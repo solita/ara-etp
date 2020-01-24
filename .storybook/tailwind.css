@@ -6,10 +6,10 @@
     src: url(../public/fonts/Montserrat-Regular.ttf) format("truetype");
   }
 
+  .font-body ~ * {
+    @apply font-body;
+  };
 
 @tailwind component;
 @tailwind utilities;
 
-.font-body ~ * {
-  @apply font-body;
-};
