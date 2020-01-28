@@ -1,5 +1,6 @@
 /node_modules/
 /public/build/
 /proxy/proxy.config.js
+/.vscode/
 
 .DS_Store
