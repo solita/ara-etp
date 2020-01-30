@@ -16,9 +16,9 @@ export default {
     sourcemap: !production,
     format: 'iife',
     name: 'app',
-    file: 'public/build/bundle.js'
+    file: 'public/build/bundle.js',
   },
-  moduleContext: (id) => {
+  moduleContext: id => {
     // In order to match native module behaviour, Rollup sets `this`
     // as `undefined` at the top level of modules. Rollup also outputs
     // a warning if a module tries to access `this` at the top level.
@@ -32,19 +32,25 @@ export default {
       'node_modules/intl-format-cache/lib/index.js',
       'node_modules/intl-messageformat-parser/lib/normalize.js',
       'node_modules/intl-messageformat-parser/lib/skeleton.js',
-      'node_modules/intl-messageformat-parser/lib/parser.js'
+      'node_modules/intl-messageformat-parser/lib/parser.js',
     ];
 
-    if (thisAsWindowForModules.some(id_ => id.trimRight().replace(/\\/g, '/').endsWith(id_))) {
+    if (
+      thisAsWindowForModules.some(id_ =>
+        id
+          .trimRight()
+          .replace(/\\/g, '/')
+          .endsWith(id_)
+      )
+    ) {
       return 'window';
     }
   },
   plugins: [
-    production && cleaner({
-      targets: [
-        './public/build/'
-      ]
-    }),
+    production &&
+      cleaner({
+        targets: ['./public/build/'],
+      }),
     json(),
     svelte({
       // enable run-time checks when not in production
@@ -55,8 +61,8 @@ export default {
         css.write('./public/build/bundle.css', !production);
       },
       preprocess: sveltePreprocess({
-        postcss: true
-      })
+        postcss: true,
+      }),
     }),
 
     // If you have external dependencies installed from
@@ -66,16 +72,23 @@ export default {
     // https://github.com/rollup/rollup-plugin-commonjs
     resolve({
       browser: true,
-      dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/')
+      dedupe: importee =>
+        importee === 'svelte' || importee.startsWith('svelte/'),
     }),
     commonjs(),
 
-    production && babel({
-      runtimeHelpers: true,
-      extensions: ['.js', '.mjs', '.html', '.svelte'],
-      include: ['src/**', 'node_modules/svelte/**', 'node_modules/svelte-i18n/**', 'node_modules/svelte-spa-router/**'],
-      ...require('./babel.config.js')
-    }),
+    production &&
+      babel({
+        runtimeHelpers: true,
+        extensions: ['.js', '.mjs', '.html', '.svelte'],
+        include: [
+          'src/**',
+          'node_modules/svelte/**',
+          'node_modules/svelte-i18n/**',
+          'node_modules/svelte-spa-router/**',
+        ],
+        ...require('./babel.config.js'),
+      }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
@@ -90,8 +103,8 @@ export default {
     production && terser(),
   ],
   watch: {
-    clearScreen: false
-  }
+    clearScreen: false,
+  },
 };
 
 function serve() {
@@ -104,14 +117,14 @@ function serve() {
 
         require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
           stdio: ['ignore', 'inherit', 'inherit'],
-          shell: true
+          shell: true,
         });
 
         require('child_process').spawn('npm', ['run', 'proxy'], {
           stdio: ['ignore', 'inherit', 'inherit'],
-          shell: true
+          shell: true,
         });
       }
-    }
+    },
   };
 }
