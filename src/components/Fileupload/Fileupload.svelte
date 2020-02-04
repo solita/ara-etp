@@ -17,20 +17,20 @@
 
   let overlay = false;
 
+  let errorStateTransitions = [
+    FileuploadUtils.filesError(FileuploadUtils.isValidAmountFiles(multiple), {
+      component: Alert,
+      type: 'error',
+      text: $_('file_upload_error_multiple_files')
+    })
+  ];
+
   $: error = R.compose(
-    Either.fold(
-      R.always({
-        component: Alert,
-        type: 'error',
-        text: $_('file_upload_error_multiple_files'),
-      }),
-      R.always({ component: false })
-    ),
-    FileuploadUtils.fileuploadError(multiple)
+    Either.fold(R.identity, R.always({ component: false })),
+    FileuploadUtils.validFilesInput(errorStateTransitions),
+    R.prop('files')
   )(state);
 </script>
-
-<input type="checkbox" bind:checked={overlay} />
 
 <div class="flex flex-col">
   <Overlay {overlay}>
