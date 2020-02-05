@@ -4,7 +4,7 @@
 
 <style type="text/postcss">
   .example {
-    @apply bg-primary w-64 text-white py-2 text-center rounded-lg;
+    @apply bg-primary w-64 text-light py-2 text-center rounded-lg;
   }
 </style>
 
