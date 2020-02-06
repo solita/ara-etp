@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 const preventDefault = event => event.preventDefault();
 
-export const fileupload = (node, {update, updateUi}) => {
+export const fileupload = (node, { update, updateUi }) => {
   const dragenter = _ => updateUi(R.assoc('highlight', true));
 
   const dragleave = _ => updateUi(R.assoc('highlight', false));
@@ -10,12 +10,12 @@ export const fileupload = (node, {update, updateUi}) => {
   const drop = event => {
     updateUi(R.assoc('highlight', false));
     update(
-        R.compose(
-          R.assoc('files'),
-          R.path(['dataTransfer', 'files']),
-          R.tap(preventDefault)
-        )(event),
-      );
+      R.compose(
+        R.assoc('files'),
+        R.path(['dataTransfer', 'files']),
+        R.tap(preventDefault)
+      )(event)
+    );
   };
 
   const dragover = preventDefault;
@@ -24,4 +24,13 @@ export const fileupload = (node, {update, updateUi}) => {
   node.addEventListener('dragleave', dragleave);
   node.addEventListener('drop', drop);
   node.addEventListener('dragover', dragover);
+
+  return {
+    destroy() {
+      node.removeEventListener('dragenter', dragenter);
+      node.removeEventListener('dragleave', dragleave);
+      node.removeEventListener('drop', drop);
+      node.removeEventListener('dragover', dragover);
+    }
+  };
 };
