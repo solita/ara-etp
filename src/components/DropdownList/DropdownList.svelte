@@ -11,7 +11,7 @@
   }
 
   .dropdownitem {
-    @apply py-2 pl-6 cursor-pointer;
+    @apply py-2 pl-6 cursor-pointer bg-light;
   }
 
   .dropdownitem:nth-child(odd) {
