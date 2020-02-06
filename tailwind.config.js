@@ -10,16 +10,21 @@ module.exports = {
       focus: '#446800',
       active: '#6d6d6d',
       disabled: '#c4c4c4',
-      error: '#d89523',
-      success: '#72af00',
+      error: '#9e0000',
+      success: '#538000',
+      tablebackground: '#eee'
     },
     extend: {
       fontFamily: {
         display: ['Montserrat', 'sans-serif'],
         body: ['Montserrat', 'sans-serif'],
+        icon: 'Material Icons'
       },
-    },
+      borderWidth: {
+        '3': '3px'
+      }
+    }
   },
   variants: {},
-  plugins: [],
+  plugins: []
 };
