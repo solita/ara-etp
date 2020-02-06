@@ -43,6 +43,10 @@
     @apply border-error;
   }
 
+  .error::after {
+    @apply text-error;
+  }
+
   .focused {
     @apply border-primary;
   }
