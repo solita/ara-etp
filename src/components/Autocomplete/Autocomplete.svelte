@@ -1,32 +1,59 @@
 <script>
   import { slide } from 'svelte/transition';
 
+  import * as R from 'ramda';
+  import * as Maybe from '../../utils/maybe-utils';
+
+  import {
+    focusNode,
+    isHandlableKey,
+    handleKey
+  } from './autocomplete-navigation';
+
   import Input from '../Input/Input.svelte';
   import DropdownList from '../DropdownList/DropdownList.svelte';
 
-  let showDropdown = false;
-
   export let state = {};
+
+  let inputNode = [];
+  let dropdownNodes = [];
+
+  let focusedIndex = Maybe.None();
+
+  $: showDropdown = focusedIndex.isSome();
+  $: focusableNodes = [inputNode, ...dropdownNodes];
+
+  const handleKeydown = event => {
+    if (!isHandlableKey(event.keyCode)) {
+      return true;
+    }
+
+    focusedIndex = R.compose(
+      Maybe.fromNull,
+      Maybe.fold(null, R.tap(_ => event.preventDefault())),
+      Maybe.fromNull,
+      R.chain(handleKey(focusableNodes, event))
+    )(focusedIndex);
+  };
 </script>
 
 <style>
   .autocomplete {
     @apply relative;
   }
-  .dropdownwrapper {
-    @apply absolute top-auto left-0 right-0;
-  }
 </style>
 
-<div class="autocomplete">
+<div class="autocomplete" on:keydown={handleKeydown}>
   <Input
     {...state.input}
-    on:focus={_ => (showDropdown = true)}
-    on:blur={_ => (showDropdown = false)}
-    on:click={_ => (showDropdown = !showDropdown)} />
+    passFocusableNodesToParent={node => (inputNode = node)}
+    on:focus={_ => (focusedIndex = Maybe.Some(0))}
+    on:blur={_ => (focusedIndex = Maybe.None())} />
   {#if showDropdown && state.dropdown}
-    <div class="dropdownwrapper">
-      <DropdownList state={state.dropdown} />
-    </div>
+    <DropdownList
+      state={state.dropdown}
+      passFocusableNodesToParent={nodes => (dropdownNodes = nodes)}
+      on:click={_ => (focusedIndex = Maybe.None())}
+      on:blur={_ => (focusedIndex = Maybe.None())} />
   {/if}
 </div>

@@ -1,5 +1,5 @@
 <script>
-  import { customClick } from './input';
+  import { onMount } from 'svelte';
 
   export let value = '';
   export let label = '';
@@ -7,8 +7,12 @@
   export let caret = false;
   export let id = '';
   export let required = false;
+  export let passFocusableNodesToParent = () => {};
 
   let focused = false;
+
+  let inputNode;
+  onMount(() => passFocusableNodesToParent(inputNode));
 </script>
 
 <style>
@@ -62,10 +66,13 @@
   <input
     {id}
     {required}
+    bind:this={inputNode}
     on:focus={_ => (focused = true)}
     on:focus
     on:blur={_ => (focused = false)}
     on:blur
+    on:click
+    on:keydown
     class="input"
     class:error
     type="text"
