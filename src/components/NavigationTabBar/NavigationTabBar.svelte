@@ -6,7 +6,12 @@
 
 <style>
   .navigationtabbar {
-    @apply flex;
+    @apply flex pb-4;
+  }
+
+  .navigationtabbar:last-child::after {
+    content: '';
+    @apply flex-grow border-dark border-b-3;
   }
 </style>
 

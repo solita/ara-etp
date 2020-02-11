@@ -24,8 +24,14 @@ module.exports = {
         '1': '1px',
         '3': '3px'
       },
+      borderWidth: {
+        '3': '3px'
+      },
       inset: {
         '100': '100%'
+      },
+      boxShadow: {
+        'hover-2': '0 0.5em #446800'
       }
     }
   },

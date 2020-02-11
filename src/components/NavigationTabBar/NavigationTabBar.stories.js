@@ -2,7 +2,7 @@ import NavigationTabBar from './NavigationTabBar.svelte';
 
 export default { title: 'NavigationTabBar' };
 
-export const withText = () => ({
+export const withMultipleLinks = () => ({
   Component: NavigationTabBar,
   props: {
     links: [

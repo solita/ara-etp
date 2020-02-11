@@ -4,14 +4,14 @@
 
 <style>
   .navigationtab {
-    @apply flex flex-grow relative mb-4 py-4 px-8 font-eb justify-center border-dark border-b-2 cursor-pointer uppercase;
+    @apply flex py-4 px-8 font-eb justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none;
+    transition: box-shadow 0.1s ease-in-out;
   }
 
-  .navigationtab:active::after,
-  .navigationtab:hover::after,
-  .navigationtab:focus::after {
-    content: '';
-    @apply bg-hover absolute top-100 left-0 right-0 h-3;
+  .navigationtab:active,
+  .navigationtab:focus,
+  .navigationtab:hover {
+    @apply shadow-hover-2 border-hover;
   }
 
   .navigationtab:focus {
