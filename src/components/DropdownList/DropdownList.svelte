@@ -28,7 +28,7 @@
   }
 
   .dropdownitem:hover {
-    @apply bg-tablebackground text-dark;
+    @apply bg-background text-dark;
   }
 
   .dropdownitem:focus {

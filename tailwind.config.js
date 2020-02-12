@@ -27,9 +27,6 @@ module.exports = {
         '1': '1px',
         '3': '3px'
       },
-      borderWidth: {
-        '3': '3px'
-      },
       inset: {
         '100': '100%'
       },
