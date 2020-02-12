@@ -1,15 +1,20 @@
 @tailwind base;
 
-  @font-face {
-    font-family: Montserrat;
-    font-weight: 400;
-    src: url(../public/fonts/Montserrat-Regular.ttf) format("truetype");
-  }
+@font-face {
+  font-family: Montserrat;
+  font-weight: 400;
+  src: url(../public/fonts/Montserrat-Regular.ttf) format('truetype');
+}
 
-  .font-body ~ * {
-    @apply font-body;
-  };
+@font-face {
+  font-family: Montserrat-ExtraBold;
+  font-weight: 400;
+  src: url(../public/fonts/Montserrat-ExtraBold.ttf) format('truetype');
+}
+
+.font-body ~ * {
+  @apply font-body;
+}
 
 @tailwind component;
 @tailwind utilities;
-

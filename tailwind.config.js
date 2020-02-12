@@ -10,19 +10,28 @@ module.exports = {
       focus: '#446800',
       active: '#6d6d6d',
       disabled: '#c4c4c4',
-      error: '#9e0000',
-      success: '#538000',
-      tablebackground: '#eee'
+      error: '#d89523',
+      success: '#72af00'
     },
     extend: {
       fontFamily: {
         display: ['Montserrat', 'sans-serif'],
         body: ['Montserrat', 'sans-serif'],
+        eb: ['Montserrat-ExtraBold', 'sans-serif'],
         icon: 'Material Icons'
       },
       borderWidth: {
         '1': '1px',
         '3': '3px'
+      },
+      borderWidth: {
+        '3': '3px'
+      },
+      inset: {
+        '100': '100%'
+      },
+      boxShadow: {
+        'hover-2': '0 0.5em #446800'
       }
     }
   },
