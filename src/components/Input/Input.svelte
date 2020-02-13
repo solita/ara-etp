@@ -17,20 +17,32 @@
 
 <style>
   label {
-    @apply text-secondary lowercase text-xs;
+    @apply text-secondary capitalize;
   }
 
   label.required::before {
-    @apply font-icon text-xs;
+    @apply font-icon text-xs align-top;
     content: '*';
   }
 
+  label.error {
+    @apply text-error;
+  }
+
+  label.focused {
+    @apply font-bold;
+  }
+
   .inputwrapper {
-    @apply flex items-center border-b-3 border-disabled text-dark;
+    @apply flex relative items-center border-b-3 border-disabled text-dark;
+  }
+
+  .inputwrapper:hover {
+    @apply border-hover;
   }
 
   input {
-    @apply flex-grow relative font-bold py-1;
+    @apply w-full relative font-eb py-1;
   }
 
   .caret::after {
@@ -41,6 +53,10 @@
 
   .input:focus {
     @apply outline-none;
+  }
+
+  .input:hover {
+    @apply bg-background;
   }
 
   .error {
@@ -60,7 +76,7 @@
   }
 </style>
 
-<label for={id} class:required>{label}</label>
+<label for={id} class:required class:error class:focused>{label}</label>
 
 <div class="inputwrapper" class:caret class:focused class:error>
   <input

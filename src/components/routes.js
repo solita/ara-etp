@@ -1,5 +1,5 @@
-import Example from './Example/Example.svelte';
+import Company from './Company/Company.svelte';
 
 export const routes = {
-  '/': Example,
-}
+  '/': Company
+};
