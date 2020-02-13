@@ -4,3 +4,8 @@
 /.vscode/
 
 .DS_Store
+
+# IntelliJ IDEA
+*.iml
+.idea
+.nrepl-port
