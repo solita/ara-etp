@@ -4,18 +4,18 @@
   export let links;
 </script>
 
-<style>
-  .navigationtabbar {
+<style type="text/postcss">
+  div {
     @apply flex pb-4;
   }
 
-  .navigationtabbar:last-child::after {
+  div:last-child::after {
     content: '';
     @apply flex-grow border-dark border-b-3;
   }
 </style>
 
-<div class="navigationtabbar">
+<div>
   {#each links as link}
     <NavigationTab text={link.text} />
   {/each}

@@ -15,7 +15,7 @@
   onMount(() => passFocusableNodesToParent(inputNode));
 </script>
 
-<style>
+<style type="text/postcss">
   label {
     @apply text-secondary capitalize;
   }
@@ -41,14 +41,21 @@
     @apply border-hover;
   }
 
-  input {
-    @apply w-full relative font-eb py-1;
+  .inputwrapper.focused {
+    @apply border-primary;
   }
 
-  .caret::after {
+  .inputwrapper.focused::after {
+    @apply text-primary;
+  }
+
+  .inputwrapper.caret::after {
     @apply font-icon absolute text-base text-disabled;
     right: 0.5em;
     content: 'expand_more';
+  }
+  input {
+    @apply w-full relative font-eb py-1;
   }
 
   .input:focus {
@@ -59,20 +66,12 @@
     @apply bg-background;
   }
 
-  .error {
+  input.error {
     @apply border-error;
   }
 
-  .error::after {
+  input.error::after {
     @apply text-error;
-  }
-
-  .focused {
-    @apply border-primary;
-  }
-
-  .focused::after {
-    @apply text-primary;
   }
 </style>
 

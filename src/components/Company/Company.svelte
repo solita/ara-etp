@@ -7,7 +7,7 @@
   const links = [{ text: 'Uusi yritys' }, { text: 'Laatijat' }];
 </script>
 
-<style>
+<style type="text/postcss">
   .content {
     @apply flex flex-col -my-4 pb-8;
   }

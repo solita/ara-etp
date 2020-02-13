@@ -21,7 +21,7 @@
     FileuploadUtils.filesError(FileuploadUtils.isValidAmountFiles(multiple), {
       component: Alert,
       type: 'error',
-      text: $_('file_upload_error_multiple_files')
+      text: 'file_upload_error_multiple_files'
     })
   ];
 
@@ -32,7 +32,13 @@
   )(state);
 </script>
 
-<div class="flex flex-col">
+<style type="text/postcss">
+  .fileupload {
+    @apply flex flex-col;
+  }
+</style>
+
+<div class="fileupload">
   <Overlay {overlay}>
     <div slot="content">
       <FileDropArea {update} {state} {multiple} />

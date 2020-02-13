@@ -2,13 +2,13 @@
 
 </script>
 
-<style>
-  .breadcrumb {
+<style type="text/postcss">
+  div {
     @apply bg-background px-20 flex h-16 items-center text-primary;
   }
 </style>
 
-<div class="breadcrumb">
+<div>
   <span class="font-icon">home</span>
   &nbsp;/ Yritys Y / Perustiedot
 </div>

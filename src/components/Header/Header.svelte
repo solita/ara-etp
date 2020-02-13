@@ -2,7 +2,7 @@
 
 </script>
 
-<style>
+<style type="text/postcss">
   header {
     @apply flex px-20 h-16 bg-secondary uppercase text-light justify-between items-center font-eb;
   }
