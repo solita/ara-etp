@@ -2,23 +2,23 @@
   export let text;
 </script>
 
-<style>
-  .navigationtab {
+<style type="text/postcss">
+  a {
     @apply flex py-4 px-8 font-eb justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none;
     transition: box-shadow 0.1s ease-in-out;
   }
 
-  .navigationtab:active,
-  .navigationtab:focus,
-  .navigationtab:hover {
+  a:active,
+  a:focus,
+  a:hover {
     @apply shadow-hover-2 border-hover;
   }
 
-  .navigationtab:focus {
+  a:focus {
     @apply outline-none;
   }
 
-  .navigationtab:active {
+  a:active {
     @apply text-hover;
   }
 </style>

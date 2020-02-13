@@ -2,7 +2,7 @@
 
 </script>
 
-<style>
+<style type="text/postcss">
   footer {
     @apply flex flex-col;
   }
@@ -25,10 +25,6 @@
 
   .arafooter {
     @apply flex justify-end items-end w-1/2;
-  }
-
-  .arafooter {
-    @apply text-primary stroke-current fill-current;
   }
 </style>
 

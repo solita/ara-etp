@@ -37,13 +37,13 @@
   };
 </script>
 
-<style>
-  .autocomplete {
+<style type="text/postcss">
+  div {
     @apply relative;
   }
 </style>
 
-<div class="autocomplete" on:keydown={handleKeydown}>
+<div on:keydown={handleKeydown}>
   <Input
     {...state.input}
     passFocusableNodesToParent={node => (inputNode = node)}

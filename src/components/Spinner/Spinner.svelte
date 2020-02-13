@@ -3,7 +3,7 @@
 </script>
 
 <style type="text/postcss">
-  .ball {
+  div {
     @apply bg-primary opacity-75 rounded-full w-8 h-8;
     animation: ball-scale 2s infinite ease-in-out;
   }
@@ -19,4 +19,4 @@
   }
 </style>
 
-<div class="ball" />
+<div />

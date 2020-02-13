@@ -4,17 +4,17 @@
 
   export let multiple = false;
   export let labelText = 'Click or drop to choose a file for uploading';
-  
+
   export let state = {
     files: []
   };
 
   export let uiState = {
     highlight: false
-  }
+  };
 
-  export let update = fn => state = fn(state);
-  const updateUi = fn => uiState = fn(uiState);
+  export let update = fn => (state = fn(state));
+  const updateUi = fn => (uiState = fn(uiState));
 </script>
 
 <style type="text/postcss">
@@ -31,17 +31,18 @@
   }
 </style>
 
-<label 
-  use:fileupload={{update, updateUi}}
+<label
+  use:fileupload={{ update, updateUi }}
   class:highlight={uiState.highlight}>
-    <input 
-    on:focus={_ => updateUi(R.assoc('highlight', true))} 
+  <input
+    on:focus={_ => updateUi(R.assoc('highlight', true))}
     on:blur={_ => updateUi(R.assoc('highlight', false))}
-    on:change={
-      event => {
-        update(R.assoc('files', event.target.files)); 
-        updateUi(R.assoc('highlight', false));
-      }}
-    type="file" files={state.files} multiple={multiple} />
-    {labelText}
+    on:change={event => {
+      update(R.assoc('files', event.target.files));
+      updateUi(R.assoc('highlight', false));
+    }}
+    type="file"
+    files={state.files}
+    {multiple} />
+  {labelText}
 </label>

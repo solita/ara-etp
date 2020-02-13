@@ -14,31 +14,31 @@
   );
 </script>
 
-<style>
-  .dropdownlist {
+<style type="text/postcss">
+  ol {
     @apply absolute top-auto left-0 right-0 shadow-lg;
   }
 
-  .dropdownitem {
+  li {
     @apply py-2 pl-6 cursor-pointer bg-light;
   }
 
-  .dropdownitem:not(:first-child) {
+  li:not(:first-child) {
     @apply border-disabled border-t-1;
   }
 
-  .dropdownitem:hover {
+  li:hover {
     @apply bg-background text-dark;
   }
 
-  .dropdownitem:focus {
+  li:focus {
     @apply outline-none bg-hover text-light;
   }
 </style>
 
-<ol transition:slide class="dropdownlist" bind:this={node}>
+<ol transition:slide bind:this={node}>
   {#each state as item}
-    <li class="dropdownitem" tabindex="0" on:click on:blur>
+    <li tabindex="0" on:click on:blur>
       {#if component}
         <svelte:component this={component} state={item} />
       {:else}{item}{/if}
