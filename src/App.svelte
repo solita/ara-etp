@@ -22,10 +22,6 @@
   .routecontainer {
     @apply flex-grow py-10 px-20 bg-light;
   }
-
-  .footercontainer {
-    @apply px-20;
-  }
 </style>
 
 <Tailwindcss />
