@@ -16,11 +16,15 @@
 
 <style type="text/postcss">
   .container {
-    @apply flex flex-col justify-center mx-auto max-w-6xl min-h-screen;
+    @apply flex flex-col justify-around mx-auto max-w-full min-h-screen;
   }
 
   .routecontainer {
-    @apply flex-grow;
+    @apply flex-grow py-10 px-20 bg-light;
+  }
+
+  .footercontainer {
+    @apply px-20;
   }
 </style>
 
