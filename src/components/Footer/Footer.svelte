@@ -4,19 +4,23 @@
 
 <style>
   footer {
-    @apply flex flex-col w-full;
+    @apply flex flex-col;
+  }
+
+  footer > * {
+    @apply px-20;
   }
 
   .adminmessage {
-    @apply bg-secondary text-light h-64;
+    @apply bg-secondary text-light h-64 font-extrabold uppercase;
   }
 
   .info {
-    @apply flex bg-background h-64;
+    @apply flex bg-background h-64 items-stretch;
   }
 
   .info > * {
-    @apply px-2 items-stretch w-1/4;
+    @apply w-1/4;
   }
 
   .arafooter {
