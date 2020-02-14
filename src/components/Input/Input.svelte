@@ -55,7 +55,7 @@
     content: 'expand_more';
   }
   input {
-    @apply w-full relative font-eb py-1;
+    @apply w-full relative font-extrabold py-1;
   }
 
   .input:focus {

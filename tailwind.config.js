@@ -20,7 +20,6 @@ module.exports = {
       fontFamily: {
         display: ['Montserrat', 'sans-serif'],
         body: ['Montserrat', 'sans-serif'],
-        eb: ['Montserrat-ExtraBold', 'sans-serif'],
         icon: 'Material Icons'
       },
       borderWidth: {
