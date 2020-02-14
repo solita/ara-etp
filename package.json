@@ -31,7 +31,6 @@
     "autoprefixer": "^9.7.3",
     "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
-    "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet-csp": "^2.9.4",
     "http-proxy-middleware": "^0.20.0",

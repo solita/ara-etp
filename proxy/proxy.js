@@ -1,13 +1,10 @@
 const express = require('express');
 const proxy = require('http-proxy-middleware');
 const csp = require('helmet-csp');
-const cors = require('cors');
 
 const config = require('./proxy.config');
 
 var app = express();
-
-app.use(cors());
 
 app.use(
   csp({
