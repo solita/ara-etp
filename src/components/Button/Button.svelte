@@ -1,6 +1,7 @@
 <script>
   export let text = '';
-  export let type = 'primary';
+  export let type = 'button';
+  export let style = 'primary';
 </script>
 
 <style type="text/postcss">
@@ -22,9 +23,10 @@
 </style>
 
 <button
-  class:primary={type === 'primary'}
-  class:secondary={type === 'secondary'}
-  class:error={type === 'error'}
+  {type}
+  class:primary={style === 'primary'}
+  class:secondary={style === 'secondary'}
+  class:error={style === 'error'}
   on:click>
   {text}
 </button>

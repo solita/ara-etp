@@ -9,6 +9,8 @@
   export let required = false;
   export let passFocusableNodesToParent = () => {};
 
+  export let update = () => {};
+
   let focused = false;
 
   let inputNode;
@@ -88,6 +90,7 @@
     on:blur
     on:click
     on:keydown
+    on:input={event => update(event.target.value)}
     class="input"
     class:error
     type="text"
