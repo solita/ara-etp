@@ -27,4 +27,4 @@ app.use(
   proxy({ target: `http://localhost:${config['static']}`, changeOrigin: true })
 );
 
-app.listen(3000);
+app.listen(3000, () => console.log('Proxy listening in http://localhost:3000'));
