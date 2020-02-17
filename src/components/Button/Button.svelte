@@ -5,7 +5,7 @@
 
 <style type="text/postcss">
   button {
-    @apply flex justify-center items-center px-6 py-2 rounded-full font-eb uppercase text-light tracking-widest;
+    @apply flex justify-center items-center px-6 py-2 rounded-full font-extrabold uppercase text-light tracking-widest;
   }
 
   .primary {
