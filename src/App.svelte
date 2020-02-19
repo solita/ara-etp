@@ -11,7 +11,11 @@
 
   import Tailwindcss from './Tailwindcss.svelte';
 
+  import { fetchUser, currentUser } from './components/User/user';
+
   setupI18n();
+
+  currentUser.set(fetchUser('current'));
 </script>
 
 <style type="text/postcss">
@@ -26,9 +30,7 @@
 
 <Tailwindcss />
 
-{#if $isLoading}
-  Loading...
-{:else}
+{#if $locale && !$isLoading}
   <div class="container">
     <Header />
     <Breadcrumb />
