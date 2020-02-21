@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "license": "EUPL v1.2",
   "scripts": {
-    "build": "rollup -c && node cachebust.js",
+    "build": "rollup -c && node configcopy.js && node cachebust.js",
     "dev-build": "set NODE_ENV=development&& rollup -c",
     "dev": "node devcopy.js && rollup -c -w",
     "start": "sirv public --single",
