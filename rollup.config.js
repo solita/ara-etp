@@ -16,7 +16,7 @@ export default {
     sourcemap: !production,
     format: 'iife',
     name: 'app',
-    file: 'public/build/bundle.js',
+    file: 'public/build/bundle.js'
   },
   moduleContext: id => {
     // In order to match native module behaviour, Rollup sets `this`
@@ -32,7 +32,7 @@ export default {
       'node_modules/intl-format-cache/lib/index.js',
       'node_modules/intl-messageformat-parser/lib/normalize.js',
       'node_modules/intl-messageformat-parser/lib/skeleton.js',
-      'node_modules/intl-messageformat-parser/lib/parser.js',
+      'node_modules/intl-messageformat-parser/lib/parser.js'
     ];
 
     if (
@@ -49,7 +49,7 @@ export default {
   plugins: [
     production &&
       cleaner({
-        targets: ['./public/build/'],
+        targets: ['./public/build/']
       }),
     json(),
     svelte({
@@ -61,8 +61,8 @@ export default {
         css.write('./public/build/bundle.css', !production);
       },
       preprocess: sveltePreprocess({
-        postcss: true,
-      }),
+        postcss: true
+      })
     }),
 
     // If you have external dependencies installed from
@@ -73,7 +73,7 @@ export default {
     resolve({
       browser: true,
       dedupe: importee =>
-        importee === 'svelte' || importee.startsWith('svelte/'),
+        importee === 'svelte' || importee.startsWith('svelte/')
     }),
     commonjs(),
 
@@ -85,9 +85,9 @@ export default {
           'src/**',
           'node_modules/svelte/**',
           'node_modules/svelte-i18n/**',
-          'node_modules/svelte-spa-router/**',
+          'node_modules/svelte-spa-router/**'
         ],
-        ...require('./babel.config.js'),
+        ...require('./babel.config.js')
       }),
 
     // In dev mode, call `npm run start` once
@@ -100,11 +100,11 @@ export default {
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser(),
+    production && terser()
   ],
   watch: {
-    clearScreen: false,
-  },
+    clearScreen: false
+  }
 };
 
 function serve() {
@@ -117,14 +117,14 @@ function serve() {
 
         require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
           stdio: ['ignore', 'inherit', 'inherit'],
-          shell: true,
+          shell: true
         });
 
         require('child_process').spawn('npm', ['run', 'proxy'], {
           stdio: ['ignore', 'inherit', 'inherit'],
-          shell: true,
+          shell: true
         });
       }
-    },
+    }
   };
 }
