@@ -1,5 +1,7 @@
-import Company from './Company/Company.svelte';
+import NewYritys from './Yritys/NewYritys.svelte';
+import ExistingYritys from './Yritys/ExistingYritys.svelte';
 
 export const routes = {
-  '/': Company
+  '/yritys/new': NewYritys,
+  '/yritys/:id?': ExistingYritys
 };
