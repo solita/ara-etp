@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c && node configcopy.js && node cachebust.js",
     "dev-build": "set NODE_ENV=development&& rollup -c",
-    "dev": "node devcopy.js && rollup -c -w",
+    "dev": "node devcopy.js && node configcopy.js && rollup -c -w",
     "start": "sirv public --single",
     "proxy": "node ./proxy/proxy.js",
     "storybook": "start-storybook -s ./public -p 6006",
