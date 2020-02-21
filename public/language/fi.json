@@ -6,14 +6,14 @@
     "laatijat": "Laatijat",
     "y-tunnus": "Y-Tunnus",
     "nimi": "Nimi",
-    "www-osoite": "www-osoite",
+    "www-osoite": "WWW-osoite",
     "laskutusosoite": "Laskutusosoite",
-    "katuosoite": "Katuosoite",
+    "jakeluosoite": "Katuosoite",
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
-    "verkkolaskutusosoite": "verkkolaskutusosoite",
-    "ovt-tunnus": "OVT-Tunnus"
+    "verkkolaskuosoite": "verkkolaskuosoite",
+    "ovt-tunnus": "OVT-tunnus"
   },
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan."
 }

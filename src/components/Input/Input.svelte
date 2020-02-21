@@ -1,13 +1,21 @@
 <script>
   import { onMount } from 'svelte';
+  import * as R from 'ramda';
+
+  export let id;
+  export let name;
 
   export let value = '';
   export let label = '';
   export let error = false;
   export let caret = false;
-  export let id = '';
   export let required = false;
   export let passFocusableNodesToParent = () => {};
+  export let type = 'text';
+  export let pattern = null;
+  export let autocomplete = 'off';
+
+  export let validation = R.always(true);
 
   export let update = () => {};
 
@@ -19,7 +27,7 @@
 
 <style type="text/postcss">
   label {
-    @apply text-secondary capitalize;
+    @apply text-secondary;
   }
 
   label.required::before {
@@ -51,6 +59,14 @@
     @apply text-primary;
   }
 
+  .inputwrapper.error {
+    @apply border-error;
+  }
+
+  .inputwrapper.error::after {
+    @apply text-error;
+  }
+
   .inputwrapper.caret::after {
     @apply font-icon absolute text-base text-disabled;
     right: 0.5em;
@@ -68,12 +84,10 @@
     @apply bg-background;
   }
 
-  input.error {
-    @apply border-error;
-  }
-
-  input.error::after {
-    @apply text-error;
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 </style>
 
@@ -82,17 +96,22 @@
 <div class="inputwrapper" class:caret class:focused class:error>
   <input
     {id}
+    {name}
     {required}
+    class="input"
+    class:error
+    {type}
+    {value}
+    {autocomplete}
+    {pattern}
     bind:this={inputNode}
     on:focus={_ => (focused = true)}
     on:focus
     on:blur={_ => (focused = false)}
+    on:blur={event => (error = !validation(event.target.value))}
     on:blur
     on:click
     on:keydown
     on:input={event => update(event.target.value)}
-    class="input"
-    class:error
-    type="text"
-    {value} />
+    on:invalid|preventDefault />
 </div>
