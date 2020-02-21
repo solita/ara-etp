@@ -14,6 +14,10 @@
     @apply shadow-hover-2 border-hover;
   }
 
+  a:hover {
+    @apply bg-background;
+  }
+
   a:focus {
     @apply outline-none;
   }
