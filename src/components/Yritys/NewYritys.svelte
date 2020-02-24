@@ -27,7 +27,7 @@
     @apply flex flex-col -my-4 pb-8;
   }
 
-  .content > * {
+  .content > * :not(first) {
     @apply py-8;
   }
 </style>

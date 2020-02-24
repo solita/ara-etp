@@ -5,7 +5,6 @@
   export let id;
   export let name;
 
-  export let value = '';
   export let label = '';
   export let error = false;
   export let caret = false;
@@ -14,6 +13,8 @@
   export let type = 'text';
   export let pattern = null;
   export let autocomplete = 'off';
+  export let value = '';
+  export let valid = true;
 
   export let validation = R.always(true);
 
@@ -108,10 +109,8 @@
     on:focus={_ => (focused = true)}
     on:focus
     on:blur={_ => (focused = false)}
-    on:blur={event => (error = !validation(event.target.value))}
     on:blur
     on:click
     on:keydown
-    on:input={event => update(event.target.value)}
-    on:invalid|preventDefault />
+    on:input={event => update(event.target.value)} />
 </div>

@@ -14,7 +14,7 @@
 
 </style>
 
-<form on:submit>
+<form on:submit|preventDefault={console.log}>
   <div class="w-full">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -92,10 +92,10 @@
     </div>
     <div class="flex -mx-4 pt-8">
       <div class="px-4">
-        <Button type="submit" text={$_('tallenna')} />
+        <Button type={'submit'} text={$_('tallenna')} />
       </div>
       <div class="px-4">
-        <Button text={$_('peruuta')} type="reset" style="secondary" />
+        <Button text={$_('peruuta')} type={'reset'} style={'secondary'} />
       </div>
     </div>
   </div>

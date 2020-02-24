@@ -15,8 +15,6 @@
   export let params;
   let id = Maybe.fromNull(params.id);
 
-  $: console.log(id);
-
   let yritysLoad = Maybe.cata(_ => Promise.reject(404), Yritys.fetchYritys, id);
 
   $: links = [
