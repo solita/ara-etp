@@ -6,7 +6,7 @@ export const responseAsJson = Future.encaseP(response => response.json());
 export const rejectWithInvalidResponse = R.ifElse(
   R.prop('ok'),
   Future.resolve,
-  R.compose(Future.reject, R.prop('statusCode'))
+  R.compose(Future.reject, R.prop('status'))
 );
 
 export const fetchFromUrl = R.curry((fetch, url) =>
