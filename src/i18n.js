@@ -14,12 +14,12 @@ const fetchLocale = locale => {
 };
 
 const setupI18n = () => {
-  register('fi', () => fetchLocale('fi'));
-  register('sv', () => fetchLocale('sv'));
+  register('fi-FI', () => fetchLocale('fi'));
+  register('sv-FI', () => fetchLocale('sv'));
   register('en', () => fetchLocale('en'));
 
   init({
-    fallbackLocale: 'fi',
+    fallbackLocale: 'fi-FI',
     initialLocale: getLocaleFromNavigator()
   });
 };
