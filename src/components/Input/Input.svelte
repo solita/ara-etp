@@ -1,12 +1,12 @@
 <script>
   import { onMount } from 'svelte';
   import * as R from 'ramda';
+  import * as Maybe from '../../utils/maybe-utils';
 
   export let id;
   export let name;
 
   export let label = '';
-  export let error = false;
   export let caret = false;
   export let required = false;
   export let passFocusableNodesToParent = () => {};
@@ -14,11 +14,12 @@
   export let pattern = null;
   export let autocomplete = 'off';
   export let value = '';
-  export let valid = true;
 
   export let validation = R.always(true);
-
   export let update = () => {};
+
+  let valid = Maybe.None();
+  $: error = Maybe.fold(false, R.not, valid);
 
   let focused = false;
 
@@ -36,11 +37,13 @@
     content: '*';
   }
 
-  label.error {
+  label.error,
+  label.error::before {
     @apply text-error;
   }
 
-  label.focused {
+  label.focused,
+  label.focused::before {
     @apply font-bold;
   }
 
@@ -77,11 +80,11 @@
     @apply w-full relative font-extrabold py-1;
   }
 
-  .input:focus {
+  input:focus {
     @apply outline-none;
   }
 
-  .input:hover {
+  input:hover {
     @apply bg-background;
   }
 
@@ -98,19 +101,22 @@
   <input
     {id}
     {name}
-    {required}
     class="input"
     class:error
-    {type}
-    {value}
+    type="text"
     {autocomplete}
-    {pattern}
     bind:this={inputNode}
     on:focus={_ => (focused = true)}
     on:focus
-    on:blur={_ => (focused = false)}
+    on:blur={_ => {
+      focused = false;
+      valid = Maybe.None();
+    }}
     on:blur
     on:click
     on:keydown
-    on:input={event => update(event.target.value)} />
+    on:input={event => {
+      valid = Maybe.Some(validation(event.target.value));
+      update(event.target.value);
+    }} />
 </div>
