@@ -52,3 +52,34 @@ export const matchErrorWithAction = R.ifElse(
   R.always(Future.resolve(newYritysAction())),
   Future.reject
 );
+
+export const isFilled = R.complement(R.isEmpty);
+
+export const isYTunnus = R.test(/^\d{7}-\d$/);
+
+export const isUrl = R.test(
+  /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+);
+
+export const maybeValidate = validator => Maybe.fold(true, validator);
+
+export const isPostinumero = R.test(/^\d{5}$/);
+
+export const formValidators = {
+  ytunnus: R.allPass([isFilled, isYTunnus]),
+  nimi: isFilled,
+  wwwosoite: R.anyPass([R.isEmpty, isUrl]),
+  jakeluosoite: isFilled,
+  postinumero: isPostinumero,
+  postitoimipaikka: isFilled,
+  maa: isFilled,
+  verkkolaskuosoite: R.always(true)
+};
+
+export const validateYritysForm = R.curry((validators, yritys) =>
+  R.compose(
+    R.evolve(R.__, yritys),
+    R.assoc('wwwosoite', maybeValidate(validators.wwwosoite)),
+    R.assoc('verkkolaskuosoite', maybeValidate(validators.verkkolaskuosoite))
+  )(validators)
+);
