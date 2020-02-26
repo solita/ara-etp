@@ -16,3 +16,17 @@ export const fetchFromUrl = R.curry((fetch, url) =>
     Future.encaseP(fetch)
   )(url)
 );
+
+export const getFetch = url =>
+  fetch(url, { headers: { Accept: 'application/json' } });
+
+export const putFetch = R.curry((fetch, method, body, url) =>
+  fetch(url, {
+    method,
+    body: JSON.stringify(body),
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+);

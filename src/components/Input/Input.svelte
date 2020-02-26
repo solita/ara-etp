@@ -11,10 +11,10 @@
   export let required = false;
   export let passFocusableNodesToParent = () => {};
   export let type = 'text';
-  export let pattern = null;
   export let autocomplete = 'off';
   export let value = '';
 
+  export let transform = R.identity;
   export let validation = R.always(true);
   export let update = () => {};
 
@@ -105,18 +105,23 @@
     class:error
     type="text"
     {autocomplete}
+    bind:value
     bind:this={inputNode}
-    on:focus={_ => (focused = true)}
+    on:focus={_ => {
+      valid = R.compose( Maybe.Some, validation, transform )(value);
+      focused = true;
+    }}
     on:focus
-    on:blur={_ => {
+    on:blur={event => {
       focused = false;
       valid = Maybe.None();
+      value = transform(event.target.value);
+      update(value);
     }}
     on:blur
     on:click
     on:keydown
     on:input={event => {
-      valid = Maybe.Some(validation(event.target.value));
-      update(event.target.value);
+      valid = R.compose( Maybe.Some, validation, transform )(event.target.value);
     }} />
 </div>

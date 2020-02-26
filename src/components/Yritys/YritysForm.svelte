@@ -10,7 +10,15 @@
 
   const update = fn => (yritys = fn(yritys));
 
+  export let submit;
+
   export let yritys;
+
+  $: isValidForm = R.compose(
+    R.reduce(R.and, true),
+    R.values,
+    YritysUtils.validateYritysForm(YritysUtils.formValidators)
+  )(yritys);
 
   $: console.log(
     YritysUtils.validateYritysForm(YritysUtils.formValidators, yritys)
@@ -21,7 +29,12 @@
 
 </style>
 
-<form on:submit|preventDefault={console.log}>
+<form
+  on:submit|preventDefault={_ => {
+    if (isValidForm) {
+      submit(yritys);
+    }
+  }}>
   <div class="w-full">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -31,6 +44,8 @@
           name={'ytunnus'}
           label={$_('yritys.y-tunnus')}
           required={true}
+          value={yritys.ytunnus}
+          transform={YritysUtils.formTransformers.ytunnus}
           validation={YritysUtils.formValidators.ytunnus}
           update={R.compose( update, R.set(R.lensProp('ytunnus')) )} />
       </div>
@@ -41,6 +56,7 @@
           label={$_('yritys.nimi')}
           required={true}
           value={yritys.nimi}
+          transform={YritysUtils.formTransformers.nimi}
           validation={YritysUtils.formValidators.nimi}
           update={R.compose( update, R.set(R.lensProp('nimi')) )} />
       </div>
@@ -53,6 +69,7 @@
         required={false}
         type={'url'}
         value={Maybe.fold('', R.identity, yritys.wwwosoite)}
+        transform={YritysUtils.formTransformers.wwwosoite}
         validation={YritysUtils.formValidators.wwwosoite}
         update={R.compose( update, R.compose( R.set(R.lensProp('wwwosoite')), Maybe.fromEmpty ) )} />
     </div>
@@ -65,6 +82,7 @@
           label={$_('yritys.jakeluosoite')}
           required={true}
           value={yritys.jakeluosoite}
+          transform={YritysUtils.formTransformers.jakeluosoite}
           validation={YritysUtils.formValidators.jakeluosoite}
           update={R.compose( update, R.set(R.lensProp('jakeluosoite')) )} />
       </div>
@@ -76,6 +94,7 @@
             label={$_('yritys.postinumero')}
             required={true}
             value={yritys.postinumero}
+            transform={YritysUtils.formTransformers.postinumero}
             validation={YritysUtils.formValidators.postinumero}
             update={R.compose( update, R.set(R.lensProp('postinumero')) )} />
         </div>
@@ -86,6 +105,7 @@
             label={$_('yritys.postitoimipaikka')}
             required={true}
             value={yritys.postitoimipaikka}
+            transform={YritysUtils.formTransformers.postitoimipaikka}
             validation={YritysUtils.formValidators.postitoimipaikka}
             update={R.compose( update, R.set(R.lensProp('postitoimipaikka')) )} />
         </div>
@@ -96,6 +116,7 @@
             label={$_('yritys.maa')}
             required={true}
             value={yritys.maa}
+            transform={YritysUtils.formTransformers.maa}
             validation={YritysUtils.formValidators.maa}
             update={R.compose( update, R.set(R.lensProp('maa')) )} />
         </div>
@@ -108,6 +129,7 @@
         name={'verkkolaskuosoite'}
         label={$_('yritys.ovt-tunnus')}
         value={Maybe.fold('', R.identity, yritys.verkkolaskuosoite)}
+        transform={YritysUtils.formTransformers.verkkolaskuosoite}
         validation={YritysUtils.formValidators.verkkolaskuosoite}
         update={R.compose( update, R.compose( R.set(R.lensProp('verkkolaskuosoite')), Maybe.fromEmpty ) )} />
     </div>

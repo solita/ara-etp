@@ -4,9 +4,9 @@ import * as Maybe from '../../utils/maybe-utils';
 import * as Future from '../../utils/future-utils';
 import * as validation from '../../utils/validation';
 
-const yritysApi = `/api/yritykset/`;
+const yritysApi = `/api/yritykset`;
 
-export const urlForYritysId = id => `${yritysApi}${id}`;
+export const urlForYritysId = id => `${yritysApi}/${id}`;
 
 export const yritysDeserialize = R.evolve({
   verkkolaskuosoite: Maybe.fromNull,
@@ -73,6 +73,17 @@ export const formValidators = {
   postitoimipaikka: isFilled,
   maa: isFilled,
   verkkolaskuosoite: R.always(true)
+};
+
+export const formTransformers = {
+  ytunnus: R.trim,
+  nimi: R.trim,
+  wwwosoite: R.trim,
+  jakeluosoite: R.trim,
+  postinumero: R.trim,
+  postitoimipaikka: R.trim,
+  maa: R.trim,
+  verkkolaskuosoite: R.trim
 };
 
 export const validateYritysForm = R.curry((validators, yritys) =>
