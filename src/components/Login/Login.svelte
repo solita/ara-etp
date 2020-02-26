@@ -1,7 +1,9 @@
 <script>
-  import * as R from 'ramda';
+  import * as RedirectUtils from '../../utils/redirect-utils'
 
-  setTimeout(() => window.location.href = 'http://example.com', 3000);
+  export let redirectTimeout = 0;
+
+  RedirectUtils.redirectAfterTimeout(RedirectUtils.loginPageUrl(), redirectTimeout);
 </script>
 
 <style type="text/postcss">

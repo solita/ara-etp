@@ -38,7 +38,7 @@
 {#if isAppLoading}
   <Loading />
 {:else if isUnauthorizedOnFirstLoad}
-  <Login />
+  <Login redirectTimeout={2000} />
 {:else}
   <div class="container">
     <Header />
