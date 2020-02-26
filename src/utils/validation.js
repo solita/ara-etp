@@ -1,16 +1,14 @@
 import * as R from 'ramda';
 
-export function ytunnusChecksum(ytunnus) {
-  const digits = R.map(parseInt, R.slice(0, 7, ytunnus));
-  const sum = R.reduce(R.add, 0, R.zipWith(R.multiply, digits, [7, 9, 10, 5, 8, 4, 2]));
-  const remainder = sum % 11;
-  return remainder === 0 ? 0 : 11 - remainder;
-}
+export const ytunnusChecksum = R.compose(
+    R.unless(R.equals(0), R.subtract(11)),
+    R.modulo(R.__, 11),
+    R.reduce(R.add, 0),
+    R.zipWith(R.multiply, [7, 9, 10, 5, 8, 4, 2]),
+    R.map(parseInt),
+    R.slice(0, 7)
+);
 
-export function validYtunnus(ytunnus) {
-  const checksum = ytunnusChecksum(ytunnus);
-  return R.length(ytunnus) === 9 &&
-      checksum !== 10 &&
-      ytunnus[7] === '-' &&
-      parseInt(ytunnus[8]) === checksum;
-}
+export const isValidYtunnus = R.allPass([
+    R.test(/^\d{7}-\d$/),
+    R.converge(R.equals, [ytunnusChecksum, R.compose(parseInt, R.nth(8))])]);

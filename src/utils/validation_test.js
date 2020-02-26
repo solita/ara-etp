@@ -9,11 +9,11 @@ describe('Validation:', () => {
     }
 
     function assertIsValid(ytunnus) {
-      assert.equal(validation.validYtunnus(ytunnus), true);
+      assert.equal(validation.isValidYtunnus(ytunnus), true);
     }
 
     function assertIsInvalid(ytunnus) {
-      assert.equal(validation.validYtunnus(ytunnus), false);
+      assert.equal(validation.isValidYtunnus(ytunnus), false);
     }
 
     it('ytunnus checksum', () => {
