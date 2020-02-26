@@ -2,6 +2,7 @@ import * as R from 'ramda';
 import * as Fetch from '../../utils/fetch-utils';
 import * as Maybe from '../../utils/maybe-utils';
 import * as Future from '../../utils/future-utils';
+import * as validation from '../../utils/validation';
 
 const yritysApi = `/api/yritykset/`;
 
@@ -55,8 +56,6 @@ export const matchErrorWithAction = R.ifElse(
 
 export const isFilled = R.complement(R.isEmpty);
 
-export const isYTunnus = R.test(/^\d{7}-\d$/);
-
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 );
@@ -66,7 +65,7 @@ export const maybeValidate = validator => Maybe.fold(true, validator);
 export const isPostinumero = R.test(/^\d{5}$/);
 
 export const formValidators = {
-  ytunnus: R.allPass([isFilled, isYTunnus]),
+  ytunnus: R.allPass([isFilled, validation.isValidYtunnus]),
   nimi: isFilled,
   wwwosoite: R.anyPass([R.isEmpty, isUrl]),
   jakeluosoite: isFilled,
