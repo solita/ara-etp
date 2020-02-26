@@ -9,4 +9,4 @@ export const redirectAfterTimeout = (url, timeout) => setTimeout(() =>
 );
 
 // TODO should include state query parameter to cognito and verify it upon returning.
-export const loginPageUrl = () => `${loginPageBaseUrl}?client_id=${CONFIG.COGNITOCLIENTID}&redirect_uri=${encodeURI(document.location.href)}&response_type=code`;
+export const loginPageUrl = () => `${loginPageBaseUrl}?client_id=${CONFIG.COGNITOCLIENTID}&redirect_uri=${encodeURIComponent(document.location.href)}&response_type=code`;
