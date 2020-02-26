@@ -21,6 +21,7 @@ describe('Validation:', () => {
       assertChecksum("0000001", 9);
       assertChecksum("0000002", 7);
       assertChecksum("1234567", 1);
+      assertChecksum("0010001", 10);
     });
 
     it('valid ytunnus', () => {
@@ -38,6 +39,11 @@ describe('Validation:', () => {
       assertIsInvalid("a000000-1");
       assertIsInvalid("0000001-a");
       assertIsInvalid("a");
+    });
+
+    it('invalid ytunnus - checksum 10', () => {
+      assertIsInvalid("0010001-1");
+      assertIsInvalid("0010001-10");
     });
   });
 });
