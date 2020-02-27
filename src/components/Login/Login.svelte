@@ -10,7 +10,7 @@
   export const loginPageUrl = () => `${loginPageBaseUrl}?client_id=${CONFIG.COGNITOCLIENTID}&redirect_uri=${encodeURIComponent(document.location.href)}&response_type=code`;
 
   // TODO should come from config.json as well.
-  export const tokenUrl = code => `https://kehitys.energiatodistuspalvelu.com/oauth2/idpresponse?code=${code}`
+  export const tokenUrl = code => `https://kehitys-energiatodistuspalvelu-com.auth.eu-central-1.amazoncognito.com/oauth2/token?code=${code}`
 
   export const urlParams = new URLSearchParams(window.location.search);
   export const oauthCode = urlParams.get('code');
@@ -20,7 +20,9 @@
     RedirectUtils.redirectAfterTimeout(loginPageUrl(), redirectTimeout);
   }
   else {
-    const response = fetch(tokenUrl(oauthCode), {method: 'POST'})
+    const response = fetch(tokenUrl(oauthCode),
+        {method: 'POST',
+         headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
       .then(function(response) {
         console.log(response);
         document.cookie = `AWSELBAuthSessionCookie=${response.body.access_token}`
