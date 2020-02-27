@@ -3,20 +3,18 @@ import {
   locale,
   _,
   locales,
-  register,
-  isLoading,
+  addMessages,
   getLocaleFromNavigator
 } from 'svelte-i18n';
 
-const fetchLocale = locale => {
-  const localeUrl = `language/${locale}.json`;
-  return fetch(localeUrl).then(response => response.json());
-};
+import fi from '../public/language/fi.json';
+import sv from '../public/language/sv.json';
 
 const setupI18n = () => {
-  register('fi-FI', () => fetchLocale('fi'));
-  register('sv-FI', () => fetchLocale('sv'));
-  register('en', () => fetchLocale('en'));
+  addMessages('fi-FI', fi);
+  addMessages('fi', fi);
+  addMessages('sv-FI', sv);
+  addMessages('sv', sv);
 
   init({
     fallbackLocale: 'fi-FI',
@@ -24,4 +22,4 @@ const setupI18n = () => {
   });
 };
 
-export { setupI18n, _, locale, locales, isLoading };
+export { setupI18n, _, locale, locales };
