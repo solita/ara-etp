@@ -13,14 +13,16 @@ export const yritysDeserialize = R.evolve({
   wwwosoite: Maybe.fromNull
 });
 
-export const yritysSerialize = R.evolve({
-  verkkolaskuosoite: Maybe.fold(null, R.identity),
-  wwwosoite: Maybe.fold(null, R.identity)
-});
+export const yritysSerialize = R.compose(
+  R.evolve({
+    verkkolaskuosoite: Maybe.fold(null, R.identity),
+    wwwosoite: Maybe.fold(null, R.identity)
+  }),
+  R.dissoc('id')
+);
 
 export const yritysFetchFuture = R.curry((fetch, id) =>
   R.compose(
-    R.map(updateYritysAction),
     R.map(yritysDeserialize),
     Fetch.fetchFromUrl(fetch),
     urlForYritysId
@@ -92,4 +94,29 @@ export const validateYritysForm = R.curry((validators, yritys) =>
     R.assoc('wwwosoite', maybeValidate(validators.wwwosoite)),
     R.assoc('verkkolaskuosoite', maybeValidate(validators.verkkolaskuosoite))
   )(validators)
+);
+
+export const getYritysByIdFuture = R.compose(
+  R.map(yritysDeserialize),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch),
+  urlForYritysId
+);
+
+export const putYritysByIdFuture = R.curry((id, yritys) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod('put', urlForYritysId(id))),
+    yritysSerialize
+  )(yritys)
+);
+
+export const postYritysFuture = R.compose;
+
+export const yritysSubmitFuture = R.curry((fetch, method, api, yritys) =>
+  R.compose(
+    Fetch.fetchFromUrl(R.__, api),
+    Fetch.fetchWithMethod(fetch, method),
+    yritysSerialize
+  )(yritys)
 );

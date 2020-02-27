@@ -14,15 +14,13 @@
 
   export let yritys;
 
+  const originalYritys = R.clone(yritys);
+
   $: isValidForm = R.compose(
     R.reduce(R.and, true),
     R.values,
     YritysUtils.validateYritysForm(YritysUtils.formValidators)
   )(yritys);
-
-  $: console.log(
-    YritysUtils.validateYritysForm(YritysUtils.formValidators, yritys)
-  );
 </script>
 
 <style>
@@ -138,7 +136,14 @@
         <Button type={'submit'} text={$_('tallenna')} />
       </div>
       <div class="px-4">
-        <Button text={$_('peruuta')} type={'reset'} style={'secondary'} />
+        <Button
+          on:click={event => {
+            event.preventDefault();
+            yritys = R.clone(originalYritys);
+          }}
+          text={$_('peruuta')}
+          type={'reset'}
+          style={'secondary'} />
       </div>
     </div>
   </div>

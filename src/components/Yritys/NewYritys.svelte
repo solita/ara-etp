@@ -28,7 +28,7 @@
       )
     ),
     Fetch.fetchFromUrl(R.__, api),
-    Fetch.putFetch(fetch, method),
+    Fetch.fetchWithMethod(fetch, method),
     YritysUtils.yritysSerialize
   );
 

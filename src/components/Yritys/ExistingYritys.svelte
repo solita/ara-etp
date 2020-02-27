@@ -7,6 +7,8 @@
 
   import * as Maybe from '../../utils/maybe-utils';
   import * as Either from '../../utils/either-utils';
+  import * as Future from '../../utils/future-utils';
+  import * as Fetch from '../../utils/fetch-utils';
 
   import NavigationTabBar from '../NavigationTabBar/NavigationTabBar.svelte';
   import YritysForm from './YritysForm.svelte';
@@ -14,12 +16,28 @@
 
   export let params;
   let id = Maybe.fromNull(params.id);
+  let yritys = Maybe.None();
+  let api = Maybe.None();
 
-  let yritysLoad = Maybe.cata(_ => Promise.reject(404), Yritys.fetchYritys, id);
+  R.compose(
+    Future.fork(
+      console.error,
+      fetchedYritys => (yritys = Maybe.Some(fetchedYritys))
+    ),
+    Maybe.getOrElse(Future.reject(404)),
+    R.lift(YritysUtils.getYritysByIdFuture)
+  )(id);
+
+  const submit = R.compose(
+    Future.fork(console.error, console.log),
+    Maybe.getOrElse(Future.reject(404)),
+    R.lift(YritysUtils.putYritysByIdFuture)(id),
+    Maybe.Some
+  );
 
   $: links = [
     {
-      text: $_('yritys.uusi_yritys')
+      text: Maybe.fold('...', R.prop('nimi'), yritys)
     },
     { text: $_('yritys.laatijat') }
   ];
@@ -36,14 +54,12 @@
 </style>
 
 <section class="content">
-  {#await yritysLoad}
+  {#if yritys.isNone()}
     Loading...
-  {:then yritysAction}
+  {:else}
     <div class="w-full">
       <NavigationTabBar {links} />
     </div>
-    <YritysForm
-      on:submit={event => console.log(event)}
-      yritys={yritysAction.yritys} />
-  {/await}
+    <YritysForm {submit} yritys={Maybe.getOrElse(null, yritys)} />
+  {/if}
 </section>
