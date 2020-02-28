@@ -13,6 +13,7 @@
   export let type = 'text';
   export let autocomplete = 'off';
   export let value = '';
+  export let disabled = false;
 
   export let transform = R.identity;
   export let validation = R.always(true);
@@ -76,6 +77,11 @@
     right: 0.5em;
     content: 'expand_more';
   }
+
+  .inputwrapper.disabled {
+    @apply border-0 pb-3;
+  }
+
   input {
     @apply w-full relative font-extrabold py-1;
   }
@@ -88,6 +94,10 @@
     @apply bg-background;
   }
 
+  input:disabled {
+    @apply bg-background;
+  }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -97,10 +107,11 @@
 
 <label for={id} class:required class:error class:focused>{label}</label>
 
-<div class="inputwrapper" class:caret class:focused class:error>
+<div class="inputwrapper" class:caret class:focused class:error class:disabled>
   <input
     {id}
     {name}
+    {disabled}
     class="input"
     class:error
     type="text"

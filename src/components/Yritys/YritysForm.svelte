@@ -11,6 +11,7 @@
   const update = fn => (yritys = fn(yritys));
 
   export let submit;
+  export let existing = false;
 
   export let yritys;
 
@@ -22,7 +23,7 @@
   $: isValidForm = R.compose(
     R.reduce(R.and, true),
     R.values,
-    YritysUtils.validateYritysForm(YritysUtils.formValidators)
+    YritysUtils.validateYritys(formValidators)
   )(yritys);
 </script>
 
@@ -48,7 +49,8 @@
           value={yritys.ytunnus}
           transform={formTransformers.ytunnus}
           validation={formValidators.ytunnus}
-          update={R.compose( update, R.set(R.lensProp('ytunnus')) )} />
+          update={R.compose( update, R.set(R.lensProp('ytunnus')) )}
+          disabled={existing} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
         <Input

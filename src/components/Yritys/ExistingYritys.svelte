@@ -43,7 +43,7 @@
     @apply flex flex-col -my-4 pb-8;
   }
 
-  .content > * {
+  .content > * :not(first) {
     @apply py-8;
   }
 </style>
@@ -55,6 +55,9 @@
     <div class="w-full">
       <NavigationTabBar {links} />
     </div>
-    <YritysForm {submit} yritys={Maybe.getOrElse(null, yritys)} />
+    <YritysForm
+      {submit}
+      existing={true}
+      yritys={Maybe.getOrElse(null, yritys)} />
   {/if}
 </section>

@@ -8,15 +8,15 @@ const yritysApi = `/api/yritykset`;
 
 export const urlForYritysId = id => `${yritysApi}/${id}`;
 
-export const yritysDeserialize = R.evolve({
+export const deserialize = R.evolve({
   verkkolaskuosoite: Maybe.fromNull,
   wwwosoite: Maybe.fromNull
 });
 
-export const yritysSerialize = R.compose(
+export const serialize = R.compose(
   R.evolve({
-    verkkolaskuosoite: Maybe.fold(null, R.identity),
-    wwwosoite: Maybe.fold(null, R.identity)
+    verkkolaskuosoite: Maybe.getOrElse(null),
+    wwwosoite: Maybe.getOrElse(null)
   }),
   R.dissoc('id')
 );
@@ -54,7 +54,7 @@ export const formTransformers = () => ({
   verkkolaskuosoite: R.trim
 });
 
-export const validateYritysForm = R.curry((validators, yritys) =>
+export const validateYritys = R.curry((validators, yritys) =>
   R.compose(
     R.evolve(R.__, yritys),
     R.assoc('wwwosoite', Maybe.fold(true, validators.wwwosoite)),
@@ -64,7 +64,7 @@ export const validateYritysForm = R.curry((validators, yritys) =>
 
 export const getYritysByIdFuture = R.curry((fetch, id) =>
   R.compose(
-    R.map(yritysDeserialize),
+    R.map(deserialize),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     urlForYritysId
@@ -75,7 +75,7 @@ export const putYritysByIdFuture = R.curry((fetch, id, yritys) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', urlForYritysId(id))),
-    yritysSerialize
+    serialize
   )(yritys)
 );
 
@@ -83,6 +83,6 @@ export const postYritysFuture = R.curry((fetch, yritys) =>
   R.compose(
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', yritysApi)),
-    yritysSerialize
+    serialize
   )(yritys)
 );
