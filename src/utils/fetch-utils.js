@@ -18,10 +18,11 @@ export const fetchFromUrl = R.curry((fetch, url) =>
   R.compose(R.map(responseAsJson), Future.encaseP(fetch))(url)
 );
 
-export const getFetch = url =>
-  fetch(url, { headers: { Accept: 'application/json' } });
+export const getFetch = R.curry((fetch, url) =>
+  fetch(url, { headers: { Accept: 'application/json' } })
+);
 
-export const fetchWithMethod = R.curry((method, url, body) =>
+export const fetchWithMethod = R.curry((fetch, method, url, body) =>
   fetch(url, {
     method,
     body: JSON.stringify(body),

@@ -4,8 +4,6 @@
 
   import { _ } from '../../i18n';
 
-  import * as Yritys from './yritys';
-
   import * as Maybe from '../../utils/maybe-utils';
   import * as Either from '../../utils/either-utils';
   import * as Fetch from '../../utils/fetch-utils';
@@ -15,21 +13,11 @@
   import YritysForm from './YritysForm.svelte';
   import * as YritysUtils from './yritys-utils';
 
-  let { yritys, api, method } = YritysUtils.newYritysAction();
+  let yritys = YritysUtils.emptyYritys();
 
   const submit = R.compose(
-    Future.fork(
-      console.error,
-      R.compose(
-        replace,
-        R.concat('/yritys/'),
-        R.toString,
-        R.prop('id')
-      )
-    ),
-    Fetch.fetchFromUrl(R.__, api),
-    Fetch.fetchWithMethod(fetch, method),
-    YritysUtils.yritysSerialize
+    Future.fork(console.error, ({ id }) => replace(`/yritys/${id}`)),
+    YritysUtils.postYritysFuture
   );
 
   $: links = [

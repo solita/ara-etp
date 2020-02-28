@@ -16,6 +16,9 @@
 
   const originalYritys = R.clone(yritys);
 
+  const formTransformers = YritysUtils.formTransformers();
+  const formValidators = YritysUtils.formValidators();
+
   $: isValidForm = R.compose(
     R.reduce(R.and, true),
     R.values,
@@ -43,8 +46,8 @@
           label={$_('yritys.y-tunnus')}
           required={true}
           value={yritys.ytunnus}
-          transform={YritysUtils.formTransformers.ytunnus}
-          validation={YritysUtils.formValidators.ytunnus}
+          transform={formTransformers.ytunnus}
+          validation={formValidators.ytunnus}
           update={R.compose( update, R.set(R.lensProp('ytunnus')) )} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
@@ -54,8 +57,8 @@
           label={$_('yritys.nimi')}
           required={true}
           value={yritys.nimi}
-          transform={YritysUtils.formTransformers.nimi}
-          validation={YritysUtils.formValidators.nimi}
+          transform={formTransformers.nimi}
+          validation={formValidators.nimi}
           update={R.compose( update, R.set(R.lensProp('nimi')) )} />
       </div>
     </div>
@@ -67,8 +70,8 @@
         required={false}
         type={'url'}
         value={Maybe.fold('', R.identity, yritys.wwwosoite)}
-        transform={YritysUtils.formTransformers.wwwosoite}
-        validation={YritysUtils.formValidators.wwwosoite}
+        transform={formTransformers.wwwosoite}
+        validation={formValidators.wwwosoite}
         update={R.compose( update, R.compose( R.set(R.lensProp('wwwosoite')), Maybe.fromEmpty ) )} />
     </div>
     <H1 text={$_('yritys.laskutusosoite')} />
@@ -80,8 +83,8 @@
           label={$_('yritys.jakeluosoite')}
           required={true}
           value={yritys.jakeluosoite}
-          transform={YritysUtils.formTransformers.jakeluosoite}
-          validation={YritysUtils.formValidators.jakeluosoite}
+          transform={formTransformers.jakeluosoite}
+          validation={formValidators.jakeluosoite}
           update={R.compose( update, R.set(R.lensProp('jakeluosoite')) )} />
       </div>
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -92,8 +95,8 @@
             label={$_('yritys.postinumero')}
             required={true}
             value={yritys.postinumero}
-            transform={YritysUtils.formTransformers.postinumero}
-            validation={YritysUtils.formValidators.postinumero}
+            transform={formTransformers.postinumero}
+            validation={formValidators.postinumero}
             update={R.compose( update, R.set(R.lensProp('postinumero')) )} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -103,8 +106,8 @@
             label={$_('yritys.postitoimipaikka')}
             required={true}
             value={yritys.postitoimipaikka}
-            transform={YritysUtils.formTransformers.postitoimipaikka}
-            validation={YritysUtils.formValidators.postitoimipaikka}
+            transform={formTransformers.postitoimipaikka}
+            validation={formValidators.postitoimipaikka}
             update={R.compose( update, R.set(R.lensProp('postitoimipaikka')) )} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -114,8 +117,8 @@
             label={$_('yritys.maa')}
             required={true}
             value={yritys.maa}
-            transform={YritysUtils.formTransformers.maa}
-            validation={YritysUtils.formValidators.maa}
+            transform={formTransformers.maa}
+            validation={formValidators.maa}
             update={R.compose( update, R.set(R.lensProp('maa')) )} />
         </div>
       </div>
@@ -127,8 +130,8 @@
         name={'verkkolaskuosoite'}
         label={$_('yritys.ovt-tunnus')}
         value={Maybe.fold('', R.identity, yritys.verkkolaskuosoite)}
-        transform={YritysUtils.formTransformers.verkkolaskuosoite}
-        validation={YritysUtils.formValidators.verkkolaskuosoite}
+        transform={formTransformers.verkkolaskuosoite}
+        validation={formValidators.verkkolaskuosoite}
         update={R.compose( update, R.compose( R.set(R.lensProp('verkkolaskuosoite')), Maybe.fromEmpty ) )} />
     </div>
     <div class="flex -mx-4 pt-8">

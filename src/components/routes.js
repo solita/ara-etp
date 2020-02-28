@@ -3,5 +3,5 @@ import ExistingYritys from './Yritys/ExistingYritys.svelte';
 
 export const routes = {
   '/yritys/new': NewYritys,
-  '/yritys/:id?': ExistingYritys
+  '/yritys/:id': ExistingYritys
 };

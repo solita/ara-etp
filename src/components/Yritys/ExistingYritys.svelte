@@ -3,8 +3,6 @@
 
   import { _ } from '../../i18n';
 
-  import * as Yritys from './yritys';
-
   import * as Maybe from '../../utils/maybe-utils';
   import * as Either from '../../utils/either-utils';
   import * as Future from '../../utils/future-utils';
@@ -15,7 +13,7 @@
   import * as YritysUtils from './yritys-utils';
 
   export let params;
-  let id = Maybe.fromNull(params.id);
+  let id = params.id;
   let yritys = Maybe.None();
   let api = Maybe.None();
 
@@ -24,15 +22,12 @@
       console.error,
       fetchedYritys => (yritys = Maybe.Some(fetchedYritys))
     ),
-    Maybe.getOrElse(Future.reject(404)),
-    R.lift(YritysUtils.getYritysByIdFuture)
+    YritysUtils.getYritysByIdFuture(fetch)
   )(id);
 
   const submit = R.compose(
     Future.fork(console.error, console.log),
-    Maybe.getOrElse(Future.reject(404)),
-    R.lift(YritysUtils.putYritysByIdFuture)(id),
-    Maybe.Some
+    YritysUtils.putYritysByIdFuture(fetch, id)
   );
 
   $: links = [
