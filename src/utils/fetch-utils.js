@@ -15,7 +15,7 @@ export const responseAsJson = R.compose(
 );
 
 export const fetchFromUrl = R.curry((fetch, url) =>
-  R.compose(R.map(responseAsJson), Future.encaseP(fetch))(url)
+  R.compose(responseAsJson, Future.encaseP(fetch))(url)
 );
 
 export const getFetch = R.curry((fetch, url) =>

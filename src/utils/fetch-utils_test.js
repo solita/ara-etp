@@ -3,7 +3,7 @@ import * as Fetch from './fetch-utils';
 import * as Future from './future-utils';
 
 describe('FetchUtils', () => {
-  describe('responseAsJson', () => {
+  describe('toJson', () => {
     it('should call right side of fork with resolve', done => {
       const expected = {
         a: true
@@ -19,7 +19,7 @@ describe('FetchUtils', () => {
           expect(value).to.eql(expected);
           done();
         },
-        Fetch.responseAsJson(response)
+        Fetch.toJson(response)
       );
     });
 
@@ -38,7 +38,7 @@ describe('FetchUtils', () => {
           done();
         },
         () => {},
-        Fetch.responseAsJson(response)
+        Fetch.toJson(response)
       );
     });
 
@@ -60,7 +60,7 @@ describe('FetchUtils', () => {
           done();
         },
         () => {},
-        Fetch.responseAsJson(response)
+        Fetch.toJson(response)
       );
     });
   });
@@ -86,7 +86,7 @@ describe('FetchUtils', () => {
     it('should reject with statusCode when not ok', done => {
       const response = {
         ok: false,
-        statusCode: 400
+        status: 400
       };
 
       const expected = 400;
