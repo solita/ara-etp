@@ -17,7 +17,7 @@
   export const loginPageUrl = () => `${loginPageBaseUrl}?client_id=${appClientId}&redirect_uri=${currentPage}&response_type=code`;
 
   // TODO should come from config.json as well.
-  export const tokenUrl = code => `https://kehitys-energiatodistuspalvelu-com.auth.eu-central-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${appClientId}&redirect_uri=${currentPage}&code=${code}`
+ export const tokenUrl = code => `https://kehitys-energiatodistuspalvelu-com.auth.eu-central-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=${appClientId}&redirect_uri=https%3A%2F%2Fkehitys.energiatodistuspalvelu.com&code=${code}`
 
   export const urlParams = new URLSearchParams(window.location.search);
   export const oauthCode = urlParams.get('code');
