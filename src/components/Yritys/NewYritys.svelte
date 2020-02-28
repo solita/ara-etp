@@ -17,7 +17,7 @@
 
   const submit = R.compose(
     Future.fork(console.error, ({ id }) => replace(`/yritys/${id}`)),
-    YritysUtils.postYritysFuture
+    YritysUtils.postYritysFuture(fetch)
   );
 
   $: links = [
