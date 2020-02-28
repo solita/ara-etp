@@ -2,6 +2,7 @@
   export let text = '';
   export let type = 'button';
   export let style = 'primary';
+  export let disabled = false;
 </script>
 
 <style type="text/postcss">
@@ -20,6 +21,10 @@
   .error {
     @apply bg-error;
   }
+
+  .disabled {
+    @apply bg-disabled;
+  }
 </style>
 
 <button
@@ -27,6 +32,8 @@
   class:primary={style === 'primary'}
   class:secondary={style === 'secondary'}
   class:error={style === 'error'}
+  class:disabled
+  {disabled}
   on:click>
   {text}
 </button>

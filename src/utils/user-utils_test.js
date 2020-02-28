@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as UserUtils from './user-utils';
-import * as Future from '../../utils/future-utils';
+import * as Future from './future-utils';
 
 describe('UserUtils-suite: ', () => {
   describe('urlForUserId', () => {
