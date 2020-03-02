@@ -1,4 +1,4 @@
-import NavigationTab from './NavigationTab.svelte';
+import NavigationTab from './NavigationTab';
 
 export default { title: 'NavigationTab' };
 

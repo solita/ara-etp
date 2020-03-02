@@ -1,4 +1,4 @@
-import NavigationTabBar from './NavigationTabBar.svelte';
+import NavigationTabBar from './NavigationTabBar';
 
 export default { title: 'NavigationTabBar' };
 

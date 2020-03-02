@@ -1,4 +1,4 @@
-import Footer from './Footer.svelte';
+import Footer from './Footer';
 
 export default { title: 'Footer' };
 

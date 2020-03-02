@@ -1,4 +1,4 @@
-import Breadcrumb from './Breadcrumb.svelte';
+import Breadcrumb from './Breadcrumb';
 
 export default { title: 'Breadcrumb' };
 

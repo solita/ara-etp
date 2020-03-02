@@ -8,8 +8,8 @@
   import * as Future from '../../utils/future-utils';
   import * as Fetch from '../../utils/fetch-utils';
 
-  import NavigationTabBar from '../NavigationTabBar/NavigationTabBar.svelte';
-  import YritysForm from './YritysForm.svelte';
+  import NavigationTabBar from '../NavigationTabBar/NavigationTabBar';
+  import YritysForm from './YritysForm';
   import * as YritysUtils from './yritys-utils';
 
   export let params;

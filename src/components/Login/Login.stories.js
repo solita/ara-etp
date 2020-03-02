@@ -1,4 +1,4 @@
-import Login from './Login.svelte';
+import Login from './Login';
 
 export default { title: 'Login' };
 

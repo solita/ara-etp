@@ -4,15 +4,15 @@
   import { routes } from './components/routes.js';
   import { setupI18n } from './i18n.js';
   import * as R from 'ramda';
-  import Header from './components/Header/Header.svelte';
-  import Loading from './components/Loading/Loading.svelte';
-  import Login from './components/Login/Login.svelte';
-  import Breadcrumb from './components/Breadcrumb/Breadcrumb.svelte';
-  import Footer from './components/Footer/Footer.svelte';
+  import Header from './components/Header/Header';
+  import Loading from './components/Loading/Loading';
+  import Login from './components/Login/Login';
+  import Breadcrumb from './components/Breadcrumb/Breadcrumb';
+  import Footer from './components/Footer/Footer';
   import * as UserUtils from './utils/user-utils';
   import { currentUserStore, errorStore } from './stores';
 
-  import Tailwindcss from './Tailwindcss.svelte';
+  import Tailwindcss from './Tailwindcss';
 
   setupI18n();
   UserUtils.fetchAndStoreUser();

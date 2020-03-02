@@ -1,5 +1,5 @@
 <script>
-  import NavigationTab from '../NavigationTab/NavigationTab.svelte';
+  import NavigationTab from '../NavigationTab/NavigationTab';
 
   export let links;
 </script>
