@@ -4,7 +4,6 @@ const Promise = require('promise');
 
 const jsHash = crypto.createHash('md5');
 const cssHash = crypto.createHash('md5');
-const configHash = crypto.createHash('md5');
 
 Promise.all([
   new Promise((resolve, reject) => {
@@ -27,13 +26,6 @@ Promise.all([
       if (err) reject(err);
       resolve(cssHash.update(data).digest('base64'));
     });
-  }),
-  new Promise((resolve, reject) => {
-    console.log('Hashing configs');
-    fs.readFile('./public/build/config.js', (err, data) => {
-      if (err) reject(err);
-      resolve(configHash.update(data).digest('base64'));
-    });
   })
 ])
   .then(([html, jsHash, cssHash, configHash]) => {
@@ -43,8 +35,7 @@ Promise.all([
         './public/index.html',
         html
           .replace('$jshash', `?hash=${jsHash}`)
-          .replace('$csshash', `?hash=${cssHash}`)
-          .replace('$confighash', `?hash=${configHash}`),
+          .replace('$csshash', `?hash=${cssHash}`),
         'utf-8',
         err => {
           if (err) reject(err);
