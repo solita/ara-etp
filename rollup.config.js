@@ -71,6 +71,7 @@ export default {
     // consult the documentation for details:
     // https://github.com/rollup/rollup-plugin-commonjs
     resolve({
+      extensions: ['.svelte', '.js'],
       browser: true,
       dedupe: importee =>
         importee === 'svelte' || importee.startsWith('svelte/')

@@ -1,9 +1,9 @@
 <script>
   import * as R from 'ramda';
-  import FileDropArea from '../FileDropArea/FileDropArea.svelte';
-  import Overlay from '../Overlay/Overlay.svelte';
-  import Spinner from '../Spinner/Spinner.svelte';
-  import Alert from '../Alert/Alert.svelte';
+  import FileDropArea from '../FileDropArea/FileDropArea';
+  import Overlay from '../Overlay/Overlay';
+  import Spinner from '../Spinner/Spinner';
+  import Alert from '../Alert/Alert';
   import * as Either from '../../utils/either-utils';
 
   import * as FileuploadUtils from './fileupload-utils';

@@ -1,4 +1,4 @@
-import H1 from './H1.svelte';
+import H1 from './H1';
 
 export default { title: 'H1' };
 

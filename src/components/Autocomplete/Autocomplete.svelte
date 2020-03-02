@@ -10,8 +10,8 @@
     handleKey
   } from './autocomplete-navigation';
 
-  import Input from '../Input/Input.svelte';
-  import DropdownList from '../DropdownList/DropdownList.svelte';
+  import Input from '../Input/Input';
+  import DropdownList from '../DropdownList/DropdownList';
 
   export let state = {};
 

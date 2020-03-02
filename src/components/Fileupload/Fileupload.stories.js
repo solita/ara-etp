@@ -1,4 +1,4 @@
-import Fileupload from './Fileupload.svelte';
+import Fileupload from './Fileupload';
 
 export default { title: 'Fileupload' };
 

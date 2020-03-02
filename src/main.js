@@ -1,7 +1,7 @@
 import 'promise-polyfill/src/polyfill';
 import 'whatwg-fetch';
 
-import App from './App.svelte';
+import App from './App';
 
 const app = new App({
   target: document.body,

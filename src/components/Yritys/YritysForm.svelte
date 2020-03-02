@@ -4,9 +4,9 @@
   import * as R from 'ramda';
   import * as YritysUtils from './yritys-utils';
 
-  import H1 from '../H1/H1.svelte';
-  import Input from '../Input/Input.svelte';
-  import Button from '../Button/Button.svelte';
+  import H1 from '../H1/H1';
+  import Input from '../Input/Input';
+  import Button from '../Button/Button';
 
   const update = fn => (yritys = fn(yritys));
 

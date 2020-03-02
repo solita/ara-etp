@@ -1,5 +1,5 @@
-import NewYritys from './Yritys/NewYritys.svelte';
-import ExistingYritys from './Yritys/ExistingYritys.svelte';
+import NewYritys from './Yritys/NewYritys';
+import ExistingYritys from './Yritys/ExistingYritys';
 
 export const routes = {
   '/yritys/new': NewYritys,

@@ -1,4 +1,4 @@
-import Autocomplete from './Autocomplete.svelte';
+import Autocomplete from './Autocomplete';
 
 export default { title: 'Autocomplete' };
 

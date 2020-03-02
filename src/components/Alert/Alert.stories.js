@@ -1,4 +1,4 @@
-import Alert from './Alert.svelte';
+import Alert from './Alert';
 
 export default { title: 'Alert' };
 
@@ -6,14 +6,14 @@ export const errorWithText = () => ({
   Component: Alert,
   props: {
     type: 'error',
-    text: 'Virhe',
-  },
+    text: 'Virhe'
+  }
 });
 
 export const successWithText = () => ({
   Component: Alert,
   props: {
     type: 'success',
-    text: 'Onnistu',
-  },
+    text: 'Onnistu'
+  }
 });

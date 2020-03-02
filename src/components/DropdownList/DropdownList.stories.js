@@ -1,4 +1,4 @@
-import DropdownList from './DropdownList.svelte';
+import DropdownList from './DropdownList';
 
 export default { title: 'DropdownList' };
 
