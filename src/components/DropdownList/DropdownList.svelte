@@ -1,17 +1,11 @@
 <script>
-  import { slide } from 'svelte/transition';
-  import { onMount } from 'svelte';
+  import * as Maybe from '../../utils/maybe-utils';
 
-  export let state = [];
-  export let component;
+  export let items = [];
+  export let active = Maybe.None;
+  export let component = null;
+  export let onclick;
 
-  export let passFocusableNodesToParent = () => {};
-
-  let node;
-
-  onMount(() =>
-    passFocusableNodesToParent(node.querySelectorAll('.dropdownitem'))
-  );
 </script>
 
 <style type="text/postcss">
@@ -31,14 +25,16 @@
     @apply bg-background text-dark;
   }
 
-  li:focus {
-    @apply outline-none bg-hover text-light;
+  .active {
+    @apply outline-none bg-primary text-light;
   }
 </style>
 
-<ol transition:slide bind:this={node}>
-  {#each state as item}
-    <li tabindex="0" on:click on:blur>
+<ol>
+  {#each items as item, index}
+    <li class="dropdownitem"
+        class:active={index===active}
+        on:click={_ => onclick(item, index)}>
       {#if component}
         <svelte:component this={component} state={item} />
       {:else}{item}{/if}

@@ -7,6 +7,7 @@
   import H1 from '../H1/H1';
   import Input from '../Input/Input';
   import Button from '../Button/Button';
+  import Autocomplete from '../Autocomplete/Autocomplete';
 
   const update = fn => (yritys = fn(yritys));
 
@@ -113,15 +114,17 @@
             update={R.compose( update, R.set(R.lensProp('postitoimipaikka')) )} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Input
-            id={'maa'}
-            name={'maa'}
-            label={$_('yritys.maa')}
-            required={true}
-            value={yritys.maa}
-            transform={formTransformers.maa}
-            validation={formValidators.maa}
-            update={R.compose( update, R.set(R.lensProp('maa')) )} />
+          <Autocomplete items={['asdf1', 'asdf2', 'asdf3', 'asdf4']}>
+            <Input
+              id={'maa'}
+              name={'maa'}
+              label={$_('yritys.maa')}
+              required={true}
+              value={yritys.maa}
+              transform={formTransformers.maa}
+              validation={formValidators.maa}
+              update={R.compose( update, R.set(R.lensProp('maa')) )} />
+          </Autocomplete>
         </div>
       </div>
     </div>

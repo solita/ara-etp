@@ -2,7 +2,7 @@ import monet from 'monet';
 import * as R from 'ramda';
 
 export const { Maybe } = monet;
-export const { of, Some, None, fromNull, fromEmpty, fromEither } = Maybe;
+export const { of, Some, None, fromNull, fromUndefined, fromEmpty, fromEither } = Maybe;
 
 export const fold = R.curry((defaultValue, fn, m) => m.fold(defaultValue)(fn));
 
