@@ -1,6 +1,6 @@
 <script>
-  import { _ } from '../../language/i18n';
-  import * as Maybe from '../../utils/maybe-utils';
+  import { _ } from '/language/i18n';
+  import * as Maybe from '/utils/maybe-utils';
   import * as R from 'ramda';
   import * as YritysUtils from './yritys-utils';
 

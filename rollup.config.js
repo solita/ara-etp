@@ -7,6 +7,7 @@ import json from '@rollup/plugin-json';
 import sveltePreprocess from 'svelte-preprocess';
 import babel from 'rollup-plugin-babel';
 import cleaner from 'rollup-plugin-cleaner';
+import rootImport from 'rollup-plugin-root-import';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -63,6 +64,11 @@ export default {
       preprocess: sveltePreprocess({
         postcss: true
       })
+    }),
+
+    rootImport({
+      root: `${__dirname}/src`,
+      extensions: ['.svelte', '.js']
     }),
 
     // If you have external dependencies installed from

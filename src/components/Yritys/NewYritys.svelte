@@ -2,16 +2,16 @@
   import { replace } from 'svelte-spa-router';
   import * as R from 'ramda';
 
-  import { _ } from '../../language/i18n';
+  import { _ } from '/language/i18n';
 
-  import * as Maybe from '../../utils/maybe-utils';
-  import * as Either from '../../utils/either-utils';
-  import * as Fetch from '../../utils/fetch-utils';
-  import * as Future from '../../utils/future-utils';
+  import * as Maybe from '/utils/maybe-utils';
+  import * as Either from '/utils/either-utils';
+  import * as Fetch from '/utils/fetch-utils';
+  import * as Future from '/utils/future-utils';
 
-  import NavigationTabBar from '../NavigationTabBar/NavigationTabBar';
-  import YritysForm from './YritysForm';
-  import * as YritysUtils from './yritys-utils';
+  import NavigationTabBar from '/components/NavigationTabBar/NavigationTabBar';
+  import YritysForm from '/components/Yritys/YritysForm';
+  import * as YritysUtils from '/components/Yritys/yritys-utils';
 
   let yritys = YritysUtils.emptyYritys();
 
