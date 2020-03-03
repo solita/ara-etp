@@ -2,7 +2,7 @@
   import Router from 'svelte-spa-router';
   import { link } from 'svelte-spa-router';
   import { routes } from './components/routes.js';
-  import { setupI18n } from './i18n.js';
+  import { setupI18n } from './language/i18n.js';
   import * as R from 'ramda';
   import Header from './components/Header/Header';
   import Loading from './components/Loading/Loading';

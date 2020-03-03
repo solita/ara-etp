@@ -2,7 +2,7 @@
   import { replace } from 'svelte-spa-router';
   import * as R from 'ramda';
 
-  import { _ } from '../../i18n';
+  import { _ } from '../../language/i18n';
 
   import * as Maybe from '../../utils/maybe-utils';
   import * as Either from '../../utils/either-utils';
