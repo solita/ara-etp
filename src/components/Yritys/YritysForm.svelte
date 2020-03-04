@@ -114,7 +114,7 @@
             update={R.compose( update, R.set(R.lensProp('postitoimipaikka')) )} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Autocomplete items={['asdf1', 'asdf2', 'asdf3', 'asdf4']}>
+          <Autocomplete items={['Suomi', 'Ruotsi', 'Norja', 'Tanska']}>
             <Input
               id={'maa'}
               name={'maa'}
