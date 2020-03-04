@@ -1,13 +1,14 @@
 <script>
-  import { _ } from '/language/i18n';
-  import * as Maybe from '/utils/maybe-utils';
   import * as R from 'ramda';
+
+  import { _ } from '@Language/i18n';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as YritysUtils from './yritys-utils';
 
-  import H1 from '../H1/H1';
-  import Input from '../Input/Input';
-  import Button from '../Button/Button';
   import Autocomplete from '../Autocomplete/Autocomplete';
+  import H1 from '@Component/H1/H1';
+  import Input from '@Component/Input/Input';
+  import Button from '@Component/Button/Button';
 
   const update = fn => (yritys = fn(yritys));
 

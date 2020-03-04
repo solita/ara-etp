@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import * as R from 'ramda';
-  import * as Maybe from '/utils/maybe-utils';
+  import * as Maybe from '@Utility/maybe-utils';
 
   export let id;
   export let name;
