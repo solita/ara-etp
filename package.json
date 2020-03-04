@@ -31,6 +31,7 @@
     "@storybook/svelte": "^5.3.12",
     "autoprefixer": "^9.7.3",
     "babel-loader": "^8.0.6",
+    "babel-plugin-module-resolver": "^4.0.0",
     "chai": "^4.2.0",
     "express": "^4.17.1",
     "helmet-csp": "^2.9.4",
