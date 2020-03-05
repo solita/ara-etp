@@ -1,80 +1,67 @@
 <script>
   import * as R from 'ramda';
 
-  export let pageCount;
-  export let pageNum;
+  import * as PaginationUtils from './pagination-utils';
 
-  const isPageCenterItem = items => {
-    return R.equals(pageNum, R.nth(1, items));
-  };
+  export let pageCount = 1;
+  export let pageNum = 1;
 
-  const addNearByDots = (acc, item) => {
-    const last = R.last(acc);
-    const isNotNextItem = R.gt(R.subtract(item, last), 1);
-    return isNotNextItem ? R.append(['x', item], acc) : R.append(item, acc);
-  };
-
-  const getNextItems = R.always(
-    R.ifElse(
-      R.equals(1),
-      R.always([R.inc(pageNum)]),
-      R.always([R.dec(pageNum)])
-    )(pageNum)
-  );
-
-  const indexes = R.compose(
-    R.flatten,
-    R.reduce(addNearByDots, []),
-    R.sort((a, b) => a - b),
-    R.union([1, pageCount]),
-    R.flatten,
-    R.when(R.isEmpty, getNextItems),
-    R.filter(isPageCenterItem),
-    R.aperture(3),
-    R.range(1),
-    R.inc
-  )(pageCount);
+  const pagesNear = PaginationUtils.nearForCurrent(pageCount, pageNum);
 </script>
 
 <style type="text/postcss">
-  .pagination {
-    @apply flex;
+  div {
+    @apply flex items-center;
   }
 
-  .dots,
-  .pagination a {
-    @apply text-dark px-4 py-2 no-underline border-1 border-active;
+  span,
+  a {
+    @apply text-dark px-4 py-2 no-underline border-t-1 border-b-1 border-r-1 border-active;
   }
 
-  .pagination a.active {
+  a.active {
     @apply bg-active;
   }
 
-  .pagination a:hover:not(.active) {
+  .arrow {
+    @apply flex;
+  }
+
+  a:hover:not(.active) {
     @apply bg-hover;
   }
 
-  .pagination a:first-child {
-    @apply rounded-l-lg;
+  a:first-child {
+    @apply rounded-l-lg border-l-1;
   }
 
-  .pagination a:last-child {
+  a:last-child {
     @apply rounded-r-lg;
   }
 </style>
 
 {#if pageCount > 0}
   <div class="pagination">
-    <a href="#">&laquo;</a>
-
-    {#each indexes as index}
-      {#if R.equals(index, 'x')}
-        <span class="dots">...</span>
-      {:else}
-        <a class={R.equals(index, pageNum) ? 'active' : ''} href="#">{index}</a>
-      {/if}
+    <a class="arrow" href="#">
+      <i class="material-icons">keyboard_arrow_left</i>
+    </a>
+    <a class={R.equals(1, pageNum) ? 'active' : ''} href="#">1</a>
+    {#if R.head(pagesNear) - 1 > 1}
+      <span class="dots">...</span>
+    {/if}
+    {#each pagesNear as page}
+      <a class={R.equals(page, pageNum) ? 'active' : ''} href="#">{page}</a>
     {/each}
-
-    <a href="#">&raquo;</a>
+    {#if pageCount - R.last(pagesNear) > 1}
+      <span class="dots">...</span>
+    {/if}
+    {#if pageCount !== 1}
+      <a class={R.equals(pageCount, pageNum) ? 'active' : ''} href="#">
+        {pageCount}
+      </a>
+    {/if}
+    <a class="arrow" href="#">
+      <i class="material-icons">keyboard_arrow_right</i>
+    </a>
   </div>
 {/if}
