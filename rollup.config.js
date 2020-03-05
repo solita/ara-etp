@@ -7,6 +7,9 @@ import json from '@rollup/plugin-json';
 import sveltePreprocess from 'svelte-preprocess';
 import babel from 'rollup-plugin-babel';
 import cleaner from 'rollup-plugin-cleaner';
+import alias from '@rollup/plugin-alias';
+
+import path from 'path';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -63,6 +66,15 @@ export default {
       preprocess: sveltePreprocess({
         postcss: true
       })
+    }),
+
+    alias({
+      entries: {
+        '@Component': path.resolve(__dirname, 'src/components'),
+        '@Utility': path.resolve(__dirname, 'src/utils'),
+        '@Language': path.resolve(__dirname, 'src/language'),
+        '@': path.resolve(__dirname, 'src')
+      }
     }),
 
     // If you have external dependencies installed from

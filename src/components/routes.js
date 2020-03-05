@@ -1,5 +1,5 @@
-import NewYritys from './Yritys/NewYritys';
-import ExistingYritys from './Yritys/ExistingYritys';
+import NewYritys from '@Component/Yritys/NewYritys';
+import ExistingYritys from '@Component/Yritys/ExistingYritys';
 
 export const routes = {
   '/yritys/new': NewYritys,

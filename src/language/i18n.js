@@ -7,8 +7,8 @@ import {
   getLocaleFromNavigator
 } from 'svelte-i18n';
 
-import fi from '../public/language/fi.json';
-import sv from '../public/language/sv.json';
+import fi from './fi.json';
+import sv from './sv.json';
 
 const setupI18n = () => {
   addMessages('fi-FI', fi);

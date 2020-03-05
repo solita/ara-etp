@@ -8,7 +8,7 @@
 
   import * as FileuploadUtils from './fileupload-utils';
 
-  import { _ } from '../../i18n.js';
+  import { _ } from '../../language/i18n.js';
 
   let state = { files: [] };
 
