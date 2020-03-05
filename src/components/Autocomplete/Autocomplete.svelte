@@ -1,40 +1,58 @@
 <script>
-  import { slide } from 'svelte/transition';
+  import { onMount } from 'svelte';
 
   import * as R from 'ramda';
+  import * as keys from './keys';
   import * as Maybe from '../../utils/maybe-utils';
 
-  import {
-    focusNode,
-    isHandlableKey,
-    handleKey
-  } from './autocomplete-navigation';
-
-  import Input from '../Input/Input';
   import DropdownList from '../DropdownList/DropdownList';
 
-  export let state = {};
+  export let items = [];
 
-  let inputNode = [];
-  let dropdownNodes = [];
+  let active = Maybe.None();
+  let input;
+  let node;
+  let filteredItems = [];
 
-  let focusedIndex = Maybe.None();
+  function setValue(value) {
+    input.value=value;
+    input.dispatchEvent(new Event("input"));
+  }
 
-  $: showDropdown = focusedIndex.isSome();
-  $: focusableNodes = [inputNode, ...dropdownNodes];
+  const keyHandlers = {
+    [keys.DOWN_ARROW]: active => active
+          .map(R.compose(R.min(filteredItems.length - 1), R.add(1)))
+          .orElse(Maybe.Some(0)),
+    [keys.UP_ARROW]: active => active
+          .map(R.add(-1))
+          .filter(R.lte(0)),
+    [keys.ESCAPE]: _ => Maybe.None(),
+    [keys.TAB]: _ => Maybe.None(),
+    [keys.ENTER]: active => {
+      active.map(R.nth(R.__, filteredItems)).forEach(item => {
+        setValue(item);
+      });
+      return Maybe.None();
+    }
+  };
 
   const handleKeydown = event => {
-    if (!isHandlableKey(event.keyCode)) {
-      return true;
+    const handler = keyHandlers[event.keyCode];
+    if (!R.isNil(handler)) {
+      active = handler(active);
     }
-
-    focusedIndex = R.compose(
-      Maybe.fromNull,
-      Maybe.fold(null, R.tap(_ => event.preventDefault())),
-      Maybe.fromNull,
-      R.chain(handleKey(focusableNodes, event))
-    )(focusedIndex);
   };
+
+  $: showDropdown = items.length > 0 && active.isSome();
+
+  onMount(_ => {
+    input = node.getElementsByTagName('input')[0];
+    input.addEventListener('input', event => {
+      const value = input.value;
+      filteredItems = R.filter(R.includes(value), items);
+      active = active.orElse(Maybe.Some(0))
+    });
+  });
 </script>
 
 <style type="text/postcss">
@@ -43,17 +61,27 @@
   }
 </style>
 
-<div on:keydown={handleKeydown}>
-  <Input
-    {...state.input}
-    passFocusableNodesToParent={node => (inputNode = node)}
-    on:focus={_ => (focusedIndex = Maybe.Some(0))}
-    on:blur={_ => (focusedIndex = Maybe.None())} />
-  {#if showDropdown && state.dropdown}
+<svelte:window on:click={event => {
+    const itemNodes = node.querySelectorAll('.dropdownitem');
+
+    if (!R.includes(event.target, itemNodes) &&
+        input !== event.target) {
+      active = Maybe.None();
+    }
+}}/>
+
+<div bind:this={node}
+     on:keydown={handleKeydown}>
+
+  <slot></slot>
+  {#if showDropdown}
     <DropdownList
-      state={state.dropdown}
-      passFocusableNodesToParent={nodes => (dropdownNodes = nodes)}
-      on:click={_ => (focusedIndex = Maybe.None())}
-      on:blur={_ => (focusedIndex = Maybe.None())} />
+      items={filteredItems}
+      active={active.getOrElse(0)}
+      onclick={(item, index) => {
+        setValue(item);
+        input.focus();
+        active = Maybe.None();
+      }}/>
   {/if}
 </div>

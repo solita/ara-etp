@@ -122,14 +122,12 @@
       valid = R.compose( Maybe.Some, validation, transform )(value);
       focused = true;
     }}
-    on:focus
     on:blur={event => {
       focused = false;
       valid = Maybe.None();
       value = transform(event.target.value);
       update(value);
     }}
-    on:blur
     on:click
     on:keydown
     on:input={event => {
