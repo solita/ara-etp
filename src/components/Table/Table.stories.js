@@ -19,6 +19,7 @@ export const withFieldsAndContent = () => ({
       { field1: 11, field2: 12, field3: 13 },
       { field1: 21, field2: 22, field3: 23 },
       { field1: 31, field2: 32, field3: 33 }
-    ]
+    ],
+    pageNum: 5
   }
 });

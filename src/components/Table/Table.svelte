@@ -5,9 +5,11 @@
   import TableColumnDefault from './TableColumnDefault';
   export let fields = [];
   export let tablecontents = [];
+  export let pageCount = 10;
+  export let pageNum = 1;
 </script>
 
-<style>
+<style type="text/postcss">
   table {
     @apply w-full;
   }
@@ -28,49 +30,55 @@
     @apply bg-background;
   }
 
-  .pagination {
-    @apply mt-4 flex justify-center;
+  .tablecontainer {
+    @apply flex flex-col items-center;
+  }
+
+  .pagination:not(empty) {
+    @apply mt-4;
   }
 </style>
 
-<table>
-  <thead>
-    <tr>
-      {#each fields as field}
-        <th>
-          {#if field.title}{field.title}{/if}
-          {#if R.equals(field.sort, 'ascend')}
-            <span class="font-icon">keyboard_arrow_down</span>
-          {/if}
-          {#if R.equals(field.sort, 'descend')}
-            <span class="font-icon">keyboard_arrow_up</span>
-          {/if}
-        </th>
-      {/each}
-    </tr>
-  </thead>
-  <tbody>
-    {#each tablecontents as row, index}
+<div class="tablecontainer">
+  <table>
+    <thead>
       <tr>
         {#each fields as field}
-          <td>
-            {#if R.equals(field.type, 'action')}
-              <svelte:component
-                this={TableColumnAction}
-                actions={field.actions}
-                {index} />
-            {:else}
-              <svelte:component
-                this={TableColumnDefault}
-                value={R.prop(field.id, row)} />
+          <th>
+            {#if field.title}{field.title}{/if}
+            {#if R.equals(field.sort, 'ascend')}
+              <span class="font-icon">keyboard_arrow_down</span>
             {/if}
-          </td>
+            {#if R.equals(field.sort, 'descend')}
+              <span class="font-icon">keyboard_arrow_up</span>
+            {/if}
+          </th>
         {/each}
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#each tablecontents as row, index}
+        <tr>
+          {#each fields as field}
+            <td>
+              {#if R.equals(field.type, 'action')}
+                <svelte:component
+                  this={TableColumnAction}
+                  actions={field.actions}
+                  {index} />
+              {:else}
+                <svelte:component
+                  this={TableColumnDefault}
+                  value={R.prop(field.id, row)} />
+              {/if}
+            </td>
+          {/each}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
 
-<div class="pagination">
-  <Pagination pageCount={10} pageNum={5} />
+  <div class="pagination">
+    <Pagination {pageCount} {pageNum} />
+  </div>
 </div>

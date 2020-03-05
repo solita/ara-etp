@@ -41,7 +41,7 @@
 </style>
 
 {#if pageCount > 0}
-  <div class="pagination">
+  <div>
     <a class="arrow" href="#">
       <i class="material-icons">keyboard_arrow_left</i>
     </a>
