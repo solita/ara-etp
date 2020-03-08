@@ -19,20 +19,29 @@
     input.dispatchEvent(new Event('input'));
   }
 
+  $: showDropdown = items.length > 0 && active.isSome();
+
   const keyHandlers = {
-    [keys.DOWN_ARROW]: active =>
-      active
+    [keys.DOWN_ARROW]: (_, active) => {
+      if (showDropdown) event.preventDefault();
+      return active
         .map(
           R.compose(
             R.min(filteredItems.length - 1),
             R.add(1)
           )
         )
-        .orElse(Maybe.Some(0)),
-    [keys.UP_ARROW]: active => active.map(R.add(-1)).filter(R.lte(0)),
-    [keys.ESCAPE]: _ => Maybe.None(),
-    [keys.TAB]: _ => Maybe.None(),
-    [keys.ENTER]: active => {
+        .orElse(Maybe.Some(0));
+    },
+    [keys.UP_ARROW]: (event, active) => {
+      if (showDropdown) event.preventDefault();
+      return active.map(R.add(-1)).filter(R.lte(0));
+    },
+    [keys.ESCAPE]: (_, _active) => Maybe.None(),
+    [keys.TAB]: (_, _active) => Maybe.None(),
+    [keys.ENTER]: (event, active) => {
+      if (showDropdown) event.preventDefault();
+
       active.map(R.nth(R.__, filteredItems)).forEach(item => {
         setValue(item);
       });
@@ -43,17 +52,23 @@
   const handleKeydown = event => {
     const handler = keyHandlers[event.keyCode];
     if (!R.isNil(handler)) {
-      active = handler(active);
+      active = handler(event, active);
     }
   };
-
-  $: showDropdown = items.length > 0 && active.isSome();
 
   onMount(_ => {
     input = node.getElementsByTagName('input')[0];
     input.addEventListener('input', event => {
       const value = input.value;
-      filteredItems = R.filter(R.includes(value), items);
+      filteredItems = R.compose(
+        R.take(5),
+        R.filter(
+          R.compose(
+            R.includes(R.toLower(value)),
+            R.toLower
+          )
+        )
+      )(items);
       active = active.orElse(Maybe.Some(0));
     });
   });

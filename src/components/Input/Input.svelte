@@ -11,7 +11,7 @@
   export let required = false;
   export let passFocusableNodesToParent = () => {};
   export let type = 'text';
-  export let autocomplete = 'off';
+  export let autocomplete = 'false';
   export let value = '';
   export let disabled = false;
 

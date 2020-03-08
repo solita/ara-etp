@@ -6,3 +6,11 @@ export const { Either } = monet;
 export const { of, Left, Right } = Either;
 
 export const fold = R.curry((leftFn, rightFn, e) => e.fold(leftFn, rightFn));
+
+export const foldRight = R.curry((initialValue, rightFn, e) =>
+  e.foldRight(initialValue)(rightFn)
+);
+
+export const isLeft = e => e.isLeft();
+
+export const isRight = e => e.isRight();
