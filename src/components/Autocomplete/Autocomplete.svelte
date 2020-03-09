@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   import * as R from 'ramda';
-  import * as keys from './keys';
+  import * as keys from '@Utility/keys';
   import * as Maybe from '../../utils/maybe-utils';
 
   import DropdownList from '../DropdownList/DropdownList';

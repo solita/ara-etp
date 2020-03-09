@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Keys from '@Utility/keys';
 
   export let id;
   export let name;
@@ -129,6 +130,13 @@
       update(value);
     }}
     on:click
+    on:keydown={event => {
+      if (event.keyCode === Keys.ENTER) {
+        value = transform(event.target.value);
+        if (!validation(value)) event.preventDefault();
+        update(value);
+      }
+    }}
     on:keydown
     on:input={event => {
       valid = R.compose( Maybe.Some, validation, transform )(event.target.value);
