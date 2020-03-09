@@ -6,7 +6,11 @@
 
 <style type="text/postcss">
   .overlay-container {
-    @apply relative flex;
+    @apply w-full relative flex;
+  }
+
+  .overlayed-content {
+    @apply flex-grow;
   }
 
   .overlay {

@@ -12,11 +12,17 @@
   import YritysForm from '@Component/Yritys/YritysForm';
   import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import { breadcrumbStore } from '@/stores';
+  import Overlay from '@Component/Overlay/Overlay';
+  import Spinner from '@Component/Spinner/Spinner';
 
   export let params;
   let id = params.id;
   let yritys = Maybe.None();
   let api = Maybe.None();
+
+  let overlay = false;
+
+  let toggleOverlay = value => () => (overlay = value);
 
   R.compose(
     Future.fork(
@@ -27,8 +33,19 @@
   )(id);
 
   const submit = R.compose(
-    Future.fork(console.error, console.log),
-    YritysUtils.putYritysByIdFuture(fetch, id)
+    Future.forkBothDiscardFirst(
+      R.compose(
+        console.error,
+        toggleOverlay(false)
+      ),
+      R.compose(
+        console.log,
+        toggleOverlay(false)
+      )
+    ),
+    Future.both(Future.after(2000, true)),
+    YritysUtils.putYritysByIdFuture(fetch, id),
+    R.tap(toggleOverlay(true))
   );
 
   $: links = [
@@ -38,15 +55,16 @@
     { text: $_('yritys.laatijat') }
   ];
 
-  $: breadcrumbStore.set([{
-    label: $_('yritys.yritykset'),
-    url: '/#/yritykset'
-  },
-  {
-    label: Maybe.fold('...', R.prop('nimi'), yritys),
-    url: location.href
-  }]);
-
+  $: breadcrumbStore.set([
+    {
+      label: $_('yritys.yritykset'),
+      url: '/#/yritykset'
+    },
+    {
+      label: Maybe.fold('...', R.prop('nimi'), yritys),
+      url: location.href
+    }
+  ]);
 </script>
 
 <style type="text/postcss">
@@ -66,9 +84,16 @@
     <div class="w-full">
       <NavigationTabBar {links} />
     </div>
-    <YritysForm
-      {submit}
-      existing={true}
-      yritys={Maybe.getOrElse(null, yritys)} />
+    <Overlay {overlay}>
+      <div class="w-full" slot="content">
+        <YritysForm
+          {submit}
+          existing={true}
+          yritys={Maybe.getOrElse(null, yritys)} />
+      </div>
+      <div slot="overlay-content">
+        <Spinner />
+      </div>
+    </Overlay>
   {/if}
 </section>

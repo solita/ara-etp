@@ -14,11 +14,24 @@
   import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import { breadcrumbStore } from '@/stores';
 
+  let overlay = false;
+
   let yritys = YritysUtils.emptyYritys();
 
   const submit = R.compose(
-    Future.fork(console.error, ({ id }) => replace(`/yritys/${id}`)),
-    YritysUtils.postYritysFuture(fetch)
+    Future.fork(
+      R.compose(
+        console.error,
+        R.tap(() => (overlay = false))
+      ),
+      R.compose(
+        ({ id }) => replace(`/yritys/${id}`),
+        R.tap(() => (overlay = false))
+      )
+    ),
+    Future.both(Future.after(500, true)),
+    YritysUtils.postYritysFuture(fetch),
+    R.tap(() => (overlay = true))
   );
 
   $: links = [
