@@ -26,6 +26,7 @@
 
   let inputNode;
   onMount(() => passFocusableNodesToParent(inputNode));
+
 </script>
 
 <style type="text/postcss">

@@ -1,53 +1,31 @@
 import Input from './Input';
+import * as R from 'ramda';
 
 export default { title: 'Input' };
 
-export const withText = () => ({
-  Component: Input,
-  props: {
+const defaultProps = {
+    id: 'prefilledid',
+    name: 'prefilledname',
     label: 'Pre-filled label',
     value: 'Pre-filled value',
-    id: 'prefilledid'
-  }
+};
+
+export const withText = () => ({
+  Component: Input,
+    props: defaultProps
 });
 
 export const withRequired = () => ({
   Component: Input,
-  props: {
-    label: 'Pre-filled label',
-    value: 'Pre-filled value',
-    id: 'prefilledid',
-    required: true
-  }
-});
-
-export const withError = () => ({
-  Component: Input,
-  props: {
-    value: 'Pre-filled value',
-    label: 'Pre-filled label',
-    id: 'prefilledid',
-    error: true
-  }
+    props: R.assoc('required', true, defaultProps)
 });
 
 export const withCaret = () => ({
   Component: Input,
-  props: {
-    value: 'Pre-filled value',
-    label: 'Pre-filled label',
-    id: 'prefilledid',
-    caret: true
-  }
+    props: R.assoc('caret', true, defaultProps)
 });
 
-export const errorWithCaret = () => ({
-  Component: Input,
-  props: {
-    value: 'Pre-filled value',
-    label: 'Pre-filled label',
-    id: 'prefilledid',
-    error: true,
-    caret: true
-  }
+export const withFailedValidation = () => ({
+    Component: Input,
+    props: R.assoc('validation', R.always(false), defaultProps)
 });
