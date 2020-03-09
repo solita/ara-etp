@@ -1,4 +1,6 @@
 <script>
+  import { slide } from 'svelte/transition';
+
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
@@ -33,6 +35,7 @@
 <ol>
   {#each items as item, index}
     <li
+      transition:slide={{ duration: 200 }}
       class="dropdownitem"
       class:active={Maybe.fold(false, R.equals(index), active)}
       on:click={_ => onclick(item, index)}>
