@@ -97,7 +97,7 @@
       items={filteredItems}
       {active}
       onclick={(item, index) => {
-        setValue(item);
+        setInputValue(item);
         input.focus();
         active = Maybe.None();
       }} />
