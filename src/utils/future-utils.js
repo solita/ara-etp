@@ -22,3 +22,5 @@ export const both = R.curry((firstFuture, secondFuture) =>
 );
 
 export const after = R.curry((delay, value) => Fluture.after(delay)(value));
+
+export const value = R.curry((fn, f) => Fluture.value(fn)(f));

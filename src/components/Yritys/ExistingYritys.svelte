@@ -15,6 +15,9 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
+  import FlashMessage from '@Component/FlashMessage/FlashMessage';
+  import { flashMessageStore } from '@/stores';
+
   export let params;
   let id = params.id;
   let yritys = Maybe.None();
@@ -35,15 +38,27 @@
   const submit = R.compose(
     Future.forkBothDiscardFirst(
       R.compose(
-        console.error,
-        toggleOverlay(false)
+        R.tap(() =>
+          flashMessageStore.add(
+            'Yritys',
+            'error',
+            $_('yritys.messages.save-error')
+          )
+        ),
+        R.tap(toggleOverlay(false))
       ),
       R.compose(
-        console.log,
-        toggleOverlay(false)
+        R.tap(() =>
+          flashMessageStore.add(
+            'Yritys',
+            'success',
+            $_('yritys.messages.save-success')
+          )
+        ),
+        R.tap(toggleOverlay(false))
       )
     ),
-    Future.both(Future.after(2000, true)),
+    Future.both(Future.after(500, true)),
     YritysUtils.putYritysByIdFuture(fetch, id),
     R.tap(toggleOverlay(true))
   );
@@ -72,8 +87,8 @@
     @apply flex flex-col -my-4 pb-8;
   }
 
-  .content > * :not(first) {
-    @apply py-8;
+  .content h1 :not(first) {
+    @apply py-6;
   }
 </style>
 
@@ -84,8 +99,11 @@
     <div class="w-full">
       <NavigationTabBar {links} />
     </div>
+    <div class="w-full min-h-3em">
+      <FlashMessage module={'Yritys'} />
+    </div>
     <Overlay {overlay}>
-      <div class="w-full" slot="content">
+      <div slot="content">
         <YritysForm
           {submit}
           existing={true}

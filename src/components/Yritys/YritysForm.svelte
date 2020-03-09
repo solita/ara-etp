@@ -16,7 +16,7 @@
   import Input2 from '@Component/Input/Input2';
   import Button from '@Component/Button/Button';
 
-  import { countryStore } from '@/stores';
+  import { countryStore, flashMessageStore } from '@/stores';
 
   const update = fn => (yritys = fn(yritys));
 
@@ -74,10 +74,13 @@
 <form
   on:submit|preventDefault={_ => {
     if (isValidForm) {
+      flashMessageStore.flush();
       submit(yritys);
+    } else {
+      flashMessageStore.add('Yritys', 'error', $_('yritys.messages.validation-error'));
     }
   }}>
-  <div class="w-full">
+  <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
@@ -117,8 +120,10 @@
         validation={formValidators.wwwosoite}
         update={R.compose( update, R.compose( R.set(R.lensProp('wwwosoite')), Maybe.fromEmpty ) )} />
     </div>
+  </div>
+  <div class="mt-8">
     <H1 text={$_('yritys.laskutusosoite')} />
-    <div class="flex flex-col -my-4">
+    <div class="flex flex-col">
       <div class="py-4">
         <Input
           id={'jakeluosoite'}
@@ -168,6 +173,8 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="mt-8">
     <H1 text={$_('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
       <Input
@@ -179,20 +186,20 @@
         validation={formValidators.verkkolaskuosoite}
         update={R.compose( update, R.compose( R.set(R.lensProp('verkkolaskuosoite')), Maybe.fromEmpty ) )} />
     </div>
-    <div class="flex -mx-4 pt-8">
-      <div class="px-4">
-        <Button type={'submit'} text={$_('tallenna')} />
-      </div>
-      <div class="px-4">
-        <Button
-          on:click={event => {
-            event.preventDefault();
-            yritys = R.clone(originalYritys);
-          }}
-          text={$_('peruuta')}
-          type={'reset'}
-          style={'secondary'} />
-      </div>
+  </div>
+  <div class="flex -mx-4 pt-8">
+    <div class="px-4">
+      <Button type={'submit'} text={$_('tallenna')} />
+    </div>
+    <div class="px-4">
+      <Button
+        on:click={event => {
+          event.preventDefault();
+          yritys = R.clone(originalYritys);
+        }}
+        text={$_('peruuta')}
+        type={'reset'}
+        style={'secondary'} />
     </div>
   </div>
 </form>
