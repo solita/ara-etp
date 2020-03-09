@@ -3,9 +3,11 @@
 
   import * as R from 'ramda';
   import * as keys from '@Utility/keys';
-  import * as Maybe from '../../utils/maybe-utils';
+  import * as Maybe from '@Utility/maybe-utils';
 
-  import DropdownList from '../DropdownList/DropdownList';
+  import * as AutocompleteUtils from './autocomplete-utils';
+
+  import DropdownList from '@Component/DropdownList/DropdownList';
 
   export let items = [];
 
@@ -14,46 +16,45 @@
   let node;
   let filteredItems = [];
 
-  function setValue(value) {
+  const setInputValue = value => {
     input.value = value;
     input.dispatchEvent(new Event('input'));
-  }
+  };
 
   $: showDropdown = items.length > 0 && active.isSome();
 
   const keyHandlers = {
     [keys.DOWN_ARROW]: (_, active) => {
       if (showDropdown) event.preventDefault();
-      return active
-        .map(
-          R.compose(
-            R.min(filteredItems.length - 1),
-            R.add(1)
-          )
-        )
-        .orElse(Maybe.Some(0));
+      return R.compose(
+        Maybe.orElse(Maybe.Some(0)),
+        R.chain(AutocompleteUtils.nextItem(filteredItems))
+      )(active);
     },
     [keys.UP_ARROW]: (event, active) => {
       if (showDropdown) event.preventDefault();
-      return active.map(R.add(-1)).filter(R.lte(0));
+      return R.chain(AutocompleteUtils.previousItem, active);
     },
     [keys.ESCAPE]: (_, _active) => Maybe.None(),
     [keys.TAB]: (_, _active) => Maybe.None(),
     [keys.ENTER]: (event, active) => {
       if (showDropdown) event.preventDefault();
 
-      active.map(R.nth(R.__, filteredItems)).forEach(item => {
-        setValue(item);
-      });
-      return Maybe.None();
+      return R.compose(
+        R.always(Maybe.None()),
+        R.forEach(setInputValue),
+        R.chain(AutocompleteUtils.selectedItem(filteredItems))
+      )(active);
     }
   };
 
   const handleKeydown = event => {
-    const handler = keyHandlers[event.keyCode];
-    if (!R.isNil(handler)) {
-      active = handler(event, active);
-    }
+    R.compose(
+      R.forEach(handler => (active = handler(event, active))),
+      Maybe.fromNull,
+      R.prop(R.__, keyHandlers),
+      R.prop('keyCode')
+    )(event);
   };
 
   onMount(_ => {
