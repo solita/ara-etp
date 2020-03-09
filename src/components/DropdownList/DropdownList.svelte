@@ -1,11 +1,11 @@
 <script>
-  import * as Maybe from '../../utils/maybe-utils';
+  import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
 
   export let items = [];
-  export let active = Maybe.None;
+  export let active = Maybe.None();
   export let component = null;
   export let onclick;
-
 </script>
 
 <style type="text/postcss">
@@ -32,9 +32,10 @@
 
 <ol>
   {#each items as item, index}
-    <li class="dropdownitem"
-        class:active={index===active}
-        on:click={_ => onclick(item, index)}>
+    <li
+      class="dropdownitem"
+      class:active={Maybe.fold(false, R.equals(index), active)}
+      on:click={_ => onclick(item, index)}>
       {#if component}
         <svelte:component this={component} state={item} />
       {:else}{item}{/if}

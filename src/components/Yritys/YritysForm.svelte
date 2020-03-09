@@ -1,14 +1,19 @@
 <script>
   import * as R from 'ramda';
 
-  import { _ } from '@Language/i18n';
+  import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as Future from '@Utility/future-utils';
+  import * as Fetch from '@Utility/fetch-utils';
   import * as YritysUtils from './yritys-utils';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
+
+  import { countryStore } from '@/stores';
 
   const update = fn => (yritys = fn(yritys));
 
@@ -21,6 +26,28 @@
 
   const formTransformers = YritysUtils.formTransformers();
   const formValidators = YritysUtils.formValidators();
+
+  const countryFuture = R.compose(
+    Future.coalesce(Either.Left, Either.Right),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )('api/countries/');
+
+  $: Either.isRight($countryStore) ||
+    Future.fork(countryStore.set, countryStore.set, countryFuture);
+
+  $: countryNames = Either.foldRight(
+    [],
+    R.map(
+      R.prop(
+        `label-${R.compose(
+          R.head,
+          R.split('-')
+        )($locale)}`
+      )
+    ),
+    $countryStore
+  );
 
   $: isValidForm = R.compose(
     R.reduce(R.and, true),
@@ -115,7 +142,7 @@
             update={R.compose( update, R.set(R.lensProp('postitoimipaikka')) )} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Autocomplete items={['Suomi', 'Ruotsi', 'Norja', 'Tanska']}>
+          <Autocomplete items={countryNames}>
             <Input
               id={'maa'}
               name={'maa'}
