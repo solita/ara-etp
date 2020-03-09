@@ -11,6 +11,7 @@
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
   import Input from '@Component/Input/Input';
+  import Input2 from '@Component/Input/Input2';
   import Button from '@Component/Button/Button';
 
   import { countryStore } from '@/stores';
@@ -31,7 +32,7 @@
     Future.coalesce(Either.Left, Either.Right),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch))
-  )('api/countries/');
+  )('api/private/countries/');
 
   $: Either.isRight($countryStore) ||
     Future.fork(countryStore.set, countryStore.set, countryFuture);
@@ -82,15 +83,15 @@
           disabled={existing} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-        <Input
+        <Input2
           id={'nimi'}
           name={'nimi'}
           label={$_('yritys.nimi')}
           required={true}
-          value={yritys.nimi}
-          transform={formTransformers.nimi}
+          bind:model={yritys}
+          parse={formTransformers.nimi}
           validation={formValidators.nimi}
-          update={R.compose( update, R.set(R.lensProp('nimi')) )} />
+          lens={R.lensProp('nimi')} />
       </div>
     </div>
     <div class="py-4">

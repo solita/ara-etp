@@ -4,7 +4,7 @@ import * as Maybe from '../../utils/maybe-utils';
 import * as Future from '../../utils/future-utils';
 import * as validation from '../../utils/validation';
 
-const yritysApi = `/api/yritykset`;
+const yritysApi = `/api/private/yritykset`;
 
 export const urlForYritysId = id => `${yritysApi}/${id}`;
 
