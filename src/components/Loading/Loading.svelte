@@ -1,7 +1,8 @@
 <script>
+  import { _ } from '@Language/i18n';
 </script>
 
 <style type="text/postcss">
 </style>
 
-<span>Loading...</span>
+<span>{$_('ladataan')}</span>
