@@ -51,7 +51,7 @@
         R.tap(toggleOverlay(false))
       )
     ),
-    Future.both(Future.after(500, true)),
+    Future.both(Future.after(400, true)),
     YritysUtils.getYritysByIdFuture(fetch)
   )(params.id);
 

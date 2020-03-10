@@ -38,9 +38,6 @@
     Future.encaseP(Fetch.getFetch(fetch))
   )('api/private/countries/');
 
-  $: Either.isRight($countryStore) ||
-    Future.fork(countryStore.set, countryStore.set, countryFuture);
-
   const parseCountry = R.compose(
     R.map(R.prop('id')),
     R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
@@ -48,6 +45,15 @@
     fn => $countryStore.map(fn),
     country.findCountry
   );
+
+  Either.isRight($countryStore) ||
+    Future.fork(countryStore.set, countryStore.set, countryFuture);
+
+  $: Either.isRight($countryStore) ||
+    R.compose(
+      Future.fork(countryStore.set, countryStore.set),
+      R.chain(Future.after(1000))
+    )(countryFuture);
 
   $: countryNames = Either.foldRight(
     [],
