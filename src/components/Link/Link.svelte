@@ -4,6 +4,13 @@
 </script>
 
 <style type="text/postcss">
+  a {
+    @apply text-link;
+  }
+
+  a:hover {
+    @apply underline;
+  }
 </style>
 
-<a class="text-link hover:underline" href="{href}">{text}</a>
+<a href="{href}">{text}</a>
