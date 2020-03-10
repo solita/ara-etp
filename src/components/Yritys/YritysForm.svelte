@@ -91,7 +91,9 @@
           required={true}
           bind:model={yritys}
           parse={formTransformers.nimi}
-          validation={[validation.isRequired, validation.lengthConstraint(2, 200)]}
+          validation={[validation.isRequired,
+            validation.minLengthConstraint(2),
+            validation.maxLengthConstraint(200)]}
           i18n={$_}
           lens={R.lensProp('nimi')} />
       </div>

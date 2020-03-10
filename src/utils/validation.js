@@ -21,14 +21,23 @@ export const isRequired = {
   label: R.applyTo('validation.required')
 };
 
-export const lengthConstraint = (min, max) => ({
-  predicate: R.compose(R.allPass([R.lte(min), R.gte(max)]), R.length),
-  label: R.pipe(
-    R.applyTo('validation.length-constraint'),
-    R.replace('{min}', min),
-    R.replace('{max}', max)
+export const interpolate = R.curry((template, values) =>
+  R.reduce((result, value) => R.replace(value[0], value[1], result),
+    template, R.toPairs(values)));
+
+export const lengthConstraint = (predicate, name, values) => ({
+  predicate: R.compose(predicate, R.length),
+  label: R.compose(
+    interpolate(R.__, values),
+    R.applyTo('validation.' + name + '-length')
   )
 });
+
+export const minLengthConstraint = min =>
+  lengthConstraint(R.lte(min), 'min', {'{min}': min});
+
+export const maxLengthConstraint = max =>
+  lengthConstraint(R.gte(max), 'max', {'{max}': max});
 
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
