@@ -122,6 +122,10 @@
     font-size: smaller;
   }
 
+  .error-icon {
+    @apply text-error;
+  }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -159,7 +163,7 @@
 
 {#if !valid}
 <div class="error-label">
-  <span class="font-icon">error</span>
+  <span class="font-icon error-icon">error</span>
   {errorMessage}
 </div>
 {/if}
