@@ -18,17 +18,34 @@
 
   export let parse = R.identity;
   export let format = R.identity;
-  export let validation = R.always(true);
+  export let validation = [{predicate: R.always(true), label: R.always('')}];
 
   let value = format(R.view(lens, model));
 
-  let valid = false;
+  let valid = true;
+  let errorMessage = '';
   let focused = false;
+
+  export let i18n;
 
   $: highlightError = focused && !valid
 
   let inputNode;
   onMount(() => passFocusableNodesToParent(inputNode));
+
+  function validate(value) {
+    const errors = R.filter(R.compose(
+        R.not,
+        R.applyTo(value),
+        R.prop('predicate')), validation);
+
+    if (!R.isEmpty(errors)) {
+      valid = false;
+      errorMessage = errors[0].label(i18n);
+    } else {
+      valid = true;
+    }
+  }
 </script>
 
 <style type="text/postcss">
@@ -101,6 +118,11 @@
     @apply bg-background;
   }
 
+  .error-label {
+    @apply absolute top-auto;
+    font-size: smaller;
+  }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -127,11 +149,18 @@
     on:blur={event => {
       focused = false;
       model = R.set(lens, parse(value), model);
-      valid = validation(parse(value));
+      validate(parse(value));
     }}
     on:click
     on:keydown
     on:input={event => {
-      valid = validation(parse(value));
+      validate(parse(value));
     }} />
 </div>
+
+{#if !valid}
+<div class="error-label">
+  <span class="font-icon">error</span>
+  {errorMessage}
+</div>
+{/if}

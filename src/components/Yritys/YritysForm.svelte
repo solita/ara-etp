@@ -6,6 +6,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Fetch from '@Utility/fetch-utils';
+  import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
@@ -90,7 +91,8 @@
           required={true}
           bind:model={yritys}
           parse={formTransformers.nimi}
-          validation={formValidators.nimi}
+          validation={[validation.isRequired, validation.lengthConstraint(2, 200)]}
+          i18n={$_}
           lens={R.lensProp('nimi')} />
       </div>
     </div>
