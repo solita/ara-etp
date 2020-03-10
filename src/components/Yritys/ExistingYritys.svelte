@@ -19,47 +19,57 @@
   import { flashMessageStore } from '@/stores';
 
   export let params;
-  let id = params.id;
+
   let yritys = Maybe.None();
   let api = Maybe.None();
 
-  let overlay = false;
+  let overlay = true;
+  let disabled = false;
 
-  let toggleOverlay = value => () => (overlay = value);
+  const toggleOverlay = value => () => (overlay = value);
+  const toggleDisabled = value => () => (disabled = value);
 
-  R.compose(
-    Future.fork(
-      console.error,
-      fetchedYritys => (yritys = Maybe.Some(fetchedYritys))
-    ),
-    YritysUtils.getYritysByIdFuture(fetch)
-  )(id);
+  const resetView = () => {
+    overlay = true;
+    yritys = Maybe.None();
+    disabled = false;
+    flashMessageStore.flush();
+  };
 
-  const submit = R.compose(
+  $: params.id && resetView();
+
+  $: R.compose(
     Future.forkBothDiscardFirst(
       R.compose(
-        R.tap(() =>
-          flashMessageStore.add(
-            'Yritys',
-            'error',
-            $_('yritys.messages.save-error')
-          )
-        ),
-        R.tap(toggleOverlay(false))
+        R.tap(toggleDisabled(true)),
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.load-error'))
       ),
       R.compose(
-        R.tap(() =>
-          flashMessageStore.add(
-            'Yritys',
-            'success',
-            $_('yritys.messages.save-success')
-          )
-        ),
+        fetchedYritys => (yritys = Maybe.Some(fetchedYritys)),
         R.tap(toggleOverlay(false))
       )
     ),
     Future.both(Future.after(500, true)),
-    YritysUtils.putYritysByIdFuture(fetch, id),
+    YritysUtils.getYritysByIdFuture(fetch)
+  )(params.id);
+
+  $: submit = R.compose(
+    Future.forkBothDiscardFirst(
+      R.compose(
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.save-error')),
+        R.tap(toggleOverlay(false))
+      ),
+      R.compose(
+        flashMessageStore.add('Yritys', 'success'),
+        R.always($_('yritys.messages.save-success')),
+        R.tap(toggleOverlay(false))
+      )
+    ),
+    Future.both(Future.after(500, true)),
+    YritysUtils.putYritysByIdFuture(fetch, params.id),
     R.tap(toggleOverlay(true))
   );
 
@@ -93,25 +103,22 @@
 </style>
 
 <section class="content">
-  {#if yritys.isNone()}
-    Loading...
-  {:else}
-    <div class="w-full">
-      <NavigationTabBar {links} />
+  <div class="w-full">
+    <NavigationTabBar {links} />
+  </div>
+  <div class="w-full min-h-3em">
+    <FlashMessage module={'Yritys'} />
+  </div>
+  <Overlay {overlay}>
+    <div slot="content">
+      <YritysForm
+        {submit}
+        {disabled}
+        existing={true}
+        yritys={Maybe.getOrElse(YritysUtils.emptyYritys(), yritys)} />
     </div>
-    <div class="w-full min-h-3em">
-      <FlashMessage module={'Yritys'} />
+    <div slot="overlay-content">
+      <Spinner />
     </div>
-    <Overlay {overlay}>
-      <div slot="content">
-        <YritysForm
-          {submit}
-          existing={true}
-          yritys={Maybe.getOrElse(null, yritys)} />
-      </div>
-      <div slot="overlay-content">
-        <Spinner />
-      </div>
-    </Overlay>
-  {/if}
+  </Overlay>
 </section>

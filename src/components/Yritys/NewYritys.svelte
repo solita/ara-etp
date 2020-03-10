@@ -30,13 +30,12 @@
   const submit = R.compose(
     Future.forkBothDiscardFirst(
       R.compose(
-        Future.value(flashMessageStore.add('Yritys', 'error')),
-        R.always(Future.after(400, $_('yritys.messages.save-error'))),
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.save-error')),
         R.tap(toggleOverlay(false))
       ),
       R.compose(
-        Future.value(flashMessageStore.add('Yritys', 'success')),
-        Future.after(400),
+        flashMessageStore.add('Yritys', 'success'),
         R.always($_('yritys.messages.save-success')),
         ({ id }) => replaceFlushFlashMessages(`/yritys/${id}`)
       )

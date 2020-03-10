@@ -25,6 +25,8 @@
 
   export let yritys;
 
+  export let disabled = false;
+
   const originalYritys = R.clone(yritys);
 
   const formTransformers = YritysUtils.formTransformers();
@@ -110,6 +112,7 @@
     </div>
     <div class="py-4">
       <Input
+        {disabled}
         id={'wwwosoite'}
         name={'wwwosoite'}
         label={$_('yritys.www-osoite')}
@@ -126,6 +129,7 @@
     <div class="flex flex-col">
       <div class="py-4">
         <Input
+          {disabled}
           id={'jakeluosoite'}
           name={'jakeluosoite'}
           label={$_('yritys.jakeluosoite')}
@@ -138,6 +142,7 @@
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
+            {disabled}
             id={'postinumero'}
             name={'postinumero'}
             label={$_('yritys.postinumero')}
@@ -149,6 +154,7 @@
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
+            {disabled}
             id={'postitoimipaikka'}
             name={'postitoimipaikka'}
             label={$_('yritys.postitoimipaikka')}
@@ -178,6 +184,7 @@
     <H1 text={$_('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
       <Input
+        {disabled}
         id={'verkkolaskuosoite'}
         name={'verkkolaskuosoite'}
         label={$_('yritys.ovt-tunnus')}
