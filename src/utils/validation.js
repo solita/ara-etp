@@ -25,10 +25,10 @@ export const interpolate = R.curry((template, values) =>
   R.reduce((result, value) => R.replace(value[0], value[1], result),
     template, R.toPairs(values)));
 
-export const lengthConstraint = (predicate, name, values) => ({
+export const lengthConstraint = (predicate, name, labelValues) => ({
   predicate: R.compose(predicate, R.length),
   label: R.compose(
-    interpolate(R.__, values),
+    interpolate(R.__, labelValues),
     R.applyTo('validation.' + name + '-length')
   )
 });
