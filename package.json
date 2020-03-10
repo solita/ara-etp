@@ -62,7 +62,7 @@
     "ramda": "^0.26.1",
     "sirv-cli": "^0.4.4",
     "svelte-i18n": "^3.0.1",
-    "svelte-spa-router": "^2.0.0",
+    "svelte-spa-router": "^2.0.1",
     "whatwg-fetch": "^3.0.0"
   }
 }
