@@ -21,3 +21,5 @@ export const getOrElse = R.curry((defaultValue, m) =>
 );
 
 export const orElse = R.curry((defaultValue, m) => m.orElse(defaultValue));
+
+export const head = R.compose(fromUndefined, R.head);

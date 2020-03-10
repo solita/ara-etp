@@ -33,19 +33,18 @@
   let inputNode;
   onMount(() => passFocusableNodesToParent(inputNode));
 
-  function validate(value) {
-    const errors = R.filter(R.compose(
+  const validate = (value) =>
+    Maybe.head(R.filter(R.compose(
         R.not,
         R.applyTo(value),
-        R.prop('predicate')), validation);
-
-    if (!R.isEmpty(errors)) {
-      valid = false;
-      errorMessage = errors[0].label(i18n);
-    } else {
-      valid = true;
-    }
-  }
+        R.prop('predicate')), validation))
+    .cata(
+        () => valid = true,
+        error => {
+          valid = false;
+          errorMessage = error.label(i18n);
+        }
+    );
 </script>
 
 <style type="text/postcss">
