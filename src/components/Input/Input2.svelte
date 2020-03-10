@@ -125,12 +125,6 @@
   .error-icon {
     @apply text-error;
   }
-
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 </style>
 
 <label for={id} class:required class:error={highlightError} class:focused>{label}</label>
