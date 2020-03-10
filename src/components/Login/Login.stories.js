@@ -2,9 +2,9 @@ import Login from './Login';
 
 export default { title: 'Login' };
 
-export const withTwoSecondRedirectTimeout = () => ({
+export const withFiveSecondRedirectTimeout = () => ({
   Component: Login,
   props: {
-    redirectTimeout: 2000
+    redirectTimeout: 5000
   }
 });

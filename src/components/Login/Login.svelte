@@ -1,4 +1,5 @@
 <script>
+  import { _ } from '@Language/i18n';
   import * as RedirectUtils from '../../utils/redirect-utils'
 
   export let redirectTimeout = 0;
@@ -14,4 +15,4 @@
 <style type="text/postcss">
 </style>
 
-<span>Odota hetki, sinut ohjataan kirjautumissivulle...</span>
+<span>{$_('login_redirect')}</span>
