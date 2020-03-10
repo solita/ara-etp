@@ -1,7 +1,6 @@
 /node_modules/
 /public/build/
 /public/index.html
-/public/language/
 /.vscode/
 
 .DS_Store
