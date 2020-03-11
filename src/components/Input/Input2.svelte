@@ -145,8 +145,9 @@
     }}
     on:blur={event => {
       focused = false;
-      model = R.set(lens, parse(value), model);
-      validate(parse(value));
+      const parsedValue = parse(value);
+      model = R.set(lens, parsedValue, model);
+      validate(parsedValue);
     }}
     on:click
     on:keydown
