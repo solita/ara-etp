@@ -144,6 +144,7 @@
     bind:this={inputNode}
     on:focus={_ => {
       focused = true;
+      validate(parse(value));
     }}
     on:blur={event => {
       focused = false;
