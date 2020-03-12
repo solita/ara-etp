@@ -36,19 +36,16 @@
   onMount(() => passFocusableNodesToParent(inputNode));
 
   const validate = (value) =>
-    Either.fromValueOrEither(value).cata(
-      parseError => {
-        valid = false;
-        errorMessage = parseError(i18n);
-      },
-      modelValue => v.validate(validation, modelValue)
-        .cata(
-          () => valid = true,
+    Either.fromValueOrEither(value)
+      .flatMap(modelValue => v.validate(validation, modelValue)
+          .map(R.prop('label')).toEither(modelValue).swap())
+      .cata(
           error => {
             valid = false;
-            errorMessage = error.label(i18n);
-          }
-      ));
+            errorMessage = error(i18n);
+          },
+          () => valid = true
+      );
 
 </script>
 
