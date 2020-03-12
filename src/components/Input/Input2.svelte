@@ -21,10 +21,10 @@
   export let format = R.identity;
   export let validators = [];
 
-  $: value = Either.fromValueOrEither(R.view(lens, model))
+  $: viewValue = Either.fromValueOrEither(R.view(lens, model))
     .map(format)
     .toMaybe()
-    .orSome(value);
+    .orSome(viewValue);
 
   let valid = true;
   let errorMessage = '';
@@ -146,7 +146,7 @@
     class:error={highlightError}
     type="text"
     {autocomplete}
-    {value}
+    value={viewValue}
     on:focus={event => {
       focused = true;
       validate(parse(event.target.value));
@@ -154,7 +154,7 @@
     on:blur={event => {
       focused = false;
       const parsedValue = parse(event.target.value);
-      Either.fromValueOrEither(parsedValue).forEach(() => (value = ''));
+      Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
       model = R.set(lens, parsedValue, model);
       validate(parsedValue);
     }}
