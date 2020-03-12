@@ -32,15 +32,22 @@
     overlay = true;
     yritys = Maybe.None();
     disabled = false;
-    flashMessageStore.flush();
   };
 
   $: params.id && resetView();
 
   $: submit = R.compose(
     Future.forkBothDiscardFirst(
-      R.tap(toggleOverlay(false)),
-      R.tap(toggleOverlay(false))
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.save-error'))
+      ),
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'success'),
+        R.always($_('yritys.messages.save-success'))
+      )
     ),
     Future.both(Future.after(500, true)),
     YritysUtils.putYritysByIdFuture(fetch, params.id),
@@ -50,7 +57,11 @@
   $: R.compose(
     Future.forkBothDiscardFirst(
       R.compose(
-        R.tap(toggleDisabled(true)),
+        R.compose(
+          R.tap(toggleDisabled(true)),
+          flashMessageStore.add('Yritys', 'error'),
+          R.always($_('yritys.messages.load-error'))
+        ),
         R.tap(toggleOverlay(false))
       ),
       R.compose(
@@ -61,13 +72,6 @@
     Future.both(Future.after(400, true)),
     YritysUtils.getYritysByIdFuture(fetch)
   )(params.id);
-
-  $: links = [
-    {
-      text: Maybe.fold('...', R.prop('nimi'), yritys)
-    },
-    { text: $_('yritys.laatijat') }
-  ];
 
   $: breadcrumbStore.set([
     {
@@ -81,33 +85,15 @@
   ]);
 </script>
 
-<style type="text/postcss">
-  .content {
-    @apply flex flex-col -my-4 pb-8;
-  }
-
-  .content h1 :not(first) {
-    @apply py-6;
-  }
-</style>
-
-<section class="content">
-  <div class="w-full">
-    <NavigationTabBar {links} />
+<Overlay {overlay}>
+  <div slot="content">
+    <YritysForm
+      {submit}
+      {disabled}
+      existing={Maybe.isSome(yritys)}
+      yritys={Maybe.getOrElse(YritysUtils.emptyYritys(), yritys)} />
   </div>
-  <div class="w-full min-h-3em">
-    <FlashMessage module={'Yritys'} />
+  <div slot="overlay-content">
+    <Spinner />
   </div>
-  <Overlay {overlay}>
-    <div slot="content">
-      <YritysForm
-        {submit}
-        {disabled}
-        existing={true}
-        yritys={Maybe.getOrElse(YritysUtils.emptyYritys(), yritys)} />
-    </div>
-    <div slot="overlay-content">
-      <Spinner />
-    </div>
-  </Overlay>
-</section>
+</Overlay>

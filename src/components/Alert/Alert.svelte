@@ -1,8 +1,6 @@
 <script>
-  import { slide } from 'svelte/transition';
-
-  export let type = 'success';
-  export let text = 'Failure';
+  export let type;
+  export let text;
   export let close = () => {};
 
   const error = type === 'error';
@@ -43,11 +41,7 @@
   }
 </style>
 
-<div
-  transition:slide={{ duration: 200 }}
-  class:error
-  class:success
-  class="alert">
+<div class:error class:success class="alert">
   <span class="icon">{icon}</span>
   <span class="alert-text">{text}</span>
   <span class="close" on:click={close}>close</span>

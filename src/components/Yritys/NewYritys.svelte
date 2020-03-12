@@ -1,5 +1,5 @@
 <script>
-  import { replaceFlushFlashMessages } from '@Component/Router/router';
+  import { replace } from '@Component/Router/router';
   import * as R from 'ramda';
 
   import { _ } from '@Language/i18n';
@@ -11,9 +11,7 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import YritysForm from '@Component/Yritys/YritysForm';
-  import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import { breadcrumbStore } from '@/stores';
   import * as YritysUtils from './yritys-utils';
 
@@ -27,20 +25,27 @@
   let yritys = YritysUtils.emptyYritys();
 
   const submit = R.compose(
-    Future.forkBothDiscardFirst(R.tap(toggleOverlay(false)), ({ id }) =>
-      replaceFlushFlashMessages(`/yritys/${id}`)
+    Future.forkBothDiscardFirst(
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.save-error'))
+      ),
+      R.compose(
+        R.tap(() =>
+          flashMessageStore.addPersist(
+            'Yritys',
+            'success',
+            $_('yritys.messages.save-success')
+          )
+        ),
+        ({ id }) => replace(`/yritys/${id}`)
+      )
     ),
     Future.both(Future.after(500, true)),
     YritysUtils.postYritysFuture(fetch),
     R.tap(toggleOverlay(true))
   );
-
-  $: links = [
-    {
-      text: $_('yritys.uusi_yritys')
-    },
-    { text: $_('yritys.laatijat') }
-  ];
 
   breadcrumbStore.set([
     {
@@ -54,29 +59,11 @@
   ]);
 </script>
 
-<style type="text/postcss">
-  .content {
-    @apply flex flex-col -my-4 pb-8;
-  }
-
-  .content h1 :not(first) {
-    @apply py-6;
-  }
-</style>
-
-<section class="content">
-  <div class="w-full">
-    <NavigationTabBar {links} />
+<Overlay {overlay}>
+  <div slot="content">
+    <YritysForm {yritys} {submit} />
   </div>
-  <div class="w-full min-h-3em">
-    <FlashMessage module={'Yritys'} />
+  <div slot="overlay-content">
+    <Spinner />
   </div>
-  <Overlay {overlay}>
-    <div slot="content">
-      <YritysForm {yritys} {submit} />
-    </div>
-    <div slot="overlay-content">
-      <Spinner />
-    </div>
-  </Overlay>
-</section>
+</Overlay>

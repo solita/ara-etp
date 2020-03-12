@@ -75,10 +75,6 @@
   )(yritys);
 </script>
 
-<style>
-
-</style>
-
 <form
   on:submit|preventDefault={_ => {
     if (isValidForm) {

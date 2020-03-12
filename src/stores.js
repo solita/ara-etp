@@ -13,10 +13,31 @@ const createFlashMessageStore = () => {
   return {
     subscribe,
     add: R.curry((module, type, text) =>
-      update(R.compose(R.uniq, R.append({ module, type, text })))
+      update(
+        R.compose(R.uniq, R.append({ module, type, text, persist: false }))
+      )
+    ),
+    addPersist: R.curry((module, type, text) =>
+      update(R.compose(R.uniq, R.append({ module, type, text, persist: true })))
     ),
     remove: message => update(R.reject(R.equals(message))),
-    flush: () => set([])
+    flush: module =>
+      update(
+        R.compose(
+          R.map(
+            R.when(
+              R.compose(R.equals(module), R.prop('module')),
+              R.assoc('persist', false)
+            )
+          ),
+          R.reject(
+            R.allPass([
+              R.compose(R.equals(module), R.prop('module')),
+              R.compose(R.not, R.prop('persist'))
+            ])
+          )
+        )
+      )
   };
 };
 
