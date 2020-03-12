@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import * as R from 'ramda';
+  import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
 
@@ -29,20 +30,26 @@
 
   export let i18n;
 
-  $: highlightError = focused && !valid
+  $: highlightError = focused && !valid;
 
   let inputNode;
   onMount(() => passFocusableNodesToParent(inputNode));
 
   const validate = (value) =>
-    v.validate(validation, value)
-    .cata(
-        () => valid = true,
-        error => {
-          valid = false;
-          errorMessage = error.label(i18n);
-        }
-    );
+    Either.fromValueOrEither(value).cata(
+      parseError => {
+        valid = false;
+        errorMessage = parseError(i18n);
+      },
+      modelValue => v.validate(validation, modelValue)
+        .cata(
+          () => valid = true,
+          error => {
+            valid = false;
+            errorMessage = error.label(i18n);
+          }
+      ));
+
 </script>
 
 <style type="text/postcss">

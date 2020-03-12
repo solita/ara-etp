@@ -14,3 +14,7 @@ export const foldRight = R.curry((initialValue, rightFn, e) =>
 export const isLeft = e => e.isLeft();
 
 export const isRight = e => e.isRight();
+
+export const fromValueOrEither =
+    any => any['@@type'] === Either.prototype.init['@@type'] ?
+      any : Either.of(any);
