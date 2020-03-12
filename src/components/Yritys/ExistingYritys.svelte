@@ -21,7 +21,6 @@
   export let params;
 
   let yritys = Maybe.None();
-  let api = Maybe.None();
 
   let overlay = true;
   let disabled = false;
@@ -38,13 +37,21 @@
 
   $: params.id && resetView();
 
+  $: submit = R.compose(
+    Future.forkBothDiscardFirst(
+      R.tap(toggleOverlay(false)),
+      R.tap(toggleOverlay(false))
+    ),
+    Future.both(Future.after(500, true)),
+    YritysUtils.putYritysByIdFuture(fetch, params.id),
+    R.tap(toggleOverlay(true))
+  );
+
   $: R.compose(
     Future.forkBothDiscardFirst(
       R.compose(
         R.tap(toggleDisabled(true)),
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Yritys', 'error'),
-        R.always($_('yritys.messages.load-error'))
+        R.tap(toggleOverlay(false))
       ),
       R.compose(
         fetchedYritys => (yritys = Maybe.Some(fetchedYritys)),
@@ -54,24 +61,6 @@
     Future.both(Future.after(400, true)),
     YritysUtils.getYritysByIdFuture(fetch)
   )(params.id);
-
-  $: submit = R.compose(
-    Future.forkBothDiscardFirst(
-      R.compose(
-        flashMessageStore.add('Yritys', 'error'),
-        R.always($_('yritys.messages.save-error')),
-        R.tap(toggleOverlay(false))
-      ),
-      R.compose(
-        flashMessageStore.add('Yritys', 'success'),
-        R.always($_('yritys.messages.save-success')),
-        R.tap(toggleOverlay(false))
-      )
-    ),
-    Future.both(Future.after(500, true)),
-    YritysUtils.putYritysByIdFuture(fetch, params.id),
-    R.tap(toggleOverlay(true))
-  );
 
   $: links = [
     {

@@ -1,5 +1,4 @@
 <script>
-  import { tick } from 'svelte';
   import { replaceFlushFlashMessages } from '@Component/Router/router';
   import * as R from 'ramda';
 
@@ -28,17 +27,8 @@
   let yritys = YritysUtils.emptyYritys();
 
   const submit = R.compose(
-    Future.forkBothDiscardFirst(
-      R.compose(
-        flashMessageStore.add('Yritys', 'error'),
-        R.always($_('yritys.messages.save-error')),
-        R.tap(toggleOverlay(false))
-      ),
-      R.compose(
-        flashMessageStore.add('Yritys', 'success'),
-        R.always($_('yritys.messages.save-success')),
-        ({ id }) => replaceFlushFlashMessages(`/yritys/${id}`)
-      )
+    Future.forkBothDiscardFirst(R.tap(toggleOverlay(false)), ({ id }) =>
+      replaceFlushFlashMessages(`/yritys/${id}`)
     ),
     Future.both(Future.after(500, true)),
     YritysUtils.postYritysFuture(fetch),
