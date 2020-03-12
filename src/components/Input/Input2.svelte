@@ -11,7 +11,6 @@
   export let label = '';
   export let caret = false;
   export let required = false;
-  export let passFocusableNodesToParent = () => {};
   export let autocomplete = 'off';
   export let disabled = false;
 
@@ -20,7 +19,7 @@
 
   export let parse = R.identity;
   export let format = R.identity;
-  export let validation = [{ predicate: R.always(true), label: R.always('') }];
+  export let validators = [];
 
   $: value = Either.fromValueOrEither(R.view(lens, model))
     .map(format)
@@ -35,13 +34,10 @@
 
   $: highlightError = focused && !valid;
 
-  let inputNode;
-  onMount(() => passFocusableNodesToParent(inputNode));
-
   $: validate = value =>
     Either.fromValueOrEither(value)
       .flatMap(modelValue =>
-        v.validate(validation, modelValue).leftMap(R.prop('label'))
+        v.validate(validators, modelValue).leftMap(R.prop('label'))
       )
       .cata(
         error => {
@@ -151,14 +147,13 @@
     type="text"
     {autocomplete}
     {value}
-    bind:this={inputNode}
-    on:focus={_ => {
+    on:focus={event => {
       focused = true;
-      validate(parse(inputNode.value));
+      validate(parse(event.target.value));
     }}
     on:blur={event => {
       focused = false;
-      const parsedValue = parse(inputNode.value);
+      const parsedValue = parse(event.target.value);
       Either.fromValueOrEither(parsedValue).forEach(() => (value = ''));
       model = R.set(lens, parsedValue, model);
       validate(parsedValue);
@@ -166,7 +161,7 @@
     on:click
     on:keydown
     on:input={event => {
-      validate(parse(inputNode.value));
+      validate(parse(event.target.value));
     }} />
 </div>
 
