@@ -10,7 +10,8 @@ export const {
   fromUndefined,
   fromEmpty,
   fromEither,
-  map
+  map,
+  toEither
 } = Maybe;
 
 export const fold = R.curry((defaultValue, fn, m) => m.fold(defaultValue)(fn));

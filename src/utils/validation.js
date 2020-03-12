@@ -50,4 +50,5 @@ export const validate = (validators, value) =>
   Maybe.fromUndefined(R.find(R.compose(
     R.not,
     R.applyTo(value),
-    R.prop('predicate')), validators));
+    R.prop('predicate')), validators))
+    .toEither(value).swap();

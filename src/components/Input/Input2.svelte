@@ -37,8 +37,7 @@
 
   const validate = (value) =>
     Either.fromValueOrEither(value)
-      .flatMap(modelValue => v.validate(validation, modelValue)
-          .map(R.prop('label')).toEither(modelValue).swap())
+      .flatMap(modelValue => v.validate(validation, modelValue).leftMap(R.prop('label')))
       .cata(
           error => {
             valid = false;
