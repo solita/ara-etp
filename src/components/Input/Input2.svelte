@@ -22,7 +22,7 @@
   export let format = R.identity;
   export let validation = [{predicate: R.always(true), label: R.always('')}];
 
-  let value = Either.fromValueOrEither(R.view(lens, model))
+  $: value = Either.fromValueOrEither(R.view(lens, model))
       .map(format).toMaybe().orSome(value);
 
   let valid = true;
@@ -140,22 +140,22 @@
     class:error={highlightError}
     type="text"
     {autocomplete}
-    bind:value
+    {value}
     bind:this={inputNode}
     on:focus={_ => {
       focused = true;
-      validate(parse(value));
+      validate(parse(inputNode.value));
     }}
     on:blur={event => {
       focused = false;
-      const parsedValue = parse(value);
+      const parsedValue = parse(inputNode.value);
       model = R.set(lens, parsedValue, model);
       validate(parsedValue);
     }}
     on:click
     on:keydown
     on:input={event => {
-      validate(parse(value));
+      validate(parse(inputNode.value));
     }} />
 </div>
 

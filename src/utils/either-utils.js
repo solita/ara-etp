@@ -15,6 +15,10 @@ export const isLeft = e => e.isLeft();
 
 export const isRight = e => e.isRight();
 
+export const orSome = (either, defaultValue) => either.cata(R.always(defaultValue), R.identity);
+
+export const from = (value, isRight, left) => isRight(value) ? Either.of(value) : Either.Left(left);
+
 export const fromValueOrEither =
     any => any['@@type'] === Either.prototype.init['@@type'] ?
       any : Either.of(any);
