@@ -22,9 +22,8 @@
   export let format = R.identity;
   export let validation = [{predicate: R.always(true), label: R.always('')}];
 
-  $: let value = Either.fromValueOrEither(R.view(lens, model))
+  let value = Either.fromValueOrEither(R.view(lens, model))
       .map(format).toMaybe().orSome(value);
-
 
   let valid = true;
   let errorMessage = '';
