@@ -7,7 +7,7 @@ import * as Future from '../../utils/future-utils';
 describe('YritysUtils:', () => {
   describe('urlForYritysId', () => {
     it('should return proper url for given id', () => {
-      assert.equal('/api/yritykset/1', YritysUtils.urlForYritysId(1));
+      assert.equal('/api/private/yritykset/1', YritysUtils.urlForYritysId(1));
     });
   });
 
