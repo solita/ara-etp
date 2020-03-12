@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as v from '@Utility/validation';
 
   export let id;
   export let name;
@@ -34,10 +35,7 @@
   onMount(() => passFocusableNodesToParent(inputNode));
 
   const validate = (value) =>
-    Maybe.head(R.filter(R.compose(
-        R.not,
-        R.applyTo(value),
-        R.prop('predicate')), validation))
+    v.validate(validation, value)
     .cata(
         () => valid = true,
         error => {

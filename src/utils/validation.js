@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as Maybe from '@Utility/maybe-utils';
 
 export const ytunnusChecksum = R.compose(
   R.unless(R.equals(0), R.subtract(11)),
@@ -44,3 +45,9 @@ export const isUrl = R.test(
 );
 
 export const isPostinumero = R.test(/^\d{5}$/);
+
+export const validate = (validators, value) =>
+  Maybe.fromUndefined(R.find(R.compose(
+    R.not,
+    R.applyTo(value),
+    R.prop('predicate')), validators));
