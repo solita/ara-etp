@@ -44,7 +44,7 @@
           country.findCountry(countries, name)
               .toEither(R.applyTo('country-not-found'))
               .map(R.prop('id'))),
-      R.always(Either.Left(R.always('connection-failure'))));
+      R.always(Either.Left(R.applyTo('connection-failure'))));
 
   $: countryNames = Either.foldRight(
     [],
