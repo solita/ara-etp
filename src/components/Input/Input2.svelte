@@ -149,7 +149,10 @@
     on:blur={event => {
       focused = false;
       const parsedValue = parse(inputNode.value);
+
+      Either.fromValueOrEither(parsedValue).forEach(() => value = '');
       model = R.set(lens, parsedValue, model);
+
       validate(parsedValue);
     }}
     on:click
