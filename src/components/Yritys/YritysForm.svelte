@@ -39,12 +39,13 @@
   $: Either.isRight($countryStore) ||
     Future.fork(countryStore.set, countryStore.set, countryFuture);
 
-  $: parseCountry = Either.orSome(
-      $countryStore.map(countries => name =>
-          country.findCountry(countries, name)
-              .toEither(R.applyTo('country-not-found'))
-              .map(R.prop('id'))),
-      R.always(Either.Left(R.applyTo('connection-failure'))));
+  const parseCountry = R.compose(
+    R.map(R.prop('id')),
+    R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
+    Either.leftMap(R.always(R.applyTo('connection-failure'))),
+    fn => $countryStore.map(fn),
+    country.findCountry
+  );
 
   $: countryNames = Either.foldRight(
     [],
@@ -92,16 +93,14 @@
           disabled={existing} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-        <Input2
+        <Input
           id={'nimi'}
           name={'nimi'}
           label={$_('yritys.nimi')}
           required={true}
           bind:model={yritys}
           parse={formTransformers.nimi}
-          validation={[validation.isRequired,
-            validation.minLengthConstraint(2),
-            validation.maxLengthConstraint(200)]}
+          validation={[validation.isRequired, validation.minLengthConstraint(2), validation.maxLengthConstraint(200)]}
           i18n={$_}
           lens={R.lensProp('nimi')} />
       </div>
@@ -165,7 +164,7 @@
               lens={R.lensProp('maa')}
               parse={parseCountry}
               validation={[]}
-              i18n={$_}/>
+              i18n={$_} />
           </Autocomplete>
         </div>
       </div>

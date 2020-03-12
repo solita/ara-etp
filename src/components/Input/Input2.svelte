@@ -20,10 +20,12 @@
 
   export let parse = R.identity;
   export let format = R.identity;
-  export let validation = [{predicate: R.always(true), label: R.always('')}];
+  export let validation = [{ predicate: R.always(true), label: R.always('') }];
 
   $: value = Either.fromValueOrEither(R.view(lens, model))
-      .map(format).toMaybe().orSome(value);
+    .map(format)
+    .toMaybe()
+    .orSome(value);
 
   let valid = true;
   let errorMessage = '';
@@ -36,17 +38,18 @@
   let inputNode;
   onMount(() => passFocusableNodesToParent(inputNode));
 
-  const validate = (value) =>
+  $: validate = value =>
     Either.fromValueOrEither(value)
-      .flatMap(modelValue => v.validate(validation, modelValue).leftMap(R.prop('label')))
+      .flatMap(modelValue =>
+        v.validate(validation, modelValue).leftMap(R.prop('label'))
+      )
       .cata(
-          error => {
-            valid = false;
-            errorMessage = error(i18n);
-          },
-          () => valid = true
+        error => {
+          valid = false;
+          errorMessage = error(i18n);
+        },
+        () => (valid = true)
       );
-
 </script>
 
 <style type="text/postcss">
@@ -129,9 +132,16 @@
   }
 </style>
 
-<label for={id} class:required class:error={highlightError} class:focused>{label}</label>
+<label for={id} class:required class:error={highlightError} class:focused>
+  {label}
+</label>
 
-<div class="inputwrapper" class:caret class:focused class:error={highlightError} class:disabled>
+<div
+  class="inputwrapper"
+  class:caret
+  class:focused
+  class:error={highlightError}
+  class:disabled>
   <input
     {id}
     {name}
@@ -149,10 +159,8 @@
     on:blur={event => {
       focused = false;
       const parsedValue = parse(inputNode.value);
-
-      Either.fromValueOrEither(parsedValue).forEach(() => value = '');
+      Either.fromValueOrEither(parsedValue).forEach(() => (value = ''));
       model = R.set(lens, parsedValue, model);
-
       validate(parsedValue);
     }}
     on:click
@@ -163,8 +171,8 @@
 </div>
 
 {#if !valid}
-<div class="error-label">
-  <span class="font-icon error-icon">error</span>
-  {errorMessage}
-</div>
+  <div class="error-label">
+    <span class="font-icon error-icon">error</span>
+    {errorMessage}
+  </div>
 {/if}
