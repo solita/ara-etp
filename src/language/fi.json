@@ -1,4 +1,9 @@
 {
+  "validation": {
+    "required": "Pakollinen tieto",
+    "min-length": "Pituus pitää olla vähintään {min} merkkiä",
+    "max-length": "Pituus saa olla enintään {max} merkkiä"
+  },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
   "tallenna": "Tallenna",

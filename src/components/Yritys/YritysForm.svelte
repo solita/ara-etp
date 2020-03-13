@@ -6,7 +6,9 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Fetch from '@Utility/fetch-utils';
+  import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
+  import * as country from './country';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
@@ -36,6 +38,14 @@
 
   $: Either.isRight($countryStore) ||
     Future.fork(countryStore.set, countryStore.set, countryFuture);
+
+  const parseCountry = R.compose(
+    R.map(R.prop('id')),
+    R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
+    Either.leftMap(R.always(R.applyTo('connection-failure'))),
+    fn => $countryStore.map(fn),
+    country.findCountry
+  );
 
   $: countryNames = Either.foldRight(
     [],
@@ -90,7 +100,8 @@
           required={true}
           bind:model={yritys}
           parse={formTransformers.nimi}
-          validation={formValidators.nimi}
+          validators={[validation.isRequired, validation.minLengthConstraint(2), validation.maxLengthConstraint(200)]}
+          i18n={$_}
           lens={R.lensProp('nimi')} />
       </div>
     </div>
@@ -144,15 +155,15 @@
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Autocomplete items={countryNames}>
-            <Input
+            <Input2
               id={'maa'}
               name={'maa'}
               label={$_('yritys.maa')}
               required={true}
-              value={yritys.maa}
-              transform={formTransformers.maa}
-              validation={formValidators.maa}
-              update={R.compose( update, R.set(R.lensProp('maa')) )} />
+              bind:model={yritys}
+              lens={R.lensProp('maa')}
+              parse={parseCountry}
+              i18n={$_} />
           </Autocomplete>
         </div>
       </div>
