@@ -11,7 +11,7 @@
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import Footer from '@Component/Footer/Footer';
   import * as UserUtils from '@Utility/user-utils';
-  import { currentUserStore, errorStore } from '@/stores';
+  import { currentUserStore, errorStore, breadcrumbStore } from '@/stores';
 
   import Tailwindcss from '@/Tailwindcss';
 
@@ -42,7 +42,7 @@
 {:else}
   <div class="container">
     <Header />
-    <Breadcrumb />
+    <Breadcrumb value="{$breadcrumbStore}"/>
     <div class="routecontainer">
       <Router {routes} />
     </div>
