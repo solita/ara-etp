@@ -29,5 +29,6 @@
       "load-error": "Yrityksen tietojen haku epäonnistui."
     }
   },
-  "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan."
+  "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
+  "country-not-found": "Virheellinen maa"
 }
