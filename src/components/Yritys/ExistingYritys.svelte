@@ -11,6 +11,7 @@
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import YritysForm from '@Component/Yritys/YritysForm';
   import * as YritysUtils from '@Component/Yritys/yritys-utils';
+  import * as Breadcrumb from '@Component/Breadcrumb/breadcrumb-utils';
 
   export let params;
   let id = params.id;
@@ -36,6 +37,10 @@
     },
     { text: $_('yritys.laatijat') }
   ];
+
+  $: Breadcrumb.set([[$_('yritys.yritykset'), '/#/yritykset'],
+                     [Maybe.fold('...', R.prop('nimi'), yritys), window.location.href]]);
+
 </script>
 
 <style type="text/postcss">
