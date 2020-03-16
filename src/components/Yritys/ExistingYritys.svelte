@@ -11,6 +11,7 @@
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import YritysForm from '@Component/Yritys/YritysForm';
   import * as YritysUtils from '@Component/Yritys/yritys-utils';
+  import { breadcrumbStore } from '@/stores';
 
   export let params;
   let id = params.id;
@@ -36,6 +37,16 @@
     },
     { text: $_('yritys.laatijat') }
   ];
+
+  $: breadcrumbStore.set([{
+    label: $_('yritys.yritykset'),
+    url: '/#/yritykset'
+  },
+  {
+    label: Maybe.fold('...', R.prop('nimi'), yritys),
+    url: location.href
+  }]);
+
 </script>
 
 <style type="text/postcss">

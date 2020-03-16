@@ -1,5 +1,6 @@
 <script>
-
+  import Link from '@Component/Link/Link';
+  export let value;
 </script>
 
 <style type="text/postcss">
@@ -9,6 +10,9 @@
 </style>
 
 <div>
-  <span class="font-icon">home</span>
-  &nbsp;/ Yritys Y / Perustiedot
+  <Link href="/" icon="home" />
+  {#each value as {label, url}, i (url)}
+    <span>&nbsp;/&nbsp</span>
+    <Link href="{url}" text="{label}" />
+  {/each}
 </div>
