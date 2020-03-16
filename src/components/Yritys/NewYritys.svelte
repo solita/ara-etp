@@ -12,8 +12,7 @@
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import YritysForm from '@Component/Yritys/YritysForm';
   import * as YritysUtils from '@Component/Yritys/yritys-utils';
-  import * as Breadcrumb from '@Component/Breadcrumb/breadcrumb-utils';
-
+  import { breadcrumbStore } from '@/stores';
 
   let yritys = YritysUtils.emptyYritys();
 
@@ -29,8 +28,8 @@
     { text: $_('yritys.laatijat') }
   ];
 
- Breadcrumb.set([[$_('yritys.yritykset'), '/#/yritykset'],
-                 [$_('yritys.uusi_yritys'), window.location.href]]);
+ breadcrumbStore.set([[$_('yritys.yritykset'), '/#/yritykset'],
+                      [$_('yritys.uusi_yritys'), window.location.href]]);
 </script>
 
 <style type="text/postcss">
