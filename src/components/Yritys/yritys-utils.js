@@ -63,14 +63,6 @@ export const formParsers = () => ({
   verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim)
 });
 
-export const validateYritys = R.curry((validators, yritys) =>
-  R.compose(
-    R.evolve(R.__, yritys),
-    R.assoc('wwwosoite', Maybe.fold(true, validators.wwwosoite)),
-    R.assoc('verkkolaskuosoite', Maybe.fold(true, validators.verkkolaskuosoite))
-  )(validators)
-);
-
 export const getYritysByIdFuture = R.curry((fetch, id) =>
   R.compose(
     R.map(deserialize),
