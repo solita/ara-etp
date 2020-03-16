@@ -28,8 +28,14 @@
     { text: $_('yritys.laatijat') }
   ];
 
- breadcrumbStore.set([[$_('yritys.yritykset'), '/#/yritykset'],
-                      [$_('yritys.uusi_yritys'), window.location.href]]);
+  breadcrumbStore.set([{
+    label: $_('yritys.yritykset'),
+    url: '/#/yritykset'
+  },{
+    label: $_('yritys.uusi_yritys'),
+    url: window.location.href
+  }]);
+
 </script>
 
 <style type="text/postcss">

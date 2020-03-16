@@ -38,8 +38,14 @@
     { text: $_('yritys.laatijat') }
   ];
 
-  $: breadcrumbStore.set([[$_('yritys.yritykset'), '/#/yritykset'],
-                          [Maybe.fold('...', R.prop('nimi'), yritys), window.location.href]]);
+  $: breadcrumbStore.set([{
+    label: $_('yritys.yritykset'),
+    url: '/#/yritykset'
+  },
+  {
+    label: Maybe.fold('...', R.prop('nimi'), yritys),
+    url: location.href
+  }]);
 
 </script>
 

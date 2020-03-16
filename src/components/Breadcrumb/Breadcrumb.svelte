@@ -11,7 +11,7 @@
 
 <div>
   <Link href="/" icon="home" />
-  {#each value as [label, url], i (url)}
+  {#each value as {label, url}, i (url)}
     <span>&nbsp;/&nbsp</span>
     <Link href="{url}" text="{label}" />
   {/each}
