@@ -3,7 +3,9 @@
     "required": "Pakollinen tieto",
     "min-length": "Pituus pitää olla vähintään {min} merkkiä",
     "max-length": "Pituus saa olla enintään {max} merkkiä",
-    "invalid-url": "Virheellinen osoite"
+    "invalid-url": "Virheellinen www-osoite",
+    "invalid-ytunnus": "Virheellinen ytunnus",
+    "invalid-postinumero": "Virheellinen postinumero"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",

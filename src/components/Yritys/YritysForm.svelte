@@ -12,7 +12,6 @@
 
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
-  import Input from '@Component/Input/Input';
   import Input2 from '@Component/Input/Input2';
   import Button from '@Component/Button/Button';
 
@@ -29,8 +28,8 @@
 
   const originalYritys = R.clone(yritys);
 
-  const formTransformers = YritysUtils.formTransformers();
-  const formValidators = YritysUtils.formValidators();
+  const formParsers = YritysUtils.formParsers();
+  const formSchema = YritysUtils.formSchema();
 
   const countryFuture = R.compose(
     Future.coalesce(Either.Left, Either.Right),
@@ -69,10 +68,12 @@
   );
 
   $: isValidForm = R.compose(
-    R.reduce(R.and, true),
+    R.all(Either.isRight),
     R.values,
-    YritysUtils.validateYritys(formValidators)
+    validation.validateModelObject(formSchema)
   )(yritys);
+
+  $: console.log("Form validation: ", isValidForm);
 </script>
 
 <form
@@ -88,15 +89,16 @@
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-        <Input
+        <Input2
           id={'ytunnus'}
           name={'ytunnus'}
           label={$_('yritys.y-tunnus')}
           required={true}
-          value={yritys.ytunnus}
-          transform={formTransformers.ytunnus}
-          validation={formValidators.ytunnus}
-          update={R.compose( update, R.set(R.lensProp('ytunnus')) )}
+          bind:model={yritys}
+          lens={R.lensProp('ytunnus')}
+          parse={formParsers.ytunnus}
+          validators={formSchema.ytunnus}
+          i18n={$_}
           disabled={existing} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
@@ -106,10 +108,10 @@
           label={$_('yritys.nimi')}
           required={true}
           bind:model={yritys}
-          parse={formTransformers.nimi}
-          validators={[validation.isRequired, validation.minLengthConstraint(2), validation.maxLengthConstraint(200)]}
-          i18n={$_}
-          lens={R.lensProp('nimi')} />
+          lens={R.lensProp('nimi')}
+          parse={formParsers.nimi}
+          validators={formSchema.nimi}
+          i18n={$_}/>
       </div>
     </div>
     <div class="py-4">
@@ -120,52 +122,55 @@
         label={$_('yritys.www-osoite')}
         required={false}
         bind:model={yritys}
+        lens={R.lensProp('wwwosoite')}
         format={Maybe.orSome('')}
-        parse={formTransformers.wwwosoite}
-        validators={R.map(validation.liftValidator, [validation.urlValidator])}
-        i18n={$_}
-        lens={R.lensProp('wwwosoite')}/>
+        parse={formParsers.wwwosoite}
+        validators={formSchema.wwwosoite}
+        i18n={$_}/>
     </div>
   </div>
   <div class="mt-8">
     <H1 text={$_('yritys.laskutusosoite')} />
     <div class="flex flex-col">
       <div class="py-4">
-        <Input
+        <Input2
           {disabled}
           id={'jakeluosoite'}
           name={'jakeluosoite'}
           label={$_('yritys.jakeluosoite')}
           required={true}
-          value={yritys.jakeluosoite}
-          transform={formTransformers.jakeluosoite}
-          validation={formValidators.jakeluosoite}
-          update={R.compose( update, R.set(R.lensProp('jakeluosoite')) )} />
+          bind:model={yritys}
+          lens={R.lensProp('jakeluosoite')}
+          parse={formParsers.jakeluosoite}
+          validators={formSchema.jakeluosoite}
+          i18n={$_} />
       </div>
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Input
+          <Input2
             {disabled}
             id={'postinumero'}
             name={'postinumero'}
             label={$_('yritys.postinumero')}
             required={true}
-            value={yritys.postinumero}
-            transform={formTransformers.postinumero}
-            validation={formValidators.postinumero}
-            update={R.compose( update, R.set(R.lensProp('postinumero')) )} />
+            bind:model={yritys}
+            lens={R.lensProp('postinumero')}
+            parse={formParsers.postinumero}
+            validators={formSchema.postinumero}
+            i18n={$_} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Input
+          <Input2
             {disabled}
             id={'postitoimipaikka'}
             name={'postitoimipaikka'}
             label={$_('yritys.postitoimipaikka')}
             required={true}
-            value={yritys.postitoimipaikka}
-            transform={formTransformers.postitoimipaikka}
-            validation={formValidators.postitoimipaikka}
-            update={R.compose( update, R.set(R.lensProp('postitoimipaikka')) )} />
+            bind:model={yritys}
+            lens={R.lensProp('postitoimipaikka')}
+            parse={formParsers.postitoimipaikka}
+            validators={formSchema.postitoimipaikka}
+            i18n={$_} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Autocomplete items={countryNames}>
@@ -186,15 +191,16 @@
   <div class="mt-8">
     <H1 text={$_('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
-      <Input
+      <Input2
         {disabled}
         id={'verkkolaskuosoite'}
         name={'verkkolaskuosoite'}
         label={$_('yritys.ovt-tunnus')}
-        value={Maybe.fold('', R.identity, yritys.verkkolaskuosoite)}
-        transform={formTransformers.verkkolaskuosoite}
-        validation={formValidators.verkkolaskuosoite}
-        update={R.compose( update, R.compose( R.set(R.lensProp('verkkolaskuosoite')), Maybe.fromEmpty ) )} />
+        bind:model={yritys}
+        lens={R.lensProp('verkkolaskuosoite')}
+        format={Maybe.orSome('')}
+        parse={formParsers.verkkolaskuosoite}
+        i18n={$_} />
     </div>
   </div>
   <div class="flex -mx-4 pt-8">
