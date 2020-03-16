@@ -17,6 +17,8 @@ export const isLeft = e => e.isLeft();
 
 export const isRight = e => e.isRight();
 
+export const right = e => e.right();
+
 export const orSome = (either, defaultValue) =>
   either.cata(R.always(defaultValue), R.identity);
 

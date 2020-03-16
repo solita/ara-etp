@@ -35,10 +35,7 @@
   $: highlightError = focused && !valid;
 
   $: validate = value =>
-    Either.fromValueOrEither(value)
-      .flatMap(modelValue =>
-        v.validate(validators, modelValue).leftMap(R.prop('label'))
-      )
+    v.validateModelValue(validators, value)
       .cata(
         error => {
           valid = false;
