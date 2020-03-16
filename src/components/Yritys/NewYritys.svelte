@@ -1,5 +1,5 @@
 <script>
-  import { replace } from 'svelte-spa-router';
+  import { replace } from '@Component/Router/router';
   import * as R from 'ramda';
 
   import { _ } from '@Language/i18n';
@@ -9,48 +9,61 @@
   import * as Fetch from '@Utility/fetch-utils';
   import * as Future from '@Utility/future-utils';
 
-  import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
+  import Overlay from '@Component/Overlay/Overlay';
+  import Spinner from '@Component/Spinner/Spinner';
   import YritysForm from '@Component/Yritys/YritysForm';
-  import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import { breadcrumbStore } from '@/stores';
+  import * as YritysUtils from './yritys-utils';
+
+  import FlashMessage from '@Component/FlashMessage/FlashMessage';
+  import { flashMessageStore } from '@/stores';
+
+  let overlay = false;
+
+  const toggleOverlay = value => () => (overlay = value);
 
   let yritys = YritysUtils.emptyYritys();
 
   const submit = R.compose(
-    Future.fork(console.error, ({ id }) => replace(`/yritys/${id}`)),
-    YritysUtils.postYritysFuture(fetch)
+    Future.forkBothDiscardFirst(
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.save-error'))
+      ),
+      R.compose(
+        R.tap(() =>
+          flashMessageStore.addPersist(
+            'Yritys',
+            'success',
+            $_('yritys.messages.save-success')
+          )
+        ),
+        ({ id }) => replace(`/yritys/${id}`)
+      )
+    ),
+    Future.both(Future.after(500, true)),
+    YritysUtils.postYritysFuture(fetch),
+    R.tap(toggleOverlay(true))
   );
 
-  $: links = [
+  breadcrumbStore.set([
     {
-      text: $_('yritys.uusi_yritys')
+      label: $_('yritys.yritykset'),
+      url: '/#/yritykset'
     },
-    { text: $_('yritys.laatijat') }
-  ];
-
-  breadcrumbStore.set([{
-    label: $_('yritys.yritykset'),
-    url: '/#/yritykset'
-  },{
-    label: $_('yritys.uusi_yritys'),
-    url: window.location.href
-  }]);
-
+    {
+      label: $_('yritys.uusi_yritys'),
+      url: window.location.href
+    }
+  ]);
 </script>
 
-<style type="text/postcss">
-  .content {
-    @apply flex flex-col -my-4 pb-8;
-  }
-
-  .content > * :not(first) {
-    @apply py-8;
-  }
-</style>
-
-<section class="content">
-  <div class="w-full">
-    <NavigationTabBar {links} />
+<Overlay {overlay}>
+  <div slot="content">
+    <YritysForm {yritys} {submit} />
   </div>
-  <YritysForm {yritys} {submit} />
-</section>
+  <div slot="overlay-content">
+    <Spinner />
+  </div>
+</Overlay>

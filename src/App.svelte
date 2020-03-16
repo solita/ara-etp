@@ -3,6 +3,7 @@
   import Router from 'svelte-spa-router';
   import { link } from 'svelte-spa-router';
 
+  import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import { routes } from '@Component/routes';
   import { setupI18n } from '@Language/i18n';
   import Header from '@Component/Header/Header';
@@ -21,6 +22,12 @@
   $: isAppLoading = !$currentUserStore && !$errorStore;
   $: isUnauthorizedOnFirstLoad =
     !$currentUserStore && $errorStore && $errorStore.statusCode === 401;
+
+  let links = [
+    {
+      text: '...'
+    }
+  ];
 </script>
 
 <style type="text/postcss">
@@ -29,7 +36,15 @@
   }
 
   .routecontainer {
-    @apply flex-grow py-10 px-20 bg-light;
+    @apply flex-grow pb-10;
+  }
+
+  .content {
+    @apply flex flex-col pb-8 px-20 pt-8 bg-light;
+  }
+
+  .content h1 :not(first) {
+    @apply py-6;
   }
 </style>
 
@@ -42,10 +57,15 @@
 {:else}
   <div class="container">
     <Header />
-    <Breadcrumb value="{$breadcrumbStore}"/>
-    <div class="routecontainer">
-      <Router {routes} />
-    </div>
+    <Breadcrumb value={$breadcrumbStore} />
+    <section class="content">
+      <div class="w-full">
+        <NavigationTabBar {links} />
+      </div>
+      <div class="routecontainer">
+        <Router {routes} />
+      </div>
+    </section>
     <Footer />
   </div>
 {/if}

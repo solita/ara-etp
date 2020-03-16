@@ -23,7 +23,7 @@
   }
 
   .disabled {
-    @apply bg-disabled;
+    @apply bg-disabled cursor-not-allowed;
   }
 </style>
 

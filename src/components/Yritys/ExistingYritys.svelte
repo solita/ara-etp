@@ -12,63 +12,88 @@
   import YritysForm from '@Component/Yritys/YritysForm';
   import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import { breadcrumbStore } from '@/stores';
+  import Overlay from '@Component/Overlay/Overlay';
+  import Spinner from '@Component/Spinner/Spinner';
+
+  import FlashMessage from '@Component/FlashMessage/FlashMessage';
+  import { flashMessageStore } from '@/stores';
 
   export let params;
-  let id = params.id;
+
   let yritys = Maybe.None();
-  let api = Maybe.None();
 
-  R.compose(
-    Future.fork(
-      console.error,
-      fetchedYritys => (yritys = Maybe.Some(fetchedYritys))
+  let overlay = true;
+  let disabled = false;
+
+  const toggleOverlay = value => () => (overlay = value);
+  const toggleDisabled = value => () => (disabled = value);
+
+  const resetView = () => {
+    overlay = true;
+    yritys = Maybe.None();
+    disabled = false;
+  };
+
+  $: params.id && resetView();
+
+  $: submit = R.compose(
+    Future.forkBothDiscardFirst(
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'error'),
+        R.always($_('yritys.messages.save-error'))
+      ),
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Yritys', 'success'),
+        R.always($_('yritys.messages.save-success'))
+      )
     ),
-    YritysUtils.getYritysByIdFuture(fetch)
-  )(id);
-
-  const submit = R.compose(
-    Future.fork(console.error, console.log),
-    YritysUtils.putYritysByIdFuture(fetch, id)
+    Future.both(Future.after(500, true)),
+    YritysUtils.putYritysByIdFuture(fetch, params.id),
+    R.tap(toggleOverlay(true))
   );
 
-  $: links = [
+  $: R.compose(
+    Future.forkBothDiscardFirst(
+      R.compose(
+        R.compose(
+          R.tap(toggleDisabled(true)),
+          flashMessageStore.add('Yritys', 'error'),
+          R.always($_('yritys.messages.load-error'))
+        ),
+        R.tap(toggleOverlay(false))
+      ),
+      R.compose(
+        fetchedYritys => (yritys = Maybe.Some(fetchedYritys)),
+        R.tap(toggleOverlay(false))
+      )
+    ),
+    Future.both(Future.after(400, true)),
+    YritysUtils.getYritysByIdFuture(fetch)
+  )(params.id);
+
+  $: breadcrumbStore.set([
     {
-      text: Maybe.fold('...', R.prop('nimi'), yritys)
+      label: $_('yritys.yritykset'),
+      url: '/#/yritykset'
     },
-    { text: $_('yritys.laatijat') }
-  ];
-
-  $: breadcrumbStore.set([{
-    label: $_('yritys.yritykset'),
-    url: '/#/yritykset'
-  },
-  {
-    label: Maybe.fold('...', R.prop('nimi'), yritys),
-    url: location.href
-  }]);
-
+    {
+      label: Maybe.fold('...', R.prop('nimi'), yritys),
+      url: location.href
+    }
+  ]);
 </script>
 
-<style type="text/postcss">
-  .content {
-    @apply flex flex-col -my-4 pb-8;
-  }
-
-  .content > * :not(first) {
-    @apply py-8;
-  }
-</style>
-
-<section class="content">
-  {#if yritys.isNone()}
-    Loading...
-  {:else}
-    <div class="w-full">
-      <NavigationTabBar {links} />
-    </div>
+<Overlay {overlay}>
+  <div slot="content">
     <YritysForm
       {submit}
-      existing={true}
-      yritys={Maybe.getOrElse(null, yritys)} />
-  {/if}
-</section>
+      {disabled}
+      existing={Maybe.isSome(yritys)}
+      yritys={Maybe.getOrElse(YritysUtils.emptyYritys(), yritys)} />
+  </div>
+  <div slot="overlay-content">
+    <Spinner />
+  </div>
+</Overlay>

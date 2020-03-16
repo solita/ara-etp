@@ -21,7 +21,13 @@
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
     "verkkolaskuosoite": "verkkolaskuosoite",
-    "ovt-tunnus": "OVT-tunnus"
+    "ovt-tunnus": "OVT-tunnus",
+    "messages": {
+      "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
+      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
+      "load-error": "Yrityksen tietojen haku epäonnistui."
+    }
   },
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan."
 }

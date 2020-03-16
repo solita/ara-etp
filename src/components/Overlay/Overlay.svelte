@@ -6,7 +6,11 @@
 
 <style type="text/postcss">
   .overlay-container {
-    @apply relative flex;
+    @apply w-full relative flex;
+  }
+
+  .overlayed-content {
+    @apply flex-grow;
   }
 
   .overlay {
@@ -23,7 +27,7 @@
     <slot name="content" />
   </div>
   {#if overlay}
-    <div transition:fade={{ duration: 200 }} class="overlay">
+    <div transition:fade={{ duration: 50 }} class="overlay">
       <slot name="overlay-content" />
     </div>
   {/if}

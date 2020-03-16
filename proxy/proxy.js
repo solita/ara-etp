@@ -12,7 +12,7 @@ app.use(
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", 'localhost:35729'],
       connectSrc: ["'self'", 'ws://localhost:35729'],
-      styleSrc: ["'self'", 'fonts.googleapis.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
       fontSrc: ["'self'", 'fonts.gstatic.com']
     }
   })

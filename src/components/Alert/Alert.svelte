@@ -1,17 +1,22 @@
 <script>
-  import { fade } from 'svelte/transition';
-
-  export let type = 'success';
-  export let text = 'Failure';
+  export let type;
+  export let text;
   export let close = () => {};
 
   const error = type === 'error';
+  const warn = type === 'warn';
   const success = type === 'success';
+
+  const icon = {
+    error: 'error_outline',
+    warn: 'warning',
+    success: 'check_circle_outline'
+  }[type];
 </script>
 
 <style type="text/postcss">
   .alert {
-    @apply flex justify-between py-2 bg-primary text-light rounded-lg;
+    @apply flex justify-around py-2 px-2 bg-primary text-light rounded-lg shadow-lg;
   }
 
   .error {
@@ -22,25 +27,22 @@
     @apply bg-success;
   }
 
-  .first-half {
-    @apply ml-4;
+  .alert-text {
+    @apply flex-grow pl-2;
   }
 
-  .second-half {
-    @apply mr-4;
+  .icon,
+  .close {
+    @apply font-icon;
+  }
+
+  .close {
+    @apply cursor-pointer;
   }
 </style>
 
-<div
-  transition:fade={{ duration: 100 }}
-  class:error
-  class:success
-  class="alert">
-  <div class="first-half">
-    <span>Y</span>
-    <span>{text}</span>
-  </div>
-  <div class="second-half cursor-pointer">
-    <span on:click={close}>X</span>
-  </div>
+<div class:error class:success class="alert">
+  <span class="icon">{icon}</span>
+  <span class="alert-text">{text}</span>
+  <span class="close" on:click={close}>close</span>
 </div>
