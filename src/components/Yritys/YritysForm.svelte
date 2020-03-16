@@ -122,7 +122,7 @@
         bind:model={yritys}
         format={Maybe.orSome('')}
         parse={formTransformers.wwwosoite}
-        validators={[validation.liftValidator(validation.urlValidator)]}
+        validators={R.map(validation.liftValidator, [validation.urlValidator])}
         i18n={$_}
         lens={R.lensProp('wwwosoite')}/>
     </div>
