@@ -28,8 +28,8 @@
 
   const originalYritys = R.clone(yritys);
 
-  const formTransformers = YritysUtils.formParsers();
-  const formValidators = YritysUtils.formValidators();
+  const formParsers = YritysUtils.formParsers();
+  const formSchema = YritysUtils.formSchema();
 
   const countryFuture = R.compose(
     Future.coalesce(Either.Left, Either.Right),
@@ -70,7 +70,7 @@
   $: isValidForm = R.compose(
     R.all(Either.isRight),
     R.values,
-    validation.validateModelObject(formValidators)
+    validation.validateModelObject(formSchema)
   )(yritys);
 
   $: console.log("Form validation: ", isValidForm);
@@ -96,8 +96,8 @@
           required={true}
           bind:model={yritys}
           lens={R.lensProp('ytunnus')}
-          parse={formTransformers.ytunnus}
-          validators={formValidators.ytunnus}
+          parse={formParsers.ytunnus}
+          validators={formSchema.ytunnus}
           i18n={$_}
           disabled={existing} />
       </div>
@@ -109,8 +109,8 @@
           required={true}
           bind:model={yritys}
           lens={R.lensProp('nimi')}
-          parse={formTransformers.nimi}
-          validators={formValidators.nimi}
+          parse={formParsers.nimi}
+          validators={formSchema.nimi}
           i18n={$_}/>
       </div>
     </div>
@@ -124,8 +124,8 @@
         bind:model={yritys}
         lens={R.lensProp('wwwosoite')}
         format={Maybe.orSome('')}
-        parse={formTransformers.wwwosoite}
-        validators={formValidators.wwwosoite}
+        parse={formParsers.wwwosoite}
+        validators={formSchema.wwwosoite}
         i18n={$_}/>
     </div>
   </div>
@@ -141,8 +141,8 @@
           required={true}
           bind:model={yritys}
           lens={R.lensProp('jakeluosoite')}
-          parse={formTransformers.jakeluosoite}
-          validators={formValidators.jakeluosoite}
+          parse={formParsers.jakeluosoite}
+          validators={formSchema.jakeluosoite}
           i18n={$_} />
       </div>
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -155,8 +155,8 @@
             required={true}
             bind:model={yritys}
             lens={R.lensProp('postinumero')}
-            parse={formTransformers.postinumero}
-            validators={formValidators.postinumero}
+            parse={formParsers.postinumero}
+            validators={formSchema.postinumero}
             i18n={$_} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -168,8 +168,8 @@
             required={true}
             bind:model={yritys}
             lens={R.lensProp('postitoimipaikka')}
-            parse={formTransformers.postitoimipaikka}
-            validators={formValidators.postitoimipaikka}
+            parse={formParsers.postitoimipaikka}
+            validators={formSchema.postitoimipaikka}
             i18n={$_} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -199,7 +199,7 @@
         bind:model={yritys}
         lens={R.lensProp('verkkolaskuosoite')}
         format={Maybe.orSome('')}
-        parse={formTransformers.verkkolaskuosoite}
+        parse={formParsers.verkkolaskuosoite}
         i18n={$_} />
     </div>
   </div>

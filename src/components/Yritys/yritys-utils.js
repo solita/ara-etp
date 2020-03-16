@@ -32,7 +32,7 @@ export const emptyYritys = () => ({
   wwwosoite: Maybe.None()
 });
 
-export const formValidators = () => ({
+export const formSchema = () => ({
   ytunnus: [validation.isRequired, validation.ytunnusValidator],
   nimi: [
     validation.isRequired,
