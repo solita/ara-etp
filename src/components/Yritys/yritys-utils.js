@@ -10,6 +10,7 @@ const yritysApi = `/api/private/yritykset`;
 export const urlForYritysId = id => `${yritysApi}/${id}`;
 
 export const deserialize = R.evolve({
+  maa: Either.Right,
   verkkolaskuosoite: Maybe.fromNull,
   wwwosoite: Maybe.fromNull
 });
