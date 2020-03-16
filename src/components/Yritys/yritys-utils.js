@@ -46,7 +46,7 @@ export const formValidators = () => ({
 export const formTransformers = () => ({
   ytunnus: R.trim,
   nimi: R.trim,
-  wwwosoite: R.trim,
+  wwwosoite: R.compose(Maybe.fromEmpty, R.trim),
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,

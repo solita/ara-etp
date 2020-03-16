@@ -113,17 +113,18 @@
       </div>
     </div>
     <div class="py-4">
-      <Input
+      <Input2
         {disabled}
         id={'wwwosoite'}
         name={'wwwosoite'}
         label={$_('yritys.www-osoite')}
         required={false}
-        type={'url'}
-        value={Maybe.fold('', R.identity, yritys.wwwosoite)}
-        transform={formTransformers.wwwosoite}
-        validation={formValidators.wwwosoite}
-        update={R.compose( update, R.compose( R.set(R.lensProp('wwwosoite')), Maybe.fromEmpty ) )} />
+        bind:model={yritys}
+        format={Maybe.orSome('')}
+        parse={formTransformers.wwwosoite}
+        validators={[validation.liftValidator(validation.urlValidator)]}
+        i18n={$_}
+        lens={R.lensProp('wwwosoite')}/>
     </div>
   </div>
   <div class="mt-8">

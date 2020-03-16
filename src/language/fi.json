@@ -2,7 +2,8 @@
   "validation": {
     "required": "Pakollinen tieto",
     "min-length": "Pituus pitää olla vähintään {min} merkkiä",
-    "max-length": "Pituus saa olla enintään {max} merkkiä"
+    "max-length": "Pituus saa olla enintään {max} merkkiä",
+    "invalid-url": "Virheellinen osoite"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",

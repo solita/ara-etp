@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 
 export const ytunnusChecksum = R.compose(
   R.unless(R.equals(0), R.subtract(11)),
@@ -43,6 +44,16 @@ export const maxLengthConstraint = max =>
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 );
+
+export const urlValidator = {
+  predicate: isUrl,
+  label: R.applyTo('validation.invalid-url')
+};
+
+export const liftValidator = (validator) =>
+  R.over(R.lensProp('predicate'),
+    predicate => R.compose(Maybe.orSome(true), R.lift(predicate)), //value => value.map(predicate).orSome(true),
+    validator);
 
 export const isPostinumero = R.test(/^\d{5}$/);
 
