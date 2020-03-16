@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import * as Fetch from '../../utils/fetch-utils';
 import * as Maybe from '../../utils/maybe-utils';
+import * as Either from '@Utility/either-utils';
 import * as Future from '../../utils/future-utils';
 import * as validation from '../../utils/validation';
 
@@ -9,12 +10,14 @@ const yritysApi = `/api/private/yritykset`;
 export const urlForYritysId = id => `${yritysApi}/${id}`;
 
 export const deserialize = R.evolve({
+  maa: Either.Right,
   verkkolaskuosoite: Maybe.fromNull,
   wwwosoite: Maybe.fromNull
 });
 
 export const serialize = R.compose(
   R.evolve({
+    maa: Either.right,
     verkkolaskuosoite: Maybe.getOrElse(null),
     wwwosoite: Maybe.getOrElse(null)
   }),
