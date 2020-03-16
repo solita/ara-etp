@@ -69,7 +69,7 @@
 
   $: isValidForm = R.compose(
     R.all(Either.isRight),
-    R.filter(value => !R.isNil(value.isRight)),
+    R.filter(Either.isEither),
     R.values,
     validation.validateModelObject(formSchema)
   )(yritys);
