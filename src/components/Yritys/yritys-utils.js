@@ -43,7 +43,7 @@ export const formSchema = () => ({
     validation.maxLengthConstraint(200)],
   wwwosoite: R.map(validation.liftValidator, [validation.urlValidator]),
   jakeluosoite: [validation.isRequired],
-  postinumero: [validation.postinumeroValidator],
+  postinumero: [validation.isRequired, validation.postinumeroValidator],
   postitoimipaikka: [validation.isRequired],
   maa: [],
   verkkolaskuosoite: []
