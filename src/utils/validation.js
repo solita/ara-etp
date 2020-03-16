@@ -16,10 +16,15 @@ export const isValidYtunnus = R.allPass([
   R.converge(R.equals, [ytunnusChecksum, R.compose(parseInt, R.nth(8))])
 ]);
 
+export const ytunnusValidator = {
+  predicate: isValidYtunnus,
+  label: R.applyTo('validation.invalid-ytunnus')
+};
+
 export const isFilled = R.complement(R.isEmpty);
 
 export const isRequired = {
-  predicate: R.complement(R.isEmpty),
+  predicate: isFilled,
   label: R.applyTo('validation.required')
 };
 
@@ -57,9 +62,22 @@ export const liftValidator = (validator) =>
 
 export const isPostinumero = R.test(/^\d{5}$/);
 
+export const postinumeroValidator = {
+  predicate: isPostinumero,
+  label: R.applyTo('validation.invalid-postinumero')
+};
+
 export const validate = (validators, value) =>
   Maybe.fromUndefined(R.find(R.compose(
     R.not,
     R.applyTo(value),
     R.prop('predicate')), validators))
     .toEither(value).swap();
+
+export const validateModelValue = R.curry((validators, value) =>
+  Either.fromValueOrEither(value)
+    .flatMap(modelValue =>
+      validate(validators, modelValue).leftMap(R.prop('label'))));
+
+export const validateModelObject = R.curry((schemaObject, object) =>
+  R.evolve(R.map(validateModelValue, schemaObject), object));

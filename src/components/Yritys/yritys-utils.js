@@ -33,17 +33,20 @@ export const emptyYritys = () => ({
 });
 
 export const formValidators = () => ({
-  ytunnus: R.allPass([validation.isFilled, validation.isValidYtunnus]),
-  nimi: validation.isFilled,
-  wwwosoite: R.anyPass([R.isEmpty, validation.isUrl]),
-  jakeluosoite: validation.isFilled,
-  postinumero: validation.isPostinumero,
-  postitoimipaikka: validation.isFilled,
-  maa: validation.isFilled,
-  verkkolaskuosoite: R.always(true)
+  ytunnus: [validation.isRequired, validation.ytunnusValidator],
+  nimi: [
+    validation.isRequired,
+    validation.minLengthConstraint(2),
+    validation.maxLengthConstraint(200)],
+  wwwosoite: R.map(validation.liftValidator, [validation.urlValidator]),
+  jakeluosoite: [validation.isRequired],
+  postinumero: [validation.postinumeroValidator],
+  postitoimipaikka: [validation.isRequired],
+  maa: [],
+  verkkolaskuosoite: []
 });
 
-export const formTransformers = () => ({
+export const formParsers = () => ({
   ytunnus: R.trim,
   nimi: R.trim,
   wwwosoite: R.compose(Maybe.fromEmpty, R.trim),
@@ -51,7 +54,7 @@ export const formTransformers = () => ({
   postinumero: R.trim,
   postitoimipaikka: R.trim,
   maa: R.trim,
-  verkkolaskuosoite: R.trim
+  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim)
 });
 
 export const validateYritys = R.curry((validators, yritys) =>
