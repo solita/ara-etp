@@ -31,6 +31,11 @@
   const formParsers = YritysUtils.formParsers();
   const formSchema = YritysUtils.formSchema();
 
+  $: labelLocale = `label-${R.compose(
+          R.head,
+          R.split('-')
+      )($locale)}`;
+
   const countryFuture = R.compose(
     Future.coalesce(Either.Left, Either.Right),
     Fetch.responseAsJson,
@@ -45,6 +50,15 @@
     country.findCountry
   );
 
+  $: formatCountry = R.compose(
+    Either.orSome(R.__, ''),
+    R.tap(console.log),
+    R.map(R.prop(labelLocale)),
+    R.chain(Maybe.toEither('')),
+    R.map(R.__, $countryStore),
+    country.findCountryById
+  );
+
   Either.isRight($countryStore) ||
     Future.fork(countryStore.set, countryStore.set, countryFuture);
 
@@ -56,14 +70,7 @@
 
   $: countryNames = Either.foldRight(
     [],
-    R.map(
-      R.prop(
-        `label-${R.compose(
-          R.head,
-          R.split('-')
-        )($locale)}`
-      )
-    ),
+    R.map(R.prop(labelLocale)),
     $countryStore
   );
 
@@ -182,6 +189,7 @@
               required={true}
               bind:model={yritys}
               lens={R.lensProp('maa')}
+              format={formatCountry}
               parse={parseCountry}
               i18n={$_} />
           </Autocomplete>

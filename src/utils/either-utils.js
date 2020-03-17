@@ -19,8 +19,8 @@ export const isRight = e => e.isRight();
 
 export const right = e => e.right();
 
-export const orSome = (either, defaultValue) =>
-  either.cata(R.always(defaultValue), R.identity);
+export const orSome = R.curry((either, defaultValue) =>
+  either.cata(R.always(defaultValue), R.identity));
 
 export const from = (value, isRight, left) =>
   isRight(value) ? Either.of(value) : Either.Left(left);
