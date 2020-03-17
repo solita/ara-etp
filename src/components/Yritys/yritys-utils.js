@@ -1,9 +1,9 @@
 import * as R from 'ramda';
-import * as Fetch from '../../utils/fetch-utils';
-import * as Maybe from '../../utils/maybe-utils';
+import * as Fetch from '@Utility/fetch-utils';
+import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
-import * as Future from '../../utils/future-utils';
-import * as validation from '../../utils/validation';
+import * as Future from '@Utility/future-utils';
+import * as validation from '@Utility/validation';
 
 const yritysApi = `/api/private/yritykset`;
 
@@ -43,8 +43,11 @@ export const formSchema = () => ({
     validation.maxLengthConstraint(200)],
   wwwosoite: R.map(validation.liftValidator, [validation.urlValidator]),
   jakeluosoite: [validation.isRequired],
-  postinumero: [validation.postinumeroValidator],
-  postitoimipaikka: [validation.isRequired],
+  postinumero: [validation.isRequired, validation.postinumeroValidator],
+  postitoimipaikka: [
+    validation.isRequired,
+    validation.minLengthConstraint(2),
+    validation.maxLengthConstraint(200)],
   maa: [],
   verkkolaskuosoite: []
 });
@@ -59,14 +62,6 @@ export const formParsers = () => ({
   maa: R.trim,
   verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim)
 });
-
-export const validateYritys = R.curry((validators, yritys) =>
-  R.compose(
-    R.evolve(R.__, yritys),
-    R.assoc('wwwosoite', Maybe.fold(true, validators.wwwosoite)),
-    R.assoc('verkkolaskuosoite', Maybe.fold(true, validators.verkkolaskuosoite))
-  )(validators)
-);
 
 export const getYritysByIdFuture = R.curry((fetch, id) =>
   R.compose(

@@ -12,7 +12,7 @@
 
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
-  import Input2 from '@Component/Input/Input2';
+  import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
 
   import { countryStore, flashMessageStore } from '@/stores';
@@ -69,7 +69,7 @@
 
   $: isValidForm = R.compose(
     R.all(Either.isRight),
-    R.filter(value => !R.isNil(value.isRight)),
+    R.filter(Either.isEither),
     R.values,
     validation.validateModelObject(formSchema)
   )(yritys);
@@ -90,7 +90,7 @@
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-        <Input2
+        <Input
           id={'ytunnus'}
           name={'ytunnus'}
           label={$_('yritys.y-tunnus')}
@@ -103,7 +103,7 @@
           disabled={existing} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-        <Input2
+        <Input
           id={'nimi'}
           name={'nimi'}
           label={$_('yritys.nimi')}
@@ -116,7 +116,7 @@
       </div>
     </div>
     <div class="py-4">
-      <Input2
+      <Input
         {disabled}
         id={'wwwosoite'}
         name={'wwwosoite'}
@@ -134,7 +134,7 @@
     <H1 text={$_('yritys.laskutusosoite')} />
     <div class="flex flex-col">
       <div class="py-4">
-        <Input2
+        <Input
           {disabled}
           id={'jakeluosoite'}
           name={'jakeluosoite'}
@@ -148,7 +148,7 @@
       </div>
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Input2
+          <Input
             {disabled}
             id={'postinumero'}
             name={'postinumero'}
@@ -161,7 +161,7 @@
             i18n={$_} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-          <Input2
+          <Input
             {disabled}
             id={'postitoimipaikka'}
             name={'postitoimipaikka'}
@@ -175,7 +175,7 @@
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Autocomplete items={countryNames}>
-            <Input2
+            <Input
               id={'maa'}
               name={'maa'}
               label={$_('yritys.maa')}
@@ -192,7 +192,7 @@
   <div class="mt-8">
     <H1 text={$_('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
-      <Input2
+      <Input
         {disabled}
         id={'verkkolaskuosoite'}
         name={'verkkolaskuosoite'}

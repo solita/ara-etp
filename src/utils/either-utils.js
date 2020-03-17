@@ -25,5 +25,6 @@ export const orSome = (either, defaultValue) =>
 export const from = (value, isRight, left) =>
   isRight(value) ? Either.of(value) : Either.Left(left);
 
-export const fromValueOrEither = any =>
-  any['@@type'] === Either.prototype.init['@@type'] ? any : Either.of(any);
+export const isEither = any => any.__proto__ === Either.prototype;
+
+export const fromValueOrEither = any => isEither(any) ? any : Either.of(any);

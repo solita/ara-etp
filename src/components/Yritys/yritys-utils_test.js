@@ -1,8 +1,10 @@
 import { assert } from 'chai';
 import * as R from 'ramda';
 import * as YritysUtils from './yritys-utils';
-import * as Maybe from '../../utils/maybe-utils';
-import * as Future from '../../utils/future-utils';
+import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
+import * as Future from '@Utility/future-utils';
+import * as validation from '@Utility/validation';
 
 describe('YritysUtils:', () => {
   describe('urlForYritysId', () => {
@@ -68,11 +70,7 @@ describe('YritysUtils:', () => {
 
   describe('validateYritys', () => {
     it('should run given validations for yritys', () => {
-      const validators = {
-        nimi: item => item.length > 0,
-        wwwosoite: item => item.length > 0,
-        verkkolaskuosoite: item => item.length > 0
-      };
+      const schema = YritysUtils.formSchema();
 
       const yritys = {
         nimi: '',
@@ -82,21 +80,17 @@ describe('YritysUtils:', () => {
 
       const expected = {
         nimi: false,
-        wwwosoite: true,
+        wwwosoite: false,
         verkkolaskuosoite: true
       };
 
       assert.deepEqual(
-        expected,
-        YritysUtils.validateYritys(validators, yritys)
+        R.map(Either.isRight, validation.validateModelObject(schema, yritys)),
+        expected
       );
     });
     it('should run validate true for Nones', () => {
-      const validators = {
-        nimi: item => item.length > 0,
-        wwwosoite: item => item.length > 0,
-        verkkolaskuosoite: item => item.length > 0
-      };
+      const schema = YritysUtils.formSchema();
 
       const yritys = {
         nimi: '',
@@ -111,8 +105,8 @@ describe('YritysUtils:', () => {
       };
 
       assert.deepEqual(
-        expected,
-        YritysUtils.validateYritys(validators, yritys)
+        R.map(Either.isRight, validation.validateModelObject(schema, yritys)),
+        expected
       );
     });
   });
