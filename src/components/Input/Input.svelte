@@ -1,8 +1,9 @@
 <script>
   import { onMount } from 'svelte';
   import * as R from 'ramda';
+  import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Keys from '@Utility/keys';
+  import * as v from '@Utility/validation';
 
   export let id;
   export let name;
@@ -10,24 +11,38 @@
   export let label = '';
   export let caret = false;
   export let required = false;
-  export let passFocusableNodesToParent = () => {};
-  export let type = 'text';
-  export let autocomplete = 'false';
-  export let value = '';
+  export let autocomplete = 'off';
   export let disabled = false;
 
-  export let transform = R.identity;
-  export let validation = R.always(true);
-  export let update = () => {};
+  export let model;
+  export let lens;
 
-  let valid = Maybe.None();
-  $: error = Maybe.fold(false, R.not, valid);
+  export let parse = R.identity;
+  export let format = R.identity;
+  export let validators = [];
 
+  $: viewValue = Either.fromValueOrEither(R.view(lens, model))
+    .map(format)
+    .toMaybe()
+    .orSome(viewValue);
+
+  let valid = true;
+  let errorMessage = '';
   let focused = false;
 
-  let inputNode;
-  onMount(() => passFocusableNodesToParent(inputNode));
+  export let i18n;
 
+  $: highlightError = focused && !valid;
+
+  $: validate = value =>
+    v.validateModelValue(validators, value)
+      .cata(
+        error => {
+          valid = false;
+          errorMessage = error(i18n);
+        },
+        () => (valid = true)
+      );
 </script>
 
 <style type="text/postcss">
@@ -81,7 +96,7 @@
   }
 
   .inputwrapper.disabled {
-    @apply border-background;
+    @apply border-0 pb-3;
   }
 
   input {
@@ -100,46 +115,56 @@
     @apply bg-background;
   }
 
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  .error-label {
+    @apply absolute top-auto;
+    font-size: smaller;
+  }
+
+  .error-icon {
+    @apply text-error;
   }
 </style>
 
-<label for={id} class:required class:error class:focused>{label}</label>
+<label for={id} class:required class:error={highlightError} class:focused>
+  {label}
+</label>
 
-<div class="inputwrapper" class:caret class:focused class:error class:disabled>
+<div
+  class="inputwrapper"
+  class:caret
+  class:focused
+  class:error={highlightError}
+  class:disabled>
   <input
     {id}
     {name}
     {disabled}
     class="input"
-    class:error
+    class:error={highlightError}
     type="text"
     {autocomplete}
-    bind:value
-    bind:this={inputNode}
-    on:focus={_ => {
-      valid = R.compose( Maybe.Some, validation, transform )(value);
+    value={viewValue}
+    on:focus={event => {
       focused = true;
+      validate(parse(event.target.value));
     }}
     on:blur={event => {
       focused = false;
-      valid = Maybe.None();
-      value = transform(event.target.value);
-      update(value);
+      const parsedValue = parse(event.target.value);
+      Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
+      model = R.set(lens, parsedValue, model);
+      validate(parsedValue);
     }}
     on:click
-    on:keydown={event => {
-      if (event.keyCode === Keys.ENTER) {
-        value = transform(event.target.value);
-        if (!validation(value)) event.preventDefault();
-        update(value);
-      }
-    }}
     on:keydown
     on:input={event => {
-      valid = R.compose( Maybe.Some, validation, transform )(event.target.value);
+      validate(parse(event.target.value));
     }} />
 </div>
+
+{#if !valid}
+  <div class="error-label">
+    <span class="font-icon error-icon">error</span>
+    {errorMessage}
+  </div>
+{/if}
