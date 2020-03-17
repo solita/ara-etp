@@ -1,8 +1,6 @@
 <script>
-  import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Either from '@Utility/either-utils';
-  import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
 
   export let id;
