@@ -5,14 +5,15 @@
 
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
   import Yritykset from '@Component/Laatija/Yritykset';
-
+  import ExistingLaatija from './ExistingLaatija';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
   const prefix = '/laatija';
   const routes = {
     '/upload': LaatijaUpload,
-    '/:id/yritykset': Yritykset
+    '/:id/yritykset': Yritykset,
+    '/:id': ExistingLaatija
   };
 </script>
 

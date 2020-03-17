@@ -12,8 +12,8 @@
   export let autocomplete = 'off';
   export let disabled = false;
 
-  export let model;
-  export let lens;
+  export let model = { empty: '' };
+  export let lens = R.lensProp('empty');
 
   export let parse = R.identity;
   export let format = R.identity;
@@ -33,14 +33,13 @@
   $: highlightError = focused && !valid;
 
   $: validate = value =>
-    v.validateModelValue(validators, value)
-      .cata(
-        error => {
-          valid = false;
-          errorMessage = error(i18n);
-        },
-        () => (valid = true)
-      );
+    v.validateModelValue(validators, value).cata(
+      error => {
+        valid = false;
+        errorMessage = error(i18n);
+      },
+      () => (valid = true)
+    );
 </script>
 
 <style type="text/postcss">

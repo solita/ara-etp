@@ -1,6 +1,5 @@
 <script>
   export let label = '';
-  export let id = '';
   export let checked = false;
 
   let focused = false;
@@ -17,10 +16,6 @@
 
   label {
     @apply text-secondary cursor-pointer;
-  }
-
-  label.focused {
-    @apply font-extrabold;
   }
 
   label:hover ~ span {
