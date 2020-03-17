@@ -1,10 +1,10 @@
 import { assert } from 'chai';
 import * as R from 'ramda';
 import * as YritysUtils from './yritys-utils';
-import * as Maybe from '../../utils/maybe-utils';
-import * as Either from '../../utils/either-utils';
-import * as Future from '../../utils/future-utils';
-import * as validation from '../../utils/validation';
+import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
+import * as Future from '@Utility/future-utils';
+import * as validation from '@Utility/validation';
 
 describe('YritysUtils:', () => {
   describe('urlForYritysId', () => {

@@ -1,9 +1,9 @@
 import * as R from 'ramda';
-import * as Fetch from '../../utils/fetch-utils';
-import * as Maybe from '../../utils/maybe-utils';
+import * as Fetch from '@Utility/fetch-utils';
+import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
-import * as Future from '../../utils/future-utils';
-import * as validation from '../../utils/validation';
+import * as Future from '@Utility/future-utils';
+import * as validation from '@Utility/validation';
 
 const yritysApi = `/api/private/yritykset`;
 
