@@ -1,8 +1,13 @@
 <script>
+  import * as R from 'ramda';
+
   export let label = '';
-  export let checked = false;
+  export let model = false;
+  export let lens = R.identity;
 
   let focused = false;
+
+  $: checked = R.view(lens, model);
 </script>
 
 <style type="text/postcss">
@@ -65,7 +70,13 @@
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
   <label>
     {label}
-    <input type="checkbox" bind:checked />
+    <input
+      type="checkbox"
+      checked={R.view(lens, model)}
+      on:change={event => (model = R.set(lens, event.target.checked, model))} />
   </label>
-  <span class:focused class:checked on:click={_ => (checked = !checked)} />
+  <span
+    class:focused
+    class:checked
+    on:click={_ => (model = R.set(lens, !checked, model))} />
 </div>

@@ -1,24 +1,66 @@
 <script>
   import * as R from 'ramda';
 
-  import { _ } from '@Language/i18n';
+  import { locale, _ } from '@Language/i18n';
 
   import H1 from '@Component/H1/H1';
+  import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import * as LaatijaUtils from './laatija-utils';
+  import { countryStore, flashMessageStore } from '@/stores';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as country from '@Component/Geo/country-utils';
+  import * as Validation from '@Utility/validation';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
 
   export let laatija;
+  export let submit;
+
+  const originalLaatija = R.clone(laatija);
+
+  const parseCountry = R.compose(
+    R.map(R.prop('id')),
+    R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
+    Either.leftMap(R.always(R.applyTo('connection-failure'))),
+    fn => $countryStore.map(fn),
+    country.findCountry
+  );
+
+  $: labelLocale = `label-${R.compose(
+    R.head,
+    R.split('-')
+  )($locale)}`;
+
+  $: formatCountry = R.compose(
+    Either.orSome(R.__, ''),
+    R.map(R.prop(labelLocale)),
+    R.chain(Maybe.toEither('')),
+    R.map(R.__, $countryStore),
+    country.findCountryById
+  );
+
+  $: countryNames = Either.foldRight(
+    [],
+    R.map(R.prop(labelLocale)),
+    $countryStore
+  );
 </script>
 
-<style type="text/postcss">
-
-</style>
-
-<form>
+<form
+  on:submit|preventDefault={_ => {
+    const isValidForm = R.compose( R.all(Either.isRight), R.filter(Either.isEither), R.values, Validation.validateModelObject(formSchema) )(laatija);
+    if (isValidForm) {
+      flashMessageStore.flush();
+      submit(laatija);
+    } else {
+      flashMessageStore.add('Laatija', 'error');
+    }
+  }}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -127,14 +169,20 @@
           i18n={$_} />
       </div>
 
-      <!--div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'maa'}
-          name={'maa'}
-          label={$_('laatija.maa')}
-          required={true}
-          i18n={$_} />
-      </div-->
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Autocomplete items={countryNames}>
+          <Input
+            id={'maa'}
+            name={'maa'}
+            label={$_('laatija.maa')}
+            required={true}
+            bind:model={laatija}
+            lens={R.lensProp('maa')}
+            format={formatCountry}
+            parse={parseCountry}
+            i18n={$_} />
+        </Autocomplete>
+      </div>
     </div>
   </div>
   <div class="mt-8">
@@ -177,14 +225,32 @@
     <H1 text={$_('laatija.julkisettiedot')} />
     <div class="flex flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 mb-2">
-        <Checkbox label={$_('laatija.puhelinnumero')} />
+        <Checkbox
+          bind:model={laatija}
+          lens={R.lensProp('julkinen-puhelin')}
+          label={$_('laatija.puhelinnumero')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
-        <Checkbox label={$_('laatija.sahkoposti')} />
+        <Checkbox
+          bind:model={laatija}
+          lens={R.lensProp('julkinen-email')}
+          label={$_('laatija.sahkoposti')} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 mt-2">
-        <Checkbox label={$_('laatija.katuosoite')} />
-      </div>
+    </div>
+  </div>
+  <div class="flex -mx-4 pt-8">
+    <div class="px-4">
+      <Button type={'submit'} text={$_('tallenna')} />
+    </div>
+    <div class="px-4">
+      <Button
+        on:click={event => {
+          event.preventDefault();
+          laatija = R.clone(originalLaatija);
+        }}
+        text={$_('peruuta')}
+        type={'reset'}
+        style={'secondary'} />
     </div>
   </div>
 </form>

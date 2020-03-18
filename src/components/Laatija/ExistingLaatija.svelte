@@ -25,13 +25,29 @@
     disabled = false;
   };
 
-  const submit = () => {};
+  $: submit = R.compose(
+    Future.forkBothDiscardFirst(
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Laatija', 'error'),
+        R.always($_('laatija.messsages.save-error'))
+      ),
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Laatija', 'success'),
+        R.always($_('yritys.messages.save-success'))
+      )
+    ),
+    Future.both(Future.after(500, true)),
+    LaatijaUtils.putLaatijaByIdFuture(fetch, params.id),
+    R.tap(toggleOverlay(true))
+  );
 
   $: R.compose(
     Future.fork(
       R.compose(
         flashMessageStore.add('Laatija', 'error'),
-        R.always($_('laatija.messages.load_error')),
+        R.always($_('laatija.messages.load-error')),
         R.tap(toggleOverlay(false)),
         R.tap(toggleDisabled(false))
       ),
