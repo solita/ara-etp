@@ -15,21 +15,23 @@
 <form>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'henkilotunnus'}
           name={'henkilotunnus'}
           label={$_('laatija.henkilotunnus')}
           required={true}
-          disabled={true} />
+          disabled={true}
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'etunimi'}
           name={'etunimi'}
           label={$_('laatija.etunimi')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
 
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -37,48 +39,54 @@
           id={'sukunimi'}
           name={'sukunimi'}
           label={$_('laatija.sukunimi')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'sahkoposti'}
           name={'sahkoposti'}
           label={`${$_('laatija.sahkoposti')}(${R.toLower($_('laatija.kayttajatunnus'))})`}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'puhelinnumero'}
           name={'puhelinnumero'}
           label={$_('laatija.puhelinnumero')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:py-0 w-full px-4 py-4">
         <Input
           id={'katuosoite'}
           name={'katuosoite'}
-          label={`${$_('laatija.katuosoite')}(${R.toLower($_('laatija.kayttajatunnus'))})`}
-          required={true} />
+          label={$_('laatija.katuosoite')}
+          required={true}
+          i18n={$_} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'postinumero'}
           name={'postinumero'}
           label={$_('laatija.postinumero')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'postitoimipaikka'}
           name={'postitoimipaikka'}
           label={$_('laatija.postitoimipaikka')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
 
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -86,7 +94,8 @@
           id={'maa'}
           name={'maa'}
           label={$_('laatija.maa')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
     </div>
   </div>
@@ -99,7 +108,8 @@
           name={'patevyydenvoimassaolo'}
           label={$_('laatija.patevyydenvoimassaolo')}
           disabled={true}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -109,7 +119,8 @@
           name={'patevyystaso'}
           label={$_('laatija.patevyystaso')}
           disabled={true}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -118,7 +129,8 @@
           id={'paatoimintaalue'}
           name={'paatoimintaalue'}
           label={$_('laatija.paatoimintaalue')}
-          required={true} />
+          required={true}
+          i18n={$_} />
       </div>
     </div>
   </div>

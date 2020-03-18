@@ -1,4 +1,5 @@
 <script>
+  import * as R from 'ramda';
   import Router from 'svelte-spa-router';
 
   import { _ } from '@Language/i18n';
@@ -8,6 +9,10 @@
   import ExistingLaatija from './ExistingLaatija';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
+  import * as Future from '@Utility/future-utils';
+  import * as Maybe from '@Utility/maybe-utils';
+
+  import * as LaatijaUtils from './laatija-utils';
 
   const prefix = '/laatija';
   const routes = {

@@ -7,7 +7,6 @@ export const routes = {
   '/': Home,
   '/yritys': Yritys,
   '/yritys/*': Yritys,
-  '/laatija': Laatija,
   '/laatija/*': Laatija,
   '*': NotFound
 };
