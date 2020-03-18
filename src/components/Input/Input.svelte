@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Either from '@Utility/either-utils';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
 
   export let id;
@@ -19,10 +20,13 @@
   export let format = R.identity;
   export let validators = [];
 
-  $: viewValue = Either.fromValueOrEither(R.view(lens, model))
-    .map(format)
-    .toMaybe()
-    .orSome(viewValue);
+  $: viewValue = R.compose(
+    Maybe.orSome(viewValue),
+    Either.toMaybe,
+    R.map(format),
+    Either.fromValueOrEither,
+    R.view(lens)
+  )(model);
 
   let valid = true;
   let errorMessage = '';

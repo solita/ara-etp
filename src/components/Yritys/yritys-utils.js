@@ -40,14 +40,16 @@ export const formSchema = () => ({
   nimi: [
     validation.isRequired,
     validation.minLengthConstraint(2),
-    validation.maxLengthConstraint(200)],
+    validation.maxLengthConstraint(200)
+  ],
   wwwosoite: R.map(validation.liftValidator, [validation.urlValidator]),
   jakeluosoite: [validation.isRequired],
-  postinumero: [validation.isRequired, validation.postinumeroValidator],
+  postinumero: [validation.isRequired, validation.isPostinumero],
   postitoimipaikka: [
     validation.isRequired,
     validation.minLengthConstraint(2),
-    validation.maxLengthConstraint(200)],
+    validation.maxLengthConstraint(200)
+  ],
   maa: [],
   verkkolaskuosoite: []
 });

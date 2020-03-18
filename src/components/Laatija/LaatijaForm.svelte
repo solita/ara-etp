@@ -6,6 +6,12 @@
   import H1 from '@Component/H1/H1';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
+  import * as LaatijaUtils from './laatija-utils';
+
+  const formParsers = LaatijaUtils.formParsers();
+  const formSchema = LaatijaUtils.formSchema();
+
+  export let laatija;
 </script>
 
 <style type="text/postcss">
@@ -22,6 +28,10 @@
           name={'henkilotunnus'}
           label={$_('laatija.henkilotunnus')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('henkilotunnus')}
+          parse={formParsers.henkilotunnus}
+          validators={formSchema.henkilotunnus}
           disabled={true}
           i18n={$_} />
       </div>
@@ -31,6 +41,10 @@
           name={'etunimi'}
           label={$_('laatija.etunimi')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('etunimi')}
+          parse={formParsers.etunimi}
+          validators={formSchema.etunimi}
           i18n={$_} />
       </div>
 
@@ -40,6 +54,10 @@
           name={'sukunimi'}
           label={$_('laatija.sukunimi')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('sukunimi')}
+          parse={formParsers.sukunimi}
+          validators={formSchema.sukunimi}
           i18n={$_} />
       </div>
     </div>
@@ -50,6 +68,10 @@
           name={'sahkoposti'}
           label={`${$_('laatija.sahkoposti')}(${R.toLower($_('laatija.kayttajatunnus'))})`}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('email')}
+          parse={formParsers.email}
+          validators={formSchema.email}
           i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -58,6 +80,10 @@
           name={'puhelinnumero'}
           label={$_('laatija.puhelinnumero')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('puhelin')}
+          parse={formParsers.puhelin}
+          validators={formSchema.puhelin}
           i18n={$_} />
       </div>
     </div>
@@ -68,6 +94,10 @@
           name={'katuosoite'}
           label={$_('laatija.katuosoite')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('jakeluosoite')}
+          parse={formParsers.jakeluosoite}
+          validators={formSchema.jakeluosoite}
           i18n={$_} />
       </div>
     </div>
@@ -78,6 +108,10 @@
           name={'postinumero'}
           label={$_('laatija.postinumero')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('postinumero')}
+          parse={formParsers.postinumero}
+          validators={formSchema.postinumero}
           i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -86,17 +120,21 @@
           name={'postitoimipaikka'}
           label={$_('laatija.postitoimipaikka')}
           required={true}
+          bind:model={laatija}
+          lens={R.lensProp('postitoimipaikka')}
+          parse={formParsers.postitoimipaikka}
+          validators={formSchema.postitoimipaikka}
           i18n={$_} />
       </div>
 
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <!--div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'maa'}
           name={'maa'}
           label={$_('laatija.maa')}
           required={true}
           i18n={$_} />
-      </div>
+      </div-->
     </div>
   </div>
   <div class="mt-8">

@@ -8,11 +8,13 @@
   import Yritykset from '@Component/Laatija/Yritykset';
   import ExistingLaatija from './ExistingLaatija';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore } from '@/stores';
-  import * as Future from '@Utility/future-utils';
-  import * as Maybe from '@Utility/maybe-utils';
-
-  import * as LaatijaUtils from './laatija-utils';
+  import Country from '@Component/Geo/Country';
+  import ToimintaAlueet from '@Component/Geo/ToimintaAlueet';
+  import {
+    flashMessageStore,
+    toimintaAlueetStore,
+    countryStore
+  } from '@/stores';
 
   const prefix = '/laatija';
   const routes = {
@@ -22,11 +24,10 @@
   };
 </script>
 
-<style type="text/postcss">
-
-</style>
-
 <svelte:window on:hashchange={_ => flashMessageStore.flush('Laatija')} />
+
+<Country />
+<ToimintaAlueet />
 
 <div class="w-full min-h-3em">
   <FlashMessage module={'Laatija'} />

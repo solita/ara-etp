@@ -1,5 +1,7 @@
 <script>
   import * as R from 'ramda';
+  import { _ } from '@Language/i18n';
+  import { flashMessageStore, breadcrumbStore } from '@/stores';
   import * as LaatijaUtils from './laatija-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
@@ -11,23 +13,52 @@
   export let params;
 
   let laatija = Maybe.None();
-  let overlay = false;
+  let overlay = true;
+  let disabled = false;
+
+  const toggleOverlay = value => () => (overlay = value);
+  const toggleDisabled = value => () => (disabled = value);
+
+  const resetView = () => {
+    overlay = true;
+    yritys = Maybe.None();
+    disabled = false;
+  };
 
   const submit = () => {};
-  const disabled = false;
 
   $: R.compose(
-    Future.fork(console.error, console.log),
-    Maybe.getOrElse(Future.resolve(LaatijaUtils.emptyLaatija())),
-    R.map(LaatijaUtils.laatijaFuture(fetch)),
-    Maybe.fromNull,
+    Future.fork(
+      R.compose(
+        flashMessageStore.add('Laatija', 'error'),
+        R.always($_('laatija.messages.load_error')),
+        R.tap(toggleOverlay(false)),
+        R.tap(toggleDisabled(false))
+      ),
+      R.compose(
+        fetchedLaatija => (laatija = Maybe.Some(fetchedLaatija)),
+        R.tap(toggleOverlay(false))
+      )
+    ),
+    LaatijaUtils.getyLaatijaByIdFuture(fetch),
     R.prop('id')
   )(params);
+
+  $: breadcrumbStore.set([
+    {
+      label: $_('laatija.omattiedot'),
+      url: location.href
+    }
+  ]);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    <LaatijaForm />
+    <LaatijaForm
+      {submit}
+      {disabled}
+      existing={true}
+      laatija={Maybe.getOrElse(LaatijaUtils.emptyLaatija(), laatija)} />
   </div>
   <div slot="overlay-content">
     <Spinner />

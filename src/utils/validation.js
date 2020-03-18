@@ -33,8 +33,12 @@ export const isRequired = {
 };
 
 export const interpolate = R.curry((template, values) =>
-  R.reduce((result, value) => R.replace(value[0], value[1], result),
-    template, R.toPairs(values)));
+  R.reduce(
+    (result, value) => R.replace(value[0], value[1], result),
+    template,
+    R.toPairs(values)
+  )
+);
 
 export const lengthConstraint = (predicate, name, labelValues) => ({
   predicate: R.compose(predicate, R.length),
@@ -45,10 +49,10 @@ export const lengthConstraint = (predicate, name, labelValues) => ({
 });
 
 export const minLengthConstraint = min =>
-  lengthConstraint(R.lte(min), 'min', {'{min}': min});
+  lengthConstraint(R.lte(min), 'min', { '{min}': min });
 
 export const maxLengthConstraint = max =>
-  lengthConstraint(R.gte(max), 'max', {'{max}': max});
+  lengthConstraint(R.gte(max), 'max', { '{max}': max });
 
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
@@ -59,15 +63,15 @@ export const urlValidator = {
   label: R.applyTo('validation.invalid-url')
 };
 
-export const liftValidator = (validator) =>
-  R.over(R.lensProp('predicate'),
+export const liftValidator = validator =>
+  R.over(
+    R.lensProp('predicate'),
     predicate => R.compose(Maybe.orSome(true), R.lift(predicate)), //value => value.map(predicate).orSome(true),
-    validator);
+    validator
+  );
 
-export const isPostinumero = R.test(/^\d{5}$/);
-
-export const postinumeroValidator = {
-  predicate: isPostinumero,
+export const isPostinumero = {
+  predicate: R.test(/^\d{5}$/),
   label: R.applyTo('validation.invalid-postinumero')
 };
 
@@ -111,16 +115,18 @@ export const isPaivamaara = R.ifElse(
 );
 
 export const validate = (validators, value) =>
-  Maybe.fromUndefined(R.find(R.compose(
-    R.not,
-    R.applyTo(value),
-    R.prop('predicate')), validators))
-    .toEither(value).swap();
+  Maybe.fromUndefined(
+    R.find(R.compose(R.not, R.applyTo(value), R.prop('predicate')), validators)
+  )
+    .toEither(value)
+    .swap();
 
 export const validateModelValue = R.curry((validators, value) =>
-  Either.fromValueOrEither(value)
-    .flatMap(modelValue =>
-      validate(validators, modelValue).leftMap(R.prop('label'))));
+  Either.fromValueOrEither(value).flatMap(modelValue =>
+    validate(validators, modelValue).leftMap(R.prop('label'))
+  )
+);
 
 export const validateModelObject = R.curry((schemaObject, object) =>
-  R.evolve(R.map(validateModelValue, schemaObject), object));
+  R.evolve(R.map(validateModelValue, schemaObject), object)
+);
