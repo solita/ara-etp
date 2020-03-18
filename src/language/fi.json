@@ -32,6 +32,16 @@
       "load-error": "Yrityksen tietojen haku epäonnistui."
     }
   },
+  "laatija": {
+    "lisaa-laatijat": "Lisää laatijat",
+    "messages": {
+      "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
+      "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
+      "load-error": "Tiedoston lataaminen epäonnistui."
+    }
+  },
+  "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
   "country-not-found": "Virheellinen maa"
 }

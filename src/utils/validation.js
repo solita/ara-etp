@@ -1,6 +1,10 @@
+import moment from 'moment';
+
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+
+export const DATE_FORMAT = 'DD.MM.YYYY';
 
 export const ytunnusChecksum = R.compose(
   R.unless(R.equals(0), R.subtract(11)),
@@ -66,6 +70,45 @@ export const postinumeroValidator = {
   predicate: isPostinumero,
   label: R.applyTo('validation.invalid-postinumero')
 };
+
+export const henkilotunnusChecksum = R.compose(
+  R.nth(R.__, '0123456789abcdefhjklmnprstuvwxy'),
+  R.modulo(R.__, 31),
+  parseInt,
+  R.join(''),
+  R.filter(Number.isInteger),
+  R.map(parseInt),
+  R.slice(0, 10)
+);
+
+export const isValidHenkilotunnus = R.allPass([
+  R.compose(
+    R.test(
+      /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d-|[01]\dA)\d{3}[\dA-Z]$/
+    ),
+    R.toUpper
+  ),
+  R.converge(R.equals, [
+    henkilotunnusChecksum,
+    R.compose(R.takeLast(1), R.toLower)
+  ])
+]);
+
+export const isLaatijanToteaja = R.test(/^(FISE|KIINKO)$/);
+
+export const isValidEmail = R.test(
+  /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+);
+
+export const isPuhelin = R.test(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
+
+export const isPatevyystaso = R.test(/^(1|2)$/);
+
+export const isPaivamaara = R.ifElse(
+  R.compose(R.equals('Date'), R.type),
+  R.curry(date => moment(date).isValid()),
+  R.curry(date => moment(date, DATE_FORMAT).isValid())
+);
 
 export const validate = (validators, value) =>
   Maybe.fromUndefined(R.find(R.compose(

@@ -40,28 +40,26 @@
   }
 </style>
 
-{#if pageCount > 0}
-  <div>
-    <a class="arrow" href="#">
-      <i class="material-icons">keyboard_arrow_left</i>
+<div>
+  <a class="arrow" href="#">
+    <i class="material-icons">keyboard_arrow_left</i>
+  </a>
+  <a class={R.equals(1, pageNum) ? 'active' : ''} href="#">1</a>
+  {#if R.head(pagesNear) - 1 > 1}
+    <span class="dots">...</span>
+  {/if}
+  {#each pagesNear as page}
+    <a class={R.equals(page, pageNum) ? 'active' : ''} href="#">{page}</a>
+  {/each}
+  {#if pageCount - R.last(pagesNear) > 1}
+    <span class="dots">...</span>
+  {/if}
+  {#if pageCount !== 1}
+    <a class={R.equals(pageCount, pageNum) ? 'active' : ''} href="#">
+      {pageCount}
     </a>
-    <a class={R.equals(1, pageNum) ? 'active' : ''} href="#">1</a>
-    {#if R.head(pagesNear) - 1 > 1}
-      <span class="dots">...</span>
-    {/if}
-    {#each pagesNear as page}
-      <a class={R.equals(page, pageNum) ? 'active' : ''} href="#">{page}</a>
-    {/each}
-    {#if pageCount - R.last(pagesNear) > 1}
-      <span class="dots">...</span>
-    {/if}
-    {#if pageCount !== 1}
-      <a class={R.equals(pageCount, pageNum) ? 'active' : ''} href="#">
-        {pageCount}
-      </a>
-    {/if}
-    <a class="arrow" href="#">
-      <i class="material-icons">keyboard_arrow_right</i>
-    </a>
-  </div>
-{/if}
+  {/if}
+  <a class="arrow" href="#">
+    <i class="material-icons">keyboard_arrow_right</i>
+  </a>
+</div>

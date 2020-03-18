@@ -2,11 +2,12 @@
   import * as R from 'ramda';
   import Pagination from './../Pagination/Pagination';
   import TableColumnAction from './TableColumnAction';
-  import TableColumnDefault from './TableColumnDefault';
+  import TableColumnValidation from './TableColumnValidation';
   export let fields = [];
   export let tablecontents = [];
-  export let pageCount = 10;
-  export let pageNum = 1;
+  export let validate = {};
+  export let pageCount = 0;
+  export let pageNum = 0;
 </script>
 
 <style type="text/postcss">
@@ -68,8 +69,10 @@
                   {index} />
               {:else}
                 <svelte:component
-                  this={TableColumnDefault}
-                  value={R.prop(field.id, row)} />
+                  this={TableColumnValidation}
+                  value={R.prop(field.id, row)}
+                  validation={R.prop(field.id, validate)}
+                  component={field.component} />
               {/if}
             </td>
           {/each}
@@ -78,7 +81,9 @@
     </tbody>
   </table>
 
-  <div class="pagination">
-    <Pagination {pageCount} {pageNum} />
-  </div>
+  {#if R.gt(pageCount, 1)}
+    <div class="pagination">
+      <Pagination {pageCount} {pageNum} />
+    </div>
+  {/if}
 </div>

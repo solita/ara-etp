@@ -1,9 +1,10 @@
 <script>
   import * as R from 'ramda';
   import { fileupload } from './fileupload-drag-and-drop';
+  import { _ } from '@Language/i18n';
 
   export let multiple = false;
-  export let labelText = 'Click or drop to choose a file for uploading';
+  export let labelText = $_('drop-or-click-file');
 
   export let state = {
     files: []
