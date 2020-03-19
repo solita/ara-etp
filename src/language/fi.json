@@ -39,6 +39,11 @@
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
       "load-error": "Tiedoston lataaminen epäonnistui."
+    },
+    "yritykset": {
+      "find-yritys": "Etsi yrityksistä",
+      "attach-to-yritys": "Liitä yritykseen",
+      "yritys-not-found": "Yritystä ei löydy"
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",

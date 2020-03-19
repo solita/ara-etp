@@ -3,7 +3,7 @@ import * as R from 'ramda';
 
 export { Fluture };
 
-export const { resolve, reject, encaseP, promise } = Fluture;
+export const { resolve, reject, encaseP, promise, attemptP } = Fluture;
 
 export const fork = R.curry((leftFn, rightFn, future) =>
   Fluture.fork(leftFn)(rightFn)(future)
