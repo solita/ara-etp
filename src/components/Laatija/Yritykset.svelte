@@ -8,6 +8,7 @@
   import Table from '@Component/Table/Table';
   import Button from '@Component/Button/Button';
   import Link from '@Component/Link/Link';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import * as api from './laatija-api';
   import * as yritys from './yritys';
 
@@ -40,6 +41,8 @@
     yritys.findYritys(allYritykset, name)
       .toEither(R.applyTo('laatija.yritykset.yritys-not-found'))
       .map(Maybe.of);
+
+  $: yritysKeywords = R.map(R.prop('nimi'), allYritykset);
 
   const load = R.compose(
     Future.fork(
@@ -109,17 +112,19 @@
     <form class="mb-5" on:submit|preventDefault={attach}>
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
         <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-          <Input
-            id={'yritys'}
-            name={'yritys'}
-            label={$_('laatija.yritykset.find-yritys')}
-            required={false}
-            {disabled}
-            bind:model={newLaatijaYritys}
-            format={R.compose(Maybe.orSome(''), R.map(R.prop('nimi')))}
-            parse={parseYritys}
-            lens={R.lens(R.identity, R.identity)}
-            i18n={$_}/>
+          <Autocomplete items={yritysKeywords}>
+            <Input
+              id={'yritys'}
+              name={'yritys'}
+              label={$_('laatija.yritykset.find-yritys')}
+              required={false}
+              {disabled}
+              bind:model={newLaatijaYritys}
+              format={R.compose(Maybe.orSome(''), R.map(R.prop('nimi')))}
+              parse={parseYritys}
+              lens={R.lens(R.identity, R.identity)}
+              i18n={$_}/>
+          </Autocomplete>
         </div>
         <div class="self-end">
           <Button type={'submit'} text={$_('laatija.yritykset.attach-to-yritys')} />
