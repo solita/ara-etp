@@ -86,7 +86,7 @@
         yritys => {
           Future.fork(
             _ => flashMessageStore.add('Laatija', 'error',
-                $_('laatija.yritykset.error.attach-failed')),
+                  $_('laatija.yritykset.error.attach-failed')),
             _ => {
               load(params.id);
               flashMessageStore.add('Laatija', 'success',
