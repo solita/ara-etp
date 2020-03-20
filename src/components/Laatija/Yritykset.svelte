@@ -38,11 +38,13 @@
 
   const parseYritys = name => R.isEmpty(R.trim(name)) ?
     Either.Right(Maybe.None()) :
-    yritys.findYritys(allYritykset, name)
+    yritys.findYritysByYtunnus(allYritykset, R.slice(0, 9, name))
       .toEither(R.applyTo('laatija.yritykset.yritys-not-found'))
       .map(Maybe.of);
 
-  $: yritysKeywords = R.map(R.prop('nimi'), allYritykset);
+  const formatYritys = yritys => yritys.ytunnus + ' | ' + yritys.nimi
+
+  $: yritysKeywords = R.map(formatYritys, allYritykset);
 
   const load = R.compose(
     Future.fork(
@@ -120,7 +122,7 @@
               required={false}
               {disabled}
               bind:model={newLaatijaYritys}
-              format={R.compose(Maybe.orSome(''), R.map(R.prop('nimi')))}
+              format={R.compose(Maybe.orSome(''), R.map(formatYritys))}
               parse={parseYritys}
               lens={R.lens(R.identity, R.identity)}
               i18n={$_}/>
