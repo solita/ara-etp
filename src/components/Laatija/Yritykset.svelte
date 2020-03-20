@@ -38,7 +38,7 @@
     );
   }
 
-  const actions = [{type: 'remove', update: detach}];
+  const actions = [{icon: 'remove_circle_outline', text: 'Poista', update: detach}];
   $: fields = [
     { id: 'nimi', title: $_('yritys.nimi') },
     { id: 'ytunnus', title: $_('yritys.y-tunnus') },
