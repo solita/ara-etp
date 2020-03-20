@@ -107,13 +107,19 @@
   <div class="w-full mt-3">
     <H1 text="Yritykset" />
 
-    <p class="mb-5">
-      Sinut on liitetty laatijaksi seuraaviin yrityksiin:
-    </p>
+    {#if R.isEmpty(laatijaYritykset)}
+      <p class="mb-10">
+        Sinua ei ole liitetty vielä yhteenkään yritykseen.
+      </p>
+    {:else}
+      <p class="mb-5">
+        Sinut on liitetty laatijaksi seuraaviin yrityksiin:
+      </p>
 
-    <div class="mb-10">
-      <Table {fields} tablecontents={laatijaYritykset} />
-    </div>
+      <div class="mb-10">
+        <Table {fields} tablecontents={laatijaYritykset} />
+      </div>
+    {/if}
 
     <h2>Liity yrityksen laatijaksi</h2>
 
