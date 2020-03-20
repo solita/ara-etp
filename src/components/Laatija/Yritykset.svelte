@@ -20,7 +20,7 @@
   export let params;
 
   let newLaatijaYritys = Either.Right(Maybe.None());
-  let yritykset = [];
+  let laatijaYritykset = [];
   let allYritykset = [];
   let overlay = true;
   let disabled = false;
@@ -44,15 +44,15 @@
   const load = R.compose(
     Future.fork(
       R.compose(
-        flashMessageStore.add('Yritys', 'error'),
-        R.always($_('yritys.messages.load-error')),
+        flashMessageStore.add('Laatija', 'error'),
+        R.always($_('errors.load-error')),
         R.tap(toggleDisabled(true)),
         R.tap(toggleOverlay(false)),
       ),
       R.compose(
         result => {
           allYritykset = result[0];
-          yritykset = R.map(id => R.find(R.propEq('id', id), allYritykset), result[1]);
+          laatijaYritykset = R.map(id => R.find(R.propEq('id', id), allYritykset), result[1]);
         },
         R.tap(toggleOverlay(false))
       )
@@ -64,17 +64,20 @@
   $: load(params.id);
 
   function attach() {
-    newLaatijaYritys.flatMap(Maybe.toEither('Valitse yritys')).cata(
-      error => {
-        console.log(error);
-      },
-      yritys => {
-        console.log('asdf');
-        Future.fork(
-          _ => console.log('fail'),
-          _ => console.log('success'),
-          api.putLaatijaYritys(fetch, params.id, yritys.id));
-      });
+    newLaatijaYritys.flatMap(Maybe.toEither(R.applyTo('laatija.yritykset.error.select-yritys')))
+      .leftMap(R.applyTo($_)).cata(
+        flashMessageStore.add('Laatija', 'error'),
+        yritys => {
+          Future.fork(
+            response => {
+              flashMessageStore.add('Laatija', 'error', $_('laatija.yritykset.error.attach-failed'))
+            },
+            response => {
+              load(params.id);
+              flashMessageStore.add('Laatija', 'success', $_('laatija.yritykset.success.attach'));
+            },
+            api.putLaatijaYritys(fetch, params.id, yritys.id));
+        });
   }
 </script>
 
@@ -93,7 +96,7 @@
     </p>
 
     <div class="mb-10">
-      <Table {fields} tablecontents={yritykset} />
+      <Table {fields} tablecontents={laatijaYritykset} />
     </div>
 
     <h2>Liity yrityksen laatijaksi</h2>

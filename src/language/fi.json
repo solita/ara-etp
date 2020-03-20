@@ -7,6 +7,9 @@
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero"
   },
+  "errors": {
+    "load-error": "Tietojen haku epäonnistui."
+  },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
   "tallenna": "Tallenna",
@@ -43,7 +46,14 @@
     "yritykset": {
       "find-yritys": "Etsi yrityksistä",
       "attach-to-yritys": "Liitä yritykseen",
-      "yritys-not-found": "Yritystä ei löydy"
+      "yritys-not-found": "Yritystä ei ole tässä palvelussa",
+      "success": {
+        "attach": "Liittäminen yritykseen onnistui"
+      },
+      "error": {
+        "select-yritys": "Valitse liitettävä yritys",
+        "attach-failed": "Liittäminen yritykseen epäonnistui"
+      }
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
