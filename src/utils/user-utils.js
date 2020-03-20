@@ -4,7 +4,8 @@ import * as Fetch from './fetch-utils';
 import * as Error from './error-utils';
 import { currentUserStore, errorStore } from '../stores';
 
-const userApi = `/api/users/`;
+const userApi = `/api/private/kayttajat/`;
+const whoamiUrl = '/api/private/whoami'
 
 export const urlForUserId = id => `${userApi}${id}`;
 
@@ -18,5 +19,5 @@ export const fetchAndStoreUser = () => {
     Error.httpError({})
   ),
   currentUserStore.set,
-  userFuture(fetch, 'current'));
+  Fetch.fetchFromUrl(fetch, whoamiUrl));
 }
