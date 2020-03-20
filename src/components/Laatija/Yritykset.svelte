@@ -23,6 +23,7 @@
   let newLaatijaYritys = Either.Right(Maybe.None());
   let laatijaYritykset = [];
   let allYritykset = [];
+  let yritysCanonicalNames = [];
   let overlay = true;
   let disabled = false;
 
@@ -55,8 +56,6 @@
 
   const formatYritys = yritys => yritys.ytunnus + ' | ' + yritys.nimi
 
-  $: yritysKeywords = R.map(formatYritys, allYritykset);
-
   const load = R.compose(
     Future.fork(
       R.compose(
@@ -69,6 +68,7 @@
         result => {
           allYritykset = result[0];
           laatijaYritykset = R.map(id => R.find(R.propEq('id', id), allYritykset), result[1]);
+          yritysCanonicalNames = R.map(formatYritys, allYritykset);
         },
         R.tap(toggleOverlay(false))
       )
@@ -85,12 +85,12 @@
         flashMessageStore.add('Laatija', 'error'),
         yritys => {
           Future.fork(
-            response => {
-              flashMessageStore.add('Laatija', 'error', $_('laatija.yritykset.error.attach-failed'))
-            },
-            response => {
+            _ => flashMessageStore.add('Laatija', 'error',
+                $_('laatija.yritykset.error.attach-failed')),
+            _ => {
               load(params.id);
-              flashMessageStore.add('Laatija', 'success', $_('laatija.yritykset.success.attach'));
+              flashMessageStore.add('Laatija', 'success',
+                  $_('laatija.yritykset.success.attach'));
             },
             api.putLaatijaYritys(fetch, params.id, yritys.id));
         });
@@ -125,7 +125,7 @@
     <form class="mb-5" on:submit|preventDefault={attach}>
       <div class="flex lg:flex-row flex-col py-4 -mx-4">
         <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-          <Autocomplete items={yritysKeywords}>
+          <Autocomplete items={yritysCanonicalNames}>
             <Input
               id={'yritys'}
               name={'yritys'}
