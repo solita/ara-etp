@@ -87,10 +87,10 @@ export const serialize = R.evolve({
   toteamispaivamaara: R.curry(date => moment(date).format('YYYY-MM-DD'))
 });
 
-export const postLaatijatFuture = R.curry((fetch, laatijat) =>
+export const putLaatijatFuture = R.curry((fetch, laatijat) =>
   R.compose(
     Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', laatijaApi)),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', laatijaApi)),
     R.map(serialize)
   )(laatijat)
 );

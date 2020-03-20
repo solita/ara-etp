@@ -17,7 +17,7 @@
     validate,
     readData,
     dataValid,
-    postLaatijatFuture
+    putLaatijatFuture
   } from './laatija-utils';
   import Patevuustaso from './Patevyystaso';
   import Date from './Date';
@@ -59,7 +59,7 @@
         R.always($_('laatija.messages.save-success'))
       )
     ),
-    postLaatijatFuture(fetch)
+    putLaatijatFuture(fetch)
   );
 
   $: tablecontents = readData(laatijaData);
