@@ -7,6 +7,9 @@
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero"
   },
+  "errors": {
+    "load-error": "Tietojen haku epäonnistui."
+  },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
   "tallenna": "Tallenna",
@@ -39,6 +42,20 @@
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
       "load-error": "Tiedoston lataaminen epäonnistui."
+    },
+    "yritykset": {
+      "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",
+      "attach-to-yritys": "Liitä yritykseen",
+      "yritys-not-found": "Yritystä ei ole tässä palvelussa",
+      "success": {
+        "attach": "Liittäminen yritykseen onnistui",
+        "detach": "Laatija on poistettu yrityksestä"
+      },
+      "error": {
+        "select-yritys": "Valitse liitettävä yritys",
+        "attach-failed": "Liittäminen yritykseen epäonnistui",
+        "detach-failed": "Laatijan poistaminen yrityksestä epäonnistui"
+      }
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",

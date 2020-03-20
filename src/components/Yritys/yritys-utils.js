@@ -72,6 +72,13 @@ export const getYritysByIdFuture = R.curry((fetch, id) =>
   )(id)
 );
 
+export const getAllYrityksetFuture = fetch =>
+  R.compose(
+    R.map(R.map(deserialize)),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )(yritysApi);
+
 export const putYritysByIdFuture = R.curry((fetch, id, yritys) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
