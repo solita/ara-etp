@@ -44,15 +44,17 @@
       "load-error": "Tiedoston lataaminen epäonnistui."
     },
     "yritykset": {
-      "find-yritys": "Etsi yrityksistä",
+      "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",
       "attach-to-yritys": "Liitä yritykseen",
       "yritys-not-found": "Yritystä ei ole tässä palvelussa",
       "success": {
-        "attach": "Liittäminen yritykseen onnistui"
+        "attach": "Liittäminen yritykseen onnistui",
+        "detach": "Laatija on poistettu yrityksestä"
       },
       "error": {
         "select-yritys": "Valitse liitettävä yritys",
-        "attach-failed": "Liittäminen yritykseen epäonnistui"
+        "attach-failed": "Liittäminen yritykseen epäonnistui",
+        "detach-failed": "Laatijan poistaminen yrityksestä epäonnistui"
       }
     }
   },

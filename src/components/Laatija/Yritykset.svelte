@@ -26,7 +26,18 @@
   let overlay = true;
   let disabled = false;
 
-  const actions = [{type: 'remove', update: R.tap(txt => console.log('Poista ', txt))}]
+  const detach = index => {
+    Future.fork(
+      _ => flashMessageStore.add('Laatija', 'error', $_('laatija.yritykset.error.detach-failed')),
+      _ => {
+        load(params.id);
+        flashMessageStore.add('Laatija', 'success', $_('laatija.yritykset.success.detach'));
+      },
+      api.deleteLaatijaYritys(fetch, params.id, laatijaYritykset[index].id)
+    );
+  }
+
+  const actions = [{type: 'remove', update: detach}];
   $: fields = [
     { id: 'nimi', title: $_('yritys.nimi') },
     { id: 'ytunnus', title: $_('yritys.y-tunnus') },

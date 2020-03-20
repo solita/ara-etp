@@ -15,10 +15,13 @@ export const getYritykset = R.curry((fetch, id) =>
     Future.encaseP(Fetch.getFetch(fetch)),
     url.yritykset)(id));
 
-export const putLaatijaYritys = R.curry((fetch, laatijaId, yritysId) =>
+const toggleLaatijaYritys = R.curry((method, fetch, laatijaId, yritysId) =>
   R.chain(
     Fetch.rejectWithInvalidResponse,
-    Future.attemptP(_ => fetch(url.yritykset(laatijaId) + '/' + yritysId, {method: 'put'}))));
+    Future.attemptP(_ => fetch(url.yritykset(laatijaId) + '/' + yritysId, {method}))));
+
+export const putLaatijaYritys = toggleLaatijaYritys('put');
+export const deleteLaatijaYritys = toggleLaatijaYritys('delete');
 
 export const getAllYritykset = yritysApi.getAllYrityksetFuture;
 
