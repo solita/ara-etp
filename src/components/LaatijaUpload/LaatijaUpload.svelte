@@ -18,7 +18,7 @@
     readData,
     dataValid,
     putLaatijatFuture
-  } from './laatija-utils';
+  } from '@Component/Laatija/laatija-utils';
   import Patevuustaso from './Patevyystaso';
   import Date from './Date';
 
@@ -83,7 +83,7 @@
     R.identity,
     R.compose(
       flashMessageStore.add('Laatija', 'error'),
-      R.always($_('laatija.messages.load-error'))
+      R.always($_('laatija.messages.upload-error'))
     )
   )(readError);
 </script>

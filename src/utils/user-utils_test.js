@@ -6,14 +6,14 @@ describe('UserUtils-suite: ', () => {
   describe('urlForUserId', () => {
     it('should return proper url for given id', () => {
       const id = 1234;
-      const expected = '/api/users/1234';
+      const expected = '/api/private/kayttajat/1234';
 
       expect(UserUtils.urlForUserId(id)).to.eql(expected);
     });
 
     it('should return proper url for current', () => {
       const id = 'current';
-      const expected = '/api/users/current';
+      const expected = '/api/private/kayttajat/current';
 
       expect(UserUtils.urlForUserId(id)).to.eql(expected);
     });
