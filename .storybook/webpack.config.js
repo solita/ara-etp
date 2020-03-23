@@ -43,6 +43,7 @@ module.exports = async ({ config, mode }) => {
     svelteLens,
     R.mergeLeft({
       options: {
+        immutable: true,
         preprocess: require('svelte-preprocess')({
           postcss: {
             sourceMap: true,
