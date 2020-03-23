@@ -11,6 +11,8 @@ export const foldRight = R.curry((initialValue, rightFn, e) =>
   e.foldRight(initialValue)(rightFn)
 );
 
+export const toMaybe = e => e.toMaybe();
+
 export const leftMap = R.curry((fn, e) => e.leftMap(fn));
 
 export const isLeft = e => e.isLeft();
@@ -27,4 +29,4 @@ export const from = (value, isRight, left) =>
 
 export const isEither = any => any.__proto__ === Either.prototype;
 
-export const fromValueOrEither = any => isEither(any) ? any : Either.of(any);
+export const fromValueOrEither = R.unless(isEither, Either.of);

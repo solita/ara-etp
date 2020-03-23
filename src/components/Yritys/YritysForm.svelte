@@ -8,7 +8,7 @@
   import * as Fetch from '@Utility/fetch-utils';
   import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
-  import * as country from './country';
+  import * as country from '@Component/Geo/country-utils';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
@@ -32,9 +32,9 @@
   const formSchema = YritysUtils.formSchema();
 
   $: labelLocale = `label-${R.compose(
-          R.head,
-          R.split('-')
-      )($locale)}`;
+    R.head,
+    R.split('-')
+  )($locale)}`;
 
   const countryFuture = R.compose(
     Future.coalesce(Either.Left, Either.Right),
@@ -80,7 +80,7 @@
     validation.validateModelObject(formSchema)
   )(yritys);
 
-  $: console.log("Form validation: ", isValidForm);
+  $: console.log('Form validation: ', isValidForm);
 </script>
 
 <form
@@ -118,7 +118,7 @@
           lens={R.lensProp('nimi')}
           parse={formParsers.nimi}
           validators={formSchema.nimi}
-          i18n={$_}/>
+          i18n={$_} />
       </div>
     </div>
     <div class="py-4">
@@ -133,7 +133,7 @@
         format={Maybe.orSome('')}
         parse={formParsers.wwwosoite}
         validators={formSchema.wwwosoite}
-        i18n={$_}/>
+        i18n={$_} />
     </div>
   </div>
   <div class="mt-8">

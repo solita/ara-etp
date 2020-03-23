@@ -37,11 +37,28 @@
   },
   "laatija": {
     "lisaa-laatijat": "Lisää laatijat",
+    "omattiedot": "Omat Tiedot",
+    "henkilotunnus": "Henkilötunnus",
+    "etunimi": "Etunimi",
+    "sukunimi": "Sukunimi",
+    "sahkoposti": "Sähköposti",
+    "kayttajatunnus": "Käyttäjätunnus",
+    "puhelinnumero": "Puhelinnumero",
+    "katuosoite": "Katuosoite",
+    "postinumero": "Postinumero",
+    "postitoimipaikka": "Postitoimipaikka",
+    "maa": "Maa",
+    "laatijatiedot": "Laatijatiedot",
+    "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
+    "patevyystaso": "Pätevyystaso",
+    "paatoimintaalue": "Päätoiminta-alue",
+    "julkisettiedot": "Valitse julkiset tiedot",
     "messages": {
       "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
-      "load-error": "Tiedoston lataaminen epäonnistui."
+      "load-error": "Laatijan tietojen haku epäonnistui.",
+      "upload-error": "Tiedoston lataaminen epäonnistui."
     },
     "yritykset": {
       "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",

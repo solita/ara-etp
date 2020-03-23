@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Either from '@Utility/either-utils';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
 
   export let id;
@@ -12,17 +13,20 @@
   export let autocomplete = 'off';
   export let disabled = false;
 
-  export let model;
-  export let lens;
+  export let model = { empty: '' };
+  export let lens = R.lensProp('empty');
 
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
 
-  $: viewValue = Either.fromValueOrEither(R.view(lens, model))
-    .map(format)
-    .toMaybe()
-    .orSome(viewValue);
+  $: viewValue = R.compose(
+    Maybe.orSome(viewValue),
+    Either.toMaybe,
+    R.map(format),
+    Either.fromValueOrEither,
+    R.view(lens)
+  )(model);
 
   let valid = true;
   let errorMessage = '';
@@ -33,14 +37,13 @@
   $: highlightError = focused && !valid;
 
   $: validate = value =>
-    v.validateModelValue(validators, value)
-      .cata(
-        error => {
-          valid = false;
-          errorMessage = error(i18n);
-        },
-        () => (valid = true)
-      );
+    v.validateModelValue(validators, value).cata(
+      error => {
+        valid = false;
+        errorMessage = error(i18n);
+      },
+      () => (valid = true)
+    );
 </script>
 
 <style type="text/postcss">

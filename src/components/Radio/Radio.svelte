@@ -23,10 +23,6 @@
     @apply text-secondary cursor-pointer;
   }
 
-  label.focused {
-    @apply font-extrabold;
-  }
-
   label:hover ~ span {
     @apply bg-disabled;
   }

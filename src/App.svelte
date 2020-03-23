@@ -32,7 +32,7 @@
 
 <style type="text/postcss">
   .container {
-    @apply flex flex-col justify-around mx-auto max-w-full min-h-screen;
+    @apply flex flex-col justify-between mx-auto max-w-full min-h-screen;
   }
 
   .routecontainer {
@@ -40,7 +40,7 @@
   }
 
   .content {
-    @apply flex flex-col pb-8 px-20 pt-8 bg-light;
+    @apply flex flex-col flex-grow pb-8 px-20 pt-8 bg-light;
   }
 
   .content h1 :not(first) {
