@@ -4,6 +4,7 @@
   export let label = '';
   export let model = false;
   export let lens = R.identity;
+  export let disabled = false;
 
   let focused = false;
 
@@ -68,15 +69,17 @@
 </style>
 
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
-  <label>
+  <label class:disabled>
     {label}
     <input
+      {disabled}
       type="checkbox"
       checked={R.view(lens, model)}
       on:change={event => (model = R.set(lens, event.target.checked, model))} />
   </label>
   <span
+    class:disabled
     class:focused
     class:checked
-    on:click={_ => (model = R.set(lens, !checked, model))} />
+    on:click={_ => !disabled && (model = R.set(lens, !checked, model))} />
 </div>
