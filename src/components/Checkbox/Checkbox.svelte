@@ -21,15 +21,23 @@
   }
 
   label {
-    @apply text-secondary cursor-pointer;
+    @apply text-dark cursor-pointer;
+  }
+
+  label.disabled {
+    @apply text-disabled;
   }
 
   label:hover ~ span {
     @apply bg-disabled;
   }
 
+  label:hover ~ span:not(.checked)::after {
+    @apply text-primary;
+  }
+
   span {
-    @apply relative w-6 h-6 rounded-sm mr-2 bg-background cursor-pointer;
+    @apply relative w-6 h-6 rounded-sm mr-2 bg-background cursor-pointer border-dark border-2;
   }
 
   span:hover {
@@ -37,11 +45,15 @@
   }
 
   span.focused {
-    @apply bg-disabled;
+    @apply bg-secondary;
   }
 
   span.checked {
     @apply bg-primary;
+  }
+
+  span.disabled {
+    @apply bg-disabled;
   }
 
   span.checked.focused {
@@ -49,22 +61,33 @@
   }
 
   span.checked:hover {
-    @apply bg-background;
+    @apply bg-disabled;
+  }
+
+  span.disabled:hover {
+    @apply bg-disabled;
+  }
+
+  span.disabled.focused {
+    @apply bg-disabled;
   }
 
   span.checked::after {
-    content: '';
-    top: 15%;
-    left: 33%;
-    right: 33%;
-    bottom: 33%;
-    @apply absolute border-b-3 border-r-3 border-light;
+    content: 'done';
 
-    transform: rotate(45deg);
+    @apply font-icon text-light absolute;
+    top: -10%;
+    left: 10%;
+    right: 0%;
+    bottom: 0%;
   }
 
   span.checked:hover::after {
-    @apply border-primary;
+    @apply text-primary;
+  }
+
+  span.checked.disabled:hover::after {
+    @apply text-light;
   }
 </style>
 

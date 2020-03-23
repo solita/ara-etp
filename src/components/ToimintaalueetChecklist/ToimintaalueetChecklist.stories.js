@@ -102,5 +102,5 @@ export const withToimintaalueet = () => ({
 
 export const withSelected = () => ({
   Component: ToimintaalueetChecklist,
-  props: { toimintaalueet, selected: { 0: true, 12: true } }
+  props: { toimintaalueet, selected: [1, 2, 3] }
 });
