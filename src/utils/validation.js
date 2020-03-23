@@ -70,8 +70,10 @@ export const liftValidator = validator =>
     validator
   );
 
-export const isPostinumero = {
-  predicate: R.test(/^\d{5}$/),
+export const isPostinumero = R.test(/^\d{5}$/);
+
+export const postinumeroValidator = {
+  predicate: isPostinumero,
   label: R.applyTo('validation.invalid-postinumero')
 };
 

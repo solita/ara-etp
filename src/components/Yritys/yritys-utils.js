@@ -44,7 +44,7 @@ export const formSchema = () => ({
   ],
   wwwosoite: R.map(validation.liftValidator, [validation.urlValidator]),
   jakeluosoite: [validation.isRequired],
-  postinumero: [validation.isRequired, validation.isPostinumero],
+  postinumero: [validation.isRequired, validation.postinumeroValidator],
   postitoimipaikka: [
     validation.isRequired,
     validation.minLengthConstraint(2),
