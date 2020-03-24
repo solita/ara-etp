@@ -30,3 +30,5 @@ export const head = R.compose(fromUndefined, R.head);
 export const toEither = R.curry((defaultValue, m) => m.toEither(defaultValue));
 
 export const isSome = m => m.isSome();
+
+export const orElseRun = R.curry((fn, m) => m.orElseRun(fn));

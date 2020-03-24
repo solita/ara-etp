@@ -12,7 +12,24 @@
 
 <style type="text/postcss">
   ol {
-    @apply absolute top-auto left-0 right-0 shadow-lg;
+    @apply absolute top-auto left-0 right-0 shadow-lg overflow-auto;
+    max-height: 12.8em;
+  }
+
+  ol::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ol::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ol::-webkit-scrollbar-thumb {
+    @apply bg-disabled;
+  }
+
+  ol::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark;
   }
 
   li {
@@ -32,10 +49,9 @@
   }
 </style>
 
-<ol>
+<ol transition:slide={{ duration: 200 }}>
   {#each items as item, index}
     <li
-      transition:slide={{ duration: 200 }}
       class="dropdownitem"
       class:active={Maybe.fold(false, R.equals(index), active)}
       on:click={_ => onclick(item, index)}>

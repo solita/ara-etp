@@ -5,7 +5,8 @@
     "max-length": "Pituus saa olla enintään {max} merkkiä",
     "invalid-url": "Virheellinen www-osoite",
     "invalid-ytunnus": "Virheellinen ytunnus",
-    "invalid-postinumero": "Virheellinen postinumero"
+    "invalid-postinumero": "Virheellinen postinumero",
+    "no-selection": "Ei valintaa"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."
