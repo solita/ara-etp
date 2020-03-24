@@ -27,7 +27,8 @@ describe('Laatija utils', () => {
             toteamispaivamaara: moment(
               '21.3.2019',
               validation.DATE_FORMAT
-            ).toDate()
+            ).toDate(),
+            maa: "FI"
           }
         ]),
         true
