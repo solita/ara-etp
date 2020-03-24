@@ -171,9 +171,10 @@ export const validate = {
   toteamispaivamaara: Validation.isPaivamaara
 };
 
+// Maa defaults to Finland as the transfer file does not have it as a field
 export const readRow = R.ifElse(
   R.compose(R.equals(R.length(dataFields)), R.length, R.split(';')),
-  R.compose(R.evolve(parse), R.zipObj(dataFields), R.split(';')),
+  R.compose(R.evolve(parse), R.assoc('maa', 'FI'), R.zipObj(dataFields), R.split(';')),
   R.always(null)
 );
 
