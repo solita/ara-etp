@@ -24,3 +24,20 @@ export const withSelected = () => ({
     parse: R.identity
   }
 });
+
+export const withObjects = () => ({
+  Component: Select,
+  props: {
+    items: [
+      { id: 1, label: 'yksi' },
+      { id: 2, label: 'kaksi' },
+      { id: 3, label: 'kolme' },
+      { id: 4, label: 'neljä' },
+      { id: 5, label: 'viisi' }
+    ],
+    model: { selected: null },
+    lens: R.lensProp('selected'),
+    format: R.prop('label'),
+    parse: R.identity
+  }
+});

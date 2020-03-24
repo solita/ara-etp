@@ -13,10 +13,11 @@
   export let model;
   export let lens;
 
+  let active = Maybe.None();
+
   $: selected = Maybe.fromNull(R.view(lens, model));
 
-  let showDropdown = false;
-  let active = Maybe.None();
+  $: showDropdown = Maybe.isSome(active);
 
   const previousItem = R.compose(
     R.filter(R.lte(0)),
@@ -55,14 +56,17 @@
     [keys.ESCAPE]: (_, active) => Maybe.None(),
     [keys.TAB]: (_, active) => Maybe.None(),
     [keys.ENTER]: (event, active) => {
-      if (showDropdown) event.preventDefault();
-      const newActive = R.compose(
-        R.forEach(item => {
-          selected = item;
-          showDropdown = false;
-        }),
-        R.chain(selectedItem(items))
-      )(active);
+      if (showDropdown) {
+        event.preventDefault();
+        return R.compose(
+          Maybe.None,
+          R.forEach(item => {
+            model = R.set(lens, parse(item), model);
+          }),
+          R.chain(selectedItem(items))
+        )(active);
+      }
+      return Maybe.Some(0);
     }
   };
 
@@ -94,8 +98,8 @@
       items={R.map(format, items)}
       {active}
       onclick={(item, index) => {
-        model = R.set(lens, parse(item), model);
-        showDropdown = false;
+        model = R.set(lens, R.nth(index, items), model);
+        active = Maybe.None();
       }} />
   {/if}
 </div>

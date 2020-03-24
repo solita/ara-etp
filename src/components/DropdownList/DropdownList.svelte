@@ -49,10 +49,9 @@
   }
 </style>
 
-<ol>
+<ol transition:slide={{ duration: 200 }}>
   {#each items as item, index}
     <li
-      transition:slide={{ duration: 200 }}
       class="dropdownitem"
       class:active={Maybe.fold(false, R.equals(index), active)}
       on:click={_ => onclick(item, index)}>
