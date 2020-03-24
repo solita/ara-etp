@@ -168,7 +168,8 @@ export const validate = {
   email: Validation.isValidEmail,
   puhelin: Validation.isPuhelin,
   patevyystaso: Validation.isPatevyystaso,
-  toteamispaivamaara: Validation.isPaivamaara
+  toteamispaivamaara: Validation.isPaivamaara,
+  maa: Validation.isFilled
 };
 
 // Maa defaults to Finland as the transfer file does not have it as a field
