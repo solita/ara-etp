@@ -98,7 +98,7 @@
       items={R.map(format, items)}
       {active}
       onclick={(item, index) => {
-        model = R.set(lens, R.nth(index, items), model);
+        model = R.set(lens, parse(R.nth(index, items)), model);
         active = Maybe.None();
       }} />
   {/if}

@@ -2,18 +2,25 @@
   import * as R from 'ramda';
 
   import { locale, _ } from '@Language/i18n';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   import H1 from '@Component/H1/H1';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
+  import Select from '@Component/Select/Select';
   import * as LaatijaUtils from './laatija-utils';
-  import { countryStore, flashMessageStore } from '@/stores';
+  import {
+    countryStore,
+    toimintaAlueetStore,
+    flashMessageStore
+  } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as country from '@Component/Geo/country-utils';
   import * as Validation from '@Utility/validation';
+  import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -31,10 +38,7 @@
     country.findCountry
   );
 
-  $: labelLocale = `label-${R.compose(
-    R.head,
-    R.split('-')
-  )($locale)}`;
+  $: labelLocale = LocaleUtils.label(locale);
 
   $: formatCountry = R.compose(
     Either.orSome(R.__, ''),
@@ -46,8 +50,25 @@
 
   $: countryNames = Either.foldRight(
     [],
+    R.sort,
     R.map(R.prop(labelLocale)),
     $countryStore
+  );
+
+  $: toimintaAlueNames = Either.foldRight(
+    [],
+    R.map(labelLocale),
+    $toimintaAlueetStore
+  );
+
+  $: formatToimintaAlue = R.compose(
+    labelLocale,
+    ToimintaAlueUtils.findToimintaAlueById($toimintaAlueetStore)
+  );
+
+  $: parseToimintaAlue = R.compose(
+    R.prop('id'),
+    ToimintaAlueUtils.findToimintaAlue($toimintaAlueetStore)
   );
 </script>
 
@@ -211,6 +232,12 @@
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Select
+          format={formatToimintaAlue}
+          parse={parseToimintaAlue}
+          bind:model={laatija}
+          lens={R.lensProp('toimintaalue')}
+          items={$toimintaAlueetStore} />
         <Input
           id={'paatoimintaalue'}
           name={'paatoimintaalue'}
