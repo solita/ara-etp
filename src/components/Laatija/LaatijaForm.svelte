@@ -38,7 +38,7 @@
     country.findCountry
   );
 
-  $: labelLocale = LocaleUtils.label(locale);
+  $: labelLocale = LocaleUtils.label($locale);
 
   $: formatCountry = R.compose(
     Either.orSome(R.__, ''),
@@ -48,12 +48,7 @@
     country.findCountryById
   );
 
-  $: countryNames = Either.foldRight(
-    [],
-    R.sort,
-    R.map(R.prop(labelLocale)),
-    $countryStore
-  );
+  $: countryNames = Either.foldRight([], R.map(labelLocale), $countryStore);
 
   $: toimintaAlueNames = Either.foldRight(
     [],
@@ -232,18 +227,12 @@
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Select
+        <!--Select
           format={formatToimintaAlue}
           parse={parseToimintaAlue}
           bind:model={laatija}
           lens={R.lensProp('toimintaalue')}
-          items={$toimintaAlueetStore} />
-        <Input
-          id={'paatoimintaalue'}
-          name={'paatoimintaalue'}
-          label={$_('laatija.paatoimintaalue')}
-          required={true}
-          i18n={$_} />
+          items={toimintaAlueNames} /-->
       </div>
     </div>
   </div>

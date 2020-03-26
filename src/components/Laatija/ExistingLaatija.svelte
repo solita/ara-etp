@@ -6,6 +6,8 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
 
+  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+
   import LaatijaForm from './LaatijaForm';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
@@ -56,7 +58,7 @@
         R.tap(toggleOverlay(false))
       )
     ),
-    LaatijaUtils.getyLaatijaByIdFuture(fetch),
+    KayttajaUtils.kayttajaAndLaatijaFuture(fetch),
     R.prop('id')
   )(params);
 

@@ -22,6 +22,14 @@ export const getFetch = R.curry((fetch, url) =>
   fetch(url, { headers: { Accept: 'application/json' } })
 );
 
+export const fetchDelay = R.curry((amount, resolve, future) =>
+  R.compose(R.map(R.last), Future.both(Future.after(amount, resolve)))(future)
+);
+
+export const fetchUrl = R.curry((fetch, url) =>
+  R.compose(responseAsJson, Future.encaseP(getFetch(fetch)))(url)
+);
+
 export const fetchWithMethod = R.curry((fetch, method, url, body) =>
   fetch(url, {
     method,

@@ -91,12 +91,7 @@ export const emptyLaatija = () =>
   });
 
 export const getyLaatijaByIdFuture = R.curry((fetch, id) =>
-  R.compose(
-    R.map(deserialize),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    urlForLaatijaId
-  )(id)
+  R.compose(R.map(deserialize), Fetch.fetchUrl(fetch), urlForLaatijaId)(id)
 );
 
 export const putLaatijaByIdFuture = R.curry((fetch, id, laatija) =>
@@ -175,7 +170,12 @@ export const validate = {
 // Maa defaults to Finland as the transfer file does not have it as a field
 export const readRow = R.ifElse(
   R.compose(R.equals(R.length(dataFields)), R.length, R.split(';')),
-  R.compose(R.evolve(parse), R.assoc('maa', 'FI'), R.zipObj(dataFields), R.split(';')),
+  R.compose(
+    R.evolve(parse),
+    R.assoc('maa', 'FI'),
+    R.zipObj(dataFields),
+    R.split(';')
+  ),
   R.always(null)
 );
 
