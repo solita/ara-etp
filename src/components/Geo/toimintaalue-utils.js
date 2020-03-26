@@ -8,11 +8,8 @@ export const toimintaAlueetToSelect = R.converge(R.zipObj, [
   R.compose(R.repeat(false), R.inc, R.reduce(R.max, -Infinity), R.pluck('id'))
 ]);
 
-export const findToimintaAlueById = R.curry((toimintaAlueet, id) =>
-  R.compose(
-    Maybe.fromNull,
-    R.find(R.compose(R.equals(id), R.prop('id')))
-  )(toimintaAlueet)
+export const findToimintaAlueById = R.curry((id, toimintaAlueet) =>
+  R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(toimintaAlueet)
 );
 
 export const findToimintaAlue = R.curry((toimintaAlueet, label) =>

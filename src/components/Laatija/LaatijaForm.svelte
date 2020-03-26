@@ -50,21 +50,17 @@
 
   $: countryNames = Either.foldRight([], R.map(labelLocale), $countryStore);
 
-  $: toimintaAlueNames = Either.foldRight(
-    [],
-    R.map(labelLocale),
-    $toimintaAlueetStore
-  );
+  $: toimintaAlueet = Either.foldRight([], R.pluck('id'), $toimintaAlueetStore);
 
   $: formatToimintaAlue = R.compose(
-    labelLocale,
-    ToimintaAlueUtils.findToimintaAlueById($toimintaAlueetStore)
+    Either.orSome(R.__, ''),
+    R.map(labelLocale),
+    R.chain(Maybe.toEither('')),
+    R.map(R.__, $toimintaAlueetStore),
+    ToimintaAlueUtils.findToimintaAlueById
   );
 
-  $: parseToimintaAlue = R.compose(
-    R.prop('id'),
-    ToimintaAlueUtils.findToimintaAlue($toimintaAlueetStore)
-  );
+  $: parseToimintaAlue = Maybe.fromNull;
 </script>
 
 <form
@@ -227,12 +223,12 @@
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <!--Select
+        <Select
           format={formatToimintaAlue}
           parse={parseToimintaAlue}
           bind:model={laatija}
           lens={R.lensProp('toimintaalue')}
-          items={toimintaAlueNames} /-->
+          items={toimintaAlueet} />
       </div>
     </div>
   </div>

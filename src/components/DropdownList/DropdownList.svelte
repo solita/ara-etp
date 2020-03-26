@@ -12,7 +12,7 @@
 
 <style type="text/postcss">
   ol {
-    @apply absolute top-auto left-0 right-0 shadow-lg overflow-auto;
+    @apply absolute top-auto left-0 right-0 shadow-lg overflow-auto z-10;
     max-height: 12.8em;
   }
 

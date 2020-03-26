@@ -15,7 +15,7 @@
 
   let active = Maybe.None();
 
-  $: selected = Maybe.fromNull(R.view(lens, model));
+  $: selected = R.view(lens, model);
 
   $: showDropdown = Maybe.isSome(active);
 
