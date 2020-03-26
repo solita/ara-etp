@@ -42,7 +42,7 @@
 
   $: formatCountry = R.compose(
     Either.orSome(R.__, ''),
-    R.map(R.prop(labelLocale)),
+    R.map(labelLocale),
     R.chain(Maybe.toEither('')),
     R.map(R.__, $countryStore),
     country.findCountryById
