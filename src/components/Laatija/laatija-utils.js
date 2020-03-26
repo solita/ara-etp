@@ -4,6 +4,7 @@ import moment from 'moment';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Either from '@Utility/either-utils';
+import * as Maybe from '@Utility/maybe-utils';
 
 import * as Validation from '@Utility/validation';
 
@@ -54,7 +55,8 @@ export const formParsers = () => ({
 });
 
 export const deserialize = R.evolve({
-  maa: Either.Right
+  maa: Either.Right,
+  toimintaalue: Maybe.fromNull
 });
 
 export const serialize = R.compose(
@@ -65,6 +67,14 @@ export const serialize = R.compose(
 export const serializeImport = R.evolve({
   toteamispaivamaara: R.curry(date => moment(date).format('YYYY-MM-DD'))
 });
+
+export const laatijaFromKayttaja = R.compose(
+  deserialize,
+  R.converge(R.merge, [
+    R.pick(['email', 'etunimi', 'sukunimi', 'puhelin', 'passivoitu']),
+    R.prop('laatija')
+  ])
+);
 
 export const emptyLaatija = () =>
   deserialize({

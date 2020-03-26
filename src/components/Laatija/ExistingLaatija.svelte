@@ -40,7 +40,7 @@
         R.always($_('yritys.messages.save-success'))
       )
     ),
-    Future.both(Future.after(500, true)),
+    Future.delay(500),
     LaatijaUtils.putLaatijaByIdFuture(fetch, params.id),
     R.tap(toggleOverlay(true))
   );
@@ -58,6 +58,8 @@
         R.tap(toggleOverlay(false))
       )
     ),
+    R.map(LaatijaUtils.laatijaFromKayttaja),
+    Future.delay(500),
     KayttajaUtils.kayttajaAndLaatijaFuture(fetch),
     R.prop('id')
   )(params);

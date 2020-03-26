@@ -19,7 +19,7 @@ export const kayttajanLaatijaFuture = R.curry((fetch, id) =>
 
 export const kayttajaAndLaatijaFuture = R.curry((fetch, id) =>
   R.compose(
-    R.map(R.reduce(R.merge, {})),
+    R.map(([kayttaja, laatija]) => R.assoc('laatija', laatija, kayttaja)),
     R.converge(Future.both, [
       kayttajaFuture(fetch),
       kayttajanLaatijaFuture(fetch)
