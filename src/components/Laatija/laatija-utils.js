@@ -39,7 +39,7 @@ export const formSchema = () => ({
     Validation.minLengthConstraint(2),
     Validation.maxLengthConstraint(200)
   ],
-  postinumero: [Validation.isRequired, Validation.isPostinumero],
+  postinumero: [Validation.isRequired, Validation.postinumeroValidator],
   postitoimipaikka: []
 });
 
