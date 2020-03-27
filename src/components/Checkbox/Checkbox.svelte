@@ -22,7 +22,7 @@
   }
 
   label.disabled {
-    @apply text-disabled;
+    @apply text-disabled cursor-default;
   }
 
   label:hover ~ span {
@@ -50,7 +50,7 @@
   }
 
   span.disabled {
-    @apply bg-disabled;
+    @apply bg-disabled cursor-default;
   }
 
   span.checked.focused {

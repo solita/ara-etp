@@ -24,3 +24,7 @@ export const toimintaalueetWithoutMain = R.curry(
       R.map(R.compose(R.applyTo(toimintaalueet), R.reject, R.equals))
     )(mainToimintaalue)
 );
+
+export const isLimit = R.curry((limit, selected) =>
+  R.compose(R.lte(limit), R.length, R.filter(R.identity), R.values)(selected)
+);

@@ -69,8 +69,10 @@
       <Checkbox
         label={format(toimintaalue)}
         checked={R.prop(toimintaalue, selected) || R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue)}
-        disabled={R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue)}
-        on:click={() => (model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: R.not }, selected)), model))}
+        disabled={!R.prop(toimintaalue, selected) && (R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue) || ToimintaAlueUtils.isLimit(limit, selected))}
+        on:click={() => {
+          model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: ToimintaAlueUtils.isLimit(limit, selected) ? R.F : R.not }, selected)), model);
+        }}
         on:change={() => (model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: R.not }, selected)), model))} />
     </li>
   {/each}
