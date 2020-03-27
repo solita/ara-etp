@@ -11,6 +11,8 @@
   export let toimintaalueet = [];
   export let limit = 5;
 
+  export let label = '';
+
   export let mainToimintaalue;
   export let model;
   export let lens;
@@ -61,8 +63,13 @@
   li {
     @apply flex-grow w-1/3 mb-6;
   }
+
+  span {
+    @apply text-secondary mb-4;
+  }
 </style>
 
+<span>{label}</span>
 <ol>
   {#each R.sortWith([R.ascend(format)], toimintaalueet) as toimintaalue}
     <li>

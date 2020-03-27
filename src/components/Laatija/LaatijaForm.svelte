@@ -225,8 +225,9 @@
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4 flex flex-col">
         <Select
+          label={$_('laatija.paatoimintaalue')}
           format={formatToimintaAlue}
           parse={parseToimintaAlue}
           bind:model={laatija}
@@ -235,8 +236,9 @@
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
-      <div class="lg:py-0 w-full px-4 py-4">
+      <div class="lg:py-0 w-full px-4 py-4 flex flex-col">
         <ToimintaalueetChecklist
+          label={$_('laatija.muuttoimintaalueet')}
           toimintaalueet={toimintaAlueet}
           mainToimintaalue={R.prop('toimintaalue', laatija)}
           bind:model={laatija}

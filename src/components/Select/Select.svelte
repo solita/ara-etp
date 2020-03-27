@@ -9,6 +9,7 @@
   export let items = [];
   export let format = R.identity;
   export let parse = R.identity;
+  export let label = '';
 
   export let model;
   export let lens;
@@ -84,13 +85,20 @@
   div {
     @apply relative;
   }
-  span {
+  .button {
     @apply min-h-2.5em block py-2 border-b-3 border-disabled cursor-pointer;
+  }
+  .label {
+    @apply text-secondary mb-4;
   }
 </style>
 
+<span class="label">{label}</span>
 <div on:keydown={handleKeydown}>
-  <span tabindex="0" on:click={_ => (showDropdown = !showDropdown)}>
+  <span
+    class="button"
+    tabindex="0"
+    on:click={_ => (showDropdown = !showDropdown)}>
     {R.compose( Maybe.orSome($_('validation.no-selection')), R.map(format) )(selected)}
   </span>
   {#if showDropdown}
