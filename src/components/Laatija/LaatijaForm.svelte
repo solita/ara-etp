@@ -10,6 +10,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
+  import ToimintaalueetChecklist from '@Component/ToimintaalueetChecklist/ToimintaalueetChecklist';
   import * as LaatijaUtils from './laatija-utils';
   import {
     countryStore,
@@ -61,6 +62,8 @@
   );
 
   $: parseToimintaAlue = Maybe.fromNull;
+
+  $: console.log(laatija);
 </script>
 
 <form
@@ -229,6 +232,17 @@
           bind:model={laatija}
           lens={R.lensProp('toimintaalue')}
           items={toimintaAlueet} />
+      </div>
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="lg:py-0 w-full px-4 py-4">
+        <ToimintaalueetChecklist
+          toimintaalueet={toimintaAlueet}
+          mainToimintaalue={R.prop('toimintaalue', laatija)}
+          bind:model={laatija}
+          lens={R.lensProp('muuttoimintaalueet')}
+          format={formatToimintaAlue}
+          parse={parseToimintaAlue} />
       </div>
     </div>
   </div>

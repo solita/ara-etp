@@ -4,27 +4,21 @@
   import * as LocaleUtils from '@Language/locale-utils';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
 
+  import * as Maybe from '@Utility/maybe-utils';
+
   import Checkbox from '@Component/Checkbox/Checkbox';
 
   export let toimintaalueet = [];
-  export let mainToimintaalue = 0;
-  export let selected = [];
   export let limit = 5;
 
-  const mergeSelected = right =>
-    R.compose(
-      R.mergeRight(right),
-      ToimintaAlueUtils.formatSelected
-    )(selected);
+  export let mainToimintaalue;
+  export let model;
+  export let lens;
 
-  let allSelected = R.compose(
-    R.assoc(mainToimintaalue, true),
-    mergeSelected,
-    ToimintaAlueUtils.toimintaAlueetToSelect
-  )(toimintaalueet);
+  export let format = R.identity;
+  export let parse = R.identity;
 
-  $: selected = R.compose(
-    R.reject(R.equals(mainToimintaalue)),
+  const selectedToModel = R.compose(
     R.map(
       R.compose(
         parseInt,
@@ -33,9 +27,30 @@
     ),
     R.filter(R.last),
     R.toPairs
-  )(allSelected);
+  );
 
-  $: currentLimit = limit - R.length(selected);
+  $: toimintaalueetWithoutMain = R.compose(
+    Maybe.orSome(toimintaalueet),
+    R.map(
+      R.compose(
+        R.applyTo(toimintaalueet),
+        R.reject,
+        R.equals
+      )
+    )
+  )(mainToimintaalue);
+
+  $: selected = R.reduce(
+    (acc, i) => R.assoc(i, R.includes(i, R.view(lens, model)), acc),
+    {},
+    toimintaalueetWithoutMain
+  );
+
+  $: model = R.over(
+    lens,
+    ToimintaAlueUtils.toimintaalueetWithoutMain(mainToimintaalue),
+    model
+  );
 </script>
 
 <style type="text/postcss">
@@ -49,13 +64,14 @@
 </style>
 
 <ol>
-  {#each R.sortBy(R.prop(`label-${LocaleUtils.shortLocale($locale)}`), toimintaalueet) as toimintaalue}
+  {#each R.sortWith([R.ascend(format)], toimintaalueet) as toimintaalue}
     <li>
       <Checkbox
-        label={LocaleUtils.label($locale, toimintaalue)}
-        bind:model={allSelected}
-        lens={R.lensProp(toimintaalue.id)}
-        disabled={toimintaalue.id === mainToimintaalue || (currentLimit <= 0 && !R.includes(toimintaalue.id, selected))} />
+        label={format(toimintaalue)}
+        checked={R.prop(toimintaalue, selected) || R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue)}
+        disabled={R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue)}
+        on:click={() => (model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: R.not }, selected)), model))}
+        on:change={() => (model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: R.not }, selected)), model))} />
     </li>
   {/each}
 </ol>

@@ -79,7 +79,7 @@ export const laatijaFromKayttaja = R.compose(
 export const emptyLaatija = () =>
   deserialize({
     jakeluosoite: '',
-    'muut-toimintaalueet': [0],
+    muuttoimintaalueet: [0],
     'patevyys-voimassaoloaika': {
       start: '2020-03-17',
       end: '2020-03-17'
