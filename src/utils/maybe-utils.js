@@ -9,8 +9,7 @@ export const {
   fromNull,
   fromUndefined,
   fromEmpty,
-  fromEither,
-  map
+  fromEither
 } = Maybe;
 
 export const fold = R.curry((defaultValue, fn, m) => m.fold(defaultValue)(fn));
