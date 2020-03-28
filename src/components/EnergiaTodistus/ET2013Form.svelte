@@ -43,6 +43,7 @@
           name={'nimi'}
           label={$_('energiatodistus.nimi')}
           required={false}
+          {disabled}
           bind:model={energiatodistus}
           lens={R.lensPath(['perustiedot', 'nimi'])}
           format={et.formatters.optionalText}

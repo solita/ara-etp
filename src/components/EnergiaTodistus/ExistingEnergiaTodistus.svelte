@@ -83,8 +83,8 @@
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(energiatodistus)}
-      <EnergiaTodistusForm year={Maybe.some(energiatodistus).year} {disabled}
-                           energiatodistus={Maybe.some(energiatodistus)}
+      <EnergiaTodistusForm year={Maybe.Some(energiatodistus).year} {disabled}
+                           energiatodistus={Maybe.Some(energiatodistus)}
                            {submit}/>
     {/if}
   </div>
