@@ -53,6 +53,25 @@
     ToimintaAlueUtils.toimintaalueetWithoutMain(mainToimintaalue),
     model
   );
+
+  $: toimintaalueLens = toimintaalue =>
+    R.lens(
+      _ =>
+        R.prop(toimintaalue, selected) ||
+        R.compose(
+          Maybe.isSome,
+          R.filter(R.equals(toimintaalue))
+        )(mainToimintaalue),
+      (value, _) =>
+        R.set(
+          lens,
+          R.compose(
+            selectedToModel,
+            R.assoc(toimintaalue, value)
+          )(selected),
+          model
+        )
+    );
 </script>
 
 <style type="text/postcss">
@@ -75,12 +94,9 @@
     <li>
       <Checkbox
         label={format(toimintaalue)}
-        checked={R.prop(toimintaalue, selected) || R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue)}
         disabled={!R.prop(toimintaalue, selected) && (R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue) || ToimintaAlueUtils.isLimit(limit, selected))}
-        on:click={() => {
-          model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: ToimintaAlueUtils.isLimit(limit, selected) ? R.F : R.not }, selected)), model);
-        }}
-        on:change={() => (model = R.set(lens, selectedToModel(R.evolve({ [toimintaalue]: R.not }, selected)), model))} />
+        lens={toimintaalueLens(toimintaalue)}
+        bind:model />
     </li>
   {/each}
 </ol>

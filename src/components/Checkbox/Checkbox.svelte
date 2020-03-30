@@ -3,9 +3,13 @@
 
   export let label = '';
   export let disabled = false;
-  export let checked = false;
+
+  export let model;
+  export let lens;
 
   let focused = false;
+
+  $: checked = R.view(lens, model);
 </script>
 
 <style type="text/postcss">
@@ -91,7 +95,15 @@
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
   <label class:disabled>
     {label}
-    <input {disabled} type="checkbox" {checked} on:change />
+    <input
+      {disabled}
+      type="checkbox"
+      {checked}
+      on:change={() => (model = R.set(lens, !checked, model))} />
   </label>
-  <span class:disabled class:focused class:checked on:click />
+  <span
+    class:disabled
+    class:focused
+    class:checked
+    on:click={() => (model = R.set(lens, !checked, model))} />
 </div>
