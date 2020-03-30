@@ -63,7 +63,11 @@
 
   $: parseToimintaAlue = Maybe.fromNull;
 
-  $: console.log(laatija);
+  $: laatija = R.over(
+    R.lensProp('muuttoimintaalueet'),
+    ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue),
+    laatija
+  );
 </script>
 
 <form
@@ -240,7 +244,6 @@
         <ToimintaalueetChecklist
           label={$_('laatija.muuttoimintaalueet')}
           toimintaalueet={toimintaAlueet}
-          mainToimintaalue={R.prop('toimintaalue', laatija)}
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
           format={formatToimintaAlue}

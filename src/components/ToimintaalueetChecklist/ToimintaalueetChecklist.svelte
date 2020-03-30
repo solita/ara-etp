@@ -13,62 +13,40 @@
 
   export let label = '';
 
-  export let mainToimintaalue;
   export let model;
   export let lens;
 
   export let format = R.identity;
   export let parse = R.identity;
 
-  const selectedToModel = R.compose(
-    R.map(
-      R.compose(
-        parseInt,
-        R.head
-      )
-    ),
-    R.filter(R.last),
-    R.toPairs
-  );
+  $: mainToimintaalue = model.toimintaalue;
 
-  $: toimintaalueetWithoutMain = R.compose(
-    Maybe.orSome(toimintaalueet),
-    R.map(
-      R.compose(
-        R.applyTo(toimintaalueet),
-        R.reject,
-        R.equals
-      )
-    )
-  )(mainToimintaalue);
-
-  $: selected = R.reduce(
-    (acc, i) => R.assoc(i, R.includes(i, R.view(lens, model)), acc),
-    {},
-    toimintaalueetWithoutMain
-  );
-
-  $: model = R.over(
-    lens,
-    ToimintaAlueUtils.toimintaalueetWithoutMain(mainToimintaalue),
-    model
+  $: selected = ToimintaAlueUtils.toimintaalueetWithoutMain(
+    mainToimintaalue,
+    R.view(lens, model)
   );
 
   $: toimintaalueLens = toimintaalue =>
     R.lens(
-      _ =>
-        R.prop(toimintaalue, selected) ||
-        R.compose(
-          Maybe.isSome,
-          R.filter(R.equals(toimintaalue))
-        )(mainToimintaalue),
-      (value, _) =>
+      R.compose(
+        R.or(
+          ToimintaAlueUtils.isMainToimintaAlue(mainToimintaalue, toimintaalue)
+        ),
+        R.includes(toimintaalue),
+        R.view(lens)
+      ),
+      (_, model) =>
         R.set(
           lens,
           R.compose(
-            selectedToModel,
-            R.assoc(toimintaalue, value)
-          )(selected),
+            R.uniq,
+            R.ifElse(
+              R.includes(toimintaalue),
+              R.reject(R.equals(toimintaalue)),
+              R.append(toimintaalue)
+            ),
+            R.view(lens)
+          )(model),
           model
         )
     );
@@ -94,7 +72,7 @@
     <li>
       <Checkbox
         label={format(toimintaalue)}
-        disabled={!R.prop(toimintaalue, selected) && (R.compose( Maybe.isSome, R.filter(R.equals(toimintaalue)) )(mainToimintaalue) || ToimintaAlueUtils.isLimit(limit, selected))}
+        disabled={ToimintaAlueUtils.isMainToimintaAlue(mainToimintaalue, toimintaalue) || (R.compose( R.lte(limit), R.length )(selected) && R.compose( R.not, R.includes(toimintaalue) )(selected))}
         lens={toimintaalueLens(toimintaalue)}
         bind:model />
     </li>

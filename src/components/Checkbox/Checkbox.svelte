@@ -99,11 +99,11 @@
       {disabled}
       type="checkbox"
       {checked}
-      on:change={() => (model = R.set(lens, !checked, model))} />
+      on:change={() => !disabled && (model = R.set(lens, !checked, model))} />
   </label>
   <span
     class:disabled
     class:focused
     class:checked
-    on:click={() => (model = R.set(lens, !checked, model))} />
+    on:click={() => !disabled && (model = R.set(lens, !checked, model))} />
 </div>
