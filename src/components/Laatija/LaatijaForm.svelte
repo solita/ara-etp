@@ -258,14 +258,20 @@
       <div class="lg:w-1/3 lg:py-0 w-full px-4 mb-2">
         <Checkbox
           bind:model={laatija}
-          lens={R.lensProp('julkinen-puhelin')}
+          lens={R.lensProp('julkinenpuhelin')}
           label={$_('laatija.puhelinnumero')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
-          lens={R.lensProp('julkinen-email')}
+          lens={R.lensProp('julkinenemail')}
           label={$_('laatija.sahkoposti')} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+        <Checkbox
+          bind:model={laatija}
+          lens={R.lensProp('julkinenosoite')}
+          label={$_('laatija.katuosoite')} />
       </div>
     </div>
   </div>

@@ -6,6 +6,8 @@ import * as Fetch from '@Utility/fetch-utils';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
+import * as Kayttaja from '@Component/Kayttaja/kayttaja-utils';
+
 import * as Validation from '@Utility/validation';
 
 export const laatijaApi = `api/private/laatijat`;
@@ -60,7 +62,7 @@ export const deserialize = R.evolve({
 });
 
 export const serialize = R.compose(
-  R.evolve({ maa: Either.right }),
+  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
   R.dissoc('id')
 );
 
@@ -69,10 +71,9 @@ export const serializeImport = R.evolve({
 });
 
 export const laatijaFromKayttaja = R.compose(
-  deserialize,
   R.converge(R.merge, [
-    R.pick(['email', 'etunimi', 'sukunimi', 'puhelin', 'passivoitu']),
-    R.prop('laatija')
+    R.pick(['email', 'etunimi', 'sukunimi', 'puhelin', 'passivoitu', 'rooli']),
+    R.compose(R.dissoc('kayttaja'), R.prop('laatija'))
   ])
 );
 
@@ -100,14 +101,17 @@ export const emptyLaatija = () =>
     'julkinen-puhelin': true
   });
 
-export const getyLaatijaByIdFuture = R.curry((fetch, id) =>
-  R.compose(R.map(deserialize), Fetch.fetchUrl(fetch), urlForLaatijaId)(id)
+export const getLaatijaByIdFuture = R.curry((fetch, id) =>
+  R.compose(
+    R.map(R.compose(deserialize, laatijaFromKayttaja)),
+    Kayttaja.kayttajaAndLaatijaFuture(fetch)
+  )(id)
 );
 
 export const putLaatijaByIdFuture = R.curry((fetch, id, laatija) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', urlForLaatijaId(id))),
+    Kayttaja.putKayttajanLaatijaFuture(fetch, id),
     serialize
   )(laatija)
 );

@@ -17,6 +17,12 @@ export const kayttajanLaatijaFuture = R.curry((fetch, id) =>
   R.compose(Fetch.fetchUrl(fetch), laatijaForKayttajaId)(id)
 );
 
+export const putKayttajanLaatijaFuture = R.curry((fetch, id, laatija) =>
+  Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', kayttajaForId(id)))(
+    laatija
+  )
+);
+
 export const kayttajaAndLaatijaFuture = R.curry((fetch, id) =>
   R.compose(
     R.map(([kayttaja, laatija]) => R.assoc('laatija', laatija, kayttaja)),

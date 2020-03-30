@@ -32,12 +32,12 @@
       R.compose(
         R.tap(toggleOverlay(false)),
         flashMessageStore.add('Laatija', 'error'),
-        R.always($_('laatija.messsages.save-error'))
+        R.always($_('laatija.messages.save-error'))
       ),
       R.compose(
         R.tap(toggleOverlay(false)),
         flashMessageStore.add('Laatija', 'success'),
-        R.always($_('yritys.messages.save-success'))
+        R.always($_('laatija.messages.save-success'))
       )
     ),
     Future.delay(500),
@@ -58,9 +58,8 @@
         R.tap(toggleOverlay(false))
       )
     ),
-    R.map(LaatijaUtils.laatijaFromKayttaja),
     Future.delay(500),
-    KayttajaUtils.kayttajaAndLaatijaFuture(fetch),
+    LaatijaUtils.getLaatijaByIdFuture(fetch),
     R.prop('id')
   )(params);
 
