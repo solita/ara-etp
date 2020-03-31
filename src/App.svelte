@@ -3,6 +3,9 @@
   import Router from 'svelte-spa-router';
   import { link } from 'svelte-spa-router';
 
+  import * as Maybe from '@Utility/maybe-utils';
+
+  import * as Navigation from '@Utility/navigation';
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import { routes } from '@Component/routes';
   import { setupI18n } from '@Language/i18n';
@@ -12,22 +15,27 @@
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import Footer from '@Component/Footer/Footer';
   import * as UserUtils from '@Utility/user-utils';
-  import { currentUserStore, errorStore, breadcrumbStore } from '@/stores';
+  import {
+    currentUserStore,
+    errorStore,
+    breadcrumbStore,
+    navigationStore
+  } from '@/stores';
+
+  import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
 
   import Tailwindcss from '@/Tailwindcss';
 
   setupI18n();
-  UserUtils.fetchAndStoreUser();
 
-  $: isAppLoading = !$currentUserStore && !$errorStore;
+  $: isAppLoading = !Maybe.isSome($currentUserStore) && !$errorStore;
   $: isUnauthorizedOnFirstLoad =
     !$currentUserStore && $errorStore && $errorStore.statusCode === 401;
 
-  let links = [
-    {
-      text: '...'
-    }
-  ];
+  $: links = R.compose(
+    Maybe.orSome([{ text: '...', href: '' }]),
+    R.map(Navigation.linksForKayttaja)
+  )($currentUserStore);
 </script>
 
 <style type="text/postcss">
@@ -49,6 +57,8 @@
 </style>
 
 <Tailwindcss />
+
+<CurrentKayttaja />
 
 {#if isAppLoading}
   <Loading />

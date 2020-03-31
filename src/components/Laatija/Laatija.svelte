@@ -13,7 +13,8 @@
   import {
     flashMessageStore,
     toimintaAlueetStore,
-    countryStore
+    countryStore,
+    navigationStore
   } from '@/stores';
 
   const prefix = '/laatija';
