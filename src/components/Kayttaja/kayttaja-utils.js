@@ -3,7 +3,12 @@ import * as R from 'ramda';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
 
-export const kayttajaApi = `api/private/kayttajat`;
+export const currentKayttajaApi = `/api/private/whoami`;
+
+export const currentKayttajaFuture = fetch =>
+  Fetch.fetchUrl(fetch, currentKayttajaApi);
+
+export const kayttajaApi = `/api/private/kayttajat`;
 
 export const kayttajaForId = id => `${kayttajaApi}/${id}`;
 
