@@ -14,7 +14,6 @@
   import Login from '@Component/Login/Login';
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import Footer from '@Component/Footer/Footer';
-  import * as UserUtils from '@Utility/user-utils';
   import {
     currentUserStore,
     errorStore,
