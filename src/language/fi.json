@@ -6,6 +6,7 @@
     "invalid-url": "Virheellinen www-osoite",
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero",
+    "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "no-selection": "Ei valintaa"
   },
   "errors": {
@@ -55,6 +56,10 @@
     "paatoimintaalue": "Päätoiminta-alue",
     "muuttoimintaalueet": "Muut toiminta-alueet",
     "julkisettiedot": "Valitse julkiset tiedot",
+    "patevyydet": {
+      "0": "Perustaso",
+      "1": "Ylempi taso"
+    },
     "messages": {
       "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",

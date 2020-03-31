@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import moment from 'moment';
 
   import { locale, _ } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -212,6 +213,12 @@
           id={'patevyydenvoimassaolo'}
           name={'patevyydenvoimassaolo'}
           label={$_('laatija.patevyydenvoimassaolo')}
+          bind:model={laatija}
+          lens={R.lensProp('toteamispaivamaara')}
+          format={toteamispaivamaara => `${moment(toteamispaivamaara).format('D.M.YYYY')} - ${moment(toteamispaivamaara)
+              .add(10, 'y')
+              .format('D.M.YYYY')}`}
+          parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}
           i18n={$_} />
@@ -223,6 +230,10 @@
           id={'patevyystaso'}
           name={'patevyystaso'}
           label={$_('laatija.patevyystaso')}
+          bind:model={laatija}
+          lens={R.lensProp('patevyystaso')}
+          format={patevyystaso => $_(`laatija.patevyydet.${patevyystaso}`)}
+          parse={R.always(R.prop('patevyystaso', laatija))}
           disabled={true}
           required={true}
           i18n={$_} />

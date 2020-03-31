@@ -100,6 +100,11 @@ export const isValidHenkilotunnus = R.allPass([
   ])
 ]);
 
+export const henkilotunnusValidator = {
+  predicate: isValidHenkilotunnus,
+  label: R.applyTo('validation.invalid-henkilotunnus')
+};
+
 export const isLaatijanToteaja = R.test(/^(FISE|KIINKO)$/);
 
 export const isValidEmail = R.test(

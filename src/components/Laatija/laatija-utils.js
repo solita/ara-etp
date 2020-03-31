@@ -15,7 +15,7 @@ export const laatijaApi = `api/private/laatijat`;
 export const urlForLaatijaId = id => `${laatijaApi}/${id}`;
 
 export const formSchema = () => ({
-  henkilotunnus: [],
+  henkilotunnus: [Validation.isRequired, Validation.henkilotunnusValidator],
   etunimi: [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
@@ -42,7 +42,11 @@ export const formSchema = () => ({
     Validation.maxLengthConstraint(200)
   ],
   postinumero: [Validation.isRequired, Validation.postinumeroValidator],
-  postitoimipaikka: []
+  postitoimipaikka: [
+    Validation.isRequired,
+    Validation.minLengthConstraint(2),
+    Validation.maxLengthConstraint(200)
+  ]
 });
 
 export const formParsers = () => ({
@@ -80,25 +84,22 @@ export const laatijaFromKayttaja = R.compose(
 export const emptyLaatija = () =>
   deserialize({
     jakeluosoite: '',
-    muuttoimintaalueet: [0],
-    'patevyys-voimassaoloaika': {
-      start: '2020-03-17',
-      end: '2020-03-17'
-    },
+    muuttoimintaalueet: [],
+    toteamispaivamaara: '1970-01-01',
     puhelin: '',
     sukunimi: '',
     maa: '',
-    patevyys: 0,
+    patevyystaso: 0,
     postitoimipaikka: '',
     postinumero: '',
     ensitallennus: true,
-    'julkinen-email': true,
+    julkinenemail: false,
     email: '',
-    'patevyys-voimassa': true,
+    patevyysvoimassa: false,
     henkilotunnus: '',
     toimintaalue: 0,
     etunimi: '',
-    'julkinen-puhelin': true
+    julkinenpuhelin: false
   });
 
 export const getLaatijaByIdFuture = R.curry((fetch, id) =>
