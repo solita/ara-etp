@@ -4,6 +4,9 @@ import moment from 'moment';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Either from '@Utility/either-utils';
+import * as Maybe from '@Utility/maybe-utils';
+
+import * as Kayttaja from '@Component/Kayttaja/kayttaja-utils';
 
 import * as Validation from '@Utility/validation';
 
@@ -12,7 +15,7 @@ export const laatijaApi = `api/private/laatijat`;
 export const urlForLaatijaId = id => `${laatijaApi}/${id}`;
 
 export const formSchema = () => ({
-  henkilotunnus: [],
+  henkilotunnus: [Validation.isRequired, Validation.henkilotunnusValidator],
   etunimi: [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
@@ -38,8 +41,12 @@ export const formSchema = () => ({
     Validation.minLengthConstraint(2),
     Validation.maxLengthConstraint(200)
   ],
-  postinumero: [Validation.isRequired, Validation.isPostinumero],
-  postitoimipaikka: []
+  postinumero: [Validation.isRequired, Validation.postinumeroValidator],
+  postitoimipaikka: [
+    Validation.isRequired,
+    Validation.minLengthConstraint(2),
+    Validation.maxLengthConstraint(200)
+  ]
 });
 
 export const formParsers = () => ({
@@ -54,11 +61,12 @@ export const formParsers = () => ({
 });
 
 export const deserialize = R.evolve({
-  maa: Either.Right
+  maa: Either.Right,
+  toimintaalue: Maybe.fromNull
 });
 
 export const serialize = R.compose(
-  R.evolve({ maa: Either.right }),
+  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
   R.dissoc('id')
 );
 
@@ -66,43 +74,45 @@ export const serializeImport = R.evolve({
   toteamispaivamaara: R.curry(date => moment(date).format('YYYY-MM-DD'))
 });
 
+export const laatijaFromKayttaja = R.compose(
+  R.converge(R.merge, [
+    R.pick(['email', 'etunimi', 'sukunimi', 'puhelin', 'passivoitu', 'rooli']),
+    R.compose(R.dissoc('kayttaja'), R.prop('laatija'))
+  ])
+);
+
 export const emptyLaatija = () =>
   deserialize({
     jakeluosoite: '',
-    'muut-toimintaalueet': [0],
-    'patevyys-voimassaoloaika': {
-      start: '2020-03-17',
-      end: '2020-03-17'
-    },
+    muuttoimintaalueet: [],
+    toteamispaivamaara: '1970-01-01',
     puhelin: '',
     sukunimi: '',
     maa: '',
-    patevyys: 0,
+    patevyystaso: 0,
     postitoimipaikka: '',
     postinumero: '',
     ensitallennus: true,
-    'julkinen-email': true,
+    julkinenemail: false,
     email: '',
-    'patevyys-voimassa': true,
+    patevyysvoimassa: false,
     henkilotunnus: '',
     toimintaalue: 0,
     etunimi: '',
-    'julkinen-puhelin': true
+    julkinenpuhelin: false
   });
 
-export const getyLaatijaByIdFuture = R.curry((fetch, id) =>
+export const getLaatijaByIdFuture = R.curry((fetch, id) =>
   R.compose(
-    R.map(deserialize),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    urlForLaatijaId
+    R.map(R.compose(deserialize, laatijaFromKayttaja)),
+    Kayttaja.kayttajaAndLaatijaFuture(fetch)
   )(id)
 );
 
 export const putLaatijaByIdFuture = R.curry((fetch, id, laatija) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', urlForLaatijaId(id))),
+    Kayttaja.putKayttajanLaatijaFuture(fetch, id),
     serialize
   )(laatija)
 );
@@ -175,7 +185,12 @@ export const validate = {
 // Maa defaults to Finland as the transfer file does not have it as a field
 export const readRow = R.ifElse(
   R.compose(R.equals(R.length(dataFields)), R.length, R.split(';')),
-  R.compose(R.evolve(parse), R.assoc('maa', 'FI'), R.zipObj(dataFields), R.split(';')),
+  R.compose(
+    R.evolve(parse),
+    R.assoc('maa', 'FI'),
+    R.zipObj(dataFields),
+    R.split(';')
+  ),
   R.always(null)
 );
 

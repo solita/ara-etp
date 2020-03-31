@@ -6,6 +6,8 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
 
+  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+
   import LaatijaForm from './LaatijaForm';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
@@ -30,15 +32,15 @@
       R.compose(
         R.tap(toggleOverlay(false)),
         flashMessageStore.add('Laatija', 'error'),
-        R.always($_('laatija.messsages.save-error'))
+        R.always($_('laatija.messages.save-error'))
       ),
       R.compose(
         R.tap(toggleOverlay(false)),
         flashMessageStore.add('Laatija', 'success'),
-        R.always($_('yritys.messages.save-success'))
+        R.always($_('laatija.messages.save-success'))
       )
     ),
-    Future.both(Future.after(500, true)),
+    Future.delay(500),
     LaatijaUtils.putLaatijaByIdFuture(fetch, params.id),
     R.tap(toggleOverlay(true))
   );
@@ -56,7 +58,8 @@
         R.tap(toggleOverlay(false))
       )
     ),
-    LaatijaUtils.getyLaatijaByIdFuture(fetch),
+    Future.delay(500),
+    LaatijaUtils.getLaatijaByIdFuture(fetch),
     R.prop('id')
   )(params);
 

@@ -1,8 +1,18 @@
 import * as R from 'ramda';
+import * as Maybe from '@Utility/maybe-utils';
 
-export const formatSelected = R.reduce((acc, i) => R.assoc(i, true, acc), {});
+export const findToimintaAlueById = R.curry((id, toimintaAlueet) =>
+  R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(toimintaAlueet)
+);
 
-export const toimintaAlueetToSelect = R.converge(R.zipObj, [
-  R.pluck('id'),
-  R.compose(R.repeat(false), R.inc, R.reduce(R.max, -Infinity), R.pluck('id'))
-]);
+export const toimintaalueetWithoutMain = R.curry(
+  (mainToimintaalue, toimintaalueet) =>
+    R.compose(
+      Maybe.orSome(toimintaalueet),
+      R.map(R.compose(R.applyTo(toimintaalueet), R.reject, R.equals))
+    )(mainToimintaalue)
+);
+
+export const isMainToimintaAlue = R.curry((mainToimintaalue, toimintaalue) =>
+  R.compose(Maybe.isSome, R.filter(R.equals(toimintaalue)))(mainToimintaalue)
+);

@@ -1,19 +1,28 @@
 <script>
   import * as R from 'ramda';
+  import moment from 'moment';
 
   import { locale, _ } from '@Language/i18n';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   import H1 from '@Component/H1/H1';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
+  import Select from '@Component/Select/Select';
+  import ToimintaalueetChecklist from '@Component/ToimintaalueetChecklist/ToimintaalueetChecklist';
   import * as LaatijaUtils from './laatija-utils';
-  import { countryStore, flashMessageStore } from '@/stores';
+  import {
+    countryStore,
+    toimintaAlueetStore,
+    flashMessageStore
+  } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as country from '@Component/Geo/country-utils';
   import * as Validation from '@Utility/validation';
+  import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -31,23 +40,34 @@
     country.findCountry
   );
 
-  $: labelLocale = `label-${R.compose(
-    R.head,
-    R.split('-')
-  )($locale)}`;
+  $: labelLocale = LocaleUtils.label($locale);
 
   $: formatCountry = R.compose(
     Either.orSome(R.__, ''),
-    R.map(R.prop(labelLocale)),
+    R.map(labelLocale),
     R.chain(Maybe.toEither('')),
     R.map(R.__, $countryStore),
     country.findCountryById
   );
 
-  $: countryNames = Either.foldRight(
-    [],
-    R.map(R.prop(labelLocale)),
-    $countryStore
+  $: countryNames = Either.foldRight([], R.map(labelLocale), $countryStore);
+
+  $: toimintaAlueet = Either.foldRight([], R.pluck('id'), $toimintaAlueetStore);
+
+  $: formatToimintaAlue = R.compose(
+    Either.orSome(R.__, ''),
+    R.map(labelLocale),
+    R.chain(Maybe.toEither('')),
+    R.map(R.__, $toimintaAlueetStore),
+    ToimintaAlueUtils.findToimintaAlueById
+  );
+
+  $: parseToimintaAlue = Maybe.fromNull;
+
+  $: laatija = R.over(
+    R.lensProp('muuttoimintaalueet'),
+    ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue),
+    laatija
   );
 </script>
 
@@ -193,6 +213,12 @@
           id={'patevyydenvoimassaolo'}
           name={'patevyydenvoimassaolo'}
           label={$_('laatija.patevyydenvoimassaolo')}
+          bind:model={laatija}
+          lens={R.lensProp('toteamispaivamaara')}
+          format={toteamispaivamaara => `${moment(toteamispaivamaara).format('D.M.YYYY')} - ${moment(toteamispaivamaara)
+              .add(10, 'y')
+              .format('D.M.YYYY')}`}
+          parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}
           i18n={$_} />
@@ -204,19 +230,35 @@
           id={'patevyystaso'}
           name={'patevyystaso'}
           label={$_('laatija.patevyystaso')}
+          bind:model={laatija}
+          lens={R.lensProp('patevyystaso')}
+          format={patevyystaso => $_(`laatija.patevyydet.${patevyystaso}`)}
+          parse={R.always(R.prop('patevyystaso', laatija))}
           disabled={true}
           required={true}
           i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'paatoimintaalue'}
-          name={'paatoimintaalue'}
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4 flex flex-col">
+        <Select
           label={$_('laatija.paatoimintaalue')}
-          required={true}
-          i18n={$_} />
+          format={formatToimintaAlue}
+          parse={parseToimintaAlue}
+          bind:model={laatija}
+          lens={R.lensProp('toimintaalue')}
+          items={toimintaAlueet} />
+      </div>
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="lg:py-0 w-full px-4 py-4 flex flex-col">
+        <ToimintaalueetChecklist
+          label={$_('laatija.muuttoimintaalueet')}
+          toimintaalueet={toimintaAlueet}
+          bind:model={laatija}
+          lens={R.lensProp('muuttoimintaalueet')}
+          format={formatToimintaAlue}
+          parse={parseToimintaAlue} />
       </div>
     </div>
   </div>
@@ -227,14 +269,20 @@
       <div class="lg:w-1/3 lg:py-0 w-full px-4 mb-2">
         <Checkbox
           bind:model={laatija}
-          lens={R.lensProp('julkinen-puhelin')}
+          lens={R.lensProp('julkinenpuhelin')}
           label={$_('laatija.puhelinnumero')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
-          lens={R.lensProp('julkinen-email')}
+          lens={R.lensProp('julkinenemail')}
           label={$_('laatija.sahkoposti')} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+        <Checkbox
+          bind:model={laatija}
+          lens={R.lensProp('julkinenosoite')}
+          label={$_('laatija.katuosoite')} />
       </div>
     </div>
   </div>

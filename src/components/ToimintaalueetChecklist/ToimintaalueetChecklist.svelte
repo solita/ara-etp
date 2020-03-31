@@ -4,38 +4,52 @@
   import * as LocaleUtils from '@Language/locale-utils';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
 
+  import * as Maybe from '@Utility/maybe-utils';
+
   import Checkbox from '@Component/Checkbox/Checkbox';
 
   export let toimintaalueet = [];
-  export let mainToimintaalue = 0;
-  export let selected = [];
   export let limit = 5;
 
-  const mergeSelected = right =>
-    R.compose(
-      R.mergeRight(right),
-      ToimintaAlueUtils.formatSelected
-    )(selected);
+  export let label = '';
 
-  let allSelected = R.compose(
-    R.assoc(mainToimintaalue, true),
-    mergeSelected,
-    ToimintaAlueUtils.toimintaAlueetToSelect
-  )(toimintaalueet);
+  export let model;
+  export let lens;
 
-  $: selected = R.compose(
-    R.reject(R.equals(mainToimintaalue)),
-    R.map(
+  export let format = R.identity;
+  export let parse = R.identity;
+
+  $: mainToimintaalue = model.toimintaalue;
+
+  $: selected = ToimintaAlueUtils.toimintaalueetWithoutMain(
+    mainToimintaalue,
+    R.view(lens, model)
+  );
+
+  $: toimintaalueLens = toimintaalue =>
+    R.lens(
       R.compose(
-        parseInt,
-        R.head
-      )
-    ),
-    R.filter(R.last),
-    R.toPairs
-  )(allSelected);
-
-  $: currentLimit = limit - R.length(selected);
+        R.or(
+          ToimintaAlueUtils.isMainToimintaAlue(mainToimintaalue, toimintaalue)
+        ),
+        R.includes(toimintaalue),
+        R.view(lens)
+      ),
+      (_, model) =>
+        R.set(
+          lens,
+          R.compose(
+            R.uniq,
+            R.ifElse(
+              R.includes(toimintaalue),
+              R.reject(R.equals(toimintaalue)),
+              R.append(toimintaalue)
+            ),
+            R.view(lens)
+          )(model),
+          model
+        )
+    );
 </script>
 
 <style type="text/postcss">
@@ -46,16 +60,21 @@
   li {
     @apply flex-grow w-1/3 mb-6;
   }
+
+  span {
+    @apply text-secondary mb-4;
+  }
 </style>
 
+<span>{label}</span>
 <ol>
-  {#each R.sortBy(R.prop(`label-${LocaleUtils.shortLocale($locale)}`), toimintaalueet) as toimintaalue}
+  {#each R.sortWith([R.ascend(format)], toimintaalueet) as toimintaalue}
     <li>
       <Checkbox
-        label={LocaleUtils.label($locale, toimintaalue)}
-        bind:model={allSelected}
-        lens={R.lensProp(toimintaalue.id)}
-        disabled={toimintaalue.id === mainToimintaalue || (currentLimit <= 0 && !R.includes(toimintaalue.id, selected))} />
+        label={format(toimintaalue)}
+        disabled={ToimintaAlueUtils.isMainToimintaAlue(mainToimintaalue, toimintaalue) || (R.compose( R.lte(limit), R.length )(selected) && R.compose( R.not, R.includes(toimintaalue) )(selected))}
+        lens={toimintaalueLens(toimintaalue)}
+        bind:model />
     </li>
   {/each}
 </ol>

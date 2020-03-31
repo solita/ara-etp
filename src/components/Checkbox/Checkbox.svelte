@@ -2,9 +2,10 @@
   import * as R from 'ramda';
 
   export let label = '';
-  export let model = false;
-  export let lens = R.identity;
   export let disabled = false;
+
+  export let model;
+  export let lens;
 
   let focused = false;
 
@@ -25,7 +26,7 @@
   }
 
   label.disabled {
-    @apply text-disabled;
+    @apply text-disabled cursor-default;
   }
 
   label:hover ~ span {
@@ -53,7 +54,7 @@
   }
 
   span.disabled {
-    @apply bg-disabled;
+    @apply bg-disabled cursor-default;
   }
 
   span.checked.focused {
@@ -97,12 +98,12 @@
     <input
       {disabled}
       type="checkbox"
-      checked={R.view(lens, model)}
-      on:change={event => (model = R.set(lens, event.target.checked, model))} />
+      {checked}
+      on:change={() => !disabled && (model = R.set(lens, !checked, model))} />
   </label>
   <span
     class:disabled
     class:focused
     class:checked
-    on:click={_ => !disabled && (model = R.set(lens, !checked, model))} />
+    on:click={() => !disabled && (model = R.set(lens, !checked, model))} />
 </div>
