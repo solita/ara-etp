@@ -3,6 +3,7 @@ import moment from 'moment';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+import * as deep from '@Utility/deep-objects';
 
 export const DATE_FORMAT = 'DD.MM.YYYY';
 
@@ -135,5 +136,5 @@ export const validateModelValue = R.curry((validators, value) =>
 );
 
 export const validateModelObject = R.curry((schemaObject, object) =>
-  R.evolve(R.map(validateModelValue, schemaObject), object)
+  R.evolve(deep.map(R.is(Array), v => validateModelValue(v), schemaObject), object)
 );

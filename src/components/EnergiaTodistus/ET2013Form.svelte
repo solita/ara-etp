@@ -4,7 +4,6 @@
   import { locale, _ } from '@Language/i18n';
   import * as Either from '@Utility/either-utils';
   import * as validation from '@Utility/validation';
-  import * as objects from '@Utility/objects';
   import * as et from './energiatodistus-utils';
 
   import H1 from '@Component/H1/H1';

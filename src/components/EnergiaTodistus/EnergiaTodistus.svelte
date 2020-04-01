@@ -8,8 +8,8 @@
 
   const prefix = '/energiatodistus';
   const routes = {
-    '/new/:year': NewEnergiaTodistus,
-    '/:id': ExistingEnergiaTodistus
+    '/:year/new': NewEnergiaTodistus,
+    '/:year/:id': ExistingEnergiaTodistus
   };
 </script>
 
