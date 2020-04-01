@@ -36,12 +36,6 @@
     R.split('-')
   )($locale)}`;
 
-  const countryFuture = R.compose(
-    Future.coalesce(Either.Left, Either.Right),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )('api/private/countries/');
-
   const parseCountry = R.compose(
     R.map(R.prop('id')),
     R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
@@ -57,15 +51,6 @@
     R.map(R.__, $countryStore),
     country.findCountryById
   );
-
-  Either.isRight($countryStore) ||
-    Future.fork(countryStore.set, countryStore.set, countryFuture);
-
-  $: Either.isRight($countryStore) ||
-    R.compose(
-      Future.fork(countryStore.set, countryStore.set),
-      R.chain(Future.after(1000))
-    )(countryFuture);
 
   $: countryNames = Either.foldRight(
     [],

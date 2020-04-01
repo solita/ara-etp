@@ -17,10 +17,18 @@
   );
 </script>
 
-<style>
-
+<style type="text/postcss">
+  div {
+    @apply sticky mt-8;
+    bottom: 4em;
+  }
 </style>
 
-{#each messages as message}
-  <Alert type={message.type} text={message.text} close={() => close(message)} />
-{/each}
+<div class="w-full min-h-3em">
+  {#each messages as message}
+    <Alert
+      type={message.type}
+      text={message.text}
+      close={() => close(message)} />
+  {/each}
+</div>
