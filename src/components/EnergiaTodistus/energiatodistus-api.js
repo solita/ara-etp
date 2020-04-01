@@ -6,7 +6,9 @@ import * as Maybe from "@Utility/maybe-utils";
 import * as deep from '@Utility/deep-objects';
 
 export const deserialize = R.evolve({
-  nimi: Maybe.fromNull,
+  perustiedot: {
+    nimi: Maybe.fromNull,
+  }
 });
 
 export const serialize = R.compose(
@@ -29,7 +31,7 @@ export const getEnergiatodistusById = R.curry((fetch, year, id) =>
   )(year, id)
 );
 
-export const putEnergiatodistusById = R.curry((fetch, id, year, energiatodistus) =>
+export const putEnergiatodistusById = R.curry((fetch, year, id, energiatodistus) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.id(year, id))),

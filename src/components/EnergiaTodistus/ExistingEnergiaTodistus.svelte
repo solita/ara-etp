@@ -49,7 +49,7 @@
       )
     ),
     Future.both(Future.after(500, true)),
-      api.putEnergiatodistusById(fetch, params.id),
+    api.putEnergiatodistusById(fetch, params.year, params.id),
     R.tap(toggleOverlay(true))
   );
 
@@ -64,13 +64,15 @@
         R.tap(toggleOverlay(false))
       ),
       R.compose(
-        fetchedYritys => (yritys = Maybe.Some(fetchedYritys)),
+        response => {
+          energiatodistus = Maybe.Some(response)
+        },
         R.tap(toggleOverlay(false))
       )
     ),
     Future.both(Future.after(400, true)),
     api.getEnergiatodistusById(fetch)
-  )(params.id);
+  )(params.year, params.id);
 
   $: breadcrumbStore.set([et.breadcrumb1stLevel($_),
     {
@@ -83,8 +85,8 @@
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(energiatodistus)}
-      <EnergiaTodistusForm year={Maybe.Some(energiatodistus).year} {disabled}
-                           energiatodistus={Maybe.Some(energiatodistus)}
+      <EnergiaTodistusForm year={params.year} {disabled}
+                           energiatodistus={energiatodistus.some()}
                            {submit}/>
     {/if}
   </div>
