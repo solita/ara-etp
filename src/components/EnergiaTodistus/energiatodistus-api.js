@@ -12,8 +12,9 @@ export const deserialize = R.evolve({
 });
 
 export const serialize = R.compose(
-  deep.map(Maybe.isMaybe, R.ifElse(Maybe.isMaybe, Maybe.orSome(null), R.identity)),
-  R.dissoc('id')
+  deep.map(Maybe.isMaybe,
+    R.ifElse(R.allPass([R.complement(R.isNil), Maybe.isMaybe]), Maybe.orSome(null), R.identity)),
+  R.omit(['id', 'tila'])
 );
 
 export const url = {
