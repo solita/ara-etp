@@ -30,9 +30,8 @@
 <Country />
 <ToimintaAlueet />
 
-<div class="w-full min-h-3em">
-  <FlashMessage module={'Laatija'} />
-</div>
 {#if $countryStore.isRight() && $toimintaAlueetStore.isRight()}
   <Router {routes} {prefix} />
 {/if}
+
+<FlashMessage module={'Laatija'} />
