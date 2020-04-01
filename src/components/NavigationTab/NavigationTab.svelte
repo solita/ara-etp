@@ -1,4 +1,5 @@
 <script>
+  import { _ } from '@Language/i18n';
   export let text;
   export let href;
 </script>
@@ -28,4 +29,4 @@
   }
 </style>
 
-<a {href} class="navigationtab" tabindex="0">{text}</a>
+<a {href} class="navigationtab" tabindex="0">{$_(text)}</a>

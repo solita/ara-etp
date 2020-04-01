@@ -1,32 +1,41 @@
 import * as R from 'ramda';
 
 export const linksForLaatija = laatija => [
-  { text: 'Energiatodistukset', href: '/#/energiatodistus' },
-  { text: 'Viestit', href: '/#/viestit' },
-  { text: 'Yritykset', href: '/#/yritys' },
-  { text: 'Omat tiedot', href: `/#/myinfo` }
+  {
+    text: 'navigation.energiatodistukset',
+    href: '/#/energiatodistus'
+  },
+  { text: 'navigation.viestit', href: '/#/viestit' },
+  { text: 'navigation.yritykset', href: '/#/yritys' },
+  { text: 'navigation.omattiedot', href: `/#/myinfo` }
 ];
 
 export const linksForPatevyydentoteaja = _ => [
-  { text: 'Laatijoiden Tuonti', href: '/#/laatija/upload' },
-  { text: 'Laatijat', href: '/#/laatijat' },
-  { text: 'Omat tiedot', href: `/#/myinfo` }
+  {
+    text: 'navigation.laatijoidentuonti',
+    href: '/#/laatija/upload'
+  },
+  { text: 'navigation.laatijat', href: '/#/laatijat' },
+  { text: 'navigation.omattiedot', href: `/#/myinfo` }
 ];
 
 export const linksForLaskuttaja = _ => [
-  { text: 'Energiatodistukset', href: '/#/energiatodistus' },
-  { text: 'Laatijat', href: '/#/laatijat' },
-  { text: 'Yritykset', href: '/#/yritys' },
-  { text: 'Laskutusajot', href: `/#/laskutus` }
+  {
+    text: 'navigation.energiatodistukset',
+    href: '/#/energiatodistus'
+  },
+  { text: 'navigation.laatijat', href: '/#/laatijat' },
+  { text: 'navigation.yritykset', href: '/#/yritys' },
+  { text: 'navigation.laskutusajot', href: `/#/laskutus` }
 ];
 
 export const linksForPaakayttaja = _ => [
-  { text: 'Työjono', href: '/#/tyojono' },
-  { text: 'Käytönvalvonta', href: '/#/viestit' },
-  { text: 'Hälytykset', href: '/#/halytys' },
-  { text: 'Käyttäjät', href: `/#/kayttaja` },
-  { text: 'Yritykset', href: `/#/yritys` },
-  { text: 'Viestit', href: `/#/viestit` }
+  { text: 'navigation.tyojono', href: '/#/tyojono' },
+  { text: 'navigation.kaytonvalvonta', href: '/#/viestit' },
+  { text: 'navigation.halytykset', href: '/#/halytys' },
+  { text: 'navigation.kayttajat', href: `/#/kayttaja` },
+  { text: 'navigation.yritykset', href: `/#/yritys` },
+  { text: 'navigation.viestit', href: `/#/viestit` }
 ];
 
 const kayttajaLinksMap = Object.freeze({
