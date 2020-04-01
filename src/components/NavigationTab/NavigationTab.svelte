@@ -1,5 +1,6 @@
 <script>
   export let text;
+  export let href;
 </script>
 
 <style type="text/postcss">
@@ -27,4 +28,4 @@
   }
 </style>
 
-<a class="navigationtab" tabindex="0">{text}</a>
+<a {href} class="navigationtab" tabindex="0">{text}</a>

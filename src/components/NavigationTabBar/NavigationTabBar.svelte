@@ -1,5 +1,5 @@
 <script>
-  import NavigationTab from '../NavigationTab/NavigationTab';
+  import NavigationTab from '@Component/NavigationTab/NavigationTab';
 
   export let links;
 </script>
@@ -17,6 +17,6 @@
 
 <div>
   {#each links as link}
-    <NavigationTab text={link.text} />
+    <NavigationTab text={link.text} href={link.href} />
   {/each}
 </div>
