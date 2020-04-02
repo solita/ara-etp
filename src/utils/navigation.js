@@ -3,10 +3,10 @@ import * as R from 'ramda';
 export const linksForLaatija = laatija => [
   {
     text: 'navigation.energiatodistukset',
-    href: '/energiatodistus'
+    href: '/energiatodistus/all'
   },
   { text: 'navigation.viestit', href: '/viestit' },
-  { text: 'navigation.yritykset', href: '/yritys' },
+  { text: 'navigation.yritykset', href: '/yritys/all' },
   {
     text: 'navigation.omattiedot',
     href: '/myinfo',
