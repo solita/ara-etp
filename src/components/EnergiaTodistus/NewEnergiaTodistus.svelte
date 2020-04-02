@@ -42,11 +42,11 @@
             $_('energiatodistus.messages.save-success')
           )
         ),
-        ({ id }) => replace(`/energiatodistus/${id}`)
+        ({ id }) => replace(`/energiatodistus/${params.year}/${id}`)
       )
     ),
     Future.both(Future.after(500, true)),
-    api.postEnergiatodistus(fetch),
+    api.postEnergiatodistus(fetch, params.year),
     R.tap(toggleOverlay(true))
   );
 

@@ -1,14 +1,184 @@
 import * as R from "ramda";
 
 import * as validation from "@Utility/validation";
-import * as objects from '@Utility/objects';
+import * as deep from '@Utility/deep-objects';
 import * as Maybe from "@Utility/maybe-utils";
 import * as Either from '@Utility/either-utils';
 
+const emptyRakennusVaippa = _ => ({
+  rva: Maybe.None(),
+  rvu: Maybe.None()
+});
+
+const emptyIkkuna = _ => ({
+  ikkA: Maybe.None(),
+  ikkU: Maybe.None(),
+  ikkG: Maybe.None()
+});
+
+const emptyIV = _ => ({
+  poisto: Maybe.None(),
+  tulo: Maybe.None(),
+  sfp: Maybe.None()
+});
+
+const emptyLammitys = _ => ({
+  'tuoton-hyotysuhde': Maybe.None(),
+  'jaon-hyotysuhde': Maybe.None(),
+  lampokerroin: Maybe.None(),
+  apulaitteet: Maybe.None()
+});
+
+const emptyLammitysMaaraTuotto = _ => ({
+  maara: Maybe.None(),
+  tuotto: Maybe.None()
+});
+
+const emptyHuomio = _ => ({
+  'teksti-fi': Maybe.None(),
+  'teksti-sv': Maybe.None(),
+  toimenpide: []
+});
+
+const emptySahkoLampo = _ => ({
+  sahko: Maybe.None(),
+  lampo: Maybe.None()
+});
+
 export const emptyEnergiatodistus2018 = _ => ({
   perustiedot: {
-    nimi: Maybe.None()
-  }
+    nimi: Maybe.None(),
+    rakennustunnus: Maybe.None(),
+    kiinteistotunnus: Maybe.None(),
+    havainnointikaynti: Maybe.None(),
+    kieli: Maybe.None(),
+    rakennusosa: Maybe.None(),
+    'katuosoite-fi': Maybe.None(),
+    'katuosoite-sv': Maybe.None(),
+    postinumero: Maybe.None(),
+    valmistumisvuosi: Maybe.None(),
+    'onko-julkinen-rakennus': false,
+    tilaaja: Maybe.None(),
+    yritys: {
+      nimi: Maybe.None(),
+      katuosoite: Maybe.None(),
+      postinumero: Maybe.None(),
+      postitoimipaikka: Maybe.None()
+    },
+    kayttotarkoitus: Maybe.None(),
+    laatimisvaihe: Maybe.None(),
+    'keskeiset-suositukset-fi': Maybe.None(),
+    'keskeiset-suositukset-sv': Maybe.None(),
+  },
+  lahtotiedot: {
+    'lammitetty-nettoala': Maybe.None(),
+    rakennusvaippa: {
+      ilmanvuotoluku: Maybe.None(),
+      'kylmasillat-UA': Maybe.None(),
+      ulkoseinat: emptyRakennusVaippa(),
+      ylapohja: emptyRakennusVaippa(),
+      alapohja: emptyRakennusVaippa(),
+      ikkunat: emptyRakennusVaippa(),
+      ulkoovet: emptyRakennusVaippa()
+    },
+    ikkunat: {
+      pohjoinen: emptyIkkuna(),
+      koillinen: emptyIkkuna(),
+      ita: emptyIkkuna(),
+      kaakko: emptyIkkuna(),
+      etela: emptyIkkuna(),
+      lounas: emptyIkkuna(),
+      lansi: emptyIkkuna(),
+      luode: emptyIkkuna(),
+    },
+    ilmanvaihto: {
+      erillispoistot: emptyIV(),
+      ivjarjestelma: emptyIV(),
+      paaiv: R.mergeRight ({
+        lampotilasuhde: Maybe.None(),
+        jaatymisenesto: Maybe.None()
+      }, emptyIV()),
+      'kuvaus-fi': Maybe.None(),
+      'kuvaus-sv': Maybe.None(),
+      'lto-vuosihyotysuhde': Maybe.None()
+    },
+    lammitys: {
+      'kuvaus-fi': Maybe.None(),
+      'kuvaus-sv': Maybe.None(),
+      'tilat-ja-iv': emptyLammitys(),
+      'lammin-kayttovesi': emptyLammitys(),
+      takka: emptyLammitysMaaraTuotto(),
+      ilmanlampopumppu: emptyLammitysMaaraTuotto()
+    },
+    jaahdytysjarjestelma: {
+      'jaahdytyskauden-painotettu-kylmakerroin': Maybe.None()
+    },
+    'lkvn-kaytto': {
+      'kulutus-per-nelio': Maybe.None(),
+      vuosikulutus: Maybe.None()
+    },
+    'sis-kuorma': []
+  },
+  tulokset: {
+    'kaytettavat-energiamuodot': [],
+    'uusiutuvat-omavaraisenergiat': [],
+    'tekniset-jarjestelmat': {
+      'tilojen-lammitys': emptySahkoLampo(),
+      'tuloilman-lammitys': emptySahkoLampo(),
+      'kayttoveden-valmistus': Maybe.None(),
+      'iv-sahko': Maybe.None(),
+      jaahdytys: Maybe.None(),
+      'kuluttajalaitteet-ja-valaistus-sahko': Maybe.None()
+    },
+    nettotarve: {
+      'tilojen-lammitys-vuosikulutus': Maybe.None(),
+      'ilmanvaihdon-lammitys-vuosikulutus': Maybe.None(),
+      'kayttoveden-valmistus-vuosikulutus': Maybe.None(),
+      'jaahdytys-vuosikulutus': Maybe.None()
+    },
+    lampokuormat: {
+      aurinko: Maybe.None(),
+      ihmiset: Maybe.None(),
+      kuluttajalaitteet: Maybe.None(),
+      valaistus: Maybe.None(),
+      kvesi: Maybe.None()
+    },
+    laskentatyokalu: Maybe.None()
+  },
+  'toteutunut-ostoenergiankulutus': {
+    'ostettu-energia': {
+      'kaukolampo-vuosikulutus': Maybe.None(),
+      'kokonaissahko-vuosikulutus': Maybe.None(),
+      'kiinteistosahko-vuosikulutus': Maybe.None(),
+      'kayttajasahko-vuosikulutus': Maybe.None(),
+      'kaukojaahdytys-vuosikulutus': Maybe.None()
+    },
+    'ostetut-polttoaineet': {
+      'kevyt-polttooljy': Maybe.None(),
+      'pilkkeet-havu-sekapuu': Maybe.None(),
+      'pilkkeet-koivu': Maybe.None(),
+      puupelletit: Maybe.None(),
+      vapaa: []
+    },
+    'to-sahko-vuosikulutus-yhteensa': Maybe.None(),
+    'to-kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
+    'to-polttoaineet-vuosikulutus-yhteensa': Maybe.None(),
+    'to-kaukojaahdytys-vuosikulutus-yhteensa': Maybe.None()
+  },
+  huomiot: {
+    lammitys: emptyHuomio(),
+    'alapohja-ylapohja': emptyHuomio(),
+    'iv-ilmastointi': emptyHuomio(),
+    ymparys: emptyHuomio(),
+    'valaistus-muut': emptyHuomio(),
+
+    'suositukset-fi': Maybe.None(),
+    'suositukset-sv': Maybe.None(),
+    'lisatietoja-fi': Maybe.None(),
+    'lisatietoja-sv': Maybe.None()
+  },
+  'lisamerkintoja-fi': Maybe.None(),
+  'lisamerkintoja-sv': Maybe.None()
 });
 
 export const emptyEnergiatodistus2013 = _ => ({
@@ -45,8 +215,8 @@ export const formatters = {
 
 export const isValidForm = R.compose(
   R.all(Either.isRight),
-  R.filter(Either.isEither),
-  objects.recursiveValues(Either.isEither),
+  R.filter(R.allPass([R.complement(R.isNil), Either.isEither])),
+  deep.values(Either.isEither),
   validation.validateModelObject
 );
 
