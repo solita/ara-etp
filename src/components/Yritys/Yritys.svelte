@@ -5,6 +5,7 @@
 
   import NewYritys from './NewYritys';
   import ExistingYritys from './ExistingYritys';
+  import Yritykset from './Yritykset';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import Country from '@Component/Geo/Country';
   import { flashMessageStore, countryStore } from '@/stores';
@@ -12,6 +13,7 @@
   const prefix = '/yritys';
   const routes = {
     '/new': NewYritys,
+    '/all': Yritykset,
     '/:id': ExistingYritys
   };
 </script>
