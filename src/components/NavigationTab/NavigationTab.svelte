@@ -4,6 +4,7 @@
   import { _ } from '@Language/i18n';
   export let text;
   export let href;
+  export let activePath;
 </script>
 
 <style type="text/postcss">
@@ -26,14 +27,19 @@
   }
 
   a:active {
-    @apply text-hover;
+    @apply text-hover border-secondary shadow-hover-2-secondary;
   }
 
-  .active {
+  :global(a.active) {
     @apply shadow-hover-2-secondary border-secondary;
   }
 </style>
 
-<a {href} class:active use:link use:active class="navigationtab" tabindex="0">
+<a
+  {href}
+  use:link
+  use:active={activePath || href}
+  class="navigationtab"
+  tabindex="0">
   {$_(text)}
 </a>

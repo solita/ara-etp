@@ -7,7 +7,11 @@ export const linksForLaatija = laatija => [
   },
   { text: 'navigation.viestit', href: '/viestit' },
   { text: 'navigation.yritykset', href: '/yritys' },
-  { text: 'navigation.omattiedot', href: `/myinfo` }
+  {
+    text: 'navigation.omattiedot',
+    href: '/myinfo',
+    activePath: `/laatija/${laatija.id}`
+  }
 ];
 
 export const linksForPatevyydentoteaja = _ => [
@@ -16,7 +20,7 @@ export const linksForPatevyydentoteaja = _ => [
     href: '/laatija/upload'
   },
   { text: 'navigation.laatijat', href: '/laatijat' },
-  { text: 'navigation.omattiedot', href: `/myinfo` }
+  { text: 'navigation.omattiedot', href: '/myinfo' }
 ];
 
 export const linksForLaskuttaja = _ => [
@@ -26,16 +30,16 @@ export const linksForLaskuttaja = _ => [
   },
   { text: 'navigation.laatijat', href: '/laatijat' },
   { text: 'navigation.yritykset', href: '/yritys' },
-  { text: 'navigation.laskutusajot', href: `/laskutus` }
+  { text: 'navigation.laskutusajot', href: '/laskutus' }
 ];
 
 export const linksForPaakayttaja = _ => [
   { text: 'navigation.tyojono', href: '/tyojono' },
-  { text: 'navigation.kaytonvalvonta', href: '/viestit' },
+  { text: 'navigation.kaytonvalvonta', href: '/kaytonvalvonta' },
   { text: 'navigation.halytykset', href: '/halytys' },
-  { text: 'navigation.kayttajat', href: `/kayttaja` },
-  { text: 'navigation.yritykset', href: `/yritys` },
-  { text: 'navigation.viestit', href: `/viestit` }
+  { text: 'navigation.kayttajat', href: '/kayttaja' },
+  { text: 'navigation.yritykset', href: '/yritys' },
+  { text: 'navigation.viestit', href: '/viestit' }
 ];
 
 const kayttajaLinksMap = Object.freeze({
