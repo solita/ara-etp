@@ -1,4 +1,6 @@
 <script>
+  import active from 'svelte-spa-router/active';
+  import { link } from 'svelte-spa-router';
   import { _ } from '@Language/i18n';
   export let text;
   export let href;
@@ -10,10 +12,9 @@
     transition: box-shadow 0.1s ease-in-out;
   }
 
-  a:active,
   a:focus,
   a:hover {
-    @apply shadow-hover-2 border-hover;
+    @apply shadow-hover-2-primary border-hover;
   }
 
   a:hover {
@@ -27,6 +28,12 @@
   a:active {
     @apply text-hover;
   }
+
+  .active {
+    @apply shadow-hover-2-secondary border-secondary;
+  }
 </style>
 
-<a {href} class="navigationtab" tabindex="0">{$_(text)}</a>
+<a {href} class:active use:link use:active class="navigationtab" tabindex="0">
+  {$_(text)}
+</a>
