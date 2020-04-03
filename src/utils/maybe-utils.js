@@ -31,6 +31,8 @@ export const toEither = R.curry((defaultValue, m) => m.toEither(defaultValue));
 
 export const isSome = m => m.isSome();
 
+export const isNone = m => m.isNone();
+
 export const orElseRun = R.curry((fn, m) => m.orElseRun(fn));
 
 export const isMaybe = any => Object.getPrototypeOf(any) === Maybe.prototype;

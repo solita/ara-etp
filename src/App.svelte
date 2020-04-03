@@ -27,9 +27,11 @@
 
   setupI18n();
 
-  $: isAppLoading = !Maybe.isSome($currentUserStore) && !$errorStore;
+  $: isAppLoading = Maybe.isNone($currentUserStore) && !$errorStore;
   $: isUnauthorizedOnFirstLoad =
-    !$currentUserStore && $errorStore && $errorStore.statusCode === 401;
+    Maybe.isNone($currentUserStore) &&
+    $errorStore &&
+    $errorStore.statusCode === 401;
 
   $: links = R.compose(
     Maybe.orSome([{ text: '...', href: '' }]),
