@@ -16,13 +16,15 @@
   import {
     countryStore,
     toimintaAlueetStore,
-    flashMessageStore
+    flashMessageStore,
+    currentUserStore
   } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as country from '@Component/Geo/country-utils';
   import * as Validation from '@Utility/validation';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
+  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -83,6 +85,13 @@
   }}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
+    <Checkbox
+      bind:model={laatija}
+      lens={R.lensProp('laatimiskielto')}
+      label={$_('laatija.todistustenlaatimiskielto')}
+      disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
+              [2]
+            ) )) )($currentUserStore)} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
