@@ -23,7 +23,7 @@
 
   const toggleOverlay = value => () => (overlay = value);
 
-  let energiatodistus = R.equals(params.year, '2018') ?
+  let energiatodistus = R.equals(params.version, '2018') ?
       et.emptyEnergiatodistus2018() :
       et.emptyEnergiatodistus2013();
 
@@ -42,18 +42,18 @@
             $_('energiatodistus.messages.save-success')
           )
         ),
-        ({ id }) => replace(`/energiatodistus/${params.year}/${id}`)
+        ({ id }) => replace(`/energiatodistus/${params.version}/${id}`)
       )
     ),
     Future.both(Future.after(500, true)),
-    api.postEnergiatodistus(fetch, params.year),
+    api.postEnergiatodistus(fetch, params.version),
     R.tap(toggleOverlay(true))
   );
 
   breadcrumbStore.set([
     et.breadcrumb1stLevel($_),
     {
-      label: $_('energiatodistus.breadcrumb.uusi-energiatodistus') + ' ' + params.year,
+      label: $_('energiatodistus.breadcrumb.uusi-energiatodistus') + ' ' + params.version,
       url: window.location.href
     }
   ]);
@@ -61,7 +61,7 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    <EnergiaTodistusForm year={params.year} {energiatodistus} {submit}/>
+    <EnergiaTodistusForm version={params.version} {energiatodistus} {submit}/>
   </div>
   <div slot="overlay-content">
     <Spinner />

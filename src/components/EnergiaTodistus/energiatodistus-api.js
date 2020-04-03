@@ -19,31 +19,31 @@ export const serialize = R.compose(
 
 export const url = {
   all: '/api/private/energiatodistukset',
-  year: (year) => `${url.all}/${year}`,
-  id: (year, id) => `${url.year(year)}/${id}`,
+  version: (version) => `${url.all}/${version}`,
+  id: (version, id) => `${url.version(version)}/${id}`,
 };
 
-export const getEnergiatodistusById = R.curry((fetch, year, id) =>
+export const getEnergiatodistusById = R.curry((fetch, version, id) =>
   R.compose(
     R.map(deserialize),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.id
-  )(year, id)
+  )(version, id)
 );
 
-export const putEnergiatodistusById = R.curry((fetch, year, id, energiatodistus) =>
+export const putEnergiatodistusById = R.curry((fetch, version, id, energiatodistus) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.id(year, id))),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.id(version, id))),
     serialize
   )(energiatodistus)
 );
 
-export const postEnergiatodistus = R.curry((fetch, year, energiatodistus) =>
+export const postEnergiatodistus = R.curry((fetch, version, energiatodistus) =>
   R.compose(
     Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.year(year))),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.version(version))),
     serialize
   )(energiatodistus)
 );

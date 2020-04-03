@@ -10,8 +10,8 @@
   const prefix = '/energiatodistus';
   const routes = {
     '/all': Energiatodistukset,
-    '/:year/new': NewEnergiaTodistus,
-    '/:year/:id': ExistingEnergiaTodistus
+    '/:version/new': NewEnergiaTodistus,
+    '/:version/:id': ExistingEnergiaTodistus
   };
 </script>
 
