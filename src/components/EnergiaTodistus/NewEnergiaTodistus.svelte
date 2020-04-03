@@ -57,11 +57,13 @@
       url: window.location.href
     }
   ]);
+
+  $: title = `Energiatodistus ${params.version} - Uusi luonnos`;
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    <EnergiaTodistusForm version={params.version} {energiatodistus} {submit}/>
+    <EnergiaTodistusForm version={params.version} {title} {energiatodistus} {submit}/>
   </div>
   <div slot="overlay-content">
     <Spinner />

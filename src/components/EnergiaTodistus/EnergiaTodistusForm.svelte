@@ -7,12 +7,13 @@
   export let energiatodistus;
   export let submit;
   export let disabled = false;
+  export let title = '';
 </script>
 
 {#if R.equals(version, '2018')}
-  <ET2018Form {energiatodistus} {submit} {disabled}/>
+  <ET2018Form {title} {energiatodistus} {submit} {disabled}/>
 {:else if R.equals(version, '2013')}
-  <ET2013Form {energiatodistus} {submit} {disabled}/>
+  <ET2013Form {title} {energiatodistus} {submit} {disabled}/>
 {:else}
   <p>Energiatodistusversiota {version} ei ole olemassa.</p>
 {/if}

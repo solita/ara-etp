@@ -80,6 +80,8 @@
       url: location.href
     }
   ]);
+
+  $: title = `Energiatodistus ${params.version}/${params.id}`;
 </script>
 
 <Overlay {overlay}>
@@ -87,7 +89,7 @@
     {#if Maybe.isSome(energiatodistus)}
       <EnergiaTodistusForm version={params.version} {disabled}
                            energiatodistus={energiatodistus.some()}
-                           {submit}/>
+                           {submit} {title}/>
     {/if}
   </div>
   <div slot="overlay-content">
