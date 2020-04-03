@@ -17,6 +17,9 @@
 
 <div>
   {#each links as link}
-    <NavigationTab text={link.text} href={link.href} />
+    <NavigationTab
+      text={link.text}
+      href={link.href}
+      activePath={link.activePath} />
   {/each}
 </div>

@@ -9,6 +9,19 @@
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "no-selection": "Ei valintaa"
   },
+  "navigation": {
+    "energiatodistukset": "Energiatodistukset",
+    "viestit": "Viestit",
+    "yritykset": "Yritykset",
+    "omattiedot": "Omat Tiedot",
+    "laatijoidentuonti": "Laatijoiden Tuonti",
+    "laatijat": "Laatijat",
+    "laskutusajot": "Laskutusajot",
+    "tyojono": "Työjono",
+    "kaytonvalvonta": "Käytönvalvonta",
+    "halytykset": "Hälytykset",
+    "kayttajat": "Käyttäjät"
+  },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."
   },

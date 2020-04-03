@@ -30,7 +30,8 @@ module.exports = {
         '100': '100%'
       },
       boxShadow: {
-        'hover-2': '0 0.5em #446800'
+        'hover-2-primary': '0 0.5em #538000',
+        'hover-2-secondary': '0 0.5em #2e5053'
       },
       maxWidth: {
         '70': '70%'

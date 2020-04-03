@@ -7,6 +7,7 @@
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
   import Yritykset from '@Component/Laatija/Yritykset';
   import ExistingLaatija from './ExistingLaatija';
+  import Laatijat from './Laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import Country from '@Component/Geo/Country';
   import ToimintaAlueet from '@Component/Geo/ToimintaAlueet';
@@ -19,6 +20,7 @@
 
   const prefix = '/laatija';
   const routes = {
+    '/all': Laatijat,
     '/upload': LaatijaUpload,
     '/:id/yritykset': Yritykset,
     '/:id': ExistingLaatija
