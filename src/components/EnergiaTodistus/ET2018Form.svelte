@@ -12,6 +12,7 @@
 
   import { flashMessageStore } from '@/stores';
 
+  export let title = '';
   export let submit;
   export let energiatodistus;
   const originalEnergiatodistus = R.clone(energiatodistus);
@@ -35,6 +36,7 @@
     }
   }}>
   <div class="w-full mt-3">
+    <H1 text={title} />
     <H1 text="Rakennuksen perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
 

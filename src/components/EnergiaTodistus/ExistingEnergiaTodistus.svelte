@@ -49,7 +49,7 @@
       )
     ),
     Future.both(Future.after(500, true)),
-    api.putEnergiatodistusById(fetch, params.year, params.id),
+    api.putEnergiatodistusById(fetch, params.version, params.id),
     R.tap(toggleOverlay(true))
   );
 
@@ -72,7 +72,7 @@
     ),
     Future.both(Future.after(400, true)),
     api.getEnergiatodistusById(fetch)
-  )(params.year, params.id);
+  )(params.version, params.id);
 
   $: breadcrumbStore.set([et.breadcrumb1stLevel($_),
     {
@@ -80,14 +80,16 @@
       url: location.href
     }
   ]);
+
+  $: title = `Energiatodistus ${params.version}/${params.id}`;
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(energiatodistus)}
-      <EnergiaTodistusForm year={params.year} {disabled}
+      <EnergiaTodistusForm version={params.version} {disabled}
                            energiatodistus={energiatodistus.some()}
-                           {submit}/>
+                           {submit} {title}/>
     {/if}
   </div>
   <div slot="overlay-content">

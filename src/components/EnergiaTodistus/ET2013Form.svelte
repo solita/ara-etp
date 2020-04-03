@@ -33,6 +33,7 @@
     }
   }}>
   <div class="w-full mt-3">
+    <H1 text="Energiatodistus 2013 - not implemented" />
     <H1 text="Rakennuksen perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
 
