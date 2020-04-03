@@ -45,7 +45,7 @@
   }
 
   .routecontainer {
-    @apply flex-grow pb-10;
+    @apply flex-grow pb-10 relative;
   }
 
   .content {
