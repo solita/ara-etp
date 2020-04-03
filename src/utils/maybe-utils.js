@@ -1,6 +1,6 @@
 import monet from 'monet';
 import * as R from 'ramda';
-import {Either} from "@Utility/either-utils";
+import { Either } from '@Utility/either-utils';
 
 export const { Maybe } = monet;
 export const {
@@ -24,6 +24,8 @@ export const getOrElse = R.curry((defaultValue, m) =>
 export const orElse = R.curry((defaultValue, m) => m.orElse(defaultValue));
 
 export const orSome = R.curry((defaultValue, m) => m.orSome(defaultValue));
+
+export const get = m => m.some();
 
 export const head = R.compose(fromUndefined, R.head);
 

@@ -76,7 +76,15 @@ export const serializeImport = R.evolve({
 
 export const laatijaFromKayttaja = R.compose(
   R.converge(R.merge, [
-    R.pick(['email', 'etunimi', 'sukunimi', 'puhelin', 'passivoitu', 'rooli']),
+    R.pick([
+      'email',
+      'etunimi',
+      'sukunimi',
+      'puhelin',
+      'passivoitu',
+      'rooli',
+      'login'
+    ]),
     R.compose(R.dissoc('kayttaja'), R.prop('laatija'))
   ])
 );
@@ -97,9 +105,10 @@ export const emptyLaatija = () =>
     email: '',
     patevyysvoimassa: false,
     henkilotunnus: '',
-    toimintaalue: 0,
+    toimintaalue: Maybe.None(),
     etunimi: '',
-    julkinenpuhelin: false
+    julkinenpuhelin: false,
+    login: Maybe.None()
   });
 
 export const getLaatijaByIdFuture = R.curry((fetch, id) =>

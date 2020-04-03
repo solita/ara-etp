@@ -50,7 +50,12 @@
       "load-error": "Yrityksen tietojen haku epäonnistui."
     }
   },
+  "time": {
+    "klo": "klo"
+  },
   "laatija": {
+    "kirjautunutviimeksi": "Kirjautunut viimeksi",
+    "eivielakirjautunut": "Ei vielä kirjautunut.",
     "lisaa-laatijat": "Lisää laatijat",
     "omattiedot": "Omat Tiedot",
     "henkilotunnus": "Henkilötunnus",
