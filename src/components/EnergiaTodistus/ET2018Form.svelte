@@ -35,7 +35,7 @@
   );
 
   $: formatKielisyys = R.compose(
-    Either.cata(R.__, R.identity, R.identity),
+    Either.cata(R.identity, R.identity),
     R.map(labelLocale),
     R.chain(Maybe.toEither('Unknown value')),
     R.map(R.__, kielisyys),
