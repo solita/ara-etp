@@ -49,3 +49,9 @@ export const kielisyys = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/kielisyys');
+
+export const laatimisvaiheet = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/laatimisvaiheet');

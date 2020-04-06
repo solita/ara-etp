@@ -224,3 +224,11 @@ export const breadcrumb1stLevel = i18n => ({
   label: i18n('energiatodistus.breadcrumb.energiatodistus'),
   url: '/#/energiatodistukset'
 });
+
+export const selectFormat = (label, items) => R.compose(
+  Either.cata(R.identity, R.identity),
+  R.map(label),
+  R.chain(Maybe.toEither('Unknown value')),
+  R.map(R.__, items),
+  Maybe.findById
+);

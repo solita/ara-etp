@@ -34,12 +34,11 @@
     api.kielisyys
   );
 
-  $: formatKielisyys = R.compose(
-    Either.cata(R.identity, R.identity),
-    R.map(labelLocale),
-    R.chain(Maybe.toEither('Unknown value')),
-    R.map(R.__, kielisyys),
-    Maybe.findById
+  let laatimisvaiheet = Either.Left('Not initialized');
+  Future.fork(
+    _ => {},
+    result => laatimisvaiheet = Either.Right(result),
+    api.laatimisvaiheet
   );
 
   let isValidForm = false;
@@ -100,7 +99,7 @@
             bind:model={energiatodistus}
             lens={R.lensPath(['perustiedot', 'kieli'])}
             parse={Maybe.Some}
-            format={formatKielisyys}
+            format={et.selectFormat(labelLocale, kielisyys)}
             items={Either.foldRight([], R.pluck('id'), kielisyys)} />
       </div>
 
@@ -114,7 +113,8 @@
             bind:model={energiatodistus}
             lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
             parse={Maybe.Some}
-            items={[0,1,2]} />
+            format={et.selectFormat(labelLocale, laatimisvaiheet)}
+            items={Either.foldRight([], R.pluck('id'), laatimisvaiheet)} />
       </div>
     </div>
 
