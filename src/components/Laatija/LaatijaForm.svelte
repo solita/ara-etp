@@ -17,7 +17,8 @@
     countryStore,
     toimintaAlueetStore,
     flashMessageStore,
-    currentUserStore
+    currentUserStore,
+    patevyydetStore
   } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
@@ -25,6 +26,7 @@
   import * as Validation from '@Utility/validation';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+  import * as Koodisto from '@Utility/koodisto';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -45,23 +47,29 @@
   $: labelLocale = LocaleUtils.label($locale);
 
   $: formatCountry = R.compose(
-    Either.orSome(R.__, ''),
-    R.map(labelLocale),
-    R.chain(Maybe.toEither('')),
+    Koodisto.koodiLocale(labelLocale),
     R.map(R.__, $countryStore),
-    country.findCountryById
+    Koodisto.findFromKoodistoById
   );
 
   $: countryNames = Either.foldRight([], R.map(labelLocale), $countryStore);
 
   $: toimintaAlueet = Either.foldRight([], R.pluck('id'), $toimintaAlueetStore);
 
+  $: patevyydet = Either.foldRight([], R.pluck('id'), $patevyydetStore);
+
+  $: formatPatevyys = R.compose(
+    Koodisto.koodiLocale(labelLocale),
+    R.map(R.__, $patevyydetStore),
+    Koodisto.findFromKoodistoById
+  );
+
+  $: parsePatevyys = R.identity;
+
   $: formatToimintaAlue = R.compose(
-    Either.orSome(R.__, ''),
-    R.map(labelLocale),
-    R.chain(Maybe.toEither('')),
+    Koodisto.koodiLocale(labelLocale),
     R.map(R.__, $toimintaAlueetStore),
-    ToimintaAlueUtils.findToimintaAlueById
+    Koodisto.findFromKoodistoById
   );
 
   $: parseToimintaAlue = Maybe.fromNull;
@@ -283,8 +291,7 @@
           toimintaalueet={toimintaAlueet}
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
-          format={formatToimintaAlue}
-          parse={parseToimintaAlue} />
+          format={formatToimintaAlue} />
       </div>
     </div>
   </div>

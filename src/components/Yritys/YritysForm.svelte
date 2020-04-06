@@ -45,7 +45,7 @@
   );
 
   $: formatCountry = R.compose(
-    Either.orSome(R.__, ''),
+    Either.orSome(''),
     R.map(R.prop(labelLocale)),
     R.chain(Maybe.toEither('')),
     R.map(R.__, $countryStore),

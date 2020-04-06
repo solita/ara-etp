@@ -1,36 +1,9 @@
 import { assert } from 'chai';
-import * as R from 'ramda';
 
 import * as ToimintaAlueUtils from './toimintaalue-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
 describe('ToimintaAlueUtils', () => {
-  describe('findToimintaalueById', () => {
-    it('should return found toimintaAlue', () => {
-      const id = 1;
-      const toimintaAlueet = [{ id: 0 }, { id: 1 }, { id: 2 }];
-
-      const expected = Maybe.of({ id: 1 });
-
-      assert.deepEqual(
-        expected,
-        ToimintaAlueUtils.findToimintaAlueById(id, toimintaAlueet)
-      );
-    });
-
-    it('should return None when toimintaAlue is not found', () => {
-      const id = 3;
-      const toimintaAlueet = [{ id: 0 }, { id: 1 }, { id: 2 }];
-
-      const expected = Maybe.None();
-
-      assert.deepEqual(
-        expected,
-        ToimintaAlueUtils.findToimintaAlueById(id, toimintaAlueet)
-      );
-    });
-  });
-
   describe('toimintaalueetWithoutMain', () => {
     it('should return toimintaAlueet without mainToimintaalue', () => {
       const toimintaAlueet = [1, 2, 3, 4, 5];

@@ -11,10 +11,15 @@
   export let parse = R.identity;
   export let label = '';
 
+  export let disabled = false;
+
   export let model;
   export let lens;
 
   let focused = false;
+  let node;
+  let button;
+
   let active = Maybe.None();
 
   $: selected = R.view(lens, model);
@@ -108,12 +113,22 @@
   }
 </style>
 
+<svelte:window
+  on:click={event => {
+    const itemNodes = node.querySelectorAll('.dropdownitem');
+    if (!R.includes(event.target, itemNodes) && event.target !== button) {
+      active = Maybe.None();
+    }
+  }} />
+
 <span class:focused class="label">{label}</span>
-<div on:keydown={handleKeydown}>
+<div bind:this={node} on:keydown={handleKeydown}>
   <span
+    class:disabled
+    bind:this={button}
     class="button"
-    tabindex="0"
-    on:click={_ => (showDropdown = !showDropdown)}
+    tabindex={disabled ? -1 : 0}
+    on:click={_ => disabled || (showDropdown = !showDropdown)}
     on:focus={_ => {
       focused = true;
     }}
