@@ -3,7 +3,7 @@ import * as R from 'ramda';
 
 export { Fluture };
 
-export const { resolve, reject, encaseP, promise, attemptP } = Fluture;
+export const { resolve, reject, encaseP, promise, attemptP, cache } = Fluture;
 
 export const fork = R.curry((leftFn, rightFn, future) =>
   Fluture.fork(leftFn)(rightFn)(future)
@@ -19,6 +19,10 @@ export const coalesce = R.curry((leftFn, rightFn, f) =>
 
 export const both = R.curry((firstFuture, secondFuture) =>
   Fluture.both(firstFuture)(secondFuture)
+);
+
+export const parallel = R.curry((concurrency, futures) =>
+  Fluture.parallel(concurrency)(futures)
 );
 
 export const after = R.curry((delay, value) => Fluture.after(delay)(value));

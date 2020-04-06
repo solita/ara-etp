@@ -65,12 +65,14 @@
       ),
       R.compose(
         response => {
-          energiatodistus = Maybe.Some(response)
+          energiatodistus = Maybe.Some(response[0])
         },
         R.tap(toggleOverlay(false))
       )
     ),
     Future.both(Future.after(400, true)),
+    Future.parallel(5),
+    R.prepend(R.__, [api.kielisyys]),
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
 
