@@ -17,7 +17,8 @@
     countryStore,
     toimintaAlueetStore,
     flashMessageStore,
-    currentUserStore
+    currentUserStore,
+    patevyydetStore
   } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
@@ -25,6 +26,7 @@
   import * as Validation from '@Utility/validation';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+  import * as Koodisto from '@Utility/koodisto';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -45,23 +47,29 @@
   $: labelLocale = LocaleUtils.label($locale);
 
   $: formatCountry = R.compose(
-    Either.orSome(R.__, ''),
-    R.map(labelLocale),
-    R.chain(Maybe.toEither('')),
+    Koodisto.koodiLocale(labelLocale),
     R.map(R.__, $countryStore),
-    country.findCountryById
+    Koodisto.findFromKoodistoById
   );
 
   $: countryNames = Either.foldRight([], R.map(labelLocale), $countryStore);
 
   $: toimintaAlueet = Either.foldRight([], R.pluck('id'), $toimintaAlueetStore);
 
+  $: patevyydet = Either.foldRight([], R.pluck('id'), $patevyydetStore);
+
+  $: formatPatevyys = R.compose(
+    Koodisto.koodiLocale(labelLocale),
+    R.map(R.__, $patevyydetStore),
+    Koodisto.findFromKoodistoById
+  );
+
+  $: parsePatevyys = R.identity;
+
   $: formatToimintaAlue = R.compose(
-    Either.orSome(R.__, ''),
-    R.map(labelLocale),
-    R.chain(Maybe.toEither('')),
+    Koodisto.koodiLocale(labelLocale),
     R.map(R.__, $toimintaAlueetStore),
-    ToimintaAlueUtils.findToimintaAlueById
+    Koodisto.findFromKoodistoById
   );
 
   $: parseToimintaAlue = Maybe.fromNull;
@@ -252,17 +260,16 @@
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'patevyystaso'}
-          name={'patevyystaso'}
+        <Select
           label={$_('laatija.patevyystaso')}
+          format={formatPatevyys}
+          parse={parsePatevyys}
           bind:model={laatija}
           lens={R.lensProp('patevyystaso')}
-          format={patevyystaso => $_(`laatija.patevyydet.${patevyystaso}`)}
-          parse={R.always(R.prop('patevyystaso', laatija))}
-          disabled={true}
-          required={true}
-          i18n={$_} />
+          disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
+                  [2]
+                ) )) )($currentUserStore)}
+          items={patevyydet} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -283,8 +290,7 @@
           toimintaalueet={toimintaAlueet}
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
-          format={formatToimintaAlue}
-          parse={parseToimintaAlue} />
+          format={formatToimintaAlue} />
       </div>
     </div>
   </div>

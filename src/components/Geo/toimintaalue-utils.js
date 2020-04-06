@@ -1,10 +1,6 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 
-export const findToimintaAlueById = R.curry((id, toimintaAlueet) =>
-  R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(toimintaAlueet)
-);
-
 export const toimintaalueetWithoutMain = R.curry(
   (mainToimintaalue, toimintaalueet) =>
     R.compose(

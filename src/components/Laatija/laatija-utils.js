@@ -66,8 +66,12 @@ export const deserialize = R.evolve({
 });
 
 export const serialize = R.compose(
-  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
-  R.dissoc('id')
+  R.evolve({
+    maa: Either.right,
+    toimintaalue: Maybe.orSome(null),
+    login: Maybe.orSome(null)
+  }),
+  R.omit(['id', 'login'])
 );
 
 export const serializeImport = R.evolve({
@@ -122,7 +126,9 @@ export const putLaatijaByIdFuture = R.curry((fetch, id, laatija) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Kayttaja.putKayttajanLaatijaFuture(fetch, id),
-    serialize
+    R.tap(console.log),
+    serialize,
+    R.tap(console.log)
   )(laatija)
 );
 

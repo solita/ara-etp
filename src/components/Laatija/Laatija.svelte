@@ -10,12 +10,14 @@
   import Laatijat from './Laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import Country from '@Component/Geo/Country';
+  import Patevyydet from './Patevyydet';
   import ToimintaAlueet from '@Component/Geo/ToimintaAlueet';
   import {
     flashMessageStore,
     toimintaAlueetStore,
     countryStore,
-    navigationStore
+    navigationStore,
+    patevyydetStore
   } from '@/stores';
 
   const prefix = '/laatija';
@@ -31,8 +33,9 @@
 
 <Country />
 <ToimintaAlueet />
+<Patevyydet />
 
-{#if $countryStore.isRight() && $toimintaAlueetStore.isRight()}
+{#if $countryStore.isRight() && $toimintaAlueetStore.isRight() && $patevyydetStore.isRight()}
   <Router {routes} {prefix} />
 {/if}
 

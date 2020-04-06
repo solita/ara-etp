@@ -11,13 +11,21 @@
   export let parse = R.identity;
   export let label = '';
 
+  export let disabled = false;
+
   export let model;
   export let lens;
 
   let focused = false;
+  let node;
+  let button;
+
   let active = Maybe.None();
 
-  $: selected = R.view(lens, model);
+  $: selected = R.compose(
+    R.when(R.complement(Maybe.isMaybe), Maybe.of),
+    R.view(lens)
+  )(model);
 
   $: showDropdown = Maybe.isSome(active);
 
@@ -99,8 +107,16 @@
     @apply outline-none border-primary;
   }
 
+  .button.disabled {
+    @apply bg-background border-0 min-h-0 py-1 cursor-default;
+  }
+
   .focused {
     @apply font-extrabold;
+  }
+
+  .focused.disabled {
+    @apply font-normal;
   }
 
   .label {
@@ -108,12 +124,22 @@
   }
 </style>
 
-<span class:focused class="label">{label}</span>
-<div on:keydown={handleKeydown}>
+<svelte:window
+  on:click={event => {
+    const itemNodes = node.querySelectorAll('.dropdownitem');
+    if (!R.includes(event.target, itemNodes) && event.target !== button) {
+      active = Maybe.None();
+    }
+  }} />
+
+<span class:focused class:disabled class="label">{label}</span>
+<div bind:this={node} on:keydown={handleKeydown}>
   <span
+    class:disabled
+    bind:this={button}
     class="button"
-    tabindex="0"
-    on:click={_ => (showDropdown = !showDropdown)}
+    tabindex={disabled ? -1 : 0}
+    on:click={_ => disabled || (showDropdown = !showDropdown)}
     on:focus={_ => {
       focused = true;
     }}

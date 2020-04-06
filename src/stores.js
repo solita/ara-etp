@@ -7,6 +7,7 @@ export const currentUserStore = writable(Maybe.None());
 export const errorStore = writable();
 export const countryStore = writable(Either.Left('Not initialized'));
 export const patevyystasoStore = writable(Either.Left('Not initialized'));
+export const patevyydetStore = writable(Either.Left('Not initialized'));
 export const toimintaAlueetStore = writable(Either.Left('Not initialized'));
 export const breadcrumbStore = writable([]);
 
