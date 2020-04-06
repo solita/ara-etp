@@ -46,7 +46,6 @@ export const postEnergiatodistus = R.curry((fetch, version, energiatodistus) =>
 
 export const kielisyys = R.compose(
   Future.cache,
-  Future.coalesce(Either.Left, Either.Right),
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/kielet');
+)('api/private/kielisyys');
