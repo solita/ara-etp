@@ -73,11 +73,13 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    <LaatijaForm
-      {submit}
-      {disabled}
-      existing={true}
-      laatija={Maybe.getOrElse(LaatijaUtils.emptyLaatija(), laatija)} />
+    {#if Maybe.isSome(laatija)}
+      <LaatijaForm
+        {submit}
+        {disabled}
+        existing={true}
+        laatija={Maybe.getOrElse(LaatijaUtils.emptyLaatija(), laatija)} />
+    {/if}
   </div>
   <div slot="overlay-content">
     <Spinner />
