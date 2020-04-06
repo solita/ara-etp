@@ -2,6 +2,7 @@ import * as R from 'ramda';
 
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
+import * as Maybe from '@Utility/maybe-utils';
 
 export const currentKayttajaApi = `/api/private/whoami`;
 
@@ -14,8 +15,13 @@ export const kayttajaForId = id => `${kayttajaApi}/${id}`;
 
 export const laatijaForKayttajaId = id => `${kayttajaForId(id)}/laatija`;
 
+export const deserialize = R.evolve({
+  login: Maybe.fromNull,
+  cognitoid: Maybe.fromNull
+});
+
 export const kayttajaFuture = R.curry((fetch, id) =>
-  R.compose(Fetch.fetchUrl(fetch), kayttajaForId)(id)
+  R.compose(R.map(deserialize), Fetch.fetchUrl(fetch), kayttajaForId)(id)
 );
 
 export const kayttajanLaatijaFuture = R.curry((fetch, id) =>

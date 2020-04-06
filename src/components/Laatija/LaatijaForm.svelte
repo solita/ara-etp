@@ -73,6 +73,12 @@
   );
 </script>
 
+<style type="text/postcss">
+  .lastlogin {
+    @apply text-secondary mb-4;
+  }
+</style>
+
 <form
   on:submit|preventDefault={_ => {
     const isValidForm = R.compose( R.all(Either.isRight), R.filter(Either.isEither), R.values, Validation.validateModelObject(formSchema) )(laatija);
@@ -85,13 +91,24 @@
   }}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
-    <Checkbox
-      bind:model={laatija}
-      lens={R.lensProp('laatimiskielto')}
-      label={$_('laatija.todistustenlaatimiskielto')}
-      disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
-              [2]
-            ) )) )($currentUserStore)} />
+    <span class="lastlogin">
+      {#if Maybe.isSome(laatija.login)}
+        {`${$_('laatija.kirjautunutviimeksi')} ${R.compose( Maybe.get, R.map(
+            date => moment(date).format(`D.M.YYYY [${$_('time.klo')}] H:m`)
+          ) )(laatija.login)}`}
+      {:else}{$_('laatija.eivielakirjautunut')}{/if}
+    </span>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Checkbox
+          bind:model={laatija}
+          lens={R.lensProp('laatimiskielto')}
+          label={$_('laatija.todistustenlaatimiskielto')}
+          disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
+                  [2]
+                ) )) )($currentUserStore)} />
+      </div>
+    </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input

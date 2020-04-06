@@ -14,6 +14,7 @@
   export let model;
   export let lens;
 
+  let focused = false;
   let active = Maybe.None();
 
   $: selected = R.view(lens, model);
@@ -85,20 +86,40 @@
   div {
     @apply relative;
   }
+
   .button {
-    @apply min-h-2.5em block py-2 border-b-3 border-disabled cursor-pointer;
+    @apply font-extrabold min-h-2.5em block py-2 cursor-pointer border-b-3 border-disabled;
   }
+
+  .button:hover {
+    @apply bg-background border-primary;
+  }
+
+  .button:focus {
+    @apply outline-none border-primary;
+  }
+
+  .focused {
+    @apply font-extrabold;
+  }
+
   .label {
-    @apply text-secondary mb-4;
+    @apply text-secondary;
   }
 </style>
 
-<span class="label">{label}</span>
+<span class:focused class="label">{label}</span>
 <div on:keydown={handleKeydown}>
   <span
     class="button"
     tabindex="0"
-    on:click={_ => (showDropdown = !showDropdown)}>
+    on:click={_ => (showDropdown = !showDropdown)}
+    on:focus={_ => {
+      focused = true;
+    }}
+    on:blur={_ => {
+      focused = false;
+    }}>
     {R.compose( Maybe.orSome($_('validation.no-selection')), R.map(format) )(selected)}
   </span>
   {#if showDropdown}
