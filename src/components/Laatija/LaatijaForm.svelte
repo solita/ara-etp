@@ -266,8 +266,8 @@
           label={$_('laatija.patevyystaso')}
           bind:model={laatija}
           lens={R.lensProp('patevyystaso')}
-          format={patevyystaso => $_(`laatija.patevyydet.${patevyystaso}`)}
-          parse={R.always(R.prop('patevyystaso', laatija))}
+          format={formatPatevyys}
+          parse={parsePatevyys}
           disabled={true}
           required={true}
           i18n={$_} />

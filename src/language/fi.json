@@ -75,10 +75,6 @@
     "muuttoimintaalueet": "Muut toiminta-alueet",
     "julkisettiedot": "Valitse julkiset tiedot",
     "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa",
-    "patevyydet": {
-      "0": "Perustaso",
-      "1": "Ylempi taso"
-    },
     "messages": {
       "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
