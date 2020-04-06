@@ -260,17 +260,16 @@
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'patevyystaso'}
-          name={'patevyystaso'}
+        <Select
           label={$_('laatija.patevyystaso')}
-          bind:model={laatija}
-          lens={R.lensProp('patevyystaso')}
           format={formatPatevyys}
           parse={parsePatevyys}
-          disabled={true}
-          required={true}
-          i18n={$_} />
+          bind:model={laatija}
+          lens={R.lensProp('patevyystaso')}
+          disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
+                  [2]
+                ) )) )($currentUserStore)}
+          items={patevyydet} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">

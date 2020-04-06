@@ -22,7 +22,10 @@
 
   let active = Maybe.None();
 
-  $: selected = R.view(lens, model);
+  $: selected = R.compose(
+    R.when(R.complement(Maybe.isMaybe), Maybe.of),
+    R.view(lens)
+  )(model);
 
   $: showDropdown = Maybe.isSome(active);
 
@@ -104,8 +107,16 @@
     @apply outline-none border-primary;
   }
 
+  .button.disabled {
+    @apply bg-background border-0 min-h-0 py-1 cursor-default;
+  }
+
   .focused {
     @apply font-extrabold;
+  }
+
+  .focused.disabled {
+    @apply font-normal;
   }
 
   .label {
@@ -121,7 +132,7 @@
     }
   }} />
 
-<span class:focused class="label">{label}</span>
+<span class:focused class:disabled class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
   <span
     class:disabled
