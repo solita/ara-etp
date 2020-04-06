@@ -11,6 +11,9 @@ export const foldRight = R.curry((initialValue, rightFn, e) =>
   e.foldRight(initialValue)(rightFn)
 );
 
+export const cata = R.curry((leftFn, rigthFn, either) =>
+  either.cata(leftFn, rigthFn));
+
 export const toMaybe = e => e.toMaybe();
 
 export const leftMap = R.curry((fn, e) => e.leftMap(fn));

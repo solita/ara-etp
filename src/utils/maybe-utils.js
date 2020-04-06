@@ -38,3 +38,7 @@ export const isNone = m => m.isNone();
 export const orElseRun = R.curry((fn, m) => m.orElseRun(fn));
 
 export const isMaybe = any => Object.getPrototypeOf(any) === Maybe.prototype;
+
+export const findById = R.curry((id, collection) =>
+  R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(collection)
+);
