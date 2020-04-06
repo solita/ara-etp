@@ -34,7 +34,8 @@ module.exports = {
         'hover-2-secondary': '0 0.5em #2e5053'
       },
       maxWidth: {
-        '70': '70%'
+        '70': '70%',
+        '1280': '1280'
       },
       minHeight: {
         '85': '85vh',
