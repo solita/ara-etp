@@ -30,7 +30,7 @@
   let kielisyys = Either.Left('Not initialized');
   Future.fork(
     _ => {},
-    result => kielisyys = result,
+    result => kielisyys = Either.Right(result),
     api.kielisyys
   );
 
