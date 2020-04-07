@@ -27,7 +27,16 @@ describe('Koodisto', () => {
 
   describe('koodiLocale', () => {
     it('should format with given locale', () => {
-      const labelLocale = Locale.label('fi');
+      const labelLocale = Locale.label('sv');
+      const koodi = Either.Right(
+        Maybe.of({ id: 1, 'label-fi': 'fi', 'label-sv': 'sv' })
+      );
+
+      assert.equal('sv', Koodisto.koodiLocale(labelLocale, koodi));
+    });
+
+    it('should format with fi as default when locale is not fi or sv', () => {
+      const labelLocale = Locale.label('en');
       const koodi = Either.Right(
         Maybe.of({ id: 1, 'label-fi': 'fi', 'label-sv': 'sv' })
       );
