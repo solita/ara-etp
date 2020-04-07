@@ -102,7 +102,15 @@
       "energiatodistus": "Energiatodistukset",
       "uusi-energiatodistus": "Uusi energiatodistus"
     },
-    "nimi": "Rakennuksen nimi",
+    "perustiedot": {
+      "nimi": "Rakennuksen nimi",
+      "tilaaja": "Tilaaja",
+      "kieli": "Kieli",
+      "laatimisvaihe": "Laatimisvaihe",
+      "yritys": {
+        "nimi": "Yritys"
+      }
+    },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",

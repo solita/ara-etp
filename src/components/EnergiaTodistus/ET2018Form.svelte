@@ -123,9 +123,9 @@
 
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
         <Input
-          id={'nimi'}
-          name={'nimi'}
-          label={$_('energiatodistus.nimi')}
+          id={'perustiedot.nimi'}
+          name={'perustiedot.nimi'}
+          label={$_('energiatodistus.perustiedot.nimi')}
           required={false}
           {disabled}
           bind:model={energiatodistus}
