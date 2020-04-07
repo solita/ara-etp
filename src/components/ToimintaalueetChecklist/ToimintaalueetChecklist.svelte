@@ -17,7 +17,6 @@
   export let lens;
 
   export let format = R.identity;
-  export let parse = R.identity;
 
   $: mainToimintaalue = model.toimintaalue;
 
