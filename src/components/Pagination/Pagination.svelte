@@ -15,51 +15,55 @@
   }
 
   span,
-  a {
+  button {
     @apply text-dark px-4 py-2 no-underline border-t-1 border-b-1 border-r-1 border-active;
   }
 
-  a.active {
-    @apply bg-active;
+  button.active {
+    @apply bg-active text-light;
   }
 
   .arrow {
     @apply flex;
   }
 
-  a:hover:not(.active) {
-    @apply bg-hover;
+  button:hover {
+    @apply bg-background;
   }
 
-  a:first-child {
+  button:first-child {
     @apply rounded-l-lg border-l-1;
   }
 
-  a:last-child {
+  button:last-child {
     @apply rounded-r-lg;
+  }
+
+  button:focus {
+    @apply outline-none bg-secondary text-light;
   }
 </style>
 
 <div>
-  <a class="arrow" href="#">
+  <button class="arrow">
     <i class="material-icons">keyboard_arrow_left</i>
-  </a>
-  <a class={R.equals(1, pageNum) ? 'active' : ''} href="#">1</a>
+  </button>
+  <button class={R.equals(1, pageNum) ? 'active' : ''}>1</button>
   {#if R.head(pagesNear) - 1 > 1}
     <span class="dots">...</span>
   {/if}
   {#each pagesNear as page}
-    <a class={R.equals(page, pageNum) ? 'active' : ''} href="#">{page}</a>
+    <button class={R.equals(page, pageNum) ? 'active' : ''}>{page}</button>
   {/each}
   {#if pageCount - R.last(pagesNear) > 1}
     <span class="dots">...</span>
   {/if}
   {#if pageCount !== 1}
-    <a class={R.equals(pageCount, pageNum) ? 'active' : ''} href="#">
+    <button class={R.equals(pageCount, pageNum) ? 'active' : ''}>
       {pageCount}
-    </a>
+    </button>
   {/if}
-  <a class="arrow" href="#">
+  <button class="arrow">
     <i class="material-icons">keyboard_arrow_right</i>
-  </a>
+  </button>
 </div>

@@ -1,7 +1,11 @@
 <script>
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
-  import { flashMessageStore, breadcrumbStore } from '@/stores';
+  import {
+    flashMessageStore,
+    breadcrumbStore,
+    currentUserStore
+  } from '@/stores';
   import * as LaatijaUtils from './laatija-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
@@ -41,7 +45,14 @@
       )
     ),
     Future.delay(500),
-    LaatijaUtils.putLaatijaByIdFuture(fetch, params.id),
+    LaatijaUtils.putLaatijaByIdFuture(
+      R.compose(
+        Maybe.orSome(0),
+        R.map(R.prop('rooli'))
+      )($currentUserStore),
+      fetch,
+      params.id
+    ),
     R.tap(toggleOverlay(true))
   );
 

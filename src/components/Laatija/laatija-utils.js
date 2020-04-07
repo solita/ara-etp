@@ -66,12 +66,19 @@ export const deserialize = R.evolve({
 });
 
 export const serialize = R.compose(
-  R.evolve({
-    maa: Either.right,
-    toimintaalue: Maybe.orSome(null),
-    login: Maybe.orSome(null)
-  }),
+  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
   R.omit(['id', 'login'])
+);
+
+export const serializeForLaatija = R.compose(
+  R.omit([
+    'passivoitu',
+    'patevyystaso',
+    'toteamispaivamaara',
+    'toteaja',
+    'laatimiskielto'
+  ]),
+  serialize
 );
 
 export const serializeImport = R.evolve({
@@ -122,13 +129,15 @@ export const getLaatijaByIdFuture = R.curry((fetch, id) =>
   )(id)
 );
 
-export const putLaatijaByIdFuture = R.curry((fetch, id, laatija) =>
+export const putLaatijaByIdFuture = R.curry((rooli, fetch, id, laatija) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Kayttaja.putKayttajanLaatijaFuture(fetch, id),
-    R.tap(console.log),
-    serialize,
-    R.tap(console.log)
+    R.ifElse(
+      R.equals(2),
+      R.always(serialize),
+      R.always(serializeForLaatija)
+    )(rooli)
   )(laatija)
 );
 

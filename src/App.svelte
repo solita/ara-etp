@@ -45,7 +45,7 @@
   }
 
   .routecontainer {
-    @apply flex-grow pb-10 relative;
+    @apply flex-grow pb-10 relative max-w-1280;
   }
 
   .content {
