@@ -107,6 +107,12 @@
       "tilaaja": "Tilaaja",
       "kieli": "Kieli",
       "laatimisvaihe": "Laatimisvaihe",
+      "katuosoite": "Katuosoite",
+      "postinumero": "Postinumero",
+      "rakennustunnus": "Rakennustunnus",
+      "kiinteistotunnus": "Kiinteistotunnus",
+      "rakennusosa": "Rakennusosa",
+      "valmistumisvuosi": "Valmistumisvuosi",
       "yritys": {
         "nimi": "Yritys"
       }
