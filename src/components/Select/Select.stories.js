@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import Select from './Select';
+import * as Maybe from '@Utility/maybe-utils';
 
 export default { title: 'Select' };
 
@@ -7,7 +8,7 @@ export const withItems = () => ({
   Component: Select,
   props: {
     items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
-    model: { selected: null },
+    model: { selected: Maybe.None() },
     lens: R.lensProp('selected'),
     format: R.identity,
     parse: R.identity
@@ -35,7 +36,7 @@ export const withObjects = () => ({
       { id: 4, label: 'neljä' },
       { id: 5, label: 'viisi' }
     ],
-    model: { selected: null },
+    model: { selected: Maybe.None() },
     lens: R.lensProp('selected'),
     format: R.prop('label'),
     parse: R.identity
