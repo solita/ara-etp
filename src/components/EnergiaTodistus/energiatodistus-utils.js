@@ -207,7 +207,7 @@ export const schema2018 = {
     'katuosoite-fi': String(200),
     'katuosoite-sv': String(200),
     postinumero: String(200),
-    valmistumisvuosi: Number(100, 3000),
+    valmistumisvuosi: Number(100, new Date().getFullYear()),
     tilaaja: String(200),
     yritys: {
       nimi: String(200)
