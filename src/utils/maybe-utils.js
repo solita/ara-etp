@@ -17,6 +17,8 @@ export const fold = R.curry((defaultValue, fn, m) => m.fold(defaultValue)(fn));
 
 export const cata = R.curry((noneFn, someFn, m) => m.cata(noneFn, someFn));
 
+export const map = R.curry((fn, maybe) => maybe.map(fn));
+
 export const getOrElse = R.curry((defaultValue, m) =>
   m.fold(defaultValue)(R.identity)
 );

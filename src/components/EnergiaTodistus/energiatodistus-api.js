@@ -5,7 +5,10 @@ import * as Either from "@Utility/either-utils";
 import * as Maybe from "@Utility/maybe-utils";
 import * as deep from '@Utility/deep-objects';
 
-export const deserialize = deep.map(R.F, Maybe.fromNull);
+export const deserialize = R.compose(
+  R.evolve({id: Maybe.get}),
+  deep.map(R.F, Maybe.fromNull)
+);
 
 export const serialize = R.compose(
   deep.map(Maybe.isMaybe,
@@ -49,3 +52,9 @@ export const kielisyys = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/kielisyys');
+
+export const laatimisvaiheet = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/laatimisvaiheet');

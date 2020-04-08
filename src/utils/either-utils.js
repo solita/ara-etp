@@ -16,6 +16,8 @@ export const cata = R.curry((leftFn, rigthFn, either) =>
 
 export const toMaybe = e => e.toMaybe();
 
+export const map = R.curry((fn, e) => e.map(fn));
+
 export const leftMap = R.curry((fn, e) => e.leftMap(fn));
 
 export const isLeft = e => e.isLeft();

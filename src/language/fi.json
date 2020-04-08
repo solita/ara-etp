@@ -3,11 +3,16 @@
     "required": "Pakollinen tieto",
     "min-length": "Pituus pitää olla vähintään {min} merkkiä",
     "max-length": "Pituus saa olla enintään {max} merkkiä",
+    "min-number": "Pienin sallittu arvo on {min}.",
+    "max-number": "Suurin sallittu arvo on {max}.",
     "invalid-url": "Virheellinen www-osoite",
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "no-selection": "Ei valintaa"
+  },
+  "parsing": {
+    "invalid-integer": "Virheellinen kokonaislukunumero"
   },
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
@@ -102,7 +107,21 @@
       "energiatodistus": "Energiatodistukset",
       "uusi-energiatodistus": "Uusi energiatodistus"
     },
-    "nimi": "Rakennuksen nimi",
+    "perustiedot": {
+      "nimi": "Rakennuksen nimi",
+      "tilaaja": "Tilaaja",
+      "kieli": "Kieli",
+      "laatimisvaihe": "Laatimisvaihe",
+      "katuosoite": "Katuosoite",
+      "postinumero": "Postinumero",
+      "rakennustunnus": "Rakennustunnus",
+      "kiinteistotunnus": "Kiinteistotunnus",
+      "rakennusosa": "Rakennusosa",
+      "valmistumisvuosi": "Valmistumisvuosi",
+      "yritys": {
+        "nimi": "Yritys"
+      }
+    },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",

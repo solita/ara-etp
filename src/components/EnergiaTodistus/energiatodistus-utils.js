@@ -191,12 +191,29 @@ export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
 };
 
+export const String = max => [
+  validation.liftValidator(validation.minLengthConstraint(2)),
+  validation.liftValidator(validation.maxLengthConstraint(max))
+];
+
+export const Number = (min, max) => R.map(validation.liftValidator, validation.Number(min, max));
+
 export const schema2018 = {
   perustiedot: {
-    nimi: [
-      validation.liftValidator(validation.minLengthConstraint(2)),
-      validation.liftValidator(validation.maxLengthConstraint(200))
-    ]
+    nimi: String(200),
+    rakennustunnus: String(200),
+    kiinteistotunnus: String(200),
+    rakennusosa: String(200),
+    'katuosoite-fi': String(200),
+    'katuosoite-sv': String(200),
+    postinumero: String(200),
+    valmistumisvuosi: Number(100, 3000),
+    tilaaja: String(200),
+    yritys: {
+      nimi: String(200)
+    },
+    'keskeiset-suositukset-fi': String(200),
+    'keskeiset-suositukset-sv': String(200),
   }
 };
 
@@ -224,3 +241,11 @@ export const breadcrumb1stLevel = i18n => ({
   label: i18n('energiatodistus.breadcrumb.energiatodistus'),
   url: '/#/energiatodistukset'
 });
+
+export const selectFormat = (label, items) => R.compose(
+  Either.cata(R.identity, R.identity),
+  R.map(label),
+  R.chain(Maybe.toEither('Unknown value')),
+  R.map(R.__, items),
+  Maybe.findById
+);
