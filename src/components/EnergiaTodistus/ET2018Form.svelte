@@ -138,8 +138,8 @@
       </div>
     </div>
 
-    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-      <div class="lg:py-0 lg:w-4/5 px-4 py-4">
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="lg:w-4/5 px-4 py-4">
         <Input
             id={'perustiedot.rakennusosa'}
             name={'perustiedot.rakennusosa'}
@@ -153,7 +153,7 @@
             i18n={$_} />
       </div>
 
-      <div class="lg:py-0 lg:w-1/5 px-4 py-4">
+      <div class="lg:w-1/5 px-4 py-4">
         <Input
             id={'perustiedot.valmistumisvuosi'}
             name={'perustiedot.valmistumisvuosi'}
@@ -168,8 +168,8 @@
       </div>
     </div>
 
-    <div class="flex flex-col py-4 -mx-4 my-4">
-      <div class="lg:py-0 w-full px-4 py-4">
+    <div class="flex flex-col -mx-4 my-4">
+      <div class="w-full px-4 py-4">
         <Input
             id={'perustiedot.katuosoite'}
             name={'perustiedot.katuosoite'}
@@ -184,8 +184,8 @@
       </div>
     </div>
 
-    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-      <div class="lg:w-2/5 lg:py-0 w-full px-4 py-4">
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="lg:w-2/5 w-full px-4 py-4">
         <Input
             id={'perustiedot.rakennustunnus'}
             name={'perustiedot.rakennustunnus'}
@@ -199,7 +199,7 @@
             i18n={$_} />
       </div>
 
-      <div class="lg:w-2/5 lg:py-0 w-full px-4 py-4">
+      <div class="lg:w-2/5 w-full px-4 py-4">
         <Input
             id={'perustiedot.kiinteistotunnus'}
             name={'perustiedot.kiinteistotunnus'}
@@ -213,7 +213,7 @@
             i18n={$_} />
       </div>
 
-      <div class="lg:w-1/5 lg:py-0 w-full px-4 py-4">
+      <div class="lg:w-1/5 w-full px-4 py-4">
         <Input
             id={'perustiedot.postinumero'}
             name={'perustiedot.postinumero'}
