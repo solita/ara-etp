@@ -41,13 +41,16 @@ export const interpolate = R.curry((template, values) =>
   )
 );
 
-export const lengthConstraint = (predicate, name, labelValues) => ({
-  predicate: R.compose(predicate, R.length),
+export const constraint = (predicate, name, labelValues) => ({
+  predicate: predicate,
   label: R.compose(
     interpolate(R.__, labelValues),
-    R.applyTo('validation.' + name + '-length')
+    R.applyTo('validation.' + name)
   )
 });
+
+export const lengthConstraint = (predicate, name, labelValues) =>
+  constraint(R.compose(predicate, R.length), name + '-length', labelValues);
 
 export const minLengthConstraint = min =>
   lengthConstraint(R.lte(min), 'min', { '{min}': min });
@@ -58,6 +61,11 @@ export const maxLengthConstraint = max =>
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 );
+
+export const Number = (min, max) => [
+  constraint(R.lte(min), 'min-number', { '{min}': min }),
+  constraint(R.gte(max), 'max-number', { '{max}': max }),
+];
 
 export const urlValidator = {
   predicate: isUrl,

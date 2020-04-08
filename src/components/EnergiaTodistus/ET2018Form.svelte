@@ -5,6 +5,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as validation from '@Utility/validation';
+  import * as parsers from '@Utility/parsers';
   import * as Future from '@Utility/future-utils';
   import * as et from './energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -161,7 +162,7 @@
             bind:model={energiatodistus}
             lens={R.lensPath(['perustiedot', 'valmistumisvuosi'])}
             format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
+            parse={parsers.optionalParser(parsers.parseInteger)}
             validators={schema.perustiedot.valmistumisvuosi}
             i18n={$_} />
       </div>
