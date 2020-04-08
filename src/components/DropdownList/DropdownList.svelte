@@ -12,8 +12,9 @@
 
 <style type="text/postcss">
   ol {
-    @apply absolute top-auto left-0 right-0 shadow-lg overflow-auto z-10;
-    max-height: 12.8em;
+    @apply absolute top-auto left-0 right-0 overflow-auto z-10;
+    box-shadow: 0 25px 50px 0px rgba(0, 0, 0, 0.25); /* TODO: Generate in tailwind */
+    max-height: 20em;
   }
 
   ol::-webkit-scrollbar {
@@ -33,7 +34,7 @@
   }
 
   li {
-    @apply py-2 pl-6 cursor-pointer bg-light;
+    @apply py-4 pl-6 cursor-pointer bg-light;
   }
 
   li:not(:first-child) {

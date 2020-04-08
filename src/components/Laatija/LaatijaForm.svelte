@@ -85,6 +85,11 @@
   .lastlogin {
     @apply text-secondary mb-4;
   }
+
+  hr {
+    @apply my-20;
+    border-color: rgba(52, 56, 65, 0.3); /* TODO: Create separate component */
+  }
 </style>
 
 <form
@@ -240,6 +245,7 @@
       </div>
     </div>
   </div>
+  <hr />
   <div class="mt-8">
     <H1 text={$_('laatija.laatijatiedot')} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -295,7 +301,7 @@
       </div>
     </div>
   </div>
-
+  <hr />
   <div class="mt-8">
     <H1 text={$_('laatija.julkisettiedot')} />
     <div class="flex flex-col py-4 -mx-4">
@@ -319,7 +325,7 @@
       </div>
     </div>
   </div>
-  <div class="flex -mx-4 pt-8">
+  <div class="flex -mx-4 mt-20">
     <div class="px-4">
       <Button type={'submit'} text={$_('tallenna')} />
     </div>

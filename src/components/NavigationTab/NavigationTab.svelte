@@ -9,8 +9,9 @@
 
 <style type="text/postcss">
   a {
-    @apply flex py-4 px-8 font-extrabold justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none;
+    @apply flex py-4 px-6 font-bold justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none;
     transition: box-shadow 0.1s ease-in-out;
+    letter-spacing: 0.15em; /* TODO: Generate in tailwind */
   }
 
   a:focus,

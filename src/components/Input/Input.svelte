@@ -101,7 +101,7 @@
   }
 
   input {
-    @apply w-full relative font-extrabold py-1;
+    @apply w-full relative font-medium py-1;
   }
 
   input:focus {
@@ -113,7 +113,7 @@
   }
 
   input:disabled {
-    @apply bg-background;
+    @apply bg-light;
   }
 
   .error-label {

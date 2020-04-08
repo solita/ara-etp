@@ -14,7 +14,7 @@
   }
 
   span {
-    @apply mr-1;
+    @apply mr-1 text-2xl;
   }
 </style>
 

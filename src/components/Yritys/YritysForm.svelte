@@ -68,6 +68,13 @@
   $: console.log('Form validation: ', isValidForm);
 </script>
 
+<style type="text/postcss">
+  hr {
+    @apply my-20;
+    border-color: rgba(52, 56, 65, 0.3); /*TODO: Create separate component */
+  }
+</style>
+
 <form
   on:submit|preventDefault={_ => {
     if (isValidForm) {
@@ -121,6 +128,7 @@
         i18n={$_} />
     </div>
   </div>
+  <hr />
   <div class="mt-8">
     <H1 text={$_('yritys.laskutusosoite')} />
     <div class="flex flex-col">
@@ -181,6 +189,7 @@
       </div>
     </div>
   </div>
+  <hr />
   <div class="mt-8">
     <H1 text={$_('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
@@ -196,7 +205,7 @@
         i18n={$_} />
     </div>
   </div>
-  <div class="flex -mx-4 pt-8">
+  <div class="flex -mx-4 mt-20">
     <div class="px-4">
       <Button type={'submit'} text={$_('tallenna')} />
     </div>

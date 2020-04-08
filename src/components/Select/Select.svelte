@@ -96,7 +96,7 @@
   }
 
   .button {
-    @apply font-extrabold min-h-2.5em block py-2 cursor-pointer border-b-3 border-disabled;
+    @apply font-medium min-h-2.5em block py-2 cursor-pointer border-b-3 border-disabled;
   }
 
   .button:hover {
@@ -108,7 +108,7 @@
   }
 
   .button.disabled {
-    @apply bg-background border-0 min-h-0 py-1 cursor-default;
+    @apply bg-light border-0 min-h-0 py-1 cursor-default;
   }
 
   .focused {
