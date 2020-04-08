@@ -1,6 +1,6 @@
 <script>
   export let href;
-  export let text;
+  export let text = '';
   export let icon;
 </script>
 
@@ -13,17 +13,15 @@
     @apply underline;
   }
 
- span {
-   @apply mr-1;
- }
+  span {
+    @apply mr-1;
+  }
 </style>
 
-<a href="{href}">
+<a {href}>
   {#if icon}
     <span class="font-icon">{icon}</span>
   {/if}
 
-  {#if text}
-    {text}
-  {/if}
+  {#if text}{text}{/if}
 </a>

@@ -1,6 +1,5 @@
 import monet from 'monet';
 import * as R from 'ramda';
-import { Either } from '@Utility/either-utils';
 
 export const { Maybe } = monet;
 export const {
