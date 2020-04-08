@@ -6,11 +6,13 @@ import * as Maybe from "@Utility/maybe-utils";
 import * as deep from '@Utility/deep-objects';
 
 export const deserialize = R.compose(
-  R.evolve({id: Maybe.get}),
+  R.evolve({id: Maybe.get, perustiedot: { valmistumisvuosi: Either.Right }}),
   deep.map(R.F, Maybe.fromNull)
 );
 
 export const serialize = R.compose(
+  deep.map(Either.isEither,
+    R.ifElse(R.allPass([R.complement(R.isNil), Either.isEither]), Either.orSome(null), R.identity)),
   deep.map(Maybe.isMaybe,
     R.ifElse(R.allPass([R.complement(R.isNil), Maybe.isMaybe]), Maybe.orSome(null), R.identity)),
   R.omit(['id', 'tila'])
