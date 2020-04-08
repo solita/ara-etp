@@ -196,8 +196,6 @@ export const String = max => [
   validation.liftValidator(validation.maxLengthConstraint(max))
 ];
 
-export const Number = (min, max) => R.map(validation.liftValidator, validation.Number(min, max));
-
 export const schema2018 = {
   perustiedot: {
     nimi: String(200),
@@ -207,7 +205,7 @@ export const schema2018 = {
     'katuosoite-fi': String(200),
     'katuosoite-sv': String(200),
     postinumero: String(200),
-    valmistumisvuosi: Number(100, new Date().getFullYear()),
+    valmistumisvuosi: validation.MaybeInterval(100, new Date().getFullYear()),
     tilaaja: String(200),
     yritys: {
       nimi: String(200)
