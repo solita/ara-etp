@@ -6,14 +6,14 @@ import * as Maybe from "@Utility/maybe-utils";
 import * as Either from '@Utility/either-utils';
 
 const emptyRakennusVaippa = _ => ({
-  rva: Maybe.None(),
-  rvu: Maybe.None()
+  ala: Maybe.None(),
+  U: Maybe.None()
 });
 
 const emptyIkkuna = _ => ({
-  ikkA: Maybe.None(),
-  ikkU: Maybe.None(),
-  ikkG: Maybe.None()
+  ala: Maybe.None(),
+  U: Maybe.None(),
+  'g-ks': Maybe.None()
 });
 
 const emptyIV = _ => ({
@@ -160,10 +160,10 @@ export const emptyEnergiatodistus2018 = _ => ({
       puupelletit: Maybe.None(),
       vapaa: []
     },
-    'to-sahko-vuosikulutus-yhteensa': Maybe.None(),
-    'to-kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
-    'to-polttoaineet-vuosikulutus-yhteensa': Maybe.None(),
-    'to-kaukojaahdytys-vuosikulutus-yhteensa': Maybe.None()
+    'sahko-vuosikulutus-yhteensa': Maybe.None(),
+    'kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
+    'polttoaineet-vuosikulutus-yhteensa': Maybe.None(),
+    'kaukojaahdytys-vuosikulutus-yhteensa': Maybe.None()
   },
   huomiot: {
     lammitys: emptyHuomio(),
