@@ -1,4 +1,5 @@
 <script>
+  import * as Maybe from '@Utility/maybe-utils';
   import Link from '@Component/Link/Link';
   export let value;
 </script>
@@ -10,7 +11,7 @@
 </style>
 
 <div>
-  <Link href="/" icon="home" />
+  <Link href="/" icon={Maybe.Some('home')} />
   {#each value as { label, url }, i (url)}
     <span>&nbsp;/&nbsp&nbsp</span>
     <Link href={url} text={label} />
