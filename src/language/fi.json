@@ -127,6 +127,13 @@
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Energiatodistuksen tietojen haku epäonnistui."
+    },
+    "allekirjoitus": {
+      "laskutusosoite": "Laskutusosoite",
+      "valitse-laskutusosoite": "Valitse laskutusosoite"
+    },
+    "laskutustiedot": {
+      "nimi": "Nimi"
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",

@@ -133,7 +133,6 @@
           validators={formSchema.etunimi}
           i18n={$_} />
       </div>
-
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'sukunimi'}
