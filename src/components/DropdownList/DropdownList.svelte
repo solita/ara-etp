@@ -12,7 +12,8 @@
 
 <style type="text/postcss">
   ol {
-    @apply absolute top-auto left-0 right-0 overflow-auto z-10 shadow-dropdownlist max-h-20;
+    @apply absolute top-auto left-0 right-0 overflow-auto z-10 shadow-dropdownlist;
+    max-height: 17.8em;
   }
 
   ol::-webkit-scrollbar {
