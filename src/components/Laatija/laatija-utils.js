@@ -67,7 +67,7 @@ export const deserialize = R.evolve({
 
 export const serialize = R.compose(
   R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
-  R.omit(['id', 'login'])
+  R.omit(['id', 'email', 'login'])
 );
 
 export const serializeForLaatija = R.compose(
