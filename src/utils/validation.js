@@ -62,10 +62,12 @@ export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 );
 
-export const Number = (min, max) => [
+export const Interval = (min, max) => [
   constraint(R.lte(min), 'min-number', { '{min}': min }),
   constraint(R.gte(max), 'max-number', { '{max}': max }),
 ];
+
+export const MaybeInterval = (min, max) => R.map(liftValidator, Interval(min, max));
 
 export const urlValidator = {
   predicate: isUrl,

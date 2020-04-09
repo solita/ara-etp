@@ -121,8 +121,8 @@
 
     <H1 text="Rakennuksen perustiedot" />
 
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
-      <div class="lg:w-4/5 w-full px-4">
+    <div class="flex lg:flex-row flex-col -mx-4">
+      <div class="lg:w-4/5 w-full px-4 py-4">
         <Input
           id={'perustiedot.nimi'}
           name={'perustiedot.nimi'}
@@ -136,24 +136,8 @@
           validators={schema.perustiedot.nimi}
           i18n={$_} />
       </div>
-    </div>
 
-    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-      <div class="lg:py-0 lg:w-4/5 px-4 py-4">
-        <Input
-            id={'perustiedot.rakennusosa'}
-            name={'perustiedot.rakennusosa'}
-            label={$_('energiatodistus.perustiedot.rakennusosa')}
-            required={false}
-            bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'rakennusosa'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.rakennusosa}
-            i18n={$_} />
-      </div>
-
-      <div class="lg:py-0 lg:w-1/5 px-4 py-4">
+      <div class="lg:w-1/5 px-4 py-4">
         <Input
             id={'perustiedot.valmistumisvuosi'}
             name={'perustiedot.valmistumisvuosi'}
@@ -168,8 +152,24 @@
       </div>
     </div>
 
-    <div class="flex flex-col py-4 -mx-4 my-4">
-      <div class="lg:py-0 w-full px-4 py-4">
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="w-full px-4 py-4">
+        <Input
+            id={'perustiedot.rakennusosa'}
+            name={'perustiedot.rakennusosa'}
+            label={$_('energiatodistus.perustiedot.rakennusosa')}
+            required={false}
+            bind:model={energiatodistus}
+            lens={R.lensPath(['perustiedot', 'rakennusosa'])}
+            format={et.formatters.optionalText}
+            parse={et.parsers.optionalText}
+            validators={schema.perustiedot.rakennusosa}
+            i18n={$_} />
+      </div>
+    </div>
+
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="lg:w-4/5 w-full px-4 py-4">
         <Input
             id={'perustiedot.katuosoite'}
             name={'perustiedot.katuosoite'}
@@ -182,38 +182,8 @@
             validators={schema.perustiedot['katuosoite-fi']}
             i18n={$_} />
       </div>
-    </div>
 
-    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-      <div class="lg:w-2/5 lg:py-0 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.rakennustunnus'}
-            name={'perustiedot.rakennustunnus'}
-            label={$_('energiatodistus.perustiedot.rakennustunnus')}
-            required={false}
-            bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'rakennustunnus'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.rakennustunnus}
-            i18n={$_} />
-      </div>
-
-      <div class="lg:w-2/5 lg:py-0 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.kiinteistotunnus'}
-            name={'perustiedot.kiinteistotunnus'}
-            label={$_('energiatodistus.perustiedot.kiinteistotunnus')}
-            required={false}
-            bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'kiinteistotunnus'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.kiinteistotunnus}
-            i18n={$_} />
-      </div>
-
-      <div class="lg:w-1/5 lg:py-0 w-full px-4 py-4">
+      <div class="lg:w-1/5 w-full px-4 py-4">
         <Input
             id={'perustiedot.postinumero'}
             name={'perustiedot.postinumero'}
@@ -228,7 +198,35 @@
       </div>
     </div>
 
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Input
+            id={'perustiedot.rakennustunnus'}
+            name={'perustiedot.rakennustunnus'}
+            label={$_('energiatodistus.perustiedot.rakennustunnus')}
+            required={false}
+            bind:model={energiatodistus}
+            lens={R.lensPath(['perustiedot', 'rakennustunnus'])}
+            format={et.formatters.optionalText}
+            parse={et.parsers.optionalText}
+            validators={schema.perustiedot.rakennustunnus}
+            i18n={$_} />
+      </div>
 
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Input
+            id={'perustiedot.kiinteistotunnus'}
+            name={'perustiedot.kiinteistotunnus'}
+            label={$_('energiatodistus.perustiedot.kiinteistotunnus')}
+            required={false}
+            bind:model={energiatodistus}
+            lens={R.lensPath(['perustiedot', 'kiinteistotunnus'])}
+            format={et.formatters.optionalText}
+            parse={et.parsers.optionalText}
+            validators={schema.perustiedot.kiinteistotunnus}
+            i18n={$_} />
+      </div>
+    </div>
   </div>
 
   <div class="flex -mx-4 pt-8">
