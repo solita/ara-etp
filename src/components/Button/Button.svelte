@@ -7,9 +7,7 @@
 
 <style type="text/postcss">
   button {
-    @apply flex justify-center items-center px-6 py-5 rounded-full font-bold uppercase text-light tracking-widest;
-    letter-spacing: 0.15em; /* TODO: Generate in tailwind */
-    min-width: 10em;
+    @apply flex justify-center items-center px-6 py-5 rounded-full font-bold uppercase text-light tracking-xl min-w-10;
   }
 
   .primary {

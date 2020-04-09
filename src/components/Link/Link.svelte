@@ -15,13 +15,9 @@
   a:hover {
     @apply underline;
   }
-
-  span {
-    @apply mr-1 text-2xl;
-  }
 </style>
 
 <a {href}>
-  {@html R.compose( Maybe.orSome(''), R.map(i => `<span class="font-icon">${i}</span>`) )(icon)}
+  {@html R.compose( Maybe.orSome(''), R.map(i => `<span class="font-icon mr-1 text-2xl">${i}</span>`) )(icon)}
   {text}
 </a>

@@ -14,7 +14,8 @@ module.exports = {
       disabled: '#a7a7a7',
       error: '#9e0000',
       success: '#538000',
-      background: '#eee'
+      background: '#eee',
+      hr: 'rgba(52, 56, 65, 0.3)'
     },
     extend: {
       fontFamily: {
@@ -31,16 +32,26 @@ module.exports = {
       },
       boxShadow: {
         'hover-2-primary': '0 0.5em #538000',
-        'hover-2-secondary': '0 0.5em #2e5053'
+        'hover-2-secondary': '0 0.5em #2e5053',
+        dropdownlist: '0 25px 50px 0px rgba(0, 0, 0, 0.25)'
       },
       maxWidth: {
         '70': '70%',
         '1280': '1280px'
       },
+      minWidth: {
+        '10': '10em'
+      },
+      maxHeight: {
+        '20': '20em'
+      },
       minHeight: {
         '85': '85vh',
         '2.5em': '2.5em',
         '3em': '3em'
+      },
+      letterSpacing: {
+        xl: '0.15em'
       }
     }
   },

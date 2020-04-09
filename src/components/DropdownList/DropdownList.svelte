@@ -12,9 +12,7 @@
 
 <style type="text/postcss">
   ol {
-    @apply absolute top-auto left-0 right-0 overflow-auto z-10;
-    box-shadow: 0 25px 50px 0px rgba(0, 0, 0, 0.25); /* TODO: Generate in tailwind */
-    max-height: 20em;
+    @apply absolute top-auto left-0 right-0 overflow-auto z-10 shadow-dropdownlist max-h-20;
   }
 
   ol::-webkit-scrollbar {
