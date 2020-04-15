@@ -120,6 +120,7 @@
       "valmistumisvuosi": "Valmistumisvuosi",
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
+      "onko-julkinen-rakennus": "Julkinen rakennus",
       "yritys": {
         "nimi": "Yritys"
       }

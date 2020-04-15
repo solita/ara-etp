@@ -15,6 +15,7 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Select from '@Component/Select/Select';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   import { flashMessageStore } from '@/stores';
 
@@ -293,6 +294,19 @@
           items={Either.foldRight([], R.pluck('id'), selectableAlakayttotarkoitusluokat)} />
       </div>
     </div>
+
+    <div class="flex flex-col -mx-4 my-4">
+      <div class="w-full px-4 py-4">
+        <Checkbox
+            bind:model={energiatodistus}
+            lens={R.lensPath(['perustiedot', 'onko-julkinen-rakennus'])}
+            label={$_('energiatodistus.perustiedot.onko-julkinen-rakennus')}
+            {disabled} />
+      </div>
+    </div>
+
+    <H1 text="Toimenpide-ehdotuksia e-luvun parantamiseksi" />
+    <p>Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi</p>
   </div>
 
   <div class="flex -mx-4 pt-8">

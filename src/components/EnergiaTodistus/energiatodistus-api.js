@@ -6,7 +6,9 @@ import * as Maybe from "@Utility/maybe-utils";
 import * as deep from '@Utility/deep-objects';
 
 export const deserialize = R.compose(
-  R.evolve({id: Maybe.get, perustiedot: { valmistumisvuosi: Either.Right }}),
+  R.evolve({id: Maybe.get, perustiedot: {
+    'onko-julkinen-rakennus': Maybe.get,
+    valmistumisvuosi: Either.Right }}),
   deep.map(R.F, Maybe.fromNull)
 );
 
