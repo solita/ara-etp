@@ -307,6 +307,24 @@
 
     <H1 text="Toimenpide-ehdotuksia e-luvun parantamiseksi" />
     <p>Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi</p>
+
+    <div class="w-full py-4">
+      <Input
+          id={'perustiedot.keskeiset-suositukset'}
+          name={'perustiedot.keskeiset-suositukset'}
+          label={$_('energiatodistus.perustiedot.keskeiset-suositukset')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['perustiedot', 'keskeiset-suositukset-fi'])}
+          format={et.formatters.optionalText}
+          parse={et.parsers.optionalText}
+          validators={schema.perustiedot['keskeiset-suositukset-fi']}
+          i18n={$_} />
+    </div>
+
+    <H1 text="E-luvun laskennan lähtotiedot" />
+
+
   </div>
 
   <div class="flex -mx-4 pt-8">
