@@ -42,6 +42,42 @@
     api.laatimisvaiheet
   );
 
+  let kayttotarkoitusluokat = Either.Left('Not initialized');
+  Future.fork(
+      _ => {},
+      result => kayttotarkoitusluokat = Either.Right(result),
+      api.kayttotarkoitusluokat2018
+  );
+
+  let alakayttotarkoitusluokat = Either.Left('Not initialized');
+  Future.fork(
+      _ => {},
+      result => alakayttotarkoitusluokat = Either.Right(result),
+      api.alakayttotarkoitusluokat2018
+  );
+
+  let kayttotarkoitusluokkaId = Maybe.None();
+  $: if (kayttotarkoitusluokkaId.isSome() &&
+      !kayttotarkoitusluokkaId.equals(et.findKayttotarkoitusluokkaId(
+        energiatodistus.perustiedot.kayttotarkoitus, alakayttotarkoitusluokat))) {
+
+    energiatodistus = R.set(R.lensPath(['perustiedot', 'kayttotarkoitus']),
+        R.compose(
+          Either.orSome(Maybe.None()),
+          Either.map(alaluokat => R.length(alaluokat) === 1 ?
+              Maybe.Some(alaluokat[0].id) : Maybe.None()),
+          et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId)
+        )(alakayttotarkoitusluokat), energiatodistus);
+  } else if (energiatodistus.perustiedot.kayttotarkoitus.isSome()) {
+
+    kayttotarkoitusluokkaId = et.findKayttotarkoitusluokkaId(
+        energiatodistus.perustiedot.kayttotarkoitus,
+        alakayttotarkoitusluokat);
+  }
+
+  $: selectableAlakayttotarkoitusluokat =
+      et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId, alakayttotarkoitusluokat);
+
   let isValidForm = false;
   $: isValidForm = et.isValidForm(schema, energiatodistus);
   $: console.log('Form validation: ', isValidForm);
@@ -225,6 +261,36 @@
             parse={et.parsers.optionalText}
             validators={schema.perustiedot.kiinteistotunnus}
             i18n={$_} />
+      </div>
+    </div>
+
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Select
+          id={'perustiedot.kayttotarkoitusluokka'}
+          name={'perustiedot.kayttotarkoitusluokka'}
+          label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
+          required={true}
+          {disabled}
+          bind:model={kayttotarkoitusluokkaId}
+          lens={R.lens(R.identity, R.identity)}
+          parse={Maybe.Some}
+          format={et.selectFormat(labelLocale, kayttotarkoitusluokat)}
+          items={Either.foldRight([], R.pluck('id'), kayttotarkoitusluokat)} />
+      </div>
+
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Select
+          id={'perustiedot.alakayttotarkoitusluokka'}
+          name={'perustiedot.alakayttotarkoitusluokka'}
+          label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
+          required={true}
+          {disabled}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['perustiedot', 'kayttotarkoitus'])}
+          parse={Maybe.Some}
+          format={et.selectFormat(labelLocale, alakayttotarkoitusluokat)}
+          items={Either.foldRight([], R.pluck('id'), selectableAlakayttotarkoitusluokat)} />
       </div>
     </div>
   </div>

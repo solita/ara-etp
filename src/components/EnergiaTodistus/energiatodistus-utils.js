@@ -247,3 +247,19 @@ export const selectFormat = (label, items) => R.compose(
   R.map(R.__, items),
   Maybe.findById
 );
+
+export const findKayttotarkoitusluokkaId = (alakayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
+  alakayttotarkoitusluokkaId.chain(
+    R.compose(
+      R.map(R.prop('kayttotarkoitusluokka-id')),
+      Either.orSome(Maybe.None()),
+      R.map(R.__, alakayttotarkoitusluokat),
+      Maybe.findById
+    ));
+
+export const filterAlakayttotarkoitusLuokat = R.curry(
+  (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
+    alakayttotarkoitusluokat.map(
+      R.filter(alaluokka => Maybe.map(
+        R.equals(alaluokka['kayttotarkoitusluokka-id']),
+        kayttotarkoitusluokkaId).orSome(true))));

@@ -72,7 +72,8 @@
     ),
     Future.both(Future.after(400, true)),
     Future.parallel(5),
-    R.prepend(R.__, [api.kielisyys, api.laatimisvaiheet]),
+    R.prepend(R.__, [api.kielisyys, api.laatimisvaiheet,
+      api.alakayttotarkoitusluokat2018, api.kayttotarkoitusluokat2018]),
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
 

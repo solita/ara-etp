@@ -118,6 +118,8 @@
       "kiinteistotunnus": "Kiinteistotunnus",
       "rakennusosa": "Rakennusosa",
       "valmistumisvuosi": "Valmistumisvuosi",
+      "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
+      "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "yritys": {
         "nimi": "Yritys"
       }

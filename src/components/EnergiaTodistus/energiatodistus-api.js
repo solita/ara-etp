@@ -60,3 +60,15 @@ export const laatimisvaiheet = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/laatimisvaiheet');
+
+export const kayttotarkoitusluokat2018 = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/kayttotarkoitusluokat/2018');
+
+export const alakayttotarkoitusluokat2018 = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/alakayttotarkoitusluokat/2018');
