@@ -12,7 +12,8 @@
     "no-selection": "Ei valintaa"
   },
   "parsing": {
-    "invalid-integer": "Virheellinen kokonaislukunumero"
+    "invalid-integer": "Virheellinen kokonaislukunumero",
+    "invalid-number": "Virheellinen numero"
   },
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
@@ -125,6 +126,9 @@
       "yritys": {
         "nimi": "Yritys"
       }
+    },
+    "lahtotiedot": {
+      "lammitetty-nettoala": "Lämmitetty nettoala"
     },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",

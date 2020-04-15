@@ -324,6 +324,19 @@
 
     <H1 text="E-luvun laskennan lähtotiedot" />
 
+    <div class="w-1/5 py-4">
+      <Input
+          id={'lahtotiedot.lammitetty-nettoala'}
+          name={'lahtotiedot.lammitetty-nettoala'}
+          label={$_('energiatodistus.lahtotiedot.lammitetty-nettoala')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['lahtotiedot', 'lammitetty-nettoala'])}
+          format={et.formatters.optionalText}
+          parse={parsers.optionalParser(parsers.parseNumber)}
+          validators={schema.lahtotiedot['lammitetty-nettoala']}
+          i18n={$_} />
+    </div>
 
   </div>
 

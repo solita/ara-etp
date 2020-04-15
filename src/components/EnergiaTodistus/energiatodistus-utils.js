@@ -212,6 +212,9 @@ export const schema2018 = {
     },
     'keskeiset-suositukset-fi': String(200),
     'keskeiset-suositukset-sv': String(200),
+  },
+  lahtotiedot: {
+    'lammitetty-nettoala': validation.MaybeInterval(0, 1000)
   }
 };
 
