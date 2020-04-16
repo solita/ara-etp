@@ -53,6 +53,9 @@ export const schema = {
       lounas: Ikkuna,
       lansi: Ikkuna,
       luode: Ikkuna
+    },
+    ilmanvaihto: {
+      'kuvaus-fi': String(500)
     }
   }
 };

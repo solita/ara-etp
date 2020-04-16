@@ -147,6 +147,9 @@
         "lounas": "Lounas",
         "lansi": "Länsi",
         "luode": "Luode"
+      },
+      "ilmanvaihto": {
+        "kuvaus": "Ilmanvaihtojärjestelmän kuvaus"
       }
     },
     "messages": {

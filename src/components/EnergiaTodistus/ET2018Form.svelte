@@ -434,7 +434,7 @@
 
     <H1 text="Ikkunat" />
 
-    <table>
+    <table class="mb-6">
       <thead>
       <tr>
         <th>Ikkuna</th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>g-kohtisuora</th>
@@ -485,6 +485,23 @@
       {/each}
       </tbody>
     </table>
+
+    <H1 text="Ilmanvaihtojärjestelmä" />
+
+    <div class="w-full py-4 mb-4">
+      <Input
+          id={'lahtotiedot.ilmanvaihto.kuvaus'}
+          name={'lahtotiedot.ilmanvaihto.kuvaus'}
+          label={$_('energiatodistus.lahtotiedot.ilmanvaihto.kuvaus')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi'])}
+          format={et.formatters.optionalText}
+          parse={et.parsers.optionalText}
+          validators={schema.lahtotiedot.ilmanvaihto['kuvaus-fi']}
+          i18n={$_} />
+    </div>
+
   </div>
 
   <div class="flex -mx-4 pt-8">
