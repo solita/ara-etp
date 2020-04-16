@@ -1,4 +1,3 @@
-import Home from '@Component/Home/Home';
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
 import Viestit from '@Component/Viestit/Viestit';
