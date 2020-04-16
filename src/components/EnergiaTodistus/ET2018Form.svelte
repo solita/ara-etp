@@ -392,7 +392,7 @@
               lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'ala'])}
               format={et.formatters.optionalText}
               parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa[vaippa]}
+              validators={schema.lahtotiedot.rakennusvaippa[vaippa].ala}
               i18n={$_} />
         </td>
         <td class="p-2">
@@ -404,7 +404,7 @@
               lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'U'])}
               format={et.formatters.optionalText}
               parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa[vaippa]}
+              validators={schema.lahtotiedot.rakennusvaippa[vaippa].U}
               i18n={$_} />
         </td>
         <td></td>
