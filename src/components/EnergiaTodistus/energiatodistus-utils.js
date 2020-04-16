@@ -125,9 +125,9 @@ export const emptyEnergiatodistus2018 = _ => ({
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': emptySahkoLampo(),
       'tuloilman-lammitys': emptySahkoLampo(),
-      'kayttoveden-valmistus': Maybe.None(),
+      'kayttoveden-valmistus': emptySahkoLampo(),
       'iv-sahko': Maybe.None(),
-      jaahdytys: Maybe.None(),
+      jaahdytys: R.assoc('kaukojaahdytys', Maybe.None(), emptySahkoLampo()),
       'kuluttajalaitteet-ja-valaistus-sahko': Maybe.None()
     },
     nettotarve: {
