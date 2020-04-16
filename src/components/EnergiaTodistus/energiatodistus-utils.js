@@ -214,7 +214,10 @@ export const schema2018 = {
     'keskeiset-suositukset-sv': String(200),
   },
   lahtotiedot: {
-    'lammitetty-nettoala': validation.MaybeInterval(0, 1000)
+    'lammitetty-nettoala': validation.MaybeInterval(0, 1000),
+    rakennusvaippa: {
+      ilmanvuotoluku: validation.MaybeInterval(0, 50)
+    }
   }
 };
 

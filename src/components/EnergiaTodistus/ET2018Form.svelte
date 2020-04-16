@@ -79,14 +79,33 @@
   $: selectableAlakayttotarkoitusluokat =
       et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId, alakayttotarkoitusluokat);
 
-  let isValidForm = false;
-  $: isValidForm = et.isValidForm(schema, energiatodistus);
-  $: console.log('Form validation: ', isValidForm);
 </script>
+
+<style type="text/postcss">
+  table {
+    @apply w-full;
+  }
+
+  thead {
+    @apply bg-tertiary;
+  }
+
+  th {
+    @apply px-4 py-2 text-center;
+  }
+
+  tr {
+    @apply px-4 py-2;
+  }
+
+  td {
+    @apply text-center;
+  }
+</style>
 
 <form
   on:submit|preventDefault={_ => {
-    if (isValidForm) {
+    if (et.isValidForm(schema, energiatodistus)) {
       flashMessageStore.flush();
       submit(energiatodistus);
     } else {
@@ -308,7 +327,7 @@
     <H1 text="Toimenpide-ehdotuksia e-luvun parantamiseksi" />
     <p>Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi</p>
 
-    <div class="w-full py-4">
+    <div class="w-full py-4 mb-4">
       <Input
           id={'perustiedot.keskeiset-suositukset'}
           name={'perustiedot.keskeiset-suositukset'}
@@ -324,7 +343,7 @@
 
     <H1 text="E-luvun laskennan lähtotiedot" />
 
-    <div class="w-1/5 py-4">
+    <div class="w-1/5 py-4 mb-4">
       <Input
           id={'lahtotiedot.lammitetty-nettoala'}
           name={'lahtotiedot.lammitetty-nettoala'}
@@ -337,6 +356,59 @@
           validators={schema.lahtotiedot['lammitetty-nettoala']}
           i18n={$_} />
     </div>
+
+    <H1 text="Rakennusvaippa" />
+
+    <div class="w-1/5 py-4 mb-4">
+      <Input
+          id={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
+          name={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
+          label={$_('energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku'])}
+          format={et.formatters.optionalText}
+          parse={parsers.optionalParser(parsers.parseNumber)}
+          validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
+          i18n={$_} />
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th> <th>Ala (M²)</th> <th>U</th> <th>U*A</th> <th>Osuus lämpöhäviöistä</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>{$_('energiatodistus.lahtotiedot.rakennusvaippa.ulkoseinat')}</td>
+        <td class="p-2">
+          <Input
+              id={'lahtotiedot.rakennusvaippa.ulkoseinat.ala'}
+              name={'lahtotiedot.rakennusvaippa.ulkoseinat.ala'}
+              required={false}
+              bind:model={energiatodistus}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ulkoseinat', 'ala'])}
+              format={et.formatters.optionalText}
+              parse={parsers.optionalParser(parsers.parseNumber)}
+              validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
+              i18n={$_} />
+        </td>
+        <td class="p-2">
+          <Input
+              id={'lahtotiedot.rakennusvaippa.ulkoseinat.U'}
+              name={'lahtotiedot.rakennusvaippa.ulkoseinat.U'}
+              required={false}
+              bind:model={energiatodistus}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ulkoseinat', 'U'])}
+              format={et.formatters.optionalText}
+              parse={parsers.optionalParser(parsers.parseNumber)}
+              validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
+              i18n={$_} />
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
   </div>
 
