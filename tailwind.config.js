@@ -29,7 +29,8 @@ module.exports = {
         '3': '3px'
       },
       inset: {
-        '100': '100%'
+        '100': '100%',
+        '3em': '3em'
       },
       boxShadow: {
         'hover-2-primary': '0 0.5em #538000',
@@ -37,6 +38,7 @@ module.exports = {
         dropdownlist: '0 25px 50px 0px rgba(0, 0, 0, 0.25)'
       },
       maxWidth: {
+        '7em': '7em',
         '70': '70%',
         '1280': '1280px'
       },
