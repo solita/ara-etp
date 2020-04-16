@@ -4,6 +4,7 @@
   import ExistingEnergiaTodistus from './ExistingEnergiaTodistus';
   import NewEnergiaTodistus from './NewEnergiaTodistus';
   import Energiatodistukset from './Energiatodistukset';
+  import Allekirjoitus from './Allekirjoitus';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
@@ -11,7 +12,8 @@
   const routes = {
     '/all': Energiatodistukset,
     '/:version/new': NewEnergiaTodistus,
-    '/:version/:id': ExistingEnergiaTodistus
+    '/:version/:id': ExistingEnergiaTodistus,
+    '/:version/:id/sign': Allekirjoitus
   };
 </script>
 
