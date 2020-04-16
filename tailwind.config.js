@@ -12,6 +12,7 @@ module.exports = {
       focus: '#538000',
       active: '#6d6d6d',
       disabled: '#a7a7a7',
+      lighterdisabled: '#f1efe4',
       error: '#9e0000',
       success: '#538000',
       background: '#eee',
