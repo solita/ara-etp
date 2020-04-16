@@ -10,6 +10,7 @@
   import * as et from './energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
   import * as api from './energiatodistus-api';
+  import { schema } from './schema-2018';
 
   import H1 from '@Component/H1/H1';
   import Input from '@Component/Input/Input';
@@ -23,7 +24,6 @@
   export let submit;
   export let energiatodistus;
   const originalEnergiatodistus = R.clone(energiatodistus);
-  const schema = et.schema2018;
 
   export let disabled = false;
 

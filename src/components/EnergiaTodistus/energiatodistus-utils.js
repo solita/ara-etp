@@ -191,46 +191,6 @@ export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
 };
 
-export const String = max => [
-  validation.liftValidator(validation.minLengthConstraint(2)),
-  validation.liftValidator(validation.maxLengthConstraint(max))
-];
-
-export const schemaRakennusvaippa = {
-  ala: validation.MaybeInterval(0, 50),
-  U: validation.MaybeInterval(0, 50),
-}
-
-export const schema2018 = {
-  perustiedot: {
-    nimi: String(200),
-    rakennustunnus: String(200),
-    kiinteistotunnus: String(200),
-    rakennusosa: String(200),
-    'katuosoite-fi': String(200),
-    'katuosoite-sv': String(200),
-    postinumero: String(200),
-    valmistumisvuosi: validation.MaybeInterval(100, new Date().getFullYear()),
-    tilaaja: String(200),
-    yritys: {
-      nimi: String(200)
-    },
-    'keskeiset-suositukset-fi': String(200),
-    'keskeiset-suositukset-sv': String(200),
-  },
-  lahtotiedot: {
-    'lammitetty-nettoala': validation.MaybeInterval(0, 1000),
-    rakennusvaippa: {
-      ilmanvuotoluku: validation.MaybeInterval(0, 50),
-      ulkoseinat: schemaRakennusvaippa,
-      ylapohja: schemaRakennusvaippa,
-      alapohja: schemaRakennusvaippa,
-      ikkunat: schemaRakennusvaippa,
-      ulkoovet: schemaRakennusvaippa,
-    }
-  }
-};
-
 export const schema2013 = {
   perustiedot: {
     nimi: [
