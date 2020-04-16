@@ -1,7 +1,10 @@
 <script>
+  import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
+
   export let href;
-  export let text;
-  export let icon;
+  export let text = '';
+  export let icon = Maybe.None();
 </script>
 
 <style type="text/postcss">
@@ -12,18 +15,9 @@
   a:hover {
     @apply underline;
   }
-
- span {
-   @apply mr-1;
- }
 </style>
 
-<a href="{href}">
-  {#if icon}
-    <span class="font-icon">{icon}</span>
-  {/if}
-
-  {#if text}
-    {text}
-  {/if}
+<a {href}>
+  {@html R.compose( Maybe.orSome(''), R.map(i => `<span class="font-icon mr-1 text-2xl">${i}</span>`) )(icon)}
+  {text}
 </a>

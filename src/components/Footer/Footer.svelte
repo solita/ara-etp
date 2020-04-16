@@ -29,7 +29,6 @@
 </style>
 
 <footer>
-  <section class="adminmessage">Viesti pääkäyttäjälle</section>
   <section class="info">
     <div class="guidance" />
     <div class="contact" />

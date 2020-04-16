@@ -6,6 +6,7 @@
   import * as LocaleUtils from '@Language/locale-utils';
 
   import H1 from '@Component/H1/H1';
+  import HR from '@Component/HR/HR';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
@@ -240,6 +241,7 @@
       </div>
     </div>
   </div>
+  <HR />
   <div class="mt-8">
     <H1 text={$_('laatija.laatijatiedot')} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -295,7 +297,7 @@
       </div>
     </div>
   </div>
-
+  <HR />
   <div class="mt-8">
     <H1 text={$_('laatija.julkisettiedot')} />
     <div class="flex flex-col py-4 -mx-4">
@@ -319,7 +321,7 @@
       </div>
     </div>
   </div>
-  <div class="flex -mx-4 pt-8">
+  <div class="flex -mx-4 mt-20">
     <div class="px-4">
       <Button type={'submit'} text={$_('tallenna')} />
     </div>

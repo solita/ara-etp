@@ -5,7 +5,7 @@
   export let disabled = false;
 
   export let model;
-  export let lens;
+  export let lens = R.identity;
 
   let focused = false;
 
@@ -30,7 +30,7 @@
   }
 
   label:hover ~ span {
-    @apply bg-disabled;
+    @apply bg-background;
   }
 
   label:hover ~ span:not(.checked)::after {
@@ -38,11 +38,11 @@
   }
 
   span {
-    @apply relative w-6 h-6 rounded-sm mr-2 bg-background cursor-pointer border-dark border-2;
+    @apply relative w-6 h-6 rounded mr-2 bg-light cursor-pointer border-dark border-2;
   }
 
   span:hover {
-    @apply bg-disabled;
+    @apply bg-background;
   }
 
   span.focused {
@@ -50,35 +50,35 @@
   }
 
   span.checked {
-    @apply bg-primary;
+    @apply bg-primary border-primary;
   }
 
   span.disabled {
-    @apply bg-disabled cursor-default;
+    @apply bg-lighterdisabled border-disabled cursor-default;
   }
 
   span.checked.focused {
-    @apply bg-secondary;
+    @apply bg-secondary border-secondary;
   }
 
   span.checked:hover {
-    @apply bg-disabled;
+    @apply bg-background;
   }
 
   span.disabled:hover {
-    @apply bg-disabled;
+    @apply bg-lighterdisabled border-disabled;
   }
 
   span.disabled.focused {
-    @apply bg-disabled;
+    @apply bg-lighterdisabled border-dark;
   }
 
   span.checked::after {
     content: 'done';
 
-    @apply font-icon text-light absolute;
-    top: -10%;
-    left: 10%;
+    @apply font-icon text-light absolute text-2xl;
+    top: -40%;
+    left: -10%;
     right: 0%;
     bottom: 0%;
   }

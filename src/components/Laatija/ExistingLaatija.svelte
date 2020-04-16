@@ -20,15 +20,12 @@
 
   let laatija = Maybe.None();
   let overlay = true;
-  let disabled = false;
 
   const toggleOverlay = value => () => (overlay = value);
-  const toggleDisabled = value => () => (disabled = value);
 
   const resetView = () => {
     overlay = true;
     yritys = Maybe.None();
-    disabled = false;
   };
 
   $: submit = R.compose(
@@ -61,8 +58,7 @@
       R.compose(
         flashMessageStore.add('Laatija', 'error'),
         R.always($_('laatija.messages.load-error')),
-        R.tap(toggleOverlay(false)),
-        R.tap(toggleDisabled(false))
+        R.tap(toggleOverlay(false))
       ),
       R.compose(
         fetchedLaatija => (laatija = Maybe.Some(fetchedLaatija)),
@@ -87,8 +83,6 @@
     {#if Maybe.isSome(laatija)}
       <LaatijaForm
         {submit}
-        {disabled}
-        existing={true}
         laatija={Maybe.getOrElse(LaatijaUtils.emptyLaatija(), laatija)} />
     {/if}
   </div>

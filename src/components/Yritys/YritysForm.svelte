@@ -12,6 +12,7 @@
 
   import Autocomplete from '../Autocomplete/Autocomplete';
   import H1 from '@Component/H1/H1';
+  import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
 
@@ -79,7 +80,7 @@
   }}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+    <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
         <Input
           id={'ytunnus'}
@@ -121,6 +122,7 @@
         i18n={$_} />
     </div>
   </div>
+  <HR />
   <div class="mt-8">
     <H1 text={$_('yritys.laskutusosoite')} />
     <div class="flex flex-col">
@@ -137,7 +139,7 @@
           validators={formSchema.jakeluosoite}
           i18n={$_} />
       </div>
-      <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
             {disabled}
@@ -181,6 +183,7 @@
       </div>
     </div>
   </div>
+  <HR />
   <div class="mt-8">
     <H1 text={$_('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
@@ -196,7 +199,7 @@
         i18n={$_} />
     </div>
   </div>
-  <div class="flex -mx-4 pt-8">
+  <div class="flex -mx-4 mt-20">
     <div class="px-4">
       <Button type={'submit'} text={$_('tallenna')} />
     </div>
