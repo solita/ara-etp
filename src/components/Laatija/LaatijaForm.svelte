@@ -110,19 +110,6 @@
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
-          id={'henkilotunnus'}
-          name={'henkilotunnus'}
-          label={$_('laatija.henkilotunnus')}
-          required={true}
-          bind:model={laatija}
-          lens={R.lensProp('henkilotunnus')}
-          parse={formParsers.henkilotunnus}
-          validators={formSchema.henkilotunnus}
-          disabled={true}
-          i18n={$_} />
-      </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
           id={'etunimi'}
           name={'etunimi'}
           label={$_('laatija.etunimi')}
@@ -143,6 +130,19 @@
           lens={R.lensProp('sukunimi')}
           parse={formParsers.sukunimi}
           validators={formSchema.sukunimi}
+          i18n={$_} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'henkilotunnus'}
+          name={'henkilotunnus'}
+          label={$_('laatija.henkilotunnus')}
+          required={true}
+          bind:model={laatija}
+          lens={R.lensProp('henkilotunnus')}
+          parse={formParsers.henkilotunnus}
+          validators={formSchema.henkilotunnus}
+          disabled={true}
           i18n={$_} />
       </div>
     </div>

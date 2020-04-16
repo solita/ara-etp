@@ -7,7 +7,17 @@ export const withLabel = () => ({
   props: { label: 'Radio', group: 0, value: 1 }
 });
 
+export const withLabelDisabled = () => ({
+  Component: Radio,
+  props: { label: 'Radio', disabled: true, group: 0, value: 1 }
+});
+
 export const withSelected = () => ({
   Component: Radio,
   props: { label: 'Radio', group: 0, value: 0 }
+});
+
+export const withSelectedDisabled = () => ({
+  Component: Radio,
+  props: { label: 'Radio', disabled: true, group: 0, value: 0 }
 });
