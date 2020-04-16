@@ -10,6 +10,7 @@
   import * as et from './energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
   import * as api from './energiatodistus-api';
+  import { schema } from './schema-2018';
 
   import H1 from '@Component/H1/H1';
   import Input from '@Component/Input/Input';
@@ -23,7 +24,6 @@
   export let submit;
   export let energiatodistus;
   const originalEnergiatodistus = R.clone(energiatodistus);
-  const schema = et.schema2018;
 
   export let disabled = false;
 
@@ -359,7 +359,7 @@
 
     <H1 text="Rakennusvaippa" />
 
-    <div class="w-1/5 py-4 mb-4">
+    <div class="w-1/5 py-4 mb-6">
       <Input
           id={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
           name={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
@@ -373,7 +373,7 @@
           i18n={$_} />
     </div>
 
-    <table>
+    <table class="mb-6">
       <thead>
         <tr>
           <th></th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>U*A (W/K)</th> <th>Osuus lämpöhäviöistä</th>
@@ -411,8 +411,96 @@
         <td></td>
       </tr>
       {/each}
+      <tr>
+        <td>{$_('energiatodistus.lahtotiedot.rakennusvaippa.kylmasillat-UA')}</td>
+        <td></td>
+        <td></td>
+        <td>
+          <Input
+              id={`lahtotiedot.rakennusvaippa.kylmasillat-UA`}
+              name={`lahtotiedot.rakennusvaippa.kylmasillat-UA`}
+              required={false}
+              bind:model={energiatodistus}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA'])}
+              format={et.formatters.optionalText}
+              parse={parsers.optionalParser(parsers.parseNumber)}
+              validators={schema.lahtotiedot.rakennusvaippa['kylmasillat-UA']}
+              i18n={$_} />
+        </td>
+        <td></td>
+      </tr>
       </tbody>
     </table>
+
+    <H1 text="Ikkunat" />
+
+    <table class="mb-6">
+      <thead>
+      <tr>
+        <th>Ikkuna</th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>g-kohtisuora</th>
+      </tr>
+      </thead>
+      <tbody>
+      {#each ['pohjoinen', 'koillinen', 'ita', 'kaakko',
+              'etela', 'lounas', 'lansi', 'luode'] as ikkuna}
+        <tr>
+          <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}`)}</td>
+          <td class="p-2">
+            <Input
+                id={`lahtotiedot.ikkunat.${ikkuna}.ala`}
+                name={`lahtotiedot.ikkunat.${ikkuna}.ala`}
+                required={false}
+                bind:model={energiatodistus}
+                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'ala'])}
+                format={et.formatters.optionalText}
+                parse={parsers.optionalParser(parsers.parseNumber)}
+                validators={schema.lahtotiedot.ikkunat[ikkuna].ala}
+                i18n={$_} />
+          </td>
+          <td class="p-2">
+            <Input
+                id={`lahtotiedot.ikkunat.${ikkuna}.U`}
+                name={`lahtotiedot.ikkunat.${ikkuna}.U`}
+                required={false}
+                bind:model={energiatodistus}
+                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'U'])}
+                format={et.formatters.optionalText}
+                parse={parsers.optionalParser(parsers.parseNumber)}
+                validators={schema.lahtotiedot.ikkunat[ikkuna].U}
+                i18n={$_} />
+          </td>
+          <td class="p-2">
+            <Input
+                id={`lahtotiedot.ikkunat.${ikkuna}.g-ks`}
+                name={`lahtotiedot.ikkunat.${ikkuna}.g-ks`}
+                required={false}
+                bind:model={energiatodistus}
+                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'g-ks'])}
+                format={et.formatters.optionalText}
+                parse={parsers.optionalParser(parsers.parseNumber)}
+                validators={schema.lahtotiedot.ikkunat[ikkuna]['g-ks']}
+                i18n={$_} />
+          </td>
+        </tr>
+      {/each}
+      </tbody>
+    </table>
+
+    <H1 text="Ilmanvaihtojärjestelmä" />
+
+    <div class="w-full py-4 mb-4">
+      <Input
+          id={'lahtotiedot.ilmanvaihto.kuvaus'}
+          name={'lahtotiedot.ilmanvaihto.kuvaus'}
+          label={$_('energiatodistus.lahtotiedot.ilmanvaihto.kuvaus')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi'])}
+          format={et.formatters.optionalText}
+          parse={et.parsers.optionalText}
+          validators={schema.lahtotiedot.ilmanvaihto['kuvaus-fi']}
+          i18n={$_} />
+    </div>
 
   </div>
 
