@@ -411,6 +411,24 @@
         <td></td>
       </tr>
       {/each}
+      <tr>
+        <td>{$_('energiatodistus.lahtotiedot.rakennusvaippa.kylmasillat-UA')}</td>
+        <td></td>
+        <td></td>
+        <td>
+          <Input
+              id={`lahtotiedot.rakennusvaippa.kylmasillat-UA`}
+              name={`lahtotiedot.rakennusvaippa.kylmasillat-UA`}
+              required={false}
+              bind:model={energiatodistus}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA'])}
+              format={et.formatters.optionalText}
+              parse={parsers.optionalParser(parsers.parseNumber)}
+              validators={schema.lahtotiedot.rakennusvaippa['kylmasillat-UA']}
+              i18n={$_} />
+        </td>
+        <td></td>
+      </tr>
       </tbody>
     </table>
 
