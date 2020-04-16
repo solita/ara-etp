@@ -26,10 +26,14 @@ module.exports = {
       },
       borderWidth: {
         '1': '1px',
-        '3': '3px'
+        '3': '3px',
+        '7': '7px'
       },
       inset: {
         '100': '100%'
+      },
+      opacity: {
+        '15': '0.15'
       },
       boxShadow: {
         'hover-2-primary': '0 0.5em #538000',
