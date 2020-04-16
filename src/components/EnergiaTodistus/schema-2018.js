@@ -10,6 +10,12 @@ const Rakennusvaippa = {
   U: validation.MaybeInterval(0, 50),
 }
 
+const Ikkuna = {
+  ala: validation.MaybeInterval(0, 9999),
+  U: validation.MaybeInterval(0.4, 6.5),
+  'g-ks': validation.MaybeInterval(0.1, 1.0)
+}
+
 export const schema = {
   perustiedot: {
     nimi: String(200),
@@ -37,6 +43,16 @@ export const schema = {
       ikkunat: Rakennusvaippa,
       ulkoovet: Rakennusvaippa,
       'kylmasillat-UA': validation.MaybeInterval(0, 50)
+    },
+    ikkunat: {
+      pohjoinen: Ikkuna,
+      koillinen: Ikkuna,
+      ita: Ikkuna,
+      kaakko: Ikkuna,
+      etela: Ikkuna,
+      lounas: Ikkuna,
+      lansi: Ikkuna,
+      luode: Ikkuna
     }
   }
 };

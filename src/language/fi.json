@@ -137,6 +137,16 @@
         "ikkunat": "Ikkuvant",
         "ulkoovet": "Ulko-ovet",
         "kylmasillat-UA": "Kylmäsillat"
+      },
+      "ikkunat": {
+        "pohjoinen": "Pohjoinen",
+        "koillinen": "Koillinen",
+        "ita": "Itä",
+        "kaakko": "Kaakko",
+        "etela": "Etelä",
+        "lounas": "Lounas",
+        "lansi": "Länsi",
+        "luode": "Luode"
       }
     },
     "messages": {

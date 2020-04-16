@@ -359,7 +359,7 @@
 
     <H1 text="Rakennusvaippa" />
 
-    <div class="w-1/5 py-4 mb-4">
+    <div class="w-1/5 py-4 mb-6">
       <Input
           id={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
           name={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
@@ -373,7 +373,7 @@
           i18n={$_} />
     </div>
 
-    <table>
+    <table class="mb-6">
       <thead>
         <tr>
           <th></th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>U*A (W/K)</th> <th>Osuus lämpöhäviöistä</th>
@@ -432,6 +432,59 @@
       </tbody>
     </table>
 
+    <H1 text="Ikkunat" />
+
+    <table>
+      <thead>
+      <tr>
+        <th>Ikkuna</th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>g-kohtisuora</th>
+      </tr>
+      </thead>
+      <tbody>
+      {#each ['pohjoinen', 'koillinen', 'ita', 'kaakko',
+              'etela', 'lounas', 'lansi', 'luode'] as ikkuna}
+        <tr>
+          <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}`)}</td>
+          <td class="p-2">
+            <Input
+                id={`lahtotiedot.ikkunat.${ikkuna}.ala`}
+                name={`lahtotiedot.ikkunat.${ikkuna}.ala`}
+                required={false}
+                bind:model={energiatodistus}
+                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'ala'])}
+                format={et.formatters.optionalText}
+                parse={parsers.optionalParser(parsers.parseNumber)}
+                validators={schema.lahtotiedot.ikkunat[ikkuna].ala}
+                i18n={$_} />
+          </td>
+          <td class="p-2">
+            <Input
+                id={`lahtotiedot.ikkunat.${ikkuna}.U`}
+                name={`lahtotiedot.ikkunat.${ikkuna}.U`}
+                required={false}
+                bind:model={energiatodistus}
+                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'U'])}
+                format={et.formatters.optionalText}
+                parse={parsers.optionalParser(parsers.parseNumber)}
+                validators={schema.lahtotiedot.ikkunat[ikkuna].U}
+                i18n={$_} />
+          </td>
+          <td class="p-2">
+            <Input
+                id={`lahtotiedot.ikkunat.${ikkuna}.g-ks`}
+                name={`lahtotiedot.ikkunat.${ikkuna}.g-ks`}
+                required={false}
+                bind:model={energiatodistus}
+                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'g-ks'])}
+                format={et.formatters.optionalText}
+                parse={parsers.optionalParser(parsers.parseNumber)}
+                validators={schema.lahtotiedot.ikkunat[ikkuna]['g-ks']}
+                i18n={$_} />
+          </td>
+        </tr>
+      {/each}
+      </tbody>
+    </table>
   </div>
 
   <div class="flex -mx-4 pt-8">
