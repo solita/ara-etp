@@ -376,37 +376,41 @@
     <table>
       <thead>
         <tr>
-          <th></th> <th>Ala (M²)</th> <th>U</th> <th>U*A</th> <th>Osuus lämpöhäviöistä</th>
+          <th></th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>U*A (W/K)</th> <th>Osuus lämpöhäviöistä</th>
         </tr>
       </thead>
       <tbody>
+      {#each ['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet'] as vaippa}
       <tr>
-        <td>{$_('energiatodistus.lahtotiedot.rakennusvaippa.ulkoseinat')}</td>
+        <td>{$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}`)}</td>
         <td class="p-2">
           <Input
-              id={'lahtotiedot.rakennusvaippa.ulkoseinat.ala'}
-              name={'lahtotiedot.rakennusvaippa.ulkoseinat.ala'}
+              id={`lahtotiedot.rakennusvaippa.${vaippa}.ala`}
+              name={`lahtotiedot.rakennusvaippa.${vaippa}.ala`}
               required={false}
               bind:model={energiatodistus}
-              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ulkoseinat', 'ala'])}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'ala'])}
               format={et.formatters.optionalText}
               parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
+              validators={schema.lahtotiedot.rakennusvaippa[vaippa]}
               i18n={$_} />
         </td>
         <td class="p-2">
           <Input
-              id={'lahtotiedot.rakennusvaippa.ulkoseinat.U'}
-              name={'lahtotiedot.rakennusvaippa.ulkoseinat.U'}
+              id={`lahtotiedot.rakennusvaippa.${vaippa}.U`}
+              name={`lahtotiedot.rakennusvaippa.${vaippa}.U`}
               required={false}
               bind:model={energiatodistus}
-              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ulkoseinat', 'U'])}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'U'])}
               format={et.formatters.optionalText}
               parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
+              validators={schema.lahtotiedot.rakennusvaippa[vaippa]}
               i18n={$_} />
         </td>
+        <td></td>
+        <td></td>
       </tr>
+      {/each}
       </tbody>
     </table>
 

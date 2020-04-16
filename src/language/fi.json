@@ -131,7 +131,11 @@
       "lammitetty-nettoala": "Lämmitetty nettoala",
       "rakennusvaippa": {
         "ilmanvuotoluku": "Ilmanvuotoluku",
-        "ulkoseinat": "Ulkoseinät"
+        "ulkoseinat": "Ulkoseinät",
+        "ylapohja": "Yläpohja",
+        "alapohja": "Alapohja",
+        "ikkunat": "Ikkuvant",
+        "ulkoovet": "Ulko-ovet"
       }
     },
     "messages": {

@@ -196,6 +196,11 @@ export const String = max => [
   validation.liftValidator(validation.maxLengthConstraint(max))
 ];
 
+export const schemaRakennusvaippa = {
+  ala: validation.MaybeInterval(0, 50),
+  U: validation.MaybeInterval(0, 50),
+}
+
 export const schema2018 = {
   perustiedot: {
     nimi: String(200),
@@ -216,7 +221,12 @@ export const schema2018 = {
   lahtotiedot: {
     'lammitetty-nettoala': validation.MaybeInterval(0, 1000),
     rakennusvaippa: {
-      ilmanvuotoluku: validation.MaybeInterval(0, 50)
+      ilmanvuotoluku: validation.MaybeInterval(0, 50),
+      ulkoseinat: schemaRakennusvaippa,
+      ylapohja: schemaRakennusvaippa,
+      alapohja: schemaRakennusvaippa,
+      ikkunat: schemaRakennusvaippa,
+      ulkoovet: schemaRakennusvaippa,
     }
   }
 };
