@@ -196,6 +196,11 @@ export const String = max => [
   validation.liftValidator(validation.maxLengthConstraint(max))
 ];
 
+export const schemaRakennusvaippa = {
+  ala: validation.MaybeInterval(0, 50),
+  U: validation.MaybeInterval(0, 50),
+}
+
 export const schema2018 = {
   perustiedot: {
     nimi: String(200),
@@ -212,6 +217,17 @@ export const schema2018 = {
     },
     'keskeiset-suositukset-fi': String(200),
     'keskeiset-suositukset-sv': String(200),
+  },
+  lahtotiedot: {
+    'lammitetty-nettoala': validation.MaybeInterval(0, 1000),
+    rakennusvaippa: {
+      ilmanvuotoluku: validation.MaybeInterval(0, 50),
+      ulkoseinat: schemaRakennusvaippa,
+      ylapohja: schemaRakennusvaippa,
+      alapohja: schemaRakennusvaippa,
+      ikkunat: schemaRakennusvaippa,
+      ulkoovet: schemaRakennusvaippa,
+    }
   }
 };
 
@@ -247,3 +263,19 @@ export const selectFormat = (label, items) => R.compose(
   R.map(R.__, items),
   Maybe.findById
 );
+
+export const findKayttotarkoitusluokkaId = (alakayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
+  alakayttotarkoitusluokkaId.chain(
+    R.compose(
+      R.map(R.prop('kayttotarkoitusluokka-id')),
+      Either.orSome(Maybe.None()),
+      R.map(R.__, alakayttotarkoitusluokat),
+      Maybe.findById
+    ));
+
+export const filterAlakayttotarkoitusLuokat = R.curry(
+  (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
+    alakayttotarkoitusluokat.map(
+      R.filter(alaluokka => Maybe.map(
+        R.equals(alaluokka['kayttotarkoitusluokka-id']),
+        kayttotarkoitusluokkaId).orSome(true))));

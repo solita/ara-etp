@@ -12,6 +12,7 @@
   export let label = '';
 
   export let disabled = false;
+  export let required = false;
 
   export let model;
   export let lens;
@@ -91,6 +92,12 @@
 </script>
 
 <style type="text/postcss">
+
+  span.required::before {
+    @apply font-icon text-xs align-top;
+    content: '* ';
+  }
+
   div {
     @apply relative;
   }
@@ -132,7 +139,7 @@
     }
   }} />
 
-<span class:focused class:disabled class="label">{label}</span>
+<span class:focused class:required class:disabled class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
   <span
     class:disabled

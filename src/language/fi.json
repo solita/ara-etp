@@ -12,7 +12,8 @@
     "no-selection": "Ei valintaa"
   },
   "parsing": {
-    "invalid-integer": "Virheellinen kokonaislukunumero"
+    "invalid-integer": "Virheellinen kokonaislukunumero",
+    "invalid-number": "Virheellinen numero"
   },
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
@@ -118,8 +119,23 @@
       "kiinteistotunnus": "Kiinteistotunnus",
       "rakennusosa": "Rakennusosa",
       "valmistumisvuosi": "Valmistumisvuosi",
+      "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
+      "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
+      "onko-julkinen-rakennus": "Julkinen rakennus",
+      "keskeiset-suositukset": "Keskeiset suositukset",
       "yritys": {
         "nimi": "Yritys"
+      }
+    },
+    "lahtotiedot": {
+      "lammitetty-nettoala": "Lämmitetty nettoala",
+      "rakennusvaippa": {
+        "ilmanvuotoluku": "Ilmanvuotoluku",
+        "ulkoseinat": "Ulkoseinät",
+        "ylapohja": "Yläpohja",
+        "alapohja": "Alapohja",
+        "ikkunat": "Ikkuvant",
+        "ulkoovet": "Ulko-ovet"
       }
     },
     "messages": {

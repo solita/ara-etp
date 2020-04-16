@@ -15,6 +15,7 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Select from '@Component/Select/Select';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   import { flashMessageStore } from '@/stores';
 
@@ -42,14 +43,69 @@
     api.laatimisvaiheet
   );
 
-  let isValidForm = false;
-  $: isValidForm = et.isValidForm(schema, energiatodistus);
-  $: console.log('Form validation: ', isValidForm);
+  let kayttotarkoitusluokat = Either.Left('Not initialized');
+  Future.fork(
+      _ => {},
+      result => kayttotarkoitusluokat = Either.Right(result),
+      api.kayttotarkoitusluokat2018
+  );
+
+  let alakayttotarkoitusluokat = Either.Left('Not initialized');
+  Future.fork(
+      _ => {},
+      result => alakayttotarkoitusluokat = Either.Right(result),
+      api.alakayttotarkoitusluokat2018
+  );
+
+  let kayttotarkoitusluokkaId = Maybe.None();
+  $: if (kayttotarkoitusluokkaId.isSome() &&
+      !kayttotarkoitusluokkaId.equals(et.findKayttotarkoitusluokkaId(
+        energiatodistus.perustiedot.kayttotarkoitus, alakayttotarkoitusluokat))) {
+
+    energiatodistus = R.set(R.lensPath(['perustiedot', 'kayttotarkoitus']),
+        R.compose(
+          Either.orSome(Maybe.None()),
+          Either.map(alaluokat => R.length(alaluokat) === 1 ?
+              Maybe.Some(alaluokat[0].id) : Maybe.None()),
+          et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId)
+        )(alakayttotarkoitusluokat), energiatodistus);
+  } else if (energiatodistus.perustiedot.kayttotarkoitus.isSome()) {
+
+    kayttotarkoitusluokkaId = et.findKayttotarkoitusluokkaId(
+        energiatodistus.perustiedot.kayttotarkoitus,
+        alakayttotarkoitusluokat);
+  }
+
+  $: selectableAlakayttotarkoitusluokat =
+      et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId, alakayttotarkoitusluokat);
+
 </script>
+
+<style type="text/postcss">
+  table {
+    @apply w-full;
+  }
+
+  thead {
+    @apply bg-tertiary;
+  }
+
+  th {
+    @apply px-4 py-2 text-center;
+  }
+
+  tr {
+    @apply px-4 py-2;
+  }
+
+  td {
+    @apply text-center;
+  }
+</style>
 
 <form
   on:submit|preventDefault={_ => {
-    if (isValidForm) {
+    if (et.isValidForm(schema, energiatodistus)) {
       flashMessageStore.flush();
       submit(energiatodistus);
     } else {
@@ -227,6 +283,137 @@
             i18n={$_} />
       </div>
     </div>
+
+    <div class="flex lg:flex-row flex-col -mx-4 my-4">
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Select
+          id={'perustiedot.kayttotarkoitusluokka'}
+          name={'perustiedot.kayttotarkoitusluokka'}
+          label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
+          required={true}
+          {disabled}
+          bind:model={kayttotarkoitusluokkaId}
+          lens={R.lens(R.identity, R.identity)}
+          parse={Maybe.Some}
+          format={et.selectFormat(labelLocale, kayttotarkoitusluokat)}
+          items={Either.foldRight([], R.pluck('id'), kayttotarkoitusluokat)} />
+      </div>
+
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Select
+          id={'perustiedot.alakayttotarkoitusluokka'}
+          name={'perustiedot.alakayttotarkoitusluokka'}
+          label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
+          required={true}
+          {disabled}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['perustiedot', 'kayttotarkoitus'])}
+          parse={Maybe.Some}
+          format={et.selectFormat(labelLocale, alakayttotarkoitusluokat)}
+          items={Either.foldRight([], R.pluck('id'), selectableAlakayttotarkoitusluokat)} />
+      </div>
+    </div>
+
+    <div class="flex flex-col -mx-4 my-4">
+      <div class="w-full px-4 py-4">
+        <Checkbox
+            bind:model={energiatodistus}
+            lens={R.lensPath(['perustiedot', 'onko-julkinen-rakennus'])}
+            label={$_('energiatodistus.perustiedot.onko-julkinen-rakennus')}
+            {disabled} />
+      </div>
+    </div>
+
+    <H1 text="Toimenpide-ehdotuksia e-luvun parantamiseksi" />
+    <p>Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi</p>
+
+    <div class="w-full py-4 mb-4">
+      <Input
+          id={'perustiedot.keskeiset-suositukset'}
+          name={'perustiedot.keskeiset-suositukset'}
+          label={$_('energiatodistus.perustiedot.keskeiset-suositukset')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['perustiedot', 'keskeiset-suositukset-fi'])}
+          format={et.formatters.optionalText}
+          parse={et.parsers.optionalText}
+          validators={schema.perustiedot['keskeiset-suositukset-fi']}
+          i18n={$_} />
+    </div>
+
+    <H1 text="E-luvun laskennan lähtotiedot" />
+
+    <div class="w-1/5 py-4 mb-4">
+      <Input
+          id={'lahtotiedot.lammitetty-nettoala'}
+          name={'lahtotiedot.lammitetty-nettoala'}
+          label={$_('energiatodistus.lahtotiedot.lammitetty-nettoala')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['lahtotiedot', 'lammitetty-nettoala'])}
+          format={et.formatters.optionalText}
+          parse={parsers.optionalParser(parsers.parseNumber)}
+          validators={schema.lahtotiedot['lammitetty-nettoala']}
+          i18n={$_} />
+    </div>
+
+    <H1 text="Rakennusvaippa" />
+
+    <div class="w-1/5 py-4 mb-4">
+      <Input
+          id={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
+          name={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
+          label={$_('energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku')}
+          required={false}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku'])}
+          format={et.formatters.optionalText}
+          parse={parsers.optionalParser(parsers.parseNumber)}
+          validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
+          i18n={$_} />
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th> <th>Ala (m²)</th> <th>U (W/(m²K))</th> <th>U*A (W/K)</th> <th>Osuus lämpöhäviöistä</th>
+        </tr>
+      </thead>
+      <tbody>
+      {#each ['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet'] as vaippa}
+      <tr>
+        <td>{$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}`)}</td>
+        <td class="p-2">
+          <Input
+              id={`lahtotiedot.rakennusvaippa.${vaippa}.ala`}
+              name={`lahtotiedot.rakennusvaippa.${vaippa}.ala`}
+              required={false}
+              bind:model={energiatodistus}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'ala'])}
+              format={et.formatters.optionalText}
+              parse={parsers.optionalParser(parsers.parseNumber)}
+              validators={schema.lahtotiedot.rakennusvaippa[vaippa].ala}
+              i18n={$_} />
+        </td>
+        <td class="p-2">
+          <Input
+              id={`lahtotiedot.rakennusvaippa.${vaippa}.U`}
+              name={`lahtotiedot.rakennusvaippa.${vaippa}.U`}
+              required={false}
+              bind:model={energiatodistus}
+              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'U'])}
+              format={et.formatters.optionalText}
+              parse={parsers.optionalParser(parsers.parseNumber)}
+              validators={schema.lahtotiedot.rakennusvaippa[vaippa].U}
+              i18n={$_} />
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+      {/each}
+      </tbody>
+    </table>
+
   </div>
 
   <div class="flex -mx-4 pt-8">
