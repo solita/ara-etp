@@ -1,4 +1,3 @@
-import Home from '@Component/Home/Home';
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
 import Viestit from '@Component/Viestit/Viestit';
@@ -9,9 +8,10 @@ import Tyojono from '@Component/Tyojono/Tyojono';
 import EnergiaTodistus from '@Component/EnergiaTodistus/EnergiaTodistus';
 import NotFound from '@Component/NotFound/NotFound';
 import MyInfo from '@Component/Kayttaja/MyInfo';
+import LandingPage from '@Component/Kayttaja/LandingPage';
 
 export const routes = {
-  '/': Home,
+  '/': LandingPage,
   '/yritys': Yritys,
   '/yritys/*': Yritys,
   '/halytykset': Halytykset,
