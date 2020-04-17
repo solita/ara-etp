@@ -239,3 +239,7 @@ export const filterAlakayttotarkoitusLuokat = R.curry(
       R.filter(alaluokka => Maybe.map(
         R.equals(alaluokka['kayttotarkoitusluokka-id']),
         kayttotarkoitusluokkaId).orSome(true))));
+
+export const validators = deep.map(
+  R.compose(R.complement(R.isNil), R.prop('validators')),
+  R.prop('validators'));
