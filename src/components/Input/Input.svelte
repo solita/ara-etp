@@ -12,6 +12,7 @@
   export let required = false;
   export let autocomplete = 'off';
   export let disabled = false;
+  export let compact = false;
 
   export let model = { empty: '' };
   export let lens = R.lensProp('empty');
@@ -126,7 +127,8 @@
   }
 </style>
 
-<label for={id} class:required class:error={highlightError} class:focused>
+<label for={id} class:required class:error={highlightError}
+       class:focused class:sr-only={compact}>
   {label}
 </label>
 

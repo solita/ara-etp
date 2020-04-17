@@ -13,7 +13,7 @@
   import { schema } from './schema-2018';
 
   import H1 from '@Component/H1/H1';
-  import Input from '@Component/Input/Input';
+  import Input from '@Component/EnergiaTodistus/Input';
   import Button from '@Component/Button/Button';
   import Select from '@Component/Select/Select';
   import Checkbox from '@Component/Checkbox/Checkbox';
@@ -105,7 +105,7 @@
 
 <form
   on:submit|preventDefault={_ => {
-    if (et.isValidForm(schema, energiatodistus)) {
+    if (et.isValidForm(et.validators(schema), energiatodistus)) {
       flashMessageStore.flush();
       submit(energiatodistus);
     } else {
@@ -117,33 +117,15 @@
     <div class="flex flex-col py-4 -mx-4">
 
       <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.yritys.nimi'}
-            name={'perustiedot.yritys.nimi'}
-            label={$_('energiatodistus.perustiedot.yritys.nimi')}
-            required={false}
-            {disabled}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'yritys', 'nimi'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.yritys.nimi}
-            i18n={$_} />
+            path={['perustiedot', 'yritys', 'nimi']}/>
       </div>
 
       <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.tilaaja'}
-            name={'perustiedot.tilaaja'}
-            label={$_('energiatodistus.perustiedot.tilaaja')}
-            required={false}
-            {disabled}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'tilaaja'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.tilaaja}
-            i18n={$_} />
+            path={['perustiedot', 'tilaaja']} />
       </div>
 
       <div class="lg:w-1/2 w-full px-4 py-4">
@@ -179,108 +161,51 @@
 
     <div class="flex lg:flex-row flex-col -mx-4">
       <div class="lg:w-4/5 w-full px-4 py-4">
-        <Input
-          id={'perustiedot.nimi'}
-          name={'perustiedot.nimi'}
-          label={$_('energiatodistus.perustiedot.nimi')}
-          required={false}
-          {disabled}
+        <Input {disabled} {schema}
           bind:model={energiatodistus}
-          lens={R.lensPath(['perustiedot', 'nimi'])}
-          format={et.formatters.optionalText}
-          parse={et.parsers.optionalText}
-          validators={schema.perustiedot.nimi}
-          i18n={$_} />
+          path={['perustiedot', 'nimi']} />
       </div>
 
       <div class="lg:w-1/5 px-4 py-4">
-        <Input
-            id={'perustiedot.valmistumisvuosi'}
-            name={'perustiedot.valmistumisvuosi'}
-            label={$_('energiatodistus.perustiedot.valmistumisvuosi')}
-            required={false}
-            bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'valmistumisvuosi'])}
-            format={et.formatters.optionalText}
-            parse={parsers.optionalParser(parsers.parseInteger)}
-            validators={schema.perustiedot.valmistumisvuosi}
-            i18n={$_} />
+        <Input {disabled} {schema}
+           bind:model={energiatodistus}
+           path={['perustiedot', 'valmistumisvuosi']} />
       </div>
     </div>
 
     <div class="flex lg:flex-row flex-col -mx-4 my-4">
       <div class="w-full px-4 py-4">
-        <Input
-            id={'perustiedot.rakennusosa'}
-            name={'perustiedot.rakennusosa'}
-            label={$_('energiatodistus.perustiedot.rakennusosa')}
-            required={false}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'rakennusosa'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.rakennusosa}
-            i18n={$_} />
+            path={['perustiedot', 'rakennusosa']} />
       </div>
     </div>
 
     <div class="flex lg:flex-row flex-col -mx-4 my-4">
       <div class="lg:w-4/5 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.katuosoite'}
-            name={'perustiedot.katuosoite'}
-            label={$_('energiatodistus.perustiedot.katuosoite')}
-            required={false}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'katuosoite-fi'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot['katuosoite-fi']}
-            i18n={$_} />
+            path={['perustiedot', 'katuosoite-fi']} />
       </div>
 
       <div class="lg:w-1/5 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.postinumero'}
-            name={'perustiedot.postinumero'}
-            label={$_('energiatodistus.perustiedot.postinumero')}
-            required={false}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'postinumero'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.postinumero}
-            i18n={$_} />
+            path={['perustiedot', 'postinumero']} />
       </div>
     </div>
 
     <div class="flex lg:flex-row flex-col -mx-4 my-4">
       <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.rakennustunnus'}
-            name={'perustiedot.rakennustunnus'}
-            label={$_('energiatodistus.perustiedot.rakennustunnus')}
-            required={false}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'rakennustunnus'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.rakennustunnus}
-            i18n={$_} />
+            path={['perustiedot', 'rakennustunnus']} />
       </div>
 
       <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-            id={'perustiedot.kiinteistotunnus'}
-            name={'perustiedot.kiinteistotunnus'}
-            label={$_('energiatodistus.perustiedot.kiinteistotunnus')}
-            required={false}
+        <Input {disabled} {schema}
             bind:model={energiatodistus}
-            lens={R.lensPath(['perustiedot', 'kiinteistotunnus'])}
-            format={et.formatters.optionalText}
-            parse={et.parsers.optionalText}
-            validators={schema.perustiedot.kiinteistotunnus}
-            i18n={$_} />
+            path={['perustiedot', 'kiinteistotunnus']} />
       </div>
     </div>
 
@@ -328,49 +253,25 @@
     <p>Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi</p>
 
     <div class="w-full py-4 mb-4">
-      <Input
-          id={'perustiedot.keskeiset-suositukset'}
-          name={'perustiedot.keskeiset-suositukset'}
-          label={$_('energiatodistus.perustiedot.keskeiset-suositukset')}
-          required={false}
+      <Input {disabled} {schema}
           bind:model={energiatodistus}
-          lens={R.lensPath(['perustiedot', 'keskeiset-suositukset-fi'])}
-          format={et.formatters.optionalText}
-          parse={et.parsers.optionalText}
-          validators={schema.perustiedot['keskeiset-suositukset-fi']}
-          i18n={$_} />
+          path={['perustiedot', 'keskeiset-suositukset-fi']} />
     </div>
 
     <H1 text="E-luvun laskennan lähtotiedot" />
 
     <div class="w-1/5 py-4 mb-4">
-      <Input
-          id={'lahtotiedot.lammitetty-nettoala'}
-          name={'lahtotiedot.lammitetty-nettoala'}
-          label={$_('energiatodistus.lahtotiedot.lammitetty-nettoala')}
-          required={false}
+      <Input {disabled} {schema}
           bind:model={energiatodistus}
-          lens={R.lensPath(['lahtotiedot', 'lammitetty-nettoala'])}
-          format={et.formatters.optionalText}
-          parse={parsers.optionalParser(parsers.parseNumber)}
-          validators={schema.lahtotiedot['lammitetty-nettoala']}
-          i18n={$_} />
+          path={['lahtotiedot', 'lammitetty-nettoala']} />
     </div>
 
     <H1 text="Rakennusvaippa" />
 
     <div class="w-1/5 py-4 mb-6">
-      <Input
-          id={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
-          name={'lahtotiedot.rakennusvaippa.ilmanvuotoluku'}
-          label={$_('energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku')}
-          required={false}
+      <Input {disabled} {schema}
           bind:model={energiatodistus}
-          lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku'])}
-          format={et.formatters.optionalText}
-          parse={parsers.optionalParser(parsers.parseNumber)}
-          validators={schema.lahtotiedot.rakennusvaippa.ilmanvuotoluku}
-          i18n={$_} />
+          path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']}/>
     </div>
 
     <table class="mb-6">
@@ -384,28 +285,14 @@
       <tr>
         <td>{$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}`)}</td>
         <td class="p-2">
-          <Input
-              id={`lahtotiedot.rakennusvaippa.${vaippa}.ala`}
-              name={`lahtotiedot.rakennusvaippa.${vaippa}.ala`}
-              required={false}
+          <Input {disabled} {schema} compact={true}
               bind:model={energiatodistus}
-              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'ala'])}
-              format={et.formatters.optionalText}
-              parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa[vaippa].ala}
-              i18n={$_} />
+              path={['lahtotiedot', 'rakennusvaippa', vaippa, 'ala']} />
         </td>
         <td class="p-2">
-          <Input
-              id={`lahtotiedot.rakennusvaippa.${vaippa}.U`}
-              name={`lahtotiedot.rakennusvaippa.${vaippa}.U`}
-              required={false}
+          <Input {disabled} {schema} compact={true}
               bind:model={energiatodistus}
-              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', vaippa, 'U'])}
-              format={et.formatters.optionalText}
-              parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa[vaippa].U}
-              i18n={$_} />
+              path={['lahtotiedot', 'rakennusvaippa', vaippa, 'U']}/>
         </td>
         <td></td>
         <td></td>
@@ -416,16 +303,9 @@
         <td></td>
         <td></td>
         <td>
-          <Input
-              id={`lahtotiedot.rakennusvaippa.kylmasillat-UA`}
-              name={`lahtotiedot.rakennusvaippa.kylmasillat-UA`}
-              required={false}
+          <Input {disabled} {schema} compact={true}
               bind:model={energiatodistus}
-              lens={R.lensPath(['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA'])}
-              format={et.formatters.optionalText}
-              parse={parsers.optionalParser(parsers.parseNumber)}
-              validators={schema.lahtotiedot.rakennusvaippa['kylmasillat-UA']}
-              i18n={$_} />
+              path={['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA']} />
         </td>
         <td></td>
       </tr>
@@ -446,40 +326,19 @@
         <tr>
           <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}`)}</td>
           <td class="p-2">
-            <Input
-                id={`lahtotiedot.ikkunat.${ikkuna}.ala`}
-                name={`lahtotiedot.ikkunat.${ikkuna}.ala`}
-                required={false}
+            <Input {disabled} {schema} compact={true}
                 bind:model={energiatodistus}
-                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'ala'])}
-                format={et.formatters.optionalText}
-                parse={parsers.optionalParser(parsers.parseNumber)}
-                validators={schema.lahtotiedot.ikkunat[ikkuna].ala}
-                i18n={$_} />
+                path={['lahtotiedot', 'ikkunat', ikkuna, 'ala']}/>
           </td>
           <td class="p-2">
-            <Input
-                id={`lahtotiedot.ikkunat.${ikkuna}.U`}
-                name={`lahtotiedot.ikkunat.${ikkuna}.U`}
-                required={false}
+            <Input {disabled} {schema} compact={true}
                 bind:model={energiatodistus}
-                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'U'])}
-                format={et.formatters.optionalText}
-                parse={parsers.optionalParser(parsers.parseNumber)}
-                validators={schema.lahtotiedot.ikkunat[ikkuna].U}
-                i18n={$_} />
+                path={['lahtotiedot', 'ikkunat', ikkuna, 'U']} />
           </td>
           <td class="p-2">
-            <Input
-                id={`lahtotiedot.ikkunat.${ikkuna}.g-ks`}
-                name={`lahtotiedot.ikkunat.${ikkuna}.g-ks`}
-                required={false}
+            <Input {disabled} {schema} compact={true}
                 bind:model={energiatodistus}
-                lens={R.lensPath(['lahtotiedot', 'ikkunat', ikkuna, 'g-ks'])}
-                format={et.formatters.optionalText}
-                parse={parsers.optionalParser(parsers.parseNumber)}
-                validators={schema.lahtotiedot.ikkunat[ikkuna]['g-ks']}
-                i18n={$_} />
+                path={['lahtotiedot', 'ikkunat', ikkuna, 'g-ks']} />
           </td>
         </tr>
       {/each}
@@ -489,17 +348,9 @@
     <H1 text="Ilmanvaihtojärjestelmä" />
 
     <div class="w-full py-4 mb-4">
-      <Input
-          id={'lahtotiedot.ilmanvaihto.kuvaus'}
-          name={'lahtotiedot.ilmanvaihto.kuvaus'}
-          label={$_('energiatodistus.lahtotiedot.ilmanvaihto.kuvaus')}
-          required={false}
+      <Input {disabled} {schema}
           bind:model={energiatodistus}
-          lens={R.lensPath(['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi'])}
-          format={et.formatters.optionalText}
-          parse={et.parsers.optionalText}
-          validators={schema.lahtotiedot.ilmanvaihto['kuvaus-fi']}
-          i18n={$_} />
+          path={['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi']} />
     </div>
 
   </div>
