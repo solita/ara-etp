@@ -8,6 +8,8 @@
   export let id;
   export let required;
   export let label = '';
+  export let disabled = false;
+  export let autocomplete = 'off';
 
   export let model = { empty: '' };
   export let lens = R.lensProp('empty');
@@ -43,21 +45,28 @@
 </script>
 
 <style type="text/postcss">
-  div {
-    @apply flex relative items-stretch border-b-3 border-disabled text-dark;
-    min-height: 6em;
+  .inputwrapper {
+    @apply flex items-stretch border-b-3 border-disabled text-dark;
+    min-height: 20em;
   }
 
-  div:hover {
+  .inputwrapper:hover {
     @apply border-hover;
   }
 
-  div.focused {
+  .inputwrapper.focused {
     @apply border-primary;
+  }
+  .inputwrapper.error {
+    @apply border-error;
+  }
+
+  .inputwrapper.disabled {
+    @apply border-0 pb-3;
   }
 
   textarea {
-    @apply font-medium flex-grow resize-none text-xl;
+    @apply flex-grow font-medium resize-none text-xl py-1;
   }
 
   textarea:focus {
@@ -79,9 +88,48 @@
   textarea::-webkit-scrollbar-thumb:hover {
     @apply bg-dark;
   }
+
+  .error-label {
+    @apply absolute top-auto;
+    font-size: smaller;
+  }
+
+  .error-icon {
+    @apply text-error;
+  }
 </style>
 
 <Label {id} {required} {label} error={highlightError} {focused} />
-<div class="inputwrapper">
-  <textarea {id} {required} value={viewValue} />
+<div
+  class="inputwrapper"
+  class:focused
+  class:error={highlightError}
+  class:disabled>
+  <textarea
+    {id}
+    {required}
+    {disabled}
+    {autocomplete}
+    value={viewValue}
+    on:focus={event => {
+      focused = true;
+      validate(parse(event.target.value));
+    }}
+    on:blur={event => {
+      focused = false;
+      const parsedValue = parse(event.target.value);
+      Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
+      model = R.set(lens, parsedValue, model);
+      validate(parsedValue);
+    }}
+    on:click
+    on:keydown
+    on:input={event => validate(parse(event.target.value))} />
 </div>
+
+{#if !valid}
+  <div class="error-label">
+    <span class="font-icon error-icon">error</span>
+    {errorMessage}
+  </div>
+{/if}
