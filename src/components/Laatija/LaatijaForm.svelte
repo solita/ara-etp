@@ -5,7 +5,7 @@
   import { locale, _ } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
 
-  import H1 from '@Component/H1/H1';
+  import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';

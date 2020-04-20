@@ -6,7 +6,7 @@
   import { _ } from '@Language/i18n';
 
   import Select from '@Component/Select/Select';
-  import H1 from '@Component/H1/H1';
+  import H1 from '@Component/H/H1';
 
   import Laskutustieto from './Laskutustieto';
 

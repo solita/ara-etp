@@ -4,7 +4,7 @@
 
 <style type="text/postcss">
   h1 {
-    @apply text-secondary font-bold uppercase text-lg pb-8 tracking-xl;
+    @apply text-secondary font-bold uppercase text-lg mb-8 tracking-xl;
   }
 </style>
 
