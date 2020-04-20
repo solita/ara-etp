@@ -94,6 +94,8 @@
     kayttotarkoitusluokkaId,
     alakayttotarkoitusluokat
   );
+
+  $: console.log(energiatodistus);
 </script>
 
 <style type="text/postcss">
@@ -110,11 +112,16 @@
   }
 
   th {
-    @apply px-4 py-2 text-center;
+    @apply px-4 py-2 text-center text-primary font-bold text-sm;
+    height: 4em;
   }
 
   tr:last-child > td {
     @apply pb-5;
+  }
+
+  tr > td:first-child {
+    @apply font-bold;
   }
 
   td {
@@ -379,7 +386,7 @@
     <table class="mb-6">
       <thead>
         <tr>
-          <th>Ikkuna</th>
+          <th />
           <th>Ala (m²)</th>
           <th>U (W/(m²K))</th>
           <th>g-kohtisuora</th>
@@ -427,6 +434,104 @@
         bind:model={energiatodistus}
         path={['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi']} />
     </div>
+
+    <table class="mb-6">
+      <thead>
+        <tr>
+          <th />
+          <th>
+            Ilmavirta
+            <br />
+            tulo (m³/s) / poisto (m³/s)
+          </th>
+          <th>
+            Järjestelmän SFP-luku
+            <br />
+            kW/(m³/s)
+          </th>
+          <th>LTO:n lämpötilasuhde</th>
+          <th>
+            Jäätymisenesto
+            <br />
+            °C
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pääilmanvaihtokoneet</td>
+          <td class="flex flex-row items-end">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
+            /
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'poisto']} />
+          </td>
+          <td>
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'sfp']} />
+          </td>
+          <td>
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'lampotilasuhde']} />
+          </td>
+          <td>
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'jaatymisenesto']} />
+          </td>
+        </tr>
+        {#each ['erillispoistot', 'ivjarjestelma'] as ilmanvaihto}
+          <tr>
+            <td>{ilmanvaihto}</td>
+            <td class="flex flex-row items-end">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
+              /
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'poisto']} />
+            </td>
+            <td>
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'sfp']} />
+            </td>
+            <td />
+            <td />
+          </tr>
+        {/each}
+      </tbody>
+    </table>
 
   </div>
 

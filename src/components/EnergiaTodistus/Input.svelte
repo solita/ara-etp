@@ -16,6 +16,8 @@
   const id = R.replace(/-fi|-sv/g, '', R.join('.', path));
   const lens = R.lensPath(path);
   const type = R.view(lens, schema);
+
+  $: console.log(id, R.view(lens, model));
 </script>
 
 <Input
