@@ -96,7 +96,7 @@
 
 <style type="text/postcss">
   table {
-    @apply w-full mb-4 border-b-1 border-disabled pb-8;
+    @apply w-full border-b-1 border-disabled pb-8;
   }
 
   tr > td:not(:first-child),
