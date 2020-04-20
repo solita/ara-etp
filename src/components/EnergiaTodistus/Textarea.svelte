@@ -4,7 +4,7 @@
   import { locale, _ } from '@Language/i18n';
   import * as et from './energiatodistus-utils';
 
-  import Input from '@Component/Input/Input';
+  import Textarea from '@Component/Textarea/Textarea';
 
   export let path;
   export let model;
@@ -18,7 +18,7 @@
   const type = R.view(lens, schema);
 </script>
 
-<Input
+<Textarea
   {id}
   name={id}
   label={$_('energiatodistus.' + id)}

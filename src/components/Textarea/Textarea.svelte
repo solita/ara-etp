@@ -10,6 +10,7 @@
   export let label = '';
   export let disabled = false;
   export let autocomplete = 'off';
+  export let name = '';
 
   export let model = { empty: '' };
   export let lens = R.lensProp('empty');
@@ -17,6 +18,8 @@
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
+
+  export let compact;
 
   $: viewValue = R.compose(
     Maybe.orSome(viewValue),
@@ -47,7 +50,7 @@
 <style type="text/postcss">
   .inputwrapper {
     @apply flex items-stretch border-b-3 border-disabled text-dark;
-    min-height: 20em;
+    min-height: 7em;
   }
 
   .inputwrapper:hover {
@@ -99,7 +102,7 @@
   }
 </style>
 
-<Label {id} {required} {label} error={highlightError} {focused} />
+<Label {id} {required} {label} {compact} error={highlightError} {focused} />
 <div
   class="inputwrapper"
   class:focused
@@ -107,6 +110,7 @@
   class:disabled>
   <textarea
     {id}
+    {name}
     {required}
     {disabled}
     {autocomplete}

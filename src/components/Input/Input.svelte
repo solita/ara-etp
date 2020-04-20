@@ -3,6 +3,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
+  import Label from '@Component/Label/Label';
 
   export let id;
   export let name;
@@ -127,11 +128,7 @@
   }
 </style>
 
-<label for={id} class:required class:error={highlightError}
-       class:focused class:sr-only={compact}>
-  {label}
-</label>
-
+<Label {id} {required} {label} {compact} error={highlightError} {focused} />
 <div
   class="inputwrapper"
   class:caret

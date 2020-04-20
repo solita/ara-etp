@@ -4,6 +4,7 @@
   export let error;
   export let focused;
   export let label = '';
+  export let compact = false;
 </script>
 
 <style type="text/postcss">
@@ -27,4 +28,11 @@
   }
 </style>
 
-<label for={id} class:required class:error class:focused>{label}</label>
+<label
+  for={id}
+  class:sr-only={compact}
+  class:required
+  class:error
+  class:focused>
+  {label}
+</label>
