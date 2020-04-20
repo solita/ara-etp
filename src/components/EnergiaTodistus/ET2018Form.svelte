@@ -96,9 +96,13 @@
 
 <style type="text/postcss">
   table {
-    @apply w-full;
+    @apply w-full mb-4 border-b-1 border-disabled pb-8;
   }
 
+  tr > td:not(:first-child),
+  tr > th:not(:first-child) {
+    @apply border-l-1 border-disabled;
+  }
   thead {
     @apply bg-tertiary;
   }
@@ -107,12 +111,12 @@
     @apply px-4 py-2 text-center;
   }
 
-  tr {
-    @apply px-4 py-2;
+  tr:last-child > td {
+    @apply pb-5;
   }
 
   td {
-    @apply text-center;
+    @apply text-center py-2 px-4;
   }
 </style>
 
@@ -329,7 +333,7 @@
             <td>
               {$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}`)}
             </td>
-            <td class="p-2">
+            <td>
               <Input
                 {disabled}
                 {schema}
@@ -337,7 +341,7 @@
                 bind:model={energiatodistus}
                 path={['lahtotiedot', 'rakennusvaippa', vaippa, 'ala']} />
             </td>
-            <td class="p-2">
+            <td>
               <Input
                 {disabled}
                 {schema}
@@ -383,7 +387,7 @@
         {#each ['pohjoinen', 'koillinen', 'ita', 'kaakko', 'etela', 'lounas', 'lansi', 'luode'] as ikkuna}
           <tr>
             <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}`)}</td>
-            <td class="p-2">
+            <td>
               <Input
                 {disabled}
                 {schema}
@@ -391,7 +395,7 @@
                 bind:model={energiatodistus}
                 path={['lahtotiedot', 'ikkunat', ikkuna, 'ala']} />
             </td>
-            <td class="p-2">
+            <td>
               <Input
                 {disabled}
                 {schema}
@@ -399,7 +403,7 @@
                 bind:model={energiatodistus}
                 path={['lahtotiedot', 'ikkunat', ikkuna, 'U']} />
             </td>
-            <td class="p-2">
+            <td>
               <Input
                 {disabled}
                 {schema}
