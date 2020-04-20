@@ -4,6 +4,7 @@
   import * as Either from '@Utility/either-utils';
   import * as v from '@Utility/validation';
   import Label from '@Component/Label/Label';
+  import { autoresize } from './autoresize';
 
   export let id;
   export let required;
@@ -18,6 +19,9 @@
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
+
+  export let min = 10;
+  export let max = 30;
 
   export let compact;
 
@@ -50,7 +54,6 @@
 <style type="text/postcss">
   .inputwrapper {
     @apply flex items-stretch border-b-3 border-disabled text-dark;
-    min-height: 7em;
   }
 
   .inputwrapper:hover {
@@ -69,7 +72,7 @@
   }
 
   textarea {
-    @apply flex-grow font-medium resize-none text-xl py-1;
+    @apply flex-grow font-medium py-1 resize-none;
   }
 
   textarea:focus {
@@ -91,7 +94,6 @@
   textarea::-webkit-scrollbar-thumb:hover {
     @apply bg-dark;
   }
-
   .error-label {
     @apply absolute top-auto;
     font-size: smaller;
@@ -114,6 +116,7 @@
     {required}
     {disabled}
     {autocomplete}
+    use:autoresize={[min, max]}
     value={viewValue}
     on:focus={event => {
       focused = true;
