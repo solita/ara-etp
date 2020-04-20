@@ -331,7 +331,7 @@
         {#each ['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet'] as vaippa}
           <tr>
             <td>
-              {$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}`)}
+              {$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}.label`)}
             </td>
             <td>
               <Input
@@ -355,7 +355,7 @@
         {/each}
         <tr>
           <td>
-            {$_('energiatodistus.lahtotiedot.rakennusvaippa.kylmasillat-UA')}
+            {$_('energiatodistus.lahtotiedot.rakennusvaippa.kylmasillat')}
           </td>
           <td />
           <td />
@@ -386,7 +386,7 @@
       <tbody>
         {#each ['pohjoinen', 'koillinen', 'ita', 'kaakko', 'etela', 'lounas', 'lansi', 'luode'] as ikkuna}
           <tr>
-            <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}`)}</td>
+            <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}.label`)}</td>
             <td>
               <Input
                 {disabled}
