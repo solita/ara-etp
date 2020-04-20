@@ -120,8 +120,21 @@ export const emptyEnergiatodistus2018 = _ => ({
     'sis-kuorma': []
   },
   tulokset: {
-    'kaytettavat-energiamuodot': [],
-    'uusiutuvat-omavaraisenergiat': [],
+    'kaytettavat-energiamuodot': {
+      'fossiilinen-polttoaine': Maybe.None(),
+      sahko: Maybe.None(),
+      kaukojaahdytys: Maybe.None(),
+      kaukolampo: Maybe.None(),
+      'uusiutuva-polttoaine': Maybe.None()
+    },
+    'uusiutuvat-omavaraisenergiat': {
+      aurinkosahko: Maybe.None(),
+      tuulisahko: Maybe.None(),
+      aurinkolampo: Maybe.None(),
+      muulampo: Maybe.None(),
+      muusahko: Maybe.None(),
+      lampopumppu: Maybe.None(),
+    },
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': emptySahkoLampo(),
       'tuloilman-lammitys': emptySahkoLampo(),
