@@ -11,7 +11,7 @@
   import * as country from '@Component/Geo/country-utils';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
-  import H1 from '@Component/H1/H1';
+  import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';

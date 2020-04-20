@@ -6,7 +6,7 @@
   import * as validation from '@Utility/validation';
   import * as et from './energiatodistus-utils';
 
-  import H1 from '@Component/H1/H1';
+  import H1 from '@Component/H/H1';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
 
@@ -17,7 +17,6 @@
   const originalEnergiatodistus = R.clone(energiatodistus);
   const schema = et.schema2013;
   export let disabled = false;
-
 
   let isValidForm = false;
   $: isValidForm = et.isValidForm(schema, energiatodistus);

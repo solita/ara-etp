@@ -3,7 +3,7 @@
 
   import { _ } from '@Language/i18n';
 
-  import H1 from '@Component/H1/H1';
+  import H1 from '@Component/H/H1';
   import Input from '@Component/Input/Input';
   import Table from '@Component/Table/Table';
   import Button from '@Component/Button/Button';
