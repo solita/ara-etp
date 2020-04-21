@@ -24,9 +24,9 @@
     <tr class="et-table--tr">
       <th class="et-table--th" />
       <th class="et-table--th">
-        Ilmavirta
+        {$_('energiatodistus.lahtotiedot.ilmanvaihto.ilmavirta')}
         <br />
-        tulo (m³/s) / poisto (m³/s)
+        {$_('energiatodistus.lahtotiedot.ilmanvaihto.tulo')}(m³/s) / {$_('energiatodistus.lahtotiedot.ilmanvaihto.poisto')}(m³/s)
       </th>
       <th class="et-table--th">
         Järjestelmän SFP-luku
@@ -116,3 +116,11 @@
     {/each}
   </tbody>
 </table>
+
+<div class="w-1/2 py-4 mb-4">
+  <Input
+    {disabled}
+    {schema}
+    bind:model={energiatodistus}
+    path={['lahtotiedot', 'ilmanvaihto', 'lto-vuosihyotysuhde']} />
+</div>

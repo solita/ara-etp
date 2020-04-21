@@ -210,7 +210,11 @@
         }
       },
       "ilmanvaihto": {
-        "kuvaus": "Ilmanvaihtojärjestelmän kuvaus"
+        "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
+        "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
+        "ilmavirta": "Ilmavirta",
+        "tulo": "tulo",
+        "poisto": "poisto"
       }
     },
     "messages": {

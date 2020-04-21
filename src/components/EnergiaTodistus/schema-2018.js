@@ -86,7 +86,8 @@ export const schema = {
       },
       ivjarjestelma: {
         ...PoistoTulo
-      }
+      },
+      'lto-vuosihyotysuhde': Float(0.0, 1.0)
     }
   }
 };
