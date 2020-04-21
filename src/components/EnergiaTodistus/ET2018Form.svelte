@@ -421,7 +421,7 @@
     <H3 text="Ilmanvaihtojärjestelmä" />
 
     <div class="w-full py-4 mb-4">
-      <Textarea
+      <Input
         {disabled}
         {schema}
         bind:model={energiatodistus}
