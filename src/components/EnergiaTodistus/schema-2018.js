@@ -1,4 +1,4 @@
-import * as validation from "@Utility/validation";
+import * as validation from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
 
 const String = max => ({
@@ -6,7 +6,8 @@ const String = max => ({
   validators: [
     validation.liftValidator(validation.minLengthConstraint(2)),
     validation.liftValidator(validation.maxLengthConstraint(max))
-]});
+  ]
+});
 
 const Integer = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseInteger),
@@ -20,14 +21,20 @@ const Float = (min, max) => ({
 
 const Rakennusvaippa = {
   ala: Float(0, 50),
-  U: Float(0, 50),
-}
+  U: Float(0, 50)
+};
 
 const Ikkuna = {
   ala: Float(0, 9999),
   U: Float(0.4, 6.5),
   'g-ks': Float(0.1, 1.0)
-}
+};
+
+const PoistoTulo = {
+  poisto: Float(0, 9999),
+  tulo: Float(0, 9999),
+  sfp: Float(0.0, 10.0)
+};
 
 export const schema = {
   perustiedot: {
@@ -44,7 +51,7 @@ export const schema = {
       nimi: String(200)
     },
     'keskeiset-suositukset-fi': String(200),
-    'keskeiset-suositukset-sv': String(200),
+    'keskeiset-suositukset-sv': String(200)
   },
   lahtotiedot: {
     'lammitetty-nettoala': Float(0, 1000),
@@ -68,7 +75,18 @@ export const schema = {
       luode: Ikkuna
     },
     ilmanvaihto: {
-      'kuvaus-fi': String(500)
+      'kuvaus-fi': String(500),
+      paaiv: {
+        ...PoistoTulo,
+        lampotilasuhde: Float(0.0, 1.0),
+        jaatymisenesto: Float(-20.0, 10.0)
+      },
+      erillispoistot: {
+        ...PoistoTulo
+      },
+      ivjarjestelma: {
+        ...PoistoTulo
+      }
     }
   }
 };
