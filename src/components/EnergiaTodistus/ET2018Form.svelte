@@ -16,10 +16,12 @@
   import H2 from '@Component/H/H2';
   import H3 from '@Component/H/H3';
 
-  import Input from '@Component/EnergiaTodistus/Input';
   import Button from '@Component/Button/Button';
   import Select from '@Component/Select/Select';
   import Checkbox from '@Component/Checkbox/Checkbox';
+
+  import Input from './Input';
+  import Textarea from './Textarea';
 
   import { flashMessageStore } from '@/stores';
 
@@ -290,7 +292,7 @@
       toimenpiteiksi" />
 
     <div class="w-full py-4 mb-4">
-      <Input
+      <Textarea
         {disabled}
         {schema}
         bind:model={energiatodistus}
@@ -416,7 +418,7 @@
       </tbody>
     </table>
 
-    <H2 text="Ilmanvaihtojärjestelmä" />
+    <H3 text="Ilmanvaihtojärjestelmä" />
 
     <div class="w-full py-4 mb-4">
       <Input

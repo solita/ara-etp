@@ -4,12 +4,14 @@
   import * as Either from '@Utility/either-utils';
   import * as v from '@Utility/validation';
   import Label from '@Component/Label/Label';
+  import { autoresize } from './autoresize';
 
   export let id;
   export let required;
   export let label = '';
   export let disabled = false;
   export let autocomplete = 'off';
+  export let name = '';
 
   export let model = { empty: '' };
   export let lens = R.lensProp('empty');
@@ -17,6 +19,11 @@
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
+
+  export let min = 10;
+  export let max = 30;
+
+  export let compact;
 
   $: viewValue = R.compose(
     Maybe.orSome(viewValue),
@@ -47,7 +54,6 @@
 <style type="text/postcss">
   .inputwrapper {
     @apply flex items-stretch border-b-3 border-disabled text-dark;
-    min-height: 20em;
   }
 
   .inputwrapper:hover {
@@ -66,7 +72,7 @@
   }
 
   textarea {
-    @apply flex-grow font-medium resize-none text-xl py-1;
+    @apply flex-grow font-medium py-1 resize-none;
   }
 
   textarea:focus {
@@ -88,7 +94,6 @@
   textarea::-webkit-scrollbar-thumb:hover {
     @apply bg-dark;
   }
-
   .error-label {
     @apply absolute top-auto;
     font-size: smaller;
@@ -99,7 +104,7 @@
   }
 </style>
 
-<Label {id} {required} {label} error={highlightError} {focused} />
+<Label {id} {required} {label} {compact} error={highlightError} {focused} />
 <div
   class="inputwrapper"
   class:focused
@@ -107,9 +112,11 @@
   class:disabled>
   <textarea
     {id}
+    {name}
     {required}
     {disabled}
     {autocomplete}
+    use:autoresize={[min, max]}
     value={viewValue}
     on:focus={event => {
       focused = true;
