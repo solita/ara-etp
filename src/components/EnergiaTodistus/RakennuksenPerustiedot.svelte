@@ -1,0 +1,160 @@
+<script>
+  import * as R from 'ramda';
+  import { _ } from '@Language/i18n';
+  import * as Either from '@Utility/either-utils';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as et from './energiatodistus-utils';
+
+  import H2 from '@Component/H/H2';
+  import Input from '@Component/EnergiaTodistus/Input';
+  import Checkbox from '@Component/Checkbox/Checkbox';
+  import Select from '@Component/Select/Select';
+
+  export let schema;
+  export let disabled;
+  export let energiatodistus;
+
+  export let labelLocale;
+
+  export let kayttotarkoitusluokat;
+  export let alakayttotarkoitusluokat;
+
+  let kayttotarkoitusluokkaId = Maybe.None();
+  $: if (
+    kayttotarkoitusluokkaId.isSome() &&
+    !kayttotarkoitusluokkaId.equals(
+      et.findKayttotarkoitusluokkaId(
+        energiatodistus.perustiedot.kayttotarkoitus,
+        alakayttotarkoitusluokat
+      )
+    )
+  ) {
+    energiatodistus = R.set(
+      R.lensPath(['perustiedot', 'kayttotarkoitus']),
+      R.compose(
+        Either.orSome(Maybe.None()),
+        Either.map(alaluokat =>
+          R.length(alaluokat) === 1 ? Maybe.Some(alaluokat[0].id) : Maybe.None()
+        ),
+        et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId)
+      )(alakayttotarkoitusluokat),
+      energiatodistus
+    );
+  } else if (energiatodistus.perustiedot.kayttotarkoitus.isSome()) {
+    kayttotarkoitusluokkaId = et.findKayttotarkoitusluokkaId(
+      energiatodistus.perustiedot.kayttotarkoitus,
+      alakayttotarkoitusluokat
+    );
+  }
+
+  $: selectableAlakayttotarkoitusluokat = et.filterAlakayttotarkoitusLuokat(
+    kayttotarkoitusluokkaId,
+    alakayttotarkoitusluokat
+  );
+</script>
+
+<H2 text="Rakennuksen perustiedot" />
+
+<div class="flex lg:flex-row flex-col -mx-4">
+  <div class="lg:w-4/5 w-full px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'nimi']} />
+  </div>
+
+  <div class="lg:w-1/5 px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'valmistumisvuosi']} />
+  </div>
+</div>
+
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="w-full px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'rakennusosa']} />
+  </div>
+</div>
+
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="lg:w-4/5 w-full px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'katuosoite-fi']} />
+  </div>
+
+  <div class="lg:w-1/5 w-full px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'postinumero']} />
+  </div>
+</div>
+
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'rakennustunnus']} />
+  </div>
+
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['perustiedot', 'kiinteistotunnus']} />
+  </div>
+</div>
+
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <Select
+      id={'perustiedot.kayttotarkoitusluokka'}
+      name={'perustiedot.kayttotarkoitusluokka'}
+      label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
+      required={true}
+      {disabled}
+      bind:model={kayttotarkoitusluokkaId}
+      lens={R.lens(R.identity, R.identity)}
+      parse={Maybe.Some}
+      format={et.selectFormat(labelLocale, kayttotarkoitusluokat)}
+      items={Either.foldRight([], R.pluck('id'), kayttotarkoitusluokat)} />
+  </div>
+
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <Select
+      id={'perustiedot.alakayttotarkoitusluokka'}
+      name={'perustiedot.alakayttotarkoitusluokka'}
+      label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
+      required={true}
+      {disabled}
+      bind:model={energiatodistus}
+      lens={R.lensPath(['perustiedot', 'kayttotarkoitus'])}
+      parse={Maybe.Some}
+      format={et.selectFormat(labelLocale, alakayttotarkoitusluokat)}
+      items={Either.foldRight([], R.pluck('id'), selectableAlakayttotarkoitusluokat)} />
+  </div>
+</div>
+
+<div class="flex flex-col -mx-4 my-4">
+  <div class="w-full px-4 py-4">
+    <Checkbox
+      bind:model={energiatodistus}
+      lens={R.lensPath(['perustiedot', 'onko-julkinen-rakennus'])}
+      label={$_('energiatodistus.perustiedot.onko-julkinen-rakennus')}
+      {disabled} />
+  </div>
+</div>

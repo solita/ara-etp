@@ -21,7 +21,12 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
 
   import Input from './Input';
-  import Textarea from './Textarea';
+
+  import RakennuksenPerustiedot from './RakennuksenPerustiedot';
+  import ToimenpideEhdotukset from './ToimenpideEhdotukset';
+  import Rakennusvaippa from './Rakennusvaippa';
+  import Ikkunat from './Ikkunat';
+  import Ilmanvaihtojarjestelma from './Ilmanvaihtojarjestelma';
 
   import { flashMessageStore } from '@/stores';
 
@@ -62,70 +67,43 @@
     api.alakayttotarkoitusluokat2018
   );
 
-  let kayttotarkoitusluokkaId = Maybe.None();
-  $: if (
-    kayttotarkoitusluokkaId.isSome() &&
-    !kayttotarkoitusluokkaId.equals(
-      et.findKayttotarkoitusluokkaId(
-        energiatodistus.perustiedot.kayttotarkoitus,
-        alakayttotarkoitusluokat
-      )
-    )
-  ) {
-    energiatodistus = R.set(
-      R.lensPath(['perustiedot', 'kayttotarkoitus']),
-      R.compose(
-        Either.orSome(Maybe.None()),
-        Either.map(alaluokat =>
-          R.length(alaluokat) === 1 ? Maybe.Some(alaluokat[0].id) : Maybe.None()
-        ),
-        et.filterAlakayttotarkoitusLuokat(kayttotarkoitusluokkaId)
-      )(alakayttotarkoitusluokat),
-      energiatodistus
-    );
-  } else if (energiatodistus.perustiedot.kayttotarkoitus.isSome()) {
-    kayttotarkoitusluokkaId = et.findKayttotarkoitusluokkaId(
-      energiatodistus.perustiedot.kayttotarkoitus,
-      alakayttotarkoitusluokat
-    );
-  }
-
-  $: selectableAlakayttotarkoitusluokat = et.filterAlakayttotarkoitusLuokat(
-    kayttotarkoitusluokkaId,
-    alakayttotarkoitusluokat
-  );
-
   $: console.log(energiatodistus);
 </script>
 
 <style type="text/postcss">
-  table {
-    @apply w-full border-b-1 border-disabled pb-8;
+  :global(.et-table) {
+    @apply border-b-1 border-disabled pb-8;
   }
 
-  tr > td:not(:first-child),
-  tr > th:not(:first-child) {
-    @apply border-l-1 border-disabled;
-  }
-  thead {
-    @apply bg-tertiary;
+  :global(.et-table--th),
+  :global(.et-table--td) {
+    @apply px-4 py-2;
   }
 
-  th {
-    @apply px-4 py-2 text-center text-primary font-bold text-sm;
+  :global(.et-table--th) {
+    @apply text-primary font-bold text-sm text-center w-1/5;
     height: 4em;
   }
 
-  tr:last-child > td {
+  :global(.et-table--tr > .et-table--th:not(:first-child)),
+  :global(.et-table--tr > .et-table--td:not(:first-child)) {
+    @apply border-l-1 border-disabled;
+  }
+
+  :global(.et-table--thead) {
+    @apply bg-tertiary;
+  }
+
+  :global(.et-table--th__sixth) {
+    @apply w-1/6;
+  }
+
+  :global(.et-table--tr:last-child > .et-table--td) {
     @apply pb-5;
   }
 
-  tr > td:first-child {
+  :global(.et-table--tr > .et-table--td:first-child) {
     @apply font-bold;
-  }
-
-  td {
-    @apply text-center py-2 px-4;
   }
 </style>
 
@@ -187,124 +165,15 @@
       </div>
     </div>
 
-    <H2 text="Rakennuksen perustiedot" />
+    <RakennuksenPerustiedot
+      {schema}
+      {disabled}
+      bind:energiatodistus
+      {labelLocale}
+      {kayttotarkoitusluokat}
+      {alakayttotarkoitusluokat} />
 
-    <div class="flex lg:flex-row flex-col -mx-4">
-      <div class="lg:w-4/5 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'nimi']} />
-      </div>
-
-      <div class="lg:w-1/5 px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'valmistumisvuosi']} />
-      </div>
-    </div>
-
-    <div class="flex lg:flex-row flex-col -mx-4 my-4">
-      <div class="w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'rakennusosa']} />
-      </div>
-    </div>
-
-    <div class="flex lg:flex-row flex-col -mx-4 my-4">
-      <div class="lg:w-4/5 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'katuosoite-fi']} />
-      </div>
-
-      <div class="lg:w-1/5 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'postinumero']} />
-      </div>
-    </div>
-
-    <div class="flex lg:flex-row flex-col -mx-4 my-4">
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'rakennustunnus']} />
-      </div>
-
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'kiinteistotunnus']} />
-      </div>
-    </div>
-
-    <div class="flex lg:flex-row flex-col -mx-4 my-4">
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Select
-          id={'perustiedot.kayttotarkoitusluokka'}
-          name={'perustiedot.kayttotarkoitusluokka'}
-          label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
-          required={true}
-          {disabled}
-          bind:model={kayttotarkoitusluokkaId}
-          lens={R.lens(R.identity, R.identity)}
-          parse={Maybe.Some}
-          format={et.selectFormat(labelLocale, kayttotarkoitusluokat)}
-          items={Either.foldRight([], R.pluck('id'), kayttotarkoitusluokat)} />
-      </div>
-
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Select
-          id={'perustiedot.alakayttotarkoitusluokka'}
-          name={'perustiedot.alakayttotarkoitusluokka'}
-          label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
-          required={true}
-          {disabled}
-          bind:model={energiatodistus}
-          lens={R.lensPath(['perustiedot', 'kayttotarkoitus'])}
-          parse={Maybe.Some}
-          format={et.selectFormat(labelLocale, alakayttotarkoitusluokat)}
-          items={Either.foldRight([], R.pluck('id'), selectableAlakayttotarkoitusluokat)} />
-      </div>
-    </div>
-
-    <div class="flex flex-col -mx-4 my-4">
-      <div class="w-full px-4 py-4">
-        <Checkbox
-          bind:model={energiatodistus}
-          lens={R.lensPath(['perustiedot', 'onko-julkinen-rakennus'])}
-          label={$_('energiatodistus.perustiedot.onko-julkinen-rakennus')}
-          {disabled} />
-      </div>
-    </div>
-
-    <H2 text="Toimenpide-ehdotuksia e-luvun parantamiseksi" />
-    <H3
-      text="Keskeiset suositukset rakennuksen e-lukua parantaviksi
-      toimenpiteiksi" />
-
-    <div class="w-full py-4 mb-4">
-      <Textarea
-        {disabled}
-        {schema}
-        bind:model={energiatodistus}
-        path={['perustiedot', 'keskeiset-suositukset-fi']} />
-    </div>
+    <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
 
     <H2 text="E-luvun laskennan lähtotiedot" />
 
@@ -316,223 +185,9 @@
         path={['lahtotiedot', 'lammitetty-nettoala']} />
     </div>
 
-    <H3 text="Rakennusvaippa" />
-
-    <div class="w-1/5 py-4 mb-6">
-      <Input
-        {disabled}
-        {schema}
-        bind:model={energiatodistus}
-        path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
-    </div>
-
-    <table class="mb-6">
-      <thead>
-        <tr>
-          <th />
-          <th>Ala (m²)</th>
-          <th>U (W/(m²K))</th>
-          <th>U*A (W/K)</th>
-          <th>Osuus lämpöhäviöistä</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each ['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet'] as vaippa}
-          <tr>
-            <td>
-              {$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}.label`)}
-            </td>
-            <td>
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'rakennusvaippa', vaippa, 'ala']} />
-            </td>
-            <td>
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'rakennusvaippa', vaippa, 'U']} />
-            </td>
-            <td />
-            <td />
-          </tr>
-        {/each}
-        <tr>
-          <td>
-            {$_('energiatodistus.lahtotiedot.rakennusvaippa.kylmasillat')}
-          </td>
-          <td />
-          <td />
-          <td>
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA']} />
-          </td>
-          <td />
-        </tr>
-      </tbody>
-    </table>
-
-    <H3 compact={true} text="Ikkunat ilmansuunnittain" />
-
-    <table class="mb-6">
-      <thead>
-        <tr>
-          <th />
-          <th>Ala (m²)</th>
-          <th>U (W/(m²K))</th>
-          <th>g-kohtisuora</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each ['pohjoinen', 'koillinen', 'ita', 'kaakko', 'etela', 'lounas', 'lansi', 'luode'] as ikkuna}
-          <tr>
-            <td>{$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}.label`)}</td>
-            <td>
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'ikkunat', ikkuna, 'ala']} />
-            </td>
-            <td>
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'ikkunat', ikkuna, 'U']} />
-            </td>
-            <td>
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'ikkunat', ikkuna, 'g-ks']} />
-            </td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-
-    <H3 text="Ilmanvaihtojärjestelmä" />
-
-    <div class="w-full py-4 mb-4">
-      <Input
-        {disabled}
-        {schema}
-        bind:model={energiatodistus}
-        path={['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi']} />
-    </div>
-
-    <table class="mb-6">
-      <thead>
-        <tr>
-          <th />
-          <th>
-            Ilmavirta
-            <br />
-            tulo (m³/s) / poisto (m³/s)
-          </th>
-          <th>
-            Järjestelmän SFP-luku
-            <br />
-            kW/(m³/s)
-          </th>
-          <th>LTO:n lämpötilasuhde</th>
-          <th>
-            Jäätymisenesto
-            <br />
-            °C
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Pääilmanvaihtokoneet</td>
-          <td class="flex flex-row items-end">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
-            /
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'poisto']} />
-          </td>
-          <td>
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'sfp']} />
-          </td>
-          <td>
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'lampotilasuhde']} />
-          </td>
-          <td>
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'jaatymisenesto']} />
-          </td>
-        </tr>
-        {#each ['erillispoistot', 'ivjarjestelma'] as ilmanvaihto}
-          <tr>
-            <td>{ilmanvaihto}</td>
-            <td class="flex flex-row items-end">
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
-              /
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'poisto']} />
-            </td>
-            <td>
-              <Input
-                {disabled}
-                {schema}
-                compact={true}
-                bind:model={energiatodistus}
-                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'sfp']} />
-            </td>
-            <td />
-            <td />
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-
+    <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
+    <Ikkunat {disabled} {schema} bind:energiatodistus />
+    <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">
