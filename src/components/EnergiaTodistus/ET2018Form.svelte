@@ -30,6 +30,7 @@
   import Lammitysjarjestelma from './FormParts/Lahtotiedot/Lammitysjarjestelma';
   import Jaahdytysjarjestelma from './FormParts/Lahtotiedot/Jaahdytysjarjestelma';
   import SisaisetLampokuormat from './FormParts/Lahtotiedot/SisaisetLampokuormat';
+  import Lamminkayttovesi from './FormParts/Lahtotiedot/Lamminkayttovesi';
 
   import { flashMessageStore } from '@/stores';
 
@@ -194,6 +195,7 @@
     <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
     <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
     <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
+    <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">

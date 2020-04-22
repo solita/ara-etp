@@ -246,6 +246,11 @@
 
       "jaahdytysjarjestelma": {
         "jaahdytyskauden-painotettu-kylmakerroin": "Jäähdytyskauden painotettu kylmäkerroin"
+      },
+
+      "lkvn-kaytto": {
+        "kulutus-per-nelio": "Ominaiskulutus",
+        "vuosikulutus": "Lämmitysenergian nettotarve"
       }
     },
     "messages": {
