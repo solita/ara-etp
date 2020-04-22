@@ -2,7 +2,7 @@
   import { _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
-  import Input from './Input';
+  import Input from '@Component/EnergiaTodistus/Input';
 
   export let disabled;
   export let schema;

@@ -24,9 +24,12 @@
 
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
-  import Rakennusvaippa from './Rakennusvaippa';
-  import Ikkunat from './Ikkunat';
-  import Ilmanvaihtojarjestelma from './Ilmanvaihtojarjestelma';
+  import Rakennusvaippa from './FormParts/Lahtotiedot/Rakennusvaippa';
+  import Ikkunat from './FormParts/Lahtotiedot/Ikkunat';
+  import Ilmanvaihtojarjestelma from './FormParts/Lahtotiedot/Ilmanvaihtojarjestelma';
+  import Lammitysjarjestelma from './FormParts/Lahtotiedot/Lammitysjarjestelma';
+  import Jaahdytysjarjestelma from './FormParts/Lahtotiedot/Jaahdytysjarjestelma';
+  import SisaisetLampokuormat from './FormParts/Lahtotiedot/SisaisetLampokuormat';
 
   import { flashMessageStore } from '@/stores';
 
@@ -188,6 +191,9 @@
     <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
     <Ikkunat {disabled} {schema} bind:energiatodistus />
     <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
+    <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
+    <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
+    <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">

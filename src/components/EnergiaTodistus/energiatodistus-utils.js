@@ -1,8 +1,8 @@
-import * as R from "ramda";
+import * as R from 'ramda';
 
-import * as validation from "@Utility/validation";
+import * as validation from '@Utility/validation';
 import * as deep from '@Utility/deep-objects';
-import * as Maybe from "@Utility/maybe-utils";
+import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 
 const emptyRakennusVaippa = _ => ({
@@ -73,7 +73,7 @@ export const emptyEnergiatodistus2018 = _ => ({
     kayttotarkoitus: Maybe.None(),
     laatimisvaihe: Maybe.None(),
     'keskeiset-suositukset-fi': Maybe.None(),
-    'keskeiset-suositukset-sv': Maybe.None(),
+    'keskeiset-suositukset-sv': Maybe.None()
   },
   lahtotiedot: {
     'lammitetty-nettoala': Maybe.None(),
@@ -94,15 +94,18 @@ export const emptyEnergiatodistus2018 = _ => ({
       etela: emptyIkkuna(),
       lounas: emptyIkkuna(),
       lansi: emptyIkkuna(),
-      luode: emptyIkkuna(),
+      luode: emptyIkkuna()
     },
     ilmanvaihto: {
       erillispoistot: emptyIV(),
       ivjarjestelma: emptyIV(),
-      paaiv: R.mergeRight ({
-        lampotilasuhde: Maybe.None(),
-        jaatymisenesto: Maybe.None()
-      }, emptyIV()),
+      paaiv: R.mergeRight(
+        {
+          lampotilasuhde: Maybe.None(),
+          jaatymisenesto: Maybe.None()
+        },
+        emptyIV()
+      ),
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
       'lto-vuosihyotysuhde': Maybe.None()
@@ -123,9 +126,9 @@ export const emptyEnergiatodistus2018 = _ => ({
       vuosikulutus: Maybe.None()
     },
     'sis-kuorma': {
-      'henkilot': emptySisKuorma(),
-      'kuluttajalaitteet': emptySisKuorma(),
-      'valaistus': emptySisKuorma(),
+      henkilot: emptySisKuorma(),
+      kuluttajalaitteet: emptySisKuorma(),
+      valaistus: emptySisKuorma()
     }
   },
   tulokset: {
@@ -142,7 +145,7 @@ export const emptyEnergiatodistus2018 = _ => ({
       aurinkolampo: Maybe.None(),
       muulampo: Maybe.None(),
       muusahko: Maybe.None(),
-      lampopumppu: Maybe.None(),
+      lampopumppu: Maybe.None()
     },
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': emptySahkoLampo(),
@@ -238,30 +241,41 @@ export const breadcrumb1stLevel = i18n => ({
   url: '/#/energiatodistukset'
 });
 
-export const selectFormat = (label, items) => R.compose(
-  Either.cata(R.identity, R.identity),
-  R.map(label),
-  R.chain(Maybe.toEither('Unknown value')),
-  R.map(R.__, items),
-  Maybe.findById
-);
+export const selectFormat = (label, items) =>
+  R.compose(
+    Either.cata(R.identity, R.identity),
+    R.map(label),
+    R.chain(Maybe.toEither('Unknown value')),
+    R.map(R.__, items),
+    Maybe.findById
+  );
 
-export const findKayttotarkoitusluokkaId = (alakayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
+export const findKayttotarkoitusluokkaId = (
+  alakayttotarkoitusluokkaId,
+  alakayttotarkoitusluokat
+) =>
   alakayttotarkoitusluokkaId.chain(
     R.compose(
       R.map(R.prop('kayttotarkoitusluokka-id')),
       Either.orSome(Maybe.None()),
       R.map(R.__, alakayttotarkoitusluokat),
       Maybe.findById
-    ));
+    )
+  );
 
 export const filterAlakayttotarkoitusLuokat = R.curry(
   (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
     alakayttotarkoitusluokat.map(
-      R.filter(alaluokka => Maybe.map(
-        R.equals(alaluokka['kayttotarkoitusluokka-id']),
-        kayttotarkoitusluokkaId).orSome(true))));
+      R.filter(alaluokka =>
+        Maybe.map(
+          R.equals(alaluokka['kayttotarkoitusluokka-id']),
+          kayttotarkoitusluokkaId
+        ).orSome(true)
+      )
+    )
+);
 
 export const validators = deep.map(
   R.compose(R.complement(R.isNil), R.prop('validators')),
-  R.prop('validators'));
+  R.prop('validators')
+);

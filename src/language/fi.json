@@ -215,6 +215,37 @@
         "ilmavirta": "Ilmavirta",
         "tulo": "tulo",
         "poisto": "poisto"
+      },
+      "lammitys": {
+        "kuvaus": "Lämmitysjärjestelmän kuvaus",
+        "tilat-ja-iv": {
+          "label": "Tilojen ja IV:n lämmitys",
+          "tuoton-hyotysuhde": "Tilojen ja IV:n lämmityksen tuoton hyötysuhde",
+          "jaon-hyotysuhde": "Tilojen ja IV:n lämmityksen jaon ja luovutuksen hyötysuhde",
+          "lampokerroin": "Tilojen ja IV:n lämmityksen lämpökerroin",
+          "apulaitteet": "Tilojen ja IV:n lämmityksen apulaitteiden sähkönkäyttö"
+        },
+        "lammin-kayttovesi": {
+          "label": "Lämpimän käyttöveden valmistus",
+          "tuoton-hyotysuhde": "Lämpimän käyttöveden valmistuksen tuoton hyötysuhde",
+          "jaon-hyotysuhde": "Lämpimän käyttöveden valmistuksen jaon ja luovutuksen hyötysuhde",
+          "lampokerroin": "Lämpimän käyttöveden valmistuksen lämpökerroin",
+          "apulaitteet": "Lämpimän käyttöveden valmistuksen apulaitteiden sähkönkäyttö"
+        },
+        "takka": {
+          "label": "Varaava tulisija",
+          "maara": "Takkojen lukumäärä",
+          "tuotto": "Takkojen tuotto"
+        },
+        "ilmanlampopumppu": {
+          "label": "Ilmalämpöpumppu",
+          "maara": "Ilmalämpöpumppujen lukumäärä",
+          "tuotto": "Ilmalämpöpumppujen tuotto"
+        }
+      },
+
+      "jaahdytysjarjestelma": {
+        "jaahdytyskauden-painotettu-kylmakerroin": "Jäähdytyskauden painotettu kylmäkerroin"
       }
     },
     "messages": {

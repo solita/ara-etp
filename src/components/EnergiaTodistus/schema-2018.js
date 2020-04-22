@@ -20,20 +20,41 @@ const Float = (min, max) => ({
 });
 
 const Rakennusvaippa = {
-  ala: Float(0, 50),
-  U: Float(0, 50)
+  ala: Float(0.0, 50),
+  U: Float(0.0, 50)
 };
 
 const Ikkuna = {
-  ala: Float(0, 9999),
+  ala: Float(0.0, Infinity),
   U: Float(0.4, 6.5),
   'g-ks': Float(0.1, 1.0)
 };
 
-const PoistoTulo = {
-  poisto: Float(0, 9999),
-  tulo: Float(0, 9999),
+const PoistoTuloSfp = {
+  poisto: Float(0.0, Infinity),
+  tulo: Float(0.0, Infinity),
   sfp: Float(0.0, 10.0)
+};
+
+const Hyotysuhde = {
+  'tuoton-hyotysuhde': Float(0.0, Infinity),
+  'jaon-hyotysuhde': Float(0.0, Infinity),
+  lampokerroin: Float(0.0, Infinity),
+  apulaitteet: Float(0.0, Infinity)
+};
+
+const MaaraTuotto = {
+  maara: Integer(0.0, 100),
+  tuotto: Float(0.0, Infinity)
+};
+
+const SisKuorma = {
+  'selite-fi': String(35),
+  'selite-sv': String(35),
+  kayttoaste: Float(0.1, 1.0),
+  henkilot: Float(1.0, 14.0),
+  kuluttajalaitteet: Float(0.0, 12.0),
+  valaistus: Float(0.0, 19.0)
 };
 
 export const schema = {
@@ -75,19 +96,32 @@ export const schema = {
       luode: Ikkuna
     },
     ilmanvaihto: {
-      'kuvaus-fi': String(500),
+      'kuvaus-fi': String(75),
+      'kuvaus-sv': String(75),
       paaiv: {
-        ...PoistoTulo,
+        ...PoistoTuloSfp,
         lampotilasuhde: Float(0.0, 1.0),
         jaatymisenesto: Float(-20.0, 10.0)
       },
-      erillispoistot: {
-        ...PoistoTulo
-      },
-      ivjarjestelma: {
-        ...PoistoTulo
-      },
+      erillispoistot: PoistoTuloSfp,
+      ivjarjestelma: PoistoTuloSfp,
       'lto-vuosihyotysuhde': Float(0.0, 1.0)
-    }
+    },
+    lammitys: {
+      'kuvaus-fi': String(75),
+      'kuvaus-sv': String(75),
+      'tilat-ja-iv': Hyotysuhde,
+      'lammin-kayttovesi': Hyotysuhde,
+      takka: MaaraTuotto,
+      ilmanlampopumppu: MaaraTuotto
+    },
+    jaahdytysjarjestelma: {
+      'jaahdytyskauden-painotettu-kylmakerroin': Float(1.0, 10.0)
+    },
+    'lkvn-kaytto': {
+      'kulutus-per-nelio': Float(0.0, Infinity),
+      vuosikulutus: Float(0.0, Infinity)
+    },
+    'sis-kuorma': [SisKuorma, SisKuorma, SisKuorma]
   }
 };
