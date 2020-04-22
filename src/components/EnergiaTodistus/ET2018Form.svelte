@@ -33,6 +33,11 @@
   import Lamminkayttovesi from './FormParts/Lahtotiedot/Lamminkayttovesi';
 
   import ELuvunErittely from './FormParts/Tulokset/ELuvunErittely';
+  import UusiutuvatOmavaraisenergiat from './FormParts/Tulokset/UusiutuvatOmavaraisenergiat';
+  import TeknistenjarjestelmienEnergiankulutus from './FormParts/Tulokset/TeknistenjarjestelmienEnergiankulutus';
+  import Nettotarve from './FormParts/Tulokset/Nettotarve';
+  import Lampokuormat from './FormParts/Tulokset/Lampokuormat';
+  import Laskentatyokalu from './FormParts/Tulokset/Laskentatyokalu';
 
   import { flashMessageStore } from '@/stores';
 
@@ -205,6 +210,14 @@
 
     <H2 text={$_('energiatodistus.tulokset.header')} />
     <ELuvunErittely {disabled} {schema} bind:energiatodistus />
+    <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
+    <TeknistenjarjestelmienEnergiankulutus
+      {disabled}
+      {schema}
+      bind:energiatodistus />
+    <Nettotarve {disabled} {schema} bind:energiatodistus />
+    <Lampokuormat {disabled} {schema} bind:energiatodistus />
+    <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">

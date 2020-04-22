@@ -52,9 +52,8 @@
     {/each}
     <tr class="et-table--tr border-t-1 border-disabled">
       <td class="et-table--td uppercase">
-        {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.yhteensa')}
+        {$_('energiatodistus.tulokset.yhteensa')}
       </td>
-      <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td" />
