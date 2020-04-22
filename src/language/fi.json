@@ -324,13 +324,16 @@
     },
     "tulokset": {
       "header": "E-luvun laskennan tulokset",
+      "yhteensa": "Yhteensä",
+      "vuosikulutus": "kWh/vuosi",
+      "vuosikulutus-per-nelio": "kWh/m²vuosi",
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
         "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia kWh/vuosi",
         "energiamuodon_kerroin": "Energiamuodon kerroin",
         "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus kWhE/vuosi",
-        "yhteensa": "Yhteensä",
+
         "labels": {
           "fossiilinen-polttoaine": "Fossiilinen polttoaine",
           "sahko": "Sähkö",
@@ -345,15 +348,33 @@
         "uusiutuva-polttoaine": "Vakioidulla käytöllä laskettu uusiutuvan polttoaineen osto"
       },
       "uusiutuvat-omavaraisenergiat": {
-        "aurinkosahko": "",
-        "tuulisahko": "",
-        "aurinkolampo": "",
-        "muulampo": "",
-        "muusahko": "",
-        "lampopumppu": ""
+        "header": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
+        "vuosituotto": "kWh/vuosi",
+        "labels": {
+          "aurinkosahko": "Aurinkosähkö",
+          "tuulisahko": "Tuulisähkö",
+          "aurinkolampo": "Aurinkolämpö",
+          "muulampo": "Muu ympäristöstä otettu energia, lämpö",
+          "muusahko": "Muu ympäristöstä otettu energia, sähkö",
+          "lampopumppu": "Lämpöpumpun lämmönlähteestä ottama energia"
+        },
+        "aurinkosahko": "Aurinkosähkön vuosituotto",
+        "tuulisahko": "Tuulisähkön vuosituotto",
+        "aurinkolampo": "Aurinkolämmön vuosituotto",
+        "muulampo": "Muun lämmön vuosituotto",
+        "muusahko": "Muun sähkön vuosituotto",
+        "lampopumppu": "Lämpöpumpun vuosituotto"
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiakulutus",
+        "labels": {
+          "tilojen-lammitys": "Tilojen lämmitys",
+          "tuloilman-lammitys": "Tuloilman lämmitys",
+          "kayttoveden-valmistus": "Lämpimän käyttöveden valmistus",
+          "iv-sahko": "Ilmanvaihtojärjestelmän sähköenergiankulutus",
+          "jaahdytys": "Jäähdytysjärjestelmä",
+          "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteet ja valaistus"
+        },
         "tilojen-lammitys": { "sahko": "", "lampo": "" },
         "tuloilman-lammitys": { "sahko": "", "lampo": "" },
         "kayttoveden-valmistus": { "sahko": "", "lampo": "" },
@@ -362,19 +383,35 @@
         "kuluttajalaitteet-ja-valaistus-sahko": ""
       },
       "nettotarve": {
-        "tilojen-lammitys-vuosikulutus": "",
-        "ilmanvaihdon-lammitys-vuosikulutus": "",
-        "kayttoveden-valmistus-vuosikulutus": "",
-        "jaahdytys-vuosikulutus": ""
+        "header": "Energian nettotarve",
+        "labels": {
+          "tilojen-lammitys-vuosikulutus": "Tilojen lämmitys",
+          "ilmanvaihdon-lammitys-vuosikulutus": "Ilmanvaihdon lämmitys",
+          "kayttoveden-valmistus-vuosikulutus": "Lämpimän käyttöveden valmistus",
+          "jaahdytys-vuosikulutus": "Jäähdytys"
+        },
+        "tilojen-lammitys-vuosikulutus": "Tilojen lämmityksen vuosikulutus",
+        "ilmanvaihdon-lammitys-vuosikulutus": "Ilmanvaihdon lämmityksen vuosikulutus",
+        "kayttoveden-valmistus-vuosikulutus": "Lämpimän käyttöveden valmistuksen vuosikulutus",
+        "jaahdytys-vuosikulutus": "Jäähdytyksen vuosikulutus"
       },
       "lampokuormat": {
-        "aurinko": "",
-        "ihmiset": "",
-        "kuluttajalaitteet": "",
-        "valaistus": "",
-        "kvesi": ""
+        "header": "Lämpökuormat",
+        "labels": {
+          "aurinko": "Aurinko",
+          "ihmiset": "Henkilöt",
+          "kuluttajalaitteet": "Kuluttajalaitteet",
+          "valaistus": "Valaistus",
+          "kvesi": "Lämpimän käyttöveden kierrosta ja varastoinnin häviöistä"
+        },
+        "aurinko": "Auringon vuosittainen lämpökuorma",
+        "ihmiset": "Henkilöiden vuosittainen lämpökuorma",
+        "kuluttajalaitteet": "Kuluttajalaitteiden lämpökuorma",
+        "valaistus": "Auringon vuosittainen lämpökuorma",
+        "kvesi": "Auringon vuosittainen lämpökuorma"
       },
-      "laskentatyokalu": ""
+      "laskentatyokalu_header": "Laskentatyökalun nimi ja versionumero",
+      "laskentatyokalu": "Laskentatyökalun nimi ja versionumero"
     },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
