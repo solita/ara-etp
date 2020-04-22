@@ -45,6 +45,11 @@ const emptySahkoLampo = _ => ({
   lampo: Maybe.None()
 });
 
+const emptySisKuorma = _ => ({
+  kayttoaste: Maybe.None(),
+  lampokuorma: Maybe.None()
+});
+
 export const emptyEnergiatodistus2018 = _ => ({
   perustiedot: {
     nimi: Maybe.None(),
@@ -117,7 +122,11 @@ export const emptyEnergiatodistus2018 = _ => ({
       'kulutus-per-nelio': Maybe.None(),
       vuosikulutus: Maybe.None()
     },
-    'sis-kuorma': []
+    'sis-kuorma': {
+      'henkilot': emptySisKuorma(),
+      'kuluttajalaitteet': emptySisKuorma(),
+      'valaistus': emptySisKuorma(),
+    }
   },
   tulokset: {
     'kaytettavat-energiamuodot': {
