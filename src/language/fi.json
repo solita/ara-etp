@@ -322,6 +322,45 @@
         }
       }
     },
+    "tulokset": {
+      "kaytettavat-energiamuodot": {
+        "fossiilinen-polttoaine": "",
+        "sahko": "",
+        "kaukojaahdytys": "",
+        "kaukolampo": "",
+        "uusiutuva-polttoaine": ""
+      },
+      "uusiutuvat-omavaraisenergiat": {
+        "aurinkosahko": "",
+        "tuulisahko": "",
+        "aurinkolampo": "",
+        "muulampo": "",
+        "muusahko": "",
+        "lampopumppu": ""
+      },
+      "tekniset-jarjestelmat": {
+        "tilojen-lammitys": { "sahko": "", "lampo": "" },
+        "tuloilman-lammitys": { "sahko": "", "lampo": "" },
+        "kayttoveden-valmistus": { "sahko": "", "lampo": "" },
+        "iv-sahko": "",
+        "jaahdytys": { "sahko": "", "lampo": "", "kaukojaahdytys": "" },
+        "kuluttajalaitteet-ja-valaistus-sahko": ""
+      },
+      "nettotarve": {
+        "tilojen-lammitys-vuosikulutus": "",
+        "ilmanvaihdon-lammitys-vuosikulutus": "",
+        "kayttoveden-valmistus-vuosikulutus": "",
+        "jaahdytys-vuosikulutus": ""
+      },
+      "lampokuormat": {
+        "aurinko": "",
+        "ihmiset": "",
+        "kuluttajalaitteet": "",
+        "valaistus": "",
+        "kvesi": ""
+      },
+      "laskentatyokalu": ""
+    },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
