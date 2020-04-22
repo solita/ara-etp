@@ -32,6 +32,8 @@
   import SisaisetLampokuormat from './FormParts/Lahtotiedot/SisaisetLampokuormat';
   import Lamminkayttovesi from './FormParts/Lahtotiedot/Lamminkayttovesi';
 
+  import ELuvunErittely from './FormParts/Tulokset/ELuvunErittely';
+
   import { flashMessageStore } from '@/stores';
 
   export let title = '';
@@ -79,6 +81,10 @@
     @apply border-b-1 border-disabled pb-8;
   }
 
+  :global(.et-table__noborder) {
+    @apply border-b-0;
+  }
+
   :global(.et-table--th),
   :global(.et-table--td) {
     @apply px-4 py-2;
@@ -102,8 +108,8 @@
     @apply w-1/6;
   }
 
-  :global(.et-table--tr:last-child > .et-table--td) {
-    @apply pb-5;
+  :global(.et-table--tr:last-child) {
+    @apply mb-5;
   }
 
   :global(.et-table--tr > .et-table--td:first-child) {
@@ -196,6 +202,9 @@
     <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
     <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
     <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+
+    <H2 text={$_('energiatodistus.tulokset.header')} />
+    <ELuvunErittely {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">

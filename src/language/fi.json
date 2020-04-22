@@ -323,12 +323,26 @@
       }
     },
     "tulokset": {
+      "header": "E-luvun laskennan tulokset",
       "kaytettavat-energiamuodot": {
-        "fossiilinen-polttoaine": "",
-        "sahko": "",
-        "kaukojaahdytys": "",
-        "kaukolampo": "",
-        "uusiutuva-polttoaine": ""
+        "header": "E-Luvun erittely",
+        "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
+        "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia kWh/vuosi",
+        "energiamuodon_kerroin": "Energiamuodon kerroin",
+        "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus kWhE/vuosi",
+        "yhteensa": "Yhteensä",
+        "labels": {
+          "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+          "sahko": "Sähkö",
+          "kaukojaahdytys": "Kaukojäähdytys",
+          "kaukolampo": "Kaukolämpö",
+          "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+        },
+        "fossiilinen-polttoaine": "Vakioidulla käytöllä laskettu fossiilisten polttoaineiden osto",
+        "sahko": "Vakioidulla käytöllä laskettu sähkön osto",
+        "kaukojaahdytys": "Vakioidulla käytöllä laskettu kaukojäähdytyksen osto",
+        "kaukolampo": "Vakioidulla käytöllä laskettu kaukolämmön osto",
+        "uusiutuva-polttoaine": "Vakioidulla käytöllä laskettu uusiutuvan polttoaineen osto"
       },
       "uusiutuvat-omavaraisenergiat": {
         "aurinkosahko": "",
@@ -339,6 +353,7 @@
         "lampopumppu": ""
       },
       "tekniset-jarjestelmat": {
+        "header": "Rakennuksen teknisten järjestelmien energiakulutus",
         "tilojen-lammitys": { "sahko": "", "lampo": "" },
         "tuloilman-lammitys": { "sahko": "", "lampo": "" },
         "kayttoveden-valmistus": { "sahko": "", "lampo": "" },
