@@ -370,6 +370,7 @@
         "sahko": "Sähkö kWh/(m²vuosi)",
         "lampo": "Lämpö kWh/(m²vuosi)",
         "kaukojaahdytys": "Kaukojäähdytys kWh/(m²vuosi)",
+        "lammitysjarjestelma": "Lämmitysjärjestelmä",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
           "tuloilman-lammitys": "Tuloilman lämmitys",

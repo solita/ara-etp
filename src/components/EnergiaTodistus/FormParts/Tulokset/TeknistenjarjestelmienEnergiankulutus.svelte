@@ -30,10 +30,20 @@
   </thead>
 
   <tbody class="et-table--tbody">
+    <tr class="et-table--tr">
+      <td class="et-table--td">
+        {$_('energiatodistus.tulokset.tekniset-jarjestelmat.lammitysjarjestelma')}
+      </td>
+      <td class="et-table--td" />
+      <td class="et-table--td" />
+      <td class="et-table--td" />
+    </tr>
     {#each ['tilojen-lammitys', 'tuloilman-lammitys', 'kayttoveden-valmistus'] as jarjestelma}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.tulokset.tekniset-jarjestelmat.labels.${jarjestelma}`)}
+          <span class="pl-8">
+            {$_(`energiatodistus.tulokset.tekniset-jarjestelmat.labels.${jarjestelma}`)}
+          </span>
         </td>
         <td class="et-table--td">
           <Input
