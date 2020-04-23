@@ -127,6 +127,9 @@
         "nimi": "Yritys"
       }
     },
+    "vuosikulutus": "kWh/vuosi",
+    "vuosikulutus-per-nelio": "kWh/m²vuosi",
+    "yhteensa": "Yhteensä",
     "lahtotiedot": {
       "ala": "Ala (m²)",
       "U": "U (W/(m²K))",
@@ -429,6 +432,75 @@
       },
       "laskentatyokalu_header": "Laskentatyökalun nimi ja versionumero",
       "laskentatyokalu": "Laskentatyökalun nimi ja versionumero"
+    },
+    "toteutunut-ostoenergiankulutus": {
+      "header": "Toteutunut energiankulutus",
+      "ostettu-energia": {
+        "header": "Energiaverkosta ostettu energia",
+        "labels": {
+          "kaukolampo": "Kaukolämpö",
+          "kokonaissahko": "Kokonaissähkö",
+          "kiinteistosahko": "Kiinteistösähkö",
+          "kayttajasahko": "Käyttäjäsähkö",
+          "kaukojaahdytys": "Kaukojäähdytys"
+        },
+        "kaukolampo-vuosikulutus": "Kaukolämmön vuosikulutus",
+        "kokonaissahko-vuosikulutus": "Kokonaissähkön vuosikulutus",
+        "kiinteistosahko-vuosikulutus": "Kiinteistösähkön vuosikulutus",
+        "kayttajasahko-vuosikulutus": "Käyttäjäsähkön vuosikulutus",
+        "kaukojaahdytys-vuosikulutus": "Kaukojäähdytyksen vuosikulutus"
+      },
+      "ostetut-polttoaineet": {
+        "header": "Ostetut polttoaineet",
+        "polttoaine-vuodessa": "Polttoaineen määrä vuodessa",
+        "yksikko": "Yksikkö",
+        "muunnoskerroin": "Muunnoskerroin kWh:ksi",
+        "labels": {
+          "kevyt-polttooljy": "Kevyt polttoöljy",
+          "pilkkeet-havu-sekapuu": "Pilkkeet (havu- ja sekapuu)",
+          "pilkkeet-koivu": "Pilkkeet (koivu)",
+          "puupelletit": "Puupelletit"
+        },
+        "kevyt-polttooljy": "Kevyen polttoöljyn ostettu vuosimäärä",
+        "kevyt-polttooljy-yksikko": "Litra",
+        "pilkkeet-havu-sekapuu": "Pilkkeiden (havu- ja sekapuu) ostettu vuosimäärä",
+        "pilkkeet-havu-sekapuu-yksikko": "pino-m³",
+        "pilkkeet-koivu": "Pilkkeiden (koivu) ostettu vuosimäärä",
+        "pilkkeet-koivu-yksikko": "pino-m³",
+        "puupelletit": "Puupellettien ostettu vuosimäärä",
+        "puupelletit-yksikko": "kg",
+        "vapaa": {
+          "0": {
+            "nimi": "Polttoaineen nimi",
+            "yksikko": "Polttoaineen yksikkö",
+            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
+            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
+          },
+          "1": {
+            "nimi": "Polttoaineen nimi",
+            "yksikko": "Polttoaineen yksikkö",
+            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
+            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
+          },
+          "2": {
+            "nimi": "Polttoaineen nimi",
+            "yksikko": "Polttoaineen yksikkö",
+            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
+            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
+          },
+          "3": {
+            "nimi": "Polttoaineen nimi",
+            "yksikko": "Polttoaineen yksikkö",
+            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
+            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
+          }
+        }
+      },
+      "toteutuneet-yhteensa": "Toteutunut ostoenergia yhteensä",
+      "sahko-vuosikulutus-yhteensa": "Sähkö yhteensä",
+      "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö yhteensä",
+      "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet yhteensä",
+      "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys yhteensä"
     },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
