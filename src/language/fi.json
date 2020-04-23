@@ -210,11 +210,37 @@
         }
       },
       "ilmanvaihto": {
+        "header": "Ilmanvaihtojärjestelmä",
+        "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
+        "lampotilasuhde": "LTO:n lämpötilasuhde",
+        "jaatymisenesto": "Jäätymisenesto °C",
         "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
         "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
         "ilmavirta": "Ilmavirta",
         "tulo": "tulo",
-        "poisto": "poisto"
+        "poisto": "poisto",
+        "labels": {
+          "paaiv": "Pääilmanvaihtokoneet",
+          "erillispoistot": "Erillispoistot",
+          "ivjarjestelma": "Ilmanvaihtojärjestelmä"
+        },
+        "paaiv": {
+          "tulo": "Pääilmanvaihtokoneen tulo",
+          "poisto": "Pääilmanvaihtokoneen poisto",
+          "sfp": "Pääilmanvaihtokoneen sfp-luku",
+          "lampotilasuhde": "Pääilmanvaihtokoneen lämpötilasuhde",
+          "jaatymisenesto": "Pääilmanvaihtokoneen jäätymisenesto"
+        },
+        "erillispoistot": {
+          "tulo": "Erillispoistojen tulo",
+          "poisto": "Erillispoistojen poisto",
+          "sfp": "Erillispoistojen sfp-luku"
+        },
+        "ivjarjestelma": {
+          "tulo": "Ilmanvaihtojärjestelmän tulo",
+          "poisto": "Ilmanvaihtojärjestelmän poisto",
+          "sfp": "Ilmanvaihtojärjestelmän sfp-luku"
+        }
       },
       "lammitys": {
         "header": "Lämmitysjärjestelmä",
