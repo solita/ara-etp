@@ -160,50 +160,56 @@
         "kylmasillat-UA": "UA"
       },
       "ikkunat": {
+        "header": "Ikkunat ilmansuunnittain",
+        "ala": "Ala (m²)",
+        "U": "U (W/(m²K))",
+        "g-ks": "gkohtisuora-arvo",
+        "labels": {
+          "pohjoinen": "Pohjoinen",
+          "koillinen": "Koillinen",
+          "ita": "Itä",
+          "kaakko": "Kaakko",
+          "etela": "Etelä",
+          "lounas": "Lounas",
+          "lansi": "Länsi",
+          "luode": "Luode"
+        },
         "pohjoinen": {
-          "label": "Pohjoinen",
           "ala": "Pohjoisten ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "koillinen": {
-          "label": "Koillinen",
           "ala": "Koillisten ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "ita": {
-          "label": "Itä",
           "ala": "Idän ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "kaakko": {
-          "label": "Kaakko",
           "ala": "Kaakon ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "etela": {
-          "label": "Etelä",
           "ala": "Etelän ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "lounas": {
-          "label": "Lounas",
           "ala": "Lounaan ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "lansi": {
-          "label": "Länsi",
           "ala": "Lännen ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"
         },
         "luode": {
-          "label": "Luode",
           "ala": "Luoteen ikkunoiden pinta-ala",
           "U": "U",
           "g-ks": "G-Kohtisuora"

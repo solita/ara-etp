@@ -9,15 +9,21 @@
   export let energiatodistus;
 </script>
 
-<H3 compact={true} text="Ikkunat ilmansuunnittain" />
+<H3 compact={true} text={$_('energiatodistus.lahtotiedot.ikkunat.header')} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">Ala (m²)</th>
-      <th class="et-table--th">U (W/(m²K))</th>
-      <th class="et-table--th">g-kohtisuora</th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.ikkunat.ala')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.ikkunat.U')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.ikkunat.g-ks')}
+      </th>
       <th class="et-table--th" />
     </tr>
   </thead>
@@ -25,7 +31,7 @@
     {#each ['pohjoinen', 'koillinen', 'ita', 'kaakko', 'etela', 'lounas', 'lansi', 'luode'] as ikkuna}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.lahtotiedot.ikkunat.${ikkuna}.label`)}
+          {$_(`energiatodistus.lahtotiedot.ikkunat.labels.${ikkuna}`)}
         </td>
         <td class="et-table--td">
           <Input
