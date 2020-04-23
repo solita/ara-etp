@@ -367,6 +367,9 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiakulutus",
+        "sahko": "Sähkö kWh/(m²vuosi)",
+        "lampo": "Lämpö kWh/(m²vuosi)",
+        "kaukojaahdytys": "Kaukojäähdytys kWh/(m²vuosi)",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
           "tuloilman-lammitys": "Tuloilman lämmitys",
@@ -375,12 +378,25 @@
           "jaahdytys": "Jäähdytysjärjestelmä",
           "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteet ja valaistus"
         },
-        "tilojen-lammitys": { "sahko": "", "lampo": "" },
-        "tuloilman-lammitys": { "sahko": "", "lampo": "" },
-        "kayttoveden-valmistus": { "sahko": "", "lampo": "" },
-        "iv-sahko": "",
-        "jaahdytys": { "sahko": "", "lampo": "", "kaukojaahdytys": "" },
-        "kuluttajalaitteet-ja-valaistus-sahko": ""
+        "tilojen-lammitys": {
+          "sahko": "Tilojen lämmityksen sähkönkulutus",
+          "lampo": "Tilojen lämmityksen lämmönkulutus"
+        },
+        "tuloilman-lammitys": {
+          "sahko": "Tuloilman lämmityksen sähkönkulutus",
+          "lampo": "Tuloilman lämmityksen lämmönkulutus"
+        },
+        "kayttoveden-valmistus": {
+          "sahko": "Käyttöveden valmistuksen sähkönkulutus",
+          "lampo": "Käyttöveden valmistuksen lämmönkulutus"
+        },
+        "iv-sahko": "Ilmanvaihtojärjestelmän sähkönkulutus",
+        "jaahdytys": {
+          "sahko": "Jäähdytyksen sähkönkulutus",
+          "lampo": "Jäähdytyksen lämmönkulutus",
+          "kaukojaahdytys": "Kaukojäähdytyksen kulutus"
+        },
+        "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteiden ja valaisun sähkönkulutus"
       },
       "nettotarve": {
         "header": "Energian nettotarve",

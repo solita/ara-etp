@@ -17,9 +17,15 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th">sahko</th>
-      <th class="et-table--th">lampo</th>
-      <th class="et-table--th">kaukojaahdytys kWh(m²vuosi)</th>
+      <th class="et-table--th">
+        {$_('energiatodistus.tulokset.tekniset-jarjestelmat.sahko')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.tulokset.tekniset-jarjestelmat.lampo')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.tulokset.tekniset-jarjestelmat.kaukojaahdytys')}
+      </th>
     </tr>
   </thead>
 
