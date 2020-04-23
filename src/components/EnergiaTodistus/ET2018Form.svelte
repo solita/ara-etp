@@ -140,7 +140,7 @@
       flashMessageStore.flush();
       submit(energiatodistus);
     } else {
-      flashMessageStore.add('EnergiaTodistus', 'error', $_('energiatodistus.messages.validation-error'));
+      flashMessageStore.add('Energiatodistus', 'error', $_('energiatodistus.messages.validation-error'));
     }
   }}>
   <div class="w-full mt-3">

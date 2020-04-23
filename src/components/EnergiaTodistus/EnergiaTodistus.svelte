@@ -1,8 +1,8 @@
 <script>
   import Router from 'svelte-spa-router';
 
-  import ExistingEnergiaTodistus from './ExistingEnergiaTodistus';
-  import NewEnergiaTodistus from './NewEnergiaTodistus';
+  import ExistingEnergiatodistus from './ExistingEnergiatodistus';
+  import NewEnergiatodistus from './NewEnergiatodistus';
   import Energiatodistukset from './Energiatodistukset';
   import Allekirjoitus from './Allekirjoitus';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
@@ -12,14 +12,14 @@
   const prefix = '/energiatodistus';
   const routes = {
     '/all': Energiatodistukset,
-    '/:version/new': NewEnergiaTodistus,
-    '/:version/:id': ExistingEnergiaTodistus,
+    '/:version/new': NewEnergiatodistus,
+    '/:version/:id': ExistingEnergiatodistus,
     '/:version/:id/sign': Allekirjoitus
   };
 </script>
 
 <svelte:window
-  on:hashchange={_ => flashMessageStore.flush('EnergiaTodistus')} />
+  on:hashchange={_ => flashMessageStore.flush('Energiatodistus')} />
 
 <div class="w-full relative flex">
   <div class="w-5/6">
@@ -31,5 +31,5 @@
 </div>
 
 <div class="w-full min-h-3em">
-  <FlashMessage module={'EnergiaTodistus'} />
+  <FlashMessage module={'Energiatodistus'} />
 </div>

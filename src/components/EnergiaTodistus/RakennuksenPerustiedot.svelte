@@ -6,7 +6,7 @@
   import * as et from './energiatodistus-utils';
 
   import H2 from '@Component/H/H2';
-  import Input from '@Component/EnergiaTodistus/Input';
+  import Input from '@Component/Energiatodistus/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
 

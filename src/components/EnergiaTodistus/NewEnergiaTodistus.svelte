@@ -11,7 +11,7 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import EnergiaTodistusForm from './EnergiaTodistusForm';
+  import EnergiatodistusForm from './EnergiatodistusForm';
   import * as et from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
 
@@ -24,21 +24,21 @@
 
   const toggleOverlay = value => () => (overlay = value);
 
-  let energiatodistus = R.equals(params.version, '2018') ?
-      et.emptyEnergiatodistus2018() :
-      et.emptyEnergiatodistus2013();
+  let energiatodistus = R.equals(params.version, '2018')
+    ? et.emptyEnergiatodistus2018()
+    : et.emptyEnergiatodistus2013();
 
   const submit = R.compose(
     Future.forkBothDiscardFirst(
       R.compose(
         R.tap(toggleOverlay(false)),
-        flashMessageStore.add('EnergiaTodistus', 'error'),
+        flashMessageStore.add('Energiatodistus', 'error'),
         R.always($_('energiatodistus.messages.save-error'))
       ),
       R.compose(
         R.tap(() =>
           flashMessageStore.addPersist(
-            'EnergiaTodistus',
+            'Energiatodistus',
             'success',
             $_('energiatodistus.messages.save-success')
           )
@@ -54,7 +54,10 @@
   breadcrumbStore.set([
     et.breadcrumb1stLevel($_),
     {
-      label: $_('energiatodistus.breadcrumb.uusi-energiatodistus') + ' ' + params.version,
+      label:
+        $_('energiatodistus.breadcrumb.uusi-energiatodistus') +
+        ' ' +
+        params.version,
       url: window.location.href
     }
   ]);
@@ -63,24 +66,34 @@
 
   // Load classifications to cache
   $: R.compose(
-      Future.fork(
-        R.compose(
-          R.tap(() => { failure = true }),
-          R.tap(toggleOverlay(false)),
-          R.tap(flashMessageStore.add('EnergiaTodistus', 'error')),
-          R.always($_('energiatodistus.messages.load-error'))),
-        R.tap(toggleOverlay(false))),
-      Future.parallel(5)
-  )([api.kielisyys,
-     api.laatimisvaiheet,
-     api.alakayttotarkoitusluokat2018,
-     api.kayttotarkoitusluokat2018]);
+    Future.fork(
+      R.compose(
+        R.tap(() => {
+          failure = true;
+        }),
+        R.tap(toggleOverlay(false)),
+        R.tap(flashMessageStore.add('Energiatodistus', 'error')),
+        R.always($_('energiatodistus.messages.load-error'))
+      ),
+      R.tap(toggleOverlay(false))
+    ),
+    Future.parallel(5)
+  )([
+    api.kielisyys,
+    api.laatimisvaiheet,
+    api.alakayttotarkoitusluokat2018,
+    api.kayttotarkoitusluokat2018
+  ]);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
     {#if !failure}
-    <EnergiaTodistusForm version={params.version} {title} {energiatodistus} {submit}/>
+      <EnergiatodistusForm
+        version={params.version}
+        {title}
+        {energiatodistus}
+        {submit} />
     {/if}
   </div>
   <div slot="overlay-content">
