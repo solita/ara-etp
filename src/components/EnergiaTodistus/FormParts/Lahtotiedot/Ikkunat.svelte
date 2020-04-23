@@ -15,12 +15,8 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ikkunat.ala')}
-      </th>
-      <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ikkunat.U')}
-      </th>
+      <th class="et-table--th">{$_('energiatodistus.lahtotiedot.ala')}</th>
+      <th class="et-table--th">{$_('energiatodistus.lahtotiedot.U')}</th>
       <th class="et-table--th">
         {$_('energiatodistus.lahtotiedot.ikkunat.g-ks')}
       </th>

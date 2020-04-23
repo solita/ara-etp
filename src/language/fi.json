@@ -128,31 +128,38 @@
       }
     },
     "lahtotiedot": {
+      "ala": "Ala (m²)",
+      "U": "U (W/(m²K))",
       "lammitetty-nettoala": "Lämmitetty nettoala",
       "rakennusvaippa": {
+        "header": "Rakennusvaippa",
+        "U*A": "U*A (W/K)",
+        "osuuslampohaviosta": "Osuus lämpöhäviöstä",
         "ilmanvuotoluku": "Ilmanvuotoluku",
+        "labels": {
+          "ulkoseinat": "Ulkoseinät",
+          "ylapohja": "Yläpohja",
+          "alapohja": "Alapohja",
+          "ikkunat": "Ikkunat",
+          "ulkoovet": "Ulko-ovet"
+        },
         "ulkoseinat": {
-          "label": "Ulkoseinät",
           "ala": "Ulkoseinien pinta-ala",
           "U": "U"
         },
         "ylapohja": {
-          "label": "Yläpohja",
           "ala": "Yläpohjan pinta-ala",
           "U": "U"
         },
         "alapohja": {
-          "label": "Alapohja",
           "ala": "Alapohjan pinta-ala",
           "U": "U"
         },
         "ikkunat": {
-          "label": "Ikkunat",
           "ala": "Ikkunoiden pinta-ala",
           "U": "U"
         },
         "ulkoovet": {
-          "label": "Ulko-ovet",
           "ala": "Ulko-ovien pinta-ala",
           "U": "U"
         },
@@ -161,8 +168,6 @@
       },
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
-        "ala": "Ala (m²)",
-        "U": "U (W/(m²K))",
         "g-ks": "gkohtisuora-arvo",
         "labels": {
           "pohjoinen": "Pohjoinen",

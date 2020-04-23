@@ -8,7 +8,7 @@
   export let energiatodistus;
 </script>
 
-<H3 text="Rakennusvaippa" />
+<H3 text={$_('energiatodistus.lahtotiedot.rakennusvaippa.header')} />
 
 <div class="w-1/5 py-4 mb-6">
   <Input
@@ -23,17 +23,21 @@
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th class="et-table--th" />
-        <th class="et-table--th">Ala (m²)</th>
-        <th class="et-table--th">U (W/(m²K))</th>
-        <th class="et-table--th">U*A (W/K)</th>
-        <th class="et-table--th">Osuus lämpöhäviöistä</th>
+        <th class="et-table--th">{$_('energiatodistus.lahtotiedot.ala')}</th>
+        <th class="et-table--th">{$_('energiatodistus.lahtotiedot.U')}</th>
+        <th class="et-table--th">
+          {$_('energiatodistus.lahtotiedot.rakennusvaippa.U*A')}
+        </th>
+        <th class="et-table--th">
+          {$_('energiatodistus.lahtotiedot.rakennusvaippa.osuuslampohaviosta')}
+        </th>
       </tr>
     </thead>
     <tbody class="et-table--tbody">
       {#each ['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet'] as vaippa}
         <tr class="et-table--tr">
           <td class="et-table--td">
-            {$_(`energiatodistus.lahtotiedot.rakennusvaippa.${vaippa}.label`)}
+            {$_(`energiatodistus.lahtotiedot.rakennusvaippa.labels.${vaippa}`)}
           </td>
           <td class="et-table--td">
             <Input
