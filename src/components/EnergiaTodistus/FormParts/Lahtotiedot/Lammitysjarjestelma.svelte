@@ -9,7 +9,7 @@
   export let energiatodistus;
 </script>
 
-<H3 text={'Lämmitysjärjestelmä'} />
+<H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
 
 <div class="w-full py-4 mb-4">
   <Input
@@ -23,13 +23,17 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">Tuoton hyötysuhde</th>
-      <th class="et-table--th">Jaon ja luovutuksen hyötysuhde</th>
-      <th class="et-table--th">Lämpökerroin</th>
       <th class="et-table--th">
-        Apulaitteiden sähkönkäyttö
-        <br />
-        kWh/(m²vuosi)
+        {$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
       </th>
     </tr>
   </thead>
@@ -80,8 +84,12 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">Kpl</th>
-      <th class="et-table--th">Tuotto</th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.kpl')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.tuotto')}
+      </th>
       <th class="et-table--th" />
       <th class="et-table--th" />
     </tr>

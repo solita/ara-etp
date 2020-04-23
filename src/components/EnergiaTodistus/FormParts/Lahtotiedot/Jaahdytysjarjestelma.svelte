@@ -9,7 +9,7 @@
   export let energiatodistus;
 </script>
 
-<H3 text={'Jäähdytysjärjestelmä'} />
+<H3 text={$_('energiatodistus.lahtotiedot.jaahdytysjarjestelma.header')} />
 <div class="w-full py-4 mb-4">
   <Input
     {disabled}

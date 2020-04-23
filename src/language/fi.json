@@ -217,6 +217,13 @@
         "poisto": "poisto"
       },
       "lammitys": {
+        "header": "Lämmitysjärjestelmä",
+        "tuotonhyotysuhde": "Tuoton hyötysuhde",
+        "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
+        "lampokerroin": "Lämpökerroin",
+        "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö kWh/(m²vuosi)",
+        "kpl": "Kpl",
+        "tuotto": "Tuotto",
         "kuvaus": "Lämmitysjärjestelmän kuvaus",
         "tilat-ja-iv": {
           "label": "Tilojen ja IV:n lämmitys",
@@ -245,6 +252,7 @@
       },
 
       "jaahdytysjarjestelma": {
+        "header": "Jäähdytysjärjestelmä",
         "jaahdytyskauden-painotettu-kylmakerroin": "Jäähdytyskauden painotettu kylmäkerroin"
       },
 
