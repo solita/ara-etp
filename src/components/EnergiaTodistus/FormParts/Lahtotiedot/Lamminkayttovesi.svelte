@@ -9,7 +9,7 @@
   export let energiatodistus;
 </script>
 
-<H3 text={'Lämmin käyttövesi'} />
+<H3 text={$_('energiatodistus.lahtotiedot.lkvn-kaytto.header')} />
 <div class="w-1/3 py-4 mb-4">
   <Input
     {disabled}
