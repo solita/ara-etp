@@ -52,6 +52,12 @@ const SisKuorma = (minInclusive, maxInclusive) => ({
   kayttoaste: Float(0.1, 1.0),
   lampokuorma: Float(minInclusive, maxInclusive)
 });
+const SahkoLampo = {
+  sahko: Float(0.0, Infinity),
+  lampo: Float(0.0, Infinity)
+};
+
+const FloatPos = Float(0.0, Infinity);
 
 export const schema = {
   perustiedot: {
@@ -123,5 +129,48 @@ export const schema = {
       kuluttajalaitteet: SisKuorma(0.0, 12.0),
       valaistus: SisKuorma(0.0, 19.0)
     }
-  }
+  },
+  tulokset: {
+    'kaytettavat-energiamuodot': {
+      'fossiilinen-polttoaine': FloatPos,
+      sahko: FloatPos,
+      kaukojaahdytys: FloatPos,
+      kaukolampo: FloatPos,
+      'uusiutuva-polttoaine': FloatPos
+    },
+    'uusiutuvat-omavaraisenergiat': {
+      aurinkosahko: FloatPos,
+      tuulisahko: FloatPos,
+      aurinkolampo: FloatPos,
+      muulampo: FloatPos,
+      muusahko: FloatPos,
+      lampopumppu: FloatPos
+    },
+    'tekniset-jarjestelmat': {
+      'tilojen-lammitys': SahkoLampo,
+      'tuloilman-lammitys': SahkoLampo,
+      'kayttoveden-valmistus': SahkoLampo,
+      'iv-sahko': FloatPos,
+      jaahdytys: { ...SahkoLampo, kaukojaahdytys: FloatPos },
+      'kuluttajalaitteet-ja-valaistus-sahko': FloatPos
+    },
+    nettotarve: {
+      'tilojen-lammitys-vuosikulutus': FloatPos,
+      'ilmanvaihdon-lammitys-vuosikulutus': FloatPos,
+      'kayttoveden-valmistus-vuosikulutus': FloatPos,
+      'jaahdytys-vuosikulutus': FloatPos
+    },
+    lampokuormat: {
+      aurinko: FloatPos,
+      ihmiset: FloatPos,
+      kuluttajalaitteet: FloatPos,
+      valaistus: FloatPos,
+      kvesi: FloatPos
+    },
+    laskentatyokalu: String(60)
+  },
+  'toteutunut-ostoenergiankulutus': {},
+  huomiot: {},
+  'lisamerkintoja-fi': {},
+  'lisamerkintoja-sv': {}
 };
