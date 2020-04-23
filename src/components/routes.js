@@ -5,7 +5,7 @@ import Laatija from '@Component/Laatija/Laatija';
 import Halytykset from '@Component/Halytykset/Halytykset';
 import Kaytonvalvonta from '@Component/Kaytonvalvonta/Kaytonvalvonta';
 import Tyojono from '@Component/Tyojono/Tyojono';
-import EnergiaTodistus from '@Component/EnergiaTodistus/EnergiaTodistus';
+import Energiatodistus from '@Component/Energiatodistus/Energiatodistus';
 import NotFound from '@Component/NotFound/NotFound';
 import MyInfo from '@Component/Kayttaja/MyInfo';
 import LandingPage from '@Component/Kayttaja/LandingPage';
@@ -20,7 +20,7 @@ export const routes = {
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
   '/viestit': Viestit,
-  '/energiatodistus/*': EnergiaTodistus,
+  '/energiatodistus/*': Energiatodistus,
   '/myinfo': MyInfo,
   '*': NotFound
 };

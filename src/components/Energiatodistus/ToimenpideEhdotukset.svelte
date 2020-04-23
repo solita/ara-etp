@@ -2,7 +2,7 @@
   import H2 from '@Component/H/H2';
   import H3 from '@Component/H/H3';
 
-  import Textarea from '@Component/EnergiaTodistus/Textarea';
+  import Textarea from '@Component/Energiatodistus/Textarea';
 
   export let disabled;
   export let schema;

@@ -7,7 +7,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Fetch from '@Utility/fetch-utils';
-  import EnergiaTodistusForm from './EnergiaTodistusForm';
+  import EnergiatodistusForm from './EnergiatodistusForm';
 
   import * as et from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
@@ -39,12 +39,12 @@
     Future.forkBothDiscardFirst(
       R.compose(
         R.tap(toggleOverlay(false)),
-        flashMessageStore.add('EnergiaTodistus', 'error'),
+        flashMessageStore.add('Energiatodistus', 'error'),
         R.always($_('energiatodistus.messages.save-error'))
       ),
       R.compose(
         R.tap(toggleOverlay(false)),
-        flashMessageStore.add('EnergiaTodistus', 'success'),
+        flashMessageStore.add('Energiatodistus', 'success'),
         R.always($_('energiatodistus.messages.save-success'))
       )
     ),
@@ -58,26 +58,31 @@
       R.compose(
         R.compose(
           R.tap(toggleDisabled(true)),
-          flashMessageStore.add('EnergiaTodistus', 'error'),
+          flashMessageStore.add('Energiatodistus', 'error'),
           R.always($_('energiatodistus.messages.load-error'))
         ),
         R.tap(toggleOverlay(false))
       ),
       R.compose(
         response => {
-          energiatodistus = Maybe.Some(response[0])
+          energiatodistus = Maybe.Some(response[0]);
         },
         R.tap(toggleOverlay(false))
       )
     ),
     Future.both(Future.after(400, true)),
     Future.parallel(5),
-    R.prepend(R.__, [api.kielisyys, api.laatimisvaiheet,
-      api.alakayttotarkoitusluokat2018, api.kayttotarkoitusluokat2018]),
+    R.prepend(R.__, [
+      api.kielisyys,
+      api.laatimisvaiheet,
+      api.alakayttotarkoitusluokat2018,
+      api.kayttotarkoitusluokat2018
+    ]),
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
 
-  $: breadcrumbStore.set([et.breadcrumb1stLevel($_),
+  $: breadcrumbStore.set([
+    et.breadcrumb1stLevel($_),
     {
       label: Maybe.fold('...', R.prop('id'), energiatodistus),
       url: location.href
@@ -90,9 +95,12 @@
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(energiatodistus)}
-      <EnergiaTodistusForm version={params.version} {disabled}
-                           energiatodistus={energiatodistus.some()}
-                           {submit} {title}/>
+      <EnergiatodistusForm
+        version={params.version}
+        {disabled}
+        energiatodistus={energiatodistus.some()}
+        {submit}
+        {title} />
     {/if}
   </div>
   <div slot="overlay-content">
