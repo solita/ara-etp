@@ -251,6 +251,29 @@
       "lkvn-kaytto": {
         "kulutus-per-nelio": "Ominaiskulutus",
         "vuosikulutus": "Lämmitysenergian nettotarve"
+      },
+
+      "sis-kuorma": {
+        "header": "Sisäiset lämpökuormat eri käyttöasteilla",
+        "kayttoaste": "Käyttöaste",
+        "lampokuorma": "Lämpökuorma W/m²",
+        "labels": {
+          "henkilot": "Henkilöt",
+          "kuluttajalaitteet": "Kuluttajalaitteet",
+          "valaistus": "Valaistus"
+        },
+        "henkilot": {
+          "kayttoaste": "Henkilöiden käyttöaste",
+          "lampokuorma": "Henkilöiden lämpökuorma"
+        },
+        "kuluttajalaitteet": {
+          "kayttoaste": "Kuluttajalaitteiden käyttöaste",
+          "lampokuorma": "Kuluttajalaitteiden lämpökuorma"
+        },
+        "valaistus": {
+          "kayttoaste": "Valaistuksen käyttöaste",
+          "lampokuorma": "Valaistuksen lämpökuorma"
+        }
       }
     },
     "messages": {

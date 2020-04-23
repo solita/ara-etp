@@ -10,40 +10,27 @@
   export let energiatodistus;
 </script>
 
-<H3 text={'Sisäiset lämpökuormat eri käyttöasteilla'} compact={true} />
+<H3 text={$_('energiatodistus.lahtotiedot.sis-kuorma.header')} compact={true} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">Käyttöaste</th>
       <th class="et-table--th">
-        Henkilöt
-        <br />
-        W/m²
+        {$_('energiatodistus.lahtotiedot.sis-kuorma.kayttoaste')}
       </th>
       <th class="et-table--th">
-        Kuluttajalaitteet
-        <br />
-        W/m²
+        {$_('energiatodistus.lahtotiedot.sis-kuorma.lampokuorma')}
       </th>
-      <th class="et-table--th">
-        Valaistus
-        <br />
-        W/m²
-      </th>
+      <th class="et-table--th" />
+      <th class="et-table--th" />
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each R.path(['lahtotiedot', 'sis-kuorma'], energiatodistus) as sisKuorma, index}
+    {#each ['henkilot', 'kuluttajalaitteet', 'valaistus'] as sisKuorma}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'sis-kuorma', index, 'selite-fi']} />
+          {$_(`energiatodistus.lahtotiedot.sis-kuorma.labels.${sisKuorma}`)}
         </td>
         <td class="et-table--td">
           <Input
@@ -51,7 +38,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'sis-kuorma', index, 'kayttoaste']} />
+            path={['lahtotiedot', 'sis-kuorma', sisKuorma, 'kayttoaste']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -59,23 +46,16 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'sis-kuorma', index, 'henkilot']} />
+            path={['lahtotiedot', 'sis-kuorma', sisKuorma, 'lampokuorma']} />
         </td>
+        <td class="et-table--td" />
         <td class="et-table--td">
-          <Input
+          <!-- <Input
             {disabled}
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'sis-kuorma', index, 'kuluttajalaitteet']} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'sis-kuorma', index, 'valaistus']} />
+            path={['lahtotiedot', 'sis-kuorma', index, 'valaistus']} /> -->
         </td>
       </tr>
     {/each}

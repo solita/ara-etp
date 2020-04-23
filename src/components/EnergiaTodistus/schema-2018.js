@@ -48,14 +48,10 @@ const MaaraTuotto = {
   tuotto: Float(0.0, Infinity)
 };
 
-const SisKuorma = {
-  'selite-fi': String(35),
-  'selite-sv': String(35),
+const SisKuorma = (minInclusive, maxInclusive) => ({
   kayttoaste: Float(0.1, 1.0),
-  henkilot: Float(1.0, 14.0),
-  kuluttajalaitteet: Float(0.0, 12.0),
-  valaistus: Float(0.0, 19.0)
-};
+  lampokuorma: Float(minInclusive, maxInclusive)
+});
 
 export const schema = {
   perustiedot: {
@@ -122,6 +118,10 @@ export const schema = {
       'kulutus-per-nelio': Float(0.0, Infinity),
       vuosikulutus: Float(0.0, Infinity)
     },
-    'sis-kuorma': [SisKuorma, SisKuorma, SisKuorma]
+    'sis-kuorma': {
+      henkilot: SisKuorma(1.0, 14.0),
+      kuluttajalaitteet: SisKuorma(0.0, 12.0),
+      valaistus: SisKuorma(0.0, 19.0)
+    }
   }
 };
