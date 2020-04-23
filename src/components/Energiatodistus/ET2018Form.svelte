@@ -39,6 +39,10 @@
   import Lampokuormat from './FormParts/Tulokset/Lampokuormat';
   import Laskentatyokalu from './FormParts/Tulokset/Laskentatyokalu';
 
+  import EnergiaverkostaOstetut from './FormParts/ToteutunutKulutus/EnergiaverkostaOstetut';
+  import OstetutPolttoaineet from './FormParts/ToteutunutKulutus/OstetutPolttoaineet';
+  import ToteutunutOstoenergia from './FormParts/ToteutunutKulutus/ToteutunutOstoenergia';
+
   import { flashMessageStore } from '@/stores';
 
   export let title = '';
@@ -92,11 +96,11 @@
 
   :global(.et-table--th),
   :global(.et-table--td) {
-    @apply px-4 py-2;
+    @apply px-4 py-2 font-bold;
   }
 
   :global(.et-table--th) {
-    @apply text-primary font-bold text-sm text-center w-1/5;
+    @apply text-primary text-sm text-center w-1/5;
     height: 4em;
   }
 
@@ -131,6 +135,10 @@
 
   :global(.et-table--tr > .et-table--td:first-child) {
     @apply font-bold;
+  }
+
+  :global(.et-table--tr > .et-table--td:not(:first-child)) {
+    @apply text-center;
   }
 </style>
 
@@ -230,6 +238,11 @@
     <Nettotarve {disabled} {schema} bind:energiatodistus />
     <Lampokuormat {disabled} {schema} bind:energiatodistus />
     <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
+
+    <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
+    <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
+    <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
+    <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">
