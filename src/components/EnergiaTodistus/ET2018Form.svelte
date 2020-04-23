@@ -113,6 +113,18 @@
     @apply w-1/6;
   }
 
+  :global(.et-table--th__fourcells) {
+    @apply w-4/5;
+  }
+
+  :global(.et-table--th__threecells) {
+    @apply w-3/5;
+  }
+
+  :global(.et-table--th__twocells) {
+    @apply w-2/5;
+  }
+
   :global(.et-table--tr:last-child) {
     @apply mb-5;
   }

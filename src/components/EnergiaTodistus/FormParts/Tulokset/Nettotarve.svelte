@@ -14,14 +14,13 @@
 <table class="et-table mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
-      <th class="et-table--th" />
+      <th class="et-table--th et-table--th__twocells" />
       <th class="et-table--th">
         {$_('energiatodistus.tulokset.vuosikulutus')}
       </th>
       <th class="et-table--th">
         {$_('energiatodistus.tulokset.vuosikulutus-per-nelio')}
       </th>
-      <th class="et-table--th" />
       <th class="et-table--th" />
     </tr>
   </thead>
@@ -40,7 +39,6 @@
             bind:model={energiatodistus}
             path={['tulokset', 'nettotarve', tarve]} />
         </td>
-        <td class="et-table--td" />
         <td class="et-table--td" />
         <td class="et-table--td" />
       </tr>

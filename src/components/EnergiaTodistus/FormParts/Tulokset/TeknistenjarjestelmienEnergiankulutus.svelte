@@ -16,11 +16,10 @@
 <table class="et-table et-table__noborder mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
-      <th class="et-table--th" />
+      <th class="et-table--th et-table--th__twocells" />
       <th class="et-table--th">sahko</th>
       <th class="et-table--th">lampo</th>
       <th class="et-table--th">kaukojaahdytys kWh(m²vuosi)</th>
-      <th class="et-table--th" />
     </tr>
   </thead>
 
@@ -47,7 +46,6 @@
             path={['tulokset', 'tekniset-jarjestelmat', jarjestelma, 'lampo']} />
         </td>
         <td class="et-table--td" />
-        <td class="et-table--td" />
       </tr>
     {/each}
     <tr class="et-table--tr">
@@ -62,7 +60,6 @@
           bind:model={energiatodistus}
           path={['tulokset', 'tekniset-jarjestelmat', 'iv-sahko']} />
       </td>
-      <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td" />
     </tr>
@@ -87,7 +84,6 @@
           bind:model={energiatodistus}
           path={['tulokset', 'tekniset-jarjestelmat', 'jaahdytys', 'kaukojaahdytys']} />
       </td>
-      <td class="et-table--td" />
     </tr>
     <tr class="et-table--tr">
       <td class="et-table--td">
@@ -103,13 +99,11 @@
       </td>
       <td class="et-table--td" />
       <td class="et-table--td" />
-      <td class="et-table--td" />
     </tr>
     <tr class="et-table--tr border-t-1 border-disabled">
       <td class="et-table--td uppercase">
         {$_('energiatodistus.tulokset.yhteensa')}
       </td>
-      <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td" />
