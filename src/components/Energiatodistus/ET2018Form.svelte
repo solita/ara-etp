@@ -24,6 +24,7 @@
 
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
+<<<<<<< HEAD
   import Rakennusvaippa from './FormParts/Lahtotiedot/Rakennusvaippa';
   import Ikkunat from './FormParts/Lahtotiedot/Ikkunat';
   import Ilmanvaihtojarjestelma from './FormParts/Lahtotiedot/Ilmanvaihtojarjestelma';
@@ -45,6 +46,32 @@
 
   import Huomio from './FormParts/Huomiot/Huomio';
   import Suositukset from './FormParts/Huomiot/Suositukset';
+=======
+  import Rakennusvaippa from './form-parts/Lahtotiedot/Rakennusvaippa';
+  import Ikkunat from './form-parts/Lahtotiedot/Ikkunat';
+  import Ilmanvaihtojarjestelma from './form-parts/Lahtotiedot/Ilmanvaihtojarjestelma';
+  import Lammitysjarjestelma from './form-parts/Lahtotiedot/Lammitysjarjestelma';
+  import Jaahdytysjarjestelma from './form-parts/Lahtotiedot/Jaahdytysjarjestelma';
+  import SisaisetLampokuormat from './form-parts/Lahtotiedot/SisaisetLampokuormat';
+  import Lamminkayttovesi from './form-parts/Lahtotiedot/Lamminkayttovesi';
+
+  import ELuvunErittely from './form-parts/Tulokset/ELuvunErittely';
+  import UusiutuvatOmavaraisenergiat from './form-parts/Tulokset/UusiutuvatOmavaraisenergiat';
+  import TeknistenjarjestelmienEnergiankulutus from './form-parts/Tulokset/TeknistenjarjestelmienEnergiankulutus';
+  import Nettotarve from './form-parts/Tulokset/Nettotarve';
+  import Lampokuormat from './form-parts/Tulokset/Lampokuormat';
+  import Laskentatyokalu from './form-parts/Tulokset/Laskentatyokalu';
+
+  import EnergiaverkostaOstetut from './form-parts/ToteutunutKulutus/EnergiaverkostaOstetut';
+  import OstetutPolttoaineet from './form-parts/ToteutunutKulutus/OstetutPolttoaineet';
+  import ToteutunutOstoenergia from './form-parts/ToteutunutKulutus/ToteutunutOstoenergia';
+  import UlkoseinatOvetIkkunat from './form-parts/Huomiot/UlkoseinatOvetIkkunat';
+  import YlapohjaAlapohja from './form-parts/Huomiot/YlapohjaAlapohja';
+  import KayttovedenLammitysjarjestelmat from './form-parts/Huomiot/KayttovedenLammitysjarjestelmat';
+  import IlmanvaihtoIlmastointijarjestelmat from './form-parts/Huomiot/IlmanvaihtoIlmastointijarjestelmat';
+  import MuutJarjestelmat from './form-parts/Huomiot/MuutJarjestelmat';
+  import Suositukset from './form-parts/Huomiot/Suositukset';
+>>>>>>> Remove FormParts-camelcase
 
   import { flashMessageStore } from '@/stores';
 
