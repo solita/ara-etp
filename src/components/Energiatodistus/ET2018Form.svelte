@@ -42,11 +42,8 @@
   import EnergiaverkostaOstetut from './FormParts/ToteutunutKulutus/EnergiaverkostaOstetut';
   import OstetutPolttoaineet from './FormParts/ToteutunutKulutus/OstetutPolttoaineet';
   import ToteutunutOstoenergia from './FormParts/ToteutunutKulutus/ToteutunutOstoenergia';
-  import UlkoseinatOvetIkkunat from './FormParts/Huomiot/UlkoseinatOvetIkkunat';
-  import YlapohjaAlapohja from './FormParts/Huomiot/YlapohjaAlapohja';
-  import KayttovedenLammitysjarjestelmat from './FormParts/Huomiot/KayttovedenLammitysjarjestelmat';
-  import IlmanvaihtoIlmastointijarjestelmat from './FormParts/Huomiot/IlmanvaihtoIlmastointijarjestelmat';
-  import MuutJarjestelmat from './FormParts/Huomiot/MuutJarjestelmat';
+
+  import Huomio from './FormParts/Huomiot/Huomio';
   import Suositukset from './FormParts/Huomiot/Suositukset';
 
   import { flashMessageStore } from '@/stores';
@@ -251,14 +248,23 @@
     <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
     <H2 text={$_('energiatodistus.huomiot.header')} />
-    <UlkoseinatOvetIkkunat {disabled} {schema} bind:energiatodistus />
-    <YlapohjaAlapohja {disabled} {schema} bind:energiatodistus />
-    <KayttovedenLammitysjarjestelmat {disabled} {schema} bind:energiatodistus />
-    <IlmanvaihtoIlmastointijarjestelmat
+    <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
+    <Huomio
       {disabled}
       {schema}
+      huomio={'alapohja-ylapohja'}
       bind:energiatodistus />
-    <MuutJarjestelmat {disabled} {schema} bind:energiatodistus />
+    <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
+    <Huomio
+      {disabled}
+      {schema}
+      huomio={'iv-ilmastointi'}
+      bind:energiatodistus />
+    <Huomio
+      {disabled}
+      {schema}
+      huomio={'valaistus-muut'}
+      bind:energiatodistus />
     <Suositukset {disabled} {schema} bind:energiatodistus />
   </div>
 
