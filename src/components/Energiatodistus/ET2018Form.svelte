@@ -55,12 +55,12 @@
   import SisaisetLampokuormat from './form-parts/Lahtotiedot/SisaisetLampokuormat';
   import Lamminkayttovesi from './form-parts/Lahtotiedot/Lamminkayttovesi';
 
-  import ELuvunErittely from './form-parts/Tulokset/ELuvunErittely';
-  import UusiutuvatOmavaraisenergiat from './form-parts/Tulokset/UusiutuvatOmavaraisenergiat';
-  import TeknistenjarjestelmienEnergiankulutus from './form-parts/Tulokset/TeknistenjarjestelmienEnergiankulutus';
-  import Nettotarve from './form-parts/Tulokset/Nettotarve';
-  import Lampokuormat from './form-parts/Tulokset/Lampokuormat';
-  import Laskentatyokalu from './form-parts/Tulokset/Laskentatyokalu';
+  import ELuvunErittely from './form-parts/tulokset/ELuvunErittely';
+  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/UusiutuvatOmavaraisenergiat';
+  import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/TeknistenjarjestelmienEnergiankulutus';
+  import Nettotarve from './form-parts/tulokset/Nettotarve';
+  import Lampokuormat from './form-parts/tulokset/Lampokuormat';
+  import Laskentatyokalu from './form-parts/tulokset/Laskentatyokalu';
 
   import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/EnergiaverkostaOstetut';
   import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/OstetutPolttoaineet';
