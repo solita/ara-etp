@@ -34,10 +34,19 @@ const emptyLammitysMaaraTuotto = _ => ({
   tuotto: Maybe.None()
 });
 
+const emptyToimenpide = _ => ({
+  'nimi-fi': Maybe.None(),
+  'nimi-sv': Maybe.None(),
+  lampo: Maybe.None(),
+  sahko: Maybe.None(),
+  jaahdytys: Maybe.None(),
+  'eluvun-muutos': Maybe.None()
+});
+
 const emptyHuomio = _ => ({
   'teksti-fi': Maybe.None(),
   'teksti-sv': Maybe.None(),
-  toimenpide: []
+  toimenpide: [emptyToimenpide(), emptyToimenpide(), emptyToimenpide()]
 });
 
 const emptySahkoLampo = _ => ({
@@ -203,7 +212,6 @@ export const emptyEnergiatodistus2018 = _ => ({
     'iv-ilmastointi': emptyHuomio(),
     ymparys: emptyHuomio(),
     'valaistus-muut': emptyHuomio(),
-
     'suositukset-fi': Maybe.None(),
     'suositukset-sv': Maybe.None(),
     'lisatietoja-fi': Maybe.None(),

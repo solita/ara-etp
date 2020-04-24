@@ -49,14 +49,7 @@
             path={['lahtotiedot', 'sis-kuorma', sisKuorma, 'lampokuorma']} />
         </td>
         <td class="et-table--td" />
-        <td class="et-table--td">
-          <!-- <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'sis-kuorma', index, 'valaistus']} /> -->
-        </td>
+        <td class="et-table--td" />
       </tr>
     {/each}
   </tbody>

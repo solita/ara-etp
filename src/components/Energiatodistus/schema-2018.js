@@ -66,6 +66,21 @@ const VapaaPolttoaine = {
   'maara-vuodessa': FloatPos
 };
 
+const Huomio = {
+  'teksti-fi': String(1000),
+  'teksti-sv': String(1000),
+  toimenpide: [
+    {
+      'nimi-fi': String(100),
+      'nimi-sv': String(100),
+      lampo: FloatPos,
+      sahko: FloatPos,
+      jaahdytys: FloatPos,
+      'eluvun-muutos': FloatPos
+    }
+  ]
+};
+
 export const schema = {
   perustiedot: {
     nimi: String(200),
@@ -201,7 +216,17 @@ export const schema = {
     'polttoaineet-vuosikulutus-yhteensa': FloatPos,
     'kaukojaahdytys-vuosikulutus-yhteensa': FloatPos
   },
-  huomiot: {},
+  huomiot: {
+    'suositukset-fi': String(1500),
+    'suositukset-sv': String(1500),
+    'lisatietoja-fi': String(500),
+    'lisatietoja-sv': String(500),
+    'iv-ilmastointi': Huomio,
+    'valaistus-muut': Huomio,
+    lammitys: Huomio,
+    ymparys: Huomio,
+    'alapohja-ylapohja': Huomio
+  },
   'lisamerkintoja-fi': {},
   'lisamerkintoja-sv': {}
 };
