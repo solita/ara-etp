@@ -42,6 +42,11 @@
   import EnergiaverkostaOstetut from './FormParts/ToteutunutKulutus/EnergiaverkostaOstetut';
   import OstetutPolttoaineet from './FormParts/ToteutunutKulutus/OstetutPolttoaineet';
   import ToteutunutOstoenergia from './FormParts/ToteutunutKulutus/ToteutunutOstoenergia';
+  import UlkoseinatOvetIkkunat from './FormParts/Huomiot/UlkoseinatOvetIkkunat';
+  import YlapohjaAlapohja from './FormParts/Huomiot/YlapohjaAlapohja';
+  import KayttovedenLammitysjarjestelmat from './FormParts/Huomiot/KayttovedenLammitysjarjestelmat';
+  import IlmanvaihtoIlmastointijarjestelmat from './FormParts/Huomiot/IlmanvaihtoIlmastointijarjestelmat';
+  import MuutJarjestelmat from './FormParts/Huomiot/MuutJarjestelmat';
 
   import { flashMessageStore } from '@/stores';
 
@@ -243,6 +248,16 @@
     <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
     <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
     <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
+
+    <H2 text={$_('energiatodistus.huomiot.header')} />
+    <UlkoseinatOvetIkkunat {disabled} {schema} bind:energiatodistus />
+    <YlapohjaAlapohja {disabled} {schema} bind:energiatodistus />
+    <KayttovedenLammitysjarjestelmat {disabled} {schema} bind:energiatodistus />
+    <IlmanvaihtoIlmastointijarjestelmat
+      {disabled}
+      {schema}
+      bind:energiatodistus />
+    <MuutJarjestelmat {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">

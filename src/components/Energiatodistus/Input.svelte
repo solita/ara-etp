@@ -13,9 +13,17 @@
   export let disabled = false;
   export let compact = false;
 
-  const id = R.replace(/-fi|-sv/g, '', R.join('.', path));
+  const nonArrayPath = R.map(
+    R.when(item => typeof item === 'number', R.always(0)),
+    path
+  );
+
+  const id = R.replace(/-fi|-sv/g, '', R.join('.', nonArrayPath));
   const lens = R.lensPath(path);
-  const type = R.view(lens, schema);
+
+  const type = R.view(R.lensPath(nonArrayPath), schema);
+
+  console.log(nonArrayPath);
 </script>
 
 <Input

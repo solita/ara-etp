@@ -502,6 +502,81 @@
       "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet yhteensä",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys yhteensä"
     },
+    "huomiot": {
+      "header": "Toimenpide-ehdotukset rakennuksen e-luvun parantamiseksi",
+      "toimenpide-nimi": "Toimenpiteen nimi",
+      "toimenpide-lampo": "Lämpö, ostoenergian muutos kWh/vuosi",
+      "toimenpide-sahko": "Sähkö, ostoenergian muutos kWh/vuosi",
+      "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos kWh/vuosi",
+      "toimenpide-eluvun-muutos": "E-luvun muutos WhE/m²vuosi",
+      "suositukset": "Suositetut toimenpide-ehdotukset",
+      "lisatietoja": "Lisätiedot",
+      "iv-ilmastointi": {
+        "header": "Huomiot - Ilmanvaihto- ja ilmastointijärjestelmät",
+        "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
+        "toimenpide": [
+          {
+            "nimi": "Toimenpiteen nimi",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        ]
+      },
+      "valaistus-muut": {
+        "header": "Huomiot - Valaistus, jäähdytysjärjestelmät, sähköiset erillislaitteet ja muut järjestelmät",
+        "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislaitteiden ja muiden järjestelmien huomiot",
+        "toimenpide": [
+          {
+            "nimi": "Toimenpiteen nimi",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        ]
+      },
+      "lammitys": {
+        "header": "Huomiot - Tilojen ja käyttöveden lämmitysjärjestelmät",
+        "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
+        "toimenpide": [
+          {
+            "nimi": "Toimenpiteen nimi",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        ]
+      },
+      "ymparys": {
+        "header": "Huomiot - Ulkoseinät, ulko-ovet ja ikkunat",
+        "teksti": "Ulkoseinien, ulko-ovien ja ikkunoiden huomiot",
+        "toimenpide": [
+          {
+            "nimi": "Toimenpiteen nimi",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        ]
+      },
+      "alapohja-ylapohja": {
+        "header": "Huomiot - Ylä- ja alapohja",
+        "teksti": "Ylä- ja alapohjan huomiot",
+        "toimenpide": [
+          {
+            "nimi": "Toimenpiteen nimi",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        ]
+      }
+    },
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
