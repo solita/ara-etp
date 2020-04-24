@@ -62,9 +62,9 @@
   import Lampokuormat from './form-parts/Tulokset/Lampokuormat';
   import Laskentatyokalu from './form-parts/Tulokset/Laskentatyokalu';
 
-  import EnergiaverkostaOstetut from './form-parts/ToteutunutKulutus/EnergiaverkostaOstetut';
-  import OstetutPolttoaineet from './form-parts/ToteutunutKulutus/OstetutPolttoaineet';
-  import ToteutunutOstoenergia from './form-parts/ToteutunutKulutus/ToteutunutOstoenergia';
+  import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/EnergiaverkostaOstetut';
+  import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/OstetutPolttoaineet';
+  import ToteutunutOstoenergia from './form-parts/toteutunut-kulutus/ToteutunutOstoenergia';
   import UlkoseinatOvetIkkunat from './form-parts/Huomiot/UlkoseinatOvetIkkunat';
   import YlapohjaAlapohja from './form-parts/Huomiot/YlapohjaAlapohja';
   import KayttovedenLammitysjarjestelmat from './form-parts/Huomiot/KayttovedenLammitysjarjestelmat';
