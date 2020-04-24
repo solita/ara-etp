@@ -19,6 +19,8 @@ const Float = (min, max) => ({
   validators: validation.MaybeInterval(min, max)
 });
 
+const FloatPos = Float(0.0, Infinity);
+
 const Rakennusvaippa = {
   ala: Float(0.0, 50),
   U: Float(0.0, 50)
@@ -57,7 +59,12 @@ const SahkoLampo = {
   lampo: Float(0.0, Infinity)
 };
 
-const FloatPos = Float(0.0, Infinity);
+const VapaaPolttoaine = {
+  nimi: String(30),
+  yksikko: String(12),
+  muunnoskerroin: FloatPos,
+  'maara-vuodessa': FloatPos
+};
 
 export const schema = {
   perustiedot: {
@@ -169,7 +176,31 @@ export const schema = {
     },
     laskentatyokalu: String(60)
   },
-  'toteutunut-ostoenergiankulutus': {},
+  'toteutunut-ostoenergiankulutus': {
+    'ostettu-energia': {
+      'kaukolampo-vuosikulutus': FloatPos,
+      'kokonaissahko-vuosikulutus': FloatPos,
+      'kiinteistosahko-vuosikulutus': FloatPos,
+      'kayttajasahko-vuosikulutus': FloatPos,
+      'kaukojaahdytys-vuosikulutus': FloatPos
+    },
+    'ostetut-polttoaineet': {
+      'kevyt-polttooljy': FloatPos,
+      'pilkkeet-havu-sekapuu': FloatPos,
+      'pilkkeet-koivu': FloatPos,
+      puupelletit: FloatPos,
+      vapaa: [
+        VapaaPolttoaine,
+        VapaaPolttoaine,
+        VapaaPolttoaine,
+        VapaaPolttoaine
+      ]
+    },
+    'sahko-vuosikulutus-yhteensa': FloatPos,
+    'kaukolampo-vuosikulutus-yhteensa': FloatPos,
+    'polttoaineet-vuosikulutus-yhteensa': FloatPos,
+    'kaukojaahdytys-vuosikulutus-yhteensa': FloatPos
+  },
   huomiot: {},
   'lisamerkintoja-fi': {},
   'lisamerkintoja-sv': {}

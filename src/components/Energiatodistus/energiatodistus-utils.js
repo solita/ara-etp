@@ -50,6 +50,13 @@ const emptySisKuorma = _ => ({
   lampokuorma: Maybe.None()
 });
 
+const emptyVapaa = _ => ({
+  nimi: Maybe.None(),
+  yksikko: Maybe.None(),
+  muunnoskerroin: Maybe.None(),
+  'maara-vuodessa': Maybe.None()
+});
+
 export const emptyEnergiatodistus2018 = _ => ({
   perustiedot: {
     nimi: Maybe.None(),
@@ -183,7 +190,7 @@ export const emptyEnergiatodistus2018 = _ => ({
       'pilkkeet-havu-sekapuu': Maybe.None(),
       'pilkkeet-koivu': Maybe.None(),
       puupelletit: Maybe.None(),
-      vapaa: []
+      vapaa: [emptyVapaa(), emptyVapaa(), emptyVapaa(), emptyVapaa()]
     },
     'sahko-vuosikulutus-yhteensa': Maybe.None(),
     'kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
