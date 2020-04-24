@@ -25,33 +25,31 @@
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
 
-  import Rakennusvaippa from './form-parts/Lahtotiedot/Rakennusvaippa';
-  import Ikkunat from './form-parts/Lahtotiedot/Ikkunat';
-  import Ilmanvaihtojarjestelma from './form-parts/Lahtotiedot/Ilmanvaihtojarjestelma';
-  import Lammitysjarjestelma from './form-parts/Lahtotiedot/Lammitysjarjestelma';
-  import Jaahdytysjarjestelma from './form-parts/Lahtotiedot/Jaahdytysjarjestelma';
-  import SisaisetLampokuormat from './form-parts/Lahtotiedot/SisaisetLampokuormat';
-  import Lamminkayttovesi from './form-parts/Lahtotiedot/Lamminkayttovesi';
+  import Rakennusvaippa from './form-parts/lahtotiedot/rakennusvaippa';
+  import Ikkunat from './form-parts/lahtotiedot/ikkunat';
+  import Ilmanvaihtojarjestelma from './form-parts/lahtotiedot/ilmanvaihtojarjestelma';
+  import Lammitysjarjestelma from './form-parts/lahtotiedot/lammitysjarjestelma';
+  import Jaahdytysjarjestelma from './form-parts/lahtotiedot/jaahdytysjarjestelma';
+  import SisaisetLampokuormat from './form-parts/lahtotiedot/sisaiset-lampokuormat';
+  import Lamminkayttovesi from './form-parts/lahtotiedot/lamminkayttovesi';
 
-  import ELuvunErittely from './form-parts/tulokset/ELuvunErittely';
-  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/UusiutuvatOmavaraisenergiat';
-  import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/TeknistenjarjestelmienEnergiankulutus';
-  import Nettotarve from './form-parts/tulokset/Nettotarve';
-  import Lampokuormat from './form-parts/tulokset/Lampokuormat';
-  import Laskentatyokalu from './form-parts/tulokset/Laskentatyokalu';
+  import ELuvunErittely from './form-parts/tulokset/e-luvun-erittely';
+  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat';
+  import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
+  import Nettotarve from './form-parts/tulokset/nettotarve';
+  import Lampokuormat from './form-parts/tulokset/lampokuormat';
+  import Laskentatyokalu from './form-parts/tulokset/laskentatyokalu';
 
-  import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/EnergiaverkostaOstetut';
-  import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/OstetutPolttoaineet';
-  import ToteutunutOstoenergia from './form-parts/toteutunut-kulutus/ToteutunutOstoenergia';
+  import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/energiaverkosta-ostetut';
+  import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';
+  import ToteutunutOstoenergia from './form-parts/toteutunut-kulutus/toteutunut-ostoenergia';
 
-  import UlkoseinatOvetIkkunat from './form-parts/huomiot/UlkoseinatOvetIkkunat';
-  import YlapohjaAlapohja from './form-parts/huomiot/YlapohjaAlapohja';
-  import KayttovedenLammitysjarjestelmat from './form-parts/huomiot/KayttovedenLammitysjarjestelmat';
-  import IlmanvaihtoIlmastointijarjestelmat from './form-parts/huomiot/IlmanvaihtoIlmastointijarjestelmat';
-  import MuutJarjestelmat from './form-parts/huomiot/MuutJarjestelmat';
-
-  import Suositukset from './form-parts/huomiot/Suositukset';
-  import Huomio from './form-parts/huomiot/Huomio';
+  import UlkoseinatOvetIkkunat from './form-parts/huomiot/ulkoseinat-ovet-ikkunat';
+  import YlapohjaAlapohja from './form-parts/huomiot/ylapohja-alapohja';
+  import KayttovedenLammitysjarjestelmat from './form-parts/huomiot/kayttoveden-lammitysjarjestelmat';
+  import IlmanvaihtoIlmastointijarjestelmat from './form-parts/huomiot/ilmanvaihto-ilmastointijarjestelmat';
+  import MuutJarjestelmat from './form-parts/huomiot/muut-jarjestelmat';
+  import Suositukset from './form-parts/huomiot/suositukset';
 
   import { flashMessageStore } from '@/stores';
 
