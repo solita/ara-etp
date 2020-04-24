@@ -44,11 +44,7 @@
   import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';
   import ToteutunutOstoenergia from './form-parts/toteutunut-kulutus/toteutunut-ostoenergia';
 
-  import UlkoseinatOvetIkkunat from './form-parts/huomiot/ulkoseinat-ovet-ikkunat';
-  import YlapohjaAlapohja from './form-parts/huomiot/ylapohja-alapohja';
-  import KayttovedenLammitysjarjestelmat from './form-parts/huomiot/kayttoveden-lammitysjarjestelmat';
-  import IlmanvaihtoIlmastointijarjestelmat from './form-parts/huomiot/ilmanvaihto-ilmastointijarjestelmat';
-  import MuutJarjestelmat from './form-parts/huomiot/muut-jarjestelmat';
+  import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
 
   import { flashMessageStore } from '@/stores';
