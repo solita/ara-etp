@@ -9,8 +9,9 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+  export let huomio;
 
-  const base = 'energiatodistus.huomiot.ymparys';
+  const base = `energiatodistus.huomiot.${huomio}`;
 </script>
 
 <H3 text={$_(`${base}.header`)} compact={true} />
@@ -20,16 +21,16 @@
     {disabled}
     {schema}
     bind:model={energiatodistus}
-    path={['huomiot', 'ymparys', 'teksti-fi']} />
+    path={['huomiot', huomio, 'teksti-fi']} />
 </div>
 
-{#each R.path(['huomiot', 'ymparys', 'toimenpide'], energiatodistus) as _, index}
+{#each R.path(['huomiot', huomio, 'toimenpide'], energiatodistus) as _, index}
   <div class="w-full py-4 mb-6">
     <Input
       {disabled}
       {schema}
       bind:model={energiatodistus}
-      path={['huomiot', 'ymparys', 'toimenpide', index, 'nimi-fi']} />
+      path={['huomiot', huomio, 'toimenpide', index, 'nimi-fi']} />
   </div>
 {/each}
 
@@ -52,7 +53,7 @@
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each R.path(['huomiot', 'ymparys', 'toimenpide'], energiatodistus) as toimenpide, index}
+    {#each R.path(['huomiot', huomio, 'toimenpide'], energiatodistus) as toimenpide, index}
       <tr class="et-table--tr">
         <td class="et-table--td">
           {index + 1}. {$_('energiatodistus.huomiot.toimenpide-ehdotus')}
@@ -63,7 +64,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['huomiot', 'ymparys', 'toimenpide', index, 'lampo']} />
+            path={['huomiot', huomio, 'toimenpide', index, 'lampo']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -71,7 +72,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['huomiot', 'ymparys', 'toimenpide', index, 'sahko']} />
+            path={['huomiot', huomio, 'toimenpide', index, 'sahko']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -79,7 +80,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['huomiot', 'ymparys', 'toimenpide', index, 'jaahdytys']} />
+            path={['huomiot', huomio, 'toimenpide', index, 'jaahdytys']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -87,7 +88,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['huomiot', 'ymparys', 'toimenpide', index, 'eluvun-muutos']} />
+            path={['huomiot', huomio, 'toimenpide', index, 'eluvun-muutos']} />
         </td>
       </tr>
     {/each}
