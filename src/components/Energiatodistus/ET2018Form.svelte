@@ -47,6 +47,7 @@
   import KayttovedenLammitysjarjestelmat from './FormParts/Huomiot/KayttovedenLammitysjarjestelmat';
   import IlmanvaihtoIlmastointijarjestelmat from './FormParts/Huomiot/IlmanvaihtoIlmastointijarjestelmat';
   import MuutJarjestelmat from './FormParts/Huomiot/MuutJarjestelmat';
+  import Suositukset from './FormParts/Huomiot/Suositukset';
 
   import { flashMessageStore } from '@/stores';
 
@@ -258,6 +259,7 @@
       {schema}
       bind:energiatodistus />
     <MuutJarjestelmat {disabled} {schema} bind:energiatodistus />
+    <Suositukset {disabled} {schema} bind:energiatodistus />
   </div>
 
   <div class="flex -mx-4 pt-8">

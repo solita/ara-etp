@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
 
   import { locale, _ } from '@Language/i18n';
   import * as et from './energiatodistus-utils';
@@ -13,6 +14,12 @@
   export let disabled = false;
   export let compact = false;
 
+  const index = R.compose(
+    Maybe.fromNull,
+    R.head,
+    R.filter(item => typeof item === 'number')
+  )(path);
+
   const nonArrayPath = R.map(
     R.when(item => typeof item === 'number', R.always(0)),
     path
@@ -22,14 +29,12 @@
   const lens = R.lensPath(path);
 
   const type = R.view(R.lensPath(nonArrayPath), schema);
-
-  console.log(nonArrayPath);
 </script>
 
 <Input
   {id}
   name={id}
-  label={$_('energiatodistus.' + id)}
+  label={`${R.compose( Maybe.orSome(''), R.map(i => `${i + 1}. `) )(index)}${$_('energiatodistus.' + id)}`}
   {required}
   {disabled}
   {compact}
