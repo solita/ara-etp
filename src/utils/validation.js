@@ -146,5 +146,6 @@ export const validateModelValue = R.curry((validators, value) =>
 );
 
 export const validateModelObject = R.curry((schemaObject, object) =>
-  R.evolve(deep.map(R.is(Array), v => validateModelValue(v), schemaObject), object)
+  R.evolve(deep.map(R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
+    v => validateModelValue(v), schemaObject), object)
 );
