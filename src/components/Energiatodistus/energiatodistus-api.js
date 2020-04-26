@@ -6,7 +6,7 @@ import * as Maybe from "@Utility/maybe-utils";
 import * as deep from '@Utility/deep-objects';
 
 export const deserialize = R.compose(
-  R.evolve({id: Maybe.get, perustiedot: {
+  R.evolve({id: Maybe.get, versio: Maybe.get, perustiedot: {
     'onko-julkinen-rakennus': Maybe.get,
     valmistumisvuosi: Either.Right }}),
   deep.map(R.F, Maybe.fromNull)
@@ -17,7 +17,7 @@ export const serialize = R.compose(
     R.ifElse(R.allPass([R.complement(R.isNil), Either.isEither]), Either.orSome(null), R.identity)),
   deep.map(Maybe.isMaybe,
     R.ifElse(R.allPass([R.complement(R.isNil), Maybe.isMaybe]), Maybe.orSome(null), R.identity)),
-  R.omit(['id', 'tila'])
+  R.omit(['id', 'tila', 'laatija-fullname', 'versio'])
 );
 
 export const url = {
@@ -25,6 +25,12 @@ export const url = {
   version: (version) => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
 };
+
+export const getEnergiatodistukset = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+)(url.all);
 
 export const getEnergiatodistusById = R.curry((fetch, version, id) =>
   R.compose(
