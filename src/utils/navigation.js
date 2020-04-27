@@ -6,7 +6,7 @@ export const linksForLaatija = laatija => [
     href: '/energiatodistus/all'
   },
   { text: 'navigation.viestit', href: '/viestit' },
-  { text: 'navigation.yritykset', href: `/laatija/${laatija.id}/yritykset` },
+  { text: 'navigation.yritykset', href: `/laatija/${laatija.laatija}/yritykset` },
   {
     text: 'navigation.omattiedot',
     href: '/myinfo',
