@@ -63,7 +63,7 @@
 </style>
 
 <div class="w-full mt-3">
-  <H1 text="Energiatodistuskset" />
+  <H1 text={$_('energiatodistukset.title')} />
 
   <Overlay {overlay}>
     <div slot="content">
