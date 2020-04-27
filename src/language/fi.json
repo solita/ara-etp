@@ -592,6 +592,9 @@
       "nimi": "Nimi"
     }
   },
+  "energiatodistukset": {
+    "title": "Energiatodistukset"
+  },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
   "country-not-found": "Virheellinen maa"
