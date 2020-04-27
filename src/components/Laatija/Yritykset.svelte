@@ -157,7 +157,11 @@
     <p class="mb-5">
       Jos yritystä ei löydy energiatodistuspalvelusta, voit lisätä sen itse.
     </p>
-
-    <Link icon={'add_circle_outline'} text={'Lisää uusi yritys'} href='#/yritys/new'/>
+    <div class="flex flex-row">
+      <span class="material-icons">
+        add
+      </span> &nbsp;
+      <Link text={'Lisää uusi yritys'} href='#/yritys/new'/>
+    </div>
   </div>
 </form>
