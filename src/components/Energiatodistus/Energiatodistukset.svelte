@@ -90,9 +90,9 @@
                     on:click={changeLocationToET(energiatodistus.versio, energiatodistus.id)}>
                   <td>Luonnos</td>
                   <td>{energiatodistus.id}</td>
-                  <td>13.3.2030</td>
                   <td>C</td>
                   <td>{energiatodistus.versio}</td>
+                  <td>13.3.2030</td>
                   <td>{orEmpty(energiatodistus.perustiedot.nimi)}</td>
                   <td>{orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}</td>
                   <td>{orEmpty(energiatodistus['laatija-fullname'])}</td>
