@@ -21,10 +21,10 @@ const Float = (min, max) => ({
 
 const FloatPos = Float(0.0, Infinity);
 
-const Rakennusvaippa = {
-  ala: Float(0.0, 50),
-  U: Float(0.0, 50)
-};
+const Rakennusvaippa = (min, max) => ({
+  ala: FloatPos,
+  U: Float(min, max)
+});
 
 const Ikkuna = {
   ala: Float(0.0, Infinity),
@@ -102,11 +102,11 @@ export const schema = {
     'lammitetty-nettoala': Float(0, 1000),
     rakennusvaippa: {
       ilmanvuotoluku: Float(0, 50),
-      ulkoseinat: Rakennusvaippa,
-      ylapohja: Rakennusvaippa,
-      alapohja: Rakennusvaippa,
-      ikkunat: Rakennusvaippa,
-      ulkoovet: Rakennusvaippa,
+      ulkoseinat: Rakennusvaippa(0.05, 2.0),
+      ylapohja: Rakennusvaippa(0.03, 2.0),
+      alapohja: Rakennusvaippa(0.03, 4.0),
+      ikkunat: Rakennusvaippa(0.04, 6.5),
+      ulkoovet: Rakennusvaippa(0.2, 6.5),
       'kylmasillat-UA': Float(0, 50)
     },
     ikkunat: {
