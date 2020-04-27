@@ -49,6 +49,7 @@
   }
 </style>
 
+<!-- purgecss: active -->
 <ol transition:slide={{ duration: 200 }}>
   {#each items as item, index}
     <li
