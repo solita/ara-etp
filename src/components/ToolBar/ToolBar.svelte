@@ -1,5 +1,8 @@
 <script>
   import LanguageSelect from './LanguageSelect';
+
+  export let save = _ => {};
+  export let cancel = _ => {};
 </script>
 
 <style type="text/postcss">
@@ -24,11 +27,11 @@
   <button>
     <LanguageSelect />
   </button>
-  <button>
+  <button on:click = {save}>
     <span class="description">Tallenna</span>
     <span class="text-2xl font-icon">save</span>
   </button>
-  <button>
+  <button on:click = {cancel}>
     <span class="description">Peruuta muutokset</span>
     <span class="text-2xl font-icon">undo</span>
   </button>

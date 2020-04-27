@@ -223,21 +223,14 @@ export const emptyEnergiatodistus2018 = _ => ({
 
 export const emptyEnergiatodistus2013 = _ => ({
   perustiedot: {
-    nimi: Maybe.None()
+    yritys: {
+      nimi: Maybe.None()
+    }
   }
 });
 
 export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
-};
-
-export const schema2013 = {
-  perustiedot: {
-    nimi: [
-      validation.liftValidator(validation.minLengthConstraint(2)),
-      validation.liftValidator(validation.maxLengthConstraint(200))
-    ]
-  }
 };
 
 export const formatters = {
