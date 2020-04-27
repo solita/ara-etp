@@ -6,6 +6,7 @@
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore, breadcrumbStore } from '@/stores';
+  import { push } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
   import Overlay from '@Component/Overlay/Overlay';
@@ -19,8 +20,8 @@
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
 
-  const changeLocationToET = (versio, id) => {
-    window.location.assign('#/energiatodistus/' + versio + '/' + id);
+  const toETView = (versio, id) => {
+    push('#/energiatodistus/' + versio + '/' + id);
   }
   $: R.compose(
       Future.fork(
@@ -87,7 +88,7 @@
             <tbody>
               {#each energiatodistukset as energiatodistus}
                 <tr class="cursor-pointer"
-                    on:click={changeLocationToET(energiatodistus.versio, energiatodistus.id)}>
+                    on:click={toETView(energiatodistus.versio, energiatodistus.id)}>
                   <td>Luonnos</td>
                   <td>{energiatodistus.id}</td>
                   <td>C</td>
