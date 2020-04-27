@@ -39,7 +39,7 @@
     <LanguageSelect />
   </button>
   <button on:click = {save}>
-    <span class="description">Tallenna</span>
+    <span class="description">{id.isSome() ? 'Tallenna' : 'Luo uusi'}</span>
     <span class="text-2xl font-icon">save</span>
   </button>
   <button on:click = {cancel}>
