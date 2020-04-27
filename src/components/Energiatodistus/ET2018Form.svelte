@@ -21,6 +21,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
 
   import Input from './Input';
+  import BasicInput from '@Component/Input/Input';
 
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
@@ -158,6 +159,20 @@
   <div class="w-full mt-3">
     <H1 text={title} />
     <div class="flex flex-col py-4 -mx-4">
+
+      {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
+      <div class="lg:w-1/2 w-full px-4 py-2">
+        <BasicInput
+            id="energiatodistus.laatija-fullname"
+            name="energiatodistus.laatija-fullname"
+            label={$_('energiatodistus.laatija-fullname')}
+            disabled={true}
+            format={Maybe.orSome('')}
+            bind:model={energiatodistus}
+            lens={R.lensProp('laatija-fullname')}
+            i18n={$_} />
+      </div>
+      {/if}
 
       <div class="lg:w-1/2 w-full px-4 py-4">
         <Input
