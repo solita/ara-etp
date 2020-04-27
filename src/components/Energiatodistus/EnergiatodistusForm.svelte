@@ -70,7 +70,7 @@
     </form>
   </div>
   <div class="sticky top-3em w-1/6 self-start flex justify-end">
-    <ToolBar save = {submit$} {cancel}/>
+    <ToolBar save = {submit$} {cancel} {version} id={Maybe.fromNull(energiatodistus.id)}/>
   </div>
 </div>
 

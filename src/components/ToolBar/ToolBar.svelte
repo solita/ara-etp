@@ -1,5 +1,12 @@
 <script>
   import LanguageSelect from './LanguageSelect';
+  import * as Maybe from "@Utility/maybe-utils";
+  export let version;
+  export let id = Maybe.None();
+
+  const pdfUrl = Maybe.map(
+    i => `/api/private/energiatodistukset/${version}/${i}/pdf`,
+    id);
 
   export let save = _ => {};
   export let cancel = _ => {};
@@ -43,10 +50,14 @@
     <span class="description">Kopioi pohjaksi</span>
     <span class="text-2xl font-icon">file_copy</span>
   </button>
+  {#if pdfUrl.isSome()}
   <button>
-    <span class="description">Tulosta PDF</span>
-    <span class="text-2xl font-icon">print</span>
+    <a href={pdfUrl.some()}>
+      <span class="description">Tulosta PDF</span>
+      <span class="text-2xl font-icon">print</span>
+    </a>
   </button>
+  {/if}
   <button>
     <span class="description">Poista</span>
     <span class="text-2xl font-icon">delete_forever</span>
