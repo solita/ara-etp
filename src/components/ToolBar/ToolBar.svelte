@@ -8,6 +8,10 @@
     i => `/api/private/energiatodistukset/${version}/${i}/pdf`,
     id);
 
+  const signUrl = Maybe.map(
+      i => `#/energiatodistus/${version}/${i}/sign`,
+      id);
+
   export let save = _ => {};
   export let cancel = _ => {};
 </script>
@@ -42,14 +46,20 @@
     <span class="description">Peruuta muutokset</span>
     <span class="text-2xl font-icon">undo</span>
   </button>
+  {#if signUrl.isSome()}
   <button>
-    <span class="description">Allekirjoita</span>
-    <span class="text-2xl font-icon border-b-3 border-secondary">create</span>
+    <a href={signUrl.some()}>
+      <div class="description">Allekirjoita</div>
+      <span class="text-2xl font-icon border-b-3 border-secondary">create</span>
+    </a>
   </button>
+  {/if}
+  {#if id.isSome()}
   <button>
     <span class="description">Kopioi pohjaksi</span>
     <span class="text-2xl font-icon">file_copy</span>
   </button>
+  {/if}
   {#if pdfUrl.isSome()}
   <button>
     <a href={pdfUrl.some()}>
@@ -58,8 +68,10 @@
     </a>
   </button>
   {/if}
+  {#if id.isSome()}
   <button>
     <span class="description">Poista</span>
     <span class="text-2xl font-icon">delete_forever</span>
   </button>
+  {/if}
 </div>
