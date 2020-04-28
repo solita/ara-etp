@@ -223,21 +223,14 @@ export const emptyEnergiatodistus2018 = _ => ({
 
 export const emptyEnergiatodistus2013 = _ => ({
   perustiedot: {
-    nimi: Maybe.None()
+    yritys: {
+      nimi: Maybe.None()
+    }
   }
 });
 
 export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
-};
-
-export const schema2013 = {
-  perustiedot: {
-    nimi: [
-      validation.liftValidator(validation.minLengthConstraint(2)),
-      validation.liftValidator(validation.maxLengthConstraint(200))
-    ]
-  }
 };
 
 export const formatters = {
@@ -253,7 +246,7 @@ export const isValidForm = R.compose(
 
 export const breadcrumb1stLevel = i18n => ({
   label: i18n('energiatodistus.breadcrumb.energiatodistus'),
-  url: '/#/energiatodistukset'
+  url: '/#/energiatodistus/all'
 });
 
 export const selectFormat = (label, items) =>

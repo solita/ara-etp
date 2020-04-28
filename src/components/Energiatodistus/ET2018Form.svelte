@@ -10,15 +10,10 @@
   import * as et from './energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
   import * as api from './energiatodistus-api';
-  import { schema } from './schema-2018';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
-  import H3 from '@Component/H/H3';
-
-  import Button from '@Component/Button/Button';
   import Select from '@Component/Select/Select';
-  import Checkbox from '@Component/Checkbox/Checkbox';
 
   import Input from './Input';
   import BasicInput from '@Component/Input/Input';
@@ -48,13 +43,9 @@
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
 
-  import { flashMessageStore } from '@/stores';
-
   export let title = '';
-  export let submit;
   export let energiatodistus;
-  const originalEnergiatodistus = R.clone(energiatodistus);
-
+  export let schema;
   export let disabled = false;
 
   $: labelLocale = LocaleUtils.label($locale);
@@ -147,15 +138,7 @@
   }
 </style>
 
-<form
-  on:submit|preventDefault={_ => {
-    if (et.isValidForm(et.validators(schema), energiatodistus)) {
-      flashMessageStore.flush();
-      submit(energiatodistus);
-    } else {
-      flashMessageStore.add('Energiatodistus', 'error', $_('energiatodistus.messages.validation-error'));
-    }
-  }}>
+
   <div class="w-full mt-3">
     <H1 text={title} />
     <div class="flex flex-col py-4 -mx-4">
@@ -283,20 +266,3 @@
       bind:energiatodistus />
     <Suositukset {disabled} {schema} bind:energiatodistus />
   </div>
-
-  <div class="flex -mx-4 pt-8">
-    <div class="px-4">
-      <Button type={'submit'} text={$_('tallenna')} />
-    </div>
-    <div class="px-4">
-      <Button
-        on:click={event => {
-          event.preventDefault();
-          energiatodistus = R.clone(originalEnergiatodistus);
-        }}
-        text={$_('peruuta')}
-        type={'reset'}
-        style={'secondary'} />
-    </div>
-  </div>
-</form>

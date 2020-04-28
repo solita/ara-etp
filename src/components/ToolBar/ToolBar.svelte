@@ -1,5 +1,19 @@
 <script>
   import LanguageSelect from './LanguageSelect';
+  import * as Maybe from "@Utility/maybe-utils";
+  export let version;
+  export let id = Maybe.None();
+
+  const pdfUrl = Maybe.map(
+    i => `/api/private/energiatodistukset/${version}/${i}/pdf`,
+    id);
+
+  const signUrl = Maybe.map(
+      i => `#/energiatodistus/${version}/${i}/sign`,
+      id);
+
+  export let save = _ => {};
+  export let cancel = _ => {};
 </script>
 
 <style type="text/postcss">
@@ -24,28 +38,40 @@
   <button>
     <LanguageSelect />
   </button>
-  <button>
-    <span class="description">Tallenna</span>
+  <button on:click = {save}>
+    <span class="description">{id.isSome() ? 'Tallenna' : 'Luo uusi'}</span>
     <span class="text-2xl font-icon">save</span>
   </button>
-  <button>
+  <button on:click = {cancel}>
     <span class="description">Peruuta muutokset</span>
     <span class="text-2xl font-icon">undo</span>
   </button>
+  {#if signUrl.isSome()}
   <button>
-    <span class="description">Allekirjoita</span>
-    <span class="text-2xl font-icon border-b-3 border-secondary">create</span>
+    <a href={signUrl.some()}>
+      <div class="description">Allekirjoita</div>
+      <span class="text-2xl font-icon border-b-3 border-secondary">create</span>
+    </a>
   </button>
+  {/if}
+  {#if id.isSome()}
   <button>
     <span class="description">Kopioi pohjaksi</span>
     <span class="text-2xl font-icon">file_copy</span>
   </button>
+  {/if}
+  {#if pdfUrl.isSome()}
   <button>
-    <span class="description">Tulosta PDF</span>
-    <span class="text-2xl font-icon">print</span>
+    <a href={pdfUrl.some()}>
+      <span class="description">Tulosta PDF</span>
+      <span class="text-2xl font-icon">print</span>
+    </a>
   </button>
+  {/if}
+  {#if id.isSome()}
   <button>
     <span class="description">Poista</span>
     <span class="text-2xl font-icon">delete_forever</span>
   </button>
+  {/if}
 </div>
