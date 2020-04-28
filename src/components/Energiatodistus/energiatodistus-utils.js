@@ -110,7 +110,9 @@ export const emptyEnergiatodistus2018 = _ => ({
       etela: emptyIkkuna(),
       lounas: emptyIkkuna(),
       lansi: emptyIkkuna(),
-      luode: emptyIkkuna()
+      luode: emptyIkkuna(),
+      valokupu: emptyIkkuna(),
+      katto: emptyIkkuna()
     },
     ilmanvaihto: {
       erillispoistot: emptyIV(),
