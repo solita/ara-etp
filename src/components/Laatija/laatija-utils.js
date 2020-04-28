@@ -76,7 +76,8 @@ export const serializeForLaatija = R.compose(
     'patevyystaso',
     'toteamispaivamaara',
     'toteaja',
-    'laatimiskielto'
+    'laatimiskielto',
+    'rooli'
   ]),
   serialize
 );
