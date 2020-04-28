@@ -4,31 +4,27 @@
 
   import { _ } from '@Language/i18n';
 
-  import Input from '@Component/Input/Input';
-
   export let laskutustieto;
 </script>
 
-<style>
+<style type="text/postcss">
+  .inner {
+    @apply flex justify-between w-1/2;
+  }
 
+  .inner:not(:last-child) {
+    @apply mb-16;
+  }
 </style>
 
-<div transition:slide={{ duration: 200 }}>
-  <Input
-    disabled={true}
-    id={'nimi'}
-    name={'nimi'}
-    label={$_('energiatodistus.laskutustiedot.nimi')}
-    required={true}
-    bind:model={laskutustieto}
-    lens={R.lensProp('nimi')} />
-
-  <Input
-    disabled={true}
-    id={'ytunnus'}
-    name={'ytunnus'}
-    label={$_('yritys.y-tunnus')}
-    required={true}
-    bind:model={laskutustieto}
-    lens={R.lensProp('ytunnus')} />
+<div class="w-full" transition:slide={{ duration: 200 }}>
+  <span class="uppercase font-bold">Yrityksen perustiedot</span>
+  <div class="inner">
+    <span>{laskutustieto.nimi}</span>
+    <span>{laskutustieto.ytunnus}</span>
+  </div>
+  <span class="uppercase font-bold">Verkkolaskuosoite</span>
+  <div class="inner">
+    <span>{laskutustieto.verkkolaskuosoite}</span>
+  </div>
 </div>

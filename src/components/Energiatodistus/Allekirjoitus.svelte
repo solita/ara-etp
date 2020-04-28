@@ -1,51 +1,98 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Fetch from '@Utility/fetch-utils';
+  import * as Future from '@Utility/future-utils';
+  import * as etApi from './energiatodistus-api';
 
   import { currentUserStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
   import Select from '@Component/Select/Select';
   import H1 from '@Component/H/H1';
-
-  import Laskutustieto from './Laskutustieto';
+  import Button from '@Component/Button/Button';
+  import Overlay from '@Component/Overlay/Overlay';
+  import Spinner from '@Component/Spinner/Spinner';
 
   export let params;
 
-  const lens = R.lensProp('laskutustiedot');
+  const mpolluxUrl = 'https://localhost:53952';
+  const mpolluxVersionUrl = `${mpolluxUrl}/version`;
+  const mpolluxSignUrl = `${mpolluxUrl}/sign`;
 
-  let model = {
-    laskutustiedot: Maybe.None()
-  };
+  let mpolluxVersionInfo = Maybe.None();
+  let energiatodistus = Maybe.None();
 
-  const laskutustiedot = [
-    { id: 0, nimi: 'Henkilökohtaiset tiedot' },
-    { id: 1, nimi: 'Yritys Y', ytunnus: '1234567-1' }
-  ];
+  Future.fork(
+    e => console.error(e),
+    ([info, et]) => {
+      mpolluxVersionInfo = Maybe.of(info);
+      energiatodistus = Maybe.of(et);
+    },
+    R.compose(
+      Future.parallel(5),
+      R.append(R.__, [Fetch.fetchFromUrl(fetch, mpolluxVersionUrl)]),
+      R.converge(etApi.getEnergiatodistusById(fetch), [
+        R.prop('version'),
+        R.prop('id')
+      ])
+    )(params)
+  );
 
-  $: formatLaskutustieto = R.prop('nimi');
+  $: console.log(mpolluxVersionInfo);
+  $: console.log(energiatodistus);
 
-  $: parseLaskutustieto = Maybe.fromNull;
+  let overlay = false;
+  let signing = false;
 
-  $: console.log(model);
+  const sign = R.compose(
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', mpolluxSignUrl)),
+    R.assoc('content', R.__, {
+      version: '1.1',
+      selector: {
+        keyusages: ['nonrepudiation'],
+        keyalgorithms: ['rsa']
+      },
+      contentType: 'data',
+      hashAlgorithm: 'SHA256',
+      signatureType: 'signature'
+    })
+  );
+
+  const signProcess = R.compose(
+    Future.fork(console.error, console.log),
+    R.chain(sign),
+    R.map(R.prop('digest')),
+    R.map(R.tap(_ => (signing = true))),
+    R.converge(etApi.getEnergiatodistusDigestById(fetch), [
+      R.prop('version'),
+      R.prop('id')
+    ]),
+    R.always(params),
+    R.tap(_ => (overlay = true))
+  );
 </script>
 
-<style>
-
+<style type="text/postcss">
+  form {
+    @apply mt-16;
+  }
 </style>
 
-<H1 text={$_('energiatodistus.allekirjoitus.laskutusosoite')} />
-<Select
-  items={laskutustiedot}
-  bind:model
-  {lens}
-  format={formatLaskutustieto}
-  parse={parseLaskutustieto}
-  label={$_('energiatodistus.allekirjoitus.valitse-laskutusosoite')} />
+<H1 text={'Allekirjoittaminen'} />
 
-<form on:submit|preventDefault>
-  {#if R.compose( Maybe.isSome, R.view(lens) )(model)}
-    <Laskutustieto
-      laskutustieto={R.compose( Maybe.get, R.view(lens) )(model)} />
-  {/if}
-</form>
+<Overlay {overlay}>
+  <form slot="content" on:submit|preventDefault={signProcess}>
+    {#if R.all(Maybe.isSome, [mpolluxVersionInfo, energiatodistus])}
+      <Button text="Siirry allekirjoittamaan" type="submit" />
+    {:else}Tarkastetaan allekirjoituspalvelun olemassaoloa...{/if}
+  </form>
+  <div slot="overlay-content" class="flex flex-col items-center justify-center">
+    <Spinner />
+    <span>
+      {#if !signing}
+        Allekirjoitettavaa tiedostoa muodostetaan.
+      {:else}Tiedostoa allekirjoitetaan{/if}
+    </span>
+  </div>
+</Overlay>

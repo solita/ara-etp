@@ -92,7 +92,6 @@
 </script>
 
 <style type="text/postcss">
-
   span.required::before {
     @apply font-icon text-xs align-top;
     content: '* ';
@@ -139,6 +138,7 @@
     }
   }} />
 
+<!-- purgecss: disabled -->
 <span class:focused class:required class:disabled class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
   <span
