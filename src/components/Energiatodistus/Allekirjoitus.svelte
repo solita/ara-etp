@@ -40,14 +40,19 @@
     )(params)
   );
 
-  $: console.log(overlay);
-
   let overlay = false;
   let signing = false;
   let successful = Maybe.None();
 
   const sign = R.compose(
-    R.map(R.pick(['signature', 'chain'])),
+    R.chain(response =>
+      response.status === 'failed'
+        ? Future.reject(response)
+        : R.compose(
+            Future.resolve,
+            R.pick(['signature', 'chain'])
+          )(response)
+    ),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', mpolluxSignUrl)),
     R.assoc('content', R.__, {
@@ -87,9 +92,7 @@
 </script>
 
 <style type="text/postcss">
-  form {
-    @apply mt-16;
-  }
+
 </style>
 
 <Confirm let:confirm={confirmAction}>
@@ -107,7 +110,9 @@
           <Button text="Siirry allekirjoittamaan" type="submit" />
         {:else if Maybe.orSome(false, successful)}
           Allekirjoitus onnistui.
-        {:else}Tarkastetaan allekirjoituspalvelun olemassaoloa...{/if}
+        {:else if !Maybe.isSome(mpolluxVersionInfo)}
+          Tarkastetaan allekirjoituspalvelun olemassaoloa...
+        {:else}Allekirjoitus epäonnistui{/if}
       </form>
       <div
         slot="overlay-content"
