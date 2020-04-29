@@ -13,6 +13,7 @@
   import Button from '@Component/Button/Button';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
+  import Confirm from '@Component/Confirm/Confirm';
 
   export let params;
 
@@ -39,8 +40,7 @@
     )(params)
   );
 
-  $: console.log(mpolluxVersionInfo);
-  $: console.log(energiatodistus);
+  $: console.log(overlay);
 
   let overlay = false;
   let signing = false;
@@ -82,8 +82,7 @@
       R.prop('version'),
       R.prop('id')
     ]),
-    R.always(params),
-    R.tap(_ => (overlay = true))
+    R.map(R.tap(_ => (overlay = true)))
   );
 </script>
 
@@ -93,25 +92,33 @@
   }
 </style>
 
-<H1 text={'Allekirjoittaminen'} />
+<Confirm let:confirm={confirmAction}>
+  <div>
+    <H1 text={'Allekirjoittaminen'} />
 
-<Overlay {overlay}>
-  <form slot="content" on:submit|preventDefault={signProcess}>
-    {#if R.all(Maybe.isSome, [
-      mpolluxVersionInfo,
-      energiatodistus
-    ]) && !Maybe.isSome(successful)}
-      <Button text="Siirry allekirjoittamaan" type="submit" />
-    {:else if Maybe.orSome(false, successful)}
-      Allekirjoitus onnistui.
-    {:else}Tarkastetaan allekirjoituspalvelun olemassaoloa...{/if}
-  </form>
-  <div slot="overlay-content" class="flex flex-col items-center justify-center">
-    <Spinner />
-    <span>
-      {#if !signing}
-        Allekirjoitettavaa tiedostoa muodostetaan.
-      {:else}Tiedostoa allekirjoitetaan{/if}
-    </span>
+    <Overlay {overlay}>
+      <form
+        slot="content"
+        on:submit|preventDefault={() => confirmAction(signProcess, params)}>
+        {#if R.all(Maybe.isSome, [
+          mpolluxVersionInfo,
+          energiatodistus
+        ]) && !Maybe.isSome(successful)}
+          <Button text="Siirry allekirjoittamaan" type="submit" />
+        {:else if Maybe.orSome(false, successful)}
+          Allekirjoitus onnistui.
+        {:else}Tarkastetaan allekirjoituspalvelun olemassaoloa...{/if}
+      </form>
+      <div
+        slot="overlay-content"
+        class="flex flex-col items-center justify-center">
+        <Spinner />
+        <span>
+          {#if !signing}
+            Allekirjoitettavaa tiedostoa muodostetaan.
+          {:else}Tiedostoa allekirjoitetaan{/if}
+        </span>
+      </div>
+    </Overlay>
   </div>
-</Overlay>
+</Confirm>
