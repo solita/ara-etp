@@ -41,6 +41,7 @@ export const url = {
   all: '/api/private/energiatodistukset',
   version: version => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
+  liitteet: (version, id) => `${url.id(version, id)}/liitteet`,
   digest: (version, id) => `${url.id(version, id)}/digest`,
   signature: (version, id) => `${url.id(version, id)}/signature`
 };
@@ -57,6 +58,34 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.id
+  )(version, id)
+);
+
+export const getLiitteetById = R.curry((fetch, version, id) =>
+  R.compose(
+    R.map(deserialize),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    url.liitteet
+  )(version, id)
+);
+
+const toFormData = (name, files) => {
+  const data = new FormData();
+  R.forEach(file => {
+    data.append(name, file);
+  }, files);
+  return data;
+};
+
+export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(uri => fetch(uri, {
+      method: 'POST',
+      body: toFormData('files', files)
+    })),
+    url.liitteet
   )(version, id)
 );
 

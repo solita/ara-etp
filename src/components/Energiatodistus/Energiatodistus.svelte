@@ -4,6 +4,7 @@
   import ExistingEnergiatodistus from './ExistingEnergiatodistus';
   import NewEnergiatodistus from './NewEnergiatodistus';
   import Energiatodistukset from './Energiatodistukset';
+  import Liitteet from './Liitteet';
   import Allekirjoitus from './Allekirjoitus';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
@@ -13,6 +14,7 @@
     '/all': Energiatodistukset,
     '/:version/new': NewEnergiatodistus,
     '/:version/:id': ExistingEnergiatodistus,
+    '/:version/:id/liitteet': Liitteet,
     '/:version/:id/sign': Allekirjoitus
   };
 </script>
