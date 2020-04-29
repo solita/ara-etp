@@ -594,7 +594,11 @@
     }
   },
   "energiatodistukset": {
-    "title": "Energiatodistukset"
+    "title": "Energiatodistukset",
+    "messages": {
+      "delete-success": "Energiatodistus poistettiin onnistuneesti",
+      "delete-error": "Energiatodistuksen poistaminen epäonnistui"
+    }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",

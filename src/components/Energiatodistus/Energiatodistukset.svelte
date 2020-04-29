@@ -22,23 +22,57 @@
 
   const toETView = (versio, id) => {
     push('#/energiatodistus/' + versio + '/' + id);
-  }
+  };
+
+  const removeEnergiatodistusFromList = R.curry((versio, id) =>
+    R.filter(
+      R.compose(
+        R.not,
+        R.allPass([R.propEq('versio', versio), R.propEq('id', id)])
+      )
+    )
+  );
+
+  const deleteEnergiatodistus = (versio, id) => {
+    Future.fork(
+      _ =>
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistukset.messages.delete-error')
+        ),
+      _ => {
+        energiatodistukset = removeEnergiatodistusFromList(versio, id)(
+          energiatodistukset
+        );
+
+        flashMessageStore.add(
+          'Energiatodistus',
+          'success',
+          $_('energiatodistukset.messages.delete-success')
+        );
+      },
+      api.deleteEnergiatodistus(fetch, versio, id)
+    );
+  };
+
   $: R.compose(
-      Future.fork(
-          R.compose(
-              R.tap(toggleOverlay(false)),
-              R.tap(flashMessageStore.add('EnergiaTodistus', 'error')),
-              R.always($_('energiatodistus.messages.load-error'))),
-          R.compose(
-              response => {
-                energiatodistukset = response[0];
-              },
-              R.tap(toggleOverlay(false))
-          )),
-      Future.parallel(5),
-      R.tap(toggleOverlay(true))
-  )([api.getEnergiatodistukset,
-     api.laatimisvaiheet]);
+    Future.fork(
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        R.tap(flashMessageStore.add('Energiatodistus', 'error')),
+        R.always($_('energiatodistus.messages.load-error'))
+      ),
+      R.compose(
+        response => {
+          energiatodistukset = response[0];
+        },
+        R.tap(toggleOverlay(false))
+      )
+    ),
+    Future.parallel(5),
+    R.tap(toggleOverlay(true))
+  )([api.getEnergiatodistukset, api.laatimisvaiheet]);
 </script>
 
 <style>
@@ -70,35 +104,46 @@
     <div slot="content">
       {#if R.isEmpty(energiatodistukset)}
         <p class="mb-10">
-          Energiatodistuksia ei löydy annetuilla hakuehdoilla
-          tai sinulle ei ole yhtään energiatodistusta.
+          Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole
+          yhtään energiatodistusta.
         </p>
       {:else}
         <div class="mb-10">
           <table>
             <thead>
-            <tr>
-              <th>Tila</th><th>Tunnus</th><th>ETL</th>
-              <th>Versio</th><th>Voimassa</th>
-              <th>Rakennuksen nimi</th><th>Osoite</th>
-              <th>Laatija</th>
-              <th>Toiminnot</th>
-            </tr>
+              <tr>
+                <th>Tila</th>
+                <th>Tunnus</th>
+                <th>ETL</th>
+                <th>Versio</th>
+                <th>Voimassa</th>
+                <th>Rakennuksen nimi</th>
+                <th>Osoite</th>
+                <th>Laatija</th>
+                <th>Toiminnot</th>
+              </tr>
             </thead>
             <tbody>
               {#each energiatodistukset as energiatodistus}
-                <tr class="cursor-pointer"
-                    on:click={toETView(energiatodistus.versio, energiatodistus.id)}>
+                <tr
+                  class="cursor-pointer"
+                  on:click={toETView(energiatodistus.versio, energiatodistus.id)}>
                   <td>Luonnos</td>
                   <td>{energiatodistus.id}</td>
                   <td>C</td>
                   <td>{energiatodistus.versio}</td>
                   <td>13.3.2030</td>
                   <td>{orEmpty(energiatodistus.perustiedot.nimi)}</td>
-                  <td>{orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}</td>
+                  <td>
+                    {orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}
+                  </td>
                   <td>{orEmpty(energiatodistus['laatija-fullname'])}</td>
                   <td>
-                    <span class="material-icons">delete</span>
+                    <span
+                      class="material-icons"
+                      on:click|stopPropagation={_ => deleteEnergiatodistus(energiatodistus.versio, energiatodistus.id)}>
+                      delete
+                    </span>
                   </td>
                 </tr>
               {/each}
@@ -111,21 +156,21 @@
       <Spinner />
     </div>
   </Overlay>
-  <p class="mb-4">Uuden energiatodistuksen voit lisätä täältä: </p>
+  <p class="mb-4">Uuden energiatodistuksen voit lisätä täältä:</p>
   <div class="mb-4 flex lg:flex-row flex-col">
-    <div class="flex flex-row mb-4  mr-4">
-      <span class="material-icons">
-        add
-      </span> &nbsp;
-      <Link text={'Luo uusi 2018 energiatodistus'}
-            href='#/energiatodistus/2018/new'/>
+    <div class="flex flex-row mb-4 mr-4">
+      <span class="material-icons">add</span>
+      &nbsp;
+      <Link
+        text={'Luo uusi 2018 energiatodistus'}
+        href="#/energiatodistus/2018/new" />
     </div>
     <div class="flex flex-row">
-      <span class="material-icons">
-        add
-      </span> &nbsp;
-      <Link text={'Luo uusi 2013 energiatodistus'}
-            href='#/energiatodistus/2013/new'/>
+      <span class="material-icons">add</span>
+      &nbsp;
+      <Link
+        text={'Luo uusi 2013 energiatodistus'}
+        href="#/energiatodistus/2013/new" />
     </div>
   </div>
 </div>

@@ -93,6 +93,13 @@ export const postEnergiatodistus = R.curry((fetch, version, energiatodistus) =>
   )(energiatodistus)
 );
 
+export const deleteEnergiatodistus = R.curry((fetch, version, id) =>
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(Fetch.fetchWithMethod(fetch, 'delete', url.id(version, id)))
+  )
+);
+
 export const kielisyys = R.compose(
   Future.cache,
   Fetch.responseAsJson,
