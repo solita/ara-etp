@@ -44,8 +44,11 @@
 
   let overlay = false;
   let signing = false;
+  let successful = Maybe.None();
 
   const sign = R.compose(
+    R.map(R.pick(['signature', 'chain'])),
+    Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', mpolluxSignUrl)),
     R.assoc('content', R.__, {
       version: '1.1',
@@ -60,9 +63,20 @@
   );
 
   const signProcess = R.compose(
-    Future.fork(console.error, console.log),
+    Future.fork(
+      _ => {
+        signing = false;
+        overlay = false;
+        successful = Maybe.of(false);
+      },
+      _ => {
+        signing = false;
+        overlay = false;
+        successful = Maybe.of(true);
+      }
+    ),
+    R.chain(etApi.signEnergiatodistus(fetch, params.version, params.id)),
     R.chain(sign),
-    R.map(R.prop('digest')),
     R.map(R.tap(_ => (signing = true))),
     R.converge(etApi.getEnergiatodistusDigestById(fetch), [
       R.prop('version'),
@@ -83,8 +97,13 @@
 
 <Overlay {overlay}>
   <form slot="content" on:submit|preventDefault={signProcess}>
-    {#if R.all(Maybe.isSome, [mpolluxVersionInfo, energiatodistus])}
+    {#if R.all(Maybe.isSome, [
+      mpolluxVersionInfo,
+      energiatodistus
+    ]) && !Maybe.isSome(successful)}
       <Button text="Siirry allekirjoittamaan" type="submit" />
+    {:else if Maybe.orSome(false, successful)}
+      Allekirjoitus onnistui.
     {:else}Tarkastetaan allekirjoituspalvelun olemassaoloa...{/if}
   </form>
   <div slot="overlay-content" class="flex flex-col items-center justify-center">
