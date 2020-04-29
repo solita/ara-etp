@@ -32,7 +32,7 @@
               R.partial($_, ['energiatodistus.liitteet.messages.load-error'])),
           R.compose(
               response => {
-                liitteet = response[0];
+                liitteet = response;
               },
               R.tap(toggleOverlay(false))
           )),
