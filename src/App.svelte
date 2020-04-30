@@ -7,7 +7,7 @@
 
   import * as Navigation from '@Utility/navigation';
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
-  import { routes } from '@Component/routes';
+  import { buildRoutes } from '@Component/routes';
   import { setupI18n } from '@Language/i18n';
   import Header from '@Component/Header/Header';
   import Loading from '@Component/Loading/Loading';
@@ -37,6 +37,8 @@
     Maybe.orSome([{ text: '...', href: '' }]),
     R.map(Navigation.linksForKayttaja)
   )($currentUserStore);
+
+  const routes = buildRoutes(breadcrumbStore);
 </script>
 
 <style type="text/postcss">

@@ -81,14 +81,6 @@
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
 
-  $: breadcrumbStore.set([
-    et.breadcrumb1stLevel($_),
-    {
-      label: Maybe.fold('...', R.prop('id'), energiatodistus),
-      url: location.href
-    }
-  ]);
-
   $: title = `Energiatodistus ${params.version}/${params.id}`;
 </script>
 
