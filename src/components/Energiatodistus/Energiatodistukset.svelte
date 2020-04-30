@@ -99,7 +99,6 @@
 
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
-
   <Overlay {overlay}>
     <div slot="content">
       {#if R.isEmpty(energiatodistukset)}
@@ -173,4 +172,7 @@
         href="#/energiatodistus/2013/new" />
     </div>
   </div>
+  <Link icon={Maybe.Some('attachment')}
+             text={'Lataa energiatodistukset XLSX-tiedostona'}
+        href="/api/private/energiatodistukset/2018/export/energiatodistukset.xlsx" />
 </div>
