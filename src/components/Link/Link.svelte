@@ -9,11 +9,11 @@
 
 <style type="text/postcss">
   a {
-    @apply text-link flex;
+    @apply text-link flex items-center;
   }
 
   a:hover {
-    @apply underline;
+    @apply underline cursor-pointer;
   }
 </style>
 
