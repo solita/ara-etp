@@ -36,8 +36,7 @@
 </style>
 
 <a
-  {href}
-  use:link
+  href={`#${href}`}
   use:active={activePath || href}
   class="navigationtab"
   tabindex="0">

@@ -10,18 +10,7 @@ export const patevyystasoStore = writable(Either.Left('Not initialized'));
 export const patevyydetStore = writable(Either.Left('Not initialized'));
 export const toimintaAlueetStore = writable(Either.Left('Not initialized'));
 export const breadcrumbStore = writable([]);
-
-const createNavigationStore = () => {
-  const { subscribe, set, update } = writable([]);
-
-  return {
-    subscribe,
-    set,
-    replaceFirst: newFirst => update(R.compose(R.prepend(newFirst), R.tail))
-  };
-};
-
-export const navigationStore = createNavigationStore();
+export const navigationStore = writable([]);
 
 const createFlashMessageStore = () => {
   const { subscribe, set, update } = writable([]);

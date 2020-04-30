@@ -4,12 +4,21 @@
 
   import { _ } from '@Language/i18n';
 
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Navigation from '@Utility/navigation';
+
   import NewYritys from './NewYritys';
   import ExistingYritys from './ExistingYritys';
   import Yritykset from './Yritykset';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import Country from '@Component/Geo/Country';
-  import { flashMessageStore, countryStore, breadcrumbStore } from '@/stores';
+  import {
+    flashMessageStore,
+    countryStore,
+    breadcrumbStore,
+    currentUserStore,
+    navigationStore
+  } from '@/stores';
 
   const idFromDetails = R.compose(
     R.head,
@@ -34,6 +43,16 @@
       return true;
     })
   };
+
+  $: R.compose(
+    navigationStore.set,
+    Maybe.get,
+    R.last,
+    R.filter(Maybe.isSome)
+  )([
+    Maybe.of([{ text: '...', href: '' }]),
+    R.map(Navigation.linksForLaatija, $currentUserStore)
+  ]);
 </script>
 
 <style type="text/postcss">

@@ -6,7 +6,10 @@ export const linksForLaatija = laatija => [
     href: '/energiatodistus/all'
   },
   { text: 'navigation.viestit', href: '/viestit' },
-  { text: 'navigation.yritykset', href: `/laatija/${laatija.laatija}/yritykset` },
+  {
+    text: 'navigation.yritykset',
+    href: `/laatija/${laatija.laatija}/yritykset`
+  },
   {
     text: 'navigation.omattiedot',
     href: '/myinfo',
@@ -40,6 +43,16 @@ export const linksForPaakayttaja = _ => [
   { text: 'navigation.kayttajat', href: '/kayttaja/all' },
   { text: 'navigation.yritykset', href: '/yritys/all' },
   { text: 'navigation.viestit', href: '/viestit' }
+];
+
+export const linksForEnergiatodistus = (version, id) => [
+  { text: `ET ${id}`, href: `/energiatodistus/${version}/${id}` },
+  { text: 'Viestit', href: `/energiatodistus/${version}/${id}/viestit` },
+  { text: 'Liitteet', href: `/energiatodistus/${version}/${id}/liitteet` },
+  {
+    text: 'Muutoshistoria',
+    href: `/energiatodistus/${version}/${id}/muutoshistoria`
+  }
 ];
 
 const kayttajaLinksMap = Object.freeze({
