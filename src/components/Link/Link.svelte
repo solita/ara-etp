@@ -15,6 +15,7 @@
 
   a:hover {
     @apply underline;
+    cursor: pointer;
   }
 </style>
 
