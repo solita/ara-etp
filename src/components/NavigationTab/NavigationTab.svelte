@@ -35,11 +35,6 @@
   }
 </style>
 
-<a
-  {href}
-  use:link
-  use:active={activePath || href}
-  class="navigationtab"
-  tabindex="0">
+<a {href} use:active={activePath || href} class="navigationtab" tabindex="0">
   {$_(text)}
 </a>

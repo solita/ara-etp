@@ -1,6 +1,9 @@
 <script>
-  import Router, { wrap } from 'svelte-spa-router';
   import * as R from 'ramda';
+  import Router, { location, wrap } from 'svelte-spa-router';
+
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Navigation from '@Utility/navigation';
 
   import { _ } from '@Language/i18n';
   import ExistingEnergiatodistus from './ExistingEnergiatodistus';
@@ -9,14 +12,26 @@
   import Liitteet from './Liitteet';
   import Allekirjoitus from './Allekirjoitus';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore, breadcrumbStore } from '@/stores';
+  import {
+    flashMessageStore,
+    navigationStore,
+    currentUserStore,
+    breadcrumbStore
+  } from '@/stores';
   import * as et from './energiatodistus-utils';
 
-  const idAndVersionFromDetails = R.compose(
+  const idAndVersionFromLocation = R.compose(
+    Maybe.fromEmpty,
+    R.unless(
+      R.compose(
+        R.equals(2),
+        R.length
+      ),
+      R.always([])
+    ),
     R.slice(1, 3),
     R.tail,
-    R.split('/'),
-    R.prop('location')
+    R.split('/')
   );
 
   const prefix = '/energiatodistus';
@@ -27,7 +42,11 @@
       return true;
     }),
     '/:version/new': wrap(NewEnergiatodistus, details => {
-      const [version, id] = idAndVersionFromDetails(details);
+      const [version, id] = R.compose(
+        Maybe.get,
+        idAndVersionFromLocation,
+        R.prop('location')
+      )(details);
 
       breadcrumbStore.set([
         et.breadcrumb1stLevel($_),
@@ -40,7 +59,11 @@
       return true;
     }),
     '/:version/:id': wrap(ExistingEnergiatodistus, details => {
-      const [version, id] = idAndVersionFromDetails(details);
+      const [version, id] = R.compose(
+        Maybe.get,
+        idAndVersionFromLocation,
+        R.prop('location')
+      )(details);
 
       breadcrumbStore.set([
         et.breadcrumb1stLevel($_),
@@ -53,7 +76,11 @@
       return true;
     }),
     '/:version/:id/liitteet': wrap(Liitteet, details => {
-      const [version, id] = idAndVersionFromDetails(details);
+      const [version, id] = R.compose(
+        Maybe.get,
+        idAndVersionFromLocation,
+        R.prop('location')
+      )(details);
 
       breadcrumbStore.set([
         et.breadcrumb1stLevel($_),
@@ -66,7 +93,11 @@
       return true;
     }),
     '/:version/:id/sign': wrap(Allekirjoitus, details => {
-      const [version, id] = idAndVersionFromDetails(details);
+      const [version, id] = R.compose(
+        Maybe.get,
+        idAndVersionFromLocation,
+        R.prop('location')
+      )(details);
 
       breadcrumbStore.set([
         et.breadcrumb1stLevel($_),
@@ -79,6 +110,20 @@
       return true;
     })
   };
+
+  $: R.compose(
+    navigationStore.set,
+    Maybe.get,
+    R.last,
+    R.filter(Maybe.isSome)
+  )([
+    Maybe.of([{ text: '...', href: '' }]),
+    R.map(Navigation.linksForLaatija, $currentUserStore),
+    R.compose(
+      R.map(R.apply(Navigation.linksForEnergiatodistus)),
+      idAndVersionFromLocation
+    )($location)
+  ]);
 </script>
 
 <svelte:window

@@ -33,7 +33,8 @@
     $errorStore &&
     $errorStore.statusCode === 401;
 
-  $: links = R.compose(
+  $: R.compose(
+    navigationStore.set,
     Maybe.orSome([{ text: '...', href: '' }]),
     R.map(Navigation.linksForKayttaja)
   )($currentUserStore);
@@ -73,7 +74,7 @@
     <Breadcrumb value={$breadcrumbStore} />
     <section class="content">
       <div class="w-full">
-        <NavigationTabBar {links} />
+        <NavigationTabBar links={$navigationStore} />
       </div>
       <div class="routecontainer">
         <Router {routes} />
