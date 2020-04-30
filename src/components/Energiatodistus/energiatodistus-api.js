@@ -37,10 +37,15 @@ export const serialize = R.compose(
   R.omit(['id', 'tila', 'laatija-fullname', 'versio'])
 );
 
+export const deserializeLiite = R.evolve({
+  url: Maybe.fromNull
+});
+
 export const url = {
   all: '/api/private/energiatodistukset',
   version: version => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
+  liitteet: (version, id) => `${url.id(version, id)}/liitteet`,
   signature: (version, id) => `${url.id(version, id)}/signature`,
   start: (version, id) => `${url.signature(version, id)}/start`,
   digest: (version, id) => `${url.signature(version, id)}/digest`,
@@ -60,6 +65,34 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.id
+  )(version, id)
+);
+
+export const getLiitteetById = R.curry((fetch, version, id) =>
+  R.compose(
+    R.map(deserializeLiite),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    url.liitteet
+  )(version, id)
+);
+
+const toFormData = (name, files) => {
+  const data = new FormData();
+  R.forEach(file => {
+    data.append(name, file);
+  }, files);
+  return data;
+};
+
+export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(uri => fetch(uri + '/files', {
+      method: 'POST',
+      body: toFormData('files', files)
+    })),
+    url.liitteet
   )(version, id)
 );
 

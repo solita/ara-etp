@@ -15,12 +15,14 @@
   };
 
   export let update = fn => (state = fn(state));
+  export let onchange = _ => {}
+
   const updateUi = fn => (uiState = fn(uiState));
 </script>
 
 <style type="text/postcss">
   label {
-    @apply inline-block px-64 py-40 text-center bg-light text-dark rounded-lg border-dashed border-secondary border-2;
+    @apply inline-block w-full py-40 text-center bg-light text-dark rounded-lg border-dashed border-secondary border-2;
   }
 
   input {
@@ -41,6 +43,7 @@
     on:change={event => {
       update(R.assoc('files', event.target.files));
       updateUi(R.assoc('highlight', false));
+      onchange(event.target.files);
     }}
     type="file"
     files={state.files}
