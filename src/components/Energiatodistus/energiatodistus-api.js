@@ -41,8 +41,11 @@ export const url = {
   all: '/api/private/energiatodistukset',
   version: version => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
-  digest: (version, id) => `${url.id(version, id)}/digest`,
-  signature: (version, id) => `${url.id(version, id)}/signature`
+  signature: (version, id) => `${url.id(version, id)}/signature`,
+  start: (version, id) => `${url.signature(version, id)}/start`,
+  digest: (version, id) => `${url.signature(version, id)}/digest`,
+  pdf: (version, id) => `${url.signature(version, id)}/pdf`,
+  finish: (version, id) => `${url.signature(version, id)}/finish`
 };
 
 export const getEnergiatodistukset = R.compose(
@@ -69,20 +72,41 @@ export const putEnergiatodistusById = R.curry(
     )(energiatodistus)
 );
 
-export const getEnergiatodistusDigestById = R.curry((fetch, version, id) =>
+export const startSign = R.curry((fetch, version, id) =>
   R.compose(
-    Fetch.responseAsJson,
+    R.chain(
+      R.ifElse(
+        R.compose(R.not, R.equals(409), R.prop('status')),
+        R.compose(Fetch.responseAsText, Future.resolve),
+        R.compose(R.chain(Fetch.toText), Future.resolve)
+      )
+    ),
+    Future.encaseP(Fetch.postEmpty(fetch)),
+    url.start
+  )(version, id)
+);
+
+export const digest = R.curry((fetch, version, id) =>
+  R.compose(
+    Fetch.responseAsText,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.digest
   )(version, id)
 );
 
-export const signEnergiatodistus = R.curry((fetch, version, id, signature) =>
+export const signPdf = R.curry((fetch, version, id, signature) =>
   R.compose(
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'put', url.signature(version, id))
-    )
+    Fetch.responseAsText,
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.pdf(version, id)))
   )(signature)
+);
+
+export const finishSign = R.curry((fetch, version, id) =>
+  R.compose(
+    Fetch.responseAsText,
+    Future.encaseP(Fetch.postEmpty(fetch)),
+    url.finish
+  )(version, id)
 );
 
 export const postEnergiatodistus = R.curry((fetch, version, energiatodistus) =>

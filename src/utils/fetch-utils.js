@@ -3,6 +3,8 @@ import * as Future from './future-utils';
 
 export const toJson = Future.encaseP(response => response.json());
 
+export const toText = Future.encaseP(response => response.text());
+
 export const rejectWithInvalidResponse = R.ifElse(
   R.prop('ok'),
   Future.resolve,
@@ -11,6 +13,11 @@ export const rejectWithInvalidResponse = R.ifElse(
 
 export const responseAsJson = R.compose(
   R.chain(toJson),
+  R.chain(rejectWithInvalidResponse)
+);
+
+export const responseAsText = R.compose(
+  R.chain(toText),
   R.chain(rejectWithInvalidResponse)
 );
 
@@ -35,4 +42,8 @@ export const fetchWithMethod = R.curry((fetch, method, url, body) =>
       'Content-Type': 'application/json'
     }
   })
+);
+
+export const postEmpty = R.curry((fetch, url) =>
+  fetch(url, { method: 'post', headers: { Accept: 'application/json' } })
 );
