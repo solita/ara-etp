@@ -10,6 +10,7 @@
 <style type="text/postcss">
   a {
     @apply text-link flex;
+    align-items: center;
   }
 
   a:hover {
