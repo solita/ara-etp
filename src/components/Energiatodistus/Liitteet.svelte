@@ -31,10 +31,10 @@
               R.tap(flashMessageStore.add('Energiatodistus', 'error')),
               R.partial($_, ['energiatodistus.liitteet.messages.load-error'])),
           R.compose(
+              R.tap(toggleOverlay(false)),
               response => {
                 liitteet = response;
-              },
-              R.tap(toggleOverlay(false))
+              }
           )),
       R.tap(toggleOverlay(true)),
       api.getLiitteetById(fetch)
@@ -96,9 +96,9 @@
           <tbody>
           {#each liitteet as liite}
             <tr>
-              <td>13.3.2030</td>
-              <td>a.pdf</td>
-              <td>Lasse</td>
+              <td>{liite.createtime}</td>
+              <td>{liite.nimi}</td>
+              <td>{liite['author-fullname']}</td>
               <td>
                 <span class="material-icons">delete</span>
               </td>

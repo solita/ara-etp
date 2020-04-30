@@ -37,6 +37,10 @@ export const serialize = R.compose(
   R.omit(['id', 'tila', 'laatija-fullname', 'versio'])
 );
 
+export const deserializeLiite = R.evolve({
+  url: Maybe.fromNull
+});
+
 export const url = {
   all: '/api/private/energiatodistukset',
   version: version => `${url.all}/${version}`,
@@ -63,7 +67,7 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
 
 export const getLiitteetById = R.curry((fetch, version, id) =>
   R.compose(
-    R.map(deserialize),
+    R.map(deserializeLiite),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.liitteet
@@ -81,7 +85,7 @@ const toFormData = (name, files) => {
 export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(uri => fetch(uri, {
+    Future.encaseP(uri => fetch(uri + '/files', {
       method: 'POST',
       body: toFormData('files', files)
     })),
