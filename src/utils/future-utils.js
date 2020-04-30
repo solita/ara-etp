@@ -32,3 +32,11 @@ export const value = R.curry((fn, f) => Fluture.value(fn)(f));
 export const delay = R.curry((amount, future) =>
   R.compose(R.map(R.last), both(after(amount, true)))(future)
 );
+
+export const filter = R.curry((predicate, rejectValue, f) =>
+  R.chain(
+    value =>
+      predicate(value) ? Fluture.resolve(value) : Fluture.reject(rejectValue),
+    f
+  )
+);
