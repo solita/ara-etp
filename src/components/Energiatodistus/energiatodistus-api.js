@@ -96,6 +96,13 @@ export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
   )(version, id)
 );
 
+export const postLiitteetLink = R.curry((fetch, version, id, link) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post',
+      url.liitteet(version, id) + '/link'))
+  )(link));
+
 export const putEnergiatodistusById = R.curry(
   (fetch, version, id, energiatodistus) =>
     R.compose(

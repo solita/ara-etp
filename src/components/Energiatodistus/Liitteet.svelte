@@ -14,15 +14,21 @@
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link';
   import FileDropArea from '@Component/FileDropArea/FileDropArea';
+  import Input from '@Component/Input/Input';
+  import Button from '@Component/Button/Button';
 
   export let params;
+
+  const emptyLiite = _ => ({ nimi: '', url: ''});
 
   let overlay = true;
   let failure = false;
   let liitteet = [];
+  let liiteLinkAdd = emptyLiite();
 
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
+  const cancel = _ => { liiteLinkAdd = emptyLiite(); }
 
   const load = R.compose(
       Future.fork(
@@ -39,19 +45,26 @@
       R.tap(toggleOverlay(true)),
       api.getLiitteetById(fetch)
   );
-
-  const upload = R.compose(
-    Future.fork(
-      R.compose(
+  const fork = Future.fork(
+    R.compose(
         R.tap(toggleOverlay(false)),
         R.tap(flashMessageStore.add('Energiatodistus', 'error')),
         R.partial($_, ['energiatodistus.liitteet.messages.save-error'])),
-      R.compose(
+    R.compose(
         R.tap(flashMessageStore.add('Energiatodistus', 'success')),
         R.partial($_, ['energiatodistus.liitteet.messages.save-success']),
-        R.partial(load, [params.version, params.id]))),
+        R.partial(load, [params.version, params.id])));
+
+  const uploadFiles = R.compose(
+    fork,
     R.tap(toggleOverlay(true)),
     api.postLiitteetFiles(fetch, params.version, params.id)
+  );
+
+  const addLink = R.compose(
+    fork,
+    R.tap(toggleOverlay(true)),
+    api.postLiitteetLink(fetch, params.version, params.id)
   );
 
   $: load(params.version, params.id);
@@ -97,7 +110,7 @@
           {#each liitteet as liite}
             <tr>
               <td>{liite.createtime}</td>
-              <td>{liite.nimi}</td>
+              <td><Link text={liite.nimi} href={liite.url} /></td>
               <td>{liite['author-fullname']}</td>
               <td>
                 <span class="material-icons">delete</span>
@@ -116,10 +129,37 @@
   <div class="mb-4 flex lg:flex-row flex-col">
     <div class="w-1/2 mr-6 mb-6">
       <H2 text={'Lisää tiedosto'} />
-      <FileDropArea onchange={upload} multiple={true}/>
+      <FileDropArea onchange={uploadFiles} multiple={true}/>
     </div>
-    <div class="w-1/2">
+    <div class="w-1/2 flex flex-col">
       <H2 text={'Lisää linkki'} />
+      <form on:submit|preventDefault={_ => addLink(liiteLinkAdd)}>
+        <div class="w-full px-4 py-4">
+          <Input
+              label={'Nimi'}
+              bind:model={liiteLinkAdd}
+              lens={R.lensPath(['nimi'])} />
+        </div>
+
+        <div class="w-full px-4 py-4">
+          <Input
+              label={'URL'}
+              bind:model={liiteLinkAdd}
+              lens={R.lensPath(['url'])} />
+        </div>
+
+        <div class="flex -mx-4 pt-8">
+          <div class="px-4">
+            <Button type={'submit'} text={'Lisää linkki'} />
+          </div>
+          <div class="px-4">
+            <Button on:click = { cancel } text={'Tyhjennä'}
+                    type={'reset'}
+                    style={'secondary'} />
+          </div>
+        </div>
+
+      </form>
     </div>
   </div>
 </div>
