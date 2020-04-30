@@ -4,6 +4,9 @@
 
   import { _ } from '@Language/i18n';
 
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Navigation from '@Utility/navigation';
+
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
   import Yritykset from '@Component/Laatija/Yritykset';
   import ExistingLaatija from './ExistingLaatija';
@@ -18,7 +21,8 @@
     countryStore,
     navigationStore,
     patevyydetStore,
-    breadcrumbStore
+    breadcrumbStore,
+    currentUserStore
   } from '@/stores';
 
   const idFromDetails = R.compose(
@@ -55,6 +59,16 @@
       return true;
     })
   };
+
+  $: R.compose(
+    navigationStore.set,
+    Maybe.get,
+    R.last,
+    R.filter(Maybe.isSome)
+  )([
+    Maybe.of([{ text: '...', href: '' }]),
+    R.map(Navigation.linksForLaatija, $currentUserStore)
+  ]);
 </script>
 
 <svelte:window on:hashchange={_ => flashMessageStore.flush('Laatija')} />

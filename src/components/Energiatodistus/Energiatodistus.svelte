@@ -23,10 +23,13 @@
   const idAndVersionFromLocation = R.compose(
     Maybe.fromEmpty,
     R.unless(
-      R.compose(
-        R.equals(2),
-        R.length
-      ),
+      R.allPass([
+        R.compose(
+          R.equals(2),
+          R.length
+        ),
+        R.complement(R.includes)('new')
+      ]),
       R.always([])
     ),
     R.slice(1, 3),
@@ -42,9 +45,10 @@
       return true;
     }),
     '/:version/new': wrap(NewEnergiatodistus, details => {
-      const [version, id] = R.compose(
-        Maybe.get,
-        idAndVersionFromLocation,
+      const version = R.compose(
+        R.nth(1),
+        R.tail,
+        R.split('/'),
         R.prop('location')
       )(details);
 
