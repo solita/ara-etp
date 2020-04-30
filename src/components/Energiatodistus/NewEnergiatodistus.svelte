@@ -51,17 +51,6 @@
     R.tap(toggleOverlay(true))
   );
 
-  breadcrumbStore.set([
-    et.breadcrumb1stLevel($_),
-    {
-      label:
-        $_('energiatodistus.breadcrumb.uusi-energiatodistus') +
-        ' ' +
-        params.version,
-      url: window.location.href
-    }
-  ]);
-
   $: title = `Energiatodistus ${params.version} - Uusi luonnos`;
 
   // Load classifications to cache

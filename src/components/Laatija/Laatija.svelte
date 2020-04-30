@@ -1,6 +1,6 @@
 <script>
   import * as R from 'ramda';
-  import Router from 'svelte-spa-router';
+  import Router, { wrap } from 'svelte-spa-router';
 
   import { _ } from '@Language/i18n';
 
@@ -17,15 +17,43 @@
     toimintaAlueetStore,
     countryStore,
     navigationStore,
-    patevyydetStore
+    patevyydetStore,
+    breadcrumbStore
   } from '@/stores';
+
+  const idFromDetails = R.compose(
+    R.nth(1),
+    R.tail,
+    R.split('/'),
+    R.prop('location')
+  );
 
   const prefix = '/laatija';
   const routes = {
-    '/all': Laatijat,
-    '/upload': LaatijaUpload,
-    '/:id/yritykset': Yritykset,
-    '/:id': ExistingLaatija
+    '/all': wrap(Laatijat, _ => {
+      breadcrumbStore.set([{ label: 'Laatijat', url: `#${prefix}/all` }]);
+      return true;
+    }),
+    '/upload': wrap(LaatijaUpload, _ => {
+      breadcrumbStore.set([
+        { label: 'Laatijoiden tuonti', url: `#${prefix}/upload` }
+      ]);
+      return true;
+    }),
+    '/:id/yritykset': wrap(Yritykset, details => {
+      const id = idFromDetails(details);
+
+      breadcrumbStore.set([
+        { label: 'Yritykset', url: `#${prefix}/${id}/yritykset` }
+      ]);
+      return true;
+    }),
+    '/:id': wrap(ExistingLaatija, details => {
+      const id = idFromDetails(details);
+
+      breadcrumbStore.set([{ label: 'Yritykset', url: `#${prefix}/${id}` }]);
+      return true;
+    })
   };
 </script>
 
