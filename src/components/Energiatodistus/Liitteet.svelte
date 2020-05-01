@@ -8,7 +8,6 @@
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore, breadcrumbStore } from '@/stores';
-  import { push } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
