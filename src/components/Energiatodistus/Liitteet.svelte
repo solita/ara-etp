@@ -2,7 +2,9 @@
   import * as R from 'ramda';
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as validation from '@Utility/validation';
   import * as api from './energiatodistus-api';
+  import * as et from './energiatodistus-utils';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore, breadcrumbStore } from '@/stores';
@@ -25,6 +27,11 @@
   let failure = false;
   let liitteet = [];
   let liiteLinkAdd = emptyLiite();
+
+  const liiteLinkAddSchema = {
+    nimi: [validation.isRequired],
+    url: [validation.isRequired, validation.urlValidator]
+  }
 
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
@@ -66,6 +73,16 @@
     R.tap(toggleOverlay(true)),
     api.postLiitteetLink(fetch, params.version, params.id)
   );
+
+  const submit = event => {
+    if (et.isValidForm(liiteLinkAddSchema, liiteLinkAdd)) {
+      flashMessageStore.flush();
+      addLink(liiteLinkAdd);
+    } else {
+      flashMessageStore.add('Energiatodistus', 'error',
+          $_('energiatodistus.messages.validation-error'));
+    }
+  }
 
   $: load(params.version, params.id);
 </script>
@@ -127,25 +144,29 @@
   </Overlay>
 
   <div class="mb-4 flex lg:flex-row flex-col">
-    <div class="w-1/2 mr-6 mb-6">
+    <div class="lg:w-1/2 w-full mr-6 mb-6">
       <H2 text={'Lisää tiedosto'} />
       <FileDropArea onchange={uploadFiles} multiple={true}/>
     </div>
-    <div class="w-1/2 flex flex-col">
+    <div class="lg:w-1/2 w-full flex flex-col">
       <H2 text={'Lisää linkki'} />
-      <form on:submit|preventDefault={_ => addLink(liiteLinkAdd)}>
+      <form on:submit|preventDefault={submit}>
         <div class="w-full px-4 py-4">
           <Input
               label={'Nimi'}
               bind:model={liiteLinkAdd}
-              lens={R.lensPath(['nimi'])} />
+              lens={R.lensPath(['nimi'])}
+              validators={liiteLinkAddSchema.nimi}
+              i18n={$_}/>
         </div>
 
         <div class="w-full px-4 py-4">
           <Input
               label={'URL'}
               bind:model={liiteLinkAdd}
-              lens={R.lensPath(['url'])} />
+              lens={R.lensPath(['url'])}
+              validators={liiteLinkAddSchema.url}
+              i18n={$_}/>
         </div>
 
         <div class="flex -mx-4 pt-8">
@@ -158,7 +179,6 @@
                     style={'secondary'} />
           </div>
         </div>
-
       </form>
     </div>
   </div>
