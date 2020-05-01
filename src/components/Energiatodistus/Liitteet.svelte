@@ -84,6 +84,11 @@
   }
 
   $: load(params.version, params.id);
+
+  const liiteUrl = liite => Maybe.orSome(
+      api.url.liitteet(params.version, params.id) + '/' + liite.id + '/content',
+      liite.url);
+
 </script>
 
 <style>
@@ -126,7 +131,7 @@
           {#each liitteet as liite}
             <tr>
               <td>{liite.createtime}</td>
-              <td><Link text={liite.nimi} href={liite.url} /></td>
+              <td><Link text={liite.nimi} href={liiteUrl(liite)} /></td>
               <td>{liite['author-fullname']}</td>
               <td>
                 <span class="material-icons">delete</span>

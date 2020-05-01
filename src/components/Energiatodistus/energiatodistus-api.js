@@ -70,7 +70,7 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
 
 export const getLiitteetById = R.curry((fetch, version, id) =>
   R.compose(
-    R.map(deserializeLiite),
+    R.map(R.map(deserializeLiite)),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.liitteet
