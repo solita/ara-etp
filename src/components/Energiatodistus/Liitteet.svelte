@@ -89,6 +89,9 @@
       api.url.liitteet(params.version, params.id) + '/' + liite.id + '/content',
       liite.url);
 
+  const addDefaultProtocol =
+      R.ifElse(R.includes('://'), R.identity, R.concat('http://'))
+
 </script>
 
 <style>
@@ -160,6 +163,7 @@
               label={'Nimi'}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['nimi'])}
+              parse={R.trim}
               validators={liiteLinkAddSchema.nimi}
               i18n={$_}/>
         </div>
@@ -169,6 +173,7 @@
               label={'URL'}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['url'])}
+              parse={R.compose(addDefaultProtocol, R.trim)}
               validators={liiteLinkAddSchema.url}
               i18n={$_}/>
         </div>
