@@ -28,7 +28,8 @@
   let liiteLinkAdd = emptyLiite();
 
   const liiteLinkAddSchema = {
-    nimi: [validation.isRequired],
+    nimi: [validation.isRequired,
+           validation.maxLengthConstraint(300)],
     url: [validation.isRequired, validation.urlValidator]
   }
 
@@ -92,6 +93,11 @@
   const addDefaultProtocol =
       R.ifElse(R.includes('://'), R.identity, R.concat('http://'))
 
+  const deleteLiite = R.compose(
+      fork,
+      R.tap(toggleOverlay(true)),
+      api.deleteLiite(fetch, params.version, params.id)
+  );
 </script>
 
 <style>
@@ -136,7 +142,7 @@
               <td>{liite.createtime}</td>
               <td><Link text={liite.nimi} href={liiteUrl(liite)} /></td>
               <td>{liite['author-fullname']}</td>
-              <td>
+              <td on:click={_ => deleteLiite(liite.id)} class="cursor-pointer">
                 <span class="material-icons">delete</span>
               </td>
             </tr>
@@ -160,6 +166,8 @@
       <form on:submit|preventDefault={submit}>
         <div class="w-full px-4 py-4">
           <Input
+              id={'link.nimi'}
+              name={'link.nimi'}
               label={'Nimi'}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['nimi'])}
@@ -170,6 +178,8 @@
 
         <div class="w-full px-4 py-4">
           <Input
+              id={'link.url'}
+              name={'link.url'}
               label={'URL'}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['url'])}

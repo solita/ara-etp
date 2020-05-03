@@ -103,6 +103,13 @@ export const postLiitteetLink = R.curry((fetch, version, id, link) =>
       url.liitteet(version, id) + '/link'))
   )(link));
 
+export const deleteLiite = R.curry((fetch, version, id, liiteId) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(liiteId => Fetch.deleteRequest(fetch,
+      url.liitteet(version, id) + '/' + liiteId))
+  ) (liiteId));
+
 export const putEnergiatodistusById = R.curry(
   (fetch, version, id, energiatodistus) =>
     R.compose(
