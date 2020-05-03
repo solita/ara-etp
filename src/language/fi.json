@@ -593,10 +593,25 @@
       "nimi": "Nimi"
     },
     "liitteet": {
+      "title": "Liitteet",
+      "empty": "Energiatodistuksella ei ole liitteitä.",
+      "liite": {
+        "createtime": "Lisätty",
+        "nimi": "Tiedosto / Linkki",
+        "author": "Lisääjä"
+      },
+      "add-files": {
+        "title": "Lisää tiedostoja"
+      },
+      "add-link": {
+        "title": "Lisää linkki",
+        "nimi": "Nimi",
+        "url": "URL"
+      },
       "messages": {
         "save-success": "Energiatodistuksen liitteet tallennettu onnistuneesti.",
         "save-error": "Energiatodistuksen liitteiden tallennuksessa tapahtui odottamaton virhe.",
-        "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
+        "validation-error": "Lisää linkki lomakkeella virheitä, tarkista syötteet.",
         "load-error": "Energiatodistuksen liitteiden haku epäonnistui."
       }
     }

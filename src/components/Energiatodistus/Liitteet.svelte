@@ -80,7 +80,7 @@
       addLink(liiteLinkAdd);
     } else {
       flashMessageStore.add('Energiatodistus', 'error',
-          $_('energiatodistus.messages.validation-error'));
+          $_('energiatodistus.liitteet.messages.validation-error'));
     }
   }
 
@@ -91,7 +91,8 @@
       liite.url);
 
   const addDefaultProtocol =
-      R.ifElse(R.includes('://'), R.identity, R.concat('http://'))
+      R.ifElse(R.anyPass([R.includes('://'), R.isEmpty]),
+          R.identity, R.concat('http://'))
 
   const deleteLiite = R.compose(
       fork,
@@ -123,17 +124,20 @@
 </style>
 
 <div class="w-full mt-3">
-  <H1 text={'Liitteet'} />
+  <H1 text={$_('energiatodistus.liitteet.title')} />
 
   <Overlay {overlay}>
     <div slot="content" class="mb-10">
       {#if R.isEmpty(liitteet)}
-        <p>Energiatodistuksella ei ole liitteitä.</p>
+        <p>{$_('energiatodistus.liitteet.empty')}</p>
       {:else}
         <table>
           <thead>
             <tr>
-              <th>Lisätty</th><th>Tiedosto / Linkki</th><th>Lisääjä</th><th>Toiminnot</th>
+              <th>{$_('energiatodistus.liitteet.liite.createtime')}</th>
+              <th>{$_('energiatodistus.liitteet.liite.nimi')}</th>
+              <th>{$_('energiatodistus.liitteet.liite.author')}</th>
+              <th>Toiminnot</th>
             </tr>
           </thead>
           <tbody>
@@ -158,17 +162,17 @@
 
   <div class="mb-4 flex lg:flex-row flex-col">
     <div class="lg:w-1/2 w-full mr-6 mb-6">
-      <H2 text={'Lisää tiedosto'} />
+      <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
       <FileDropArea onchange={uploadFiles} multiple={true}/>
     </div>
     <div class="lg:w-1/2 w-full flex flex-col">
-      <H2 text={'Lisää linkki'} />
+      <H2 text={$_('energiatodistus.liitteet.add-link.title')} />
       <form on:submit|preventDefault={submit}>
         <div class="w-full px-4 py-4">
           <Input
               id={'link.nimi'}
               name={'link.nimi'}
-              label={'Nimi'}
+              label={$_('energiatodistus.liitteet.add-link.nimi')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['nimi'])}
               parse={R.trim}
@@ -180,7 +184,7 @@
           <Input
               id={'link.url'}
               name={'link.url'}
-              label={'URL'}
+              label={$_('energiatodistus.liitteet.add-link.url')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['url'])}
               parse={R.compose(addDefaultProtocol, R.trim)}
