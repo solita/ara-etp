@@ -63,7 +63,11 @@
     <LanguageSelect />
   </button>
   <button on:click={save}>
-    <span class="description">{id.isSome() ? 'Tallenna' : 'Luo uusi'}</span>
+    <span class="description">
+      {id.isSome() ?
+        $_('energiatodistus.toolbar.save') :
+        $_('energiatodistus.toolbar.new')}
+    </span>
     <span class="text-2xl font-icon">save</span>
   </button>
   <button on:click={cancel}>

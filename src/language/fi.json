@@ -111,6 +111,10 @@
       "energiatodistus": "Energiatodistukset",
       "uusi-energiatodistus": "Uusi energiatodistus"
     },
+    "toolbar": {
+      "new": "Tallenna",
+      "save": "Tallenna"
+    },
     "laatija-fullname": "Laatija",
     "perustiedot": {
       "nimi": "Rakennuksen nimi",
