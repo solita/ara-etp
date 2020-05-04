@@ -3,6 +3,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as validation from '@Utility/validation';
+  import * as formats from '@Utility/formats';
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
 
@@ -143,7 +144,7 @@
           <tbody>
           {#each liitteet as liite}
             <tr>
-              <td>{liite.createtime}</td>
+              <td>{formats.formatTimeInstant(liite.createtime)}</td>
               <td><Link text={liite.nimi} href={liiteUrl(liite)} /></td>
               <td>{liite['author-fullname']}</td>
               <td on:click={_ => deleteLiite(liite.id)} class="cursor-pointer">

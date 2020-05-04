@@ -38,7 +38,8 @@ export const serialize = R.compose(
 );
 
 export const deserializeLiite = R.evolve({
-  url: Maybe.fromNull
+  url: Maybe.fromNull,
+  createtime: Date.parse
 });
 
 export const url = {
