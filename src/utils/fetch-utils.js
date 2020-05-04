@@ -47,3 +47,7 @@ export const fetchWithMethod = R.curry((fetch, method, url, body) =>
 export const postEmpty = R.curry((fetch, url) =>
   fetch(url, { method: 'post', headers: { Accept: 'application/json' } })
 );
+
+export const deleteRequest = R.curry((fetch, url) =>
+  fetch(url, { method: 'delete' })
+);

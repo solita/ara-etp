@@ -70,7 +70,7 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
 
 export const getLiitteetById = R.curry((fetch, version, id) =>
   R.compose(
-    R.map(deserializeLiite),
+    R.map(R.map(deserializeLiite)),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.liitteet
@@ -95,6 +95,20 @@ export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
     url.liitteet
   )(version, id)
 );
+
+export const postLiitteetLink = R.curry((fetch, version, id, link) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post',
+      url.liitteet(version, id) + '/link'))
+  )(link));
+
+export const deleteLiite = R.curry((fetch, version, id, liiteId) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(liiteId => Fetch.deleteRequest(fetch,
+      url.liitteet(version, id) + '/' + liiteId))
+  ) (liiteId));
 
 export const putEnergiatodistusById = R.curry(
   (fetch, version, id, energiatodistus) =>
