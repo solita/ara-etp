@@ -67,7 +67,7 @@
     R.filter(Maybe.isSome)
   )([
     Maybe.of([{ text: '...', href: '' }]),
-    R.map(Navigation.linksForLaatija, $currentUserStore)
+    R.map(Navigation.linksForKayttaja, $currentUserStore)
   ]);
 </script>
 
