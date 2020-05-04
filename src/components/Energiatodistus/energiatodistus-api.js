@@ -34,7 +34,8 @@ export const serialize = R.compose(
       R.identity
     )
   ),
-  R.omit(['id', 'tila', 'laatija-fullname', 'versio'])
+    R.omit(['id', 'tila', 'laatija-fullname', 'versio',
+            'allekirjoitusaika', 'allekirjoituksessaaika'])
 );
 
 export const deserializeLiite = R.evolve({
