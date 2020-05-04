@@ -28,6 +28,7 @@
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
   import * as Koodisto from '@Utility/koodisto';
+  import * as formats from '@Utility/formats';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -101,11 +102,11 @@
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <span class="lastlogin">
-      {#if Maybe.isSome(laatija.login)}
-        {`${$_('laatija.kirjautunutviimeksi')} ${R.compose( Maybe.get, R.map(
-            date => moment(date).format(`D.M.YYYY [${$_('time.klo')}] H:m`)
-          ) )(laatija.login)}`}
-      {:else}{$_('laatija.eivielakirjautunut')}{/if}
+      {R.compose(
+        Maybe.orSome($_('laatija.no-login')),
+        Maybe.map(R.concat($_('laatija.last-login') + ' ')),
+        Maybe.map(formats.formatTimeInstant))
+      (laatija.login)}
     </span>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">

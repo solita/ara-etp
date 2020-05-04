@@ -63,8 +63,8 @@
     "klo": "klo"
   },
   "laatija": {
-    "kirjautunutviimeksi": "Kirjautunut viimeksi",
-    "eivielakirjautunut": "Ei vielä kirjautunut.",
+    "last-login": "Kirjautunut viimeksi",
+    "no-login": "Ei vielä kirjautunut.",
     "lisaa-laatijat": "Lisää laatijat",
     "omattiedot": "Omat tiedot",
     "henkilotunnus": "Henkilötunnus",
