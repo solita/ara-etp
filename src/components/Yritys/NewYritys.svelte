@@ -4,9 +4,6 @@
 
   import { _ } from '@Language/i18n';
 
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as Fetch from '@Utility/fetch-utils';
   import * as Future from '@Utility/future-utils';
 
   import Overlay from '@Component/Overlay/Overlay';
@@ -25,27 +22,23 @@
   let yritys = YritysUtils.emptyYritys();
 
   const submit = R.compose(
-    Future.forkBothDiscardFirst(
+    Future.fork(
       R.compose(
         R.tap(toggleOverlay(false)),
         flashMessageStore.add('Yritys', 'error'),
-        R.always($_('yritys.messages.save-error'))
-      ),
+        R.ifElse(R.equals(409),
+            _ => $_('yritys.messages.save-conflict'),
+            _ => $_('yritys.messages.save-error'))),
       R.compose(
-        R.tap(() =>
+        R.tap(_ =>
           flashMessageStore.addPersist(
             'Yritys',
             'success',
             $_('yritys.messages.save-success')
-          )
-        ),
-        ({ id }) => replace(`/yritys/${id}`)
-      )
-    ),
-    Future.both(Future.after(500, true)),
+          )),
+        ({ id }) => replace(`/yritys/${id}`))),
     YritysUtils.postYritysFuture(fetch),
-    R.tap(toggleOverlay(true))
-  );
+    R.tap(toggleOverlay(true)));
 
   breadcrumbStore.set([
     {

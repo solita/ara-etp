@@ -53,14 +53,12 @@
     $countryStore
   );
 
-  $: isValidForm = R.compose(
+  const isValidForm = R.compose(
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
     validation.validateModelObject(formSchema)
-  )(yritys);
-
-  $: console.log('Form validation: ', isValidForm);
+  );
 
   const cancel = event => {
     event.preventDefault();
@@ -70,7 +68,7 @@
 
 <form
   on:submit|preventDefault={_ => {
-    if (isValidForm) {
+    if (isValidForm(yritys)) {
       flashMessageStore.flush();
       submit(yritys);
     } else {
