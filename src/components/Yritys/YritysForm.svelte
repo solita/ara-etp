@@ -2,6 +2,7 @@
   import * as R from 'ramda';
 
   import { locale, _ } from '@Language/i18n';
+  import * as locales from '@Language/locale-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
@@ -32,11 +33,6 @@
   const formParsers = YritysUtils.formParsers();
   const formSchema = YritysUtils.formSchema();
 
-  $: labelLocale = `label-${R.compose(
-    R.head,
-    R.split('-')
-  )($locale)}`;
-
   const parseCountry = R.compose(
     R.map(R.prop('id')),
     R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
@@ -47,7 +43,7 @@
 
   $: formatCountry = R.compose(
     Either.orSome(''),
-    R.map(R.prop(labelLocale)),
+    R.map(locales.label($locale)),
     R.chain(Maybe.toEither('')),
     R.map(R.__, $countryStore),
     country.findCountryById
@@ -55,7 +51,7 @@
 
   $: countryNames = Either.foldRight(
     [],
-    R.map(R.prop(labelLocale)),
+    R.map(locales.label($locale)),
     $countryStore
   );
 
