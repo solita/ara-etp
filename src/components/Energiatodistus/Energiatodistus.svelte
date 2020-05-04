@@ -134,6 +134,6 @@
   on:hashchange={_ => flashMessageStore.flush('Energiatodistus')} />
 
 <Router {routes} {prefix} />
-<div class="w-full min-h-3em">
+<div class="w-full min-h-3em sticky bottom-0">
   <FlashMessage module={'Energiatodistus'} />
 </div>
