@@ -16,7 +16,7 @@ export const kayttajaForId = id => `${kayttajaApi}/${id}`;
 export const laatijaForKayttajaId = id => `${kayttajaForId(id)}/laatija`;
 
 export const deserialize = R.evolve({
-  login: Maybe.fromNull,
+  login: R.compose(R.map(Date.parse), Maybe.fromNull),
   cognitoid: Maybe.fromNull
 });
 
