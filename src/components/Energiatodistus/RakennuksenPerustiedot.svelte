@@ -122,8 +122,6 @@
 <div class="flex lg:flex-row flex-col -mx-4 my-4">
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Select
-      id={'perustiedot.kayttotarkoitusluokka'}
-      name={'perustiedot.kayttotarkoitusluokka'}
       label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
       required={true}
       {disabled}
@@ -136,8 +134,6 @@
 
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Select
-      id={'perustiedot.alakayttotarkoitusluokka'}
-      name={'perustiedot.alakayttotarkoitusluokka'}
       label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
       required={true}
       {disabled}

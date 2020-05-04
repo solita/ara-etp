@@ -138,131 +138,118 @@
   }
 </style>
 
+<div class="w-full mt-3">
+  <H1 text={title} />
+  <div class="flex flex-col py-4 -mx-4">
 
-  <div class="w-full mt-3">
-    <H1 text={title} />
-    <div class="flex flex-col py-4 -mx-4">
-
-      {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
+    {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
       <div class="lg:w-1/2 w-full px-4 py-2">
         <BasicInput
-            id="energiatodistus.laatija-fullname"
-            name="energiatodistus.laatija-fullname"
-            label={$_('energiatodistus.laatija-fullname')}
-            disabled={true}
-            format={Maybe.orSome('')}
-            bind:model={energiatodistus}
-            lens={R.lensProp('laatija-fullname')}
-            i18n={$_} />
-      </div>
-      {/if}
-
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
+          id="energiatodistus.laatija-fullname"
+          name="energiatodistus.laatija-fullname"
+          label={$_('energiatodistus.laatija-fullname')}
+          disabled={true}
+          format={Maybe.orSome('')}
           bind:model={energiatodistus}
-          path={['perustiedot', 'yritys', 'nimi']} />
+          lens={R.lensProp('laatija-fullname')}
+          i18n={$_} />
       </div>
+    {/if}
 
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-          {disabled}
-          {schema}
-          bind:model={energiatodistus}
-          path={['perustiedot', 'tilaaja']} />
-      </div>
-
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Select
-          id={'perustiedot.kieli'}
-          name={'perustiedot.kieli'}
-          label={$_('energiatodistus.perustiedot.kieli')}
-          required={false}
-          {disabled}
-          bind:model={energiatodistus}
-          lens={R.lensPath(['perustiedot', 'kieli'])}
-          parse={Maybe.Some}
-          format={et.selectFormat(labelLocale, kielisyys)}
-          items={Either.foldRight([], R.pluck('id'), kielisyys)} />
-      </div>
-
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Select
-          id={'perustiedot.laatimisvaihe'}
-          name={'perustiedot.laatimisvaihe'}
-          label={$_('energiatodistus.perustiedot.laatimisvaihe')}
-          required={false}
-          {disabled}
-          bind:model={energiatodistus}
-          lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
-          parse={Maybe.Some}
-          format={et.selectFormat(labelLocale, laatimisvaiheet)}
-          items={Either.foldRight([], R.pluck('id'), laatimisvaiheet)} />
-      </div>
-    </div>
-
-    <RakennuksenPerustiedot
-      {schema}
-      {disabled}
-      bind:energiatodistus
-      {labelLocale}
-      {kayttotarkoitusluokat}
-      {alakayttotarkoitusluokat} />
-
-    <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
-
-    <H2 text="E-luvun laskennan lähtotiedot" />
-
-    <div class="w-1/5 py-4 mb-4">
+    <div class="lg:w-1/2 w-full px-4 py-4">
       <Input
         {disabled}
         {schema}
         bind:model={energiatodistus}
-        path={['lahtotiedot', 'lammitetty-nettoala']} />
+        path={['perustiedot', 'yritys', 'nimi']} />
     </div>
 
-    <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
-    <Ikkunat {disabled} {schema} bind:energiatodistus />
-    <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
-    <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
-    <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
-    <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
-    <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+    <div class="lg:w-1/2 w-full px-4 py-4">
+      <Input
+        {disabled}
+        {schema}
+        bind:model={energiatodistus}
+        path={['perustiedot', 'tilaaja']} />
+    </div>
 
-    <H2 text={$_('energiatodistus.tulokset.header')} />
-    <ELuvunErittely {disabled} {schema} bind:energiatodistus />
-    <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
-    <TeknistenjarjestelmienEnergiankulutus
-      {disabled}
-      {schema}
-      bind:energiatodistus />
-    <Nettotarve {disabled} {schema} bind:energiatodistus />
-    <Lampokuormat {disabled} {schema} bind:energiatodistus />
-    <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
+    <div class="lg:w-1/2 w-full px-4 py-4">
+      <Select
+        label={$_('energiatodistus.perustiedot.kieli')}
+        required={false}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'kieli'])}
+        parse={Maybe.Some}
+        format={et.selectFormat(labelLocale, kielisyys)}
+        items={Either.foldRight([], R.pluck('id'), kielisyys)} />
+    </div>
 
-    <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
-    <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
-    <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
-    <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
-
-    <H2 text={$_('energiatodistus.huomiot.header')} />
-    <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
-    <Huomio
-      {disabled}
-      {schema}
-      huomio={'alapohja-ylapohja'}
-      bind:energiatodistus />
-    <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
-    <Huomio
-      {disabled}
-      {schema}
-      huomio={'iv-ilmastointi'}
-      bind:energiatodistus />
-    <Huomio
-      {disabled}
-      {schema}
-      huomio={'valaistus-muut'}
-      bind:energiatodistus />
-    <Suositukset {disabled} {schema} bind:energiatodistus />
+    <div class="lg:w-1/2 w-full px-4 py-4">
+      <Select
+        label={$_('energiatodistus.perustiedot.laatimisvaihe')}
+        required={false}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
+        parse={Maybe.Some}
+        format={et.selectFormat(labelLocale, laatimisvaiheet)}
+        items={Either.foldRight([], R.pluck('id'), laatimisvaiheet)} />
+    </div>
   </div>
+
+  <RakennuksenPerustiedot
+    {schema}
+    {disabled}
+    bind:energiatodistus
+    {labelLocale}
+    {kayttotarkoitusluokat}
+    {alakayttotarkoitusluokat} />
+
+  <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
+
+  <H2 text="E-luvun laskennan lähtotiedot" />
+
+  <div class="w-1/5 py-4 mb-4">
+    <Input
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitetty-nettoala']} />
+  </div>
+
+  <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
+  <Ikkunat {disabled} {schema} bind:energiatodistus />
+  <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
+  <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
+  <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
+  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
+  <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+
+  <H2 text={$_('energiatodistus.tulokset.header')} />
+  <ELuvunErittely {disabled} {schema} bind:energiatodistus />
+  <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
+  <TeknistenjarjestelmienEnergiankulutus
+    {disabled}
+    {schema}
+    bind:energiatodistus />
+  <Nettotarve {disabled} {schema} bind:energiatodistus />
+  <Lampokuormat {disabled} {schema} bind:energiatodistus />
+  <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
+
+  <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
+  <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
+  <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
+  <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
+
+  <H2 text={$_('energiatodistus.huomiot.header')} />
+  <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
+  <Huomio
+    {disabled}
+    {schema}
+    huomio={'alapohja-ylapohja'}
+    bind:energiatodistus />
+  <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
+  <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
+  <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
+  <Suositukset {disabled} {schema} bind:energiatodistus />
+</div>

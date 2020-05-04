@@ -124,7 +124,7 @@
     Maybe.of([{ text: '...', href: '' }]),
     R.map(Navigation.linksForLaatija, $currentUserStore),
     R.compose(
-      R.map(R.apply(Navigation.linksForEnergiatodistus)),
+      R.map(R.apply(Navigation.linksForEnergiatodistus($_))),
       idAndVersionFromLocation
     )($location)
   ]);
