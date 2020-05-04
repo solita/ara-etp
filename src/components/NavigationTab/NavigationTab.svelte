@@ -4,6 +4,7 @@
   import { _ } from '@Language/i18n';
   export let text;
   export let href;
+  export let dynamic = false;
   export let activePath;
 </script>
 
@@ -40,5 +41,5 @@
   use:active={activePath || href}
   class="navigationtab"
   tabindex="0">
-  {$_(text)}
+  {dynamic ? text : $_(text)}
 </a>

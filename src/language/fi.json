@@ -26,7 +26,10 @@
     "tyojono": "Työjono",
     "kaytonvalvonta": "Käytönvalvonta",
     "halytykset": "Hälytykset",
-    "kayttajat": "Käyttäjät"
+    "kayttajat": "Käyttäjät",
+    "et": "ET",
+    "liitteet": "Liitteet",
+    "muutoshistoria": "Muutoshistoria"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."

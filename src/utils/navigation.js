@@ -45,15 +45,25 @@ export const linksForPaakayttaja = _ => [
   { text: 'navigation.viestit', href: '/viestit' }
 ];
 
-export const linksForEnergiatodistus = (version, id) => [
-  { text: `ET ${id}`, href: `/energiatodistus/${version}/${id}` },
-  { text: 'Viestit', href: `/energiatodistus/${version}/${id}/viestit` },
-  { text: 'Liitteet', href: `/energiatodistus/${version}/${id}/liitteet` },
+export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
   {
-    text: 'Muutoshistoria',
+    text: `${i18n('navigation.et')} ${id}`,
+    href: `/energiatodistus/${version}/${id}`,
+    dynamic: true
+  },
+  {
+    text: 'navigation.viestit',
+    href: `/energiatodistus/${version}/${id}/viestit`
+  },
+  {
+    text: 'navigation.liitteet',
+    href: `/energiatodistus/${version}/${id}/liitteet`
+  },
+  {
+    text: 'navigation.muutoshistoria',
     href: `/energiatodistus/${version}/${id}/muutoshistoria`
   }
-];
+]);
 
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,

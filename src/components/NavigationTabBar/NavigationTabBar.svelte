@@ -20,6 +20,7 @@
     <NavigationTab
       text={link.text}
       href={link.href}
+      dynamic={link.dynamic}
       activePath={link.activePath} />
   {/each}
 </div>
