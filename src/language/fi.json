@@ -609,9 +609,19 @@
         "url": "URL"
       },
       "messages": {
-        "save-success": "Energiatodistuksen liitteet tallennettu onnistuneesti.",
-        "save-error": "Energiatodistuksen liitteiden tallennuksessa tapahtui odottamaton virhe.",
-        "validation-error": "Lisää linkki lomakkeella virheitä, tarkista syötteet.",
+        "add-files": {
+          "success": "Energiatodistuksen liitteet tallennettu.",
+          "error": "Energiatodistuksen liitteiden tallennuksessa tapahtui odottamaton virhe."
+        },
+        "add-link": {
+          "success": "Energiatodistuksen linkki tallennettu.",
+          "error": "Energiatodistuksen linkin tallennuksessa tapahtui odottamaton virhe.",
+          "validation": "Lisää linkki lomakkeella virheitä, tarkista syötteet."
+        },
+        "delete-liite": {
+          "success": "Energiatodistuksen liite poistettu.",
+          "delete": "Energiatodistuksen liitteen poistossa tapahtui odottamaton virhe."
+        },
         "load-error": "Energiatodistuksen liitteiden haku epäonnistui."
       }
     }

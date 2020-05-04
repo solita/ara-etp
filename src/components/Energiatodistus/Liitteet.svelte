@@ -52,24 +52,24 @@
       R.tap(toggleOverlay(true)),
       api.getLiitteetById(fetch)
   );
-  const fork = Future.fork(
+  const fork = functionName => Future.fork(
     R.compose(
         R.tap(toggleOverlay(false)),
         R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-        R.partial($_, ['energiatodistus.liitteet.messages.save-error'])),
+        R.partial($_, [`energiatodistus.liitteet.messages.${functionName}.error`])),
     R.compose(
         R.tap(flashMessageStore.add('Energiatodistus', 'success')),
-        R.partial($_, ['energiatodistus.liitteet.messages.save-success']),
+        R.partial($_, [`energiatodistus.liitteet.messages.${functionName}.success`]),
         R.partial(load, [params.version, params.id])));
 
   const uploadFiles = R.compose(
-    fork,
+    fork('add-files'),
     R.tap(toggleOverlay(true)),
     api.postLiitteetFiles(fetch, params.version, params.id)
   );
 
   const addLink = R.compose(
-    fork,
+    fork('add-link'),
     R.tap(toggleOverlay(true)),
     api.postLiitteetLink(fetch, params.version, params.id)
   );
@@ -80,7 +80,7 @@
       addLink(liiteLinkAdd);
     } else {
       flashMessageStore.add('Energiatodistus', 'error',
-          $_('energiatodistus.liitteet.messages.validation-error'));
+          $_('energiatodistus.liitteet.messages.add-link.validation'));
     }
   }
 
@@ -95,7 +95,7 @@
           R.identity, R.concat('http://'))
 
   const deleteLiite = R.compose(
-      fork,
+      fork('delete-liite'),
       R.tap(toggleOverlay(true)),
       api.deleteLiite(fetch, params.version, params.id)
   );
