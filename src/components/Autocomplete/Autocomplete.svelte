@@ -74,7 +74,7 @@
   onMount(_ => {
     input = node.getElementsByTagName('input')[0];
     input.addEventListener('input', inputHandler);
-    input.addEventListener('click', inputHandler);
+    input.addEventListener('focus', inputHandler);
   });
 </script>
 
