@@ -54,6 +54,7 @@
     "ovt-tunnus": "OVT-tunnus",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
+      "save-conflict": "Yrityksen tietojen tallennus epäonnistui. Toinen yritys samalla y-tunnuksella on jo olemassa.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Yrityksen tietojen haku epäonnistui."
