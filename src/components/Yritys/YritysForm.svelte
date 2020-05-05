@@ -28,8 +28,6 @@
 
   export let disabled = false;
 
-  const originalYritys = R.clone(yritys);
-
   const formParsers = YritysUtils.formParsers();
   const formSchema = YritysUtils.formSchema();
 
@@ -63,6 +61,11 @@
   )(yritys);
 
   $: console.log('Form validation: ', isValidForm);
+
+  const cancel = event => {
+    event.preventDefault();
+    window.location.reload();
+  };
 </script>
 
 <form
@@ -201,10 +204,7 @@
     </div>
     <div class="px-4">
       <Button
-        on:click={event => {
-          event.preventDefault();
-          yritys = R.clone(originalYritys);
-        }}
+        on:click={cancel}
         text={$_('peruuta')}
         type={'reset'}
         style={'secondary'} />
