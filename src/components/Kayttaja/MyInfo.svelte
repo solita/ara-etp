@@ -5,8 +5,6 @@
 
   import * as Maybe from '@Utility/maybe-utils';
 
-  import Patevyydentoteaja from '@Component/Kayttaja/Patevyydentoteaja';
-
   const routeForKayttaja = kayttaja => {
     if (kayttaja.rooli === 0) {
       replace(`/laatija/${kayttaja.id}`);
