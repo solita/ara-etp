@@ -12,6 +12,7 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link';
+  import Select from '@Component/Select/Select';
 
   let overlay = true;
   let failure = false;
@@ -19,6 +20,16 @@
 
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
+
+  let query = {
+    tila: Maybe.None()
+  }
+
+  const formatTila = R.compose(
+      Maybe.orSome($_('validation.no-selection')),
+      Maybe.map(tila => $_(`energiatodistukset.tilat.` + tila)),
+      R.when(R.complement(Maybe.isMaybe), Maybe.of));
+
 
   const toETView = (versio, id) => {
     push('#/energiatodistus/' + versio + '/' + id);
@@ -72,7 +83,7 @@
     ),
     Future.parallel(5),
     R.tap(toggleOverlay(true))
-  )([api.getEnergiatodistukset, api.laatimisvaiheet]);
+  )([api.getEnergiatodistukset(query), api.laatimisvaiheet]);
 </script>
 
 <style>
@@ -101,6 +112,17 @@
   <H1 text={$_('energiatodistukset.title')} />
   <Overlay {overlay}>
     <div slot="content">
+      <div class="lg:w-1/3 w-full mb-6">
+        <Select
+            label={'Tila'}
+            disabled={false}
+            bind:model={query}
+            lens={R.lensProp('tila')}
+            format={formatTila}
+            parse={R.when(R.complement(Maybe.isMaybe), Maybe.of)}
+            items={[Maybe.None(), 0, 1]} />
+      </div>
+
       {#if R.isEmpty(energiatodistukset)}
         <p class="mb-10">
           Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole
@@ -164,7 +186,7 @@
         text={'Luo uusi 2018 energiatodistus'}
         href="#/energiatodistus/2018/new" />
     </div>
-    <div class="flex flex-row">
+    <div class="flex flex-row mb-4 mr-4">
       <span class="material-icons">add</span>
       &nbsp;
       <Link

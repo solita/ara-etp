@@ -55,11 +55,22 @@ export const url = {
   finish: (version, id) => `${url.signature(version, id)}/finish`
 };
 
+export const toQueryString = R.compose(
+  Maybe.orSome(''),
+  Maybe.map(R.concat('?')),
+  Maybe.map(R.join('&')),
+  Maybe.toMaybeList,
+  R.map(([key, optionalValue]) => Maybe.map(value => `${key}=${value}`, optionalValue)),
+  R.toPairs,
+);
+
 export const getEnergiatodistukset = R.compose(
   R.map(R.map(deserialize)),
   Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)(url.all);
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(url.all),
+  toQueryString
+);
 
 export const getEnergiatodistusById = R.curry((fetch, version, id) =>
   R.compose(
