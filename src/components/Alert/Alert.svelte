@@ -3,10 +3,6 @@
   export let text;
   export let close = () => {};
 
-  const error = type === 'error';
-  const warn = type === 'warn';
-  const success = type === 'success';
-
   const icon = {
     error: 'error_outline',
     warn: 'warning',
@@ -41,7 +37,10 @@
   }
 </style>
 
-<div class:error class:success class="alert">
+<div
+  class:error={type === 'error'}
+  class:success={type === 'success'}
+  class="alert">
   <span class="icon">{icon}</span>
   <span class="alert-text">{text}</span>
   <span class="close" on:click={close}>close</span>
