@@ -5,7 +5,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as deep from '@Utility/deep-objects';
 
-export const DATE_FORMAT = 'DD.MM.YYYY';
+export const DATE_FORMAT = 'dd.MM.yyyy';
 
 export const ytunnusChecksum = R.compose(
   R.unless(R.equals(0), R.subtract(11)),
@@ -64,10 +64,11 @@ export const isUrl = R.test(
 
 export const Interval = (min, max) => [
   constraint(R.lte(min), 'min-number', { '{min}': min }),
-  constraint(R.gte(max), 'max-number', { '{max}': max }),
+  constraint(R.gte(max), 'max-number', { '{max}': max })
 ];
 
-export const MaybeInterval = (min, max) => R.map(liftValidator, Interval(min, max));
+export const MaybeInterval = (min, max) =>
+  R.map(liftValidator, Interval(min, max));
 
 export const urlValidator = {
   predicate: isUrl,
@@ -146,6 +147,12 @@ export const validateModelValue = R.curry((validators, value) =>
 );
 
 export const validateModelObject = R.curry((schemaObject, object) =>
-  R.evolve(deep.map(R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
-    v => validateModelValue(v), schemaObject), object)
+  R.evolve(
+    deep.map(
+      R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
+      v => validateModelValue(v),
+      schemaObject
+    ),
+    object
+  )
 );

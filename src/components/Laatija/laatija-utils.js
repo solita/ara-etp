@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import moment from 'moment';
+import * as dfns from 'date-fns';
 
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
@@ -83,7 +83,7 @@ export const serializeForLaatija = R.compose(
 );
 
 export const serializeImport = R.evolve({
-  toteamispaivamaara: R.curry(date => moment(date).format('YYYY-MM-DD'))
+  toteamispaivamaara: date => dfns.format(date, 'yyyy-MM-dd')
 });
 
 export const laatijaFromKayttaja = R.compose(
@@ -183,13 +183,12 @@ export const parse = {
   email: R.trim,
   puhelin: R.trim,
   patevyystaso: R.compose(parseInt, R.trim),
-  toteamispaivamaara: R.compose(
-    R.curry(date => {
-      const momentDate = moment(date, Validation.DATE_FORMAT);
-      return momentDate.isValid() ? momentDate.toDate() : date;
-    }),
-    R.trim
-  )
+  toteamispaivamaara: date =>
+    R.compose(
+      R.unless(dfns.isValid, R.always(date)),
+      d => dfns.parse(d, Validation.DATE_FORMAT, 0),
+      R.trim
+    )(date)
 };
 
 export const validate = {

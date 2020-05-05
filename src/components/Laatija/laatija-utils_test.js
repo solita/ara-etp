@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import * as R from 'ramda';
-import moment from 'moment';
+import * as dfns from 'date-fns';
 
 import * as validation from '@Utility/validation';
 import { readData, dataValid } from './laatija-utils';
@@ -24,11 +24,12 @@ describe('Laatija utils', () => {
             email: 'arja.pirex@ara.fi',
             puhelin: '0400123456',
             patevyystaso: 2,
-            toteamispaivamaara: moment(
+            toteamispaivamaara: dfns.parse(
               '21.3.2019',
-              validation.DATE_FORMAT
-            ).toDate(),
-            maa: "FI"
+              validation.DATE_FORMAT,
+              0
+            ),
+            maa: 'FI'
           }
         ]),
         true
