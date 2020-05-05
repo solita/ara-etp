@@ -636,6 +636,10 @@
   },
   "energiatodistukset": {
     "title": "Energiatodistukset",
+    "tilat": {
+      "0": "Luonnos",
+      "1": "Voimassa"
+    },
     "messages": {
       "delete-success": "Energiatodistus poistettiin onnistuneesti",
       "delete-error": "Energiatodistuksen poistaminen epäonnistui"

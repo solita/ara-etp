@@ -43,3 +43,9 @@ export const isMaybe = any => Object.getPrototypeOf(any) === Maybe.prototype;
 export const findById = R.curry((id, collection) =>
   R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(collection)
 );
+
+export const toMaybeList = R.compose(
+  map(list => list.toArray()),
+  list => list.sequenceMaybe(),
+  monet.List.fromArray
+);
