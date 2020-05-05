@@ -57,21 +57,24 @@
     )(event);
   };
 
-  onMount(_ => {
-    input = node.getElementsByTagName('input')[0];
-    input.addEventListener('input', event => {
-      const value = input.value;
-      filteredItems = R.compose(
+  const inputHandler = () => {
+    const value = input.value;
+    filteredItems = R.compose(
         R.take(5),
         R.filter(
-          R.compose(
-            R.includes(R.toLower(value)),
-            R.toLower
-          )
+            R.compose(
+                R.includes(R.toLower(value)),
+                R.toLower
+            )
         )
-      )(items);
-      active = active.orElse(Maybe.Some(0));
-    });
+    )(items);
+    active = active.orElse(Maybe.Some(0));
+  }
+
+  onMount(_ => {
+    input = node.getElementsByTagName('input')[0];
+    input.addEventListener('input', inputHandler);
+    input.addEventListener('click', inputHandler);
   });
 </script>
 
