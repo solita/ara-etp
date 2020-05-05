@@ -1,4 +1,4 @@
-import moment from 'moment';
+import * as dfns from 'date-fns';
 
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
@@ -127,10 +127,11 @@ export const isPuhelin = R.test(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
 
 export const isPatevyystaso = R.test(/^(1|2)$/);
 
-export const isPaivamaara = R.ifElse(
-  R.compose(R.equals('Date'), R.type),
-  R.curry(date => moment(date).isValid()),
-  R.curry(date => moment(date, DATE_FORMAT).isValid())
+export const isPaivamaara = R.compose(
+  dfns.isValid,
+  R.unless(R.compose(R.equals('Date'), R.type), date =>
+    dfns.parse(date, DATE_FORMAT, 0)
+  )
 );
 
 export const validate = (validators, value) =>

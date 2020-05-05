@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import * as R from 'ramda';
-import moment from 'moment';
+import * as dfns from 'date-fns';
 import * as validation from './validation';
 
 const assertChecksum = R.curry((value, checksum, validator) => {
@@ -134,13 +134,13 @@ describe('Validation:', () => {
       assert.equal(validation.isPaivamaara('01.12.2012'), true);
       assert.equal(
         validation.isPaivamaara(
-          moment('16.12.2012', validation.DATE_FORMAT).toDate()
+          dfns.parse('16.12.2012', validation.DATE_FORMAT, 0)
         ),
         true
       );
       assert.equal(
         validation.isPaivamaara(
-          moment('01.12.2012', validation.DATE_FORMAT).toDate()
+          dfns.parse('01.12.2012', validation.DATE_FORMAT, 0)
         ),
         true
       );
