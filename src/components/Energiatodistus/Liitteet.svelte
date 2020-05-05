@@ -25,8 +25,15 @@
 
   let overlay = true;
   let failure = false;
-  let liitteet = [];
-  let liiteLinkAdd = emptyLiite();
+  let liitteet;
+  let liiteLinkAdd;
+
+  const resetForm = () => {
+    liitteet = [];
+    liiteLinkAdd = emptyLiite();
+  };
+
+  resetForm();
 
   const liiteLinkAddSchema = {
     nimi: [validation.isRequired,
@@ -79,6 +86,7 @@
     if (et.isValidForm(liiteLinkAddSchema, liiteLinkAdd)) {
       flashMessageStore.flush();
       addLink(liiteLinkAdd);
+      resetForm();
     } else {
       flashMessageStore.add('Energiatodistus', 'error',
           $_('energiatodistus.liitteet.messages.add-link.validation'));
