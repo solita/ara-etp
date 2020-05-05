@@ -14,6 +14,7 @@
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
   import Select from '@Component/Select/Select';
+  import HR from '@Component/HR/HR';
 
   import Input from './Input';
   import BasicInput from '@Component/Input/Input';
@@ -140,7 +141,7 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
-  <div class="flex flex-col py-4 -mx-4">
+  <div class="flex flex-col -mx-4">
 
     {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
       <div class="lg:w-1/2 w-full px-4 py-2">
@@ -197,6 +198,8 @@
     </div>
   </div>
 
+  <HR />
+
   <RakennuksenPerustiedot
     {schema}
     {disabled}
@@ -205,9 +208,11 @@
     {kayttotarkoitusluokat}
     {alakayttotarkoitusluokat} />
 
+  <HR />
   <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
 
-  <H2 text="Lähtötiedot" />
+  <HR />
+  <H2 text="E-luvun laskennan lähtotiedot" />
 
   <div class="w-1/5 py-4 mb-4">
     <Input
@@ -225,6 +230,8 @@
   <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
 
+  <HR />
+
   <H2 text={$_('energiatodistus.tulokset.header')} />
   <ELuvunErittely {disabled} {schema} bind:energiatodistus />
   <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
@@ -236,11 +243,13 @@
   <Lampokuormat {disabled} {schema} bind:energiatodistus />
   <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
 
+  <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
   <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
+  <HR />
   <H2 text={$_('energiatodistus.huomiot.header')} />
   <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
   <Huomio

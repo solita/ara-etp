@@ -4,7 +4,7 @@
 
 <style type="text/postcss">
   h2 {
-    @apply text-primary font-medium text-2xl mb-4 tracking-xl;
+    @apply text-primary uppercase font-bold text-base mb-4;
   }
 </style>
 

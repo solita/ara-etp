@@ -17,6 +17,7 @@
   }
 </style>
 
+<!-- purgecss: font-icon mr-1 text-2xl -->
 <a {href}>
   {@html R.compose( Maybe.orSome(''), R.map(i => `<span class="font-icon mr-1 text-2xl">${i}</span>`) )(icon)}
   {text}

@@ -7,7 +7,7 @@
 
 <style type="text/postcss">
   button {
-    @apply flex justify-center items-center px-6 py-5 rounded-full font-bold uppercase text-light tracking-xl min-w-10;
+    @apply flex justify-center items-center px-6 py-3 rounded-full font-bold uppercase text-light tracking-xl min-w-10;
   }
 
   .primary {
