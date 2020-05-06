@@ -11,7 +11,7 @@
     {
       "enabled": true,
       "name": "x-amzn-oidc-identity",
-      "value": "laatija-1@example.com",
+      "value": "laatija-1",
       "comment": ""
     },
     {
