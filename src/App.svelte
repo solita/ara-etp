@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
   import Router from 'svelte-spa-router';
-  import { link } from 'svelte-spa-router';
+  import { link, replace } from 'svelte-spa-router';
 
   import * as Maybe from '@Utility/maybe-utils';
 
@@ -39,7 +39,12 @@
     R.map(Navigation.linksForKayttaja)
   )($currentUserStore);
 
-  const routes = buildRoutes(breadcrumbStore);
+  $: routes = R.compose(
+    Maybe.orSome({}),
+    R.map(buildRoutes(breadcrumbStore))
+  )($currentUserStore);
+
+  $: console.log(routes);
 </script>
 
 <style type="text/postcss">
@@ -77,7 +82,7 @@
         <NavigationTabBar links={$navigationStore} />
       </div>
       <div class="routecontainer">
-        <Router {routes} />
+        <Router on:conditionsFailed={_ => replace('/404')} {routes} />
       </div>
     </section>
     <Footer />
