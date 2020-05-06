@@ -1,11 +1,11 @@
-import moment from 'moment';
+import * as dfns from 'date-fns';
 
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as deep from '@Utility/deep-objects';
 
-export const DATE_FORMAT = 'DD.MM.YYYY';
+export const DATE_FORMAT = 'dd.MM.yyyy';
 
 export const ytunnusChecksum = R.compose(
   R.unless(R.equals(0), R.subtract(11)),
@@ -64,10 +64,11 @@ export const isUrl = R.test(
 
 export const Interval = (min, max) => [
   constraint(R.lte(min), 'min-number', { '{min}': min }),
-  constraint(R.gte(max), 'max-number', { '{max}': max }),
+  constraint(R.gte(max), 'max-number', { '{max}': max })
 ];
 
-export const MaybeInterval = (min, max) => R.map(liftValidator, Interval(min, max));
+export const MaybeInterval = (min, max) =>
+  R.map(liftValidator, Interval(min, max));
 
 export const urlValidator = {
   predicate: isUrl,
@@ -126,10 +127,11 @@ export const isPuhelin = R.test(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
 
 export const isPatevyystaso = R.test(/^(1|2)$/);
 
-export const isPaivamaara = R.ifElse(
-  R.compose(R.equals('Date'), R.type),
-  R.curry(date => moment(date).isValid()),
-  R.curry(date => moment(date, DATE_FORMAT).isValid())
+export const isPaivamaara = R.compose(
+  dfns.isValid,
+  R.unless(R.compose(R.equals('Date'), R.type), date =>
+    dfns.parse(date, DATE_FORMAT, 0)
+  )
 );
 
 export const validate = (validators, value) =>
@@ -146,6 +148,12 @@ export const validateModelValue = R.curry((validators, value) =>
 );
 
 export const validateModelObject = R.curry((schemaObject, object) =>
-  R.evolve(deep.map(R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
-    v => validateModelValue(v), schemaObject), object)
+  R.evolve(
+    deep.map(
+      R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
+      v => validateModelValue(v),
+      schemaObject
+    ),
+    object
+  )
 );

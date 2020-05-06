@@ -1,6 +1,6 @@
 <script>
   import * as R from 'ramda';
-  import moment from 'moment';
+  import * as dfns from 'date-fns';
 
   import { locale, _ } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -102,11 +102,7 @@
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <span class="lastlogin">
-      {R.compose(
-        Maybe.orSome($_('laatija.no-login')),
-        Maybe.map(R.concat($_('laatija.last-login') + ' ')),
-        Maybe.map(formats.formatTimeInstant))
-      (laatija.login)}
+      {R.compose( Maybe.orSome($_('laatija.no-login')), Maybe.map(R.concat($_('laatija.last-login') + ' ')), Maybe.map(formats.formatTimeInstant) )(laatija.login)}
     </span>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -252,9 +248,10 @@
           label={$_('laatija.patevyydenvoimassaolo')}
           bind:model={laatija}
           lens={R.lensProp('toteamispaivamaara')}
-          format={toteamispaivamaara => `${moment(toteamispaivamaara).format('D.M.YYYY')} - ${moment(toteamispaivamaara)
-              .add(10, 'y')
-              .format('D.M.YYYY')}`}
+          format={toteamispaivamaara => `${dfns.format(dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0), 'd.M.yyyy')} - ${dfns.format(dfns.add(
+                dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0),
+                { years: 10 }
+              ), 'd.M.yyyy')}`}
           parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}

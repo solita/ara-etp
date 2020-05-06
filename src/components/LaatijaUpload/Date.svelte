@@ -1,19 +1,16 @@
 <script>
-  import moment from 'moment';
+  import * as dfns from 'date-fns';
   import * as R from 'ramda';
 
   import * as validation from '@Utility/validation';
 
   export let value;
-
-  $: formattedDate = R.ifElse(
-    R.compose(
-      R.equals('Date'),
-      R.type
-    ),
-    R.curry(date => moment(date).format(validation.DATE_FORMAT)),
-    R.identity
-  )(value);
 </script>
 
-{formattedDate}
+{R.when(
+  R.compose(
+    R.equals('Date'),
+    R.type
+  ),
+  date => dfns.format(date, validation.DATE_FORMAT)
+)(value)}
