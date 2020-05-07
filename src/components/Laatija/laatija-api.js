@@ -25,4 +25,8 @@ export const deleteLaatijaYritys = toggleLaatijaYritys('delete');
 
 export const getAllYritykset = yritysApi.getAllYrityksetFuture;
 
-
+export const patevyydet = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/patevyydet/');

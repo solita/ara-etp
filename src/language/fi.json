@@ -63,17 +63,27 @@
   "time": {
     "klo": "klo"
   },
-  "laatija": {
+  "kayttaja": {
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
-    "lisaa-laatijat": "Lisää laatijat",
     "omattiedot": "Omat tiedot",
-    "henkilotunnus": "Henkilötunnus",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
     "sahkoposti": "Sähköposti",
     "kayttajatunnus": "Käyttäjätunnus",
     "puhelinnumero": "Puhelinnumero",
+
+    "messages": {
+      "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
+      "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
+      "load-error": "Käyttäjän tietojen haku epäonnistui.",
+      "upload-error": "Tiedoston lataaminen epäonnistui."
+    }
+  },
+  "laatija": {
+    "lisaa-laatijat": "Lisää laatijat",
+    "henkilotunnus": "Henkilötunnus",
     "katuosoite": "Katuosoite",
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
