@@ -305,3 +305,46 @@ export const calculatePaths = R.curry((calcFn, firstPath, secondPath, et) =>
     energiatodistusPath(secondPath)
   ])(et)
 );
+
+const teknisetJarjestelmat = R.path(['tulokset', 'tekniset-jarjestelmat']);
+
+const fieldsWithSahko = [
+  'jaahdytys',
+  'kayttoveden-valmistus',
+  'tilojen-lammitys',
+  'tuloilman-lammitys'
+];
+
+const fieldsWithLampo = [
+  'jaahdytys',
+  'kayttoveden-valmistus',
+  'tilojen-lammitys',
+  'tuloilman-lammitys'
+];
+
+export const teknistenJarjestelmienSahkot = R.compose(
+  R.map(unnestValidation),
+  R.converge(R.merge, [
+    R.pick(['iv-sahko', 'kuluttajalaitteet-ja-valaistus-sahko']),
+    R.compose(R.map(R.prop('sahko')), R.pick(fieldsWithSahko))
+  ]),
+  teknisetJarjestelmat
+);
+
+export const teknistenJarjestelmienLammot = R.compose(
+  R.map(R.compose(unnestValidation, R.prop('lampo'))),
+  R.pick(fieldsWithLampo),
+  teknisetJarjestelmat
+);
+
+export const teknistenJarjestelmienKaukojaahdytys = R.compose(
+  R.map(R.compose(unnestValidation, R.prop('kaukojaahdytys'))),
+  R.pick(['jaahdytys']),
+  teknisetJarjestelmat
+);
+
+export const sumEtValues = R.compose(
+  R.reduce(R.lift(R.add), Maybe.of(0)),
+  R.filter(Maybe.isSome),
+  R.values
+);
