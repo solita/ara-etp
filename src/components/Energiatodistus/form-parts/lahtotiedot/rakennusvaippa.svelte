@@ -12,37 +12,12 @@
   export let schema;
   export let energiatodistus;
 
-  $: UA = R.compose(
-    R.merge({
-      'kylmasillat-UA': EtUtils.energiatodistusPath(
-        ['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA'],
-        energiatodistus
-      )
-    }),
-    R.converge(R.zipObj, [
-      R.identity,
-      R.map(
-        R.compose(
-          R.applyTo(energiatodistus),
-          R.apply(EtUtils.calculatePaths(R.multiply)),
-          R.converge(Array.of, [R.append('ala'), R.append('U')]),
-          R.append(R.__, ['lahtotiedot', 'rakennusvaippa'])
-        )
-      )
-    ])
-  )(['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet']);
+  $: UA = EtUtils.rakennusvaippaUA(energiatodistus);
 
-  $: UAsum = R.compose(
-    R.reduce(R.lift(R.add), Maybe.of(0)),
-    R.values,
-    R.filter(Maybe.isSome)
-  )(UA);
-
-  $: osuudetLampohavioista = R.compose(
-    R.fromPairs,
-    R.map(R.over(R.lensIndex(1), R.lift(R.flip(R.divide))(UAsum))),
-    R.toPairs
-  )(UA);
+  $: osuudetLampohavioista = R.map(
+    EtUtils.partOfSum(EtUtils.sumEtValues(UA)),
+    UA
+  );
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.rakennusvaippa.header')} />

@@ -241,4 +241,52 @@ describe.only('Energiatodistus Utils: ', () => {
       assert.deepEqual(expected, EtUtils.sumEtValues(values));
     });
   });
+
+  describe('partOfSum', () => {
+    it('should calculate part of sum', () => {
+      const sum = Maybe.Some(2);
+      const value = Maybe.Some(1);
+
+      const expected = Maybe.Some(0.5);
+
+      assert.deepEqual(expected, EtUtils.partOfSum(sum, value));
+    });
+
+    it('should return None when input is None', () => {
+      const sum = Maybe.None();
+      const value = Maybe.Some(1);
+
+      const expected = Maybe.None();
+
+      assert.deepEqual(expected, EtUtils.partOfSum(sum, value));
+    });
+  });
+
+  describe('rakennusvaippaUA', () => {
+    it('should return all calculated U*As', () => {
+      const et = {
+        lahtotiedot: {
+          rakennusvaippa: {
+            'kylmasillat-UA': Either.Right(Maybe.Some(1)),
+            ulkoseinat: { ala: Maybe.Some(2), U: Maybe.Some(2) },
+            ylapohja: { ala: Maybe.Some(2), U: Maybe.Some(2) },
+            alapohja: { ala: Maybe.Some(2), U: Maybe.Some(2) },
+            ikkunat: { ala: Maybe.Some(2), U: Maybe.Some(2) },
+            ulkoovet: { ala: Maybe.Some(2), U: Maybe.Some(2) }
+          }
+        }
+      };
+
+      const expected = {
+        'kylmasillat-UA': Maybe.Some(1),
+        ulkoseinat: Maybe.Some(4),
+        ylapohja: Maybe.Some(4),
+        alapohja: Maybe.Some(4),
+        ikkunat: Maybe.Some(4),
+        ulkoovet: Maybe.Some(4)
+      };
+
+      assert.deepEqual(expected, EtUtils.rakennusvaippaUA(et));
+    });
+  });
 });

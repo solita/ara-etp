@@ -306,6 +306,33 @@ export const calculatePaths = R.curry((calcFn, firstPath, secondPath, et) =>
   ])(et)
 );
 
+const rakennusvaippa = R.path(['lahtotiedot', 'rakennusvaippa']);
+
+const fieldsWithUA = [
+  'ulkoseinat',
+  'ylapohja',
+  'alapohja',
+  'ikkunat',
+  'ulkoovet'
+];
+
+export const rakennusvaippaUA = R.compose(
+  R.converge(R.merge, [
+    R.compose(R.map(unnestValidation), R.pick(['kylmasillat-UA'])),
+    R.compose(
+      R.map(
+        R.compose(
+          R.apply(R.lift(R.multiply)),
+          R.map(unnestValidation),
+          R.props(['ala', 'U'])
+        )
+      ),
+      R.pick(fieldsWithUA)
+    )
+  ]),
+  rakennusvaippa
+);
+
 const teknisetJarjestelmat = R.path(['tulokset', 'tekniset-jarjestelmat']);
 
 const fieldsWithSahko = [
@@ -348,3 +375,5 @@ export const sumEtValues = R.compose(
   R.filter(Maybe.isSome),
   R.values
 );
+
+export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
