@@ -289,3 +289,19 @@ export const validators = deep.map(
   R.compose(R.complement(R.isNil), R.prop('validators')),
   R.prop('validators')
 );
+
+export const unnestValidation = R.compose(
+  R.when(Either.isEither, Maybe.None),
+  R.when(R.allPass([Either.isEither, Either.isRight]), Either.right)
+);
+
+export const energiatodistusPath = R.curry((path, et) =>
+  R.compose(unnestValidation, R.path(path))(et)
+);
+
+export const calculatePaths = R.curry((calcFn, firstPath, secondPath, et) =>
+  R.converge(R.lift(calcFn), [
+    energiatodistusPath(firstPath),
+    energiatodistusPath(secondPath)
+  ])(et)
+);
