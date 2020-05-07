@@ -13,6 +13,7 @@
   export let required = false;
   export let disabled = false;
   export let compact = false;
+  export let center = false;
 
   const index = R.compose(
     Maybe.fromNull,
@@ -38,6 +39,7 @@
   {required}
   {disabled}
   {compact}
+  {center}
   bind:model
   {lens}
   format={et.formatters.optionalText}
