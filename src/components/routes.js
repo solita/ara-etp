@@ -1,4 +1,6 @@
 import { wrap } from 'svelte-spa-router';
+import * as R from 'ramda';
+import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
@@ -12,7 +14,11 @@ import NotFound from '@Component/NotFound/NotFound';
 import MyInfo from '@Component/Kayttaja/MyInfo';
 import LandingPage from '@Component/Kayttaja/LandingPage';
 
-export const buildRoutes = breadcrumbStore => ({
+const laatijaRole = 0;
+const patevyydentoteajaRole = 1;
+const paakayttajaRole = 2;
+
+export const buildRoutes = R.curry((breadcrumbStore, currentUser) => ({
   '/': wrap(LandingPage, _ => {
     breadcrumbStore.set([]);
     return true;
@@ -25,16 +31,27 @@ export const buildRoutes = breadcrumbStore => ({
     breadcrumbStore.set([{ label: 'Yritykset', url: '/yritys' }]);
     return true;
   }),
-  '/halytykset': wrap(Halytykset, _ => {
-    breadcrumbStore.set([{ label: 'Halytykset', url: '/halytykset' }]);
-    return true;
-  }),
+  '/halytykset': wrap(
+    Halytykset,
+    _ =>
+      KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser),
+    _ => {
+      breadcrumbStore.set([{ label: 'Halytykset', url: '/halytykset' }]);
+      return true;
+    }
+  ),
   '/kaytonvalvonta': wrap(Kaytonvalvonta, _ => {
-    breadcrumbStore.set([{ label: 'Käytönvalvonta', url: '/kaytonvalvonta' }]);
+    _ =>
+      KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser),
+      breadcrumbStore.set([
+        { label: 'Käytönvalvonta', url: '/kaytonvalvonta' }
+      ]);
     return true;
   }),
   '/tyojono': wrap(Tyojono, _ => {
-    breadcrumbStore.set([{ label: 'Työjono', url: '/tyojono' }]);
+    _ =>
+      KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser),
+      breadcrumbStore.set([{ label: 'Työjono', url: '/tyojono' }]);
     return true;
   }),
   '/kayttaja/*': wrap(Kayttaja, _ => {
@@ -49,12 +66,20 @@ export const buildRoutes = breadcrumbStore => ({
     breadcrumbStore.set([{ label: 'Viestit', url: '/viestit' }]);
     return true;
   }),
-  '/energiatodistus/*': wrap(Energiatodistus, _ => {
-    breadcrumbStore.set([
-      { label: 'Energiatodistukset', url: '/energiatodistus' }
-    ]);
-    return true;
-  }),
+  '/energiatodistus/*': wrap(
+    Energiatodistus,
+    _ =>
+      KayttajaUtils.kayttajaHasAccessToResource(
+        [laatijaRole, paakayttajaRole],
+        currentUser
+      ),
+    _ => {
+      breadcrumbStore.set([
+        { label: 'Energiatodistukset', url: '/energiatodistus' }
+      ]);
+      return true;
+    }
+  ),
   '/myinfo': wrap(MyInfo, _ => {
     breadcrumbStore.set([{ label: 'Omat tiedot', url: '/myinfo' }]);
     return true;
@@ -63,4 +88,4 @@ export const buildRoutes = breadcrumbStore => ({
     breadcrumbStore.set([]);
     return true;
   })
-});
+}));
