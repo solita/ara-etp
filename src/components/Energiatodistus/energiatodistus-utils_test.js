@@ -4,7 +4,7 @@ import * as Either from '@Utility/either-utils';
 
 import * as EtUtils from './energiatodistus-utils';
 
-describe.only('Energiatodistus Utils: ', () => {
+describe('Energiatodistus Utils: ', () => {
   describe('unnestValidation', () => {
     it('should return value within Either', () => {
       const value = Either.Right(Maybe.Some(1));
@@ -287,6 +287,58 @@ describe.only('Energiatodistus Utils: ', () => {
       };
 
       assert.deepEqual(expected, EtUtils.rakennusvaippaUA(et));
+    });
+  });
+
+  describe('ostoenergiat', () => {
+    it('should return all ostoenergiat-fields and unnest', () => {
+      const et = {
+        tulokset: {
+          'kaytettavat-energiamuodot': {
+            kaukolampo: Either.Right(Maybe.Some(1)),
+            sahko: Either.Right(Maybe.Some(2)),
+            'uusiutuva-polttoaine': Either.Right(Maybe.Some(3)),
+            'fossiilinen-polttoaine': Either.Right(Maybe.Some(4)),
+            kaukojaahdytys: Either.Right(Maybe.Some(5))
+          }
+        }
+      };
+
+      const expected = {
+        kaukolampo: Maybe.Some(1),
+        sahko: Maybe.Some(2),
+        'uusiutuva-polttoaine': Maybe.Some(3),
+        'fossiilinen-polttoaine': Maybe.Some(4),
+        kaukojaahdytys: Maybe.Some(5)
+      };
+
+      assert.deepEqual(expected, EtUtils.ostoenergiat(et));
+    });
+  });
+
+  describe('multiplyOstoenergia', () => {
+    it('should return Some with proper values', () => {
+      const ostoenergiamaara = Maybe.Some(10);
+      const kerroin = 2;
+
+      const expected = Maybe.Some(20);
+
+      assert.deepEqual(
+        expected,
+        EtUtils.multiplyOstoenergia(kerroin, ostoenergiamaara)
+      );
+    });
+
+    it('should return None with None ostoenergiamaara', () => {
+      const ostoenergiamaara = Maybe.None();
+      const kerroin = 2;
+
+      const expected = Maybe.None();
+
+      assert.deepEqual(
+        expected,
+        EtUtils.multiplyOstoenergia(kerroin, ostoenergiamaara)
+      );
     });
   });
 });

@@ -126,6 +126,10 @@
     @apply w-2/5;
   }
 
+  :global(.et-table--td__fifth) {
+    @apply w-1/5;
+  }
+
   :global(.et-table--tr:last-child) {
     @apply mb-5;
   }

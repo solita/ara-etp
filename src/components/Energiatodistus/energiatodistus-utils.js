@@ -377,3 +377,34 @@ export const sumEtValues = R.compose(
 );
 
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
+
+export const energiamuotokertoimet2018 = () => ({
+  'fossiilinen-polttoaine': 1,
+  kaukojaahdytys: 0.28,
+  kaukolampo: 0.5,
+  sahko: 1.2,
+  'uusiutuva-polttoaine': 0.5
+});
+
+const fieldsWithErittelyOstoenergia = [
+  'kaukolampo',
+  'sahko',
+  'uusiutuva-polttoaine',
+  'fossiilinen-polttoaine',
+  'kaukojaahdytys'
+];
+
+const kaytettavatEnergiamuodot = R.path([
+  'tulokset',
+  'kaytettavat-energiamuodot'
+]);
+
+export const ostoenergiat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithErittelyOstoenergia),
+  kaytettavatEnergiamuodot
+);
+
+export const multiplyOstoenergia = R.curry((kerroin, ostoenergiamaara) =>
+  R.map(R.multiply(kerroin), ostoenergiamaara)
+);
