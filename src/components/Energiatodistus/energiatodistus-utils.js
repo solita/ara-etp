@@ -408,3 +408,31 @@ export const ostoenergiat = R.compose(
 export const multiplyOstoenergia = R.curry((kerroin, ostoenergiamaara) =>
   R.map(R.multiply(kerroin), ostoenergiamaara)
 );
+
+export const perLammitettyNettoala = R.curry((energiatodistus, values) =>
+  R.compose(
+    R.map(R.__, values),
+    R.lift(R.flip(R.divide)),
+    energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])
+  )(energiatodistus)
+);
+
+const fieldsWithUusiutuvaOmavaraisenergia = [
+  'aurinkosahko',
+  'tuulisahko',
+  'aurinkolampo',
+  'muulampo',
+  'muusahko',
+  'lampopumppu'
+];
+
+const uusiutuvatOmavaraisenergiat = R.path([
+  'tulokset',
+  'uusiutuvat-omavaraisenergiat'
+]);
+
+export const omavaraisenergiat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithUusiutuvaOmavaraisenergia),
+  uusiutuvatOmavaraisenergiat
+);

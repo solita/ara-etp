@@ -339,14 +339,15 @@
       "yhteensa": "Yhteensä",
       "vuosikulutus": "kWh/vuosi",
       "vuosikulutus-per-nelio": "kWh/m²vuosi",
+      "kwhevuosi": "kWhE/vuosi",
+      "kwhem2vuosi": "kWhE/m²vuosi",
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
         "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia kWh/vuosi",
         "energiamuodon_kerroin": "Energiamuodon kerroin",
         "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
-        "kwhevuosi": "kWhE/vuosi",
-        "kwhem2vuosi": "kWhE/m²vuosi",
+
         "labels": {
           "fossiilinen-polttoaine": "Fossiilinen polttoaine",
           "sahko": "Sähkö",

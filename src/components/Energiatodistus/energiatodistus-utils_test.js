@@ -341,4 +341,94 @@ describe('Energiatodistus Utils: ', () => {
       );
     });
   });
+
+  describe('perLammitettyNettoala', () => {
+    it('should return values divided by lammitetty nettoala', () => {
+      const et = {
+        lahtotiedot: {
+          'lammitetty-nettoala': Either.Right(Maybe.Some(10))
+        }
+      };
+
+      const values = {
+        a: Maybe.Some(10),
+        b: Maybe.Some(15)
+      };
+
+      const expected = {
+        a: Maybe.Some(1),
+        b: Maybe.Some(1.5)
+      };
+
+      assert.deepEqual(expected, EtUtils.perLammitettyNettoala(et, values));
+    });
+
+    it('should return none when value is none', () => {
+      const et = {
+        lahtotiedot: {
+          'lammitetty-nettoala': Either.Right(Maybe.Some(10))
+        }
+      };
+
+      const values = {
+        a: Maybe.Some(10),
+        b: Maybe.None()
+      };
+
+      const expected = {
+        a: Maybe.Some(1),
+        b: Maybe.None()
+      };
+
+      assert.deepEqual(expected, EtUtils.perLammitettyNettoala(et, values));
+    });
+
+    it('should return none when nettoala is none', () => {
+      const et = {
+        lahtotiedot: {
+          'lammitetty-nettoala': Either.Right(Maybe.None())
+        }
+      };
+
+      const values = {
+        a: Maybe.Some(10),
+        b: Maybe.Some(15)
+      };
+
+      const expected = {
+        a: Maybe.None(),
+        b: Maybe.None()
+      };
+
+      assert.deepEqual(expected, EtUtils.perLammitettyNettoala(et, values));
+    });
+  });
+
+  describe('omavaraisenergiat', () => {
+    it('should return unnested omavaraisenergiat', () => {
+      const et = {
+        tulokset: {
+          'uusiutuvat-omavaraisenergiat': {
+            aurinkosahko: Either.Right(Maybe.Some(1)),
+            tuulisahko: Either.Right(Maybe.Some(1)),
+            aurinkolampo: Either.Right(Maybe.Some(1)),
+            muulampo: Either.Right(Maybe.Some(1)),
+            muusahko: Either.Right(Maybe.Some(1)),
+            lampopumppu: Either.Right(Maybe.Some(1))
+          }
+        }
+      };
+
+      const expected = {
+        aurinkosahko: Maybe.Some(1),
+        tuulisahko: Maybe.Some(1),
+        aurinkolampo: Maybe.Some(1),
+        muulampo: Maybe.Some(1),
+        muusahko: Maybe.Some(1),
+        lampopumppu: Maybe.Some(1)
+      };
+
+      assert.deepEqual(expected, EtUtils.omavaraisenergiat(et));
+    });
+  });
 });

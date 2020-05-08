@@ -29,11 +29,10 @@
     R.map(R.map(Math.ceil))
   )(painotetutOstoenergiankulutukset);
 
-  $: painotetutOstoenergiankulutuksetPerNelio = R.compose(
-    R.map(R.__, painotetutOstoenergiankulutukset),
-    R.lift(R.flip(R.divide)),
-    EtUtils.energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])
-  )(energiatodistus);
+  $: painotetutOstoenergiankulutuksetPerNelio = EtUtils.perLammitettyNettoala(
+    energiatodistus,
+    painotetutOstoenergiankulutukset
+  );
 </script>
 
 <H3
@@ -57,12 +56,8 @@
           {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella_painotettu_energiankulutus')}
         </div>
         <div class="flex flex-row justify-around">
-          <span>
-            {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kwhevuosi')}
-          </span>
-          <span>
-            {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kwhem2vuosi')}
-          </span>
+          <span>{$_('energiatodistus.tulokset.kwhevuosi')}</span>
+          <span>{$_('energiatodistus.tulokset.kwhem2vuosi')}</span>
         </div>
       </th>
     </tr>
