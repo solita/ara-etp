@@ -379,11 +379,11 @@ export const sumEtValues = R.compose(
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
 export const energiamuotokertoimet2018 = () => ({
-  'fossiilinen-polttoaine': 1,
-  kaukojaahdytys: 0.28,
-  kaukolampo: 0.5,
-  sahko: 1.2,
-  'uusiutuva-polttoaine': 0.5
+  'fossiilinen-polttoaine': Maybe.Some(1),
+  kaukojaahdytys: Maybe.Some(0.28),
+  kaukolampo: Maybe.Some(0.5),
+  sahko: Maybe.Some(1.2),
+  'uusiutuva-polttoaine': Maybe.Some(0.5)
 });
 
 const fieldsWithErittelyOstoenergia = [
@@ -405,8 +405,8 @@ export const ostoenergiat = R.compose(
   kaytettavatEnergiamuodot
 );
 
-export const multiplyOstoenergia = R.curry((kerroin, ostoenergiamaara) =>
-  R.map(R.multiply(kerroin), ostoenergiamaara)
+export const multiplyWithKerroin = R.curry((kerroin, ostoenergiamaara) =>
+  R.lift(R.multiply)(kerroin, ostoenergiamaara)
 );
 
 export const perLammitettyNettoala = R.curry((energiatodistus, values) =>
@@ -500,4 +500,40 @@ export const toteutuneetOstoenergiat = R.compose(
   R.map(unnestValidation),
   R.pick(fieldsWithToteutunutOstoenergia),
   toteutunutOstoenergia
+);
+
+const fieldsWithOstettuPolttoaine = [
+  'kevyt-polttooljy',
+  'pilkkeet-havu-sekapuu',
+  'pilkkeet-koivu',
+  'puupelletit'
+];
+
+const ostetutPolttoaineet = R.path([
+  'toteutunut-ostoenergiankulutus',
+  'ostetut-polttoaineet'
+]);
+
+export const polttoaineet = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithOstettuPolttoaine),
+  ostetutPolttoaineet
+);
+
+const vapaaPolttoaine = R.path([
+  'toteutunut-ostoenergiankulutus',
+  'ostetut-polttoaineet',
+  'vapaa'
+]);
+
+export const vapaatPolttoaineet = R.compose(
+  R.map(unnestValidation),
+  R.map(R.prop('maara-vuodessa')),
+  vapaaPolttoaine
+);
+
+export const vapaatKertoimet = R.compose(
+  R.map(unnestValidation),
+  R.map(R.prop('muunnoskerroin')),
+  vapaaPolttoaine
 );

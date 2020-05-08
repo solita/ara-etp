@@ -316,28 +316,28 @@ describe('Energiatodistus Utils: ', () => {
     });
   });
 
-  describe('multiplyOstoenergia', () => {
+  describe('multiplyWithKerroin', () => {
     it('should return Some with proper values', () => {
       const ostoenergiamaara = Maybe.Some(10);
-      const kerroin = 2;
+      const kerroin = Maybe.Some(2);
 
       const expected = Maybe.Some(20);
 
       assert.deepEqual(
         expected,
-        EtUtils.multiplyOstoenergia(kerroin, ostoenergiamaara)
+        EtUtils.multiplyWithKerroin(kerroin, ostoenergiamaara)
       );
     });
 
     it('should return None with None ostoenergiamaara', () => {
       const ostoenergiamaara = Maybe.None();
-      const kerroin = 2;
+      const kerroin = Maybe.Some(2);
 
       const expected = Maybe.None();
 
       assert.deepEqual(
         expected,
-        EtUtils.multiplyOstoenergia(kerroin, ostoenergiamaara)
+        EtUtils.multiplyWithKerroin(kerroin, ostoenergiamaara)
       );
     });
   });
@@ -527,6 +527,98 @@ describe('Energiatodistus Utils: ', () => {
       };
 
       assert.deepEqual(expected, EtUtils.toteutuneetOstoenergiat(et));
+    });
+  });
+
+  describe('polttoaineet', () => {
+    it('should return unnested toteutuneet ostoenergiat', () => {
+      const et = {
+        'toteutunut-ostoenergiankulutus': {
+          'ostetut-polttoaineet': {
+            'kevyt-polttooljy': Either.Right(Maybe.Some(1)),
+            'pilkkeet-havu-sekapuu': Either.Right(Maybe.Some(1)),
+            'pilkkeet-koivu': Either.Right(Maybe.Some(1)),
+            puupelletit: Either.Right(Maybe.Some(1))
+          }
+        }
+      };
+
+      const expected = {
+        'kevyt-polttooljy': Maybe.Some(1),
+        'pilkkeet-havu-sekapuu': Maybe.Some(1),
+        'pilkkeet-koivu': Maybe.Some(1),
+        puupelletit: Maybe.Some(1)
+      };
+
+      assert.deepEqual(expected, EtUtils.polttoaineet(et));
+    });
+  });
+
+  describe('vapaatPolttoaineet', () => {
+    it('should return unnested toteutuneet ostoenergiat', () => {
+      const et = {
+        'toteutunut-ostoenergiankulutus': {
+          'ostetut-polttoaineet': {
+            vapaa: [
+              {
+                'maara-vuodessa': Either.Right(Maybe.Some(1))
+              },
+              {
+                'maara-vuodessa': Either.Right(Maybe.Some(2))
+              },
+              {
+                'maara-vuodessa': Either.Right(Maybe.Some(3))
+              },
+              {
+                'maara-vuodessa': Either.Right(Maybe.Some(4))
+              }
+            ]
+          }
+        }
+      };
+
+      const expected = [
+        Maybe.Some(1),
+        Maybe.Some(2),
+        Maybe.Some(3),
+        Maybe.Some(4)
+      ];
+
+      assert.deepEqual(expected, EtUtils.vapaatPolttoaineet(et));
+    });
+  });
+
+  describe('vapaatKertoimet', () => {
+    it('should return unnested toteutuneet ostoenergiat', () => {
+      const et = {
+        'toteutunut-ostoenergiankulutus': {
+          'ostetut-polttoaineet': {
+            vapaa: [
+              {
+                muunnoskerroin: Either.Right(Maybe.Some(1))
+              },
+              {
+                muunnoskerroin: Either.Right(Maybe.Some(2))
+              },
+              {
+                muunnoskerroin: Either.Right(Maybe.Some(3))
+              },
+              {
+                muunnoskerroin: Either.Right(Maybe.Some(4))
+              }
+            ]
+          }
+        }
+      };
+
+      const expected = [
+        Maybe.Some(1),
+        Maybe.Some(2),
+        Maybe.Some(3),
+        Maybe.Some(4)
+      ];
+
+      assert.deepEqual(expected, EtUtils.vapaatKertoimet(et));
     });
   });
 });

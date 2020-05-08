@@ -1,5 +1,7 @@
 <script>
   import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
@@ -9,12 +11,33 @@
   export let schema;
   export let energiatodistus;
 
-  const muunnoskerroin = {
-    'kevyt-polttooljy': 10,
-    'pilkkeet-havu-sekapuu': 1300,
-    'pilkkeet-koivu': 1700,
-    puupelletit: 4.7
+  const muunnoskertoimet = {
+    'kevyt-polttooljy': Maybe.Some(10),
+    'pilkkeet-havu-sekapuu': Maybe.Some(1300),
+    'pilkkeet-koivu': Maybe.Some(1700),
+    puupelletit: Maybe.Some(4.7)
   };
+
+  $: muunnoskerrotutPolttoaineet = R.compose(
+    R.map(R.apply(EtUtils.multiplyWithKerroin)),
+    R.mergeWith(Array.of, muunnoskertoimet),
+    EtUtils.polttoaineet
+  )(energiatodistus);
+
+  $: muunnoskerrotutPolttoaineetPerLammitettyNettoala = EtUtils.perLammitettyNettoala(
+    energiatodistus,
+    muunnoskerrotutPolttoaineet
+  );
+
+  $: muunnoskerrotutVapaatPolttoaineet = R.compose(
+    R.map(R.apply(EtUtils.multiplyWithKerroin)),
+    R.converge(R.zip, [EtUtils.vapaatKertoimet, EtUtils.vapaatPolttoaineet])
+  )(energiatodistus);
+
+  $: muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala = EtUtils.perLammitettyNettoala(
+    energiatodistus,
+    muunnoskerrotutVapaatPolttoaineet
+  );
 </script>
 
 <H3
@@ -59,9 +82,13 @@
         <td class="et-table--td">
           {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`)}
         </td>
-        <td class="et-table--td">{muunnoskerroin[polttoaine]}</td>
-        <td class="et-table--td" />
-        <td class="et-table--td" />
+        <td class="et-table--td">{Maybe.get(muunnoskertoimet[polttoaine])}</td>
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
+        </td>
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
+        </td>
       </tr>
     {/each}
     {#each R.path(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'], schema) as vapaa, index}
@@ -98,8 +125,12 @@
             bind:model={energiatodistus}
             path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'muunnoskerroin']} />
         </td>
-        <td class="et-table--td" />
-        <td class="et-table--td" />
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}
+        </td>
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.nth(index) )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
+        </td>
       </tr>
     {/each}
   </tbody>

@@ -20,7 +20,7 @@
   $: ostoenergiaSum = EtUtils.sumEtValues(ostoenergiat);
 
   $: painotetutOstoenergiankulutukset = R.compose(
-    R.map(R.apply(EtUtils.multiplyOstoenergia)),
+    R.map(R.apply(EtUtils.multiplyWithKerroin)),
     R.mergeWith(Array.of)
   )(energiamuotokertoimet, ostoenergiat);
 
@@ -77,7 +77,7 @@
             path={['tulokset', 'kaytettavat-energiamuodot', energiamuoto]} />
         </td>
         <td class="et-table--td">
-          {R.prop(energiamuoto, energiamuotokertoimet)}
+          {R.compose( Maybe.get, R.prop(energiamuoto) )(energiamuotokertoimet)}
         </td>
         <td class="et-table--td et-table--td__fifth">
           {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(energiamuoto) )(painotetutOstoenergiankulutukset)}
