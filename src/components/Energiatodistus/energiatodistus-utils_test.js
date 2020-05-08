@@ -507,4 +507,26 @@ describe('Energiatodistus Utils: ', () => {
       assert.deepEqual(expected, EtUtils.ostetutEnergiamuodot(et));
     });
   });
+
+  describe('toteutuneetOstoenergiat', () => {
+    it('should return unnested toteutuneet ostoenergiat', () => {
+      const et = {
+        'toteutunut-ostoenergiankulutus': {
+          'sahko-vuosikulutus-yhteensa': Either.Right(Maybe.Some(1)),
+          'kaukolampo-vuosikulutus-yhteensa': Either.Right(Maybe.Some(1)),
+          'polttoaineet-vuosikulutus-yhteensa': Either.Right(Maybe.Some(1)),
+          'kaukojaahdytys-vuosikulutus-yhteensa': Either.Right(Maybe.Some(1))
+        }
+      };
+
+      const expected = {
+        'sahko-vuosikulutus-yhteensa': Maybe.Some(1),
+        'kaukolampo-vuosikulutus-yhteensa': Maybe.Some(1),
+        'polttoaineet-vuosikulutus-yhteensa': Maybe.Some(1),
+        'kaukojaahdytys-vuosikulutus-yhteensa': Maybe.Some(1)
+      };
+
+      assert.deepEqual(expected, EtUtils.toteutuneetOstoenergiat(et));
+    });
+  });
 });

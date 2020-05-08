@@ -486,3 +486,18 @@ export const ostetutEnergiamuodot = R.compose(
   R.pick(fieldsWithOstoenergia),
   ostettuEnergia
 );
+
+const fieldsWithToteutunutOstoenergia = [
+  'sahko-vuosikulutus-yhteensa',
+  'kaukolampo-vuosikulutus-yhteensa',
+  'polttoaineet-vuosikulutus-yhteensa',
+  'kaukojaahdytys-vuosikulutus-yhteensa'
+];
+
+const toteutunutOstoenergia = R.path(['toteutunut-ostoenergiankulutus']);
+
+export const toteutuneetOstoenergiat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithToteutunutOstoenergia),
+  toteutunutOstoenergia
+);

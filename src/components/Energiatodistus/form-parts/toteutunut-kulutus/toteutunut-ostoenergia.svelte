@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
@@ -9,6 +10,20 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  $: ostoenergiat = EtUtils.toteutuneetOstoenergiat(energiatodistus);
+
+  $: ostoenergiatSum = EtUtils.sumEtValues(ostoenergiat);
+
+  $: toteutuneetOstoenergiatPerLammitettyNettoala = EtUtils.perLammitettyNettoala(
+    energiatodistus,
+    ostoenergiat
+  );
+
+  $: toteutuneetOstoenergiatPerLammitettyNettoalaSum = R.compose(
+    EtUtils.sumEtValues,
+    R.map(R.map(Math.ceil))
+  )(toteutuneetOstoenergiatPerLammitettyNettoala);
 </script>
 
 <H3
@@ -40,12 +55,16 @@
         <td class="et-table--td" />
         <td class="et-table--td" />
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.path([
-              'toteutunut-ostoenergiankulutus',
-              energiamuoto
-            ]) )(energiatodistus)}
+          <Input
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['toteutunut-ostoenergiankulutus', energiamuoto]} />
         </td>
-        <td class="et-table--td" />
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(energiamuoto) )(toteutuneetOstoenergiatPerLammitettyNettoala)}
+        </td>
       </tr>
     {/each}
     <tr class="et-table--tr border-t-1 border-disabled">
@@ -53,8 +72,12 @@
       <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td" />
-      <td class="et-table--td" />
-      <td class="et-table--td" />
+      <td class="et-table--td">
+        {R.compose( Maybe.get, R.map(Math.round) )(ostoenergiatSum)}
+      </td>
+      <td class="et-table--td">
+        {Maybe.get(toteutuneetOstoenergiatPerLammitettyNettoalaSum)}
+      </td>
     </tr>
   </tbody>
 </table>
