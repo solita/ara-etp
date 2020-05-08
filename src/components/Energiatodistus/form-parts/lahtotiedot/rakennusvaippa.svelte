@@ -1,4 +1,11 @@
 <script>
+  import * as R from 'ramda';
+
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+
+  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+
   import { _ } from '@Language/i18n';
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -43,6 +50,7 @@
             <Input
               {disabled}
               {schema}
+              center={true}
               compact={true}
               bind:model={energiatodistus}
               path={['lahtotiedot', 'rakennusvaippa', vaippa, 'ala']} />
@@ -51,6 +59,7 @@
             <Input
               {disabled}
               {schema}
+              center={true}
               compact={true}
               bind:model={energiatodistus}
               path={['lahtotiedot', 'rakennusvaippa', vaippa, 'U']} />
@@ -69,6 +78,7 @@
           <Input
             {disabled}
             {schema}
+            center={true}
             compact={true}
             bind:model={energiatodistus}
             path={['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA']} />

@@ -14,6 +14,7 @@
   export let autocomplete = 'off';
   export let disabled = false;
   export let compact = false;
+  export let center = false;
 
   export let model = { empty: '' };
   export let lens = R.lensProp('empty');
@@ -106,6 +107,10 @@
     @apply w-full relative font-medium py-1;
   }
 
+  input.center {
+    @apply text-center;
+  }
+
   input:focus {
     @apply outline-none;
   }
@@ -140,6 +145,7 @@
     {name}
     {disabled}
     class="input"
+    class:center
     class:error={highlightError}
     type="text"
     {autocomplete}
