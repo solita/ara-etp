@@ -65,23 +65,6 @@ export const deserialize = R.evolve({
   toimintaalue: Maybe.fromNull
 });
 
-export const serialize = R.compose(
-  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
-  R.omit(['id', 'email', 'login'])
-);
-
-export const serializeForLaatija = R.compose(
-  R.omit([
-    'passivoitu',
-    'patevyystaso',
-    'toteamispaivamaara',
-    'toteaja',
-    'laatimiskielto',
-    'rooli'
-  ]),
-  serialize
-);
-
 export const serializeImport = R.evolve({
   toteamispaivamaara: date => dfns.format(date, 'yyyy-MM-dd')
 });
@@ -122,25 +105,6 @@ export const emptyLaatija = () =>
     julkinenpuhelin: false,
     login: Maybe.None()
   });
-
-export const getLaatijaByIdFuture = R.curry((fetch, id) =>
-  R.compose(
-    R.map(R.compose(deserialize, laatijaFromKayttaja)),
-    Kayttaja.kayttajaAndLaatijaFuture(fetch)
-  )(id)
-);
-
-export const putLaatijaByIdFuture = R.curry((rooli, fetch, id, laatija) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Kayttaja.putKayttajanLaatijaFuture(fetch, id),
-    R.ifElse(
-      R.equals(2),
-      R.always(serialize),
-      R.always(serializeForLaatija)
-    )(rooli)
-  )(laatija)
-);
 
 export const putLaatijatFuture = R.curry((fetch, laatijat) =>
   R.compose(

@@ -7,7 +7,7 @@
 
   const routeForKayttaja = kayttaja => {
     if (kayttaja.rooli === 0) {
-      replace(`/laatija/${kayttaja.id}`);
+      replace(`/kayttaja/${kayttaja.id}`);
     } else {
       console.log('Roolia ei tuettu');
     }

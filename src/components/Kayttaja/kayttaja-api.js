@@ -5,6 +5,7 @@ import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
 import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
+import * as kayttajat from "@Utility/kayttajat";
 
 const deserialize = R.evolve({
   login: R.compose(R.map(Date.parse), Maybe.fromNull),
@@ -33,4 +34,25 @@ export const getLaatijaById = R.curry((fetch, id) =>
     Future.encaseP(Fetch.getFetch(fetch)),
     url.laatija
   )(id));
+
+export const serialize = R.compose(
+  R.omit(['id', 'email', 'login', 'cognitoid', 'ensitallennus'])
+);
+
+export const serializeForNonAdmin = R.compose(
+  R.omit(['rooli', 'passivoitu']),
+  serialize
+);
+
+export const putKayttajaById = R.curry((rooli, fetch, id, laatija) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.id(id))),
+    R.ifElse(
+      kayttajat.isPaakayttaja,
+      R.always(serialize),
+      R.always(serializeForNonAdmin)
+    )(rooli)
+  )(laatija)
+);
 

@@ -2,12 +2,42 @@ import * as R from "ramda";
 import * as Fetch from "@Utility/fetch-utils";
 import * as Future from "@Utility/future-utils";
 import * as yritysApi from "@Component/Yritys/yritys-utils"
+import * as Either from "@Utility/either-utils";
+import * as Maybe from "@Utility/maybe-utils";
+import * as kayttajat from "@Utility/kayttajat";
 
 export const url = {
   laatijat: '/api/private/laatijat',
   laatija: id => `${url.laatijat}/${id}`,
   yritykset: id => `${url.laatija(id)}/yritykset`
 };
+
+export const serialize = R.compose(
+  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
+  R.omit(['id', 'email', 'login', 'rooli', 'passivoitu'])
+);
+
+export const serializeForLaatija = R.compose(
+  R.omit([
+    'patevyystaso',
+    'toteamispaivamaara',
+    'toteaja',
+    'laatimiskielto'
+  ]),
+  serialize
+);
+
+export const putLaatijaById = R.curry((rooli, fetch, id, laatija) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.laatija(id))),
+    R.ifElse(
+      kayttajat.isPaakayttaja,
+      R.always(serialize),
+      R.always(serializeForLaatija)
+    )(rooli)
+  )(laatija)
+);
 
 export const getYritykset = R.curry((fetch, id) =>
   R.compose(

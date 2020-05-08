@@ -10,8 +10,8 @@
   import * as api from './kayttaja-api';
   import * as geoApi from '@Component/Geo/geo-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
-  import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
 
@@ -29,29 +29,43 @@
 
   const toggleOverlay = value => () => (overlay = value);
 
-  $: submit = R.compose(
-    Future.forkBothDiscardFirst(
+  const fork = type =>
+    Future.fork(
       R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Kayttaja', 'error'),
-        R.always($_('laatija.messages.save-error'))
+          R.tap(toggleOverlay(false)),
+          flashMessageStore.add('Kayttaja', 'error'),
+          R.always($_(`${type}.messages.save-error`))
       ),
       R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Kayttaja', 'success'),
-        R.always($_('laatija.messages.save-success'))
+          R.tap(toggleOverlay(false)),
+          flashMessageStore.add('Kayttaja', 'success'),
+          R.always($_(`${type}.messages.save-success`))
       )
-    ),
-    Future.delay(500),
-    LaatijaUtils.putLaatijaByIdFuture(
+    );
+
+  $: submitLaatija = R.compose(
+    fork('laatija'),
+    R.tap(toggleOverlay(true)),
+    laatijaApi.putLaatijaById(
       R.compose(
         Maybe.orSome(0),
         R.map(R.prop('rooli'))
       )($currentUserStore),
       fetch,
       params.id
-    ),
-    R.tap(toggleOverlay(true))
+    ));
+
+  $: submitKayttaja = R.compose(
+      fork('kayttaja'),
+      kayttajaApi.putKayttajaById(
+          R.compose(
+              Maybe.orSome(0),
+              R.map(R.prop('rooli'))
+          )($currentUserStore),
+          fetch,
+          params.id
+      ),
+      R.tap(toggleOverlay(true))
   );
 
   $: R.compose(
@@ -75,7 +89,7 @@
       countries: geoApi.countries,
       toimintaalueet: geoApi.toimintaalueet,
       patevyydet: laatijaApi.patevyydet})),
-    R.juxt([api.getKayttajaById(fetch), api.getLaatijaById(fetch)]),
+    R.juxt([kayttajaApi.getKayttajaById(fetch), kayttajaApi.getLaatijaById(fetch)]),
     R.prop('id')
   )(params);
 
@@ -96,11 +110,11 @@
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(laatija)}
-      <LaatijaForm {submit}
+      <LaatijaForm submit={submitLaatija}
                    luokittelut={Maybe.get(luokittelut)}
                    laatija={mergeKayttajaLaatija(Maybe.get(kayttaja), Maybe.get(laatija))} />
     {:else if Maybe.isSome(kayttaja)}
-      <KayttajaForm {submit} kayttaja={Maybe.get(kayttaja)} />
+      <KayttajaForm submit={submitKayttaja} kayttaja={Maybe.get(kayttaja)} />
     {/if}
   </div>
   <div slot="overlay-content">
