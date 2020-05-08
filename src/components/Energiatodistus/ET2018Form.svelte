@@ -161,6 +161,7 @@
       <Input
         {disabled}
         {schema}
+        center={false}
         bind:model={energiatodistus}
         path={['perustiedot', 'yritys', 'nimi']} />
     </div>
@@ -169,6 +170,7 @@
       <Input
         {disabled}
         {schema}
+        center={false}
         bind:model={energiatodistus}
         path={['perustiedot', 'tilaaja']} />
     </div>
@@ -218,6 +220,7 @@
     <Input
       {disabled}
       {schema}
+      center={false}
       bind:model={energiatodistus}
       path={['lahtotiedot', 'lammitetty-nettoala']} />
   </div>

@@ -15,6 +15,7 @@
   <Input
     {disabled}
     {schema}
+    center={false}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'lammitys', 'kuvaus-fi']} />
 </div>

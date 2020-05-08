@@ -14,6 +14,7 @@
   <Input
     {disabled}
     {schema}
+    center={false}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'jaahdytysjarjestelma', 'jaahdytyskauden-painotettu-kylmakerroin']} />
 </div>

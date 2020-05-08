@@ -15,6 +15,7 @@
   <Input
     {disabled}
     {schema}
+    center={false}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi']} />
 </div>
@@ -123,6 +124,7 @@
   <Input
     {disabled}
     {schema}
+    center={false}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'ilmanvaihto', 'lto-vuosihyotysuhde']} />
 </div>

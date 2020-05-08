@@ -29,6 +29,7 @@
     <Input
       {disabled}
       {schema}
+      center={false}
       bind:model={energiatodistus}
       path={['huomiot', huomio, 'toimenpide', index, 'nimi-fi']} />
   </div>

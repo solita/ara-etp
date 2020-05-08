@@ -19,6 +19,8 @@
   export let kayttotarkoitusluokat;
   export let alakayttotarkoitusluokat;
 
+  const center = false;
+
   let kayttotarkoitusluokkaId = Maybe.None();
   $: if (
     kayttotarkoitusluokkaId.isSome() &&
@@ -60,6 +62,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'nimi']} />
   </div>
@@ -68,6 +71,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'valmistumisvuosi']} />
   </div>
@@ -78,6 +82,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'rakennusosa']} />
   </div>
@@ -88,6 +93,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'katuosoite-fi']} />
   </div>
@@ -96,6 +102,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'postinumero']} />
   </div>
@@ -106,6 +113,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'rakennustunnus']} />
   </div>
@@ -114,6 +122,7 @@
     <Input
       {disabled}
       {schema}
+      {center}
       bind:model={energiatodistus}
       path={['perustiedot', 'kiinteistotunnus']} />
   </div>

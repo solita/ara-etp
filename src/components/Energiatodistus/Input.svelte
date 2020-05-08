@@ -13,7 +13,7 @@
   export let required = false;
   export let disabled = false;
   export let compact = false;
-  export let center = false;
+  export let center = true;
 
   const index = R.compose(
     Maybe.fromNull,
