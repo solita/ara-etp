@@ -15,8 +15,6 @@
     EtUtils.perLammitettyNettoala(energiatodistus),
     EtUtils.omavaraisenergiat
   )(energiatodistus);
-
-  $: console.log(omavaraisenergiatPerLammitettyNettoala);
 </script>
 
 <H3

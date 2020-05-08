@@ -451,3 +451,19 @@ export const nettotarpeet = R.compose(
   R.pick(fieldsWithNettotarve),
   nettotarve
 );
+
+const fieldsWithLampokuorma = [
+  'aurinko',
+  'ihmiset',
+  'kuluttajalaitteet',
+  'valaistus',
+  'kvesi'
+];
+
+const lampokuormat = R.path(['tulokset', 'lampokuormat']);
+
+export const kuormat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithLampokuorma),
+  lampokuormat
+);

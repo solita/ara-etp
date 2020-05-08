@@ -455,4 +455,30 @@ describe('Energiatodistus Utils: ', () => {
       assert.deepEqual(expected, EtUtils.nettotarpeet(et));
     });
   });
+
+  describe('kuormat', () => {
+    it('should return unnested kuormat', () => {
+      const et = {
+        tulokset: {
+          lampokuormat: {
+            aurinko: Either.Right(Maybe.Some(1)),
+            ihmiset: Either.Right(Maybe.Some(1)),
+            kuluttajalaitteet: Either.Right(Maybe.Some(1)),
+            valaistus: Either.Right(Maybe.Some(1)),
+            kvesi: Either.Right(Maybe.Some(1))
+          }
+        }
+      };
+
+      const expected = {
+        aurinko: Maybe.Some(1),
+        ihmiset: Maybe.Some(1),
+        kuluttajalaitteet: Maybe.Some(1),
+        valaistus: Maybe.Some(1),
+        kvesi: Maybe.Some(1)
+      };
+
+      assert.deepEqual(expected, EtUtils.kuormat(et));
+    });
+  });
 });
