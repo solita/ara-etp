@@ -431,4 +431,28 @@ describe('Energiatodistus Utils: ', () => {
       assert.deepEqual(expected, EtUtils.omavaraisenergiat(et));
     });
   });
+
+  describe('nettotarpeet', () => {
+    it('should return unnested nettotarpeet', () => {
+      const et = {
+        tulokset: {
+          nettotarve: {
+            'tilojen-lammitys-vuosikulutus': Either.Right(Maybe.Some(1)),
+            'ilmanvaihdon-lammitys-vuosikulutus': Either.Right(Maybe.Some(1)),
+            'kayttoveden-valmistus-vuosikulutus': Either.Right(Maybe.Some(1)),
+            'jaahdytys-vuosikulutus': Either.Right(Maybe.Some(1))
+          }
+        }
+      };
+
+      const expected = {
+        'tilojen-lammitys-vuosikulutus': Maybe.Some(1),
+        'ilmanvaihdon-lammitys-vuosikulutus': Maybe.Some(1),
+        'kayttoveden-valmistus-vuosikulutus': Maybe.Some(1),
+        'jaahdytys-vuosikulutus': Maybe.Some(1)
+      };
+
+      assert.deepEqual(expected, EtUtils.nettotarpeet(et));
+    });
+  });
 });

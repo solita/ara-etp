@@ -436,3 +436,18 @@ export const omavaraisenergiat = R.compose(
   R.pick(fieldsWithUusiutuvaOmavaraisenergia),
   uusiutuvatOmavaraisenergiat
 );
+
+const fieldsWithNettotarve = [
+  'tilojen-lammitys-vuosikulutus',
+  'ilmanvaihdon-lammitys-vuosikulutus',
+  'kayttoveden-valmistus-vuosikulutus',
+  'jaahdytys-vuosikulutus'
+];
+
+const nettotarve = R.path(['tulokset', 'nettotarve']);
+
+export const nettotarpeet = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithNettotarve),
+  nettotarve
+);
