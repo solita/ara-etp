@@ -7,6 +7,8 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  const center = false;
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lkvn-kaytto.header')} />
@@ -14,6 +16,7 @@
   <Input
     {disabled}
     {schema}
+    {center}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'lkvn-kaytto', 'vuosikulutus']} />
 </div>
@@ -22,6 +25,7 @@
   <Input
     {disabled}
     {schema}
+    {center}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'lkvn-kaytto', 'kulutus-per-nelio']} />
 </div>

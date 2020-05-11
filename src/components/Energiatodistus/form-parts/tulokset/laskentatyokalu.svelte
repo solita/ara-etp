@@ -17,6 +17,7 @@
   <Input
     {disabled}
     {schema}
+    center={false}
     bind:model={energiatodistus}
     path={['tulokset', 'laskentatyokalu']} />
 </div>

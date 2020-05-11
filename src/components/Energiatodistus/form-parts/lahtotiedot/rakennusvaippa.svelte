@@ -21,6 +21,7 @@
   <Input
     {disabled}
     {schema}
+    center={false}
     bind:model={energiatodistus}
     path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
 </div>
@@ -50,7 +51,6 @@
             <Input
               {disabled}
               {schema}
-              center={true}
               compact={true}
               bind:model={energiatodistus}
               path={['lahtotiedot', 'rakennusvaippa', vaippa, 'ala']} />
@@ -59,7 +59,6 @@
             <Input
               {disabled}
               {schema}
-              center={true}
               compact={true}
               bind:model={energiatodistus}
               path={['lahtotiedot', 'rakennusvaippa', vaippa, 'U']} />
@@ -78,7 +77,6 @@
           <Input
             {disabled}
             {schema}
-            center={true}
             compact={true}
             bind:model={energiatodistus}
             path={['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA']} />
