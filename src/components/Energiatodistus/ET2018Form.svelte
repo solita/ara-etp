@@ -212,7 +212,7 @@
   <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
 
   <HR />
-  <H2 text="E-luvun laskennan lähtotiedot" />
+  <H2 text="Lähtötiedot" />
 
   <div class="w-1/5 py-4 mb-4">
     <Input
