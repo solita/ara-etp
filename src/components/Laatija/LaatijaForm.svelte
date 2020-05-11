@@ -92,7 +92,8 @@
       flashMessageStore.flush();
       submit(laatija);
     } else {
-      flashMessageStore.add('Laatija', 'error');
+      flashMessageStore.add('Kayttaja', 'error',
+          $_('laatija.messages.validation-error'));
     }
   }
 
