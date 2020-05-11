@@ -1,9 +1,21 @@
 <script>
+  import Router from 'svelte-spa-router';
+
+  import ExistingKayttaja from './ExistingKayttaja';
+  import FlashMessage from '@Component/FlashMessage/FlashMessage';
+
+  import {
+    flashMessageStore
+  } from '@/stores';
+
+  const prefix = '/kayttaja';
+  const routes = {
+    '/:id': ExistingKayttaja
+  };
 
 </script>
 
-<style>
+<svelte:window on:hashchange={_ => flashMessageStore.flush('Kayttaja')} />
 
-</style>
-
-<span>Tähän tulee käyttäjät</span>
+<Router {routes} {prefix} />
+<FlashMessage module={'Kayttaja'} />

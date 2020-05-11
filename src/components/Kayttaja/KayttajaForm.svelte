@@ -1,0 +1,123 @@
+<script>
+  import * as R from 'ramda';
+
+  import { locale, _ } from '@Language/i18n';
+
+  import H1 from '@Component/H/H1';
+  import Button from '@Component/Button/Button';
+  import Input from '@Component/Input/Input';
+  import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
+  import {
+    flashMessageStore,
+    currentUserStore,
+  } from '@/stores';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as validation from '@Utility/validation';
+  import * as formats from '@Utility/formats';
+
+  const formParsers = LaatijaUtils.formParsers();
+  const formSchema = LaatijaUtils.formSchema();
+
+  export let kayttaja;
+  export let submit;
+
+  const isValidForm = R.compose(
+    R.all(Either.isRight),
+    R.filter(Either.isEither),
+    R.values,
+    validation.validateModelObject(formSchema));
+
+</script>
+
+<style type="text/postcss">
+  .lastlogin {
+    @apply text-secondary mb-4;
+  }
+</style>
+
+<form
+  on:submit|preventDefault={_ => {
+    if (isValidForm(kayttaja)) {
+      flashMessageStore.flush();
+      submit(kayttaja);
+    } else {
+      flashMessageStore.add('Kayttaja', 'error');
+    }
+  }}>
+  <div class="w-full mt-3">
+    <H1 text="Perustiedot" />
+    <span class="lastlogin">
+      {R.compose( Maybe.orSome($_('kayttaja.no-login')), Maybe.map(R.concat($_('kayttaja.last-login') + ' ')), Maybe.map(formats.formatTimeInstant) )(kayttaja.login)}
+    </span>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'etunimi'}
+          name={'etunimi'}
+          label={$_('kayttaja.etunimi')}
+          required={true}
+          bind:model={kayttaja}
+          lens={R.lensProp('etunimi')}
+          parse={formParsers.etunimi}
+          validators={formSchema.etunimi}
+          i18n={$_} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'sukunimi'}
+          name={'sukunimi'}
+          label={$_('kayttaja.sukunimi')}
+          required={true}
+          bind:model={kayttaja}
+          lens={R.lensProp('sukunimi')}
+          parse={formParsers.sukunimi}
+          validators={formSchema.sukunimi}
+          i18n={$_} />
+      </div>
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'sahkoposti'}
+          name={'sahkoposti'}
+          label={`${$_('kayttaja.sahkoposti')}(${R.toLower($_('kayttaja.kayttajatunnus'))})`}
+          required={true}
+          disabled={true}
+          bind:model={kayttaja}
+          lens={R.lensProp('email')}
+          parse={formParsers.email}
+          validators={formSchema.email}
+          i18n={$_} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'puhelinnumero'}
+          name={'puhelinnumero'}
+          label={$_('kayttaja.puhelinnumero')}
+          required={true}
+          bind:model={kayttaja}
+          lens={R.lensProp('puhelin')}
+          parse={formParsers.puhelin}
+          validators={formSchema.puhelin}
+          i18n={$_} />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex -mx-4 mt-20">
+    <div class="px-4">
+      <Button type={'submit'} text={$_('tallenna')} />
+    </div>
+    <div class="px-4">
+      <Button
+        on:click={event => {
+          event.preventDefault();
+          window.location.reload();
+        }}
+        text={$_('peruuta')}
+        type={'reset'}
+        style={'secondary'} />
+    </div>
+  </div>
+</form>

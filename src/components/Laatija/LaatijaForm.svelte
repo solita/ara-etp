@@ -13,16 +13,16 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
   import ToimintaalueetChecklist from '@Component/ToimintaalueetChecklist/ToimintaalueetChecklist';
+  import * as laatijaApi from './laatija-api';
   import * as LaatijaUtils from './laatija-utils';
+
   import {
-    countryStore,
-    toimintaAlueetStore,
-    flashMessageStore,
     currentUserStore,
-    patevyydetStore
+    flashMessageStore
   } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
+  import * as Future from '@Utility/future-utils';
   import * as country from '@Component/Geo/country-utils';
   import * as Validation from '@Utility/validation';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
@@ -34,44 +34,43 @@
   const formSchema = LaatijaUtils.formSchema();
 
   export let laatija;
+  export let luokittelut;
   export let submit;
 
   const originalLaatija = R.clone(laatija);
 
-  const parseCountry = R.compose(
-    R.map(R.prop('id')),
-    R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
-    Either.leftMap(R.always(R.applyTo('connection-failure'))),
-    fn => $countryStore.map(fn),
-    country.findCountry
-  );
-
   $: labelLocale = LocaleUtils.label($locale);
 
-  $: formatCountry = R.compose(
-    Koodisto.koodiLocale(labelLocale),
-    R.map(R.__, $countryStore),
-    Koodisto.findFromKoodistoById
+  const parseCountry = R.compose(
+    Either.map(R.prop('id')),
+    Maybe.toEither(R.applyTo('country-not-found')),
+    country.findCountry(R.__, luokittelut.countries)
   );
 
-  $: countryNames = Either.foldRight([], R.map(labelLocale), $countryStore);
+  $: formatCountry = R.compose(
+    Maybe.orSome(''),
+    Maybe.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.countries)
+  );
 
-  $: toimintaAlueet = Either.foldRight([], R.pluck('id'), $toimintaAlueetStore);
+  $: countryNames = R.map(labelLocale, luokittelut.countries);
 
-  $: patevyydet = Either.foldRight([], R.pluck('id'), $patevyydetStore);
+  $: toimintaAlueetIds = R.pluck('id', luokittelut.toimintaalueet);
+
+  $: patevyydetIds = R.pluck('id', luokittelut.patevyydet);
 
   $: formatPatevyys = R.compose(
-    Koodisto.koodiLocale(labelLocale),
-    R.map(R.__, $patevyydetStore),
-    Koodisto.findFromKoodistoById
+    Maybe.orSome(''),
+    Maybe.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.patevyydet)
   );
 
   $: parsePatevyys = R.identity;
 
   $: formatToimintaAlue = R.compose(
-    Koodisto.koodiLocale(labelLocale),
-    R.map(R.__, $toimintaAlueetStore),
-    Koodisto.findFromKoodistoById
+    Maybe.orSome(''),
+    Maybe.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.toimintaalueet)
   );
 
   $: parseToimintaAlue = Maybe.fromNull;
@@ -81,6 +80,23 @@
     ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue),
     laatija
   );
+
+  const isValidForm = R.compose(
+    R.all(Either.isRight),
+    R.filter(Either.isEither),
+    R.values,
+    Validation.validateModelObject(formSchema));
+
+  const validateAndSubmit = _ => {
+    if (isValidForm(laatija)) {
+      flashMessageStore.flush();
+      submit(laatija);
+    } else {
+      flashMessageStore.add('Kayttaja', 'error',
+          $_('laatija.messages.validation-error'));
+    }
+  }
+
 </script>
 
 <style type="text/postcss">
@@ -90,26 +106,18 @@
 </style>
 
 <form
-  on:submit|preventDefault={_ => {
-    const isValidForm = R.compose( R.all(Either.isRight), R.filter(Either.isEither), R.values, Validation.validateModelObject(formSchema) )(laatija);
-    if (isValidForm) {
-      flashMessageStore.flush();
-      submit(laatija);
-    } else {
-      flashMessageStore.add('Laatija', 'error');
-    }
-  }}>
+  on:submit|preventDefault={validateAndSubmit}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <span class="lastlogin">
-      {R.compose( Maybe.orSome($_('laatija.no-login')), Maybe.map(R.concat($_('laatija.last-login') + ' ')), Maybe.map(formats.formatTimeInstant) )(laatija.login)}
+      {R.compose( Maybe.orSome($_('kayttaja.no-login')), Maybe.map(R.concat($_('kayttaja.last-login') + ' ')), Maybe.map(formats.formatTimeInstant) )(laatija.login)}
     </span>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'etunimi'}
           name={'etunimi'}
-          label={$_('laatija.etunimi')}
+          label={$_('kayttaja.etunimi')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('etunimi')}
@@ -121,7 +129,7 @@
         <Input
           id={'sukunimi'}
           name={'sukunimi'}
-          label={$_('laatija.sukunimi')}
+          label={$_('kayttaja.sukunimi')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('sukunimi')}
@@ -148,7 +156,7 @@
         <Input
           id={'sahkoposti'}
           name={'sahkoposti'}
-          label={`${$_('laatija.sahkoposti')}(${R.toLower($_('laatija.kayttajatunnus'))})`}
+          label={`${$_('kayttaja.sahkoposti')}(${R.toLower($_('kayttaja.kayttajatunnus'))})`}
           required={true}
           disabled={true}
           bind:model={laatija}
@@ -161,7 +169,7 @@
         <Input
           id={'puhelinnumero'}
           name={'puhelinnumero'}
-          label={$_('laatija.puhelinnumero')}
+          label={$_('kayttaja.puhelinnumero')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('puhelin')}
@@ -269,7 +277,7 @@
           disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
                   [2]
                 ) )) )($currentUserStore)}
-          items={patevyydet} />
+          items={patevyydetIds} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -280,14 +288,14 @@
           parse={parseToimintaAlue}
           bind:model={laatija}
           lens={R.lensProp('toimintaalue')}
-          items={toimintaAlueet} />
+          items={toimintaAlueetIds} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:py-0 w-full px-4 py-4 flex flex-col">
         <ToimintaalueetChecklist
           label={$_('laatija.muuttoimintaalueet')}
-          toimintaalueet={toimintaAlueet}
+          toimintaalueet={toimintaAlueetIds}
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
           format={formatToimintaAlue} />
@@ -302,13 +310,13 @@
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenpuhelin')}
-          label={$_('laatija.puhelinnumero')} />
+          label={$_('kayttaja.puhelinnumero')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenemail')}
-          label={$_('laatija.sahkoposti')} />
+          label={$_('kayttaja.sahkoposti')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox

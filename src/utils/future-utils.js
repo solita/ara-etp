@@ -5,6 +5,10 @@ export { Fluture };
 
 export const { resolve, reject, encaseP, promise, attemptP, cache } = Fluture;
 
+export const chainRej = R.curry((mapper, future) =>
+  Fluture.chainRej(mapper)(future)
+);
+
 export const fork = R.curry((leftFn, rightFn, future) =>
   Fluture.fork(leftFn)(rightFn)(future)
 );
@@ -24,6 +28,10 @@ export const both = R.curry((firstFuture, secondFuture) =>
 export const parallel = R.curry((concurrency, futures) =>
   Fluture.parallel(concurrency)(futures)
 );
+
+export const parallelObject = R.curry((concurrency, futures) =>
+  Fluture.map(values => R.zipObj(R.keys(futures), values))(
+    Fluture.parallel(concurrency)(R.values(futures))));
 
 export const after = R.curry((delay, value) => Fluture.after(delay)(value));
 

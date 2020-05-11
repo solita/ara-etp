@@ -9,7 +9,6 @@
 
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
   import Yritykset from '@Component/Laatija/Yritykset';
-  import ExistingLaatija from './ExistingLaatija';
   import Laatijat from './Laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import Country from '@Component/Geo/Country';
@@ -50,12 +49,6 @@
       breadcrumbStore.set([
         { label: 'Yritykset', url: `#${prefix}/${id}/yritykset` }
       ]);
-      return true;
-    }),
-    '/:id': wrap(ExistingLaatija, details => {
-      const id = idFromDetails(details);
-
-      breadcrumbStore.set([{ label: 'Yritykset', url: `#${prefix}/${id}` }]);
       return true;
     })
   };
