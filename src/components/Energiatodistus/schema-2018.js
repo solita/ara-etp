@@ -27,27 +27,27 @@ const Rakennusvaippa = (min, max) => ({
 });
 
 const Ikkuna = {
-  ala: Float(0.0, Infinity),
+  ala: FloatPos,
   U: Float(0.4, 6.5),
   'g-ks': Float(0.1, 1.0)
 };
 
 const PoistoTuloSfp = {
-  poisto: Float(0.0, Infinity),
-  tulo: Float(0.0, Infinity),
+  poisto: FloatPos,
+  tulo: FloatPos,
   sfp: Float(0.0, 10.0)
 };
 
 const Hyotysuhde = {
-  'tuoton-hyotysuhde': Float(0.0, Infinity),
-  'jaon-hyotysuhde': Float(0.0, Infinity),
-  lampokerroin: Float(0.0, Infinity),
-  apulaitteet: Float(0.0, Infinity)
+  'tuoton-hyotysuhde': FloatPos,
+  'jaon-hyotysuhde': FloatPos,
+  lampokerroin: FloatPos,
+  apulaitteet: FloatPos
 };
 
 const MaaraTuotto = {
   maara: Integer(0.0, 100),
-  tuotto: Float(0.0, Infinity)
+  tuotto: FloatPos
 };
 
 const SisKuorma = (minInclusive, maxInclusive) => ({
@@ -55,8 +55,8 @@ const SisKuorma = (minInclusive, maxInclusive) => ({
   lampokuorma: Float(minInclusive, maxInclusive)
 });
 const SahkoLampo = {
-  sahko: Float(0.0, Infinity),
-  lampo: Float(0.0, Infinity)
+  sahko: FloatPos,
+  lampo: FloatPos
 };
 
 const VapaaPolttoaine = {
@@ -99,7 +99,7 @@ export const schema = {
     'keskeiset-suositukset-sv': String(200)
   },
   lahtotiedot: {
-    'lammitetty-nettoala': Float(0, 1000),
+    'lammitetty-nettoala': FloatPos,
     rakennusvaippa: {
       ilmanvuotoluku: Float(0, 50),
       ulkoseinat: Rakennusvaippa(0.05, 2.0),
@@ -143,8 +143,8 @@ export const schema = {
       'jaahdytyskauden-painotettu-kylmakerroin': Float(1.0, 10.0)
     },
     'lkvn-kaytto': {
-      'kulutus-per-nelio': Float(0.0, Infinity),
-      vuosikulutus: Float(0.0, Infinity)
+      'kulutus-per-nelio': FloatPos,
+      vuosikulutus: FloatPos
     },
     'sis-kuorma': {
       henkilot: SisKuorma(1.0, 14.0),
