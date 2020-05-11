@@ -289,3 +289,251 @@ export const validators = deep.map(
   R.compose(R.complement(R.isNil), R.prop('validators')),
   R.prop('validators')
 );
+
+export const unnestValidation = R.compose(
+  R.when(Either.isEither, Maybe.None),
+  R.when(R.allPass([Either.isEither, Either.isRight]), Either.right)
+);
+
+export const energiatodistusPath = R.curry((path, et) =>
+  R.compose(unnestValidation, R.path(path))(et)
+);
+
+export const calculatePaths = R.curry((calcFn, firstPath, secondPath, et) =>
+  R.converge(R.lift(calcFn), [
+    energiatodistusPath(firstPath),
+    energiatodistusPath(secondPath)
+  ])(et)
+);
+
+const rakennusvaippa = R.path(['lahtotiedot', 'rakennusvaippa']);
+
+const fieldsWithUA = [
+  'ulkoseinat',
+  'ylapohja',
+  'alapohja',
+  'ikkunat',
+  'ulkoovet'
+];
+
+export const rakennusvaippaUA = R.compose(
+  R.converge(R.merge, [
+    R.compose(R.map(unnestValidation), R.pick(['kylmasillat-UA'])),
+    R.compose(
+      R.map(
+        R.compose(
+          R.apply(R.lift(R.multiply)),
+          R.map(unnestValidation),
+          R.props(['ala', 'U'])
+        )
+      ),
+      R.pick(fieldsWithUA)
+    )
+  ]),
+  rakennusvaippa
+);
+
+const teknisetJarjestelmat = R.path(['tulokset', 'tekniset-jarjestelmat']);
+
+const fieldsWithSahko = [
+  'jaahdytys',
+  'kayttoveden-valmistus',
+  'tilojen-lammitys',
+  'tuloilman-lammitys'
+];
+
+const fieldsWithLampo = [
+  'jaahdytys',
+  'kayttoveden-valmistus',
+  'tilojen-lammitys',
+  'tuloilman-lammitys'
+];
+
+export const teknistenJarjestelmienSahkot = R.compose(
+  R.map(unnestValidation),
+  R.converge(R.merge, [
+    R.pick(['iv-sahko', 'kuluttajalaitteet-ja-valaistus-sahko']),
+    R.compose(R.map(R.prop('sahko')), R.pick(fieldsWithSahko))
+  ]),
+  teknisetJarjestelmat
+);
+
+export const teknistenJarjestelmienLammot = R.compose(
+  R.map(R.compose(unnestValidation, R.prop('lampo'))),
+  R.pick(fieldsWithLampo),
+  teknisetJarjestelmat
+);
+
+export const teknistenJarjestelmienKaukojaahdytys = R.compose(
+  R.map(R.compose(unnestValidation, R.prop('kaukojaahdytys'))),
+  R.pick(['jaahdytys']),
+  teknisetJarjestelmat
+);
+
+export const sumEtValues = R.compose(
+  R.reduce(R.lift(R.add), Maybe.of(0)),
+  R.filter(Maybe.isSome),
+  R.values
+);
+
+export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
+
+export const energiamuotokertoimet2018 = () => ({
+  'fossiilinen-polttoaine': Maybe.Some(1),
+  kaukojaahdytys: Maybe.Some(0.28),
+  kaukolampo: Maybe.Some(0.5),
+  sahko: Maybe.Some(1.2),
+  'uusiutuva-polttoaine': Maybe.Some(0.5)
+});
+
+const fieldsWithErittelyOstoenergia = [
+  'kaukolampo',
+  'sahko',
+  'uusiutuva-polttoaine',
+  'fossiilinen-polttoaine',
+  'kaukojaahdytys'
+];
+
+const kaytettavatEnergiamuodot = R.path([
+  'tulokset',
+  'kaytettavat-energiamuodot'
+]);
+
+export const ostoenergiat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithErittelyOstoenergia),
+  kaytettavatEnergiamuodot
+);
+
+export const multiplyWithKerroin = R.curry((kerroin, ostoenergiamaara) =>
+  R.lift(R.multiply)(kerroin, ostoenergiamaara)
+);
+
+export const perLammitettyNettoala = R.curry((energiatodistus, values) =>
+  R.compose(
+    R.map(R.__, values),
+    R.lift(R.flip(R.divide)),
+    energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])
+  )(energiatodistus)
+);
+
+const fieldsWithUusiutuvaOmavaraisenergia = [
+  'aurinkosahko',
+  'tuulisahko',
+  'aurinkolampo',
+  'muulampo',
+  'muusahko',
+  'lampopumppu'
+];
+
+const uusiutuvatOmavaraisenergiat = R.path([
+  'tulokset',
+  'uusiutuvat-omavaraisenergiat'
+]);
+
+export const omavaraisenergiat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithUusiutuvaOmavaraisenergia),
+  uusiutuvatOmavaraisenergiat
+);
+
+const fieldsWithNettotarve = [
+  'tilojen-lammitys-vuosikulutus',
+  'ilmanvaihdon-lammitys-vuosikulutus',
+  'kayttoveden-valmistus-vuosikulutus',
+  'jaahdytys-vuosikulutus'
+];
+
+const nettotarve = R.path(['tulokset', 'nettotarve']);
+
+export const nettotarpeet = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithNettotarve),
+  nettotarve
+);
+
+const fieldsWithLampokuorma = [
+  'aurinko',
+  'ihmiset',
+  'kuluttajalaitteet',
+  'valaistus',
+  'kvesi'
+];
+
+const lampokuormat = R.path(['tulokset', 'lampokuormat']);
+
+export const kuormat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithLampokuorma),
+  lampokuormat
+);
+
+const fieldsWithOstoenergia = [
+  'kaukolampo-vuosikulutus',
+  'kokonaissahko-vuosikulutus',
+  'kiinteistosahko-vuosikulutus',
+  'kayttajasahko-vuosikulutus',
+  'kaukojaahdytys-vuosikulutus'
+];
+
+const ostettuEnergia = R.path([
+  'toteutunut-ostoenergiankulutus',
+  'ostettu-energia'
+]);
+
+export const ostetutEnergiamuodot = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithOstoenergia),
+  ostettuEnergia
+);
+
+const fieldsWithToteutunutOstoenergia = [
+  'sahko-vuosikulutus-yhteensa',
+  'kaukolampo-vuosikulutus-yhteensa',
+  'polttoaineet-vuosikulutus-yhteensa',
+  'kaukojaahdytys-vuosikulutus-yhteensa'
+];
+
+const toteutunutOstoenergia = R.path(['toteutunut-ostoenergiankulutus']);
+
+export const toteutuneetOstoenergiat = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithToteutunutOstoenergia),
+  toteutunutOstoenergia
+);
+
+const fieldsWithOstettuPolttoaine = [
+  'kevyt-polttooljy',
+  'pilkkeet-havu-sekapuu',
+  'pilkkeet-koivu',
+  'puupelletit'
+];
+
+const ostetutPolttoaineet = R.path([
+  'toteutunut-ostoenergiankulutus',
+  'ostetut-polttoaineet'
+]);
+
+export const polttoaineet = R.compose(
+  R.map(unnestValidation),
+  R.pick(fieldsWithOstettuPolttoaine),
+  ostetutPolttoaineet
+);
+
+const vapaaPolttoaine = R.path([
+  'toteutunut-ostoenergiankulutus',
+  'ostetut-polttoaineet',
+  'vapaa'
+]);
+
+export const vapaatPolttoaineet = R.compose(
+  R.map(unnestValidation),
+  R.map(R.prop('maara-vuodessa')),
+  vapaaPolttoaine
+);
+
+export const vapaatKertoimet = R.compose(
+  R.map(unnestValidation),
+  R.map(R.prop('muunnoskerroin')),
+  vapaaPolttoaine
+);

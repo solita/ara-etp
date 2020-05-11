@@ -1,4 +1,7 @@
 <script>
+  import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
@@ -7,6 +10,11 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  $: omavaraisenergiatPerLammitettyNettoala = R.compose(
+    EtUtils.perLammitettyNettoala(energiatodistus),
+    EtUtils.omavaraisenergiat
+  )(energiatodistus);
 </script>
 
 <H3
@@ -20,7 +28,7 @@
       <th class="et-table--th">
         {$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.vuosituotto')}
       </th>
-      <th class="et-table--th" />
+      <th class="et-table--th">{$_('energiatodistus.tulokset.kwhem2vuosi')}</th>
       <th class="et-table--th" />
     </tr>
   </thead>
@@ -39,7 +47,9 @@
             bind:model={energiatodistus}
             path={['tulokset', 'uusiutuvat-omavaraisenergiat', energiamuoto]} />
         </td>
-        <td class="et-table--td" />
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(energiamuoto) )(omavaraisenergiatPerLammitettyNettoala)}
+        </td>
         <td class="et-table--td" />
       </tr>
     {/each}

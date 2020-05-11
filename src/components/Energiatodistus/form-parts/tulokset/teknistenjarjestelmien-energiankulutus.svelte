@@ -1,5 +1,9 @@
 <script>
+  import * as R from 'ramda';
   import { _ } from '@Language/i18n';
+
+  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as Maybe from '@Utility/maybe-utils';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -7,6 +11,21 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  $: sahkoSum = R.compose(
+    EtUtils.sumEtValues,
+    EtUtils.teknistenJarjestelmienSahkot
+  )(energiatodistus);
+
+  $: lampoSum = R.compose(
+    EtUtils.sumEtValues,
+    EtUtils.teknistenJarjestelmienLammot
+  )(energiatodistus);
+
+  $: kaukojaahdytysSum = R.compose(
+    EtUtils.sumEtValues,
+    EtUtils.teknistenJarjestelmienKaukojaahdytys
+  )(energiatodistus);
 </script>
 
 <H3
@@ -120,9 +139,15 @@
       <td class="et-table--td uppercase">
         {$_('energiatodistus.tulokset.yhteensa')}
       </td>
-      <td class="et-table--td" />
-      <td class="et-table--td" />
-      <td class="et-table--td" />
+      <td class="et-table--td">
+        {R.compose( Maybe.get, R.map(Math.ceil) )(sahkoSum)}
+      </td>
+      <td class="et-table--td">
+        {R.compose( Maybe.get, R.map(Math.ceil) )(lampoSum)}
+      </td>
+      <td class="et-table--td">
+        {R.compose( Maybe.get, R.map(Math.ceil) )(kaukojaahdytysSum)}
+      </td>
     </tr>
   </tbody>
 </table>
