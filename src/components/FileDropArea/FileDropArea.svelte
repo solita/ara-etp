@@ -6,18 +6,11 @@
   export let multiple = false;
   export let labelText = $_('drop-or-click-file');
 
-  export let state = {
-    files: []
-  };
+  export let files;
 
-  export let uiState = {
-    highlight: false
-  };
-
-  export let update = fn => (state = fn(state));
-  export let onchange = _ => {}
-
-  const updateUi = fn => (uiState = fn(uiState));
+  let highlight = false;
+  const toggleHighlight = value => (highlight = value);
+  const setFiles = f => (files = f);
 </script>
 
 <style type="text/postcss">
@@ -34,19 +27,17 @@
   }
 </style>
 
-<label
-  use:fileupload={{ update, updateUi }}
-  class:highlight={uiState.highlight}>
+<label use:fileupload={{ setFiles, toggleHighlight }} class:highlight>
   <input
-    on:focus={_ => updateUi(R.assoc('highlight', true))}
-    on:blur={_ => updateUi(R.assoc('highlight', false))}
+    on:click={e => (e.target.value = '')}
+    on:focus={_ => toggleHighlight(true)}
+    on:blur={_ => toggleHighlight(false)}
     on:change={event => {
-      update(R.assoc('files', event.target.files));
-      updateUi(R.assoc('highlight', false));
-      onchange(event.target.files);
+      setFiles(event.target.files);
+      toggleHighlight(false);
     }}
     type="file"
-    files={state.files}
+    bind:files
     {multiple} />
   {labelText}
 </label>

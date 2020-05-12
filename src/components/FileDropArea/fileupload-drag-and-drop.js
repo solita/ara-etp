@@ -2,20 +2,19 @@ import * as R from 'ramda';
 
 const preventDefault = event => event.preventDefault();
 
-export const fileupload = (node, { update, updateUi }) => {
-  const dragenter = _ => updateUi(R.assoc('highlight', true));
+export const fileupload = (node, { setFiles, toggleHighlight }) => {
+  const dragenter = _ => toggleHighlight(true);
 
-  const dragleave = _ => updateUi(R.assoc('highlight', false));
+  const dragleave = _ => toggleHighlight(false);
 
   const drop = event => {
-    updateUi(R.assoc('highlight', false));
-    update(
-      R.compose(
-        R.assoc('files'),
-        R.path(['dataTransfer', 'files']),
-        R.tap(preventDefault)
-      )(event)
-    );
+    toggleHighlight(false);
+
+    R.compose(
+      setFiles,
+      R.path(['dataTransfer', 'files']),
+      R.tap(preventDefault)
+    )(event);
   };
 
   const dragover = preventDefault;

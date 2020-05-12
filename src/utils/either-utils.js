@@ -12,7 +12,8 @@ export const foldRight = R.curry((initialValue, rightFn, e) =>
 );
 
 export const cata = R.curry((leftFn, rigthFn, either) =>
-  either.cata(leftFn, rigthFn));
+  either.cata(leftFn, rigthFn)
+);
 
 export const toMaybe = e => e.toMaybe();
 
@@ -36,3 +37,9 @@ export const from = (value, isRight, left) =>
 export const isEither = any => Object.getPrototypeOf(any) === Either.prototype;
 
 export const fromValueOrEither = R.unless(isEither, Either.of);
+
+export const filter = R.curry((leftValue, filterFn, e) =>
+  R.chain(R.ifElse(filterFn, Right, R.always(Left(leftValue))), e)
+);
+
+export const forEachLeft = R.curry((leftFn, e) => e.forEachLeft(leftFn));

@@ -27,6 +27,7 @@
   let failure = false;
   let liitteet;
   let liiteLinkAdd;
+  let files = [];
 
   const resetForm = () => {
     liitteet = [];
@@ -81,11 +82,12 @@
       )
     );
 
-  const uploadFiles = R.compose(
-    fork('add-files'),
-    R.tap(toggleOverlay(true)),
-    api.postLiitteetFiles(fetch, params.version, params.id)
-  );
+  $: files.length > 0 &&
+    R.compose(
+      fork('add-files'),
+      R.tap(toggleOverlay(true)),
+      api.postLiitteetFiles(fetch, params.version, params.id)
+    )(files);
 
   const addLink = R.compose(
     fork('add-link'),
@@ -194,7 +196,7 @@
   <div class="mb-4 flex lg:flex-row flex-col">
     <div class="lg:w-1/2 w-full mr-6 mb-6">
       <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
-      <FileDropArea onchange={uploadFiles} multiple={true} />
+      <FileDropArea bind:files multiple={true} />
     </div>
     <div class="lg:w-1/2 w-full flex flex-col">
       <H2 text={$_('energiatodistus.liitteet.add-link.title')} />

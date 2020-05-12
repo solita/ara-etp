@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import * as dfns from 'date-fns';
 
 import * as validation from '@Utility/validation';
-import { readData, dataValid } from './laatija-utils';
+import { readData, rowValid } from './laatija-utils';
 
 describe('Laatija utils', () => {
   describe('valid data', () => {
@@ -34,7 +34,7 @@ describe('Laatija utils', () => {
         ]),
         true
       );
-      assert.equal(dataValid(readData(data)), true);
+      assert.equal(R.all(rowValid, data), true);
     });
 
     it('more than one row', () => {
@@ -42,21 +42,21 @@ describe('Laatija utils', () => {
   FISE;Arja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019
   FISE;Sari Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019`;
 
-      assert.equal(dataValid(readData(data)), true);
+      assert.equal(R.all(rowValid, readData(data)), true);
     });
 
     it('a row with a whitespace', () => {
       const data = `FISE;Tarja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019
        `;
 
-      assert.equal(dataValid(readData(data)), true);
+      assert.equal(R.all(rowValid, readData(data)), true);
     });
   });
   describe('invalid data', () => {
     it('a row with an invalid postinumero', () => {
       const data = `FISE;Tarja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150a;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019`;
 
-      assert.equal(dataValid(readData(data)), false);
+      assert.equal(R.all(rowValid, readData(data)), false);
     });
 
     it('more than one row with invalid postinumero', () => {
@@ -64,39 +64,27 @@ describe('Laatija utils', () => {
   FISE;Arja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150a;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019
   FISE;Sari Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019`;
 
-      assert.equal(dataValid(readData(data)), false);
+      assert.equal(R.all(rowValid, readData(data)), false);
     });
 
     it('empty data', () => {
       const data = '';
-
-      let parsedData = readData(data);
-      assert.equal(R.isEmpty(parsedData), true);
-      assert.equal(dataValid(parsedData), false);
+      assert.deepEqual(readData(data), []);
     });
 
     it('null data', () => {
       const data = null;
-
-      let parsedData = readData(data);
-      assert.equal(R.isEmpty(parsedData), true);
-      assert.equal(dataValid(parsedData), false);
+      assert.deepEqual(readData(data), []);
     });
 
     it('invalid row', () => {
       const data = 'FISE;Tarja Helena;Specimen-Pirex';
-
-      let parsedData = readData(data);
-      assert.equal(R.isEmpty(parsedData), true);
-      assert.equal(dataValid(parsedData), false);
+      assert.deepEqual(readData(data), []);
     });
 
     it('invalid data', () => {
       const data = 'datadatadata';
-
-      let parsedData = readData(data);
-      assert.equal(R.isEmpty(parsedData), true);
-      assert.equal(dataValid(parsedData), false);
+      assert.deepEqual(readData(data), []);
     });
   });
 });
