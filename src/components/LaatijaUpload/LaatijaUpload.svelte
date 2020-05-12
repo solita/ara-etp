@@ -7,32 +7,15 @@
   import { locale, _ } from '@Language/i18n';
 
   import Fileupload from '@Component/Fileupload/Fileupload';
+  import FileDropArea from '@Component/FileDropArea/FileDropArea';
   import Table from '@Component/Table/Table';
   import Button from '@Component/Button/Button';
 
   import { flashMessageStore } from '@/stores';
 
-  import {
-    parse,
-    validate,
-    readData,
-    dataValid,
-    putLaatijatFuture
-  } from '@Component/Laatija/laatija-utils';
+  import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
   import Patevuustaso from './Patevyystaso';
   import Date from './Date';
-
-  let laatijaData;
-  let update = data => {
-    // TODO: Same file selection does not trigger this
-    flashMessageStore.flush('Laatija');
-    let files = R.compose(data)({});
-    const reader = new FileReader();
-    reader.onload = e => {
-      laatijaData = e.target.result;
-    };
-    reader.readAsText(files.files[0], 'UTF-8');
-  };
 
   export const fields = [
     { id: 'etunimi', title: 'Etunimi' },
@@ -56,46 +39,69 @@
       ),
       R.compose(
         flashMessageStore.add('Laatija', 'success'),
-        R.always($_('laatija.messages.save-success'))
+        R.always($_('laatija.messages.save-success')),
+        R.tap(_ => {
+          laatijat = [];
+        })
       )
     ),
-    putLaatijatFuture(fetch)
+    LaatijaUtils.putLaatijatFuture(fetch)
   );
 
-  $: tablecontents = readData(laatijaData);
-  $: valid = dataValid(tablecontents);
-  $: isLaatijaData = R.allPass([
-    R.complement(R.isEmpty),
-    R.complement(R.isNil)
-  ])(laatijaData);
-  $: readError = R.and(isLaatijaData, R.isEmpty(tablecontents));
-  $: readOk = R.and(isLaatijaData, R.complement(R.isEmpty)(tablecontents));
+  let files = [];
+  let laatijat = [];
 
-  $: R.when(
-    R.allPass([R.always(readOk), R.not]),
-    R.compose(
-      flashMessageStore.add('Laatija', 'error'),
-      R.always($_('laatija.messages.validation-error'))
-    )
-  )(valid);
+  let error = '';
 
-  $: R.when(
-    R.identity,
-    R.compose(
-      flashMessageStore.add('Laatija', 'error'),
-      R.always($_('laatija.messages.upload-error'))
-    )
-  )(readError);
+  const fileAsText = file =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        resolve(e.target.result);
+      };
+      reader.onerror = e => {
+        reject(e);
+      };
+      reader.readAsText(file, 'UTF-8');
+    });
+
+  const addError = message =>
+    flashMessageStore.add('Laatija', 'error', $_(message));
+
+  $: R.compose(
+    Future.fork(
+      R.compose(
+        R.tap(_ => addError('laatija.messages.upload-error')),
+        R.tap(_ => (laatijat = []))
+      ),
+      R.compose(
+        R.tap(data => (laatijat = data)),
+        R.when(
+          R.any(R.complement(LaatijaUtils.rowValid)),
+          R.tap(_ => addError('laatija.messages.validation-error'))
+        ),
+        R.when(
+          R.isEmpty,
+          R.tap(_ => addError('laatija.messages.upload-error'))
+        ),
+        R.tap(console.log)
+      )
+    ),
+    R.map(R.flatten),
+    R.sequence(Future.resolve),
+    R.map(R.map(LaatijaUtils.readData)),
+    R.map(Future.encaseP(fileAsText))
+  )(files);
+
+  $: valid = R.all(LaatijaUtils.rowValid, laatijat);
+
+  $: files && flashMessageStore.flush('Laatija');
 </script>
 
-<style type="text/postcss">
-
-</style>
-
-<Fileupload {update} />
-{#if readOk}
+<FileDropArea bind:files />
+{#if laatijat.length}
   <div class="w-full overflow-x-auto mt-4">
-    <Table {fields} {validate} {tablecontents} />
+    <Table {fields} validate={LaatijaUtils.validate} tablecontents={laatijat} />
   </div>
   <div class="flex -mx-4 pt-8">
     <div class="px-4">
@@ -106,7 +112,7 @@
         on:click={event => {
           event.preventDefault();
           flashMessageStore.flush('Laatija');
-          submit(tablecontents);
+          submit(laatijat);
         }} />
     </div>
     <div class="px-4">

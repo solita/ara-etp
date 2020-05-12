@@ -10,9 +10,7 @@
 
   import { _ } from '../../language/i18n.js';
 
-  let state = { files: [] };
-
-  export let update = fn => (state = fn(state));
+  export let files;
   export let multiple = false;
 
   let overlay = false;
@@ -41,7 +39,7 @@
 <div class="fileupload">
   <Overlay {overlay}>
     <div slot="content">
-      <FileDropArea {update} {state} {multiple} />
+      <FileDropArea bind:files {multiple} />
     </div>
     <div slot="overlay-content">
       <Spinner />

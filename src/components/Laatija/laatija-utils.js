@@ -198,9 +198,3 @@ export const rowValid = R.compose(
   R.values,
   R.evolve(validate)
 );
-
-export const dataValid = R.ifElse(
-  R.allPass([R.complement(R.isEmpty), R.compose(R.equals('Array'), R.type)]),
-  R.compose(R.reduce(R.and, true), R.map(rowValid)),
-  R.always(false)
-);
