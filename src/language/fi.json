@@ -148,14 +148,15 @@
     },
     "vuosikulutus": "kWh/vuosi",
     "vuosikulutus-per-nelio": "kWh/m²vuosi",
+    "litraa-per-neliovuosi": "dm³/m²vuosi",
     "yhteensa": "Yhteensä",
     "lahtotiedot": {
-      "ala": "Ala (m²)",
-      "U": "U (W/(m²K))",
+      "ala": "Ala",
+      "U": "U",
       "lammitetty-nettoala": "Lämmitetty nettoala",
       "rakennusvaippa": {
         "header": "Rakennusvaippa",
-        "U*A": "U*A (W/K)",
+        "U*A": "U*A",
         "osuuslampohaviosta": "Osuus lämpöhäviöstä",
         "ilmanvuotoluku": "Ilmanvuotoluku",
         "labels": {

@@ -89,7 +89,7 @@
         {$_('energiatodistus.lahtotiedot.lammitys.kpl')}
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.lammitys.tuotto')}
+        {$_('energiatodistus.lahtotiedot.lammitys.tuotto')} (kWh)
       </th>
       <th class="et-table--th" />
       <th class="et-table--th" />
