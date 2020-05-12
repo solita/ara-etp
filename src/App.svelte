@@ -24,6 +24,7 @@
   import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
 
   import Tailwindcss from '@/Tailwindcss';
+  import TableStyles from '@/TableStyles';
 
   setupI18n();
 
@@ -66,6 +67,7 @@
 </style>
 
 <Tailwindcss />
+<TableStyles />
 
 <CurrentKayttaja />
 
