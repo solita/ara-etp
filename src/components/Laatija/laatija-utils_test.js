@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import * as dfns from 'date-fns';
 
 import * as validation from '@Utility/validation';
-import { readData, dataValid, rowValid } from './laatija-utils';
+import { readData, rowValid } from './laatija-utils';
 
 describe('Laatija utils', () => {
   describe('valid data', () => {

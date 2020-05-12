@@ -6,7 +6,6 @@
 
   import { locale, _ } from '@Language/i18n';
 
-  import Fileupload from '@Component/Fileupload/Fileupload';
   import FileDropArea from '@Component/FileDropArea/FileDropArea';
   import Table from '@Component/Table/Table';
   import Button from '@Component/Button/Button';
@@ -122,7 +121,7 @@
         on:click={event => {
           event.preventDefault();
           flashMessageStore.flush('Laatija');
-          laatijaData = undefined;
+          laatijat = [];
         }} />
     </div>
   </div>
