@@ -18,6 +18,7 @@
   import FileDropArea from '@Component/FileDropArea/FileDropArea';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
+  import Confirm from '@Component/Confirm/Confirm';
 
   export let params;
 
@@ -154,7 +155,7 @@
               <th class="etp-table--th">
                 {$_('energiatodistus.liitteet.liite.author')}
               </th>
-              <th class="etp-table--th">Toiminnot</th>
+              <th class="etp-table--th">{$_('table.actions')}</th>
             </tr>
           </thead>
           <tbody class="etp-table--tbody">
@@ -168,11 +169,16 @@
                 </td>
                 <td class="etp-table--td">{liite['author-fullname']}</td>
                 <td class="etp-table--td">
-                  <span
-                    on:click={_ => deleteLiite(liite.id)}
-                    class="material-icons cursor-pointer">
-                    delete
-                  </span>
+                  <Confirm
+                    let:confirm
+                    confirmButtonLabel={$_('confirm.button.delete')}
+                    confirmMessage={$_('confirm.you-want-to-delete')}>
+                    <span
+                      class="material-icons cursor-pointer"
+                      on:click|stopPropagation={_ => confirm(deleteLiite, liite.id)}>
+                      delete
+                    </span>
+                  </Confirm>
                 </td>
               </tr>
             {/each}

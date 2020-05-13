@@ -2,10 +2,14 @@
   import { replace } from 'svelte-spa-router';
   import LanguageSelect from './LanguageSelect';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Future from '@Utility/future-utils';
+
+  import Confirm from '@Component/Confirm/Confirm';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
+
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
-  import * as Future from '@Utility/future-utils';
+
   export let version;
   export let id = Maybe.None();
 
@@ -64,9 +68,7 @@
   </button>
   <button on:click={save}>
     <span class="description">
-      {id.isSome() ?
-        $_('energiatodistus.toolbar.save') :
-        $_('energiatodistus.toolbar.new')}
+      {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
     </span>
     <span class="text-2xl font-icon">save</span>
   </button>
@@ -99,9 +101,14 @@
     </button>
   {/if}
   {#if id.isSome()}
-    <button on:click={() => deleteEnergiatodistus()}>
-      <span class="description">Poista</span>
-      <span class="text-2xl font-icon">delete_forever</span>
-    </button>
+    <Confirm
+      let:confirm
+      confirmButtonLabel={$_('confirm.button.delete')}
+      confirmMessage={$_('confirm.you-want-to-delete')}>
+      <button on:click={() => confirm(deleteEnergiatodistus)}>
+        <span class="description">Poista</span>
+        <span class="text-2xl font-icon">delete_forever</span>
+      </button>
+    </Confirm>
   {/if}
 </div>

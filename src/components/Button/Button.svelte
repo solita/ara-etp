@@ -34,6 +34,6 @@
   class:error={style === 'error'}
   class:disabled
   {disabled}
-  on:click>
+  on:click|stopPropagation>
   {text}
 </button>

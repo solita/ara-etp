@@ -13,6 +13,7 @@
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link';
   import Select from '@Component/Select/Select';
+  import Confirm from '@Component/Confirm/Confirm';
 
   let overlay = true;
   let failure = false;
@@ -146,11 +147,16 @@
                     {orEmpty(energiatodistus['laatija-fullname'])}
                   </td>
                   <td class="etp-table--td etp-table--td__center">
-                    <span
-                      class="material-icons"
-                      on:click|stopPropagation={_ => deleteEnergiatodistus(energiatodistus.versio, energiatodistus.id)}>
-                      delete
-                    </span>
+                    <Confirm
+                      let:confirm
+                      confirmButtonLabel={$_('confirm.button.delete')}
+                      confirmMessage={$_('confirm.you-want-to-delete')}>
+                      <span
+                        class="material-icons"
+                        on:click|stopPropagation={_ => confirm(deleteEnergiatodistus, energiatodistus.versio, energiatodistus.id)}>
+                        delete
+                      </span>
+                    </Confirm>
                   </td>
                 </tr>
               {/each}

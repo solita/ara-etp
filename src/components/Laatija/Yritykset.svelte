@@ -5,10 +5,10 @@
 
   import H1 from '@Component/H/H1';
   import Input from '@Component/Input/Input';
-  import Table from '@Component/Table/Table';
   import Button from '@Component/Button/Button';
   import Link from '@Component/Link/Link';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
+  import Confirm from '@Component/Confirm/Confirm';
   import * as api from './laatija-api';
   import * as yritys from './yritys';
 
@@ -46,15 +46,6 @@
       api.deleteLaatijaYritys(fetch, params.id, laatijaYritykset[index].id)
     );
   };
-
-  const actions = [
-    { icon: 'remove_circle_outline', text: 'Poista', update: detach }
-  ];
-  $: fields = [
-    { id: 'nimi', title: $_('yritys.nimi') },
-    { id: 'ytunnus', title: $_('yritys.y-tunnus') },
-    { title: 'Toiminnot', type: 'action', actions: actions }
-  ];
 
   const toggleOverlay = value => () => (overlay = value);
   const toggleDisabled = value => () => (disabled = value);
@@ -139,7 +130,35 @@
       <p class="mb-5">Sinut on liitetty laatijaksi seuraaviin yrityksiin:</p>
 
       <div class="mb-10">
-        <Table {fields} tablecontents={laatijaYritykset} />
+        <table class="etp-table">
+          <thead class="etp-table--thead">
+            <tr class="etp-table--tr">
+              <th class="etp-table--th">{$_('yritys.nimi')}</th>
+              <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
+              <th class="etp-table--th">{$_('table.actions')}</th>
+            </tr>
+          </thead>
+          <tbody class="etp-table--tbody">
+            {#each laatijaYritykset as yritys, index}
+              <tr class="etp-table--tr">
+                <td class="etp-table--td">{yritys.nimi}</td>
+                <td class="etp-table--td">{yritys.ytunnus}</td>
+                <td class="etp-table--td">
+                  <Confirm
+                    let:confirm
+                    confirmButtonLabel={$_('confirm.button.delete')}
+                    confirmMessage={$_('confirm.you-want-to-delete')}>
+                    <span
+                      class="material-icons cursor-pointer"
+                      on:click|stopPropagation={_ => confirm(detach, index)}>
+                      delete
+                    </span>
+                  </Confirm>
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
       </div>
     {/if}
 
