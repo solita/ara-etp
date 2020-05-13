@@ -13,7 +13,7 @@
   }
 
   a {
-    @apply text-link border-b-1 border-light;
+    @apply text-link border-b-1 border-transparent;
   }
 
   a:hover {

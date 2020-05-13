@@ -17,7 +17,8 @@ module.exports = {
       error: '#9e0000',
       success: '#538000',
       background: '#eee',
-      hr: 'rgba(52, 56, 65, 0.3)'
+      hr: 'rgba(52, 56, 65, 0.3)',
+      transparent: 'rgba(0,0,0,0)'
     },
     extend: {
       fontFamily: {

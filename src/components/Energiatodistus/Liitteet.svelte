@@ -129,25 +129,7 @@
 </script>
 
 <style>
-  table {
-    @apply w-full;
-  }
 
-  th {
-    @apply px-4 py-2 text-center;
-  }
-
-  tr {
-    @apply px-4 py-2;
-  }
-
-  td {
-    @apply text-center;
-  }
-
-  tr:nth-child(even) {
-    @apply bg-background;
-  }
 </style>
 
 <div class="w-full mt-3">
@@ -158,27 +140,37 @@
       {#if R.isEmpty(liitteet)}
         <p>{$_('energiatodistus.liitteet.empty')}</p>
       {:else}
-        <table>
-          <thead>
-            <tr>
-              <th>{$_('energiatodistus.liitteet.liite.createtime')}</th>
-              <th>{$_('energiatodistus.liitteet.liite.nimi')}</th>
-              <th>{$_('energiatodistus.liitteet.liite.author')}</th>
-              <th>Toiminnot</th>
+        <table class="etp-table">
+          <thead class="etp-table--thead">
+            <tr class="etp-table--tr">
+              <th class="etp-table--th">
+                {$_('energiatodistus.liitteet.liite.createtime')}
+              </th>
+              <th class="etp-table--th">
+                {$_('energiatodistus.liitteet.liite.nimi')}
+              </th>
+              <th class="etp-table--th">
+                {$_('energiatodistus.liitteet.liite.author')}
+              </th>
+              <th class="etp-table--th">Toiminnot</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="etp-table--tbody">
             {#each liitteet as liite}
-              <tr>
-                <td>{formats.formatTimeInstant(liite.createtime)}</td>
-                <td class="flex justify-center">
+              <tr class="etp-table--tr">
+                <td class="etp-table--td">
+                  {formats.formatTimeInstant(liite.createtime)}
+                </td>
+                <td class=" etp-table--td">
                   <Link text={liite.nimi} href={liiteUrl(liite)} />
                 </td>
-                <td>{liite['author-fullname']}</td>
-                <td
-                  on:click={_ => deleteLiite(liite.id)}
-                  class="cursor-pointer">
-                  <span class="material-icons">delete</span>
+                <td class="etp-table--td">{liite['author-fullname']}</td>
+                <td class="etp-table--td">
+                  <span
+                    on:click={_ => deleteLiite(liite.id)}
+                    class="material-icons cursor-pointer">
+                    delete
+                  </span>
                 </td>
               </tr>
             {/each}
