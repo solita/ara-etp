@@ -11,26 +11,6 @@
 </script>
 
 <style type="text/postcss">
-  table {
-    @apply w-full;
-  }
-
-  th {
-    @apply px-4 py-2 text-center;
-  }
-
-  tr {
-    @apply px-4 py-2;
-  }
-
-  td {
-    @apply text-center;
-  }
-
-  tr:nth-child(even) {
-    @apply bg-background;
-  }
-
   .tablecontainer {
     @apply flex flex-col items-center;
   }
@@ -41,11 +21,11 @@
 </style>
 
 <div class="tablecontainer">
-  <table>
-    <thead>
-      <tr>
+  <table class="etp-table">
+    <thead class="etp-table--thead">
+      <tr class="etp-table--tr">
         {#each fields as field}
-          <th>
+          <th class="etp-table--th">
             {#if field.title}{field.title}{/if}
             {#if R.equals(field.sort, 'ascend')}
               <span class="font-icon">keyboard_arrow_down</span>
@@ -57,11 +37,11 @@
         {/each}
       </tr>
     </thead>
-    <tbody>
+    <tbody class="etp-table--tbody">
       {#each tablecontents as row, index}
-        <tr>
+        <tr class="etp-table--tr">
           {#each fields as field}
-            <td>
+            <td class="etp-table--td">
               {#if R.equals(field.type, 'action')}
                 <svelte:component
                   this={TableColumnAction}

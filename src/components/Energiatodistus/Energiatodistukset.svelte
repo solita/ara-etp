@@ -23,13 +23,13 @@
 
   let query = {
     tila: Maybe.None()
-  }
+  };
 
   const formatTila = R.compose(
-      Maybe.orSome($_('validation.no-selection')),
-      Maybe.map(tila => $_(`energiatodistukset.tilat.` + tila)),
-      R.when(R.complement(Maybe.isMaybe), Maybe.of));
-
+    Maybe.orSome($_('validation.no-selection')),
+    Maybe.map(tila => $_(`energiatodistukset.tilat.` + tila)),
+    R.when(R.complement(Maybe.isMaybe), Maybe.of)
+  );
 
   const toETView = (versio, id) => {
     push('#/energiatodistus/' + versio + '/' + id);
@@ -87,25 +87,7 @@
 </script>
 
 <style>
-  table {
-    @apply w-full;
-  }
 
-  th {
-    @apply px-4 py-2 text-center;
-  }
-
-  tr {
-    @apply px-4 py-2;
-  }
-
-  td {
-    @apply text-center;
-  }
-
-  tr:nth-child(even) {
-    @apply bg-background;
-  }
 </style>
 
 <div class="w-full mt-3">
@@ -114,13 +96,13 @@
     <div slot="content">
       <div class="lg:w-1/3 w-full mb-6">
         <Select
-            label={'Tila'}
-            disabled={false}
-            bind:model={query}
-            lens={R.lensProp('tila')}
-            format={formatTila}
-            parse={R.when(R.complement(Maybe.isMaybe), Maybe.of)}
-            items={[Maybe.None(), 0, 1]} />
+          label={'Tila'}
+          disabled={false}
+          bind:model={query}
+          lens={R.lensProp('tila')}
+          format={formatTila}
+          parse={R.when(R.complement(Maybe.isMaybe), Maybe.of)}
+          items={[Maybe.None(), 0, 1]} />
       </div>
 
       {#if R.isEmpty(energiatodistukset)}
@@ -130,36 +112,40 @@
         </p>
       {:else}
         <div class="mb-10">
-          <table>
-            <thead>
-              <tr>
-                <th>Tila</th>
-                <th>Tunnus</th>
-                <th>ETL</th>
-                <th>Versio</th>
-                <th>Voimassa</th>
-                <th>Rakennuksen nimi</th>
-                <th>Osoite</th>
-                <th>Laatija</th>
-                <th>Toiminnot</th>
+          <table class="etp-table">
+            <thead class="etp-table--thead">
+              <tr class="etp-table--tr etp-table--tr__light">
+                <th class="etp-table--th">Tila</th>
+                <th class="etp-table--th">Tunnus</th>
+                <th class="etp-table--th">ETL</th>
+                <th class="etp-table--th">Versio</th>
+                <th class="etp-table--th">Voimassa</th>
+                <th class="etp-table--th">Rakennuksen nimi</th>
+                <th class="etp-table--th">Osoite</th>
+                <th class="etp-table--th">Laatija</th>
+                <th class="etp-table--th">Toiminnot</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="etp-table--tbody">
               {#each energiatodistukset as energiatodistus}
                 <tr
-                  class="cursor-pointer"
+                  class="etp-table--tr etp-table--tr__link"
                   on:click={toETView(energiatodistus.versio, energiatodistus.id)}>
-                  <td>Luonnos</td>
-                  <td>{energiatodistus.id}</td>
-                  <td>C</td>
-                  <td>{energiatodistus.versio}</td>
-                  <td>13.3.2030</td>
-                  <td>{orEmpty(energiatodistus.perustiedot.nimi)}</td>
-                  <td>
+                  <td class="etp-table--td">Luonnos</td>
+                  <td class="etp-table--td">{energiatodistus.id}</td>
+                  <td class="etp-table--td">C</td>
+                  <td class="etp-table--td">{energiatodistus.versio}</td>
+                  <td class="etp-table--td">13.3.2030</td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus.perustiedot.nimi)}
+                  </td>
+                  <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}
                   </td>
-                  <td>{orEmpty(energiatodistus['laatija-fullname'])}</td>
-                  <td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus['laatija-fullname'])}
+                  </td>
+                  <td class="etp-table--td etp-table--td__center">
                     <span
                       class="material-icons"
                       on:click|stopPropagation={_ => deleteEnergiatodistus(energiatodistus.versio, energiatodistus.id)}>
@@ -194,7 +180,11 @@
         href="#/energiatodistus/2013/new" />
     </div>
   </div>
-  <Link icon={Maybe.Some('attachment')}
-             text={'Lataa energiatodistukset XLSX-tiedostona'}
-        href="/api/private/energiatodistukset/2018/export/energiatodistukset.xlsx" />
+  <div class="flex flew-row mb-4 mr-4">
+    <span class="material-icons">attachment</span>
+    &nbsp;
+    <Link
+      text={'Lataa energiatodistukset XLSX-tiedostona'}
+      href="/api/private/energiatodistukset/2018/export/energiatodistukset.xlsx" />
+  </div>
 </div>
