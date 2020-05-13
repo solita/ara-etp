@@ -12,11 +12,20 @@
     @apply px-2 py-1;
   }
 
-  :global(.etp-table--tr > *:not(:first-child)) {
+  :global(.etp-table--td:not(:first-child)),
+  :global(.etp-table--th:not(:first-child)) {
     @apply border-disabled border-l-1;
   }
 
-  :global(.etp-table--tbody .etp-table--tr:nth-child(odd)) {
+  :global(.etp-table--tbody > :nth-child(odd)) {
     @apply bg-background;
+  }
+
+  :global(.etp-table--tr__link:hover) {
+    @apply cursor-pointer bg-tertiary;
+  }
+
+  :global(.etp-table--td__center) {
+    @apply text-center;
   }
 </style>

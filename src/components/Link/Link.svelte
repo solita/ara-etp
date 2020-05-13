@@ -8,12 +8,16 @@
 </script>
 
 <style type="text/postcss">
+  div {
+    @apply flex justify-start items-center;
+  }
+
   a {
-    @apply text-link flex items-center;
+    @apply text-link border-b-1 border-light;
   }
 
   a:hover {
-    @apply underline cursor-pointer;
+    @apply cursor-pointer border-primary;
   }
 </style>
 
