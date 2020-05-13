@@ -4,8 +4,10 @@ import * as Future from '@Utility/future-utils';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
+import * as et from './energiatodistus-utils';
 
 export const deserialize = R.compose(
+  deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), et.emptyEnergiatodistus2018()),
   R.evolve({
     id: Maybe.get,
     versio: Maybe.get,
@@ -34,8 +36,8 @@ export const serialize = R.compose(
       R.identity
     )
   ),
-    R.omit(['id', 'tila', 'laatija-id', 'laatija-fullname', 'versio',
-            'allekirjoitusaika', 'allekirjoituksessaaika'])
+  R.omit(['id', 'tila', 'laatija-id', 'laatija-fullname', 'versio',
+          'allekirjoitusaika', 'allekirjoituksessaaika'])
 );
 
 export const deserializeLiite = R.evolve({
