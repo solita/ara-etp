@@ -14,6 +14,7 @@
   export let disabled = false;
   export let compact = false;
   export let center = true;
+  export let format = et.formatters.optionalText;
 
   const index = R.compose(
     Maybe.fromNull,
@@ -42,7 +43,7 @@
   {center}
   bind:model
   {lens}
-  format={et.formatters.optionalText}
+  {format}
   parse={type.parse}
   validators={type.validators}
   i18n={$_} />

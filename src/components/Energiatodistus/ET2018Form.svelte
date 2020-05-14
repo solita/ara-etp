@@ -10,6 +10,9 @@
   import * as et from './energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
   import * as api from './energiatodistus-api';
+  import * as formats from '@Utility/formats';
+  import * as dfns from 'date-fns';
+  import * as Validation from '@Utility/validation';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
@@ -78,7 +81,13 @@
     result => (alakayttotarkoitusluokat = Either.Right(result)),
     api.alakayttotarkoitusluokat2018
   );
-
+  $: isLaatimisvaiheOlemassaOlevaRakennus = R.equals(
+    2,
+    Maybe.getOrElse(
+      -1,
+      R.view(R.lensPath(['perustiedot', 'laatimisvaihe']), energiatodistus)
+    )
+  );
   $: console.log(energiatodistus);
 </script>
 
@@ -202,6 +211,18 @@
         format={et.selectFormat(labelLocale, laatimisvaiheet)}
         items={Either.foldRight([], R.pluck('id'), laatimisvaiheet)} />
     </div>
+    {#if isLaatimisvaiheOlemassaOlevaRakennus}
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Input
+          {disabled}
+          {schema}
+          required={true}
+          center={false}
+          format={R.compose(Maybe.orSome(''), Maybe.map(formats.formatDateInstant))}
+          bind:model={energiatodistus}
+          path={['perustiedot', 'havainnointikaynti']} />
+      </div>
+    {/if}
   </div>
 
   <HR />

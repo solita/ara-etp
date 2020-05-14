@@ -19,6 +19,10 @@ const Float = (min, max) => ({
   validators: validation.MaybeInterval(min, max)
 });
 
+const DateValue = () => ({
+  parse: parsers.optionalParser(parsers.parseDate)
+});
+
 const FloatPos = Float(0.0, Infinity);
 
 const Rakennusvaippa = (min, max) => ({
@@ -95,6 +99,7 @@ export const schema = {
     yritys: {
       nimi: String(200)
     },
+    havainnointikaynti: DateValue(),
     'keskeiset-suositukset-fi': String(200),
     'keskeiset-suositukset-sv': String(200)
   },

@@ -13,7 +13,8 @@
   },
   "parsing": {
     "invalid-integer": "Virheellinen kokonaislukunumero",
-    "invalid-number": "Virheellinen numero"
+    "invalid-number": "Virheellinen numero",
+    "invalid-date": "Virheellinen päivämäärä"
   },
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
@@ -132,6 +133,7 @@
       "tilaaja": "Tilaaja",
       "kieli": "Kieli",
       "laatimisvaihe": "Laatimisvaihe",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä",
       "katuosoite": "Katuosoite",
       "postinumero": "Postinumero",
       "rakennustunnus": "Rakennustunnus",
