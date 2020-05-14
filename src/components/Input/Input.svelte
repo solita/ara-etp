@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
   import Label from '@Component/Label/Label';
+  import * as keys from '@Utility/keys';
 
   export let id;
   export let name;
@@ -47,6 +48,13 @@
       },
       () => (valid = true)
     );
+
+  $: updateValue = value => {
+    const parsedValue = parse(value);
+    Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
+    model = R.set(lens, parsedValue, model);
+    validate(parsedValue);
+  };
 </script>
 
 <style type="text/postcss">
@@ -156,13 +164,14 @@
     }}
     on:blur={event => {
       focused = false;
-      const parsedValue = parse(event.target.value);
-      Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
-      model = R.set(lens, parsedValue, model);
-      validate(parsedValue);
+      updateValue(event.target.value);
     }}
     on:click
-    on:keydown
+    on:keydown={event => {
+      if (event.keyCode === keys.ENTER) {
+        updateValue(event.target.value);
+      }
+    }}
     on:input={event => {
       validate(parse(event.target.value));
     }} />
