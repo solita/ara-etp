@@ -17,25 +17,13 @@ export const deserialize = R.compose(
     versio: Maybe.get,
     perustiedot: {
       'onko-julkinen-rakennus': Maybe.get,
-      valmistumisvuosi: Either.Right,
-      havainnointikaynti: R.ifElse(
-        Maybe.isSome,
-        R.compose(Maybe.Some, Date.parse, Maybe.get),
-        R.always(Maybe.None())
-      )
+      valmistumisvuosi: Either.Right
     }
   }),
   deep.map(R.F, Maybe.fromNull)
 );
 
 export const serialize = R.compose(
-  R.evolve({
-    perustiedot: {
-      havainnointikaynti: R.compose(
-        R.when(dfns.isValid, d => dfns.formatISO(d, { representation: 'date' }))
-      )
-    }
-  }),
   deep.map(
     Either.isEither,
     R.ifElse(

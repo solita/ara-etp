@@ -81,13 +81,12 @@
     result => (alakayttotarkoitusluokat = Either.Right(result)),
     api.alakayttotarkoitusluokat2018
   );
-  $: isLaatimisvaiheOlemassaOlevaRakennus = R.equals(
-    2,
-    Maybe.getOrElse(
-      -1,
-      R.view(R.lensPath(['perustiedot', 'laatimisvaihe']), energiatodistus)
-    )
-  );
+  $: isLaatimisvaiheOlemassaOlevaRakennus = R.compose(
+    Maybe.isSome,
+    R.filter(R.equals(2)),
+    R.view(R.lensPath(['perustiedot', 'laatimisvaihe']))
+  )(energiatodistus);
+
   $: console.log(energiatodistus);
 </script>
 
@@ -218,7 +217,7 @@
           {schema}
           required={true}
           center={false}
-          format={R.compose(Maybe.orSome(''), Maybe.map(formats.formatDateInstant))}
+          format={R.compose( Maybe.orSome(''), R.map(R.compose( formats.formatDateInstant, dfns.parseISO )) )}
           bind:model={energiatodistus}
           path={['perustiedot', 'havainnointikaynti']} />
       </div>

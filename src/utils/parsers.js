@@ -27,7 +27,9 @@ export const parseNumber = R.compose(
 export const parseDate = R.compose(
   R.ifElse(
     dfns.isValid,
-    R.compose(Either.Right, date => dfns.getTime(date)),
+    R.compose(Either.Right, date =>
+      dfns.formatISO(date, { representation: 'date' })
+    ),
     R.always(Either.Left(R.applyTo('parsing.invalid-date')))
   ),
   date => dfns.parse(date, Validation.DATE_FORMAT, 0),
