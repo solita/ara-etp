@@ -5,6 +5,7 @@ import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as et from './energiatodistus-utils';
+import * as dfns from 'date-fns';
 
 export const deserialize = R.compose(
   deep.mergeRight(
