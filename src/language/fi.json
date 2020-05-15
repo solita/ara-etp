@@ -9,7 +9,6 @@
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
-    "invalid-date": "Virheellinen päivämäärä",
     "no-selection": "Ei valintaa"
   },
   "parsing": {

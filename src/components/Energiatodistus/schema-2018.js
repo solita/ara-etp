@@ -20,8 +20,7 @@ const Float = (min, max) => ({
 });
 
 const DateValue = () => ({
-  parse: parsers.optionalParser(parsers.parseDate),
-  validators: [validation.liftValidator(validation.dateValidator)]
+  parse: parsers.optionalParser(parsers.parseDate)
 });
 
 const FloatPos = Float(0.0, Infinity);

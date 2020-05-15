@@ -33,11 +33,6 @@ export const isRequired = {
   label: R.applyTo('validation.required')
 };
 
-export const dateValidator = {
-  predicate: dfns.isValid,
-  label: R.applyTo('validation.invalid-date')
-};
-
 export const interpolate = R.curry((template, values) =>
   R.reduce(
     (result, value) => R.replace(value[0], value[1], result),
