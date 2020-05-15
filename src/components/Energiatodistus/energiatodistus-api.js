@@ -31,15 +31,11 @@ export const deserialize = R.compose(
 export const serialize = R.compose(
   R.evolve({
     perustiedot: {
-      havainnointikaynti: date =>
-        R.compose(
-          R.when(dfns.isValid, d =>
-            dfns.formatISO(d, { representation: 'date' })
-          )
-        )(date)
+      havainnointikaynti: R.compose(
+        R.when(dfns.isValid, d => dfns.formatISO(d, { representation: 'date' }))
+      )
     }
   }),
-  R.tap(console.log),
   deep.map(
     Either.isEither,
     R.ifElse(
