@@ -5,13 +5,9 @@ import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as et from './energiatodistus-utils';
-import * as dfns from 'date-fns';
 
 export const deserialize = R.compose(
-  deep.mergeRight(
-    R.anyPass([Either.isEither, Maybe.isMaybe]),
-    et.emptyEnergiatodistus2018()
-  ),
+  deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), et.emptyEnergiatodistus2018()),
   R.evolve({
     id: Maybe.get,
     versio: Maybe.get,
@@ -40,15 +36,8 @@ export const serialize = R.compose(
       R.identity
     )
   ),
-  R.omit([
-    'id',
-    'tila',
-    'laatija-id',
-    'laatija-fullname',
-    'versio',
-    'allekirjoitusaika',
-    'allekirjoituksessaaika'
-  ])
+  R.omit(['id', 'tila', 'laatija-id', 'laatija-fullname', 'versio',
+          'allekirjoitusaika', 'allekirjoituksessaaika'])
 );
 
 export const deserializeLiite = R.evolve({
@@ -73,10 +62,8 @@ export const toQueryString = R.compose(
   Maybe.map(R.concat('?')),
   Maybe.map(R.join('&')),
   Maybe.toMaybeList,
-  R.map(([key, optionalValue]) =>
-    Maybe.map(value => `${key}=${value}`, optionalValue)
-  ),
-  R.toPairs
+  R.map(([key, optionalValue]) => Maybe.map(value => `${key}=${value}`, optionalValue)),
+  R.toPairs,
 );
 
 export const getEnergiatodistukset = R.compose(
@@ -116,12 +103,10 @@ const toFormData = (name, files) => {
 export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(uri =>
-      fetch(uri + '/files', {
-        method: 'POST',
-        body: toFormData('files', files)
-      })
-    ),
+    Future.encaseP(uri => fetch(uri + '/files', {
+      method: 'POST',
+      body: toFormData('files', files)
+    })),
     url.liitteet
   )(version, id)
 );
@@ -129,20 +114,16 @@ export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
 export const postLiitteetLink = R.curry((fetch, version, id, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(version, id) + '/link')
-    )
-  )(link)
-);
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post',
+      url.liitteet(version, id) + '/link'))
+  )(link));
 
 export const deleteLiite = R.curry((fetch, version, id, liiteId) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(liiteId =>
-      Fetch.deleteRequest(fetch, url.liitteet(version, id) + '/' + liiteId)
-    )
-  )(liiteId)
-);
+    Future.encaseP(liiteId => Fetch.deleteRequest(fetch,
+      url.liitteet(version, id) + '/' + liiteId))
+  ) (liiteId));
 
 export const putEnergiatodistusById = R.curry(
   (fetch, version, id, energiatodistus) =>
