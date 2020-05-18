@@ -36,7 +36,7 @@ export const serialize = R.compose(
       R.identity
     )
   ),
-  R.omit(['id', 'tila', 'laatija-id', 'laatija-fullname', 'versio',
+  R.omit(['id', 'tila-id', 'laatija-id', 'laatija-fullname', 'versio',
           'allekirjoitusaika', 'allekirjoituksessaaika'])
 );
 
