@@ -29,6 +29,13 @@ describe('Deep objects:', () => {
       assert.deepEqual(objects.values(R.F, {a: {b: 1}, c: 1}), [1, 1]);
       assert.deepEqual(objects.values(R.F, {a: {b: 1}, c: {d: 1}}), [1, 1]);
     });
+
+    it('Value objects', () => {
+      const isValue = R.equals({a: 1});
+      assert.deepEqual(objects.values(isValue, {a: {a: 1}}), [{a: 1}]);
+      assert.deepEqual(objects.values(isValue, {a: {a: {a: 1}}}), [{a: 1}]);
+      assert.deepEqual(objects.values(isValue, {a: {a: {a: {a: 1}}}}), [{a: 1}]);
+    });
   });
 
   describe('Deep map:', () => {

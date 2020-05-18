@@ -88,6 +88,7 @@ export const emptyEnergiatodistus2018 = _ => ({
     },
     kayttotarkoitus: Maybe.None(),
     laatimisvaihe: Maybe.None(),
+    havainnointikaynti: Maybe.None(),
     'keskeiset-suositukset-fi': Maybe.None(),
     'keskeiset-suositukset-sv': Maybe.None()
   },
