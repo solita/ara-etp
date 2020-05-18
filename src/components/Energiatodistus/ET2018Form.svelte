@@ -238,7 +238,7 @@
   <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
 
   <HR />
-  <H2 text="Lähtötiedot" />
+  <H2 text={$_('energiatodistus.lahtotiedot.header')} />
 
   <div class="w-1/5 py-4 mb-4 flex flex-row items-end">
     <div class="w-5/6">
