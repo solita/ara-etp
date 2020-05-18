@@ -16,10 +16,7 @@
   import * as laatijaApi from './laatija-api';
   import * as LaatijaUtils from './laatija-utils';
 
-  import {
-    currentUserStore,
-    flashMessageStore
-  } from '@/stores';
+  import { currentUserStore, flashMessageStore } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
@@ -85,18 +82,21 @@
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
-    Validation.validateModelObject(formSchema));
+    Validation.validateModelObject(formSchema)
+  );
 
   const validateAndSubmit = _ => {
     if (isValidForm(laatija)) {
       flashMessageStore.flush();
       submit(laatija);
     } else {
-      flashMessageStore.add('Kayttaja', 'error',
-          $_('laatija.messages.validation-error'));
+      flashMessageStore.add(
+        'Kayttaja',
+        'error',
+        $_('laatija.messages.validation-error')
+      );
     }
-  }
-
+  };
 </script>
 
 <style type="text/postcss">
@@ -105,8 +105,7 @@
   }
 </style>
 
-<form
-  on:submit|preventDefault={validateAndSubmit}>
+<form on:submit|preventDefault={validateAndSubmit}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <span class="lastlogin">
@@ -229,6 +228,7 @@
             lens={R.lensProp('maa')}
             format={formatCountry}
             parse={parseCountry}
+            handleSubmit={false}
             i18n={$_} />
         </Autocomplete>
       </div>

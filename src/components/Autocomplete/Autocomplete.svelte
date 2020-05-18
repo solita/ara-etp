@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   import * as R from 'ramda';
   import * as keys from '@Utility/keys';
@@ -18,7 +18,8 @@
 
   const setInputValue = value => {
     input.value = value;
-    input.dispatchEvent(new Event('input'));
+    input.blur();
+    input.focus();
   };
 
   $: showDropdown = items.length > 0 && active.isSome();
@@ -60,21 +61,26 @@
   const inputHandler = () => {
     const value = input.value;
     filteredItems = R.compose(
-        R.take(5),
-        R.filter(
-            R.compose(
-                R.includes(R.toLower(value)),
-                R.toLower
-            )
+      R.take(5),
+      R.filter(
+        R.compose(
+          R.includes(R.toLower(value)),
+          R.toLower
         )
+      )
     )(items);
     active = active.orElse(Maybe.Some(0));
-  }
+  };
 
   onMount(_ => {
     input = node.getElementsByTagName('input')[0];
     input.addEventListener('input', inputHandler);
     input.addEventListener('focus', inputHandler);
+  });
+
+  onDestroy(_ => {
+    input.removeEventListener('input', inputHandler);
+    input.removeEventListener('focus', inputHandler);
   });
 </script>
 
@@ -101,7 +107,6 @@
       {active}
       onclick={(item, index) => {
         setInputValue(item);
-        input.focus();
         active = Maybe.None();
       }} />
   {/if}

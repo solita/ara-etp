@@ -6,6 +6,8 @@
   import Label from '@Component/Label/Label';
   import * as keys from '@Utility/keys';
 
+  import InputContainer from './InputContainer';
+
   export let id;
   export let name;
 
@@ -24,37 +26,11 @@
   export let format = R.identity;
   export let validators = [];
 
-  $: viewValue = R.compose(
-    Maybe.orSome(viewValue),
-    Either.toMaybe,
-    R.map(format),
-    Either.fromValueOrEither,
-    R.view(lens)
-  )(model);
+  export let handleSubmit = true;
 
-  let valid = true;
-  let errorMessage = '';
   let focused = false;
 
   export let i18n;
-
-  $: highlightError = focused && !valid;
-
-  $: validate = value =>
-    v.validateModelValue(validators, value).cata(
-      error => {
-        valid = false;
-        errorMessage = error(i18n);
-      },
-      () => (valid = true)
-    );
-
-  $: updateValue = value => {
-    const parsedValue = parse(value);
-    Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
-    model = R.set(lens, parsedValue, model);
-    validate(parsedValue);
-  };
 </script>
 
 <style type="text/postcss">
@@ -141,45 +117,54 @@
   }
 </style>
 
-<Label {id} {required} {label} {compact} error={highlightError} {focused} />
-<div
-  class="inputwrapper"
-  class:caret
-  class:focused
-  class:error={highlightError}
-  class:disabled>
-  <input
+<InputContainer
+  {lens}
+  bind:model
+  {i18n}
+  {parse}
+  {format}
+  {validators}
+  {handleSubmit}
+  on:keydown
+  let:viewValue
+  let:errorMessage
+  let:valid>
+  <Label
     {id}
-    {name}
-    {disabled}
-    class="input"
-    class:center
-    class:error={highlightError}
-    type="text"
-    {autocomplete}
-    value={viewValue}
-    on:focus={event => {
-      focused = true;
-      validate(parse(event.target.value));
-    }}
-    on:blur={event => {
-      focused = false;
-      updateValue(event.target.value);
-    }}
-    on:click
-    on:keydown={event => {
-      if (event.keyCode === keys.ENTER) {
-        updateValue(event.target.value);
-      }
-    }}
-    on:input={event => {
-      validate(parse(event.target.value));
-    }} />
-</div>
-
-{#if !valid}
-  <div class="error-label">
-    <span class="font-icon error-icon">error</span>
-    {errorMessage}
+    {required}
+    {label}
+    {compact}
+    error={focused && !valid}
+    {focused} />
+  <div
+    class="inputwrapper"
+    class:caret
+    class:focused
+    class:error={focused && !valid}
+    class:disabled>
+    <input
+      {id}
+      {name}
+      {disabled}
+      class="input"
+      class:center
+      class:error={focused && !valid}
+      type="text"
+      {autocomplete}
+      value={viewValue}
+      on:focus={event => {
+        focused = true;
+      }}
+      on:blur={event => {
+        focused = false;
+      }}
+      on:input />
   </div>
-{/if}
+
+  {#if !valid}
+    <div class="error-label">
+      <span class="font-icon error-icon">error</span>
+      {errorMessage}
+    </div>
+  {/if}
+</InputContainer>
