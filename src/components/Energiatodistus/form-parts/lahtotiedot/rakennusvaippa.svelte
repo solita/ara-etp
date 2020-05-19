@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as fxmath from '@Utility/fxmath';
 
   import { _ } from '@Language/i18n';
   import H3 from '@Component/H/H3';
@@ -77,9 +78,9 @@
               path={['lahtotiedot', 'rakennusvaippa', vaippa, 'U']} />
           </td>
           <td class="et-table--td">
-            {R.compose( Maybe.orSome(''), R.map(num =>
-                num.toFixed(1)
-              ), R.prop(vaippa) )(UA)}
+            {R.compose( Maybe.orSome(''),
+               R.map(fxmath.round(1)),
+               R.prop(vaippa) )(UA)}
           </td>
           <td class="et-table--td">
             {R.compose( Maybe.orSome(''), R.map(num =>
