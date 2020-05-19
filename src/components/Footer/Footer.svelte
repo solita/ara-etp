@@ -1,5 +1,5 @@
 <script>
-
+  import Version from '@Component/Version/Version';
 </script>
 
 <style type="text/postcss">
@@ -26,11 +26,17 @@
   .arafooter {
     @apply flex justify-end items-end w-1/2;
   }
+
+  .version {
+    @apply flex items-end;
+  }
 </style>
 
 <footer>
   <section class="info">
-    <div class="guidance" />
+    <div class="version">
+      <Version />
+    </div>
     <div class="contact" />
     <div class="arafooter">
       <img class="araprimary" src="images/ara_logo_simple_nega.svg" alt="Ara" />

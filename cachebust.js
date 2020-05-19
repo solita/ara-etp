@@ -28,7 +28,7 @@ Promise.all([
     });
   })
 ])
-  .then(([html, jsHash, cssHash, configHash]) => {
+  .then(([html, jsHash, cssHash]) => {
     console.info('Writing hash-signatures to resources');
     return new Promise((resolve, reject) => {
       fs.writeFile(
