@@ -4,8 +4,8 @@
   "license": "EUPL v1.2",
   "scripts": {
     "build": "rollup -c && node cachebust.js",
-    "dev-build": "set NODE_ENV=development&& rollup -c",
-    "dev": "node devcopy.js && rollup -c -w",
+    "dev-build": "set NODE_ENV=development&& node version.js && rollup -c",
+    "dev": "set NODE_ENV=development&& node devcopy.js && node version.js && rollup -c -w",
     "start": "sirv public --single",
     "proxy": "node ./proxy/proxy.js",
     "storybook": "start-storybook -s ./public -p 6006",

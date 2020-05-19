@@ -13,10 +13,7 @@ new Promise((resolve, reject) => {
       console.info('Writing index');
       fs.writeFile(
         './public/index.html',
-        html
-          .replace('$jshash', '')
-          .replace('$csshash', '')
-          .replace('$confighash', ''),
+        html.replace('$jshash', '').replace('$csshash', ''),
         'utf-8',
         err => {
           if (err) reject(err);
