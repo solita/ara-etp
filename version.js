@@ -7,7 +7,7 @@ const production = process.env.NODE_ENV !== 'development';
 
 const version = `${production ? 'build' : 'dev'}-${format(
   Date.now(),
-  'yyyy-MM-dd'
+  'yyyy-MM-dd-HH-mm'
 )}`;
 
 new Promise((resolve, reject) => {
