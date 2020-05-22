@@ -198,14 +198,20 @@ export const laatimisvaiheet = R.compose(
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/laatimisvaiheet');
 
-export const kayttotarkoitusluokat2018 = R.compose(
+export const kayttotarkoitusluokat = version => R.compose(
   Future.cache,
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/kayttotarkoitusluokat/2018');
+)('api/private/kayttotarkoitusluokat/' + version);
 
-export const alakayttotarkoitusluokat2018 = R.compose(
+export const alakayttotarkoitusluokat = version => R.compose(
   Future.cache,
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/alakayttotarkoitusluokat/2018');
+)('api/private/alakayttotarkoitusluokat/' + version);
+
+export const luokittelut = version => Future.parallelObject(5, {
+  kielisyys: kielisyys,
+  laatimisvaiheet: laatimisvaiheet,
+  kayttotarkoitusluokat: kayttotarkoitusluokat(version),
+  alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)});

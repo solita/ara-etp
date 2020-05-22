@@ -49,107 +49,19 @@
 
   export let title = '';
   export let energiatodistus;
+  export let luokittelut;
   export let schema;
   export let disabled = false;
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  let kielisyys = Either.Left('Not initialized');
-  Future.fork(
-    _ => {},
-    result => (kielisyys = Either.Right(result)),
-    api.kielisyys
-  );
-
-  let laatimisvaiheet = Either.Left('Not initialized');
-  Future.fork(
-    _ => {},
-    result => (laatimisvaiheet = Either.Right(result)),
-    api.laatimisvaiheet
-  );
-
-  let kayttotarkoitusluokat = Either.Left('Not initialized');
-  Future.fork(
-    _ => {},
-    result => (kayttotarkoitusluokat = Either.Right(result)),
-    api.kayttotarkoitusluokat2018
-  );
-
-  let alakayttotarkoitusluokat = Either.Left('Not initialized');
-  Future.fork(
-    _ => {},
-    result => (alakayttotarkoitusluokat = Either.Right(result)),
-    api.alakayttotarkoitusluokat2018
-  );
   $: isLaatimisvaiheOlemassaOlevaRakennus = R.compose(
     Maybe.isSome,
     R.filter(R.equals(2)),
     R.view(R.lensPath(['perustiedot', 'laatimisvaihe']))
   )(energiatodistus);
 
-  $: console.log(energiatodistus);
 </script>
-
-<style type="text/postcss">
-  :global(.et-table) {
-    @apply border-b-1 border-disabled pb-8;
-  }
-
-  :global(.et-table__noborder) {
-    @apply border-b-0;
-  }
-
-  :global(.et-table--th),
-  :global(.et-table--td) {
-    @apply px-4 py-2 font-bold;
-  }
-
-  :global(.et-table--th) {
-    @apply text-primary text-sm text-center w-1/5;
-    height: 4em;
-  }
-
-  :global(.et-table--tr > .et-table--th:not(:first-child)),
-  :global(.et-table--tr > .et-table--td:not(:first-child)) {
-    @apply border-l-1 border-disabled;
-  }
-
-  :global(.et-table--thead) {
-    @apply bg-tertiary;
-  }
-
-  :global(.et-table--th__sixth) {
-    @apply w-1/6;
-  }
-
-  :global(.et-table--th__fourcells) {
-    @apply w-4/5;
-  }
-
-  :global(.et-table--th__threecells) {
-    @apply w-3/5;
-  }
-
-  :global(.et-table--th__twocells) {
-    @apply w-2/5;
-  }
-
-  :global(.et-table--td__fifth) {
-    @apply w-1/5;
-  }
-
-  :global(.et-table--tr:last-child) {
-    @apply mb-5;
-  }
-
-  :global(.et-table--tr > .et-table--td:first-child) {
-    @apply font-bold;
-  }
-
-  :global(.et-table--tr > .et-table--td:not(:first-child)) {
-    @apply text-center;
-  }
-</style>
 
 <div class="w-full mt-3">
   <H1 text={title} />
@@ -195,8 +107,8 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'kieli'])}
         parse={Maybe.Some}
-        format={et.selectFormat(labelLocale, kielisyys)}
-        items={Either.foldRight([], R.pluck('id'), kielisyys)} />
+        format={et.selectFormat(labelLocale, luokittelut.kielisyys)}
+        items={R.pluck('id', luokittelut.kielisyys)} />
     </div>
 
     <div class="lg:w-1/2 w-full px-4 py-4">
@@ -207,8 +119,8 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
         parse={Maybe.Some}
-        format={et.selectFormat(labelLocale, laatimisvaiheet)}
-        items={Either.foldRight([], R.pluck('id'), laatimisvaiheet)} />
+        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
+        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
     </div>
     {#if isLaatimisvaiheOlemassaOlevaRakennus}
       <div class="lg:w-1/2 w-full px-4 py-4">
@@ -231,8 +143,8 @@
     {disabled}
     bind:energiatodistus
     {labelLocale}
-    {kayttotarkoitusluokat}
-    {alakayttotarkoitusluokat} />
+    kayttotarkoitusluokat = {luokittelut.kayttotarkoitusluokat}
+    alakayttotarkoitusluokat = {luokittelut.alakayttotarkoitusluokat} />
 
   <HR />
   <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />

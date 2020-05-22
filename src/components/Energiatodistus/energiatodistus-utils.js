@@ -71,7 +71,6 @@ export const emptyEnergiatodistus2018 = _ => ({
     nimi: Maybe.None(),
     rakennustunnus: Maybe.None(),
     kiinteistotunnus: Maybe.None(),
-    havainnointikaynti: Maybe.None(),
     kieli: Maybe.None(),
     rakennusosa: Maybe.None(),
     'katuosoite-fi': Maybe.None(),
@@ -224,13 +223,7 @@ export const emptyEnergiatodistus2018 = _ => ({
   'lisamerkintoja-sv': Maybe.None()
 });
 
-export const emptyEnergiatodistus2013 = _ => ({
-  perustiedot: {
-    yritys: {
-      nimi: Maybe.None()
-    }
-  }
-});
+export const emptyEnergiatodistus2013 = emptyEnergiatodistus2018;
 
 export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
@@ -254,37 +247,31 @@ export const breadcrumb1stLevel = i18n => ({
 
 export const selectFormat = (label, items) =>
   R.compose(
-    Either.cata(R.identity, R.identity),
+    Maybe.orSome(''),
     R.map(label),
-    R.chain(Maybe.toEither('Unknown value')),
-    R.map(R.__, items),
-    Maybe.findById
+    Maybe.findById(R.__, items)
   );
 
 export const findKayttotarkoitusluokkaId = (
   alakayttotarkoitusluokkaId,
   alakayttotarkoitusluokat
 ) =>
-  alakayttotarkoitusluokkaId.chain(
-    R.compose(
-      R.map(R.prop('kayttotarkoitusluokka-id')),
-      Either.orSome(Maybe.None()),
-      R.map(R.__, alakayttotarkoitusluokat),
-      Maybe.findById
-    )
-  );
+  R.compose(
+    Maybe.map(R.prop('kayttotarkoitusluokka-id')),
+    Maybe.findById(R.__, alakayttotarkoitusluokat));
 
 export const filterAlakayttotarkoitusLuokat = R.curry(
   (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
-    alakayttotarkoitusluokat.map(
-      R.filter(alaluokka =>
-        Maybe.map(
-          R.equals(alaluokka['kayttotarkoitusluokka-id']),
-          kayttotarkoitusluokkaId
-        ).orSome(true)
-      )
-    )
-);
+    R.filter(
+      Maybe.map(R.propEq('kayttotarkoitusluokka-id'), kayttotarkoitusluokkaId).orSome(R.T),
+      alakayttotarkoitusluokat));
+
+export const findAlakayttotarkoitusluokkaId =
+  (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) => {
+    const alaluokat = filterAlakayttotarkoitusLuokat(
+      kayttotarkoitusluokkaId, alakayttotarkoitusluokat);
+    return R.length(alaluokat) === 1 ? Maybe.Some(alaluokat[0].id) : Maybe.None();
+}
 
 export const validators = deep.map(
   R.compose(R.complement(R.isNil), R.prop('validators')),
