@@ -20,13 +20,14 @@
   export let params;
 
   let overlay = false;
-  let failure = false;
 
   const toggleOverlay = value => () => (overlay = value);
 
   let energiatodistus = R.equals(params.version, '2018')
     ? et.emptyEnergiatodistus2018()
     : et.emptyEnergiatodistus2013();
+
+  let luokittelut = Maybe.None();
 
   const submit = R.compose(
     Future.forkBothDiscardFirst(
@@ -53,35 +54,33 @@
 
   $: title = `Energiatodistus ${params.version} - Uusi luonnos`;
 
-  // Load classifications to cache
+  // Load classifications
   $: R.compose(
     Future.fork(
       R.compose(
-        R.tap(() => {
-          failure = true;
-        }),
         R.tap(toggleOverlay(false)),
         R.tap(flashMessageStore.add('Energiatodistus', 'error')),
         R.always($_('energiatodistus.messages.load-error'))
       ),
-      R.tap(toggleOverlay(false))
+      R.compose(
+        response => {
+          luokittelut = Maybe.Some(response);
+        },
+        R.tap(toggleOverlay(false))
+      )
     ),
-    Future.parallel(5)
-  )([
-    api.kielisyys,
-    api.laatimisvaiheet,
-    api.alakayttotarkoitusluokat2018,
-    api.kayttotarkoitusluokat2018
-  ]);
+    api.luokittelut
+  )(params.version);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if !failure}
+    {#if luokittelut.isSome()}
       <EnergiatodistusForm
         version={params.version}
         {title}
         {energiatodistus}
+        luokittelut = {luokittelut.some()}
         {submit} />
     {/if}
   </div>

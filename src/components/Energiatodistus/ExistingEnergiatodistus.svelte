@@ -20,6 +20,7 @@
   export let params;
 
   let energiatodistus = Maybe.None();
+  let luokittelut = Maybe.None();
 
   let overlay = true;
   let disabled = false;
@@ -54,7 +55,7 @@
   );
 
   $: R.compose(
-    Future.forkBothDiscardFirst(
+    Future.fork(
       R.compose(
         R.compose(
           R.tap(toggleDisabled(true)),
@@ -66,18 +67,14 @@
       R.compose(
         response => {
           energiatodistus = Maybe.Some(response[0]);
+          luokittelut = Maybe.Some(response[1]);
         },
         R.tap(toggleOverlay(false))
       )
     ),
-    Future.both(Future.after(400, true)),
     Future.parallel(5),
-    R.prepend(R.__, [
-      api.kielisyys,
-      api.laatimisvaiheet,
-      api.alakayttotarkoitusluokat2018,
-      api.kayttotarkoitusluokat2018
-    ]),
+    R.tap(console.log),
+    R.pair(R.__, api.luokittelut(params.version)),
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
 
@@ -91,6 +88,7 @@
         version={params.version}
         {disabled}
         energiatodistus={energiatodistus.some()}
+        luokittelut={luokittelut.some()}
         {submit}
         {title} />
     {/if}

@@ -18,6 +18,7 @@
 
   export let version;
   export let energiatodistus;
+  export let luokittelut;
 
   export let submit;
   export let disabled = false;
@@ -54,12 +55,74 @@
   };
 </script>
 
+<style type="text/postcss">
+  :global(.et-table) {
+    @apply border-b-1 border-disabled pb-8;
+  }
+
+  :global(.et-table__noborder) {
+    @apply border-b-0;
+  }
+
+  :global(.et-table--th),
+  :global(.et-table--td) {
+    @apply px-4 py-2 font-bold;
+  }
+
+  :global(.et-table--th) {
+    @apply text-primary text-sm text-center w-1/5;
+    height: 4em;
+  }
+
+  :global(.et-table--tr > .et-table--th:not(:first-child)),
+  :global(.et-table--tr > .et-table--td:not(:first-child)) {
+    @apply border-l-1 border-disabled;
+  }
+
+  :global(.et-table--thead) {
+    @apply bg-tertiary;
+  }
+
+  :global(.et-table--th__sixth) {
+    @apply w-1/6;
+  }
+
+  :global(.et-table--th__fourcells) {
+    @apply w-4/5;
+  }
+
+  :global(.et-table--th__threecells) {
+    @apply w-3/5;
+  }
+
+  :global(.et-table--th__twocells) {
+    @apply w-2/5;
+  }
+
+  :global(.et-table--td__fifth) {
+    @apply w-1/5;
+  }
+
+  :global(.et-table--tr:last-child) {
+    @apply mb-5;
+  }
+
+  :global(.et-table--tr > .et-table--td:first-child) {
+    @apply font-bold;
+  }
+
+  :global(.et-table--tr > .et-table--td:not(:first-child)) {
+    @apply text-center;
+  }
+</style>
+
+
 {#if !R.isNil(ETForm)}
 
   <div class="w-full relative flex">
     <div class="w-5/6">
       <form on:submit|preventDefault={submit$}>
-        <ETForm {title} bind:energiatodistus {disabled} {schema} />
+        <ETForm {title} bind:energiatodistus {disabled} {schema} {luokittelut}/>
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
             <Button type={'submit'} text={$_('tallenna')} />
