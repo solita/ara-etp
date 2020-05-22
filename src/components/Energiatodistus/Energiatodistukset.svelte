@@ -191,6 +191,6 @@
     &nbsp;
     <Link
       text={'Lataa energiatodistukset XLSX-tiedostona'}
-      href="/api/private/energiatodistukset/2018/export/energiatodistukset.xlsx" />
+      href="/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx" />
   </div>
 </div>
