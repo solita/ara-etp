@@ -258,7 +258,8 @@ export const findKayttotarkoitusluokkaId = (
 ) =>
   R.compose(
     Maybe.map(R.prop('kayttotarkoitusluokka-id')),
-    Maybe.findById(R.__, alakayttotarkoitusluokat));
+    Maybe.chain(Maybe.findById(R.__, alakayttotarkoitusluokat)))
+  (alakayttotarkoitusluokkaId);
 
 export const filterAlakayttotarkoitusLuokat = R.curry(
   (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
