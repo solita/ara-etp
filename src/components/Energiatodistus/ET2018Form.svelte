@@ -194,8 +194,8 @@
   <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
   <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
-  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
 
   <HR />
 

@@ -164,8 +164,8 @@
       }
     },
     "vuosikulutus": "kWh/vuosi",
-    "vuosikulutus-per-nelio": "kWh/m²vuosi",
-    "litraa-per-neliovuosi": "dm³/m²vuosi",
+    "vuosikulutus-per-nelio": "kWh/(m²vuosi)",
+    "litraa-per-neliovuosi": "dm³/(m²vuosi)",
     "yhteensa": "Yhteensä",
     "lahtotiedot": {
       "header": "E-luvun laskennan lähtötiedot",
