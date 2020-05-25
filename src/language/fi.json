@@ -138,8 +138,11 @@
       "new": "Tallenna",
       "save": "Tallenna"
     },
+
+    "id": "Energiatodistusnumero",
     "laatija-fullname": "Laatija",
     "perustiedot": {
+      "header": "Energiatodistuksen perustiedot",
       "nimi": "Rakennuksen nimi",
       "tilaaja": "Tilaaja",
       "kieli": "Kieli",
@@ -468,7 +471,7 @@
         "kvesi": "Auringon vuosittainen lämpökuorma"
       },
       "laskentatyokalu_header": "Laskentatyökalun nimi ja versionumero",
-      "laskentatyokalu": "Laskentatyökalun nimi ja versionumero"
+      "laskentatyokalu": "Energiatodistuksen laadintaohjelmisto ja versio"
     },
     "toteutunut-ostoenergiankulutus": {
       "header": "Toteutunut energiankulutus",
