@@ -29,19 +29,8 @@
 
   const prefix = '/yritys';
   const routes = {
-    '/new': wrap(NewYritys, _ => {
-      breadcrumbStore.set([{ label: 'Uusi yritys', url: `#${prefix}/new` }]);
-      return true;
-    }),
-    '/all': wrap(Yritykset, _ => {
-      breadcrumbStore.set([{ label: 'Yritykset', url: `#${prefix}/all` }]);
-      return true;
-    }),
-    '/:id': wrap(ExistingYritys, details => {
-      const id = idFromDetails(details);
-      breadcrumbStore.set([{ label: `Yritys ${id}`, url: `#${prefix}/${id}` }]);
-      return true;
-    })
+    '/new': NewYritys,
+    '/:id': ExistingYritys
   };
 
   $: R.compose(

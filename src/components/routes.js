@@ -23,14 +23,8 @@ export const buildRoutes = R.curry((breadcrumbStore, currentUser) => ({
     breadcrumbStore.set([]);
     return true;
   }),
-  '/yritys': wrap(Yritys, _ => {
-    breadcrumbStore.set([{ label: 'Yritykset', url: '/yritys' }]);
-    return true;
-  }),
-  '/yritys/*': wrap(Yritys, _ => {
-    breadcrumbStore.set([{ label: 'Yritykset', url: '/yritys' }]);
-    return true;
-  }),
+  '/yritys': Yritys,
+  '/yritys/*': Yritys,
   '/halytykset': wrap(
     Halytykset,
     _ =>

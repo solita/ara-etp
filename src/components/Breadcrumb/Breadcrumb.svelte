@@ -1,19 +1,33 @@
 <script>
+  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as BreadcrumbUtils from './breadcrumb-utils';
   import Link from '@Component/Link/Link';
-  export let value;
+
+  export let user;
+  export let location;
+  export let i18n;
+
+  $: breadcrumbs = R.compose(
+    R.flatten,
+    Array.of,
+    BreadcrumbUtils.breadcrumbParse
+  )(location, i18n, user);
 </script>
 
 <style type="text/postcss">
   div {
     @apply bg-background px-20 flex h-16 items-center text-primary;
   }
+  span {
+    @apply ml-1 mr-2;
+  }
 </style>
 
 <div>
   <Link href="/" icon={Maybe.Some('home')} />
-  {#each value as { label, url }, i (url)}
-    <span>&nbsp;/&nbsp&nbsp</span>
+  {#each breadcrumbs as { label, url }}
+    <span>/</span>
     <Link href={url} text={label} />
   {/each}
 </div>
