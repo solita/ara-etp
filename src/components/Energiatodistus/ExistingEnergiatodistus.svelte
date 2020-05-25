@@ -77,7 +77,11 @@
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
 
-  $: title = `Energiatodistus ${params.version}/${params.id}`;
+  const tilaLabel = R.compose(
+      Maybe.orSome($_('energiatodistus.tila.loading')),
+      R.map(e => $_('energiatodistus.tila.' + et.tilaKey(e['tila-id']))));
+
+  $: title = `${$_('energiatodistus.title')} ${params.version}/${params.id} - ${tilaLabel(energiatodistus)}`;
 </script>
 
 <Overlay {overlay}>
