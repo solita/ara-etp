@@ -26,7 +26,7 @@
 
   const schemas = {
     '2018': schema2018,
-    '2013': schema2013
+    '2013': schema2018
   };
   let schema = schemas[version];
 

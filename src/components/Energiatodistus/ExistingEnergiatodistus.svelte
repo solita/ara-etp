@@ -73,7 +73,6 @@
       )
     ),
     Future.parallel(5),
-    R.tap(console.log),
     R.pair(R.__, api.luokittelut(params.version)),
     api.getEnergiatodistusById(fetch)
   )(params.version, params.id);
