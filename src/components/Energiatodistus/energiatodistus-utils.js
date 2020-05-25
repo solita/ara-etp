@@ -526,3 +526,7 @@ export const vapaatKertoimet = R.compose(
   R.map(R.prop('muunnoskerroin')),
   vapaaPolttoaine
 );
+
+const tilat = ['draft', 'in-signing', 'signed', 'discarded', 'replaced', 'deleted'];
+
+export const tilaKey = id => tilat[id];

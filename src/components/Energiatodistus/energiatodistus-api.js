@@ -11,6 +11,7 @@ export const deserialize = R.compose(
   R.evolve({
     id: Maybe.get,
     versio: Maybe.get,
+    'tila-id': Maybe.get,
     perustiedot: {
       'onko-julkinen-rakennus': Maybe.get,
       valmistumisvuosi: Either.Right

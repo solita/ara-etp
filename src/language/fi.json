@@ -119,6 +119,17 @@
     }
   },
   "energiatodistus": {
+    "title": "Energiatodistus",
+    "tila": {
+      "draft": "Luonnos",
+      "in-signing": "Allekirjoitus",
+      "signed": "Voimassa",
+      "discarded": "Hylätty",
+      "replaced":  "Korvattu",
+      "deleted": "Poistettu",
+      "expired": "Vanhentunut",
+      "loading": "Ladataan"
+    },
     "breadcrumb": {
       "energiatodistus": "Energiatodistukset",
       "uusi-energiatodistus": "Uusi energiatodistus"
