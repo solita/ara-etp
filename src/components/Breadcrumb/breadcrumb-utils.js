@@ -21,17 +21,24 @@ export const parseYritys = R.curry((i18n, user, locationParts) => {
     url: `#/${prefix}/${id}`
   };
 
-  if (R.equals('new', id)) {
-    return R.assoc('label', i18n('yritys.uusi-yritys'), crumbPart);
-  }
-
   if (R.equals('all', id)) {
     return R.assoc('label', i18n('navigation.yritykset'), crumbPart);
   }
 
   return R.compose(
     Maybe.orSome(crumbPart),
-    R.map(R.compose(R.append(crumbPart), Array.of)),
+    R.map(
+      R.compose(
+        R.compose(
+          R.append,
+          R.when(
+            R.always(R.equals('new', id)),
+            R.assoc('label', i18n('yritys.uusi-yritys'))
+          )
+        )(crumbPart),
+        Array.of
+      )
+    ),
     laatijanYrityksetCrumb
   )(i18n, user);
 });
