@@ -25,6 +25,10 @@ export const parseYritys = R.curry((i18n, user, locationParts) => {
     return R.assoc('label', i18n('yritys.uusi-yritys'), crumbPart);
   }
 
+  if (R.equals('all', id)) {
+    return R.assoc('label', i18n('navigation.yritykset'), crumbPart);
+  }
+
   return R.compose(
     Maybe.orSome(crumbPart),
     R.map(R.compose(R.append(crumbPart), Array.of)),
@@ -100,6 +104,10 @@ export const parseEnergiatodistus = R.curry((i18n, _, locationParts) => {
 
 export const parseKayttaja = R.curry((i18n, user, locationParts) => {
   const [prefix, id] = locationParts;
+
+  if (R.equals('all', id)) {
+    return { label: i18n('navigation.kayttajat'), url: `#/${prefix}/${id}` };
+  }
 
   const label = R.compose(
     Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),

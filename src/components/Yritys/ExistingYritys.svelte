@@ -72,17 +72,6 @@
     Future.both(Future.after(400, true)),
     YritysUtils.getYritysByIdFuture(fetch)
   )(params.id);
-
-  $: breadcrumbStore.set([
-    {
-      label: $_('yritys.yritykset'),
-      url: '/#/yritykset'
-    },
-    {
-      label: Maybe.fold('...', R.prop('nimi'), yritys),
-      url: location.href
-    }
-  ]);
 </script>
 
 <Overlay {overlay}>

@@ -23,6 +23,7 @@
   const prefix = '/yritys';
   const routes = {
     '/new': NewYritys,
+    '/all': Yritykset,
     '/:id': ExistingYritys
   };
 
