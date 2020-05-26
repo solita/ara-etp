@@ -9,7 +9,6 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import YritysForm from '@Component/Yritys/YritysForm';
-  import { breadcrumbStore } from '@/stores';
   import * as YritysUtils from './yritys-utils';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';

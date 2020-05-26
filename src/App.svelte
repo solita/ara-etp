@@ -14,12 +14,7 @@
   import Login from '@Component/Login/Login';
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import Footer from '@Component/Footer/Footer';
-  import {
-    currentUserStore,
-    errorStore,
-    breadcrumbStore,
-    navigationStore
-  } from '@/stores';
+  import { currentUserStore, errorStore, navigationStore } from '@/stores';
 
   import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
 
@@ -42,7 +37,7 @@
 
   $: routes = R.compose(
     Maybe.orSome({}),
-    R.map(buildRoutes(breadcrumbStore))
+    R.map(buildRoutes)
   )($currentUserStore);
 
   $: console.log(routes);

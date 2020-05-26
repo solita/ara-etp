@@ -15,7 +15,6 @@
   import {
     flashMessageStore,
     countryStore,
-    breadcrumbStore,
     currentUserStore,
     navigationStore
   } from '@/stores';

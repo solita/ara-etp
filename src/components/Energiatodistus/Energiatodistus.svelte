@@ -15,8 +15,7 @@
   import {
     flashMessageStore,
     navigationStore,
-    currentUserStore,
-    breadcrumbStore
+    currentUserStore
   } from '@/stores';
   import * as et from './energiatodistus-utils';
 

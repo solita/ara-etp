@@ -11,7 +11,6 @@
 
   import * as et from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
-  import { breadcrumbStore } from '@/stores';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 

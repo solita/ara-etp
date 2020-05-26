@@ -18,7 +18,7 @@ const laatijaRole = 0;
 const patevyydentoteajaRole = 1;
 const paakayttajaRole = 2;
 
-export const buildRoutes = R.curry((breadcrumbStore, currentUser) => ({
+export const buildRoutes = currentUser => ({
   '/': LandingPage,
   '/yritys': Yritys,
   '/yritys/*': Yritys,
@@ -42,4 +42,4 @@ export const buildRoutes = R.curry((breadcrumbStore, currentUser) => ({
   ),
   '/myinfo': MyInfo,
   '*': NotFound
-}));
+});

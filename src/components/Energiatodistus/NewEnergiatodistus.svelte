@@ -15,7 +15,7 @@
   import * as et from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
 
-  import { flashMessageStore, breadcrumbStore } from '@/stores';
+  import { flashMessageStore } from '@/stores';
 
   export let params;
 

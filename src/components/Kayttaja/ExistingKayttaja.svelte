@@ -3,7 +3,6 @@
   import { _ } from '@Language/i18n';
   import {
     flashMessageStore,
-    breadcrumbStore,
     currentUserStore
   } from '@/stores';
 

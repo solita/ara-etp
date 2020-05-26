@@ -20,7 +20,6 @@
     countryStore,
     navigationStore,
     patevyydetStore,
-    breadcrumbStore,
     currentUserStore
   } from '@/stores';
 
