@@ -195,7 +195,19 @@ export const breadcrumbParse = R.curry((location, i18n, user) =>
       ],
       [R.compose(R.equals('kayttaja'), R.head), parseKayttaja(i18n, user)],
       [R.compose(R.equals('laatija'), R.head), parseLaatija(i18n, user)],
-      [R.compose(R.lt(0), R.length), parseAction(i18n, user)],
+      [
+        R.compose(
+          R.includes(R.__, [
+            'halytykset',
+            'kaytonvalvonta',
+            'tyojono',
+            'viestit',
+            'myinfo'
+          ]),
+          R.head
+        ),
+        parseAction(i18n, user)
+      ],
       [R.T, R.always({ label: '', url: '' })]
     ]),
     locationParts

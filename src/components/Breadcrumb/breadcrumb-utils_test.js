@@ -1,6 +1,7 @@
 import { assert } from 'chai';
 import * as R from 'ramda';
 import * as BreadcrumbUtils from './breadcrumb-utils';
+import * as Maybe from '@Utility/maybe-utils';
 
 describe.only('BreadcrumbUtils', () => {
   describe('locationParts', () => {
@@ -13,20 +14,26 @@ describe.only('BreadcrumbUtils', () => {
   });
 
   describe('parseYritys', () => {
+    const user = Maybe.of({ id: 1 });
+
     const i18n = R.prop(R.__, {
+      'navigation.yritykset': 'Yritykset',
       'yritys.yritys': 'Yritys',
       'yritys.uusi-yritys': 'Uusi yritys'
     });
     it('should return proper crumb for new yritys', () => {
       const locationParts = ['yritys', 'new'];
 
-      const expected = {
-        label: `Uusi yritys`,
-        url: `#/yritys/new`
-      };
+      const expected = [
+        { label: 'Yritykset', url: '#/laatija/1/yritykset' },
+        {
+          label: `Uusi yritys`,
+          url: `#/yritys/new`
+        }
+      ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseYritys(i18n, {}, locationParts),
+        BreadcrumbUtils.parseYritys(i18n, user, locationParts),
         expected
       );
     });
@@ -34,13 +41,16 @@ describe.only('BreadcrumbUtils', () => {
     it('should return proper label for existing yritys', () => {
       const locationParts = ['yritys', '1'];
 
-      const expected = {
-        label: `Yritys 1`,
-        url: `#/yritys/1`
-      };
+      const expected = [
+        { label: 'Yritykset', url: '#/laatija/1/yritykset' },
+        {
+          label: `Yritys 1`,
+          url: `#/yritys/1`
+        }
+      ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseYritys(i18n, {}, locationParts),
+        BreadcrumbUtils.parseYritys(i18n, user, locationParts),
         expected
       );
     });
@@ -54,11 +64,11 @@ describe.only('BreadcrumbUtils', () => {
 
     const user = {};
 
-    it('should return locationcurried function for yritys', () => {
-      const location = '/yritys/new';
+    it('should return empty on unknown route', () => {
+      const location = '/abcd';
       const expected = {
-        label: `Uusi yritys`,
-        url: `#/yritys/new`
+        label: '',
+        url: ''
       };
 
       assert.deepEqual(
