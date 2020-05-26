@@ -39,80 +39,11 @@
 
   const prefix = '/energiatodistus';
   const routes = {
-    '/all': wrap(Energiatodistukset, _ => {
-      breadcrumbStore.set([et.breadcrumb1stLevel($_)]);
-
-      return true;
-    }),
-    '/:version/new': wrap(NewEnergiatodistus, details => {
-      const version = R.compose(
-        R.nth(1),
-        R.tail,
-        R.split('/'),
-        R.prop('location')
-      )(details);
-
-      breadcrumbStore.set([
-        et.breadcrumb1stLevel($_),
-        {
-          label: `Uusi energiatodistus ${version}`,
-          url: location.href
-        }
-      ]);
-
-      return true;
-    }),
-    '/:version/:id': wrap(ExistingEnergiatodistus, details => {
-      const [version, id] = R.compose(
-        Maybe.get,
-        idAndVersionFromLocation,
-        R.prop('location')
-      )(details);
-
-      breadcrumbStore.set([
-        et.breadcrumb1stLevel($_),
-        {
-          label: `ET ${id}`,
-          url: location.href
-        }
-      ]);
-
-      return true;
-    }),
-    '/:version/:id/liitteet': wrap(Liitteet, details => {
-      const [version, id] = R.compose(
-        Maybe.get,
-        idAndVersionFromLocation,
-        R.prop('location')
-      )(details);
-
-      breadcrumbStore.set([
-        et.breadcrumb1stLevel($_),
-        {
-          label: `ET ${id}`,
-          url: location.href
-        }
-      ]);
-
-      return true;
-    }),
-    '/:version/:id/sign': wrap(Allekirjoitus, details => {
-      const [version, id] = R.compose(
-        Maybe.get,
-        idAndVersionFromLocation,
-        R.prop('location')
-      )(details);
-
-      breadcrumbStore.set([
-        et.breadcrumb1stLevel($_),
-        {
-          label: `ET ${id}`,
-          url: location.href
-        }
-      ]);
-
-      return true;
-    })
+    '/all': Energiatodistukset,
+    '/:version/new': NewEnergiatodistus,
+    '/:version/:id': ExistingEnergiatodistus,
+    '/:version/:id/liitteet': Liitteet,
+    '/:version/:id/allekirjoitus': Allekirjoitus
   };
 
   $: R.compose(
