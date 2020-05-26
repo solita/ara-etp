@@ -32,14 +32,14 @@
   const fork = type =>
     Future.fork(
       R.compose(
-          R.tap(toggleOverlay(false)),
-          flashMessageStore.add('Kayttaja', 'error'),
-          R.always($_(`${type}.messages.save-error`))
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Kayttaja', 'error'),
+        R.always($_(`${type}.messages.save-error`))
       ),
       R.compose(
-          R.tap(toggleOverlay(false)),
-          flashMessageStore.add('Kayttaja', 'success'),
-          R.always($_(`${type}.messages.save-success`))
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Kayttaja', 'success'),
+        R.always($_(`${type}.messages.save-success`))
       )
     );
 
@@ -53,19 +53,20 @@
       )($currentUserStore),
       fetch,
       params.id
-    ));
+    )
+  );
 
   $: submitKayttaja = R.compose(
-      fork('kayttaja'),
-      kayttajaApi.putKayttajaById(
-          R.compose(
-              Maybe.orSome(0),
-              R.map(R.prop('rooli'))
-          )($currentUserStore),
-          fetch,
-          params.id
-      ),
-      R.tap(toggleOverlay(true))
+    fork('kayttaja'),
+    kayttajaApi.putKayttajaById(
+      R.compose(
+        Maybe.orSome(0),
+        R.map(R.prop('rooli'))
+      )($currentUserStore),
+      fetch,
+      params.id
+    ),
+    R.tap(toggleOverlay(true))
   );
 
   $: R.compose(
@@ -85,34 +86,34 @@
       )
     ),
     Future.parallel(5),
-    R.append(Future.parallelObject(5, {
-      countries: geoApi.countries,
-      toimintaalueet: geoApi.toimintaalueet,
-      patevyydet: laatijaApi.patevyydet})),
-    R.juxt([kayttajaApi.getKayttajaById(fetch), kayttajaApi.getLaatijaById(fetch)]),
+    R.append(
+      Future.parallelObject(5, {
+        countries: geoApi.countries,
+        toimintaalueet: geoApi.toimintaalueet,
+        patevyydet: laatijaApi.patevyydet
+      })
+    ),
+    R.juxt([
+      kayttajaApi.getKayttajaById(fetch),
+      kayttajaApi.getLaatijaById(fetch)
+    ]),
     R.prop('id')
   )(params);
 
   const mergeKayttajaLaatija = (kayttaja, laatija) =>
     R.compose(
       R.omit(['kayttaja', 'cognitoid', 'ensitallennus']),
-      R.mergeRight)(kayttaja, laatija);
-
-  // TODO: remove breadcrumb code here - see AE-205
-  $: breadcrumbStore.set([
-    {
-      label: $_('kayttaja.omattiedot'),
-      url: location.href
-    }
-  ]);
+      R.mergeRight
+    )(kayttaja, laatija);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(laatija)}
-      <LaatijaForm submit={submitLaatija}
-                   luokittelut={Maybe.get(luokittelut)}
-                   laatija={mergeKayttajaLaatija(Maybe.get(kayttaja), Maybe.get(laatija))} />
+      <LaatijaForm
+        submit={submitLaatija}
+        luokittelut={Maybe.get(luokittelut)}
+        laatija={mergeKayttajaLaatija(Maybe.get(kayttaja), Maybe.get(laatija))} />
     {:else if Maybe.isSome(kayttaja)}
       <KayttajaForm submit={submitKayttaja} kayttaja={Maybe.get(kayttaja)} />
     {/if}

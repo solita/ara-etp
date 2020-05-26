@@ -28,10 +28,12 @@
     "kaytonvalvonta": "Käytönvalvonta",
     "halytykset": "Hälytykset",
     "kayttajat": "Käyttäjät",
+    "kayttaja": "Käyttäjä",
     "et": "ET",
     "liitteet": "Liitteet",
     "allekirjoitus": "Allekirjoitus",
-    "muutoshistoria": "Muutoshistoria"
+    "muutoshistoria": "Muutoshistoria",
+    "myinfo": ""
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."

@@ -84,6 +84,71 @@ export const parseEnergiatodistus = R.curry((i18n, _, locationParts) => {
   return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
 });
 
+export const parseKayttaja = R.curry((i18n, user, locationParts) => {
+  const [prefix, id] = locationParts;
+
+  const label = R.compose(
+    Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),
+    R.map(R.always(i18n('navigation.omattiedot'))),
+    R.filter(R.compose(R.equals(parseInt(id, 10)), R.prop('id')))
+  )(user);
+
+  const crumbPart = {
+    label,
+    url: `#/${prefix}/${id}`
+  };
+
+  return crumbPart;
+});
+
+export const parseLaatijaRootActionCrumb = R.curry((i18n, prefix, root) => ({
+  label: i18n(`navigation.${root}`),
+  url: `#/${prefix}/${root}`
+}));
+
+export const parseSingleLaatijaActionCrumb = R.curry(
+  (i18n, prefix, id, action) => {
+    const actionLabels = {
+      yritykset: 'navigation.yritykset'
+    };
+
+    const crumbPart = {
+      label: `${R.compose(
+        i18n,
+        R.defaultTo(''),
+        R.prop(R.__, actionLabels)
+      )(action)}`,
+      url: `#/${prefix}/${id}/${action}`
+    };
+
+    return crumbPart;
+  }
+);
+
+export const parseLaatija = R.curry((i18n, user, locationParts) => {
+  const [prefix, root, action] = R.compose(
+    R.take(3),
+    R.concat(R.__, R.times(Maybe.None, 3)),
+    R.map(Maybe.fromNull)
+  )(locationParts);
+
+  const crumbParts = [
+    R.lift(parseLaatijaRootActionCrumb(i18n))(prefix, root),
+    R.lift(parseSingleLaatijaActionCrumb(i18n))(prefix, root, action)
+  ];
+
+  return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
+});
+
+export const parseAction = R.curry((i18n, _, [action]) => {
+  const crumbPart = {
+    label: i18n(`navigation.${action}`),
+    url: `#/${action}`
+  };
+
+  return crumbPart;
+});
+
 export const breadcrumbParse = R.curry((location, i18n, user) =>
   R.compose(
     R.cond([
@@ -91,7 +156,11 @@ export const breadcrumbParse = R.curry((location, i18n, user) =>
       [
         R.compose(R.equals('energiatodistus'), R.head),
         parseEnergiatodistus(i18n, user)
-      ]
+      ],
+      [R.compose(R.equals('kayttaja'), R.head), parseKayttaja(i18n, user)],
+      [R.compose(R.equals('laatija'), R.head), parseLaatija(i18n, user)],
+      [R.compose(R.lt(0), R.length), parseAction(i18n, user)],
+      [R.T, R.always({ label: '', url: '' })]
     ]),
     locationParts
   )(location)
