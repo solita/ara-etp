@@ -65,8 +65,21 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
-  <div class="flex flex-col -mx-4">
+  <H2 text={$_('energiatodistus.perustiedot.header')} />
 
+  <div class="flex lg:flex-row flex-col -mx-4">
+    {#if R.complement(R.isNil)(energiatodistus.id)}
+      <div class="lg:w-1/2 w-full px-4 py-2">
+        <BasicInput
+            id="energiatodistus.id"
+            name="energiatodistus.id"
+            label={$_('energiatodistus.id')}
+            disabled={true}
+            bind:model={energiatodistus}
+            lens={R.lensProp('id')}
+            i18n={$_} />
+      </div>
+    {/if}
     {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
       <div class="lg:w-1/2 w-full px-4 py-2">
         <BasicInput
@@ -80,7 +93,8 @@
           i18n={$_} />
       </div>
     {/if}
-
+  </div>
+  <div class="flex lg:flex-row flex-col -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Input
         {disabled}
@@ -98,7 +112,9 @@
         bind:model={energiatodistus}
         path={['perustiedot', 'tilaaja']} />
     </div>
+  </div>
 
+  <div class="flex flex-col -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Select
         label={$_('energiatodistus.perustiedot.kieli')}
@@ -134,6 +150,15 @@
           path={['perustiedot', 'havainnointikaynti']} />
       </div>
     {/if}
+
+    <div class="lg:w-1/2 w-full  px-4 py-4">
+      <Input
+          {disabled}
+          {schema}
+          center={false}
+          bind:model={energiatodistus}
+          path={['tulokset', 'laskentatyokalu']} />
+    </div>
   </div>
 
   <HR />
@@ -169,8 +194,8 @@
   <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
   <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
-  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
 
   <HR />
 
@@ -183,7 +208,6 @@
     bind:energiatodistus />
   <Nettotarve {disabled} {schema} bind:energiatodistus />
   <Lampokuormat {disabled} {schema} bind:energiatodistus />
-  <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />

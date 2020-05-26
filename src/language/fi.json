@@ -138,8 +138,11 @@
       "new": "Tallenna",
       "save": "Tallenna"
     },
+
+    "id": "Energiatodistusnumero",
     "laatija-fullname": "Laatija",
     "perustiedot": {
+      "header": "Energiatodistuksen perustiedot",
       "nimi": "Rakennuksen nimi",
       "tilaaja": "Tilaaja",
       "kieli": "Kieli",
@@ -161,8 +164,8 @@
       }
     },
     "vuosikulutus": "kWh/vuosi",
-    "vuosikulutus-per-nelio": "kWh/m²vuosi",
-    "litraa-per-neliovuosi": "dm³/m²vuosi",
+    "vuosikulutus-per-nelio": "kWh/(m²vuosi)",
+    "litraa-per-neliovuosi": "dm³/(m²vuosi)",
     "yhteensa": "Yhteensä",
     "lahtotiedot": {
       "header": "E-luvun laskennan lähtötiedot",
@@ -468,7 +471,7 @@
         "kvesi": "Auringon vuosittainen lämpökuorma"
       },
       "laskentatyokalu_header": "Laskentatyökalun nimi ja versionumero",
-      "laskentatyokalu": "Laskentatyökalun nimi ja versionumero"
+      "laskentatyokalu": "Energiatodistuksen laadintaohjelmisto ja versio"
     },
     "toteutunut-ostoenergiankulutus": {
       "header": "Toteutunut energiankulutus",

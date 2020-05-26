@@ -10,7 +10,7 @@
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.jaahdytysjarjestelma.header')} />
-<div class="w-full py-4 mb-4">
+<div class="w-1/3 py-4 mb-4">
   <Input
     {disabled}
     {schema}
