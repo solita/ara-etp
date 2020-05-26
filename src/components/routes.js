@@ -19,67 +19,27 @@ const patevyydentoteajaRole = 1;
 const paakayttajaRole = 2;
 
 export const buildRoutes = R.curry((breadcrumbStore, currentUser) => ({
-  '/': wrap(LandingPage, _ => {
-    breadcrumbStore.set([]);
-    return true;
-  }),
+  '/': LandingPage,
   '/yritys': Yritys,
   '/yritys/*': Yritys,
-  '/halytykset': wrap(
-    Halytykset,
-    _ =>
-      KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser),
-    _ => {
-      breadcrumbStore.set([{ label: 'Halytykset', url: '/halytykset' }]);
-      return true;
-    }
+  '/halytykset': wrap(Halytykset, _ =>
+    KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser)
   ),
-  '/kaytonvalvonta': wrap(Kaytonvalvonta, _ => {
-    _ =>
-      KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser),
-      breadcrumbStore.set([
-        { label: 'Käytönvalvonta', url: '/kaytonvalvonta' }
-      ]);
-    return true;
-  }),
-  '/tyojono': wrap(Tyojono, _ => {
-    _ =>
-      KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser),
-      breadcrumbStore.set([{ label: 'Työjono', url: '/tyojono' }]);
-    return true;
-  }),
-  '/kayttaja/*': wrap(Kayttaja, _ => {
-    breadcrumbStore.set([{ label: 'Kayttaja', url: '/kayttaja' }]);
-    return true;
-  }),
-  '/laatija/*': wrap(Laatija, _ => {
-    breadcrumbStore.set([{ label: 'Laatija', url: '/laatija' }]);
-    return true;
-  }),
-  '/viestit': wrap(Viestit, _ => {
-    breadcrumbStore.set([{ label: 'Viestit', url: '/viestit' }]);
-    return true;
-  }),
-  '/energiatodistus/*': wrap(
-    Energiatodistus,
-    _ =>
-      KayttajaUtils.kayttajaHasAccessToResource(
-        [laatijaRole, paakayttajaRole],
-        currentUser
-      ),
-    _ => {
-      breadcrumbStore.set([
-        { label: 'Energiatodistukset', url: '/energiatodistus' }
-      ]);
-      return true;
-    }
+  '/kaytonvalvonta': wrap(Kaytonvalvonta, _ =>
+    KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser)
   ),
-  '/myinfo': wrap(MyInfo, _ => {
-    breadcrumbStore.set([{ label: 'Omat tiedot', url: '/myinfo' }]);
-    return true;
-  }),
-  '*': wrap(NotFound, _ => {
-    breadcrumbStore.set([]);
-    return true;
-  })
+  '/tyojono': wrap(Tyojono, _ =>
+    KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser)
+  ),
+  '/kayttaja/*': Kayttaja,
+  '/laatija/*': Laatija,
+  '/viestit': Viestit,
+  '/energiatodistus/*': wrap(Energiatodistus, _ =>
+    KayttajaUtils.kayttajaHasAccessToResource(
+      [laatijaRole, paakayttajaRole],
+      currentUser
+    )
+  ),
+  '/myinfo': MyInfo,
+  '*': NotFound
 }));
