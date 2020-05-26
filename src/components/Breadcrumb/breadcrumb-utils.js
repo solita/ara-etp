@@ -101,10 +101,17 @@ export const parseKayttaja = R.curry((i18n, user, locationParts) => {
   return crumbPart;
 });
 
-export const parseLaatijaRootActionCrumb = R.curry((i18n, prefix, root) => ({
-  label: i18n(`navigation.${root}`),
-  url: `#/${prefix}/${root}`
-}));
+export const parseLaatijaRootActionCrumb = R.curry((i18n, prefix, action) => {
+  const actionLabels = {
+    all: 'navigation.laatijat',
+    laatijoidentuonti: 'navigation.laatijoidentuonti'
+  };
+
+  return {
+    label: R.compose(i18n, R.defaultTo(''), R.prop(R.__, actionLabels))(action),
+    url: `#/${prefix}/${action}`
+  };
+});
 
 export const parseSingleLaatijaActionCrumb = R.curry(
   (i18n, prefix, id, action) => {

@@ -20,7 +20,7 @@ export const linksForLaatija = laatija => [
 export const linksForPatevyydentoteaja = _ => [
   {
     text: 'navigation.laatijoidentuonti',
-    href: '/laatija/upload'
+    href: '/laatija/laatijoidentuonti'
   },
   { text: 'navigation.laatijat', href: '/laatija/all' },
   { text: 'navigation.omattiedot', href: '/myinfo' }

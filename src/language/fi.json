@@ -33,7 +33,7 @@
     "liitteet": "Liitteet",
     "allekirjoitus": "Allekirjoitus",
     "muutoshistoria": "Muutoshistoria",
-    "myinfo": ""
+    "myinfo": "Omat Tiedot"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."

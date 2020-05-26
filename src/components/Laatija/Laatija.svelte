@@ -24,33 +24,11 @@
     currentUserStore
   } from '@/stores';
 
-  const idFromDetails = R.compose(
-    R.nth(1),
-    R.tail,
-    R.split('/'),
-    R.prop('location')
-  );
-
   const prefix = '/laatija';
   const routes = {
-    '/all': wrap(Laatijat, _ => {
-      breadcrumbStore.set([{ label: 'Laatijat', url: `#${prefix}/all` }]);
-      return true;
-    }),
-    '/upload': wrap(LaatijaUpload, _ => {
-      breadcrumbStore.set([
-        { label: 'Laatijoiden tuonti', url: `#${prefix}/upload` }
-      ]);
-      return true;
-    }),
-    '/:id/yritykset': wrap(Yritykset, details => {
-      const id = idFromDetails(details);
-
-      breadcrumbStore.set([
-        { label: 'Yritykset', url: `#${prefix}/${id}/yritykset` }
-      ]);
-      return true;
-    })
+    '/all': Laatijat,
+    '/laatijoidentuonti': LaatijaUpload,
+    '/:id/yritykset': Yritykset
   };
 
   $: R.compose(

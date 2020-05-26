@@ -20,13 +20,6 @@
     navigationStore
   } from '@/stores';
 
-  const idFromDetails = R.compose(
-    R.head,
-    R.tail,
-    R.split('/'),
-    R.prop('location')
-  );
-
   const prefix = '/yritys';
   const routes = {
     '/new': NewYritys,
