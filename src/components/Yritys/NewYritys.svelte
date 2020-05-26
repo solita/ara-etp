@@ -26,30 +26,26 @@
       R.compose(
         R.tap(toggleOverlay(false)),
         flashMessageStore.add('Yritys', 'error'),
-        R.ifElse(R.equals(409),
-            _ => $_('yritys.messages.save-conflict'),
-            _ => $_('yritys.messages.save-error'))),
+        R.ifElse(
+          R.equals(409),
+          _ => $_('yritys.messages.save-conflict'),
+          _ => $_('yritys.messages.save-error')
+        )
+      ),
       R.compose(
         R.tap(_ =>
           flashMessageStore.addPersist(
             'Yritys',
             'success',
             $_('yritys.messages.save-success')
-          )),
-        ({ id }) => replace(`/yritys/${id}`))),
+          )
+        ),
+        ({ id }) => replace(`/yritys/${id}`)
+      )
+    ),
     YritysUtils.postYritysFuture(fetch),
-    R.tap(toggleOverlay(true)));
-
-  breadcrumbStore.set([
-    {
-      label: $_('yritys.yritykset'),
-      url: '/#/yritykset'
-    },
-    {
-      label: $_('yritys.uusi_yritys'),
-      url: window.location.href
-    }
-  ]);
+    R.tap(toggleOverlay(true))
+  );
 </script>
 
 <Overlay {overlay}>

@@ -3,7 +3,17 @@ import * as Maybe from '@Utility/maybe-utils';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-export const parseYritys = R.curry((i18n, _, locationParts) => {
+export const laatijanYrityksetCrumb = R.curry((i18n, user) =>
+  R.map(
+    u => ({
+      label: i18n('navigation.yritykset'),
+      url: `#/laatija/${R.prop('id', u)}/yritykset`
+    }),
+    user
+  )
+);
+
+export const parseYritys = R.curry((i18n, user, locationParts) => {
   const [prefix, id] = locationParts;
 
   const crumbPart = {
@@ -15,7 +25,11 @@ export const parseYritys = R.curry((i18n, _, locationParts) => {
     return R.assoc('label', i18n('yritys.uusi-yritys'), crumbPart);
   }
 
-  return crumbPart;
+  return R.compose(
+    Maybe.orSome(crumbPart),
+    R.map(R.compose(R.append(crumbPart), Array.of)),
+    laatijanYrityksetCrumb
+  )(i18n, user);
 });
 
 export const energiatodistusRootActionCrumb = R.curry(
@@ -132,7 +146,7 @@ export const parseSingleLaatijaActionCrumb = R.curry(
   }
 );
 
-export const parseLaatija = R.curry((i18n, user, locationParts) => {
+export const parseLaatija = R.curry((i18n, _, locationParts) => {
   const [prefix, root, action] = R.compose(
     R.take(3),
     R.concat(R.__, R.times(Maybe.None, 3)),
