@@ -18,7 +18,7 @@
       <th class="et-table--th">{$_('energiatodistus.lahtotiedot.ala')}</th>
       <th class="et-table--th">{$_('energiatodistus.lahtotiedot.U')}</th>
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ikkunat.g-ks')}
+        g<sub>{$_('energiatodistus.lahtotiedot.ikkunat.kohtisuora')}</sub>
       </th>
       <th class="et-table--th" />
     </tr>
