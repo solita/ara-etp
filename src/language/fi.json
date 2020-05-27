@@ -141,6 +141,7 @@
 
     "id": "Energiatodistusnumero",
     "laatija-fullname": "Laatija",
+    "e-luku": "E-luku",
     "perustiedot": {
       "header": "Energiatodistuksen perustiedot",
       "nimi": "Rakennuksen nimi",
