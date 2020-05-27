@@ -620,6 +620,7 @@
         ]
       }
     },
+    "lisamerkintoja": "Lisämerkintojä",
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
