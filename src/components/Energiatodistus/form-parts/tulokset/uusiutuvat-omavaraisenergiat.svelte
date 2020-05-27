@@ -34,7 +34,7 @@
   </thead>
 
   <tbody class="et-table--tbody">
-    {#each ['aurinkosahko', 'tuulisahko', 'aurinkolampo', 'muulampo', 'muusahko', 'lampopumppu'] as energiamuoto}
+    {#each ['aurinkosahko', 'aurinkolampo', 'tuulisahko', 'lampopumppu', 'muusahko', 'muulampo'] as energiamuoto}
       <tr class="et-table--tr">
         <td class="et-table--td">
           {$_(`energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.labels.${energiamuoto}`)}
