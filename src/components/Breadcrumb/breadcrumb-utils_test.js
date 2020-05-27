@@ -33,7 +33,7 @@ describe.only('BreadcrumbUtils', () => {
       ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseYritys(i18n, user, locationParts),
+        BreadcrumbUtils.parseYritys(i18n, user, Maybe.None(), locationParts),
         expected
       );
     });
@@ -50,7 +50,7 @@ describe.only('BreadcrumbUtils', () => {
       ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseYritys(i18n, user, locationParts),
+        BreadcrumbUtils.parseYritys(i18n, user, Maybe.None(), locationParts),
         expected
       );
     });
@@ -72,7 +72,7 @@ describe.only('BreadcrumbUtils', () => {
       };
 
       assert.deepEqual(
-        BreadcrumbUtils.breadcrumbParse(location, i18n, user),
+        BreadcrumbUtils.breadcrumbParse(location, i18n, user, Maybe.None()),
         expected
       );
     });

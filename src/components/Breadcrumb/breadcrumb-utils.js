@@ -13,11 +13,14 @@ export const laatijanYrityksetCrumb = R.curry((i18n, user) =>
   )
 );
 
-export const parseYritys = R.curry((i18n, user, locationParts) => {
+export const parseYritys = R.curry((i18n, user, yritys, locationParts) => {
   const [prefix, id] = locationParts;
 
   const crumbPart = {
-    label: `${i18n('yritys.yritys')} ${id}`,
+    label: R.compose(
+      Maybe.orSome(`${i18n('yritys.yritys')} ${id}`),
+      R.map(R.prop('nimi'))
+    )(yritys),
     url: `#/${prefix}/${id}`
   };
 
@@ -109,7 +112,7 @@ export const parseEnergiatodistus = R.curry((i18n, _, locationParts) => {
   return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
 });
 
-export const parseKayttaja = R.curry((i18n, user, locationParts) => {
+export const parseKayttaja = R.curry((i18n, user, kayttaja, locationParts) => {
   const [prefix, id] = locationParts;
 
   if (R.equals('all', id)) {
@@ -117,7 +120,12 @@ export const parseKayttaja = R.curry((i18n, user, locationParts) => {
   }
 
   const label = R.compose(
-    Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),
+    Maybe.orSome(
+      R.compose(
+        Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),
+        R.map(k => `${k.etunimi} ${k.sukunimi}`)
+      )(kayttaja)
+    ),
     R.map(R.always(i18n('navigation.omattiedot'))),
     R.filter(R.compose(R.equals(parseInt(id, 10)), R.prop('id')))
   )(user);
@@ -127,7 +135,10 @@ export const parseKayttaja = R.curry((i18n, user, locationParts) => {
     url: `#/${prefix}/${id}`
   };
 
-  return crumbPart;
+  return [
+    { label: i18n('navigation.kayttajat'), url: `#/${prefix}/all` },
+    crumbPart
+  ];
 });
 
 export const parseLaatijaRootActionCrumb = R.curry((i18n, prefix, action) => {
@@ -185,15 +196,21 @@ export const parseAction = R.curry((i18n, _, [action]) => {
   return crumbPart;
 });
 
-export const breadcrumbParse = R.curry((location, i18n, user) =>
+export const breadcrumbParse = R.curry((location, i18n, user, resource) =>
   R.compose(
     R.cond([
-      [R.compose(R.equals('yritys'), R.head), parseYritys(i18n, user)],
+      [
+        R.compose(R.equals('yritys'), R.head),
+        parseYritys(i18n, user, resource)
+      ],
       [
         R.compose(R.equals('energiatodistus'), R.head),
         parseEnergiatodistus(i18n, user)
       ],
-      [R.compose(R.equals('kayttaja'), R.head), parseKayttaja(i18n, user)],
+      [
+        R.compose(R.equals('kayttaja'), R.head),
+        parseKayttaja(i18n, user, resource)
+      ],
       [R.compose(R.equals('laatija'), R.head), parseLaatija(i18n, user)],
       [
         R.compose(
