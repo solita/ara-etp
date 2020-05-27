@@ -568,8 +568,8 @@
         ]
       },
       "valaistus-muut": {
-        "header": "Huomiot - Valaistus, jäähdytysjärjestelmät, sähköiset erillislaitteet ja muut järjestelmät",
-        "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislaitteiden ja muiden järjestelmien huomiot",
+        "header": "Huomiot - Valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät",
+        "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien huomiot",
         "toimenpide": [
           {
             "nimi": "Toimenpide-ehdotus",
