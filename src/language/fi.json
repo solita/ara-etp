@@ -558,7 +558,7 @@
         "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -571,7 +571,7 @@
         "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislaitteiden ja muiden järjestelmien huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -584,7 +584,7 @@
         "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -597,7 +597,7 @@
         "teksti": "Ulkoseinien, ulko-ovien ja ikkunoiden huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -610,7 +610,7 @@
         "teksti": "Ylä- ja alapohjan huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
