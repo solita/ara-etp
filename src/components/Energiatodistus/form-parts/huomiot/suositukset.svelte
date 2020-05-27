@@ -17,3 +17,12 @@
     bind:model={energiatodistus}
     path={['huomiot', 'suositukset-fi']} />
 </div>
+
+<H3 text={$_('energiatodistus.huomiot.lisatietoja-header')} />
+<div class="w-full py-4 mb-4">
+  <Textarea
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['huomiot', 'lisatietoja-fi']} />
+</div>
