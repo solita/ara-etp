@@ -5,15 +5,7 @@
 
   import * as Maybe from '@Utility/maybe-utils';
 
-  const routeForKayttaja = kayttaja => {
-    if (kayttaja.rooli === 0) {
-      replace(`/kayttaja/${kayttaja.id}`);
-    } else {
-      console.log('Roolia ei tuettu');
-    }
-  };
-
-  R.forEach(routeForKayttaja, $currentUserStore);
+  R.forEach(kayttaja => replace(`/kayttaja/${kayttaja.id}`), $currentUserStore);
 </script>
 
 {#if R.compose( Maybe.isSome, R.filter(R.compose( R.equals(1), R.prop('rooli') )) )($currentUserStore)}
