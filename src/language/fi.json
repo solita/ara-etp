@@ -391,7 +391,6 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "header": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
-        "vuosituotto": "kWh/vuosi",
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",
