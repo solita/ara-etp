@@ -348,7 +348,7 @@
       "sis-kuorma": {
         "header": "Sisäiset lämpökuormat eri käyttöasteilla",
         "kayttoaste": "Käyttöaste",
-        "lampokuorma": "Lämpökuorma W/m²",
+        "lampokuorma": "Lämpökuorma",
         "labels": {
           "henkilot": "Henkilöt",
           "kuluttajalaitteet": "Kuluttajalaitteet",
