@@ -26,6 +26,8 @@ const DateValue = () => ({
 
 const FloatPos = Float(0.0, Infinity);
 
+const AnyFloat = Float(-Infinity, Infinity);
+
 const Rakennusvaippa = (min, max) => ({
   ala: FloatPos,
   U: Float(min, max)
@@ -78,10 +80,10 @@ const Huomio = {
     {
       'nimi-fi': String(100),
       'nimi-sv': String(100),
-      lampo: FloatPos,
-      sahko: FloatPos,
-      jaahdytys: FloatPos,
-      'eluvun-muutos': FloatPos
+      lampo: AnyFloat,
+      sahko: AnyFloat,
+      jaahdytys: AnyFloat,
+      'eluvun-muutos': AnyFloat
     }
   ]
 };
