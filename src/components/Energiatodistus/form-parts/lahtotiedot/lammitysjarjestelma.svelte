@@ -86,10 +86,12 @@
     <tr class="et-table--tr">
       <th class="et-table--th" />
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.lammitys.kpl')}
+        <span>{$_('energiatodistus.lahtotiedot.lammitys.maara')}</span>
+        <span class="block">{$_('units.pieces')}</span>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.lammitys.tuotto')} (kWh)
+        <span>{$_('energiatodistus.lahtotiedot.lammitys.tuotto')}</span>
+        <span class="block">kWh</span>
       </th>
       <th class="et-table--th" />
       <th class="et-table--th" />

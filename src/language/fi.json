@@ -36,7 +36,8 @@
     "load-error": "Tietojen haku epäonnistui."
   },
   "units": {
-    "year": "vuosi"
+    "year": "vuosi",
+    "pieces": "kpl"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
@@ -304,7 +305,7 @@
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
         "lampokerroin": "Lämpökerroin",
         "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö kWh/(m²vuosi)",
-        "kpl": "Kpl",
+        "maara": "Maara",
         "tuotto": "Tuotto",
         "kuvaus": "Lämmitysjärjestelmän kuvaus",
         "tilat-ja-iv": {
