@@ -35,6 +35,9 @@
   "errors": {
     "load-error": "Tietojen haku epäonnistui."
   },
+  "units": {
+    "year": "vuosi"
+  },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
   "tallenna": "Tallenna",
@@ -549,7 +552,7 @@
       "toimenpide-lampo": "Lämpö, ostoenergian muutos kWh/vuosi",
       "toimenpide-sahko": "Sähkö, ostoenergian muutos kWh/vuosi",
       "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos kWh/vuosi",
-      "toimenpide-eluvun-muutos": "E-luvun muutos WhE/m²vuosi",
+      "toimenpide-eluvun-muutos": "E-luvun muutos",
       "suositukset-header": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
       "suositukset": "Suositetut toimenpide-ehdotukset",
       "lisatietoja-header": "Lisätietoja energiatehokkuudesta",
