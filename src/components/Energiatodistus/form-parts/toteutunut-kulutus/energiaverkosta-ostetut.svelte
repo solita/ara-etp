@@ -17,6 +17,12 @@
   )(energiatodistus);
 </script>
 
+<style type="text/postcss">
+  .indent {
+    @apply pl-4;
+  }
+</style>
+
 <H3
   compact={true}
   text={$_('energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.header')} />
@@ -40,7 +46,9 @@
     {#each ['kaukolampo', 'kokonaissahko', 'kiinteistosahko', 'kayttajasahko', 'kaukojaahdytys'] as energiamuoto}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.labels.${energiamuoto}`)}
+          <div class:indent="{R.includes(energiamuoto, ['kiinteistosahko', 'kayttajasahko'])}">
+            {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.labels.${energiamuoto}`)}
+          </div>
         </td>
         <td class="et-table--td" />
         <td class="et-table--td" />

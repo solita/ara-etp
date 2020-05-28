@@ -21,6 +21,7 @@
 
   import Input from './Input';
   import BasicInput from '@Component/Input/Input';
+  import Textarea from './Textarea';
 
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
@@ -249,4 +250,13 @@
   <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
   <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
   <Suositukset {disabled} {schema} bind:energiatodistus />
+
+  <H2 text={$_('energiatodistus.lisamerkintoja')} />
+  <div class="w-full py-4 mb-4">
+  <Textarea
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['lisamerkintoja-fi']} />
+  </div>
 </div>

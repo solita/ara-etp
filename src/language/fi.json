@@ -210,7 +210,7 @@
       },
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
-        "g-ks": "gkohtisuora-arvo",
+        "kohtisuora": "kohtisuora",
         "labels": {
           "pohjoinen": "Pohjoinen",
           "koillinen": "Koillinen",
@@ -224,42 +224,42 @@
         "pohjoinen": {
           "ala": "Pohjoisten ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "koillinen": {
           "ala": "Koillisten ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "ita": {
           "ala": "Idän ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "kaakko": {
           "ala": "Kaakon ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "etela": {
           "ala": "Etelän ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "lounas": {
           "ala": "Lounaan ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "lansi": {
           "ala": "Lännen ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         },
         "luode": {
           "ala": "Luoteen ikkunoiden pinta-ala",
           "U": "U",
-          "g-ks": "G-Kohtisuora"
+          "g-ks": "g-kohtisuora"
         }
       },
       "ilmanvaihto": {
@@ -552,13 +552,14 @@
       "toimenpide-eluvun-muutos": "E-luvun muutos WhE/m²vuosi",
       "suositukset-header": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
       "suositukset": "Suositetut toimenpide-ehdotukset",
+      "lisatietoja-header": "Lisätietoja energiatehokkuudesta",
       "lisatietoja": "Lisätiedot",
       "iv-ilmastointi": {
         "header": "Huomiot - Ilmanvaihto- ja ilmastointijärjestelmät",
         "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -567,11 +568,11 @@
         ]
       },
       "valaistus-muut": {
-        "header": "Huomiot - Valaistus, jäähdytysjärjestelmät, sähköiset erillislaitteet ja muut järjestelmät",
-        "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislaitteiden ja muiden järjestelmien huomiot",
+        "header": "Huomiot - Valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät",
+        "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -584,7 +585,7 @@
         "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -597,7 +598,7 @@
         "teksti": "Ulkoseinien, ulko-ovien ja ikkunoiden huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -610,7 +611,7 @@
         "teksti": "Ylä- ja alapohjan huomiot",
         "toimenpide": [
           {
-            "nimi": "Toimenpiteen nimi",
+            "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
             "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen kulutukseen",
@@ -619,6 +620,7 @@
         ]
       }
     },
+    "lisamerkintoja": "Lisämerkintojä",
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
