@@ -6,6 +6,7 @@
   import Input from '@Component/Energiatodistus/Input';
   import Textarea from '@Component/Energiatodistus/Textarea';
   import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
+  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
 
   export let disabled;
   export let schema;
@@ -41,13 +42,13 @@
     <tr class="et-table--tr">
       <th class="et-table--th" />
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-lampo')}
+        {$_('energiatodistus.huomiot.toimenpide-lampo')} <VuosikulutusUnit/>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-sahko')}
+        {$_('energiatodistus.huomiot.toimenpide-sahko')} <VuosikulutusUnit/>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-jaahdytys')}
+        {$_('energiatodistus.huomiot.toimenpide-jaahdytys')} <VuosikulutusUnit/>
       </th>
       <th class="et-table--th">
         {$_('energiatodistus.huomiot.toimenpide-eluvun-muutos')} <ELukuUnit/>

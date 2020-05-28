@@ -543,9 +543,9 @@
     "huomiot": {
       "header": "Toimenpide-ehdotukset rakennuksen e-luvun parantamiseksi",
       "toimenpide-ehdotus": "Toimenpide-ehdotus",
-      "toimenpide-lampo": "Lämpö, ostoenergian muutos kWh/vuosi",
-      "toimenpide-sahko": "Sähkö, ostoenergian muutos kWh/vuosi",
-      "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos kWh/vuosi",
+      "toimenpide-lampo": "Lämpö, ostoenergian muutos",
+      "toimenpide-sahko": "Sähkö, ostoenergian muutos",
+      "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos",
       "toimenpide-eluvun-muutos": "E-luvun muutos",
       "suositukset-header": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
       "suositukset": "Suositetut toimenpide-ehdotukset",
