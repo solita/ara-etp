@@ -7,7 +7,3 @@
 
   R.forEach(kayttaja => replace(`/kayttaja/${kayttaja.id}`), $currentUserStore);
 </script>
-
-{#if R.compose( Maybe.isSome, R.filter(R.compose( R.equals(1), R.prop('rooli') )) )($currentUserStore)}
-  Pätevyydentoteajan tiedot tulevat tänne.
-{/if}
