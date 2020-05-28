@@ -6,6 +6,8 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/vuosikulutus-per-ala';
+  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/vuosikulutus';
 
   export let disabled;
   export let schema;
@@ -58,10 +60,10 @@
         {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.muunnoskerroin')}
       </th>
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.vuosikulutus')}
+        <VuosikulutusUnit/>
       </th>
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.vuosikulutus-per-nelio')}
+        <VuosikulutusPerAlaUnit/>
       </th>
     </tr>
   </thead>
