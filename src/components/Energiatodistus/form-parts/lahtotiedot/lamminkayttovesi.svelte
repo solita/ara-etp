@@ -3,7 +3,7 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
-  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/vuosikulutus-per-ala';
+  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
 
   export let disabled;
   export let schema;
