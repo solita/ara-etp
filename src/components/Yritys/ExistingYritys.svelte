@@ -15,7 +15,7 @@
   import Spinner from '@Component/Spinner/Spinner';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore } from '@/stores';
+  import { flashMessageStore, idTranslateStore } from '@/stores';
 
   export let params;
 
@@ -35,23 +35,25 @@
 
   $: params.id && resetView();
 
-  $: submit = R.compose(
-    Future.forkBothDiscardFirst(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Yritys', 'error'),
-        R.always($_('yritys.messages.save-error'))
+  $: submit = updatedYritys =>
+    R.compose(
+      Future.forkBothDiscardFirst(
+        R.compose(
+          R.tap(toggleOverlay(false)),
+          flashMessageStore.add('Yritys', 'error'),
+          R.always($_('yritys.messages.save-error'))
+        ),
+        R.compose(
+          R.tap(toggleOverlay(false)),
+          flashMessageStore.add('Yritys', 'success'),
+          R.always($_('yritys.messages.save-success')),
+          R.tap(() => idTranslateStore.updateYritys(updatedYritys))
+        )
       ),
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Yritys', 'success'),
-        R.always($_('yritys.messages.save-success'))
-      )
-    ),
-    Future.both(Future.after(500, true)),
-    YritysUtils.putYritysByIdFuture(fetch, params.id),
-    R.tap(toggleOverlay(true))
-  );
+      Future.both(Future.after(500, true)),
+      YritysUtils.putYritysByIdFuture(fetch, params.id),
+      R.tap(toggleOverlay(true))
+    )(updatedYritys);
 
   $: R.compose(
     Future.forkBothDiscardFirst(
@@ -65,6 +67,7 @@
       ),
       R.compose(
         fetchedYritys => (yritys = Maybe.Some(fetchedYritys)),
+        R.tap(idTranslateStore.updateYritys),
         R.tap(toggleOverlay(false))
       )
     ),
@@ -79,7 +82,7 @@
       {submit}
       {disabled}
       existing={Maybe.isSome(yritys)}
-      yritys={Maybe.getOrElse(YritysUtils.emptyYritys(), yritys)} />
+      yritys={Maybe.orSome(YritysUtils.emptyYritys(), yritys)} />
   </div>
   <div slot="overlay-content">
     <Spinner />

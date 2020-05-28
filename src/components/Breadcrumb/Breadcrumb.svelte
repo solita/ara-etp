@@ -1,7 +1,6 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Resources from '@Utility/resources';
   import * as Future from '@Utility/future-utils';
   import * as BreadcrumbUtils from './breadcrumb-utils';
 
@@ -10,21 +9,13 @@
   export let user;
   export let location;
   export let i18n;
-
-  let resource = Maybe.None();
-
-  $: R.compose(
-    Future.value(r => (resource = r)),
-    Future.coalesce(Maybe.None, Maybe.Some),
-    Maybe.orSome(Future.reject()),
-    Resources.parseResource(fetch)
-  )(location);
+  export let idTranslate;
 
   $: breadcrumbs = R.compose(
     R.flatten,
     Array.of,
     BreadcrumbUtils.breadcrumbParse
-  )(location, i18n, user, resource);
+  )(idTranslate, location, i18n, user);
 </script>
 
 <style type="text/postcss">

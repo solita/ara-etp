@@ -13,35 +13,22 @@ export const laatijanYrityksetCrumb = R.curry((i18n, user) =>
   )
 );
 
-export const parseYritys = R.curry((i18n, user, yritys, locationParts) => {
+export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
   const [prefix, id] = locationParts;
+  const label = R.compose(
+    Maybe.orSome(`${i18n('yritys.yritys')} ${id}`),
+    Maybe.fromNull,
+    R.path([prefix, id])
+  )(idTranslate);
 
   const crumbPart = {
-    label: R.compose(
-      Maybe.orSome(`${i18n('yritys.yritys')} ${id}`),
-      R.map(R.prop('nimi'))
-    )(yritys),
+    label: i18n(label),
     url: `#/${prefix}/${id}`
   };
 
-  if (R.equals('all', id)) {
-    return R.assoc('label', i18n('navigation.yritykset'), crumbPart);
-  }
-
   return R.compose(
     Maybe.orSome(crumbPart),
-    R.map(
-      R.compose(
-        R.compose(
-          R.append,
-          R.when(
-            R.always(R.equals('new', id)),
-            R.assoc('label', i18n('yritys.uusi-yritys'))
-          )
-        )(crumbPart),
-        Array.of
-      )
-    ),
+    R.map(R.compose(R.append(crumbPart), Array.of)),
     laatijanYrityksetCrumb
   )(i18n, user);
 });
@@ -112,34 +99,46 @@ export const parseEnergiatodistus = R.curry((i18n, _, locationParts) => {
   return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
 });
 
-export const parseKayttaja = R.curry((i18n, user, kayttaja, locationParts) => {
-  const [prefix, id] = locationParts;
+export const isCurrentUser = R.curry((id, user) =>
+  R.compose(R.equals(parseInt(id, 10)), R.prop('id'))(user)
+);
 
-  if (R.equals('all', id)) {
-    return { label: i18n('navigation.kayttajat'), url: `#/${prefix}/${id}` };
+export const shouldPrependKayttajat = R.curry((id, user) =>
+  R.not(
+    R.either(
+      R.equals('all'),
+      R.compose(Maybe.isSome, R.filter(R.__, user), isCurrentUser)
+    )(id)
+  )
+);
+
+export const parseKayttaja = R.curry(
+  (idTranslate, i18n, user, locationParts) => {
+    const [prefix, id] = locationParts;
+
+    const label = R.compose(
+      Maybe.orSome(
+        R.compose(
+          Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),
+          Maybe.fromNull,
+          R.path([prefix, id])
+        )(idTranslate)
+      ),
+      R.map(R.always('navigation.omattiedot')),
+      R.filter(isCurrentUser(id))
+    )(user);
+
+    const crumbPart = {
+      label: i18n(label),
+      url: `#/${prefix}/${id}`
+    };
+
+    return R.when(
+      R.always(shouldPrependKayttajat(id, user)),
+      R.prepend({ label: i18n('navigation.kayttajat'), url: `#/${prefix}/all` })
+    )([crumbPart]);
   }
-
-  const label = R.compose(
-    Maybe.orSome(
-      R.compose(
-        Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),
-        R.map(k => `${k.etunimi} ${k.sukunimi}`)
-      )(kayttaja)
-    ),
-    R.map(R.always(i18n('navigation.omattiedot'))),
-    R.filter(R.compose(R.equals(parseInt(id, 10)), R.prop('id')))
-  )(user);
-
-  const crumbPart = {
-    label,
-    url: `#/${prefix}/${id}`
-  };
-
-  return [
-    { label: i18n('navigation.kayttajat'), url: `#/${prefix}/all` },
-    crumbPart
-  ];
-});
+);
 
 export const parseLaatijaRootActionCrumb = R.curry((i18n, prefix, action) => {
   const actionLabels = {
@@ -196,12 +195,12 @@ export const parseAction = R.curry((i18n, _, [action]) => {
   return crumbPart;
 });
 
-export const breadcrumbParse = R.curry((location, i18n, user, resource) =>
+export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
   R.compose(
     R.cond([
       [
         R.compose(R.equals('yritys'), R.head),
-        parseYritys(i18n, user, resource)
+        parseYritys(idTranslate, i18n, user)
       ],
       [
         R.compose(R.equals('energiatodistus'), R.head),
@@ -209,7 +208,7 @@ export const breadcrumbParse = R.curry((location, i18n, user, resource) =>
       ],
       [
         R.compose(R.equals('kayttaja'), R.head),
-        parseKayttaja(i18n, user, resource)
+        parseKayttaja(idTranslate, i18n, user)
       ],
       [R.compose(R.equals('laatija'), R.head), parseLaatija(i18n, user)],
       [

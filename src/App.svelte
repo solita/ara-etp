@@ -14,7 +14,12 @@
   import Login from '@Component/Login/Login';
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import Footer from '@Component/Footer/Footer';
-  import { currentUserStore, errorStore, navigationStore } from '@/stores';
+  import {
+    currentUserStore,
+    errorStore,
+    navigationStore,
+    idTranslateStore
+  } from '@/stores';
 
   import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
 
@@ -73,7 +78,11 @@
 {:else}
   <div class="container">
     <Header />
-    <Breadcrumb location={$location} user={$currentUserStore} i18n={$_} />
+    <Breadcrumb
+      idTranslate={$idTranslateStore}
+      location={$location}
+      user={$currentUserStore}
+      i18n={$_} />
     <section class="content">
       <div class="w-full">
         <NavigationTabBar links={$navigationStore} />
