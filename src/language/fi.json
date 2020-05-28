@@ -413,9 +413,9 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiakulutus",
-        "sahko": "Sähkö kWh/(m²vuosi)",
-        "lampo": "Lämpö kWh/(m²vuosi)",
-        "kaukojaahdytys": "Kaukojäähdytys kWh/(m²vuosi)",
+        "sahko": "Sähkö",
+        "lampo": "Lämpö",
+        "kaukojaahdytys": "Kaukojäähdytys",
         "lammitysjarjestelma": "Lämmitysjärjestelmä",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
