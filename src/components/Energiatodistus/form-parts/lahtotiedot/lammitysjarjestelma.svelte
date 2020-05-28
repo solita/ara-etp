@@ -3,6 +3,7 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
 
   export let disabled;
   export let schema;
@@ -34,7 +35,8 @@
         {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
+        <span>{$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}</span>
+        <span class="block"><VuosikulutusPerAlaUnit/></span>
       </th>
     </tr>
   </thead>
