@@ -372,7 +372,7 @@
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
-        "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia kWh/vuosi",
+        "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia",
         "energiamuodon_kerroin": "Energiamuodon kerroin",
         "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
 

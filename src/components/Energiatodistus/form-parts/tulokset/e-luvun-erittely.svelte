@@ -8,6 +8,7 @@
   import Input from '@Component/Energiatodistus/Input';
   import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
   import EVuosiKulutusUnit from '@Component/Energiatodistus/form-parts/units/e-painotettu-vuosikulutus.svelte';
+  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
 
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
 
@@ -48,7 +49,8 @@
         {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kaytettavat-energiamuodot')}
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.vakioidun_kayton_ostoenergia')}
+        <span>{$_('energiatodistus.tulokset.kaytettavat-energiamuodot.vakioidun_kayton_ostoenergia')}</span>
+        <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
         {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon_kerroin')}
