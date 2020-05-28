@@ -15,8 +15,8 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">{$_('energiatodistus.lahtotiedot.ala')}</th>
-      <th class="et-table--th">{$_('energiatodistus.lahtotiedot.U')}</th>
+      <th class="et-table--th">{$_('energiatodistus.lahtotiedot.ala')} (m²)</th>
+      <th class="et-table--th">{$_('energiatodistus.lahtotiedot.U')} (W/(m²K))</th>
       <th class="et-table--th">
         g<sub>{$_('energiatodistus.lahtotiedot.ikkunat.kohtisuora')}</sub>
       </th>
