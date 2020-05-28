@@ -44,7 +44,6 @@ export const linksForPaakayttaja = _ => [
   { text: 'navigation.yritykset', href: '/yritys/all' },
   { text: 'navigation.viestit', href: '/viestit' },
   { text: 'navigation.omattiedot', href: '/myinfo' }
-
 ];
 
 export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
