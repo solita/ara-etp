@@ -32,7 +32,7 @@
       bind:model={energiatodistus}
       path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
   </div>
-  <div class="w-1/6 pl-2">m³/hm²</div>
+  <div class="w-1/6 pl-2">m³/(hm²)</div>
 </div>
 
 <div class="min-w-full overflow-x-auto">
