@@ -6,6 +6,8 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
+  import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
+  import EVuosiKulutusUnit from '@Component/Energiatodistus/form-parts/units/e-painotettu-vuosikulutus.svelte';
 
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
 
@@ -56,8 +58,8 @@
           {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella_painotettu_energiankulutus')}
         </div>
         <div class="flex flex-row justify-around">
-          <span>{$_('energiatodistus.tulokset.kwhevuosi')}</span>
-          <span>{$_('energiatodistus.tulokset.kwhem2vuosi')}</span>
+          <span><EVuosiKulutusUnit/></span>
+          <span><ELukuUnit/></span>
         </div>
       </th>
     </tr>

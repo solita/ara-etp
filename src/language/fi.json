@@ -372,8 +372,6 @@
       "yhteensa": "Yhteensä",
       "vuosikulutus": "kWh/vuosi",
       "vuosikulutus-per-nelio": "kWh/m²vuosi",
-      "kwhevuosi": "kWhE/vuosi",
-      "kwhem2vuosi": "kWhE/m²vuosi",
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
