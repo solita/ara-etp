@@ -7,7 +7,7 @@ const labelLens = R.lensProp('label');
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-export const fillToLength = R.curry((n, item, arr) =>
+export const fillAndTake = R.curry((n, item, arr) =>
   R.compose(R.take(n), R.concat(arr), R.times)(item, n)
 );
 
@@ -17,18 +17,21 @@ const routeReservedKeywords = [
   'allekirjoitus',
   'liitteet',
   'viestit',
-  'muutoshistoria'
+  'muutoshistoria',
+  'laatijoidentuonti',
+  'yritykset'
 ];
 
-export const translateReservedKeywordLabel = R.curry((i18n, id, breadcrumb) =>
-  R.when(
-    R.always(R.includes(id, routeReservedKeywords)),
-    R.over(labelLens, i18n),
-    breadcrumb
-  )
+export const translateReservedKeywordLabel = R.curry(
+  (i18n, keyword, breadcrumb) =>
+    R.when(
+      R.always(R.includes(keyword, routeReservedKeywords)),
+      R.over(labelLens, i18n),
+      breadcrumb
+    )
 );
 
-export const yritysBreadcrumbForId = R.curry((idTranslate, i18n, id) =>
+export const yritysCrumb = R.curry((idTranslate, i18n, id) =>
   R.compose(
     createCrumb(`#/yritys/${id}`),
     Maybe.orSome(`${i18n('yritys.yritys')} ${id}`),
@@ -54,20 +57,19 @@ export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
     ),
     Array.of,
     translateReservedKeywordLabel(i18n, id),
-    yritysBreadcrumbForId(idTranslate, i18n)
+    yritysCrumb(idTranslate, i18n)
   )(id);
 });
 
 export const energiatodistusRootActionCrumb = R.curry((i18n, keyword) =>
   R.compose(
-    translateReservedKeywordLabel(i18n, keyword),
     createCrumb(R.__, i18n('navigation.energiatodistukset')),
     R.concat('#/energiatodistus/')
   )(keyword)
 );
 
 export const singleEnergiatodistusCrumb = R.curry((i18n, version, id) =>
-  R.compose(translateReservedKeywordLabel(i18n, id), createCrumb)(
+  createCrumb(
     `#/energiatodistus/${version}/${id}`,
     `${i18n('navigation.et')} ${id}`
   )
@@ -93,9 +95,9 @@ export const singleEnergiatodistusActionCrumb = R.curry(
     )(energiatodistusActionLabels)
 );
 
-export const parseEnergiatodistus = R.curry((i18n, _, locationParts) => {
+export const parseEnergiatodistus = R.curry((i18n, locationParts) => {
   const [root, id, action] = R.compose(
-    fillToLength(3, Maybe.None),
+    fillAndTake(3, Maybe.None),
     R.map(Maybe.fromNull)
   )(locationParts);
 
@@ -148,9 +150,9 @@ export const parseLaatijaRootActionCrumb = R.curry((i18n, action) => {
   };
 
   return R.compose(
+    translateReservedKeywordLabel(i18n, action),
     createCrumb(`#/laatija/${action}`),
     Maybe.orSome(action),
-    R.map(i18n),
     Maybe.fromNull,
     R.prop(action)
   )(actionLabels);
@@ -162,17 +164,17 @@ export const parseSingleLaatijaActionCrumb = R.curry((i18n, id, action) => {
   };
 
   return R.compose(
+    translateReservedKeywordLabel(i18n, action),
     createCrumb(`#/laatija/${id}/${action}`),
     Maybe.orSome(action),
-    R.map(i18n),
     Maybe.fromNull,
     R.prop(action)
   )(actionLabels);
 });
 
-export const parseLaatija = R.curry((i18n, _, locationParts) => {
+export const parseLaatija = R.curry((i18n, locationParts) => {
   const [root, action] = R.compose(
-    fillToLength(2, Maybe.None),
+    fillAndTake(2, Maybe.None),
     R.map(Maybe.fromNull)
   )(locationParts);
 
@@ -184,7 +186,7 @@ export const parseLaatija = R.curry((i18n, _, locationParts) => {
   return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
 });
 
-export const parseAction = R.curry((i18n, _, [action]) => {
+export const parseAction = R.curry((i18n, action) => {
   const crumbPart = {
     label: i18n(`navigation.${action}`),
     url: `#/${action}`
@@ -204,7 +206,7 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
       ],
       [
         R.compose(R.equals('energiatodistus'), R.head),
-        R.compose(parseEnergiatodistus(i18n, user), R.tail)
+        R.compose(parseEnergiatodistus(i18n), R.tail)
       ],
       [
         R.compose(R.equals('kayttaja'), R.head),
@@ -212,7 +214,7 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
       ],
       [
         R.compose(R.equals('laatija'), R.head),
-        R.compose(parseLaatija(i18n, user), R.tail)
+        R.compose(parseLaatija(i18n), R.tail)
       ],
       [
         R.compose(
@@ -225,7 +227,7 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
           ]),
           R.head
         ),
-        parseAction(i18n, user)
+        parseAction(i18n)
       ],
       [R.T, R.always({ label: '', url: '' })]
     ]),
