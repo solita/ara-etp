@@ -241,16 +241,12 @@ export const isValidForm = R.compose(
 );
 
 export const breadcrumb1stLevel = i18n => ({
-  label: i18n('energiatodistus.breadcrumb.energiatodistus'),
+  label: i18n('navigation.energiatodistukset'),
   url: '/#/energiatodistus/all'
 });
 
 export const selectFormat = (label, items) =>
-  R.compose(
-    Maybe.orSome(''),
-    R.map(label),
-    Maybe.findById(R.__, items)
-  );
+  R.compose(Maybe.orSome(''), R.map(label), Maybe.findById(R.__, items));
 
 export const findKayttotarkoitusluokkaId = (
   alakayttotarkoitusluokkaId,
@@ -258,21 +254,30 @@ export const findKayttotarkoitusluokkaId = (
 ) =>
   R.compose(
     Maybe.map(R.prop('kayttotarkoitusluokka-id')),
-    Maybe.chain(Maybe.findById(R.__, alakayttotarkoitusluokat)))
-  (alakayttotarkoitusluokkaId);
+    Maybe.chain(Maybe.findById(R.__, alakayttotarkoitusluokat))
+  )(alakayttotarkoitusluokkaId);
 
 export const filterAlakayttotarkoitusLuokat = R.curry(
   (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
     R.filter(
-      Maybe.map(R.propEq('kayttotarkoitusluokka-id'), kayttotarkoitusluokkaId).orSome(R.T),
-      alakayttotarkoitusluokat));
+      Maybe.map(
+        R.propEq('kayttotarkoitusluokka-id'),
+        kayttotarkoitusluokkaId
+      ).orSome(R.T),
+      alakayttotarkoitusluokat
+    )
+);
 
-export const findAlakayttotarkoitusluokkaId =
-  (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) => {
-    const alaluokat = filterAlakayttotarkoitusLuokat(
-      kayttotarkoitusluokkaId, alakayttotarkoitusluokat);
-    return R.length(alaluokat) === 1 ? Maybe.Some(alaluokat[0].id) : Maybe.None();
-}
+export const findAlakayttotarkoitusluokkaId = (
+  kayttotarkoitusluokkaId,
+  alakayttotarkoitusluokat
+) => {
+  const alaluokat = filterAlakayttotarkoitusLuokat(
+    kayttotarkoitusluokkaId,
+    alakayttotarkoitusluokat
+  );
+  return R.length(alaluokat) === 1 ? Maybe.Some(alaluokat[0].id) : Maybe.None();
+};
 
 export const validators = deep.map(
   R.compose(R.complement(R.isNil), R.prop('validators')),
@@ -527,6 +532,13 @@ export const vapaatKertoimet = R.compose(
   vapaaPolttoaine
 );
 
-const tilat = ['draft', 'in-signing', 'signed', 'discarded', 'replaced', 'deleted'];
+const tilat = [
+  'draft',
+  'in-signing',
+  'signed',
+  'discarded',
+  'replaced',
+  'deleted'
+];
 
 export const tilaKey = id => tilat[id];

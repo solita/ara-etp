@@ -21,6 +21,9 @@ describe.only('BreadcrumbUtils', () => {
       'yritys.yritys': 'Yritys',
       'yritys.uusi-yritys': 'Uusi yritys'
     });
+
+    const idTranslate = { yritys: { new: 'yritys.uusi-yritys' } };
+
     it('should return proper crumb for new yritys', () => {
       const locationParts = ['yritys', 'new'];
 
@@ -33,7 +36,7 @@ describe.only('BreadcrumbUtils', () => {
       ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseYritys(i18n, user, locationParts),
+        BreadcrumbUtils.parseYritys(idTranslate, i18n, user, locationParts),
         expected
       );
     });

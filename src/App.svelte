@@ -81,7 +81,7 @@
     <Breadcrumb
       idTranslate={$idTranslateStore}
       location={$location}
-      user={$currentUserStore}
+      user={Maybe.get($currentUserStore)}
       i18n={$_} />
     <section class="content">
       <div class="w-full">

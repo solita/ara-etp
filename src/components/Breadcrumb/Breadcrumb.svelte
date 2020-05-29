@@ -11,11 +11,12 @@
   export let i18n;
   export let idTranslate;
 
-  $: breadcrumbs = R.compose(
-    R.flatten,
-    Array.of,
-    BreadcrumbUtils.breadcrumbParse
-  )(idTranslate, location, i18n, user);
+  $: breadcrumbs = BreadcrumbUtils.breadcrumbParse(
+    idTranslate,
+    location,
+    i18n,
+    user
+  );
 </script>
 
 <style type="text/postcss">

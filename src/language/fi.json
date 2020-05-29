@@ -18,6 +18,7 @@
   },
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
+    "uusi-energiatodistus": "Uusi energiatodistus",
     "viestit": "Viestit",
     "yritykset": "Yritykset",
     "omattiedot": "Omat tiedot",
@@ -137,10 +138,6 @@
       "deleted": "Poistettu",
       "expired": "Vanhentunut",
       "loading": "Ladataan"
-    },
-    "breadcrumb": {
-      "energiatodistus": "Energiatodistukset",
-      "uusi-energiatodistus": "Uusi energiatodistus"
     },
     "toolbar": {
       "new": "Tallenna",
