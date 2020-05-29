@@ -32,7 +32,7 @@
       bind:model={energiatodistus}
       path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
   </div>
-  <div class="w-1/6 pl-2">m³/hm²</div>
+  <div class="w-1/6 pl-2">m³/(hm²)</div>
 </div>
 
 <div class="min-w-full overflow-x-auto">
@@ -41,17 +41,20 @@
       <tr class="et-table--tr">
         <th class="et-table--th" />
         <th class="et-table--th">
-          {$_('energiatodistus.lahtotiedot.ala')} (m²)
+          <span>{$_('energiatodistus.lahtotiedot.ala')}</span>
+          <span class="block">m²</span>
         </th>
         <th class="et-table--th">
-          {$_('energiatodistus.lahtotiedot.U')} (W/(m²K))
+          <span>{$_('energiatodistus.lahtotiedot.U')}</span>
+          <span class="block">W/(m²K)</span>
         </th>
         <th class="et-table--th">
-          {$_('energiatodistus.lahtotiedot.rakennusvaippa.U*A')} (W/K)
+          <span>{$_('energiatodistus.lahtotiedot.rakennusvaippa.U*A')}</span>
+          <span class="block">W/K</span>
         </th>
         <th class="et-table--th">
-          {$_('energiatodistus.lahtotiedot.rakennusvaippa.osuuslampohaviosta')}
-          (%)
+          <span>{$_('energiatodistus.lahtotiedot.rakennusvaippa.osuuslampohaviosta')}</span>
+          <span class="block">%</span>
         </th>
       </tr>
     </thead>

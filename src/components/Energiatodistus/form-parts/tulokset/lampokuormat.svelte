@@ -6,6 +6,8 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
+  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
 
   export let disabled;
   export let schema;
@@ -24,10 +26,10 @@
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
       <th class="et-table--th">
-        {$_('energiatodistus.tulokset.vuosikulutus')}
+        <VuosikulutusUnit/>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.tulokset.vuosikulutus-per-nelio')}
+        <VuosikulutusPerAlaUnit/>
       </th>
       <th class="et-table--th" />
     </tr>

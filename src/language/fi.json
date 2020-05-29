@@ -36,7 +36,8 @@
     "load-error": "Tietojen haku epäonnistui."
   },
   "units": {
-    "year": "vuosi"
+    "year": "vuosi",
+    "pieces": "kpl"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
@@ -155,7 +156,7 @@
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
       "katuosoite": "Katuosoite",
       "postinumero": "Postinumero",
-      "rakennustunnus": "Rakennustunnus",
+      "rakennustunnus": "Pysyvä rakennustunnus",
       "kiinteistotunnus": "Kiinteistötunnus",
       "rakennusosa": "Rakennusosa",
       "valmistumisvuosi": "Valmistumisvuosi",
@@ -167,8 +168,6 @@
         "nimi": "Yritys"
       }
     },
-    "vuosikulutus": "kWh/vuosi",
-    "vuosikulutus-per-nelio": "kWh/(m²vuosi)",
     "litraa-per-neliovuosi": "dm³/(m²vuosi)",
     "yhteensa": "Yhteensä",
     "lahtotiedot": {
@@ -303,8 +302,8 @@
         "tuotonhyotysuhde": "Tuoton hyötysuhde",
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
         "lampokerroin": "Lämpökerroin",
-        "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö kWh/(m²vuosi)",
-        "kpl": "Kpl",
+        "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö",
+        "maara": "Maara",
         "tuotto": "Tuotto",
         "kuvaus": "Lämmitysjärjestelmän kuvaus",
         "tilat-ja-iv": {
@@ -347,7 +346,7 @@
       "sis-kuorma": {
         "header": "Sisäiset lämpökuormat eri käyttöasteilla",
         "kayttoaste": "Käyttöaste",
-        "lampokuorma": "Lämpökuorma W/m²",
+        "lampokuorma": "Lämpökuorma",
         "labels": {
           "henkilot": "Henkilöt",
           "kuluttajalaitteet": "Kuluttajalaitteet",
@@ -370,12 +369,10 @@
     "tulokset": {
       "header": "E-luvun laskennan tulokset",
       "yhteensa": "Yhteensä",
-      "vuosikulutus": "kWh/vuosi",
-      "vuosikulutus-per-nelio": "kWh/m²vuosi",
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
-        "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia kWh/vuosi",
+        "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia",
         "energiamuodon_kerroin": "Energiamuodon kerroin",
         "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
 
@@ -394,7 +391,6 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "header": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
-        "vuosituotto": "kWh/vuosi",
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",
@@ -412,9 +408,9 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiakulutus",
-        "sahko": "Sähkö kWh/(m²vuosi)",
-        "lampo": "Lämpö kWh/(m²vuosi)",
-        "kaukojaahdytys": "Kaukojäähdytys kWh/(m²vuosi)",
+        "sahko": "Sähkö",
+        "lampo": "Lämpö",
+        "kaukojaahdytys": "Kaukojäähdytys",
         "lammitysjarjestelma": "Lämmitysjärjestelmä",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
@@ -504,7 +500,7 @@
           "puupelletit": "Puupelletit"
         },
         "kevyt-polttooljy": "Kevyen polttoöljyn ostettu vuosimäärä",
-        "kevyt-polttooljy-yksikko": "Litra",
+        "kevyt-polttooljy-yksikko": "litra",
         "pilkkeet-havu-sekapuu": "Pilkkeiden (havu- ja sekapuu) ostettu vuosimäärä",
         "pilkkeet-havu-sekapuu-yksikko": "pino-m³",
         "pilkkeet-koivu": "Pilkkeiden (koivu) ostettu vuosimäärä",
@@ -547,9 +543,9 @@
     "huomiot": {
       "header": "Toimenpide-ehdotukset rakennuksen e-luvun parantamiseksi",
       "toimenpide-ehdotus": "Toimenpide-ehdotus",
-      "toimenpide-lampo": "Lämpö, ostoenergian muutos kWh/vuosi",
-      "toimenpide-sahko": "Sähkö, ostoenergian muutos kWh/vuosi",
-      "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos kWh/vuosi",
+      "toimenpide-lampo": "Lämpö, ostoenergian muutos",
+      "toimenpide-sahko": "Sähkö, ostoenergian muutos",
+      "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos",
       "toimenpide-eluvun-muutos": "E-luvun muutos",
       "suositukset-header": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
       "suositukset": "Suositetut toimenpide-ehdotukset",

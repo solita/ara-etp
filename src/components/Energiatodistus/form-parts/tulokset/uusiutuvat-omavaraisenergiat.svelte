@@ -7,6 +7,7 @@
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
   import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
+  import VuosituottoUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
 
   export let disabled;
   export let schema;
@@ -26,9 +27,7 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th">
-        {$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.vuosituotto')}
-      </th>
+      <th class="et-table--th"><VuosituottoUnit/></th>
       <th class="et-table--th"><ELukuUnit/></th>
       <th class="et-table--th" />
     </tr>

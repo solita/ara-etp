@@ -3,6 +3,7 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
 
   export let disabled;
   export let schema;
@@ -33,6 +34,6 @@
       bind:model={energiatodistus}
       path={['lahtotiedot', 'lkvn-kaytto', 'vuosikulutus']} />
   </div>
-  <div class="w-2/5 pl-2">{$_('energiatodistus.vuosikulutus-per-nelio')}</div>
+  <div class="w-2/5 pl-2"><VuosikulutusPerAlaUnit/></div>
 </div>
 </div>

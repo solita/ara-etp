@@ -20,7 +20,8 @@
         {$_('energiatodistus.lahtotiedot.sis-kuorma.kayttoaste')}
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.sis-kuorma.lampokuorma')}
+        <span>{$_('energiatodistus.lahtotiedot.sis-kuorma.lampokuorma')}</span>
+        <span class="block">W/m²</span>
       </th>
       <th class="et-table--th" />
       <th class="et-table--th" />
