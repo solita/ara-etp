@@ -34,6 +34,7 @@
   import SisaisetLampokuormat from './form-parts/lahtotiedot/sisaiset-lampokuormat';
   import Lamminkayttovesi from './form-parts/lahtotiedot/lamminkayttovesi';
 
+  import ELuku from './form-parts/tulokset/e-luku';
   import ELuvunErittely from './form-parts/tulokset/e-luvun-erittely';
   import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat';
   import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
@@ -201,28 +202,8 @@
   <HR />
 
   <H2 text={$_('energiatodistus.tulokset.header')} />
-  <div class="flex lg:flex-row flex-col">
-    <div class="lg:w-1/3 w-full py-2">
-      <BasicInput
-          id="energiatodistus.e-luku"
-          name="energiatodistus.e-luku"
-          label={$_('energiatodistus.e-luku')}
-          disabled={true}
-          model={'TODO'}
-          lens={R.lens(R.identity, R.identity)}
-          i18n={$_} />
-    </div>
-    <div class="lg:w-1/3 w-full py-2">
-      <Input
-          disabled={true}
-          {schema}
-          center={false}
-          bind:model={energiatodistus}
-          format={R.compose(Maybe.orSome('- m²'), R.map(v => v + ' m²'))}
-          path={['lahtotiedot', 'lammitetty-nettoala']} />
-    </div>
-  </div>
 
+  <ELuku {schema} {energiatodistus} />
   <ELuvunErittely {disabled} {schema} bind:energiatodistus />
   <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
   <TeknistenjarjestelmienEnergiankulutus
