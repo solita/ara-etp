@@ -79,11 +79,7 @@
           R.any(R.complement(LaatijaUtils.rowValid)),
           R.tap(_ => addError('laatija.messages.validation-error'))
         ),
-        R.when(
-          R.isEmpty,
-          R.tap(_ => addError('laatija.messages.upload-error'))
-        ),
-        R.tap(console.log)
+        R.when(R.isEmpty, R.tap(_ => addError('laatija.messages.upload-error')))
       )
     ),
     R.map(R.flatten),

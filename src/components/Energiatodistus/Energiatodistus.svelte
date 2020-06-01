@@ -14,7 +14,6 @@
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import {
     flashMessageStore,
-    navigationStore,
     currentUserStore
   } from '@/stores';
   import * as et from './energiatodistus-utils';
@@ -44,20 +43,6 @@
     '/:version/:id/liitteet': Liitteet,
     '/:version/:id/allekirjoitus': Allekirjoitus
   };
-
-  $: R.compose(
-    navigationStore.set,
-    Maybe.get,
-    R.last,
-    R.filter(Maybe.isSome)
-  )([
-    Maybe.of([{ text: '...', href: '' }]),
-    R.map(Navigation.linksForKayttaja, $currentUserStore),
-    R.compose(
-      R.map(R.apply(Navigation.linksForEnergiatodistus($_))),
-      idAndVersionFromLocation
-    )($location)
-  ]);
 </script>
 
 <svelte:window
