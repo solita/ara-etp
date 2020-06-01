@@ -220,4 +220,8 @@ export const energiatodistus2018 = _ => ({
   'lisamerkintoja-sv': Maybe.None()
 });
 
-export const energiatodistus2013 = energiatodistus2018;
+export const energiatodistus2013 =
+  R.compose(
+    R.assocPath(['perustiedot', 'uudisrakennus'], false),
+    R.dissocPath(['perustiedot', 'laatimisvaihe']),
+    energiatodistus2018);
