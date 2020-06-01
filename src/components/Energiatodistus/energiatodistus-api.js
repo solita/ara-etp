@@ -4,10 +4,10 @@ import * as Future from '@Utility/future-utils';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
-import * as et from './energiatodistus-utils';
+import * as empty from './empty';
 
 export const deserialize = R.compose(
-  deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), et.emptyEnergiatodistus2018()),
+  deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), empty.energiatodistus2018()),
   R.evolve({
     id: Maybe.get,
     versio: Maybe.get,
