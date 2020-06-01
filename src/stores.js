@@ -14,7 +14,8 @@ export const navigationStore = writable([]);
 const createIdTranslateStore = () => {
   const { subscribe, update } = writable({
     yritys: { all: 'navigation.yritykset', new: 'yritys.uusi-yritys' },
-    kayttaja: { all: 'navigation.kayttajat' }
+    kayttaja: { all: 'navigation.kayttajat' },
+    energiatodistus: { new: 'navigation.uusi-energiatodistus' }
   });
 
   return {
