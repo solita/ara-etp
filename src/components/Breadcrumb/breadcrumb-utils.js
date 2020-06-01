@@ -68,11 +68,15 @@ export const energiatodistusRootActionCrumb = R.curry((i18n, keyword) =>
   )(keyword)
 );
 
-export const singleEnergiatodistusCrumb = R.curry((i18n, version, id) =>
-  createCrumb(
-    `#/energiatodistus/${version}/${id}`,
-    `${i18n('navigation.et')} ${id}`
-  )
+export const singleEnergiatodistusCrumb = R.curry(
+  (idTranslate, i18n, version, id) =>
+    R.compose(
+      translateReservedKeywordLabel(i18n, id),
+      createCrumb(`#/energiatodistus/${version}/${id}`),
+      Maybe.orSome(`${i18n('navigation.et')} ${id}`),
+      Maybe.fromNull,
+      R.path(['energiatodistus', id])
+    )(idTranslate)
 );
 
 const energiatodistusActionLabels = {
@@ -95,26 +99,31 @@ export const singleEnergiatodistusActionCrumb = R.curry(
     )(energiatodistusActionLabels)
 );
 
-export const parseEnergiatodistus = R.curry((i18n, locationParts) => {
-  const [root, id, action] = R.compose(
-    fillAndTake(3, Maybe.None),
-    R.map(Maybe.fromNull)
-  )(locationParts);
+export const parseEnergiatodistus = R.curry(
+  (idTranslate, i18n, locationParts) => {
+    const [root, id, action] = R.compose(
+      fillAndTake(3, Maybe.None),
+      R.map(Maybe.fromNull)
+    )(locationParts);
 
-  const crumbParts = [
-    R.lift(energiatodistusRootActionCrumb(i18n))(root),
-    R.lift(singleEnergiatodistusCrumb(i18n))(root, id),
-    R.lift((root, id, action) =>
-      R.compose(
-        R.prepend(singleEnergiatodistusCrumb(i18n, root, id)),
-        Array.of,
-        singleEnergiatodistusActionCrumb(i18n)
+    const crumbParts = [
+      R.lift(energiatodistusRootActionCrumb(i18n))(root),
+      R.lift(singleEnergiatodistusCrumb(idTranslate, i18n))(root, id),
+      R.lift((root, id, action) =>
+        R.compose(
+          R.prepend(singleEnergiatodistusCrumb(idTranslate, i18n, root, id)),
+          Array.of,
+          singleEnergiatodistusActionCrumb(i18n)
+        )(root, id, action)
       )(root, id, action)
-    )(root, id, action)
-  ];
+    ];
 
-  return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
-});
+    return R.uniq([
+      energiatodistusRootActionCrumb(i18n, 'all'),
+      R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts)
+    ]);
+  }
+);
 
 export const isCurrentUser = R.curry((id, user) =>
   R.compose(R.equals(parseInt(id, 10)), R.prop('id'))(user)
@@ -206,7 +215,7 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
       ],
       [
         R.compose(R.equals('energiatodistus'), R.head),
-        R.compose(parseEnergiatodistus(i18n), R.tail)
+        R.compose(parseEnergiatodistus(idTranslate, i18n), R.tail)
       ],
       [
         R.compose(R.equals('kayttaja'), R.head),
