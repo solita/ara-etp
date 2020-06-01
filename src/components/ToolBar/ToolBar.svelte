@@ -18,7 +18,10 @@
     id
   );
 
-  const signUrl = Maybe.map(i => `#/energiatodistus/${version}/${i}/sign`, id);
+  const signUrl = Maybe.map(
+    i => `#/energiatodistus/${version}/${i}/allekirjoitus`,
+    id
+  );
 
   const deleteEnergiatodistus = () => {
     Future.fork(

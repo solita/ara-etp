@@ -9,8 +9,35 @@ export const countryStore = writable(Either.Left('Not initialized'));
 export const patevyystasoStore = writable(Either.Left('Not initialized'));
 export const patevyydetStore = writable(Either.Left('Not initialized'));
 export const toimintaAlueetStore = writable(Either.Left('Not initialized'));
-export const breadcrumbStore = writable([]);
 export const navigationStore = writable([]);
+
+const createIdTranslateStore = () => {
+  const { subscribe, update } = writable({
+    yritys: { all: 'navigation.yritykset', new: 'yritys.uusi-yritys' },
+    kayttaja: { all: 'navigation.kayttajat' }
+  });
+
+  return {
+    subscribe,
+    update,
+    updateYritys: yritys =>
+      update(
+        R.assocPath(['yritys', R.prop('id', yritys)], R.prop('nimi', yritys))
+      ),
+    updateKayttaja: kayttaja =>
+      update(
+        R.assocPath(
+          ['kayttaja', R.prop('id', kayttaja)],
+          R.compose(
+            R.join(' '),
+            R.converge(Array.of, [R.prop('etunimi'), R.prop('sukunimi')])
+          )(kayttaja)
+        )
+      )
+  };
+};
+
+export const idTranslateStore = createIdTranslateStore();
 
 const createFlashMessageStore = () => {
   const { subscribe, set, update } = writable([]);

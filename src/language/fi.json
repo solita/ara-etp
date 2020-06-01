@@ -18,6 +18,7 @@
   },
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
+    "uusi-energiatodistus": "Uusi energiatodistus",
     "viestit": "Viestit",
     "yritykset": "Yritykset",
     "omattiedot": "Omat tiedot",
@@ -28,9 +29,12 @@
     "kaytonvalvonta": "Käytönvalvonta",
     "halytykset": "Hälytykset",
     "kayttajat": "Käyttäjät",
+    "kayttaja": "Käyttäjä",
     "et": "ET",
     "liitteet": "Liitteet",
-    "muutoshistoria": "Muutoshistoria"
+    "allekirjoitus": "Allekirjoitus",
+    "muutoshistoria": "Muutoshistoria",
+    "myinfo": "Omat Tiedot"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."
@@ -45,7 +49,8 @@
   "peruuta": "Peruuta",
   "yritys": {
     "yritykset": "Yritykset",
-    "uusi_yritys": "Uusi yritys",
+    "yritys": "Yritys",
+    "uusi-yritys": "Uusi yritys",
     "laatijat": "Laatijat",
     "y-tunnus": "Y-Tunnus",
     "nimi": "Nimi",
@@ -129,14 +134,10 @@
       "in-signing": "Allekirjoitus",
       "signed": "Voimassa",
       "discarded": "Hylätty",
-      "replaced":  "Korvattu",
+      "replaced": "Korvattu",
       "deleted": "Poistettu",
       "expired": "Vanhentunut",
       "loading": "Ladataan"
-    },
-    "breadcrumb": {
-      "energiatodistus": "Energiatodistukset",
-      "uusi-energiatodistus": "Uusi energiatodistus"
     },
     "toolbar": {
       "new": "Tallenna",

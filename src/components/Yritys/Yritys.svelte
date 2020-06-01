@@ -15,33 +15,15 @@
   import {
     flashMessageStore,
     countryStore,
-    breadcrumbStore,
     currentUserStore,
     navigationStore
   } from '@/stores';
 
-  const idFromDetails = R.compose(
-    R.head,
-    R.tail,
-    R.split('/'),
-    R.prop('location')
-  );
-
   const prefix = '/yritys';
   const routes = {
-    '/new': wrap(NewYritys, _ => {
-      breadcrumbStore.set([{ label: 'Uusi yritys', url: `#${prefix}/new` }]);
-      return true;
-    }),
-    '/all': wrap(Yritykset, _ => {
-      breadcrumbStore.set([{ label: 'Yritykset', url: `#${prefix}/all` }]);
-      return true;
-    }),
-    '/:id': wrap(ExistingYritys, details => {
-      const id = idFromDetails(details);
-      breadcrumbStore.set([{ label: `Yritys ${id}`, url: `#${prefix}/${id}` }]);
-      return true;
-    })
+    '/new': NewYritys,
+    '/all': Yritykset,
+    '/:id': ExistingYritys
   };
 
   $: R.compose(

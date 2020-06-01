@@ -3,8 +3,8 @@
   import { _ } from '@Language/i18n';
   import {
     flashMessageStore,
-    breadcrumbStore,
-    currentUserStore
+    currentUserStore,
+    idTranslateStore
   } from '@/stores';
 
   import * as api from './kayttaja-api';
@@ -29,44 +29,53 @@
 
   const toggleOverlay = value => () => (overlay = value);
 
-  const fork = type =>
+  const fork = (type, updatedModel) =>
     Future.fork(
       R.compose(
-          R.tap(toggleOverlay(false)),
-          flashMessageStore.add('Kayttaja', 'error'),
-          R.always($_(`${type}.messages.save-error`))
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Kayttaja', 'error'),
+        R.always($_(`${type}.messages.save-error`))
       ),
       R.compose(
-          R.tap(toggleOverlay(false)),
-          flashMessageStore.add('Kayttaja', 'success'),
-          R.always($_(`${type}.messages.save-success`))
+        R.tap(toggleOverlay(false)),
+        flashMessageStore.add('Kayttaja', 'success'),
+        R.always($_(`${type}.messages.save-success`)),
+        R.tap(() =>
+          R.when(
+            R.always(R.equals('kayttaja', type)),
+            idTranslateStore.updateKayttaja(updatedModel)
+          )
+        )
       )
     );
 
-  $: submitLaatija = R.compose(
-    fork('laatija'),
-    R.tap(toggleOverlay(true)),
-    laatijaApi.putLaatijaById(
-      R.compose(
-        Maybe.orSome(0),
-        R.map(R.prop('rooli'))
-      )($currentUserStore),
-      fetch,
-      params.id
-    ));
+  $: submitLaatija = updatedLaatija =>
+    R.compose(
+      fork('laatija', updatedLaatija),
+      R.tap(toggleOverlay(true)),
+      laatijaApi.putLaatijaById(
+        R.compose(
+          Maybe.orSome(0),
+          R.map(R.prop('rooli'))
+        )($currentUserStore),
+        fetch,
+        params.id
+      )
+    )(updatedLaatija);
 
-  $: submitKayttaja = R.compose(
-      fork('kayttaja'),
+  $: submitKayttaja = updatedKayttaja =>
+    R.compose(
+      fork('kayttaja', updatedKayttaja),
       kayttajaApi.putKayttajaById(
-          R.compose(
-              Maybe.orSome(0),
-              R.map(R.prop('rooli'))
-          )($currentUserStore),
-          fetch,
-          params.id
+        R.compose(
+          Maybe.orSome(0),
+          R.map(R.prop('rooli'))
+        )($currentUserStore),
+        fetch,
+        params.id
       ),
       R.tap(toggleOverlay(true))
-  );
+    )(updatedKayttaja);
 
   $: R.compose(
     Future.fork(
@@ -77,6 +86,7 @@
       ),
       R.compose(
         ([fetchedKayttaja, fetchedLaatija, fetchedLuokittelut]) => {
+          idTranslateStore.updateKayttaja(fetchedKayttaja);
           kayttaja = Maybe.Some(fetchedKayttaja);
           laatija = Maybe.fromNull(fetchedLaatija);
           luokittelut = Maybe.Some(fetchedLuokittelut);
@@ -85,34 +95,34 @@
       )
     ),
     Future.parallel(5),
-    R.append(Future.parallelObject(5, {
-      countries: geoApi.countries,
-      toimintaalueet: geoApi.toimintaalueet,
-      patevyydet: laatijaApi.patevyydet})),
-    R.juxt([kayttajaApi.getKayttajaById(fetch), kayttajaApi.getLaatijaById(fetch)]),
+    R.append(
+      Future.parallelObject(5, {
+        countries: geoApi.countries,
+        toimintaalueet: geoApi.toimintaalueet,
+        patevyydet: laatijaApi.patevyydet
+      })
+    ),
+    R.juxt([
+      kayttajaApi.getKayttajaById(fetch),
+      kayttajaApi.getLaatijaById(fetch)
+    ]),
     R.prop('id')
   )(params);
 
   const mergeKayttajaLaatija = (kayttaja, laatija) =>
     R.compose(
       R.omit(['kayttaja', 'cognitoid', 'ensitallennus']),
-      R.mergeRight)(kayttaja, laatija);
-
-  // TODO: remove breadcrumb code here - see AE-205
-  $: breadcrumbStore.set([
-    {
-      label: $_('kayttaja.omattiedot'),
-      url: location.href
-    }
-  ]);
+      R.mergeRight
+    )(kayttaja, laatija);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
     {#if Maybe.isSome(laatija)}
-      <LaatijaForm submit={submitLaatija}
-                   luokittelut={Maybe.get(luokittelut)}
-                   laatija={mergeKayttajaLaatija(Maybe.get(kayttaja), Maybe.get(laatija))} />
+      <LaatijaForm
+        submit={submitLaatija}
+        luokittelut={Maybe.get(luokittelut)}
+        laatija={mergeKayttajaLaatija(Maybe.get(kayttaja), Maybe.get(laatija))} />
     {:else if Maybe.isSome(kayttaja)}
       <KayttajaForm submit={submitKayttaja} kayttaja={Maybe.get(kayttaja)} />
     {/if}

@@ -1,14 +1,14 @@
 <script>
   import * as R from 'ramda';
   import Router from 'svelte-spa-router';
-  import { link, replace } from 'svelte-spa-router';
+  import { location, link, replace } from 'svelte-spa-router';
 
   import * as Maybe from '@Utility/maybe-utils';
 
   import * as Navigation from '@Utility/navigation';
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import { buildRoutes } from '@Component/routes';
-  import { setupI18n } from '@Language/i18n';
+  import { setupI18n, _ } from '@Language/i18n';
   import Header from '@Component/Header/Header';
   import Loading from '@Component/Loading/Loading';
   import Login from '@Component/Login/Login';
@@ -17,8 +17,8 @@
   import {
     currentUserStore,
     errorStore,
-    breadcrumbStore,
-    navigationStore
+    navigationStore,
+    idTranslateStore
   } from '@/stores';
 
   import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
@@ -42,7 +42,7 @@
 
   $: routes = R.compose(
     Maybe.orSome({}),
-    R.map(buildRoutes(breadcrumbStore))
+    R.map(buildRoutes)
   )($currentUserStore);
 
   $: console.log(routes);
@@ -78,7 +78,11 @@
 {:else}
   <div class="container">
     <Header />
-    <Breadcrumb value={$breadcrumbStore} />
+    <Breadcrumb
+      idTranslate={$idTranslateStore}
+      location={$location}
+      user={Maybe.get($currentUserStore)}
+      i18n={$_} />
     <section class="content">
       <div class="w-full">
         <NavigationTabBar links={$navigationStore} />

@@ -8,7 +8,7 @@
   import * as et from './energiatodistus-utils';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore, breadcrumbStore } from '@/stores';
+  import { flashMessageStore } from '@/stores';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
