@@ -13,6 +13,7 @@
   import Spinner from '@Component/Spinner/Spinner';
   import EnergiatodistusForm from './EnergiatodistusForm';
   import * as et from './energiatodistus-utils';
+  import * as empty from './empty';
   import * as api from './energiatodistus-api';
 
   import { flashMessageStore } from '@/stores';
@@ -24,8 +25,8 @@
   const toggleOverlay = value => () => (overlay = value);
 
   let energiatodistus = R.equals(params.version, '2018')
-    ? et.emptyEnergiatodistus2018()
-    : et.emptyEnergiatodistus2013();
+    ? empty.energiatodistus2018()
+    : empty.energiatodistus2013();
 
   let luokittelut = Maybe.None();
 
