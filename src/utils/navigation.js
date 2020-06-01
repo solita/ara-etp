@@ -35,7 +35,7 @@ export const linksForPatevyydentoteaja = R.curry((i18n, kayttaja) => [
 export const linksForLaskuttaja = R.curry((i18n, _) => [
   {
     label: i18n('navigation.energiatodistukset'),
-    href: '#/energiatodistus'
+    href: '#/energiatodistus/all'
   },
   { label: i18n('navigation.laatijat'), href: '#/laatija/all' },
   { label: i18n('navigation.yritykset'), href: '#/yritys/all' },
@@ -131,7 +131,7 @@ export const navigationParse = R.curry((i18n, kayttaja, location) =>
         ),
         R.always(parseRoot(i18n, kayttaja))
       ],
-      [R.T, R.always([])]
+      [R.T, R.always([{ label: '...', href: '#/' }])]
     ]),
     locationParts
   )(location)
