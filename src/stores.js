@@ -9,7 +9,6 @@ export const countryStore = writable(Either.Left('Not initialized'));
 export const patevyystasoStore = writable(Either.Left('Not initialized'));
 export const patevyydetStore = writable(Either.Left('Not initialized'));
 export const toimintaAlueetStore = writable(Either.Left('Not initialized'));
-export const navigationStore = writable([]);
 
 const createIdTranslateStore = () => {
   const { subscribe, update } = writable({

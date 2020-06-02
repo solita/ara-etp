@@ -1,5 +1,8 @@
-import { expect } from 'chai';
+import { assert } from 'chai';
+import * as R from 'ramda';
+
 import * as RamdaUtils from './ramda-utils';
+import * as Maybe from './maybe-utils';
 
 describe('RamdaUtils:', () => {
   describe('inRangeInclusive', () => {
@@ -9,7 +12,7 @@ describe('RamdaUtils:', () => {
       const value = 1;
 
       const expected = true;
-      expect(RamdaUtils.inRangeInclusive(low, high, value)).to.eql(expected);
+      assert.isTrue(RamdaUtils.inRangeInclusive(low, high, value));
     });
 
     it('should return false with value lower than low', () => {
@@ -18,7 +21,7 @@ describe('RamdaUtils:', () => {
       const value = 0;
 
       const expected = false;
-      expect(RamdaUtils.inRangeInclusive(low, high, value)).to.eql(expected);
+      assert.isFalse(RamdaUtils.inRangeInclusive(low, high, value));
     });
 
     it('should return false with value higher than high', () => {
@@ -27,7 +30,7 @@ describe('RamdaUtils:', () => {
       const value = 2;
 
       const expected = false;
-      expect(RamdaUtils.inRangeInclusive(low, high, value)).to.eql(expected);
+      assert.isFalse(RamdaUtils.inRangeInclusive(low, high, value));
     });
 
     it('should return true with high edge', () => {
@@ -36,7 +39,7 @@ describe('RamdaUtils:', () => {
       const value = 1;
 
       const expected = true;
-      expect(RamdaUtils.inRangeInclusive(low, high, value)).to.eql(expected);
+      assert.isTrue(RamdaUtils.inRangeInclusive(low, high, value));
     });
 
     it('should return true with low edge', () => {
@@ -45,7 +48,16 @@ describe('RamdaUtils:', () => {
       const value = 0;
 
       const expected = true;
-      expect(RamdaUtils.inRangeInclusive(low, high, value)).to.eql(expected);
+      assert.isTrue(RamdaUtils.inRangeInclusive(low, high, value));
+    });
+  });
+
+  describe('fillAndTake', () => {
+    it('should fill given array and take fill amount', () => {
+      const arr = R.map(Maybe.Some, [1, 2, 3]);
+      const expected = [...arr, Maybe.None(), Maybe.None(), Maybe.None()];
+
+      assert.deepEqual(RamdaUtils.fillAndTake(6, Maybe.None, arr), expected);
     });
   });
 });

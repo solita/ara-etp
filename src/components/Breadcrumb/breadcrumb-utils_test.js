@@ -4,27 +4,6 @@ import * as BreadcrumbUtils from './breadcrumb-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
 describe('BreadcrumbUtils', () => {
-  describe('locationParts', () => {
-    it('should return parts', () => {
-      const location = '/yritys/new';
-      const expected = ['yritys', 'new'];
-
-      assert.deepEqual(BreadcrumbUtils.locationParts(location), expected);
-    });
-  });
-
-  describe('fillAndTake', () => {
-    it('should fill given array and take fill amount', () => {
-      const arr = R.map(Maybe.Some, [1, 2, 3]);
-      const expected = [...arr, Maybe.None(), Maybe.None(), Maybe.None()];
-
-      assert.deepEqual(
-        BreadcrumbUtils.fillAndTake(6, Maybe.None, arr),
-        expected
-      );
-    });
-  });
-
   describe('translateReservedKeywordLabel', () => {
     const i18n = R.prop(R.__, {
       a: '`a',
@@ -176,6 +155,7 @@ describe('BreadcrumbUtils', () => {
   });
 
   describe('singleEnergiatodistusCrumb', () => {
+    const idTranslate = { new: 'Uusi energiatodistus' };
     const i18n = R.prop(R.__, { 'navigation.et': 'Energiatodistus' });
     it('should return proper crumb for single energiatodistus', () => {
       const expected = {
@@ -184,7 +164,12 @@ describe('BreadcrumbUtils', () => {
       };
 
       assert.deepEqual(
-        BreadcrumbUtils.singleEnergiatodistusCrumb(i18n, '2018', '1'),
+        BreadcrumbUtils.singleEnergiatodistusCrumb(
+          idTranslate,
+          i18n,
+          '2018',
+          '1'
+        ),
         expected
       );
     });
@@ -231,6 +216,8 @@ describe('BreadcrumbUtils', () => {
   });
 
   describe('parseEnergiatodistus', () => {
+    const idTranslate = { new: 'Uusi energiatodistus' };
+
     const i18n = R.prop(R.__, {
       'navigation.energiatodistukset': 'Energiatodistukset',
       'navigation.et': 'Energiatodistus',
@@ -241,31 +228,43 @@ describe('BreadcrumbUtils', () => {
     });
 
     it('should return root-level breadcrumb', () => {
-      const expected = {
-        url: '#/energiatodistus/all',
-        label: 'Energiatodistukset'
-      };
+      const expected = [
+        {
+          url: '#/energiatodistus/all',
+          label: 'Energiatodistukset'
+        }
+      ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseEnergiatodistus(i18n, ['all']),
+        BreadcrumbUtils.parseEnergiatodistus(idTranslate, i18n, ['all']),
         expected
       );
     });
 
     it('should return single-et-level breadcrumb', () => {
-      const expected = {
-        url: '#/energiatodistus/2018/1',
-        label: 'Energiatodistus 1'
-      };
+      const expected = [
+        {
+          url: '#/energiatodistus/all',
+          label: 'Energiatodistukset'
+        },
+        {
+          url: '#/energiatodistus/2018/1',
+          label: 'Energiatodistus 1'
+        }
+      ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseEnergiatodistus(i18n, ['2018', '1']),
+        BreadcrumbUtils.parseEnergiatodistus(idTranslate, i18n, ['2018', '1']),
         expected
       );
     });
 
     it('should return single-et-action-level breadcrumbs', () => {
       const expected = [
+        {
+          url: '#/energiatodistus/all',
+          label: 'Energiatodistukset'
+        },
         {
           url: '#/energiatodistus/2018/1',
           label: 'Energiatodistus 1'
@@ -277,7 +276,7 @@ describe('BreadcrumbUtils', () => {
       ];
 
       assert.deepEqual(
-        BreadcrumbUtils.parseEnergiatodistus(i18n, [
+        BreadcrumbUtils.parseEnergiatodistus(idTranslate, i18n, [
           '2018',
           '1',
           'allekirjoitus'

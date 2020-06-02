@@ -1,7 +1,12 @@
 <script>
   import NavigationTab from '@Component/NavigationTab/NavigationTab';
+  import * as Navigation from '@Utility/navigation';
 
-  export let links;
+  export let location;
+  export let user;
+  export let i18n;
+
+  $: links = Navigation.navigationParse(i18n, user, location);
 </script>
 
 <style type="text/postcss">
@@ -18,9 +23,8 @@
 <div>
   {#each links as link}
     <NavigationTab
-      text={link.text}
+      label={link.label}
       href={link.href}
-      dynamic={link.dynamic}
       activePath={link.activePath} />
   {/each}
 </div>

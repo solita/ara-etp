@@ -5,7 +5,6 @@
 
   import * as Maybe from '@Utility/maybe-utils';
 
-  import * as Navigation from '@Utility/navigation';
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import { buildRoutes } from '@Component/routes';
   import { setupI18n, _ } from '@Language/i18n';
@@ -14,12 +13,7 @@
   import Login from '@Component/Login/Login';
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import Footer from '@Component/Footer/Footer';
-  import {
-    currentUserStore,
-    errorStore,
-    navigationStore,
-    idTranslateStore
-  } from '@/stores';
+  import { currentUserStore, errorStore, idTranslateStore } from '@/stores';
 
   import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
 
@@ -33,12 +27,6 @@
     Maybe.isNone($currentUserStore) &&
     $errorStore &&
     $errorStore.statusCode === 401;
-
-  $: R.compose(
-    navigationStore.set,
-    Maybe.orSome([{ text: '...', href: '' }]),
-    R.map(Navigation.linksForKayttaja)
-  )($currentUserStore);
 
   $: routes = R.compose(
     Maybe.orSome({}),
@@ -85,7 +73,10 @@
       i18n={$_} />
     <section class="content">
       <div class="w-full">
-        <NavigationTabBar links={$navigationStore} />
+        <NavigationTabBar
+          location={$location}
+          user={Maybe.get($currentUserStore)}
+          i18n={$_} />
       </div>
       <div class="routecontainer">
         <Router on:conditionsFailed={_ => replace('/404')} {routes} />

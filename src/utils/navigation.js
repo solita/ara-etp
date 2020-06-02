@@ -1,68 +1,69 @@
 import * as R from 'ramda';
+import * as RUtils from '@Utility/ramda-utils';
+import * as Maybe from '@Utility/maybe-utils';
 
-export const linksForLaatija = laatija => [
+export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
+
+const linksForLaatija = R.curry((i18n, kayttaja) => [
   {
-    text: 'navigation.energiatodistukset',
-    href: '/energiatodistus/all'
+    label: i18n('navigation.energiatodistukset'),
+    href: '#/energiatodistus/all'
   },
-  { text: 'navigation.viestit', href: '/viestit' },
+  { label: i18n('navigation.viestit'), href: '#/viestit' },
   {
-    text: 'navigation.yritykset',
-    href: `/laatija/${laatija.laatija}/yritykset`
+    label: i18n('navigation.yritykset'),
+    href: `#/laatija/${kayttaja.laatija}/yritykset`
   },
   {
-    text: 'navigation.omattiedot',
-    href: '/myinfo',
-    activePath: `/laatija/${laatija.id}`
+    label: i18n('navigation.omattiedot'),
+    href: '#/myinfo',
+    activePath: `#/kayttaja/${kayttaja.id}`
   }
-];
+]);
 
-export const linksForPatevyydentoteaja = _ => [
+export const linksForPatevyydentoteaja = R.curry((i18n, kayttaja) => [
   {
-    text: 'navigation.laatijoidentuonti',
-    href: '/laatija/laatijoidentuonti'
+    label: i18n('navigation.laatijoidentuonti'),
+    href: '#/laatija/laatijoidentuonti'
   },
-  { text: 'navigation.laatijat', href: '/laatija/all' },
-  { text: 'navigation.omattiedot', href: '/myinfo' }
-];
-
-export const linksForLaskuttaja = _ => [
+  { label: i18n('navigation.laatijat'), href: '#/laatija/all' },
   {
-    text: 'navigation.energiatodistukset',
-    href: '/energiatodistus'
-  },
-  { text: 'navigation.laatijat', href: '/laatija/all' },
-  { text: 'navigation.yritykset', href: '/yritys/all' },
-  { text: 'navigation.laskutusajot', href: '/laskutus' }
-];
-
-export const linksForPaakayttaja = _ => [
-  { text: 'navigation.tyojono', href: '/tyojono' },
-  { text: 'navigation.kaytonvalvonta', href: '/kaytonvalvonta' },
-  { text: 'navigation.halytykset', href: '/halytykset' },
-  { text: 'navigation.kayttajat', href: '/kayttaja/all' },
-  { text: 'navigation.yritykset', href: '/yritys/all' },
-  { text: 'navigation.viestit', href: '/viestit' },
-  { text: 'navigation.omattiedot', href: '/myinfo' }
-];
+    label: i18n('navigation.omattiedot'),
+    href: '#/myinfo',
+    activePath: `#/kayttaja/${kayttaja.id}`
+  }
+]);
 
 export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
   {
-    text: `${i18n('navigation.et')} ${id}`,
-    href: `/energiatodistus/${version}/${id}`,
-    dynamic: true
+    label: `${i18n('navigation.et')} ${id}`,
+    href: `#/energiatodistus/${version}/${id}`
   },
   {
-    text: 'navigation.viestit',
-    href: `/energiatodistus/${version}/${id}/viestit`
+    label: i18n('navigation.viestit'),
+    href: `#/energiatodistus/${version}/${id}/viestit`
   },
   {
-    text: 'navigation.liitteet',
-    href: `/energiatodistus/${version}/${id}/liitteet`
+    label: i18n('navigation.liitteet'),
+    href: `#/energiatodistus/${version}/${id}/liitteet`
   },
   {
-    text: 'navigation.muutoshistoria',
-    href: `/energiatodistus/${version}/${id}/muutoshistoria`
+    label: i18n('navigation.muutoshistoria'),
+    href: `#/energiatodistus/${version}/${id}/muutoshistoria`
+  }
+]);
+
+export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
+  { label: i18n('navigation.tyojono'), href: '#/tyojono' },
+  { label: i18n('navigation.kaytonvalvonta'), href: '#/kaytonvalvonta' },
+  { label: i18n('navigation.halytykset'), href: '#/halytykset' },
+  { label: i18n('navigation.kayttajat'), href: '#/kayttaja/all' },
+  { label: i18n('navigation.yritykset'), href: '#/yritys/all' },
+  { label: i18n('navigation.viestit'), href: '#/viestit' },
+  {
+    label: i18n('navigation.omattiedot'),
+    href: '#/myinfo',
+    activePath: `#/kayttaja/${kayttaja.id}`
   }
 ]);
 
@@ -72,9 +73,56 @@ const kayttajaLinksMap = Object.freeze({
   2: linksForPaakayttaja
 });
 
-export const linksForKayttaja = kayttaja =>
+export const parseEnergiatodistus = R.curry((i18n, kayttaja, locationParts) => {
+  const [version, id] = R.compose(
+    RUtils.fillAndTake(2, Maybe.None),
+    R.map(Maybe.fromNull)
+  )(locationParts);
+
+  if (R.compose(Maybe.isSome, R.filter(R.equals('new')))(id)) {
+    return parseRoot(i18n, kayttaja);
+  }
+
+  return R.compose(
+    Maybe.orSome(parseRoot(i18n, kayttaja)),
+    R.lift(linksForEnergiatodistus(i18n))
+  )(version, id);
+});
+
+export const parseRoot = R.curry((i18n, kayttaja) =>
+  R.converge(R.apply, [
+    R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
+    R.append(R.__, [i18n])
+  ])(kayttaja)
+);
+
+export const navigationParse = R.curry((i18n, kayttaja, location) =>
   R.compose(
-    R.applyTo(kayttaja),
-    R.prop(R.__, kayttajaLinksMap),
-    R.prop('rooli')
-  )(kayttaja);
+    R.flatten,
+    Array.of,
+    R.cond([
+      [
+        R.compose(R.equals('energiatodistus'), R.head),
+        R.compose(parseEnergiatodistus(i18n, kayttaja), R.tail)
+      ],
+      [
+        R.compose(
+          R.includes(R.__, [
+            'yritys',
+            'kayttaja',
+            'laatija',
+            'halytykset',
+            'kaytonvalvonta',
+            'tyojono',
+            'viestit',
+            'myinfo'
+          ]),
+          R.head
+        ),
+        R.always(parseRoot(i18n, kayttaja))
+      ],
+      [R.T, R.always([{ label: '...', href: '#/' }])]
+    ]),
+    locationParts
+  )(location)
+);

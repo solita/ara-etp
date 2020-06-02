@@ -1,23 +1,17 @@
 <script>
   import * as R from 'ramda';
-  import Router, { wrap } from 'svelte-spa-router';
+  import Router from 'svelte-spa-router';
 
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Navigation from '@Utility/navigation';
 
   import NewYritys from './NewYritys';
   import ExistingYritys from './ExistingYritys';
   import Yritykset from './Yritykset';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import Country from '@Component/Geo/Country';
-  import {
-    flashMessageStore,
-    countryStore,
-    currentUserStore,
-    navigationStore
-  } from '@/stores';
+  import { flashMessageStore, countryStore, currentUserStore } from '@/stores';
 
   const prefix = '/yritys';
   const routes = {
@@ -25,16 +19,6 @@
     '/all': Yritykset,
     '/:id': ExistingYritys
   };
-
-  $: R.compose(
-    navigationStore.set,
-    Maybe.get,
-    R.last,
-    R.filter(Maybe.isSome)
-  )([
-    Maybe.of([{ text: '...', href: '' }]),
-    R.map(Navigation.linksForKayttaja, $currentUserStore)
-  ]);
 </script>
 
 <style type="text/postcss">

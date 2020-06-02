@@ -1,10 +1,10 @@
 <script>
+  import * as R from 'ramda';
   import active from 'svelte-spa-router/active';
   import { link } from 'svelte-spa-router';
   import { _ } from '@Language/i18n';
-  export let text;
+  export let label;
   export let href;
-  export let dynamic = false;
   export let activePath;
 </script>
 
@@ -25,9 +25,9 @@
 </style>
 
 <a
-  href={`#${href}`}
-  use:active={activePath || href}
+  {href}
+  use:active={R.compose( R.dropWhile(R.equals('#')), R.defaultTo(href) )(activePath)}
   class="navigationtab"
   tabindex="0">
-  {dynamic ? text : $_(text)}
+  {label}
 </a>
