@@ -6,17 +6,36 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as empty from './empty';
 
+const deserialize2018 = {
+  id: Maybe.get,
+  'tila-id': Maybe.get,
+  perustiedot: {
+    'onko-julkinen-rakennus': Maybe.get,
+    valmistumisvuosi: Either.Right
+  }
+}
+
+const deserialize2013 = R.mergeRight(deserialize2018, {
+  perustiedot: { uudisrakennus: Maybe.get }
+})
+
+const assertVersion = et => {
+  if (!R.includes(et.versio, [2018, 2013])) {
+    throw 'Unsupported energiatodistus version: ' + et.version;
+  }
+}
+
+const mergeEmpty = deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]));
+
 export const deserialize = R.compose(
-  deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), empty.energiatodistus2018()),
-  R.evolve({
-    id: Maybe.get,
-    versio: Maybe.get,
-    'tila-id': Maybe.get,
-    perustiedot: {
-      'onko-julkinen-rakennus': Maybe.get,
-      valmistumisvuosi: Either.Right
-    }
-  }),
+  R.cond([
+    [R.propEq('versio', 2018), mergeEmpty(empty.energiatodistus2018)],
+    [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013)]]),
+  R.cond([
+    [R.propEq('versio', 2018), R.evolve(deserialize2018)],
+    [R.propEq('versio', 2013), R.evolve(deserialize2013)]]),
+  R.tap(assertVersion),
+  R.evolve({ versio: Maybe.get }),
   deep.map(R.F, Maybe.fromNull)
 );
 

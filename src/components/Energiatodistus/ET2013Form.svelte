@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
 
-  import {locale, _} from '@Language/i18n';
+  import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -14,6 +14,7 @@
   import Input from './Input';
   import BasicInput from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
+  import Textarea from './Textarea';
 
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
@@ -26,6 +27,7 @@
   import SisaisetLampokuormat from './form-parts/lahtotiedot/sisaiset-lampokuormat';
   import Lamminkayttovesi from './form-parts/lahtotiedot/lamminkayttovesi';
 
+  import ELuku from './form-parts/tulokset/e-luku';
   import ELuvunErittely from './form-parts/tulokset/e-luvun-erittely';
   import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat';
   import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
@@ -52,8 +54,21 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
-  <div class="flex flex-col -mx-4">
+  <H2 text={$_('energiatodistus.perustiedot.header')} />
 
+  <div class="flex lg:flex-row flex-col -mx-4">
+    {#if R.complement(R.isNil)(energiatodistus.id)}
+      <div class="lg:w-1/2 w-full px-4 py-2">
+        <BasicInput
+            id="energiatodistus.id"
+            name="energiatodistus.id"
+            label={$_('energiatodistus.id')}
+            disabled={true}
+            bind:model={energiatodistus}
+            lens={R.lensProp('id')}
+            i18n={$_} />
+      </div>
+    {/if}
     {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
       <div class="lg:w-1/2 w-full px-4 py-2">
         <BasicInput
@@ -67,7 +82,8 @@
             i18n={$_} />
       </div>
     {/if}
-
+  </div>
+  <div class="flex lg:flex-row flex-col -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Input
           {disabled}
@@ -85,7 +101,9 @@
           bind:model={energiatodistus}
           path={['perustiedot', 'tilaaja']} />
     </div>
+  </div>
 
+  <div class="flex flex-col -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Select
           label={$_('energiatodistus.perustiedot.kieli')}
@@ -104,6 +122,15 @@
           lens={R.lensPath(['perustiedot', 'uudisrakennus'])}
           label={$_('energiatodistus.perustiedot.uudisrakennus')}
           {disabled} />
+    </div>
+
+    <div class="lg:w-1/2 w-full  px-4 py-4">
+      <Input
+          {disabled}
+          {schema}
+          center={false}
+          bind:model={energiatodistus}
+          path={['tulokset', 'laskentatyokalu']} />
     </div>
   </div>
 
@@ -140,12 +167,14 @@
   <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
   <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
-  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
 
   <HR />
 
   <H2 text={$_('energiatodistus.tulokset.header')} />
+
+  <ELuku {schema} {energiatodistus} />
   <ELuvunErittely {disabled} {schema} bind:energiatodistus />
   <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
   <TeknistenjarjestelmienEnergiankulutus
@@ -154,7 +183,6 @@
       bind:energiatodistus />
   <Nettotarve {disabled} {schema} bind:energiatodistus />
   <Lampokuormat {disabled} {schema} bind:energiatodistus />
-  <Laskentatyokalu {disabled} {schema} bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
@@ -174,4 +202,13 @@
   <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
   <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
   <Suositukset {disabled} {schema} bind:energiatodistus />
+
+  <H2 text={$_('energiatodistus.lisamerkintoja')} />
+  <div class="w-full py-4 mb-4">
+  <Textarea
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      path={['lisamerkintoja-fi']} />
+  </div>
 </div>
