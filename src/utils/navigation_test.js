@@ -20,6 +20,15 @@ describe('Navigation', () => {
     'navigation.kayttajat': 'Käyttäjät'
   });
 
+  describe('locationParts', () => {
+    it('should return parts', () => {
+      const location = '/yritys/new';
+      const expected = ['yritys', 'new'];
+
+      assert.deepEqual(Navigation.locationParts(location), expected);
+    });
+  });
+
   describe('parseEnergiatodistus', () => {
     const kayttaja = { rooli: 0, id: 2, laatija: 3 };
 

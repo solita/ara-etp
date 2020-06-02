@@ -1,15 +1,12 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 
+import * as Navigation from '@Utility/navigation';
+import * as RUtils from '@Utility/ramda-utils';
+
 const createCrumb = R.curry((url, label) => ({ url, label }));
 
 const labelLens = R.lensProp('label');
-
-export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
-
-export const fillAndTake = R.curry((n, item, arr) =>
-  R.compose(R.take(n), R.concat(arr), R.times)(item, n)
-);
 
 const routeReservedKeywords = [
   'all',
@@ -102,7 +99,7 @@ export const singleEnergiatodistusActionCrumb = R.curry(
 export const parseEnergiatodistus = R.curry(
   (idTranslate, i18n, locationParts) => {
     const [root, id, action] = R.compose(
-      fillAndTake(3, Maybe.None),
+      RUtils.fillAndTake(3, Maybe.None),
       R.map(Maybe.fromNull)
     )(locationParts);
 
@@ -183,7 +180,7 @@ export const parseSingleLaatijaActionCrumb = R.curry((i18n, id, action) => {
 
 export const parseLaatija = R.curry((i18n, locationParts) => {
   const [root, action] = R.compose(
-    fillAndTake(2, Maybe.None),
+    RUtils.fillAndTake(2, Maybe.None),
     R.map(Maybe.fromNull)
   )(locationParts);
 
@@ -240,6 +237,6 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
       ],
       [R.T, R.always({ label: '', url: '' })]
     ]),
-    locationParts
+    Navigation.locationParts
   )(location)
 );

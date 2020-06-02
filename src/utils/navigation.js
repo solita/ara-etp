@@ -2,6 +2,8 @@ import * as R from 'ramda';
 import * as RUtils from '@Utility/ramda-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
+export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
+
 const linksForLaatija = R.curry((i18n, kayttaja) => [
   {
     label: i18n('navigation.energiatodistukset'),
@@ -30,16 +32,6 @@ export const linksForPatevyydentoteaja = R.curry((i18n, kayttaja) => [
     href: '#/myinfo',
     activePath: `#/kayttaja/${kayttaja.id}`
   }
-]);
-
-export const linksForLaskuttaja = R.curry((i18n, _) => [
-  {
-    label: i18n('navigation.energiatodistukset'),
-    href: '#/energiatodistus/all'
-  },
-  { label: i18n('navigation.laatijat'), href: '#/laatija/all' },
-  { label: i18n('navigation.yritykset'), href: '#/yritys/all' },
-  { label: i18n('navigation.laskutusajot'), href: '#/laskutus' }
 ]);
 
 export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
@@ -74,8 +66,6 @@ export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
     activePath: `#/kayttaja/${kayttaja.id}`
   }
 ]);
-
-export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,

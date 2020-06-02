@@ -5,7 +5,6 @@
 
   import * as Maybe from '@Utility/maybe-utils';
 
-  import * as Navigation from '@Utility/navigation';
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import { buildRoutes } from '@Component/routes';
   import { setupI18n, _ } from '@Language/i18n';
