@@ -1,5 +1,6 @@
 import * as validation from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
+import * as R from "ramda";
 
 const String = max => ({
   parse: parsers.optionalString,
@@ -97,7 +98,7 @@ const Yritys = {
   postinumero: YritysPostinumero
 };
 
-export const schema = {
+export const v2018 = {
   perustiedot: {
     nimi: String(50),
     rakennustunnus: String(200),
@@ -245,3 +246,17 @@ export const schema = {
   'lisamerkintoja-fi': String(6300),
   'lisamerkintoja-sv': String(6300)
 };
+
+const MuuEnergiamuoto = {
+  nimi: String(30),
+  muotokerroin: FloatPos,
+  'ostoenergia': FloatPos
+};
+
+export const v2013 =
+  R.compose(
+    R.assocPath(
+      ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
+      R.repeat(MuuEnergiamuoto,3)),
+    R.dissocPath(['perustiedot', 'laatimisvaihe']))
+  (v2018);

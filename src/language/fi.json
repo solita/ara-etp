@@ -376,7 +376,6 @@
         "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia",
         "energiamuodon_kerroin": "Energiamuodon kerroin",
         "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
-
         "labels": {
           "fossiilinen-polttoaine": "Fossiilinen polttoaine",
           "sahko": "Sähkö",
@@ -388,7 +387,14 @@
         "sahko": "Vakioidulla käytöllä laskettu sähkön osto",
         "kaukojaahdytys": "Vakioidulla käytöllä laskettu kaukojäähdytyksen osto",
         "kaukolampo": "Vakioidulla käytöllä laskettu kaukolämmön osto",
-        "uusiutuva-polttoaine": "Vakioidulla käytöllä laskettu uusiutuvan polttoaineen osto"
+        "uusiutuva-polttoaine": "Vakioidulla käytöllä laskettu uusiutuvan polttoaineen osto",
+        "muu": {
+          "0": {
+            "nimi": "Energiamuodon nimi",
+            "muotokerroin": "Energiamuodon kerroin",
+            "ostoenergia": "Vakioidulla käytöllä laskettu energian osto vuodessa"
+          }
+        }
       },
       "uusiutuvat-omavaraisenergiat": {
         "header": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",

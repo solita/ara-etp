@@ -220,8 +220,15 @@ export const energiatodistus2018 = _ => ({
   'lisamerkintoja-sv': Maybe.None()
 });
 
+const emptyMuuEnergiamuoto = _ => ({
+  nimi: Maybe.None(),
+  muotokerroin: Maybe.None(),
+  'ostoenergia': Maybe.None()
+});
+
 export const energiatodistus2013 =
   R.compose(
+    R.assocPath(['tulokset', 'kaytettavat-energiamuodot', 'muu'], R.times(emptyMuuEnergiamuoto,3)),
     R.assocPath(['perustiedot', 'uudisrakennus'], false),
     R.dissocPath(['perustiedot', 'laatimisvaihe']),
     energiatodistus2018);

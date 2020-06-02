@@ -5,8 +5,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as deep from '@Utility/deep-objects';
-  import { schema as schema2018 } from './schema-2018';
-  import { schema as schema2013 } from './schema-2013';
+  import * as schemas from './schema';
   import { _ } from '@Language/i18n';
 
   import ET2018Form from './ET2018Form';
@@ -24,11 +23,7 @@
   export let disabled = false;
   export let title = '';
 
-  const schemas = {
-    '2018': schema2018,
-    '2013': schema2018
-  };
-  let schema = schemas[version];
+  let schema = schemas['v' + version];
 
   const forms = {
     '2018': ET2018Form,
