@@ -223,7 +223,7 @@ export const energiatodistus2018 = _ => ({
 const emptyMuuEnergiamuoto = _ => ({
   nimi: Maybe.None(),
   muotokerroin: Maybe.None(),
-  'ostoenergia': Maybe.None()
+  ostoenergia: Maybe.None()
 });
 
 export const energiatodistus2013 =
