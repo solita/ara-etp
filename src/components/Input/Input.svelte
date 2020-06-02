@@ -13,6 +13,7 @@
 
   export let label = '';
   export let caret = false;
+  export let search = false;
   export let required = false;
   export let autocomplete = 'off';
   export let disabled = false;
@@ -61,6 +62,18 @@
     @apply border-hover;
   }
 
+  .inputwrapper.caret::after {
+    @apply font-icon absolute text-xl font-bold text-disabled;
+    right: 0.5em;
+    content: 'expand_more';
+  }
+
+  .inputwrapper.search::after {
+    @apply font-icon absolute text-xl font-bold text-disabled;
+    right: 0.5em;
+    content: 'search';
+  }
+
   .inputwrapper.focused {
     @apply border-primary;
   }
@@ -75,12 +88,6 @@
 
   .inputwrapper.error::after {
     @apply text-error;
-  }
-
-  .inputwrapper.caret::after {
-    @apply font-icon absolute text-base text-disabled;
-    right: 0.5em;
-    content: 'expand_more';
   }
 
   .inputwrapper.disabled {
@@ -139,6 +146,7 @@
   <div
     class="inputwrapper"
     class:caret
+    class:search
     class:focused
     class:error={focused && !valid}
     class:disabled>
