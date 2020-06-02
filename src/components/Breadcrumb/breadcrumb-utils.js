@@ -115,10 +115,12 @@ export const parseEnergiatodistus = R.curry(
       )(root, id, action)
     ];
 
-    return R.uniq([
-      energiatodistusRootActionCrumb(i18n, 'all'),
-      R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts)
-    ]);
+    return R.flatten(
+      R.uniq([
+        energiatodistusRootActionCrumb(i18n, 'all'),
+        R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts)
+      ])
+    );
   }
 );
 
