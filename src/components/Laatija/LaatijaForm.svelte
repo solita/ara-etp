@@ -228,6 +228,7 @@
             lens={R.lensProp('maa')}
             format={formatCountry}
             parse={parseCountry}
+            search={true}
             handleSubmit={false}
             i18n={$_} />
         </Autocomplete>

@@ -105,6 +105,16 @@
     @apply font-medium min-h-2.5em block py-2 cursor-pointer border-b-3 border-disabled;
   }
 
+  .button:not(.disabled)::after {
+    @apply font-icon absolute text-xl font-bold text-disabled;
+    right: 0.5em;
+    content: 'expand_more';
+  }
+
+  .button.focused:not(.disabled)::after {
+    @apply text-primary;
+  }
+
   .button:hover {
     @apply bg-background border-primary;
   }
@@ -117,11 +127,11 @@
     @apply bg-light border-0 min-h-0 py-1 cursor-default;
   }
 
-  .focused {
+  .label.focused {
     @apply font-extrabold;
   }
 
-  .focused.disabled {
+  .label.focused.disabled {
     @apply font-normal;
   }
 
@@ -145,6 +155,7 @@
     class:disabled
     bind:this={button}
     class="button"
+    class:focused
     tabindex={disabled ? -1 : 0}
     on:click={_ => disabled || (showDropdown = !showDropdown)}
     on:focus={_ => {
