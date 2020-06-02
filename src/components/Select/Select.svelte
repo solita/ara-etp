@@ -106,8 +106,9 @@
   }
 
   .button:not(.disabled)::after {
-    @apply font-icon absolute text-xl font-bold text-disabled;
+    @apply font-icon absolute text-2xl font-bold text-disabled;
     right: 0.5em;
+    bottom: 0.2em;
     content: 'expand_more';
   }
 
