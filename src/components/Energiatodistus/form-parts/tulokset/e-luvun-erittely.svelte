@@ -91,6 +91,40 @@
         </td>
       </tr>
     {/each}
+    {#each R.defaultTo([], energiatodistus.tulokset['kaytettavat-energiamuodot'].muu) as _, index}
+      <tr class="et-table--tr">
+        <td class="et-table--td">
+          <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['tulokset', 'kaytettavat-energiamuodot', 'muu', index, 'nimi']} />
+        </td>
+        <td class="et-table--td">
+          <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['tulokset', 'kaytettavat-energiamuodot', 'muu', index, 'ostoenergia']} />
+        </td>
+        <td class="et-table--td">
+          <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['tulokset', 'kaytettavat-energiamuodot', 'muu', index, 'muotokerroin']} />
+        </td>
+        <td class="et-table--td et-table--td__fifth">
+          TODO
+        </td>
+        <td class="et-table--td et-table--td__fifth">
+          TODO
+        </td>
+      </tr>
+    {/each}
     <tr class="et-table--tr border-t-1 border-disabled">
       <td class="et-table--td uppercase">
         {$_('energiatodistus.tulokset.yhteensa')}
