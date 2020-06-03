@@ -174,6 +174,7 @@
               lens={R.lensProp('maa')}
               format={formatCountry}
               parse={parseCountry}
+              search={true}
               i18n={$_} />
           </Autocomplete>
         </div>

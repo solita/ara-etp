@@ -13,6 +13,7 @@
 
   export let disabled = false;
   export let required = false;
+  export let allowNone = true;
 
   export let model;
   export let lens;
@@ -29,6 +30,10 @@
   )(model);
 
   $: showDropdown = Maybe.isSome(active);
+
+  $: selectableItems = allowNone
+    ? [$_('validation.no-selection'), ...R.map(format, items)]
+    : R.map(format, items);
 
   const previousItem = R.compose(
     R.filter(R.lte(0)),
@@ -105,6 +110,17 @@
     @apply font-medium min-h-2.5em block py-2 cursor-pointer border-b-3 border-disabled;
   }
 
+  .button:not(.disabled)::after {
+    @apply font-icon absolute text-2xl font-bold text-disabled;
+    right: 0.5em;
+    bottom: 0.2em;
+    content: 'expand_more';
+  }
+
+  .button.focused:not(.disabled)::after {
+    @apply text-primary;
+  }
+
   .button:hover {
     @apply bg-background border-primary;
   }
@@ -117,11 +133,11 @@
     @apply bg-light border-0 min-h-0 py-1 cursor-default;
   }
 
-  .focused {
+  .label.focused {
     @apply font-extrabold;
   }
 
-  .focused.disabled {
+  .label.focused.disabled {
     @apply font-normal;
   }
 
@@ -145,6 +161,7 @@
     class:disabled
     bind:this={button}
     class="button"
+    class:focused
     tabindex={disabled ? -1 : 0}
     on:click={_ => disabled || (showDropdown = !showDropdown)}
     on:focus={_ => {
@@ -157,10 +174,14 @@
   </span>
   {#if showDropdown}
     <DropdownList
-      items={R.map(format, items)}
+      items={selectableItems}
       {active}
       onclick={(item, index) => {
-        model = R.set(lens, parse(R.nth(index, items)), model);
+        if (allowNone && index === 0) {
+          model = R.set(lens, Maybe.None(), model);
+        } else {
+          model = R.compose( R.set(lens, R.__, model), parse, R.nth(R.__, items), R.when(R.always(allowNone), R.dec) )(index);
+        }
         active = Maybe.None();
       }} />
   {/if}
