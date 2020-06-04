@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
+  import * as formats from '@Utility/formats';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -26,10 +27,10 @@
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
       <th class="et-table--th">
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       </th>
       <th class="et-table--th">
-        <VuosikulutusPerAlaUnit/>
+        <VuosikulutusPerAlaUnit />
       </th>
       <th class="et-table--th" />
     </tr>
@@ -50,7 +51,7 @@
             path={['tulokset', 'lampokuormat', kuorma]} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(kuorma) )(kuormatPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(kuorma) )(kuormatPerLammitettyNettoala)}
         </td>
         <td class="et-table--td" />
       </tr>
