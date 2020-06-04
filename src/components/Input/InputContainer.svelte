@@ -10,7 +10,6 @@
   export let i18n;
   export let parse = R.identity;
   export let format = R.identity;
-  export let handleSubmit;
   export let validators = [];
 
   let viewValue;

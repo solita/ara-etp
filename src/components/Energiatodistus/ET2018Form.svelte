@@ -62,7 +62,6 @@
     R.filter(R.equals(2)),
     R.view(R.lensPath(['perustiedot', 'laatimisvaihe']))
   )(energiatodistus);
-
 </script>
 
 <div class="w-full mt-3">
@@ -73,13 +72,13 @@
     {#if R.complement(R.isNil)(energiatodistus.id)}
       <div class="lg:w-1/2 w-full px-4 py-2">
         <BasicInput
-            id="energiatodistus.id"
-            name="energiatodistus.id"
-            label={$_('energiatodistus.id')}
-            disabled={true}
-            bind:model={energiatodistus}
-            lens={R.lensProp('id')}
-            i18n={$_} />
+          id="energiatodistus.id"
+          name="energiatodistus.id"
+          label={$_('energiatodistus.id')}
+          disabled={true}
+          bind:model={energiatodistus}
+          lens={R.lensProp('id')}
+          i18n={$_} />
       </div>
     {/if}
     {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
@@ -153,13 +152,13 @@
       </div>
     {/if}
 
-    <div class="lg:w-1/2 w-full  px-4 py-4">
+    <div class="lg:w-1/2 w-full px-4 py-4">
       <Input
-          {disabled}
-          {schema}
-          center={false}
-          bind:model={energiatodistus}
-          path={['tulokset', 'laskentatyokalu']} />
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['tulokset', 'laskentatyokalu']} />
     </div>
   </div>
 
@@ -170,8 +169,8 @@
     {disabled}
     bind:energiatodistus
     {labelLocale}
-    kayttotarkoitusluokat = {luokittelut.kayttotarkoitusluokat}
-    alakayttotarkoitusluokat = {luokittelut.alakayttotarkoitusluokat} />
+    kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
+    alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
 
   <HR />
   <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
@@ -234,7 +233,7 @@
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">
-  <Textarea
+    <Textarea
       {disabled}
       {schema}
       bind:model={energiatodistus}

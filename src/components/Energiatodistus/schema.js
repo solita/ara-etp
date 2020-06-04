@@ -1,9 +1,11 @@
 import * as validation from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
-import * as R from "ramda";
+import * as formats from '@Utility/formats';
+import * as R from 'ramda';
 
 const String = max => ({
   parse: parsers.optionalString,
+  format: formats.optionalString,
   validators: [
     validation.liftValidator(validation.minLengthConstraint(2)),
     validation.liftValidator(validation.maxLengthConstraint(max))
@@ -12,11 +14,13 @@ const String = max => ({
 
 const Integer = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseInteger),
+  format: formats.optionalNumber,
   validators: validation.MaybeInterval(min, max)
 });
 
 const Float = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseNumber),
+  format: formats.optionalNumber,
   validators: validation.MaybeInterval(min, max)
 });
 
@@ -250,13 +254,13 @@ export const v2018 = {
 const MuuEnergiamuoto = {
   nimi: String(30),
   muotokerroin: FloatPos,
-  'ostoenergia': FloatPos
+  ostoenergia: FloatPos
 };
 
-export const v2013 =
-  R.compose(
-    R.assocPath(
-      ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
-      R.repeat(MuuEnergiamuoto,3)),
-    R.dissocPath(['perustiedot', 'laatimisvaihe']))
-  (v2018);
+export const v2013 = R.compose(
+  R.assocPath(
+    ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
+    R.repeat(MuuEnergiamuoto, 3)
+  ),
+  R.dissocPath(['perustiedot', 'laatimisvaihe'])
+)(v2018);
