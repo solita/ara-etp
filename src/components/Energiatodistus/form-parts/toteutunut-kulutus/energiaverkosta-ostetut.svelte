@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
+  import * as formats from '@Utility/formats';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -37,10 +38,10 @@
       <th class="et-table--th et-table--th__sixth" />
       <th class="et-table--th et-table--th__sixth" />
       <th class="et-table--th et-table--th__sixth">
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       </th>
       <th class="et-table--th et-table--th__sixth">
-        <VuosikulutusPerAlaUnit/>
+        <VuosikulutusPerAlaUnit />
       </th>
     </tr>
   </thead>
@@ -48,7 +49,11 @@
     {#each ['kaukolampo', 'kokonaissahko', 'kiinteistosahko', 'kayttajasahko', 'kaukojaahdytys'] as energiamuoto}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          <div class:indent="{R.includes(energiamuoto, ['kiinteistosahko', 'kayttajasahko'])}">
+          <div
+            class:indent={R.includes(energiamuoto, [
+              'kiinteistosahko',
+              'kayttajasahko'
+            ])}>
             {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.labels.${energiamuoto}`)}
           </div>
         </td>
@@ -64,7 +69,7 @@
             path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', `${energiamuoto}-vuosikulutus`]} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(`${energiamuoto}-vuosikulutus`) )(ostettuEnergiaPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(`${energiamuoto}-vuosikulutus`) )(ostettuEnergiaPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
