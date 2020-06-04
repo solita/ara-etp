@@ -15,10 +15,15 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+  export let versio;
 
-  $: energiamuotokertoimet = EtUtils.energiamuotokertoimet2018();
+  $: energiamuotokertoimet = R.mergeRight(
+      EtUtils.energiamuotokertoimet()[versio],
+      EtUtils.muutEnergiamuotokertoimet(energiatodistus));
 
-  $: ostoenergiat = EtUtils.ostoenergiat(energiatodistus);
+  $: ostoenergiat = R.mergeRight(
+      EtUtils.ostoenergiat(energiatodistus),
+      EtUtils.muutOstoenergiat(energiatodistus));
 
   $: ostoenergiaSum = EtUtils.sumEtValues(ostoenergiat);
 
@@ -118,10 +123,10 @@
               path={['tulokset', 'kaytettavat-energiamuodot', 'muu', index, 'muotokerroin']} />
         </td>
         <td class="et-table--td et-table--td__fifth">
-          TODO
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop('muu-' + index) )(painotetutOstoenergiankulutukset)}
         </td>
         <td class="et-table--td et-table--td__fifth">
-          TODO
+          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop('muu-' + index) )(painotetutOstoenergiankulutuksetPerNelio)}
         </td>
       </tr>
     {/each}
