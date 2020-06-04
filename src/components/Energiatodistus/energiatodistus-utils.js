@@ -4,6 +4,7 @@ import * as validation from '@Utility/validation';
 import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+import * as objects from '@Utility/objects';
 
 export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
@@ -152,12 +153,21 @@ export const sumEtValues = R.compose(
 
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
-export const energiamuotokertoimet2018 = () => ({
-  'fossiilinen-polttoaine': Maybe.Some(1),
-  kaukojaahdytys: Maybe.Some(0.28),
-  kaukolampo: Maybe.Some(0.5),
-  sahko: Maybe.Some(1.2),
-  'uusiutuva-polttoaine': Maybe.Some(0.5)
+export const energiamuotokertoimet = () => ({
+  2018: {
+    'fossiilinen-polttoaine': Maybe.Some(1),
+    kaukojaahdytys: Maybe.Some(0.28),
+    kaukolampo: Maybe.Some(0.5),
+    sahko: Maybe.Some(1.2),
+    'uusiutuva-polttoaine': Maybe.Some(0.5)
+  },
+  2013: {
+    'fossiilinen-polttoaine': Maybe.Some(1),
+    kaukojaahdytys: Maybe.Some(0.4),
+    kaukolampo: Maybe.Some(0.7),
+    sahko: Maybe.Some(1.7),
+    'uusiutuva-polttoaine': Maybe.Some(0.5)
+  }
 });
 
 const fieldsWithErittelyOstoenergia = [
@@ -177,6 +187,30 @@ export const ostoenergiat = R.compose(
   R.map(unnestValidation),
   R.pick(fieldsWithErittelyOstoenergia),
   kaytettavatEnergiamuodot
+);
+
+export const muutOstoenergiat = R.compose(
+  objects.mapKeys(key => 'muu-' + key),
+  R.map(unnestValidation),
+  R.map(R.prop('ostoenergia')),
+  R.defaultTo([]),
+  R.path([
+    'tulokset',
+    'kaytettavat-energiamuodot',
+    'muu'
+  ])
+);
+
+export const muutEnergiamuotokertoimet = R.compose(
+  objects.mapKeys(key => 'muu-' + key),
+  R.map(unnestValidation),
+  R.map(R.prop('muotokerroin')),
+  R.defaultTo([]),
+  R.path([
+    'tulokset',
+    'kaytettavat-energiamuodot',
+    'muu'
+  ])
 );
 
 export const multiplyWithKerroin = R.curry((kerroin, ostoenergiamaara) =>

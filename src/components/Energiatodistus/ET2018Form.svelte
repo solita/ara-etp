@@ -204,7 +204,7 @@
   <H2 text={$_('energiatodistus.tulokset.header')} />
 
   <ELuku {schema} {energiatodistus} />
-  <ELuvunErittely {disabled} {schema} bind:energiatodistus />
+  <ELuvunErittely {disabled} {schema} bind:energiatodistus versio={2018}/>
   <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
   <TeknistenjarjestelmienEnergiankulutus
     {disabled}
