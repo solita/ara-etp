@@ -6,7 +6,8 @@ export const formatTimeInstant = time => dfns.format(time, 'd.M.yyyy H:mm:ss');
 export const formatDateInstant = date => dfns.format(date, 'd.M.yyyy');
 
 export const numberFormat = Intl.NumberFormat('fi-FI').format;
-export const percentFormat = Intl.NumberFormat('fi-FI', { style: 'percent' });
+export const percentFormat = Intl.NumberFormat('fi-FI', { style: 'percent' })
+  .format;
 
 export const optionalString = Maybe.orSome('');
 export const optionalNumber = R.compose(Maybe.orSome(''), R.map(numberFormat));
