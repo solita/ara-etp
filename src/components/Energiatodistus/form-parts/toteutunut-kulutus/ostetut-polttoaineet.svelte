@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
+  import * as formats from '@Utility/formats';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -60,10 +61,10 @@
         {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.muunnoskerroin')}
       </th>
       <th class="et-table--th et-table--th__sixth">
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       </th>
       <th class="et-table--th et-table--th__sixth">
-        <VuosikulutusPerAlaUnit/>
+        <VuosikulutusPerAlaUnit />
       </th>
     </tr>
   </thead>
@@ -84,12 +85,14 @@
         <td class="et-table--td">
           {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`)}
         </td>
-        <td class="et-table--td">{Maybe.get(muunnoskertoimet[polttoaine])}</td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
+          {R.compose( formats.numberFormat, Maybe.get, R.prop(polttoaine) )(muunnoskertoimet)}
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
+        </td>
+        <td class="et-table--td">
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
@@ -128,10 +131,10 @@
             path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'muunnoskerroin']} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(Math.ceil), R.nth(index) )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
