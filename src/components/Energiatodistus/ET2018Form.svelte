@@ -55,6 +55,8 @@
   export let schema;
   export let disabled = false;
 
+  let eLuku = Maybe.None();
+
   $: labelLocale = LocaleUtils.label($locale);
 
   $: isLaatimisvaiheOlemassaOlevaRakennus = R.compose(
@@ -203,7 +205,12 @@
   <H2 text={$_('energiatodistus.tulokset.header')} />
 
   <ELuku {schema} {energiatodistus} />
-  <ELuvunErittely {disabled} {schema} bind:energiatodistus versio={2018}/>
+  <ELuvunErittely
+    bind:eLuku
+    {disabled}
+    {schema}
+    bind:energiatodistus
+    versio={2018} />
   <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
   <TeknistenjarjestelmienEnergiankulutus
     {disabled}
