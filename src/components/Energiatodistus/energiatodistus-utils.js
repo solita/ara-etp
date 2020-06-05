@@ -65,10 +65,7 @@ export const validators = deep.map(
   R.prop('validators')
 );
 
-export const unnestValidation = R.compose(
-  R.when(Either.isEither, Maybe.None),
-  R.when(R.allPass([Either.isEither, Either.isRight]), Either.right)
-);
+export const unnestValidation = R.when(Either.isEither, Either.toMaybe);
 
 export const energiatodistusPath = R.curry((path, et) =>
   R.compose(unnestValidation, R.path(path))(et)
