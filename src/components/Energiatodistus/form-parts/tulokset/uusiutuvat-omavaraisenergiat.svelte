@@ -6,8 +6,8 @@
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
-  import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
   import VuosituottoUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
+  import VuosituottoAreaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area.svelte';
 
   import * as formats from '@Utility/formats';
 
@@ -29,12 +29,8 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th">
-        <VuosituottoUnit />
-      </th>
-      <th class="et-table--th">
-        <ELukuUnit />
-      </th>
+      <th class="et-table--th"><VuosituottoUnit/></th>
+      <th class="et-table--th"><VuosituottoAreaUnit/></th>
       <th class="et-table--th" />
     </tr>
   </thead>
