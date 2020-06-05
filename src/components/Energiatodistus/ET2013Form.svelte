@@ -29,11 +29,10 @@
 
   import ELuku from './form-parts/tulokset/e-luku';
   import ELuvunErittely from './form-parts/tulokset/e-luvun-erittely';
-  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat';
+  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat-2013';
   import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
   import Nettotarve from './form-parts/tulokset/nettotarve';
   import Lampokuormat from './form-parts/tulokset/lampokuormat';
-  import Laskentatyokalu from './form-parts/tulokset/laskentatyokalu';
 
   import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/energiaverkosta-ostetut';
   import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';

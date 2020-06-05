@@ -257,10 +257,19 @@ const MuuEnergiamuoto = {
   ostoenergia: FloatPos
 };
 
-export const v2013 = R.compose(
-  R.assocPath(
-    ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
-    R.repeat(MuuEnergiamuoto, 3)
-  ),
-  R.dissocPath(['perustiedot', 'laatimisvaihe'])
-)(v2018);
+const MuuUusiutuvaEnergia = {
+  'nimi-fi': String(30),
+  'nimi-sv': String(30),
+  vuosikulutus: FloatPos
+};
+
+export const v2013 =
+  R.compose(
+    R.assocPath(
+      ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
+      R.repeat(MuuEnergiamuoto, 3)),
+    R.assocPath(
+      ['tulokset', 'uusiutuvat-omavaraisenergiat'],
+      R.repeat(MuuUusiutuvaEnergia, 5)),
+    R.dissocPath(['perustiedot', 'laatimisvaihe']))
+  (v2018);

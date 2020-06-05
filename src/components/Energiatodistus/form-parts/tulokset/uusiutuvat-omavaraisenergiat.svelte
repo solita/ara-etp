@@ -23,7 +23,7 @@
 
 <H3
   compact={true}
-  text={$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header')} />
+  text={$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2018')} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">

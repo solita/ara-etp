@@ -397,7 +397,10 @@
         }
       },
       "uusiutuvat-omavaraisenergiat": {
-        "header": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
+        "header": {
+          "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
+          "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
+        },
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",
@@ -411,7 +414,11 @@
         "aurinkolampo": "Aurinkolämmön vuosituotto",
         "muulampo": "Muun lämmön vuosituotto",
         "muusahko": "Muun sähkön vuosituotto",
-        "lampopumppu": "Lämpöpumpun vuosituotto"
+        "lampopumppu": "Lämpöpumpun vuosituotto",
+        "0": {
+          "nimi": "Uusiutuvan omavaraisenergian nimi",
+          "vuosikulus": "Uusiutuvan omavaraisenergian kulutus vuodessa"
+        }
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiakulutus",
