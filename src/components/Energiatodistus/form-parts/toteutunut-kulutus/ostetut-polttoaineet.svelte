@@ -96,7 +96,7 @@
         </td>
       </tr>
     {/each}
-    {#each R.path(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'], schema) as vapaa, index}
+    {#each R.path(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'], energiatodistus) as vapaa, index}
       <tr class="et-table--tr">
         <td class="et-table--td">
           <Input

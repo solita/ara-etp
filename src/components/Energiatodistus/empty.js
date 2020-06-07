@@ -198,7 +198,7 @@ export const energiatodistus2018 = _ => ({
       'pilkkeet-havu-sekapuu': Maybe.None(),
       'pilkkeet-koivu': Maybe.None(),
       puupelletit: Maybe.None(),
-      vapaa: [emptyVapaa(), emptyVapaa(), emptyVapaa(), emptyVapaa()]
+      vapaa: R.times(emptyVapaa, 4)
     },
     'sahko-vuosikulutus-yhteensa': Maybe.None(),
     'kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
@@ -234,6 +234,7 @@ const emptyMuuEnergia = _ => ({
 
 export const energiatodistus2013 =
   R.compose(
+    R.assocPath(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'], R.times(emptyVapaa, 10)),
     R.assocPath(['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'], R.times(emptyMuuEnergia, 6)),
     R.assocPath(['tulokset', 'kaytettavat-energiamuodot', 'muu'], R.times(emptyMuuEnergiamuoto, 3)),
     R.assocPath(['tulokset', 'uusiutuvat-omavaraisenergiat'], R.times(emptyMuuEnergia, 5)),
