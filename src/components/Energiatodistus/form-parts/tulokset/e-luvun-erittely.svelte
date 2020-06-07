@@ -61,11 +61,11 @@
         <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon_kerroin')}
+        {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon-kerroin')}
       </th>
       <th class="et-table--th et-table--th__twocells" colspan="2">
         <div>
-          {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella_painotettu_energiankulutus')}
+          {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella-painotettu-energiankulutus')}
         </div>
         <div class="flex flex-row justify-around">
           <span>

@@ -387,8 +387,8 @@
           "2018": "Vakioidulla käytöllä laskettu ostoenergia",
           "2013": "Laskettu ostoenergia"
         },
-        "energiamuodon_kerroin": "Energiamuodon kerroin",
-        "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
+        "energiamuodon-kerroin": "Energiamuodon kerroin",
+        "kertoimella-painotettu-energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
         "labels": {
           "fossiilinen-polttoaine": "Fossiilinen polttoaine",
           "sahko": "Sähkö",
