@@ -1,7 +1,6 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as fxmath from '@Utility/fxmath';
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
 
@@ -14,15 +13,9 @@
   export let schema;
   export let energiatodistus;
 
+  const energiaPerLammitettyNettoala = index =>
+      EtUtils.energiaPerLammitettyNettoala(['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']);
 
-  const energiaPerLammitettyNettoala =
-    R.compose(
-      R.map(fxmath.round(1)),
-      R.useWith(R.lift(R.divide),
-        [index => EtUtils.energiatodistusPath(['tulokset', 'uusiutuvat-omavaraisenergiat', index]),
-         EtUtils.energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])]));
-
-  $: console.log(energiatodistus.tulokset['uusiutuvat-omavaraisenergiat']);
 </script>
 
 <H3
@@ -59,7 +52,7 @@
             path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']} />
         </td>
         <td class="et-table--td">
-          {Maybe.orSome('', energiaPerLammitettyNettoala(index, energiatodistus))}
+          {Maybe.orSome('', energiaPerLammitettyNettoala(index)(energiatodistus))}
         </td>
         <td class="et-table--td" />
       </tr>

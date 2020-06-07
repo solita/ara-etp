@@ -5,6 +5,7 @@ import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
+import * as fxmath from '@Utility/fxmath';
 
 export const parsers = {
   optionalText: R.compose(Maybe.fromEmpty, R.trim)
@@ -65,7 +66,10 @@ export const validators = deep.map(
   R.prop('validators')
 );
 
-export const unnestValidation = R.when(Either.isEither, Either.toMaybe);
+export const unnestValidation = R.compose(
+  R.when(Either.isEither, Maybe.None),
+  R.when(R.allPass([Either.isEither, Either.isRight]), Either.right)
+);
 
 export const energiatodistusPath = R.curry((path, et) =>
   R.compose(unnestValidation, R.path(path))(et)
@@ -221,6 +225,13 @@ export const perLammitettyNettoala = R.curry((energiatodistus, values) =>
     energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])
   )(energiatodistus)
 );
+
+export const energiaPerLammitettyNettoala = energiaPath =>
+  R.compose(
+    R.map(fxmath.round(1)),
+    R.converge(R.lift(R.divide),
+      [energiatodistusPath(energiaPath),
+       energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])]));
 
 const fieldsWithUusiutuvaOmavaraisenergia = [
   'aurinkosahko',
