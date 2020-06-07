@@ -165,6 +165,16 @@
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "onko-julkinen-rakennus": "Julkinen rakennus",
       "keskeiset-suositukset": "Keskeiset suositukset",
+      "keskeiset-suositukset-heading":  {
+        "2018": {
+          "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
+          "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia)"
+        },
+        "2013": {
+          "h2": "Energiatehokkuutta parantavat toimenpiteet",
+          "h3": "Keskeiset suositukset rakennuksen energiatehokkuutta parantaviksi toimenpiteiksi"
+        }
+      },
       "yritys": {
         "nimi": "Yritys"
       }

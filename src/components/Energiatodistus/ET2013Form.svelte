@@ -144,7 +144,7 @@
       alakayttotarkoitusluokat = {luokittelut.alakayttotarkoitusluokat} />
 
   <HR />
-  <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
+  <ToimenpideEhdotukset versio={'2013'} {disabled} {schema} bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.lahtotiedot.header')} />
