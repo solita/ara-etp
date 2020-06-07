@@ -501,7 +501,10 @@
     "toteutunut-ostoenergiankulutus": {
       "header": "Toteutunut energiankulutus",
       "ostettu-energia": {
-        "header": "Energiaverkosta ostettu energia",
+        "header": {
+          "2018": "Energiaverkosta ostettu energia",
+          "2013": "Ostettu energia"
+        },
         "labels": {
           "kaukolampo": "Kaukolämpö",
           "kokonaissahko": "Kokonaissähkö",

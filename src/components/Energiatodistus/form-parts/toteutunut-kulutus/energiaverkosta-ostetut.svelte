@@ -13,11 +13,7 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
-
-  $: ostettuEnergiaPerLammitettyNettoala = R.compose(
-    EtUtils.perLammitettyNettoala(energiatodistus),
-    EtUtils.ostetutEnergiamuodot
-  )(energiatodistus);
+  export let versio;
 </script>
 
 <style type="text/postcss">
@@ -28,7 +24,7 @@
 
 <H3
   compact={true}
-  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.header')} />
+  text={$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.header.${versio}`)} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">

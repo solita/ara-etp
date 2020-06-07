@@ -214,7 +214,7 @@
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
-  <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
+  <EnergiaverkostaOstetut versio={2018} {disabled} {schema} bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
