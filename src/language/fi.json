@@ -577,7 +577,10 @@
       "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys yhteensä"
     },
     "huomiot": {
-      "header": "Toimenpide-ehdotukset rakennuksen e-luvun parantamiseksi",
+      "header": {
+        "2018": "Toimenpide-ehdotukset e-luvun parantamiseksi",
+        "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
+      },
       "toimenpide-ehdotus": "Toimenpide-ehdotus",
       "toimenpide-lampo": "Lämpö, ostoenergian muutos",
       "toimenpide-sahko": "Sähkö, ostoenergian muutos",

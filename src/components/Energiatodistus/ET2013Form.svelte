@@ -190,7 +190,7 @@
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
   <HR />
-  <H2 text={$_('energiatodistus.huomiot.header')} />
+  <H2 text={$_('energiatodistus.huomiot.header.2013')} />
   <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
   <Huomio
       {disabled}
