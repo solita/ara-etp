@@ -257,7 +257,7 @@ const MuuEnergiamuoto = {
   ostoenergia: FloatPos
 };
 
-const MuuUusiutuvaEnergia = {
+const MuuEnergia = {
   'nimi-fi': String(30),
   'nimi-sv': String(30),
   vuosikulutus: FloatPos
@@ -270,6 +270,9 @@ export const v2013 =
       R.repeat(MuuEnergiamuoto, 3)),
     R.assocPath(
       ['tulokset', 'uusiutuvat-omavaraisenergiat'],
-      R.repeat(MuuUusiutuvaEnergia, 5)),
+      R.repeat(MuuEnergia, 5)),
+    R.assocPath(
+      ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'],
+      R.repeat(MuuEnergia, 5)),
     R.dissocPath(['perustiedot', 'laatimisvaihe']))
   (v2018);

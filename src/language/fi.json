@@ -417,7 +417,7 @@
         "lampopumppu": "Lämpöpumpun vuosituotto",
         "0": {
           "nimi": "Uusiutuvan omavaraisenergian nimi",
-          "vuosikulus": "Uusiutuvan omavaraisenergian kulutus vuodessa"
+          "vuosikulutus": "Uusiutuvan omavaraisenergian kulutus vuodessa"
         }
       },
       "tekniset-jarjestelmat": {
@@ -500,7 +500,13 @@
         "kokonaissahko-vuosikulutus": "Kokonaissähkön vuosikulutus",
         "kiinteistosahko-vuosikulutus": "Kiinteistösähkön vuosikulutus",
         "kayttajasahko-vuosikulutus": "Käyttäjäsähkön vuosikulutus",
-        "kaukojaahdytys-vuosikulutus": "Kaukojäähdytyksen vuosikulutus"
+        "kaukojaahdytys-vuosikulutus": "Kaukojäähdytyksen vuosikulutus",
+        "muu": {
+          "0": {
+            "nimi": "Energiamuodon nimi",
+            "vuosikulutus": "Energian vuosikulutus"
+          }
+        }
       },
       "ostetut-polttoaineet": {
         "header": "Ostetut polttoaineet",

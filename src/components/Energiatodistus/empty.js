@@ -226,7 +226,7 @@ const emptyMuuEnergiamuoto = _ => ({
   ostoenergia: Maybe.None()
 });
 
-const emptyUusiutuvaEnergia = _ => ({
+const emptyMuuEnergia = _ => ({
   'nimi-fi': Maybe.None(),
   'nimi-sv': Maybe.None(),
   vuosikulutus: Maybe.None()
@@ -234,8 +234,9 @@ const emptyUusiutuvaEnergia = _ => ({
 
 export const energiatodistus2013 =
   R.compose(
-    R.assocPath(['tulokset', 'kaytettavat-energiamuodot', 'muu'], R.times(emptyMuuEnergiamuoto,3)),
-    R.assocPath(['tulokset', 'uusiutuvat-omavaraisenergiat'], R.times(emptyUusiutuvaEnergia,5)),
+    R.assocPath(['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'], R.times(emptyMuuEnergia, 6)),
+    R.assocPath(['tulokset', 'kaytettavat-energiamuodot', 'muu'], R.times(emptyMuuEnergiamuoto, 3)),
+    R.assocPath(['tulokset', 'uusiutuvat-omavaraisenergiat'], R.times(emptyMuuEnergia, 5)),
     R.assocPath(['perustiedot', 'uudisrakennus'], false),
     R.dissocPath(['perustiedot', 'laatimisvaihe']),
     energiatodistus2018);
