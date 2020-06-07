@@ -57,12 +57,8 @@
         {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.kaytettavat-energiamuodot')}
       </th>
       <th class="et-table--th">
-        <span>
-          {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.vakioidun_kayton_ostoenergia')}
-        </span>
-        <span class="block">
-          <VuosikulutusUnit />
-        </span>
+        <span>{$_(`energiatodistus.tulokset.kaytettavat-energiamuodot.ostoenergia.${versio}`)}</span>
+        <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
         {$_('energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon_kerroin')}
