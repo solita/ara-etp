@@ -3,7 +3,6 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import { locale, _ } from '@Language/i18n';
-  import * as et from './energiatodistus-utils';
 
   import * as formats from '@Utility/formats';
 

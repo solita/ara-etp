@@ -175,7 +175,7 @@
     alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
 
   <HR />
-  <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
+  <ToimenpideEhdotukset versio={'2018'} {disabled} {schema} bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.lahtotiedot.header')} />
@@ -221,12 +221,12 @@
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
-  <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
+  <EnergiaverkostaOstetut versio={2018} {disabled} {schema} bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
   <HR />
-  <H2 text={$_('energiatodistus.huomiot.header')} />
+  <H2 text={$_('energiatodistus.huomiot.header.2018')} />
   <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
   <Huomio
     {disabled}
@@ -236,7 +236,7 @@
   <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
   <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
   <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
-  <Suositukset {disabled} {schema} bind:energiatodistus />
+  <Suositukset versio={2018} {disabled} {schema} bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">

@@ -9,21 +9,18 @@
   import VuosituottoUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
   import VuosituottoAreaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area.svelte';
 
-  import * as formats from '@Utility/formats';
-
   export let disabled;
   export let schema;
   export let energiatodistus;
 
-  $: omavaraisenergiatPerLammitettyNettoala = R.compose(
-    EtUtils.perLammitettyNettoala(energiatodistus),
-    EtUtils.omavaraisenergiat
-  )(energiatodistus);
+  const energiaPerLammitettyNettoala = index =>
+      EtUtils.energiaPerLammitettyNettoala(['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']);
+
 </script>
 
 <H3
   compact={true}
-  text={$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2018')} />
+  text={$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2013')} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">
@@ -36,10 +33,15 @@
   </thead>
 
   <tbody class="et-table--tbody">
-    {#each ['aurinkosahko', 'aurinkolampo', 'tuulisahko', 'lampopumppu', 'muusahko', 'muulampo'] as energiamuoto}
+    {#each energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'] as _, index}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.labels.${energiamuoto}`)}
+          <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'nimi-fi']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -47,10 +49,10 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['tulokset', 'uusiutuvat-omavaraisenergiat', energiamuoto]} />
+            path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(energiamuoto) )(omavaraisenergiatPerLammitettyNettoala)}
+          {Maybe.orSome('', energiaPerLammitettyNettoala(index)(energiatodistus))}
         </td>
         <td class="et-table--td" />
       </tr>

@@ -29,11 +29,10 @@
 
   import ELuku from './form-parts/tulokset/e-luku';
   import ELuvunErittely from './form-parts/tulokset/e-luvun-erittely';
-  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat';
+  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat-2013';
   import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
   import Nettotarve from './form-parts/tulokset/nettotarve';
   import Lampokuormat from './form-parts/tulokset/lampokuormat';
-  import Laskentatyokalu from './form-parts/tulokset/laskentatyokalu';
 
   import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/energiaverkosta-ostetut';
   import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';
@@ -145,7 +144,7 @@
       alakayttotarkoitusluokat = {luokittelut.alakayttotarkoitusluokat} />
 
   <HR />
-  <ToimenpideEhdotukset {disabled} {schema} bind:energiatodistus />
+  <ToimenpideEhdotukset versio={'2013'} {disabled} {schema} bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.lahtotiedot.header')} />
@@ -186,12 +185,12 @@
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
-  <EnergiaverkostaOstetut {disabled} {schema} bind:energiatodistus />
+  <EnergiaverkostaOstetut versio={2013} {disabled} {schema} bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
   <HR />
-  <H2 text={$_('energiatodistus.huomiot.header')} />
+  <H2 text={$_('energiatodistus.huomiot.header.2013')} />
   <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
   <Huomio
       {disabled}
@@ -201,7 +200,7 @@
   <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
   <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
   <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
-  <Suositukset {disabled} {schema} bind:energiatodistus />
+  <Suositukset versio={2013} {disabled} {schema} bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">

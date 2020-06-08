@@ -7,9 +7,10 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+  export let versio;
 </script>
 
-<H3 text={$_('energiatodistus.huomiot.suositukset-header')} />
+<H3 text={$_(`energiatodistus.huomiot.suositukset-header.${versio}`)} />
 <div class="w-full py-4 mb-4">
   <Textarea
     {disabled}

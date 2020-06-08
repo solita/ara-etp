@@ -33,7 +33,6 @@
     R.map(buildRoutes)
   )($currentUserStore);
 
-  $: console.log(routes);
 </script>
 
 <style type="text/postcss">

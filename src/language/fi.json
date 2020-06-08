@@ -41,7 +41,8 @@
   },
   "units": {
     "year": "vuosi",
-    "pieces": "kpl"
+    "pieces": "kpl",
+    "celsius": "°C"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
@@ -165,6 +166,16 @@
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "onko-julkinen-rakennus": "Julkinen rakennus",
       "keskeiset-suositukset": "Keskeiset suositukset",
+      "keskeiset-suositukset-heading":  {
+        "2018": {
+          "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
+          "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia)"
+        },
+        "2013": {
+          "h2": "Energiatehokkuutta parantavat toimenpiteet",
+          "h3": "Keskeiset suositukset rakennuksen energiatehokkuutta parantaviksi toimenpiteiksi"
+        }
+      },
       "yritys": {
         "nimi": "Yritys"
       }
@@ -214,6 +225,7 @@
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
         "kohtisuora": "kohtisuora",
+        "arvo": "arvo",
         "labels": {
           "pohjoinen": "Pohjoinen",
           "koillinen": "Koillinen",
@@ -269,7 +281,7 @@
         "header": "Ilmanvaihtojärjestelmä",
         "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
         "lampotilasuhde": "LTO:n lämpötilasuhde",
-        "jaatymisenesto": "Jäätymisenesto °C",
+        "jaatymisenesto": "Jäätymisenesto",
         "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
         "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
         "ilmavirta": "Ilmavirta",
@@ -373,9 +385,12 @@
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
-        "vakioidun_kayton_ostoenergia": "Vakioidulla käytöllä laskettu ostoenergia",
-        "energiamuodon_kerroin": "Energiamuodon kerroin",
-        "kertoimella_painotettu_energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
+        "ostoenergia": {
+          "2018": "Vakioidulla käytöllä laskettu ostoenergia",
+          "2013": "Laskettu ostoenergia"
+        },
+        "energiamuodon-kerroin": "Energiamuodon kerroin",
+        "kertoimella-painotettu-energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
         "labels": {
           "fossiilinen-polttoaine": "Fossiilinen polttoaine",
           "sahko": "Sähkö",
@@ -397,7 +412,10 @@
         }
       },
       "uusiutuvat-omavaraisenergiat": {
-        "header": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
+        "header": {
+          "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
+          "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
+        },
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",
@@ -411,7 +429,11 @@
         "aurinkolampo": "Aurinkolämmön vuosituotto",
         "muulampo": "Muun lämmön vuosituotto",
         "muusahko": "Muun sähkön vuosituotto",
-        "lampopumppu": "Lämpöpumpun vuosituotto"
+        "lampopumppu": "Lämpöpumpun vuosituotto",
+        "0": {
+          "nimi": "Uusiutuvan omavaraisenergian nimi",
+          "vuosikulutus": "Uusiutuvan omavaraisenergian kulutus vuodessa"
+        }
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiakulutus",
@@ -481,7 +503,10 @@
     "toteutunut-ostoenergiankulutus": {
       "header": "Toteutunut energiankulutus",
       "ostettu-energia": {
-        "header": "Energiaverkosta ostettu energia",
+        "header": {
+          "2018": "Energiaverkosta ostettu energia",
+          "2013": "Ostettu energia"
+        },
         "labels": {
           "kaukolampo": "Kaukolämpö",
           "kokonaissahko": "Kokonaissähkö",
@@ -493,7 +518,13 @@
         "kokonaissahko-vuosikulutus": "Kokonaissähkön vuosikulutus",
         "kiinteistosahko-vuosikulutus": "Kiinteistösähkön vuosikulutus",
         "kayttajasahko-vuosikulutus": "Käyttäjäsähkön vuosikulutus",
-        "kaukojaahdytys-vuosikulutus": "Kaukojäähdytyksen vuosikulutus"
+        "kaukojaahdytys-vuosikulutus": "Kaukojäähdytyksen vuosikulutus",
+        "muu": {
+          "0": {
+            "nimi": "Energiamuodon nimi",
+            "vuosikulutus": "Energian vuosikulutus"
+          }
+        }
       },
       "ostetut-polttoaineet": {
         "header": "Ostetut polttoaineet",
@@ -548,13 +579,19 @@
       "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys yhteensä"
     },
     "huomiot": {
-      "header": "Toimenpide-ehdotukset rakennuksen e-luvun parantamiseksi",
+      "header": {
+        "2018": "Toimenpide-ehdotukset e-luvun parantamiseksi",
+        "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
+      },
       "toimenpide-ehdotus": "Toimenpide-ehdotus",
       "toimenpide-lampo": "Lämpö, ostoenergian muutos",
       "toimenpide-sahko": "Sähkö, ostoenergian muutos",
       "toimenpide-jaahdytys": "Jäähdytys, ostoenergian muutos",
       "toimenpide-eluvun-muutos": "E-luvun muutos",
-      "suositukset-header": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
+      "suositukset-header": {
+        "2018": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
+        "2013": "Suosituksia rakennuksen käyttöön ja ylläpitoon"
+      },
       "suositukset": "Suositetut toimenpide-ehdotukset",
       "lisatietoja-header": "Lisätietoja energiatehokkuudesta",
       "lisatietoja": "Lisätiedot",

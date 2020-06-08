@@ -36,7 +36,8 @@
         {$_('energiatodistus.lahtotiedot.ilmanvaihto.lampotilasuhde')}
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}
+        <span>{$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}</span>
+        <span class="block">{$_('units.celsius')}</span>
       </th>
     </tr>
   </thead>

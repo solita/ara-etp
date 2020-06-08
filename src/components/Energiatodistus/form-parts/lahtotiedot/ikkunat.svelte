@@ -24,7 +24,7 @@
         <span class="block">W/(m²K)</span>
       </th>
       <th class="et-table--th">
-        g<sub>{$_('energiatodistus.lahtotiedot.ikkunat.kohtisuora')}</sub>
+        g<sub>{$_('energiatodistus.lahtotiedot.ikkunat.kohtisuora')}</sub>-{$_('energiatodistus.lahtotiedot.ikkunat.arvo')}
       </th>
       <th class="et-table--th" />
     </tr>
