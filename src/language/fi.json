@@ -41,7 +41,8 @@
   },
   "units": {
     "year": "vuosi",
-    "pieces": "kpl"
+    "pieces": "kpl",
+    "celsius": "°C"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "ladataan": "Ladataan...",
@@ -280,7 +281,7 @@
         "header": "Ilmanvaihtojärjestelmä",
         "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
         "lampotilasuhde": "LTO:n lämpötilasuhde",
-        "jaatymisenesto": "Jäätymisenesto °C",
+        "jaatymisenesto": "Jäätymisenesto",
         "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
         "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
         "ilmavirta": "Ilmavirta",
