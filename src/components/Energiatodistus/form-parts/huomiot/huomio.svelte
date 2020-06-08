@@ -42,16 +42,20 @@
     <tr class="et-table--tr">
       <th class="et-table--th" />
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-lampo')} <VuosikulutusUnit/>
+        <span>{$_('energiatodistus.huomiot.toimenpide-lampo')}</span>
+        <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-sahko')} <VuosikulutusUnit/>
+        <span>{$_('energiatodistus.huomiot.toimenpide-sahko')}</span>
+        <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-jaahdytys')} <VuosikulutusUnit/>
+        <span>{$_('energiatodistus.huomiot.toimenpide-jaahdytys')}</span>
+        <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        {$_('energiatodistus.huomiot.toimenpide-eluvun-muutos')} <ELukuUnit/>
+        <span>{$_('energiatodistus.huomiot.toimenpide-eluvun-muutos')}</span>
+        <span class="block"><ELukuUnit/></span>
       </th>
     </tr>
   </thead>
