@@ -224,6 +224,7 @@
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
         "kohtisuora": "kohtisuora",
+        "arvo": "arvo",
         "labels": {
           "pohjoinen": "Pohjoinen",
           "koillinen": "Koillinen",
