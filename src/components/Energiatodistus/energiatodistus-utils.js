@@ -7,14 +7,6 @@ import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
 import * as fxmath from '@Utility/fxmath';
 
-export const parsers = {
-  optionalText: R.compose(Maybe.fromEmpty, R.trim)
-};
-
-export const formatters = {
-  optionalText: Maybe.orSome('')
-};
-
 export const isValidForm = R.compose(
   R.all(Either.isRight),
   R.filter(R.allPass([R.complement(R.isNil), Either.isEither])),
