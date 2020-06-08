@@ -27,8 +27,6 @@
   export let format = R.identity;
   export let validators = [];
 
-  export let handleSubmit = true;
-
   let focused = false;
 
   export let i18n;
@@ -131,7 +129,6 @@
   {parse}
   {format}
   {validators}
-  {handleSubmit}
   on:keydown
   let:viewValue
   let:errorMessage
