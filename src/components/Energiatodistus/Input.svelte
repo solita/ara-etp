@@ -5,6 +5,8 @@
   import { locale, _ } from '@Language/i18n';
   import * as et from './energiatodistus-utils';
 
+  import * as formats from '@Utility/formats';
+
   import Input from '@Component/Input/Input';
 
   export let path;
@@ -14,7 +16,7 @@
   export let disabled = false;
   export let compact = false;
   export let center = true;
-  export let format = et.formatters.optionalText;
+  export let format = formats.optionalString;
 
   const index = R.compose(
     Maybe.fromNull,
@@ -43,7 +45,7 @@
   {center}
   bind:model
   {lens}
-  {format}
+  format={type.format || format}
   parse={type.parse}
   validators={type.validators}
   i18n={$_} />
