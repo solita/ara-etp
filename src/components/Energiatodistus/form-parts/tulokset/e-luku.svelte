@@ -3,6 +3,7 @@
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
+  import * as formats from '@Utility/formats';
 
   import Input from '@Component/Energiatodistus/Input';
   import BasicInput from '@Component/Input/Input';
@@ -19,7 +20,7 @@
       name="energiatodistus.e-luku"
       label={$_('energiatodistus.e-luku')}
       disabled={true}
-      model={Maybe.orSome('', eLuku)}
+      model={R.compose( Maybe.orSome(''), R.map(formats.numberFormat) )(eLuku)}
       lens={R.lens(R.identity, R.identity)}
       i18n={$_} />
   </div>

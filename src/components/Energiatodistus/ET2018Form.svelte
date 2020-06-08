@@ -204,7 +204,7 @@
 
   <H2 text={$_('energiatodistus.tulokset.header')} />
 
-  <ELuku {schema} {energiatodistus} />
+  <ELuku {eLuku} {schema} {energiatodistus} />
   <ELuvunErittely
     bind:eLuku
     {disabled}

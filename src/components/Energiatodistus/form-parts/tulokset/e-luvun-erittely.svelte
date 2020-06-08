@@ -164,7 +164,7 @@
         {R.compose( Maybe.get, R.map(formats.numberFormat) )(painotetutOstoenergiankulutuksetSum)}
       </td>
       <td class="et-table--td et-table--td__fifth">
-        {Maybe.get(painotetutOstoenergiankulutuksetPerNelioSum)}
+        {R.compose( Maybe.get, R.map(formats.numberFormat) )(painotetutOstoenergiankulutuksetPerNelioSum)}
       </td>
     </tr>
   </tbody>
