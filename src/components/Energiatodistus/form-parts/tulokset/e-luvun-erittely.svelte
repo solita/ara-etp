@@ -17,6 +17,7 @@
   export let schema;
   export let energiatodistus;
   export let versio;
+  export let eLuku;
 
   $: energiamuotokertoimet = R.mergeRight(
     EtUtils.energiamuotokertoimet()[versio],
@@ -43,6 +44,16 @@
   $: painotetutOstoenergiankulutuksetPerNelio = EtUtils.perLammitettyNettoala(
     energiatodistus,
     painotetutOstoenergiankulutukset
+  );
+
+  $: painotetutOstoenergiankulutuksetPerNelioSum = R.compose(
+    EtUtils.sumEtValues,
+    R.map(R.map(Math.ceil))
+  )(painotetutOstoenergiankulutuksetPerNelio);
+
+  $: eLuku = R.filter(
+    R.complement(R.equals(0)),
+    painotetutOstoenergiankulutuksetPerNelioSum
   );
 </script>
 
@@ -152,7 +163,9 @@
       <td class="et-table--td et-table--td__fifth">
         {R.compose( Maybe.get, R.map(formats.numberFormat) )(painotetutOstoenergiankulutuksetSum)}
       </td>
-      <td class="et-table--td et-table--td__fifth" />
+      <td class="et-table--td et-table--td__fifth">
+        {R.compose( Maybe.get, R.map(formats.numberFormat) )(painotetutOstoenergiankulutuksetPerNelioSum)}
+      </td>
     </tr>
   </tbody>
 </table>
