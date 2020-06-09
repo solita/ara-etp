@@ -12,7 +12,7 @@ const linksForLaatija = R.curry((i18n, kayttaja) => [
   { label: i18n('navigation.viestit'), href: '#/viestit' },
   {
     label: i18n('navigation.yritykset'),
-    href: `#/laatija/${kayttaja.laatija}/yritykset`
+    href: `#/laatija/${kayttaja.id}/yritykset`
   },
   {
     label: i18n('navigation.omattiedot'),
