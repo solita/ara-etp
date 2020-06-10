@@ -436,7 +436,7 @@
         }
       },
       "tekniset-jarjestelmat": {
-        "header": "Rakennuksen teknisten järjestelmien energiakulutus",
+        "header": "Rakennuksen teknisten järjestelmien energiankulutus",
         "sahko": "Sähkö",
         "lampo": "Lämpö",
         "kaukojaahdytys": "Kaukojäähdytys",
