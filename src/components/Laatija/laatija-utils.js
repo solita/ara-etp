@@ -46,7 +46,8 @@ export const formSchema = () => ({
     Validation.isRequired,
     Validation.minLengthConstraint(2),
     Validation.maxLengthConstraint(200)
-  ]
+  ],
+  wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator])
 });
 
 export const formParsers = () => ({
@@ -57,12 +58,14 @@ export const formParsers = () => ({
   puhelin: R.trim,
   jakeluosoite: R.trim,
   postinumero: R.trim,
-  postitoimipaikka: R.trim
+  postitoimipaikka: R.trim,
+  wwwosoite: R.compose(Maybe.fromEmpty, R.trim)
 });
 
 export const deserialize = R.evolve({
   maa: Either.Right,
-  toimintaalue: Maybe.fromNull
+  toimintaalue: Maybe.fromNull,
+  wwwosoite: Maybe.fromNull
 });
 
 export const serializeImport = R.evolve({
@@ -103,7 +106,8 @@ export const emptyLaatija = () =>
     toimintaalue: Maybe.None(),
     etunimi: '',
     julkinenpuhelin: false,
-    login: Maybe.None()
+    login: Maybe.None(),
+    wwwosoite: Maybe.None()
   });
 
 export const putLaatijatFuture = R.curry((fetch, laatijat) =>
@@ -167,7 +171,8 @@ export const validate = {
   puhelin: Validation.isPuhelin,
   patevyystaso: Validation.isPatevyystaso,
   toteamispaivamaara: Validation.isPaivamaara,
-  maa: Validation.isFilled
+  maa: Validation.isFilled,
+  wwwosoite: Validation.isUrl
 };
 
 // Maa defaults to Finland as the transfer file does not have it as a field
