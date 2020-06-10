@@ -104,20 +104,6 @@
           i18n={$_} />
       </div>
     </div>
-    <div class="py-4">
-      <Input
-        {disabled}
-        id={'wwwosoite'}
-        name={'wwwosoite'}
-        label={$_('yritys.www-osoite')}
-        required={false}
-        bind:model={yritys}
-        lens={R.lensProp('wwwosoite')}
-        format={Maybe.orSome('')}
-        parse={formParsers.wwwosoite}
-        validators={formSchema.wwwosoite}
-        i18n={$_} />
-    </div>
   </div>
   <HR />
   <div class="mt-8">

@@ -13,7 +13,11 @@ export const url = {
 };
 
 export const serialize = R.compose(
-  R.evolve({ maa: Either.right, toimintaalue: Maybe.orSome(null) }),
+  R.evolve({
+    maa: Either.right,
+    toimintaalue: Maybe.orSome(null),
+    wwwosoite: Maybe.getOrElse(null)
+  }),
   R.omit(['id', 'email', 'login', 'rooli', 'passivoitu'])
 );
 

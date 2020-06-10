@@ -216,7 +216,6 @@
           validators={formSchema.postitoimipaikka}
           i18n={$_} />
       </div>
-
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Autocomplete items={countryNames}>
           <Input
@@ -234,6 +233,22 @@
         </Autocomplete>
       </div>
     </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'wwwosoite'}
+          name={'wwwosoite'}
+          label={$_('laatija.www-osoite')}
+          required={false}
+          bind:model={laatija}
+          lens={R.lensProp('wwwosoite')}
+          format={Maybe.orSome('')}
+          parse={formParsers.wwwosoite}
+          validators={formSchema.wwwosoite}
+          i18n={$_} />
+      </div>
+    </div>
+
   </div>
   <HR />
   <div class="mt-8">
