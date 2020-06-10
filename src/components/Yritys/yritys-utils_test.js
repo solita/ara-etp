@@ -14,50 +14,44 @@ describe('YritysUtils:', () => {
   });
 
   describe('deserialize', () => {
-    it('should wrap verkkolaskuosoite and wwwosoite into Somes', () => {
-      const yritys = { verkkolaskuosoite: '12345', wwwosoite: '54321' };
+    it('should wrap verkkolaskuosoite into Some', () => {
+      const yritys = { verkkolaskuosoite: '12345' };
       const deserializedYritys = YritysUtils.deserialize(yritys);
 
       assert.equal(
         '12345',
         Maybe.getOrElse('', deserializedYritys.verkkolaskuosoite)
       );
-      assert.equal('54321', Maybe.getOrElse('', deserializedYritys.wwwosoite));
     });
 
-    it('should wrap null verkkolaskuosoite and wwwosoite into Nones', () => {
-      const yritys = { verkkolaskuosoite: null, wwwosoite: null };
+    it('should wrap null verkkolaskuosoite into None', () => {
+      const yritys = { verkkolaskuosoite: null };
       const deserializedYritys = YritysUtils.deserialize(yritys);
 
       assert.equal(
         '',
         Maybe.getOrElse('', deserializedYritys.verkkolaskuosoite)
       );
-      assert.equal('', Maybe.getOrElse('', deserializedYritys.wwwosoite));
     });
   });
 
   describe('serialize', () => {
-    it('should unwrap Some verkkolaskuosoite and wwwosoite into raw values', () => {
+    it('should unwrap Some verkkolaskuosoite into raw value', () => {
       const yritys = {
-        verkkolaskuosoite: Maybe.of('12345'),
-        wwwosoite: Maybe.of('54321')
+        verkkolaskuosoite: Maybe.of('12345')
       };
       const serializedYritys = YritysUtils.serialize(yritys);
 
       assert.equal('12345', serializedYritys.verkkolaskuosoite);
-      assert.equal('54321', serializedYritys.wwwosoite);
     });
 
-    it('should unwrap None verkkolaskuosoite and wwwosoite into nulls', () => {
+    it('should unwrap None verkkolaskuosoite into null', () => {
       const yritys = {
         verkkolaskuosoite: Maybe.None(),
-        wwwosoite: Maybe.None()
       };
       const serializedYritys = YritysUtils.serialize(yritys);
 
       assert.equal(null, serializedYritys.verkkolaskuosoite);
-      assert.equal(null, serializedYritys.wwwosoite);
     });
 
     it('should remove id-property', () => {
@@ -74,13 +68,11 @@ describe('YritysUtils:', () => {
 
       const yritys = {
         nimi: '',
-        wwwosoite: Maybe.Some('12345'),
         verkkolaskuosoite: Maybe.Some('54321')
       };
 
       const expected = {
         nimi: false,
-        wwwosoite: false,
         verkkolaskuosoite: true
       };
 
@@ -94,13 +86,11 @@ describe('YritysUtils:', () => {
 
       const yritys = {
         nimi: '',
-        wwwosoite: Maybe.None(),
         verkkolaskuosoite: Maybe.None()
       };
 
       const expected = {
         nimi: false,
-        wwwosoite: true,
         verkkolaskuosoite: true
       };
 
@@ -116,7 +106,6 @@ describe('YritysUtils:', () => {
       const expected = {
         id: 1,
         nimi: 'test',
-        wwwosoite: Maybe.None(),
         verkkolaskuosoite: Maybe.Some('12345')
       };
 
@@ -128,8 +117,7 @@ describe('YritysUtils:', () => {
             resolve({
               id: 1,
               nimi: 'test',
-              verkkolaskuosoite: '12345',
-              wwwosoite: null
+              verkkolaskuosoite: '12345'
             })
           )
       };
