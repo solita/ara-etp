@@ -30,7 +30,7 @@ describe('Navigation', () => {
   });
 
   describe('parseEnergiatodistus', () => {
-    const kayttaja = { rooli: 0, id: 2, laatija: 3 };
+    const kayttaja = { rooli: 0, id: 2 };
 
     it('should return energiatodistus-links when within energiatodistus', () => {
       const expected = [
@@ -62,7 +62,7 @@ describe('Navigation', () => {
         { label: 'Viestit', href: '#/viestit' },
         {
           label: 'Yritykset',
-          href: `#/laatija/3/yritykset`
+          href: `#/laatija/2/yritykset`
         },
         {
           label: 'Omat tiedot',
@@ -86,7 +86,7 @@ describe('Navigation', () => {
         { label: 'Viestit', href: '#/viestit' },
         {
           label: 'Yritykset',
-          href: `#/laatija/3/yritykset`
+          href: `#/laatija/2/yritykset`
         },
         {
           label: 'Omat tiedot',
@@ -104,7 +104,7 @@ describe('Navigation', () => {
 
   describe('parseRoot', () => {
     it('should return links for laatija', () => {
-      const kayttaja = { rooli: 0, id: 1, laatija: 2 };
+      const kayttaja = { rooli: 0, id: 1 };
       const expected = [
         {
           label: 'Energiatodistukset',
@@ -113,7 +113,7 @@ describe('Navigation', () => {
         { label: 'Viestit', href: '#/viestit' },
         {
           label: 'Yritykset',
-          href: `#/laatija/2/yritykset`
+          href: `#/laatija/1/yritykset`
         },
         {
           label: 'Omat tiedot',
