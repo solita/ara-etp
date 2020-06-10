@@ -11,15 +11,13 @@ export const urlForYritysId = id => `${yritysApi}/${id}`;
 
 export const deserialize = R.evolve({
   maa: Either.Right,
-  verkkolaskuosoite: Maybe.fromNull,
-  wwwosoite: Maybe.fromNull
+  verkkolaskuosoite: Maybe.fromNull
 });
 
 export const serialize = R.compose(
   R.evolve({
     maa: Either.right,
-    verkkolaskuosoite: Maybe.getOrElse(null),
-    wwwosoite: Maybe.getOrElse(null)
+    verkkolaskuosoite: Maybe.getOrElse(null)
   }),
   R.dissoc('id')
 );
@@ -31,8 +29,7 @@ export const emptyYritys = () => ({
   postinumero: '',
   postitoimipaikka: '',
   maa: '',
-  verkkolaskuosoite: Maybe.None(),
-  wwwosoite: Maybe.None()
+  verkkolaskuosoite: Maybe.None()
 });
 
 export const formSchema = () => ({
@@ -42,7 +39,6 @@ export const formSchema = () => ({
     validation.minLengthConstraint(2),
     validation.maxLengthConstraint(200)
   ],
-  wwwosoite: R.map(validation.liftValidator, [validation.urlValidator]),
   jakeluosoite: [validation.isRequired],
   postinumero: [validation.isRequired, validation.postinumeroValidator],
   postitoimipaikka: [
@@ -57,7 +53,6 @@ export const formSchema = () => ({
 export const formParsers = () => ({
   ytunnus: R.trim,
   nimi: R.trim,
-  wwwosoite: R.compose(Maybe.fromEmpty, R.trim),
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,
