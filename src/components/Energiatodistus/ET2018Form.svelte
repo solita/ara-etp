@@ -23,6 +23,7 @@
   import BasicInput from '@Component/Input/Input';
   import Textarea from './Textarea';
 
+  import EnergiatodistuksenKorvaus from './energiatodistuksen-korvaus';
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
 
@@ -64,10 +65,15 @@
     R.filter(R.equals(2)),
     R.view(R.lensPath(['perustiedot', 'laatimisvaihe']))
   )(energiatodistus);
+
+  $: console.log(energiatodistus);
 </script>
 
 <div class="w-full mt-3">
   <H1 text={title} />
+  <H2 text={$_('energiatodistus.korvaavuus')} />
+  <EnergiatodistuksenKorvaus {luokittelut} />
+
   <H2 text={$_('energiatodistus.perustiedot.header')} />
 
   <div class="flex lg:flex-row flex-col -mx-4">
