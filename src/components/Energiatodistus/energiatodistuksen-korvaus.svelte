@@ -7,7 +7,11 @@
   import AsyncAutocomplete from '@Component/Autocomplete/AsyncAutocomplete';
   import Input from '@Component/Input/Input';
 
+  import Overlay from '@Component/Overlay/Overlay';
+  import Spinner from '@Component/Spinner/Spinner';
+
   import * as EtApi from './energiatodistus-api';
+  import * as empty from './empty';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
@@ -23,6 +27,8 @@
   let completedValue = '';
 
   let cancel = () => {};
+
+  let overlay = false;
 
   const parseEt = R.compose(
     Maybe.fromEmpty,
@@ -47,22 +53,34 @@
       return;
     }
     cancel = R.compose(
-      Maybe.orSome(() => {}),
-      R.map(
+      Maybe.cata(
+        R.compose(
+          R.always(() => {}),
+          R.tap(_ => (korvattavaEnergiatodistus = Maybe.None()))
+        ),
         R.compose(
           Future.fork(
             _ => {
+              overlay = false;
               korvattavaEnergiatodistus = Maybe.None();
             },
             et => {
+              overlay = false;
               model = R.set(lens, R.map(i => parseInt(i, 10), id), model);
               korvattavaEnergiatodistus = Maybe.Some(et);
             }
           ),
-          EtApi.getEnergiatodistusById(fetch, 'all')
+          R.chain(Future.after(2000)),
+          EtApi.getEnergiatodistusById(fetch, 'all'),
+          R.tap(_ => {
+            overlay = true;
+            korvattavaEnergiatodistus = R.compose(
+              R.map(R.assoc('laatija-fullname', Maybe.None())),
+              Maybe.Some
+            )(empty.energiatodistus2018());
+          })
         )
       ),
-      R.tap(_ => (korvattavaEnergiatodistus = Maybe.None())),
       R.tap(cancel)
     )(id);
   };
@@ -87,7 +105,9 @@
 <Checkbox label={'Korvaa todistuksen'} bind:model={checked} />
 
 {#if checked}
-  <div class="flex flex-col -mx-4 mt-4" in:slide={{ duration: 200 }}>
+  <div
+    class="flex flex-col -mx-4 mt-4"
+    transition:slide|local={{ duration: 200 }}>
     <div class="w-full lg:w-1/2 px-4 py-2">
       <AsyncAutocomplete
         bind:completedValue
@@ -103,46 +123,56 @@
         i18n={$_} />
     </div>
     {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
-      <div class="w-full px-4 py-2">
-        <table class="etp-table">
-          <thead class="etp-table--thead">
-            <tr class="etp-table--tr etp-table--tr__light">
-              <th class="etp-table--th">Tunnus</th>
-              <th class="etp-table--th">Etl</th>
-              <th class="etp-table--th">ktl</th>
-              <th class="etp-table--th">pysyvä rakennustunnus</th>
-              <th class="etp-table--th">nettoala</th>
-              <th class="etp-table--th">rakennuksen nimi</th>
-              <th class="etp-table--th">osoite</th>
-              <th class="etp-table--th">laatija</th>
-            </tr>
-          </thead>
-          <tbody class="etp-table--tbody">
-            <tr class="etp-table-tr">
-              <td class="etp-table--td">{et.id}</td>
-              <td class="etp-table--td">{''}</td>
-              <td class="etp-table--td">
-                {Maybe.orSome('', et.perustiedot.kayttotarkoitus)}
-              </td>
-              <td class="etp-table--td">
-                {Maybe.orSome('', et.perustiedot.rakennustunnus)}
-              </td>
-              <td class="etp-table--td">
-                {Maybe.orSome('', et.lahtotiedot['lammitetty-nettoala'])}
-              </td>
-              <td class="etp-table--td">
-                {Maybe.orSome('', et.perustiedot.nimi)}
-              </td>
-              <td class="etp-table--td">
-                {Maybe.orSome('', et.perustiedot['katuosoite-fi'])}
-              </td>
-              <td class="etp-table--td">
-                {Maybe.orSome('', et['laatija-fullname'])}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+      <div
+        class="w-full px-4 py-2 relative"
+        transition:slide|local={{ duration: 200 }}>
+        <Overlay {overlay}>
+          <div slot="content" class="w-full">
+            <table class="etp-table">
+              <thead class="etp-table--thead">
+                <tr class="etp-table--tr etp-table--tr__light">
+                  <th class="etp-table--th">Tunnus</th>
+                  <th class="etp-table--th">Etl</th>
+                  <th class="etp-table--th">ktl</th>
+                  <th class="etp-table--th">pysyvä rakennustunnus</th>
+                  <th class="etp-table--th">nettoala</th>
+                  <th class="etp-table--th">rakennuksen nimi</th>
+                  <th class="etp-table--th">osoite</th>
+                  <th class="etp-table--th">laatija</th>
+                </tr>
+              </thead>
+              <tbody class="etp-table--tbody">
+                <tr class="etp-table-tr">
+                  <td class="etp-table--td">
+                    {R.defaultTo(Maybe.get(korvattavaEnergiatodistusId), et.id)}
+                  </td>
+                  <td class="etp-table--td">{''}</td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', et.perustiedot.kayttotarkoitus)}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', et.perustiedot.rakennustunnus)}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', et.lahtotiedot['lammitetty-nettoala'])}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', et.perustiedot.nimi)}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', et.perustiedot['katuosoite-fi'])}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', et['laatija-fullname'])}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div slot="overlay-content">
+            <Spinner />
+          </div>
+        </Overlay>
       </div>
     {/each}
   </div>
