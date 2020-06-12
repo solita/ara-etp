@@ -13,7 +13,8 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
 
-  export let luokittelut;
+  export let model;
+  export let lens;
 
   let korvattavaEnergiatodistusId = Maybe.None();
   let korvattavaEnergiatodistus = Maybe.None();
@@ -37,19 +38,14 @@
   );
 
   const fetchEnergiatodistus = id => {
-    console.log(id, korvattavaEnergiatodistus);
     if (
       R.compose(
         Maybe.exists(R.identity),
         R.lift(isIdMatch)
       )(korvattavaEnergiatodistus, id)
     ) {
-      console.log('not fetching');
       return;
     }
-
-    console.log('fetching');
-
     cancel = R.compose(
       Maybe.orSome(() => {}),
       R.map(
@@ -59,6 +55,7 @@
               korvattavaEnergiatodistus = Maybe.None();
             },
             et => {
+              model = R.set(lens, R.map(i => parseInt(i, 10), id), model);
               korvattavaEnergiatodistus = Maybe.Some(et);
             }
           ),
@@ -71,7 +68,6 @@
   };
 
   $: korvattavaEnergiatodistusId = parseEt(completedValue);
-  $: console.log(korvattavaEnergiatodistus);
 
   $: fetchEnergiatodistus(korvattavaEnergiatodistusId);
 </script>
