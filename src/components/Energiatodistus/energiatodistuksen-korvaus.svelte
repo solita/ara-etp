@@ -67,9 +67,17 @@
     )(id);
   };
 
+  const resetKorvaus = () => {
+    model = R.set(lens, Maybe.None(), model);
+    korvattavaEnergiatodistus = Maybe.None();
+    korvattavaEnergiatodistusId = Maybe.None();
+  };
+
   $: korvattavaEnergiatodistusId = parseEt(completedValue);
 
   $: fetchEnergiatodistus(korvattavaEnergiatodistusId);
+
+  $: checked === false && resetKorvaus();
 </script>
 
 <style>
