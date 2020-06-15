@@ -120,6 +120,7 @@
         lens={R.lens(R.identity, R.identity)}
         format={Maybe.orSome('')}
         parse={parseEt}
+        reject={Maybe.fromNull(model.id)}
         i18n={$_} />
     </div>
     {#each Maybe.toArray(korvattavaEnergiatodistus) as et}

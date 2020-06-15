@@ -17,6 +17,7 @@
   export let lens;
   export let parse;
   export let format;
+  export let reject = Maybe.None();
   export let i18n;
 
   let items = [];
@@ -38,10 +39,17 @@
         },
         fetchedItems => {
           cancel = () => {};
-          items = fetchedItems;
+          items = R.compose(
+            R.map(R.toString),
+            R.reject(
+              R.compose(
+                Maybe.exists(R.__, reject),
+                R.equals
+              )
+            )
+          )(fetchedItems);
         }
       ),
-      R.map(R.map(R.toString)),
       R.chain(createFutureFn(fetch)),
       Future.after(300),
       R.tap(cancel),

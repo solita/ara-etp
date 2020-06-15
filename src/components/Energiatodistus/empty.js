@@ -219,8 +219,7 @@ export const energiatodistus2018 = _ => ({
   },
   'lisamerkintoja-fi': Maybe.None(),
   'lisamerkintoja-sv': Maybe.None(),
-  'korvattu-energiatodistus-id': Maybe.None(),
-  'laatija-fullname': Maybe.None()
+  'korvattu-energiatodistus-id': Maybe.None()
 });
 
 const emptyMuuEnergiamuoto = _ => ({
