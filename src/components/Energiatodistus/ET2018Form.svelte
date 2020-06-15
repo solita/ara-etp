@@ -69,7 +69,7 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
-  <H2 text={$_('energiatodistus.korvaavuus')} />
+  <H2 text={$_('energiatodistus.korvaavuus.header')} />
   <EnergiatodistuksenKorvaus
     bind:model={energiatodistus}
     lens={R.lensProp('korvattu-energiatodistus-id')} />

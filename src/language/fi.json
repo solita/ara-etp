@@ -131,7 +131,17 @@
   "energiatodistus": {
     "title": "Energiatodistus",
     "kaikki": "Kaikki",
-    "korvaavuus": "Energiatodistuksen korvaavuus",
+    "korvaavuus": {
+      "header": "Energiatodistuksen korvaavuus",
+      "tunnus": "Tunnus",
+      "etl": "ETL",
+      "ktl": "KTL",
+      "rakennustunnus": "Pysyvä rakennustunnus",
+      "nettoala": "Nettoala",
+      "nimi": "Rakennuksen nimi",
+      "osoite": "Osoite",
+      "laatija": "Laatija"
+    },
     "tila": {
       "draft": "Luonnos",
       "in-signing": "Allekirjoitus",

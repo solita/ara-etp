@@ -132,14 +132,30 @@
             <table class="etp-table">
               <thead class="etp-table--thead">
                 <tr class="etp-table--tr etp-table--tr__light">
-                  <th class="etp-table--th">Tunnus</th>
-                  <th class="etp-table--th">Etl</th>
-                  <th class="etp-table--th">ktl</th>
-                  <th class="etp-table--th">pysyvä rakennustunnus</th>
-                  <th class="etp-table--th">nettoala</th>
-                  <th class="etp-table--th">rakennuksen nimi</th>
-                  <th class="etp-table--th">osoite</th>
-                  <th class="etp-table--th">laatija</th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.tunnus')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.etl')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.ktl')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.rakennustunnus')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.nettoala')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.nimi')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.osoite')}
+                  </th>
+                  <th class="etp-table--th">
+                    {$_('energiatodistus.korvaavuus.laatija')}
+                  </th>
                 </tr>
               </thead>
               <tbody class="etp-table--tbody">
