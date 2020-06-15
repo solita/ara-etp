@@ -65,8 +65,6 @@
     R.filter(R.equals(2)),
     R.view(R.lensPath(['perustiedot', 'laatimisvaihe']))
   )(energiatodistus);
-
-  $: console.log(energiatodistus);
 </script>
 
 <div class="w-full mt-3">
