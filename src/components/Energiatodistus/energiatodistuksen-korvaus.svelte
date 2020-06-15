@@ -70,7 +70,7 @@
               korvattavaEnergiatodistus = Maybe.Some(et);
             }
           ),
-          R.chain(Future.after(2000)),
+          R.chain(Future.after(200)),
           EtApi.getEnergiatodistusById(fetch, 'all'),
           R.tap(_ => {
             overlay = true;
@@ -125,7 +125,7 @@
     </div>
     {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
       <div
-        class="w-full px-4 py-2 relative"
+        class="w-full px-4 py-4 relative"
         transition:slide|local={{ duration: 200 }}>
         <Overlay {overlay}>
           <div slot="content" class="w-full">

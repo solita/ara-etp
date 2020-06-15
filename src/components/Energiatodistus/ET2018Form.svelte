@@ -74,6 +74,8 @@
     bind:model={energiatodistus}
     lens={R.lensProp('korvattu-energiatodistus-id')} />
 
+  <HR />
+
   <H2 text={$_('energiatodistus.perustiedot.header')} />
 
   <div class="flex lg:flex-row flex-col -mx-4">
