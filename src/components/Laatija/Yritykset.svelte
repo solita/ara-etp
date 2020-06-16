@@ -183,6 +183,7 @@
               format={R.compose( Maybe.orSome(''), R.map(formatYritys) )}
               parse={parseYritys}
               lens={R.lens(R.identity, R.identity)}
+              search={true}
               i18n={$_} />
           </Autocomplete>
         </div>
