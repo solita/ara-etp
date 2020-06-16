@@ -85,6 +85,8 @@
     Future.parallel(5),
     R.tap(toggleOverlay(true))
   )([api.getEnergiatodistukset(query), api.laatimisvaiheet]);
+
+  $: console.log(query);
 </script>
 
 <style>
@@ -102,8 +104,9 @@
           bind:model={query}
           lens={R.lensProp('tila')}
           format={formatTila}
-          parse={R.when(R.complement(Maybe.isMaybe), Maybe.of)}
-          items={[Maybe.None(), 0, 1]} />
+          parse={Maybe.Some}
+          noneLabel={'energiatodistus.kaikki'}
+          items={[0, 1]} />
       </div>
 
       {#if R.isEmpty(energiatodistukset)}
