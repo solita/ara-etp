@@ -1,7 +1,6 @@
 <script>
   import * as R from 'ramda';
-  import active from 'svelte-spa-router/active';
-  import { link } from 'svelte-spa-router';
+  import { link, location } from 'svelte-spa-router';
   import { _ } from '@Language/i18n';
   export let label;
   export let href;
@@ -15,7 +14,7 @@
   }
 
   a:hover,
-  :global(a.active) {
+  a.active {
     @apply shadow-hover-2-primary border-hover;
   }
 
@@ -26,7 +25,7 @@
 
 <a
   {href}
-  use:active={R.compose( R.dropWhile(R.equals('#')), R.defaultTo(href) )(activePath)}
+  class:active={R.compose( R.equals($location), R.dropWhile(R.equals('#')), R.defaultTo(href) )(activePath)}
   class="navigationtab"
   tabindex="0">
   {label}
