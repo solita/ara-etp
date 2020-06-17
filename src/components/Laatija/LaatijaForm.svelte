@@ -305,15 +305,15 @@
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'wwwosoite'}
-             name={'wwwosoite'}
+          name={'wwwosoite'}
           label={$_('laatija.www-osoite')}
-             required={false}
+          required={false}
           bind:model={laatija}
-             lens={R.lensProp('wwwosoite')}
+          lens={R.lensProp('wwwosoite')}
           format={Maybe.orSome('')}
-             parse={formParsers.wwwosoite}
+          parse={formParsers.wwwosoite}
           validators={formSchema.wwwosoite}
-             i18n={$_} />
+          i18n={$_} />
       </div>
     </div>
   </div>
