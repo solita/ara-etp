@@ -125,6 +125,7 @@
         {disabled}
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'kieli'])}
+        allowNone={false}
         parse={Maybe.Some}
         format={et.selectFormat(labelLocale, luokittelut.kielisyys)}
         items={R.pluck('id', luokittelut.kielisyys)} />
@@ -175,7 +176,11 @@
     alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
 
   <HR />
-  <ToimenpideEhdotukset versio={'2018'} {disabled} {schema} bind:energiatodistus />
+  <ToimenpideEhdotukset
+    versio={'2018'}
+    {disabled}
+    {schema}
+    bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.lahtotiedot.header')} />
@@ -221,7 +226,11 @@
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
-  <EnergiaverkostaOstetut versio={2018} {disabled} {schema} bind:energiatodistus />
+  <EnergiaverkostaOstetut
+    versio={2018}
+    {disabled}
+    {schema}
+    bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 

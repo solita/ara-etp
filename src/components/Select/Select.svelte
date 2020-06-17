@@ -14,6 +14,7 @@
   export let disabled = false;
   export let required = false;
   export let allowNone = true;
+  export let noneLabel = 'validation.no-selection';
 
   export let model;
   export let lens;
@@ -32,7 +33,7 @@
   $: showDropdown = Maybe.isSome(active);
 
   $: selectableItems = allowNone
-    ? [$_('validation.no-selection'), ...R.map(format, items)]
+    ? [$_(noneLabel), ...R.map(format, items)]
     : R.map(format, items);
 
   const previousItem = R.compose(
@@ -170,7 +171,7 @@
     on:blur={_ => {
       focused = false;
     }}>
-    {R.compose( Maybe.orSome($_('validation.no-selection')), R.map(format) )(selected)}
+    {R.compose( Maybe.orSome($_(noneLabel)), R.map(format) )(selected)}
   </span>
   {#if showDropdown}
     <DropdownList

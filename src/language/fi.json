@@ -130,6 +130,7 @@
   },
   "energiatodistus": {
     "title": "Energiatodistus",
+    "kaikki": "Kaikki",
     "tila": {
       "draft": "Luonnos",
       "in-signing": "Allekirjoitus",
@@ -166,7 +167,7 @@
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "onko-julkinen-rakennus": "Julkinen rakennus",
       "keskeiset-suositukset": "Keskeiset suositukset",
-      "keskeiset-suositukset-heading":  {
+      "keskeiset-suositukset-heading": {
         "2018": {
           "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
           "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia)"
