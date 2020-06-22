@@ -5,6 +5,7 @@
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as formats from '@Utility/formats';
+  import * as fxmath from '@Utility/fxmath';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -157,13 +158,13 @@
         {$_('energiatodistus.tulokset.yhteensa')}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(Math.ceil) )(sahkoSum)}
+        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(sahkoSum)}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(Math.ceil) )(lampoSum)}
+        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(lampoSum)}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(Math.ceil) )(kaukojaahdytysSum)}
+        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(kaukojaahdytysSum)}
       </td>
     </tr>
   </tbody>
