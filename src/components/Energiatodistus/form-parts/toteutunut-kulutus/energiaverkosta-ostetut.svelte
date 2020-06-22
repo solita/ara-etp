@@ -4,6 +4,7 @@
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@Utility/formats';
+  import * as fxmath from '@Utility/fxmath';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -65,9 +66,13 @@
             path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', `${energiamuoto}-vuosikulutus`]} />
         </td>
         <td class="et-table--td">
-          {formats.optionalNumber(EtUtils.energiaPerLammitettyNettoala(
-            ['toteutunut-ostoenergiankulutus', 'ostettu-energia', `${energiamuoto}-vuosikulutus`])
-            (energiatodistus))}
+          {R.compose( formats.optionalNumber, R.map(fxmath.round(0)), EtUtils.energiaPerLammitettyNettoala(
+              [
+                'toteutunut-ostoenergiankulutus',
+                'ostettu-energia',
+                `${energiamuoto}-vuosikulutus`
+              ]
+            ) )(energiatodistus)}
         </td>
       </tr>
     {/each}
@@ -75,27 +80,33 @@
       <tr class="et-table--tr">
         <td class="et-table--td">
           <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'nimi-fi']} />
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'nimi-fi']} />
         </td>
         <td class="et-table--td" />
         <td class="et-table--td" />
         <td class="et-table--td" />
         <td class="et-table--td">
           <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'vuosikulutus']} />
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'vuosikulutus']} />
         </td>
         <td class="et-table--td">
-          {formats.optionalNumber(EtUtils.energiaPerLammitettyNettoala(
-            ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'vuosikulutus'])
-            (energiatodistus))}
+          {R.compose( formats.optionalNumber, R.map(fxmath.round(0)), EtUtils.energiaPerLammitettyNettoala(
+              [
+                'toteutunut-ostoenergiankulutus',
+                'ostettu-energia',
+                'muu',
+                index,
+                'vuosikulutus'
+              ]
+            ) )(energiatodistus)}
         </td>
       </tr>
     {/each}
