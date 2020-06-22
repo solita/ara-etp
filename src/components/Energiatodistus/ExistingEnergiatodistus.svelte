@@ -77,10 +77,21 @@
   )(params.version, params.id);
 
   const tilaLabel = R.compose(
-      Maybe.orSome($_('energiatodistus.tila.loading')),
-      R.map(e => $_('energiatodistus.tila.' + et.tilaKey(e['tila-id']))));
+    Maybe.orSome($_('energiatodistus.tila.loading')),
+    R.map(e => $_('energiatodistus.tila.' + et.tilaKey(e['tila-id'])))
+  );
 
-  $: title = `${$_('energiatodistus.title')} ${params.version}/${params.id} - ${tilaLabel(energiatodistus)}`;
+  $: title = `${$_('energiatodistus.title')} ${params.version}/${
+    params.id
+  } - ${tilaLabel(energiatodistus)}`;
+
+  $: disabled = Maybe.exists(
+    R.compose(
+      Maybe.isSome,
+      R.prop('allekirjoitusaika')
+    ),
+    energiatodistus
+  );
 </script>
 
 <Overlay {overlay}>
