@@ -4,6 +4,7 @@
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@Utility/formats';
+  import * as fxmath from '@Utility/fxmath';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -89,10 +90,10 @@
           {R.compose( formats.numberFormat, Maybe.get, R.prop(polttoaine) )(muunnoskertoimet)}
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
@@ -131,10 +132,10 @@
             path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'muunnoskerroin']} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
