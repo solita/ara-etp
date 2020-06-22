@@ -10,6 +10,7 @@
   import VuosituottoAreaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area.svelte';
 
   import * as formats from '@Utility/formats';
+  import * as fxmath from '@Utility/fxmath';
 
   export let disabled;
   export let schema;
@@ -29,8 +30,12 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th"><VuosituottoUnit/></th>
-      <th class="et-table--th"><VuosituottoAreaUnit/></th>
+      <th class="et-table--th">
+        <VuosituottoUnit />
+      </th>
+      <th class="et-table--th">
+        <VuosituottoAreaUnit />
+      </th>
       <th class="et-table--th" />
     </tr>
   </thead>
@@ -50,7 +55,7 @@
             path={['tulokset', 'uusiutuvat-omavaraisenergiat', energiamuoto]} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )), R.prop(energiamuoto) )(omavaraisenergiatPerLammitettyNettoala)}
+          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(energiamuoto) )(omavaraisenergiatPerLammitettyNettoala)}
         </td>
         <td class="et-table--td" />
       </tr>
