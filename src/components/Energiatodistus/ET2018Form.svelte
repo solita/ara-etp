@@ -23,6 +23,7 @@
   import BasicInput from '@Component/Input/Input';
   import Textarea from './Textarea';
 
+  import EnergiatodistuksenKorvaus from './energiatodistuksen-korvaus';
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
 
@@ -68,6 +69,13 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
+  <H2 text={$_('energiatodistus.korvaavuus.header')} />
+  <EnergiatodistuksenKorvaus
+    bind:model={energiatodistus}
+    lens={R.lensProp('korvattu-energiatodistus-id')} />
+
+  <HR />
+
   <H2 text={$_('energiatodistus.perustiedot.header')} />
 
   <div class="flex lg:flex-row flex-col -mx-4">

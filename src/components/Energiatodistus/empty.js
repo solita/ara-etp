@@ -218,7 +218,8 @@ export const energiatodistus2018 = _ => ({
     'lisatietoja-sv': Maybe.None()
   },
   'lisamerkintoja-fi': Maybe.None(),
-  'lisamerkintoja-sv': Maybe.None()
+  'lisamerkintoja-sv': Maybe.None(),
+  'korvattu-energiatodistus-id': Maybe.None()
 });
 
 const emptyMuuEnergiamuoto = _ => ({
@@ -233,12 +234,24 @@ const emptyMuuEnergia = _ => ({
   vuosikulutus: Maybe.None()
 });
 
-export const energiatodistus2013 =
-  R.compose(
-    R.assocPath(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'], R.times(emptyVapaa, 10)),
-    R.assocPath(['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'], R.times(emptyMuuEnergia, 6)),
-    R.assocPath(['tulokset', 'kaytettavat-energiamuodot', 'muu'], R.times(emptyMuuEnergiamuoto, 3)),
-    R.assocPath(['tulokset', 'uusiutuvat-omavaraisenergiat'], R.times(emptyMuuEnergia, 5)),
-    R.assocPath(['perustiedot', 'uudisrakennus'], false),
-    R.dissocPath(['perustiedot', 'laatimisvaihe']),
-    energiatodistus2018);
+export const energiatodistus2013 = R.compose(
+  R.assocPath(
+    ['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'],
+    R.times(emptyVapaa, 10)
+  ),
+  R.assocPath(
+    ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'],
+    R.times(emptyMuuEnergia, 6)
+  ),
+  R.assocPath(
+    ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
+    R.times(emptyMuuEnergiamuoto, 3)
+  ),
+  R.assocPath(
+    ['tulokset', 'uusiutuvat-omavaraisenergiat'],
+    R.times(emptyMuuEnergia, 5)
+  ),
+  R.assocPath(['perustiedot', 'uudisrakennus'], false),
+  R.dissocPath(['perustiedot', 'laatimisvaihe']),
+  energiatodistus2018
+);

@@ -34,6 +34,10 @@ export const head = R.compose(fromUndefined, R.head);
 
 export const toEither = R.curry((defaultValue, m) => m.toEither(defaultValue));
 
+export const toArray = m => m.toArray();
+
+export const exists = R.curry((pred, m) => m.exists(pred));
+
 export const isSome = m => m.isSome();
 
 export const isNone = m => m.isNone();

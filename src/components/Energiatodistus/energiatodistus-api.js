@@ -13,27 +13,29 @@ const deserialize2018 = {
     'onko-julkinen-rakennus': Maybe.get,
     valmistumisvuosi: Either.Right
   }
-}
+};
 
 const deserialize2013 = R.mergeRight(deserialize2018, {
   perustiedot: { uudisrakennus: Maybe.get }
-})
+});
 
 const assertVersion = et => {
   if (!R.includes(et.versio, [2018, 2013])) {
     throw 'Unsupported energiatodistus version: ' + et.version;
   }
-}
+};
 
 const mergeEmpty = deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]));
 
 export const deserialize = R.compose(
   R.cond([
     [R.propEq('versio', 2018), mergeEmpty(empty.energiatodistus2018)],
-    [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013)]]),
+    [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013)]
+  ]),
   R.cond([
     [R.propEq('versio', 2018), R.evolve(deserialize2018)],
-    [R.propEq('versio', 2013), R.evolve(deserialize2013)]]),
+    [R.propEq('versio', 2013), R.evolve(deserialize2013)]
+  ]),
   R.tap(assertVersion),
   R.evolve({ versio: Maybe.get }),
   deep.map(R.F, Maybe.fromNull)
@@ -56,8 +58,15 @@ export const serialize = R.compose(
       R.identity
     )
   ),
-  R.omit(['id', 'tila-id', 'laatija-id', 'laatija-fullname', 'versio',
-          'allekirjoitusaika', 'allekirjoituksessaaika'])
+  R.omit([
+    'id',
+    'tila-id',
+    'laatija-id',
+    'laatija-fullname',
+    'versio',
+    'allekirjoitusaika',
+    'allekirjoituksessaaika'
+  ])
 );
 
 export const deserializeLiite = R.evolve({
@@ -82,8 +91,10 @@ export const toQueryString = R.compose(
   Maybe.map(R.concat('?')),
   Maybe.map(R.join('&')),
   Maybe.toMaybeList,
-  R.map(([key, optionalValue]) => Maybe.map(value => `${key}=${value}`, optionalValue)),
-  R.toPairs,
+  R.map(([key, optionalValue]) =>
+    Maybe.map(value => `${key}=${value}`, optionalValue)
+  ),
+  R.toPairs
 );
 
 export const getEnergiatodistukset = R.compose(
@@ -123,10 +134,12 @@ const toFormData = (name, files) => {
 export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(uri => fetch(uri + '/files', {
-      method: 'POST',
-      body: toFormData('files', files)
-    })),
+    Future.encaseP(uri =>
+      fetch(uri + '/files', {
+        method: 'POST',
+        body: toFormData('files', files)
+      })
+    ),
     url.liitteet
   )(version, id)
 );
@@ -134,16 +147,20 @@ export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
 export const postLiitteetLink = R.curry((fetch, version, id, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post',
-      url.liitteet(version, id) + '/link'))
-  )(link));
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(version, id) + '/link')
+    )
+  )(link)
+);
 
 export const deleteLiite = R.curry((fetch, version, id, liiteId) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(liiteId => Fetch.deleteRequest(fetch,
-      url.liitteet(version, id) + '/' + liiteId))
-  ) (liiteId));
+    Future.encaseP(liiteId =>
+      Fetch.deleteRequest(fetch, url.liitteet(version, id) + '/' + liiteId)
+    )
+  )(liiteId)
+);
 
 export const putEnergiatodistusById = R.curry(
   (fetch, version, id, energiatodistus) =>
@@ -218,20 +235,32 @@ export const laatimisvaiheet = R.compose(
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/laatimisvaiheet');
 
-export const kayttotarkoitusluokat = version => R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/kayttotarkoitusluokat/' + version);
+export const kayttotarkoitusluokat = version =>
+  R.compose(
+    Future.cache,
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )('api/private/kayttotarkoitusluokat/' + version);
 
-export const alakayttotarkoitusluokat = version => R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/alakayttotarkoitusluokat/' + version);
+export const alakayttotarkoitusluokat = version =>
+  R.compose(
+    Future.cache,
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )('api/private/alakayttotarkoitusluokat/' + version);
 
-export const luokittelut = version => Future.parallelObject(5, {
-  kielisyys: kielisyys,
-  laatimisvaiheet: laatimisvaiheet,
-  kayttotarkoitusluokat: kayttotarkoitusluokat(version),
-  alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)});
+export const luokittelut = version =>
+  Future.parallelObject(5, {
+    kielisyys: kielisyys,
+    laatimisvaiheet: laatimisvaiheet,
+    kayttotarkoitusluokat: kayttotarkoitusluokat(version),
+    alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
+  });
+
+export const signed = R.curry((fetch, id) =>
+  R.compose(
+    Future.cache,
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )(`api/private/energiatodistukset/signed?id=${id}`)
+);

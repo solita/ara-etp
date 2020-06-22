@@ -10,14 +10,17 @@
   import DropdownList from '@Component/DropdownList/DropdownList';
 
   export let items = [];
+  export let completedValue = '';
 
   let active = Maybe.None();
   let input;
   let node;
   let filteredItems = [];
+  let rawValue = '';
 
   const setInputValue = value => {
     input.value = value;
+    completedValue = value;
     input.blur();
     input.focus();
   };
@@ -59,16 +62,7 @@
   };
 
   const inputHandler = () => {
-    const value = input.value;
-    filteredItems = R.compose(
-      R.take(5),
-      R.filter(
-        R.compose(
-          R.includes(R.toLower(value)),
-          R.toLower
-        )
-      )
-    )(items);
+    rawValue = input.value;
     active = active.orElse(Maybe.Some(0));
   };
 
@@ -82,6 +76,16 @@
     input.removeEventListener('input', inputHandler);
     input.removeEventListener('focus', inputHandler);
   });
+
+  $: filteredItems = R.compose(
+    R.take(5),
+    R.filter(
+      R.compose(
+        R.includes(R.toLower(rawValue)),
+        R.toLower
+      )
+    )
+  )(items);
 </script>
 
 <style type="text/postcss">

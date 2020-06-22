@@ -17,7 +17,7 @@
   }
 </style>
 
-<div class="w-full" transition:slide={{ duration: 200 }}>
+<div class="w-full" transition:slide|local={{ duration: 200 }}>
   <span class="uppercase font-bold">Yrityksen perustiedot</span>
   <div class="inner">
     <span>{laskutustieto.nimi}</span>
