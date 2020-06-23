@@ -36,6 +36,10 @@ export const formSchema = () => ({
     Validation.minLengthConstraint(2),
     Validation.maxLengthConstraint(200)
   ],
+  'vastaanottajan-tarkenne': R.map(Validation.liftValidator, [
+    Validation.isRequired,
+    Validation.minLengthConstraint(2),
+    Validation.maxLengthConstraint(200)]),
   jakeluosoite: [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
@@ -56,6 +60,7 @@ export const formParsers = () => ({
   sukunimi: R.trim,
   email: R.trim,
   puhelin: R.trim,
+  'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,
@@ -63,6 +68,7 @@ export const formParsers = () => ({
 });
 
 export const deserialize = R.evolve({
+  'vastaanottajan-tarkenne': Maybe.fromNull,
   maa: Either.Right,
   toimintaalue: Maybe.fromNull,
   wwwosoite: Maybe.fromNull
@@ -107,7 +113,7 @@ export const emptyLaatija = () =>
     etunimi: '',
     julkinenpuhelin: false,
     login: Maybe.None(),
-    wwwosoite: Maybe.None()
+    wwwosoite: Maybe.None(),
   });
 
 export const putLaatijatFuture = R.curry((fetch, laatijat) =>
