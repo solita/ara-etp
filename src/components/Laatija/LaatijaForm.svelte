@@ -258,7 +258,7 @@
           lens={R.lensProp('toteamispaivamaara')}
           format={toteamispaivamaara => `${dfns.format(dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0), 'd.M.yyyy')} - ${dfns.format(dfns.add(
                 dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0),
-                { years: 10 }
+                { years: 7 }
               ), 'd.M.yyyy')}`}
           parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
