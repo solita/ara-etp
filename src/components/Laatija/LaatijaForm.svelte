@@ -56,6 +56,8 @@
 
   $: patevyydetIds = R.pluck('id', luokittelut.patevyydet);
 
+  $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
+
   $: formatPatevyys = R.compose(
     Maybe.orSome(''),
     Maybe.map(labelLocale),
@@ -77,6 +79,14 @@
     ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue),
     laatija
   );
+
+  $: formatLaskutuskieli = R.compose(
+    Maybe.orSome(''),
+    Maybe.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.laskutuskielet)
+  );
+
+  $: parseLaskutuskieli = R.identity;
 
   const isValidForm = R.compose(
     R.all(Either.isRight),
@@ -246,6 +256,18 @@
             handleSubmit={false}
             i18n={$_} />
         </Autocomplete>
+      </div>
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Select
+          label={$_('laatija.laskutuskieli')}
+          format={formatLaskutuskieli}
+          parse={parseLaskutuskieli}
+          bind:model={laatija}
+          lens={R.lensProp('laskutuskieli')}
+          allowNone={false}
+          items={laskutuskieletIds} />
       </div>
     </div>
   </div>
