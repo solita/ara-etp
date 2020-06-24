@@ -11,7 +11,7 @@
   import * as geoApi from '@Component/Geo/geo-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as laskutuskieliApi from '@Component/Laskutuskieli/laskutuskieli-api';
+  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
@@ -101,7 +101,7 @@
         countries: geoApi.countries,
         toimintaalueet: geoApi.toimintaalueet,
         patevyydet: laatijaApi.patevyydet,
-        laskutuskielet: laskutuskieliApi.laskutuskielet
+        laskutuskielet: laskutusApi.laskutuskielet
       })
     ),
     R.juxt([
