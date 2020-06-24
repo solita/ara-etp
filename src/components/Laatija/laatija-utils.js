@@ -113,7 +113,7 @@ export const emptyLaatija = () =>
     etunimi: '',
     julkinenpuhelin: false,
     login: Maybe.None(),
-    wwwosoite: Maybe.None(),
+    wwwosoite: Maybe.None()
   });
 
 export const putLaatijatFuture = R.curry((fetch, laatijat) =>
