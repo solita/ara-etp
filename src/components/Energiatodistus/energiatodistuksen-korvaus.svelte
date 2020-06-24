@@ -19,39 +19,42 @@
 
   export let model;
   export let lens;
-
-  let korvattavaEnergiatodistusId = Maybe.None();
-  let korvattavaEnergiatodistus = Maybe.None();
-
-  let checked = false;
-  let completedValue = '';
+  export let initialEnergiatodistusId = Maybe.None();
 
   let cancel = () => {};
-
+  let completedValue = '';
   let overlay = false;
 
-  const parseEt = R.compose(
-    Maybe.fromEmpty,
-    R.trim
-  );
+  let korvattavaEnergiatodistusId = Maybe.isSome(initialEnergiatodistusId)
+    ? initialEnergiatodistusId
+    : Maybe.None();
+  let korvattavaEnergiatodistus = Maybe.None();
 
-  const isIdMatch = R.curry((energiatodistus, id) =>
+  let checked = Maybe.isSome(korvattavaEnergiatodistusId);
+
+  const energiatodistusMatchId = R.curry((energiatodistus, id) =>
     R.compose(
       R.equals(id),
-      R.toString,
       R.prop('id')
     )(energiatodistus)
   );
 
+  const parseEt = R.compose(
+    Maybe.fromFalsy,
+    value => parseInt(value, 10)
+  );
+
   const fetchEnergiatodistus = id => {
+    console.log(id);
     if (
       R.compose(
         Maybe.exists(R.identity),
-        R.lift(isIdMatch)
+        R.lift(energiatodistusMatchId)
       )(korvattavaEnergiatodistus, id)
     ) {
       return;
     }
+
     cancel = R.compose(
       Maybe.cata(
         R.compose(
@@ -85,22 +88,17 @@
     )(id);
   };
 
-  const resetKorvaus = () => {
-    model = R.set(lens, Maybe.None(), model);
-    korvattavaEnergiatodistus = Maybe.None();
-    korvattavaEnergiatodistusId = Maybe.None();
-  };
+  $: checked
+    ? (model = R.set(lens, korvattavaEnergiatodistusId, model))
+    : (model = R.set(lens, Maybe.None(), model));
 
-  $: korvattavaEnergiatodistusId = parseEt(completedValue);
+  $: korvattavaEnergiatodistusId = R.compose(
+    Maybe.orElse(korvattavaEnergiatodistusId),
+    parseEt
+  )(completedValue);
 
   $: fetchEnergiatodistus(korvattavaEnergiatodistusId);
-
-  $: checked === false && resetKorvaus();
 </script>
-
-<style>
-
-</style>
 
 <Checkbox label={'Korvaa todistuksen'} bind:model={checked} />
 
@@ -161,7 +159,7 @@
               <tbody class="etp-table--tbody">
                 <tr class="etp-table-tr">
                   <td class="etp-table--td">
-                    {R.defaultTo(Maybe.get(korvattavaEnergiatodistusId), et.id)}
+                    {R.defaultTo(Maybe.getOrElse(' ', korvattavaEnergiatodistusId), et.id)}
                   </td>
                   <td class="etp-table--td">{''}</td>
                   <td class="etp-table--td">
