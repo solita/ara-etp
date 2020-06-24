@@ -94,10 +94,12 @@
   "laatija": {
     "lisaa-laatijat": "Lisää laatijat",
     "henkilotunnus": "Henkilötunnus",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne",
     "katuosoite": "Katuosoite",
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
+    "laskutuskieli": "Laskun kieli",
     "www-osoite": "Toiminnan www-osoite",
     "laatijatiedot": "Laatijatiedot",
     "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
