@@ -17,8 +17,6 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
 
-  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
-
   import { countryStore, flashMessageStore } from '@/stores';
 
   const update = fn => (yritys = fn(yritys));
@@ -30,15 +28,7 @@
 
   export let disabled = false;
 
-  export let luokittelut = Maybe.None();
-
-  $: Future.fork(
-    flashMessageStore.add('Yritys', 'error'),
-    ([laskutuskielet, verkkolaskuoperaattorit]) =>
-      luokittelut = Maybe.Some({laskutuskielet: laskutuskielet,
-                               verkkolaskuoperaattorit: verkkolaskuoperaattorit}),
-    Future.parallel(2,[laskutusApi.laskutuskielet, laskutusApi.verkkolaskuoperaattorit])
-  );
+  export let luokittelut;
 
   const formParsers = YritysUtils.formParsers();
   const formSchema = YritysUtils.formSchema();
@@ -67,25 +57,23 @@
     $countryStore
   );
 
-  $: laskutuskieletIds = R.map(R.compose(R.pluck('id'), R.prop('laskutuskielet')), luokittelut);
+  $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
 
-  $: formatLaskutuskieli = id => R.compose(
+  $: formatLaskutuskieli = R.compose(
     Maybe.orSome(''),
     R.map(labelLocale),
-    R.chain(Maybe.findById(id)),
-    R.map(R.prop('laskutuskielet'))
-  )(luokittelut);
+    Maybe.findById(R.__, luokittelut.laskutuskielet),
+  );
 
   $: parseLaskutuskieli = R.identity;
 
-  $: verkkolaskuoperaattoritIds = R.map(R.compose(R.pluck('id'), R.prop('verkkolaskuoperaattorit')), luokittelut);
+  $: verkkolaskuoperaattoritIds = R.pluck('id', luokittelut.verkkolaskuoperaattorit);
 
-  $: formatVerkkolaskuoperaattori = id => R.compose(
+  $: formatVerkkolaskuoperaattori = R.compose(
     Maybe.orSome(''),
     R.map(vlo => vlo.nimi + ' - ' + vlo.valittajatunnus),
-    R.chain(Maybe.findById(id)),
-    R.map(R.prop('verkkolaskuoperaattorit'))
-  )(luokittelut);
+    Maybe.findById(R.__, luokittelut.verkkolaskuoperaattorit),
+  );
 
   $: parseVerkkolaskuoperaattori = Maybe.fromNull;
 
@@ -227,7 +215,7 @@
             bind:model={yritys}
             lens={R.lensProp('laskutuskieli')}
             allowNone={false}
-            items={laskutuskieletIds.orSome([])} />
+            items={laskutuskieletIds} />
         </div>
       </div>
     </div>
@@ -257,7 +245,7 @@
           bind:model={yritys}
           lens={R.lensProp('verkkolaskuoperaattori')}
           allowNone={true}
-          items={verkkolaskuoperaattoritIds.orSome([])} />
+          items={verkkolaskuoperaattoritIds} />
       </div>
     </div>
   </div>

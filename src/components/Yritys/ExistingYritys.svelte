@@ -17,12 +17,17 @@
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
+  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
+
+
   export let params;
 
   let yritys = Maybe.None();
 
   let overlay = true;
   let disabled = false;
+
+  let luokittelut = Maybe.None();
 
   const toggleOverlay = value => () => (overlay = value);
   const toggleDisabled = value => () => (disabled = value);
@@ -74,15 +79,37 @@
     Future.both(Future.after(400, true)),
     YritysUtils.getYritysByIdFuture(fetch)
   )(params.id);
+
+  // Load classifications
+  $: R.compose(
+    Future.fork(
+      R.compose(
+        R.tap(toggleOverlay(false)),
+        R.tap(flashMessageStore.add('Yritys', 'error')),
+        R.always($_('yritys.messages.load-error'))
+      ),
+      R.compose(
+        response => {
+          luokittelut = Maybe.Some(response);
+        },
+        R.tap(toggleOverlay(false))
+      )
+    ),
+    laskutusApi.luokittelut
+  )();
+
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    <YritysForm
-      {submit}
-      {disabled}
-      existing={Maybe.isSome(yritys)}
-      yritys={Maybe.orSome(YritysUtils.emptyYritys(), yritys)} />
+    {#if luokittelut.isSome()}
+      <YritysForm
+        {submit}
+        {disabled}
+        luokittelut={luokittelut.some()}
+        existing={Maybe.isSome(yritys)}
+        yritys={Maybe.orSome(YritysUtils.emptyYritys(), yritys)} />
+    {/if}
   </div>
   <div slot="overlay-content">
     <Spinner />

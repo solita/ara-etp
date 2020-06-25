@@ -11,7 +11,12 @@ export const laskutuskielet = R.compose(
 )(api + '/laskutuskielet/');
 
 export const verkkolaskuoperaattorit = R.compose(
-    Future.cache,
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
 )(api + '/verkkolaskuoperaattorit/');
+
+export const luokittelut = () => Future.parallelObject(2, {
+  laskutuskielet: laskutuskielet,
+  verkkolaskuoperaattorit: verkkolaskuoperaattorit
+});
