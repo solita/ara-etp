@@ -10,14 +10,18 @@ const yritysApi = `/api/private/yritykset`;
 export const urlForYritysId = id => `${yritysApi}/${id}`;
 
 export const deserialize = R.evolve({
+  'vastaanottajan-tarkenne': Maybe.fromNull,
   maa: Either.Right,
-  verkkolaskuosoite: Maybe.fromNull
+  verkkolaskuosoite: Maybe.fromNull,
+  verkkolaskuoperaattori: Maybe.fromNull
 });
 
 export const serialize = R.compose(
   R.evolve({
+    'vastaanottajan-tarkenne': Maybe.orSome(null),
     maa: Either.right,
-    verkkolaskuosoite: Maybe.getOrElse(null)
+    verkkolaskuosoite: Maybe.orSome(null),
+    verkkolaskuoperaattori: Maybe.orSome(null),
   }),
   R.dissoc('id')
 );
@@ -25,11 +29,14 @@ export const serialize = R.compose(
 export const emptyYritys = () => ({
   ytunnus: '',
   nimi: '',
+  'vastaanottajan-tarkenne': Maybe.None(),
   jakeluosoite: '',
   postinumero: '',
   postitoimipaikka: '',
   maa: '',
-  verkkolaskuosoite: Maybe.None()
+  laskutuskieli: Maybe.None(),
+  verkkolaskuosoite: Maybe.None(),
+  verkkolaskuoperaattori: Maybe.None()
 });
 
 export const formSchema = () => ({
@@ -39,6 +46,10 @@ export const formSchema = () => ({
     validation.minLengthConstraint(2),
     validation.maxLengthConstraint(200)
   ],
+  'vastaanottajan-tarkenne': R.map(validation.liftValidator, [
+    validation.isRequired,
+    validation.minLengthConstraint(2),
+    validation.maxLengthConstraint(200)]),
   jakeluosoite: [validation.isRequired],
   postinumero: [validation.isRequired, validation.postinumeroValidator],
   postitoimipaikka: [
@@ -47,17 +58,20 @@ export const formSchema = () => ({
     validation.maxLengthConstraint(200)
   ],
   maa: [],
-  verkkolaskuosoite: []
+  verkkolaskuosoite: [],
+  verkkolaskuoperaattori: [],
 });
 
 export const formParsers = () => ({
   ytunnus: R.trim,
   nimi: R.trim,
+  'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,
   maa: R.trim,
-  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim)
+  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim),
+  verkkolaskuoperaattori: R.compose(Maybe.fromEmpty, R.trim)
 });
 
 export const getYritysByIdFuture = R.curry((fetch, id) =>

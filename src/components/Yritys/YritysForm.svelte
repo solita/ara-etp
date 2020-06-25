@@ -2,16 +2,16 @@
   import * as R from 'ramda';
 
   import { locale, _ } from '@Language/i18n';
-  import * as locales from '@Language/locale-utils';
+  import * as LocaleUtils from '@Language/locale-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
-  import * as Fetch from '@Utility/fetch-utils';
   import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Component/Geo/country-utils';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
+  import Select from '@Component/Select/Select';
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
@@ -28,8 +28,12 @@
 
   export let disabled = false;
 
+  export let luokittelut;
+
   const formParsers = YritysUtils.formParsers();
   const formSchema = YritysUtils.formSchema();
+
+  $: labelLocale = LocaleUtils.label($locale);
 
   const parseCountry = R.compose(
     R.map(R.prop('id')),
@@ -41,7 +45,7 @@
 
   $: formatCountry = R.compose(
     Either.orSome(''),
-    R.map(locales.label($locale)),
+    R.map(LocaleUtils.label($locale)),
     R.chain(Maybe.toEither('')),
     R.map(R.__, $countryStore),
     country.findCountryById
@@ -49,9 +53,29 @@
 
   $: countryNames = Either.foldRight(
     [],
-    R.map(locales.label($locale)),
+    R.map(LocaleUtils.label($locale)),
     $countryStore
   );
+
+  $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
+
+  $: formatLaskutuskieli = R.compose(
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.laskutuskielet),
+  );
+
+  $: parseLaskutuskieli = R.identity;
+
+  $: verkkolaskuoperaattoritIds = R.pluck('id', luokittelut.verkkolaskuoperaattorit);
+
+  $: formatVerkkolaskuoperaattori = R.compose(
+    Maybe.orSome(''),
+    R.map(vlo => vlo.nimi + ' - ' + vlo.valittajatunnus),
+    Maybe.findById(R.__, luokittelut.verkkolaskuoperaattorit),
+  );
+
+  $: parseVerkkolaskuoperaattori = Maybe.fromNull;
 
   const isValidForm = R.compose(
     R.all(Either.isRight),
@@ -112,6 +136,22 @@
       <div class="py-4">
         <Input
           {disabled}
+          id={'vastaanottajan-tarkenne'}
+          name={'vastaanottajan-tarkenne'}
+          label={$_('yritys.vastaanottajan-tarkenne')}
+          required={false}
+          bind:model={yritys}
+          lens={R.lensProp('vastaanottajan-tarkenne')}
+          format={Maybe.orSome('')}
+          parse={formParsers['vastaanottajan-tarkenne']}
+          validators={formSchema['vastaanottajan-tarkenne']}
+          i18n={$_} />
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <div class="py-4">
+        <Input
+          {disabled}
           id={'jakeluosoite'}
           name={'jakeluosoite'}
           label={$_('yritys.jakeluosoite')}
@@ -165,6 +205,19 @@
           </Autocomplete>
         </div>
       </div>
+      <div class="flex lg:flex-row flex-col py-4 -mx-4">
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Select
+            label={$_('yritys.laskutuskieli')}
+            required={true}
+            format={formatLaskutuskieli}
+            parse={parseLaskutuskieli}
+            bind:model={yritys}
+            lens={R.lensProp('laskutuskieli')}
+            allowNone={false}
+            items={laskutuskieletIds} />
+        </div>
+      </div>
     </div>
   </div>
   <HR />
@@ -181,6 +234,19 @@
         format={Maybe.orSome('')}
         parse={formParsers.verkkolaskuosoite}
         i18n={$_} />
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Select
+          label={$_('yritys.verkkolaskuoperaattori')}
+          required={false}
+          format={formatVerkkolaskuoperaattori}
+          parse={parseVerkkolaskuoperaattori}
+          bind:model={yritys}
+          lens={R.lensProp('verkkolaskuoperaattori')}
+          allowNone={true}
+          items={verkkolaskuoperaattoritIds} />
+      </div>
     </div>
   </div>
   <div class="flex -mx-4 mt-20">

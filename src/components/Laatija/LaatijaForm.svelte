@@ -262,6 +262,7 @@
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Select
           label={$_('laatija.laskutuskieli')}
+          required={true}
           format={formatLaskutuskieli}
           parse={parseLaskutuskieli}
           bind:model={laatija}

@@ -55,11 +55,13 @@
     "laatijat": "Laatijat",
     "y-tunnus": "Y-Tunnus",
     "nimi": "Nimi",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
     "laskutusosoite": "Laskutusosoite",
     "jakeluosoite": "Katuosoite",
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
+    "laskutuskieli": "Laskun kieli",
     "verkkolaskuosoite": "verkkolaskuosoite",
     "ovt-tunnus": "OVT-tunnus",
     "messages": {
@@ -94,7 +96,7 @@
   "laatija": {
     "lisaa-laatijat": "Lisää laatijat",
     "henkilotunnus": "Henkilötunnus",
-    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
     "katuosoite": "Katuosoite",
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
