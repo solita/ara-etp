@@ -73,7 +73,7 @@
   <EnergiatodistuksenKorvaus
     bind:model={energiatodistus}
     lens={R.lensProp('korvattu-energiatodistus-id')}
-    initialEnergiatodistusId={energiatodistus['korvattu-energiatodistus-id']} />
+    initialKorvattavaId={energiatodistus['korvattu-energiatodistus-id']} />
 
   <HR />
 

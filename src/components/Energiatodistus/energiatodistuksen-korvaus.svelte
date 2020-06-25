@@ -19,14 +19,14 @@
 
   export let model;
   export let lens;
-  export let initialEnergiatodistusId = Maybe.None();
+  export let initialKorvattavaId = Maybe.None();
 
   let cancel = () => {};
   let completedValue = '';
   let overlay = false;
 
-  let korvattavaEnergiatodistusId = Maybe.isSome(initialEnergiatodistusId)
-    ? initialEnergiatodistusId
+  let korvattavaEnergiatodistusId = Maybe.isSome(initialKorvattavaId)
+    ? initialKorvattavaId
     : Maybe.None();
   let korvattavaEnergiatodistus = Maybe.None();
 
