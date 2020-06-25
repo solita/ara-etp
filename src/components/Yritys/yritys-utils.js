@@ -29,6 +29,7 @@ export const emptyYritys = () => ({
   postinumero: '',
   postitoimipaikka: '',
   maa: '',
+  laskutuskieli: Maybe.None(),
   verkkolaskuosoite: Maybe.None()
 });
 

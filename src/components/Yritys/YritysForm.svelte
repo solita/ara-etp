@@ -2,20 +2,22 @@
   import * as R from 'ramda';
 
   import { locale, _ } from '@Language/i18n';
-  import * as locales from '@Language/locale-utils';
+  import * as LocaleUtils from '@Language/locale-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
-  import * as Fetch from '@Utility/fetch-utils';
   import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Component/Geo/country-utils';
 
   import Autocomplete from '../Autocomplete/Autocomplete';
+  import Select from '@Component/Select/Select';
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
+
+  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
 
   import { countryStore, flashMessageStore } from '@/stores';
 
@@ -28,8 +30,18 @@
 
   export let disabled = false;
 
+  export let luokittelut = Maybe.None();
+
+  $: Future.fork(
+    flashMessageStore.add('Yritys', 'error'),
+    ([laskutuskielet]) => luokittelut = Maybe.Some({laskutuskielet: laskutuskielet}),
+    Future.parallel(1,[laskutusApi.laskutuskielet])
+  );
+
   const formParsers = YritysUtils.formParsers();
   const formSchema = YritysUtils.formSchema();
+
+  $: labelLocale = LocaleUtils.label($locale);
 
   const parseCountry = R.compose(
     R.map(R.prop('id')),
@@ -41,7 +53,7 @@
 
   $: formatCountry = R.compose(
     Either.orSome(''),
-    R.map(locales.label($locale)),
+    R.map(LocaleUtils.label($locale)),
     R.chain(Maybe.toEither('')),
     R.map(R.__, $countryStore),
     country.findCountryById
@@ -49,9 +61,20 @@
 
   $: countryNames = Either.foldRight(
     [],
-    R.map(locales.label($locale)),
+    R.map(LocaleUtils.label($locale)),
     $countryStore
   );
+
+  $: laskutuskieletIds = R.map(R.compose(R.pluck('id'), R.prop('laskutuskielet')), luokittelut);
+
+  $: formatLaskutuskieli = id => R.compose(
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    R.chain(Maybe.findById(id)),
+    R.map(R.prop('laskutuskielet'))
+  )(luokittelut);
+
+  $: parseLaskutuskieli = R.identity;
 
   const isValidForm = R.compose(
     R.all(Either.isRight),
@@ -163,6 +186,18 @@
               search={true}
               i18n={$_} />
           </Autocomplete>
+        </div>
+      </div>
+      <div class="flex lg:flex-row flex-col py-4 -mx-4">
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Select
+            label={$_('yritys.laskutuskieli')}
+            format={formatLaskutuskieli}
+            parse={parseLaskutuskieli}
+            bind:model={yritys}
+            lens={R.lensProp('laskutuskieli')}
+            allowNone={false}
+            items={laskutuskieletIds.orSome([])} />
         </div>
       </div>
     </div>
