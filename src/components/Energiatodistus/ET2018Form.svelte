@@ -72,7 +72,8 @@
   <H2 text={$_('energiatodistus.korvaavuus.header')} />
   <EnergiatodistuksenKorvaus
     bind:model={energiatodistus}
-    lens={R.lensProp('korvattu-energiatodistus-id')} />
+    lens={R.lensProp('korvattu-energiatodistus-id')}
+    initialKorvattavaId={energiatodistus['korvattu-energiatodistus-id']} />
 
   <HR />
 

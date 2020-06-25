@@ -142,7 +142,8 @@
       "nettoala": "Nettoala",
       "nimi": "Rakennuksen nimi",
       "osoite": "Osoite",
-      "laatija": "Laatija"
+      "laatija": "Laatija",
+      "invalid-korvaus": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta, Tarkista korvattava energiatodistus."
     },
     "tila": {
       "draft": "Luonnos",
