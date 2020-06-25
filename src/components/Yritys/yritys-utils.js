@@ -12,14 +12,16 @@ export const urlForYritysId = id => `${yritysApi}/${id}`;
 export const deserialize = R.evolve({
   'vastaanottajan-tarkenne': Maybe.fromNull,
   maa: Either.Right,
-  verkkolaskuosoite: Maybe.fromNull
+  verkkolaskuosoite: Maybe.fromNull,
+  verkkolaskuoperaattori: Maybe.fromNull
 });
 
 export const serialize = R.compose(
   R.evolve({
     'vastaanottajan-tarkenne': Maybe.orSome(null),
     maa: Either.right,
-    verkkolaskuosoite: Maybe.getOrElse(null)
+    verkkolaskuosoite: Maybe.orSome(null),
+    verkkolaskuoperaattori: Maybe.orSome(null),
   }),
   R.dissoc('id')
 );
@@ -33,7 +35,8 @@ export const emptyYritys = () => ({
   postitoimipaikka: '',
   maa: '',
   laskutuskieli: Maybe.None(),
-  verkkolaskuosoite: Maybe.None()
+  verkkolaskuosoite: Maybe.None(),
+  verkkolaskuoperaattori: Maybe.None()
 });
 
 export const formSchema = () => ({
@@ -55,7 +58,8 @@ export const formSchema = () => ({
     validation.maxLengthConstraint(200)
   ],
   maa: [],
-  verkkolaskuosoite: []
+  verkkolaskuosoite: [],
+  verkkolaskuoperaattori: [],
 });
 
 export const formParsers = () => ({
@@ -66,7 +70,8 @@ export const formParsers = () => ({
   postinumero: R.trim,
   postitoimipaikka: R.trim,
   maa: R.trim,
-  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim)
+  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim),
+  verkkolaskuoperaattori: R.compose(Maybe.fromEmpty, R.trim)
 });
 
 export const getYritysByIdFuture = R.curry((fetch, id) =>

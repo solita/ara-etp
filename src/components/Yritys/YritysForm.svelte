@@ -34,8 +34,10 @@
 
   $: Future.fork(
     flashMessageStore.add('Yritys', 'error'),
-    ([laskutuskielet]) => luokittelut = Maybe.Some({laskutuskielet: laskutuskielet}),
-    Future.parallel(1,[laskutusApi.laskutuskielet])
+    ([laskutuskielet, verkkolaskuoperaattorit]) =>
+      luokittelut = Maybe.Some({laskutuskielet: laskutuskielet,
+                               verkkolaskuoperaattorit: verkkolaskuoperaattorit}),
+    Future.parallel(2,[laskutusApi.laskutuskielet, laskutusApi.verkkolaskuoperaattorit])
   );
 
   const formParsers = YritysUtils.formParsers();
@@ -75,6 +77,17 @@
   )(luokittelut);
 
   $: parseLaskutuskieli = R.identity;
+
+  $: verkkolaskuoperaattoritIds = R.map(R.compose(R.pluck('id'), R.prop('verkkolaskuoperaattorit')), luokittelut);
+
+  $: formatVerkkolaskuoperaattori = id => R.compose(
+    Maybe.orSome(''),
+    R.map(vlo => vlo.nimi + ' - ' + vlo.valittajatunnus),
+    R.chain(Maybe.findById(id)),
+    R.map(R.prop('verkkolaskuoperaattorit'))
+  )(luokittelut);
+
+  $: parseVerkkolaskuoperaattori = Maybe.fromNull;
 
   const isValidForm = R.compose(
     R.all(Either.isRight),
@@ -233,6 +246,19 @@
         format={Maybe.orSome('')}
         parse={formParsers.verkkolaskuosoite}
         i18n={$_} />
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Select
+          label={$_('yritys.verkkolaskuoperaattori')}
+          required={false}
+          format={formatVerkkolaskuoperaattori}
+          parse={parseVerkkolaskuoperaattori}
+          bind:model={yritys}
+          lens={R.lensProp('verkkolaskuoperaattori')}
+          allowNone={true}
+          items={verkkolaskuoperaattoritIds.orSome([])} />
+      </div>
     </div>
   </div>
   <div class="flex -mx-4 mt-20">
