@@ -7,6 +7,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Fetch from '@Utility/fetch-utils';
+  import * as EtUtils from './energiatodistus-utils';
   import EnergiatodistusForm from './EnergiatodistusForm';
 
   import * as et from './energiatodistus-utils';
@@ -85,11 +86,8 @@
     params.id
   } - ${tilaLabel(energiatodistus)}`;
 
-  $: disabled = Maybe.exists(
-    R.compose(
-      Maybe.isSome,
-      R.prop('allekirjoitusaika')
-    ),
+  $: disabled = !Maybe.exists(
+    R.propEq('tila-id', R.tap(console.log, EtUtils.tila.draft)),
     energiatodistus
   );
 </script>

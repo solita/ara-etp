@@ -187,11 +187,7 @@ export const muutOstoenergiat = R.compose(
   R.map(unnestValidation),
   R.map(R.prop('ostoenergia')),
   R.defaultTo([]),
-  R.path([
-    'tulokset',
-    'kaytettavat-energiamuodot',
-    'muu'
-  ])
+  R.path(['tulokset', 'kaytettavat-energiamuodot', 'muu'])
 );
 
 export const muutEnergiamuotokertoimet = R.compose(
@@ -199,11 +195,7 @@ export const muutEnergiamuotokertoimet = R.compose(
   R.map(unnestValidation),
   R.map(R.prop('muotokerroin')),
   R.defaultTo([]),
-  R.path([
-    'tulokset',
-    'kaytettavat-energiamuodot',
-    'muu'
-  ])
+  R.path(['tulokset', 'kaytettavat-energiamuodot', 'muu'])
 );
 
 export const multiplyWithKerroin = R.curry((kerroin, ostoenergiamaara) =>
@@ -221,9 +213,11 @@ export const perLammitettyNettoala = R.curry((energiatodistus, values) =>
 export const energiaPerLammitettyNettoala = energiaPath =>
   R.compose(
     R.map(fxmath.round(1)),
-    R.converge(R.lift(R.divide),
-      [energiatodistusPath(energiaPath),
-       energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])]));
+    R.converge(R.lift(R.divide), [
+      energiatodistusPath(energiaPath),
+      energiatodistusPath(['lahtotiedot', 'lammitetty-nettoala'])
+    ])
+  );
 
 const fieldsWithUusiutuvaOmavaraisenergia = [
   'aurinkosahko',
@@ -354,5 +348,7 @@ const tilat = [
   'replaced',
   'deleted'
 ];
+
+export const tila = R.invertObj(tilat);
 
 export const tilaKey = id => tilat[id];
