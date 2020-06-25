@@ -10,12 +10,14 @@ const yritysApi = `/api/private/yritykset`;
 export const urlForYritysId = id => `${yritysApi}/${id}`;
 
 export const deserialize = R.evolve({
+  'vastaanottajan-tarkenne': Maybe.fromNull,
   maa: Either.Right,
   verkkolaskuosoite: Maybe.fromNull
 });
 
 export const serialize = R.compose(
   R.evolve({
+    'vastaanottajan-tarkenne': Maybe.orSome(null),
     maa: Either.right,
     verkkolaskuosoite: Maybe.getOrElse(null)
   }),
@@ -25,6 +27,7 @@ export const serialize = R.compose(
 export const emptyYritys = () => ({
   ytunnus: '',
   nimi: '',
+  'vastaanottajan-tarkenne': Maybe.None(),
   jakeluosoite: '',
   postinumero: '',
   postitoimipaikka: '',
@@ -40,6 +43,10 @@ export const formSchema = () => ({
     validation.minLengthConstraint(2),
     validation.maxLengthConstraint(200)
   ],
+  'vastaanottajan-tarkenne': R.map(validation.liftValidator, [
+    validation.isRequired,
+    validation.minLengthConstraint(2),
+    validation.maxLengthConstraint(200)]),
   jakeluosoite: [validation.isRequired],
   postinumero: [validation.isRequired, validation.postinumeroValidator],
   postitoimipaikka: [
@@ -54,6 +61,7 @@ export const formSchema = () => ({
 export const formParsers = () => ({
   ytunnus: R.trim,
   nimi: R.trim,
+  'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,

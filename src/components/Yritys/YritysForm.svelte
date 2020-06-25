@@ -135,6 +135,22 @@
       <div class="py-4">
         <Input
           {disabled}
+          id={'vastaanottajan-tarkenne'}
+          name={'vastaanottajan-tarkenne'}
+          label={$_('yritys.vastaanottajan-tarkenne')}
+          required={false}
+          bind:model={yritys}
+          lens={R.lensProp('vastaanottajan-tarkenne')}
+          format={Maybe.orSome('')}
+          parse={formParsers['vastaanottajan-tarkenne']}
+          validators={formSchema['vastaanottajan-tarkenne']}
+          i18n={$_} />
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <div class="py-4">
+        <Input
+          {disabled}
           id={'jakeluosoite'}
           name={'jakeluosoite'}
           label={$_('yritys.jakeluosoite')}
