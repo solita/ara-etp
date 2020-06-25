@@ -56,6 +56,8 @@
 
   $: patevyydetIds = R.pluck('id', luokittelut.patevyydet);
 
+  $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
+
   $: formatPatevyys = R.compose(
     Maybe.orSome(''),
     Maybe.map(labelLocale),
@@ -77,6 +79,14 @@
     ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue),
     laatija
   );
+
+  $: formatLaskutuskieli = R.compose(
+    Maybe.orSome(''),
+    Maybe.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.laskutuskielet)
+  );
+
+  $: parseLaskutuskieli = R.identity;
 
   const isValidForm = R.compose(
     R.all(Either.isRight),
@@ -180,6 +190,21 @@
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:py-0 w-full px-4 py-4">
         <Input
+          id={'vastaanottajan-tarkenne'}
+          name={'vastaanottajan-tarkenne'}
+          label={$_('laatija.vastaanottajan-tarkenne')}
+          required={false}
+          bind:model={laatija}
+          lens={R.lensProp('vastaanottajan-tarkenne')}
+          format={Maybe.orSome('')}
+          parse={formParsers['vastaanottajan-tarkenne']}
+          validators={formSchema['vastaanottajan-tarkenne']}
+          i18n={$_} />
+      </div>
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+      <div class="lg:py-0 w-full px-4 py-4">
+        <Input
           id={'katuosoite'}
           name={'katuosoite'}
           label={$_('laatija.katuosoite')}
@@ -231,6 +256,18 @@
             handleSubmit={false}
             i18n={$_} />
         </Autocomplete>
+      </div>
+    </div>
+    <div class="flex lg:flex-row flex-col py-4 -mx-4">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Select
+          label={$_('laatija.laskutuskieli')}
+          format={formatLaskutuskieli}
+          parse={parseLaskutuskieli}
+          bind:model={laatija}
+          lens={R.lensProp('laskutuskieli')}
+          allowNone={false}
+          items={laskutuskieletIds} />
       </div>
     </div>
   </div>
