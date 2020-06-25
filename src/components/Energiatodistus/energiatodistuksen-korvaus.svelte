@@ -98,7 +98,31 @@
   )(completedValue);
 
   $: fetchEnergiatodistus(korvattavaEnergiatodistusId);
+
+  const postinumeroLens = R.lensPath(['perustiedot', 'postinumero']);
+  const ktlLens = R.lensPath(['perustiedot', 'kayttotarkoitus']);
+
+  $: valid =
+    R.compose(
+      R.equals(R.view(postinumeroLens, model)),
+      R.chain(R.view(postinumeroLens))
+    )(korvattavaEnergiatodistus) &&
+    R.compose(
+      R.equals(R.view(ktlLens, model)),
+      R.chain(R.view(ktlLens))
+    )(korvattavaEnergiatodistus);
 </script>
+
+<style type="text/postcss">
+  .error-label {
+    @apply absolute top-auto;
+    font-size: smaller;
+  }
+
+  .error-icon {
+    @apply text-error;
+  }
+</style>
 
 <Checkbox label={'Korvaa todistuksen'} bind:model={checked} />
 
@@ -183,6 +207,12 @@
                 </tr>
               </tbody>
             </table>
+            {#if !valid}
+              <div class="error-label">
+                <span class="font-icon error-icon">error</span>
+                {$_('energiatodistus.korvaavuus.invalid-korvaus')}
+              </div>
+            {/if}
           </div>
           <div slot="overlay-content">
             <Spinner />
