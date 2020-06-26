@@ -5,6 +5,7 @@
   export let labelLens;
   export let leafsLens;
   export let margin = 1.5;
+  export let onclick = () => {};
 
   $: label = R.view(labelLens, item);
   $: leafs = R.defaultTo([], R.view(leafsLens, item));
@@ -48,7 +49,12 @@
 {#if leafs.length > 0}
   <li class="subitem">
     {#each leafs as leaf}
-      <svelte:self margin={margin + 0.5} {labelLens} {leafsLens} item={leaf} />
+      <svelte:self
+        {onclick}
+        margin={margin + 0.5}
+        {labelLens}
+        {leafsLens}
+        item={leaf} />
     {/each}
   </li>
 {/if}

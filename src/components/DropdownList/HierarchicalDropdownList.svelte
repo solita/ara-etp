@@ -5,6 +5,7 @@
   export let items;
   export let labelLens;
   export let leafsLens;
+  export let onclick = () => {};
 </script>
 
 <style>
@@ -49,6 +50,6 @@
 <!-- purgecss: active -->
 <ol transition:slide|local={{ duration: 200 }}>
   {#each items as item}
-    <HierarchicalNode {item} {labelLens} {leafsLens} />
+    <HierarchicalNode {onclick} {item} {labelLens} {leafsLens} />
   {/each}
 </ol>
