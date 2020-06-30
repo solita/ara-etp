@@ -33,7 +33,10 @@
   ) {
     energiatodistus = R.set(
       R.lensPath(['perustiedot', 'kayttotarkoitus']),
-      et.findAlakayttotarkoitusluokkaId(kayttotarkoitusluokkaId, alakayttotarkoitusluokat),
+      et.findAlakayttotarkoitusluokkaId(
+        kayttotarkoitusluokkaId,
+        alakayttotarkoitusluokat
+      ),
       energiatodistus
     );
   } else if (energiatodistus.perustiedot.kayttotarkoitus.isSome()) {
@@ -105,7 +108,7 @@
 <div class="flex lg:flex-row flex-col -mx-4 my-4">
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
-      {disabled}
+      disabled={false}
       {schema}
       {center}
       bind:model={energiatodistus}

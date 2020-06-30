@@ -7,6 +7,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Fetch from '@Utility/fetch-utils';
+  import * as EtUtils from './energiatodistus-utils';
   import EnergiatodistusForm from './EnergiatodistusForm';
 
   import * as et from './energiatodistus-utils';
@@ -77,10 +78,18 @@
   )(params.version, params.id);
 
   const tilaLabel = R.compose(
-      Maybe.orSome($_('energiatodistus.tila.loading')),
-      R.map(e => $_('energiatodistus.tila.' + et.tilaKey(e['tila-id']))));
+    Maybe.orSome($_('energiatodistus.tila.loading')),
+    R.map(e => $_('energiatodistus.tila.' + et.tilaKey(e['tila-id'])))
+  );
 
-  $: title = `${$_('energiatodistus.title')} ${params.version}/${params.id} - ${tilaLabel(energiatodistus)}`;
+  $: title = `${$_('energiatodistus.title')} ${params.version}/${
+    params.id
+  } - ${tilaLabel(energiatodistus)}`;
+
+  $: disabled = !Maybe.exists(
+    R.propEq('tila-id', R.tap(console.log, EtUtils.tila.draft)),
+    energiatodistus
+  );
 </script>
 
 <Overlay {overlay}>
