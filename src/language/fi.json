@@ -62,6 +62,7 @@
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
     "laskutuskieli": "Laskun kieli",
+    "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "verkkolaskuosoite",
     "ovt-tunnus": "OVT-tunnus",
     "messages": {
