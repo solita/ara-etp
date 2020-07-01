@@ -1,8 +1,5 @@
 <script>
-  import * as R from 'ramda';
-
-  import InputContainer from './InputContainer';
-  import SimpleInput from './SimpleInput';
+  import Label from '@Component/Label/Label';
 
   export let id;
   export let name;
@@ -16,14 +13,15 @@
   export let compact = false;
   export let center = false;
 
-  export let model = { empty: '' };
-  export let lens = R.lensProp('empty');
+  export let viewValue;
+  export let rawValue = '';
 
-  export let parse = R.identity;
-  export let format = R.identity;
-  export let validators = [];
+  export let rawValueAsViewValue = false;
 
-  export let i18n;
+  export let valid = true;
+  let focused = false;
+
+  $: rawValueAsViewValue && (viewValue = rawValue);
 </script>
 
 <style type="text/postcss">
@@ -116,35 +114,32 @@
   }
 </style>
 
-<InputContainer
-  {lens}
-  bind:model
-  {i18n}
-  {parse}
-  {format}
-  {validators}
-  on:keydown
-  let:viewValue
-  let:errorMessage
-  let:valid>
-  <SimpleInput
+<!-- purgecss: center error caret search focused disabled-->
+
+<Label {id} {required} {label} {compact} error={focused && !valid} {focused} />
+<div
+  class="inputwrapper"
+  class:caret
+  class:search
+  class:focused
+  class:error={focused && !valid}
+  class:disabled>
+  <input
     {id}
     {name}
-    {label}
-    {caret}
-    {search}
-    {required}
-    {autocomplete}
     {disabled}
-    {compact}
-    {center}
-    {viewValue}
-    {valid} />
-
-  {#if !valid}
-    <div class="error-label">
-      <span class="font-icon error-icon">error</span>
-      {errorMessage}
-    </div>
-  {/if}
-</InputContainer>
+    class="input"
+    class:center
+    class:error={focused && !valid}
+    type="text"
+    {autocomplete}
+    value={viewValue}
+    on:focus={event => {
+      focused = true;
+    }}
+    on:blur={event => {
+      focused = false;
+    }}
+    on:input={event => (rawValue = event.target.value)}
+    on:input />
+</div>
