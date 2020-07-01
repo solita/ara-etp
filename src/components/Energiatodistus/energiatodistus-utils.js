@@ -349,6 +349,6 @@ const tilat = [
   'deleted'
 ];
 
-export const tila = R.invertObj(tilat);
+export const tila = R.compose(R.map(parseInt), R.invertObj)(tilat);
 
 export const tilaKey = id => tilat[id];
