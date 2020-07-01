@@ -1,5 +1,7 @@
 <script>
   import Label from '@Component/Label/Label';
+  import SquareInputWrapper from './SquareInputWrapper';
+  import InputField from './InputField';
 
   export let id;
   export let name;
@@ -19,9 +21,15 @@
   export let rawValueAsViewValue = false;
 
   export let valid = true;
+
+  export let wrapper = SquareInputWrapper;
+
+  let error = false;
   let focused = false;
 
   $: rawValueAsViewValue && (viewValue = rawValue);
+
+  $: error = focused && !valid;
 </script>
 
 <style type="text/postcss">
@@ -43,103 +51,21 @@
   label.focused::before {
     @apply font-bold;
   }
-
-  .inputwrapper {
-    @apply flex relative items-center border-b-3 border-disabled text-dark;
-  }
-
-  .inputwrapper:hover {
-    @apply border-hover;
-  }
-
-  .inputwrapper.caret::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
-    right: 0.5em;
-    content: 'expand_more';
-  }
-
-  .inputwrapper.search::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
-    right: 0.5em;
-    content: 'search';
-  }
-
-  .inputwrapper.focused {
-    @apply border-primary;
-  }
-
-  .inputwrapper.focused::after {
-    @apply text-primary;
-  }
-
-  .inputwrapper.error {
-    @apply border-error;
-  }
-
-  .inputwrapper.error::after {
-    @apply text-error;
-  }
-
-  .inputwrapper.disabled {
-    @apply border-0 pb-3;
-  }
-
-  input {
-    @apply w-full relative font-medium py-1;
-  }
-
-  input.center {
-    @apply text-center;
-  }
-
-  input:focus {
-    @apply outline-none;
-  }
-
-  input:hover {
-    @apply bg-background;
-  }
-
-  input:disabled {
-    @apply bg-light;
-  }
-
-  .error-label {
-    @apply absolute top-auto;
-    font-size: smaller;
-  }
-
-  .error-icon {
-    @apply text-error;
-  }
 </style>
 
 <!-- purgecss: center error caret search focused disabled-->
 
-<Label {id} {required} {label} {compact} error={focused && !valid} {focused} />
-<div
-  class="inputwrapper"
-  class:caret
-  class:search
-  class:focused
-  class:error={focused && !valid}
-  class:disabled>
-  <input
+<Label {id} {required} {label} {compact} {error} {focused} />
+<svelte:component this={wrapper} {caret} {search} {focused} {error} {disabled}>
+  <InputField
     {id}
     {name}
     {disabled}
-    class="input"
-    class:center
-    class:error={focused && !valid}
-    type="text"
+    {center}
+    {error}
     {autocomplete}
-    value={viewValue}
-    on:focus={event => {
-      focused = true;
-    }}
-    on:blur={event => {
-      focused = false;
-    }}
-    on:input={event => (rawValue = event.target.value)}
+    {viewValue}
+    bind:rawValue
+    bind:focused
     on:input />
-</div>
+</svelte:component>
