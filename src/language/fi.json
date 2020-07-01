@@ -95,6 +95,7 @@
     }
   },
   "laatija": {
+    "laatija": "Laatija",
     "lisaa-laatijat": "Lisää laatijat",
     "henkilotunnus": "Henkilötunnus",
     "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
@@ -131,6 +132,17 @@
         "attach-failed": "Liittäminen yritykseen epäonnistui",
         "detach-failed": "Laatijan poistaminen yrityksestä epäonnistui"
       }
+    }
+  },
+  "laatijahaku": {
+    "title": "Laatijahaku",
+    "results": "Tuloksia {count} KPL",
+    "kaikki": "Kaikki",
+    "voimassaolo": "Voimassaolo",
+    "tila": "Tila",
+    "tilat": {
+      "0": "Pätevyys voimassa",
+      "1": "Pätevyys vanhentunut"
     }
   },
   "energiatodistus": {
@@ -749,5 +761,8 @@
   "country-not-found": "Virheellinen maa",
   "table": {
     "actions": "Toiminnot"
+  },
+  "pagination": {
+    "results": "Tuloksia {from}...{to} / {total}"
   }
 }

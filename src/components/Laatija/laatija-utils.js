@@ -209,3 +209,12 @@ export const rowValid = R.compose(
   R.values,
   R.evolve(validate)
 );
+
+export const formatVoimassaoloaika = toteamispaivamaara =>
+  `${dfns.format(
+    dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0),
+    'd.M.yyyy'
+  )} - ${dfns.format(
+    dfns.add(dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0), { years: 7 }),
+    'd.M.yyyy'
+  )}`;

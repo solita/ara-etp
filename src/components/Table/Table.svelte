@@ -6,15 +6,26 @@
   export let fields = [];
   export let tablecontents = [];
   export let validate = {};
-  export let pageCount = 0;
-  export let pageNum = 0;
+  export let pageCount = 1;
+  export let pageNum = 1;
+  export let onRowClick;
+  export let nextPageCallback;
+  export let itemsPerPage = 1;
+
+  $: pageContent = R.compose(
+    R.take(itemsPerPage),
+    R.drop(R.multiply(R.dec(pageNum), itemsPerPage))
+  )(tablecontents);
 </script>
 
 <style type="text/postcss">
   .tablecontainer {
-    @apply flex flex-col items-center;
+    @apply flex items-center overflow-x-auto;
   }
 
+  .pagination {
+    @apply flex justify-center;
+  }
   .pagination:not(empty) {
     @apply mt-4;
   }
@@ -38,8 +49,11 @@
       </tr>
     </thead>
     <tbody class="etp-table--tbody">
-      {#each tablecontents as row, index}
-        <tr class="etp-table--tr">
+      {#each pageContent as row, index}
+        <tr
+          class="etp-table--tr"
+          on:click={_ => R.when(R.complement(R.isNil), R.applyTo(row))(onRowClick)}
+          class:etp-table--tr__link={R.complement(R.isNil)(onRowClick)}>
           {#each fields as field}
             <td class="etp-table--td">
               {#if R.equals(field.type, 'action')}
@@ -47,10 +61,16 @@
                   this={TableColumnAction}
                   actions={field.actions}
                   {index} />
+              {:else if R.equals(field.type, 'action-with-template')}
+                <svelte:component
+                  this={TableColumnAction}
+                  actions={R.map(field.actionTemplate, R.prop(field.id, row))}
+                  {index} />
               {:else}
                 <svelte:component
                   this={TableColumnValidation}
                   value={R.prop(field.id, row)}
+                  format={field.format}
                   validation={R.prop(field.id, validate)}
                   component={field.component} />
               {/if}
@@ -60,10 +80,14 @@
       {/each}
     </tbody>
   </table>
-
-  {#if R.gt(pageCount, 1)}
-    <div class="pagination">
-      <Pagination {pageCount} {pageNum} />
-    </div>
-  {/if}
 </div>
+{#if R.gt(pageCount, 1)}
+  <div class="pagination">
+    <Pagination
+      {pageCount}
+      {pageNum}
+      {nextPageCallback}
+      {itemsPerPage}
+      itemsCount={R.length(tablecontents)} />
+  </div>
+{/if}
