@@ -14,6 +14,7 @@
   import Link from '@Component/Link/Link';
   import Select from '@Component/Select/Select';
   import Confirm from '@Component/Confirm/Confirm';
+  import EnergiatodistusHaku from './energiatodistus-haku';
 
   let overlay = true;
   let failure = false;
@@ -95,6 +96,7 @@
 
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
+  <EnergiatodistusHaku />
   <Overlay {overlay}>
     <div slot="content">
       <div class="lg:w-1/3 w-full mb-6">

@@ -149,6 +149,24 @@
   },
   "energiatodistus": {
     "title": "Energiatodistus",
+    "haku": {
+      "and": "Ja",
+      "or": "Tai",
+      "suosikkihaut": "Suosikkihaut",
+      "perustiedot": "Nimi",
+      "rakennustunnus": "Pysyvä rakennustunnus",
+      "kiinteistotunnus": "Kiinteistötunnus",
+      "katuosoite-fi": "Katuosoite suomeksi",
+      "katuosoite-sv": "Katuosoite ruotsiksi",
+      "postinumero": "Postinumero",
+      "onko-julkinen-rakennus": "Julkinen rakennus",
+      "uudisrakennus": "Uudisrakennus",
+      "laatimisvaihe": "Laatimisvaihe",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä",
+      "valmistumisvuosi": "Valmistumisvuosi",
+      "rakennusluokka": "Käyttötarkoitusluokka",
+      "rakennuksen-kayttotarkoitusluokka": "Rakennuksen käyttötarkoitusluokka"
+    },
     "kaikki": "Kaikki",
     "korvaavuus": {
       "header": "Energiatodistuksen korvaavuus",
