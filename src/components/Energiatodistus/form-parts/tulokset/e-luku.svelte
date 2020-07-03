@@ -20,7 +20,7 @@
       name="energiatodistus.e-luku"
       label={$_('energiatodistus.e-luku')}
       disabled={true}
-      model={R.compose( Maybe.orSome(''), R.map(formats.numberFormat) )(eLuku)}
+      model={R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )) )(eLuku)}
       lens={R.lens(R.identity, R.identity)}
       i18n={$_} />
   </div>
