@@ -87,7 +87,7 @@
   } - ${tilaLabel(energiatodistus)}`;
 
   $: disabled = !Maybe.exists(
-    R.propEq('tila-id', R.tap(console.log, EtUtils.tila.draft)),
+    R.propEq('tila-id', EtUtils.tila.draft),
     energiatodistus
   );
 </script>
