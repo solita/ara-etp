@@ -68,6 +68,6 @@
     "svelte-i18n": "^3.0.1",
     "svelte-spa-router": "^2.0.1",
     "whatwg-fetch": "^3.0.0",
-    "qs": "^6.9.4"
+    "uuid": "^8.2.0"
   }
 }
