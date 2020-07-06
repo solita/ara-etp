@@ -6,10 +6,14 @@
   import { v4 as uuidv4 } from 'uuid';
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import Button from '@Component/Button/Button';
 
   import QueryBlock from './queryblock';
 
   export let where;
+  export let navigate;
+
+  console.log(where);
 
   const firstConjunctionLens = R.compose(
     R.lensIndex(0),
@@ -37,6 +41,22 @@
       ])
     )
   )(where);
+
+  $: formatedWhere = R.compose(
+    JSON.stringify,
+    R.reduce(
+      (acc, { conjunction, block }) => {
+        if (Maybe.exists(R.equals('or'), conjunction)) {
+          return R.append([block], acc);
+        }
+
+        const lastLens = R.lensIndex(R.length(acc) - 1);
+
+        return R.over(lastLens, R.append(block), acc);
+      },
+      [[]]
+    )
+  )(parsedWhere);
 </script>
 
 <style>
@@ -55,4 +75,6 @@
       </span>
     </div>
   {/each}
+
+  <Button text={'Hae'} on:click={() => navigate(formatedWhere)} />
 </div>

@@ -22,7 +22,7 @@
 
   const valittuHaku = Maybe.None();
 
-  let where = R.compose(
+  $: where = R.compose(
     Maybe.orSome([]),
     R.map(JSON.parse),
     Maybe.fromNull,
@@ -30,7 +30,18 @@
     qs.parse
   )($querystring);
 
-  let showHakukriteerit = where.length > 0;
+  $: showHakukriteerit = where.length > 0;
+
+  $: console.log($location, $querystring);
+
+  $: navigate = where =>
+    R.compose(
+      push,
+      R.tap(console.log),
+      R.concat(`${$location}?`),
+      params => qs.stringify(params, { encode: false }),
+      R.mergeRight(qs.parse($querystring))
+    )({ where });
 </script>
 
 <style>
@@ -64,6 +75,6 @@
 
 {#if showHakukriteerit}
   <div transition:slide|local={{ duration: 200 }} class="flex w-full">
-    <QueryBuilder bind:where />
+    <QueryBuilder bind:where {navigate} />
   </div>
 {/if}
