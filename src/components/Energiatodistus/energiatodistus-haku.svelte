@@ -32,12 +32,9 @@
 
   $: showHakukriteerit = where.length > 0;
 
-  $: console.log($location, $querystring);
-
   $: navigate = where =>
     R.compose(
       push,
-      R.tap(console.log),
       R.concat(`${$location}?`),
       params => qs.stringify(params, { encode: false }),
       R.mergeRight(qs.parse($querystring))

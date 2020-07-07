@@ -1,3 +1,5 @@
+import * as Maybe from '@Utility/maybe-utils';
+
 const gt = { label: '>', command: (first, second) => `> ${first} ${second}` };
 const gte = {
   label: '>=',
@@ -47,3 +49,5 @@ export const perustiedot = () => ({
     []
   )
 });
+
+export let defaultKriteeri = () => ['=', 'perustiedot.id', ''];

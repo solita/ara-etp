@@ -7,13 +7,18 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import Button from '@Component/Button/Button';
+  import TextButton from '@Component/Button/TextButton';
+
+  import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
 
   import QueryBlock from './queryblock';
 
   export let where;
   export let navigate;
 
-  console.log(where);
+  if (!R.length(R.flatten(where))) {
+    where = [[EtHakuUtils.defaultKriteeri()]];
+  }
 
   const firstConjunctionLens = R.compose(
     R.lensIndex(0),
@@ -57,6 +62,8 @@
       [[]]
     )
   )(parsedWhere);
+
+  $: console.log(formatedWhere);
 </script>
 
 <style>
@@ -75,6 +82,21 @@
       </span>
     </div>
   {/each}
-
-  <Button text={'Hae'} on:click={() => navigate(formatedWhere)} />
+  <div>
+    <TextButton
+      text={'Lisää hakuehto'}
+      icon={'add_circle_outline'}
+      on:click={evt => (parsedWhere = R.append({ conjunction: Maybe.Some('and'), block: EtHakuUtils.defaultKriteeri(), uuid: uuidv4() }, parsedWhere))} />
+  </div>
+  <div class="flex">
+    <div class="w-1/5">
+      <Button text={'Hae'} on:click={() => navigate(formatedWhere)} />
+    </div>
+    <div class="w-1/3">
+      <Button
+        text={'Tyhjennä hakuehdot'}
+        style={'secondary'}
+        on:click={evt => (where = [[EtHakuUtils.defaultKriteeri()]])} />
+    </div>
+  </div>
 </div>

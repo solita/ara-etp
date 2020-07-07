@@ -96,7 +96,9 @@
 
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
-  <EnergiatodistusHaku />
+  <div class="mb-10">
+    <EnergiatodistusHaku />
+  </div>
   <Overlay {overlay}>
     <div slot="content">
       <div class="lg:w-1/3 w-full mb-6">
