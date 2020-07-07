@@ -73,12 +73,15 @@
 <div class="flex flex-col w-full">
   {#each parsedWhere as { conjunction, block, uuid }, index (uuid)}
     <div
+      class="flex justify-start items-end"
       transition:slide|local={{ duration: 200 }}
       animate:flip={{ duration: 200 }}>
       <QueryBlock bind:model={parsedWhere} lens={R.lensIndex(index)} />
       <span
+        class="text-primary font-icon text-2xl cursor-pointer ml-4
+        hover:text-secondary"
         on:click={_ => (parsedWhere = R.compose( R.tap(console.log), R.set(firstConjunctionLens, Maybe.None()), R.tap(console.log), R.remove(index, 1) )(parsedWhere))}>
-        X
+        delete
       </span>
     </div>
   {/each}
