@@ -153,4 +153,17 @@ describe('Validation:', () => {
       assert.equal(validation.isPaivamaara(null), false);
     });
   });
+
+  describe('Rakennustunnus validation', () => {
+    it('valid rakennustunnus', () => {
+      assert.equal(validation.isRakennustunnus('1035150826'), true);
+      assert.equal(validation.isRakennustunnus('103515074X'), true);
+      assert.equal(validation.isRakennustunnus('103515074x'), true);
+    });
+
+    it('invalid rakennustunnus', () => {
+      assert.equal(validation.isRakennustunnus('100012345A'), false);
+      assert.equal(validation.isRakennustunnus(null), false);
+    });
+  });
 });

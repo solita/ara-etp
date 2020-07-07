@@ -29,6 +29,16 @@ const DateValue = () => ({
   validators: []
 });
 
+const StringValidator = validator => ({
+  parse: parsers.optionalString,
+  format: formats.optionalString,
+  validators: [validator]
+});
+
+const Rakennustunnus = StringValidator(
+  validation.liftValidator(validation.rakennustunnusValidator)
+);
+
 const FloatPos = Float(0.0, Infinity);
 
 const AnyFloat = Float(-Infinity, Infinity);
@@ -105,7 +115,7 @@ const Yritys = {
 export const v2018 = {
   perustiedot: {
     nimi: String(50),
-    rakennustunnus: String(200),
+    rakennustunnus: Rakennustunnus,
     kiinteistotunnus: String(50),
     rakennusosa: String(100),
     'katuosoite-fi': String(100),
@@ -263,16 +273,18 @@ const MuuEnergia = {
   vuosikulutus: FloatPos
 };
 
-export const v2013 =
-  R.compose(
-    R.assocPath(
-      ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
-      R.repeat(MuuEnergiamuoto, 3)),
-    R.assocPath(
-      ['tulokset', 'uusiutuvat-omavaraisenergiat'],
-      R.repeat(MuuEnergia, 5)),
-    R.assocPath(
-      ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'],
-      R.repeat(MuuEnergia, 5)),
-    R.dissocPath(['perustiedot', 'laatimisvaihe']))
-  (v2018);
+export const v2013 = R.compose(
+  R.assocPath(
+    ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
+    R.repeat(MuuEnergiamuoto, 3)
+  ),
+  R.assocPath(
+    ['tulokset', 'uusiutuvat-omavaraisenergiat'],
+    R.repeat(MuuEnergia, 5)
+  ),
+  R.assocPath(
+    ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'],
+    R.repeat(MuuEnergia, 5)
+  ),
+  R.dissocPath(['perustiedot', 'laatimisvaihe'])
+)(v2018);
