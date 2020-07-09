@@ -14,8 +14,6 @@
 
   import { _ } from '@Language/i18n';
 
-  const hakuKriteerit = EtHakuUtils.perustiedot();
-
   let valitutKriteerit = [];
 
   let hakuValue = '';
@@ -23,8 +21,7 @@
   const valittuHaku = Maybe.None();
 
   $: where = R.compose(
-    Maybe.orSome([]),
-    R.map(JSON.parse),
+    Maybe.orSome(''),
     Maybe.fromNull,
     R.prop('where'),
     qs.parse
@@ -46,7 +43,7 @@
 </style>
 
 <div class="flex w-full">
-  <div class="w-7/12">
+  <div class="w-7/12 flex flex-col justify-end">
     <SimpleInput
       label={' '}
       wrapper={PillInputWrapper}

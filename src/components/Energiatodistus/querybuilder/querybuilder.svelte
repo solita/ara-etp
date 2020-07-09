@@ -1,9 +1,5 @@
 <script>
-  import { slide } from 'svelte/transition';
-  import { flip } from 'svelte/animate';
-
   import qs from 'qs';
-  import { v4 as uuidv4 } from 'uuid';
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import Button from '@Component/Button/Button';
@@ -25,8 +21,10 @@
     R.lensProp('conjunction')
   );
 
+  $: console.log(R.type(where), where);
+
   $: parsedWhere = R.compose(
-    R.map(([conjunction, block]) => ({ conjunction, block, uuid: uuidv4() })),
+    R.map(([conjunction, block]) => ({ conjunction, block })),
     R.over(R.lensIndex(0), R.pair(Maybe.None())),
     R.unnest,
     R.converge(R.concat, [
@@ -44,10 +42,11 @@
           R.tail
         )
       ])
-    )
+    ),
+    JSON.parse
   )(where);
 
-  $: formatedWhere = R.compose(
+  const formatWhere = R.compose(
     JSON.stringify,
     R.reduce(
       (acc, { conjunction, block }) => {
@@ -61,26 +60,17 @@
       },
       [[]]
     )
-  )(parsedWhere);
-
-  $: console.log(formatedWhere);
+  );
 </script>
 
-<style>
-  /* your styles go here */
-</style>
-
 <div class="flex flex-col w-full">
-  {#each parsedWhere as { conjunction, block, uuid }, index (uuid)}
-    <div
-      class="flex justify-start items-end"
-      transition:slide|local={{ duration: 200 }}
-      animate:flip={{ duration: 200 }}>
+  {#each parsedWhere as { conjunction, block }, index}
+    <div class="flex justify-start items-end">
       <QueryBlock bind:model={parsedWhere} lens={R.lensIndex(index)} />
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
-        on:click={_ => (parsedWhere = R.compose( R.tap(console.log), R.set(firstConjunctionLens, Maybe.None()), R.tap(console.log), R.remove(index, 1) )(parsedWhere))}>
+        on:click={_ => (where = R.compose( R.tap(console.log), formatWhere, R.tap(console.log), R.set(firstConjunctionLens, Maybe.None()), R.remove(index, 1) )(parsedWhere))}>
         delete
       </span>
     </div>
@@ -89,17 +79,24 @@
     <TextButton
       text={'Lisää hakuehto'}
       icon={'add_circle_outline'}
-      on:click={evt => (parsedWhere = R.append({ conjunction: Maybe.Some('and'), block: EtHakuUtils.defaultKriteeri(), uuid: uuidv4() }, parsedWhere))} />
+      on:click={evt => (where = R.compose( R.tap(console.log), formatWhere, R.tap(console.log), R.append(
+            {
+              conjunction: Maybe.Some('and'),
+              block: EtHakuUtils.defaultKriteeri()
+            }
+          ) )(parsedWhere))} />
   </div>
   <div class="flex">
     <div class="w-1/5">
-      <Button text={'Hae'} on:click={() => navigate(formatedWhere)} />
+      <Button
+        text={'Hae'}
+        on:click={() => navigate(formatWhere(parsedWhere))} />
     </div>
     <div class="w-1/3">
       <Button
         text={'Tyhjennä hakuehdot'}
         style={'secondary'}
-        on:click={evt => (where = [[EtHakuUtils.defaultKriteeri()]])} />
+        on:click={evt => (where = EtHakuUtils.defaultKriteeri())} />
     </div>
   </div>
 </div>

@@ -5,6 +5,8 @@
   import Select from '@Component/Select/Select';
   import { _ } from '@Language/i18n';
 
+  import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
+
   export let model;
   export let lens;
 
@@ -13,12 +15,15 @@
     R.lensProp('conjunction')
   );
 
+  const blockLens = R.compose(
+    lens,
+    R.lensProp('block')
+  );
+
   $: ({ conjunction, block } = R.view(lens, model));
+
+  const kriteeri = EtHakuUtils.idKriteeri;
 </script>
-
-<style>
-
-</style>
 
 <div class="w-10/12 flex flex-col">
   {#if Maybe.isSome(conjunction)}
@@ -44,10 +49,11 @@
         allowNone={true} />
     </div>
     <div class="flex-grow">
-      <Select
-        model={{ value: Maybe.None() }}
-        lens={R.lensProp('value')}
-        allowNone={true} />
+      <svelte:component
+        this={kriteeri.component}
+        bind:model
+        operators={kriteeri.operators}
+        lens={blockLens} />
     </div>
   </div>
 </div>
