@@ -20,6 +20,7 @@
   export let model;
   export let lens;
   export let initialKorvattavaId = Maybe.None();
+  export let disabled = false;
 
   let cancel = () => {};
   let completedValue = '';
@@ -77,10 +78,6 @@
           EtApi.getEnergiatodistusById(fetch, 'all'),
           R.tap(_ => {
             overlay = true;
-            korvattavaEnergiatodistus = R.compose(
-              R.map(R.assoc('laatija-fullname', Maybe.None())),
-              Maybe.Some
-            )(empty.energiatodistus2018());
           })
         )
       ),
@@ -124,27 +121,29 @@
   }
 </style>
 
-<Checkbox label={'Korvaa todistuksen'} bind:model={checked} />
+<Checkbox label={'Korvaa todistuksen'} bind:model={checked} {disabled} />
 
 {#if checked}
   <div
     class="flex flex-col -mx-4 mt-4"
     transition:slide|local={{ duration: 200 }}>
-    <div class="w-full lg:w-1/2 px-4 py-2">
-      <AsyncAutocomplete
-        bind:completedValue
-        createFutureFn={EtApi.signed}
-        id={'korvattavaenergiatodistus'}
-        name={'korvattavaenergiatodistus'}
-        label={'Korvattava todistus'}
-        required={true}
-        bind:model={korvattavaEnergiatodistusId}
-        lens={R.lens(R.identity, R.identity)}
-        format={Maybe.orSome('')}
-        parse={parseEt}
-        reject={Maybe.fromNull(model.id)}
-        i18n={$_} />
-    </div>
+    {#if !disabled}
+      <div class="w-full lg:w-1/2 px-4 py-2">
+        <AsyncAutocomplete
+          bind:completedValue
+          createFutureFn={EtApi.signed}
+          id={'korvattavaenergiatodistus'}
+          name={'korvattavaenergiatodistus'}
+          label={'Korvattava todistus'}
+          required={true}
+          bind:model={korvattavaEnergiatodistusId}
+          lens={R.lens(R.identity, R.identity)}
+          format={Maybe.orSome('')}
+          parse={parseEt}
+          reject={Maybe.fromNull(model.id)}
+          i18n={$_} />
+      </div>
+    {/if}
     {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
       <div
         class="w-full px-4 py-4 relative"

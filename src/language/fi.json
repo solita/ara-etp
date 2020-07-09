@@ -161,6 +161,9 @@
       "laatija": "Laatija",
       "invalid-korvaus": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta, Tarkista korvattava energiatodistus."
     },
+    "korvaava": {
+      "header": "Energiatodistuksen korvaava"
+    },
     "tila": {
       "draft": "Luonnos",
       "in-signing": "Allekirjoitus",
