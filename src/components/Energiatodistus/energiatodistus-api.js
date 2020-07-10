@@ -258,10 +258,10 @@ export const luokittelut = version =>
     alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
   });
 
-export const signed = R.curry((fetch, id) =>
+export const replaceable = R.curry((fetch, id) =>
   R.compose(
     Future.cache,
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch))
-  )(`api/private/energiatodistukset/signed?id=${id}`)
+  )(`api/private/energiatodistukset/replaceable?id=${id}`)
 );

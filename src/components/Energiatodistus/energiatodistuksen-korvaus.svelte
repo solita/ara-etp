@@ -131,7 +131,7 @@
       <div class="w-full lg:w-1/2 px-4 py-2">
         <AsyncAutocomplete
           bind:completedValue
-          createFutureFn={EtApi.signed}
+          createFutureFn={EtApi.replaceable}
           id={'korvattavaenergiatodistus'}
           name={'korvattavaenergiatodistus'}
           label={'Korvattava todistus'}
