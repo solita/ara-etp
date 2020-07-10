@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
+import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
 
 const gt = {
   label: '>',
@@ -96,8 +97,8 @@ export const perustiedot = () => ({
     'perustiedot.onko-julkinen-rakennus',
     [eq],
     eq,
-    '',
-    OperatorInput
+    'true',
+    BooleanInput
   ),
   uudisrakennus: kriteeri(
     'perustiedot.uudisrakennus',

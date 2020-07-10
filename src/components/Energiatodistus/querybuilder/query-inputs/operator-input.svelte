@@ -12,10 +12,7 @@
     lens,
     R.lensIndex(0)
   );
-  const keyLens = R.compose(
-    lens,
-    R.lensIndex(1)
-  );
+
   const paramLens = R.compose(
     lens,
     R.lensIndex(2)

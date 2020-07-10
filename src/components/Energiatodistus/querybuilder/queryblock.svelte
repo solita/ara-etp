@@ -96,7 +96,7 @@
     </div>
   {/if}
 
-  <div class="flex-grow flex">
+  <div class="flex-grow flex items-center justify-start">
     <div class="w-1/2 mr-4">
       <Select
         items={laatijaKriteerit}
