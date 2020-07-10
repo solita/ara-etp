@@ -14,29 +14,34 @@ import NotFound from '@Component/NotFound/NotFound';
 import MyInfo from '@Component/Kayttaja/MyInfo';
 import LandingPage from '@Component/Kayttaja/LandingPage';
 
-const laatijaRole = 0;
-const patevyydentoteajaRole = 1;
-const paakayttajaRole = 2;
-
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
   '/yritys': Yritys,
   '/yritys/*': Yritys,
   '/halytykset': wrap(Halytykset, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser)
+    KayttajaUtils.kayttajaHasAccessToResource(
+      [KayttajaUtils.paakayttajaRole],
+      currentUser
+    )
   ),
   '/kaytonvalvonta': wrap(Kaytonvalvonta, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser)
+    KayttajaUtils.kayttajaHasAccessToResource(
+      [KayttajaUtils.paakayttajaRole],
+      currentUser
+    )
   ),
   '/tyojono': wrap(Tyojono, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource([paakayttajaRole], currentUser)
+    KayttajaUtils.kayttajaHasAccessToResource(
+      [KayttajaUtils.paakayttajaRole],
+      currentUser
+    )
   ),
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
   '/viestit': Viestit,
   '/energiatodistus/*': wrap(Energiatodistus, _ =>
     KayttajaUtils.kayttajaHasAccessToResource(
-      [laatijaRole, paakayttajaRole],
+      [KayttajaUtils.laatijaRole, KayttajaUtils.paakayttajaRole],
       currentUser
     )
   ),
