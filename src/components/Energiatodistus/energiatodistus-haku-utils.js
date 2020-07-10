@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
 import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
+import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date-input';
 
 const gt = {
   label: '>',
@@ -64,7 +65,13 @@ export const idKriteeri = kriteeri(
   OperatorInput
 );
 
-// const allekirjoitusaikaKriteeri = kriteeri('allekirjoitusaika', []);
+const allekirjoitusaikaKriteeri = kriteeri(
+  'allekirjoitusaika',
+  allComparisons,
+  eq,
+  '',
+  DateInput
+);
 
 // const viimeinenvoimassaoloKriteeri = kriteeri('viimeinenvoimassaolo', []);
 
@@ -120,4 +127,8 @@ export const perustiedot = () => ({
 export let defaultKriteeri = () =>
   JSON.stringify([[['=', 'perustiedot.id', '']]]);
 
-export const laatijaKriteerit = () => [idKriteeri, ...R.values(perustiedot())];
+export const laatijaKriteerit = () => [
+  idKriteeri,
+  allekirjoitusaikaKriteeri,
+  ...R.values(perustiedot())
+];

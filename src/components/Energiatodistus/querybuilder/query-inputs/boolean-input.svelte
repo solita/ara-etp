@@ -6,6 +6,8 @@
   export let model;
   export let lens;
 
+  export let operators;
+
   const paramLens = R.compose(
     lens,
     R.lens(

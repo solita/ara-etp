@@ -159,6 +159,7 @@
       "and": "Ja",
       "or": "Tai",
       "suosikkihaut": "Suosikkihaut",
+      "allekirjoitusaika": "Allekirjoitusaika",
       "perustiedot": {
         "id": "Tunnus",
         "nimi": "Nimi",
