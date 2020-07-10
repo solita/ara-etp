@@ -21,8 +21,6 @@
     R.lensProp('conjunction')
   );
 
-  $: console.log(R.type(where), where);
-
   $: parsedWhere = R.compose(
     R.map(([conjunction, block]) => ({ conjunction, block })),
     R.over(R.lensIndex(0), R.pair(Maybe.None())),
@@ -70,7 +68,7 @@
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
-        on:click={_ => (where = R.compose( R.tap(console.log), formatWhere, R.tap(console.log), R.set(firstConjunctionLens, Maybe.None()), R.remove(index, 1) )(parsedWhere))}>
+        on:click={_ => (where = R.compose( formatWhere, R.set(firstConjunctionLens, Maybe.None()), R.remove(index, 1) )(parsedWhere))}>
         delete
       </span>
     </div>
@@ -79,12 +77,10 @@
     <TextButton
       text={'Lisää hakuehto'}
       icon={'add_circle_outline'}
-      on:click={evt => (where = R.compose( R.tap(console.log), formatWhere, R.tap(console.log), R.append(
-            {
-              conjunction: Maybe.Some('and'),
-              block: EtHakuUtils.defaultKriteeri()
-            }
-          ) )(parsedWhere))} />
+      on:click={evt => (where = R.compose( formatWhere, R.append({
+            conjunction: Maybe.Some('and'),
+            block: EtHakuUtils.defaultKriteeri()
+          }) )(parsedWhere))} />
   </div>
   <div class="flex">
     <div class="w-1/5">

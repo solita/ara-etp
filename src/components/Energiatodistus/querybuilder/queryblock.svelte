@@ -20,40 +20,100 @@
     R.lensProp('block')
   );
 
-  $: ({ conjunction, block } = R.view(lens, model));
+  const keyLens = R.compose(
+    blockLens,
+    R.lensIndex(1)
+  );
 
-  const kriteeri = EtHakuUtils.idKriteeri;
+  const laatijaKriteerit = EtHakuUtils.laatijaKriteerit();
+
+  const findKriteeri = R.curry((kriteerit, key) =>
+    R.compose(
+      Maybe.fromNull,
+      R.find(
+        R.compose(
+          R.equals(key),
+          R.prop('key')
+        )
+      )
+    )(kriteerit)
+  );
+
+  let conjunction = R.view(conjunctionLens, model);
+
+  let key = Maybe.fromNull(R.view(keyLens, model));
+
+  let kriteeri = R.compose(
+    R.assoc('kriteeri', R.__, {}),
+    R.chain(findKriteeri(laatijaKriteerit)),
+    Maybe.fromNull,
+    R.view(keyLens)
+  )(model);
+
+  $: model = R.set(conjunctionLens, conjunction, model);
+
+  $: R.compose(
+    R.forEach(
+      R.unless(
+        R.compose(
+          R.equals(R.view(keyLens, model)),
+          R.prop('key')
+        ),
+        k =>
+          (model = R.set(
+            blockLens,
+            R.compose(
+              R.split(' '),
+              k.defaultOperator.command
+            )(k.defaultValue),
+            model
+          ))
+      )
+    ),
+
+    R.prop('kriteeri')
+  )(kriteeri);
+
+  $: R.compose(
+    Maybe.orElseRun(() => (model = R.set(blockLens, [], model))),
+    R.prop('kriteeri')
+  )(kriteeri);
 </script>
 
-<div class="w-10/12 flex flex-col">
+<div class="w-full flex flex-col">
   {#if Maybe.isSome(conjunction)}
     <div class="flex justify-between w-1/6 my-10">
       <Radio
         bind:group={conjunction}
         value={Maybe.Some('and')}
         label={$_('energiatodistus.haku.and')}
-        on:click={evt => (model = R.set(conjunctionLens, Maybe.Some('and'), model))} />
+        on:click={evt => (conjunction = Maybe.Some('and'))} />
       <Radio
         bind:group={conjunction}
         value={Maybe.Some('or')}
         label={$_('energiatodistus.haku.or')}
-        on:click={evt => (model = R.set(conjunctionLens, Maybe.Some('or'), model))} />
+        on:click={evt => (conjunction = Maybe.Some('or'))} />
     </div>
   {/if}
 
   <div class="flex-grow flex">
-    <div class="flex-grow mr-4">
+    <div class="w-1/2 mr-4">
       <Select
-        model={{ value: Maybe.None() }}
-        lens={R.lensProp('value')}
-        allowNone={true} />
+        items={laatijaKriteerit}
+        bind:model={kriteeri}
+        format={R.compose( $_, R.concat('energiatodistus.haku.'), R.prop('key') )}
+        parse={Maybe.Some}
+        lens={R.lensProp('kriteeri')}
+        allowNone={false} />
     </div>
-    <div class="flex-grow">
-      <svelte:component
-        this={kriteeri.component}
-        bind:model
-        operators={kriteeri.operators}
-        lens={blockLens} />
+    <div class="w-1/2">
+      {#each R.compose( Maybe.toArray, R.prop('kriteeri') )(kriteeri) as k}
+        <svelte:component
+          this={k.component}
+          bind:model
+          operators={k.operators}
+          lens={blockLens} />
+      {/each}
     </div>
   </div>
 </div>
