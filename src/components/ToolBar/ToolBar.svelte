@@ -98,8 +98,8 @@
   {#if pdfUrl.isSome()}
     <button>
       <a href={pdfUrl.some()}>
-        <span class="description">Tulosta PDF</span>
-        <span class="text-2xl font-icon">print</span>
+        <span class="block description">Esikatselu</span>
+        <span class="text-2xl font-icon">picture_as_pdf</span>
       </a>
     </button>
   {/if}
