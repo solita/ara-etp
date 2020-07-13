@@ -9,8 +9,6 @@
   import SquareInputWrapper from '@Component/Input/SquareInputWrapper';
 
   export let selected = new Date();
-  export let start = new Date();
-  export let end = new Date();
 </script>
 
 <style>
@@ -34,6 +32,7 @@
 <SquareInputWrapper>
   <input
     class="text-center"
+    value={formats.formatDateInstant(selected)}
     on:focus={evt => evt.target.click()}
-    use:litepicker={{ lang: $locale, dropdowns: { minYear: 1990, maxYear: null, months: true, years: true } }} />
+    use:litepicker={{ format: 'D.M.YYYY', onSelect: date => (selected = date), lang: $locale, dropdowns: { minYear: 1970, maxYear: null, months: true, years: true } }} />
 </SquareInputWrapper>

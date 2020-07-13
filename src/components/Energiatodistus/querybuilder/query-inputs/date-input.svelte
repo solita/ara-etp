@@ -12,9 +12,6 @@
   export let lens;
   export let operators;
 
-  export let start = dfns.sub(new Date(), { years: 20 });
-  export let end = new Date();
-
   const operatorLens = R.compose(
     lens,
     R.lensIndex(0)
@@ -50,6 +47,6 @@
       allowNone={false} />
   </div>
   <div class="w-1/2 pl-4 flex flex-col justify-end">
-    <Datepicker {start} {end} bind:selected />
+    <Datepicker bind:selected />
   </div>
 </div>
