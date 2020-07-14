@@ -62,17 +62,20 @@
   $: formatLaskutuskieli = R.compose(
     Maybe.orSome(''),
     R.map(labelLocale),
-    Maybe.findById(R.__, luokittelut.laskutuskielet),
+    Maybe.findById(R.__, luokittelut.laskutuskielet)
   );
 
   $: parseLaskutuskieli = R.identity;
 
-  $: verkkolaskuoperaattoritIds = R.pluck('id', luokittelut.verkkolaskuoperaattorit);
+  $: verkkolaskuoperaattoritIds = R.pluck(
+    'id',
+    luokittelut.verkkolaskuoperaattorit
+  );
 
   $: formatVerkkolaskuoperaattori = R.compose(
     Maybe.orSome(''),
     R.map(vlo => vlo.nimi + ' - ' + vlo.valittajatunnus),
-    Maybe.findById(R.__, luokittelut.verkkolaskuoperaattorit),
+    Maybe.findById(R.__, luokittelut.verkkolaskuoperaattorit)
   );
 
   $: parseVerkkolaskuoperaattori = Maybe.fromNull;
@@ -233,6 +236,7 @@
         lens={R.lensProp('verkkolaskuosoite')}
         format={Maybe.orSome('')}
         parse={formParsers.verkkolaskuosoite}
+        validators={formSchema['verkkolaskuosoite']}
         i18n={$_} />
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">

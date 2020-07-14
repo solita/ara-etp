@@ -15,11 +15,11 @@ describe('YritysUtils:', () => {
 
   describe('deserialize', () => {
     it('should wrap verkkolaskuosoite into Some', () => {
-      const yritys = { verkkolaskuosoite: '12345' };
+      const yritys = { verkkolaskuosoite: '003712345671' };
       const deserializedYritys = YritysUtils.deserialize(yritys);
 
       assert.equal(
-        '12345',
+        '003712345671',
         Maybe.getOrElse('', deserializedYritys.verkkolaskuosoite)
       );
     });
@@ -38,16 +38,16 @@ describe('YritysUtils:', () => {
   describe('serialize', () => {
     it('should unwrap Some verkkolaskuosoite into raw value', () => {
       const yritys = {
-        verkkolaskuosoite: Maybe.of('12345')
+        verkkolaskuosoite: Maybe.of('003712345671')
       };
       const serializedYritys = YritysUtils.serialize(yritys);
 
-      assert.equal('12345', serializedYritys.verkkolaskuosoite);
+      assert.equal('003712345671', serializedYritys.verkkolaskuosoite);
     });
 
     it('should unwrap None verkkolaskuosoite into null', () => {
       const yritys = {
-        verkkolaskuosoite: Maybe.None(),
+        verkkolaskuosoite: Maybe.None()
       };
       const serializedYritys = YritysUtils.serialize(yritys);
 
@@ -68,7 +68,7 @@ describe('YritysUtils:', () => {
 
       const yritys = {
         nimi: '',
-        verkkolaskuosoite: Maybe.Some('54321')
+        verkkolaskuosoite: Maybe.Some('003712345671')
       };
 
       const expected = {
@@ -106,7 +106,7 @@ describe('YritysUtils:', () => {
       const expected = {
         id: 1,
         nimi: 'test',
-        verkkolaskuosoite: Maybe.Some('12345')
+        verkkolaskuosoite: Maybe.Some('003712345671')
       };
 
       const response = {
@@ -117,7 +117,7 @@ describe('YritysUtils:', () => {
             resolve({
               id: 1,
               nimi: 'test',
-              verkkolaskuosoite: '12345'
+              verkkolaskuosoite: '003712345671'
             })
           )
       };

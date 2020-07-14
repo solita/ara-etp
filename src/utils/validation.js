@@ -148,6 +148,22 @@ export const rakennustunnusValidator = {
   label: R.applyTo('validation.invalid-rakennustunnus')
 };
 
+export const isOVTTunnus = R.allPass([
+  R.test(/^0037\d{8,13}$/),
+  R.compose(
+    isValidYtunnus,
+    R.join(''),
+    R.adjust(7, R.concat('-')),
+    R.take(8),
+    R.drop(4)
+  )
+]);
+
+export const OVTTunnusValidator = {
+  predicate: isOVTTunnus,
+  label: R.applyTo('validation.invalid-ovttunnus')
+};
+
 export const validate = (validators, value) =>
   Maybe.fromUndefined(
     R.find(R.compose(R.not, R.applyTo(value), R.prop('predicate')), validators)

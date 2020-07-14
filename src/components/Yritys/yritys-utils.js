@@ -21,7 +21,7 @@ export const serialize = R.compose(
     'vastaanottajan-tarkenne': Maybe.orSome(null),
     maa: Either.right,
     verkkolaskuosoite: Maybe.orSome(null),
-    verkkolaskuoperaattori: Maybe.orSome(null),
+    verkkolaskuoperaattori: Maybe.orSome(null)
   }),
   R.dissoc('id')
 );
@@ -49,7 +49,8 @@ export const formSchema = () => ({
   'vastaanottajan-tarkenne': R.map(validation.liftValidator, [
     validation.isRequired,
     validation.minLengthConstraint(2),
-    validation.maxLengthConstraint(200)]),
+    validation.maxLengthConstraint(200)
+  ]),
   jakeluosoite: [validation.isRequired],
   postinumero: [validation.isRequired, validation.postinumeroValidator],
   postitoimipaikka: [
@@ -58,8 +59,10 @@ export const formSchema = () => ({
     validation.maxLengthConstraint(200)
   ],
   maa: [],
-  verkkolaskuosoite: [],
-  verkkolaskuoperaattori: [],
+  verkkolaskuosoite: R.map(validation.liftValidator, [
+    validation.OVTTunnusValidator
+  ]),
+  verkkolaskuoperaattori: []
 });
 
 export const formParsers = () => ({
