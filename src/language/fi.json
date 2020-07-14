@@ -150,6 +150,9 @@
   "energiatodistus": {
     "title": "Energiatodistus",
     "haku": {
+      "lisaa_hakuehto": "Lisää hakuehto",
+      "tyhjenna_hakuehdot": "Tyhjennä hakuehdot",
+      "hae": "Hae",
       "=": "=",
       "<": "<",
       ">": ">",

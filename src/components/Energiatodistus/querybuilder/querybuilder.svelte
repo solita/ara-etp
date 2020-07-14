@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
+  import { _ } from '@Language/i18n';
 
   import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
 
@@ -75,7 +76,7 @@
   {/each}
   <div>
     <TextButton
-      text={'Lisää hakuehto'}
+      text={$_('energiatodistus.haku.lisaa_hakuehto')}
       icon={'add_circle_outline'}
       on:click={evt => (where = R.compose( formatWhere, R.append({
             conjunction: Maybe.Some('and'),
@@ -85,12 +86,12 @@
   <div class="flex">
     <div class="w-1/5">
       <Button
-        text={'Hae'}
+        text={$_('energiatodistus.haku.hae')}
         on:click={() => navigate(formatWhere(parsedWhere))} />
     </div>
     <div class="w-1/3">
       <Button
-        text={'Tyhjennä hakuehdot'}
+        text={$_('energiatodistus.haku.tyhjenna_hakuehdot')}
         style={'secondary'}
         on:click={evt => (where = EtHakuUtils.defaultKriteeri())} />
     </div>
