@@ -1,4 +1,6 @@
 <script>
+  import { fly } from 'svelte/transition';
+
   import * as R from 'ramda';
   import { flashMessageStore } from '@/stores';
 
@@ -19,16 +21,18 @@
 
 <style type="text/postcss">
   div {
-    @apply sticky mt-8;
+    @apply sticky mt-2;
     bottom: 4em;
   }
 </style>
 
 <div class="w-full min-h-3em">
   {#each messages as message}
-    <Alert
-      type={message.type}
-      text={message.text}
-      close={() => close(message)} />
+    <div transition:fly|local={{ y: 50 }}>
+      <Alert
+        type={message.type}
+        text={message.text}
+        close={() => close(message)} />
+    </div>
   {/each}
 </div>
