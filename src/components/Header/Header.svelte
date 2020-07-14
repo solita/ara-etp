@@ -16,7 +16,7 @@
 
 <style type="text/postcss">
   header {
-    @apply flex px-20 h-20 bg-secondary uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex px-20 h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
   }
 
   a {
@@ -32,7 +32,7 @@
     }
   }} />
 
-<header>
+<header class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
   <img src="images/ara_logo_simple_nega.svg" alt="Ara" />
   <div>Tähän haku</div>
   <div>Laatijan ohjeet</div>
