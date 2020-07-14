@@ -21,14 +21,14 @@
 
 <style type="text/postcss">
   div {
-    @apply bg-background px-20 flex h-16 items-center text-primary;
+    @apply px-20 flex h-16 items-center text-primary;
   }
   span {
     @apply ml-1 mr-2;
   }
 </style>
 
-<div>
+<div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
   <Link href="/" icon={Maybe.Some('home')} />
   {#each breadcrumbs as { label, url }}
     <span>/</span>

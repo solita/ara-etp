@@ -43,6 +43,21 @@
     @apply w-full pb-10 relative;
   }
 
+  .headercontainer,
+  .breadcrumbcontainer,
+  .footercontainer {
+    @apply flex justify-center w-full;
+  }
+
+  .headercontainer {
+    @apply bg-secondary;
+  }
+
+  .breadcrumbcontainer,
+  .footercontainer {
+    @apply bg-background;
+  }
+
   .content {
     @apply flex flex-col items-center flex-grow py-8 px-10 mx-auto bg-light;
   }
@@ -63,12 +78,16 @@
   <Login redirectTimeout={2000} />
 {:else}
   <div class="appcontainer">
-    <Header />
-    <Breadcrumb
-      idTranslate={$idTranslateStore}
-      location={$location}
-      user={Maybe.get($currentUserStore)}
-      i18n={$_} />
+    <div class="headercontainer">
+      <Header />
+    </div>
+    <div class="breadcrumbcontainer">
+      <Breadcrumb
+        idTranslate={$idTranslateStore}
+        location={$location}
+        user={Maybe.get($currentUserStore)}
+        i18n={$_} />
+    </div>
     <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
       <div class="w-full">
         <NavigationTabBar
@@ -80,6 +99,8 @@
         <Router on:conditionsFailed={_ => replace('/404')} {routes} />
       </div>
     </section>
-    <Footer />
+    <div class="footercontainer">
+      <Footer />
+    </div>
   </div>
 {/if}
