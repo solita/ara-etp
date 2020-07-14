@@ -84,11 +84,19 @@
 
   $: parseToimintaAlue = Maybe.fromNull;
 
-  $: laatija = R.over(
-    R.lensProp('muuttoimintaalueet'),
-    ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue),
-    laatija
-  );
+  $: laatija = R.compose(
+    R.when(
+      R.compose(
+        Maybe.isNone,
+        R.prop('wwwosoite')
+      ),
+      R.assoc('julkinenwwwosoite', false)
+    ),
+    R.over(
+      R.lensProp('muuttoimintaalueet'),
+      ToimintaAlueUtils.toimintaalueetWithoutMain(laatija.toimintaalue)
+    )
+  )(laatija);
 
   $: formatLaskutuskieli = R.compose(
     Maybe.orSome(''),
