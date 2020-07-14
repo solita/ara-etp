@@ -44,14 +44,29 @@ const createFlashMessageStore = () => {
 
   return {
     subscribe,
-    add: R.curry((module, type, text) =>
-      update(
-        R.compose(R.uniq, R.append({ module, type, text, persist: false }))
-      )
-    ),
-    addPersist: R.curry((module, type, text) =>
-      update(R.compose(R.uniq, R.append({ module, type, text, persist: true })))
-    ),
+    add: R.curry((module, type, text) => {
+      const message = { module, type, text, persist: false };
+
+      if (type === 'success') {
+        setTimeout(
+          () => update(R.reject(R.eqBy(R.omit('persist'), message))),
+          5000
+        );
+      }
+
+      return update(R.compose(R.uniq, R.append(message)));
+    }),
+    addPersist: R.curry((module, type, text) => {
+      const message = { module, type, text, persist: false };
+
+      if (type === 'success') {
+        setTimeout(
+          () => update(R.reject(R.eqBy(R.omit('persist'), message))),
+          5000
+        );
+      }
+      return update(R.compose(R.uniq, R.append(message)));
+    }),
     remove: message => update(R.reject(R.equals(message))),
     flush: module =>
       update(
