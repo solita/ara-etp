@@ -3,20 +3,25 @@
 </script>
 
 <style type="text/postcss">
-  div {
-    @apply bg-primary opacity-75 rounded-full w-8 h-8;
-    animation: ball-scale 2s infinite ease-in-out;
+  .spinner {
+    @apply inline-block relative w-12 h-12;
   }
-
-  @keyframes ball-scale {
-    0%,
-    100% {
-      transform: scaleX(0);
+  .spinner div {
+    @apply block absolute w-12 h-12 rounded-full border-solid border-8;
+    box-sizing: border-box;
+    border-color: #538000 transparent transparent transparent;
+    animation: spin 1.2s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
     }
-    50% {
-      transform: scaleX(1);
+    100% {
+      transform: rotate(360deg);
     }
   }
 </style>
 
-<div />
+<div class="spinner">
+  <div />
+</div>
