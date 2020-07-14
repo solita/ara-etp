@@ -1,12 +1,8 @@
 <script>
   import * as R from 'ramda';
-  import * as Either from '@Utility/either-utils';
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as v from '@Utility/validation';
-  import Label from '@Component/Label/Label';
-  import * as keys from '@Utility/keys';
 
   import InputContainer from './InputContainer';
+  import SimpleInput from './SimpleInput';
 
   export let id;
   export let name;
@@ -26,8 +22,6 @@
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
-
-  let focused = false;
 
   export let i18n;
 </script>
@@ -133,38 +127,19 @@
   let:viewValue
   let:errorMessage
   let:valid>
-  <Label
+  <SimpleInput
     {id}
-    {required}
+    {name}
     {label}
+    {caret}
+    {search}
+    {required}
+    {autocomplete}
+    {disabled}
     {compact}
-    error={focused && !valid}
-    {focused} />
-  <div
-    class="inputwrapper"
-    class:caret
-    class:search
-    class:focused
-    class:error={focused && !valid}
-    class:disabled>
-    <input
-      {id}
-      {name}
-      {disabled}
-      class="input"
-      class:center
-      class:error={focused && !valid}
-      type="text"
-      {autocomplete}
-      value={viewValue}
-      on:focus={event => {
-        focused = true;
-      }}
-      on:blur={event => {
-        focused = false;
-      }}
-      on:input />
-  </div>
+    {center}
+    {viewValue}
+    {valid} />
 
   {#if !valid}
     <div class="error-label">

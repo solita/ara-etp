@@ -5,6 +5,9 @@ import * as Maybe from '@Utility/maybe-utils';
 export const formatTimeInstant = time => dfns.format(time, 'd.M.yyyy H:mm:ss');
 export const formatDateInstant = date => dfns.format(date, 'd.M.yyyy');
 
+export const formatSerializedDateInstant = date =>
+  dfns.format(date, 'yyyy-MM-dd');
+
 export const numberFormat = Intl.NumberFormat('fi-FI').format;
 export const percentFormat = Intl.NumberFormat('fi-FI', { style: 'percent' })
   .format;

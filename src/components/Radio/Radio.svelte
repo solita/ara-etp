@@ -103,5 +103,6 @@
     class:disabled
     class:focused
     class:selected
-    on:click={_ => disabled || (group = value)} />
+    on:click={_ => disabled || (group = value)}
+    on:click />
 </div>
