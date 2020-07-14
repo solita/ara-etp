@@ -64,7 +64,9 @@
 </div>
 
 <div class="flex w-full justify-end mt-8">
-  <ToggleButton label={'Lisää hakuehtoja'} bind:value={showHakukriteerit} />
+  <ToggleButton
+    label={$_('energiatodistus.haku.lisaa_hakuehtoja')}
+    bind:value={showHakukriteerit} />
 </div>
 
 {#if showHakukriteerit}
