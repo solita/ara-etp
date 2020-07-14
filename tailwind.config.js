@@ -51,6 +51,12 @@ module.exports = {
       minWidth: {
         '10': '10em'
       },
+      width: {
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px'
+      },
       minHeight: {
         '85': '85vh',
         '2.5em': '2.5em',

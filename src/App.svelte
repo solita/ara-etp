@@ -32,20 +32,19 @@
     Maybe.orSome({}),
     R.map(buildRoutes)
   )($currentUserStore);
-
 </script>
 
 <style type="text/postcss">
-  .container {
-    @apply flex flex-col justify-between mx-auto max-w-full min-h-screen;
+  .appcontainer {
+    @apply flex flex-col flex-grow justify-between w-full min-h-screen;
   }
 
   .routecontainer {
-    @apply flex-grow pb-10 relative max-w-1280;
+    @apply w-full pb-10 relative;
   }
 
   .content {
-    @apply flex flex-col flex-grow pb-8 px-20 pt-8 bg-light;
+    @apply flex flex-col items-center flex-grow py-8 px-10 mx-auto bg-light;
   }
 
   .content h1 :not(first) {
@@ -63,14 +62,14 @@
 {:else if isUnauthorizedOnFirstLoad}
   <Login redirectTimeout={2000} />
 {:else}
-  <div class="container">
+  <div class="appcontainer">
     <Header />
     <Breadcrumb
       idTranslate={$idTranslateStore}
       location={$location}
       user={Maybe.get($currentUserStore)}
       i18n={$_} />
-    <section class="content">
+    <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
       <div class="w-full">
         <NavigationTabBar
           location={$location}
