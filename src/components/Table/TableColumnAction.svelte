@@ -2,6 +2,7 @@
   import * as R from 'ramda';
 
   import Link from '@Component/Link/Link';
+  import * as Maybe from '@Utility/maybe-utils';
 
   export let actions;
   export let index;
@@ -28,7 +29,10 @@
         remove_circle_outline
       </span>
     {:else if R.equals(action.type, 'link')}
-      <Link href={action.href} text={action.text} />
+      <Link
+        href={action.href}
+        text={action.text}
+        icon={Maybe.fromNull(action.icon)} />
     {:else}
       <div class="action" on:click={e => action.update(index)}>
         <span class="font-icon self-center">{action.icon}</span>

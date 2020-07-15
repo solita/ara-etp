@@ -138,13 +138,17 @@
   },
   "laatijahaku": {
     "title": "Laatijahaku",
+    "kunta": "Kunta",
+    "energiatodistukset": "ET:t",
     "results": "Tuloksia {count} KPL",
     "kaikki": "Kaikki",
     "voimassaolo": "Voimassaolo",
     "tila": "Tila",
     "tilat": {
       "0": "Pätevyys voimassa",
-      "1": "Pätevyys vanhentunut"
+      "1": "Ei kirjautunut",
+      "2": "Pätevyys peruttu / Laatimiskiellossa",
+      "3": "Pätevyys päättynyt"
     }
   },
   "energiatodistus": {
