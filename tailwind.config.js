@@ -18,7 +18,8 @@ module.exports = {
       success: '#538000',
       background: '#eee',
       hr: 'rgba(52, 56, 65, 0.3)',
-      transparent: 'rgba(0,0,0,0)'
+      transparent: 'rgba(0,0,0,0)',
+      tableborder: 'rgba(167,167,167,0.3)'
     },
     extend: {
       fontFamily: {
