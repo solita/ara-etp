@@ -12,9 +12,11 @@
   export let format = R.identity;
   export let validators = [];
 
+  export let currentValue = '';
+  export let valid = true;
+
   let viewValue;
   let errorMessage = '';
-  let valid = true;
 
   $: validate = value =>
     v.validateModelValue(validators, value).cata(
@@ -24,6 +26,8 @@
       },
       () => (valid = true)
     );
+
+  const updateCurrentValue = value => (currentValue = parse(value));
 
   $: viewValue = R.compose(
     Maybe.orSome(viewValue),
@@ -37,6 +41,7 @@
     const parsedValue = parse(value);
     Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
     model = R.set(lens, parsedValue, model);
+    currentValue = parsedValue;
     validate(parsedValue);
   };
 </script>
@@ -44,7 +49,10 @@
 <div
   on:focus|capture={event => validate(parse(event.target.value))}
   on:blur|capture={event => updateValue(event.target.value)}
-  on:input={event => validate(parse(event.target.value))}
+  on:input={event => {
+    updateCurrentValue(event.target.value);
+    validate(parse(event.target.value));
+  }}
   on:keydown={event => {
     if (event.keyCode === keys.ENTER) {
       updateValue(event.target.value);

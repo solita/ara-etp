@@ -18,9 +18,11 @@
 
   export let model = { empty: '' };
   export let lens = R.lensProp('empty');
+  export let currentValue = '';
 
   export let parse = R.identity;
   export let format = R.identity;
+  export let valid = true;
   export let validators = [];
 
   export let i18n;
@@ -119,14 +121,15 @@
 <InputContainer
   {lens}
   bind:model
+  bind:currentValue
   {i18n}
   {parse}
   {format}
   {validators}
   on:keydown
+  bind:valid
   let:viewValue
-  let:errorMessage
-  let:valid>
+  let:errorMessage>
   <SimpleInput
     {id}
     {name}

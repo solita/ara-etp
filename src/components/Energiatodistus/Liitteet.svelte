@@ -30,6 +30,11 @@
   let liiteLinkAdd;
   let files = [];
 
+  let linkNimi = '';
+  let linkUrl = '';
+  let linkNimiValid = true;
+  let linkUrlValid = true;
+
   const resetForm = () => {
     liitteet = [];
     liiteLinkAdd = emptyLiite();
@@ -45,6 +50,10 @@
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
   const cancel = _ => {
+    linkNimi = '';
+    linkUrl = '';
+    linkNimiValid = true;
+    linkUrlValid = true;
     liiteLinkAdd = emptyLiite();
   };
 
@@ -129,6 +138,9 @@
     R.tap(toggleOverlay(true)),
     api.deleteLiite(fetch, params.version, params.id)
   );
+
+  $: linkEmpty = linkNimi.length === 0 || linkUrl.length === 0;
+  $: linkInvalid = !(linkNimiValid && linkUrlValid);
 </script>
 
 <style>
@@ -206,6 +218,8 @@
             label={$_('energiatodistus.liitteet.add-link.nimi')}
             bind:model={liiteLinkAdd}
             lens={R.lensPath(['nimi'])}
+            bind:currentValue={linkNimi}
+            bind:valid={linkNimiValid}
             parse={R.trim}
             validators={liiteLinkAddSchema.nimi}
             i18n={$_} />
@@ -218,6 +232,8 @@
             label={$_('energiatodistus.liitteet.add-link.url')}
             bind:model={liiteLinkAdd}
             lens={R.lensPath(['url'])}
+            bind:currentValue={linkUrl}
+            bind:valid={linkUrlValid}
             parse={R.compose( addDefaultProtocol, R.trim )}
             validators={liiteLinkAddSchema.url}
             i18n={$_} />
@@ -225,7 +241,10 @@
 
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
-            <Button type={'submit'} text={'Lisää linkki'} />
+            <Button
+              disabled={linkEmpty || linkInvalid}
+              type={'submit'}
+              text={'Lisää linkki'} />
           </div>
           <div class="px-4">
             <Button
