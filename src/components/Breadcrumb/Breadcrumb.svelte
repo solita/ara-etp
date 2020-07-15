@@ -37,7 +37,7 @@
   {:else}
     <Link href="/" icon={Maybe.Some('home')} />
   {/if}
-  {#each breadcrumbs as { label, url }}
+  {#each tail as { label, url }}
     <span>/</span>
     <Link href={url} text={label} />
   {/each}
