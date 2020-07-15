@@ -8,12 +8,8 @@
 </script>
 
 <style type="text/postcss">
-  div {
-    @apply flex justify-start items-center;
-  }
-
   a {
-    @apply text-link border-b-1 border-transparent;
+    @apply relative flex items-start text-link border-b-1 border-transparent;
   }
 
   a:hover {
@@ -21,8 +17,9 @@
   }
 </style>
 
-<!-- purgecss: font-icon mr-1 text-2xl -->
 <a {href}>
-  {@html R.compose( Maybe.orSome(''), R.map(i => `<span class="font-icon mr-1 text-2xl">${i}</span>`) )(icon)}
-  {text}
+  {#each Maybe.toArray(icon) as i}
+    <span class="font-icon mr-1">{i}</span>
+  {/each}
+  <span>{text}</span>
 </a>

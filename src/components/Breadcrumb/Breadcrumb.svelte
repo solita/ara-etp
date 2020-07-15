@@ -17,6 +17,9 @@
     i18n,
     user
   );
+
+  $: head = R.head(breadcrumbs);
+  $: tail = R.tail(breadcrumbs);
 </script>
 
 <style type="text/postcss">
@@ -29,8 +32,12 @@
 </style>
 
 <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-  <Link href="/" icon={Maybe.Some('home')} />
-  {#each breadcrumbs as { label, url }}
+  {#if head}
+    <Link href={head.url} text={head.label} icon={Maybe.Some('home')} />
+  {:else}
+    <Link href="/" icon={Maybe.Some('home')} />
+  {/if}
+  {#each tail as { label, url }}
     <span>/</span>
     <Link href={url} text={label} />
   {/each}
