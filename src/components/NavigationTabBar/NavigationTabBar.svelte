@@ -25,6 +25,7 @@
     <NavigationTab
       label={link.label}
       href={link.href}
-      activePath={link.activePath} />
+      activePath={link.activePath}
+      disabled={link.disabled} />
   {/each}
 </div>

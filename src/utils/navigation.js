@@ -53,6 +53,25 @@ export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
   }
 ]);
 
+export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
+  {
+    label: `${i18n('navigation.uusi-energiatodistus')}`,
+    href: `#/energiatodistus/${version}/new`
+  },
+  {
+    label: i18n('navigation.viestit'),
+    disabled: true
+  },
+  {
+    label: i18n('navigation.liitteet'),
+    disabled: true
+  },
+  {
+    label: i18n('navigation.muutoshistoria'),
+    disabled: true
+  }
+]);
+
 export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
   { label: i18n('navigation.tyojono'), href: '#/tyojono' },
   { label: i18n('navigation.kaytonvalvonta'), href: '#/kaytonvalvonta' },
@@ -80,7 +99,10 @@ export const parseEnergiatodistus = R.curry((i18n, kayttaja, locationParts) => {
   )(locationParts);
 
   if (R.compose(Maybe.isSome, R.filter(R.equals('new')))(id)) {
-    return parseRoot(i18n, kayttaja);
+    return R.compose(
+      Maybe.orSome(parseRoot(i18n, kayttaja)),
+      R.map(linksForNewEnergiatodistus(i18n))
+    )(version);
   }
 
   return R.compose(
