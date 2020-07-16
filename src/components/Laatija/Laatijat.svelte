@@ -223,7 +223,15 @@
 
   const laatijaTilaMatch = R.curry((model, laatija) =>
     R.cond([
-      [R.equals(0), R.always(R.propEq('voimassa', true, laatija))],
+      [
+        R.equals(0),
+        R.always(
+          R.allPass([
+            R.propEq('voimassa', true),
+            R.propEq('laatimiskielto', false)
+          ])(laatija)
+        )
+      ],
       [R.equals(1), R.always(R.propEq('ensitallennus', false, laatija))],
       [R.equals(2), R.always(R.propEq('laatimiskielto', true, laatija))],
       [R.equals(3), R.always(R.propEq('voimassa', false, laatija))],
