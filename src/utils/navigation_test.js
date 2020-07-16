@@ -6,6 +6,7 @@ import * as Navigation from './navigation';
 describe('Navigation', () => {
   const i18n = R.prop(R.__, {
     'navigation.et': 'ET',
+    'navigation.uusi-energiatodistus': 'Uusi energiatodistus',
     'navigation.viestit': 'Viestit',
     'navigation.liitteet': 'Liitteet',
     'navigation.muutoshistoria': 'Muutoshistoria',
@@ -80,18 +81,17 @@ describe('Navigation', () => {
     it('should return root links when creating new energiatodistus', () => {
       const expected = [
         {
-          label: 'Energiatodistukset',
-          href: '#/energiatodistus/all'
+          href: '#/energiatodistus/2018/new',
+          label: 'Uusi energiatodistus'
         },
-        { label: 'Viestit', href: '#/viestit' },
+        { disabled: true, label: 'Viestit' },
         {
-          label: 'Yritykset',
-          href: `#/laatija/2/yritykset`
+          label: 'Liitteet',
+          disabled: true
         },
         {
-          label: 'Omat tiedot',
-          href: '#/myinfo',
-          activePath: `#/kayttaja/2`
+          label: 'Muutoshistoria',
+          disabled: true
         }
       ];
 
