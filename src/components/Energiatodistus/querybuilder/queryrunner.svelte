@@ -4,12 +4,18 @@
   import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
 
   export let where;
+  export let query;
 
   const operations = EtHakuUtils.operations();
 
   const toQueryParameter = ([operation, key, ...values]) =>
     R.compose(
-      R.map(op => R.apply(op.command, [key, ...values])),
+      R.map(
+        R.compose(
+          R.split(' '),
+          op => R.apply(op.command, [key, ...values])
+        )
+      ),
       Maybe.fromNull,
       R.find(
         R.compose(
@@ -19,13 +25,15 @@
       )
     )(operations);
 
-  $: kriteerit = R.compose(
+  $: query = R.compose(
+    JSON.stringify,
     R.filter(R.length),
     R.map(R.map(Maybe.get)),
     R.map(R.filter(Maybe.isSome)),
     R.map(R.map(toQueryParameter))
   )(where);
-  $: console.log(kriteerit);
+
+  $: console.log(query);
 </script>
 
 <style>
