@@ -5,6 +5,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Fetch from '@Utility/fetch-utils';
   import { patevyystasoStore } from '@/stores';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   export let value;
 
@@ -31,12 +32,7 @@
   $: patevyystaso = Either.foldRight(
     [],
     R.compose(
-      R.prop(
-        `label-${R.compose(
-          R.head,
-          R.split('-')
-        )($locale)}`
-      ),
+      LocaleUtils.label($locale),
       R.find(R.propEq('id', value))
     ),
     $patevyystasoStore

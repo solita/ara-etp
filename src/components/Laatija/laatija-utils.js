@@ -39,7 +39,8 @@ export const formSchema = () => ({
   'vastaanottajan-tarkenne': R.map(Validation.liftValidator, [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)]),
+    Validation.maxLengthConstraint(200)
+  ]),
   jakeluosoite: [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
@@ -121,14 +122,6 @@ export const putLaatijatFuture = R.curry((fetch, laatijat) =>
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', laatijaApi)),
     R.map(serializeImport)
-  )(laatijat)
-);
-
-export const postLaatijatFuture = R.curry((fetch, laatijat) =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', laatijaApi)),
-    R.map(serialize)
   )(laatijat)
 );
 
