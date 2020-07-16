@@ -11,6 +11,7 @@
   import Select from '@Component/Select/Select';
   import ToggleButton from '@Component/ToggleButton/ToggleButton';
   import QueryBuilder from './querybuilder/querybuilder';
+  import QueryRunner from './querybuilder/queryrunner';
 
   import { _ } from '@Language/i18n';
 
@@ -21,6 +22,7 @@
   const valittuHaku = Maybe.None();
 
   $: where = R.compose(
+    JSON.parse,
     Maybe.orSome(''),
     Maybe.fromNull,
     R.prop('where'),
@@ -74,3 +76,5 @@
     <QueryBuilder bind:where {navigate} />
   </div>
 {/if}
+
+<QueryRunner {where} />

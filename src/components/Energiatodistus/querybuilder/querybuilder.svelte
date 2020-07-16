@@ -41,8 +41,7 @@
           R.tail
         )
       ])
-    ),
-    JSON.parse
+    )
   )(where);
 
   const formatWhere = R.compose(

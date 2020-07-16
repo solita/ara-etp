@@ -4,32 +4,34 @@ import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/b
 import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date-input';
 
 const gt = {
-  label: '>',
+  operation: '>',
   command: R.curry((first, second) => `> ${first} ${second}`)
 };
 const gte = {
-  label: '>=',
+  operation: '>=',
   command: R.curry((first, second) => `>= ${first} ${second}`)
 };
 const lt = {
-  label: '<',
+  operation: '<',
   command: R.curry((first, second) => `< ${first} ${second}`)
 };
 const lte = {
-  label: '<=',
+  operation: '<=',
   command: R.curry((first, second) => `<= ${first} ${second}`)
 };
 const eq = {
-  label: '=',
+  operation: '=',
   command: R.curry((first, second) => `= ${first} ${second}`)
 };
 
 const contains = {
-  label: 'sisaltaa',
+  operation: 'sisaltaa',
   command: R.curry((first, second) => `like ${first} %${second}%`)
 };
 
 const allComparisons = [eq, gt, gte, lt, lte];
+
+export const operations = () => [...allComparisons, contains];
 
 const kriteeri = (
   key,
