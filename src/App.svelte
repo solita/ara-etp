@@ -36,7 +36,7 @@
 
 <style type="text/postcss">
   .appcontainer {
-    @apply flex flex-col flex-grow justify-between w-full min-h-screen;
+    @apply flex flex-col flex-grow justify-between min-h-screen;
   }
 
   .routecontainer {
@@ -46,7 +46,7 @@
   .headercontainer,
   .breadcrumbcontainer,
   .footercontainer {
-    @apply flex justify-center w-full;
+    @apply flex justify-center;
   }
 
   .headercontainer {
@@ -79,14 +79,18 @@
 {:else}
   <div class="appcontainer">
     <div class="headercontainer">
-      <Header />
+      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+        <Header />
+      </div>
     </div>
     <div class="breadcrumbcontainer">
-      <Breadcrumb
-        idTranslate={$idTranslateStore}
-        location={$location}
-        user={Maybe.get($currentUserStore)}
-        i18n={$_} />
+      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+        <Breadcrumb
+          idTranslate={$idTranslateStore}
+          location={$location}
+          user={Maybe.get($currentUserStore)}
+          i18n={$_} />
+      </div>
     </div>
     <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
       <div class="w-full">
@@ -100,7 +104,9 @@
       </div>
     </section>
     <div class="footercontainer">
-      <Footer />
+      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+        <Footer />
+      </div>
     </div>
   </div>
 {/if}
