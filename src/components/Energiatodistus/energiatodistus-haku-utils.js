@@ -126,8 +126,9 @@ export const perustiedot = () => ({
   // )
 });
 
-export let defaultKriteeri = () =>
-  JSON.stringify([[['=', 'perustiedot.id', '']]]);
+export let defaultKriteeriBlock = () => ['=', 'perustiedot.id', ''];
+
+export let defaultKriteeri = () => [[['=', 'perustiedot.id', '']]];
 
 export const laatijaKriteerit = () => [
   idKriteeri,

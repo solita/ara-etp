@@ -15,6 +15,8 @@
 
   import { _ } from '@Language/i18n';
 
+  export let query = '';
+
   let valitutKriteerit = [];
 
   let hakuValue = '';
@@ -22,8 +24,8 @@
   const valittuHaku = Maybe.None();
 
   $: where = R.compose(
-    JSON.parse,
     Maybe.orSome(''),
+    R.map(JSON.parse),
     Maybe.fromNull,
     R.prop('where'),
     qs.parse
@@ -38,6 +40,8 @@
       params => qs.stringify(params, { encode: false }),
       R.mergeRight(qs.parse($querystring))
     )({ where });
+
+  $: console.log(query);
 </script>
 
 <style>
@@ -77,4 +81,4 @@
   </div>
 {/if}
 
-<QueryRunner {where} />
+<QueryRunner {where} bind:query />

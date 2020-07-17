@@ -45,7 +45,6 @@
   )(where);
 
   const formatWhere = R.compose(
-    JSON.stringify,
     R.reduce(
       (acc, { conjunction, block }) => {
         if (Maybe.exists(R.equals('or'), conjunction)) {
@@ -68,7 +67,7 @@
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
-        on:click={_ => (where = R.compose( formatWhere, R.set(firstConjunctionLens, Maybe.None()), R.remove(index, 1) )(parsedWhere))}>
+        on:click={_ => (where = R.compose( R.tap(console.log), formatWhere, R.set(firstConjunctionLens, Maybe.None()), R.remove(index, 1) )(parsedWhere))}>
         delete
       </span>
     </div>
@@ -77,10 +76,10 @@
     <TextButton
       text={$_('energiatodistus.haku.lisaa_hakuehto')}
       icon={'add_circle_outline'}
-      on:click={evt => (where = R.compose( formatWhere, R.append({
-            conjunction: Maybe.Some('and'),
-            block: EtHakuUtils.defaultKriteeri()
-          }) )(parsedWhere))} />
+      on:click={evt => {
+        const lastLens = R.lensIndex(R.length(where) - 1);
+        where = R.over(lastLens, R.append(EtHakuUtils.defaultKriteeriBlock()))(where);
+      }} />
   </div>
   <div class="flex">
     <div class="w-1/5">
