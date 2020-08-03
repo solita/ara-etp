@@ -32,6 +32,10 @@
   const lens = R.lensPath(path);
 
   const type = R.view(R.lensPath(nonArrayPath), schema);
+
+  if (R.isNil(type)) {
+    throw "Property: " + id + " does not exists in schema."
+  }
 </script>
 
 <Input

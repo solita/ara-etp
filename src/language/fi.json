@@ -423,8 +423,8 @@
 
       "lkvn-kaytto": {
         "header": "Lämmin käyttövesi",
-        "kulutus-per-nelio": "Ominaiskulutus",
-        "vuosikulutus": "Lämmitysenergian nettotarve"
+        "ominaiskulutus": "Ominaiskulutus",
+        "lammitysenergian-nettotarve": "Lämmitysenergian nettotarve"
       },
 
       "sis-kuorma": {
