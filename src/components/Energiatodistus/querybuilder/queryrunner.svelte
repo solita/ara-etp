@@ -33,7 +33,7 @@
     R.map(R.map(toQueryParameter))
   )(where);
 
-  $: console.log(query);
+  $: console.log(`generated query:  ${query}`);
 </script>
 
 <style>

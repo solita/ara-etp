@@ -33,15 +33,14 @@
 
   $: showHakukriteerit = where.length > 0;
 
-  $: navigate = where =>
-    R.compose(
-      push,
-      R.concat(`${$location}?`),
-      params => qs.stringify(params, { encode: false }),
-      R.mergeRight(qs.parse($querystring))
-    )({ where });
-
-  $: console.log(query);
+  $: navigate = R.compose(
+    push,
+    R.concat(`${$location}?`),
+    params => qs.stringify(params, { encode: false }),
+    R.mergeRight(qs.parse($querystring)),
+    R.assoc('where', R.__, {}),
+    JSON.stringify
+  );
 </script>
 
 <style>

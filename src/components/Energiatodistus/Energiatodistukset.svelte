@@ -87,7 +87,7 @@
     R.tap(toggleOverlay(true))
   )([api.getEnergiatodistukset(query), api.laatimisvaiheet]);
 
-  $: console.log(query);
+  $: console.log(`currentQuery: ${JSON.stringify(query)}`);
 </script>
 
 <style>
