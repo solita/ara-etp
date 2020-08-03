@@ -31,7 +31,7 @@
   }
 </style>
 
-<div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+<div>
   {#if head}
     <Link href={head.url} text={head.label} icon={Maybe.Some('home')} />
   {:else}

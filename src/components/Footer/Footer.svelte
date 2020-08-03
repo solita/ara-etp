@@ -32,7 +32,7 @@
   }
 </style>
 
-<footer class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+<footer>
   <section class="info">
     <div class="version">
       <Version />

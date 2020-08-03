@@ -32,7 +32,7 @@
     }
   }} />
 
-<header class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+<header>
   <img src="images/ara_logo_simple_nega.svg" alt="Ara" />
   <div>Tähän haku</div>
   <div>Laatijan ohjeet</div>
