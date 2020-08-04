@@ -59,13 +59,7 @@ const korvattuEnergiatodistusIdKriteeri = kriteeri(
   OperatorInput
 );
 
-export const idKriteeri = kriteeri(
-  'perustiedot.id',
-  allComparisons,
-  eq,
-  '',
-  OperatorInput
-);
+export const idKriteeri = kriteeri('id', allComparisons, eq, '', OperatorInput);
 
 const allekirjoitusaikaKriteeri = kriteeri(
   'allekirjoitusaika',
@@ -126,9 +120,9 @@ export const perustiedot = () => ({
   // )
 });
 
-export let defaultKriteeriBlock = () => ['=', 'perustiedot.id', ''];
+export let defaultKriteeriBlock = () => ['=', 'id', ''];
 
-export let defaultKriteeri = () => [[['=', 'perustiedot.id', '']]];
+export let defaultKriteeri = () => [[['=', 'id', '']]];
 
 export const laatijaKriteerit = () => [
   idKriteeri,
