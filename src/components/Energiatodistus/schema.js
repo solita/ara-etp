@@ -173,8 +173,8 @@ export const v2018 = {
       'jaahdytyskauden-painotettu-kylmakerroin': Float(1.0, 10.0)
     },
     'lkvn-kaytto': {
-      'kulutus-per-nelio': FloatPos,
-      vuosikulutus: FloatPos
+      ominaiskulutus: FloatPos,
+      'lammitysenergian-nettotarve': FloatPos
     },
     'sis-kuorma': {
       henkilot: SisKuorma(1.0, 14.0),

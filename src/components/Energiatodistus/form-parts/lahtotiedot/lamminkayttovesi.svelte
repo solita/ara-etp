@@ -21,7 +21,7 @@
         {schema}
         {center}
         bind:model={energiatodistus}
-        path={['lahtotiedot', 'lkvn-kaytto', 'kulutus-per-nelio']} />
+        path={['lahtotiedot', 'lkvn-kaytto', 'ominaiskulutus']} />
   </div>
   <div class="w-2/5 pl-2 pr-20">{$_('energiatodistus.litraa-per-neliovuosi')}</div>
 </div>
@@ -32,7 +32,7 @@
       {schema}
       {center}
       bind:model={energiatodistus}
-      path={['lahtotiedot', 'lkvn-kaytto', 'vuosikulutus']} />
+      path={['lahtotiedot', 'lkvn-kaytto', 'lammitysenergian-nettotarve']} />
   </div>
   <div class="w-2/5 pl-2"><VuosikulutusPerAlaUnit/></div>
 </div>

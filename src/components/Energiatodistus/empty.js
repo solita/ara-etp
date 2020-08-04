@@ -137,8 +137,8 @@ export const energiatodistus2018 = _ => ({
       'jaahdytyskauden-painotettu-kylmakerroin': Maybe.None()
     },
     'lkvn-kaytto': {
-      'kulutus-per-nelio': Maybe.None(),
-      vuosikulutus: Maybe.None()
+      ominaiskulutus: Maybe.None(),
+      'lammitysenergian-nettotarve': Maybe.None()
     },
     'sis-kuorma': {
       henkilot: emptySisKuorma(),
