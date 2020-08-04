@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import NumberOperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/number-operator-input';
 import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
 import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
 import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date-input';
@@ -59,7 +60,13 @@ const korvattuEnergiatodistusIdKriteeri = kriteeri(
   OperatorInput
 );
 
-export const idKriteeri = kriteeri('id', allComparisons, eq, '', OperatorInput);
+export const idKriteeri = kriteeri(
+  'id',
+  allComparisons,
+  eq,
+  '',
+  NumberOperatorInput
+);
 
 const allekirjoitusaikaKriteeri = kriteeri(
   'allekirjoitusaika',
