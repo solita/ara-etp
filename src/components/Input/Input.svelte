@@ -122,6 +122,7 @@
   {lens}
   bind:model
   bind:currentValue
+  {id}
   {i18n}
   {parse}
   {format}
