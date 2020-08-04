@@ -4,7 +4,9 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
   import * as keys from '@Utility/keys';
+  import * as objects from '@Utility/objects';
 
+  export let id;
   export let lens;
   export let model;
   export let i18n;
@@ -17,6 +19,10 @@
 
   let viewValue;
   let errorMessage = '';
+
+  const requireNotNil = objects.requireNotNil(R.__,
+    'Nil value in input: ' + id + '. ' +
+      'Nil values are not allowed. Use Maybe monad for optional values.');
 
   $: validate = value =>
     v.validateModelValue(validators, value).cata(
@@ -34,6 +40,7 @@
     Either.toMaybe,
     R.map(format),
     Either.fromValueOrEither,
+    requireNotNil,
     R.view(lens)
   )(model);
 
