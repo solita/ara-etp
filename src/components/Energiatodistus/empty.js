@@ -56,7 +56,7 @@ const emptySisKuorma = _ => ({
   lampokuorma: Maybe.None()
 });
 
-const emptyVapaa = _ => ({
+const emptyMuuPolttoaine = _ => ({
   nimi: Maybe.None(),
   yksikko: Maybe.None(),
   muunnoskerroin: Maybe.None(),
@@ -198,7 +198,7 @@ export const energiatodistus2018 = _ => ({
       'pilkkeet-havu-sekapuu': Maybe.None(),
       'pilkkeet-koivu': Maybe.None(),
       puupelletit: Maybe.None(),
-      vapaa: R.times(emptyVapaa, 4)
+      muu: R.times(emptyMuuPolttoaine, 4)
     },
     'sahko-vuosikulutus-yhteensa': Maybe.None(),
     'kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
@@ -235,8 +235,8 @@ const emptyMuuEnergia = _ => ({
 
 export const energiatodistus2013 = R.compose(
   R.assocPath(
-    ['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'],
-    R.times(emptyVapaa, 10)
+    ['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu'],
+    R.times(emptyMuuPolttoaine, 10)
   ),
   R.assocPath(
     ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'],

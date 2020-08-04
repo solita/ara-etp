@@ -81,7 +81,7 @@ const SahkoLampo = {
   lampo: FloatPos
 };
 
-const VapaaPolttoaine = {
+const MuuPolttoaine = {
   nimi: String(30),
   yksikko: String(12),
   muunnoskerroin: FloatPos,
@@ -234,12 +234,7 @@ export const v2018 = {
       'pilkkeet-havu-sekapuu': FloatPos,
       'pilkkeet-koivu': FloatPos,
       puupelletit: FloatPos,
-      vapaa: [
-        VapaaPolttoaine,
-        VapaaPolttoaine,
-        VapaaPolttoaine,
-        VapaaPolttoaine
-      ]
+      muu: R.repeat(MuuPolttoaine, 4)
     },
     'sahko-vuosikulutus-yhteensa': FloatPos,
     'kaukolampo-vuosikulutus-yhteensa': FloatPos,

@@ -616,26 +616,8 @@
         "pilkkeet-koivu-yksikko": "pino-m³",
         "puupelletit": "Puupellettien ostettu vuosimäärä",
         "puupelletit-yksikko": "kg",
-        "vapaa": {
+        "muu": {
           "0": {
-            "nimi": "Polttoaineen nimi",
-            "yksikko": "Polttoaineen yksikkö",
-            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
-            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
-          },
-          "1": {
-            "nimi": "Polttoaineen nimi",
-            "yksikko": "Polttoaineen yksikkö",
-            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
-            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
-          },
-          "2": {
-            "nimi": "Polttoaineen nimi",
-            "yksikko": "Polttoaineen yksikkö",
-            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
-            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa"
-          },
-          "3": {
             "nimi": "Polttoaineen nimi",
             "yksikko": "Polttoaineen yksikkö",
             "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
