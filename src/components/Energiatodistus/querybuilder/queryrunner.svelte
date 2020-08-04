@@ -10,12 +10,7 @@
 
   const toQueryParameter = ([operation, key, ...values]) =>
     R.compose(
-      R.map(
-        R.compose(
-          R.split(' '),
-          op => R.apply(op.command, [key, ...values])
-        )
-      ),
+      R.map(op => R.apply(op.command, [key, ...values])),
       Maybe.fromNull,
       R.find(
         R.compose(

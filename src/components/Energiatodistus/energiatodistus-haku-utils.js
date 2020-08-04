@@ -6,28 +6,28 @@ import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date
 
 const gt = {
   operation: '>',
-  command: R.curry((first, second) => `> ${first} ${second}`)
+  command: R.curry((first, second) => ['>', first, second])
 };
 const gte = {
   operation: '>=',
-  command: R.curry((first, second) => `>= ${first} ${second}`)
+  command: R.curry((first, second) => ['>=', first, second])
 };
 const lt = {
   operation: '<',
-  command: R.curry((first, second) => `< ${first} ${second}`)
+  command: R.curry((first, second) => ['<', first, second])
 };
 const lte = {
   operation: '<=',
-  command: R.curry((first, second) => `<= ${first} ${second}`)
+  command: R.curry((first, second) => ['<=', first, second])
 };
 const eq = {
   operation: '=',
-  command: R.curry((first, second) => `= ${first} ${second}`)
+  command: R.curry((first, second) => ['=', first, second])
 };
 
 const contains = {
   operation: 'sisaltaa',
-  command: R.curry((first, second) => `like ${first} %${second}%`)
+  command: R.curry((first, second) => ['like', first, `%${second}%`])
 };
 
 const allComparisons = [eq, gt, gte, lt, lte];

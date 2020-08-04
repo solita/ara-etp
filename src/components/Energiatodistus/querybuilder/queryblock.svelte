@@ -62,10 +62,7 @@
         k =>
           (model = R.set(
             blockLens,
-            R.compose(
-              R.split(' '),
-              k.defaultOperator.command
-            )(k.defaultValue),
+            k.defaultOperator.command(k.defaultValue),
             model
           ))
       )
