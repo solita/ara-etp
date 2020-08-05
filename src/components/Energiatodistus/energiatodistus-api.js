@@ -90,14 +90,11 @@ export const url = {
 export const toQueryString = R.compose(
   Maybe.orSome(''),
   R.map(R.compose(R.concat('?'), R.join('&'))),
-  R.tap(console.log),
   Maybe.toMaybeList,
-  R.tap(console.log),
   R.map(([key, optionalValue]) =>
     R.map(value => `${key}=${value}`, optionalValue)
   ),
-  R.toPairs,
-  R.tap(console.log)
+  R.toPairs
 );
 
 export const getEnergiatodistukset = R.compose(
