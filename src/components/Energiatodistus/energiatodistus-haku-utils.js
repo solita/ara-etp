@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as Maybe from '@Utility/maybe-utils';
 
 import NumberOperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/number-operator-input';
 import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
@@ -33,7 +34,7 @@ const contains = {
 
 const allComparisons = [eq, gt, gte, lt, lte];
 
-export const operations = () => [...allComparisons, contains];
+const operations = [...allComparisons, contains];
 
 const kriteeri = (
   key,
@@ -137,3 +138,26 @@ export const laatijaKriteerit = () => [
   allekirjoitusaikaKriteeri,
   ...R.values(perustiedot())
 ];
+
+export const findOperation = operation =>
+  R.compose(
+    Maybe.fromNull,
+    R.find(R.compose(R.equals(operation), R.prop('operation')))
+  )(operations);
+
+export const blockToQueryParameter = ([operation, key, ...values]) =>
+  R.compose(
+    R.map(op => R.apply(op.command, [key, ...values])),
+    findOperation
+  )(operation);
+
+export const convertWhereToQuery = R.compose(
+  R.filter(R.length),
+  R.map(
+    R.compose(
+      R.map(Maybe.get),
+      R.filter(Maybe.isSome),
+      R.map(blockToQueryParameter)
+    )
+  )
+);
