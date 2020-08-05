@@ -325,7 +325,7 @@ export const polttoaineet = R.compose(
 const vapaaPolttoaine = R.path([
   'toteutunut-ostoenergiankulutus',
   'ostetut-polttoaineet',
-  'vapaa'
+  'muu'
 ]);
 
 export const vapaatPolttoaineet = R.compose(

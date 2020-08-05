@@ -97,7 +97,7 @@
         </td>
       </tr>
     {/each}
-    {#each R.path(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa'], energiatodistus) as vapaa, index}
+    {#each R.path(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu'], energiatodistus) as muu, index}
       <tr class="et-table--tr">
         <td class="et-table--td">
           <Input
@@ -105,7 +105,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'nimi']} />
+            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'nimi']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -113,7 +113,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'maara-vuodessa']} />
+            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'maara-vuodessa']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -121,7 +121,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'yksikko']} />
+            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'yksikko']} />
         </td>
         <td class="et-table--td">
           <Input
@@ -129,7 +129,7 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'vapaa', index, 'muunnoskerroin']} />
+            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'muunnoskerroin']} />
         </td>
         <td class="et-table--td">
           {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}

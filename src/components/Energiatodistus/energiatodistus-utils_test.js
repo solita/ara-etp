@@ -559,7 +559,7 @@ describe('Energiatodistus Utils: ', () => {
       const et = {
         'toteutunut-ostoenergiankulutus': {
           'ostetut-polttoaineet': {
-            vapaa: [
+            muu: [
               {
                 'maara-vuodessa': Either.Right(Maybe.Some(1))
               },
@@ -593,7 +593,7 @@ describe('Energiatodistus Utils: ', () => {
       const et = {
         'toteutunut-ostoenergiankulutus': {
           'ostetut-polttoaineet': {
-            vapaa: [
+            muu: [
               {
                 muunnoskerroin: Either.Right(Maybe.Some(1))
               },
