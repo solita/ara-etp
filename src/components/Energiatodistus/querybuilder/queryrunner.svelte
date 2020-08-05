@@ -5,6 +5,7 @@
 
   export let where;
   export let query;
+  export let runQuery;
 
   const operations = EtHakuUtils.operations();
 
@@ -20,17 +21,20 @@
       )
     )(operations);
 
-  $: query = R.compose(
-    JSON.stringify,
-    R.filter(R.length),
-    R.map(R.map(Maybe.get)),
-    R.map(R.filter(Maybe.isSome)),
-    R.map(R.map(toQueryParameter))
-  )(where);
-
-  $: console.log(`generated query:  ${query}`);
+  $: R.compose(
+    runQuery,
+    R.assoc(
+      'where',
+      R.compose(
+        R.filter(R.length),
+        R.map(
+          R.compose(
+            R.map(Maybe.get),
+            R.filter(Maybe.isSome),
+            R.map(toQueryParameter)
+          )
+        )
+      )(where)
+    )
+  )(query);
 </script>
-
-<style>
-
-</style>

@@ -4,6 +4,9 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as api from './energiatodistus-api';
 
+  import { querystring } from 'svelte-spa-router';
+  import qs from 'qs';
+
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
   import { push } from '@Component/Router/router';
@@ -22,10 +25,6 @@
 
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
-
-  let query = {
-    tila: Maybe.None()
-  };
 
   const formatTila = R.compose(
     Maybe.orSome($_('validation.no-selection')),
@@ -69,25 +68,53 @@
     );
   };
 
-  $: R.compose(
-    Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-        R.always($_('energiatodistus.messages.load-error'))
+  const runQuery = query =>
+    R.compose(
+      Future.fork(
+        R.compose(
+          R.tap(toggleOverlay(false)),
+          R.tap(flashMessageStore.add('Energiatodistus', 'error')),
+          R.always($_('energiatodistus.messages.load-error'))
+        ),
+        R.compose(
+          response => {
+            energiatodistukset = response[0];
+          },
+          R.tap(toggleOverlay(false))
+        )
       ),
-      R.compose(
-        response => {
-          energiatodistukset = response[0];
-        },
-        R.tap(toggleOverlay(false))
-      )
-    ),
-    Future.parallel(5),
-    R.tap(toggleOverlay(true))
-  )([api.getEnergiatodistukset(query), api.laatimisvaiheet]);
+      Future.parallel(5),
+      R.tap(toggleOverlay(true))
+    )([
+      api.getEnergiatodistukset(
+        R.compose(
+          R.pickBy(Maybe.isSome),
+          R.evolve({
+            where: R.compose(
+              R.map(JSON.stringify),
+              Maybe.fromEmpty
+            )
+          })
+        )(query)
+      ),
+      api.laatimisvaiheet
+    ]);
 
-  $: console.log(`currentQuery: ${JSON.stringify(query)}`);
+  $: parsedQuery = R.compose(
+    R.mergeRight({
+      tila: Maybe.None(),
+      where: ''
+    }),
+    R.evolve({
+      tila: Maybe.fromNull,
+      where: R.compose(
+        Maybe.orSome(''),
+        R.map(JSON.parse),
+        Maybe.fromNull
+      )
+    }),
+    qs.parse
+  )($querystring);
 </script>
 
 <style>
@@ -97,7 +124,7 @@
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
   <div class="mb-10">
-    <EnergiatodistusHaku />
+    <EnergiatodistusHaku {parsedQuery} {runQuery} />
   </div>
   <Overlay {overlay}>
     <div slot="content">
@@ -105,7 +132,7 @@
         <Select
           label={'Tila'}
           disabled={false}
-          bind:model={query}
+          bind:model={parsedQuery}
           lens={R.lensProp('tila')}
           format={formatTila}
           parse={Maybe.Some}

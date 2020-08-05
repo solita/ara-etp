@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+
 import NumberOperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/number-operator-input';
 import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
 import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
@@ -127,9 +128,9 @@ export const perustiedot = () => ({
   // )
 });
 
-export let defaultKriteeriBlock = () => ['=', 'id', ''];
+export const defaultKriteeriBlock = () => ['=', 'id', ''];
 
-export let defaultKriteeri = () => [[['=', 'id', '']]];
+export const defaultKriteeri = () => [[['=', 'id', '']]];
 
 export const laatijaKriteerit = () => [
   idKriteeri,

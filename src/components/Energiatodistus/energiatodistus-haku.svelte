@@ -15,21 +15,15 @@
 
   import { _ } from '@Language/i18n';
 
-  export let query = '';
+  export let parsedQuery;
+  export let runQuery;
 
-  let valitutKriteerit = [];
+  $: parsedWhere = R.prop('where', parsedQuery);
+  $: where = parsedWhere;
 
   let hakuValue = '';
 
   const valittuHaku = Maybe.None();
-
-  $: where = R.compose(
-    Maybe.orSome(''),
-    R.map(JSON.parse),
-    Maybe.fromNull,
-    R.prop('where'),
-    qs.parse
-  )($querystring);
 
   $: showHakukriteerit = where.length > 0;
 
@@ -80,4 +74,4 @@
   </div>
 {/if}
 
-<QueryRunner {where} bind:query />
+<QueryRunner where={parsedWhere} query={parsedQuery} {runQuery} />
