@@ -1,10 +1,12 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 
-import NumberOperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/number-operator-input';
-import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
-import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
-import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date-input';
+export const OPERATOR_TYPES = Object.freeze({
+  STRING: 'STRING',
+  NUMBER: 'NUMBER',
+  DATESINGLE: 'DATESINGLE',
+  BOOLEAN: 'BOOLEAN'
+});
 
 const gt = {
   operation: '>',
@@ -36,13 +38,7 @@ const allComparisons = [eq, gt, gte, lt, lte];
 
 const operations = [...allComparisons, contains];
 
-const kriteeri = (
-  key,
-  operators,
-  defaultOperator,
-  defaultValues,
-  component
-) => ({
+const kriteeri = (key, operators, defaultOperator, defaultValues, type) => ({
   key,
   operators: R.map(R.over(R.lensProp('command'), R.applyTo(key)), operators),
   defaultOperator: R.over(
@@ -51,7 +47,7 @@ const kriteeri = (
     defaultOperator
   ),
   defaultValues,
-  component
+  type
 });
 
 const korvattuEnergiatodistusIdKriteeri = kriteeri(
@@ -59,7 +55,7 @@ const korvattuEnergiatodistusIdKriteeri = kriteeri(
   allComparisons,
   eq,
   [''],
-  OperatorInput
+  OPERATOR_TYPES.STRING
 );
 
 export const idKriteeri = kriteeri(
@@ -67,7 +63,7 @@ export const idKriteeri = kriteeri(
   allComparisons,
   eq,
   [''],
-  NumberOperatorInput
+  OPERATOR_TYPES.NUMBER
 );
 
 const allekirjoitusaikaKriteeri = kriteeri(
@@ -75,26 +71,32 @@ const allekirjoitusaikaKriteeri = kriteeri(
   allComparisons,
   eq,
   [''],
-  DateInput
+  OPERATOR_TYPES.DATESINGLE
 );
 
 // const viimeinenvoimassaoloKriteeri = kriteeri('viimeinenvoimassaolo', []);
 
 export const perustiedot = () => ({
-  nimi: kriteeri('perustiedot.nimi', [eq, contains], eq, '', OperatorInput),
+  nimi: kriteeri(
+    'perustiedot.nimi',
+    [eq, contains],
+    eq,
+    '',
+    OPERATOR_TYPES.STRING
+  ),
   rakennustunnus: kriteeri(
     'perustiedot.rakennustunnus',
     allComparisons,
     eq,
     [''],
-    OperatorInput
+    OPERATOR_TYPES.STRING
   ),
   kiinteistotunnus: kriteeri(
     'perustiedot.kiinteistotunnus',
     allComparisons,
     eq,
     [''],
-    OperatorInput
+    OPERATOR_TYPES.STRING
   ),
   // 'katuosoite-fi': kriteeri('perustiedot.katuosoite-fi', []),
   // 'katuosoite-sv': kriteeri('perustiedot.katuosoite-sv', []),
@@ -103,21 +105,21 @@ export const perustiedot = () => ({
     allComparisons,
     eq,
     [''],
-    OperatorInput
+    OPERATOR_TYPES.STRING
   ),
   'onko-julkinen-rakennus': kriteeri(
     'perustiedot.onko-julkinen-rakennus',
     [eq],
     eq,
     'true',
-    BooleanInput
+    OPERATOR_TYPES.BOOLEAN
   ),
   uudisrakennus: kriteeri(
     'perustiedot.uudisrakennus',
     [eq],
     eq,
     [''],
-    OperatorInput
+    OPERATOR_TYPES.STRING
   )
   // laatimisvaihe: kriteeri('perustiedot.laatimisvaihe', []),
   // havainnointikaynti: kriteeri('perustiedot.havainnointikaynti', []),
