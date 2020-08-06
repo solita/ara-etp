@@ -23,6 +23,8 @@
   let failure = false;
   let energiatodistukset = [];
 
+  let cancel = () => {};
+
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
 
@@ -69,7 +71,7 @@
   };
 
   const runQuery = query =>
-    R.compose(
+    (cancel = R.compose(
       Future.fork(
         R.compose(
           R.tap(toggleOverlay(false)),
@@ -84,7 +86,8 @@
         )
       ),
       Future.parallel(5),
-      R.tap(toggleOverlay(true))
+      R.tap(toggleOverlay(true)),
+      R.tap(cancel)
     )([
       api.getEnergiatodistukset(
         R.compose(
@@ -98,7 +101,7 @@
         )(query)
       ),
       api.laatimisvaiheet
-    ]);
+    ]));
 
   $: parsedQuery = R.compose(
     R.mergeRight({
