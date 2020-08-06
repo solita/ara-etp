@@ -40,7 +40,7 @@ const kriteeri = (
   key,
   operators,
   defaultOperator,
-  defaultValue,
+  defaultValues,
   component
 ) => ({
   key,
@@ -50,7 +50,7 @@ const kriteeri = (
     R.applyTo(key),
     defaultOperator
   ),
-  defaultValue,
+  defaultValues,
   component
 });
 
@@ -58,7 +58,7 @@ const korvattuEnergiatodistusIdKriteeri = kriteeri(
   'korvattu-energiatodistus-id',
   allComparisons,
   eq,
-  '',
+  [''],
   OperatorInput
 );
 
@@ -66,7 +66,7 @@ export const idKriteeri = kriteeri(
   'id',
   allComparisons,
   eq,
-  '',
+  [''],
   NumberOperatorInput
 );
 
@@ -74,7 +74,7 @@ const allekirjoitusaikaKriteeri = kriteeri(
   'allekirjoitusaika',
   allComparisons,
   eq,
-  '',
+  [''],
   DateInput
 );
 
@@ -86,14 +86,14 @@ export const perustiedot = () => ({
     'perustiedot.rakennustunnus',
     allComparisons,
     eq,
-    '',
+    [''],
     OperatorInput
   ),
   kiinteistotunnus: kriteeri(
     'perustiedot.kiinteistotunnus',
     allComparisons,
     eq,
-    '',
+    [''],
     OperatorInput
   ),
   // 'katuosoite-fi': kriteeri('perustiedot.katuosoite-fi', []),
@@ -102,7 +102,7 @@ export const perustiedot = () => ({
     'perustiedot.postinumero',
     allComparisons,
     eq,
-    '',
+    [''],
     OperatorInput
   ),
   'onko-julkinen-rakennus': kriteeri(
@@ -116,7 +116,7 @@ export const perustiedot = () => ({
     'perustiedot.uudisrakennus',
     [eq],
     eq,
-    '',
+    [''],
     OperatorInput
   )
   // laatimisvaihe: kriteeri('perustiedot.laatimisvaihe', []),
@@ -210,4 +210,8 @@ export const removeQueryItem = R.curry((index, queryItems) =>
 
 export const appendDefaultQueryItem = R.append(
   R.assoc('conjunction', Maybe.Some('and'), defaultKriteeriQueryItem())
+);
+
+export const findFromKriteeritByKey = R.curry((kriteerit, key) =>
+  R.compose(Maybe.fromNull, R.find(R.propEq('key', key)))(kriteerit)
 );

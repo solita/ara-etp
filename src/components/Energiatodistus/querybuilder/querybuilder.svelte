@@ -37,7 +37,8 @@
       text={$_('energiatodistus.haku.lisaa_hakuehto')}
       icon={'add_circle_outline'}
       on:click={evt => {
-        queryItems = EtHakuUtils.appendDefaultQueryItem(queryItems);
+        const items = EtHakuUtils.appendDefaultQueryItem(queryItems);
+        queryItems = R.when(R.compose( R.equals(1), R.length, R.tap(console.log) ), R.set(R.compose( R.lensIndex(0), R.lensProp('conjunction') ), Maybe.None()), items);
       }} />
   </div>
   <div class="flex">
@@ -50,7 +51,7 @@
       <Button
         text={$_('energiatodistus.haku.tyhjenna_hakuehdot')}
         style={'secondary'}
-        on:click={evt => (queryItems = [EtHakuUtils.defaultKriteeriQueryItem()])} />
+        on:click={evt => (queryItems = [])} />
     </div>
   </div>
 </div>

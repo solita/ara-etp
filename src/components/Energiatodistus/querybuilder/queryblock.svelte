@@ -27,26 +27,11 @@
 
   const laatijaKriteerit = EtHakuUtils.laatijaKriteerit();
 
-  const findKriteeri = R.curry((kriteerit, key) =>
-    R.compose(
-      Maybe.fromNull,
-      R.find(
-        R.compose(
-          R.equals(key),
-          R.prop('key')
-        )
-      )
-    )(kriteerit)
-  );
-
   let conjunction = R.view(conjunctionLens, model);
-
-  let key = Maybe.fromNull(R.view(keyLens, model));
 
   let kriteeri = R.compose(
     R.assoc('kriteeri', R.__, {}),
-    R.chain(findKriteeri(laatijaKriteerit)),
-    Maybe.fromNull,
+    EtHakuUtils.findFromKriteeritByKey(laatijaKriteerit),
     R.view(keyLens)
   )(model);
 
@@ -62,7 +47,7 @@
         k =>
           (model = R.set(
             blockLens,
-            k.defaultOperator.command(k.defaultValue),
+            k.defaultOperator.command(...k.defaultValues),
             model
           ))
       )
