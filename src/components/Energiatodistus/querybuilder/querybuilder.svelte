@@ -13,7 +13,10 @@
   export let where;
   export let navigate;
 
-  let queryItems = EtHakuUtils.deserializeWhere(where);
+  let queryItems = R.compose(
+    EtHakuUtils.deserializeWhere,
+    R.unless(R.length, EtHakuUtils.defaultWhere)
+  )(where);
 
   if (!R.length(queryItems)) {
     queryItems = [EtHakuUtils.defaultKriteeriQueryItem()];

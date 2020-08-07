@@ -136,6 +136,8 @@ export const defaultKriteeriQueryItem = () => ({
   block: ['=', 'id', 0]
 });
 
+export const defaultWhere = () => [[['=', 'id', 0]]];
+
 export const laatijaKriteerit = () => [
   idKriteeri,
   allekirjoitusaikaKriteeri,
