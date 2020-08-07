@@ -4,6 +4,8 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Navigation from '@Utility/navigation';
 import * as RUtils from '@Utility/ramda-utils';
 
+import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+
 const createCrumb = R.curry((url, label) => ({ url, label }));
 
 const labelLens = R.lensProp('label');
@@ -203,9 +205,41 @@ export const parseAction = R.curry((i18n, action) => {
   return crumbPart;
 });
 
+export const roleBasedRootCrumb = R.curry((i18n, user) => {
+  return R.compose(
+    R.cond([
+      [
+        R.equals(KayttajaUtils.laatijaRole),
+        R.always(
+          createCrumb(
+            '#/energiatodistus/all',
+            i18n('navigation.energiatodistukset')
+          )
+        )
+      ],
+      [
+        R.equals(KayttajaUtils.patevyydentoteajaRole),
+        R.always(
+          createCrumb(
+            '#/laatija/laatijoidentuonti',
+            i18n('navigation.laatijoidentuonti')
+          )
+        )
+      ],
+      [
+        R.equals(KayttajaUtils.paakayttajaRole),
+        R.always(createCrumb('#/tyojono', i18n('navigation.tyojono')))
+      ]
+    ]),
+    R.prop('rooli')
+  )(user);
+});
+
 export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
   R.compose(
+    R.uniq,
     R.flatten,
+    R.prepend(roleBasedRootCrumb(i18n, user)),
     Array.of,
     R.cond([
       [
