@@ -136,8 +136,6 @@ export const defaultKriteeriQueryItem = () => ({
   block: ['=', 'id', 0]
 });
 
-export const defaultKriteeri = () => [[['=', 'id', 0]]];
-
 export const laatijaKriteerit = () => [
   idKriteeri,
   allekirjoitusaikaKriteeri,
@@ -167,26 +165,20 @@ export const convertWhereToQuery = R.compose(
   )
 );
 
-export const deserializeBlock = ([conjunction, block]) => ({
+export const deserializeConjuntionBlockPair = ([conjunction, block]) => ({
   conjunction,
   block
 });
 
 export const deserializeAndBlocks = R.converge(R.concat, [
-  R.take(1),
+  R.compose(Array.of, R.pair(Maybe.Some('or')), R.head),
   R.compose(R.map(R.pair(Maybe.Some('and'))), R.tail)
 ]);
 
-export const deserializeOrBlocks = R.converge(R.concat, [
-  R.take(1),
-  R.compose(R.map(R.over(R.lensIndex(0), R.pair(Maybe.Some('or')))), R.tail)
-]);
-
 export const deserializeWhere = R.compose(
-  R.map(deserializeBlock),
-  R.over(R.lensIndex(0), R.pair(Maybe.None())),
+  R.map(deserializeConjuntionBlockPair),
+  R.set(R.compose(R.lensIndex(0), R.lensIndex(0)), Maybe.None()),
   R.unnest,
-  deserializeOrBlocks,
   R.map(deserializeAndBlocks)
 );
 
