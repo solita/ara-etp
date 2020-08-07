@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import * as Maybe from '@Utility/maybe-utils';
 import * as EtHakuUtils from './energiatodistus-haku-utils';
 
-describe.only('EtHakuUtils:', () => {
+describe('EtHakuUtils:', () => {
   describe('findOperation', () => {
     it('should return Some when operation is found', () => {
       const operation = 'sisaltaa';
