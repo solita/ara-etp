@@ -7,7 +7,7 @@
   import { _ } from '@Language/i18n';
   import ExistingEnergiatodistus from './ExistingEnergiatodistus';
   import NewEnergiatodistus from './NewEnergiatodistus';
-  import Energiatodistukset from './Energiatodistukset';
+  import Energiatodistukset from './energiatodistukset';
   import Liitteet from './Liitteet';
   import Allekirjoitus from './Allekirjoitus';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';

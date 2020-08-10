@@ -14,6 +14,11 @@
   div:hover {
     @apply border-hover bg-background;
   }
+
+  div:hover :global(input) {
+    @apply bg-background;
+  }
+
   .focused {
     @apply border-primary;
   }

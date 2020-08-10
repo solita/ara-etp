@@ -168,8 +168,8 @@
       "or": "Tai",
       "suosikkihaut": "Suosikkihaut",
       "allekirjoitusaika": "Allekirjoitusaika",
+      "id": "Tunnus",
       "perustiedot": {
-        "id": "Tunnus",
         "nimi": "Nimi",
         "rakennustunnus": "Pysyvä rakennustunnus",
         "kiinteistotunnus": "Kiinteistötunnus",

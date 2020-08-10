@@ -7,8 +7,21 @@
 
   import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
 
+  import NumberOperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/number-operator-input';
+  import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
+  import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
+  import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date-input';
+
   export let model;
   export let lens;
+
+  const mapOperatorTypeToComponent = type =>
+    R.prop(type, {
+      [EtHakuUtils.OPERATOR_TYPES.STRING]: OperatorInput,
+      [EtHakuUtils.OPERATOR_TYPES.NUMBER]: NumberOperatorInput,
+      [EtHakuUtils.OPERATOR_TYPES.DATESINGLE]: DateInput,
+      [EtHakuUtils.OPERATOR_TYPES.BOOLEAN]: BooleanInput
+    });
 
   const conjunctionLens = R.compose(
     lens,
@@ -27,26 +40,11 @@
 
   const laatijaKriteerit = EtHakuUtils.laatijaKriteerit();
 
-  const findKriteeri = R.curry((kriteerit, key) =>
-    R.compose(
-      Maybe.fromNull,
-      R.find(
-        R.compose(
-          R.equals(key),
-          R.prop('key')
-        )
-      )
-    )(kriteerit)
-  );
-
   let conjunction = R.view(conjunctionLens, model);
-
-  let key = Maybe.fromNull(R.view(keyLens, model));
 
   let kriteeri = R.compose(
     R.assoc('kriteeri', R.__, {}),
-    R.chain(findKriteeri(laatijaKriteerit)),
-    Maybe.fromNull,
+    EtHakuUtils.findFromKriteeritByKey(laatijaKriteerit),
     R.view(keyLens)
   )(model);
 
@@ -62,10 +60,7 @@
         k =>
           (model = R.set(
             blockLens,
-            R.compose(
-              R.split(' '),
-              k.defaultOperator.command
-            )(k.defaultValue),
+            k.defaultOperator.command(...k.defaultValues),
             model
           ))
       )
@@ -109,7 +104,7 @@
     <div class="w-1/2">
       {#each R.compose( Maybe.toArray, R.prop('kriteeri') )(kriteeri) as k}
         <svelte:component
-          this={k.component}
+          this={mapOperatorTypeToComponent(k.type)}
           bind:model
           operators={k.operators}
           lens={blockLens} />

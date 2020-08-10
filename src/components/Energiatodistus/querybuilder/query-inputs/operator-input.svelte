@@ -26,7 +26,7 @@
 <div class="flex">
   <div class="w-1/2">
     <Select
-      items={R.map(R.prop('label'), operators)}
+      items={R.map(R.prop('operation'), operators)}
       bind:model
       lens={operatorLens}
       format={R.compose( $_, R.concat('energiatodistus.haku.') )}

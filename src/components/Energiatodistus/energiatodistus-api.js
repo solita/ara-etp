@@ -89,11 +89,10 @@ export const url = {
 
 export const toQueryString = R.compose(
   Maybe.orSome(''),
-  Maybe.map(R.concat('?')),
-  Maybe.map(R.join('&')),
+  R.map(R.compose(R.concat('?'), R.join('&'))),
   Maybe.toMaybeList,
   R.map(([key, optionalValue]) =>
-    Maybe.map(value => `${key}=${value}`, optionalValue)
+    R.map(value => `${key}=${value}`, optionalValue)
   ),
   R.toPairs
 );

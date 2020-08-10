@@ -11,31 +11,30 @@
   import Select from '@Component/Select/Select';
   import ToggleButton from '@Component/ToggleButton/ToggleButton';
   import QueryBuilder from './querybuilder/querybuilder';
+  import QueryRunner from './querybuilder/queryrunner';
 
   import { _ } from '@Language/i18n';
 
-  let valitutKriteerit = [];
+  export let parsedQuery;
+  export let runQuery;
+
+  $: parsedWhere = R.prop('where', parsedQuery);
+  $: where = parsedWhere;
 
   let hakuValue = '';
 
   const valittuHaku = Maybe.None();
 
-  $: where = R.compose(
-    Maybe.orSome(''),
-    Maybe.fromNull,
-    R.prop('where'),
-    qs.parse
-  )($querystring);
-
   $: showHakukriteerit = where.length > 0;
 
-  $: navigate = where =>
-    R.compose(
-      push,
-      R.concat(`${$location}?`),
-      params => qs.stringify(params, { encode: false }),
-      R.mergeRight(qs.parse($querystring))
-    )({ where });
+  $: navigate = R.compose(
+    push,
+    R.concat(`${$location}?`),
+    params => qs.stringify(params, { encode: false }),
+    R.mergeRight(qs.parse($querystring)),
+    R.assoc('where', R.__, {}),
+    JSON.stringify
+  );
 </script>
 
 <style>
@@ -74,3 +73,5 @@
     <QueryBuilder bind:where {navigate} />
   </div>
 {/if}
+
+<QueryRunner where={parsedWhere} query={parsedQuery} {runQuery} />
