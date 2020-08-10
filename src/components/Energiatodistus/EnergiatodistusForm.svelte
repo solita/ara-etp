@@ -25,6 +25,8 @@
 
   let schema = schemas['v' + version];
 
+  let inputLanguage;
+
   const forms = {
     '2018': ET2018Form,
     '2013': ET2013Form
@@ -139,6 +141,8 @@
     <div class="sticky top-3em w-1/6 self-start flex justify-end">
       <ToolBar
         save={submit$}
+        energiatodistusKieli={energiatodistus.perustiedot.kieli}
+        bind:inputLanguage
         {cancel}
         {version}
         id={Maybe.fromNull(energiatodistus.id)} />
