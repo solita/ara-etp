@@ -13,6 +13,7 @@
   export let schema;
   export let disabled;
   export let energiatodistus;
+  export let inputLanguage;
 
   export let labelLocale;
 
@@ -91,8 +92,9 @@
       {disabled}
       {schema}
       {center}
+      inputLanguage={Maybe.Some(inputLanguage)}
       bind:model={energiatodistus}
-      path={['perustiedot', 'katuosoite-fi']} />
+      path={['perustiedot', 'katuosoite']} />
   </div>
 
   <div class="lg:w-1/5 w-full px-4 py-4">

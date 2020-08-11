@@ -138,6 +138,7 @@
 
   <RakennuksenPerustiedot
       {schema}
+      {inputLanguage}
       {disabled}
       bind:energiatodistus
       {labelLocale}
