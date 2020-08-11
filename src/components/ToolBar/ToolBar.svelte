@@ -26,7 +26,8 @@
   )(energiatodistusKieli);
 
   $: inputLanguage = bilingual ?
-      selectedLanguage : energiatodistusKieli.map(et.kielisyysKey).some();
+      selectedLanguage :
+      Maybe.orSome(selectedLanguage, R.map(et.kielisyysKey, energiatodistusKieli));
 
   function toggleLanguageSelection() {
     if (bilingual) {
