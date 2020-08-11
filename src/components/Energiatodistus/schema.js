@@ -238,10 +238,8 @@ export const v2018 = {
     'kaukojaahdytys-vuosikulutus-yhteensa': FloatPos
   },
   huomiot: {
-    'suositukset-fi': String(1500),
-    'suositukset-sv': String(1500),
-    'lisatietoja-fi': String(500),
-    'lisatietoja-sv': String(500),
+    'suositukset': String(1500),
+    'lisatietoja': String(500),
     'iv-ilmastointi': Huomio,
     'valaistus-muut': Huomio,
     lammitys: Huomio,

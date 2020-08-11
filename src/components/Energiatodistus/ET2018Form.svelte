@@ -282,7 +282,8 @@
           huomio={'iv-ilmastointi'} bind:energiatodistus />
   <Huomio {disabled} {schema} {inputLanguage}
           huomio={'valaistus-muut'} bind:energiatodistus />
-  <Suositukset versio={2018} {disabled} {schema} bind:energiatodistus />
+
+  <Suositukset versio={2018} {disabled} {schema} {inputLanguage} bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">
