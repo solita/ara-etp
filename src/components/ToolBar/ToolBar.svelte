@@ -1,8 +1,10 @@
 <script>
+  import * as R from 'ramda';
+
   import { replace } from 'svelte-spa-router';
-  import LanguageSelect from './LanguageSelect';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
 
   import Confirm from '@Component/Confirm/Confirm';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
@@ -12,9 +14,29 @@
 
   export let version;
   export let id = Maybe.None();
+  export let inputLanguage = 'fi';
+  export let energiatodistusKieli = Maybe.None();
 
-  const pdfUrl = Maybe.map(
-    i => `/api/private/energiatodistukset/${version}/${i}/pdf/fi/energiatodistus-${i}-fi.pdf`,
+  let bilingual = true;
+  let selectedLanguage = 'fi';
+
+  $: bilingual = R.compose(
+    Maybe.orSome(true),
+    R.map(R.equals(et.kielisyys.bilingual))
+  )(energiatodistusKieli);
+
+  $: inputLanguage = bilingual ?
+      selectedLanguage :
+      Maybe.orSome(selectedLanguage, R.map(et.kielisyysKey, energiatodistusKieli));
+
+  function toggleLanguageSelection() {
+    if (bilingual) {
+      selectedLanguage = R.equals(selectedLanguage, 'fi') ? 'sv' : 'fi';
+    }
+  }
+
+  $: pdfUrl = Maybe.map(
+    i => `/api/private/energiatodistukset/${version}/${i}/pdf/${inputLanguage}/energiatodistus-${i}-${inputLanguage}.pdf`,
     id
   );
 
@@ -66,8 +88,20 @@
 </style>
 
 <div class="flex flex-col text-secondary">
-  <button>
-    <LanguageSelect />
+  <button on:click={toggleLanguageSelection}>
+  {#if bilingual}
+    <div class="flex flex-row w-full">
+      {#each ['fi', 'sv'] as language}
+        <div class="w-1/2 text-light text-lg description"
+             class:bg-primary={R.equals(selectedLanguage, language)}
+             class:bg-secondary={!R.equals(selectedLanguage, language)}>
+          {language}
+        </div>
+      {/each}
+    </div>
+  {:else}
+    <div class="w-full text-light description bg-primary">{energiatodistusKieli.map(et.kielisyysKey).some()}</div>
+  {/if}
   </button>
   <button on:click={save}>
     <span class="description">
@@ -95,14 +129,14 @@
       <span class="text-2xl font-icon">file_copy</span>
     </button>
   {/if}
-  {#if pdfUrl.isSome()}
+  {#each pdfUrl.toArray() as url}
     <button>
-      <a href={pdfUrl.some()}>
+      <a href={url}>
         <span class="block description">Esikatselu</span>
         <span class="text-2xl font-icon">picture_as_pdf</span>
       </a>
     </button>
-  {/if}
+  {/each}
   {#if id.isSome()}
     <Confirm
       let:confirm
