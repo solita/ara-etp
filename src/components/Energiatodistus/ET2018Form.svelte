@@ -263,6 +263,7 @@
     versio={2018}
     {disabled}
     {schema}
+    {inputLanguage}
     bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />

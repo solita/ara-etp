@@ -182,7 +182,7 @@
 
   <ELuku {schema} {energiatodistus} />
   <ELuvunErittely {disabled} {schema} bind:energiatodistus versio={2013} />
-  <UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
+  <UusiutuvatOmavaraisenergiat {disabled} {schema} {inputLanguage} bind:energiatodistus />
   <TeknistenjarjestelmienEnergiankulutus
       {disabled}
       {schema}
@@ -192,7 +192,7 @@
 
   <HR />
   <H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
-  <EnergiaverkostaOstetut versio={2013} {disabled} {schema} bind:energiatodistus />
+  <EnergiaverkostaOstetut versio={2013} {disabled} {schema} {inputLanguage} bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 

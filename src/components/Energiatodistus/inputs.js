@@ -23,7 +23,7 @@ export const typeLens = R.compose(
 );
 
 export const id = R.compose(
-  R.replace(/-fi|-sv/g),
+  R.replace(/-fi|-sv/g, ''),
   R.join('.'));
 
 export const type = (schema, path) =>

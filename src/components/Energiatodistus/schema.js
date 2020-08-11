@@ -256,8 +256,7 @@ const MuuEnergiamuoto = {
 };
 
 const MuuEnergia = {
-  'nimi-fi': String(30),
-  'nimi-sv': String(30),
+  'nimi': String(30),
   vuosikulutus: FloatPos
 };
 

@@ -12,6 +12,7 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+  export let inputLanguage;
 
   const energiaPerLammitettyNettoala = index =>
       EtUtils.energiaPerLammitettyNettoala(['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']);
@@ -41,7 +42,8 @@
               {schema}
               compact={true}
               bind:model={energiatodistus}
-              path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'nimi-fi']} />
+              inputLanguage={Maybe.Some(inputLanguage)}
+              path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'nimi']} />
         </td>
         <td class="et-table--td">
           <Input
