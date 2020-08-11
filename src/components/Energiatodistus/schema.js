@@ -89,12 +89,10 @@ const MuuPolttoaine = {
 };
 
 const Huomio = {
-  'teksti-fi': String(1000),
-  'teksti-sv': String(1000),
+  'teksti': String(1000),
   toimenpide: [
     {
-      'nimi-fi': String(100),
-      'nimi-sv': String(100),
+      'nimi': String(100),
       lampo: AnyFloat,
       sahko: AnyFloat,
       jaahdytys: AnyFloat,

@@ -198,15 +198,20 @@
 
   <HR />
   <H2 text={$_('energiatodistus.huomiot.header.2013')} />
-  <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'ymparys'} bind:energiatodistus />
   <Huomio
       {disabled}
-      {schema}
+      {schema} {inputLanguage}
       huomio={'alapohja-ylapohja'}
       bind:energiatodistus />
-  <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
-  <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
-  <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'lammitys'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'iv-ilmastointi'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'valaistus-muut'} bind:energiatodistus />
+
   <Suositukset versio={2013} {disabled} {schema} bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
