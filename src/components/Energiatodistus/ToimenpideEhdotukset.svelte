@@ -1,5 +1,6 @@
 <script>
   import { _ } from '@Language/i18n';
+  import * as Maybe from '@Utility/maybe-utils';
 
   import H2 from '@Component/H/H2';
   import H3 from '@Component/H/H3';
@@ -8,6 +9,7 @@
 
   export let disabled;
   export let schema;
+  export let inputLanguage;
   export let energiatodistus;
   export let versio;
 </script>
@@ -23,6 +25,7 @@
   <Textarea
     {disabled}
     {schema}
+    inputLanguage={Maybe.Some(inputLanguage)}
     bind:model={energiatodistus}
-    path={['perustiedot', 'keskeiset-suositukset-fi']} />
+    path={['perustiedot', 'keskeiset-suositukset']} />
 </div>

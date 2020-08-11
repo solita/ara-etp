@@ -53,6 +53,7 @@
 
   export let title = '';
   export let energiatodistus;
+  export let inputLanguage;
   export let luokittelut;
   export let schema;
   export let disabled = false;
@@ -199,6 +200,7 @@
 
   <RakennuksenPerustiedot
     {schema}
+    {inputLanguage}
     {disabled}
     bind:energiatodistus
     {labelLocale}
@@ -209,6 +211,7 @@
   <ToimenpideEhdotukset
     versio={'2018'}
     {disabled}
+    {inputLanguage}
     {schema}
     bind:energiatodistus />
 
@@ -260,29 +263,36 @@
     versio={2018}
     {disabled}
     {schema}
+    {inputLanguage}
     bind:energiatodistus />
   <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
   <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
   <HR />
   <H2 text={$_('energiatodistus.huomiot.header.2018')} />
-  <Huomio {disabled} {schema} huomio={'ymparys'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'ymparys'} bind:energiatodistus />
   <Huomio
     {disabled}
-    {schema}
+    {schema} {inputLanguage}
     huomio={'alapohja-ylapohja'}
     bind:energiatodistus />
-  <Huomio {disabled} {schema} huomio={'lammitys'} bind:energiatodistus />
-  <Huomio {disabled} {schema} huomio={'iv-ilmastointi'} bind:energiatodistus />
-  <Huomio {disabled} {schema} huomio={'valaistus-muut'} bind:energiatodistus />
-  <Suositukset versio={2018} {disabled} {schema} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'lammitys'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'iv-ilmastointi'} bind:energiatodistus />
+  <Huomio {disabled} {schema} {inputLanguage}
+          huomio={'valaistus-muut'} bind:energiatodistus />
+
+  <Suositukset versio={2018} {disabled} {schema} {inputLanguage} bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">
     <Textarea
       {disabled}
       {schema}
+      inputLanguage={Maybe.Some(inputLanguage)}
       bind:model={energiatodistus}
-      path={['lisamerkintoja-fi']} />
+      path={['lisamerkintoja']} />
   </div>
 </div>

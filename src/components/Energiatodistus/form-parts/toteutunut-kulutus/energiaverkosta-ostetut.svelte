@@ -15,6 +15,7 @@
   export let schema;
   export let energiatodistus;
   export let versio;
+  export let inputLanguage;
 </script>
 
 <style type="text/postcss">
@@ -84,7 +85,8 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'nimi-fi']} />
+            inputLanguage={Maybe.Some(inputLanguage)}
+            path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu', index, 'nimi']} />
         </td>
         <td class="et-table--td" />
         <td class="et-table--td" />

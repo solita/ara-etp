@@ -89,12 +89,10 @@ const MuuPolttoaine = {
 };
 
 const Huomio = {
-  'teksti-fi': String(1000),
-  'teksti-sv': String(1000),
+  'teksti': String(1000),
   toimenpide: [
     {
-      'nimi-fi': String(100),
-      'nimi-sv': String(100),
+      'nimi': String(100),
       lampo: AnyFloat,
       sahko: AnyFloat,
       jaahdytys: AnyFloat,
@@ -118,15 +116,13 @@ export const v2018 = {
     rakennustunnus: Rakennustunnus,
     kiinteistotunnus: String(50),
     rakennusosa: String(100),
-    'katuosoite-fi': String(100),
-    'katuosoite-sv': String(100),
+    'katuosoite': String(100),
     postinumero: String(8),
     valmistumisvuosi: Integer(100, new Date().getFullYear()),
     tilaaja: String(200),
     yritys: Yritys,
     havainnointikaynti: DateValue(),
-    'keskeiset-suositukset-fi': String(2500),
-    'keskeiset-suositukset-sv': String(2500)
+    'keskeiset-suositukset': String(2500)
   },
   lahtotiedot: {
     'lammitetty-nettoala': FloatPos,
@@ -242,18 +238,15 @@ export const v2018 = {
     'kaukojaahdytys-vuosikulutus-yhteensa': FloatPos
   },
   huomiot: {
-    'suositukset-fi': String(1500),
-    'suositukset-sv': String(1500),
-    'lisatietoja-fi': String(500),
-    'lisatietoja-sv': String(500),
+    'suositukset': String(1500),
+    'lisatietoja': String(500),
     'iv-ilmastointi': Huomio,
     'valaistus-muut': Huomio,
     lammitys: Huomio,
     ymparys: Huomio,
     'alapohja-ylapohja': Huomio
   },
-  'lisamerkintoja-fi': String(6300),
-  'lisamerkintoja-sv': String(6300)
+  'lisamerkintoja': String(6300)
 };
 
 const MuuEnergiamuoto = {
@@ -263,8 +256,7 @@ const MuuEnergiamuoto = {
 };
 
 const MuuEnergia = {
-  'nimi-fi': String(30),
-  'nimi-sv': String(30),
+  'nimi': String(30),
   vuosikulutus: FloatPos
 };
 

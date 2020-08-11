@@ -13,3 +13,6 @@ export const label = R.curry((locale, item) =>
     item
   )
 );
+
+export const path = R.curry((locale, path) =>
+  R.adjust(-1, R.concat(R.__, '-' + locale), path));
