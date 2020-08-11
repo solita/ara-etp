@@ -124,8 +124,7 @@ export const v2018 = {
     tilaaja: String(200),
     yritys: Yritys,
     havainnointikaynti: DateValue(),
-    'keskeiset-suositukset-fi': String(2500),
-    'keskeiset-suositukset-sv': String(2500)
+    'keskeiset-suositukset': String(2500)
   },
   lahtotiedot: {
     'lammitetty-nettoala': FloatPos,

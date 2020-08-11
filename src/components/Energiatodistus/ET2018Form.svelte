@@ -211,6 +211,7 @@
   <ToimenpideEhdotukset
     versio={'2018'}
     {disabled}
+    {inputLanguage}
     {schema}
     bind:energiatodistus />
 
