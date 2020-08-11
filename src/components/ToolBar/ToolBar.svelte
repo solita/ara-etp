@@ -14,7 +14,7 @@
   export let id = Maybe.None();
 
   const pdfUrl = Maybe.map(
-    i => `/api/private/energiatodistukset/${version}/${i}/pdf`,
+    i => `/api/private/energiatodistukset/${version}/${i}/pdf/fi/energiatodistus-${i}-fi.pdf`,
     id
   );
 
