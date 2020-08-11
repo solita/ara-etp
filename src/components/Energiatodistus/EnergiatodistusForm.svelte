@@ -25,7 +25,7 @@
 
   let schema = schemas['v' + version];
 
-  let inputLanguage;
+  let inputLanguage = 'fi';
 
   const forms = {
     '2018': ET2018Form,
@@ -121,6 +121,7 @@
         <ETForm
           {title}
           bind:energiatodistus
+          {inputLanguage}
           {disabled}
           {schema}
           {luokittelut} />

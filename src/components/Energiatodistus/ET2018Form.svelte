@@ -53,6 +53,7 @@
 
   export let title = '';
   export let energiatodistus;
+  export let inputLanguage;
   export let luokittelut;
   export let schema;
   export let disabled = false;
@@ -282,7 +283,8 @@
     <Textarea
       {disabled}
       {schema}
+      inputLanguage={Maybe.Some(inputLanguage)}
       bind:model={energiatodistus}
-      path={['lisamerkintoja-fi']} />
+      path={['lisamerkintoja']} />
   </div>
 </div>

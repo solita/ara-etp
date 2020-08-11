@@ -43,6 +43,7 @@
 
   export let title = '';
   export let energiatodistus;
+  export let inputLanguage;
   export let luokittelut;
   export let schema;
   export let disabled = false;
@@ -204,10 +205,11 @@
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">
-  <Textarea
+    <Textarea
       {disabled}
       {schema}
+      inputLanguage={Maybe.Some(inputLanguage)}
       bind:model={energiatodistus}
-      path={['lisamerkintoja-fi']} />
+      path={['lisamerkintoja']} />
   </div>
 </div>

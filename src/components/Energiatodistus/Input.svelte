@@ -3,7 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import { locale, _ } from '@Language/i18n';
-
+  import * as inputs from './inputs';
   import * as formats from '@Utility/formats';
 
   import Input from '@Component/Input/Input';
@@ -16,38 +16,23 @@
   export let compact = false;
   export let center = true;
   export let format = formats.optionalString;
+  export let inputLanguage = Maybe.None();
 
-  const index = R.compose(
-    Maybe.fromNull,
-    R.head,
-    R.filter(item => typeof item === 'number')
-  )(path);
+  const id = inputs.id(path);
+  const type = inputs.type(schema, path);
 
-  const nonArrayPath = R.map(
-    R.when(item => typeof item === 'number', R.always(0)),
-    path
-  );
-
-  const id = R.replace(/-fi|-sv/g, '', R.join('.', nonArrayPath));
-  const lens = R.lensPath(path);
-
-  const type = R.view(R.lensPath(nonArrayPath), schema);
-
-  if (R.isNil(type)) {
-    throw "Property: " + id + " does not exists in schema."
-  }
 </script>
 
 <Input
   {id}
   name={id}
-  label={`${R.compose( Maybe.orSome(''), R.map(i => `${i + 1}. `) )(index)}${$_('energiatodistus.' + id)}`}
+  label={inputs.label($_, inputLanguage, path)}
   {required}
   {disabled}
   {compact}
   {center}
   bind:model
-  {lens}
+  lens={inputs.dataLens(inputLanguage, path)}
   format={type.format || format}
   parse={type.parse}
   validators={type.validators}

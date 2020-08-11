@@ -252,8 +252,7 @@ export const v2018 = {
     ymparys: Huomio,
     'alapohja-ylapohja': Huomio
   },
-  'lisamerkintoja-fi': String(6300),
-  'lisamerkintoja-sv': String(6300)
+  'lisamerkintoja': String(6300)
 };
 
 const MuuEnergiamuoto = {
