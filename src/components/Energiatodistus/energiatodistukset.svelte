@@ -3,6 +3,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as api from './energiatodistus-api';
+  import * as et from './energiatodistus-utils';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
@@ -169,7 +170,9 @@
                 <tr
                   class="etp-table--tr etp-table--tr__link"
                   on:click={toETView(energiatodistus.versio, energiatodistus.id)}>
-                  <td class="etp-table--td">Luonnos</td>
+                  <td class="etp-table--td">
+                    {$_('energiatodistus.tila.' + et.tilaKey(energiatodistus['tila-id']))}
+                  </td>
                   <td class="etp-table--td">{energiatodistus.id}</td>
                   <td class="etp-table--td">C</td>
                   <td class="etp-table--td">{energiatodistus.versio}</td>
