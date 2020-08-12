@@ -141,7 +141,10 @@ export const parseKayttaja = R.curry(
     return R.compose(
       R.unless(
         R.always(R.equals('all', id)),
-        R.prepend(createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat')))
+        R.prepend(
+          R.equals(KayttajaUtils.patevyydentoteajaRole, user.rooli) ?
+            createCrumb(`#/laatija/all`, i18n('navigation.laatijat')):
+            createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat')))
       ),
       Array.of,
       translateReservedKeywordLabel(i18n, id),
