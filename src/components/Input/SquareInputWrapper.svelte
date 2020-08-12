@@ -52,7 +52,7 @@
 <div
   class="inputwrapper"
   class:caret
-  class:search
+  class:search={search && !disabled}
   class:focused
   class:error
   class:disabled>
