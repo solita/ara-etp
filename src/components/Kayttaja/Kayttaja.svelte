@@ -1,6 +1,7 @@
 <script>
   import Router from 'svelte-spa-router';
 
+  import Kayttajat from './kayttajat';
   import ExistingKayttaja from './ExistingKayttaja';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
 
@@ -10,6 +11,7 @@
 
   const prefix = '/kayttaja';
   const routes = {
+    '/all': Kayttajat,
     '/:id': ExistingKayttaja
   };
 
