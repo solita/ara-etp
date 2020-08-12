@@ -51,7 +51,7 @@
 <!-- purgecss: caret search focused error disabled -->
 <div
   class="inputwrapper"
-  class:caret
+  class:caret={caret && !disabled}
   class:search={search && !disabled}
   class:focused
   class:error
