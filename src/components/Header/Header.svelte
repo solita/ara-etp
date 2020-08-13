@@ -17,14 +17,6 @@
     Maybe.orSome('...'),
     R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`)
   )($currentUserStore);
-
-  $: console.log(
-    R.compose(
-      R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)),
-      Maybe.orSome([]),
-      R.map(Navigation.roleBasedHeaderMenuLinks($_))
-    )($currentUserStore)
-  );
 </script>
 
 <style type="text/postcss">
