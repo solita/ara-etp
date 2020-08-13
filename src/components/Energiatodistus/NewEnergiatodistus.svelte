@@ -22,7 +22,7 @@
 
   let overlay = false;
 
-  const toggleOverlay = value => () => (overlay = value);
+  const toggleOverlay = value => { overlay = value };
 
   let energiatodistus = R.equals(params.version, '2018')
     ? empty.energiatodistus2018()
@@ -31,26 +31,21 @@
   let luokittelut = Maybe.None();
 
   const submit = R.compose(
-    Future.forkBothDiscardFirst(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Energiatodistus', 'error'),
-        R.always($_('energiatodistus.messages.save-error'))
-      ),
-      R.compose(
-        R.tap(() =>
-          flashMessageStore.addPersist(
-            'Energiatodistus',
-            'success',
-            $_('energiatodistus.messages.save-success')
-          )
-        ),
-        ({ id }) => replace(`/energiatodistus/${params.version}/${id}`)
-      )
+    Future.fork(
+      () => {
+        toggleOverlay(false);
+        flashMessageStore.add('Energiatodistus', 'error',
+            $_('energiatodistus.messages.save-error'));
+      },
+      ({id}) => {
+        flashMessageStore.addPersist('Energiatodistus', 'success',
+            $_('energiatodistus.messages.save-success'));
+        replace(`/energiatodistus/${params.version}/${id}`);
+      }
     ),
-    Future.both(Future.after(500, true)),
+    Future.delay(500),
     api.postEnergiatodistus(fetch, params.version),
-    R.tap(toggleOverlay(true))
+    R.tap(() => toggleOverlay(true))
   );
 
   $: title = `Energiatodistus ${params.version} - Uusi luonnos`;
@@ -58,17 +53,15 @@
   // Load classifications
   $: R.compose(
     Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-        R.always($_('energiatodistus.messages.load-error'))
-      ),
-      R.compose(
-        response => {
-          luokittelut = Maybe.Some(response);
-        },
-        R.tap(toggleOverlay(false))
-      )
+      () => {
+        toggleOverlay(false);
+        flashMessageStore.add('Energiatodistus', 'error',
+            $_('energiatodistus.messages.load-error'));
+      },
+      response => {
+        luokittelut = Maybe.Some(response);
+        toggleOverlay(false);
+      },
     ),
     api.luokittelut
   )(params.version);
