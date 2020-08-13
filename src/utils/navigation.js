@@ -77,17 +77,11 @@ export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
     label: i18n('navigation.energiatodistukset'),
     href: '#/energiatodistus/all'
   },
-  { label: i18n('navigation.tyojono'), href: '#/tyojono' },
-  { label: i18n('navigation.kaytonvalvonta'), href: '#/kaytonvalvonta' },
-  { label: i18n('navigation.halytykset'), href: '#/halytykset' },
-  { label: i18n('navigation.kayttajat'), href: '#/kayttaja/all' },
-  { label: i18n('navigation.yritykset'), href: '#/yritys/all' },
-  { label: i18n('navigation.viestit'), href: '#/viestit' },
   {
-    label: i18n('navigation.omattiedot'),
-    href: '#/myinfo',
-    activePath: `#/kayttaja/${kayttaja.id}`
-  }
+    label: i18n('navigation.laatijat'),
+    href: '#/laatija/all'
+  },
+  { label: i18n('navigation.viestit'), href: '#/viestit' }
 ]);
 
 const kayttajaLinksMap = Object.freeze({
@@ -152,3 +146,31 @@ export const navigationParse = R.curry((i18n, kayttaja, location) =>
     locationParts
   )(location)
 );
+
+export const defaultHeaderMenuLinks = i18n => [
+  {
+    href: `/api/logout`,
+    text: i18n('navigation.kirjaudu-ulos')
+  }
+];
+
+export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
+  if (kayttaja.rooli === 2) {
+    return [
+      {
+        href: `#/kayttaja/all`,
+        text: i18n('navigation.kayttajahallinta')
+      },
+      {
+        href: `#/yritys/all`,
+        text: i18n('navigation.yritykset')
+      },
+      {
+        href: `#/myinfo`,
+        text: i18n('navigation.omattiedot')
+      }
+    ];
+  }
+
+  return [];
+});

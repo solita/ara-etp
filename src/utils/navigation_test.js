@@ -153,17 +153,8 @@ describe('Navigation', () => {
       const kayttaja = { rooli: 2, id: 1 };
       const expected = [
         { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
-        { label: 'Työjono', href: '#/tyojono' },
-        { label: 'Käytönvalvonta', href: '#/kaytonvalvonta' },
-        { label: 'Hälytykset', href: '#/halytykset' },
-        { label: 'Käyttäjät', href: '#/kayttaja/all' },
-        { label: 'Yritykset', href: '#/yritys/all' },
-        { label: 'Viestit', href: '#/viestit' },
-        {
-          label: 'Omat tiedot',
-          href: '#/myinfo',
-          activePath: `#/kayttaja/1`
-        }
+        { label: 'Laatijat', href: '#/laatija/all' },
+        { label: 'Viestit', href: '#/viestit' }
       ];
 
       assert.deepEqual(
