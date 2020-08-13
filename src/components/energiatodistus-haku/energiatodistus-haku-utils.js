@@ -211,3 +211,23 @@ export const appendDefaultQueryItem = R.append(
 export const findFromKriteeritByKey = R.curry((kriteerit, key) =>
   R.compose(Maybe.fromNull, R.find(R.propEq('key', key)))(kriteerit)
 );
+
+export const operationFromBlock = (operations, block) =>
+  R.compose(
+    Maybe.orSome(R.head(operations)),
+    Maybe.fromNull,
+    R.find(R.pathEq(['operation', 'browserCommand'], R.head(block)))
+  )(operations);
+
+export const blockFromOperation = R.curry((op, values) => [
+  op.operation.browserCommand,
+  op.key,
+  ...values
+]);
+
+export const valuesFromBlock = R.curry((operation, block) => {
+  const values = R.drop(2, block);
+  const defaultValues = R.drop(R.length(values), operation.defaultValues);
+
+  return R.concat(values, defaultValues);
+});

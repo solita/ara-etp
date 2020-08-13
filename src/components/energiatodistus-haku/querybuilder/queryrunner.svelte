@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
+  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
 
   export let where;
   export let query;

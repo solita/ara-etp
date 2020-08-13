@@ -17,6 +17,7 @@
 
   export let parsedQuery;
   export let runQuery;
+  export let schema;
 
   $: parsedWhere = R.prop('where', parsedQuery);
   $: where = parsedWhere;
@@ -70,7 +71,7 @@
 
 {#if showHakukriteerit}
   <div transition:slide|local={{ duration: 200 }} class="flex w-full">
-    <QueryBuilder bind:where {navigate} />
+    <QueryBuilder bind:where {navigate} {schema} />
   </div>
 {/if}
 

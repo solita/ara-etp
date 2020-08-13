@@ -8,39 +8,34 @@ export const OPERATOR_TYPES = Object.freeze({
 });
 
 const eq = {
-  operation: '=',
-  command: '=',
-  format: R.identity,
-  parse: parseFloat
+  browserCommand: '=',
+  serverCommand: '=',
+  format: R.identity
 };
 const gt = {
-  operation: '>',
-  command: '>',
-  format: R.identity,
-  parse: parseFloat
+  browserCommand: '>',
+  serverCommand: '>',
+  format: R.identity
 };
 const gte = {
-  operation: '>=',
-  command: '>=',
-  format: R.identity,
-  parse: parseFloat
+  browserCommand: '>=',
+  serverCommand: '>=',
+  format: R.identity
 };
 const lt = {
-  operation: '<',
-  command: '<',
-  format: R.identity,
-  parse: parseFloat
+  browserCommand: '<',
+  serverCommand: '<',
+  format: R.identity
 };
 const lte = {
-  operation: '<=',
-  command: '<=',
-  format: R.identity,
-  parse: parseFloat
+  browserCommand: '<=',
+  serverCommand: '<=',
+  format: R.identity
 };
 
 const contains = {
-  operation: 'sisaltaa',
-  command: 'like',
+  browserCommand: 'sisaltaa',
+  serverCommand: 'like',
   format: arg => `%${arg}%`
 };
 
@@ -48,7 +43,7 @@ const singleNumberOperation = R.curry((operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValue: 0,
+  defaultValues: [0],
   type: OPERATOR_TYPES.NUMBER
 }));
 
@@ -66,7 +61,7 @@ const containsString = key => ({
   operation: contains,
   key,
   argumentNumber: 1,
-  defaultValue: '',
+  defaultValues: [''],
   type: OPERATOR_TYPES.STRING
 });
 
@@ -79,7 +74,15 @@ const numberComparisons = [
 ];
 
 const schema = {
-  id: R.map(R.applyTo('id'), numberComparisons)
+  id: R.map(R.applyTo('id'), numberComparisons),
+  'korvattu-energiatodistus-id': [containsString('korvattu-energiatodistus-id')]
+  // R.map(
+  //   R.applyTo('korvattu-energiatodistus-id'),
+  //   numberComparisons
+  // )
 };
 
-const laatijaSchema = R.pick(['id'], schema);
+export const laatijaSchema = R.pick(
+  ['id', 'korvattu-energiatodistus-id'],
+  schema
+);

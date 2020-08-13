@@ -6,12 +6,13 @@
   import TextButton from '@Component/Button/TextButton';
   import { _ } from '@Language/i18n';
 
-  import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
+  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
 
   import QueryBlock from './queryblock';
 
   export let where;
   export let navigate;
+  export let schema;
 
   let queryItems = R.compose(
     EtHakuUtils.deserializeWhere,
@@ -26,7 +27,7 @@
 <div class="flex flex-col w-full">
   {#each queryItems as { conjunction, block }, index}
     <div class="flex justify-start items-end">
-      <QueryBlock bind:model={queryItems} lens={R.lensIndex(index)} />
+      <QueryBlock bind:model={queryItems} lens={R.lensIndex(index)} {schema} />
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
@@ -41,7 +42,7 @@
       icon={'add_circle_outline'}
       on:click={evt => {
         const items = EtHakuUtils.appendDefaultQueryItem(queryItems);
-        queryItems = R.when(R.compose( R.equals(1), R.length, R.tap(console.log) ), R.set(R.compose( R.lensIndex(0), R.lensProp('conjunction') ), Maybe.None()), items);
+        queryItems = R.when(R.compose( R.equals(1), R.length ), R.set(R.compose( R.lensIndex(0), R.lensProp('conjunction') ), Maybe.None()), items);
       }} />
   </div>
   <div class="flex">

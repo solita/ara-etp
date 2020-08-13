@@ -5,15 +5,19 @@
   import Select from '@Component/Select/Select';
   import { _ } from '@Language/i18n';
 
-  import * as EtHakuUtils from '@Component/Energiatodistus/energiatodistus-haku-utils';
+  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
 
-  import NumberOperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/number-operator-input';
-  import OperatorInput from '@Component/Energiatodistus/querybuilder/query-inputs/operator-input';
-  import BooleanInput from '@Component/Energiatodistus/querybuilder/query-inputs/boolean-input';
-  import DateInput from '@Component/Energiatodistus/querybuilder/query-inputs/date-input';
+  import NumberOperatorInput from '@Component/energiatodistus-haku/querybuilder/query-inputs/number-operator-input';
+  import OperatorInput from '@Component/energiatodistus-haku/querybuilder/query-inputs/operator-input';
+  import BooleanInput from '@Component/energiatodistus-haku/querybuilder/query-inputs/boolean-input';
+  import DateInput from '@Component/energiatodistus-haku/querybuilder/query-inputs/date-input';
+
+  import QueryInput from '@Component/energiatodistus-haku/querybuilder/query-input';
 
   export let model;
   export let lens;
+
+  export let schema;
 
   const mapOperatorTypeToComponent = type =>
     R.prop(type, {
@@ -33,46 +37,53 @@
     R.lensProp('block')
   );
 
+  const operationLens = R.compose(
+    blockLens,
+    R.lensIndex(0)
+  );
+
   const keyLens = R.compose(
     blockLens,
     R.lensIndex(1)
   );
 
-  const laatijaKriteerit = EtHakuUtils.laatijaKriteerit();
-
   let conjunction = R.view(conjunctionLens, model);
 
   let kriteeri = R.compose(
     R.assoc('kriteeri', R.__, {}),
-    EtHakuUtils.findFromKriteeritByKey(laatijaKriteerit),
+    R.prop(R.__, schema),
     R.view(keyLens)
   )(model);
 
+  let key = R.view(keyLens, model);
+
   $: model = R.set(conjunctionLens, conjunction, model);
 
-  $: R.compose(
-    R.forEach(
-      R.unless(
-        R.compose(
-          R.equals(R.view(keyLens, model)),
-          R.prop('key')
-        ),
-        k =>
-          (model = R.set(
-            blockLens,
-            k.defaultOperator.command(...k.defaultValues),
-            model
-          ))
-      )
-    ),
+  $: operations = R.prop(key, schema);
 
-    R.prop('kriteeri')
-  )(kriteeri);
+  // $: R.compose(
+  //   R.forEach(
+  //     R.unless(
+  //       R.compose(
+  //         R.equals(R.view(keyLens, model)),
+  //         R.prop('key')
+  //       ),
+  //       k =>
+  //         (model = R.set(
+  //           blockLens,
+  //           k.defaultOperator.command(...k.defaultValues),
+  //           model
+  //         ))
+  //     )
+  //   ),
 
-  $: R.compose(
-    Maybe.orElseRun(() => (model = R.set(blockLens, [], model))),
-    R.prop('kriteeri')
-  )(kriteeri);
+  //   R.prop('kriteeri')
+  // )(kriteeri);
+
+  // $: R.compose(
+  //   Maybe.orElseRun(() => (model = R.set(blockLens, [], model))),
+  //   R.prop('kriteeri')
+  // )(kriteeri);
 </script>
 
 <div class="w-full flex flex-col">
@@ -94,21 +105,15 @@
   <div class="flex-grow flex items-center justify-start">
     <div class="w-1/2 mr-4">
       <Select
-        items={laatijaKriteerit}
-        bind:model={kriteeri}
-        format={R.compose( $_, R.concat('energiatodistus.haku.'), R.prop('key') )}
-        parse={Maybe.Some}
-        lens={R.lensProp('kriteeri')}
+        items={R.keys(schema)}
+        bind:model={key}
+        format={R.compose( $_, R.concat('energiatodistus.haku.') )}
+        parse={R.identity}
+        lens={R.identity}
         allowNone={false} />
     </div>
     <div class="w-1/2">
-      {#each R.compose( Maybe.toArray, R.prop('kriteeri') )(kriteeri) as k}
-        <svelte:component
-          this={mapOperatorTypeToComponent(k.type)}
-          bind:model
-          operators={k.operators}
-          lens={blockLens} />
-      {/each}
+      <QueryInput bind:model lens={blockLens} {operations} />
     </div>
   </div>
 </div>
