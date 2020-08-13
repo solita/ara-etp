@@ -36,7 +36,9 @@
     "liitteet": "Liitteet",
     "allekirjoitus": "Allekirjoitus",
     "muutoshistoria": "Muutoshistoria",
-    "myinfo": "Omat Tiedot"
+    "myinfo": "Omat Tiedot",
+    "kirjaudu-ulos": "Kirjaudu ulos",
+    "kayttajahallinta": "Käyttäjähallinta"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui."
