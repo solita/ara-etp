@@ -142,9 +142,10 @@ export const parseKayttaja = R.curry(
       R.unless(
         R.always(R.equals('all', id)),
         R.prepend(
-          R.equals(KayttajaUtils.patevyydentoteajaRole, user.rooli) ?
-            createCrumb(`#/laatija/all`, i18n('navigation.laatijat')):
-            createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat')))
+          R.equals(KayttajaUtils.patevyydentoteajaRole, user.rooli)
+            ? createCrumb(`#/laatija/all`, i18n('navigation.laatijat'))
+            : createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat'))
+        )
       ),
       Array.of,
       translateReservedKeywordLabel(i18n, id),
@@ -231,7 +232,12 @@ export const roleBasedRootCrumb = R.curry((i18n, user) => {
       ],
       [
         R.equals(KayttajaUtils.paakayttajaRole),
-        R.always(createCrumb('#/tyojono', i18n('navigation.tyojono')))
+        R.always(
+          createCrumb(
+            '#/energiatodistus/all',
+            i18n('navigation.energiatodistukset')
+          )
+        )
       ]
     ]),
     R.prop('rooli')

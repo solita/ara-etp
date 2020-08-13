@@ -152,6 +152,7 @@ describe('Navigation', () => {
     it('should return links for pääkäyttäjä', () => {
       const kayttaja = { rooli: 2, id: 1 };
       const expected = [
+        { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
         { label: 'Työjono', href: '#/tyojono' },
         { label: 'Käytönvalvonta', href: '#/kaytonvalvonta' },
         { label: 'Hälytykset', href: '#/halytykset' },

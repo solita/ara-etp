@@ -73,6 +73,10 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
 ]);
 
 export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
+  {
+    label: i18n('navigation.energiatodistukset'),
+    href: '#/energiatodistus/all'
+  },
   { label: i18n('navigation.tyojono'), href: '#/tyojono' },
   { label: i18n('navigation.kaytonvalvonta'), href: '#/kaytonvalvonta' },
   { label: i18n('navigation.halytykset'), href: '#/halytykset' },
