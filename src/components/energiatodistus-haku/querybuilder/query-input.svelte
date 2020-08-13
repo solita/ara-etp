@@ -35,9 +35,16 @@
     )(input)
   );
 
+  const parseByInputType = R.curry((input, value) => {
+    if (input.type === OPERATOR_TYPES.STRING) {
+      return value;
+    }
+
+    return parseFloat(value, 10);
+  });
+
   let block;
   let operation;
-
   let input = { type: OPERATOR_TYPES.NUMBER, values: [] };
 
   $: {
@@ -50,8 +57,6 @@
 
     model = updateModel(model, operation, input);
   }
-
-  $: console.log(model);
 </script>
 
 <style type="text/postcss">
@@ -78,7 +83,7 @@
       <div class="flex flex-col justify-end">
         <SimpleInput
           center={true}
-          on:input={evt => (model = R.compose( updateModel(model, operation), R.set(R.compose( R.lensProp('values'), R.lensIndex(index) ), evt.target.value) )(input))}
+          on:input={evt => (model = R.compose( updateModel(model, operation), R.set(R.compose( R.lensProp('values'), R.lensIndex(index) ), parseByOperationType(operation, evt.target.value)) )(input))}
           viewValue={value} />
       </div>
     {/each}
