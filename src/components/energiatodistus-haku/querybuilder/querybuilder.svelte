@@ -14,13 +14,15 @@
   export let navigate;
   export let schema;
 
-  let queryItems = R.compose(
+  $: queryItems = R.compose(
     EtHakuUtils.deserializeWhere,
     R.unless(R.length, EtHakuUtils.defaultWhere)
   )(where);
 
-  if (!R.length(queryItems)) {
-    queryItems = [EtHakuUtils.defaultKriteeriQueryItem()];
+  $: {
+    if (!R.length(queryItems)) {
+      queryItems = [EtHakuUtils.defaultKriteeriQueryItem()];
+    }
   }
 </script>
 
