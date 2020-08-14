@@ -132,6 +132,7 @@
     <Select
       label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
       required={true}
+      allowNone={false}
       {disabled}
       bind:model={kayttotarkoitusluokkaId}
       lens={R.lens(R.identity, R.identity)}
@@ -144,6 +145,7 @@
     <Select
       label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
       required={true}
+      allowNone={false}
       {disabled}
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'kayttotarkoitus'])}
