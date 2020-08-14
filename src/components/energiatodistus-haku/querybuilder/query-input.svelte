@@ -21,11 +21,17 @@
   });
 
   const parseByOperationType = R.curry((operation, value) => {
-    if (operation.type === OPERATOR_TYPES.STRING) {
-      return value;
+    switch (operation.type) {
+      case OPERATOR_TYPES.STRING:
+        if (R.type(value) === 'String') {
+          break;
+        }
+        return R.toString(value);
+      case OPERATOR_TYPES.NUMBER:
+        return parseFloat(value, 10);
     }
 
-    return parseFloat(value, 10);
+    return value;
   });
 
   let operation;
@@ -37,6 +43,7 @@
   )(model);
 
   $: values = R.compose(
+    R.map(parseByOperationType(operation)),
     R.take(operation.argumentNumber),
     R.unless(
       R.gt(operation.argumentNumber),
