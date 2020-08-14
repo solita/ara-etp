@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
 
-  import { replace } from 'svelte-spa-router';
+  import { replace, push } from 'svelte-spa-router';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as et from '@Component/Energiatodistus/energiatodistus-utils';
@@ -41,7 +41,7 @@
   );
 
   const signUrl = Maybe.map(
-    i => `#/energiatodistus/${version}/${i}/allekirjoitus`,
+    i => `/energiatodistus/${version}/${i}/allekirjoitus`,
     id
   );
 
@@ -67,6 +67,12 @@
 
   export let save = _ => {};
   export let cancel = _ => {};
+
+  const openUrl = url => {
+    window.open(url, '_blank');
+  }
+
+  const nope = () => {};
 </script>
 
 <style type="text/postcss">
@@ -92,7 +98,7 @@
   {#if bilingual}
     <div class="flex flex-row w-full">
       {#each ['fi', 'sv'] as language}
-        <div class="w-1/2 text-light text-lg description"
+        <div class="w-1/2 text-light description"
              class:bg-primary={R.equals(selectedLanguage, language)}
              class:bg-secondary={!R.equals(selectedLanguage, language)}>
           {language}
@@ -103,7 +109,7 @@
     <div class="w-full text-light description bg-primary">{energiatodistusKieli.map(et.kielisyysKey).some()}</div>
   {/if}
   </button>
-  <button on:click={save}>
+  <button on:click={save(nope)}>
     <span class="description">
       {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
     </span>
@@ -113,16 +119,14 @@
     <span class="description">Peruuta muutokset</span>
     <span class="text-2xl font-icon">undo</span>
   </button>
-  {#if signUrl.isSome()}
-    <button>
-      <a href={signUrl.some()}>
-        <div class="description">Allekirjoita</div>
-        <span class="text-2xl font-icon border-b-3 border-secondary">
-          create
-        </span>
-      </a>
+  {#each signUrl.toArray() as url}
+    <button on:click={save(() => push(url))}>
+      <div class="description">Allekirjoita</div>
+      <span class="text-2xl font-icon border-b-3 border-secondary">
+        create
+      </span>
     </button>
-  {/if}
+  {/each}
   {#if id.isSome()}
     <button>
       <span class="description">Kopioi pohjaksi</span>
@@ -130,11 +134,9 @@
     </button>
   {/if}
   {#each pdfUrl.toArray() as url}
-    <button>
-      <a href={url}>
-        <span class="block description">Esikatselu</span>
-        <span class="text-2xl font-icon">picture_as_pdf</span>
-      </a>
+    <button on:click={save(() => openUrl(url))}>
+      <span class="block description">Esikatselu</span>
+      <span class="text-2xl font-icon">picture_as_pdf</span>
     </button>
   {/each}
   {#if id.isSome()}

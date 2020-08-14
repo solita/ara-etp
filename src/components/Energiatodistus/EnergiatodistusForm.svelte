@@ -3,8 +3,6 @@
 
   import * as et from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as deep from '@Utility/deep-objects';
   import * as schemas from './schema';
   import { _ } from '@Language/i18n';
 
@@ -33,10 +31,11 @@
   };
   const ETForm = forms[version];
 
-  $: submit$ = _ => {
+
+  const validateAndSubmit = onSuccessfulSave => () => {
     if (et.isValidForm(et.validators(schema), energiatodistus)) {
       flashMessageStore.flush();
-      submit(energiatodistus);
+      submit(energiatodistus, onSuccessfulSave);
     } else {
       flashMessageStore.add(
         'Energiatodistus',
@@ -45,6 +44,8 @@
       );
     }
   };
+
+  const nope = () => {};
 
   const cancel = event => {
     event.preventDefault();
@@ -117,7 +118,7 @@
 
   <div class="w-full relative flex">
     <div class="w-5/6">
-      <form on:submit|preventDefault={submit$}>
+      <form on:submit|preventDefault={validateAndSubmit(nope)}>
         <ETForm
           {title}
           bind:energiatodistus
@@ -141,7 +142,7 @@
     </div>
     <div class="sticky top-3em w-1/6 self-start flex justify-end">
       <ToolBar
-        save={submit$}
+        save={validateAndSubmit}
         energiatodistusKieli={energiatodistus.perustiedot.kieli}
         bind:inputLanguage
         {cancel}
