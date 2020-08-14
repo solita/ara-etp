@@ -8,6 +8,7 @@
   import Select from '@Component/Select/Select';
   import SimpleInput from '@Component/Input/SimpleInput';
   import DatePicker from '@Component/Datepicker/Datepicker';
+  import Radio from '@Component/Radio/Radio';
 
   import { _ } from '@Language/i18n';
 
@@ -67,21 +68,27 @@
   .inputs > div:not(:first-child) {
     @apply ml-2;
   }
+
+  .radiogroup {
+    @apply justify-around;
+  }
 </style>
 
 <div class="flex">
-  <div class="w-1/2">
-    <Select
-      items={operations}
-      bind:model={operation}
-      lens={R.identity}
-      format={R.compose( $_, R.concat('energiatodistus.haku.'), R.path([
-          'operation',
-          'browserCommand'
-        ]) )}
-      parse={R.identity}
-      allowNone={false} />
-  </div>
+  {#if operation.type !== OPERATOR_TYPES.BOOLEAN}
+    <div class="w-1/2">
+      <Select
+        items={operations}
+        bind:model={operation}
+        lens={R.identity}
+        format={R.compose( $_, R.concat('energiatodistus.haku.'), R.path([
+            'operation',
+            'browserCommand'
+          ]) )}
+        parse={R.identity}
+        allowNone={false} />
+    </div>
+  {/if}
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}
       <div class="flex flex-col justify-end">
@@ -94,6 +101,19 @@
           <DatePicker
             selected={value}
             update={value => (values = R.set(R.lensIndex(index), parseByOperationType(operation, value), values))} />
+        {:else if operation.type === OPERATOR_TYPES.BOOLEAN}
+          <div class="radiogroup flex justify-between">
+            <Radio
+              group={value}
+              value={true}
+              on:click={evt => (values = R.set(R.lensIndex(index), true, values))}
+              label={$_('energiatodistus.haku.true')} />
+            <Radio
+              group={value}
+              value={false}
+              on:click={evt => (values = R.set(R.lensIndex(index), false, values))}
+              label={$_('energiatodistus.haku.false')} />
+          </div>
         {/if}
       </div>
     {/each}

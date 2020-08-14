@@ -80,6 +80,14 @@ const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   type: OPERATOR_TYPES.DATE
 }));
 
+const singleBoolean = key => ({
+  operation: eq,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [true],
+  type: OPERATOR_TYPES.BOOLEAN
+});
+
 const dateEquals = singleDateOperation(
   () => dfns.format(new Date(), 'd.M.yyyy'),
   eq
@@ -124,7 +132,12 @@ const dateComparisons = [
 const schema = {
   id: R.map(R.applyTo('id'), numberComparisons),
   allekirjoitusaika: R.map(R.applyTo('allekirjoitusaika'), dateComparisons),
-  'korvattu-energiatodistus-id': [stringContains('korvattu-energiatodistus-id')]
+  'korvattu-energiatodistus-id': [
+    stringContains('korvattu-energiatodistus-id')
+  ],
+  'perustiedot.onko-julkinen-rakennus': [
+    singleBoolean('perustiedot.onko-julkinen-rakennus')
+  ]
   // R.map(
   //   R.applyTo('korvattu-energiatodistus-id'),
   //   numberComparisons
@@ -132,6 +145,11 @@ const schema = {
 };
 
 export const laatijaSchema = R.pick(
-  ['id', 'allekirjoitusaika', 'korvattu-energiatodistus-id'],
+  [
+    'id',
+    'allekirjoitusaika',
+    'korvattu-energiatodistus-id',
+    'perustiedot.onko-julkinen-rakennus'
+  ],
   schema
 );
