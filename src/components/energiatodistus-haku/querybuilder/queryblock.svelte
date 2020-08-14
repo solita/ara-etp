@@ -60,30 +60,6 @@
   $: model = R.set(conjunctionLens, conjunction, model);
 
   $: operations = R.prop(key, schema);
-
-  // $: R.compose(
-  //   R.forEach(
-  //     R.unless(
-  //       R.compose(
-  //         R.equals(R.view(keyLens, model)),
-  //         R.prop('key')
-  //       ),
-  //       k =>
-  //         (model = R.set(
-  //           blockLens,
-  //           k.defaultOperator.command(...k.defaultValues),
-  //           model
-  //         ))
-  //     )
-  //   ),
-
-  //   R.prop('kriteeri')
-  // )(kriteeri);
-
-  // $: R.compose(
-  //   Maybe.orElseRun(() => (model = R.set(blockLens, [], model))),
-  //   R.prop('kriteeri')
-  // )(kriteeri);
 </script>
 
 <div class="w-full flex flex-col">

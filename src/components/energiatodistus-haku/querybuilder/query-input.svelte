@@ -3,9 +3,12 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import { OPERATOR_TYPES } from '@Component/energiatodistus-haku/schema';
+  import * as dfns from 'date-fns';
 
   import Select from '@Component/Select/Select';
   import SimpleInput from '@Component/Input/SimpleInput';
+  import DatePicker from '@Component/Datepicker/Datepicker';
+
   import { _ } from '@Language/i18n';
 
   export let operations;
@@ -29,12 +32,13 @@
         return R.toString(value);
       case OPERATOR_TYPES.NUMBER:
         return parseFloat(value, 10);
+      case OPERATOR_TYPES.DATE:
+        break;
     }
-
     return value;
   });
 
-  let operation;
+  let type;
   let values;
 
   $: operation = R.compose(
@@ -42,16 +46,19 @@
     R.view(lens)
   )(model);
 
-  $: values = R.compose(
-    R.map(parseByOperationType(operation)),
-    R.take(operation.argumentNumber),
-    R.unless(
-      R.gt(operation.argumentNumber),
-      R.concat(R.__, operation.defaultValues())
-    ),
-    R.drop(2),
-    R.view(lens)
-  )(model);
+  $: {
+    values = R.compose(
+      R.map(parseByOperationType(operation)),
+      R.take(operation.argumentNumber),
+      R.when(
+        R.always(operation.type !== type && !R.isNil(type)),
+        operation.defaultValues
+      ),
+      R.drop(2),
+      R.view(lens)
+    )(model);
+    type = operation.type;
+  }
 
   $: updateModel(operation, values);
 </script>
@@ -78,10 +85,16 @@
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}
       <div class="flex flex-col justify-end">
-        <SimpleInput
-          center={true}
-          on:input={evt => (values = R.set(R.lensIndex(index), parseByOperationType(operation, evt.target.value), values))}
-          viewValue={value} />
+        {#if operation.type === OPERATOR_TYPES.STRING || operation.type === OPERATOR_TYPES.NUMBER}
+          <SimpleInput
+            center={true}
+            on:input={evt => (values = R.set(R.lensIndex(index), parseByOperationType(operation, evt.target.value), values))}
+            viewValue={value} />
+        {:else if operation.type === OPERATOR_TYPES.DATE}
+          <DatePicker
+            selected={value}
+            update={value => (values = R.set(R.lensIndex(index), parseByOperationType(operation, value), values))} />
+        {/if}
       </div>
     {/each}
   </div>

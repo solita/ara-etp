@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as dfns from 'date-fns';
 
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
@@ -63,7 +64,7 @@ const numberLessThan = singleNumberOperation(lt);
 
 const numberLessThanOrEqual = singleNumberOperation(lte);
 
-const containsString = key => ({
+const stringContains = key => ({
   operation: contains,
   key,
   argumentNumber: 1,
@@ -71,23 +72,38 @@ const containsString = key => ({
   type: OPERATOR_TYPES.STRING
 });
 
-const singleDateOperation = R.curry((operation, key) => ({
+const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValues: Date,
+  defaultValues: () => [dateGenerator()],
   type: OPERATOR_TYPES.DATE
 }));
 
-const dateEquals = singleDateOperation(eq);
+const dateEquals = singleDateOperation(
+  () => dfns.format(new Date(), 'd.M.yyyy'),
+  eq
+);
 
-const dateGreaterThan = singleDateOperation(gt);
+const dateGreaterThan = singleDateOperation(
+  () => dfns.format(new Date(), 'd.M.yyyy'),
+  gt
+);
 
-const dateGreaterThanOrEqual = singleDateOperation(gte);
+const dateGreaterThanOrEqual = singleDateOperation(
+  () => dfns.format(new Date(), 'd.M.yyyy'),
+  gte
+);
 
-const dateLessThan = singleDateOperation(lt);
+const dateLessThan = singleDateOperation(
+  () => dfns.format(new Date(), 'd.M.yyyy'),
+  lt
+);
 
-const dateLessThanOrEqual = singleDateOperation(lte);
+const dateLessThanOrEqual = singleDateOperation(
+  () => dfns.format(new Date(), 'd.M.yyyy'),
+  lte
+);
 
 const numberComparisons = [
   numberEquals,
@@ -107,8 +123,8 @@ const dateComparisons = [
 
 const schema = {
   id: R.map(R.applyTo('id'), numberComparisons),
-  // allekirjoitusaika: R.map(R.applyTo('allekirjoitusaika', dateComparisons)),
-  'korvattu-energiatodistus-id': [containsString('korvattu-energiatodistus-id')]
+  allekirjoitusaika: R.map(R.applyTo('allekirjoitusaika'), dateComparisons),
+  'korvattu-energiatodistus-id': [stringContains('korvattu-energiatodistus-id')]
   // R.map(
   //   R.applyTo('korvattu-energiatodistus-id'),
   //   numberComparisons
@@ -116,6 +132,6 @@ const schema = {
 };
 
 export const laatijaSchema = R.pick(
-  ['id', 'korvattu-energiatodistus-id'],
+  ['id', 'allekirjoitusaika', 'korvattu-energiatodistus-id'],
   schema
 );
