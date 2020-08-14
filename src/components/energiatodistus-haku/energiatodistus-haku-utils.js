@@ -212,12 +212,13 @@ export const findFromKriteeritByKey = R.curry((kriteerit, key) =>
   R.compose(Maybe.fromNull, R.find(R.propEq('key', key)))(kriteerit)
 );
 
-export const operationFromBlock = (operations, block) =>
+export const operationFromBlock = R.curry((operations, block) =>
   R.compose(
     Maybe.orSome(R.head(operations)),
     Maybe.fromNull,
     R.find(R.pathEq(['operation', 'browserCommand'], R.head(block)))
-  )(operations);
+  )(operations)
+);
 
 export const blockFromOperation = R.curry((op, values) => [
   op.operation.browserCommand,

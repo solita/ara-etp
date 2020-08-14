@@ -3,7 +3,7 @@ import * as R from 'ramda';
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
   NUMBER: 'NUMBER',
-  DATESINGLE: 'DATESINGLE',
+  DATE: 'DATE',
   BOOLEAN: 'BOOLEAN'
 });
 
@@ -39,11 +39,17 @@ const contains = {
   format: arg => `%${arg}%`
 };
 
+const between = {
+  browserCommand: 'valissa',
+  serverCommand: 'between',
+  format: R.identity
+};
+
 const singleNumberOperation = R.curry((operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValues: [0],
+  defaultValues: () => [0],
   type: OPERATOR_TYPES.NUMBER
 }));
 
@@ -61,9 +67,27 @@ const containsString = key => ({
   operation: contains,
   key,
   argumentNumber: 1,
-  defaultValues: [''],
+  defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
 });
+
+const singleDateOperation = R.curry((operation, key) => ({
+  operation,
+  key,
+  argumentNumber: 1,
+  defaultValues: Date,
+  type: OPERATOR_TYPES.DATE
+}));
+
+const dateEquals = singleDateOperation(eq);
+
+const dateGreaterThan = singleDateOperation(gt);
+
+const dateGreaterThanOrEqual = singleDateOperation(gte);
+
+const dateLessThan = singleDateOperation(lt);
+
+const dateLessThanOrEqual = singleDateOperation(lte);
 
 const numberComparisons = [
   numberEquals,
@@ -73,8 +97,17 @@ const numberComparisons = [
   numberLessThanOrEqual
 ];
 
+const dateComparisons = [
+  dateEquals,
+  dateGreaterThan,
+  dateGreaterThanOrEqual,
+  dateLessThan,
+  dateLessThanOrEqual
+];
+
 const schema = {
   id: R.map(R.applyTo('id'), numberComparisons),
+  // allekirjoitusaika: R.map(R.applyTo('allekirjoitusaika', dateComparisons)),
   'korvattu-energiatodistus-id': [containsString('korvattu-energiatodistus-id')]
   // R.map(
   //   R.applyTo('korvattu-energiatodistus-id'),

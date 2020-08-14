@@ -12,51 +12,41 @@
   export let model;
   export let lens;
 
-  const operationLens = R.compose(
-    lens,
-    R.lensIndex(0)
-  );
+  const updateModel = R.curry((operation, values) => {
+    const newBlock = EtHakuUtils.blockFromOperation(operation, values);
 
-  const inputFromOperation = R.curry((operation, input, valuesFromBlock) => {
-    const newInput = { type: operation.type };
-
-    if (R.equals(input.type, operation.type)) {
-      return R.assoc('values', valuesFromBlock, newInput);
+    if (!R.equals(R.view(lens, model), newBlock)) {
+      model = R.set(lens, newBlock, model);
     }
-
-    return R.assoc('values', operation.defaultValues, newInput);
   });
 
-  const updateModel = R.curry((model, operation, input) =>
-    R.compose(
-      R.set(lens, R.__, model),
-      EtHakuUtils.blockFromOperation(operation),
-      R.prop('values')
-    )(input)
-  );
-
-  const parseByInputType = R.curry((input, value) => {
-    if (input.type === OPERATOR_TYPES.STRING) {
+  const parseByOperationType = R.curry((operation, value) => {
+    if (operation.type === OPERATOR_TYPES.STRING) {
       return value;
     }
 
     return parseFloat(value, 10);
   });
 
-  let block;
   let operation;
-  let input = { type: OPERATOR_TYPES.NUMBER, values: [] };
+  let values;
 
-  $: {
-    block = R.view(lens, model);
-    operation = EtHakuUtils.operationFromBlock(operations, block);
-    input = R.compose(
-      inputFromOperation(operation, input),
-      EtHakuUtils.valuesFromBlock
-    )(operation, block);
+  $: operation = R.compose(
+    EtHakuUtils.operationFromBlock(operations),
+    R.view(lens)
+  )(model);
 
-    model = updateModel(model, operation, input);
-  }
+  $: values = R.compose(
+    R.take(operation.argumentNumber),
+    R.unless(
+      R.gt(operation.argumentNumber),
+      R.concat(R.__, operation.defaultValues())
+    ),
+    R.drop(2),
+    R.view(lens)
+  )(model);
+
+  $: updateModel(operation, values);
 </script>
 
 <style type="text/postcss">
@@ -79,11 +69,11 @@
       allowNone={false} />
   </div>
   <div class="inputs w-1/2 pl-4 flex justify-between">
-    {#each input.values as value, index}
+    {#each values as value, index}
       <div class="flex flex-col justify-end">
         <SimpleInput
           center={true}
-          on:input={evt => (model = R.compose( updateModel(model, operation), R.set(R.compose( R.lensProp('values'), R.lensIndex(index) ), parseByOperationType(operation, evt.target.value)) )(input))}
+          on:input={evt => (values = R.set(R.lensIndex(index), parseByOperationType(operation, evt.target.value), values))}
           viewValue={value} />
       </div>
     {/each}
