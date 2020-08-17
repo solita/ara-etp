@@ -99,7 +99,8 @@
             viewValue={value} />
         {:else if operation.type === OPERATOR_TYPES.DATE}
           <DatePicker
-            selected={value}
+            start={value}
+            end={value}
             update={value => (values = R.set(R.lensIndex(index), parseByOperationType(operation, value), values))} />
         {:else if operation.type === OPERATOR_TYPES.BOOLEAN}
           <div class="radiogroup flex justify-between">

@@ -88,28 +88,22 @@ const singleBoolean = key => ({
   type: OPERATOR_TYPES.BOOLEAN
 });
 
-const dateEquals = singleDateOperation(
-  () => dfns.format(new Date(), 'd.M.yyyy'),
-  eq
-);
+const dateEquals = singleDateOperation(() => dfns.formatISO(new Date()), eq);
 
 const dateGreaterThan = singleDateOperation(
-  () => dfns.format(new Date(), 'd.M.yyyy'),
+  () => dfns.formatISO(new Date()),
   gt
 );
 
 const dateGreaterThanOrEqual = singleDateOperation(
-  () => dfns.format(new Date(), 'd.M.yyyy'),
+  () => dfns.formatISO(new Date()),
   gte
 );
 
-const dateLessThan = singleDateOperation(
-  () => dfns.format(new Date(), 'd.M.yyyy'),
-  lt
-);
+const dateLessThan = singleDateOperation(() => dfns.formatISO(new Date()), lt);
 
 const dateLessThanOrEqual = singleDateOperation(
-  () => dfns.format(new Date(), 'd.M.yyyy'),
+  () => dfns.formatISO(new Date()),
   lte
 );
 
