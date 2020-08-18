@@ -147,3 +147,28 @@ export const laatijaSchema = R.pick(
   ],
   schema
 );
+
+export const isSchemaObject = R.has('type');
+
+export const flattenSchema = (path, schema) => {
+  const pairs = R.toPairs(schema);
+
+  return R.reduce(
+    (acc, obj) => {
+      if (!isSchemaObject(R.last(obj))) {
+        return R.concat(
+          acc,
+          flattenSchema(`${path}.${R.head(obj)}`, R.last(obj))
+        );
+      }
+
+      return R.compose(
+        R.append(R.__, acc),
+        R.assoc('key', R.drop(1, `${path}.${R.head(obj)}`)),
+        R.last
+      )(obj);
+    },
+    [],
+    pairs
+  );
+};
