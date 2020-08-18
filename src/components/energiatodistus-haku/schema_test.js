@@ -2,14 +2,17 @@ import * as R from 'ramda';
 import { assert } from 'chai';
 import * as Schema from './schema';
 
+const dummySchemaObject = R.curry((type, key) => ({
+  type,
+  key
+}));
+
 describe('EtHakuSchema', () => {
   describe('flattenSchema', () => {
     it('should flatten given schema with 1 item', () => {
       const schema = {
         perustiedot: {
-          id: {
-            type: 'NUMBER'
-          }
+          id: dummySchemaObject('NUMBER')
         }
       };
 
@@ -26,15 +29,9 @@ describe('EtHakuSchema', () => {
     it('should flatten given schema with multiple items in single branch', () => {
       const schema = {
         perustiedot: {
-          id: {
-            type: 'NUMBER'
-          },
-          nimi: {
-            type: 'STRING'
-          },
-          osoite: {
-            type: 'STRING'
-          }
+          id: dummySchemaObject('NUMBER'),
+          nimi: dummySchemaObject('STRING'),
+          osoite: dummySchemaObject('STRING')
         }
       };
 
@@ -59,16 +56,10 @@ describe('EtHakuSchema', () => {
     it('should flatten given schema with multiple items in branching branch', () => {
       const schema = {
         perustiedot: {
-          id: {
-            type: 'NUMBER'
-          },
+          id: dummySchemaObject('NUMBER'),
           branch: {
-            nimi: {
-              type: 'STRING'
-            },
-            osoite: {
-              type: 'STRING'
-            }
+            nimi: dummySchemaObject('STRING'),
+            osoite: dummySchemaObject('STRING')
           }
         }
       };
@@ -94,36 +85,20 @@ describe('EtHakuSchema', () => {
     it('should flatten given schema with multiple items in multiple branches', () => {
       const schema = {
         perustiedot: {
-          id: {
-            type: 'NUMBER'
-          },
+          id: dummySchemaObject('NUMBER'),
           branch: {
-            nimi: {
-              type: 'STRING'
-            },
-            osoite: {
-              type: 'STRING'
-            }
+            nimi: dummySchemaObject('STRING'),
+            osoite: dummySchemaObject('STRING')
           }
         },
         laajemmattiedot: {
-          id: {
-            type: 'STRING'
-          },
+          id: dummySchemaObject('STRING'),
           branch: {
-            nimi: {
-              type: 'STRING'
-            },
-            osoite: {
-              type: 'STRING'
-            },
+            nimi: dummySchemaObject('STRING'),
+            osoite: dummySchemaObject('STRING'),
             puhelinnumero: {
-              suuntanumero: {
-                type: 'NUMBER'
-              },
-              numero: {
-                type: 'NUMBER'
-              }
+              suuntanumero: dummySchemaObject('NUMBER'),
+              numero: dummySchemaObject('NUMBER')
             }
           }
         }

@@ -123,6 +123,153 @@ const dateComparisons = [
   dateLessThanOrEqual
 ];
 
+const perustiedot = {
+  nimi: {},
+  rakennustunnus: {},
+  kiinteistotunnus: {},
+  rakennusosa: {},
+  katuosoite: {},
+  postinumero: {},
+  valmistumisvuosi: {},
+  tilaaja: {},
+  yritys: {},
+  havainnointikaynti: {},
+  'keskeiset-suositukset': {}
+};
+
+const lahtotiedot = {
+  'lammitetty-nettoala': {},
+  rakennusvaippa: {
+    ilmanvuotoluku: {},
+    ulkoseinat: {},
+    ylapohja: {},
+    alapohja: {},
+    ikkunat: {},
+    ulkoovet: {},
+    'kylmasillat-UA': {}
+  },
+  ikkunat: {
+    pohjoinen: {},
+    koillinen: {},
+    ita: {},
+    kaakko: {},
+    etela: {},
+    lounas: {},
+    lansi: {},
+    luode: {}
+  },
+  ilmanvaihto: {
+    'kuvaus-fi': {},
+    'kuvaus-sv': {},
+    paaiv: {
+      poisto: {},
+      tulo: {},
+      sfp: {},
+      lampotilasuhde: {},
+      jaatymisenesto: {}
+    },
+    erillispoistot: {},
+    ivjarjestelma: {},
+    'lto-vuosihyotysuhde': {}
+  },
+  lammitys: {
+    'kuvaus-fi': {},
+    'kuvaus-sv': {},
+    'tilat-ja-iv': {},
+    'lammin-kayttovesi': {},
+    takka: {},
+    ilmanlampopumppu: {}
+  },
+  jaahdytysjarjestelma: {
+    'jaahdytyskauden-painotettu-kylmakerroin': {}
+  },
+  'lkvn-kaytto': {
+    ominaiskulutus: {},
+    'lammitysenergian-nettotarve': {}
+  },
+  'sis-kuorma': {
+    henkilot: {},
+    kuluttajalaitteet: {},
+    valaistus: {}
+  }
+};
+
+const tulokset = {
+  'kaytettavat-energiamuodot': {
+    'fossiilinen-polttoaine': {},
+    sahko: {},
+    kaukojaahdytys: {},
+    kaukolampo: {},
+    'uusiutuva-polttoaine': {}
+  },
+  'uusiutuvat-omavaraisenergiat': {
+    aurinkosahko: {},
+    tuulisahko: {},
+    aurinkolampo: {},
+    muulampo: {},
+    muusahko: {},
+    lampopumppu: {}
+  },
+  'tekniset-jarjestelmat': {
+    'tilojen-lammitys': {},
+    'tuloilman-lammitys': {},
+    'kayttoveden-valmistus': {},
+    'iv-sahko': {},
+    jaahdytys: { sahko: {}, lampo: {}, kaukojaahdytys: {} },
+    'kuluttajalaitteet-ja-valaistus-sahko': {}
+  },
+  nettotarve: {
+    'tilojen-lammitys-vuosikulutus': {},
+    'ilmanvaihdon-lammitys-vuosikulutus': {},
+    'kayttoveden-valmistus-vuosikulutus': {},
+    'jaahdytys-vuosikulutus': {}
+  },
+  lampokuormat: {
+    aurinko: {},
+    ihmiset: {},
+    kuluttajalaitteet: {},
+    valaistus: {},
+    kvesi: {}
+  },
+  laskentatyokalu: {}
+};
+
+const toteutunutOstoenergiankulutus = {
+  'ostettu-energia': {
+    'kaukolampo-vuosikulutus': {},
+    'kokonaissahko-vuosikulutus': {},
+    'kiinteistosahko-vuosikulutus': {},
+    'kayttajasahko-vuosikulutus': {},
+    'kaukojaahdytys-vuosikulutus': {}
+  },
+  'ostetut-polttoaineet': {
+    'kevyt-polttooljy': {},
+    'pilkkeet-havu-sekapuu': {},
+    'pilkkeet-koivu': {},
+    puupelletit: {},
+    muu: {
+      nimi: {},
+      yksikko: {},
+      muunnoskerroin: {},
+      'maara-vuodessa': {}
+    }
+  },
+  'sahko-vuosikulutus-yhteensa': {},
+  'kaukolampo-vuosikulutus-yhteensa': {},
+  'polttoaineet-vuosikulutus-yhteensa': {},
+  'kaukojaahdytys-vuosikulutus-yhteensa': {}
+};
+
+const huomiot = {
+  suositukset: {},
+  lisatietoja: {},
+  'iv-ilmastointi': {},
+  'valaistus-muut': {},
+  lammitys: {},
+  ymparys: {},
+  'alapohja-ylapohja': {}
+};
+
 const schema = {
   id: R.map(R.applyTo('id'), numberComparisons),
   allekirjoitusaika: R.map(R.applyTo('allekirjoitusaika'), dateComparisons),
@@ -148,14 +295,14 @@ export const laatijaSchema = R.pick(
   schema
 );
 
-export const isSchemaObject = R.has('type');
+export const isSchemaObjectFunction = R.compose(R.equals('Function'), R.type);
 
 export const flattenSchema = (path, schema) => {
   const pairs = R.toPairs(schema);
 
   return R.reduce(
     (acc, obj) => {
-      if (!isSchemaObject(R.last(obj))) {
+      if (!isSchemaObjectFunction(R.last(obj))) {
         return R.concat(
           acc,
           flattenSchema(`${path}.${R.head(obj)}`, R.last(obj))
@@ -164,7 +311,7 @@ export const flattenSchema = (path, schema) => {
 
       return R.compose(
         R.append(R.__, acc),
-        R.assoc('key', R.drop(1, `${path}.${R.head(obj)}`)),
+        fn => fn(R.drop(1, `${path}.${R.head(obj)}`)),
         R.last
       )(obj);
     },
