@@ -295,27 +295,29 @@ export const laatijaSchema = R.pick(
   schema
 );
 
-export const isSchemaObjectFunction = R.compose(R.equals('Function'), R.type);
+export const isOperationArray = R.compose(R.equals('Array'), R.type);
 
 export const flattenSchema = (path, schema) => {
   const pairs = R.toPairs(schema);
 
   return R.reduce(
     (acc, obj) => {
-      if (!isSchemaObjectFunction(R.last(obj))) {
-        return R.concat(
+      if (!isOperationArray(R.last(obj))) {
+        return R.mergeRight(
           acc,
           flattenSchema(`${path}.${R.head(obj)}`, R.last(obj))
         );
       }
 
+      const newPath = R.drop(1, `${path}.${R.head(obj)}`);
+
       return R.compose(
-        R.append(R.__, acc),
-        fn => fn(R.drop(1, `${path}.${R.head(obj)}`)),
+        R.assoc(newPath, R.__, acc),
+        R.map(fn => fn(newPath)),
         R.last
       )(obj);
     },
-    [],
+    {},
     pairs
   );
 };
