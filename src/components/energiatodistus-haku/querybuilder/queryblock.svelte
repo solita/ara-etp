@@ -49,12 +49,6 @@
 
   let conjunction = R.view(conjunctionLens, model);
 
-  let kriteeri = R.compose(
-    R.assoc('kriteeri', R.__, {}),
-    R.prop(R.__, schema),
-    R.view(keyLens)
-  )(model);
-
   let key = R.view(keyLens, model);
 
   $: model = R.set(conjunctionLens, conjunction, model);
