@@ -5,6 +5,8 @@ import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as empty from './empty';
+import * as laatijaApi from '@Component/Laatija/laatija-api';
+import * as yritysApi from '@Component/Yritys/yritys-api';
 
 const deserialize2018 = {
   id: Maybe.get,
@@ -249,13 +251,13 @@ export const alakayttotarkoitusluokat = version =>
     Future.encaseP(Fetch.getFetch(fetch))
   )('api/private/alakayttotarkoitusluokat/' + version);
 
-export const luokittelut = version =>
+export const luokittelut = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
     kielisyys: kielisyys,
     laatimisvaiheet: laatimisvaiheet,
     kayttotarkoitusluokat: kayttotarkoitusluokat(version),
     alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
-  });
+  }));
 
 export const replaceable = R.curry((fetch, id) =>
   R.compose(
@@ -264,3 +266,10 @@ export const replaceable = R.curry((fetch, id) =>
     Future.encaseP(Fetch.getFetch(fetch))
   )(`api/private/energiatodistukset/replaceable?id=${id}`)
 );
+
+export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
+  Future.chain(
+    R.compose(
+      Future.parallel(10),
+      R.map(yritysApi.getYritysById(fetch))),
+    laatijaApi.getYritykset(fetch, laatijaId)));

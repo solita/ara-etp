@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
 
-  import { locale, _ } from '@Language/i18n';
+  import {locale, _} from '@Language/i18n';
   import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as validation from '@Utility/validation';
@@ -50,6 +50,7 @@
 
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
+  import Laskutus from "./laskutus";
 
   export let title = '';
   export let energiatodistus;
@@ -98,6 +99,10 @@
       {disabled} />
     <HR />
   {/if}
+
+  <Laskutus {disabled}
+            {schema}
+            bind:energiatodistus/>
 
   <H2 text={$_('energiatodistus.perustiedot.header')} />
 

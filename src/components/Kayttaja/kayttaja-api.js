@@ -15,8 +15,11 @@ const deserialize = R.evolve({
 export const url = {
   all: 'api/private/kayttajat',
   id: id => `${url.all}/${id}`,
-  laatija: id => `${url.id(id)}/laatija`
+  laatija: id => `${url.id(id)}/laatija`,
+  whoami: '/api/private/whoami'
 }
+
+export const whoami = Future.cache(Fetch.fetchUrl(fetch, url.whoami));
 
 export const getKayttajaById = R.curry((fetch, id) =>
   R.compose(
