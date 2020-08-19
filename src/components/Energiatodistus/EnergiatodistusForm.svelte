@@ -5,6 +5,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as schemas from './schema';
   import { _ } from '@Language/i18n';
+  import * as localstorage from './local-storage';
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
@@ -36,6 +37,8 @@
     if (et.isValidForm(et.validators(schema), energiatodistus)) {
       flashMessageStore.flush();
       submit(energiatodistus, onSuccessfulSave);
+      localstorage.setDefaultLaskutettavaYritysId(
+        energiatodistus['laskutettava-yritys-id']);
     } else {
       flashMessageStore.add(
         'Energiatodistus',

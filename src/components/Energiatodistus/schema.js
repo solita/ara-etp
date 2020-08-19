@@ -111,6 +111,7 @@ const Yritys = {
 };
 
 export const v2018 = {
+  laskuriviviite: String(50),
   perustiedot: {
     nimi: String(50),
     rakennustunnus: Rakennustunnus,
