@@ -16,15 +16,26 @@
   import Spinner from "../Spinner/Spinner.svelte";
   import SimpleInput from '@Component/Input/SimpleInput';
   import Input from './Input';
+  import * as KayttajaUtils from "@Component/Kayttaja/kayttaja-utils";
+  import HR from "@Component/HR/HR.svelte";
 
   export let energiatodistus;
+  export let whoami;
   export let disabled;
   export let schema;
 
   let laatijaYritykset = [];
   let verkkolaskuoperaattorit = [];
   let overlay = true;
-  const toggleOverlay = value => { overlay = value };
+  let laatija = Maybe.None();
+  const toggleOverlay = value => {
+    overlay = value
+  };
+
+  const getLaatija = id =>
+    (R.equals(id, whoami.id) || KayttajaUtils.isPaakayttaja(whoami)) ?
+      R.map(Maybe.Some, kayttajaApi.getLaatijaById(fetch, id)) :
+      Future.resolve(Maybe.None());
 
   R.compose(
     Future.fork(
@@ -34,7 +45,8 @@
           $_('energiatodistus.messages.load-error'));
       },
       response => {
-        laatijaYritykset = response[1];
+        laatijaYritykset = response[1][0];
+        laatija = response[1][1];
         verkkolaskuoperaattorit = response[0];
 
         localstorage.getDefaultLaskutettavaYritysId().forEach(
@@ -54,13 +66,11 @@
       },
     ),
     Future.both(laskutusApi.verkkolaskuoperaattorit),
-    Maybe.orSome(Future.chain(
-      whoami => api.getLaatijaYritykset(fetch, whoami.id),
-      kayttajaApi.whoami)),
-    R.map(api.getLaatijaYritykset(fetch)),
+    R.converge(Future.both, [api.getLaatijaYritykset(fetch), getLaatija]),
+    Maybe.orSome(whoami.id),
+    R.prop('laatija-id'),
     R.tap(() => toggleOverlay(true)),
-    R.prop('laatija-id')
-  ) (energiatodistus)
+  )(energiatodistus)
 
   const yritysLabel = yritys => yritys.nimi + ' | ' + yritys.ytunnus +
     R.compose(
@@ -80,9 +90,9 @@
     R.juxt([verkkolaskuoperaattori, R.prop('verkkolaskuosoite')])
   )
 
-  const postiosoite = yritys =>
-    yritys.jakeluosoite + ', ' +
-    yritys.postinumero + ' ' + yritys.postitoimipaikka
+  const postiosoite = entity =>
+    entity.jakeluosoite + ', ' +
+    entity.postinumero + ' ' + entity.postitoimipaikka
 
   const osoite = yritys => Maybe.orSome(
     postiosoite(yritys),
@@ -117,8 +127,20 @@
           viewValue={et.selectFormat(osoite, laatijaYritykset)(id)}/>
       </div>
       {/each}
+      {#if energiatodistus['laskutettava-yritys-id'].isNone()}
+        {#each laatija.toArray() as laatija }
+          <div class="lg:w-1/2 w-full px-4 py-4">
+            <SimpleInput
+                id="energiatodistus.laskutus.osoite"
+                name="energiatodistus.laskutus.osoite"
+                label={$_('energiatodistus.laskutus.osoite')}
+                disabled={true}
+                viewValue={postiosoite(laatija)}/>
+          </div>
+        {/each}
+      {/if}
     </div>
-    <div class="flex flex-col lg:flex-row -mx-4 my-4">
+    <div class="flex flex-col lg:flex-row -mx-4">
       <div class="lg:w-1/2 w-full px-4 py-4">
         <Input
             {disabled}
@@ -128,6 +150,8 @@
             path={['laskuriviviite']} />
       </div>
     </div>
+
+    <HR/>
   </div>
   <div slot="overlay-content">
     <Spinner />

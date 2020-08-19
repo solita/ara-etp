@@ -51,3 +51,5 @@ export const kayttajaAndLaatijaFuture = R.curry((fetch, id) =>
 export const kayttajaHasAccessToResource = R.curry((roolit, kayttaja) =>
   R.compose(R.applyTo(roolit), R.includes, R.prop('rooli'))(kayttaja)
 );
+
+export const isPaakayttaja = kayttajaHasAccessToResource([paakayttajaRole])

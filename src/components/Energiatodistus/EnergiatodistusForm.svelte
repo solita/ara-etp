@@ -17,6 +17,7 @@
   export let version;
   export let energiatodistus;
   export let luokittelut;
+  export let whoami;
 
   export let submit;
   export let disabled = false;
@@ -37,8 +38,10 @@
     if (et.isValidForm(et.validators(schema), energiatodistus)) {
       flashMessageStore.flush();
       submit(energiatodistus, onSuccessfulSave);
-      localstorage.setDefaultLaskutettavaYritysId(
-        energiatodistus['laskutettava-yritys-id']);
+      if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
+        localstorage.setDefaultLaskutettavaYritysId(
+          energiatodistus['laskutettava-yritys-id']);
+      }
     } else {
       flashMessageStore.add(
         'Energiatodistus',
@@ -128,7 +131,8 @@
           {inputLanguage}
           {disabled}
           {schema}
-          {luokittelut} />
+          {luokittelut}
+          {whoami} />
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
             <Button type={'submit'} text={$_('tallenna')} />
