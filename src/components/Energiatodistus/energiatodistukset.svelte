@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
+  import * as dfns from 'date-fns';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
@@ -176,7 +177,12 @@
                   <td class="etp-table--td">{energiatodistus.id}</td>
                   <td class="etp-table--td">C</td>
                   <td class="etp-table--td">{energiatodistus.versio}</td>
-                  <td class="etp-table--td">13.3.2030</td>
+                  <td class="etp-table--td">
+                    {R.compose( Maybe.orSome('-'), R.map(R.compose( d => dfns.format(d, 'd.M.yyyy'), d => dfns.add(
+                              d,
+                              { years: 10 }
+                            ), dfns.parseISO )), R.prop('allekirjoitusaika') )(energiatodistus)}
+                  </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot.nimi)}
                   </td>
