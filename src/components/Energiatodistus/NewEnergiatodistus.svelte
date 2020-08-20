@@ -15,6 +15,7 @@
   import * as et from './energiatodistus-utils';
   import * as empty from './empty';
   import * as api from './energiatodistus-api';
+  import * as kayttajaApi from "@Component/Kayttaja/kayttaja-api";
 
   import { flashMessageStore } from '@/stores';
 
@@ -29,6 +30,7 @@
     : empty.energiatodistus2013();
 
   let luokittelut = Maybe.None();
+  let whoami = Maybe.None();
 
   const submit = R.compose(
     Future.fork(
@@ -59,10 +61,12 @@
             $_('energiatodistus.messages.load-error'));
       },
       response => {
-        luokittelut = Maybe.Some(response);
+        luokittelut = Maybe.Some(response[0]);
+        whoami = Maybe.Some(response[1]);
         toggleOverlay(false);
       },
     ),
+    Future.both(R.__, kayttajaApi.whoami),
     api.luokittelut
   )(params.version);
 </script>
@@ -74,6 +78,7 @@
         version={params.version}
         {title}
         {energiatodistus}
+        whoami={whoami.some()}
         luokittelut = {luokittelut.some()}
         {submit} />
     {/if}

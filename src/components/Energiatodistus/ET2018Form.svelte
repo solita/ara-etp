@@ -58,6 +58,7 @@
   export let luokittelut;
   export let schema;
   export let disabled = false;
+  export let whoami;
 
   let eLuku = Maybe.None();
 
@@ -102,6 +103,7 @@
 
   <Laskutus {disabled}
             {schema}
+            {whoami}
             bind:energiatodistus/>
 
   <H2 text={$_('energiatodistus.perustiedot.header')} />

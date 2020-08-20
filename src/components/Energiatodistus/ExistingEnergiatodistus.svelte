@@ -10,6 +10,7 @@
 
   import * as et from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
@@ -19,6 +20,7 @@
 
   let energiatodistus = Maybe.None();
   let luokittelut = Maybe.None();
+  let whoami = Maybe.None();
 
   let overlay = true;
   let disabled = false;
@@ -65,11 +67,13 @@
       response => {
         energiatodistus = Maybe.Some(response[0]);
         luokittelut = Maybe.Some(response[1]);
+        whoami = Maybe.Some(response[2]);
         toggleOverlay(false);
       }
     ),
     Future.parallel(5),
-    R.pair(R.__, api.luokittelut(params.version)),
+    R.prepend(R.__,
+      [api.luokittelut(params.version), kayttajaApi.whoami]),
     R.tap(() => toggleOverlay(true)),
     api.getEnergiatodistusById(fetch),
   ) (params.version, params.id);
@@ -91,12 +95,13 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if Maybe.isSome(energiatodistus)}
+    {#if energiatodistus.isSome()}
       <EnergiatodistusForm
         version={params.version}
         {disabled}
         energiatodistus={energiatodistus.some()}
         luokittelut={luokittelut.some()}
+        whoami={whoami.some()}
         {submit}
         {title} />
     {/if}
