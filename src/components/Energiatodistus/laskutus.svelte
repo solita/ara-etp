@@ -12,8 +12,7 @@
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
   import {flashMessageStore} from "@/stores";
-  import Overlay from "../Overlay/Overlay.svelte";
-  import Spinner from "../Spinner/Spinner.svelte";
+  import Loading from "../Loading/Loading.svelte";
   import SimpleInput from '@Component/Input/SimpleInput';
   import Input from './Input';
   import * as KayttajaUtils from "@Component/Kayttaja/kayttaja-utils";
@@ -26,10 +25,11 @@
 
   let laatijaYritykset = [];
   let verkkolaskuoperaattorit = [];
-  let overlay = true;
+  let loading = true;
   let laatija = Maybe.None();
-  const toggleOverlay = value => {
-    overlay = value
+  let error = Maybe.None();
+  const toggleLoading = value => {
+    loading = value
   };
 
   const getLaatija = id =>
@@ -40,9 +40,8 @@
   R.compose(
     Future.fork(
       () => {
-        toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-          $_('energiatodistus.messages.load-error'));
+        error = Maybe.Some($_('energiatodistus.laskutus.load-error'));
+        flashMessageStore.add('Energiatodistus', 'error', error.some());
       },
       response => {
         laatijaYritykset = response[1][0];
@@ -62,14 +61,14 @@
           }
         );
 
-        toggleOverlay(false);
+        toggleLoading(false);
       },
     ),
     Future.both(laskutusApi.verkkolaskuoperaattorit),
     R.converge(Future.both, [api.getLaatijaYritykset(fetch), getLaatija]),
     Maybe.orSome(whoami.id),
     R.prop('laatija-id'),
-    R.tap(() => toggleOverlay(true)),
+    R.tap(() => toggleLoading(true)),
   )(energiatodistus)
 
   const yritysLabel = yritys => yritys.nimi + ' | ' + yritys.ytunnus +
@@ -101,59 +100,57 @@
 </script>
 <H2 text={'* ' + $_('energiatodistus.laskutus.title')} />
 
-<Overlay {overlay}>
-  <div slot="content">
-    <div class="flex flex-col lg:flex-row -mx-4">
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Select
-            label={$_('energiatodistus.laskutus.laskutettava')}
-            required={true}
-            allowNone={true}
-            noneLabel={'energiatodistus.laskutus.laatijalaskutus'}
-            {disabled}
-            bind:model={energiatodistus}
-            lens={R.lensPath(['laskutettava-yritys-id'])}
-            parse={Maybe.Some}
-            format={et.selectFormat(yritysLabel, laatijaYritykset)}
-            items={R.pluck('id', laatijaYritykset)} />
-      </div>
-      {#each energiatodistus['laskutettava-yritys-id'].toArray() as id }
+{#if !loading}
+<div class="flex flex-col lg:flex-row -mx-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <Select
+        label={$_('energiatodistus.laskutus.laskutettava')}
+        required={true}
+        allowNone={true}
+        noneLabel={'energiatodistus.laskutus.laatijalaskutus'}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['laskutettava-yritys-id'])}
+        parse={Maybe.Some}
+        format={et.selectFormat(yritysLabel, laatijaYritykset)}
+        items={R.pluck('id', laatijaYritykset)} />
+  </div>
+  {#each energiatodistus['laskutettava-yritys-id'].toArray() as id }
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <SimpleInput
+      id="energiatodistus.laskutus.osoite"
+      name="energiatodistus.laskutus.osoite"
+      label={$_('energiatodistus.laskutus.osoite')}
+      disabled={true}
+      viewValue={et.selectFormat(osoite, laatijaYritykset)(id)}/>
+  </div>
+  {/each}
+  {#if energiatodistus['laskutettava-yritys-id'].isNone()}
+    {#each laatija.toArray() as laatija }
       <div class="lg:w-1/2 w-full px-4 py-4">
         <SimpleInput
-          id="energiatodistus.laskutus.osoite"
-          name="energiatodistus.laskutus.osoite"
-          label={$_('energiatodistus.laskutus.osoite')}
-          disabled={true}
-          viewValue={et.selectFormat(osoite, laatijaYritykset)(id)}/>
+            id="energiatodistus.laskutus.osoite"
+            name="energiatodistus.laskutus.osoite"
+            label={$_('energiatodistus.laskutus.osoite')}
+            disabled={true}
+            viewValue={postiosoite(laatija)}/>
       </div>
-      {/each}
-      {#if energiatodistus['laskutettava-yritys-id'].isNone()}
-        {#each laatija.toArray() as laatija }
-          <div class="lg:w-1/2 w-full px-4 py-4">
-            <SimpleInput
-                id="energiatodistus.laskutus.osoite"
-                name="energiatodistus.laskutus.osoite"
-                label={$_('energiatodistus.laskutus.osoite')}
-                disabled={true}
-                viewValue={postiosoite(laatija)}/>
-          </div>
-        {/each}
-      {/if}
-    </div>
-    <div class="flex flex-col lg:flex-row -mx-4">
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-            {disabled}
-            {schema}
-            center={false}
-            bind:model={energiatodistus}
-            path={['laskuriviviite']} />
-      </div>
-    </div>
+    {/each}
+  {/if}
+</div>
+<div class="flex flex-col lg:flex-row -mx-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
+    <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['laskuriviviite']} />
+  </div>
+</div>
 
-    <HR/>
-  </div>
-  <div slot="overlay-content">
-    <Spinner />
-  </div>
-</Overlay>
+{:else}
+<Loading {error}/>
+{/if}
+
+<HR/>

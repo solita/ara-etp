@@ -49,7 +49,7 @@
     "celsius": "°C"
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
-  "ladataan": "Ladataan...",
+  "loading": "Ladataan...",
   "tallenna": "Tallenna",
   "peruuta": "Peruuta",
   "yritys": {
@@ -226,7 +226,8 @@
       "title": "Laskutustiedot",
       "osoite": "Osoite",
       "laskutettava": "Käytettävät laskutustiedot",
-      "laatijalaskutus": "Henkilökohtaiset tiedot"
+      "laatijalaskutus": "Henkilökohtaiset tiedot",
+      "load-error": "Laskutustietojen lataus epäonnistui"
     },
     "perustiedot": {
       "header": "Energiatodistuksen perustiedot",
