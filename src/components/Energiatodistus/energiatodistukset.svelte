@@ -198,7 +198,7 @@
                   <td class="etp-table--td">
                     {R.compose( Maybe.fold('-', d =>
                         dfns.format(d, 'd.M.yyyy')
-                      ), R.map(et.viimeinenVoimassaolo) )(energiatodistus)}
+                      ), et.viimeinenVoimassaolo )(energiatodistus)}
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot.nimi)}
