@@ -156,6 +156,17 @@
   "energiatodistus": {
     "title": "Energiatodistus",
     "haku": {
+      "sarakkeet": {
+        "tila": "Tila",
+        "tunnus": "Tunnus",
+        "ETL": "ETL",
+        "versio": "Versio",
+        "voimassa": "Voimassa",
+        "rakennuksen-nimi": "Rakennuksen nimi",
+        "osoite": "Osoite",
+        "laatija": "Laatija",
+        "toiminnot": "Toiminnot"
+      },
       "lisaa_hakuehtoja": "Lisää hakuehtoja",
       "lisaa_hakuehto": "Lisää hakuehto",
       "tyhjenna_hakuehdot": "Tyhjennä hakuehdot",

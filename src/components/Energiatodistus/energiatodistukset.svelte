@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
+  import * as dfns from 'date-fns';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
@@ -154,15 +155,33 @@
           <table class="etp-table">
             <thead class="etp-table--thead">
               <tr class="etp-table--tr etp-table--tr__light">
-                <th class="etp-table--th">Tila</th>
-                <th class="etp-table--th">Tunnus</th>
-                <th class="etp-table--th">ETL</th>
-                <th class="etp-table--th">Versio</th>
-                <th class="etp-table--th">Voimassa</th>
-                <th class="etp-table--th">Rakennuksen nimi</th>
-                <th class="etp-table--th">Osoite</th>
-                <th class="etp-table--th">Laatija</th>
-                <th class="etp-table--th">Toiminnot</th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.tila')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.tunnus')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.ETL')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.versio')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.voimassa')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.osoite')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.laatija')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.toiminnot')}
+                </th>
               </tr>
             </thead>
             <tbody class="etp-table--tbody">
@@ -176,7 +195,11 @@
                   <td class="etp-table--td">{energiatodistus.id}</td>
                   <td class="etp-table--td">C</td>
                   <td class="etp-table--td">{energiatodistus.versio}</td>
-                  <td class="etp-table--td">13.3.2030</td>
+                  <td class="etp-table--td">
+                    {R.compose( Maybe.fold('-', d =>
+                        dfns.format(d, 'd.M.yyyy')
+                      ), R.map(et.viimeinenVoimassaolo) )(energiatodistus)}
+                  </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot.nimi)}
                   </td>
