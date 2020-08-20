@@ -261,7 +261,6 @@ export const luokittelut = R.memoizeWith(R.identity, version =>
 
 export const replaceable = R.curry((fetch, id) =>
   R.compose(
-    Future.cache,
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch))
   )(`api/private/energiatodistukset/replaceable?id=${id}`)

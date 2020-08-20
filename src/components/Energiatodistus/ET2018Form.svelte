@@ -91,7 +91,8 @@
     <EnergiatodistuksenKorvaava
       korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
     <HR />
-  {:else if showEnergiatodistusKorvaavuus}
+  {/if}
+  {#if showEnergiatodistusKorvaavuus}
     <H2 text={$_('energiatodistus.korvaavuus.header')} />
     <EnergiatodistuksenKorvaus
       bind:model={energiatodistus}
@@ -277,21 +278,43 @@
 
   <HR />
   <H2 text={$_('energiatodistus.huomiot.header.2018')} />
-  <Huomio {disabled} {schema} {inputLanguage}
-          huomio={'ymparys'} bind:energiatodistus />
   <Huomio
     {disabled}
-    {schema} {inputLanguage}
+    {schema}
+    {inputLanguage}
+    huomio={'ymparys'}
+    bind:energiatodistus />
+  <Huomio
+    {disabled}
+    {schema}
+    {inputLanguage}
     huomio={'alapohja-ylapohja'}
     bind:energiatodistus />
-  <Huomio {disabled} {schema} {inputLanguage}
-          huomio={'lammitys'} bind:energiatodistus />
-  <Huomio {disabled} {schema} {inputLanguage}
-          huomio={'iv-ilmastointi'} bind:energiatodistus />
-  <Huomio {disabled} {schema} {inputLanguage}
-          huomio={'valaistus-muut'} bind:energiatodistus />
+  <Huomio
+    {disabled}
+    {schema}
+    {inputLanguage}
+    huomio={'lammitys'}
+    bind:energiatodistus />
+  <Huomio
+    {disabled}
+    {schema}
+    {inputLanguage}
+    huomio={'iv-ilmastointi'}
+    bind:energiatodistus />
+  <Huomio
+    {disabled}
+    {schema}
+    {inputLanguage}
+    huomio={'valaistus-muut'}
+    bind:energiatodistus />
 
-  <Suositukset versio={2018} {disabled} {schema} {inputLanguage} bind:energiatodistus />
+  <Suositukset
+    versio={2018}
+    {disabled}
+    {schema}
+    {inputLanguage}
+    bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.lisamerkintoja')} />
   <div class="w-full py-4 mb-4">
