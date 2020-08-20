@@ -242,20 +242,20 @@
   {#if Maybe.fold(false, KayttajaUtils.kayttajaHasAccessToResource([
       KayttajaUtils.laatijaRole
     ]), $currentUserStore)}
-    <p class="mb-4">Uuden energiatodistuksen voit lisätä täältä:</p>
+    <p class="mb-4">{$_('energiatodistus.et-lisays')}</p>
     <div class="mb-4 flex lg:flex-row flex-col">
       <div class="flex flex-row mb-4 mr-4">
         <span class="material-icons">add</span>
         &nbsp;
         <Link
-          text={'Luo uusi 2018 energiatodistus'}
+          text={$_('energiatodistus.luo2018')}
           href="#/energiatodistus/2018/new" />
       </div>
       <div class="flex flex-row mb-4 mr-4">
         <span class="material-icons">add</span>
         &nbsp;
         <Link
-          text={'Luo uusi 2013 energiatodistus'}
+          text={$_('energiatodistus.luo2013')}
           href="#/energiatodistus/2013/new" />
       </div>
     </div>
@@ -264,7 +264,7 @@
     <span class="material-icons">attachment</span>
     &nbsp;
     <Link
-      text={'Lataa energiatodistukset XLSX-tiedostona'}
+      text={$_('energiatodistus.lataa-xlsx')}
       href="/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx" />
   </div>
 </div>
