@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as dfns from 'date-fns';
 
 import * as validation from '@Utility/validation';
 import * as deep from '@Utility/deep-objects';
@@ -353,10 +354,13 @@ export const tila = R.compose(R.map(parseInt), R.invertObj)(tilat);
 
 export const tilaKey = id => tilat[id];
 
-const kielisyydet = [
-  'fi', 'sv', 'bilingual'
-]
+const kielisyydet = ['fi', 'sv', 'bilingual'];
 
 export const kielisyys = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
 
 export const kielisyysKey = id => kielisyydet[id];
+
+export const viimeinenVoimassaolo = R.compose(
+  R.map(R.compose(d => dfns.add(d, { years: 10 }), dfns.parseISO)),
+  R.prop('allekirjoitusaika')
+);

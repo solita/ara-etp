@@ -196,10 +196,9 @@
                   <td class="etp-table--td">C</td>
                   <td class="etp-table--td">{energiatodistus.versio}</td>
                   <td class="etp-table--td">
-                    {R.compose( Maybe.orSome('-'), R.map(R.compose( d => dfns.format(d, 'd.M.yyyy'), d => dfns.add(
-                              d,
-                              { years: 10 }
-                            ), dfns.parseISO )), R.prop('allekirjoitusaika') )(energiatodistus)}
+                    {R.compose( Maybe.fold('-', d =>
+                        dfns.format(d, 'd.M.yyyy')
+                      ), R.map(et.viimeinenVoimassaolo) )(energiatodistus)}
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot.nimi)}
