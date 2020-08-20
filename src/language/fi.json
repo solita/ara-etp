@@ -182,20 +182,299 @@
       "suosikkihaut": "Suosikkihaut",
       "allekirjoitusaika": "Allekirjoitusaika",
       "id": "Tunnus",
+      "true": "Kyllä",
+      "false": "Ei",
+      "onko-julkinen-rakennus": "Julkinen rakennus",
+      "korvattu-energiatodistus-id": "Korvaa todistuksen",
+      "laatimisvaihe": "Laatimisvaihe",
+      "lisamerkintoja": "Lisämerkintojä",
+      "tilaaja": "Tilaaja",
       "perustiedot": {
         "nimi": "Nimi",
         "rakennustunnus": "Pysyvä rakennustunnus",
         "kiinteistotunnus": "Kiinteistötunnus",
+        "rakennusosa": "Rakennusosa",
         "katuosoite-fi": "Katuosoite suomeksi",
         "katuosoite-sv": "Katuosoite ruotsiksi",
         "postinumero": "Postinumero",
-        "onko-julkinen-rakennus": "Julkinen rakennus",
-        "uudisrakennus": "Uudisrakennus",
-        "laatimisvaihe": "Laatimisvaihe",
-        "havainnointikaynti": "Havainnointikäynnin päivämäärä",
         "valmistumisvuosi": "Valmistumisvuosi",
-        "rakennusluokka": "Käyttötarkoitusluokka",
-        "rakennuksen-kayttotarkoitusluokka": "Rakennuksen käyttötarkoitusluokka"
+        "yritys": {
+          "nimi": "Yrityksen nimi",
+          "katuosoite": "Yrityksen katuosoite",
+          "postitoimipaikka": "Yrityksen postitoimipaikka",
+          "postinumero": "Yrityksen puhelinnumero"
+        },
+        "keskeiset-suositukset": "Keskeiset suositukset"
+      },
+      "lahtotiedot": {
+        "lammitetty-nettoala": "Lämmitetty nettoala",
+        "rakennusvaippa": {
+          "ilmanvuotoluku": "Ilmanvuotoluku",
+          "ulkoseinat": {
+            "ala": "Ulkoseinien pinta-ala",
+            "U": "Ulkoseinien U"
+          },
+          "ylapohja": {
+            "ala": "Yläpohjan pinta-ala",
+            "U": "Yläpohjan U"
+          },
+          "alapohja": {
+            "ala": "Alapohjan pinta-ala",
+            "U": "Alapohjan U"
+          },
+          "ikkunat": {
+            "ala": "Ikkunoiden pinta-ala",
+            "U": "Ikkunoiden U"
+          },
+          "ulkoovet": {
+            "ala": "Ulko-ovien pinta-ala",
+            "U": "Ulko-ovien U"
+          },
+          "kylmasillat-UA": "Kylmäsillat U/A"
+        },
+        "ikkunat": {
+          "pohjoinen": {
+            "ala": "Pohjoisen ikkunoiden pinta-ala",
+            "U": "Pohjoisen ikkunoiden U",
+            "g-ks": "Pohjoisen ikkunoiden g-kohtisuora"
+          },
+          "koillinen": {
+            "ala": "Koillisen ikkunoiden pinta-ala",
+            "U": "Koillisen ikkunoiden U",
+            "g-ks": "Koillisen ikkunoiden g-kohtisuora"
+          },
+          "ita": {
+            "ala": "Idän ikkunoiden pinta-ala",
+            "U": "Idän ikkunoiden U",
+            "g-ks": "Idän ikkunoiden g-kohtisuora"
+          },
+          "kaakko": {
+            "ala": "Kaakon ikkunoiden pinta-ala",
+            "U": "Kaakon ikkunoiden U",
+            "g-ks": "Kaakon ikkunoiden g-kohtisuora"
+          },
+          "etela": {
+            "ala": "Etelän ikkunoiden pinta-ala",
+            "U": "Etelän ikkunoiden U",
+            "g-ks": "Etelän ikkunoiden g-kohtisuora"
+          },
+          "lounas": {
+            "ala": "Lounaan ikkunoiden pinta-ala",
+            "U": "Lounaan ikkunoiden U",
+            "g-ks": "Lounaan ikkunoiden g-kohtisuora"
+          },
+          "lansi": {
+            "ala": "Lännen ikkunoiden pinta-ala",
+            "U": "Lännen ikkunoiden U",
+            "g-ks": "Lännen ikkunoiden g-kohtisuora"
+          },
+          "luode": {
+            "ala": "Luoteen ikkunoiden pinta-ala",
+            "U": "Luoteen ikkunoiden U",
+            "g-ks": "Luoteen ikkunoiden g-kohtisuora"
+          }
+        },
+        "ilmanvaihto": {
+          "kuvaus-fi": "Ilmanvaihdon kuvaus (suomeksi)",
+          "kuvaus-sv": "Ilmanvaihdon kuvaus (ruotsiksi)",
+          "paaiv": {
+            "poisto": "Pääilmanvaihdon poisto",
+            "tulo": "Pääilmanvaihdon tulo",
+            "sfp": "Pääilmanvaihdon SFP-luku",
+            "lampotilasuhde": "Pääilmanvaihtokoneen lämpötilasuhde",
+            "jaatymisenesto": "Pääilmanvaihtokoneen jäätymisenesto"
+          },
+          "erillispoistot": {
+            "poisto": "Erillispoistojen poisto",
+            "tulo": "Erillispoistojen tulo",
+            "sfp": "Erillispoistojen SFP-luku"
+          },
+          "ivjarjestelma": {
+            "poisto": "Ilmanvaihtojärjestelmän poisto",
+            "tulo": "Ilmanvaihtojärjestelmän tulo",
+            "sfp": "Ilmanvaihtojärjestelmän SFP-luku"
+          },
+
+          "lto-vuosihyotysuhde": "Ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde"
+        },
+        "lammitys": {
+          "kuvaus-fi": "Lämmityksen kuvaus (suomeksi)",
+          "kuvaus-sv": "Lämmityksen kuvaus (ruotsiksi)",
+          "tilat-ja-iv": {
+            "tuoton-hyotysuhde": "Tilojen ja IV:n lämmityksen tuoton hyötysuhde",
+            "jaon-hyotysuhde": "Tilojen ja IV:n lämmityksen jaon ja luovutuksen hyötysuhde",
+            "lampokerroin": "Tilojen ja IV:n lämmityksen lämpökerroin",
+            "apulaitteet": "Tilojen ja IV:n lämmityksen apulaitteiden sähkönkäyttö"
+          },
+          "lammin-kayttovesi": {
+            "tuoton-hyotysuhde": "Lämpimän käyttöveden valmistuksen tuoton hyötysuhde",
+            "jaon-hyotysuhde": "Lämpimän käyttöveden valmistuksen jaon ja luovutuksen hyötysuhde",
+            "lampokerroin": "Lämpimän käyttöveden valmistuksen lämpökerroin",
+            "apulaitteet": "Lämpimän käyttöveden valmistuksen apulaitteiden sähkönkäyttö"
+          },
+          "takka": {
+            "maara": "Takkojen lukumäärä",
+            "tuotto": "Takkojen tuotto"
+          },
+          "ilmanlampopumppu": {
+            "maara": "Ilmalämpöpumppujen lukumäärä",
+            "tuotto": "Ilmalämpöpumppujen tuotto"
+          }
+        },
+        "jaahdytysjarjestelma": {
+          "jaahdytyskauden-painotettu-kylmakerroin": "Jäähdytyskauden painotettu kylmäkerroin"
+        },
+        "lkvn-kaytto": {
+          "ominaiskulutus": "Ominaiskulutus",
+          "lammitysenergian-nettotarve": "Lämmitysenergian nettotarve"
+        },
+        "sis-kuorma": {
+          "henkilot": {
+            "kayttoaste": "Henkilöiden käyttöaste",
+            "lampokuorma": "Henkilöiden lämpökuorma"
+          },
+          "kuluttajalaitteet": {
+            "kayttoaste": "Kuluttajalaitteiden käyttöaste",
+            "lampokuorma": "Kuluttajalaitteiden lämpökuorma"
+          },
+          "valaistus": {
+            "kayttoaste": "Valaistuksen käyttöaste",
+            "lampokuorma": "Valaistuksen lämpökuorma"
+          }
+        }
+      },
+      "tulokset": {
+        "kaytettavat-energiamuodot": {
+          "fossiilinen-polttoaine": "Vakioidulla käytöllä laskettu fossiilisten polttoaineiden osto",
+          "sahko": "Vakioidulla käytöllä laskettu sähkön osto",
+          "kaukojaahdytys": "Vakioidulla käytöllä laskettu kaukojäähdytyksen osto",
+          "kaukolampo": "Vakioidulla käytöllä laskettu kaukolämmön osto",
+          "uusiutuva-polttoaine": "Vakioidulla käytöllä laskettu uusiutuvan polttoaineen osto"
+        },
+        "uusiutuvat-omavaraisenergiat": {
+          "aurinkosahko": "Aurinkosähkön vuosituotto",
+          "tuulisahko": "Tuulisähkön vuosituotto",
+          "aurinkolampo": "Aurinkolämmön vuosituotto",
+          "muulampo": "Muun lämmön vuosituotto",
+          "muusahko": "Muun sähkön vuosituotto",
+          "lampopumppu": "Lämpöpumpun vuosituotto"
+        },
+        "tekniset-jarjestelmat": {
+          "tilojen-lammitys": {
+            "sahko": "Tilojen lämmityksen sähkönkulutus",
+            "lampo": "Tilojen lämmityksen lämmönkulutus"
+          },
+          "tuloilman-lammitys": {
+            "sahko": "Tuloilman lämmityksen sähkönkulutus",
+            "lampo": "Tuloilman lämmityksen lämmönkulutus"
+          },
+          "kayttoveden-valmistus": {
+            "sahko": "Käyttöveden valmistuksen sähkönkulutus",
+            "lampo": "Käyttöveden valmistuksen lämmönkulutus"
+          },
+          "iv-sahko": "Ilmanvaihtojärjestelmän sähkönkulutus",
+          "jaahdytys": {
+            "sahko": "Jäähdytyksen sähkönkulutus",
+            "lampo": "Jäähdytyksen lämmönkulutus",
+            "kaukojaahdytys": "Kaukojäähdytyksen kulutus"
+          },
+          "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteiden ja valaisun sähkönkulutus"
+        },
+        "nettotarve": {
+          "tilojen-lammitys-vuosikulutus": "Tilojen lämmityksen vuosikulutus",
+          "ilmanvaihdon-lammitys-vuosikulutus": "Ilmanvaihdon lämmityksen vuosikulutus",
+          "kayttoveden-valmistus-vuosikulutus": "Lämpimän käyttöveden valmistuksen vuosikulutus",
+          "jaahdytys-vuosikulutus": "Jäähdytyksen vuosikulutus"
+        },
+        "lampokuormat": {
+          "aurinko": "Auringon vuosittainen lämpökuorma",
+          "ihmiset": "Henkilöiden vuosittainen lämpökuorma",
+          "kuluttajalaitteet": "Kuluttajalaitteiden lämpökuorma",
+          "valaistus": "Auringon vuosittainen lämpökuorma",
+          "kvesi": "Auringon vuosittainen lämpökuorma"
+        },
+        "laskentatyokalu": "Energiatodistuksen laadintaohjelmisto ja versio"
+      },
+      "toteutunut-ostoenergiankulutus": {
+        "ostettu-energia": {
+          "kaukolampo-vuosikulutus": "Kaukolämmön vuosikulutus",
+          "kokonaissahko-vuosikulutus": "Kokonaissähkön vuosikulutus",
+          "kiinteistosahko-vuosikulutus": "Kiinteistösähkön vuosikulutus",
+          "kayttajasahko-vuosikulutus": "Käyttäjäsähkön vuosikulutus",
+          "kaukojaahdytys-vuosikulutus": "Kaukojäähdytyksen vuosikulutus"
+        },
+        "ostetut-polttoaineet": {
+          "kevyt-polttooljy": "Kevyen polttoöljyn ostettu vuosimäärä",
+          "pilkkeet-havu-sekapuu": "Pilkkeiden (havu- ja sekapuu) ostettu vuosimäärä",
+          "pilkkeet-koivu": "Pilkkeiden (koivu) ostettu vuosimäärä",
+          "puupelletit": "Puupellettien ostettu vuosimäärä",
+
+          "muu": {
+            "nimi": "Muun polttoaineen nimi",
+            "yksikko": "Muun polttoaineen yksikkö",
+            "muunnoskerroin": "Muun polttoaineen muunnoskerroin kWh:ksi",
+            "maara-vuodessa": "Muun polttoaineen ostomäärä vuodessa"
+          }
+        },
+
+        "sahko-vuosikulutus-yhteensa": "Sähkö yhteensä",
+        "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö yhteensä",
+        "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet yhteensä",
+        "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys yhteensä"
+      },
+      "huomiot": {
+        "suositukset": "Huomioiden suositetut toimenpide-ehdotukset",
+        "lisatietoja": "Huomioiden lisätiedot",
+        "iv-ilmastointi": {
+          "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
+          "toimenpide": {
+            "nimi": "Ilmanvaihto- ja ilmastointijärjestelmien toimenpide-ehdotus",
+            "lampo": "Ilmanvaihto- ja ilmastointijärjestelmien toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Ilmanvaihto- ja ilmastointijärjestelmien toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Ilmanvaihto- ja ilmastointijärjestelmien toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Ilmanvaihto- ja ilmastointijärjestelmien toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        },
+        "valaistus-muut": {
+          "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien huomiot",
+          "toimenpide": {
+            "nimi": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien toimenpide-ehdotus",
+            "lampo": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        },
+        "lammitys": {
+          "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
+          "toimenpide": {
+            "nimi": "Tilojen ja käyttöveden lämmitysjärjestelmien toimenpide-ehdotus",
+            "lampo": "Tilojen ja käyttöveden lämmitysjärjestelmien toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Tilojen ja käyttöveden lämmitysjärjestelmien toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Tilojen ja käyttöveden lämmitysjärjestelmien toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Tilojen ja käyttöveden lämmitysjärjestelmien toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        },
+        "ymparys": {
+          "teksti": "Ulkoseinien, ulko-ovien ja ikkunoiden huomiot",
+          "toimenpide": {
+            "nimi": "Ulkoseinien, ulko-ovien ja ikkunoiden toimenpide-ehdotus",
+            "lampo": "Ulkoseinien, ulko-ovien ja ikkunoiden toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Ulkoseinien, ulko-ovien ja ikkunoiden toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Ulkoseinien, ulko-ovien ja ikkunoiden toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Ulkoseinien, ulko-ovien ja ikkunoiden toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        },
+        "alapohja-ylapohja": {
+          "teksti": "Ylä- ja alapohjan huomiot",
+          "toimenpide": {
+            "nimi": "Ylä- ja alapohjan toimenpide-ehdotus",
+            "lampo": "Ylä- ja alapohjan toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Ylä- ja alapohjan toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Ylä- ja alapohjan toimenpiteen vaikutukset jäähdytyksen kulutukseen",
+            "eluvun-muutos": "Ylä- ja alapohjan toimenpiteen vaikutukset e-luvun muutokseen"
+          }
+        }
       }
     },
     "kaikki": "Kaikki",

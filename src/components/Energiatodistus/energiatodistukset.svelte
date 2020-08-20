@@ -19,7 +19,9 @@
   import Link from '@Component/Link/Link';
   import Select from '@Component/Select/Select';
   import Confirm from '@Component/Confirm/Confirm';
-  import EnergiatodistusHaku from './energiatodistus-haku';
+  import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
+
+  import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
 
   let overlay = true;
   let failure = false;
@@ -129,7 +131,10 @@
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
   <div class="mb-10">
-    <EnergiatodistusHaku {parsedQuery} {runQuery} />
+    <EnergiatodistusHaku
+      {parsedQuery}
+      {runQuery}
+      schema={EtHakuSchema.laatijaSchema} />
   </div>
   <Overlay {overlay}>
     <div slot="content">
