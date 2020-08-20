@@ -165,6 +165,7 @@ export const energiatodistus2018 = _ => ({
       muusahko: Maybe.None(),
       lampopumppu: Maybe.None()
     },
+    'kuukausierittely': Maybe.None(),
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': emptySahkoLampo(),
       'tuloilman-lammitys': emptySahkoLampo(),
