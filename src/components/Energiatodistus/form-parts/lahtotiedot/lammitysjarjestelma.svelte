@@ -4,6 +4,7 @@
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
   import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
+  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
 
   export let disabled;
   export let schema;
@@ -34,9 +35,16 @@
       <th class="et-table--th">
         {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
       </th>
-      <th class="et-table--th">
+      <th class="et-table--th border-r-4">
         <span>{$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}</span>
         <span class="block"><VuosikulutusPerAlaUnit/></span>
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}
+      </th>
+      <th class="et-table--th">
+        {$_('energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila')}
+        <VuosikulutusUnit />
       </th>
     </tr>
   </thead>
@@ -70,13 +78,29 @@
             bind:model={energiatodistus}
             path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampokerroin']} />
         </td>
-        <td class="et-table--td">
+        <td class="et-table--td border-r-4">
           <Input
             {disabled}
             {schema}
             compact={true}
             bind:model={energiatodistus}
             path={['lahtotiedot', 'lammitys', hyotysuhde, 'apulaitteet']} />
+        </td>
+        <td class="et-table--td">
+          <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampopumppu-tuotto-osuus']} />
+        </td>
+        <td class="et-table--td">
+          <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampohavio-lammittamaton-tila']} />
         </td>
       </tr>
     {/each}

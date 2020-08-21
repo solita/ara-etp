@@ -64,7 +64,9 @@ const Hyotysuhde = {
   'tuoton-hyotysuhde': FloatPos,
   'jaon-hyotysuhde': FloatPos,
   lampokerroin: FloatPos,
-  apulaitteet: FloatPos
+  apulaitteet: FloatPos,
+  'lampopumppu-tuotto-osuus': Float(0.0, 1.0),
+  'lampohavio-lammittamaton-tila': FloatPos
 };
 
 const MaaraTuotto = {

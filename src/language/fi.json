@@ -687,6 +687,8 @@
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
         "lampokerroin": "Lämpökerroin",
         "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö",
+        "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus",
+        "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämättömään tilaan",
         "maara": "Määrä",
         "tuotto": "Tuotto",
         "kuvaus": "Lämmitysjärjestelmän kuvaus",
@@ -695,14 +697,18 @@
           "tuoton-hyotysuhde": "Tilojen ja IV:n lämmityksen tuoton hyötysuhde",
           "jaon-hyotysuhde": "Tilojen ja IV:n lämmityksen jaon ja luovutuksen hyötysuhde",
           "lampokerroin": "Tilojen ja IV:n lämmityksen lämpökerroin",
-          "apulaitteet": "Tilojen ja IV:n lämmityksen apulaitteiden sähkönkäyttö"
+          "apulaitteet": "Tilojen ja IV:n lämmityksen apulaitteiden sähkönkäyttö",
+          "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus tilojen lämpöenergian tarpeesta",
+          "lampohavio-lammittamaton-tila": "Tilojen lämmityksen lämpöhäviöt lämmittämättömään tilaan"
         },
         "lammin-kayttovesi": {
           "label": "Lämpimän käyttöveden valmistus",
           "tuoton-hyotysuhde": "Lämpimän käyttöveden valmistuksen tuoton hyötysuhde",
           "jaon-hyotysuhde": "Lämpimän käyttöveden valmistuksen jaon ja luovutuksen hyötysuhde",
           "lampokerroin": "Lämpimän käyttöveden valmistuksen lämpökerroin",
-          "apulaitteet": "Lämpimän käyttöveden valmistuksen apulaitteiden sähkönkäyttö"
+          "apulaitteet": "Lämpimän käyttöveden valmistuksen apulaitteiden sähkönkäyttö",
+          "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus käyttöveden lämpöenergian tarpeesta",
+          "lampohavio-lammittamaton-tila": "Käyttöveden lämmityksen lämpöhäviöt lämmittämättömään tilaan"
         },
         "takka": {
           "label": "Varaava tulisija",
