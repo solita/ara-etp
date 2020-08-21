@@ -40,6 +40,7 @@
 
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
+  import Laskutus from "./laskutus";
 
   export let title = '';
   export let energiatodistus;
@@ -47,6 +48,7 @@
   export let luokittelut;
   export let schema;
   export let disabled = false;
+  export let whoami;
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -54,6 +56,12 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
+
+  <Laskutus {disabled}
+            {schema}
+            {whoami}
+            bind:energiatodistus/>
+
   <H2 text={$_('energiatodistus.perustiedot.header')} />
 
   <div class="flex lg:flex-row flex-col -mx-4">
