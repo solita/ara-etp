@@ -16,6 +16,8 @@
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Textarea from './Textarea';
 
+  import EnergiatodistuksenKorvaus from './energiatodistuksen-korvaus';
+  import EnergiatodistuksenKorvaava from './energiatodistuksen-korvaava';
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
 
@@ -52,10 +54,37 @@
 
   $: labelLocale = LocaleUtils.label($locale);
 
+  $: isEnergiatodistusKorvattu = R.compose(
+    R.ifElse(R.isNil, R.always(false), Maybe.isSome),
+    R.prop('korvaava-energiatodistus-id')
+  )(energiatodistus);
+
+  $: isEnergiatodistusKorvaava = R.compose(
+    Maybe.isSome,
+    R.prop('korvattu-energiatodistus-id')
+  )(energiatodistus);
+
+  $: showEnergiatodistusKorvaavuus = !(!isEnergiatodistusKorvaava && disabled);
 </script>
 
 <div class="w-full mt-3">
   <H1 text={title} />
+
+  {#if isEnergiatodistusKorvattu}
+    <H2 text={$_('energiatodistus.korvaava.header')} />
+    <EnergiatodistuksenKorvaava
+      korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
+    <HR />
+  {/if}
+  {#if showEnergiatodistusKorvaavuus}
+    <H2 text={$_('energiatodistus.korvaavuus.header')} />
+    <EnergiatodistuksenKorvaus
+      bind:model={energiatodistus}
+      lens={R.lensProp('korvattu-energiatodistus-id')}
+      initialKorvattavaId={energiatodistus['korvattu-energiatodistus-id']}
+      {disabled} />
+    <HR />
+  {/if}
 
   <Laskutus {disabled}
             {schema}
