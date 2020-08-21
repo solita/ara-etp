@@ -563,6 +563,8 @@
         "U*A": "U*A",
         "osuuslampohaviosta": "Osuus lämpöhäviöstä",
         "ilmanvuotoluku": "Ilmanvuotoluku",
+        "lampokapasiteetti": "Lämpökapasiteetti",
+        "ilmatilavuus": "Ilmatilavuus",
         "labels": {
           "ulkoseinat": "Ulkoseinät",
           "ylapohja": "Yläpohja",

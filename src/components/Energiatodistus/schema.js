@@ -131,6 +131,8 @@ export const v2018 = {
     'lammitetty-nettoala': FloatPos,
     rakennusvaippa: {
       ilmanvuotoluku: Float(0, 50),
+      lampokapasiteetti: FloatPos,
+      ilmatilavuus: FloatPos,
       ulkoseinat: Rakennusvaippa(0.05, 2.0),
       ylapohja: Rakennusvaippa(0.03, 2.0),
       alapohja: Rakennusvaippa(0.03, 4.0),
