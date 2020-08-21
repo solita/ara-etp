@@ -657,6 +657,7 @@
         "jaatymisenesto": "Jäätymisenesto",
         "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
         "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
+        "tuloilma-lampotila": "Tuloilman sisäänpuhalluslämpötila C°",
         "ilmavirta": "Ilmavirta",
         "tulo": "tulo",
         "poisto": "poisto",

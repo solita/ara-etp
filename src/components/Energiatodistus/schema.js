@@ -160,7 +160,8 @@ export const v2018 = {
       },
       erillispoistot: PoistoTuloSfp,
       ivjarjestelma: PoistoTuloSfp,
-      'lto-vuosihyotysuhde': Float(0.0, 1.0)
+      'lto-vuosihyotysuhde': Float(0.0, 1.0),
+      'tuloilma-lampotila': FloatPos
     },
     lammitys: {
       'kuvaus-fi': String(75),
