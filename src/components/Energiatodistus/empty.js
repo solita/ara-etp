@@ -23,7 +23,9 @@ const emptyLammitys = _ => ({
   'tuoton-hyotysuhde': Maybe.None(),
   'jaon-hyotysuhde': Maybe.None(),
   lampokerroin: Maybe.None(),
-  apulaitteet: Maybe.None()
+  apulaitteet: Maybe.None(),
+  'lampohavio-lammittamaton-tila': Maybe.None(),
+  'lampopumppu-tuotto-osuus': Maybe.None()
 });
 
 const emptyLammitysMaaraTuotto = _ => ({
@@ -95,6 +97,8 @@ export const energiatodistus2018 = _ => ({
     'lammitetty-nettoala': Maybe.None(),
     rakennusvaippa: {
       ilmanvuotoluku: Maybe.None(),
+      lampokapasiteetti: Maybe.None(),
+      ilmatilavuus: Maybe.None(),
       'kylmasillat-UA': Maybe.None(),
       ulkoseinat: emptyRakennusVaippa(),
       ylapohja: emptyRakennusVaippa(),
@@ -126,7 +130,8 @@ export const energiatodistus2018 = _ => ({
       ),
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
-      'lto-vuosihyotysuhde': Maybe.None()
+      'lto-vuosihyotysuhde': Maybe.None(),
+      'tuloilma-lampotila': Maybe.None(),
     },
     lammitys: {
       'kuvaus-fi': Maybe.None(),
