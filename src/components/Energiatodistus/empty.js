@@ -2,6 +2,8 @@ import * as R from 'ramda';
 
 import * as Maybe from '@Utility/maybe-utils';
 
+import * as EtUtils from './energiatodistus-utils';
+
 const emptyRakennusVaippa = _ => ({
   ala: Maybe.None(),
   U: Maybe.None()
@@ -64,6 +66,7 @@ const emptyMuuPolttoaine = _ => ({
 });
 
 export const energiatodistus2018 = _ => ({
+  'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
   'laskuriviviite': Maybe.None(),
