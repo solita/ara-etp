@@ -35,7 +35,7 @@
   const ETForm = forms[version];
 
   $: disabled = !R.and(energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
-                       Maybe.fromUndefined(energiatodistus['tila-id']).fold(true)(R.equals(EtUtils.tila.draft)));
+                       R.propEq('tila-id', EtUtils.tila.draft, energiatodistus));
 
   const validateAndSubmit = onSuccessfulSave => () => {
     if (et.isValidForm(et.validators(schema), energiatodistus)) {
