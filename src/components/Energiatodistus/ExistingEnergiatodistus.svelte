@@ -5,7 +5,6 @@
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
-  import * as EtUtils from './energiatodistus-utils';
   import EnergiatodistusForm from './EnergiatodistusForm';
 
   import * as et from './energiatodistus-utils';
@@ -23,15 +22,12 @@
   let whoami = Maybe.None();
 
   let overlay = true;
-  let disabled = false;
 
   const toggleOverlay = value => { overlay = value };
-  const toggleDisabled = value => { disabled = value };
 
   const resetView = () => {
     overlay = true;
     energiatodistus = Maybe.None();
-    disabled = false;
   };
 
   $: params.id && resetView();
@@ -59,7 +55,6 @@
   $: R.compose(
     Future.fork(
       () => {
-        toggleDisabled(true);
         toggleOverlay(false);
         flashMessageStore.add('Energiatodistus', 'error',
             $_('energiatodistus.messages.load-error'));
@@ -86,11 +81,6 @@
   $: title = `${$_('energiatodistus.title')} ${params.version}/${
     params.id
   } - ${tilaLabel(energiatodistus)}`;
-
-  $: disabled = !Maybe.exists(
-    R.propEq('tila-id', EtUtils.tila.draft),
-    energiatodistus
-  );
 </script>
 
 <Overlay {overlay}>
@@ -98,7 +88,6 @@
     {#if energiatodistus.isSome()}
       <EnergiatodistusForm
         version={params.version}
-        {disabled}
         energiatodistus={energiatodistus.some()}
         luokittelut={luokittelut.some()}
         whoami={whoami.some()}

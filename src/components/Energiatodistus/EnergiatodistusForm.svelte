@@ -9,6 +9,8 @@
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
+  import * as EtUtils from './energiatodistus-utils';
+
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
 
@@ -20,7 +22,6 @@
   export let whoami;
 
   export let submit;
-  export let disabled = false;
   export let title = '';
 
   let schema = schemas['v' + version];
@@ -33,6 +34,8 @@
   };
   const ETForm = forms[version];
 
+  $: disabled = !R.and(energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
+                       Maybe.fromUndefined(energiatodistus['tila-id']).fold(true)(R.equals(EtUtils.tila.draft)));
 
   const validateAndSubmit = onSuccessfulSave => () => {
     if (et.isValidForm(et.validators(schema), energiatodistus)) {
