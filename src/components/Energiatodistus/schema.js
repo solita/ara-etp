@@ -64,7 +64,9 @@ const Hyotysuhde = {
   'tuoton-hyotysuhde': FloatPos,
   'jaon-hyotysuhde': FloatPos,
   lampokerroin: FloatPos,
-  apulaitteet: FloatPos
+  apulaitteet: FloatPos,
+  'lampopumppu-tuotto-osuus': Float(0.0, 1.0),
+  'lampohavio-lammittamaton-tila': FloatPos
 };
 
 const MaaraTuotto = {
@@ -129,6 +131,8 @@ export const v2018 = {
     'lammitetty-nettoala': FloatPos,
     rakennusvaippa: {
       ilmanvuotoluku: Float(0, 50),
+      lampokapasiteetti: FloatPos,
+      ilmatilavuus: FloatPos,
       ulkoseinat: Rakennusvaippa(0.05, 2.0),
       ylapohja: Rakennusvaippa(0.03, 2.0),
       alapohja: Rakennusvaippa(0.03, 4.0),
@@ -156,7 +160,8 @@ export const v2018 = {
       },
       erillispoistot: PoistoTuloSfp,
       ivjarjestelma: PoistoTuloSfp,
-      'lto-vuosihyotysuhde': Float(0.0, 1.0)
+      'lto-vuosihyotysuhde': Float(0.0, 1.0),
+      'tuloilma-lampotila': FloatPos
     },
     lammitys: {
       'kuvaus-fi': String(75),

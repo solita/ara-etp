@@ -24,16 +24,42 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.rakennusvaippa.header')} />
 
-<div class="w-1/5 py-4 mb-6 flex flex-row items-end">
-  <div class="w-5/6">
-    <Input
-      {disabled}
-      {schema}
-      center={false}
-      bind:model={energiatodistus}
-      path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
+<div class="flex lg:flex-row flex-col">
+  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+    <div class="w-2/3">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
+    </div>
+    <div class="w-1/3 pl-2 pr-20">m³/(hm²)</div>
   </div>
-  <div class="w-1/6 pl-2">m³/(hm²)</div>
+
+  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+    <div class="w-2/3">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['lahtotiedot', 'rakennusvaippa', 'lampokapasiteetti']} />
+    </div>
+    <div class="w-1/3 pl-2 pr-20">Wh/(m²K)</div>
+  </div>
+
+  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+    <div class="w-2/3">
+      <Input
+          {disabled}
+          {schema}
+          center={false}
+          bind:model={energiatodistus}
+          path={['lahtotiedot', 'rakennusvaippa', 'ilmatilavuus']} />
+    </div>
+    <div class="w-1/3 pl-2">m³</div>
+  </div>
 </div>
 
 <div class="min-w-full overflow-x-auto">
