@@ -39,7 +39,8 @@ export const deserialize = R.compose(
     [R.propEq('versio', 2013), R.evolve(deserialize2013)]
   ]),
   R.tap(assertVersion),
-  R.evolve({ versio: Maybe.get }),
+  R.evolve({ versio: Maybe.get,
+             laskutusaika: Maybe.map(laskutusaika => new Date(laskutusaika))}),
   deep.map(R.F, Maybe.fromNull)
 );
 

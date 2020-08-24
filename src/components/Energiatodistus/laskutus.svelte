@@ -32,7 +32,7 @@
     loading = value
   };
 
-  $: disabled = energiatodistus['laskutusaika'].fold(false)(laskutusaika => dfns.isPast(new Date(laskutusaika)));
+  $: disabled = energiatodistus['laskutusaika'].isSome();
 
   const getLaatija = id =>
     (R.equals(id, whoami.id) || KayttajaUtils.isPaakayttaja(whoami)) ?
