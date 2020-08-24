@@ -8,6 +8,41 @@
   export let active = Maybe.None();
   export let component = null;
   export let onclick;
+
+  let listElement;
+  let previousIndex;
+
+  const checkIfInView = (container, element, partial) => {
+    const containerTop = container.scrollTop;
+    const containerBottom = containerTop + container.clientHeight;
+
+    const elementTop = element.offsetTop;
+    const elementBottom = elementTop + element.clientHeight;
+
+    const isTotal =
+      elementTop >= containerTop && elementBottom <= containerBottom;
+    const isPartial =
+      partial &&
+      ((elementTop < containerTop && elementBottom > containerTop) ||
+        (elementBottom > containerBottom && elementTop < containerBottom));
+
+    return isTotal || isPartial;
+  };
+
+  const scrollIndexToView = index => {
+    if (!listElement) {
+      previousIndex = 0;
+    }
+    if (
+      listElement &&
+      !checkIfInView(listElement, listElement.children[index], false)
+    ) {
+      listElement.children[index].scrollIntoView(previousIndex > index);
+    }
+    previousIndex = index;
+  };
+
+  $: R.forEach(scrollIndexToView, active);
 </script>
 
 <style type="text/postcss">
@@ -50,7 +85,10 @@
 </style>
 
 <!-- purgecss: active -->
-<ol transition:slide|local={{ duration: 200 }}>
+<ol
+  bind:this={listElement}
+  transition:slide|local={{ duration: 200 }}
+  on:introend={() => scrollIndexToView(Maybe.orSome(0, active))}>
   {#each items as item, index}
     <li
       class="dropdownitem"
