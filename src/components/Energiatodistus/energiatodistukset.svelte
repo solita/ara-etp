@@ -5,12 +5,13 @@
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
   import * as dfns from 'date-fns';
+  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { flashMessageStore, currentUserStore } from '@/stores';
   import { push } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
@@ -238,28 +239,32 @@
       <Spinner />
     </div>
   </Overlay>
-  <p class="mb-4">Uuden energiatodistuksen voit lisätä täältä:</p>
-  <div class="mb-4 flex lg:flex-row flex-col">
-    <div class="flex flex-row mb-4 mr-4">
-      <span class="material-icons">add</span>
-      &nbsp;
-      <Link
-        text={'Luo uusi 2018 energiatodistus'}
-        href="#/energiatodistus/2018/new" />
+  {#if Maybe.fold(false, KayttajaUtils.kayttajaHasAccessToResource([
+      KayttajaUtils.laatijaRole
+    ]), $currentUserStore)}
+    <p class="mb-4">{$_('energiatodistus.et-lisays')}</p>
+    <div class="mb-4 flex lg:flex-row flex-col">
+      <div class="flex flex-row mb-4 mr-4">
+        <span class="material-icons">add</span>
+        &nbsp;
+        <Link
+          text={$_('energiatodistus.luo2018')}
+          href="#/energiatodistus/2018/new" />
+      </div>
+      <div class="flex flex-row mb-4 mr-4">
+        <span class="material-icons">add</span>
+        &nbsp;
+        <Link
+          text={$_('energiatodistus.luo2013')}
+          href="#/energiatodistus/2013/new" />
+      </div>
     </div>
-    <div class="flex flex-row mb-4 mr-4">
-      <span class="material-icons">add</span>
-      &nbsp;
-      <Link
-        text={'Luo uusi 2013 energiatodistus'}
-        href="#/energiatodistus/2013/new" />
-    </div>
-  </div>
+  {/if}
   <div class="flex flew-row mb-4 mr-4">
     <span class="material-icons">attachment</span>
     &nbsp;
     <Link
-      text={'Lataa energiatodistukset XLSX-tiedostona'}
+      text={$_('energiatodistus.lataa-xlsx')}
       href="/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx" />
   </div>
 </div>

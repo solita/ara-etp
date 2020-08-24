@@ -155,6 +155,10 @@
   },
   "energiatodistus": {
     "title": "Energiatodistus",
+    "et-lisays": "Uuden energiatodistuksen voit lisätä täältä:",
+    "luo2018": "Luo uusi 2018 energiatodistus",
+    "luo2013": "Luo uusi 2013 energiatodistus",
+    "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
