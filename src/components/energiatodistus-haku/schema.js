@@ -138,6 +138,7 @@ const perustiedot = {
   rakennustunnus: [...stringComparisons],
   kiinteistotunnus: [...stringComparisons],
   rakennusosa: [...stringComparisons],
+  'onko-julkinen-rakennus': [singleBoolean],
   katuosoite: [...stringComparisons],
   postinumero: [...stringComparisons],
   valmistumisvuosi: [...numberComparisons],
@@ -423,7 +424,7 @@ const huomiot = {
 export const schema = {
   id: [...numberComparisons],
   'korvattu-energiatodistus-id': [...numberComparisons],
-  'onko-julkinen-rakennus': [singleBoolean],
+
   perustiedot,
   lahtotiedot,
   tulokset,
