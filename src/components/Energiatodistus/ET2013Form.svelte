@@ -86,8 +86,7 @@
     <HR />
   {/if}
 
-  <Laskutus {disabled}
-            {schema}
+  <Laskutus {schema}
             {whoami}
             bind:energiatodistus/>
 

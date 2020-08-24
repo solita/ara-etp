@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
   import * as localstorage from './local-storage';
+  import * as dfns from 'date-fns';
 
   import H2 from '@Component/H/H2';
   import Select from '@Component/Select/Select';
@@ -20,7 +21,6 @@
 
   export let energiatodistus;
   export let whoami;
-  export let disabled;
   export let schema;
 
   let laatijaYritykset = [];
@@ -31,6 +31,8 @@
   const toggleLoading = value => {
     loading = value
   };
+
+  $: disabled = energiatodistus['laskutusaika'].isSome();
 
   const getLaatija = id =>
     (R.equals(id, whoami.id) || KayttajaUtils.isPaakayttaja(whoami)) ?
