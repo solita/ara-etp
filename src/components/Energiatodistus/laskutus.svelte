@@ -78,24 +78,24 @@
       R.prop('vastaanottajan-tarkenne')
     )(yritys)
 
-  const verkkolaskuoperaattori = R.compose(
-    R.map(et.selectFormat(R.prop('nimi'), verkkolaskuoperaattorit)),
-    R.prop('verkkolaskuoperaattori')
-  );
-
-  const verkkolaskuosoite = R.compose(
-    R.map(R.join(' | ')),
-    Maybe.toMaybeList,
-    R.juxt([verkkolaskuoperaattori, R.prop('verkkolaskuosoite')])
-  )
-
   const postiosoite = entity =>
     entity.jakeluosoite + ', ' +
     entity.postinumero + ' ' + entity.postitoimipaikka
 
-  const osoite = yritys => Maybe.orSome(
-    postiosoite(yritys),
-    verkkolaskuosoite(yritys));
+  let laskutettavaYritys = Maybe.None();
+  $: laskutettavaYritys = Maybe.chain(
+    Maybe.findById(R.__, laatijaYritykset),
+    energiatodistus['laskutettava-yritys-id']);
+
+  $: verkkolaskuoperaattori = R.compose(
+    R.map(et.selectFormat(R.prop('nimi'), verkkolaskuoperaattorit)),
+    R.prop('verkkolaskuoperaattori')
+  );
+
+  $: verkkolasku = R.compose(
+    Maybe.toMaybeList,
+    R.juxt([verkkolaskuoperaattori, R.prop('verkkolaskuosoite')])
+  )
 
 </script>
 <H2 text={'* ' + $_('energiatodistus.laskutus.title')} />
@@ -115,23 +115,45 @@
         format={et.selectFormat(yritysLabel, laatijaYritykset)}
         items={R.pluck('id', laatijaYritykset)} />
   </div>
-  {#each energiatodistus['laskutettava-yritys-id'].toArray() as id }
-  <div class="lg:w-1/2 w-full px-4 py-4">
-    <SimpleInput
-      id="energiatodistus.laskutus.osoite"
-      name="energiatodistus.laskutus.osoite"
-      label={$_('energiatodistus.laskutus.osoite')}
-      disabled={true}
-      viewValue={et.selectFormat(osoite, laatijaYritykset)(id)}/>
-  </div>
+</div>
+<div class="flex flex-col lg:flex-row -mx-4">
+  {#each laskutettavaYritys.toArray() as yritys }
+    {#each verkkolasku(yritys).toArray() as [operaattori, osoite]}
+    <div class="lg:w-1/2 w-full px-4 py-4">
+      <SimpleInput
+          id="energiatodistus.laskutus.verkkolaskuoperaattori"
+          name="energiatodistus.laskutus.verkkolaskuoperaattori"
+          label={$_('energiatodistus.laskutus.verkkolaskuoperaattori')}
+          disabled={true}
+          viewValue={operaattori}/>
+    </div>
+    <div class="lg:w-1/2 w-full px-4 py-4">
+      <SimpleInput
+          id="energiatodistus.laskutus.verkkolaskuosoite"
+          name="energiatodistus.laskutus.verkkolaskuosoite"
+          label={$_('energiatodistus.laskutus.verkkolaskuosoite')}
+          disabled={true}
+          viewValue={osoite}/>
+    </div>
+    {/each}
+    {#if verkkolasku(yritys).isNone()}
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <SimpleInput
+            id="energiatodistus.laskutus.postiosoite"
+            name="energiatodistus.laskutus.postiosoite"
+            label={$_('energiatodistus.laskutus.postiosoite')}
+            disabled={true}
+            viewValue={postiosoite(yritys)}/>
+      </div>
+    {/if}
   {/each}
-  {#if energiatodistus['laskutettava-yritys-id'].isNone()}
+  {#if laskutettavaYritys.isNone()}
     {#each laatija.toArray() as laatija }
       <div class="lg:w-1/2 w-full px-4 py-4">
         <SimpleInput
-            id="energiatodistus.laskutus.osoite"
-            name="energiatodistus.laskutus.osoite"
-            label={$_('energiatodistus.laskutus.osoite')}
+            id="energiatodistus.laskutus.postiosoite"
+            name="energiatodistus.laskutus.postiosoite"
+            label={$_('energiatodistus.laskutus.postiosoite')}
             disabled={true}
             viewValue={postiosoite(laatija)}/>
       </div>

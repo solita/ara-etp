@@ -518,7 +518,9 @@
     "laskuriviviite": "Projektiviite (näkyy laskurivillä)",
     "laskutus": {
       "title": "Laskutustiedot",
-      "osoite": "Osoite",
+      "postiosoite": "Postiosoite",
+      "verkkolaskuosoite": "Verkkolaskuosoite",
+      "verkkolaskuoperaattori": "Välittäjätunnus",
       "laskutettava": "Käytettävät laskutustiedot",
       "laatijalaskutus": "Henkilökohtaiset tiedot",
       "load-error": "Laskutustietojen lataus epäonnistui"
