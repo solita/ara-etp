@@ -72,6 +72,7 @@ export const energiatodistus2018 = _ => ({
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
   'laskuriviviite': Maybe.None(),
+  'laskutusaika': Maybe.None(),
   perustiedot: {
     nimi: Maybe.None(),
     rakennustunnus: Maybe.None(),
