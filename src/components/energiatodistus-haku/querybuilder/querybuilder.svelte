@@ -27,7 +27,7 @@
 </script>
 
 <div class="flex flex-col w-full">
-  {#each queryItems as { conjunction, block }, index}
+  {#each queryItems as { conjunction, block }, index (`${index},${block.join()}`)}
     <div class="flex justify-start items-end">
       <QueryBlock bind:model={queryItems} lens={R.lensIndex(index)} {schema} />
       <span
