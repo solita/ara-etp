@@ -1,6 +1,8 @@
 <script>
+  import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
+  import Select from '@Component/Select/Select';
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
   import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
@@ -9,6 +11,9 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  export let lammitysmuoto;
+  export let lammonjako;
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
@@ -36,8 +41,12 @@
         {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
       </th>
       <th class="et-table--th border-r-4">
-        <span>{$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}</span>
-        <span class="block"><VuosikulutusPerAlaUnit/></span>
+        <span>
+          {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
+        </span>
+        <span class="block">
+          <VuosikulutusPerAlaUnit />
+        </span>
       </th>
       <th class="et-table--th">
         {$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}
@@ -88,19 +97,19 @@
         </td>
         <td class="et-table--td">
           <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampopumppu-tuotto-osuus']} />
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampopumppu-tuotto-osuus']} />
         </td>
         <td class="et-table--td">
           <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampohavio-lammittamaton-tila']} />
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampohavio-lammittamaton-tila']} />
         </td>
       </tr>
     {/each}
