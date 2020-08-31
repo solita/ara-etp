@@ -39,8 +39,10 @@ export const deserialize = R.compose(
     [R.propEq('versio', 2013), R.evolve(deserialize2013)]
   ]),
   R.tap(assertVersion),
-  R.evolve({ versio: Maybe.get,
-             laskutusaika: Maybe.map(laskutusaika => new Date(laskutusaika))}),
+  R.evolve({
+    versio: Maybe.get,
+    laskutusaika: Maybe.map(laskutusaika => new Date(laskutusaika))
+  }),
   deep.map(R.F, Maybe.fromNull)
 );
 
@@ -259,7 +261,8 @@ export const luokittelut = R.memoizeWith(R.identity, version =>
     laatimisvaiheet: laatimisvaiheet,
     kayttotarkoitusluokat: kayttotarkoitusluokat(version),
     alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
-  }));
+  })
+);
 
 export const replaceable = R.curry((fetch, id) =>
   R.compose(
@@ -270,12 +273,12 @@ export const replaceable = R.curry((fetch, id) =>
 
 export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
   Future.chain(
-    R.compose(
-      Future.parallel(10),
-      R.map(yritysApi.getYritysById(fetch))),
-    laatijaApi.getYritykset(fetch, laatijaId)));
+    R.compose(Future.parallel(10), R.map(yritysApi.getYritysById(fetch))),
+    laatijaApi.getYritykset(fetch, laatijaId)
+  )
+);
 
-const cachedGet = (url) =>
+const cachedGet = url =>
   R.compose(
     Future.cache,
     Fetch.responseAsJson,
@@ -284,5 +287,18 @@ const cachedGet = (url) =>
 
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
-    numeric: cachedGet('api/private/validation/numeric/' + version),
-  }));
+    numeric: cachedGet('api/private/validation/numeric/' + version)
+  })
+);
+
+export const lammonjako = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/lammonjako');
+
+export const lammitysmuoto = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/lammitysmuoto');

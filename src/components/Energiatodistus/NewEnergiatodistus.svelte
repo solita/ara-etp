@@ -15,7 +15,7 @@
   import * as et from './energiatodistus-utils';
   import * as empty from './empty';
   import * as api from './energiatodistus-api';
-  import * as kayttajaApi from "@Component/Kayttaja/kayttaja-api";
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
 
@@ -23,7 +23,9 @@
 
   let overlay = false;
 
-  const toggleOverlay = value => { overlay = value };
+  const toggleOverlay = value => {
+    overlay = value;
+  };
 
   let energiatodistus = R.equals(params.version, '2018')
     ? empty.energiatodistus2018()
@@ -32,17 +34,25 @@
   let luokittelut = Maybe.None();
   let whoami = Maybe.None();
   let validation = Maybe.None();
+  let lammitysmuoto = Maybe.None();
+  let lammonjako = Maybe.None();
 
   const submit = R.compose(
     Future.fork(
       () => {
         toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-            $_('energiatodistus.messages.save-error'));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.messages.save-error')
+        );
       },
-      ({id}) => {
-        flashMessageStore.addPersist('Energiatodistus', 'success',
-            $_('energiatodistus.messages.save-success'));
+      ({ id }) => {
+        flashMessageStore.addPersist(
+          'Energiatodistus',
+          'success',
+          $_('energiatodistus.messages.save-success')
+        );
         replace(`/energiatodistus/${params.version}/${id}`);
       }
     ),
@@ -58,18 +68,23 @@
     Future.fork(
       () => {
         toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-            $_('energiatodistus.messages.load-error'));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.messages.load-error')
+        );
       },
       response => {
-        luokittelut = Maybe.Some(response[0]);
-        validation = Maybe.Some(response[1]);
-        whoami = Maybe.Some(response[2]);
+        whoami = Maybe.Some(response[0]);
+        lammitysmuoto = Maybe.Some(response[1]);
+        lammonjako = Maybe.Some(response[2]);
+        luokittelut = Maybe.Some(response[3]);
+        validation = Maybe.Some(response[4]);
         toggleOverlay(false);
-      },
+      }
     ),
-    Future.parallel(3),
-    R.append(kayttajaApi.whoami),
+    Future.parallel(5),
+    R.concat([kayttajaApi.whoami, api.lammitysmuoto, api.lammonjako]),
     R.juxt([api.luokittelut, api.validation])
   )(params.version);
 </script>
@@ -82,8 +97,10 @@
         {title}
         {energiatodistus}
         whoami={whoami.some()}
-        luokittelut = {luokittelut.some()}
-        validation = {validation.some()}
+        luokittelut={luokittelut.some()}
+        validation={validation.some()}
+        lammitysmuoto={lammitysmuoto.some()}
+        lammonjako={lammonjako.some()}
         {submit} />
     {/if}
   </div>
