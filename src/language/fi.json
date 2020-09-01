@@ -692,9 +692,18 @@
       },
       "lammitys": {
         "header": "Lämmitysjärjestelmä",
-        "lammitysmuoto-1": "Ensisijaisen lämmitysjärjestelmän tuotto",
-        "lammitysmuoto-2": "Toissijaisen lämmitysjärjestelmän tuotto",
-        "lammonjako": "Lämmönjako",
+        "lammitysmuoto-1": {
+          "id": "Ensisijaisen lämmitysjärjestelmän tuotto",
+          "kuvaus": "Ensisijaisen lämmitysjärjestelmän kuvaus"
+        },
+        "lammitysmuoto-2": {
+          "id": "Toissijaisen lämmitysjärjestelmän tuotto",
+          "kuvaus": "Toissijaisen lämmitysjärjestelmän kuvaus"
+        },
+        "lammonjako": {
+          "id": "Lämmönjako",
+          "kuvaus": "Lämmönjaon kuvaus"
+        },
         "tuotonhyotysuhde": "Tuoton hyötysuhde",
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
         "lampokerroin": "Lämpökerroin",

@@ -47,11 +47,18 @@
     allowNone={false}
     bind:model={energiatodistus}
     lens={lammitysmuoto1IdLens}
-    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1')} />
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1.id')} />
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(lammitysmuoto1IdLens) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">Placeholder for input-field</div>
+  <div class="w-full py-4 mb-4">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'kuvaus-fi']} />
+  </div>
 {/if}
 
 <div class="w-full py-4 mb-4">
@@ -62,11 +69,18 @@
     allowNone={true}
     bind:model={energiatodistus}
     lens={lammitysmuoto2IdLens}
-    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2')} />
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2.id')} />
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(lammitysmuoto2IdLens) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">Placeholder for input-field</div>
+  <div class="w-full py-4 mb-4">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitys', 'lammitysmuoto-2', 'kuvaus-fi']} />
+  </div>
 {/if}
 
 <div class="w-full py-4 mb-4">
@@ -77,11 +91,18 @@
     allowNone={false}
     bind:model={energiatodistus}
     lens={lammonjakoLens}
-    label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako')} />
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')} />
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(lammonjakoMuuId)), R.view(lammonjakoLens) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">Placeholder for input-field</div>
+  <div class="w-full py-4 mb-4">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitys', 'lammonjako', 'kuvaus-fi']} />
+  </div>
 {/if}
 
 <div class="w-full py-4 mb-4">
