@@ -46,7 +46,7 @@
   );
 
   const fetchEnergiatodistus = id => {
-    console.log(id);
+
     if (
       R.compose(
         Maybe.exists(R.identity),
