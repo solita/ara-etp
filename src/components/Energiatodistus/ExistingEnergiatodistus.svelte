@@ -20,6 +20,7 @@
   let energiatodistus = Maybe.None();
   let luokittelut = Maybe.None();
   let whoami = Maybe.None();
+  let validation = Maybe.None();
 
   let overlay = true;
 
@@ -63,12 +64,15 @@
         energiatodistus = Maybe.Some(response[0]);
         luokittelut = Maybe.Some(response[1]);
         whoami = Maybe.Some(response[2]);
+        validation = Maybe.Some(response[3]);
         toggleOverlay(false);
       }
     ),
     Future.parallel(5),
     R.prepend(R.__,
-      [api.luokittelut(params.version), kayttajaApi.whoami]),
+      [api.luokittelut(params.version),
+       kayttajaApi.whoami,
+       api.validation(params.version)]),
     R.tap(() => toggleOverlay(true)),
     api.getEnergiatodistusById(fetch),
   ) (params.version, params.id);
@@ -91,6 +95,7 @@
         energiatodistus={energiatodistus.some()}
         luokittelut={luokittelut.some()}
         whoami={whoami.some()}
+        validation={validation.some()}
         {submit}
         {title} />
     {/if}

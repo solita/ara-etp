@@ -20,11 +20,15 @@
   export let energiatodistus;
   export let luokittelut;
   export let whoami;
+  export let validation;
 
   export let submit;
   export let title = '';
 
-  let schema = schemas['v' + version];
+  let schema = R.reduce(
+    schemas.redefineNumericValidation,
+    schemas['v' + version],
+    validation.numeric);
 
   let inputLanguage = 'fi';
 

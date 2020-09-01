@@ -274,3 +274,15 @@ export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
       Future.parallel(10),
       R.map(yritysApi.getYritysById(fetch))),
     laatijaApi.getYritykset(fetch, laatijaId)));
+
+const cachedGet = (url) =>
+  R.compose(
+    Future.cache,
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )(url);
+
+export const validation = R.memoizeWith(R.identity, version =>
+  Future.parallelObject(5, {
+    numeric: cachedGet('api/private/validation/numeric/' + version),
+  }));

@@ -31,6 +31,7 @@
 
   let luokittelut = Maybe.None();
   let whoami = Maybe.None();
+  let validation = Maybe.None();
 
   const submit = R.compose(
     Future.fork(
@@ -62,12 +63,14 @@
       },
       response => {
         luokittelut = Maybe.Some(response[0]);
-        whoami = Maybe.Some(response[1]);
+        validation = Maybe.Some(response[1]);
+        whoami = Maybe.Some(response[2]);
         toggleOverlay(false);
       },
     ),
-    Future.both(R.__, kayttajaApi.whoami),
-    api.luokittelut
+    Future.parallel(3),
+    R.append(kayttajaApi.whoami),
+    R.juxt([api.luokittelut, api.validation])
   )(params.version);
 </script>
 
@@ -80,6 +83,7 @@
         {energiatodistus}
         whoami={whoami.some()}
         luokittelut = {luokittelut.some()}
+        validation = {validation.some()}
         {submit} />
     {/if}
   </div>
