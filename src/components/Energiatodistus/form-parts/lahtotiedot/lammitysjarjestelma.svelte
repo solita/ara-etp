@@ -1,6 +1,8 @@
 <script>
   import * as R from 'ramda';
-  import { _ } from '@Language/i18n';
+  import * as Maybe from '@Utility/maybe-utils';
+  import { _, locale } from '@Language/i18n';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   import Select from '@Component/Select/Select';
   import H3 from '@Component/H/H3';
@@ -14,9 +16,73 @@
 
   export let lammitysmuoto;
   export let lammonjako;
+
+  const lammitysmuotoMuuId = 9;
+  const lammonjakoMuuId = 12;
+
+  const lammitysLens = R.lensPath(['lahtotiedot', 'lammitys']);
+  const lammitysmuoto1IdLens = R.compose(
+    lammitysLens,
+    R.lensProp('lammitysmuoto-1-id')
+  );
+
+  const lammitysmuoto2IdLens = R.compose(
+    lammitysLens,
+    R.lensProp('lammitysmuoto-2-id')
+  );
+
+  const lammonjakoLens = R.compose(
+    lammitysLens,
+    R.lensProp('lammonjako-id')
+  );
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
+
+<div class="w-full py-4 mb-4">
+  <Select
+    items={R.map(R.prop('id'), lammitysmuoto)}
+    format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammitysmuoto), R.propEq('id') )}
+    parse={Maybe.Some}
+    allowNone={false}
+    bind:model={energiatodistus}
+    lens={lammitysmuoto1IdLens}
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1')} />
+</div>
+
+{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(lammitysmuoto1IdLens) )(energiatodistus)}
+  <div class="w-full py-4 mb-4">Placeholder for input-field</div>
+{/if}
+
+<div class="w-full py-4 mb-4">
+  <Select
+    items={R.map(R.prop('id'), lammitysmuoto)}
+    format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammitysmuoto), R.propEq('id') )}
+    parse={Maybe.Some}
+    allowNone={true}
+    bind:model={energiatodistus}
+    lens={lammitysmuoto2IdLens}
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2')} />
+</div>
+
+{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(lammitysmuoto2IdLens) )(energiatodistus)}
+  <div class="w-full py-4 mb-4">Placeholder for input-field</div>
+{/if}
+
+<div class="w-full py-4 mb-4">
+  <Select
+    items={R.map(R.prop('id'), lammonjako)}
+    format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammonjako), R.propEq('id') )}
+    parse={Maybe.Some}
+    allowNone={false}
+    bind:model={energiatodistus}
+    lens={lammonjakoLens}
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako')} />
+</div>
+
+{#if R.compose( Maybe.exists(R.equals(lammonjakoMuuId)), R.view(lammonjakoLens) )(energiatodistus)}
+  <div class="w-full py-4 mb-4">Placeholder for input-field</div>
+{/if}
 
 <div class="w-full py-4 mb-4">
   <Input
