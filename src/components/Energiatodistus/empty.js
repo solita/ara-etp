@@ -67,6 +67,12 @@ const emptyMuuPolttoaine = _ => ({
   'maara-vuodessa': Maybe.None()
 });
 
+const formalDescription = _ => ({
+  id: Maybe.None(),
+  'kuvaus-fi': Maybe.None(),
+  'kuvaus-sv': Maybe.None()
+});
+
 export const energiatodistus2018 = _ => ({
   'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
@@ -139,9 +145,9 @@ export const energiatodistus2018 = _ => ({
       'tuloilma-lampotila': Maybe.None()
     },
     lammitys: {
-      'lammitysmuoto-1-id': Maybe.None(),
-      'lammitysmuoto-2-id': Maybe.None(),
-      'lammonjako-id': Maybe.None(),
+      'lammitysmuoto-1': formalDescription(),
+      'lammitysmuoto-2': formalDescription(),
+      lammonjako: formalDescription(),
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
       'tilat-ja-iv': emptyLammitys(),

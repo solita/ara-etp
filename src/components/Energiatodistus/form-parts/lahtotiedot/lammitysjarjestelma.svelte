@@ -23,17 +23,17 @@
   const lammitysLens = R.lensPath(['lahtotiedot', 'lammitys']);
   const lammitysmuoto1IdLens = R.compose(
     lammitysLens,
-    R.lensProp('lammitysmuoto-1-id')
+    R.lensPath(['lammitysmuoto-1', 'id'])
   );
 
   const lammitysmuoto2IdLens = R.compose(
     lammitysLens,
-    R.lensProp('lammitysmuoto-2-id')
+    R.lensPath(['lammitysmuoto-2', 'id'])
   );
 
   const lammonjakoLens = R.compose(
     lammitysLens,
-    R.lensProp('lammonjako-id')
+    R.lensPath(['lammonjako', 'id'])
   );
 </script>
 
