@@ -1,4 +1,4 @@
-import * as validation from '@Utility/validation';
+import * as validations from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
 import * as formats from '@Utility/formats';
 import * as R from 'ramda';
@@ -7,21 +7,21 @@ const String = max => ({
   parse: parsers.optionalString,
   format: formats.optionalString,
   validators: [
-    validation.liftValidator(validation.minLengthConstraint(2)),
-    validation.liftValidator(validation.maxLengthConstraint(max))
+    validations.liftValidator(validations.minLengthConstraint(2)),
+    validations.liftValidator(validations.maxLengthConstraint(max))
   ]
 });
 
 const Integer = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseInteger),
   format: formats.optionalNumber,
-  validators: validation.MaybeInterval(min, max)
+  validators: validations.MaybeInterval(min, max)
 });
 
 const Float = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseNumber),
   format: formats.optionalNumber,
-  validators: validation.MaybeInterval(min, max)
+  validators: validations.MaybeInterval(min, max)
 });
 
 const DateValue = () => ({
@@ -36,7 +36,7 @@ const StringValidator = validator => ({
 });
 
 const Rakennustunnus = StringValidator(
-  validation.liftValidator(validation.rakennustunnusValidator)
+  validations.liftValidator(validations.rakennustunnusValidator)
 );
 
 const FloatPos = Float(0.0, Infinity);
@@ -281,3 +281,15 @@ export const v2013 = R.compose(
   ),
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
+
+export const redefineNumericValidation = (schema, constraint) => {
+  const path = R.append(R.__, R.split('.', constraint.property))
+  return R.compose(
+    R.assocPath(
+      path('validators'),
+      validations.MaybeInterval(constraint.error.min, constraint.error.max)),
+    R.assocPath(
+      path('warningValidators'),
+      validations.MaybeInterval(constraint.warning.min, constraint.warning.max)),
+  )(schema);
+}
