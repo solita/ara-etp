@@ -132,12 +132,16 @@ export const energiatodistus2018 = _ => ({
         },
         emptyIV()
       ),
+      'tyyppi-id': Maybe.None(),
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
       'lto-vuosihyotysuhde': Maybe.None(),
       'tuloilma-lampotila': Maybe.None(),
     },
     lammitys: {
+      'lammitysmuoto-1-id': Maybe.None(),
+      'lammitysmuoto-2-id': Maybe.None(),
+      'lammonjako-id': Maybe.None(),
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
       'tilat-ja-iv': emptyLammitys(),
