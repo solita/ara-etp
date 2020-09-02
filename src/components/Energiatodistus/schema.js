@@ -165,15 +165,12 @@ export const v2018 = {
     },
     lammitys: {
       'lammitysmuoto-1': {
-        id: Integer(0, 9),
         kuvaus: String(75)
       },
       'lammitysmuoto-2': {
-        id: Integer(0, 9),
         kuvaus: String(75)
       },
       lammonjako: {
-        id: Integer(0, 12),
         kuvaus: String(75)
       },
       'tilat-ja-iv': Hyotysuhde,
