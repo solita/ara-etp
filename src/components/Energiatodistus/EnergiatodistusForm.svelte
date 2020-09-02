@@ -21,9 +21,6 @@
   export let luokittelut;
   export let whoami;
   export let validation;
-  export let lammitysmuoto;
-  export let lammonjako;
-  export let ilmanvaihto;
 
   $: console.log(luokittelut);
 
