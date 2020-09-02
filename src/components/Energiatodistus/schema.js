@@ -152,8 +152,7 @@ export const v2018 = {
       luode: Ikkuna
     },
     ilmanvaihto: {
-      'kuvaus-fi': String(75),
-      'kuvaus-sv': String(75),
+      kuvaus: String(75),
       paaiv: {
         ...PoistoTuloSfp,
         lampotilasuhde: Float(0.0, 1.0),

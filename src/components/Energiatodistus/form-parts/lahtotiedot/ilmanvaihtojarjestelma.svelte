@@ -1,24 +1,53 @@
 <script>
-  import { _ } from '@Language/i18n';
+  import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
+  import { _, locale } from '@Language/i18n';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
+  import Select from '@Component/Select/Select';
 
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  export let ilmanvaihto;
+  export let inputLanguage;
+
+  const ilmanvaihtoMuuId = 6;
+
+  const ilmanvaihtoLens = R.lensPath(['lahtotiedot', 'ilmanvaihto']);
+  const tyyppiLens = R.compose(
+    ilmanvaihtoLens,
+    R.lensProp('tyyppi-id')
+  );
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.ilmanvaihto.header')} />
 
 <div class="w-full py-4 mb-4">
-  <Input
-    {disabled}
-    {schema}
-    center={false}
+  <Select
+    items={R.map(R.prop('id'), ilmanvaihto)}
+    format={R.compose( LocaleUtils.label($locale), R.find(R.__, ilmanvaihto), R.propEq('id') )}
+    parse={Maybe.Some}
+    allowNone={false}
     bind:model={energiatodistus}
-    path={['lahtotiedot', 'ilmanvaihto', 'kuvaus-fi']} />
+    lens={tyyppiLens}
+    label={$_('energiatodistus.lahtotiedot.ilmanvaihto.tyyppi-id')} />
 </div>
+
+{#if R.compose( Maybe.exists(R.equals(ilmanvaihtoMuuId)), R.view(tyyppiLens) )(energiatodistus)}
+  <div class="w-full py-4 mb-4">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      inputLanguage={Maybe.Some(inputLanguage)}
+      path={['lahtotiedot', 'ilmanvaihto', 'kuvaus']} />
+  </div>
+{/if}
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">
@@ -36,7 +65,9 @@
         {$_('energiatodistus.lahtotiedot.ilmanvaihto.lampotilasuhde')}
       </th>
       <th class="et-table--th">
-        <span>{$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}</span>
+        <span>
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}
+        </span>
         <span class="block">{$_('units.celsius')}</span>
       </th>
     </tr>
@@ -122,21 +153,21 @@
 </table>
 
 <div class="flex lg:flex-row flex-col lg:items-end">
-<div class="w-1/2 py-4 mb-4 mr-8">
-  <Input
-    {disabled}
-    {schema}
-    center={false}
-    bind:model={energiatodistus}
-    path={['lahtotiedot', 'ilmanvaihto', 'lto-vuosihyotysuhde']} />
-</div>
+  <div class="w-1/2 py-4 mb-4 mr-8">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'ilmanvaihto', 'lto-vuosihyotysuhde']} />
+  </div>
 
-<div class="w-1/2 py-4 mb-4">
-  <Input
+  <div class="w-1/2 py-4 mb-4">
+    <Input
       {disabled}
       {schema}
       center={false}
       bind:model={energiatodistus}
       path={['lahtotiedot', 'ilmanvaihto', 'tuloilma-lampotila']} />
-</div>
+  </div>
 </div>

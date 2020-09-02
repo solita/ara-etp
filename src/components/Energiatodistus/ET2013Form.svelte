@@ -53,6 +53,7 @@
   export let whoami;
   export let lammitysmuoto;
   export let lammonjako;
+  export let ilmanvaihto;
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -206,13 +207,18 @@
 
   <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
   <Ikkunat {disabled} {schema} bind:energiatodistus />
-  <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
+  <Ilmanvaihtojarjestelma
+    {disabled}
+    {schema}
+    bind:energiatodistus
+    {ilmanvaihto}
+    {inputLanguage} />
   <Lammitysjarjestelma
     {disabled}
     {schema}
     bind:energiatodistus
     {lammitysmuoto}
-    {lammonjako} 
+    {lammonjako}
     {inputLanguage} />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />

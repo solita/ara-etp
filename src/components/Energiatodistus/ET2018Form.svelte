@@ -61,6 +61,7 @@
   export let whoami;
   export let lammitysmuoto;
   export let lammonjako;
+  export let ilmanvaihto;
 
   let eLuku = Maybe.None();
 
@@ -239,7 +240,13 @@
 
   <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
   <Ikkunat {disabled} {schema} bind:energiatodistus />
-  <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
+  <Ilmanvaihtojarjestelma
+    {disabled}
+    {schema}
+    bind:energiatodistus
+    {ilmanvaihto}
+    {inputLanguage} />
+
   <Lammitysjarjestelma
     {disabled}
     {schema}

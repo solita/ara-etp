@@ -658,6 +658,7 @@
       },
       "ilmanvaihto": {
         "header": "Ilmanvaihtojärjestelmä",
+        "tyyppi-id": "Ilmanvaihtojärjestelmän tyyppi",
         "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
         "lampotilasuhde": "LTO:n lämpötilasuhde",
         "jaatymisenesto": "Jäätymisenesto",

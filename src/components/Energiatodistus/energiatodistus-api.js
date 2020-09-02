@@ -302,3 +302,9 @@ export const lammitysmuoto = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/lammitysmuoto');
+
+export const ilmanvaihto = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/ilmanvaihtotyyppi');

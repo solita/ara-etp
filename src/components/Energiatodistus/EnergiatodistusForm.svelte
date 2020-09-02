@@ -23,6 +23,7 @@
   export let validation;
   export let lammitysmuoto;
   export let lammonjako;
+  export let ilmanvaihto;
 
   export let submit;
   export let title = '';
@@ -147,7 +148,8 @@
           {luokittelut}
           {whoami}
           {lammitysmuoto}
-          {lammonjako} />
+          {lammonjako}
+          {ilmanvaihto} />
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
             <Button type={'submit'} text={$_('tallenna')} />
