@@ -5,7 +5,6 @@
   import * as LocaleUtils from '@Language/locale-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
-  import * as Future from '@Utility/future-utils';
   import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Component/Geo/country-utils';
