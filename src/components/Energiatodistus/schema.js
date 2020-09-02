@@ -92,15 +92,15 @@ const MuuPolttoaine = {
 
 const Huomio = {
   'teksti': String(1000),
-  toimenpide: [
+  toimenpide: R.repeat(
     {
       'nimi': String(100),
       lampo: AnyFloat,
       sahko: AnyFloat,
       jaahdytys: AnyFloat,
       'eluvun-muutos': AnyFloat
-    }
-  ]
+    },
+  3)
 };
 
 const YritysPostinumero = String(8);
