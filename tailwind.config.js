@@ -15,6 +15,7 @@ module.exports = {
       disabled: '#a7a7a7',
       lighterdisabled: '#f1efe4',
       error: '#9e0000',
+      warning: '#ead049',
       success: '#538000',
       background: '#eee',
       hr: 'rgba(52, 56, 65, 0.3)',
