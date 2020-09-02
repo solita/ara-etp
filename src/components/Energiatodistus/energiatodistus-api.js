@@ -255,10 +255,31 @@ export const alakayttotarkoitusluokat = version =>
     Future.encaseP(Fetch.getFetch(fetch))
   )('api/private/alakayttotarkoitusluokat/' + version);
 
+export const lammonjako = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/lammonjako');
+
+export const lammitysmuoto = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/lammitysmuoto');
+
+export const ilmanvaihtotyypit = R.compose(
+  Future.cache,
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)('api/private/ilmanvaihtotyyppi');
+
 export const luokittelut = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
-    kielisyys: kielisyys,
-    laatimisvaiheet: laatimisvaiheet,
+    lammonjako,
+    lammitysmuoto,
+    ilmanvaihtotyypit,
+    kielisyys,
+    laatimisvaiheet,
     kayttotarkoitusluokat: kayttotarkoitusluokat(version),
     alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
   })
@@ -290,21 +311,3 @@ export const validation = R.memoizeWith(R.identity, version =>
     numeric: cachedGet('api/private/validation/numeric/' + version)
   })
 );
-
-export const lammonjako = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/lammonjako');
-
-export const lammitysmuoto = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/lammitysmuoto');
-
-export const ilmanvaihto = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/ilmanvaihtotyyppi');

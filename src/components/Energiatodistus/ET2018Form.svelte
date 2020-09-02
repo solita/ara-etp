@@ -59,9 +59,6 @@
   export let schema;
   export let disabled = false;
   export let whoami;
-  export let lammitysmuoto;
-  export let lammonjako;
-  export let ilmanvaihto;
 
   let eLuku = Maybe.None();
 
@@ -244,15 +241,15 @@
     {disabled}
     {schema}
     bind:energiatodistus
-    {ilmanvaihto}
+    ilmanvaihtotyypit={luokittelut.ilmanvaihtotyypit}
     {inputLanguage} />
 
   <Lammitysjarjestelma
     {disabled}
     {schema}
     bind:energiatodistus
-    {lammitysmuoto}
-    {lammonjako}
+    lammitysmuoto={luokittelut.lammitysmuoto}
+    lammonjako={luokittelut.lammonjako}
     {inputLanguage} />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />

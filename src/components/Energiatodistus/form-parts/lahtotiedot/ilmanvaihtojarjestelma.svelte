@@ -12,7 +12,7 @@
   export let schema;
   export let energiatodistus;
 
-  export let ilmanvaihto;
+  export let ilmanvaihtotyypit;
   export let inputLanguage;
 
   const ilmanvaihtoMuuId = 6;
@@ -28,8 +28,8 @@
 
 <div class="w-full py-4 mb-4">
   <Select
-    items={R.map(R.prop('id'), ilmanvaihto)}
-    format={R.compose( LocaleUtils.label($locale), R.find(R.__, ilmanvaihto), R.propEq('id') )}
+    items={R.map(R.prop('id'), ilmanvaihtotyypit)}
+    format={R.compose( LocaleUtils.label($locale), R.find(R.__, ilmanvaihtotyypit), R.propEq('id') )}
     parse={Maybe.Some}
     allowNone={false}
     bind:model={energiatodistus}

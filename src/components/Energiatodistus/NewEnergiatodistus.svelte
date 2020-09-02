@@ -34,9 +34,6 @@
   let luokittelut = Maybe.None();
   let whoami = Maybe.None();
   let validation = Maybe.None();
-  let lammitysmuoto = Maybe.None();
-  let lammonjako = Maybe.None();
-  let ilmanvaihto = Maybe.None();
 
   const submit = R.compose(
     Future.fork(
@@ -77,21 +74,13 @@
       },
       response => {
         whoami = Maybe.Some(response[0]);
-        lammitysmuoto = Maybe.Some(response[1]);
-        lammonjako = Maybe.Some(response[2]);
-        ilmanvaihto = Maybe.Some(response[3]);
-        luokittelut = Maybe.Some(response[4]);
-        validation = Maybe.Some(response[5]);
+        luokittelut = Maybe.Some(response[1]);
+        validation = Maybe.Some(response[2]);
         toggleOverlay(false);
       }
     ),
     Future.parallel(5),
-    R.concat([
-      kayttajaApi.whoami,
-      api.lammitysmuoto,
-      api.lammonjako,
-      api.ilmanvaihto
-    ]),
+    R.prepend(kayttajaApi.whoami),
     R.juxt([api.luokittelut, api.validation])
   )(params.version);
 </script>
@@ -106,9 +95,6 @@
         whoami={whoami.some()}
         luokittelut={luokittelut.some()}
         validation={validation.some()}
-        lammitysmuoto={lammitysmuoto.some()}
-        lammonjako={lammonjako.some()}
-        ilmanvaihto={ilmanvaihto.some()}
         {submit} />
     {/if}
   </div>

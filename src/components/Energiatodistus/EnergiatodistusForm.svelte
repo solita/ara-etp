@@ -25,6 +25,8 @@
   export let lammonjako;
   export let ilmanvaihto;
 
+  $: console.log(luokittelut);
+
   export let submit;
   export let title = '';
 
@@ -146,10 +148,7 @@
           {disabled}
           {schema}
           {luokittelut}
-          {whoami}
-          {lammitysmuoto}
-          {lammonjako}
-          {ilmanvaihto} />
+          {whoami} />
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
             <Button type={'submit'} text={$_('tallenna')} />

@@ -21,9 +21,6 @@
   let luokittelut = Maybe.None();
   let whoami = Maybe.None();
   let validation = Maybe.None();
-  let lammitysmuoto = Maybe.None();
-  let lammonjako = Maybe.None();
-  let ilmanvaihto = Maybe.None();
 
   let overlay = true;
 
@@ -80,9 +77,6 @@
         luokittelut = Maybe.Some(response[1]);
         whoami = Maybe.Some(response[2]);
         validation = Maybe.Some(response[3]);
-        lammitysmuoto = Maybe.Some(response[4]);
-        lammonjako = Maybe.Some(response[5]);
-        ilmanvaihto = Maybe.Some(response[6]);
         toggleOverlay(false);
       }
     ),
@@ -90,10 +84,7 @@
     R.prepend(R.__, [
       api.luokittelut(params.version),
       kayttajaApi.whoami,
-      api.validation(params.version),
-      api.lammitysmuoto,
-      api.lammonjako,
-      api.ilmanvaihto
+      api.validation(params.version)
     ]),
     R.tap(() => toggleOverlay(true)),
     api.getEnergiatodistusById(fetch)
@@ -118,9 +109,6 @@
         luokittelut={luokittelut.some()}
         whoami={whoami.some()}
         validation={validation.some()}
-        lammitysmuoto={lammitysmuoto.some()}
-        lammonjako={lammonjako.some()}
-        ilmanvaihto={ilmanvaihto.some()}
         {submit}
         {title} />
     {/if}
