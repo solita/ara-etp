@@ -21,19 +21,19 @@
   const lammonjakoMuuId = 12;
 
   const lammitysLens = R.lensPath(['lahtotiedot', 'lammitys']);
-  const lammitysmuoto1IdLens = R.compose(
+  const lammitysmuoto1Lens = R.compose(
     lammitysLens,
-    R.lensPath(['lammitysmuoto-1', 'id'])
+    R.lensProp('lammitysmuoto-1')
   );
 
-  const lammitysmuoto2IdLens = R.compose(
+  const lammitysmuoto2Lens = R.compose(
     lammitysLens,
-    R.lensPath(['lammitysmuoto-2', 'id'])
+    R.lensProp('lammitysmuoto-2')
   );
 
   const lammonjakoLens = R.compose(
     lammitysLens,
-    R.lensPath(['lammonjako', 'id'])
+    R.lensProp('lammonjako')
   );
 </script>
 
@@ -46,11 +46,11 @@
     parse={Maybe.Some}
     allowNone={false}
     bind:model={energiatodistus}
-    lens={lammitysmuoto1IdLens}
+    lens={R.compose( lammitysmuoto1Lens, R.lensProp('id') )}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1.id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(lammitysmuoto1IdLens) )(energiatodistus)}
+{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(R.compose( lammitysmuoto1Lens, R.lensProp('id') )) )(energiatodistus)}
   <div class="w-full py-4 mb-4">
     <Input
       {disabled}
@@ -68,11 +68,11 @@
     parse={Maybe.Some}
     allowNone={true}
     bind:model={energiatodistus}
-    lens={lammitysmuoto2IdLens}
+    lens={R.compose( lammitysmuoto2Lens, R.lensProp('id') )}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2.id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(lammitysmuoto2IdLens) )(energiatodistus)}
+{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(R.compose( lammitysmuoto2Lens, R.lensProp('id') )) )(energiatodistus)}
   <div class="w-full py-4 mb-4">
     <Input
       {disabled}
@@ -88,13 +88,13 @@
     items={R.map(R.prop('id'), lammonjako)}
     format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammonjako), R.propEq('id') )}
     parse={Maybe.Some}
-    allowNone={false}
+    allowNone={true}
     bind:model={energiatodistus}
-    lens={lammonjakoLens}
+    lens={R.compose( lammonjakoLens, R.lensProp('id') )}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(lammonjakoMuuId)), R.view(lammonjakoLens) )(energiatodistus)}
+{#if R.compose( Maybe.exists(R.equals(lammonjakoMuuId)), R.view(R.compose( lammonjakoLens, R.lensProp('id') )) )(energiatodistus)}
   <div class="w-full py-4 mb-4">
     <Input
       {disabled}
@@ -104,15 +104,6 @@
       path={['lahtotiedot', 'lammitys', 'lammonjako', 'kuvaus-fi']} />
   </div>
 {/if}
-
-<div class="w-full py-4 mb-4">
-  <Input
-    {disabled}
-    {schema}
-    center={false}
-    bind:model={energiatodistus}
-    path={['lahtotiedot', 'lammitys', 'kuvaus-fi']} />
-</div>
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">

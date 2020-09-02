@@ -148,8 +148,6 @@ export const energiatodistus2018 = _ => ({
       'lammitysmuoto-1': formalDescription(),
       'lammitysmuoto-2': formalDescription(),
       lammonjako: formalDescription(),
-      'kuvaus-fi': Maybe.None(),
-      'kuvaus-sv': Maybe.None(),
       'tilat-ja-iv': emptyLammitys(),
       'lammin-kayttovesi': emptyLammitys(),
       takka: emptyLammitysMaaraTuotto(),

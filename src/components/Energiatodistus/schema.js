@@ -174,8 +174,6 @@ export const v2018 = {
       'lammitysmuoto-1': formalDescription(0, 9),
       'lammitysmuoto-2': formalDescription(0, 9),
       lammonjako: formalDescription(0, 12),
-      'kuvaus-fi': String(75),
-      'kuvaus-sv': String(75),
       'tilat-ja-iv': Hyotysuhde,
       'lammin-kayttovesi': Hyotysuhde,
       takka: MaaraTuotto,
