@@ -22,8 +22,6 @@
   export let whoami;
   export let validation;
 
-  $: console.log(luokittelut);
-
   export let submit;
   export let title = '';
 
