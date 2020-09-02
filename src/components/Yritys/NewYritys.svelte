@@ -11,63 +11,48 @@
   import Spinner from '@Component/Spinner/Spinner';
   import YritysForm from '@Component/Yritys/YritysForm';
   import * as YritysUtils from './yritys-utils';
-
-  import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
-  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
-
+  import * as api from './yritys-api';
 
   let overlay = false;
 
-  const toggleOverlay = value => () => (overlay = value);
+  const toggleOverlay = value => { overlay = value };
 
   let yritys = YritysUtils.emptyYritys();
   let luokittelut = Maybe.None();
 
   const submit = R.compose(
-    Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Yritys', 'error'),
-        R.ifElse(
-          R.equals(409),
-          _ => $_('yritys.messages.save-conflict'),
-          _ => $_('yritys.messages.save-error')
-        )
-      ),
-      R.compose(
-        R.tap(_ =>
-          flashMessageStore.addPersist(
+    Future.fork(status => {
+        toggleOverlay(false);
+        flashMessageStore.add('Yritys', 'error',
+          (status == 409 ?
+            $_('yritys.messages.save-conflict') :
+            $_('yritys.messages.save-error')));
+      },
+      ({ id }) => {
+        flashMessageStore.addPersist(
             'Yritys',
             'success',
-            $_('yritys.messages.save-success')
-          )
-        ),
-        ({ id }) => replace(`/yritys/${id}`)
-      )
+            $_('yritys.messages.save-success'));
+
+        replace(`/yritys/${id}`);
+      }
     ),
-    YritysUtils.postYritysFuture(fetch),
-    R.tap(toggleOverlay(true))
+    api.postYritys(fetch),
+    R.tap(() => toggleOverlay(true))
   );
 
   // Load classifications
-  $: R.compose(
-    Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        R.tap(flashMessageStore.add('Yritys', 'error')),
-        R.always($_('yritys.messages.load-error'))
-      ),
-      R.compose(
-        response => {
-          luokittelut = Maybe.Some(response);
-        },
-        R.tap(toggleOverlay(false))
-      )
-    ),
-    laskutusApi.luokittelut
-  )();
+  $: Future.fork(
+      () => {
+        toggleOverlay(false);
+        flashMessageStore.add('Yritys', 'error', $_('yritys.messages.load-error'));
+      },
+      response => {
+        luokittelut = Maybe.Some(response);
+        toggleOverlay(false);
+      }, api.luokittelut);
 
 </script>
 

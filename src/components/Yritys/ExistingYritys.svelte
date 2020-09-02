@@ -4,20 +4,15 @@
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
-  import * as Fetch from '@Utility/fetch-utils';
 
-  import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import YritysForm from '@Component/Yritys/YritysForm';
-  import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
-  import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
-  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
+  import * as api from './yritys-api';
 
 
   export let params;
@@ -29,8 +24,8 @@
 
   let luokittelut = Maybe.None();
 
-  const toggleOverlay = value => () => (overlay = value);
-  const toggleDisabled = value => () => (disabled = value);
+  const toggleOverlay = value => { overlay = value };
+  const toggleDisabled = value => { disabled = value };
 
   const resetView = () => {
     overlay = true;
@@ -42,61 +37,39 @@
 
   $: submit = updatedYritys =>
     R.compose(
-      Future.forkBothDiscardFirst(
-        R.compose(
-          R.tap(toggleOverlay(false)),
-          flashMessageStore.add('Yritys', 'error'),
-          R.always($_('yritys.messages.save-error'))
-        ),
-        R.compose(
-          R.tap(toggleOverlay(false)),
-          flashMessageStore.add('Yritys', 'success'),
-          R.always($_('yritys.messages.save-success')),
-          R.tap(() => idTranslateStore.updateYritys(updatedYritys))
-        )
+      Future.fork(
+        () => {
+          toggleOverlay(false);
+          flashMessageStore.add('Yritys', 'error', $_('yritys.messages.save-error'));
+        },
+        () => {
+          toggleOverlay(false);
+          flashMessageStore.add('Yritys', 'success', $_('yritys.messages.save-success'));
+          idTranslateStore.updateYritys(updatedYritys);
+        }
       ),
-      Future.both(Future.after(500, true)),
-      YritysUtils.putYritysByIdFuture(fetch, params.id),
-      R.tap(toggleOverlay(true))
+      Future.delay(400),
+      api.putYritysById(fetch, params.id),
+      R.tap(() => toggleOverlay(true))
     )(updatedYritys);
 
-  $: R.compose(
-    Future.forkBothDiscardFirst(
-      R.compose(
-        R.compose(
-          R.tap(toggleDisabled(true)),
-          flashMessageStore.add('Yritys', 'error'),
-          R.always($_('yritys.messages.load-error'))
-        ),
-        R.tap(toggleOverlay(false))
-      ),
-      R.compose(
-        fetchedYritys => (yritys = Maybe.Some(fetchedYritys)),
-        R.tap(idTranslateStore.updateYritys),
-        R.tap(toggleOverlay(false))
-      )
-    ),
-    Future.both(Future.after(400, true)),
-    YritysUtils.getYritysByIdFuture(fetch)
-  )(params.id);
-
-  // Load classifications
+  // Load yritys and all luokittelut used in yritys form
   $: R.compose(
     Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        R.tap(flashMessageStore.add('Yritys', 'error')),
-        R.always($_('yritys.messages.load-error'))
-      ),
-      R.compose(
-        response => {
-          luokittelut = Maybe.Some(response);
-        },
-        R.tap(toggleOverlay(false))
-      )
+      () => {
+        toggleOverlay(false);
+        flashMessageStore.add('Yritys', 'error', $_('yritys.messages.load-error'));
+      },
+      response => {
+        luokittelut = Maybe.Some(response[0]);
+        yritys = Maybe.Some(response[1]);
+        toggleOverlay(false);
+      }
     ),
-    laskutusApi.luokittelut
-  )();
+    Future.delay(400),
+    Future.both(api.luokittelut),
+    api.getYritysById(fetch)
+  )(params.id);
 
 </script>
 
@@ -107,8 +80,8 @@
         {submit}
         {disabled}
         luokittelut={luokittelut.some()}
-        existing={Maybe.isSome(yritys)}
-        yritys={Maybe.orSome(YritysUtils.emptyYritys(), yritys)} />
+        existing={false}
+        yritys={yritys.some()} />
     {/if}
   </div>
   <div slot="overlay-content">

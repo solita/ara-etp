@@ -11,6 +11,6 @@ export const findCountry = R.curry((name, countries) =>
     R.find(R.compose(
       R.includes(R.toLower(name)),
       R.map(R.toLower),
-      R.values))
+      R.props(['id', 'label-fi', 'label-sv'])))
   )(countries)
 );
