@@ -15,6 +15,7 @@ export const url = {
 export const serialize = R.compose(
   R.evolve({
     'vastaanottajan-tarkenne': Maybe.orSome(null),
+    henkilotunnus: Maybe.orSome(null),
     maa: Either.right,
     toimintaalue: Maybe.orSome(null),
     wwwosoite: Maybe.getOrElse(null)

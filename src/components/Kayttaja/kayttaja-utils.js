@@ -21,7 +21,8 @@ export const laatijaForKayttajaId = id => `${kayttajaForId(id)}/laatija`;
 
 export const deserialize = R.evolve({
   login: R.compose(R.map(Date.parse), Maybe.fromNull),
-  cognitoid: Maybe.fromNull
+  cognitoid: Maybe.fromNull,
+  henkilotunnus: Maybe.fromNull
 });
 
 export const kayttajaFuture = R.curry((fetch, id) =>
@@ -52,4 +53,7 @@ export const kayttajaHasAccessToResource = R.curry((roolit, kayttaja) =>
   R.compose(R.applyTo(roolit), R.includes, R.prop('rooli'))(kayttaja)
 );
 
-export const isPaakayttaja = kayttajaHasAccessToResource([paakayttajaRole])
+export const isPaakayttaja = kayttajaHasAccessToResource([paakayttajaRole]);
+export const isPatevyydentoteaja = kayttajaHasAccessToResource([
+  patevyydentoteajaRole
+]);

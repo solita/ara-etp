@@ -89,7 +89,9 @@
     "sahkoposti": "Sähköposti",
     "kayttajatunnus": "Käyttäjätunnus",
     "puhelinnumero": "Puhelinnumero",
-
+    "virtu": "Virtu kirjautumistiedot",
+    "virtulocalid": "Käyttäjätunnus (Virtu Local ID)",
+    "virtuorganisaatio": "Organisaatio",
     "messages": {
       "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
       "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",

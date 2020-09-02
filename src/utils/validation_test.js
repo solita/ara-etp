@@ -80,6 +80,7 @@ describe('Validation:', () => {
     });
 
     it('invalid henkilötunnus', () => {
+      assertHenkilotunnusIsInvalid(null);
       assertHenkilotunnusIsInvalid('131052B308T');
       assertHenkilotunnusIsInvalid('131053-308T');
       assertHenkilotunnusIsInvalid('0131053-308T');

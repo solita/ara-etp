@@ -100,6 +100,7 @@ export const henkilotunnusChecksum = R.compose(
 );
 
 export const isValidHenkilotunnus = R.allPass([
+  R.complement(R.isNil),
   R.compose(
     R.test(
       /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d-|[01]\dA)\d{3}[\dA-Z]$/

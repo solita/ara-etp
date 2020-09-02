@@ -7,14 +7,12 @@
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
-  import {
-    flashMessageStore,
-    currentUserStore,
-  } from '@/stores';
+  import { flashMessageStore, currentUserStore } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
+  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
   const formParsers = LaatijaUtils.formParsers();
   const formSchema = LaatijaUtils.formSchema();
@@ -26,8 +24,9 @@
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
-    validation.validateModelObject(formSchema));
-
+    validation.validateModelObject(formSchema),
+    R.when(R.complement(KayttajaUtils.isPaakayttaja), R.omit(['henkilotunnus']))
+  );
 </script>
 
 <style type="text/postcss">
@@ -75,6 +74,22 @@
           validators={formSchema.sukunimi}
           i18n={$_} />
       </div>
+      {#if KayttajaUtils.isPatevyydentoteaja(kayttaja)}
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Input
+            id={'henkilotunnus'}
+            name={'henkilotunnus'}
+            label={$_('laatija.henkilotunnus')}
+            required={true}
+            bind:model={kayttaja}
+            lens={R.lensProp('henkilotunnus')}
+            format={Maybe.orSome('')}
+            parse={formParsers.henkilotunnus}
+            validators={formSchema.henkilotunnus}
+            disabled={true}
+            i18n={$_} />
+        </div>
+      {/if}
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -103,6 +118,35 @@
           i18n={$_} />
       </div>
     </div>
+    {#if KayttajaUtils.isPaakayttaja(kayttaja)}
+      <H1 text={$_('kayttaja.virtu')} />
+      <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Input
+            id={'virtuorganisaatio'}
+            name={'virtuorganisaatio'}
+            label={$_('kayttaja.virtuorganisaatio')}
+            required={true}
+            disabled={true}
+            bind:model={kayttaja}
+            format={Maybe.orSome('')}
+            lens={R.lensPath(['virtu', 'organisaatio'])}
+            i18n={$_} />
+        </div>
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Input
+            id={'virtulocalid'}
+            name={'virtulocalid'}
+            label={$_('kayttaja.virtulocalid')}
+            required={true}
+            disabled={true}
+            bind:model={kayttaja}
+            format={Maybe.orSome('')}
+            lens={R.lensPath(['virtu', 'localid'])}
+            i18n={$_} />
+        </div>
+      </div>
+    {/if}
   </div>
 
   <div class="flex -mx-4 mt-20">

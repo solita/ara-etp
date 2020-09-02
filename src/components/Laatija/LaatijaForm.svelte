@@ -174,6 +174,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('henkilotunnus')}
+          format={Maybe.orSome('')}
           parse={formParsers.henkilotunnus}
           validators={formSchema.henkilotunnus}
           disabled={true}

@@ -34,7 +34,8 @@ export const orSome = R.curry((defaultValue, either) =>
 export const from = (value, isRight, left) =>
   isRight(value) ? Either.of(value) : Either.Left(left);
 
-export const isEither = any => Object.getPrototypeOf(any) === Either.prototype;
+export const isEither = any =>
+  R.complement(R.isNil)(any) && Object.getPrototypeOf(any) === Either.prototype;
 
 export const fromValueOrEither = R.unless(isEither, Either.of);
 

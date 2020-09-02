@@ -15,7 +15,10 @@ export const laatijaApi = `api/private/laatijat`;
 export const urlForLaatijaId = id => `${laatijaApi}/${id}`;
 
 export const formSchema = () => ({
-  henkilotunnus: [Validation.isRequired, Validation.henkilotunnusValidator],
+  henkilotunnus: R.map(Validation.liftValidator, [
+    Validation.isRequired,
+    Validation.henkilotunnusValidator
+  ]),
   etunimi: [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
@@ -56,7 +59,7 @@ export const formSchema = () => ({
 });
 
 export const formParsers = () => ({
-  henkilotunnus: R.trim,
+  henkilotunnus: R.compose(Maybe.fromEmpty, R.trim),
   etunimi: R.trim,
   sukunimi: R.trim,
   email: R.trim,
@@ -70,6 +73,7 @@ export const formParsers = () => ({
 
 export const deserialize = R.evolve({
   'vastaanottajan-tarkenne': Maybe.fromNull,
+  henkilotunnus: Maybe.fromNull,
   maa: Either.Right,
   toimintaalue: Maybe.fromNull,
   wwwosoite: Maybe.fromNull
@@ -88,7 +92,8 @@ export const laatijaFromKayttaja = R.compose(
       'puhelin',
       'passivoitu',
       'rooli',
-      'login'
+      'login',
+      'henkilotunnus'
     ]),
     R.compose(R.dissoc('kayttaja'), R.prop('laatija'))
   ])

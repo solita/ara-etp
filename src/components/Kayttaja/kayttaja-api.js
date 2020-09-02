@@ -5,11 +5,13 @@ import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
 import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
-import * as kayttajat from "@Utility/kayttajat";
+import * as kayttajat from '@Utility/kayttajat';
 
 const deserialize = R.evolve({
   login: R.compose(R.map(Date.parse), Maybe.fromNull),
-  cognitoid: Maybe.fromNull
+  cognitoid: Maybe.fromNull,
+  henkilotunnus: Maybe.fromNull,
+  virtu: { localid: Maybe.fromNull, organisaatio: Maybe.fromNull }
 });
 
 export const url = {
@@ -17,7 +19,7 @@ export const url = {
   id: id => `${url.all}/${id}`,
   laatija: id => `${url.id(id)}/laatija`,
   whoami: '/api/private/whoami'
-}
+};
 
 export const whoami = Future.cache(Fetch.fetchUrl(fetch, url.whoami));
 
@@ -27,23 +29,30 @@ export const getKayttajaById = R.curry((fetch, id) =>
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.id
-  )(id));
+  )(id)
+);
 
 export const getLaatijaById = R.curry((fetch, id) =>
   R.compose(
-    Future.chainRej(R.ifElse(R.equals(404), R.always(Future.resolve(null)), Future.reject)),
+    Future.chainRej(
+      R.ifElse(R.equals(404), R.always(Future.resolve(null)), Future.reject)
+    ),
     R.map(LaatijaUtils.deserialize),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.laatija
-  )(id));
+  )(id)
+);
 
 export const serialize = R.compose(
-  R.omit(['id', 'email', 'login', 'cognitoid', 'ensitallennus'])
+  R.evolve({
+    henkilotunnus: Maybe.getOrElse(null)
+  }),
+  R.omit(['id', 'email', 'login', 'cognitoid', 'ensitallennus', 'virtu'])
 );
 
 export const serializeForNonAdmin = R.compose(
-  R.omit(['rooli', 'passivoitu']),
+  R.omit(['rooli', 'passivoitu', 'henkilotunnus']),
   serialize
 );
 
@@ -58,4 +67,3 @@ export const putKayttajaById = R.curry((rooli, fetch, id, laatija) =>
     )(rooli)
   )(laatija)
 );
-
