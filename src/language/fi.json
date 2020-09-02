@@ -658,6 +658,7 @@
       },
       "ilmanvaihto": {
         "header": "Ilmanvaihtojärjestelmä",
+        "tyyppi-id": "Ilmanvaihtojärjestelmän tyyppi",
         "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
         "lampotilasuhde": "LTO:n lämpötilasuhde",
         "jaatymisenesto": "Jäätymisenesto",
@@ -692,6 +693,18 @@
       },
       "lammitys": {
         "header": "Lämmitysjärjestelmä",
+        "lammitysmuoto-1": {
+          "id": "Ensisijaisen lämmitysjärjestelmän tuotto",
+          "kuvaus": "Ensisijaisen lämmitysjärjestelmän kuvaus"
+        },
+        "lammitysmuoto-2": {
+          "id": "Toissijaisen lämmitysjärjestelmän tuotto",
+          "kuvaus": "Toissijaisen lämmitysjärjestelmän kuvaus"
+        },
+        "lammonjako": {
+          "id": "Lämmönjako",
+          "kuvaus": "Lämmönjaon kuvaus"
+        },
         "tuotonhyotysuhde": "Tuoton hyötysuhde",
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
         "lampokerroin": "Lämpökerroin",

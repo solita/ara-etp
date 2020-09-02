@@ -67,12 +67,18 @@ const emptyMuuPolttoaine = _ => ({
   'maara-vuodessa': Maybe.None()
 });
 
+const formalDescription = _ => ({
+  id: Maybe.None(),
+  'kuvaus-fi': Maybe.None(),
+  'kuvaus-sv': Maybe.None()
+});
+
 export const energiatodistus2018 = _ => ({
   'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
-  'laskuriviviite': Maybe.None(),
-  'laskutusaika': Maybe.None(),
+  laskuriviviite: Maybe.None(),
+  laskutusaika: Maybe.None(),
   perustiedot: {
     nimi: Maybe.None(),
     rakennustunnus: Maybe.None(),
@@ -136,14 +142,12 @@ export const energiatodistus2018 = _ => ({
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
       'lto-vuosihyotysuhde': Maybe.None(),
-      'tuloilma-lampotila': Maybe.None(),
+      'tuloilma-lampotila': Maybe.None()
     },
     lammitys: {
-      'lammitysmuoto-1-id': Maybe.None(),
-      'lammitysmuoto-2-id': Maybe.None(),
-      'lammonjako-id': Maybe.None(),
-      'kuvaus-fi': Maybe.None(),
-      'kuvaus-sv': Maybe.None(),
+      'lammitysmuoto-1': formalDescription(),
+      'lammitysmuoto-2': formalDescription(),
+      lammonjako: formalDescription(),
       'tilat-ja-iv': emptyLammitys(),
       'lammin-kayttovesi': emptyLammitys(),
       takka: emptyLammitysMaaraTuotto(),
@@ -178,7 +182,7 @@ export const energiatodistus2018 = _ => ({
       muusahko: Maybe.None(),
       lampopumppu: Maybe.None()
     },
-    'kuukausierittely': [],
+    kuukausierittely: [],
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': emptySahkoLampo(),
       'tuloilman-lammitys': emptySahkoLampo(),

@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
 
-  import {locale, _} from '@Language/i18n';
+  import { locale, _ } from '@Language/i18n';
   import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as validation from '@Utility/validation';
@@ -50,7 +50,7 @@
 
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
-  import Laskutus from "./laskutus";
+  import Laskutus from './laskutus';
 
   export let title = '';
   export let energiatodistus;
@@ -102,9 +102,7 @@
     <HR />
   {/if}
 
-  <Laskutus {schema}
-            {whoami}
-            bind:energiatodistus/>
+  <Laskutus {schema} {whoami} bind:energiatodistus />
 
   <H2 text={$_('energiatodistus.perustiedot.header')} />
 
@@ -239,8 +237,20 @@
 
   <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
   <Ikkunat {disabled} {schema} bind:energiatodistus />
-  <Ilmanvaihtojarjestelma {disabled} {schema} bind:energiatodistus />
-  <Lammitysjarjestelma {disabled} {schema} bind:energiatodistus />
+  <Ilmanvaihtojarjestelma
+    {disabled}
+    {schema}
+    bind:energiatodistus
+    ilmanvaihtotyypit={luokittelut.ilmanvaihtotyypit}
+    {inputLanguage} />
+
+  <Lammitysjarjestelma
+    {disabled}
+    {schema}
+    bind:energiatodistus
+    lammitysmuoto={luokittelut.lammitysmuoto}
+    lammonjako={luokittelut.lammonjako}
+    {inputLanguage} />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
   <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />

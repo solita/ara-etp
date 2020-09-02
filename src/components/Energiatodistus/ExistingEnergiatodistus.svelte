@@ -24,7 +24,9 @@
 
   let overlay = true;
 
-  const toggleOverlay = value => { overlay = value };
+  const toggleOverlay = value => {
+    overlay = value;
+  };
 
   const resetView = () => {
     overlay = true;
@@ -33,32 +35,42 @@
 
   $: params.id && resetView();
 
-  const submit = (energiatodistus, onSuccessfulSave) => R.compose(
-    Future.fork(
-      () => {
-        toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-            $_('energiatodistus.messages.save-error'));
-      },
-      () => {
-        toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'success',
-            $_('energiatodistus.messages.save-success'));
-        onSuccessfulSave();
-      }
-    ),
-    Future.delay(500),
-    api.putEnergiatodistusById(fetch, params.version, params.id),
-    R.tap(() => toggleOverlay(true))
-  ) (energiatodistus);
+  const submit = (energiatodistus, onSuccessfulSave) =>
+    R.compose(
+      Future.fork(
+        () => {
+          toggleOverlay(false);
+          flashMessageStore.add(
+            'Energiatodistus',
+            'error',
+            $_('energiatodistus.messages.save-error')
+          );
+        },
+        () => {
+          toggleOverlay(false);
+          flashMessageStore.add(
+            'Energiatodistus',
+            'success',
+            $_('energiatodistus.messages.save-success')
+          );
+          onSuccessfulSave();
+        }
+      ),
+      Future.delay(500),
+      api.putEnergiatodistusById(fetch, params.version, params.id),
+      R.tap(() => toggleOverlay(true))
+    )(energiatodistus);
 
   // load energiatodistus and classifications in parallel
   $: R.compose(
     Future.fork(
       () => {
         toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-            $_('energiatodistus.messages.load-error'));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.messages.load-error')
+        );
       },
       response => {
         energiatodistus = Maybe.Some(response[0]);
@@ -69,13 +81,14 @@
       }
     ),
     Future.parallel(5),
-    R.prepend(R.__,
-      [api.luokittelut(params.version),
-       kayttajaApi.whoami,
-       api.validation(params.version)]),
+    R.prepend(R.__, [
+      api.luokittelut(params.version),
+      kayttajaApi.whoami,
+      api.validation(params.version)
+    ]),
     R.tap(() => toggleOverlay(true)),
-    api.getEnergiatodistusById(fetch),
-  ) (params.version, params.id);
+    api.getEnergiatodistusById(fetch)
+  )(params.version, params.id);
 
   const tilaLabel = R.compose(
     Maybe.orSome($_('energiatodistus.tila.loading')),
