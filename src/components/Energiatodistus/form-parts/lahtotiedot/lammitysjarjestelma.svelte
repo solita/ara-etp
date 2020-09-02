@@ -37,8 +37,6 @@
     lammitysLens,
     R.lensProp('lammonjako')
   );
-
-  $: console.log(inputLanguage);
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
