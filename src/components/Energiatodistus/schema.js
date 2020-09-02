@@ -113,12 +113,6 @@ const Yritys = {
   postinumero: YritysPostinumero
 };
 
-const formalDescription = (min, max) => ({
-  id: Integer(min, max),
-  'kuvaus-fi': String(75),
-  'kuvaus-sv': String(75)
-});
-
 export const v2018 = {
   laskuriviviite: String(50),
   perustiedot: {
@@ -171,9 +165,18 @@ export const v2018 = {
       'tuloilma-lampotila': FloatPos
     },
     lammitys: {
-      'lammitysmuoto-1': formalDescription(0, 9),
-      'lammitysmuoto-2': formalDescription(0, 9),
-      lammonjako: formalDescription(0, 12),
+      'lammitysmuoto-1': {
+        id: Integer(0, 9),
+        kuvaus: String(75)
+      },
+      'lammitysmuoto-2': {
+        id: Integer(0, 9),
+        kuvaus: String(75)
+      },
+      lammonjako: {
+        id: Integer(0, 12),
+        kuvaus: String(75)
+      },
       'tilat-ja-iv': Hyotysuhde,
       'lammin-kayttovesi': Hyotysuhde,
       takka: MaaraTuotto,

@@ -17,6 +17,8 @@
   export let lammitysmuoto;
   export let lammonjako;
 
+  export let inputLanguage;
+
   const lammitysmuotoMuuId = 9;
   const lammonjakoMuuId = 12;
 
@@ -35,6 +37,8 @@
     lammitysLens,
     R.lensProp('lammonjako')
   );
+
+  $: console.log(inputLanguage);
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
@@ -57,7 +61,8 @@
       {schema}
       center={false}
       bind:model={energiatodistus}
-      path={['lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'kuvaus-fi']} />
+      inputLanguage={Maybe.Some(inputLanguage)}
+      path={['lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'kuvaus']} />
   </div>
 {/if}
 
@@ -79,7 +84,8 @@
       {schema}
       center={false}
       bind:model={energiatodistus}
-      path={['lahtotiedot', 'lammitys', 'lammitysmuoto-2', 'kuvaus-fi']} />
+      inputLanguage={Maybe.Some(inputLanguage)}
+      path={['lahtotiedot', 'lammitys', 'lammitysmuoto-2', 'kuvaus']} />
   </div>
 {/if}
 
@@ -101,7 +107,8 @@
       {schema}
       center={false}
       bind:model={energiatodistus}
-      path={['lahtotiedot', 'lammitys', 'lammonjako', 'kuvaus-fi']} />
+      inputLanguage={Maybe.Some(inputLanguage)}
+      path={['lahtotiedot', 'lammitys', 'lammonjako', 'kuvaus']} />
   </div>
 {/if}
 

@@ -212,7 +212,8 @@
     {schema}
     bind:energiatodistus
     {lammitysmuoto}
-    {lammonjako} />
+    {lammonjako} 
+    {inputLanguage} />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
   <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
