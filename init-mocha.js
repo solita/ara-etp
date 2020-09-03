@@ -1,0 +1,1 @@
+global.fetch = () => { throw "Create mocked fetch in test."}

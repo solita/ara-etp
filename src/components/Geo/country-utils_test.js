@@ -13,8 +13,8 @@ const testFindCountry = (keyword, countries, expectedCountry) => {
 describe('Country related functions:', () => {
   describe('findCountry', () => {
     it('Positive tests', () => {
-      testFindCountry('asdf', [{ id: 'FI', 'label-fi': 'asdf' }], 0);
-      testFindCountry('FI', [{ id: 'FI', 'label-fi': 'asdf' }], 0);
+      testFindCountry('asdf', [{ id: 'FI', 'label-fi': 'asdf', 'label-sv': 'asdf' }], 0);
+      testFindCountry('FI', [{ id: 'FI', 'label-fi': 'asdf',  'label-sv': 'asdf' }], 0);
     });
   });
 });
