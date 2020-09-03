@@ -107,8 +107,8 @@ export const perustiedot = () => ({
     [''],
     OPERATOR_TYPES.STRING
   ),
-  'onko-julkinen-rakennus': kriteeri(
-    'perustiedot.onko-julkinen-rakennus',
+  'julkinen-rakennus': kriteeri(
+    'perustiedot.julkinen-rakennus',
     [eq],
     eq,
     'true',

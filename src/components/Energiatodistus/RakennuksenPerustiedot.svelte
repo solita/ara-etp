@@ -159,8 +159,8 @@
   <div class="w-full px-4 py-4">
     <Checkbox
       bind:model={energiatodistus}
-      lens={R.lensPath(['perustiedot', 'onko-julkinen-rakennus'])}
-      label={$_('energiatodistus.perustiedot.onko-julkinen-rakennus')}
+      lens={R.lensPath(['perustiedot', 'julkinen-rakennus'])}
+      label={$_('energiatodistus.perustiedot.julkinen-rakennus')}
       {disabled} />
   </div>
 </div>

@@ -12,7 +12,7 @@ const deserialize2018 = {
   id: Maybe.get,
   'tila-id': Maybe.get,
   perustiedot: {
-    'onko-julkinen-rakennus': Maybe.get,
+    'julkinen-rakennus': Maybe.get,
     valmistumisvuosi: Either.Right
   }
 };

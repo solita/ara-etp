@@ -138,7 +138,7 @@ const perustiedot = {
   rakennustunnus: [...stringComparisons],
   kiinteistotunnus: [...stringComparisons],
   rakennusosa: [...stringComparisons],
-  'onko-julkinen-rakennus': [singleBoolean],
+  'julkinen-rakennus': [singleBoolean],
   katuosoite: [...stringComparisons],
   postinumero: [...stringComparisons],
   valmistumisvuosi: [...numberComparisons],
@@ -465,7 +465,7 @@ export const laatijaSchema = R.compose(
   R.pick([
     'id',
     'korvattu-energiatodistus-id',
-    'onko-julkinen-rakennus',
+    'julkinen-rakennus',
     'perustiedot',
     'lahtotiedot',
     'tulokset',

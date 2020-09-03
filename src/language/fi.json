@@ -199,7 +199,7 @@
         "rakennustunnus": "Pysyvä rakennustunnus",
         "kiinteistotunnus": "Kiinteistötunnus",
         "rakennusosa": "Rakennusosa",
-        "onko-julkinen-rakennus": "Julkinen rakennus",
+        "julkinen-rakennus": "Julkinen rakennus",
         "katuosoite": "Katuosoite",
         "postinumero": "Postinumero",
         "valmistumisvuosi": "Valmistumisvuosi",
@@ -543,7 +543,7 @@
       "valmistumisvuosi": "Valmistumisvuosi",
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
-      "onko-julkinen-rakennus": "Julkinen rakennus",
+      "julkinen-rakennus": "Julkinen rakennus",
       "keskeiset-suositukset": "Keskeiset suositukset",
       "keskeiset-suositukset-heading": {
         "2018": {
