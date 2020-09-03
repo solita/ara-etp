@@ -361,6 +361,6 @@ export const kielisyys = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
 export const kielisyysKey = id => kielisyydet[id];
 
 export const viimeinenVoimassaolo = R.compose(
-  R.map(R.compose(d => dfns.add(d, { years: 10 }), dfns.parseISO)),
-  R.prop('allekirjoitusaika')
+  R.map(paattymisaika => dfns.subDays(dfns.parseISO(paattymisaika), 1)),
+  R.prop('voimassaolo-paattymisaika')
 );

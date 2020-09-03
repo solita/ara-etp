@@ -72,7 +72,8 @@ export const serialize = R.compose(
     'allekirjoitusaika',
     'allekirjoituksessaaika',
     'laskutusaika',
-    'korvaava-energiatodistus-id'
+    'korvaava-energiatodistus-id',
+    'voimassaolo-paattymisaika'
   ])
 );
 
