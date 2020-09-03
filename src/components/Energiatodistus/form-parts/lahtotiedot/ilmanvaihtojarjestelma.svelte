@@ -1,4 +1,6 @@
 <script>
+  import { slide } from 'svelte/transition';
+
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
@@ -38,7 +40,7 @@
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(ilmanvaihtoMuuId)), R.view(tyyppiLens) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">
+  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
