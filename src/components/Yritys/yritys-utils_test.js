@@ -1,22 +1,23 @@
 import { assert } from 'chai';
 import * as R from 'ramda';
 import * as YritysUtils from './yritys-utils';
+import * as api from './yritys-api';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as Future from '@Utility/future-utils';
 import * as validation from '@Utility/validation';
 
-describe('YritysUtils:', () => {
+describe('Yritys api and utils tests:', () => {
   describe('urlForYritysId', () => {
     it('should return proper url for given id', () => {
-      assert.equal('/api/private/yritykset/1', YritysUtils.urlForYritysId(1));
+      assert.equal('/api/private/yritykset/1', api.url.yritys(1));
     });
   });
 
   describe('deserialize', () => {
     it('should wrap verkkolaskuosoite into Some', () => {
       const yritys = { verkkolaskuosoite: '003712345671' };
-      const deserializedYritys = YritysUtils.deserialize(yritys);
+      const deserializedYritys = api.deserialize(yritys);
 
       assert.equal(
         '003712345671',
@@ -26,7 +27,7 @@ describe('YritysUtils:', () => {
 
     it('should wrap null verkkolaskuosoite into None', () => {
       const yritys = { verkkolaskuosoite: null };
-      const deserializedYritys = YritysUtils.deserialize(yritys);
+      const deserializedYritys = api.deserialize(yritys);
 
       assert.equal(
         '',
@@ -40,7 +41,7 @@ describe('YritysUtils:', () => {
       const yritys = {
         verkkolaskuosoite: Maybe.of('003712345671')
       };
-      const serializedYritys = YritysUtils.serialize(yritys);
+      const serializedYritys = api.serialize(yritys);
 
       assert.equal('003712345671', serializedYritys.verkkolaskuosoite);
     });
@@ -49,14 +50,14 @@ describe('YritysUtils:', () => {
       const yritys = {
         verkkolaskuosoite: Maybe.None()
       };
-      const serializedYritys = YritysUtils.serialize(yritys);
+      const serializedYritys = api.serialize(yritys);
 
       assert.equal(null, serializedYritys.verkkolaskuosoite);
     });
 
     it('should remove id-property', () => {
       const yritys = { id: 1 };
-      const serializedYritys = YritysUtils.serialize(yritys);
+      const serializedYritys = api.serialize(yritys);
 
       assert.notProperty(serializedYritys, 'id');
     });
@@ -132,7 +133,7 @@ describe('YritysUtils:', () => {
           assert.deepEqual(expected, value);
           done();
         },
-        YritysUtils.getYritysByIdFuture(fetch, 1)
+        api.getYritysById(fetch, 1)
       );
     });
 
@@ -152,7 +153,7 @@ describe('YritysUtils:', () => {
           done();
         },
         _ => {},
-        YritysUtils.getYritysByIdFuture(fetch, 1)
+        api.getYritysById(fetch, 1)
       );
     });
   });
@@ -174,7 +175,7 @@ describe('YritysUtils:', () => {
           assert.deepEqual(expected, response);
           done();
         },
-        YritysUtils.putYritysByIdFuture(fetch, 1, {})
+        api.putYritysById(fetch, 1, {})
       );
     });
 
@@ -194,7 +195,7 @@ describe('YritysUtils:', () => {
           done();
         },
         _ => {},
-        YritysUtils.putYritysByIdFuture(fetch, 1, {})
+        api.putYritysById(fetch, 1, {})
       );
     });
   });
@@ -221,7 +222,7 @@ describe('YritysUtils:', () => {
           assert.deepEqual(expected, value);
           done();
         },
-        YritysUtils.postYritysFuture(fetch, {})
+        api.postYritys(fetch, {})
       );
     });
 
@@ -242,7 +243,7 @@ describe('YritysUtils:', () => {
           done();
         },
         _ => {},
-        YritysUtils.postYritysFuture(fetch, {})
+        api.postYritys(fetch, {})
       );
     });
   });

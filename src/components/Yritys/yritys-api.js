@@ -10,7 +10,7 @@ import * as Either from '@Utility/either-utils';
  * This namespace is for all flutures related to yritys api
  */
 
-const url = {
+export const url = {
   yritykset: '/api/private/yritykset',
   yritys: id => `${url.yritykset}/${id}`
 }
