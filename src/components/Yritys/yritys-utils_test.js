@@ -123,9 +123,7 @@ describe('Yritys api and utils tests:', () => {
           )
       };
 
-      const fetch = R.curry(
-        (url, options) => new Promise((resolve, _) => resolve(response))
-      );
+      const fetch = (url, options) => new Promise((resolve, _) => resolve(response));
 
       Future.fork(
         _ => {},
@@ -143,9 +141,7 @@ describe('Yritys api and utils tests:', () => {
         ok: false
       };
 
-      const fetch = R.curry(
-        (url, options) => new Promise((_, reject) => reject(response))
-      );
+      const fetch = (url, options) => new Promise((_, reject) => reject(response));
 
       Future.fork(
         reject => {
@@ -165,9 +161,7 @@ describe('Yritys api and utils tests:', () => {
         ok: true
       };
 
-      const fetch = R.curry(
-        (url, options) => new Promise((resolve, _) => resolve(expected))
-      );
+      const fetch = (url, options) => new Promise((resolve, _) => resolve(expected));
 
       Future.fork(
         _ => {},
@@ -185,9 +179,7 @@ describe('Yritys api and utils tests:', () => {
         ok: false
       };
 
-      const fetch = R.curry(
-        (url, options) => new Promise((_, reject) => reject(response))
-      );
+      const fetch = (url, options) => new Promise((_, reject) => reject(response));
 
       Future.fork(
         response => {
@@ -212,9 +204,7 @@ describe('Yritys api and utils tests:', () => {
         json: () => new Promise((resolve, _) => resolve({ id: 1 }))
       };
 
-      const fetch = R.curry(
-        (url, options) => new Promise((resolve, _) => resolve(response))
-      );
+      const fetch = (url, options) => new Promise((resolve, _) => resolve(response));
 
       Future.fork(
         _ => {},
@@ -233,9 +223,7 @@ describe('Yritys api and utils tests:', () => {
         json: () => new Promise((resolve, _) => resolve({ id: 1 }))
       };
 
-      const fetch = R.curry(
-        (url, options) => new Promise((_, reject) => reject(response))
-      );
+      const fetch = (url, options) => new Promise((_, reject) => reject(response));
 
       Future.fork(
         reject => {
