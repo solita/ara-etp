@@ -230,56 +230,19 @@ export const deleteEnergiatodistus = R.curry((fetch, version, id) =>
   )
 );
 
-export const kielisyys = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/kielisyys');
+export const laatimisvaiheet = Fetch.cached(fetch, '/laatimisvaiheet');
 
-export const laatimisvaiheet = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/laatimisvaiheet');
-
-export const kayttotarkoitusluokat = version =>
-  R.compose(
-    Future.cache,
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )('api/private/kayttotarkoitusluokat/' + version);
-
-export const alakayttotarkoitusluokat = version =>
-  R.compose(
-    Future.cache,
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )('api/private/alakayttotarkoitusluokat/' + version);
-
-export const lammonjako = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/lammonjako');
-
-export const lammitysmuoto = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/lammitysmuoto');
-
-export const ilmanvaihtotyypit = R.compose(
-  Future.cache,
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/ilmanvaihtotyyppi');
+const kayttotarkoitusluokat = version =>
+  Fetch.cached(fetch, '/kayttotarkoitusluokat/' + version);
+const alakayttotarkoitusluokat = version =>
+  Fetch.cached(fetch, '/alakayttotarkoitusluokat/' + version);
 
 export const luokittelut = R.memoizeWith(R.identity, version =>
-  Future.parallelObject(5, {
-    lammonjako,
-    lammitysmuoto,
-    ilmanvaihtotyypit,
-    kielisyys,
+  Future.parallelObject(7, {
+    lammonjako: Fetch.cached(fetch, '/lammonjako'),
+    lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
+    ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
+    kielisyys: Fetch.cached(fetch, '/kielisyys'),
     laatimisvaiheet,
     kayttotarkoitusluokat: kayttotarkoitusluokat(version),
     alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
@@ -300,15 +263,8 @@ export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
   )
 );
 
-const cachedGet = url =>
-  R.compose(
-    Future.cache,
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(url);
-
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
-    numeric: cachedGet('api/private/validation/numeric/' + version)
+    numeric: Fetch.cached(fetch, '/validation/numeric/' + version)
   })
 );

@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 import * as Future from './future-utils';
 
+const api = 'api/private';
+
 export const toJson = Future.encaseP(response => response.json());
 
 export const toText = Future.encaseP(response => response.text());
@@ -51,3 +53,12 @@ export const postEmpty = R.curry((fetch, url) =>
 export const deleteRequest = R.curry((fetch, url) =>
   fetch(url, { method: 'delete' })
 );
+
+/**
+ * Cached future to fetch static data from backend
+ * @type {any}
+ */
+export const cached = R.curry((fetch, url) => R.compose(
+  Future.cache,
+  fetchUrl
+)(fetch, api + url))
