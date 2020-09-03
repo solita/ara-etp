@@ -5,7 +5,6 @@
   import * as LocaleUtils from '@Language/locale-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
-  import * as Future from '@Utility/future-utils';
   import * as validation from '@Utility/validation';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Component/Geo/country-utils';
@@ -17,7 +16,7 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
 
-  import { countryStore, flashMessageStore } from '@/stores';
+  import { flashMessageStore } from '@/stores';
 
   const update = fn => (yritys = fn(yritys));
 
@@ -37,25 +36,17 @@
 
   const parseCountry = R.compose(
     R.map(R.prop('id')),
-    R.chain(Maybe.toEither(R.applyTo('country-not-found'))),
-    Either.leftMap(R.always(R.applyTo('connection-failure'))),
-    fn => $countryStore.map(fn),
-    country.findCountry
+    Maybe.toEither(R.applyTo('country-not-found')),
+    country.findCountry(R.__, luokittelut.countries)
   );
 
   $: formatCountry = R.compose(
-    Either.orSome(''),
-    R.map(LocaleUtils.label($locale)),
-    R.chain(Maybe.toEither('')),
-    R.map(R.__, $countryStore),
-    country.findCountryById
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    country.findCountryById(R.__, luokittelut.countries)
   );
 
-  $: countryNames = Either.foldRight(
-    [],
-    R.map(LocaleUtils.label($locale)),
-    $countryStore
-  );
+  $: countryNames = R.map(labelLocale, luokittelut.countries);
 
   $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
 

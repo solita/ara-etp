@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
-import * as yritysApi from '@Component/Yritys/yritys-utils';
+import * as yritysApi from '@Component/Yritys/yritys-api';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as kayttajat from '@Utility/kayttajat';
@@ -65,7 +65,7 @@ const toggleLaatijaYritys = R.curry((method, fetch, laatijaId, yritysId) =>
 export const putLaatijaYritys = toggleLaatijaYritys('put');
 export const deleteLaatijaYritys = toggleLaatijaYritys('delete');
 
-export const getAllYritykset = yritysApi.getAllYrityksetFuture;
+export const getAllYritykset = yritysApi.getAllYritykset;
 
 export const patevyydet = R.compose(
   Future.cache,

@@ -10,8 +10,7 @@
   import ExistingYritys from './ExistingYritys';
   import Yritykset from './Yritykset';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import Country from '@Component/Geo/Country';
-  import { flashMessageStore, countryStore, currentUserStore } from '@/stores';
+  import { flashMessageStore, currentUserStore } from '@/stores';
 
   const prefix = '/yritys';
   const routes = {
@@ -27,10 +26,6 @@
 
 <svelte:window on:hashchange={_ => flashMessageStore.flush('Yritys')} />
 
-<Country />
-
-{#if $countryStore.isRight()}
-  <Router {routes} {prefix} />
-{/if}
+<Router {routes} {prefix} />
 
 <FlashMessage module={'Yritys'} />

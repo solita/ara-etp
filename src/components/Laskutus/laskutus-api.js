@@ -16,7 +16,3 @@ export const verkkolaskuoperaattorit = R.compose(
   Future.encaseP(Fetch.getFetch(fetch))
 )(api + '/verkkolaskuoperaattorit/');
 
-export const luokittelut = () => Future.parallelObject(2, {
-  laskutuskielet: laskutuskielet,
-  verkkolaskuoperaattorit: verkkolaskuoperaattorit
-});
