@@ -4,7 +4,7 @@
   import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
-  import * as laatimisvaiheet from './laatimisvaiheet';
+  import * as Laatimisvaiheet from './laatimisvaiheet';
   import * as LocaleUtils from '@Language/locale-utils';
   import * as formats from '@Utility/formats';
   import * as dfns from 'date-fns';
@@ -37,7 +37,6 @@
   import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
   import Nettotarve from './form-parts/tulokset/nettotarve';
   import Lampokuormat from './form-parts/tulokset/lampokuormat';
-  import Laskentatyokalu from './form-parts/tulokset/laskentatyokalu';
 
   import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/energiaverkosta-ostetut';
   import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';
@@ -167,7 +166,7 @@
         format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
         items={R.pluck('id', luokittelut.laatimisvaiheet)} />
     </div>
-    {#if laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
+    {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
       <div class="lg:w-1/2 w-full px-4 py-4">
         <Input
           {disabled}
