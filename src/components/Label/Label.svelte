@@ -2,6 +2,7 @@
   export let id;
   export let required;
   export let error;
+  export let warning;
   export let focused;
   export let label = '';
   export let compact = false;
@@ -17,6 +18,11 @@
     content: '*';
   }
 
+  label.warning,
+  label.warning::before {
+    @apply text-warning;
+  }
+
   label.error,
   label.error::before {
     @apply text-error;
@@ -28,11 +34,12 @@
   }
 </style>
 
-<!-- purgecss: sr-only required error focused -->
+<!-- purgecss: sr-only required error focused warning -->
 <label
   for={id}
   class:sr-only={compact}
   class:required
+  class:warning
   class:error
   class:focused>
   {label}

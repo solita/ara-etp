@@ -20,7 +20,6 @@
 
   const id = inputs.id(path);
   const type = inputs.type(schema, path);
-
 </script>
 
 <Input
@@ -36,4 +35,5 @@
   format={type.format || format}
   parse={type.parse}
   validators={type.validators}
+  warnValidators={type.warnValidators}
   i18n={$_} />

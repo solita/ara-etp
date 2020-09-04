@@ -4,6 +4,7 @@
   export let disabled;
   export let focused;
   export let error;
+  export let warning;
 </script>
 
 <style type="text/postcss">
@@ -35,6 +36,14 @@
     @apply text-primary;
   }
 
+  div.warning {
+    @apply border-warning;
+  }
+
+  div.warning::after {
+    @apply text-warning;
+  }
+
   div.error {
     @apply border-error;
   }
@@ -48,13 +57,14 @@
   }
 </style>
 
-<!-- purgecss: caret search focused error disabled -->
+<!-- purgecss: caret search focused error disabled warning -->
 <div
   class="inputwrapper"
   class:caret={caret && !disabled}
   class:search={search && !disabled}
   class:focused
   class:error
-  class:disabled>
+  class:disabled
+  class:warning>
   <slot />
 </div>

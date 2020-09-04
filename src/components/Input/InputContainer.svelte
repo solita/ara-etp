@@ -13,25 +13,42 @@
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
+  export let warnValidators = [];
 
   export let currentValue = '';
   export let valid = true;
 
+  export let validationResult;
+
   let viewValue;
-  let errorMessage = '';
 
-  const requireNotNil = objects.requireNotNil(R.__,
-    'Nil value in input: ' + id + '. ' +
-      'Nil values are not allowed. Use Maybe monad for optional values.');
+  const requireNotNil = objects.requireNotNil(
+    R.__,
+    'Nil value in input: ' +
+      id +
+      '. ' +
+      'Nil values are not allowed. Use Maybe monad for optional values.'
+  );
 
-  $: validate = value =>
-    v.validateModelValue(validators, value).cata(
-      error => {
-        valid = false;
-        errorMessage = error(i18n);
-      },
-      () => (valid = true)
-    );
+  $: validate = value => {
+    valid = true;
+
+    v.validateModelValue(warnValidators, value).forEachLeft(error => {
+      valid = false;
+      validationResult = {
+        type: 'warning',
+        message: error(i18n)
+      };
+    });
+
+    v.validateModelValue(validators, value).forEachLeft(error => {
+      valid = false;
+      validationResult = {
+        type: 'error',
+        message: error(i18n)
+      };
+    });
+  };
 
   const updateCurrentValue = value => (currentValue = parse(value));
 
@@ -65,5 +82,5 @@
       updateValue(event.target.value);
     }
   }}>
-  <slot {viewValue} {valid} {errorMessage} />
+  <slot {viewValue} />
 </div>

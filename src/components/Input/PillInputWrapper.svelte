@@ -4,6 +4,7 @@
   export let disabled;
   export let focused;
   export let error;
+  export let warning;
 </script>
 
 <style type="text/postcss">
@@ -36,16 +37,17 @@
   }
 </style>
 
-<!-- purgecss: caret search focused error disabled -->
+<!-- purgecss: caret search focused error warning disabled -->
 <div
   class="inputwrapper"
   class:caret
   class:search
   class:focused
   class:error
+  class:warning
   class:disabled>
   <slot />
   {#if search}
-    <span class:focused class:error>search</span>
+    <span class:focused class:error class:warning>search</span>
   {/if}
 </div>

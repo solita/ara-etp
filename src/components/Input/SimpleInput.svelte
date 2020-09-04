@@ -21,6 +21,10 @@
   export let rawValueAsViewValue = false;
 
   export let valid = true;
+  export let validationResult = {
+    type: '',
+    message: ''
+  };
 
   export let wrapper = SquareInputWrapper;
 
@@ -29,34 +33,19 @@
 
   $: rawValueAsViewValue && (viewValue = rawValue);
 
-  $: error = focused && !valid;
+  $: error = focused && !valid && validationResult.type === 'error';
+  $: warning = focused && !valid && validationResult.type === 'warning';
 </script>
 
-<style type="text/postcss">
-  label {
-    @apply text-secondary;
-  }
-
-  label.required::before {
-    @apply font-icon text-xs align-top;
-    content: '*';
-  }
-
-  label.error,
-  label.error::before {
-    @apply text-error;
-  }
-
-  label.focused,
-  label.focused::before {
-    @apply font-bold;
-  }
-</style>
-
-<!-- purgecss: center error caret search focused disabled-->
-
-<Label {id} {required} {label} {compact} {error} {focused} />
-<svelte:component this={wrapper} {caret} {search} {focused} {error} {disabled}>
+<Label {id} {required} {label} {compact} {error} {warning} {focused} />
+<svelte:component
+  this={wrapper}
+  {caret}
+  {search}
+  {focused}
+  {error}
+  {warning}
+  {disabled}>
   <InputField
     {id}
     {name}
