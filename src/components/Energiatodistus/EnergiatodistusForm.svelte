@@ -77,6 +77,9 @@
         'Energiatodistus',
         'error',
         'Pakolliset tiedot puuttuvat: ' + missingTxt);
+
+      document.getElementById(missing[0])
+        .parentElement.parentElement.scrollIntoView();
     }
   }
 
