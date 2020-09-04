@@ -2,17 +2,12 @@
   import * as R from 'ramda';
 
   import { locale, _ } from '@Language/i18n';
-  import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as validation from '@Utility/validation';
-  import * as parsers from '@Utility/parsers';
-  import * as Future from '@Utility/future-utils';
   import * as et from './energiatodistus-utils';
+  import * as laatimisvaiheet from './laatimisvaiheet';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as api from './energiatodistus-api';
   import * as formats from '@Utility/formats';
   import * as dfns from 'date-fns';
-  import * as Validation from '@Utility/validation';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
@@ -63,12 +58,6 @@
   let eLuku = Maybe.None();
 
   $: labelLocale = LocaleUtils.label($locale);
-
-  $: isLaatimisvaiheOlemassaOlevaRakennus = R.compose(
-    Maybe.isSome,
-    R.filter(R.equals(2)),
-    R.view(R.lensPath(['perustiedot', 'laatimisvaihe']))
-  )(energiatodistus);
 
   $: isEnergiatodistusKorvattu = R.compose(
     R.ifElse(R.isNil, R.always(false), Maybe.isSome),
@@ -178,7 +167,7 @@
         format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
         items={R.pluck('id', luokittelut.laatimisvaiheet)} />
     </div>
-    {#if isLaatimisvaiheOlemassaOlevaRakennus}
+    {#if laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
       <div class="lg:w-1/2 w-full px-4 py-4">
         <Input
           {disabled}
