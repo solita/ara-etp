@@ -11,7 +11,7 @@
     "storybook": "start-storybook -s ./public -p 6006",
     "test": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require @babel/register --reporter dot",
-    "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch"
+    "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",

@@ -1,4 +1,6 @@
 <script>
+  import { slide } from 'svelte/transition';
+
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
@@ -53,7 +55,7 @@
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(R.compose( lammitysmuoto1Lens, R.lensProp('id') )) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">
+  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
@@ -76,7 +78,7 @@
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(R.compose( lammitysmuoto2Lens, R.lensProp('id') )) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">
+  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
@@ -99,7 +101,7 @@
 </div>
 
 {#if R.compose( Maybe.exists(R.equals(lammonjakoMuuId)), R.view(R.compose( lammonjakoLens, R.lensProp('id') )) )(energiatodistus)}
-  <div class="w-full py-4 mb-4">
+  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
