@@ -10,6 +10,7 @@
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
   import * as EtUtils from './energiatodistus-utils';
+  import * as Inputs from './inputs';
 
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
@@ -78,8 +79,7 @@
         'error',
         'Pakolliset tiedot puuttuvat: ' + missingTxt);
 
-      document.getElementById(missing[0])
-        .parentElement.parentElement.scrollIntoView();
+      Inputs.scrollIntoView(document, missing[0]);
     }
   }
 
