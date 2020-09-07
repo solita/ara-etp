@@ -8,6 +8,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
+const GenerateJsonPlugin = require('generate-json-webpack-plugin');
+
 const TerserPlugin = require('terser-webpack-plugin');
 
 const path = require('path');
@@ -93,14 +95,11 @@ module.exports = {
   mode,
   plugins: [
     new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({
-      __VERSION__:
-        '"' +
-        `${prod ? 'build' : 'dev'} - ${format(
-          Date.now(),
-          'yyyy-MM-dd-HH-mm'
-        )}` +
-        '"'
+    new GenerateJsonPlugin('version.json', {
+      version: `${prod ? 'build' : 'dev'} - ${format(
+        Date.now(),
+        'yyyy-MM-dd-HH-mm'
+      )}`
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
