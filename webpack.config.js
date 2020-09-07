@@ -105,11 +105,16 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
     }),
-    new HtmlWebpackPlugin({ title: 'Ara - Energiatodistuspalvelu' }),
-    new BundleAnalyzerPlugin()
+    new HtmlWebpackPlugin({ title: 'Ara - Energiatodistuspalvelu' })
+    // uncomment to see treeview of generated bundle after build
+    // new BundleAnalyzerPlugin()
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
+    headers: {
+      'Content-Security-Policy':
+        "default-src 'self';script-src 'self';connect-src 'self';style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com"
+    },
     https: true,
     port: 3000,
     proxy: {
