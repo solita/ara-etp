@@ -110,6 +110,7 @@ module.exports = {
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
+    https: true,
     port: 3000,
     proxy: {
       '/api': {
