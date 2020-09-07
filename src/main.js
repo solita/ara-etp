@@ -1,13 +1,8 @@
-import 'promise-polyfill/src/polyfill';
-import 'whatwg-fetch';
-
+import './main.css';
 import App from '@/App';
 
 const app = new App({
-  target: document.body,
-  props: {
-    name: 'world'
-  }
+  target: document.body
 });
 
 export default app;
