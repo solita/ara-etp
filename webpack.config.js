@@ -12,7 +12,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 const path = require('path');
-const proxyConfig = require('./proxy/proxy.config');
+
+const apiPort = 8080;
 
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
@@ -123,7 +124,7 @@ module.exports = {
     port: 3000,
     proxy: {
       '/api': {
-        target: `http://localhost:${proxyConfig.api}`
+        target: `http://localhost:${apiPort}`
       }
     }
   }
