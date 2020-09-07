@@ -1,5 +1,3 @@
-const webpack = require('webpack');
-
 const format = require('date-fns/format');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -9,6 +7,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -34,7 +33,7 @@ module.exports = {
     mainFields: ['svelte', 'browser', 'module', 'main']
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public'),
     filename: '[name].[contenthash].js'
   },
   optimization: {
@@ -104,7 +103,13 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
     }),
-    new HtmlWebpackPlugin({ title: 'Ara - Energiatodistuspalvelu' })
+    new HtmlWebpackPlugin({
+      title: 'Ara - Energiatodistuspalvelu',
+      favicon: './assets/favicon.png'
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'assets/images', to: 'images' }]
+    })
     // uncomment to see treeview of generated bundle after build
     // new BundleAnalyzerPlugin()
   ],

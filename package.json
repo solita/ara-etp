@@ -4,7 +4,7 @@
   "license": "EUPL v1.2",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
-    "dev": "webpack-dev-server --content-base public",
+    "dev": "webpack-dev-server --content-base dist",
     "start": "sirv public --single",
     "proxy": "node ./proxy/proxy.js",
     "storybook": "start-storybook -s ./public -p 6006",
@@ -31,6 +31,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "chai": "^4.2.0",
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.1.0",
     "cross-env": "^7.0.2",
     "css-loader": "^4.2.2",
     "cssnano": "^4.1.10",
