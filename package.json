@@ -5,8 +5,6 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack-dev-server --content-base public",
-    "start": "sirv public --single",
-    "proxy": "node ./proxy/proxy.js",
     "storybook": "start-storybook -s ./public -p 6006",
     "test": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require @babel/register --reporter dot",
