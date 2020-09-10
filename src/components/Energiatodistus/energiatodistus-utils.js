@@ -7,6 +7,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
 import * as fxmath from '@Utility/fxmath';
+import * as laatimisvaiheet from './laatimisvaiheet';
 
 export const isValidForm = R.compose(
   R.all(Either.isRight),

@@ -265,6 +265,7 @@ export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
 
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
-    numeric: Fetch.cached(fetch, '/validation/numeric/' + version)
+    numeric: Fetch.cached(fetch, '/validation/numeric/' + version),
+    required: Fetch.cached(fetch, '/validation/required/' + version)
   })
 );

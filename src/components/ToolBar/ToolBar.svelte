@@ -66,13 +66,14 @@
   };
 
   export let save = _ => {};
+  export let saveComplete = _ => {};
   export let cancel = _ => {};
 
   const openUrl = url => {
     window.open(url, '_blank');
   }
 
-  const nope = () => {};
+  const noop = () => {};
 </script>
 
 <style type="text/postcss">
@@ -109,7 +110,7 @@
     <div class="w-full text-light description bg-primary">{energiatodistusKieli.map(et.kielisyysKey).some()}</div>
   {/if}
   </button>
-  <button on:click={save(nope)}>
+  <button on:click={save(noop)}>
     <span class="description">
       {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
     </span>
@@ -120,7 +121,7 @@
     <span class="text-2xl font-icon">undo</span>
   </button>
   {#each signUrl.toArray() as url}
-    <button on:click={save(() => push(url))}>
+    <button on:click={saveComplete(() => push(url))}>
       <div class="description">Allekirjoita</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
         create

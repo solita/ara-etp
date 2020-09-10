@@ -47,3 +47,8 @@ export const label = (i18n, inputLanguage, path) =>
   R.compose(
     Maybe.orSome(''),
     R.map(l => ` / ${l}`))(inputLanguage);
+
+export function scrollIntoView(document, id) {
+  document.getElementById(id)
+    .parentElement.parentElement.scrollIntoView();
+}

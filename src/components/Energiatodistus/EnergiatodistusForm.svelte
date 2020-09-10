@@ -10,6 +10,8 @@
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
   import * as EtUtils from './energiatodistus-utils';
+  import * as Validations from './validation';
+  import * as Inputs from './inputs';
 
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
@@ -62,7 +64,27 @@
     }
   };
 
-  const nope = () => {};
+  const validateCompleteAndSubmit= onSuccessfulSave => () => {
+    const missing = Validations.missingProperties(validation.required, energiatodistus);
+    if (R.isEmpty(missing)) {
+      validateAndSubmit(onSuccessfulSave)();
+    } else {
+      const missingTxt = R.compose(
+        R.join(', '),
+        R.map($_),
+        R.map(R.concat('energiatodistus.'))
+      )(missing);
+
+      flashMessageStore.add(
+        'Energiatodistus',
+        'error',
+        'Pakolliset tiedot puuttuvat: ' + missingTxt);
+
+      Inputs.scrollIntoView(document, missing[0]);
+    }
+  }
+
+  const noop = () => {};
 
   const cancel = event => {
     event.preventDefault();
@@ -135,7 +157,7 @@
 
   <div class="w-full relative flex">
     <div class="w-5/6">
-      <form on:submit|preventDefault={validateAndSubmit(nope)}>
+      <form on:submit|preventDefault={validateAndSubmit(noop)}>
         <ETForm
           {title}
           bind:energiatodistus
@@ -161,6 +183,7 @@
     <div class="sticky top-3em w-1/6 self-start flex justify-end">
       <ToolBar
         save={validateAndSubmit}
+        saveComplete={validateCompleteAndSubmit}
         energiatodistusKieli={energiatodistus.perustiedot.kieli}
         bind:inputLanguage
         {cancel}
