@@ -10,6 +10,7 @@
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
   import * as EtUtils from './energiatodistus-utils';
+  import * as Validations from './validation';
   import * as Inputs from './inputs';
 
   import ToolBar from '@Component/ToolBar/ToolBar';
@@ -64,7 +65,7 @@
   };
 
   const validateCompleteAndSubmit= onSuccessfulSave => () => {
-    const missing = EtUtils.missingProperties(validation.required, energiatodistus);
+    const missing = Validations.missingProperties(validation.required, energiatodistus);
     if (R.isEmpty(missing)) {
       validateAndSubmit(onSuccessfulSave)();
     } else {

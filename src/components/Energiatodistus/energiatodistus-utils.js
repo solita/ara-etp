@@ -16,26 +16,6 @@ export const isValidForm = R.compose(
   validation.validateModelObject
 );
 
-const conditionallyRequired = [
-  [laatimisvaiheet.isOlemassaOlevaRakennus, "perustiedot.havainnointikaynti"],
-  [R.complement(laatimisvaiheet.isRakennuslupa), "perustiedot.rakennustunnus"]
-];
-
-export const missingProperties = (required, energiatodistus) => {
-  const isMissing = energiatodistus => property =>
-    Maybe.isNone(R.path(R.split('.', property), energiatodistus));
-
-  const missing = energiatodistus => ([predicate, property]) =>
-    predicate(energiatodistus) && isMissing(energiatodistus)(property) ?
-      [property] : [];
-
-  return R.concat(
-    R.chain(missing(energiatodistus), conditionallyRequired),
-    R.filter(isMissing(energiatodistus), required)
-  );
-}
-
-
 export const breadcrumb1stLevel = i18n => ({
   label: i18n('navigation.energiatodistukset'),
   url: '/#/energiatodistus/all'
