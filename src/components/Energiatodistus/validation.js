@@ -7,16 +7,25 @@ import * as Either from '@Utility/either-utils';
 
 const requiredCondition = {
   "perustiedot.havainnointikaynti": laatimisvaiheet.isOlemassaOlevaRakennus,
-  "perustiedot.rakennustunnus": R.complement(laatimisvaiheet.isRakennuslupa)
+  "perustiedot.rakennustunnus": R.complement(laatimisvaiheet.isRakennuslupa),
+  "perustiedot.keskeiset-suositukset-fi": laatimisvaiheet.isOlemassaOlevaRakennus,
+  "perustiedot.keskeiset-suositukset-sv": laatimisvaiheet.isOlemassaOlevaRakennus,
 };
 
 const predicate = R.compose(
-  R.find(R.complement(R.isNil())),
+  R.ifElse(R.isEmpty, R.always(R.T), R.allPass),
+  R.filter(R.complement(R.isNil)),
   R.juxt([
     R.prop(R.__, requiredCondition),
-    R.ifElse(R.endsWith("-fi"), R.always(kielisyys.fi), R.always(null)),
-    R.ifElse(R.endsWith("-sv"), R.always(kielisyys.sv), R.always(null)),
-    R.always(R.T)
+    property => R.endsWith("-fi", property) ? kielisyys.fi : null,
+    property => R.endsWith("-sv", property) ? kielisyys.sv : null,
+    property => R.endsWith(".U", property) ?
+      R.pathSatisfies(
+        R.compose(
+          Either.orSome(false),
+          R.map(R.lt(0)),
+          R.chain(Maybe.toEither(false))),
+        R.update(-1, 'ala', R.split('.', property))) : null
 ]));
 
 const requiredConstraints = R.map(R.juxt([predicate, R.identity]));
