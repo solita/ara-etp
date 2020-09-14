@@ -45,6 +45,7 @@
 
 <div class="w-full py-4 mb-4">
   <Select
+    id={'lahtotiedot.lammitys.lammitysmuoto-1.id'}
     items={R.map(R.prop('id'), lammitysmuoto)}
     format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammitysmuoto), R.propEq('id') )}
     parse={Maybe.Some}
@@ -68,6 +69,7 @@
 
 <div class="w-full py-4 mb-4">
   <Select
+    id={'lahtotiedot.lammitys.lammitysmuoto-2.id'}
     items={R.map(R.prop('id'), lammitysmuoto)}
     format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammitysmuoto), R.propEq('id') )}
     parse={Maybe.Some}
@@ -91,6 +93,7 @@
 
 <div class="w-full py-4 mb-4">
   <Select
+    id={'lahtotiedot.lammitys.lammonjako.id'}
     items={R.map(R.prop('id'), lammonjako)}
     format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammonjako), R.propEq('id') )}
     parse={Maybe.Some}

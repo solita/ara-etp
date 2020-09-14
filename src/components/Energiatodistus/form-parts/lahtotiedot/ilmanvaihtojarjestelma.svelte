@@ -30,6 +30,7 @@
 
 <div class="w-full py-4 mb-4">
   <Select
+    id={'lahtotiedot.ilmanvaihto.tyyppi-id'}
     items={R.map(R.prop('id'), ilmanvaihtotyypit)}
     format={R.compose( LocaleUtils.label($locale), R.find(R.__, ilmanvaihtotyypit), R.propEq('id') )}
     parse={Maybe.Some}
