@@ -64,6 +64,11 @@
     }
   };
 
+  const language = property =>
+    R.endsWith('-fi', property) || R.endsWith('-sv', property) ?
+      Maybe.Some(R.slice(-2, Infinity, property)) :
+      Maybe.None();
+
   const validateCompleteAndSubmit= onSuccessfulSave => () => {
     const missing = Validations.missingProperties(validation.required, energiatodistus);
     if (R.isEmpty(missing)) {
@@ -71,8 +76,9 @@
     } else {
       const missingTxt = R.compose(
         R.join(', '),
-        R.map($_),
-        R.map(R.concat('energiatodistus.'))
+        R.map(R.converge(
+          R.partial(Inputs.label, [$_]),
+          [language, R.split('.')])),
       )(missing);
 
       flashMessageStore.add(
