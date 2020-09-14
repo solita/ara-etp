@@ -620,13 +620,13 @@
         },
         "pohjoinen": {
           "ala": "Pohjoisen ikkunoiden pinta-ala",
-          "U": "Pohjoisten ikkunoiden U-arvo",
-          "g-ks": "Pohjoisten ikkunoiden g-kohtisuora"
+          "U": "Pohjoisen ikkunoiden U-arvo",
+          "g-ks": "Pohjoisen ikkunoiden g-kohtisuora"
         },
         "koillinen": {
           "ala": "Koillisen ikkunoiden pinta-ala",
-          "U": "Koillisten ikkunoiden U-arvo",
-          "g-ks": "Koillisten ikkunoiden g-kohtisuora"
+          "U": "Koillisen ikkunoiden U-arvo",
+          "g-ks": "Koillisen ikkunoiden g-kohtisuora"
         },
         "ita": {
           "ala": "Idän ikkunoiden pinta-ala",
