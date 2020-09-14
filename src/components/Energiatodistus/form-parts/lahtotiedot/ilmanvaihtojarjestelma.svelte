@@ -5,6 +5,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
+  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -19,11 +20,7 @@
 
   const ilmanvaihtoMuuId = 6;
 
-  const ilmanvaihtoLens = R.lensPath(['lahtotiedot', 'ilmanvaihto']);
-  const tyyppiLens = R.compose(
-    ilmanvaihtoLens,
-    R.lensProp('tyyppi-id')
-  );
+  const tyyppiLens = R.lensPath(['lahtotiedot', 'ilmanvaihto', 'tyyppi-id']);
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.ilmanvaihto.header')} />
@@ -32,7 +29,7 @@
   <Select
     id={'lahtotiedot.ilmanvaihto.tyyppi-id'}
     items={R.map(R.prop('id'), ilmanvaihtotyypit)}
-    format={R.compose( LocaleUtils.label($locale), R.find(R.__, ilmanvaihtotyypit), R.propEq('id') )}
+    format={et.selectFormat(LocaleUtils.label($locale), ilmanvaihtotyypit)}
     parse={Maybe.Some}
     allowNone={false}
     bind:model={energiatodistus}
