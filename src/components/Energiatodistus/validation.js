@@ -4,6 +4,21 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 
+export const isIlmanvaihtoKuvausRequired = R.compose(
+  Maybe.exists(R.equals(6)),
+  R.path(['lahtotiedot', 'ilmanvaihto', 'tyyppi-id']));
+
+export const isLammitysmuoto1KuvausRequired = R.compose(
+  Maybe.exists(R.equals(9)),
+  R.path(['lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'id']));
+
+export const isLammitysmuoto2KuvausRequired = R.compose(
+  Maybe.exists(R.equals(9)),
+  R.path(['lahtotiedot', 'lammitys', 'lammitysmuoto-2', 'id']));
+
+export const isLammonjakoKuvausRequired = R.compose(
+  Maybe.exists(R.equals(12)),
+  R.path(['lahtotiedot', 'lammitys', 'lammonjako', 'id']));
 
 const requiredCondition = {
   "perustiedot.havainnointikaynti": laatimisvaiheet.isOlemassaOlevaRakennus,
@@ -11,25 +26,17 @@ const requiredCondition = {
   "perustiedot.keskeiset-suositukset-fi": laatimisvaiheet.isOlemassaOlevaRakennus,
   "perustiedot.keskeiset-suositukset-sv": laatimisvaiheet.isOlemassaOlevaRakennus,
 
-  "lahtotiedot.ilmanvaihto.kuvaus-fi":
-    R.pathEq(6, ["lahtotiedot", "ilmanvaihto", "tyyppi-id"]),
-  "lahtotiedot.ilmanvaihto.kuvaus-sv":
-    R.pathEq(6, ["lahtotiedot", "ilmanvaihto", "tyyppi-id"]),
+  "lahtotiedot.ilmanvaihto.kuvaus-fi": isIlmanvaihtoKuvausRequired,
+  "lahtotiedot.ilmanvaihto.kuvaus-sv": isIlmanvaihtoKuvausRequired,
 
-  "lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-fi":
-    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-1", "id"]),
-  "lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-sv":
-    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-1", "id"]),
+  "lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-fi": isLammitysmuoto1KuvausRequired,
+  "lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-sv": isLammitysmuoto1KuvausRequired,
 
-  "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-fi":
-    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-2", "id"]),
-  "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-sv":
-    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-2", "id"]),
+  "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-fi": isLammitysmuoto2KuvausRequired,
+  "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-sv": isLammitysmuoto2KuvausRequired,
 
-  "lahtotiedot.lammitys.lammonjako.kuvaus-fi":
-    R.pathEq(12, ["lahtotiedot", "lammitys", "lammonjako", "id"]),
-  "lahtotiedot.lammitys.lammonjako.kuvaus-sv":
-    R.pathEq(12, ["lahtotiedot", "lammitys", "lammonjako", "id"])
+  "lahtotiedot.lammitys.lammonjako.kuvaus-fi": isLammonjakoKuvausRequired,
+  "lahtotiedot.lammitys.lammonjako.kuvaus-sv": isLammonjakoKuvausRequired
 };
 
 const predicate = R.compose(

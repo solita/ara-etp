@@ -5,6 +5,8 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
+  import * as Validation from '@Component/Energiatodistus/validation';
+  import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
 
   import Select from '@Component/Select/Select';
   import H3 from '@Component/H/H3';
@@ -20,9 +22,6 @@
   export let lammonjako;
 
   export let inputLanguage;
-
-  const lammitysmuotoMuuId = 9;
-  const lammonjakoMuuId = 12;
 
   const lammitysLens = R.lensPath(['lahtotiedot', 'lammitys']);
   const lammitysmuoto1Lens = R.compose(
@@ -47,7 +46,7 @@
   <Select
     id={'lahtotiedot.lammitys.lammitysmuoto-1.id'}
     items={R.map(R.prop('id'), lammitysmuoto)}
-    format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammitysmuoto), R.propEq('id') )}
+    format={ET.selectFormat(LocaleUtils.label($locale), lammitysmuoto)}
     parse={Maybe.Some}
     allowNone={false}
     bind:model={energiatodistus}
@@ -55,7 +54,7 @@
     label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1.id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(R.compose( lammitysmuoto1Lens, R.lensProp('id') )) )(energiatodistus)}
+{#if Validation.isLammitysmuoto1KuvausRequired(energiatodistus)}
   <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
@@ -71,7 +70,7 @@
   <Select
     id={'lahtotiedot.lammitys.lammitysmuoto-2.id'}
     items={R.map(R.prop('id'), lammitysmuoto)}
-    format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammitysmuoto), R.propEq('id') )}
+    format={ET.selectFormat(LocaleUtils.label($locale), lammitysmuoto)}
     parse={Maybe.Some}
     allowNone={true}
     bind:model={energiatodistus}
@@ -79,7 +78,7 @@
     label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2.id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(lammitysmuotoMuuId)), R.view(R.compose( lammitysmuoto2Lens, R.lensProp('id') )) )(energiatodistus)}
+{#if Validation.isLammitysmuoto2KuvausRequired(energiatodistus)}
   <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
@@ -95,7 +94,7 @@
   <Select
     id={'lahtotiedot.lammitys.lammonjako.id'}
     items={R.map(R.prop('id'), lammonjako)}
-    format={R.compose( LocaleUtils.label($locale), R.find(R.__, lammonjako), R.propEq('id') )}
+    format={ET.selectFormat(LocaleUtils.label($locale), lammonjako)}
     parse={Maybe.Some}
     allowNone={true}
     bind:model={energiatodistus}
@@ -103,7 +102,7 @@
     label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(lammonjakoMuuId)), R.view(R.compose( lammonjakoLens, R.lensProp('id') )) )(energiatodistus)}
+{#if Validation.isLammonjakoKuvausRequired(energiatodistus)}
   <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
