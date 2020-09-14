@@ -140,6 +140,7 @@
   <div class="flex flex-col -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Select
+        id={'perustiedot.kieli'}
         label={$_('energiatodistus.perustiedot.kieli')}
         required={false}
         {disabled}

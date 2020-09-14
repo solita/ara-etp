@@ -6,6 +6,7 @@
 
   import DropdownList from '@Component/DropdownList/DropdownList';
 
+  export let id;
   export let items = [];
   export let format = R.identity;
   export let parse = R.identity;
@@ -159,6 +160,7 @@
 <span class:focused class:required class:disabled class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
   <span
+    {id}
     class:disabled
     bind:this={button}
     class="button"
