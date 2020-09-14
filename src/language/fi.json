@@ -541,6 +541,7 @@
       "kiinteistotunnus": "Kiinteistötunnus",
       "rakennusosa": "Rakennusosa",
       "valmistumisvuosi": "Valmistumisvuosi",
+      "kayttotarkoitus": "Käyttötarkoitusluokat",
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "julkinen-rakennus": "Julkinen rakennus",
@@ -582,23 +583,23 @@
         },
         "ulkoseinat": {
           "ala": "Ulkoseinien pinta-ala",
-          "U": "U"
+          "U": "Ulkoseinien U-arvo"
         },
         "ylapohja": {
           "ala": "Yläpohjan pinta-ala",
-          "U": "U"
+          "U": "Yläpohjan U-arvo"
         },
         "alapohja": {
           "ala": "Alapohjan pinta-ala",
-          "U": "U"
+          "U": "Alapohjan U-arvo"
         },
         "ikkunat": {
           "ala": "Ikkunoiden pinta-ala",
-          "U": "U"
+          "U": "Ikkunoiden U-arvo"
         },
         "ulkoovet": {
           "ala": "Ulko-ovien pinta-ala",
-          "U": "U"
+          "U": "Ulko-ovien U-arvo"
         },
         "kylmasillat": "Kylmäsillat",
         "kylmasillat-UA": "UA"
