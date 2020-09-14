@@ -7,16 +7,46 @@ import * as Either from '@Utility/either-utils';
 
 const requiredCondition = {
   "perustiedot.havainnointikaynti": laatimisvaiheet.isOlemassaOlevaRakennus,
-  "perustiedot.rakennustunnus": R.complement(laatimisvaiheet.isRakennuslupa)
+  "perustiedot.rakennustunnus": R.complement(laatimisvaiheet.isRakennuslupa),
+  "perustiedot.keskeiset-suositukset-fi": laatimisvaiheet.isOlemassaOlevaRakennus,
+  "perustiedot.keskeiset-suositukset-sv": laatimisvaiheet.isOlemassaOlevaRakennus,
+
+  "lahtotiedot.ilmanvaihto.kuvaus-fi":
+    R.pathEq(6, ["lahtotiedot", "ilmanvaihto", "tyyppi-id"]),
+  "lahtotiedot.ilmanvaihto.kuvaus-sv":
+    R.pathEq(6, ["lahtotiedot", "ilmanvaihto", "tyyppi-id"]),
+
+  "lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-fi":
+    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-1", "id"]),
+  "lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-sv":
+    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-1", "id"]),
+
+  "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-fi":
+    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-2", "id"]),
+  "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-sv":
+    R.pathEq(9, ["lahtotiedot", "lammitys", "lammitysmuoto-2", "id"]),
+
+  "lahtotiedot.lammitys.lammonjako.kuvaus-fi":
+    R.pathEq(12, ["lahtotiedot", "lammitys", "lammonjako", "id"]),
+  "lahtotiedot.lammitys.lammonjako.kuvaus-sv":
+    R.pathEq(12, ["lahtotiedot", "lammitys", "lammonjako", "id"])
 };
 
 const predicate = R.compose(
-  R.find(R.complement(R.isNil())),
+  R.ifElse(R.isEmpty, R.always(R.T), R.allPass),
+  R.filter(R.complement(R.isNil)),
   R.juxt([
     R.prop(R.__, requiredCondition),
-    R.ifElse(R.endsWith("-fi"), R.always(kielisyys.fi), R.always(null)),
-    R.ifElse(R.endsWith("-sv"), R.always(kielisyys.sv), R.always(null)),
-    R.always(R.T)
+    property => R.endsWith("-fi", property) ? kielisyys.fi : null,
+    property => R.endsWith("-sv", property) ? kielisyys.sv : null,
+    property => R.endsWith(".U", property) || R.endsWith(".g-ks", property) ?
+      R.pathSatisfies(
+        R.compose(
+          Either.orSome(false),
+          R.map(R.lt(0)),
+          R.chain(Maybe.toEither(false)),
+          Either.fromValueOrEither),
+        R.update(-1, 'ala', R.split('.', property))) : null
 ]));
 
 const requiredConstraints = R.map(R.juxt([predicate, R.identity]));
@@ -41,6 +71,6 @@ export const missingProperties = (requiredProperties, energiatodistus) =>
   R.compose(
     R.map(R.nth(1)),
     R.filter(([predicate, property]) =>
-      predicate(energiatodistus) &&
-      isValueMissing(property, energiatodistus))
+      isValueMissing(property, energiatodistus) &&
+      predicate(energiatodistus))
   )(requiredConstraints(requiredProperties))

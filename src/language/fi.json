@@ -541,6 +541,7 @@
       "kiinteistotunnus": "Kiinteistötunnus",
       "rakennusosa": "Rakennusosa",
       "valmistumisvuosi": "Valmistumisvuosi",
+      "kayttotarkoitus": "Käyttötarkoitusluokat",
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "julkinen-rakennus": "Julkinen rakennus",
@@ -582,26 +583,26 @@
         },
         "ulkoseinat": {
           "ala": "Ulkoseinien pinta-ala",
-          "U": "U"
+          "U": "Ulkoseinien U-arvo"
         },
         "ylapohja": {
           "ala": "Yläpohjan pinta-ala",
-          "U": "U"
+          "U": "Yläpohjan U-arvo"
         },
         "alapohja": {
           "ala": "Alapohjan pinta-ala",
-          "U": "U"
+          "U": "Alapohjan U-arvo"
         },
         "ikkunat": {
           "ala": "Ikkunoiden pinta-ala",
-          "U": "U"
+          "U": "Ikkunoiden U-arvo"
         },
         "ulkoovet": {
           "ala": "Ulko-ovien pinta-ala",
-          "U": "U"
+          "U": "Ulko-ovien U-arvo"
         },
         "kylmasillat": "Kylmäsillat",
-        "kylmasillat-UA": "UA"
+        "kylmasillat-UA": "Kylmäsiltojen UA-arvo"
       },
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
@@ -618,44 +619,44 @@
           "luode": "Luode"
         },
         "pohjoinen": {
-          "ala": "Pohjoisten ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "ala": "Pohjoisen ikkunoiden pinta-ala",
+          "U": "Pohjoisen ikkunoiden U-arvo",
+          "g-ks": "Pohjoisen ikkunoiden g-kohtisuora"
         },
         "koillinen": {
-          "ala": "Koillisten ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "ala": "Koillisen ikkunoiden pinta-ala",
+          "U": "Koillisen ikkunoiden U-arvo",
+          "g-ks": "Koillisen ikkunoiden g-kohtisuora"
         },
         "ita": {
           "ala": "Idän ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Idän ikkunoiden U-arvo",
+          "g-ks": "Idän ikkunoiden g-kohtisuora"
         },
         "kaakko": {
           "ala": "Kaakon ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Kaakon ikkunoiden U-arvo",
+          "g-ks": "Kaakon ikkunoiden g-kohtisuora"
         },
         "etela": {
           "ala": "Etelän ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Etelän ikkunoiden U-arvo",
+          "g-ks": "Etelän ikkunoiden g-kohtisuora"
         },
         "lounas": {
           "ala": "Lounaan ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Lounaan ikkunoiden U-arvo",
+          "g-ks": "Lounaan ikkunoiden g-kohtisuora"
         },
         "lansi": {
           "ala": "Lännen ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Lännen ikkunoiden U-arvo",
+          "g-ks": "Lännen ikkunoiden g-kohtisuora"
         },
         "luode": {
           "ala": "Luoteen ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Luoteen ikkunoiden U-arvo",
+          "g-ks": "Luoteen ikkunoiden g-kohtisuora"
         }
       },
       "ilmanvaihto": {
