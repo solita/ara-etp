@@ -5,7 +5,8 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as Validation from '@Component/Energiatodistus/validation';
 
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
@@ -18,8 +19,6 @@
   export let ilmanvaihtotyypit;
   export let inputLanguage;
 
-  const ilmanvaihtoMuuId = 6;
-
   const tyyppiLens = R.lensPath(['lahtotiedot', 'ilmanvaihto', 'tyyppi-id']);
 </script>
 
@@ -29,7 +28,7 @@
   <Select
     id={'lahtotiedot.ilmanvaihto.tyyppi-id'}
     items={R.map(R.prop('id'), ilmanvaihtotyypit)}
-    format={et.selectFormat(LocaleUtils.label($locale), ilmanvaihtotyypit)}
+    format={ET.selectFormat(LocaleUtils.label($locale), ilmanvaihtotyypit)}
     parse={Maybe.Some}
     allowNone={false}
     bind:model={energiatodistus}
@@ -37,7 +36,7 @@
     label={$_('energiatodistus.lahtotiedot.ilmanvaihto.tyyppi-id')} />
 </div>
 
-{#if R.compose( Maybe.exists(R.equals(ilmanvaihtoMuuId)), R.view(tyyppiLens) )(energiatodistus)}
+{#if Validation.isIlmanvaihtoKuvausRequired(energiatodistus)}
   <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
     <Input
       {disabled}
