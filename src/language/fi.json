@@ -620,43 +620,43 @@
         },
         "pohjoinen": {
           "ala": "Pohjoisten ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Pohjoisten ikkunoiden U-arvo",
+          "g-ks": "Pohjoisten ikkunoiden g-kohtisuora"
         },
         "koillinen": {
           "ala": "Koillisten ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Koillisten ikkunoiden U-arvo",
+          "g-ks": "Koillisten ikkunoiden g-kohtisuora"
         },
         "ita": {
           "ala": "Idän ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Idän ikkunoiden U-arvo",
+          "g-ks": "Idän ikkunoiden g-kohtisuora"
         },
         "kaakko": {
           "ala": "Kaakon ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Kaakon ikkunoiden U-arvo",
+          "g-ks": "Kaakon ikkunoiden g-kohtisuora"
         },
         "etela": {
           "ala": "Etelän ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Etelän ikkunoiden U-arvo",
+          "g-ks": "Etelän ikkunoiden g-kohtisuora"
         },
         "lounas": {
           "ala": "Lounaan ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Lounaan ikkunoiden U-arvo",
+          "g-ks": "Lounaan ikkunoiden g-kohtisuora"
         },
         "lansi": {
           "ala": "Lännen ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Lännen ikkunoiden U-arvo",
+          "g-ks": "Lännen ikkunoiden g-kohtisuora"
         },
         "luode": {
           "ala": "Luoteen ikkunoiden pinta-ala",
-          "U": "U",
-          "g-ks": "g-kohtisuora"
+          "U": "Luoteen ikkunoiden U-arvo",
+          "g-ks": "Luoteen ikkunoiden g-kohtisuora"
         }
       },
       "ilmanvaihto": {
