@@ -1050,7 +1050,8 @@
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
-      "load-error": "Energiatodistuksen tietojen haku epäonnistui."
+      "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
+      "validation-required-error": "Pakolliset tiedot puuttuvat: "
     },
     "allekirjoitus": {
       "laskutusosoite": "Laskutusosoite",

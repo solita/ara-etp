@@ -64,6 +64,11 @@
     }
   };
 
+  const language = R.compose(
+    R.map(R.slice(-2, Infinity)),
+    R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
+    Maybe.Some);
+
   const validateCompleteAndSubmit= onSuccessfulSave => () => {
     const missing = Validations.missingProperties(validation.required, energiatodistus);
     if (R.isEmpty(missing)) {
@@ -71,14 +76,15 @@
     } else {
       const missingTxt = R.compose(
         R.join(', '),
-        R.map($_),
-        R.map(R.concat('energiatodistus.'))
+        R.map(R.converge(
+          R.partial(Inputs.label, [$_]),
+          [language, R.split('.')])),
       )(missing);
 
       flashMessageStore.add(
         'Energiatodistus',
         'error',
-        'Pakolliset tiedot puuttuvat: ' + missingTxt);
+        $_('energiatodistus.messages.validation-required-error') + missingTxt);
 
       Inputs.scrollIntoView(document, missing[0]);
     }
