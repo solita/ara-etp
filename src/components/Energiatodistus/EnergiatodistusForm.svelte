@@ -64,10 +64,10 @@
     }
   };
 
-  const language = property =>
-    R.endsWith('-fi', property) || R.endsWith('-sv', property) ?
-      Maybe.Some(R.slice(-2, Infinity, property)) :
-      Maybe.None();
+  const language = R.compose(
+    R.map(R.slice(-2, Infinity)),
+    R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
+    Maybe.Some);
 
   const validateCompleteAndSubmit= onSuccessfulSave => () => {
     const missing = Validations.missingProperties(validation.required, energiatodistus);
@@ -84,7 +84,7 @@
       flashMessageStore.add(
         'Energiatodistus',
         'error',
-        'Pakolliset tiedot puuttuvat: ' + missingTxt);
+        $_('energiatodistus.messages.validation-required-error') + missingTxt);
 
       Inputs.scrollIntoView(document, missing[0]);
     }
