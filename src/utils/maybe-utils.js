@@ -47,9 +47,9 @@ export const orElseRun = R.curry((fn, m) => m.orElseRun(fn));
 
 export const isMaybe = any => Object.getPrototypeOf(any) === Maybe.prototype;
 
-export const findById = R.curry((id, collection) =>
-  R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(collection)
-);
+export const find = R.compose(Maybe.fromNull, R.find);
+
+export const findById = R.useWith(find, [R.propEq('id'), R.identity]);
 
 export const toMaybeList = R.compose(
   map(list => list.toArray()),

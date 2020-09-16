@@ -51,6 +51,7 @@
   export let schema;
   export let disabled = false;
   export let whoami;
+  export let validation;
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -220,7 +221,10 @@
     {inputLanguage} />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
-  <SisaisetLampokuormat {disabled} {schema} bind:energiatodistus />
+  <SisaisetLampokuormat {disabled} {schema}
+                        kuormat={validation.kuormat}
+                        alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat}
+                        bind:energiatodistus />
 
   <HR />
 

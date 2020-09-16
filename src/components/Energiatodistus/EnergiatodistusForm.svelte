@@ -171,6 +171,7 @@
           {disabled}
           {schema}
           {luokittelut}
+          {validation}
           {whoami} />
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
