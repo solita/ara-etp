@@ -297,7 +297,7 @@ export const redefineNumericValidation = (schema, constraint) => {
       validations.MaybeInterval(constraint.error.min, constraint.error.max)
     ),
     R.assocPath(
-      path('warningValidators'),
+      path('warnValidators'),
       validations.MaybeInterval(constraint.warning.min, constraint.warning.max)
     )
   )(schema);
