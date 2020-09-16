@@ -1051,6 +1051,7 @@
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
+      "not-found": "Energiatodistusta ei ole olemassa.",
       "validation-required-error": "Pakolliset tiedot puuttuvat: "
     },
     "allekirjoitus": {

@@ -64,13 +64,13 @@
   // load energiatodistus and classifications in parallel
   $: R.compose(
     Future.fork(
-      () => {
+      status => {
         toggleOverlay(false);
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          $_('energiatodistus.messages.load-error')
-        );
+        const msg = R.equals(status, 404) ?
+          $_('energiatodistus.messages.not-found'):
+          $_('energiatodistus.messages.load-error');
+
+        flashMessageStore.add('Energiatodistus', 'error', msg);
       },
       response => {
         energiatodistus = Maybe.Some(response[0]);
