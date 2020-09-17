@@ -33,6 +33,11 @@ export const isRequired = {
   label: R.applyTo('validation.required')
 };
 
+export const isSome = {
+  predicate: Maybe.isSome,
+  label: R.applyTo('validation.required')
+};
+
 export const interpolate = R.curry((template, values) =>
   R.reduce(
     (result, value) => R.replace(value[0], value[1], result),

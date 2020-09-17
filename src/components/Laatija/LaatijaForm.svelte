@@ -15,6 +15,7 @@
   import ToimintaalueetChecklist from '@Component/ToimintaalueetChecklist/ToimintaalueetChecklist';
   import * as laatijaApi from './laatija-api';
   import * as LaatijaUtils from './laatija-utils';
+  import * as LaatijaSchema from './schema';
 
   import { currentUserStore, flashMessageStore } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
@@ -27,8 +28,8 @@
   import * as Koodisto from '@Utility/koodisto';
   import * as formats from '@Utility/formats';
 
-  const formParsers = LaatijaUtils.formParsers();
-  const formSchema = LaatijaUtils.formSchema();
+  const formParsers = LaatijaSchema.formParsers();
+  const formSchema = LaatijaSchema.formSchema();
 
   export let laatija;
   export let luokittelut;
