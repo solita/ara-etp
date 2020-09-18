@@ -1,6 +1,5 @@
 /node_modules/
-/public/build/
-/public/index.html
+/public/
 /.vscode/
 /.nyc_output/
 /coverage/

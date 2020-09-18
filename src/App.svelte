@@ -17,7 +17,6 @@
 
   import CurrentKayttaja from '@Component/Kayttaja/CurrentKayttaja';
 
-  import Tailwindcss from '@/Tailwindcss';
   import TableStyles from '@/TableStyles';
 
   setupI18n();
@@ -67,7 +66,6 @@
   }
 </style>
 
-<Tailwindcss />
 <TableStyles />
 
 <CurrentKayttaja />
@@ -77,7 +75,7 @@
 {:else if isUnauthorizedOnFirstLoad}
   <Login redirectTimeout={2000} />
 {:else}
-  <div class="appcontainer">
+  <div class="appcontainer font-body">
     <div class="headercontainer">
       <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
         <Header />

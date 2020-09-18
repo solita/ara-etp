@@ -70,5 +70,9 @@ module.exports = {
     }
   },
   variants: {},
-  plugins: []
+  plugins: [],
+  future: {
+    removeDeprecatedGapUtilities: true
+  },
+  purge: false
 };

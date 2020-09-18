@@ -8,14 +8,14 @@
   let versionInfo = Maybe.None();
 
   R.compose(
-    Future.fork(e => e, v => (versionInfo = v)),
+    Future.fork(e => e, v => (versionInfo = Maybe.Some(v))),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch))
-  )(`/build/version.json?${Date.now()}`);
+  )(`version.json?${Date.now()}`);
 </script>
 
 <style>
 
 </style>
 
-{versionInfo.version}
+{R.compose(Maybe.orSome(''), R.map(R.prop('version')))(versionInfo)}
