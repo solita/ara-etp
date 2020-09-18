@@ -13,8 +13,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const path = require('path');
 
-const apiPort = 8080;
-
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
 
@@ -35,6 +33,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'public'),
+    publicPath: '/',
     filename: '[name].[contenthash].js'
   },
   optimization: {
@@ -124,7 +123,9 @@ module.exports = {
     port: 3000,
     proxy: {
       '/api': {
-        target: `http://localhost:${apiPort}`
+        target: `http://localhost:8080`,
+        secure: false,
+        changeOrigin: true
       }
     }
   }
