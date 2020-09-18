@@ -6,26 +6,26 @@
   import H1 from '@Component/H/H1';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
-  import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
+  import * as KayttajaSchema from '@Component/Kayttaja/schema';
   import { flashMessageStore, currentUserStore } from '@/stores';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
-  const formParsers = LaatijaUtils.formParsers();
-  const formSchema = LaatijaUtils.formSchema();
-
   export let kayttaja;
   export let submit;
+
+  const formSchema = KayttajaSchema[Kayttajat.roleKey(kayttaja.rooli)];
+  const formParsers = KayttajaSchema.formParsers();
 
   const isValidForm = R.compose(
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
-    validation.validateModelObject(formSchema),
-    R.when(R.complement(KayttajaUtils.isPaakayttaja), R.omit(['henkilotunnus']))
+    validation.validateModelObject(formSchema)
   );
 </script>
 
@@ -89,7 +89,7 @@
             disabled={true}
             i18n={$_} />
         </div>
-      {/if}
+       {/if}
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -127,10 +127,12 @@
             name={'virtuorganisaatio'}
             label={$_('kayttaja.virtuorganisaatio')}
             required={true}
-            disabled={true}
+            disabled={false}
             bind:model={kayttaja}
             format={Maybe.orSome('')}
             lens={R.lensPath(['virtu', 'organisaatio'])}
+            parse={formParsers.virtu.organisaatio}
+            validators={formSchema.virtu.organisaatio}
             i18n={$_} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -139,10 +141,12 @@
             name={'virtulocalid'}
             label={$_('kayttaja.virtulocalid')}
             required={true}
-            disabled={true}
+            disabled={false}
             bind:model={kayttaja}
             format={Maybe.orSome('')}
             lens={R.lensPath(['virtu', 'localid'])}
+            parse={formParsers.virtu.localid}
+            validators={formSchema.virtu.localid}
             i18n={$_} />
         </div>
       </div>

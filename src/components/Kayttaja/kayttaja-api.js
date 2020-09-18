@@ -46,13 +46,15 @@ export const getLaatijaById = R.curry((fetch, id) =>
 
 export const serialize = R.compose(
   R.evolve({
-    henkilotunnus: Maybe.getOrElse(null)
+    henkilotunnus: Maybe.getOrElse(null),
+    virtu: {localid: Maybe.getOrElse(null),
+            organisaatio: Maybe.getOrElse(null)}
   }),
-  R.omit(['id', 'email', 'login', 'cognitoid', 'ensitallennus', 'virtu'])
+  R.omit(['id', 'email', 'login', 'cognitoid', 'ensitallennus'])
 );
 
 export const serializeForNonAdmin = R.compose(
-  R.omit(['rooli', 'passivoitu', 'henkilotunnus']),
+  R.omit(['rooli', 'passivoitu', 'henkilotunnus', 'virtu']),
   serialize
 );
 

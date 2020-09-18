@@ -14,63 +14,6 @@ export const laatijaApi = `api/private/laatijat`;
 
 export const urlForLaatijaId = id => `${laatijaApi}/${id}`;
 
-export const formSchema = () => ({
-  henkilotunnus: R.map(Validation.liftValidator, [
-    Validation.isRequired,
-    Validation.henkilotunnusValidator
-  ]),
-  etunimi: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  sukunimi: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  email: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  puhelin: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  'vastaanottajan-tarkenne': R.map(Validation.liftValidator, [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ]),
-  jakeluosoite: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  postinumero: [Validation.isRequired, Validation.postinumeroValidator],
-  postitoimipaikka: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator])
-});
-
-export const formParsers = () => ({
-  henkilotunnus: R.compose(Maybe.fromEmpty, R.trim),
-  etunimi: R.trim,
-  sukunimi: R.trim,
-  email: R.trim,
-  puhelin: R.trim,
-  'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
-  jakeluosoite: R.trim,
-  postinumero: R.trim,
-  postitoimipaikka: R.trim,
-  wwwosoite: R.compose(Maybe.fromEmpty, R.trim)
-});
-
 export const deserialize = R.evolve({
   'vastaanottajan-tarkenne': Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
