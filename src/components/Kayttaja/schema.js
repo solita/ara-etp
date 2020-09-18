@@ -31,7 +31,7 @@ const formSchema = {
 };
 
 export const paakayttaja = R.dissoc('henkilotunnus', formSchema);
-export const patevyydentoteaja = formSchema;
+export const patevyydentoteaja = R.dissoc('virtu', formSchema);
 
 export const formParsers = () => ({
   henkilotunnus: R.compose(Maybe.fromEmpty, R.trim),
