@@ -25,9 +25,7 @@
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
-    validation.validateModelObject(formSchema),
-    R.when(R.complement(KayttajaUtils.isPaakayttaja),
-           R.omit(['henkilotunnus','virtu']))
+    validation.validateModelObject(formSchema)
   );
 </script>
 
