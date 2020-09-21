@@ -1,20 +1,11 @@
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
 
-import * as validation from '@Utility/validation';
 import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
 import * as fxmath from '@Utility/fxmath';
-import * as laatimisvaiheet from './laatimisvaiheet';
-
-export const isValidForm = R.compose(
-  R.all(Either.isRight),
-  R.filter(R.allPass([R.complement(R.isNil), Either.isEither])),
-  deep.values(Either.isEither),
-  validation.validateModelObject
-);
 
 export const breadcrumb1stLevel = i18n => ({
   label: i18n('navigation.energiatodistukset'),

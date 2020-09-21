@@ -3,6 +3,9 @@ import * as kielisyys from '@Component/Energiatodistus/kielisyys';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+import * as Inputs from '@Component/Energiatodistus/inputs';
+import * as validation from '@Utility/validation';
+import * as deep from '@Utility/deep-objects';
 
 export const isIlmanvaihtoKuvausRequired = R.compose(
   Maybe.exists(R.equals(6)),
@@ -80,4 +83,26 @@ export const missingProperties = (requiredProperties, energiatodistus) =>
     R.filter(([predicate, property]) =>
       isValueMissing(property, energiatodistus) &&
       predicate(energiatodistus))
-  )(requiredConstraints(requiredProperties))
+  )(requiredConstraints(requiredProperties));
+
+
+const typeLens = R.compose(
+  Inputs.typeLens,
+  R.split('.'),
+  Inputs.removeLocalePostfix
+);
+
+const validateModelValue = (schema, property, value) => {
+  const type = R.view(typeLens(property), schema);
+  return R.isNil(type) ?
+    Either.fromValueOrEither(value) :
+    validation.validateModelValue(type.validators, value)
+}
+
+export const invalidProperties = (schema, object) => R.compose(
+  R.filter(R.propSatisfies(R.allPass([Either.isEither, Either.isLeft]), 1)),
+  R.map(([property, value]) =>
+    [property, validateModelValue(schema, property, value)]),
+  R.toPairs,
+  deep.treeFlat(".", R.anyPass([Maybe.isMaybe, Either.isEither]))
+)(object);

@@ -14,6 +14,10 @@ const assertSameAsMergeRight = (left, right) => {
   assert.deepEqual(objects.mergeRight(R.F, left, right), R.mergeRight(left, right));
 };
 
+const assertSameAsIdentity = (fn, object) => {
+  assert.deepEqual(fn(object), object);
+};
+
 describe('Deep objects:', () => {
   describe('Deep values:', () => {
     it('Flat objects - same as R.values', () => {
@@ -69,6 +73,26 @@ describe('Deep objects:', () => {
 
     it('Mixed', () => {
       assert.deepEqual(objects.mergeRight(R.F, [1], {a: 2}), {"0": 1, a: 2});
+    });
+  });
+
+  describe('TreeFlat:', () => {
+    it('Flat objects - no change', () => {
+      assertSameAsIdentity(objects.treeFlat("", R.F), {});
+      assertSameAsIdentity(objects.treeFlat("a", R.F),{a: 1})
+      assertSameAsIdentity(objects.treeFlat("b", R.F),{a: 1, b: 1})
+    });
+
+    it('Nested objects', () => {
+      assert.deepEqual(objects.treeFlat("_", R.F, {a: {b: 1}}), {a_b: 1});
+      assert.deepEqual(objects.treeFlat("_", R.F, {a: {b: {c: 1}}}), {a_b_c: 1});
+
+      assert.deepEqual(objects.treeFlat("_", R.F, {a: {c: 1}, b: {c: 1}}), {a_c: 1, b_c: 1});
+    });
+
+    it('Nested objects with arrays', () => {
+      assert.deepEqual(objects.treeFlat("_", R.F, {a: [1]}), {a_0: 1});
+      assert.deepEqual(objects.treeFlat("_", R.F, {a: {b: [1]}}), {a_b_0: 1});
     });
   });
 });

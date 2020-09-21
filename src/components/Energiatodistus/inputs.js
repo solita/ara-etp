@@ -22,8 +22,10 @@ export const typeLens = R.compose(
   zeroPath
 );
 
+export const removeLocalePostfix = R.replace(/-fi|-sv/g, '');
+
 export const id = R.compose(
-  R.replace(/-fi|-sv/g, ''),
+  removeLocalePostfix,
   R.join('.'));
 
 export const type = (schema, path) =>
@@ -31,7 +33,7 @@ export const type = (schema, path) =>
     "Property: " + R.join('.', path) + " does not exists in schema.");
 
 const localeKey = R.compose(
-  R.replace(/-fi|-sv/g, ''),
+  removeLocalePostfix,
   R.join('.'),
   zeroPath);
 
