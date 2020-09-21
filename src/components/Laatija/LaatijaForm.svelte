@@ -191,7 +191,7 @@
           name={'sahkoposti'}
           label={`${$_('kayttaja.sahkoposti')}(${R.toLower($_('kayttaja.kayttajatunnus'))})`}
           required={true}
-          disabled={true}
+          disabled={disabled}
           bind:model={laatija}
           lens={R.lensProp('email')}
           parse={formParsers.email}
