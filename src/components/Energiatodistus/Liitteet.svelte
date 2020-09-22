@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
   import * as api from './energiatodistus-api';
@@ -106,7 +107,7 @@
   );
 
   const submit = event => {
-    if (et.isValidForm(liiteLinkAddSchema, liiteLinkAdd)) {
+    if (isValidForm(liiteLinkAdd)) {
       flashMessageStore.flush();
       addLink(liiteLinkAdd);
       resetForm();
@@ -137,6 +138,13 @@
     fork('delete-liite'),
     R.tap(toggleOverlay(true)),
     api.deleteLiite(fetch, params.version, params.id)
+  );
+
+  const isValidForm = R.compose(
+    R.all(Either.isRight),
+    R.filter(Either.isEither),
+    R.values,
+    validation.validateModelObject(liiteLinkAddSchema)
   );
 
   $: linkEmpty = linkNimi.length === 0 || linkUrl.length === 0;
