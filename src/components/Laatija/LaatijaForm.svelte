@@ -35,15 +35,17 @@
   export let luokittelut;
   export let submit;
 
-  const isPaakayttaja = R.compose(
-    KayttajaUtils.kayttajaHasAccessToResource([KayttajaUtils.paakayttajaRole])
-  );
-  const isOwnSettings = R.eqProps('id', laatija);
-
-  $: disabled = !Maybe.exists(
-    R.anyPass([isPaakayttaja, isOwnSettings]),
+  $: isPaakayttaja = Maybe.exists(
+    KayttajaUtils.kayttajaHasAccessToResource([KayttajaUtils.paakayttajaRole]),
     $currentUserStore
   );
+
+  $: isOwnSettings = Maybe.exists(
+    R.eqProps('id', laatija),
+    $currentUserStore
+  );
+
+  $: disabled = !R.or(isPaakayttaja, isOwnSettings);
 
   const originalLaatija = R.clone(laatija);
 
@@ -151,7 +153,7 @@
           lens={R.lensProp('etunimi')}
           parse={formParsers.etunimi}
           validators={formSchema.etunimi}
-          {disabled}
+          disabled={!isPaakayttaja}
           i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -164,7 +166,7 @@
           lens={R.lensProp('sukunimi')}
           parse={formParsers.sukunimi}
           validators={formSchema.sukunimi}
-          {disabled}
+          disabled={!isPaakayttaja}
           i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">

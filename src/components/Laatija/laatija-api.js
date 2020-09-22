@@ -24,7 +24,8 @@ export const serialize = R.compose(
 );
 
 export const serializeForLaatija = R.compose(
-  R.omit(['patevyystaso', 'toteamispaivamaara', 'toteaja', 'laatimiskielto']),
+  R.omit(['etunimi', 'sukunimi', 'henkilotunnus', 'patevyystaso',
+          'toteamispaivamaara', 'toteaja', 'laatimiskielto']),
   serialize
 );
 
