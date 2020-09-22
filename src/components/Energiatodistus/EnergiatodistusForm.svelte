@@ -47,7 +47,8 @@
   );
 
   const validateAndSubmit = onSuccessfulSave => () => {
-    if (et.isValidForm(et.validators(schema), energiatodistus)) {
+    const invalid = Validations.invalidProperties(schema, energiatodistus);
+    if (R.isEmpty(invalid)) {
       flashMessageStore.flush();
       submit(energiatodistus, onSuccessfulSave);
       if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
@@ -56,11 +57,21 @@
         );
       }
     } else {
+      const invalidTxt = R.compose(
+        R.join(', '),
+        R.map(R.converge(
+          R.partial(Inputs.label, [$_]),
+          [language, R.split('.')])),
+        R.map(R.nth(0))
+      ) (invalid);
+
       flashMessageStore.add(
         'Energiatodistus',
         'error',
-        $_('energiatodistus.messages.validation-error')
+        $_('energiatodistus.messages.validation-error') + invalidTxt
       );
+
+      Inputs.scrollIntoView(document, invalid[0][0]);
     }
   };
 

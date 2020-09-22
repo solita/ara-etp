@@ -37,3 +37,16 @@ export const mergeRight = R.curry((isValue, left, right) =>
         ([l, r]) => mergeRight(isValue, l, r),
         R.nth(1)),
       R.pair)))(left, right));
+
+const addPrefix = (prefix, separator, key) =>
+  R.isNil(prefix) ? key : prefix + separator + key;
+
+const treeFlatPrefixed = R.curry((prefix, separator, isValue, object) =>
+  R.reduce(
+    (result, [key, value]) => R.is(Object, value) && !isValue(value) ?
+          R.mergeRight(result, treeFlatPrefixed(addPrefix(prefix, separator, key),
+            separator, isValue, value)) :
+          R.assoc(addPrefix(prefix, separator, key), value, result),
+    {}, R.toPairs(object)));
+
+export const treeFlat = treeFlatPrefixed(null);
