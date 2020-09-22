@@ -9,16 +9,7 @@
   export let createFutureFn;
   export let completedValue = '';
 
-  export let id;
-  export let name;
-  export let label;
-  export let required;
-  export let model;
-  export let lens;
-  export let parse;
-  export let format;
   export let reject = Maybe.None();
-  export let i18n;
 
   let items = [];
   let rawValue = '';
@@ -69,12 +60,6 @@
     @apply border-hover;
   }
 
-  .inputwrapper.caret::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
-    right: 0.5em;
-    content: 'expand_more';
-  }
-
   .inputwrapper.search::after {
     @apply font-icon absolute text-2xl font-bold text-disabled;
     right: 0.5em;
@@ -89,24 +74,8 @@
     @apply text-primary;
   }
 
-  .inputwrapper.error {
-    @apply border-error;
-  }
-
-  .inputwrapper.error::after {
-    @apply text-error;
-  }
-
-  .inputwrapper.disabled {
-    @apply border-0 pb-3;
-  }
-
   input {
     @apply w-full relative font-medium py-1;
-  }
-
-  input.center {
-    @apply text-center;
   }
 
   input:focus {
