@@ -11,10 +11,6 @@
     @apply px-20;
   }
 
-  .adminmessage {
-    @apply bg-secondary text-light h-64 font-extrabold uppercase;
-  }
-
   .info {
     @apply flex bg-background h-64 items-stretch;
   }
