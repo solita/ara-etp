@@ -39,55 +39,57 @@ const Rakennustunnus = StringValidator(
   validations.liftValidator(validations.rakennustunnusValidator)
 );
 
-const FloatPos = Float(0.0, Infinity);
-
+const FloatNonNegative = Float(0.0, Infinity);
+const Float1 = Float(0.0, 1.0);
 const AnyFloat = Float(-Infinity, Infinity);
+const IntegerNonNegative = Integer(0.0, Infinity);
 
-const Rakennusvaippa = (min, max) => ({
-  ala: FloatPos,
-  U: Float(min, max)
-});
+const Rakennusvaippa = {
+  ala: FloatNonNegative,
+  U: FloatNonNegative
+};
 
 const Ikkuna = {
-  ala: FloatPos,
-  U: Float(0.4, 6.5),
-  'g-ks': Float(0.1, 1.0)
+  ala: FloatNonNegative,
+  U: FloatNonNegative,
+  'g-ks': Float1
 };
 
 const PoistoTuloSfp = {
-  poisto: FloatPos,
-  tulo: FloatPos,
-  sfp: Float(0.0, 10.0)
+  poisto: FloatNonNegative,
+  tulo: FloatNonNegative,
+  sfp: FloatNonNegative
 };
 
 const Hyotysuhde = {
-  'tuoton-hyotysuhde': FloatPos,
-  'jaon-hyotysuhde': FloatPos,
-  lampokerroin: FloatPos,
-  apulaitteet: FloatPos,
-  'lampopumppu-tuotto-osuus': Float(0.0, 1.0),
-  'lampohavio-lammittamaton-tila': FloatPos
+  'tuoton-hyotysuhde': FloatNonNegative,
+  'jaon-hyotysuhde': FloatNonNegative,
+  lampokerroin: FloatNonNegative,
+  apulaitteet: FloatNonNegative,
+  'lampopumppu-tuotto-osuus': Float1,
+  'lampohavio-lammittamaton-tila': FloatNonNegative
 };
 
 const MaaraTuotto = {
-  maara: Integer(0, 100),
-  tuotto: FloatPos
+  maara: IntegerNonNegative,
+  tuotto: FloatNonNegative
 };
 
-const SisKuorma = (minInclusive, maxInclusive) => ({
-  kayttoaste: Float(0.1, 1.0),
-  lampokuorma: Float(minInclusive, maxInclusive)
-});
+const SisKuorma = {
+  kayttoaste: Float1,
+  lampokuorma: FloatNonNegative
+};
+
 const SahkoLampo = {
-  sahko: FloatPos,
-  lampo: FloatPos
+  sahko: FloatNonNegative,
+  lampo: FloatNonNegative
 };
 
 const MuuPolttoaine = {
   nimi: String(30),
   yksikko: String(12),
-  muunnoskerroin: FloatPos,
-  'maara-vuodessa': FloatPos
+  muunnoskerroin: FloatNonNegative,
+  'maara-vuodessa': FloatNonNegative
 };
 
 const Huomio = {
@@ -129,17 +131,17 @@ export const v2018 = {
     'keskeiset-suositukset': String(2500)
   },
   lahtotiedot: {
-    'lammitetty-nettoala': FloatPos,
+    'lammitetty-nettoala': FloatNonNegative,
     rakennusvaippa: {
-      ilmanvuotoluku: Float(0, 50),
-      lampokapasiteetti: FloatPos,
-      ilmatilavuus: FloatPos,
-      ulkoseinat: Rakennusvaippa(0.05, 2.0),
-      ylapohja: Rakennusvaippa(0.03, 2.0),
-      alapohja: Rakennusvaippa(0.03, 4.0),
-      ikkunat: Rakennusvaippa(0.04, 6.5),
-      ulkoovet: Rakennusvaippa(0.2, 6.5),
-      'kylmasillat-UA': FloatPos
+      ilmanvuotoluku: FloatNonNegative,
+      lampokapasiteetti: FloatNonNegative,
+      ilmatilavuus: FloatNonNegative,
+      ulkoseinat: Rakennusvaippa,
+      ylapohja: Rakennusvaippa,
+      alapohja: Rakennusvaippa,
+      ikkunat: Rakennusvaippa,
+      ulkoovet: Rakennusvaippa,
+      'kylmasillat-UA': FloatNonNegative
     },
     ikkunat: {
       pohjoinen: Ikkuna,
@@ -155,13 +157,13 @@ export const v2018 = {
       kuvaus: String(75),
       paaiv: {
         ...PoistoTuloSfp,
-        lampotilasuhde: Float(0.0, 1.0),
-        jaatymisenesto: Float(-20.0, 10.0)
+        lampotilasuhde: Float1,
+        jaatymisenesto: AnyFloat
       },
       erillispoistot: PoistoTuloSfp,
       ivjarjestelma: PoistoTuloSfp,
-      'lto-vuosihyotysuhde': Float(0.0, 1.0),
-      'tuloilma-lampotila': FloatPos
+      'lto-vuosihyotysuhde': Float1,
+      'tuloilma-lampotila': FloatNonNegative
     },
     lammitys: {
       'lammitysmuoto-1': {
@@ -179,76 +181,76 @@ export const v2018 = {
       ilmanlampopumppu: MaaraTuotto
     },
     jaahdytysjarjestelma: {
-      'jaahdytyskauden-painotettu-kylmakerroin': Float(1.0, 10.0)
+      'jaahdytyskauden-painotettu-kylmakerroin': FloatNonNegative
     },
     'lkvn-kaytto': {
-      ominaiskulutus: FloatPos,
-      'lammitysenergian-nettotarve': FloatPos
+      ominaiskulutus: FloatNonNegative,
+      'lammitysenergian-nettotarve': FloatNonNegative
     },
     'sis-kuorma': {
-      henkilot: SisKuorma(1.0, 14.0),
-      kuluttajalaitteet: SisKuorma(0.0, 12.0),
-      valaistus: SisKuorma(0.0, 19.0)
+      henkilot: SisKuorma,
+      kuluttajalaitteet: SisKuorma,
+      valaistus: SisKuorma
     }
   },
   tulokset: {
     'kaytettavat-energiamuodot': {
-      'fossiilinen-polttoaine': FloatPos,
-      sahko: FloatPos,
-      kaukojaahdytys: FloatPos,
-      kaukolampo: FloatPos,
-      'uusiutuva-polttoaine': FloatPos
+      'fossiilinen-polttoaine': FloatNonNegative,
+      sahko: FloatNonNegative,
+      kaukojaahdytys: FloatNonNegative,
+      kaukolampo: FloatNonNegative,
+      'uusiutuva-polttoaine': FloatNonNegative
     },
     'uusiutuvat-omavaraisenergiat': {
-      aurinkosahko: FloatPos,
-      tuulisahko: FloatPos,
-      aurinkolampo: FloatPos,
-      muulampo: FloatPos,
-      muusahko: FloatPos,
-      lampopumppu: FloatPos
+      aurinkosahko: FloatNonNegative,
+      tuulisahko: FloatNonNegative,
+      aurinkolampo: FloatNonNegative,
+      muulampo: FloatNonNegative,
+      muusahko: FloatNonNegative,
+      lampopumppu: FloatNonNegative
     },
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': SahkoLampo,
       'tuloilman-lammitys': SahkoLampo,
       'kayttoveden-valmistus': SahkoLampo,
-      'iv-sahko': FloatPos,
-      jaahdytys: { ...SahkoLampo, kaukojaahdytys: FloatPos },
-      'kuluttajalaitteet-ja-valaistus-sahko': FloatPos
+      'iv-sahko': FloatNonNegative,
+      jaahdytys: { ...SahkoLampo, kaukojaahdytys: FloatNonNegative },
+      'kuluttajalaitteet-ja-valaistus-sahko': FloatNonNegative
     },
     nettotarve: {
-      'tilojen-lammitys-vuosikulutus': FloatPos,
-      'ilmanvaihdon-lammitys-vuosikulutus': FloatPos,
-      'kayttoveden-valmistus-vuosikulutus': FloatPos,
-      'jaahdytys-vuosikulutus': FloatPos
+      'tilojen-lammitys-vuosikulutus': FloatNonNegative,
+      'ilmanvaihdon-lammitys-vuosikulutus': FloatNonNegative,
+      'kayttoveden-valmistus-vuosikulutus': FloatNonNegative,
+      'jaahdytys-vuosikulutus': FloatNonNegative
     },
     lampokuormat: {
-      aurinko: FloatPos,
-      ihmiset: FloatPos,
-      kuluttajalaitteet: FloatPos,
-      valaistus: FloatPos,
-      kvesi: FloatPos
+      aurinko: FloatNonNegative,
+      ihmiset: FloatNonNegative,
+      kuluttajalaitteet: FloatNonNegative,
+      valaistus: FloatNonNegative,
+      kvesi: FloatNonNegative
     },
     laskentatyokalu: String(60)
   },
   'toteutunut-ostoenergiankulutus': {
     'ostettu-energia': {
-      'kaukolampo-vuosikulutus': FloatPos,
-      'kokonaissahko-vuosikulutus': FloatPos,
-      'kiinteistosahko-vuosikulutus': FloatPos,
-      'kayttajasahko-vuosikulutus': FloatPos,
-      'kaukojaahdytys-vuosikulutus': FloatPos
+      'kaukolampo-vuosikulutus': FloatNonNegative,
+      'kokonaissahko-vuosikulutus': FloatNonNegative,
+      'kiinteistosahko-vuosikulutus': FloatNonNegative,
+      'kayttajasahko-vuosikulutus': FloatNonNegative,
+      'kaukojaahdytys-vuosikulutus': FloatNonNegative
     },
     'ostetut-polttoaineet': {
-      'kevyt-polttooljy': FloatPos,
-      'pilkkeet-havu-sekapuu': FloatPos,
-      'pilkkeet-koivu': FloatPos,
-      puupelletit: FloatPos,
+      'kevyt-polttooljy': FloatNonNegative,
+      'pilkkeet-havu-sekapuu': FloatNonNegative,
+      'pilkkeet-koivu': FloatNonNegative,
+      puupelletit: FloatNonNegative,
       muu: R.repeat(MuuPolttoaine, 4)
     },
-    'sahko-vuosikulutus-yhteensa': FloatPos,
-    'kaukolampo-vuosikulutus-yhteensa': FloatPos,
-    'polttoaineet-vuosikulutus-yhteensa': FloatPos,
-    'kaukojaahdytys-vuosikulutus-yhteensa': FloatPos
+    'sahko-vuosikulutus-yhteensa': FloatNonNegative,
+    'kaukolampo-vuosikulutus-yhteensa': FloatNonNegative,
+    'polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
+    'kaukojaahdytys-vuosikulutus-yhteensa': FloatNonNegative
   },
   huomiot: {
     suositukset: String(1500),
@@ -264,13 +266,13 @@ export const v2018 = {
 
 const MuuEnergiamuoto = {
   nimi: String(30),
-  muotokerroin: FloatPos,
-  ostoenergia: FloatPos
+  muotokerroin: FloatNonNegative,
+  ostoenergia: FloatNonNegative
 };
 
 const MuuEnergia = {
   nimi: String(30),
-  vuosikulutus: FloatPos
+  vuosikulutus: FloatNonNegative
 };
 
 export const v2013 = R.compose(
