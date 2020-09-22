@@ -50,7 +50,7 @@ export const serialize = R.compose(
     virtu: {localid: Maybe.getOrElse(null),
             organisaatio: Maybe.getOrElse(null)}
   }),
-  R.omit(['id', 'email', 'login', 'cognitoid', 'ensitallennus'])
+  R.omit(['id', 'login', 'cognitoid', 'ensitallennus'])
 );
 
 export const serializeForNonAdmin = R.compose(

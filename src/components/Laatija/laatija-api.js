@@ -20,7 +20,7 @@ export const serialize = R.compose(
     toimintaalue: Maybe.orSome(null),
     wwwosoite: Maybe.getOrElse(null)
   }),
-  R.omit(['id', 'email', 'login', 'rooli', 'passivoitu'])
+  R.omit(['id', 'login', 'rooli', 'passivoitu'])
 );
 
 export const serializeForLaatija = R.compose(
