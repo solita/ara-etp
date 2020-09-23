@@ -67,13 +67,18 @@ export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 );
 
-export const Interval = (min, max) => [
-  constraint(R.lte(min), 'min-number', { '{min}': min }),
-  constraint(R.gte(max), 'max-number', { '{max}': max })
+const Interval3 = (labelPrefix, min, max) => [
+  constraint(R.lte(min), labelPrefix + 'min-number', { '{min}': min }),
+  constraint(R.gte(max), labelPrefix + 'max-number', { '{max}': max })
 ];
+
+export const Interval = (min, max) => Interval3('', min, max);
 
 export const MaybeInterval = (min, max) =>
   R.map(liftValidator, Interval(min, max));
+
+export const MaybeIntervalWarning = (min, max) =>
+  R.map(liftValidator, Interval3('warning.', min, max));
 
 export const urlValidator = {
   predicate: isUrl,

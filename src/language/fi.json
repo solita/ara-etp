@@ -11,7 +11,11 @@
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "invalid-rakennustunnus": "Virheellinen rakennustunnus",
     "invalid-ovttunnus": "Virheellinen OVT-tunnus",
-    "no-selection": "Ei valintaa"
+    "no-selection": "Ei valintaa",
+    "warning": {
+      "min-number": "Tyypillisesti suurempi kuin {min}",
+      "max-number": "Tyypillisesti pienempi kuin {max}."
+    }
   },
   "parsing": {
     "invalid-integer": "Virheellinen kokonaislukunumero",
