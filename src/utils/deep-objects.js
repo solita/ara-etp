@@ -15,10 +15,18 @@ export const values = R.curry((isValue, object) => R.compose(
         R.identity)),
   R.values)(object));
 
-export const map = R.curry((isValue, fn, functor) =>
+export const map = R.curry((isValue, mapping, functor) =>
   R.map(R.ifElse(R.allPass([isObject, R.complement(isValue)]),
-    object => map(isValue, fn, object), fn),
+    object => map(isValue, mapping, object), mapping),
     functor));
+
+export const filter = R.curry((isValue, predicate, filterable) =>
+  R.compose(
+    R.filter(R.ifElse(R.allPass([isObject, R.complement(isValue)]), R.T, predicate)),
+    R.map(
+      R.ifElse(R.allPass([isObject, R.complement(isValue)]),
+          f => filter(isValue, predicate, f),
+        R.identity)))(filterable));
 
 const toArray = object => {
   const result = Array(R.length(R.keys(object)))

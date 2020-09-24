@@ -1,47 +1,49 @@
 import * as R from 'ramda';
 
 import * as Maybe from '@Utility/maybe-utils';
-
+import * as Either from '@Utility/either-utils';
 import * as EtUtils from './energiatodistus-utils';
 
+const ValidNone = R.compose(Either.Right, Maybe.None)
+
 const emptyRakennusVaippa = _ => ({
-  ala: Maybe.None(),
-  U: Maybe.None()
+  ala: ValidNone(),
+  U: ValidNone()
 });
 
 const emptyIkkuna = _ => ({
-  ala: Maybe.None(),
-  U: Maybe.None(),
-  'g-ks': Maybe.None()
+  ala: ValidNone(),
+  U: ValidNone(),
+  'g-ks': ValidNone()
 });
 
 const emptyIV = _ => ({
-  poisto: Maybe.None(),
-  tulo: Maybe.None(),
-  sfp: Maybe.None()
+  poisto: ValidNone(),
+  tulo: ValidNone(),
+  sfp: ValidNone()
 });
 
 const emptyLammitys = _ => ({
-  'tuoton-hyotysuhde': Maybe.None(),
-  'jaon-hyotysuhde': Maybe.None(),
-  lampokerroin: Maybe.None(),
-  apulaitteet: Maybe.None(),
-  'lampohavio-lammittamaton-tila': Maybe.None(),
-  'lampopumppu-tuotto-osuus': Maybe.None()
+  'tuoton-hyotysuhde': ValidNone(),
+  'jaon-hyotysuhde': ValidNone(),
+  lampokerroin: ValidNone(),
+  apulaitteet: ValidNone(),
+  'lampohavio-lammittamaton-tila': ValidNone(),
+  'lampopumppu-tuotto-osuus': ValidNone()
 });
 
 const emptyLammitysMaaraTuotto = _ => ({
-  maara: Maybe.None(),
-  tuotto: Maybe.None()
+  maara: ValidNone(),
+  tuotto: ValidNone()
 });
 
 const emptyToimenpide = _ => ({
   'nimi-fi': Maybe.None(),
   'nimi-sv': Maybe.None(),
-  lampo: Maybe.None(),
-  sahko: Maybe.None(),
-  jaahdytys: Maybe.None(),
-  'eluvun-muutos': Maybe.None()
+  lampo: ValidNone(),
+  sahko: ValidNone(),
+  jaahdytys: ValidNone(),
+  'eluvun-muutos': ValidNone()
 });
 
 const emptyHuomio = _ => ({
@@ -51,20 +53,20 @@ const emptyHuomio = _ => ({
 });
 
 const emptySahkoLampo = _ => ({
-  sahko: Maybe.None(),
-  lampo: Maybe.None()
+  sahko: ValidNone(),
+  lampo: ValidNone()
 });
 
 const emptySisKuorma = _ => ({
-  kayttoaste: Maybe.None(),
-  lampokuorma: Maybe.None()
+  kayttoaste: ValidNone(),
+  lampokuorma: ValidNone()
 });
 
 const emptyMuuPolttoaine = _ => ({
   nimi: Maybe.None(),
   yksikko: Maybe.None(),
-  muunnoskerroin: Maybe.None(),
-  'maara-vuodessa': Maybe.None()
+  muunnoskerroin: ValidNone(),
+  'maara-vuodessa': ValidNone()
 });
 
 const formalDescription = _ => ({
@@ -74,6 +76,7 @@ const formalDescription = _ => ({
 });
 
 export const energiatodistus2018 = _ => ({
+  versio: 2018,
   'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
@@ -88,7 +91,7 @@ export const energiatodistus2018 = _ => ({
     'katuosoite-fi': Maybe.None(),
     'katuosoite-sv': Maybe.None(),
     postinumero: Maybe.None(),
-    valmistumisvuosi: Maybe.None(),
+    valmistumisvuosi: ValidNone(),
     'julkinen-rakennus': false,
     tilaaja: Maybe.None(),
     yritys: {
@@ -104,12 +107,12 @@ export const energiatodistus2018 = _ => ({
     'keskeiset-suositukset-sv': Maybe.None()
   },
   lahtotiedot: {
-    'lammitetty-nettoala': Maybe.None(),
+    'lammitetty-nettoala': ValidNone(),
     rakennusvaippa: {
-      ilmanvuotoluku: Maybe.None(),
-      lampokapasiteetti: Maybe.None(),
-      ilmatilavuus: Maybe.None(),
-      'kylmasillat-UA': Maybe.None(),
+      ilmanvuotoluku: ValidNone(),
+      lampokapasiteetti: ValidNone(),
+      ilmatilavuus: ValidNone(),
+      'kylmasillat-UA': ValidNone(),
       ulkoseinat: emptyRakennusVaippa(),
       ylapohja: emptyRakennusVaippa(),
       alapohja: emptyRakennusVaippa(),
@@ -133,16 +136,16 @@ export const energiatodistus2018 = _ => ({
       ivjarjestelma: emptyIV(),
       paaiv: R.mergeRight(
         {
-          lampotilasuhde: Maybe.None(),
-          jaatymisenesto: Maybe.None()
+          lampotilasuhde: ValidNone(),
+          jaatymisenesto: ValidNone()
         },
         emptyIV()
       ),
       'tyyppi-id': Maybe.None(),
       'kuvaus-fi': Maybe.None(),
       'kuvaus-sv': Maybe.None(),
-      'lto-vuosihyotysuhde': Maybe.None(),
-      'tuloilma-lampotila': Maybe.None()
+      'lto-vuosihyotysuhde': ValidNone(),
+      'tuloilma-lampotila': ValidNone()
     },
     lammitys: {
       'lammitysmuoto-1': formalDescription(),
@@ -154,11 +157,11 @@ export const energiatodistus2018 = _ => ({
       ilmanlampopumppu: emptyLammitysMaaraTuotto()
     },
     jaahdytysjarjestelma: {
-      'jaahdytyskauden-painotettu-kylmakerroin': Maybe.None()
+      'jaahdytyskauden-painotettu-kylmakerroin': ValidNone()
     },
     'lkvn-kaytto': {
-      ominaiskulutus: Maybe.None(),
-      'lammitysenergian-nettotarve': Maybe.None()
+      ominaiskulutus: ValidNone(),
+      'lammitysenergian-nettotarve': ValidNone()
     },
     'sis-kuorma': {
       henkilot: emptySisKuorma(),
@@ -168,63 +171,63 @@ export const energiatodistus2018 = _ => ({
   },
   tulokset: {
     'kaytettavat-energiamuodot': {
-      'fossiilinen-polttoaine': Maybe.None(),
-      sahko: Maybe.None(),
-      kaukojaahdytys: Maybe.None(),
-      kaukolampo: Maybe.None(),
-      'uusiutuva-polttoaine': Maybe.None()
+      'fossiilinen-polttoaine': ValidNone(),
+      sahko: ValidNone(),
+      kaukojaahdytys: ValidNone(),
+      kaukolampo: ValidNone(),
+      'uusiutuva-polttoaine': ValidNone()
     },
     'uusiutuvat-omavaraisenergiat': {
-      aurinkosahko: Maybe.None(),
-      tuulisahko: Maybe.None(),
-      aurinkolampo: Maybe.None(),
-      muulampo: Maybe.None(),
-      muusahko: Maybe.None(),
-      lampopumppu: Maybe.None()
+      aurinkosahko: ValidNone(),
+      tuulisahko: ValidNone(),
+      aurinkolampo: ValidNone(),
+      muulampo: ValidNone(),
+      muusahko: ValidNone(),
+      lampopumppu: ValidNone()
     },
     kuukausierittely: [],
     'tekniset-jarjestelmat': {
       'tilojen-lammitys': emptySahkoLampo(),
       'tuloilman-lammitys': emptySahkoLampo(),
       'kayttoveden-valmistus': emptySahkoLampo(),
-      'iv-sahko': Maybe.None(),
-      jaahdytys: R.assoc('kaukojaahdytys', Maybe.None(), emptySahkoLampo()),
-      'kuluttajalaitteet-ja-valaistus-sahko': Maybe.None()
+      'iv-sahko': ValidNone(),
+      jaahdytys: R.assoc('kaukojaahdytys', ValidNone(), emptySahkoLampo()),
+      'kuluttajalaitteet-ja-valaistus-sahko': ValidNone()
     },
     nettotarve: {
-      'tilojen-lammitys-vuosikulutus': Maybe.None(),
-      'ilmanvaihdon-lammitys-vuosikulutus': Maybe.None(),
-      'kayttoveden-valmistus-vuosikulutus': Maybe.None(),
-      'jaahdytys-vuosikulutus': Maybe.None()
+      'tilojen-lammitys-vuosikulutus': ValidNone(),
+      'ilmanvaihdon-lammitys-vuosikulutus': ValidNone(),
+      'kayttoveden-valmistus-vuosikulutus': ValidNone(),
+      'jaahdytys-vuosikulutus': ValidNone()
     },
     lampokuormat: {
-      aurinko: Maybe.None(),
-      ihmiset: Maybe.None(),
-      kuluttajalaitteet: Maybe.None(),
-      valaistus: Maybe.None(),
-      kvesi: Maybe.None()
+      aurinko: ValidNone(),
+      ihmiset: ValidNone(),
+      kuluttajalaitteet: ValidNone(),
+      valaistus: ValidNone(),
+      kvesi: ValidNone()
     },
     laskentatyokalu: Maybe.None()
   },
   'toteutunut-ostoenergiankulutus': {
     'ostettu-energia': {
-      'kaukolampo-vuosikulutus': Maybe.None(),
-      'kokonaissahko-vuosikulutus': Maybe.None(),
-      'kiinteistosahko-vuosikulutus': Maybe.None(),
-      'kayttajasahko-vuosikulutus': Maybe.None(),
-      'kaukojaahdytys-vuosikulutus': Maybe.None()
+      'kaukolampo-vuosikulutus': ValidNone(),
+      'kokonaissahko-vuosikulutus': ValidNone(),
+      'kiinteistosahko-vuosikulutus': ValidNone(),
+      'kayttajasahko-vuosikulutus': ValidNone(),
+      'kaukojaahdytys-vuosikulutus': ValidNone()
     },
     'ostetut-polttoaineet': {
-      'kevyt-polttooljy': Maybe.None(),
-      'pilkkeet-havu-sekapuu': Maybe.None(),
-      'pilkkeet-koivu': Maybe.None(),
-      puupelletit: Maybe.None(),
+      'kevyt-polttooljy': ValidNone(),
+      'pilkkeet-havu-sekapuu': ValidNone(),
+      'pilkkeet-koivu': ValidNone(),
+      puupelletit: ValidNone(),
       muu: R.times(emptyMuuPolttoaine, 4)
     },
-    'sahko-vuosikulutus-yhteensa': Maybe.None(),
-    'kaukolampo-vuosikulutus-yhteensa': Maybe.None(),
-    'polttoaineet-vuosikulutus-yhteensa': Maybe.None(),
-    'kaukojaahdytys-vuosikulutus-yhteensa': Maybe.None()
+    'sahko-vuosikulutus-yhteensa': ValidNone(),
+    'kaukolampo-vuosikulutus-yhteensa': ValidNone(),
+    'polttoaineet-vuosikulutus-yhteensa': ValidNone(),
+    'kaukojaahdytys-vuosikulutus-yhteensa': ValidNone()
   },
   huomiot: {
     lammitys: emptyHuomio(),
@@ -244,14 +247,14 @@ export const energiatodistus2018 = _ => ({
 
 const emptyMuuEnergiamuoto = _ => ({
   nimi: Maybe.None(),
-  muotokerroin: Maybe.None(),
-  ostoenergia: Maybe.None()
+  muotokerroin: ValidNone(),
+  ostoenergia: ValidNone()
 });
 
 const emptyMuuEnergia = _ => ({
   'nimi-fi': Maybe.None(),
   'nimi-sv': Maybe.None(),
-  vuosikulutus: Maybe.None()
+  vuosikulutus: ValidNone()
 });
 
 export const energiatodistus2013 = R.compose(
@@ -273,5 +276,6 @@ export const energiatodistus2013 = R.compose(
   ),
   R.assocPath(['perustiedot', 'uudisrakennus'], false),
   R.dissocPath(['perustiedot', 'laatimisvaihe']),
+  R.assoc('versio', 2013),
   energiatodistus2018
 );

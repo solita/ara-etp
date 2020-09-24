@@ -5,25 +5,53 @@ import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as empty from './empty';
+import * as schema from './schema';
 import * as laatijaApi from '@Component/Laatija/laatija-api';
 import * as yritysApi from '@Component/Yritys/yritys-api';
+import * as dfns from "date-fns";
 
-const deserialize2018 = {
+/*
+This deserializer is for all energiatodistus versions.
+
+By default, every value is in Maybe.
+
+If key does not exists in the specific version
+then the deserialize function is not used
+ */
+const deserializer = {
   id: Maybe.get,
+  versio: Maybe.get,
   'tila-id': Maybe.get,
+  laskutusaika: Maybe.map(dfns.parseJSON),
   perustiedot: {
     'julkinen-rakennus': Maybe.get,
-    valmistumisvuosi: Either.Right
+    uudisrakennus: Maybe.get
   }
 };
 
-const deserialize2013 = R.mergeRight(deserialize2018, {
-  perustiedot: { uudisrakennus: Maybe.get }
-});
+const transformationFromSchema = name => R.compose(
+  deep.filter(R.is(Function), R.complement(R.isNil)),
+  deep.map(
+    R.propSatisfies(R.is(Array), 'validators'),
+    R.prop(name)));
+
+const versions = {
+  "2018": {
+    deserializer: transformationFromSchema('deserialize')(schema.v2018),
+    serializer: transformationFromSchema('serialize')(schema.v2018)
+  },
+  "2013": {
+    deserializer: transformationFromSchema('deserialize')(schema.v2013),
+    serializer: transformationFromSchema('serialize')(schema.v2013)
+  }
+}
+
+const evolveForVersion = name => energiatodistus =>
+  R.evolve(versions[energiatodistus.versio][name], energiatodistus);
 
 const assertVersion = et => {
-  if (!R.includes(et.versio, [2018, 2013])) {
-    throw 'Unsupported energiatodistus version: ' + et.version;
+  if (!R.includes(et.versio, R.map(parseInt, R.keys(versions)))) {
+    throw 'Unsupported energiatodistus version: ' + et.versio;
   }
 };
 
@@ -34,15 +62,9 @@ export const deserialize = R.compose(
     [R.propEq('versio', 2018), mergeEmpty(empty.energiatodistus2018)],
     [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013)]
   ]),
-  R.cond([
-    [R.propEq('versio', 2018), R.evolve(deserialize2018)],
-    [R.propEq('versio', 2013), R.evolve(deserialize2013)]
-  ]),
+  evolveForVersion('deserializer'),
   R.tap(assertVersion),
-  R.evolve({
-    versio: Maybe.get,
-    laskutusaika: Maybe.map(laskutusaika => new Date(laskutusaika))
-  }),
+  R.evolve(deserializer),
   deep.map(R.F, Maybe.fromNull)
 );
 
@@ -65,16 +87,17 @@ export const serialize = R.compose(
   ),
   R.omit([
     'id',
+    'versio',
     'tila-id',
     'laatija-id',
     'laatija-fullname',
-    'versio',
     'allekirjoitusaika',
-    'allekirjoituksessaaika',
     'laskutusaika',
     'korvaava-energiatodistus-id',
     'voimassaolo-paattymisaika'
-  ])
+  ]),
+  evolveForVersion('serializer'),
+  R.tap(assertVersion)
 );
 
 export const deserializeLiite = R.evolve({

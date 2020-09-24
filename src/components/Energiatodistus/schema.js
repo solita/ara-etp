@@ -1,7 +1,10 @@
 import * as validations from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
 import * as formats from '@Utility/formats';
+import * as Either from '@Utility/either-utils';
+import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
+import * as dfns from 'date-fns';
 
 const String = max => ({
   parse: parsers.optionalString,
@@ -15,17 +18,22 @@ const String = max => ({
 const Integer = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseInteger),
   format: formats.optionalNumber,
+  deserialize: Either.Right,
   validators: validations.MaybeInterval(min, max)
 });
 
 const Float = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseNumber),
   format: formats.optionalNumber,
+  deserialize: Either.Right,
   validators: validations.MaybeInterval(min, max)
 });
 
 const DateValue = () => ({
   parse: parsers.optionalParser(parsers.parseDate),
+  format: R.compose(Maybe.orSome(''), R.map(formats.formatDateInstant)),
+  deserialize: R.compose(parsers.toEitherMaybe, R.map(parsers.parseISODate)),
+  serialize: R.map(R.map(date => dfns.formatISO(date, { representation: 'date' }))),
   validators: []
 });
 
