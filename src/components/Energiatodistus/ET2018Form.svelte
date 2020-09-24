@@ -6,8 +6,6 @@
   import * as et from './energiatodistus-utils';
   import * as Laatimisvaiheet from './laatimisvaiheet';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as formats from '@Utility/formats';
-  import * as dfns from 'date-fns';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
@@ -176,7 +174,6 @@
           {schema}
           required={true}
           center={false}
-          format={R.compose( Maybe.orSome(''), R.map(R.compose( formats.formatDateInstant, dfns.parseISO )) )}
           bind:model={energiatodistus}
           path={['perustiedot', 'havainnointikaynti']} />
       </div>

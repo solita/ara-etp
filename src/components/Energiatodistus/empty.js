@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 
 import * as Maybe from '@Utility/maybe-utils';
-
 import * as EtUtils from './energiatodistus-utils';
 
 const emptyRakennusVaippa = _ => ({
@@ -74,6 +73,7 @@ const formalDescription = _ => ({
 });
 
 export const energiatodistus2018 = _ => ({
+  versio: 2018,
   'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
@@ -273,5 +273,6 @@ export const energiatodistus2013 = R.compose(
   ),
   R.assocPath(['perustiedot', 'uudisrakennus'], false),
   R.dissocPath(['perustiedot', 'laatimisvaihe']),
+  R.assoc('versio', 2013),
   energiatodistus2018
 );

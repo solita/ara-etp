@@ -26,21 +26,33 @@ export const parseNumber = R.compose(
 
 export const parseDate = R.compose(
   R.ifElse(
-    dfns.isValid,
-    R.compose(Either.Right, date =>
-      dfns.formatISO(date, { representation: 'date' })
-    ),
+    dfns.isValid, Either.Right,
     R.always(Either.Left(R.applyTo('parsing.invalid-date')))
   ),
   date => dfns.parse(date, Validation.DATE_FORMAT, 0),
   R.trim
 );
 
+export const parseISODate = R.compose(
+  R.ifElse(
+    dfns.isValid, Either.Right,
+    R.always(Either.Left(R.applyTo('parsing.invalid-date')))
+  ),
+  dfns.parseISO
+);
+
+/**
+ * Transforms Maybe[Either[A]] -> Either[Maybe[A]]
+ */
+export const toEitherMaybe = R.compose(
+  Maybe.orSome(Either.Right(Maybe.None())),
+  Maybe.map(Either.map(Maybe.Some)));
+
 export const optionalString = R.compose(Maybe.fromEmpty, R.trim);
 
 export const optionalParser = parse =>
   R.compose(
-    Maybe.orSome(Either.Right(Maybe.None())),
-    Maybe.map(R.compose(Either.map(Maybe.Some), parse)),
+    toEitherMaybe,
+    Maybe.map(parse),
     optionalString
   );
