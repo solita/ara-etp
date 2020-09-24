@@ -74,5 +74,8 @@ module.exports = {
   future: {
     removeDeprecatedGapUtilities: true
   },
-  purge: false
+  purge: {
+    content: ['./src/**/*.css', './src/**/*.svelte'],
+    options: { safelist: { standard: /svelte-/ } }
+  }
 };
