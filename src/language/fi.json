@@ -6,6 +6,7 @@
     "min-number": "Pienin sallittu arvo on {min}.",
     "max-number": "Suurin sallittu arvo on {max}.",
     "invalid-url": "Virheellinen www-osoite",
+    "invalid-email": "Virheellinen email",
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",

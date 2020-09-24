@@ -134,6 +134,11 @@ export const isValidEmail = R.test(
   /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
 );
 
+export const emailValidator = {
+  predicate: isValidEmail,
+  label: R.applyTo('validation.invalid-email')
+};
+
 export const isPuhelin = R.test(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
 
 export const isPatevyystaso = R.test(/^(1|2)$/);

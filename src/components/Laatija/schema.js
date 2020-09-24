@@ -19,7 +19,8 @@ export const formSchema = () => ({
   email: [
     Validation.isRequired,
     Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
+    Validation.maxLengthConstraint(200),
+    Validation.emailValidator
   ],
   puhelin: [
     Validation.isRequired,
