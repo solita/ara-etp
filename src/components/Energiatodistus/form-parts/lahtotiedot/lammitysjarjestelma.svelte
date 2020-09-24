@@ -220,7 +220,7 @@
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each ['takka', 'ilmanlampopumppu'] as maaratuotto}
+    {#each ['takka', 'ilmalampopumppu'] as maaratuotto}
       <tr class="et-table--tr">
         <td class="et-table--td">
           {$_(`energiatodistus.lahtotiedot.lammitys.${maaratuotto}.label`)}
