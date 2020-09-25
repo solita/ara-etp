@@ -259,7 +259,7 @@ const lahtotiedot = {
       apulaitteet: [...numberComparisons]
     },
     takka: { maara: [...numberComparisons], tuotto: [...numberComparisons] },
-    ilmanlampopumppu: {
+    ilmalampopumppu: {
       maara: [...numberComparisons],
       tuotto: [...numberComparisons]
     }

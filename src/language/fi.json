@@ -327,7 +327,7 @@
             "maara": "Takkojen lukumäärä",
             "tuotto": "Takkojen tuotto"
           },
-          "ilmanlampopumppu": {
+          "ilmalampopumppu": {
             "maara": "Ilmalämpöpumppujen lukumäärä",
             "tuotto": "Ilmalämpöpumppujen tuotto"
           }
@@ -745,7 +745,7 @@
           "maara": "Takkojen lukumäärä",
           "tuotto": "Takkojen tuotto"
         },
-        "ilmanlampopumppu": {
+        "ilmalampopumppu": {
           "label": "Ilmalämpöpumppu",
           "maara": "Ilmalämpöpumppujen lukumäärä",
           "tuotto": "Ilmalämpöpumppujen tuotto"

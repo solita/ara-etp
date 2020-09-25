@@ -186,7 +186,7 @@ export const v2018 = {
       'tilat-ja-iv': Hyotysuhde,
       'lammin-kayttovesi': Hyotysuhde,
       takka: MaaraTuotto,
-      ilmanlampopumppu: MaaraTuotto
+      ilmalampopumppu: MaaraTuotto
     },
     jaahdytysjarjestelma: {
       'jaahdytyskauden-painotettu-kylmakerroin': FloatNonNegative

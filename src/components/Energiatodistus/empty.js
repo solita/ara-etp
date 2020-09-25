@@ -154,7 +154,7 @@ export const energiatodistus2018 = _ => ({
       'tilat-ja-iv': emptyLammitys(),
       'lammin-kayttovesi': emptyLammitys(),
       takka: emptyLammitysMaaraTuotto(),
-      ilmanlampopumppu: emptyLammitysMaaraTuotto()
+      ilmalampopumppu: emptyLammitysMaaraTuotto()
     },
     jaahdytysjarjestelma: {
       'jaahdytyskauden-painotettu-kylmakerroin': ValidNone()
