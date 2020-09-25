@@ -20,6 +20,8 @@
 
   export let validationResult;
 
+  export let tooltip = null;
+
   let viewValue;
 
   const requireNotNil = objects.requireNotNil(
@@ -70,7 +72,7 @@
   };
 </script>
 
-<div
+<div title={tooltip}
   on:focus|capture={event => validate(parse(event.target.value))}
   on:blur|capture={event => updateValue(event.target.value)}
   on:input={event => {

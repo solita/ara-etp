@@ -5,6 +5,7 @@
   import Select from '@Component/Select/Select';
   import { _ } from '@Language/i18n';
 
+  import * as Inputs from '@Component/Energiatodistus/inputs';
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
 
   import NumberOperatorInput from '@Component/energiatodistus-haku/querybuilder/query-inputs/number-operator-input';
@@ -77,7 +78,7 @@
       <Select
         items={R.keys(schema)}
         bind:model={key}
-        format={R.compose( $_, R.concat('energiatodistus.haku.') )}
+        format={Inputs.propertyLabel($_)}
         parse={R.identity}
         lens={R.identity}
         allowNone={false} />

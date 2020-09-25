@@ -46,19 +46,19 @@
     <tr class="et-table--tr">
       <th class="et-table--th" />
       <th class="et-table--th">
-        <span>{$_('energiatodistus.huomiot.toimenpide-lampo')}</span>
+        <span>{$_('energiatodistus.huomiot.toimenpide-table.lampo')}</span>
         <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        <span>{$_('energiatodistus.huomiot.toimenpide-sahko')}</span>
+        <span>{$_('energiatodistus.huomiot.toimenpide-table.sahko')}</span>
         <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        <span>{$_('energiatodistus.huomiot.toimenpide-jaahdytys')}</span>
+        <span>{$_('energiatodistus.huomiot.toimenpide-table.jaahdytys')}</span>
         <span class="block"><VuosikulutusUnit/></span>
       </th>
       <th class="et-table--th">
-        <span>{$_('energiatodistus.huomiot.toimenpide-eluvun-muutos')}</span>
+        <span>{$_('energiatodistus.huomiot.toimenpide-table.eluvun-muutos')}</span>
         <span class="block"><ELukuUnit/></span>
       </th>
     </tr>
@@ -67,7 +67,7 @@
     {#each R.path(['huomiot', huomio, 'toimenpide'], energiatodistus) as toimenpide, index}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {index + 1}. {$_('energiatodistus.huomiot.toimenpide-ehdotus')}
+          {index + 1}. {$_('energiatodistus.huomiot.toimenpide-table.ehdotus')}
         </td>
         <td class="et-table--td">
           <Input

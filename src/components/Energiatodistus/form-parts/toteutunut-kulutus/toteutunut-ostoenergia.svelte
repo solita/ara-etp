@@ -31,7 +31,7 @@
 
 <H3
   compact={true}
-  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa')} />
+  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header')} />
 
 <table class="et-table et-table__noborder mb-6">
   <thead class="et-table--thead">
@@ -52,7 +52,7 @@
     {#each ['sahko-vuosikulutus-yhteensa', 'kaukolampo-vuosikulutus-yhteensa', 'polttoaineet-vuosikulutus-yhteensa', 'kaukojaahdytys-vuosikulutus-yhteensa'] as energiamuoto}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.${energiamuoto}`)}
+          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.labels.${energiamuoto}`)}
         </td>
         <td class="et-table--td" />
         <td class="et-table--td" />

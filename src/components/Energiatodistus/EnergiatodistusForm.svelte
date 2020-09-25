@@ -59,9 +59,7 @@
     } else {
       const invalidTxt = R.compose(
         R.join(', '),
-        R.map(R.converge(
-          R.partial(Inputs.label, [$_]),
-          [language, R.split('.')])),
+        R.map(Inputs.propertyLabel($_)),
         R.map(R.nth(0))
       ) (invalid);
 
@@ -87,9 +85,7 @@
     } else {
       const missingTxt = R.compose(
         R.join(', '),
-        R.map(R.converge(
-          R.partial(Inputs.label, [$_]),
-          [language, R.split('.')])),
+        R.map(Inputs.propertyLabel($_))
       )(missing);
 
       flashMessageStore.add(
