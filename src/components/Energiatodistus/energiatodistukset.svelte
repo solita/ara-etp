@@ -123,8 +123,6 @@
     )([api.getEnergiatodistukset(queryAsQueryString),
        api.laatimisvaiheet]));
 
-  $: xlsxUrl = '/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx'
-             + queryAsQueryString;
 </script>
 
 <style>
@@ -266,6 +264,7 @@
     &nbsp;
     <Link
       text={$_('energiatodistus.lataa-xlsx')}
-      href={xlsxUrl} />
+      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx'
+            + queryAsQueryString} />
   </div>
 </div>
