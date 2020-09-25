@@ -117,7 +117,7 @@ module.exports = {
   devServer: {
     headers: {
       'Content-Security-Policy':
-        "default-src 'self';script-src 'self';connect-src 'self';style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com"
+        "default-src 'self';script-src 'self';connect-src 'self' localhost:53952;style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com"
     },
     https: true,
     port: 3000,
