@@ -20,7 +20,7 @@
 
   label.warning,
   label.warning::before {
-    @apply text-warning;
+    @apply text-dark;
   }
 
   label.error,
