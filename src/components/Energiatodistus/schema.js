@@ -47,10 +47,10 @@ const Rakennustunnus = StringValidator(
   validations.liftValidator(validations.rakennustunnusValidator)
 );
 
-const FloatNonNegative = Float(0.0, Infinity);
+const FloatNonNegative = Float(0.0, 9999999999);
 const Float1 = Float(0.0, 1.0);
-const AnyFloat = Float(-Infinity, Infinity);
-const IntegerNonNegative = Integer(0.0, Infinity);
+const AnyFloat = Float(-9999999999, 9999999999);
+const IntegerNonNegative = Integer(0.0, 9999999999);
 
 const Rakennusvaippa = {
   ala: FloatNonNegative,
