@@ -51,6 +51,7 @@
   {format}
   {validators}
   {warnValidators}
+  tooltip={compact ? label : null}
   on:keydown
   bind:valid
   bind:validationResult

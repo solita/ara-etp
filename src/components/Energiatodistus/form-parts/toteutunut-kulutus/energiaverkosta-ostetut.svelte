@@ -66,7 +66,7 @@
             bind:model={energiatodistus}
             path={['toteutunut-ostoenergiankulutus', 'ostettu-energia', `${energiamuoto}-vuosikulutus`]} />
         </td>
-        <td class="et-table--td">
+        <td class="et-table--td" title={$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.${energiamuoto}-neliovuosikulutus`)}>
           {R.compose( formats.optionalNumber, R.map(fxmath.round(0)), EtUtils.energiaPerLammitettyNettoala(
               [
                 'toteutunut-ostoenergiankulutus',

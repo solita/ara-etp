@@ -53,13 +53,13 @@
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__sixth" />
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.polttoaine-vuodessa')}
+        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.maara')}
       </th>
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.yksikko')}
+        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko')}
       </th>
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.muunnoskerroin')}
+        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.muunnoskerroin')}
       </th>
       <th class="et-table--th et-table--th__sixth">
         <VuosikulutusUnit />
@@ -73,7 +73,7 @@
     {#each ['kevyt-polttooljy', 'pilkkeet-havu-sekapuu', 'pilkkeet-koivu', 'puupelletit'] as polttoaine}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.labels.${polttoaine}`)}
+          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}`)}
         </td>
         <td class="et-table--td">
           <Input
@@ -89,10 +89,10 @@
         <td class="et-table--td">
           {R.compose( formats.numberFormat, Maybe.get, R.prop(polttoaine) )(muunnoskertoimet)}
         </td>
-        <td class="et-table--td">
+        <td class="et-table--td" title={$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-vuosikulutus`)}>
           {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
         </td>
-        <td class="et-table--td">
+        <td class="et-table--td" title={$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-neliovuosikulutus`)}>
           {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>

@@ -50,7 +50,29 @@ export const label = (i18n, inputLanguage, path) =>
     Maybe.orSome(''),
     R.map(l => ` / ${l}`))(inputLanguage);
 
+const labelContext = (i18n, path) =>
+  R.length(path) > 1 ?
+    R.compose(
+      R.filter(R.complement(R.equals("$unused"))),
+      Maybe.fromEmpty
+    )(i18n('energiatodistus.' +
+      localeKey(R.slice(0, -1, path)) +
+      '.label-context')) :
+    Maybe.None();
+
+export const fullLabel = (i18n, inputLanguage, path) =>
+  labelContext(i18n, path).map(t => t + ' / ').orSome('') +
+  label(i18n, inputLanguage, path);
+
 export function scrollIntoView(document, id) {
   document.getElementById(R.replace(/-fi|-sv/g, '', id))
     .parentElement.parentElement.scrollIntoView();
 }
+
+const language = R.compose(
+  R.map(R.slice(-2, Infinity)),
+  R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
+  Maybe.Some)
+
+export const propertyLabel = R.curry((i18n, propertyName) =>
+  fullLabel(i18n, language(propertyName), R.split('.', propertyName)));
