@@ -75,6 +75,33 @@
     );
   };
 
+  $: parsedQuery = R.compose(
+    R.mergeRight({
+      tila: Maybe.None(),
+      where: ''
+    }),
+    R.evolve({
+      tila: Maybe.fromNull,
+      where: R.compose(
+        Maybe.orSome(''),
+        R.map(JSON.parse),
+        Maybe.fromNull
+      )
+    }),
+    qs.parse
+  )($querystring);
+
+  $: queryAsQueryString = R.compose(
+    api.toQueryString,
+    R.pickBy(Maybe.isSome),
+    R.evolve({
+      where: R.compose(
+        R.map(encodeURI),
+        R.map(JSON.stringify),
+        Maybe.fromEmpty
+      )
+  }))(parsedQuery);
+
   const runQuery = query =>
     (cancel = R.compose(
       Future.fork(
@@ -93,37 +120,9 @@
       Future.parallel(5),
       R.tap(toggleOverlay(true)),
       R.tap(cancel)
-    )([
-      api.getEnergiatodistukset(
-        R.compose(
-          R.pickBy(Maybe.isSome),
-          R.evolve({
-            where: R.compose(
-              R.map(encodeURI),
-              R.map(JSON.stringify),
-              Maybe.fromEmpty
-            )
-          })
-        )(query)
-      ),
-      api.laatimisvaiheet
-    ]));
+    )([api.getEnergiatodistukset(queryAsQueryString),
+       api.laatimisvaiheet]));
 
-  $: parsedQuery = R.compose(
-    R.mergeRight({
-      tila: Maybe.None(),
-      where: ''
-    }),
-    R.evolve({
-      tila: Maybe.fromNull,
-      where: R.compose(
-        Maybe.orSome(''),
-        R.map(JSON.parse),
-        Maybe.fromNull
-      )
-    }),
-    qs.parse
-  )($querystring);
 </script>
 
 <style>
@@ -265,6 +264,7 @@
     &nbsp;
     <Link
       text={$_('energiatodistus.lataa-xlsx')}
-      href="/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx" />
+      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx'
+            + queryAsQueryString} />
   </div>
 </div>

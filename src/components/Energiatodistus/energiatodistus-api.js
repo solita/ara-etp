@@ -131,8 +131,7 @@ export const getEnergiatodistukset = R.compose(
   R.map(R.map(deserialize)),
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch)),
-  R.concat(url.all),
-  toQueryString
+  R.concat(url.all)
 );
 
 export const getEnergiatodistusById = R.curry((fetch, version, id) =>
