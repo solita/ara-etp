@@ -11,6 +11,7 @@
 
   export let items = [];
   export let completedValue = '';
+  export let size = 5;
 
   let active = Maybe.None();
   let input;
@@ -78,7 +79,7 @@
   });
 
   $: filteredItems = R.compose(
-    R.take(5),
+    R.take(size),
     R.filter(
       R.compose(
         R.includes(R.toLower(rawValue)),

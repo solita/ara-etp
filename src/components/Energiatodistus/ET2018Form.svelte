@@ -196,7 +196,7 @@
     {inputLanguage}
     {disabled}
     bind:energiatodistus
-    {labelLocale}
+    postinumerot={luokittelut.postinumerot}
     kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
     alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
 

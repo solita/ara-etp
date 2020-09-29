@@ -4,7 +4,7 @@
   import * as et from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as schemas from './schema';
-  import { _ } from '@Language/i18n';
+  import { locale, _ } from '@Language/i18n';
   import * as localstorage from './local-storage';
 
   import ET2018Form from './ET2018Form';
@@ -12,6 +12,7 @@
   import * as EtUtils from './energiatodistus-utils';
   import * as Validations from './validation';
   import * as Inputs from './inputs';
+  import * as Postinumero from './postinumero';
 
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
@@ -29,7 +30,9 @@
 
   let schema = R.reduce(
     schemas.redefineNumericValidation,
-    schemas['v' + version],
+    R.assocPath(['perustiedot', 'postinumero'],
+      Postinumero.Type(luokittelut.postinumerot),
+      schemas['v' + version]),
     validation.numeric
   );
 

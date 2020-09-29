@@ -265,6 +265,7 @@ export const luokittelut = R.memoizeWith(R.identity, version =>
     lammonjako: Fetch.cached(fetch, '/lammonjako'),
     lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
     ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
+    postinumerot: Fetch.cached(fetch, '/postinumerot'),
     kielisyys: Fetch.cached(fetch, '/kielisyys'),
     laatimisvaiheet,
     kayttotarkoitusluokat: kayttotarkoitusluokat(version),

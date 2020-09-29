@@ -131,7 +131,7 @@ export const v2018 = {
     kiinteistotunnus: String(50),
     rakennusosa: String(100),
     katuosoite: String(100),
-    postinumero: String(8),
+    postinumero: String(5),
     valmistumisvuosi: Integer(100, new Date().getFullYear()),
     tilaaja: String(200),
     yritys: Yritys,

@@ -9,6 +9,7 @@
     "invalid-email": "Virheellinen email",
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero": "Virheellinen postinumero",
+    "postinumero-not-found": "Postinumeroa ei ole olemassa",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "invalid-rakennustunnus": "Virheellinen rakennustunnus",
     "invalid-ovttunnus": "Virheellinen OVT-tunnus",
