@@ -1,26 +1,33 @@
 <script>
   import * as R from 'ramda';
-  import { _ } from '@Language/i18n';
-  import * as Either from '@Utility/either-utils';
+  import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
+  import * as Postinumero from './postinumero';
 
   import H2 from '@Component/H/H2';
   import Input from '@Component/Energiatodistus/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   export let schema;
   export let disabled;
   export let energiatodistus;
   export let inputLanguage;
 
-  export let labelLocale;
-
   export let kayttotarkoitusluokat;
   export let alakayttotarkoitusluokat;
+  export let postinumerot;
 
   const center = false;
+
+  $: labelLocale = LocaleUtils.label($locale);
+
+  $: postinumeroNames = R.map(
+    Postinumero.fullLabel($locale),
+    postinumerot);
 
   let kayttotarkoitusluokkaId = Maybe.None();
   $: if (
@@ -87,7 +94,7 @@
 </div>
 
 <div class="flex lg:flex-row flex-col -mx-4 my-4">
-  <div class="lg:w-4/5 w-full px-4 py-4">
+  <div class="lg:w-2/3 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -97,13 +104,17 @@
       path={['perustiedot', 'katuosoite']} />
   </div>
 
-  <div class="lg:w-1/5 w-full px-4 py-4">
-    <Input
-      {disabled}
-      {schema}
-      {center}
-      bind:model={energiatodistus}
-      path={['perustiedot', 'postinumero']} />
+  <div class="lg:w-1/3 w-full px-4 py-4">
+    <Autocomplete items={postinumeroNames} size={10}>
+      <Input
+        {disabled}
+        {schema}
+        {center}
+        search={true}
+        bind:model={energiatodistus}
+        format={Maybe.fold('', Postinumero.formatPostinumero(postinumerot, $locale))}
+        path={['perustiedot', 'postinumero']} />
+    </Autocomplete>
   </div>
 </div>
 

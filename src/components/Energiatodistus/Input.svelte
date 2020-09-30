@@ -15,6 +15,7 @@
   export let disabled = false;
   export let compact = false;
   export let center = true;
+  export let search = false;
   export let format = formats.optionalString;
   export let inputLanguage = Maybe.None();
 
@@ -32,6 +33,7 @@
   {disabled}
   {compact}
   {center}
+  {search}
   bind:model
   lens={inputs.dataLens(inputLanguage, path)}
   format={type.format || format}
