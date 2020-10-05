@@ -39,7 +39,10 @@ const requiredCondition = {
   "lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-sv": isLammitysmuoto2KuvausRequired,
 
   "lahtotiedot.lammitys.lammonjako.kuvaus-fi": isLammonjakoKuvausRequired,
-  "lahtotiedot.lammitys.lammonjako.kuvaus-sv": isLammonjakoKuvausRequired
+  "lahtotiedot.lammitys.lammonjako.kuvaus-sv": isLammonjakoKuvausRequired,
+
+  "huomiot.ymparys.teksti-fi": laatimisvaiheet.isOlemassaOlevaRakennus,
+  "huomiot.ymparys.teksti-sv": laatimisvaiheet.isOlemassaOlevaRakennus
 };
 
 const predicate = R.compose(
