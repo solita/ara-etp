@@ -51,7 +51,8 @@
     allowNone={false}
     bind:model={energiatodistus}
     lens={R.compose( lammitysmuoto1Lens, R.lensProp('id') )}
-    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1.id')} />
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1.id')}
+    {disabled} />
 </div>
 
 {#if Validation.isLammitysmuoto1KuvausRequired(energiatodistus)}
@@ -75,7 +76,8 @@
     allowNone={true}
     bind:model={energiatodistus}
     lens={R.compose( lammitysmuoto2Lens, R.lensProp('id') )}
-    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2.id')} />
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2.id')}
+    {disabled} />
 </div>
 
 {#if Validation.isLammitysmuoto2KuvausRequired(energiatodistus)}
@@ -99,7 +101,8 @@
     allowNone={true}
     bind:model={energiatodistus}
     lens={R.compose( lammonjakoLens, R.lensProp('id') )}
-    label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')} />
+    label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')}
+    {disabled} />
 </div>
 
 {#if Validation.isLammonjakoKuvausRequired(energiatodistus)}
