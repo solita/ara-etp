@@ -11,7 +11,9 @@ const deserialize = R.evolve({
   login: R.compose(R.map(Date.parse), Maybe.fromNull),
   cognitoid: Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
-  virtu: { localid: Maybe.fromNull, organisaatio: Maybe.fromNull }
+  virtu: R.when(
+    R.allPass([R.isNil, kayttajat.isPaakayttaja]),
+    R.always({ localid: "", organisaatio: "" }))
 });
 
 export const url = {
@@ -46,9 +48,7 @@ export const getLaatijaById = R.curry((fetch, id) =>
 
 export const serialize = R.compose(
   R.evolve({
-    henkilotunnus: Maybe.getOrElse(null),
-    virtu: {localid: Maybe.getOrElse(null),
-            organisaatio: Maybe.getOrElse(null)}
+    henkilotunnus: Maybe.getOrElse(null)
   }),
   R.omit(['id', 'login', 'cognitoid', 'ensitallennus'])
 );
