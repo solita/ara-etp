@@ -18,7 +18,8 @@ export const serialize = R.compose(
     henkilotunnus: Maybe.orSome(null),
     maa: Either.right,
     toimintaalue: Maybe.orSome(null),
-    wwwosoite: Maybe.getOrElse(null)
+    wwwosoite: Maybe.orSome(null),
+    'api-key': Maybe.orSome(null)
   }),
   R.omit(['id', 'login', 'rooli', 'passivoitu'])
 );

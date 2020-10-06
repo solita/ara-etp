@@ -29,7 +29,7 @@
   import * as formats from '@Utility/formats';
 
   const formParsers = LaatijaSchema.formParsers();
-  const formSchema = LaatijaSchema.formSchema();
+  const formSchema = LaatijaSchema.schema;
 
   export let laatija;
   export let luokittelut;
@@ -46,8 +46,6 @@
   );
 
   $: disabled = !R.or(isPaakayttaja, isOwnSettings);
-
-  const originalLaatija = R.clone(laatija);
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -386,6 +384,24 @@
       </div>
     </div>
   </div>
+
+  <div class="mt-8">
+    <H1 text={$_('laatija.api-key-header')} />
+    <div class="w-1/3">
+    <Input
+        id={'api-key'}
+        name={'api-key'}
+        label={$_('laatija.api-key')}
+        required={false}
+        bind:model={laatija}
+        lens={R.lensProp('api-key')}
+        format={Maybe.orSome('')}
+        parse={R.compose(Maybe.fromEmpty, R.trim)}
+        validators={formSchema['api-key']}
+        {disabled}
+        i18n={$_} />
+    </div>
+  </div>
   <HR />
   <div class="mt-8">
     <H1 text={$_('laatija.julkisettiedot')} />
@@ -426,9 +442,9 @@
     </div>
     <div class="px-4">
       <Button
-        on:click={event => {
+          on:click={ event => {
           event.preventDefault();
-          laatija = R.clone(originalLaatija);
+          window.location.reload();
         }}
         text={$_('peruuta')}
         type={'reset'}

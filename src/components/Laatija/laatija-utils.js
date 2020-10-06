@@ -12,15 +12,15 @@ import * as Validation from '@Utility/validation';
 
 export const laatijaApi = `api/private/laatijat`;
 
-export const urlForLaatijaId = id => `${laatijaApi}/${id}`;
-
-export const deserialize = R.evolve({
-  'vastaanottajan-tarkenne': Maybe.fromNull,
-  henkilotunnus: Maybe.fromNull,
-  maa: Either.Right,
-  toimintaalue: Maybe.fromNull,
-  wwwosoite: Maybe.fromNull
-});
+export const deserialize = R.compose(
+  R.assoc('api-key', Maybe.None()),
+  R.evolve({
+    'vastaanottajan-tarkenne': Maybe.fromNull,
+    henkilotunnus: Maybe.fromNull,
+    maa: Either.Right,
+    toimintaalue: Maybe.fromNull,
+    wwwosoite: Maybe.fromNull
+  }));
 
 export const serializeImport = R.evolve({
   toteamispaivamaara: date => dfns.format(date, 'yyyy-MM-dd')
@@ -41,29 +41,6 @@ export const laatijaFromKayttaja = R.compose(
     R.compose(R.dissoc('kayttaja'), R.prop('laatija'))
   ])
 );
-
-export const emptyLaatija = () =>
-  deserialize({
-    jakeluosoite: '',
-    muuttoimintaalueet: [],
-    toteamispaivamaara: '1970-01-01',
-    puhelin: '',
-    sukunimi: '',
-    maa: '',
-    patevyystaso: 0,
-    postitoimipaikka: '',
-    postinumero: '',
-    ensitallennus: true,
-    julkinenemail: false,
-    email: '',
-    patevyysvoimassa: false,
-    henkilotunnus: '',
-    toimintaalue: Maybe.None(),
-    etunimi: '',
-    julkinenpuhelin: false,
-    login: Maybe.None(),
-    wwwosoite: Maybe.None()
-  });
 
 export const putLaatijatFuture = R.curry((fetch, laatijat) =>
   R.compose(

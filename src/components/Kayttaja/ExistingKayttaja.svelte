@@ -28,32 +28,27 @@
   let luokittelut = Maybe.None();
   let overlay = true;
 
-  const toggleOverlay = value => () => (overlay = value);
+  const toggleOverlay = value => { overlay = value };
 
   const fork = (type, updatedModel) =>
     Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Kayttaja', 'error'),
-        R.always($_(`${type}.messages.save-error`))
-      ),
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        flashMessageStore.add('Kayttaja', 'success'),
-        R.always($_(`${type}.messages.save-success`)),
-        R.tap(() =>
-          R.when(
-            R.always(R.equals('kayttaja', type)),
-            idTranslateStore.updateKayttaja(updatedModel)
-          )
-        )
-      )
+      _ => {
+        toggleOverlay(false);
+        flashMessageStore.add('Kayttaja', 'error', $_(`${type}.messages.save-error`));
+      },
+      _ => {
+        flashMessageStore.add('Kayttaja', 'success', $_(`${type}.messages.save-success`));
+        if (R.equals('kayttaja', type)) {
+          idTranslateStore.updateKayttaja(updatedModel);
+        }
+        toggleOverlay(false);
+      }
     );
 
   $: submitLaatija = updatedLaatija =>
     R.compose(
       fork('laatija', updatedLaatija),
-      R.tap(toggleOverlay(true)),
+      R.tap(() => toggleOverlay(true)),
       laatijaApi.putLaatijaById(
         R.compose(
           Maybe.orSome(0),
@@ -75,25 +70,22 @@
         fetch,
         params.id
       ),
-      R.tap(toggleOverlay(true))
+      R.tap(() => toggleOverlay(true))
     )(updatedKayttaja);
 
   $: R.compose(
     Future.fork(
-      R.compose(
-        flashMessageStore.add('Kayttaja', 'error'),
-        R.always($_('kayttaja.messages.load-error')),
-        R.tap(toggleOverlay(false))
-      ),
-      R.compose(
-        ([fetchedKayttaja, fetchedLaatija, fetchedLuokittelut]) => {
-          idTranslateStore.updateKayttaja(fetchedKayttaja);
-          kayttaja = Maybe.Some(fetchedKayttaja);
-          laatija = Maybe.fromNull(fetchedLaatija);
-          luokittelut = Maybe.Some(fetchedLuokittelut);
-        },
-        R.tap(toggleOverlay(false))
-      )
+      _ => {
+        flashMessageStore.add('Kayttaja', 'error', $_('kayttaja.messages.load-error'));
+        toggleOverlay(false);
+     },
+     ([fetchedKayttaja, fetchedLaatija, fetchedLuokittelut]) => {
+        idTranslateStore.updateKayttaja(fetchedKayttaja);
+        kayttaja = Maybe.Some(fetchedKayttaja);
+        laatija = Maybe.fromNull(fetchedLaatija);
+        luokittelut = Maybe.Some(fetchedLuokittelut);
+        toggleOverlay(false);
+      }
     ),
     Future.parallel(5),
     R.append(

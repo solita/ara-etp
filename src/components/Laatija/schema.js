@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Validation from '@Utility/validation';
 
-export const formSchema = () => ({
+export const schema = {
   henkilotunnus: [
     Validation.isSome,
     Validation.liftValidator(Validation.henkilotunnusValidator)],
@@ -43,8 +43,13 @@ export const formSchema = () => ({
     Validation.minLengthConstraint(2),
     Validation.maxLengthConstraint(200)
   ],
-  wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator])
-});
+  wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator]),
+
+  'api-key': R.map(Validation.liftValidator,[
+    Validation.minLengthConstraint(8),
+    Validation.maxLengthConstraint(30)
+  ])
+};
 
 export const formParsers = () => ({
   'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
