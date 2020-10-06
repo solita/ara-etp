@@ -387,7 +387,7 @@
 
   <div class="mt-8">
     <H1 text={$_('laatija.api-key-header')} />
-    <div class="w-1/3">
+    <div class="lg:w-1/2 w-full">
     <Input
         id={'api-key'}
         name={'api-key'}
