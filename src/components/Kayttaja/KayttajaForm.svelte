@@ -7,10 +7,11 @@
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import * as KayttajaSchema from '@Component/Kayttaja/schema';
-  import { flashMessageStore, currentUserStore } from '@/stores';
+  import { flashMessageStore } from '@/stores';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
+  import * as deep from '@Utility/deep-objects';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
@@ -24,7 +25,7 @@
   const isValidForm = R.compose(
     R.all(Either.isRight),
     R.filter(Either.isEither),
-    R.values,
+    deep.values(Either.isEither),
     validation.validateModelObject(formSchema)
   );
 </script>
@@ -41,7 +42,7 @@
       flashMessageStore.flush();
       submit(kayttaja);
     } else {
-      flashMessageStore.add('Kayttaja', 'error');
+      flashMessageStore.add('Kayttaja', 'error', $_('kayttaja.messages.validation-error'));
     }
   }}>
   <div class="w-full mt-3">
@@ -118,17 +119,16 @@
       </div>
     </div>
     {#if KayttajaUtils.isPaakayttaja(kayttaja)}
-      <H1 text={$_('kayttaja.virtu')} />
+      <H1 text={$_('kayttaja.virtu.header')} />
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
-            id={'virtuorganisaatio'}
-            name={'virtuorganisaatio'}
-            label={$_('kayttaja.virtuorganisaatio')}
+            id={'virtu.organisaatio'}
+            name={'virtu.organisaatio'}
+            label={$_('kayttaja.virtu.organisaatio')}
             required={true}
             disabled={false}
             bind:model={kayttaja}
-            format={Maybe.orSome('')}
             lens={R.lensPath(['virtu', 'organisaatio'])}
             parse={formParsers.virtu.organisaatio}
             validators={formSchema.virtu.organisaatio}
@@ -136,13 +136,12 @@
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
-            id={'virtulocalid'}
-            name={'virtulocalid'}
-            label={$_('kayttaja.virtulocalid')}
+            id={'virtu.localid'}
+            name={'virtu.localid'}
+            label={$_('kayttaja.virtu.localid')}
             required={true}
             disabled={false}
             bind:model={kayttaja}
-            format={Maybe.orSome('')}
             lens={R.lensPath(['virtu', 'localid'])}
             parse={formParsers.virtu.localid}
             validators={formSchema.virtu.localid}

@@ -95,9 +95,11 @@
     "sahkoposti": "Sähköposti",
     "kayttajatunnus": "Käyttäjätunnus",
     "puhelinnumero": "Puhelinnumero",
-    "virtu": "Virtu kirjautumistiedot",
-    "virtulocalid": "Käyttäjätunnus (Virtu Local ID)",
-    "virtuorganisaatio": "Organisaatio",
+    "virtu": {
+      "header": "Virtu kirjautumistiedot",
+      "localid": "Käyttäjätunnus (Virtu Local ID)",
+      "organisaatio": "Organisaatio"
+    },
     "messages": {
       "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
       "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",

@@ -2,37 +2,29 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Validation from '@Utility/validation';
 
-const formSchema = {
+const RequiredString = (min, max) => ([
+    Validation.isRequired,
+    Validation.minLengthConstraint(min),
+    Validation.maxLengthConstraint(max)
+  ]);
+
+const schema = {
   henkilotunnus: [
     Validation.isSome,
     Validation.liftValidator(Validation.henkilotunnusValidator)],
-  etunimi: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  sukunimi: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
+  etunimi: RequiredString(2, 200),
+  sukunimi: RequiredString(2, 200),
   email: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200),
+    ... RequiredString(2, 200),
     Validation.emailValidator
   ],
-  puhelin: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  virtu: {localid: [Validation.isSome],
-          organisaatio: [Validation.isSome]}
+  puhelin: RequiredString(2, 200),
+  virtu: {localid: RequiredString(2, 200),
+          organisaatio: RequiredString(2, 200)}
 };
 
-export const paakayttaja = R.dissoc('henkilotunnus', formSchema);
-export const patevyydentoteaja = R.dissoc('virtu', formSchema);
+export const paakayttaja = R.dissoc('henkilotunnus', schema);
+export const patevyydentoteaja = R.dissoc('virtu', schema);
 
 export const formParsers = () => ({
   henkilotunnus: R.compose(Maybe.fromEmpty, R.trim),
@@ -41,6 +33,6 @@ export const formParsers = () => ({
   email: R.trim,
   puhelin: R.trim,
   wwwosoite: R.compose(Maybe.fromEmpty, R.trim),
-  virtu: {localid: R.compose(Maybe.fromEmpty, R.trim),
-          organisaatio: R.compose(Maybe.fromEmpty, R.trim)}
+  virtu: {localid: R.trim,
+          organisaatio: R.trim}
 });
