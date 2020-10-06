@@ -63,6 +63,11 @@ export const minLengthConstraint = min =>
 export const maxLengthConstraint = max =>
   lengthConstraint(R.gte(max), 'max', { '{max}': max });
 
+export const LimitedString = (min, max) => ([
+  minLengthConstraint(min),
+  maxLengthConstraint(max)
+]);
+
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 );

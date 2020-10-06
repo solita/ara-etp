@@ -2,53 +2,31 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Validation from '@Utility/validation';
 
+const RequiredString = (min, max) => ([
+  Validation.isRequired,
+  ...Validation.LimitedString(min, max)
+]);
+
 export const schema = {
   henkilotunnus: [
     Validation.isSome,
     Validation.liftValidator(Validation.henkilotunnusValidator)],
-  etunimi: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  sukunimi: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
+  etunimi: RequiredString(2, 200),
+  sukunimi: RequiredString(2, 200),
   email: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200),
+    ...RequiredString(2, 200),
     Validation.emailValidator
   ],
-  puhelin: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  'vastaanottajan-tarkenne': R.map(Validation.liftValidator, [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ]),
-  jakeluosoite: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  postinumero: [Validation.isRequired, Validation.postinumeroValidator],
-  postitoimipaikka: [
-    Validation.isRequired,
-    Validation.minLengthConstraint(2),
-    Validation.maxLengthConstraint(200)
-  ],
-  wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator]),
+  puhelin: RequiredString(2, 200),
 
-  'api-key': R.map(Validation.liftValidator,[
-    Validation.minLengthConstraint(8),
-    Validation.maxLengthConstraint(30)
-  ])
+  'vastaanottajan-tarkenne':
+    R.map(Validation.liftValidator, Validation.LimitedString(2,200)),
+  jakeluosoite: RequiredString(2, 200),
+  postinumero: [Validation.isRequired, Validation.postinumeroValidator],
+  postitoimipaikka: RequiredString(2, 200),
+
+  wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator]),
+  'api-key': R.map(Validation.liftValidator, Validation.LimitedString(8, 200))
 };
 
 export const formParsers = () => ({

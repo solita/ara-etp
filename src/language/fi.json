@@ -127,7 +127,7 @@
     "julkisettiedot": "Valitse julkiset tiedot",
     "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa",
     "api-key-header": "Laskentaohjelmisto",
-    "api-key": "Anna uusi tiedonsiirron salasana",
+    "api-key": "Anna uusi tiedonsiirron salasana (vähintään 8 merkkiä)",
     "messages": {
       "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
