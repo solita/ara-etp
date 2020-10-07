@@ -33,7 +33,8 @@
     allowNone={false}
     bind:model={energiatodistus}
     lens={tyyppiLens}
-    label={$_('energiatodistus.lahtotiedot.ilmanvaihto.tyyppi-id')} />
+    label={$_('energiatodistus.lahtotiedot.ilmanvaihto.tyyppi-id')}
+    {disabled} />
 </div>
 
 {#if Validation.isIlmanvaihtoKuvausRequired(energiatodistus)}
