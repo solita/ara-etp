@@ -82,23 +82,5 @@ describe('FetchUtils', () => {
         Fetch.rejectWithInvalidResponse(response)
       );
     });
-
-    it('should reject with statusCode when not ok', done => {
-      const response = {
-        ok: false,
-        status: 400
-      };
-
-      const expected = 400;
-
-      Future.fork(
-        response => {
-          expect(response).to.eql(expected);
-          done();
-        },
-        () => {},
-        Fetch.rejectWithInvalidResponse(response)
-      );
-    });
   });
 });
