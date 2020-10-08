@@ -30,11 +30,18 @@
 
   const toggleOverlay = value => { overlay = value };
 
+  const errorMessage = (type, response) =>
+    R.ifElse(
+      R.equals('unique-violation'),
+      R.always(`unique-violations.${response.body.constraint}`),
+      R.always(`${type}.messages.save-error`)
+    )(response.body.type);
+
   const fork = (type, updatedModel) =>
     Future.fork(
-      _ => {
+      response => {
         toggleOverlay(false);
-        flashMessageStore.add('Kayttaja', 'error', $_(`${type}.messages.save-error`));
+        flashMessageStore.add('Kayttaja', 'error', $_(errorMessage(type, response)));
       },
       _ => {
         flashMessageStore.add('Kayttaja', 'success', $_(`${type}.messages.save-success`));

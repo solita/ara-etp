@@ -952,5 +952,8 @@
   },
   "pagination": {
     "results": "Tuloksia {from}...{to} / {total}"
+  },
+  "unique-violations": {
+    "kayttaja-email-key": "Sähköpostiosoite on jo käytössä."
   }
 }
