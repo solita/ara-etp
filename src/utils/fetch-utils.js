@@ -10,10 +10,8 @@ export const toText = Future.encaseP(response => response.text());
 export const rejectWithInvalidResponse = R.ifElse(
   R.prop('ok'),
   Future.resolve,
-  response => R.compose(R.chain(Future.reject),
-                        R.map(R.assoc('body', R.__, R.pick(['status', 'url'], response))),
-                        toJson)(response)
-  );
+  Future.reject
+);
 
 export const responseAsJson = R.compose(
   R.chain(toJson),
