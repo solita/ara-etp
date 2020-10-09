@@ -25,7 +25,7 @@
   $: isUnauthorizedOnFirstLoad =
     Maybe.isNone($currentUserStore) &&
     $errorStore &&
-    $errorStore.statusCode === 401;
+    $errorStore.response.status === 401;
 
   $: routes = R.compose(
     Maybe.orSome({}),
