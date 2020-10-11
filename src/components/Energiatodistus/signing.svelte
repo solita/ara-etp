@@ -10,7 +10,6 @@
   import * as signatureApi from './signature-api';
   import { _ } from '@Language/i18n';
 
-  import H1 from '@Component/H/H1';
   import Button from '@Component/Button/Button';
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link';
