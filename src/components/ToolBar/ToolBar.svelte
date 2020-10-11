@@ -78,6 +78,8 @@
   }
 
   const noop = () => {};
+
+  $: persistentDraft = id.isSome() && R.propEq('tila-id', et.tila.draft, energiatodistus)
 </script>
 
 <style type="text/postcss">
@@ -126,7 +128,7 @@
     <span class="description">Peruuta muutokset</span>
     <span class="text-2xl font-icon">undo</span>
   </button>
-  {#if R.propEq('tila-id', et.tila.draft, energiatodistus)}
+  {#if persistentDraft}
   <button on:click={saveComplete(openSigning)}>
     <div class="description">Allekirjoita</div>
     <span class="text-2xl font-icon border-b-3 border-secondary">
@@ -146,7 +148,7 @@
       <span class="text-2xl font-icon">picture_as_pdf</span>
     </button>
   {/each}
-  {#if id.isSome()}
+  {#if persistentDraft}
     <Confirm
       let:confirm
       confirmButtonLabel={$_('confirm.button.delete')}
