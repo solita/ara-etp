@@ -109,12 +109,14 @@ export const url = {
   all: '/api/private/energiatodistukset',
   version: version => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
+  pdf: (version, id, language) => `${url.id(version, id)}/pdf/${language}/energiatodistus-${id}-${language}.pdf`,
   liitteet: (version, id) => `${url.id(version, id)}/liitteet`,
   signature: (version, id) => `${url.id(version, id)}/signature`,
   start: (version, id) => `${url.signature(version, id)}/start`,
-  digest: (version, id) => `${url.signature(version, id)}/digest`,
-  pdf: (version, id) => `${url.signature(version, id)}/pdf`,
-  finish: (version, id) => `${url.signature(version, id)}/finish`
+  digest: (version, id, language) => `${url.signature(version, id)}/digest/${language}`,
+  signPdf: (version, id, language) => `${url.signature(version, id)}/pdf/${language}`,
+  finish: (version, id) => `${url.signature(version, id)}/finish`,
+  cancel: (version, id) => `${url.signature(version, id)}/cancel`
 };
 
 export const toQueryString = R.compose(
@@ -200,7 +202,7 @@ export const putEnergiatodistusById = R.curry(
     )(energiatodistus)
 );
 
-export const startSign = R.curry((fetch, version, id) =>
+const idempotentStateChange = R.curry((url, fetch, version, id) =>
   R.compose(
     R.chain(
       R.ifElse(
@@ -210,22 +212,25 @@ export const startSign = R.curry((fetch, version, id) =>
       )
     ),
     Future.encaseP(Fetch.postEmpty(fetch)),
-    url.start
+    url
   )(version, id)
 );
 
-export const digest = R.curry((fetch, version, id) =>
+export const startSign = idempotentStateChange(url.start);
+export const cancelSign = idempotentStateChange(url.cancel);
+
+export const digest = R.curry((fetch, version, id, language) =>
   R.compose(
     Fetch.responseAsText,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.digest
-  )(version, id)
+  )(version, id, language)
 );
 
-export const signPdf = R.curry((fetch, version, id, signature) =>
+export const signPdf = R.curry((fetch, version, id, language, signature) =>
   R.compose(
     Fetch.responseAsText,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.pdf(version, id)))
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.signPdf(version, id, language)))
   )(signature)
 );
 

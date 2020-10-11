@@ -9,6 +9,7 @@
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
+  import Signing from './signing';
   import * as EtUtils from './energiatodistus-utils';
   import * as Validations from './validation';
   import * as Inputs from './inputs';
@@ -171,6 +172,10 @@
 
 {#if !R.isNil(ETForm)}
 
+  {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
+    <Signing {energiatodistus} reload={cancel}/>
+  {/if}
+
   <div class="w-full relative flex">
     <div class="w-5/6">
       <form on:submit|preventDefault={validateAndSubmit(noop)}>
@@ -201,11 +206,9 @@
       <ToolBar
         save={validateAndSubmit}
         saveComplete={validateCompleteAndSubmit}
-        energiatodistusKieli={energiatodistus.perustiedot.kieli}
-        bind:inputLanguage
         {cancel}
-        {version}
-        id={Maybe.fromNull(energiatodistus.id)} />
+        {energiatodistus}
+        bind:inputLanguage />
     </div>
   </div>
 {:else}

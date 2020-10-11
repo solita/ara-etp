@@ -8,6 +8,7 @@ const kielisyydet = [
 ];
 
 export const kieli = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
+export const kieliKey = id => kielisyydet[id];
 
 const isKielisyys = kieliId => R.compose(
   Maybe.isSome,

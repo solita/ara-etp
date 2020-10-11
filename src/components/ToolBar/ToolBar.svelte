@@ -7,19 +7,24 @@
   import * as et from '@Component/Energiatodistus/energiatodistus-utils';
 
   import Confirm from '@Component/Confirm/Confirm';
+  import Signing from '@Component/Energiatodistus/signing';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  export let version;
-  export let id = Maybe.None();
+  export let energiatodistus;
   export let inputLanguage = 'fi';
-  export let energiatodistusKieli = Maybe.None();
 
+  const version = energiatodistus.versio;
+  const id = Maybe.fromNull(energiatodistus.id);
+
+  let energiatodistusKieli = Maybe.None();
   let bilingual = true;
   let selectedLanguage = 'fi';
+  let signingActive = false;
 
+  $: energiatodistusKieli = energiatodistus.perustiedot.kieli;
   $: bilingual = R.compose(
     Maybe.orSome(true),
     R.map(R.equals(et.kielisyys.bilingual))
@@ -36,14 +41,13 @@
   }
 
   $: pdfUrl = Maybe.map(
-    i => `/api/private/energiatodistukset/${version}/${i}/pdf/${inputLanguage}/energiatodistus-${i}-${inputLanguage}.pdf`,
+    i => api.url.pdf(version, i, inputLanguage),
     id
   );
 
-  const signUrl = Maybe.map(
-    i => `/energiatodistus/${version}/${i}/allekirjoitus`,
-    id
-  );
+  const openSigning = _ => {
+    signingActive = true;
+  };
 
   const deleteEnergiatodistus = () => {
     Future.fork(
@@ -94,6 +98,8 @@
   }
 </style>
 
+{#if signingActive} <Signing {energiatodistus} reload={cancel} /> {/if}
+
 <div class="flex flex-col text-secondary">
   <button on:click={toggleLanguageSelection}>
   {#if bilingual}
@@ -120,14 +126,14 @@
     <span class="description">Peruuta muutokset</span>
     <span class="text-2xl font-icon">undo</span>
   </button>
-  {#each signUrl.toArray() as url}
-    <button on:click={saveComplete(() => push(url))}>
-      <div class="description">Allekirjoita</div>
-      <span class="text-2xl font-icon border-b-3 border-secondary">
-        create
-      </span>
-    </button>
-  {/each}
+  {#if R.propEq('tila-id', et.tila.draft, energiatodistus)}
+  <button on:click={saveComplete(openSigning)}>
+    <div class="description">Allekirjoita</div>
+    <span class="text-2xl font-icon border-b-3 border-secondary">
+      create
+    </span>
+  </button>
+  {/if}
   {#if id.isSome()}
     <button>
       <span class="description">Kopioi pohjaksi</span>
