@@ -135,9 +135,7 @@
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id))
   }
 
-  const pdfUrl = language => etApi.url.pdf(energiatodistus.versio, energiatodistus.id, language)
-
-  $: console.log(currentState);
+  const pdfUrl = language => etApi.url.pdf(energiatodistus.versio, energiatodistus.id, language);
 </script>
 
 <style type="text/postcss">
