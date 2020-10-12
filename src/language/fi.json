@@ -886,6 +886,46 @@
       "not-found": "Energiatodistusta ei ole olemassa.",
       "validation-required-error": "Pakolliset tiedot puuttuvat: "
     },
+    "signing": {
+      "header": "Allekirjoittaminen",
+      "language-adjective": {
+        "fi": "suomenkielinen",
+        "sv": "ruotsinkielinen",
+        "bilingual": "kaksikielinen"
+      },
+      "language-genitive": {
+        "fi": "suomenkielisen",
+        "sv": "ruotsinkielisen",
+        "bilingual": "kaksikielisen"
+      },
+      "messages": {
+        "connection-check": "Tarkistetaan yhteyttä mPolluxiin.",
+        "already-started": "Allekirjoitus on keskeytynyt tuntemattomasta syystä.",
+        "connection-success": "Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu.",
+        "connection-failed": "Yhteyden avaus mPolluxiin epäonnistui. Allekirjoittaminen edellyttää että allekirjoitusohjelma mPollux on asennettu ja selaimesta on yhteys allekirjoitusohjelmaan."
+      },
+      "error": {
+        "abort-failed": "Keskeyttäminen epäonnistui",
+        "signing-failed": "Allekirjoittaminen epäonnistui tuntemattomaan virheeseen. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
+        "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä."
+      },
+      "status": {
+        "not-started": "Voit nyt allekirjoittaa {language-genitive} energiatodistuksen.",
+        "already-started": "Voit aloittaa energiatodistuksen allekirjoittamisen uudestaan tai keskeyttää allekirjoitus ja palata luonnostilaan.",
+        "start": "Käynnistetään {language} allekirjoitusprosessi.",
+        "digest": "Muodostetaan {language} energiatodistus allekirjoitettavaksi.",
+        "signature": "Allekirjoita {language} energiatodistus mPollux-ohjelmistossa.",
+        "pdf": "Allekirjoitetaan {language} energiatodistus.",
+        "finish": "Allekirjoitusprosessin päättäminen.",
+        "signed": "{language} energiatodistus on allekirjoitettu onnistuneesti.",
+        "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan."
+      },
+      "button": {
+        "start": "Allekirjoita",
+        "abort": "Keskeytä",
+        "close": "Sulje"
+      }
+    },
     "allekirjoitus": {
       "laskutusosoite": "Laskutusosoite",
       "valitse-laskutusosoite": "Valitse laskutusosoite"

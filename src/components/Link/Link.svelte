@@ -4,6 +4,7 @@
 
   export let href;
   export let text = '';
+  export let target = '_self';
   export let icon = Maybe.None();
 </script>
 
@@ -17,7 +18,7 @@
   }
 </style>
 
-<a {href}>
+<a {href} {target}>
   {#each Maybe.toArray(icon) as i}
     <span class="font-icon mr-1">{i}</span>
   {/each}

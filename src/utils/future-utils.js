@@ -5,6 +5,10 @@ export { Fluture };
 
 export const { resolve, reject, encaseP, promise, attemptP, cache } = Fluture;
 
+export const and = R.curry((firstFuture, secondFuture) =>
+  Fluture.and(firstFuture)(secondFuture)
+);
+
 export const chain = R.curry((mapper, future) =>
   Fluture.chain(mapper)(future)
 );
