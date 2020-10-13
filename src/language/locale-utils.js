@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as Maybe from '@Utility/maybe-utils';
 
 const locales = ['fi', 'sv'];
 
@@ -16,3 +17,11 @@ export const label = R.curry((locale, item) =>
 
 export const path = R.curry((locale, path) =>
   R.adjust(-1, R.concat(R.__, '-' + locale), path));
+
+export const uniqueViolationKey = R.compose(
+  R.map(R.concat('unique-violations.')),
+  R.map(R.prop('constraint')),
+  R.filter(R.propEq('type', 'unique-violation')),
+  Maybe.fromNull,
+  R.prop('body')
+);

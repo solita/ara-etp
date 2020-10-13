@@ -14,6 +14,7 @@
   import { flashMessageStore } from '@/stores';
 
   import * as api from './yritys-api';
+  import * as Locales from '@Language/locale-utils';
 
   let overlay = false;
 
@@ -23,12 +24,11 @@
   let luokittelut = Maybe.None();
 
   const submit = R.compose(
-    Future.fork(status => {
+    Future.fork(response => {
         toggleOverlay(false);
         flashMessageStore.add('Yritys', 'error',
-          (status == 409 ?
-            $_('yritys.messages.save-conflict') :
-            $_('yritys.messages.save-error')));
+          $_(Maybe.orSome('yritys.messages.save-error',
+            Locales.uniqueViolationKey(response))));
       },
       ({ id }) => {
         flashMessageStore.addPersist(
