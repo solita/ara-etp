@@ -21,7 +21,7 @@ export const path = R.curry((locale, path) =>
 export const uniqueViolationKey = R.compose(
   R.map(R.concat('unique-violations.')),
   R.map(R.prop('constraint')),
-  Maybe.filter(R.propEq('type', 'unique-violation')),
+  R.filter(R.propEq('type', 'unique-violation')),
   Maybe.fromNull,
   R.prop('body')
 );
