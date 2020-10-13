@@ -97,7 +97,7 @@
         <Input
           id={'sahkoposti'}
           name={'sahkoposti'}
-          label={`${$_('kayttaja.sahkoposti')}(${R.toLower($_('kayttaja.kayttajatunnus'))})`}
+          label={`${$_('kayttaja.sahkoposti')}`}
           required={true}
           bind:model={kayttaja}
           lens={R.lensProp('email')}

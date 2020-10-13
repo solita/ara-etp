@@ -92,7 +92,7 @@
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
     "sahkoposti": "Sähköposti",
-    "kayttajatunnus": "Käyttäjätunnus",
+    "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
     "puhelinnumero": "Puhelinnumero",
     "virtu": {
       "header": "Virtu kirjautumistiedot",

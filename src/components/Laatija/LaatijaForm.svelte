@@ -187,7 +187,7 @@
         <Input
           id={'sahkoposti'}
           name={'sahkoposti'}
-          label={`${$_('kayttaja.sahkoposti')}(${R.toLower($_('kayttaja.kayttajatunnus'))})`}
+          label={`${$_('kayttaja.sahkoposti')} (${R.toLower($_('kayttaja.kayttajatunnus'))})`}
           required={true}
           disabled={disabled}
           bind:model={laatija}
