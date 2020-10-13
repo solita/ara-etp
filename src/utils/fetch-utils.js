@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Future from './future-utils';
+import * as Maybe from './maybe-utils';
 
 const api = 'api/private';
 
@@ -7,10 +8,28 @@ export const toJson = Future.encaseP(response => response.json());
 
 export const toText = Future.encaseP(response => response.text());
 
+const contentType = R.compose(
+  R.chain(headers => Maybe.fromNull(headers.get('content-type'))),
+  Maybe.fromNull,
+  R.prop('headers')
+);
+
+const isJson = R.compose(
+  Maybe.exists(R.startsWith('application/json')),
+  contentType
+)
+
+const invalidResponse = response => R.compose(
+  R.map(R.assoc('contentType', contentType(response))),
+  R.map(R.mergeLeft(R.pick(['status', 'url'], response))),
+  Future.coalesce(R.always({}), R.objOf('body')),
+  R.ifElse(isJson, toJson, toText)
+)(response)
+
 export const rejectWithInvalidResponse = R.ifElse(
   R.prop('ok'),
   Future.resolve,
-  Future.reject
+  R.compose(R.chain(Future.reject), invalidResponse)
 );
 
 export const responseAsJson = R.compose(

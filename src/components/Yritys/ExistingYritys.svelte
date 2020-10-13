@@ -13,6 +13,7 @@
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
   import * as api from './yritys-api';
+  import * as Locales from '@Language/locale-utils';
 
 
   export let params;
@@ -38,9 +39,11 @@
   $: submit = updatedYritys =>
     R.compose(
       Future.fork(
-        () => {
+        response => {
           toggleOverlay(false);
-          flashMessageStore.add('Yritys', 'error', $_('yritys.messages.save-error'));
+          flashMessageStore.add('Yritys', 'error',
+            $_(Maybe.orSome('yritys.messages.save-error',
+              Locales.uniqueViolationKey(response))))
         },
         () => {
           toggleOverlay(false);

@@ -77,7 +77,6 @@
     "ovt-tunnus": "OVT-tunnus",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
-      "save-conflict": "Yrityksen tietojen tallennus epäonnistui. Toinen yritys samalla y-tunnuksella on jo olemassa.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Yrityksen tietojen haku epäonnistui."
@@ -994,6 +993,9 @@
     "results": "Tuloksia {from}...{to} / {total}"
   },
   "unique-violations": {
-    "kayttaja-email-key": "Sähköpostiosoite on jo käytössä."
+    "kayttaja-email-key": "Sähköpostiosoite on jo käytössä.",
+    "kayttaja-virtu-key": "Virtu käyttäjätunnus on jo käytössä.",
+    "kayttaja_henkilotunnus_key": "Henkilötunnus on jo käytössä.",
+    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä."
   }
 }

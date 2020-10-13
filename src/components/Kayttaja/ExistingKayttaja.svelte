@@ -1,13 +1,13 @@
 <script>
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
+  import * as Locales from '@Language/locale-utils';
   import {
     flashMessageStore,
     currentUserStore,
     idTranslateStore
   } from '@/stores';
 
-  import * as api from './kayttaja-api';
   import * as geoApi from '@Component/Geo/geo-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -31,11 +31,8 @@
   const toggleOverlay = value => { overlay = value };
 
   const errorMessage = (type, response) =>
-    R.ifElse(
-      R.equals('unique-violation'),
-      R.always(`unique-violations.${response.body.constraint}`),
-      R.always(`${type}.messages.save-error`)
-    )(response.body.type);
+    Maybe.orSome(`${type}.messages.save-error`,
+      Locales.uniqueViolationKey(response));
 
   const fork = (type, updatedModel) =>
     Future.fork(

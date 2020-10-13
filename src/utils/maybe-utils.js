@@ -39,6 +39,8 @@ export const toArray = m => m.toArray();
 
 export const exists = R.curry((pred, m) => m.exists(pred));
 
+export const filter = R.curry((pred, m) => m.filter(pred));
+
 export const isSome = m => m.isSome();
 
 export const isNone = m => m.isNone();
