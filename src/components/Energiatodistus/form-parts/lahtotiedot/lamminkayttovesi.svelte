@@ -4,6 +4,7 @@
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
   import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
+  import LitraaPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-volume-over-area';
 
   export let disabled;
   export let schema;
@@ -14,26 +15,22 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.lkvn-kaytto.header')} />
 <div class="flex lg:flex-row flex-col">
-<div class="w-1/2 py-4 mb-4 flex flex-row items-end">
-  <div class="w-3/5">
-    <Input
-        {disabled}
-        {schema}
-        {center}
-        bind:model={energiatodistus}
-        path={['lahtotiedot', 'lkvn-kaytto', 'ominaiskulutus']} />
-  </div>
-  <div class="w-2/5 pl-2 pr-20">{$_('energiatodistus.litraa-per-neliovuosi')}</div>
-</div>
-<div class="w-1/2 py-4 mb-4 flex flex-row items-end">
-  <div class="w-3/5">
+  <div class="w-1/2 py-4 mb-4 flex flex-row items-end">
     <Input
       {disabled}
       {schema}
       {center}
       bind:model={energiatodistus}
-      path={['lahtotiedot', 'lkvn-kaytto', 'lammitysenergian-nettotarve']} />
+      path={['lahtotiedot', 'lkvn-kaytto', 'ominaiskulutus']}
+      unit={LitraaPerAlaUnit} />
   </div>
-  <div class="w-2/5 pl-2"><VuosikulutusPerAlaUnit/></div>
-</div>
+  <div class="w-1/2 py-4 mb-4 flex flex-row items-end">
+    <Input
+      {disabled}
+      {schema}
+      {center}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lkvn-kaytto', 'lammitysenergian-nettotarve']}
+      unit={VuosikulutusPerAlaUnit} />
+  </div>
 </div>
