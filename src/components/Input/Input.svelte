@@ -26,6 +26,8 @@
   export let validators = [];
   export let warnValidators = [];
 
+  export let labelUnit;
+
   let validationResult = {
     type: '',
     message: ''
@@ -69,7 +71,8 @@
     {center}
     {viewValue}
     {valid}
-    {validationResult} />
+    {validationResult}
+    {labelUnit} />
 
   {#if !valid}
     <div class="validation-label">

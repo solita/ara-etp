@@ -44,6 +44,8 @@
   import Suositukset from './form-parts/huomiot/suositukset';
   import Laskutus from './laskutus';
 
+  import Area from './form-parts/units/area';
+
   export let title = '';
   export let energiatodistus;
   export let inputLanguage;
@@ -54,6 +56,8 @@
   export let validation;
 
   let eLuku = Maybe.None();
+
+  disabled = false;
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -212,15 +216,16 @@
   <H2 text={$_('energiatodistus.lahtotiedot.header')} />
 
   <div class="w-1/5 py-4 mb-4 flex flex-row items-end">
-    <div class="w-5/6">
+    <div class="w-full">
       <Input
         {disabled}
         {schema}
         center={false}
         bind:model={energiatodistus}
-        path={['lahtotiedot', 'lammitetty-nettoala']} />
+        path={['lahtotiedot', 'lammitetty-nettoala']}
+        unit={Area} />
     </div>
-    <div class="w-1/6 pl-2">m²</div>
+
   </div>
 
   <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
@@ -241,10 +246,12 @@
     {inputLanguage} />
   <Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
   <Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
-  <SisaisetLampokuormat {disabled} {schema}
-                        kuormat={validation.kuormat}
-                        alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat}
-                        bind:energiatodistus />
+  <SisaisetLampokuormat
+    {disabled}
+    {schema}
+    kuormat={validation.kuormat}
+    alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat}
+    bind:energiatodistus />
 
   <HR />
 

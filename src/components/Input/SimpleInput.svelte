@@ -27,6 +27,7 @@
   };
 
   export let wrapper = SquareInputWrapper;
+  export let labelUnit;
 
   let error = false;
   let focused = false;
@@ -37,7 +38,15 @@
   $: warning = focused && !valid && validationResult.type === 'warning';
 </script>
 
-<Label {id} {required} {label} {compact} {error} {warning} {focused} />
+<Label
+  {id}
+  {required}
+  {label}
+  {compact}
+  {error}
+  {warning}
+  {focused}
+  unit={labelUnit} />
 <svelte:component
   this={wrapper}
   {caret}

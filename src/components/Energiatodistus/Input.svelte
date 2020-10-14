@@ -18,26 +18,44 @@
   export let search = false;
   export let format = formats.optionalString;
   export let inputLanguage = Maybe.None();
+  export let unit;
+  export let labelUnit;
 
   const id = inputs.id(path);
   const type = inputs.type(schema, path);
 </script>
 
-<Input
-  {id}
-  name={id}
-  label={compact ?
-    inputs.fullLabel($_, inputLanguage, path) :
-    inputs.label($_, inputLanguage, path)}
-  {required}
-  {disabled}
-  {compact}
-  {center}
-  {search}
-  bind:model
-  lens={inputs.dataLens(inputLanguage, path)}
-  format={type.format || format}
-  parse={type.parse}
-  validators={type.validators}
-  warnValidators={type.warnValidators}
-  i18n={$_} />
+<style>
+  .unit {
+    @apply border-b-3 border-transparent py-1;
+  }
+
+  .disabled {
+    @apply border-0 pb-4 pt-0;
+  }
+</style>
+
+<div class="flex flex-row items-end">
+  <div class="flex-grow">
+    <Input
+      {id}
+      name={id}
+      label={compact ? inputs.fullLabel($_, inputLanguage, path) : inputs.label($_, inputLanguage, path)}
+      {required}
+      {disabled}
+      {compact}
+      {center}
+      {search}
+      bind:model
+      lens={inputs.dataLens(inputLanguage, path)}
+      format={type.format || format}
+      parse={type.parse}
+      validators={type.validators}
+      warnValidators={type.warnValidators}
+      i18n={$_}
+      {labelUnit} />
+  </div>
+  <div class="unit" class:disabled>
+    <svelte:component this={unit} />
+  </div>
+</div>

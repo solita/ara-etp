@@ -7,6 +7,14 @@
   import H3 from '@Component/H/H3';
   import Input from '@Component/Energiatodistus/Input';
 
+  import Area from '@Component/Energiatodistus/form-parts/units/area';
+  import CubicMetre from '@Component/Energiatodistus/form-parts/units/cubic-metre';
+  import LampokapasiteettiUnit from '@Component/Energiatodistus/form-parts/units/lampokapasiteetti';
+  import IlmanvuotolukuUnit from '@Component/Energiatodistus/form-parts/units/ilmanvuotoluku';
+  import Q50 from '@Component/Energiatodistus/form-parts/units/q50';
+  import Crak from '@Component/Energiatodistus/form-parts/units/c-rak';
+  import V from '@Component/Energiatodistus/form-parts/units/v';
+
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import * as formats from '@Utility/formats';
 
@@ -26,39 +34,36 @@
 
 <div class="flex lg:flex-row flex-col">
   <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
-    <div class="w-2/3">
-      <Input
-        {disabled}
-        {schema}
-        center={false}
-        bind:model={energiatodistus}
-        path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']} />
-    </div>
-    <div class="w-1/3 pl-2 pr-20">m³/(hm²)</div>
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'rakennusvaippa', 'ilmanvuotoluku']}
+      unit={IlmanvuotolukuUnit}
+      labelUnit={Q50} />
   </div>
 
   <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
-    <div class="w-2/3">
-      <Input
-        {disabled}
-        {schema}
-        center={false}
-        bind:model={energiatodistus}
-        path={['lahtotiedot', 'rakennusvaippa', 'lampokapasiteetti']} />
-    </div>
-    <div class="w-1/3 pl-2 pr-20">Wh/(m²K)</div>
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'rakennusvaippa', 'lampokapasiteetti']}
+      unit={LampokapasiteettiUnit}
+      labelUnit={Crak} />
   </div>
 
   <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
-    <div class="w-2/3">
-      <Input
-          {disabled}
-          {schema}
-          center={false}
-          bind:model={energiatodistus}
-          path={['lahtotiedot', 'rakennusvaippa', 'ilmatilavuus']} />
-    </div>
-    <div class="w-1/3 pl-2">m³</div>
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'rakennusvaippa', 'ilmatilavuus']}
+      unit={CubicMetre}
+      labelUnit={V} />
   </div>
 </div>
 
@@ -69,7 +74,9 @@
         <th class="et-table--th" />
         <th class="et-table--th">
           <span>{$_('energiatodistus.lahtotiedot.ala')}</span>
-          <span class="block">m²</span>
+          <span class="block">
+            <Area />
+          </span>
         </th>
         <th class="et-table--th">
           <span>{$_('energiatodistus.lahtotiedot.U')}</span>
