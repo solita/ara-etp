@@ -57,8 +57,6 @@
 
   let eLuku = Maybe.None();
 
-  disabled = false;
-
   $: labelLocale = LocaleUtils.label($locale);
 
   $: isEnergiatodistusKorvattu = R.compose(
@@ -216,16 +214,13 @@
   <H2 text={$_('energiatodistus.lahtotiedot.header')} />
 
   <div class="w-1/5 py-4 mb-4 flex flex-row items-end">
-    <div class="w-full">
-      <Input
-        {disabled}
-        {schema}
-        center={false}
-        bind:model={energiatodistus}
-        path={['lahtotiedot', 'lammitetty-nettoala']}
-        unit={Area} />
-    </div>
-
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitetty-nettoala']}
+      unit={Area} />
   </div>
 
   <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
