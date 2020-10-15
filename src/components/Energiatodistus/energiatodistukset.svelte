@@ -22,6 +22,7 @@
   import Confirm from '@Component/Confirm/Confirm';
   import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
 
+  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
 
   let overlay = true;
@@ -75,7 +76,7 @@
     );
   };
 
-  $: parsedQuery = R.compose(
+  let parsedQuery = R.compose(
     R.mergeRight({
       tila: Maybe.None(),
       where: ''
@@ -91,8 +92,9 @@
     qs.parse
   )($querystring);
 
-  $: queryAsQueryString = R.compose(
+  let queryAsQueryString = R.compose(
     api.toQueryString,
+    R.tap(console.log),
     R.pickBy(Maybe.isSome),
     R.evolve({
       where: R.compose(
@@ -100,7 +102,9 @@
         R.map(JSON.stringify),
         Maybe.fromEmpty
       )
-  }))(parsedQuery);
+    }),
+    R.tap(console.log)
+  )(parsedQuery);
 
   const runQuery = query =>
     (cancel = R.compose(
@@ -120,9 +124,15 @@
       Future.parallel(5),
       R.tap(toggleOverlay(true)),
       R.tap(cancel)
-    )([api.getEnergiatodistukset(queryAsQueryString),
-       api.laatimisvaiheet]));
+    )([api.getEnergiatodistukset(queryAsQueryString), api.laatimisvaiheet]));
 
+  runQuery(
+    R.assoc(
+      'where',
+      EtHakuUtils.convertWhereToQuery(R.prop('where', parsedQuery)),
+      parsedQuery
+    )
+  );
 </script>
 
 <style>
@@ -264,7 +274,6 @@
     &nbsp;
     <Link
       text={$_('energiatodistus.lataa-xlsx')}
-      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx'
-            + queryAsQueryString} />
+      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' + queryAsQueryString} />
   </div>
 </div>

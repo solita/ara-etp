@@ -1,5 +1,7 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as parsers from '@Utility/parsers';
+import * as Either from '@Utility/either-utils';
 
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
@@ -232,3 +234,82 @@ export const valuesFromBlock = R.curry((operation, block) => {
 
   return R.concat(values, defaultValues);
 });
+
+export const parseValueByType = R.curry((type, value) => {
+  console.log(value);
+  switch (type) {
+    case OPERATOR_TYPES.NUMBER:
+      return parsers.parseNumber(value);
+    case OPERATOR_TYPES.BOOLEAN:
+      return Either.Right(value === 'true');
+    default:
+      return Either.Right(value);
+  }
+});
+
+export const formObject = form => {
+  const fd = new FormData(form);
+  const ds = {};
+  fd.forEach((value, key) => (ds[key] = value));
+  return ds;
+};
+
+export const groupHakuForm = R.compose(
+  R.map(R.map(R.tail)),
+  R.values,
+  R.groupBy(R.head),
+  R.map(R.compose(R.flatten, R.over(R.lensIndex(0), R.split('_')))),
+  R.toPairs
+);
+
+export const findValueByMatchingHead = R.curry((value, arr) =>
+  R.compose(
+    R.map(R.last),
+    Maybe.fromNull,
+    R.find(R.compose(R.equals(value), R.head))
+  )(arr)
+);
+
+export const hakuCriteriaFromGroupedInput = inputs => {
+  const type = Maybe.orSome('', findValueByMatchingHead('type', inputs));
+  const conjunction = findValueByMatchingHead('conjunction', inputs);
+  const key = findValueByMatchingHead('key', inputs);
+  const operation = findValueByMatchingHead('operation', inputs);
+  const values = R.compose(
+    R.map(R.compose(parseValueByType(type), R.last)),
+    R.sortBy(R.nth(1)),
+    R.filter(R.compose(R.equals('value'), R.head))
+  )(inputs);
+
+  return {
+    conjunction: Maybe.orSome('and', conjunction),
+    block: R.all(Either.isRight)
+      ? [Maybe.get(operation), Maybe.get(key), ...R.map(Either.right, values)]
+      : []
+  };
+};
+
+export const parseHakuForm = form => {
+  const formdata = formObject(form);
+  const groupedInputs = groupHakuForm(formdata);
+
+  const searchItems = R.map(hakuCriteriaFromGroupedInput, groupedInputs);
+
+  return searchItems;
+};
+
+export const searchString = searchItems =>
+  JSON.stringify(
+    R.reduce(
+      (acc, item) => {
+        if (item.length === 0) return acc;
+        if (item.conjunction === 'and') {
+          return R.over(R.lensIndex(acc.length - 1), R.append(item.block), acc);
+        }
+
+        return R.append([item.block], acc);
+      },
+      [[]],
+      searchItems
+    )
+  );

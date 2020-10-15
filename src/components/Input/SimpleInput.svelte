@@ -14,6 +14,7 @@
   export let disabled = false;
   export let compact = false;
   export let center = false;
+  export let type = 'text';
 
   export let viewValue;
   export let rawValue = '';
@@ -54,6 +55,7 @@
     {error}
     {autocomplete}
     {viewValue}
+    {type}
     bind:rawValue
     bind:focused
     on:input />
