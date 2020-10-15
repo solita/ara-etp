@@ -1,0 +1,110 @@
+[
+  {
+    "appendMode": false,
+    "backgroundColor": "#105f24",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-accesstoken",
+        "value": "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwYXRldnl5ZGVudG90ZWFqYUBzb2xpdGEuZmkiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6Im9wZW5pZCIsImF1dGhfdGltZSI6MTU4MzIzMDk2OSwiaXNzIjoiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NvbGl0YS9ldHAtY29yZS9mZWF0dXJlL0FFLTQzLWF1dGgtaGVhZGVycy1oYW5kbGluZy9ldHAtYmFja2VuZC9zcmMvbWFpbi9yZXNvdXJjZXMiLCJleHAiOjE4OTM0NTYwMDAsImlhdCI6MTU4MzQxMzQyNCwidmVyc2lvbiI6MiwianRpIjoiNWZkZDdhMjktN2VlYS00ZjNkLWE3YTYtYzIyODQyNmY2MTJiIiwiY2xpZW50X2lkIjoidGVzdC1jbGllbnRfaWQiLCJ1c2VybmFtZSI6InRlc3RfdXNlcm5hbWUifQ.XXWQOcTxuz5NUs8E2oQqKBEyBHXdh7WbaUQfpKIKRRc8QDgeV2VfwJd4C8VnxyEunrTxNU2whQm_dFxAIVhg2gUVpdnrYwB023dSZHGOowlnbHQYW_xVcFplW-pX0UrWuhdvo2FU3ZTW4Y_QBZzrztSMvQU0bThk8VDkWke4NsuI-ImPr_iczd20fQAcvXsuY8fXdxYDnXMi_mjQMOl8CmuIi-08zUnkIdRf0fvD40UUsxAZqYsxHdJyIev6XUQiWvscVjZ5LfGmbnPzpwqBYb2rrwDT7yefvys44d9klzyEcNV9v9-p_LwYNiM4Uetsb8ElK_6InPRmSEuRtLHWGQ"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-identity",
+        "value": "patevyydentoteaja@solita.fi"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-data",
+        "value": "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJwYXRldnl5ZGVudG90ZWFqYUBzb2xpdGEuZmkiLCJlbWFpbCI6InBhdGV2eXlkZW50b3RlYWphQHNvbGl0YS5maSIsInVzZXJuYW1lIjoidGVzdC11c2VybmFtZSIsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoidGVzdC1pc3MifQ.UTDDu-r4dQWydb-IMe_HE3-B-Z3nHm3znYy1XOdhSP2gf3pFGiJ03QlVhCq54hH7bfGD6vdtrGXqBwcpznTtoECR5sTGz5N0fYW7Ff94NG8W_DlvE8XUGVV3eh3GreS1tPRaHLVXEdTb3m3ENdAAHBe-T9V1vOfj3S7Nd5JAkKBQnpzTPrxXUjSzA4gA2n0fm3nxvEitQW40UKoglA6jebaGu3_etnOMBbMP-y4TrnA9WvHbtl0YKP0QKY0dxNEJWPUvkfylwqvHWUHvfzi-GeBwBz3PkH7EPJegdoBU4gAr6zmubUf49OjWVBVw7dg9iXzwh0pUopcEZvQetI0KgA"
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "title": "patevyydentoteaja@solita.fi",
+    "urlReplacements": []
+  },
+  {
+    "appendMode": false,
+    "backgroundColor": "#16836a",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-accesstoken",
+        "value": "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoib3BlbmlkIiwiYXV0aF90aW1lIjoxNTgzMjMwOTY5LCJpc3MiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc29saXRhL2V0cC1jb3JlL2ZlYXR1cmUvQUUtNDMtYXV0aC1oZWFkZXJzLWhhbmRsaW5nL2V0cC1iYWNrZW5kL3NyYy9tYWluL3Jlc291cmNlcyIsImV4cCI6MTg5MzQ1NjAwMCwiaWF0IjoxNjAxNTEwNDAwLCJ2ZXJzaW9uIjoyLCJqdGkiOiI1ZmRkN2EyOS03ZWVhLTRmM2QtYTdhNi1jMjI4NDI2ZjYxMmIiLCJjbGllbnRfaWQiOiJ0ZXN0LWNsaWVudF9pZCIsInVzZXJuYW1lIjoidGVzdC11c2VybmFtZSJ9.HAlEjQejKyvOoxHrORdnnTnfwiD5lUuEBMalTFKQtu_6luxqxJYfyn-etf2AkaoKWkqsT9g_-k3BV1hT-R1Y0gK3Xl21yT1MDk8QmEZlp1ztiOx4o5ufrX0t6C_Y-VKBxqQkRWLw8crSKfH2TpsTETDetA2gCReoHfHBt2_O63xL-y35glJIzHlc3egqlNFfXwduBZy8ON08h-hhZp0b8AtlaYVoY_OZY3jjfmA19jzf19rEUmK6qOJhJPr-Sgob_CDFf8G6KO4-lIF4FqdUYTvmiJoLiFmefRFscqVQTTurbsxIKmmz5JFY10vCvqp4uWcvO60O0-zgZEQcbV1Ltw"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-identity",
+        "value": "laatija@solita.fi"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-data",
+        "value": "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsImVtYWlsIjoibGFhdGlqYUBzb2xpdGEuZmkiLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUiLCJleHAiOjE4OTM0NTYwMDAsImlzcyI6InRlc3QtaXNzIn0.HiEjH9svgiUxPmC__kag997di2cNy5PfRehCeNtxN55OMLQM8PcTJTO4_0sY6EXkedWRZCLFJ2jxqMXyOL_EXLK9DmjRyZw6RrVXwG8y2feoAvZWvJU2zcnH_j30rd5DuICNeUwx_l3ej3ZiX1JNmh3PAn_7j85aVzEs7-ipChG1K2qSJPvluXlyfEYyhmOv3U7kcQQRM2R-LipXCWXRVAuj6HOuQXF1jwdV2RTQHBWfNb2zyUQ3OoTDBH0lPy9FRww7KLOMzbDEz8fNACnZXZSGGkz2NI1YuLS0-IBjqlwewCR9RhuuU6NoIojTeJo9LMZzbPaYqXnNSDTZ_uB1Bw"
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "title": "laatija@solita.fi",
+    "urlReplacements": []
+  },
+  {
+    "appendMode": false,
+    "backgroundColor": "#232b4a",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "Authorization",
+        "value": "Basic bGFhdGlqYUBzb2xpdGEuZmk6cGFzc3dvcmQ="
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "title": "laatija@solita.fi-external",
+    "urlReplacements": []
+  },
+  {
+    "appendMode": false,
+    "backgroundColor": "#6e1056",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-accesstoken",
+        "value": "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwYWFrYXl0dGFqYUBzb2xpdGEuZmkiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6Im9wZW5pZCIsImF1dGhfdGltZSI6MTU4MzIzMDk2OSwiaXNzIjoiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NvbGl0YS9ldHAtY29yZS9mZWF0dXJlL0FFLTQzLWF1dGgtaGVhZGVycy1oYW5kbGluZy9ldHAtYmFja2VuZC9zcmMvbWFpbi9yZXNvdXJjZXMiLCJleHAiOjE4OTM0NTYwMDAsImlhdCI6MTU4MzQxMzQyNCwidmVyc2lvbiI6MiwianRpIjoiNWZkZDdhMjktN2VlYS00ZjNkLWE3YTYtYzIyODQyNmY2MTJiIiwiY2xpZW50X2lkIjoidGVzdC1jbGllbnRfaWQiLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUifQ.PY5_jWcdxhCyn2EpFpss7Q0R3_xH1PvHi4mxDLorpppHnciGT2kFLeutebi7XeLtTYwmttTxxg2tyUyX0_UF7zj_P-tdq-kZQlud1ENmRaUxLXO5mTFKXD7zPb6BPFNe0ewRQ7Uuv3lDk_IxOf-6i86VDYB8luyesEXq7ra4S4l8akFodW_QYBSZQnUva_CVyzsTNcmgGTyrz2NI6seT1x6Pt1uFdYI97FHKlCCWVL1Z042omfujfta8j8XkTWdhKf3dfsHRWjrw31xqOkgD7uwPKcrC0U-wIj3U0uX0Rz2Tk4T-kIq4XTkKttYpkJqOmMFAYuhk6MDjfRkPWBZhUA"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-identity",
+        "value": "paakayttaja@solita.fi"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-data",
+        "value": "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJwYWFrYXl0dGFqYUBzb2xpdGEuZmkiLCJlbWFpbCI6InBhYWtheXR0YWphQHNvbGl0YS5maSIsInVzZXJuYW1lIjoidGVzdC11c2VybmFtZSIsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoidGVzdC1pc3MifQ.bYW_4mydptUFCDnkgcddmdeS-E9a5n-RJGDwnF-helAHevKmFhzhb9hw5mZzeyuJpgcDoYgTC0EvKAQtIXzWqg9lKN9HZEkrCeXJLkezTHEiGs9qntMVYlIlFSZMk9LfeZy0NfgfNBfqeWBufsOSCclFUmMFKZIfiXDxTlRz5qBe6v6z3FEJZ_Y80qc1gAAmLWE1bI409mc8wwCTsnZ8qgG710Zx0rxNydwfSHlZvRXyZARvF9qOdBz19WnuLgaIb35zqr4PXJw6L8gLXMbjVobUCF8Un_-6nzC13TqaSV6G9W8iDhQXUuN4c0fykI6-QttlBEqFzbPiXtjNy_QsQw"
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "title": "paakayttaja@solita.fi",
+    "urlReplacements": []
+  }
+]
