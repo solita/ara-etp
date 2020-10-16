@@ -15,6 +15,14 @@ const isInVaihe = R.curry((vaiheId, energiatodistus) => R.compose(
   R.path(['perustiedot', 'laatimisvaihe'])
 )(energiatodistus));
 
+/*
+Applicable only for 2018 version
+This information cannot be inferred from 2013 et
+*/
 export const isRakennuslupa = isInVaihe(vaihe.rakennuslupa);
 export const isKayttoonotto = isInVaihe(vaihe.kayttoonotto);
-export const isOlemassaOlevaRakennus = isInVaihe(vaihe.olemassaolevarakennus);
+
+/* Applicable for 2018 + 2013 versions */
+export const isOlemassaOlevaRakennus = R.ifElse(R.propEq('versio', 2013),
+  R.complement(R.path(['perustiedot', 'uudisrakennus'])),
+  isInVaihe(vaihe.olemassaolevarakennus));
