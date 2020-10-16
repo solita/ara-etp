@@ -23,9 +23,13 @@ export const isLammonjakoKuvausRequired = R.compose(
   Maybe.exists(R.equals(12)),
   R.path(['lahtotiedot', 'lammitys', 'lammonjako', 'id']));
 
+const if2013Else = (on2013, onFalse) =>
+  R.ifElse(R.propEq('versio', 2013), on2013, onFalse)
+
 const requiredCondition = {
   "perustiedot.havainnointikaynti": laatimisvaiheet.isOlemassaOlevaRakennus,
-  "perustiedot.rakennustunnus": R.complement(laatimisvaiheet.isRakennuslupa),
+  "perustiedot.rakennustunnus":
+    if2013Else(R.T, R.complement(laatimisvaiheet.isRakennuslupa)),
   "perustiedot.keskeiset-suositukset-fi": laatimisvaiheet.isOlemassaOlevaRakennus,
   "perustiedot.keskeiset-suositukset-sv": laatimisvaiheet.isOlemassaOlevaRakennus,
 

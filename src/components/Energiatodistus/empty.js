@@ -274,7 +274,7 @@ export const energiatodistus2013 = R.compose(
     ['tulokset', 'uusiutuvat-omavaraisenergiat'],
     R.times(emptyMuuEnergia, 5)
   ),
-  R.assocPath(['perustiedot', 'uudisrakennus'], false),
+  R.assocPath(['perustiedot', 'uudisrakennus'], true),
   R.dissocPath(['perustiedot', 'laatimisvaihe']),
   R.assoc('versio', 2013),
   energiatodistus2018
