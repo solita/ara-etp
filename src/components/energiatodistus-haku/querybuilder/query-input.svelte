@@ -12,56 +12,36 @@
 
   import { _ } from '@Language/i18n';
 
+  export let nameprefix = '';
+
   export let operations;
-  export let model;
-  export let lens;
+  export let operation;
+  export let values;
 
-  const updateModel = R.curry((operation, values) => {
-    const newBlock = EtHakuUtils.blockFromOperation(operation, values);
+  $: op = R.compose(
+    Maybe.orSome(R.head(operations)),
+    Maybe.fromNull,
+    R.find(R.pathEq(['operation', 'browserCommand'], operation))
+  )(operations);
 
-    if (!R.equals(R.view(lens, model), newBlock)) {
-      model = R.set(lens, newBlock, model);
-    }
-  });
-
-  const parseByOperationType = R.curry((operation, value) => {
-    switch (operation.type) {
-      case OPERATOR_TYPES.STRING:
-        if (R.type(value) === 'String') {
-          break;
-        }
-        return R.toString(value);
+  const isOperatorType = R.curry((op, value) => {
+    switch (op.type) {
       case OPERATOR_TYPES.NUMBER:
-        return parseFloat(value, 10);
+        return !isNaN(parseInt(value));
+      case OPERATOR_TYPES.BOOLEAN:
+        return typeof value === 'boolean';
       case OPERATOR_TYPES.DATE:
-        break;
+        return true;
+      default:
+        return true;
     }
-    return value;
   });
 
-  let type;
-  let values;
-
-  $: operation = R.compose(
-    EtHakuUtils.operationFromBlock(operations),
-    R.view(lens)
-  )(model);
-
-  $: {
-    values = R.compose(
-      R.map(parseByOperationType(operation)),
-      R.take(operation.argumentNumber),
-      R.when(
-        R.always(operation.type !== type && !R.isNil(type)),
-        operation.defaultValues
-      ),
-      R.drop(2),
-      R.view(lens)
-    )(model);
-    type = operation.type;
+  $: if (!isOperatorType(op, R.head(values))) {
+    values = op.defaultValues();
   }
 
-  $: updateModel(operation, values);
+  $: firstVal = R.head(values);
 </script>
 
 <style type="text/postcss">
@@ -75,45 +55,43 @@
 </style>
 
 <div class="flex">
-  {#if operation.type !== OPERATOR_TYPES.BOOLEAN}
+  <input class="sr-only" name={`${nameprefix}_type`} value={op.type} />
+  {#if op.type !== OPERATOR_TYPES.BOOLEAN}
     <div class="w-1/2">
       <Select
-        items={operations}
-        bind:model={operation}
+        items={R.map(R.path(['operation', 'browserCommand']), operations)}
+        model={R.path(['operation', 'browserCommand'], op)}
         lens={R.identity}
-        format={R.compose( $_, R.concat('energiatodistus.haku.'), R.path([
-            'operation',
-            'browserCommand'
-          ]) )}
-        parse={R.identity}
-        allowNone={false} />
+        format={R.compose( $_, R.concat('energiatodistus.haku.') )}
+        allowNone={false}
+        name={`${nameprefix}_operation`} />
     </div>
+  {:else}
+    <input class="sr-only" name={`${nameprefix}_operation`} value="=" />
   {/if}
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}
       <div class="flex flex-col justify-end">
-        {#if operation.type === OPERATOR_TYPES.STRING || operation.type === OPERATOR_TYPES.NUMBER}
+        {#if op.type === OPERATOR_TYPES.STRING || op.type === OPERATOR_TYPES.NUMBER}
           <SimpleInput
             center={true}
-            on:input={evt => (values = R.set(R.lensIndex(index), parseByOperationType(operation, evt.target.value), values))}
-            viewValue={value} />
-        {:else if operation.type === OPERATOR_TYPES.DATE}
-          <DatePicker
-            start={value}
-            end={value}
-            update={value => (values = R.set(R.lensIndex(index), parseByOperationType(operation, value), values))} />
-        {:else if operation.type === OPERATOR_TYPES.BOOLEAN}
+            viewValue={value}
+            name={`${nameprefix}_value_${index}`}
+            type={op.type === OPERATOR_TYPES.NUMBER ? 'number' : 'text'} />
+        {:else if op.type === OPERATOR_TYPES.DATE}
+          <DatePicker start={value} end={value} update={() => {}} />
+        {:else if op.type === OPERATOR_TYPES.BOOLEAN}
           <div class="radiogroup flex justify-between">
             <Radio
-              group={value}
+              bind:group={firstVal}
               value={true}
-              on:click={evt => (values = R.set(R.lensIndex(index), true, values))}
-              label={$_('energiatodistus.haku.true')} />
+              label={$_('energiatodistus.haku.true')}
+              name={`${nameprefix}_value_${index}`} />
             <Radio
-              group={value}
+              bind:group={firstVal}
               value={false}
-              on:click={evt => (values = R.set(R.lensIndex(index), false, values))}
-              label={$_('energiatodistus.haku.false')} />
+              label={$_('energiatodistus.haku.false')}
+              name={`${nameprefix}_value_${index}`} />
           </div>
         {/if}
       </div>

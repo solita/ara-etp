@@ -10,8 +10,7 @@
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import Select from '@Component/Select/Select';
   import ToggleButton from '@Component/ToggleButton/ToggleButton';
-  import QueryBuilder from './querybuilder/qb';
-  import QueryRunner from './querybuilder/queryrunner';
+  import QueryBlock from './querybuilder/queryblock';
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
   import Radio from '@Component/Radio/Radio';
@@ -111,7 +110,7 @@
       </div>
     </div>
     <div class="flex justify-start items-end">
-      <QueryBuilder {operator} {key} {values} {index} {schema} />
+      <QueryBlock {operator} {key} {values} {index} {schema} />
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
