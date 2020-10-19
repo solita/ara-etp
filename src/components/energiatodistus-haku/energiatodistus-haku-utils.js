@@ -138,11 +138,6 @@ export const defaultQueryItem = R.always({
   block: ['=', 'id', 1]
 });
 
-export const defaultKriteeriQueryItem = () => ({
-  conjunction: Maybe.None(),
-  block: ['=', 'id', 0]
-});
-
 export const defaultWhere = () => [[['=', 'id', 0]]];
 
 export const laatijaKriteerit = () => [
@@ -191,54 +186,12 @@ export const deserializeWhere = R.compose(
   R.map(deserializeAndBlocks)
 );
 
-export const serializeWhere = R.reduce(
-  (acc, { conjunction, block }) => {
-    if (Maybe.exists(R.equals('or'), conjunction)) {
-      return R.append([block], acc);
-    }
-
-    const lastLens = R.lensIndex(R.length(acc) - 1);
-
-    return R.over(lastLens, R.append(block), acc);
-  },
-  [[]]
-);
-
 export const removeQueryItem = R.curry((index, queryItems) =>
   R.compose(
     R.set(R.compose(R.lensIndex(0), R.lensProp('conjunction')), 'and'),
     R.remove(index, 1)
   )(queryItems)
 );
-
-export const appendDefaultQueryItem = R.append(
-  R.assoc('conjunction', Maybe.Some('and'), defaultKriteeriQueryItem())
-);
-
-export const findFromKriteeritByKey = R.curry((kriteerit, key) =>
-  R.compose(Maybe.fromNull, R.find(R.propEq('key', key)))(kriteerit)
-);
-
-export const operationFromBlock = R.curry((operations, block) =>
-  R.compose(
-    Maybe.orSome(R.head(operations)),
-    Maybe.fromNull,
-    R.find(R.pathEq(['operation', 'browserCommand'], R.head(block)))
-  )(operations)
-);
-
-export const blockFromOperation = R.curry((op, values) => [
-  op.operation.browserCommand,
-  op.key,
-  ...values
-]);
-
-export const valuesFromBlock = R.curry((operation, block) => {
-  const values = R.drop(2, block);
-  const defaultValues = R.drop(R.length(values), operation.defaultValues);
-
-  return R.concat(values, defaultValues);
-});
 
 export const parseValueByType = R.curry((type, value) => {
   switch (type) {
@@ -295,17 +248,6 @@ export const hakuCriteriaFromGroupedInput = inputs => {
         ]
       : []
   };
-};
-
-export const allValuesValid = inputs => {
-  const type = Maybe.orSome('', findValueByMatchingHead('type', inputs));
-  const values = R.compose(
-    R.map(R.compose(parseValueByType(type), R.last)),
-    R.sortBy(R.nth(1)),
-    R.filter(R.compose(R.equals('value'), R.head))
-  )(inputs);
-
-  return R.all(Either.isRight, values);
 };
 
 export const parseHakuForm = form => {
