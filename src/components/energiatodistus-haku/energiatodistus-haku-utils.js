@@ -133,6 +133,11 @@ export const perustiedot = () => ({
   // )
 });
 
+export const defaultQueryItem = R.always({
+  conjunction: 'and',
+  block: ['=', 'id', 1]
+});
+
 export const defaultKriteeriQueryItem = () => ({
   conjunction: Maybe.None(),
   block: ['=', 'id', 0]
@@ -175,13 +180,13 @@ export const deserializeConjuntionBlockPair = ([conjunction, block]) => ({
 });
 
 export const deserializeAndBlocks = R.converge(R.concat, [
-  R.compose(Array.of, R.pair(Maybe.Some('or')), R.head),
-  R.compose(R.map(R.pair(Maybe.Some('and'))), R.tail)
+  R.compose(Array.of, R.pair('or'), R.head),
+  R.compose(R.map(R.pair('and')), R.tail)
 ]);
 
 export const deserializeWhere = R.compose(
   R.map(deserializeConjuntionBlockPair),
-  R.set(R.compose(R.lensIndex(0), R.lensIndex(0)), Maybe.None()),
+  R.set(R.compose(R.lensIndex(0), R.lensIndex(0)), 'and'),
   R.unnest,
   R.map(deserializeAndBlocks)
 );
@@ -201,7 +206,7 @@ export const serializeWhere = R.reduce(
 
 export const removeQueryItem = R.curry((index, queryItems) =>
   R.compose(
-    R.set(R.compose(R.lensIndex(0), R.lensProp('conjunction')), Maybe.None()),
+    R.set(R.compose(R.lensIndex(0), R.lensProp('conjunction')), 'and'),
     R.remove(index, 1)
   )(queryItems)
 );
@@ -236,7 +241,6 @@ export const valuesFromBlock = R.curry((operation, block) => {
 });
 
 export const parseValueByType = R.curry((type, value) => {
-  console.log(value);
   switch (type) {
     case OPERATOR_TYPES.NUMBER:
       return parsers.parseNumber(value);
@@ -284,19 +288,34 @@ export const hakuCriteriaFromGroupedInput = inputs => {
   return {
     conjunction: Maybe.orSome('and', conjunction),
     block: R.all(Either.isRight)
-      ? [Maybe.get(operation), Maybe.get(key), ...R.map(Either.right, values)]
+      ? [
+          Maybe.get(operation),
+          Maybe.get(key),
+          ...R.map(Either.orSome(''), values)
+        ]
       : []
   };
+};
+
+export const allValuesValid = inputs => {
+  const type = Maybe.orSome('', findValueByMatchingHead('type', inputs));
+  const values = R.compose(
+    R.map(R.compose(parseValueByType(type), R.last)),
+    R.sortBy(R.nth(1)),
+    R.filter(R.compose(R.equals('value'), R.head))
+  )(inputs);
+
+  return R.all(Either.isRight, values);
 };
 
 export const parseHakuForm = form => {
   const formdata = formObject(form);
   const groupedInputs = groupHakuForm(formdata);
 
-  const searchItems = R.map(hakuCriteriaFromGroupedInput, groupedInputs);
-
-  return searchItems;
+  return groupedInputs;
 };
+
+export const searchItems = R.map(hakuCriteriaFromGroupedInput);
 
 export const searchString = searchItems =>
   JSON.stringify(

@@ -17,8 +17,6 @@
     lens,
     R.lensIndex(2)
   );
-
-  $: console.log(R.view(lens, model), operators);
 </script>
 
 <style>

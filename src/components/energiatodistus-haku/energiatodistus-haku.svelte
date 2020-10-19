@@ -13,14 +13,13 @@
   import QueryBuilder from './querybuilder/qb';
   import QueryRunner from './querybuilder/queryrunner';
   import Button from '@Component/Button/Button';
+  import TextButton from '@Component/Button/TextButton';
+  import Radio from '@Component/Radio/Radio';
 
   import { _ } from '@Language/i18n';
 
-  export let parsedQuery;
-  export let runQuery;
+  export let where;
   export let schema;
-
-  let where = R.prop('where', parsedQuery);
 
   let hakuValue = '';
 
@@ -29,7 +28,6 @@
   const navigate = search => {
     R.compose(
       push,
-      R.tap(console.log),
       R.concat(`${$location}?`),
       params => qs.stringify(params, { encode: false }),
       R.mergeRight(qs.parse($querystring)),
@@ -39,17 +37,19 @@
 
   $: showHakukriteerit = where.length > 0;
 
+  let queryItems = [];
+
   $: queryItems = R.ifElse(
     R.length,
     EtHakuUtils.deserializeWhere,
     R.always([])
   )(where);
-
-  $: console.log(parsedQuery);
 </script>
 
 <style>
-
+  .conjunction:first-of-type {
+    display: none;
+  }
 </style>
 
 <div class="flex w-full">
@@ -82,15 +82,54 @@
 <form
   novalidate
   on:submit|preventDefault={evt => {
-    R.compose( navigate, EtHakuUtils.searchString, EtHakuUtils.parseHakuForm )(evt.target);
+    const parsedHakuForm = EtHakuUtils.parseHakuForm(evt.target);
+    R.compose( navigate, EtHakuUtils.searchString, EtHakuUtils.searchItems )(parsedHakuForm);
   }}
-  on:reset|preventDefault={evt => {
-    debugger;
+  on:reset|preventDefault={_ => {
+    queryItems = [];
   }}>
 
   {#each queryItems as { conjunction, block: [operator, key, ...values] }, index}
-    <QueryBuilder {conjunction} {operator} {key} {values} {index} {schema} />
+    <div class="conjunction w-full flex flex-col">
+      <div class="flex justify-between w-1/6 my-10">
+        <Radio
+          group={conjunction}
+          value={'and'}
+          label={$_('energiatodistus.haku.and')}
+          name={`${index}_conjunction`}
+          on:click={_ => {
+            queryItems = R.over(R.lensIndex(index), R.assoc('conjunction', 'and'), queryItems);
+          }} />
+        <Radio
+          group={conjunction}
+          value={'or'}
+          label={$_('energiatodistus.haku.or')}
+          name={`${index}_conjunction`}
+          on:click={_ => {
+            queryItems = R.over(R.lensIndex(index), R.assoc('conjunction', 'or'), queryItems);
+          }} />
+      </div>
+    </div>
+    <div class="flex justify-start items-end">
+      <QueryBuilder {operator} {key} {values} {index} {schema} />
+      <span
+        class="text-primary font-icon text-2xl cursor-pointer ml-4
+        hover:text-secondary"
+        on:click={_ => (queryItems = EtHakuUtils.removeQueryItem(index, queryItems))}>
+        delete
+      </span>
+    </div>
   {/each}
+
+  <div class="flex">
+    <TextButton
+      text={$_('energiatodistus.haku.lisaa_hakuehto')}
+      icon={'add_circle_outline'}
+      type={'button'}
+      on:click={_ => {
+        queryItems = R.append(EtHakuUtils.defaultQueryItem(), queryItems);
+      }} />
+  </div>
 
   <div class="flex">
     <div class="w-1/5">
@@ -104,11 +143,3 @@
     </div>
   </div>
 </form>
-
-<!--
-{#if showHakukriteerit}
-  <div transition:slide|local={{ duration: 200 }} class="flex w-full">
-    <QueryBuilder bind:where {navigate} {schema} />
-  </div>
-{/if}
--->

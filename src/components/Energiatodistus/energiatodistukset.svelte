@@ -76,7 +76,7 @@
     );
   };
 
-  let parsedQuery = R.compose(
+  $: parsedQuery = R.compose(
     R.mergeRight({
       tila: Maybe.None(),
       where: ''
@@ -92,9 +92,42 @@
     qs.parse
   )($querystring);
 
+  $: where = R.prop('where', parsedQuery);
+  $: tila = R.prop('tila', parsedQuery);
+
   let queryAsQueryString = R.compose(
     api.toQueryString,
-    R.tap(console.log),
+    R.pickBy(Maybe.isSome),
+    R.evolve({
+      where: R.compose(
+        R.map(encodeURI),
+        R.map(JSON.stringify),
+        Maybe.fromEmpty
+      )
+    })
+  )(parsedQuery);
+
+  $: R.compose(
+    Future.fork(
+      () => {
+        overlay = false;
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.messages.load-error')
+        );
+      },
+      response => {
+        overlay = false;
+        energiatodistukset = response[0];
+      }
+    ),
+    Future.parallel(5),
+    R.tap(toggleOverlay(true)),
+    R.tap(cancel),
+    R.prepend(R.__, [api.laatimisvaiheet]),
+    api.getEnergiatodistukset,
+    api.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
       where: R.compose(
@@ -103,36 +136,23 @@
         Maybe.fromEmpty
       )
     }),
-    R.tap(console.log)
-  )(parsedQuery);
+    R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery),
+    R.mergeRight({
+      tila: Maybe.None(),
+      where: ''
+    }),
+    R.evolve({
+      tila: Maybe.fromNull,
+      where: R.compose(
+        Maybe.orSome(''),
+        R.map(JSON.parse),
+        Maybe.fromNull
+      )
+    }),
+    qs.parse
+  )($querystring);
 
-  const runQuery = query =>
-    (cancel = R.compose(
-      Future.fork(
-        R.compose(
-          R.tap(toggleOverlay(false)),
-          R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-          R.always($_('energiatodistus.messages.load-error'))
-        ),
-        R.compose(
-          response => {
-            energiatodistukset = response[0];
-          },
-          R.tap(toggleOverlay(false))
-        )
-      ),
-      Future.parallel(5),
-      R.tap(toggleOverlay(true)),
-      R.tap(cancel)
-    )([api.getEnergiatodistukset(queryAsQueryString), api.laatimisvaiheet]));
-
-  runQuery(
-    R.assoc(
-      'where',
-      EtHakuUtils.convertWhereToQuery(R.prop('where', parsedQuery)),
-      parsedQuery
-    )
-  );
+  const runQuery = () => {};
 </script>
 
 <style>
@@ -142,10 +162,7 @@
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
   <div class="mb-10">
-    <EnergiatodistusHaku
-      {parsedQuery}
-      {runQuery}
-      schema={EtHakuSchema.laatijaSchema} />
+    <EnergiatodistusHaku {where} schema={EtHakuSchema.laatijaSchema} />
   </div>
   <Overlay {overlay}>
     <div slot="content">
