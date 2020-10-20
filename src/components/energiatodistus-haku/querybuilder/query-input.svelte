@@ -10,6 +10,11 @@
   import DatePicker from '@Component/Datepicker/Datepicker';
   import Radio from '@Component/Radio/Radio';
 
+  import BooleanInput from './query-inputs/boolean-input';
+  import TextInput from './query-inputs/text-input';
+  import DateInput from './query-inputs/date-input';
+  import NumberInput from './query-inputs/number-input';
+
   import { _ } from '@Language/i18n';
 
   export let nameprefix = '';
@@ -17,6 +22,19 @@
   export let operations;
   export let operation;
   export let values;
+
+  const inputForType = type => {
+    switch (type) {
+      case OPERATOR_TYPES.NUMBER:
+        return NumberInput;
+      case OPERATOR_TYPES.BOOLEAN:
+        return BooleanInput;
+      case OPERATOR_TYPES.DATE:
+        return DateInput;
+      default:
+        return TextInput;
+    }
+  };
 
   $: op = R.compose(
     Maybe.orSome(R.head(operations)),
@@ -40,17 +58,11 @@
   $: if (!isOperatorType(op, R.head(values))) {
     values = op.defaultValues();
   }
-
-  $: firstVal = R.head(values);
 </script>
 
 <style type="text/postcss">
   .inputs > div:not(:first-child) {
     @apply ml-2;
-  }
-
-  .radiogroup {
-    @apply justify-around;
   }
 </style>
 
@@ -72,28 +84,11 @@
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}
       <div class="flex flex-col justify-end">
-        {#if op.type === OPERATOR_TYPES.STRING || op.type === OPERATOR_TYPES.NUMBER}
-          <SimpleInput
-            center={true}
-            viewValue={value}
-            name={`${nameprefix}_value_${index}`}
-            type={op.type === OPERATOR_TYPES.NUMBER ? 'number' : 'text'} />
-        {:else if op.type === OPERATOR_TYPES.DATE}
-          <DatePicker start={value} end={value} update={() => {}} />
-        {:else if op.type === OPERATOR_TYPES.BOOLEAN}
-          <div class="radiogroup flex justify-between">
-            <Radio
-              bind:group={firstVal}
-              value={true}
-              label={$_('energiatodistus.haku.true')}
-              name={`${nameprefix}_value_${index}`} />
-            <Radio
-              bind:group={firstVal}
-              value={false}
-              label={$_('energiatodistus.haku.false')}
-              name={`${nameprefix}_value_${index}`} />
-          </div>
-        {/if}
+        <svelte:component
+          this={inputForType(op.type)}
+          {value}
+          {nameprefix}
+          {index} />
       </div>
     {/each}
   </div>
