@@ -152,11 +152,14 @@ export const findOperation = operation =>
     R.find(R.compose(R.equals(operation), R.prop('operation')))
   )(operations);
 
-export const blockToQueryParameter = ([operation, key, ...values]) =>
-  R.compose(
+export const blockToQueryParameter = ([operation, key, ...values]) => {
+  if (R.filter(value => value !== '', values).length === 0) return Maybe.None();
+
+  return R.compose(
     R.map(op => R.apply(op.command, [key, ...values])),
     findOperation
   )(operation);
+};
 
 export const convertWhereToQuery = R.compose(
   R.filter(R.length),
