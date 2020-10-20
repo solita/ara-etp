@@ -85,6 +85,12 @@ describe('EtHakuUtils:', () => {
 
   describe('deserializeWhere', () => {
     it('should return deserialized where', () => {
+      const schema = {
+        nimi: true,
+        id: true,
+        key: true
+      };
+
       const where = [
         [
           ['sisaltaa', 'nimi', 'asdf'],
@@ -103,7 +109,34 @@ describe('EtHakuUtils:', () => {
         { conjunction: 'and', block: ['>=', 'key', 'value'] }
       ];
 
-      assert.deepEqual(EtHakuUtils.deserializeWhere(where), expected);
+      assert.deepEqual(EtHakuUtils.deserializeWhere(schema, where), expected);
+    });
+
+    it('should remove not found criteria', () => {
+      const schema = {
+        nimi: true,
+        id: true,
+        key: true
+      };
+
+      const where = [
+        [
+          ['sisaltaa', 'notfound', 'asdf'],
+          ['=', 'id', 2]
+        ],
+        [
+          ['>', 'key', 'value'],
+          ['>=', 'key', 'value']
+        ]
+      ];
+
+      const expected = [
+        { conjunction: 'and', block: ['=', 'id', 2] },
+        { conjunction: 'or', block: ['>', 'key', 'value'] },
+        { conjunction: 'and', block: ['>=', 'key', 'value'] }
+      ];
+
+      assert.deepEqual(EtHakuUtils.deserializeWhere(schema, where), expected);
     });
   });
 

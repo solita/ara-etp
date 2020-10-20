@@ -40,7 +40,7 @@
 
   $: queryItems = R.ifElse(
     R.length,
-    EtHakuUtils.deserializeWhere,
+    EtHakuUtils.deserializeWhere(schema),
     R.always([])
   )(where);
 </script>

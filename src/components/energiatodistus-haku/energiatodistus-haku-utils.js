@@ -182,11 +182,14 @@ export const deserializeAndBlocks = R.converge(R.concat, [
   R.compose(R.map(R.pair('and')), R.tail)
 ]);
 
-export const deserializeWhere = R.compose(
-  R.map(deserializeConjuntionBlockPair),
-  R.set(R.compose(R.lensIndex(0), R.lensIndex(0)), 'and'),
-  R.unnest,
-  R.map(deserializeAndBlocks)
+export const deserializeWhere = R.curry((schema, where) =>
+  R.compose(
+    R.set(R.compose(R.lensIndex(0), R.lensProp('conjunction')), 'and'),
+    R.filter(R.compose(R.has(R.__, schema), R.nth(1), R.prop('block'))),
+    R.map(deserializeConjuntionBlockPair),
+    R.unnest,
+    R.map(deserializeAndBlocks)
+  )(where)
 );
 
 export const removeQueryItem = R.curry((index, queryItems) =>

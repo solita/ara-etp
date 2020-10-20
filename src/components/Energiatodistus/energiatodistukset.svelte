@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
   import * as dfns from 'date-fns';
@@ -84,9 +85,8 @@
     R.evolve({
       tila: Maybe.fromNull,
       where: R.compose(
-        Maybe.orSome(''),
-        R.map(JSON.parse),
-        Maybe.fromNull
+        Either.orSome(''),
+        w => Either.fromTry(() => JSON.parse(w))
       )
     }),
     qs.parse
@@ -144,9 +144,8 @@
     R.evolve({
       tila: Maybe.fromNull,
       where: R.compose(
-        Maybe.orSome(''),
-        R.map(JSON.parse),
-        Maybe.fromNull
+        Either.orSome(''),
+        w => Either.fromTry(() => JSON.parse(w))
       )
     }),
     qs.parse
