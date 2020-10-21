@@ -7,6 +7,8 @@
   import * as Laatimisvaiheet from './laatimisvaiheet';
   import * as LocaleUtils from '@Language/locale-utils';
 
+  import PaakayttajanKommentti from './paakayttajan-kommentti';
+
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
   import Select from '@Component/Select/Select';
@@ -74,6 +76,12 @@
 
 <div class="w-full mt-3">
   <H1 text={title} />
+
+  <PaakayttajanKommentti
+    {whoami}
+    {schema}
+    path={['kommentti']}
+    bind:model={energiatodistus} />
 
   {#if isEnergiatodistusKorvattu}
     <H2 text={$_('energiatodistus.korvaava.header')} />

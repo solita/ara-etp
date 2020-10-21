@@ -57,7 +57,11 @@
   }
 
   .inputwrapper:hover {
-    @apply border-hover;
+    @apply border-hover bg-background;
+  }
+
+  .inputwrapper.disabled:hover {
+    @apply bg-light;
   }
 
   .inputwrapper.focused {
@@ -72,7 +76,7 @@
   }
 
   textarea {
-    @apply flex-grow font-medium py-1 resize-none;
+    @apply flex-grow font-medium py-1 resize-none bg-transparent;
   }
 
   textarea:focus {
@@ -103,6 +107,8 @@
     @apply text-error;
   }
 </style>
+
+<!-- purgecss: focused error disabled -->
 
 <Label {id} {required} {label} {compact} error={highlightError} {focused} />
 <div
