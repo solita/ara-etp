@@ -33,7 +33,9 @@ const DateValue = () => ({
   parse: parsers.optionalParser(parsers.parseDate),
   format: R.compose(Maybe.orSome(''), R.map(formats.formatDateInstant)),
   deserialize: R.compose(parsers.toEitherMaybe, R.map(parsers.parseISODate)),
-  serialize: R.map(R.map(date => dfns.formatISO(date, { representation: 'date' }))),
+  serialize: R.map(
+    R.map(date => dfns.formatISO(date, { representation: 'date' }))
+  ),
   validators: []
 });
 
@@ -269,7 +271,8 @@ export const v2018 = {
     ymparys: Huomio,
     'alapohja-ylapohja': Huomio
   },
-  lisamerkintoja: String(6300)
+  lisamerkintoja: String(6300),
+  kommentti: String(6300)
 };
 
 const MuuEnergiamuoto = {
@@ -308,7 +311,10 @@ export const redefineNumericValidation = (schema, constraint) => {
     ),
     R.assocPath(
       path('warnValidators'),
-      validations.MaybeIntervalWarning(constraint.warning.min, constraint.warning.max)
+      validations.MaybeIntervalWarning(
+        constraint.warning.min,
+        constraint.warning.max
+      )
     )
   )(schema);
 };
