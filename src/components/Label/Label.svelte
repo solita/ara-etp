@@ -6,6 +6,8 @@
   export let focused;
   export let label = '';
   export let compact = false;
+
+  export let unit;
 </script>
 
 <style type="text/postcss">
@@ -43,4 +45,5 @@
   class:error
   class:focused>
   {label}
+  <svelte:component this={unit} />
 </label>
