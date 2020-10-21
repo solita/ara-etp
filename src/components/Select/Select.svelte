@@ -17,6 +17,8 @@
   export let allowNone = true;
   export let noneLabel = 'validation.no-selection';
 
+  export let name = '';
+
   export let model;
   export let lens;
 
@@ -159,6 +161,7 @@
 <!-- purgecss: disabled -->
 <span class:focused class:required class:disabled class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
+  <input class="sr-only" {name} value={parse(R.view(lens, model))} />
   <span
     {id}
     class:disabled

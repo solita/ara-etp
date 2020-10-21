@@ -5,6 +5,7 @@
   export let group = 0;
   export let value = 0;
   export let disabled = false;
+  export let name = '';
 
   let focused = false;
 
@@ -97,7 +98,7 @@
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
   <label class:disabled>
     {label}
-    <input {disabled} type="radio" bind:group {value} />
+    <input {disabled} type="radio" {name} bind:group {value} />
   </label>
   <span
     class:disabled

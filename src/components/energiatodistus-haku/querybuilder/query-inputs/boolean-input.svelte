@@ -1,25 +1,23 @@
 <script>
-  import * as R from 'ramda';
-  import Checkbox from '@Component/Checkbox/Checkbox';
+  import Radio from '@Component/Radio/Radio';
   import { _ } from '@Language/i18n';
 
-  export let model;
-  export let lens;
+  export let value;
+  export let nameprefix;
+  export let index;
 
-  const paramLens = R.compose(
-    lens,
-    R.lens(
-      R.compose(
-        R.equals('true'),
-        R.nth(2)
-      ),
-      (v, m) => R.update(2, R.toString(v), m)
-    )
-  );
+  let strValue = value + '' === 'true' ? 'true' : 'false';
 </script>
 
-<style>
-
-</style>
-
-<Checkbox bind:model lens={paramLens} />
+<div class="flex justify-between">
+  <Radio
+    bind:group={strValue}
+    value={'true'}
+    label={$_('energiatodistus.haku.true')}
+    name={`${nameprefix}_value_${index}`} />
+  <Radio
+    bind:group={strValue}
+    value={'false'}
+    label={$_('energiatodistus.haku.false')}
+    name={`${nameprefix}_value_${index}`} />
+</div>

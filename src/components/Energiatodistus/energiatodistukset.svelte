@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
   import * as dfns from 'date-fns';
@@ -22,6 +23,7 @@
   import Confirm from '@Component/Confirm/Confirm';
   import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
 
+  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
 
   let overlay = true;
@@ -83,15 +85,17 @@
     R.evolve({
       tila: Maybe.fromNull,
       where: R.compose(
-        Maybe.orSome(''),
-        R.map(JSON.parse),
-        Maybe.fromNull
+        Either.orSome(''),
+        w => Either.fromTry(() => JSON.parse(w))
       )
     }),
     qs.parse
   )($querystring);
 
-  $: queryAsQueryString = R.compose(
+  $: where = R.prop('where', parsedQuery);
+  $: tila = R.prop('tila', parsedQuery);
+
+  let queryAsQueryString = R.compose(
     api.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
@@ -100,29 +104,54 @@
         R.map(JSON.stringify),
         Maybe.fromEmpty
       )
-  }))(parsedQuery);
+    })
+  )(parsedQuery);
 
-  const runQuery = query =>
-    (cancel = R.compose(
-      Future.fork(
-        R.compose(
-          R.tap(toggleOverlay(false)),
-          R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-          R.always($_('energiatodistus.messages.load-error'))
-        ),
-        R.compose(
-          response => {
-            energiatodistukset = response[0];
-          },
-          R.tap(toggleOverlay(false))
-        )
-      ),
-      Future.parallel(5),
-      R.tap(toggleOverlay(true)),
-      R.tap(cancel)
-    )([api.getEnergiatodistukset(queryAsQueryString),
-       api.laatimisvaiheet]));
+  $: R.compose(
+    Future.fork(
+      () => {
+        overlay = false;
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.messages.load-error')
+        );
+      },
+      response => {
+        overlay = false;
+        energiatodistukset = response[0];
+      }
+    ),
+    Future.parallel(5),
+    R.tap(toggleOverlay(true)),
+    R.tap(cancel),
+    R.prepend(R.__, [api.laatimisvaiheet]),
+    api.getEnergiatodistukset,
+    api.toQueryString,
+    R.pickBy(Maybe.isSome),
+    R.evolve({
+      where: R.compose(
+        R.map(encodeURI),
+        R.map(JSON.stringify),
+        Maybe.fromEmpty
+      )
+    }),
+    R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery),
+    R.mergeRight({
+      tila: Maybe.None(),
+      where: ''
+    }),
+    R.evolve({
+      tila: Maybe.fromNull,
+      where: R.compose(
+        Either.orSome(''),
+        w => Either.fromTry(() => JSON.parse(w))
+      )
+    }),
+    qs.parse
+  )($querystring);
 
+  const runQuery = () => {};
 </script>
 
 <style>
@@ -132,10 +161,7 @@
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
   <div class="mb-10">
-    <EnergiatodistusHaku
-      {parsedQuery}
-      {runQuery}
-      schema={EtHakuSchema.laatijaSchema} />
+    <EnergiatodistusHaku {where} schema={EtHakuSchema.laatijaSchema} />
   </div>
   <Overlay {overlay}>
     <div slot="content">
@@ -264,7 +290,6 @@
     &nbsp;
     <Link
       text={$_('energiatodistus.lataa-xlsx')}
-      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx'
-            + queryAsQueryString} />
+      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' + queryAsQueryString} />
   </div>
 </div>

@@ -1,6 +1,7 @@
 <script>
   export let text = '';
   export let icon = '';
+  export let type = 'submit';
 </script>
 
 <style type="text/postcss">
@@ -21,7 +22,7 @@
   }
 </style>
 
-<button on:click>
+<button {type} on:click>
   <span class="font-icon mr-1">{icon}</span>
   {text}
 </button>

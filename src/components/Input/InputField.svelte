@@ -7,6 +7,7 @@
   export let autocomplete = 'off';
   export let viewValue;
   export let rawValue;
+  export let type = 'text';
 
   export let focused;
 </script>
@@ -41,7 +42,7 @@
   class="input"
   class:center
   class:error
-  type="text"
+  {type}
   {autocomplete}
   value={viewValue}
   on:focus={event => {
