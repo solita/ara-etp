@@ -85,6 +85,8 @@ export const serialize = R.compose(
       R.identity
     )
   ),
+  R.dissocPath(['tulokset', 'e-luku']),
+  R.dissocPath(['tulokset', 'e-luokka']),
   R.omit([
     'id',
     'versio',
