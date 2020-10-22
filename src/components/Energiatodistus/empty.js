@@ -4,7 +4,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as EtUtils from './energiatodistus-utils';
 
-const ValidNone = R.compose(Either.Right, Maybe.None)
+const ValidNone = R.compose(Either.Right, Maybe.None);
 
 const emptyRakennusVaippa = _ => ({
   ala: ValidNone(),
@@ -242,7 +242,8 @@ export const energiatodistus2018 = _ => ({
   },
   'lisamerkintoja-fi': Maybe.None(),
   'lisamerkintoja-sv': Maybe.None(),
-  'korvattu-energiatodistus-id': Maybe.None()
+  'korvattu-energiatodistus-id': Maybe.None(),
+  kommentti: Maybe.None()
 });
 
 const emptyMuuEnergiamuoto = _ => ({
