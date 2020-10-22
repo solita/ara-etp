@@ -5,6 +5,7 @@
   import * as R from 'ramda';
 
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as EtHakuUtils from './energiatodistus-haku-utils';
   import SimpleInput from '@Component/Input/SimpleInput';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
@@ -81,8 +82,9 @@
 <form
   novalidate
   on:submit|preventDefault={evt => {
-    const parsedHakuForm = EtHakuUtils.parseHakuForm(evt.target);
-    R.compose( navigate, EtHakuUtils.searchString, EtHakuUtils.searchItems )(parsedHakuForm);
+    R.compose( R.chain(navigate), R.map(EtHakuUtils.searchString), R.map(EtHakuUtils.searchItems), evt => Either.fromTry(
+          () => EtHakuUtils.parseHakuForm(evt.target)
+        ) )(evt);
   }}
   on:reset|preventDefault={_ => {
     queryItems = [];
