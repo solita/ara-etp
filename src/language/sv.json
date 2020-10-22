@@ -1,2 +1,1003 @@
 {
+  "validation": {
+    "required": "Pakollinen tieto SV?",
+    "min-length": "Pituus pitää olla vähintään {min} merkkiä SV?",
+    "max-length": "Pituus saa olla enintään {max} merkkiä SV?",
+    "min-number": "Pienin sallittu arvo on {min}. SV?",
+    "max-number": "Suurin sallittu arvo on {max}. SV?",
+    "invalid-url": "Virheellinen www-osoite SV?",
+    "invalid-email": "Virheellinen email SV?",
+    "invalid-ytunnus": "Virheellinen ytunnus SV?",
+    "invalid-postinumero": "Virheellinen postinumero SV?",
+    "postinumero-not-found": "Postinumeroa ei ole olemassa SV?",
+    "invalid-henkilotunnus": "Virheellinen henkilötunnus SV?",
+    "invalid-rakennustunnus": "Virheellinen rakennustunnus SV?",
+    "invalid-ovttunnus": "Virheellinen OVT-tunnus SV?",
+    "no-selection": "Ei valintaa SV?",
+    "warning": {
+      "min-number": "Tyypillisesti suurempi kuin {min} SV?",
+      "max-number": "Tyypillisesti pienempi kuin {max}"
+    }
+  },
+  "parsing": {
+    "invalid-integer": "Virheellinen kokonaislukunumero SV?",
+    "invalid-number": "Virheellinen numero SV?",
+    "invalid-date": "Virheellinen päivämäärä SV?"
+  },
+  "navigation": {
+    "energiatodistukset": "Energicertifikat",
+    "uusi-energiatodistus": "Nytt energicertifikat",
+    "viestit": "Meddelanden",
+    "yritykset": "Företag",
+    "omattiedot": "Egna uppgifter",
+    "laatijoidentuonti": "Laatijoiden tuonti SV?",
+    "laatijat": "Upprättare",
+    "laskutusajot": "Laskutusajot SV?",
+    "tyojono": "Työjono SV?",
+    "kaytonvalvonta": "Käytönvalvonta SV?",
+    "halytykset": "Hälytykset SV?",
+    "kayttajat": "Användare",
+    "kayttaja": "Käyttäjä",
+    "et": "EC",
+    "liitteet": "Bilagor",
+    "allekirjoitus": "Signatur",
+    "muutoshistoria": "Muutoshistoria SV?",
+    "myinfo": "Egna uppgifter",
+    "kirjaudu-ulos": "Logga ut",
+    "kayttajahallinta": "Användarkontroll"
+  },
+  "errors": {
+    "load-error": "Tietojen haku epäonnistui. SV?"
+  },
+  "units": {
+    "year": "år",
+    "pieces": "St",
+    "celsius": "°C"
+  },
+  "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle SV?",
+  "loading": "Ladataan... SV?",
+  "tallenna": "Spara",
+  "peruuta": "Peruuta SV?",
+  "yritys": {
+    "yritykset": "Företag",
+    "yritys": "Yritys SV?",
+    "uusi-yritys": "Uusi yritys SV?",
+    "laatijat": "Upprättare",
+    "y-tunnus": "FO-nummer",
+    "nimi": "Nimi SV?",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O SV?",
+    "laskutusosoite": "Faktureringsadress",
+    "jakeluosoite": "Gatuadress",
+    "postinumero": "Postnummer",
+    "postitoimipaikka": "Postitoimipaikka SV?",
+    "maa": "Land",
+    "laskutuskieli": "Faktureringsspråk",
+    "verkkolaskuoperaattori": "Verkkolaskuoperaattori SV?",
+    "verkkolaskuosoite": "Adress för nätfaktura",
+    "ovt-tunnus": "OVT-tunnus SV?",
+    "messages": {
+      "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
+      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
+      "load-error": "Yrityksen tietojen haku epäonnistui."
+    }
+  },
+  "time": {
+    "klo": "kl."
+  },
+  "kayttaja": {
+    "last-login": "Kirjautunut viimeksi SV?",
+    "no-login": "Ei vielä kirjautunut. SV?",
+    "omattiedot": "Egna uppgifter",
+    "etunimi": "Förnamn",
+    "sukunimi": "Efternamn",
+    "sahkoposti": "E-postadress",
+    "kayttajatunnus": "Tiedonsiirron käyttäjätunnus SV?",
+    "puhelinnumero": "Telefon",
+    "virtu": {
+      "header": "Virtu kirjautumistiedot",
+      "localid": "Käyttäjätunnus (Virtu Local ID)",
+      "organisaatio": "Organisaatio"
+    },
+    "messages": {
+      "save-success": "Käyttäjän tiedot tallennettu onnistuneesti. SV?",
+      "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe. SV?",
+      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan. SV?",
+      "load-error": "Käyttäjän tietojen haku epäonnistui. SV?",
+      "upload-error": "Tiedoston lataaminen epäonnistui. SV?"
+    }
+  },
+  "laatija": {
+    "laatija": "Upprättare",
+    "lisaa-laatijat": "Lisää laatijat SV?",
+    "henkilotunnus": "Personbeteckning",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O  SV?",
+    "katuosoite": "Gatuadress",
+    "postinumero": "Postnummer",
+    "postitoimipaikka": "Postitoimipaikka SV?",
+    "maa": "Land",
+    "laskutuskieli": "Laskutuskieli SV?",
+    "www-osoite": "Toiminnan www-osoite SV?",
+    "laatijatiedot": "Laatijatiedo SV?",
+    "patevyydenvoimassaolo": "Befogenhetens giltighetstid",
+    "patevyystaso": "Behörighetsnivå",
+    "paatoimintaalue": "Päätoiminta-alue SV?",
+    "muuttoimintaalueet": "Muut toiminta-alueet SV?",
+    "julkisettiedot": "Valitse julkiset tiedo SV?t",
+    "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa SV?",
+    "api-key-header": "Laskentaohjelmisto SV?",
+    "api-key": "Anna uusi tiedonsiirron salasana (vähintään 8 merkkiä) SV?",
+    "messages": {
+      "save-success": "Laatijoiden tiedot tallennettu onnistuneesti. SV?",
+      "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe. SV?",
+      "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan. SV?",
+      "load-error": "Laatijan tietojen haku epäonnistui. SV?",
+      "upload-error": "Tiedoston lataaminen epäonnistui. SV?"
+    },
+    "yritykset": {
+      "find-yritys": "Etsi yrityksistä (ytunnus tai nimi) SV?",
+      "attach-to-yritys": "Liitä yritykseen SV?",
+      "yritys-not-found": "Yritystä ei ole tässä palvelussa SV?",
+      "success": {
+        "attach": "Liittäminen yritykseen onnistui SV?",
+        "detach": "Laatija on poistettu yrityksestä SV?"
+      },
+      "error": {
+        "select-yritys": "Valitse liitettävä yritys SV?",
+        "attach-failed": "Liittäminen yritykseen epäonnistui SV?",
+        "detach-failed": "Laatijan poistaminen yrityksestä epäonnistui SV?"
+      }
+    }
+  },
+  "laatijahaku": {
+    "title": "Laatijahaku SV?",
+    "kunta": "Kommun",
+    "energiatodistukset": "ET:t SV?",
+    "results": "Tuloksia {count} KPL SV?",
+    "kaikki": "Kaikki SV?",
+    "voimassaolo": "Voimassaolo SV?",
+    "tila": "Status",
+    "tilat": {
+      "0": "Pätevyys voimassa SV?",
+      "1": "Ei kirjautunut SV?",
+      "2": "Pätevyys peruttu / Laatimiskiellossa SV?",
+      "3": "Pätevyys päättynyt SV?"
+    }
+  },
+  "energiatodistus": {
+    "title": "Energicertifikat",
+    "et-lisays": "Uuden energiatodistuksen voit lisätä täältä: SV?",
+    "luo2018": "Luo uusi 2018 energiatodistus SV?",
+    "luo2013": "Luo uusi 2013 energiatodistus SV?",
+    "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona SV?",
+    "haku": {
+      "sarakkeet": {
+        "tila": "Tila",
+        "tunnus": "Beteckning",
+        "ETL": "ETL SV?",
+        "versio": "Version",
+        "voimassa": "Voimassa SV?",
+        "rakennuksen-nimi": "Byggnadens namn",
+        "osoite": "Adress",
+        "laatija": "Upprättare",
+        "toiminnot": "Toiminnot SV?"
+      },
+      "lisaa_hakuehtoja": "Fler sökkriterier",
+      "lisaa_hakuehto": "Lägg till sökvilkor",
+      "tyhjenna_hakuehdot": "Tyhjennä hakuehdot SV?",
+      "hae": "Sök",
+      "=": "=",
+      "<": "<",
+      ">": ">",
+      "<=": "<=",
+      ">=": ">=",
+      "sisaltaa": "Innehåller",
+      "and": "Och",
+      "or": "Eller",
+      "suosikkihaut": "Suosikkihaut SV?",
+      "id": "Beteckning",
+      "true": "Ja",
+      "false": "Nej",
+      "laatimisvaihe": "Upprättandes period"
+    },
+    "kaikki": "Allt",
+    "korvaavuus": {
+      "header": "Energiatodistuksen korvaavuus SV?",
+      "tunnus": "Beteckning",
+      "etl": "ETL SV?",
+      "ktl": "KTL SV?",
+      "rakennustunnus": "Permanent byggnadsbeteckning",
+      "nettoala": "Nettoarea",
+      "nimi": "Byggnadens namn",
+      "osoite": "Adress",
+      "laatija": "Upprätttare",
+      "invalid-korvaus": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta, Tarkista korvattava energiatodistus. SV?"
+    },
+    "korvaava": {
+      "header": "Korvaa energiatodistuksen SV?"
+    },
+    "tila": {
+      "draft": "Utkast",
+      "in-signing": "Allekirjoitus kekeytynyt  SV?",
+      "signed": "Voimassa SV?",
+      "discarded": "Förkastat",
+      "replaced": "Ersättlig",
+      "deleted": "Poistettu SV?",
+      "expired": "Vanhentunut SV?",
+      "loading": "Ladataan SV?"
+    },
+    "toolbar": {
+      "new": "Tallenna???",
+      "save": "Spara"
+    },
+    "id": "Energiatodistustunnus SV?",
+    "laatija-fullname": "Upprättare",
+    "e-luku": "E-talet",
+    "laskuriviviite": "Projektreferens (näkyy laskurivillä) SV?",
+    "korvattu-energiatodistus-id": "Korvaa todistuksen SV?",
+    "laskutus": {
+      "title": "Laskutustiedot",
+      "postiosoite": "Postadress",
+      "verkkolaskuosoite": "Adress för nätfaktura",
+      "verkkolaskuoperaattori": "Förmedlingsnummer",
+      "laskutettava": "Käytettävät laskutustiedot SV?",
+      "laatijalaskutus": "Personliga faktureringsuppgifter",
+      "load-error": "Laskutustietojen lataus epäonnistui SV?"
+    },
+    "perustiedot": {
+      "header": "Energiatodistuksen perustiedot SV?",
+      "label-context": "$unused",
+      "nimi": "Byggnadens namn",
+      "tilaaja": "Beställare",
+      "kieli": "Språk",
+      "laatimisvaihe": "Upprättandes period",
+      "uudisrakennus": "Uudisrakennus",
+      "havainnointikaynti": "Datum för iakttagelser på plats",
+      "katuosoite": "Gatuadress",
+      "postinumero": "Postnummer",
+      "rakennustunnus": "Permanent byggnadsbeteckning",
+      "kiinteistotunnus": "Fastighetsbeteckning",
+      "rakennusosa": "Del av byggnaden",
+      "valmistumisvuosi": "Byggnaden färdigställd år",
+      "kayttotarkoitus": "Käyttötarkoitusluokat SV?",
+      "kayttotarkoitusluokka": "Användningskategori",
+      "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka SV?",
+      "julkinen-rakennus": "Offentlig byggnad",
+      "keskeiset-suositukset": "De viktigaste rekommendationerna",
+      "keskeiset-suositukset-heading": {
+        "2018": {
+          "h2": "Åtgärdsförslag för att förbättra E-talet",
+          "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
+        },
+        "2013": {
+          "h2": "Åtgärder som förbättrar energiprestandan",
+          "h3": "Centrala rekommendationer angående åtgärder som förbättrar energiprestandan"
+        }
+      },
+      "yritys": {
+        "label-context": "$unused",
+        "nimi": "Företag"
+      }
+    },
+    "litraa-per-neliovuosi": "dm³/(m²år)",
+    "yhteensa": "Totalt",
+    "lahtotiedot": {
+      "header": "Utgångsuppgifter för beräkning av E-talet",
+      "label-context": "$unused",
+      "ala": "A",
+      "U": "U",
+      "lammitetty-nettoala": "Uppvärmd nettoarea",
+      "rakennusvaippa": {
+        "header": "Klimatskal",
+        "label-context": "Klimatskal",
+        "U*A": "U*A",
+        "osuuslampohaviosta": "Andel av värmeförlusten",
+        "ilmanvuotoluku": "Luftläckagetal",
+        "lampokapasiteetti": "Lämpökapasiteetti SV?",
+        "ilmatilavuus": "Ilmatilavuus SV?",
+        "labels": {
+          "ulkoseinat": "Ytterväggar",
+          "ylapohja": "Vindsbjälklag",
+          "alapohja": "Bottenbjälklag",
+          "ikkunat": "Fönster",
+          "ulkoovet": "Ytterdörrar"
+        },
+        "ulkoseinat": {
+          "label-context": "Klimatskal / Ytterväggar",
+          "ala": "A",
+          "U": "U"
+        },
+        "ylapohja": {
+          "label-context": "Klimatskal / Vindsbjälklag",
+          "ala": "A",
+          "U": "U"
+        },
+        "alapohja": {
+          "label-context": "Klimatskal / Bottenbjälklag",
+          "ala": "A",
+          "U": "U"
+        },
+        "ikkunat": {
+          "label-context": "Klimatskal / Fönster",
+          "ala": "A",
+          "U": "U"
+        },
+        "ulkoovet": {
+          "label-context": "Klimatskal / Ytterdörrar",
+          "ala": "A",
+          "U": "U"
+        },
+        "kylmasillat": "Köldbryggor",
+        "kylmasillat-UA": "Köldbryggor U*A"
+      },
+      "ikkunat": {
+        "header": "Fönster enligt väderstreck",
+        "kohtisuora": "rät vinkel",
+        "arvo": "värde",
+        "labels": {
+          "pohjoinen": "Norr",
+          "koillinen": "Nordost",
+          "ita": "Öster",
+          "kaakko": "Sydost",
+          "etela": "Söder",
+          "lounas": "Sydväst",
+          "lansi": "Väster",
+          "luode": "Nordväst"
+        },
+        "pohjoinen": {
+          "label-context": "Fönster / Norr",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "koillinen": {
+          "label-context": "Fönster / Nordost",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "ita": {
+          "label-context": "Fönster / Öster",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "kaakko": {
+          "label-context": "Fönster / Sydost",
+          "ala": " A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "etela": {
+          "label-context": "Fönster / Söder",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "lounas": {
+          "label-context": "Fönster / Sydväst",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "lansi": {
+          "label-context": "Fönster / Väster",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "luode": {
+          "label-context": "Fönster / Nordväst",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        }
+      },
+      "ilmanvaihto": {
+        "header": "Ventilationssystem",
+        "label-context": "Ventilationssystem",
+        "tyyppi-id": "Ilmanvaihtojärjestelmän tyyppi SV?",
+        "sfp-luku": "Systemets SFP-värde kW/(m³/s)",
+        "lampotilasuhde": "Temperaturrelation för VÅV",
+        "jaatymisenesto": "Frostskydd",
+        "kuvaus": "Beskrivning av ventilationssystemet",
+        "lto-vuosihyotysuhde": "Årsverkningsgraden för VÅV från byggnadens ventilationssystem",
+        "tuloilma-lampotila": "Tuloilman sisäänpuhalluslämpötila °C SV?",
+        "ilmavirta": "Ilmavirta SV?",
+        "tulo": "in",
+        "poisto": "frånluft",
+        "labels": {
+          "paaiv": "Huvudaggregat (ventilation)",
+          "erillispoistot": "Separata utsug",
+          "ivjarjestelma": "Ventilationssystem"
+        },
+        "paaiv": {
+          "label-context": "Huvudaggregat (ventilation)",
+          "tulo": "In",
+          "poisto": "Frånluft ",
+          "sfp": "SFP-värde",
+          "lampotilasuhde": "Temperaturrelation för VÅV",
+          "jaatymisenesto": "Frostskydd"
+        },
+        "erillispoistot": {
+          "label-context": "Separata utsug",
+          "tulo": "In",
+          "poisto": "Frånluft",
+          "sfp": "SFP-värde"
+        },
+        "ivjarjestelma": {
+          "label-context": "Ventilationssystem",
+          "tulo": "In",
+          "poisto": "Frånluft",
+          "sfp": "SFP-värde"
+        }
+      },
+      "lammitys": {
+        "header": "Uppvärmningssystem",
+        "label-context": "Uppvärmningssystem",
+        "lammitysmuoto-1": {
+          "label-context": "$unused",
+          "id": "Ensisijainen lämmitysjärjestelmä SV?",
+          "kuvaus": "Ensisijaisen lämmitysjärjestelmän kuvaus SV?"
+        },
+        "lammitysmuoto-2": {
+          "label-context": "$unused",
+          "id": "Toissijainen lämmitysjärjestelmä SV?",
+          "kuvaus": "Toissijaisen lämmitysjärjestelmän kuvaus SV?"
+        },
+        "lammonjako": {
+          "label-context": "$unused",
+          "id": "Lämmönjako",
+          "kuvaus": "Lämmönjaon kuvaus SV?"
+        },
+        "tuotonhyotysuhde": "Verkningsgrad för produktionen",
+        "jaonjaluovutuksenhyotysuhde": "Verkningsgraden för distribution och avgivning",
+        "lampokerroin": "Temperaturkoefficient",
+        "apulaitteidensahkonkaytto": "Hjälputrustningens elförbrukning",
+        "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus SV?",
+        "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämättömään tilaan SV?",
+        "maara": "Mängd",
+        "tuotto": "Produktion",
+        "kuvaus": "Beskrivning av uppvärmningssystemet",
+        "tilat-ja-iv": {
+          "label": "Uppvärmning av utrymmen och ventilationsluft",
+          "label-context": "Uppvärmning av utrymmen och ventilationsluft",
+          "tuoton-hyotysuhde": "Verkningsgrad för produktionen",
+          "jaon-hyotysuhde": "Verkningsgraden för distribution och avgivning",
+          "lampokerroin": "Temperaturkoefficient",
+          "apulaitteet": "Hjälputrustningens elförbrukning",
+          "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus KÄÄNÖS",
+          "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämättömään tilaan SV?"
+        },
+        "lammin-kayttovesi": {
+          "label": "Varmvattenberedning",
+          "label-context": "Varmvattenberedning",
+          "tuoton-hyotysuhde": "Verkningsgrad för produktionen",
+          "jaon-hyotysuhde": "Verkningsgraden för distribution och avgivning",
+          "lampokerroin": "Temperaturkoefficient",
+          "apulaitteet": "Hjälputrustningens elförbrukning",
+          "lampopumppu-tuotto-osuus": "Lämpäpumpun tuotto-osuus SV?",
+          "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämättömään tilaan SV?"
+        },
+        "takka": {
+          "label": "Värmelagrande eldstad",
+          "label-context": "$unused",
+          "maara": "Varaavien tulisijojen lukumäärä SV?",
+          "tuotto": "Varaavien tulisijojen tuotto SV?"
+        },
+        "ilmalampopumppu": {
+          "label": "Luftvärmepump",
+          "label-context": "$unused",
+          "maara": "Ilmalämpöpumppujen lukumäärä SV?",
+          "tuotto": "Ilmalämpöpumppujen tuotto SV?"
+        }
+      },
+
+      "jaahdytysjarjestelma": {
+        "header": "Kylsystem",
+        "label-context": "Kylsystem",
+        "jaahdytyskauden-painotettu-kylmakerroin": "Viktad kylkoefficient för kylningssäsongen"
+      },
+
+      "lkvn-kaytto": {
+        "header": "Varmt tappvatten",
+        "label-context": "Varmt tappvatten",
+        "ominaiskulutus": "Specifik förbrukning",
+        "lammitysenergian-nettotarve": "Nettobehov av uppvärmningsenergi"
+      },
+
+      "sis-kuorma": {
+        "header": "Interna värmelaster enligt användningsgrad",
+        "kayttoaste": "Användningsgrad",
+        "lampokuorma": "Lämpökuorma SV?",
+        "labels": {
+          "henkilot": "Personer",
+          "kuluttajalaitteet": "Hushållsapparater",
+          "valaistus": "Belysning"
+        },
+        "henkilot": {
+          "label-context": "Interna värmelaster / Personer",
+          "kayttoaste": "Användningsgrad",
+          "lampokuorma": "Lämpökuorma SV?"
+        },
+        "kuluttajalaitteet": {
+          "label-context": "Interna värmelaster / Hushållsapparater",
+          "kayttoaste": "Användningsgrad",
+          "lampokuorma": "Lämpökuorma SV?"
+        },
+        "valaistus": {
+          "label-context": "Interna värmelaster / Belysning",
+          "kayttoaste": "Användningsgrad",
+          "lampokuorma": "Lämpökuorma SV?"
+        }
+      }
+    },
+    "tulokset": {
+      "header": "Beräkning av e-tal, resultat",
+      "label-context": "$unused",
+      "yhteensa": "Totalt",
+      "kaytettavat-energiamuodot": {
+        "header": "Specifikation av E-tal",
+        "label-context": "Specifikation av E-tal",
+        "kaytettavat-energiamuodot": "Använda energiformer",
+        "ostoenergia": {
+          "2018": "Köpt energi beräknad vid standardanvändning",
+          "2013": "Beräknad mängd energi"
+        },
+        "energiamuodon-kerroin": "Energiformsfaktor",
+        "kertoimella-painotettu-energiankulutus": "Energiförbrukning viktad med energiformsfaktorn",
+        "labels": {
+          "fossiilinen-polttoaine": "Fossila bränslen",
+          "sahko": "El",
+          "kaukojaahdytys": "Fjärrkyla",
+          "kaukolampo": "Fjärrvärme",
+          "uusiutuva-polttoaine": "Förrnybara bränslen"
+        },
+        "fossiilinen-polttoaine": "Köpt energi / Fossila bränslen",
+        "fossiilinen-polttoaine-painotettu-vuosikulutus": " Viktad energiförbrukning / Fossila bränslen (kWhE/vuosi)",
+        "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fossila bränslen (kWhE/(m²vuosi))",
+        "sahko": "Köpt energi / El",
+        "sahko-painotettu-vuosikulutus": "Viktad energiförbrukning/ El (kWhE/vuosi)",
+        "sahko-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ El (kWhE/(m²vuosi))",
+        "kaukojaahdytys": "Köpt energi / Fjärrkyla",
+        "kaukojaahdytys-painotettu-vuosikulutus": "Viktad energiförbrukning/ Fjärrkyla (kWhE/vuosi)",
+        "kaukojaahdytys-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrkyla (kWhE/(m²vuosi))",
+        "kaukolampo": "Köpt energi / Fjärrvärme",
+        "kaukolampo-painotettu-vuosikulutus": "Viktad energiförbrukning/ Fjärrvärme (kWhE/vuosi)",
+        "kaukolampo-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrvärme (kWhE/(m²vuosi))",
+        "uusiutuva-polttoaine": "Köpt energi / Förrnybara bränslen SV?",
+        "uusiutuva-polttoaine-painotettu-vuosikulutus": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/vuosi)",
+        "uusiutuva-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/(m²vuosi))",
+        "muu": {
+          "0": {
+            "label-context": "Specifikation av E-tal",
+            "nimi": "Energiamuodon nimi SV?",
+            "muotokerroin": "Energiformsfaktor",
+            "ostoenergia": "Köpt energi"
+          }
+        }
+      },
+      "uusiutuvat-omavaraisenergiat": {
+        "header": {
+          "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)",
+          "2013": "Utnyttjad andel av förnybar egenproducerad energi"
+        },
+        "label-context": "Uusiutuvat omavaraisenergiat",
+        "labels": {
+          "aurinkosahko": "Solel",
+          "tuulisahko": "Vindel",
+          "aurinkolampo": "Solvärme",
+          "muulampo": "Annan energi som utvunnits ur närmiljön, värme",
+          "muusahko": "Annan energi som utvunnits ur närmiljön, el",
+          "lampopumppu": "Energi som en värmepump upptar från värmekällan"
+        },
+        "aurinkosahko": "Solel (kWh/år)",
+        "aurinkosahko-neliovuosikulutus": "Solel (kWh/(m²år))",
+        "tuulisahko": "Vindel (kWh/år)",
+        "tuulisahko-neliovuosikulutus": "Vindel (kWh/(m²år))",
+        "aurinkolampo": "Aurinkolämpö (kWh/år)",
+        "aurinkolampo-neliovuosikulutus": "Aurinkolämpö (kWh/(m²år))",
+        "muulampo": "Muu ympäristöstä otettu energia / Lämpö (kWh/år)",
+        "muulampo-neliovuosikulutus": "Muu ympäristöstä otettu energia / Lämpö (kWh/(m²år))",
+        "muusahko": "Annan energi som utvunnits ur närmiljön / El (kWh/år)",
+        "muusahko-neliovuosikulutus": "Annan energi som utvunnits ur närmiljön / El (kWh/(m²år))",
+        "lampopumppu": "Energi som en värmepump upptar från värmekällan (kWh/år)",
+        "lampopumppu-neliovuosikulutus": "Energi som en värmepump upptar från värmekällan (kWh/(m²år))",
+        "0": {
+          "label-context": "Uusiutuvat omavaraisenergiat SV?",
+          "nimi": "Energian nimi SV?",
+          "vuosikulutus": "Produktion (kWh/vuosi)"
+        }
+      },
+      "tekniset-jarjestelmat": {
+        "header": "Energi som förbrukas av husets tekniska system",
+        "label-context": "$unused",
+        "sahko": "El",
+        "lampo": "Värme",
+        "kaukojaahdytys": "Fjärrkyla",
+        "lammitysjarjestelma": "Uppvärmningssystemet",
+        "labels": {
+          "tilojen-lammitys": "Uppvärmning av utrymmen",
+          "tuloilman-lammitys": "Uppvärmning av tilluft",
+          "kayttoveden-valmistus": "Varmvattenberedning",
+          "iv-sahko": "Elenergi som förbrukas av ventilationssystemet",
+          "jaahdytys": "Kylsystem",
+          "kuluttajalaitteet-ja-valaistus-sahko": "Hushållsapparater och belysning"
+        },
+        "tilojen-lammitys": {
+          "label-context": "Uppvärmning av utrymmen",
+          "sahko": "Elförbrukning",
+          "lampo": "värmeförbrukning"
+        },
+        "tuloilman-lammitys": {
+          "label-context": "Uppvärmning av tilluft",
+          "sahko": "Elförbrukning",
+          "lampo": "värmeförbrukning"
+        },
+        "kayttoveden-valmistus": {
+          "label-context": "Varmvattenberedning",
+          "sahko": "Elförbrukning",
+          "lampo": "värmeförbrukning"
+        },
+        "iv-sahko": "Elenergi som förbrukas av ventilationssystemet",
+        "jaahdytys": {
+          "label-context": "$unused",
+          "sahko": "Jäähdytyksen sähkönkulutus SV?",
+          "lampo": "Jäähdytyksen lämmönkulutus SV?",
+          "kaukojaahdytys": "Kaukojäähdytyksen energiankulutus SV?"
+        },
+        "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteiden ja valaistuksen sähkönkulutus SV?"
+      },
+      "nettotarve": {
+        "header": "Nettoenergibehov",
+        "labels": {
+          "tilojen-lammitys-vuosikulutus": "Uppvärmning av utrymmen",
+          "ilmanvaihdon-lammitys-vuosikulutus": "Uppvärmning av ventilationsluft",
+          "kayttoveden-valmistus-vuosikulutus": "Varmvattenberedning",
+          "jaahdytys-vuosikulutus": "Kylning"
+        },
+        "label-context": "Nettoenergibehov",
+        "tilojen-lammitys-vuosikulutus": "Uppvärmning av utrymmen (kWh/år)",
+        "tilojen-lammitys-neliovuosikulutus": "Uppvärmning av utrymmen (kWh/(m²år))",
+        "ilmanvaihdon-lammitys-vuosikulutus": "Uppvärmning av ventilationsluf (kWh/år)",
+        "ilmanvaihdon-lammitys-neliovuosikulutus": "Uppvärmning av ventilationsluf (kWh/(m²år))",
+        "kayttoveden-valmistus-vuosikulutus": "Varmvattenberedning (kWh/år)",
+        "kayttoveden-valmistus-neliovuosikulutus": "Varmvattenberedning (kWh/(m²år))",
+        "jaahdytys-vuosikulutus": "Kylning (kWh/år)",
+        "jaahdytys-neliovuosikulutus": "Kylning (kWh/(m²år))"
+      },
+      "lampokuormat": {
+        "header": "Värmelaster",
+        "label-context": "Värmelaster",
+        "labels": {
+          "aurinko": "Solen",
+          "ihmiset": "Personer",
+          "kuluttajalaitteet": "Hushållsapparater",
+          "valaistus": "Belysning",
+          "kvesi": "Cirkul. varmt tappvatten och förluster från varmvattenb."
+        },
+        "aurinko": "Solen (kWh/år)",
+        "aurinko-nelivuosikuorma": "Solen (kWh/(m²år))",
+        "ihmiset": "Personer (kWh/år)",
+        "ihmiset-nelivuosikuorma": "Personer (kWh/(m²år))",
+        "kuluttajalaitteet": "Hushållsapparater (kWh/år)",
+        "kuluttajalaitteet-nelivuosikuorma": "Hushållsapparater (kWh/(m²år))",
+        "valaistus": "Belysning (kWh/år)",
+        "valaistus-nelivuosikuorma": "Belysning (kWh/(m²år))",
+        "kvesi": "Cirkul. varmt tappvatten och förluster från varmvattenb. (kWh/år)",
+        "kvesi-nelivuosikuorma": "Cirkul. varmt tappvatten och förluster från varmvattenb. (kWh/(m²år))"
+      },
+      "laskentatyokalu": "Beräkningsverktygets namn och versionsnummer"
+    },
+    "toteutunut-ostoenergiankulutus": {
+      "header": "Faktisk energiförbrukning",
+      "ostettu-energia": {
+        "header": {
+          "2018": "Energi köpt från energinät",
+          "2013": "Köpt energi"
+        },
+        "labels": {
+          "kaukolampo": "Fjärrvärme",
+          "kokonaissahko": "Total elmängd",
+          "kiinteistosahko": "Fastighetsel",
+          "kayttajasahko": "Hushållsel",
+          "kaukojaahdytys": "Fjärrkyla"
+        },
+        "label-context": "Köpt energi",
+        "kaukolampo-vuosikulutus": "Fjärrvärme (kWh/vuosi)",
+        "kaukolampo-neliovuosikulutus": "Fjärrvärme (kWh/(m²vuosi))",
+        "kokonaissahko-vuosikulutus": "Total elmängd (kWh/vuosi)",
+        "kokonaissahko-neliovuosikulutus": "Total elmängd (kWh/(m²vuosi))",
+        "kiinteistosahko-vuosikulutus": "Fastighetsel (kWh/vuosi)",
+        "kiinteistosahko-neliovuosikulutus": "Fastighetsel (kWh/(m²vuosi))",
+        "kayttajasahko-vuosikulutus": "Hushållsel (kWh/vuosi)",
+        "kayttajasahko-neliovuosikulutus": "Hushållsel (kWh/(m²vuosi))",
+        "kaukojaahdytys-vuosikulutus": "Fjärrkyla (kWh/vuosi)",
+        "kaukojaahdytys-neliovuosikulutus": "Fjärrkyla (kWh/(m²vuosi))",
+        "muu": {
+          "0": {
+            "label-context": "Muu ostettu energia SV?",
+            "nimi": "Energiamuodon nimi SV?",
+            "vuosikulutus": "Energian vuosikulutus SV?"
+          }
+        }
+      },
+      "ostetut-polttoaineet": {
+        "header": "Köpta bränslen",
+        "table-header": {
+          "maara": "Mängd per år",
+          "yksikko": "Enhet",
+          "muunnoskerroin": "Omvandlingsfaktor (kWh)"
+        },
+        "label-context": "Köpta bränslen",
+
+        "kevyt-polttooljy": "Lätt brännolja",
+        "kevyt-polttooljy-yksikko": "liter",
+        "kevyt-polttooljy-vuosikulutus": "Lätt brännolja (kWh/år)",
+        "kevyt-polttooljy-neliovuosikulutus": "Lätt brännolja (kWh/(m²år))",
+
+        "pilkkeet-havu-sekapuu": "Ved (barr- och blandved)",
+        "pilkkeet-havu-sekapuu-yksikko": "trav-m³",
+        "pilkkeet-havu-sekapuu-vuosikulutus": "Ved (barr- och blandved) (kWh/år)",
+        "pilkkeet-havu-sekapuu-neliovuosikulutus": "Ved (barr- och blandved) (kWh/(m²år))",
+
+        "pilkkeet-koivu": "Ved (björkved)",
+        "pilkkeet-koivu-yksikko": "trav-m³",
+        "pilkkeet-koivu-vuosikulutus": "Ved (björkved) (kWh/år)",
+        "pilkkeet-koivu-neliovuosikulutus": "Ved (björkved) (kWh/(m²år))",
+
+        "puupelletit": "Träpelletar",
+        "puupelletit-yksikko": "kg",
+        "puupelletit-vuosikulutus": "Träpelletar (kWh/år)",
+        "puupelletit-neliovuosikulutus": "Träpelletar (kWh/(m²år))",
+
+        "muu": {
+          "0": {
+            "label-context": "Muut ostetut polttoaineet SV?",
+            "nimi": "Polttoaineen nimi SV?",
+            "yksikko": "Polttoaineen yksikkö SV?",
+            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi SV?",
+            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa SV?",
+            "vuosikulutus": "Polttoaineen vuosikulutus (kWh/vuosi) SV?",
+            "neliovuosikulutus": "Polttoaineen neliovuosikulutus (kWh/m²vuosi) SV?"
+          }
+        }
+      },
+      "toteutuneet-yhteensa-header": "Faktisk köpt energi totalt",
+      "label-context": "Faktisk köpt energi",
+      "labels": {
+        "sahko-vuosikulutus-yhteensa": "El",
+        "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme",
+        "polttoaineet-vuosikulutus-yhteensa": "Bränsle",
+        "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning"
+      },
+      "sahko-vuosikulutus-yhteensa": "El (kWh/år)",
+      "sahko-neliovuosikulutus-yhteensa": "El (kWh/m²år)",
+      "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme (kWh/år)",
+      "kaukolampo-neliovuosikulutus-yhteensa": "Fjärrvärme (kWh/m²år)",
+      "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning (kWh/år)",
+      "polttoaineet-vuosikulutus-yhteensa": "Bränsle (kWh/år)",
+      "polttoaineet-neliovuosikulutus-yhteensa": "Bränsle (kWh/(m²år))",
+      "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",
+      "toteutunut-neliovuosikulutus-yhteensä": "Totalt (kWh/(m²år))"
+    },
+    "huomiot": {
+      "header": {
+        "2018": "Åtgärdsförslag för att förbättra e-talet",
+        "2013": "Förslag till åtgärder för att förbättra energiprestandan"
+      },
+      "label-context": "$unused",
+      "toimenpide-table": {
+        "ehdotus": "Åtgärdsförslag",
+        "lampo": "Värme, förändring i köpt energi",
+        "sahko": "El, förändring i köpt energi",
+        "jaahdytys": "Kylning, förändring i köpt energi",
+        "eluvun-muutos": "E-tal, förändring"
+      },
+
+      "suositukset-header": {
+        "2018": "Rekommendationer för användning och underhåll av byggnaden (påverkar inte E-talet)",
+        "2013": "Rekommendationer för byggnadens användning och underhåll"
+      },
+      "suositukset": "Suositetut toimenpide-ehdotukset SV?",
+      "lisatietoja-header": "Ytterligare uppgifter om energiprestanda",
+      "lisatietoja": "Ytterligare uppgifter",
+      "iv-ilmastointi": {
+        "header": "Anmärkningar - ventilations- och luftkonditioneringssystem",
+        "label-context": "$unused",
+        "teksti": "Anmärkningar - ventilations- och luftkonditioneringssystem",
+        "toimenpide": [
+          {
+            "label-context": "Anmärkningar / Ventilations- och luftkonditioneringssystem",
+            "nimi": "Åtgärdsförslag",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen SV?",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen SV?",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen SV?",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen SV?"
+          }
+        ]
+      },
+      "valaistus-muut": {
+        "header": "Anmärkningar - belysning, kylsystem, separat eluppvärmning och andra system",
+        "label-context": "$unused",
+        "teksti": "Anmärkningar - belysning, kylsystem, separat eluppvärmning och andra system",
+        "toimenpide": [
+          {
+            "label-context": "Anmärkningar / Belysning, och andra system",
+            "nimi": "Åtgärdsförslag",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen SV?",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen SV?",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen SV?",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen SV?"
+          }
+        ]
+      },
+      "lammitys": {
+        "header": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
+        "label-context": "$unused",
+        "teksti": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
+        "toimenpide": [
+          {
+            "label-context": "Anmärkningar / Uppvärmningssystem",
+            "nimi": "Åtgärdsförslag",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen SV?",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen SV?",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen SV?",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen SV?"
+          }
+        ]
+      },
+      "ymparys": {
+        "header": "Anmärkningar - ytterväggar, ytterdörrar och fönster",
+        "label-context": "$unused",
+        "teksti": "Anmärkningar - ytterväggar, ytterdörrar och fönster",
+        "toimenpide": [
+          {
+            "label-context": "Anmärkningar / Ytterväggar...",
+            "nimi": "Toimenpide-ehdotus",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen SV?",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen SV?",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen SV?",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen SV?"
+          }
+        ]
+      },
+      "alapohja-ylapohja": {
+        "header": "Anmärkningar, vinds- och bottenbjälklag",
+        "label-context": "$unused",
+        "teksti": "Anmärkningar, vinds- och bottenbjälklag",
+        "toimenpide": [
+          {
+            "label-context": "Anmärkningar / vinds- och bottenbjälklag",
+            "nimi": "Anmärkningar",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen SV?",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen SV?",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen SV?",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen SV?"
+          }
+        ]
+      }
+    },
+    "lisamerkintoja": "Tilläggsuppgifter",
+    "messages": {
+      "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti. SV?",
+      "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe. SV?",
+      "validation-error": "Lomakkeella virheitä, tarkista syötteet kentissä: SV?",
+      "load-error": "Energiatodistuksen tietojen haku epäonnistui. SV?",
+      "not-found": "Energiatodistusta ei ole olemassa. SV?",
+      "validation-required-error": "Pakolliset tiedot puuttuvat: SV?"
+    },
+    "signing": {
+      "header": "Allekirjoittaminen SV?",
+      "language-adjective": {
+        "fi": "på finska",
+        "sv": "på svenska",
+        "bilingual": "tvåspråkig"
+      },
+      "language-genitive": {
+        "fi": "suomenkielisen SV?",
+        "sv": "ruotsinkielisen SV?",
+        "bilingual": "kaksikielisen SV?"
+      },
+      "messages": {
+        "connection-check": "Tarkistetaan yhteyttä mPolluxiin. SV?",
+        "already-started": "Allekirjoitus on keskeytynyt tuntemattomasta syystä. SV?",
+        "connection-success": "Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu. SV?",
+        "connection-failed": "Yhteyden avaus mPolluxiin epäonnistui. Allekirjoittaminen edellyttää että allekirjoitusohjelma mPollux on asennettu ja selaimesta on yhteys allekirjoitusohjelmaan. SV?"
+      },
+      "error": {
+        "abort-failed": "Keskeyttäminen epäonnistui SV?",
+        "signing-failed": "Allekirjoittaminen keskeytyi tuntemattomasta syystä. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen. SV?",
+        "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä. SV?"
+      },
+      "status": {
+        "not-started": "Voit nyt allekirjoittaa {language-genitive} energiatodistuksen. SV?",
+        "already-started": "Voit aloittaa energiatodistuksen allekirjoittamisen uudestaan tai keskeyttää allekirjoittamisen ja palata luonnostilaan. SV?",
+        "start": "Käynnistetään {language} allekirjoitusprosessi. SV?",
+        "digest": "Muodostetaan {language} energiatodistusta. SV?",
+        "signature": "Allekirjoita {language} energiatodistus mPollux-ohjelmistossa. SV?",
+        "pdf": "Allekirjoitetaan {language} energiatodistusta. SV?",
+        "finish": "Allekirjoitusprosessin päättäminen SV?.",
+        "signed": "{language} energiatodistus on allekirjoitettu onnistuneesti.",
+        "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan."
+      },
+      "button": {
+        "start": "Allekirjoita",
+        "abort": "Keskeytä",
+        "close": "Sulje"
+      }
+    },
+    "allekirjoitus": {
+      "laskutusosoite": "Faktureringsadress",
+      "valitse-laskutusosoite": "Välj en faktureringsadress"
+    },
+    "laskutustiedot": {
+      "nimi": "Namn"
+    },
+    "liitteet": {
+      "title": "Liitteet SV?",
+      "empty": "Energiatodistuksella ei ole liitteitä. SV?",
+      "liite": {
+        "createtime": "Lisätty SV?",
+        "nimi": "Tiedosto / Linkki SV?",
+        "author": "Lisääjä SV?"
+      },
+      "add-files": {
+        "title": "Lisää tiedostoja SV?"
+      },
+      "add-link": {
+        "title": "Lisää linkki SV?",
+        "nimi": "Nimi",
+        "url": "Webbadress"
+      },
+      "messages": {
+        "add-files": {
+          "success": "Energiatodistuksen liitteet tallennettu. SV?",
+          "error": "Energiatodistuksen liitteiden tallennuksessa tapahtui virhe. SV?"
+        },
+        "add-link": {
+          "success": "Energiatodistuksen linkki tallennettu. SV?",
+          "error": "Energiatodistuksen linkin tallennuksessa tapahtui odottamaton virhe. SV?",
+          "validation": "Lisää linkki lomakkeella virheitä, tarkista kentät. SV?"
+        },
+        "delete-liite": {
+          "success": "Energiatodistuksen liite poistettu. SV?",
+          "delete": "Energiatodistuksen liitteen poistamisessa tapahtui virhe. SV?"
+        },
+        "load-error": "Energiatodistuksen liitteiden haku epäonnistui. SV?"
+      }
+    }
+  },
+  "energiatodistukset": {
+    "title": "Energicertifikat",
+    "tilat": {
+      "0": "Utkast",
+      "1": "Voimassa SV?"
+    },
+    "messages": {
+      "delete-success": "Energiatodistus poistettiin onnistuneesti SV?",
+      "delete-error": "Energiatodistuksen poistaminen epäonnistui SV?"
+    }
+  },
+  "confirm": {
+    "you-want-to-delete": "Oletko varma, että haluat poistaa? SV?",
+    "button": {
+      "delete": "Radera"
+    }
+  },
+  "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja SV?",
+  "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan. SV?",
+  "country-not-found": "Virheellinen maa SV?",
+  "table": {
+    "actions": "Toiminnot SV?"
+  },
+  "pagination": {
+    "results": "Tuloksia {from}...{to} / {total} SV?"
+  },
+  "unique-violations": {
+    "kayttaja-email-key": "Sähköpostiosoite on jo käytössä. SV?",
+    "kayttaja-virtu-key": "Virtu käyttäjätunnus on jo käytössä. SV?",
+    "kayttaja_henkilotunnus_key": "Henkilötunnus on jo käytössä. SV?",
+    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä. SV?"
+  }
 }
