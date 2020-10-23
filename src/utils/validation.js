@@ -180,6 +180,32 @@ export const isOVTTunnus = R.allPass([
   )
 ]);
 
+export const ibanCharObj = R.zipObj(
+  "abcdefghijklmnopqrstuvwxyz",
+  R.range(10, 36)
+);
+
+export const isIBAN = R.ifElse(
+  str => str && str.length >= 4,
+  str => {
+    const country = str.substring(0, 2);
+    const checksum = str.substring(2, 4);
+    const bban = str.substring(4);
+    return R.compose(
+      R.equals(1n),
+      str => BigInt(str) % 97n,
+      R.join(''),
+      R.map(R.either(R.prop(R.__, ibanCharObj), R.identity)),
+      R.toLower
+    )(bban + country + checksum);
+  },
+  R.always(false));
+
+export const isVerkkolaskuosoite = R.anyPass([
+  isOVTTunnus,
+  isIBAN
+]);
+
 export const OVTTunnusValidator = {
   predicate: isOVTTunnus,
   label: R.applyTo('validation.invalid-ovttunnus')
