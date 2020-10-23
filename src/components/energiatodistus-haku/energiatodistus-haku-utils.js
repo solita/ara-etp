@@ -184,8 +184,15 @@ export const deserializeAndBlocks = R.converge(R.concat, [
 
 export const deserializeWhere = R.curry((schema, where) =>
   R.compose(
-    R.set(R.compose(R.lensIndex(0), R.lensProp('conjunction')), 'and'),
-    R.filter(R.compose(R.has(R.__, schema), R.nth(1), R.prop('block'))),
+    Either.orSome(''),
+    R.map(R.set(R.compose(R.lensIndex(0), R.lensProp('conjunction')), 'and')),
+    where =>
+      Either.fromTry(() =>
+        R.filter(
+          R.compose(R.has(R.__, schema), R.nth(1), R.prop('block')),
+          where
+        )
+      ),
     R.map(deserializeConjuntionBlockPair),
     R.unnest,
     R.map(deserializeAndBlocks)
