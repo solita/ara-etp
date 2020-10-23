@@ -23,8 +23,6 @@
 
   let hakuValue = '';
 
-  const valittuHaku = Maybe.None();
-
   const navigate = search => {
     R.compose(
       push,
@@ -34,8 +32,6 @@
       R.assoc('where', R.__, {})
     )(search);
   };
-
-  $: showHakukriteerit = where.length > 0;
 
   let queryItems = [];
 
@@ -61,22 +57,6 @@
       search={true}
       bind:rawValue={hakuValue} />
   </div>
-  <div class="w-1/12" />
-  <div class="flex justify-center items-center w-1/3 pl-4">
-    <div class="w-full">
-      <Select
-        allowNone={true}
-        label={$_('energiatodistus.haku.suosikkihaut')}
-        model={valittuHaku}
-        lens={a => a} />
-    </div>
-  </div>
-</div>
-
-<div class="flex w-full justify-end mt-8">
-  <ToggleButton
-    label={$_('energiatodistus.haku.lisaa_hakuehtoja')}
-    bind:value={showHakukriteerit} />
 </div>
 
 <form
@@ -122,7 +102,7 @@
     </div>
   {/each}
 
-  <div class="flex">
+  <div class="flex my-4">
     <TextButton
       text={$_('energiatodistus.haku.lisaa_hakuehto')}
       icon={'add_circle_outline'}
