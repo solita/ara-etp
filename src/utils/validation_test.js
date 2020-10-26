@@ -199,4 +199,18 @@ describe('Validation:', () => {
       assert.equal(validation.isIBAN(''), false);
     });
   });
+
+  describe('TEOVT-tunnus validation', () => {
+    it('valid TEOVT-tunnus', () => {
+      assert.equal(validation.isTEOVTTunnus('TE003712345671'), true);
+      assert.equal(validation.isTEOVTTunnus('TE0037123456710'), true);
+    });
+
+    it('invalid TEOVT-tunnus', () => {
+      assert.equal(validation.isTEOVTTunnus('003712345671'), false);
+      assert.equal(validation.isTEOVTTunnus('TE003712345672'), false);
+      assert.equal(validation.isTEOVTTunnus(null), false);
+      assert.equal(validation.isTEOVTTunnus(''), false);
+    });
+  });
 });

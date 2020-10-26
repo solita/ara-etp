@@ -186,7 +186,7 @@ export const ibanCharObj = R.zipObj(
 );
 
 export const isIBAN = R.ifElse(
-  str => str && str.length >= 4,
+  str => R.gte(R.length(str), 4),
   str => {
     const country = str.substring(0, 2);
     const checksum = str.substring(2, 4);
@@ -201,9 +201,16 @@ export const isIBAN = R.ifElse(
   },
   R.always(false));
 
+export const isTEOVTTunnus = R.allPass([
+    R.compose(R.gte(R.__, 2), R.length),
+    R.compose(R.startsWith('te'), R.toLower),
+    R.compose(isOVTTunnus,R.drop(2))
+]);
+
 export const isVerkkolaskuosoite = R.anyPass([
   isOVTTunnus,
-  isIBAN
+  isIBAN,
+  isTEOVTTunnus
 ]);
 
 export const OVTTunnusValidator = {
