@@ -39,7 +39,7 @@ export const formSchema = () => ({
   ],
   maa: [],
   verkkolaskuosoite: R.map(validation.liftValidator, [
-    validation.OVTTunnusValidator
+    validation.VerkkolaskuosoiteValidator
   ]),
   verkkolaskuoperaattori: []
 });

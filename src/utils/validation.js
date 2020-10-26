@@ -213,9 +213,9 @@ export const isVerkkolaskuosoite = R.anyPass([
   isTEOVTTunnus
 ]);
 
-export const OVTTunnusValidator = {
-  predicate: isOVTTunnus,
-  label: R.applyTo('validation.invalid-ovttunnus')
+export const VerkkolaskuosoiteValidator = {
+  predicate: isVerkkolaskuosoite,
+  label: R.applyTo('validation.invalid-verkkolaskuosoite')
 };
 
 export const validate = (validators, value) =>

@@ -12,7 +12,7 @@
     "postinumero-not-found": "Postinumeroa ei ole olemassa",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "invalid-rakennustunnus": "Virheellinen rakennustunnus",
-    "invalid-ovttunnus": "Virheellinen OVT-tunnus",
+    "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
     "no-selection": "Ei valintaa",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min}",
@@ -74,7 +74,7 @@
     "laskutuskieli": "Laskun kieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "verkkolaskuosoite",
-    "ovt-tunnus": "OVT-tunnus",
+    "verkkolaskuosoite": "Verkkolaskuosoite",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
