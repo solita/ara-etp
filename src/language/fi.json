@@ -218,7 +218,7 @@
     },
     "tila": {
       "draft": "Luonnos",
-      "in-signing": "Allekirjoitus keskeytynyt",
+      "in-signing": "Allekirjoitus",
       "signed": "Voimassa",
       "discarded": "Hylätty",
       "replaced": "Korvattu",
@@ -279,7 +279,6 @@
         "nimi": "Yritys"
       }
     },
-    "litraa-per-neliovuosi": "dm³/(m²vuosi)",
     "yhteensa": "Yhteensä",
     "lahtotiedot": {
       "header": "E-luvun laskennan lähtötiedot",
@@ -517,7 +516,7 @@
         },
         "henkilot": {
           "label-context": "Sisäiset lämpökuormat / Henkilöt",
-          "kayttoaste": "§Käyttöaste",
+          "kayttoaste": "Käyttöaste",
           "lampokuorma": "Lämpökuorma"
         },
         "kuluttajalaitteet": {
@@ -914,9 +913,9 @@
         "not-started": "Voit nyt allekirjoittaa {language-genitive} energiatodistuksen.",
         "already-started": "Voit aloittaa energiatodistuksen allekirjoittamisen uudestaan tai keskeyttää allekirjoittamisen ja palata luonnostilaan.",
         "start": "Käynnistetään {language} allekirjoitusprosessi.",
-        "digest": "Muodostetaan {language} energiatodistusta.",
+        "digest": "Muodostetaan {language} energiatodistus.",
         "signature": "Allekirjoita {language} energiatodistus mPollux-ohjelmistossa.",
-        "pdf": "Allekirjoitetaan {language} energiatodistusta.",
+        "pdf": "Allekirjoitetaan {language} energiatodistus.",
         "finish": "Allekirjoitusprosessin päättäminen.",
         "signed": "{language} energiatodistus on allekirjoitettu onnistuneesti.",
         "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan."
@@ -958,7 +957,7 @@
         "add-link": {
           "success": "Energiatodistuksen linkki lisätty onnistuneesti.",
           "error": "Energiatodistuksen linkin lisäämisessä tapahtui odottamaton virhe.",
-          "validation": "Lisää linkki lomakkeella virheitä, tarkista kentkät."
+          "validation": "Lisää linkki lomakkeella virheitä, tarkista kentät."
         },
         "delete-liite": {
           "success": "Energiatodistuksen liite poistettu.",
