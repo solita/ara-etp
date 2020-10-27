@@ -7,6 +7,7 @@
   import { _ } from '@Language/i18n';
 
   import Link from '@Component/Link/Link';
+  import LanguageSelect from './language-select';
 
   let showDropdown = false;
 
@@ -21,18 +22,18 @@
 
 <style type="text/postcss">
   header {
-    @apply flex px-20 h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex px-10 h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
   }
 
-  a {
+  .listlink {
     @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
   }
 
-  a:not(:last-child) {
+  .listlink:not(:last-child) {
     @apply border-b-1 border-disabled;
   }
 
-  a:hover {
+  .listlink:hover {
     @apply bg-background;
   }
 </style>
@@ -45,25 +46,29 @@
     }
   }} />
 
-<header>
-  <img src="images/ara_logo_simple_nega.svg" alt="Ara" />
-  <div>Tähän haku</div>
-  <div>Laatijan ohjeet</div>
-  <div>Työkalut</div>
-  <div bind:this={nameNode} class="relative">
-    <span
-      bind:this={namebutton}
-      class="cursor-pointer"
-      on:click={() => (showDropdown = !showDropdown)}>
-      {fullName}
-    </span>
-    <span class="material-icons absolute">keyboard_arrow_down</span>
-    {#if showDropdown}
-      <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col">
-        {#each R.compose( R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)), Maybe.orSome([]), R.map(Navigation.roleBasedHeaderMenuLinks($_)) )($currentUserStore) as link}
-          <a class="w-full" href={link.href}>{link.text}</a>
-        {/each}
-      </div>
-    {/if}
+<header class="flex justify-between">
+  <div class="flex flex-1 items-center">
+    <a href="/">
+      <img class="mr-8" src="images/ara_logo_simple_nega.svg" alt="Ara" />
+    </a>
+    <LanguageSelect />
+  </div>
+  <div class="flex flex-row justify-between">
+    <div bind:this={nameNode} class="relative">
+      <span
+        bind:this={namebutton}
+        class="cursor-pointer"
+        on:click={() => (showDropdown = !showDropdown)}>
+        {fullName}
+      </span>
+      <span class="material-icons absolute">keyboard_arrow_down</span>
+      {#if showDropdown}
+        <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col">
+          {#each R.compose( R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)), Maybe.orSome([]), R.map(Navigation.roleBasedHeaderMenuLinks($_)) )($currentUserStore) as link}
+            <a class="listlink w-full" href={link.href}>{link.text}</a>
+          {/each}
+        </div>
+      {/if}
+    </div>
   </div>
 </header>

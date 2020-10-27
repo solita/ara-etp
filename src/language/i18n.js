@@ -18,7 +18,7 @@ const setupI18n = () => {
 
   init({
     fallbackLocale: 'fi-FI',
-    initialLocale: getLocaleFromNavigator()
+    initialLocale: localStorage.getItem('locale') || getLocaleFromNavigator()
   });
 };
 
