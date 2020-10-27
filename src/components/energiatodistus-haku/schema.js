@@ -139,7 +139,8 @@ const perustiedot = {
   kiinteistotunnus: [...stringComparisons],
   rakennusosa: [...stringComparisons],
   'julkinen-rakennus': [singleBoolean],
-  katuosoite: [...stringComparisons],
+  'katuosoite-fi': [...stringComparisons],
+  'katuosoite-sv': [...stringComparisons],
   postinumero: [...stringComparisons],
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
@@ -150,7 +151,8 @@ const perustiedot = {
     postinumero: [...stringComparisons]
   },
   // havainnointikaynti: [...dateComparisons],
-  'keskeiset-suositukset': [...stringComparisons]
+  'keskeiset-suositukset-fi': [...stringComparisons],
+  'keskeiset-suositukset-sv': [...stringComparisons]
 };
 
 const lahtotiedot = {
@@ -367,8 +369,10 @@ const toteutunutOstoenergiankulutus = {
 };
 
 const huomiot = {
-  suositukset: [...stringComparisons],
-  lisatietoja: [...stringComparisons],
+  'suositukset-fi': [...stringComparisons],
+  'suositukset-sv': [...stringComparisons],
+  'lisatietoja-fi': [...stringComparisons],
+  'lisatietoja-sv': [...stringComparisons],
   'iv-ilmastointi': {
     teksti: [...stringComparisons],
     toimenpide: {
@@ -430,7 +434,8 @@ export const schema = {
   tulokset,
   'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
   huomiot,
-  lisamerkintoja: [...stringComparisons]
+  'lisamerkintoja-fi': [...stringComparisons],
+  'lisamerkintoja-sv': [...stringComparisons]
 };
 
 export const isOperationArray = R.compose(R.equals('Array'), R.type);
