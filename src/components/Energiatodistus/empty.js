@@ -80,6 +80,8 @@ export const energiatodistus2018 = _ => ({
   'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
+  'korvaava-energiatodistus-id': Maybe.None(),
+  'korvattu-energiatodistus-id': Maybe.None(),
   laskuriviviite: Maybe.None(),
   laskutusaika: Maybe.None(),
   perustiedot: {
@@ -242,7 +244,6 @@ export const energiatodistus2018 = _ => ({
   },
   'lisamerkintoja-fi': Maybe.None(),
   'lisamerkintoja-sv': Maybe.None(),
-  'korvattu-energiatodistus-id': Maybe.None(),
   kommentti: Maybe.None()
 });
 
