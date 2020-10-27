@@ -3,111 +3,102 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
+  import HR from '@Component/HR/HR';
+  import H2 from '@Component/H/H2';
   import Checkbox from '@Component/Checkbox/Checkbox';
-  import AsyncAutocomplete from '@Component/Autocomplete/AsyncAutocomplete';
   import Input from '@Component/Input/Input';
-
-  import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
   import * as EtApi from './energiatodistus-api';
-  import * as empty from './empty';
 
+  import * as Korvaavuus from './energiatodistuksen-korvaavuus';
+  import * as ET from './energiatodistus-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
+  import * as Parsers from '@Utility/parsers';
 
-  export let model;
-  export let lens;
-  export let initialKorvattavaId = Maybe.None();
-  export let disabled = false;
+  export let energiatodistus;
+  export let whoami;
+
+  const enabled =
+    Kayttajat.isLaatija(whoami.rooli) && R.propEq('tila-id', ET.tila.draft, energiatodistus) ||
+    Kayttajat.isPaakayttaja(whoami.rooli) &&
+      !ET.isTilaInTilat([ET.tila.draft, ET.tila.deleted])(energiatodistus);
+
+  const lens = R.lensProp('korvattu-energiatodistus-id');
 
   let cancel = () => {};
-  let completedValue = '';
   let overlay = false;
-
-  let korvattavaEnergiatodistusId = Maybe.isSome(initialKorvattavaId)
-    ? initialKorvattavaId
-    : Maybe.None();
+  let query = R.view(lens, energiatodistus);
   let korvattavaEnergiatodistus = Maybe.None();
+  let checked = Maybe.isSome(R.view(lens, energiatodistus));
 
-  let checked = Maybe.isSome(korvattavaEnergiatodistusId);
-
-  const energiatodistusMatchId = R.curry((energiatodistus, id) =>
-    R.compose(
-      R.equals(id),
-      R.prop('id')
-    )(energiatodistus)
-  );
-
-  const parseEt = R.compose(
+  const parseId = R.compose(
     Maybe.fromFalsy,
     value => parseInt(value, 10)
   );
 
-  const fetchEnergiatodistus = id => {
-
-    if (
-      R.compose(
-        Maybe.exists(R.identity),
-        R.lift(energiatodistusMatchId)
-      )(korvattavaEnergiatodistus, id)
-    ) {
-      return;
+  const setKorvattavaEnergiatodistus = id => {
+    if (!R.equals(R.view(lens, energiatodistus), id)) {
+      energiatodistus = R.set(lens, id, energiatodistus);
     }
+  }
 
+  const fetchKorvattavaEnergiatodistus = id => {
     cancel = R.compose(
-      Maybe.cata(
-        R.compose(
-          R.always(() => {}),
-          R.tap(_ => (korvattavaEnergiatodistus = Maybe.None()))
-        ),
-        R.compose(
-          Future.fork(
-            _ => {
-              overlay = false;
-              korvattavaEnergiatodistus = Maybe.None();
-            },
-            et => {
-              overlay = false;
-              model = R.set(lens, R.map(i => parseInt(i, 10), id), model);
-              korvattavaEnergiatodistus = Maybe.Some(et);
-            }
-          ),
-          R.chain(Future.after(200)),
-          EtApi.getEnergiatodistusById(fetch, 'all'),
-          R.tap(_ => {
-            overlay = true;
-          })
-        )
+      Future.fork(
+        _ => {
+          overlay = false;
+          korvattavaEnergiatodistus = Maybe.None();
+        },
+        et => {
+          overlay = false;
+          setKorvattavaEnergiatodistus(Maybe.Some(et.id))
+          korvattavaEnergiatodistus = Maybe.Some(et);
+        }
       ),
-      R.tap(cancel)
-    )(id);
+      R.chain(Future.after(400)),
+      EtApi.getEnergiatodistusById(fetch, 'all'),
+      R.tap(_ => {
+        overlay = true;
+      }),
+      R.tap(cancel))(id);
   };
 
-  $: checked
-    ? (model = R.set(lens, korvattavaEnergiatodistusId, model))
-    : (model = R.set(lens, Maybe.None(), model));
+  R.forEach(fetchKorvattavaEnergiatodistus, R.view(lens, energiatodistus));
 
-  $: korvattavaEnergiatodistusId = R.compose(
-    Maybe.orElse(korvattavaEnergiatodistusId),
-    parseEt
-  )(completedValue);
+  $: if (enabled && !overlay) {
+    if (checked) {
+      setKorvattavaEnergiatodistus(korvattavaEnergiatodistus.map(R.prop('id')));
+    } else {
+      setKorvattavaEnergiatodistus(Maybe.None());
+    }
+  }
 
-  $: fetchEnergiatodistus(korvattavaEnergiatodistusId);
+  const searchKorvattavaEnergiatodistus = R.compose(
+    Maybe.cata(_ => {
+        korvattavaEnergiatodistus = Maybe.None();
+      },
+      fetchKorvattavaEnergiatodistus),
+    R.chain(parseId)
+  );
 
-  const postinumeroLens = R.lensPath(['perustiedot', 'postinumero']);
-  const ktlLens = R.lensPath(['perustiedot', 'kayttotarkoitus']);
+  const updateQuery = event => {
+    query = Parsers.optionalString(event.target.value);
+    searchKorvattavaEnergiatodistus(query)
+  }
 
-  $: valid =
-    R.compose(
-      R.equals(R.view(postinumeroLens, model)),
-      R.chain(R.view(postinumeroLens))
-    )(korvattavaEnergiatodistus) &&
-    R.compose(
-      R.equals(R.view(ktlLens, model)),
-      R.chain(R.view(ktlLens))
-    )(korvattavaEnergiatodistus);
+  $: error = R.chain(
+    korvattava =>
+      Korvaavuus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
+      !Korvaavuus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
+      Korvaavuus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
+      !Korvaavuus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
+        Maybe.None(),
+    korvattavaEnergiatodistus);
+
 </script>
 
 <style type="text/postcss">
@@ -121,103 +112,112 @@
   }
 </style>
 
-<Checkbox label={'Korvaa todistuksen'} bind:model={checked} {disabled} />
+{#if checked || enabled}
+  <H2 text={$_('energiatodistus.korvaavuus.header')} />
 
-{#if checked}
-  <div
-    class="flex flex-col -mx-4 mt-4"
-    transition:slide|local={{ duration: 200 }}>
-    {#if !disabled}
-      <div class="w-full lg:w-1/2 px-4 py-2">
-        <AsyncAutocomplete
-          bind:completedValue
-          createFutureFn={EtApi.replaceable}
-          id={'korvattavaenergiatodistus'}
-          name={'korvattavaenergiatodistus'}
-          label={'Korvattava todistus'}
-          required={true}
-          bind:model={korvattavaEnergiatodistusId}
-          lens={R.lens(R.identity, R.identity)}
-          format={Maybe.orSome('')}
-          parse={parseEt}
-          reject={Maybe.fromNull(model.id)}
-          i18n={$_} />
-      </div>
-    {/if}
-    {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
-      <div
-        class="w-full px-4 py-4 relative"
+  <Checkbox label={'Korvaa todistuksen'} bind:model={checked} disabled={!enabled} />
+
+  {#if checked}
+    <div
+        class="flex flex-col -mx-4 mt-4"
         transition:slide|local={{ duration: 200 }}>
-        <Overlay {overlay}>
-          <div slot="content" class="w-full">
+      {#if enabled}
+        <div class="w-full lg:w-1/2 px-4 py-2" on:input={updateQuery}>
+          <Input
+              model={query}
+              id={'korvattavaenergiatodistus'}
+              name={'korvattavaenergiatodistus'}
+              label={'Valitse korvattava todistus'}
+              lens={R.lens(R.identity, R.identity)}
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              search={true}
+              i18n={$_}/>
+        </div>
+      {/if}
+      {#if !overlay}
+        {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
+          <div class="w-full px-4 py-4 relative"
+               transition:slide|local={{ duration: 200 }}>
             <table class="etp-table">
               <thead class="etp-table--thead">
-                <tr class="etp-table--tr etp-table--tr__light">
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.tunnus')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.etl')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.ktl')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.rakennustunnus')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.nettoala')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.nimi')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.osoite')}
-                  </th>
-                  <th class="etp-table--th">
-                    {$_('energiatodistus.korvaavuus.laatija')}
-                  </th>
-                </tr>
+              <tr class="etp-table--tr etp-table--tr__light">
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.tunnus')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.etl')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.ktl')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.rakennustunnus')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.nettoala')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.nimi')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.osoite')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.korvaavuus.laatija')}
+                </th>
+              </tr>
               </thead>
               <tbody class="etp-table--tbody">
-                <tr class="etp-table-tr">
-                  <td class="etp-table--td">
-                    {R.defaultTo(Maybe.getOrElse(' ', korvattavaEnergiatodistusId), et.id)}
-                  </td>
-                  <td class="etp-table--td">{''}</td>
-                  <td class="etp-table--td">
-                    {Maybe.orSome('', et.perustiedot.kayttotarkoitus)}
-                  </td>
-                  <td class="etp-table--td">
-                    {Maybe.orSome('', et.perustiedot.rakennustunnus)}
-                  </td>
-                  <td class="etp-table--td">
-                    {Maybe.orSome('', et.lahtotiedot['lammitetty-nettoala'])}
-                  </td>
-                  <td class="etp-table--td">
-                    {Maybe.orSome('', et.perustiedot.nimi)}
-                  </td>
-                  <td class="etp-table--td">
-                    {Maybe.orSome('', et.perustiedot['katuosoite-fi'])}
-                  </td>
-                  <td class="etp-table--td">
-                    {Maybe.orSome('', et['laatija-fullname'])}
-                  </td>
-                </tr>
+              <tr class="etp-table-tr">
+                <td class="etp-table--td">
+                  {et.id}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', et.tulokset['e-luokka'])}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', et.perustiedot.kayttotarkoitus)}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', et.perustiedot.rakennustunnus)}
+                </td>
+                <td class="etp-table--td">
+                  {EM.orSome('', et.lahtotiedot['lammitetty-nettoala'])}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', et.perustiedot.nimi)}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', et.perustiedot['katuosoite-fi'])}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', et['laatija-fullname'])}
+                </td>
+              </tr>
               </tbody>
             </table>
-            {#if !valid}
+            {#each Maybe.toArray(error) as key}
               <div class="error-label">
                 <span class="font-icon error-icon">error</span>
-                {$_('energiatodistus.korvaavuus.invalid-korvaus')}
+                {$_('energiatodistus.korvaavuus.validation.' + key)}
               </div>
-            {/if}
+            {/each}
           </div>
-          <div slot="overlay-content">
-            <Spinner />
+        {/each}
+        {#if query.isSome() && korvattavaEnergiatodistus.isNone() && !overlay}
+          <div class="w-full">
+            <div class="error-label px-4">
+              <span class="font-icon error-icon">error</span>
+              {$_('energiatodistus.korvaavuus.validation.not-found')}
+            </div>
           </div>
-        </Overlay>
-      </div>
-    {/each}
-  </div>
+        {/if}
+      {:else}
+        <Spinner/>
+      {/if}
+    </div>
+  {/if}
+
+  <HR />
 {/if}
