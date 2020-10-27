@@ -180,25 +180,21 @@ export const isOVTTunnus = R.allPass([
   )
 ]);
 
-export const ibanCharObj = R.zipObj(
-  "abcdefghijklmnopqrstuvwxyz",
-  R.range(10, 36)
-);
-
 export const isIBAN = R.ifElse(
   str => R.gte(R.length(str), 4),
-  str => {
-    const country = str.substring(0, 2);
-    const checksum = str.substring(2, 4);
-    const bban = str.substring(4);
-    return R.compose(
-      R.equals(1n),
-      str => BigInt(str) % 97n,
-      R.join(''),
-      R.map(R.either(R.prop(R.__, ibanCharObj), R.identity)),
-      R.toLower
-    )(bban + country + checksum);
-  },
+  R.compose(
+    R.equals(1n),
+    R.modulo(R.__, 97n),
+    BigInt,
+    R.join(''),
+    R.map(
+      R.when(
+        R.compose(R.lte(65),  item => item.charCodeAt(0)),
+        R.compose(R.subtract(R.__, 55), item => item.charCodeAt(0)))
+    ),
+    R.toUpper,
+    R.converge(R.flip(R.concat), [R.take(4), R.drop(4)])
+  ),
   R.always(false));
 
 export const isTEOVTTunnus = R.allPass([
