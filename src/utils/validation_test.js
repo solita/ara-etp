@@ -185,4 +185,32 @@ describe('Validation:', () => {
       assert.equal(validation.isOVTTunnus(''), false);
     });
   });
+
+  describe('IBAN validation', () => {
+    it('valid IBAN', () => {
+      assert.equal(validation.isIBAN('FI1410093000123458'), true);
+      assert.equal(validation.isIBAN('BR1500000000000010932840814P2'), true);
+    });
+
+    it('invalid IBAN', () => {
+      assert.equal(validation.isIBAN('FI1410093000123459'), false);
+      assert.equal(validation.isIBAN('FI14'), false);
+      assert.equal(validation.isIBAN(null), false);
+      assert.equal(validation.isIBAN(''), false);
+    });
+  });
+
+  describe('TEOVT-tunnus validation', () => {
+    it('valid TEOVT-tunnus', () => {
+      assert.equal(validation.isTEOVTTunnus('TE003712345671'), true);
+      assert.equal(validation.isTEOVTTunnus('TE0037123456710'), true);
+    });
+
+    it('invalid TEOVT-tunnus', () => {
+      assert.equal(validation.isTEOVTTunnus('003712345671'), false);
+      assert.equal(validation.isTEOVTTunnus('TE003712345672'), false);
+      assert.equal(validation.isTEOVTTunnus(null), false);
+      assert.equal(validation.isTEOVTTunnus(''), false);
+    });
+  });
 });

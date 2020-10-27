@@ -222,7 +222,7 @@
         {disabled}
         id={'verkkolaskuosoite'}
         name={'verkkolaskuosoite'}
-        label={$_('yritys.ovt-tunnus')}
+        label={$_('yritys.verkkolaskuosoite')}
         bind:model={yritys}
         lens={R.lensProp('verkkolaskuosoite')}
         format={Maybe.orSome('')}
