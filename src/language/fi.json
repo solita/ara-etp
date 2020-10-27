@@ -211,7 +211,13 @@
       "nimi": "Rakennuksen nimi",
       "osoite": "Osoite",
       "laatija": "Laatija",
-      "invalid-korvaus": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta, Tarkista korvattava energiatodistus."
+      "validation": {
+        "invalid-tila": "Korvattava energiatodistus pitää olla allekirjoitettu tai hylätty.",
+        "already-replaced": "Korvattavalla energiatodistuksella on jo toinen korvaava energiatodistus.",
+        "invalid-location": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta.",
+        "is-same": "Energiatodistus ei voi korvata itseään.",
+        "not-found": "Energiatodistusta ei ole olemassa."
+      }
     },
     "korvaava": {
       "header": "Energiatodistuksen korvaava"

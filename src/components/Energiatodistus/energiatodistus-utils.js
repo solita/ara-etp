@@ -346,6 +346,11 @@ export const tila = R.compose(R.map(parseInt), R.invertObj)(tilat);
 
 export const tilaKey = id => tilat[id];
 
+export const isTilaInTilat = tilat => R.compose(
+  R.includes(R.__, tilat),
+  R.prop('tila-id')
+);
+
 const kielisyydet = ['fi', 'sv', 'bilingual'];
 
 export const kielisyys = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
