@@ -14,3 +14,4 @@ export const percentFormat = Intl.NumberFormat('fi-FI', { style: 'percent' })
 
 export const optionalString = Maybe.orSome('');
 export const optionalNumber = R.compose(Maybe.orSome(''), R.map(numberFormat));
+export const optionalYear = R.compose(Maybe.orSome(''), R.map(R.identity));

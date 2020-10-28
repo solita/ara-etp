@@ -134,7 +134,10 @@ export const v2018 = {
     rakennusosa: String(100),
     katuosoite: String(100),
     postinumero: String(5),
-    valmistumisvuosi: Integer(100, new Date().getFullYear()),
+    valmistumisvuosi: {
+      ...Integer(100, new Date().getFullYear()),
+      format: formats.optionalYear
+    },
     tilaaja: String(200),
     yritys: Yritys,
     havainnointikaynti: DateValue(),
