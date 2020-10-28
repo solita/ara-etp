@@ -77,7 +77,7 @@
     );
   };
 
-  $: parsedQuery = R.compose(
+  const parseQuerystring = R.compose(
     R.mergeRight({
       tila: Maybe.None(),
       where: ''
@@ -90,12 +90,14 @@
       )
     }),
     qs.parse
-  )($querystring);
+  );
+
+  $: parsedQuery = parseQuerystring($querystring);
 
   $: where = R.prop('where', parsedQuery);
   $: tila = R.prop('tila', parsedQuery);
 
-  let queryAsQueryString = R.compose(
+  const queryToQuerystring = R.compose(
     api.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
@@ -105,53 +107,39 @@
         Maybe.fromEmpty
       )
     })
-  )(parsedQuery);
+  );
 
-  $: R.compose(
-    Future.fork(
-      () => {
-        overlay = false;
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          $_('energiatodistus.messages.load-error')
-        );
-      },
-      response => {
-        overlay = false;
-        energiatodistukset = response[0];
-      }
-    ),
-    Future.parallel(5),
-    R.tap(toggleOverlay(true)),
-    R.tap(cancel),
-    R.prepend(R.__, [api.laatimisvaiheet]),
-    api.getEnergiatodistukset,
-    api.toQueryString,
-    R.pickBy(Maybe.isSome),
-    R.evolve({
-      where: R.compose(
-        R.map(encodeURI),
-        R.map(JSON.stringify),
-        Maybe.fromEmpty
-      )
-    }),
-    R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery),
-    R.mergeRight({
-      tila: Maybe.None(),
-      where: ''
-    }),
-    R.evolve({
-      tila: Maybe.fromNull,
-      where: R.compose(
-        Either.orSome(''),
-        w => Either.fromTry(() => JSON.parse(w))
-      )
-    }),
-    qs.parse
-  )($querystring);
+  let queryAsQueryString = queryToQuerystring(parsedQuery);
 
-  const runQuery = () => {};
+  let initialQuery = true;
+
+  $: if (initialQuery || $querystring !== '') {
+    initialQuery = false;
+    R.compose(
+      Future.fork(
+        () => {
+          overlay = false;
+          flashMessageStore.add(
+            'Energiatodistus',
+            'error',
+            $_('energiatodistus.messages.load-error')
+          );
+        },
+        response => {
+          overlay = false;
+          energiatodistukset = response[0];
+        }
+      ),
+      Future.parallel(5),
+      R.tap(toggleOverlay(true)),
+      R.tap(cancel),
+      R.prepend(R.__, [api.laatimisvaiheet]),
+      api.getEnergiatodistukset,
+      queryToQuerystring,
+      R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery),
+      parseQuerystring
+    )($querystring);
+  }
 </script>
 
 <style>
