@@ -24,7 +24,7 @@
 
 <style type="text/postcss">
   div {
-    @apply px-20 flex h-16 items-center text-primary;
+    @apply px-10 flex h-16 items-center text-primary;
   }
   span {
     @apply ml-1 mr-2;
