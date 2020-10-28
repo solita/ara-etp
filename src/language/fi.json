@@ -16,7 +16,7 @@
     "no-selection": "Ei valintaa",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min}",
-      "max-number": "Tyypillisesti pienempi kuin {max}."
+      "max-number": "Tyypillisesti pienempi kuin {max}"
     }
   },
   "parsing": {
@@ -71,7 +71,7 @@
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
-    "laskutuskieli": "Laskun kieli",
+    "laskutuskieli": "Laskutuskieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "verkkolaskuosoite",
     "verkkolaskuosoite": "Verkkolaskuosoite",
@@ -91,7 +91,7 @@
     "omattiedot": "Omat tiedot",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
-    "sahkoposti": "Sähköposti",
+    "sahkoposti": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
     "puhelinnumero": "Puhelinnumero",
     "virtu": {
@@ -116,7 +116,7 @@
     "postinumero": "Postinumero",
     "postitoimipaikka": "Postitoimipaikka",
     "maa": "Maa",
-    "laskutuskieli": "Laskun kieli",
+    "laskutuskieli": "Laskutuskieli",
     "www-osoite": "Toiminnan www-osoite",
     "laatijatiedot": "Laatijatiedot",
     "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
@@ -220,7 +220,7 @@
       }
     },
     "korvaava": {
-      "header": "Energiatodistuksen korvaava"
+      "header": "Korvaa energiatodistuksen"
     },
     "tila": {
       "draft": "Luonnos",
@@ -241,7 +241,6 @@
     "e-luku": "E-luku",
     "laskuriviviite": "Projektiviite (näkyy laskurivillä)",
     "korvattu-energiatodistus-id": "Korvaa todistuksen",
-    "kommentti": "Kommentti energiatodistukselle",
     "laskutus": {
       "title": "Laskutustiedot",
       "postiosoite": "Postiosoite",
@@ -264,8 +263,8 @@
       "postinumero": "Postinumero",
       "rakennustunnus": "Pysyvä rakennustunnus",
       "kiinteistotunnus": "Kiinteistötunnus",
-      "rakennusosa": "Rakennusosa",
-      "valmistumisvuosi": "Valmistumisvuosi",
+      "rakennusosa": "Rakennuksen osa",
+      "valmistumisvuosi": "Rakennuksen valmistumisvuosi",
       "kayttotarkoitus": "Käyttötarkoitusluokat",
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
@@ -674,7 +673,7 @@
       },
       "lampokuormat": {
         "header": "Lämpökuormat",
-        "label-context": "Lämpökuorma",
+        "label-context": "Lämpökuormat",
         "labels": {
           "aurinko": "Aurinko",
           "ihmiset": "Henkilöt",
@@ -778,7 +777,9 @@
         "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys"
       },
       "sahko-vuosikulutus-yhteensa": "Sähkö (kWh/vuosi)",
+      "sahko-neliovuosikulutus-yhteensa": "Sähkö (kWh/m²vuosi)",
       "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö (kWh/vuosi)",
+      "kaukolampo-neliovuosikulutus-yhteensa": "Kaukolämpö (kWh/m²vuosi)",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys (kWh/vuosi)",
       "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet (kWh/vuosi)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Polttoaineet (kWh/(m²vuosi))",
@@ -803,7 +804,7 @@
         "2018": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
         "2013": "Suosituksia rakennuksen käyttöön ja ylläpitoon"
       },
-      "suositukset": "Suositetut toimenpide-ehdotukset",
+      "suositukset": "Suositellut toimenpide-ehdotukset",
       "lisatietoja-header": "Lisätietoja energiatehokkuudesta",
       "lisatietoja": "Lisätiedot",
       "iv-ilmastointi": {
@@ -842,7 +843,7 @@
         "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
         "toimenpide": [
           {
-            "label-context": "Huomiot / Lämmitys",
+            "label-context": "Huomiot / Lämmitysjärjestelmät",
             "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
@@ -857,7 +858,7 @@
         "teksti": "Ulkoseinien, ulko-ovien ja ikkunoiden huomiot",
         "toimenpide": [
           {
-            "label-context": "Huomiot / Ulkoseinät",
+            "label-context": "Huomiot / Ulkoseinät...",
             "nimi": "Toimenpide-ehdotus",
             "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
             "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
@@ -886,7 +887,7 @@
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Lomakkeella virheitä, tarkista syötteet kentissä: ",
+      "validation-error": "Lomakkeella virheitä, tarkista kentät: ",
       "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
       "not-found": "Energiatodistusta ei ole olemassa.",
       "validation-required-error": "Pakolliset tiedot puuttuvat: "
@@ -911,14 +912,14 @@
       },
       "error": {
         "abort-failed": "Keskeyttäminen epäonnistui",
-        "signing-failed": "Allekirjoittaminen epäonnistui tuntemattomaan virheeseen. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
+        "signing-failed": "Allekirjoittaminen keskeytyi tuntemattomasta syystä. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
         "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä."
       },
       "status": {
         "not-started": "Voit nyt allekirjoittaa {language-genitive} energiatodistuksen.",
-        "already-started": "Voit aloittaa energiatodistuksen allekirjoittamisen uudestaan tai keskeyttää allekirjoitus ja palata luonnostilaan.",
+        "already-started": "Voit aloittaa energiatodistuksen allekirjoittamisen uudestaan tai keskeyttää allekirjoittamisen ja palata luonnostilaan.",
         "start": "Käynnistetään {language} allekirjoitusprosessi.",
-        "digest": "Muodostetaan {language} energiatodistus allekirjoitettavaksi.",
+        "digest": "Muodostetaan {language} energiatodistus.",
         "signature": "Allekirjoita {language} energiatodistus mPollux-ohjelmistossa.",
         "pdf": "Allekirjoitetaan {language} energiatodistus.",
         "finish": "Allekirjoitusprosessin päättäminen.",
@@ -956,17 +957,17 @@
       },
       "messages": {
         "add-files": {
-          "success": "Energiatodistuksen liitteet tallennettu.",
-          "error": "Energiatodistuksen liitteiden tallennuksessa tapahtui virhe."
+          "success": "Energiatodistuksen liitteet lisätty onnistuneesti.",
+          "error": "Energiatodistuksen liitteiden lisäämisessä tapahtui virhe."
         },
         "add-link": {
-          "success": "Energiatodistuksen linkki tallennettu.",
-          "error": "Energiatodistuksen linkin tallennuksessa tapahtui odottamaton virhe.",
-          "validation": "Lisää linkki lomakkeella virheitä, tarkista syötteet."
+          "success": "Energiatodistuksen linkki lisätty onnistuneesti.",
+          "error": "Energiatodistuksen linkin lisäämisessä tapahtui odottamaton virhe.",
+          "validation": "Lisää linkki lomakkeella virheitä, tarkista kentät."
         },
         "delete-liite": {
           "success": "Energiatodistuksen liite poistettu.",
-          "delete": "Energiatodistuksen liitteen poistossa tapahtui virhe."
+          "delete": "Energiatodistuksen liitteen poistamisessa tapahtui virhe."
         },
         "load-error": "Energiatodistuksen liitteiden haku epäonnistui."
       }
