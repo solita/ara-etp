@@ -135,7 +135,7 @@ export const perustiedot = () => ({
 
 export const defaultQueryItem = R.always({
   conjunction: 'and',
-  block: ['=', 'id', 1]
+  block: ['', '', '']
 });
 
 export const defaultWhere = () => [[['=', 'id', 0]]];
@@ -255,8 +255,8 @@ export const hakuCriteriaFromGroupedInput = inputs => {
     conjunction: Maybe.orSome('and', conjunction),
     block: R.all(Either.isRight)
       ? [
-          Maybe.get(operation),
-          Maybe.get(key),
+          Maybe.orSome('', operation),
+          Maybe.orSome('', key),
           ...R.map(Either.orSome(''), values)
         ]
       : []
@@ -287,3 +287,12 @@ export const searchString = searchItems =>
       searchItems
     )
   );
+
+export const isValidBlock = R.curry((schema, [operator, key, ...values]) => {
+  if (!R.all(R.length, [operator, key])) {
+    return false;
+  }
+
+  // Implement rest soon.
+  return true;
+});
