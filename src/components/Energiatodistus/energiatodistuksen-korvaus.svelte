@@ -21,6 +21,7 @@
 
   export let energiatodistus;
   export let whoami;
+  export let error = Maybe.None();
 
   const enabled =
     Kayttajat.isLaatija(whoami.rooli) && R.propEq('tila-id', ET.tila.draft, energiatodistus) ||
@@ -90,14 +91,15 @@
     searchKorvattavaEnergiatodistus(query)
   }
 
-  $: error = R.chain(
-    korvattava =>
-      Korvaavuus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
-      !Korvaavuus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
-      Korvaavuus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
-      !Korvaavuus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
-        Maybe.None(),
-    korvattavaEnergiatodistus);
+  $: error = R.compose(
+      R.filter(R.always(R.view(lens, energiatodistus).isSome())),
+      R.chain(korvattava =>
+        Korvaavuus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
+        !Korvaavuus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
+        Korvaavuus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
+        !Korvaavuus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
+          Maybe.None()))
+    (korvattavaEnergiatodistus);
 
 </script>
 

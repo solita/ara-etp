@@ -7,6 +7,12 @@
   import { locale, _ } from '@Language/i18n';
   import * as localstorage from './local-storage';
 
+  import H1 from '@Component/H/H1';
+  import PaakayttajanKommentti from './paakayttajan-kommentti';
+  import EnergiatodistuksenKorvaus from './energiatodistuksen-korvaus';
+  import EnergiatodistuksenKorvaava from './energiatodistuksen-korvaava';
+  import Laskutus from './laskutus';
+
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
   import Signing from './signing';
@@ -39,6 +45,8 @@
 
   let inputLanguage = 'fi';
 
+  let korvausError = Maybe.None();
+
   const forms = {
     '2018': ET2018Form,
     '2013': ET2013Form
@@ -50,9 +58,32 @@
     R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
   );
 
+  const showInvalidPropertiesMessage = invalidProperties => {
+    if (!R.isEmpty(invalidProperties)) {
+      const invalidTxt = R.compose(
+        R.join(', '),
+        R.map(Inputs.propertyLabel($_)),
+        R.map(R.nth(0))
+      ) (invalidProperties);
+
+      flashMessageStore.add(
+        'Energiatodistus',
+        'error',
+        $_('energiatodistus.messages.validation-error') + invalidTxt
+      );
+
+      Inputs.scrollIntoView(document, invalidProperties[0][0]);
+    }
+  }
+
+  const showKorvausErrorMessage = R.forEach(R.compose(
+    flashMessageStore.add('Energiatodistus', 'error'),
+    $_,
+    R.concat('energiatodistus.korvaavuus.validation.')));
+
   const validateAndSubmit = onSuccessfulSave => () => {
     const invalid = Validations.invalidProperties(schema, energiatodistus);
-    if (R.isEmpty(invalid)) {
+    if (R.isEmpty(invalid) && korvausError.isNone()) {
       flashMessageStore.flush();
       submit(energiatodistus, onSuccessfulSave);
       if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
@@ -61,19 +92,8 @@
         );
       }
     } else {
-      const invalidTxt = R.compose(
-        R.join(', '),
-        R.map(Inputs.propertyLabel($_)),
-        R.map(R.nth(0))
-      ) (invalid);
-
-      flashMessageStore.add(
-        'Energiatodistus',
-        'error',
-        $_('energiatodistus.messages.validation-error') + invalidTxt
-      );
-
-      Inputs.scrollIntoView(document, invalid[0][0]);
+      showKorvausErrorMessage(korvausError);
+      showInvalidPropertiesMessage(invalid);
     }
   };
 
@@ -179,15 +199,28 @@
   <div class="w-full relative flex">
     <div class="w-5/6">
       <form on:submit|preventDefault={validateAndSubmit(noop)}>
-        <ETForm
-          {title}
-          bind:energiatodistus
-          {inputLanguage}
-          {disabled}
-          {schema}
-          {luokittelut}
-          {validation}
-          {whoami} />
+        <div class="w-full mt-3">
+          <H1 text={title} />
+
+          <PaakayttajanKommentti
+              {whoami}
+              {schema}
+              path={['kommentti']}
+              bind:model={energiatodistus} />
+
+          <EnergiatodistuksenKorvaava
+              korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
+          <EnergiatodistuksenKorvaus bind:energiatodistus {whoami} bind:error={korvausError}/>
+
+          <Laskutus {schema} {whoami} bind:energiatodistus />
+          <ETForm
+            bind:energiatodistus
+            {inputLanguage}
+            {disabled}
+            {schema}
+            {luokittelut}
+            {validation}/>
+        </div>
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
             <Button type={'submit'} text={$_('tallenna')} />
