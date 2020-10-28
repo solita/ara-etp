@@ -4,6 +4,8 @@
   import qs from 'qs';
   import * as R from 'ramda';
 
+  import { flashMessageStore } from '@/stores';
+
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as EtHakuUtils from './energiatodistus-haku-utils';
@@ -35,6 +37,8 @@
 
   let queryItems = [];
 
+  let form;
+
   $: queryItems = R.ifElse(
     R.length,
     EtHakuUtils.deserializeWhere(schema),
@@ -60,6 +64,7 @@
 </div>
 
 <form
+  bind:this={form}
   novalidate
   on:submit|preventDefault={evt => {
     R.compose( R.chain(navigate), R.map(EtHakuUtils.searchString), R.map(EtHakuUtils.searchItems), evt => Either.fromTry(
@@ -70,7 +75,7 @@
     queryItems = [];
   }}>
 
-  {#each queryItems as { conjunction, block: [operator, key, ...values] }, index}
+  {#each queryItems as { conjunction, block: [operator, key, ...values] }, index (`${index}_${operator}_${key}_${R.join('_', values)}`)}
     <div class="conjunction w-full flex flex-col">
       <div class="flex justify-between w-1/6 my-10">
         <Radio
@@ -96,7 +101,16 @@
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
-        on:click={_ => (queryItems = EtHakuUtils.removeQueryItem(index, queryItems))}>
+        on:click={_ => {
+          const newItems = R.compose( R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
+              () => EtHakuUtils.parseHakuForm(form)
+            ));
+          if (Either.isRight(newItems)) {
+            queryItems = Either.right(newItems);
+          } else {
+            flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin poistamisessa tapahtui virhe.');
+          }
+        }}>
         delete
       </span>
     </div>
@@ -108,7 +122,14 @@
       icon={'add_circle_outline'}
       type={'button'}
       on:click={_ => {
-        queryItems = R.append(EtHakuUtils.defaultQueryItem(), queryItems);
+        const newItems = R.compose( R.map(R.append(EtHakuUtils.defaultQueryItem())), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
+            () => EtHakuUtils.parseHakuForm(form)
+          ));
+        if (Either.isRight(newItems)) {
+          queryItems = Either.right(newItems);
+        } else {
+          flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin lisäyksessä tapahtui virhe.');
+        }
       }} />
   </div>
 
