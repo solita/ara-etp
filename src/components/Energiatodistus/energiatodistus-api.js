@@ -138,6 +138,11 @@ export const getEnergiatodistukset = R.compose(
   R.concat(url.all)
 );
 
+export const getEnergiatodistuksetByField = R.curry((field, value) =>
+  getEnergiatodistukset(`?where=[[["=","${field}",${R.toString(value)}]]]`));
+
+export const findEnergiatodistusById = getEnergiatodistuksetByField('id');
+
 export const getEnergiatodistusById = R.curry((fetch, version, id) =>
   R.compose(
     R.map(deserialize),

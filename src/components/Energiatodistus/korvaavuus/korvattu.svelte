@@ -68,20 +68,15 @@
         },
         response => {
           searching = false;
-          if (R.isEmpty(response)) {
-            korvattavaEnergiatodistus = Maybe.None();
-            error = Maybe.Some('not-found');
-          } else {
-            const et = response[0];
-            setKorvattavaEnergiatodistus(Maybe.Some(et.id))
-            korvattavaEnergiatodistus = Maybe.Some(et);
-            error = korvattavaETError(et);
-          }
+          korvattavaEnergiatodistus = Maybe.head(response);
+          setKorvattavaEnergiatodistus(R.map(R.prop('id'), korvattavaEnergiatodistus));
+          error = korvattavaEnergiatodistus.isSome() ?
+            R.chain(korvattavaETError, korvattavaEnergiatodistus) :
+            Maybe.Some('not-found');
         }
       ),
-      Future.delay(400),
-      R.chain(EtApi.getEnergiatodistukset),
-      R.map(id => `?where=[[["=", "id", ${id}]]]`),
+      Future.delay(200),
+      R.chain(EtApi.findEnergiatodistusById),
       R.map(R.tap(_ => {
         searching = true;
       })),

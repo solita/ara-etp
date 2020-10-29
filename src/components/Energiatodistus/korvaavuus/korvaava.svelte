@@ -12,6 +12,7 @@
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import { flashMessageStore } from '@/stores';
 
   export let korvaavaEnergiatodistusId = Maybe.None();
   export let postinumerot;
@@ -29,14 +30,19 @@
         _ => {
           overlay = false;
           korvaavaEnergiatodistus = Maybe.None();
+          flashMessageStore.add(
+            'Energiatodistus',
+            'error',
+            $_('energiatodistus.messages.load-error')
+          );
         },
-        et => {
+        response => {
           overlay = false;
-          korvaavaEnergiatodistus = Maybe.Some(et);
+          korvaavaEnergiatodistus = Maybe.head(response);
         }
       ),
-      R.chain(Future.after(200)),
-      EtApi.getEnergiatodistusById(fetch, 'all'),
+      Future.delay(200),
+      EtApi.findEnergiatodistusById,
       R.tap(_ => {
         overlay = true;
       })
