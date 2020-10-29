@@ -223,7 +223,8 @@
         "already-replaced": "Korvattavalla energiatodistuksella on jo toinen korvaava energiatodistus.",
         "invalid-location": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta.",
         "is-same": "Energiatodistus ei voi korvata itseään.",
-        "not-found": "Energiatodistusta ei ole olemassa."
+        "not-found": "Energiatodistusta ei ole olemassa.",
+        "invalid-id": "Energiatodistustunnus ei sisällä kirjaimia."
       }
     },
     "tila": {

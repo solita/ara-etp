@@ -8,6 +8,8 @@
   import Spinner from '@Component/Spinner/Spinner';
   import EtTable from './energiatodistus-table';
 
+  import { flashMessageStore } from '@/stores';
+
   import * as EtApi from '../energiatodistus-api';
 
   import * as Korvaus from './korvaus';
@@ -45,24 +47,44 @@
     }
   }
 
+  const korvattavaETError = korvattava =>
+    Korvaus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
+      !Korvaus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
+        Korvaus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
+          !Korvaus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
+            Maybe.None();
+
   const fetchKorvattavaEnergiatodistus = id => {
     cancel = R.compose(
       Future.fork(
         _ => {
           searching = false;
-          korvattavaEnergiatodistus = Maybe.None();
+          flashMessageStore.add(
+            'Energiatodistus',
+            'error',
+            $_('energiatodistus.messages.load-error')
+          );
         },
-        et => {
+        response => {
           searching = false;
-          setKorvattavaEnergiatodistus(Maybe.Some(et.id))
-          korvattavaEnergiatodistus = Maybe.Some(et);
+          if (R.isEmpty(response)) {
+            korvattavaEnergiatodistus = Maybe.None();
+            error = Maybe.Some('not-found');
+          } else {
+            const et = response[0];
+            setKorvattavaEnergiatodistus(Maybe.Some(et.id))
+            korvattavaEnergiatodistus = Maybe.Some(et);
+            error = korvattavaETError(et);
+          }
         }
       ),
-      R.chain(EtApi.getEnergiatodistusById(fetch, 'all')),
-      Future.after(500),
-      R.tap(_ => {
+      Future.delay(400),
+      R.chain(EtApi.getEnergiatodistukset),
+      R.map(id => `?where=[[["=", "id", ${id}]]]`),
+      R.map(R.tap(_ => {
         searching = true;
-      }),
+      })),
+      Future.after(400),
       R.tap(cancel))(id);
   };
 
@@ -79,6 +101,7 @@
   const searchKorvattavaEnergiatodistus = R.compose(
     Maybe.cata(_ => {
         korvattavaEnergiatodistus = Maybe.None();
+        error = query.map(R.always('invalid-id'));
       },
       fetchKorvattavaEnergiatodistus),
     R.chain(parseId)
@@ -88,16 +111,6 @@
     query = Parsers.optionalString(event.target.value);
     searchKorvattavaEnergiatodistus(query)
   }
-
-  $: error = R.compose(
-      R.filter(R.always(R.view(lens, energiatodistus).isSome())),
-      R.chain(korvattava =>
-        Korvaus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
-        !Korvaus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
-        Korvaus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
-        !Korvaus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
-          Maybe.None()))
-    (korvattavaEnergiatodistus);
 
 </script>
 
@@ -145,26 +158,20 @@
         </div>
       {/if}
       {#if !searching}
-        {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
-          <div class="w-full px-4 py-4 relative"
+        <div class="w-full px-4">
+          {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
+          <div class="w-full py-4"
                transition:slide|local={{ duration: 200 }}>
-            <EtTable energiatodistus={et} />
-            {#each Maybe.toArray(error) as key}
-              <div class="error-label">
-                <span class="font-icon error-icon">error</span>
-                {$_('energiatodistus.korvaavuus.validation.' + key)}
-              </div>
-            {/each}
+              <EtTable energiatodistus={et} />
           </div>
-        {/each}
-        {#if query.isSome() && korvattavaEnergiatodistus.isNone() && !searching}
-          <div class="w-full">
-            <div class="error-label px-4">
+          {/each}
+          {#each Maybe.toArray(error) as key}
+            <div class="error-label">
               <span class="font-icon error-icon">error</span>
-              {$_('energiatodistus.korvaavuus.validation.not-found')}
+              {$_('energiatodistus.korvaavuus.validation.' + key)}
             </div>
-          </div>
-        {/if}
+          {/each}
+        </div>
       {:else}
         <Spinner/>
       {/if}
