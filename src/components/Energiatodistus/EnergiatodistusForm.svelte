@@ -8,9 +8,11 @@
   import * as localstorage from './local-storage';
 
   import H1 from '@Component/H/H1';
+  import H2 from '@Component/H/H2';
+  import HR from '@Component/HR/HR';
   import PaakayttajanKommentti from './paakayttajan-kommentti';
-  import EnergiatodistuksenKorvaus from './energiatodistuksen-korvaus';
-  import EnergiatodistuksenKorvaava from './energiatodistuksen-korvaava';
+  import EnergiatodistusKorvattu from './korvaavuus/korvattu';
+  import EnergiatodistusKorvaava from './korvaavuus/korvaava';
   import Laskutus from './laskutus';
 
   import ET2018Form from './ET2018Form';
@@ -208,9 +210,11 @@
               path={['kommentti']}
               bind:model={energiatodistus} />
 
-          <EnergiatodistuksenKorvaava
+          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
+          <EnergiatodistusKorvattu bind:energiatodistus {whoami} bind:error={korvausError}/>
+          <EnergiatodistusKorvaava
               korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
-          <EnergiatodistuksenKorvaus bind:energiatodistus {whoami} bind:error={korvausError}/>
+          <HR/>
 
           <Laskutus {schema} {whoami} bind:energiatodistus />
           <ETForm
