@@ -60,7 +60,7 @@
         {Maybe.orSome('', energiatodistus.perustiedot.rakennustunnus)}
       </td>
       <td class="etp-table--td">
-        {EM.orSome('', energiatodistus.lahtotiedot['lammitetty-nettoala'])}
+        {EM.orSome('', energiatodistus.lahtotiedot['lammitetty-nettoala'])} m²
       </td>
       <td class="etp-table--td">
         {Maybe.orSome('', energiatodistus.perustiedot.nimi)}
