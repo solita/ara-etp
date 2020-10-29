@@ -211,8 +211,10 @@
               bind:model={energiatodistus} />
 
           <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
-          <EnergiatodistusKorvattu bind:energiatodistus {whoami} bind:error={korvausError}/>
-          <EnergiatodistusKorvaava
+          <EnergiatodistusKorvattu bind:energiatodistus {whoami}
+                                   postinumerot={luokittelut.postinumerot}
+                                   bind:error={korvausError}/>
+          <EnergiatodistusKorvaava postinumerot={luokittelut.postinumerot}
               korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
           <HR/>
 

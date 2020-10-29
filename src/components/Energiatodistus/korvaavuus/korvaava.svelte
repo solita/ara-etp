@@ -14,6 +14,7 @@
   import * as Future from '@Utility/future-utils';
 
   export let korvaavaEnergiatodistusId = Maybe.None();
+  export let postinumerot;
 
   let overlay = false;
 
@@ -57,7 +58,7 @@ h3 {
       {#each Maybe.toArray(korvaavaEnergiatodistus) as et}
         <div class="w-full px-4 py-4 relative"
             transition:slide|local={{ duration: 200 }}>
-          <EtTable energiatodistus={et} />
+          <EtTable energiatodistus={et} {postinumerot}/>
         </div>
       {/each}
     {:else}

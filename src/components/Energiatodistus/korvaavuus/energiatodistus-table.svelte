@@ -2,17 +2,22 @@
   import * as R from 'ramda';
 
   import { push } from '@Component/Router/router';
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
 
+  import * as Postinumerot from '../postinumero'
   import * as Maybe from '@Utility/maybe-utils';
   import * as EM from '@Utility/either-maybe';
   import * as str from '@Utility/strings';
 
   export let energiatodistus;
-  
+  export let postinumerot;
+
 </script>
 
 <style type="text/postcss">
+  address {
+      @apply not-italic;
+  }
 </style>
 
 <table class="etp-table">
@@ -66,9 +71,13 @@
         {Maybe.orSome('', energiatodistus.perustiedot.nimi)}
       </td>
       <td class="etp-table--td">
-        {Maybe.orSome('', energiatodistus.perustiedot['katuosoite-fi'])}
-        {Maybe.fold('', R.compose(str.lpad(5, '0'), n => n.toString()),
-          energiatodistus.perustiedot.postinumero)}
+        <address>
+          {Maybe.orSome('', energiatodistus.perustiedot['katuosoite-fi'])}
+          <span class="whitespace-no-wrap">
+            {Maybe.fold('', Postinumerot.formatPostinumero(postinumerot, $locale),
+              energiatodistus.perustiedot.postinumero)}
+          </span>
+        </address>
       </td>
       <td class="etp-table--td">
         {Maybe.orSome('', energiatodistus['laatija-fullname'])}

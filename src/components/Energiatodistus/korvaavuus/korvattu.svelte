@@ -22,6 +22,7 @@
   export let energiatodistus;
   export let whoami;
   export let error = Maybe.None();
+  export let postinumerot;
 
   const enabled =
     Kayttajat.isLaatija(whoami.rooli) && R.propEq('tila-id', ET.tila.draft, energiatodistus) ||
@@ -162,7 +163,7 @@
           {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
           <div class="w-full py-4"
                transition:slide|local={{ duration: 200 }}>
-              <EtTable energiatodistus={et} />
+              <EtTable energiatodistus={et} {postinumerot}/>
           </div>
           {/each}
           {#each Maybe.toArray(error) as key}
