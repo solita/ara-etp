@@ -55,7 +55,7 @@
           !Korvaus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
             Maybe.None();
 
-  const fetchKorvattavaEnergiatodistus = id => {
+  const fetchKorvattavaEnergiatodistus = initialDelay => id => {
     cancel = R.compose(
       Future.fork(
         _ => {
@@ -80,11 +80,11 @@
       R.map(R.tap(_ => {
         searching = true;
       })),
-      Future.after(400),
+      initialDelay > 0 ? Future.after(initialDelay) : Future.resolve,
       R.tap(cancel))(id);
   };
 
-  R.forEach(fetchKorvattavaEnergiatodistus, R.view(lens, energiatodistus));
+  R.forEach(fetchKorvattavaEnergiatodistus(0), R.view(lens, energiatodistus));
 
   $: if (enabled && !searching) {
     if (checked) {
@@ -99,7 +99,7 @@
         korvattavaEnergiatodistus = Maybe.None();
         error = query.map(R.always('invalid-id'));
       },
-      fetchKorvattavaEnergiatodistus),
+      fetchKorvattavaEnergiatodistus(500)),
     R.chain(parseId)
   );
 
