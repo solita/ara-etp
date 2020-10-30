@@ -25,9 +25,7 @@
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  $: postinumeroNames = R.map(
-    Postinumero.fullLabel($locale),
-    postinumerot);
+  $: postinumeroNames = R.map(Postinumero.fullLabel($locale), postinumerot);
 
   let kayttotarkoitusluokkaId = Maybe.None();
   $: if (
@@ -63,7 +61,7 @@
 <H2 text="Rakennuksen perustiedot" />
 
 <div class="flex lg:flex-row flex-col -mx-4">
-  <div class="lg:w-4/5 w-full px-4 py-4">
+  <div class="lg:w-3/5 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -72,7 +70,7 @@
       path={['perustiedot', 'nimi']} />
   </div>
 
-  <div class="lg:w-1/5 px-4 py-4">
+  <div class="lg:w-2/5 px-4 py-4">
     <Input
       {disabled}
       {schema}
