@@ -31,6 +31,7 @@
 
   const lens = R.lensProp('korvattu-energiatodistus-id');
 
+  let internalError = Maybe.None();
   let cancel = () => {};
   let searching = false;
   let query = R.view(lens, energiatodistus);
@@ -69,8 +70,7 @@
         response => {
           searching = false;
           korvattavaEnergiatodistus = Maybe.head(response);
-          setKorvattavaEnergiatodistus(R.map(R.prop('id'), korvattavaEnergiatodistus));
-          error = korvattavaEnergiatodistus.isSome() ?
+          internalError = korvattavaEnergiatodistus.isSome() ?
             R.chain(korvattavaETError, korvattavaEnergiatodistus) :
             Maybe.Some('not-found');
         }
@@ -86,19 +86,20 @@
 
   R.forEach(fetchKorvattavaEnergiatodistus(0), R.view(lens, energiatodistus));
 
-  $: if (enabled && !searching) {
+  $: if (enabled) {
     if (checked) {
       setKorvattavaEnergiatodistus(korvattavaEnergiatodistus.map(R.prop('id')));
     } else {
       setKorvattavaEnergiatodistus(Maybe.None());
-      error = Maybe.None();
     }
   }
+
+  $: error = checked ? internalError : Maybe.None();
 
   const searchKorvattavaEnergiatodistus = R.compose(
     Maybe.cata(_ => {
         korvattavaEnergiatodistus = Maybe.None();
-        error = query.map(R.always('invalid-id'));
+        internalError = query.map(R.always('invalid-id'));
       },
       fetchKorvattavaEnergiatodistus(500)),
     R.chain(parseId)
@@ -162,7 +163,7 @@
               <EtTable energiatodistus={et} {postinumerot}/>
           </div>
           {/each}
-          {#each Maybe.toArray(error) as key}
+          {#each Maybe.toArray(internalError) as key}
             <div class="error-label">
               <span class="font-icon error-icon">error</span>
               {$_('energiatodistus.korvaavuus.validation.' + key)}
