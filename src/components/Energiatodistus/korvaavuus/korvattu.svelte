@@ -145,7 +145,7 @@
               model={query}
               id={'korvattavaenergiatodistus'}
               name={'korvattavaenergiatodistus'}
-              label={'Valitse korvattava todistus'}
+              label={$_('energiatodistus.korvaavuus.input')}
               lens={R.lens(R.identity, R.identity)}
               format={Maybe.orSome('')}
               parse={Parsers.optionalString}

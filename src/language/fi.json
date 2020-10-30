@@ -208,6 +208,7 @@
         "korvaavuus": "Energiatodistuksen korvaavuus"
       },
       "checkbox": "Korvaa todistuksen",
+      "input": "Valitse korvattava todistus",
       "table": {
         "tunnus": "Tunnus",
         "etl": "ETL",
