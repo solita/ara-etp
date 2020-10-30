@@ -91,6 +91,7 @@
       setKorvattavaEnergiatodistus(korvattavaEnergiatodistus.map(R.prop('id')));
     } else {
       setKorvattavaEnergiatodistus(Maybe.None());
+      error = Maybe.None();
     }
   }
 
