@@ -202,25 +202,31 @@
     },
     "kaikki": "Kaikki",
     "korvaavuus": {
-      "header": "Energiatodistuksen korvaavuus",
-      "tunnus": "Tunnus",
-      "etl": "ETL",
-      "ktl": "KTL",
-      "rakennustunnus": "Pysyvä rakennustunnus",
-      "nettoala": "Nettoala",
-      "nimi": "Rakennuksen nimi",
-      "osoite": "Osoite",
-      "laatija": "Laatija",
+      "header": {
+        "korvattu": "Korvaa energiatodistuksen",
+        "korvaava": "Korvattu energiatodistuksella",
+        "korvaavuus": "Energiatodistuksen korvaavuus"
+      },
+      "checkbox": "Korvaa todistuksen",
+      "input": "Valitse korvattava todistus",
+      "table": {
+        "tunnus": "Tunnus",
+        "etl": "ETL",
+        "ktl": "KTL",
+        "rakennustunnus": "Pysyvä rakennustunnus",
+        "nettoala": "Nettoala",
+        "nimi": "Rakennuksen nimi",
+        "osoite": "Osoite",
+        "laatija": "Laatija"
+      },
       "validation": {
         "invalid-tila": "Korvattava energiatodistus pitää olla allekirjoitettu tai hylätty.",
         "already-replaced": "Korvattavalla energiatodistuksella on jo toinen korvaava energiatodistus.",
         "invalid-location": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta.",
         "is-same": "Energiatodistus ei voi korvata itseään.",
-        "not-found": "Energiatodistusta ei ole olemassa."
+        "not-found": "Energiatodistusta ei ole olemassa.",
+        "invalid-id": "Energiatodistustunnus ei sisällä kirjaimia."
       }
-    },
-    "korvaava": {
-      "header": "Korvaa energiatodistuksen"
     },
     "tila": {
       "draft": "Luonnos",

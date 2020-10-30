@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import * as ET from './energiatodistus-utils';
+import * as ET from '../energiatodistus-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
 const equals = R.curry((getter, a, b) => R.equals(getter(a), getter(b)));
