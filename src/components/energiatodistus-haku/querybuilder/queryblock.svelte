@@ -16,6 +16,8 @@
   export let values;
   export let index;
   export let schema;
+
+  let maybeKey = Maybe.fromEmpty(key);
 </script>
 
 <div class="flex-grow flex items-center justify-start">
@@ -23,17 +25,20 @@
     <Select
       name={`${index}_key`}
       items={R.keys(schema)}
-      bind:model={key}
+      bind:model={maybeKey}
       format={Inputs.propertyLabel($_)}
-      parse={R.identity}
+      parse={Maybe.Some}
+      inputValueParse={Maybe.orSome('')}
       lens={R.identity}
-      allowNone={false} />
+      allowNone={true} />
   </div>
-  <div class="w-1/2">
-    <QueryInput
-      nameprefix={`${index}`}
-      operation={operator}
-      {values}
-      operations={R.prop(key, schema)} />
-  </div>
+  {#if Maybe.isSome(maybeKey)}
+    <div class="w-1/2">
+      <QueryInput
+        nameprefix={`${index}`}
+        operation={operator}
+        {values}
+        operations={Maybe.orSome([], R.map(R.prop(R.__, schema), maybeKey))} />
+    </div>
+  {/if}
 </div>

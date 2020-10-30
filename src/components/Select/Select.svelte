@@ -1,4 +1,6 @@
 <script>
+  import { tick } from 'svelte';
+
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
@@ -10,6 +12,7 @@
   export let items = [];
   export let format = R.identity;
   export let parse = R.identity;
+  export let inputValueParse;
   export let label = '';
 
   export let disabled = false;
@@ -22,6 +25,7 @@
   export let model;
   export let lens;
 
+  let input;
   let focused = false;
   let node;
   let button;
@@ -161,7 +165,11 @@
 <!-- purgecss: disabled -->
 <span class:focused class:required class:disabled class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
-  <input class="sr-only" {name} value={parse(R.view(lens, model))} />
+  <input
+    bind:this={input}
+    class="sr-only"
+    {name}
+    value={(inputValueParse || parse)(R.view(lens, model))} />
   <span
     {id}
     class:disabled
@@ -182,13 +190,16 @@
     <DropdownList
       items={selectableItems}
       {active}
-      onclick={(item, index) => {
+      onclick={async (item, index) => {
         if (allowNone && index === 0) {
           model = R.set(lens, Maybe.None(), model);
         } else {
           model = R.compose( R.set(lens, R.__, model), parse, R.nth(R.__, items), R.when(R.always(allowNone), R.dec) )(index);
         }
         active = Maybe.None();
+        await tick();
+        const event = new Event('change', { bubbles: true });
+        input.dispatchEvent(event);
       }} />
   {/if}
 </div>

@@ -1,8 +1,11 @@
 <script>
+  import { tick } from 'svelte';
   import { slide } from 'svelte/transition';
   import { querystring, location, push } from 'svelte-spa-router';
   import qs from 'qs';
   import * as R from 'ramda';
+
+  import { flashMessageStore } from '@/stores';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
@@ -35,6 +38,10 @@
 
   let queryItems = [];
 
+  let form;
+
+  let valid = true;
+
   $: queryItems = R.ifElse(
     R.length,
     EtHakuUtils.deserializeWhere(schema),
@@ -60,6 +67,12 @@
 </div>
 
 <form
+  bind:this={form}
+  on:change={evt => {
+    valid = R.compose( Either.orSome(false), R.map(R.compose( R.all(EtHakuUtils.isValidBlock(schema)), R.map(R.prop('block')), EtHakuUtils.searchItems )), f => Either.fromTry(
+          () => EtHakuUtils.parseHakuForm(f)
+        ) )(form);
+  }}
   novalidate
   on:submit|preventDefault={evt => {
     R.compose( R.chain(navigate), R.map(EtHakuUtils.searchString), R.map(EtHakuUtils.searchItems), evt => Either.fromTry(
@@ -68,9 +81,10 @@
   }}
   on:reset|preventDefault={_ => {
     queryItems = [];
+    valid = true;
   }}>
 
-  {#each queryItems as { conjunction, block: [operator, key, ...values] }, index}
+  {#each queryItems as { conjunction, block: [operator, key, ...values] }, index (`${index}_${operator}_${key}_${R.join('_', values)}`)}
     <div class="conjunction w-full flex flex-col">
       <div class="flex justify-between w-1/6 my-10">
         <Radio
@@ -96,7 +110,18 @@
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
         hover:text-secondary"
-        on:click={_ => (queryItems = EtHakuUtils.removeQueryItem(index, queryItems))}>
+        on:click={async _ => {
+          const newItems = R.compose( R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
+              () => EtHakuUtils.parseHakuForm(form)
+            ));
+          if (Either.isRight(newItems)) {
+            queryItems = Either.right(newItems);
+            await tick();
+            form.dispatchEvent(new Event('change'));
+          } else {
+            flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin poistamisessa tapahtui virhe.');
+          }
+        }}>
         delete
       </span>
     </div>
@@ -107,14 +132,26 @@
       text={$_('energiatodistus.haku.lisaa_hakuehto')}
       icon={'add_circle_outline'}
       type={'button'}
-      on:click={_ => {
-        queryItems = R.append(EtHakuUtils.defaultQueryItem(), queryItems);
+      on:click={async _ => {
+        const newItems = R.compose( R.map(R.append(EtHakuUtils.defaultQueryItem())), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
+            () => EtHakuUtils.parseHakuForm(form)
+          ));
+        if (Either.isRight(newItems)) {
+          queryItems = Either.right(newItems);
+          await tick();
+          form.dispatchEvent(new Event('change'));
+        } else {
+          flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin lisäyksessä tapahtui virhe.');
+        }
       }} />
   </div>
 
   <div class="flex">
     <div class="w-1/5">
-      <Button type="submit" text={$_('energiatodistus.haku.hae')} />
+      <Button
+        disabled={!valid}
+        type="submit"
+        text={$_('energiatodistus.haku.hae')} />
     </div>
     <div class="w-1/3">
       <Button
