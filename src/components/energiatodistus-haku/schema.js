@@ -137,22 +137,20 @@ const perustiedot = {
   nimi: [...stringComparisons],
   rakennustunnus: [...stringComparisons],
   kiinteistotunnus: [...stringComparisons],
-  rakennusosa: [...stringComparisons],
   'julkinen-rakennus': [singleBoolean],
+  uudisrakennus: [singleBoolean],
   'katuosoite-fi': [...stringComparisons],
   'katuosoite-sv': [...stringComparisons],
   postinumero: [...stringComparisons],
+  laatimisvaihe: [...numberComparisons],
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
+  kayttotarkoitus: [...stringComparisons],
   yritys: {
-    nimi: [...stringComparisons],
-    katuosoite: [...stringComparisons],
-    postitoimipaikka: [...stringComparisons],
-    postinumero: [...stringComparisons]
+    nimi: [...stringComparisons]
   },
-  // havainnointikaynti: [...dateComparisons],
-  'keskeiset-suositukset-fi': [...stringComparisons],
-  'keskeiset-suositukset-sv': [...stringComparisons]
+  havainnointikaynti: [...dateComparisons],
+  kieli: [...numberComparisons]
 };
 
 const lahtotiedot = {
@@ -224,6 +222,7 @@ const lahtotiedot = {
     }
   },
   ilmanvaihto: {
+    'tyyppi-id': [...numberComparisons],
     'kuvaus-fi': [...stringComparisons],
     'kuvaus-sv': [...stringComparisons],
     paaiv: {
@@ -235,30 +234,31 @@ const lahtotiedot = {
     },
     erillispoistot: {
       poisto: [...numberComparisons],
-      tulo: [...numberComparisons],
-      sfp: [...numberComparisons]
-    },
-    ivjarjestelma: {
-      poisto: [...numberComparisons],
-      tulo: [...numberComparisons],
       sfp: [...numberComparisons]
     },
     'lto-vuosihyotysuhde': [...numberComparisons]
   },
   lammitys: {
-    'kuvaus-fi': [...stringComparisons],
-    'kuvaus-sv': [...stringComparisons],
+    lammonjako: {
+      id: [...numberComparisons],
+      'kuvaus-fi': [...stringComparisons],
+      'kuvaus-sv': [...stringComparisons]
+    },
     'tilat-ja-iv': {
       'tuoton-hyotysuhde': [...numberComparisons],
       'jaon-hyotysuhde': [...numberComparisons],
       lampokerroin: [...numberComparisons],
-      apulaitteet: [...numberComparisons]
+      apulaitteet: [...numberComparisons],
+      'lampohavio-lammittamaton-tila': [...numberComparisons],
+      'lampopumppu-tuotto-osuus': [...numberComparisons]
     },
     'lammin-kayttovesi': {
       'tuoton-hyotysuhde': [...numberComparisons],
       'jaon-hyotysuhde': [...numberComparisons],
       lampokerroin: [...numberComparisons],
-      apulaitteet: [...numberComparisons]
+      apulaitteet: [...numberComparisons],
+      'lampohavio-lammittamaton-tila': [...numberComparisons],
+      'lampopumppu-tuotto-osuus': [...numberComparisons]
     },
     takka: { maara: [...numberComparisons], tuotto: [...numberComparisons] },
     ilmalampopumppu: {
@@ -290,6 +290,8 @@ const lahtotiedot = {
 };
 
 const tulokset = {
+  'e-luku': [...numberComparisons],
+  'e-luokka': [stringEquals],
   'kaytettavat-energiamuodot': {
     'fossiilinen-polttoaine': [...numberComparisons],
     sahko: [...numberComparisons],
@@ -321,7 +323,6 @@ const tulokset = {
     'iv-sahko': [...numberComparisons],
     jaahdytys: {
       sahko: [...numberComparisons],
-      lampo: [...numberComparisons],
       kaukojaahdytys: [...numberComparisons]
     },
     'kuluttajalaitteet-ja-valaistus-sahko': [...numberComparisons]
@@ -343,25 +344,6 @@ const tulokset = {
 };
 
 const toteutunutOstoenergiankulutus = {
-  'ostettu-energia': {
-    'kaukolampo-vuosikulutus': [...numberComparisons],
-    'kokonaissahko-vuosikulutus': [...numberComparisons],
-    'kiinteistosahko-vuosikulutus': [...numberComparisons],
-    'kayttajasahko-vuosikulutus': [...numberComparisons],
-    'kaukojaahdytys-vuosikulutus': [...numberComparisons]
-  },
-  'ostetut-polttoaineet': {
-    'kevyt-polttooljy': [...numberComparisons],
-    'pilkkeet-havu-sekapuu': [...numberComparisons],
-    'pilkkeet-koivu': [...numberComparisons],
-    puupelletit: [...numberComparisons],
-    muu: {
-      nimi: [...stringComparisons],
-      yksikko: [...stringComparisons],
-      muunnoskerroin: [...numberComparisons],
-      'maara-vuodessa': [...numberComparisons]
-    }
-  },
   'sahko-vuosikulutus-yhteensa': [...numberComparisons],
   'kaukolampo-vuosikulutus-yhteensa': [...numberComparisons],
   'polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
@@ -374,68 +356,42 @@ const huomiot = {
   'lisatietoja-fi': [...stringComparisons],
   'lisatietoja-sv': [...stringComparisons],
   'iv-ilmastointi': {
-    teksti: [...stringComparisons],
-    toimenpide: {
-      nimi: [...stringComparisons],
-      lampo: [...numberComparisons],
-      sahko: [...numberComparisons],
-      jaahdytys: [...numberComparisons],
-      'eluvun-muutos': [...numberComparisons]
-    }
+    'teksti-fi': [...stringComparisons],
+    'teksti-sv': [...stringComparisons]
   },
   'valaistus-muut': {
-    teksti: [...stringComparisons],
-    toimenpide: {
-      nimi: [...stringComparisons],
-      lampo: [...numberComparisons],
-      sahko: [...numberComparisons],
-      jaahdytys: [...numberComparisons],
-      'eluvun-muutos': [...numberComparisons]
-    }
+    'teksti-fi': [...stringComparisons],
+    'teksti-sv': [...stringComparisons]
   },
   lammitys: {
-    teksti: [...stringComparisons],
-    toimenpide: {
-      nimi: [...stringComparisons],
-      lampo: [...numberComparisons],
-      sahko: [...numberComparisons],
-      jaahdytys: [...numberComparisons],
-      'eluvun-muutos': [...numberComparisons]
-    }
+    'teksti-fi': [...stringComparisons],
+    'teksti-sv': [...stringComparisons]
   },
   ymparys: {
-    teksti: [...stringComparisons],
-    toimenpide: {
-      nimi: [...stringComparisons],
-      lampo: [...numberComparisons],
-      sahko: [...numberComparisons],
-      jaahdytys: [...numberComparisons],
-      'eluvun-muutos': [...numberComparisons]
-    }
+    'teksti-fi': [...stringComparisons],
+    'teksti-sv': [...stringComparisons]
   },
   'alapohja-ylapohja': {
-    teksti: [...stringComparisons],
-    toimenpide: {
-      nimi: [...stringComparisons],
-      lampo: [...numberComparisons],
-      sahko: [...numberComparisons],
-      jaahdytys: [...numberComparisons],
-      'eluvun-muutos': [...numberComparisons]
-    }
+    'teksti-fi': [...stringComparisons],
+    'teksti-sv': [...stringComparisons]
   }
 };
 
 export const schema = {
   id: [...numberComparisons],
   'korvattu-energiatodistus-id': [...numberComparisons],
-
+  allekirjoitusaika: [...dateComparisons],
+  'tila-id': [...numberComparisons],
   perustiedot,
   lahtotiedot,
   tulokset,
   'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
   huomiot,
+  versio: [...numberComparisons],
   'lisamerkintoja-fi': [...stringComparisons],
-  'lisamerkintoja-sv': [...stringComparisons]
+  'lisamerkintoja-sv': [...stringComparisons],
+  laskuriviviite: [...stringComparisons],
+  'laatija-fullname': [...stringComparisons]
 };
 
 export const isOperationArray = R.compose(R.equals('Array'), R.type);
@@ -470,7 +426,11 @@ export const laatijaSchema = R.compose(
   R.pick([
     'id',
     'korvattu-energiatodistus-id',
+    'allekirjoitusaika',
     'julkinen-rakennus',
+    'tila-id',
+    'versio',
+    'laskuriviviite',
     'perustiedot',
     'lahtotiedot',
     'tulokset',
