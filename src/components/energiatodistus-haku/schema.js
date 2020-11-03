@@ -150,7 +150,9 @@ const perustiedot = {
     nimi: [...stringComparisons]
   },
   havainnointikaynti: [...dateComparisons],
-  kieli: [...numberComparisons]
+  kieli: [...numberComparisons],
+  'keskeiset-suositukset-fi': [...stringComparisons],
+  'keskeiset-suositukset-sv': [...stringComparisons]
 };
 
 const lahtotiedot = {
@@ -421,21 +423,26 @@ export const flattenSchema = R.curry((path, schema) => {
   );
 });
 
+const localizedField = key => [`${key}-fi`, `${key}-sv`];
+
 export const laatijaSchema = R.compose(
-  flattenSchema(''),
-  R.pick([
-    'id',
+  R.omit([
     'korvattu-energiatodistus-id',
-    'allekirjoitusaika',
+    'perustiedot.kiinteistotunnus',
     'julkinen-rakennus',
-    'tila-id',
-    'versio',
-    'laskuriviviite',
-    'perustiedot',
-    'lahtotiedot',
-    'tulokset',
-    'toteutunut-ostoenergiankulutus',
-    'huomiot',
-    'lisamerkintoja'
-  ])
+    ...localizedField('perustiedot.keskeiset-suositukset'),
+    ...localizedField('lisamerkintoja'),
+    'lahtotiedot.rakennusvaippa.ilmanvuotoluku',
+    ''
+  ]),
+  flattenSchema(''),
+  R.over(R.lensProp('lahtotiedot'), R.pick(['lammitetty-nettoala'])),
+  R.over(R.lensProp('tulokset'), R.pick(['e-luku', 'e-luokka'])),
+  R.dissoc('toteutunut-ostoenergiankulutus'),
+  R.dissoc('huomiot')
+)(schema);
+
+export const paakayttajaSchema = R.compose(
+  R.omit(['laskuriviviite']),
+  flattenSchema('')
 )(schema);
