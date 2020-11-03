@@ -13,7 +13,7 @@
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore, currentUserStore } from '@/stores';
-  import { push } from '@Component/Router/router';
+  import { push, replace } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
   import Overlay from '@Component/Overlay/Overlay';
@@ -91,6 +91,10 @@
     }),
     qs.parse
   );
+
+  $: if (!qs.parse($querystring).where) {
+    replace('#/energiatodistus/all?where=[[]]');
+  }
 
   $: parsedQuery = parseQuerystring($querystring);
 
