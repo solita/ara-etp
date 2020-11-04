@@ -104,7 +104,7 @@
           }} />
       </div>
     </div>
-    <div class="flex justify-start items-end">
+    <div class="flex justify-start items-center">
       <QueryBlock {operator} {key} {values} {index} {schema} />
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
