@@ -13,7 +13,6 @@
   import SimpleInput from '@Component/Input/SimpleInput';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import Select from '@Component/Select/Select';
-  import ToggleButton from '@Component/ToggleButton/ToggleButton';
   import QueryBlock from './querybuilder/queryblock';
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';

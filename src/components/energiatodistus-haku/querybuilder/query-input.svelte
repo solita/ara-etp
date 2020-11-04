@@ -65,7 +65,11 @@
 </style>
 
 <div class="flex">
-  <input class="sr-only" name={`${nameprefix}_type`} value={op.type} />
+  <input
+    class="sr-only"
+    tabindex="-1"
+    name={`${nameprefix}_type`}
+    value={op.type} />
   {#if op.type !== OPERATOR_TYPES.BOOLEAN}
     <div class="w-1/2">
       <Select
@@ -77,7 +81,11 @@
         name={`${nameprefix}_operation`} />
     </div>
   {:else}
-    <input class="sr-only" name={`${nameprefix}_operation`} value="=" />
+    <input
+      class="sr-only"
+      tabindex="-1"
+      name={`${nameprefix}_operation`}
+      value="=" />
   {/if}
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}

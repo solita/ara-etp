@@ -168,6 +168,7 @@
   <input
     bind:this={input}
     class="sr-only"
+    tabindex="-1"
     {name}
     value={(inputValueParse || parse)(R.view(lens, model))} />
   <span

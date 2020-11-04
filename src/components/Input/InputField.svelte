@@ -51,5 +51,6 @@
   on:blur={event => {
     focused = false;
   }}
+  on:blur
   on:input={event => (rawValue = event.target.value)}
   on:input />
