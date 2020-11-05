@@ -170,6 +170,9 @@
     "luo2018": "Luo uusi 2018 energiatodistus SV?",
     "luo2013": "Luo uusi 2013 energiatodistus SV?",
     "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona SV?",
+    "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
+    "tila-id": "Laatimisvaihe SV?",
+    "versio": "Version",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
@@ -535,6 +538,8 @@
       "header": "Beräkning av e-tal, resultat",
       "label-context": "$unused",
       "yhteensa": "Totalt",
+      "e-luku": "E-tal",
+      "e-luokka": "E-luokka SV?",
       "kaytettavat-energiamuodot": {
         "header": "Specifikation av E-tal",
         "label-context": "Specifikation av E-tal",

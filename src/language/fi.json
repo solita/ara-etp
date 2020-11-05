@@ -170,6 +170,9 @@
     "luo2018": "Luo uusi 2018 energiatodistus",
     "luo2013": "Luo uusi 2013 energiatodistus",
     "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona",
+    "allekirjoitusaika": "Todistuksen laatimispäivä",
+    "tila-id": "Laatimisvaihe",
+    "versio": "Versio",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
@@ -547,6 +550,8 @@
       "header": "E-luvun laskennan tulokset",
       "label-context": "$unused",
       "yhteensa": "Yhteensä",
+      "e-luku": "E-luku",
+      "e-luokka": "E-luokka",
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "label-context": "E-luvun erittely",

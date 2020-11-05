@@ -57,7 +57,7 @@
     <Autocomplete
       bind:completedValue
       items={R.compose( R.map(Inputs.propertyLabel($_)), R.keys )(schema)}
-      size={20} />
+      size={100000} />
     <input
       bind:this={input}
       tabindex="-1"
