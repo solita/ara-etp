@@ -15,6 +15,7 @@
   export let compact = false;
   export let center = false;
   export let type = 'text';
+  export let placeholder = '';
 
   export let viewValue;
   export let rawValue = '';
@@ -65,6 +66,7 @@
     {autocomplete}
     {viewValue}
     {type}
+    {placeholder}
     bind:rawValue
     bind:focused
     on:input />

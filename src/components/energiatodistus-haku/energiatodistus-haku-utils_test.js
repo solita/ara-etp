@@ -1,21 +1,28 @@
 import { assert } from 'chai';
 import * as Maybe from '@Utility/maybe-utils';
 import * as EtHakuUtils from './energiatodistus-haku-utils';
+import { flatSchema } from './schema';
 
 describe('EtHakuUtils:', () => {
   describe('blockToQueryParameter', () => {
     it('should return Just query parameter for given block', () => {
-      const block = ['sisaltaa', 'nimi', 'asdf'];
-      const expected = Maybe.Some(['like', 'nimi', '%asdf%']);
+      const block = ['sisaltaa', 'perustiedot.nimi', 'asdf'];
+      const expected = Maybe.Some(['like', 'perustiedot.nimi', '%asdf%']);
 
-      assert.deepEqual(EtHakuUtils.blockToQueryParameter(block), expected);
+      assert.deepEqual(
+        EtHakuUtils.blockToQueryParameter(flatSchema, block),
+        expected
+      );
     });
 
     it('should return proper query parameter for given block', () => {
       const block = ['no-operation-named-this', 'nimi', 'asdf'];
       const expected = Maybe.None();
 
-      assert.deepEqual(EtHakuUtils.blockToQueryParameter(block), expected);
+      assert.deepEqual(
+        EtHakuUtils.blockToQueryParameter(flatSchema, block),
+        expected
+      );
     });
   });
 
@@ -23,33 +30,39 @@ describe('EtHakuUtils:', () => {
     it('should convert Where to Query', () => {
       const where = [
         [
-          ['sisaltaa', 'nimi', 'asdf'],
+          ['sisaltaa', 'perustiedot.nimi', 'asdf'],
           ['=', 'id', 2]
         ],
-        [['>', 'key', 'value']]
+        [['>', 'id', 'value']]
       ];
       const expected = [
         [
-          ['like', 'nimi', '%asdf%'],
+          ['like', 'perustiedot.nimi', '%asdf%'],
           ['=', 'id', 2]
         ],
-        [['>', 'key', 'value']]
+        [['>', 'id', 'value']]
       ];
 
-      assert.deepEqual(EtHakuUtils.convertWhereToQuery(where), expected);
+      assert.deepEqual(
+        EtHakuUtils.convertWhereToQuery(flatSchema, where),
+        expected
+      );
     });
 
     it('should remove empty blocks when converting Where to Query', () => {
       const where = [
         [
-          ['sisaltaa', 'nimi', 'asdf'],
+          ['sisaltaa', 'perustiedot.nimi', 'asdf'],
           ['no-operation-named-this', 'id', 2]
         ],
         [['no-operation-named-this', 'key', 'value']]
       ];
-      const expected = [[['like', 'nimi', '%asdf%']]];
+      const expected = [[['like', 'perustiedot.nimi', '%asdf%']]];
 
-      assert.deepEqual(EtHakuUtils.convertWhereToQuery(where), expected);
+      assert.deepEqual(
+        EtHakuUtils.convertWhereToQuery(flatSchema, where),
+        expected
+      );
     });
   });
 

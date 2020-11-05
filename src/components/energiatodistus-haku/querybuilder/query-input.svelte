@@ -29,6 +29,8 @@
         return NumberInput;
       case OPERATOR_TYPES.BOOLEAN:
         return BooleanInput;
+      case OPERATOR_TYPES.DATE:
+        return DateInput;
       default:
         return TextInput;
     }

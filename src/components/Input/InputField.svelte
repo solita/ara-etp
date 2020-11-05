@@ -8,13 +8,14 @@
   export let viewValue;
   export let rawValue;
   export let type = 'text';
+  export let placeholder = '';
 
   export let focused;
 </script>
 
 <style type="text/postcss">
   input {
-    @apply w-full relative font-medium py-2;
+    @apply w-full relative font-medium py-1;
   }
 
   input.center {
@@ -44,6 +45,7 @@
   class:error
   {type}
   {autocomplete}
+  {placeholder}
   value={viewValue}
   on:focus={event => {
     focused = true;

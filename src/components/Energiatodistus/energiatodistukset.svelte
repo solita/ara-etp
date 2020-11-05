@@ -9,6 +9,8 @@
   import * as dfns from 'date-fns';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
+  import {flatSchema} from '@Component/energiatodistus-haku/schema';
+
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
 
@@ -150,7 +152,7 @@
       R.prepend(R.__, [api.laatimisvaiheet, kayttajaApi.whoami]),
       api.getEnergiatodistukset,
       queryToQuerystring,
-      R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery),
+      R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
       parseQuerystring
     )($querystring);
   }

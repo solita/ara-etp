@@ -40,12 +40,6 @@ const contains = {
   format: arg => `%${arg}%`
 };
 
-const between = {
-  browserCommand: 'valissa',
-  serverCommand: 'between',
-  format: R.identity
-};
-
 const singleNumberOperation = R.curry((operation, key) => ({
   operation,
   key,
@@ -81,7 +75,10 @@ const stringEquals = key => ({
 });
 
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
-  operation,
+  operation: {
+    ...operation,
+    format: R.compose(R.join('-'), R.reverse, R.split('.'))
+  },
   key,
   argumentNumber: 1,
   defaultValues: () => [dateGenerator()],
@@ -132,6 +129,13 @@ const dateComparisons = [
 ];
 
 const stringComparisons = [stringEquals, stringContains];
+
+export const allOperations = [
+  ...numberComparisons,
+  ...dateComparisons,
+  ...stringComparisons,
+  singleBoolean
+];
 
 const perustiedot = {
   nimi: [...stringComparisons],
@@ -446,3 +450,5 @@ export const paakayttajaSchema = R.compose(
   R.omit(['laskuriviviite']),
   flattenSchema('')
 )(schema);
+
+export const flatSchema = flattenSchema('', schema);
