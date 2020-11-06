@@ -621,7 +621,7 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Energi som förbrukas av husets tekniska system",
-        "label-context": "$unused",
+        "label-context": "Tekniset järjestelmät SV?",
         "sahko": "El",
         "lampo": "Värme",
         "kaukojaahdytys": "Fjärrkyla",
@@ -786,6 +786,7 @@
       "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme (kWh/år)",
       "kaukolampo-neliovuosikulutus-yhteensa": "Fjärrvärme (kWh/m²år)",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning (kWh/år)",
+      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Fjärrkylning (kWh/m²år)",
       "polttoaineet-vuosikulutus-yhteensa": "Bränsle (kWh/år)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Bränsle (kWh/(m²år))",
       "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",
