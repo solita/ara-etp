@@ -165,25 +165,31 @@ const lahtotiedot = {
     ilmanvuotoluku: [...numberComparisons],
     ulkoseinat: {
       ala: [...numberComparisons],
-      U: [...numberComparisons]
+      U: [...numberComparisons],
+      osuuslampohaviosta: [...numberComparisons]
     },
     ylapohja: {
       ala: [...numberComparisons],
-      U: [...numberComparisons]
+      U: [...numberComparisons],
+      osuuslampohaviosta: [...numberComparisons]
     },
     alapohja: {
       ala: [...numberComparisons],
-      U: [...numberComparisons]
+      U: [...numberComparisons],
+      osuuslampohaviosta: [...numberComparisons]
     },
     ikkunat: {
       ala: [...numberComparisons],
-      U: [...numberComparisons]
+      U: [...numberComparisons],
+      osuuslampohaviosta: [...numberComparisons]
     },
     ulkoovet: {
       ala: [...numberComparisons],
-      U: [...numberComparisons]
+      U: [...numberComparisons],
+      osuuslampohaviosta: [...numberComparisons]
     },
-    'kylmasillat-UA': [...numberComparisons]
+    'kylmasillat-UA': [...numberComparisons],
+    'kylmasillat-osuuslampohaviosta': [...numberComparisons]
   },
   ikkunat: {
     pohjoinen: {
@@ -300,18 +306,31 @@ const tulokset = {
   'e-luokka': [stringEquals],
   'kaytettavat-energiamuodot': {
     'fossiilinen-polttoaine': [...numberComparisons],
+    'fossiilinen-polttoaine-painotettu-neliovuosikulutus': [
+      ...numberComparisons
+    ],
     sahko: [...numberComparisons],
+    'sahko-painotettu-neliovuosikulutus': [...numberComparisons],
     kaukojaahdytys: [...numberComparisons],
+    'kaukojaahdytys-painotettu-neliovuosikulutus': [...numberComparisons],
     kaukolampo: [...numberComparisons],
-    'uusiutuva-polttoaine': [...numberComparisons]
+    'kaukolampo-painotettu-neliovuosikulutus': [...numberComparisons],
+    'uusiutuva-polttoaine': [...numberComparisons],
+    'uusiutuva-polttoaine-painotettu-neliovuosikulutus': [...numberComparisons]
   },
   'uusiutuvat-omavaraisenergiat': {
     aurinkosahko: [...numberComparisons],
+    'aurinkosahko-neliovuosikulutus': [...numberComparisons],
     tuulisahko: [...numberComparisons],
+    'tuulisahko-neliovuosikulutus': [...numberComparisons],
     aurinkolampo: [...numberComparisons],
+    'aurinkolampo-neliovuosikulutus': [...numberComparisons],
     muulampo: [...numberComparisons],
+    'muulampo-neliovuosikulutus': [...numberComparisons],
     muusahko: [...numberComparisons],
-    lampopumppu: [...numberComparisons]
+    'muusahko-neliovuosikulutus': [...numberComparisons],
+    lampopumppu: [...numberComparisons],
+    'lampopumppu-neliovuosikulutus': [...numberComparisons]
   },
   'tekniset-jarjestelmat': {
     'tilojen-lammitys': {
@@ -331,29 +350,51 @@ const tulokset = {
       sahko: [...numberComparisons],
       kaukojaahdytys: [...numberComparisons]
     },
-    'kuluttajalaitteet-ja-valaistus-sahko': [...numberComparisons]
+    'kuluttajalaitteet-ja-valaistus-sahko': [...numberComparisons],
+    sahko: [...numberComparisons],
+    lampo: [...numberComparisons],
+    kaukojaahdytys: [...numberComparisons]
   },
   nettotarve: {
     'tilojen-lammitys-vuosikulutus': [...numberComparisons],
+    'tilojen-lammitys-neliovuosikulutus': [...numberComparisons],
     'ilmanvaihdon-lammitys-vuosikulutus': [...numberComparisons],
+    'ilmanvaihdon-lammitys-neliovuosikulutus': [...numberComparisons],
     'kayttoveden-valmistus-vuosikulutus': [...numberComparisons],
-    'jaahdytys-vuosikulutus': [...numberComparisons]
+    'kayttoveden-valmistus-neliovuosikulutus': [...numberComparisons],
+    'jaahdytys-vuosikulutus': [...numberComparisons],
+    'jaahdytys-neliovuosikulutus': [...numberComparisons]
   },
   lampokuormat: {
     aurinko: [...numberComparisons],
+    'aurinko-nelivuosikuorma': [...numberComparisons],
     ihmiset: [...numberComparisons],
+    'ihmiset-nelivuosikuorma': [...numberComparisons],
     kuluttajalaitteet: [...numberComparisons],
+    'kuluttajalaitteet-nelivuosikuorma': [...numberComparisons],
     valaistus: [...numberComparisons],
-    kvesi: [...numberComparisons]
+    'valaistus-nelivuosikuorma': [...numberComparisons],
+    kvesi: [...numberComparisons],
+    'kvesi-nelivuosikuorma': [...numberComparisons]
   },
   laskentatyokalu: [...stringComparisons]
 };
 
 const toteutunutOstoenergiankulutus = {
   'sahko-vuosikulutus-yhteensa': [...numberComparisons],
+  'sahko-neliovuosikulutus-yhteensa': [...numberComparisons],
   'kaukolampo-vuosikulutus-yhteensa': [...numberComparisons],
+  'kaukolampo-neliovuosikulutus-yhteensa': [...numberComparisons],
+  'kaukojaahdytys-vuosikulutus-yhteensa': [...numberComparisons],
+  'kaukojaahdytys-neliovuosikulutus-yhteensa': [...numberComparisons],
   'polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
-  'kaukojaahdytys-vuosikulutus-yhteensa': [...numberComparisons]
+  'polttoaineet-neliovuosikulutus-yhteensa': [...numberComparisons],
+  'toteutunut-vuosikulutus-yhteensä': [...numberComparisons],
+  'toteutunut-neliovuosikulutus-yhteensä': [...numberComparisons],
+  'ostetut-polttoaineet': {
+    'kevyt-polttooljy-vuosikulutus': [...numberComparisons],
+    'kevyt-polttooljy-neliovuosikulutus': [...numberComparisons]
+  }
 };
 
 const huomiot = {

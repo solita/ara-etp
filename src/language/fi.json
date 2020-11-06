@@ -319,30 +319,36 @@
         "ulkoseinat": {
           "label-context": "Rakennusvaippa / Ulkoseinät",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
         },
         "ylapohja": {
           "label-context": "Rakennusvaippa / Yläpohja",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
         },
         "alapohja": {
           "label-context": "Rakennusvaippa / Alapohja",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
         },
         "ikkunat": {
           "label-context": "Rakennusvaippa / Ikkunat",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
         },
         "ulkoovet": {
           "label-context": "Rakennusvaippa / Ulko-ovet",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
         },
         "kylmasillat": "Kylmäsillat",
-        "kylmasillat-UA": "Kylmäsillat U*A"
+        "kylmasillat-UA": "Kylmäsillat U*A",
+        "kylmasillat-osuuslampohaviosta": "Kylmäsillat / Osuus lämpöhäviöstä"
       },
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
@@ -627,7 +633,7 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
-        "label-context": "$unused",
+        "label-context": "Tekniset järjestelmät",
         "sahko": "Sähkö",
         "lampo": "Lämpö",
         "kaukojaahdytys": "Kaukojäähdytys",
@@ -792,6 +798,7 @@
       "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö (kWh/vuosi)",
       "kaukolampo-neliovuosikulutus-yhteensa": "Kaukolämpö (kWh/m²vuosi)",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys (kWh/vuosi)",
+      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Kaukojäähdytys (kWh/m²vuosi)",
       "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet (kWh/vuosi)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Polttoaineet (kWh/(m²vuosi))",
       "toteutunut-vuosikulutus-yhteensä": "Yhteensä (kWh/vuosi)",

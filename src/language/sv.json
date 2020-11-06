@@ -307,30 +307,36 @@
         "ulkoseinat": {
           "label-context": "Klimatskal / Ytterväggar",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "ylapohja": {
           "label-context": "Klimatskal / Vindsbjälklag",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "alapohja": {
           "label-context": "Klimatskal / Bottenbjälklag",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "ikkunat": {
           "label-context": "Klimatskal / Fönster",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "ulkoovet": {
           "label-context": "Klimatskal / Ytterdörrar",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "kylmasillat": "Köldbryggor",
-        "kylmasillat-UA": "Köldbryggor U*A"
+        "kylmasillat-UA": "Köldbryggor U*A",
+        "kylmasillat-osuuslampohaviosta": "Köldbryggor / Andel av värmeförlusten"
       },
       "ikkunat": {
         "header": "Fönster enligt väderstreck",

@@ -49,6 +49,8 @@
   </div>
 {/if}
 
+<!-- purgecss: pb-3 -->
+
 <table class="et-table mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
@@ -77,14 +79,14 @@
       <td class="et-table--td">
         {$_('energiatodistus.lahtotiedot.ilmanvaihto.labels.paaiv')}
       </td>
-      <td class="et-table--td flex flex-row items-end">
+      <td class="et-table--td flex flex-row items-center">
         <Input
           {disabled}
           {schema}
           compact={true}
           bind:model={energiatodistus}
           path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
-        /
+        <span class="block" class:pb-3={disabled}>/</span>
         <Input
           {disabled}
           {schema}
@@ -122,14 +124,14 @@
         <td class="et-table--td">
           {$_(`energiatodistus.lahtotiedot.ilmanvaihto.labels.${ilmanvaihto}`)}
         </td>
-        <td class="et-table--td flex flex-row items-end">
+        <td class="et-table--td flex flex-row items-center">
           <Input
             {disabled}
             {schema}
             compact={true}
             bind:model={energiatodistus}
             path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
-          /
+          <span class="block" class:pb-3={disabled}>/</span>
           <Input
             {disabled}
             {schema}
