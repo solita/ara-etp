@@ -54,6 +54,8 @@
   }
 </style>
 
+<!-- purgecss: bg-beige -->
+
 <div class="flex w-full">
   <div class="w-7/12 flex flex-col justify-end">
     <SimpleInput
@@ -84,8 +86,10 @@
   }}>
 
   {#each queryItems as { conjunction, block: [operator, key, ...values] }, index (`${index}_${operator}_${key}_${R.join('_', values)}`)}
-    <div class="conjunction w-full flex flex-col">
-      <div class="flex justify-between w-1/6 my-10">
+    <div
+      class="conjunction w-full flex justify-center"
+      class:bg-beige={conjunction === 'or'}>
+      <div class="flex justify-between w-1/6 my-5">
         <Radio
           group={conjunction}
           value={'and'}
@@ -108,7 +112,7 @@
       <QueryBlock {operator} {key} {values} {index} {schema} />
       <span
         class="text-primary font-icon text-2xl cursor-pointer ml-4
-        hover:text-secondary"
+        hover:text-error"
         on:click={async _ => {
           const newItems = R.compose( R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
               () => EtHakuUtils.parseHakuForm(form)
@@ -121,7 +125,7 @@
             flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin poistamisessa tapahtui virhe.');
           }
         }}>
-        delete
+        cancel
       </span>
     </div>
   {/each}

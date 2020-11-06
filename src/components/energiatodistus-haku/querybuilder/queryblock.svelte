@@ -52,7 +52,7 @@
   }
 </script>
 
-<div class="flex-grow flex items-center justify-start my-8">
+<div class="flex items-center justify-start my-8 w-full">
   <div class="w-1/2 mr-4">
     <Autocomplete
       bind:completedValue

@@ -20,7 +20,8 @@ module.exports = {
       background: '#eee',
       hr: 'rgba(52, 56, 65, 0.3)',
       transparent: 'rgba(0,0,0,0)',
-      tableborder: 'rgba(167,167,167,0.3)'
+      tableborder: 'rgba(167,167,167,0.3)',
+      beige: '#f2f8e7'
     },
     extend: {
       fontFamily: {

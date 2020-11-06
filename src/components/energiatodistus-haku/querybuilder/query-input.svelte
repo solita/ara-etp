@@ -91,7 +91,7 @@
   {/if}
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}
-      <div class="flex flex-col justify-end">
+      <div class="flex flex-grow flex-col justify-end">
         <svelte:component
           this={inputForType(op.type)}
           {value}
