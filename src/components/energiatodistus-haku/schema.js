@@ -5,7 +5,8 @@ export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
   NUMBER: 'NUMBER',
   DATE: 'DATE',
-  BOOLEAN: 'BOOLEAN'
+  BOOLEAN: 'BOOLEAN',
+  VERSIO: 'VERSIO'
 });
 
 const eq = {
@@ -72,6 +73,17 @@ const stringEquals = key => ({
   argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
+});
+
+const versioEquals = key => ({
+  operation: {
+    ...eq,
+    format: item => parseInt(item)
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [2018],
+  type: OPERATOR_TYPES.VERSIO
 });
 
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
@@ -434,7 +446,7 @@ export const schema = {
   tulokset,
   'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
   huomiot,
-  versio: [...numberComparisons],
+  versio: [versioEquals],
   'lisamerkintoja-fi': [...stringComparisons],
   'lisamerkintoja-sv': [...stringComparisons],
   laskuriviviite: [...stringComparisons],

@@ -14,6 +14,7 @@
   import TextInput from './query-inputs/text-input';
   import DateInput from './query-inputs/date-input';
   import NumberInput from './query-inputs/number-input';
+  import VersioInput from './query-inputs/versio-input';
 
   import { _ } from '@Language/i18n';
 
@@ -31,6 +32,8 @@
         return BooleanInput;
       case OPERATOR_TYPES.DATE:
         return DateInput;
+      case OPERATOR_TYPES.VERSIO:
+        return VersioInput;
       default:
         return TextInput;
     }

@@ -82,6 +82,7 @@ export const removeQueryItem = R.curry((index, queryItems) =>
 export const parseValueByType = R.curry((type, value) => {
   switch (type) {
     case OPERATOR_TYPES.NUMBER:
+    case OPERATOR_TYPES.VERSIO:
       return parsers.parseNumber(value);
     case OPERATOR_TYPES.BOOLEAN:
       return Either.Right(value === 'true');
