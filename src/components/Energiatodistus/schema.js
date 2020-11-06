@@ -120,7 +120,7 @@ const YritysPostinumero = String(8);
 
 const Yritys = {
   nimi: String(150),
-  katuosoite: String(100),
+  katuosoite: String(50),
   postitoimipaikka: String(30),
   postinumero: YritysPostinumero
 };
@@ -132,7 +132,7 @@ export const v2018 = {
     rakennustunnus: Rakennustunnus,
     kiinteistotunnus: String(50),
     rakennusosa: String(100),
-    katuosoite: String(100),
+    katuosoite: String(50),
     postinumero: String(5),
     valmistumisvuosi: {
       ...Integer(100, new Date().getFullYear()),
