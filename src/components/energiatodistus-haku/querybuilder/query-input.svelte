@@ -15,6 +15,7 @@
   import DateInput from './query-inputs/date-input';
   import NumberInput from './query-inputs/number-input';
   import VersioInput from './query-inputs/versio-input';
+  import EluokkaInput from './query-inputs/e-luokka-input';
 
   import { _ } from '@Language/i18n';
 
@@ -34,6 +35,8 @@
         return DateInput;
       case OPERATOR_TYPES.VERSIO:
         return VersioInput;
+      case OPERATOR_TYPES.ELUOKKA:
+        return EluokkaInput;
       default:
         return TextInput;
     }

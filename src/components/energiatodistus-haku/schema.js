@@ -6,7 +6,8 @@ export const OPERATOR_TYPES = Object.freeze({
   NUMBER: 'NUMBER',
   DATE: 'DATE',
   BOOLEAN: 'BOOLEAN',
-  VERSIO: 'VERSIO'
+  VERSIO: 'VERSIO',
+  ELUOKKA: 'ELUOKKA'
 });
 
 const eq = {
@@ -86,6 +87,20 @@ const versioEquals = key => ({
   type: OPERATOR_TYPES.VERSIO
 });
 
+const eLuokkaOperation = R.curry((operation, key) => ({
+  operation,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => ['A'],
+  type: OPERATOR_TYPES.ELUOKKA
+}));
+
+const eLuokkaEquals = eLuokkaOperation(eq);
+const eLuokkaGreaterThan = eLuokkaOperation(eq);
+const eLuokkaGreaterThanOrEqual = eLuokkaOperation(eq);
+const eLuokkaLessThan = eLuokkaOperation(eq);
+const eLuokkaLessThanOrEqual = eLuokkaOperation(eq);
+
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation: {
     ...operation,
@@ -142,11 +157,12 @@ const dateComparisons = [
 
 const stringComparisons = [stringEquals, stringContains];
 
-export const allOperations = [
-  ...numberComparisons,
-  ...dateComparisons,
-  ...stringComparisons,
-  singleBoolean
+const eLuokkaComparisons = [
+  eLuokkaEquals,
+  eLuokkaGreaterThan,
+  eLuokkaGreaterThanOrEqual,
+  eLuokkaLessThan,
+  eLuokkaLessThanOrEqual
 ];
 
 const perustiedot = {
@@ -315,7 +331,7 @@ const lahtotiedot = {
 
 const tulokset = {
   'e-luku': [...numberComparisons],
-  'e-luokka': [stringEquals],
+  'e-luokka': [...eLuokkaComparisons],
   'kaytettavat-energiamuodot': {
     'fossiilinen-polttoaine': [...numberComparisons],
     'fossiilinen-polttoaine-painotettu-neliovuosikulutus': [
