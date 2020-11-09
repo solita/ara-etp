@@ -185,9 +185,7 @@
     on:blur={_ => {
       focused = false;
     }}>
-    <span>
-      {R.compose( Maybe.orSome($_(noneLabel)), R.map(format) )(selected)}
-    </span>
+    {R.compose( Maybe.orSome($_(noneLabel)), R.map(format) )(selected)}
   </div>
   {#if showDropdown}
     <DropdownList
