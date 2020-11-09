@@ -56,3 +56,5 @@ export const toMaybeList = R.compose(
   list => list.sequenceMaybe(),
   monet.List.fromArray
 );
+
+export const nullReturning = fn => R.compose(Maybe.fromNull, fn);

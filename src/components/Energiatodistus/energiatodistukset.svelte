@@ -4,16 +4,19 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as api from './energiatodistus-api';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as et from './energiatodistus-utils';
   import * as dfns from 'date-fns';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+
+  import {flatSchema} from '@Component/energiatodistus-haku/schema';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore, currentUserStore } from '@/stores';
-  import { push } from '@Component/Router/router';
+  import { push, replace } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
   import Overlay from '@Component/Overlay/Overlay';
@@ -29,6 +32,7 @@
   let overlay = true;
   let failure = false;
   let energiatodistukset = [];
+  let schema = Maybe.None();
 
   let cancel = () => {};
 
@@ -92,6 +96,10 @@
     qs.parse
   );
 
+  $: if (!qs.parse($querystring).where) {
+    replace('#/energiatodistus/all?where=[[]]');
+  }
+
   $: parsedQuery = parseQuerystring($querystring);
 
   $: where = R.prop('where', parsedQuery);
@@ -128,15 +136,23 @@
         response => {
           overlay = false;
           energiatodistukset = response[0];
+          schema = R.compose(
+            Maybe.Some,
+            R.ifElse(
+              KayttajaUtils.isPaakayttaja,
+              R.always(EtHakuSchema.paakayttajaSchema),
+              R.always(EtHakuSchema.laatijaSchema)
+            )
+          )(response[2]);
         }
       ),
       Future.parallel(5),
       R.tap(toggleOverlay(true)),
       R.tap(cancel),
-      R.prepend(R.__, [api.laatimisvaiheet]),
+      R.prepend(R.__, [api.laatimisvaiheet, kayttajaApi.whoami]),
       api.getEnergiatodistukset,
       queryToQuerystring,
-      R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery),
+      R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
       parseQuerystring
     )($querystring);
   }
@@ -148,9 +164,11 @@
 
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
-  <div class="mb-10">
-    <EnergiatodistusHaku {where} schema={EtHakuSchema.laatijaSchema} />
-  </div>
+  {#each Maybe.toArray(schema) as s}
+    <div class="mb-10">
+      <EnergiatodistusHaku {where} schema={s} />
+    </div>
+  {/each}
   <Overlay {overlay}>
     <div slot="content">
       <div class="lg:w-1/3 w-full mb-6">

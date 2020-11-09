@@ -12,7 +12,7 @@
     "postinumero-not-found": "Postinumeroa ei ole olemassa SV?",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus SV?",
     "invalid-rakennustunnus": "Virheellinen rakennustunnus SV?",
-    "invalid-ovttunnus": "Virheellinen OVT-tunnus SV?",
+    "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
     "no-selection": "Ei valintaa SV?",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min} SV?",
@@ -74,7 +74,6 @@
     "laskutuskieli": "Faktureringsspråk",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori SV?",
     "verkkolaskuosoite": "Adress för nätfaktura",
-    "ovt-tunnus": "OVT-tunnus SV?",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
@@ -170,6 +169,9 @@
     "luo2018": "Luo uusi 2018 energiatodistus SV?",
     "luo2013": "Luo uusi 2013 energiatodistus SV?",
     "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona SV?",
+    "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
+    "tila-id": "Laatimisvaihe SV?",
+    "versio": "Version",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
@@ -202,19 +204,31 @@
     },
     "kaikki": "Allt",
     "korvaavuus": {
-      "header": "Energiatodistuksen korvaavuus SV?",
-      "tunnus": "Beteckning",
-      "etl": "ETL SV?",
-      "ktl": "KTL SV?",
-      "rakennustunnus": "Permanent byggnadsbeteckning",
-      "nettoala": "Nettoarea",
-      "nimi": "Byggnadens namn",
-      "osoite": "Adress",
-      "laatija": "Upprätttare",
-      "invalid-korvaus": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta, Tarkista korvattava energiatodistus. SV?"
-    },
-    "korvaava": {
-      "header": "Korvaa energiatodistuksen SV?"
+      "header": {
+        "korvattu": "Korvaa energiatodistuksen SV?",
+        "korvaava": "Korvattu energiatodistuksella SV?",
+        "korvaavuus": "Energiatodistuksen korvaavuus SV?"
+      },
+      "checkbox": "Korvaa todistuksen SV?",
+      "input": "Valitse korvattava todistus SV?",
+      "table": {
+        "tunnus": "Tunnus SV?",
+        "etl": "ETL SV?",
+        "ktl": "KTL SV?",
+        "rakennustunnus": "Permanent byggnadsbeteckning",
+        "nettoala": "Nettoarea",
+        "nimi": "Byggnadens namn",
+        "osoite": "Adress?",
+        "laatija": "Upprätttare"
+      },
+      "validation": {
+        "invalid-tila": "Korvattava energiatodistus pitää olla allekirjoitettu tai hylätty. SV?",
+        "already-replaced": "Korvattavalla energiatodistuksella on jo toinen korvaava energiatodistus. SV?",
+        "invalid-location": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta. SV?",
+        "is-same": "Energiatodistus ei voi korvata itseään. SV?",
+        "not-found": "Energiatodistusta ei ole olemassa. SV?",
+        "invalid-id": "Energiatodistustunnus ei sisällä kirjaimia. SV?"
+      }
     },
     "tila": {
       "draft": "Utkast",
@@ -304,30 +318,36 @@
         "ulkoseinat": {
           "label-context": "Klimatskal / Ytterväggar",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "ylapohja": {
           "label-context": "Klimatskal / Vindsbjälklag",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "alapohja": {
           "label-context": "Klimatskal / Bottenbjälklag",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "ikkunat": {
           "label-context": "Klimatskal / Fönster",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "ulkoovet": {
           "label-context": "Klimatskal / Ytterdörrar",
           "ala": "A",
-          "U": "U"
+          "U": "U",
+          "osuuslampohaviosta": "Andel av värmeförlusten"
         },
         "kylmasillat": "Köldbryggor",
-        "kylmasillat-UA": "Köldbryggor U*A"
+        "kylmasillat-UA": "Köldbryggor U*A",
+        "kylmasillat-osuuslampohaviosta": "Köldbryggor / Andel av värmeförlusten"
       },
       "ikkunat": {
         "header": "Fönster enligt väderstreck",
@@ -535,6 +555,8 @@
       "header": "Beräkning av e-tal, resultat",
       "label-context": "$unused",
       "yhteensa": "Totalt",
+      "e-luku": "E-tal",
+      "e-luokka": "E-luokka SV?",
       "kaytettavat-energiamuodot": {
         "header": "Specifikation av E-tal",
         "label-context": "Specifikation av E-tal",
@@ -610,7 +632,7 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Energi som förbrukas av husets tekniska system",
-        "label-context": "$unused",
+        "label-context": "Tekniset järjestelmät SV?",
         "sahko": "El",
         "lampo": "Värme",
         "kaukojaahdytys": "Fjärrkyla",
@@ -775,6 +797,7 @@
       "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme (kWh/år)",
       "kaukolampo-neliovuosikulutus-yhteensa": "Fjärrvärme (kWh/m²år)",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning (kWh/år)",
+      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Fjärrkylning (kWh/m²år)",
       "polttoaineet-vuosikulutus-yhteensa": "Bränsle (kWh/år)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Bränsle (kWh/(m²år))",
       "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",

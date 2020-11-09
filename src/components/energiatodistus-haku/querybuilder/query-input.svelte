@@ -29,6 +29,8 @@
         return NumberInput;
       case OPERATOR_TYPES.BOOLEAN:
         return BooleanInput;
+      case OPERATOR_TYPES.DATE:
+        return DateInput;
       default:
         return TextInput;
     }
@@ -65,7 +67,11 @@
 </style>
 
 <div class="flex">
-  <input class="sr-only" name={`${nameprefix}_type`} value={op.type} />
+  <input
+    class="sr-only"
+    tabindex="-1"
+    name={`${nameprefix}_type`}
+    value={op.type} />
   {#if op.type !== OPERATOR_TYPES.BOOLEAN}
     <div class="w-1/2">
       <Select
@@ -77,11 +83,15 @@
         name={`${nameprefix}_operation`} />
     </div>
   {:else}
-    <input class="sr-only" name={`${nameprefix}_operation`} value="=" />
+    <input
+      class="sr-only"
+      tabindex="-1"
+      name={`${nameprefix}_operation`}
+      value="=" />
   {/if}
   <div class="inputs w-1/2 pl-4 flex justify-between">
     {#each values as value, index}
-      <div class="flex flex-col justify-end">
+      <div class="flex flex-grow flex-col justify-end">
         <svelte:component
           this={inputForType(op.type)}
           {value}

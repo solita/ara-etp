@@ -3,173 +3,46 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as parsers from '@Utility/parsers';
 import * as Either from '@Utility/either-utils';
 
-export const OPERATOR_TYPES = Object.freeze({
-  STRING: 'STRING',
-  NUMBER: 'NUMBER',
-  DATESINGLE: 'DATESINGLE',
-  BOOLEAN: 'BOOLEAN'
-});
-
-const gt = {
-  operation: '>',
-  command: R.curry((first, second) => ['>', first, second])
-};
-const gte = {
-  operation: '>=',
-  command: R.curry((first, second) => ['>=', first, second])
-};
-const lt = {
-  operation: '<',
-  command: R.curry((first, second) => ['<', first, second])
-};
-const lte = {
-  operation: '<=',
-  command: R.curry((first, second) => ['<=', first, second])
-};
-const eq = {
-  operation: '=',
-  command: R.curry((first, second) => ['=', first, second])
-};
-
-const contains = {
-  operation: 'sisaltaa',
-  command: R.curry((first, second) => ['like', first, `%${second}%`])
-};
-
-const allComparisons = [eq, gt, gte, lt, lte];
-
-const operations = [...allComparisons, contains];
-
-const kriteeri = (key, operators, defaultOperator, defaultValues, type) => ({
-  key,
-  operators: R.map(R.over(R.lensProp('command'), R.applyTo(key)), operators),
-  defaultOperator: R.over(
-    R.lensProp('command'),
-    R.applyTo(key),
-    defaultOperator
-  ),
-  defaultValues,
-  type
-});
-
-const korvattuEnergiatodistusIdKriteeri = kriteeri(
-  'korvattu-energiatodistus-id',
-  allComparisons,
-  eq,
-  [''],
-  OPERATOR_TYPES.STRING
-);
-
-export const idKriteeri = kriteeri(
-  'id',
-  allComparisons,
-  eq,
-  [''],
-  OPERATOR_TYPES.NUMBER
-);
-
-const allekirjoitusaikaKriteeri = kriteeri(
-  'allekirjoitusaika',
-  allComparisons,
-  eq,
-  [''],
-  OPERATOR_TYPES.DATESINGLE
-);
-
-// const viimeinenvoimassaoloKriteeri = kriteeri('viimeinenvoimassaolo', []);
-
-export const perustiedot = () => ({
-  nimi: kriteeri(
-    'perustiedot.nimi',
-    [eq, contains],
-    eq,
-    '',
-    OPERATOR_TYPES.STRING
-  ),
-  rakennustunnus: kriteeri(
-    'perustiedot.rakennustunnus',
-    allComparisons,
-    eq,
-    [''],
-    OPERATOR_TYPES.STRING
-  ),
-  kiinteistotunnus: kriteeri(
-    'perustiedot.kiinteistotunnus',
-    allComparisons,
-    eq,
-    [''],
-    OPERATOR_TYPES.STRING
-  ),
-  // 'katuosoite-fi': kriteeri('perustiedot.katuosoite-fi', []),
-  // 'katuosoite-sv': kriteeri('perustiedot.katuosoite-sv', []),
-  postinumero: kriteeri(
-    'perustiedot.postinumero',
-    allComparisons,
-    eq,
-    [''],
-    OPERATOR_TYPES.STRING
-  ),
-  'julkinen-rakennus': kriteeri(
-    'perustiedot.julkinen-rakennus',
-    [eq],
-    eq,
-    'true',
-    OPERATOR_TYPES.BOOLEAN
-  ),
-  uudisrakennus: kriteeri(
-    'perustiedot.uudisrakennus',
-    [eq],
-    eq,
-    [''],
-    OPERATOR_TYPES.STRING
-  )
-  // laatimisvaihe: kriteeri('perustiedot.laatimisvaihe', []),
-  // havainnointikaynti: kriteeri('perustiedot.havainnointikaynti', []),
-  // valmistumisvuosi: kriteeri('perustiedot.valmistumisvuosi', []),
-  // rakennusluokka: kriteeri('rakennusluokka', []),
-  // 'rakennuksen-kayttotarkoitusluokka': kriteeri(
-  //   'rakennuksen-kayttotarkoitusluokka',
-  //   []
-  // )
-});
+import { OPERATOR_TYPES } from './schema';
 
 export const defaultQueryItem = R.always({
   conjunction: 'and',
   block: ['', '', '']
 });
 
-export const defaultWhere = () => [[['=', 'id', 0]]];
+export const blockToQueryParameter = R.curry(
+  (schema, [operation, key, ...values]) => {
+    if (R.filter(value => value !== '', values).length === 0)
+      return Maybe.None();
 
-export const laatijaKriteerit = () => [
-  idKriteeri,
-  allekirjoitusaikaKriteeri,
-  ...R.values(perustiedot())
-];
+    return R.compose(
+      R.map(s => [
+        s.operation.serverCommand,
+        key,
+        ...R.map(s.operation.format, values)
+      ]),
+      R.chain(
+        Maybe.nullReturning(
+          R.find(R.pathEq(['operation', 'browserCommand'], operation))
+        )
+      ),
+      Maybe.fromNull,
+      R.prop(key)
+    )(schema);
+  }
+);
 
-export const findOperation = operation =>
+export const convertWhereToQuery = R.curry((schema, where) =>
   R.compose(
-    Maybe.fromNull,
-    R.find(R.compose(R.equals(operation), R.prop('operation')))
-  )(operations);
-
-export const blockToQueryParameter = ([operation, key, ...values]) => {
-  if (R.filter(value => value !== '', values).length === 0) return Maybe.None();
-
-  return R.compose(
-    R.map(op => R.apply(op.command, [key, ...values])),
-    findOperation
-  )(operation);
-};
-
-export const convertWhereToQuery = R.compose(
-  R.filter(R.length),
-  R.map(
-    R.compose(
-      R.map(Maybe.get),
-      R.filter(Maybe.isSome),
-      R.map(blockToQueryParameter)
+    R.filter(R.length),
+    R.map(
+      R.compose(
+        R.map(Maybe.get),
+        R.filter(Maybe.isSome),
+        R.map(blockToQueryParameter(schema))
+      )
     )
-  )
+  )(where)
 );
 
 export const deserializeConjuntionBlockPair = ([conjunction, block]) => ({

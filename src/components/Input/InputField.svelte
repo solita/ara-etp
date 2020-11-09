@@ -8,6 +8,7 @@
   export let viewValue;
   export let rawValue;
   export let type = 'text';
+  export let placeholder = '';
 
   export let focused;
 </script>
@@ -44,6 +45,7 @@
   class:error
   {type}
   {autocomplete}
+  {placeholder}
   value={viewValue}
   on:focus={event => {
     focused = true;
@@ -51,5 +53,6 @@
   on:blur={event => {
     focused = false;
   }}
+  on:blur
   on:input={event => (rawValue = event.target.value)}
   on:input />

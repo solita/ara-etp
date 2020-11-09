@@ -115,13 +115,13 @@
   }
 
   .button {
-    @apply font-medium min-h-2.5em block py-2 cursor-pointer border-b-3 border-disabled;
+    @apply font-medium cursor-pointer border-b-3 pt-2 border-disabled;
   }
 
   .button:not(.disabled)::after {
     @apply font-icon absolute text-2xl font-bold text-disabled;
     right: 0.5em;
-    bottom: 0.2em;
+    top: 0.03em;
     content: 'expand_more';
   }
 
@@ -168,13 +168,14 @@
   <input
     bind:this={input}
     class="sr-only"
+    tabindex="-1"
     {name}
     value={(inputValueParse || parse)(R.view(lens, model))} />
-  <span
+  <div
     {id}
     class:disabled
     bind:this={button}
-    class="button"
+    class="button flex items-center"
     class:focused
     tabindex={disabled ? -1 : 0}
     on:click={_ => disabled || (showDropdown = !showDropdown)}
@@ -184,8 +185,10 @@
     on:blur={_ => {
       focused = false;
     }}>
-    {R.compose( Maybe.orSome($_(noneLabel)), R.map(format) )(selected)}
-  </span>
+    <span>
+      {R.compose( Maybe.orSome($_(noneLabel)), R.map(format) )(selected)}
+    </span>
+  </div>
   {#if showDropdown}
     <DropdownList
       items={selectableItems}
