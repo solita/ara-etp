@@ -16,11 +16,9 @@ export const blockToQueryParameter = R.curry(
       return Maybe.None();
 
     return R.compose(
-      R.map(s => [
-        s.operation.serverCommand,
-        key,
-        ...R.map(s.operation.format, values)
-      ]),
+      R.map(s =>
+        R.apply(s.operation.format(s.operation.serverCommand, key), values)
+      ),
       R.chain(
         Maybe.nullReturning(
           R.find(R.pathEq(['operation', 'browserCommand'], operation))
@@ -37,6 +35,7 @@ export const convertWhereToQuery = R.curry((schema, where) =>
     R.filter(R.length),
     R.map(
       R.compose(
+        R.reduce(R.concat, []),
         R.map(Maybe.get),
         R.filter(Maybe.isSome),
         R.map(blockToQueryParameter(schema))
@@ -86,6 +85,8 @@ export const parseValueByType = R.curry((type, value) => {
       return parsers.parseNumber(value);
     case OPERATOR_TYPES.BOOLEAN:
       return Either.Right(value === 'true');
+    case OPERATOR_TYPES.VERSIOLUOKKA:
+      return parsers.parseNumber(value);
     default:
       return Either.Right(value);
   }

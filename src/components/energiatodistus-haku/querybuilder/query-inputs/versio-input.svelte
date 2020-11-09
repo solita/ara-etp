@@ -7,9 +7,10 @@
 
   import Select from '@Component/Select/Select';
 
-  export let value;
+  export let values = [];
   export let nameprefix;
-  export let index;
+  export let index = 0;
+  export let value = R.head(values);
 
   const versiot = [2018, 2013];
 
@@ -21,6 +22,6 @@
 <Select
   name={`${nameprefix}_value_${index}`}
   allowNone={false}
-  model={value}
+  bind:model={value}
   items={versiot}
   lens={R.identity} />

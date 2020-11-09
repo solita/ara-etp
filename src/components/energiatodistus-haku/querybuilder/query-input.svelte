@@ -15,6 +15,7 @@
   import DateInput from './query-inputs/date-input';
   import NumberInput from './query-inputs/number-input';
   import VersioInput from './query-inputs/versio-input';
+  import VersioluokkaInput from './query-inputs/versioluokka-input';
   import EluokkaInput from './query-inputs/e-luokka-input';
 
   import { _ } from '@Language/i18n';
@@ -24,6 +25,7 @@
   export let operations;
   export let operation;
   export let values;
+  export let luokittelut;
 
   const inputForType = type => {
     switch (type) {
@@ -37,6 +39,8 @@
         return VersioInput;
       case OPERATOR_TYPES.ELUOKKA:
         return EluokkaInput;
+      case OPERATOR_TYPES.VERSIOLUOKKA:
+        return VersioluokkaInput;
       default:
         return TextInput;
     }
@@ -79,14 +83,16 @@
     name={`${nameprefix}_type`}
     value={op.type} />
   {#if op.type !== OPERATOR_TYPES.BOOLEAN}
-    <div class="w-1/2">
-      <Select
-        items={R.map(R.path(['operation', 'browserCommand']), operations)}
-        model={R.path(['operation', 'browserCommand'], op)}
-        lens={R.identity}
-        format={R.compose( $_, R.concat('energiatodistus.haku.') )}
-        allowNone={false}
-        name={`${nameprefix}_operation`} />
+    <div class="flex items-end w-1/4">
+      <div class="flex-grow">
+        <Select
+          items={R.map(R.path(['operation', 'browserCommand']), operations)}
+          model={R.path(['operation', 'browserCommand'], op)}
+          lens={R.identity}
+          format={R.compose( $_, R.concat('energiatodistus.haku.') )}
+          allowNone={false}
+          name={`${nameprefix}_operation`} />
+      </div>
     </div>
   {:else}
     <input
@@ -95,15 +101,11 @@
       name={`${nameprefix}_operation`}
       value="=" />
   {/if}
-  <div class="inputs w-1/2 pl-4 flex justify-between">
-    {#each values as value, index}
-      <div class="flex flex-grow flex-col justify-end">
-        <svelte:component
-          this={inputForType(op.type)}
-          {value}
-          {nameprefix}
-          {index} />
-      </div>
-    {/each}
+  <div class="inputs pl-4 flex justify-between flex-grow flex-row items-end">
+    <svelte:component
+      this={inputForType(op.type)}
+      {values}
+      {nameprefix}
+      {luokittelut} />
   </div>
 </div>

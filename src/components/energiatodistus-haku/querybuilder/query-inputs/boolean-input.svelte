@@ -1,10 +1,12 @@
 <script>
+  import * as R from 'ramda';
   import Radio from '@Component/Radio/Radio';
   import { _ } from '@Language/i18n';
 
-  export let value;
+  export let values;
   export let nameprefix;
-  export let index;
+  export let index = 0;
+  export let value = R.head(values);
 
   let strValue = value + '' === 'true' ? 'true' : 'false';
 </script>

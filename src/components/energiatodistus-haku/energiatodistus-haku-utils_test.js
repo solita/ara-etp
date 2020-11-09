@@ -7,7 +7,7 @@ describe('EtHakuUtils:', () => {
   describe('blockToQueryParameter', () => {
     it('should return Just query parameter for given block', () => {
       const block = ['sisaltaa', 'perustiedot.nimi', 'asdf'];
-      const expected = Maybe.Some(['like', 'perustiedot.nimi', '%asdf%']);
+      const expected = Maybe.Some([['like', 'perustiedot.nimi', '%asdf%']]);
 
       assert.deepEqual(
         EtHakuUtils.blockToQueryParameter(flatSchema, block),

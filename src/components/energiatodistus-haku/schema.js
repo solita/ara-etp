@@ -7,39 +7,42 @@ export const OPERATOR_TYPES = Object.freeze({
   DATE: 'DATE',
   BOOLEAN: 'BOOLEAN',
   VERSIO: 'VERSIO',
-  ELUOKKA: 'ELUOKKA'
+  ELUOKKA: 'ELUOKKA',
+  VERSIOLUOKKA: 'VERSIOLUOKKA'
 });
+
+const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
 
 const eq = {
   browserCommand: '=',
   serverCommand: '=',
-  format: R.identity
+  format: defaultFormat
 };
 const gt = {
   browserCommand: '>',
   serverCommand: '>',
-  format: R.identity
+  format: defaultFormat
 };
 const gte = {
   browserCommand: '>=',
   serverCommand: '>=',
-  format: R.identity
+  format: defaultFormat
 };
 const lt = {
   browserCommand: '<',
   serverCommand: '<',
-  format: R.identity
+  format: defaultFormat
 };
 const lte = {
   browserCommand: '<=',
   serverCommand: '<=',
-  format: R.identity
+  format: defaultFormat
 };
 
 const contains = {
   browserCommand: 'sisaltaa',
   serverCommand: 'like',
-  format: arg => `%${arg}%`
+  format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
 const singleNumberOperation = R.curry((operation, key) => ({
@@ -79,12 +82,26 @@ const stringEquals = key => ({
 const versioEquals = key => ({
   operation: {
     ...eq,
-    format: item => parseInt(item)
+    format: R.curry((command, key, value) => [[command, key, parseInt(value)]])
   },
   key,
   argumentNumber: 1,
   defaultValues: () => [2018],
   type: OPERATOR_TYPES.VERSIO
+});
+
+const versioluokkaEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, versio, luokka) => [
+      ['=', 'versio', parseInt(versio)],
+      [command, key, parseInt(luokka)]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [2018],
+  type: OPERATOR_TYPES.VERSIOLUOKKA
 });
 
 const eLuokkaOperation = R.curry((operation, key) => ({
@@ -104,7 +121,9 @@ const eLuokkaLessThanOrEqual = eLuokkaOperation(eq);
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation: {
     ...operation,
-    format: R.compose(R.join('-'), R.reverse, R.split('.'))
+    format: R.curry((command, key, value) => [
+      [command, key, R.compose(R.join('-'), R.reverse, R.split('.'))(value)]
+    ])
   },
   key,
   argumentNumber: 1,
@@ -177,7 +196,7 @@ const perustiedot = {
   laatimisvaihe: [...numberComparisons],
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
-  kayttotarkoitus: [...stringComparisons],
+  kayttotarkoitus: [versioluokkaEquals],
   yritys: {
     nimi: [...stringComparisons]
   },

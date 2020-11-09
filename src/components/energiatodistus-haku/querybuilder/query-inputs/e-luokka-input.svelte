@@ -7,9 +7,10 @@
 
   import Select from '@Component/Select/Select';
 
-  export let value;
+  export let values = [];
   export let nameprefix;
-  export let index;
+  export let index = 0;
+  export let value = R.head(values);
 
   const luokat = ['A', 'B', 'C', 'D', 'E', 'F'];
 
