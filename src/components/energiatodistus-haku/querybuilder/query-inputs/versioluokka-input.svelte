@@ -24,8 +24,6 @@
     R.path([versiovalue, key], luokittelut)
   );
 
-  $: console.log(currentluokittelut);
-
   $: labelLocale = LocaleUtils.label($locale);
 
   $: if (
@@ -35,7 +33,6 @@
       R.map(R.pluck('id'))
     )(currentluokittelut)
   ) {
-    console.log('asdf');
     luokitteluvalue = R.compose(
       Maybe.orSome(1),
       R.map(
