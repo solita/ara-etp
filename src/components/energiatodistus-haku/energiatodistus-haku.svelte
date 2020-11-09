@@ -159,7 +159,7 @@
           schema={Maybe.get(schema)}
           luokittelut={Maybe.get(luokittelut)} />
         <span
-          class="text-primary font-icon text-2xl cursor-pointer ml-4
+          class="text-disabled font-icon text-2xl cursor-pointer ml-4
           hover:text-error"
           on:click={async _ => {
             const newItems = R.compose( R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
