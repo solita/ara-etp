@@ -31,9 +31,9 @@
 
   const lens = R.lensProp('korvattu-energiatodistus-id');
 
-  let internalError = Maybe.None();
   let cancel = () => {};
   let searching = false;
+  let updated = true;
   let query = R.view(lens, energiatodistus);
   let korvattavaEnergiatodistus = Maybe.None();
   let checked = Maybe.isSome(R.view(lens, energiatodistus));
@@ -49,7 +49,7 @@
     }
   }
 
-  const korvattavaETError = korvattava =>
+  $: korvattavaETError = korvattava =>
     Korvaus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
       !Korvaus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
         Korvaus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
@@ -61,6 +61,7 @@
       Future.fork(
         _ => {
           searching = false;
+          updated = true;
           flashMessageStore.add(
             'Energiatodistus',
             'error',
@@ -69,10 +70,8 @@
         },
         response => {
           searching = false;
+          updated = true;
           korvattavaEnergiatodistus = Maybe.head(response);
-          internalError = korvattavaEnergiatodistus.isSome() ?
-            R.chain(korvattavaETError, korvattavaEnergiatodistus) :
-            Maybe.Some('not-found');
         }
       ),
       Future.delay(200),
@@ -81,6 +80,9 @@
         searching = true;
       })),
       initialDelay > 0 ? Future.after(initialDelay) : Future.resolve,
+      R.tap(_ => {
+        updated = false;
+      }),
       R.tap(cancel))(id);
   };
 
@@ -94,12 +96,14 @@
     }
   }
 
-  $: error = checked ? internalError : Maybe.None();
+  $: error = checked && query.isSome() && updated ?
+    Maybe.isNone(R.chain(parseId, query)) ? Maybe.Some('invalid-id') :
+      korvattavaEnergiatodistus.isNone() ? Maybe.Some('not-found') :
+        R.chain(korvattavaETError, korvattavaEnergiatodistus) : Maybe.None();
 
   const searchKorvattavaEnergiatodistus = R.compose(
     Maybe.cata(_ => {
         korvattavaEnergiatodistus = Maybe.None();
-        internalError = query.map(R.always('invalid-id'));
       },
       fetchKorvattavaEnergiatodistus(500)),
     R.chain(parseId)
@@ -163,7 +167,7 @@
               <EtTable energiatodistus={et} {postinumerot}/>
           </div>
           {/each}
-          {#each Maybe.toArray(internalError) as key}
+          {#each Maybe.toArray(error) as key}
             <div class="error-label">
               <span class="font-icon error-icon">error</span>
               {$_('energiatodistus.korvaavuus.validation.' + key)}
