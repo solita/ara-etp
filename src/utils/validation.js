@@ -4,6 +4,7 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as deep from '@Utility/deep-objects';
+import BigInt from 'big-integer';
 
 export const DATE_FORMAT = 'dd.MM.yyyy';
 
@@ -63,10 +64,10 @@ export const minLengthConstraint = min =>
 export const maxLengthConstraint = max =>
   lengthConstraint(R.gte(max), 'max', { '{max}': max });
 
-export const LimitedString = (min, max) => ([
+export const LimitedString = (min, max) => [
   minLengthConstraint(min),
   maxLengthConstraint(max)
-]);
+];
 
 export const isUrl = R.test(
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
@@ -183,24 +184,26 @@ export const isOVTTunnus = R.allPass([
 export const isIBAN = R.ifElse(
   str => R.gte(R.length(str), 4),
   R.compose(
-    R.equals(1n),
-    R.modulo(R.__, 97n),
+    n => n.equals(1),
+    n => n.mod(97),
     BigInt,
     R.join(''),
     R.map(
       R.when(
-        R.compose(R.lte(65),  item => item.charCodeAt(0)),
-        R.compose(R.subtract(R.__, 55), item => item.charCodeAt(0)))
+        R.compose(R.lte(65), item => item.charCodeAt(0)),
+        R.compose(R.subtract(R.__, 55), item => item.charCodeAt(0))
+      )
     ),
     R.toUpper,
     R.converge(R.flip(R.concat), [R.take(4), R.drop(4)])
   ),
-  R.always(false));
+  R.always(false)
+);
 
 export const isTEOVTTunnus = R.allPass([
-    R.compose(R.gte(R.__, 2), R.length),
-    R.compose(R.startsWith('te'), R.toLower),
-    R.compose(isOVTTunnus,R.drop(2))
+  R.compose(R.gte(R.__, 2), R.length),
+  R.compose(R.startsWith('te'), R.toLower),
+  R.compose(isOVTTunnus, R.drop(2))
 ]);
 
 export const isVerkkolaskuosoite = R.anyPass([
