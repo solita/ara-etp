@@ -48,7 +48,7 @@
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui.",
-    "unauthorized": "Et ole kirjautunut järjestelmään. Voit kirjautua toisella välilehdellä jos tällä välilehdellä on jotakin kesken.",
+    "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken.",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan.",
     "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe."
   },
