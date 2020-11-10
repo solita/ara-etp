@@ -14,7 +14,7 @@
   export let values;
   export let nameprefix;
   export let luokittelut;
-  export let key = 'kayttotarkoitusluokat';
+  export let key = 'alakayttotarkoitusluokat';
 
   let [versiovalue, luokitteluvalue] = values;
 

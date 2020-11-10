@@ -95,7 +95,7 @@ const versioluokkaEquals = key => ({
     ...eq,
     format: R.curry((command, key, versio, luokka) => [
       ['=', 'versio', parseInt(versio)],
-      [command, key, parseInt(luokka)]
+      [command, key, luokka]
     ])
   },
   key,
