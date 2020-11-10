@@ -5,6 +5,7 @@
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Response from '@Utility/response';
   import EnergiatodistusForm from './EnergiatodistusForm';
 
   import * as et from './energiatodistus-utils';
@@ -64,11 +65,12 @@
   // load energiatodistus and classifications in parallel
   $: R.compose(
     Future.fork(
-      status => {
+      response => {
         toggleOverlay(false);
-        const msg = R.equals(status, 404) ?
+        const msg = Response.notFound(response) ?
           $_('energiatodistus.messages.not-found'):
-          $_('energiatodistus.messages.load-error');
+          $_(Maybe.orSome('energiatodistus.messages.load-error',
+            Response.localizationKey(response)));
 
         flashMessageStore.add('Energiatodistus', 'error', msg);
       },
