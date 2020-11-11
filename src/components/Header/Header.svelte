@@ -1,13 +1,13 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import { currentUserStore } from '@/stores';
 
   import * as Navigation from '@Utility/navigation';
   import { _ } from '@Language/i18n';
 
-  import Link from '@Component/Link/Link';
   import LanguageSelect from './language-select';
+
+  export let whoami = Maybe.None();
 
   let showDropdown = false;
 
@@ -17,7 +17,13 @@
   $: fullName = R.compose(
     Maybe.orSome('...'),
     R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`)
-  )($currentUserStore);
+  )(whoami);
+
+  $: links = R.compose(
+    R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)),
+    Maybe.orSome([]),
+    R.map(Navigation.roleBasedHeaderMenuLinks($_))
+  )(whoami)
 </script>
 
 <style type="text/postcss">
@@ -64,7 +70,7 @@
       <span class="material-icons absolute">keyboard_arrow_down</span>
       {#if showDropdown}
         <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col">
-          {#each R.compose( R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)), Maybe.orSome([]), R.map(Navigation.roleBasedHeaderMenuLinks($_)) )($currentUserStore) as link}
+          {#each links as link}
             <a class="listlink w-full" href={link.href}>{link.text}</a>
           {/each}
         </div>

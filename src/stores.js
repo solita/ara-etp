@@ -3,12 +3,10 @@ import * as R from 'ramda';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
+/* deprecated - do not use */
 export const currentUserStore = writable(Maybe.None());
-export const errorStore = writable();
-export const countryStore = writable(Either.Left('Not initialized'));
+/* deprecated - do not use */
 export const patevyystasoStore = writable(Either.Left('Not initialized'));
-export const patevyydetStore = writable(Either.Left('Not initialized'));
-export const toimintaAlueetStore = writable(Either.Left('Not initialized'));
 
 const createIdTranslateStore = () => {
   const { subscribe, update } = writable({
