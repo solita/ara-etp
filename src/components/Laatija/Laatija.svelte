@@ -1,17 +1,11 @@
 <script>
-  import * as R from 'ramda';
   import Router, { wrap } from 'svelte-spa-router';
-
-  import { _ } from '@Language/i18n';
 
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
   import Yritykset from '@Component/Laatija/Yritykset';
   import Laatijat from './Laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import {
-    flashMessageStore,
-    currentUserStore
-  } from '@/stores';
+  import { flashMessageStore } from '@/stores';
 
   const prefix = '/laatija';
   const routes = {
