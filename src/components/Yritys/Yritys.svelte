@@ -1,16 +1,11 @@
 <script>
-  import * as R from 'ramda';
   import Router from 'svelte-spa-router';
-
-  import { _ } from '@Language/i18n';
-
-  import * as Maybe from '@Utility/maybe-utils';
 
   import NewYritys from './NewYritys';
   import ExistingYritys from './ExistingYritys';
   import Yritykset from './Yritykset';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore, currentUserStore } from '@/stores';
+  import { flashMessageStore } from '@/stores';
 
   const prefix = '/yritys';
   const routes = {
