@@ -1,26 +1,19 @@
 <script>
-  import * as R from 'ramda';
   import Router from 'svelte-spa-router';
 
-  import * as Maybe from '@Utility/maybe-utils';
-
-  import { _ } from '@Language/i18n';
   import ExistingEnergiatodistus from './ExistingEnergiatodistus';
   import NewEnergiatodistus from './NewEnergiatodistus';
   import Energiatodistukset from './energiatodistukset';
   import Liitteet from './Liitteet';
-  import Allekirjoitus from './Allekirjoitus';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore, currentUserStore } from '@/stores';
-  import * as et from './energiatodistus-utils';
+  import { flashMessageStore } from '@/stores';
 
   const prefix = '/energiatodistus';
   const routes = {
     '/all': Energiatodistukset,
     '/:version/new': NewEnergiatodistus,
     '/:version/:id': ExistingEnergiatodistus,
-    '/:version/:id/liitteet': Liitteet,
-    '/:version/:id/allekirjoitus': Allekirjoitus
+    '/:version/:id/liitteet': Liitteet
   };
 </script>
 

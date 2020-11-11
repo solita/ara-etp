@@ -13,7 +13,6 @@ const labelLens = R.lensProp('label');
 const routeReservedKeywords = [
   'all',
   'new',
-  'allekirjoitus',
   'liitteet',
   'viestit',
   'muutoshistoria',
@@ -79,7 +78,6 @@ export const singleEnergiatodistusCrumb = R.curry(
 );
 
 const energiatodistusActionLabels = {
-  allekirjoitus: 'navigation.allekirjoitus',
   liitteet: 'navigation.liitteet',
   viestit: 'navigation.viestit',
   muutoshistoria: 'navigation.muutoshistoria'

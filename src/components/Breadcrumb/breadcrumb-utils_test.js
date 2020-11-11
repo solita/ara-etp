@@ -8,7 +8,6 @@ describe('BreadcrumbUtils', () => {
     const i18n = R.prop(R.__, {
       a: '`a',
       b: '`b',
-      c: '`c',
       d: '`d',
       e: '`e',
       f: '`f'
@@ -18,7 +17,6 @@ describe('BreadcrumbUtils', () => {
       const crumbs = [
         { url: 'a', label: 'a' },
         { url: 'b', label: 'b' },
-        { url: 'c', label: 'c' },
         { url: 'd', label: 'd' },
         { url: 'e', label: 'e' },
         { url: 'f', label: 'f' },
@@ -28,7 +26,6 @@ describe('BreadcrumbUtils', () => {
       const expected = [
         { url: 'a', label: '`a' },
         { url: 'b', label: '`b' },
-        { url: 'c', label: '`c' },
         { url: 'd', label: '`d' },
         { url: 'e', label: '`e' },
         { url: 'f', label: '`f' },
@@ -41,7 +38,6 @@ describe('BreadcrumbUtils', () => {
         R.zip([
           'all',
           'new',
-          'allekirjoitus',
           'liitteet',
           'viestit',
           'muutoshistoria',
@@ -177,7 +173,6 @@ describe('BreadcrumbUtils', () => {
 
   describe('singleEnergiatodistusActionCrumb', () => {
     const i18n = R.prop(R.__, {
-      'navigation.allekirjoitus': 'Allekirjoitus',
       'navigation.liitteet': 'Liitteet',
       'navigation.viestit': 'Viestit',
       'navigation.muutoshistoria': 'Muutoshistoria'
@@ -185,7 +180,6 @@ describe('BreadcrumbUtils', () => {
 
     it('should return proper breadcrumb for single energiatodistus action', () => {
       const keywords = [
-        'allekirjoitus',
         'liitteet',
         'viestit',
         'muutoshistoria'
@@ -194,10 +188,6 @@ describe('BreadcrumbUtils', () => {
       const id = '1';
 
       const expected = [
-        {
-          url: '#/energiatodistus/2018/1/allekirjoitus',
-          label: 'Allekirjoitus'
-        },
         { url: '#/energiatodistus/2018/1/liitteet', label: 'Liitteet' },
         { url: '#/energiatodistus/2018/1/viestit', label: 'Viestit' },
         {
@@ -221,7 +211,6 @@ describe('BreadcrumbUtils', () => {
     const i18n = R.prop(R.__, {
       'navigation.energiatodistukset': 'Energiatodistukset',
       'navigation.et': 'Energiatodistus',
-      'navigation.allekirjoitus': 'Allekirjoitus',
       'navigation.liitteet': 'Liitteet',
       'navigation.viestit': 'Viestit',
       'navigation.muutoshistoria': 'Muutoshistoria'
@@ -270,8 +259,8 @@ describe('BreadcrumbUtils', () => {
           label: 'Energiatodistus 1'
         },
         {
-          url: '#/energiatodistus/2018/1/allekirjoitus',
-          label: 'Allekirjoitus'
+          url: '#/energiatodistus/2018/1/liitteet',
+          label: 'Liitteet'
         }
       ];
 
@@ -279,7 +268,7 @@ describe('BreadcrumbUtils', () => {
         BreadcrumbUtils.parseEnergiatodistus(idTranslate, i18n, [
           '2018',
           '1',
-          'allekirjoitus'
+          'liitteet'
         ]),
         expected
       );
