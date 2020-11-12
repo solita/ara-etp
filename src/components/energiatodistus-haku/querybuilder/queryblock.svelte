@@ -19,6 +19,7 @@
   export let values;
   export let index;
   export let schema;
+  export let luokittelut;
 
   let input;
 
@@ -52,7 +53,7 @@
   }
 </script>
 
-<div class="flex items-center justify-start my-8 w-full">
+<div class="flex items-end justify-start my-8 w-full">
   <div class="w-1/2 mr-4">
     <Autocomplete
       bind:completedValue
@@ -70,7 +71,8 @@
         nameprefix={`${index}`}
         operation={operator}
         {values}
-        operations={Maybe.orSome([], R.map(R.prop(R.__, schema), maybeKey))} />
+        operations={Maybe.orSome([], R.map(R.prop(R.__, schema), maybeKey))}
+        {luokittelut} />
     </div>
   {/if}
 </div>

@@ -8,7 +8,7 @@ import * as empty from './empty';
 import * as schema from './schema';
 import * as laatijaApi from '@Component/Laatija/laatija-api';
 import * as yritysApi from '@Component/Yritys/yritys-api';
-import * as dfns from "date-fns";
+import * as dfns from 'date-fns';
 
 /*
 This deserializer is for all energiatodistus versions.
@@ -29,22 +29,22 @@ const deserializer = {
   }
 };
 
-const transformationFromSchema = name => R.compose(
-  deep.filter(R.is(Function), R.complement(R.isNil)),
-  deep.map(
-    R.propSatisfies(R.is(Array), 'validators'),
-    R.prop(name)));
+const transformationFromSchema = name =>
+  R.compose(
+    deep.filter(R.is(Function), R.complement(R.isNil)),
+    deep.map(R.propSatisfies(R.is(Array), 'validators'), R.prop(name))
+  );
 
 const versions = {
-  "2018": {
+  '2018': {
     deserializer: transformationFromSchema('deserialize')(schema.v2018),
     serializer: transformationFromSchema('serialize')(schema.v2018)
   },
-  "2013": {
+  '2013': {
     deserializer: transformationFromSchema('deserialize')(schema.v2013),
     serializer: transformationFromSchema('serialize')(schema.v2013)
   }
-}
+};
 
 const evolveForVersion = name => energiatodistus =>
   R.evolve(versions[energiatodistus.versio][name], energiatodistus);
@@ -111,12 +111,18 @@ export const url = {
   all: '/api/private/energiatodistukset',
   version: version => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
-  pdf: (version, id, language) => `${url.id(version, id)}/pdf/${language}/energiatodistus-${id}-${language}.pdf`,
+  pdf: (version, id, language) =>
+    `${url.id(
+      version,
+      id
+    )}/pdf/${language}/energiatodistus-${id}-${language}.pdf`,
   liitteet: (version, id) => `${url.id(version, id)}/liitteet`,
   signature: (version, id) => `${url.id(version, id)}/signature`,
   start: (version, id) => `${url.signature(version, id)}/start`,
-  digest: (version, id, language) => `${url.signature(version, id)}/digest/${language}`,
-  signPdf: (version, id, language) => `${url.signature(version, id)}/pdf/${language}`,
+  digest: (version, id, language) =>
+    `${url.signature(version, id)}/digest/${language}`,
+  signPdf: (version, id, language) =>
+    `${url.signature(version, id)}/pdf/${language}`,
   finish: (version, id) => `${url.signature(version, id)}/finish`,
   cancel: (version, id) => `${url.signature(version, id)}/cancel`
 };
@@ -139,7 +145,8 @@ export const getEnergiatodistukset = R.compose(
 );
 
 export const getEnergiatodistuksetByField = R.curry((field, value) =>
-  getEnergiatodistukset(`?where=[[["=","${field}",${R.toString(value)}]]]`));
+  getEnergiatodistukset(`?where=[[["=","${field}",${R.toString(value)}]]]`)
+);
 
 export const findEnergiatodistusById = getEnergiatodistuksetByField('id');
 
@@ -237,7 +244,9 @@ export const digest = R.curry((fetch, version, id, language) =>
 export const signPdf = R.curry((fetch, version, id, language, signature) =>
   R.compose(
     Fetch.responseAsText,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.signPdf(version, id, language)))
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'put', url.signPdf(version, id, language))
+    )
   )(signature)
 );
 
@@ -266,10 +275,26 @@ export const deleteEnergiatodistus = R.curry((fetch, version, id) =>
 
 export const laatimisvaiheet = Fetch.cached(fetch, '/laatimisvaiheet');
 
-const kayttotarkoitusluokat = version =>
+export const yhteisetLuokittelut = Future.parallelObject(6, {
+  lammonjako: Fetch.cached(fetch, '/lammonjako'),
+  lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
+  ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
+  postinumerot: Fetch.cached(fetch, '/postinumerot'),
+  kielisyys: Fetch.cached(fetch, '/kielisyys'),
+  laatimisvaiheet
+});
+
+export const kayttotarkoitusluokat = version =>
   Fetch.cached(fetch, '/kayttotarkoitusluokat/' + version);
-const alakayttotarkoitusluokat = version =>
+export const alakayttotarkoitusluokat = version =>
   Fetch.cached(fetch, '/alakayttotarkoitusluokat/' + version);
+
+export const tarkoitusluokat = R.memoizeWith(R.identity, version =>
+  Future.parallelObject(2, {
+    kayttotarkoitusluokat: kayttotarkoitusluokat(version),
+    alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
+  })
+);
 
 export const luokittelut = R.memoizeWith(R.identity, version =>
   Future.parallelObject(7, {

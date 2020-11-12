@@ -5,9 +5,10 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  export let value;
+  export let values = [];
   export let nameprefix;
-  export let index;
+  export let index = 0;
+  export let value = R.head(values);
 
   if (value === 'true' || value === 'false') {
     value = '';

@@ -5,39 +5,44 @@ export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
   NUMBER: 'NUMBER',
   DATE: 'DATE',
-  BOOLEAN: 'BOOLEAN'
+  BOOLEAN: 'BOOLEAN',
+  VERSIO: 'VERSIO',
+  ELUOKKA: 'ELUOKKA',
+  VERSIOLUOKKA: 'VERSIOLUOKKA'
 });
+
+const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
 
 const eq = {
   browserCommand: '=',
   serverCommand: '=',
-  format: R.identity
+  format: defaultFormat
 };
 const gt = {
   browserCommand: '>',
   serverCommand: '>',
-  format: R.identity
+  format: defaultFormat
 };
 const gte = {
   browserCommand: '>=',
   serverCommand: '>=',
-  format: R.identity
+  format: defaultFormat
 };
 const lt = {
   browserCommand: '<',
   serverCommand: '<',
-  format: R.identity
+  format: defaultFormat
 };
 const lte = {
   browserCommand: '<=',
   serverCommand: '<=',
-  format: R.identity
+  format: defaultFormat
 };
 
 const contains = {
   browserCommand: 'sisaltaa',
   serverCommand: 'like',
-  format: arg => `%${arg}%`
+  format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
 const singleNumberOperation = R.curry((operation, key) => ({
@@ -74,10 +79,51 @@ const stringEquals = key => ({
   type: OPERATOR_TYPES.STRING
 });
 
+const versioEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, value) => [[command, key, parseInt(value)]])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [2018],
+  type: OPERATOR_TYPES.VERSIO
+});
+
+const versioluokkaEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, versio, luokka) => [
+      ['=', 'versio', parseInt(versio)],
+      [command, key, luokka]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [2018],
+  type: OPERATOR_TYPES.VERSIOLUOKKA
+});
+
+const eLuokkaOperation = R.curry((operation, key) => ({
+  operation,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => ['A'],
+  type: OPERATOR_TYPES.ELUOKKA
+}));
+
+const eLuokkaEquals = eLuokkaOperation(eq);
+const eLuokkaGreaterThan = eLuokkaOperation(eq);
+const eLuokkaGreaterThanOrEqual = eLuokkaOperation(eq);
+const eLuokkaLessThan = eLuokkaOperation(eq);
+const eLuokkaLessThanOrEqual = eLuokkaOperation(eq);
+
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation: {
     ...operation,
-    format: R.compose(R.join('-'), R.reverse, R.split('.'))
+    format: R.curry((command, key, value) => [
+      [command, key, R.compose(R.join('-'), R.reverse, R.split('.'))(value)]
+    ])
   },
   key,
   argumentNumber: 1,
@@ -130,11 +176,12 @@ const dateComparisons = [
 
 const stringComparisons = [stringEquals, stringContains];
 
-export const allOperations = [
-  ...numberComparisons,
-  ...dateComparisons,
-  ...stringComparisons,
-  singleBoolean
+const eLuokkaComparisons = [
+  eLuokkaEquals,
+  eLuokkaGreaterThan,
+  eLuokkaGreaterThanOrEqual,
+  eLuokkaLessThan,
+  eLuokkaLessThanOrEqual
 ];
 
 const perustiedot = {
@@ -149,7 +196,7 @@ const perustiedot = {
   laatimisvaihe: [...numberComparisons],
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
-  kayttotarkoitus: [...stringComparisons],
+  kayttotarkoitus: [versioluokkaEquals],
   yritys: {
     nimi: [...stringComparisons]
   },
@@ -303,7 +350,7 @@ const lahtotiedot = {
 
 const tulokset = {
   'e-luku': [...numberComparisons],
-  'e-luokka': [stringEquals],
+  'e-luokka': [...eLuokkaComparisons],
   'kaytettavat-energiamuodot': {
     'fossiilinen-polttoaine': [...numberComparisons],
     'fossiilinen-polttoaine-painotettu-neliovuosikulutus': [
@@ -434,7 +481,7 @@ export const schema = {
   tulokset,
   'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
   huomiot,
-  versio: [...numberComparisons],
+  versio: [versioEquals],
   'lisamerkintoja-fi': [...stringComparisons],
   'lisamerkintoja-sv': [...stringComparisons],
   laskuriviviite: [...stringComparisons],

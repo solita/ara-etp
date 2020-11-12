@@ -9,7 +9,7 @@
   import * as dfns from 'date-fns';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
-  import {flatSchema} from '@Component/energiatodistus-haku/schema';
+  import { flatSchema } from '@Component/energiatodistus-haku/schema';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
@@ -27,12 +27,10 @@
   import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
 
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
-  import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
 
   let overlay = true;
   let failure = false;
   let energiatodistukset = [];
-  let schema = Maybe.None();
 
   let cancel = () => {};
 
@@ -119,10 +117,10 @@
 
   let queryAsQueryString = queryToQuerystring(parsedQuery);
 
-  let initialQuery = true;
+  let currentQuery = '';
 
-  $: if (initialQuery || $querystring !== '') {
-    initialQuery = false;
+  $: if ($querystring !== currentQuery) {
+    currentQuery = $querystring;
     R.compose(
       Future.fork(
         () => {
@@ -136,25 +134,17 @@
         response => {
           overlay = false;
           energiatodistukset = response[0];
-          schema = R.compose(
-            Maybe.Some,
-            R.ifElse(
-              KayttajaUtils.isPaakayttaja,
-              R.always(EtHakuSchema.paakayttajaSchema),
-              R.always(EtHakuSchema.laatijaSchema)
-            )
-          )(response[2]);
         }
       ),
       Future.parallel(5),
       R.tap(toggleOverlay(true)),
       R.tap(cancel),
-      R.prepend(R.__, [api.laatimisvaiheet, kayttajaApi.whoami]),
+      R.prepend(R.__, [api.laatimisvaiheet]),
       api.getEnergiatodistukset,
       queryToQuerystring,
       R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
       parseQuerystring
-    )($querystring);
+    )(currentQuery);
   }
 </script>
 
@@ -164,11 +154,9 @@
 
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
-  {#each Maybe.toArray(schema) as s}
-    <div class="mb-10">
-      <EnergiatodistusHaku {where} schema={s} />
-    </div>
-  {/each}
+  <div class="mb-10">
+    <EnergiatodistusHaku {where} />
+  </div>
   <Overlay {overlay}>
     <div slot="content">
       <div class="lg:w-1/3 w-full mb-6">
