@@ -188,7 +188,7 @@
                   {$_('energiatodistus.haku.sarakkeet.tunnus')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.ETL')}
+                  {$_('energiatodistus.haku.sarakkeet.e-luokka')}
                 </th>
                 <th class="etp-table--th">
                   {$_('energiatodistus.haku.sarakkeet.versio')}
