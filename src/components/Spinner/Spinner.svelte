@@ -1,5 +1,5 @@
 <script>
-
+  export let white = false;
 </script>
 
 <style type="text/postcss">
@@ -12,6 +12,11 @@
     border-color: #538000 transparent transparent transparent;
     animation: spin 1.2s linear infinite;
   }
+
+  .white div {
+    border-color: white transparent transparent transparent;
+  }
+
   @keyframes spin {
     0% {
       transform: rotate(0deg);
@@ -22,6 +27,6 @@
   }
 </style>
 
-<div class="spinner">
+<div class="spinner" class:white>
   <div />
 </div>
