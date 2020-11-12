@@ -13,6 +13,14 @@
 </script>
 
 <style type="text/postcss">
+    .content {
+        @apply flex flex-col flex-grow py-8 px-10 mx-auto bg-light;
+    }
 </style>
 
-<span>{$_('login_redirect')}</span>
+<section class="content">
+  <p class="bg-success flex justify-around py-4 px-4 bg-primary text-light rounded-lg">
+    <span class="font-icon pr-4">check_circle_outline</span>
+    {$_('login_redirect')}
+  </p>
+</section>
