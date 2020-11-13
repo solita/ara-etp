@@ -26,9 +26,10 @@
   const submit = R.compose(
     Future.fork(response => {
         toggleOverlay(false);
-        flashMessageStore.add('Yritys', 'error',
-          $_(Maybe.orSome('yritys.messages.save-error',
-            Locales.uniqueViolationKey(response))));
+        flashMessageStore.add(
+          'Yritys',
+          'error',
+          Locales.uniqueViolationMessage($_, response, 'yritys.messages.save-error'));
       },
       ({ id }) => {
         flashMessageStore.addPersist(

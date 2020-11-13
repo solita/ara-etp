@@ -15,6 +15,7 @@
   import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
   import Patevuustaso from './Patevyystaso';
   import Date from './Date';
+  import * as Locales from '@Language/locale-utils';
 
   export const fields = [
     { id: 'etunimi', title: 'Etunimi' },
@@ -31,18 +32,14 @@
   ];
 
   $: submit = R.compose(
-    Future.forkBothDiscardFirst(
-      R.compose(
-        flashMessageStore.add('Laatija', 'error'),
-        R.always($_('laatija.messages.save-error'))
-      ),
-      R.compose(
-        flashMessageStore.add('Laatija', 'success'),
-        R.always($_('laatija.messages.save-success')),
-        R.tap(_ => {
-          laatijat = [];
-        })
-      )
+      Future.fork(response => {
+        const msg = Locales.uniqueViolationMessage($_, response, 'laatija.messages.save-error')
+        flashMessageStore.add('Laatija', 'error', msg);
+      },
+      _ => {
+        flashMessageStore.add('Laatija', 'success', $_('laatija.messages.save-success'));
+        laatijat = [];
+      }
     ),
     LaatijaUtils.putLaatijatFuture(fetch)
   );

@@ -31,8 +31,7 @@
   const toggleOverlay = value => { overlay = value };
 
   const errorMessage = (type, response) =>
-    Maybe.orSome(`${type}.messages.save-error`,
-      Locales.uniqueViolationKey(response));
+    Locales.uniqueViolationMessage($_, response, `${type}.messages.save-error`);
 
   const fork = (type, updatedModel) =>
     Future.fork(
