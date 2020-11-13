@@ -27,6 +27,7 @@
   }
 </style>
 
+<!-- purgecss: white -->
 <div class="spinner" class:white>
   <div />
 </div>
