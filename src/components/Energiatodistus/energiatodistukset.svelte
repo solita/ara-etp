@@ -188,7 +188,7 @@
                   {$_('energiatodistus.haku.sarakkeet.tunnus')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.ETL')}
+                  {$_('energiatodistus.haku.sarakkeet.e-luokka')}
                 </th>
                 <th class="etp-table--th">
                   {$_('energiatodistus.haku.sarakkeet.versio')}
@@ -219,7 +219,9 @@
                     {$_('energiatodistus.tila.' + et.tilaKey(energiatodistus['tila-id']))}
                   </td>
                   <td class="etp-table--td">{energiatodistus.id}</td>
-                  <td class="etp-table--td">C</td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus.tulokset['e-luokka'])}
+                  </td>
                   <td class="etp-table--td">{energiatodistus.versio}</td>
                   <td class="etp-table--td">
                     {R.compose( Maybe.fold('-', d =>
