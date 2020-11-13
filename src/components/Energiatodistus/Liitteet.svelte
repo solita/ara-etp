@@ -124,7 +124,11 @@
 
   const liiteUrl = liite =>
     Maybe.orSome(
-      api.url.liitteet(params.version, params.id) + '/' + liite.id + '/content',
+      api.url.liitteet(params.version, params.id)
+        + '/'
+        + liite.id
+        + '/'
+        + encodeURIComponent(liite.nimi),
       liite.url
     );
 
