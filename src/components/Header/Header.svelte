@@ -10,14 +10,9 @@
   export let whoami = Maybe.None();
 
   let showDropdown = false;
-
-  let namebutton;
   let nameNode;
 
-  $: fullName = R.compose(
-    Maybe.orSome('...'),
-    R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`)
-  )(whoami);
+  const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;
 
   $: links = R.compose(
     R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)),
@@ -42,15 +37,23 @@
   .listlink:hover {
     @apply bg-background;
   }
+
+  .logout {
+      @apply normal-case text-sm font-normal tracking-normal;
+  }
+
+  .logout:hover {
+      @apply cursor-pointer underline;
+  }
 </style>
 
 <svelte:window
   on:click={event => {
-    const itemNodes = nameNode.querySelectorAll('.dropdownitem');
-    if (!R.includes(event.target, itemNodes) && event.target !== namebutton) {
-      showDropdown = false;
-    }
-  }} />
+    if (!R.isNil(nameNode)) {
+      if (event.target !== nameNode && event.target.parentElement !== nameNode) {
+        showDropdown = false;
+      }
+    }}} />
 
 <header class="flex justify-between">
   <div class="flex flex-1 items-center">
@@ -59,22 +62,29 @@
     </a>
     <LanguageSelect />
   </div>
-  <div class="flex flex-row justify-between">
-    <div bind:this={nameNode} class="relative">
-      <span
-        bind:this={namebutton}
-        class="cursor-pointer"
-        on:click={() => (showDropdown = !showDropdown)}>
-        {fullName}
-      </span>
-      <span class="material-icons absolute">keyboard_arrow_down</span>
-      {#if showDropdown}
-        <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col">
-          {#each links as link}
-            <a class="listlink w-full" href={link.href}>{link.text}</a>
-          {/each}
-        </div>
-      {/if}
+
+  {#each whoami.toArray() as user}
+    <div class="flex flex-row justify-between">
+      <div bind:this={nameNode} class="relative cursor-pointer"
+           on:click={() => (showDropdown = !showDropdown)}>
+        <span>
+          {fullName(user)}
+        </span>
+        <span class="material-icons absolute">keyboard_arrow_down</span>
+        {#if showDropdown}
+          <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col">
+            {#each links as link}
+              <a class="listlink w-full" href={link.href}>{link.text}</a>
+            {/each}
+          </div>
+        {/if}
+      </div>
     </div>
-  </div>
+  {/each}
+
+  {#if whoami.isNone()}
+    <div class="logout px-2">
+      <a href="api/logout">{$_('navigation.kirjaudu-ulos')}</a>
+    </div>
+  {/if}
 </header>

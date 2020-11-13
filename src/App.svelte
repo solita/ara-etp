@@ -61,7 +61,9 @@
   </div>
 
   {#if whoami.isNone() && failure.isNone()}
-    <Loading />
+    <section class="flex flex-col flex-grow py-8 px-10 mx-auto">
+      <Loading />
+    </section>
   {/if}
 
   {#each Maybe.toArray(failure) as error}
