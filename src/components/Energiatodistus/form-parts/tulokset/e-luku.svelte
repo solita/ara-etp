@@ -8,8 +8,6 @@
   import Input from '@Component/Energiatodistus/Input';
   import BasicInput from '@Component/Input/Input';
 
-  export let schema;
-  export let energiatodistus;
   export let eTehokkuus = Maybe.None();
 </script>
 
