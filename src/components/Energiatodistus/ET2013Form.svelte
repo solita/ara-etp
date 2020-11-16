@@ -46,6 +46,7 @@
   export let schema;
   export let disabled = false;
   export let validation;
+  export let eTehokkuus = Maybe.None();
 
   $: labelLocale = LocaleUtils.label($locale);
 </script>
@@ -194,8 +195,10 @@
 
 <H2 text={$_('energiatodistus.tulokset.header')} />
 
-<ELuku {schema} {energiatodistus} />
-<ELuvunErittely {disabled} {schema} bind:energiatodistus versio={2013} />
+<ELuku {eTehokkuus} {schema} {energiatodistus} />
+<ELuvunErittely {disabled} {schema}
+                bind:energiatodistus bind:eTehokkuus
+                versio={2013} />
 <UusiutuvatOmavaraisenergiat
   {disabled}
   {schema}

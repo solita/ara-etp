@@ -330,3 +330,12 @@ export const validation = R.memoizeWith(R.identity, version =>
     kuormat: Fetch.cached(fetch, '/validation/sisaiset-kuormat/' + version)
   })
 );
+
+export const getEluokka = R.curry((fetch, versio,
+                                   alakayttotarkoitusId,
+                                   nettoala, eLuku) =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )(`api/private/e-luokka/${versio}/${alakayttotarkoitusId}/${nettoala}/${eLuku}`)
+);
