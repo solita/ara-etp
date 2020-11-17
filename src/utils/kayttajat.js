@@ -4,6 +4,7 @@ const roles = ['laatija', 'patevyydentoteaja', 'paakayttaja'];
 export const role = R.compose(R.map(parseInt), R.invertObj)(roles);
 export const roleKey = id => roles[id];
 
+/** predicate functions for role id */
 export const isLaatijaRole = R.equals(role.laatija);
 export const isPatevyydentoteajaRole = R.equals(role.patevyydentoteaja);
 export const isPaakayttajaRole = R.equals(role.paakayttaja);
