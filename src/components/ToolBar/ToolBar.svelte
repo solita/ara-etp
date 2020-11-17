@@ -15,6 +15,7 @@
 
   export let energiatodistus;
   export let inputLanguage = 'fi';
+  export let eTehokkuus = Maybe.None();
 
   const version = energiatodistus.versio;
   const id = Maybe.fromNull(energiatodistus.id);
@@ -159,4 +160,15 @@
       </button>
     </Confirm>
   {/if}
+  {#each eTehokkuus.toArray() as e}
+    <div class="border-2 border-dark py-2 bg-secondary">
+      <div class="font-bold text-center text-sm text-light pb-1">
+        {$_('energiatodistus.tulokset.e-luku')} {e['e-luku']}
+      </div>
+      <div class="font-bold text-center text-sm text-light pt-1">
+        {$_('energiatodistus.tulokset.e-luokka')}
+        {e['e-luokka']}<sub>{energiatodistus.versio}</sub>
+      </div>
+    </div>
+  {/each}
 </div>

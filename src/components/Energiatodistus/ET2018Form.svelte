@@ -48,8 +48,7 @@
   export let schema;
   export let disabled = false;
   export let validation;
-
-  let eLuku = Maybe.None();
+  export let eTehokkuus = Maybe.None();
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -164,6 +163,7 @@
   kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
   alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
 
+<ELuku {eTehokkuus} />
 <HR />
 <ToimenpideEhdotukset
   versio={'2018'}
@@ -214,9 +214,9 @@
 
 <H2 text={$_('energiatodistus.tulokset.header')} />
 
-<ELuku {eLuku} {schema} {energiatodistus} />
+<ELuku {eTehokkuus} />
 <ELuvunErittely
-  bind:eLuku
+  bind:eTehokkuus
   {disabled}
   {schema}
   bind:energiatodistus

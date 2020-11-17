@@ -3,6 +3,8 @@
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe';
+  import * as Future from '@Utility/future-utils';
   import * as formats from '@Utility/formats';
   import * as fxmath from '@Utility/fxmath';
 
@@ -13,12 +15,15 @@
   import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
 
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as api from '@Component/Energiatodistus/energiatodistus-api';
 
   export let disabled;
   export let schema;
   export let energiatodistus;
   export let versio;
-  export let eLuku;
+  export let eTehokkuus = Maybe.None();
+
+  let eTehokkuusParams = [];
 
   $: energiamuotokertoimet = R.mergeRight(
     EtUtils.energiamuotokertoimet()[versio],
@@ -52,8 +57,31 @@
 
   $: eLuku = R.filter(
     R.complement(R.equals(0)),
-    painotetutOstoenergiankulutuksetPerNelioSum
+    R.map(Math.ceil, painotetutOstoenergiankulutuksetPerNelioSum)
   );
+
+  $: {
+    const params = Maybe.toMaybeList([
+      energiatodistus.perustiedot.kayttotarkoitus,
+      EM.toMaybe(energiatodistus.lahtotiedot['lammitetty-nettoala']),
+      eLuku]);
+
+    Maybe.orElseRun(_ => {
+      eTehokkuus = Maybe.None();
+    }, params);
+
+    R.forEach(p => {
+      // calculate new e-luokka only if params has changed
+      if (!R.equals(p, eTehokkuusParams))  {
+        eTehokkuusParams = p;
+        Future.fork(
+          _ => {},
+          response => {
+            eTehokkuus = Maybe.Some(R.assoc('e-luku', p[2], response));
+          },
+          R.apply(api.getEluokka(fetch, versio), p)
+        )}}, params);
+  }
 </script>
 
 <H3

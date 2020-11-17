@@ -45,6 +45,7 @@
     validation.numeric
   );
 
+  let eTehokkuus = Maybe.None();
   let inputLanguage = 'fi';
 
   let korvausError = Maybe.None();
@@ -221,6 +222,7 @@
           <Laskutus {schema} {whoami} bind:energiatodistus />
           <ETForm
             bind:energiatodistus
+            bind:eTehokkuus
             {inputLanguage}
             {disabled}
             {schema}
@@ -247,6 +249,7 @@
         saveComplete={validateCompleteAndSubmit}
         {cancel}
         {energiatodistus}
+        {eTehokkuus}
         bind:inputLanguage />
     </div>
   </div>

@@ -8,29 +8,30 @@
   import Input from '@Component/Energiatodistus/Input';
   import BasicInput from '@Component/Input/Input';
 
-  export let schema;
-  export let energiatodistus;
-  export let eLuku = Maybe.None();
+  export let eTehokkuus = Maybe.None();
 </script>
 
 <div class="flex lg:flex-row flex-col">
-  <div class="lg:w-1/3 w-full py-2">
+  <div class="lg:w-1/5 w-full py-2">
     <BasicInput
-      id="energiatodistus.e-luku"
-      name="energiatodistus.e-luku"
-      label={$_('energiatodistus.e-luku')}
+      id="energiatodistus.tulokset.e-luku"
+      name="energiatodistus.tulokset.e-luku"
+      label={$_('energiatodistus.tulokset.e-luku')}
       disabled={true}
-      model={R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, Math.ceil )) )(eLuku)}
+      model={Maybe.fold('-',
+        R.compose(formats.numberFormat, R.prop('e-luku')),
+        eTehokkuus)}
       lens={R.lens(R.identity, R.identity)}
       i18n={$_} />
   </div>
-  <div class="lg:w-1/3 w-full py-2">
-    <Input
-      disabled={true}
-      {schema}
-      center={false}
-      bind:model={energiatodistus}
-      format={R.compose( Maybe.orSome('- m²'), R.map(v => v + ' m²') )}
-      path={['lahtotiedot', 'lammitetty-nettoala']} />
+  <div class="lg:w-1/5 w-full py-2">
+    <BasicInput
+        id="energiatodistus.tulokset.e-luokka"
+        name="energiatodistus.tulokset.e-luokka"
+        label={$_('energiatodistus.tulokset.e-luokka')}
+        disabled={true}
+        model={Maybe.fold('-', R.prop('e-luokka'), eTehokkuus)}
+        lens={R.lens(R.identity, R.identity)}
+        i18n={$_} />
   </div>
 </div>
