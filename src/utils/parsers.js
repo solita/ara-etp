@@ -20,6 +20,7 @@ export const parseNumber = R.compose(
     R.compose(Either.Right, txt => parseFloat(txt)),
     R.always(Either.Left(R.applyTo('parsing.invalid-number')))
   ),
+  R.replace(/\u2212/g, '-'),
   R.replace(/,/g, '.'),
   R.replace(/\s/g, '')
 );
