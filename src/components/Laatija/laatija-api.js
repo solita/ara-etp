@@ -35,7 +35,7 @@ export const putLaatijaById = R.curry((rooli, fetch, id, laatija) =>
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.laatija(id))),
     R.ifElse(
-      kayttajat.isPaakayttaja,
+      kayttajat.isPaakayttajaRole,
       R.always(serialize),
       R.always(serializeForLaatija)
     )(rooli)

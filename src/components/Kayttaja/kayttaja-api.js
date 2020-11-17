@@ -12,7 +12,7 @@ const deserialize = R.evolve({
   cognitoid: Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
   virtu: R.when(
-    R.allPass([R.isNil, kayttajat.isPaakayttaja]),
+    R.allPass([R.isNil, kayttajat.isPaakayttajaRole]),
     R.always({ localid: "", organisaatio: "" }))
 });
 
@@ -63,7 +63,7 @@ export const putKayttajaById = R.curry((rooli, fetch, id, laatija) =>
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.id(id))),
     R.ifElse(
-      kayttajat.isPaakayttaja,
+      kayttajat.isPaakayttajaRole,
       R.always(serialize),
       R.always(serializeForNonAdmin)
     )(rooli)
