@@ -36,12 +36,14 @@ describe('Navigation', () => {
     it('should return energiatodistus-links when within energiatodistus', () => {
       const expected = [
         { label: 'ET 1', href: '#/energiatodistus/2018/1' },
-        { label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' },
-        { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet' },
-        {
-          label: 'Muutoshistoria',
-          href: '#/energiatodistus/2018/1/muutoshistoria'
-        }
+        // Hidden until implemented
+        //{ label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' },
+        { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet' }
+        // Hidden until implemented
+        //{
+        //  label: 'Muutoshistoria',
+        //  href: '#/energiatodistus/2018/1/muutoshistoria'
+        //}
       ];
 
       assert.deepEqual(
@@ -60,7 +62,8 @@ describe('Navigation', () => {
           label: 'Energiatodistukset',
           href: '#/energiatodistus/all'
         },
-        { label: 'Viestit', href: '#/viestit' },
+        // Hidden until implemented
+        // { label: 'Viestit', href: '#/viestit' },
         {
           label: 'Yritykset',
           href: `#/laatija/2/yritykset`
@@ -79,15 +82,17 @@ describe('Navigation', () => {
           href: '#/energiatodistus/2018/new',
           label: 'Uusi energiatodistus'
         },
-        { disabled: true, label: 'Viestit' },
+        // Hidden until implemented
+        // { disabled: true, label: 'Viestit' },
         {
           label: 'Liitteet',
           disabled: true
         },
-        {
-          label: 'Muutoshistoria',
-          disabled: true
-        }
+        // Hidden until implemented
+        //{
+        //  label: 'Muutoshistoria',
+        //  disabled: true
+        //}
       ];
 
       assert.deepEqual(
@@ -105,7 +110,8 @@ describe('Navigation', () => {
           label: 'Energiatodistukset',
           href: '#/energiatodistus/all'
         },
-        { label: 'Viestit', href: '#/viestit' },
+        // Hidden until implemented
+        // { label: 'Viestit', href: '#/viestit' },
         {
           label: 'Yritykset',
           href: `#/laatija/1/yritykset`
@@ -139,7 +145,8 @@ describe('Navigation', () => {
       const expected = [
         { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
         { label: 'Laatijat', href: '#/laatija/all' },
-        { label: 'Viestit', href: '#/viestit' }
+        // Hidden until implemented
+        // { label: 'Viestit', href: '#/viestit' }
       ];
 
       assert.deepEqual(
