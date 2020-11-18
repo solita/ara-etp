@@ -108,9 +108,11 @@
 
   const signingProcess = R.compose(
     Future.fork(response => {
-        error = R.pathEq(['body', 'type'], 'name-does-not-match', response) ?
-          Maybe.Some($_('energiatodistus.signing.error.name-does-not-match')) :
-          Maybe.Some($_('energiatodistus.signing.error.signing-failed'));
+        const errorKey = 'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
+        const message = $_(errorKey);
+        error = R.equals(message, errorKey) ?
+          Maybe.Some($_('energiatodistus.signing.error.signing-failed')) :
+          Maybe.Some(message);
       },
       setStateStatus(status.signed)),
     Future.and(etApi.finishSign(fetch, energiatodistus.versio, energiatodistus.id)),
