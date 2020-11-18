@@ -19,7 +19,7 @@
   const id = inputs.id(path);
 </script>
 
-{#if KayttajaUtils.isPaakayttaja(whoami.rooli)}
+{#if KayttajaUtils.isPaakayttaja(whoami)}
   <div class="w-full">
     <Textarea
       {id}

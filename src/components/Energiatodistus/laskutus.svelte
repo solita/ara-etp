@@ -9,6 +9,7 @@
   import H2 from '@Component/H/H2';
   import Select from '@Component/Select/Select';
   import * as Future from '@Utility/future-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
@@ -16,7 +17,6 @@
   import Loading from '../Loading/Loading.svelte';
   import SimpleInput from '@Component/Input/SimpleInput';
   import Input from './Input';
-  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
   import HR from '@Component/HR/HR.svelte';
 
   export let energiatodistus;
@@ -35,7 +35,7 @@
   $: disabled = energiatodistus['laskutusaika'].isSome();
 
   const getLaatija = id =>
-    R.equals(id, whoami.id) || KayttajaUtils.isPaakayttaja(whoami)
+    R.equals(id, whoami.id) || Kayttajat.isPaakayttaja(whoami)
       ? R.map(Maybe.Some, kayttajaApi.getLaatijaById(fetch, id))
       : Future.resolve(Maybe.None());
 

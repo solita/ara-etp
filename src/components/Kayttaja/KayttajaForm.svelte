@@ -14,7 +14,6 @@
   import * as deep from '@Utility/deep-objects';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
-  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
   export let kayttaja;
   export let submit;
@@ -75,7 +74,7 @@
           validators={formSchema.sukunimi}
           i18n={$_} />
       </div>
-      {#if KayttajaUtils.isPatevyydentoteaja(kayttaja)}
+      {#if Kayttajat.isPatevyydentoteaja(kayttaja)}
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
             id={'henkilotunnus'}
@@ -118,7 +117,7 @@
           i18n={$_} />
       </div>
     </div>
-    {#if KayttajaUtils.isPaakayttaja(kayttaja)}
+    {#if Kayttajat.isPaakayttaja(kayttaja)}
       <H1 text={$_('kayttaja.virtu.header')} />
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">

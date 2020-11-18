@@ -25,8 +25,8 @@
   export let postinumerot;
 
   const enabled =
-    Kayttajat.isLaatija(whoami.rooli) && R.propEq('tila-id', ET.tila.draft, energiatodistus) ||
-    Kayttajat.isPaakayttaja(whoami.rooli) &&
+    Kayttajat.isLaatija(whoami) && R.propEq('tila-id', ET.tila.draft, energiatodistus) ||
+    Kayttajat.isPaakayttaja(whoami) &&
       !ET.isTilaInTilat([ET.tila.draft, ET.tila.deleted])(energiatodistus);
 
   const lens = R.lensProp('korvattu-energiatodistus-id');

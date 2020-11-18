@@ -10,10 +10,10 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
-  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
   import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
 
   import * as EtHakuUtils from './energiatodistus-haku-utils';
@@ -41,7 +41,7 @@
       response => {
         overlay = false;
         schema = Maybe.Some(
-          KayttajaUtils.isPaakayttaja(response[0])
+          Kayttajat.isPaakayttaja(response[0])
             ? EtHakuSchema.paakayttajaSchema
             : EtHakuSchema.laatijaSchema
         );
