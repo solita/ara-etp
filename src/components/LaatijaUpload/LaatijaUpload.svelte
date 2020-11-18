@@ -93,7 +93,11 @@
 <FileDropArea bind:files />
 {#if laatijat.length}
   <div class="w-full overflow-x-auto mt-4">
-    <Table {fields} validate={LaatijaUtils.validate} tablecontents={laatijat} />
+    <Table
+      {fields}
+      validate={LaatijaUtils.validate}
+      tablecontents={laatijat}
+      itemsPerPage={50} />
   </div>
   <div class="flex -mx-4 pt-8">
     <div class="px-4">

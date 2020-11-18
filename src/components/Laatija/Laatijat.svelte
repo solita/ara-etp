@@ -258,7 +258,6 @@
     R.map(R.filter(laatijaMatch(model)))
   )(laatijat);
   $: isReusults = R.complement(R.isEmpty)(results);
-  $: pageCount = Math.ceil(R.divide(R.length(results), itemsPerPage));
 
   $: R.compose(
     querystring => push(`${$location}?${querystring}`),
@@ -327,7 +326,6 @@
         tablecontents={results}
         {onRowClick}
         pageNum={R.compose( Maybe.orSome(1), R.prop('page') )(model)}
-        {pageCount}
         {nextPageCallback}
         {itemsPerPage} />
     </div>

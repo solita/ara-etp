@@ -6,7 +6,6 @@
   export let fields = [];
   export let tablecontents = [];
   export let validate = {};
-  export let pageCount = 1;
   export let pageNum = 1;
   export let onRowClick;
   export let nextPageCallback;
@@ -16,6 +15,9 @@
     R.take(itemsPerPage),
     R.drop(R.multiply(R.dec(pageNum), itemsPerPage))
   )(tablecontents);
+
+  $: pageCount = Math.ceil(R.divide(R.length(tablecontents), itemsPerPage));
+
 </script>
 
 <style type="text/postcss">
