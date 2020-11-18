@@ -13,11 +13,6 @@ const linksForLaatija = R.curry((i18n, kayttaja) => [
   {
     label: i18n('navigation.yritykset'),
     href: `#/laatija/${kayttaja.id}/yritykset`
-  },
-  {
-    label: i18n('navigation.omattiedot'),
-    href: '#/myinfo',
-    activePath: `#/kayttaja/${kayttaja.id}`
   }
 ]);
 
@@ -26,12 +21,7 @@ export const linksForPatevyydentoteaja = R.curry((i18n, kayttaja) => [
     label: i18n('navigation.laatijoidentuonti'),
     href: '#/laatija/laatijoidentuonti'
   },
-  { label: i18n('navigation.laatijat'), href: '#/laatija/all' },
-  {
-    label: i18n('navigation.omattiedot'),
-    href: '#/myinfo',
-    activePath: `#/kayttaja/${kayttaja.id}`
-  }
+  { label: i18n('navigation.laatijat'), href: '#/laatija/all' }
 ]);
 
 export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
@@ -149,6 +139,10 @@ export const navigationParse = R.curry((i18n, kayttaja, location) =>
 
 export const defaultHeaderMenuLinks = i18n => [
   {
+    href: `#/myinfo`,
+    text: i18n('navigation.omattiedot')
+  },
+  {
     href: `/api/logout`,
     text: i18n('navigation.kirjaudu-ulos')
   }
@@ -164,10 +158,6 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
       {
         href: `#/yritys/all`,
         text: i18n('navigation.yritykset')
-      },
-      {
-        href: `#/myinfo`,
-        text: i18n('navigation.omattiedot')
       }
     ];
   }
