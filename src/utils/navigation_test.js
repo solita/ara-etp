@@ -64,11 +64,6 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/2/yritykset`
-        },
-        {
-          label: 'Omat tiedot',
-          href: '#/myinfo',
-          activePath: `#/kayttaja/2`
         }
       ];
 
@@ -114,11 +109,6 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/1/yritykset`
-        },
-        {
-          label: 'Omat tiedot',
-          href: '#/myinfo',
-          activePath: `#/kayttaja/1`
         }
       ];
 
@@ -135,12 +125,7 @@ describe('Navigation', () => {
           label: 'Laatijoiden tuonti',
           href: '#/laatija/laatijoidentuonti'
         },
-        { label: 'Laatijat', href: '#/laatija/all' },
-        {
-          label: 'Omat tiedot',
-          href: '#/myinfo',
-          activePath: `#/kayttaja/1`
-        }
+        { label: 'Laatijat', href: '#/laatija/all' }
       ];
 
       assert.deepEqual(
