@@ -1,11 +1,14 @@
 <script>
+  import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as RedirectUtils from '../../utils/redirect-utils';
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
   export let redirectTimeout = 0;
 
-  export const currentUrlEncoded = encodeURIComponent(document.location.href);
+  /* Remove path /api/logout from redirect url */
+  export const currentUrlEncoded =
+    encodeURIComponent(R.replace(/api\/logout.*$/, '', document.location.href));
 
   export const loginUrl = () => `${document.location.protocol}//${document.location.host}/api/login?redirect=${currentUrlEncoded}`;
 
