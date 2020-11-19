@@ -21,7 +21,8 @@ export const serialize = R.compose(
     wwwosoite: Maybe.orSome(null),
     'api-key': Maybe.orSome(null)
   }),
-  R.omit(['id', 'login', 'rooli', 'passivoitu'])
+  R.omit(['id', 'login', 'rooli', 'passivoitu',
+    'voimassaolo-paattymisaika', 'voimassa'])
 );
 
 export const serializeForLaatija = R.compose(
