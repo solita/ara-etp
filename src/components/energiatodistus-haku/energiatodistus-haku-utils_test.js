@@ -7,7 +7,9 @@ describe('EtHakuUtils:', () => {
   describe('blockToQueryParameter', () => {
     it('should return Just query parameter for given block', () => {
       const block = ['sisaltaa', 'perustiedot.nimi', 'asdf'];
-      const expected = Maybe.Some([['like', 'perustiedot.nimi', '%asdf%']]);
+      const expected = Maybe.Some([
+        ['like', 'energiatodistus.perustiedot.nimi', '%asdf%']
+      ]);
 
       assert.deepEqual(
         EtHakuUtils.blockToQueryParameter(flatSchema, block),
@@ -37,10 +39,10 @@ describe('EtHakuUtils:', () => {
       ];
       const expected = [
         [
-          ['like', 'perustiedot.nimi', '%asdf%'],
-          ['=', 'id', 2]
+          ['like', 'energiatodistus.perustiedot.nimi', '%asdf%'],
+          ['=', 'energiatodistus.id', 2]
         ],
-        [['>', 'id', 'value']]
+        [['>', 'energiatodistus.id', 'value']]
       ];
 
       assert.deepEqual(
@@ -57,7 +59,9 @@ describe('EtHakuUtils:', () => {
         ],
         [['no-operation-named-this', 'key', 'value']]
       ];
-      const expected = [[['like', 'perustiedot.nimi', '%asdf%']]];
+      const expected = [
+        [['like', 'energiatodistus.perustiedot.nimi', '%asdf%']]
+      ];
 
       assert.deepEqual(
         EtHakuUtils.convertWhereToQuery(flatSchema, where),
