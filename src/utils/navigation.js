@@ -9,7 +9,8 @@ const linksForLaatija = R.curry((i18n, kayttaja) => [
     label: i18n('navigation.energiatodistukset'),
     href: '#/energiatodistus/all'
   },
-  { label: i18n('navigation.viestit'), href: '#/viestit' },
+  // Hidden until implemented
+  //{ label: i18n('navigation.viestit'), href: '#/viestit' },
   {
     label: i18n('navigation.yritykset'),
     href: `#/laatija/${kayttaja.id}/yritykset`
@@ -29,18 +30,20 @@ export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
     label: `${i18n('navigation.et')} ${id}`,
     href: `#/energiatodistus/${version}/${id}`
   },
-  {
-    label: i18n('navigation.viestit'),
-    href: `#/energiatodistus/${version}/${id}/viestit`
-  },
+  // Hidden until implemented
+  //{
+  //  label: i18n('navigation.viestit'),
+  //  href: `#/energiatodistus/${version}/${id}/viestit`
+  //},
   {
     label: i18n('navigation.liitteet'),
     href: `#/energiatodistus/${version}/${id}/liitteet`
   },
-  {
-    label: i18n('navigation.muutoshistoria'),
-    href: `#/energiatodistus/${version}/${id}/muutoshistoria`
-  }
+  // Hidden until implemented
+  // {
+  //  label: i18n('navigation.muutoshistoria'),
+  //  href: `#/energiatodistus/${version}/${id}/muutoshistoria`
+  // }
 ]);
 
 export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
@@ -48,18 +51,20 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
     label: `${i18n('navigation.uusi-energiatodistus')}`,
     href: `#/energiatodistus/${version}/new`
   },
-  {
-    label: i18n('navigation.viestit'),
-    disabled: true
-  },
+  // Hidden until implemented
+  //{
+  //  label: i18n('navigation.viestit'),
+  //  disabled: true
+  //},
   {
     label: i18n('navigation.liitteet'),
     disabled: true
-  },
-  {
-    label: i18n('navigation.muutoshistoria'),
-    disabled: true
   }
+  // Hidden until implemented
+  //{
+  //  label: i18n('navigation.muutoshistoria'),
+  //  disabled: true
+  //}
 ]);
 
 export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
@@ -70,8 +75,9 @@ export const linksForPaakayttaja = R.curry((i18n, kayttaja) => [
   {
     label: i18n('navigation.laatijat'),
     href: '#/laatija/all'
-  },
-  { label: i18n('navigation.viestit'), href: '#/viestit' }
+  }
+  // Hidden until implemented
+  //{ label: i18n('navigation.viestit'), href: '#/viestit' }
 ]);
 
 const kayttajaLinksMap = Object.freeze({
