@@ -66,6 +66,7 @@
       push,
       R.concat(`${$location}?`),
       params => qs.stringify(params, { encode: false }),
+      R.dissoc('offset'),
       R.when(R.propEq('keyword', ''), R.dissoc('keyword')),
       R.mergeRight(R.mergeRight(qs.parse($querystring), { keyword })),
       R.assoc('where', R.__, {})
@@ -104,7 +105,12 @@
         wrapper={PillInputWrapper}
         rawValueAsViewValue={true}
         search={true}
-        bind:rawValue={keyword} />
+        bind:rawValue={keyword}
+        on:keypress={evt => {
+          if (evt.key === 'Enter') {
+            form.dispatchEvent(new Event('submit'));
+          }
+        }} />
     </div>
   </div>
 
