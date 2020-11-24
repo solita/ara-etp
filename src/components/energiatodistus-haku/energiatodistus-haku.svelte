@@ -19,7 +19,6 @@
   import * as EtHakuUtils from './energiatodistus-haku-utils';
   import SimpleInput from '@Component/Input/SimpleInput';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
-  import Select from '@Component/Select/Select';
   import QueryBlock from './querybuilder/queryblock';
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
@@ -28,6 +27,7 @@
   import { _ } from '@Language/i18n';
 
   export let where;
+  export let keyword;
 
   let overlay = true;
   let luokittelut = Maybe.None();
@@ -61,14 +61,13 @@
     api.tarkoitusluokat(2018)
   ]);
 
-  let hakuValue = '';
-
   const navigate = search => {
     R.compose(
       push,
       R.concat(`${$location}?`),
       params => qs.stringify(params, { encode: false }),
-      R.mergeRight(qs.parse($querystring)),
+      R.when(R.propEq('keyword', ''), R.dissoc('keyword')),
+      R.mergeRight(R.mergeRight(qs.parse($querystring), { keyword })),
       R.assoc('where', R.__, {})
     )(search);
   };
@@ -105,28 +104,39 @@
         wrapper={PillInputWrapper}
         rawValueAsViewValue={true}
         search={true}
-        bind:rawValue={hakuValue} />
+        bind:rawValue={keyword} />
     </div>
   </div>
 
   <form
     bind:this={form}
-    on:change={evt => {
-      valid = R.compose( Either.orSome(false), R.map(R.compose( R.all(EtHakuUtils.isValidBlock(Maybe.get(schema))), R.map(R.prop('block')), EtHakuUtils.searchItems )), f => Either.fromTry(
-            () => EtHakuUtils.parseHakuForm(f)
-          ) )(form);
+    on:change={_ => {
+      valid = R.compose(
+        Either.orSome(false),
+        R.map(
+          R.compose(
+            R.all(EtHakuUtils.isValidBlock(Maybe.get(schema))),
+            R.map(R.prop('block')),
+            EtHakuUtils.searchItems
+          )
+        ),
+        f => Either.fromTry(() => EtHakuUtils.parseHakuForm(f))
+      )(form);
     }}
     novalidate
     on:submit|preventDefault={evt => {
-      R.compose( R.chain(navigate), R.map(EtHakuUtils.searchString), R.map(EtHakuUtils.searchItems), evt => Either.fromTry(
-            () => EtHakuUtils.parseHakuForm(evt.target)
-          ) )(evt);
+      R.compose(
+        R.chain(navigate),
+        R.map(EtHakuUtils.searchString),
+        R.map(EtHakuUtils.searchItems),
+        evt => Either.fromTry(() => EtHakuUtils.parseHakuForm(evt.target))
+      )(evt);
     }}
     on:reset|preventDefault={_ => {
       queryItems = [];
+      keyword = '';
       valid = true;
     }}>
-
     {#each queryItems as { conjunction, block: [operator, key, ...values] }, index (`${index}_${operator}_${key}_${R.join('_', values)}`)}
       <div
         class="conjunction w-full flex justify-center"
@@ -162,7 +172,7 @@
           class="text-secondary font-icon text-2xl cursor-pointer ml-4
           hover:text-error"
           on:click={async _ => {
-            const newItems = R.compose( R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
+            const newItems = R.compose(R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems))(Either.fromTry(
                 () => EtHakuUtils.parseHakuForm(form)
               ));
             if (Either.isRight(newItems)) {
@@ -184,7 +194,7 @@
         icon={'add_circle_outline'}
         type={'button'}
         on:click={async _ => {
-          const newItems = R.compose( R.map(R.append(EtHakuUtils.defaultQueryItem())), R.map(EtHakuUtils.searchItems) )(Either.fromTry(
+          const newItems = R.compose(R.map(R.append(EtHakuUtils.defaultQueryItem())), R.map(EtHakuUtils.searchItems))(Either.fromTry(
               () => EtHakuUtils.parseHakuForm(form)
             ));
           if (Either.isRight(newItems)) {
