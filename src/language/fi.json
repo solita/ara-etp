@@ -220,6 +220,7 @@
     "tila-id": "Energiatodistuksen tila",
     "versio": "Versio",
     "laatija-id": "Laatija",
+    "kommentti": "Pääkäyttäjän kommentti",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
