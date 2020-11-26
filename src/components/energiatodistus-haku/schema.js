@@ -202,8 +202,8 @@ const perustiedot = {
   },
   havainnointikaynti: [...dateComparisons],
   kieli: [...numberComparisons],
-  'keskeiset-suositukset-fi': [...stringComparisons],
-  'keskeiset-suositukset-sv': [...stringComparisons]
+  'keskeiset-suositukset-fi': [stringContains],
+  'keskeiset-suositukset-sv': [stringContains]
 };
 
 const lahtotiedot = {
@@ -482,8 +482,8 @@ export const schema = {
   'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
   huomiot,
   versio: [versioEquals],
-  'lisamerkintoja-fi': [...stringComparisons],
-  'lisamerkintoja-sv': [...stringComparisons],
+  'lisamerkintoja-fi': [stringContains],
+  'lisamerkintoja-sv': [stringContains],
   laskuriviviite: [...stringComparisons],
   'laatija-fullname': [...stringComparisons]
 };
