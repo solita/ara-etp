@@ -129,10 +129,10 @@ const tilaOperation = R.curry((operation, key) => ({
 }));
 
 const tilaEquals = tilaOperation(eq);
-const tilaGreaterThan = tilaOperation(eq);
-const tilaGreaterThanOrEqual = tilaOperation(eq);
-const tilaLessThan = tilaOperation(eq);
-const tilaLessThanOrEqual = tilaOperation(eq);
+const tilaGreaterThan = tilaOperation(gt);
+const tilaGreaterThanOrEqual = tilaOperation(gte);
+const tilaLessThan = tilaOperation(lt);
+const tilaLessThanOrEqual = tilaOperation(lte);
 
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation: {
