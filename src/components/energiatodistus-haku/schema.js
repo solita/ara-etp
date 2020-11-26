@@ -129,10 +129,6 @@ const tilaOperation = R.curry((operation, key) => ({
 }));
 
 const tilaEquals = tilaOperation(eq);
-const tilaGreaterThan = tilaOperation(gt);
-const tilaGreaterThanOrEqual = tilaOperation(gte);
-const tilaLessThan = tilaOperation(lt);
-const tilaLessThanOrEqual = tilaOperation(lte);
 
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation: {
@@ -200,13 +196,7 @@ const eLuokkaComparisons = [
   eLuokkaLessThanOrEqual
 ];
 
-const tilaComparisons = [
-  tilaEquals,
-  tilaGreaterThan,
-  tilaGreaterThanOrEqual,
-  tilaLessThan,
-  tilaLessThanOrEqual
-];
+const tilaComparisons = [tilaEquals];
 
 const perustiedot = {
   nimi: [...stringComparisons],
