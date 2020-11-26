@@ -11,15 +11,19 @@
   let strValue = value + '' === 'true' ? 'true' : 'false';
 </script>
 
-<div class="flex justify-between">
-  <Radio
-    bind:group={strValue}
-    value={'true'}
-    label={$_('energiatodistus.haku.true')}
-    name={`${nameprefix}_value_${index}`} />
-  <Radio
-    bind:group={strValue}
-    value={'false'}
-    label={$_('energiatodistus.haku.false')}
-    name={`${nameprefix}_value_${index}`} />
+<div class="flex">
+  <div class="mr-3">
+    <Radio
+      bind:group={strValue}
+      value={'true'}
+      label={$_('energiatodistus.haku.true')}
+      name={`${nameprefix}_value_${index}`} />
+  </div>
+  <div class="mr-3">
+    <Radio
+      bind:group={strValue}
+      value={'false'}
+      label={$_('energiatodistus.haku.false')}
+      name={`${nameprefix}_value_${index}`} />
+  </div>
 </div>

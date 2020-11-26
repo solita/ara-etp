@@ -333,7 +333,7 @@ export const vapaatKertoimet = R.compose(
   vapaaPolttoaine
 );
 
-const tilat = [
+export const tilat = [
   'draft',
   'in-signing',
   'signed',
@@ -346,10 +346,8 @@ export const tila = R.compose(R.map(parseInt), R.invertObj)(tilat);
 
 export const tilaKey = id => tilat[id];
 
-export const isTilaInTilat = tilat => R.compose(
-  R.includes(R.__, tilat),
-  R.prop('tila-id')
-);
+export const isTilaInTilat = tilat =>
+  R.compose(R.includes(R.__, tilat), R.prop('tila-id'));
 
 const kielisyydet = ['fi', 'sv', 'bilingual'];
 
