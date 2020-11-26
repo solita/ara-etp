@@ -152,7 +152,21 @@ const singleBoolean = key => ({
 });
 
 const singleDateOperation = R.curry((operation, key) => ({
-  operation,
+  operation: {
+    ...operation,
+    format: R.curry((command, key, value) => [
+      [
+        command,
+        key,
+        dfns
+          .subMinutes(
+            dfns.parseISO(value),
+            dfns.parseISO(value).getTimezoneOffset()
+          )
+          .toISOString()
+      ]
+    ])
+  },
   key,
   argumentNumber: 1,
   defaultValues: () => [''],
