@@ -89,7 +89,7 @@
           items={R.map(R.path(['operation', 'browserCommand']), operations)}
           model={R.path(['operation', 'browserCommand'], op)}
           lens={R.identity}
-          format={R.compose( $_, R.concat('energiatodistus.haku.') )}
+          format={R.compose($_, R.concat('energiatodistus.haku.'))}
           allowNone={false}
           name={`${nameprefix}_operation`} />
       </div>

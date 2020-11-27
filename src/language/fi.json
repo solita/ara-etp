@@ -77,7 +77,6 @@
     "laskutuskieli": "Laskutuskieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "verkkolaskuosoite",
-    "verkkolaskuosoite": "Verkkolaskuosoite",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
@@ -198,6 +197,7 @@
       "<=": "<=",
       ">=": ">=",
       "sisaltaa": "Sisältää",
+      "in": "Jokin",
       "and": "Ja",
       "or": "Tai",
       "suosikkihaut": "Suosikkihaut",

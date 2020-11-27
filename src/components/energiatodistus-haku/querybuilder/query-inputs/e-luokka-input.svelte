@@ -1,27 +1,52 @@
 <script>
-  import SimpleInput from '@Component/Input/SimpleInput';
-  import * as parsers from '@Utility/parsers';
-  import * as Either from '@Utility/either-utils';
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  import Select from '@Component/Select/Select';
+  const luokat = ['A', 'B', 'C', 'D', 'E', 'F'];
 
   export let values = [];
   export let nameprefix;
   export let index = 0;
-  export let value = R.head(values);
 
-  const luokat = ['A', 'B', 'C', 'D', 'E', 'F'];
+  let group = R.head(values);
+  let input;
 
-  if (!R.includes(value, luokat)) {
-    value = R.head(luokat);
+  $: {
+    input && (input.value = group);
+    input && input.dispatchEvent(new Event('change', { bubbles: true }));
   }
 </script>
 
-<Select
-  name={`${nameprefix}_value_${index}`}
-  allowNone={false}
-  model={value}
-  items={luokat}
-  lens={R.identity} />
+<style type="text/postcss">
+  span::after {
+    @apply select-none text-3xl;
+    content: 'check_box_outline_blank';
+  }
+
+  span.checked::after {
+    @apply text-primary;
+    content: 'check_box';
+  }
+</style>
+
+<!-- purgecss: checked -->
+
+<input
+  bind:this={input}
+  class="sr-only"
+  name={`${nameprefix}_value_${index}`} />
+
+{#each luokat as luokka}
+  <label class="text">
+    <input
+      class="sr-only"
+      on:change|stopPropagation
+      type="checkbox"
+      bind:group
+      value={luokka} />
+    <div class="flex items-center">
+      <span class="material-icons" class:checked={R.includes(luokka, group)} />
+      {luokka}
+    </div>
+  </label>
+{/each}
