@@ -86,7 +86,7 @@ const versioEquals = key => ({
   },
   key,
   argumentNumber: 1,
-  defaultValues: () => [2018],
+  defaultValues: () => [],
   type: OPERATOR_TYPES.VERSIO
 });
 
