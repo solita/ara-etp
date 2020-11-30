@@ -88,6 +88,8 @@ export const parseYritys = R.curry((i18n, kayttaja, locationParts) => {
       label: `${i18n('navigation.new-yritys')}`,
       href: `#/yritys/new`
     }];
+  } else if (R.equals('all', id)) {
+    return [];
   } else {
     return linksForYritys(i18n, id)
   }
