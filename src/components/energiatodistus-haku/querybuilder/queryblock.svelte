@@ -26,12 +26,7 @@
   const findKey = label =>
     R.compose(
       Maybe.fromNull,
-      R.find(
-        R.compose(
-          R.equals(label),
-          Inputs.propertyLabel($_)
-        )
-      ),
+      R.find(R.compose(R.equals(label), Inputs.propertyLabel($_))),
       R.keys
     )(schema);
 
@@ -40,6 +35,8 @@
     R.map(Inputs.propertyLabel($_)),
     Maybe.fromEmpty
   );
+
+  let previousType;
 
   $: completedValue = findLabel(key);
 
@@ -51,13 +48,28 @@
       input.dispatchEvent(new Event('change', { bubbles: true }));
     });
   }
+
+  $: operations = Maybe.orSome([], R.map(R.prop(R.__, schema), maybeKey));
+
+  $: op = R.compose(
+    Maybe.orSome(R.head(operations)),
+    Maybe.fromNull,
+    R.find(R.pathEq(['operation', 'browserCommand'], operator))
+  )(operations);
+
+  $: if (op && previousType !== undefined && previousType !== op.type) {
+    values = op.defaultValues();
+    previousType = op.type;
+  } else if (op) {
+    previousType = op.type;
+  }
 </script>
 
 <div class="flex items-end justify-start my-8 w-full">
   <div class="w-1/2 mr-4">
     <Autocomplete
       bind:completedValue
-      items={R.compose( R.map(Inputs.propertyLabel($_)), R.keys )(schema)}
+      items={R.compose(R.map(Inputs.propertyLabel($_)), R.keys)(schema)}
       size={100000} />
     <input
       bind:this={input}

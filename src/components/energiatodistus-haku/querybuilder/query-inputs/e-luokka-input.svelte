@@ -36,17 +36,21 @@
   class="sr-only"
   name={`${nameprefix}_value_${index}`} />
 
-{#each luokat as luokka}
-  <label class="text">
-    <input
-      class="sr-only"
-      on:change|stopPropagation
-      type="checkbox"
-      bind:group
-      value={luokka} />
-    <div class="flex items-center">
-      <span class="material-icons" class:checked={R.includes(luokka, group)} />
-      {luokka}
-    </div>
-  </label>
-{/each}
+<div class="flex flex-row">
+  {#each luokat as luokka}
+    <label class="mr-4">
+      <input
+        class="sr-only"
+        on:change|stopPropagation
+        type="checkbox"
+        bind:group
+        value={luokka} />
+      <div class="flex items-center">
+        <span
+          class="material-icons"
+          class:checked={R.includes(luokka, group)} />
+        {luokka}
+      </div>
+    </label>
+  {/each}
+</div>
