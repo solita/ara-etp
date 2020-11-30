@@ -47,6 +47,12 @@ const contains = {
   format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
+const some = {
+  browserCommand: 'in',
+  serverCommand: 'in',
+  format: defaultFormat
+};
+
 const singleNumberOperation = R.curry((operation, key) => ({
   operation,
   key,
@@ -110,15 +116,17 @@ const eLuokkaOperation = R.curry((operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValues: () => ['A'],
+  defaultValues: () => [],
   type: OPERATOR_TYPES.ELUOKKA
 }));
 
-const eLuokkaEquals = eLuokkaOperation(eq);
-const eLuokkaGreaterThan = eLuokkaOperation(eq);
-const eLuokkaGreaterThanOrEqual = eLuokkaOperation(eq);
-const eLuokkaLessThan = eLuokkaOperation(eq);
-const eLuokkaLessThanOrEqual = eLuokkaOperation(eq);
+const eLuokkaSome = key => ({
+  operation: some,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [],
+  type: OPERATOR_TYPES.ELUOKKA
+});
 
 const tilaOperation = R.curry((operation, key) => ({
   operation,
@@ -214,13 +222,7 @@ const dateComparisons = [
 
 const stringComparisons = [stringEquals, stringContains];
 
-const eLuokkaComparisons = [
-  eLuokkaEquals,
-  eLuokkaGreaterThan,
-  eLuokkaGreaterThanOrEqual,
-  eLuokkaLessThan,
-  eLuokkaLessThanOrEqual
-];
+const eLuokkaComparisons = [eLuokkaSome];
 
 const tilaComparisons = [tilaEquals];
 

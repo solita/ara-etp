@@ -89,6 +89,8 @@ export const parseValueByType = R.curry((type, value) => {
       return parsers.parseNumber(value);
     case OPERATOR_TYPES.BOOLEAN:
       return Either.Right(value === 'true');
+    case OPERATOR_TYPES.ELUOKKA:
+      return Either.Right(R.split(',', value));
     default:
       return Either.Right(value);
   }
