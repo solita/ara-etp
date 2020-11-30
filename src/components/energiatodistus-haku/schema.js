@@ -130,19 +130,6 @@ const tilaOperation = R.curry((operation, key) => ({
 
 const tilaEquals = tilaOperation(eq);
 
-const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
-  operation: {
-    ...operation,
-    format: R.curry((command, key, value) => [
-      [command, key, R.compose(R.join('-'), R.reverse, R.split('.'))(value)]
-    ])
-  },
-  key,
-  argumentNumber: 1,
-  defaultValues: () => [dateGenerator()],
-  type: OPERATOR_TYPES.DATE
-}));
-
 const singleBoolean = key => ({
   operation: eq,
   key,

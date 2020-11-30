@@ -10,7 +10,7 @@
   export let nameprefix;
   export let index = 0;
   export let value = R.compose(
-    Either.orSome(new Date()),
+    Either.orSome(dfns.startOfToday()),
     parsers.parseISODate,
     R.head
   )(values);
@@ -19,12 +19,7 @@
   let inputValue;
 
   $: {
-    inputValue = dfns
-      .subMinutes(
-        value || new Date(),
-        (value || new Date()).getTimezoneOffset()
-      )
-      .toISOString();
+    inputValue = value.toISOString();
     input && input.dispatchEvent(new Event('change', { bubbles: true }));
   }
 </script>
