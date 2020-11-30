@@ -18,10 +18,7 @@ export const blockToQueryParameter = R.curry(
     return R.compose(
       R.map(s =>
         R.compose(
-          R.over(
-            R.compose(R.lensIndex(0), R.lensIndex(1)),
-            R.concat('energiatodistus.')
-          ),
+          R.map(R.over(R.lensIndex(1), R.concat('energiatodistus.'))),
           R.apply(s.operation.format(s.operation.serverCommand, key))
         )(values)
       ),

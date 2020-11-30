@@ -130,19 +130,6 @@ const tilaOperation = R.curry((operation, key) => ({
 
 const tilaEquals = tilaOperation(eq);
 
-const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
-  operation: {
-    ...operation,
-    format: R.curry((command, key, value) => [
-      [command, key, R.compose(R.join('-'), R.reverse, R.split('.'))(value)]
-    ])
-  },
-  key,
-  argumentNumber: 1,
-  defaultValues: () => [dateGenerator()],
-  type: OPERATOR_TYPES.DATE
-}));
-
 const singleBoolean = key => ({
   operation: eq,
   key,
@@ -151,24 +138,63 @@ const singleBoolean = key => ({
   type: OPERATOR_TYPES.BOOLEAN
 });
 
-const dateEquals = singleDateOperation(() => dfns.formatISO(new Date()), eq);
+const singleDateOperation = R.curry((operation, key) => ({
+  operation: {
+    ...operation,
+    format: R.curry((command, key, value) => [
+      [
+        command,
+        key,
+        dfns
+          .subMinutes(
+            dfns.parseISO(value),
+            dfns.parseISO(value).getTimezoneOffset()
+          )
+          .toISOString()
+      ]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DATE
+}));
 
-const dateGreaterThan = singleDateOperation(
-  () => dfns.formatISO(new Date()),
-  gt
-);
+const dateEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, value) => [
+      [
+        'between',
+        key,
+        dfns
+          .subMinutes(
+            dfns.parseISO(value),
+            dfns.parseISO(value).getTimezoneOffset()
+          )
+          .toISOString(),
+        dfns
+          .subMinutes(
+            dfns.addDays(dfns.parseJSON(value), 1),
+            dfns.parseISO(value).getTimezoneOffset()
+          )
+          .toISOString()
+      ]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DATE
+});
 
-const dateGreaterThanOrEqual = singleDateOperation(
-  () => dfns.formatISO(new Date()),
-  gte
-);
+const dateGreaterThan = singleDateOperation(gt);
 
-const dateLessThan = singleDateOperation(() => dfns.formatISO(new Date()), lt);
+const dateGreaterThanOrEqual = singleDateOperation(gte);
 
-const dateLessThanOrEqual = singleDateOperation(
-  () => dfns.formatISO(new Date()),
-  lte
-);
+const dateLessThan = singleDateOperation(lt);
+
+const dateLessThanOrEqual = singleDateOperation(lte);
 
 const numberComparisons = [
   numberEquals,
