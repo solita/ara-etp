@@ -65,9 +65,10 @@
           $_('energiatodistukset.messages.delete-error')
         ),
       _ => {
-        energiatodistukset = removeEnergiatodistusFromList(versio, id)(
-          energiatodistukset
-        );
+        energiatodistukset = removeEnergiatodistusFromList(
+          versio,
+          id
+        )(energiatodistukset);
 
         flashMessageStore.add(
           'Energiatodistus',
@@ -82,14 +83,15 @@
   const parseQuerystring = R.compose(
     R.mergeRight({
       tila: Maybe.None(),
-      where: ''
+      where: '',
+      keyword: Maybe.None()
     }),
     R.evolve({
       tila: Maybe.fromNull,
-      where: R.compose(
-        Either.orSome(''),
-        w => Either.fromTry(() => JSON.parse(w))
-      )
+      where: R.compose(Either.orSome(''), w =>
+        Either.fromTry(() => JSON.parse(w))
+      ),
+      keyword: Maybe.fromNull
     }),
     qs.parse
   );
@@ -102,16 +104,13 @@
 
   $: where = R.prop('where', parsedQuery);
   $: tila = R.prop('tila', parsedQuery);
+  $: keyword = R.prop('keyword', parsedQuery);
 
   const queryToQuerystring = R.compose(
     api.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
-      where: R.compose(
-        R.map(encodeURI),
-        R.map(JSON.stringify),
-        Maybe.fromEmpty
-      )
+      where: R.compose(R.map(encodeURI), R.map(JSON.stringify), Maybe.fromEmpty)
     })
   );
 
@@ -149,13 +148,12 @@
 </script>
 
 <style>
-
 </style>
 
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
   <div class="mb-10">
-    <EnergiatodistusHaku {where} />
+    <EnergiatodistusHaku {where} keyword={Maybe.orSome('', keyword)} />
   </div>
   <Overlay {overlay}>
     <div slot="content">
