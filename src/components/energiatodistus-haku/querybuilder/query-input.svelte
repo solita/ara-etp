@@ -91,7 +91,7 @@
     <div class="w-full">
       <svelte:component
         this={inputForType(op.type)}
-        values={R.includes(R.head(values), op.defaultValues()) ? values : op.defaultValues()}
+        {values}
         {nameprefix}
         {luokittelut} />
     </div>
