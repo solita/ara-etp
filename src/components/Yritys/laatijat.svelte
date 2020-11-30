@@ -74,7 +74,7 @@
         flashMessageStore.add(
           'Yritys',
           'success',
-          $_('yritys.laatijat.accept.success.accept')
+          $_('yritys.laatijat.accept.success')
         );
       },
       api.putAcceptedLaatijaYritys(fetch, id, params.id)
