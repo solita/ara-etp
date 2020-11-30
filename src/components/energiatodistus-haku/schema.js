@@ -10,7 +10,8 @@ export const OPERATOR_TYPES = Object.freeze({
   VERSIO: 'VERSIO',
   ELUOKKA: 'ELUOKKA',
   VERSIOLUOKKA: 'VERSIOLUOKKA',
-  TILA: 'TILA'
+  TILA: 'TILA',
+  VERSIOKAYTTOTARKOITUSLUOKKA: 'VERSIOKAYTTOTARKOITUSLUOKKA'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -57,7 +58,7 @@ const singleNumberOperation = R.curry((operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValues: () => [0],
+  defaultValues: () => [''],
   type: OPERATOR_TYPES.NUMBER
 }));
 
@@ -94,7 +95,7 @@ const versioEquals = key => ({
   },
   key,
   argumentNumber: 1,
-  defaultValues: () => [],
+  defaultValues: () => [''],
   type: OPERATOR_TYPES.VERSIO
 });
 
@@ -112,11 +113,27 @@ const versioluokkaEquals = key => ({
   type: OPERATOR_TYPES.VERSIOLUOKKA
 });
 
+const versioluokkaSome = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, versio, luokat) => {
+      return [
+        ['=', 'versio', parseInt(versio)],
+        ['in', key, R.split(',', luokat)]
+      ];
+    })
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [2018, ''],
+  type: OPERATOR_TYPES.VERSIOKAYTTOTARKOITUSLUOKKA
+});
+
 const eLuokkaOperation = R.curry((operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValues: () => [],
+  defaultValues: () => [''],
   type: OPERATOR_TYPES.ELUOKKA
 }));
 
@@ -124,7 +141,7 @@ const eLuokkaSome = key => ({
   operation: some,
   key,
   argumentNumber: 1,
-  defaultValues: () => [],
+  defaultValues: () => [''],
   type: OPERATOR_TYPES.ELUOKKA
 });
 
@@ -132,7 +149,7 @@ const tilaOperation = R.curry((operation, key) => ({
   operation,
   key,
   argumentNumber: 1,
-  defaultValues: () => [...R.values(EtUtils.tila)],
+  defaultValues: () => [EtUtils.tila.signed],
   type: OPERATOR_TYPES.TILA
 }));
 
@@ -238,7 +255,8 @@ const perustiedot = {
   laatimisvaihe: [...numberComparisons],
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
-  kayttotarkoitus: [versioluokkaEquals],
+  kayttotarkoitus: [versioluokkaSome],
+  alakayttotarkoitus: [versioluokkaEquals],
   yritys: {
     nimi: [...stringComparisons]
   },

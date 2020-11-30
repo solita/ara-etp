@@ -158,7 +158,8 @@
     class="sr-only"
     tabindex="-1"
     {name}
-    value={(inputValueParse || parse)(R.view(lens, model))} />
+    value={(inputValueParse || parse)(R.view(lens, model))}
+    on:change />
   <div
     {id}
     class:disabled
