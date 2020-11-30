@@ -2,23 +2,20 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
+  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+
   import Select from '@Component/Select/Select';
 
-  export let values = [];
+  export let values = [0];
   export let nameprefix;
   export let index = 0;
   export let value = R.head(values);
-
-  const luokat = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-  if (!R.includes(value, luokat)) {
-    value = R.head(luokat);
-  }
 </script>
 
 <Select
   name={`${nameprefix}_value_${index}`}
   allowNone={false}
   model={value}
-  items={luokat}
+  format={R.compose($_, R.concat('energiatodistus.tila.'), R.nth(R.__, EtUtils.tilat))}
+  items={R.values(EtUtils.tila)}
   lens={R.identity} />

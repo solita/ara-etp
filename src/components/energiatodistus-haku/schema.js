@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
+import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
 
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
@@ -8,7 +9,8 @@ export const OPERATOR_TYPES = Object.freeze({
   BOOLEAN: 'BOOLEAN',
   VERSIO: 'VERSIO',
   ELUOKKA: 'ELUOKKA',
-  VERSIOLUOKKA: 'VERSIOLUOKKA'
+  VERSIOLUOKKA: 'VERSIOLUOKKA',
+  TILA: 'TILA'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -118,6 +120,16 @@ const eLuokkaGreaterThanOrEqual = eLuokkaOperation(eq);
 const eLuokkaLessThan = eLuokkaOperation(eq);
 const eLuokkaLessThanOrEqual = eLuokkaOperation(eq);
 
+const tilaOperation = R.curry((operation, key) => ({
+  operation,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [...R.values(EtUtils.tila)],
+  type: OPERATOR_TYPES.TILA
+}));
+
+const tilaEquals = tilaOperation(eq);
+
 const singleDateOperation = R.curry((dateGenerator, operation, key) => ({
   operation: {
     ...operation,
@@ -183,6 +195,8 @@ const eLuokkaComparisons = [
   eLuokkaLessThan,
   eLuokkaLessThanOrEqual
 ];
+
+const tilaComparisons = [tilaEquals];
 
 const perustiedot = {
   nimi: [...stringComparisons],
@@ -475,7 +489,7 @@ export const schema = {
   id: [...numberComparisons],
   'korvattu-energiatodistus-id': [...numberComparisons],
   allekirjoitusaika: [...dateComparisons],
-  'tila-id': [...numberComparisons],
+  'tila-id': [...tilaComparisons],
   perustiedot,
   lahtotiedot,
   tulokset,

@@ -17,6 +17,7 @@
   import VersioInput from './query-inputs/versio-input';
   import VersioluokkaInput from './query-inputs/versioluokka-input';
   import EluokkaInput from './query-inputs/e-luokka-input';
+  import TilaInput from './query-inputs/tila-input';
 
   import { _ } from '@Language/i18n';
 
@@ -41,6 +42,8 @@
         return EluokkaInput;
       case OPERATOR_TYPES.VERSIOLUOKKA:
         return VersioluokkaInput;
+      case OPERATOR_TYPES.TILA:
+        return TilaInput;
       default:
         return TextInput;
     }
@@ -51,23 +54,6 @@
     Maybe.fromNull,
     R.find(R.pathEq(['operation', 'browserCommand'], operation))
   )(operations);
-
-  const isOperatorType = R.curry((op, value) => {
-    switch (op.type) {
-      case OPERATOR_TYPES.NUMBER:
-        return !isNaN(parseInt(value));
-      case OPERATOR_TYPES.BOOLEAN:
-        return typeof value === 'boolean';
-      case OPERATOR_TYPES.DATE:
-        return true;
-      default:
-        return true;
-    }
-  });
-
-  $: if (!isOperatorType(op, R.head(values))) {
-    values = op.defaultValues();
-  }
 </script>
 
 <style type="text/postcss">
@@ -89,7 +75,7 @@
           items={R.map(R.path(['operation', 'browserCommand']), operations)}
           model={R.path(['operation', 'browserCommand'], op)}
           lens={R.identity}
-          format={R.compose( $_, R.concat('energiatodistus.haku.') )}
+          format={R.compose($_, R.concat('energiatodistus.haku.'))}
           allowNone={false}
           name={`${nameprefix}_operation`} />
       </div>
@@ -102,10 +88,12 @@
       value="=" />
   {/if}
   <div class="inputs pl-4 flex justify-between flex-grow flex-row items-end">
-    <svelte:component
-      this={inputForType(op.type)}
-      {values}
-      {nameprefix}
-      {luokittelut} />
+    <div class="w-full">
+      <svelte:component
+        this={inputForType(op.type)}
+        values={R.includes(R.head(values), op.defaultValues()) ? values : op.defaultValues()}
+        {nameprefix}
+        {luokittelut} />
+    </div>
   </div>
 </div>

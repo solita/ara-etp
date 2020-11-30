@@ -174,7 +174,7 @@
     "luo2013": "Luo uusi 2013 energiatodistus",
     "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona",
     "allekirjoitusaika": "Todistuksen laatimispäivä",
-    "tila-id": "Laatimisvaihe",
+    "tila-id": "Energiatodistuksen tila",
     "versio": "Versio",
     "haku": {
       "sarakkeet": {

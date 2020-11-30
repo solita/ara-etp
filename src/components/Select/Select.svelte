@@ -43,26 +43,14 @@
     ? [$_(noneLabel), ...R.map(format, items)]
     : R.map(format, items);
 
-  const previousItem = R.compose(
-    R.filter(R.lte(0)),
-    Maybe.Some,
-    R.dec
-  );
+  const previousItem = R.compose(R.filter(R.lte(0)), Maybe.Some, R.dec);
 
   const nextItem = R.curry((items, active) =>
-    R.compose(
-      Maybe.Some,
-      R.min(R.inc(active)),
-      R.dec,
-      R.length
-    )(items)
+    R.compose(Maybe.Some, R.min(R.inc(active)), R.dec, R.length)(items)
   );
 
   const selectedItem = R.curry((items, active) =>
-    R.compose(
-      Maybe.fromNull,
-      R.nth(R.__, items)
-    )(active)
+    R.compose(Maybe.fromNull, R.nth(R.__, items))(active)
   );
 
   const keyHandlers = {
@@ -185,7 +173,7 @@
     on:blur={_ => {
       focused = false;
     }}>
-    {R.compose( Maybe.orSome($_(noneLabel)), R.map(format) )(selected)}
+    {R.compose(Maybe.orSome($_(noneLabel)), R.map(format))(selected)}
   </div>
   {#if showDropdown}
     <DropdownList
@@ -195,12 +183,11 @@
         if (allowNone && index === 0) {
           model = R.set(lens, Maybe.None(), model);
         } else {
-          model = R.compose( R.set(lens, R.__, model), parse, R.nth(R.__, items), R.when(R.always(allowNone), R.dec) )(index);
+          model = R.compose(R.set(lens, R.__, model), parse, R.nth(R.__, items), R.when(R.always(allowNone), R.dec))(index);
         }
         active = Maybe.None();
         await tick();
-        const event = new Event('change', { bubbles: true });
-        input.dispatchEvent(event);
+        input.dispatchEvent(new Event('change', { bubbles: true }));
       }} />
   {/if}
 </div>
