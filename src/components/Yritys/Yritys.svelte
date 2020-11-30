@@ -4,6 +4,7 @@
   import NewYritys from './NewYritys';
   import ExistingYritys from './ExistingYritys';
   import Yritykset from './Yritykset';
+  import Laatijat from './laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
@@ -11,7 +12,8 @@
   const routes = {
     '/new': NewYritys,
     '/all': Yritykset,
-    '/:id': ExistingYritys
+    '/:id': ExistingYritys,
+    '/:id/laatijat': Laatijat
   };
 </script>
 

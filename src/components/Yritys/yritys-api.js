@@ -1,4 +1,5 @@
 import * as Future from '@Utility/future-utils';
+import * as dfns from 'date-fns';
 import * as geoApi from '@Component/Geo/geo-api';
 import * as laskutusApi from '@Component/Laskutus/laskutus-api';
 import * as R from 'ramda';
@@ -12,7 +13,8 @@ import * as Either from '@Utility/either-utils';
 
 export const url = {
   yritykset: '/api/private/yritykset',
-  yritys: id => `${url.yritykset}/${id}`
+  yritys: id => `${url.yritykset}/${id}`,
+  laatijat: id => `${url.yritykset}/${id}/laatijat`
 }
 
 export const deserialize = R.evolve({
@@ -68,4 +70,22 @@ export const postYritys = R.curry((fetch, yritys) =>
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.yritykset)),
     serialize
   )(yritys)
+);
+
+export const getLaatijatById = R.curry((fetch, id) =>
+  R.compose(
+    R.map(R.map(R.evolve({ modifytime: dfns.parseJSON }))),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    url.laatijat
+  )(id)
+);
+
+export const putAcceptedLaatijaYritys = R.curry((fetch, laatijaId, yritysId) =>
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ =>
+      fetch(url.laatijat(yritysId) + '/' + laatijaId, { method: 'put' })
+    )
+  )
 );

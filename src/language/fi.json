@@ -44,7 +44,11 @@
     "muutoshistoria": "Muutoshistoria",
     "myinfo": "Omat Tiedot",
     "kirjaudu-ulos": "Kirjaudu ulos",
-    "kayttajahallinta": "Käyttäjähallinta"
+    "kayttajahallinta": "Käyttäjähallinta",
+
+    "new-yritys": "Uusi yritys",
+    "yritys": "Yritys",
+    "yritys-laatijat": "Laatijat"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui.",
@@ -82,6 +86,26 @@
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Yrityksen tietojen haku epäonnistui."
+    },
+    "laatijat": {
+      "table": {
+        "laatija": "Laatija",
+        "liitetty": "Liitetty",
+        "hyvaksyja": "Hyväksyjä",
+        "delete": "Poista"
+      },
+      "accept": {
+        "confirm-message": "Oletko varma että haluat liittää laatijan yritykseen.",
+        "confirm-button": "Hyväksy",
+        "link": "Hyväksy liittäminen",
+        "success": "Laatijan hyväksyminen yritykseen onnistui",
+        "error": "Laatijan hyväksyminen yritykseen epäonnistui"
+      },
+      "delete": {
+        "confirm-message": "Oletko varma että haluat poistaa laatijan yrityksestä.",
+        "confirm-button": "Poista",
+        "link": "Poista"
+      }
     }
   },
   "time": {
