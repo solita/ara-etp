@@ -203,7 +203,8 @@
       "id": "Beteckning",
       "true": "Ja",
       "false": "Nej",
-      "laatimisvaihe": "Upprättandes period"
+      "laatimisvaihe": "Upprättandes period",
+      "kaikki": "Kaikki SV?"
     },
     "kaikki": "Allt",
     "korvaavuus": {

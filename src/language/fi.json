@@ -77,7 +77,6 @@
     "laskutuskieli": "Laskutuskieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "verkkolaskuosoite",
-    "verkkolaskuosoite": "Verkkolaskuosoite",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
@@ -204,7 +203,8 @@
       "id": "Tunnus",
       "true": "Kyllä",
       "false": "Ei",
-      "laatimisvaihe": "Laatimisvaihe"
+      "laatimisvaihe": "Laatimisvaihe",
+      "kaikki": "Kaikki"
     },
     "kaikki": "Kaikki",
     "korvaavuus": {
