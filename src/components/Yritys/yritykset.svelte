@@ -10,7 +10,8 @@
   import { push } from '@Component/Router/router';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
-  import H1 from '../H/H1.svelte';
+  import H1 from '@Component/H/H1.svelte';
+  import Address from './address';
 
   let yritykset = [];
   let overlay = true;
@@ -44,6 +45,7 @@
       <tr class="etp-table--tr">
         <th class="etp-table--th">{$_('yritys.nimi')}</th>
         <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
+        <th class="etp-table--th">{$_('yritys.laskutusosoite')}</th>
       </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -56,6 +58,7 @@
               yritys['vastaanottajan-tarkenne'])}
           </td>
           <td class="etp-table--td">{yritys.ytunnus}</td>
+          <td class="etp-table--td"><Address address={yritys}/></td>
         </tr>
       {/each}
       </tbody>

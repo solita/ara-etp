@@ -165,14 +165,25 @@
       "upload-error": "Tiedoston lataaminen epäonnistui."
     },
     "yritykset": {
+      "title": "Yritykset",
+      "empty": "Sinua ei ole liitetty vielä yhteenkään yritykseen.",
+      "table": {
+        "description": "Sinut on liitetty laatijaksi seuraaviin yrityksiin:",
+        "tila": "Tila",
+        "proposal": "Odottaa hyväksymistä",
+        "accepted": "Liitetty {time}",
+        "delete": "Poista",
+        "footer": "Liitettyjen yritysten laskutusosoitteet ovat käytössäsi energiatodistuksen allekirjoitusvaiheessa."
+      },
+      "joining": {
+        "heading": "Liity yrityksen laatijaksi",
+        "step-1": "Hae yritystä. (Jos yritystä ei ole niin voit itse luoda yrityksen palveluun)",
+        "step-2": "Liitä yritys.",
+        "step-3": "Ota yhteyttä yrityksesi muihin laatijoihin. He voivat nyt hyväksyä sinut yrityksen laatijaksi."
+      },
       "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",
       "attach-to-yritys": "Liitä yritykseen",
       "yritys-not-found": "Yritystä ei ole tässä palvelussa",
-      "table": {
-        "tila": "Tila",
-        "proposal": "Odottaa hyväksymistä",
-        "accepted": "Liitetty {time}"
-      },
       "success": {
         "attach": "Liittäminen yritykseen onnistui",
         "detach": "Laatija on poistettu yrityksestä"
