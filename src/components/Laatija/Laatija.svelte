@@ -2,7 +2,7 @@
   import Router, { wrap } from 'svelte-spa-router';
 
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
-  import Yritykset from '@Component/Laatija/Yritykset';
+  import Yritykset from '@Component/Laatija/yritykset';
   import Laatijat from './Laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';

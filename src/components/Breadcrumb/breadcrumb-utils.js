@@ -3,8 +3,7 @@ import * as Maybe from '@Utility/maybe-utils';
 
 import * as Navigation from '@Utility/navigation';
 import * as RUtils from '@Utility/ramda-utils';
-
-import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+import * as Kayttajat from '@Utility/kayttajat';
 
 const createCrumb = R.curry((url, label) => ({ url, label }));
 
@@ -38,12 +37,13 @@ export const yritysCrumb = R.curry((idTranslate, i18n, id) =>
   )(idTranslate)
 );
 
-export const laatijanYrityksetCrumb = R.curry((i18n, user) =>
-  R.compose(
-    createCrumb(R.__, i18n('navigation.yritykset')),
-    u => `#/laatija/${R.prop('id', u)}/yritykset`
-  )(user)
-);
+export const yrityksetCrumb = R.curry((i18n, user) => {
+  const url = Kayttajat.isPaakayttaja(user) ?
+    '#/yritys/all' :
+    `#/laatija/${user.id}/yritykset`;
+
+  return createCrumb(url, i18n('navigation.yritykset'));
+});
 
 export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
   const [id] = locationParts;
@@ -51,7 +51,7 @@ export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
   return R.compose(
     R.unless(
       R.always(R.equals('all', id)),
-      R.prepend(laatijanYrityksetCrumb(i18n, user))
+      R.prepend(yrityksetCrumb(i18n, user))
     ),
     Array.of,
     translateReservedKeywordLabel(i18n, id),
@@ -140,7 +140,7 @@ export const parseKayttaja = R.curry(
       R.unless(
         R.always(R.equals('all', id)),
         R.prepend(
-          R.equals(KayttajaUtils.patevyydentoteajaRole, user.rooli)
+          Kayttajat.isPatevyydentoteaja(user)
             ? createCrumb(`#/laatija/all`, i18n('navigation.laatijat'))
             : createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat'))
         )
@@ -211,7 +211,7 @@ export const roleBasedRootCrumb = R.curry((i18n, user) => {
   return R.compose(
     R.cond([
       [
-        R.equals(KayttajaUtils.laatijaRole),
+        Kayttajat.isLaatija,
         R.always(
           createCrumb(
             '#/energiatodistus/all',
@@ -220,7 +220,7 @@ export const roleBasedRootCrumb = R.curry((i18n, user) => {
         )
       ],
       [
-        R.equals(KayttajaUtils.patevyydentoteajaRole),
+        Kayttajat.isPatevyydentoteaja,
         R.always(
           createCrumb(
             '#/laatija/laatijoidentuonti',
@@ -229,7 +229,7 @@ export const roleBasedRootCrumb = R.curry((i18n, user) => {
         )
       ],
       [
-        R.equals(KayttajaUtils.paakayttajaRole),
+        Kayttajat.isPaakayttaja,
         R.always(
           createCrumb(
             '#/energiatodistus/all',
@@ -237,8 +237,7 @@ export const roleBasedRootCrumb = R.curry((i18n, user) => {
           )
         )
       ]
-    ]),
-    R.prop('rooli')
+    ])
   )(user);
 });
 

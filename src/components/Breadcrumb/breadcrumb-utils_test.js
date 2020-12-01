@@ -80,7 +80,7 @@ describe('BreadcrumbUtils', () => {
       const expected = { url: '#/laatija/1/yritykset', label: 'Yritykset' };
 
       assert.deepEqual(
-        BreadcrumbUtils.laatijanYrityksetCrumb(i18n, user),
+        BreadcrumbUtils.yrityksetCrumb(i18n, user),
         expected
       );
     });

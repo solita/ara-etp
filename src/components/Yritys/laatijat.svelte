@@ -4,9 +4,11 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import * as api from './yritys-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as Tila from './laatija-yritys-tila';
 
   import { _ } from '@Language/i18n';
@@ -22,6 +24,7 @@
 
   let overlay = false;
   let laatijat = [];
+  let whoami = Maybe.None();
 
   const load = R.compose(
     Future.fork(
@@ -32,10 +35,12 @@
             Response.localizationKey(response))));
       },
       response => {
-        laatijat = R.filter(R.complement(Tila.isDeleted), response);
+        whoami = Maybe.Some(response[0]);
+        laatijat = R.filter(R.complement(Tila.isDeleted), response[1]);
         overlay = false;
       }
     ),
+    Future.both(kayttajaApi.whoami),
     api.getLaatijatById(fetch)
   );
 
@@ -79,6 +84,11 @@
       },
       api.putAcceptedLaatijaYritys(fetch, id, params.id)
     );
+
+  $: isInYritys = Maybe.exists(
+    user => R.any(R.propEq('id', user.id),
+      R.filter(Tila.isAccepted, laatijat)),
+    whoami);
 </script>
 
 <style>
@@ -86,7 +96,7 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content">
+  <div slot="content" class="w-full mt-3">
     <H1 text="Yrityksen laatijat" />
 
     <table class="etp-table">
@@ -113,7 +123,8 @@
           {laatija.etunimi} {laatija.sukunimi}
         </td>
         <td class="etp-table--td">
-          {#if Tila.isProposal(laatija)}
+          {#if Tila.isProposal(laatija) &&
+               (isInYritys || Maybe.exists(Kayttajat.isPaakayttaja, whoami))}
             <Confirm let:confirm
                 confirmButtonLabel={$_('yritys.laatijat.accept.confirm-button')}
                 confirmMessage={$_('yritys.laatijat.accept.confirm-message')}>
@@ -124,6 +135,8 @@
                       text={$_('yritys.laatijat.accept.link')}/>
               </div>
             </Confirm>
+          {:else if Tila.isProposal(laatija)}
+            {$_('yritys.laatijat.table.proposal')}
           {:else}
             {Formats.formatTimeInstant(laatija.modifytime)}
           {/if}
