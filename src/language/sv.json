@@ -175,6 +175,7 @@
     "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
     "tila-id": "Energiatodistuksen tila SV?",
     "versio": "Version",
+    "laatija-id": "Upprättare",
     "haku": {
       "sarakkeet": {
         "tila": "Status",

@@ -4,7 +4,6 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as api from './energiatodistus-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as et from './energiatodistus-utils';
   import * as dfns from 'date-fns';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
