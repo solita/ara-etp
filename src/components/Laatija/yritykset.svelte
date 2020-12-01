@@ -2,6 +2,7 @@
   import * as R from 'ramda';
 
   import { _ } from '@Language/i18n';
+  import { push } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
   import Input from '@Component/Input/Input';
@@ -9,12 +10,15 @@
   import Link from '@Component/Link/Link';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Confirm from '@Component/Confirm/Confirm';
+
   import * as api from './laatija-api';
-  import * as yritys from './yritys';
+  import * as Yritys from './yritys';
+  import * as Tila from '@Component/Yritys/laatija-yritys-tila';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Formats from '@Utility/formats';
 
   import { flashMessageStore } from '@/stores';
 
@@ -53,7 +57,7 @@
   const parseYritys = name =>
     R.isEmpty(R.trim(name))
       ? Either.Right(Maybe.None())
-      : yritys
+      : Yritys
           .findYritysByYtunnus(allYritykset, R.slice(0, 9, name))
           .toEither(R.applyTo('laatija.yritykset.yritys-not-found'))
           .map(Maybe.of);
@@ -71,10 +75,12 @@
       R.compose(
         result => {
           allYritykset = result[0];
-          laatijaYritykset = R.map(
-            id => R.find(R.propEq('id', id), allYritykset),
-            result[1]
-          );
+          laatijaYritykset = R.compose(
+            R.map(yritys => R.mergeLeft(
+              yritys,
+              R.find(R.propEq('id', yritys.id), allYritykset))),
+            R.filter(R.complement(Tila.isDeleted))
+          )(result[1]);
           yritysCanonicalNames = R.map(formatYritys, allYritykset);
         },
         R.tap(toggleOverlay(false))
@@ -135,14 +141,29 @@
             <tr class="etp-table--tr">
               <th class="etp-table--th">{$_('yritys.nimi')}</th>
               <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
+              <th class="etp-table--th">{$_('laatija.yritykset.table.tila')}</th>
               <th class="etp-table--th">{$_('table.actions')}</th>
             </tr>
           </thead>
           <tbody class="etp-table--tbody">
             {#each laatijaYritykset as yritys, index}
-              <tr class="etp-table--tr">
-                <td class="etp-table--td">{yritys.nimi}</td>
+              <tr class="etp-table--tr etp-table--tr__link"
+                  on:click={() => push('#/yritys/' + yritys.id)}>
+                <td class="etp-table--td">
+                  {yritys.nimi}
+                  {Maybe.fold('', R.concat('/ ', R.__),
+                    yritys['vastaanottajan-tarkenne'])}
+                </td>
                 <td class="etp-table--td">{yritys.ytunnus}</td>
+                <td class="etp-table--td">
+                  {#if Tila.isProposal(yritys)}
+                    {$_('laatija.yritykset.table.proposal')}
+                  {:else}
+                    {R.replace('{time}',
+                      Formats.formatTimeInstant(yritys.modifytime),
+                      $_('laatija.yritykset.table.accepted'))}
+                  {/if}
+                </td>
                 <td class="etp-table--td">
                   <Confirm
                     let:confirm

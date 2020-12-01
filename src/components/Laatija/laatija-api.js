@@ -5,6 +5,7 @@ import * as yritysApi from '@Component/Yritys/yritys-api';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as kayttajat from '@Utility/kayttajat';
+import * as dfns from "date-fns";
 
 export const url = {
   laatijat: '/api/private/laatijat',
@@ -45,6 +46,7 @@ export const putLaatijaById = R.curry((rooli, fetch, id, laatija) =>
 
 export const getYritykset = R.curry((fetch, id) =>
   R.compose(
+    R.map(R.map(R.evolve({ modifytime: dfns.parseJSON }))),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.yritykset

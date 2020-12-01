@@ -92,7 +92,8 @@
         "laatija": "Laatija",
         "liitetty": "Liitetty",
         "hyvaksyja": "Hyväksyjä",
-        "delete": "Poista"
+        "delete": "Poista",
+        "proposal": "Odottaa hyväksymistä"
       },
       "accept": {
         "confirm-message": "Oletko varma että haluat liittää laatijan yritykseen.",
@@ -164,6 +165,11 @@
       "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",
       "attach-to-yritys": "Liitä yritykseen",
       "yritys-not-found": "Yritystä ei ole tässä palvelussa",
+      "table": {
+        "tila": "Tila",
+        "proposal": "Odottaa hyväksymistä",
+        "accepted": "Liitetty {time}"
+      },
       "success": {
         "attach": "Liittäminen yritykseen onnistui",
         "detach": "Laatija on poistettu yrityksestä"

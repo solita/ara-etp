@@ -9,6 +9,7 @@ import * as schema from './schema';
 import * as laatijaApi from '@Component/Laatija/laatija-api';
 import * as yritysApi from '@Component/Yritys/yritys-api';
 import * as dfns from 'date-fns';
+import * as LaatijaYritysTila from '@Component/Yritys/laatija-yritys-tila';
 
 /*
 This deserializer is for all energiatodistus versions.
@@ -317,11 +318,12 @@ export const replaceable = R.curry((fetch, id) =>
 );
 
 export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
-  Future.chain(
-    R.compose(Future.parallel(10), R.map(yritysApi.getYritysById(fetch))),
-    laatijaApi.getYritykset(fetch, laatijaId)
-  )
-);
+  R.compose(
+    R.chain(Future.parallel(10)),
+    R.map(R.map(yritysApi.getYritysById(fetch))),
+    R.map(R.map(R.prop('id'))),
+    R.map(R.filter(LaatijaYritysTila.isAccepted)),
+    laatijaApi.getYritykset(fetch))(laatijaId));
 
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
