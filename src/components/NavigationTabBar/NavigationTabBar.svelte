@@ -1,4 +1,5 @@
 <script>
+  import * as R from 'ramda';
   import NavigationTab from '@Component/NavigationTab/NavigationTab';
   import * as Navigation from '@Utility/navigation';
 
@@ -20,6 +21,7 @@
   }
 </style>
 
+{#if !R.isEmpty(links)}
 <div>
   {#each links as link}
     <NavigationTab
@@ -29,3 +31,4 @@
       disabled={link.disabled} />
   {/each}
 </div>
+{/if}
