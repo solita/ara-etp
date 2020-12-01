@@ -104,12 +104,12 @@ const versioluokkaEquals = key => ({
     ...eq,
     format: R.curry((command, key, versio, luokka) => [
       ['=', 'versio', parseInt(versio)],
-      [command, key, luokka]
+      [command, 'perustiedot.kayttotarkoitus', luokka]
     ])
   },
   key,
   argumentNumber: 1,
-  defaultValues: () => [2018],
+  defaultValues: () => [2018, ''],
   type: OPERATOR_TYPES.VERSIOLUOKKA
 });
 
@@ -256,7 +256,7 @@ const perustiedot = {
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
   kayttotarkoitus: [versioluokkaSome],
-  alakayttotarkoitus: [versioluokkaEquals],
+  alakayttotarkoitusluokka: [versioluokkaEquals],
   yritys: {
     nimi: [...stringComparisons]
   },

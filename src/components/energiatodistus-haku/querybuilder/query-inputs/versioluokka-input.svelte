@@ -9,7 +9,6 @@
   import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
 
-  export let nameprefix;
   export let luokittelut;
   export let key = 'alakayttotarkoitusluokat';
   export let versio;
@@ -35,20 +34,24 @@
   }
 </script>
 
-<div class="flex flex-row">
-<div class="w-1/4">
-  <Select allowNone={false} bind:model={versio} items={[2018, 2013]} lens={R.identity} />
-</div>
-
-{#if currentluokittelut}
-  <div class="flex-grow ml-2">
+<div class="flex flex-row items-end">
+  <div class="w-1/4">
     <Select
       allowNone={false}
-      model={luokittelu || R.compose(Maybe.orSome(1), R.map(R.prop('id')), R.head)(currentluokittelut)}
-      items={R.compose(Maybe.orSome([]), R.map(R.pluck('id')))(currentluokittelut)}
-      format={EtUtils.selectFormat(labelLocale, Maybe.orSome([], currentluokittelut))}
-      lens={R.identity}
-      on:change />
+      bind:model={versio}
+      items={[2018, 2013]}
+      lens={R.identity} />
   </div>
-{/if}
+
+  {#if currentluokittelut}
+    <div class="flex-grow ml-2">
+      <Select
+        allowNone={false}
+        model={luokittelu || R.compose(Maybe.orSome(1), R.map(R.prop('id')), R.head)(currentluokittelut)}
+        items={R.compose(Maybe.orSome([]), R.map(R.pluck('id')))(currentluokittelut)}
+        format={EtUtils.selectFormat(labelLocale, Maybe.orSome([], currentluokittelut))}
+        lens={R.identity}
+        on:change />
+    </div>
+  {/if}
 </div>

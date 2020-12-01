@@ -12,6 +12,7 @@
   import VersioInput from './query-inputs/versio-input';
   import VersioluokkaInput from './query-inputs/versioluokka-input';
   import KayttotarkoitusInput from './query-inputs/kayttotarkoitus-input';
+  import AlakayttotarkoitusInput from './query-inputs/alakayttotarkoitus-input';
   import EluokkaInput from './query-inputs/e-luokka-input';
   import TilaInput from './query-inputs/tila-input';
 
@@ -37,7 +38,7 @@
       case OPERATOR_TYPES.ELUOKKA:
         return EluokkaInput;
       case OPERATOR_TYPES.VERSIOLUOKKA:
-        return VersioluokkaInput;
+        return AlakayttotarkoitusInput;
       case OPERATOR_TYPES.TILA:
         return TilaInput;
       case OPERATOR_TYPES.VERSIOKAYTTOTARKOITUSLUOKKA:
