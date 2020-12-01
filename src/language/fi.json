@@ -109,6 +109,9 @@
       }
     }
   },
+  "yritykset": {
+    "title": "Kaikki yritykset"
+  },
   "time": {
     "klo": "klo"
   },

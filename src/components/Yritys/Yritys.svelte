@@ -3,7 +3,7 @@
 
   import NewYritys from './NewYritys';
   import ExistingYritys from './ExistingYritys';
-  import Yritykset from './Yritykset';
+  import Yritykset from './yritykset';
   import Laatijat from './laatijat';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
