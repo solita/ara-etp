@@ -8,8 +8,6 @@
   export let nameprefix;
   export let laatijat;
 
-  console.log(nameprefix);
-
   let value = R.defaultTo('', R.head(values));
 
   const formatLaatija = laatija =>
@@ -43,8 +41,7 @@
 <Autocomplete
   bind:completedValue
   items={R.map(formatLaatija, laatijat)}
-  size={10000}
-  on:change={evt => console.log(evt.target.value)} />
+  size={10000} />
 <input
   bind:this={input}
   tabindex="-1"
