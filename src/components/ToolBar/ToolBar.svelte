@@ -129,6 +129,27 @@
   .languageselect:active {
     @apply bg-primarydark;
   }
+
+  .toolbar {
+    max-height: 90vh;
+    overflow: auto;
+  }
+
+  .toolbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .toolbar::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  .toolbar::-webkit-scrollbar-thumb {
+    @apply bg-disabled;
+  }
+
+  .toolbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark;
+  }
 </style>
 
 <!-- purgecss: bg-primary bg-disabled -->
@@ -137,7 +158,7 @@
   <Signing {energiatodistus} reload={cancel} />
 {/if}
 
-<div class="flex flex-col text-secondary border-1 border-disabled">
+<div class="toolbar flex flex-col text-secondary border-1 border-disabled">
   <button on:click={toggleLanguageSelection}>
     {#if bilingual}
       <div class="flex flex-row w-full">
