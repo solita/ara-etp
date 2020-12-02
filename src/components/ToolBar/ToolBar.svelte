@@ -166,7 +166,7 @@
           <div
             class="languageselect"
             class:bg-primary={R.equals(selectedLanguage, language)}
-            class:bg-secondary={!R.equals(selectedLanguage, language)}>
+            class:bg-disabled={!R.equals(selectedLanguage, language)}>
             {language}
           </div>
         {/each}
