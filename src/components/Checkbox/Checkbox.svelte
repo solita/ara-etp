@@ -34,10 +34,10 @@
   }
 </style>
 
-<!-- purgecss: inline-block hidden -->
+<!-- purgecss: inline-block hidden disabled font-bold -->
 
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
-  <label class:disabled>
+  <label class:disabled class:font-bold={focused}>
     <span
       class="material-icons checked text-primary align-bottom"
       class:inline-block={checked}
