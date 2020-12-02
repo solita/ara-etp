@@ -1,14 +1,9 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import { OPERATOR_TYPES } from '@Component/energiatodistus-haku/schema';
-  import * as dfns from 'date-fns';
 
   import Select from '@Component/Select/Select';
-  import SimpleInput from '@Component/Input/SimpleInput';
-  import DatePicker from '@Component/Datepicker/Datepicker';
-  import Radio from '@Component/Radio/Radio';
 
   import BooleanInput from './query-inputs/boolean-input';
   import TextInput from './query-inputs/text-input';
@@ -16,6 +11,8 @@
   import NumberInput from './query-inputs/number-input';
   import VersioInput from './query-inputs/versio-input';
   import VersioluokkaInput from './query-inputs/versioluokka-input';
+  import KayttotarkoitusInput from './query-inputs/kayttotarkoitus-input';
+  import AlakayttotarkoitusInput from './query-inputs/alakayttotarkoitus-input';
   import EluokkaInput from './query-inputs/e-luokka-input';
   import TilaInput from './query-inputs/tila-input';
 
@@ -41,9 +38,11 @@
       case OPERATOR_TYPES.ELUOKKA:
         return EluokkaInput;
       case OPERATOR_TYPES.VERSIOLUOKKA:
-        return VersioluokkaInput;
+        return AlakayttotarkoitusInput;
       case OPERATOR_TYPES.TILA:
         return TilaInput;
+      case OPERATOR_TYPES.VERSIOKAYTTOTARKOITUSLUOKKA:
+        return KayttotarkoitusInput;
       default:
         return TextInput;
     }

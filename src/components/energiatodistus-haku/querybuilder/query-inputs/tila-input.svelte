@@ -6,7 +6,7 @@
 
   import Select from '@Component/Select/Select';
 
-  export let values = [0];
+  export let values = [...R.values(EtUtils.tila)];
   export let nameprefix;
   export let index = 0;
   export let value = R.head(values);

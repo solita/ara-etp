@@ -7,7 +7,7 @@ import { OPERATOR_TYPES } from './schema';
 
 export const defaultQueryItem = R.always({
   conjunction: 'and',
-  block: ['', '', '']
+  block: ['', '']
 });
 
 export const blockToQueryParameter = R.curry(

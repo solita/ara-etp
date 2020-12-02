@@ -1,18 +1,13 @@
 <script>
   import { tick } from 'svelte';
-  import qs from 'qs';
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import Radio from '@Component/Radio/Radio';
-  import Select from '@Component/Select/Select';
   import { _ } from '@Language/i18n';
 
   import * as Inputs from '@Component/Energiatodistus/inputs';
-  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
 
   import QueryInput from './query-input';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
-  import SimpleInput from '@Component/Input/SimpleInput';
 
   export let operator;
   export let key;
@@ -57,6 +52,10 @@
     R.find(R.pathEq(['operation', 'browserCommand'], operator))
   )(operations);
 
+  $: if (op && values.length === 0) {
+    values = op.defaultValues();
+  }
+
   $: if (op && previousType !== undefined && previousType !== op.type) {
     values = op.defaultValues();
     previousType = op.type;
@@ -77,7 +76,7 @@
       class="sr-only"
       name={`${index}_key`} />
   </div>
-  {#if Maybe.isSome(maybeKey)}
+  {#if Maybe.isSome(maybeKey) && values.length > 0}
     <div class="w-1/2">
       <QueryInput
         nameprefix={`${index}`}
