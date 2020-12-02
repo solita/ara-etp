@@ -594,6 +594,7 @@ export const laatijaSchema = R.compose(
     ...localizedField('perustiedot.keskeiset-suositukset'),
     ...localizedField('lisamerkintoja'),
     'lahtotiedot.rakennusvaippa.ilmanvuotoluku',
+    'laatija-id',
     ''
   ]),
   flattenSchema(''),
