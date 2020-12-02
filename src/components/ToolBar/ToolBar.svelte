@@ -172,7 +172,7 @@
         {/each}
       </div>
     {:else}
-      <div class="w-full text-light description bg-primary">
+      <div class="w-full font-bold py-2 uppercase text-light bg-primary">
         {energiatodistusKieli.map(et.kielisyysKey).some()}
       </div>
     {/if}
