@@ -15,6 +15,7 @@
   import AlakayttotarkoitusInput from './query-inputs/alakayttotarkoitus-input';
   import EluokkaInput from './query-inputs/e-luokka-input';
   import TilaInput from './query-inputs/tila-input';
+  import LaatijaInput from './query-inputs/laatija-input';
 
   import { _ } from '@Language/i18n';
 
@@ -24,6 +25,7 @@
   export let operation;
   export let values;
   export let luokittelut;
+  export let laatijat;
 
   const inputForType = type => {
     switch (type) {
@@ -43,6 +45,8 @@
         return TilaInput;
       case OPERATOR_TYPES.VERSIOKAYTTOTARKOITUSLUOKKA:
         return KayttotarkoitusInput;
+      case OPERATOR_TYPES.LAATIJA:
+        return LaatijaInput;
       default:
         return TextInput;
     }
@@ -92,7 +96,8 @@
         this={inputForType(op.type)}
         {values}
         {nameprefix}
-        {luokittelut} />
+        {luokittelut}
+        {laatijat} />
     </div>
   </div>
 </div>

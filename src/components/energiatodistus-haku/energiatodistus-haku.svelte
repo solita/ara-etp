@@ -15,6 +15,7 @@
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
   import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
+  import * as laatijaApi from '@Component/Laatija/laatija-api';
 
   import * as EtHakuUtils from './energiatodistus-haku-utils';
   import SimpleInput from '@Component/Input/SimpleInput';
@@ -32,6 +33,7 @@
   let overlay = true;
   let luokittelut = Maybe.None();
   let schema = Maybe.None();
+  let laatijat = Maybe.None();
 
   R.compose(
     Future.fork(
@@ -50,6 +52,8 @@
           2013: { ...response[1], ...response[2] },
           2018: { ...response[1], ...response[3] }
         });
+
+        laatijat = Maybe.Some(response[4]);
       }
     ),
     Future.parallel(5),
@@ -58,7 +62,8 @@
     kayttajaApi.whoami,
     api.yhteisetLuokittelut,
     api.tarkoitusluokat(2013),
-    api.tarkoitusluokat(2018)
+    api.tarkoitusluokat(2018),
+    laatijaApi.getLaatijat(fetch)
   ]);
 
   const navigate = search => {
@@ -97,7 +102,7 @@
 </style>
 
 <!-- purgecss: bg-beige -->
-{#if Maybe.isSome(schema) && Maybe.isSome(luokittelut)}
+{#if Maybe.isSome(schema) && Maybe.isSome(luokittelut) && Maybe.isSome(laatijat)}
   <div class="flex w-full">
     <div class="w-7/12 flex flex-col justify-end">
       <SimpleInput
@@ -173,7 +178,8 @@
           {values}
           {index}
           schema={Maybe.get(schema)}
-          luokittelut={Maybe.get(luokittelut)} />
+          luokittelut={Maybe.get(luokittelut)}
+          laatijat={Maybe.get(laatijat)} />
         <span
           class="text-secondary font-icon text-2xl cursor-pointer ml-4
           hover:text-error"
@@ -207,6 +213,7 @@
             queryItems = Either.right(newItems);
             await tick();
             form.dispatchEvent(new Event('change'));
+            R.last([...form.querySelectorAll('input:not(.sr-only)')]).focus();
           } else {
             flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin lisäyksessä tapahtui virhe.');
           }

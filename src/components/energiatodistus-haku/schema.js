@@ -11,7 +11,8 @@ export const OPERATOR_TYPES = Object.freeze({
   ELUOKKA: 'ELUOKKA',
   VERSIOLUOKKA: 'VERSIOLUOKKA',
   TILA: 'TILA',
-  VERSIOKAYTTOTARKOITUSLUOKKA: 'VERSIOKAYTTOTARKOITUSLUOKKA'
+  VERSIOKAYTTOTARKOITUSLUOKKA: 'VERSIOKAYTTOTARKOITUSLUOKKA',
+  LAATIJA: 'LAATIJA'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -211,6 +212,14 @@ const dateEquals = key => ({
   argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.DATE
+});
+
+const laatijaEquals = key => ({
+  operation: eq,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.LAATIJA
 });
 
 const dateGreaterThan = singleDateOperation(gt);
@@ -545,7 +554,7 @@ export const schema = {
   'lisamerkintoja-fi': [stringContains],
   'lisamerkintoja-sv': [stringContains],
   laskuriviviite: [...stringComparisons],
-  'laatija-fullname': [...stringComparisons]
+  'laatija-id': [laatijaEquals]
 };
 
 export const isOperationArray = R.compose(R.equals('Array'), R.type);

@@ -70,6 +70,7 @@
 
   onMount(_ => {
     input = node.getElementsByTagName('input')[0];
+
     input.addEventListener('input', inputHandler);
     input.addEventListener('focus', inputHandler);
   });
@@ -81,12 +82,7 @@
 
   $: filteredItems = R.compose(
     R.take(size),
-    R.filter(
-      R.compose(
-        R.includes(R.toLower(rawValue)),
-        R.toLower
-      )
-    )
+    R.filter(R.compose(R.includes(R.toLower(rawValue)), R.toLower))
   )(items);
 </script>
 
@@ -105,7 +101,6 @@
   }} />
 
 <div bind:this={node} on:keydown={handleKeydown}>
-
   <slot>
     <SimpleInput bind:rawValue={completedValue} rawValueAsViewValue={true} />
   </slot>

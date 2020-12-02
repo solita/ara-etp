@@ -219,6 +219,7 @@
     "allekirjoitusaika": "Todistuksen laatimispäivä",
     "tila-id": "Energiatodistuksen tila",
     "versio": "Versio",
+    "laatija-id": "Laatija",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
