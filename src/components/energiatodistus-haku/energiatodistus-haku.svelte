@@ -213,6 +213,7 @@
             queryItems = Either.right(newItems);
             await tick();
             form.dispatchEvent(new Event('change'));
+            R.last([...form.querySelectorAll('input:not(.sr-only)')]).focus();
           } else {
             flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin lisäyksessä tapahtui virhe.');
           }

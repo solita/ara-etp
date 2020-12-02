@@ -14,8 +14,6 @@
   export let completedValue = '';
   export let size = 5;
 
-  export let focusOnMount = false;
-
   let active = Maybe.None();
   let input;
   let node;
@@ -72,10 +70,6 @@
 
   onMount(_ => {
     input = node.getElementsByTagName('input')[0];
-
-    if (focusOnMount) {
-      input.focus();
-    }
 
     input.addEventListener('input', inputHandler);
     input.addEventListener('focus', inputHandler);
