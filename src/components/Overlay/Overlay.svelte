@@ -10,15 +10,11 @@
   }
 
   .overlayed-content {
-    @apply flex-grow;
+    @apply w-full;
   }
 
   .overlay {
     @apply absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0 flex justify-center items-center;
-  }
-
-  .overlayed-content > * {
-    @apply flex-grow;
   }
 </style>
 

@@ -176,6 +176,7 @@
     "tila-id": "Energiatodistuksen tila SV?",
     "versio": "Version",
     "laatija-id": "Upprättare",
+    "kommentti": "Pääkäyttäjän kommentti SV?",
     "haku": {
       "sarakkeet": {
         "tila": "Status",

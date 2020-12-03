@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
 
-  import { replace, push } from 'svelte-spa-router';
+  import { replace } from 'svelte-spa-router';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as et from '@Component/Energiatodistus/energiatodistus-utils';
@@ -16,6 +16,7 @@
   export let energiatodistus;
   export let inputLanguage = 'fi';
   export let eTehokkuus = Maybe.None();
+  export let dirty;
 
   const version = energiatodistus.versio;
   const id = Maybe.fromNull(energiatodistus.id);
@@ -31,9 +32,12 @@
     R.map(R.equals(et.kielisyys.bilingual))
   )(energiatodistusKieli);
 
-  $: inputLanguage = bilingual ?
-      selectedLanguage :
-      Maybe.orSome(selectedLanguage, R.map(et.kielisyysKey, energiatodistusKieli));
+  $: inputLanguage = bilingual
+    ? selectedLanguage
+    : Maybe.orSome(
+        selectedLanguage,
+        R.map(et.kielisyysKey, energiatodistusKieli)
+      );
 
   function toggleLanguageSelection() {
     if (bilingual) {
@@ -41,10 +45,7 @@
     }
   }
 
-  $: pdfUrl = Maybe.map(
-    i => api.url.pdf(version, i, inputLanguage),
-    id
-  );
+  $: pdfUrl = Maybe.map(i => api.url.pdf(version, i, inputLanguage), id);
 
   const openSigning = _ => {
     signingActive = true;
@@ -76,50 +77,107 @@
 
   const openUrl = url => {
     window.open(url, '_blank');
-  }
+  };
 
   const noop = () => {};
 
-  $: persistentDraft = id.isSome() && R.propEq('tila-id', et.tila.draft, energiatodistus)
+  $: persistentDraft =
+    id.isSome() && R.propEq('tila-id', et.tila.draft, energiatodistus);
 </script>
 
 <style type="text/postcss">
   button {
-    @apply w-32 border-2 border-secondary flex flex-col justify-center items-center;
+    @apply w-32 flex flex-col justify-center items-center;
   }
 
   button:not(:first-child) {
     @apply h-24;
   }
 
-  .description {
-    @apply font-bold;
+  button:hover {
+    @apply bg-primary text-light;
   }
 
-  button:not(:last-child) {
-    @apply border-b-0;
+  button:hover * {
+    @apply border-light;
+  }
+
+  button:active {
+    @apply bg-primarydark;
+  }
+
+  button:disabled {
+    @apply text-disabled cursor-not-allowed;
+  }
+
+  button:disabled:hover {
+    @apply bg-light;
+  }
+
+  .description {
+    @apply font-bold uppercase text-sm;
+  }
+
+  .languageselect {
+    @apply font-bold uppercase text-light w-1/2 py-2;
+  }
+
+  .languageselect:hover {
+    @apply bg-primary;
+  }
+
+  .languageselect:active {
+    @apply bg-primarydark;
+  }
+
+  .toolbar {
+    max-height: 90vh;
+    overflow: auto;
+  }
+
+  .toolbar::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  .toolbar::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  .toolbar::-webkit-scrollbar-thumb {
+    @apply bg-disabled;
+  }
+
+  .toolbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark;
   }
 </style>
 
-{#if signingActive} <Signing {energiatodistus} reload={cancel} /> {/if}
+<!-- purgecss: bg-primary bg-disabled -->
 
-<div class="flex flex-col text-secondary">
+{#if signingActive}
+  <Signing {energiatodistus} reload={cancel} />
+{/if}
+
+<div class="toolbar flex flex-col text-secondary border-1 border-disabled">
   <button on:click={toggleLanguageSelection}>
-  {#if bilingual}
-    <div class="flex flex-row w-full">
-      {#each ['fi', 'sv'] as language}
-        <div class="w-1/2 text-light description"
-             class:bg-primary={R.equals(selectedLanguage, language)}
-             class:bg-secondary={!R.equals(selectedLanguage, language)}>
-          {language}
-        </div>
-      {/each}
-    </div>
-  {:else}
-    <div class="w-full text-light description bg-primary">{energiatodistusKieli.map(et.kielisyysKey).some()}</div>
-  {/if}
+    {#if bilingual}
+      <div class="flex flex-row w-full">
+        {#each ['fi', 'sv'] as language}
+          <div
+            class="languageselect"
+            class:bg-primary={R.equals(selectedLanguage, language)}
+            class:bg-disabled={!R.equals(selectedLanguage, language)}>
+            {language}
+          </div>
+        {/each}
+      </div>
+    {:else}
+      <div class="w-full font-bold py-2 uppercase text-light bg-primary">
+        {energiatodistusKieli.map(et.kielisyysKey).some()}
+      </div>
+    {/if}
   </button>
-  <button on:click={save(noop)}>
+  <button disabled={!dirty} on:click={save(noop)}>
     <span class="description">
       {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
     </span>
@@ -130,12 +188,12 @@
     <span class="text-2xl font-icon">undo</span>
   </button>
   {#if persistentDraft}
-  <button on:click={saveComplete(openSigning)}>
-    <div class="description">Allekirjoita</div>
-    <span class="text-2xl font-icon border-b-3 border-secondary">
-      create
-    </span>
-  </button>
+    <button on:click={saveComplete(openSigning)}>
+      <div class="description">Allekirjoita</div>
+      <span class="text-2xl font-icon border-b-3 border-secondary">
+        create
+      </span>
+    </button>
   {/if}
   {#if id.isSome()}
     <button>
@@ -163,7 +221,8 @@
   {#each eTehokkuus.toArray() as e}
     <div class="border-2 border-dark py-2 bg-secondary">
       <div class="font-bold text-center text-sm text-light pb-1">
-        {$_('energiatodistus.tulokset.e-luku')} {e['e-luku']}
+        {$_('energiatodistus.tulokset.e-luku')}
+        {e['e-luku']}
       </div>
       <div class="font-bold text-center text-sm text-light pt-1">
         {$_('energiatodistus.tulokset.e-luokka')}

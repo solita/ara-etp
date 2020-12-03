@@ -37,11 +37,15 @@
   export let submit;
   export let title = '';
 
+  let dirty = false;
+
   let schema = R.reduce(
     schemas.redefineNumericValidation,
-    R.assocPath(['perustiedot', 'postinumero'],
+    R.assocPath(
+      ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot),
-      schemas['v' + version]),
+      schemas['v' + version]
+    ),
     validation.numeric
   );
 
@@ -67,7 +71,7 @@
         R.join(', '),
         R.map(Inputs.propertyLabel($_)),
         R.map(R.nth(0))
-      ) (invalidProperties);
+      )(invalidProperties);
 
       flashMessageStore.add(
         'Energiatodistus',
@@ -77,12 +81,15 @@
 
       Inputs.scrollIntoView(document, invalidProperties[0][0]);
     }
-  }
+  };
 
-  const showKorvausErrorMessage = R.forEach(R.compose(
-    flashMessageStore.add('Energiatodistus', 'error'),
-    $_,
-    R.concat('energiatodistus.korvaavuus.validation.')));
+  const showKorvausErrorMessage = R.forEach(
+    R.compose(
+      flashMessageStore.add('Energiatodistus', 'error'),
+      $_,
+      R.concat('energiatodistus.korvaavuus.validation.')
+    )
+  );
 
   const validateAndSubmit = onSuccessfulSave => () => {
     const invalid = Validations.invalidProperties(schema, energiatodistus);
@@ -103,10 +110,14 @@
   const language = R.compose(
     R.map(R.slice(-2, Infinity)),
     R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
-    Maybe.Some);
+    Maybe.Some
+  );
 
-  const validateCompleteAndSubmit= onSuccessfulSave => () => {
-    const missing = Validations.missingProperties(validation.required, energiatodistus);
+  const validateCompleteAndSubmit = onSuccessfulSave => () => {
+    const missing = Validations.missingProperties(
+      validation.required,
+      energiatodistus
+    );
     if (R.isEmpty(missing)) {
       validateAndSubmit(onSuccessfulSave)();
     } else {
@@ -118,11 +129,12 @@
       flashMessageStore.add(
         'Energiatodistus',
         'error',
-        $_('energiatodistus.messages.validation-required-error') + missingTxt);
+        $_('energiatodistus.messages.validation-required-error') + missingTxt
+      );
 
       Inputs.scrollIntoView(document, missing[0]);
     }
-  }
+  };
 
   const noop = () => {};
 
@@ -134,7 +146,7 @@
 
 <style type="text/postcss">
   :global(.et-table) {
-    @apply border-b-1 border-disabled pb-8;
+    @apply border-b-1 border-disabled pb-8 table-fixed w-full overflow-x-auto;
   }
 
   :global(.et-table__noborder) {
@@ -194,30 +206,34 @@
 </style>
 
 {#if !R.isNil(ETForm)}
-
   {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
-    <Signing {energiatodistus} reload={cancel}/>
+    <Signing {energiatodistus} reload={cancel} />
   {/if}
 
   <div class="w-full relative flex">
     <div class="w-5/6">
-      <form on:submit|preventDefault={validateAndSubmit(noop)}>
+      <form
+        on:submit|preventDefault={validateAndSubmit(noop)}
+        on:change={() => (dirty = true)}>
         <div class="w-full mt-3">
           <H1 text={title} />
 
           <PaakayttajanKommentti
-              {whoami}
-              {schema}
-              path={['kommentti']}
-              bind:model={energiatodistus} />
+            {whoami}
+            {schema}
+            path={['kommentti']}
+            bind:model={energiatodistus} />
 
           <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
-          <EnergiatodistusKorvattu bind:energiatodistus {whoami}
-                                   postinumerot={luokittelut.postinumerot}
-                                   bind:error={korvausError}/>
-          <EnergiatodistusKorvaava postinumerot={luokittelut.postinumerot}
-              korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
-          <HR/>
+          <EnergiatodistusKorvattu
+            bind:energiatodistus
+            {whoami}
+            postinumerot={luokittelut.postinumerot}
+            bind:error={korvausError} />
+          <EnergiatodistusKorvaava
+            postinumerot={luokittelut.postinumerot}
+            korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
+          <HR />
 
           <Laskutus {schema} {whoami} bind:energiatodistus />
           <ETForm
@@ -227,7 +243,7 @@
             {disabled}
             {schema}
             {luokittelut}
-            {validation}/>
+            {validation} />
         </div>
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
@@ -250,6 +266,7 @@
         {cancel}
         {energiatodistus}
         {eTehokkuus}
+        {dirty}
         bind:inputLanguage />
     </div>
   </div>

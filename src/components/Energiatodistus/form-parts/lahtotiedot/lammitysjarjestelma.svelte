@@ -34,10 +34,7 @@
     R.lensProp('lammitysmuoto-2')
   );
 
-  const lammonjakoLens = R.compose(
-    lammitysLens,
-    R.lensProp('lammonjako')
-  );
+  const lammonjakoLens = R.compose(lammitysLens, R.lensProp('lammonjako'));
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
@@ -50,7 +47,7 @@
     parse={Maybe.Some}
     allowNone={false}
     bind:model={energiatodistus}
-    lens={R.compose( lammitysmuoto1Lens, R.lensProp('id') )}
+    lens={R.compose(lammitysmuoto1Lens, R.lensProp('id'))}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-1.id')}
     {disabled} />
 </div>
@@ -75,7 +72,7 @@
     parse={Maybe.Some}
     allowNone={true}
     bind:model={energiatodistus}
-    lens={R.compose( lammitysmuoto2Lens, R.lensProp('id') )}
+    lens={R.compose(lammitysmuoto2Lens, R.lensProp('id'))}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammitysmuoto-2.id')}
     {disabled} />
 </div>
@@ -100,7 +97,7 @@
     parse={Maybe.Some}
     allowNone={true}
     bind:model={energiatodistus}
-    lens={R.compose( lammonjakoLens, R.lensProp('id') )}
+    lens={R.compose(lammonjakoLens, R.lensProp('id'))}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')}
     {disabled} />
 </div>
