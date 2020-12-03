@@ -1037,7 +1037,11 @@
         },
         "delete-liite": {
           "success": "Energiatodistuksen liite poistettu.",
-          "delete": "Energiatodistuksen liitteen poistamisessa tapahtui virhe."
+          "error": "Energiatodistuksen liitteen poistamisessa tapahtui virhe."
+        },
+        "valvonta": {
+          "success": "Valvonnan tila päivitetty.",
+          "error": "Valvonnan tilan päivityksessä tapahtui virhe."
         },
         "load-error": "Energiatodistuksen liitteiden haku epäonnistui."
       }

@@ -4,7 +4,7 @@
   import ExistingEnergiatodistus from './ExistingEnergiatodistus';
   import NewEnergiatodistus from './NewEnergiatodistus';
   import Energiatodistukset from './energiatodistukset';
-  import Liitteet from './Liitteet';
+  import Liitteet from './liitteet';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
