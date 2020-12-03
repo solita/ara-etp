@@ -56,15 +56,19 @@
         laatijat = Maybe.Some(response[4]);
       }
     ),
-    Future.parallel(5),
+    R.chain(whoami =>
+      Future.parallel(5, [
+        Future.resolve(whoami),
+        api.yhteisetLuokittelut,
+        api.tarkoitusluokat(2013),
+        api.tarkoitusluokat(2018),
+        Kayttajat.isPaakayttaja(whoami)
+          ? laatijaApi.getLaatijat(fetch)
+          : Future.resolve([])
+      ])
+    ),
     R.tap(() => (overlay = true))
-  )([
-    kayttajaApi.whoami,
-    api.yhteisetLuokittelut,
-    api.tarkoitusluokat(2013),
-    api.tarkoitusluokat(2018),
-    laatijaApi.getLaatijat(fetch)
-  ]);
+  )(kayttajaApi.whoami);
 
   const navigate = search => {
     R.compose(
