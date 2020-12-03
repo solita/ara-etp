@@ -146,7 +146,7 @@
 
 <style type="text/postcss">
   :global(.et-table) {
-    @apply border-b-1 border-disabled pb-8;
+    @apply border-b-1 border-disabled pb-8 table-fixed w-full overflow-x-auto;
   }
 
   :global(.et-table__noborder) {
