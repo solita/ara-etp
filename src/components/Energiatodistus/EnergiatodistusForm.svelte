@@ -95,7 +95,11 @@
     const invalid = Validations.invalidProperties(schema, energiatodistus);
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       flashMessageStore.flush();
-      submit(energiatodistus, onSuccessfulSave);
+      submit(energiatodistus, (...args) => {
+        confirmNavigation = false;
+        history.back();
+        onSuccessfulSave(...args);
+      });
       if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
         localstorage.setDefaultLaskutettavaYritysId(
           energiatodistus['laskutettava-yritys-id']
@@ -119,6 +123,9 @@
       energiatodistus
     );
     if (R.isEmpty(missing)) {
+      if (!currentStatePushedToHistory) {
+        history.pushState(null, null, null);
+      }
       validateAndSubmit(onSuccessfulSave)();
     } else {
       const missingTxt = R.compose(
@@ -138,8 +145,16 @@
 
   const noop = () => {};
 
+  let confirmNavigation = false;
+
+  let currentStatePushedToHistory = false;
+
   const cancel = event => {
     event.preventDefault();
+    confirmNavigation = false;
+    if (currentStatePushedToHistory) {
+      history.back();
+    }
     window.location.reload();
   };
 </script>
@@ -205,6 +220,30 @@
   }
 </style>
 
+<svelte:window
+  on:hashchange|capture={evt => console.log('hashchange', evt)}
+  on:popstate={_ => {
+    if (confirmNavigation) {
+      const confirm = window.confirm('U wanna?', 'Yes', 'No');
+      if (confirm) {
+        confirmNavigation = false;
+        history.back();
+      } else {
+        history.pushState(null, null, null);
+      }
+    }
+  }}
+  on:beforeunload={evt => {
+    if (confirmNavigation) {
+      if (currentStatePushedToHistory) {
+        confirmNavigation = false;
+        history.back();
+      }
+      evt.preventDefault();
+      evt.returnValue = 'U wanna?';
+    }
+  }} />
+
 {#if !R.isNil(ETForm)}
   {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
     <Signing {energiatodistus} reload={cancel} />
@@ -214,7 +253,15 @@
     <div class="w-5/6">
       <form
         on:submit|preventDefault={validateAndSubmit(noop)}
-        on:change={() => (dirty = true)}>
+        on:change={_ => {
+          dirty = true;
+          if (!currentStatePushedToHistory) {
+            history.pushState(null, null, null);
+            currentStatePushedToHistory = true;
+          }
+
+          confirmNavigation = true;
+        }}>
         <div class="w-full mt-3">
           <H1 text={title} />
 
