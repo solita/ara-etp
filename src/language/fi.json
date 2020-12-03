@@ -36,6 +36,7 @@
     "tyojono": "Työjono",
     "kaytonvalvonta": "Käytönvalvonta",
     "halytykset": "Hälytykset",
+    "uusi-kayttaja": "Uusi käyttäjä",
     "kayttajat": "Käyttäjät",
     "kayttaja": "Käyttäjä",
     "et": "ET",
@@ -45,7 +46,6 @@
     "myinfo": "Omat Tiedot",
     "kirjaudu-ulos": "Kirjaudu ulos",
     "kayttajahallinta": "Käyttäjähallinta",
-
     "new-yritys": "Uusi yritys",
     "yritys": "Yritys",
     "yritys-laatijat": "Laatijat"

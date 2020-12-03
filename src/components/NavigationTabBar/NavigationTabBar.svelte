@@ -3,11 +3,12 @@
   import NavigationTab from '@Component/NavigationTab/NavigationTab';
   import * as Navigation from '@Utility/navigation';
 
+  export let idTranslate;
   export let location;
   export let user;
   export let i18n;
 
-  $: links = Navigation.navigationParse(i18n, user, location);
+  $: links = Navigation.navigationParse(i18n, user, location, idTranslate);
 </script>
 
 <style type="text/postcss">
@@ -22,13 +23,13 @@
 </style>
 
 {#if !R.isEmpty(links)}
-<div>
-  {#each links as link}
-    <NavigationTab
-      label={link.label}
-      href={link.href}
-      activePath={link.activePath}
-      disabled={link.disabled} />
-  {/each}
-</div>
+  <div>
+    {#each links as link}
+      <NavigationTab
+        label={link.label}
+        href={link.href}
+        activePath={link.activePath}
+        disabled={link.disabled} />
+    {/each}
+  </div>
 {/if}
