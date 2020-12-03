@@ -236,7 +236,7 @@ export const cancelSign = idempotentStateChange(url.cancel);
 
 export const digest = R.curry((fetch, version, id, language) =>
   R.compose(
-    Fetch.responseAsText,
+    Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.digest
   )(version, id, language)

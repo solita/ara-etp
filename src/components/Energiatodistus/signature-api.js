@@ -30,6 +30,7 @@ export const getSignature = R.curry((fetch, content) =>
     Future.filter(isValidSignatureResponse, 'error'),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', mpolluxSignUrl)),
-    R.assoc('content', R.__, signatureOptions)
+    R.assoc('content', R.__, signatureOptions),
+    R.prop('digest')
   )(content)
 );
