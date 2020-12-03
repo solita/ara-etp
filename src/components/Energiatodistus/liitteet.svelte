@@ -5,8 +5,10 @@
   import * as Either from '@Utility/either-utils';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as api from './energiatodistus-api';
-  import * as et from './energiatodistus-utils';
+  import * as valvontaApi from './valvonta-api';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
@@ -20,6 +22,8 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Confirm from '@Component/Confirm/Confirm';
+  import Checkbox from '@Component/Checkbox/Checkbox.svelte';
+  import * as Response from '@Utility/response';
 
   export let params;
 
@@ -27,9 +31,11 @@
 
   let overlay = true;
   let failure = false;
+  let enabled = false;
   let liitteet;
   let liiteLinkAdd;
   let files = [];
+  let whoami = Maybe.None();
 
   let linkNimi = '';
   let linkUrl = '';
@@ -41,6 +47,10 @@
     liiteLinkAdd = emptyLiite();
   };
 
+  const enableOverlay = _ => {
+    overlay = true
+  }
+
   resetForm();
 
   const liiteLinkAddSchema = {
@@ -48,7 +58,6 @@
     url: [validation.isRequired, validation.urlValidator]
   };
 
-  const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
   const cancel = _ => {
     linkNimi = '';
@@ -58,51 +67,59 @@
     liiteLinkAdd = emptyLiite();
   };
 
+  const getValvonta = (_, id) => valvontaApi.getValvonta(fetch, id);
+
   const load = R.compose(
     Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-        R.partial($_, ['energiatodistus.liitteet.messages.load-error'])
-      ),
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        response => {
-          liitteet = response;
-        }
-      )
+      _ => {
+        flashMessageStore.add('Energiatodistus', 'error',
+          $_('energiatodistus.liitteet.messages.load-error'));
+        overlay = false;
+      },
+      response => {
+        whoami = Maybe.Some(response[0]);
+        liitteet = response[1];
+        enabled = response[2].active;
+        overlay = false;
+      }
     ),
-    R.tap(toggleOverlay(true)),
-    api.getLiitteetById(fetch)
+    R.tap(enableOverlay),
+    Future.parallel(5),
+    R.prepend(kayttajaApi.whoami),
+    R.juxt([api.getLiitteetById(fetch), getValvonta])
   );
+
+
+  const viewError = (functionName, response) => {
+    const msg = $_(Maybe.orSome(
+      `energiatodistus.liitteet.messages.${functionName}.error`,
+      Response.localizationKey(response)));
+    flashMessageStore.add('Energiatodistus', 'error', msg);
+  }
+
   const fork = functionName =>
     Future.fork(
-      R.compose(
-        R.tap(toggleOverlay(false)),
-        R.tap(flashMessageStore.add('Energiatodistus', 'error')),
-        R.partial($_, [
-          `energiatodistus.liitteet.messages.${functionName}.error`
-        ])
-      ),
-      R.compose(
-        R.tap(flashMessageStore.add('Energiatodistus', 'success')),
-        R.partial($_, [
-          `energiatodistus.liitteet.messages.${functionName}.success`
-        ]),
-        R.partial(load, [params.version, params.id])
-      )
+      response => {
+        viewError(functionName, response);
+        overlay = false;
+      },
+      _ => {
+        flashMessageStore.add('Energiatodistus', 'success',
+          $_(`energiatodistus.liitteet.messages.${functionName}.success`));
+        load(params.version, params.id);
+      }
     );
 
   $: files.length > 0 &&
-    R.compose(
-      fork('add-files'),
-      R.tap(toggleOverlay(true)),
-      api.postLiitteetFiles(fetch, params.version, params.id)
-    )(files);
+  R.compose(
+    fork('add-files'),
+    R.tap(enableOverlay),
+    api.postLiitteetFiles(fetch, params.version, params.id)
+  )(files);
 
   const addLink = R.compose(
     fork('add-link'),
-    R.tap(toggleOverlay(true)),
+    R.tap(enableOverlay),
     api.postLiitteetLink(fetch, params.version, params.id)
   );
 
@@ -125,10 +142,10 @@
   const liiteUrl = liite =>
     Maybe.orSome(
       api.url.liitteet(params.version, params.id)
-        + '/'
-        + liite.id
-        + '/'
-        + encodeURIComponent(liite.nimi),
+      + '/'
+      + liite.id
+      + '/'
+      + encodeURIComponent(liite.nimi),
       liite.url
     );
 
@@ -140,7 +157,7 @@
 
   const deleteLiite = R.compose(
     fork('delete-liite'),
-    R.tap(toggleOverlay(true)),
+    R.tap(enableOverlay),
     api.deleteLiite(fetch, params.version, params.id)
   );
 
@@ -153,6 +170,17 @@
 
   $: linkEmpty = linkNimi.length === 0 || linkUrl.length === 0;
   $: linkInvalid = !(linkNimiValid && linkUrlValid);
+
+  const saveValvonta = event => Future.fork(
+    response => {
+      viewError('valvonta', response);
+      enabled = !enabled;
+    },
+    _ => {
+      flashMessageStore.add('Energiatodistus', 'success',
+        $_(`energiatodistus.liitteet.messages.valvonta.success`));
+    },
+    valvontaApi.putValvonta(fetch, params.id, enabled));
 </script>
 
 <style>
@@ -164,6 +192,22 @@
 
   <Overlay {overlay}>
     <div slot="content" class="mb-10">
+      {#if Maybe.fold(false, Kayttajat.isPaakayttaja, whoami)}
+      <div class="mb-5"
+           on:change={saveValvonta}>
+      <Checkbox
+          bind:model={enabled}
+          label="Laatija saa lisätä todistukselle liitteitä" />
+      </div>
+      {/if}
+
+      {#if !enabled}
+      <div class="mb-5 bg-warning flex p-5">
+        <span class="font-icon mr-2">warning</span>
+        Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa
+      </div>
+      {/if}
+
       {#if R.isEmpty(liitteet)}
         <p>{$_('energiatodistus.liitteet.empty')}</p>
       {:else}
@@ -215,6 +259,7 @@
     </div>
   </Overlay>
 
+  {#if enabled}
   <div class="mb-4 flex lg:flex-row flex-col">
     <div class="lg:w-1/2 w-full mr-6 mb-6">
       <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
@@ -269,4 +314,5 @@
       </form>
     </div>
   </div>
+  {/if}
 </div>
