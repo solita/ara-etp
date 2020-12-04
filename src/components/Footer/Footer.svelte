@@ -1,35 +1,78 @@
 <script>
-  import Button from '@Component/Button/Button';
+  import { locale, _ } from '@Language/i18n';
 </script>
 
 <footer class="flex flex-col w-full text-sm">
   <div class="flex flex-col md:flex-row justify-between p-8">
-    <div class="flex flex-col space-y-4">
+    <div class="flex flex-col text-primary mr-4">
       <span class="uppercase font-bold text-secondary">
-        Viesti paakayttajalle
+        {$_('footer.contact-info')}
       </span>
-      <span class="font-bold text-secondary">
-        Onko onglemia palvelun kaytossa?
-      </span>
-      <Button style="primary" text={'Laheta viesti'} />
+      <div class="flex space-x-4">
+        <div class="flex flex-col">
+          <span class="font-bold"> {$_('footer.name')} </span>
+          <span class="font-bold"> {$_('footer.po-box')} </span>
+          <span class="font-bold"> {$_('footer.post-num')} </span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold"> {$_('footer.phone')}: </span>
+          <a class="font-bold" href="tel:0295250800"> 029 525 0800 </a>
+          <span class="font-bold mt-2"> {$_('footer.email')}: </span>
+          <a
+            class="font-bold"
+            href="mailto:energiatodistus@ara.fi">energiatodistus@ara.fi
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="flex flex-col space-y-4">
+    <div class="flex flex-col space-y-2">
       <span class="uppercase font-bold text-secondary">
-        Tietoa sivustosta
+        {$_('footer.about')}
       </span>
-      <a class="font-bold text-primary" href="/"> Rekisteriseloste </a>
-    </div>
-    <div class="flex flex-col text-primary">
-      <span class="uppercase font-bold text-secondary"> yhteystiedot </span>
-      <span class="font-bold"> asumisen rahoitus ja kehittamiskeskus </span>
-      <span class="font-bold"> PL 30 </span>
-      <span class="font-bold"> 15141 </span>
-      <br />
-      <span class="font-bold"> Puhelin: 029 525 0800 </span>
-      <span class="font-bold"> Sahkoposti: energiatodistus@ara.fi </span>
+      {#if $locale.startsWith('sv')}
+        <a
+          class="font-bold text-primary"
+          href="pdf/Dataskyddsbeskrivning_Energicertifikatregistret.pdf"
+          target="_blank">
+          Dataskyddsbeskrivning Energicertifikatregistret (pdf)
+        </a>
+        <a
+          class="font-bold text-primary"
+          href="pdf/Dataskyddsbeskrivning_Register_för_övervakningsuppgifter_om_energicertifikat.pdf"
+          target="_blank">
+          Dataskyddsbeskrivning Register för övervakningsuppgifter om
+          energicertifikat (pdf)
+        </a>
+        <a
+          class="font-bold text-primary"
+          href="pdf/Dataskyddsbeskrivning_Register_för_upprättare_av_energiferticikat.pdf"
+          target="_blank">
+          Dataskyddsbeskrivning Register för upprättare av energiferticikat
+          (pdf)
+        </a>
+      {:else}
+        <a
+          class="font-bold text-primary"
+          href="pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf"
+          target="_blank">
+          Tietosuojaseloste Energiatodistusrekisteri (pdf)
+        </a>
+        <a
+          class="font-bold text-primary"
+          href="pdf/Tietosuojaseloste_Energiatodistusten_laatijarekisteri.pdf"
+          target="_blank">
+          Tietosuojaseloste Energiatodistusten laatijarekisteri (pdf)
+        </a>
+        <a
+          class="font-bold text-primary"
+          href="pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf"
+          target="_blank">
+          Tietosuojaseloste Energiatodistusten valvontatietorekisteri (pdf)
+        </a>
+      {/if}
     </div>
   </div>
-  <div class="w-full border-t border-tableborder mx-4 pt-4 pb-16">
-    <img class="text-primary" src="images/ara_logo_simple_nega.svg" alt="Ara" />
+  <div class="border-t border-tableborder mx-8 pt-4 pb-16">
+    <img class="w-20 h-20" src="images/ara_logo_green.svg" alt="Ara" />
   </div>
 </footer>
