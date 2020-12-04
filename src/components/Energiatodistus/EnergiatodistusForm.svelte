@@ -231,7 +231,6 @@
     }
   }}
   on:beforeunload={evt => {
-    console.log('asdf');
     if (confirmNavigation) {
       if (currentStatePushedToHistory) {
         confirmNavigation = false;
