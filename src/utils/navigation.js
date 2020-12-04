@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import * as RUtils from '@Utility/ramda-utils';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Kayttajat from '@Utility/kayttajat';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
@@ -109,7 +110,10 @@ export const parseKayttaja = R.curry(
         }
       ];
     } else if (
-      R.and(R.equals(2, kayttaja.rooli), R.equals(parseInt(id), kayttaja.id))
+      R.and(
+        Kayttajat.isPaakayttaja(kayttaja),
+        R.propEq('id', parseInt(id), kayttaja)
+      )
     ) {
       return linksForPaakayttajaOmatTiedot(i18n, id, idTranslate);
     } else if (R.equals('all', id)) {
