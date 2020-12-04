@@ -1,4 +1,5 @@
 <script>
+  import Version from '@Component/Version/Version';
   import { locale, _ } from '@Language/i18n';
 </script>
 
@@ -72,7 +73,9 @@
       {/if}
     </div>
   </div>
-  <div class="border-t border-tableborder mx-8 pt-4 pb-16">
+  <div
+    class="border-t border-tableborder mx-8 pt-4 pb-16 flex items-center justify-between">
     <img class="w-20 h-20" src="images/ara_logo_green.svg" alt="Ara" />
+    <Version />
   </div>
 </footer>
