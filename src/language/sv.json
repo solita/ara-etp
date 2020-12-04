@@ -45,7 +45,8 @@
     "muutoshistoria": "Ändringshistoria",
     "myinfo": "Egna uppgifter",
     "kirjaudu-ulos": "Logga ut",
-    "kayttajahallinta": "Användarkontroll"
+    "kayttajahallinta": "Användarkontroll",
+    "form-confirm": "Muutoksia ei ole tallennettu. Haluatko poistua sivulta? SV?"
   },
   "errors": {
     "load-error": "Sökningen av uppgifterna misslyckades.",

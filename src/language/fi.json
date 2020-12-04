@@ -48,7 +48,8 @@
     "kayttajahallinta": "Käyttäjähallinta",
     "new-yritys": "Uusi yritys",
     "yritys": "Yritys",
-    "yritys-laatijat": "Laatijat"
+    "yritys-laatijat": "Laatijat",
+    "form-confirm": "Muutoksia ei ole tallennettu. Haluatko poistua sivulta?"
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui.",

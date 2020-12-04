@@ -37,8 +37,6 @@
   export let submit;
   export let title = '';
 
-  let dirty = false;
-
   let schema = R.reduce(
     schemas.redefineNumericValidation,
     R.assocPath(
@@ -224,7 +222,7 @@
   on:hashchange|capture={evt => console.log('hashchange', evt)}
   on:popstate={_ => {
     if (confirmNavigation) {
-      const confirm = window.confirm('U wanna?', 'Yes', 'No');
+      const confirm = window.confirm($_('navigation.form-confirm'));
       if (confirm) {
         confirmNavigation = false;
         history.back();
@@ -234,13 +232,14 @@
     }
   }}
   on:beforeunload={evt => {
+    console.log('asdf');
     if (confirmNavigation) {
       if (currentStatePushedToHistory) {
         confirmNavigation = false;
         history.back();
       }
       evt.preventDefault();
-      evt.returnValue = 'U wanna?';
+      evt.returnValue = $_('navigation.form.confirm');
     }
   }} />
 
@@ -254,7 +253,6 @@
       <form
         on:submit|preventDefault={validateAndSubmit(noop)}
         on:change={_ => {
-          dirty = true;
           if (!currentStatePushedToHistory) {
             history.pushState(null, null, null);
             currentStatePushedToHistory = true;
