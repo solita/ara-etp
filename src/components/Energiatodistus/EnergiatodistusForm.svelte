@@ -267,6 +267,7 @@
         {energiatodistus}
         {eTehokkuus}
         {dirty}
+        {whoami}
         bind:inputLanguage />
     </div>
   </div>

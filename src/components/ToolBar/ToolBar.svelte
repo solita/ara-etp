@@ -10,6 +10,8 @@
   import Signing from '@Component/Energiatodistus/signing';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
 
+  import * as Toolbar from './toolbar-utils';
+
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
@@ -17,6 +19,7 @@
   export let inputLanguage = 'fi';
   export let eTehokkuus = Maybe.None();
   export let dirty;
+  export let whoami;
 
   const version = energiatodistus.versio;
   const id = Maybe.fromNull(energiatodistus.id);
@@ -45,7 +48,21 @@
     }
   }
 
-  $: pdfUrl = Maybe.map(i => api.url.pdf(version, i, inputLanguage), id);
+  let pdfUrls = [];
+
+  $: if (bilingual) {
+    pdfUrls = [
+      R.map(i => ({ lang: 'fi', href: api.url.pdf(version, i, 'fi') }), id),
+      R.map(i => ({ lang: 'sv', href: api.url.pdf(version, i, 'sv') }), id)
+    ];
+  } else {
+    pdfUrls = [
+      R.lift((i, k) => ({
+        lang: et.kielisyysKey(k),
+        href: api.url.pdf(version, i, et.kielisyysKey(k))
+      }))(id, energiatodistusKieli)
+    ];
+  }
 
   const openSigning = _ => {
     signingActive = true;
@@ -81,8 +98,7 @@
 
   const noop = () => {};
 
-  $: persistentDraft =
-    id.isSome() && R.propEq('tila-id', et.tila.draft, energiatodistus);
+  $: fields = Toolbar.toolbarFields(whoami, R.prop('tila-id', energiatodistus));
 </script>
 
 <style type="text/postcss">
@@ -177,17 +193,19 @@
       </div>
     {/if}
   </button>
-  <button disabled={!dirty} on:click={save(noop)}>
-    <span class="description">
-      {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
-    </span>
-    <span class="text-2xl font-icon">save</span>
-  </button>
-  <button on:click={cancel}>
-    <span class="description">Peruuta muutokset</span>
-    <span class="text-2xl font-icon">undo</span>
-  </button>
-  {#if persistentDraft}
+  {#if R.includes(Toolbar.module.save, fields)}
+    <button disabled={!dirty} on:click={save(noop)}>
+      <span class="description">
+        {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
+      </span>
+      <span class="text-2xl font-icon">save</span>
+    </button>
+    <button disabled={!dirty} on:click={cancel}>
+      <span class="description">Peruuta muutokset</span>
+      <span class="text-2xl font-icon">undo</span>
+    </button>
+  {/if}
+  {#if R.includes(Toolbar.module.sign, fields)}
     <button on:click={saveComplete(openSigning)}>
       <div class="description">Allekirjoita</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
@@ -195,19 +213,35 @@
       </span>
     </button>
   {/if}
-  {#if id.isSome()}
-    <button>
-      <span class="description">Kopioi pohjaksi</span>
-      <span class="text-2xl font-icon">file_copy</span>
-    </button>
+  {#if R.includes(Toolbar.module.copy, fields)}
+    {#if id.isSome()}
+      <button>
+        <span class="description">Kopioi pohjaksi</span>
+        <span class="text-2xl font-icon">file_copy</span>
+      </button>
+    {/if}
   {/if}
-  {#each pdfUrl.toArray() as url}
-    <button on:click={save(() => openUrl(url))}>
-      <span class="block description">Esikatselu</span>
-      <span class="text-2xl font-icon">picture_as_pdf</span>
-    </button>
-  {/each}
-  {#if persistentDraft}
+  {#if R.includes(Toolbar.module.preview, fields)}
+    {#each pdfUrls as pdfUrl}
+      {#each pdfUrl.toArray() as { href, lang }}
+        <button on:click={save(() => openUrl(href))}>
+          <span class="block description">Esikatselu {R.toUpper(lang)}</span>
+          <span class="text-2xl font-icon">picture_as_pdf</span>
+        </button>
+      {/each}
+    {/each}
+  {/if}
+  {#if R.includes(Toolbar.module.download, fields)}
+    {#each pdfUrls as pdfUrl}
+      {#each pdfUrl.toArray() as { href, lang }}
+        <button on:click={() => openUrl(href)}>
+          <span class="block description">Lataa {R.toUpper(lang)}</span>
+          <span class="text-2xl font-icon">picture_as_pdf</span>
+        </button>
+      {/each}
+    {/each}
+  {/if}
+  {#if R.includes(Toolbar.module.delete, fields)}
     <Confirm
       let:confirm
       confirmButtonLabel={$_('confirm.button.delete')}
