@@ -4,6 +4,8 @@
   import LaatijaUpload from '@Component/LaatijaUpload/LaatijaUpload';
   import Yritykset from '@Component/Laatija/yritykset';
   import Laatijat from './Laatijat';
+  import NotFound from '@Component/NotFound/NotFound';
+
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
@@ -11,7 +13,8 @@
   const routes = {
     '/all': Laatijat,
     '/laatijoidentuonti': LaatijaUpload,
-    '/:id/yritykset': Yritykset
+    '/:id/yritykset': Yritykset,
+    '*': NotFound
   };
 </script>
 
