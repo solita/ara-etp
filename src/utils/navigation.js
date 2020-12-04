@@ -82,6 +82,19 @@ export const linksForKayttaja = R.curry((i18n, id, idTranslate) => [
   }
 ]);
 
+export const linksForPaakayttajaOmatTiedot = R.curry(
+  (i18n, id, idTranslate) => [
+    {
+      label: R.compose(
+        Maybe.orSome('...'),
+        Maybe.fromNull,
+        R.path(['kayttaja', id])
+      )(idTranslate),
+      href: `#/kayttaja/${id}`
+    }
+  ]
+);
+
 export const parseKayttaja = R.curry(
   (i18n, kayttaja, idTranslate, locationParts) => {
     if (R.isEmpty(locationParts)) {
@@ -95,6 +108,10 @@ export const parseKayttaja = R.curry(
           href: `#/kayttaja/new`
         }
       ];
+    } else if (
+      R.and(R.equals(2, kayttaja.rooli), R.equals(parseInt(id), kayttaja.id))
+    ) {
+      return linksForPaakayttajaOmatTiedot(i18n, id, idTranslate);
     } else if (R.equals('all', id)) {
       return [];
     } else {
