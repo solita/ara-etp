@@ -219,7 +219,6 @@
 </style>
 
 <svelte:window
-  on:hashchange|capture={evt => console.log('hashchange', evt)}
   on:popstate={_ => {
     if (confirmNavigation) {
       const confirm = window.confirm($_('navigation.form-confirm'));
