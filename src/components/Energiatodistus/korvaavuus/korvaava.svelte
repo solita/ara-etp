@@ -38,7 +38,7 @@
         },
         response => {
           overlay = false;
-          korvaavaEnergiatodistus = Maybe.head(response);
+          korvaavaEnergiatodistus = Maybe.fromNull(response);
         }
       ),
       Future.delay(200),

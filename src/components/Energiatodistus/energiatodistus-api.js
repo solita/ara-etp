@@ -149,8 +149,6 @@ export const getEnergiatodistuksetByField = R.curry((field, value) =>
   getEnergiatodistukset(`?where=[[["=","${field}",${R.toString(value)}]]]`)
 );
 
-export const findEnergiatodistusById = getEnergiatodistuksetByField('id');
-
 export const getEnergiatodistusById = R.curry((fetch, version, id) =>
   R.compose(
     R.map(deserialize),
@@ -159,6 +157,12 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
     url.id
   )(version, id)
 );
+
+export const findEnergiatodistusById = R.compose(
+  Future.chainRej(
+    R.ifElse(R.propEq('status', 404),
+      R.always(Future.resolve(null)), Future.reject)),
+  getEnergiatodistusById(fetch, 'all'));
 
 export const getLiitteetById = R.curry((fetch, version, id) =>
   R.compose(
