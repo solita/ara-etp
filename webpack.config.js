@@ -26,7 +26,6 @@ module.exports = {
       '@Component': path.resolve(__dirname, 'src/components'),
       '@Utility': path.resolve(__dirname, 'src/utils'),
       '@Language': path.resolve(__dirname, 'src/language'),
-      '@Asset': path.resolve(__dirname, 'assets'),
       '@': path.resolve(__dirname, 'src'),
       svelte: path.resolve('node_modules', 'svelte')
     },
