@@ -249,8 +249,16 @@
       "loading": "Laddar"
     },
     "toolbar": {
-      "new": "Tallenna???",
-      "save": "Spara"
+      "new": "Spara",
+      "save": "Spara",
+      "undo": "Peruuta muutokset SV?",
+      "sign": "Allekirjoita SV?",
+      "copy": "Kopioi pohjaksi SV?",
+      "preview": "Esikatsele SV?",
+      "download": "Lataa SV?",
+      "discard": "Hylkää SV?",
+      "undodiscard": "Kumoa hylkäys SV?",
+      "delete": "Poista SV?"
     },
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
@@ -1003,8 +1011,12 @@
   },
   "confirm": {
     "you-want-to-delete": "Är du säker på att du vill avlägsna?",
+    "you-want-to-discard": "Oletko varma, että haluat hylätä? SV?",
+    "you-want-to-undodiscard": "Oletko varma, että haluat kumota hylkäyksen? SV?",
     "button": {
-      "delete": "Radera"
+      "delete": "Radera",
+      "discard": "Hylkää SV?",
+      "undodiscard": "Kumoa hylkäys SV?"
     }
   },
   "drop-or-click-file": "Lägg till en fil genom att dra eller bläddra bland filer",

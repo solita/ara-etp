@@ -201,13 +201,13 @@
       <span class="text-2xl font-icon">save</span>
     </button>
     <button disabled={!dirty} on:click={cancel}>
-      <span class="description">Peruuta muutokset</span>
+      <span class="description">{$_('energiatodistus.toolbar.undo')}</span>
       <span class="text-2xl font-icon">undo</span>
     </button>
   {/if}
   {#if R.includes(Toolbar.module.sign, fields)}
     <button on:click={saveComplete(openSigning)}>
-      <div class="description">Allekirjoita</div>
+      <div class="description">{$_('energiatodistus.toolbar.sign')}</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
         create
       </span>
@@ -216,7 +216,7 @@
   {#if R.includes(Toolbar.module.copy, fields)}
     {#if id.isSome()}
       <button>
-        <span class="description">Kopioi pohjaksi</span>
+        <span class="description">{$_('energiatodistus.toolbar.copy')}</span>
         <span class="text-2xl font-icon">file_copy</span>
       </button>
     {/if}
@@ -225,7 +225,9 @@
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
         <button on:click={save(() => openUrl(href))}>
-          <span class="block description">Esikatselu {R.toUpper(lang)}</span>
+          <span
+            class="block description">{$_('energiatodistus.toolbar.preview')}
+            {R.toUpper(lang)}</span>
           <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
       {/each}
@@ -235,11 +237,36 @@
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
         <button on:click={() => openUrl(href)}>
-          <span class="block description">Lataa {R.toUpper(lang)}</span>
+          <span
+            class="block description">{$_('energiatodistus.toolbar.download')}
+            {R.toUpper(lang)}</span>
           <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
       {/each}
     {/each}
+  {/if}
+  {#if R.includes(Toolbar.module.discard, fields)}
+    <Confirm
+      let:confirm
+      confirmButtonLabel={$_('confirm.button.discard')}
+      confirmMessage={$_('confirm.you-want-to-discard')}>
+      <button on:click={() => confirm(() => {})}>
+        <span class="description">{$_('energiatodistus.toolbar.discard')}</span>
+        <span class="text-2xl font-icon">block</span>
+      </button>
+    </Confirm>
+  {/if}
+  {#if R.includes(Toolbar.module.undodiscard, fields)}
+    <Confirm
+      let:confirm
+      confirmButtonLabel={$_('confirm.button.undodiscard')}
+      confirmMessage={$_('confirm.you-want-to-discard')}>
+      <button on:click={() => confirm(() => {})}>
+        <span
+          class="description">{$_('energiatodistus.toolbar.undodiscard')}</span>
+        <span class="text-2xl font-icon">undo</span>
+      </button>
+    </Confirm>
   {/if}
   {#if R.includes(Toolbar.module.delete, fields)}
     <Confirm
@@ -247,7 +274,7 @@
       confirmButtonLabel={$_('confirm.button.delete')}
       confirmMessage={$_('confirm.you-want-to-delete')}>
       <button on:click={() => confirm(deleteEnergiatodistus)}>
-        <span class="description">Poista</span>
+        <span class="description">{$_('energiatodistus.toolbar.delete')}</span>
         <span class="text-2xl font-icon">delete_forever</span>
       </button>
     </Confirm>

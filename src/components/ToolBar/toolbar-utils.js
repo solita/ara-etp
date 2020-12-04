@@ -36,20 +36,14 @@ export const laatijaFields = tila => {
   switch (tila) {
     case EtUtils.tila['draft']:
     case EtUtils.tila['in-signing']:
-      return [
-        module.save,
-        module.sign,
-        module.copy,
-        module.preview,
-        module.delete
-      ];
+      return [module.save, module.sign, module.preview, module.delete];
     case EtUtils.tila['signed']:
-      return [module.save, module.copy, module.download];
+      return [module.save, module.download];
     case EtUtils.tila['discarded']:
       return [module.preview, module.download, module.undodiscard];
     case EtUtils.tila['replaced']:
     case EtUtils.tila['deleted']:
-      return [module.copy, module.download];
+      return [module.download];
     default:
       return [];
   }
