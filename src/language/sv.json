@@ -1022,5 +1022,8 @@
     "kayttaja-virtu-key": "Virtu-användarnamnet är redan i bruk.",
     "kayttaja_henkilotunnus_key": "Personbeteckningen är redan i bruk.",
     "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Företagsnummer, namn och mottagarens specifikation används av ett annat företag."
+  },
+  "not-found": {
+    "message": "Valitsemaasi sivua ei ole olemassa. SV"
   }
 }
