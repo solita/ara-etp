@@ -5,6 +5,8 @@
   import ExistingYritys from './ExistingYritys';
   import Yritykset from './yritykset';
   import Laatijat from './laatijat';
+  import NotFound from '@Component/NotFound/NotFound';
+
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
@@ -13,7 +15,8 @@
     '/new': NewYritys,
     '/all': Yritykset,
     '/:id': ExistingYritys,
-    '/:id/laatijat': Laatijat
+    '/:id/laatijat': Laatijat,
+    '*': NotFound
   };
 </script>
 

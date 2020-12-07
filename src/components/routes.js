@@ -16,7 +16,6 @@ import LandingPage from '@Component/Kayttaja/LandingPage';
 
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
-  '/yritys': Yritys,
   '/yritys/*': Yritys,
   '/halytykset': wrap(Halytykset, _ =>
     KayttajaUtils.kayttajaHasAccessToResource(

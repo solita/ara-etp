@@ -7,13 +7,15 @@
   import Liitteet from './liitteet';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
+  import NotFound from '@Component/NotFound/NotFound';
 
   const prefix = '/energiatodistus';
   const routes = {
     '/all': Energiatodistukset,
     '/:version/new': NewEnergiatodistus,
     '/:version/:id': ExistingEnergiatodistus,
-    '/:version/:id/liitteet': Liitteet
+    '/:version/:id/liitteet': Liitteet,
+    '*': NotFound
   };
 </script>
 
