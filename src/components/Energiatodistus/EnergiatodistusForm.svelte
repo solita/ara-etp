@@ -25,6 +25,7 @@
 
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
+  import FormConfirm from '@Component/formconfirm/formconfirm';
 
   import { flashMessageStore } from '@/stores';
 
@@ -89,13 +90,12 @@
     )
   );
 
-  const validateAndSubmit = onSuccessfulSave => () => {
+  const validateAndSubmit = R.curry((beforeSubmit, onSuccessfulSave) => () => {
     const invalid = Validations.invalidProperties(schema, energiatodistus);
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       flashMessageStore.flush();
       submit(energiatodistus, (...args) => {
-        confirmNavigation = false;
-        history.back();
+        beforeSubmit();
         onSuccessfulSave(...args);
       });
       if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
@@ -107,7 +107,7 @@
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
     }
-  };
+  });
 
   const language = R.compose(
     R.map(R.slice(-2, Infinity)),
@@ -115,46 +115,32 @@
     Maybe.Some
   );
 
-  const validateCompleteAndSubmit = onSuccessfulSave => () => {
-    const missing = Validations.missingProperties(
-      validation.required,
-      energiatodistus
-    );
-    if (R.isEmpty(missing)) {
-      if (!currentStatePushedToHistory) {
-        history.pushState(null, null, null);
-      }
-      validateAndSubmit(onSuccessfulSave)();
-    } else {
-      const missingTxt = R.compose(
-        R.join(', '),
-        R.map(Inputs.propertyLabel($_))
-      )(missing);
-
-      flashMessageStore.add(
-        'Energiatodistus',
-        'error',
-        $_('energiatodistus.messages.validation-required-error') + missingTxt
+  const validateCompleteAndSubmit = R.curry(
+    (beforeSubmit, onSuccessfulSave) => () => {
+      const missing = Validations.missingProperties(
+        validation.required,
+        energiatodistus
       );
+      if (R.isEmpty(missing)) {
+        validateAndSubmit(beforeSubmit, onSuccessfulSave)();
+      } else {
+        const missingTxt = R.compose(
+          R.join(', '),
+          R.map(Inputs.propertyLabel($_))
+        )(missing);
 
-      Inputs.scrollIntoView(document, missing[0]);
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.messages.validation-required-error') + missingTxt
+        );
+
+        Inputs.scrollIntoView(document, missing[0]);
+      }
     }
-  };
+  );
 
   const noop = () => {};
-
-  let confirmNavigation = false;
-
-  let currentStatePushedToHistory = false;
-
-  const cancel = event => {
-    event.preventDefault();
-    confirmNavigation = false;
-    if (currentStatePushedToHistory) {
-      history.back();
-    }
-    window.location.reload();
-  };
 </script>
 
 <style type="text/postcss">
@@ -218,102 +204,71 @@
   }
 </style>
 
-<svelte:window
-  on:popstate={_ => {
-    if (confirmNavigation) {
-      const confirm = window.confirm($_('navigation.form-confirm'));
-      if (confirm) {
-        confirmNavigation = false;
-        history.back();
-      } else {
-        history.pushState(null, null, null);
-      }
-    }
-  }}
-  on:beforeunload={evt => {
-    if (confirmNavigation) {
-      if (currentStatePushedToHistory) {
-        confirmNavigation = false;
-        history.back();
-      }
-      evt.preventDefault();
-      evt.returnValue = $_('navigation.form.confirm');
-    }
-  }} />
-
 {#if !R.isNil(ETForm)}
-  {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
-    <Signing {energiatodistus} reload={cancel} />
-  {/if}
+  <FormConfirm let:dirty let:formChange let:reset let:beforeSubmit>
+    {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
+      <Signing {energiatodistus} reload={reset} />
+    {/if}
 
-  <div class="w-full relative flex">
-    <div class="w-5/6">
-      <form
-        on:submit|preventDefault={validateAndSubmit(noop)}
-        on:change={_ => {
-          if (!currentStatePushedToHistory) {
-            history.pushState(null, null, null);
-            currentStatePushedToHistory = true;
-          }
+    <div class="w-full relative flex">
+      <div class="w-5/6">
+        <form
+          on:submit|preventDefault={validateAndSubmit(beforeSubmit, noop)}
+          on:change={formChange}
+          on:reset={reset}>
+          <div class="w-full mt-3">
+            <H1 text={title} />
 
-          confirmNavigation = true;
-        }}>
-        <div class="w-full mt-3">
-          <H1 text={title} />
+            <PaakayttajanKommentti
+              {whoami}
+              {schema}
+              path={['kommentti']}
+              bind:model={energiatodistus} />
 
-          <PaakayttajanKommentti
-            {whoami}
-            {schema}
-            path={['kommentti']}
-            bind:model={energiatodistus} />
+            <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
+            <EnergiatodistusKorvattu
+              bind:energiatodistus
+              {whoami}
+              postinumerot={luokittelut.postinumerot}
+              bind:error={korvausError} />
+            <EnergiatodistusKorvaava
+              postinumerot={luokittelut.postinumerot}
+              korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
+            <HR />
 
-          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
-          <EnergiatodistusKorvattu
-            bind:energiatodistus
-            {whoami}
-            postinumerot={luokittelut.postinumerot}
-            bind:error={korvausError} />
-          <EnergiatodistusKorvaava
-            postinumerot={luokittelut.postinumerot}
-            korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
-          <HR />
-
-          <Laskutus {schema} {whoami} bind:energiatodistus />
-          <ETForm
-            bind:energiatodistus
-            bind:eTehokkuus
-            {inputLanguage}
-            {disabled}
-            {schema}
-            {luokittelut}
-            {validation} />
-        </div>
-        <div class="flex -mx-4 pt-8">
-          <div class="px-4">
-            <Button type={'submit'} text={$_('tallenna')} />
+            <Laskutus {schema} {whoami} bind:energiatodistus />
+            <ETForm
+              bind:energiatodistus
+              bind:eTehokkuus
+              {inputLanguage}
+              {disabled}
+              {schema}
+              {luokittelut}
+              {validation} />
           </div>
-          <div class="px-4">
-            <Button
-              on:click={cancel}
-              text={$_('peruuta')}
-              type={'reset'}
-              style={'secondary'} />
+          <div class="flex -mx-4 pt-8">
+            <div class="px-4">
+              <Button type={'submit'} text={$_('tallenna')} />
+            </div>
+            <div class="px-4">
+              <Button text={$_('peruuta')} type={'reset'} style={'secondary'} />
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="sticky top-3em w-1/6 self-start flex justify-end">
+        <ToolBar
+          save={validateAndSubmit(beforeSubmit)}
+          saveComplete={validateCompleteAndSubmit(beforeSubmit)}
+          cancel={reset}
+          {energiatodistus}
+          {eTehokkuus}
+          {dirty}
+          {whoami}
+          bind:inputLanguage />
+      </div>
     </div>
-    <div class="sticky top-3em w-1/6 self-start flex justify-end">
-      <ToolBar
-        save={validateAndSubmit}
-        saveComplete={validateCompleteAndSubmit}
-        {cancel}
-        {energiatodistus}
-        {eTehokkuus}
-        {dirty}
-        {whoami}
-        bind:inputLanguage />
-    </div>
-  </div>
+  </FormConfirm>
 {:else}
   <p>Energiatodistusversiota {version} ei ole olemassa.</p>
 {/if}
