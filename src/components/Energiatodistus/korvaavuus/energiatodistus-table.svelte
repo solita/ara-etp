@@ -27,16 +27,10 @@
       {$_('energiatodistus.korvaavuus.table.tunnus')}
     </th>
     <th class="etp-table--th">
-      {$_('energiatodistus.korvaavuus.table.etl')}
-    </th>
-    <th class="etp-table--th">
       {$_('energiatodistus.korvaavuus.table.ktl')}
     </th>
     <th class="etp-table--th">
       {$_('energiatodistus.korvaavuus.table.rakennustunnus')}
-    </th>
-    <th class="etp-table--th">
-      {$_('energiatodistus.korvaavuus.table.nettoala')}
     </th>
     <th class="etp-table--th">
       {$_('energiatodistus.korvaavuus.table.nimi')}
@@ -56,16 +50,10 @@
         {energiatodistus.id}
       </td>
       <td class="etp-table--td">
-        {Maybe.orSome('-', energiatodistus.tulokset['e-luokka'])}<sub>{energiatodistus.versio}</sub>
-      </td>
-      <td class="etp-table--td">
         {Maybe.orSome('', energiatodistus.perustiedot.kayttotarkoitus)}
       </td>
       <td class="etp-table--td">
         {Maybe.orSome('', energiatodistus.perustiedot.rakennustunnus)}
-      </td>
-      <td class="etp-table--td">
-        {EM.orSome('', energiatodistus.lahtotiedot['lammitetty-nettoala'])} m²
       </td>
       <td class="etp-table--td">
         {Maybe.orSome('', energiatodistus.perustiedot.nimi)}

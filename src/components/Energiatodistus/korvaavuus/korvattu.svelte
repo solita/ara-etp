@@ -71,7 +71,7 @@
         response => {
           searching = false;
           updated = true;
-          korvattavaEnergiatodistus = Maybe.head(response);
+          korvattavaEnergiatodistus = Maybe.fromNull(response);
         }
       ),
       Future.delay(200),
