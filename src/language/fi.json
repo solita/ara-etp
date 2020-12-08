@@ -294,7 +294,15 @@
     },
     "toolbar": {
       "new": "Tallenna",
-      "save": "Tallenna"
+      "save": "Tallenna",
+      "undo": "Peruuta muutokset",
+      "sign": "Allekirjoita",
+      "copy": "Kopioi pohjaksi",
+      "preview": "Esikatsele",
+      "download": "Lataa",
+      "discard": "Hylkää",
+      "undodiscard": "Kumoa hylkäys",
+      "delete": "Poista"
     },
     "id": "Energiatodistustunnus",
     "laatija-fullname": "Laatija",
@@ -1060,8 +1068,12 @@
   },
   "confirm": {
     "you-want-to-delete": "Oletko varma, että haluat poistaa?",
+    "you-want-to-discard": "Oletko varma, että haluat hylätä?",
+    "you-want-to-undodiscard": "Oletko varma, että haluat kumota hylkäyksen?",
     "button": {
-      "delete": "Poista"
+      "delete": "Poista",
+      "discard": "Hylkää",
+      "undodiscard": "Kumoa hylkäys"
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
