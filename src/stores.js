@@ -52,7 +52,7 @@ const createFlashMessageStore = () => {
         );
       }
 
-      return update(R.compose(R.uniq, R.append(message)));
+      return set([message]);
     }),
     addPersist: R.curry((module, type, text) => {
       const message = { module, type, text, persist: false };
@@ -63,7 +63,7 @@ const createFlashMessageStore = () => {
           5000
         );
       }
-      return update(R.compose(R.uniq, R.append(message)));
+      return set([message]);
     }),
     remove: message => update(R.reject(R.equals(message))),
     flush: module =>
