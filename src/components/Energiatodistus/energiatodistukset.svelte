@@ -82,8 +82,9 @@
   const parseQuerystring = R.compose(
     R.mergeRight({
       tila: Maybe.None(),
-      where: '',
+      where: [[]],
       keyword: Maybe.None(),
+      id: Maybe.None(),
       order: Maybe.Some('desc'),
       sort: Maybe.Some('energiatodistus.id'),
       limit: Maybe.Some(100),
@@ -91,39 +92,57 @@
     }),
     R.evolve({
       tila: Maybe.fromNull,
-      where: R.compose(Either.orSome(''), w =>
+      where: R.compose(Either.orSome([[]]), w =>
         Either.fromTry(() => JSON.parse(w))
       ),
       keyword: Maybe.fromNull,
       order: Maybe.fromNull,
       sort: Maybe.fromNull,
       limit: Maybe.fromNull,
-      offset: Maybe.fromNull
+      offset: Maybe.fromNull,
+      id: R.compose(
+        R.filter(i => !isNaN(i)),
+        R.map(i => parseInt(i, 10)),
+        Maybe.fromNull
+      )
     }),
     qs.parse
   );
-
-  $: if (!qs.parse($querystring).where) {
-    replace('#/energiatodistus/all?where=[[]]');
-  }
 
   $: parsedQuery = parseQuerystring($querystring);
 
   $: where = R.prop('where', parsedQuery);
   $: tila = R.prop('tila', parsedQuery);
   $: keyword = R.prop('keyword', parsedQuery);
+  $: id = R.prop('id', parsedQuery);
 
   const queryToQuerystring = R.compose(
     api.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
       where: R.compose(R.map(encodeURI), R.map(JSON.stringify), Maybe.fromEmpty)
+    }),
+    R.dissoc('id'),
+    R.when(R.propSatisfies(Maybe.isSome, 'id'), q =>
+      R.assoc(
+        'where',
+        EtHakuUtils.convertWhereToQuery(flatSchema, [
+          [['=', 'id', Maybe.get(q.id)]]
+        ]),
+        q
+      )
+    ),
+    R.defaultTo({
+      tila: Maybe.None(),
+      where: [[]],
+      keyword: Maybe.None(),
+      id: Maybe.None()
     })
   );
 
   let queryAsQueryString = queryToQuerystring(parsedQuery);
 
-  let currentQuery = '';
+  let currentQuery = 'where=[[]]';
 
   $: if ($querystring !== currentQuery) {
     currentQuery = $querystring;
@@ -160,7 +179,10 @@
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
   <div class="mb-10">
-    <EnergiatodistusHaku {where} keyword={Maybe.orSome('', keyword)} />
+    <EnergiatodistusHaku
+      {where}
+      keyword={Maybe.orSome('', keyword)}
+      id={Maybe.orSome('', id)} />
   </div>
   <Overlay {overlay}>
     <div slot="content">
