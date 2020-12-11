@@ -83,14 +83,18 @@
     R.mergeRight({
       tila: Maybe.None(),
       where: '',
-      keyword: Maybe.None()
+      keyword: Maybe.None(),
+      order: Maybe.Some('desc'),
+      sort: Maybe.Some('energiatodistus.id')
     }),
     R.evolve({
       tila: Maybe.fromNull,
       where: R.compose(Either.orSome(''), w =>
         Either.fromTry(() => JSON.parse(w))
       ),
-      keyword: Maybe.fromNull
+      keyword: Maybe.fromNull,
+      order: Maybe.fromNull,
+      sort: Maybe.fromNull
     }),
     qs.parse
   );
