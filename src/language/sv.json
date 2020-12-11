@@ -320,7 +320,7 @@
         "header": "Klimatskal",
         "label-context": "Klimatskal",
         "U*A": "U*A",
-        "osuuslampohaviosta": "Andel av värmeförlusten",
+        "osuus-lampohaviosta": "Andel av värmeförlusten",
         "ilmanvuotoluku": "Luftläckagetal",
         "lampokapasiteetti": "Värmekapacitet",
         "ilmatilavuus": "Luftvolym",
@@ -335,35 +335,35 @@
           "label-context": "Klimatskal / Ytterväggar",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Andel av värmeförlusten"
+          "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "ylapohja": {
           "label-context": "Klimatskal / Vindsbjälklag",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Andel av värmeförlusten"
+          "osuu-lampohaviosta": "Andel av värmeförlusten"
         },
         "alapohja": {
           "label-context": "Klimatskal / Bottenbjälklag",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Andel av värmeförlusten"
+          "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "ikkunat": {
           "label-context": "Klimatskal / Fönster",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Andel av värmeförlusten"
+          "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "ulkoovet": {
           "label-context": "Klimatskal / Ytterdörrar",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Andel av värmeförlusten"
+          "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "kylmasillat": "Köldbryggor",
         "kylmasillat-UA": "Köldbryggor U*A",
-        "kylmasillat-osuuslampohaviosta": "Köldbryggor / Andel av värmeförlusten"
+        "kylmasillat-osuus-lampohaviosta": "Köldbryggor / Andel av värmeförlusten"
       },
       "ikkunat": {
         "header": "Fönster enligt väderstreck",
@@ -588,19 +588,19 @@
           "uusiutuva-polttoaine": "Förrnybara bränslen"
         },
         "fossiilinen-polttoaine": "Köpt energi / Fossila bränslen",
-        "fossiilinen-polttoaine-painotettu-vuosikulutus": " Viktad energiförbrukning / Fossila bränslen (kWhE/vuosi)",
+        "fossiilinen-polttoaine-painotettu": " Viktad energiförbrukning / Fossila bränslen (kWhE/vuosi)",
         "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fossila bränslen (kWhE/(m²vuosi))",
         "sahko": "Köpt energi / El",
-        "sahko-painotettu-vuosikulutus": "Viktad energiförbrukning/ El (kWhE/vuosi)",
+        "sahko-painotettu": "Viktad energiförbrukning/ El (kWhE/vuosi)",
         "sahko-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ El (kWhE/(m²vuosi))",
         "kaukojaahdytys": "Köpt energi / Fjärrkyla",
-        "kaukojaahdytys-painotettu-vuosikulutus": "Viktad energiförbrukning/ Fjärrkyla (kWhE/vuosi)",
+        "kaukojaahdytys-painotettu": "Viktad energiförbrukning/ Fjärrkyla (kWhE/vuosi)",
         "kaukojaahdytys-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrkyla (kWhE/(m²vuosi))",
         "kaukolampo": "Köpt energi / Fjärrvärme",
-        "kaukolampo-painotettu-vuosikulutus": "Viktad energiförbrukning/ Fjärrvärme (kWhE/vuosi)",
+        "kaukolampo-painotettu": "Viktad energiförbrukning/ Fjärrvärme (kWhE/vuosi)",
         "kaukolampo-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrvärme (kWhE/(m²vuosi))",
         "uusiutuva-polttoaine": "Köpt energi / Förrnybara bränslen",
-        "uusiutuva-polttoaine-painotettu-vuosikulutus": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/vuosi)",
+        "uusiutuva-polttoaine-painotettu": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/vuosi)",
         "uusiutuva-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/(m²vuosi))",
         "muu": {
           "0": {
@@ -711,15 +711,15 @@
           "kvesi": "Cirkul. varmt tappvatten och förluster från varmvattenb."
         },
         "aurinko": "Solen (kWh/år)",
-        "aurinko-nelivuosikuorma": "Solen (kWh/(m²år))",
+        "aurinko-neliovuosikuorma": "Solen (kWh/(m²år))",
         "ihmiset": "Personer (kWh/år)",
-        "ihmiset-nelivuosikuorma": "Personer (kWh/(m²år))",
+        "ihmiset-neliovuosikuorma": "Personer (kWh/(m²år))",
         "kuluttajalaitteet": "Hushållsapparater (kWh/år)",
-        "kuluttajalaitteet-nelivuosikuorma": "Hushållsapparater (kWh/(m²år))",
+        "kuluttajalaitteet-neliovuosikuorma": "Hushållsapparater (kWh/(m²år))",
         "valaistus": "Belysning (kWh/år)",
-        "valaistus-nelivuosikuorma": "Belysning (kWh/(m²år))",
+        "valaistus-neliovuosikuorma": "Belysning (kWh/(m²år))",
         "kvesi": "Cirkul. varmt tappvatten och förluster från varmvattenb. (kWh/år)",
-        "kvesi-nelivuosikuorma": "Cirkul. varmt tappvatten och förluster från varmvattenb. (kWh/(m²år))"
+        "kvesi-neliovuosikuorma": "Cirkul. varmt tappvatten och förluster från varmvattenb. (kWh/(m²år))"
       },
       "laskentatyokalu": "Beräkningsverktygets namn och versionsnummer"
     },

@@ -363,7 +363,7 @@
         "header": "Rakennusvaippa",
         "label-context": "Rakennusvaippa",
         "U*A": "U*A",
-        "osuuslampohaviosta": "Osuus lämpöhäviöstä",
+        "osuus-lampohaviosta": "Osuus lämpöhäviöstä",
         "ilmanvuotoluku": "Ilmanvuotoluku",
         "lampokapasiteetti": "Lämpökapasiteetti",
         "ilmatilavuus": "Ilmatilavuus",
@@ -378,35 +378,40 @@
           "label-context": "Rakennusvaippa / Ulkoseinät",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
         },
         "ylapohja": {
           "label-context": "Rakennusvaippa / Yläpohja",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
         },
         "alapohja": {
           "label-context": "Rakennusvaippa / Alapohja",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
         },
         "ikkunat": {
           "label-context": "Rakennusvaippa / Ikkunat",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
         },
         "ulkoovet": {
           "label-context": "Rakennusvaippa / Ulko-ovet",
           "ala": "A",
           "U": "U",
-          "osuuslampohaviosta": "Osuus lämpöhäviöstä"
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
         },
         "kylmasillat": "Kylmäsillat",
         "kylmasillat-UA": "Kylmäsillat U*A",
-        "kylmasillat-osuuslampohaviosta": "Kylmäsillat / Osuus lämpöhäviöstä"
+        "kylmasillat-osuus-lampohaviosta": "Kylmäsillat / Osuus lämpöhäviöstä"
       },
       "ikkunat": {
         "header": "Ikkunat ilmansuunnittain",
@@ -634,19 +639,19 @@
           "uusiutuva-polttoaine": "Uusiutuva polttoaine"
         },
         "fossiilinen-polttoaine": "Ostoenergia / Fossiilinen polttoaine",
-        "fossiilinen-polttoaine-painotettu-vuosikulutus": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/vuosi)",
+        "fossiilinen-polttoaine-painotettu": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/vuosi)",
         "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/(m²vuosi))",
         "sahko": "Ostoenergia / Sähkö",
-        "sahko-painotettu-vuosikulutus": "Painotettu kulutus / Sähkö (kWhE/vuosi)",
+        "sahko-painotettu": "Painotettu kulutus / Sähkö (kWhE/vuosi)",
         "sahko-painotettu-neliovuosikulutus": "Painotettu kulutus / Sähkö (kWhE/(m²vuosi))",
         "kaukojaahdytys": "Ostoenergia / Kaukojäähdytys",
-        "kaukojaahdytys-painotettu-vuosikulutus": "Painotettu kulutus / Kaukojäähdytys (kWhE/vuosi)",
+        "kaukojaahdytys-painotettu": "Painotettu kulutus / Kaukojäähdytys (kWhE/vuosi)",
         "kaukojaahdytys-painotettu-neliovuosikulutus": "Painotettu kulutus / Kaukojäähdytys (kWhE/(m²vuosi))",
         "kaukolampo": "Ostoenergia / Kaukolämpö",
-        "kaukolampo-painotettu-vuosikulutus": "Painotettu kulutus / Kaukolämpö (kWhE/vuosi)",
+        "kaukolampo-painotettu": "Painotettu kulutus / Kaukolämpö (kWhE/vuosi)",
         "kaukolampo-painotettu-neliovuosikulutus": "Painotettu kulutus / Kaukolämpö (kWhE/(m²vuosi))",
         "uusiutuva-polttoaine": "Ostoenergia / Uusiutuva polttoaine",
-        "uusiutuva-polttoaine-painotettu-vuosikulutus": "Painotettu kulutus / Uusiutuva polttoaine (kWhE/vuosi)",
+        "uusiutuva-polttoaine-painotettu": "Painotettu kulutus / Uusiutuva polttoaine (kWhE/vuosi)",
         "uusiutuva-polttoaine-painotettu-neliovuosikulutus": "Painotettu kulutus / Uusiutuva polttoaine (kWhE/(m²vuosi))",
         "muu": {
           "0": {
@@ -757,15 +762,15 @@
           "kvesi": "Lämpimän käyttöveden kierrosta ja varastoinnin häviöistä"
         },
         "aurinko": "Aurinko (kWh/vuosi)",
-        "aurinko-nelivuosikuorma": "Aurinko (kWh/(m²vuosi))",
+        "aurinko-neliovuosikuorma": "Aurinko (kWh/(m²vuosi))",
         "ihmiset": "Henkilöt (kWh/vuosi)",
-        "ihmiset-nelivuosikuorma": "Henkilöt (kWh/(m²vuosi))",
+        "ihmiset-neliovuosikuorma": "Henkilöt (kWh/(m²vuosi))",
         "kuluttajalaitteet": "Kuluttajalaitteet (kWh/vuosi)",
-        "kuluttajalaitteet-nelivuosikuorma": "Kuluttajalaitteet (kWh/(m²vuosi))",
+        "kuluttajalaitteet-neliovuosikuorma": "Kuluttajalaitteet (kWh/(m²vuosi))",
         "valaistus": "Valaistus (kWh/vuosi)",
-        "valaistus-nelivuosikuorma": "Valaistus (kWh/(m²vuosi))",
+        "valaistus-neliovuosikuorma": "Valaistus (kWh/(m²vuosi))",
         "kvesi": "Lämpimän käyttöveden kierto ja varastoinnin häviöt (kWh/vuosi)",
-        "kvesi-nelivuosikuorma": "Lämpimän käyttöveden kierto ja varastoinnin häviöt (kWh/(m²vuosi))"
+        "kvesi-neliovuosikuorma": "Lämpimän käyttöveden kierto ja varastoinnin häviöt (kWh/(m²vuosi))"
       },
       "laskentatyokalu": "Energiatodistuksen laadintaohjelmisto ja versio"
     },
