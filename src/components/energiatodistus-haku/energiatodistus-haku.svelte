@@ -29,6 +29,7 @@
 
   export let where;
   export let keyword;
+  export let id;
 
   let overlay = true;
   let luokittelut = Maybe.None();
@@ -76,8 +77,10 @@
       R.concat(`${$location}?`),
       params => qs.stringify(params, { encode: false }),
       R.dissoc('offset'),
+      R.when(R.has('id'), R.dissoc('where')),
       R.when(R.propEq('keyword', ''), R.dissoc('keyword')),
-      R.mergeRight(R.mergeRight(qs.parse($querystring), { keyword })),
+      R.when(R.propEq('id', ''), R.dissoc('id')),
+      R.mergeRight(R.mergeRight(qs.parse($querystring), { keyword, id })),
       R.assoc('where', R.__, {})
     )(search);
   };
@@ -110,11 +113,11 @@
   <div class="flex w-full">
     <div class="w-7/12 flex flex-col justify-end">
       <SimpleInput
-        label={' '}
+        label={$_('energiatodistus.id')}
         wrapper={PillInputWrapper}
         rawValueAsViewValue={true}
         search={true}
-        bind:rawValue={keyword}
+        bind:rawValue={id}
         on:keypress={evt => {
           if (evt.key === 'Enter') {
             form.dispatchEvent(new Event('submit'));
@@ -150,6 +153,7 @@
     on:reset|preventDefault={_ => {
       queryItems = [];
       keyword = '';
+      id = '';
       valid = true;
     }}>
     {#each queryItems as { conjunction, block: [operator, key, ...values] }, index (`${index}_${operator}_${key}_${R.join('_', values)}`)}
