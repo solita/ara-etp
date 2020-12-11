@@ -1037,5 +1037,14 @@
   },
   "not-found": {
     "message": "Valitsemaasi sivua ei ole olemassa. SV"
+  },
+  "footer": {
+    "about": "Tietoa Sivustosta SV?",
+    "name": "Finansiering- och utvecklingcentralet för boendet",
+    "po-box": "PB 30",
+    "post-num": "15140 LAHTIS",
+    "contact-info": "Kontaktuppgifter",
+    "phone": "Telefon",
+    "email": "E-post"
   }
 }

@@ -1093,5 +1093,14 @@
   },
   "not-found": {
     "message": "Valitsemaasi sivua ei ole olemassa."
+  },
+  "footer": {
+    "about": "Tietoa Sivustosta",
+    "name": "Asumisen rahoitus- ja kehittämiskeskus",
+    "po-box": "PL 30",
+    "post-num": "15141 LAHTI",
+    "contact-info": "Yhteystiedot",
+    "phone": "Puhelin",
+    "email": "Sähköposti"
   }
 }

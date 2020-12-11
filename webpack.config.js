@@ -111,6 +111,9 @@ module.exports = {
       patterns: [{ from: 'assets/images', to: 'images' }]
     }),
     new CopyWebpackPlugin({
+      patterns: [{ from: 'assets/pdf', to: 'pdf' }]
+    }),
+    new CopyWebpackPlugin({
       patterns: [{ from: 'assets/errorpages', to: 'errorpages' }]
     })
     // uncomment to see treeview of generated bundle after build
