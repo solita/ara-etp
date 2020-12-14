@@ -9,7 +9,8 @@ const mpolluxSignUrl = `${mpolluxUrl}/sign`;
 const signatureOptions = {
   version: '1.1',
   selector: {
-    keyusages: ['nonrepudiation']
+    keyusages: ['nonrepudiation'],
+    keyalgorithms: ['rsa']
   },
   contentType: 'data',
   hashAlgorithm: 'SHA256',
