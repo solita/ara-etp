@@ -259,10 +259,12 @@
       "header": {
         "korvattu": "Korvaa energiatodistuksen",
         "korvaava": "Korvattu energiatodistuksella",
+        "korvaava-draft": "Korvataan energiatodistuksella (luonnos)",
         "korvaavuus": "Energiatodistuksen korvaavuus"
       },
       "checkbox": "Korvaa todistuksen",
       "input": "Valitse korvattava todistus",
+      "korvaava-draft-info": "Korvaaminen tapahtuu kun korvaava energiatodistus allekirjoitetaan.",
       "table": {
         "tunnus": "Tunnus",
         "etl": "ETL",
