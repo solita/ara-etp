@@ -186,18 +186,6 @@
   </div>
   <Overlay {overlay}>
     <div slot="content">
-      <div class="lg:w-1/3 w-full mb-6">
-        <Select
-          label={'Tila'}
-          disabled={false}
-          bind:model={parsedQuery}
-          lens={R.lensProp('tila')}
-          format={formatTila}
-          parse={Maybe.Some}
-          noneLabel={'energiatodistus.kaikki'}
-          items={[0, 1]} />
-      </div>
-
       {#if R.isEmpty(energiatodistukset)}
         <p class="mb-10">
           Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole
