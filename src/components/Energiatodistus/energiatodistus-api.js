@@ -59,9 +59,10 @@ const assertVersion = et => {
 const mergeEmpty = deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]));
 
 export const deserialize = R.compose(
+  R.tap(console.log),
   R.cond([
-    [R.propEq('versio', 2018), mergeEmpty(empty.energiatodistus2018)],
-    [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013)]
+    [R.propEq('versio', 2018), mergeEmpty(empty.energiatodistus2018())],
+    [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013())]
   ]),
   evolveForVersion('deserializer'),
   R.tap(assertVersion),

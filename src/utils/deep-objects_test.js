@@ -69,6 +69,7 @@ describe('Deep objects:', () => {
     it('Arrays', () => {
       assert.deepEqual(objects.mergeRight(R.F, [1], [2]), [2]);
       assert.deepEqual(objects.mergeRight(R.F, {a: [1, 2]}, {a: [2]}), {a: [2, 2]});
+      assert.deepEqual(objects.mergeRight(R.F, {a: [2, 2]}, {a: [1]}), {a: [1, 2]});
     });
 
     it('Mixed', () => {
