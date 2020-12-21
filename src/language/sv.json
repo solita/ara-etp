@@ -216,10 +216,12 @@
       "header": {
         "korvattu": "Ersätter energicertifikatet",
         "korvaava": "Korvattu energiatodistuksella SV?",
+        "korvaava-draft": "Korvataan energiatodistuksella SV",
         "korvaavuus": "Energicertifikatets ersättbarhet"
       },
       "checkbox": "Ersätter certifikatet",
       "input": "Valitse korvattava todistus SV?",
+      "korvaava-draft-info": "Korvaaminen tapahtuu kun korvaava energiatodistus allekirjoitetaan. SV",
       "table": {
         "tunnus": "Beteckning",
         "etl": "ETL",
