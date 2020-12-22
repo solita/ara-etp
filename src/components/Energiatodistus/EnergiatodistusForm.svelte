@@ -115,6 +115,21 @@
     Maybe.Some
   );
 
+  export const showMissingProperties = missing => {
+    const missingTxt = R.compose(
+      R.join(', '),
+      R.map(Inputs.propertyLabel($_))
+    )(missing);
+
+    flashMessageStore.add(
+      'Energiatodistus',
+      'error',
+      $_('energiatodistus.messages.validation-required-error') + missingTxt
+    );
+
+    Inputs.scrollIntoView(document, missing[0]);
+  }
+
   const validateCompleteAndSubmit = R.curry(
     (beforeSubmit, onSuccessfulSave) => () => {
       const missing = Validations.missingProperties(
@@ -124,18 +139,7 @@
       if (R.isEmpty(missing)) {
         validateAndSubmit(beforeSubmit, onSuccessfulSave)();
       } else {
-        const missingTxt = R.compose(
-          R.join(', '),
-          R.map(Inputs.propertyLabel($_))
-        )(missing);
-
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          $_('energiatodistus.messages.validation-required-error') + missingTxt
-        );
-
-        Inputs.scrollIntoView(document, missing[0]);
+        showMissingProperties(missing);
       }
     }
   );

@@ -36,16 +36,20 @@
 
   $: params.id && resetView();
 
+  let showMissingProperties;
+
   const submit = (energiatodistus, onSuccessfulSave) =>
     R.compose(
       Future.fork(
-        () => {
+        response => {
           toggleOverlay(false);
-          flashMessageStore.add(
-            'Energiatodistus',
-            'error',
-            $_('energiatodistus.messages.save-error')
-          );
+          if (R.pathEq(['body', 'type'], 'missing-value', response)) {
+            showMissingProperties(response.body.missing);
+          } else {
+            flashMessageStore.add('Energiatodistus', 'error',
+              $_(Maybe.orSome('energiatodistus.messages.save-error',
+                Response.localizationKey(response))));
+          }
         },
         () => {
           toggleOverlay(false);
@@ -111,6 +115,7 @@
         luokittelut={luokittelut.some()}
         whoami={whoami.some()}
         validation={validation.some()}
+        bind:showMissingProperties
         {submit}
         {title} />
     {/if}
