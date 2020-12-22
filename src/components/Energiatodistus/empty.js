@@ -270,7 +270,7 @@ export const energiatodistus2013 = R.compose(
   ),
   R.assocPath(
     ['tulokset', 'kaytettavat-energiamuodot', 'muu'],
-    R.times(emptyMuuEnergiamuoto, 3)
+    R.times(emptyMuuEnergiamuoto, 1)
   ),
   R.assocPath(
     ['tulokset', 'uusiutuvat-omavaraisenergiat'],
