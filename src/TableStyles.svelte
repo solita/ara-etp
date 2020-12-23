@@ -22,10 +22,11 @@
   }
 
   :global(.etp-table--tr__link:hover) {
-    @apply cursor-pointer bg-tertiary;
+    @apply cursor-pointer bg-althover;
   }
 
-  :global(.etp-table--td__center) {
+  :global(.etp-table--td__center),
+  :global(.etp-table--th__center) {
     @apply text-center;
   }
 </style>

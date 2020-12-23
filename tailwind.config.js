@@ -10,6 +10,7 @@ module.exports = {
       secondarydark: '#343841',
       link: '#538000',
       hover: '#538000',
+      althover: '#c5e191',
       focus: '#538000',
       active: '#6d6d6d',
       disabled: '#a7a7a7',
