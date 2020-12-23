@@ -254,6 +254,14 @@
   .pagination:not(empty) {
     @apply mt-4;
   }
+
+  .delete-icon:hover:not(.text-disabled) {
+    @apply text-error;
+  }
+
+  .delete-icon.text-disabled {
+    @apply cursor-not-allowed;
+  }
 </style>
 
 <div class="w-full mt-3">
@@ -298,10 +306,13 @@
                   {$_('energiatodistus.haku.sarakkeet.osoite')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.laatija')}
+                  {$_('energiatodistus.haku.sarakkeet.ktl')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.toiminnot')}
+                  {$_('energiatodistus.haku.sarakkeet.laatija')}
+                </th>
+                <th class="etp-table--th  etp-table--th__center">
+                  <span class="material-icons"> delete_forever </span>
                 </th>
               </tr>
             </thead>
@@ -328,6 +339,10 @@
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}
+                    {orEmpty(energiatodistus.perustiedot.postinumero)}
+                  </td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus['laatija-fullname'])}
@@ -338,9 +353,13 @@
                       confirmButtonLabel={$_('confirm.button.delete')}
                       confirmMessage={$_('confirm.you-want-to-delete')}>
                       <span
-                        class="material-icons"
-                        on:click|stopPropagation={_ => confirm(deleteEnergiatodistus, energiatodistus.versio, energiatodistus.id)}>
-                        delete
+                        class="material-icons delete-icon"
+                        class:text-disabled={et.tilaKey(energiatodistus['tila-id']) == 'signed'}
+                        title={et.tilaKey(energiatodistus['tila-id']) == 'signed' ? $_('energiatodistus.haku.poista_disabled') : ''}
+                        on:click|stopPropagation={_ => {
+                          if (et.tilaKey(energiatodistus['tila-id']) != 'signed') confirm(deleteEnergiatodistus, energiatodistus.versio, energiatodistus.id);
+                        }}>
+                        highlight_off
                       </span>
                     </Confirm>
                   </td>
