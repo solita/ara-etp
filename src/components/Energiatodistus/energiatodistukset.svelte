@@ -86,6 +86,7 @@
           'success',
           $_('energiatodistukset.messages.delete-success')
         );
+        nextPageCallback(1);
       },
       api.deleteEnergiatodistus(fetch, versio, id)
     );
