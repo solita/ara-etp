@@ -339,8 +339,7 @@
                     {orEmpty(energiatodistus.perustiedot.nimi)}
                   </td>
                   <td class="etp-table--td">
-                    {orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}
-                    {orEmpty(energiatodistus.perustiedot.postinumero)}
+                    {`${orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}, ${orEmpty(energiatodistus.perustiedot.postinumero)}`}
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
