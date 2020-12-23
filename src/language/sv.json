@@ -36,9 +36,9 @@
     "tyojono": "Arbetskö",
     "kaytonvalvonta": "Driftsövervakning",
     "halytykset": "Larm",
-    "uusi-kayttaja": "Uusi käyttäjä SV?",
+    "uusi-kayttaja": "Ny användare",
     "kayttajat": "Användare",
-    "kayttaja": "Käyttäjä",
+    "kayttaja": "Användare",
     "et": "EC",
     "liitteet": "Bilagor",
     "allekirjoitus": "Signatur",
@@ -46,6 +46,9 @@
     "myinfo": "Egna uppgifter",
     "kirjaudu-ulos": "Logga ut",
     "kayttajahallinta": "Användarkontroll",
+    "new-yritys": "Nytt företag?",
+    "yritys": "Företag",
+    "yritys-laatijat": "Upprättare",
     "form-confirm": "Muutoksia ei ole tallennettu. Haluatko poistua sivulta? SV?"
   },
   "errors": {
@@ -80,11 +83,35 @@
     "verkkolaskuoperaattori": "E-fakturaoperatör",
     "verkkolaskuosoite": "Adress för nätfaktura",
     "messages": {
-      "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
-      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
-      "load-error": "Yrityksen tietojen haku epäonnistui."
+      "save-success": "Yrityksen tiedot tallennettu onnistuneesti. SV?",
+      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe. SV?",
+      "validation-error": "Lomakkeella virheitä, tarkista syötteet. SV?",
+      "load-error": "Yrityksen tietojen haku epäonnistui. SV?"
+    },
+    "laatijat": {
+      "table": {
+        "laatija": "Upprättare",
+        "liitetty": "Liitetty SV?",
+        "hyvaksyja": "Hyväksyjä SV?",
+        "delete": "Poista SV?",
+        "proposal": "Odottaa hyväksymistä SV?"
+      },
+      "accept": {
+        "confirm-message": "Oletko varma että haluat liittää laatijan yritykseen. SV?",
+        "confirm-button": "Hyväksy SV?",
+        "link": "Hyväksy liittäminen SV?",
+        "success": "Laatijan hyväksyminen yritykseen onnistui SV?",
+        "error": "Laatijan hyväksyminen yritykseen epäonnistui SV?"
+      },
+      "delete": {
+        "confirm-message": "Oletko varma että haluat poistaa laatijan yrityksestä. SV?",
+        "confirm-button": "Poista SV?",
+        "link": "Poista SV?"
+      }
     }
+  },
+  "yritykset": {
+    "title": "Alla företag"
   },
   "time": {
     "klo": "kl."
@@ -139,6 +166,22 @@
       "upload-error": "Filen kunde inte laddas ner."
     },
     "yritykset": {
+      "title": "Företag",
+      "empty": "Sinua ei ole liitetty vielä yhteenkään yritykseen. SV?",
+      "table": {
+        "description": "Sinut on liitetty laatijaksi seuraaviin yrityksiin: SV?",
+        "tila": "Status",
+        "proposal": "Odottaa hyväksymistä SV?",
+        "accepted": "Liitetty {time} SV?",
+        "delete": "Poista SV?",
+        "footer": "Liitettyjen yritysten laskutusosoitteet ovat käytössäsi energiatodistuksen allekirjoitusvaiheessa. SV?"
+      },
+      "joining": {
+        "heading": "Liity yrityksen laatijaksi SV?",
+        "step-1": "Hae yritystä. (Jos yritystä ei ole niin voit itse luoda yrityksen palveluun) SV?",
+        "step-2": "Liitä yritys. SV?",
+        "step-3": "Ota yhteyttä yrityksesi muihin laatijoihin. He voivat nyt hyväksyä sinut yrityksen laatijaksi. SV?"
+      },
       "find-yritys": "Sök bland företag (FO-nummer eller namn)",
       "attach-to-yritys": "Koppla till företaget",
       "yritys-not-found": "Företaget finns inte i den här tjänsten",
@@ -183,7 +226,7 @@
       "sarakkeet": {
         "tila": "Status",
         "tunnus": "Beteckning",
-        "e-luokka": "E-luokka SV?",
+        "e-luokka": "E--klass",
         "versio": "Version",
         "voimassa": "Giltig",
         "rakennuksen-nimi": "Byggnadens namn",
@@ -191,7 +234,7 @@
         "laatija": "Upprättare",
         "toiminnot": "Funktioner"
       },
-      "valitse_hakuehto": "Valitse hakuehto",
+      "valitse_hakuehto": "Valitse hakuehto SV?",
       "lisaa_hakuehtoja": "Fler sökkriterier",
       "lisaa_hakuehto": "Lägg till sökvilkor",
       "tyhjenna_hakuehdot": "Töm sökvillkoren",
@@ -210,7 +253,7 @@
       "true": "Ja",
       "false": "Nej",
       "laatimisvaihe": "Upprättandes period",
-      "kaikki": "Kaikki SV?"
+      "kaikki": "Alla"
     },
     "kaikki": "Allt",
     "korvaavuus": {
@@ -338,30 +381,35 @@
           "label-context": "Klimatskal / Ytterväggar",
           "ala": "A",
           "U": "U",
+          "UA": "U*A",
           "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "ylapohja": {
           "label-context": "Klimatskal / Vindsbjälklag",
           "ala": "A",
           "U": "U",
+          "UA": "U*A",
           "osuu-lampohaviosta": "Andel av värmeförlusten"
         },
         "alapohja": {
           "label-context": "Klimatskal / Bottenbjälklag",
           "ala": "A",
           "U": "U",
+          "UA": "U*A",
           "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "ikkunat": {
           "label-context": "Klimatskal / Fönster",
           "ala": "A",
           "U": "U",
+          "UA": "U*A",
           "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "ulkoovet": {
           "label-context": "Klimatskal / Ytterdörrar",
           "ala": "A",
           "U": "U",
+          "UA": "U*A",
           "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
         "kylmasillat": "Köldbryggor",
@@ -572,7 +620,7 @@
       "label-context": "$unused",
       "yhteensa": "Totalt",
       "e-luku": "E-talet",
-      "e-luokka": "E-luokka SV?",
+      "e-luokka": "E-klass",
       "kaytettavat-energiamuodot": {
         "header": "Specifikation av E-tal",
         "label-context": "Specifikation av E-tal",
@@ -998,6 +1046,10 @@
           "success": "Bilagan till energicertifikatet har avlägsnats.",
           "delete": "Det uppstod ett fel i avlägsnandet av bilagan till energicertifikatet."
         },
+        "valvonta": {
+          "success": "Valvonnan tila päivitetty.",
+          "error": "Valvonnan tilan päivityksessä tapahtui virhe."
+        },
         "load-error": "Sökningen av energicertifikatets bilagor misslyckades."
       }
     }
@@ -1042,7 +1094,7 @@
     "message": "Valitsemaasi sivua ei ole olemassa. SV"
   },
   "footer": {
-    "about": "Tietoa Sivustosta SV?",
+    "about": "Tietoa sivustosta SV?",
     "name": "Finansiering- och utvecklingcentralet för boendet",
     "po-box": "PB 30",
     "post-num": "15140 LAHTIS",

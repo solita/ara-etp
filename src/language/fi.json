@@ -578,20 +578,17 @@
           "tuotto": "Ilmalämpöpumppujen tuotto"
         }
       },
-
       "jaahdytysjarjestelma": {
         "header": "Jäähdytysjärjestelmä",
         "label-context": "Jäähdytysjärjestelmä",
         "jaahdytyskauden-painotettu-kylmakerroin": "Jäähdytyskauden painotettu kylmäkerroin"
       },
-
       "lkvn-kaytto": {
         "header": "Lämmin käyttövesi",
         "label-context": "Lämmin käyttövesi",
         "ominaiskulutus": "Ominaiskulutus",
         "lammitysenergian-nettotarve": "Lämmitysenergian nettotarve"
       },
-
       "sis-kuorma": {
         "header": "Sisäiset lämpökuormat eri käyttöasteilla",
         "kayttoaste": "Käyttöaste",
@@ -818,27 +815,22 @@
           "muunnoskerroin": "Muunnoskerroin kWh:ksi"
         },
         "label-context": "Ostetut polttoaineet",
-
         "kevyt-polttooljy": "Kevyt polttoöljy",
         "kevyt-polttooljy-yksikko": "litra",
         "kevyt-polttooljy-vuosikulutus": "Kevyt polttoöljy (kWh/vuosi)",
         "kevyt-polttooljy-neliovuosikulutus": "Kevyt polttoöljy (kWh/(m²vuosi))",
-
         "pilkkeet-havu-sekapuu": "Pilkkeet (havu- ja sekapuu)",
         "pilkkeet-havu-sekapuu-yksikko": "pino-m³",
         "pilkkeet-havu-sekapuu-vuosikulutus": "Pilkkeet (havu- ja sekapuu) (kWh/vuosi)",
         "pilkkeet-havu-sekapuu-neliovuosikulutus": "Pilkkeet (havu- ja sekapuu) (kWh/(m²vuosi))",
-
         "pilkkeet-koivu": "Pilkkeet (koivu)",
         "pilkkeet-koivu-yksikko": "pino-m³",
         "pilkkeet-koivu-vuosikulutus": "Pilkkeet (koivu) (kWh/vuosi)",
         "pilkkeet-koivu-neliovuosikulutus": "Pilkkeet (koivu) (kWh/(m²vuosi))",
-
         "puupelletit": "Puupelletit",
         "puupelletit-yksikko": "kg",
         "puupelletit-vuosikulutus": "Puupelletit (kWh/vuosi)",
         "puupelletit-neliovuosikulutus": "Puupelletit (kWh/(m²vuosi))",
-
         "muu": {
           "0": {
             "label-context": "Muut ostetut polttoaineet",
@@ -883,7 +875,6 @@
         "jaahdytys": "Jäähdytys, ostoenergian muutos",
         "eluvun-muutos": "E-luvun muutos"
       },
-
       "suositukset-header": {
         "2018": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
         "2013": "Suosituksia rakennuksen käyttöön ja ylläpitoon"
