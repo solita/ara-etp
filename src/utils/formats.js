@@ -12,3 +12,20 @@ export const percentFormat = Intl.NumberFormat('fi-FI', { style: 'percent' })
 export const optionalString = Maybe.orSome('');
 export const optionalNumber = R.compose(Maybe.orSome(''), R.map(numberFormat));
 export const optionalYear = R.compose(Maybe.orSome(''), R.map(R.identity));
+
+/**
+ * Format start time instant (UTC) as a start date.
+ * Start date is a date in Europe/Helsinki timezone when
+ * the particular period is started.
+ */
+export const inclusiveStartDate = Intl.DateTimeFormat('fi-FI',
+  { timeZone: "Europe/Helsinki", dateStyle: 'medium' }).format
+
+/**
+ * Format end time instant as a inclusive end date (the last valid date).
+ * Here we assume that Europe/Helsinki timezone is always
+ * somewhere between -9 to +13
+ */
+export const inclusiveEndDate = endTimeInstant =>
+  Intl.DateTimeFormat('fi-FI', { timeZone: "UTC", dateStyle: 'medium' })
+    .format(dfns.subHours(endTimeInstant, 10));

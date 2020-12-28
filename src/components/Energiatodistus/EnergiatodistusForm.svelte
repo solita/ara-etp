@@ -3,6 +3,7 @@
 
   import * as et from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Formats from '@Utility/formats';
   import * as schemas from './schema';
   import { locale, _ } from '@Language/i18n';
   import * as localstorage from './local-storage';
@@ -218,6 +219,12 @@
           on:reset={reset}>
           <div class="w-full mt-3">
             <H1 text={title} />
+
+            {#if EtUtils.isSigned(energiatodistus)}
+              <div class="mb-5">Voimassa:
+                {Maybe.fold('', Formats.inclusiveStartDate, energiatodistus.allekirjoitusaika)} -
+                {Maybe.fold('', Formats.inclusiveEndDate, energiatodistus['voimassaolo-paattymisaika'])}</div>
+            {/if}
 
             <PaakayttajanKommentti
               {whoami}

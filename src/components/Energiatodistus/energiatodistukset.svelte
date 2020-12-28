@@ -3,9 +3,9 @@
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
+  import * as Formats from '@Utility/formats';
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
-  import * as dfns from 'date-fns';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
   import { flatSchema } from '@Component/energiatodistus-haku/schema';
@@ -239,9 +239,9 @@
                   </td>
                   <td class="etp-table--td">{energiatodistus.versio}</td>
                   <td class="etp-table--td">
-                    {R.compose( Maybe.fold('-', d =>
-                        dfns.format(d, 'd.M.yyyy')
-                      ), et.viimeinenVoimassaolo )(energiatodistus)}
+                    {Maybe.fold('-',
+                      Formats.inclusiveEndDate,
+                      energiatodistus['voimassaolo-paattymisaika'])}
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(energiatodistus.perustiedot.nimi)}
