@@ -350,6 +350,7 @@ export const isTilaInTilat = tilat =>
   R.compose(R.includes(R.__, tilat), R.prop('tila-id'));
 
 export const isDraft = R.propEq('tila-id', tila.draft);
+export const isSigned = R.propEq('tila-id', tila.signed);
 
 const kielisyydet = ['fi', 'sv', 'bilingual'];
 
@@ -357,7 +358,3 @@ export const kielisyys = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
 
 export const kielisyysKey = id => kielisyydet[id];
 
-export const viimeinenVoimassaolo = R.compose(
-  R.map(paattymisaika => dfns.subDays(dfns.parseISO(paattymisaika), 1)),
-  R.prop('voimassaolo-paattymisaika')
-);
