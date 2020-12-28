@@ -140,8 +140,7 @@
     })
   );
 
-  let queryAsQueryString = queryToQuerystring(parsedQuery);
-
+  let queryStringForXlsx;
   let currentQuery = 'where=[[]]';
 
   $: if ($querystring !== currentQuery) {
@@ -166,6 +165,7 @@
       R.tap(cancel),
       R.prepend(R.__, [api.laatimisvaiheet]),
       api.getEnergiatodistukset,
+      R.tap(queryString => queryStringForXlsx = queryString),
       queryToQuerystring,
       R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
       parseQuerystring
@@ -301,6 +301,6 @@
     &nbsp;
     <Link
       text={$_('energiatodistus.lataa-xlsx')}
-      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' + queryAsQueryString} />
+      href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' + queryStringForXlsx} />
   </div>
 </div>
