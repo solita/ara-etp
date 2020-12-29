@@ -112,6 +112,7 @@ export const deserializeLiite = R.evolve({
 
 export const url = {
   all: '/api/private/energiatodistukset',
+  allCount: '/api/private/energiatodistukset/count',
   version: version => `${url.all}/${version}`,
   id: (version, id) => `${url.version(version)}/${id}`,
   pdf: (version, id, language) =>
@@ -147,6 +148,12 @@ export const getEnergiatodistukset = R.compose(
   R.concat(url.all)
 );
 
+export const getEnergiatodistuksetCount = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(url.allCount)
+);
+
 export const getEnergiatodistuksetByField = R.curry((field, value) =>
   getEnergiatodistukset(`?where=[[["=","${field}",${R.toString(value)}]]]`)
 );
@@ -162,9 +169,14 @@ export const getEnergiatodistusById = R.curry((fetch, version, id) =>
 
 export const findEnergiatodistusById = R.compose(
   Future.chainRej(
-    R.ifElse(R.propEq('status', 404),
-      R.always(Future.resolve(null)), Future.reject)),
-  getEnergiatodistusById(fetch, 'all'));
+    R.ifElse(
+      R.propEq('status', 404),
+      R.always(Future.resolve(null)),
+      Future.reject
+    )
+  ),
+  getEnergiatodistusById(fetch, 'all')
+);
 
 export const getLiitteetById = R.curry((fetch, version, id) =>
   R.compose(
@@ -329,7 +341,9 @@ export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
     R.map(R.map(yritysApi.getYritysById(fetch))),
     R.map(R.map(R.prop('id'))),
     R.map(R.filter(LaatijaYritysTila.isAccepted)),
-    laatijaApi.getYritykset(fetch))(laatijaId));
+    laatijaApi.getYritykset(fetch)
+  )(laatijaId)
+);
 
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
@@ -339,11 +353,12 @@ export const validation = R.memoizeWith(R.identity, version =>
   })
 );
 
-export const getEluokka = R.curry((fetch, versio,
-                                   alakayttotarkoitusId,
-                                   nettoala, eLuku) =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(`api/private/e-luokka/${versio}/${alakayttotarkoitusId}/${nettoala}/${eLuku}`)
+export const getEluokka = R.curry(
+  (fetch, versio, alakayttotarkoitusId, nettoala, eLuku) =>
+    R.compose(
+      Fetch.responseAsJson,
+      Future.encaseP(Fetch.getFetch(fetch))
+    )(
+      `api/private/e-luokka/${versio}/${alakayttotarkoitusId}/${nettoala}/${eLuku}`
+    )
 );

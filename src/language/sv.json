@@ -231,6 +231,7 @@
         "voimassa": "Giltig",
         "rakennuksen-nimi": "Byggnadens namn",
         "osoite": "Adress",
+        "ktl": "KTL SV?",
         "laatija": "Upprättare",
         "toiminnot": "Funktioner"
       },
@@ -253,7 +254,8 @@
       "true": "Ja",
       "false": "Nej",
       "laatimisvaihe": "Upprättandes period",
-      "kaikki": "Alla"
+      "kaikki": "Alla",
+      "poista_disabled": "Et voi poistaa allekirjoitettua energiatodistusta. SV?"
     },
     "kaikki": "Allt",
     "korvaavuus": {

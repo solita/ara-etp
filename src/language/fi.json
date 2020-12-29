@@ -231,6 +231,7 @@
         "voimassa": "Voimassa",
         "rakennuksen-nimi": "Rakennuksen nimi",
         "osoite": "Osoite",
+        "ktl": "KTL",
         "laatija": "Laatija",
         "toiminnot": "Toiminnot"
       },
@@ -253,7 +254,8 @@
       "true": "Kyllä",
       "false": "Ei",
       "laatimisvaihe": "Laatimisvaihe",
-      "kaikki": "Kaikki"
+      "kaikki": "Kaikki",
+      "poista_disabled": "Et voi poistaa allekirjoitettua energiatodistusta."
     },
     "kaikki": "Kaikki",
     "korvaavuus": {
