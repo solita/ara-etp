@@ -22,12 +22,10 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link';
-  import Select from '@Component/Select/Select';
   import Confirm from '@Component/Confirm/Confirm';
   import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
 
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
-  import { jsonToString } from 'webpack/lib/Stats';
 
   let overlay = true;
   let failure = false;
@@ -42,16 +40,10 @@
   const toggleOverlay = value => () => (overlay = value);
   const orEmpty = Maybe.orSome('');
 
-  const formatTila = R.compose(
-    Maybe.orSome($_('validation.no-selection')),
-    Maybe.map(tila => $_(`energiatodistukset.tilat.` + tila)),
-    R.when(R.complement(Maybe.isMaybe), Maybe.of)
-  );
-
-  const numberCheck = R.compose(
+  const parseMaybeInt = R.compose(
     R.filter(i => !isNaN(i)),
     R.map(i => parseInt(i, 10)),
-    Maybe.fromNull
+    Maybe.fromEmpty
   );
 
   const toETView = (versio, id) => {
@@ -93,54 +85,25 @@
   };
 
   const parseQuerystring = R.compose(
-    R.mergeRight({
-      tila: Maybe.None(),
-      where: [[]],
+    R.mergeRight({ where: [[]] }),
+    R.mergeWith(Maybe.orElse, {
       keyword: Maybe.None(),
       id: Maybe.None(),
       page: Maybe.Some(0),
-      order: Maybe.Some('desc'),
-      sort: Maybe.Some('energiatodistus.id'),
       limit: Maybe.Some(pageSize),
-      offset: Maybe.Some(0)
+      order: Maybe.Some('desc'),
+      sort: Maybe.Some('energiatodistus.id')
     }),
     R.evolve({
-      tila: Maybe.fromNull,
       where: R.compose(Either.orSome([[]]), w =>
         Either.fromTry(() => JSON.parse(w))
       ),
-      keyword: Maybe.fromNull,
-      order: Maybe.fromNull,
-      sort: Maybe.fromNull,
-      limit: Maybe.fromNull,
-      offset: Maybe.fromNull,
-      page: numberCheck,
-      id: numberCheck
-    }),
-    qs.parse
-  );
-
-  const parseQuerystringCount = R.compose(
-    R.mergeLeft({
-      order: Maybe.None(),
-      sort: Maybe.None(),
-      limit: Maybe.None(),
-      offset: Maybe.None(),
-      page: Maybe.None()
-    }),
-    R.mergeRight({
-      tila: Maybe.None(),
-      where: [[]],
-      keyword: Maybe.None(),
-      id: Maybe.None()
-    }),
-    R.evolve({
-      tila: Maybe.fromNull,
-      where: R.compose(Either.orSome([[]]), w =>
-        Either.fromTry(() => JSON.parse(w))
-      ),
-      keyword: Maybe.fromNull,
-      id: numberCheck
+      keyword: Maybe.fromEmpty,
+      order: Maybe.fromEmpty,
+      sort: Maybe.fromEmpty,
+      limit: Maybe.fromEmpty,
+      page: parseMaybeInt,
+      id: parseMaybeInt
     }),
     qs.parse
   );
@@ -148,13 +111,6 @@
   const nextPageCallback = nextPage => {
     let param = R.compose(
       queryToQuerystring,
-      R.mergeLeft({
-        order: Maybe.None(),
-        sort: Maybe.None(),
-        limit: Maybe.None(),
-        offset: Maybe.None()
-      }),
-      // R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
       R.set(R.lensProp('page'), Maybe.Some(nextPage - 1)),
       parseQuerystring
     )(currentQuery);
@@ -165,7 +121,6 @@
   $: parsedQuery = parseQuerystring($querystring);
 
   $: where = R.prop('where', parsedQuery);
-  $: tila = R.prop('tila', parsedQuery);
   $: keyword = R.prop('keyword', parsedQuery);
   $: id = R.prop('id', parsedQuery);
   $: page = R.prop('page', parsedQuery);
@@ -195,12 +150,20 @@
     })
   );
 
-  let queryStringForXlsx;
+  $: queryStringForXlsx = R.compose(
+    queryToQuerystring,
+    R.omit(['offset', 'page', 'limit']),
+    R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema))
+  )(parsedQuery);
+
   let currentQuery = 'where=[[]]';
+
+  const setOffsetToQuery = query => R.assoc('offset',
+    R.lift(R.multiply)(query.limit, query.page), query);
 
   $: if ($querystring !== currentQuery) {
     currentQuery = $querystring;
-    R.compose(
+    cancel = R.compose(
       Future.fork(
         () => {
           overlay = false;
@@ -213,40 +176,19 @@
         response => {
           overlay = false;
           energiatodistukset = response[0];
+          energiatodistuksetCount = response[1].count;
         }
       ),
-      Future.parallel(5),
       R.tap(toggleOverlay(true)),
       R.tap(cancel),
-      R.prepend(R.__, [api.laatimisvaiheet]),
-      api.getEnergiatodistukset,
-      R.tap(queryString => queryStringForXlsx = queryString),
-      queryToQuerystring,
+      Future.parallel(2),
+      R.juxt([
+        R.compose(api.getEnergiatodistukset, queryToQuerystring,
+          R.dissoc('page'), setOffsetToQuery),
+        R.compose(api.getEnergiatodistuksetCount, queryToQuerystring,
+          R.omit(['limit', 'sort', 'order', 'page', 'offset']))]),
       R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
-      R.set(
-        R.lensProp('offset'),
-        Maybe.Some(R.multiply(pageSize, page.orSome(0)))
-      ),
       parseQuerystring
-    )(currentQuery);
-
-    R.compose(
-      Future.fork(
-        () => {
-          flashMessageStore.add(
-            'Energiatodistus',
-            'error',
-            $_('energiatodistus.messages.load-error')
-          );
-        },
-        response => {
-          energiatodistuksetCount = response.count;
-        }
-      ),
-      api.getEnergiatodistuksetCount,
-      queryToQuerystring,
-      R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
-      parseQuerystringCount
     )(currentQuery);
   }
 </script>
