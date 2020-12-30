@@ -214,10 +214,17 @@ export const navigationParse = R.curry(
           R.compose(parseYritys(i18n, kayttaja), R.tail)
         ],
         [
-          R.compose(
-            R.either(R.equals('kayttaja'), R.equals('laatija')),
-            R.head
-          ),
+          R.allPass([
+            R.compose(
+              R.either(R.equals('kayttaja'), R.equals('laatija')),
+              R.head
+            ),
+            R.compose(
+              R.not,
+              R.equals(['laatijoidentuonti']),
+              R.tail
+            )
+          ]),
           R.compose(parseKayttaja(i18n, kayttaja, idTranslate), R.tail)
         ],
         [
