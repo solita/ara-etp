@@ -88,7 +88,7 @@
     ),
     Future.parallel(5),
     R.prepend(R.__, [
-      api.luokittelut(params.version),
+      api.luokittelutForVersion(params.version),
       kayttajaApi.whoami,
       api.validation(params.version)
     ]),

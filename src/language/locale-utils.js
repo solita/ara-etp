@@ -5,6 +5,8 @@ const locales = ['fi', 'sv'];
 
 export const shortLocale = R.compose(R.head, R.split('-'));
 
+export const isSV = R.compose(R.equals('sv'), shortLocale);
+
 export const label = R.curry((locale, item) =>
   R.prop(
     `label-${R.unless(
