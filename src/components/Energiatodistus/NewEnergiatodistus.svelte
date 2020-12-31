@@ -81,7 +81,7 @@
     ),
     Future.parallel(5),
     R.prepend(kayttajaApi.whoami),
-    R.juxt([api.luokittelut, api.validation])
+    R.juxt([api.luokittelutForVersion, api.validation])
   )(params.version);
 </script>
 

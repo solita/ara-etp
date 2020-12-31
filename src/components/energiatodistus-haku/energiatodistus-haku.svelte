@@ -30,46 +30,27 @@
   export let where;
   export let keyword;
   export let id;
+  export let luokittelut;
+  export let whoami;
 
   let overlay = true;
-  let luokittelut = Maybe.None();
-  let schema = Maybe.None();
+  let schema = Kayttajat.isPaakayttaja(whoami)
+    ? EtHakuSchema.paakayttajaSchema
+    : EtHakuSchema.laatijaSchema;
+
   let laatijat = Maybe.None();
 
-  R.compose(
-    Future.fork(
-      () => {
-        overlay = false;
-      },
-      response => {
-        overlay = false;
-        schema = Maybe.Some(
-          Kayttajat.isPaakayttaja(response[0])
-            ? EtHakuSchema.paakayttajaSchema
-            : EtHakuSchema.laatijaSchema
-        );
-
-        luokittelut = Maybe.Some({
-          2013: { ...response[1], ...response[2] },
-          2018: { ...response[1], ...response[3] }
-        });
-
-        laatijat = Maybe.Some(response[4]);
-      }
-    ),
-    R.chain(whoami =>
-      Future.parallel(5, [
-        Future.resolve(whoami),
-        api.yhteisetLuokittelut,
-        api.tarkoitusluokat(2013),
-        api.tarkoitusluokat(2018),
-        Kayttajat.isPaakayttaja(whoami)
-          ? laatijaApi.getLaatijat(fetch)
-          : Future.resolve([])
-      ])
-    ),
-    R.tap(() => (overlay = true))
-  )(kayttajaApi.whoami);
+ Future.fork(
+    () => {
+      overlay = false;
+    },
+    response => {
+      overlay = false;
+      laatijat = Maybe.Some(response);
+    },
+   Kayttajat.isPaakayttaja(whoami)
+     ? laatijaApi.getLaatijat(fetch)
+     : Future.resolve([]));
 
   const navigate = search => {
     R.compose(
@@ -95,7 +76,7 @@
     R.length,
     R.compose(
       Maybe.orSome([]),
-      R.lift(EtHakuUtils.deserializeWhere)(schema),
+      R.lift(EtHakuUtils.deserializeWhere)(Maybe.Some(schema)),
       Maybe.Some
     ),
     R.always([])
@@ -109,7 +90,7 @@
 </style>
 
 <!-- purgecss: bg-beige -->
-{#if Maybe.isSome(schema) && Maybe.isSome(luokittelut) && Maybe.isSome(laatijat)}
+{#if Maybe.isSome(laatijat)}
   <div class="flex w-full">
     <div class="w-7/12 flex flex-col justify-end">
       <SimpleInput
@@ -133,7 +114,7 @@
         Either.orSome(false),
         R.map(
           R.compose(
-            R.all(EtHakuUtils.isValidBlock(Maybe.get(schema))),
+            R.all(EtHakuUtils.isValidBlock(schema)),
             R.map(R.prop('block')),
             EtHakuUtils.searchItems
           )
@@ -185,8 +166,8 @@
           {key}
           {values}
           {index}
-          schema={Maybe.get(schema)}
-          luokittelut={Maybe.get(luokittelut)}
+          {luokittelut}
+          {schema}
           laatijat={Maybe.get(laatijat)} />
         <span
           class="text-secondary font-icon text-2xl cursor-pointer ml-4

@@ -292,41 +292,31 @@ export const deleteEnergiatodistus = R.curry((fetch, version, id) =>
   )
 );
 
-export const laatimisvaiheet = Fetch.cached(fetch, '/laatimisvaiheet');
-
-export const yhteisetLuokittelut = Future.parallelObject(6, {
+const luokittelut = {
   lammonjako: Fetch.cached(fetch, '/lammonjako'),
   lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
   ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
   postinumerot: Fetch.cached(fetch, '/postinumerot'),
   kielisyys: Fetch.cached(fetch, '/kielisyys'),
-  laatimisvaiheet
+  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet')
+};
+
+const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
+  kayttotarkoitusluokat: Fetch.cached(fetch, '/kayttotarkoitusluokat/' + version),
+  alakayttotarkoitusluokat: Fetch.cached(fetch, '/alakayttotarkoitusluokat/' + version)
+}));
+
+export const luokittelutForVersion = version =>
+  Future.parallelObject(8, {
+    ...luokittelut,
+    ...kayttotarkoitusluokittelut(version)
+  });
+
+export const luokittelutAllVersions = Future.parallelObject(10, {
+  ...luokittelut,
+  2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
+  2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
 });
-
-export const kayttotarkoitusluokat = version =>
-  Fetch.cached(fetch, '/kayttotarkoitusluokat/' + version);
-export const alakayttotarkoitusluokat = version =>
-  Fetch.cached(fetch, '/alakayttotarkoitusluokat/' + version);
-
-export const tarkoitusluokat = R.memoizeWith(R.identity, version =>
-  Future.parallelObject(2, {
-    kayttotarkoitusluokat: kayttotarkoitusluokat(version),
-    alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
-  })
-);
-
-export const luokittelut = R.memoizeWith(R.identity, version =>
-  Future.parallelObject(7, {
-    lammonjako: Fetch.cached(fetch, '/lammonjako'),
-    lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
-    ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
-    postinumerot: Fetch.cached(fetch, '/postinumerot'),
-    kielisyys: Fetch.cached(fetch, '/kielisyys'),
-    laatimisvaiheet,
-    kayttotarkoitusluokat: kayttotarkoitusluokat(version),
-    alakayttotarkoitusluokat: alakayttotarkoitusluokat(version)
-  })
-);
 
 export const replaceable = R.curry((fetch, id) =>
   R.compose(
