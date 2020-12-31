@@ -936,7 +936,7 @@
         "toimenpide": [
           {
             "label-context": "Anmärkningar / Ytterväggar...",
-            "nimi": "Toimenpide-ehdotus",
+            "nimi": "Åtgärdsförslag",
             "lampo": "Åtgärdens inverkan på värmeförbrukningen",
             "sahko": "Åtgärdens inverkan på elförbrukningen",
             "jaahdytys": "Åtgärdens inverkan på kylningens energiförbrukning",
