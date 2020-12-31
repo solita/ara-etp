@@ -17,6 +17,7 @@
   import qs from 'qs';
 
   import { _, locale } from '@Language/i18n';
+  import * as Locales from '@Language/locale-utils';
   import { flashMessageStore } from '@/stores';
   import { push, replace } from '@Component/Router/router';
 
@@ -213,6 +214,21 @@
       api.luokittelutAllVersions
     ])
   );
+
+  const kayttotarkoitusTitle = (luokittelut, energiatodistus) =>
+    Maybe.fold('-',
+      et.selectFormat(
+        Locales.label($locale),
+        luokittelut[energiatodistus.versio].kayttotarkoitusluokat),
+      et.findKayttotarkoitusluokkaId(
+        energiatodistus.perustiedot.kayttotarkoitus,
+        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat))
+    + ' / ' +
+    Maybe.fold('-',
+      et.selectFormat(
+        Locales.label($locale),
+        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat),
+      energiatodistus.perustiedot.kayttotarkoitus)
 </script>
 
 <style>
@@ -311,7 +327,9 @@
                       <Address {energiatodistus}
                                postinumerot={luokittelut.postinumerot} />
                     </td>
-                    <td class="etp-table--td">
+                    <td class="etp-table--td"
+                        title="{kayttotarkoitusTitle(luokittelut, energiatodistus)}">
+
                       {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
                     </td>
                     <td class="etp-table--td">
