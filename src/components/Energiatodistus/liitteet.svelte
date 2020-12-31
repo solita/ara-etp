@@ -5,6 +5,7 @@
   import * as Either from '@Utility/either-utils';
   import * as validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
+  import * as parsers from '@Utility/parsers';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as api from './energiatodistus-api';
   import * as valvontaApi from './valvonta-api';
@@ -149,12 +150,6 @@
       liite.url
     );
 
-  const addDefaultProtocol = R.ifElse(
-    R.anyPass([R.includes('://'), R.isEmpty]),
-    R.identity,
-    R.concat('http://')
-  );
-
   const deleteLiite = R.compose(
     fork('delete-liite'),
     R.tap(enableOverlay),
@@ -291,7 +286,7 @@
             lens={R.lensPath(['url'])}
             bind:currentValue={linkUrl}
             bind:valid={linkUrlValid}
-            parse={R.compose( addDefaultProtocol, R.trim )}
+            parse={R.compose( parsers.addDefaultProtocol, R.trim )}
             validators={liiteLinkAddSchema.url}
             i18n={$_} />
         </div>

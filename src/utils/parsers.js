@@ -42,6 +42,12 @@ export const parseISODate = R.compose(
   dfns.parseISO
 );
 
+export const addDefaultProtocol = R.ifElse(
+  R.anyPass([R.includes('://'), R.isEmpty]),
+  R.identity,
+  R.concat('http://')
+);
+
 /**
  * Transforms Maybe[Either[A]] -> Either[Maybe[A]]
  */
