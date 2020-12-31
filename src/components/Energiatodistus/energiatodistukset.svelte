@@ -16,8 +16,8 @@
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
 
-  import { _ } from '@Language/i18n';
-  import { flashMessageStore, currentUserStore } from '@/stores';
+  import { _, locale } from '@Language/i18n';
+  import { flashMessageStore } from '@/stores';
   import { push, replace } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
@@ -26,6 +26,7 @@
   import Link from '@Component/Link/Link';
   import Confirm from '@Component/Confirm/Confirm';
   import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
+  import Address from './address';
 
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -307,7 +308,8 @@
                       {orEmpty(energiatodistus.perustiedot.nimi)}
                     </td>
                     <td class="etp-table--td">
-                      {`${orEmpty(energiatodistus.perustiedot['katuosoite-fi'])}, ${orEmpty(energiatodistus.perustiedot.postinumero)}`}
+                      <Address {energiatodistus}
+                               postinumerot={luokittelut.postinumerot} />
                     </td>
                     <td class="etp-table--td">
                       {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
