@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Validation from '@Utility/validation';
+import * as parsers from '@Utility/parsers';
 
 const RequiredString = (min, max) => ([
   Validation.isRequired,
@@ -34,5 +35,5 @@ export const formParsers = () => ({
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,
-  wwwosoite: R.compose(Maybe.fromEmpty, R.trim)
+  wwwosoite: R.compose(Maybe.fromEmpty, parsers.addDefaultProtocol, R.trim)
 });

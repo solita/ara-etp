@@ -70,7 +70,7 @@ export const LimitedString = (min, max) => [
 ];
 
 export const isUrl = R.test(
-  /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/
+  /^https?:\/\/(www\.)?[-a-zA-ZäöåÄÖÅ0-9@:%._\+~#=]{1,256}\.[a-zA-ZäöåÄÖÅ0-9()]{1,6}\b([-a-zA-ZäöåÄÖÅ0-9()@:%_\+.~#?&//=]*)$/
 );
 
 const Interval3 = (labelPrefix, min, max) => [
