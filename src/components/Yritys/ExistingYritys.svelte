@@ -13,7 +13,9 @@
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
   import * as api from './yritys-api';
+  import * as Yritykset from './yritys-utils';
   import * as Locales from '@Language/locale-utils';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
 
   export let params;
@@ -21,20 +23,11 @@
   let yritys = Maybe.None();
 
   let overlay = true;
-  let disabled = false;
+  let disabled = true;
 
   let luokittelut = Maybe.None();
 
   const toggleOverlay = value => { overlay = value };
-  const toggleDisabled = value => { disabled = value };
-
-  const resetView = () => {
-    overlay = true;
-    yritys = Maybe.None();
-    disabled = false;
-  };
-
-  $: params.id && resetView();
 
   $: submit = updatedYritys =>
     R.compose(
@@ -65,14 +58,17 @@
         flashMessageStore.add('Yritys', 'error', $_('yritys.messages.load-error'));
       },
       response => {
-        luokittelut = Maybe.Some(response[0]);
-        yritys = Maybe.Some(response[1]);
+        luokittelut = Maybe.Some(response[2]);
+        yritys = Maybe.Some(response[0]);
         toggleOverlay(false);
+        disabled = !Yritykset.hasModifyPermission(
+          response[1], response[3])
       }
     ),
-    Future.delay(400),
-    Future.both(api.luokittelut),
-    api.getYritysById(fetch)
+    Future.delay(300),
+    Future.parallel(4),
+    R.concat(R.__, [api.luokittelut, kayttajaApi.whoami]),
+    R.juxt([api.getYritysById(fetch), api.getLaatijatById(fetch)])
   )(params.id);
 
 </script>

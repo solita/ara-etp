@@ -81,14 +81,16 @@
     "maa": "Maa",
     "laskutuskieli": "Laskutuskieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
-    "verkkolaskuosoite": "verkkolaskuosoite",
+    "verkkolaskuosoite": "Verkkolaskuosoite",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
-      "load-error": "Yrityksen tietojen haku epäonnistui."
+      "load-error": "Yrityksen tietojen haku epäonnistui.",
+      "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen."
     },
     "laatijat": {
+      "empty": "Yrityksellä ei ole laatijoita.",
       "table": {
         "laatija": "Laatija",
         "liitetty": "Liitetty",

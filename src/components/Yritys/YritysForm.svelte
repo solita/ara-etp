@@ -21,7 +21,6 @@
   const update = fn => (yritys = fn(yritys));
 
   export let submit;
-  export let existing = false;
 
   export let yritys;
 
@@ -107,7 +106,7 @@
           parse={formParsers.ytunnus}
           validators={formSchema.ytunnus}
           i18n={$_}
-          disabled={existing} />
+          {disabled} />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
         <Input
@@ -119,7 +118,8 @@
           lens={R.lensProp('nimi')}
           parse={formParsers.nimi}
           validators={formSchema.nimi}
-          i18n={$_} />
+          i18n={$_}
+          {disabled} />
       </div>
     </div>
   </div>
@@ -195,7 +195,8 @@
               format={formatCountry}
               parse={parseCountry}
               search={true}
-              i18n={$_} />
+              i18n={$_}
+              {disabled} />
           </Autocomplete>
         </div>
       </div>
@@ -204,6 +205,7 @@
           <Select
             label={$_('yritys.laskutuskieli')}
             required={true}
+            {disabled}
             format={formatLaskutuskieli}
             parse={parseLaskutuskieli}
             bind:model={yritys}
@@ -235,6 +237,7 @@
         <Select
           label={$_('yritys.verkkolaskuoperaattori')}
           required={false}
+          {disabled}
           format={formatVerkkolaskuoperaattori}
           parse={parseVerkkolaskuoperaattori}
           bind:model={yritys}
@@ -246,14 +249,14 @@
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={$_('tallenna')} />
+      <Button type={'submit'} text={$_('tallenna')} {disabled} />
     </div>
     <div class="px-4">
       <Button
         on:click={cancel}
         text={$_('peruuta')}
         type={'reset'}
-        style={'secondary'} />
+        style={'secondary'} {disabled} />
     </div>
   </div>
 </form>
