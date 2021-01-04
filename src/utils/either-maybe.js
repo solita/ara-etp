@@ -10,4 +10,6 @@ export const toMaybe = R.compose(
 export const orSome = R.curry((defaultValue, em) => R.compose(
   Maybe.orSome(defaultValue),
   toMaybe
-)(em))
+)(em));
+
+export const forEach = (fn, em) => toMaybe(em).forEach(fn);
