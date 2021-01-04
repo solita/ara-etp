@@ -17,7 +17,13 @@
   export let kuormat = [];
   export let alakayttotarkoitusluokat = [];
 
-  let constantKuorma = Maybe.None();
+  const findConstantKuorma = R.chain(
+    id => Maybe.find(R.propEq('kayttotarkoitusluokka-id', id), kuormat));
+
+  let constantKuorma = findConstantKuorma(et.findKayttotarkoitusluokkaId(
+    energiatodistus.perustiedot.kayttotarkoitus,
+    alakayttotarkoitusluokat
+  ));
 
   $: if (!disabled) {
 
@@ -30,10 +36,7 @@
           kayttotarkoitusluokkaId,
           R.map(R.prop('kayttotarkoitusluokka-id'), constantKuorma)))
     {
-      constantKuorma = R.chain(
-        id => Maybe.find(R.propEq('kayttotarkoitusluokka-id', id), kuormat),
-        kayttotarkoitusluokkaId);
-
+      constantKuorma = findConstantKuorma(kayttotarkoitusluokkaId);
       constantKuorma.forEach(kuorma => {
         tick().then(() => {
           energiatodistus = R.assocPath(['lahtotiedot', 'sis-kuorma'],
