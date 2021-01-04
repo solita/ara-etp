@@ -1,9 +1,8 @@
 import * as R from 'ramda';
-import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
-import * as Either from '@Utility/either-utils';
-import * as Future from '@Utility/future-utils';
+import * as Kayttajat from '@Utility/kayttajat';
 import * as validation from '@Utility/validation';
+import * as Tila from '@Component/Yritys/laatija-yritys-tila';
 
 export const emptyYritys = () => ({
   ytunnus: '',
@@ -55,3 +54,9 @@ export const formParsers = () => ({
   verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim),
   verkkolaskuoperaattori: R.compose(Maybe.fromEmpty, R.trim)
 });
+
+const isInYritys = (laatijat, whoami) =>
+  R.any(R.propEq('id', whoami.id), R.filter(Tila.isAccepted, laatijat));
+
+export const hasModifyPermission = R.curry((laatijat, whoami) =>
+  Kayttajat.isPaakayttaja(whoami) || isInYritys(laatijat, whoami));
