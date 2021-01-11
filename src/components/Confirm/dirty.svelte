@@ -27,7 +27,8 @@
 
   const confirmationUnload = event => {
     if (dirty) {
-      event.returnValue = 'Testing';
+      event.returnValue = $_('navigation.confirmation.description')
+        + ' ' + $_('navigation.confirmation.message');
     }
   }
 
