@@ -29,6 +29,8 @@
     if (dirty) {
       event.returnValue = $_('navigation.confirmation.description')
         + ' ' + $_('navigation.confirmation.message');
+
+      event.preventDefault();
     }
   }
 
