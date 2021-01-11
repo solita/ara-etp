@@ -49,7 +49,14 @@
     "new-yritys": "Nytt företag?",
     "yritys": "Företag",
     "yritys-laatijat": "Upprättare",
-    "form-confirm": "Muutoksia ei ole tallennettu. Haluatko poistua sivulta? SV?"
+
+    "confirmation":{
+      "title": "Varmistus poistumisesta SV",
+      "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta. SV",
+      "message": "Oletko varma, että haluat poistua sivulta? SV",
+      "forward": "Poistu sivulta SV",
+      "cancel": "Peruuta SV"
+    }
   },
   "errors": {
     "load-error": "Sökningen av uppgifterna misslyckades.",

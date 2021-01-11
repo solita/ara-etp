@@ -49,7 +49,14 @@
     "new-yritys": "Uusi yritys",
     "yritys": "Yritys",
     "yritys-laatijat": "Laatijat",
-    "form-confirm": "Muutoksia ei ole tallennettu. Haluatko poistua sivulta?"
+
+    "confirmation":{
+      "title": "Varmistus poistumisesta",
+      "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta.",
+      "message": "Oletko varma, että haluat poistua sivulta?",
+      "forward": "Poistu sivulta",
+      "cancel": "Peruuta"
+    }
   },
   "errors": {
     "load-error": "Tietojen haku epäonnistui.",
