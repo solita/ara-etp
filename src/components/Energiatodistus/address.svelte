@@ -10,7 +10,7 @@
   export let energiatodistus;
   export let postinumerot;
 
-  const katuosoitteet = [
+  $: katuosoitteet = [
     energiatodistus.perustiedot['katuosoite-fi'],
     energiatodistus.perustiedot['katuosoite-sv']
   ];
