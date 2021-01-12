@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { replace, loc } from 'svelte-spa-router';
 
   import * as et from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
@@ -26,7 +27,7 @@
 
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
-  import FormConfirm from '@Component/formconfirm/formconfirm';
+  import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { flashMessageStore } from '@/stores';
 
@@ -53,6 +54,7 @@
   let inputLanguage = 'fi';
 
   let korvausError = Maybe.None();
+  let dirty = false;
 
   const forms = {
     '2018': ET2018Form,
@@ -91,12 +93,12 @@
     )
   );
 
-  const validateAndSubmit = R.curry((beforeSubmit, onSuccessfulSave) => () => {
+  const validateAndSubmit = onSuccessfulSave => () => {
     const invalid = Validations.invalidProperties(schema, energiatodistus);
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       flashMessageStore.flush();
       submit(energiatodistus, (...args) => {
-        beforeSubmit();
+        dirty = false;
         onSuccessfulSave(...args);
       });
       if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
@@ -108,7 +110,7 @@
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
     }
-  });
+  };
 
   const language = R.compose(
     R.map(R.slice(-2, Infinity)),
@@ -131,21 +133,24 @@
     Inputs.scrollIntoView(document, missing[0]);
   }
 
-  const validateCompleteAndSubmit = R.curry(
-    (beforeSubmit, onSuccessfulSave) => () => {
-      const missing = Validations.missingProperties(
-        validation.required,
-        energiatodistus
-      );
-      if (R.isEmpty(missing)) {
-        validateAndSubmit(beforeSubmit, onSuccessfulSave)();
-      } else {
-        showMissingProperties(missing);
-      }
+  const validateCompleteAndSubmit = onSuccessfulSave => () => {
+    const missing = Validations.missingProperties(
+      validation.required,
+      energiatodistus
+    );
+    if (R.isEmpty(missing)) {
+      validateAndSubmit(onSuccessfulSave)();
+    } else {
+      showMissingProperties(missing);
     }
-  );
+  };
 
   const noop = () => {};
+  const reset = _ => {
+    dirty = false;
+    replace($loc.location +
+      Maybe.fold('', R.concat('?', R.__), Maybe.fromEmpty($loc.querystring)));
+  }
 </script>
 
 <style type="text/postcss">
@@ -210,76 +215,77 @@
 </style>
 
 {#if !R.isNil(ETForm)}
-  <FormConfirm let:dirty let:formChange let:reset let:beforeSubmit>
-    {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
-      <Signing {energiatodistus} reload={reset} />
-    {/if}
+  {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
+    <Signing {energiatodistus} reload={reset} />
+  {/if}
 
-    <div class="w-full relative flex">
-      <div class="w-5/6">
-        <form
-          on:submit|preventDefault={validateAndSubmit(beforeSubmit, noop)}
-          on:change={formChange}
-          on:reset={reset}>
-          <div class="w-full mt-3">
-            <H1 text={title} />
+  <DirtyConfirmation {dirty} />
 
-            {#if EtUtils.isSigned(energiatodistus)}
-              <div class="mb-5">Voimassa:
-                {Maybe.fold('', Formats.inclusiveStartDate, energiatodistus.allekirjoitusaika)} -
-                {Maybe.fold('', Formats.inclusiveEndDate, energiatodistus['voimassaolo-paattymisaika'])}</div>
-            {/if}
+  <div class="w-full relative flex">
+    <div class="w-5/6">
+      <form
+        on:submit|preventDefault={validateAndSubmit(noop)}
+        on:input={_ => { dirty = true; }}
+        on:change={_ => { dirty = true; }}
+        on:reset={reset}>
+        <div class="w-full mt-3">
+          <H1 text={title} />
 
-            <PaakayttajanKommentti
-              {whoami}
-              {schema}
-              path={['kommentti']}
-              bind:model={energiatodistus} />
+          {#if EtUtils.isSigned(energiatodistus)}
+            <div class="mb-5">Voimassa:
+              {Maybe.fold('', Formats.inclusiveStartDate, energiatodistus.allekirjoitusaika)} -
+              {Maybe.fold('', Formats.inclusiveEndDate, energiatodistus['voimassaolo-paattymisaika'])}</div>
+          {/if}
 
-            <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
-            <EnergiatodistusKorvattu
-              bind:energiatodistus
-              {whoami}
-              postinumerot={luokittelut.postinumerot}
-              bind:error={korvausError} />
-            <EnergiatodistusKorvaava
-              postinumerot={luokittelut.postinumerot}
-              korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
-            <HR />
+          <PaakayttajanKommentti
+            {whoami}
+            {schema}
+            path={['kommentti']}
+            bind:model={energiatodistus} />
 
-            <Laskutus {schema} {whoami} bind:energiatodistus />
-            <ETForm
-              bind:energiatodistus
-              bind:eTehokkuus
-              {inputLanguage}
-              {disabled}
-              {schema}
-              {luokittelut}
-              {validation} />
+          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
+          <EnergiatodistusKorvattu
+            bind:energiatodistus
+            {whoami}
+            postinumerot={luokittelut.postinumerot}
+            bind:error={korvausError} />
+          <EnergiatodistusKorvaava
+            postinumerot={luokittelut.postinumerot}
+            korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
+          <HR />
+
+          <Laskutus {schema} {whoami} bind:energiatodistus />
+          <ETForm
+            bind:energiatodistus
+            bind:eTehokkuus
+            {inputLanguage}
+            {disabled}
+            {schema}
+            {luokittelut}
+            {validation} />
+        </div>
+        <div class="flex -mx-4 pt-8">
+          <div class="px-4">
+            <Button type={'submit'} text={$_('tallenna')} disabled={!dirty} />
           </div>
-          <div class="flex -mx-4 pt-8">
-            <div class="px-4">
-              <Button type={'submit'} text={$_('tallenna')} />
-            </div>
-            <div class="px-4">
-              <Button text={$_('peruuta')} type={'reset'} style={'secondary'} />
-            </div>
+          <div class="px-4">
+            <Button text={$_('peruuta')} type={'reset'} style={'secondary'} disabled={!dirty} />
           </div>
-        </form>
-      </div>
-      <div class="sticky top-3em w-1/6 self-start flex justify-end">
-        <ToolBar
-          save={validateAndSubmit(beforeSubmit)}
-          saveComplete={validateCompleteAndSubmit(beforeSubmit)}
-          cancel={reset}
-          {energiatodistus}
-          {eTehokkuus}
-          {dirty}
-          {whoami}
-          bind:inputLanguage />
-      </div>
+        </div>
+      </form>
     </div>
-  </FormConfirm>
+    <div class="sticky top-3em w-1/6 self-start flex justify-end">
+      <ToolBar
+        save={validateAndSubmit}
+        saveComplete={validateCompleteAndSubmit}
+        cancel={reset}
+        {energiatodistus}
+        {eTehokkuus}
+        {dirty}
+        {whoami}
+        bind:inputLanguage />
+    </div>
+  </div>
 {:else}
   <p>Energiatodistusversiota {version} ei ole olemassa.</p>
 {/if}

@@ -27,7 +27,7 @@
     overlay = value;
   };
 
-  let energiatodistus = R.equals(params.version, '2018')
+  $: energiatodistus = R.equals(params.version, '2018')
     ? empty.energiatodistus2018()
     : empty.energiatodistus2013();
 
