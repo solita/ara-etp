@@ -266,10 +266,10 @@
         </div>
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
-            <Button type={'submit'} text={$_('tallenna')} />
+            <Button type={'submit'} text={$_('tallenna')} disabled={!dirty} />
           </div>
           <div class="px-4">
-            <Button text={$_('peruuta')} type={'reset'} style={'secondary'} />
+            <Button text={$_('peruuta')} type={'reset'} style={'secondary'} disabled={!dirty} />
           </div>
         </div>
       </form>
