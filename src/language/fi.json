@@ -1067,6 +1067,7 @@
   },
   "energiatodistukset": {
     "title": "Energiatodistukset",
+    "not-found": "Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole yhtään energiatodistusta.",
     "tilat": {
       "0": "Luonnos",
       "1": "Voimassa"

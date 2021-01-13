@@ -1065,6 +1065,7 @@
   },
   "energiatodistukset": {
     "title": "Energicertifikat",
+    "not-found": "Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole yhtään energiatodistusta. SV?",
     "tilat": {
       "0": "Utkast",
       "1": "Giltig"

@@ -44,7 +44,7 @@
   let cancel = () => {};
 
   const toggleOverlay = value => {
-    overlay = value
+    overlay = value;
   };
   const orEmpty = Maybe.orSome('');
 
@@ -55,11 +55,12 @@
   );
 
   const showError = defaultKey => response => {
-    const msg = $_(Maybe.orSome(defaultKey,
-      Response.localizationKey(response)));
+    const msg = $_(
+      Maybe.orSome(defaultKey, Response.localizationKey(response))
+    );
 
     flashMessageStore.add('Energiatodistus', 'error', msg);
-  }
+  };
 
   const loadError = showError('energiatodistus.messages.load-error');
 
@@ -170,8 +171,8 @@
 
   let currentQuery = 'where=[[]]';
 
-  const setOffsetToQuery = query => R.assoc('offset',
-    R.lift(R.multiply)(query.limit, query.page), query);
+  const setOffsetToQuery = query =>
+    R.assoc('offset', R.lift(R.multiply)(query.limit, query.page), query);
 
   $: if ($querystring !== currentQuery) {
     currentQuery = $querystring;
@@ -191,10 +192,18 @@
       R.tap(cancel),
       Future.parallel(2),
       R.juxt([
-        R.compose(api.getEnergiatodistukset, queryToQuerystring,
-          R.dissoc('page'), setOffsetToQuery),
-        R.compose(api.getEnergiatodistuksetCount, queryToQuerystring,
-          R.omit(['limit', 'sort', 'order', 'page', 'offset']))]),
+        R.compose(
+          api.getEnergiatodistukset,
+          queryToQuerystring,
+          R.dissoc('page'),
+          setOffsetToQuery
+        ),
+        R.compose(
+          api.getEnergiatodistuksetCount,
+          queryToQuerystring,
+          R.omit(['limit', 'sort', 'order', 'page', 'offset'])
+        )
+      ]),
       R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema)),
       parseQuerystring
     )(currentQuery);
@@ -206,29 +215,33 @@
     response => {
       resources = Maybe.Some({
         whoami: response[0],
-        luokittelut:response[1]
+        luokittelut: response[1]
       });
     },
-    Future.parallel(2, [
-      kayttajaApi.whoami,
-      api.luokittelutAllVersions
-    ])
+    Future.parallel(2, [kayttajaApi.whoami, api.luokittelutAllVersions])
   );
 
   const kayttotarkoitusTitle = (luokittelut, energiatodistus) =>
-    Maybe.fold('-',
+    Maybe.fold(
+      '-',
       et.selectFormat(
         Locales.label($locale),
-        luokittelut[energiatodistus.versio].kayttotarkoitusluokat),
+        luokittelut[energiatodistus.versio].kayttotarkoitusluokat
+      ),
       et.findKayttotarkoitusluokkaId(
         energiatodistus.perustiedot.kayttotarkoitus,
-        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat))
-    + ' / ' +
-    Maybe.fold('-',
+        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat
+      )
+    ) +
+    ' / ' +
+    Maybe.fold(
+      '-',
       et.selectFormat(
         Locales.label($locale),
-        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat),
-      energiatodistus.perustiedot.kayttotarkoitus)
+        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat
+      ),
+      energiatodistus.perustiedot.kayttotarkoitus
+    );
 </script>
 
 <style>
@@ -245,11 +258,10 @@
   }
 </style>
 
-
 <div class="w-full mt-3">
   <H1 text={$_('energiatodistukset.title')} />
 
-  {#each resources.toArray() as {luokittelut, whoami}}
+  {#each resources.toArray() as { luokittelut, whoami }}
     <div class="mb-10">
       <EnergiatodistusHaku
         {where}
@@ -261,10 +273,7 @@
     <Overlay {overlay}>
       <div slot="content">
         {#if R.isEmpty(energiatodistukset)}
-          <p class="mb-10">
-            Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole
-            yhtään energiatodistusta.
-          </p>
+          <p class="mb-10">{$_('energiatodistukset.not-found')}</p>
         {:else}
           <div class="mb-10">
             <table class="etp-table">
@@ -316,20 +325,19 @@
                     </td>
                     <td class="etp-table--td">{energiatodistus.versio}</td>
                     <td class="etp-table--td">
-                      {Maybe.fold('-',
-                        Formats.inclusiveEndDate,
-                        energiatodistus['voimassaolo-paattymisaika'])}
+                      {Maybe.fold('-', Formats.inclusiveEndDate, energiatodistus['voimassaolo-paattymisaika'])}
                     </td>
                     <td class="etp-table--td">
                       {orEmpty(energiatodistus.perustiedot.nimi)}
                     </td>
                     <td class="etp-table--td">
-                      <Address {energiatodistus}
-                               postinumerot={luokittelut.postinumerot} />
+                      <Address
+                        {energiatodistus}
+                        postinumerot={luokittelut.postinumerot} />
                     </td>
-                    <td class="etp-table--td"
-                        title="{kayttotarkoitusTitle(luokittelut, energiatodistus)}">
-
+                    <td
+                      class="etp-table--td"
+                      title={kayttotarkoitusTitle(luokittelut, energiatodistus)}>
                       {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
                     </td>
                     <td class="etp-table--td">
