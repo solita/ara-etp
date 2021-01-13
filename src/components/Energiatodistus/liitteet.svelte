@@ -49,8 +49,8 @@
   };
 
   const enableOverlay = _ => {
-    overlay = true
-  }
+    overlay = true;
+  };
 
   resetForm();
 
@@ -73,8 +73,11 @@
   const load = R.compose(
     Future.fork(
       _ => {
-        flashMessageStore.add('Energiatodistus', 'error',
-          $_('energiatodistus.liitteet.messages.load-error'));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          $_('energiatodistus.liitteet.messages.load-error')
+        );
         overlay = false;
       },
       response => {
@@ -90,13 +93,15 @@
     R.juxt([api.getLiitteetById(fetch), getValvonta])
   );
 
-
   const viewError = (functionName, response) => {
-    const msg = $_(Maybe.orSome(
-      `energiatodistus.liitteet.messages.${functionName}.error`,
-      Response.localizationKey(response)));
+    const msg = $_(
+      Maybe.orSome(
+        `energiatodistus.liitteet.messages.${functionName}.error`,
+        Response.localizationKey(response)
+      )
+    );
     flashMessageStore.add('Energiatodistus', 'error', msg);
-  }
+  };
 
   const fork = functionName =>
     Future.fork(
@@ -105,18 +110,21 @@
         overlay = false;
       },
       _ => {
-        flashMessageStore.add('Energiatodistus', 'success',
-          $_(`energiatodistus.liitteet.messages.${functionName}.success`));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'success',
+          $_(`energiatodistus.liitteet.messages.${functionName}.success`)
+        );
         load(params.version, params.id);
       }
     );
 
   $: files.length > 0 &&
-  R.compose(
-    fork('add-files'),
-    R.tap(enableOverlay),
-    api.postLiitteetFiles(fetch, params.version, params.id)
-  )(files);
+    R.compose(
+      fork('add-files'),
+      R.tap(enableOverlay),
+      api.postLiitteetFiles(fetch, params.version, params.id)
+    )(files);
 
   const addLink = R.compose(
     fork('add-link'),
@@ -142,11 +150,11 @@
 
   const liiteUrl = liite =>
     Maybe.orSome(
-      api.url.liitteet(params.version, params.id)
-      + '/'
-      + liite.id
-      + '/'
-      + encodeURIComponent(liite.nimi),
+      api.url.liitteet(params.version, params.id) +
+        '/' +
+        liite.id +
+        '/' +
+        encodeURIComponent(liite.nimi),
       liite.url
     );
 
@@ -166,20 +174,34 @@
   $: linkEmpty = linkNimi.length === 0 || linkUrl.length === 0;
   $: linkInvalid = !(linkNimiValid && linkUrlValid);
 
-  const saveValvonta = event => Future.fork(
-    response => {
-      viewError('valvonta', response);
-      enabled = !enabled;
-    },
-    _ => {
-      flashMessageStore.add('Energiatodistus', 'success',
-        $_(`energiatodistus.liitteet.messages.valvonta.success`));
-    },
-    valvontaApi.putValvonta(fetch, params.id, enabled));
+  const saveValvonta = event =>
+    Future.fork(
+      response => {
+        viewError('valvonta', response);
+        enabled = !enabled;
+      },
+      _ => {
+        flashMessageStore.add(
+          'Energiatodistus',
+          'success',
+          $_(`energiatodistus.liitteet.messages.valvonta.success`)
+        );
+      },
+      valvontaApi.putValvonta(fetch, params.id, enabled)
+    );
+
+  $: isDeleteEnabled =
+    enabled || Maybe.fold(false, Kayttajat.isPaakayttaja, whoami);
 </script>
 
 <style>
+  .delete-icon:hover:not(.text-disabled) {
+    @apply text-error cursor-pointer;
+  }
 
+  .delete-icon.text-disabled {
+    @apply cursor-not-allowed;
+  }
 </style>
 
 <div class="w-full mt-3">
@@ -188,19 +210,18 @@
   <Overlay {overlay}>
     <div slot="content" class="mb-10">
       {#if Maybe.fold(false, Kayttajat.isPaakayttaja, whoami)}
-      <div class="mb-5"
-           on:change={saveValvonta}>
-      <Checkbox
-          bind:model={enabled}
-          label="Laatija saa lisätä todistukselle liitteitä" />
-      </div>
+        <div class="mb-5" on:change={saveValvonta}>
+          <Checkbox
+            bind:model={enabled}
+            label="Laatija saa lisätä todistukselle liitteitä" />
+        </div>
       {/if}
 
       {#if !enabled}
-      <div class="mb-5 bg-warning flex p-5">
-        <span class="font-icon mr-2">warning</span>
-        Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa
-      </div>
+        <div class="mb-5 bg-warning flex p-5">
+          <span class="font-icon mr-2">warning</span>
+          Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa
+        </div>
       {/if}
 
       {#if R.isEmpty(liitteet)}
@@ -218,7 +239,9 @@
               <th class="etp-table--th">
                 {$_('energiatodistus.liitteet.liite.author')}
               </th>
-              <th class="etp-table--th">{$_('table.actions')}</th>
+              <th class="etp-table--th etp-table--th__center">
+                <span class="material-icons">delete_forever</span>
+              </th>
             </tr>
           </thead>
           <tbody class="etp-table--tbody">
@@ -231,15 +254,19 @@
                   <Link text={liite.nimi} href={liiteUrl(liite)} />
                 </td>
                 <td class="etp-table--td">{liite['author-fullname']}</td>
-                <td class="etp-table--td">
+                <td class="etp-table--td etp-table--td__center">
                   <Confirm
                     let:confirm
                     confirmButtonLabel={$_('confirm.button.delete')}
                     confirmMessage={$_('confirm.you-want-to-delete')}>
                     <span
-                      class="material-icons cursor-pointer"
-                      on:click|stopPropagation={_ => confirm(deleteLiite, liite.id)}>
-                      delete
+                      class="material-icons delete-icon"
+                      class:text-disabled={!isDeleteEnabled}
+                      title={!isDeleteEnabled ? $_('energiatodistus.liitteet.poista-disabled') : ''}
+                      on:click|stopPropagation={_ => {
+                        if (isDeleteEnabled) confirm(deleteLiite, liite.id);
+                      }}>
+                      highlight_off
                     </span>
                   </Confirm>
                 </td>
@@ -255,59 +282,59 @@
   </Overlay>
 
   {#if enabled}
-  <div class="mb-4 flex lg:flex-row flex-col">
-    <div class="lg:w-1/2 w-full mr-6 mb-6">
-      <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
-      <FileDropArea bind:files multiple={true} />
-    </div>
-    <div class="lg:w-1/2 w-full flex flex-col">
-      <H2 text={$_('energiatodistus.liitteet.add-link.title')} />
-      <form on:submit|preventDefault={submit}>
-        <div class="w-full px-4 py-4">
-          <Input
-            id={'link.nimi'}
-            name={'link.nimi'}
-            label={$_('energiatodistus.liitteet.add-link.nimi')}
-            bind:model={liiteLinkAdd}
-            lens={R.lensPath(['nimi'])}
-            bind:currentValue={linkNimi}
-            bind:valid={linkNimiValid}
-            parse={R.trim}
-            validators={liiteLinkAddSchema.nimi}
-            i18n={$_} />
-        </div>
-
-        <div class="w-full px-4 py-4">
-          <Input
-            id={'link.url'}
-            name={'link.url'}
-            label={$_('energiatodistus.liitteet.add-link.url')}
-            bind:model={liiteLinkAdd}
-            lens={R.lensPath(['url'])}
-            bind:currentValue={linkUrl}
-            bind:valid={linkUrlValid}
-            parse={R.compose( parsers.addDefaultProtocol, R.trim )}
-            validators={liiteLinkAddSchema.url}
-            i18n={$_} />
-        </div>
-
-        <div class="flex -mx-4 pt-8">
-          <div class="px-4">
-            <Button
-              disabled={linkEmpty || linkInvalid}
-              type={'submit'}
-              text={'Lisää linkki'} />
+    <div class="mb-4 flex lg:flex-row flex-col">
+      <div class="lg:w-1/2 w-full mr-6 mb-6">
+        <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
+        <FileDropArea bind:files multiple={true} />
+      </div>
+      <div class="lg:w-1/2 w-full flex flex-col">
+        <H2 text={$_('energiatodistus.liitteet.add-link.title')} />
+        <form on:submit|preventDefault={submit}>
+          <div class="w-full px-4 py-4">
+            <Input
+              id={'link.nimi'}
+              name={'link.nimi'}
+              label={$_('energiatodistus.liitteet.add-link.nimi')}
+              bind:model={liiteLinkAdd}
+              lens={R.lensPath(['nimi'])}
+              bind:currentValue={linkNimi}
+              bind:valid={linkNimiValid}
+              parse={R.trim}
+              validators={liiteLinkAddSchema.nimi}
+              i18n={$_} />
           </div>
-          <div class="px-4">
-            <Button
-              on:click={cancel}
-              text={'Tyhjennä'}
-              type={'reset'}
-              style={'secondary'} />
+
+          <div class="w-full px-4 py-4">
+            <Input
+              id={'link.url'}
+              name={'link.url'}
+              label={$_('energiatodistus.liitteet.add-link.url')}
+              bind:model={liiteLinkAdd}
+              lens={R.lensPath(['url'])}
+              bind:currentValue={linkUrl}
+              bind:valid={linkUrlValid}
+              parse={R.compose(parsers.addDefaultProtocol, R.trim)}
+              validators={liiteLinkAddSchema.url}
+              i18n={$_} />
           </div>
-        </div>
-      </form>
+
+          <div class="flex -mx-4 pt-8">
+            <div class="px-4">
+              <Button
+                disabled={linkEmpty || linkInvalid}
+                type={'submit'}
+                text={'Lisää linkki'} />
+            </div>
+            <div class="px-4">
+              <Button
+                on:click={cancel}
+                text={'Tyhjennä'}
+                type={'reset'}
+                style={'secondary'} />
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
   {/if}
 </div>
