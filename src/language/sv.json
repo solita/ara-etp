@@ -262,7 +262,7 @@
       "false": "Nej",
       "laatimisvaihe": "Upprättandes period",
       "kaikki": "Alla",
-      "poista_disabled": "Et voi poistaa allekirjoitettua energiatodistusta. SV?"
+      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa. SV?"
     },
     "kaikki": "Allt",
     "korvaavuus": {

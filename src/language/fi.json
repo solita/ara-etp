@@ -264,7 +264,7 @@
       "false": "Ei",
       "laatimisvaihe": "Laatimisvaihe",
       "kaikki": "Kaikki",
-      "poista_disabled": "Et voi poistaa allekirjoitettua energiatodistusta."
+      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa."
     },
     "kaikki": "Kaikki",
     "korvaavuus": {
