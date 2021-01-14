@@ -350,10 +350,10 @@
                         confirmMessage={$_('confirm.you-want-to-delete')}>
                         <span
                           class="material-icons delete-icon"
-                          class:text-disabled={et.tilaKey(energiatodistus['tila-id']) == 'signed'}
-                          title={et.tilaKey(energiatodistus['tila-id']) == 'signed' ? $_('energiatodistus.haku.poista_disabled') : ''}
+                          class:text-disabled={!et.isDraft(energiatodistus)}
+                          title={!et.isDraft(energiatodistus) ? $_('energiatodistus.haku.poista-disabled') : ''}
                           on:click|stopPropagation={_ => {
-                            if (et.tilaKey(energiatodistus['tila-id']) != 'signed') confirm(deleteEnergiatodistus, energiatodistus.versio, energiatodistus.id);
+                            if (et.isDraft(energiatodistus)) confirm(deleteEnergiatodistus, energiatodistus.versio, energiatodistus.id);
                           }}>
                           highlight_off
                         </span>
