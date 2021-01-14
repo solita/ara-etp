@@ -40,15 +40,14 @@
   export let submit;
   export let title = '';
 
-  let schema = R.reduce(
-    schemas.redefineNumericValidation,
-    R.assocPath(
-      ['perustiedot', 'postinumero'],
-      Postinumero.Type(luokittelut.postinumerot),
-      schemas['v' + version]
-    ),
-    validation.numeric
-  );
+  let schema = R.compose(
+    R.reduce(schemas.assocRequired, R.__,
+      validation.required),
+    R.reduce(schemas.redefineNumericValidation, R.__,
+      validation.numeric),
+    R.assocPath(['perustiedot', 'postinumero'],
+      Postinumero.Type(luokittelut.postinumerot))
+  )(schemas['v' + version]);
 
   let eTehokkuus = Maybe.None();
   let inputLanguage = 'fi';

@@ -49,7 +49,7 @@ const requiredCondition = {
   "huomiot.ymparys.teksti-sv": laatimisvaiheet.isOlemassaOlevaRakennus
 };
 
-const predicate = R.compose(
+export const predicate = R.compose(
   R.ifElse(R.isEmpty, R.always(R.T), R.allPass),
   R.filter(R.complement(R.isNil)),
   R.juxt([

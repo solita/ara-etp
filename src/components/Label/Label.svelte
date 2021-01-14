@@ -16,7 +16,7 @@
   }
 
   label.required::before {
-    @apply font-icon text-xs align-top;
+    @apply font-icon text-xs align-top mr-1;
     content: '*';
   }
 

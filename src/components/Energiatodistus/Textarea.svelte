@@ -11,7 +11,6 @@
   export let path;
   export let model;
   export let schema;
-  export let required = false;
   export let disabled = false;
   export let compact = false;
   export let format = formats.optionalString;
@@ -19,6 +18,7 @@
 
   const id = inputs.id(path);
   const type = inputs.type(schema, path);
+  $: required = inputs.required(inputLanguage, type, model);
 </script>
 
 <Textarea

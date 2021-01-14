@@ -32,6 +32,11 @@ export const type = (schema, path) =>
   objects.requireNotNil(R.view(typeLens(path), schema),
     "Property: " + R.join('.', path) + " does not exists in schema.");
 
+export const required = (inputLanguage, type, model) =>
+  R.defaultTo(R.F,
+    R.path(['required', Maybe.orSome('all', inputLanguage)], type))
+  (model)
+
 const localeKey = R.compose(
   removeLocalePostfix,
   R.join('.'),

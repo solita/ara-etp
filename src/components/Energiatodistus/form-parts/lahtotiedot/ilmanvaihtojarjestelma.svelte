@@ -30,6 +30,7 @@
     items={R.map(R.prop('id'), ilmanvaihtotyypit)}
     format={ET.selectFormat(LocaleUtils.label($locale), ilmanvaihtotyypit)}
     parse={Maybe.Some}
+    required={true}
     allowNone={false}
     bind:model={energiatodistus}
     lens={tyyppiLens}

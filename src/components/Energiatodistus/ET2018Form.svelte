@@ -108,7 +108,7 @@
     <Select
       id={'perustiedot.kieli'}
       label={$_('energiatodistus.perustiedot.kieli')}
-      required={false}
+      required={true}
       {disabled}
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'kieli'])}
@@ -122,7 +122,7 @@
     <Select
       id={'perustiedot.laatimisvaihe'}
       label={$_('energiatodistus.perustiedot.laatimisvaihe')}
-      required={false}
+      required={true}
       {disabled}
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}

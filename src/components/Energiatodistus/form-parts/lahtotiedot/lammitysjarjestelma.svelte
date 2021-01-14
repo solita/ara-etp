@@ -45,6 +45,7 @@
     items={R.map(R.prop('id'), lammitysmuoto)}
     format={ET.selectFormat(LocaleUtils.label($locale), lammitysmuoto)}
     parse={Maybe.Some}
+    required={true}
     allowNone={false}
     bind:model={energiatodistus}
     lens={R.compose(lammitysmuoto1Lens, R.lensProp('id'))}
@@ -96,6 +97,7 @@
     format={ET.selectFormat(LocaleUtils.label($locale), lammonjako)}
     parse={Maybe.Some}
     allowNone={true}
+    required={true}
     bind:model={energiatodistus}
     lens={R.compose(lammonjakoLens, R.lensProp('id'))}
     label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')}
