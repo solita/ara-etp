@@ -260,7 +260,7 @@ const perustiedot = {
   uudisrakennus: [singleBoolean],
   'katuosoite-fi': [...stringComparisons],
   'katuosoite-sv': [...stringComparisons],
-  postinumero: [...stringComparisons],
+  postinumero: [...numberComparisons],
   laatimisvaihe: [...numberComparisons],
   valmistumisvuosi: [...numberComparisons],
   tilaaja: [...stringComparisons],
