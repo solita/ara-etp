@@ -5,6 +5,8 @@ import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
+import * as Inputs from './inputs';
+import * as Validation from './validation'
 
 const String = max => ({
   parse: parsers.optionalString,
@@ -320,4 +322,16 @@ export const redefineNumericValidation = (schema, constraint) => {
       )
     )
   )(schema);
+};
+
+export const assocRequired = (schema, property) => {
+  const path = R.split('.', Inputs.removeLocalePostfix(property));
+  const language = R.endsWith('-fi', property) ? 'fi' :
+    R.endsWith('-sv', property) ? 'sv' : 'all';
+
+  return R.unless(
+    R.compose(R.isNil, R.path(path)),
+    R.assocPath(R.concat(path, ['required', language]),
+      Validation.predicate(property)),
+    schema);
 };

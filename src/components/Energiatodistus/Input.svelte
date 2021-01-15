@@ -1,8 +1,7 @@
 <script>
-  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import { locale, _ } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
   import * as inputs from './inputs';
   import * as formats from '@Utility/formats';
 
@@ -11,7 +10,6 @@
   export let path;
   export let model;
   export let schema;
-  export let required = false;
   export let disabled = false;
   export let compact = false;
   export let center = true;
@@ -23,6 +21,7 @@
 
   const id = inputs.id(path);
   const type = inputs.type(schema, path);
+  $: required = inputs.required(inputLanguage, type, model);
 </script>
 
 <style>

@@ -94,8 +94,8 @@
 
 <style type="text/postcss">
   span.required::before {
-    @apply font-icon text-xs align-top;
-    content: '* ';
+    @apply font-icon text-xs align-top mr-1;
+    content: '*';
   }
 
   div {

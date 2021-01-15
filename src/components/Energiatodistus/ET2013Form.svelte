@@ -105,7 +105,7 @@
     <Select
       id={'perustiedot.kieli'}
       label={$_('energiatodistus.perustiedot.kieli')}
-      required={false}
+      required={true}
       {disabled}
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'kieli'])}
