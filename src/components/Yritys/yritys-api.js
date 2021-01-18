@@ -6,6 +6,7 @@ import * as R from 'ramda';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+import * as EM from '@Utility/either-maybe';
 
 /**
  * This namespace is for all flutures related to yritys api
@@ -29,7 +30,7 @@ export const serialize = R.compose(
     'vastaanottajan-tarkenne': Maybe.orSome(null),
     maa: Either.right,
     verkkolaskuosoite: Maybe.orSome(null),
-    verkkolaskuoperaattori: Maybe.orSome(null)
+    verkkolaskuoperaattori: R.ifElse(Either.isEither, EM.orSome(null), Maybe.orSome(null))
   }),
   R.dissoc('id')
 );

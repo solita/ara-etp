@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as validation from '@Utility/validation';
 import * as Tila from '@Component/Yritys/laatija-yritys-tila';
@@ -14,7 +15,7 @@ export const emptyYritys = () => ({
   maa: '',
   laskutuskieli: 0,
   verkkolaskuosoite: Maybe.None(),
-  verkkolaskuoperaattori: Maybe.None()
+  verkkolaskuoperaattori: Either.Right(Maybe.None())
 });
 
 export const formSchema = () => ({

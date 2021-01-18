@@ -4,6 +4,7 @@
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
 
   import YritysForm from '@Component/Yritys/YritysForm';
@@ -59,7 +60,9 @@
       },
       response => {
         luokittelut = Maybe.Some(response[2]);
-        yritys = Maybe.Some(response[0]);
+        yritys = R.compose(
+          Maybe.Some,
+          R.over(R.lensProp('verkkolaskuoperaattori'), Either.Right))(response[0]);
         toggleOverlay(false);
         disabled = !Yritykset.hasModifyPermission(
           response[1], response[3])

@@ -13,6 +13,7 @@
     "invalid-henkilotunnus": "Felaktig personbeteckning",
     "invalid-rakennustunnus": "Felaktig byggnadsbeteckning",
     "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite SV?",
+    "invalid-verkkolaskuoperaattori": "Virheellinen verkkolaskuoperaattori SV?",
     "no-selection": "Inget val",
     "warning": {
       "min-number": "Vanligtvis större än {min}",
