@@ -35,7 +35,7 @@
   let whoami = Maybe.None();
   let validation = Maybe.None();
 
-  const submit = R.compose(
+  const submit = (energiatodistus, onSuccessfulSave) => R.compose(
     Future.fork(
       () => {
         toggleOverlay(false);
@@ -46,18 +46,20 @@
         );
       },
       ({ id }) => {
+        toggleOverlay(false);
         flashMessageStore.addPersist(
           'Energiatodistus',
           'success',
           $_('energiatodistus.messages.save-success')
         );
+        onSuccessfulSave();
         replace(`/energiatodistus/${params.version}/${id}`);
       }
     ),
     Future.delay(500),
     api.postEnergiatodistus(fetch, params.version),
     R.tap(() => toggleOverlay(true))
-  );
+  )(energiatodistus);
 
   $: title = `Energiatodistus ${params.version} - Uusi luonnos`;
 
