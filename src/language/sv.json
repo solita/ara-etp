@@ -1,4 +1,7 @@
 {
+  "document": {
+    "title": "Ara - Energicertifikatservice"
+  },
   "validation": {
     "required": "Obligatorisk uppgift",
     "min-length": "Längden ska vara minst {min} tecken",
