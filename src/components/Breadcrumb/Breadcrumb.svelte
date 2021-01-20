@@ -20,6 +20,11 @@
 
   $: head = R.head(breadcrumbs);
   $: tail = R.tail(breadcrumbs);
+
+  $: {
+    document.title = i18n('document.title') + ' | ' +
+      R.join(' / ', R.map(R.prop('label'), breadcrumbs));
+  }
 </script>
 
 <style type="text/postcss">

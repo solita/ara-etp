@@ -1,4 +1,7 @@
 {
+  "document": {
+    "title": "Ara - Energiatodistuspalvelu"
+  },
   "validation": {
     "required": "Pakollinen tieto",
     "min-length": "Pituus pitää olla vähintään {min} merkkiä",

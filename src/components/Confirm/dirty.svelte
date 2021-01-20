@@ -2,26 +2,23 @@
   import * as R from 'ramda';
 
   import { _ } from '@Language/i18n';
-  import { lock, location } from 'svelte-spa-router';
+  import { lock } from 'svelte-spa-router';
 
   import Button from '@Component/Button/Button';
 
   export let dirty = false;
   export let routeRequest = false;
 
-  let formLocation = $location;
-
-  const removeQueryString = R.compose(
-    R.nth(0),
-    R.split('?'))
-
   const confirmation = event => {
-    if (dirty &&
-      !R.isNil(event.newURL) &&
-      !R.endsWith(formLocation, removeQueryString(event.newURL))) {
-
-      window.history.back();
+    if (dirty && !R.isNil(event.newURL) && !R.isNil(event.oldURL)) {
       routeRequest = true;
+
+      // revert hash change to an old url
+      // Note: push state does not cause a new hashchange event
+      window.history.pushState(undefined, undefined, event.oldURL);
+
+      // update location in router
+      window.dispatchEvent(new Event('hashchange'));
     }
   }
 
@@ -41,13 +38,12 @@
   const forward = _ => {
     routeRequest = false;
     dirty = false;
-    window.history.forward();
+    window.history.back();
   }
 
   $: if (dirty) {
     lock.set(true);
   } else {
-    formLocation = $location;
     lock.set(false);
   }
 </script>
