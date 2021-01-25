@@ -322,6 +322,10 @@
       "undodiscard": "Kumoa hylkäys",
       "delete": "Poista"
     },
+    "new": {
+      "draft": "Uusi luonnos",
+      "copy-from": "Uusi kopio todistuksesta"
+    },
     "id": "Energiatodistustunnus",
     "laatija-fullname": "Laatija",
     "laskuriviviite": "Projektiviite (näkyy laskurivillä)",

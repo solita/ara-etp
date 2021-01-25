@@ -280,7 +280,7 @@
         cancel={reset}
         {energiatodistus}
         {eTehokkuus}
-        {dirty}
+        dirty={dirty || R.isNil(energiatodistus.id)}
         {whoami}
         bind:inputLanguage />
     </div>

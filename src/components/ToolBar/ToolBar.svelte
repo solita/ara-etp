@@ -1,9 +1,10 @@
 <script>
   import * as R from 'ramda';
 
-  import { replace } from 'svelte-spa-router';
+  import { replace, push } from 'svelte-spa-router';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as et from '@Component/Energiatodistus/energiatodistus-utils';
 
   import Confirm from '@Component/Confirm/Confirm';
@@ -213,13 +214,12 @@
       </span>
     </button>
   {/if}
-  {#if R.includes(Toolbar.module.copy, fields)}
-    {#if id.isSome()}
-      <button>
-        <span class="description">{$_('energiatodistus.toolbar.copy')}</span>
-        <span class="text-2xl font-icon">file_copy</span>
-      </button>
-    {/if}
+  {#if id.isSome() && Kayttajat.isLaatija(whoami)}
+    <button on:click={save(_ => push('/energiatodistus/' +
+          version + '/new?copy-from-id=' + id.some()))}>
+      <span class="description">{$_('energiatodistus.toolbar.copy')}</span>
+      <span class="text-2xl font-icon">file_copy</span>
+    </button>
   {/if}
   {#if R.includes(Toolbar.module.preview, fields)}
     {#each pdfUrls as pdfUrl}

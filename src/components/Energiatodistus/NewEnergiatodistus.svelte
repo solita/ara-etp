@@ -1,23 +1,24 @@
 <script>
   import { replace } from '@Component/Router/router';
+  import { querystring } from 'svelte-spa-router';
   import * as R from 'ramda';
 
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as Fetch from '@Utility/fetch-utils';
   import * as Future from '@Utility/future-utils';
+  import qs from 'qs';
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import EnergiatodistusForm from './EnergiatodistusForm';
-  import * as et from './energiatodistus-utils';
   import * as empty from './empty';
+  import * as ET from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
+  import * as Response from '@Utility/response';
 
   export let params;
 
@@ -27,13 +28,28 @@
     overlay = value;
   };
 
-  $: energiatodistus = R.equals(params.version, '2018')
-    ? empty.energiatodistus2018()
-    : empty.energiatodistus2013();
+  const emptyEnergiatodistus = versio =>
+    R.equals(versio, '2018') ?
+      empty.energiatodistus2018() :
+      empty.energiatodistus2013();
 
-  let luokittelut = Maybe.None();
-  let whoami = Maybe.None();
-  let validation = Maybe.None();
+  const cleanEnergiatodistusCopy = R.compose(
+    R.assoc('korvattu-energiatodistus-id', Maybe.None()),
+    R.assoc('laskutettava-yritys-id', Maybe.None()),
+    R.assoc('laskuriviviite', Maybe.None()),
+    R.assoc('laatija-id', Maybe.None()),
+    R.assoc('kommentti', Maybe.None()),
+    R.assoc('tila-id', ET.tila.draft),
+    R.dissoc('id')
+  );
+
+  $: copyFromId = R.compose(
+    Maybe.fromNull,
+    R.prop('copy-from-id'),
+    qs.parse
+  )($querystring);
+
+  let resources = Maybe.None();
 
   const submit = (energiatodistus, onSuccessfulSave) => R.compose(
     Future.fork(
@@ -61,44 +77,58 @@
     R.tap(() => toggleOverlay(true))
   )(energiatodistus);
 
-  $: title = `Energiatodistus ${params.version} - Uusi luonnos`;
+  $: title =
+    $_('energiatodistus.title') +
+    ' ' + params.version + ' - ' +
+    Maybe.fold($_('energiatodistus.new.draft'), id =>
+      $_('energiatodistus.new.copy-from') + ' ' + id,
+      copyFromId);
 
-  // Load classifications
+  // Load all page resources
   $: R.compose(
     Future.fork(
-      () => {
+      response => {
         toggleOverlay(false);
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          $_('energiatodistus.messages.load-error')
-        );
+        const msg =
+          $_(Maybe.orSome('energiatodistus.messages.load-error',
+            Response.localizationKey(response)));
+
+        flashMessageStore.add('Energiatodistus', 'error', msg);
       },
       response => {
-        whoami = Maybe.Some(response[0]);
-        luokittelut = Maybe.Some(response[1]);
-        validation = Maybe.Some(response[2]);
+        resources = Maybe.Some({
+          energiatodistus: R.compose(
+            Maybe.orSome(emptyEnergiatodistus(params.version)),
+            R.map(cleanEnergiatodistusCopy),
+            Maybe.fromNull
+          )(response[0]),
+          whoami: response[1],
+          luokittelut: response[2],
+          validation: response[3]
+        });
         toggleOverlay(false);
       }
     ),
     Future.parallel(5),
+    R.prepend(Maybe.fold(
+      Future.resolve(null),
+      api.getEnergiatodistusById(fetch, params.version),
+      copyFromId)),
     R.prepend(kayttajaApi.whoami),
     R.juxt([api.luokittelutForVersion, api.validation])
-  )(params.version);
+  )(params.version)
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if luokittelut.isSome()}
+    {#each resources.toArray() as
+      {energiatodistus, luokittelut, validation, whoami}}
       <EnergiatodistusForm
-        version={params.version}
-        {title}
+        version={params.version} {title}
         {energiatodistus}
-        whoami={whoami.some()}
-        luokittelut={luokittelut.some()}
-        validation={validation.some()}
+        {whoami} {luokittelut} {validation}
         {submit} />
-    {/if}
+    {/each}
   </div>
   <div slot="overlay-content">
     <Spinner />
