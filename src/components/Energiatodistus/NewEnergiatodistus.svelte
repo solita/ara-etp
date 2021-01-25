@@ -38,6 +38,7 @@
     R.assoc('laskutettava-yritys-id', Maybe.None()),
     R.assoc('laskuriviviite', Maybe.None()),
     R.assoc('laatija-id', Maybe.None()),
+    R.dissoc('laatija-fullname'),
     R.assoc('kommentti', Maybe.None()),
     R.assoc('tila-id', ET.tila.draft),
     R.dissoc('id')
