@@ -320,6 +320,10 @@
       "undodiscard": "Kumoa hylkäys SV?",
       "delete": "Poista SV?"
     },
+    "new": {
+      "draft": "Uusi luonnos SV",
+      "copy-from": "Uusi kopio todistuksesta SV"
+    },
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
     "laskuriviviite": "Projektreferens (syns på fakturaraden)",
