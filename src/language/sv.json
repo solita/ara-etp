@@ -982,7 +982,12 @@
       "validation-error": "Fel på blanketten, kontrollera meddelandena i fälten:",
       "load-error": "Sökningen av uppgifterna i energicertifikatet misslyckades.",
       "not-found": "Det finns inget energicertifikat.",
-      "validation-required-error": "Obligatoriska uppgifter saknas:"
+      "validation-required-error": "Obligatoriska uppgifter saknas:",
+
+      "delete-success": "Energicertifikatet avlägsnades",
+      "delete-error": "Det gick inte att avlägsna energicertifikatet",
+      "discard-success": "Energiatodistus hylättiin onnistuneesti SV",
+      "discard-error": "Energiatodistuksen hylkääminen epäonnistui SV"
     },
     "signing": {
       "header": "Undertecknande",

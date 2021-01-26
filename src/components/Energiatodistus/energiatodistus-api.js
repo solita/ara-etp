@@ -128,7 +128,8 @@ export const url = {
   signPdf: (version, id, language) =>
     `${url.signature(version, id)}/pdf/${language}`,
   finish: (version, id) => `${url.signature(version, id)}/finish`,
-  cancel: (version, id) => `${url.signature(version, id)}/cancel`
+  cancel: (version, id) => `${url.signature(version, id)}/cancel`,
+  discarded: (version, id) => `${url.id(version, id)}/discarded`,
 };
 
 export const toQueryString = R.compose(
@@ -291,6 +292,18 @@ export const deleteEnergiatodistus = R.curry((fetch, version, id) =>
     Future.attemptP(Fetch.fetchWithMethod(fetch, 'delete', url.id(version, id)))
   )
 );
+
+export const discardEnergiatodistus = R.curry((fetch, version, id) =>
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ => Fetch.fetchWithMethod(fetch, 'post', url.discarded(version, id), true))
+  ));
+
+export const undoDiscardEnergiatodistus = R.curry((fetch, version, id) =>
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ => Fetch.fetchWithMethod(fetch, 'post', url.discarded(version, id), false))
+  ));
 
 const luokittelut = {
   lammonjako: Fetch.cached(fetch, '/lammonjako'),
