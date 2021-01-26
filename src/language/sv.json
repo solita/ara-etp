@@ -54,7 +54,7 @@
     "yritys": "Företag",
     "yritys-laatijat": "Upprättare",
 
-    "confirmation":{
+    "confirmation": {
       "title": "Varmistus poistumisesta SV",
       "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta. SV",
       "message": "Oletko varma, että haluat poistua sivulta? SV",
@@ -1040,14 +1040,15 @@
       "liite": {
         "createtime": "Adderad",
         "nimi": "Fil / Länk",
-        "author": "Adderare"
+        "author": "Adderare",
+        "type": "Tyyppi SV?"
       },
       "add-files": {
         "title": "Lägg till fil"
       },
       "add-link": {
         "title": "Lägg till länk",
-        "nimi": "Nimi",
+        "nimi": "Linkin nimi SV?",
         "url": "Webbadress"
       },
       "messages": {
@@ -1095,6 +1096,8 @@
     }
   },
   "drop-or-click-file": "Lägg till en fil genom att dra eller bläddra bland filer",
+  "file-drop-or": "Lisää tiedosto raahaamalla tai SV?",
+  "file-browse": "selaa tiedostoja SV?",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lägg till en fil i taget.",
   "country-not-found": "Felaktigt land",
   "table": {

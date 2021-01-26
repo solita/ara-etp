@@ -54,7 +54,7 @@
     "yritys": "Yritys",
     "yritys-laatijat": "Laatijat",
 
-    "confirmation":{
+    "confirmation": {
       "title": "Varmistus poistumisesta",
       "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta.",
       "message": "Oletko varma, että haluat poistua sivulta?",
@@ -1042,15 +1042,16 @@
       "liite": {
         "createtime": "Lisätty",
         "nimi": "Tiedosto / Linkki",
-        "author": "Lisääjä"
+        "author": "Lisääjä",
+        "type": "Tyyppi"
       },
       "add-files": {
         "title": "Lisää tiedostoja"
       },
       "add-link": {
         "title": "Lisää linkki",
-        "nimi": "Nimi",
-        "url": "Verkko-osoite"
+        "nimi": "Linkin nimi",
+        "url": "www-osoite"
       },
       "messages": {
         "add-files": {
@@ -1097,6 +1098,8 @@
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
+  "file-drop-or": "Lisää tiedosto raahaamalla tai ",
+  "file-browse": "selaa tiedostoja",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
   "country-not-found": "Virheellinen maa",
   "table": {

@@ -10,11 +10,11 @@
 
 <style type="text/postcss">
   a {
-    @apply relative flex items-start text-link border-b-1 border-transparent;
+    @apply relative flex items-start text-link font-bold;
   }
 
   a:hover {
-    @apply cursor-pointer border-primary;
+    @apply cursor-pointer border-primary underline;
   }
 </style>
 
