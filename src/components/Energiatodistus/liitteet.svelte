@@ -18,7 +18,6 @@
   import H2 from '@Component/H/H2';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import Link from '@Component/Link/Link';
   import FileDropArea from '@Component/FileDropArea/FileDropArea';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
@@ -213,14 +212,15 @@
         <div class="mb-5" on:change={saveValvonta}>
           <Checkbox
             bind:model={enabled}
-            label="Laatija saa lisätä todistukselle liitteitä" />
+            label={$_('energiatodistus.liitteet.enabled-checkbox-label')}
+          />
         </div>
       {/if}
 
       {#if !enabled}
         <div class="mb-5 bg-warning flex p-5">
           <span class="font-icon mr-2">warning</span>
-          Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa
+          {$_('energiatodistus.liitteet.attachments-disabled')}
         </div>
       {/if}
 
@@ -234,10 +234,13 @@
                 {$_('energiatodistus.liitteet.liite.createtime')}
               </th>
               <th class="etp-table--th">
+                {$_('energiatodistus.liitteet.liite.author')}
+              </th>
+              <th class="etp-table--th">
                 {$_('energiatodistus.liitteet.liite.nimi')}
               </th>
               <th class="etp-table--th">
-                {$_('energiatodistus.liitteet.liite.author')}
+                {$_('energiatodistus.liitteet.liite.type')}
               </th>
               <th class="etp-table--th etp-table--th__center">
                 <span class="material-icons">delete_forever</span>
@@ -250,24 +253,37 @@
                 <td class="etp-table--td">
                   {formats.formatTimeInstant(liite.createtime)}
                 </td>
-                <td class=" etp-table--td">
-                  <Link text={liite.nimi} href={liiteUrl(liite)} />
-                </td>
                 <td class="etp-table--td">{liite['author-fullname']}</td>
+                <td class="etp-table--td">
+                  <a
+                    class="hover:underline font-bold text-link"
+                    target="_self"
+                    href={liiteUrl(liite)}>
+                    {liite.nimi}
+                  </a>
+                </td>
+                <td class="etp-table--td etp-table--td__center">
+                  <span
+                    class="material-icons cursor-default"
+                    title={liite['contenttype']}>
+                    {Maybe.isSome(liite.url) ? 'link' : 'attachment'}
+                  </span>
+                </td>
                 <td class="etp-table--td etp-table--td__center">
                   <Confirm
                     let:confirm
                     confirmButtonLabel={$_('confirm.button.delete')}
-                    confirmMessage={$_('confirm.you-want-to-delete')}>
+                    confirmMessage={$_('confirm.you-want-to-delete')}
+                  >
                     <span
                       class="material-icons delete-icon"
                       class:text-disabled={!isDeleteEnabled}
-                      title={!isDeleteEnabled ? $_('energiatodistus.liitteet.poista-disabled') : ''}
+                      title={!isDeleteEnabled
+                        ? $_('energiatodistus.liitteet.poista-disabled')
+                        : ''}
                       on:click|stopPropagation={_ => {
                         if (isDeleteEnabled) confirm(deleteLiite, liite.id);
-                      }}>
-                      highlight_off
-                    </span>
+                      }}> highlight_off </span>
                   </Confirm>
                 </td>
               </tr>
@@ -284,27 +300,19 @@
   {#if enabled}
     <div class="mb-4 flex lg:flex-row flex-col">
       <div class="lg:w-1/2 w-full mr-6 mb-6">
-        <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
+        <div class="flex space-x-1 text-primary">
+          <span class="material-icons"> attachment </span>
+          <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
+        </div>
         <FileDropArea bind:files multiple={true} />
       </div>
       <div class="lg:w-1/2 w-full flex flex-col">
-        <H2 text={$_('energiatodistus.liitteet.add-link.title')} />
+        <div class="flex space-x-1 text-primary">
+          <span class="material-icons"> link </span>
+          <H2 text={$_('energiatodistus.liitteet.add-link.title')} />
+        </div>
         <form on:submit|preventDefault={submit}>
-          <div class="w-full px-4 py-4">
-            <Input
-              id={'link.nimi'}
-              name={'link.nimi'}
-              label={$_('energiatodistus.liitteet.add-link.nimi')}
-              bind:model={liiteLinkAdd}
-              lens={R.lensPath(['nimi'])}
-              bind:currentValue={linkNimi}
-              bind:valid={linkNimiValid}
-              parse={R.trim}
-              validators={liiteLinkAddSchema.nimi}
-              i18n={$_} />
-          </div>
-
-          <div class="w-full px-4 py-4">
+          <div class="w-full py-4">
             <Input
               id={'link.url'}
               name={'link.url'}
@@ -313,25 +321,40 @@
               lens={R.lensPath(['url'])}
               bind:currentValue={linkUrl}
               bind:valid={linkUrlValid}
+              required={true}
               parse={R.compose(parsers.addDefaultProtocol, R.trim)}
               validators={liiteLinkAddSchema.url}
-              i18n={$_} />
+              i18n={$_}
+            />
+          </div>
+          <div class="w-full py-4">
+            <Input
+              id={'link.nimi'}
+              name={'link.nimi'}
+              label={$_('energiatodistus.liitteet.add-link.nimi')}
+              bind:model={liiteLinkAdd}
+              lens={R.lensPath(['nimi'])}
+              bind:currentValue={linkNimi}
+              bind:valid={linkNimiValid}
+              required={true}
+              parse={R.trim}
+              validators={liiteLinkAddSchema.nimi}
+              i18n={$_}
+            />
           </div>
 
-          <div class="flex -mx-4 pt-8">
-            <div class="px-4">
-              <Button
-                disabled={linkEmpty || linkInvalid}
-                type={'submit'}
-                text={'Lisää linkki'} />
-            </div>
-            <div class="px-4">
-              <Button
-                on:click={cancel}
-                text={'Tyhjennä'}
-                type={'reset'}
-                style={'secondary'} />
-            </div>
+          <div class="flex space-x-4 pt-8">
+            <Button
+              disabled={linkEmpty || linkInvalid}
+              type={'submit'}
+              text={'Lisää linkki'}
+            />
+            <Button
+              on:click={cancel}
+              text={'Tyhjennä'}
+              type={'reset'}
+              style={'secondary'}
+            />
           </div>
         </form>
       </div>

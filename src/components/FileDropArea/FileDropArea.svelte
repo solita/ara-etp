@@ -4,7 +4,8 @@
   import { _ } from '@Language/i18n';
 
   export let multiple = false;
-  export let labelText = $_('drop-or-click-file');
+  export let labelText = $_('file-drop-or');
+  export let labelTextHighlight = $_('file-browse');
 
   export let files;
 
@@ -15,15 +16,20 @@
 
 <style type="text/postcss">
   label {
-    @apply inline-block w-full py-40 text-center bg-light text-dark rounded-lg border-dashed border-secondary border-2;
+    @apply inline-block w-full py-40 text-center bg-light text-dark rounded-lg border-dashed border-secondary border-2 cursor-pointer;
   }
 
   input {
     @apply opacity-0 w-0 h-0;
   }
 
+  label:hover .highlight-text,
+  .highlight .highlight-text {
+    @apply underline;
+  }
+
   .highlight {
-    @apply bg-primary;
+    @apply border-primary border-4;
   }
 </style>
 
@@ -38,6 +44,10 @@
     }}
     type="file"
     bind:files
-    {multiple} />
-  {labelText}
+    {multiple}
+  />
+  <span class="material-icons text-primary align-middle">arrow_downward</span>
+  <span>{labelText}</span>
+  <span class="font-bold text-primary highlight-text">{labelTextHighlight}</span
+  >
 </label>
