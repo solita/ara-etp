@@ -266,9 +266,7 @@
                   <span
                     class="material-icons cursor-default"
                     title={liite['contenttype']}>
-                    {R.propSatisfies(Maybe.isSome, 'url', liite)
-                      ? 'link'
-                      : 'attachment'}
+                    {Maybe.isSome(liite.url) ? 'link' : 'attachment'}
                   </span>
                 </td>
                 <td class="etp-table--td etp-table--td__center">
@@ -323,6 +321,7 @@
               lens={R.lensPath(['url'])}
               bind:currentValue={linkUrl}
               bind:valid={linkUrlValid}
+              required={true}
               parse={R.compose(parsers.addDefaultProtocol, R.trim)}
               validators={liiteLinkAddSchema.url}
               i18n={$_}
@@ -337,6 +336,7 @@
               lens={R.lensPath(['nimi'])}
               bind:currentValue={linkNimi}
               bind:valid={linkNimiValid}
+              required={true}
               parse={R.trim}
               validators={liiteLinkAddSchema.nimi}
               i18n={$_}
