@@ -18,7 +18,6 @@
   import H2 from '@Component/H/H2';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import Link from '@Component/Link/Link';
   import FileDropArea from '@Component/FileDropArea/FileDropArea';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
@@ -256,10 +255,17 @@
                 </td>
                 <td class="etp-table--td">{liite['author-fullname']}</td>
                 <td class="etp-table--td">
-                  <Link text={liite.nimi} href={liiteUrl(liite)} />
+                  <a
+                    class="hover:underline font-bold text-link"
+                    target="_self"
+                    href={liiteUrl(liite)}>
+                    {liite.nimi}
+                  </a>
                 </td>
                 <td class="etp-table--td etp-table--td__center">
-                  <span class="material-icons" title={liite['contenttype']}>
+                  <span
+                    class="material-icons cursor-default"
+                    title={liite['contenttype']}>
                     {liite['contenttype'].includes('uri')
                       ? 'link'
                       : 'attachment'}
@@ -312,7 +318,7 @@
             <Input
               id={'link.url'}
               name={'link.url'}
-              label={$_('energiatodistus.liitteet.add-link.url')}
+              label={'*' + $_('energiatodistus.liitteet.add-link.url')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['url'])}
               bind:currentValue={linkUrl}
@@ -326,7 +332,7 @@
             <Input
               id={'link.nimi'}
               name={'link.nimi'}
-              label={$_('energiatodistus.liitteet.add-link.nimi')}
+              label={'*' + $_('energiatodistus.liitteet.add-link.nimi')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['nimi'])}
               bind:currentValue={linkNimi}
