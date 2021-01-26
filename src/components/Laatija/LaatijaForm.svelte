@@ -40,10 +40,7 @@
     $currentUserStore
   );
 
-  $: isOwnSettings = Maybe.exists(
-    R.eqProps('id', laatija),
-    $currentUserStore
-  );
+  $: isOwnSettings = Maybe.exists(R.eqProps('id', laatija), $currentUserStore);
 
   $: disabled = !R.or(isPaakayttaja, isOwnSettings);
 
@@ -87,10 +84,7 @@
 
   $: laatija = R.compose(
     R.when(
-      R.compose(
-        Maybe.isNone,
-        R.prop('wwwosoite')
-      ),
+      R.compose(Maybe.isNone, R.prop('wwwosoite')),
       R.assoc('julkinenwwwosoite', false)
     ),
     R.over(
@@ -138,7 +132,11 @@
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <span class="lastlogin">
-      {R.compose( Maybe.orSome($_('kayttaja.no-login')), Maybe.map(R.concat($_('kayttaja.last-login') + ' ')), Maybe.map(formats.formatTimeInstant) )(laatija.login)}
+      {R.compose(
+        Maybe.orSome($_('kayttaja.no-login')),
+        Maybe.map(R.concat($_('kayttaja.last-login') + ' ')),
+        Maybe.map(formats.formatTimeInstant)
+      )(laatija.login)}
     </span>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -152,7 +150,8 @@
           parse={formParsers.etunimi}
           validators={formSchema.etunimi}
           disabled={!isPaakayttaja}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -165,7 +164,8 @@
           parse={formParsers.sukunimi}
           validators={formSchema.sukunimi}
           disabled={!isPaakayttaja}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -179,7 +179,8 @@
           parse={formParsers.henkilotunnus}
           validators={formSchema.henkilotunnus}
           disabled={true}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -187,14 +188,17 @@
         <Input
           id={'sahkoposti'}
           name={'sahkoposti'}
-          label={`${$_('kayttaja.sahkoposti')} (${R.toLower($_('kayttaja.kayttajatunnus'))})`}
+          label={`${$_('kayttaja.sahkoposti')} (${R.toLower(
+            $_('kayttaja.kayttajatunnus')
+          )})`}
           required={true}
-          disabled={disabled}
+          {disabled}
           bind:model={laatija}
           lens={R.lensProp('email')}
           parse={formParsers.email}
           validators={formSchema.email}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -207,7 +211,8 @@
           parse={formParsers.puhelin}
           validators={formSchema.puhelin}
           {disabled}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -223,7 +228,8 @@
           parse={formParsers['vastaanottajan-tarkenne']}
           validators={formSchema['vastaanottajan-tarkenne']}
           {disabled}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -238,7 +244,8 @@
           parse={formParsers.jakeluosoite}
           validators={formSchema.jakeluosoite}
           {disabled}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -253,7 +260,8 @@
           parse={formParsers.postinumero}
           validators={formSchema.postinumero}
           {disabled}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -266,7 +274,8 @@
           parse={formParsers.postitoimipaikka}
           validators={formSchema.postitoimipaikka}
           {disabled}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Autocomplete items={countryNames}>
@@ -282,7 +291,8 @@
             search={true}
             handleSubmit={false}
             {disabled}
-            i18n={$_} />
+            i18n={$_}
+          />
         </Autocomplete>
       </div>
     </div>
@@ -297,24 +307,37 @@
           lens={R.lensProp('laskutuskieli')}
           allowNone={false}
           {disabled}
-          items={laskutuskieletIds} />
+          items={laskutuskieletIds}
+        />
       </div>
     </div>
   </div>
   <HR />
   <div class="mt-8">
     <H1 text={$_('laatija.laatijatiedot')} />
-    <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Checkbox
-          bind:model={laatija}
-          lens={R.lensProp('laatimiskielto')}
-          label={$_('laatija.todistustenlaatimiskielto')}
-          disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
-                  [KayttajaUtils.paakayttajaRole]
-                ) )) )($currentUserStore)} />
+
+    {#if R.or(R.view(R.lensProp('laatimiskielto'), laatija), isPaakayttaja)}
+      <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Checkbox
+            bind:model={laatija}
+            lens={R.lensProp('laatimiskielto')}
+            label={$_('laatija.todistustenlaatimiskielto')}
+            disabled={R.compose(
+              Maybe.getOrElse(true),
+              R.map(
+                R.compose(
+                  R.not,
+                  KayttajaUtils.kayttajaHasAccessToResource([
+                    KayttajaUtils.paakayttajaRole
+                  ])
+                )
+              )
+            )($currentUserStore)}
+          />
+        </div>
       </div>
-    </div>
+    {/if}
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -327,7 +350,8 @@
           parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -338,10 +362,19 @@
           parse={parsePatevyys}
           bind:model={laatija}
           lens={R.lensProp('patevyystaso')}
-          disabled={R.compose( Maybe.getOrElse(true), R.map(R.compose( R.not, KayttajaUtils.kayttajaHasAccessToResource(
-                  [KayttajaUtils.paakayttajaRole]
-                ) )) )($currentUserStore)}
-          items={patevyydetIds} />
+          disabled={R.compose(
+            Maybe.getOrElse(true),
+            R.map(
+              R.compose(
+                R.not,
+                KayttajaUtils.kayttajaHasAccessToResource([
+                  KayttajaUtils.paakayttajaRole
+                ])
+              )
+            )
+          )($currentUserStore)}
+          items={patevyydetIds}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -353,7 +386,8 @@
           bind:model={laatija}
           lens={R.lensProp('toimintaalue')}
           {disabled}
-          items={toimintaAlueetIds} />
+          items={toimintaAlueetIds}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -364,7 +398,8 @@
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
           {disabled}
-          format={formatToimintaAlue} />
+          format={formatToimintaAlue}
+        />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -380,7 +415,8 @@
           parse={formParsers.wwwosoite}
           validators={formSchema.wwwosoite}
           {disabled}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
   </div>
@@ -388,7 +424,7 @@
   <div class="mt-8">
     <H1 text={$_('laatija.api-key-header')} />
     <div class="lg:w-1/2 w-full">
-    <Input
+      <Input
         id={'api-key'}
         name={'api-key'}
         label={$_('laatija.api-key')}
@@ -399,7 +435,8 @@
         parse={R.compose(Maybe.fromEmpty, R.trim)}
         validators={formSchema['api-key']}
         {disabled}
-        i18n={$_} />
+        i18n={$_}
+      />
     </div>
   </div>
   <HR />
@@ -411,28 +448,33 @@
           bind:model={laatija}
           lens={R.lensProp('julkinenpuhelin')}
           {disabled}
-          label={$_('kayttaja.puhelinnumero')} />
+          label={$_('kayttaja.puhelinnumero')}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenemail')}
           {disabled}
-          label={$_('kayttaja.sahkoposti')} />
+          label={$_('kayttaja.sahkoposti')}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenosoite')}
           {disabled}
-          label={$_('laatija.katuosoite')} />
+          label={$_('laatija.katuosoite')}
+        />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenwwwosoite')}
-          disabled={disabled || !R.compose( Maybe.isSome, R.prop('wwwosoite') )(laatija)}
-          label={$_('laatija.www-osoite')} />
+          disabled={disabled ||
+            !R.compose(Maybe.isSome, R.prop('wwwosoite'))(laatija)}
+          label={$_('laatija.www-osoite')}
+        />
       </div>
     </div>
   </div>
@@ -442,13 +484,14 @@
     </div>
     <div class="px-4">
       <Button
-          on:click={ event => {
+        on:click={event => {
           event.preventDefault();
           window.location.reload();
         }}
         text={$_('peruuta')}
         type={'reset'}
-        style={'secondary'} />
+        style={'secondary'}
+      />
     </div>
   </div>
 </form>
