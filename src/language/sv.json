@@ -1037,6 +1037,8 @@
       "title": "Bilagor",
       "empty": "Energicertifikatet har inga bilagor.",
       "poista-disabled": "Et voi poistaa liitettä energiatodistukselta joka ei ole valvonnassa. SV?",
+      "enabled-checkbox-label": "Laatija saa lisätä todistukselle liitteitä SV?",
+      "attachments-disabled": "Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa SV?",
       "liite": {
         "createtime": "Adderad",
         "nimi": "Fil / Länk",

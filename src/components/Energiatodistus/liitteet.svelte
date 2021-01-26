@@ -212,7 +212,7 @@
         <div class="mb-5" on:change={saveValvonta}>
           <Checkbox
             bind:model={enabled}
-            label="Laatija saa lisätä todistukselle liitteitä"
+            label={$_('energiatodistus.liitteet.enabled-checkbox-label')}
           />
         </div>
       {/if}
@@ -220,7 +220,7 @@
       {#if !enabled}
         <div class="mb-5 bg-warning flex p-5">
           <span class="font-icon mr-2">warning</span>
-          Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa
+          {$_('energiatodistus.liitteet.attachments-disabled')}
         </div>
       {/if}
 
@@ -266,7 +266,7 @@
                   <span
                     class="material-icons cursor-default"
                     title={liite['contenttype']}>
-                    {liite['contenttype'].includes('uri')
+                    {R.propSatisfies(Maybe.isSome, 'url', liite)
                       ? 'link'
                       : 'attachment'}
                   </span>
@@ -318,7 +318,7 @@
             <Input
               id={'link.url'}
               name={'link.url'}
-              label={'*' + $_('energiatodistus.liitteet.add-link.url')}
+              label={$_('energiatodistus.liitteet.add-link.url')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['url'])}
               bind:currentValue={linkUrl}
@@ -332,7 +332,7 @@
             <Input
               id={'link.nimi'}
               name={'link.nimi'}
-              label={'*' + $_('energiatodistus.liitteet.add-link.nimi')}
+              label={$_('energiatodistus.liitteet.add-link.nimi')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['nimi'])}
               bind:currentValue={linkNimi}
