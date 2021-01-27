@@ -181,12 +181,13 @@ export const isOVTTunnus = R.allPass([
   )
 ]);
 
-export const isIBAN = R.ifElse(
-  str => R.gte(R.length(str), 4),
+export const isIBAN = R.allPass([
+  R.compose(R.gt(R.__, 4), R.length),
+  R.test(/^[A-Z]{2}[A-Z0-9]*$/),
   R.compose(
     n => n.equals(1),
     n => n.mod(97),
-    BigInt,
+    R.tryCatch(BigInt, R.always(BigInt(0))),
     R.join(''),
     R.map(
       R.when(
@@ -195,10 +196,9 @@ export const isIBAN = R.ifElse(
       )
     ),
     R.toUpper,
-    R.converge(R.flip(R.concat), [R.take(4), R.drop(4)])
-  ),
-  R.always(false)
-);
+    R.converge(R.concat, [R.drop(4), R.take(4)])
+  )
+]);
 
 export const isTEOVTTunnus = R.allPass([
   R.compose(R.gte(R.__, 2), R.length),
