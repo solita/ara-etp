@@ -183,20 +183,27 @@ describe('Validation:', () => {
       assert.equal(validation.isOVTTunnus('000012345671'), false);
       assert.equal(validation.isOVTTunnus(null), false);
       assert.equal(validation.isOVTTunnus(''), false);
+      assert.equal(validation.isOVTTunnus('test@ara.fi'), false);
     });
   });
 
   describe('IBAN validation', () => {
     it('valid IBAN', () => {
-      assert.equal(validation.isIBAN('FI1410093000123458'), true);
-      assert.equal(validation.isIBAN('BR1500000000000010932840814P2'), true);
+      assert.isTrue(validation.isIBAN('FI1410093000123458'));
+      assert.isTrue(validation.isIBAN('BR1500000000000010932840814P2'));
+      assert.isTrue(validation.isIBAN('GB82WEST12345698765432'));
+      assert.isTrue(validation.isIBAN('BE71096123456769'));
+      assert.isTrue(validation.isIBAN('BR1500000000000010932840814P2'));
     });
 
     it('invalid IBAN', () => {
-      assert.equal(validation.isIBAN('FI1410093000123459'), false);
-      assert.equal(validation.isIBAN('FI14'), false);
-      assert.equal(validation.isIBAN(null), false);
-      assert.equal(validation.isIBAN(''), false);
+      assert.isFalse(validation.isIBAN('003712345671'));
+      assert.isFalse(validation.isIBAN('FI1410093000123459'));
+      assert.isFalse(validation.isIBAN('FI14'));
+      assert.isFalse(validation.isIBAN(null));
+      assert.isFalse(validation.isIBAN(''));
+      assert.isFalse(validation.isIBAN('test@ara.fi'));
+      assert.isFalse(validation.isIBAN('*?+2#/="'));
     });
   });
 

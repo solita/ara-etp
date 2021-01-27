@@ -1,6 +1,7 @@
 import * as dfns from 'date-fns';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Validation from '@Utility/validation';
 
 export const formatTimeInstant = time => dfns.format(time, 'd.M.yyyy H:mm:ss');
 export const formatDateInstant = date => dfns.format(date, 'd.M.yyyy');
@@ -29,3 +30,7 @@ export const inclusiveStartDate = Intl.DateTimeFormat('fi-FI',
 export const inclusiveEndDate = endTimeInstant =>
   Intl.DateTimeFormat('fi-FI', { timeZone: "UTC", dateStyle: 'medium' })
     .format(dfns.subHours(endTimeInstant, 10));
+
+export const iban = R.compose(R.join(' '), R.splitEvery(4));
+
+export const verkkolaskuosoite = R.when(Validation.isIBAN, iban);

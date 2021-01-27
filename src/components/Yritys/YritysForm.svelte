@@ -7,6 +7,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Validation from '@Utility/validation';
   import * as Parsers from '@Utility/parsers';
+  import * as Formats from '@Utility/formats';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Component/Geo/country-utils';
 
@@ -240,7 +241,7 @@
         label={$_('yritys.verkkolaskuosoite')}
         bind:model={yritys}
         lens={R.lensProp('verkkolaskuosoite')}
-        format={Maybe.orSome('')}
+        format={Maybe.fold('', Formats.verkkolaskuosoite)}
         parse={formParsers.verkkolaskuosoite}
         validators={formSchema['verkkolaskuosoite']}
         i18n={$_} />

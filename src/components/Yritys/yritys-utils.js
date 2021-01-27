@@ -52,7 +52,7 @@ export const formParsers = () => ({
   postinumero: R.trim,
   postitoimipaikka: R.trim,
   maa: R.trim,
-  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim),
+  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim, R.toUpper, R.replace(/\s/g, '')),
   verkkolaskuoperaattori: R.compose(Maybe.fromEmpty, R.trim)
 });
 
