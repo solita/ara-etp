@@ -984,7 +984,12 @@
       "validation-error": "Lomakkeella virheitä, tarkista kentät: ",
       "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
       "not-found": "Energiatodistusta ei ole olemassa.",
-      "validation-required-error": "Pakolliset tiedot puuttuvat: "
+      "validation-required-error": "Pakolliset tiedot puuttuvat: ",
+
+      "delete-success": "Energiatodistus poistettiin onnistuneesti",
+      "delete-error": "Energiatodistuksen poistaminen epäonnistui",
+      "discard-success": "Energiatodistus hylättiin onnistuneesti",
+      "discard-error": "Energiatodistuksen hylkääminen epäonnistui"
     },
     "signing": {
       "header": "Allekirjoittaminen",

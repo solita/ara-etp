@@ -15,6 +15,7 @@
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
+  import * as Response from '@Utility/response';
 
   export let energiatodistus;
   export let inputLanguage = 'fi';
@@ -69,25 +70,33 @@
     signingActive = true;
   };
 
-  const deleteEnergiatodistus = () => {
+  const noop = () => {};
+
+  const execute = (operation, name, onSuccess) => _ => {
     Future.fork(
-      _ =>
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          $_('energiatodistukset.messages.delete-error')
-        ),
+      response => {
+        const msg = Response.notFound(response) ?
+          $_('energiatodistus.messages.not-found'):
+          $_(Maybe.orSome(`energiatodistus.messages.${name}-error`,
+            Response.localizationKey(response)));
+
+        flashMessageStore.add('Energiatodistus', 'error', msg)
+      },
       _ => {
-        replace('/energiatodistus/all');
+        onSuccess();
         flashMessageStore.add(
           'Energiatodistus',
           'success',
-          $_('energiatodistukset.messages.delete-success')
+          $_(`energiatodistus.messages.${name}-success`)
         );
       },
-      api.deleteEnergiatodistus(fetch, version, Maybe.get(id))
-    );
+      operation(fetch, version, Maybe.get(id)));
   };
+
+  const deleteEnergiatodistus = execute(api.deleteEnergiatodistus, 'delete',
+    _ => replace('/energiatodistus/all'));
+
+  $: discardEnergiatodistus = execute(api.discardEnergiatodistus, 'discard', cancel);
 
   export let save = _ => {};
   export let saveComplete = _ => {};
@@ -96,8 +105,6 @@
   const openUrl = url => {
     window.open(url, '_blank');
   };
-
-  const noop = () => {};
 
   $: fields = Toolbar.toolbarFields(whoami, R.prop('tila-id', energiatodistus));
 </script>
@@ -250,7 +257,7 @@
       let:confirm
       confirmButtonLabel={$_('confirm.button.discard')}
       confirmMessage={$_('confirm.you-want-to-discard')}>
-      <button on:click={() => confirm(() => {})}>
+      <button on:click={() => confirm(discardEnergiatodistus)}>
         <span class="description">{$_('energiatodistus.toolbar.discard')}</span>
         <span class="text-2xl font-icon">block</span>
       </button>
