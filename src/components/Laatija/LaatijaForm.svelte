@@ -316,7 +316,7 @@
   <div class="mt-8">
     <H1 text={$_('laatija.laatijatiedot')} />
 
-    {#if R.or(R.view(R.lensProp('laatimiskielto'), laatija), isPaakayttaja)}
+    {#if R.or(laatija.laatimiskielto, isPaakayttaja)}
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Checkbox
