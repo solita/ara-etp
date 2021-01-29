@@ -37,6 +37,13 @@
   const lammonjakoLens = R.compose(lammitysLens, R.lensProp('lammonjako'));
 </script>
 
+<style>
+  .et-table--thead .et-table--th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
 
 <div class="w-full py-4 mb-4">
@@ -120,27 +127,37 @@
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th" />
-      <th class="et-table--th">
+      <th
+        class="et-table--th"
+        title={$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}>
         {$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}
       </th>
-      <th class="et-table--th">
+      <th
+        class="et-table--th"
+        title={$_('energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde')}>
         {$_('energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde')}
       </th>
-      <th class="et-table--th">
+      <th
+        class="et-table--th"
+        title={$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}>
         {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
       </th>
-      <th class="et-table--th border-r-4">
-        <span>
-          {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
-        </span>
+      <th
+        class="et-table--th border-r-4"
+        title={$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}>
+        {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
         <span class="block">
           <VuosikulutusPerAlaUnit />
         </span>
       </th>
-      <th class="et-table--th">
+      <th
+        class="et-table--th"
+        title={$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}>
         {$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}
       </th>
-      <th class="et-table--th">
+      <th
+        class="et-table--th"
+        title={$_('energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila')}>
         {$_('energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila')}
         <VuosikulutusUnit />
       </th>
