@@ -989,7 +989,9 @@
       "delete-success": "Energiatodistus poistettiin onnistuneesti",
       "delete-error": "Energiatodistuksen poistaminen epäonnistui",
       "discard-success": "Energiatodistus hylättiin onnistuneesti",
-      "discard-error": "Energiatodistuksen hylkääminen epäonnistui"
+      "discard-error": "Energiatodistuksen hylkääminen epäonnistui",
+      "undodiscard-success": "Energiatodistuksen hylkääminen peruttiin onnistuneesti",
+      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui"
     },
     "signing": {
       "header": "Allekirjoittaminen",

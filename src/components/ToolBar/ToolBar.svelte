@@ -97,6 +97,11 @@
     _ => replace('/energiatodistus/all'));
 
   $: discardEnergiatodistus = execute(api.discardEnergiatodistus, 'discard', cancel);
+  $: undoDiscardEnergiatodistus = execute(
+      api.undoDiscardEnergiatodistus,
+      'undodiscard',
+      cancel
+  );
 
   export let save = _ => {};
   export let saveComplete = _ => {};
@@ -267,8 +272,8 @@
     <Confirm
       let:confirm
       confirmButtonLabel={$_('confirm.button.undodiscard')}
-      confirmMessage={$_('confirm.you-want-to-discard')}>
-      <button on:click={() => confirm(() => {})}>
+      confirmMessage={$_('confirm.you-want-to-undodiscard')}>
+      <button on:click={() => confirm(undoDiscardEnergiatodistus)}>
         <span
           class="description">{$_('energiatodistus.toolbar.undodiscard')}</span>
         <span class="text-2xl font-icon">undo</span>

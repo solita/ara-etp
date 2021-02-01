@@ -987,7 +987,9 @@
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet",
       "discard-success": "Energiatodistus hylättiin onnistuneesti SV",
-      "discard-error": "Energiatodistuksen hylkääminen epäonnistui SV"
+      "discard-error": "Energiatodistuksen hylkääminen epäonnistui SV",
+      "undodiscard-success": "Energiatodistuksen hylkääminen peruttiin onnistuneesti SV",
+      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui SV"
     },
     "signing": {
       "header": "Undertecknande",
