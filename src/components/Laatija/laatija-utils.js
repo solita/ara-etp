@@ -20,7 +20,8 @@ export const deserialize = R.compose(
     maa: Either.Right,
     toimintaalue: Maybe.fromNull,
     wwwosoite: Maybe.fromNull
-  }));
+  })
+);
 
 export const serializeImport = R.evolve({
   toteamispaivamaara: date => dfns.format(date, 'yyyy-MM-dd')
@@ -68,7 +69,7 @@ export const parse = {
   toteaja: R.trim,
   etunimi: R.trim,
   sukunimi: R.trim,
-  henkilotunnus: R.trim,
+  henkilotunnus: R.compose(R.toUpper, R.trim),
   jakeluosoite: R.trim,
   postinumero: R.trim,
   postitoimipaikka: R.trim,

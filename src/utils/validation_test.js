@@ -68,15 +68,14 @@ describe('Validation:', () => {
       assertIsInvalid(value)(validation.isValidHenkilotunnus);
 
     it('henkilötunnus checksum', () => {
-      assertHenkilotunnusChecksum('131052-308T', 't');
-      assertHenkilotunnusChecksum('130200A892S', 's');
-      assertHenkilotunnusChecksum('130200a892s', 's');
+      assertHenkilotunnusChecksum('131052-308T', 'T');
+      assertHenkilotunnusChecksum('130200A892S', 'S');
+      assertHenkilotunnusChecksum('130200A892s', 'S');
     });
 
     it('valid henkilötunnus', () => {
       assertHenkilotunnusIsValid('131052-308T');
       assertHenkilotunnusIsValid('130200A892S');
-      assertHenkilotunnusIsValid('130200a892s');
     });
 
     it('invalid henkilötunnus', () => {
@@ -88,6 +87,9 @@ describe('Validation:', () => {
       assertHenkilotunnusIsInvalid('130200X892S');
       assertHenkilotunnusIsInvalid('130200A891S');
       assertHenkilotunnusIsInvalid('1A0200A892S');
+
+      assertHenkilotunnusIsInvalid('130200A892s');
+      assertHenkilotunnusIsInvalid('130200a892s');
     });
   });
 
@@ -159,11 +161,11 @@ describe('Validation:', () => {
     it('valid rakennustunnus', () => {
       assert.equal(validation.isRakennustunnus('1035150826'), true);
       assert.equal(validation.isRakennustunnus('103515074X'), true);
-      assert.equal(validation.isRakennustunnus('103515074x'), true);
     });
 
     it('invalid rakennustunnus', () => {
       assert.equal(validation.isRakennustunnus('100012345A'), false);
+      assert.equal(validation.isRakennustunnus('103515074x'), false);
       assert.equal(validation.isRakennustunnus(null), false);
     });
   });

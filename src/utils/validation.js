@@ -106,7 +106,7 @@ export const postinumeroValidator = {
 };
 
 export const henkilotunnusChecksum = R.compose(
-  R.nth(R.__, '0123456789abcdefhjklmnprstuvwxy'),
+  R.nth(R.__, '0123456789ABCDEFHJKLMNPRSTUVWXY'),
   R.modulo(R.__, 31),
   parseInt,
   R.join(''),
@@ -117,16 +117,10 @@ export const henkilotunnusChecksum = R.compose(
 
 export const isValidHenkilotunnus = R.allPass([
   R.complement(R.isNil),
-  R.compose(
-    R.test(
-      /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d-|[01]\dA)\d{3}[\dA-Z]$/
-    ),
-    R.toUpper
+  R.test(
+    /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d-|[01]\dA)\d{3}[\dA-Z]$/
   ),
-  R.converge(R.equals, [
-    henkilotunnusChecksum,
-    R.compose(R.takeLast(1), R.toLower)
-  ])
+  R.converge(R.equals, [henkilotunnusChecksum, R.takeLast(1)])
 ]);
 
 export const henkilotunnusValidator = {
@@ -158,10 +152,10 @@ export const isPaivamaara = R.compose(
 
 export const isRakennustunnus = R.allPass([
   R.compose(R.equals(10), R.length),
-  R.compose(R.test(/^1\d{8}[A-Z0-9]{1}$/), R.toUpper),
+  R.test(/^1\d{8}[A-Z0-9]{1}$/),
   R.converge(R.equals, [
     R.compose(henkilotunnusChecksum, R.slice(0, 9)),
-    R.compose(R.takeLast(1), R.toLower)
+    R.takeLast(1)
   ])
 ]);
 

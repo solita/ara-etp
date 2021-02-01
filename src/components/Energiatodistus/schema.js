@@ -6,7 +6,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
 import * as Inputs from './inputs';
-import * as Validation from './validation'
+import * as Validation from './validation';
 
 const String = max => ({
   parse: parsers.optionalString,
@@ -41,15 +41,11 @@ const DateValue = () => ({
   validators: []
 });
 
-const StringValidator = validator => ({
-  parse: parsers.optionalString,
+const Rakennustunnus = {
+  parse: R.compose(Maybe.fromEmpty, R.trim, R.toUpper),
   format: formats.optionalString,
-  validators: [validator]
-});
-
-const Rakennustunnus = StringValidator(
-  validations.liftValidator(validations.rakennustunnusValidator)
-);
+  validators: [validations.liftValidator(validations.rakennustunnusValidator)]
+};
 
 const FloatNonNegative = Float(0.0, 9999999999);
 const Float1 = Float(0.0, 1.0);
