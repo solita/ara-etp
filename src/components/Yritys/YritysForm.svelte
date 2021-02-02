@@ -76,7 +76,10 @@
         R.includes(R.compose(R.toLower, R.last, R.split(' - '))(name)),
         R.map(R.toLower),
         R.props(['valittajatunnus'])
-      ), verkkolaskuoperaattorit));
+      ),
+      verkkolaskuoperaattorit
+    )
+  );
 
   const parseVerkkolaskuoperaattori = R.compose(
     Maybe.toEither(R.applyTo('validation.invalid-verkkolaskuoperaattori')),
@@ -103,9 +106,14 @@
       flashMessageStore.flush();
       submit(yritys);
     } else {
-      flashMessageStore.add('Yritys', 'error', $_('yritys.messages.validation-error'));
+      flashMessageStore.add(
+        'Yritys',
+        'error',
+        $_('yritys.messages.validation-error')
+      );
     }
-  }}>
+  }}
+>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
@@ -120,7 +128,8 @@
           parse={formParsers.ytunnus}
           validators={formSchema.ytunnus}
           i18n={$_}
-          {disabled} />
+          {disabled}
+        />
       </div>
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
         <Input
@@ -133,7 +142,8 @@
           parse={formParsers.nimi}
           validators={formSchema.nimi}
           i18n={$_}
-          {disabled} />
+          {disabled}
+        />
       </div>
     </div>
   </div>
@@ -153,7 +163,8 @@
           format={Maybe.orSome('')}
           parse={formParsers['vastaanottajan-tarkenne']}
           validators={formSchema['vastaanottajan-tarkenne']}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
     </div>
     <div class="flex flex-col">
@@ -168,7 +179,8 @@
           lens={R.lensProp('jakeluosoite')}
           parse={formParsers.jakeluosoite}
           validators={formSchema.jakeluosoite}
-          i18n={$_} />
+          i18n={$_}
+        />
       </div>
       <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -182,7 +194,8 @@
             lens={R.lensProp('postinumero')}
             parse={formParsers.postinumero}
             validators={formSchema.postinumero}
-            i18n={$_} />
+            i18n={$_}
+          />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Input
@@ -195,7 +208,8 @@
             lens={R.lensProp('postitoimipaikka')}
             parse={formParsers.postitoimipaikka}
             validators={formSchema.postitoimipaikka}
-            i18n={$_} />
+            i18n={$_}
+          />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Autocomplete items={countryNames}>
@@ -210,7 +224,8 @@
               parse={parseCountry}
               search={true}
               i18n={$_}
-              {disabled} />
+              {disabled}
+            />
           </Autocomplete>
         </div>
       </div>
@@ -225,7 +240,8 @@
             bind:model={yritys}
             lens={R.lensProp('laskutuskieli')}
             allowNone={false}
-            items={laskutuskieletIds} />
+            items={laskutuskieletIds}
+          />
         </div>
       </div>
     </div>
@@ -244,11 +260,12 @@
         format={Maybe.fold('', Formats.verkkolaskuosoite)}
         parse={formParsers.verkkolaskuosoite}
         validators={formSchema['verkkolaskuosoite']}
-        i18n={$_} />
+        i18n={$_}
+      />
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Autocomplete items={verkkolaskuoperaattoriNames}>
+        <Autocomplete items={verkkolaskuoperaattoriNames} size={20}>
           <Input
             id={'verkkolaskuoperaattori'}
             name={'verkkolaskuoperaattori'}
@@ -260,7 +277,8 @@
             bind:model={yritys}
             lens={R.lensProp('verkkolaskuoperaattori')}
             search={true}
-            i18n={$_} />
+            i18n={$_}
+          />
         </Autocomplete>
       </div>
     </div>
@@ -275,7 +293,8 @@
         text={$_('peruuta')}
         type={'reset'}
         style={'secondary'}
-        {disabled} />
+        {disabled}
+      />
     </div>
   </div>
 </form>
