@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { push, location, querystring } from 'svelte-spa-router';
+  import { push, replace, location, querystring } from 'svelte-spa-router';
   import * as R from 'ramda';
   import * as qs from 'qs';
   import * as Maybe from '@Utility/maybe-utils';
@@ -78,10 +78,7 @@
   ]);
 
   const formatLocale = R.curry((localizations, id) =>
-    R.compose(
-      locales.label($locale),
-      R.find(R.propEq('id', id))
-    )(localizations)
+    R.compose(locales.label($locale), R.find(R.propEq('id', id)))(localizations)
   );
 
   const findYritysById = R.curry((yritykset, id) =>
@@ -164,25 +161,14 @@
 
   const searchValue = R.compose(
     Maybe.orSome(''),
-    R.map(
-      R.compose(
-        R.toLower,
-        R.trim
-      )
-    ),
+    R.map(R.compose(R.toLower, R.trim)),
     R.prop('search')
   );
 
   const isMatchToSearchValue = R.curry((model, value) =>
     R.compose(
       Maybe.orSome(false),
-      R.map(
-        R.compose(
-          R.contains(searchValue(model)),
-          R.toLower,
-          R.trim
-        )
-      ),
+      R.map(R.compose(R.contains(searchValue(model)), R.toLower, R.trim)),
       Maybe.fromNull
     )(value)
   );
@@ -236,13 +222,7 @@
       [R.equals(2), R.always(R.propEq('laatimiskielto', true, laatija))],
       [R.equals(3), R.always(R.propEq('voimassa', false, laatija))],
       [R.T, R.always(true)]
-    ])(
-      R.compose(
-        Maybe.orSome(-1),
-        R.map(parseInt),
-        R.prop('state')
-      )(model)
-    )
+    ])(R.compose(Maybe.orSome(-1), R.map(parseInt), R.prop('state'))(model))
   );
 
   const laatijaMatch = R.curry((model, laatija) =>
@@ -260,7 +240,7 @@
   $: isReusults = R.complement(R.isEmpty)(results);
 
   $: R.compose(
-    querystring => push(`${$location}?${querystring}`),
+    querystring => replace(`${$location}?${querystring}`),
     qs.stringify,
     R.evolve({
       search: Maybe.orSome(''),
@@ -281,10 +261,11 @@
     }),
     R.pick(['search', 'page', 'state'])
   )(qs.parse($querystring));
+
+  let cancel = () => {};
 </script>
 
 <style>
-
 </style>
 
 <div class="w-full mt-3">
@@ -296,8 +277,16 @@
         label={' '}
         wrapper={PillInputWrapper}
         search={true}
-        on:input={evt => (model = R.assoc('search', Maybe.Some(evt.target.value), model))}
-        viewValue={R.compose( Maybe.orSome(''), R.prop('search') )(model)} />
+        on:input={evt => {
+          cancel = R.compose(
+            Future.value(val => {
+              model = R.assoc('search', Maybe.Some(val), model);
+            }),
+            Future.after(200),
+            R.tap(cancel)
+          )(evt.target.value);
+        }}
+        viewValue={R.compose(Maybe.orSome(''), R.prop('search'))(model)} />
     </div>
 
     <div class="lg:w-1/3 w-full px-4 py-4">
@@ -325,7 +314,7 @@
         {fields}
         tablecontents={results}
         {onRowClick}
-        pageNum={R.compose( Maybe.orSome(1), R.prop('page') )(model)}
+        pageNum={R.compose(Maybe.orSome(1), R.prop('page'))(model)}
         {nextPageCallback}
         {itemsPerPage} />
     </div>
