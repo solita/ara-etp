@@ -7,7 +7,7 @@
   "trailingComma": "none",
   "bracketSpacing": true,
   "arrowParens": "avoid",
-  "svelteSortOrder": "scripts-styles-markup",
+  "svelteSortOrder": "options-scripts-styles-markup",
   "svelteAllowShorthand": true,
-  "svelteBracketSameLine": true
+  "svelteBracketNewLine": false
 }
