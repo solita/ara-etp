@@ -7,6 +7,7 @@
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as Viestit from '@Component/viesti/viesti-util';
 
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
@@ -17,6 +18,7 @@
   import Button from '@Component/Button/Button.svelte';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import Link from '@Component/Link/Link.svelte';
 
   const i18nRoot = 'viesti.ketju.existing';
 
@@ -80,6 +82,8 @@
   const cancel = _ => {
     newViesti = Maybe.None();
   };
+
+  $: formatSender = Viestit.formatSender($_);
 </script>
 
 <style>
@@ -91,9 +95,14 @@
     {#each resources.toArray() as {ketju, whoami}}
       <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject}/>
 
+      <div class="flex mb-4">
+      <Link text={'\u2B05 Kaikki viestit'} href="#/viesti/all" />
+      </div>
+
       <div class="divide-y-2 divide-hr">
         {#each ketju.viestit as viesti}
           <div class="py-2">
+            <p>{formatSender(viesti.from)}</p>
             <p>{Formats.formatTimeInstant(viesti.senttime)}</p>
             <p>{viesti.body}</p>
           </div>

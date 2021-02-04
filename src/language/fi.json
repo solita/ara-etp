@@ -1097,6 +1097,7 @@
     }
   },
   "viesti": {
+    "valvoja": "Valvojat",
     "all": {
       "title": "Viestikeskus",
       "senttime": "Lähetysaika",

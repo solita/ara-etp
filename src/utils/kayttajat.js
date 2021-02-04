@@ -13,3 +13,5 @@ export const isPaakayttajaRole = R.equals(role.paakayttaja);
 export const isLaatija = R.propSatisfies(isLaatijaRole, 'rooli');
 export const isPatevyydentoteaja = R.propSatisfies(isPatevyydentoteajaRole, 'rooli');
 export const isPaakayttaja = R.propSatisfies(isPaakayttajaRole, 'rooli');
+
+export const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;
