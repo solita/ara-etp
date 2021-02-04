@@ -18,7 +18,7 @@ const signatureOptions = {
 };
 
 export const versionInfo = fetch =>
-  Fetch.fetchFromUrl(fetch, mpolluxVersionUrl);
+  Fetch.getJson(fetch, mpolluxVersionUrl);
 
 export const isValidSignatureResponse = R.compose(
   R.equals('ok'),

@@ -23,7 +23,7 @@ export const url = {
   whoami: '/api/private/whoami'
 };
 
-export const whoami = Future.cache(Fetch.fetchUrl(fetch, url.whoami));
+export const whoami = Future.cache(Fetch.getJson(fetch, url.whoami));
 
 export const getKayttajaById = R.curry((fetch, id) =>
   R.compose(

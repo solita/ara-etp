@@ -1096,6 +1096,43 @@
       "delete-error": "Energiatodistuksen poistaminen epäonnistui"
     }
   },
+  "viesti": {
+    "all": {
+      "title": "Viestikeskus",
+      "senttime": "Lähetysaika",
+      "osallistujat": "Osallistujat",
+      "content": "Sisältö",
+      "messages": {
+        "load-error": "Viestien lataus epäonnistui."
+      }
+    },
+    "ketju": {
+      "subject": "Aihe",
+      "body": "Viesti",
+      "new": {
+        "title": "Uusi viestiketju",
+        "submit": "Lähetä",
+        "reset": "Tyhjennä",
+        "messages": {
+          "load-error": "Tietojen lataus epäonnistui.",
+          "success": "Uusi viestiketju lisätty",
+          "error": "Uuden viestiketjun lisääminen epäonnistui"
+        }
+      },
+      "existing": {
+        "title": "Viestiketju",
+        "new-viesti": "Vastaus",
+        "submit": "Vastaa",
+        "reset": "Tyhjennä",
+        "messages": {
+          "not-found": "Viestiketjua ei ole olemassa.",
+          "load-error": "Viestiketjun tietojen lataus epäonnistui.",
+          "success": "Uusi viesti lisätty",
+          "error": "Uuden viestin lisääminen epäonnistui"
+        }
+      }
+    }
+  },
   "confirm": {
     "you-want-to-delete": "Oletko varma, että haluat poistaa?",
     "you-want-to-discard": "Oletko varma, että haluat hylätä?",
