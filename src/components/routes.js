@@ -4,7 +4,7 @@ import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
 
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
-import Viestit from '@Component/Viestit/Viestit';
+import Viesti from '@Component/viesti/viesti';
 import Laatija from '@Component/Laatija/Laatija';
 import Halytykset from '@Component/Halytykset/Halytykset';
 import Kaytonvalvonta from '@Component/Kaytonvalvonta/Kaytonvalvonta';
@@ -37,7 +37,7 @@ export const buildRoutes = currentUser => ({
   ),
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
-  '/viestit': Viestit,
+  '/viesti/*': Viesti,
   '/energiatodistus/*': wrap(Energiatodistus, _ =>
     KayttajaUtils.kayttajaHasAccessToResource(
       [KayttajaUtils.laatijaRole, KayttajaUtils.paakayttajaRole],
