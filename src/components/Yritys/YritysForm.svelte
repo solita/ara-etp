@@ -76,7 +76,10 @@
         R.includes(R.compose(R.toLower, R.last, R.split(' - '))(name)),
         R.map(R.toLower),
         R.props(['valittajatunnus'])
-      ), verkkolaskuoperaattorit));
+      ),
+      verkkolaskuoperaattorit
+    )
+  );
 
   const parseVerkkolaskuoperaattori = R.compose(
     Maybe.toEither(R.applyTo('validation.invalid-verkkolaskuoperaattori')),
@@ -103,7 +106,11 @@
       flashMessageStore.flush();
       submit(yritys);
     } else {
-      flashMessageStore.add('Yritys', 'error', $_('yritys.messages.validation-error'));
+      flashMessageStore.add(
+        'Yritys',
+        'error',
+        $_('yritys.messages.validation-error')
+      );
     }
   }}>
   <div class="w-full mt-3">
@@ -248,7 +255,7 @@
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Autocomplete items={verkkolaskuoperaattoriNames}>
+        <Autocomplete items={verkkolaskuoperaattoriNames} size={20}>
           <Input
             id={'verkkolaskuoperaattori'}
             name={'verkkolaskuoperaattori'}
