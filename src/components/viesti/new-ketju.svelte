@@ -25,7 +25,6 @@
   const i18nRoot = 'viesti.ketju.new';
 
   let resources = Maybe.None();
-  let ketjuForm = null;
   let dirty = false;
   let overlay = true;
   let enableOverlay = _ => {
@@ -71,13 +70,13 @@
 
   const isValidForm = Validation.isValidForm(Schema.ketju);
 
-  const submitNewKetju = _ => {
+  const submitNewKetju = event => {
     if (isValidForm(ketju)) {
       addKetju(ketju);
     } else {
       flashMessageStore.add('viesti', 'error',
         $_(`${i18nRoot}.messages.validation-error`));
-      Validation.blurForm(ketjuForm);
+      Validation.blurForm(event.target);
     }
   }
 
@@ -97,7 +96,7 @@
     <DirtyConfirmation {dirty} />
     {#each resources.toArray() as {whoami}}
 
-      <form id="ketju" bind:this={ketjuForm}
+      <form id="ketju"
             on:submit|preventDefault={submitNewKetju}
             on:input={_ => { dirty = true; }}
             on:change={_ => { dirty = true; }}>
