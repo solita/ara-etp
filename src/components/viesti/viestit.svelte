@@ -6,6 +6,7 @@
   import * as Formats from '@Utility/formats';
 
   import * as api from './viesti-api';
+  import * as Viestit from './viesti-util';
 
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
@@ -38,6 +39,8 @@
     R.last,
     R.prop('viestit'));
 
+  $: formatSender = Viestit.formatSender($_);
+
 </script>
 
 <style>
@@ -62,7 +65,7 @@
             <p>{sentTime(ketju)}</p>
           </td>
           <td class="etp-table--td">
-            Käyttäjä {R.last(ketju.viestit)['from-id']}
+            {formatSender(R.last(ketju.viestit)['from'])}
             {#if R.length(ketju.viestit) > 1}
               <p>{R.length(ketju.viestit)} viestiä</p>
             {/if}
