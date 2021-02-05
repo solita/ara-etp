@@ -253,6 +253,11 @@ const isInput = R.compose(
   R.prop('tagName')
 )
 
+/**
+ * Dispatch blur event for all the form inputs to ensure
+ * that the inputs are validated and they show error message
+ * if not valid.
+ */
 export const blurForm = R.compose(
   R.forEach(R.when(isInput, blur)),
   R.prop('elements')
