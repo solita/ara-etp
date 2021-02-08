@@ -1117,7 +1117,8 @@
         "messages": {
           "load-error": "Tietojen lataus epäonnistui.",
           "success": "Uusi viestiketju lisätty",
-          "error": "Uuden viestiketjun lisääminen epäonnistui"
+          "error": "Uuden viestiketjun lisääminen epäonnistui",
+          "validation-error": "Viestiketjun tiedoissa virheitä, tarkista syötteet."
         }
       },
       "existing": {

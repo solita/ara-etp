@@ -119,7 +119,6 @@
   <textarea
     {id}
     {name}
-    {required}
     {disabled}
     {autocomplete}
     use:autoresize={[min, max]}
