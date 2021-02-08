@@ -42,30 +42,31 @@
       </span>
       <div class="flex">
         {#if R.length(ketju.viestit) > 1}
-          <span class="block w-1/5">{R.length(ketju.viestit)} viestiä</span>
+          <span class="block w-4/12">{R.length(ketju.viestit)} viestiä</span>
         {:else}
-          <span class="block w-1/5">1 viesti</span>
+          <span class="block w-4/12">1 viesti</span>
         {/if}
-        <span class="block w-4/5">
+        <span class="block w-8/12">
           <span class="font-icon">people</span>
-          {R.compose(
-            Maybe.orSome(''),
-            R.chain(
-              Maybe.nullReturning(
-                R.compose(R.prop(R.__, participants), R.prop('id'))
+          {R.join(', ', R.filter(R.length, [
+            R.compose(
+              Maybe.orSome(''),
+              R.chain(
+                Maybe.nullReturning(
+                  R.compose(R.prop(R.__, participants), R.prop('id'))
+                )
               )
-            )
-          )($currentUserStore)}
-          {R.compose(
-            R.join(', '),
-            R.values,
-            Maybe.orSome(participants),
-            R.chain(
-              Maybe.nullReturning(
-                R.compose(R.dissoc(R.__, participants), R.prop('id'))
+            )($currentUserStore),
+            R.compose(
+              R.values,
+              Maybe.orSome(participants),
+              R.chain(
+                Maybe.nullReturning(
+                  R.compose(R.dissoc(R.__, participants), R.prop('id'))
+                )
               )
-            )
-          )($currentUserStore)}
+            )($currentUserStore)
+          ]))}
         </span>
       </div>
     </div>
