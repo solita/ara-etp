@@ -46,13 +46,13 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     <H1 text={$_('viesti.all.title')} />
-    <div class="flex flex-col">
+    <!--<div class="flex flex-col">
       <div class="flex header">
         <span class="w-1/6">{$_('viesti.all.senttime')}</span>
         <span class="w-1/3">{$_('viesti.all.osallistujat')}</span>
         <span class="w-1/2">{$_('viesti.all.content')}</span>
       </div>
-    </div>
+    </div>-->
     {#each ketjut as ketju}
       <Viestiketju {ketju} />
     {/each}
