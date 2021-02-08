@@ -1130,7 +1130,8 @@
           "not-found": "Viestiketjua ei ole olemassa.",
           "load-error": "Viestiketjun tietojen lataus epäonnistui.",
           "success": "Uusi viesti lisätty",
-          "error": "Uuden viestin lisääminen epäonnistui"
+          "error": "Uuden viestin lisääminen epäonnistui",
+          "validation-error": "Vastauksessa on virhe. Tarkista vastauksen tiedot ennen lähettämistä."
         }
       }
     }

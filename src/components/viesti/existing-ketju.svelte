@@ -4,10 +4,12 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
+  import * as Validation from '@Utility/validation';
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as Viestit from '@Component/viesti/viesti-util';
+  import * as Schema from './schema';
 
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
@@ -19,12 +21,14 @@
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Link from '@Component/Link/Link.svelte';
+  import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   const i18nRoot = 'viesti.ketju.existing';
 
   export let params;
 
   let resources = Maybe.None();
+  let dirty = false;
   let overlay = true;
   let enableOverlay = _ => {
     overlay = true;
@@ -57,7 +61,7 @@
 
   $: load(params.id);
 
-  let newViesti = Maybe.None();
+  let newViesti = '';
 
   $: addNewViesti = R.compose(
     Future.fork(
@@ -72,15 +76,27 @@
         flashMessageStore.add('viesti', 'success',
           $_(`${i18nRoot}.messages.success`));
         load(params.id);
-        newViesti = Maybe.None();
+        newViesti = '';
+        dirty = false;
       }
     ),
     api.postNewViesti(fetch, params.id));
 
-  const submitNewViesti = _ => R.forEach(addNewViesti, newViesti);
+  const isValidForm = Validation.validateModelValue(Schema.ketju.body);
+
+  const submitNewViesti = event => {
+    if (isValidForm(newViesti).isRight()) {
+      addNewViesti(newViesti);
+    } else {
+      flashMessageStore.add('viesti', 'error',
+        $_(`${i18nRoot}.messages.validation-error`));
+      Validation.blurForm(event.target);
+    }
+  }
 
   const cancel = _ => {
-    newViesti = Maybe.None();
+    newViesti = '';
+    dirty = false;
   };
 
   $: formatSender = Viestit.formatSender($_);
@@ -94,6 +110,8 @@
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as {ketju, whoami}}
       <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject}/>
+
+      <DirtyConfirmation {dirty} />
 
       <div class="flex mb-4">
       <Link text={'\u2B05 Kaikki viestit'} href="#/viesti/all" />
@@ -109,7 +127,9 @@
         {/each}
       </div>
 
-      <form class="mt-5" on:submit|preventDefault={submitNewViesti}>
+      <form class="mt-5" on:submit|preventDefault={submitNewViesti}
+            on:input={_ => { dirty = true; }}
+            on:change={_ => { dirty = true; }}>
         <div class="w-full py-4">
           <Textarea
               id={'ketju.new-viesti'}
@@ -118,17 +138,19 @@
               bind:model={newViesti}
               lens={R.lens(R.identity, R.identity)}
               required={true}
-              parse={R.compose(Maybe.fromEmpty, R.trim)}
-              format={Maybe.orSome('')}
+              parse={R.trim}
+              validators={Schema.ketju.body}
               i18n={$_}/>
         </div>
 
         <div class="flex space-x-4 pt-8">
           <Button
+              disabled={!dirty}
               type={'submit'}
               text={'Vastaa'}/>
           <Button
               on:click={cancel}
+              disabled={!dirty}
               text={'Tyhjennä'}
               type={'reset'}
               style={'secondary'}/>
