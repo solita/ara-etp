@@ -1094,6 +1094,45 @@
       "delete-error": "Det gick inte att avlägsna energicertifikatet"
     }
   },
+  "viesti": {
+    "valvoja": "Valvojat SV?",
+    "mina": "Minä SV?",
+    "all": {
+      "title": "Viestikeskus SV?",
+      "senttime": "Lähetysaika SV?",
+      "osallistujat": "Osallistujat SV?",
+      "content": "Sisältö SV?",
+      "messages": {
+        "load-error": "Viestien lataus epäonnistui. SV?"
+      }
+    },
+    "ketju": {
+      "subject": "Aihe SV?",
+      "body": "Viesti SV?",
+      "new": {
+        "title": "Uusi viestiketju SV?",
+        "submit": "Lähetä SV?",
+        "reset": "Tyhjennä SV?",
+        "messages": {
+          "load-error": "Tietojen lataus epäonnistui. SV?",
+          "success": "Uusi viestiketju lisätty SV?",
+          "error": "Uuden viestiketjun lisääminen epäonnistui"
+        }
+      },
+      "existing": {
+        "title": "Viestiketju SV?",
+        "new-viesti": "Vastaus SV?",
+        "submit": "Vastaa SV?",
+        "reset": "Tyhjennä SV?",
+        "messages": {
+          "not-found": "Viestiketjua ei ole olemassa. SV?",
+          "load-error": "Viestiketjun tietojen lataus epäonnistui. SV?",
+          "success": "Uusi viesti lisätty SV?",
+          "error": "Uuden viestin lisääminen epäonnistui SV?"
+        }
+      }
+    }
+  },
   "confirm": {
     "you-want-to-delete": "Är du säker på att du vill avlägsna?",
     "you-want-to-discard": "Oletko varma, että haluat hylätä? SV?",
