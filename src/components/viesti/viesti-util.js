@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import * as Kayttajat from '@Utility/kayttajat';
 
 export const emptyKetju = _ => ({
-  'kayttajat': [],
+  kayttajat: [],
   'kayttajarooli-id': Maybe.None(),
   'kayttajaryhma-id': Maybe.None(),
   'energiatodistus-id': Maybe.None(),
@@ -11,7 +11,14 @@ export const emptyKetju = _ => ({
   body: ''
 });
 
-export const formatSender = i18n => R.ifElse(
-  R.propSatisfies(Kayttajat.isPaakayttajaRole, 'rooli-id'),
-  from => i18n('viesti.valvoja') + ' (' + from.etunimi + ')',
-  Kayttajat.fullName);
+export const formatSender = R.curry((i18n, viesti) =>
+  R.ifElse(
+    R.propSatisfies(Kayttajat.isPaakayttajaRole, 'rooli-id'),
+    from => i18n('viesti.valvoja') + ' (' + from.etunimi + ')',
+    Kayttajat.fullName
+  )(viesti)
+);
+
+export const isSelfSent = R.curry((viesti, currentUser) =>
+  R.propEq('id', R.path(['from', 'id'], viesti), currentUser)
+);
