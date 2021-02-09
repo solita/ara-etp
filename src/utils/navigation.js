@@ -19,7 +19,7 @@ const linksForLaatija = R.curry((flags, i18n, kayttaja) =>
     }),
     R.when(
       R.always(flags.viestit),
-      R.append({ label: i18n('navigation.viestit'), href: '#/viestit' })
+      R.append({ label: i18n('navigation.viestit'), href: '#/viesti/all' })
     )
   )([])
 );
@@ -174,7 +174,7 @@ export const linksForPaakayttaja = R.curry((flags, i18n, kayttaja) =>
     ]),
     R.when(
       R.always(flags.viestit),
-      R.append({ label: i18n('navigation.viestit'), href: '#/viestit/all' })
+      R.append({ label: i18n('navigation.viestit'), href: '#/viesti/all' })
     )
   )([])
 );
@@ -245,7 +245,7 @@ export const navigationParse = R.curry(
               'halytykset',
               'kaytonvalvonta',
               'tyojono',
-              'viestit',
+              'viesti',
               'myinfo'
             ]),
             R.head
