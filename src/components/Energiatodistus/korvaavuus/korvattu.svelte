@@ -53,8 +53,7 @@
     Korvaus.isSame(korvattava, energiatodistus) ? Maybe.Some('is-same') :
       !Korvaus.isValidState(korvattava, energiatodistus) ? Maybe.Some('invalid-tila') :
         Korvaus.hasOtherKorvaaja(korvattava, energiatodistus) ? Maybe.Some('already-replaced') :
-          !Korvaus.isValidLocation(korvattava, energiatodistus) ? Maybe.Some('invalid-location') :
-            Maybe.None();
+          Maybe.None();
 
   const fetchKorvattavaEnergiatodistus = initialDelay => id => {
     cancel = R.compose(
