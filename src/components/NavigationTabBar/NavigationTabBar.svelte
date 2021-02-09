@@ -7,6 +7,7 @@
   export let location;
   export let user;
   export let i18n;
+  export let versio;
 
   $: links = Navigation.navigationParse(i18n, user, location, idTranslate);
 </script>

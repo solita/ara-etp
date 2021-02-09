@@ -1,6 +1,7 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
   import * as Response from '@Utility/response';
+  import * as R from 'ramda';
 
   import { currentUserStore } from '@/stores';
   import { setupI18n, _ } from '@Language/i18n';
@@ -12,42 +13,49 @@
 
   import TableStyles from '@/TableStyles';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as versionApi from '@Component/Version/version-api';
   import * as Future from '@Utility/future-utils';
   import Content from './UserContent.svelte';
 
   setupI18n();
 
   let whoami = Maybe.None();
+  let version = Maybe.None();
   let failure = Maybe.None();
 
-  Future.fork(
-    response => {
-      failure = Maybe.Some(response);
-    },
-    response => {
-      whoami = Maybe.Some(response);
-      currentUserStore.set(whoami);
-    },
-    kayttajaApi.whoami);
-
+  R.compose(
+    Future.fork(
+      response => {
+        failure = Maybe.Some(response);
+      },
+      response => {
+        whoami = Maybe.Some(response[0]);
+        version = Maybe.Some(response[1]);
+        currentUserStore.set(whoami);
+      }
+    ),
+    Future.parallel(2),
+    R.pair(kayttajaApi.whoami),
+    versionApi.getVersion
+  )(Date.now());
 </script>
 
 <style type="text/postcss">
   .appcontainer {
-      @apply flex flex-col flex-grow justify-between min-h-screen;
+    @apply flex flex-col flex-grow justify-between min-h-screen;
   }
 
   .headercontainer,
   .footercontainer {
-      @apply flex justify-center;
+    @apply flex justify-center;
   }
 
   .headercontainer {
-      @apply bg-secondary;
+    @apply bg-secondary;
   }
 
   .footercontainer {
-      @apply bg-background;
+    @apply bg-background;
   }
 </style>
 
@@ -75,7 +83,9 @@
   {/each}
 
   {#each Maybe.toArray(whoami) as user}
-    <Content {user} />
+    {#each Maybe.toArray(version) as versio}
+      <Content {user} {versio} />
+    {/each}
   {/each}
 
   <div class="footercontainer">

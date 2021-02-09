@@ -98,7 +98,8 @@ module.exports = {
       version: `${prod ? 'build' : 'dev'} - ${format(
         Date.now(),
         'yyyy-MM-dd-HH-mm'
-      )}`
+      )}`,
+      environment: prod ? 'production' : 'dev'
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
