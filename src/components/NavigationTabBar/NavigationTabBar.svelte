@@ -9,7 +9,17 @@
   export let i18n;
   export let versio;
 
-  $: links = Navigation.navigationParse(i18n, user, location, idTranslate);
+  const flags = {
+    viestit: versio.environment === 'dev'
+  };
+
+  $: links = Navigation.navigationParse(
+    flags,
+    i18n,
+    user,
+    location,
+    idTranslate
+  );
 </script>
 
 <style type="text/postcss">
