@@ -5,6 +5,7 @@
   import * as Response from '@Utility/response';
 
   import * as api from './viesti-api';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
@@ -13,28 +14,40 @@
   import H1 from '@Component/H/H1.svelte';
   import Link from '../Link/Link.svelte';
   import Viestiketju from './viestiketju';
+  import Spinner from '@Component/Spinner/Spinner.svelte';
 
-  let ketjut = [];
+  let resources = Maybe.None();
+
   let overlay = true;
 
-  Future.fork(
-    response => {
-      const msg = $_(
-        Maybe.orSome(
-          'viesti.all.messages.load-error',
-          Response.localizationKey(response)
-        )
-      );
+  const enableOverlay = _ => (overlay = true);
 
-      flashMessageStore.add('viesti', 'error', msg);
-      overlay = false;
-    },
-    response => {
-      ketjut = response;
-      overlay = false;
-    },
-    api.getKetjut(fetch)
-  );
+  R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            'viesti.all.messages.load-error',
+            Response.localizationKey(response)
+          )
+        );
+
+        flashMessageStore.add('viesti', 'error', msg);
+        overlay = false;
+      },
+      response => {
+        resources = Maybe.Some({
+          whoami: response[0],
+          ketjut: response[1]
+        });
+        overlay = false;
+      }
+    ),
+    Future.parallel(2),
+    R.tap(enableOverlay),
+    R.pair(kayttajaApi.whoami),
+    api.getKetjut
+  )(fetch);
 </script>
 
 <style>
@@ -45,20 +58,25 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={$_('viesti.all.title')} />
-    <!--<div class="flex flex-col">
+    {#each Maybe.toArray(resources) as { ketjut, whoami }}
+      <H1 text={$_('viesti.all.title')} />
+      <!--<div class="flex flex-col">
       <div class="flex header">
         <span class="w-1/6">{$_('viesti.all.senttime')}</span>
         <span class="w-1/3">{$_('viesti.all.osallistujat')}</span>
         <span class="w-1/2">{$_('viesti.all.content')}</span>
       </div>
     </div>-->
-    {#each ketjut as ketju}
-      <Viestiketju {ketju} />
-    {/each}
+      {#each ketjut as ketju}
+        <Viestiketju {ketju} {whoami} />
+      {/each}
 
-    <div class="flex mt-5">
-      <Link text={'Lisää uusi ketju'} href="#/viesti/new" />
-    </div>
+      <div class="flex mt-5">
+        <Link text={'Lisää uusi ketju'} href="#/viesti/new" />
+      </div>
+    {/each}
+  </div>
+  <div slot="overlay-content">
+    <Spinner />
   </div>
 </Overlay>

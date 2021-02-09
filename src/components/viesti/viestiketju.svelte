@@ -1,21 +1,20 @@
 <script>
   import * as R from 'ramda';
   import * as Formats from '@Utility/formats';
-  import * as Maybe from '@Utility/maybe-utils';
 
   import * as Viestit from './viesti-util';
 
-  import { currentUserStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
   export let ketju;
+  export let whoami;
 
   const sentTime = R.compose(R.prop('senttime'), R.last, R.prop('viestit'));
 
   $: participants = R.compose(
     R.reduce(R.mergeLeft, {}),
     R.map(viesti => {
-      if (Maybe.exists(Viestit.isSelfSent(viesti), $currentUserStore)) {
+      if (Viestit.isSelfSent(viesti, whoami)) {
         return { [viesti.from.id]: $_('viesti.mina') };
       }
       return { [viesti.from.id]: Viestit.formatSender($_, viesti.from) };
@@ -23,10 +22,10 @@
     R.prop('viestit')
   )(ketju);
 
-  $: currentUserPartOfKetju = Maybe.exists(
-    R.compose(R.has(R.__, participants), R.prop('id')),
-    $currentUserStore
-  );
+  $: currentUserPartOfKetju = R.compose(
+    R.has(R.__, participants),
+    R.prop('id')
+  )(whoami);
 </script>
 
 <style>
@@ -48,9 +47,10 @@
     <div class="flex flex-col w-1/3">
       <span
         class="block font-bold"
-        class:text-primary={Maybe.exists(
-          R.propEq('id', R.path(['from', 'id'], R.last(ketju.viestit))),
-          $currentUserStore
+        class:text-primary={R.propEq(
+          'id',
+          R.path(['from', 'id'], R.last(ketju.viestit)),
+          whoami
         )}>
         {participants[R.path(['from', 'id'], R.last(ketju.viestit))]}
       </span>
@@ -65,12 +65,10 @@
           <div class="flex-auto ml-1">
             {#if currentUserPartOfKetju}
               <span class="participant font-bold text-primary">
-                {participants[
-                  R.compose(Maybe.get, R.map(R.prop('id')))($currentUserStore)
-                ]}
+                {participants[R.prop('id', whoami)]}
               </span>
             {/if}
-            {#each R.compose(R.filter(R.length), R.values, Maybe.orSome(participants), R.chain(Maybe.nullReturning(R.compose(R.dissoc(R.__, participants), R.prop('id')))))($currentUserStore) as participant}
+            {#each R.compose(R.filter(R.length), R.values, R.dissoc(R.prop('id', whoami)))(participants) as participant}
               <span class="participant">
                 {participant}
               </span>
