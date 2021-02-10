@@ -1105,6 +1105,7 @@
       "senttime": "Lähetysaika",
       "osallistujat": "Osallistujat",
       "content": "Sisältö",
+      "no-messages": "Ei viestejä",
       "messages": {
         "load-error": "Viestien lataus epäonnistui."
       }

@@ -67,6 +67,9 @@
         <span class="w-1/2">{$_('viesti.all.content')}</span>
       </div>
     </div>-->
+      {#if ketjut.length === 0}
+        <span>{$_('viesti.all.no-messages')}</span>
+      {/if}
       {#each ketjut as ketju}
         <Viestiketju {ketju} {whoami} />
       {/each}

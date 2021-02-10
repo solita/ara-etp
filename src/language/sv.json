@@ -1103,6 +1103,7 @@
       "senttime": "Lähetysaika SV?",
       "osallistujat": "Osallistujat SV?",
       "content": "Sisältö SV?",
+      "no-messages": "Ei viestejä SV?",
       "messages": {
         "load-error": "Viestien lataus epäonnistui. SV?"
       }
