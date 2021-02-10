@@ -38,11 +38,16 @@ export const yritysCrumb = R.curry((idTranslate, i18n, id) =>
 );
 
 export const yrityksetCrumb = R.curry((i18n, user) => {
-  const url = Kayttajat.isPaakayttaja(user) ?
-    '#/yritys/all' :
-    `#/laatija/${user.id}/yritykset`;
+  const url = Kayttajat.isPaakayttaja(user)
+    ? '#/yritys/all'
+    : `#/laatija/${user.id}/yritykset`;
 
   return createCrumb(url, i18n('navigation.yritykset'));
+});
+
+export const parseViesti = R.curry((i18n, locationParts) => {
+  const url = `#/viesti/all`;
+  return createCrumb(url, i18n('navigation.viesti'));
 });
 
 export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
@@ -265,12 +270,15 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
         R.compose(parseLaatija(i18n), R.tail)
       ],
       [
+        R.compose(R.equals('viesti'), R.head),
+        R.compose(parseViesti(i18n), R.tail)
+      ],
+      [
         R.compose(
           R.includes(R.__, [
             'halytykset',
             'kaytonvalvonta',
             'tyojono',
-            'viestit',
             'myinfo'
           ]),
           R.head
