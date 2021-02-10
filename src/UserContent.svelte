@@ -10,7 +10,7 @@
   import { buildRoutes } from '@Component/routes';
 
   export let user;
-  export let versio;
+  export let version;
 
   const routes = buildRoutes(user);
 </script>
@@ -51,7 +51,7 @@
       idTranslate={$idTranslateStore}
       location={$location}
       {user}
-      {versio}
+      {version}
       i18n={$_} />
   </div>
   <div class="routecontainer">

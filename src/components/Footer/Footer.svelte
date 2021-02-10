@@ -1,6 +1,8 @@
 <script>
   import Version from '@Component/Version/Version';
   import { locale, _ } from '@Language/i18n';
+
+  export let version;
 </script>
 
 <footer class="flex flex-col w-full text-sm">
@@ -19,9 +21,8 @@
           <span class="font-bold"> {$_('footer.phone')}: </span>
           <a class="font-bold" href="tel:0295250800"> 029 525 0800 </a>
           <span class="font-bold mt-2"> {$_('footer.email')}: </span>
-          <a
-            class="font-bold"
-            href="mailto:energiatodistus@ara.fi">energiatodistus@ara.fi
+          <a class="font-bold" href="mailto:energiatodistus@ara.fi"
+            >energiatodistus@ara.fi
           </a>
         </div>
       </div>
@@ -76,6 +77,6 @@
   <div
     class="border-t border-tableborder mx-8 pt-4 pb-16 flex items-center justify-between">
     <img class="w-20 h-20" src="images/ara_logo_green.svg" alt="Ara" />
-    <Version />
+    <Version {version} />
   </div>
 </footer>

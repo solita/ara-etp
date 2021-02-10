@@ -7,14 +7,10 @@
   export let location;
   export let user;
   export let i18n;
-  export let versio;
-
-  const flags = {
-    viestit: versio.environment === 'dev'
-  };
+  export let version;
 
   $: links = Navigation.navigationParse(
-    flags,
+    version.flags,
     i18n,
     user,
     location,

@@ -20,7 +20,7 @@
   setupI18n();
 
   let whoami = Maybe.None();
-  let version = Maybe.None();
+  let v = Maybe.None();
   let failure = Maybe.None();
 
   R.compose(
@@ -30,7 +30,7 @@
       },
       response => {
         whoami = Maybe.Some(response[0]);
-        version = Maybe.Some(response[1]);
+        v = Maybe.Some(response[1]);
         currentUserStore.set(whoami);
       }
     ),
@@ -83,14 +83,16 @@
   {/each}
 
   {#each Maybe.toArray(whoami) as user}
-    {#each Maybe.toArray(version) as versio}
-      <Content {user} {versio} />
+    {#each Maybe.toArray(v) as version}
+      <Content {user} {version} />
     {/each}
   {/each}
 
-  <div class="footercontainer">
-    <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-      <Footer />
+  {#each Maybe.toArray(v) as version}
+    <div class="footercontainer">
+      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+        <Footer {version} />
+      </div>
     </div>
-  </div>
+  {/each}
 </div>

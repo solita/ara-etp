@@ -99,7 +99,9 @@ module.exports = {
         Date.now(),
         'yyyy-MM-dd-HH-mm'
       )}`,
-      environment: prod ? 'production' : 'dev'
+      flags: {
+        viestit: !prod
+      }
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
