@@ -39,8 +39,8 @@
 
 <style>
   .et-table--thead .et-table--th {
-    overflow: hidden;
     text-overflow: ellipsis;
+    @apply overflow-hidden px-2;
   }
 </style>
 
@@ -143,7 +143,7 @@
         {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
       </th>
       <th
-        class="et-table--th border-r-4"
+        class="et-table--th"
         title={$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}>
         {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
         <span class="block">
@@ -193,7 +193,7 @@
             bind:model={energiatodistus}
             path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampokerroin']} />
         </td>
-        <td class="et-table--td border-r-4">
+        <td class="et-table--td">
           <Input
             {disabled}
             {schema}
