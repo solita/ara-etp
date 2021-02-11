@@ -11,7 +11,7 @@
   import * as Viestit from '@Component/viesti/viesti-util';
   import * as Schema from './schema';
 
-  import { flashMessageStore } from '@/stores';
+  import { flashMessageStore, idTranslateStore } from '@/stores';
   import { _ } from '@Language/i18n';
   import { push } from '@Component/Router/router';
 
@@ -37,11 +37,14 @@
   const load = R.compose(
     Future.fork(
       response => {
-        const msg = $_(Response.notFound(response) ?
-          `${i18nRoot}.messages.not-found` :
-          Maybe.orSome(
-            `${i18nRoot}.messages.load-error`,
-            Response.localizationKey(response)));
+        const msg = $_(
+          Response.notFound(response)
+            ? `${i18nRoot}.messages.not-found`
+            : Maybe.orSome(
+                `${i18nRoot}.messages.load-error`,
+                Response.localizationKey(response)
+              )
+        );
 
         flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
@@ -52,7 +55,9 @@
           ketju: response[1]
         });
         overlay = false;
-      }),
+        idTranslateStore.updateKetju(response[1]);
+      }
+    ),
     Future.parallel(2),
     R.tap(enableOverlay),
     R.pair(kayttajaApi.whoami),
@@ -66,21 +71,28 @@
   $: addNewViesti = R.compose(
     Future.fork(
       response => {
-        const msg = $_(Maybe.orSome(
-          `${i18nRoot}.messages.error`,
-          Response.localizationKey(response)));
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.messages.error`,
+            Response.localizationKey(response)
+          )
+        );
         flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add('viesti', 'success',
-          $_(`${i18nRoot}.messages.success`));
+        flashMessageStore.add(
+          'viesti',
+          'success',
+          $_(`${i18nRoot}.messages.success`)
+        );
         load(params.id);
         newViesti = '';
         dirty = false;
       }
     ),
-    api.postNewViesti(fetch, params.id));
+    api.postNewViesti(fetch, params.id)
+  );
 
   const isValidForm = Validation.validateModelValue(Schema.ketju.body);
 
@@ -88,11 +100,14 @@
     if (isValidForm(newViesti).isRight()) {
       addNewViesti(newViesti);
     } else {
-      flashMessageStore.add('viesti', 'error',
-        $_(`${i18nRoot}.messages.validation-error`));
+      flashMessageStore.add(
+        'viesti',
+        'error',
+        $_(`${i18nRoot}.messages.validation-error`)
+      );
       Validation.blurForm(event.target);
     }
-  }
+  };
 
   const cancel = _ => {
     newViesti = '';
@@ -103,18 +118,17 @@
 </script>
 
 <style>
-
 </style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each resources.toArray() as {ketju, whoami}}
-      <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject}/>
+    {#each resources.toArray() as { ketju, whoami }}
+      <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
 
       <DirtyConfirmation {dirty} />
 
       <div class="flex mb-4">
-      <Link text={'\u2B05 Kaikki viestit'} href="#/viesti/all" />
+        <Link text={'\u2B05 Kaikki viestit'} href="#/viesti/all" />
       </div>
 
       <div class="divide-y-2 divide-hr">
@@ -127,33 +141,36 @@
         {/each}
       </div>
 
-      <form class="mt-5" on:submit|preventDefault={submitNewViesti}
-            on:input={_ => { dirty = true; }}
-            on:change={_ => { dirty = true; }}>
+      <form
+        class="mt-5"
+        on:submit|preventDefault={submitNewViesti}
+        on:input={_ => {
+          dirty = true;
+        }}
+        on:change={_ => {
+          dirty = true;
+        }}>
         <div class="w-full py-4">
           <Textarea
-              id={'ketju.new-viesti'}
-              name={'ketju.new-viesti'}
-              label={$_(i18nRoot + '.new-viesti')}
-              bind:model={newViesti}
-              lens={R.lens(R.identity, R.identity)}
-              required={true}
-              parse={R.trim}
-              validators={Schema.ketju.body}
-              i18n={$_}/>
+            id={'ketju.new-viesti'}
+            name={'ketju.new-viesti'}
+            label={$_(i18nRoot + '.new-viesti')}
+            bind:model={newViesti}
+            lens={R.lens(R.identity, R.identity)}
+            required={true}
+            parse={R.trim}
+            validators={Schema.ketju.body}
+            i18n={$_} />
         </div>
 
         <div class="flex space-x-4 pt-8">
+          <Button disabled={!dirty} type={'submit'} text={'Vastaa'} />
           <Button
-              disabled={!dirty}
-              type={'submit'}
-              text={'Vastaa'}/>
-          <Button
-              on:click={cancel}
-              disabled={!dirty}
-              text={'Tyhjennä'}
-              type={'reset'}
-              style={'secondary'}/>
+            on:click={cancel}
+            disabled={!dirty}
+            text={'Tyhjennä'}
+            type={'reset'}
+            style={'secondary'} />
         </div>
       </form>
     {/each}

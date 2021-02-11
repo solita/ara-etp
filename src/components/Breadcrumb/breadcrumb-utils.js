@@ -45,9 +45,21 @@ export const yrityksetCrumb = R.curry((i18n, user) => {
   return createCrumb(url, i18n('navigation.yritykset'));
 });
 
-export const parseViesti = R.curry((i18n, locationParts) => {
-  const url = `#/viesti/all`;
-  return createCrumb(url, i18n('navigation.viesti'));
+export const parseViesti = R.curry((idTranslate, i18n, locationParts) => {
+  const allCrumb = createCrumb(`#/viesti/all`, i18n('navigation.viesti'));
+  if (locationParts[0] === 'all' || !idTranslate['viesti'][locationParts[0]]) {
+    return [allCrumb];
+  }
+
+  return [
+    singleEnergiatodistusCrumb(
+      idTranslate,
+      i18n,
+      R.path(['viesti', locationParts[0], 'versio'], idTranslate),
+      R.path(['viesti', locationParts[0], 'id'], idTranslate)
+    ),
+    createCrumb(`#/viesti/${locationParts[0]}`, i18n('navigation.viestit'))
+  ];
 });
 
 export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
@@ -271,7 +283,7 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
       ],
       [
         R.compose(R.equals('viesti'), R.head),
-        R.compose(parseViesti(i18n), R.tail)
+        R.compose(parseViesti(idTranslate, i18n), R.tail)
       ],
       [
         R.compose(
