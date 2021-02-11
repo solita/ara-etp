@@ -34,13 +34,12 @@ const createIdTranslateStore = () => {
         )
       ),
     updateKetju: ketju => {
-      debugger;
-      if (ketju['energiatodistus-id'] && ketju['energiatodistus-versio']) {
+      if (ketju['energiatodistus-id']) {
         update(
-          R.assocPath(['viesti', R.prop('id', ketju)], {
-            id: R.prop('energiatodistus-id', ketju),
-            versio: R.prop('energiatodistus-versio', ketju)
-          })
+          R.assocPath(
+            ['viesti', R.prop('id', ketju)],
+            R.prop('energiatodistus-id', ketju)
+          )
         );
       }
     }
@@ -48,8 +47,6 @@ const createIdTranslateStore = () => {
 };
 
 export const idTranslateStore = createIdTranslateStore();
-
-window.idTranslateStore = idTranslateStore;
 
 const createFlashMessageStore = () => {
   const { subscribe, set, update } = writable([]);

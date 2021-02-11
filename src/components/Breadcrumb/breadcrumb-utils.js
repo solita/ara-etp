@@ -52,11 +52,9 @@ export const parseViesti = R.curry((idTranslate, i18n, locationParts) => {
   }
 
   return [
-    singleEnergiatodistusCrumb(
-      idTranslate,
-      i18n,
-      R.path(['viesti', locationParts[0], 'versio'], idTranslate),
-      R.path(['viesti', locationParts[0], 'id'], idTranslate)
+    createCrumb(
+      `#/energiatodistus/${idTranslate['viesti'][locationParts[0]]}`,
+      `${i18n('navigation.et')} ${idTranslate['viesti'][locationParts[0]]}`
     ),
     createCrumb(`#/viesti/${locationParts[0]}`, i18n('navigation.viestit'))
   ];
