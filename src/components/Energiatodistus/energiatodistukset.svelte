@@ -259,9 +259,28 @@
 </style>
 
 <div class="w-full mt-3">
-  <H1 text={$_('energiatodistukset.title')} />
-
   {#each resources.toArray() as { luokittelut, whoami }}
+    <div class="flex flex-col lg:flex-row justify-between">
+      <H1 text={$_('energiatodistukset.title')} />
+      {#if Kayttajat.isLaatija(whoami)}
+        <div class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
+          <div class="flex flex-row my-auto">
+            <span class="material-icons">add_circle_outline</span>
+            &nbsp;
+            <Link
+              text={$_('energiatodistus.luo2018')}
+              href="#/energiatodistus/2018/new" />
+          </div>
+          <div class="flex flex-row my-auto">
+            <span class="material-icons">add_circle_outline</span>
+            &nbsp;
+            <Link
+              text={$_('energiatodistus.luo2013')}
+              href="#/energiatodistus/2013/new" />
+          </div>
+        </div>
+      {/if}
+    </div>
     <div class="mb-10">
       <EnergiatodistusHaku
         {where}
@@ -380,25 +399,6 @@
         <Spinner />
       </div>
     </Overlay>
-    {#if Kayttajat.isLaatija(whoami)}
-      <p class="mb-4">{$_('energiatodistus.et-lisays')}</p>
-      <div class="mb-4 flex lg:flex-row flex-col">
-        <div class="flex flex-row mb-4 mr-4">
-          <span class="material-icons">add</span>
-          &nbsp;
-          <Link
-            text={$_('energiatodistus.luo2018')}
-            href="#/energiatodistus/2018/new" />
-        </div>
-        <div class="flex flex-row mb-4 mr-4">
-          <span class="material-icons">add</span>
-          &nbsp;
-          <Link
-            text={$_('energiatodistus.luo2013')}
-            href="#/energiatodistus/2013/new" />
-        </div>
-      </div>
-    {/if}
     <div class="flex flew-row mb-4 mr-4">
       <span class="material-icons">attachment</span>
       &nbsp;

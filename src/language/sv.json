@@ -554,10 +554,10 @@
           "kuvaus": "Beskrivning av värmedistributionen"
         },
         "tuotonhyotysuhde": "Verkningsgrad för produktionen",
-        "jaonjaluovutuksenhyotysuhde": "Verkningsgraden för distribution och avgivning",
-        "lampokerroin": "Temperaturkoefficient",
+        "jaonjaluovutuksenhyotysuhde": "Verknings-graden för distribution och avgivning",
+        "lampokerroin": "Temperatur-koefficient",
         "apulaitteidensahkonkaytto": "Hjälputrustningens elförbrukning",
-        "lampopumppu-tuotto-osuus": "Värmepumpens avkastningsandel",
+        "lampopumppu-tuotto-osuus": "Värme-pumpens avkastnings-andel",
         "lampohavio-lammittamaton-tila": "Värmeförluster i icke-uppvärmt utrymme",
         "maara": "Mängd",
         "tuotto": "Produktion",
