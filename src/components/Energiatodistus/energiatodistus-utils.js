@@ -1,5 +1,4 @@
 import * as R from 'ramda';
-import * as dfns from 'date-fns';
 
 import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
@@ -358,3 +357,4 @@ export const kielisyys = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
 
 export const kielisyysKey = id => kielisyydet[id];
 
+export const isLaskutettu = R.propSatisfies(Maybe.isSome, 'laskutusaika');
