@@ -1,6 +1,7 @@
 <script>
   import Router from 'svelte-spa-router';
 
+  import EnergiatodistusResolver from './energiatodistus-resolver';
   import ExistingEnergiatodistus from './ExistingEnergiatodistus';
   import NewEnergiatodistus from './NewEnergiatodistus';
   import Energiatodistukset from './energiatodistukset';
@@ -12,6 +13,7 @@
   const prefix = '/energiatodistus';
   const routes = {
     '/all': Energiatodistukset,
+    '/:id': EnergiatodistusResolver,
     '/:version/new': NewEnergiatodistus,
     '/:version/:id': ExistingEnergiatodistus,
     '/:version/:id/liitteet': Liitteet,
