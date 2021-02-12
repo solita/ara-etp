@@ -155,7 +155,7 @@ export const parseKayttaja = R.curry(
       R.unless(
         R.always(R.equals('all', id)),
         R.prepend(
-          Kayttajat.isPatevyydentoteaja(user)
+          Kayttajat.isPatevyydentoteaja(user) || Kayttajat.isPaakayttaja(user)
             ? createCrumb(`#/laatija/all`, i18n('navigation.laatijat'))
             : createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat'))
         )
