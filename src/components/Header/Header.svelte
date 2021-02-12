@@ -18,7 +18,7 @@
     R.concat(R.__, Navigation.defaultHeaderMenuLinks($_)),
     Maybe.orSome([]),
     R.map(Navigation.roleBasedHeaderMenuLinks($_))
-  )(whoami)
+  )(whoami);
 </script>
 
 <style type="text/postcss">
@@ -39,21 +39,25 @@
   }
 
   .logout {
-      @apply normal-case text-sm font-normal tracking-normal;
+    @apply normal-case text-sm font-normal tracking-normal;
   }
 
   .logout:hover {
-      @apply cursor-pointer underline;
+    @apply cursor-pointer underline;
   }
 </style>
 
 <svelte:window
   on:click={event => {
     if (!R.isNil(nameNode)) {
-      if (event.target !== nameNode && event.target.parentElement !== nameNode) {
+      if (
+        event.target !== nameNode &&
+        event.target.parentElement !== nameNode
+      ) {
         showDropdown = false;
       }
-    }}} />
+    }
+  }} />
 
 <header class="flex justify-between">
   <div class="flex flex-1 items-center">
@@ -65,14 +69,16 @@
 
   {#each whoami.toArray() as user}
     <div class="flex flex-row justify-between">
-      <div bind:this={nameNode} class="relative cursor-pointer"
-           on:click={() => (showDropdown = !showDropdown)}>
+      <div
+        bind:this={nameNode}
+        class="relative cursor-pointer"
+        on:click={() => (showDropdown = !showDropdown)}>
         <span>
           {fullName(user)}
         </span>
         <span class="material-icons absolute">keyboard_arrow_down</span>
         {#if showDropdown}
-          <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col">
+          <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
             {#each links as link}
               <a class="listlink w-full" href={link.href}>{link.text}</a>
             {/each}
