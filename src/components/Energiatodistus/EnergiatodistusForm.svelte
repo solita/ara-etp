@@ -93,7 +93,10 @@
   );
 
   const validateAndSubmit = onSuccessfulSave => () => {
-    const invalid = Validations.invalidProperties(schema, energiatodistus);
+    const invalid = R.filter(
+      R.propSatisfies(Validations.isValidationRequired(whoami, energiatodistus), 0),
+      Validations.invalidProperties(schema, energiatodistus));
+
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       flashMessageStore.flush();
       submit(energiatodistus, (...args) => {

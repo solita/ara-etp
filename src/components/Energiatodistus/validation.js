@@ -6,6 +6,8 @@ import * as Either from '@Utility/either-utils';
 import * as Inputs from '@Component/Energiatodistus/inputs';
 import * as validation from '@Utility/validation';
 import * as deep from '@Utility/deep-objects';
+import * as Kayttajat from '@Utility/kayttajat';
+import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
 
 export const isIlmanvaihtoKuvausRequired = R.compose(
   Maybe.exists(R.equals(6)),
@@ -113,3 +115,23 @@ export const invalidProperties = (schema, object) => R.compose(
   R.toPairs,
   deep.treeFlat(".", R.anyPass([Maybe.isMaybe, Either.isEither]))
 )(object);
+
+/**
+ * Should this property be validated for a particular user and energiatodistus.
+ *
+ * @param whoami
+ * @param energiatodistus
+ * @param property
+ * @returns {boolean}
+ */
+export const isValidationRequired = R.curry((whoami, energiatodistus, property) =>
+  // validate all if draft
+  ET.isDraft(energiatodistus) ||
+  // jos ei laskutettu -> validate laskutustiedot
+  (!ET.isLaskutettu(energiatodistus) && R.includes(property,
+    ['laskuriviviite', 'laskutettava-yritys-id'])) ||
+  // rakennustunnus validoidaan aina
+  R.equals(property, 'perustiedot.rakennustunnus') ||
+  // pääkäyttäjältä validoidaan aina kommentti ja korvattu energiatodistus
+  (Kayttajat.isPaakayttaja(whoami) && R.includes(property,
+    ['kommentti', 'korvattu-energiatodistus-id'])))
