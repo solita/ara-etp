@@ -7,8 +7,15 @@
   export let location;
   export let user;
   export let i18n;
+  export let version;
 
-  $: links = Navigation.navigationParse(i18n, user, location, idTranslate);
+  $: links = Navigation.navigationParse(
+    version.flags,
+    i18n,
+    user,
+    location,
+    idTranslate
+  );
 </script>
 
 <style type="text/postcss">

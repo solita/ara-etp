@@ -31,7 +31,7 @@
   "navigation": {
     "energiatodistukset": "Energiatodistukset",
     "uusi-energiatodistus": "Uusi energiatodistus",
-    "viestit": "Viestit",
+    "viestit": "Viestikeskus",
     "yritykset": "Yritykset",
     "omattiedot": "Omat tiedot",
     "laatijoidentuonti": "Laatijoiden Tuonti",
@@ -66,7 +66,8 @@
     "load-error": "Tietojen haku epäonnistui.",
     "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken.",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan.",
-    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman."
+    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman.",
+    "unexpected": "Sovelluksen latauksessa tapahtui odottamaton virhe. Sivun päivitys voi korjata ongelman."
   },
   "units": {
     "year": "vuosi",
@@ -1104,6 +1105,7 @@
       "senttime": "Lähetysaika",
       "osallistujat": "Osallistujat",
       "content": "Sisältö",
+      "no-messages": "Ei viestejä",
       "messages": {
         "load-error": "Viestien lataus epäonnistui."
       }

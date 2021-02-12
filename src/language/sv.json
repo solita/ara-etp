@@ -31,7 +31,7 @@
   "navigation": {
     "energiatodistukset": "Energicertifikat",
     "uusi-energiatodistus": "Nytt energicertifikat",
-    "viestit": "Meddelanden",
+    "viestit": "Viestikeskus SV?",
     "yritykset": "Företag",
     "omattiedot": "Egna uppgifter",
     "laatijoidentuonti": "Import av upprättare",
@@ -66,7 +66,8 @@
     "load-error": "Sökningen av uppgifterna misslyckades.",
     "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken. SV?",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan. SV?",
-    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman. SV?"
+    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman. SV?",
+    "unexpected": "Sovelluksen latauksessa tapahtui odottamaton virhe. Sivun päivitys voi korjata ongelman. SV?"
   },
   "units": {
     "year": "år",
@@ -1102,6 +1103,7 @@
       "senttime": "Lähetysaika SV?",
       "osallistujat": "Osallistujat SV?",
       "content": "Sisältö SV?",
+      "no-messages": "Ei viestejä SV?",
       "messages": {
         "load-error": "Viestien lataus epäonnistui. SV?"
       }

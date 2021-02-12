@@ -1,6 +1,7 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
   import * as Response from '@Utility/response';
+  import * as R from 'ramda';
 
   import { currentUserStore } from '@/stores';
   import { setupI18n, _ } from '@Language/i18n';
@@ -12,12 +13,14 @@
 
   import TableStyles from '@/TableStyles';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as versionApi from '@Component/Version/version-api';
   import * as Future from '@Utility/future-utils';
   import Content from './UserContent.svelte';
 
   setupI18n();
 
   let whoami = Maybe.None();
+  let applicationVersion = Maybe.None();
   let failure = Maybe.None();
 
   Future.fork(
@@ -25,29 +28,30 @@
       failure = Maybe.Some(response);
     },
     response => {
-      whoami = Maybe.Some(response);
+      whoami = Maybe.Some(response[0]);
+      applicationVersion = Maybe.Some(response[1]);
       currentUserStore.set(whoami);
     },
-    kayttajaApi.whoami);
-
+    Future.parallel(2, [kayttajaApi.whoami, versionApi.getVersion])
+  );
 </script>
 
 <style type="text/postcss">
   .appcontainer {
-      @apply flex flex-col flex-grow justify-between min-h-screen;
+    @apply flex flex-col flex-grow justify-between min-h-screen;
   }
 
   .headercontainer,
   .footercontainer {
-      @apply flex justify-center;
+    @apply flex justify-center;
   }
 
   .headercontainer {
-      @apply bg-secondary;
+    @apply bg-secondary;
   }
 
   .footercontainer {
-      @apply bg-background;
+    @apply bg-background;
   }
 </style>
 
@@ -75,12 +79,16 @@
   {/each}
 
   {#each Maybe.toArray(whoami) as user}
-    <Content {user} />
+    {#each Maybe.toArray(applicationVersion) as version}
+      <Content {user} {version} />
+    {/each}
   {/each}
 
-  <div class="footercontainer">
-    <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-      <Footer />
+  {#each Maybe.toArray(applicationVersion) as version}
+    <div class="footercontainer">
+      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+        <Footer {version} />
+      </div>
     </div>
-  </div>
+  {/each}
 </div>

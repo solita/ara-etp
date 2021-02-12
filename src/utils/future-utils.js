@@ -9,9 +9,7 @@ export const and = R.curry((firstFuture, secondFuture) =>
   Fluture.and(firstFuture)(secondFuture)
 );
 
-export const chain = R.curry((mapper, future) =>
-  Fluture.chain(mapper)(future)
-);
+export const chain = R.curry((mapper, future) => Fluture.chain(mapper)(future));
 
 export const chainRej = R.curry((mapper, future) =>
   Fluture.chainRej(mapper)(future)
@@ -35,7 +33,9 @@ export const parallel = R.curry((concurrency, futures) =>
 
 export const parallelObject = R.curry((concurrency, futures) =>
   Fluture.map(values => R.zipObj(R.keys(futures), values))(
-    Fluture.parallel(concurrency)(R.values(futures))));
+    Fluture.parallel(concurrency)(R.values(futures))
+  )
+);
 
 export const after = R.curry((delay, value) => Fluture.after(delay)(value));
 
