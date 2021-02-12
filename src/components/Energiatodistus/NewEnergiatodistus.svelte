@@ -29,9 +29,9 @@
   };
 
   const emptyEnergiatodistus = versio =>
-    R.equals(versio, '2018') ?
-      empty.energiatodistus2018() :
-      empty.energiatodistus2013();
+    R.equals(versio, '2018')
+      ? empty.energiatodistus2018()
+      : empty.energiatodistus2013();
 
   const cleanEnergiatodistusCopy = R.compose(
     R.assoc('korvattu-energiatodistus-id', Maybe.None()),
@@ -52,47 +52,55 @@
 
   let resources = Maybe.None();
 
-  const submit = (energiatodistus, onSuccessfulSave) => R.compose(
-    Future.fork(
-      () => {
-        toggleOverlay(false);
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          $_('energiatodistus.messages.save-error')
-        );
-      },
-      ({ id }) => {
-        toggleOverlay(false);
-        flashMessageStore.addPersist(
-          'Energiatodistus',
-          'success',
-          $_('energiatodistus.messages.save-success')
-        );
-        onSuccessfulSave();
-        replace(`/energiatodistus/${params.version}/${id}`);
-      }
-    ),
-    Future.delay(500),
-    api.postEnergiatodistus(fetch, params.version),
-    R.tap(() => toggleOverlay(true))
-  )(energiatodistus);
+  const submit = (energiatodistus, onSuccessfulSave) =>
+    R.compose(
+      Future.fork(
+        () => {
+          toggleOverlay(false);
+          flashMessageStore.add(
+            'Energiatodistus',
+            'error',
+            $_('energiatodistus.messages.save-error')
+          );
+        },
+        ({ id }) => {
+          toggleOverlay(false);
+          flashMessageStore.addPersist(
+            'Energiatodistus',
+            'success',
+            $_('energiatodistus.messages.save-success')
+          );
+          onSuccessfulSave();
+          replace(`/energiatodistus/${params.version}/${id}`);
+        }
+      ),
+      Future.delay(500),
+      api.postEnergiatodistus(fetch, params.version),
+      R.tap(() => toggleOverlay(true))
+    )(energiatodistus);
 
   $: title =
     $_('energiatodistus.title') +
-    ' ' + params.version + ' - ' +
-    Maybe.fold($_('energiatodistus.new.draft'), id =>
-      $_('energiatodistus.new.copy-from') + ' ' + id,
-      copyFromId);
+    ' ' +
+    params.version +
+    ' - ' +
+    Maybe.fold(
+      $_('energiatodistus.new.draft'),
+      id => $_('energiatodistus.new.copy-from') + ' ' + id,
+      copyFromId
+    );
 
   // Load all page resources
   $: R.compose(
     Future.fork(
       response => {
         toggleOverlay(false);
-        const msg =
-          $_(Maybe.orSome('energiatodistus.messages.load-error',
-            Response.localizationKey(response)));
+        const msg = $_(
+          Maybe.orSome(
+            'energiatodistus.messages.load-error',
+            Response.localizationKey(response)
+          )
+        );
 
         flashMessageStore.add('Energiatodistus', 'error', msg);
       },
@@ -111,23 +119,28 @@
       }
     ),
     Future.parallel(5),
-    R.prepend(Maybe.fold(
-      Future.resolve(null),
-      api.getEnergiatodistusById(fetch, params.version),
-      copyFromId)),
+    R.prepend(
+      Maybe.fold(
+        Future.resolve(null),
+        api.getEnergiatodistusById(fetch, params.version),
+        copyFromId
+      )
+    ),
     R.prepend(kayttajaApi.whoami),
     R.juxt([api.luokittelutForVersion, api.validation])
-  )(params.version)
+  )(params.version);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each resources.toArray() as
-      {energiatodistus, luokittelut, validation, whoami}}
+    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami }}
       <EnergiatodistusForm
-        version={params.version} {title}
+        version={params.version}
+        {title}
         {energiatodistus}
-        {whoami} {luokittelut} {validation}
+        {whoami}
+        {luokittelut}
+        {validation}
         {submit} />
     {/each}
   </div>

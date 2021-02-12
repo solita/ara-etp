@@ -31,10 +31,7 @@
 
   $: patevyystaso = Either.foldRight(
     [],
-    R.compose(
-      LocaleUtils.label($locale),
-      R.find(R.propEq('id', value))
-    ),
+    R.compose(LocaleUtils.label($locale), R.find(R.propEq('id', value))),
     $patevyystasoStore
   );
 </script>

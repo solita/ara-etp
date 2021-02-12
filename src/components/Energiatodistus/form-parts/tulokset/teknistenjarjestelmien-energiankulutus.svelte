@@ -69,7 +69,9 @@
   <tbody class="et-table--tbody">
     <tr class="et-table--tr">
       <td class="et-table--td">
-        {$_('energiatodistus.tulokset.tekniset-jarjestelmat.lammitysjarjestelma')}
+        {$_(
+          'energiatodistus.tulokset.tekniset-jarjestelmat.lammitysjarjestelma'
+        )}
       </td>
       <td class="et-table--td" />
       <td class="et-table--td" />
@@ -79,7 +81,9 @@
       <tr class="et-table--tr">
         <td class="et-table--td">
           <span class="pl-8">
-            {$_(`energiatodistus.tulokset.tekniset-jarjestelmat.labels.${jarjestelma}`)}
+            {$_(
+              `energiatodistus.tulokset.tekniset-jarjestelmat.labels.${jarjestelma}`
+            )}
           </span>
         </td>
         <td class="et-table--td">
@@ -88,7 +92,12 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['tulokset', 'tekniset-jarjestelmat', jarjestelma, 'sahko']} />
+            path={[
+              'tulokset',
+              'tekniset-jarjestelmat',
+              jarjestelma,
+              'sahko'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -96,7 +105,12 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['tulokset', 'tekniset-jarjestelmat', jarjestelma, 'lampo']} />
+            path={[
+              'tulokset',
+              'tekniset-jarjestelmat',
+              jarjestelma,
+              'lampo'
+            ]} />
         </td>
         <td class="et-table--td" />
       </tr>
@@ -135,12 +149,19 @@
           {schema}
           compact={true}
           bind:model={energiatodistus}
-          path={['tulokset', 'tekniset-jarjestelmat', 'jaahdytys', 'kaukojaahdytys']} />
+          path={[
+            'tulokset',
+            'tekniset-jarjestelmat',
+            'jaahdytys',
+            'kaukojaahdytys'
+          ]} />
       </td>
     </tr>
     <tr class="et-table--tr">
       <td class="et-table--td">
-        {$_('energiatodistus.tulokset.tekniset-jarjestelmat.labels.kuluttajalaitteet-ja-valaistus-sahko')}
+        {$_(
+          'energiatodistus.tulokset.tekniset-jarjestelmat.labels.kuluttajalaitteet-ja-valaistus-sahko'
+        )}
       </td>
       <td class="et-table--td">
         <Input
@@ -148,7 +169,11 @@
           {schema}
           compact={true}
           bind:model={energiatodistus}
-          path={['tulokset', 'tekniset-jarjestelmat', 'kuluttajalaitteet-ja-valaistus-sahko']} />
+          path={[
+            'tulokset',
+            'tekniset-jarjestelmat',
+            'kuluttajalaitteet-ja-valaistus-sahko'
+          ]} />
       </td>
       <td class="et-table--td" />
       <td class="et-table--td" />
@@ -158,13 +183,25 @@
         {$_('energiatodistus.tulokset.yhteensa')}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(sahkoSum)}
+        {R.compose(
+          formats.numberFormat,
+          Maybe.get,
+          R.map(fxmath.round(0))
+        )(sahkoSum)}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(lampoSum)}
+        {R.compose(
+          formats.numberFormat,
+          Maybe.get,
+          R.map(fxmath.round(0))
+        )(lampoSum)}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(kaukojaahdytysSum)}
+        {R.compose(
+          formats.numberFormat,
+          Maybe.get,
+          R.map(fxmath.round(0))
+        )(kaukojaahdytysSum)}
       </td>
     </tr>
   </tbody>

@@ -322,12 +322,18 @@ export const redefineNumericValidation = (schema, constraint) => {
 
 export const assocRequired = (schema, property) => {
   const path = R.split('.', Inputs.removeLocalePostfix(property));
-  const language = R.endsWith('-fi', property) ? 'fi' :
-    R.endsWith('-sv', property) ? 'sv' : 'all';
+  const language = R.endsWith('-fi', property)
+    ? 'fi'
+    : R.endsWith('-sv', property)
+    ? 'sv'
+    : 'all';
 
   return R.unless(
     R.compose(R.isNil, R.path(path)),
-    R.assocPath(R.concat(path, ['required', language]),
-      Validation.predicate(property)),
-    schema);
+    R.assocPath(
+      R.concat(path, ['required', language]),
+      Validation.predicate(property)
+    ),
+    schema
+  );
 };

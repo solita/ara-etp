@@ -18,20 +18,22 @@
       name="energiatodistus.tulokset.e-luku"
       label={$_('energiatodistus.tulokset.e-luku')}
       disabled={true}
-      model={Maybe.fold('-',
+      model={Maybe.fold(
+        '-',
         R.compose(formats.numberFormat, R.prop('e-luku')),
-        eTehokkuus)}
+        eTehokkuus
+      )}
       lens={R.lens(R.identity, R.identity)}
       i18n={$_} />
   </div>
   <div class="lg:w-1/5 w-full py-2">
     <BasicInput
-        id="energiatodistus.tulokset.e-luokka"
-        name="energiatodistus.tulokset.e-luokka"
-        label={$_('energiatodistus.tulokset.e-luokka')}
-        disabled={true}
-        model={Maybe.fold('-', R.prop('e-luokka'), eTehokkuus)}
-        lens={R.lens(R.identity, R.identity)}
-        i18n={$_} />
+      id="energiatodistus.tulokset.e-luokka"
+      name="energiatodistus.tulokset.e-luokka"
+      label={$_('energiatodistus.tulokset.e-luokka')}
+      disabled={true}
+      model={Maybe.fold('-', R.prop('e-luokka'), eTehokkuus)}
+      lens={R.lens(R.identity, R.identity)}
+      i18n={$_} />
   </div>
 </div>

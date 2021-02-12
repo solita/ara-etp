@@ -7,10 +7,7 @@
   export let component;
   export let format = R.identity;
 
-  $: error = R.compose(
-    R.not,
-    validation
-  )(value);
+  $: error = R.compose(R.not, validation)(value);
   $: hasValue = R.allPass([R.complement(R.isNil), R.complement(R.isEmpty)])(
     value
   );

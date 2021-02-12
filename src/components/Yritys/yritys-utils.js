@@ -52,12 +52,19 @@ export const formParsers = () => ({
   postinumero: R.trim,
   postitoimipaikka: R.trim,
   maa: R.trim,
-  verkkolaskuosoite: R.compose(Maybe.fromEmpty, R.trim, R.toUpper, R.replace(/\s/g, '')),
+  verkkolaskuosoite: R.compose(
+    Maybe.fromEmpty,
+    R.trim,
+    R.toUpper,
+    R.replace(/\s/g, '')
+  ),
   verkkolaskuoperaattori: R.compose(Maybe.fromEmpty, R.trim)
 });
 
 const isInYritys = (laatijat, whoami) =>
   R.any(R.propEq('id', whoami.id), R.filter(Tila.isAccepted, laatijat));
 
-export const hasModifyPermission = R.curry((laatijat, whoami) =>
-  Kayttajat.isPaakayttaja(whoami) || isInYritys(laatijat, whoami));
+export const hasModifyPermission = R.curry(
+  (laatijat, whoami) =>
+    Kayttajat.isPaakayttaja(whoami) || isInYritys(laatijat, whoami)
+);

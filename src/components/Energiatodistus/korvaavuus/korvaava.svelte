@@ -24,7 +24,7 @@
 
   const fetchEnergiatodistus = Maybe.cata(
     _ => {
-      korvaavaEnergiatodistus = Maybe.None()
+      korvaavaEnergiatodistus = Maybe.None();
     },
     R.compose(
       Future.fork(
@@ -47,27 +47,31 @@
       R.tap(_ => {
         overlay = true;
       })
-    ));
+    )
+  );
 
   $: fetchEnergiatodistus(korvaavaEnergiatodistusId);
 </script>
 
 <style type="text/postcss">
-h3 {
+  h3 {
     @apply text-primary uppercase font-bold text-sm mt-6;
-}
+  }
 </style>
 
 {#if korvaavaEnergiatodistusId.isSome()}
-  <h3> {Maybe.exists(ET.isDraft, korvaavaEnergiatodistus) ?
-    $_('energiatodistus.korvaavuus.header.korvaava-draft') :
-    $_('energiatodistus.korvaavuus.header.korvaava')} </h3>
+  <h3>
+    {Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)
+      ? $_('energiatodistus.korvaavuus.header.korvaava-draft')
+      : $_('energiatodistus.korvaavuus.header.korvaava')}
+  </h3>
   <div class="flex flex-col -mx-4 mt-2">
     {#if !overlay}
       {#each Maybe.toArray(korvaavaEnergiatodistus) as et}
-        <div class="w-full px-4 py-4 relative"
-            transition:slide|local={{ duration: 200 }}>
-          <EtTable energiatodistus={et} {postinumerot}/>
+        <div
+          class="w-full px-4 py-4 relative"
+          transition:slide|local={{ duration: 200 }}>
+          <EtTable energiatodistus={et} {postinumerot} />
           {#if Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)}
             <p class="text-sm flex mt-2">
               <span class="font-icon mr-1">info</span>
@@ -77,7 +81,7 @@ h3 {
         </div>
       {/each}
     {:else}
-      <Spinner/>
+      <Spinner />
     {/if}
   </div>
 {/if}

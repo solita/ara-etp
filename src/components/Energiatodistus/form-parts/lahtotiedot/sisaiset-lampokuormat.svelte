@@ -17,32 +17,41 @@
   export let kuormat = [];
   export let alakayttotarkoitusluokat = [];
 
-  const findConstantKuorma = R.chain(
-    id => Maybe.find(R.propEq('kayttotarkoitusluokka-id', id), kuormat));
+  const findConstantKuorma = R.chain(id =>
+    Maybe.find(R.propEq('kayttotarkoitusluokka-id', id), kuormat)
+  );
 
-  let constantKuorma = findConstantKuorma(et.findKayttotarkoitusluokkaId(
-    energiatodistus.perustiedot.kayttotarkoitus,
-    alakayttotarkoitusluokat
-  ));
+  let constantKuorma = findConstantKuorma(
+    et.findKayttotarkoitusluokkaId(
+      energiatodistus.perustiedot.kayttotarkoitus,
+      alakayttotarkoitusluokat
+    )
+  );
 
   $: if (!disabled) {
-
     let kayttotarkoitusluokkaId = et.findKayttotarkoitusluokkaId(
       energiatodistus.perustiedot.kayttotarkoitus,
       alakayttotarkoitusluokat
     );
 
-    if (!R.equals(
-          kayttotarkoitusluokkaId,
-          R.map(R.prop('kayttotarkoitusluokka-id'), constantKuorma)))
-    {
+    if (
+      !R.equals(
+        kayttotarkoitusluokkaId,
+        R.map(R.prop('kayttotarkoitusluokka-id'), constantKuorma)
+      )
+    ) {
       constantKuorma = findConstantKuorma(kayttotarkoitusluokkaId);
       constantKuorma.forEach(kuorma => {
         tick().then(() => {
-          energiatodistus = R.assocPath(['lahtotiedot', 'sis-kuorma'],
-            deep.map(R.F, R.compose(Either.Right, Maybe.Some),
-              R.dissoc('kayttotarkoitusluokka-id', kuorma)),
-            energiatodistus);
+          energiatodistus = R.assocPath(
+            ['lahtotiedot', 'sis-kuorma'],
+            deep.map(
+              R.F,
+              R.compose(Either.Right, Maybe.Some),
+              R.dissoc('kayttotarkoitusluokka-id', kuorma)
+            ),
+            energiatodistus
+          );
         });
       });
     }
@@ -74,7 +83,7 @@
         </td>
         <td class="et-table--td">
           <Input
-            disabled = {disabled || constantKuorma.isSome()}
+            disabled={disabled || constantKuorma.isSome()}
             {schema}
             compact={true}
             bind:model={energiatodistus}
@@ -82,7 +91,7 @@
         </td>
         <td class="et-table--td">
           <Input
-            disabled = {disabled ||
+            disabled={disabled ||
               (constantKuorma.isSome() && !R.equals(sisKuorma, 'valaistus'))}
             {schema}
             compact={true}

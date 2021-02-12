@@ -18,7 +18,7 @@ describe('Kayttaja-api-suite: ', () => {
       const id = 1234;
       const expected = 'api/private/kayttajat/1234/laatija';
 
-      assert.equal(api.url.laatija(id), expected, );
+      assert.equal(api.url.laatija(id), expected);
     });
   });
 

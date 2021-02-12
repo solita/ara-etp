@@ -41,12 +41,12 @@
   export let title = '';
 
   let schema = R.compose(
-    R.reduce(schemas.assocRequired, R.__,
-      validation.required),
-    R.reduce(schemas.redefineNumericValidation, R.__,
-      validation.numeric),
-    R.assocPath(['perustiedot', 'postinumero'],
-      Postinumero.Type(luokittelut.postinumerot))
+    R.reduce(schemas.assocRequired, R.__, validation.required),
+    R.reduce(schemas.redefineNumericValidation, R.__, validation.numeric),
+    R.assocPath(
+      ['perustiedot', 'postinumero'],
+      Postinumero.Type(luokittelut.postinumerot)
+    )
   )(schemas['v' + version]);
 
   let eTehokkuus = Maybe.None();
@@ -94,8 +94,12 @@
 
   const validateAndSubmit = onSuccessfulSave => () => {
     const invalid = R.filter(
-      R.propSatisfies(Validations.isValidationRequired(whoami, energiatodistus), 0),
-      Validations.invalidProperties(schema, energiatodistus));
+      R.propSatisfies(
+        Validations.isValidationRequired(whoami, energiatodistus),
+        0
+      ),
+      Validations.invalidProperties(schema, energiatodistus)
+    );
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       flashMessageStore.flush();
@@ -133,7 +137,7 @@
     );
 
     Inputs.scrollIntoView(document, missing[0]);
-  }
+  };
 
   const validateCompleteAndSubmit = onSuccessfulSave => () => {
     const missing = Validations.missingProperties(
@@ -150,9 +154,11 @@
   const noop = () => {};
   const reset = _ => {
     dirty = false;
-    replace($loc.location +
-      Maybe.fold('', R.concat('?', R.__), Maybe.fromEmpty($loc.querystring)));
-  }
+    replace(
+      $loc.location +
+        Maybe.fold('', R.concat('?', R.__), Maybe.fromEmpty($loc.querystring))
+    );
+  };
 </script>
 
 <style type="text/postcss">
@@ -227,16 +233,30 @@
     <div class="w-5/6">
       <form
         on:submit|preventDefault={validateAndSubmit(noop)}
-        on:input={_ => { dirty = true; }}
-        on:change={_ => { dirty = true; }}
+        on:input={_ => {
+          dirty = true;
+        }}
+        on:change={_ => {
+          dirty = true;
+        }}
         on:reset={reset}>
         <div class="w-full mt-3">
           <H1 text={title} />
 
           {#if EtUtils.isSigned(energiatodistus)}
-            <div class="mb-5">Voimassa:
-              {Maybe.fold('', Formats.inclusiveStartDate, energiatodistus.allekirjoitusaika)} -
-              {Maybe.fold('', Formats.inclusiveEndDate, energiatodistus['voimassaolo-paattymisaika'])}</div>
+            <div class="mb-5">
+              Voimassa:
+              {Maybe.fold(
+                '',
+                Formats.inclusiveStartDate,
+                energiatodistus.allekirjoitusaika
+              )} -
+              {Maybe.fold(
+                '',
+                Formats.inclusiveEndDate,
+                energiatodistus['voimassaolo-paattymisaika']
+              )}
+            </div>
           {/if}
 
           <PaakayttajanKommentti
@@ -248,12 +268,14 @@
           <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
           <EnergiatodistusKorvaava
             postinumerot={luokittelut.postinumerot}
-            korvaavaEnergiatodistusId={energiatodistus['korvaava-energiatodistus-id']} />
+            korvaavaEnergiatodistusId={energiatodistus[
+              'korvaava-energiatodistus-id'
+            ]} />
           <EnergiatodistusKorvattu
-              bind:energiatodistus
-              {whoami}
-              postinumerot={luokittelut.postinumerot}
-              bind:error={korvausError} />
+            bind:energiatodistus
+            {whoami}
+            postinumerot={luokittelut.postinumerot}
+            bind:error={korvausError} />
           <HR />
 
           <Laskutus {schema} {whoami} bind:energiatodistus />
@@ -271,7 +293,11 @@
             <Button type={'submit'} text={$_('tallenna')} disabled={!dirty} />
           </div>
           <div class="px-4">
-            <Button text={$_('peruuta')} type={'reset'} style={'secondary'} disabled={!dirty} />
+            <Button
+              text={$_('peruuta')}
+              type={'reset'}
+              style={'secondary'}
+              disabled={!dirty} />
           </div>
         </div>
       </form>

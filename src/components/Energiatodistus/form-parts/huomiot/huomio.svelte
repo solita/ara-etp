@@ -47,19 +47,20 @@
       <th class="et-table--th" />
       <th class="et-table--th">
         <span>{$_('energiatodistus.huomiot.toimenpide-table.lampo')}</span>
-        <span class="block"><VuosikulutusUnit/></span>
+        <span class="block"><VuosikulutusUnit /></span>
       </th>
       <th class="et-table--th">
         <span>{$_('energiatodistus.huomiot.toimenpide-table.sahko')}</span>
-        <span class="block"><VuosikulutusUnit/></span>
+        <span class="block"><VuosikulutusUnit /></span>
       </th>
       <th class="et-table--th">
         <span>{$_('energiatodistus.huomiot.toimenpide-table.jaahdytys')}</span>
-        <span class="block"><VuosikulutusUnit/></span>
+        <span class="block"><VuosikulutusUnit /></span>
       </th>
       <th class="et-table--th">
-        <span>{$_('energiatodistus.huomiot.toimenpide-table.eluvun-muutos')}</span>
-        <span class="block"><ELukuUnit/></span>
+        <span
+          >{$_('energiatodistus.huomiot.toimenpide-table.eluvun-muutos')}</span>
+        <span class="block"><ELukuUnit /></span>
       </th>
     </tr>
   </thead>

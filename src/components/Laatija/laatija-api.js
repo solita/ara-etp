@@ -5,7 +5,7 @@ import * as yritysApi from '@Component/Yritys/yritys-api';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as kayttajat from '@Utility/kayttajat';
-import * as dfns from "date-fns";
+import * as dfns from 'date-fns';
 
 export const url = {
   laatijat: '/api/private/laatijat',
@@ -22,13 +22,26 @@ export const serialize = R.compose(
     wwwosoite: Maybe.orSome(null),
     'api-key': Maybe.orSome(null)
   }),
-  R.omit(['id', 'login', 'rooli', 'passivoitu',
-    'voimassaolo-paattymisaika', 'voimassa'])
+  R.omit([
+    'id',
+    'login',
+    'rooli',
+    'passivoitu',
+    'voimassaolo-paattymisaika',
+    'voimassa'
+  ])
 );
 
 export const serializeForLaatija = R.compose(
-  R.omit(['etunimi', 'sukunimi', 'henkilotunnus', 'patevyystaso',
-          'toteamispaivamaara', 'toteaja', 'laatimiskielto']),
+  R.omit([
+    'etunimi',
+    'sukunimi',
+    'henkilotunnus',
+    'patevyystaso',
+    'toteamispaivamaara',
+    'toteaja',
+    'laatimiskielto'
+  ]),
   serialize
 );
 

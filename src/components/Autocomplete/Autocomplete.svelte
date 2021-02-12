@@ -25,7 +25,7 @@
     completedValue = value;
     input.blur();
     input.focus();
-    input.dispatchEvent(new Event('change', {bubbles:true}));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
   $: showDropdown = items.length > 0 && active.isSome();

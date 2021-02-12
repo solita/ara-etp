@@ -17,14 +17,15 @@ const contentType = R.compose(
 const isJson = R.compose(
   Maybe.exists(R.startsWith('application/json')),
   contentType
-)
+);
 
-const invalidResponse = response => R.compose(
-  R.map(R.assoc('contentType', contentType(response))),
-  R.map(R.mergeLeft(R.pick(['status', 'url'], response))),
-  Future.coalesce(R.always({}), R.objOf('body')),
-  R.ifElse(isJson, toJson, toText)
-)(response)
+const invalidResponse = response =>
+  R.compose(
+    R.map(R.assoc('contentType', contentType(response))),
+    R.map(R.mergeLeft(R.pick(['status', 'url'], response))),
+    Future.coalesce(R.always({}), R.objOf('body')),
+    R.ifElse(isJson, toJson, toText)
+  )(response);
 
 export const rejectWithInvalidResponse = R.ifElse(
   R.prop('ok'),
@@ -73,7 +74,6 @@ export const deleteRequest = R.curry((fetch, url) =>
  * Cached future to fetch static data from backend
  * @type {any}
  */
-export const cached = R.curry((fetch, url) => R.compose(
-  Future.cache,
-  getJson
-)(fetch, api + url))
+export const cached = R.curry((fetch, url) =>
+  R.compose(Future.cache, getJson)(fetch, api + url)
+);

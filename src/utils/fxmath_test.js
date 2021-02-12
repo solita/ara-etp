@@ -1,12 +1,11 @@
 import { assert } from 'chai';
 import * as fxmath from './fxmath';
 
-
 describe('Fixed math:', () => {
   describe('Rounding:', () => {
     it('No rounding', () => {
-      assert.equal(fxmath.round(1, 0), 0)
-      assert.equal(fxmath.round(1, 1.1), 1.1)
+      assert.equal(fxmath.round(1, 0), 0);
+      assert.equal(fxmath.round(1, 1.1), 1.1);
       assert.equal(fxmath.round(1, 1.1), 1.1);
       assert.equal(fxmath.round(1, 1.0), 1.0);
       assert.equal(fxmath.round(1, 2.0), 2.0);
@@ -39,7 +38,7 @@ describe('Fixed math:', () => {
     it('Actual fixed bugs', () => {
       // AE-245
       assert.equal(fxmath.round(1, 71.05), 71.1);
-      assert.equal(fxmath.round(1, 203*0.35), 71.1);
+      assert.equal(fxmath.round(1, 203 * 0.35), 71.1);
     });
   });
 });

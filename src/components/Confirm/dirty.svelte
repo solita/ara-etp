@@ -20,26 +20,28 @@
       // update location in router
       window.dispatchEvent(new Event('hashchange'));
     }
-  }
+  };
 
   const confirmationUnload = event => {
     if (dirty) {
-      event.returnValue = $_('navigation.confirmation.description')
-        + ' ' + $_('navigation.confirmation.message');
+      event.returnValue =
+        $_('navigation.confirmation.description') +
+        ' ' +
+        $_('navigation.confirmation.message');
 
       event.preventDefault();
     }
-  }
+  };
 
   const cancel = _ => {
     routeRequest = false;
-  }
+  };
 
   const forward = _ => {
     routeRequest = false;
     dirty = false;
     window.history.back();
-  }
+  };
 
   $: if (dirty) {
     lock.set(true);
@@ -49,28 +51,30 @@
 </script>
 
 <style type="text/postcss">
-    dialog {
-        @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
-    }
+  dialog {
+    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
+  }
 
-    .content {
-        @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
-    }
+  .content {
+    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
+  }
 
-    h1 {
-        @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
-    }
+  h1 {
+    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
+  }
 
-    p {
-        @apply mt-2;
-    }
+  p {
+    @apply mt-2;
+  }
 
-    .buttons {
-        @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-    }
+  .buttons {
+    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+  }
 </style>
 
-<svelte:window on:beforeunload={confirmationUnload} on:hashchange={confirmation}/>
+<svelte:window
+  on:beforeunload={confirmationUnload}
+  on:hashchange={confirmation} />
 
 {#if dirty && routeRequest}
   <dialog on:click|stopPropagation>
@@ -81,11 +85,16 @@
       <p>{$_('navigation.confirmation.message')}</p>
       <div class="buttons">
         <div class="mr-5 mt-5">
-          <Button text={$_('navigation.confirmation.forward')} on:click={forward}/>
+          <Button
+            text={$_('navigation.confirmation.forward')}
+            on:click={forward} />
         </div>
 
         <div class="mt-5">
-          <Button text={$_('navigation.confirmation.cancel')} style={'secondary'} on:click={cancel}/>
+          <Button
+            text={$_('navigation.confirmation.cancel')}
+            style={'secondary'}
+            on:click={cancel} />
         </div>
       </div>
     </div>

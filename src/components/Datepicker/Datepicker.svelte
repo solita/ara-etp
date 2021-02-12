@@ -30,9 +30,12 @@
 </style>
 
 <div
-  use:litepicker={{ lang: $locale, update: val => {
+  use:litepicker={{
+    lang: $locale,
+    update: val => {
       value = val;
-    } }}>
+    }
+  }}>
   <SquareInputWrapper>
     <input
       class="text-center"

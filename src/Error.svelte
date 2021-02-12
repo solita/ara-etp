@@ -13,7 +13,8 @@
 </style>
 
 <section class="content">
-  <p class="bg-error flex justify-around py-4 px-4 bg-primary text-light rounded-lg">
+  <p
+    class="bg-error flex justify-around py-4 px-4 bg-primary text-light rounded-lg">
     <span class="font-icon pr-4">error</span>
     {$_(Maybe.orSome('errors.whoami', Response.localizationKey(error)))}
   </p>

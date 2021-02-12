@@ -235,23 +235,27 @@ export const validateModelObject = R.curry((schemaObject, object) =>
   )
 );
 
-export const isValidForm = schemaObject => R.compose(
-  R.all(Either.isRight),
-  R.filter(Either.isEither),
-  deep.values(Either.isEither),
-  validateModelObject(schemaObject)
-);
+export const isValidForm = schemaObject =>
+  R.compose(
+    R.all(Either.isRight),
+    R.filter(Either.isEither),
+    deep.values(Either.isEither),
+    validateModelObject(schemaObject)
+  );
 
-const blur = element => element.dispatchEvent(new Event('blur', {
-    bubbles: true,
-    cancelable: true,
-  }));
+const blur = element =>
+  element.dispatchEvent(
+    new Event('blur', {
+      bubbles: true,
+      cancelable: true
+    })
+  );
 
 const isInput = R.compose(
   R.includes(R.__, ['input', 'textarea']),
   R.toLower,
   R.prop('tagName')
-)
+);
 
 /**
  * Dispatch blur event for all the form inputs to ensure
@@ -261,4 +265,4 @@ const isInput = R.compose(
 export const blurForm = R.compose(
   R.forEach(R.when(isInput, blur)),
   R.prop('elements')
-)
+);

@@ -22,45 +22,50 @@
         flashMessageStore.add(
           'Yritys',
           'error',
-          $_('laatija.yritykset.error.detach-failed'));
+          $_('laatija.yritykset.error.detach-failed')
+        );
         overlay = false;
       },
       response => {
         yritykset = response;
         overlay = false;
-      }),
+      }
+    ),
     api.getAllYritykset
   )(fetch);
 </script>
 
 <style>
-
 </style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={$_('yritykset.title')}/>
+    <H1 text={$_('yritykset.title')} />
     <table class="etp-table">
       <thead class="etp-table--thead">
-      <tr class="etp-table--tr">
-        <th class="etp-table--th">{$_('yritys.nimi')}</th>
-        <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
-        <th class="etp-table--th">{$_('yritys.laskutusosoite')}</th>
-      </tr>
+        <tr class="etp-table--tr">
+          <th class="etp-table--th">{$_('yritys.nimi')}</th>
+          <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
+          <th class="etp-table--th">{$_('yritys.laskutusosoite')}</th>
+        </tr>
       </thead>
       <tbody class="etp-table--tbody">
-      {#each yritykset as yritys}
-        <tr class="etp-table--tr etp-table--tr__link"
+        {#each yritykset as yritys}
+          <tr
+            class="etp-table--tr etp-table--tr__link"
             on:click={() => push('#/yritys/' + yritys.id)}>
-          <td class="etp-table--td">
-            {yritys.nimi}
-            {Maybe.fold('', R.concat('/ ', R.__),
-              yritys['vastaanottajan-tarkenne'])}
-          </td>
-          <td class="etp-table--td">{yritys.ytunnus}</td>
-          <td class="etp-table--td"><Address address={yritys}/></td>
-        </tr>
-      {/each}
+            <td class="etp-table--td">
+              {yritys.nimi}
+              {Maybe.fold(
+                '',
+                R.concat('/ ', R.__),
+                yritys['vastaanottajan-tarkenne']
+              )}
+            </td>
+            <td class="etp-table--td">{yritys.ytunnus}</td>
+            <td class="etp-table--td"><Address address={yritys} /></td>
+          </tr>
+        {/each}
       </tbody>
     </table>
   </div>

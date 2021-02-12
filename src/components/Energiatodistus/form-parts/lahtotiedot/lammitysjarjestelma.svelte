@@ -134,7 +134,9 @@
       </th>
       <th
         class="et-table--th"
-        title={$_('energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde')}>
+        title={$_(
+          'energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde'
+        )}>
         {$_('energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde')}
       </th>
       <th
@@ -144,7 +146,9 @@
       </th>
       <th
         class="et-table--th"
-        title={$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}>
+        title={$_(
+          'energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto'
+        )}>
         {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
         <span class="block">
           <VuosikulutusPerAlaUnit />
@@ -152,13 +156,19 @@
       </th>
       <th
         class="et-table--th"
-        title={$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}>
+        title={$_(
+          'energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus'
+        )}>
         {$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}
       </th>
       <th
         class="et-table--th"
-        title={$_('energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila')}>
-        {$_('energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila')}
+        title={$_(
+          'energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila'
+        )}>
+        {$_(
+          'energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila'
+        )}
         <VuosikulutusUnit />
       </th>
     </tr>
@@ -175,7 +185,12 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', hyotysuhde, 'tuoton-hyotysuhde']} />
+            path={[
+              'lahtotiedot',
+              'lammitys',
+              hyotysuhde,
+              'tuoton-hyotysuhde'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -207,7 +222,12 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampopumppu-tuotto-osuus']} />
+            path={[
+              'lahtotiedot',
+              'lammitys',
+              hyotysuhde,
+              'lampopumppu-tuotto-osuus'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -215,7 +235,12 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampohavio-lammittamaton-tila']} />
+            path={[
+              'lahtotiedot',
+              'lammitys',
+              hyotysuhde,
+              'lampohavio-lammittamaton-tila'
+            ]} />
         </td>
       </tr>
     {/each}

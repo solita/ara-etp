@@ -28,7 +28,9 @@
   let luokittelut = Maybe.None();
   let overlay = true;
 
-  const toggleOverlay = value => { overlay = value };
+  const toggleOverlay = value => {
+    overlay = value;
+  };
 
   const errorMessage = (type, response) =>
     Locales.uniqueViolationMessage($_, response, `${type}.messages.save-error`);
@@ -37,10 +39,18 @@
     Future.fork(
       response => {
         toggleOverlay(false);
-        flashMessageStore.add('Kayttaja', 'error', $_(errorMessage(type, response)));
+        flashMessageStore.add(
+          'Kayttaja',
+          'error',
+          $_(errorMessage(type, response))
+        );
       },
       _ => {
-        flashMessageStore.add('Kayttaja', 'success', $_(`${type}.messages.save-success`));
+        flashMessageStore.add(
+          'Kayttaja',
+          'success',
+          $_(`${type}.messages.save-success`)
+        );
         if (R.equals('kayttaja', type)) {
           idTranslateStore.updateKayttaja(updatedModel);
         }
@@ -53,10 +63,7 @@
       fork('laatija', updatedLaatija),
       R.tap(() => toggleOverlay(true)),
       laatijaApi.putLaatijaById(
-        R.compose(
-          Maybe.orSome(0),
-          R.map(R.prop('rooli'))
-        )($currentUserStore),
+        R.compose(Maybe.orSome(0), R.map(R.prop('rooli')))($currentUserStore),
         fetch,
         params.id
       )
@@ -66,10 +73,7 @@
     R.compose(
       fork('kayttaja', updatedKayttaja),
       kayttajaApi.putKayttajaById(
-        R.compose(
-          Maybe.orSome(0),
-          R.map(R.prop('rooli'))
-        )($currentUserStore),
+        R.compose(Maybe.orSome(0), R.map(R.prop('rooli')))($currentUserStore),
         fetch,
         params.id
       ),
@@ -79,10 +83,14 @@
   $: R.compose(
     Future.fork(
       _ => {
-        flashMessageStore.add('Kayttaja', 'error', $_('kayttaja.messages.load-error'));
+        flashMessageStore.add(
+          'Kayttaja',
+          'error',
+          $_('kayttaja.messages.load-error')
+        );
         toggleOverlay(false);
-     },
-     ([fetchedKayttaja, fetchedLaatija, fetchedLuokittelut]) => {
+      },
+      ([fetchedKayttaja, fetchedLaatija, fetchedLuokittelut]) => {
         idTranslateStore.updateKayttaja(fetchedKayttaja);
         kayttaja = Maybe.Some(fetchedKayttaja);
         laatija = Maybe.fromNull(fetchedLaatija);
@@ -119,7 +127,10 @@
       <LaatijaForm
         submit={submitLaatija}
         luokittelut={Maybe.get(luokittelut)}
-        laatija={mergeKayttajaLaatija(Maybe.get(kayttaja), Maybe.get(laatija))} />
+        laatija={mergeKayttajaLaatija(
+          Maybe.get(kayttaja),
+          Maybe.get(laatija)
+        )} />
     {:else if Maybe.isSome(kayttaja)}
       <KayttajaForm submit={submitKayttaja} kayttaja={Maybe.get(kayttaja)} />
     {/if}

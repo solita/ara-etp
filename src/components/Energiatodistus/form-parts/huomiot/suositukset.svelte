@@ -25,9 +25,9 @@
 <H3 text={$_('energiatodistus.huomiot.lisatietoja-header')} />
 <div class="w-full py-4 mb-4">
   <Textarea
-      {disabled}
-      {schema}
-      bind:model={energiatodistus}
-      inputLanguage={Maybe.Some(inputLanguage)}
-      path={['huomiot', 'lisatietoja']} />
+    {disabled}
+    {schema}
+    bind:model={energiatodistus}
+    inputLanguage={Maybe.Some(inputLanguage)}
+    path={['huomiot', 'lisatietoja']} />
 </div>

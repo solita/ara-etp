@@ -16,10 +16,7 @@
 
   let strValue = value + '';
 
-  $: valid = R.compose(
-    R.lt(0),
-    R.length
-  )(strValue);
+  $: valid = R.compose(R.lt(0), R.length)(strValue);
 </script>
 
 <style type="text/postcss">

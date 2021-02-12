@@ -52,7 +52,11 @@
             path={['tulokset', 'nettotarve', tarve]} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(tarve) )(nettotarpeetPerLammitettyNettoala)}
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+            R.prop(tarve)
+          )(nettotarpeetPerLammitettyNettoala)}
         </td>
         <td class="et-table--td" />
       </tr>

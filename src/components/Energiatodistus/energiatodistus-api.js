@@ -129,7 +129,7 @@ export const url = {
     `${url.signature(version, id)}/pdf/${language}`,
   finish: (version, id) => `${url.signature(version, id)}/finish`,
   cancel: (version, id) => `${url.signature(version, id)}/cancel`,
-  discarded: (version, id) => `${url.id(version, id)}/discarded`,
+  discarded: (version, id) => `${url.id(version, id)}/discarded`
 };
 
 export const toQueryString = R.compose(
@@ -296,14 +296,20 @@ export const deleteEnergiatodistus = R.curry((fetch, version, id) =>
 export const discardEnergiatodistus = R.curry((fetch, version, id) =>
   R.chain(
     Fetch.rejectWithInvalidResponse,
-    Future.attemptP(_ => Fetch.fetchWithMethod(fetch, 'post', url.discarded(version, id), true))
-  ));
+    Future.attemptP(_ =>
+      Fetch.fetchWithMethod(fetch, 'post', url.discarded(version, id), true)
+    )
+  )
+);
 
 export const undoDiscardEnergiatodistus = R.curry((fetch, version, id) =>
   R.chain(
     Fetch.rejectWithInvalidResponse,
-    Future.attemptP(_ => Fetch.fetchWithMethod(fetch, 'post', url.discarded(version, id), false))
-  ));
+    Future.attemptP(_ =>
+      Fetch.fetchWithMethod(fetch, 'post', url.discarded(version, id), false)
+    )
+  )
+);
 
 const luokittelut = {
   lammonjako: Fetch.cached(fetch, '/lammonjako'),
@@ -315,8 +321,14 @@ const luokittelut = {
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
-  kayttotarkoitusluokat: Fetch.cached(fetch, '/kayttotarkoitusluokat/' + version),
-  alakayttotarkoitusluokat: Fetch.cached(fetch, '/alakayttotarkoitusluokat/' + version)
+  kayttotarkoitusluokat: Fetch.cached(
+    fetch,
+    '/kayttotarkoitusluokat/' + version
+  ),
+  alakayttotarkoitusluokat: Fetch.cached(
+    fetch,
+    '/alakayttotarkoitusluokat/' + version
+  )
 }));
 
 export const luokittelutForVersion = version =>
@@ -328,7 +340,7 @@ export const luokittelutForVersion = version =>
 export const luokittelutAllVersions = Future.parallelObject(10, {
   ...luokittelut,
   2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
-  2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
+  2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013))
 });
 
 export const replaceable = R.curry((fetch, id) =>

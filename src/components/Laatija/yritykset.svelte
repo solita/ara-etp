@@ -60,10 +60,9 @@
   const parseYritys = name =>
     R.isEmpty(R.trim(name))
       ? Either.Right(Maybe.None())
-      : Yritys
-        .findYritysByYtunnus(allYritykset, R.slice(0, 9, name))
-        .toEither(R.applyTo('laatija.yritykset.yritys-not-found'))
-        .map(Maybe.of);
+      : Yritys.findYritysByYtunnus(allYritykset, R.slice(0, 9, name))
+          .toEither(R.applyTo('laatija.yritykset.yritys-not-found'))
+          .map(Maybe.of);
 
   const formatYritys = yritys => yritys.ytunnus + ' | ' + yritys.nimi;
 
@@ -76,9 +75,9 @@
       result => {
         allYritykset = result[0];
         laatijaYritykset = R.compose(
-          R.map(yritys => R.mergeLeft(
-            yritys,
-            R.find(R.propEq('id', yritys.id), allYritykset))),
+          R.map(yritys =>
+            R.mergeLeft(yritys, R.find(R.propEq('id', yritys.id), allYritykset))
+          ),
           R.filter(R.complement(Tila.isDeleted))
         )(result[1]);
         yritysCanonicalNames = R.map(formatYritys, allYritykset);
@@ -144,28 +143,36 @@
                   <th class="etp-table--th">{$_('yritys.nimi')}</th>
                   <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
                   <th class="etp-table--th">{$_('yritys.laskutusosoite')}</th>
-                  <th class="etp-table--th">{$_('laatija.yritykset.table.tila')}</th>
-                  <th class="etp-table--th">{$_('laatija.yritykset.table.delete')}</th>
+                  <th class="etp-table--th"
+                    >{$_('laatija.yritykset.table.tila')}</th>
+                  <th class="etp-table--th"
+                    >{$_('laatija.yritykset.table.delete')}</th>
                 </tr>
               </thead>
               <tbody class="etp-table--tbody">
                 {#each laatijaYritykset as yritys, index}
-                  <tr class="etp-table--tr etp-table--tr__link"
-                      on:click={() => push('#/yritys/' + yritys.id)}>
+                  <tr
+                    class="etp-table--tr etp-table--tr__link"
+                    on:click={() => push('#/yritys/' + yritys.id)}>
                     <td class="etp-table--td">
                       {yritys.nimi}
-                      {Maybe.fold('', R.concat('/ ', R.__),
-                        yritys['vastaanottajan-tarkenne'])}
+                      {Maybe.fold(
+                        '',
+                        R.concat('/ ', R.__),
+                        yritys['vastaanottajan-tarkenne']
+                      )}
                     </td>
                     <td class="etp-table--td">{yritys.ytunnus}</td>
-                    <td class="etp-table--td"><Address address={yritys}/></td>
+                    <td class="etp-table--td"><Address address={yritys} /></td>
                     <td class="etp-table--td">
                       {#if Tila.isProposal(yritys)}
                         {$_('laatija.yritykset.table.proposal')}
                       {:else}
-                        {R.replace('{time}',
+                        {R.replace(
+                          '{time}',
                           Formats.formatTimeInstant(yritys.modifytime),
-                          $_('laatija.yritykset.table.accepted'))}
+                          $_('laatija.yritykset.table.accepted')
+                        )}
                       {/if}
                     </td>
                     <td class="etp-table--td">
@@ -175,7 +182,8 @@
                         confirmMessage={$_('confirm.you-want-to-delete')}>
                         <span
                           class="material-icons cursor-pointer"
-                          on:click|stopPropagation={_ => confirm(detach, index)}>
+                          on:click|stopPropagation={_ =>
+                            confirm(detach, index)}>
                           delete
                         </span>
                       </Confirm>
@@ -184,11 +192,11 @@
                 {/each}
               </tbody>
               <tfoot>
-              <tr>
-                <td colspan="4">
-                  {$_('laatija.yritykset.table.footer')}
-                </td>
-              </tr>
+                <tr>
+                  <td colspan="4">
+                    {$_('laatija.yritykset.table.footer')}
+                  </td>
+                </tr>
               </tfoot>
             </table>
           </div>
@@ -213,7 +221,7 @@
                   required={false}
                   {disabled}
                   bind:model={newLaatijaYritys}
-                  format={R.compose( Maybe.orSome(''), R.map(formatYritys) )}
+                  format={R.compose(Maybe.orSome(''), R.map(formatYritys))}
                   parse={parseYritys}
                   lens={R.lens(R.identity, R.identity)}
                   search={true}
@@ -226,7 +234,6 @@
                 text={$_('laatija.yritykset.attach-to-yritys')} />
             </div>
           </div>
-
         </form>
 
         <h2>Luo uusi yritys</h2>

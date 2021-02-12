@@ -47,9 +47,20 @@
     <div class="flex-grow ml-2">
       <Select
         allowNone={false}
-        model={luokittelu || R.compose(Maybe.orSome(1), R.map(R.prop('id')), R.head)(currentluokittelut)}
-        items={R.compose(Maybe.orSome([]), R.map(R.pluck('id')))(currentluokittelut)}
-        format={EtUtils.selectFormat(labelLocale, Maybe.orSome([], currentluokittelut))}
+        model={luokittelu ||
+          R.compose(
+            Maybe.orSome(1),
+            R.map(R.prop('id')),
+            R.head
+          )(currentluokittelut)}
+        items={R.compose(
+          Maybe.orSome([]),
+          R.map(R.pluck('id'))
+        )(currentluokittelut)}
+        format={EtUtils.selectFormat(
+          labelLocale,
+          Maybe.orSome([], currentluokittelut)
+        )}
         lens={R.identity}
         on:change />
     </div>

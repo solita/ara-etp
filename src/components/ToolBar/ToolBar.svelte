@@ -75,12 +75,16 @@
   const execute = (operation, name, onSuccess) => _ => {
     Future.fork(
       response => {
-        const msg = Response.notFound(response) ?
-          $_('energiatodistus.messages.not-found'):
-          $_(Maybe.orSome(`energiatodistus.messages.${name}-error`,
-            Response.localizationKey(response)));
+        const msg = Response.notFound(response)
+          ? $_('energiatodistus.messages.not-found')
+          : $_(
+              Maybe.orSome(
+                `energiatodistus.messages.${name}-error`,
+                Response.localizationKey(response)
+              )
+            );
 
-        flashMessageStore.add('Energiatodistus', 'error', msg)
+        flashMessageStore.add('Energiatodistus', 'error', msg);
       },
       _ => {
         onSuccess();
@@ -90,17 +94,25 @@
           $_(`energiatodistus.messages.${name}-success`)
         );
       },
-      operation(fetch, version, Maybe.get(id)));
+      operation(fetch, version, Maybe.get(id))
+    );
   };
 
-  const deleteEnergiatodistus = execute(api.deleteEnergiatodistus, 'delete',
-    _ => replace('/energiatodistus/all'));
+  const deleteEnergiatodistus = execute(
+    api.deleteEnergiatodistus,
+    'delete',
+    _ => replace('/energiatodistus/all')
+  );
 
-  $: discardEnergiatodistus = execute(api.discardEnergiatodistus, 'discard', cancel);
+  $: discardEnergiatodistus = execute(
+    api.discardEnergiatodistus,
+    'discard',
+    cancel
+  );
   $: undoDiscardEnergiatodistus = execute(
-      api.undoDiscardEnergiatodistus,
-      'undodiscard',
-      cancel
+    api.undoDiscardEnergiatodistus,
+    'undodiscard',
+    cancel
   );
 
   export let save = _ => {};
@@ -209,7 +221,9 @@
   {#if R.includes(Toolbar.module.save, fields)}
     <button disabled={!dirty} on:click={save(noop)}>
       <span class="description">
-        {id.isSome() ? $_('energiatodistus.toolbar.save') : $_('energiatodistus.toolbar.new')}
+        {id.isSome()
+          ? $_('energiatodistus.toolbar.save')
+          : $_('energiatodistus.toolbar.new')}
       </span>
       <span class="text-2xl font-icon">save</span>
     </button>
@@ -227,8 +241,10 @@
     </button>
   {/if}
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
-    <button on:click={save(_ => push('/energiatodistus/' +
-          version + '/new?copy-from-id=' + id.some()))}>
+    <button
+      on:click={save(_ =>
+        push('/energiatodistus/' + version + '/new?copy-from-id=' + id.some())
+      )}>
       <span class="description">{$_('energiatodistus.toolbar.copy')}</span>
       <span class="text-2xl font-icon">file_copy</span>
     </button>
@@ -237,8 +253,8 @@
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
         <button on:click={save(() => openUrl(href))}>
-          <span
-            class="block description">{$_('energiatodistus.toolbar.preview')}
+          <span class="block description"
+            >{$_('energiatodistus.toolbar.preview')}
             {R.toUpper(lang)}</span>
           <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
@@ -249,8 +265,8 @@
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
         <button on:click={() => openUrl(href)}>
-          <span
-            class="block description">{$_('energiatodistus.toolbar.download')}
+          <span class="block description"
+            >{$_('energiatodistus.toolbar.download')}
             {R.toUpper(lang)}</span>
           <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
@@ -274,8 +290,8 @@
       confirmButtonLabel={$_('confirm.button.undodiscard')}
       confirmMessage={$_('confirm.you-want-to-undodiscard')}>
       <button on:click={() => confirm(undoDiscardEnergiatodistus)}>
-        <span
-          class="description">{$_('energiatodistus.toolbar.undodiscard')}</span>
+        <span class="description"
+          >{$_('energiatodistus.toolbar.undodiscard')}</span>
         <span class="text-2xl font-icon">undo</span>
       </button>
     </Confirm>

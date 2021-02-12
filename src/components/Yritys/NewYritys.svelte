@@ -18,24 +18,33 @@
 
   let overlay = false;
 
-  const toggleOverlay = value => { overlay = value };
+  const toggleOverlay = value => {
+    overlay = value;
+  };
 
   let yritys = YritysUtils.emptyYritys();
   let luokittelut = Maybe.None();
 
   const submit = R.compose(
-    Future.fork(response => {
+    Future.fork(
+      response => {
         toggleOverlay(false);
         flashMessageStore.add(
           'Yritys',
           'error',
-          Locales.uniqueViolationMessage($_, response, 'yritys.messages.save-error'));
+          Locales.uniqueViolationMessage(
+            $_,
+            response,
+            'yritys.messages.save-error'
+          )
+        );
       },
       ({ id }) => {
         flashMessageStore.addPersist(
-            'Yritys',
-            'success',
-            $_('yritys.messages.save-success'));
+          'Yritys',
+          'success',
+          $_('yritys.messages.save-success')
+        );
 
         replace(`/yritys/${id}`);
       }
@@ -46,15 +55,20 @@
 
   // Load classifications
   $: Future.fork(
-      () => {
-        toggleOverlay(false);
-        flashMessageStore.add('Yritys', 'error', $_('yritys.messages.load-error'));
-      },
-      response => {
-        luokittelut = Maybe.Some(response);
-        toggleOverlay(false);
-      }, api.luokittelut);
-
+    () => {
+      toggleOverlay(false);
+      flashMessageStore.add(
+        'Yritys',
+        'error',
+        $_('yritys.messages.load-error')
+      );
+    },
+    response => {
+      luokittelut = Maybe.Some(response);
+      toggleOverlay(false);
+    },
+    api.luokittelut
+  );
 </script>
 
 <Overlay {overlay}>

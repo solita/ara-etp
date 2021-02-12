@@ -31,14 +31,24 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add('Yritys', 'error',
-          $_(Maybe.orSome('yritys.messages.load-error',
-            Response.localizationKey(response))));
+        flashMessageStore.add(
+          'Yritys',
+          'error',
+          $_(
+            Maybe.orSome(
+              'yritys.messages.load-error',
+              Response.localizationKey(response)
+            )
+          )
+        );
       },
       response => {
         laatijat = R.filter(R.complement(Tila.isDeleted), response[1]);
 
-        hasModifyPermission = Yritykset.hasModifyPermission(response[1], response[0])
+        hasModifyPermission = Yritykset.hasModifyPermission(
+          response[1],
+          response[0]
+        );
         overlay = false;
       }
     ),
@@ -90,7 +100,7 @@
 
 <style>
   .delete-icon.text-disabled {
-      @apply cursor-not-allowed;
+    @apply cursor-not-allowed;
   }
 </style>
 
@@ -101,71 +111,83 @@
     {#if R.isEmpty(laatijat)}
       {$_('yritys.laatijat.empty')}
     {:else}
-    <table class="etp-table">
-      <thead class="etp-table--thead">
-      <tr class="etp-table--tr etp-table--tr__light">
-        <th class="etp-table--th">
-          {$_('yritys.laatijat.table.laatija')}
-        </th>
-        <th class="etp-table--th">
-          {$_('yritys.laatijat.table.liitetty')}
-        </th>
-        <th class="etp-table--th">
-          {$_('yritys.laatijat.table.hyvaksyja')}
-        </th>
-        <th class="etp-table--th">
-          {$_('yritys.laatijat.table.delete')}
-        </th>
-      </tr>
-      </thead>
-      <tbody class="etp-table--tbody">
-      {#each laatijat as laatija}
-      <tr class="etp-table-tr">
-        <td class="etp-table--td">
-          {laatija.etunimi} {laatija.sukunimi}
-        </td>
-        <td class="etp-table--td">
-          {#if Tila.isProposal(laatija) && hasModifyPermission}
-            <Confirm let:confirm
-                confirmButtonLabel={$_('yritys.laatijat.accept.confirm-button')}
-                confirmMessage={$_('yritys.laatijat.accept.confirm-message')}>
-
-              <div class="flex"
-                  on:click|stopPropagation={_ => confirm(accept, laatija.id)}>
-                <Link icon={Maybe.Some('person_add')}
-                      text={$_('yritys.laatijat.accept.link')}/>
-              </div>
-            </Confirm>
-          {:else if Tila.isProposal(laatija)}
-            {$_('yritys.laatijat.table.proposal')}
-          {:else}
-            {Formats.formatTimeInstant(laatija.modifytime)}
-          {/if}
-        </td>
-        <td class="etp-table--td">
-          {#if Tila.isAccepted(laatija)}
-            {laatija['modifiedby-name']}
-          {/if}
-        </td>
-        <td class="etp-table--td">
-          <Confirm
-              let:confirm
-              confirmButtonLabel={$_('yritys.laatijat.delete.confirm-button')}
-              confirmMessage={$_('yritys.laatijat.delete.confirm-message')}>
-              <span
-                  class="material-icons cursor-pointer delete-icon"
-                  title={hasModifyPermission ? null : $_('yritys.messages.missing-permission')}
-                  class:text-disabled={!hasModifyPermission}
-                  on:click|stopPropagation={_ => hasModifyPermission &&
-                    confirm(detach, laatija.id)}>
-                delete
-              </span>
-          </Confirm>
-        </td>
-      </tr>
-      {/each}
-      </tbody>
-    </table>
+      <table class="etp-table">
+        <thead class="etp-table--thead">
+          <tr class="etp-table--tr etp-table--tr__light">
+            <th class="etp-table--th">
+              {$_('yritys.laatijat.table.laatija')}
+            </th>
+            <th class="etp-table--th">
+              {$_('yritys.laatijat.table.liitetty')}
+            </th>
+            <th class="etp-table--th">
+              {$_('yritys.laatijat.table.hyvaksyja')}
+            </th>
+            <th class="etp-table--th">
+              {$_('yritys.laatijat.table.delete')}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="etp-table--tbody">
+          {#each laatijat as laatija}
+            <tr class="etp-table-tr">
+              <td class="etp-table--td">
+                {laatija.etunimi}
+                {laatija.sukunimi}
+              </td>
+              <td class="etp-table--td">
+                {#if Tila.isProposal(laatija) && hasModifyPermission}
+                  <Confirm
+                    let:confirm
+                    confirmButtonLabel={$_(
+                      'yritys.laatijat.accept.confirm-button'
+                    )}
+                    confirmMessage={$_(
+                      'yritys.laatijat.accept.confirm-message'
+                    )}>
+                    <div
+                      class="flex"
+                      on:click|stopPropagation={_ =>
+                        confirm(accept, laatija.id)}>
+                      <Link
+                        icon={Maybe.Some('person_add')}
+                        text={$_('yritys.laatijat.accept.link')} />
+                    </div>
+                  </Confirm>
+                {:else if Tila.isProposal(laatija)}
+                  {$_('yritys.laatijat.table.proposal')}
+                {:else}
+                  {Formats.formatTimeInstant(laatija.modifytime)}
+                {/if}
+              </td>
+              <td class="etp-table--td">
+                {#if Tila.isAccepted(laatija)}
+                  {laatija['modifiedby-name']}
+                {/if}
+              </td>
+              <td class="etp-table--td">
+                <Confirm
+                  let:confirm
+                  confirmButtonLabel={$_(
+                    'yritys.laatijat.delete.confirm-button'
+                  )}
+                  confirmMessage={$_('yritys.laatijat.delete.confirm-message')}>
+                  <span
+                    class="material-icons cursor-pointer delete-icon"
+                    title={hasModifyPermission
+                      ? null
+                      : $_('yritys.messages.missing-permission')}
+                    class:text-disabled={!hasModifyPermission}
+                    on:click|stopPropagation={_ =>
+                      hasModifyPermission && confirm(detach, laatija.id)}>
+                    delete
+                  </span>
+                </Confirm>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
     {/if}
   </div>
   <div slot="overlay-content">

@@ -21,7 +21,6 @@
 </script>
 
 <style type="text/postcss">
-
 </style>
 
 <svelte:window on:hashchange={_ => flashMessageStore.flush('Yritys')} />

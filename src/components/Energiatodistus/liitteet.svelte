@@ -212,8 +212,7 @@
         <div class="mb-5" on:change={saveValvonta}>
           <Checkbox
             bind:model={enabled}
-            label={$_('energiatodistus.liitteet.enabled-checkbox-label')}
-          />
+            label={$_('energiatodistus.liitteet.enabled-checkbox-label')} />
         </div>
       {/if}
 
@@ -273,8 +272,7 @@
                   <Confirm
                     let:confirm
                     confirmButtonLabel={$_('confirm.button.delete')}
-                    confirmMessage={$_('confirm.you-want-to-delete')}
-                  >
+                    confirmMessage={$_('confirm.you-want-to-delete')}>
                     <span
                       class="material-icons delete-icon"
                       class:text-disabled={!isDeleteEnabled}
@@ -283,7 +281,9 @@
                         : ''}
                       on:click|stopPropagation={_ => {
                         if (isDeleteEnabled) confirm(deleteLiite, liite.id);
-                      }}> highlight_off </span>
+                      }}>
+                      highlight_off
+                    </span>
                   </Confirm>
                 </td>
               </tr>
@@ -324,8 +324,7 @@
               required={true}
               parse={R.compose(parsers.addDefaultProtocol, R.trim)}
               validators={liiteLinkAddSchema.url}
-              i18n={$_}
-            />
+              i18n={$_} />
           </div>
           <div class="w-full py-4">
             <Input
@@ -339,22 +338,19 @@
               required={true}
               parse={R.trim}
               validators={liiteLinkAddSchema.nimi}
-              i18n={$_}
-            />
+              i18n={$_} />
           </div>
 
           <div class="flex space-x-4 pt-8">
             <Button
               disabled={linkEmpty || linkInvalid}
               type={'submit'}
-              text={'Lisää linkki'}
-            />
+              text={'Lisää linkki'} />
             <Button
               on:click={cancel}
               text={'Tyhjennä'}
               type={'reset'}
-              style={'secondary'}
-            />
+              style={'secondary'} />
           </div>
         </form>
       </div>

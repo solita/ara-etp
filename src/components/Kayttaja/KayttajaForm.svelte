@@ -41,13 +41,21 @@
       flashMessageStore.flush();
       submit(kayttaja);
     } else {
-      flashMessageStore.add('Kayttaja', 'error', $_('kayttaja.messages.validation-error'));
+      flashMessageStore.add(
+        'Kayttaja',
+        'error',
+        $_('kayttaja.messages.validation-error')
+      );
     }
   }}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <span class="lastlogin">
-      {R.compose( Maybe.orSome($_('kayttaja.no-login')), Maybe.map(R.concat($_('kayttaja.last-login') + ' ')), Maybe.map(formats.formatTimeInstant) )(kayttaja.login)}
+      {R.compose(
+        Maybe.orSome($_('kayttaja.no-login')),
+        Maybe.map(R.concat($_('kayttaja.last-login') + ' ')),
+        Maybe.map(formats.formatTimeInstant)
+      )(kayttaja.login)}
     </span>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -89,7 +97,7 @@
             disabled={true}
             i18n={$_} />
         </div>
-       {/if}
+      {/if}
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">

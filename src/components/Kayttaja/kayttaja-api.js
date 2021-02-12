@@ -13,7 +13,8 @@ const deserialize = R.evolve({
   henkilotunnus: Maybe.fromNull,
   virtu: R.when(
     R.allPass([R.isNil, kayttajat.isPaakayttajaRole]),
-    R.always({ localid: "", organisaatio: "" }))
+    R.always({ localid: '', organisaatio: '' })
+  )
 });
 
 export const url = {
@@ -37,8 +38,12 @@ export const getKayttajaById = R.curry((fetch, id) =>
 export const getLaatijaById = R.curry((fetch, id) =>
   R.compose(
     Future.chainRej(
-      R.ifElse(R.propEq('status', 404),
-        R.always(Future.resolve(null)), Future.reject)),
+      R.ifElse(
+        R.propEq('status', 404),
+        R.always(Future.resolve(null)),
+        Future.reject
+      )
+    ),
     R.map(LaatijaUtils.deserialize),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
