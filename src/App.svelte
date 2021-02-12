@@ -20,24 +20,20 @@
   setupI18n();
 
   let whoami = Maybe.None();
-  let v = Maybe.None();
+  let applicationVersion = Maybe.None();
   let failure = Maybe.None();
 
-  R.compose(
-    Future.fork(
-      response => {
-        failure = Maybe.Some(response);
-      },
-      response => {
-        whoami = Maybe.Some(response[0]);
-        v = Maybe.Some(response[1]);
-        currentUserStore.set(whoami);
-      }
-    ),
-    Future.parallel(2),
-    R.pair(kayttajaApi.whoami),
-    versionApi.getVersion
-  )(Date.now());
+  Future.fork(
+    response => {
+      failure = Maybe.Some(response);
+    },
+    response => {
+      whoami = Maybe.Some(response[0]);
+      applicationVersion = Maybe.Some(response[1]);
+      currentUserStore.set(whoami);
+    },
+    Future.parallel(2, [kayttajaApi.whoami, versionApi.getVersion])
+  );
 </script>
 
 <style type="text/postcss">
@@ -83,12 +79,12 @@
   {/each}
 
   {#each Maybe.toArray(whoami) as user}
-    {#each Maybe.toArray(v) as version}
+    {#each Maybe.toArray(applicationVersion) as version}
       <Content {user} {version} />
     {/each}
   {/each}
 
-  {#each Maybe.toArray(v) as version}
+  {#each Maybe.toArray(applicationVersion) as version}
     <div class="footercontainer">
       <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
         <Footer {version} />
