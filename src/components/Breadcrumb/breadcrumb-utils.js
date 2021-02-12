@@ -38,11 +38,26 @@ export const yritysCrumb = R.curry((idTranslate, i18n, id) =>
 );
 
 export const yrityksetCrumb = R.curry((i18n, user) => {
-  const url = Kayttajat.isPaakayttaja(user) ?
-    '#/yritys/all' :
-    `#/laatija/${user.id}/yritykset`;
+  const url = Kayttajat.isPaakayttaja(user)
+    ? '#/yritys/all'
+    : `#/laatija/${user.id}/yritykset`;
 
   return createCrumb(url, i18n('navigation.yritykset'));
+});
+
+export const parseViesti = R.curry((idTranslate, i18n, locationParts) => {
+  const allCrumb = createCrumb(`#/viesti/all`, i18n('navigation.viesti'));
+  if (locationParts[0] === 'all' || !idTranslate['viesti'][locationParts[0]]) {
+    return [allCrumb];
+  }
+
+  return [
+    createCrumb(
+      `#/energiatodistus/${idTranslate['viesti'][locationParts[0]]}`,
+      `${i18n('navigation.et')} ${idTranslate['viesti'][locationParts[0]]}`
+    ),
+    createCrumb(`#/viesti/${locationParts[0]}`, i18n('navigation.viestit'))
+  ];
 });
 
 export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
@@ -140,7 +155,7 @@ export const parseKayttaja = R.curry(
       R.unless(
         R.always(R.equals('all', id)),
         R.prepend(
-          Kayttajat.isPatevyydentoteaja(user)
+          Kayttajat.isPatevyydentoteaja(user) || Kayttajat.isPaakayttaja(user)
             ? createCrumb(`#/laatija/all`, i18n('navigation.laatijat'))
             : createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat'))
         )
@@ -265,12 +280,15 @@ export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
         R.compose(parseLaatija(i18n), R.tail)
       ],
       [
+        R.compose(R.equals('viesti'), R.head),
+        R.compose(parseViesti(idTranslate, i18n), R.tail)
+      ],
+      [
         R.compose(
           R.includes(R.__, [
             'halytykset',
             'kaytonvalvonta',
             'tyojono',
-            'viestit',
             'myinfo'
           ]),
           R.head

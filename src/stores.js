@@ -12,7 +12,8 @@ const createIdTranslateStore = () => {
   const { subscribe, update } = writable({
     yritys: { all: 'navigation.yritykset', new: 'yritys.uusi-yritys' },
     kayttaja: { all: 'navigation.kayttajat' },
-    energiatodistus: { new: 'navigation.uusi-energiatodistus' }
+    energiatodistus: { new: 'navigation.uusi-energiatodistus' },
+    viesti: { all: 'navigation.viesti' }
   });
 
   return {
@@ -31,7 +32,17 @@ const createIdTranslateStore = () => {
             R.converge(Array.of, [R.prop('etunimi'), R.prop('sukunimi')])
           )(kayttaja)
         )
-      )
+      ),
+    updateKetju: ketju => {
+      if (ketju['energiatodistus-id']) {
+        update(
+          R.assocPath(
+            ['viesti', R.prop('id', ketju)],
+            R.prop('energiatodistus-id', ketju)
+          )
+        );
+      }
+    }
   };
 };
 
