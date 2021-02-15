@@ -21,6 +21,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Formats from '@Utility/formats';
+  import * as Parsers from '@Utility/parsers';
 
   import { flashMessageStore } from '@/stores';
 
@@ -29,7 +30,6 @@
   let newLaatijaYritys = Either.Right(Maybe.None());
   let laatijaYritykset = [];
   let allYritykset = [];
-  let yritysCanonicalNames = [];
   let overlay = true;
   let disabled = false;
 
@@ -57,14 +57,23 @@
     overlay = value;
   };
 
-  const parseYritys = name =>
-    R.isEmpty(R.trim(name))
-      ? Either.Right(Maybe.None())
-      : Yritys.findYritysByYtunnus(allYritykset, R.slice(0, 9, name))
-          .toEither(R.applyTo('laatija.yritykset.yritys-not-found'))
-          .map(Maybe.of);
+  const parseId = R.compose(parseInt, R.trim, R.nth(0), R.split('|'));
 
-  const formatYritys = yritys => yritys.ytunnus + ' | ' + yritys.nimi;
+  const isInYritykset = yritykset =>
+    R.propSatisfies(R.includes(R.__, R.map(R.prop('id'), yritykset)), 'id');
+
+  $: parseYritys = R.compose(
+    Either.filter(
+      R.applyTo('laatija.yritykset.already-attached'),
+      R.complement(isInYritykset(laatijaYritykset))
+    ),
+    Maybe.toEither(R.applyTo('laatija.yritykset.yritys-not-found')),
+    Maybe.findById(R.__, allYritykset),
+    parseId
+  );
+
+  const formatYritys = yritys =>
+    yritys.id + ' | ' + yritys.ytunnus + ' | ' + yritys.nimi;
 
   const load = R.compose(
     Future.fork(
@@ -80,7 +89,7 @@
           ),
           R.filter(R.complement(Tila.isDeleted))
         )(result[1]);
-        yritysCanonicalNames = R.map(formatYritys, allYritykset);
+
         toggleOverlay(false);
       }
     ),
@@ -213,7 +222,7 @@
         <form class="mb-5" on:submit|preventDefault={attach}>
           <div class="flex lg:flex-row flex-col py-4 -mx-4">
             <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-              <Autocomplete items={yritysCanonicalNames}>
+              <Autocomplete items={R.map(formatYritys, allYritykset)}>
                 <Input
                   id={'yritys'}
                   name={'yritys'}
@@ -222,7 +231,7 @@
                   {disabled}
                   bind:model={newLaatijaYritys}
                   format={R.compose(Maybe.orSome(''), R.map(formatYritys))}
-                  parse={parseYritys}
+                  parse={Parsers.optionalParser(parseYritys)}
                   lens={R.lens(R.identity, R.identity)}
                   search={true}
                   i18n={$_} />
