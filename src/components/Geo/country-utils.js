@@ -8,9 +8,12 @@ export const findCountryById = R.curry((id, countries) =>
 export const findCountry = R.curry((name, countries) =>
   R.compose(
     Maybe.fromNull,
-    R.find(R.compose(
-      R.includes(R.toLower(name)),
-      R.map(R.toLower),
-      R.props(['id', 'label-fi', 'label-sv'])))
+    R.find(
+      R.compose(
+        R.includes(R.toLower(name)),
+        R.map(R.toLower),
+        R.props(['id', 'label-fi', 'label-sv'])
+      )
+    )
   )(countries)
 );

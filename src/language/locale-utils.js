@@ -18,7 +18,8 @@ export const label = R.curry((locale, item) =>
 );
 
 export const path = R.curry((locale, path) =>
-  R.adjust(-1, R.concat(R.__, '-' + locale), path));
+  R.adjust(-1, R.concat(R.__, '-' + locale), path)
+);
 
 const uniqueViolationKey = R.compose(
   R.map(R.concat('unique-violations.')),

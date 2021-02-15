@@ -184,7 +184,12 @@
         if (allowNone && index === 0) {
           model = R.set(lens, Maybe.None(), model);
         } else {
-          model = R.compose(R.set(lens, R.__, model), parse, R.nth(R.__, items), R.when(R.always(allowNone), R.dec))(index);
+          model = R.compose(
+            R.set(lens, R.__, model),
+            parse,
+            R.nth(R.__, items),
+            R.when(R.always(allowNone), R.dec)
+          )(index);
         }
         active = Maybe.None();
         await tick();

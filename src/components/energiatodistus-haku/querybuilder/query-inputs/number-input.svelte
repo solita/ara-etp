@@ -13,10 +13,7 @@
 
   let strValue = value + '';
 
-  $: valid = R.compose(
-    Either.isRight,
-    parsers.parseNumber
-  )(strValue);
+  $: valid = R.compose(Either.isRight, parsers.parseNumber)(strValue);
 </script>
 
 <style type="text/postcss">

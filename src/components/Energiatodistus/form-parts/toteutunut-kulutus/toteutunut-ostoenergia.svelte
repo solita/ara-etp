@@ -31,7 +31,9 @@
 
 <H3
   compact={true}
-  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header')} />
+  text={$_(
+    'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header'
+  )} />
 
 <table class="et-table et-table__noborder mb-6">
   <thead class="et-table--thead">
@@ -52,7 +54,9 @@
     {#each ['sahko-vuosikulutus-yhteensa', 'kaukolampo-vuosikulutus-yhteensa', 'polttoaineet-vuosikulutus-yhteensa', 'kaukojaahdytys-vuosikulutus-yhteensa'] as energiamuoto}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.labels.${energiamuoto}`)}
+          {$_(
+            `energiatodistus.toteutunut-ostoenergiankulutus.labels.${energiamuoto}`
+          )}
         </td>
         <td class="et-table--td" />
         <td class="et-table--td" />
@@ -66,7 +70,11 @@
             path={['toteutunut-ostoenergiankulutus', energiamuoto]} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(energiamuoto) )(toteutuneetOstoenergiatPerLammitettyNettoala)}
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+            R.prop(energiamuoto)
+          )(toteutuneetOstoenergiatPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
@@ -76,10 +84,18 @@
       <td class="et-table--td" />
       <td class="et-table--td" />
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, Maybe.get, R.map(fxmath.round(0)) )(ostoenergiatSum)}
+        {R.compose(
+          formats.numberFormat,
+          Maybe.get,
+          R.map(fxmath.round(0))
+        )(ostoenergiatSum)}
       </td>
       <td class="et-table--td">
-        {R.compose( formats.numberFormat, fxmath.round(0), Maybe.get )(toteutuneetOstoenergiatPerLammitettyNettoalaSum)}
+        {R.compose(
+          formats.numberFormat,
+          fxmath.round(0),
+          Maybe.get
+        )(toteutuneetOstoenergiatPerLammitettyNettoalaSum)}
       </td>
     </tr>
   </tbody>

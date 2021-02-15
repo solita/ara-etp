@@ -44,10 +44,9 @@
     }}
     type="file"
     bind:files
-    {multiple}
-  />
+    {multiple} />
   <span class="material-icons text-primary align-middle">arrow_downward</span>
   <span>{labelText}</span>
-  <span class="font-bold text-primary highlight-text">{labelTextHighlight}</span
-  >
+  <span class="font-bold text-primary highlight-text"
+    >{labelTextHighlight}</span>
 </label>

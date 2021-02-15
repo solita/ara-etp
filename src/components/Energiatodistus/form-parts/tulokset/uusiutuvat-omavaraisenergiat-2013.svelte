@@ -15,20 +15,26 @@
   export let inputLanguage;
 
   const energiaPerLammitettyNettoala = index =>
-      EtUtils.energiaPerLammitettyNettoala(['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']);
-
+    EtUtils.energiaPerLammitettyNettoala([
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      index,
+      'vuosikulutus'
+    ]);
 </script>
 
 <H3
   compact={true}
-  text={$_('energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2013')} />
+  text={$_(
+    'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2013'
+  )} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th"><VuosituottoUnit/></th>
-      <th class="et-table--th"><VuosituottoAreaUnit/></th>
+      <th class="et-table--th"><VuosituottoUnit /></th>
+      <th class="et-table--th"><VuosituottoAreaUnit /></th>
       <th class="et-table--th" />
     </tr>
   </thead>
@@ -38,12 +44,17 @@
       <tr class="et-table--tr">
         <td class="et-table--td">
           <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              inputLanguage={Maybe.Some(inputLanguage)}
-              path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'nimi']} />
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            inputLanguage={Maybe.Some(inputLanguage)}
+            path={[
+              'tulokset',
+              'uusiutuvat-omavaraisenergiat',
+              index,
+              'nimi'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -51,10 +62,18 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['tulokset', 'uusiutuvat-omavaraisenergiat', index, 'vuosikulutus']} />
+            path={[
+              'tulokset',
+              'uusiutuvat-omavaraisenergiat',
+              index,
+              'vuosikulutus'
+            ]} />
         </td>
         <td class="et-table--td">
-          {Maybe.orSome('', energiaPerLammitettyNettoala(index)(energiatodistus))}
+          {Maybe.orSome(
+            '',
+            energiaPerLammitettyNettoala(index)(energiatodistus)
+          )}
         </td>
         <td class="et-table--td" />
       </tr>

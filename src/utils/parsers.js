@@ -27,7 +27,8 @@ export const parseNumber = R.compose(
 
 export const parseDate = R.compose(
   R.ifElse(
-    dfns.isValid, Either.Right,
+    dfns.isValid,
+    Either.Right,
     R.always(Either.Left(R.applyTo('parsing.invalid-date')))
   ),
   date => dfns.parse(date, Validation.DATE_FORMAT, 0),
@@ -36,7 +37,8 @@ export const parseDate = R.compose(
 
 export const parseISODate = R.compose(
   R.ifElse(
-    dfns.isValid, Either.Right,
+    dfns.isValid,
+    Either.Right,
     R.always(Either.Left(R.applyTo('parsing.invalid-date')))
   ),
   dfns.parseISO
@@ -53,13 +55,10 @@ export const addDefaultProtocol = R.ifElse(
  */
 export const toEitherMaybe = R.compose(
   Maybe.orSome(Either.Right(Maybe.None())),
-  Maybe.map(Either.map(Maybe.Some)));
+  Maybe.map(Either.map(Maybe.Some))
+);
 
 export const optionalString = R.compose(Maybe.fromEmpty, R.trim);
 
 export const optionalParser = parse =>
-  R.compose(
-    toEitherMaybe,
-    Maybe.map(parse),
-    optionalString
-  );
+  R.compose(toEitherMaybe, Maybe.map(parse), optionalString);

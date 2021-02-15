@@ -4,7 +4,6 @@ import * as parsers from './parsers';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
-
 describe('Parsers:', () => {
   describe('Parse integer:', () => {
     it('Success', () => {

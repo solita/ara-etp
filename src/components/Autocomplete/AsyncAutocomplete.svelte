@@ -32,12 +32,7 @@
           cancel = () => {};
           items = R.compose(
             R.map(R.toString),
-            R.reject(
-              R.compose(
-                Maybe.exists(R.__, reject),
-                R.equals
-              )
-            )
+            R.reject(R.compose(Maybe.exists(R.__, reject), R.equals))
           )(fetchedItems);
         }
       ),

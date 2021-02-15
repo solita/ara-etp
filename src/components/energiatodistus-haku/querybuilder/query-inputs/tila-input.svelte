@@ -16,6 +16,10 @@
   name={`${nameprefix}_value_${index}`}
   allowNone={false}
   model={value}
-  format={R.compose($_, R.concat('energiatodistus.tila.'), R.nth(R.__, EtUtils.tilat))}
+  format={R.compose(
+    $_,
+    R.concat('energiatodistus.tila.'),
+    R.nth(R.__, EtUtils.tilat)
+  )}
   items={R.values(EtUtils.tila)}
   lens={R.identity} />

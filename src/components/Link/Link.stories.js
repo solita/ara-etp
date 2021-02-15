@@ -19,10 +19,10 @@ export const withIcon = () => ({
 });
 
 export const withTextAndIcon = () => ({
-    Component: Link,
-    props: {
-        href: 'http://example.com',
-        icon: 'home',
-        text: 'To example.com'
-    }
+  Component: Link,
+  props: {
+    href: 'http://example.com',
+    icon: 'home',
+    text: 'To example.com'
+  }
 });

@@ -72,7 +72,13 @@
     <li>
       <Checkbox
         label={format(toimintaalue)}
-        disabled={disabled || ToimintaAlueUtils.isMainToimintaAlue(mainToimintaalue, toimintaalue) || (R.compose( R.lte(limit), R.length )(selected) && R.compose( R.not, R.includes(toimintaalue) )(selected))}
+        disabled={disabled ||
+          ToimintaAlueUtils.isMainToimintaAlue(
+            mainToimintaalue,
+            toimintaalue
+          ) ||
+          (R.compose(R.lte(limit), R.length)(selected) &&
+            R.compose(R.not, R.includes(toimintaalue))(selected))}
         lens={toimintaalueLens(toimintaalue)}
         bind:model />
     </li>

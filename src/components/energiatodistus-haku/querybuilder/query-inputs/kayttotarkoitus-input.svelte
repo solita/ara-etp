@@ -69,9 +69,13 @@
   {key}
   on:change={evt => {
     evt.stopPropagation();
-    const alakayttotarkoitusluokat = R.compose(R.map(R.prop('id')), R.filter(R.propEq('kayttotarkoitusluokka-id', parseInt(evt.target.value))), R.path(
-        [versio, 'alakayttotarkoitusluokat']
-      ))(luokittelut);
+    const alakayttotarkoitusluokat = R.compose(
+      R.map(R.prop('id')),
+      R.filter(
+        R.propEq('kayttotarkoitusluokka-id', parseInt(evt.target.value))
+      ),
+      R.path([versio, 'alakayttotarkoitusluokat'])
+    )(luokittelut);
 
     input.value = alakayttotarkoitusluokat;
     input.dispatchEvent(new Event('change', { bubbles: true }));

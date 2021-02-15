@@ -196,9 +196,12 @@
 <H2 text={$_('energiatodistus.tulokset.header')} />
 
 <ELuku {eTehokkuus} />
-<ELuvunErittely {disabled} {schema}
-                bind:energiatodistus bind:eTehokkuus
-                versio={2013} />
+<ELuvunErittely
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  bind:eTehokkuus
+  versio={2013} />
 <UusiutuvatOmavaraisenergiat
   {disabled}
   {schema}

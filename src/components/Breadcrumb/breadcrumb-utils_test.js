@@ -79,10 +79,7 @@ describe('BreadcrumbUtils', () => {
     it('should return laatijanYritykset crumb', () => {
       const expected = { url: '#/laatija/1/yritykset', label: 'Yritykset' };
 
-      assert.deepEqual(
-        BreadcrumbUtils.yrityksetCrumb(i18n, user),
-        expected
-      );
+      assert.deepEqual(BreadcrumbUtils.yrityksetCrumb(i18n, user), expected);
     });
   });
 
@@ -179,11 +176,7 @@ describe('BreadcrumbUtils', () => {
     });
 
     it('should return proper breadcrumb for single energiatodistus action', () => {
-      const keywords = [
-        'liitteet',
-        'viestit',
-        'muutoshistoria'
-      ];
+      const keywords = ['liitteet', 'viestit', 'muutoshistoria'];
       const version = '2018';
       const id = '1';
 

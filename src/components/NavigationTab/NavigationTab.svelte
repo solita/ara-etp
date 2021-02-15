@@ -39,7 +39,11 @@
 {:else}
   <a
     {href}
-    class:active={R.compose( R.equals($location), R.dropWhile(R.equals('#')), R.defaultTo(href) )(activePath)}>
+    class:active={R.compose(
+      R.equals($location),
+      R.dropWhile(R.equals('#')),
+      R.defaultTo(href)
+    )(activePath)}>
     {label}
   </a>
 {/if}

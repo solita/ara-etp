@@ -110,7 +110,10 @@
         {center}
         search={true}
         bind:model={energiatodistus}
-        format={Maybe.fold('', Postinumero.formatPostinumero(postinumerot, $locale))}
+        format={Maybe.fold(
+          '',
+          Postinumero.formatPostinumero(postinumerot, $locale)
+        )}
         path={['perustiedot', 'postinumero']} />
     </Autocomplete>
   </div>

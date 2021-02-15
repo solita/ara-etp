@@ -34,7 +34,8 @@
       previousIndex = 0;
     }
     if (
-      listElement && listElement.children[index] &&
+      listElement &&
+      listElement.children[index] &&
       !checkIfInView(listElement, listElement.children[index], false)
     ) {
       listElement.children[index].scrollIntoView(previousIndex > index);

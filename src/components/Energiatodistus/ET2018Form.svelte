@@ -51,7 +51,6 @@
   export let eTehokkuus = Maybe.None();
 
   $: labelLocale = LocaleUtils.label($locale);
-
 </script>
 
 <H2 text={$_('energiatodistus.perustiedot.header')} />

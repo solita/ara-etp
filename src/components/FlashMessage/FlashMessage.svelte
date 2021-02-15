@@ -11,10 +11,7 @@
   const close = message => flashMessageStore.remove(message);
 
   $: messages = R.filter(
-    R.compose(
-      R.equals(module),
-      R.prop('module')
-    ),
+    R.compose(R.equals(module), R.prop('module')),
     $flashMessageStore
   );
 </script>

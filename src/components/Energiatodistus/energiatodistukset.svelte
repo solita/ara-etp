@@ -263,7 +263,8 @@
     <div class="flex flex-col lg:flex-row justify-between">
       <H1 text={$_('energiatodistukset.title')} />
       {#if Kayttajat.isLaatija(whoami)}
-        <div class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
+        <div
+          class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
           <div class="flex flex-row my-auto">
             <span class="material-icons">add_circle_outline</span>
             &nbsp;
@@ -334,9 +335,15 @@
                 {#each energiatodistukset as energiatodistus}
                   <tr
                     class="etp-table--tr etp-table--tr__link"
-                    on:click={toETView(energiatodistus.versio, energiatodistus.id)}>
+                    on:click={toETView(
+                      energiatodistus.versio,
+                      energiatodistus.id
+                    )}>
                     <td class="etp-table--td">
-                      {$_('energiatodistus.tila.' + et.tilaKey(energiatodistus['tila-id']))}
+                      {$_(
+                        'energiatodistus.tila.' +
+                          et.tilaKey(energiatodistus['tila-id'])
+                      )}
                     </td>
                     <td class="etp-table--td">{energiatodistus.id}</td>
                     <td class="etp-table--td">
@@ -344,7 +351,11 @@
                     </td>
                     <td class="etp-table--td">{energiatodistus.versio}</td>
                     <td class="etp-table--td">
-                      {Maybe.fold('-', Formats.inclusiveEndDate, energiatodistus['voimassaolo-paattymisaika'])}
+                      {Maybe.fold(
+                        '-',
+                        Formats.inclusiveEndDate,
+                        energiatodistus['voimassaolo-paattymisaika']
+                      )}
                     </td>
                     <td class="etp-table--td">
                       {orEmpty(energiatodistus.perustiedot.nimi)}
@@ -356,7 +367,10 @@
                     </td>
                     <td
                       class="etp-table--td"
-                      title={kayttotarkoitusTitle(luokittelut, energiatodistus)}>
+                      title={kayttotarkoitusTitle(
+                        luokittelut,
+                        energiatodistus
+                      )}>
                       {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
                     </td>
                     <td class="etp-table--td">
@@ -370,9 +384,16 @@
                         <span
                           class="material-icons delete-icon"
                           class:text-disabled={!et.isDraft(energiatodistus)}
-                          title={!et.isDraft(energiatodistus) ? $_('energiatodistus.haku.poista-disabled') : ''}
+                          title={!et.isDraft(energiatodistus)
+                            ? $_('energiatodistus.haku.poista-disabled')
+                            : ''}
                           on:click|stopPropagation={_ => {
-                            if (et.isDraft(energiatodistus)) confirm(deleteEnergiatodistus, energiatodistus.versio, energiatodistus.id);
+                            if (et.isDraft(energiatodistus))
+                              confirm(
+                                deleteEnergiatodistus,
+                                energiatodistus.versio,
+                                energiatodistus.id
+                              );
                           }}>
                           highlight_off
                         </span>
@@ -404,7 +425,8 @@
       &nbsp;
       <Link
         text={$_('energiatodistus.lataa-xlsx')}
-        href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' + queryStringForXlsx} />
+        href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' +
+          queryStringForXlsx} />
     </div>
   {/each}
 </div>

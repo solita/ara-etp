@@ -39,7 +39,9 @@
     <Input
       {id}
       name={id}
-      label={compact ? inputs.fullLabel($_, inputLanguage, path) : inputs.label($_, inputLanguage, path)}
+      label={compact
+        ? inputs.fullLabel($_, inputLanguage, path)
+        : inputs.label($_, inputLanguage, path)}
       {required}
       {disabled}
       {compact}

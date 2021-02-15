@@ -16,7 +16,7 @@ export const url = {
   yritykset: '/api/private/yritykset',
   yritys: id => `${url.yritykset}/${id}`,
   laatijat: id => `${url.yritykset}/${id}/laatijat`
-}
+};
 
 export const deserialize = R.evolve({
   'vastaanottajan-tarkenne': Maybe.fromNull,
@@ -30,7 +30,11 @@ export const serialize = R.compose(
     'vastaanottajan-tarkenne': Maybe.orSome(null),
     maa: Either.right,
     verkkolaskuosoite: Maybe.orSome(null),
-    verkkolaskuoperaattori: R.ifElse(Either.isEither, EM.orSome(null), Maybe.orSome(null))
+    verkkolaskuoperaattori: R.ifElse(
+      Either.isEither,
+      EM.orSome(null),
+      Maybe.orSome(null)
+    )
   }),
   R.dissoc('id')
 );

@@ -3,12 +3,12 @@ import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
 import * as Maybe from '@Utility/maybe-utils';
 
-import * as dfns from "date-fns";
+import * as dfns from 'date-fns';
 
 const url = {
   ketjut: '/api/private/viestit',
   ketju: id => `${url.ketjut}/${id}`,
-  viestit: id => `${url.ketju(id)}/viestit`,
+  viestit: id => `${url.ketju(id)}/viestit`
 };
 
 export const serialize = R.evolve({
@@ -28,23 +28,26 @@ export const getKetju = fetch =>
     R.map(deserialize),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
-    url.ketju);
+    url.ketju
+  );
 
 export const getKetjut = fetch =>
   R.compose(
     R.map(R.map(deserialize)),
     Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
+    Future.encaseP(Fetch.getFetch(fetch))
   )(url.ketjut);
 
 export const postKetju = fetch =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.ketjut)),
-    serialize);
+    serialize
+  );
 
 export const postNewViesti = R.curry((fetch, id, body) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.viestit(id))))
-  (body));
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.viestit(id)))
+  )(body)
+);

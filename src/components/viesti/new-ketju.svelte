@@ -33,9 +33,12 @@
 
   Future.fork(
     response => {
-      const msg = $_(Maybe.orSome(
-        `${i18nRoot}.messages.load-error`,
-        Response.localizationKey(response)));
+      const msg = $_(
+        Maybe.orSome(
+          `${i18nRoot}.messages.load-error`,
+          Response.localizationKey(response)
+        )
+      );
 
       flashMessageStore.add('viesti', 'error', msg);
       overlay = false;
@@ -46,27 +49,35 @@
       });
       overlay = false;
     },
-    kayttajaApi.whoami);
+    kayttajaApi.whoami
+  );
 
   let ketju = Viestit.emptyKetju();
 
   const addKetju = R.compose(
     Future.fork(
       response => {
-        const msg = $_(Maybe.orSome(
-          `${i18nRoot}.messages.error`,
-          Response.localizationKey(response)));
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.messages.error`,
+            Response.localizationKey(response)
+          )
+        );
         flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add('viesti', 'success',
-          $_(`${i18nRoot}.messages.success`));
+        flashMessageStore.add(
+          'viesti',
+          'success',
+          $_(`${i18nRoot}.messages.success`)
+        );
         dirty = false;
         pop();
       }
     ),
-    api.postKetju(fetch));
+    api.postKetju(fetch)
+  );
 
   const isValidForm = Validation.isValidForm(Schema.ketju);
 
@@ -74,11 +85,14 @@
     if (isValidForm(ketju)) {
       addKetju(ketju);
     } else {
-      flashMessageStore.add('viesti', 'error',
-        $_(`${i18nRoot}.messages.validation-error`));
+      flashMessageStore.add(
+        'viesti',
+        'error',
+        $_(`${i18nRoot}.messages.validation-error`)
+      );
       Validation.blurForm(event.target);
     }
-  }
+  };
 
   const cancel = _ => {
     ketju = Viestit.emptyKetju();
@@ -87,55 +101,58 @@
 </script>
 
 <style>
-
 </style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={$_(`${i18nRoot}.title`)}/>
+    <H1 text={$_(`${i18nRoot}.title`)} />
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as {whoami}}
-
-      <form id="ketju"
-            on:submit|preventDefault={submitNewKetju}
-            on:input={_ => { dirty = true; }}
-            on:change={_ => { dirty = true; }}>
+    {#each resources.toArray() as { whoami }}
+      <form
+        id="ketju"
+        on:submit|preventDefault={submitNewKetju}
+        on:input={_ => {
+          dirty = true;
+        }}
+        on:change={_ => {
+          dirty = true;
+        }}>
         <div class="w-full py-4">
           <Input
-              id={'ketju.subject'}
-              name={'ketju.subject'}
-              label={$_('viesti.ketju.subject')}
-              required={true}
-              bind:model={ketju}
-              lens={R.lensProp('subject')}
-              parse={R.trim}
-              validators={Schema.ketju.subject}
-              i18n={$_} />
+            id={'ketju.subject'}
+            name={'ketju.subject'}
+            label={$_('viesti.ketju.subject')}
+            required={true}
+            bind:model={ketju}
+            lens={R.lensProp('subject')}
+            parse={R.trim}
+            validators={Schema.ketju.subject}
+            i18n={$_} />
         </div>
         <div class="w-full py-4">
           <Textarea
-              id={'ketju.body'}
-              name={'ketju.body'}
-              label={$_('viesti.ketju.body')}
-              bind:model={ketju}
-              lens={R.lensProp('body')}
-              required={true}
-              parse={R.trim}
-              validators={Schema.ketju.body}
-              i18n={$_}/>
+            id={'ketju.body'}
+            name={'ketju.body'}
+            label={$_('viesti.ketju.body')}
+            bind:model={ketju}
+            lens={R.lensProp('body')}
+            required={true}
+            parse={R.trim}
+            validators={Schema.ketju.body}
+            i18n={$_} />
         </div>
 
         <div class="flex space-x-4 pt-8">
           <Button
-              disabled={!dirty}
-              type={'submit'}
-              text={$_(`${i18nRoot}.submit`)}/>
+            disabled={!dirty}
+            type={'submit'}
+            text={$_(`${i18nRoot}.submit`)} />
           <Button
-              disabled={!dirty}
-              on:click={cancel}
-              text={$_(`${i18nRoot}.reset`)}
-              type={'reset'}
-              style={'secondary'}/>
+            disabled={!dirty}
+            on:click={cancel}
+            text={$_(`${i18nRoot}.reset`)}
+            type={'reset'}
+            style={'secondary'} />
         </div>
       </form>
     {/each}

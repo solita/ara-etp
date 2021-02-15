@@ -17,7 +17,6 @@
   )(tablecontents);
 
   $: pageCount = Math.ceil(R.divide(R.length(tablecontents), itemsPerPage));
-
 </script>
 
 <style type="text/postcss">
@@ -54,7 +53,8 @@
       {#each pageContent as row, index}
         <tr
           class="etp-table--tr"
-          on:click={_ => R.when(R.complement(R.isNil), R.applyTo(row))(onRowClick)}
+          on:click={_ =>
+            R.when(R.complement(R.isNil), R.applyTo(row))(onRowClick)}
           class:etp-table--tr__link={R.complement(R.isNil)(onRowClick)}>
           {#each fields as field}
             <td class="etp-table--td">

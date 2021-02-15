@@ -88,7 +88,9 @@
         </th>
         <th class="et-table--th">
           <span>
-            {$_('energiatodistus.lahtotiedot.rakennusvaippa.osuus-lampohaviosta')}
+            {$_(
+              'energiatodistus.lahtotiedot.rakennusvaippa.osuus-lampohaviosta'
+            )}
           </span>
           <span class="block">%</span>
         </th>
@@ -117,10 +119,18 @@
               path={['lahtotiedot', 'rakennusvaippa', vaippa, 'U']} />
           </td>
           <td class="et-table--td">
-            {R.compose(Maybe.orSome(''), R.map(R.compose(formats.numberFormat, fxmath.round(1))), R.prop(vaippa))(UA)}
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(R.compose(formats.numberFormat, fxmath.round(1))),
+              R.prop(vaippa)
+            )(UA)}
           </td>
           <td class="et-table--td">
-            {R.compose(Maybe.orSome(''), R.map(formats.percentFormat), R.prop(vaippa))(osuudetLampohavioista)}
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(formats.percentFormat),
+              R.prop(vaippa)
+            )(osuudetLampohavioista)}
           </td>
         </tr>
       {/each}
@@ -139,7 +149,11 @@
             path={['lahtotiedot', 'rakennusvaippa', 'kylmasillat-UA']} />
         </td>
         <td class="et-table--td">
-          {R.compose(Maybe.orSome(''), R.map(formats.percentFormat), R.prop('kylmasillat-UA'))(osuudetLampohavioista)}
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(formats.percentFormat),
+            R.prop('kylmasillat-UA')
+          )(osuudetLampohavioista)}
         </td>
       </tr>
     </tbody>

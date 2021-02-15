@@ -32,12 +32,21 @@
   ];
 
   $: submit = R.compose(
-      Future.fork(response => {
-        const msg = Locales.uniqueViolationMessage($_, response, 'laatija.messages.save-error')
+    Future.fork(
+      response => {
+        const msg = Locales.uniqueViolationMessage(
+          $_,
+          response,
+          'laatija.messages.save-error'
+        );
         flashMessageStore.add('Laatija', 'error', msg);
       },
       _ => {
-        flashMessageStore.add('Laatija', 'success', $_('laatija.messages.save-success'));
+        flashMessageStore.add(
+          'Laatija',
+          'success',
+          $_('laatija.messages.save-success')
+        );
         laatijat = [];
       }
     ),
@@ -76,7 +85,10 @@
           R.any(R.complement(LaatijaUtils.rowValid)),
           R.tap(_ => addError('laatija.messages.validation-error'))
         ),
-        R.when(R.isEmpty, R.tap(_ => addError('laatija.messages.upload-error')))
+        R.when(
+          R.isEmpty,
+          R.tap(_ => addError('laatija.messages.upload-error'))
+        )
       )
     ),
     R.map(R.flatten),

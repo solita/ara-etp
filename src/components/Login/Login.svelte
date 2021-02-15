@@ -7,13 +7,14 @@
   export let redirectTimeout = 0;
 
   /* Remove path /api/logout from redirect url */
-  export const currentUrlEncoded =
-    encodeURIComponent(R.replace(/api\/logout.*$/, '', document.location.href));
+  export const currentUrlEncoded = encodeURIComponent(
+    R.replace(/api\/logout.*$/, '', document.location.href)
+  );
 
-  export const loginUrl = () => `${document.location.protocol}//${document.location.host}/api/login?redirect=${currentUrlEncoded}`;
+  export const loginUrl = () =>
+    `${document.location.protocol}//${document.location.host}/api/login?redirect=${currentUrlEncoded}`;
 
   RedirectUtils.redirectAfterTimeout(loginUrl(), redirectTimeout);
-
 </script>
 
 <style type="text/postcss">
@@ -23,8 +24,9 @@
 </style>
 
 <section class="content">
-  <div class="bg-success flex items-center py-4 px-4 mx-4 bg-primary text-light rounded-lg">
-    <Spinner white={true}/>
+  <div
+    class="bg-success flex items-center py-4 px-4 mx-4 bg-primary text-light rounded-lg">
+    <Spinner white={true} />
     <div class="mx-4">{$_('login_redirect')}</div>
   </div>
 </section>

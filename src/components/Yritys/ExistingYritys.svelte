@@ -18,7 +18,6 @@
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
-
   export let params;
 
   let yritys = Maybe.None();
@@ -28,7 +27,9 @@
 
   let luokittelut = Maybe.None();
 
-  const toggleOverlay = value => { overlay = value };
+  const toggleOverlay = value => {
+    overlay = value;
+  };
 
   $: submit = updatedYritys =>
     R.compose(
@@ -38,11 +39,20 @@
           flashMessageStore.add(
             'Yritys',
             'error',
-            Locales.uniqueViolationMessage($_, response, 'yritys.messages.save-error'))
+            Locales.uniqueViolationMessage(
+              $_,
+              response,
+              'yritys.messages.save-error'
+            )
+          );
         },
         () => {
           toggleOverlay(false);
-          flashMessageStore.add('Yritys', 'success', $_('yritys.messages.save-success'));
+          flashMessageStore.add(
+            'Yritys',
+            'success',
+            $_('yritys.messages.save-success')
+          );
           idTranslateStore.updateYritys(updatedYritys);
         }
       ),
@@ -56,16 +66,20 @@
     Future.fork(
       () => {
         toggleOverlay(false);
-        flashMessageStore.add('Yritys', 'error', $_('yritys.messages.load-error'));
+        flashMessageStore.add(
+          'Yritys',
+          'error',
+          $_('yritys.messages.load-error')
+        );
       },
       response => {
         luokittelut = Maybe.Some(response[2]);
         yritys = R.compose(
           Maybe.Some,
-          R.over(R.lensProp('verkkolaskuoperaattori'), Either.Right))(response[0]);
+          R.over(R.lensProp('verkkolaskuoperaattori'), Either.Right)
+        )(response[0]);
         toggleOverlay(false);
-        disabled = !Yritykset.hasModifyPermission(
-          response[1], response[3])
+        disabled = !Yritykset.hasModifyPermission(response[1], response[3]);
       }
     ),
     Future.delay(300),
@@ -73,7 +87,6 @@
     R.concat(R.__, [api.luokittelut, kayttajaApi.whoami]),
     R.juxt([api.getYritysById(fetch), api.getLaatijatById(fetch)])
   )(params.id);
-
 </script>
 
 <Overlay {overlay}>

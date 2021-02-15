@@ -46,20 +46,28 @@
 
 <H3
   compact={true}
-  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.header')} />
+  text={$_(
+    'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.header'
+  )} />
 
 <table class="et-table mb-6">
   <thead class="et-table--thead">
     <tr class="et-table--tr">
       <th class="et-table--th et-table--th__sixth" />
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.maara')}
+        {$_(
+          'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.maara'
+        )}
       </th>
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko')}
+        {$_(
+          'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
+        )}
       </th>
       <th class="et-table--th et-table--th__sixth">
-        {$_('energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.muunnoskerroin')}
+        {$_(
+          'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.muunnoskerroin'
+        )}
       </th>
       <th class="et-table--th et-table--th__sixth">
         <VuosikulutusUnit />
@@ -73,7 +81,9 @@
     {#each ['kevyt-polttooljy', 'pilkkeet-havu-sekapuu', 'pilkkeet-koivu', 'puupelletit'] as polttoaine}
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}`)}
+          {$_(
+            `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}`
+          )}
         </td>
         <td class="et-table--td">
           <Input
@@ -81,19 +91,45 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', polttoaine]} />
+            path={[
+              'toteutunut-ostoenergiankulutus',
+              'ostetut-polttoaineet',
+              polttoaine
+            ]} />
         </td>
         <td class="et-table--td">
-          {$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`)}
+          {$_(
+            `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`
+          )}
         </td>
         <td class="et-table--td">
-          {R.compose( formats.numberFormat, Maybe.get, R.prop(polttoaine) )(muunnoskertoimet)}
+          {R.compose(
+            formats.numberFormat,
+            Maybe.get,
+            R.prop(polttoaine)
+          )(muunnoskertoimet)}
         </td>
-        <td class="et-table--td" title={$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-vuosikulutus`)}>
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineet)}
+        <td
+          class="et-table--td"
+          title={$_(
+            `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-vuosikulutus`
+          )}>
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+            R.prop(polttoaine)
+          )(muunnoskerrotutPolttoaineet)}
         </td>
-        <td class="et-table--td" title={$_(`energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-neliovuosikulutus`)}>
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.prop(polttoaine) )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
+        <td
+          class="et-table--td"
+          title={$_(
+            `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-neliovuosikulutus`
+          )}>
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+            R.prop(polttoaine)
+          )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}
@@ -105,7 +141,13 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'nimi']} />
+            path={[
+              'toteutunut-ostoenergiankulutus',
+              'ostetut-polttoaineet',
+              'muu',
+              index,
+              'nimi'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -113,7 +155,13 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'maara-vuodessa']} />
+            path={[
+              'toteutunut-ostoenergiankulutus',
+              'ostetut-polttoaineet',
+              'muu',
+              index,
+              'maara-vuodessa'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -121,7 +169,13 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'yksikko']} />
+            path={[
+              'toteutunut-ostoenergiankulutus',
+              'ostetut-polttoaineet',
+              'muu',
+              index,
+              'yksikko'
+            ]} />
         </td>
         <td class="et-table--td">
           <Input
@@ -129,13 +183,27 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu', index, 'muunnoskerroin']} />
+            path={[
+              'toteutunut-ostoenergiankulutus',
+              'ostetut-polttoaineet',
+              'muu',
+              index,
+              'muunnoskerroin'
+            ]} />
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineet)}
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+            R.nth(index)
+          )(muunnoskerrotutVapaatPolttoaineet)}
         </td>
         <td class="et-table--td">
-          {R.compose( Maybe.orSome(''), R.map(R.compose( formats.numberFormat, fxmath.round(0) )), R.nth(index) )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
+          {R.compose(
+            Maybe.orSome(''),
+            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+            R.nth(index)
+          )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
         </td>
       </tr>
     {/each}

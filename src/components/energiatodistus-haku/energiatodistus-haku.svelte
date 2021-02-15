@@ -40,7 +40,7 @@
 
   let laatijat = Maybe.None();
 
- Future.fork(
+  Future.fork(
     () => {
       overlay = false;
     },
@@ -48,9 +48,10 @@
       overlay = false;
       laatijat = Maybe.Some(response);
     },
-   Kayttajat.isPaakayttaja(whoami)
-     ? laatijaApi.getLaatijat(fetch)
-     : Future.resolve([]));
+    Kayttajat.isPaakayttaja(whoami)
+      ? laatijaApi.getLaatijat(fetch)
+      : Future.resolve([])
+  );
 
   const navigate = search => {
     R.compose(
@@ -148,7 +149,11 @@
             label={$_('energiatodistus.haku.and')}
             name={`${index}_conjunction`}
             on:click={_ => {
-              queryItems = R.over(R.lensIndex(index), R.assoc('conjunction', 'and'), queryItems);
+              queryItems = R.over(
+                R.lensIndex(index),
+                R.assoc('conjunction', 'and'),
+                queryItems
+              );
             }} />
           <Radio
             group={conjunction}
@@ -156,7 +161,11 @@
             label={$_('energiatodistus.haku.or')}
             name={`${index}_conjunction`}
             on:click={_ => {
-              queryItems = R.over(R.lensIndex(index), R.assoc('conjunction', 'or'), queryItems);
+              queryItems = R.over(
+                R.lensIndex(index),
+                R.assoc('conjunction', 'or'),
+                queryItems
+              );
             }} />
         </div>
       </div>
@@ -173,15 +182,20 @@
           class="text-secondary font-icon text-2xl cursor-pointer ml-4
           hover:text-error"
           on:click={async _ => {
-            const newItems = R.compose(R.map(EtHakuUtils.removeQueryItem(index)), R.map(EtHakuUtils.searchItems))(Either.fromTry(
-                () => EtHakuUtils.parseHakuForm(form)
-              ));
+            const newItems = R.compose(
+              R.map(EtHakuUtils.removeQueryItem(index)),
+              R.map(EtHakuUtils.searchItems)
+            )(Either.fromTry(() => EtHakuUtils.parseHakuForm(form)));
             if (Either.isRight(newItems)) {
               queryItems = Either.right(newItems);
               await tick();
               form.dispatchEvent(new Event('change'));
             } else {
-              flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin poistamisessa tapahtui virhe.');
+              flashMessageStore.add(
+                'energiatodistus',
+                'warn',
+                'Hakukriteerin poistamisessa tapahtui virhe.'
+              );
             }
           }}>
           cancel
@@ -195,16 +209,21 @@
         icon={'add_circle_outline'}
         type={'button'}
         on:click={async _ => {
-          const newItems = R.compose(R.map(R.append(EtHakuUtils.defaultQueryItem())), R.map(EtHakuUtils.searchItems))(Either.fromTry(
-              () => EtHakuUtils.parseHakuForm(form)
-            ));
+          const newItems = R.compose(
+            R.map(R.append(EtHakuUtils.defaultQueryItem())),
+            R.map(EtHakuUtils.searchItems)
+          )(Either.fromTry(() => EtHakuUtils.parseHakuForm(form)));
           if (Either.isRight(newItems)) {
             queryItems = Either.right(newItems);
             await tick();
             form.dispatchEvent(new Event('change'));
             R.last([...form.querySelectorAll('input:not(.sr-only)')]).focus();
           } else {
-            flashMessageStore.add('energiatodistus', 'warn', 'Hakukriteerin lisäyksessä tapahtui virhe.');
+            flashMessageStore.add(
+              'energiatodistus',
+              'warn',
+              'Hakukriteerin lisäyksessä tapahtui virhe.'
+            );
           }
         }} />
     </div>

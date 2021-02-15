@@ -22,7 +22,9 @@
   $: tail = R.tail(breadcrumbs);
 
   $: {
-    document.title = i18n('document.title') + ' | ' +
+    document.title =
+      i18n('document.title') +
+      ' | ' +
       R.join(' / ', R.map(R.prop('label'), breadcrumbs));
   }
 </script>

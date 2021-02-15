@@ -150,8 +150,7 @@
           parse={formParsers.etunimi}
           validators={formSchema.etunimi}
           disabled={!isPaakayttaja}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -164,8 +163,7 @@
           parse={formParsers.sukunimi}
           validators={formSchema.sukunimi}
           disabled={!isPaakayttaja}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -179,8 +177,7 @@
           parse={formParsers.henkilotunnus}
           validators={formSchema.henkilotunnus}
           disabled={true}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -197,8 +194,7 @@
           lens={R.lensProp('email')}
           parse={formParsers.email}
           validators={formSchema.email}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -211,8 +207,7 @@
           parse={formParsers.puhelin}
           validators={formSchema.puhelin}
           {disabled}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -228,8 +223,7 @@
           parse={formParsers['vastaanottajan-tarkenne']}
           validators={formSchema['vastaanottajan-tarkenne']}
           {disabled}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -244,8 +238,7 @@
           parse={formParsers.jakeluosoite}
           validators={formSchema.jakeluosoite}
           {disabled}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -260,8 +253,7 @@
           parse={formParsers.postinumero}
           validators={formSchema.postinumero}
           {disabled}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -274,8 +266,7 @@
           parse={formParsers.postitoimipaikka}
           validators={formSchema.postitoimipaikka}
           {disabled}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Autocomplete items={countryNames}>
@@ -291,8 +282,7 @@
             search={true}
             handleSubmit={false}
             {disabled}
-            i18n={$_}
-          />
+            i18n={$_} />
         </Autocomplete>
       </div>
     </div>
@@ -307,8 +297,7 @@
           lens={R.lensProp('laskutuskieli')}
           allowNone={false}
           {disabled}
-          items={laskutuskieletIds}
-        />
+          items={laskutuskieletIds} />
       </div>
     </div>
   </div>
@@ -333,8 +322,7 @@
                   ])
                 )
               )
-            )($currentUserStore)}
-          />
+            )($currentUserStore)} />
         </div>
       </div>
     {/if}
@@ -350,8 +338,7 @@
           parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -373,8 +360,7 @@
               )
             )
           )($currentUserStore)}
-          items={patevyydetIds}
-        />
+          items={patevyydetIds} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -386,8 +372,7 @@
           bind:model={laatija}
           lens={R.lensProp('toimintaalue')}
           {disabled}
-          items={toimintaAlueetIds}
-        />
+          items={toimintaAlueetIds} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -398,8 +383,7 @@
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
           {disabled}
-          format={formatToimintaAlue}
-        />
+          format={formatToimintaAlue} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
@@ -415,8 +399,7 @@
           parse={formParsers.wwwosoite}
           validators={formSchema.wwwosoite}
           {disabled}
-          i18n={$_}
-        />
+          i18n={$_} />
       </div>
     </div>
   </div>
@@ -435,8 +418,7 @@
         parse={R.compose(Maybe.fromEmpty, R.trim)}
         validators={formSchema['api-key']}
         {disabled}
-        i18n={$_}
-      />
+        i18n={$_} />
     </div>
   </div>
   <HR />
@@ -448,24 +430,21 @@
           bind:model={laatija}
           lens={R.lensProp('julkinenpuhelin')}
           {disabled}
-          label={$_('kayttaja.puhelinnumero')}
-        />
+          label={$_('kayttaja.puhelinnumero')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenemail')}
           {disabled}
-          label={$_('kayttaja.sahkoposti')}
-        />
+          label={$_('kayttaja.sahkoposti')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenosoite')}
           {disabled}
-          label={$_('laatija.katuosoite')}
-        />
+          label={$_('laatija.katuosoite')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
@@ -473,8 +452,7 @@
           lens={R.lensProp('julkinenwwwosoite')}
           disabled={disabled ||
             !R.compose(Maybe.isSome, R.prop('wwwosoite'))(laatija)}
-          label={$_('laatija.www-osoite')}
-        />
+          label={$_('laatija.www-osoite')} />
       </div>
     </div>
   </div>
@@ -490,8 +468,7 @@
         }}
         text={$_('peruuta')}
         type={'reset'}
-        style={'secondary'}
-      />
+        style={'secondary'} />
     </div>
   </div>
 </form>

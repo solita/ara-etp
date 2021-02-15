@@ -3,25 +3,25 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Validation from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
 
-const RequiredString = (min, max) => ([
+const RequiredString = (min, max) => [
   Validation.isRequired,
   ...Validation.LimitedString(min, max)
-]);
+];
 
 export const schema = {
   henkilotunnus: [
     Validation.isSome,
-    Validation.liftValidator(Validation.henkilotunnusValidator)],
+    Validation.liftValidator(Validation.henkilotunnusValidator)
+  ],
   etunimi: RequiredString(2, 200),
   sukunimi: RequiredString(2, 200),
-  email: [
-    ...RequiredString(2, 200),
-    Validation.emailValidator
-  ],
+  email: [...RequiredString(2, 200), Validation.emailValidator],
   puhelin: RequiredString(2, 200),
 
-  'vastaanottajan-tarkenne':
-    R.map(Validation.liftValidator, Validation.LimitedString(2,200)),
+  'vastaanottajan-tarkenne': R.map(
+    Validation.liftValidator,
+    Validation.LimitedString(2, 200)
+  ),
   jakeluosoite: RequiredString(2, 200),
   postinumero: [Validation.isRequired, Validation.postinumeroValidator],
   postitoimipaikka: RequiredString(2, 200),

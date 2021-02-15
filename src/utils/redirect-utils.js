@@ -1,6 +1,4 @@
-export const redirect = url => window.location.href = url;
+export const redirect = url => (window.location.href = url);
 
-export const redirectAfterTimeout = (url, timeout) => setTimeout(() =>
-  redirect(url),
-  timeout
-);
+export const redirectAfterTimeout = (url, timeout) =>
+  setTimeout(() => redirect(url), timeout);

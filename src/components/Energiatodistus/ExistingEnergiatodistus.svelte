@@ -46,9 +46,16 @@
           if (R.pathEq(['body', 'type'], 'missing-value', response)) {
             showMissingProperties(response.body.missing);
           } else {
-            flashMessageStore.add('Energiatodistus', 'error',
-              $_(Maybe.orSome('energiatodistus.messages.save-error',
-                Response.localizationKey(response))));
+            flashMessageStore.add(
+              'Energiatodistus',
+              'error',
+              $_(
+                Maybe.orSome(
+                  'energiatodistus.messages.save-error',
+                  Response.localizationKey(response)
+                )
+              )
+            );
           }
         },
         () => {
@@ -71,10 +78,14 @@
     Future.fork(
       response => {
         toggleOverlay(false);
-        const msg = Response.notFound(response) ?
-          $_('energiatodistus.messages.not-found'):
-          $_(Maybe.orSome('energiatodistus.messages.load-error',
-            Response.localizationKey(response)));
+        const msg = Response.notFound(response)
+          ? $_('energiatodistus.messages.not-found')
+          : $_(
+              Maybe.orSome(
+                'energiatodistus.messages.load-error',
+                Response.localizationKey(response)
+              )
+            );
 
         flashMessageStore.add('Energiatodistus', 'error', msg);
       },
