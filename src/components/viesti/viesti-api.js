@@ -13,13 +13,11 @@ const url = {
 
 export const serialize = R.evolve({
   'kayttajarooli-id': Maybe.orSome(null),
-  'kayttajaryhma-id': Maybe.orSome(null),
   'energiatodistus-id': Maybe.orSome(null)
 });
 
 export const deserialize = R.evolve({
   'kayttajarooli-id': Maybe.fromNull,
-  'kayttajaryhma-id': Maybe.fromNull,
   viestit: R.map(R.evolve({ senttime: dfns.parseJSON }))
 });
 
@@ -51,3 +49,5 @@ export const postNewViesti = R.curry((fetch, id, body) =>
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.viestit(id)))
   )(body)
 );
+
+export const vastaanottajaryhmat = Fetch.cached(fetch, '/vastaanottajaryhmat');

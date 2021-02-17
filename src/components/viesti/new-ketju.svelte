@@ -8,6 +8,7 @@
   import * as Validation from '@Utility/validation';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Parsers from '@Utility/parsers';
+  import * as Locales from '@Language/locale-utils';
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -16,7 +17,7 @@
   import * as Schema from './schema';
 
   import { flashMessageStore } from '@/stores';
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
   import { pop } from '@Component/Router/router';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
@@ -27,6 +28,7 @@
   import Input from '@Component/Input/Input.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
+  import Select from '@Component/Select/Select.svelte';
 
   const i18nRoot = 'viesti.ketju.new';
 
@@ -40,6 +42,7 @@
   const formatVastaanottaja = kayttaja =>
     `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
 
+  // List[Kayttaja] -> Str -> Either[Int]
   const parseVastaanottaja = kayttajat => R.compose(
     Maybe.toEither(R.applyTo(`${i18nRoot}.messages.vastaanottaja-not-found`)),
     R.map(R.prop('id')),
@@ -69,7 +72,8 @@
         resources = Maybe.Some(response);
         overlay = false;
       }),
-    R.chain(whoami => Future.parallelObject(2, {
+    R.chain(whoami => Future.parallelObject(3, {
+      vastaanottajaryhmat: api.vastaanottajaryhmat,
       whoami: Future.resolve(whoami),
       laatijat: Kayttajat.isPaakayttaja(whoami)
         ? laatijaApi.getLaatijat(fetch)
@@ -132,7 +136,7 @@
   <div slot="content" class="w-full mt-3">
     <H1 text={$_(`${i18nRoot}.title`)} />
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as { whoami, laatijat }}
+    {#each resources.toArray() as { whoami, laatijat, vastaanottajaryhmat }}
       <form
         id="ketju"
         on:submit|preventDefault={submitNewKetju}
@@ -142,8 +146,9 @@
         on:change={_ => {
           dirty = true;
         }}>
+
         {#if Kayttajat.isPaakayttaja(whoami)}
-          <div class="w-full py-4">
+          <div class="lg:w-1/2 w-full py-4">
             <Autocomplete items={R.map(formatVastaanottaja, laatijat)} size="10">
               <Input
                   id={'ketju.vastaanottaja'}
@@ -160,6 +165,20 @@
             </Autocomplete>
           </div>
         {/if}
+
+        <div class="lg:w-1/2 w-full py-4">
+          <Select
+              id={'ketju.vastaanottajaryhma'}
+              label={$_('viesti.ketju.vastaanottajaryhma')}
+              required={true}
+              disabled={!Kayttajat.isPaakayttaja(whoami)}
+              allowNone={false}
+              bind:model={ketju}
+              lens={R.lensProp('kayttajaryhma-id')}
+              format={Locales.labelForId($locale, vastaanottajaryhmat)}
+              items={R.pluck('id', vastaanottajaryhmat)} />
+        </div>
+
         <div class="w-full py-4">
           <Input
             id={'ketju.subject'}
