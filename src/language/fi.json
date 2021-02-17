@@ -200,6 +200,7 @@
       "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",
       "attach-to-yritys": "Liitä yritykseen",
       "yritys-not-found": "Yritystä ei ole tässä palvelussa",
+      "already-attached": "Sinut on jo liitetty yritykseen",
       "success": {
         "attach": "Liittäminen yritykseen onnistui",
         "detach": "Laatija on poistettu yrityksestä"

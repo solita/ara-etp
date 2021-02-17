@@ -198,6 +198,7 @@
       "find-yritys": "Sök bland företag (FO-nummer eller namn)",
       "attach-to-yritys": "Koppla till företaget",
       "yritys-not-found": "Företaget finns inte i den här tjänsten",
+      "already-attached": "Sinut on jo liitetty yritykseen SV",
       "success": {
         "attach": "Kopplingen till företaget lyckades",
         "detach": "Upprättaren har avlägsnats från företaget"
