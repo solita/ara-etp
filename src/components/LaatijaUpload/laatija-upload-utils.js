@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import * as Future from '@Utility/future-utils';
 import * as Either from '@Utility/either-utils';
+import * as Maybe from '@Utility/maybe-utils';
 import * as parsers from '@Utility/parsers';
 import * as Validation from '@Utility/validation';
 import { schema } from '@Component/Laatija/schema';
@@ -47,30 +48,25 @@ export const validate = Validation.validateModelObject(uploadSchema);
 
 export const errorsForLaatija = R.curry((i18n, laatija) =>
   R.compose(
-    R.join(' / '),
+    R.reduce(R.mergeLeft, {}),
     R.map(Either.left),
     R.filter(Either.isLeft),
     R.values,
     R.mapObjIndexed((value, key, _) =>
-      Either.leftMap(labelFn => `${key}: ${labelFn(i18n)}`, value)
+      Either.leftMap(labelFn => ({ [key]: labelFn(i18n) }), value)
     )
   )(laatija)
 );
 
 export const errors = R.curry((i18n, laatijat) =>
-  R.compose(
-    R.join(' | '),
-    R.filter(R.length),
-    R.addIndex(R.map)((laatija, index) =>
+  R.map(
+    laatija =>
       R.compose(
-        R.when(
-          R.length,
-          R.concat(`${i18n('errors.row-error')} ${index + 1}: `)
-        ),
+        R.ifElse(R.compose(R.length, R.values), Maybe.Some, Maybe.None),
         errorsForLaatija(i18n)
-      )(laatija)
-    )
-  )(laatijat)
+      )(laatija),
+    laatijat
+  )
 );
 
 export const deserialize = R.evolve({
@@ -81,8 +77,6 @@ export const deserialize = R.evolve({
 export const readRows = R.compose(
   R.map(
     R.compose(
-      validate,
-      deserialize,
       R.mergeLeft({ maa: 'FI' }),
       R.zipObj(dataFields),
       R.map(R.trim),

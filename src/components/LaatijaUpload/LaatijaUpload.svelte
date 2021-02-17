@@ -2,6 +2,7 @@
   import * as R from 'ramda';
 
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as Fetch from '@Utility/fetch-utils';
   import * as Future from '@Utility/future-utils';
 
@@ -142,21 +143,59 @@
 
   // $: files && flashMessageStore.flush('Laatija');
 
-  $: console.log(laatijat);
-
   $: labelLocale = LocaleUtils.label($locale);
 
-  $: formats = {
-    patevyystaso: patevyys =>
+  $: formats = R.curry((key, value) =>
+    R.defaultTo(
+      R.identity,
+      R.prop(key, {
+        patevyystaso: patevyys =>
+          R.compose(
+            Maybe.orSome(patevyys),
+            R.map(labelLocale),
+            R.chain(
+              Maybe.nullReturning(R.find(R.propEq('id', parseInt(patevyys))))
+            )
+          )(patevyystasot)
+      })
+    )(value)
+  );
+
+  $: model = R.map(LaatijaUploadUtils.deserialize, laatijat);
+
+  $: errors = R.compose(
+    R.join(' | '),
+    R.filter(R.length),
+    R.addIndex(R.map)((item, index) =>
       R.compose(
         Maybe.orSome(''),
-        R.map(labelLocale),
-        R.map(R.find(R.propEq('id', parseInt(patevyys)))),
-        R.tap(console.log)
-      )(patevyystasot)
-  };
+        R.map(
+          R.compose(
+            R.concat(`${$_('errors.row-error')} ${index}: `),
+            R.compose(
+              R.join(' / '),
+              R.map(
+                R.compose(
+                  R.join(': '),
+                  R.over(
+                    R.lensIndex(0),
+                    R.compose($_, R.concat('laatijaupload.'))
+                  )
+                )
+              ),
+              R.toPairs
+            )
+          )
+        )
+      )(item)
+    ),
+    LaatijaUploadUtils.errors($_),
+    R.map(LaatijaUploadUtils.validate)
+  )(model);
 
-  $: console.log(LaatijaUploadUtils.errors($_, laatijat));
+  $: if (errors.length) {
+    flashMessageStore.add('Laatija', 'error', errors);
+  }
 </script>
 
 <style>
@@ -165,7 +204,13 @@
     width: 100vw;
     left: calc(-50vw + 50%);
   }
+
+  .invalid {
+    @apply text-error font-bold;
+  }
 </style>
+
+<!-- purgecss: invalid -->
 
 <Overlay {overlay}>
   <div slot="content">
@@ -184,8 +229,15 @@
             {#each laatijat as laatija}
               <tr class="etp-table--tr">
                 {#each fields as field}
-                  <td class="etp-table--td">
-                    {R.defaultTo(R.identity, formats[field])(laatija[field])}
+                  <td
+                    class="etp-table--td"
+                    class:invalid={R.compose(
+                      Either.isLeft,
+                      R.prop(field),
+                      LaatijaUploadUtils.validate,
+                      LaatijaUploadUtils.deserialize
+                    )(laatija)}>
+                    {formats(field, laatija[field])}
                   </td>
                 {/each}
               </tr>
