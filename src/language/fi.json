@@ -1112,6 +1112,7 @@
       }
     },
     "ketju": {
+      "vastaanottaja": "Vastaanottaja",
       "subject": "Aihe",
       "body": "Viesti",
       "new": {
@@ -1120,9 +1121,10 @@
         "reset": "Tyhjennä",
         "messages": {
           "load-error": "Tietojen lataus epäonnistui.",
-          "success": "Uusi viestiketju lisätty",
-          "error": "Uuden viestiketjun lisääminen epäonnistui",
-          "validation-error": "Viestiketjun tiedoissa virheitä, tarkista syötteet."
+          "success": "Uusi viestiketju lisätty.",
+          "error": "Uuden viestiketjun lisääminen epäonnistui.",
+          "validation-error": "Viestiketjun tiedoissa virheitä, tarkista syötteet.",
+          "vastaanottaja-not-found": "Vastaanottajaa ei ole järjestelmässä."
         }
       },
       "existing": {
