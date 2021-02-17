@@ -14,7 +14,6 @@
   import Address from '@Component/Yritys/address.svelte';
 
   import * as api from './laatija-api';
-  import * as Yritys from './yritys';
   import * as Tila from '@Component/Yritys/laatija-yritys-tila';
 
   import * as Maybe from '@Utility/maybe-utils';
