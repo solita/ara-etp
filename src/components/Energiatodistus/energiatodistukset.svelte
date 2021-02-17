@@ -266,18 +266,16 @@
         <div
           class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
           <div class="flex flex-row my-auto">
-            <span class="material-icons">add_circle_outline</span>
-            &nbsp;
             <Link
               text={$_('energiatodistus.luo2018')}
-              href="#/energiatodistus/2018/new" />
+              href="#/energiatodistus/2018/new"
+              icon={Maybe.Some('add_circle_outline')} />
           </div>
           <div class="flex flex-row my-auto">
-            <span class="material-icons">add_circle_outline</span>
-            &nbsp;
             <Link
               text={$_('energiatodistus.luo2013')}
-              href="#/energiatodistus/2013/new" />
+              href="#/energiatodistus/2013/new"
+              icon={Maybe.Some('add_circle_outline')} />
           </div>
         </div>
       {/if}
