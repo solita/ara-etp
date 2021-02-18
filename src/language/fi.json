@@ -64,6 +64,7 @@
     }
   },
   "laatijaupload": {
+    "rivi": "Rivi",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
     "henkilotunnus": "Henkilötunnus",
