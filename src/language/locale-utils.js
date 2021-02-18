@@ -33,3 +33,6 @@ export const uniqueViolationMessage = (i18n, response, defaultKey) => {
   const key = Maybe.orSome(defaultKey, uniqueViolationKey(response));
   return R.replace('{value}', response.body.value, i18n(key));
 };
+
+export const labelForId = (locale, items) =>
+  R.compose(Maybe.orSome(''), R.map(label(locale)), Maybe.findById(R.__, items));

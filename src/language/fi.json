@@ -1114,6 +1114,7 @@
     },
     "ketju": {
       "vastaanottaja": "Vastaanottaja",
+      "vastaanottajaryhma": "Vastaanottajaryhmä",
       "subject": "Aihe",
       "body": "Viesti",
       "new": {

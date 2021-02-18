@@ -1111,6 +1111,8 @@
       }
     },
     "ketju": {
+      "vastaanottaja": "Vastaanottaja SV?",
+      "vastaanottajaryhma": "Vastaanottajaryhmä SV?",
       "subject": "Aihe SV?",
       "body": "Viesti SV?",
       "new": {

@@ -5,7 +5,7 @@ import * as Kayttajat from '@Utility/kayttajat';
 export const emptyKetju = _ => ({
   kayttajat: [],
   'kayttajarooli-id': Maybe.None(),
-  'kayttajaryhma-id': Maybe.None(),
+  'kayttajaryhma-id': 0,
   'energiatodistus-id': Maybe.None(),
   subject: '',
   body: ''
