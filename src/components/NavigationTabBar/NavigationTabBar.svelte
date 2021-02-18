@@ -7,10 +7,10 @@
   export let location;
   export let user;
   export let i18n;
-  export let version;
+  export let config;
 
   $: links = Navigation.navigationParse(
-    version.flags,
+    config.isDev,
     i18n,
     user,
     location,

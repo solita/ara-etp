@@ -11,7 +11,7 @@
   import * as versionApi from '@Component/Version/version-api';
 
   let whoami = Maybe.None();
-  let flags = Maybe.None();
+  let isDev = Maybe.None();
   let failure = Maybe.None();
 
   Future.fork(
@@ -20,9 +20,9 @@
     },
     response => {
       whoami = Maybe.Some(response[0]);
-      flags = Maybe.Some(response[1].flags);
+      isDev = Maybe.Some(response[1].isDev);
     },
-    Future.parallel(2, [kayttajaApi.whoami, versionApi.getVersion])
+    Future.parallel(2, [kayttajaApi.whoami, versionApi.getConfig])
   );
 
   $: R.forEach(
@@ -30,7 +30,7 @@
       replace,
       R.prop('href'),
       R.head,
-      Navigation.parseRoot(Maybe.orSome({ viestit: false }, flags), $_)
+      Navigation.parseRoot(Maybe.orSome({ viestit: false }, isDev), $_)
     ),
     whoami
   );

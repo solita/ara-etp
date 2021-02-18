@@ -21,6 +21,7 @@
 
   let whoami = Maybe.None();
   let applicationVersion = Maybe.None();
+  let applicationConfig = Maybe.None();
   let failure = Maybe.None();
 
   Future.fork(
@@ -30,9 +31,14 @@
     response => {
       whoami = Maybe.Some(response[0]);
       applicationVersion = Maybe.Some(response[1]);
+      applicationConfig = Maybe.Some(response[2]);
       currentUserStore.set(whoami);
     },
-    Future.parallel(2, [kayttajaApi.whoami, versionApi.getVersion])
+    Future.parallel(3, [
+      kayttajaApi.whoami,
+      versionApi.getVersion,
+      versionApi.getConfig
+    ])
   );
 </script>
 
@@ -78,10 +84,11 @@
     {/if}
   {/each}
 
-  {#each Maybe.toArray(whoami) as user}
-    {#each Maybe.toArray(applicationVersion) as version}
-      <Content {user} {version} />
-    {/each}
+  {#each Maybe.toArray(R.sequence(Maybe.of, [
+      whoami,
+      applicationConfig
+    ])) as [user, config]}
+    <Content {user} {config} />
   {/each}
 
   {#each Maybe.toArray(applicationVersion) as version}
