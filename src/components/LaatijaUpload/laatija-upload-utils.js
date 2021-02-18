@@ -46,6 +46,26 @@ const uploadSchema = {
 
 export const validate = Validation.validateModelObject(uploadSchema);
 
+export const formatRowErrors = R.curry((i18n, rowErrors) =>
+  R.compose(
+    R.join(' / '),
+    R.map(
+      R.compose(
+        R.join(' - '),
+        R.over(R.lensIndex(0), R.compose(i18n, R.concat('laatijaupload.')))
+      )
+    ),
+    R.toPairs
+  )(rowErrors)
+);
+
+export const formatRowError = R.curry((i18n, index, rowError) =>
+  R.compose(
+    R.concat(`${i18n('errors.row-error')} ${index}: `),
+    formatRowErrors(i18n)
+  )(rowError)
+);
+
 export const errorsForLaatija = R.curry((i18n, laatija) =>
   R.compose(
     R.reduce(R.mergeLeft, {}),
@@ -86,26 +106,3 @@ export const readRows = R.compose(
   R.flatten,
   R.map(R.compose(R.split(/\r?\n/g)))
 );
-
-// Maa defaults to Finland as the transfer file does not have it as a field
-// export const readRow = R.ifElse(
-//   R.compose(R.equals(R.length(dataFields)), R.length, R.split(';')),
-//   R.compose(
-//     R.evolve(parse),
-//     R.assoc('maa', 'FI'),
-//     R.zipObj(dataFields),
-//     R.split(';')
-//   ),
-//   R.always(null)
-// );
-
-// export const readData = R.ifElse(
-//   R.compose(R.equals('String'), R.type),
-//   R.compose(
-//     R.filter(R.complement(R.isNil)),
-//     R.map(readRow),
-//     R.split(/\r?\n/g),
-//     R.trim
-//   ),
-//   R.always([])
-// );

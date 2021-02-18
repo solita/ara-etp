@@ -7,8 +7,7 @@
   import { flashMessageStore } from '@/stores';
 
   export let laatijat;
-
-  let files = [];
+  export let files = [];
 
   $: R.compose(
     Future.fork(
