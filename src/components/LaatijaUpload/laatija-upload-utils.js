@@ -33,6 +33,20 @@ const dataFields = [
   'toteamispaivamaara'
 ];
 
+const emptyUploadLaatija = {
+  toteaja: '',
+  etunimi: '',
+  sukunimi: '',
+  henkilotunnus: '',
+  jakeluosoite: '',
+  postinumero: '',
+  postitoimipaikka: '',
+  email: '',
+  puhelin: '',
+  patevyystaso: '',
+  toteamispaivamaara: ''
+};
+
 const uploadSchema = {
   ...R.omit(
     ['henkilotunnus', 'vastaanottajan-tarkenne', 'wwwosoite', 'api-key'],
@@ -61,7 +75,7 @@ export const formatRowErrors = R.curry((i18n, rowErrors) =>
 
 export const formatRowError = R.curry((i18n, index, rowError) =>
   R.compose(
-    R.concat(`${i18n('errors.row-error')} ${index}: `),
+    R.concat(`${i18n('errors.row-error')} ${index + 1}: `),
     formatRowErrors(i18n)
   )(rowError)
 );
@@ -97,7 +111,7 @@ export const deserialize = R.evolve({
 export const readRows = R.compose(
   R.map(
     R.compose(
-      R.mergeLeft({ maa: 'FI' }),
+      R.mergeRight({ ...emptyUploadLaatija, maa: 'FI' }),
       R.zipObj(dataFields),
       R.map(R.trim),
       R.split(';')

@@ -89,9 +89,7 @@
           R.compose(
             Maybe.orSome(patevyys),
             R.map(labelLocale),
-            R.chain(
-              Maybe.nullReturning(R.find(R.propEq('id', parseInt(patevyys))))
-            )
+            R.chain(Maybe.findById(parseInt(patevyys)))
           )(patevyystasot)
       })
     )(value)
@@ -140,14 +138,18 @@
         <table class="etp-table">
           <thead class="etp-table--thead">
             <tr class="etp-table--tr">
+              <th class="etp-table--th">{$_('rivi')}</th>
               {#each fields as field}
                 <th class="etp-table--th">{$_(`laatijaupload.${field}`)}</th>
               {/each}
             </tr>
           </thead>
           <tbody class="etp-table--tbody">
-            {#each laatijat as laatija}
+            {#each laatijat as laatija, index}
               <tr class="etp-table--tr">
+                <td class="etp-table--td">
+                  {index + 1}
+                </td>
                 {#each fields as field}
                   <td
                     class="etp-table--td"
