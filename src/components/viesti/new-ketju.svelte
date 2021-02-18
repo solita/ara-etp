@@ -1,12 +1,17 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
+  import * as Kayttajat from '@Utility/kayttajat';
+  import * as Parsers from '@Utility/parsers';
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as Viestit from './viesti-util';
   import * as Schema from './schema';
 
@@ -21,6 +26,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Input from '@Component/Input/Input.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
 
   const i18nRoot = 'viesti.ketju.new';
 
@@ -31,26 +37,45 @@
     overlay = true;
   };
 
-  Future.fork(
-    response => {
-      const msg = $_(
-        Maybe.orSome(
-          `${i18nRoot}.messages.load-error`,
-          Response.localizationKey(response)
-        )
-      );
+  const formatVastaanottaja = kayttaja =>
+    `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
 
-      flashMessageStore.add('viesti', 'error', msg);
-      overlay = false;
-    },
-    response => {
-      resources = Maybe.Some({
-        whoami: response
-      });
-      overlay = false;
-    },
-    kayttajaApi.whoami
+  const parseVastaanottaja = kayttajat => R.compose(
+    Maybe.toEither(R.applyTo(`${i18nRoot}.messages.vastaanottaja-not-found`)),
+    R.map(R.prop('id')),
+    predicate => Maybe.find(predicate, kayttajat),
+    R.propEq('email'),
+    R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
   );
+
+  const arrayHeadLens = R.lens(
+    R.compose(Either.Right, Maybe.head),
+    R.compose(Maybe.toArray, EM.toMaybe));
+
+  R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.messages.load-error`,
+            Response.localizationKey(response)
+          )
+        );
+
+        flashMessageStore.add('viesti', 'error', msg);
+        overlay = false;
+      },
+      response => {
+        resources = Maybe.Some(response);
+        overlay = false;
+      }),
+    R.chain(whoami => Future.parallelObject(2, {
+      whoami: Future.resolve(whoami),
+      laatijat: Kayttajat.isPaakayttaja(whoami)
+        ? laatijaApi.getLaatijat(fetch)
+        : Future.resolve([])
+    }))
+  )(kayttajaApi.whoami);
 
   let ketju = Viestit.emptyKetju();
 
@@ -107,7 +132,7 @@
   <div slot="content" class="w-full mt-3">
     <H1 text={$_(`${i18nRoot}.title`)} />
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as { whoami }}
+    {#each resources.toArray() as { whoami, laatijat }}
       <form
         id="ketju"
         on:submit|preventDefault={submitNewKetju}
@@ -117,6 +142,24 @@
         on:change={_ => {
           dirty = true;
         }}>
+        {#if Kayttajat.isPaakayttaja(whoami)}
+          <div class="w-full py-4">
+            <Autocomplete items={R.map(formatVastaanottaja, laatijat)} size="10">
+              <Input
+                  id={'ketju.vastaanottaja'}
+                  name={'ketju.vastaanottaja'}
+                  label={$_('viesti.ketju.vastaanottaja')}
+                  required={false}
+                  bind:model={ketju}
+                  lens={R.compose(R.lensProp('kayttajat'), arrayHeadLens)}
+                  parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
+                  format={R.compose(Maybe.orSome(''),
+                    R.map(formatVastaanottaja),
+                    R.chain(id => Maybe.findById(id, laatijat)))}
+                  i18n={$_} />
+            </Autocomplete>
+          </div>
+        {/if}
         <div class="w-full py-4">
           <Input
             id={'ketju.subject'}

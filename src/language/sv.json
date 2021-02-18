@@ -1119,8 +1119,10 @@
         "reset": "Tyhjennä SV?",
         "messages": {
           "load-error": "Tietojen lataus epäonnistui. SV?",
-          "success": "Uusi viestiketju lisätty SV?",
-          "error": "Uuden viestiketjun lisääminen epäonnistui"
+          "success": "Uusi viestiketju lisätty. SV?",
+          "error": "Uuden viestiketjun lisääminen epäonnistui. SV?",
+          "validation-error": "Viestiketjun tiedoissa virheitä, tarkista syötteet. SV?",
+          "vastaanottaja-not-found": "Vastaanottajaa ei ole järjestelmässä. SV?"
         }
       },
       "existing": {
