@@ -98,10 +98,7 @@ module.exports = {
       version: `${prod ? 'build' : 'dev'} - ${format(
         Date.now(),
         'yyyy-MM-dd-HH-mm'
-      )}`,
-      flags: {
-        viestit: !prod
-      }
+      )}`
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
@@ -124,6 +121,10 @@ module.exports = {
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
+    before: (app, server, compiler) =>
+      app.get('/config.json', (req, res) =>
+        res.json({ isDev: true, environment: 'dev' })
+      ),
     headers: {
       'Content-Security-Policy':
         "default-src 'self';script-src 'self';connect-src 'self' localhost:53952;style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com"

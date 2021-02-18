@@ -34,7 +34,6 @@ describe('Navigation', () => {
     const kayttaja = { rooli: 0, id: 2 };
 
     it('should return energiatodistus-links when within energiatodistus', () => {
-      const flags = { viestit: false };
       const expected = [
         { label: 'ET 1', href: '#/energiatodistus/2018/1' },
         // Hidden until implemented
@@ -48,7 +47,7 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(flags, i18n, kayttaja, [
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, [
           '2018',
           '1',
           'allekirjoitus'
@@ -58,7 +57,6 @@ describe('Navigation', () => {
     });
 
     it('should return root links when outside single energiatodistus', () => {
-      const flags = { viestit: false };
       const expected = [
         {
           label: 'Energiatodistukset',
@@ -73,13 +71,12 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(flags, i18n, kayttaja, []),
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
         expected
       );
     });
 
     it('should return root links when creating new energiatodistus', () => {
-      const flags = { viestit: false };
       const expected = [
         {
           href: '#/energiatodistus/2018/new',
@@ -99,7 +96,7 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(flags, i18n, kayttaja, ['2018', 'new']),
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2018', 'new']),
         expected
       );
     });
@@ -107,7 +104,6 @@ describe('Navigation', () => {
 
   describe('parseRoot', () => {
     it('should return links for laatija', () => {
-      const flags = { viestit: false };
       const kayttaja = { rooli: 0, id: 1 };
       const expected = [
         {
@@ -123,13 +119,12 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(flags, i18n, kayttaja, []),
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
         expected
       );
     });
 
     it('should return links for pätevyydentoteaja', () => {
-      const flags = { viestit: false };
       const kayttaja = { rooli: 1, id: 1 };
       const expected = [
         {
@@ -140,13 +135,12 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(flags, i18n, kayttaja, []),
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
         expected
       );
     });
 
     it('should return links for pääkäyttäjä', () => {
-      const flags = { viestit: false };
       const kayttaja = { rooli: 2, id: 1 };
       const expected = [
         { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
@@ -156,7 +150,7 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(flags, i18n, kayttaja, []),
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
         expected
       );
     });

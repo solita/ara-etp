@@ -5,7 +5,7 @@ import * as Kayttajat from '@Utility/kayttajat';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-const linksForLaatija = R.curry((flags, i18n, kayttaja) =>
+const linksForLaatija = R.curry((isDev, i18n, kayttaja) =>
   R.compose(
     R.concat([
       {
@@ -18,13 +18,13 @@ const linksForLaatija = R.curry((flags, i18n, kayttaja) =>
       href: `#/laatija/${kayttaja.id}/yritykset`
     }),
     R.when(
-      R.always(flags.viestit),
+      R.always(isDev),
       R.append({ label: i18n('navigation.viestit'), href: '#/viesti/all' })
     )
   )([])
 );
 
-export const linksForPatevyydentoteaja = R.curry((flags, i18n, kayttaja) => [
+export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
   {
     label: i18n('navigation.laatijoidentuonti'),
     href: '#/laatija/laatijoidentuonti'
@@ -160,7 +160,7 @@ export const parseYritys = R.curry((i18n, kayttaja, locationParts) => {
   }
 });
 
-export const linksForPaakayttaja = R.curry((flags, i18n, kayttaja) =>
+export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) =>
   R.compose(
     R.concat([
       {
@@ -173,7 +173,7 @@ export const linksForPaakayttaja = R.curry((flags, i18n, kayttaja) =>
       }
     ]),
     R.when(
-      R.always(flags.viestit),
+      R.always(isDev),
       R.append({ label: i18n('navigation.viestit'), href: '#/viesti/all' })
     )
   )([])
@@ -186,7 +186,7 @@ const kayttajaLinksMap = Object.freeze({
 });
 
 export const parseEnergiatodistus = R.curry(
-  (flags, i18n, kayttaja, locationParts) => {
+  (isDev, i18n, kayttaja, locationParts) => {
     const [version, id] = R.compose(
       RUtils.fillAndTake(2, Maybe.None),
       R.map(Maybe.fromNull)
@@ -194,34 +194,34 @@ export const parseEnergiatodistus = R.curry(
 
     if (R.compose(Maybe.isSome, R.filter(R.equals('new')))(id)) {
       return R.compose(
-        Maybe.orSome(parseRoot(flags, i18n, kayttaja)),
+        Maybe.orSome(parseRoot(isDev, i18n, kayttaja)),
         R.map(linksForNewEnergiatodistus(i18n))
       )(version);
     }
 
     return R.compose(
-      Maybe.orSome(parseRoot(flags, i18n, kayttaja)),
+      Maybe.orSome(parseRoot(isDev, i18n, kayttaja)),
       R.lift(linksForEnergiatodistus(i18n))
     )(version, id);
   }
 );
 
-export const parseRoot = R.curry((flags, i18n, kayttaja) =>
+export const parseRoot = R.curry((isDev, i18n, kayttaja) =>
   R.converge(R.apply, [
     R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
-    R.append(R.__, [flags, i18n])
+    R.append(R.__, [isDev, i18n])
   ])(kayttaja)
 );
 
 export const navigationParse = R.curry(
-  (flags, i18n, kayttaja, location, idTranslate) =>
+  (isDev, i18n, kayttaja, location, idTranslate) =>
     R.compose(
       R.flatten,
       Array.of,
       R.cond([
         [
           R.compose(R.equals('energiatodistus'), R.head),
-          R.compose(parseEnergiatodistus(flags, i18n, kayttaja), R.tail)
+          R.compose(parseEnergiatodistus(isDev, i18n, kayttaja), R.tail)
         ],
         [
           R.compose(R.equals('yritys'), R.head),
@@ -250,7 +250,7 @@ export const navigationParse = R.curry(
             ]),
             R.head
           ),
-          R.always(parseRoot(flags, i18n, kayttaja))
+          R.always(parseRoot(isDev, i18n, kayttaja))
         ],
         [R.T, R.always([{ label: '...', href: '#/' }])]
       ]),
