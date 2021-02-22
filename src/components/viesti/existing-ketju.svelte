@@ -118,31 +118,56 @@
 </script>
 
 <style>
+  .message {
+    @apply p-4 flex flex-col rounded-lg;
+  }
+  .message:not(.self){
+    @apply mr-8 bg-background;
+  }
+  .message.self{
+    @apply ml-8 bg-light border-tableborder border;
+  }
+
+  .message.self .from-me{
+    @apply text-primary block;
+  }
+  .message:not(.self) .from{
+    @apply block;
+  }
+
+  .message p{
+    @apply border-tableborder whitespace-pre mt-2 pt-2 border-t;
+  }
+  .message.self p{
+    @apply border-tableborder;
+  }
 </style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as { ketju, whoami }}
-      <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
+    
+    <DirtyConfirmation {dirty} />
 
-      <DirtyConfirmation {dirty} />
-
-      <div class="flex mb-4">
-        <Link text={'\u2B05 Kaikki viestit'} href="#/viesti/all" />
-      </div>
-
-      <div class="divide-y-2 divide-hr">
+    <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
+    
+      <div class="space-y-2">
         {#each ketju.viestit as viesti}
-          <div class="py-2">
-            <p>{formatSender(viesti.from)}</p>
-            <p>{Formats.formatTimeInstant(viesti.senttime)}</p>
+          <div class="message" class:self={R.propEq(
+            'id',
+            R.path(['from', 'id'], viesti),
+            whoami
+          )}>
+            <strong class="from hidden">{formatSender(viesti.from)}</strong>
+            <strong class="from-me hidden">{$_(i18nRoot + '.self')}</strong>
+            <span class="italic text-sm">{Formats.formatTimeInstant(viesti.senttime)}</span>
             <p>{viesti.body}</p>
           </div>
         {/each}
       </div>
 
       <form
-        class="mt-5"
+        class="p-4 mt-4 ml-8 rounded-lg border-tableborder border"
         on:submit|preventDefault={submitNewViesti}
         on:input={_ => {
           dirty = true;
@@ -150,11 +175,11 @@
         on:change={_ => {
           dirty = true;
         }}>
-        <div class="w-full py-4">
+        <div class="w-full mb-8 space-y-2">
+          <strong>{$_(i18nRoot + '.new-viesti')}</strong>
           <Textarea
             id={'ketju.new-viesti'}
             name={'ketju.new-viesti'}
-            label={$_(i18nRoot + '.new-viesti')}
             bind:model={newViesti}
             lens={R.lens(R.identity, R.identity)}
             required={true}
@@ -163,17 +188,21 @@
             i18n={$_} />
         </div>
 
-        <div class="flex space-x-4 pt-8">
-          <Button disabled={!dirty} type={'submit'} text={'Vastaa'} />
+        <div class="w-full flex space-x-4">
+          <Button disabled={!dirty} type={'submit'} text={$_(i18nRoot + '.submit')} />
           <Button
             on:click={cancel}
             disabled={!dirty}
-            text={'Tyhjennä'}
+            text={$_(i18nRoot + '.reset')}
             type={'reset'}
             style={'secondary'} />
         </div>
       </form>
     {/each}
+
+    <div class="flex mt-16">
+      <Link text={$_(i18nRoot + '.back')} href="#/viesti/all" icon={Maybe.Some('arrow_back')} />
+    </div>
   </div>
   <div slot="overlay-content">
     <Spinner />
