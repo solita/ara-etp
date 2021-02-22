@@ -96,7 +96,7 @@
   );
 
   $: model = R.map(
-    R.compose(LaatijaUploadUtils.validate, LaatijaUploadUtils.deserialize),
+    R.compose(LaatijaUploadUtils.validate, LaatijaUploadUtils.parse),
     laatijat
   );
 
@@ -157,7 +157,7 @@
                       Either.isLeft,
                       R.prop(field),
                       LaatijaUploadUtils.validate,
-                      LaatijaUploadUtils.deserialize
+                      LaatijaUploadUtils.parse
                     )(laatija)}>
                     {formats(field, laatija[field])}
                   </td>

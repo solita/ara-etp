@@ -38,3 +38,12 @@ export const inclusiveEndDate = endTimeInstant =>
 export const iban = R.compose(R.join(' '), R.splitEvery(4));
 
 export const verkkolaskuosoite = R.when(Validation.isIBAN, iban);
+
+export const formatPatevyydenVoimassaoloaika = toteamispaivamaara =>
+  `${dfns.format(
+    dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0),
+    'd.M.yyyy'
+  )} - ${dfns.format(
+    dfns.add(dfns.parse(toteamispaivamaara, 'yyyy-M-d', 0), { years: 7 }),
+    'd.M.yyyy'
+  )}`;

@@ -15,7 +15,7 @@
         flashMessageStore.add('Laatija', 'error', $_('errors.file-read-error')),
       result => (laatijat = result)
     ),
-    R.map(LaatijaUploadUtils.readRows),
+    R.map(LaatijaUploadUtils.deserialize),
     R.sequence(Future.resolve),
     R.map(LaatijaUploadUtils.futurizeFileRead)
   )(files);

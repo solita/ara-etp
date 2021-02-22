@@ -1,6 +1,5 @@
 <script>
   import * as R from 'ramda';
-  import * as dfns from 'date-fns';
 
   import { locale, _ } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -13,19 +12,16 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
   import ToimintaalueetChecklist from '@Component/ToimintaalueetChecklist/ToimintaalueetChecklist';
-  import * as laatijaApi from './laatija-api';
-  import * as LaatijaUtils from './laatija-utils';
+
   import * as LaatijaSchema from './schema';
 
   import { currentUserStore, flashMessageStore } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
-  import * as Future from '@Utility/future-utils';
   import * as country from '@Component/Geo/country-utils';
   import * as Validation from '@Utility/validation';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
-  import * as Koodisto from '@Utility/koodisto';
   import * as formats from '@Utility/formats';
 
   const formParsers = LaatijaSchema.formParsers();
@@ -334,7 +330,7 @@
           label={$_('laatija.patevyydenvoimassaolo')}
           bind:model={laatija}
           lens={R.lensProp('toteamispaivamaara')}
-          format={LaatijaUtils.formatVoimassaoloaika}
+          format={formats.formatPatevyydenVoimassaoloaika}
           parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}

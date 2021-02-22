@@ -103,12 +103,12 @@ export const errors = R.curry((i18n, laatijat) =>
   )
 );
 
-export const deserialize = R.evolve({
+export const parse = R.evolve({
   patevyystaso: parsers.parseInteger,
   toteamispaivamaara: parsers.parseDate
 });
 
-export const readRows = R.compose(
+export const deserialize = R.compose(
   R.map(
     R.compose(
       R.mergeRight({ ...emptyUploadLaatija, maa: 'FI' }),
@@ -118,5 +118,6 @@ export const readRows = R.compose(
     )
   ),
   R.flatten,
-  R.map(R.compose(R.split(/\r?\n/g)))
+  R.map(R.compose(R.split(/\r?\n/g))),
+  R.map(R.trim)
 );
