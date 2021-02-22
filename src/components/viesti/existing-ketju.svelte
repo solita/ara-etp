@@ -136,10 +136,7 @@
   }
 
   .message p{
-    @apply border-tableborder whitespace-pre mt-2 pt-2 border-t;
-  }
-  .message.self p{
-    @apply border-tableborder;
+    @apply border-tableborder whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
   }
 </style>
 
