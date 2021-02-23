@@ -119,7 +119,7 @@
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'uudisrakennus'])}
       label={$_('energiatodistus.perustiedot.uudisrakennus')}
-      {disabled} />
+      disabled={true} />
   </div>
 
   <div class="lg:w-1/2 w-full px-4 py-4">
