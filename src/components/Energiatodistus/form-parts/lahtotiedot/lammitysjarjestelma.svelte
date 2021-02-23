@@ -38,9 +38,10 @@
 </script>
 
 <style>
-  .et-table--thead .et-table--th {
+  .et-table--thead .et-table--th, 
+  .et-table--tbody .et-table--td:first-child{
     text-overflow: ellipsis;
-    @apply overflow-hidden px-2;
+    @apply overflow-hidden px-1 text-sm;
   }
 </style>
 
@@ -176,7 +177,7 @@
   <tbody class="et-table--tbody">
     {#each ['tilat-ja-iv', 'lammin-kayttovesi'] as hyotysuhde}
       <tr class="et-table--tr">
-        <td class="et-table--td">
+        <td class="et-table--td" title={$_(`energiatodistus.lahtotiedot.lammitys.${hyotysuhde}.label`)}>
           {$_(`energiatodistus.lahtotiedot.lammitys.${hyotysuhde}.label`)}
         </td>
         <td class="et-table--td">
