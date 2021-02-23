@@ -1129,9 +1129,11 @@
       },
       "existing": {
         "title": "Viestiketju SV?",
-        "new-viesti": "Vastaus SV?",
+        "self": "Minä SV?",
+        "new-viesti": "Uusi viesti SV?",
         "submit": "Vastaa SV?",
         "reset": "Tyhjennä SV?",
+        "back": "Kaikki viestit SV?",
         "messages": {
           "not-found": "Viestiketjua ei ole olemassa. SV?",
           "load-error": "Viestiketjun tietojen lataus epäonnistui. SV?",

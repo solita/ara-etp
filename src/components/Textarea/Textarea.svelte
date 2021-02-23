@@ -76,7 +76,7 @@
   }
 
   textarea {
-    @apply flex-grow font-medium py-1 resize-none bg-transparent;
+    @apply flex-grow font-medium p-2 resize-none bg-transparent;
   }
 
   textarea:focus {
@@ -109,8 +109,9 @@
 </style>
 
 <!-- purgecss: focused error disabled -->
-
-<Label {id} {required} {label} {compact} error={highlightError} {focused} />
+{#if label}
+  <Label {id} {required} {label} {compact} error={highlightError} {focused} />
+{/if}
 <div
   class="inputwrapper"
   class:focused
