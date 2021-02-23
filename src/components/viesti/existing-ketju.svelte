@@ -145,7 +145,7 @@
 
       <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
 
-      <div class="space-y-2">
+      <div class="space-y-6">
         {#each ketju.viestit as viesti}
           <div
             class="message"
@@ -161,7 +161,7 @@
       </div>
 
       <form
-        class="p-4 mt-4 ml-8 rounded-lg border-tableborder border"
+        class="p-4 mt-6 ml-8 rounded-lg border-tableborder border"
         on:submit|preventDefault={submitNewViesti}
         on:input={_ => {
           dirty = true;
@@ -178,6 +178,7 @@
             lens={R.lens(R.identity, R.identity)}
             required={true}
             parse={R.trim}
+            compact={true}
             validators={Schema.ketju.body}
             i18n={$_} />
         </div>
@@ -187,12 +188,6 @@
             disabled={!dirty}
             type={'submit'}
             text={$_(i18nRoot + '.submit')} />
-          <Button
-            on:click={cancel}
-            disabled={!dirty}
-            text={$_(i18nRoot + '.reset')}
-            type={'reset'}
-            style={'secondary'} />
         </div>
       </form>
     {/each}

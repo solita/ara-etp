@@ -109,9 +109,7 @@
 </style>
 
 <!-- purgecss: focused error disabled -->
-{#if label}
-  <Label {id} {required} {label} {compact} error={highlightError} {focused} />
-{/if}
+<Label {id} {required} {label} {compact} error={highlightError} {focused} />
 <div
   class="inputwrapper"
   class:focused
