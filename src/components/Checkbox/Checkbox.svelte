@@ -32,6 +32,10 @@
   label .material-icons {
     @apply select-none text-3xl;
   }
+
+  .disabled .material-icons {
+    @apply text-disabled;
+  }
 </style>
 
 <!-- purgecss: inline-block hidden disabled font-bold -->
