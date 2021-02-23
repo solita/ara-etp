@@ -40,14 +40,14 @@
         </a>
         <a
           class="font-bold text-primary"
-          href="pdf/Dataskyddsbeskrivning_Register_för_övervakningsuppgifter_om_energicertifikat.pdf"
+          href="pdf/Dataskyddsbeskrivning_Register_for_overvakningsuppgifter_om_energicertifikat.pdf"
           target="_blank">
           Dataskyddsbeskrivning Register för övervakningsuppgifter om
           energicertifikat (pdf)
         </a>
         <a
           class="font-bold text-primary"
-          href="pdf/Dataskyddsbeskrivning_Register_för_upprättare_av_energiferticikat.pdf"
+          href="pdf/Dataskyddsbeskrivning_Register_for_upprattare_av_energiferticikat.pdf"
           target="_blank">
           Dataskyddsbeskrivning Register för upprättare av energiferticikat
           (pdf)
