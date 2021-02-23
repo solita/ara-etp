@@ -103,7 +103,11 @@ export const linksForPaakayttajaOmatTiedot = R.curry(
 );
 
 export const parseKayttaja = R.curry(
-  (i18n, kayttaja, idTranslate, locationParts) => {
+  (isDev, i18n, kayttaja, idTranslate, locationParts) => {
+    if (Kayttajat.isPatevyydentoteaja(kayttaja)) {
+      return linksForPatevyydentoteaja(isDev, i18n, kayttaja);
+    }
+
     if (R.isEmpty(locationParts)) {
       return [];
     }
@@ -123,7 +127,10 @@ export const parseKayttaja = R.curry(
     ) {
       return linksForPaakayttajaOmatTiedot(i18n, id, idTranslate);
     } else if (R.equals('all', id)) {
-      return [];
+      return R.converge(R.apply, [
+        R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
+        R.append(R.__, [isDev, i18n])
+      ])(kayttaja);
     } else {
       return linksForKayttaja(i18n, id, idTranslate);
     }
@@ -228,14 +235,11 @@ export const navigationParse = R.curry(
           R.compose(parseYritys(i18n, kayttaja), R.tail)
         ],
         [
-          R.allPass([
-            R.compose(
-              R.either(R.equals('kayttaja'), R.equals('laatija')),
-              R.head
-            ),
-            R.compose(R.not, R.equals(['laatijoidentuonti']), R.tail)
-          ]),
-          R.compose(parseKayttaja(i18n, kayttaja, idTranslate), R.tail)
+          R.compose(
+            R.either(R.equals('kayttaja'), R.equals('laatija')),
+            R.head
+          ),
+          R.compose(parseKayttaja(isDev, i18n, kayttaja, idTranslate), R.tail)
         ],
         [
           R.compose(
