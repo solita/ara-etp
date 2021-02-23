@@ -10,17 +10,15 @@
   import H1 from '@Component/H/H1';
   import Select from '@Component/Select/Select';
   import Table from '@Component/Table/Table';
-  import Input from '@Component/Input/Input';
-  import Button from '@Component/Button/Button';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as geoApi from '@Component/Geo/geo-api';
   import { locale, _ } from '@Language/i18n';
   import * as locales from '@Language/locale-utils';
-  import * as LaatijaUtils from './laatija-utils';
   import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
   import { currentUserStore } from '@/stores';
 
   import * as Future from '@Utility/future-utils';
+  import * as formats from '@Utility/formats';
 
   import { flashMessageStore } from '@/stores';
 
@@ -49,7 +47,7 @@
     {
       id: 'toteamispaivamaara',
       title: $_('laatijahaku.voimassaolo'),
-      format: LaatijaUtils.formatVoimassaoloaika
+      format: formats.formatPatevyydenVoimassaoloaika
     },
     { id: 'toimintaalue', title: $_('laatija.paatoimintaalue') },
     { id: 'postinumero', title: $_('laatija.postinumero') },

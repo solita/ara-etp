@@ -27,6 +27,8 @@ export const isRight = e => e.isRight();
 
 export const right = e => e.right();
 
+export const left = e => e.left();
+
 export const orSome = R.curry((defaultValue, either) =>
   either.cata(R.always(defaultValue), R.identity)
 );

@@ -63,12 +63,28 @@
       "cancel": "Peruuta"
     }
   },
+  "laatijaupload": {
+    "rivi": "Rivi",
+    "etunimi": "Etunimi",
+    "sukunimi": "Sukunimi",
+    "henkilotunnus": "Henkilötunnus",
+    "jakeluosoite": "Jakeluosoite",
+    "postinumero": "Postinumero",
+    "postitoimipaikka": "Postitoimipaikka",
+    "email": "Sähköposti",
+    "puhelin": "Puhelinnumero",
+    "patevyystaso": "Pätevyystaso",
+    "toteamispaivamaara": "Toteamispäivämäärä",
+    "toteaja": "Toteaja"
+  },
   "errors": {
+    "row-error": "Virhe rivillä",
     "load-error": "Tietojen haku epäonnistui.",
     "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken.",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan.",
     "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman.",
-    "unexpected": "Sovelluksen latauksessa tapahtui odottamaton virhe. Sivun päivitys voi korjata ongelman."
+    "unexpected": "Sovelluksen latauksessa tapahtui odottamaton virhe. Sivun päivitys voi korjata ongelman.",
+    "file-read-error": "Tiedoston lukemisessa tapahtui odottamaton virhe."
   },
   "units": {
     "year": "vuosi",

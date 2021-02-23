@@ -3,8 +3,8 @@ import * as R from 'ramda';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 
-import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
 import * as kayttajat from '@Utility/kayttajat';
 
 const deserialize = R.evolve({
@@ -16,6 +16,17 @@ const deserialize = R.evolve({
     R.always({ localid: '', organisaatio: '' })
   )
 });
+
+const deserializeLaatija = R.compose(
+  R.assoc('api-key', Maybe.None()),
+  R.evolve({
+    'vastaanottajan-tarkenne': Maybe.fromNull,
+    henkilotunnus: Maybe.fromNull,
+    maa: Either.Right,
+    toimintaalue: Maybe.fromNull,
+    wwwosoite: Maybe.fromNull
+  })
+);
 
 export const url = {
   all: 'api/private/kayttajat',
@@ -44,7 +55,7 @@ export const getLaatijaById = R.curry((fetch, id) =>
         Future.reject
       )
     ),
-    R.map(LaatijaUtils.deserialize),
+    R.map(deserializeLaatija),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.laatija

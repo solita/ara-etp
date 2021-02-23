@@ -3,7 +3,15 @@ import * as R from 'ramda';
 
 export { Fluture };
 
-export const { resolve, reject, encaseP, promise, attemptP, cache } = Fluture;
+export const {
+  Future,
+  resolve,
+  reject,
+  encaseP,
+  promise,
+  attemptP,
+  cache
+} = Fluture;
 
 export const and = R.curry((firstFuture, secondFuture) =>
   Fluture.and(firstFuture)(secondFuture)

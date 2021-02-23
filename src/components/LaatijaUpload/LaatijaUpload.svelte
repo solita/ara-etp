@@ -1,40 +1,63 @@
 <script>
   import * as R from 'ramda';
 
-  import * as Fetch from '@Utility/fetch-utils';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
 
   import { locale, _ } from '@Language/i18n';
 
-  import FileDropArea from '@Component/FileDropArea/FileDropArea';
-  import Table from '@Component/Table/Table';
+  import LaatijaDropArea from './laatija-upload-droparea';
+  import * as LaatijaUploadUtils from './laatija-upload-utils';
   import Button from '@Component/Button/Button';
 
   import { flashMessageStore } from '@/stores';
 
-  import * as LaatijaUtils from '@Component/Laatija/laatija-utils';
-  import Patevuustaso from './Patevyystaso';
-  import Date from './Date';
-  import * as Locales from '@Language/locale-utils';
+  import * as LocaleUtils from '@Language/locale-utils';
+  import * as laatijaApi from '@Component/Laatija/laatija-api';
 
-  export const fields = [
-    { id: 'etunimi', title: 'Etunimi' },
-    { id: 'sukunimi', title: 'Sukunimi' },
-    { id: 'henkilotunnus', title: 'Henkilötunnus' },
-    { id: 'jakeluosoite', title: 'Jakeluosoite' },
-    { id: 'postinumero', title: 'Postinumero' },
-    { id: 'postitoimipaikka', title: 'Postitoimipaikka' },
-    { id: 'email', title: 'Email' },
-    { id: 'puhelin', title: 'Puhelin' },
-    { id: 'patevyystaso', title: 'Pätevyystaso', component: Patevuustaso },
-    { id: 'toteamispaivamaara', title: 'Toteamispäivämäärä', component: Date },
-    { id: 'toteaja', title: 'Toteaja' }
+  import Overlay from '@Component/Overlay/Overlay';
+  import Spinner from '@Component/Spinner/Spinner';
+
+  let overlay = false;
+
+  const toggleOverlay = value => (overlay = value);
+
+  let patevyystasot = Maybe.None();
+  let laatijat = [];
+  let files = [];
+
+  $: Future.fork(
+    () => {
+      toggleOverlay(false);
+      flashMessageStore.add('Laatija', 'error', $_('errors.unexpected'));
+    },
+    response => {
+      toggleOverlay(false);
+      patevyystasot = Maybe.Some(response);
+    },
+    R.tap(() => toggleOverlay(true), laatijaApi.patevyydet)
+  );
+
+  const fields = [
+    'etunimi',
+    'sukunimi',
+    'henkilotunnus',
+    'jakeluosoite',
+    'postinumero',
+    'postitoimipaikka',
+    'email',
+    'puhelin',
+    'patevyystaso',
+    'toteamispaivamaara',
+    'toteaja'
   ];
 
   $: submit = R.compose(
     Future.fork(
       response => {
-        const msg = Locales.uniqueViolationMessage(
+        toggleOverlay(false);
+        const msg = LocaleUtils.uniqueViolationMessage(
           $_,
           response,
           'laatija.messages.save-error'
@@ -42,6 +65,7 @@
         flashMessageStore.add('Laatija', 'error', msg);
       },
       _ => {
+        toggleOverlay(false);
         flashMessageStore.add(
           'Laatija',
           'success',
@@ -50,88 +74,124 @@
         laatijat = [];
       }
     ),
-    LaatijaUtils.putLaatijatFuture(fetch)
+    Future.delay(300),
+    R.tap(() => toggleOverlay(true)),
+    laatijaApi.uploadLaatijat
   );
 
-  let files = [];
-  let laatijat = [];
+  $: labelLocale = LocaleUtils.label($locale);
 
-  let error = '';
+  $: formats = R.curry((key, value) =>
+    R.defaultTo(
+      R.identity,
+      R.prop(key, {
+        patevyystaso: patevyys =>
+          R.compose(
+            Maybe.orSome(patevyys),
+            R.map(labelLocale),
+            R.chain(Maybe.findById(parseInt(patevyys)))
+          )(patevyystasot)
+      })
+    )(value)
+  );
 
-  const fileAsText = file =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => {
-        resolve(e.target.result);
-      };
-      reader.onerror = e => {
-        reject(e);
-      };
-      reader.readAsText(file, 'UTF-8');
-    });
+  $: model = R.map(
+    R.compose(LaatijaUploadUtils.validate, LaatijaUploadUtils.parse),
+    laatijat
+  );
 
-  const addError = message =>
-    flashMessageStore.add('Laatija', 'error', $_(message));
-
-  $: R.compose(
-    Future.fork(
+  $: errors = R.compose(
+    R.filter(R.length),
+    R.addIndex(R.map)((item, index) =>
       R.compose(
-        R.tap(_ => addError('laatija.messages.upload-error')),
-        R.tap(_ => (laatijat = []))
-      ),
-      R.compose(
-        R.tap(data => (laatijat = data)),
-        R.when(
-          R.any(R.complement(LaatijaUtils.rowValid)),
-          R.tap(_ => addError('laatija.messages.validation-error'))
-        ),
-        R.when(
-          R.isEmpty,
-          R.tap(_ => addError('laatija.messages.upload-error'))
-        )
-      )
+        Maybe.orSome(''),
+        R.map(LaatijaUploadUtils.formatRowError($_, index))
+      )(item)
     ),
-    R.map(R.flatten),
-    R.sequence(Future.resolve),
-    R.map(R.map(LaatijaUtils.readData)),
-    R.map(Future.encaseP(fileAsText))
-  )(files);
+    LaatijaUploadUtils.errors($_)
+  )(model);
 
-  $: valid = R.all(LaatijaUtils.rowValid, laatijat);
-
-  $: files && flashMessageStore.flush('Laatija');
+  $: if (errors.length) {
+    flashMessageStore.add('Laatija', 'error', R.join(' | ', errors));
+  }
 </script>
 
-<FileDropArea bind:files />
-{#if laatijat.length}
-  <div class="w-full overflow-x-auto mt-4">
-    <Table
-      {fields}
-      validate={LaatijaUtils.validate}
-      tablecontents={laatijat}
-      itemsPerPage={50} />
-  </div>
-  <div class="flex -mx-4 pt-8">
-    <div class="px-4">
-      <Button
-        disabled={!valid}
-        type={'submit'}
-        text={$_('laatija.lisaa-laatijat')}
-        on:click={event => {
-          event.preventDefault();
+<style>
+  .breakout {
+    @apply relative ml-8 mt-4 overflow-x-auto;
+    width: 95vw;
+    left: calc(-50vw + 50%);
+  }
+
+  .invalid {
+    @apply text-error font-bold;
+  }
+</style>
+
+<!-- purgecss: invalid -->
+
+<Overlay {overlay}>
+  <div slot="content">
+    <LaatijaDropArea bind:laatijat bind:files />
+    {#if laatijat.length}
+      <div class="breakout overflow-x-auto">
+        <table class="etp-table">
+          <thead class="etp-table--thead">
+            <tr class="etp-table--tr">
+              <th class="etp-table--th">{$_('rivi')}</th>
+              {#each fields as field}
+                <th class="etp-table--th">{$_(`laatijaupload.${field}`)}</th>
+              {/each}
+            </tr>
+          </thead>
+          <tbody class="etp-table--tbody">
+            {#each laatijat as laatija, index}
+              <tr class="etp-table--tr">
+                <td class="etp-table--td">
+                  {index + 1}
+                </td>
+                {#each fields as field}
+                  <td
+                    class="etp-table--td"
+                    class:invalid={R.compose(
+                      Either.isLeft,
+                      R.prop(field),
+                      LaatijaUploadUtils.validate,
+                      LaatijaUploadUtils.parse
+                    )(laatija)}>
+                    {formats(field, laatija[field])}
+                  </td>
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+      <form
+        on:submit|preventDefault={_ => {
           flashMessageStore.flush('Laatija');
-          submit(laatijat);
-        }} />
-    </div>
-    <div class="px-4">
-      <Button
-        style={'secondary'}
-        text={$_('peruuta')}
-        on:click={event => {
-          event.preventDefault();
+          submit(model);
+        }}
+        on:reset|preventDefault={_ => {
           flashMessageStore.flush('Laatija');
+          files = [];
           laatijat = [];
-        }} />
-    </div>
+        }}>
+        <div class="flex -mx-4 pt-8">
+          <div class="px-4">
+            <Button
+              disabled={errors.length}
+              type={'submit'}
+              text={$_('laatija.lisaa-laatijat')} />
+          </div>
+          <div class="px-4">
+            <Button style={'secondary'} type={'reset'} text={$_('peruuta')} />
+          </div>
+        </div>
+      </form>
+    {/if}
   </div>
-{/if}
+  <div slot="overlay-content">
+    <Spinner />
+  </div>
+</Overlay>

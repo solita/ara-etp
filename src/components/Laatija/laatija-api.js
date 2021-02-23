@@ -13,6 +13,24 @@ export const url = {
   yritykset: id => `${url.laatija(id)}/yritykset`
 };
 
+export const laatijaUploadSerialize = R.evolve({
+  etunimi: Either.right,
+  sukunimi: Either.right,
+  henkilotunnus: Either.right,
+  jakeluosoite: Either.right,
+  postinumero: Either.right,
+  postitoimipaikka: Either.right,
+  email: Either.right,
+  puhelin: Either.right,
+  patevyystaso: Either.right,
+  toteamispaivamaara: R.compose(
+    Either.right,
+    R.map(date => dfns.format(date, 'yyyy-MM-dd'))
+  ),
+  toteaja: Either.right,
+  maa: Either.right
+});
+
 export const serialize = R.compose(
   R.evolve({
     'vastaanottajan-tarkenne': Maybe.orSome(null),
@@ -90,3 +108,9 @@ export const patevyydet = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
 )('api/private/patevyydet/');
+
+export const uploadLaatijat = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.laatijat)),
+  R.map(laatijaUploadSerialize)
+);
