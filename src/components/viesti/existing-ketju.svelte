@@ -121,21 +121,19 @@
   .message {
     @apply p-4 flex flex-col rounded-lg;
   }
-  .message:not(.self){
+  .message:not(.self) {
     @apply mr-8 bg-background;
   }
-  .message.self{
+  .message.self {
     @apply ml-8 bg-light border-tableborder border;
   }
-
-  .message.self .from-me{
+  .message.self .from-me {
     @apply text-primary block;
   }
-  .message:not(.self) .from{
+  .message:not(.self) .from {
     @apply block;
   }
-
-  .message p{
+  .message p {
     @apply border-tableborder whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
   }
 </style>
@@ -143,21 +141,20 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as { ketju, whoami }}
-    
-    <DirtyConfirmation {dirty} />
+      <DirtyConfirmation {dirty} />
 
-    <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
-    
+      <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
+
       <div class="space-y-2">
         {#each ketju.viestit as viesti}
-          <div class="message" class:self={R.propEq(
-            'id',
-            R.path(['from', 'id'], viesti),
-            whoami
-          )}>
+          <div
+            class="message"
+            class:self={R.propEq('id', R.path(['from', 'id'], viesti), whoami)}>
             <strong class="from hidden">{formatSender(viesti.from)}</strong>
             <strong class="from-me hidden">{$_(i18nRoot + '.self')}</strong>
-            <span class="italic text-sm">{Formats.formatTimeInstant(viesti.senttime)}</span>
+            <span class="italic text-sm">
+              {Formats.formatTimeInstant(viesti.senttime)}
+            </span>
             <p>{viesti.body}</p>
           </div>
         {/each}
@@ -186,7 +183,10 @@
         </div>
 
         <div class="w-full flex space-x-4">
-          <Button disabled={!dirty} type={'submit'} text={$_(i18nRoot + '.submit')} />
+          <Button
+            disabled={!dirty}
+            type={'submit'}
+            text={$_(i18nRoot + '.submit')} />
           <Button
             on:click={cancel}
             disabled={!dirty}
@@ -198,7 +198,10 @@
     {/each}
 
     <div class="flex mt-16">
-      <Link text={$_(i18nRoot + '.back')} href="#/viesti/all" icon={Maybe.Some('arrow_back')} />
+      <Link
+        text={$_(i18nRoot + '.back')}
+        href="#/viesti/all"
+        icon={Maybe.Some('arrow_back')} />
     </div>
   </div>
   <div slot="overlay-content">
