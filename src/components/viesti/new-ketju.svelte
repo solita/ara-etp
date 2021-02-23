@@ -43,17 +43,19 @@
     `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
 
   // List[Kayttaja] -> Str -> Either[Int]
-  const parseVastaanottaja = kayttajat => R.compose(
-    Maybe.toEither(R.applyTo(`${i18nRoot}.messages.vastaanottaja-not-found`)),
-    R.map(R.prop('id')),
-    predicate => Maybe.find(predicate, kayttajat),
-    R.propEq('email'),
-    R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
-  );
+  const parseVastaanottaja = kayttajat =>
+    R.compose(
+      Maybe.toEither(R.applyTo(`${i18nRoot}.messages.vastaanottaja-not-found`)),
+      R.map(R.prop('id')),
+      predicate => Maybe.find(predicate, kayttajat),
+      R.propEq('email'),
+      R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
+    );
 
   const arrayHeadLens = R.lens(
     R.compose(Either.Right, Maybe.head),
-    R.compose(Maybe.toArray, EM.toMaybe));
+    R.compose(Maybe.toArray, EM.toMaybe)
+  );
 
   R.compose(
     Future.fork(
@@ -71,14 +73,17 @@
       response => {
         resources = Maybe.Some(response);
         overlay = false;
-      }),
-    R.chain(whoami => Future.parallelObject(3, {
-      vastaanottajaryhmat: api.vastaanottajaryhmat,
-      whoami: Future.resolve(whoami),
-      laatijat: Kayttajat.isPaakayttaja(whoami)
-        ? laatijaApi.getLaatijat(fetch)
-        : Future.resolve([])
-    }))
+      }
+    ),
+    R.chain(whoami =>
+      Future.parallelObject(3, {
+        vastaanottajaryhmat: api.vastaanottajaryhmat,
+        whoami: Future.resolve(whoami),
+        laatijat: Kayttajat.isPaakayttaja(whoami)
+          ? laatijaApi.getLaatijat(fetch)
+          : Future.resolve([])
+      })
+    )
   )(kayttajaApi.whoami);
 
   let ketju = Viestit.emptyKetju();
@@ -146,37 +151,40 @@
         on:change={_ => {
           dirty = true;
         }}>
-
         {#if Kayttajat.isPaakayttaja(whoami)}
           <div class="lg:w-1/2 w-full py-4">
-            <Autocomplete items={R.map(formatVastaanottaja, laatijat)} size="10">
+            <Autocomplete
+              items={R.map(formatVastaanottaja, laatijat)}
+              size="10">
               <Input
-                  id={'ketju.vastaanottaja'}
-                  name={'ketju.vastaanottaja'}
-                  label={$_('viesti.ketju.vastaanottaja')}
-                  required={false}
-                  bind:model={ketju}
-                  lens={R.compose(R.lensProp('kayttajat'), arrayHeadLens)}
-                  parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
-                  format={R.compose(Maybe.orSome(''),
-                    R.map(formatVastaanottaja),
-                    R.chain(id => Maybe.findById(id, laatijat)))}
-                  i18n={$_} />
+                id={'ketju.vastaanottaja'}
+                name={'ketju.vastaanottaja'}
+                label={$_('viesti.ketju.vastaanottaja')}
+                required={false}
+                bind:model={ketju}
+                lens={R.compose(R.lensProp('kayttajat'), arrayHeadLens)}
+                parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
+                format={R.compose(
+                  Maybe.orSome(''),
+                  R.map(formatVastaanottaja),
+                  R.chain(id => Maybe.findById(id, laatijat))
+                )}
+                i18n={$_} />
             </Autocomplete>
           </div>
         {/if}
 
         <div class="lg:w-1/2 w-full py-4">
           <Select
-              id={'ketju.vastaanottajaryhma'}
-              label={$_('viesti.ketju.vastaanottajaryhma')}
-              required={true}
-              disabled={!Kayttajat.isPaakayttaja(whoami)}
-              allowNone={false}
-              bind:model={ketju}
-              lens={R.lensProp('kayttajaryhma-id')}
-              format={Locales.labelForId($locale, vastaanottajaryhmat)}
-              items={R.pluck('id', vastaanottajaryhmat)} />
+            id={'ketju.vastaanottajaryhma'}
+            label={$_('viesti.ketju.vastaanottajaryhma')}
+            required={true}
+            disabled={!Kayttajat.isPaakayttaja(whoami)}
+            allowNone={false}
+            bind:model={ketju}
+            lens={R.lensProp('kayttajaryhma-id')}
+            format={Locales.labelForId($locale, vastaanottajaryhmat)}
+            items={R.pluck('id', vastaanottajaryhmat)} />
         </div>
 
         <div class="w-full py-4">
