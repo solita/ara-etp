@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 
-const roles = ['laatija', 'patevyydentoteaja', 'paakayttaja'];
+const roles = ['laatija', 'patevyydentoteaja', 'paakayttaja', 'laskuttaja'];
 export const role = R.compose(R.map(parseInt), R.invertObj)(roles);
 export const roleKey = id => roles[id];
 
