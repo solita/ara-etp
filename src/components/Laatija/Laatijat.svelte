@@ -8,9 +8,7 @@
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import H1 from '@Component/H/H1';
   import Select from '@Component/Select/Select';
-  import Pagination from '@Component/Pagination/Pagination';
   import Pgn from '@Component/Pagination/pgn';
-  import Table from '@Component/Table/Table';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as yritysApi from '@Component/Yritys/yritys-api';
   import * as geoApi from '@Component/Geo/geo-api';
@@ -28,7 +26,6 @@
 
   let laatijat = Maybe.None();
   let kayttaja = Maybe.None();
-  let pageSize = 3;
 
   const hasCurrentUserAccessToField = R.ifElse(
     R.has('roles'),
@@ -353,6 +350,7 @@
     <Pgn
       items={laatijat}
       page={Maybe.orSome(0, parsedQuery.page)}
+      pageSize={50}
       urlFn={urlForPage(parsedQuery)}
       baseUrl={'#/laatija/all?'}
       let:pageItems>
@@ -409,17 +407,4 @@
       </table>
     </Pgn>
   {/each}
-  <!-- {#if isReusults}
-    <div class="w-full overflow-x-auto mt-4">
-      
-        
-        <Table
-        {fields}
-        tablecontents={results}
-        {onRowClick}
-        pageNum={R.compose(Maybe.orSome(1), R.prop('page'))(model)}
-        {nextPageCallback}
-        {itemsPerPage} /> 
-    </div>
-  {/if} -->
 </div>
