@@ -13,7 +13,8 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Address from '@Component/Yritys/address.svelte';
 
-  import * as api from './laatija-api';
+  import * as laatijaApi from './laatija-api';
+  import * as yritysApi from '@Component/Yritys/yritys-api';
   import * as Tila from '@Component/Yritys/laatija-yritys-tila';
 
   import * as Maybe from '@Utility/maybe-utils';
@@ -48,7 +49,11 @@
           $_('laatija.yritykset.success.detach')
         );
       },
-      api.deleteLaatijaYritys(fetch, params.id, laatijaYritykset[index].id)
+      laatijaApi.deleteLaatijaYritys(
+        fetch,
+        params.id,
+        laatijaYritykset[index].id
+      )
     );
   };
 
@@ -93,8 +98,8 @@
       }
     ),
     R.tap(() => toggleOverlay(true)),
-    Future.both(api.getAllYritykset(fetch)),
-    api.getYritykset(fetch)
+    Future.both(yritysApi.getAllYritykset),
+    laatijaApi.yritykset
   );
 
   $: load(params.id);

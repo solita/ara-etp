@@ -16,23 +16,21 @@
   let yritykset = [];
   let overlay = true;
 
-  R.compose(
-    Future.fork(
-      _ => {
-        flashMessageStore.add(
-          'Yritys',
-          'error',
-          $_('laatija.yritykset.error.detach-failed')
-        );
-        overlay = false;
-      },
-      response => {
-        yritykset = response;
-        overlay = false;
-      }
-    ),
+  Future.fork(
+    _ => {
+      flashMessageStore.add(
+        'Yritys',
+        'error',
+        $_('laatija.yritykset.error.detach-failed')
+      );
+      overlay = false;
+    },
+    response => {
+      yritykset = response;
+      overlay = false;
+    },
     api.getAllYritykset
-  )(fetch);
+  );
 </script>
 
 <style>

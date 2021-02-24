@@ -45,12 +45,11 @@ export const luokittelut = Future.parallelObject(3, {
   countries: geoApi.countries
 });
 
-export const getAllYritykset = fetch =>
-  R.compose(
-    R.map(R.map(deserialize)),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(url.yritykset);
+export const getAllYritykset = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(R.__, url.yritykset))
+)(fetch);
 
 export const getYritysById = R.compose(
   R.map(deserialize),
