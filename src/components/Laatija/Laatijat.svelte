@@ -15,9 +15,9 @@
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import { locale, _ } from '@Language/i18n';
   import * as locales from '@Language/locale-utils';
-  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
   import * as Kayttajat from '@Utility/kayttajat';
-  import { currentUserStore } from '@/stores';
+
+  import Linkrow from '@Component/linkrow/linkrow';
 
   import * as Future from '@Utility/future-utils';
   import * as formats from '@Utility/formats';
@@ -27,102 +27,25 @@
   let laatijat = Maybe.None();
   let kayttaja = Maybe.None();
 
-  const hasCurrentUserAccessToField = R.ifElse(
-    R.has('roles'),
-    R.compose(
-      KayttajaUtils.kayttajaHasAccessToResource(
-        R.__,
-        Maybe.get($currentUserStore)
-      ),
-      R.prop('roles')
-    ),
-    R.always(true)
-  );
-
-  const fields = R.filter(hasCurrentUserAccessToField, [
-    { id: 'laatija', title: $_('laatija.laatija') },
-    { id: 'puhelin', title: $_('kayttaja.puhelinnumero') },
-    {
-      id: 'patevyystaso',
-      title: $_('laatija.patevyystaso')
-    },
-    {
-      id: 'toteamispaivamaara',
-      title: $_('laatijahaku.voimassaolo'),
-      format: formats.formatPatevyydenVoimassaoloaika
-    },
-    { id: 'toimintaalue', title: $_('laatija.paatoimintaalue') },
-    { id: 'postinumero', title: $_('laatija.postinumero') },
-    { id: 'postitoimipaikka', title: $_('laatijahaku.kunta') },
-    {
-      id: 'yritys',
-      type: 'action-with-template',
-      title: $_('yritys.yritykset'),
-      actionTemplate: ({ id, nimi }) => ({
-        type: 'link',
-        href: `#/yritys/${id}`,
-        text: `${nimi}`
-      })
-    },
-    {
-      id: 'energiatodistus',
-      type: 'action-with-template',
-      title: $_('laatijahaku.energiatodistukset'),
-      actionTemplate: ({ laatija }) => ({
-        type: 'link',
-        href: `#/energiatodistus/all?where=[[["=","laatija-id",${laatija}]]]`,
-        icon: 'view_list'
-      }),
-      roles: [KayttajaUtils.paakayttajaRole]
-    }
-  ]);
-
-  const formatLocale = R.curry((localizations, id) =>
-    R.compose(locales.label($locale), R.find(R.propEq('id', id)))(localizations)
-  );
-
-  const findYritysById = R.curry((yritykset, id) =>
-    R.find(R.propEq('id', id), yritykset)
-  );
-
   const formatYritys = R.curry((yritykset, idt) =>
     R.compose(
-      R.map(R.pick(['id', 'nimi'])),
-      R.map(findYritysById(yritykset))
+      R.map(Maybe.get),
+      R.filter(Maybe.isSome),
+      R.map(
+        R.compose(
+          R.map(R.pick(['id', 'nimi'])),
+          Maybe.findById(R.__, yritykset)
+        )
+      )
     )(idt)
   );
 
-  const formatLaatija = R.curry((patevyydet, yritykset, toimintaalueet) =>
+  const formatLocale = R.curry((localizations, id) =>
     R.compose(
-      R.map(laatija =>
-        R.compose(
-          R.pick(
-            R.compose(
-              R.concat(R.__, [
-                'henkilotunnus',
-                'email',
-                'ensitallennus',
-                'laatimiskielto',
-                'voimassa',
-                'id'
-              ]),
-              R.map(R.prop('id'))
-            )(fields)
-          ),
-          R.assoc(
-            'patevyystaso',
-            formatLocale(patevyydet, laatija.patevyystaso)
-          ),
-          R.assoc(
-            'toimintaalue',
-            formatLocale(toimintaalueet, laatija.toimintaalue)
-          ),
-          R.assoc('yritys', formatYritys(yritykset, laatija.yritys)),
-          R.assoc('laatija', `${laatija.etunimi} ${laatija.sukunimi}`),
-          R.assoc('energiatodistus', [{ laatija: laatija.id }])
-        )(laatija)
-      )
-    )
+      Maybe.orSome(id),
+      R.map(locales.label($locale)),
+      Maybe.findById(id)
+    )(localizations)
   );
 
   const formatLaatijaa = R.curry(
@@ -160,62 +83,21 @@
     })
   );
 
-  const onRowClick = ({ id }) => push(`#/kayttaja/${id}`);
-
-  const nextPageCallback = nextPage => {
-    model = R.assoc('page', Maybe.Some(nextPage), model);
-    push(
-      `${$location}?${R.compose(
-        qs.stringify,
-        R.map(Maybe.orSome('')),
-        R.pick(['search', 'page', 'state'])
-      )(model)}`
-    );
-  };
-
   const formatTila = R.compose(
     Maybe.orSome($_('validation.no-selection')),
     Maybe.map(state => $_(`laatijahaku.tilat.` + state)),
     R.when(R.complement(Maybe.isMaybe), Maybe.of)
   );
 
-  const searchValue = R.compose(
-    Maybe.orSome(''),
-    R.map(R.compose(R.toLower, R.trim)),
-    R.prop('search')
-  );
-
-  const isMatchToSearchValue = R.curry((model, value) =>
+  const matchSearch = R.curry((search, laatija) =>
     R.compose(
-      Maybe.orSome(false),
-      R.map(R.compose(R.contains(searchValue(model)), R.toLower, R.trim)),
-      Maybe.fromNull
-    )(value)
-  );
-
-  const matchTransformation = R.curry(model => ({
-    laatija: isMatchToSearchValue(model),
-    henkilotunnus: isMatchToSearchValue(model),
-    email: isMatchToSearchValue(model),
-    yritys: R.compose(
-      R.complement(R.isEmpty),
-      R.filter(isMatchToSearchValue(model)),
-      R.map(R.prop('nimi'))
-    ),
-    postinumero: isMatchToSearchValue(model),
-    postitoimipaikka: isMatchToSearchValue(model),
-    toimintaalue: isMatchToSearchValue(model),
-    puhelin: isMatchToSearchValue(model)
-  }));
-
-  const laatijaSearchMatch = R.curry((model, laatija) =>
-    R.compose(
-      R.complement(R.isEmpty),
-      R.filter(R.equals(true)),
+      R.any(R.includes(R.compose(R.toLower, R.trim)(search))),
+      R.map(R.toLower),
+      R.flatten,
       R.values,
-      R.evolve(matchTransformation(model)),
       R.pick([
-        'laatija',
+        'etunimi',
+        'sukunimi',
         'henkilotunnus',
         'email',
         'yritys',
@@ -223,11 +105,12 @@
         'postitoimipaikka',
         'toimintaalue',
         'puhelin'
-      ])
+      ]),
+      R.over(R.lensProp('yritys'), R.pluck('nimi'))
     )(laatija)
   );
 
-  const laatijaTilaMatch = R.curry((model, laatija) =>
+  const matchTila = R.curry((state, laatija) =>
     R.cond([
       [
         R.equals(0),
@@ -242,17 +125,8 @@
       [R.equals(2), R.always(R.propEq('laatimiskielto', true, laatija))],
       [R.equals(3), R.always(R.propEq('voimassa', false, laatija))],
       [R.T, R.always(true)]
-    ])(R.compose(Maybe.orSome(-1), R.map(parseInt), R.prop('state'))(model))
+    ])(state)
   );
-
-  const laatijaMatch = R.curry((model, laatija) =>
-    R.allPass([laatijaTilaMatch(model), laatijaSearchMatch(model)])(laatija)
-  );
-
-  $: results = R.compose(
-    Maybe.orSome([]),
-    R.map(R.filter(laatijaMatch(model)))
-  )(laatijat);
 
   $: R.compose(
     querystring => replace(`${$location}?${querystring}`),
@@ -297,10 +171,26 @@
         R.map(i => parseInt(i, 10)),
         Maybe.fromEmpty
       ),
-      state: Maybe.fromEmpty
+      state: R.compose(
+        R.filter(i => !isNaN(i)),
+        R.map(i => parseInt(i, 10)),
+        Maybe.fromEmpty
+      )
     }),
     qs.parse
   )($querystring);
+
+  $: results = R.compose(
+    Maybe.orSome([]),
+    R.map(
+      R.filter(
+        R.allPass([
+          matchTila(Maybe.orSome(-1, parsedQuery.state)),
+          matchSearch(Maybe.orSome('', parsedQuery.search))
+        ])
+      )
+    )
+  )(laatijat);
 </script>
 
 <div class="w-full mt-3">
@@ -350,7 +240,7 @@
     <Pgn
       items={laatijat}
       page={Maybe.orSome(0, parsedQuery.page)}
-      pageSize={50}
+      pageSize={3}
       urlFn={urlForPage(parsedQuery)}
       baseUrl={'#/laatija/all?'}
       let:pageItems>
@@ -372,17 +262,34 @@
         <tbody class="etp-table--tbody">
           {#each pageItems as laatija}
             <tr class="etp-table--tr">
-              <td class="etp-table--td"
-                >{`${laatija.etunimi} ${laatija.sukunimi}`}</td>
+              <Linkrow
+                contents={[
+                  `${laatija.etunimi} ${laatija.sukunimi}`,
+                  laatija.puhelin,
+                  laatija.patevyystaso,
+                  formats.formatPatevyydenVoimassaoloaika(
+                    laatija.toteamispaivamaara
+                  ),
+                  laatija.toimintaalue,
+                  laatija.postinumero,
+                  laatija.postitoimipaikka
+                ]}
+                href={`#/kayttaja/${laatija.id}`} />
+              <!-- <td class="etp-table--td">
+                <a class="block" href={`#/kayttaja/${laatija.id}`}>
+                  {`${laatija.etunimi} ${laatija.sukunimi}`}
+                </a>
+              </td>
               <td class="etp-table--td">{laatija.puhelin}</td>
               <td class="etp-table--td">{laatija.patevyystaso}</td>
-              <td class="etp-table--td"
-                >{formats.formatPatevyydenVoimassaoloaika(
+              <td class="etp-table--td">
+                {formats.formatPatevyydenVoimassaoloaika(
                   laatija.toteamispaivamaara
-                )}</td>
+                )}
+              </td>
               <td class="etp-table--td">{laatija.toimintaalue}</td>
               <td class="etp-table--td">{laatija.postinumero}</td>
-              <td class="etp-table--td">{laatija.postitoimipaikka}</td>
+              <td class="etp-table--td">{laatija.postitoimipaikka}</td> -->
               <td class="etp-table--td">
                 {#each laatija.yritys as { id, nimi }}
                   <a

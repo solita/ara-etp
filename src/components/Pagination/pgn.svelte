@@ -1,24 +1,13 @@
 <script>
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
+  import * as PaginationUtils from './pagination-utils';
 
   export let items;
-  export let pageSize = 5;
+  export let pageSize = 50;
   export let page = 0;
   export let baseUrl = '#/';
   export let urlFn = page => `#/${page}`;
-
-  const truncate = (numberOfPages, page) => {
-    const pages = R.range(0, numberOfPages);
-    const heads = R.slice(0, 2, pages);
-    const tails = R.compose(R.reverse, R.slice(0, 2), R.reverse)(pages);
-
-    const nearPages = R.slice(page - 1, page + 2, pages);
-
-    const truncated = R.uniq([...heads, ...nearPages, ...tails]);
-
-    return truncated;
-  };
 
   $: numberOfPages = Math.ceil(items.length / pageSize);
   $: results = {
@@ -56,7 +45,7 @@
             {/if}
           </div>
           <div class="w-1/2 flex justify-evenly items-center">
-            {#each R.aperture(2, truncate(numberOfPages, page)) as [currentPage, nextPage]}
+            {#each R.aperture(2, PaginationUtils.truncate(numberOfPages, page)) as [currentPage, nextPage]}
               <a
                 class="text-primary text-xl hover:underline"
                 class:font-bold={page === currentPage}
