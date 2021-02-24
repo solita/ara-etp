@@ -1,5 +1,5 @@
 <script>
-  import { push, replace, location, querystring } from 'svelte-spa-router';
+  import { replace, location, querystring } from 'svelte-spa-router';
   import * as R from 'ramda';
   import * as qs from 'qs';
   import * as Maybe from '@Utility/maybe-utils';
@@ -128,29 +128,6 @@
     ])(state)
   );
 
-  $: R.compose(
-    querystring => replace(`${$location}?${querystring}`),
-    qs.stringify,
-    R.evolve({
-      search: Maybe.orSome(''),
-      page: Maybe.orSome(0),
-      state: Maybe.orSome('')
-    })
-  )(model);
-
-  $: model = R.compose(
-    R.merge({ search: Maybe.None(), page: Maybe.Some(0), state: Maybe.None() }),
-    R.evolve({
-      search: Maybe.Some,
-      page: R.compose(
-        R.ifElse(Number.isInteger, Maybe.Some, R.always(Maybe.Some(0))),
-        parseInt
-      ),
-      state: R.ifElse(R.isEmpty, Maybe.None, Maybe.Some)
-    }),
-    R.pick(['search', 'page', 'state'])
-  )(qs.parse($querystring));
-
   let cancel = () => {};
 
   const urlForPage = R.curry((query, page) =>
@@ -163,9 +140,14 @@
     )(query)
   );
 
-  $: parsedQuery = R.compose(
+  $: model = R.compose(
+    R.mergeRight({
+      search: Maybe.None(),
+      page: Maybe.Some(0),
+      state: Maybe.None()
+    }),
     R.evolve({
-      search: Maybe.fromEmpty,
+      search: Maybe.Some,
       page: R.compose(
         R.filter(i => !isNaN(i)),
         R.map(i => parseInt(i, 10)),
@@ -177,16 +159,26 @@
         Maybe.fromEmpty
       )
     }),
-    qs.parse
-  )($querystring);
+    R.pick(['search', 'page', 'state'])
+  )(qs.parse($querystring));
+
+  $: R.compose(
+    querystring => replace(`${$location}?${querystring}`),
+    qs.stringify,
+    R.evolve({
+      search: Maybe.orSome(''),
+      page: Maybe.orSome(0),
+      state: Maybe.orSome('')
+    })
+  )(model);
 
   $: results = R.compose(
     Maybe.orSome([]),
     R.map(
       R.filter(
         R.allPass([
-          matchTila(Maybe.orSome(-1, parsedQuery.state)),
-          matchSearch(Maybe.orSome('', parsedQuery.search))
+          matchTila(Maybe.orSome(-1, model.state)),
+          matchSearch(Maybe.orSome('', model.search))
         ])
       )
     )
@@ -205,7 +197,10 @@
         on:input={evt => {
           cancel = R.compose(
             Future.value(val => {
-              model = R.assoc('search', Maybe.Some(val), model);
+              model = R.mergeRight(model, {
+                search: Maybe.Some(val),
+                page: Maybe.Some(0)
+              });
             }),
             Future.after(200),
             R.tap(cancel)
@@ -218,12 +213,18 @@
       <Select
         label={$_('laatijahaku.tila')}
         disabled={false}
-        bind:model
-        lens={R.lensProp('state')}
+        model={model.state}
+        lens={R.identity}
         format={formatTila}
-        parse={Maybe.Some}
+        parse={R.identity}
+        inputValueParse={Maybe.orSome('')}
         noneLabel={'laatijahaku.kaikki'}
-        items={[0, 1, 2, 3]} />
+        items={R.map(Maybe.Some, [0, 1, 2, 3])}
+        on:change={evt =>
+          (model = R.mergeRight(model, {
+            state: Maybe.Some(evt.target.value),
+            page: Maybe.Some(0)
+          }))} />
     </div>
   </div>
 
@@ -239,9 +240,9 @@
   ]) as [laatijat, kayttaja]}
     <Pgn
       items={laatijat}
-      page={Maybe.orSome(0, parsedQuery.page)}
-      pageSize={3}
-      urlFn={urlForPage(parsedQuery)}
+      page={Maybe.orSome(0, model.page)}
+      pageSize={20}
+      urlFn={urlForPage(model)}
       baseUrl={'#/laatija/all?'}
       let:pageItems>
       <table class="etp-table">
@@ -275,21 +276,6 @@
                   laatija.postitoimipaikka
                 ]}
                 href={`#/kayttaja/${laatija.id}`} />
-              <!-- <td class="etp-table--td">
-                <a class="block" href={`#/kayttaja/${laatija.id}`}>
-                  {`${laatija.etunimi} ${laatija.sukunimi}`}
-                </a>
-              </td>
-              <td class="etp-table--td">{laatija.puhelin}</td>
-              <td class="etp-table--td">{laatija.patevyystaso}</td>
-              <td class="etp-table--td">
-                {formats.formatPatevyydenVoimassaoloaika(
-                  laatija.toteamispaivamaara
-                )}
-              </td>
-              <td class="etp-table--td">{laatija.toimintaalue}</td>
-              <td class="etp-table--td">{laatija.postinumero}</td>
-              <td class="etp-table--td">{laatija.postitoimipaikka}</td> -->
               <td class="etp-table--td">
                 {#each laatija.yritys as { id, nimi }}
                   <a

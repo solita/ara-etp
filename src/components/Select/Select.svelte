@@ -186,7 +186,9 @@
         } else {
           model = R.compose(
             R.set(lens, R.__, model),
+            R.tap(console.log),
             parse,
+            R.tap(console.log),
             R.nth(R.__, items),
             R.when(R.always(allowNone), R.dec)
           )(index);
