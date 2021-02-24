@@ -3,7 +3,6 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import { replace } from 'svelte-spa-router';
-  import { currentUserStore } from '@/stores';
   import { _ } from '@Language/i18n';
   import * as Navigation from '@Utility/navigation';
 
