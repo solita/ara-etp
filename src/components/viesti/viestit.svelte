@@ -3,6 +3,9 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import { querystring } from 'svelte-spa-router';
+  import { push } from '@Component/Router/router';
+  import qs from 'qs';
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -15,12 +18,25 @@
   import Link from '../Link/Link.svelte';
   import Viestiketju from './viestiketju';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import Pagination from '@Component/Pagination/Pagination';
 
   let resources = Maybe.None();
-
   let overlay = true;
 
+  const pageSize = 3;
+  $: ketjutCount = 0;
+  $: pageCount = Math.ceil(R.divide(parseInt(ketjutCount), pageSize));
+  $: page = R.compose(
+    R.prop('page'),
+    R.mergeWith(Maybe.orElse, { page: Maybe.Some(0) }),
+    R.evolve({ page: Maybe.fromEmpty }),
+    qs.parse
+  )($querystring);
+
   const enableOverlay = _ => (overlay = true);
+
+  const nextPageCallback = nextPage =>
+    push(`#/viesti/all?page=${parseInt(nextPage) - 1}`);
 
   R.compose(
     Future.fork(
@@ -40,13 +56,15 @@
           whoami: response[0],
           ketjut: response[1]
         });
+        ketjutCount = parseInt(response[2].count);
         overlay = false;
       }
     ),
-    Future.parallel(2),
+    Future.parallel(3),
     R.tap(enableOverlay),
+    R.append(api.getKetjutCount(fetch)),
     R.pair(kayttajaApi.whoami),
-    api.getKetjut
+    api.getKetjut(R.__, `?offset=${page}&limit=${pageSize}`)
   )(fetch);
 </script>
 
@@ -78,6 +96,16 @@
         <Link text={'Lisää uusi ketju'} href="#/viesti/new" />
       </div>
     {/each}
+    {#if R.gt(pageCount, 1)}
+      <div class="pagination">
+        <Pagination
+          {pageCount}
+          pageNum={parseInt(page.orSome(0)) + 1}
+          {nextPageCallback}
+          itemsPerPage={pageSize}
+          itemsCount={ketjutCount} />
+      </div>
+    {/if}
   </div>
   <div slot="overlay-content">
     <Spinner />
