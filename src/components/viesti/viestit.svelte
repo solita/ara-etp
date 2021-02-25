@@ -25,7 +25,7 @@
   let resources = Maybe.None();
   let overlay = true;
 
-  const pageSize = 3;
+  const pageSize = 50;
   let ketjutCount = 0;
   $: pageCount = Math.ceil(R.divide(parseInt(ketjutCount), pageSize));
 
