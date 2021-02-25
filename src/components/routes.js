@@ -1,6 +1,4 @@
-import { wrap } from 'svelte-spa-router';
-import * as R from 'ramda';
-import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
+import {wrap} from 'svelte-spa-router/wrap'
 
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
@@ -17,33 +15,17 @@ import LandingPage from '@Component/Kayttaja/LandingPage';
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
   '/yritys/*': Yritys,
-  '/halytykset': wrap(Halytykset, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource(
-      [KayttajaUtils.paakayttajaRole],
-      currentUser
-    )
-  ),
-  '/kaytonvalvonta': wrap(Kaytonvalvonta, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource(
-      [KayttajaUtils.paakayttajaRole],
-      currentUser
-    )
-  ),
-  '/tyojono': wrap(Tyojono, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource(
-      [KayttajaUtils.paakayttajaRole],
-      currentUser
-    )
-  ),
+  '/halytykset': Halytykset,
+  '/kaytonvalvonta': Kaytonvalvonta,
+  '/tyojono': Tyojono,
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
   '/viesti/*': Viesti,
-  '/energiatodistus/*': wrap(Energiatodistus, _ =>
-    KayttajaUtils.kayttajaHasAccessToResource(
-      [KayttajaUtils.laatijaRole, KayttajaUtils.paakayttajaRole],
-      currentUser
-    )
-  ),
-  '/myinfo': MyInfo,
+  '/energiatodistus/*': Energiatodistus,
+  '/myinfo': wrap ({
+    component: MyInfo,
+    props: {
+      whoami: currentUser
+    }}),
   '*': NotFound
 });

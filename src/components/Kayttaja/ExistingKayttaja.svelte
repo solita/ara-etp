@@ -2,11 +2,8 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
-  import {
-    flashMessageStore,
-    currentUserStore,
-    idTranslateStore
-  } from '@/stores';
+  import * as Response from '@Utility/response';
+  import { flashMessageStore, idTranslateStore } from '@/stores';
 
   import * as geoApi from '@Component/Geo/geo-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
@@ -23,9 +20,7 @@
 
   export let params;
 
-  let kayttaja = Maybe.None();
-  let laatija = Maybe.None();
-  let luokittelut = Maybe.None();
+  let resources = Maybe.None();
   let overlay = true;
 
   const toggleOverlay = value => {
@@ -33,7 +28,14 @@
   };
 
   const errorMessage = (type, response) =>
-    Locales.uniqueViolationMessage($_, response, `${type}.messages.save-error`);
+    Locales.uniqueViolationMessage(
+      $_,
+      response,
+      Maybe.orSome(
+        `${type}.messages.save-error`,
+        Response.localizationKey(response)
+      )
+    );
 
   const fork = (type, updatedModel) =>
     Future.fork(
@@ -58,61 +60,51 @@
       }
     );
 
-  $: submitLaatija = updatedLaatija =>
+  const submitLaatija = (whoami, id) => updatedLaatija =>
     R.compose(
       fork('laatija', updatedLaatija),
       R.tap(() => toggleOverlay(true)),
-      laatijaApi.putLaatijaById(
-        R.compose(Maybe.orSome(0), R.map(R.prop('rooli')))($currentUserStore),
-        fetch,
-        params.id
-      )
+      laatijaApi.putLaatijaById(whoami.rooli, fetch, id)
     )(updatedLaatija);
 
-  $: submitKayttaja = updatedKayttaja =>
+  const submitKayttaja = (whoami, id) => updatedKayttaja =>
     R.compose(
       fork('kayttaja', updatedKayttaja),
-      kayttajaApi.putKayttajaById(
-        R.compose(Maybe.orSome(0), R.map(R.prop('rooli')))($currentUserStore),
-        fetch,
-        params.id
-      ),
-      R.tap(() => toggleOverlay(true))
+      R.tap(() => toggleOverlay(true)),
+      kayttajaApi.putKayttajaById(whoami.rooli, fetch, id)
     )(updatedKayttaja);
 
-  $: R.compose(
-    Future.fork(
-      _ => {
-        flashMessageStore.add(
-          'Kayttaja',
-          'error',
-          $_('kayttaja.messages.load-error')
-        );
-        toggleOverlay(false);
-      },
-      ([fetchedKayttaja, fetchedLaatija, fetchedLuokittelut]) => {
-        idTranslateStore.updateKayttaja(fetchedKayttaja);
-        kayttaja = Maybe.Some(fetchedKayttaja);
-        laatija = Maybe.fromNull(fetchedLaatija);
-        luokittelut = Maybe.Some(fetchedLuokittelut);
-        toggleOverlay(false);
-      }
-    ),
-    Future.parallel(5),
-    R.append(
-      Future.parallelObject(5, {
+  $: Future.fork(
+    response => {
+      const msg = $_(
+        Maybe.orSome(
+          'kayttaja.messages.load-error',
+          Response.localizationKey(response)
+        )
+      );
+      flashMessageStore.add('Kayttaja', 'error', msg);
+      toggleOverlay(false);
+    },
+    response => {
+      idTranslateStore.updateKayttaja(response.kayttaja);
+      resources = Maybe.Some(response);
+      toggleOverlay(false);
+    },
+    Future.parallelObject(5, {
+      kayttaja: kayttajaApi.getKayttajaById(fetch, params.id),
+      laatija: R.map(
+        Maybe.fromNull,
+        kayttajaApi.getLaatijaById(fetch, params.id)
+      ),
+      whoami: kayttajaApi.whoami,
+      luokittelut: Future.parallelObject(5, {
         countries: geoApi.countries,
         toimintaalueet: geoApi.toimintaalueet,
         patevyydet: laatijaApi.patevyydet,
         laskutuskielet: laskutusApi.laskutuskielet
       })
-    ),
-    R.juxt([
-      kayttajaApi.getKayttajaById(fetch),
-      kayttajaApi.getLaatijaById(fetch)
-    ]),
-    R.prop('id')
-  )(params);
+    })
+  );
 
   const mergeKayttajaLaatija = (kayttaja, laatija) =>
     R.compose(
@@ -123,17 +115,17 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if Maybe.isSome(laatija)}
-      <LaatijaForm
-        submit={submitLaatija}
-        luokittelut={Maybe.get(luokittelut)}
-        laatija={mergeKayttajaLaatija(
-          Maybe.get(kayttaja),
-          Maybe.get(laatija)
-        )} />
-    {:else if Maybe.isSome(kayttaja)}
-      <KayttajaForm submit={submitKayttaja} kayttaja={Maybe.get(kayttaja)} />
-    {/if}
+    {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut }}
+      {#if Maybe.isSome(laatija)}
+        <LaatijaForm
+          submit={submitLaatija(whoami, params.id)}
+          {whoami}
+          {luokittelut}
+          laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
+      {:else}
+        <KayttajaForm submit={submitKayttaja(whoami, params.id)} {kayttaja} />
+      {/if}
+    {/each}
   </div>
   <div slot="overlay-content">
     <Spinner />
