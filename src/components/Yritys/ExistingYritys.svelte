@@ -85,7 +85,7 @@
     Future.delay(300),
     Future.parallel(4),
     R.concat(R.__, [api.luokittelut, kayttajaApi.whoami]),
-    R.juxt([api.getYritysById(fetch), api.getLaatijatById(fetch)])
+    R.juxt([api.getYritysById, api.getLaatijatById(fetch)])
   )(params.id);
 </script>
 

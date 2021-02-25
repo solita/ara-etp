@@ -102,7 +102,7 @@ describe('Yritys api and utils tests:', () => {
     });
   });
 
-  describe('getYritysIdByFuture', () => {
+  describe.skip('getYritysIdByFuture', () => {
     it('should call right on succesful request', done => {
       const expected = {
         id: 1,

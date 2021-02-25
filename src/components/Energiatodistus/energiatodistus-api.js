@@ -353,7 +353,7 @@ export const replaceable = R.curry((fetch, id) =>
 export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
   R.compose(
     R.chain(Future.parallel(10)),
-    R.map(R.map(yritysApi.getYritysById(fetch))),
+    R.map(R.map(yritysApi.getYritysById)),
     R.map(R.map(R.prop('id'))),
     R.map(R.filter(LaatijaYritysTila.isAccepted)),
     laatijaApi.getYritykset(fetch)

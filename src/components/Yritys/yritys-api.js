@@ -52,13 +52,11 @@ export const getAllYritykset = fetch =>
     Future.encaseP(Fetch.getFetch(fetch))
   )(url.yritykset);
 
-export const getYritysById = R.curry((fetch, id) =>
-  R.compose(
-    R.map(deserialize),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    url.yritys
-  )(id)
+export const getYritysById = R.compose(
+  R.map(deserialize),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.yritys
 );
 
 export const putYritysById = R.curry((fetch, id, yritys) =>
