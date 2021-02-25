@@ -91,7 +91,7 @@
       toggleOverlay(false);
     },
     Future.parallelObject(5, {
-      kayttaja: kayttajaApi.getKayttajaById(fetch, params.id),
+      kayttaja: kayttajaApi.getKayttajaById(params.id),
       laatija: R.map(
         Maybe.fromNull,
         kayttajaApi.getLaatijaById(fetch, params.id)
