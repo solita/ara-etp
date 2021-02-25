@@ -1,6 +1,8 @@
 <script>
   import * as R from 'ramda';
+  import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import { querystring } from 'svelte-spa-router';
@@ -24,12 +26,14 @@
   let overlay = true;
 
   const pageSize = 3;
-  $: ketjutCount = 0;
+  let ketjutCount = 0;
   $: pageCount = Math.ceil(R.divide(parseInt(ketjutCount), pageSize));
+
   $: page = R.compose(
+    R.chain(Either.toMaybe),
+    R.map(Parsers.parseInteger),
+    Maybe.fromEmpty,
     R.prop('page'),
-    R.mergeWith(Maybe.orElse, { page: Maybe.Some(0) }),
-    R.evolve({ page: Maybe.fromEmpty }),
     qs.parse
   )($querystring);
 
@@ -38,34 +42,37 @@
   const nextPageCallback = nextPage =>
     push(`#/viesti/all?page=${parseInt(nextPage) - 1}`);
 
-  R.compose(
-    Future.fork(
-      response => {
-        const msg = $_(
-          Maybe.orSome(
-            'viesti.all.messages.load-error',
-            Response.localizationKey(response)
-          )
-        );
+  $: if (page) {
+    R.compose(
+      Future.fork(
+        response => {
+          const msg = $_(
+            Maybe.orSome(
+              'viesti.all.messages.load-error',
+              Response.localizationKey(response)
+            )
+          );
 
-        flashMessageStore.add('viesti', 'error', msg);
-        overlay = false;
-      },
-      response => {
-        resources = Maybe.Some({
-          whoami: response[0],
-          ketjut: response[1]
-        });
-        ketjutCount = parseInt(response[2].count);
-        overlay = false;
-      }
-    ),
-    Future.parallel(3),
-    R.tap(enableOverlay),
-    R.append(api.getKetjutCount(fetch)),
-    R.pair(kayttajaApi.whoami),
-    api.getKetjut(R.__, `?offset=${page}&limit=${pageSize}`)
-  )(fetch);
+          flashMessageStore.add('viesti', 'error', msg);
+          overlay = false;
+        },
+        response => {
+          resources = Maybe.Some({
+            whoami: response[0],
+            ketjut: response[1]
+          });
+          ketjutCount = parseInt(response[2].count);
+          overlay = false;
+        }
+      ),
+      Future.parallel(3),
+      R.tap(enableOverlay),
+      R.append(api.getKetjutCount),
+      R.pair(kayttajaApi.whoami),
+      api.getKetjut,
+      api.toQueryString
+    )({ offset: page, limit: Maybe.Some(pageSize) });
+  }
 </script>
 
 <style>
@@ -100,7 +107,7 @@
       <div class="pagination">
         <Pagination
           {pageCount}
-          pageNum={parseInt(page.orSome(0)) + 1}
+          pageNum={page.orSome(0) + 1}
           {nextPageCallback}
           itemsPerPage={pageSize}
           itemsCount={ketjutCount} />

@@ -22,6 +22,16 @@ export const deserialize = R.evolve({
   viestit: R.map(R.evolve({ senttime: dfns.parseJSON }))
 });
 
+export const toQueryString = R.compose(
+  Maybe.orSome(''),
+  R.map(R.compose(R.concat('?'), R.join('&'))),
+  Maybe.toMaybeList,
+  R.map(([key, optionalValue]) =>
+    R.map(value => `${key}=${value}`, optionalValue)
+  ),
+  R.toPairs
+);
+
 export const getKetju = fetch =>
   R.compose(
     R.map(deserialize),
@@ -30,20 +40,17 @@ export const getKetju = fetch =>
     url.ketju
   );
 
-export const getKetjut = R.curry((fetch, params) =>
-  R.compose(
-    R.map(R.map(deserialize)),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    R.concat(R.__, params)
-  )(url.ketjut)
+export const getKetjut = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(url.ketjut)
 );
 
-export const getKetjutCount = fetch =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(url.ketjutCount);
+export const getKetjutCount = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)(url.ketjutCount);
 
 export const postKetju = fetch =>
   R.compose(
