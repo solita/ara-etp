@@ -185,10 +185,13 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
   { label: i18n('navigation.viestit'), href: '#/viesti/all' }
 ]);
 
+export const linksForLaskuttaja = linksForPaakayttaja;
+
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,
   1: linksForPatevyydentoteaja,
-  2: linksForPaakayttaja
+  2: linksForPaakayttaja,
+  3: linksForLaskuttaja
 });
 
 export const parseEnergiatodistus = R.curry(
