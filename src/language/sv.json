@@ -68,8 +68,7 @@
     "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken. SV?",
     "forbidden": "Puutteelliset käyttöoikeudet SV?",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan. SV?",
-    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman. SV?",
-    "unexpected": "Sovelluksen latauksessa tapahtui odottamaton virhe. Sivun päivitys voi korjata ongelman. SV?"
+    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman. SV?"
   },
   "units": {
     "year": "år",
@@ -149,6 +148,7 @@
       "save-error": "Det uppstod ett oväntat fel i sparandet av användarens uppgifter.",
       "validation-error": "Käyttäjän tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen.",
       "load-error": "Sökningen av användarens uppgifter misslyckades.",
+      "not-found": "Käyttäjää ei löydy tästä palvelusta SV",
       "upload-error": "Filen kunde inte laddas ner."
     }
   },
