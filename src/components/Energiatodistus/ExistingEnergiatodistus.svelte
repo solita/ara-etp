@@ -104,7 +104,7 @@
       api.validation(params.version)
     ]),
     R.tap(() => toggleOverlay(true)),
-    api.getEnergiatodistusById(fetch)
+    api.getEnergiatodistusById
   )(params.version, params.id);
 
   const tilaLabel = R.compose(
