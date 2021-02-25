@@ -8,7 +8,7 @@
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import H1 from '@Component/H/H1';
   import Select from '@Component/Select/Select';
-  import Pgn from '@Component/Pagination/pgn';
+  import Pagination from '@Component/Pagination/items-pagination';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as yritysApi from '@Component/Yritys/yritys-api';
   import * as geoApi from '@Component/Geo/geo-api';
@@ -238,7 +238,7 @@
     Maybe.Some(results),
     kayttaja
   ]) as [laatijat, kayttaja]}
-    <Pgn
+    <Pagination
       items={laatijat}
       page={Maybe.orSome(0, model.page)}
       pageSize={20}
@@ -298,6 +298,6 @@
           {/each}
         </tbody>
       </table>
-    </Pgn>
+    </Pagination>
   {/each}
 </div>
