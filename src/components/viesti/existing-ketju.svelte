@@ -61,7 +61,7 @@
     Future.parallel(2),
     R.tap(enableOverlay),
     R.pair(kayttajaApi.whoami),
-    api.getKetju(fetch)
+    api.ketju
   );
 
   $: load(params.id);

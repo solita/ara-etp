@@ -21,13 +21,12 @@ export const deserialize = R.evolve({
   viestit: R.map(R.evolve({ senttime: dfns.parseJSON }))
 });
 
-export const getKetju = fetch =>
-  R.compose(
-    R.map(deserialize),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    url.ketju
-  );
+export const ketju = R.compose(
+  R.map(deserialize),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.ketju
+);
 
 export const getKetjut = fetch =>
   R.compose(
