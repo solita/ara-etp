@@ -132,16 +132,6 @@ export const url = {
   discarded: (version, id) => `${url.id(version, id)}/discarded`
 };
 
-export const toQueryString = R.compose(
-  Maybe.orSome(''),
-  R.map(R.compose(R.concat('?'), R.join('&'))),
-  Maybe.toMaybeList,
-  R.map(([key, optionalValue]) =>
-    R.map(value => `${key}=${value}`, optionalValue)
-  ),
-  R.toPairs
-);
-
 export const getEnergiatodistukset = R.compose(
   R.map(R.map(deserialize)),
   Fetch.responseAsJson,

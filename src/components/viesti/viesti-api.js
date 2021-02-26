@@ -7,6 +7,7 @@ import * as dfns from 'date-fns';
 
 const url = {
   ketjut: '/api/private/viestit',
+  ketjutCount: '/api/private/viestit/count',
   ketju: id => `${url.ketjut}/${id}`,
   viestit: id => `${url.ketju(id)}/viestit`
 };
@@ -28,12 +29,17 @@ export const ketju = R.compose(
   url.ketju
 );
 
-export const getKetjut = fetch =>
-  R.compose(
-    R.map(R.map(deserialize)),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(url.ketjut);
+export const getKetjut = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(url.ketjut)
+);
+
+export const getKetjutCount = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)(url.ketjutCount);
 
 export const postKetju = fetch =>
   R.compose(
