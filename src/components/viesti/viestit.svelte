@@ -28,7 +28,7 @@
 
   const pageSize = 50;
   let ketjutCount = 0;
-  $: pageCount = Math.ceil(R.divide(parseInt(ketjutCount), pageSize));
+  let page = Maybe.Some(0);
 
   $: page = R.compose(
     R.chain(Either.toMaybe),
@@ -37,43 +37,42 @@
     R.prop('page'),
     qs.parse
   )($querystring);
+  $: pageCount = Math.ceil(R.divide(parseInt(ketjutCount), pageSize));
 
   const enableOverlay = _ => (overlay = true);
 
   const nextPageCallback = nextPage =>
     push(`#/viesti/all?page=${parseInt(nextPage) - 1}`);
 
-  $: if (page) {
-    R.compose(
-      Future.fork(
-        response => {
-          const msg = $_(
-            Maybe.orSome(
-              'viesti.all.messages.load-error',
-              Response.localizationKey(response)
-            )
-          );
+  R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            'viesti.all.messages.load-error',
+            Response.localizationKey(response)
+          )
+        );
 
-          flashMessageStore.add('viesti', 'error', msg);
-          overlay = false;
-        },
-        response => {
-          resources = Maybe.Some({
-            whoami: response[0],
-            ketjut: response[1]
-          });
-          ketjutCount = parseInt(response[2].count);
-          overlay = false;
-        }
-      ),
-      Future.parallel(3),
-      R.tap(enableOverlay),
-      R.append(api.getKetjutCount),
-      R.pair(kayttajaApi.whoami),
-      api.getKetjut,
-      Query.toQueryString
-    )({ offset: page, limit: Maybe.Some(pageSize) });
-  }
+        flashMessageStore.add('viesti', 'error', msg);
+        overlay = false;
+      },
+      response => {
+        resources = Maybe.Some({
+          whoami: response[0],
+          ketjut: response[1]
+        });
+        ketjutCount = parseInt(response[2].count);
+        overlay = false;
+      }
+    ),
+    Future.parallel(3),
+    R.tap(enableOverlay),
+    R.append(api.getKetjutCount),
+    R.pair(kayttajaApi.whoami),
+    api.getKetjut,
+    Query.toQueryString
+  )({ offset: page, limit: Maybe.Some(pageSize) });
 </script>
 
 <style>
