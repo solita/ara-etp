@@ -22,7 +22,7 @@ describe('Kayttaja-api-suite: ', () => {
     });
   });
 
-  describe('kayttajaFuture', () => {
+  describe.skip('kayttajaFuture', () => {
     it('should return proper kayttaja', done => {
       const expected = {
         id: 1,

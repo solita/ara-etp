@@ -122,7 +122,7 @@
     R.prepend(
       Maybe.fold(
         Future.resolve(null),
-        api.getEnergiatodistusById(fetch, params.version),
+        api.getEnergiatodistusById(params.version),
         copyFromId
       )
     ),

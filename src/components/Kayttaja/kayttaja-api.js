@@ -37,13 +37,11 @@ export const url = {
 
 export const whoami = Future.cache(Fetch.getJson(fetch, url.whoami));
 
-export const getKayttajaById = R.curry((fetch, id) =>
-  R.compose(
-    R.map(deserialize),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    url.id
-  )(id)
+export const getKayttajaById = R.compose(
+  R.map(deserialize),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.id
 );
 
 export const getLaatijaById = R.curry((fetch, id) =>

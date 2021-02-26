@@ -159,7 +159,7 @@ export const getEnergiatodistuksetByField = R.curry((field, value) =>
   getEnergiatodistukset(`?where=[[["=","${field}",${R.toString(value)}]]]`)
 );
 
-export const getEnergiatodistusById = R.curry((fetch, version, id) =>
+export const getEnergiatodistusById = R.curry((version, id) =>
   R.compose(
     R.map(deserialize),
     Fetch.responseAsJson,
@@ -176,7 +176,7 @@ export const findEnergiatodistusById = R.compose(
       Future.reject
     )
   ),
-  getEnergiatodistusById(fetch, 'all')
+  getEnergiatodistusById('all')
 );
 
 export const getLiitteetById = R.curry((fetch, version, id) =>
@@ -353,7 +353,7 @@ export const replaceable = R.curry((fetch, id) =>
 export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
   R.compose(
     R.chain(Future.parallel(10)),
-    R.map(R.map(yritysApi.getYritysById(fetch))),
+    R.map(R.map(yritysApi.getYritysById)),
     R.map(R.map(R.prop('id'))),
     R.map(R.filter(LaatijaYritysTila.isAccepted)),
     laatijaApi.getYritykset(fetch)

@@ -34,7 +34,7 @@
         `#/energiatodistus/${energiatodistus.versio}/${energiatodistus.id}`
       );
     },
-    EtApi.getEnergiatodistusById(fetch, 'all', params.id)
+    EtApi.getEnergiatodistusById('all', params.id)
   );
 </script>
 
