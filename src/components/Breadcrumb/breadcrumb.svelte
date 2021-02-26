@@ -5,7 +5,7 @@
   import Link from '@Component/Link/Link';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import * as BreadcrumbFutureUtils from './breadcrumb-future-utils';
+  import * as BreadcrumbUtils from './breadcrumb-utils';
 
   export let location;
 
@@ -26,10 +26,7 @@
         R.tap(updatedCache => (crumbCache = updatedCache)),
         R.unless(
           R.view(lens),
-          R.set(
-            lens,
-            Future.cache(BreadcrumbFutureUtils.parseLocation($_, location))
-          )
+          R.set(lens, Future.cache(BreadcrumbUtils.parseLocation($_, location)))
         ),
         R.tap(cancel)
       )(crumbCache)

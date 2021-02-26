@@ -102,60 +102,6 @@ describe('Yritys api and utils tests:', () => {
     });
   });
 
-  describe.skip('getYritysIdByFuture', () => {
-    it('should call right on succesful request', done => {
-      const expected = {
-        id: 1,
-        nimi: 'test',
-        verkkolaskuosoite: Maybe.Some('003712345671')
-      };
-
-      const response = {
-        status: 200,
-        ok: true,
-        json: () =>
-          new Promise((resolve, _) =>
-            resolve({
-              id: 1,
-              nimi: 'test',
-              verkkolaskuosoite: '003712345671'
-            })
-          )
-      };
-
-      const fetch = (url, options) =>
-        new Promise((resolve, _) => resolve(response));
-
-      Future.fork(
-        _ => {},
-        value => {
-          assert.deepEqual(expected, value);
-          done();
-        },
-        api.getYritysById(fetch, 1)
-      );
-    });
-
-    it('should call left on failed request', done => {
-      const response = {
-        status: 404,
-        ok: false
-      };
-
-      const fetch = (url, options) =>
-        new Promise((_, reject) => reject(response));
-
-      Future.fork(
-        reject => {
-          assert.equal(404, reject.status);
-          done();
-        },
-        _ => {},
-        api.getYritysById(fetch, 1)
-      );
-    });
-  });
-
   describe('putYritysByIdFuture', () => {
     it('should call right on succesful request', done => {
       const expected = {

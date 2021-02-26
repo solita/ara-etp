@@ -6,7 +6,7 @@
   import { _ } from '@Language/i18n';
 
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
-  import Breadcrumb from '@Component/Breadcrumb/breadcrumb-future';
+  import Breadcrumb from '@Component/Breadcrumb/breadcrumb';
   import { buildRoutes } from '@Component/routes';
 
   export let whoami;

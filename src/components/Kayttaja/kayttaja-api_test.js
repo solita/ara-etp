@@ -22,50 +22,6 @@ describe('Kayttaja-api-suite: ', () => {
     });
   });
 
-  describe.skip('kayttajaFuture', () => {
-    it('should return proper kayttaja', done => {
-      const expected = {
-        id: 1,
-        nimi: 'Paavo Pesusieni'
-      };
-
-      const response = {
-        status: 200,
-        ok: true,
-        json: () => new Promise((resolve, _) => resolve(expected))
-      };
-
-      const fetch = url => new Promise((resolve, _) => resolve(response));
-
-      Future.fork(
-        _ => {},
-        kayttaja => {
-          assert.deepEqual(expected, kayttaja);
-          done();
-        },
-        api.getKayttajaById(fetch, 1234)
-      );
-    });
-
-    it('should fail when rejected', done => {
-      const response = {
-        status: 404,
-        ok: false
-      };
-
-      const fetch = url => new Promise((_, reject) => reject(response));
-
-      Future.fork(
-        reject => {
-          assert.equal(404, reject.status);
-          done();
-        },
-        _ => {},
-        api.getKayttajaById(fetch, 1234)
-      );
-    });
-  });
-
   describe('laatijaFuture', () => {
     it('should return proper laatija', done => {
       const expected = {
