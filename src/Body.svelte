@@ -7,6 +7,7 @@
 
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
+  import BreadcrumbFuture from '@Component/Breadcrumb/breadcrumb-future';
   import { buildRoutes } from '@Component/routes';
 
   export let whoami;
@@ -43,6 +44,7 @@
       location={$location}
       {whoami}
       i18n={$_} />
+    <BreadcrumbFuture location={$location} />
   </div>
 </div>
 <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
