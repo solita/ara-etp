@@ -6,6 +6,7 @@
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Response from '@Utility/response';
+  import * as Query from '@Utility/query';
 
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
@@ -139,7 +140,7 @@
   $: page = R.prop('page', parsedQuery);
 
   const queryToQuerystring = R.compose(
-    api.toQueryString,
+    Query.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
       where: R.compose(R.map(encodeURI), R.map(JSON.stringify), Maybe.fromEmpty)

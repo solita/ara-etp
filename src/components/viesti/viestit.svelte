@@ -5,6 +5,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Query from '@Utility/query';
   import { querystring } from 'svelte-spa-router';
   import { push } from '@Component/Router/router';
   import qs from 'qs';
@@ -70,7 +71,7 @@
       R.append(api.getKetjutCount),
       R.pair(kayttajaApi.whoami),
       api.getKetjut,
-      api.toQueryString
+      Query.toQueryString
     )({ offset: page, limit: Maybe.Some(pageSize) });
   }
 </script>

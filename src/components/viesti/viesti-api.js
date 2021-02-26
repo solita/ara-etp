@@ -22,16 +22,6 @@ export const deserialize = R.evolve({
   viestit: R.map(R.evolve({ senttime: dfns.parseJSON }))
 });
 
-export const toQueryString = R.compose(
-  Maybe.orSome(''),
-  R.map(R.compose(R.concat('?'), R.join('&'))),
-  Maybe.toMaybeList,
-  R.map(([key, optionalValue]) =>
-    R.map(value => `${key}=${value}`, optionalValue)
-  ),
-  R.toPairs
-);
-
 export const getKetju = fetch =>
   R.compose(
     R.map(deserialize),
