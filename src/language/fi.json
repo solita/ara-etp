@@ -84,7 +84,6 @@
     "forbidden": "Puutteelliset käyttöoikeudet",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan.",
     "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman.",
-    "unexpected": "Sovelluksen latauksessa tapahtui odottamaton virhe. Sivun päivitys voi korjata ongelman.",
     "file-read-error": "Tiedoston lukemisessa tapahtui odottamaton virhe."
   },
   "units": {
@@ -167,6 +166,7 @@
       "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
       "load-error": "Käyttäjän tietojen haku epäonnistui.",
+      "not-found": "Käyttäjää ei löydy tästä palvelusta.",
       "upload-error": "Tiedoston lataaminen epäonnistui."
     }
   },

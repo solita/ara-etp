@@ -76,13 +76,17 @@
 
   $: Future.fork(
     response => {
-      const msg = $_(
-        Maybe.orSome(
-          'kayttaja.messages.load-error',
-          Response.localizationKey(response)
-        )
-      );
+      const msg = Response.notFound(response)
+        ? $_('kayttaja.messages.not-found')
+        : $_(
+            Maybe.orSome(
+              'kayttaja.messages.load-error',
+              Response.localizationKey(response)
+            )
+          );
+
       flashMessageStore.add('Kayttaja', 'error', msg);
+      resources = Maybe.None();
       toggleOverlay(false);
     },
     response => {
