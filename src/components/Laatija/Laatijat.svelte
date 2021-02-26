@@ -27,7 +27,7 @@
   let laatijat = Maybe.None();
   let kayttaja = Maybe.None();
 
-  const formatYritys = R.curry((yritykset, idt) =>
+  const formatYritys = R.curry((yritykset, ids) =>
     R.compose(
       R.map(Maybe.get),
       R.filter(Maybe.isSome),
@@ -37,7 +37,7 @@
           Maybe.findById(R.__, yritykset)
         )
       )
-    )(idt)
+    )(ids)
   );
 
   const formatLocale = R.curry((localizations, id) =>
@@ -48,7 +48,7 @@
     )(localizations)
   );
 
-  const formatLaatijaa = R.curry(
+  const formatLaatija = R.curry(
     (patevyydet, yritykset, toimintaalueet, laatija) =>
       R.evolve(
         {
@@ -66,11 +66,19 @@
   );
 
   Future.fork(
-    _ => flashMessageStore.add('Laatija', 'error', $_('errors.load-error')),
+    response => {
+      const msg = Response.notFound(response)
+        ? $_('laatija.messages.not-found')
+        : $_(
+            Maybe.orSome('laatija.messages.load-error'),
+            Response.localizationKey(response)
+          );
+      flashMessageStore.add('Laatija', 'error', msg);
+    },
     ({ laatijatResponse, yritykset, patevyydet, toimintaalueet, whoami }) => {
       laatijat = R.compose(
         Maybe.Some,
-        R.map(formatLaatijaa(patevyydet, yritykset, toimintaalueet))
+        R.map(formatLaatija(patevyydet, yritykset, toimintaalueet))
       )(laatijatResponse);
       kayttaja = Maybe.Some(whoami);
     },

@@ -191,6 +191,7 @@
     "api-key-header": "Laskentaohjelmisto",
     "api-key": "Anna uusi tiedonsiirron salasana (vähintään 8 merkkiä)",
     "messages": {
+      "not-found": "Laatijaa ei löydy tästä palvelusta.",
       "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
       "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
