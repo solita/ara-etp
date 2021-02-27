@@ -2,6 +2,7 @@ import * as R from 'ramda';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Query from '@Utility/query';
 
 import * as dfns from 'date-fns';
 
@@ -33,7 +34,8 @@ export const getKetjut = R.compose(
   R.map(R.map(deserialize)),
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch)),
-  R.concat(url.ketjut)
+  R.concat(url.ketjut),
+  Query.toQueryString
 );
 
 export const getKetjutCount = R.compose(
