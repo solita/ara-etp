@@ -5,7 +5,6 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Query from '@Utility/query';
   import { querystring } from 'svelte-spa-router';
   import { push } from '@Component/Router/router';
   import qs from 'qs';
@@ -28,7 +27,7 @@
 
   const pageSize = 50;
   let ketjutCount = 0;
-  let page = Maybe.Some(0);
+  let page = Maybe.Some(1);
 
   $: page = R.compose(
     R.chain(Either.toMaybe),
@@ -37,14 +36,13 @@
     R.prop('page'),
     qs.parse
   )($querystring);
-  $: pageCount = Math.ceil(R.divide(parseInt(ketjutCount), pageSize));
-
-  const enableOverlay = _ => (overlay = true);
+  $: pageCount = Math.ceil(R.divide(ketjutCount, pageSize));
 
   const nextPageCallback = nextPage =>
-    push(`#/viesti/all?page=${parseInt(nextPage) - 1}`);
+    push(`#/viesti/all?page=${nextPage}`);
 
-  R.compose(
+  $: {
+    overlay = true;
     Future.fork(
       response => {
         const msg = $_(
@@ -58,21 +56,20 @@
         overlay = false;
       },
       response => {
-        resources = Maybe.Some({
-          whoami: response[0],
-          ketjut: response[1]
-        });
-        ketjutCount = parseInt(response[2].count);
+        resources = Maybe.Some(response);
+        ketjutCount = response.ketjutCount.count;
         overlay = false;
-      }
-    ),
-    Future.parallel(3),
-    R.tap(enableOverlay),
-    R.append(api.getKetjutCount),
-    R.pair(kayttajaApi.whoami),
-    api.getKetjut,
-    Query.toQueryString
-  )({ offset: page, limit: Maybe.Some(pageSize) });
+      },
+      Future.parallelObject(3, {
+        whoami: kayttajaApi.whoami,
+        ketjutCount: api.getKetjutCount,
+        ketjut: api.getKetjut({
+          offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
+          limit: Maybe.Some(pageSize)
+        })
+      })
+    );
+  };
 </script>
 
 <style>
@@ -107,7 +104,7 @@
       <div class="pagination">
         <Pagination
           {pageCount}
-          pageNum={page.orSome(0) + 1}
+          pageNum={page.orSome(1)}
           {nextPageCallback}
           itemsPerPage={pageSize}
           itemsCount={ketjutCount} />
