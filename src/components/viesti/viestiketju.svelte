@@ -29,24 +29,40 @@
 </script>
 
 <style>
-  .participant:not(:first-child)::before {
+  a:first-child {
+    @apply border-t;
+  }
+  .participants span:not(:last-child)::after {
     content: ', ';
+  }
+  .participants span {
+    @apply m-0 p-0;
+  }
+  .expanding-subject .subject {
+    transition: background 0.3s;
+    @apply rounded;
+  }
+  .expanding-subject .subject:not(:hover) {
+    @apply truncate;
+  }
+  .expanding-subject .subject:hover {
+    transform: translateY(-1%);
+    @apply bg-light border border-background whitespace-pre-wrap absolute z-10;
   }
 </style>
 
-<!-- purgecss: font-bold text-primary -->
+<!-- purgecss: font-bold text-primary expanding-subject -->
 
-<a href={`#/viesti/${ketju.id}`}>
-  <div class="flex hover:bg-althover border-b-1 py-2 border-dark">
-    <div class="flex flex-col w-1/6">
-      <span class="block"
-        >{R.compose(Formats.formatDateInstant, sentTime)(ketju)}</span>
-      <span class="block"
-        >{R.compose(Formats.formatHoursMinutes, sentTime)(ketju)}</span>
-    </div>
-    <div class="flex flex-col w-1/3">
+<a
+  href={`#/viesti/${ketju.id}`}
+  class="flex flex-col border-b border-background hover:bg-background hover:rounded-lg px-2 py-5">
+  <!-- FIRST ROW -->
+  <div class="flex items-start font-bold">
+    <span class="w-1/12 py-2">
+      {R.compose(Formats.formatDateInstant, sentTime)(ketju)}
+    </span>
+    <div class="w-5/12 py-2 flex">
       <span
-        class="block font-bold"
         class:text-primary={R.propEq(
           'id',
           R.path(['from', 'id'], R.last(ketju.viestit)),
@@ -54,33 +70,59 @@
         )}>
         {participants[R.path(['from', 'id'], R.last(ketju.viestit))]}
       </span>
-      <div class="flex">
-        {#if R.length(ketju.viestit) > 1}
-          <span class="block w-4/12">{R.length(ketju.viestit)} viestiä</span>
-        {:else}
-          <span class="block w-4/12">1 viesti</span>
-        {/if}
-        <div class="w-8/12 flex">
-          <span class="block font-icon">people</span>
-          <div class="flex-auto ml-1">
+    </div>
+    <div
+      class="flex w-1/2 justify-between"
+      class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
+      <span class="p-2 subject"> {ketju.subject} </span>
+
+      {#if R.gt(R.length(ketju.viestit), 1)}
+        <div
+          class="flex items-center flex-shrink ml-auto justify-self-end py-2"
+          title={'Viestejä ketjussa'}>
+          <span class="font-icon outline mr-1">chat_bubble_outline</span>
+          <span class="font-semibold">{R.length(ketju.viestit)}</span>
+        </div>
+      {/if}
+    </div>
+  </div>
+
+  <!-- SECOND ROW -->
+  <div class="flex items-start text-sm">
+    <div class="flex flex-col w-1/12">
+      <span class="block">
+        {R.compose(Formats.formatHoursMinutes, sentTime)(ketju)}
+      </span>
+    </div>
+
+    <div class="flex w-5/12 items-center space-x-2">
+      {#if R.gt(R.length(R.values(participants)), 1)}
+        <div
+          class="flex items-center w-full"
+          title={'Osallistujia viestiketjussa'}>
+          <span class="font-icon font-semibold">people</span>
+          <span class="font-semibold mx-1">
+            {R.length(R.values(participants)) + ' '}
+          </span>
+          <div class="truncate px-1 participants">
             {#if currentUserPartOfKetju}
-              <span class="participant font-bold text-primary">
+              <span class="font-semibold text-primary">
                 {participants[R.prop('id', whoami)]}
               </span>
             {/if}
             {#each R.compose(R.filter(R.length), R.values, R.dissoc(R.prop('id', whoami)))(participants) as participant}
-              <span class="participant">
+              <span>
                 {participant}
               </span>
             {/each}
           </div>
         </div>
-      </div>
+      {/if}
     </div>
+
     <div class="flex w-1/2">
-      <span class="font-bold">{ketju.subject}</span>
-      <span class="truncate">
-        &nbsp;- {R.last(ketju.viestit).body}
+      <span class="truncate px-2">
+        {R.last(ketju.viestit).body}
       </span>
     </div>
   </div>
