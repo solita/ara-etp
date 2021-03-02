@@ -35,30 +35,25 @@
   .participants span:not(:last-child)::after {
     content: ', ';
   }
-  .participants span {
-    @apply m-0 p-0;
-  }
   .expanding-subject .subject {
-    transition: background 0.3s;
-    @apply rounded;
+    transition: all 0.3s;
+    @apply rounded border;
   }
   .expanding-subject .subject:not(:hover) {
-    @apply truncate;
+    @apply truncate border-transparent;
   }
   .expanding-subject .subject:hover {
-    transform: translateY(-1%);
-    @apply bg-light border border-background whitespace-pre-wrap absolute z-10;
+    @apply bg-light border-background whitespace-pre-wrap absolute z-10;
   }
 </style>
 
-<!-- purgecss: font-bold text-primary expanding-subject -->
+<!-- purgecss: font-bold text-primary -->
 
 <a
   href={`#/viesti/${ketju.id}`}
   class="flex flex-col border-b border-background hover:bg-background hover:rounded-lg px-2 py-5">
-  <!-- FIRST ROW -->
   <div class="flex items-start font-bold">
-    <span class="w-1/12 py-2">
+    <span class="w-1/12 py-2 border border-transparent">
       {R.compose(Formats.formatDateInstant, sentTime)(ketju)}
     </span>
     <div class="w-5/12 py-2 flex">
@@ -78,8 +73,7 @@
 
       {#if R.gt(R.length(ketju.viestit), 1)}
         <div
-          class="flex items-center flex-shrink ml-auto justify-self-end py-2"
-          title={'Viestejä ketjussa'}>
+          class="flex items-center flex-shrink ml-auto justify-self-end py-2 border border-transparent">
           <span class="font-icon outline mr-1">chat_bubble_outline</span>
           <span class="font-semibold">{R.length(ketju.viestit)}</span>
         </div>
@@ -87,7 +81,6 @@
     </div>
   </div>
 
-  <!-- SECOND ROW -->
   <div class="flex items-start text-sm">
     <div class="flex flex-col w-1/12">
       <span class="block">
@@ -97,12 +90,10 @@
 
     <div class="flex w-5/12 items-center space-x-2">
       {#if R.gt(R.length(R.values(participants)), 1)}
-        <div
-          class="flex items-center w-full"
-          title={'Osallistujia viestiketjussa'}>
+        <div class="flex items-center w-full">
           <span class="font-icon font-semibold">people</span>
           <span class="font-semibold mx-1">
-            {R.length(R.values(participants)) + ' '}
+            {R.length(R.values(participants))}
           </span>
           <div class="truncate px-1 participants">
             {#if currentUserPartOfKetju}
