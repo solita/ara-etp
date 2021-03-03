@@ -1123,6 +1123,7 @@
       "title": "Viestikeskus",
       "senttime": "Lähetysaika",
       "osallistujat": "Osallistujat",
+      "new-viesti": "Uusi viesti",
       "content": "Sisältö",
       "no-messages": "Ei viestejä",
       "messages": {
