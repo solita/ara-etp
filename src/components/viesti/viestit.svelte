@@ -38,8 +38,7 @@
   )($querystring);
   $: pageCount = Math.ceil(R.divide(ketjutCount, pageSize));
 
-  const nextPageCallback = nextPage =>
-    push(`#/viesti/all?page=${nextPage}`);
+  const nextPageCallback = nextPage => push(`#/viesti/all?page=${nextPage}`);
 
   $: {
     overlay = true;
@@ -69,7 +68,7 @@
         })
       })
     );
-  };
+  }
 </script>
 
 <style>

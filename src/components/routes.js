@@ -1,4 +1,4 @@
-import {wrap} from 'svelte-spa-router/wrap'
+import { wrap } from 'svelte-spa-router/wrap';
 
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
@@ -22,10 +22,11 @@ export const buildRoutes = currentUser => ({
   '/laatija/*': Laatija,
   '/viesti/*': Viesti,
   '/energiatodistus/*': Energiatodistus,
-  '/myinfo': wrap ({
+  '/myinfo': wrap({
     component: MyInfo,
     props: {
       whoami: currentUser
-    }}),
+    }
+  }),
   '*': NotFound
 });
