@@ -14,6 +14,7 @@
 
   export let schema;
   export let disabled;
+  export let disabledRt;
   export let energiatodistus;
   export let inputLanguage;
 
@@ -122,7 +123,7 @@
 <div class="flex lg:flex-row flex-col -mx-4 my-4">
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
-      disabled={false}
+      disabled={disabledRt}
       {schema}
       {center}
       bind:model={energiatodistus}

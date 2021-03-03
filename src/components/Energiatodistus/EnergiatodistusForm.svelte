@@ -24,6 +24,7 @@
   import * as Validations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from './postinumero';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import ToolBar from '@Component/ToolBar/ToolBar';
   import Button from '@Component/Button/Button';
@@ -65,6 +66,8 @@
     energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
     R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
   );
+
+  $: disabledRt = Kayttajat.isLaskuttaja(whoami);
 
   const showInvalidPropertiesMessage = invalidProperties => {
     if (!R.isEmpty(invalidProperties)) {
@@ -284,6 +287,7 @@
             bind:eTehokkuus
             {inputLanguage}
             {disabled}
+            {disabledRt}
             {schema}
             {luokittelut}
             {validation}
