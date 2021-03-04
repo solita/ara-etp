@@ -5,14 +5,14 @@
 
   export let idTranslate;
   export let location;
-  export let user;
+  export let whoami;
   export let i18n;
   export let config;
 
   $: links = Navigation.navigationParse(
     config.isDev,
     i18n,
-    user,
+    whoami,
     location,
     idTranslate
   );

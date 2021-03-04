@@ -9,10 +9,10 @@
   import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
   import { buildRoutes } from '@Component/routes';
 
-  export let user;
+  export let whoami;
   export let config;
 
-  const routes = buildRoutes(user);
+  const routes = buildRoutes(whoami);
 </script>
 
 <style type="text/postcss">
@@ -41,7 +41,7 @@
     <Breadcrumb
       idTranslate={$idTranslateStore}
       location={$location}
-      {user}
+      {whoami}
       i18n={$_} />
   </div>
 </div>
@@ -50,7 +50,7 @@
     <NavigationTabBar
       idTranslate={$idTranslateStore}
       location={$location}
-      {user}
+      {whoami}
       {config}
       i18n={$_} />
   </div>
