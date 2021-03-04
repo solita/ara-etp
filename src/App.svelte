@@ -15,13 +15,11 @@
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
   import * as Future from '@Utility/future-utils';
-  import Content from './UserContent.svelte';
+  import Body from './Body.svelte';
 
   setupI18n();
 
-  let whoami = Maybe.None();
-  let applicationVersion = Maybe.None();
-  let applicationConfig = Maybe.None();
+  let resources = Maybe.None();
   let failure = Maybe.None();
 
   Future.fork(
@@ -29,16 +27,14 @@
       failure = Maybe.Some(response);
     },
     response => {
-      whoami = Maybe.Some(response[0]);
-      applicationVersion = Maybe.Some(response[1]);
-      applicationConfig = Maybe.Some(response[2]);
-      currentUserStore.set(whoami);
+      resources = Maybe.Some(response);
+      currentUserStore.set(Maybe.Some(response.whoami));
     },
-    Future.parallel(3, [
-      kayttajaApi.whoami,
-      versionApi.getVersion,
-      versionApi.getConfig
-    ])
+    Future.parallelObject(3, {
+      whoami: kayttajaApi.whoami,
+      version: versionApi.getVersion,
+      config: versionApi.getConfig
+    })
   );
 </script>
 
@@ -64,13 +60,7 @@
 <TableStyles />
 
 <div class="appcontainer font-body">
-  <div class="headercontainer">
-    <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-      <Header {whoami} />
-    </div>
-  </div>
-
-  {#if whoami.isNone() && failure.isNone()}
+  {#if resources.isNone() && failure.isNone()}
     <section class="flex flex-col flex-grow py-8 px-10 mx-auto">
       <Loading />
     </section>
@@ -84,14 +74,15 @@
     {/if}
   {/each}
 
-  {#each Maybe.toArray(R.sequence(Maybe.of, [
-      whoami,
-      applicationConfig
-    ])) as [whoami, config]}
-    <Content {whoami} {config} />
-  {/each}
+  {#each Maybe.toArray(resources) as { whoami, config, version }}
+    <div class="headercontainer">
+      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+        <Header whoami={Maybe.Some(whoami)} />
+      </div>
+    </div>
 
-  {#each Maybe.toArray(applicationVersion) as version}
+    <Body {whoami} {config} />
+
     <div class="footercontainer">
       <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
         <Footer {version} />
