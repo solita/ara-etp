@@ -20,7 +20,7 @@ export const serialize = R.evolve({
 
 export const deserialize = R.evolve({
   'kayttajarooli-id': Maybe.fromNull,
-  viestit: R.map(R.evolve({ senttime: dfns.parseJSON }))
+  viestit: R.map(R.evolve({ 'sent-time': dfns.parseJSON }))
 });
 
 export const ketju = R.compose(

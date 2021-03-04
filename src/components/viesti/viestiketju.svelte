@@ -9,7 +9,7 @@
   export let ketju;
   export let whoami;
 
-  const sentTime = R.compose(R.prop('senttime'), R.last, R.prop('viestit'));
+  const sentTime = R.compose(R.prop('sent-time'), R.last, R.prop('viestit'));
 
   $: participants = R.compose(
     R.reduce(R.mergeLeft, {}),
