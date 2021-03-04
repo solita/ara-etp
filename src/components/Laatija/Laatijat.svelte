@@ -68,7 +68,7 @@
       title: $_('laatijahaku.energiatodistukset'),
       actionTemplate: ({ laatija }) => ({
         type: 'link',
-        href: `#/energiatodistus/all`,
+        href: `#/energiatodistus/all?where=[[["=","laatija-id",${laatija}]]]`,
         icon: 'view_list'
       }),
       roles: [KayttajaUtils.paakayttajaRole]

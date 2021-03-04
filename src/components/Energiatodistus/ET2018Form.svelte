@@ -17,6 +17,7 @@
 
   import RakennuksenPerustiedot from './RakennuksenPerustiedot';
   import ToimenpideEhdotukset from './ToimenpideEhdotukset';
+  import EnergiatodistusLaatija from './EnergiatodistusLaatija';
 
   import Rakennusvaippa from './form-parts/lahtotiedot/rakennusvaippa';
   import Ikkunat from './form-parts/lahtotiedot/ikkunat';
@@ -49,6 +50,7 @@
   export let disabled = false;
   export let validation;
   export let eTehokkuus = Maybe.None();
+  export let whoami;
 
   $: labelLocale = LocaleUtils.label($locale);
 </script>
@@ -70,15 +72,7 @@
   {/if}
   {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
     <div class="lg:w-1/2 w-full px-4 py-2">
-      <BasicInput
-        id="energiatodistus.laatija-fullname"
-        name="energiatodistus.laatija-fullname"
-        label={$_('energiatodistus.laatija-fullname')}
-        disabled={true}
-        format={Maybe.orSome('')}
-        bind:model={energiatodistus}
-        lens={R.lensProp('laatija-fullname')}
-        i18n={$_} />
+      <EnergiatodistusLaatija {whoami} {energiatodistus} />
     </div>
   {/if}
 </div>

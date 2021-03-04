@@ -286,7 +286,8 @@
             {disabled}
             {schema}
             {luokittelut}
-            {validation} />
+            {validation}
+            {whoami} />
         </div>
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
