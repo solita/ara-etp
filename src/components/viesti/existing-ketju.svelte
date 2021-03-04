@@ -153,7 +153,7 @@
             <strong class="from hidden">{formatSender(viesti.from)}</strong>
             <strong class="from-me hidden">{$_(i18nRoot + '.self')}</strong>
             <span class="italic text-sm">
-              {Formats.formatTimeInstant(viesti.senttime)}
+              {Formats.formatTimeInstant(viesti['sent-time'])}
             </span>
             <p>{viesti.body}</p>
           </div>
