@@ -1,37 +1,39 @@
 <script>
   import * as R from 'ramda';
   import * as Future from '@Utility/future-utils';
-  import { _, locale } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
   import Link from '@Component/Link/Link';
   import * as Maybe from '@Utility/maybe-utils';
+  import { idTranslateStore } from '@/stores';
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import * as BreadcrumbUtils from './breadcrumb-utils';
 
   export let location;
 
-  let crumbCache = {};
-
   let breadcrumb = [];
 
   let cancel = () => {};
 
-  $: {
-    const lens = R.lensPath([$locale, location]);
-
-    cancel = Future.fork(
-      console.error,
-      result => (breadcrumb = result),
+  $: cancel = Future.value(
+    result => (breadcrumb = result),
+    R.chain(
       R.compose(
-        R.view(lens),
-        R.tap(updatedCache => (crumbCache = updatedCache)),
-        R.unless(
-          R.view(lens),
-          R.set(lens, Future.cache(BreadcrumbUtils.parseLocation($_, location)))
+        ({ fallback, future }) => {
+          breadcrumb = fallback;
+          return future;
+        },
+        BreadcrumbUtils.parseLocation(
+          $_,
+          $idTranslateStore,
+          idTranslateStore,
+          location
         ),
         R.tap(cancel)
-      )(crumbCache)
-    );
-  }
+      ),
+      kayttajaApi.whoami
+    )
+  );
 </script>
 
 <style>

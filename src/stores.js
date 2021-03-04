@@ -2,6 +2,11 @@ import { writable } from 'svelte/store';
 import * as R from 'ramda';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Future from '@Utility/future-utils';
+
+import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+import * as viestiApi from '@Component/viesti/viesti-api';
+import * as yritysApi from '@Component/Yritys/yritys-api';
 
 /* deprecated - do not use */
 export const currentUserStore = writable(Maybe.None());
@@ -10,10 +15,10 @@ export const patevyystasoStore = writable(Either.Left('Not initialized'));
 
 const createIdTranslateStore = () => {
   const { subscribe, update } = writable({
-    yritys: { all: 'navigation.yritykset', new: 'yritys.uusi-yritys' },
-    kayttaja: { all: 'navigation.kayttajat' },
-    energiatodistus: { new: 'navigation.uusi-energiatodistus' },
-    viesti: { all: 'navigation.viesti' }
+    yritys: {},
+    kayttaja: {},
+    energiatodistus: {},
+    viesti: {}
   });
 
   return {
@@ -27,21 +32,16 @@ const createIdTranslateStore = () => {
       update(
         R.assocPath(
           ['kayttaja', R.prop('id', kayttaja)],
-          R.compose(
-            R.join(' '),
-            R.converge(Array.of, [R.prop('etunimi'), R.prop('sukunimi')])
-          )(kayttaja)
+          R.pick(['etunimi', 'sukunimi', 'id', 'rooli'], kayttaja)
         )
       ),
     updateKetju: ketju => {
-      if (ketju['energiatodistus-id']) {
-        update(
-          R.assocPath(
-            ['viesti', R.prop('id', ketju)],
-            R.prop('energiatodistus-id', ketju)
-          )
-        );
-      }
+      update(
+        R.assocPath(
+          ['viesti', R.prop('id', ketju)],
+          Maybe.fromNull(R.prop('energiatodistus-id', ketju))
+        )
+      );
     }
   };
 };
