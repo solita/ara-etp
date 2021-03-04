@@ -221,6 +221,7 @@ export const laatijaCrumbFuture = R.curry((i18n, store, whoami, id, ...rest) =>
 export const laatijaCrumb = R.curry(
   (i18n, idTranslate, store, whoami, [id, ...rest]) =>
     R.cond([
+      [R.equals('laatijoidentuonti'), R.always(withSelfFallback([]))],
       [R.equals('all'), R.always(withSelfFallback([laatijat(i18n)]))],
       [
         R.T,
