@@ -71,6 +71,7 @@ export const linksForKayttaja = R.curry((i18n, id, idTranslate) => [
   {
     label: R.compose(
       Maybe.orSome('...'),
+      R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`),
       Maybe.fromNull,
       R.path(['kayttaja', id])
     )(idTranslate),
@@ -87,6 +88,7 @@ export const linksForPaakayttajaOmatTiedot = R.curry(
     {
       label: R.compose(
         Maybe.orSome('...'),
+        R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`),
         Maybe.fromNull,
         R.path(['kayttaja', id])
       )(idTranslate),
