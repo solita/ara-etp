@@ -87,8 +87,8 @@
   {#each Maybe.toArray(R.sequence(Maybe.of, [
       whoami,
       applicationConfig
-    ])) as [user, config]}
-    <Content {user} {config} />
+    ])) as [whoami, config]}
+    <Content {whoami} {config} />
   {/each}
 
   {#each Maybe.toArray(applicationVersion) as version}

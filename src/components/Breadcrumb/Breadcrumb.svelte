@@ -6,7 +6,7 @@
 
   import Link from '@Component/Link/Link';
 
-  export let user;
+  export let whoami;
   export let location;
   export let i18n;
   export let idTranslate;
@@ -15,7 +15,7 @@
     idTranslate,
     location,
     i18n,
-    user
+    whoami
   );
 
   $: head = R.head(breadcrumbs);
