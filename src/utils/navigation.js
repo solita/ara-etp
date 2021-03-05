@@ -5,24 +5,17 @@ import * as Kayttajat from '@Utility/kayttajat';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-const linksForLaatija = R.curry((isDev, i18n, kayttaja) =>
-  R.compose(
-    R.concat([
-      {
-        label: i18n('navigation.energiatodistukset'),
-        href: '#/energiatodistus/all'
-      }
-    ]),
-    R.append({
-      label: i18n('navigation.yritykset'),
-      href: `#/laatija/${kayttaja.id}/yritykset`
-    }),
-    R.when(
-      R.always(isDev),
-      R.append({ label: i18n('navigation.viestit'), href: '#/viesti/all' })
-    )
-  )([])
-);
+const linksForLaatija = R.curry((isDev, i18n, kayttaja) => [
+  {
+    label: i18n('navigation.energiatodistukset'),
+    href: '#/energiatodistus/all'
+  },
+  {
+    label: i18n('navigation.yritykset'),
+    href: `#/laatija/${kayttaja.id}/yritykset`
+  },
+  { label: i18n('navigation.viestit'), href: '#/viesti/all' }
+]);
 
 export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
   {
@@ -167,24 +160,17 @@ export const parseYritys = R.curry((i18n, kayttaja, locationParts) => {
   }
 });
 
-export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) =>
-  R.compose(
-    R.concat([
-      {
-        label: i18n('navigation.energiatodistukset'),
-        href: '#/energiatodistus/all'
-      },
-      {
-        label: i18n('navigation.laatijat'),
-        href: '#/laatija/all'
-      }
-    ]),
-    R.when(
-      R.always(isDev),
-      R.append({ label: i18n('navigation.viestit'), href: '#/viesti/all' })
-    )
-  )([])
-);
+export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
+  {
+    label: i18n('navigation.energiatodistukset'),
+    href: '#/energiatodistus/all'
+  },
+  {
+    label: i18n('navigation.laatijat'),
+    href: '#/laatija/all'
+  },
+  { label: i18n('navigation.viestit'), href: '#/viesti/all' }
+]);
 
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,
