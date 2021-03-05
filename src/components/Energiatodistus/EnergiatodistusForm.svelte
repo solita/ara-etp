@@ -61,18 +61,10 @@
   };
   const ETForm = forms[version];
 
-  $: disabled = !R.both(
-    R.compose(
-      Maybe.orSome(true),
-      R.map(R.equals(whoami.id), R.prop('laatija-id')),
-      R.propEq('tila-id', EtUtils.tila.draft)
-    )
-  )(energiatodistus);
-
-  // $: disabled = !R.and(
-  //   energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
-  //   R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
-  // );
+  $: disabled = !R.and(
+    energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
+    R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
+  );
 
   const showInvalidPropertiesMessage = invalidProperties => {
     if (!R.isEmpty(invalidProperties)) {

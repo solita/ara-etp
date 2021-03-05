@@ -38,7 +38,7 @@
 
 <div class="breadcrumbcontainer">
   <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-    <Breadcrumb location={$location} />
+    <Breadcrumb {user} location={$location} />
   </div>
 </div>
 <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">

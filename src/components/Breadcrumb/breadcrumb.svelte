@@ -10,6 +10,7 @@
   import * as BreadcrumbUtils from './breadcrumb-utils';
 
   export let location;
+  export let user;
 
   let breadcrumb = [];
 
@@ -17,22 +18,19 @@
 
   $: cancel = Future.value(
     result => (breadcrumb = result),
-    R.chain(
-      R.compose(
-        ({ fallback, future }) => {
-          breadcrumb = fallback;
-          return future;
-        },
-        BreadcrumbUtils.parseLocation(
-          $_,
-          $idTranslateStore,
-          idTranslateStore,
-          location
-        ),
-        R.tap(cancel)
+    R.compose(
+      ({ fallback, future }) => {
+        breadcrumb = fallback;
+        return future;
+      },
+      BreadcrumbUtils.parseLocation(
+        $_,
+        $idTranslateStore,
+        idTranslateStore,
+        location
       ),
-      kayttajaApi.whoami
-    )
+      R.tap(cancel)
+    )(user)
   );
 </script>
 
