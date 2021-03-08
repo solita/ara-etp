@@ -18,60 +18,67 @@
 </script>
 
 <style>
-  a {
-    @apply p-4;
+  a,
+  span {
+    @apply block text-dark px-4 py-2 no-underline border-t-1 border-b-1 border-r-1 border-active;
+  }
+
+  a.active {
+    @apply bg-active text-light;
+  }
+
+  a:hover {
+    @apply bg-background;
+  }
+
+  a:focus {
+    @apply outline-none bg-secondary text-light;
+  }
+
+  a:first-child {
+    @apply rounded-l-lg border-l-1;
+  }
+
+  a:last-child {
+    @apply rounded-r-lg;
   }
 </style>
 
-<!-- purgecss: font-bold -->
-
+<!-- purgecss: active -->
 <div>
   {#if items.length > 0}
     <slot
       pageItems={R.slice(page * pageSize, page * pageSize + pageSize, items)} />
-    <div class="flex flex-col mt-4">
-      <div>
+    <div class="flex w-full mt-4">
+      <div class="flex-1 slef-center">
         {$_('pagination.results', { values: results })}
       </div>
-      <div class="flex-grow flex justify-center">
+      <div class="flex">
         {#if numberOfPages > 0}
-          <div class="w-1/8 flex items-center justify-center">
-            {#if page > 0}
-              <a
-                class="font-icon text-primary text-xl hover:underline"
-                href={`${baseUrl}${urlFn(page - 1)}`}>
-                chevron_left
-              </a>
-            {/if}
-          </div>
-          <div class="w-1/2 flex justify-evenly items-center">
-            {#each R.aperture(2, PaginationUtils.truncate(numberOfPages, page)) as [currentPage, nextPage]}
-              <a
-                class="text-primary text-xl hover:underline"
-                class:font-bold={page === currentPage}
-                href={`${baseUrl}${urlFn(currentPage)}`}>{currentPage + 1}</a>
-              {#if nextPage - currentPage > 1}<span class="text-2xl">...</span
-                >{/if}
-            {/each}
-            {#if numberOfPages > 1}
-              <a
-                class="text-primary text-xl hover:underline"
-                class:font-bold={page === numberOfPages - 1}
-                href={`${baseUrl}${urlFn(numberOfPages - 1)}`}
-                >{numberOfPages}</a>
-            {/if}
-          </div>
-          <div class="w-1/8 flex items-center justify-center">
-            {#if page + 1 < numberOfPages}
-              <a
-                class="font-icon text-primary text-xl hover:underline"
-                href={`${baseUrl}${urlFn(page + 1)}`}>
-                chevron_right
-              </a>
-            {/if}
-          </div>
+          {#if page > 0}
+            <a class="flex font-icon" href={`${baseUrl}${urlFn(page - 1)}`}>
+              keyboard_arrow_left
+            </a>
+          {/if}
+          {#each R.aperture(2, PaginationUtils.truncate(numberOfPages, page)) as [currentPage, nextPage]}
+            <a
+              class:active={page === currentPage}
+              href={`${baseUrl}${urlFn(currentPage)}`}>{currentPage + 1}</a>
+            {#if nextPage - currentPage > 1}<span>...</span>{/if}
+          {/each}
+          {#if numberOfPages > 1}
+            <a
+              class:active={page === numberOfPages - 1}
+              href={`${baseUrl}${urlFn(numberOfPages - 1)}`}>{numberOfPages}</a>
+          {/if}
+          {#if page + 1 < numberOfPages}
+            <a class="flex font-icon" href={`${baseUrl}${urlFn(page + 1)}`}>
+              keyboard_arrow_right
+            </a>
+          {/if}
         {/if}
       </div>
+      <div class="flex-1 self-center" />
     </div>
   {/if}
 </div>
