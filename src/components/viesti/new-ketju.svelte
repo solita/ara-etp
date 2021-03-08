@@ -80,7 +80,7 @@
         vastaanottajaryhmat: api.vastaanottajaryhmat,
         whoami: Future.resolve(whoami),
         laatijat: Kayttajat.isPaakayttaja(whoami)
-          ? laatijaApi.getLaatijat(fetch)
+          ? laatijaApi.laatijat
           : Future.resolve([])
       })
     )

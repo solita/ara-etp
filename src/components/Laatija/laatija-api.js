@@ -84,9 +84,16 @@ export const getYritykset = R.curry((fetch, id) =>
   )(id)
 );
 
-export const getLaatijat = R.compose(
+export const laatijat = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(R.__, url.laatijat))
+)(fetch);
+
+export const yritykset = R.compose(
+  R.map(R.map(R.evolve({ modifytime: dfns.parseJSON }))),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.yritykset
 );
 
 const toggleLaatijaYritys = R.curry((method, fetch, laatijaId, yritysId) =>
@@ -100,8 +107,6 @@ const toggleLaatijaYritys = R.curry((method, fetch, laatijaId, yritysId) =>
 
 export const putLaatijaYritys = toggleLaatijaYritys('put');
 export const deleteLaatijaYritys = toggleLaatijaYritys('delete');
-
-export const getAllYritykset = yritysApi.getAllYritykset;
 
 export const patevyydet = R.compose(
   Future.cache,

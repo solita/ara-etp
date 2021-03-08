@@ -48,9 +48,7 @@
       overlay = false;
       laatijat = Maybe.Some(response);
     },
-    Kayttajat.isPaakayttaja(whoami)
-      ? laatijaApi.getLaatijat(fetch)
-      : Future.resolve([])
+    Kayttajat.isPaakayttaja(whoami) ? laatijaApi.laatijat : Future.resolve([])
   );
 
   const navigate = search => {
