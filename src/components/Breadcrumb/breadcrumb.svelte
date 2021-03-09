@@ -10,7 +10,7 @@
   import * as BreadcrumbUtils from './breadcrumb-utils';
 
   export let location;
-  export let user;
+  export let whoami;
 
   let breadcrumb = [];
 
@@ -30,7 +30,7 @@
         location
       ),
       R.tap(cancel)
-    )(user)
+    )(whoami)
   );
 </script>
 

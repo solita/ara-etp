@@ -38,7 +38,7 @@
 
 <div class="breadcrumbcontainer">
   <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-    <Breadcrumb {user} location={$location} />
+    <Breadcrumb {whoami} location={$location} />
   </div>
 </div>
 <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
