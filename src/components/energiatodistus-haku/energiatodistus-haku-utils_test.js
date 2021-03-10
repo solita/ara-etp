@@ -8,7 +8,7 @@ describe('EtHakuUtils:', () => {
     it('should return Just query parameter for given block', () => {
       const block = ['sisaltaa', 'perustiedot.nimi', 'asdf'];
       const expected = Maybe.Some([
-        ['like', 'energiatodistus.perustiedot.nimi', '%asdf%']
+        ['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%']
       ]);
 
       assert.deepEqual(
@@ -39,7 +39,7 @@ describe('EtHakuUtils:', () => {
       ];
       const expected = [
         [
-          ['like', 'energiatodistus.perustiedot.nimi', '%asdf%'],
+          ['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%'],
           ['=', 'energiatodistus.id', 2]
         ],
         [['>', 'energiatodistus.id', 'value']]
@@ -60,7 +60,7 @@ describe('EtHakuUtils:', () => {
         [['no-operation-named-this', 'key', 'value']]
       ];
       const expected = [
-        [['like', 'energiatodistus.perustiedot.nimi', '%asdf%']]
+        [['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%']]
       ];
 
       assert.deepEqual(
