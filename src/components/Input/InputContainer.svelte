@@ -1,10 +1,10 @@
 <script>
   import * as R from 'ramda';
   import * as Either from '@Utility/either-utils';
-  import * as Maybe from '@Utility/maybe-utils';
   import * as v from '@Utility/validation';
   import * as keys from '@Utility/keys';
   import * as objects from '@Utility/objects';
+  import { tick } from 'svelte';
 
   export let id;
   export let lens;
@@ -54,35 +54,40 @@
 
   const updateCurrentValue = value => (currentValue = parse(value));
 
-  $: viewValue = R.compose(
-    Maybe.orSome(viewValue),
+  $: formatModelValue = R.compose(
     Either.toMaybe,
     R.map(format),
     Either.fromValueOrEither,
     requireNotNil,
     R.view(lens)
-  )(model);
+  );
 
-  $: updateValue = value => {
+  $: R.forEach(value => {
+    viewValue = value;
+  }, formatModelValue(model));
+
+  $: updateModel = value => {
+    viewValue = value;
     const parsedValue = parse(value);
-    Either.fromValueOrEither(parsedValue).forEach(() => (viewValue = ''));
-    model = R.set(lens, parsedValue, model);
     currentValue = parsedValue;
-    validate(parsedValue);
+    tick().then(_ => {
+      model = R.set(lens, parsedValue, model);
+      validate(parsedValue);
+    });
   };
 </script>
 
 <div
   title={tooltip}
   on:focus|capture={event => validate(parse(event.target.value))}
-  on:blur|capture={event => updateValue(event.target.value)}
+  on:blur|capture={event => updateModel(event.target.value)}
   on:input={event => {
     updateCurrentValue(event.target.value);
     validate(parse(event.target.value));
   }}
   on:keydown={event => {
     if (event.keyCode === keys.ENTER) {
-      updateValue(event.target.value);
+      updateModel(event.target.value);
     }
   }}>
   <slot {viewValue} />
