@@ -16,7 +16,9 @@
       : yritysApi.getYritysById(id);
 
   const kayttajaFuture = ([id]) =>
-    R.includes(id, ['all']) ? Future.reject() : kayttajaApi.getKayttajaById(id);
+    R.includes(id, ['all', 'laatijoidentuonti'])
+      ? Future.reject()
+      : kayttajaApi.getKayttajaById(id);
 
   const viestiFuture = ([id]) =>
     R.includes(id, ['all', 'new']) ? Future.reject() : viestiApi.ketju(id);
@@ -77,7 +79,7 @@
     R.ifElse(
       R.hasPath([mapRoot(root), parseInt(id, 10)]),
       R.always(Future.reject()),
-      R.always(Future.resolve([mapRoot(root), parseInt(id, 10)]))
+      R.always(Future.resolve([mapRoot(root), id]))
     ),
     R.tap(cancel)
   )($idTranslateStore);

@@ -12,7 +12,12 @@
 
   let breadcrumb = [];
 
-  $: console.log(idTranslate);
+  $: breadcrumb = BreadcrumbUtils.parseLocation(
+    $_,
+    idTranslate,
+    location,
+    whoami
+  );
 </script>
 
 <style>
