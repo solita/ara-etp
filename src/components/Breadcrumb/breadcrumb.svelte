@@ -1,37 +1,18 @@
 <script>
   import * as R from 'ramda';
-  import * as Future from '@Utility/future-utils';
   import { _ } from '@Language/i18n';
   import Link from '@Component/Link/Link';
   import * as Maybe from '@Utility/maybe-utils';
-  import { idTranslateStore } from '@/stores';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import * as BreadcrumbUtils from './breadcrumb-utils';
 
   export let location;
   export let whoami;
+  export let idTranslate;
 
   let breadcrumb = [];
 
-  let cancel = () => {};
-
-  $: cancel = Future.value(
-    result => (breadcrumb = result),
-    R.compose(
-      ({ fallback, future }) => {
-        breadcrumb = fallback;
-        return future;
-      },
-      BreadcrumbUtils.parseLocation(
-        $_,
-        $idTranslateStore,
-        idTranslateStore,
-        location
-      ),
-      R.tap(cancel)
-    )(whoami)
-  );
+  $: console.log(idTranslate);
 </script>
 
 <style>
