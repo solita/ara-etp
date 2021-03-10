@@ -45,7 +45,7 @@ const lte = {
 
 const contains = {
   browserCommand: 'sisaltaa',
-  serverCommand: 'like',
+  serverCommand: 'ilike',
   format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
