@@ -17,7 +17,7 @@
   export let inputLanguage = Maybe.None();
 
   const id = inputs.id(path);
-  const type = inputs.type(schema, path);
+  $: type = inputs.type(schema, path);
   $: required = inputs.required(inputLanguage, type, model);
 </script>
 
@@ -32,5 +32,5 @@
   lens={inputs.dataLens(inputLanguage, path)}
   format={type.format || format}
   parse={type.parse}
-  validators={type.validators}
+  validators={R.defaultTo([], type.validators)}
   i18n={$_} />

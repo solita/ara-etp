@@ -7,6 +7,7 @@ import * as R from 'ramda';
 import * as dfns from 'date-fns';
 import * as Inputs from './inputs';
 import * as Validation from './validation';
+import * as Deep from '@Utility/deep-objects';
 
 const String = max => ({
   parse: parsers.optionalString,
@@ -338,3 +339,21 @@ export const assocRequired = (schema, property) => {
     schema
   );
 };
+
+export const appendRequiredValidators = (schema, isRequired) => Deep.map(
+    R.propSatisfies(R.is(Array), 'validators'),
+    R.when(
+      R.has('required'),
+      type => {
+        const isRequiredPredicate = lang => R.defaultTo(
+          type.required.all,
+          type.required[lang]);
+
+        return R.over(R.lensProp('validators'), R.append({
+          predicate: v => !isRequired(isRequiredPredicate) || Maybe.isSome(v),
+          label: R.applyTo('validation.required')
+        }), type);
+      }
+    ),
+  schema);
+
