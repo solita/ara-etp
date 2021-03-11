@@ -13,6 +13,8 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Address from '@Component/Yritys/address.svelte';
 
+  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as Kayttajat from '@Utility/kayttajat'
   import * as laatijaApi from './laatija-api';
   import * as yritysApi from '@Component/Yritys/yritys-api';
   import * as Tila from '@Component/Yritys/laatija-yritys-tila';
@@ -30,6 +32,7 @@
   let newLaatijaYritys = Either.Right(Maybe.None());
   let laatijaYritykset = [];
   let allYritykset = [];
+  let whoami = Maybe.None();
   let overlay = true;
   let disabled = false;
 
@@ -79,28 +82,31 @@
   const formatYritys = yritys =>
     yritys.id + ' | ' + yritys.ytunnus + ' | ' + yritys.nimi;
 
-  const load = R.compose(
-    Future.fork(
+  const load = id => {
+    toggleOverlay(true);
+    return Future.fork(
       _ => {
         flashMessageStore.add('Laatija', 'error', $_('errors.load-error'));
         toggleOverlay(false);
       },
-      result => {
-        allYritykset = result[0];
+      response => {
+        allYritykset = response.allYritykset;
         laatijaYritykset = R.compose(
           R.map(yritys =>
             R.mergeLeft(yritys, R.find(R.propEq('id', yritys.id), allYritykset))
           ),
           R.filter(R.complement(Tila.isDeleted))
-        )(result[1]);
-
+        )(response.yritykset);
+        whoami = Maybe.Some(response.whoami);
         toggleOverlay(false);
-      }
-    ),
-    R.tap(() => toggleOverlay(true)),
-    Future.both(yritysApi.getAllYritykset),
-    laatijaApi.yritykset
-  );
+      },
+      Future.parallelObject(3, {
+        yritykset: laatijaApi.yritykset(id),
+        allYritykset: yritysApi.getAllYritykset,
+        whoami: kayttajaApi.whoami
+      })
+    )
+  }
 
   $: load(params.id);
 
@@ -215,50 +221,52 @@
           </div>
         {/if}
 
-        <h2>{$_('laatija.yritykset.joining.heading')}</h2>
+        {#if whoami.map(Kayttajat.isLaatija).orSome(false)}
+          <h2>{$_('laatija.yritykset.joining.heading')}</h2>
 
-        <ol class="list-decimal list-inside">
-          <li>{$_('laatija.yritykset.joining.step-1')}</li>
-          <li>{$_('laatija.yritykset.joining.step-2')}</li>
-          <li>{$_('laatija.yritykset.joining.step-3')}</li>
-        </ol>
+          <ol class="list-decimal list-inside">
+            <li>{$_('laatija.yritykset.joining.step-1')}</li>
+            <li>{$_('laatija.yritykset.joining.step-2')}</li>
+            <li>{$_('laatija.yritykset.joining.step-3')}</li>
+          </ol>
 
-        <form class="mb-5" on:submit|preventDefault={attach}>
-          <div class="flex lg:flex-row flex-col py-4 -mx-4">
-            <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-              <Autocomplete items={R.map(formatYritys, allYritykset)}>
-                <Input
-                  id={'yritys'}
-                  name={'yritys'}
-                  label={$_('laatija.yritykset.find-yritys')}
-                  required={false}
-                  {disabled}
-                  bind:model={newLaatijaYritys}
-                  format={R.compose(Maybe.orSome(''), R.map(formatYritys))}
-                  parse={Parsers.optionalParser(parseYritys)}
-                  lens={R.lens(R.identity, R.identity)}
-                  search={true}
-                  i18n={$_} />
-              </Autocomplete>
+          <form class="mb-5" on:submit|preventDefault={attach}>
+            <div class="flex lg:flex-row flex-col py-4 -mx-4">
+              <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+                <Autocomplete items={R.map(formatYritys, allYritykset)}>
+                  <Input
+                    id={'yritys'}
+                    name={'yritys'}
+                    label={$_('laatija.yritykset.find-yritys')}
+                    required={false}
+                    {disabled}
+                    bind:model={newLaatijaYritys}
+                    format={R.compose(Maybe.orSome(''), R.map(formatYritys))}
+                    parse={Parsers.optionalParser(parseYritys)}
+                    lens={R.lens(R.identity, R.identity)}
+                    search={true}
+                    i18n={$_} />
+                </Autocomplete>
+              </div>
+              <div class="self-end">
+                <Button
+                  type={'submit'}
+                  text={$_('laatija.yritykset.attach-to-yritys')} />
+              </div>
             </div>
-            <div class="self-end">
-              <Button
-                type={'submit'}
-                text={$_('laatija.yritykset.attach-to-yritys')} />
-            </div>
-          </div>
-        </form>
+          </form>
 
-        <h2>{$_('laatija.yritykset.create-new')}</h2>
+          <h2>{$_('laatija.yritykset.create-new')}</h2>
 
-        <p class="mb-5">
+          <p class="mb-5">
             {$_('laatija.yritykset.create-info')}
-        </p>
-        <div class="flex flex-row">
-          <span class="material-icons">add</span>
-          &nbsp;
-          <Link text={$_('laatija.yritykset.add-new')} href="#/yritys/new" />
-        </div>
+          </p>
+          <div class="flex flex-row">
+            <span class="material-icons">add</span>
+            &nbsp;
+            <Link text={$_('laatija.yritykset.add-new')} href="#/yritys/new" />
+          </div>
+        {/if}
       </div>
     </form>
   </div>
