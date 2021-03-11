@@ -1,7 +1,7 @@
 <script>
-  import SimpleInput from '@Component/Input/SimpleInput';
-  import * as parsers from '@Utility/parsers';
-  import * as Either from '@Utility/either-utils';
+  import Input from '@Component/Input/Input';
+  import * as Parsers from '@Utility/parsers';
+  import * as Formats from '@Utility/formats';
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
@@ -9,32 +9,18 @@
   export let nameprefix;
   export let index = 0;
 
-  export let value = R.head(values);
-
-  let strValue = value + '';
-
-  $: valid = R.compose(Either.isRight, parsers.parseNumber)(strValue);
+  let value = R.defaultTo(Parsers.parseNumber('a'), R.head(values));
 </script>
 
-<style type="text/postcss">
-  .validation-label {
-    @apply absolute top-auto;
-    font-size: smaller;
-  }
-</style>
-
 <div>
-  <SimpleInput
-    {valid}
-    validationResult={{ type: 'error' }}
+  <Input
+    id={`${nameprefix}_value_${index}`}
+    name={`${nameprefix}_value_${index}`}
     center={true}
-    bind:rawValue={strValue}
-    rawValueAsViewValue={true}
-    name={`${nameprefix}_value_${index}`} />
-  {#if !valid}
-    <div class="validation-label">
-      <span class="font-icon text-error">error</span>
-      {$_('parsing.invalid-number')}
-    </div>
-  {/if}
+    compact={true}
+    lens={R.lens(R.identity, R.identity)}
+    format={Formats.numberFormat}
+    parse={Parsers.parseNumber}
+    model={value}
+    i18n={$_} />
 </div>
