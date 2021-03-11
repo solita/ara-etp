@@ -15,28 +15,26 @@
 
   import * as LaatijaSchema from './schema';
 
-  import { currentUserStore, flashMessageStore } from '@/stores';
+  import { flashMessageStore } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as country from '@Component/Geo/country-utils';
   import * as Validation from '@Utility/validation';
   import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
-  import * as KayttajaUtils from '@Component/Kayttaja/kayttaja-utils';
   import * as formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   const formParsers = LaatijaSchema.formParsers();
   const formSchema = LaatijaSchema.schema;
 
   export let laatija;
+  export let whoami;
   export let luokittelut;
   export let submit;
 
-  $: isPaakayttaja = Maybe.exists(
-    KayttajaUtils.kayttajaHasAccessToResource([KayttajaUtils.paakayttajaRole]),
-    $currentUserStore
-  );
+  $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
 
-  $: isOwnSettings = Maybe.exists(R.eqProps('id', laatija), $currentUserStore);
+  $: isOwnSettings = R.eqProps('id', laatija, whoami);
 
   $: disabled = !R.or(isPaakayttaja, isOwnSettings);
 
@@ -308,17 +306,7 @@
             bind:model={laatija}
             lens={R.lensProp('laatimiskielto')}
             label={$_('laatija.todistustenlaatimiskielto')}
-            disabled={R.compose(
-              Maybe.getOrElse(true),
-              R.map(
-                R.compose(
-                  R.not,
-                  KayttajaUtils.kayttajaHasAccessToResource([
-                    KayttajaUtils.paakayttajaRole
-                  ])
-                )
-              )
-            )($currentUserStore)} />
+            disabled={!isPaakayttaja} />
         </div>
       </div>
     {/if}
@@ -345,17 +333,7 @@
           parse={parsePatevyys}
           bind:model={laatija}
           lens={R.lensProp('patevyystaso')}
-          disabled={R.compose(
-            Maybe.getOrElse(true),
-            R.map(
-              R.compose(
-                R.not,
-                KayttajaUtils.kayttajaHasAccessToResource([
-                  KayttajaUtils.paakayttajaRole
-                ])
-              )
-            )
-          )($currentUserStore)}
+          disabled={!isPaakayttaja}
           items={patevyydetIds} />
       </div>
     </div>

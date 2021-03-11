@@ -1,9 +1,7 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
   import * as Response from '@Utility/response';
-  import * as R from 'ramda';
 
-  import { currentUserStore } from '@/stores';
   import { setupI18n, _ } from '@Language/i18n';
   import Header from '@Component/Header/Header';
   import Loading from '@Component/Loading/Loading';
@@ -28,7 +26,6 @@
     },
     response => {
       resources = Maybe.Some(response);
-      currentUserStore.set(Maybe.Some(response.whoami));
     },
     Future.parallelObject(3, {
       whoami: kayttajaApi.whoami,

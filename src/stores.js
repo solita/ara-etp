@@ -1,17 +1,6 @@
 import { writable } from 'svelte/store';
 import * as R from 'ramda';
-import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
-import * as Future from '@Utility/future-utils';
-
-import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-import * as viestiApi from '@Component/viesti/viesti-api';
-import * as yritysApi from '@Component/Yritys/yritys-api';
-
-/* deprecated - do not use */
-export const currentUserStore = writable(Maybe.None());
-/* deprecated - do not use */
-export const patevyystasoStore = writable(Either.Left('Not initialized'));
 
 const createIdTranslateStore = () => {
   const { subscribe, update } = writable({
