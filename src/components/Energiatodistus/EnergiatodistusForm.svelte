@@ -61,8 +61,10 @@
     )
   )(schemas['v' + version]);
 
-  const requiredSchema = schemas.appendRequiredValidators(saveSchema,
-    isRequiredPredicate => isRequiredPredicate(inputLanguage)(energiatodistus));
+  const requiredSchema = schemas.appendRequiredValidators(
+    saveSchema,
+    isRequiredPredicate => isRequiredPredicate(inputLanguage)(energiatodistus)
+  );
 
   let schema = saveSchema;
 

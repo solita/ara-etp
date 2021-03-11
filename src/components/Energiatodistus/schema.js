@@ -340,20 +340,21 @@ export const assocRequired = (schema, property) => {
   );
 };
 
-export const appendRequiredValidators = (schema, isRequired) => Deep.map(
+export const appendRequiredValidators = (schema, isRequired) =>
+  Deep.map(
     R.propSatisfies(R.is(Array), 'validators'),
-    R.when(
-      R.has('required'),
-      type => {
-        const isRequiredPredicate = lang => R.defaultTo(
-          type.required.all,
-          type.required[lang]);
+    R.when(R.has('required'), type => {
+      const isRequiredPredicate = lang =>
+        R.defaultTo(type.required.all, type.required[lang]);
 
-        return R.over(R.lensProp('validators'), R.append({
+      return R.over(
+        R.lensProp('validators'),
+        R.append({
           predicate: v => !isRequired(isRequiredPredicate) || Maybe.isSome(v),
           label: R.applyTo('validation.required')
-        }), type);
-      }
-    ),
-  schema);
-
+        }),
+        type
+      );
+    }),
+    schema
+  );
