@@ -80,6 +80,7 @@
         )(response[0]);
         toggleOverlay(false);
         disabled = !Yritykset.hasModifyPermission(response[1], response[3]);
+        idTranslateStore.updateYritys(response[0]);
       }
     ),
     Future.delay(300),

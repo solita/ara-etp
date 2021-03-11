@@ -6,7 +6,8 @@
   import { _ } from '@Language/i18n';
 
   import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
-  import Breadcrumb from '@Component/Breadcrumb/Breadcrumb';
+  import Breadcrumb from '@Component/Breadcrumb/breadcrumb';
+  import ResourceProvider from './resource-provider';
   import { buildRoutes } from '@Component/routes';
 
   export let whoami;
@@ -36,25 +37,23 @@
   }
 </style>
 
-<div class="breadcrumbcontainer">
-  <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-    <Breadcrumb
-      idTranslate={$idTranslateStore}
-      location={$location}
-      {whoami}
-      i18n={$_} />
+<ResourceProvider let:idTranslate>
+  <div class="breadcrumbcontainer">
+    <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+      <Breadcrumb {whoami} {idTranslate} location={$location} />
+    </div>
   </div>
-</div>
-<section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
-  <div class="w-full">
-    <NavigationTabBar
-      idTranslate={$idTranslateStore}
-      location={$location}
-      {whoami}
-      {config}
-      i18n={$_} />
-  </div>
-  <div class="routecontainer">
-    <Router on:conditionsFailed={_ => replace('/404')} {routes} />
-  </div>
-</section>
+  <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
+    <div class="w-full">
+      <NavigationTabBar
+        {idTranslate}
+        location={$location}
+        {whoami}
+        {config}
+        i18n={$_} />
+    </div>
+    <div class="routecontainer">
+      <Router on:conditionsFailed={_ => replace('/404')} {routes} />
+    </div>
+  </section>
+</ResourceProvider>

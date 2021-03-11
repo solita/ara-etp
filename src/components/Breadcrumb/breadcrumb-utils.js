@@ -1,302 +1,313 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
-
-import * as Navigation from '@Utility/navigation';
-import * as RUtils from '@Utility/ramda-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 
-const createCrumb = R.curry((url, label) => ({ url, label }));
-
-const labelLens = R.lensProp('label');
-
-const routeReservedKeywords = [
-  'all',
-  'new',
-  'liitteet',
-  'viestit',
-  'muutoshistoria',
-  'laatijoidentuonti',
-  'yritykset'
-];
-
-export const translateReservedKeywordLabel = R.curry(
-  (i18n, keyword, breadcrumb) =>
-    R.when(
-      R.always(R.includes(keyword, routeReservedKeywords)),
-      R.over(labelLens, i18n),
-      breadcrumb
-    )
-);
-
-export const yritysCrumb = R.curry((idTranslate, i18n, id) =>
-  R.compose(
-    createCrumb(`#/yritys/${id}`),
-    Maybe.orSome(`${i18n('yritys.yritys')} ${id}`),
-    Maybe.fromNull,
-    R.path(['yritys', id])
-  )(idTranslate)
-);
-
-export const yrityksetCrumb = R.curry((i18n, user) => {
-  const url = Kayttajat.isPaakayttaja(user)
-    ? '#/yritys/all'
-    : `#/laatija/${user.id}/yritykset`;
-
-  return createCrumb(url, i18n('navigation.yritykset'));
-});
-
-export const parseViesti = R.curry((idTranslate, i18n, locationParts) => {
-  const allCrumb = createCrumb(`#/viesti/all`, i18n('navigation.viesti'));
-  if (locationParts[0] === 'all' || !idTranslate['viesti'][locationParts[0]]) {
-    return [allCrumb];
-  }
-
-  return [
-    createCrumb(
-      `#/energiatodistus/${idTranslate['viesti'][locationParts[0]]}`,
-      `${i18n('navigation.et')} ${idTranslate['viesti'][locationParts[0]]}`
-    ),
-    createCrumb(`#/viesti/${locationParts[0]}`, i18n('navigation.viestit'))
-  ];
-});
-
-export const parseYritys = R.curry((idTranslate, i18n, user, locationParts) => {
-  const [id] = locationParts;
-
-  return R.compose(
-    R.unless(
-      R.always(R.equals('all', id)),
-      R.prepend(yrityksetCrumb(i18n, user))
-    ),
-    Array.of,
-    translateReservedKeywordLabel(i18n, id),
-    yritysCrumb(idTranslate, i18n)
-  )(id);
-});
-
-export const energiatodistusRootActionCrumb = R.curry((i18n, keyword) =>
-  R.compose(
-    createCrumb(R.__, i18n('navigation.energiatodistukset')),
-    R.concat('#/energiatodistus/')
-  )(keyword)
-);
-
-export const singleEnergiatodistusCrumb = R.curry(
-  (idTranslate, i18n, version, id) =>
-    R.compose(
-      translateReservedKeywordLabel(i18n, id),
-      createCrumb(`#/energiatodistus/${version}/${id}`),
-      Maybe.orSome(`${i18n('navigation.et')} ${id}`),
-      Maybe.fromNull,
-      R.path(['energiatodistus', id])
-    )(idTranslate)
-);
-
-const energiatodistusActionLabels = {
-  liitteet: 'navigation.liitteet',
-  viestit: 'navigation.viestit',
-  muutoshistoria: 'navigation.muutoshistoria'
-};
-
-export const singleEnergiatodistusActionCrumb = R.curry(
-  (i18n, version, id, keyword) =>
-    R.compose(
-      Maybe.orSome(
-        createCrumb(`#/energiatodistus/${version}/${id}/${keyword}`, keyword)
-      ),
-      R.map(translateReservedKeywordLabel(i18n, keyword)),
-      R.lift(createCrumb(`#/energiatodistus/${version}/${id}/${keyword}`)),
-      Maybe.fromNull,
-      R.prop(keyword)
-    )(energiatodistusActionLabels)
-);
-
-export const parseEnergiatodistus = R.curry(
-  (idTranslate, i18n, locationParts) => {
-    const [root, id, action] = R.compose(
-      RUtils.fillAndTake(3, Maybe.None),
-      R.map(Maybe.fromNull)
-    )(locationParts);
-
-    const crumbParts = [
-      R.lift(energiatodistusRootActionCrumb(i18n))(root),
-      R.lift(singleEnergiatodistusCrumb(idTranslate, i18n))(root, id),
-      R.lift((root, id, action) =>
-        R.compose(
-          R.prepend(singleEnergiatodistusCrumb(idTranslate, i18n, root, id)),
-          Array.of,
-          singleEnergiatodistusActionCrumb(i18n)
-        )(root, id, action)
-      )(root, id, action)
-    ];
-
-    return R.flatten(
-      R.uniq([
-        energiatodistusRootActionCrumb(i18n, 'all'),
-        R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts)
-      ])
-    );
-  }
-);
-
-export const isCurrentUser = R.curry((id, user) =>
-  R.compose(R.equals(parseInt(id, 10)), R.prop('id'))(user)
-);
-
-export const parseKayttaja = R.curry(
-  (idTranslate, i18n, user, locationParts) => {
-    const [id] = locationParts;
-
-    if (isCurrentUser(id, user)) {
-      return createCrumb(`#/kayttaja/${id}`, i18n('navigation.omattiedot'));
-    }
-
-    return R.compose(
-      R.unless(
-        R.always(R.equals('all', id)),
-        R.prepend(
-          Kayttajat.isPatevyydentoteaja(user) || Kayttajat.isPaakayttaja(user)
-            ? createCrumb(`#/laatija/all`, i18n('navigation.laatijat'))
-            : createCrumb(`#/kayttaja/all`, i18n('navigation.kayttajat'))
-        )
-      ),
-      Array.of,
-      translateReservedKeywordLabel(i18n, id),
-      createCrumb(`#/kayttaja/${id}`),
-      Maybe.orSome(`${i18n('navigation.kayttaja')} ${id}`),
-      Maybe.fromNull,
-      R.path(['kayttaja', id])
-    )(idTranslate);
-  }
-);
-
-export const parseLaatijaRootActionCrumb = R.curry((i18n, action) => {
-  const actionLabels = {
-    all: 'navigation.laatijat',
-    laatijoidentuonti: 'navigation.laatijoidentuonti'
-  };
-
-  return R.compose(
-    translateReservedKeywordLabel(i18n, action),
-    createCrumb(`#/laatija/${action}`),
-    Maybe.orSome(action),
-    Maybe.fromNull,
-    R.prop(action)
-  )(actionLabels);
-});
-
-export const parseSingleLaatijaActionCrumb = R.curry((i18n, id, action) => {
-  const actionLabels = {
-    yritykset: 'navigation.yritykset'
-  };
-
-  return R.compose(
-    translateReservedKeywordLabel(i18n, action),
-    createCrumb(`#/laatija/${id}/${action}`),
-    Maybe.orSome(action),
-    Maybe.fromNull,
-    R.prop(action)
-  )(actionLabels);
-});
-
-export const parseLaatija = R.curry((i18n, locationParts) => {
-  const [root, action] = R.compose(
-    RUtils.fillAndTake(2, Maybe.None),
-    R.map(Maybe.fromNull)
-  )(locationParts);
-
-  const crumbParts = [
-    R.lift(parseLaatijaRootActionCrumb(i18n))(root),
-    R.lift(parseSingleLaatijaActionCrumb(i18n))(root, action)
-  ];
-
-  return R.compose(Maybe.get, R.last, R.reject(Maybe.isNone))(crumbParts);
-});
-
-export const parseAction = R.curry((i18n, action) => {
-  const crumbPart = {
-    label: i18n(`navigation.${action}`),
-    url: `#/${action}`
-  };
-
-  return crumbPart;
-});
-
-export const roleBasedRootCrumb = R.curry((i18n, user) => {
-  return R.compose(
-    R.cond([
-      [
-        Kayttajat.isLaatija,
-        R.always(
-          createCrumb(
-            '#/energiatodistus/all',
-            i18n('navigation.energiatodistukset')
-          )
-        )
-      ],
-      [
-        Kayttajat.isPatevyydentoteaja,
-        R.always(
-          createCrumb(
-            '#/laatija/laatijoidentuonti',
-            i18n('navigation.laatijoidentuonti')
-          )
-        )
-      ],
-      [
-        Kayttajat.isPaakayttaja,
-        R.always(
-          createCrumb(
-            '#/energiatodistus/all',
-            i18n('navigation.energiatodistukset')
-          )
-        )
-      ]
-    ])
-  )(user);
-});
-
-export const breadcrumbParse = R.curry((idTranslate, location, i18n, user) =>
+export const parseLocation = R.curry((i18n, idTranslate, location, whoami) =>
   R.compose(
     R.uniq,
-    R.flatten,
-    R.prepend(roleBasedRootCrumb(i18n, user)),
-    Array.of,
-    R.cond([
-      [
-        R.compose(R.equals('yritys'), R.head),
-        R.compose(parseYritys(idTranslate, i18n, user), R.tail)
-      ],
-      [
-        R.compose(R.equals('energiatodistus'), R.head),
-        R.compose(parseEnergiatodistus(idTranslate, i18n), R.tail)
-      ],
-      [
-        R.compose(R.equals('kayttaja'), R.head),
-        R.compose(parseKayttaja(idTranslate, i18n, user), R.tail)
-      ],
-      [
-        R.compose(R.equals('laatija'), R.head),
-        R.compose(parseLaatija(i18n), R.tail)
-      ],
-      [
-        R.compose(R.equals('viesti'), R.head),
-        R.compose(parseViesti(idTranslate, i18n), R.tail)
-      ],
-      [
-        R.compose(
-          R.includes(R.__, [
-            'halytykset',
-            'kaytonvalvonta',
-            'tyojono',
-            'myinfo'
-          ]),
-          R.head
-        ),
-        parseAction(i18n)
-      ],
-      [R.T, R.always({ label: '', url: '' })]
-    ]),
-    Navigation.locationParts
+    R.prepend(rootCrumb(i18n, whoami)),
+    parseCrumb(i18n, idTranslate, whoami),
+    R.split('/'),
+    R.tail
   )(location)
+);
+
+export const parseCrumb = R.curry((i18n, idTranslate, whoami, location) =>
+  R.cond([
+    [
+      R.compose(R.equals('yritys'), R.head),
+      R.compose(yritysCrumb(i18n, idTranslate, whoami), R.tail)
+    ],
+    [
+      R.compose(R.equals('kayttaja'), R.head),
+      R.compose(kayttajaCrumb(i18n, idTranslate, whoami), R.tail)
+    ],
+    [
+      R.compose(R.equals('laatija'), R.head),
+      R.compose(laatijaCrumb(i18n, idTranslate, whoami), R.tail)
+    ],
+    [
+      R.compose(R.equals('energiatodistus'), R.head),
+      R.compose(energiatodistusCrumb(i18n), R.tail)
+    ],
+    [
+      R.compose(R.equals('viesti'), R.head),
+      R.compose(viestiCrumb(i18n, idTranslate), R.tail)
+    ],
+    [R.T, R.always([])]
+  ])(location)
+);
+
+export const etKetjuCrumb = R.curry((i18n, etId) => ({
+  url: `#/energiatodistus/${etId}`,
+  label: `${i18n('navigation.et')} ${etId}`
+}));
+
+export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
+  R.cond([
+    [
+      R.equals('all'),
+      R.always([{ url: '#/viesti/all', label: i18n('navigation.viesti') }])
+    ],
+    [
+      R.equals('new'),
+      R.always([
+        { url: '#/viesti/all', label: i18n('navigation.viesti') },
+        { url: '#/viesti/new', label: i18n('navigation.uusi-viesti') }
+      ])
+    ],
+    [
+      R.T,
+      R.always(
+        R.ifElse(
+          R.hasPath(['viesti', parseInt(id, 10)]),
+          R.compose(
+            Maybe.orSome([
+              { url: '#/viesti/all', label: i18n('navigation.viesti') },
+              {
+                url: `#/viesti/${id}`,
+                label: `${i18n('navigation.viestiketju')} ${id}`
+              }
+            ]),
+            R.map(etId => [
+              { url: '#/viesti/all', label: i18n('navigation.viesti') },
+              etKetjuCrumb(i18n, etId),
+              {
+                url: `#/viesti/${id}`,
+                label: `${i18n('navigation.viestiketju')} ${id}`
+              }
+            ]),
+            R.path(['viesti', parseInt(id, 10)])
+          ),
+          R.always([
+            { url: '#/viesti/all', label: i18n('navigation.viesti') },
+            {
+              url: `#/viesti/${id}`,
+              label: `${i18n('navigation.viestiketju')} ${id}`
+            }
+          ])
+        )(idTranslate)
+      )
+    ]
+  ])(id)
+);
+
+export const energiatodistukset = i18n => ({
+  url: '#/energiatodistus/all',
+  label: i18n('navigation.energiatodistukset')
+});
+
+export const energiatodistusExtra = R.curry((i18n, [versio, id, extra]) =>
+  R.equals('liitteet', extra)
+    ? [
+        {
+          url: `#/energiatodistus/${versio}/${id}/liitteet`,
+          label: i18n('navigation.liitteet')
+        }
+      ]
+    : []
+);
+
+export const energiatodistusCrumb = R.curry((i18n, [versio, id, ...rest]) =>
+  R.cond([
+    [R.equals('all'), R.always([energiatodistukset(i18n)])],
+    [
+      R.T,
+      R.always(
+        R.flatten([
+          energiatodistukset(i18n),
+          {
+            url: `#/energiatodistus/${versio}/${id}`,
+            label: `${i18n('navigation.et')} ${id}`
+          },
+          energiatodistusExtra(i18n, [versio, id, ...rest])
+        ])
+      )
+    ]
+  ])(versio)
+);
+
+export const laatijat = i18n => ({
+  url: '#/laatija/all',
+  label: i18n('navigation.laatijat')
+});
+
+export const laatijaExtra = R.curry((i18n, [id, extra]) =>
+  R.cond([
+    [
+      R.equals('yritykset'),
+      R.always([
+        {
+          url: `#/laatija/${id}/yritykset`,
+          label: i18n('navigation.yritykset')
+        }
+      ])
+    ],
+    [R.T, R.always([])]
+  ])(extra)
+);
+
+export const laatijatForSelfRole = R.curry((i18n, whoami) =>
+  Kayttajat.isPaakayttaja(whoami) || Kayttajat.isPatevyydentoteaja(whoami)
+    ? laatijat(i18n)
+    : []
+);
+
+export const laatijaCrumb = R.curry(
+  (i18n, idTranslate, whoami, [id, ...rest]) =>
+    R.cond([
+      [R.equals('laatijoidentuonti'), R.always([])],
+      [R.equals('all'), R.always([laatijat(i18n)])],
+      [
+        R.T,
+        id =>
+          R.ifElse(
+            R.hasPath(['kayttaja', parseInt(id, 10)]),
+            R.compose(
+              kayttaja =>
+                R.flatten([
+                  laatijatForSelfRole(i18n, whoami),
+                  kayttajaNimiCrumb(i18n, whoami, kayttaja),
+                  laatijaExtra(i18n, [id, ...rest])
+                ]),
+              R.path(['kayttaja', parseInt(id, 10)])
+            ),
+            R.always(
+              R.flatten([
+                laatijatForSelfRole(i18n, whoami),
+                kayttajaIdCrumb(i18n, whoami, id),
+                laatijaExtra(i18n, [id, ...rest])
+              ])
+            )
+          )(idTranslate)
+      ]
+    ])(id)
+);
+
+export const laatijatForTargetRole = R.curry((i18n, whoami, kayttaja) =>
+  R.either(Kayttajat.isPaakayttaja, Kayttajat.isPatevyydentoteaja)(whoami) &&
+  Kayttajat.isLaatija(kayttaja)
+    ? laatijat(i18n)
+    : []
+);
+
+export const kayttajaIdCrumb = R.curry((i18n, whoami, id) => [
+  R.equals(whoami.id, parseInt(id, 10))
+    ? {
+        url: `#/kayttaja/${id}`,
+        label: i18n('navigation.omattiedot')
+      }
+    : {
+        url: `#/kayttaja/${id}`,
+        label: `${i18n('navigation.kayttaja')} ${id}`
+      }
+]);
+
+export const kayttajaNimiCrumb = R.curry((i18n, whoami, kayttaja) =>
+  R.eqProps('id', whoami, kayttaja)
+    ? {
+        url: `#/kayttaja/${kayttaja.id}`,
+        label: i18n('navigation.omattiedot')
+      }
+    : {
+        url: `#/kayttaja/${kayttaja.id}`,
+        label: `${kayttaja.etunimi} ${kayttaja.sukunimi}`
+      }
+);
+
+export const kayttajaCrumb = R.curry(
+  (i18n, idTranslate, whoami, [id, ...rest]) =>
+    R.cond([
+      [R.equals('all'), R.always([laatijat(i18n)])],
+      [
+        R.T,
+        id =>
+          R.ifElse(
+            R.hasPath(['kayttaja', parseInt(id, 10)]),
+            R.compose(
+              kayttaja =>
+                R.flatten([
+                  laatijatForTargetRole(i18n, whoami, kayttaja),
+                  kayttajaNimiCrumb(i18n, whoami, kayttaja)
+                ]),
+              R.path(['kayttaja', parseInt(id, 10)])
+            ),
+            R.always(R.flatten([kayttajaIdCrumb(i18n, whoami, id)]))
+          )(idTranslate)
+      ]
+    ])(id)
+);
+
+export const yritykset = R.curry((i18n, whoami) => ({
+  url: Kayttajat.isPaakayttaja(whoami)
+    ? '#/yritys/all'
+    : `#/laatija/${whoami.id}/yritykset`,
+  label: i18n('navigation.yritykset')
+}));
+
+export const yritysExtra = R.curry((i18n, [id, extra]) =>
+  R.equals('laatijat', extra)
+    ? [
+        {
+          url: `#/yritys/${id}/laatijat`,
+          label: i18n('navigation.yritys-laatijat')
+        }
+      ]
+    : []
+);
+
+export const yritysIdCrumb = R.curry((i18n, whoami, id, ...rest) =>
+  R.flatten([
+    yritykset(i18n, whoami),
+    { url: `#/yritys/${id}`, label: `${i18n('navigation.yritys')} ${id}` },
+    yritysExtra(i18n, [id, ...rest])
+  ])
+);
+
+export const yritysNimiCrumb = R.curry((i18n, whoami, nimi, id, ...rest) =>
+  R.flatten([
+    yritykset(i18n, whoami),
+    { url: `#/yritys/${id}`, label: nimi },
+    yritysExtra(i18n, [id, ...rest])
+  ])
+);
+
+export const newYritysCrumb = R.curry((i18n, whoami) => [
+  yritykset(i18n, whoami),
+  { url: '#/yritys/new', label: i18n('navigation.new-yritys') }
+]);
+
+export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
+  R.cond([
+    [R.equals('all'), R.always([yritykset(i18n, whoami)])],
+    [R.equals('new'), R.always(newYritysCrumb(i18n, whoami))],
+    [
+      R.T,
+      id =>
+        R.ifElse(
+          R.hasPath(['yritys', parseInt(id, 10)]),
+          R.compose(
+            yritys => yritysNimiCrumb(i18n, whoami, yritys, id, ...rest),
+            R.path(['yritys', parseInt(id, 10)])
+          ),
+          R.always(yritysIdCrumb(i18n, whoami, id, ...rest))
+        )(idTranslate)
+    ]
+  ])(id)
+);
+
+export const rootCrumb = R.curry((i18n, whoami) =>
+  R.cond([
+    [
+      R.either(Kayttajat.isLaatija, Kayttajat.isPaakayttaja),
+      R.always(energiatodistukset(i18n))
+    ],
+    [
+      Kayttajat.isPatevyydentoteaja,
+      R.always({
+        url: '#/laatija/laatijoidentuonti',
+        label: i18n('navigation.laatijoidentuonti')
+      })
+    ]
+  ])(whoami)
 );
