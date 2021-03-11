@@ -132,7 +132,7 @@
               $_('laatija.yritykset.success.attach')
             );
           },
-          api.putLaatijaYritys(fetch, params.id, yritys.id)
+          laatijaApi.putLaatijaYritys(fetch, params.id, yritys.id)
         );
       });
   }
