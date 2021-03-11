@@ -249,15 +249,15 @@
           </div>
         </form>
 
-        <h2>Luo uusi yritys</h2>
+        <h2>{$_('laatija.yritykset.create-new')}</h2>
 
         <p class="mb-5">
-          Jos yritystä ei löydy energiatodistuspalvelusta, voit lisätä sen itse.
+            {$_('laatija.yritykset.create-info')}
         </p>
         <div class="flex flex-row">
           <span class="material-icons">add</span>
           &nbsp;
-          <Link text={'Lisää uusi yritys'} href="#/yritys/new" />
+          <Link text={$_('laatija.yritykset.add-new')} href="#/yritys/new" />
         </div>
       </div>
     </form>

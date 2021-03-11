@@ -219,6 +219,9 @@
       "attach-to-yritys": "Liitä yritykseen",
       "yritys-not-found": "Yritystä ei ole tässä palvelussa",
       "already-attached": "Sinut on jo liitetty yritykseen",
+      "create-new": "Luo uusi yritys",
+      "add-new": "Lisää uusi yritys",
+      "create-info": "Jos yritystä ei löydy energiatodistuspalvelusta, voit lisätä sen itse.",
       "success": {
         "attach": "Liittäminen yritykseen onnistui",
         "detach": "Laatija on poistettu yrityksestä"

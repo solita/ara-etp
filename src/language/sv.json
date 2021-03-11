@@ -200,6 +200,9 @@
       "attach-to-yritys": "Koppla till företaget",
       "yritys-not-found": "Företaget finns inte i den här tjänsten",
       "already-attached": "Sinut on jo liitetty yritykseen SV",
+      "create-new": "Luo uusi yritys SV",
+      "add-new": "Lisää uusi yritys SV",
+      "create-info": "Jos yritystä ei löydy energiatodistuspalvelusta, voit lisätä sen itse. SV",
       "success": {
         "attach": "Kopplingen till företaget lyckades",
         "detach": "Upprättaren har avlägsnats från företaget"
