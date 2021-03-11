@@ -126,7 +126,7 @@
               $_('laatija.yritykset.success.attach')
             );
           },
-          api.putLaatijaYritys(fetch, params.id, yritys.id)
+          laatijaApi.putLaatijaYritys(fetch, params.id, yritys.id)
         );
       });
   }
@@ -137,6 +137,8 @@
     @apply font-bold uppercase text-lg pb-4;
   }
 </style>
+
+<!-- purgecss: etp-table--tr__link -->
 
 <Overlay {overlay}>
   <div slot="content">
@@ -166,7 +168,11 @@
                 {#each laatijaYritykset as yritys, index}
                   <tr
                     class="etp-table--tr etp-table--tr__link"
-                    on:click={() => push('#/yritys/' + yritys.id)}>
+                    class:etp-table--tr__link={!Tila.isProposal(yritys)}
+                    on:click={() => {
+                      if (!Tila.isProposal(yritys))
+                        push('#/yritys/' + yritys.id);
+                    }}>
                     <td class="etp-table--td">
                       {yritys.nimi}
                       {Maybe.fold(
