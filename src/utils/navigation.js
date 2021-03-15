@@ -5,17 +5,21 @@ import * as Kayttajat from '@Utility/kayttajat';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-const linksForLaatija = R.curry((isDev, i18n, kayttaja) => [
-  {
-    label: i18n('navigation.energiatodistukset'),
-    href: '#/energiatodistus/all'
-  },
-  {
-    label: i18n('navigation.yritykset'),
-    href: `#/laatija/${kayttaja.id}/yritykset`
-  },
-  { label: i18n('navigation.viestit'), href: '#/viesti/all' }
-]);
+const linksForLaatija = R.curry((isDev, i18n, kayttaja) =>
+  R.concat(
+    [
+      {
+        label: i18n('navigation.energiatodistukset'),
+        href: '#/energiatodistus/all'
+      },
+      {
+        label: i18n('navigation.yritykset'),
+        href: `#/laatija/${kayttaja.id}/yritykset`
+      }
+    ],
+    isDev ? [{ label: i18n('navigation.viestit'), href: '#/viesti/all' }] : []
+  )
+);
 
 export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
   {

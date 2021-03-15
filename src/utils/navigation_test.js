@@ -65,8 +65,8 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/2/yritykset`
-        },
-        { label: 'Viestit', href: "#/viesti/all" }
+        }
+        //{ label: 'Viestit', href: '#/viesti/all' }
       ];
 
       assert.deepEqual(
@@ -112,8 +112,8 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/1/yritykset`
-        },
-        { label: 'Viestit', href: "#/viesti/all" }
+        }
+        //{ label: 'Viestit', href: '#/viesti/all' }
       ];
 
       assert.deepEqual(
@@ -143,7 +143,7 @@ describe('Navigation', () => {
       const expected = [
         { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
         { label: 'Laatijat', href: '#/laatija/all' },
-        { label: 'Viestit', href: "#/viesti/all" }
+        { label: 'Viestit', href: '#/viesti/all' }
       ];
 
       assert.deepEqual(
