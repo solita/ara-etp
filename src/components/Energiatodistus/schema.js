@@ -117,8 +117,8 @@ const Huomio = {
 const YritysPostinumero = String(8);
 
 const Yritys = {
-  nimi: String(150),
-  katuosoite: String(50),
+  nimi: String(40),
+  katuosoite: String(40),
   postitoimipaikka: String(30),
   postinumero: YritysPostinumero
 };
