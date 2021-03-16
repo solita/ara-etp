@@ -296,7 +296,7 @@
       </button>
     </Confirm>
   {/if}
-  {#if R.includes(Toolbar.module.delete, fields)}
+  {#if R.includes(Toolbar.module.delete, fields) && Maybe.isSome(id)}
     <Confirm
       let:confirm
       confirmButtonLabel={$_('confirm.button.delete')}
