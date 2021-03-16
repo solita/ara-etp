@@ -33,6 +33,7 @@
     "cross-env": "^7.0.2",
     "css-loader": "^4.2.2",
     "cssnano": "^4.1.10",
+    "cypress": "^6.6.0",
     "generate-json-webpack-plugin": "^1.0.0",
     "html-webpack-plugin": "^4.4.1",
     "mini-css-extract-plugin": "^0.11.0",
