@@ -127,7 +127,7 @@ module.exports = {
       ),
     headers: {
       'Content-Security-Policy':
-        "default-src 'self';script-src 'self';connect-src 'self' localhost:53952;style-src 'self' 'unsafe-inline' fonts.googleapis.com;font-src 'self' fonts.gstatic.com;img-src 'self' data:"
+        "default-src 'self';script-src 'self';connect-src 'self' localhost:53952;style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com;font-src 'self' fonts.gstatic.com;img-src 'self' data:"
     },
     https: true,
     port: 3000,

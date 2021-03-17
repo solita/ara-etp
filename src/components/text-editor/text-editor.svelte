@@ -19,7 +19,6 @@
   });
 
   export let id;
-  export let name;
   export let label = '';
   export let required = true;
   export let compact = false;
