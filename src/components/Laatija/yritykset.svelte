@@ -144,6 +144,8 @@
   }
 </style>
 
+<!-- purgecss: etp-table--tr__link -->
+
 <Overlay {overlay}>
   <div slot="content">
     <form>
@@ -172,7 +174,11 @@
                 {#each laatijaYritykset as yritys, index}
                   <tr
                     class="etp-table--tr etp-table--tr__link"
-                    on:click={() => push('#/yritys/' + yritys.id)}>
+                    class:etp-table--tr__link={!Tila.isProposal(yritys)}
+                    on:click={() => {
+                      if (!Tila.isProposal(yritys))
+                        push('#/yritys/' + yritys.id);
+                    }}>
                     <td class="etp-table--td">
                       {yritys.nimi}
                       {Maybe.fold(
