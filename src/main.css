@@ -5,3 +5,5 @@
 
 @tailwind components;
 @tailwind utilities;
+
+@import '~quill/dist/quill.snow.css';

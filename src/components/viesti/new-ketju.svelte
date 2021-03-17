@@ -24,11 +24,20 @@
   import H1 from '@Component/H/H1.svelte';
   import Button from '@Component/Button/Button.svelte';
   import Textarea from '@Component/Textarea/Textarea.svelte';
+  import Texteditor from '@Component/text-editor/text-editor';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Input from '@Component/Input/Input.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
   import Select from '@Component/Select/Select.svelte';
+
+  import Marked from 'marked';
+
+  Marked.use({
+    tokenizer: {
+      url: _ => null
+    }
+  });
 
   const i18nRoot = 'viesti.ketju.new';
 
@@ -132,6 +141,8 @@
     ketju = Viestit.emptyKetju();
     dirty = false;
   };
+
+  let editorContent = '';
 </script>
 
 <style>
@@ -211,7 +222,6 @@
             validators={Schema.ketju.body}
             i18n={$_} />
         </div>
-
         <div class="flex space-x-4 pt-8">
           <Button
             disabled={!dirty}
@@ -226,6 +236,12 @@
         </div>
       </form>
     {/each}
+    <div class="w-full py-4">
+      <Texteditor bind:editorContent />
+    </div>
+    <div class="editorcontent">
+      {@html Marked(editorContent)}
+    </div>
   </div>
   <div slot="overlay-content">
     <Spinner />
