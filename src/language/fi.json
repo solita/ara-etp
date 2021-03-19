@@ -1125,6 +1125,8 @@
   "viesti": {
     "valvoja": "Valvojat",
     "mina": "Minä",
+    "message": "viesti",
+    "messages": "viestiä",
     "all": {
       "title": "Viestikeskus",
       "senttime": "Lähetysaika",
