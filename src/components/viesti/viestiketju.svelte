@@ -48,10 +48,6 @@
   .expanding-subject .message {
     @apply hidden;
   }
-
-  .flex-grow {
-    flex-grow: 3;
-  }
 </style>
 
 <!-- purgecss: font-bold text-primary -->
@@ -74,13 +70,13 @@
       </span>
     </div>
     <div
-      class="flex w-7/12 justify-start items-center whitespace-no-wrap space-x-1"
+      class="flex w-7/12 justify-start whitespace-no-wrap space-x-1"
       class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
-      <span class="p-1 subject font-bold">
+      <span class="p-1 subject font-bold self-start">
         {ketju.subject}
       </span>
 
-      <span class="message truncate flex-shrink text-sm">
+      <span class="message truncate flex-shrink text-sm self-center">
         {R.last(ketju.viestit).body}
       </span>
     </div>
