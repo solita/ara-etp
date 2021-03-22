@@ -11,12 +11,13 @@
   import Select from '@Component/Select/Select';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
   import * as LocaleUtils from '@Language/locale-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   export let schema;
   export let disabled;
-  export let disabledRt;
   export let energiatodistus;
   export let inputLanguage;
+  export let whoami;
 
   export let kayttotarkoitusluokat;
   export let alakayttotarkoitusluokat;
@@ -123,7 +124,7 @@
 <div class="flex lg:flex-row flex-col -mx-4 my-4">
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
-      disabled={disabledRt}
+      disabled={Kayttajat.isLaskuttaja(whoami)}
       {schema}
       {center}
       bind:model={energiatodistus}

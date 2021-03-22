@@ -67,8 +67,6 @@
     R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
   );
 
-  $: disabledRt = Kayttajat.isLaskuttaja(whoami);
-
   const showInvalidPropertiesMessage = invalidProperties => {
     if (!R.isEmpty(invalidProperties)) {
       const invalidTxt = R.compose(
@@ -287,7 +285,6 @@
             bind:eTehokkuus
             {inputLanguage}
             {disabled}
-            {disabledRt}
             {schema}
             {luokittelut}
             {validation}

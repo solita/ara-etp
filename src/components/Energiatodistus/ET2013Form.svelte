@@ -46,7 +46,6 @@
   export let luokittelut;
   export let schema;
   export let disabled = false;
-  export let disabledRt = false;
   export let validation;
   export let eTehokkuus = Maybe.None();
   export let whoami;
@@ -133,7 +132,7 @@
   {schema}
   {inputLanguage}
   {disabled}
-  {disabledRt}
+  {whoami}
   bind:energiatodistus
   {labelLocale}
   postinumerot={luokittelut.postinumerot}
