@@ -4,7 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
   import * as Postinumero from './postinumero';
-  import { isRakennuslupa } from '././laatimisvaiheet';
+  import * as Laatimisvaiheet from '././laatimisvaiheet';
 
   import H2 from '@Component/H/H2';
   import Input from '@Component/Energiatodistus/Input';
@@ -125,7 +125,7 @@
     <Input
       disabled={R.ifElse(
         R.compose(R.equals(2018), R.prop('versio')),
-        isRakennuslupa,
+        Laatimisvaiheet.isRakennuslupa,
         R.F
       )(energiatodistus)}
       {schema}
