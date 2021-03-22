@@ -251,8 +251,7 @@ context('Laatija', () => {
       cy.get('[name="postitoimipaikka"]')
         .type(yritys.postitoimipaikka)
         .blur();
-      cy.get('[name="maa"]').type('su');
-      cy.contains('Suomi').click();
+      cy.get('[name="maa"]').type('suom{enter}');
 
       cy.intercept(
         {
@@ -279,10 +278,10 @@ context('Laatija', () => {
       cy.wait('@yritys');
 
       cy.get('[name="ytunnus"]').should('have.value', '1111112-8');
-      cy.get('.breadcrumbcontainer a')
+      cy.get('#breadcrumbcontainer a')
         .last()
         .should('contain.text', 'nimi');
-      cy.get('section a')
+      cy.get('#navigationcontainer a')
         .first()
         .should('contain.text', 'nimi');
     });
@@ -342,7 +341,7 @@ context('Laatija', () => {
       cy.get('tbody tr').should('have.length', 2);
     });
 
-    it.only('should leave yritys', () => {
+    it('should leave yritys', () => {
       const laatijaYrityksetResponseGenerator = function*() {
         yield [
           ...FIXTURES.laatija.yritykset,
@@ -591,6 +590,74 @@ context('Laatija', () => {
       cy.wait('@viesti');
 
       cy.get('.message').should(msg => assert.equal(msg.length, 2));
+    });
+  });
+
+  describe('Omat tiedot', () => {
+    it('should navigate to omat tiedot', () => {
+      cy.visit('https://localhost:3000/');
+      cy.contains('Liisa Specimen-Potex').click();
+      cy.contains('Omat tiedot').click();
+
+      cy.location().should(loc =>
+        assert.equal(loc.toString(), 'https://localhost:3000/#/kayttaja/2')
+      );
+      cy.get('#breadcrumbcontainer span')
+        .last()
+        .should('contain.text', 'Omat tiedot');
+      cy.get('#navigationcontainer a')
+        .first()
+        .should('contain.text', 'Liisa Specimen-Potex');
+    });
+
+    it('should disable checkbox with päätoiminta-alue selection', () => {
+      cy.visit('https://localhost:3000/#/kayttaja/2');
+      cy.contains('Ei valintaa').click();
+      cy.contains('Etelä-Karjala').click();
+      cy.get('#muuttoimintaalueet ol li input')
+        .first()
+        .should('be.disabled');
+    });
+
+    it('should disable all with many toimintaalueet selected', () => {
+      cy.visit('https://localhost:3000/#/kayttaja/2');
+      cy.contains('Ei valintaa').click();
+      cy.contains('Etelä-Karjala').click();
+      cy.get('#muuttoimintaalueet').as('root');
+
+      const toimintaalueet = [
+        'Kainuu',
+        'Keski-Suomi',
+        'Pirkanmaa',
+        'Pohjois-Pohjanmaa',
+        'Satakunta'
+      ];
+
+      toimintaalueet.forEach(item =>
+        cy
+          .get('@root')
+          .contains(item)
+          .click()
+      );
+
+      cy.get('#muuttoimintaalueet [type="checkbox"]:disabled').should(
+        'have.length',
+        13
+      );
+    });
+
+    it('should undisable julkinen www when valid url is given', () => {
+      cy.visit('https://localhost:3000/#/kayttaja/2');
+
+      cy.get('[type="checkbox"]:disabled').as('input');
+
+      cy.get('@input').should('be.disabled');
+
+      cy.get('[name="wwwosoite"]')
+        .type('example.com')
+        .blur();
+
+      cy.get('@input').should('not.be.disabled');
     });
   });
 });
