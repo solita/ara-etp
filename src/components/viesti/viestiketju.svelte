@@ -96,7 +96,7 @@
     <div class="flex w-10/12 items-center space-x-2">
       <div class="flex items-center flex-shrink">
         <span class="font-icon outline mr-1">chat_bubble_outline</span>
-        <span class="font-semibold">{R.length(ketju.viestit)}</span>
+        <span>{R.length(ketju.viestit)}</span>
 
         {#if R.gt(R.length(ketju.viestit), 1)}
           <span class="ml-1">{$_('viesti.messages')}</span>
@@ -106,8 +106,8 @@
       </div>
       {#if R.gt(R.length(R.values(participants)), 1)}
         <div class="flex items-center w-full flex-grow">
-          <span class="font-icon font-semibold">people</span>
-          <span class="font-semibold mx-1">
+          <span class="font-icon">people</span>
+          <span class="mx-1">
             {R.length(R.values(participants))}
           </span>
           <div class="truncate px-1 participants">
