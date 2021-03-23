@@ -124,7 +124,7 @@
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       disabled={R.ifElse(
-        R.compose(R.equals(2018), R.prop('versio')),
+        R.propEq('versio', 2018),
         Laatimisvaiheet.isRakennuslupa,
         R.F
       )(energiatodistus)}
