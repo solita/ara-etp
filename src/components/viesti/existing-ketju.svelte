@@ -5,6 +5,7 @@
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
   import * as Validation from '@Utility/validation';
+  import * as Locales from '@Language/locale-utils';
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -12,8 +13,7 @@
   import * as Schema from './schema';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
-  import { _ } from '@Language/i18n';
-  import { push } from '@Component/Router/router';
+  import { _, locale } from '@Language/i18n';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
@@ -52,14 +52,16 @@
       response => {
         resources = Maybe.Some({
           whoami: response[0],
-          ketju: response[1]
+          ketju: response[1],
+          ryhmat: response[2]
         });
         overlay = false;
         idTranslateStore.updateKetju(response[1]);
       }
     ),
-    Future.parallel(2),
+    Future.parallel(3),
     R.tap(enableOverlay),
+    R.append(api.vastaanottajaryhmat),
     R.pair(kayttajaApi.whoami),
     api.ketju
   );
@@ -136,11 +138,15 @@
   .message p {
     @apply border-tableborder whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
   }
+
+  .to span:not(:last-child)::after {
+    content: ', ';
+  }
 </style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each resources.toArray() as { ketju, whoami }}
+    {#each resources.toArray() as { ketju, whoami, ryhmat }}
       <DirtyConfirmation {dirty} />
 
       <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
@@ -150,8 +156,28 @@
           <div
             class="message"
             class:self={R.propEq('id', R.path(['from', 'id'], viesti), whoami)}>
-            <strong class="from hidden">{formatSender(viesti.from)}</strong>
-            <strong class="from-me hidden">{$_(i18nRoot + '.self')}</strong>
+            <div class="flex">
+              <span class="from hidden">{formatSender(viesti.from)}</span>
+              <strong class="from-me hidden">{$_(i18nRoot + '.self')}</strong>
+
+              <span class="material-icons mx-2"> arrow_right_alt </span>
+              <div class="to">
+                <span>
+                  {Locales.label(
+                    $locale,
+                    R.find(
+                      R.propEq('id', ketju['vastaanottajaryhma-id']),
+                      ryhmat
+                    )
+                  )}
+                </span>
+                {#each ketju.vastaanottajat as vastaanottaja}
+                  <span>
+                    {`${vastaanottaja.etunimi} ${vastaanottaja.sukunimi}`}
+                  </span>
+                {/each}
+              </div>
+            </div>
             <span class="italic text-sm">
               {Formats.formatTimeInstant(viesti['sent-time'])}
             </span>
