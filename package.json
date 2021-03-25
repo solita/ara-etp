@@ -9,7 +9,8 @@
     "test": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require @babel/register --reporter dot",
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
-    "format": "prettier --write './src/**/*' modheaders.json"
+    "format": "prettier --write './src/**/*' modheaders.json",
+    "cypress": "cypress open"
   },
   "browserslist": [
     "defaults"
