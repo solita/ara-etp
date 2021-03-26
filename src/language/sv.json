@@ -1139,6 +1139,7 @@
       "existing": {
         "title": "Viestiketju SV?",
         "self": "Minä SV?",
+        "handled": "Käsitelty SV?",
         "new-viesti": "Uusi viesti SV?",
         "submit": "Vastaa SV?",
         "reset": "Tyhjennä SV?",

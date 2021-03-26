@@ -16,12 +16,13 @@
   import { _, locale } from '@Language/i18n';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
-  import H1 from '@Component/H/H1.svelte';
   import Button from '@Component/Button/Button.svelte';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import Checkbox from '@Component/Checkbox/Checkbox.svelte';
+  import SenderRecipients from './sender-recipients.svelte';
 
   const i18nRoot = 'viesti.ketju.existing';
 
@@ -116,6 +117,9 @@
     dirty = false;
   };
 
+  const isSenderSelf = (viesti, whoami) =>
+    R.propEq('id', R.path(['from', 'id'], viesti), whoami);
+
   $: formatSender = Viestit.formatSender($_);
 </script>
 
@@ -124,23 +128,13 @@
     @apply p-4 flex flex-col rounded-lg;
   }
   .message:not(.self) {
-    @apply mr-8 bg-background;
+    @apply mr-8 bg-backgroundhalf;
   }
   .message.self {
-    @apply ml-8 bg-light border-tableborder border;
-  }
-  .message.self .from-me {
-    @apply text-primary block;
-  }
-  .message:not(.self) .from {
-    @apply block;
+    @apply ml-8 bg-light border-backgroundhalf border;
   }
   .message p {
-    @apply border-tableborder whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
-  }
-
-  .to span:not(:last-child)::after {
-    content: ', ';
+    @apply border-disabled whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
   }
 </style>
 
@@ -149,45 +143,21 @@
     {#each resources.toArray() as { ketju, whoami, ryhmat }}
       <DirtyConfirmation {dirty} />
 
-      <H1 text={$_(`${i18nRoot}.title`) + ' - ' + ketju.subject} />
-
-      <div class="space-y-6">
-        {#each ketju.viestit as viesti}
-          <div
-            class="message"
-            class:self={R.propEq('id', R.path(['from', 'id'], viesti), whoami)}>
-            <div class="flex">
-              <span class="from hidden">{formatSender(viesti.from)}</span>
-              <strong class="from-me hidden">{$_(i18nRoot + '.self')}</strong>
-
-              <span class="material-icons mx-2"> arrow_right_alt </span>
-              <div class="to">
-                <span>
-                  {Locales.label(
-                    $locale,
-                    R.find(
-                      R.propEq('id', ketju['vastaanottajaryhma-id']),
-                      ryhmat
-                    )
-                  )}
-                </span>
-                {#each ketju.vastaanottajat as vastaanottaja}
-                  <span>
-                    {`${vastaanottaja.etunimi} ${vastaanottaja.sukunimi}`}
-                  </span>
-                {/each}
-              </div>
-            </div>
-            <span class="italic text-sm">
-              {Formats.formatTimeInstant(viesti['sent-time'])}
-            </span>
-            <p>{viesti.body}</p>
-          </div>
-        {/each}
+      <div class="flex flex-col">
+        <div class="flex justify-between items-center my-2">
+          <Link
+            text={$_(i18nRoot + '.back')}
+            href="#/viesti/all"
+            icon={Maybe.Some('arrow_back')} />
+          <!-- <Checkbox
+            bind:model={ketju}
+            lens={R.lensProp('kasitelty')}
+            label={$_(i18nRoot + '.handled')} /> -->
+        </div>
       </div>
 
       <form
-        class="p-4 mt-6 ml-8 rounded-lg border-tableborder border"
+        class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf border"
         on:submit|preventDefault={submitNewViesti}
         on:input={_ => {
           dirty = true;
@@ -196,7 +166,19 @@
           dirty = true;
         }}>
         <div class="w-full mb-8 space-y-2">
-          <strong>{$_(i18nRoot + '.new-viesti')}</strong>
+          <strong>{ketju.subject}</strong>
+          <SenderRecipients
+            sender={$_(i18nRoot + '.self')}
+            senderIsSelf={true}
+            recipients={R.prop('vastaanottajat', ketju)}
+            recipientGroup={Locales.label(
+              $locale,
+              R.find(
+                R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
+                ryhmat
+              )
+            )} />
+
           <Textarea
             id={'ketju.new-viesti'}
             name={'ketju.new-viesti'}
@@ -216,6 +198,33 @@
             text={$_(i18nRoot + '.submit')} />
         </div>
       </form>
+
+      <div class="space-y-6">
+        {#each R.reverse(ketju.viestit) as viesti}
+          <div class="message" class:self={isSenderSelf(viesti, whoami)}>
+            <div class="flex space-x-6">
+              <span>
+                {Formats.formatTimeInstant(viesti['sent-time'])}
+              </span>
+              <span>
+                {ketju.subject}
+              </span>
+            </div>
+            <SenderRecipients
+              sender={formatSender(viesti.from)}
+              senderIsSelf={isSenderSelf(viesti, whoami)}
+              recipients={R.prop('vastaanottajat', ketju)}
+              recipientGroup={Locales.label(
+                $locale,
+                R.find(
+                  R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
+                  ryhmat
+                )
+              )} />
+            <p>{viesti.body}</p>
+          </div>
+        {/each}
+      </div>
     {/each}
 
     <div class="flex mt-16">
