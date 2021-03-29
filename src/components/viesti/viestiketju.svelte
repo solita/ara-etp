@@ -30,7 +30,7 @@
 
 <style>
   a:first-child {
-    @apply border-t;
+    @apply border-t-2;
   }
   .participants span:not(:last-child)::after {
     content: ', ';
@@ -45,18 +45,21 @@
   .expanding-subject .subject:hover {
     @apply bg-light border-background whitespace-pre-wrap absolute z-10;
   }
+  .expanding-subject .message {
+    @apply hidden;
+  }
 </style>
 
 <!-- purgecss: font-bold text-primary -->
 
 <a
   href={`#/viesti/${ketju.id}`}
-  class="flex flex-col border-b border-background hover:bg-background hover:rounded-lg px-2 py-5">
-  <div class="flex items-start font-bold">
-    <span class="w-1/12 py-2 border border-transparent">
+  class="flex flex-col border-b-2 border-background hover:bg-background p-2">
+  <div class="flex items-start">
+    <span class="py-1 w-2/12 border border-transparent">
       {R.compose(Formats.formatDateInstant, sentTime)(ketju)}
     </span>
-    <div class="w-5/12 py-2 flex">
+    <div class="py-1 w-3/12 flex font-bold">
       <span
         class:text-primary={R.propEq(
           'id',
@@ -67,32 +70,40 @@
       </span>
     </div>
     <div
-      class="flex w-1/2 justify-between"
+      class="flex w-7/12 justify-start whitespace-no-wrap space-x-1"
       class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
-      <span class="p-2 subject"> {ketju.subject} </span>
+      <span class="p-1 subject font-bold self-start">
+        {ketju.subject}
+      </span>
 
-      {#if R.gt(R.length(ketju.viestit), 1)}
-        <div
-          class="flex items-center flex-shrink ml-auto justify-self-end py-2 border border-transparent">
-          <span class="font-icon outline mr-1">chat_bubble_outline</span>
-          <span class="font-semibold">{R.length(ketju.viestit)}</span>
-        </div>
-      {/if}
+      <span class="message truncate flex-shrink text-sm self-center">
+        {R.last(ketju.viestit).body}
+      </span>
     </div>
   </div>
 
-  <div class="flex items-start text-sm">
-    <div class="flex flex-col w-1/12">
+  <div class="flex items-center">
+    <div class="flex flex-col w-2/12">
       <span class="block">
         {R.compose(Formats.formatHoursMinutes, sentTime)(ketju)}
       </span>
     </div>
 
-    <div class="flex w-5/12 items-center space-x-2">
+    <div class="flex w-10/12 items-center space-x-2">
+      <div class="flex items-center flex-shrink">
+        <span class="font-icon outline mr-1">chat_bubble_outline</span>
+        <span>{R.length(ketju.viestit)}</span>
+
+        {#if R.gt(R.length(ketju.viestit), 1)}
+          <span class="ml-1">{$_('viesti.messages')}</span>
+        {:else}
+          <span class="ml-1">{$_('viesti.message')}</span>
+        {/if}
+      </div>
       {#if R.gt(R.length(R.values(participants)), 1)}
-        <div class="flex items-center w-full">
-          <span class="font-icon font-semibold">people</span>
-          <span class="font-semibold mx-1">
+        <div class="flex items-center w-full flex-grow">
+          <span class="font-icon">people</span>
+          <span class="mx-1">
             {R.length(R.values(participants))}
           </span>
           <div class="truncate px-1 participants">
@@ -109,12 +120,6 @@
           </div>
         </div>
       {/if}
-    </div>
-
-    <div class="flex w-1/2">
-      <span class="truncate px-2">
-        {R.last(ketju.viestit).body}
-      </span>
     </div>
   </div>
 </a>

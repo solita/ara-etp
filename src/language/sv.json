@@ -1106,6 +1106,8 @@
   "viesti": {
     "valvoja": "Valvojat SV?",
     "mina": "Minä SV?",
+    "message": "viesti SV?",
+    "messages": "viestiä SV?",
     "all": {
       "title": "Viestikeskus SV?",
       "senttime": "Lähetysaika SV?",
@@ -1137,6 +1139,7 @@
       "existing": {
         "title": "Viestiketju SV?",
         "self": "Minä SV?",
+        "handled": "Käsitelty SV?",
         "new-viesti": "Uusi viesti SV?",
         "submit": "Vastaa SV?",
         "reset": "Tyhjennä SV?",

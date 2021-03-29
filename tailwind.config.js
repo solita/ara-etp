@@ -19,6 +19,7 @@ module.exports = {
       warning: '#ead049',
       success: '#538000',
       background: '#eee',
+      backgroundhalf: 'rgba(238, 238, 238, 0.5)',
       hr: 'rgba(52, 56, 65, 0.3)',
       transparent: 'rgba(0,0,0,0)',
       tableborder: 'rgba(167,167,167,0.3)',
