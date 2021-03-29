@@ -162,6 +162,7 @@
     on:change />
   <div
     {id}
+    data-cy={name}
     class:disabled
     bind:this={button}
     class="button flex items-center"

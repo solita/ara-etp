@@ -78,6 +78,46 @@ const FIXTURES = {
       }
     ]
   },
+
+  viesti: {
+    id: 5000,
+    vastaanottajat: [],
+    'vastaanottajaryhma-id': 0,
+    'energiatodistus-id': null,
+    subject: 'Otsikko',
+    viestit: [
+      {
+        from: {
+          id: 2,
+          'rooli-id': 0,
+          sukunimi: 'Specimen-Potex',
+          etunimi: 'Liisa'
+        },
+        'sent-time': '2021-03-18T08:25:16.735110Z',
+        body: 'Viesti'
+      }
+    ]
+  },
+  get respondedViesti() {
+    return {
+      ...this.viesti,
+      ...{
+        viestit: [
+          ...this.viesti.viestit,
+          {
+            from: {
+              id: 2,
+              'rooli-id': 0,
+              sukunimi: 'Specimen-Potex',
+              etunimi: 'Liisa'
+            },
+            'sent-time': '2021-03-18T10:01:35.810864Z',
+            body: 'Vastaus'
+          }
+        ]
+      }
+    };
+  },
   // prettier-ignore
   energiatodistukset: [{"laatija-fullname":"Specimen-Potex, Liisa","laatija-id":2,"voimassaolo-paattymisaika":null,"tulokset":{"e-luku":190,"e-luokka":"D","kaytettavat-energiamuodot":{"fossiilinen-polttoaine":0,"sahko":20000,"kaukojaahdytys":0,"kaukolampo":0,"uusiutuva-polttoaine":5000}},"tila-id":0,"perustiedot":{"havainnointikaynti":"2020-04-15","rakennustunnus":"101089527F","katuosoite-sv":"katuosoite-sv","keskeiset-suositukset-fi":"Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                       * Toimenpide 2","laatimisvaihe":0,"kieli":0,"nimi":"Rakennuksen nimi","postinumero":"33100","yritys":{"nimi":"Yritys Oy","katuosoite":"yrityksen katuosoite","postinumero":"33100","postitoimipaikka":"tampere"},"kayttotarkoitus":"YAT","katuosoite-fi":"Katuosoite","keskeiset-suositukset-sv":null,"valmistumisvuosi":2020},"lahtotiedot":{"lammitetty-nettoala":140,"ilmanvaihto":{"tyyppi-id":1,"kuvaus-fi":"ilmanvaihdon kuvaus fi","kuvaus-sv":null},"lammitys":{"lammitysmuoto-1":{"id":0,"kuvaus-fi":null,"kuvaus-sv":null},"lammitysmuoto-2":{"id":9,"kuvaus-fi":"Toissijaisen lämmitysjärjestelmän kuvaus","kuvaus-sv":null},"lammonjako":{"id":1,"kuvaus-fi":null,"kuvaus-sv":null}}},"korvaava-energiatodistus-id":null,"id":5,"versio":2018,"allekirjoitusaika":null},{"laatija-fullname":"Specimen-Potex, Liisa","laatija-id":2,"voimassaolo-paattymisaika":null,"tulokset":{"e-luku":101,"e-luokka":"C","kaytettavat-energiamuodot":{"fossiilinen-polttoaine":0,"sahko":5000,"kaukojaahdytys":0,"kaukolampo":3000000,"uusiutuva-polttoaine":7000}},"tila-id":0,"perustiedot":{"havainnointikaynti":"2020-04-15","rakennustunnus":"101089527F","katuosoite-sv":"katuosoite-sv","keskeiset-suositukset-fi":"Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                       * Toimenpide 2","laatimisvaihe":0,"kieli":0,"nimi":"Rakennuksen nimi","postinumero":"33100","yritys":{"nimi":"Yritys Oy","katuosoite":"yrityksen katuosoite","postinumero":"33100","postitoimipaikka":"tampere"},"kayttotarkoitus":"AK3","katuosoite-fi":"Katuosoite","keskeiset-suositukset-sv":null,"valmistumisvuosi":2017},"lahtotiedot":{"lammitetty-nettoala":15000,"ilmanvaihto":{"tyyppi-id":1,"kuvaus-fi":"ilmanvaihdon kuvaus fi","kuvaus-sv":null},"lammitys":{"lammitysmuoto-1":{"id":0,"kuvaus-fi":null,"kuvaus-sv":null},"lammitysmuoto-2":{"id":9,"kuvaus-fi":"Toissijaisen lämmitysjärjestelmän kuvaus","kuvaus-sv":null},"lammonjako":{"id":1,"kuvaus-fi":null,"kuvaus-sv":null}}},"korvaava-energiatodistus-id":null,"id":4,"versio":2018,"allekirjoitusaika":null},{"laatija-fullname":"Specimen-Potex, Liisa","laatija-id":2,"voimassaolo-paattymisaika":null,"tulokset":{"e-luku":104,"e-luokka":"B","kaytettavat-energiamuodot":{"fossiilinen-polttoaine":0,"sahko":10000000,"kaukojaahdytys":0,"kaukolampo":7000000,"uusiutuva-polttoaine":7000}},"tila-id":0,"perustiedot":{"havainnointikaynti":"2020-04-15","rakennustunnus":"101089527F","katuosoite-sv":"katuosoite-sv","keskeiset-suositukset-fi":"Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                         * Toimenpide 2","laatimisvaihe":0,"kieli":0,"nimi":"Rakennuksen nimi","postinumero":"33100","yritys":{"nimi":"Yritys Oy","katuosoite":"yrityksen katuosoite","postinumero":"33100","postitoimipaikka":"tampere"},"kayttotarkoitus":"TT","katuosoite-fi":"Katuosoite","keskeiset-suositukset-sv":null,"valmistumisvuosi":2018},"lahtotiedot":{"lammitetty-nettoala":150000,"ilmanvaihto":{"tyyppi-id":1,"kuvaus-fi":"ilmanvaihdon kuvaus fi","kuvaus-sv":null},"lammitys":{"lammitysmuoto-1":{"id":0,"kuvaus-fi":null,"kuvaus-sv":null},"lammitysmuoto-2":{"id":9,"kuvaus-fi":"Toissijaisen lämmitysjärjestelmän kuvaus","kuvaus-sv":null},"lammonjako":{"id":1,"kuvaus-fi":null,"kuvaus-sv":null}}},"korvaava-energiatodistus-id":null,"id":3,"versio":2018,"allekirjoitusaika":null},{"laatija-fullname":"Specimen-Potex, Liisa","laatija-id":2,"voimassaolo-paattymisaika":null,"tulokset":{"e-luku":50,"e-luokka":"A","kaytettavat-energiamuodot":{"fossiilinen-polttoaine":0,"sahko":0,"kaukojaahdytys":0,"kaukolampo":0,"uusiutuva-polttoaine":50000}},"tila-id":0,"perustiedot":{"havainnointikaynti":"2020-04-15","rakennustunnus":"101089527F","katuosoite-sv":"katuosoite-sv","keskeiset-suositukset-fi":"Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                         * Toimenpide 2","laatimisvaihe":0,"kieli":0,"nimi":"Rakennuksen nimi","postinumero":"33100","yritys":{"nimi":"Yritys Oy","katuosoite":"yrityksen katuosoite","postinumero":"33100","postitoimipaikka":"tampere"},"kayttotarkoitus":"PK","katuosoite-fi":"Katuosoite","keskeiset-suositukset-sv":null,"valmistumisvuosi":2019},"lahtotiedot":{"lammitetty-nettoala":500,"ilmanvaihto":{"tyyppi-id":1,"kuvaus-fi":"ilmanvaihdon kuvaus fi","kuvaus-sv":null},"lammitys":{"lammitysmuoto-1":{"id":0,"kuvaus-fi":null,"kuvaus-sv":null},"lammitysmuoto-2":{"id":9,"kuvaus-fi":"Toissijaisen lämmitysjärjestelmän kuvaus","kuvaus-sv":null},"lammonjako":{"id":1,"kuvaus-fi":null,"kuvaus-sv":null}}},"korvaava-energiatodistus-id":null,"id":2,"versio":2018,"allekirjoitusaika":null},{"laatija-fullname":"Specimen-Potex, Liisa","laatija-id":2,"voimassaolo-paattymisaika":null,"tulokset":{"e-luku":322,"e-luokka":"E","kaytettavat-energiamuodot":{"fossiilinen-polttoaine":550000,"sahko":5000,"kaukojaahdytys":0,"kaukolampo":0,"uusiutuva-polttoaine":0}},"tila-id":0,"perustiedot":{"havainnointikaynti":"2020-04-15","rakennustunnus":"101089527F","katuosoite-sv":"Katuosoite SV","keskeiset-suositukset-fi":"Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                      * Toimenpide 2","kieli":2,"nimi":"Rakennuksen nimi","postinumero":"33100","yritys":{"nimi":"Yritys Oy","katuosoite":"yrityksen katuosoite","postinumero":"33100","postitoimipaikka":"tampere"},"kayttotarkoitus":"RK","katuosoite-fi":"Katuosoite","keskeiset-suositukset-sv":"Keskeiset suositukset SV","valmistumisvuosi":2016},"lahtotiedot":{"lammitetty-nettoala":5000,"ilmanvaihto":{"tyyppi-id":0,"kuvaus-fi":"ilmanvaihdon kuvaus fi","kuvaus-sv":"ilmanvaihdon kuvaus sv"},"lammitys":{"lammitysmuoto-1":{"id":2,"kuvaus-fi":null,"kuvaus-sv":null},"lammitysmuoto-2":{"id":5,"kuvaus-fi":null,"kuvaus-sv":null},"lammonjako":{"id":7,"kuvaus-fi":null,"kuvaus-sv":null}}},"korvaava-energiatodistus-id":null,"id":1,"versio":2013,"allekirjoitusaika":null}]
 };
@@ -104,7 +144,7 @@ context('Laatija', () => {
     it('should navigate to energiatodistus', () => {
       cy.visit('https://localhost:3000');
 
-      cy.get('tbody tr')
+      cy.get('[data-cy="energiatodistus-row"]')
         .first()
         .click();
 
@@ -129,7 +169,7 @@ context('Laatija', () => {
         { statusCode: 200 }
       ).as('signStart');
       cy.visit('https://localhost:3000/#/energiatodistus/2018/5');
-      cy.contains('Allekirjoita').click();
+      cy.get('[data-cy="allekirjoita-button"]').click();
 
       cy.wait('@signStart');
       cy.wait('@mpolluxVersion');
@@ -174,9 +214,7 @@ context('Laatija', () => {
         { statusCode: 200, body: 'Ok' }
       ).as('finish');
 
-      cy.get('dialog button')
-        .first()
-        .click();
+      cy.get('[data-cy="signing-submit-button"]').click();
 
       cy.wait('@start');
       cy.wait('@digest');
@@ -205,9 +243,9 @@ context('Laatija', () => {
       cy.wait('@yritykset');
       cy.wait('@yritys1');
 
-      cy.get('#laskutettava-yritys-id').click();
+      cy.get('[data-cy="laskutettava-yritys-id"]').click();
       cy.contains('nimi').click();
-      cy.get('[name="energiatodistus.laskutus.postiosoite"]').should(
+      cy.get('[data-cy="energiatodistus.laskutus.postiosoite"]').should(
         'have.value',
         'jakeluosoite, 12345 postitoimipaikka'
       );
@@ -216,7 +254,7 @@ context('Laatija', () => {
     it('should delete energiatodistus from energiatodistus page', () => {
       cy.visit('https://localhost:3000/');
 
-      cy.get('tbody tr')
+      cy.get('[data-cy="energiatodistus-row"]')
         .first()
         .click();
 
@@ -246,15 +284,13 @@ context('Laatija', () => {
       ).as('count');
 
       cy.contains('Poista').click();
-      cy.get('dialog button')
-        .first()
-        .click();
+      cy.get('[data-cy="confirm-submit-button"]').click();
 
       cy.wait('@deleteEnergiatodistus');
       cy.wait('@energiatodistukset');
       cy.wait('@count');
 
-      cy.get('tbody tr').should('have.length', 4);
+      cy.get('[data-cy="energiatodistus-row"]').should('have.length', 4);
     });
 
     it('should delete energiatodistus from energiatodistukset page', () => {
@@ -268,7 +304,9 @@ context('Laatija', () => {
         { statusCode: 200 }
       ).as('deleteEnergiatodistus');
 
-      cy.get('tbody tr:first-child td:last-child span').click();
+      cy.get(
+        '[data-cy="energiatodistus-row"]:first-child td:last-child span'
+      ).click();
 
       cy.intercept(
         {
@@ -287,15 +325,13 @@ context('Laatija', () => {
         { statusCode: 200, body: { count: 4 } }
       ).as('count');
 
-      cy.get('dialog button')
-        .first()
-        .click();
+      cy.get('[data-cy="confirm-submit-button"]').click();
 
       cy.wait('@deleteEnergiatodistus');
       cy.wait('@energiatodistukset');
       cy.wait('@count');
 
-      cy.get('tbody tr').should('have.length', 4);
+      cy.get('[data-cy="energiatodistus-row"]').should('have.length', 4);
     });
   });
 
@@ -323,22 +359,12 @@ context('Laatija', () => {
         assert.equal(loc.toString(), 'https://localhost:3000/#/yritys/new')
       );
 
-      cy.get('[name="ytunnus"]')
-        .type(yritys.ytunnus)
-        .blur();
-      cy.get('[name="nimi"]')
-        .type(yritys.nimi)
-        .blur();
-      cy.get('[name="jakeluosoite"]')
-        .type(yritys.jakeluosoite)
-        .blur();
-      cy.get('[name="postinumero"]')
-        .type(yritys.postinumero)
-        .blur();
-      cy.get('[name="postitoimipaikka"]')
-        .type(yritys.postitoimipaikka)
-        .blur();
-      cy.get('[name="maa"]').type('suom{enter}');
+      cy.get('[data-cy="ytunnus"]').type(yritys.ytunnus);
+      cy.get('[data-cy="nimi"]').type(yritys.nimi);
+      cy.get('[data-cy="jakeluosoite"]').type(yritys.jakeluosoite);
+      cy.get('[data-cy="postinumero"]').type(yritys.postinumero);
+      cy.get('[data-cy="postitoimipaikka"]').type(yritys.postitoimipaikka);
+      cy.get('[data-cy="maa"]').type('suom{enter}');
 
       cy.intercept(
         {
@@ -364,7 +390,7 @@ context('Laatija', () => {
       cy.wait('@postYritys');
       cy.wait('@yritys');
 
-      cy.get('[name="ytunnus"]').should('have.value', '1111112-8');
+      cy.get('[data-cy="ytunnus"]').should('have.value', '1111112-8');
       cy.get('#breadcrumbcontainer a')
         .last()
         .should('contain.text', 'nimi');
@@ -417,7 +443,7 @@ context('Laatija', () => {
         { statusCode: 200 }
       ).as('putLaatija');
 
-      cy.get('[name="yritys"]').type('yri{enter}');
+      cy.get('[data-cy="yritys"]').type('yri{enter}');
 
       cy.contains('Liitä yritykseen').click();
 
@@ -425,7 +451,7 @@ context('Laatija', () => {
       cy.wait('@laatijanYritykset');
 
       cy.contains('Odottaa hyväksymistä').should('exist');
-      cy.get('tbody tr').should('have.length', 2);
+      cy.get('[data-cy="yritys-row"]').should('have.length', 2);
     });
 
     it('should leave yritys', () => {
@@ -472,72 +498,24 @@ context('Laatija', () => {
         { statusCode: 200 }
       ).as('deleteLaatija');
 
-      cy.get('tbody span')
+      cy.get('[data-cy="yritys-row"] span')
         .last()
         .click();
 
-      cy.get('dialog button')
-        .first()
-        .click();
+      cy.get('[data-cy="confirm-submit-button"]').click();
 
       cy.wait('@deleteLaatija');
       cy.wait('@yritykset');
       cy.wait('@laatijanYritykset');
 
-      cy.get('tbody tr').should('have.length', 1);
+      cy.get('[data-cy="yritys-row"]').should('have.length', 1);
     });
   });
 
   describe('viestiketjut', () => {
     const viestiResponseGenerator = function*() {
-      yield {
-        id: 5000,
-        vastaanottajat: [],
-        'vastaanottajaryhma-id': 0,
-        'energiatodistus-id': null,
-        subject: 'Otsikko',
-        viestit: [
-          {
-            from: {
-              id: 2,
-              'rooli-id': 0,
-              sukunimi: 'Specimen-Potex',
-              etunimi: 'Liisa'
-            },
-            'sent-time': '2021-03-18T08:25:16.735110Z',
-            body: 'Viesti'
-          }
-        ]
-      };
-      yield {
-        id: 5000,
-        vastaanottajat: [],
-        'vastaanottajaryhma-id': 0,
-        'energiatodistus-id': null,
-        subject: 'Otsikko',
-        viestit: [
-          {
-            from: {
-              id: 2,
-              'rooli-id': 0,
-              sukunimi: 'Specimen-Potex',
-              etunimi: 'Liisa'
-            },
-            'sent-time': '2021-03-18T08:39:20.181019Z',
-            body: 'Viesti'
-          },
-          {
-            from: {
-              id: 2,
-              'rooli-id': 0,
-              sukunimi: 'Specimen-Potex',
-              etunimi: 'Liisa'
-            },
-            'sent-time': '2021-03-18T10:01:35.810864Z',
-            body: 'Vastaus'
-          }
-        ]
-      };
+      yield FIXTURES.viesti;
+      yield FIXTURES.respondedViesti;
     };
 
     it('should navigate to viestit', () => {
@@ -610,12 +588,8 @@ context('Laatija', () => {
         }
       ).as('viestit');
 
-      cy.get('[name="ketju.subject"]')
-        .type('Otsikko')
-        .blur();
-      cy.get('[name="ketju.body"]')
-        .type('Viesti')
-        .blur();
+      cy.get('[data-cy="ketju.subject"]').type('Otsikko');
+      cy.get('[data-cy="ketju.body"]').type('Viesti');
       cy.contains('Lähetä').click();
       cy.wait('@post');
       cy.wait('@count');
@@ -641,7 +615,7 @@ context('Laatija', () => {
 
       cy.wait('@viesti');
 
-      cy.get('.message').should(msg => assert.equal(msg.length, 1));
+      cy.get('[data-cy="message"]').should(msg => assert.equal(msg.length, 1));
     });
 
     it('should respond to viestiketju', () => {
@@ -658,7 +632,7 @@ context('Laatija', () => {
 
       cy.wait('@viesti');
 
-      cy.get('[name="ketju.new-viesti"]')
+      cy.get('[data-cy="ketju.new-viesti"]')
         .type('Vastaus')
         .blur();
       cy.intercept(
@@ -676,7 +650,7 @@ context('Laatija', () => {
       cy.wait('@vastaus');
       cy.wait('@viesti');
 
-      cy.get('.message').should(msg => assert.equal(msg.length, 2));
+      cy.get('[data-cy="message"]').should(msg => assert.equal(msg.length, 2));
     });
   });
 
@@ -740,7 +714,7 @@ context('Laatija', () => {
 
       cy.get('@input').should('be.disabled');
 
-      cy.get('[name="wwwosoite"]')
+      cy.get('[data-cy="wwwosoite"]')
         .type('example.com')
         .blur();
 

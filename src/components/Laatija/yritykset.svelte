@@ -14,7 +14,7 @@
   import Address from '@Component/Yritys/address.svelte';
 
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as Kayttajat from '@Utility/kayttajat'
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as laatijaApi from './laatija-api';
   import * as yritysApi from '@Component/Yritys/yritys-api';
   import * as Tila from '@Component/Yritys/laatija-yritys-tila';
@@ -105,8 +105,8 @@
         allYritykset: yritysApi.getAllYritykset,
         whoami: kayttajaApi.whoami
       })
-    )
-  }
+    );
+  };
 
   $: load(params.id);
 
@@ -173,6 +173,7 @@
               <tbody class="etp-table--tbody">
                 {#each laatijaYritykset as yritys, index}
                   <tr
+                    data-cy="yritys-row"
                     class="etp-table--tr etp-table--tr__link"
                     class:etp-table--tr__link={!Tila.isProposal(yritys)}
                     on:click={() => {

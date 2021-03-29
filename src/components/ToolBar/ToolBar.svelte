@@ -233,7 +233,7 @@
     </button>
   {/if}
   {#if R.includes(Toolbar.module.sign, fields)}
-    <button on:click={saveComplete(openSigning)}>
+    <button data-cy="allekirjoita-button" on:click={saveComplete(openSigning)}>
       <div class="description">{$_('energiatodistus.toolbar.sign')}</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
         create

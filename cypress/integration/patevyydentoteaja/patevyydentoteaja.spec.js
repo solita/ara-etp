@@ -31,7 +31,7 @@ context('Patevyyden toteaja', () => {
   describe('laatija upload', () => {
     it('should highlight and unhighlight on dragevents', () => {
       cy.visit('https://localhost:3000/#/laatija/laatijoidentuonti');
-      cy.get('label').as('upload');
+      cy.get('[data-cy="droparea"]').as('upload');
 
       cy.get('@upload').should('exist');
       cy.get('@upload').should('not.have.class', 'highlight');
@@ -47,11 +47,13 @@ context('Patevyyden toteaja', () => {
       const files = [new File(FIXTURES.validFile.split(''), 'laatijat.txt')];
       cy.visit('https://localhost:3000/#/laatija/laatijoidentuonti');
 
-      cy.get('label').trigger('drop', { dataTransfer: { files } });
+      cy.get('[data-cy="droparea"]').trigger('drop', {
+        dataTransfer: { files }
+      });
 
-      cy.get('tbody tr').should('have.length', 2);
+      cy.get('[data-cy="laatija-upload-row"]').should('have.length', 2);
 
-      cy.get('button[type="submit"]')
+      cy.get('[data-cy="laatija-upload-submit"]')
         .as('submit')
         .should('be.enabled');
 
@@ -77,11 +79,13 @@ context('Patevyyden toteaja', () => {
       const files = [new File(FIXTURES.invalidFile.split(''), 'laatijat.txt')];
       cy.visit('https://localhost:3000/#/laatija/laatijoidentuonti');
 
-      cy.get('label').trigger('drop', { dataTransfer: { files } });
+      cy.get('[data-cy="droparea"]').trigger('drop', {
+        dataTransfer: { files }
+      });
 
-      cy.get('tbody tr').should('have.length', 2);
+      cy.get('[data-cy="laatija-upload-row"]').should('have.length', 2);
 
-      cy.get('button[type="submit"]').should('be.disabled');
+      cy.get('[data-cy="laatija-upload-submit"]').should('be.disabled');
       cy.contains('240301A921G').should('have.class', 'invalid');
       cy.get('.alert.error').should('exist');
     });
@@ -99,7 +103,7 @@ context('Patevyyden toteaja', () => {
         )
       );
 
-      cy.get('tbody tr').should('have.length', 15);
+      cy.get('[data-cy="laatija-row"]').should('have.length', 15);
     });
 
     it('should filter laatijat', () => {
@@ -108,7 +112,7 @@ context('Patevyyden toteaja', () => {
         .as('input')
         .type('laat');
 
-      cy.get('tbody tr').should('have.length', 9);
+      cy.get('[data-cy="laatija-row"]').should('have.length', 9);
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
@@ -118,7 +122,7 @@ context('Patevyyden toteaja', () => {
 
       cy.get('@input').type('{selectall}{backspace}');
 
-      cy.get('tbody tr').should('have.length', 15);
+      cy.get('[data-cy="laatija-row"]').should('have.length', 15);
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),

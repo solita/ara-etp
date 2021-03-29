@@ -40,6 +40,7 @@
   {id}
   {name}
   {disabled}
+  data-cy={name}
   class="input"
   class:center
   class:error

@@ -33,7 +33,10 @@
   }
 </style>
 
-<label use:fileupload={{ setFiles, toggleHighlight }} class:highlight>
+<label
+  data-cy="droparea"
+  use:fileupload={{ setFiles, toggleHighlight }}
+  class:highlight>
   <input
     on:click={e => (e.target.value = '')}
     on:focus={_ => toggleHighlight(true)}
