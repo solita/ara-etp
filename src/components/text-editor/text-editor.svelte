@@ -83,7 +83,6 @@
   on:text-change={evt =>
     R.compose(
       validate,
-      R.tap(console.log),
       R.join(''),
       R.filter(R.test(/(\w|[ÅÄÖ])/i)),
       R.replace(/<\/?[^>]+(>|$)/g, ''),
