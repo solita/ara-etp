@@ -126,11 +126,9 @@
   <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       disabled={Kayttajat.isLaskuttaja(whoami) ||
-        R.ifElse(
-          R.propEq('versio', 2018),
-          Laatimisvaiheet.isRakennuslupa,
-          R.F
-        )(energiatodistus)}
+        R.allPass([R.propEq('versio', 2018), Laatimisvaiheet.isRakennuslupa])(
+          energiatodistus
+        )}
       {schema}
       {center}
       bind:model={energiatodistus}
