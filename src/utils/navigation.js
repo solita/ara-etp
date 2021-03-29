@@ -29,26 +29,31 @@ export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
   { label: i18n('navigation.laatijat'), href: '#/laatija/all' }
 ]);
 
-export const linksForEnergiatodistus = R.curry((i18n, version, id) => [
-  {
-    label: `${i18n('navigation.et')} ${id}`,
-    href: `#/energiatodistus/${version}/${id}`
-  },
-  // Hidden until implemented
-  //{
-  //  label: i18n('navigation.viestit'),
-  //  href: `#/energiatodistus/${version}/${id}/viestit`
-  //},
-  {
-    label: i18n('navigation.liitteet'),
-    href: `#/energiatodistus/${version}/${id}/liitteet`
-  }
-  // Hidden until implemented
-  // {
-  //  label: i18n('navigation.muutoshistoria'),
-  //  href: `#/energiatodistus/${version}/${id}/muutoshistoria`
-  // }
-]);
+export const linksForEnergiatodistus = R.curry((i18n, kayttaja, version, id) =>
+  R.when(
+    R.always(!Kayttajat.isLaskuttaja(kayttaja)),
+    R.append({
+      label: i18n('navigation.liitteet'),
+      href: `#/energiatodistus/${version}/${id}/liitteet`
+    }),
+    [
+      // Hidden until implemented
+      //{
+      //  label: i18n('navigation.viestit'),
+      //  href: `#/energiatodistus/${version}/${id}/viestit`
+      //},
+      {
+        label: `${i18n('navigation.et')} ${id}`,
+        href: `#/energiatodistus/${version}/${id}`
+      }
+      // Hidden until implemented
+      // {
+      //  label: i18n('navigation.muutoshistoria'),
+      //  href: `#/energiatodistus/${version}/${id}/muutoshistoria`
+      // }
+    ]
+  )
+);
 
 export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   {
@@ -185,10 +190,13 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
   { label: i18n('navigation.viestit'), href: '#/viesti/all' }
 ]);
 
+export const linksForLaskuttaja = linksForPaakayttaja;
+
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,
   1: linksForPatevyydentoteaja,
-  2: linksForPaakayttaja
+  2: linksForPaakayttaja,
+  3: linksForLaskuttaja
 });
 
 export const parseEnergiatodistus = R.curry(
@@ -207,7 +215,7 @@ export const parseEnergiatodistus = R.curry(
 
     return R.compose(
       Maybe.orSome(parseRoot(isDev, i18n, kayttaja)),
-      R.lift(linksForEnergiatodistus(i18n))
+      R.lift(linksForEnergiatodistus(i18n, kayttaja))
     )(version, id);
   }
 );

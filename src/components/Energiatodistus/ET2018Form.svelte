@@ -151,6 +151,7 @@
   {schema}
   {inputLanguage}
   {disabled}
+  {whoami}
   bind:energiatodistus
   postinumerot={luokittelut.postinumerot}
   kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}

@@ -32,7 +32,8 @@
     loading = value;
   };
 
-  $: disabled = energiatodistus['laskutusaika'].isSome();
+  $: disabled =
+    energiatodistus['laskutusaika'].isSome() || Kayttajat.isLaskuttaja(whoami);
 
   const getLaatija = id =>
     R.equals(id, whoami.id) || Kayttajat.isPaakayttaja(whoami)

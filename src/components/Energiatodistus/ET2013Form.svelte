@@ -132,6 +132,7 @@
   {schema}
   {inputLanguage}
   {disabled}
+  {whoami}
   bind:energiatodistus
   {labelLocale}
   postinumerot={luokittelut.postinumerot}

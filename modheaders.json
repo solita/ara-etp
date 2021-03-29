@@ -155,5 +155,36 @@
     "shortTitle": "1",
     "title": "harri.lindberg@solita.fi-external",
     "urlReplacements": []
+  },
+  {
+    "appendMode": false,
+    "backgroundColor": "#43175a",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-accesstoken",
+        "value": "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJsYXNrdXR0YWphQHNvbGl0YS5maSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoib3BlbmlkIiwiYXV0aF90aW1lIjoxNTgzMjMwOTY5LCJpc3MiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc29saXRhL2V0cC1jb3JlL2ZlYXR1cmUvQUUtNDMtYXV0aC1oZWFkZXJzLWhhbmRsaW5nL2V0cC1iYWNrZW5kL3NyYy9tYWluL3Jlc291cmNlcyIsImV4cCI6MTg5MzQ1NjAwMCwiaWF0IjoxNjAxNTEwNDAwLCJ2ZXJzaW9uIjoyLCJqdGkiOiJiNTg1ZTQ0Zi00NDA0LTRkZDctYjFiZi03MmFhMWVhZTE3OWIiLCJjbGllbnRfaWQiOiJ0ZXN0LWNsaWVudF9pZCIsInVzZXJuYW1lIjoidGVzdC11c2VybmFtZSJ9.YvBob1dZP33iIzb9Kb_oICLKKDMZa_Q9v_2v6Fcz-1Q_w6ZlwRWZYaqKu2MppBv6tcOsklJxh-9jT-uB-QtMm-U61NDAT3H0OUm_8ymqsaKGhWk13SMtZBttKtP-vjktX_ngkNUnjnbGj0BJHh8yhVt-5nwBuTOqma0ADLHQrQsd6k77WIc02b3G75tasLYqWrbiy1ZWfd-LqrRkTuVgcHaUMHmIdT1wvh8OmEAklKSWPhTKmhHr6A8hDtFmuvZfrHUDlA0hOOrkUsxDVLcYQoWV2nnPsAqbhdIUbX7mhFliSRhYEb1gtcKwFEXdwq-nD-kBu2-rvOgJL8d2cqIPzQ"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-identity",
+        "value": "laskuttaja@solita.fi"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-data",
+        "value": "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJsYXNrdXR0YWphQHNvbGl0YS5maSIsImVtYWlsIjoibGFza3V0dGFqYUBzb2xpdGEuZmkiLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUiLCJleHAiOjE4OTM0NTYwMDAsImlzcyI6InRlc3QtaXNzIn0.AOI-GKhEkJpOHtxvwe0cZEyouEpQBQFLJmz3A3mAGjdBiCE77KCmuulTa5rJ8tkNr2QjG7f2HYwCSe6Q0NhuI6YY5R8kl5o7EPCe24a0qGDGVP0ULWbe_o8svDxjk2WE-GqM8WzjHvP0pzlD-mhTibCs9sAYDykSo9OAc5SAbHCj1eJXASH5zqzBq71Nca6OTWTl6Psv5pqQmGs1O1lylqPTVLVJj6-kQOOeTfsbvQyjDyt7_h7a0exM-EY_JnDmQ4-8O0WIDYs-xNd8X-9VnWvGpzrdQgB3nQF-W7g-z0-gS1g57-dLSbJYlnkIOfDyZeYyPu0VTHyNmNjopWegLQ"
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "textColor": "#ffffff",
+    "title": "laskuttaja@solita.fi",
+    "urlReplacements": []
   }
 ]

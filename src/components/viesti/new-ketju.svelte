@@ -39,6 +39,9 @@
     overlay = true;
   };
 
+  const isAllowedToSendToEveryone = whoami =>
+    R.or(Kayttajat.isPaakayttaja(whoami), Kayttajat.isLaskuttaja(whoami));
+
   const formatVastaanottaja = kayttaja =>
     `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
 
@@ -79,7 +82,7 @@
       Future.parallelObject(3, {
         vastaanottajaryhmat: api.vastaanottajaryhmat,
         whoami: Future.resolve(whoami),
-        laatijat: Kayttajat.isPaakayttaja(whoami)
+        laatijat: isAllowedToSendToEveryone(whoami)
           ? laatijaApi.laatijat
           : Future.resolve([])
       })
@@ -151,7 +154,7 @@
         on:change={_ => {
           dirty = true;
         }}>
-        {#if Kayttajat.isPaakayttaja(whoami)}
+        {#if isAllowedToSendToEveryone(whoami)}
           <div class="lg:w-1/2 w-full py-4">
             <Autocomplete
               items={R.map(formatVastaanottaja, laatijat)}
@@ -179,7 +182,7 @@
             id={'ketju.vastaanottajaryhma'}
             label={$_('viesti.ketju.vastaanottajaryhma')}
             required={true}
-            disabled={!Kayttajat.isPaakayttaja(whoami)}
+            disabled={!isAllowedToSendToEveryone(whoami)}
             allowNone={false}
             bind:model={ketju}
             lens={R.lensProp('vastaanottajaryhma-id')}
