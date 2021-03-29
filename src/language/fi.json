@@ -1158,6 +1158,7 @@
       "existing": {
         "title": "Viestiketju",
         "self": "Minä",
+        "handled": "Käsitelty",
         "new-viesti": "Uusi viesti",
         "submit": "Vastaa",
         "reset": "Tyhjennä",
