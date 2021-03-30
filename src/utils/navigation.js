@@ -112,12 +112,7 @@ export const parseKayttaja = R.curry(
     }
     const id = locationParts[0];
     if (R.equals('new', id)) {
-      return [
-        {
-          label: `${i18n('navigation.uusi-kayttaja')}`,
-          href: `#/kayttaja/new`
-        }
-      ];
+      return [];
     } else if (
       R.and(
         Kayttajat.isPaakayttaja(kayttaja),
@@ -158,14 +153,7 @@ export const parseYritys = R.curry(
       return [];
     }
     const id = locationParts[0];
-    if (R.equals('new', id)) {
-      return [
-        {
-          label: `${i18n('navigation.new-yritys')}`,
-          href: `#/yritys/new`
-        }
-      ];
-    } else if (R.equals('all', id)) {
+    if (R.equals('new', id) || R.equals('all', id)) {
       return [];
     } else {
       return linksForYritys(i18n, idTranslate, id);
@@ -199,10 +187,7 @@ export const parseEnergiatodistus = R.curry(
     )(locationParts);
 
     if (R.compose(Maybe.isSome, R.filter(R.equals('new')))(id)) {
-      return R.compose(
-        Maybe.orSome(parseRoot(isDev, i18n, kayttaja)),
-        R.map(linksForNewEnergiatodistus(i18n))
-      )(version);
+      return [];
     }
 
     return R.compose(
@@ -239,6 +224,18 @@ export const navigationParse = R.curry(
             R.head
           ),
           R.compose(parseKayttaja(isDev, i18n, kayttaja, idTranslate), R.tail)
+        ],
+        [
+          R.compose(R.equals('viesti'), R.head),
+          R.compose(
+            R.ifElse(
+              R.equals('all'),
+              R.always(parseRoot(isDev, i18n, kayttaja)),
+              R.always([])
+            ),
+            R.head,
+            R.tail
+          )
         ],
         [
           R.compose(
