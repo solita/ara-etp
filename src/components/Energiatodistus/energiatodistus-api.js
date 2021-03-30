@@ -23,6 +23,7 @@ const deserializer = {
   id: Maybe.get,
   versio: Maybe.get,
   'tila-id': Maybe.get,
+  'draft-visible-to-paakayttaja': Maybe.get,
   laskutusaika: Maybe.map(dfns.parseJSON),
   allekirjoitusaika: Maybe.map(dfns.parseJSON),
   'voimassaolo-paattymisaika': Maybe.map(dfns.parseJSON),

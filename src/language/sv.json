@@ -242,6 +242,7 @@
     "versio": "Version",
     "laatija-id": "Upprättare",
     "kommentti": "Pääkäyttäjän kommentti SV?",
+    "draft-visible-to-paakayttaja": "Valvojat saavat nähdä luonnostilaisen energiatodistuksen SV?",
     "haku": {
       "sarakkeet": {
         "tila": "Status",

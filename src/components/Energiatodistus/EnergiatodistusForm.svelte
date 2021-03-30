@@ -12,6 +12,7 @@
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
   import HR from '@Component/HR/HR';
+  import Checkbox from '@Component/Checkbox/Checkbox';
   import PaakayttajanKommentti from './paakayttajan-kommentti';
   import EnergiatodistusKorvattu from './korvaavuus/korvattu';
   import EnergiatodistusKorvaava from './korvaavuus/korvaava';
@@ -259,6 +260,14 @@
               )}
             </div>
           {/if}
+
+          <div class="mb-5">
+            <Checkbox
+              bind:model={energiatodistus}
+              lens={R.lensPath(['draft-visible-to-paakayttaja'])}
+              label={$_('energiatodistus.draft-visible-to-paakayttaja')}
+              disabled={disabled} />
+          </div>
 
           <PaakayttajanKommentti
             {whoami}

@@ -82,6 +82,7 @@ export const energiatodistus2018 = _ => ({
   'laskutettava-yritys-id': Maybe.None(),
   'korvaava-energiatodistus-id': Maybe.None(),
   'korvattu-energiatodistus-id': Maybe.None(),
+  'draft-visible-to-paakayttaja': false,
   laskuriviviite: Maybe.None(),
   laskutusaika: Maybe.None(),
   perustiedot: {
