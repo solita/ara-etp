@@ -1,5 +1,8 @@
 <script>
   import * as R from 'ramda';
+  import { querystring } from 'svelte-spa-router';
+  import qs from 'qs';
+
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
@@ -18,7 +21,7 @@
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
-  import { pop } from '@Component/Router/router';
+  import { replace } from '@Component/Router/router';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
@@ -107,7 +110,7 @@
           $_(`${i18nRoot}.messages.success`)
         );
         dirty = false;
-        pop();
+        replace('#/viesti/all');
       }
     ),
     api.postKetju(fetch)
@@ -132,6 +135,13 @@
     ketju = Viestit.emptyKetju();
     dirty = false;
   };
+
+  $: {
+    const query = qs.parse($querystring);
+    if (R.has('subject', query)) {
+      ketju = R.assoc('subject', `Re: [${query.subject}]`, ketju);
+    }
+  }
 </script>
 
 <style>
