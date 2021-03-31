@@ -62,13 +62,18 @@
     "big-integer": "^1.6.48",
     "core-js": "^3.6.5",
     "date-fns": "^2.12.0",
+    "dompurify": "^2.2.7",
     "fluture": "^12.2.0",
     "litepicker": "^1.5.7",
+    "marked": "^2.0.1",
     "monet": "^0.9.1",
     "qs": "^6.9.4",
+    "quill": "^1.3.7",
+    "quill-image-drop-module": "^1.0.3",
     "ramda": "^0.26.1",
     "sirv-cli": "^0.4.4",
     "svelte-i18n": "^3.0.4",
-    "svelte-spa-router": "git://github.com/hkorpi/svelte-spa-router.git#v3.1.0+locking"
+    "svelte-spa-router": "git://github.com/hkorpi/svelte-spa-router.git#v3.1.0+locking",
+    "turndown": "^7.0.0"
   }
 }
