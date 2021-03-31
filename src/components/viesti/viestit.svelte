@@ -40,7 +40,7 @@
 
   const nextPageCallback = nextPage => push(`#/viesti/all?page=${nextPage}`);
 
-  $: {
+  const load = () => {
     overlay = true;
     Future.fork(
       response => {
@@ -59,16 +59,56 @@
         ketjutCount = response.ketjutCount.count;
         overlay = false;
       },
-      Future.parallelObject(3, {
+      Future.parallelObject(4, {
         whoami: kayttajaApi.whoami,
         ketjutCount: api.getKetjutCount,
         ketjut: api.getKetjut({
           offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
           limit: Maybe.Some(pageSize)
-        })
+        }),
+        vastaanottajaryhmat: api.vastaanottajaryhmat,
+        kasittelijat: api.getKasittelijat
       })
     );
-  }
+  };
+
+  $: load();
+
+  const submitKasitelty = (ketjuId, kasitelty, kasittelijaId) => {
+    updateKasitelty(ketjuId, {
+      'kasittelija-id': kasittelijaId,
+      kasitelty: kasitelty
+    });
+  };
+
+  const updateKasitelty = (ketjuId, kasitelty) =>
+    R.compose(
+      Future.fork(
+        response => {
+          const msg = $_(
+            Maybe.orSome(
+              `viesti.all.messages.update-error`,
+              Response.localizationKey(response)
+            )
+          );
+          flashMessageStore.add('viesti', 'update-error', msg);
+          overlay = false;
+        },
+        _ => {
+          flashMessageStore.add(
+            'viesti',
+            'success',
+            $_(`viesti.all.messages.update-success`)
+          );
+          overlay = false;
+          load();
+        }
+      ),
+      R.tap(() => {
+        overlay = true;
+      }),
+      api.putKetju(fetch, ketjuId)
+    )(kasitelty);
 </script>
 
 <style>
@@ -79,7 +119,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { ketjut, whoami }}
+    {#each Maybe.toArray(resources) as { ketjut, whoami, vastaanottajaryhmat, kasittelijat }}
       <div class="flex justify-between">
         <H1 text={$_('viesti.all.title')} />
         <div class="font-bold">
@@ -94,7 +134,12 @@
       {/if}
       <div class="my-6">
         {#each ketjut as ketju}
-          <Viestiketju {ketju} {whoami} />
+          <Viestiketju
+            {ketju}
+            {whoami}
+            {vastaanottajaryhmat}
+            {kasittelijat}
+            {submitKasitelty} />
         {/each}
       </div>
     {/each}
