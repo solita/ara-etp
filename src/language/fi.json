@@ -261,6 +261,7 @@
     "versio": "Versio",
     "laatija-id": "Laatija",
     "kommentti": "Pääkäyttäjän kommentti",
+    "draft-visible-to-paakayttaja": "Valvojat saavat nähdä luonnostilaisen energiatodistuksen",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
