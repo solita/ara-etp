@@ -75,18 +75,18 @@
   $: load();
 
   const submitKasittelija = (ketjuId, kasittelijaId) => {
-    updateKasitelty(ketjuId, {
+    updateKetju(ketjuId, {
       'kasittelija-id': kasittelijaId
     });
   };
 
   const submitKasitelty = (ketjuId, kasitelty) => {
-    updateKasitelty(ketjuId, {
+    updateKetju(ketjuId, {
       kasitelty: kasitelty
     });
   };
 
-  const updateKasitelty = (ketjuId, kasitelty) =>
+  const updateKetju = (ketjuId, kasitelty) =>
     R.compose(
       Future.fork(
         response => {

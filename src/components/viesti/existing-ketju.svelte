@@ -101,18 +101,18 @@
   );
 
   const submitKasitelty = kasitelty => {
-    updateKasitelty({
+    updateKetju({
       kasitelty: kasitelty
     });
   };
 
   const submitKasittelija = kasittelija => {
-    updateKasitelty({
+    updateKetju({
       'kasittelija-id': kasittelija
     });
   };
 
-  const updateKasitelty = R.compose(
+  const updateKetju = R.compose(
     Future.fork(
       response => {
         const msg = $_(
