@@ -74,9 +74,14 @@
 
   $: load();
 
-  const submitKasitelty = (ketjuId, kasitelty, kasittelijaId) => {
+  const submitKasittelija = (ketjuId, kasittelijaId) => {
     updateKasitelty(ketjuId, {
-      'kasittelija-id': kasittelijaId,
+      'kasittelija-id': kasittelijaId
+    });
+  };
+
+  const submitKasitelty = (ketjuId, kasitelty) => {
+    updateKasitelty(ketjuId, {
       kasitelty: kasitelty
     });
   };

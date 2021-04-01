@@ -74,7 +74,7 @@
 
   let newViesti = '';
 
-  $: addNewViesti = R.compose(
+  const addNewViesti = R.compose(
     Future.fork(
       response => {
         const msg = $_(
@@ -100,14 +100,19 @@
     api.postNewViesti(fetch, params.id)
   );
 
-  const submitKasitelty = (kasitelty, kasittelija) => {
+  const submitKasitelty = kasitelty => {
     updateKasitelty({
-      'kasittelija-id': kasittelija,
       kasitelty: kasitelty
     });
   };
 
-  $: updateKasitelty = R.compose(
+  const submitKasittelija = kasittelija => {
+    updateKasitelty({
+      'kasittelija-id': kasittelija
+    });
+  };
+
+  const updateKasitelty = R.compose(
     Future.fork(
       response => {
         const msg = $_(
@@ -201,10 +206,7 @@
             </div>
 
             <button
-              on:click={submitKasitelty(
-                !ketju.kasitelty,
-                R.prop('kasittelija-id', ketju)
-              )}
+              on:click={submitKasitelty(!ketju.kasitelty)}
               class="flex items-center space-x-1">
               {#if ketju.kasitelty}
                 <span class="material-icons text-primary"> check_box </span>

@@ -68,8 +68,7 @@
         <button
           on:click|preventDefault|stopPropagation={submitKasitelty(
             R.prop('id', ketju),
-            !ketju.kasitelty,
-            R.prop('kasittelija-id', ketju)
+            !ketju.kasitelty
           )}
           class="flex items-center space-x-1">
           {#if ketju.kasitelty}
