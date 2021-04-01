@@ -1183,6 +1183,19 @@
       }
     }
   },
+  "valvonta": {
+    "oikeellisuus": {
+      "all": {
+        "title": "Oikeellisuuden valvonta",
+        "table": {
+          "publish-time": "Tapahtumaaika",
+          "deadline-date": "Määräaika",
+          "type": "Tyyppi",
+          "diaarinumero": "Diaarinumero"
+        }
+      }
+    }
+  },
   "confirm": {
     "you-want-to-delete": "Oletko varma, että haluat poistaa?",
     "you-want-to-discard": "Oletko varma, että haluat hylätä?",

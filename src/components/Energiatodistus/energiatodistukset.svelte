@@ -10,6 +10,7 @@
 
   import * as api from './energiatodistus-api';
   import * as et from './energiatodistus-utils';
+  import * as ETViews from './views';
   import Pagination from '@Component/Pagination/Pagination';
 
   import { flatSchema } from '@Component/energiatodistus-haku/schema';
@@ -64,10 +65,6 @@
   };
 
   const loadError = showError('energiatodistus.messages.load-error');
-
-  const toETView = (versio, id) => {
-    push('#/energiatodistus/' + versio + '/' + id);
-  };
 
   const removeEnergiatodistusFromList = R.curry((versio, id) =>
     R.filter(
@@ -222,27 +219,7 @@
     Future.parallel(2, [kayttajaApi.whoami, api.luokittelutAllVersions])
   );
 
-  const kayttotarkoitusTitle = (luokittelut, energiatodistus) =>
-    Maybe.fold(
-      '-',
-      et.selectFormat(
-        Locales.label($locale),
-        luokittelut[energiatodistus.versio].kayttotarkoitusluokat
-      ),
-      et.findKayttotarkoitusluokkaId(
-        energiatodistus.perustiedot.kayttotarkoitus,
-        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat
-      )
-    ) +
-    ' / ' +
-    Maybe.fold(
-      '-',
-      et.selectFormat(
-        Locales.label($locale),
-        luokittelut[energiatodistus.versio].alakayttotarkoitusluokat
-      ),
-      energiatodistus.perustiedot.kayttotarkoitus
-    );
+  $: kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
 </script>
 
 <style>
@@ -335,10 +312,7 @@
                   <tr
                     data-cy="energiatodistus-row"
                     class="etp-table--tr etp-table--tr__link"
-                    on:click={toETView(
-                      energiatodistus.versio,
-                      energiatodistus.id
-                    )}>
+                    on:click={ETViews.toETView(energiatodistus)}>
                     <td class="etp-table--td">
                       {$_(
                         'energiatodistus.tila.' +

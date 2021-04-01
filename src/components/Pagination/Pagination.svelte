@@ -11,6 +11,8 @@
   export let itemsCount = 1;
   export let nextPageCallback = R.identity();
 
+  $: pageCount = Math.ceil(R.divide(itemsCount, itemsPerPage));
+
   const nextPage = next => _ => {
     nextPageCallback(
       R.ifElse(
