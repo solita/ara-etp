@@ -10,6 +10,7 @@
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as Viestit from '@Component/viesti/viesti-util';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Schema from './schema';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
@@ -179,24 +180,37 @@
               )
             )} />
 
-          <Textarea
-            id={'ketju.new-viesti'}
-            name={'ketju.new-viesti'}
-            bind:model={newViesti}
-            lens={R.lens(R.identity, R.identity)}
-            required={true}
-            parse={R.trim}
-            compact={true}
-            validators={Schema.ketju.body}
-            i18n={$_} />
+          {#if Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)}
+            <Textarea
+              id={'ketju.new-viesti'}
+              name={'ketju.new-viesti'}
+              bind:model={newViesti}
+              lens={R.lens(R.identity, R.identity)}
+              required={true}
+              parse={R.trim}
+              compact={true}
+              validators={Schema.ketju.body}
+              i18n={$_} />
+          {/if}
         </div>
 
-        <div class="w-full flex space-x-4">
-          <Button
-            disabled={!dirty}
-            type={'submit'}
-            text={$_(i18nRoot + '.submit')} />
-        </div>
+        {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
+          <div class="inline-block font-bold">
+            <Link
+              icon={Maybe.Some('add_circle_outline')}
+              text="Vastaa viestiin uudessa ketjussa"
+              href="#/viesti/new?subject={ketju.subject}" />
+          </div>
+        {/if}
+
+        {#if Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)}
+          <div class="w-full flex space-x-4">
+            <Button
+              disabled={!dirty}
+              type={'submit'}
+              text={$_(i18nRoot + '.submit')} />
+          </div>
+        {/if}
       </form>
 
       <div class="space-y-6">
