@@ -108,9 +108,18 @@ export const energiatodistusExtra = R.curry((i18n, [versio, id, extra]) =>
     : []
 );
 
+export const newEnergiatodistusCrumb = R.curry((i18n, versio) => [
+  energiatodistukset(i18n),
+  {
+    url: `#/energiatodistus/${versio}/new`,
+    label: i18n('navigation.uusi-energiatodistus')
+  }
+]);
+
 export const energiatodistusCrumb = R.curry((i18n, [versio, id, ...rest]) =>
   R.cond([
-    [R.equals('all'), R.always([energiatodistukset(i18n)])],
+    [R.always(R.equals('all', versio)), R.always([energiatodistukset(i18n)])],
+    [R.equals('new'), R.always(newEnergiatodistusCrumb(i18n, versio))],
     [
       R.T,
       R.always(
@@ -124,7 +133,7 @@ export const energiatodistusCrumb = R.curry((i18n, [versio, id, ...rest]) =>
         ])
       )
     ]
-  ])(versio)
+  ])(id)
 );
 
 export const laatijat = i18n => ({
