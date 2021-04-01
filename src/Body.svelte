@@ -17,14 +17,14 @@
 </script>
 
 <style type="text/postcss">
-  .routecontainer {
+  #routecontainer {
     @apply w-full pb-10 relative;
   }
-  .breadcrumbcontainer {
+  #breadcrumbcontainer {
     @apply flex justify-center;
   }
 
-  .breadcrumbcontainer {
+  #breadcrumbcontainer {
     @apply bg-background;
   }
 
@@ -38,13 +38,13 @@
 </style>
 
 <ResourceProvider let:idTranslate>
-  <div class="breadcrumbcontainer">
+  <div id="breadcrumbcontainer">
     <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
       <Breadcrumb {whoami} {idTranslate} location={$location} />
     </div>
   </div>
   <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
-    <div class="w-full">
+    <div id="navigationcontainer" class="w-full">
       <NavigationTabBar
         {idTranslate}
         location={$location}
@@ -52,7 +52,7 @@
         {config}
         i18n={$_} />
     </div>
-    <div class="routecontainer">
+    <div id="routecontainer">
       <Router on:conditionsFailed={_ => replace('/404')} {routes} />
     </div>
   </section>

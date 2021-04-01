@@ -3,6 +3,7 @@
   export let type = 'button';
   export let style = 'primary';
   export let disabled = false;
+  export let prefix = '';
 </script>
 
 <style type="text/postcss">
@@ -29,6 +30,7 @@
 
 <button
   {type}
+  data-cy={`${prefix}-${type}`}
   class:primary={style === 'primary'}
   class:secondary={style === 'secondary'}
   class:error={style === 'error'}

@@ -270,6 +270,7 @@
       ]) && mPollux.version.isSome()) || error.isSome()}
         <div class="mr-10 mt-5">
           <Button
+            prefix="signing-submit"
             text={$_('energiatodistus.signing.button.start')}
             on:click={sign} />
         </div>
@@ -277,6 +278,7 @@
       {#if !R.includes(currentState.status, closeTasks)}
         <div class="mt-5">
           <Button
+            prefix="signing-reject"
             text={$_('energiatodistus.signing.button.abort')}
             style={'secondary'}
             on:click={abort} />

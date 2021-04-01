@@ -118,6 +118,7 @@
   <textarea
     {id}
     {name}
+    data-cy={name}
     {disabled}
     {autocomplete}
     use:autoresize={[min, max]}

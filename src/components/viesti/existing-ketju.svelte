@@ -215,7 +215,10 @@
 
       <div class="space-y-6">
         {#each R.reverse(ketju.viestit) as viesti}
-          <div class="message" class:self={isSenderSelf(viesti, whoami)}>
+          <div
+            class="message"
+            data-cy="message"
+            class:self={isSenderSelf(viesti, whoami)}>
             <div class="flex space-x-6">
               <span>
                 {Formats.formatTimeInstant(viesti['sent-time'])}
@@ -240,7 +243,6 @@
         {/each}
       </div>
     {/each}
-
     <div class="flex mt-16">
       <Link
         text={$_(i18nRoot + '.back')}

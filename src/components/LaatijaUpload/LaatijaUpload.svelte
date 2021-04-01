@@ -146,7 +146,7 @@
           </thead>
           <tbody class="etp-table--tbody">
             {#each laatijat as laatija, index}
-              <tr class="etp-table--tr">
+              <tr data-cy="laatija-upload-row" class="etp-table--tr">
                 <td class="etp-table--td">
                   {index + 1}
                 </td>
@@ -180,12 +180,17 @@
         <div class="flex -mx-4 pt-8">
           <div class="px-4">
             <Button
+              prefix="laatija-upload"
               disabled={errors.length}
               type={'submit'}
               text={$_('laatija.lisaa-laatijat')} />
           </div>
           <div class="px-4">
-            <Button style={'secondary'} type={'reset'} text={$_('peruuta')} />
+            <Button
+              prefix="laatija-upload"
+              style={'secondary'}
+              type={'reset'}
+              text={$_('peruuta')} />
           </div>
         </div>
       </form>

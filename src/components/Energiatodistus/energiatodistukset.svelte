@@ -333,6 +333,7 @@
               <tbody class="etp-table--tbody">
                 {#each energiatodistukset as energiatodistus}
                   <tr
+                    data-cy="energiatodistus-row"
                     class="etp-table--tr etp-table--tr__link"
                     on:click={toETView(
                       energiatodistus.versio,

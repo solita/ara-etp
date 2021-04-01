@@ -54,12 +54,17 @@
       <div class="buttons">
         <div class="px-2">
           <Button
+            prefix="confirm-submit"
             on:click={resolve}
             style="primary"
             text={confirmButtonLabel} />
         </div>
         <div class="px-2">
-          <Button on:click={reject} style="secondary" text={$_('peruuta')} />
+          <Button
+            prefix="confirm-reject"
+            on:click={reject}
+            style="secondary"
+            text={$_('peruuta')} />
         </div>
       </div>
     </div>

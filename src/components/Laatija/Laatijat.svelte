@@ -270,7 +270,7 @@
         </thead>
         <tbody class="etp-table--tbody">
           {#each pageItems as laatija}
-            <tr class="etp-table--tr">
+            <tr data-cy="laatija-row" class="etp-table--tr">
               <Linkrow
                 contents={[
                   `${laatija.etunimi} ${laatija.sukunimi}`,
