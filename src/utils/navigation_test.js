@@ -75,24 +75,8 @@ describe('Navigation', () => {
       );
     });
 
-    it('should return root links when creating new energiatodistus', () => {
-      const expected = [
-        {
-          href: '#/energiatodistus/2018/new',
-          label: 'Uusi energiatodistus'
-        },
-        // Hidden until implemented
-        // { disabled: true, label: 'Viestit' },
-        {
-          label: 'Liitteet',
-          disabled: true
-        }
-        // Hidden until implemented
-        //{
-        //  label: 'Muutoshistoria',
-        //  disabled: true
-        //}
-      ];
+    it('should return empty links when creating new energiatodistus', () => {
+      const expected = [];
 
       assert.deepEqual(
         Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2018', 'new']),
