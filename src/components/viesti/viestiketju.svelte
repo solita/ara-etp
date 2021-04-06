@@ -1,39 +1,31 @@
 <script>
   import * as R from 'ramda';
   import * as Formats from '@Utility/formats';
-
+  import * as Locales from '@Language/locale-utils';
   import * as Viestit from './viesti-util';
+  import * as Kayttajat from '@Utility/kayttajat';
+  import SenderRecipients from './sender-recipients.svelte';
 
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
 
   export let ketju;
   export let whoami;
-
+  export let vastaanottajaryhmat;
+  export let kasittelijat;
+  export let submitKasitelty;
   const sentTime = R.compose(R.prop('sent-time'), R.last, R.prop('viestit'));
 
-  $: participants = R.compose(
-    R.reduce(R.mergeLeft, {}),
-    R.map(viesti => {
-      if (Viestit.isSelfSent(viesti, whoami)) {
-        return { [viesti.from.id]: $_('viesti.mina') };
-      }
-      return { [viesti.from.id]: Viestit.formatSender($_, viesti.from) };
-    }),
-    R.prop('viestit')
-  )(ketju);
-
-  $: currentUserPartOfKetju = R.compose(
-    R.has(R.__, participants),
-    R.prop('id')
-  )(whoami);
+  const isSenderSelf = (viesti, whoami) =>
+    R.propEq('id', R.path(['from', 'id'], viesti), whoami);
+  $: formatSender = Viestit.formatSender($_);
 </script>
 
 <style>
   a:first-child {
     @apply border-t-2;
   }
-  .participants span:not(:last-child)::after {
-    content: ', ';
+  div:not(.expanding-subject) .subject {
+    @apply whitespace-no-wrap;
   }
   .expanding-subject .subject {
     transition: all 0.3s;
@@ -55,70 +47,77 @@
 <a
   href={`#/viesti/${ketju.id}`}
   class="flex flex-col border-b-2 border-background hover:bg-background p-2">
-  <div class="flex items-start">
-    <span class="py-1 w-2/12 border border-transparent">
-      {R.compose(Formats.formatDateInstant, sentTime)(ketju)}
+  <div class="flex items-start w-full justify-start">
+    <span class="w-2/12 py-1 border border-transparent">
+      {`${R.compose(Formats.formatDateInstant, sentTime)(ketju)} 
+      ${R.compose(Formats.formatHoursMinutes, sentTime)(ketju)}`}
     </span>
-    <div class="py-1 w-3/12 flex font-bold">
-      <span
-        class:text-primary={R.propEq(
-          'id',
-          R.path(['from', 'id'], R.last(ketju.viestit)),
-          whoami
-        )}>
-        {participants[R.path(['from', 'id'], R.last(ketju.viestit))]}
-      </span>
-    </div>
     <div
-      class="flex w-7/12 justify-start whitespace-no-wrap space-x-1"
+      class="w-9/12 flex overflow-hidden space-x-1 items-center"
       class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
       <span class="p-1 subject font-bold self-start">
         {ketju.subject}
       </span>
 
-      <span class="message truncate flex-shrink text-sm self-center">
+      <span class="message truncate flex-shrink">
         {R.last(ketju.viestit).body}
       </span>
     </div>
+    {#if !Kayttajat.isLaatija(whoami)}
+      <div class="flex-shrink justify-self-end ml-auto">
+        <button
+          on:click|preventDefault|stopPropagation={submitKasitelty(
+            R.prop('id', ketju),
+            !ketju.kasitelty
+          )}
+          class="flex items-center space-x-1">
+          {#if ketju.kasitelty}
+            <span class="material-icons text-primary"> check_box </span>
+          {:else}
+            <span class="material-icons"> check_box_outline_blank </span>
+          {/if}
+        </button>
+      </div>
+    {/if}
   </div>
 
   <div class="flex items-center">
     <div class="flex flex-col w-2/12">
       <span class="block">
-        {R.compose(Formats.formatHoursMinutes, sentTime)(ketju)}
+        <span class="font-icon outline mr-1 text-primary"> chat </span>
+        <span>{R.length(ketju.viestit)}</span>
       </span>
     </div>
 
-    <div class="flex w-10/12 items-center space-x-2">
-      <div class="flex items-center flex-shrink">
-        <span class="font-icon outline mr-1">chat_bubble_outline</span>
-        <span>{R.length(ketju.viestit)}</span>
-
-        {#if R.gt(R.length(ketju.viestit), 1)}
-          <span class="ml-1">{$_('viesti.messages')}</span>
-        {:else}
-          <span class="ml-1">{$_('viesti.message')}</span>
-        {/if}
+    <div class="flex w-10/12 items-center justify-between">
+      <div class="truncate p-1">
+        <SenderRecipients
+          sender={formatSender(R.prop('from', R.last(ketju.viestit)))}
+          senderIsSelf={isSenderSelf(R.last(ketju.viestit), whoami)}
+          recipients={R.prop('vastaanottajat', ketju)}
+          recipientGroup={Locales.label(
+            $locale,
+            R.find(
+              R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
+              vastaanottajaryhmat
+            )
+          )} />
       </div>
-      {#if R.gt(R.length(R.values(participants)), 1)}
-        <div class="flex items-center w-full flex-grow">
-          <span class="font-icon">people</span>
-          <span class="mx-1">
-            {R.length(R.values(participants))}
+
+      {#if !Kayttajat.isLaatija(whoami)}
+        {#if R.prop('kasittelija-id', ketju)}
+          <span class="whitespace-no-wrap">
+            {R.compose(
+              R.join(' '),
+              R.props(['etunimi', 'sukunimi']),
+              R.find(R.propEq('id', R.prop('kasittelija-id', ketju)))
+            )(kasittelijat)}
           </span>
-          <div class="truncate px-1 participants">
-            {#if currentUserPartOfKetju}
-              <span class="font-semibold text-primary">
-                {participants[R.prop('id', whoami)]}
-              </span>
-            {/if}
-            {#each R.compose(R.filter(R.length), R.values, R.dissoc(R.prop('id', whoami)))(participants) as participant}
-              <span>
-                {participant}
-              </span>
-            {/each}
-          </div>
-        </div>
+        {:else}
+          <span class="text-error whitespace-no-wrap">
+            {$_('viesti.ketju.existing.no-handler')}
+          </span>
+        {/if}
       {/if}
     </div>
   </div>

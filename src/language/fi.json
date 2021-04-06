@@ -1136,6 +1136,8 @@
       "content": "Sisältö",
       "no-messages": "Ei viestejä",
       "messages": {
+        "update-success": "Viestiketjun päivitys onnistui",
+        "update-error": "Viestiketjun päivitys epäonnistui",
         "load-error": "Viestien lataus epäonnistui."
       }
     },
@@ -1160,6 +1162,8 @@
         "title": "Viestiketju",
         "self": "Minä",
         "handled": "Käsitelty",
+        "handler": "Käsittelijä",
+        "no-handler": "Ei käsittelijää",
         "new-viesti": "Uusi viesti",
         "submit": "Vastaa",
         "reset": "Tyhjennä",
@@ -1169,6 +1173,8 @@
           "load-error": "Viestiketjun tietojen lataus epäonnistui.",
           "success": "Uusi viesti lisätty",
           "error": "Uuden viestin lisääminen epäonnistui",
+          "update-success": "Viestiketjun päivitys onnistui",
+          "update-error": "Viestiketjun päivitys epäonnistui",
           "validation-error": "Vastauksessa on virhe. Tarkista vastauksen tiedot ennen lähettämistä."
         }
       }

@@ -10,7 +10,8 @@ const url = {
   ketjut: '/api/private/viestit',
   ketjutCount: '/api/private/viestit/count',
   ketju: id => `${url.ketjut}/${id}`,
-  viestit: id => `${url.ketju(id)}/viestit`
+  viestit: id => `${url.ketju(id)}/viestit`,
+  kasittelijat: '/api/private/kasittelijat'
 };
 
 export const serialize = R.evolve({
@@ -43,12 +44,24 @@ export const getKetjutCount = R.compose(
   Future.encaseP(Fetch.getFetch(fetch))
 )(url.ketjutCount);
 
+export const getKasittelijat = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)(url.kasittelijat);
+
 export const postKetju = fetch =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.ketjut)),
     serialize
   );
+
+export const putKetju = R.curry((fetch, id, body) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.ketju(id)))
+  )(body)
+);
 
 export const postNewViesti = R.curry((fetch, id, body) =>
   R.compose(

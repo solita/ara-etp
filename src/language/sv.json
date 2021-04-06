@@ -1117,6 +1117,8 @@
       "new-viesti": "Uusi viesti SV?",
       "no-messages": "Ei viestejä SV?",
       "messages": {
+        "update-success": "Viestiketjun päivitys onnistui SV?",
+        "update-error": "Viestiketjun päivitys epäonnistui SV?",
         "load-error": "Viestien lataus epäonnistui. SV?"
       }
     },
@@ -1141,6 +1143,8 @@
         "title": "Viestiketju SV?",
         "self": "Minä SV?",
         "handled": "Käsitelty SV?",
+        "handler": "Käsittelijä SV?",
+        "no-handler": "Ei käsittelijää SV?",
         "new-viesti": "Uusi viesti SV?",
         "submit": "Vastaa SV?",
         "reset": "Tyhjennä SV?",
@@ -1149,7 +1153,10 @@
           "not-found": "Viestiketjua ei ole olemassa. SV?",
           "load-error": "Viestiketjun tietojen lataus epäonnistui. SV?",
           "success": "Uusi viesti lisätty SV?",
-          "error": "Uuden viestin lisääminen epäonnistui SV?"
+          "error": "Uuden viestin lisääminen epäonnistui SV?",
+          "update-success": "Viestiketjun päivitys onnistui SV?",
+          "update-error": "Viestiketjun päivitys epäonnistui SV?",
+          "validation-error": "Vastauksessa on virhe. Tarkista vastauksen tiedot ennen lähettämistä. SV?"
         }
       }
     }

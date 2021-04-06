@@ -24,7 +24,7 @@
   <strong class="from-me hidden">{$_('viesti.ketju.existing.self')}</strong>
 
   <span class="material-icons mx-2"> arrow_right_alt </span>
-  <div class="to">
+  <div class="to truncate">
     <span> {recipientGroup} </span>
     {#each recipients as recipient}
       <span>
