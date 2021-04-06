@@ -11,7 +11,6 @@
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as Viestit from '@Component/viesti/viesti-util';
-  import * as Kayttajat from '@Utility/kayttajat';
   import * as Schema from './schema';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
