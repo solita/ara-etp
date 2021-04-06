@@ -3,6 +3,7 @@
   import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
@@ -81,19 +82,18 @@
   $: kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
 
   const formatDeadline = R.compose(
-    Maybe.orSome('-'),
-    R.map(Formats.formatDateInstant),
+    EM.fold('-', Formats.formatDateInstant),
     R.prop('deadline-date'));
 
   const toValvontaView = energiatodistus => {
-    Router.push('#/valvonta/oikeellisuus/' + energiatodistus.id);
+    Router.push('#/valvonta/oikeellisuus/' + energiatodistus.versio + '/' +  energiatodistus.id);
   };
 </script>
 
 <style>
-    .header > * {
-        @apply block font-bold text-primary uppercase text-left tracking-wider bg-light text-sm;
-    }
+  .header > * {
+    @apply block font-bold text-primary uppercase text-left tracking-wider bg-light text-sm;
+  }
 </style>
 
 <Overlay {overlay}>
@@ -101,7 +101,7 @@
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit }}
       <H1 text={$_('valvonta.oikeellisuus.all.title')} />
       {#if valvonnat.length === 0}
-        <span>{$_('valvonta.oikeellisuus.all.no-messages')}</span>
+        <span>{$_('valvonta.oikeellisuus.all.empty')}</span>
       {:else}
         <div class="my-6">
           <table class="etp-table">

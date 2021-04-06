@@ -1187,11 +1187,64 @@
     "oikeellisuus": {
       "all": {
         "title": "Oikeellisuuden valvonta",
+        "empty": "Ei valvontatoimenpiteitä",
         "table": {
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",
           "type": "Tyyppi",
           "diaarinumero": "Diaarinumero"
+        }
+      },
+      "existing": {
+
+      },
+      "new-toimenpide": {
+        "cancel-button": "Peruuta toimenpide",
+        "verified": {
+          "title": "Merkitse katsotuksi",
+          "description": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",
+          "document": "Kommentti",
+          "publish-button": "Merkitse katsotuksi"
+        },
+        "anomaly": {
+          "title": "Ilmoita poikkeamasta",
+          "description": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä.",
+          "document": "Poikkeama",
+          "publish-button": "Julkaise ilmoitus"
+        },
+        "case": {
+          "title": "Valvonnan aloitus",
+          "description": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
+          "document": "Kommentti",
+          "publish-button": "Aloita valvonta"
+        },
+        "rfi-request": {
+          "title": "Tietopyyntö",
+          "description": "Pyydetään laatijalta lisää tietoa.",
+          "document": "Kommentti",
+          "publish-button": "Lähetä tietopyyntö"
+        },
+        "rfi-order": {
+          "title": "Tietopyyntö kehoitus",
+          "description": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
+          "document": "Kommentti",
+          "publish-button": "Lähetä kehoitus"
+        },
+        "rfi-warning": {
+          "title": "Tietopyyntö varoitus",
+          "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
+          "document": "Kommentti",
+          "publish-button": "Lähetä varoitus"
+        },
+        "audit-report": {
+          "title": "Valvontamuistio",
+          "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
+          "document": "Kommentti",
+          "publish-button": "Julkaise valvontamuistio"
+        },
+        "messages": {
+          "success": "Toimenpide lisätty",
+          "error": "Toimenpiteen lisääminen epäonnistui"
         }
       }
     }

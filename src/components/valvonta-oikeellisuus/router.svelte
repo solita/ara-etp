@@ -3,8 +3,8 @@
 
   import Valvonnat from './valvonnat';
   import Valvonta from './valvonta';
-  import NewToimepide from './new-toimenpide';
-  import ExistingToimepide from './valvonta';
+  import NewToimenpide from './new-toimenpide';
+  import ExistingToimenpide from './existing-toimenpide';
   import NotFound from '@Component/NotFound/NotFound';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
@@ -13,9 +13,9 @@
   const prefix = '/valvonta/oikeellisuus';
   const routes = {
     '/all': Valvonnat,
-    '/:id': Valvonta,
-    '/:id/new': NewToimepide,
-    '/:id/:toimenpide-id': ExistingToimepide,
+    '/:version/:id': Valvonta,
+    '/:version/:id/:toimenpide-id': ExistingToimenpide,
+    '/:version/:id/new/:type': NewToimenpide,
     '*': NotFound
   };
 </script>
