@@ -41,6 +41,7 @@
   let enableOverlay = _ => {
     overlay = true;
   };
+  let ketju = Viestit.emptyKetju();
 
   const isAllowedToSendToEveryone = whoami =>
     R.or(Kayttajat.isPaakayttaja(whoami), Kayttajat.isLaskuttaja(whoami));
@@ -78,12 +79,9 @@
       },
       response => {
         resources = Maybe.Some(response);
-        if (
-          !isAllowedToSendToEveryone(
-            R.prop('whoami', R.head(resources.toArray()))
-          )
-        )
-          ketju['vastaanottajaryhma-id'] = 0;
+        if (!isAllowedToSendToEveryone(response.whoami)) {
+          ketju['vastaanottajaryhma-id'] = Maybe.Some(0);
+        }
         overlay = false;
       }
     ),
@@ -97,8 +95,6 @@
       })
     )
   )(kayttajaApi.whoami);
-
-  let ketju = Viestit.emptyKetju();
 
   const addKetju = R.compose(
     Future.fork(
