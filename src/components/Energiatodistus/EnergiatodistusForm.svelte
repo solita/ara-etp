@@ -23,6 +23,7 @@
   import Signing from './signing';
   import * as EtUtils from './energiatodistus-utils';
   import * as Validations from './validation';
+  import Input from './Input';
   import * as Inputs from './inputs';
   import * as Postinumero from './postinumero';
   import * as Kayttajat from '@Utility/kayttajat';
@@ -44,7 +45,9 @@
 
   let schema = R.compose(
     R.reduce(schemas.assocRequired, R.__, validation.required),
-    R.reduce(schemas.redefineNumericValidation, R.__, validation.numeric),
+    schema => R.propEq('bypass-validation-limits', false, energiatodistus) ?
+                R.reduce(schemas.redefineNumericValidation, schema, validation.numeric) :
+                schema,
     R.assocPath(
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
@@ -65,6 +68,11 @@
 
   $: disabled = !R.and(
     energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
+    R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
+  );
+
+  $: disabledForPaakayttaja = !R.and(
+    Kayttajat.isPaakayttaja(whoami),
     R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
   );
 
@@ -268,6 +276,28 @@
               label={$_('energiatodistus.draft-visible-to-paakayttaja')}
               disabled={disabled} />
           </div>
+
+          {#if R.or(energiatodistus['bypass-validation-limits'],
+              Kayttajat.isPaakayttaja(whoami))}
+            <div class="mb-5">
+              <Checkbox
+                bind:model={energiatodistus}
+                lens={R.lensPath(['bypass-validation-limits'])}
+                label={$_('energiatodistus.bypass-validation-limits')}
+                disabled={disabledForPaakayttaja} />
+            </div>
+          {/if}
+
+          {#if energiatodistus['bypass-validation-limits']}
+            <div class="mb-5">
+              <Input
+                disabled={disabledForPaakayttaja}
+                {schema}
+                center={false}
+                bind:model={energiatodistus}
+                path={['bypass-validation-limits-reason']} />
+            </div>
+          {/if}
 
           <PaakayttajanKommentti
             {whoami}

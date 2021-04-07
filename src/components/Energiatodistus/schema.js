@@ -273,7 +273,8 @@ export const v2018 = {
     'alapohja-ylapohja': Huomio
   },
   lisamerkintoja: String(6300),
-  kommentti: String(6300)
+  kommentti: String(6300),
+  'bypass-validation-limits-reason': String(6300)
 };
 
 const MuuEnergiamuoto = {
