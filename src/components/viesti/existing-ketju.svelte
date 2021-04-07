@@ -241,7 +241,7 @@
               )
             )} />
 
-          {#if Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)}
+          {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
             <Textarea
               id={'ketju.new-viesti'}
               name={'ketju.new-viesti'}
@@ -255,23 +255,22 @@
           {/if}
         </div>
 
-        {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
-          <div class="inline-block font-bold">
-            <Link
-              icon={Maybe.Some('add_circle_outline')}
-              text="Vastaa viestiin uudessa ketjussa"
-              href="#/viesti/new?subject={ketju.subject}" />
-          </div>
-        {/if}
-
-        {#if Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)}
-          <div class="w-full flex space-x-4">
+        <div class="w-full flex justify-between font-bold">
+          {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
             <Button
               disabled={!dirty}
               type={'submit'}
               text={$_(i18nRoot + '.submit')} />
-          </div>
-        {/if}
+          {/if}
+          {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
+            <div class="mt-auto">
+              <Link
+                icon={Maybe.Some('add_circle_outline')}
+                text={$_(i18nRoot + '.reply-in-new')}
+                href="#/viesti/new?subject={ketju.subject}" />
+            </div>
+          {/if}
+        </div>
       </form>
 
       <div class="space-y-6">

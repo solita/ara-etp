@@ -1149,6 +1149,7 @@
         "submit": "Vastaa SV?",
         "reset": "Tyhjennä SV?",
         "back": "Kaikki viestit SV?",
+        "reply-in-new": "Vastaa viestiin uudessa ketjussa SV?",
         "messages": {
           "not-found": "Viestiketjua ei ole olemassa. SV?",
           "load-error": "Viestiketjun tietojen lataus epäonnistui. SV?",

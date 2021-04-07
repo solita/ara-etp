@@ -41,6 +41,7 @@
   let enableOverlay = _ => {
     overlay = true;
   };
+  let ketju = Viestit.emptyKetju();
 
   const isAllowedToSendToEveryone = whoami =>
     R.or(Kayttajat.isPaakayttaja(whoami), Kayttajat.isLaskuttaja(whoami));
@@ -78,6 +79,9 @@
       },
       response => {
         resources = Maybe.Some(response);
+        if (!isAllowedToSendToEveryone(response.whoami)) {
+          ketju['vastaanottajaryhma-id'] = Maybe.Some(0);
+        }
         overlay = false;
       }
     ),
@@ -91,8 +95,6 @@
       })
     )
   )(kayttajaApi.whoami);
-
-  let ketju = Viestit.emptyKetju();
 
   const addKetju = R.compose(
     Future.fork(
@@ -145,6 +147,12 @@
       ketju = R.assoc('subject', `Re: [${query.subject}]`, ketju);
     }
   }
+
+  $: isVastaanottajaRequired = Maybe.isNone(
+    R.prop('vastaanottajaryhma-id', ketju)
+  );
+
+  $: isVastaanottajaRyhmaRequired = R.isEmpty(R.prop('vastaanottajat', ketju));
 </script>
 
 <style>
@@ -173,7 +181,7 @@
                 id={'ketju.vastaanottaja'}
                 name={'ketju.vastaanottaja'}
                 label={$_('viesti.ketju.vastaanottaja')}
-                required={false}
+                required={isVastaanottajaRequired}
                 bind:model={ketju}
                 lens={R.compose(R.lensProp('vastaanottajat'), arrayHeadLens)}
                 parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
@@ -191,10 +199,11 @@
           <Select
             id={'ketju.vastaanottajaryhma'}
             label={$_('viesti.ketju.vastaanottajaryhma')}
-            required={true}
+            required={isVastaanottajaRyhmaRequired}
             disabled={!isAllowedToSendToEveryone(whoami)}
-            allowNone={false}
+            allowNone={true}
             bind:model={ketju}
+            parse={Maybe.fromNull}
             lens={R.lensProp('vastaanottajaryhma-id')}
             format={Locales.labelForId($locale, vastaanottajaryhmat)}
             items={R.pluck('id', vastaanottajaryhmat)} />
