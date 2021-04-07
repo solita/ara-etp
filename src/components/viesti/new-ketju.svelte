@@ -78,6 +78,12 @@
       },
       response => {
         resources = Maybe.Some(response);
+        if (
+          !isAllowedToSendToEveryone(
+            R.prop('whoami', R.head(resources.toArray()))
+          )
+        )
+          ketju['vastaanottajaryhma-id'] = 0;
         overlay = false;
       }
     ),
@@ -145,6 +151,12 @@
       ketju = R.assoc('subject', `Re: [${query.subject}]`, ketju);
     }
   }
+
+  $: isVastaanottajaRequired = Maybe.isNone(
+    R.prop('vastaanottajaryhma-id', ketju)
+  );
+
+  $: isVastaanottajaRyhmaRequired = R.isEmpty(R.prop('vastaanottajat', ketju));
 </script>
 
 <style>
@@ -173,7 +185,7 @@
                 id={'ketju.vastaanottaja'}
                 name={'ketju.vastaanottaja'}
                 label={$_('viesti.ketju.vastaanottaja')}
-                required={false}
+                required={isVastaanottajaRequired}
                 bind:model={ketju}
                 lens={R.compose(R.lensProp('vastaanottajat'), arrayHeadLens)}
                 parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
@@ -191,10 +203,11 @@
           <Select
             id={'ketju.vastaanottajaryhma'}
             label={$_('viesti.ketju.vastaanottajaryhma')}
-            required={true}
+            required={isVastaanottajaRyhmaRequired}
             disabled={!isAllowedToSendToEveryone(whoami)}
-            allowNone={false}
+            allowNone={true}
             bind:model={ketju}
+            parse={Maybe.fromNull}
             lens={R.lensProp('vastaanottajaryhma-id')}
             format={Locales.labelForId($locale, vastaanottajaryhmat)}
             items={R.pluck('id', vastaanottajaryhmat)} />

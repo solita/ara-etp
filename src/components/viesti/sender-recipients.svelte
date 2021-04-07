@@ -25,7 +25,9 @@
 
   <span class="material-icons mx-2"> arrow_right_alt </span>
   <div class="to truncate">
-    <span> {recipientGroup} </span>
+    {#if recipientGroup}
+      <span> {recipientGroup} </span>
+    {/if}
     {#each recipients as recipient}
       <span>
         {`${recipient.etunimi} ${recipient.sukunimi}`}
