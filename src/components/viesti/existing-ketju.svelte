@@ -266,7 +266,7 @@
             <div class="mt-auto">
               <Link
                 icon={Maybe.Some('add_circle_outline')}
-                text="Vastaa viestiin uudessa ketjussa"
+                text={$_(i18nRoot + '.reply-in-new')}
                 href="#/viesti/new?subject={ketju.subject}" />
             </div>
           {/if}

@@ -1168,6 +1168,7 @@
         "submit": "Vastaa",
         "reset": "Tyhjennä",
         "back": "Kaikki viestit",
+        "reply-in-new": "Vastaa viestiin uudessa ketjussa",
         "messages": {
           "not-found": "Viestiketjua ei ole olemassa.",
           "load-error": "Viestiketjun tietojen lataus epäonnistui.",
