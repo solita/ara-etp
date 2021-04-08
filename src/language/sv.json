@@ -243,6 +243,8 @@
     "laatija-id": "Upprättare",
     "kommentti": "Pääkäyttäjän kommentti SV?",
     "draft-visible-to-paakayttaja": "Valvojat saavat nähdä luonnostilaisen energiatodistuksen SV?",
+    "bypass-validation-limits": "Ohita tarkistukset allekirjoittaessa SV?",
+    "bypass-validation-limits-reason": "Selite tarkistusten ohittamisesta SV?",
     "haku": {
       "sarakkeet": {
         "tila": "Status",
