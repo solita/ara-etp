@@ -218,30 +218,39 @@
         {/if}
       </div>
 
-      <form
-        class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf border"
-        on:submit|preventDefault={submitNewViesti}
-        on:input={_ => {
-          dirty = true;
-        }}
-        on:change={_ => {
-          dirty = true;
-        }}>
-        <div class="w-full mb-8 space-y-2">
-          <strong>{ketju.subject}</strong>
-          <SenderRecipients
-            sender={$_(i18nRoot + '.self')}
-            senderIsSelf={true}
-            recipients={R.prop('vastaanottajat', ketju)}
-            recipientGroup={Locales.label(
-              $locale,
-              R.find(
-                R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
-                ryhmat
-              )
-            )} />
+      {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
+        <div class="font-bold my-4 mr-auto flex flex-shrink">
+          <Link
+            icon={Maybe.Some('add_circle_outline')}
+            text={$_(i18nRoot + '.reply-in-new')}
+            href="#/viesti/new?subject={ketju.subject}" />
+        </div>
+      {/if}
 
-          {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
+      {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
+        <form
+          class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf border"
+          on:submit|preventDefault={submitNewViesti}
+          on:input={_ => {
+            dirty = true;
+          }}
+          on:change={_ => {
+            dirty = true;
+          }}>
+          <div class="w-full mb-8 space-y-2">
+            <strong>{ketju.subject}</strong>
+            <SenderRecipients
+              sender={$_(i18nRoot + '.self')}
+              senderIsSelf={true}
+              recipients={R.prop('vastaanottajat', ketju)}
+              recipientGroup={Locales.label(
+                $locale,
+                R.find(
+                  R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
+                  ryhmat
+                )
+              )} />
+
             <Textarea
               id={'ketju.new-viesti'}
               name={'ketju.new-viesti'}
@@ -252,26 +261,18 @@
               compact={true}
               validators={Schema.ketju.body}
               i18n={$_} />
-          {/if}
-        </div>
+          </div>
 
-        <div class="w-full flex justify-between font-bold">
-          {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
-            <Button
-              disabled={!dirty}
-              type={'submit'}
-              text={$_(i18nRoot + '.submit')} />
-          {/if}
-          {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
-            <div class="mt-auto">
-              <Link
-                icon={Maybe.Some('add_circle_outline')}
-                text={$_(i18nRoot + '.reply-in-new')}
-                href="#/viesti/new?subject={ketju.subject}" />
-            </div>
-          {/if}
-        </div>
-      </form>
+          <div class="w-full flex">
+            {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
+              <Button
+                disabled={!dirty}
+                type={'submit'}
+                text={$_(i18nRoot + '.submit')} />
+            {/if}
+          </div>
+        </form>
+      {/if}
 
       <div class="space-y-6">
         {#each R.reverse(ketju.viestit) as viesti}
