@@ -70,3 +70,10 @@ export const postToimenpide = (id, toimenpide) =>
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.toimenpiteet(id))),
     serializeToimenpide
   )(toimenpide);
+
+export const putValvonta= R.curry((id, body) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.valvonta(id)))
+  )(body)
+);

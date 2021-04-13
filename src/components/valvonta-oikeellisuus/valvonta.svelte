@@ -30,6 +30,8 @@
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
 
+  const i18nRoot = 'valvonta.oikeellisuus.existing';
+
   export let params;
   export let resources = Maybe.None();
 
@@ -44,10 +46,10 @@
       response => {
         overlay = false;
         const msg = Response.notFound(response)
-          ? $_('valvonta.oikeellisuus.messages.not-found')
+          ? $_(`${i18nRoot}.messages.not-found`)
           : $_(
             Maybe.orSome(
-              'valvonta.oikeellisuus.messages.load-error',
+              `${i18nRoot}.messages.load-error`,
               Response.localizationKey(response)
             )
           );
@@ -73,12 +75,18 @@
 
   const kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
 
-  const fullName = R.compose(R.join(' '), R.juxt([R.prop('etunimi'), R.prop('sukunimi')]));
+  const fullName = valvojat => R.compose(
+    R.join(' '),
+    R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
+    R.find(R.__, valvojat),
+    R.propEq('id'));
 
   const openNewToimenpide = type => {
     if (type == Toimenpiteet.type.audit.report) {
+      // toimenpiteet, jotka käsitellään omalla näytöllä
       Router.push(`#/valvonta/oikeellisuus/${params.version}/${params.id}/new/${Toimenpiteet.type.audit.report}`);
     } else {
+      // toimenpiteet, jotka käsitellään dialogi-näytöllä
       newToimenpide = Maybe.Some({
         'type-id': type,
         'deadline-date': Either.Right(Toimenpiteet.defaultDeadline(type)),
@@ -88,6 +96,33 @@
   };
 
   const isAuditCase = toimenpiteet => !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
+
+  const saveValvonta = valvonta => {
+    overlay = true;
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.messages.update-error`,
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        overlay = false;
+      },
+      _ => {
+        flashMessageStore.add(
+          'valvonta-oikeellisuus',
+          'success',
+          $_(`${i18nRoot}.messages.update-success`)
+        );
+        load(params);
+      },
+      ValvontaApi.putValvonta(params.id, valvonta)
+    )
+  };
+
+  const saveKasittelija = id => saveValvonta({ 'valvoja-id': id});
 </script>
 
 <style>
@@ -114,8 +149,9 @@
       <div class="lg:w-1/2 w-full mb-5">
         <Select label="Valitse käsittelijä"
                 model={valvonta} lens={R.lensProp('valvoja-id')}
-                format={fullName}
-                items={valvojat}/>
+                on:change={event => saveKasittelija(parseInt(event.target.value))}
+                format={fullName(valvojat)}
+                items={R.pluck('id', valvojat)}/>
       </div>
 
       <div class="flex space-x-4 mb-5">
@@ -150,6 +186,9 @@
       {#each R.reverse(toimenpiteet) as toimenpide}
         <Toimenpide {toimenpidetyypit} {toimenpide}/>
       {/each}
+      {#if R.isEmpty(toimenpiteet)}
+        <p>Ei valvontatoimenpiteitä</p>
+      {/if}
     {/each}
   </div>
   <div slot="overlay-content">

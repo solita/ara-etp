@@ -1196,7 +1196,12 @@
         }
       },
       "existing": {
-
+        "messages": {
+          "not-found": "Energiatodistusta ei ole olemassa",
+          "load-error": "Valvonnan tietojen lataus epäonnistui",
+          "update-error": "Valvonnan tietojen päivitys epäonnistui",
+          "update-success": "Valvonnan tiedot päivitetty"
+        }
       },
       "new-toimenpide": {
         "cancel-button": "Peruuta toimenpide",
