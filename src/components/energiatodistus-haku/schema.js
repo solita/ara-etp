@@ -269,6 +269,7 @@ const perustiedot = {
   yritys: {
     nimi: [...stringComparisons]
   },
+  rakennusosa: [...stringComparisons],
   havainnointikaynti: [...dateComparisons],
   kieli: [...numberComparisons],
   'keskeiset-suositukset-fi': [stringContains],
