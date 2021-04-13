@@ -25,6 +25,7 @@ const schema = {
 
 export const paakayttaja = R.dissoc('henkilotunnus', schema);
 export const patevyydentoteaja = R.dissoc('virtu', schema);
+export const laskuttaja = R.omit(['henkilotunnus', 'virtu'], schema);
 
 export const formParsers = () => ({
   henkilotunnus: R.compose(Maybe.fromEmpty, R.trim),
