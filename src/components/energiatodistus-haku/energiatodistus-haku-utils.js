@@ -84,6 +84,7 @@ export const removeQueryItem = R.curry((index, queryItems) =>
 export const parseValueByType = R.curry((type, value) => {
   switch (type) {
     case OPERATOR_TYPES.NUMBER:
+    case OPERATOR_TYPES.UNFORMATTED_NUMBER:
     case OPERATOR_TYPES.VERSIO:
     case OPERATOR_TYPES.TILA:
     case OPERATOR_TYPES.LAATIJA:

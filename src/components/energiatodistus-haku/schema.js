@@ -5,6 +5,7 @@ import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
   NUMBER: 'NUMBER',
+  UNFORMATTED_NUMBER: 'UNFORMATTED_NUMBER',
   DATE: 'DATE',
   BOOLEAN: 'BOOLEAN',
   VERSIO: 'VERSIO',
@@ -55,23 +56,13 @@ const some = {
   format: defaultFormat
 };
 
-const singleNumberOperation = R.curry((operation, key) => ({
+const singleNumberOperation = R.curry((operation, type, key) => ({
   operation,
   key,
   argumentNumber: 1,
   defaultValues: () => [''],
-  type: OPERATOR_TYPES.NUMBER
+  type: type
 }));
-
-const numberEquals = singleNumberOperation(eq);
-
-const numberGreaterThan = singleNumberOperation(gt);
-
-const numberGreaterThanOrEqual = singleNumberOperation(gte);
-
-const numberLessThan = singleNumberOperation(lt);
-
-const numberLessThanOrEqual = singleNumberOperation(lte);
 
 const stringContains = key => ({
   operation: contains,
@@ -230,13 +221,17 @@ const dateLessThan = singleDateOperation(lt);
 
 const dateLessThanOrEqual = singleDateOperation(lte);
 
-const numberComparisons = [
-  numberEquals,
-  numberGreaterThan,
-  numberGreaterThanOrEqual,
-  numberLessThan,
-  numberLessThanOrEqual
+const numberComparisonsFromType = type => [
+  singleNumberOperation(eq, type),
+  singleNumberOperation(gt, type),
+  singleNumberOperation(gte, type),
+  singleNumberOperation(lt, type),
+  singleNumberOperation(lte, type)
 ];
+
+const numberComparisons = numberComparisonsFromType(OPERATOR_TYPES.NUMBER);
+
+const unformattedNumberComparisons = numberComparisonsFromType(OPERATOR_TYPES.UNFORMATTED_NUMBER);
 
 const dateComparisons = [
   dateEquals,
@@ -262,7 +257,7 @@ const perustiedot = {
   'katuosoite-sv': [...stringComparisons],
   postinumero: [...numberComparisons],
   laatimisvaihe: [...numberComparisons],
-  valmistumisvuosi: [...numberComparisons],
+  valmistumisvuosi: [...unformattedNumberComparisons],
   tilaaja: [...stringComparisons],
   kayttotarkoitus: [versioluokkaSome],
   alakayttotarkoitusluokka: [versioluokkaEquals],
