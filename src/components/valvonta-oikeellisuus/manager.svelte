@@ -31,7 +31,7 @@
   const openNewToimenpide = type => {
     if (type == Toimenpiteet.type.audit.report) {
       // toimenpiteet, jotka käsitellään omalla näytöllä
-      Router.push(`#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${Toimenpiteet.type.audit.report}`);
+      Router.push(`#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${type}`);
     } else {
       // toimenpiteet, jotka käsitellään dialogi-näytöllä
       newToimenpide = Maybe.Some({
