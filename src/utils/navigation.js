@@ -291,5 +291,14 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
     ];
   }
 
+  if (kayttaja.rooli === 3) {
+    return [
+      {
+        href: `#/yritys/all`,
+        text: i18n('navigation.yritykset')
+      }
+    ];
+  }
+
   return [];
 });
