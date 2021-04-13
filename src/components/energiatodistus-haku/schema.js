@@ -367,6 +367,7 @@ const lahtotiedot = {
       jaatymisenesto: [...numberComparisons]
     },
     erillispoistot: {
+      tulo: [...numberComparisons],
       poisto: [...numberComparisons],
       sfp: [...numberComparisons]
     },
