@@ -3,6 +3,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
@@ -107,13 +108,15 @@
         <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
       </div>
 
-      <Manager
-          {energiatodistus}
-          {valvojat} {valvonta}
-          {toimenpiteet}
-          {toimenpidetyypit}
-          {saveValvonta}
-          reload={_ => load(params)}/>
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <Manager
+            {energiatodistus}
+            {valvojat} {valvonta}
+            {toimenpiteet}
+            {toimenpidetyypit}
+            {saveValvonta}
+            reload={_ => load(params)}/>
+      {/if}
 
       <H2 text="Toimenpiteet"/>
 
