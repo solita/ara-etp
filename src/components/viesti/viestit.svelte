@@ -40,7 +40,7 @@
 
   const nextPageCallback = nextPage => push(`#/viesti/all?page=${nextPage}`);
 
-  const load = () => {
+  const load = page => {
     overlay = true;
     Future.fork(
       response => {
@@ -72,7 +72,7 @@
     );
   };
 
-  $: load();
+  $: load(page);
 
   const submitKasittelija = (ketjuId, kasittelijaId) => {
     updateKetju(ketjuId, {

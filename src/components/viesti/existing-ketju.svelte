@@ -176,13 +176,27 @@
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as { ketju, whoami, ryhmat, kasittelijat }}
       <DirtyConfirmation {dirty} />
-
-      <div
-        class="flex justify-between items-center py-2 border-b border-backgroundhalf">
+      <div class="flex">
         <Link
           text={$_(i18nRoot + '.back')}
           href="#/viesti/all"
           icon={Maybe.Some('arrow_back')} />
+      </div>
+
+      <div
+        class="flex justify-between items-center py-2 border-b border-backgroundhalf">
+        <div>
+          <strong>{ketju.subject}</strong>
+          <SenderRecipients
+            sender={R.prop('from', R.head(ketju.viestit))}
+            {whoami}
+            recipients={R.prop('vastaanottajat', ketju)}
+            recipientGroup={Viestit.findKetjuVastaanottajaryhma(
+              ryhmat,
+              ketju
+            )} />
+        </div>
+
         {#if !Kayttajat.isLaatija(whoami)}
           <div class="flex items-end space-x-4 px-2">
             <div class="flex flex-col">
@@ -238,27 +252,15 @@
             dirty = true;
           }}>
           <div class="w-full mb-8 space-y-2">
-            <strong>{ketju.subject}</strong>
-            <SenderRecipients
-              sender={$_(i18nRoot + '.self')}
-              senderIsSelf={true}
-              recipients={R.prop('vastaanottajat', ketju)}
-              recipientGroup={Locales.label(
-                $locale,
-                R.find(
-                  R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
-                  ryhmat
-                )
-              )} />
-
             <Textarea
               id={'ketju.new-viesti'}
               name={'ketju.new-viesti'}
+              label={$_(i18nRoot + '.new-viesti')}
               bind:model={newViesti}
               lens={R.lens(R.identity, R.identity)}
               required={true}
               parse={R.trim}
-              compact={true}
+              compact={false}
               validators={Schema.ketju.body}
               i18n={$_} />
           </div>
@@ -282,23 +284,13 @@
             class:self={isSenderSelf(viesti, whoami)}>
             <div class="flex space-x-6">
               <span>
-                {Formats.formatTimeInstant(viesti['sent-time'])}
+                {Formats.formatTimeInstantMinutes(viesti['sent-time'])}
               </span>
               <span>
                 {ketju.subject}
               </span>
             </div>
-            <SenderRecipients
-              sender={formatSender(viesti.from)}
-              senderIsSelf={isSenderSelf(viesti, whoami)}
-              recipients={R.prop('vastaanottajat', ketju)}
-              recipientGroup={Locales.label(
-                $locale,
-                R.find(
-                  R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
-                  ryhmat
-                )
-              )} />
+            <SenderRecipients sender={viesti.from} {whoami} />
             <p>{viesti.body}</p>
           </div>
         {/each}
