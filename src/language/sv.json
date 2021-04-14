@@ -1148,7 +1148,7 @@
         "handler": "Käsittelijä SV?",
         "no-handler": "Ei käsittelijää SV?",
         "new-viesti": "Uusi viesti SV?",
-        "submit": "Vastaa SV?",
+        "submit": "Lähetä SV?",
         "reset": "Tyhjennä SV?",
         "back": "Kaikki viestit SV?",
         "reply-in-new": "Vastaa viestiin uudessa ketjussa SV?",
