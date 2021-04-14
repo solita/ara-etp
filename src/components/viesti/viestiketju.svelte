@@ -25,19 +25,6 @@
   a:first-child {
     @apply border-t-2;
   }
-  div:not(.expanding-subject) .subject {
-    @apply whitespace-no-wrap;
-  }
-  .expanding-subject .subject {
-    transition: all 0.3s;
-    @apply rounded border;
-  }
-  .expanding-subject .subject:not(:hover) {
-    @apply truncate border-transparent;
-  }
-  .expanding-subject .subject:hover {
-    @apply bg-light border-background whitespace-pre-wrap absolute z-10;
-  }
 </style>
 
 <!-- purgecss: font-bold text-primary -->
@@ -51,7 +38,7 @@
     </span>
     <div
       class="w-9/12 py-1 flex flex-wrap items-center"
-      class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
+      title={R.gt(R.length(ketju.subject), 40) ? ketju.subject : ''}>
       <span class="subject truncate font-bold self-start mr-2">
         {ketju.subject}
       </span>
