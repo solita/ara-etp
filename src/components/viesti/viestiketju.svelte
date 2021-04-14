@@ -38,9 +38,6 @@
   .expanding-subject .subject:hover {
     @apply bg-light border-background whitespace-pre-wrap absolute z-10;
   }
-  .expanding-subject .message {
-    @apply hidden;
-  }
 </style>
 
 <!-- purgecss: font-bold text-primary -->
@@ -53,22 +50,20 @@
       {sentTime(ketju)}
     </span>
     <div
-      class="w-9/12 flex flex-wrap space-x-1 items-center"
+      class="w-9/12 py-1 flex flex-wrap items-center"
       class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
       <span class="subject truncate font-bold self-start mr-2">
         {ketju.subject}
       </span>
 
-      <span class="message truncate flex-shrink">
-        <SenderRecipients
-          sender={R.prop('from', R.head(ketju.viestit))}
-          {whoami}
-          recipients={R.prop('vastaanottajat', ketju)}
-          recipientGroup={Viestit.findKetjuVastaanottajaryhma(
-            vastaanottajaryhmat,
-            ketju
-          )} />
-      </span>
+      <SenderRecipients
+        sender={R.prop('from', R.head(ketju.viestit))}
+        {whoami}
+        recipients={R.prop('vastaanottajat', ketju)}
+        recipientGroup={Viestit.findKetjuVastaanottajaryhma(
+          vastaanottajaryhmat,
+          ketju
+        )} />
     </div>
     {#if !Kayttajat.isLaatija(whoami)}
       <div class="flex-shrink justify-self-end ml-auto">

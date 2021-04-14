@@ -23,7 +23,7 @@
   }
 </style>
 
-<div class="flex ">
+<div class="flex">
   {#if R.eqProps('id', sender, whoami)}
     <strong class="from-me whitespace-no-wrap">
       {$_('viesti.ketju.existing.self')}
