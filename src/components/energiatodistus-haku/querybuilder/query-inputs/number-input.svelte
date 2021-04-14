@@ -8,6 +8,8 @@
   export let values = [];
   export let nameprefix;
   export let index = 0;
+  export let format = Formats.numberFormat;
+  export let parse = Parsers.parseNumber;
 
   let value = R.defaultTo(Parsers.parseNumber('a'), R.head(values));
 </script>
@@ -19,8 +21,8 @@
     center={true}
     compact={true}
     lens={R.lens(R.identity, R.identity)}
-    format={Formats.numberFormat}
-    parse={Parsers.parseNumber}
+    {format}
+    {parse}
     model={value}
     i18n={$_} />
 </div>
