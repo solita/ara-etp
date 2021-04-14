@@ -86,34 +86,33 @@
     });
   };
 
-  const updateKetju = (ketjuId, kasitelty) =>
-    R.compose(
-      Future.fork(
-        response => {
-          const msg = $_(
-            Maybe.orSome(
-              `viesti.all.messages.update-error`,
-              Response.localizationKey(response)
-            )
-          );
-          flashMessageStore.add('viesti', 'update-error', msg);
-          overlay = false;
-        },
-        _ => {
-          flashMessageStore.add(
-            'viesti',
-            'success',
-            $_(`viesti.all.messages.update-success`)
-          );
-          overlay = false;
-          load();
-        }
-      ),
-      R.tap(() => {
-        overlay = true;
-      }),
-      api.putKetju(fetch, ketjuId)
-    )(kasitelty);
+  const updateKetju = R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            `viesti.all.messages.update-error`,
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('viesti', 'update-error', msg);
+        overlay = false;
+      },
+      _ => {
+        flashMessageStore.add(
+          'viesti',
+          'success',
+          $_(`viesti.all.messages.update-success`)
+        );
+        overlay = false;
+        load(page);
+      }
+    ),
+    R.tap(() => {
+      overlay = true;
+    }),
+    api.putKetju(fetch)
+  );
 </script>
 
 <style>
