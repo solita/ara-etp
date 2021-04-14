@@ -34,7 +34,7 @@
   export let whoami;
 
   let overlay = true;
-  let schema = Kayttajat.isPaakayttaja(whoami)
+  let schema = Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
     ? EtHakuSchema.paakayttajaSchema
     : EtHakuSchema.laatijaSchema;
 
