@@ -13,9 +13,12 @@
   export let vastaanottajaryhmat;
   export let kasittelijat;
   export let submitKasitelty;
-  const sentTime = R.compose(Formats.formatTimeInstantMinutes, R.prop('sent-time'), R.last, R.prop('viestit'));
-
-
+  const sentTime = R.compose(
+    Formats.formatTimeInstantMinutes,
+    R.prop('sent-time'),
+    R.last,
+    R.prop('viestit')
+  );
 </script>
 
 <style>
@@ -52,17 +55,19 @@
     <div
       class="w-9/12 flex flex-wrap space-x-1 items-center"
       class:expanding-subject={R.gt(R.length(R.prop('subject', ketju)), 55)}>
-
       <span class="subject truncate font-bold self-start mr-2">
         {ketju.subject}
       </span>
 
       <span class="message truncate flex-shrink">
         <SenderRecipients
-            sender={R.prop('from', R.head(ketju.viestit))}
-            {whoami}
-            recipients={R.prop('vastaanottajat', ketju)}
-            recipientGroup={Viestit.findKetjuVastaanottajaryhma(vastaanottajaryhmat, ketju)} />
+          sender={R.prop('from', R.head(ketju.viestit))}
+          {whoami}
+          recipients={R.prop('vastaanottajat', ketju)}
+          recipientGroup={Viestit.findKetjuVastaanottajaryhma(
+            vastaanottajaryhmat,
+            ketju
+          )} />
       </span>
     </div>
     {#if !Kayttajat.isLaatija(whoami)}
@@ -94,8 +99,8 @@
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
         <SenderRecipients
-            sender={R.prop('from', R.last(ketju.viestit))}
-            {whoami} />:
+          sender={R.prop('from', R.last(ketju.viestit))}
+          {whoami} />:
         <div class="truncate p-1">
           {R.last(ketju.viestit).body}
         </div>

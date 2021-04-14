@@ -38,6 +38,8 @@ export const isForLaatijat = R.propSatisfies(
   'vastaanottajaryhma-id'
 );
 
-export const findKetjuVastaanottajaryhma = (vastaanottajaryhmat, ketju) => Maybe.find(
-  R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
-  vastaanottajaryhmat)
+export const findKetjuVastaanottajaryhma = (vastaanottajaryhmat, ketju) =>
+  Maybe.find(
+    R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
+    vastaanottajaryhmat
+  );

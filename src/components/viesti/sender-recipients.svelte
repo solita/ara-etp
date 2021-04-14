@@ -25,7 +25,9 @@
 
 <div class="flex ">
   {#if R.eqProps('id', sender, whoami)}
-    <strong class="from-me whitespace-no-wrap">{$_('viesti.ketju.existing.self')}</strong>
+    <strong class="from-me whitespace-no-wrap">
+      {$_('viesti.ketju.existing.self')}
+    </strong>
   {:else}
     <span class="whitespace-no-wrap">{formatSender(sender)}</span>
   {/if}

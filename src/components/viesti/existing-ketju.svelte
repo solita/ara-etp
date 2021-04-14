@@ -178,21 +178,23 @@
       <DirtyConfirmation {dirty} />
       <div class="flex">
         <Link
-            text={$_(i18nRoot + '.back')}
-            href="#/viesti/all"
-            icon={Maybe.Some('arrow_back')} />
+          text={$_(i18nRoot + '.back')}
+          href="#/viesti/all"
+          icon={Maybe.Some('arrow_back')} />
       </div>
 
       <div
         class="flex justify-between items-center py-2 border-b border-backgroundhalf">
-
         <div>
           <strong>{ketju.subject}</strong>
           <SenderRecipients
-              sender={R.prop('from', R.head(ketju.viestit))}
-              {whoami}
-              recipients={R.prop('vastaanottajat', ketju)}
-              recipientGroup={Viestit.findKetjuVastaanottajaryhma(ryhmat, ketju)} />
+            sender={R.prop('from', R.head(ketju.viestit))}
+            {whoami}
+            recipients={R.prop('vastaanottajat', ketju)}
+            recipientGroup={Viestit.findKetjuVastaanottajaryhma(
+              ryhmat,
+              ketju
+            )} />
         </div>
 
         {#if !Kayttajat.isLaatija(whoami)}
