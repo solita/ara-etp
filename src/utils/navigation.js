@@ -278,7 +278,7 @@ export const defaultHeaderMenuLinks = i18n => [
 ];
 
 export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
-  if (kayttaja.rooli === 2) {
+  if (Kayttajat.isPaakayttaja(kayttaja)) {
     return [
       {
         href: `#/kayttaja/all`,
@@ -291,7 +291,7 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
     ];
   }
 
-  if (kayttaja.rooli === 3) {
+  if (Kayttajat.isLaskuttaja(kayttaja)) {
     return [
       {
         href: `#/yritys/all`,
