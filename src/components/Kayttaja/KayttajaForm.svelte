@@ -17,6 +17,7 @@
 
   export let kayttaja;
   export let submit;
+  export let whoami;
 
   const formSchema = KayttajaSchema[Kayttajat.roleKey(kayttaja.rooli)];
   const formParsers = KayttajaSchema.formParsers();
@@ -27,6 +28,10 @@
     deep.values(Either.isEither),
     validation.validateModelObject(formSchema)
   );
+
+  $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
+  $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
+  $: disabled = !R.or(isPaakayttaja, isOwnSettings);
 </script>
 
 <style type="text/postcss">
@@ -68,6 +73,7 @@
           lens={R.lensProp('etunimi')}
           parse={formParsers.etunimi}
           validators={formSchema.etunimi}
+          {disabled}
           i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -80,6 +86,7 @@
           lens={R.lensProp('sukunimi')}
           parse={formParsers.sukunimi}
           validators={formSchema.sukunimi}
+          {disabled}
           i18n={$_} />
       </div>
       {#if Kayttajat.isPatevyydentoteaja(kayttaja)}
@@ -110,6 +117,7 @@
           lens={R.lensProp('email')}
           parse={formParsers.email}
           validators={formSchema.email}
+          {disabled}
           i18n={$_} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -122,10 +130,11 @@
           lens={R.lensProp('puhelin')}
           parse={formParsers.puhelin}
           validators={formSchema.puhelin}
+          {disabled}
           i18n={$_} />
       </div>
     </div>
-    {#if Kayttajat.isPaakayttaja(kayttaja)}
+    {#if Kayttajat.isPaakayttaja(kayttaja) && isPaakayttaja}
       <H1 text={$_('kayttaja.virtu.header')} />
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -160,7 +169,7 @@
 
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={$_('tallenna')} />
+      <Button type={'submit'} text={$_('tallenna')} {disabled} />
     </div>
     <div class="px-4">
       <Button

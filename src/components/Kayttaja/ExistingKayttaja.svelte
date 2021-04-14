@@ -127,7 +127,10 @@
           {luokittelut}
           laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
       {:else}
-        <KayttajaForm submit={submitKayttaja(whoami, params.id)} {kayttaja} />
+        <KayttajaForm
+          submit={submitKayttaja(whoami, params.id)}
+          {kayttaja}
+          {whoami} />
       {/if}
     {/each}
   </div>
