@@ -60,7 +60,6 @@
     Maybe.fromNull,
     R.find(R.pathEq(['operation', 'browserCommand'], operation))
   )(operations);
-
 </script>
 
 <style type="text/postcss">
