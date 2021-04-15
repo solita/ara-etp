@@ -263,7 +263,7 @@
           <th class="etp-table--th">{$_('laatija.postinumero')}</th>
           <th class="etp-table--th">{$_('laatijahaku.kunta')}</th>
           <th class="etp-table--th">{$_('yritys.yritykset')}</th>
-          {#if Kayttajat.isPaakayttaja(kayttaja)}
+          {#if Kayttajat.isPaakayttajaOrLaskuttaja(kayttaja)}
             <th class="etp-table--th"
               >{$_('laatijahaku.energiatodistukset')}</th>
           {/if}
@@ -293,7 +293,7 @@
                   </a>
                 {/each}
               </td>
-              {#if Kayttajat.isPaakayttaja(kayttaja)}
+              {#if Kayttajat.isPaakayttajaOrLaskuttaja(kayttaja)}
                 <td class="etp-table--td">
                   <a
                     class="font-icon text-2xl text-primary hover:underline"
