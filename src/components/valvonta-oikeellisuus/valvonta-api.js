@@ -62,7 +62,7 @@ export const valvonta = R.compose(
   url.valvonta
 );
 
-export const valvojat = Fetch.getJson(fetch, url.valvonnat + '/valvojat');
+export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 
 export const postToimenpide = (id, toimenpide) =>
   R.compose(
