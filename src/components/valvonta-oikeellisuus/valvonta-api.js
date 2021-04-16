@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as Objects from '@Utility/objects';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
 import * as Maybe from '@Utility/maybe-utils';
@@ -15,22 +16,21 @@ const url = {
   toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`
 };
 
-export const deserializeValvonta = R.evolve({
-  'create-time': dfns.parseJSON,
-  'publish-time': dfns.parseJSON,
-  'deadline-date': Parsers.optionalParser(Parsers.parseISODate),
-  'diaarinumero': Maybe.fromNull,
-  'energiatodistus': energiatodistusApi.deserialize
-});
-
 export const deserializeToimenpide = R.evolve({
   'create-time': dfns.parseJSON,
   'publish-time': dfns.parseJSON,
-  'deadline-date': R.compose(R.map(dfns.parseISO), Maybe.fromNull),
+  'deadline-date': R.compose(Parsers.toEitherMaybe, R.map(Parsers.parseISODate), Maybe.fromNull),
   'diaarinumero': Maybe.fromNull,
 });
 
-export const deserializeValvontaState = R.evolve({
+export const deserializeValvontaStatus = R.compose(
+  R.evolve({
+    'lastToimenpide': deserializeToimenpide,
+    'energiatodistus': energiatodistusApi.deserialize
+  }),
+  Objects.renameKeys({'last-toimenpide': 'lastToimenpide'}));
+
+export const deserializeValvonta = R.evolve({
   'valvoja-id': Maybe.fromNull
 });
 
@@ -40,7 +40,7 @@ export const serializeToimenpide = R.evolve({
 });
 
 export const valvonnat = R.compose(
-  R.map(R.map(deserializeValvonta)),
+  R.map(R.map(deserializeValvontaStatus)),
   Fetch.getJson(fetch),
   R.concat(url.valvonnat),
   Query.toQueryString
@@ -57,7 +57,7 @@ export const toimenpiteet = R.compose(
 );
 
 export const valvonta = R.compose(
-  R.map(deserializeValvontaState),
+  R.map(deserializeValvonta),
   Fetch.getJson(fetch),
   url.valvonta
 );

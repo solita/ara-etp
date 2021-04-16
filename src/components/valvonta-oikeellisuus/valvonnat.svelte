@@ -144,18 +144,18 @@
             </tr>
             </thead>
             <tbody class="etp-table--tbody">
-            {#each valvonnat as {energiatodistus, ...valvonta}}
+            {#each valvonnat as {energiatodistus, lastToimenpide}}
               <tr class="etp-table--tr etp-table--tr__link"
                   on:click={toValvontaView(energiatodistus)}>
                 <!-- valvonta -->
                 <td class="etp-table--td">
-                  {Formats.formatTimeInstant(valvonta['publish-time'])}
+                  {Formats.formatTimeInstant(lastToimenpide['publish-time'])}
                 </td>
                 <td class="etp-table--td">
-                  {Locales.labelForId($locale, toimenpidetyypit)(valvonta['type-id'])}
+                  {Locales.labelForId($locale, toimenpidetyypit)(lastToimenpide['type-id'])}
                 </td>
                 <td class="etp-table--td">
-                  {formatDeadline(valvonta)}
+                  {formatDeadline(lastToimenpide)}
                 </td>
 
                 <!-- energiatodistus -->
