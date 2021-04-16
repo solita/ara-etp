@@ -18,6 +18,9 @@ export const isPatevyydentoteaja = R.propSatisfies(
 );
 export const isPaakayttaja = R.propSatisfies(isPaakayttajaRole, 'rooli');
 export const isLaskuttaja = R.propSatisfies(isLaskuttajaRole, 'rooli');
-export const isPaakayttajaOrLaskuttaja = R.anyPass([isPaakayttaja, isLaskuttaja]);
+export const isPaakayttajaOrLaskuttaja = R.anyPass([
+  isPaakayttaja,
+  isLaskuttaja
+]);
 
 export const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;

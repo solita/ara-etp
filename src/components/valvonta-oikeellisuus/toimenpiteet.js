@@ -1,0 +1,65 @@
+import * as R from 'ramda';
+import * as Deep from '@Utility/deep-objects';
+import * as Maybe from '@Utility/maybe-utils';
+import * as dfns from 'date-fns';
+import { _ } from '@Language/i18n';
+
+export const type = {
+  verified: 0,
+  anomaly: 1, // kevyt valvontamenettely
+
+  // raskas valvontamenettely - asia avataan ashaan
+  case: 2,
+  rfi: {
+    // tietopyyntö
+    request: 3,
+    reply: 4,
+    order: 5,
+    warning: 6
+  },
+  audit: {
+    // valvonnan käsittely - auditoinnin tulokset + laatijan vastaus
+    report: 7,
+    reply: 8,
+    order: 9,
+    warning: 10
+  },
+  decision: {
+    // päätökset
+    prohibition: 11 // kieltopäätös
+  }
+};
+
+const types = R.invertObj(Deep.treeFlat('-', R.F, type));
+
+export const typeKey = id => types[id];
+
+export const isType = R.propEq('type-id');
+
+const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
+export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
+export const hasDocumentTemplate = R.propSatisfies(
+  R.includes(R.__, [3, 5, 6, 7, 8, 10]),
+  'type-id'
+);
+export const isAuditCase = R.propSatisfies(R.gt(R.__, type.anomaly), 'type-id');
+
+export const isAuditCaseToimenpideType = R.propSatisfies(
+  R.includes(R.__, [3, 5, 6, 7, 9, 10, 11]),
+  'id'
+);
+
+export const isVerified = isType(type.verified);
+export const isAnomaly = isType(type.anomaly);
+
+export const defaultDeadline = typeId =>
+  isDeadlineType(typeId)
+    ? Maybe.Some(dfns.addMonths(new Date(), 1))
+    : Maybe.None();
+
+export const i18nKey = (toimenpide, key) =>
+  R.join('.', [
+    'valvonta.oikeellisuus.new-toimenpide',
+    typeKey(toimenpide['type-id']),
+    key
+  ]);
