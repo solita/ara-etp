@@ -18,6 +18,7 @@
   import * as laatijaApi from '@Component/Laatija/laatija-api';
 
   import * as EtHakuUtils from './energiatodistus-haku-utils';
+  import Input from '@Component/Input/Input';
   import SimpleInput from '@Component/Input/SimpleInput';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import QueryBlock from './querybuilder/queryblock';
@@ -92,7 +93,13 @@
 {#if Maybe.isSome(laatijat)}
   <div class="flex w-full">
     <div class="w-7/12 flex flex-col justify-end">
-      <SimpleInput
+      <Input bind:model={id} label={$_('energiatodistus.id')} search={true} wrapper={PillInputWrapper} on:keypress={evt => {
+          if (evt.key === 'Enter') {
+            form.dispatchEvent(new Event('submit'));
+          }
+        }}/>
+
+      <!-- <SimpleInput
         label={$_('energiatodistus.id')}
         wrapper={PillInputWrapper}
         rawValueAsViewValue={true}
@@ -102,7 +109,7 @@
           if (evt.key === 'Enter') {
             form.dispatchEvent(new Event('submit'));
           }
-        }} />
+        }} /> -->
     </div>
   </div>
 

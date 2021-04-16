@@ -8,6 +8,7 @@
   import * as AutocompleteUtils from './autocomplete-utils';
 
   import DropdownList from '@Component/DropdownList/DropdownList';
+  import Input from '@Component/Input/Input';
   import SimpleInput from '@Component/Input/SimpleInput';
 
   export let items = [];
@@ -103,7 +104,8 @@
 
 <div bind:this={node} on:keydown={handleKeydown}>
   <slot>
-    <SimpleInput bind:rawValue={completedValue} rawValueAsViewValue={true} />
+    <Input bind:model={completedValue} />
+    <!-- <SimpleInput bind:rawValue={completedValue} rawValueAsViewValue={true} /> -->
   </slot>
   {#if showDropdown}
     <DropdownList

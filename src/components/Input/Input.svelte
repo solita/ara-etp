@@ -3,6 +3,7 @@
 
   import InputContainer from './InputContainer';
   import SimpleInput from './SimpleInput';
+  import SquareInputWrapper from './SquareInputWrapper';
 
   export let id;
   export let name;
@@ -16,8 +17,8 @@
   export let compact = false;
   export let center = false;
 
-  export let model = { empty: '' };
-  export let lens = R.lensProp('empty');
+  export let model = '';
+  export let lens = R.identity;
   export let currentValue = '';
 
   export let parse = R.identity;
@@ -27,6 +28,8 @@
   export let warnValidators = [];
 
   export let labelUnit;
+  
+  export let wrapper = SquareInputWrapper;
 
   let validationResult = {
     type: '',
@@ -60,6 +63,8 @@
   bind:validationResult
   let:viewValue>
   <SimpleInput
+    on:keypress
+    on:input
     {id}
     {name}
     {label}
@@ -73,7 +78,8 @@
     {viewValue}
     {valid}
     {validationResult}
-    {labelUnit} />
+    {labelUnit} 
+    {wrapper} />
 
   {#if !valid}
     <div class="validation-label">

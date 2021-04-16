@@ -4,6 +4,7 @@
   import * as qs from 'qs';
   import * as Maybe from '@Utility/maybe-utils';
 
+  import Input from '@Component/Input/Input';
   import SimpleInput from '@Component/Input/SimpleInput';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import H1 from '@Component/H/H1';
@@ -198,7 +199,23 @@
 
   <div class="flex lg:flex-row flex-col -mx-4 my-4">
     <div class="lg:w-2/3 w-full px-4 lg:pt-10">
-      <SimpleInput
+      <Input
+        model={Maybe.orSome('', model.search)}
+        wrapper={PillInputWrapper}
+        search={true}
+        on:input={evt => {
+          cancel = R.compose(
+            Future.value(val => {
+              model = R.mergeRight(model, {
+                search: Maybe.Some(val),
+                page: Maybe.Some(0)
+              });
+            }),
+            Future.after(200),
+            R.tap(cancel)
+          )(evt.target.value);
+        }} />
+      <!-- <SimpleInput
         label={' '}
         wrapper={PillInputWrapper}
         search={true}
@@ -214,7 +231,7 @@
             R.tap(cancel)
           )(evt.target.value);
         }}
-        viewValue={R.compose(Maybe.orSome(''), R.prop('search'))(model)} />
+      viewValue={R.compose(Maybe.orSome(''), R.prop('search'))(model)} /> -->
     </div>
 
     <div class="lg:w-1/3 w-full px-4 py-4">

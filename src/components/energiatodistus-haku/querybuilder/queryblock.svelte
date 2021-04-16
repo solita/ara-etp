@@ -9,6 +9,7 @@
   import QueryInput from './query-input';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import SimpleInput from '@Component/Input/SimpleInput';
+  import Input from '@Component/Input/Input';
 
   export let operator;
   export let key;
@@ -72,11 +73,15 @@
       bind:completedValue
       items={R.compose(R.map(Inputs.propertyLabel($_)), R.keys)(schema)}
       size={100000}>
-      <SimpleInput
+      <Input
+        bind:model={completedValue}
+        label={$_('energiatodistus.haku.valitse_hakuehto')}
+        search={true} />
+      <!-- <SimpleInput
         label={$_('energiatodistus.haku.valitse_hakuehto')}
         search={true}
         bind:rawValue={completedValue}
-        rawValueAsViewValue={true} />
+        rawValueAsViewValue={true} /> -->
     </Autocomplete>
     <input
       bind:this={input}

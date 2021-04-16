@@ -15,8 +15,9 @@
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
   import { flashMessageStore } from '@/stores';
   import Loading from '../Loading/Loading.svelte';
+  import Input from '@Component/Input/Input';
   import SimpleInput from '@Component/Input/SimpleInput';
-  import Input from './Input';
+  import EtInput from './Input';
   import HR from '@Component/HR/HR.svelte';
 
   export let energiatodistus;
@@ -134,49 +135,71 @@
     {#each laskutettavaYritys.toArray() as yritys}
       {#each verkkolasku(yritys).toArray() as [operaattori, osoite]}
         <div class="lg:w-1/2 w-full px-4 py-4">
-          <SimpleInput
+          <Input id="energiatodistus.laskutus.verkkolaskuoperaattori"
+            name="energiatodistus.laskutus.verkkolaskuoperaattori"
+            label={$_('energiatodistus.laskutus.verkkolaskuoperaattori')}
+            disabled={true}
+            model={operaattori} />
+          <!-- <SimpleInput
             id="energiatodistus.laskutus.verkkolaskuoperaattori"
             name="energiatodistus.laskutus.verkkolaskuoperaattori"
             label={$_('energiatodistus.laskutus.verkkolaskuoperaattori')}
             disabled={true}
-            viewValue={operaattori} />
+            viewValue={operaattori} /> -->
         </div>
         <div class="lg:w-1/2 w-full px-4 py-4">
-          <SimpleInput
+        <Input id="energiatodistus.laskutus.verkkolaskuosoite"
+            name="energiatodistus.laskutus.verkkolaskuosoite"
+            label={$_('energiatodistus.laskutus.verkkolaskuosoite')}
+            disabled={true}
+            model={osoite} />
+          <!-- <SimpleInput
             id="energiatodistus.laskutus.verkkolaskuosoite"
             name="energiatodistus.laskutus.verkkolaskuosoite"
             label={$_('energiatodistus.laskutus.verkkolaskuosoite')}
             disabled={true}
-            viewValue={osoite} />
+            viewValue={osoite} /> -->
         </div>
       {/each}
       {#if verkkolasku(yritys).isNone()}
         <div class="lg:w-1/2 w-full px-4 py-4">
-          <SimpleInput
+          <Input
             id="energiatodistus.laskutus.postiosoite"
             name="energiatodistus.laskutus.postiosoite"
             label={$_('energiatodistus.laskutus.postiosoite')}
             disabled={true}
-            viewValue={postiosoite(yritys)} />
+            model={postiosoite(yritys)} />
+          <!-- <SimpleInput
+            id="energiatodistus.laskutus.postiosoite"
+            name="energiatodistus.laskutus.postiosoite"
+            label={$_('energiatodistus.laskutus.postiosoite')}
+            disabled={true}
+            viewValue={postiosoite(yritys)} /> -->
         </div>
       {/if}
     {/each}
     {#if laskutettavaYritys.isNone()}
       {#each laatija.toArray() as laatija}
         <div class="lg:w-1/2 w-full px-4 py-4">
-          <SimpleInput
+        <Input
             id="energiatodistus.laskutus.postiosoite"
             name="energiatodistus.laskutus.postiosoite"
             label={$_('energiatodistus.laskutus.postiosoite')}
             disabled={true}
-            viewValue={postiosoite(laatija)} />
+            model={postiosoite(laatija)} />
+          <!-- <SimpleInput
+            id="energiatodistus.laskutus.postiosoite"
+            name="energiatodistus.laskutus.postiosoite"
+            label={$_('energiatodistus.laskutus.postiosoite')}
+            disabled={true}
+            viewValue={postiosoite(laatija)} /> -->
         </div>
       {/each}
     {/if}
   </div>
   <div class="flex flex-col lg:flex-row -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
-      <Input
+      <EtInput
         {disabled}
         {schema}
         center={false}
