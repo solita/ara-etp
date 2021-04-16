@@ -39,11 +39,11 @@
         const msg = Response.notFound(response)
           ? $_(`${i18nRoot}.messages.not-found`)
           : $_(
-            Maybe.orSome(
-              `${i18nRoot}.messages.load-error`,
-              Response.localizationKey(response)
-            )
-          );
+              Maybe.orSome(
+                `${i18nRoot}.messages.load-error`,
+                Response.localizationKey(response)
+              )
+            );
         flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
       },
       response => {
@@ -52,7 +52,10 @@
       },
       Future.parallelObject(5, {
         luokittelut: EnergiatodistusApi.luokittelutForVersion(params.version),
-        energiatodistus: EnergiatodistusApi.getEnergiatodistusById(params.version, params.id),
+        energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
+          params.version,
+          params.id
+        ),
         toimenpiteet: ValvontaApi.toimenpiteet(params.id),
         toimenpidetyypit: ValvontaApi.toimenpidetyypit,
         valvojat: ValvontaApi.valvojat,
@@ -86,7 +89,7 @@
         load(params);
       },
       ValvontaApi.putValvonta(params.id, valvonta)
-    )
+    );
   };
 </script>
 
@@ -95,14 +98,16 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text="Oikeellisuuden valvonta"/>
+    <H1 text="Oikeellisuuden valvonta" />
 
     {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, toimenpidetyypit, valvojat, valvonta, whoami }}
-
       <div class="mb-2">
         Energiatodistus {energiatodistus.versio}/{energiatodistus.id} -
         {Maybe.orSome('', energiatodistus.perustiedot.nimi)} -
-        {kayttotarkoitusTitle(R.objOf(energiatodistus.versio, luokittelut), energiatodistus)}
+        {kayttotarkoitusTitle(
+          R.objOf(energiatodistus.versio, luokittelut),
+          energiatodistus
+        )}
       </div>
       <div class="mb-5">
         <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
@@ -110,18 +115,19 @@
 
       {#if Kayttajat.isPaakayttaja(whoami)}
         <Manager
-            {energiatodistus}
-            {valvojat} {valvonta}
-            {toimenpiteet}
-            {toimenpidetyypit}
-            {saveValvonta}
-            reload={_ => load(params)}/>
+          {energiatodistus}
+          {valvojat}
+          {valvonta}
+          {toimenpiteet}
+          {toimenpidetyypit}
+          {saveValvonta}
+          reload={_ => load(params)} />
       {/if}
 
-      <H2 text="Toimenpiteet"/>
+      <H2 text="Toimenpiteet" />
 
       {#each R.reverse(toimenpiteet) as toimenpide}
-        <Toimenpide {toimenpidetyypit} {toimenpide}/>
+        <Toimenpide {toimenpidetyypit} {toimenpide} />
       {/each}
       {#if R.isEmpty(toimenpiteet)}
         <p>Ei valvontatoimenpiteitä</p>

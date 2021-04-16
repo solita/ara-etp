@@ -5,7 +5,11 @@ export const mapKeys = R.curry((fn, object) =>
 );
 
 export const renameKeys = R.curry((keysMap, obj) =>
-  R.reduce((acc, key) => R.assoc(keysMap[key] || key, obj[key], acc), {}, R.keys(obj))
+  R.reduce(
+    (acc, key) => R.assoc(keysMap[key] || key, obj[key], acc),
+    {},
+    R.keys(obj)
+  )
 );
 
 export const requireNotNil = R.curry((value, error) => {

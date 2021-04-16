@@ -44,7 +44,8 @@
     qs.parse
   )($querystring);
 
-  const nextPageCallback = nextPage => Router.push(`#/valvonta/oikeellisuus/all?page=${nextPage}`);
+  const nextPageCallback = nextPage =>
+    Router.push(`#/valvonta/oikeellisuus/all?page=${nextPage}`);
 
   $: {
     overlay = true;
@@ -83,10 +84,16 @@
 
   const formatDeadline = R.compose(
     EM.fold('-', Formats.formatDateInstant),
-    R.prop('deadline-date'));
+    R.prop('deadline-date')
+  );
 
   const toValvontaView = energiatodistus => {
-    Router.push('#/valvonta/oikeellisuus/' + energiatodistus.versio + '/' +  energiatodistus.id);
+    Router.push(
+      '#/valvonta/oikeellisuus/' +
+        energiatodistus.versio +
+        '/' +
+        energiatodistus.id
+    );
   };
 </script>
 
@@ -106,90 +113,92 @@
         <div class="my-6">
           <table class="etp-table">
             <thead class="etp-table--thead">
-            <tr class="etp-table--tr etp-table--tr__light">
-              <th class="etp-table--th">
-                {$_('valvonta.oikeellisuus.all.table.publish-time')}
-              </th>
-              <th class="etp-table--th">
-                {$_('valvonta.oikeellisuus.all.table.type')}
-              </th>
-              <th class="etp-table--th">
-                {$_('valvonta.oikeellisuus.all.table.deadline-date')}
-              </th>
+              <tr class="etp-table--tr etp-table--tr__light">
+                <th class="etp-table--th">
+                  {$_('valvonta.oikeellisuus.all.table.publish-time')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('valvonta.oikeellisuus.all.table.type')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('valvonta.oikeellisuus.all.table.deadline-date')}
+                </th>
 
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.tila')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.tunnus')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.e-luokka')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.versio')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.osoite')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.ktl')}
-              </th>
-              <th class="etp-table--th">
-                {$_('energiatodistus.haku.sarakkeet.laatija')}
-              </th>
-            </tr>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.tila')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.tunnus')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.e-luokka')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.versio')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.osoite')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.ktl')}
+                </th>
+                <th class="etp-table--th">
+                  {$_('energiatodistus.haku.sarakkeet.laatija')}
+                </th>
+              </tr>
             </thead>
             <tbody class="etp-table--tbody">
-            {#each valvonnat as {energiatodistus, lastToimenpide}}
-              <tr class="etp-table--tr etp-table--tr__link"
+              {#each valvonnat as { energiatodistus, lastToimenpide }}
+                <tr
+                  class="etp-table--tr etp-table--tr__link"
                   on:click={toValvontaView(energiatodistus)}>
-                <!-- valvonta -->
-                <td class="etp-table--td">
-                  {Formats.formatTimeInstant(lastToimenpide['publish-time'])}
-                </td>
-                <td class="etp-table--td">
-                  {Locales.labelForId($locale, toimenpidetyypit)(lastToimenpide['type-id'])}
-                </td>
-                <td class="etp-table--td">
-                  {formatDeadline(lastToimenpide)}
-                </td>
+                  <!-- valvonta -->
+                  <td class="etp-table--td">
+                    {Formats.formatTimeInstant(lastToimenpide['publish-time'])}
+                  </td>
+                  <td class="etp-table--td">
+                    {Locales.labelForId(
+                      $locale,
+                      toimenpidetyypit
+                    )(lastToimenpide['type-id'])}
+                  </td>
+                  <td class="etp-table--td">
+                    {formatDeadline(lastToimenpide)}
+                  </td>
 
-                <!-- energiatodistus -->
-                <td class="etp-table--td">
-                  {$_(
-                    'energiatodistus.tila.' +
-                    ET.tilaKey(energiatodistus['tila-id'])
-                  )}
-                </td>
-                <td class="etp-table--td">{energiatodistus.id}</td>
-                <td class="etp-table--td">
-                  {orEmpty(energiatodistus.tulokset['e-luokka'])}
-                </td>
-                <td class="etp-table--td">{energiatodistus.versio}</td>
-                <td class="etp-table--td">
-                  {orEmpty(energiatodistus.perustiedot.nimi)}
-                </td>
-                <td class="etp-table--td">
-                  <Address
+                  <!-- energiatodistus -->
+                  <td class="etp-table--td">
+                    {$_(
+                      'energiatodistus.tila.' +
+                        ET.tilaKey(energiatodistus['tila-id'])
+                    )}
+                  </td>
+                  <td class="etp-table--td">{energiatodistus.id}</td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus.tulokset['e-luokka'])}
+                  </td>
+                  <td class="etp-table--td">{energiatodistus.versio}</td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus.perustiedot.nimi)}
+                  </td>
+                  <td class="etp-table--td">
+                    <Address
                       {energiatodistus}
                       postinumerot={luokittelut.postinumerot} />
-                </td>
-                <td class="etp-table--td"
-                    title={kayttotarkoitusTitle(
-                        luokittelut,
-                        energiatodistus
-                      )}>
-                  {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
-                </td>
-                <td class="etp-table--td">
-                  {orEmpty(energiatodistus['laatija-fullname'])}
-                </td>
-              </tr>
-            {/each}
+                  </td>
+                  <td
+                    class="etp-table--td"
+                    title={kayttotarkoitusTitle(luokittelut, energiatodistus)}>
+                    {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
+                  </td>
+                  <td class="etp-table--td">
+                    {orEmpty(energiatodistus['laatija-fullname'])}
+                  </td>
+                </tr>
+              {/each}
             </tbody>
           </table>
         </div>
@@ -198,10 +207,10 @@
     {#if R.gt(valvontaCount, pageSize)}
       <div class="pagination">
         <Pagination
-            pageNum={page.orSome(1)}
-            {nextPageCallback}
-            itemsPerPage={pageSize}
-            itemsCount={valvontaCount} />
+          pageNum={page.orSome(1)}
+          {nextPageCallback}
+          itemsPerPage={pageSize}
+          itemsCount={valvontaCount} />
       </div>
     {/if}
   </div>

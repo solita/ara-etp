@@ -19,4 +19,4 @@
   const text = R.compose($_, Toimenpiteet.i18nKey);
 </script>
 
-<H1 text={text(params, 'title')}/>
+<H1 text={text(params, 'title')} />

@@ -31,21 +31,35 @@
   export let i18n;
 
   export let transform = R.identity;
-
 </script>
 
 <style type="text/postcss">
 </style>
 
-<div use:litepicker={{
+<div
+  use:litepicker={{
     lang: $locale,
     update: date => {
       model = R.set(lens, transform(date), model);
     }
   }}>
-  <Input {id} {name} {label}
-         {caret} {search} {required} {autocomplete} {disabled} {compact} {center}
-         bind:model {lens} {format} {parse}
-         {validators} {warnValidators} {i18n} {labelUnit}/>
+  <Input
+    {id}
+    {name}
+    {label}
+    {caret}
+    {search}
+    {required}
+    {autocomplete}
+    {disabled}
+    {compact}
+    {center}
+    bind:model
+    {lens}
+    {format}
+    {parse}
+    {validators}
+    {warnValidators}
+    {i18n}
+    {labelUnit} />
 </div>
-

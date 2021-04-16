@@ -31,71 +31,87 @@
   const openNewToimenpide = type => {
     if (type == Toimenpiteet.type.audit.report) {
       // toimenpiteet, jotka käsitellään omalla näytöllä
-      Router.push(`#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${type}`);
+      Router.push(
+        `#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${type}`
+      );
     } else {
       // toimenpiteet, jotka käsitellään dialogi-näytöllä
       newToimenpide = Maybe.Some({
         'type-id': type,
         'deadline-date': Either.Right(Toimenpiteet.defaultDeadline(type)),
-        'document': Maybe.None()
+        document: Maybe.None()
       });
     }
   };
 
-  const isAuditCase = toimenpiteet => !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
+  const isAuditCase = toimenpiteet =>
+    !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
 
   const saveKasittelija = id => saveValvonta({ 'valvoja-id': id });
 
-  const fullName = valvojat => R.compose(
-    R.join(' '),
-    R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
-    R.find(R.__, valvojat),
-    R.propEq('id'));
+  const fullName = valvojat =>
+    R.compose(
+      R.join(' '),
+      R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
+      R.find(R.__, valvojat),
+      R.propEq('id')
+    );
 
   const load = _ => {
     newToimenpide = Maybe.None();
     toimenpideTyyppi = Maybe.None();
     reload();
-  }
+  };
 </script>
 
 {#each Maybe.toArray(newToimenpide) as toimenpide}
-  <NewToimenpideDialog id={energiatodistus.id} {toimenpide} reload={load}/>
+  <NewToimenpideDialog id={energiatodistus.id} {toimenpide} reload={load} />
 {/each}
 
 <div class="lg:w-1/2 w-full mb-5">
-  <Select label="Valitse käsittelijä"
-          model={valvonta} lens={R.lensProp('valvoja-id')}
-          on:change={event => saveKasittelija(parseInt(event.target.value))}
-          format={fullName(valvojat)}
-          items={R.pluck('id', valvojat)}/>
+  <Select
+    label="Valitse käsittelijä"
+    model={valvonta}
+    lens={R.lensProp('valvoja-id')}
+    on:change={event => saveKasittelija(parseInt(event.target.value))}
+    format={fullName(valvojat)}
+    items={R.pluck('id', valvojat)} />
 </div>
 
 <div class="flex space-x-4 mb-5">
   <TextButton icon="add_comment" text="Lisää muistiinpano" on:click={load} />
-  <TextButton disabled={isAuditCase(toimenpiteet)}
-              icon="verified"
-              text="Merkitse katsotuksi"
-              on:click={_ => openNewToimenpide(Toimenpiteet.type.verified)} />
-  <TextButton disabled={isAuditCase(toimenpiteet)}
-              icon="bug_report"
-              text="Ilmoita poikkeamasta"
-              on:click={_ => openNewToimenpide(Toimenpiteet.type.anomaly)} />
+  <TextButton
+    disabled={isAuditCase(toimenpiteet)}
+    icon="verified"
+    text="Merkitse katsotuksi"
+    on:click={_ => openNewToimenpide(Toimenpiteet.type.verified)} />
+  <TextButton
+    disabled={isAuditCase(toimenpiteet)}
+    icon="bug_report"
+    text="Ilmoita poikkeamasta"
+    on:click={_ => openNewToimenpide(Toimenpiteet.type.anomaly)} />
 </div>
 
 {#if !isAuditCase(toimenpiteet)}
   <div class="mb-5">
-    <Button text="Aloita valvonta" on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
+    <Button
+      text="Aloita valvonta"
+      on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
 {:else}
-  <H2 text="Uusi toimenpide"/>
+  <H2 text="Uusi toimenpide" />
 
   <div class="lg:w-1/2 w-full mb-5">
-    <Select label="Valitse toimenpide"
-            model={toimenpideTyyppi} lens={R.lens(R.identity, R.identity)}
-            inputValueParse={R.prop('id')}
-            format={Locales.label($locale)}
-            on:change={event => openNewToimenpide(parseInt(event.target.value))}
-            items={R.filter(Toimenpiteet.isAuditCaseToimenpideType, toimenpidetyypit)}/>
+    <Select
+      label="Valitse toimenpide"
+      model={toimenpideTyyppi}
+      lens={R.lens(R.identity, R.identity)}
+      inputValueParse={R.prop('id')}
+      format={Locales.label($locale)}
+      on:change={event => openNewToimenpide(parseInt(event.target.value))}
+      items={R.filter(
+        Toimenpiteet.isAuditCaseToimenpideType,
+        toimenpidetyypit
+      )} />
   </div>
 {/if}

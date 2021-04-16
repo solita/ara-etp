@@ -51,25 +51,25 @@
 </script>
 
 <style type="text/postcss">
-    dialog {
-        @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
-    }
+  dialog {
+    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
+  }
 
-    .content {
-        @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
-    }
+  .content {
+    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
+  }
 
-    h1 {
-        @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
-    }
+  h1 {
+    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
+  }
 
-    p {
-        @apply mt-2;
-    }
+  p {
+    @apply mt-2;
+  }
 
-    .buttons {
-        @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-    }
+  .buttons {
+    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+  }
 </style>
 
 <dialog on:click|stopPropagation>
@@ -81,50 +81,60 @@
     {#if Toimenpiteet.hasDeadline(toimenpide)}
       <div class="flex py-4">
         <Datepicker
-            label="Määräpäivä"
-            bind:model={toimenpide}
-            lens={R.lensProp('deadline-date')}
-            format={Maybe.fold('', Formats.formatDateInstant)}
-            parse={Parsers.optionalParser(Parsers.parseDate)}
-            transform={EM.fromNull}
-            i18n={$_}/>
+          label="Määräpäivä"
+          bind:model={toimenpide}
+          lens={R.lensProp('deadline-date')}
+          format={Maybe.fold('', Formats.formatDateInstant)}
+          parse={Parsers.optionalParser(Parsers.parseDate)}
+          transform={EM.fromNull}
+          i18n={$_} />
       </div>
     {/if}
 
     {#if Toimenpiteet.hasDocumentTemplate(toimenpide)}
       <div class="w-1/2 py-4">
-        <Select label="Valitse asiakirjapohja"
-                model={Maybe.None()} lens={R.lens(R.identity, R.identity)}
-                items={['Energiatodistus 2013 FI', 'Energiatodistus 2013 SV',
-                        'Energiatodistus 2018 FI', 'Energiatodistus 2018 SV']}/>
+        <Select
+          label="Valitse asiakirjapohja"
+          model={Maybe.None()}
+          lens={R.lens(R.identity, R.identity)}
+          items={[
+            'Energiatodistus 2013 FI',
+            'Energiatodistus 2013 SV',
+            'Energiatodistus 2018 FI',
+            'Energiatodistus 2018 SV'
+          ]} />
       </div>
     {:else}
       <div class="w-full py-4">
         <Textarea
-            id={'toimenpide.document'}
-            name={'toimenpide.document'}
-            label={text(toimenpide, 'document')}
-            bind:model={toimenpide}
-            lens={R.lensProp('document')}
-            required={false}
-            format={Maybe.orSome('')}
-            parse={Parsers.optionalString}
-            i18n={$_} />
+          id={'toimenpide.document'}
+          name={'toimenpide.document'}
+          label={text(toimenpide, 'document')}
+          bind:model={toimenpide}
+          lens={R.lensProp('document')}
+          required={false}
+          format={Maybe.orSome('')}
+          parse={Parsers.optionalString}
+          i18n={$_} />
       </div>
     {/if}
 
     <div class="buttons">
       <div class="mr-5 mt-5">
         <Button
-            text={$_(`${i18nRoot}.${Toimenpiteet.typeKey(toimenpide['type-id'])}.publish-button`)}
-            on:click={publish(toimenpide)} />
+          text={$_(
+            `${i18nRoot}.${Toimenpiteet.typeKey(
+              toimenpide['type-id']
+            )}.publish-button`
+          )}
+          on:click={publish(toimenpide)} />
       </div>
 
       <div class="mt-5">
         <Button
-            text={$_(i18nRoot + '.cancel-button')}
-            style={'secondary'}
-            on:click={reload} />
+          text={$_(i18nRoot + '.cancel-button')}
+          style={'secondary'}
+          on:click={reload} />
       </div>
     </div>
   </div>

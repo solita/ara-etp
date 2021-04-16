@@ -1237,15 +1237,25 @@
         },
         "rfi-warning": {
           "title": "Tietopyyntö varoitus",
-          "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
+          "description": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
           "document": "Kommentti",
           "publish-button": "Lähetä varoitus"
         },
         "audit-report": {
           "title": "Valvontamuistio",
+          "publish-button": "Julkaise valvontamuistio"
+        },
+        "audit-order": {
+          "title": "Valvontamuistio kehoitus",
           "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
           "document": "Kommentti",
-          "publish-button": "Julkaise valvontamuistio"
+          "publish-button": "Lähetä kehoitus"
+        },
+        "audit-warning": {
+          "title": "Valvontamuistio varoitus",
+          "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
+          "document": "Kommentti",
+          "publish-button": "Lähetä varoitus"
         },
         "messages": {
           "success": "Toimenpide lisätty",

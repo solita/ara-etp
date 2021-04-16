@@ -19,24 +19,31 @@ const url = {
 export const deserializeToimenpide = R.evolve({
   'create-time': dfns.parseJSON,
   'publish-time': dfns.parseJSON,
-  'deadline-date': R.compose(Parsers.toEitherMaybe, R.map(Parsers.parseISODate), Maybe.fromNull),
-  'diaarinumero': Maybe.fromNull,
+  'deadline-date': R.compose(
+    Parsers.toEitherMaybe,
+    R.map(Parsers.parseISODate),
+    Maybe.fromNull
+  ),
+  diaarinumero: Maybe.fromNull
 });
 
 export const deserializeValvontaStatus = R.compose(
   R.evolve({
-    'lastToimenpide': deserializeToimenpide,
-    'energiatodistus': energiatodistusApi.deserialize
+    lastToimenpide: deserializeToimenpide,
+    energiatodistus: energiatodistusApi.deserialize
   }),
-  Objects.renameKeys({'last-toimenpide': 'lastToimenpide'}));
+  Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
+);
 
 export const deserializeValvonta = R.evolve({
   'valvoja-id': Maybe.fromNull
 });
 
 export const serializeToimenpide = R.evolve({
-  'document': Maybe.orSome(null),
-  'deadline-date': EM.fold(null, date => dfns.formatISO(date, { representation: 'date' }))
+  document: Maybe.orSome(null),
+  'deadline-date': EM.fold(null, date =>
+    dfns.formatISO(date, { representation: 'date' })
+  )
 });
 
 export const valvonnat = R.compose(
@@ -48,7 +55,10 @@ export const valvonnat = R.compose(
 
 export const valvontaCount = Fetch.getJson(fetch, url.valvonnat + '/count');
 
-export const toimenpidetyypit = Fetch.cached(fetch, '/valvonta/oikeellisuus/toimenpidetyypit');
+export const toimenpidetyypit = Fetch.cached(
+  fetch,
+  '/valvonta/oikeellisuus/toimenpidetyypit'
+);
 
 export const toimenpiteet = R.compose(
   R.map(R.map(deserializeToimenpide)),
@@ -71,7 +81,7 @@ export const postToimenpide = (id, toimenpide) =>
     serializeToimenpide
   )(toimenpide);
 
-export const putValvonta= R.curry((id, body) =>
+export const putValvonta = R.curry((id, body) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.valvonta(id)))
