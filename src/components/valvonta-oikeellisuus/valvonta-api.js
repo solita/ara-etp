@@ -13,18 +13,20 @@ import * as energiatodistusApi from '@Component/Energiatodistus/energiatodistus-
 const url = {
   valvonnat: 'api/private/valvonta/oikeellisuus',
   valvonta: id => `${url.valvonnat}/${id}`,
-  toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`
+  toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`,
+  toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`
 };
 
 export const deserializeToimenpide = R.evolve({
   'create-time': dfns.parseJSON,
-  'publish-time': dfns.parseJSON,
+  'publish-time': R.compose(R.map(dfns.parseJSON), Maybe.fromNull),
   'deadline-date': R.compose(
     Parsers.toEitherMaybe,
     R.map(Parsers.parseISODate),
     Maybe.fromNull
   ),
-  diaarinumero: Maybe.fromNull
+  diaarinumero: Maybe.fromNull,
+  document: Maybe.fromNull
 });
 
 export const deserializeValvontaStatus = R.compose(
@@ -39,12 +41,14 @@ export const deserializeValvonta = R.evolve({
   'valvoja-id': Maybe.fromNull
 });
 
-export const serializeToimenpide = R.evolve({
-  document: Maybe.orSome(null),
-  'deadline-date': EM.fold(null, date =>
-    dfns.formatISO(date, { representation: 'date' })
-  )
-});
+export const serializeToimenpide = R.compose(
+  R.evolve({
+    document: Maybe.orSome(null),
+    'deadline-date': EM.fold(null, date =>
+      dfns.formatISO(date, { representation: 'date' })
+    )
+  }),
+  R.pick(['type-id', 'deadline-date', 'document']));
 
 export const valvonnat = R.compose(
   R.map(R.map(deserializeValvontaStatus)),
@@ -66,6 +70,12 @@ export const toimenpiteet = R.compose(
   url.toimenpiteet
 );
 
+export const toimenpide = R.compose(
+  R.map(deserializeToimenpide),
+  Fetch.getJson(fetch),
+  url.toimenpide
+);
+
 export const valvonta = R.compose(
   R.map(deserializeValvonta),
   Fetch.getJson(fetch),
@@ -74,12 +84,21 @@ export const valvonta = R.compose(
 
 export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 
-export const postToimenpide = (id, toimenpide) =>
+export const postToimenpide = R.curry((id, toimenpide) =>
   R.compose(
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.toimenpiteet(id))),
     serializeToimenpide
-  )(toimenpide);
+  )(toimenpide));
+
+export const putToimenpide = R.curry((id, toimenpideId, toimenpide) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put',
+      url.toimenpide(id, toimenpideId))),
+    R.dissoc('type-id'),
+    serializeToimenpide
+  )(toimenpide));
 
 export const putValvonta = R.curry((id, body) =>
   R.compose(
@@ -87,3 +106,8 @@ export const putValvonta = R.curry((id, body) =>
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.valvonta(id)))
   )(body)
 );
+
+export const publishToimenpide = R.curry((id, toimenpideId) =>
+  R.chain(Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ => Fetch.postEmpty(fetch,
+      url.toimenpide(id, toimenpideId) + '/publish'))));

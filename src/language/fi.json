@@ -1226,38 +1226,50 @@
         "rfi-request": {
           "title": "Tietopyyntö",
           "description": "Pyydetään laatijalta lisää tietoa.",
-          "document": "Kommentti",
           "publish-button": "Lähetä tietopyyntö"
         },
         "rfi-order": {
           "title": "Tietopyyntö kehoitus",
           "description": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
-          "document": "Kommentti",
           "publish-button": "Lähetä kehoitus"
         },
         "rfi-warning": {
           "title": "Tietopyyntö varoitus",
           "description": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
-          "document": "Kommentti",
           "publish-button": "Lähetä varoitus"
         },
         "audit-report": {
           "title": "Valvontamuistio",
-          "publish-button": "Julkaise valvontamuistio"
+          "publish-button": "Lähetä valvontamuistio",
+          "save-button": "Tallenna valvontamuistio",
+          "reset-button": "Peruuta",
+          "delete-button": "Poista luonnos"
         },
         "audit-order": {
           "title": "Valvontamuistio kehoitus",
-          "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
-          "document": "Kommentti",
+          "description": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
           "publish-button": "Lähetä kehoitus"
         },
         "audit-warning": {
           "title": "Valvontamuistio varoitus",
-          "description": "Varoitetaan laatijaa seurauksista. jos tietoja ei luovuteta määräaikaan mennessä.",
-          "document": "Kommentti",
+          "description": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus"
         },
+        "decision-prohibition": {
+          "title": "Kieltopäätös",
+          "description": "Energiatodistus hylätään koska laatija ei halua korjata sitä.",
+          "document": "Kommentti",
+          "publish-button": "Kirjaa päätös"
+        },
+        "closed": {
+          "title": "Valvonnan lopetus",
+          "description": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
+          "document": "Kommentti",
+          "publish-button": "Lopeta"
+        },
         "messages": {
+          "load-error": "Toimenpiteen tietojen haku epäonnistui",
+          "save-success": "Toimenpiteen muutokset tallennettu",
           "success": "Toimenpide lisätty",
           "error": "Toimenpiteen lisääminen epäonnistui"
         }

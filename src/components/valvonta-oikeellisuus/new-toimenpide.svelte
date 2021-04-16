@@ -6,17 +6,98 @@
   import * as Formats from '@Utility/formats';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Validation from '@Utility/validation';
+
+  import { flashMessageStore } from '@/stores';
+  import { replace } from '@Component/Router/router';
+
   import * as Toimenpiteet from './toimenpiteet';
 
   import * as ValvontaApi from './valvonta-api';
+  import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';
-  import H1 from '@Component/H/H1';
+
+  import Overlay from '@Component/Overlay/Overlay.svelte';
+  import Spinner from '@Component/Spinner/Spinner.svelte';
+  import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import ToimenpideForm from './toimenpide-form.svelte';
 
   export let params;
   const i18nRoot = 'valvonta.oikeellisuus.new-toimenpide';
 
-  const text = R.compose($_, Toimenpiteet.i18nKey);
+  let resources = Maybe.None();
+  let dirty = false;
+  let overlay = true;
+
+  const empty = {
+    'rfi-extra': _ => { todo: true },
+    'audit-report': Toimenpiteet.emptyValvontamuistio
+  };
+  const emptyToimenpide = params => empty[Toimenpiteet.typeKey(params['type-id'])]();
+
+  $: toimenpide = emptyToimenpide(params);
+
+  Future.fork(
+    response => {
+      const msg = $_(`${i18nRoot}.messages.load-error`,
+        Response.localizationKey(response));
+
+      flashMessageStore.add('viesti', 'error', msg);
+      overlay = false;
+    },
+    response => {
+      resources = Maybe.Some(response);
+      overlay = false;
+    },
+    Future.parallelObject(2, {
+      whoami: KayttajaApi.whoami
+    })
+  );
+
+  const addToimenpide = R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.messages.error`,
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        overlay = false;
+      },
+      response => {
+        flashMessageStore.add(
+          'valvonta-oikeellisuus',
+          'success',
+          $_(`${i18nRoot}.messages.success`)
+        );
+        dirty = false;
+        replace(`#/valvonta/oikeellisuus/${params.version}/${params.id}/${response.id}`)
+      }
+    ),
+    R.tap(_ => { overlay = true; }),
+    ValvontaApi.postToimenpide(params.id)
+  );
+
+  const cancel = _ => {
+    toimenpide = emptyToimenpide(params)
+  }
 </script>
 
-<H1 text={text(params, 'title')} />
+<Overlay {overlay}>
+  <div slot="content" class="w-full mt-3">
+    <DirtyConfirmation {dirty}/>
+    {#each Maybe.toArray(resources) as {whoami}}
+      <ToimenpideForm {toimenpide}
+                      bind:dirty
+                      {whoami}
+                      {cancel}
+                      submit={addToimenpide}/>
+    {/each}
+  </div>
+  <div slot="overlay-content">
+    <Spinner/>
+  </div>
+</Overlay>

@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import * as Deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as dfns from 'date-fns';
-import { _ } from '@Language/i18n';
+import * as Either from '@Utility/either-utils';
 
 export const type = {
   verified: 0,
@@ -27,7 +27,8 @@ export const type = {
   decision: {
     // päätökset
     prohibition: 11 // kieltopäätös
-  }
+  },
+  closed: 12
 };
 
 const types = R.invertObj(Deep.treeFlat('-', R.F, type));
@@ -37,15 +38,18 @@ export const typeKey = id => types[id];
 export const isType = R.propEq('type-id');
 
 const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
+export const isDialogType = R.complement(R.equals(type.audit.report));
+const isDocumentTemplateType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
+
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 export const hasDocumentTemplate = R.propSatisfies(
-  R.includes(R.__, [3, 5, 6, 7, 8, 10]),
+  isDocumentTemplateType,
   'type-id'
 );
-export const isAuditCase = R.propSatisfies(R.gt(R.__, type.anomaly), 'type-id');
 
+export const isAuditCase = R.propSatisfies(R.gt(R.__, type.anomaly), 'type-id');
 export const isAuditCaseToimenpideType = R.propSatisfies(
-  R.includes(R.__, [3, 5, 6, 7, 9, 10, 11]),
+  R.includes(R.__, [3, 5, 6, 7, 9, 10, 11, 12]),
   'id'
 );
 
@@ -63,3 +67,15 @@ export const i18nKey = (toimenpide, key) =>
     typeKey(toimenpide['type-id']),
     key
   ]);
+
+export const emptyValvontamuistio = _ => ({
+  'publish-time': Maybe.None(),
+  'type-id': type.audit.report,
+  'deadline-date': Either.Right(defaultDeadline(type.audit.report)),
+  document: Maybe.None(),
+  /*'template-id': Maybe.None(),
+  'vakavuusluokka-id': Maybe.None(),
+  virheet: []*/
+});
+
+export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'))
