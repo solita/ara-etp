@@ -116,7 +116,7 @@
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Select
         id={'laskutettava-yritys-id'}
-        name='laskutettava-yritys-id'
+        name="laskutettava-yritys-id"
         label={$_('energiatodistus.laskutus.laskutettava')}
         required={true}
         allowNone={true}

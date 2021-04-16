@@ -231,7 +231,9 @@ const numberComparisonsFromType = type => [
 
 const numberComparisons = numberComparisonsFromType(OPERATOR_TYPES.NUMBER);
 
-const unformattedNumberComparisons = numberComparisonsFromType(OPERATOR_TYPES.UNFORMATTED_NUMBER);
+const unformattedNumberComparisons = numberComparisonsFromType(
+  OPERATOR_TYPES.UNFORMATTED_NUMBER
+);
 
 const dateComparisons = [
   dateEquals,

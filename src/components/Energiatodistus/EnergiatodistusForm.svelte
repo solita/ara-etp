@@ -45,9 +45,14 @@
 
   let schema = R.compose(
     R.reduce(schemas.assocRequired, R.__, validation.required),
-    schema => R.propEq('bypass-validation-limits', false, energiatodistus) ?
-                R.reduce(schemas.redefineNumericValidation, schema, validation.numeric) :
-                schema,
+    schema =>
+      R.propEq('bypass-validation-limits', false, energiatodistus)
+        ? R.reduce(
+            schemas.redefineNumericValidation,
+            schema,
+            validation.numeric
+          )
+        : schema,
     R.assocPath(
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
@@ -274,11 +279,10 @@
               bind:model={energiatodistus}
               lens={R.lensPath(['draft-visible-to-paakayttaja'])}
               label={$_('energiatodistus.draft-visible-to-paakayttaja')}
-              disabled={disabled} />
+              {disabled} />
           </div>
 
-          {#if R.or(energiatodistus['bypass-validation-limits'],
-              Kayttajat.isPaakayttaja(whoami))}
+          {#if R.or(energiatodistus['bypass-validation-limits'], Kayttajat.isPaakayttaja(whoami))}
             <div class="mb-5">
               <Checkbox
                 bind:model={energiatodistus}
