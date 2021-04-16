@@ -15,7 +15,7 @@
     '/all': Valvonnat,
     '/:version/:id': Valvonta,
     '/:version/:id/:toimenpide-id': ExistingToimenpide,
-    '/:version/:id/new/:type': NewToimenpide,
+    '/:version/:id/new/:type-id': NewToimenpide,
     '*': NotFound
   };
 </script>

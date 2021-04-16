@@ -47,7 +47,7 @@
     );
   };
 
-  const text = (toimenpide, key) => $_(R.join('.', [i18nRoot, Toimenpiteet.typeKey(toimenpide['type-id']), key]));
+  const text = R.compose($_, Toimenpiteet.i18nKey);
 </script>
 
 <style type="text/postcss">

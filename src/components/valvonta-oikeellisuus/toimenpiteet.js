@@ -2,6 +2,7 @@ import * as R from 'ramda';
 import * as Deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as dfns from 'date-fns';
+import { _ } from '@Language/i18n';
 
 export const type = {
   verified: 0, anomaly: 1, // kevyt valvontamenettely
@@ -43,3 +44,6 @@ export const isAnomaly = isType(type.anomaly);
 
 export const defaultDeadline = typeId => isDeadlineType(typeId) ?
   Maybe.Some(dfns.addMonths(new Date(), 1)) : Maybe.None();
+
+export const i18nKey = (toimenpide, key) =>
+  R.join('.', ['valvonta.oikeellisuus.new-toimenpide', typeKey(toimenpide['type-id']), key]);
