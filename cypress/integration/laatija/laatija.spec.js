@@ -645,7 +645,7 @@ context('Laatija', () => {
         }
       ).as('vastaus');
 
-      cy.contains('Vastaa').click();
+      cy.contains('Lähetä').click();
 
       cy.wait('@vastaus');
       cy.wait('@viesti');
