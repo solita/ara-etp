@@ -61,7 +61,7 @@ const singleNumberOperation = R.curry((operation, type, key) => ({
   key,
   argumentNumber: 1,
   defaultValues: () => [''],
-  type: type
+  type
 }));
 
 const stringContains = key => ({
@@ -149,6 +149,20 @@ const tilaEquals = tilaOperation(eq);
 
 const singleBoolean = key => ({
   operation: eq,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [true],
+  type: OPERATOR_TYPES.BOOLEAN
+});
+
+const uudisrakennusEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, uudisrakennus) => [
+      ['=', 'versio', 2013],
+      [command, 'perustiedot.uudisrakennus', uudisrakennus]
+    ])
+  },
   key,
   argumentNumber: 1,
   defaultValues: () => [true],
@@ -254,7 +268,7 @@ const perustiedot = {
   rakennustunnus: [...stringComparisons],
   kiinteistotunnus: [...stringComparisons],
   'julkinen-rakennus': [singleBoolean],
-  uudisrakennus: [singleBoolean],
+  uudisrakennus: [uudisrakennusEquals],
   'katuosoite-fi': [...stringComparisons],
   'katuosoite-sv': [...stringComparisons],
   postinumero: [...numberComparisons],
