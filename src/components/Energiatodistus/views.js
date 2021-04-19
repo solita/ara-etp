@@ -4,7 +4,9 @@ import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
 import * as Locales from '@Language/locale-utils';
 
 export const toETView = energiatodistus => {
-  Router.push('#/energiatodistus/' + energiatodistus.versio + '/' + energiatodistus.id);
+  Router.push(
+    '#/energiatodistus/' + energiatodistus.versio + '/' + energiatodistus.id
+  );
 };
 
 export const kayttotarkoitusTitle = locale => (luokittelut, energiatodistus) =>
