@@ -6,6 +6,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Link from '@Component/Link/Link';
   import NavLink from '@Component/ohje/nav-link';
+  import { arrayToObject } from 'qs/lib/utils';
 
   export let sivut = [];
   export let activeSivuId;
@@ -14,44 +15,43 @@
   const hasNoParent = s => R.prop('parent-id', s).isNone();
   const hasParent = s => R.prop('parent-id', s).isSome();
 
-  let navi = R.compose(
-    R.map(
-      R.assoc(
-        'children',
-        R.find(R.propEq('parent-id', R.__.id))(R.filter(hasParent, sivut))
-      )
-    ),
-    R.filter(hasNoParent)
-  )(sivut);
+  // const unflatten = (array, parent, tree) => {
+  //   tree = typeof tree !== 'undefined' ? tree : [];
+  //   parent =
+  //     typeof parent !== 'undefined'
+  //       ? R.evolve({
+  //           id: Maybe.fromNull
+  //         })(parent)
+  //       : { id: Maybe.None() };
 
-  $: console.log('navi', navi);
-  $: console.log('find', R.find(R.propEq('parent-id', Maybe.Some(5)))(sivut));
-  // for each
-  // if has parent id, add to that objects child array
-  // remove original
-  // order by ordinal in child arrays and in root
+  //   var children = array.filter(function(child) {
+  //     return R.equals(child['parent-id'], parent.id);
+  //   });
 
-  // $: console.log('parent', R.prop('parent-id'));
+  //   if (children.length) {
+  //     if (Maybe.isNone(parent.id)) {
+  //       tree = children;
+  //     } else {
+  //       parent = R.mergeWith(R.concat, { children: children }, parent);
+  //       console.log('parent', parent);
+  //     }
+  //     children.forEach(function(child) {
+  //       unflatten(array, child);
+  //     });
+  //   }
 
-  // let test = R.filter(hasParent, sivut);
-  // $: console.log('test', test);
+  //   return tree;
+  // };
+
+  // let navi = unflatten(sivut);
+  // $: console.log('navi', navi);
+
+  $: console.log('sivut', sivut);
 </script>
-
-<style>
-  .root {
-    @apply bg-secondary text-light border-light;
-  }
-  .child {
-    @apply bg-light text-dark border-secondary;
-  }
-  .active .title {
-    @apply font-bold underline;
-  }
-</style>
 
 <nav class="w-full flex flex-col max-w-xs">
   {#each sivut as sivu}
-    <NavLink {sivu} {activeSivuId} } />
+    <NavLink {sivu} {activeSivuId} />
   {/each}
   {#if Kayttajat.isPaakayttaja(whoami)}
     <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
