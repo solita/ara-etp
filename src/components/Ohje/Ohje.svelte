@@ -10,7 +10,7 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Navigation from '@Component/Ohje/navigation.svelte';
-  import Sivu from '@Component/Ohje/sivu.svelte';
+  import OhjeViewer from '@Component/Ohje/viewer.svelte';
 
   export let params;
 
@@ -52,7 +52,7 @@
         <Navigation activeSivuId={id} {sivut} {whoami} />
       </div>
       <div class="w-4/6">
-        <Sivu {sivu} {whoami} />
+        <OhjeViewer {sivu} {whoami} />
       </div>
     {/each}
   </div>
