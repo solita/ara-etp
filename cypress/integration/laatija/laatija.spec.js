@@ -645,7 +645,7 @@ context('Laatija', () => {
         }
       ).as('vastaus');
 
-      cy.contains('Lähetä').click();
+      cy.get('[data-cy="viesti-submit"]').click();
 
       cy.wait('@vastaus');
       cy.wait('@viesti');

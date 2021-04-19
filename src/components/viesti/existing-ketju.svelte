@@ -268,6 +268,7 @@
           <div class="w-full flex">
             {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
               <Button
+                prefix={'viesti'}
                 disabled={!dirty}
                 type={'submit'}
                 text={$_(i18nRoot + '.submit')} />
