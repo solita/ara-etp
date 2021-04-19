@@ -18,8 +18,6 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
 
-  export let params;
-
   const emptySivu = { public: false, title: '', body: '' };
   let checked = false;
 
@@ -27,7 +25,7 @@
   let sivu = emptySivu;
 
   let dirty = false;
-  let overlay = true;
+  let overlay = false;
   let enableOverlay = _ => {
     overlay = true;
   };
@@ -37,46 +35,40 @@
     dirty = false;
   };
 
-  $: console.log('params', params);
-
-  let resources = Maybe.None();
-  $: id = params.id;
-
-  $: {
-    overlay = true;
+  const addOhje = R.compose(
     Future.fork(
       response => {
         const msg = $_(
           Maybe.orSome(
-            'viesti.all.messages.load-error',
+            `${i18nRoot}.messages.error`,
             Response.localizationKey(response)
           )
         );
-
         flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
       },
-      response => {
-        resources = Maybe.Some(response);
-        overlay = false;
-      },
-      Future.parallelObject(2, {
-        whoami: kayttajaApi.whoami,
-        sivu: api.getSivu(id)
-      })
-    );
-  }
+      _ => {
+        flashMessageStore.add(
+          'viesti',
+          'success',
+          $_(`${i18nRoot}.messages.success`)
+        );
+        dirty = false;
+      }
+    ),
+    R.tap(enableOverlay),
+    api.postOhje(fetch)
+  );
 </script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { sivu, whoami }}
+    <div class="w-full flex flex-col">
+      <DirtyConfirmation {dirty} />
       <div class="w-full flex flex-col">
-        <DirtyConfirmation {dirty} />
-        <div class="w-full flex flex-col">
-          <form>
-            <div class="w-full py-4">
-              <!-- <Input
+        <form>
+          <div class="w-full py-4">
+            <!-- <Input
             id={'ohje.title'}
             name={'ohje.title'}
             label={'TITLE'}
@@ -85,10 +77,10 @@
             lens={R.compose(R.lensProp('title'), arrayHeadLens)}
             parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
             i18n={$_} /> -->
-            </div>
+          </div>
 
-            <div class="w-full py-4">
-              <!-- <Textarea
+          <div class="w-full py-4">
+            <!-- <Textarea
             id={'ketju.body'}
             name={'ketju.body'}
             label={$_('ohje.ketju.body')}
@@ -98,35 +90,29 @@
             parse={R.trim}
             validators={}
             i18n={$_} /> -->
-            </div>
+          </div>
 
-            <div class="flex space-x-4 pt-8">
-              <Checkbox
-                label={$_('ohje.julkaistu')}
-                bind:model={checked}
-                disabled={false} />
-            </div>
-            <div class="flex space-x-4 pt-8">
-              <Button
-                disabled={!dirty}
-                type={'submit'}
-                text={$_(`${i18nRoot}.submit`)} />
-              <Button
-                disabled={!dirty}
-                on:click={cancel}
-                text={$_(`${i18nRoot}.reset`)}
-                type={'reset'}
-                style={'secondary'} />
-              <Button
-                disabled={!dirty}
-                on:click={cancel}
-                text={$_(`${i18nRoot}.delete`)}
-                style={'error'} />
-            </div>
-          </form>
-        </div>
+          <div class="flex space-x-4 pt-8">
+            <Checkbox
+              label={$_('ohje.julkaistu')}
+              bind:model={checked}
+              disabled={false} />
+          </div>
+          <div class="flex space-x-4 pt-8">
+            <Button
+              disabled={!dirty}
+              type={'submit'}
+              text={$_(`${i18nRoot}.submit`)} />
+            <Button
+              disabled={!dirty}
+              on:click={cancel}
+              text={$_(`${i18nRoot}.reset`)}
+              type={'reset'}
+              style={'secondary'} />
+          </div>
+        </form>
       </div>
-    {/each}
+    </div>
   </div>
   <div slot="overlay-content">
     <Spinner />
