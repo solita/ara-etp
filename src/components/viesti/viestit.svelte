@@ -1,4 +1,7 @@
 <script>
+  import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
+
   import * as R from 'ramda';
   import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
@@ -11,9 +14,6 @@
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-
-  import { flashMessageStore } from '@/stores';
-  import { _ } from '@Language/i18n';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';

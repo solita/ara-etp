@@ -1,7 +1,9 @@
 <script>
   import * as R from 'ramda';
 
+  import Label from '@Component/Label/Label';
   import InputContainer from './InputContainer';
+  import InputField from './InputField';
   import SimpleInput from './SimpleInput';
   import SquareInputWrapper from './SquareInputWrapper';
 
@@ -23,20 +25,18 @@
 
   export let parse = R.identity;
   export let format = R.identity;
-  export let valid = true;
+
   export let validators = [];
   export let warnValidators = [];
 
   export let labelUnit;
-  
-  export let wrapper = SquareInputWrapper;
 
-  let validationResult = {
-    type: '',
-    message: ''
-  };
+  export let inputComponentWrapper = SquareInputWrapper;
+  export let inputComponent = InputField;
 
   export let i18n;
+
+  let focused = false;
 </script>
 
 <style type="text/postcss">
@@ -59,28 +59,47 @@
   {warnValidators}
   tooltip={compact ? label : null}
   on:keydown
-  bind:valid
-  bind:validationResult
-  let:viewValue>
-  <SimpleInput
-    on:keypress
-    on:input
-    {id}
-    {name}
+  let:valid
+  let:validationResult
+  let:viewValue
+  let:focused
+  let:warning
+  let:error>
+  <Label
     {label}
+    {id}
+    {required}
+    {compact}
+    {error}
+    {warning}
+    {focused}
+    unit={labelUnit} />
+      
+  
+    <svelte:component 
+    this={inputComponentWrapper} 
     {caret}
     {search}
-    {required}
-    {autocomplete}
-    {disabled}
-    {compact}
-    {center}
-    {viewValue}
-    {valid}
-    {validationResult}
-    {labelUnit} 
-    {wrapper} />
+    {focused}
+    {error}
+    {warning}
+    {disabled}>
+      <slot name="inputField" valid={valid} warning={warning} error={error} validationResult={validationResult} viewValue={viewValue} focused={focused} />
+      <svelte:component 
+      this={inputComponent}
+      {id}
+      {name}
+      {disabled}
+      {center}
+      {error}
+      {autocomplete}
+      {viewValue}
+      {focused}
+      on:input
+      on:keypress />
+    </svelte:component>
 
+  
   {#if !valid}
     <div class="validation-label">
       {#if validationResult.type === 'error'}
