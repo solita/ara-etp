@@ -1203,7 +1203,7 @@
           "update-success": "Valvonnan tiedot päivitetty"
         }
       },
-      "new-toimenpide": {
+      "toimenpide": {
         "cancel-button": "Peruuta toimenpide",
         "verified": {
           "title": "Merkitse katsotuksi",
@@ -1268,10 +1268,11 @@
           "publish-button": "Lopeta"
         },
         "messages": {
-          "load-error": "Toimenpiteen tietojen haku epäonnistui",
-          "save-success": "Toimenpiteen muutokset tallennettu",
-          "success": "Toimenpide lisätty",
-          "error": "Toimenpiteen lisääminen epäonnistui"
+          "load-error": "Toimenpiteen tietojen haku epäonnistui.",
+          "save-success": "Toimenpiteen muutokset tallennettu.",
+          "publish-success": "Toimenpide on lähetetty.",
+          "success": "Toimenpide lisätty.",
+          "error": "Toimenpiteen lisääminen epäonnistui."
         }
       }
     }

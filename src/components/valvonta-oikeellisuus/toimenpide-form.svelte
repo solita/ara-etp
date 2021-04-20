@@ -25,7 +25,7 @@
   export let cancel;
   export let publish = Maybe.None();
 
-  const i18nRoot = 'valvonta.oikeellisuus.new-toimenpide';
+  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   const text = R.compose($_, Toimenpiteet.i18nKey);
 

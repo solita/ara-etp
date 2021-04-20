@@ -10,7 +10,7 @@
   import Datepicker from '@Component/Input/Datepicker.svelte';
   import Select from '@Component/Select/Select.svelte';
 
-  const i18nRoot = 'valvonta.oikeellisuus.new-toimenpide.audit-report';
+  const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
 
   export let toimenpide;
 </script>

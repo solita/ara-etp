@@ -63,7 +63,7 @@ export const defaultDeadline = typeId =>
 
 export const i18nKey = (toimenpide, key) =>
   R.join('.', [
-    'valvonta.oikeellisuus.new-toimenpide',
+    'valvonta.oikeellisuus.toimenpide',
     typeKey(toimenpide['type-id']),
     key
   ]);
