@@ -23,7 +23,7 @@ export const buildRoutes = currentUser => ({
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
   '/viesti/*': Viesti,
-  '/ohje/:id': Ohje,
+  '/ohje/*': Ohje,
   '/energiatodistus/*': Energiatodistus,
   '/valvonta/oikeellisuus/*': Valvonta,
   '/myinfo': wrap({
