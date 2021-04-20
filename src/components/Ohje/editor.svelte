@@ -15,6 +15,7 @@
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Input from '@Component/Input/Input.svelte';
   import Textarea from '@Component/Textarea/Textarea.svelte';
+  import TextEditor from '@Component/text-editor/text-editor.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
 
@@ -98,6 +99,7 @@
             parse={R.trim}
             validators={}
             i18n={$_} /> -->
+              <TextEditor />
             </div>
 
             <div class="flex space-x-4 pt-8">

@@ -14,7 +14,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Input from '@Component/Input/Input.svelte';
-  import Textarea from '@Component/Textarea/Textarea.svelte';
+  import TextEditor from '@Component/text-editor/text-editor.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
 
@@ -68,28 +68,11 @@
       <div class="w-full flex flex-col">
         <form>
           <div class="w-full py-4">
-            <!-- <Input
-            id={'ohje.title'}
-            name={'ohje.title'}
-            label={'TITLE'}
-            required={true}
-            bind:model={sivu}
-            lens={R.compose(R.lensProp('title'), arrayHeadLens)}
-            parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
-            i18n={$_} /> -->
+            <Input label={$_('ohje.title')} required={true} />
           </div>
 
           <div class="w-full py-4">
-            <!-- <Textarea
-            id={'ketju.body'}
-            name={'ketju.body'}
-            label={$_('ohje.ketju.body')}
-            bind:model={sivu}
-            lens={R.lensProp('body')}
-            required={true}
-            parse={R.trim}
-            validators={}
-            i18n={$_} /> -->
+            <TextEditor label={$_('ohje.body')} required={true} />
           </div>
 
           <div class="flex space-x-4 pt-8">
