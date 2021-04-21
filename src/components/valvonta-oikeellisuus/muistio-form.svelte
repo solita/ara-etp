@@ -13,11 +13,13 @@
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
 
   export let toimenpide;
+  export let disabled;
 </script>
 
 <div class="flex py-4">
   <Datepicker
       label="Määräpäivä"
+      {disabled}
       bind:model={toimenpide}
       lens={R.lensProp('deadline-date')}
       format={Maybe.fold('', Formats.formatDateInstant)}
@@ -29,6 +31,7 @@
 <div class="w-1/2 py-4">
   <Select
       label="Valitse asiakirjapohja"
+      {disabled}
       model={Maybe.None()}
       lens={R.lens(R.identity, R.identity)}
       items={[

@@ -67,22 +67,24 @@
       on:input={setDirty}
       on:change={setDirty}>
 
-  <Content bind:toimenpide />
+  <Content bind:toimenpide disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">
     <Button
-        disabled={Maybe.isNone(publish) &&
-            Toimenpiteet.isDraft(toimenpide)}
+        disabled={
+            Maybe.isNone(publish) ||
+            !Toimenpiteet.isDraft(toimenpide)}
         on:click={publishToimenpide}
         text={text(toimenpide, 'publish-button')} />
 
     <Button
-        disabled={!dirty && !R.isNil(toimenpide.id)}
+        disabled={!Toimenpiteet.isDraft(toimenpide) ||
+                  (!dirty && !R.isNil(toimenpide.id))}
         type={'submit'}
         text={text(toimenpide, 'save-button')} />
 
     <Button
-        disabled={!dirty}
+        disabled={!Toimenpiteet.isDraft(toimenpide) || !dirty}
         on:click={cancel}
         text={text(toimenpide, 'reset-button')}
         type={'reset'}

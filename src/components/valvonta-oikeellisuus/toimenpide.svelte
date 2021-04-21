@@ -33,7 +33,7 @@
             href={`#/valvonta/oikeellisuus/${energiatodistus.version}/${energiatodistus.id}/${toimenpide.id}`}/>
     {/if}
     {#if Toimenpiteet.isDraft(toimenpide)}
-      (luonnos)
+      <div class="ml-2">(luonnos)</div>
     {/if}
   </div>
 </div>
