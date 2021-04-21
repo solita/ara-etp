@@ -29,9 +29,18 @@ export const getSivut = R.compose(
   Future.encaseP(Fetch.getFetch(fetch))
 )(url.sivut);
 
-export const postOhje = fetch =>
+export const postSivu = fetch =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.sivut)),
     serialize
   );
+
+export const putSivu = R.curry((fetch, id, body) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.sivu(id))),
+    R.dissoc('id'),
+    serialize
+  )(body)
+);

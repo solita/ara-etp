@@ -4,12 +4,9 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
-  import * as Kayttajat from '@Utility/kayttajat';
-  import * as Parsers from '@Utility/parsers';
-  import { _, locale } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as api from './ohje-api';
   import * as Schema from './schema';
 
@@ -29,7 +26,7 @@
     ordinal: 0
   };
 
-  const i18nRoot = 'ohje.editor';
+  const i18nRoot = 'ohje.creator';
   let sivu = emptySivu;
 
   let dirty = false;
@@ -48,7 +45,7 @@
       response => {
         const msg = $_(
           Maybe.orSome(
-            `${i18nRoot}.messages.error`,
+            `${i18nRoot}.add.error`,
             Response.localizationKey(response)
           )
         );
@@ -56,17 +53,13 @@
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'ohje',
-          'success',
-          $_(`${i18nRoot}.create.success`)
-        );
+        flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.add.success`));
         dirty = false;
         overlay = false;
       }
     ),
     R.tap(enableOverlay),
-    api.postOhje(fetch)
+    api.postSivu(fetch)
   );
 
   const isValidForm = Validation.isValidForm(Schema.sivu);

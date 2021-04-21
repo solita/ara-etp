@@ -11,7 +11,5 @@ export const sivu = {
     validation.minLengthConstraint(2),
     validation.maxLengthConstraint(10000)
   ]
-  // published: [
-  //   validation.isRequired
-  // ]
+};
 };

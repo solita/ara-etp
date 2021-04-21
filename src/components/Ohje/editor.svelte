@@ -3,109 +3,148 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Kayttajat from '@Utility/kayttajat';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as api from './ohje-api';
-  import * as Parsers from '@Utility/parsers';
   import * as Validation from '@Utility/validation';
-  import { _, locale } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
+  import { flashMessageStore } from '@/stores';
+  import { push } from 'svelte-spa-router';
+
+  import * as api from './ohje-api';
+  import * as Schema from './schema';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Input from '@Component/Input/Input.svelte';
-  import Textarea from '@Component/Textarea/Textarea.svelte';
   import TextEditor from '@Component/text-editor/text-editor.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
 
-  export let params;
-
-  const emptySivu = { public: false, title: '', body: '' };
-  let checked = false;
-
   const i18nRoot = 'ohje.editor';
-  let sivu = emptySivu;
+
+  export let params;
 
   let dirty = false;
   let overlay = true;
   let enableOverlay = _ => {
     overlay = true;
   };
+  let sivu;
+  $: load(params.id);
 
-  const cancel = _ => {
-    sivu = emptySivu;
-    dirty = false;
-  };
-
-  $: console.log('params', params);
-
-  let resources = Maybe.None();
-  $: id = params.id;
-
-  $: {
+  const load = id => {
     overlay = true;
     Future.fork(
       response => {
         const msg = $_(
-          Maybe.orSome(
-            'viesti.all.messages.load-error',
-            Response.localizationKey(response)
-          )
+          Maybe.orSome('ohje.load-error', Response.localizationKey(response))
         );
 
-        flashMessageStore.add('viesti', 'error', msg);
+        flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       response => {
-        resources = Maybe.Some(response);
+        // resources = Maybe.Some(response);
+        sivu = response.sivu;
         overlay = false;
       },
-      Future.parallelObject(2, {
-        whoami: kayttajaApi.whoami,
+      Future.parallelObject(1, {
         sivu: api.getSivu(id)
       })
     );
-  }
+  };
+
+  const updateOhje = R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.add.error`,
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('ohje', 'error', msg);
+        overlay = false;
+      },
+      _ => {
+        flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.add.success`));
+        dirty = false;
+        overlay = false;
+        push(`/ohje/${params.id}`);
+      }
+    ),
+    R.tap(enableOverlay),
+    api.putSivu(fetch, params.id)
+  );
+
+  const isValidForm = Validation.isValidForm(Schema.sivu);
+
+  const deleteOhje = () => {
+    alert('delete ohje');
+  };
+
+  const submitOhje = event => {
+    if (isValidForm(sivu)) {
+      updateOhje(sivu);
+    } else {
+      flashMessageStore.add(
+        'ohje',
+        'error',
+        $_(`${i18nRoot}.validation-error`)
+      );
+      Validation.blurForm(event.target);
+    }
+  };
 </script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { sivu, whoami }}
+    {#if sivu}
       <div class="w-full flex flex-col">
         <DirtyConfirmation {dirty} />
         <div class="w-full flex flex-col">
-          <form>
+          <form
+            id="ohje"
+            on:submit|preventDefault={submitOhje(sivu)}
+            on:input={_ => {
+              dirty = true;
+            }}
+            on:change={_ => {
+              dirty = true;
+            }}>
             <div class="w-full py-4">
-              <!-- <Input
-            id={'ohje.title'}
-            name={'ohje.title'}
-            label={'TITLE'}
-            required={true}
-            bind:model={sivu}
-            lens={R.compose(R.lensProp('title'), arrayHeadLens)}
-            parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
-            i18n={$_} /> -->
+              <Input
+                id={'ohje.title'}
+                name={'ohje.title'}
+                label={$_('ohje.title')}
+                required={true}
+                bind:model={sivu}
+                lens={R.lensProp('title')}
+                parse={R.trim}
+                validators={Schema.sivu.title}
+                i18n={$_} />
             </div>
 
             <div class="w-full py-4">
-              <!-- <Textarea
-            id={'ketju.body'}
-            name={'ketju.body'}
-            label={$_('ohje.ketju.body')}
-            bind:model={sivu}
-            lens={R.lensProp('body')}
-            required={true}
-            parse={R.trim}
-            validators={}
-            i18n={$_} /> -->
-              <TextEditor />
+              <TextEditor
+                id={'ohje.body'}
+                name={'ohje.body'}
+                label={$_('ohje.body')}
+                bind:model={sivu}
+                lens={R.lensProp('body')}
+                required={true}
+                parse={R.trim}
+                validators={Schema.sivu.body}
+                i18n={$_} />
             </div>
 
             <div class="flex space-x-4 pt-8">
               <Checkbox
-                label={$_('ohje.julkaistu')}
-                bind:model={checked}
+                id={'ohje.published'}
+                name={'ohje.published'}
+                label={$_('ohje.published')}
+                bind:model={sivu}
+                lens={R.lensProp('published')}
+                required={true}
                 disabled={false} />
             </div>
             <div class="flex space-x-4 pt-8">
@@ -113,22 +152,16 @@
                 disabled={!dirty}
                 type={'submit'}
                 text={$_(`${i18nRoot}.submit`)} />
-              <Button
+              <!-- <Button
                 disabled={!dirty}
-                on:click={cancel}
-                text={$_(`${i18nRoot}.reset`)}
-                type={'reset'}
-                style={'secondary'} />
-              <Button
-                disabled={!dirty}
-                on:click={cancel}
+                on:click={deleteOhje}
                 text={$_(`${i18nRoot}.delete`)}
-                style={'error'} />
+                style={'error'} /> -->
             </div>
           </form>
         </div>
       </div>
-    {/each}
+    {/if}
   </div>
   <div slot="overlay-content">
     <Spinner />
