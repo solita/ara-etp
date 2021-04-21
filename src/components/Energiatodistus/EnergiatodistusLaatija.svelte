@@ -20,7 +20,7 @@
   )(energiatodistus);
 </script>
 
-<label>{$_('energiatodistus.laatija-fullname')}</label>
+<span>{$_('energiatodistus.laatija-fullname')}</span>
 <div class="flex">
   {#if Kayttajat.isPaakayttaja(whoami)}
     <Link text={laatijaFullName} href={`#/kayttaja/${laatijaId}`} />
