@@ -21,7 +21,7 @@
 
 <div class="flex">
   <div class="mr-4">
-  {Formats.formatTimeInstant(Maybe.orSome(
+  {Formats.formatTimeInstantMinutes(Maybe.orSome(
     toimenpide['create-time'],
     toimenpide['publish-time']))}
   </div>

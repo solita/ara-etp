@@ -1204,7 +1204,7 @@
         }
       },
       "toimenpide": {
-        "cancel-button": "Peruuta toimenpide",
+        "cancel-button": "Peruuta",
         "verified": {
           "title": "Merkitse katsotuksi",
           "description": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",
@@ -1214,8 +1214,8 @@
         "anomaly": {
           "title": "Ilmoita poikkeamasta",
           "description": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä.",
-          "document": "Poikkeama",
-          "publish-button": "Julkaise ilmoitus"
+          "document": "Poikkeamailmoitus",
+          "publish-button": "Lähetä ilmoitus"
         },
         "case": {
           "title": "Valvonnan aloitus",
