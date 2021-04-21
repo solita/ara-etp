@@ -27,6 +27,8 @@
 
   export let params;
 
+  const i18n = $_;
+
   const emptyLiite = _ => ({ nimi: '', url: '' });
 
   let overlay = true;
@@ -75,7 +77,7 @@
         flashMessageStore.add(
           'Energiatodistus',
           'error',
-          $_('energiatodistus.liitteet.messages.load-error')
+          i18n('energiatodistus.liitteet.messages.load-error')
         );
         overlay = false;
       },
@@ -93,7 +95,7 @@
   );
 
   const viewError = (functionName, response) => {
-    const msg = $_(
+    const msg = i18n(
       Maybe.orSome(
         `energiatodistus.liitteet.messages.${functionName}.error`,
         Response.localizationKey(response)
@@ -112,7 +114,7 @@
         flashMessageStore.add(
           'Energiatodistus',
           'success',
-          $_(`energiatodistus.liitteet.messages.${functionName}.success`)
+          i18n(`energiatodistus.liitteet.messages.${functionName}.success`)
         );
         load(params.version, params.id);
       }
@@ -140,7 +142,7 @@
       flashMessageStore.add(
         'Energiatodistus',
         'error',
-        $_('energiatodistus.liitteet.messages.add-link.validation')
+        i18n('energiatodistus.liitteet.messages.add-link.validation')
       );
     }
   };
@@ -183,7 +185,7 @@
         flashMessageStore.add(
           'Energiatodistus',
           'success',
-          $_(`energiatodistus.liitteet.messages.valvonta.success`)
+          i18n(`energiatodistus.liitteet.messages.valvonta.success`)
         );
       },
       valvontaApi.putValvonta(fetch, params.id, enabled)
@@ -204,7 +206,7 @@
 </style>
 
 <div class="w-full mt-3">
-  <H1 text={$_('energiatodistus.liitteet.title')} />
+  <H1 text={i18n('energiatodistus.liitteet.title')} />
 
   <Overlay {overlay}>
     <div slot="content" class="mb-10">
@@ -212,34 +214,34 @@
         <div class="mb-5" on:change={saveValvonta}>
           <Checkbox
             bind:model={enabled}
-            label={$_('energiatodistus.liitteet.enabled-checkbox-label')} />
+            label={i18n('energiatodistus.liitteet.enabled-checkbox-label')} />
         </div>
       {/if}
 
       {#if !enabled}
         <div class="mb-5 bg-warning flex p-5">
           <span class="font-icon mr-2">warning</span>
-          {$_('energiatodistus.liitteet.attachments-disabled')}
+          {i18n('energiatodistus.liitteet.attachments-disabled')}
         </div>
       {/if}
 
       {#if R.isEmpty(liitteet)}
-        <p>{$_('energiatodistus.liitteet.empty')}</p>
+        <p>{i18n('energiatodistus.liitteet.empty')}</p>
       {:else}
         <table class="etp-table">
           <thead class="etp-table--thead">
             <tr class="etp-table--tr">
               <th class="etp-table--th">
-                {$_('energiatodistus.liitteet.liite.createtime')}
+                {i18n('energiatodistus.liitteet.liite.createtime')}
               </th>
               <th class="etp-table--th">
-                {$_('energiatodistus.liitteet.liite.author')}
+                {i18n('energiatodistus.liitteet.liite.author')}
               </th>
               <th class="etp-table--th">
-                {$_('energiatodistus.liitteet.liite.nimi')}
+                {i18n('energiatodistus.liitteet.liite.nimi')}
               </th>
               <th class="etp-table--th">
-                {$_('energiatodistus.liitteet.liite.type')}
+                {i18n('energiatodistus.liitteet.liite.type')}
               </th>
               <th class="etp-table--th etp-table--th__center">
                 <span class="material-icons">delete_forever</span>
@@ -271,13 +273,13 @@
                 <td class="etp-table--td etp-table--td__center">
                   <Confirm
                     let:confirm
-                    confirmButtonLabel={$_('confirm.button.delete')}
-                    confirmMessage={$_('confirm.you-want-to-delete')}>
+                    confirmButtonLabel={i18n('confirm.button.delete')}
+                    confirmMessage={i18n('confirm.you-want-to-delete')}>
                     <span
                       class="material-icons delete-icon"
                       class:text-disabled={!isDeleteEnabled}
                       title={!isDeleteEnabled
-                        ? $_('energiatodistus.liitteet.poista-disabled')
+                        ? i18n('energiatodistus.liitteet.poista-disabled')
                         : ''}
                       on:click|stopPropagation={_ => {
                         if (isDeleteEnabled) confirm(deleteLiite, liite.id);
@@ -302,21 +304,21 @@
       <div class="lg:w-1/2 w-full mr-6 mb-6">
         <div class="flex space-x-1 text-primary">
           <span class="material-icons"> attachment </span>
-          <H2 text={$_('energiatodistus.liitteet.add-files.title')} />
+          <H2 text={i18n('energiatodistus.liitteet.add-files.title')} />
         </div>
         <FileDropArea bind:files multiple={true} />
       </div>
       <div class="lg:w-1/2 w-full flex flex-col">
         <div class="flex space-x-1 text-primary">
           <span class="material-icons"> link </span>
-          <H2 text={$_('energiatodistus.liitteet.add-link.title')} />
+          <H2 text={i18n('energiatodistus.liitteet.add-link.title')} />
         </div>
         <form on:submit|preventDefault={submit}>
           <div class="w-full py-4">
             <Input
               id={'link.url'}
               name={'link.url'}
-              label={$_('energiatodistus.liitteet.add-link.url')}
+              label={i18n('energiatodistus.liitteet.add-link.url')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['url'])}
               bind:currentValue={linkUrl}
@@ -324,13 +326,13 @@
               required={true}
               parse={R.compose(parsers.addDefaultProtocol, R.trim)}
               validators={liiteLinkAddSchema.url}
-              i18n={$_} />
+              {i18n} />
           </div>
           <div class="w-full py-4">
             <Input
               id={'link.nimi'}
               name={'link.nimi'}
-              label={$_('energiatodistus.liitteet.add-link.nimi')}
+              label={i18n('energiatodistus.liitteet.add-link.nimi')}
               bind:model={liiteLinkAdd}
               lens={R.lensPath(['nimi'])}
               bind:currentValue={linkNimi}
@@ -338,7 +340,7 @@
               required={true}
               parse={R.trim}
               validators={liiteLinkAddSchema.nimi}
-              i18n={$_} />
+              {i18n} />
           </div>
 
           <div class="flex space-x-4 pt-8">
