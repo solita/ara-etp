@@ -29,18 +29,18 @@
   let toimenpideTyyppi = Maybe.None();
 
   const openNewToimenpide = type => {
-    if (type == Toimenpiteet.type.audit.report) {
-      // toimenpiteet, jotka käsitellään omalla näytöllä
-      Router.push(
-        `#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${type}`
-      );
-    } else {
+    if (Toimenpiteet.isDialogType(type)) {
       // toimenpiteet, jotka käsitellään dialogi-näytöllä
       newToimenpide = Maybe.Some({
         'type-id': type,
         'deadline-date': Either.Right(Toimenpiteet.defaultDeadline(type)),
         document: Maybe.None()
       });
+    } else {
+      // toimenpiteet, jotka käsitellään omalla näytöllä
+      Router.push(
+        `#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${type}`
+      );
     }
   };
 

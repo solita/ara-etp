@@ -17,6 +17,10 @@ export const and = R.curry((firstFuture, secondFuture) =>
   Fluture.and(firstFuture)(secondFuture)
 );
 
+export const lastly = R.curry((cleanup, action) =>
+  Fluture.lastly(cleanup)(action)
+);
+
 export const chain = R.curry((mapper, future) => Fluture.chain(mapper)(future));
 
 export const chainRej = R.curry((mapper, future) =>

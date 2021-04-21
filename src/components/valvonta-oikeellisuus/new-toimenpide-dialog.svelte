@@ -18,7 +18,7 @@
   import { flashMessageStore } from '@/stores';
   import Select from '../Select/Select.svelte';
 
-  const i18nRoot = 'valvonta.oikeellisuus.new-toimenpide';
+  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   export let id;
   export let toimenpide;

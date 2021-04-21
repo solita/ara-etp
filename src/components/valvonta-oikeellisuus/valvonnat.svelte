@@ -157,7 +157,9 @@
                   on:click={toValvontaView(energiatodistus)}>
                   <!-- valvonta -->
                   <td class="etp-table--td">
-                    {Formats.formatTimeInstant(lastToimenpide['publish-time'])}
+                    {Formats.formatTimeInstant(Maybe.orSome(
+                      lastToimenpide['create-time'],
+                      lastToimenpide['publish-time']))}
                   </td>
                   <td class="etp-table--td">
                     {Locales.labelForId(

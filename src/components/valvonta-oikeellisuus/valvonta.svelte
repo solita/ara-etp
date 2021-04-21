@@ -127,7 +127,7 @@
       <H2 text="Toimenpiteet" />
 
       {#each R.reverse(toimenpiteet) as toimenpide}
-        <Toimenpide {toimenpidetyypit} {toimenpide} />
+        <Toimenpide {energiatodistus} {toimenpidetyypit} {toimenpide} />
       {/each}
       {#if R.isEmpty(toimenpiteet)}
         <p>Ei valvontatoimenpiteitä</p>
