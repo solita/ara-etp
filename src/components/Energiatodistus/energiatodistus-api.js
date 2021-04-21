@@ -309,7 +309,8 @@ const luokittelut = {
   ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
   postinumerot: Fetch.cached(fetch, '/postinumerot'),
   kielisyys: Fetch.cached(fetch, '/kielisyys'),
-  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet')
+  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet'),
+  patevyydet: Fetch.cached(fetch, '/patevyydet')
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({

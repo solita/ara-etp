@@ -112,7 +112,7 @@ export const patevyydet = R.compose(
   Future.cache,
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
-)('api/private/patevyydet/');
+)('api/private/patevyydet');
 
 export const uploadLaatijat = R.compose(
   Fetch.responseAsJson,
