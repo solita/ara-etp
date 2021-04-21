@@ -3,12 +3,15 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Validation from '@Utility/validation';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Parsers from '@Utility/parsers';
+  import { _, locale } from '@Language/i18n';
+  import { flashMessageStore } from '@/stores';
+
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as api from './ohje-api';
-  import * as Parsers from '@Utility/parsers';
-  import * as Validation from '@Utility/validation';
-  import { _, locale } from '@Language/i18n';
+  import * as Schema from './schema';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
@@ -18,8 +21,13 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
 
-  const emptySivu = { public: false, title: '', body: '' };
-  let checked = false;
+  const emptySivu = {
+    published: false,
+    title: '',
+    body: '',
+    'parent-id': Maybe.None(),
+    ordinal: 0
+  };
 
   const i18nRoot = 'ohje.editor';
   let sivu = emptySivu;
@@ -44,21 +52,37 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'error', msg);
+        flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       _ => {
         flashMessageStore.add(
-          'viesti',
+          'ohje',
           'success',
-          $_(`${i18nRoot}.messages.success`)
+          $_(`${i18nRoot}.create.success`)
         );
         dirty = false;
+        overlay = false;
       }
     ),
     R.tap(enableOverlay),
     api.postOhje(fetch)
   );
+
+  const isValidForm = Validation.isValidForm(Schema.sivu);
+
+  const submitOhje = event => {
+    if (isValidForm(sivu)) {
+      addOhje(sivu);
+    } else {
+      flashMessageStore.add(
+        'ohje',
+        'error',
+        $_(`${i18nRoot}.validation-error`)
+      );
+      Validation.blurForm(event.target);
+    }
+  };
 </script>
 
 <Overlay {overlay}>
@@ -66,19 +90,49 @@
     <div class="w-full flex flex-col">
       <DirtyConfirmation {dirty} />
       <div class="w-full flex flex-col">
-        <form>
+        <form
+          id="ohje"
+          on:submit|preventDefault={submitOhje}
+          on:input={_ => {
+            dirty = true;
+          }}
+          on:change={_ => {
+            dirty = true;
+          }}>
           <div class="w-full py-4">
-            <Input label={$_('ohje.title')} required={true} />
+            <Input
+              id={'ohje.title'}
+              name={'ohje.title'}
+              label={$_('ohje.title')}
+              required={true}
+              bind:model={sivu}
+              lens={R.lensProp('title')}
+              parse={R.trim}
+              validators={Schema.sivu.title}
+              i18n={$_} />
           </div>
 
           <div class="w-full py-4">
-            <TextEditor label={$_('ohje.body')} required={true} />
+            <TextEditor
+              id={'ohje.body'}
+              name={'ohje.body'}
+              label={$_('ohje.body')}
+              bind:model={sivu}
+              lens={R.lensProp('body')}
+              required={true}
+              parse={R.trim}
+              validators={Schema.sivu.body}
+              i18n={$_} />
           </div>
 
           <div class="flex space-x-4 pt-8">
             <Checkbox
-              label={$_('ohje.julkaistu')}
-              bind:model={checked}
+              id={'ohje.published'}
+              name={'ohje.published'}
+              label={$_('ohje.published')}
+              bind:model={sivu}
+              lens={R.lensProp('published')}
+              required={true}
               disabled={false} />
           </div>
           <div class="flex space-x-4 pt-8">
