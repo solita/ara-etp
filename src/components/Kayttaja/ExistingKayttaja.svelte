@@ -20,6 +20,8 @@
 
   export let params;
 
+  const i18n = $_;
+
   let resources = Maybe.None();
   let overlay = true;
 
@@ -29,7 +31,7 @@
 
   const errorMessage = (type, response) =>
     Locales.uniqueViolationMessage(
-      $_,
+      i18n,
       response,
       Maybe.orSome(
         `${type}.messages.save-error`,
@@ -44,14 +46,14 @@
         flashMessageStore.add(
           'Kayttaja',
           'error',
-          $_(errorMessage(type, response))
+          i18n(errorMessage(type, response))
         );
       },
       _ => {
         flashMessageStore.add(
           'Kayttaja',
           'success',
-          $_(`${type}.messages.save-success`)
+          i18n(`${type}.messages.save-success`)
         );
         if (R.equals('kayttaja', type)) {
           idTranslateStore.updateKayttaja(updatedModel);
@@ -77,8 +79,8 @@
   $: Future.fork(
     response => {
       const msg = Response.notFound(response)
-        ? $_('kayttaja.messages.not-found')
-        : $_(
+        ? i18n('kayttaja.messages.not-found')
+        : i18n(
             Maybe.orSome(
               'kayttaja.messages.load-error',
               Response.localizationKey(response)
