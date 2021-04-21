@@ -23,6 +23,7 @@
   import Manager from './manager.svelte';
   import Toimenpide from './toimenpide.svelte';
 
+  const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.existing';
 
   export let params;
@@ -37,8 +38,8 @@
       response => {
         overlay = false;
         const msg = Response.notFound(response)
-          ? $_(`${i18nRoot}.messages.not-found`)
-          : $_(
+          ? i18n(`${i18nRoot}.messages.not-found`)
+          : i18n(
               Maybe.orSome(
                 `${i18nRoot}.messages.load-error`,
                 Response.localizationKey(response)
@@ -71,7 +72,7 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.update-error`,
             Response.localizationKey(response)
@@ -84,7 +85,7 @@
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          $_(`${i18nRoot}.messages.update-success`)
+          i18n(`${i18nRoot}.messages.update-success`)
         );
         load(params);
       },

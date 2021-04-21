@@ -18,6 +18,7 @@
   import { flashMessageStore } from '@/stores';
   import Select from '../Select/Select.svelte';
 
+  const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   export let id;
@@ -27,7 +28,7 @@
   const publish = toimenpide => {
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.error`,
             Response.localizationKey(response)
@@ -39,7 +40,7 @@
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          $_(`${i18nRoot}.messages.success`)
+          i18n(`${i18nRoot}.messages.success`)
         );
         reload();
       },
@@ -47,7 +48,7 @@
     );
   };
 
-  const text = R.compose($_, Toimenpiteet.i18nKey);
+  const text = R.compose(i18n, Toimenpiteet.i18nKey);
 </script>
 
 <style type="text/postcss">
@@ -87,7 +88,7 @@
           format={Maybe.fold('', Formats.formatDateInstant)}
           parse={Parsers.optionalParser(Parsers.parseDate)}
           transform={EM.fromNull}
-          i18n={$_} />
+          {i18n} />
       </div>
     {/if}
 
@@ -115,14 +116,14 @@
           required={false}
           format={Maybe.orSome('')}
           parse={Parsers.optionalString}
-          i18n={$_} />
+          {i18n} />
       </div>
     {/if}
 
     <div class="buttons">
       <div class="mr-5 mt-5">
         <Button
-          text={$_(
+          text={i18n(
             `${i18nRoot}.${Toimenpiteet.typeKey(
               toimenpide['type-id']
             )}.publish-button`
@@ -132,7 +133,7 @@
 
       <div class="mt-5">
         <Button
-          text={$_(i18nRoot + '.cancel-button')}
+          text={i18n(i18nRoot + '.cancel-button')}
           style={'secondary'}
           on:click={reload} />
       </div>
