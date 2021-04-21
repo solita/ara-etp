@@ -14,24 +14,21 @@
   import Link from '@Component/Link/Link';
 
   export let params;
-  $: console.log('params', params);
+
+  $: id = params.id;
 
   let overlay = true;
   let resources = Maybe.None();
-  $: id = params.id;
 
   $: {
     overlay = true;
     Future.fork(
       response => {
         const msg = $_(
-          Maybe.orSome(
-            'viesti.all.messages.load-error',
-            Response.localizationKey(response)
-          )
+          Maybe.orSome('ohje.load-error', Response.localizationKey(response))
         );
 
-        flashMessageStore.add('viesti', 'error', msg);
+        flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       response => {
@@ -54,9 +51,18 @@
     <div class="w-full flex flex-col">
       {#each Maybe.toArray(resources) as { sivu, whoami }}
         <div class="flex justify-between items-start">
-          <H1 text={sivu.title} />
+          <div class="flex items-start justify-start">
+            <H1 text={sivu.title} />
+            {#if !sivu.published}
+              <span
+                class="material-icons select-none ml-1 text-error"
+                title={$_(`ohje.unpublished`)}>
+                visibility_off
+              </span>
+            {/if}
+          </div>
           {#if Kayttajat.isPaakayttaja(whoami)}
-            <div class="mb-auto">
+            <div class="mb-auto font-semibold">
               <Link
                 href={`/#/ohje/${sivu.id}/edit`}
                 icon={Maybe.Some('edit')}
