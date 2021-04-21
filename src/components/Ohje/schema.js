@@ -12,4 +12,3 @@ export const sivu = {
     validation.maxLengthConstraint(10000)
   ]
 };
-};
