@@ -89,14 +89,6 @@ const stringContainsNo = key => ({
   type: OPERATOR_TYPES.STRING
 });
 
-const stringEquals = key => ({
-  operation: eq,
-  key,
-  argumentNumber: 1,
-  defaultValues: () => [''],
-  type: OPERATOR_TYPES.STRING
-});
-
 const versioEquals = key => ({
   operation: {
     ...eq,
@@ -274,7 +266,7 @@ const dateComparisons = [
   dateLessThanOrEqual
 ];
 
-const stringComparisons = [stringEquals, stringContains, stringContainsNo];
+const stringComparisons = [stringContains, stringContainsNo];
 
 const eLuokkaComparisons = [eLuokkaSome];
 
