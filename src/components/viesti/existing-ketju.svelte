@@ -25,6 +25,7 @@
   import SenderRecipients from './sender-recipients.svelte';
 
   const i18nRoot = 'viesti.ketju.existing';
+  const i18n = $_;
 
   export let params;
 
@@ -38,7 +39,7 @@
   const load = R.compose(
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Response.notFound(response)
             ? `${i18nRoot}.messages.not-found`
             : Maybe.orSome(
@@ -76,7 +77,7 @@
   const addNewViesti = R.compose(
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.error`,
             Response.localizationKey(response)
@@ -89,7 +90,7 @@
         flashMessageStore.add(
           'viesti',
           'success',
-          $_(`${i18nRoot}.messages.success`)
+          i18n(`${i18nRoot}.messages.success`)
         );
         load(params.id);
         newViesti = '';
@@ -114,7 +115,7 @@
   const updateKetju = R.compose(
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.error`,
             Response.localizationKey(response)
@@ -127,7 +128,7 @@
         flashMessageStore.add(
           'viesti',
           'success',
-          $_(`${i18nRoot}.messages.update-success`)
+          i18n(`${i18nRoot}.messages.update-success`)
         );
         load(params.id);
       }
@@ -145,7 +146,7 @@
       flashMessageStore.add(
         'viesti',
         'error',
-        $_(`${i18nRoot}.messages.validation-error`)
+        i18n(`${i18nRoot}.messages.validation-error`)
       );
       Validation.blurForm(event.target);
     }
@@ -154,7 +155,7 @@
   const isSenderSelf = (viesti, whoami) =>
     R.propEq('id', R.path(['from', 'id'], viesti), whoami);
 
-  $: formatSender = Viestit.formatSender($_);
+  $: formatSender = Viestit.formatSender(i18n);
 </script>
 
 <style>
@@ -178,7 +179,7 @@
       <DirtyConfirmation {dirty} />
       <div class="flex">
         <Link
-          text={$_(i18nRoot + '.back')}
+          text={i18n(i18nRoot + '.back')}
           href="#/viesti/all"
           icon={Maybe.Some('arrow_back')} />
       </div>
@@ -201,7 +202,7 @@
           <div class="flex items-end space-x-4 px-2">
             <div class="flex flex-col">
               <label for="handler" class="text-secondary">
-                {$_(i18nRoot + '.handler')}
+                {i18n(i18nRoot + '.handler')}
               </label>
               {#if R.prop('kasittelija-id', ketju)}
                 <span name="handler" class="whitespace-no-wrap">
@@ -213,7 +214,7 @@
                 </span>
               {:else}
                 <span name="handler" class="text-error whitespace-no-wrap">
-                  {$_(i18nRoot + '.no-handler')}
+                  {i18n(i18nRoot + '.no-handler')}
                 </span>
               {/if}
             </div>
@@ -226,7 +227,7 @@
               {:else}
                 <span class="material-icons"> check_box_outline_blank </span>
               {/if}
-              <span>{$_(i18nRoot + '.handled')}</span>
+              <span>{i18n(i18nRoot + '.handled')}</span>
             </button>
           </div>
         {/if}
@@ -236,7 +237,7 @@
         <div class="font-bold my-4 mr-auto flex flex-shrink">
           <Link
             icon={Maybe.Some('add_circle_outline')}
-            text={$_(i18nRoot + '.reply-in-new')}
+            text={i18n(i18nRoot + '.reply-in-new')}
             href="#/viesti/new?subject={ketju.subject}" />
         </div>
       {/if}
@@ -255,14 +256,14 @@
             <Textarea
               id={'ketju.new-viesti'}
               name={'ketju.new-viesti'}
-              label={$_(i18nRoot + '.new-viesti')}
+              label={i18n(i18nRoot + '.new-viesti')}
               bind:model={newViesti}
               lens={R.lens(R.identity, R.identity)}
               required={true}
               parse={R.trim}
               compact={false}
               validators={Schema.ketju.body}
-              i18n={$_} />
+              {i18n} />
           </div>
 
           <div class="w-full flex">
@@ -271,7 +272,7 @@
                 prefix={'viesti'}
                 disabled={!dirty}
                 type={'submit'}
-                text={$_(i18nRoot + '.submit')} />
+                text={i18n(i18nRoot + '.submit')} />
             {/if}
           </div>
         </form>
