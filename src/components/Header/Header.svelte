@@ -8,9 +8,12 @@
   import LanguageSelect from './language-select';
 
   export let whoami = Maybe.None();
+  export let ohjeSivut = Maybe.None();
 
-  let showDropdown = false;
+  let showNameDropdown = false;
+  let showOhjeDropdown = false;
   let nameNode;
+  let ohjeNode;
 
   const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;
 
@@ -19,6 +22,9 @@
     Maybe.orSome([]),
     R.map(Navigation.roleBasedHeaderMenuLinks($_))
   )(whoami);
+
+  const hasNoParent = s => R.prop('parent-id', s).isNone();
+  let ohjeNav = R.filter(hasNoParent)(ohjeSivut);
 </script>
 
 <style type="text/postcss">
@@ -27,7 +33,7 @@
   }
 
   .listlink {
-    @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
+    @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer truncate;
   }
 
   .listlink:not(:last-child) {
@@ -54,7 +60,15 @@
         event.target !== nameNode &&
         event.target.parentElement !== nameNode
       ) {
-        showDropdown = false;
+        showNameDropdown = false;
+      }
+    }
+    if (!R.isNil(ohjeNode)) {
+      if (
+        event.target !== ohjeNode &&
+        event.target.parentElement !== ohjeNode
+      ) {
+        showOhjeDropdown = false;
       }
     }
   }} />
@@ -67,26 +81,51 @@
     <LanguageSelect />
   </div>
 
-  {#each whoami.toArray() as user}
-    <div class="flex flex-row justify-between">
-      <div
-        bind:this={nameNode}
-        class="relative cursor-pointer"
-        on:click={() => (showDropdown = !showDropdown)}>
-        <span>
-          {fullName(user)}
-        </span>
-        <span class="material-icons absolute">keyboard_arrow_down</span>
-        {#if showDropdown}
-          <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
-            {#each links as link}
-              <a class="listlink w-full" href={link.href}>{link.text}</a>
-            {/each}
-          </div>
-        {/if}
+  <div class="dropdowns flex space-x-4">
+    {#if !R.isEmpty(ohjeNav)}
+      <div class="flex flex-row justify-between">
+        <div
+          bind:this={ohjeNode}
+          class="relative cursor-pointer"
+          on:click={() => (showOhjeDropdown = !showOhjeDropdown)}>
+          <span> {$_('navigation.ohjeet')} </span>
+          <span class="material-icons my-auto">keyboard_arrow_down</span>
+          {#if showOhjeDropdown}
+            <div
+              class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
+              {#each ohjeNav as sivu}
+                <a class="listlink w-full" href={`/#/ohje/${sivu.id}`}>
+                  {sivu.title}
+                </a>
+              {/each}
+            </div>
+          {/if}
+        </div>
       </div>
-    </div>
-  {/each}
+    {/if}
+
+    {#each whoami.toArray() as user}
+      <div class="flex flex-row justify-between">
+        <div
+          bind:this={nameNode}
+          class="relative cursor-pointer"
+          on:click={() => (showNameDropdown = !showNameDropdown)}>
+          <span>
+            {fullName(user)}
+          </span>
+          <span class="material-icons my-auto">keyboard_arrow_down</span>
+          {#if showNameDropdown}
+            <div
+              class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
+              {#each links as link}
+                <a class="listlink w-full" href={link.href}>{link.text}</a>
+              {/each}
+            </div>
+          {/if}
+        </div>
+      </div>
+    {/each}
+  </div>
 
   {#if whoami.isNone()}
     <div class="logout px-2">

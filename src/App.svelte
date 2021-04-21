@@ -12,6 +12,7 @@
   import TableStyles from '@/TableStyles';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
+  import * as ohjeApi from '@Component/ohje/ohje-api';
   import * as Future from '@Utility/future-utils';
   import Body from './Body.svelte';
 
@@ -30,7 +31,8 @@
     Future.parallelObject(3, {
       whoami: kayttajaApi.whoami,
       version: versionApi.getVersion,
-      config: versionApi.getConfig
+      config: versionApi.getConfig,
+      ohjeSivut: ohjeApi.getSivut
     })
   );
 </script>
@@ -71,10 +73,10 @@
     {/if}
   {/each}
 
-  {#each Maybe.toArray(resources) as { whoami, config, version }}
+  {#each Maybe.toArray(resources) as { whoami, config, version, ohjeSivut }}
     <div class="headercontainer">
       <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
-        <Header whoami={Maybe.Some(whoami)} />
+        <Header whoami={Maybe.Some(whoami)} {ohjeSivut} />
       </div>
     </div>
 
