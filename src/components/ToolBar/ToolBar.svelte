@@ -23,6 +23,8 @@
   export let dirty;
   export let whoami;
 
+  const i18n = $_;
+
   const version = energiatodistus.versio;
   const id = Maybe.fromNull(energiatodistus.id);
 
@@ -76,8 +78,8 @@
     Future.fork(
       response => {
         const msg = Response.notFound(response)
-          ? $_('energiatodistus.messages.not-found')
-          : $_(
+          ? i18n('energiatodistus.messages.not-found')
+          : i18n(
               Maybe.orSome(
                 `energiatodistus.messages.${name}-error`,
                 Response.localizationKey(response)
@@ -91,7 +93,7 @@
         flashMessageStore.add(
           'Energiatodistus',
           'success',
-          $_(`energiatodistus.messages.${name}-success`)
+          i18n(`energiatodistus.messages.${name}-success`)
         );
       },
       operation(fetch, version, Maybe.get(id))
@@ -222,19 +224,19 @@
     <button disabled={!dirty} on:click={save(noop)}>
       <span class="description">
         {id.isSome()
-          ? $_('energiatodistus.toolbar.save')
-          : $_('energiatodistus.toolbar.new')}
+          ? i18n('energiatodistus.toolbar.save')
+          : i18n('energiatodistus.toolbar.new')}
       </span>
       <span class="text-2xl font-icon">save</span>
     </button>
     <button disabled={!dirty} on:click={cancel}>
-      <span class="description">{$_('energiatodistus.toolbar.undo')}</span>
+      <span class="description">{i18n('energiatodistus.toolbar.undo')}</span>
       <span class="text-2xl font-icon">undo</span>
     </button>
   {/if}
   {#if R.includes(Toolbar.module.sign, fields)}
     <button data-cy="allekirjoita-button" on:click={saveComplete(openSigning)}>
-      <div class="description">{$_('energiatodistus.toolbar.sign')}</div>
+      <div class="description">{i18n('energiatodistus.toolbar.sign')}</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
         create
       </span>
@@ -245,7 +247,7 @@
       on:click={save(_ =>
         push('/energiatodistus/' + version + '/new?copy-from-id=' + id.some())
       )}>
-      <span class="description">{$_('energiatodistus.toolbar.copy')}</span>
+      <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
       <span class="text-2xl font-icon">file_copy</span>
     </button>
   {/if}
@@ -254,7 +256,7 @@
       {#each pdfUrl.toArray() as { href, lang }}
         <button on:click={save(() => openUrl(href))}>
           <span class="block description"
-            >{$_('energiatodistus.toolbar.preview')}
+            >{i18n('energiatodistus.toolbar.preview')}
             {R.toUpper(lang)}</span>
           <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
@@ -266,7 +268,7 @@
       {#each pdfUrl.toArray() as { href, lang }}
         <button on:click={() => openUrl(href)}>
           <span class="block description"
-            >{$_('energiatodistus.toolbar.download')}
+            >{i18n('energiatodistus.toolbar.download')}
             {R.toUpper(lang)}</span>
           <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
@@ -276,10 +278,11 @@
   {#if R.includes(Toolbar.module.discard, fields)}
     <Confirm
       let:confirm
-      confirmButtonLabel={$_('confirm.button.discard')}
-      confirmMessage={$_('confirm.you-want-to-discard')}>
+      confirmButtonLabel={i18n('confirm.button.discard')}
+      confirmMessage={i18n('confirm.you-want-to-discard')}>
       <button on:click={() => confirm(discardEnergiatodistus)}>
-        <span class="description">{$_('energiatodistus.toolbar.discard')}</span>
+        <span class="description"
+          >{i18n('energiatodistus.toolbar.discard')}</span>
         <span class="text-2xl font-icon">block</span>
       </button>
     </Confirm>
@@ -287,11 +290,11 @@
   {#if R.includes(Toolbar.module.undodiscard, fields)}
     <Confirm
       let:confirm
-      confirmButtonLabel={$_('confirm.button.undodiscard')}
-      confirmMessage={$_('confirm.you-want-to-undodiscard')}>
+      confirmButtonLabel={i18n('confirm.button.undodiscard')}
+      confirmMessage={i18n('confirm.you-want-to-undodiscard')}>
       <button on:click={() => confirm(undoDiscardEnergiatodistus)}>
         <span class="description"
-          >{$_('energiatodistus.toolbar.undodiscard')}</span>
+          >{i18n('energiatodistus.toolbar.undodiscard')}</span>
         <span class="text-2xl font-icon">undo</span>
       </button>
     </Confirm>
@@ -299,10 +302,11 @@
   {#if R.includes(Toolbar.module.delete, fields) && Maybe.isSome(id)}
     <Confirm
       let:confirm
-      confirmButtonLabel={$_('confirm.button.delete')}
-      confirmMessage={$_('confirm.you-want-to-delete')}>
+      confirmButtonLabel={i18n('confirm.button.delete')}
+      confirmMessage={i18n('confirm.you-want-to-delete')}>
       <button on:click={() => confirm(deleteEnergiatodistus)}>
-        <span class="description">{$_('energiatodistus.toolbar.delete')}</span>
+        <span class="description"
+          >{i18n('energiatodistus.toolbar.delete')}</span>
         <span class="text-2xl font-icon">delete_forever</span>
       </button>
     </Confirm>
@@ -310,11 +314,11 @@
   {#each eTehokkuus.toArray() as e}
     <div class="border-2 border-dark py-2 bg-secondary">
       <div class="font-bold text-center text-sm text-light pb-1">
-        {$_('energiatodistus.tulokset.e-luku')}
+        {i18n('energiatodistus.tulokset.e-luku')}
         {e['e-luku']}
       </div>
       <div class="font-bold text-center text-sm text-light pt-1">
-        {$_('energiatodistus.tulokset.e-luokka')}
+        {i18n('energiatodistus.tulokset.e-luokka')}
         {e['e-luokka']}<sub>{energiatodistus.versio}</sub>
       </div>
     </div>
