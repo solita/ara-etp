@@ -23,6 +23,8 @@
 
   export let params;
 
+  const i18n = $_;
+
   let overlay = false;
   let laatijat = [];
   let hasModifyPermission = false;
@@ -34,7 +36,7 @@
         flashMessageStore.add(
           'Yritys',
           'error',
-          $_(
+          i18n(
             Maybe.orSome(
               'yritys.messages.load-error',
               Response.localizationKey(response)
@@ -64,14 +66,14 @@
         flashMessageStore.add(
           'Yritys',
           'error',
-          $_('laatija.yritykset.error.detach-failed')
+          i18n('laatija.yritykset.error.detach-failed')
         ),
       _ => {
         load(params.id);
         flashMessageStore.add(
           'Yritys',
           'success',
-          $_('laatija.yritykset.success.detach')
+          i18n('laatija.yritykset.success.detach')
         );
       },
       laatijaApi.deleteLaatijaYritys(fetch, id, params.id)
@@ -84,14 +86,14 @@
         flashMessageStore.add(
           'Yritys',
           'error',
-          $_('yritys.laatijat.accept.error')
+          i18n('yritys.laatijat.accept.error')
         ),
       _ => {
         load(params.id);
         flashMessageStore.add(
           'Yritys',
           'success',
-          $_('yritys.laatijat.accept.success')
+          i18n('yritys.laatijat.accept.success')
         );
       },
       api.putAcceptedLaatijaYritys(fetch, id, params.id)
@@ -109,22 +111,22 @@
     <H1 text="Yrityksen laatijat" />
 
     {#if R.isEmpty(laatijat)}
-      {$_('yritys.laatijat.empty')}
+      {i18n('yritys.laatijat.empty')}
     {:else}
       <table class="etp-table">
         <thead class="etp-table--thead">
           <tr class="etp-table--tr etp-table--tr__light">
             <th class="etp-table--th">
-              {$_('yritys.laatijat.table.laatija')}
+              {i18n('yritys.laatijat.table.laatija')}
             </th>
             <th class="etp-table--th">
-              {$_('yritys.laatijat.table.liitetty')}
+              {i18n('yritys.laatijat.table.liitetty')}
             </th>
             <th class="etp-table--th">
-              {$_('yritys.laatijat.table.hyvaksyja')}
+              {i18n('yritys.laatijat.table.hyvaksyja')}
             </th>
             <th class="etp-table--th">
-              {$_('yritys.laatijat.table.delete')}
+              {i18n('yritys.laatijat.table.delete')}
             </th>
           </tr>
         </thead>
@@ -139,10 +141,10 @@
                 {#if Tila.isProposal(laatija) && hasModifyPermission}
                   <Confirm
                     let:confirm
-                    confirmButtonLabel={$_(
+                    confirmButtonLabel={i18n(
                       'yritys.laatijat.accept.confirm-button'
                     )}
-                    confirmMessage={$_(
+                    confirmMessage={i18n(
                       'yritys.laatijat.accept.confirm-message'
                     )}>
                     <div
@@ -151,11 +153,11 @@
                         confirm(accept, laatija.id)}>
                       <Link
                         icon={Maybe.Some('person_add')}
-                        text={$_('yritys.laatijat.accept.link')} />
+                        text={i18n('yritys.laatijat.accept.link')} />
                     </div>
                   </Confirm>
                 {:else if Tila.isProposal(laatija)}
-                  {$_('yritys.laatijat.table.proposal')}
+                  {i18n('yritys.laatijat.table.proposal')}
                 {:else}
                   {Formats.formatTimeInstant(laatija.modifytime)}
                 {/if}
@@ -168,15 +170,17 @@
               <td class="etp-table--td">
                 <Confirm
                   let:confirm
-                  confirmButtonLabel={$_(
+                  confirmButtonLabel={i18n(
                     'yritys.laatijat.delete.confirm-button'
                   )}
-                  confirmMessage={$_('yritys.laatijat.delete.confirm-message')}>
+                  confirmMessage={i18n(
+                    'yritys.laatijat.delete.confirm-message'
+                  )}>
                   <span
                     class="material-icons cursor-pointer delete-icon"
                     title={hasModifyPermission
                       ? null
-                      : $_('yritys.messages.missing-permission')}
+                      : i18n('yritys.messages.missing-permission')}
                     class:text-disabled={!hasModifyPermission}
                     on:click|stopPropagation={_ =>
                       hasModifyPermission && confirm(detach, laatija.id)}>

@@ -13,6 +13,8 @@
   import H1 from '@Component/H/H1.svelte';
   import Address from './address';
 
+  const i18n = $_;
+
   let yritykset = [];
   let overlay = true;
 
@@ -21,7 +23,7 @@
       flashMessageStore.add(
         'Yritys',
         'error',
-        $_('laatija.yritykset.error.detach-failed')
+        i18n('laatija.yritykset.error.detach-failed')
       );
       overlay = false;
     },
@@ -38,13 +40,13 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={$_('yritykset.title')} />
+    <H1 text={i18n('yritykset.title')} />
     <table class="etp-table">
       <thead class="etp-table--thead">
         <tr class="etp-table--tr">
-          <th class="etp-table--th">{$_('yritys.nimi')}</th>
-          <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
-          <th class="etp-table--th">{$_('yritys.laskutusosoite')}</th>
+          <th class="etp-table--th">{i18n('yritys.nimi')}</th>
+          <th class="etp-table--th">{i18n('yritys.y-tunnus')}</th>
+          <th class="etp-table--th">{i18n('yritys.laskutusosoite')}</th>
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
