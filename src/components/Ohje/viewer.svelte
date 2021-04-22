@@ -12,6 +12,8 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H1 from '@Component/H/H1';
   import Link from '@Component/Link/Link';
+  import Navigation from './navigation';
+  import DOMPurify from 'dompurify';
 
   export let params;
 
@@ -47,8 +49,11 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3 flex">
-    <div class="w-full flex flex-col">
+  <div slot="content" class="w-full mt-3 flex space-x-4">
+    <div class="w-2/6 max-w-xs">
+      <Navigation />
+    </div>
+    <div class="w-4/6 flex-grow flex flex-col">
       {#each Maybe.toArray(resources) as { sivu, whoami }}
         <div class="flex justify-between items-start">
           <div class="flex items-start justify-start">
@@ -56,7 +61,7 @@
             {#if !sivu.published}
               <span
                 class="material-icons select-none ml-1 text-error"
-                title={$_(`ohje.unpublished`)}>
+                title={$_('ohje.viewer.unpublished')}>
                 visibility_off
               </span>
             {/if}
@@ -66,11 +71,13 @@
               <Link
                 href={`/#/ohje/${sivu.id}/edit`}
                 icon={Maybe.Some('edit')}
-                text={'Edit_Page'} />
+                text={$_('ohje.viewer.edit')} />
             </div>
           {/if}
         </div>
-        <p class="whitespace-pre-wrap">{sivu.body}</p>
+        <p class="whitespace-pre-wrap">
+          {@html DOMPurify.sanitize(sivu.body)}
+        </p>
       {/each}
     </div>
   </div>

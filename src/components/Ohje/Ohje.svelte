@@ -4,7 +4,6 @@
   import OhjeViewer from './viewer';
   import OhjeEditor from './editor';
   import OhjeCreator from './creator';
-  import Navigation from './navigation';
   import NotFound from '@Component/NotFound/NotFound';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
@@ -20,13 +19,7 @@
 </script>
 
 <svelte:window on:hashchange={_ => flashMessageStore.flush('ohje')} />
-<div class="flex space-x-4">
-  <div class="w-2/6 max-w-xs">
-    <Navigation />
-  </div>
-  <div class="w-4/6 flex-grow">
-    <Router {routes} {prefix} />
-  </div>
-</div>
+
+<Router {routes} {prefix} />
 
 <FlashMessage module={'ohje'} />

@@ -20,11 +20,17 @@
   let whoami = Maybe.None();
   let sivutTree = [];
 
-  $: console.log(whoami);
+  const hasParent = s => R.prop('parent-id', s).isSome();
+  const hasNoParent = s => R.prop('parent-id', s).isNone();
+  const sortByOrdinalTitle = R.sortWith([
+    R.ascend(R.prop('ordinal')),
+    R.ascend(R.compose(R.toLower, R.prop('title')))
+  ]);
 
   const nestChildren = R.curry((data, obj) =>
     R.compose(
       R.assoc('children', R.__, obj),
+      sortByOrdinalTitle,
       R.map(nestChildren(data)),
       R.filter(
         R.compose(Maybe.exists(R.equals(obj['id'])), R.prop('parent-id'))
@@ -33,9 +39,11 @@
   );
 
   const toTree = data =>
-    R.compose(R.map(nestChildren(data)), R.filter(hasNoParent))(data);
-  const hasParent = s => R.prop('parent-id', s).isSome();
-  const hasNoParent = s => R.prop('parent-id', s).isNone();
+    R.compose(
+      R.map(nestChildren(data)),
+      sortByOrdinalTitle,
+      R.filter(hasNoParent)
+    )(data);
 
   const load = () => {
     overlay = true;
@@ -62,37 +70,31 @@
       })
     );
   };
-  load();
+  $: load();
 </script>
 
-<Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
-    <nav class="w-full flex flex-col">
-      {#each sivutTree as sivu}
-        <!-- {#if !(Kayttajat.isPaakayttaja(whoami) && sivu.published)} -->
-        <NavLink {sivu} activeSivuId={id} />
-        <!-- {/if} -->
-      {/each}
-      {#each Maybe.toArray(whoami) as whoami}
-        {#if Kayttajat.isPaakayttaja(whoami)}
-          <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
-            <TextButton
-              on:click={() => {
-                alert('Order Links Button');
-              }}
-              icon="swap_vert"
-              text={'Jarjestä_sivut'} />
-
-            <Link
-              href="/#/ohje/new"
-              icon={Maybe.Some('add_circle_outline')}
-              text={'Uusi_sivu'} />
-          </div>
+<nav class="w-full flex flex-col">
+  {#each sivutTree as sivu}
+    <!-- {#if !(Kayttajat.isPaakayttaja(whoami) && sivu.published)} -->
+    <NavLink {sivu} activeSivuId={id} />
+    <!-- {/if} -->
+  {/each}
+  {#each Maybe.toArray(whoami) as whoami}
+    {#if Kayttajat.isPaakayttaja(whoami)}
+      <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
+        <TextButton
+          on:click={() => {
+            alert('Order Links Button');
+          }}
+          icon="swap_vert"
+          text={$_('ohje.navigation.sort')} />
+        {#if id !== 'new'}
+          <Link
+            href="/#/ohje/new"
+            icon={Maybe.Some('add_circle_outline')}
+            text={$_('ohje.navigation.create')} />
         {/if}
-      {/each}
-    </nav>
-  </div>
-  <div slot="overlay-content">
-    <Spinner />
-  </div>
-</Overlay>
+      </div>
+    {/if}
+  {/each}
+</nav>

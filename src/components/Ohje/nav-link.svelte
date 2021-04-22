@@ -25,7 +25,7 @@
     @apply font-bold;
   }
   .material-icons {
-    @apply select-none px-1;
+    @apply select-none;
   }
   .root .text-error {
     @apply text-light;
@@ -55,7 +55,7 @@
         {/if}
       </button>
     {:else}
-      <span class="material-icons text-transparent">circle</span>
+      <span class="material-icons text-transparent p-2">circle</span>
     {/if}
     <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
       <span class="title"> {sivu.title} </span>

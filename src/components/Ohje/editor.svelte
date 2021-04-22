@@ -18,6 +18,7 @@
   import TextEditor from '@Component/text-editor/text-editor.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
+  import Navigation from './navigation';
 
   const i18nRoot = 'ohje.editor';
 
@@ -36,20 +37,20 @@
     Future.fork(
       response => {
         const msg = $_(
-          Maybe.orSome('ohje.load-error', Response.localizationKey(response))
+          Maybe.orSome(
+            `${i18nRoot}.load-error`,
+            Response.localizationKey(response)
+          )
         );
 
         flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       response => {
-        // resources = Maybe.Some(response);
-        sivu = response.sivu;
+        sivu = response;
         overlay = false;
       },
-      Future.parallelObject(1, {
-        sivu: api.getSivu(id)
-      })
+      api.getSivu(id)
     );
   };
 
@@ -57,16 +58,13 @@
     Future.fork(
       response => {
         const msg = $_(
-          Maybe.orSome(
-            `${i18nRoot}.add.error`,
-            Response.localizationKey(response)
-          )
+          Maybe.orSome(`${i18nRoot}.error`, Response.localizationKey(response))
         );
         flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.add.success`));
+        flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.success`));
         dirty = false;
         overlay = false;
         push(`/ohje/${params.id}`);
@@ -97,71 +95,76 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
-    {#if sivu}
-      <div class="w-full flex flex-col">
-        <DirtyConfirmation {dirty} />
+  <div slot="content" class="w-full mt-3 flex space-x-4">
+    <div class="w-2/6 max-w-xs">
+      <Navigation />
+    </div>
+    <div class="w-4/6 flex-grow">
+      {#if sivu}
         <div class="w-full flex flex-col">
-          <form
-            id="ohje"
-            on:submit|preventDefault={submitOhje(sivu)}
-            on:input={_ => {
-              dirty = true;
-            }}
-            on:change={_ => {
-              dirty = true;
-            }}>
-            <div class="w-full py-4">
-              <Input
-                id={'ohje.title'}
-                name={'ohje.title'}
-                label={$_('ohje.title')}
-                required={true}
-                bind:model={sivu}
-                lens={R.lensProp('title')}
-                parse={R.trim}
-                validators={Schema.sivu.title}
-                i18n={$_} />
-            </div>
+          <DirtyConfirmation {dirty} />
+          <div class="w-full flex flex-col">
+            <form
+              id="ohje"
+              on:submit|preventDefault={submitOhje(sivu)}
+              on:input={_ => {
+                dirty = true;
+              }}
+              on:change={_ => {
+                dirty = true;
+              }}>
+              <div class="w-full py-4">
+                <Input
+                  id={'ohje.title'}
+                  name={'ohje.title'}
+                  label={$_(`${i18nRoot}.title`)}
+                  required={true}
+                  bind:model={sivu}
+                  lens={R.lensProp('title')}
+                  parse={R.trim}
+                  validators={Schema.sivu.title}
+                  i18n={$_} />
+              </div>
 
-            <div class="w-full py-4">
-              <TextEditor
-                id={'ohje.body'}
-                name={'ohje.body'}
-                label={$_('ohje.body')}
-                bind:model={sivu}
-                lens={R.lensProp('body')}
-                required={true}
-                parse={R.trim}
-                validators={Schema.sivu.body}
-                i18n={$_} />
-            </div>
+              <div class="w-full py-4">
+                <TextEditor
+                  id={'ohje.body'}
+                  name={'ohje.body'}
+                  label={$_(`${i18nRoot}.body`)}
+                  bind:model={sivu}
+                  lens={R.lensProp('body')}
+                  required={true}
+                  parse={R.trim}
+                  validators={Schema.sivu.body}
+                  i18n={$_} />
+              </div>
 
-            <div class="flex space-x-4 pt-8">
-              <Checkbox
-                id={'ohje.published'}
-                name={'ohje.published'}
-                label={$_('ohje.published')}
-                bind:model={sivu}
-                lens={R.lensProp('published')}
-                required={true}
-                disabled={false} />
-            </div>
-            <div class="flex space-x-4 pt-8">
-              <Button
-                disabled={!dirty}
-                type={'submit'}
-                text={$_(`${i18nRoot}.submit`)} />
-              <!-- <Button
+              <div class="flex space-x-4 pt-8">
+                <Checkbox
+                  id={'ohje.published'}
+                  name={'ohje.published'}
+                  label={$_(`${i18nRoot}.published`)}
+                  bind:model={sivu}
+                  lens={R.lensProp('published')}
+                  required={true}
+                  disabled={false} />
+              </div>
+              <div class="flex space-x-4 pt-8">
+                <Button
+                  disabled={!dirty}
+                  type={'submit'}
+                  text={$_(`${i18nRoot}.submit`)} />
+                <!-- <Button
                 disabled={!dirty}
                 on:click={deleteOhje}
                 text={$_(`${i18nRoot}.delete`)}
                 style={'error'} /> -->
-            </div>
-          </form>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    {/if}
+      {/if}
+    </div>
   </div>
   <div slot="overlay-content">
     <Spinner />
