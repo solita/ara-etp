@@ -268,7 +268,7 @@ const luokitteluEquals = R.curry((type, key) => ({
   operation: eq,
   key,
   argumentNumber: 1,
-  defaultValues: () => [''],
+  defaultValues: () => [0],
   type
 }));
 
