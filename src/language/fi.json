@@ -288,6 +288,7 @@
       "<=": "<=",
       ">=": ">=",
       "sisaltaa": "Sisältää",
+      "ei-sisalla": "Ei sisällä",
       "in": "Jokin",
       "and": "Ja",
       "or": "Tai",

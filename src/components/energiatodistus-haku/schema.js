@@ -53,6 +53,12 @@ const contains = {
   format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
+const containsNo = {
+  browserCommand: 'ei-sisalla',
+  serverCommand: 'not ilike',
+  format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
+};
+
 const some = {
   browserCommand: 'in',
   serverCommand: 'in',
@@ -69,6 +75,14 @@ const singleNumberOperation = R.curry((operation, type, key) => ({
 
 const stringContains = key => ({
   operation: contains,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.STRING
+});
+
+const stringContainsNo = key => ({
+  operation: containsNo,
   key,
   argumentNumber: 1,
   defaultValues: () => [''],
@@ -260,7 +274,7 @@ const dateComparisons = [
   dateLessThanOrEqual
 ];
 
-const stringComparisons = [stringEquals, stringContains];
+const stringComparisons = [stringEquals, stringContains, stringContainsNo];
 
 const eLuokkaComparisons = [eLuokkaSome];
 

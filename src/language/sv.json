@@ -269,6 +269,7 @@
       "<=": "<=",
       ">=": ">=",
       "sisaltaa": "Innehåller",
+      "ei-sisällä": "Innehåller inte",
       "in": "Jokin SV?",
       "and": "Och",
       "or": "Eller",
