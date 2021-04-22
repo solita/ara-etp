@@ -89,6 +89,8 @@ export const parseValueByType = R.curry((type, value) => {
     case OPERATOR_TYPES.TILA:
     case OPERATOR_TYPES.LAATIJA:
     case OPERATOR_TYPES.LAATIMISVAIHE:
+    case OPERATOR_TYPES.KIELISYYS:
+    case OPERATOR_TYPES.ILMANVAIHTOTYYPPI:
       return parsers.parseNumber(value);
     case OPERATOR_TYPES.BOOLEAN:
       return Either.Right(value === 'true');
