@@ -54,6 +54,8 @@
     "new-yritys": "Nytt företag?",
     "yritys": "Företag",
     "yritys-laatijat": "Upprättare",
+    "ohjeet": "Laatijan ohjeet SV?",
+
     "confirmation": {
       "title": "Varmistus poistumisesta SV",
       "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta. SV",
@@ -1146,6 +1148,38 @@
           "validation-error": "Vastauksessa on virhe. Tarkista vastauksen tiedot ennen lähettämistä. SV?"
         }
       }
+    }
+  },
+  "ohje": {
+    "navigation": {
+      "create": "Uusi sivu SV?",
+      "sort": "Järjestä SV?"
+    },
+    "creator": {
+      "title": "Otsikko SV?",
+      "body": "Sisältö SV?",
+      "published": "Julkaistu SV?",
+      "submit": "Luo SV?",
+      "reset": "Tyhjennä SV?",
+      "success": "Uusi sivu lisätty SV?",
+      "error": "Uuden sivun lisääminen epäonnistui SV?",
+      "validation-error": "Tiedoissa virheitä, tarkista syötteet SV?"
+    },
+    "editor": {
+      "title": "Otsikko SV?",
+      "body": "Sisältö SV?",
+      "published": "Julkaistu SV?",
+      "submit": "Tallenna SV?",
+      "delete": "Poista SV?",
+      "success": "Sivun muokkaaminen onnistui SV?",
+      "error": "Sivun muokkaaminen epäonnistui SV?",
+      "validation-error": "Tiedoissa virheitä, tarkista syötteet SV?",
+      "load-error": "Tietojen lataus epäonnistui. SV?"
+    },
+    "viewer": {
+      "unpublished": "Tämä sivu ei ole julkaistu laatijoille SV?",
+      "edit": "Muokkaa SV?",
+      "load-error": "Tietojen lataus epäonnistui. SV?"
     }
   },
   "confirm": {
