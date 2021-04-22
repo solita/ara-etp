@@ -9,12 +9,12 @@
   export let index = 0;
   export let luokittelut = [];
   export let luokittelu;
+  export let values = [];
+
+  let selectedLuokittelu = R.prop(luokittelu, luokittelut);
+  let value = R.head(values);
 
   $: labelLocale = LocaleUtils.label($locale);
-
-  $: selectedLuokittelu = R.prop(luokittelu, luokittelut);
-  $: values = R.map(R.prop('id'), selectedLuokittelu);
-  $: value = R.head(values);
 </script>
 
 <Select
@@ -26,5 +26,5 @@
     R.find(R.__, selectedLuokittelu),
     R.propEq('id')
   )}
-  items={values}
+  items={R.pluck('id', selectedLuokittelu)}
   lens={R.identity} />
