@@ -17,6 +17,7 @@
   import EluokkaInput from './query-inputs/e-luokka-input';
   import TilaInput from './query-inputs/tila-input';
   import LaatijaInput from './query-inputs/laatija-input';
+  import LaatimisvaiheInput from './query-inputs/laatimisvaihe-input';
 
   import { _ } from '@Language/i18n';
 
@@ -50,6 +51,8 @@
         return KayttotarkoitusInput;
       case OPERATOR_TYPES.LAATIJA:
         return LaatijaInput;
+      case OPERATOR_TYPES.LAATIMISVAIHE:
+        return LaatimisvaiheInput;
       default:
         return TextInput;
     }

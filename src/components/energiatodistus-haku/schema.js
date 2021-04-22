@@ -13,7 +13,8 @@ export const OPERATOR_TYPES = Object.freeze({
   VERSIOLUOKKA: 'VERSIOLUOKKA',
   TILA: 'TILA',
   VERSIOKAYTTOTARKOITUSLUOKKA: 'VERSIOKAYTTOTARKOITUSLUOKKA',
-  LAATIJA: 'LAATIJA'
+  LAATIJA: 'LAATIJA',
+  LAATIMISVAIHE: 'LAATIMISVAIHE'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -263,6 +264,14 @@ const eLuokkaComparisons = [eLuokkaSome];
 
 const tilaComparisons = [tilaEquals];
 
+const luokitteluEquals = R.curry((type, key) => ({
+  operation: eq,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type
+}));
+
 const perustiedot = {
   nimi: [...stringComparisons],
   rakennustunnus: [...stringComparisons],
@@ -272,7 +281,7 @@ const perustiedot = {
   'katuosoite-fi': [...stringComparisons],
   'katuosoite-sv': [...stringComparisons],
   postinumero: [...numberComparisons],
-  laatimisvaihe: [...numberComparisons],
+  laatimisvaihe: [luokitteluEquals(OPERATOR_TYPES.LAATIMISVAIHE)],
   valmistumisvuosi: [...unformattedNumberComparisons],
   tilaaja: [...stringComparisons],
   kayttotarkoitus: [versioluokkaSome],
