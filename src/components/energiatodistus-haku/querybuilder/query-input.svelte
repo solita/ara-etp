@@ -18,6 +18,8 @@
   import TilaInput from './query-inputs/tila-input';
   import LaatijaInput from './query-inputs/laatija-input';
   import LaatimisvaiheInput from './query-inputs/laatimisvaihe-input';
+  import KielisyysInput from './query-inputs/kielisyys-input';
+  import IlmanvaihtotyyppiInput from './query-inputs/ilmanvaihtotyyppi-input';
 
   import { _ } from '@Language/i18n';
 
@@ -53,6 +55,10 @@
         return LaatijaInput;
       case OPERATOR_TYPES.LAATIMISVAIHE:
         return LaatimisvaiheInput;
+      case OPERATOR_TYPES.KIELISYYS:
+        return KielisyysInput;
+      case OPERATOR_TYPES.ILMANVAIHTOTYYPPI:
+        return IlmanvaihtotyyppiInput;
       default:
         return TextInput;
     }

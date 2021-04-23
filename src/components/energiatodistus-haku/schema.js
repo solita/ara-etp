@@ -14,7 +14,9 @@ export const OPERATOR_TYPES = Object.freeze({
   TILA: 'TILA',
   VERSIOKAYTTOTARKOITUSLUOKKA: 'VERSIOKAYTTOTARKOITUSLUOKKA',
   LAATIJA: 'LAATIJA',
-  LAATIMISVAIHE: 'LAATIMISVAIHE'
+  LAATIMISVAIHE: 'LAATIMISVAIHE',
+  KIELISYYS: 'KIELISYYS',
+  ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -291,7 +293,7 @@ const perustiedot = {
   },
   rakennusosa: [...stringComparisons],
   havainnointikaynti: [...dateComparisons],
-  kieli: [...numberComparisons],
+  kieli: [luokitteluEquals(OPERATOR_TYPES.KIELISYYS)],
   'keskeiset-suositukset-fi': [stringContains],
   'keskeiset-suositukset-sv': [stringContains]
 };
@@ -376,7 +378,7 @@ const lahtotiedot = {
     }
   },
   ilmanvaihto: {
-    'tyyppi-id': [...numberComparisons],
+    'tyyppi-id': [luokitteluEquals(OPERATOR_TYPES.ILMANVAIHTOTYYPPI)],
     'kuvaus-fi': [...stringComparisons],
     'kuvaus-sv': [...stringComparisons],
     paaiv: {
