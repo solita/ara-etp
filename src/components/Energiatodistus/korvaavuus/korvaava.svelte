@@ -18,6 +18,8 @@
   export let korvaavaEnergiatodistusId = Maybe.None();
   export let postinumerot;
 
+  const i18n = $_;
+
   let overlay = false;
 
   let korvaavaEnergiatodistus = Maybe.None();
@@ -34,7 +36,7 @@
           flashMessageStore.add(
             'Energiatodistus',
             'error',
-            $_('energiatodistus.messages.load-error')
+            i18n('energiatodistus.messages.load-error')
           );
         },
         response => {
@@ -62,8 +64,8 @@
 {#if korvaavaEnergiatodistusId.isSome()}
   <h3>
     {Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)
-      ? $_('energiatodistus.korvaavuus.header.korvaava-draft')
-      : $_('energiatodistus.korvaavuus.header.korvaava')}
+      ? i18n('energiatodistus.korvaavuus.header.korvaava-draft')
+      : i18n('energiatodistus.korvaavuus.header.korvaava')}
   </h3>
   <div class="flex flex-col -mx-4 mt-2">
     {#if !overlay}
@@ -75,7 +77,7 @@
           {#if Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)}
             <p class="text-sm flex mt-2">
               <span class="font-icon mr-1">info</span>
-              {$_('energiatodistus.korvaavuus.korvaava-draft-info')}
+              {i18n('energiatodistus.korvaavuus.korvaava-draft-info')}
             </p>
           {/if}
         </div>

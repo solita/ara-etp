@@ -17,6 +17,8 @@
   export let energiatodistus;
   export let reload;
 
+  const i18n = $_;
+
   let error = Maybe.None();
   let mPollux = {
     version: Maybe.None(),
@@ -89,10 +91,10 @@
   );
 
   const statusText = state => {
-    const languageAdjectiveName = $_(
+    const languageAdjectiveName = i18n(
       'energiatodistus.signing.language-adjective.' + state.language
     );
-    const languageAdjectiveGenetiveName = $_(
+    const languageAdjectiveGenetiveName = i18n(
       'energiatodistus.signing.language-genitive.' + state.language
     );
 
@@ -100,7 +102,7 @@
       capitalize,
       R.replace('{language}', languageAdjectiveName),
       R.replace('{language-genitive}', languageAdjectiveGenetiveName),
-      key => $_('energiatodistus.signing.status.' + key),
+      key => i18n('energiatodistus.signing.status.' + key),
       R.replace('_', '-'),
       statusKey
     )(state.status);
@@ -136,9 +138,9 @@
     Future.fork(response => {
       const errorKey =
         'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
-      const message = $_(errorKey);
+      const message = i18n(errorKey);
       error = R.equals(message, errorKey)
-        ? Maybe.Some($_('energiatodistus.signing.error.signing-failed'))
+        ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
         : Maybe.Some(message);
     }, setStateStatus(status.signed)),
     Future.and(
@@ -161,7 +163,7 @@
     cancel();
     Future.fork(
       _ => {
-        error = Maybe.Some($_('energiatodistus.signing.error.abort-failed'));
+        error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
       },
       setStateStatus(status.aborted),
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
@@ -200,16 +202,16 @@
 
 <dialog on:click|stopPropagation>
   <div class="content">
-    <h1>{$_('energiatodistus.signing.header')}</h1>
+    <h1>{i18n('energiatodistus.signing.header')}</h1>
 
     {#if mPollux.failure.isSome()}
       <p>
-        {$_('energiatodistus.signing.messages.connection-failed')}
+        {i18n('energiatodistus.signing.messages.connection-failed')}
       </p>
     {:else if mPollux.version.isSome()}
       {#if R.equals(currentState.status, status.already_started)}
         <p>
-          {$_('energiatodistus.signing.messages.already-started')}
+          {i18n('energiatodistus.signing.messages.already-started')}
         </p>
       {/if}
 
@@ -218,7 +220,7 @@
         status.already_started
       ])}
         <p>
-          {$_('energiatodistus.signing.messages.connection-success')}
+          {i18n('energiatodistus.signing.messages.connection-success')}
         </p>
       {/if}
 
@@ -252,7 +254,7 @@
       {/if}
     {:else}
       <p>
-        {$_('energiatodistus.signing.messages.connection-check')}
+        {i18n('energiatodistus.signing.messages.connection-check')}
       </p>
       <Spinner />
     {/if}
@@ -271,7 +273,7 @@
         <div class="mr-10 mt-5">
           <Button
             prefix="signing-submit"
-            text={$_('energiatodistus.signing.button.start')}
+            text={i18n('energiatodistus.signing.button.start')}
             on:click={sign} />
         </div>
       {/if}
@@ -279,7 +281,7 @@
         <div class="mt-5">
           <Button
             prefix="signing-reject"
-            text={$_('energiatodistus.signing.button.abort')}
+            text={i18n('energiatodistus.signing.button.abort')}
             style={'secondary'}
             on:click={abort} />
         </div>
@@ -287,7 +289,7 @@
       {#if R.includes(currentState.status, closeTasks)}
         <div class="mt-5">
           <Button
-            text={$_('energiatodistus.signing.button.close')}
+            text={i18n('energiatodistus.signing.button.close')}
             style={'secondary'}
             on:click={reload} />
         </div>

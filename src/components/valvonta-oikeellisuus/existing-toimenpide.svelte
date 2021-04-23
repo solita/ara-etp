@@ -24,6 +24,8 @@
   import ToimenpideForm from './toimenpide-form.svelte';
 
   export let params;
+
+  const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   let resources = Maybe.None();
@@ -34,8 +36,10 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(`${i18nRoot}.messages.load-error`,
-          Response.localizationKey(response));
+        const msg = i18n(
+          `${i18nRoot}.messages.load-error`,
+          Response.localizationKey(response)
+        );
 
         flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
         overlay = false;
@@ -49,40 +53,44 @@
         whoami: KayttajaApi.whoami,
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])
       })
-    )
+    );
   };
 
   $: load(params);
 
-  const updateToimenpide = successCallback => R.compose(
+  const updateToimenpide = successCallback =>
+    R.compose(
+      Future.fork(
+        response => {
+          const msg = i18n(
+            Maybe.orSome(
+              `${i18nRoot}.messages.error`,
+              Response.localizationKey(response)
+            )
+          );
+          flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+          overlay = false;
+        },
+        response => {
+          flashMessageStore.add(
+            'valvonta-oikeellisuus',
+            'success',
+            i18n(`${i18nRoot}.messages.save-success`)
+          );
+          successCallback();
+          load(params);
+        }
+      ),
+      R.tap(_ => {
+        overlay = true;
+      }),
+      ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
+    );
+
+  const publishToimenpide = _ =>
     Future.fork(
       response => {
-        const msg = $_(
-          Maybe.orSome(
-            `${i18nRoot}.messages.error`,
-            Response.localizationKey(response)
-          )
-        );
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
-        overlay = false;
-      },
-      response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'success',
-          $_(`${i18nRoot}.messages.save-success`)
-        );
-        successCallback();
-        load(params);
-      }
-    ),
-    R.tap(_ => { overlay = true; }),
-    ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
-  );
-
-  const publishToimenpide = _ => Future.fork(
-      response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.error`,
             Response.localizationKey(response)
@@ -95,31 +103,35 @@
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          $_(`${i18nRoot}.messages.publish-success`));
+          i18n(`${i18nRoot}.messages.publish-success`)
+        );
       },
-      ValvontaApi.publishToimenpide(params.id, params['toimenpide-id']));
+      ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])
+    );
 
   const saveToimenpide = updateToimenpide(_ => {});
   const saveAndPublishToimenpide = updateToimenpide(publishToimenpide);
 
   const cancel = _ => {
     load(params);
-  }
+  };
 </script>
 
 <Overlay {overlay}>
+  <slot />
   <div slot="content" class="w-full mt-3">
-    <DirtyConfirmation {dirty}/>
-    {#each Maybe.toArray(resources) as {whoami, toimenpide}}
-      <ToimenpideForm {toimenpide}
-                      bind:dirty
-                      {whoami}
-                      {cancel}
-                      submit={saveToimenpide}
-                      publish={Maybe.Some(saveAndPublishToimenpide)}/>
+    <DirtyConfirmation {dirty} />
+    {#each Maybe.toArray(resources) as { whoami, toimenpide }}
+      <ToimenpideForm
+        {toimenpide}
+        bind:dirty
+        {whoami}
+        {cancel}
+        submit={saveToimenpide}
+        publish={Maybe.Some(saveAndPublishToimenpide)} />
     {/each}
   </div>
   <div slot="overlay-content">
-    <Spinner/>
+    <Spinner />
   </div>
 </Overlay>

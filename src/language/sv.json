@@ -148,7 +148,7 @@
     "messages": {
       "save-success": "Användarens uppgifter har sparats.",
       "save-error": "Det uppstod ett oväntat fel i sparandet av användarens uppgifter.",
-      "validation-error": "Käyttäjän tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen.",
+      "validation-error": "Käyttäjän tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen. SV?",
       "load-error": "Sökningen av användarens uppgifter misslyckades.",
       "not-found": "Käyttäjää ei löydy tästä palvelusta SV",
       "upload-error": "Filen kunde inte laddas ner."
@@ -1037,8 +1037,8 @@
         "signature": "Underteckna energicertifikatet {language} i mPollux-programmet.",
         "pdf": "Underteckna {language} energicertifikatet.",
         "finish": "Avsluta underteckningsprocessen.",
-        "signed": "{language} energiatodistus on allekirjoitettu onnistuneesti.",
-        "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan."
+        "signed": "{language} energiatodistus on allekirjoitettu onnistuneesti. SV?",
+        "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan. SV?"
       },
       "button": {
         "start": "Allekirjoita",

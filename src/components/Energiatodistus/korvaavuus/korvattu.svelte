@@ -24,6 +24,8 @@
   export let error = Maybe.None();
   export let postinumerot;
 
+  const i18n = $_;
+
   const enabled =
     (Kayttajat.isLaatija(whoami) &&
       R.propEq('tila-id', ET.tila.draft, energiatodistus)) ||
@@ -65,7 +67,7 @@
           flashMessageStore.add(
             'Energiatodistus',
             'error',
-            $_('energiatodistus.messages.load-error')
+            i18n('energiatodistus.messages.load-error')
           );
         },
         response => {
@@ -139,13 +141,13 @@
 {#if checked || enabled}
   {#if enabled}
     <Checkbox
-      label={$_('energiatodistus.korvaavuus.checkbox')}
+      label={i18n('energiatodistus.korvaavuus.checkbox')}
       bind:model={checked}
       disabled={!enabled} />
   {/if}
 
   {#if !enabled}
-    <h3>{$_('energiatodistus.korvaavuus.header.korvattu')}</h3>
+    <h3>{i18n('energiatodistus.korvaavuus.header.korvattu')}</h3>
   {/if}
 
   {#if checked}
@@ -158,12 +160,12 @@
             model={query}
             id={'korvattavaenergiatodistus'}
             name={'korvattavaenergiatodistus'}
-            label={$_('energiatodistus.korvaavuus.input')}
+            label={i18n('energiatodistus.korvaavuus.input')}
             lens={R.lens(R.identity, R.identity)}
             format={Maybe.orSome('')}
             parse={Parsers.optionalString}
             search={true}
-            i18n={$_} />
+            {i18n} />
         </div>
       {/if}
       {#if !searching}
@@ -176,7 +178,7 @@
           {#each Maybe.toArray(error) as key}
             <div class="error-label">
               <span class="font-icon error-icon">error</span>
-              {$_('energiatodistus.korvaavuus.validation.' + key)}
+              {i18n('energiatodistus.korvaavuus.validation.' + key)}
             </div>
           {/each}
         </div>

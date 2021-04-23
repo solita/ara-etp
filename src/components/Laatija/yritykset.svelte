@@ -29,6 +29,8 @@
 
   export let params;
 
+  const i18n = $_;
+
   let newLaatijaYritys = Either.Right(Maybe.None());
   let laatijaYritykset = [];
   let allYritykset = [];
@@ -42,14 +44,14 @@
         flashMessageStore.add(
           'Laatija',
           'error',
-          $_('laatija.yritykset.error.detach-failed')
+          i18n('laatija.yritykset.error.detach-failed')
         ),
       _ => {
         load(params.id);
         flashMessageStore.add(
           'Laatija',
           'success',
-          $_('laatija.yritykset.success.detach')
+          i18n('laatija.yritykset.success.detach')
         );
       },
       laatijaApi.deleteLaatijaYritys(
@@ -86,7 +88,7 @@
     toggleOverlay(true);
     return Future.fork(
       _ => {
-        flashMessageStore.add('Laatija', 'error', $_('errors.load-error'));
+        flashMessageStore.add('Laatija', 'error', i18n('errors.load-error'));
         toggleOverlay(false);
       },
       response => {
@@ -115,21 +117,21 @@
       .flatMap(
         Maybe.toEither(R.applyTo('laatija.yritykset.error.select-yritys'))
       )
-      .leftMap(R.applyTo($_))
+      .leftMap(R.applyTo(i18n))
       .cata(flashMessageStore.add('Laatija', 'error'), yritys => {
         Future.fork(
           _ =>
             flashMessageStore.add(
               'Laatija',
               'error',
-              $_('laatija.yritykset.error.attach-failed')
+              i18n('laatija.yritykset.error.attach-failed')
             ),
           _ => {
             load(params.id);
             flashMessageStore.add(
               'Laatija',
               'success',
-              $_('laatija.yritykset.success.attach')
+              i18n('laatija.yritykset.success.attach')
             );
           },
           laatijaApi.putLaatijaYritys(fetch, params.id, yritys.id)
@@ -150,24 +152,24 @@
   <div slot="content">
     <form>
       <div class="w-full mt-3">
-        <H1 text={$_('laatija.yritykset.title')} />
+        <H1 text={i18n('laatija.yritykset.title')} />
 
         {#if R.isEmpty(laatijaYritykset)}
-          <p class="mb-10">{$_('laatija.yritykset.empty')}</p>
+          <p class="mb-10">{i18n('laatija.yritykset.empty')}</p>
         {:else}
-          <p class="mb-5">{$_('laatija.yritykset.table.description')}</p>
+          <p class="mb-5">{i18n('laatija.yritykset.table.description')}</p>
 
           <div class="mb-8">
             <table class="etp-table">
               <thead class="etp-table--thead">
                 <tr class="etp-table--tr">
-                  <th class="etp-table--th">{$_('yritys.nimi')}</th>
-                  <th class="etp-table--th">{$_('yritys.y-tunnus')}</th>
-                  <th class="etp-table--th">{$_('yritys.laskutusosoite')}</th>
+                  <th class="etp-table--th">{i18n('yritys.nimi')}</th>
+                  <th class="etp-table--th">{i18n('yritys.y-tunnus')}</th>
+                  <th class="etp-table--th">{i18n('yritys.laskutusosoite')}</th>
                   <th class="etp-table--th"
-                    >{$_('laatija.yritykset.table.tila')}</th>
+                    >{i18n('laatija.yritykset.table.tila')}</th>
                   <th class="etp-table--th"
-                    >{$_('laatija.yritykset.table.delete')}</th>
+                    >{i18n('laatija.yritykset.table.delete')}</th>
                 </tr>
               </thead>
               <tbody class="etp-table--tbody">
@@ -192,20 +194,20 @@
                     <td class="etp-table--td"><Address address={yritys} /></td>
                     <td class="etp-table--td">
                       {#if Tila.isProposal(yritys)}
-                        {$_('laatija.yritykset.table.proposal')}
+                        {i18n('laatija.yritykset.table.proposal')}
                       {:else}
                         {R.replace(
                           '{time}',
                           Formats.formatTimeInstant(yritys.modifytime),
-                          $_('laatija.yritykset.table.accepted')
+                          i18n('laatija.yritykset.table.accepted')
                         )}
                       {/if}
                     </td>
                     <td class="etp-table--td">
                       <Confirm
                         let:confirm
-                        confirmButtonLabel={$_('confirm.button.delete')}
-                        confirmMessage={$_('confirm.you-want-to-delete')}>
+                        confirmButtonLabel={i18n('confirm.button.delete')}
+                        confirmMessage={i18n('confirm.you-want-to-delete')}>
                         <span
                           class="material-icons cursor-pointer"
                           on:click|stopPropagation={_ =>
@@ -220,7 +222,7 @@
               <tfoot>
                 <tr>
                   <td colspan="4">
-                    {$_('laatija.yritykset.table.footer')}
+                    {i18n('laatija.yritykset.table.footer')}
                   </td>
                 </tr>
               </tfoot>
@@ -229,12 +231,12 @@
         {/if}
 
         {#if whoami.map(Kayttajat.isLaatija).orSome(false)}
-          <h2>{$_('laatija.yritykset.joining.heading')}</h2>
+          <h2>{i18n('laatija.yritykset.joining.heading')}</h2>
 
           <ol class="list-decimal list-inside">
-            <li>{$_('laatija.yritykset.joining.step-1')}</li>
-            <li>{$_('laatija.yritykset.joining.step-2')}</li>
-            <li>{$_('laatija.yritykset.joining.step-3')}</li>
+            <li>{i18n('laatija.yritykset.joining.step-1')}</li>
+            <li>{i18n('laatija.yritykset.joining.step-2')}</li>
+            <li>{i18n('laatija.yritykset.joining.step-3')}</li>
           </ol>
 
           <form class="mb-5" on:submit|preventDefault={attach}>
@@ -244,7 +246,7 @@
                   <Input
                     id={'yritys'}
                     name={'yritys'}
-                    label={$_('laatija.yritykset.find-yritys')}
+                    label={i18n('laatija.yritykset.find-yritys')}
                     required={false}
                     {disabled}
                     bind:model={newLaatijaYritys}
@@ -252,26 +254,28 @@
                     parse={Parsers.optionalParser(parseYritys)}
                     lens={R.lens(R.identity, R.identity)}
                     search={true}
-                    i18n={$_} />
+                    {i18n} />
                 </Autocomplete>
               </div>
               <div class="self-end">
                 <Button
                   type={'submit'}
-                  text={$_('laatija.yritykset.attach-to-yritys')} />
+                  text={i18n('laatija.yritykset.attach-to-yritys')} />
               </div>
             </div>
           </form>
 
-          <h2>{$_('laatija.yritykset.create-new')}</h2>
+          <h2>{i18n('laatija.yritykset.create-new')}</h2>
 
           <p class="mb-5">
-            {$_('laatija.yritykset.create-info')}
+            {i18n('laatija.yritykset.create-info')}
           </p>
           <div class="flex flex-row">
             <span class="material-icons">add</span>
             &nbsp;
-            <Link text={$_('laatija.yritykset.add-new')} href="#/yritys/new" />
+            <Link
+              text={i18n('laatija.yritykset.add-new')}
+              href="#/yritys/new" />
           </div>
         {/if}
       </div>

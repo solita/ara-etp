@@ -22,6 +22,8 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Pagination from '@Component/Pagination/Pagination';
 
+  const i18n = $_;
+
   let resources = Maybe.None();
   let overlay = true;
 
@@ -44,7 +46,7 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             'viesti.all.messages.load-error',
             Response.localizationKey(response)
@@ -89,7 +91,7 @@
   const updateKetju = R.compose(
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `viesti.all.messages.update-error`,
             Response.localizationKey(response)
@@ -102,7 +104,7 @@
         flashMessageStore.add(
           'viesti',
           'success',
-          $_(`viesti.all.messages.update-success`)
+          i18n(`viesti.all.messages.update-success`)
         );
         overlay = false;
         load(page);
@@ -115,26 +117,20 @@
   );
 </script>
 
-<style>
-  .header > * {
-    @apply block font-bold text-primary uppercase text-left tracking-wider bg-light text-sm;
-  }
-</style>
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { ketjut, whoami, vastaanottajaryhmat, kasittelijat }}
       <div class="flex justify-between">
-        <H1 text={$_('viesti.all.title')} />
+        <H1 text={i18n('viesti.all.title')} />
         <div class="font-bold">
           <Link
             icon={Maybe.Some('add_circle_outline')}
-            text={$_('viesti.all.new-viesti')}
+            text={i18n('viesti.all.new-viesti')}
             href="#/viesti/new" />
         </div>
       </div>
       {#if ketjut.length === 0}
-        <span>{$_('viesti.all.no-messages')}</span>
+        <span>{i18n('viesti.all.no-messages')}</span>
       {/if}
       <div class="my-6">
         {#each ketjut as ketju}

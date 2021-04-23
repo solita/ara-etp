@@ -24,6 +24,8 @@
   import * as formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
 
+  const i18n = $_;
+
   const formParsers = LaatijaSchema.formParsers();
   const formSchema = LaatijaSchema.schema;
 
@@ -110,7 +112,7 @@
       flashMessageStore.add(
         'Kayttaja',
         'error',
-        $_('laatija.messages.validation-error')
+        i18n('laatija.messages.validation-error')
       );
     }
   };
@@ -127,8 +129,8 @@
     <H1 text="Perustiedot" />
     <span class="lastlogin">
       {R.compose(
-        Maybe.orSome($_('kayttaja.no-login')),
-        Maybe.map(R.concat($_('kayttaja.last-login') + ' ')),
+        Maybe.orSome(i18n('kayttaja.no-login')),
+        Maybe.map(R.concat(i18n('kayttaja.last-login') + ' ')),
         Maybe.map(formats.formatTimeInstant)
       )(laatija.login)}
     </span>
@@ -137,33 +139,33 @@
         <Input
           id={'etunimi'}
           name={'etunimi'}
-          label={$_('kayttaja.etunimi')}
+          label={i18n('kayttaja.etunimi')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('etunimi')}
           parse={formParsers.etunimi}
           validators={formSchema.etunimi}
           disabled={!isPaakayttaja}
-          i18n={$_} />
+          {i18n} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'sukunimi'}
           name={'sukunimi'}
-          label={$_('kayttaja.sukunimi')}
+          label={i18n('kayttaja.sukunimi')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('sukunimi')}
           parse={formParsers.sukunimi}
           validators={formSchema.sukunimi}
           disabled={!isPaakayttaja}
-          i18n={$_} />
+          {i18n} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'henkilotunnus'}
           name={'henkilotunnus'}
-          label={$_('laatija.henkilotunnus')}
+          label={i18n('laatija.henkilotunnus')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('henkilotunnus')}
@@ -171,7 +173,7 @@
           parse={formParsers.henkilotunnus}
           validators={formSchema.henkilotunnus}
           disabled={true}
-          i18n={$_} />
+          {i18n} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4 items-end">
@@ -179,8 +181,8 @@
         <Input
           id={'sahkoposti'}
           name={'sahkoposti'}
-          label={`${$_('kayttaja.sahkoposti')} (${R.toLower(
-            $_('kayttaja.kayttajatunnus')
+          label={`${i18n('kayttaja.sahkoposti')} (${R.toLower(
+            i18n('kayttaja.kayttajatunnus')
           )})`}
           required={true}
           {disabled}
@@ -188,20 +190,20 @@
           lens={R.lensProp('email')}
           parse={formParsers.email}
           validators={formSchema.email}
-          i18n={$_} />
+          {i18n} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'puhelinnumero'}
           name={'puhelinnumero'}
-          label={$_('kayttaja.puhelinnumero')}
+          label={i18n('kayttaja.puhelinnumero')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('puhelin')}
           parse={formParsers.puhelin}
           validators={formSchema.puhelin}
           {disabled}
-          i18n={$_} />
+          {i18n} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -209,7 +211,7 @@
         <Input
           id={'vastaanottajan-tarkenne'}
           name={'vastaanottajan-tarkenne'}
-          label={$_('laatija.vastaanottajan-tarkenne')}
+          label={i18n('laatija.vastaanottajan-tarkenne')}
           required={false}
           bind:model={laatija}
           lens={R.lensProp('vastaanottajan-tarkenne')}
@@ -217,7 +219,7 @@
           parse={formParsers['vastaanottajan-tarkenne']}
           validators={formSchema['vastaanottajan-tarkenne']}
           {disabled}
-          i18n={$_} />
+          {i18n} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -225,14 +227,14 @@
         <Input
           id={'katuosoite'}
           name={'katuosoite'}
-          label={$_('laatija.katuosoite')}
+          label={i18n('laatija.katuosoite')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('jakeluosoite')}
           parse={formParsers.jakeluosoite}
           validators={formSchema.jakeluosoite}
           {disabled}
-          i18n={$_} />
+          {i18n} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -240,34 +242,34 @@
         <Input
           id={'postinumero'}
           name={'postinumero'}
-          label={$_('laatija.postinumero')}
+          label={i18n('laatija.postinumero')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('postinumero')}
           parse={formParsers.postinumero}
           validators={formSchema.postinumero}
           {disabled}
-          i18n={$_} />
+          {i18n} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
           id={'postitoimipaikka'}
           name={'postitoimipaikka'}
-          label={$_('laatija.postitoimipaikka')}
+          label={i18n('laatija.postitoimipaikka')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('postitoimipaikka')}
           parse={formParsers.postitoimipaikka}
           validators={formSchema.postitoimipaikka}
           {disabled}
-          i18n={$_} />
+          {i18n} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Autocomplete items={countryNames}>
           <Input
             id={'maa'}
             name={'maa'}
-            label={$_('laatija.maa')}
+            label={i18n('laatija.maa')}
             required={true}
             bind:model={laatija}
             lens={R.lensProp('maa')}
@@ -276,14 +278,14 @@
             search={true}
             handleSubmit={false}
             {disabled}
-            i18n={$_} />
+            {i18n} />
         </Autocomplete>
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Select
-          label={$_('laatija.laskutuskieli')}
+          label={i18n('laatija.laskutuskieli')}
           required={true}
           format={formatLaskutuskieli}
           parse={parseLaskutuskieli}
@@ -297,7 +299,7 @@
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={$_('laatija.laatijatiedot')} />
+    <H1 text={i18n('laatija.laatijatiedot')} />
 
     {#if R.or(laatija.laatimiskielto, isPaakayttaja)}
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -305,7 +307,7 @@
           <Checkbox
             bind:model={laatija}
             lens={R.lensProp('laatimiskielto')}
-            label={$_('laatija.todistustenlaatimiskielto')}
+            label={i18n('laatija.todistustenlaatimiskielto')}
             disabled={!isPaakayttaja} />
         </div>
       </div>
@@ -315,20 +317,20 @@
         <Input
           id={'patevyydenvoimassaolo'}
           name={'patevyydenvoimassaolo'}
-          label={$_('laatija.patevyydenvoimassaolo')}
+          label={i18n('laatija.patevyydenvoimassaolo')}
           bind:model={laatija}
           lens={R.lensProp('toteamispaivamaara')}
           format={formats.formatPatevyydenVoimassaoloaika}
           parse={R.always(R.prop('toteamispaivamaara', laatija))}
           disabled={true}
           required={true}
-          i18n={$_} />
+          {i18n} />
       </div>
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Select
-          label={$_('laatija.patevyystaso')}
+          label={i18n('laatija.patevyystaso')}
           format={formatPatevyys}
           parse={parsePatevyys}
           bind:model={laatija}
@@ -340,7 +342,7 @@
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4 flex flex-col">
         <Select
-          label={$_('laatija.paatoimintaalue')}
+          label={i18n('laatija.paatoimintaalue')}
           format={formatToimintaAlue}
           parse={parseToimintaAlue}
           bind:model={laatija}
@@ -354,7 +356,7 @@
         id="muuttoimintaalueet"
         class="lg:py-0 w-full px-4 py-4 flex flex-col">
         <ToimintaalueetChecklist
-          label={$_('laatija.muuttoimintaalueet')}
+          label={i18n('laatija.muuttoimintaalueet')}
           toimintaalueet={toimintaAlueetIds}
           bind:model={laatija}
           lens={R.lensProp('muuttoimintaalueet')}
@@ -367,7 +369,7 @@
         <Input
           id={'wwwosoite'}
           name={'wwwosoite'}
-          label={$_('laatija.www-osoite')}
+          label={i18n('laatija.www-osoite')}
           required={false}
           bind:model={laatija}
           lens={R.lensProp('wwwosoite')}
@@ -375,18 +377,18 @@
           parse={formParsers.wwwosoite}
           validators={formSchema.wwwosoite}
           {disabled}
-          i18n={$_} />
+          {i18n} />
       </div>
     </div>
   </div>
 
   <div class="mt-8">
-    <H1 text={$_('laatija.api-key-header')} />
+    <H1 text={i18n('laatija.api-key-header')} />
     <div class="lg:w-1/2 w-full">
       <Input
         id={'api-key'}
         name={'api-key'}
-        label={$_('laatija.api-key')}
+        label={i18n('laatija.api-key')}
         required={false}
         bind:model={laatija}
         lens={R.lensProp('api-key')}
@@ -394,33 +396,33 @@
         parse={R.compose(Maybe.fromEmpty, R.trim)}
         validators={formSchema['api-key']}
         {disabled}
-        i18n={$_} />
+        {i18n} />
     </div>
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={$_('laatija.julkisettiedot')} />
+    <H1 text={i18n('laatija.julkisettiedot')} />
     <div class="flex flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 mb-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenpuhelin')}
           {disabled}
-          label={$_('kayttaja.puhelinnumero')} />
+          label={i18n('kayttaja.puhelinnumero')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenemail')}
           {disabled}
-          label={$_('kayttaja.sahkoposti')} />
+          label={i18n('kayttaja.sahkoposti')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenosoite')}
           {disabled}
-          label={$_('laatija.katuosoite')} />
+          label={i18n('laatija.katuosoite')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
@@ -428,13 +430,13 @@
           lens={R.lensProp('julkinenwwwosoite')}
           disabled={disabled ||
             !R.compose(Maybe.isSome, R.prop('wwwosoite'))(laatija)}
-          label={$_('laatija.www-osoite')} />
+          label={i18n('laatija.www-osoite')} />
       </div>
     </div>
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={$_('tallenna')} {disabled} />
+      <Button type={'submit'} text={i18n('tallenna')} {disabled} />
     </div>
     <div class="px-4">
       <Button
@@ -442,7 +444,7 @@
           event.preventDefault();
           window.location.reload();
         }}
-        text={$_('peruuta')}
+        text={i18n('peruuta')}
         type={'reset'}
         style={'secondary'} />
     </div>

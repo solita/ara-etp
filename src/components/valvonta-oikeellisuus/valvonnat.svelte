@@ -97,12 +97,6 @@
   };
 </script>
 
-<style>
-  .header > * {
-    @apply block font-bold text-primary uppercase text-left tracking-wider bg-light text-sm;
-  }
-</style>
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit }}

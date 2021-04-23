@@ -9,10 +9,16 @@
   export let laatijat;
   export let files = [];
 
+  const i18n = $_;
+
   $: R.compose(
     Future.fork(
       _ =>
-        flashMessageStore.add('Laatija', 'error', $_('errors.file-read-error')),
+        flashMessageStore.add(
+          'Laatija',
+          'error',
+          i18n('errors.file-read-error')
+        ),
       result => (laatijat = result)
     ),
     R.map(LaatijaUploadUtils.deserialize),

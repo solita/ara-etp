@@ -19,6 +19,8 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
+  const i18n = $_;
+
   let overlay = false;
 
   const toggleOverlay = value => (overlay = value);
@@ -30,7 +32,7 @@
   $: Future.fork(
     () => {
       toggleOverlay(false);
-      flashMessageStore.add('Laatija', 'error', $_('errors.unexpected'));
+      flashMessageStore.add('Laatija', 'error', i18n('errors.unexpected'));
     },
     response => {
       toggleOverlay(false);
@@ -58,7 +60,7 @@
       response => {
         toggleOverlay(false);
         const msg = LocaleUtils.uniqueViolationMessage(
-          $_,
+          i18n,
           response,
           'laatija.messages.save-error'
         );
@@ -69,7 +71,7 @@
         flashMessageStore.add(
           'Laatija',
           'success',
-          $_('laatija.messages.save-success')
+          i18n('laatija.messages.save-success')
         );
         laatijat = [];
       }
@@ -105,10 +107,10 @@
     R.addIndex(R.map)((item, index) =>
       R.compose(
         Maybe.orSome(''),
-        R.map(LaatijaUploadUtils.formatRowError($_, index))
+        R.map(LaatijaUploadUtils.formatRowError(i18n, index))
       )(item)
     ),
-    LaatijaUploadUtils.errors($_)
+    LaatijaUploadUtils.errors(i18n)
   )(model);
 
   $: if (errors.length) {
@@ -138,9 +140,9 @@
         <table class="etp-table">
           <thead class="etp-table--thead">
             <tr class="etp-table--tr">
-              <th class="etp-table--th">{$_('rivi')}</th>
+              <th class="etp-table--th">{i18n('rivi')}</th>
               {#each fields as field}
-                <th class="etp-table--th">{$_(`laatijaupload.${field}`)}</th>
+                <th class="etp-table--th">{i18n(`laatijaupload.${field}`)}</th>
               {/each}
             </tr>
           </thead>
@@ -183,14 +185,14 @@
               prefix="laatija-upload"
               disabled={errors.length}
               type={'submit'}
-              text={$_('laatija.lisaa-laatijat')} />
+              text={i18n('laatija.lisaa-laatijat')} />
           </div>
           <div class="px-4">
             <Button
               prefix="laatija-upload"
               style={'secondary'}
               type={'reset'}
-              text={$_('peruuta')} />
+              text={i18n('peruuta')} />
           </div>
         </div>
       </form>

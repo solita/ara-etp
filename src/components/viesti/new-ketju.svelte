@@ -34,6 +34,7 @@
   import Select from '@Component/Select/Select.svelte';
 
   const i18nRoot = 'viesti.ketju.new';
+  const i18n = $_;
 
   let resources = Maybe.None();
   let dirty = false;
@@ -67,7 +68,7 @@
   R.compose(
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.load-error`,
             Response.localizationKey(response)
@@ -99,7 +100,7 @@
   const addKetju = R.compose(
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             `${i18nRoot}.messages.error`,
             Response.localizationKey(response)
@@ -112,7 +113,7 @@
         flashMessageStore.add(
           'viesti',
           'success',
-          $_(`${i18nRoot}.messages.success`)
+          i18n(`${i18nRoot}.messages.success`)
         );
         dirty = false;
         replace('#/viesti/all');
@@ -130,7 +131,7 @@
       flashMessageStore.add(
         'viesti',
         'error',
-        $_(`${i18nRoot}.messages.validation-error`)
+        i18n(`${i18nRoot}.messages.validation-error`)
       );
       Validation.blurForm(event.target);
     }
@@ -160,7 +161,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={$_(`${i18nRoot}.title`)} />
+    <H1 text={i18n(`${i18nRoot}.title`)} />
     <DirtyConfirmation {dirty} />
     {#each resources.toArray() as { whoami, laatijat, vastaanottajaryhmat }}
       <form
@@ -180,7 +181,7 @@
               <Input
                 id={'ketju.vastaanottaja'}
                 name={'ketju.vastaanottaja'}
-                label={$_('viesti.ketju.vastaanottaja')}
+                label={i18n('viesti.ketju.vastaanottaja')}
                 required={isVastaanottajaRequired}
                 bind:model={ketju}
                 lens={R.compose(R.lensProp('vastaanottajat'), arrayHeadLens)}
@@ -190,7 +191,7 @@
                   R.map(formatVastaanottaja),
                   R.chain(id => Maybe.findById(id, laatijat))
                 )}
-                i18n={$_} />
+                {i18n} />
             </Autocomplete>
           </div>
         {/if}
@@ -198,7 +199,7 @@
         <div class="lg:w-1/2 w-full py-4">
           <Select
             id={'ketju.vastaanottajaryhma'}
-            label={$_('viesti.ketju.vastaanottajaryhma')}
+            label={i18n('viesti.ketju.vastaanottajaryhma')}
             required={isVastaanottajaRyhmaRequired}
             disabled={!isAllowedToSendToEveryone(whoami)}
             allowNone={true}
@@ -213,36 +214,36 @@
           <Input
             id={'ketju.subject'}
             name={'ketju.subject'}
-            label={$_('viesti.ketju.subject')}
+            label={i18n('viesti.ketju.subject')}
             required={true}
             bind:model={ketju}
             lens={R.lensProp('subject')}
             parse={R.trim}
             validators={Schema.ketju.subject}
-            i18n={$_} />
+            {i18n} />
         </div>
         <div class="w-full py-4">
           <Textarea
             id={'ketju.body'}
             name={'ketju.body'}
-            label={$_('viesti.ketju.body')}
+            label={i18n('viesti.ketju.body')}
             bind:model={ketju}
             lens={R.lensProp('body')}
             required={true}
             parse={R.trim}
             validators={Schema.ketju.body}
-            i18n={$_} />
+            {i18n} />
         </div>
 
         <div class="flex space-x-4 pt-8">
           <Button
             disabled={!dirty}
             type={'submit'}
-            text={$_(`${i18nRoot}.submit`)} />
+            text={i18n(`${i18nRoot}.submit`)} />
           <Button
             disabled={!dirty}
             on:click={cancel}
-            text={$_(`${i18nRoot}.reset`)}
+            text={i18n(`${i18nRoot}.reset`)}
             type={'reset'}
             style={'secondary'} />
         </div>

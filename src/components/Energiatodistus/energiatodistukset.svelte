@@ -34,6 +34,8 @@
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
+  const i18n = $_;
+
   let overlay = true;
   let failure = false;
 
@@ -57,7 +59,7 @@
   );
 
   const showError = defaultKey => response => {
-    const msg = $_(
+    const msg = i18n(
       Maybe.orSome(defaultKey, Response.localizationKey(response))
     );
 
@@ -87,7 +89,7 @@
         flashMessageStore.add(
           'Energiatodistus',
           'success',
-          $_('energiatodistukset.messages.delete-success')
+          i18n('energiatodistukset.messages.delete-success')
         );
         nextPageCallback(1);
       },
@@ -239,19 +241,19 @@
 <div class="w-full mt-3">
   {#each resources.toArray() as { luokittelut, whoami }}
     <div class="flex flex-col lg:flex-row justify-between">
-      <H1 text={$_('energiatodistukset.title')} />
+      <H1 text={i18n('energiatodistukset.title')} />
       {#if Kayttajat.isLaatija(whoami)}
         <div
           class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
           <div class="flex flex-row my-auto">
             <Link
-              text={$_('energiatodistus.luo2018')}
+              text={i18n('energiatodistus.luo2018')}
               href="#/energiatodistus/2018/new"
               icon={Maybe.Some('add_circle_outline')} />
           </div>
           <div class="flex flex-row my-auto">
             <Link
-              text={$_('energiatodistus.luo2013')}
+              text={i18n('energiatodistus.luo2013')}
               href="#/energiatodistus/2013/new"
               icon={Maybe.Some('add_circle_outline')} />
           </div>
@@ -269,38 +271,38 @@
     <Overlay {overlay}>
       <div slot="content">
         {#if R.isEmpty(energiatodistukset)}
-          <p class="mb-10">{$_('energiatodistukset.not-found')}</p>
+          <p class="mb-10">{i18n('energiatodistukset.not-found')}</p>
         {:else}
           <div class="mb-10">
             <table class="etp-table">
               <thead class="etp-table--thead">
                 <tr class="etp-table--tr etp-table--tr__light">
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.tila')}
+                    {i18n('energiatodistus.haku.sarakkeet.tila')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.tunnus')}
+                    {i18n('energiatodistus.haku.sarakkeet.tunnus')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.e-luokka')}
+                    {i18n('energiatodistus.haku.sarakkeet.e-luokka')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.versio')}
+                    {i18n('energiatodistus.haku.sarakkeet.versio')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.voimassa')}
+                    {i18n('energiatodistus.haku.sarakkeet.voimassa')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
+                    {i18n('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.osoite')}
+                    {i18n('energiatodistus.haku.sarakkeet.osoite')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.ktl')}
+                    {i18n('energiatodistus.haku.sarakkeet.ktl')}
                   </th>
                   <th class="etp-table--th">
-                    {$_('energiatodistus.haku.sarakkeet.laatija')}
+                    {i18n('energiatodistus.haku.sarakkeet.laatija')}
                   </th>
                   <th class="etp-table--th  etp-table--th__center">
                     <span class="material-icons"> delete_forever </span>
@@ -314,7 +316,7 @@
                     class="etp-table--tr etp-table--tr__link"
                     on:click={ETViews.toETView(energiatodistus)}>
                     <td class="etp-table--td">
-                      {$_(
+                      {i18n(
                         'energiatodistus.tila.' +
                           et.tilaKey(energiatodistus['tila-id'])
                       )}
@@ -353,13 +355,13 @@
                     <td class="etp-table--td etp-table--td__center">
                       <Confirm
                         let:confirm
-                        confirmButtonLabel={$_('confirm.button.delete')}
-                        confirmMessage={$_('confirm.you-want-to-delete')}>
+                        confirmButtonLabel={i18n('confirm.button.delete')}
+                        confirmMessage={i18n('confirm.you-want-to-delete')}>
                         <span
                           class="material-icons delete-icon"
                           class:text-disabled={!et.isDraft(energiatodistus)}
                           title={!et.isDraft(energiatodistus)
-                            ? $_('energiatodistus.haku.poista-disabled')
+                            ? i18n('energiatodistus.haku.poista-disabled')
                             : ''}
                           on:click|stopPropagation={_ => {
                             if (et.isDraft(energiatodistus))
@@ -398,7 +400,7 @@
       <span class="material-icons">attachment</span>
       &nbsp;
       <Link
-        text={$_('energiatodistus.lataa-xlsx')}
+        text={i18n('energiatodistus.lataa-xlsx')}
         href={'/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx' +
           queryStringForXlsx} />
     </div>
