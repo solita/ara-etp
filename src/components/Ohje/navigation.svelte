@@ -82,12 +82,14 @@
   {#each Maybe.toArray(whoami) as whoami}
     {#if Kayttajat.isPaakayttaja(whoami)}
       <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
-        <TextButton
-          on:click={() => {
-            alert('Order Links Button');
-          }}
-          icon="swap_vert"
-          text={$_('ohje.navigation.sort')} />
+        {#if !R.isEmpty(sivutTree)}
+          <TextButton
+            on:click={() => {
+              alert('Order Links Button');
+            }}
+            icon="swap_vert"
+            text={$_('ohje.navigation.sort')} />
+        {/if}
         {#if id !== 'new'}
           <Link
             href="/#/ohje/new"
