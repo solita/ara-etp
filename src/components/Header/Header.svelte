@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import * as Navigation from '@Utility/navigation';
+  import * as Kayttajat from '@Utility/kayttajat';
   import { _ } from '@Language/i18n';
 
   import LanguageSelect from './language-select';
@@ -81,7 +82,7 @@
     <LanguageSelect />
   </div>
 
-  <div class="dropdowns flex space-x-4">
+  <div class="dropdowns flex space-x-4 items-center">
     {#if !R.isEmpty(ohjeNav)}
       <div class="flex flex-row justify-between">
         <div
@@ -89,7 +90,7 @@
           class="relative cursor-pointer"
           on:click={() => (showOhjeDropdown = !showOhjeDropdown)}>
           <span> {$_('navigation.ohjeet')} </span>
-          <span class="material-icons my-auto">keyboard_arrow_down</span>
+          <span class="material-icons absolute">keyboard_arrow_down</span>
           {#if showOhjeDropdown}
             <div
               class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
@@ -102,6 +103,11 @@
           {/if}
         </div>
       </div>
+    {:else if Kayttajat.isPaakayttaja(R.head(whoami.toArray()))}
+      <a class="text-light flex items-center" href={'/#/ohje/new'}>
+        <span class="material-icons"> add </span>
+        <span>{$_('navigation.ohjeet')}</span>
+      </a>
     {/if}
 
     {#each whoami.toArray() as user}
@@ -113,7 +119,7 @@
           <span>
             {fullName(user)}
           </span>
-          <span class="material-icons my-auto">keyboard_arrow_down</span>
+          <span class="material-icons absolute">keyboard_arrow_down</span>
           {#if showNameDropdown}
             <div
               class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
