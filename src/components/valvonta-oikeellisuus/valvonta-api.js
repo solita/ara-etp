@@ -43,12 +43,13 @@ export const deserializeValvonta = R.evolve({
 
 export const serializeToimenpide = R.compose(
   R.evolve({
+    'template-id': Maybe.orSome(null),
     document: Maybe.orSome(null),
     'deadline-date': EM.fold(null, date =>
       dfns.formatISO(date, { representation: 'date' })
     )
   }),
-  R.pick(['type-id', 'deadline-date', 'document']));
+  R.pick(['type-id', 'deadline-date', 'document', 'template-id']));
 
 export const valvonnat = R.compose(
   R.map(R.map(deserializeValvontaStatus)),
@@ -62,6 +63,11 @@ export const valvontaCount = Fetch.getJson(fetch, url.valvonnat + '/count');
 export const toimenpidetyypit = Fetch.cached(
   fetch,
   '/valvonta/oikeellisuus/toimenpidetyypit'
+);
+
+export const templates = Fetch.cached(
+  fetch,
+  '/valvonta/oikeellisuus/templates'
 );
 
 export const toimenpiteet = R.compose(

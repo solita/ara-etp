@@ -21,6 +21,7 @@
   export let valvonta;
   export let toimenpiteet;
   export let toimenpidetyypit;
+  export let templates;
 
   export let saveValvonta;
   export let reload;
@@ -34,6 +35,7 @@
       newToimenpide = Maybe.Some({
         'type-id': type,
         'deadline-date': Either.Right(Toimenpiteet.defaultDeadline(type)),
+        'template-id': Maybe.None(),
         document: Maybe.None()
       });
     } else {
@@ -65,7 +67,10 @@
 </script>
 
 {#each Maybe.toArray(newToimenpide) as toimenpide}
-  <NewToimenpideDialog id={energiatodistus.id} {toimenpide} reload={load} />
+  <NewToimenpideDialog id={energiatodistus.id}
+                       {toimenpide}
+                       {templates}
+                       reload={load} />
 {/each}
 
 <div class="lg:w-1/2 w-full mb-5">

@@ -59,6 +59,7 @@
         ),
         toimenpiteet: ValvontaApi.toimenpiteet(params.id),
         toimenpidetyypit: ValvontaApi.toimenpidetyypit,
+        templates: R.map(R.groupBy(R.prop('toimenpidetype-id')), ValvontaApi.templates),
         valvojat: ValvontaApi.valvojat,
         valvonta: ValvontaApi.valvonta(params.id),
         whoami: KayttajaApi.whoami
@@ -101,7 +102,7 @@
   <div slot="content" class="w-full mt-3">
     <H1 text="Oikeellisuuden valvonta" />
 
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, toimenpidetyypit, valvojat, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, toimenpidetyypit, templates, valvojat, valvonta, whoami }}
       <div class="mb-2">
         Energiatodistus {energiatodistus.versio}/{energiatodistus.id} -
         {Maybe.orSome('', energiatodistus.perustiedot.nimi)} -
@@ -121,6 +122,7 @@
           {valvonta}
           {toimenpiteet}
           {toimenpidetyypit}
+          {templates}
           {saveValvonta}
           reload={_ => load(params)} />
       {/if}
