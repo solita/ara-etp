@@ -51,7 +51,8 @@
       overlay = false;
     },
     Future.parallelObject(2, {
-      whoami: KayttajaApi.whoami
+      whoami: KayttajaApi.whoami,
+      templates: R.map(R.groupBy(R.prop('toimenpidetype-id')), ValvontaApi.templates),
     })
   );
 
@@ -89,10 +90,11 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     <DirtyConfirmation {dirty}/>
-    {#each Maybe.toArray(resources) as {whoami}}
+    {#each Maybe.toArray(resources) as {whoami, templates}}
       <ToimenpideForm {toimenpide}
                       bind:dirty
                       {whoami}
+                      {templates}
                       {cancel}
                       submit={addToimenpide}/>
     {/each}
