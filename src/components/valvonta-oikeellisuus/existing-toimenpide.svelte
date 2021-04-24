@@ -51,7 +51,7 @@
       },
       Future.parallelObject(3, {
         whoami: KayttajaApi.whoami,
-        templates: R.map(R.groupBy(R.prop('toimenpidetype-id')), ValvontaApi.templates),
+        templates: ValvontaApi.templates,
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])
       })
     );

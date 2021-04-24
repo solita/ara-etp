@@ -59,7 +59,7 @@
         ),
         toimenpiteet: ValvontaApi.toimenpiteet(params.id),
         toimenpidetyypit: ValvontaApi.toimenpidetyypit,
-        templates: R.map(R.groupBy(R.prop('toimenpidetype-id')), ValvontaApi.templates),
+        templates: ValvontaApi.templates,
         valvojat: ValvontaApi.valvojat,
         valvonta: ValvontaApi.valvonta(params.id),
         whoami: KayttajaApi.whoami

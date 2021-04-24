@@ -66,10 +66,11 @@ export const toimenpidetyypit = Fetch.cached(
   '/valvonta/oikeellisuus/toimenpidetyypit'
 );
 
-export const templates = Fetch.cached(
-  fetch,
-  '/valvonta/oikeellisuus/templates'
-);
+export const templates = R.compose(
+  Future.cache,
+  R.map(R.groupBy(R.prop('toimenpidetype-id'))),
+  Fetch.getJson(fetch)
+)(url.valvonnat + '/templates');
 
 export const toimenpiteet = R.compose(
   R.map(R.map(deserializeToimenpide)),
