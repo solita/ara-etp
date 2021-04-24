@@ -51,7 +51,7 @@
       },
       Future.parallelObject(3, {
         whoami: KayttajaApi.whoami,
-        templates: ValvontaApi.templates,
+        templatesByType: ValvontaApi.templatesByType,
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])
       })
     );
@@ -122,10 +122,10 @@
   <slot />
   <div slot="content" class="w-full mt-3">
     <DirtyConfirmation {dirty} />
-    {#each Maybe.toArray(resources) as { whoami, templates, toimenpide }}
+    {#each Maybe.toArray(resources) as { whoami, templatesByType, toimenpide }}
       <ToimenpideForm
         {toimenpide}
-        {templates}
+        {templatesByType}
         bind:dirty
         {whoami}
         {cancel}

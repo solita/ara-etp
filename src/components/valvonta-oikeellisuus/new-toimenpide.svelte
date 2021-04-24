@@ -52,7 +52,7 @@
     },
     Future.parallelObject(2, {
       whoami: KayttajaApi.whoami,
-      templates: ValvontaApi.templates,
+      templatesByType: ValvontaApi.templatesByType,
     })
   );
 
@@ -90,11 +90,11 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     <DirtyConfirmation {dirty}/>
-    {#each Maybe.toArray(resources) as {whoami, templates}}
+    {#each Maybe.toArray(resources) as {whoami, templatesByType}}
       <ToimenpideForm {toimenpide}
                       bind:dirty
                       {whoami}
-                      {templates}
+                      {templatesByType}
                       {cancel}
                       submit={addToimenpide}/>
     {/each}

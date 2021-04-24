@@ -23,7 +23,7 @@
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   export let id;
-  export let templates;
+  export let templatesByType;
   export let toimenpide;
   export let reload;
 
@@ -52,11 +52,8 @@
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
-  $: toimenpideTemplates = R.defaultTo([], templates[toimenpide['type-id']]);
-
-  $: formatTemplate  = R.compose(
-    Maybe.fold('', Locales.label($locale)),
-    Maybe.findById(R.__, toimenpideTemplates));
+  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
+  $: formatTemplate  = Toimenpiteet.templateLabel($locale, templates);
 </script>
 
 <style type="text/postcss">
@@ -100,7 +97,7 @@
       </div>
     {/if}
 
-    {#if !R.isEmpty(toimenpideTemplates)}
+    {#if !R.isEmpty(templates)}
       <div class="w-1/2 py-4">
         <Select
           label="Valitse asiakirjapohja"
@@ -108,7 +105,7 @@
           lens={R.lensProp('template-id')}
           parse={Maybe.fromNull}
           format={formatTemplate}
-          items={R.pluck('id', toimenpideTemplates)} />
+          items={R.pluck('id', templates)} />
       </div>
     {:else}
       <div class="w-full py-4">

@@ -15,11 +15,11 @@
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
 
   export let toimenpide;
-  export let templates;
+  export let templatesByType;
   export let disabled;
 
-  $: toimenpideTemplates = Toimenpiteet.templates(templates)(toimenpide);
-  $: formatTemplate  = Toimenpiteet.templateLabel($locale, toimenpideTemplates);
+  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
+  $: formatTemplate  = Toimenpiteet.templateLabel($locale, templates);
 </script>
 
 <div class="flex py-4">
@@ -34,7 +34,7 @@
       i18n={$_} />
 </div>
 
-{#if !R.isEmpty(toimenpideTemplates)}
+{#if !R.isEmpty(templates)}
   <div class="w-1/2 py-4">
     <Select
         label="Valitse asiakirjapohja"
@@ -42,6 +42,6 @@
         lens={R.lensProp('template-id')}
         parse={Maybe.fromNull}
         format={formatTemplate}
-        items={R.pluck('id', toimenpideTemplates)} />
+        items={R.pluck('id', templates)} />
   </div>
 {/if}

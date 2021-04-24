@@ -21,7 +21,7 @@
   export let valvonta;
   export let toimenpiteet;
   export let toimenpidetyypit;
-  export let templates;
+  export let templatesByType;
 
   export let saveValvonta;
   export let reload;
@@ -69,7 +69,7 @@
 {#each Maybe.toArray(newToimenpide) as toimenpide}
   <NewToimenpideDialog id={energiatodistus.id}
                        {toimenpide}
-                       {templates}
+                       {templatesByType}
                        reload={load} />
 {/each}
 
