@@ -53,7 +53,7 @@
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
-  $: formatTemplate  = Toimenpiteet.templateLabel($locale, templates);
+  $: formatTemplate  = Locales.labelForId($locale, templates);
 </script>
 
 <style type="text/postcss">

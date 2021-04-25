@@ -85,7 +85,3 @@ export const templates = templatesByType => R.compose(
   R.defaultTo([]),
   R.prop(R.__, templatesByType),
   R.prop('type-id'));
-
-export const templateLabel = (locale, templates) => R.compose(
-  Maybe.fold('', Locales.label(locale)),
-  Maybe.findById(R.__, templates));

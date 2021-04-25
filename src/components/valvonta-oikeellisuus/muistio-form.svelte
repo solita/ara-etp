@@ -4,6 +4,7 @@
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
+  import * as Locales from '@Language/locale-utils';
 
   import { _, locale } from '@Language/i18n';
 
@@ -19,7 +20,7 @@
   export let disabled;
 
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
-  $: formatTemplate  = Toimenpiteet.templateLabel($locale, templates);
+  $: formatTemplate  = Locales.labelForId($locale, templates);
 </script>
 
 <div class="flex py-4">
