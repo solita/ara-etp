@@ -8,7 +8,6 @@
 
   import QueryInput from './query-input';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
-  import SimpleInput from '@Component/Input/SimpleInput';
   import Input from '@Component/Input/Input';
 
   export let operator;
@@ -77,11 +76,6 @@
         bind:model={completedValue}
         label={$_('energiatodistus.haku.valitse_hakuehto')}
         search={true} />
-      <!-- <SimpleInput
-        label={$_('energiatodistus.haku.valitse_hakuehto')}
-        search={true}
-        bind:rawValue={completedValue}
-        rawValueAsViewValue={true} /> -->
     </Autocomplete>
     <input
       bind:this={input}

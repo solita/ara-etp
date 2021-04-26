@@ -9,7 +9,6 @@
 
   import DropdownList from '@Component/DropdownList/DropdownList';
   import Input from '@Component/Input/Input';
-  import SimpleInput from '@Component/Input/SimpleInput';
 
   export let items = [];
   export let completedValue = '';
@@ -105,7 +104,6 @@
 <div bind:this={node} on:keydown={handleKeydown}>
   <slot>
     <Input bind:model={completedValue} />
-    <!-- <SimpleInput bind:rawValue={completedValue} rawValueAsViewValue={true} /> -->
   </slot>
   {#if showDropdown}
     <DropdownList

@@ -1,6 +1,5 @@
 <script>
   import { tick } from 'svelte';
-  import { slide } from 'svelte/transition';
   import { querystring, location, push } from 'svelte-spa-router';
   import qs from 'qs';
   import * as R from 'ramda';
@@ -12,14 +11,11 @@
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
 
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
   import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
 
   import * as EtHakuUtils from './energiatodistus-haku-utils';
   import Input from '@Component/Input/Input';
-  import SimpleInput from '@Component/Input/SimpleInput';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import QueryBlock from './querybuilder/queryblock';
   import Button from '@Component/Button/Button';
@@ -93,23 +89,16 @@
 {#if Maybe.isSome(laatijat)}
   <div class="flex w-full">
     <div class="w-7/12 flex flex-col justify-end">
-      <Input bind:model={id} label={$_('energiatodistus.id')} search={true} wrapper={PillInputWrapper} on:keypress={evt => {
-          if (evt.key === 'Enter') {
-            form.dispatchEvent(new Event('submit'));
-          }
-        }}/>
-
-      <!-- <SimpleInput
+      <Input
+        bind:model={id}
         label={$_('energiatodistus.id')}
-        wrapper={PillInputWrapper}
-        rawValueAsViewValue={true}
         search={true}
-        bind:rawValue={id}
+        wrapper={PillInputWrapper}
         on:keypress={evt => {
           if (evt.key === 'Enter') {
             form.dispatchEvent(new Event('submit'));
           }
-        }} /> -->
+        }} />
     </div>
   </div>
 

@@ -4,7 +4,6 @@
   import Label from '@Component/Label/Label';
   import InputContainer from './InputContainer';
   import InputField from './InputField';
-  import SimpleInput from './SimpleInput';
   import SquareInputWrapper from './SquareInputWrapper';
 
   export let id;
@@ -86,14 +85,6 @@
       {error}
       {warning}
       {disabled}>
-      <slot
-        name="inputField"
-        {valid}
-        {warning}
-        {error}
-        {validationResult}
-        {viewValue}
-        {focused} />
       <svelte:component
         this={inputComponent}
         {id}
