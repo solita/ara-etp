@@ -74,32 +74,41 @@
     {warning}
     {focused}
     unit={labelUnit} />
-      
-  
-    <svelte:component 
-    this={inputComponentWrapper} 
-    {caret}
-    {search}
-    {focused}
-    {error}
-    {warning}
-    {disabled}>
-      <slot name="inputField" valid={valid} warning={warning} error={error} validationResult={validationResult} viewValue={viewValue} focused={focused} />
-      <svelte:component 
-      this={inputComponent}
-      {id}
-      {name}
-      {disabled}
-      {center}
-      {error}
-      {autocomplete}
-      {viewValue}
-      {focused}
-      on:input
-      on:keypress />
-    </svelte:component>
 
-  
+  <slot {valid} {validationResult} {viewValue} {focused} {warning} {error} />
+
+  {#if !$$slots.default}
+    <svelte:component
+      this={inputComponentWrapper}
+      {caret}
+      {search}
+      {focused}
+      {error}
+      {warning}
+      {disabled}>
+      <slot
+        name="inputField"
+        {valid}
+        {warning}
+        {error}
+        {validationResult}
+        {viewValue}
+        {focused} />
+      <svelte:component
+        this={inputComponent}
+        {id}
+        {name}
+        {disabled}
+        {center}
+        {error}
+        {autocomplete}
+        {viewValue}
+        {focused}
+        on:input
+        on:keypress />
+    </svelte:component>
+  {/if}
+
   {#if !valid}
     <div class="validation-label">
       {#if validationResult.type === 'error'}
