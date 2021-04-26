@@ -1321,6 +1321,8 @@
       "delete": "Poista",
       "success": "Sivun muokkaaminen onnistui",
       "error": "Sivun muokkaaminen epäonnistui",
+      "delete-success": "Sivu poistettu",
+      "delete-error": "Sivun poisto epäonnistui",
       "validation-error": "Tiedoissa virheitä, tarkista syötteet",
       "load-error": "Tietojen lataus epäonnistui."
     },

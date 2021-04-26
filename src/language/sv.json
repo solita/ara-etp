@@ -1174,6 +1174,8 @@
       "submit": "Tallenna SV?",
       "delete": "Poista SV?",
       "success": "Sivun muokkaaminen onnistui SV?",
+      "delete-success": "Sivu poistettu SV?",
+      "delete-error": "Sivun poisto epäonnistui SV?",
       "error": "Sivun muokkaaminen epäonnistui SV?",
       "validation-error": "Tiedoissa virheitä, tarkista syötteet SV?",
       "load-error": "Tietojen lataus epäonnistui. SV?"
