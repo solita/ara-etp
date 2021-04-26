@@ -20,6 +20,7 @@
   import TextButton from '../Button/TextButton.svelte';
 
   export let toimenpide;
+  export let templatesByType;
   export let dirty;
   export let submit;
   export let cancel;
@@ -67,7 +68,8 @@
       on:input={setDirty}
       on:change={setDirty}>
 
-  <Content bind:toimenpide disabled={!Toimenpiteet.isDraft(toimenpide)} />
+  <Content bind:toimenpide {templatesByType}
+           disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">
     <Button

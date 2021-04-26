@@ -4,8 +4,11 @@
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
+  import * as Locales from '@Language/locale-utils';
 
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
+
+  import * as Toimenpiteet from './toimenpiteet';
 
   import Datepicker from '@Component/Input/Datepicker.svelte';
   import Select from '@Component/Select/Select.svelte';
@@ -13,7 +16,11 @@
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
 
   export let toimenpide;
+  export let templatesByType;
   export let disabled;
+
+  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
+  $: formatTemplate  = Locales.labelForId($locale, templates);
 </script>
 
 <div class="flex py-4">
@@ -28,16 +35,14 @@
       i18n={$_} />
 </div>
 
-<div class="w-1/2 py-4">
-  <Select
-      label="Valitse asiakirjapohja"
-      {disabled}
-      model={Maybe.None()}
-      lens={R.lens(R.identity, R.identity)}
-      items={[
-            'Energiatodistus 2013 FI',
-            'Energiatodistus 2013 SV',
-            'Energiatodistus 2018 FI',
-            'Energiatodistus 2018 SV'
-          ]} />
-</div>
+{#if !R.isEmpty(templates)}
+  <div class="w-1/2 py-4">
+    <Select
+        label="Valitse asiakirjapohja"
+        bind:model={toimenpide}
+        lens={R.lensProp('template-id')}
+        parse={Maybe.fromNull}
+        format={formatTemplate}
+        items={R.pluck('id', templates)} />
+  </div>
+{/if}

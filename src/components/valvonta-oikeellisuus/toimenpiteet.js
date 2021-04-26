@@ -3,6 +3,7 @@ import * as Deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as dfns from 'date-fns';
 import * as Either from '@Utility/either-utils';
+import * as Locales from '@Language/locale-utils';
 
 export const type = {
   verified: 0,
@@ -73,9 +74,14 @@ export const emptyValvontamuistio = _ => ({
   'type-id': type.audit.report,
   'deadline-date': Either.Right(defaultDeadline(type.audit.report)),
   document: Maybe.None(),
-  /*'template-id': Maybe.None(),
-  'vakavuusluokka-id': Maybe.None(),
+  'template-id': Maybe.None(),
+  /*'vakavuusluokka-id': Maybe.None(),
   virheet: []*/
 });
 
-export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'))
+export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
+
+export const templates = templatesByType => R.compose(
+  R.defaultTo([]),
+  R.prop(R.__, templatesByType),
+  R.prop('type-id'));

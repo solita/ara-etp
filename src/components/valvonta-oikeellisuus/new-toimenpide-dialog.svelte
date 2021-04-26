@@ -7,10 +7,11 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Toimenpiteet from './toimenpiteet';
+  import * as Locales from '@Language/locale-utils';
 
   import * as ValvontaApi from './valvonta-api';
 
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
 
   import Button from '@Component/Button/Button';
   import Textarea from '@Component/Textarea/Textarea';
@@ -22,6 +23,7 @@
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   export let id;
+  export let templatesByType;
   export let toimenpide;
   export let reload;
 
@@ -49,6 +51,9 @@
   };
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
+
+  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
+  $: formatTemplate  = Locales.labelForId($locale, templates);
 </script>
 
 <style type="text/postcss">
@@ -92,18 +97,15 @@
       </div>
     {/if}
 
-    {#if Toimenpiteet.hasDocumentTemplate(toimenpide)}
+    {#if !R.isEmpty(templates)}
       <div class="w-1/2 py-4">
         <Select
           label="Valitse asiakirjapohja"
-          model={Maybe.None()}
-          lens={R.lens(R.identity, R.identity)}
-          items={[
-            'Energiatodistus 2013 FI',
-            'Energiatodistus 2013 SV',
-            'Energiatodistus 2018 FI',
-            'Energiatodistus 2018 SV'
-          ]} />
+          bind:model={toimenpide}
+          lens={R.lensProp('template-id')}
+          parse={Maybe.fromNull}
+          format={formatTemplate}
+          items={R.pluck('id', templates)} />
       </div>
     {:else}
       <div class="w-full py-4">
@@ -123,11 +125,7 @@
     <div class="buttons">
       <div class="mr-5 mt-5">
         <Button
-          text={i18n(
-            `${i18nRoot}.${Toimenpiteet.typeKey(
-              toimenpide['type-id']
-            )}.publish-button`
-          )}
+          text={text(toimenpide, 'publish-button')}
           on:click={publish(toimenpide)} />
       </div>
 
