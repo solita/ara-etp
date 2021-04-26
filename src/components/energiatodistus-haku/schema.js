@@ -280,6 +280,26 @@ const luokitteluEquals = R.curry((type, key) => ({
   type
 }));
 
+const timeEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, value) => [
+      [
+        'between',
+        key,
+        value,
+        dfns.endOfDay(dfns.parseISO(value), 1).toISOString()
+      ]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DATE
+});
+
+const timeComparisons = [timeEquals];
+
 const perustiedot = {
   nimi: [...stringComparisons],
   rakennustunnus: [...stringComparisons],
@@ -586,7 +606,7 @@ const huomiot = {
 export const schema = {
   id: [...numberComparisons],
   'korvattu-energiatodistus-id': [...numberComparisons],
-  allekirjoitusaika: [...dateComparisons],
+  allekirjoitusaika: [...timeComparisons],
   'tila-id': [...tilaComparisons],
   perustiedot,
   lahtotiedot,
