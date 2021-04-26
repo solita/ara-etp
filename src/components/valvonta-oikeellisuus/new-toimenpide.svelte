@@ -30,19 +30,7 @@
   let dirty = false;
   let overlay = true;
 
-  const empty = {
-    'rfi-extra': _ => { todo: true },
-    'audit-report': Toimenpiteet.emptyValvontamuistio,
-    'audit-reply': Toimenpiteet.emptyReply,
-    'rfi-reply': Toimenpiteet.emptyReply
-  };
-  const emptyToimenpide = params => {
-    const typeId = parseInt(params['type-id']);
-    const create = empty[Toimenpiteet.typeKey(typeId)];
-    return create(typeId);
-  }
-
-  $: toimenpide = emptyToimenpide(params);
+  $: toimenpide = Toimenpiteet.emptyToimenpide(parseInt(params['type-id']));
 
   Future.fork(
     response => {

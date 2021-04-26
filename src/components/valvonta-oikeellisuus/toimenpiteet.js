@@ -66,22 +66,12 @@ export const i18nKey = (toimenpide, key) =>
     key
   ]);
 
-export const emptyValvontamuistio = _ => ({
-  'publish-time': Maybe.None(),
-  'type-id': type.audit.report,
-  'deadline-date': Either.Right(defaultDeadline(type.audit.report)),
-  document: Maybe.None(),
-  'template-id': Maybe.None(),
-  /*'vakavuusluokka-id': Maybe.None(),
-  virheet: []*/
-});
-
-export const emptyReply = typeId => ({
-  'publish-time': Maybe.None(),
+export const emptyToimenpide = typeId => ({
   'type-id': typeId,
-  'deadline-date': Either.Right(Maybe.None()),
-  document: Maybe.None(),
+  'publish-time': Maybe.None(),
+  'deadline-date': Either.Right(defaultDeadline(typeId)),
   'template-id': Maybe.None(),
+  document: Maybe.None()
 });
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));

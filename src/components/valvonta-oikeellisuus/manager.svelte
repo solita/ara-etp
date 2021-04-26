@@ -32,12 +32,7 @@
   const openNewToimenpide = type => {
     if (Toimenpiteet.isDialogType(type)) {
       // toimenpiteet, jotka käsitellään dialogi-näytöllä
-      newToimenpide = Maybe.Some({
-        'type-id': type,
-        'deadline-date': Either.Right(Toimenpiteet.defaultDeadline(type)),
-        'template-id': Maybe.None(),
-        document: Maybe.None()
-      });
+      newToimenpide = Maybe.Some(Toimenpiteet.emptyToimenpide(type));
     } else {
       // toimenpiteet, jotka käsitellään omalla näytöllä
       Router.push(
