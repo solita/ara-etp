@@ -8,8 +8,8 @@
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
 
-  import { flashMessageStore, idTranslateStore } from '@/stores';
-  import { replace } from '@Component/Router/router';
+  import { flashMessageStore } from '@/stores';
+  import * as Router from '@Component/Router/router';
 
   import * as Toimenpiteet from './toimenpiteet';
 
@@ -106,6 +106,7 @@
           'success',
           i18n(`${i18nRoot}.messages.publish-success`)
         );
+        Router.push(`#/valvonta/oikeellisuus/${params.version}/${params.id}`)
       },
       ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])
     );

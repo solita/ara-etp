@@ -21,6 +21,7 @@
   import H2 from '@Component/H/H2.svelte';
 
   import Manager from './manager.svelte';
+  import LaatijaResponse from './laatija-response.svelte';
   import Toimenpide from './toimenpide.svelte';
 
   const i18n = $_;
@@ -125,6 +126,9 @@
           {templatesByType}
           {saveValvonta}
           reload={_ => load(params)} />
+      {/if}
+      {#if Kayttajat.isLaatija(whoami)}
+        <LaatijaResponse {energiatodistus} {toimenpiteet} />
       {/if}
 
       <H2 text="Toimenpiteet" />

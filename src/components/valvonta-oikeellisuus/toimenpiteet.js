@@ -39,14 +39,11 @@ export const typeKey = id => types[id];
 export const isType = R.propEq('type-id');
 
 const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
-export const isDialogType = R.complement(R.equals(type.audit.report));
-const isDocumentTemplateType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
+export const isDialogType = R.includes(R.__, [0, 1, 2, 3, 5, 6, 9, 10, 11]);
+const isResponseType = R.includes(R.__, [4, 8]);
 
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
-export const hasDocumentTemplate = R.propSatisfies(
-  isDocumentTemplateType,
-  'type-id'
-);
+export const isResponse = R.propSatisfies(isResponseType, 'type-id');
 
 export const isAuditCase = R.propSatisfies(R.gt(R.__, type.anomaly), 'type-id');
 export const isAuditCaseToimenpideType = R.propSatisfies(
@@ -79,9 +76,31 @@ export const emptyValvontamuistio = _ => ({
   virheet: []*/
 });
 
+export const emptyReply = typeId => ({
+  'publish-time': Maybe.None(),
+  'type-id': typeId,
+  'deadline-date': Either.Right(Maybe.None()),
+  document: Maybe.None(),
+  'template-id': Maybe.None(),
+});
+
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
 
 export const templates = templatesByType => R.compose(
   R.defaultTo([]),
   R.prop(R.__, templatesByType),
+  R.prop('type-id'));
+
+const responseTypes = {
+  'rfi-request': type.rfi.reply,
+  'rfi-order': type.rfi.reply,
+  'rfi-warning': type.rfi.reply,
+  'audit-report': type.audit.reply,
+  'audit-order': type.audit.reply,
+  'audit-warning': type.audit.reply,
+}
+
+export const responseTypeFor = R.compose(
+  Maybe.fromNull,
+  typeId => responseTypes[typeKey(typeId)],
   R.prop('type-id'));

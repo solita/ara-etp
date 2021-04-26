@@ -15,6 +15,7 @@
 
   import MuistioForm from './muistio-form.svelte';
   import LisatietopyyntoForm from './lisatietopyynto-form.svelte';
+  import ResponseForm from './response-form.svelte';
   import Button from '../Button/Button.svelte';
   import { flashMessageStore } from '@/stores';
   import TextButton from '../Button/TextButton.svelte';
@@ -32,7 +33,9 @@
 
   const forms = {
     'audit-report': MuistioForm,
-    'rfi-extra': LisatietopyyntoForm
+    'rfi-extra': LisatietopyyntoForm,
+    'rfi-reply': ResponseForm,
+    'audit-reply': ResponseForm,
   };
   const Content = forms[Toimenpiteet.typeKey(toimenpide['type-id'])];
 
@@ -68,7 +71,8 @@
       on:input={setDirty}
       on:change={setDirty}>
 
-  <Content bind:toimenpide {templatesByType}
+  <Content bind:toimenpide
+           {templatesByType}
            disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">

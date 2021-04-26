@@ -32,9 +32,15 @@
 
   const empty = {
     'rfi-extra': _ => { todo: true },
-    'audit-report': Toimenpiteet.emptyValvontamuistio
+    'audit-report': Toimenpiteet.emptyValvontamuistio,
+    'audit-reply': Toimenpiteet.emptyReply,
+    'rfi-reply': Toimenpiteet.emptyReply
   };
-  const emptyToimenpide = params => empty[Toimenpiteet.typeKey(params['type-id'])]();
+  const emptyToimenpide = params => {
+    const typeId = parseInt(params['type-id']);
+    const create = empty[Toimenpiteet.typeKey(typeId)];
+    return create(typeId);
+  }
 
   $: toimenpide = emptyToimenpide(params);
 

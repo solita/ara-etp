@@ -1229,6 +1229,13 @@
           "description": "Pyydetään laatijalta lisää tietoa.",
           "publish-button": "Lähetä tietopyyntö"
         },
+        "rfi-reply": {
+          "title": "Vastaus tietopyyntöön",
+          "document": "Vastaus",
+          "save-button": "Tallenna",
+          "reset-button": "Peruuta",
+          "publish-button": "Lähetä vastaus"
+        },
         "rfi-order": {
           "title": "Tietopyyntö kehoitus",
           "description": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
