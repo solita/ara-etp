@@ -6,6 +6,7 @@
   export let text = '';
   export let target = '_self';
   export let icon = Maybe.None();
+  export let disabled = false;
 </script>
 
 <style type="text/postcss">
@@ -16,9 +17,12 @@
   a:hover {
     @apply cursor-pointer border-primary;
   }
+  a.disabled {
+    @apply pointer-events-none text-disabled;
+  }
 </style>
 
-<a {href} {target}>
+<a {href} {target} class:disabled>
   {#each Maybe.toArray(icon) as i}
     <span class="font-icon mr-1">{i}</span>
   {/each}

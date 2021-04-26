@@ -19,6 +19,8 @@
   $: id = R.last(R.split('/ohje/', $location));
   let whoami = Maybe.None();
   let sivutTree = [];
+  let sortMode = false;
+  $: console.log('sortMode', sortMode);
 
   const hasParent = s => R.prop('parent-id', s).isSome();
   const hasNoParent = s => R.prop('parent-id', s).isNone();
@@ -71,28 +73,36 @@
     );
   };
   $: load();
+
+  const toggleSortMode = () => {
+    sortMode = !sortMode;
+  };
 </script>
 
 <nav class="w-full flex flex-col">
   {#each sivutTree as sivu}
-    <!-- {#if !(Kayttajat.isPaakayttaja(whoami) && sivu.published)} -->
-    <NavLink {sivu} activeSivuId={id} />
-    <!-- {/if} -->
+    <NavLink {sivu} activeSivuId={id} disabled={sortMode} />
   {/each}
   {#each Maybe.toArray(whoami) as whoami}
     {#if Kayttajat.isPaakayttaja(whoami)}
       <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
         {#if !R.isEmpty(sivutTree)}
-          <TextButton
-            on:click={() => {
-              alert('Order Links Button');
-            }}
-            icon="swap_vert"
-            text={$_('ohje.navigation.sort')} />
+          {#if !sortMode}
+            <TextButton
+              on:click={toggleSortMode}
+              icon="swap_vert"
+              text={$_('ohje.navigation.sort')} />
+          {:else}
+            <TextButton
+              on:click={toggleSortMode}
+              icon="highlight_off"
+              text={$_('ohje.navigation.end-sort')} />
+          {/if}
         {/if}
         {#if id !== 'new'}
           <Link
             href="/#/ohje/new"
+            disabled={sortMode}
             icon={Maybe.Some('add_circle_outline')}
             text={$_('ohje.navigation.create')} />
         {/if}

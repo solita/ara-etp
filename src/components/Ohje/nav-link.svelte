@@ -6,6 +6,7 @@
   export let sivu;
   export let activeSivuId = -1;
   export let childrenShown = true;
+  export let disabled = false;
 </script>
 
 <style>
@@ -34,6 +35,10 @@
   .root ~ .children {
     @apply border-b border-light;
   }
+
+  .disabled a {
+    @apply pointer-events-none text-disabled select-none;
+  }
 </style>
 
 <div class="flex flex-col w-full">
@@ -41,7 +46,8 @@
     class="flex w-full border-b items-center"
     class:active={sivu.id === parseInt(activeSivuId)}
     class:root={sivu['parent-id'].isNone()}
-    class:child={sivu['parent-id'].isSome()}>
+    class:child={sivu['parent-id'].isSome()}
+    class:disabled>
     {#if !R.isEmpty(sivu.children)}
       <button
         class="p-2"
@@ -55,7 +61,9 @@
         {/if}
       </button>
     {:else}
-      <span class="material-icons text-transparent p-2">circle</span>
+      <div class="text-transparent p-2 pointer-events-none">
+        <span class="material-icons">circle</span>
+      </div>
     {/if}
     <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
       <span class="title"> {sivu.title} </span>
@@ -63,13 +71,18 @@
         <span class="font-icon text-error"> visibility_off </span>
       {/if}
     </a>
+    {#if disabled}
+      <div class="p-2 cursor-move">
+        <span class="material-icons"> drag_handle </span>
+      </div>
+    {/if}
   </div>
   {#if !R.isEmpty(sivu.children) && childrenShown}
     <div
       class="children pl-1 bg-secondary"
       transition:slide|local={{ duration: 100 }}>
       {#each sivu.children as child}
-        <svelte:self sivu={child} {activeSivuId} />
+        <svelte:self sivu={child} {activeSivuId} {disabled} />
       {/each}
     </div>
   {/if}

@@ -1299,7 +1299,8 @@
   "ohje": {
     "navigation": {
       "create": "Uusi sivu",
-      "sort": "Järjestä"
+      "sort": "Järjestä",
+      "end-sort": "Lopeta järjestäminen"
     },
     "creator": {
       "title": "Otsikko",
@@ -1307,6 +1308,7 @@
       "published": "Julkaistu",
       "submit": "Luo",
       "reset": "Tyhjennä",
+      "back": "Takaisin",
       "success": "Uusi sivu lisätty",
       "error": "Uuden sivun lisääminen epäonnistui",
       "validation-error": "Tiedoissa virheitä, tarkista syötteet"
