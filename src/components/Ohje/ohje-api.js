@@ -31,6 +31,7 @@ export const getSivut = R.compose(
 
 export const postSivu = fetch =>
   R.compose(
+    Fetch.responseAsJson,
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.sivut)),
     serialize

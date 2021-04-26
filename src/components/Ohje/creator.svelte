@@ -7,6 +7,7 @@
   import { pop } from '@Component/Router/router';
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
+  import { push } from '@Component/Router/router';
 
   import * as api from './ohje-api';
   import * as Schema from './schema';
@@ -34,6 +35,7 @@
 
   let dirty = false;
   let overlay = false;
+  let createSuccess = false;
   let enableOverlay = _ => {
     overlay = true;
   };
@@ -53,10 +55,16 @@
         overlay = false;
       },
       response => {
-        console.log(response.body);
         flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.success`));
         dirty = false;
-        overlay = false;
+        createSuccess = true;
+        if (R.has('id', response)) {
+          setTimeout(() => {
+            push(`/ohje/${response.id}`);
+          }, 3000);
+        } else {
+          overlay = false;
+        }
       }
     ),
     R.tap(enableOverlay),
@@ -78,6 +86,12 @@
     }
   };
 </script>
+
+<style>
+  .success-icon {
+    font-size: 54px;
+  }
+</style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
@@ -157,6 +171,12 @@
     </div>
   </div>
   <div slot="overlay-content">
-    <Spinner />
+    {#if createSuccess}
+      <span class="material-icons text-primary success-icon">
+        check_circle
+      </span>
+    {:else}
+      <Spinner />
+    {/if}
   </div>
 </Overlay>
