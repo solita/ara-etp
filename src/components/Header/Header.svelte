@@ -25,7 +25,11 @@
   )(whoami);
 
   const hasNoParent = s => R.prop('parent-id', s).isNone();
-  let ohjeNav = R.filter(hasNoParent)(ohjeSivut);
+  const sortByOrdinalTitle = R.sortWith([
+    R.ascend(R.prop('ordinal')),
+    R.ascend(R.compose(R.toLower, R.prop('title')))
+  ]);
+  let ohjeNav = R.compose(sortByOrdinalTitle, R.filter(hasNoParent))(ohjeSivut);
 </script>
 
 <style type="text/postcss">
@@ -82,7 +86,7 @@
     <LanguageSelect />
   </div>
 
-  <div class="dropdowns flex space-x-4 items-center">
+  <div class="dropdowns flex space-x-8 items-center">
     {#if !R.isEmpty(ohjeNav)}
       <div class="flex flex-row justify-between">
         <div
