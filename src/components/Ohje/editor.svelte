@@ -18,6 +18,7 @@
   import TextEditor from '@Component/text-editor/text-editor.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
+  import Confirm from '@Component/Confirm/Confirm';
   import Navigation from './navigation';
 
   const i18nRoot = 'ohje.editor';
@@ -73,12 +74,34 @@
     R.tap(enableOverlay),
     api.putSivu(fetch, params.id)
   );
+  const deleteOhje = R.compose(
+    Future.fork(
+      response => {
+        const msg = $_(
+          Maybe.orSome(
+            `${i18nRoot}.delete-error`,
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('ohje', 'error', msg);
+        overlay = false;
+      },
+      _ => {
+        flashMessageStore.add(
+          'ohje',
+          'success',
+          $_(`${i18nRoot}.delete-success`)
+        );
+        dirty = false;
+        overlay = false;
+        push(`/`);
+      }
+    ),
+    R.tap(enableOverlay),
+    api.deleteSivu(fetch, params.id)
+  );
 
   const isValidForm = Validation.isValidForm(Schema.sivu);
-
-  const deleteOhje = () => {
-    alert('delete ohje');
-  };
 
   const submitOhje = event => {
     if (isValidForm(sivu)) {
@@ -154,11 +177,17 @@
                   disabled={!dirty}
                   type={'submit'}
                   text={$_(`${i18nRoot}.submit`)} />
-                <!-- <Button
-                disabled={!dirty}
-                on:click={deleteOhje}
-                text={$_(`${i18nRoot}.delete`)}
-                style={'error'} /> -->
+                <Confirm
+                  let:confirm
+                  confirmButtonLabel={$_('confirm.button.delete')}
+                  confirmMessage={$_('confirm.you-want-to-delete')}>
+                  <Button
+                    on:click={() => {
+                      confirm(deleteOhje);
+                    }}
+                    text={$_(`${i18nRoot}.delete`)}
+                    style={'error'} />
+                </Confirm>
               </div>
             </form>
           </div>

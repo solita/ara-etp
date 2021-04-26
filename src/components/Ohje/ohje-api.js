@@ -45,3 +45,10 @@ export const putSivu = R.curry((fetch, id, body) =>
     serialize
   )(body)
 );
+
+export const deleteSivu = R.curry((fetch, id) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'delete', url.sivu(id)))
+  )
+);
