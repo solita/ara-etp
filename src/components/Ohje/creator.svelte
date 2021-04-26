@@ -4,6 +4,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
+  import { pop } from '@Component/Router/router';
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
@@ -17,6 +18,7 @@
   import TextEditor from '@Component/text-editor/text-editor.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
+  import TextButton from '@Component/Button/TextButton';
   import Navigation from './navigation';
 
   const emptySivu = {
@@ -51,7 +53,7 @@
         overlay = false;
       },
       response => {
-        resId = response.body;
+        console.log(response.body);
         flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.success`));
         dirty = false;
         overlay = false;
@@ -79,12 +81,20 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
-    <div class="w-2/6 max-w-xs">
+    <!-- <div class="w-2/6 max-w-xs">
       <Navigation />
     </div>
-    <div class="w-4/6 flex-grow flex flex-col">
+    <div class="w-4/6 flex-grow flex flex-col"> -->
+    <div class="w-full flex flex-col">
       <DirtyConfirmation {dirty} />
       <div class="w-full flex flex-col">
+        <div class="mr-auto">
+          <TextButton
+            on:click={pop}
+            icon="arrow_back"
+            text={$_(`${i18nRoot}.back`)}
+            style={'secondary'} />
+        </div>
         <form
           id="ohje"
           on:submit|preventDefault={submitOhje}
@@ -112,9 +122,9 @@
               id={'ohje.body'}
               name={'ohje.body'}
               label={$_(`${i18nRoot}.body`)}
+              required={true}
               bind:model={sivu}
               lens={R.lensProp('body')}
-              required={true}
               parse={R.trim}
               validators={Schema.sivu.body}
               i18n={$_} />
@@ -135,12 +145,12 @@
               disabled={!dirty}
               type={'submit'}
               text={$_(`${i18nRoot}.submit`)} />
-            <Button
+            <!-- <Button
               disabled={!dirty}
               on:click={cancel}
               text={$_(`${i18nRoot}.reset`)}
               type={'reset'}
-              style={'secondary'} />
+              style={'secondary'} /> -->
           </div>
         </form>
       </div>
