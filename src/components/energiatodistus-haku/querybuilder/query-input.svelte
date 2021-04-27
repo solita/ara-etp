@@ -90,10 +90,15 @@
     <div class="flex items-end w-1/4">
       <div class="flex-grow">
         <Select
-          items={R.map(R.path(['operation', 'browserCommand']), operations)}
-          model={R.path(['operation', 'browserCommand'], op)}
+          items={operations}
+          bind:model={op}
+          format={R.compose(
+            $_,
+            R.concat('energiatodistus.haku.'),
+            R.path(['operation', 'browserCommand'])
+          )}
+          inputValueParse={R.path(['operation', 'browserCommand'])}
           lens={R.identity}
-          format={R.compose($_, R.concat('energiatodistus.haku.'))}
           allowNone={false}
           name={`${nameprefix}_operation`} />
       </div>
