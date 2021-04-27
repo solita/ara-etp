@@ -9,9 +9,10 @@
   import * as Validation from '@Utility/validation';
 
   import { flashMessageStore } from '@/stores';
-  import { replace } from '@Component/Router/router';
+  import * as Router from '@Component/Router/router';
 
   import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -69,7 +70,7 @@
           $_(`${i18nRoot}.messages.success`)
         );
         dirty = false;
-        replace(`#/valvonta/oikeellisuus/${params.versio}/${params.id}/${response.id}`)
+        Router.replace(Links.toimenpide(response, params))
       }
     ),
     R.tap(_ => { overlay = true; }),
@@ -77,7 +78,7 @@
   );
 
   const cancel = _ => {
-    toimenpide = emptyToimenpide(params)
+    toimenpide = Toimenpiteet.emptyToimenpide(parseInt(params['type-id']));
   }
 </script>
 

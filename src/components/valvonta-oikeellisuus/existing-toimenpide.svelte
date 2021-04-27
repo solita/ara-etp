@@ -1,17 +1,13 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
-  import * as Parsers from '@Utility/parsers';
-  import * as Formats from '@Utility/formats';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Validation from '@Utility/validation';
 
   import { flashMessageStore } from '@/stores';
   import * as Router from '@Component/Router/router';
 
-  import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -106,7 +102,7 @@
           'success',
           i18n(`${i18nRoot}.messages.publish-success`)
         );
-        Router.push(`#/valvonta/oikeellisuus/${params.versio}/${params.id}`)
+        Router.push(Links.valvonta(params))
       },
       ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])
     );
