@@ -53,9 +53,9 @@
         overlay = false;
       },
       Future.parallelObject(5, {
-        luokittelut: EnergiatodistusApi.luokittelutForVersion(params.version),
+        luokittelut: EnergiatodistusApi.luokittelutForVersion(params.versio),
         energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
-          params.version,
+          params.versio,
           params.id
         ),
         toimenpiteet: ValvontaApi.toimenpiteet(params.id),

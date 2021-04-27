@@ -13,9 +13,9 @@
   const prefix = '/valvonta/oikeellisuus';
   const routes = {
     '/all': Valvonnat,
-    '/:version/:id': Valvonta,
-    '/:version/:id/:toimenpide-id': ExistingToimenpide,
-    '/:version/:id/new/:type-id': NewToimenpide,
+    '/:versio/:id': Valvonta,
+    '/:versio/:id/:toimenpide-id': ExistingToimenpide,
+    '/:versio/:id/new/:type-id': NewToimenpide,
     '*': NotFound
   };
 </script>

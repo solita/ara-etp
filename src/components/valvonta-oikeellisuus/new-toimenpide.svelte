@@ -69,7 +69,7 @@
           $_(`${i18nRoot}.messages.success`)
         );
         dirty = false;
-        replace(`#/valvonta/oikeellisuus/${params.version}/${params.id}/${response.id}`)
+        replace(`#/valvonta/oikeellisuus/${params.versio}/${params.id}/${response.id}`)
       }
     ),
     R.tap(_ => { overlay = true; }),

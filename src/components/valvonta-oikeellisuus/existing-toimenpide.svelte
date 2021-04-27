@@ -106,7 +106,7 @@
           'success',
           i18n(`${i18nRoot}.messages.publish-success`)
         );
-        Router.push(`#/valvonta/oikeellisuus/${params.version}/${params.id}`)
+        Router.push(`#/valvonta/oikeellisuus/${params.versio}/${params.id}`)
       },
       ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])
     );
