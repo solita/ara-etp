@@ -7,6 +7,7 @@ export const OPERATOR_TYPES = Object.freeze({
   NUMBER: 'NUMBER',
   UNFORMATTED_NUMBER: 'UNFORMATTED_NUMBER',
   DATE: 'DATE',
+  DATE_BETWEEN: 'DATE_BETWEEN',
   BOOLEAN: 'BOOLEAN',
   VERSIO: 'VERSIO',
   ELUOKKA: 'ELUOKKA',
@@ -63,6 +64,14 @@ const some = {
   browserCommand: 'in',
   serverCommand: 'in',
   format: defaultFormat
+};
+
+const between = {
+  browserCommand: 'between',
+  serverCommand: 'between',
+  format: R.curry((command, key, startValue, endValue) => [
+    [command, key, startValue, endValue]
+  ])
 };
 
 const singleNumberOperation = R.curry((operation, type, key) => ({
@@ -298,7 +307,15 @@ const timeEquals = key => ({
   type: OPERATOR_TYPES.DATE
 });
 
-const timeComparisons = [timeEquals];
+const timeBetween = key => ({
+  operation: between,
+  key,
+  argumentNumber: 1,
+  defaultValues: () => ['', ''],
+  type: OPERATOR_TYPES.DATE_BETWEEN
+});
+
+const timeComparisons = [timeEquals, timeBetween];
 
 const perustiedot = {
   nimi: [...stringComparisons],

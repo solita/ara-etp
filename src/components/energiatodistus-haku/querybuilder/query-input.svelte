@@ -8,6 +8,7 @@
   import BooleanInput from './query-inputs/boolean-input';
   import TextInput from './query-inputs/text-input';
   import DateInput from './query-inputs/date-input';
+  import DateBetweenInput from './query-inputs/date-between-input';
   import NumberInput from './query-inputs/number-input';
   import UnformattedNumberInput from './query-inputs/unformatted-number-input';
   import VersioInput from './query-inputs/versio-input';
@@ -41,6 +42,8 @@
         return BooleanInput;
       case OPERATOR_TYPES.DATE:
         return DateInput;
+      case OPERATOR_TYPES.DATE_BETWEEN:
+        return DateBetweenInput;
       case OPERATOR_TYPES.VERSIO:
         return VersioInput;
       case OPERATOR_TYPES.ELUOKKA:
