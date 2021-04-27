@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  const luokat = ['A', 'B', 'C', 'D', 'E', 'F'];
+  const luokat = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
   export let values = [];
   export let nameprefix;
