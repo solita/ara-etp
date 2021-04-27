@@ -9,6 +9,7 @@
   import { _, locale } from '@Language/i18n';
 
   import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
 
   import H2 from '@Component/H/H2.svelte';
   import Link from '@Component/Link/Link.svelte';
@@ -32,7 +33,7 @@
       </p>
 
       <div class="flex">
-        <Link href="#/valvonta/oikeellisuus/{energiatodistus.versio}/{energiatodistus.id}/new/{responseType}"
+        <Link href={Links.newToimenpide(responseType, energiatodistus)}
               icon={Maybe.Some('create')}
               text="Aloita vastauksen tekeminen tietopyyntöön."/>
       </div>
@@ -49,7 +50,7 @@
       Kun vastaus ja liitteet on tallennettu järjestelmään, muista lopuksi vielä lähettää vastaus.
     </p>
     <div class="flex">
-      <Link href="#/valvonta/oikeellisuus/{energiatodistus.versio}/{energiatodistus.id}/{lastToimenpide.id}"
+      <Link href={Links.toimenpide(lastToimenpide, energiatodistus)}
             icon={Maybe.Some('edit')}
             text="Jatka vastauksen tekemistä tietopyyntöön."/>
     </div>
@@ -57,7 +58,7 @@
     <p class="mb-2">
       Laatija on lähettänyt
       <span class="inline-block">
-        <Link href="#/valvonta/oikeellisuus/{energiatodistus.versio}/{energiatodistus.id}/{lastToimenpide.id}"
+        <Link href={Links.toimenpide(lastToimenpide, energiatodistus)}
               text="vastauksen"/>
       </span>
       tietopyyntöön.
