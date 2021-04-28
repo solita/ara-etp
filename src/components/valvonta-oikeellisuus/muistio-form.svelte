@@ -42,6 +42,8 @@
         lens={R.lensProp('template-id')}
         parse={Maybe.fromNull}
         format={formatTemplate}
+        required={true}
+        validation={schema.publish}
         items={R.pluck('id', templates)} />
   </div>
 {/if}
