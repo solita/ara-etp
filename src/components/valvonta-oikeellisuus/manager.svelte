@@ -8,6 +8,7 @@
   import * as Router from '@Component/Router/router';
 
   import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
 
   import NewToimenpideDialog from './new-toimenpide-dialog.svelte';
 
@@ -32,17 +33,10 @@
   const openNewToimenpide = type => {
     if (Toimenpiteet.isDialogType(type)) {
       // toimenpiteet, jotka käsitellään dialogi-näytöllä
-      newToimenpide = Maybe.Some({
-        'type-id': type,
-        'deadline-date': Either.Right(Toimenpiteet.defaultDeadline(type)),
-        'template-id': Maybe.None(),
-        document: Maybe.None()
-      });
+      newToimenpide = Maybe.Some(Toimenpiteet.emptyToimenpide(type));
     } else {
       // toimenpiteet, jotka käsitellään omalla näytöllä
-      Router.push(
-        `#/valvonta/oikeellisuus/${energiatodistus.versio}/${energiatodistus.id}/new/${type}`
-      );
+      Router.push(Links.newToimenpide(type, energiatodistus));
     }
   };
 

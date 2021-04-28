@@ -9,9 +9,10 @@
   import * as Validation from '@Utility/validation';
 
   import { flashMessageStore } from '@/stores';
-  import { replace } from '@Component/Router/router';
+  import * as Router from '@Component/Router/router';
 
   import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -30,13 +31,7 @@
   let dirty = false;
   let overlay = true;
 
-  const empty = {
-    'rfi-extra': _ => { todo: true },
-    'audit-report': Toimenpiteet.emptyValvontamuistio
-  };
-  const emptyToimenpide = params => empty[Toimenpiteet.typeKey(params['type-id'])]();
-
-  $: toimenpide = emptyToimenpide(params);
+  $: toimenpide = Toimenpiteet.emptyToimenpide(parseInt(params['type-id']));
 
   Future.fork(
     response => {
@@ -61,7 +56,7 @@
       response => {
         const msg = $_(
           Maybe.orSome(
-            `${i18nRoot}.messages.error`,
+            `${i18nRoot}.messages.add-error`,
             Response.localizationKey(response)
           )
         );
@@ -72,10 +67,10 @@
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          $_(`${i18nRoot}.messages.success`)
+          $_(`${i18nRoot}.messages.add-success`)
         );
         dirty = false;
-        replace(`#/valvonta/oikeellisuus/${params.version}/${params.id}/${response.id}`)
+        Router.replace(Links.toimenpide(response, params))
       }
     ),
     R.tap(_ => { overlay = true; }),
@@ -83,7 +78,7 @@
   );
 
   const cancel = _ => {
-    toimenpide = emptyToimenpide(params)
+    toimenpide = Toimenpiteet.emptyToimenpide(parseInt(params['type-id']));
   }
 </script>
 

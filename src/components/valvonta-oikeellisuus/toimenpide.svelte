@@ -7,6 +7,7 @@
   import * as Locales from '@Language/locale-utils';
 
   import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
   import Link from '../Link/Link.svelte';
 
   export let energiatodistus;
@@ -30,7 +31,7 @@
       {typeLabel(toimenpide)}
     {:else}
       <Link text={typeLabel(toimenpide)}
-            href={`#/valvonta/oikeellisuus/${energiatodistus.version}/${energiatodistus.id}/${toimenpide.id}`}/>
+            href={Links.toimenpide(toimenpide, energiatodistus)}/>
     {/if}
     {#if Toimenpiteet.isDraft(toimenpide)}
       <div class="ml-2">(luonnos)</div>

@@ -21,6 +21,7 @@
   import H2 from '@Component/H/H2.svelte';
 
   import Manager from './manager.svelte';
+  import LaatijaResponse from './laatija-response.svelte';
   import Toimenpide from './toimenpide.svelte';
 
   const i18n = $_;
@@ -52,9 +53,9 @@
         overlay = false;
       },
       Future.parallelObject(5, {
-        luokittelut: EnergiatodistusApi.luokittelutForVersion(params.version),
+        luokittelut: EnergiatodistusApi.luokittelutForVersion(params.versio),
         energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
-          params.version,
+          params.versio,
           params.id
         ),
         toimenpiteet: ValvontaApi.toimenpiteet(params.id),
@@ -125,6 +126,9 @@
           {templatesByType}
           {saveValvonta}
           reload={_ => load(params)} />
+      {/if}
+      {#if Kayttajat.isLaatija(whoami)}
+        <LaatijaResponse {energiatodistus} {toimenpiteet} />
       {/if}
 
       <H2 text="Toimenpiteet" />

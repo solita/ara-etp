@@ -1,17 +1,13 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
-  import * as Parsers from '@Utility/parsers';
-  import * as Formats from '@Utility/formats';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Validation from '@Utility/validation';
 
-  import { flashMessageStore, idTranslateStore } from '@/stores';
-  import { replace } from '@Component/Router/router';
+  import { flashMessageStore } from '@/stores';
+  import * as Router from '@Component/Router/router';
 
-  import * as Toimenpiteet from './toimenpiteet';
+  import * as Links from './links';
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -32,15 +28,17 @@
   let dirty = false;
   let overlay = true;
 
+  const errorMessage = (key, response) => i18n(
+    Response.notFound(response)
+      ? `${i18nRoot}.messages.not-found`
+      : Maybe.orSome(`${i18nRoot}.messages.${key}-error`,
+      Response.localizationKey(response)));
+
   const load = params => {
     overlay = true;
     Future.fork(
       response => {
-        const msg = i18n(
-          `${i18nRoot}.messages.load-error`,
-          Response.localizationKey(response)
-        );
-
+        const msg = errorMessage('load', response);
         flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
         overlay = false;
       },
@@ -59,44 +57,11 @@
 
   $: load(params);
 
-  const updateToimenpide = successCallback =>
-    R.compose(
-      Future.fork(
-        response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.error`,
-              Response.localizationKey(response)
-            )
-          );
-          flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
-          overlay = false;
-        },
-        response => {
-          flashMessageStore.add(
-            'valvonta-oikeellisuus',
-            'success',
-            i18n(`${i18nRoot}.messages.save-success`)
-          );
-          successCallback();
-          load(params);
-        }
-      ),
-      R.tap(_ => {
-        overlay = true;
-      }),
-      ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
-    );
-
-  const publishToimenpide = _ =>
+  const fork = (key, successCallback) => future => {
+    overlay = true;
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            `${i18nRoot}.messages.error`,
-            Response.localizationKey(response)
-          )
-        );
+        const msg = errorMessage(key, response);
         flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
         overlay = false;
       },
@@ -104,14 +69,26 @@
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          i18n(`${i18nRoot}.messages.publish-success`)
+          i18n(`${i18nRoot}.messages.${key}-success`)
         );
+        successCallback();
       },
-      ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])
-    );
+      future);
+  };
 
-  const saveToimenpide = updateToimenpide(_ => {});
-  const saveAndPublishToimenpide = updateToimenpide(publishToimenpide);
+  $: saveToimenpide = R.compose(
+    fork('save', _ => load(params)),
+    ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
+  );
+
+  $: saveAndPublishToimenpide = R.compose(
+    fork('publish', _ => {
+      dirty = false;
+      Router.push(Links.valvonta(params));
+    }),
+    Future.and(ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])),
+    ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
+  );
 
   const cancel = _ => {
     load(params);

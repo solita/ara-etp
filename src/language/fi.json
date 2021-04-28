@@ -1230,6 +1230,13 @@
           "description": "Pyydetään laatijalta lisää tietoa.",
           "publish-button": "Lähetä tietopyyntö"
         },
+        "rfi-reply": {
+          "title": "Vastaus tietopyyntöön",
+          "document": "Vastaus",
+          "save-button": "Tallenna",
+          "reset-button": "Peruuta",
+          "publish-button": "Lähetä vastaus"
+        },
         "rfi-order": {
           "title": "Tietopyyntö kehoitus",
           "description": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
@@ -1270,11 +1277,15 @@
           "publish-button": "Lopeta"
         },
         "messages": {
+          "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
           "save-success": "Toimenpiteen muutokset tallennettu.",
+          "save-error": "Toimenpiteen tallennus epäonnistui.",
           "publish-success": "Toimenpide on lähetetty.",
-          "success": "Toimenpide lisätty.",
-          "error": "Toimenpiteen lisääminen epäonnistui."
+          "publish-error": "Toimenpiteen lähetys epäonnistui.",
+          "add-success": "Toimenpide lisätty.",
+          "add-error": "Toimenpiteen lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
         }
       }
     }

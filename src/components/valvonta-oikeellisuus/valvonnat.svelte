@@ -15,6 +15,8 @@
   import * as ETViews from '@Component/Energiatodistus/views';
   import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
 
+  import * as Links from './links';
+
   import * as api from './valvonta-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as EnergiatodistusApi from '@Component/Energiatodistus/energiatodistus-api';
@@ -88,12 +90,7 @@
   );
 
   const toValvontaView = energiatodistus => {
-    Router.push(
-      '#/valvonta/oikeellisuus/' +
-        energiatodistus.versio +
-        '/' +
-        energiatodistus.id
-    );
+    Router.push(Links.valvonta(energiatodistus));
   };
 </script>
 

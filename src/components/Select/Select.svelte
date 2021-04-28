@@ -19,6 +19,7 @@
   export let required = false;
   export let allowNone = true;
   export let noneLabel = 'validation.no-selection';
+  export let validation = false;
 
   export let name = '';
 
@@ -29,6 +30,7 @@
   let focused = false;
   let node;
   let button;
+  let blurred = false;
 
   let active = Maybe.None();
 
@@ -140,6 +142,11 @@
   .label {
     @apply text-secondary;
   }
+
+  .validation-label {
+    @apply absolute top-auto;
+    font-size: smaller;
+  }
 </style>
 
 <svelte:window
@@ -159,7 +166,8 @@
     tabindex="-1"
     {name}
     value={(inputValueParse || parse)(R.view(lens, model))}
-    on:change />
+    on:change
+    on:blur={_ => { blurred = true }}/>
   <div
     {id}
     data-cy={name}
@@ -196,5 +204,12 @@
         await tick();
         input.dispatchEvent(new Event('change', { bubbles: true }));
       }} />
+  {/if}
+
+  {#if validation && required && Maybe.isNone(selected) && blurred}
+    <div class="validation-label">
+      <span class="font-icon text-error">error</span>
+      {$_('validation.required')}
+    </div>
   {/if}
 </div>

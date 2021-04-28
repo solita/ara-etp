@@ -39,14 +39,11 @@ export const typeKey = id => types[id];
 export const isType = R.propEq('type-id');
 
 const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
-export const isDialogType = R.complement(R.equals(type.audit.report));
-const isDocumentTemplateType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
+export const isDialogType = R.includes(R.__, [0, 1, 2, 3, 5, 6, 9, 10, 11]);
+const isResponseType = R.includes(R.__, [4, 8]);
 
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
-export const hasDocumentTemplate = R.propSatisfies(
-  isDocumentTemplateType,
-  'type-id'
-);
+export const isResponse = R.propSatisfies(isResponseType, 'type-id');
 
 export const isAuditCase = R.propSatisfies(R.gt(R.__, type.anomaly), 'type-id');
 export const isAuditCaseToimenpideType = R.propSatisfies(
@@ -57,7 +54,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 export const isVerified = isType(type.verified);
 export const isAnomaly = isType(type.anomaly);
 
-export const defaultDeadline = typeId =>
+const defaultDeadline = typeId =>
   isDeadlineType(typeId)
     ? Maybe.Some(dfns.addMonths(new Date(), 1))
     : Maybe.None();
@@ -69,14 +66,12 @@ export const i18nKey = (toimenpide, key) =>
     key
   ]);
 
-export const emptyValvontamuistio = _ => ({
+export const emptyToimenpide = typeId => ({
+  'type-id': typeId,
   'publish-time': Maybe.None(),
-  'type-id': type.audit.report,
-  'deadline-date': Either.Right(defaultDeadline(type.audit.report)),
-  document: Maybe.None(),
+  'deadline-date': Either.Right(defaultDeadline(typeId)),
   'template-id': Maybe.None(),
-  /*'vakavuusluokka-id': Maybe.None(),
-  virheet: []*/
+  document: Maybe.None()
 });
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
@@ -84,4 +79,18 @@ export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
 export const templates = templatesByType => R.compose(
   R.defaultTo([]),
   R.prop(R.__, templatesByType),
+  R.prop('type-id'));
+
+const responseTypes = {
+  'rfi-request': type.rfi.reply,
+  'rfi-order': type.rfi.reply,
+  'rfi-warning': type.rfi.reply,
+  'audit-report': type.audit.reply,
+  'audit-order': type.audit.reply,
+  'audit-warning': type.audit.reply,
+}
+
+export const responseTypeFor = R.compose(
+  Maybe.fromNull,
+  typeId => responseTypes[typeKey(typeId)],
   R.prop('type-id'));
