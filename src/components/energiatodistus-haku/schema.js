@@ -188,56 +188,6 @@ const uudisrakennusEquals = key => ({
   type: OPERATOR_TYPES.BOOLEAN
 });
 
-const singleDateOperation = R.curry((operation, key) => ({
-  operation: {
-    ...operation,
-    format: R.curry((command, key, value) => [
-      [
-        command,
-        key,
-        dfns
-          .subMinutes(
-            dfns.parseISO(value),
-            dfns.parseISO(value).getTimezoneOffset()
-          )
-          .toISOString()
-      ]
-    ])
-  },
-  key,
-  argumentNumber: 1,
-  defaultValues: () => [''],
-  type: OPERATOR_TYPES.DATE
-}));
-
-const dateEquals = key => ({
-  operation: {
-    ...eq,
-    format: R.curry((command, key, value) => [
-      [
-        'between',
-        key,
-        dfns
-          .subMinutes(
-            dfns.parseISO(value),
-            dfns.parseISO(value).getTimezoneOffset()
-          )
-          .toISOString(),
-        dfns
-          .subMinutes(
-            dfns.addDays(dfns.parseJSON(value), 1),
-            dfns.parseISO(value).getTimezoneOffset()
-          )
-          .toISOString()
-      ]
-    ])
-  },
-  key,
-  argumentNumber: 1,
-  defaultValues: () => [''],
-  type: OPERATOR_TYPES.DATE
-});
-
 const laatijaEquals = key => ({
   operation: eq,
   key,
@@ -245,14 +195,6 @@ const laatijaEquals = key => ({
   defaultValues: () => [''],
   type: OPERATOR_TYPES.LAATIJA
 });
-
-const dateGreaterThan = singleDateOperation(gt);
-
-const dateGreaterThanOrEqual = singleDateOperation(gte);
-
-const dateLessThan = singleDateOperation(lt);
-
-const dateLessThanOrEqual = singleDateOperation(lte);
 
 const numberComparisonsFromType = type => [
   singleNumberOperation(eq, type),
@@ -269,14 +211,6 @@ const unformattedNumberComparisons = numberComparisonsFromType(
 );
 
 const percentComparisons = numberComparisonsFromType(OPERATOR_TYPES.PERCENT);
-
-const dateComparisons = [
-  dateEquals,
-  dateGreaterThan,
-  dateGreaterThanOrEqual,
-  dateLessThan,
-  dateLessThanOrEqual
-];
 
 const stringComparisons = [stringContains, stringContainsNo];
 
@@ -325,6 +259,43 @@ const timeBetween = key => ({
 
 const timeComparisons = [timeEquals, timeBetween];
 
+const havainnointikayntiEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, value) => [
+      ['=', 'perustiedot.laatimisvaihe', 2],
+      [
+        command,
+        key,
+        dfns.formatISO(dfns.parseISO(value), { representation: 'date' })
+      ]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DATE
+});
+
+const havainnointikayntiBetween = key => ({
+  operation: {
+    ...between,
+    format: R.curry((command, key, startValue, endValue) => [
+      ['=', 'perustiedot.laatimisvaihe', 2],
+      [
+        command,
+        key,
+        dfns.formatISO(dfns.parseISO(startValue), { representation: 'date' }),
+        dfns.formatISO(dfns.parseISO(endValue), { representation: 'date' })
+      ]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => ['', ''],
+  type: OPERATOR_TYPES.DATE_BETWEEN
+});
+
 const perustiedot = {
   nimi: [...stringComparisons],
   rakennustunnus: [...stringComparisons],
@@ -343,7 +314,7 @@ const perustiedot = {
     nimi: [...stringComparisons]
   },
   rakennusosa: [...stringComparisons],
-  havainnointikaynti: [...dateComparisons],
+  havainnointikaynti: [havainnointikayntiEquals, havainnointikayntiBetween],
   kieli: [luokitteluEquals(OPERATOR_TYPES.KIELISYYS)],
   'keskeiset-suositukset-fi': [stringContains],
   'keskeiset-suositukset-sv': [stringContains]
