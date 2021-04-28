@@ -7,6 +7,7 @@ export const OPERATOR_TYPES = Object.freeze({
   NUMBER: 'NUMBER',
   UNFORMATTED_NUMBER: 'UNFORMATTED_NUMBER',
   DATE: 'DATE',
+  DATE_BETWEEN: 'DATE_BETWEEN',
   BOOLEAN: 'BOOLEAN',
   VERSIO: 'VERSIO',
   ELUOKKA: 'ELUOKKA',
@@ -63,6 +64,14 @@ const some = {
   browserCommand: 'in',
   serverCommand: 'in',
   format: defaultFormat
+};
+
+const between = {
+  browserCommand: 'between',
+  serverCommand: 'between',
+  format: R.curry((command, key, startValue, endValue) => [
+    [command, key, startValue, endValue]
+  ])
 };
 
 const singleNumberOperation = R.curry((operation, type, key) => ({
@@ -279,6 +288,39 @@ const luokitteluEquals = R.curry((type, key) => ({
   defaultValues: () => [0],
   type
 }));
+
+const timeEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, value) => [
+      ['between', key, value, dfns.endOfDay(dfns.parseISO(value)).toISOString()]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DATE
+});
+
+const timeBetween = key => ({
+  operation: {
+    ...between,
+    format: R.curry((command, key, startValue, endValue) => [
+      [
+        command,
+        key,
+        startValue,
+        dfns.endOfDay(dfns.parseISO(endValue)).toISOString()
+      ]
+    ])
+  },
+  key,
+  argumentNumber: 1,
+  defaultValues: () => ['', ''],
+  type: OPERATOR_TYPES.DATE_BETWEEN
+});
+
+const timeComparisons = [timeEquals, timeBetween];
 
 const perustiedot = {
   nimi: [...stringComparisons],
@@ -586,7 +628,7 @@ const huomiot = {
 export const schema = {
   id: [...numberComparisons],
   'korvattu-energiatodistus-id': [...numberComparisons],
-  allekirjoitusaika: [...dateComparisons],
+  allekirjoitusaika: [...timeComparisons],
   'tila-id': [...tilaComparisons],
   perustiedot,
   lahtotiedot,
