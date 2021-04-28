@@ -4,6 +4,7 @@
   import OhjeViewer from './viewer';
   import OhjeEditor from './editor';
   import OhjeCreator from './creator';
+  import OhjeDeleted from './deleted';
   import NotFound from '@Component/NotFound/NotFound';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
@@ -12,6 +13,7 @@
   const prefix = '/ohje';
   const routes = {
     '/new': OhjeCreator,
+    '/deleted': OhjeDeleted,
     '/:id': OhjeViewer,
     '/:id/edit': OhjeEditor,
     '*': NotFound
