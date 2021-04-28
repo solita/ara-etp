@@ -293,12 +293,7 @@ const timeEquals = key => ({
   operation: {
     ...eq,
     format: R.curry((command, key, value) => [
-      [
-        'between',
-        key,
-        value,
-        dfns.endOfDay(dfns.parseISO(value), 1).toISOString()
-      ]
+      ['between', key, value, dfns.endOfDay(dfns.parseISO(value)).toISOString()]
     ])
   },
   key,
@@ -308,7 +303,17 @@ const timeEquals = key => ({
 });
 
 const timeBetween = key => ({
-  operation: between,
+  operation: {
+    ...between,
+    format: R.curry((command, key, startValue, endValue) => [
+      [
+        command,
+        key,
+        startValue,
+        dfns.endOfDay(dfns.parseISO(endValue)).toISOString()
+      ]
+    ])
+  },
   key,
   argumentNumber: 1,
   defaultValues: () => ['', ''],

@@ -8,7 +8,6 @@
 
   export let values;
   export let nameprefix;
-  export let index = 0;
   export let startValue = R.compose(
     Either.orSome(dfns.startOfToday()),
     parsers.parseISODate,
@@ -16,7 +15,7 @@
   )(values);
 
   export let endValue = R.compose(
-    Either.orSome(dfns.startOfToday()),
+    Either.orSome(dfns.endOfToday()),
     parsers.parseISODate,
     R.last
   )(values);
@@ -36,15 +35,17 @@
   }
 </script>
 
-<input
-  bind:this={startInput}
-  class="sr-only"
-  name={`${nameprefix}_startValue_${index}`}
-  value={startInputValue} />
-<Datepicker bind:startValue />
-<input
-  bind:this={endInput}
-  class="sr-only"
-  name={`${nameprefix}_endValue_${index}`}
-  value={endInputValue} />
-<Datepicker bind:endValue />
+<div class="flex">
+  <input
+    bind:this={startInput}
+    class="sr-only"
+    name={`${nameprefix}_value_0`}
+    value={startInputValue} />
+  <Datepicker bind:value={startValue} />
+  <input
+    bind:this={endInput}
+    class="sr-only"
+    name={`${nameprefix}_value_1`}
+    value={endInputValue} />
+  <Datepicker bind:value={endValue} />
+</div>
