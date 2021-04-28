@@ -6,13 +6,15 @@
   import * as Formats from '@Utility/formats';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Toimenpiteet from './toimenpiteet';
   import * as Validation from '@Utility/validation';
   import * as Router from '@Component/Router/router';
 
-  import { _ } from '@Language/i18n';
-  import H1 from '@Component/H/H1';
+  import * as Toimenpiteet from './toimenpiteet';
+  import * as Schema from './schema';
 
+  import { _ } from '@Language/i18n';
+
+  import H1 from '@Component/H/H1';
   import MuistioForm from './muistio-form.svelte';
   import LisatietopyyntoForm from './lisatietopyynto-form.svelte';
   import ResponseForm from './response-form.svelte';
@@ -43,10 +45,12 @@
     dirty = true;
   };
 
-  const isValidForm = Validation.isValidForm({});
+  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
+  let form;
+  let schema = Schema.toimenpideSave;
 
-  const submitToimenpide = submit => event => {
-    if (isValidForm(toimenpide)) {
+  const submitToimenpide = submit => {
+    if (Validation.isValidForm(schema)(toimenpide)) {
       submit(toimenpide);
     } else {
       flashMessageStore.add(
@@ -54,11 +58,20 @@
         'error',
         $_(`${i18nRoot}.messages.validation-error`)
       );
-      Validation.blurForm(event.target);
+      Validation.blurForm(form);
     }
   };
 
-  const publishToimenpide = Maybe.fold(_ => {}, submitToimenpide, publish);
+  const publishToimenpide = _ =>
+    R.forEach(fn => {
+      schema = Schema.toimenpidePublish(templates, toimenpide);
+      submitToimenpide(fn);
+    }, publish);
+
+  const saveToimenpide = _ => {
+    schema = Schema.toimenpideSave;
+    submitToimenpide(submit);
+  }
 </script>
 
 <H1 text={text(toimenpide, 'title')}/>
@@ -67,12 +80,14 @@
             icon="arrow_back"
             on:click={_ => Router.pop()} />
 
-<form on:submit|preventDefault={submitToimenpide(submit)}
+<form bind:this={form}
+      on:submit|preventDefault={saveToimenpide}
       on:input={setDirty}
       on:change={setDirty}>
 
   <Content bind:toimenpide
-           {templatesByType}
+           {schema}
+           {templates}
            disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">

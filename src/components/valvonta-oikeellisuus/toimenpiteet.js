@@ -54,7 +54,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 export const isVerified = isType(type.verified);
 export const isAnomaly = isType(type.anomaly);
 
-export const defaultDeadline = typeId =>
+const defaultDeadline = typeId =>
   isDeadlineType(typeId)
     ? Maybe.Some(dfns.addMonths(new Date(), 1))
     : Maybe.None();

@@ -1280,7 +1280,8 @@
           "save-success": "Toimenpiteen muutokset tallennettu.",
           "publish-success": "Toimenpide on lähetetty.",
           "success": "Toimenpide lisätty.",
-          "error": "Toimenpiteen lisääminen epäonnistui."
+          "error": "Toimenpiteen lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
         }
       }
     }

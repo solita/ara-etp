@@ -8,18 +8,16 @@
 
   import { _, locale } from '@Language/i18n';
 
-  import * as Toimenpiteet from './toimenpiteet';
-
   import Datepicker from '@Component/Input/Datepicker.svelte';
   import Select from '@Component/Select/Select.svelte';
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
 
   export let toimenpide;
-  export let templatesByType;
+  export let templates;
   export let disabled;
+  export let schema;
 
-  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
   $: formatTemplate  = Locales.labelForId($locale, templates);
 </script>
 
@@ -32,6 +30,7 @@
       format={Maybe.fold('', Formats.formatDateInstant)}
       parse={Parsers.optionalParser(Parsers.parseDate)}
       transform={EM.fromNull}
+      validators={schema['deadline-date']}
       i18n={$_} />
 </div>
 
