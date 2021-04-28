@@ -71,6 +71,7 @@
     "qs": "^6.9.4",
     "quill": "^1.3.7",
     "quill-image-drop-module": "^1.0.3",
+    "quill-magic-url": "^3.0.2",
     "ramda": "^0.26.1",
     "sirv-cli": "^0.4.4",
     "svelte-i18n": "^3.0.4",
