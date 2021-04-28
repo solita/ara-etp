@@ -56,7 +56,7 @@
       response => {
         const msg = $_(
           Maybe.orSome(
-            `${i18nRoot}.messages.error`,
+            `${i18nRoot}.messages.add-error`,
             Response.localizationKey(response)
           )
         );
@@ -67,7 +67,7 @@
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          $_(`${i18nRoot}.messages.success`)
+          $_(`${i18nRoot}.messages.add-success`)
         );
         dirty = false;
         Router.replace(Links.toimenpide(response, params))

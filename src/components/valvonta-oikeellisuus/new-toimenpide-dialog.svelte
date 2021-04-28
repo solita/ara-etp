@@ -48,7 +48,7 @@
         response => {
           const msg = i18n(
             Maybe.orSome(
-              `${i18nRoot}.messages.error`,
+              `${i18nRoot}.messages.publish-error`,
               Response.localizationKey(response)
             )
           );
@@ -58,7 +58,7 @@
           flashMessageStore.add(
             'valvonta-oikeellisuus',
             'success',
-            i18n(`${i18nRoot}.messages.success`)
+            i18n(`${i18nRoot}.messages.publish-success`)
           );
           reload();
         },
