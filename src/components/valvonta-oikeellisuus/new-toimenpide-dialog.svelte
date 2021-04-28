@@ -133,6 +133,7 @@
           lens={R.lensProp('template-id')}
           parse={Maybe.fromNull}
           required={true}
+          validation={true}
           format={formatTemplate}
           items={R.pluck('id', templates)} />
       </div>
