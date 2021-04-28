@@ -4,7 +4,9 @@ import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
 
-const isDocumentRequired = Toimenpiteet.isType(Toimenpiteet.type.anomaly);
+const isDocumentRequired = R.anyPass([
+  Toimenpiteet.isType(Toimenpiteet.type.anomaly),
+  Toimenpiteet.isResponse]);
 
 const document = R.map(Validation.liftValidator, Validation.LimitedString(2, 4000));
 

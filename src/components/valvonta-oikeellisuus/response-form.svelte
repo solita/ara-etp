@@ -16,6 +16,7 @@
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
   export let toimenpide;
+  export let schema;
   export let disabled;
 
 </script>
@@ -31,5 +32,6 @@
       required={false}
       format={Maybe.orSome('')}
       parse={Parsers.optionalString}
+      validators={schema.document}
       {i18n} />
 </div>
