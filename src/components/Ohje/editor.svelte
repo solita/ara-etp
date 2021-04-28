@@ -27,7 +27,6 @@
 
   let dirty = false;
   let overlay = true;
-  let deleteSuccess = false;
   let enableOverlay = _ => {
     overlay = true;
   };
@@ -93,12 +92,9 @@
           'success',
           $_(`${i18nRoot}.delete-success`)
         );
-        deleteSuccess = true;
         dirty = false;
-        setTimeout(() => {
-          push('/');
-          overlay = false;
-        }, 500);
+        overlay = false;
+        push('/ohje/deleted');
       }
     ),
     R.tap(enableOverlay),
@@ -206,12 +202,6 @@
     </div>
   </div>
   <div slot="overlay-content">
-    {#if deleteSuccess}
-      <span class="material-icons text-primary success-icon">
-        check_circle
-      </span>
-    {:else}
-      <Spinner />
-    {/if}
+    <Spinner />
   </div>
 </Overlay>

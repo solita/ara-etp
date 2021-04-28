@@ -61,7 +61,7 @@
         if (R.has('id', response)) {
           setTimeout(() => {
             push(`/ohje/${response.id}`);
-          }, 500);
+          }, 1000);
         } else {
           overlay = false;
         }

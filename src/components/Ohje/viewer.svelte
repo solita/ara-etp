@@ -14,6 +14,7 @@
   import Link from '@Component/Link/Link';
   import Navigation from './navigation';
   import DOMPurify from 'dompurify';
+  import Marked from 'marked';
 
   export let params;
 
@@ -76,7 +77,7 @@
           {/if}
         </div>
         <p class="whitespace-pre-wrap">
-          {@html DOMPurify.sanitize(sivu.body)}
+          {@html Marked(DOMPurify.sanitize(sivu.body))}
         </p>
       {/each}
     </div>

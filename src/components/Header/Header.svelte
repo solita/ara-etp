@@ -38,14 +38,19 @@
   }
 
   .listlink {
-    @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer truncate;
+    @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
+  }
+  .ohjelistlink {
+    @apply p-2 text-dark text-left font-normal normal-case tracking-normal cursor-pointer;
   }
 
-  .listlink:not(:last-child) {
+  .listlink:not(:last-child),
+  .ohjelistlink:not(:last-child) {
     @apply border-b-1 border-disabled;
   }
 
-  .listlink:hover {
+  .listlink:hover,
+  .ohjelistlink:hover {
     @apply bg-background;
   }
 
@@ -99,7 +104,7 @@
             <div
               class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
               {#each ohjeNav as sivu}
-                <a class="listlink w-full" href={`/#/ohje/${sivu.id}`}>
+                <a class="ohjelistlink w-full" href={`/#/ohje/${sivu.id}`}>
                   {sivu.title}
                 </a>
               {/each}
