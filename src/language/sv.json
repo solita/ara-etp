@@ -163,7 +163,7 @@
     "paatoimintaalue": "Huvudverksamhetsområde",
     "muuttoimintaalueet": "Övriga verksamhetsområden",
     "julkisettiedot": "Välj offentliga uppgifter",
-    "todistustenlaatimiskielto": "Förbud mot upprättande av intyg",
+    "todistustenlaatimiskielto": "Förbud mot upprättande av certifikat",
     "api-key-header": "Kalkylprogram",
     "api-key": "Ange ett nytt lösenord för dataöverföringen (minst 8 tecken)",
     "messages": {
@@ -242,7 +242,7 @@
       "sarakkeet": {
         "tila": "Status",
         "tunnus": "Beteckning",
-        "e-luokka": "E--klass",
+        "e-luokka": "E-klass",
         "versio": "Version",
         "voimassa": "Giltig",
         "rakennuksen-nimi": "Byggnadens namn",
@@ -333,7 +333,7 @@
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
     "laskuriviviite": "Projektreferens (syns på fakturaraden)",
-    "korvattu-energiatodistus-id": "Ersätter intyget",
+    "korvattu-energiatodistus-id": "Ersätter certifikatet",
     "laskutus": {
       "title": "Laskutustiedot",
       "postiosoite": "Postadress",
