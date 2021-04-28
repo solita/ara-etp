@@ -629,6 +629,7 @@ export const schema = {
   id: [...numberComparisons],
   'korvattu-energiatodistus-id': [...numberComparisons],
   allekirjoitusaika: [...timeComparisons],
+  'voimassaolo-paattymisaika': [...timeComparisons],
   'tila-id': [...tilaComparisons],
   perustiedot,
   lahtotiedot,
