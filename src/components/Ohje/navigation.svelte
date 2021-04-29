@@ -16,6 +16,7 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
+  const i18n = $_;
   $: id = R.last(R.split('/ohje/', $location));
   let whoami = Maybe.None();
   let sivutTree = [];
@@ -55,7 +56,7 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             'viesti.all.messages.load-error',
             Response.localizationKey(response)
@@ -83,7 +84,7 @@
     R.compose(
       Future.fork(
         response => {
-          const msg = $_(
+          const msg = i18n(
             Maybe.orSome(
               'ohje.navigation.sort-success',
               Response.localizationKey(response)
@@ -96,7 +97,7 @@
           flashMessageStore.add(
             'ohje',
             'success',
-            $_('ohje.navigation.sort-success')
+            i18n('ohje.navigation.sort-success')
           );
           overlay = false;
           load();
@@ -124,12 +125,12 @@
               <TextButton
                 on:click={toggleSortMode}
                 icon="swap_vert"
-                text={$_('ohje.navigation.sort')} />
+                text={i18n('ohje.navigation.sort')} />
             {:else}
               <TextButton
                 on:click={toggleSortMode}
                 icon="highlight_off"
-                text={$_('ohje.navigation.end-sort')} />
+                text={i18n('ohje.navigation.end-sort')} />
             {/if}
           {/if}
           {#if id !== 'new'}
@@ -137,7 +138,7 @@
               href="/#/ohje/new"
               disabled={sortMode}
               icon={Maybe.Some('add_circle_outline')}
-              text={$_('ohje.navigation.create')} />
+              text={i18n('ohje.navigation.create')} />
           {/if}
         </div>
       {/if}
