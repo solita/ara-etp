@@ -14,8 +14,8 @@
   let isBeingTargeted = false;
   let setDroppedAsChild = false;
 
-  const hoverTimeout = 3000;
-  let timer;
+  const hoverTime = 1000;
+  let hoverTimeout;
 
   // when dragged
   const dragStart = e => {
@@ -36,14 +36,14 @@
     e.preventDefault();
     isBeingTargeted = true;
     setDroppedAsChild = false;
-    timer = setTimeout(() => {
+    hoverTimeout = setTimeout(() => {
       setDroppedAsChild = true;
-    }, hoverTimeout);
+    }, hoverTime);
   };
   const dragLeave = e => {
     if (!draggable) return;
     isBeingTargeted = false;
-    clearTimeout(timer);
+    clearTimeout(hoverTimeout);
   };
 
   const drop = e => {
@@ -65,7 +65,7 @@
       // set dropped as target's sibling
       updateSivu(droppedSivuId, {
         'parent-id': sivu['parent-id'],
-        ordinal: parseInt(sivu.ordinal) + 1
+        ordinal: parseInt(sivu.ordinal) + 1 // for this to work right, we need to manage sivu ordinals better, preferably in the back end
       });
     }
   };
@@ -90,7 +90,7 @@
   .material-icons {
     @apply select-none;
   }
-  .root .text-error {
+  .root .text-dark {
     @apply text-light;
   }
 
@@ -102,20 +102,22 @@
   }
 
   .draggable a {
-    @apply pointer-events-none text-disabled select-none;
+    @apply pointer-events-none font-hairline select-none;
   }
 
   .isBeingDragged {
     @apply bg-warning;
   }
-  .isBeingTargeted:not(.setDroppedAsChild) {
+  .isBeingTargeted.hasNoChildren:not(.setDroppedAsChild),
+  .isBeingTargeted:not(.childrenShown):not(.setDroppedAsChild),
+  .isBeingTargeted:not(.setDroppedAsChild) ~ .children {
     @apply border-b-4 border-error;
   }
   .isBeingTargeted.setDroppedAsChild.hasNoChildren {
     @apply border-b-8 border-success;
   }
   .isBeingTargeted.setDroppedAsChild ~ .children {
-    @apply border-2 border-success;
+    @apply border-b-8 border-success;
   }
 </style>
 
@@ -132,10 +134,11 @@
     class:isBeingDragged
     class:isBeingTargeted
     class:setDroppedAsChild
+    class:childrenShown
     {draggable}>
     {#if !R.isEmpty(sivu.children)}
       <button
-        class="p-2"
+        class="p-2 focus:outline-none focus:underline"
         on:click={() => {
           childrenShown = !childrenShown;
         }}>
@@ -153,7 +156,7 @@
     <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
       <span class="title"> {sivu.title} </span>
       {#if !sivu.published}
-        <span class="font-icon text-error"> visibility_off </span>
+        <span class="font-icon text-dark"> visibility_off </span>
       {/if}
     </a>
     {#if draggable}

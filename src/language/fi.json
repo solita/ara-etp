@@ -1300,7 +1300,9 @@
     "navigation": {
       "create": "Uusi sivu",
       "sort": "Järjestä",
-      "end-sort": "Lopeta järjestäminen"
+      "end-sort": "Lopeta järjestäminen",
+      "sort-success": "Navigaation järjestyksen muuttaminen onnistui",
+      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui"
     },
     "creator": {
       "title": "Otsikko",

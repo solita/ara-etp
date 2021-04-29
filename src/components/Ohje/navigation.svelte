@@ -75,13 +75,13 @@
 
   load();
 
-  const updateOhje = (id, body) =>
+  const updateSivu = (id, body) =>
     R.compose(
       Future.fork(
         response => {
           const msg = $_(
             Maybe.orSome(
-              `ohje.editor.error`,
+              'ohje.navigation.sort-success',
               Response.localizationKey(response)
             )
           );
@@ -89,7 +89,11 @@
           // overlay = false;
         },
         _ => {
-          flashMessageStore.add('ohje', 'success', $_(`ohje.editor.success`));
+          flashMessageStore.add(
+            'ohje',
+            'success',
+            $_('ohje.navigation.sort-success')
+          );
           // overlay = false;
           load();
         }
@@ -105,11 +109,7 @@
 
 <nav class="w-full flex flex-col">
   {#each sivutTree as sivu}
-    <NavLink
-      {sivu}
-      activeSivuId={id}
-      draggable={sortMode}
-      updateSivu={updateOhje} />
+    <NavLink {sivu} activeSivuId={id} draggable={sortMode} {updateSivu} />
   {/each}
   {#each Maybe.toArray(whoami) as whoami}
     {#if Kayttajat.isPaakayttaja(whoami)}

@@ -1154,7 +1154,9 @@
     "navigation": {
       "create": "Uusi sivu SV?",
       "sort": "Järjestä SV?",
-      "end-sort": "Lopeta järjestäminen SV?"
+      "end-sort": "Lopeta järjestäminen SV?",
+      "sort-success": "Navigaation järjestyksen muuttaminen onnistui SV?",
+      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui SV?"
     },
     "creator": {
       "title": "Otsikko SV?",
