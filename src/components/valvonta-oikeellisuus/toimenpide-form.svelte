@@ -8,6 +8,7 @@
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
   import * as Router from '@Component/Router/router';
+  import { tick } from 'svelte';
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Schema from './schema';
@@ -65,7 +66,7 @@
   const publishToimenpide = _ =>
     R.forEach(fn => {
       schema = Schema.toimenpidePublish(templates, toimenpide);
-      submitToimenpide(fn);
+      tick().then(_ => submitToimenpide(fn));
     }, publish);
 
   const saveToimenpide = _ => {

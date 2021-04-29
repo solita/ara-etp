@@ -39,7 +39,7 @@ export const typeKey = id => types[id];
 export const isType = R.propEq('type-id');
 
 const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
-export const isDialogType = R.includes(R.__, [0, 1, 2, 3, 5, 6, 9, 10, 11]);
+export const isDialogType = R.includes(R.__, [0, 1, 2, 3, 5, 6, 9, 10, 11, 12]);
 const isResponseType = R.includes(R.__, [4, 8]);
 
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
