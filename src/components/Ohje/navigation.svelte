@@ -13,14 +13,18 @@
   import TextButton from '@Component/Button/TextButton';
   import Link from '@Component/Link/Link';
   import NavLink from '@Component/Ohje/nav-link';
-  // import Overlay from '@Component/Overlay/Overlay.svelte';
-  // import Spinner from '@Component/Spinner/Spinner.svelte';
-  // let overlay = true;
+  import Overlay from '@Component/Overlay/Overlay.svelte';
+  import Spinner from '@Component/Spinner/Spinner.svelte';
 
   $: id = R.last(R.split('/ohje/', $location));
   let whoami = Maybe.None();
   let sivutTree = [];
   let sortMode = false;
+  let overlay = true;
+
+  const enableOverlay = _ => {
+    overlay = true;
+  };
 
   const hasParent = s => R.prop('parent-id', s).isSome();
   const hasNoParent = s => R.prop('parent-id', s).isNone();
@@ -48,7 +52,7 @@
     )(data);
 
   const load = () => {
-    // overlay = true;
+    overlay = true;
     Future.fork(
       response => {
         const msg = $_(
@@ -59,12 +63,12 @@
         );
 
         flashMessageStore.add('viesti', 'error', msg);
-        // overlay = false;
+        overlay = false;
       },
       response => {
         sivutTree = toTree(response.sivut);
         whoami = Maybe.Some(response.whoami);
-        // overlay = false;
+        overlay = false;
       },
       Future.parallelObject(2, {
         whoami: kayttajaApi.whoami,
@@ -86,7 +90,7 @@
             )
           );
           flashMessageStore.add('ohje', 'error', msg);
-          // overlay = false;
+          overlay = false;
         },
         _ => {
           flashMessageStore.add(
@@ -94,11 +98,11 @@
             'success',
             $_('ohje.navigation.sort-success')
           );
-          // overlay = false;
+          overlay = false;
           load();
         }
       ),
-      // R.tap(enableOverlay),
+      R.tap(enableOverlay),
       api.putSivu(fetch, id)
     )(body);
 
@@ -107,34 +111,40 @@
   };
 </script>
 
-<nav class="w-full flex flex-col">
-  {#each sivutTree as sivu}
-    <NavLink {sivu} activeSivuId={id} draggable={sortMode} {updateSivu} />
-  {/each}
-  {#each Maybe.toArray(whoami) as whoami}
-    {#if Kayttajat.isPaakayttaja(whoami)}
-      <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
-        {#if !R.isEmpty(sivutTree)}
-          {#if !sortMode}
-            <TextButton
-              on:click={toggleSortMode}
-              icon="swap_vert"
-              text={$_('ohje.navigation.sort')} />
-          {:else}
-            <TextButton
-              on:click={toggleSortMode}
-              icon="highlight_off"
-              text={$_('ohje.navigation.end-sort')} />
+<Overlay {overlay}>
+  <nav slot="content" class="w-full flex flex-col">
+    {#each sivutTree as sivu}
+      <NavLink {sivu} activeSivuId={id} draggable={sortMode} {updateSivu} />
+    {/each}
+    {#each Maybe.toArray(whoami) as whoami}
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
+          {#if !R.isEmpty(sivutTree)}
+            {#if !sortMode}
+              <TextButton
+                on:click={toggleSortMode}
+                icon="swap_vert"
+                text={$_('ohje.navigation.sort')} />
+            {:else}
+              <TextButton
+                on:click={toggleSortMode}
+                icon="highlight_off"
+                text={$_('ohje.navigation.end-sort')} />
+            {/if}
           {/if}
-        {/if}
-        {#if id !== 'new'}
-          <Link
-            href="/#/ohje/new"
-            disabled={sortMode}
-            icon={Maybe.Some('add_circle_outline')}
-            text={$_('ohje.navigation.create')} />
-        {/if}
-      </div>
-    {/if}
-  {/each}
-</nav>
+          {#if id !== 'new'}
+            <Link
+              href="/#/ohje/new"
+              disabled={sortMode}
+              icon={Maybe.Some('add_circle_outline')}
+              text={$_('ohje.navigation.create')} />
+          {/if}
+        </div>
+      {/if}
+    {/each}
+  </nav>
+
+  <div slot="overlay-content">
+    <Spinner />
+  </div>
+</Overlay>
