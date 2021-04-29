@@ -94,6 +94,12 @@
       ValvontaApi.putValvonta(params.id, valvonta)
     );
   };
+
+  const diaarinumero = R.compose(
+    R.chain(R.prop('diaarinumero')),
+    Maybe.fromNull,
+    R.last
+  );
 </script>
 
 <style>
@@ -101,9 +107,10 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text="Oikeellisuuden valvonta" />
-
     {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
+      <H1
+        text={i18n(i18nRoot + '.title') +
+          Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
       <div class="mb-2">
         Energiatodistus {energiatodistus.versio}/{energiatodistus.id} -
         {Maybe.orSome('', energiatodistus.perustiedot.nimi)} -

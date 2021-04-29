@@ -38,7 +38,7 @@
     'audit-report': MuistioForm,
     'rfi-extra': LisatietopyyntoForm,
     'rfi-reply': ResponseForm,
-    'audit-reply': ResponseForm,
+    'audit-reply': ResponseForm
   };
   const Content = forms[Toimenpiteet.typeKey(toimenpide['type-id'])];
 
@@ -72,50 +72,51 @@
   const saveToimenpide = _ => {
     schema = Schema.toimenpideSave;
     submitToimenpide(submit);
-  }
+  };
 </script>
 
-<H1 text={text(toimenpide, 'title')}/>
+<H1 text={text(toimenpide, 'title')} />
 
-<TextButton text="Takaisin valvontaan"
-            icon="arrow_back"
-            on:click={_ => Router.pop()} />
+<TextButton
+  text="Takaisin valvontaan"
+  icon="arrow_back"
+  on:click={_ => Router.pop()} />
 
-<form bind:this={form}
-      on:submit|preventDefault={saveToimenpide}
-      on:input={setDirty}
-      on:change={setDirty}>
-
-  <Content bind:toimenpide
-           {schema}
-           {templates}
-           disabled={!Toimenpiteet.isDraft(toimenpide)} />
+<form
+  bind:this={form}
+  on:submit|preventDefault={saveToimenpide}
+  on:input={setDirty}
+  on:change={setDirty}>
+  <Content
+    bind:toimenpide
+    {schema}
+    {templates}
+    disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">
     <Button
-        disabled={
-            Maybe.isNone(publish) ||
-            !Toimenpiteet.isDraft(toimenpide)}
-        on:click={publishToimenpide}
-        text={text(toimenpide, 'publish-button')} />
+      disabled={Maybe.isNone(publish) || !Toimenpiteet.isDraft(toimenpide)}
+      on:click={publishToimenpide}
+      text={text(toimenpide, 'publish-button')} />
 
     <Button
-        disabled={!Toimenpiteet.isDraft(toimenpide) ||
-                  (!dirty && !R.isNil(toimenpide.id))}
-        type={'submit'}
-        text={text(toimenpide, 'save-button')} />
+      disabled={!Toimenpiteet.isDraft(toimenpide) ||
+        (!dirty && !R.isNil(toimenpide.id))}
+      type={'submit'}
+      text={text(toimenpide, 'save-button')} />
 
     <Button
-        disabled={!Toimenpiteet.isDraft(toimenpide) || !dirty}
-        on:click={cancel}
-        text={text(toimenpide, 'reset-button')}
-        type={'reset'}
-        style={'secondary'} />
+      disabled={!Toimenpiteet.isDraft(toimenpide) || !dirty}
+      on:click={cancel}
+      text={text(toimenpide, 'reset-button')}
+      type={'reset'}
+      style={'secondary'} />
   </div>
 </form>
 
 <div class="mt-5">
-<TextButton text="Takaisin valvontaan"
-            icon="arrow_back"
-            on:click={_ => Router.pop()} />
+  <TextButton
+    text="Takaisin valvontaan"
+    icon="arrow_back"
+    on:click={_ => Router.pop()} />
 </div>

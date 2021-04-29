@@ -76,10 +76,8 @@ export const emptyToimenpide = typeId => ({
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
 
-export const templates = templatesByType => R.compose(
-  R.defaultTo([]),
-  R.prop(R.__, templatesByType),
-  R.prop('type-id'));
+export const templates = templatesByType =>
+  R.compose(R.defaultTo([]), R.prop(R.__, templatesByType), R.prop('type-id'));
 
 const responseTypes = {
   'rfi-request': type.rfi.reply,
@@ -87,10 +85,11 @@ const responseTypes = {
   'rfi-warning': type.rfi.reply,
   'audit-report': type.audit.reply,
   'audit-order': type.audit.reply,
-  'audit-warning': type.audit.reply,
-}
+  'audit-warning': type.audit.reply
+};
 
 export const responseTypeFor = R.compose(
   Maybe.fromNull,
   typeId => responseTypes[typeKey(typeId)],
-  R.prop('type-id'));
+  R.prop('type-id')
+);

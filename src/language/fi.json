@@ -1198,6 +1198,7 @@
         }
       },
       "existing": {
+        "title": "Oikeellisuuden valvonta",
         "messages": {
           "not-found": "Energiatodistusta ei ole olemassa",
           "load-error": "Valvonnan tietojen lataus epäonnistui",

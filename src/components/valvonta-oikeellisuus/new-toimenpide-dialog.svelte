@@ -8,7 +8,6 @@
   import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
 
-
   import * as Toimenpiteet from './toimenpiteet';
   import * as Schema from './schema';
 
@@ -37,7 +36,7 @@
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
-  $: formatTemplate  = Locales.labelForId($locale, templates);
+  $: formatTemplate = Locales.labelForId($locale, templates);
 
   $: schema = Schema.toimenpidePublish(templates, toimenpide);
   $: isValidForm = Validation.isValidForm(schema);
@@ -93,7 +92,7 @@
   }
 
   .error {
-      @apply flex py-2 px-2 bg-error text-light;
+    @apply flex py-2 px-2 bg-error text-light;
   }
 </style>
 

@@ -61,10 +61,11 @@
 </script>
 
 {#each Maybe.toArray(newToimenpide) as toimenpide}
-  <NewToimenpideDialog id={energiatodistus.id}
-                       {toimenpide}
-                       {templatesByType}
-                       reload={load} />
+  <NewToimenpideDialog
+    id={energiatodistus.id}
+    {toimenpide}
+    {templatesByType}
+    reload={load} />
 {/each}
 
 <div class="lg:w-1/2 w-full mb-5">

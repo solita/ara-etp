@@ -18,32 +18,32 @@
   export let disabled;
   export let schema;
 
-  $: formatTemplate  = Locales.labelForId($locale, templates);
+  $: formatTemplate = Locales.labelForId($locale, templates);
 </script>
 
 <div class="flex py-4">
   <Datepicker
-      label="Määräpäivä"
-      {disabled}
-      bind:model={toimenpide}
-      lens={R.lensProp('deadline-date')}
-      format={Maybe.fold('', Formats.formatDateInstant)}
-      parse={Parsers.optionalParser(Parsers.parseDate)}
-      transform={EM.fromNull}
-      validators={schema['deadline-date']}
-      i18n={$_} />
+    label="Määräpäivä"
+    {disabled}
+    bind:model={toimenpide}
+    lens={R.lensProp('deadline-date')}
+    format={Maybe.fold('', Formats.formatDateInstant)}
+    parse={Parsers.optionalParser(Parsers.parseDate)}
+    transform={EM.fromNull}
+    validators={schema['deadline-date']}
+    i18n={$_} />
 </div>
 
 {#if !R.isEmpty(templates)}
   <div class="w-1/2 py-4">
     <Select
-        label="Valitse asiakirjapohja"
-        bind:model={toimenpide}
-        lens={R.lensProp('template-id')}
-        parse={Maybe.fromNull}
-        format={formatTemplate}
-        required={true}
-        validation={schema.publish}
-        items={R.pluck('id', templates)} />
+      label="Valitse asiakirjapohja"
+      bind:model={toimenpide}
+      lens={R.lensProp('template-id')}
+      parse={Maybe.fromNull}
+      format={formatTemplate}
+      required={true}
+      validation={schema.publish}
+      items={R.pluck('id', templates)} />
   </div>
 {/if}
