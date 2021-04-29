@@ -1,7 +1,5 @@
 {
-  "document": {
-    "title": "Ara - Energicertifikatservice"
-  },
+  "document": { "title": "Ara - Energicertifikatservice" },
   "validation": {
     "required": "Obligatorisk uppgift",
     "min-length": "Längden ska vara minst {min} tecken",
@@ -56,7 +54,6 @@
     "new-yritys": "Nytt företag?",
     "yritys": "Företag",
     "yritys-laatijat": "Upprättare",
-
     "confirmation": {
       "title": "Varmistus poistumisesta SV",
       "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta. SV",
@@ -70,13 +67,11 @@
     "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken. SV?",
     "forbidden": "Puutteelliset käyttöoikeudet SV?",
     "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan. SV?",
-    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman. SV?"
+    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman. SV?",
+    "row-error": "Virhe rivillä SV?",
+    "file-read-error": "Tiedoston lukemisessa tapahtui odottamaton virhe. SV?"
   },
-  "units": {
-    "year": "år",
-    "pieces": "St",
-    "celsius": "°C"
-  },
+  "units": { "year": "år", "pieces": "St", "celsius": "°C" },
   "login_redirect": "Vänta en stund, du hänvisas till inloggningssidan",
   "loading": "Laddar...",
   "tallenna": "Spara",
@@ -85,24 +80,6 @@
     "yritykset": "Företag",
     "yritys": "Företag",
     "uusi-yritys": "Nytt företag",
-    "laatijat": "Upprättare",
-    "y-tunnus": "FO-nummer",
-    "nimi": "Namn",
-    "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O",
-    "laskutusosoite": "Faktureringsadress",
-    "jakeluosoite": "Gatuadress",
-    "postinumero": "Postnummer",
-    "postitoimipaikka": "Postanstalt",
-    "maa": "Land",
-    "laskutuskieli": "Faktureringsspråk",
-    "verkkolaskuoperaattori": "E-fakturaoperatör",
-    "verkkolaskuosoite": "Adress för nätfaktura",
-    "messages": {
-      "save-success": "Yrityksen tiedot tallennettu onnistuneesti. SV?",
-      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe. SV?",
-      "validation-error": "Lomakkeella virheitä, tarkista syötteet. SV?",
-      "load-error": "Yrityksen tietojen haku epäonnistui. SV?"
-    },
     "laatijat": {
       "table": {
         "laatija": "Upprättare",
@@ -122,15 +99,30 @@
         "confirm-message": "Oletko varma että haluat poistaa laatijan yrityksestä. SV?",
         "confirm-button": "Poista SV?",
         "link": "Poista SV?"
-      }
+      },
+      "empty": "Yrityksellä ei ole laatijoita. SV?"
+    },
+    "y-tunnus": "FO-nummer",
+    "nimi": "Namn",
+    "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O",
+    "laskutusosoite": "Faktureringsadress",
+    "jakeluosoite": "Gatuadress",
+    "postinumero": "Postnummer",
+    "postitoimipaikka": "Postanstalt",
+    "maa": "Land",
+    "laskutuskieli": "Faktureringsspråk",
+    "verkkolaskuoperaattori": "E-fakturaoperatör",
+    "verkkolaskuosoite": "Adress för nätfaktura",
+    "messages": {
+      "save-success": "Yrityksen tiedot tallennettu onnistuneesti. SV?",
+      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe. SV?",
+      "validation-error": "Lomakkeella virheitä, tarkista syötteet. SV?",
+      "load-error": "Yrityksen tietojen haku epäonnistui. SV?",
+      "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen. SV?"
     }
   },
-  "yritykset": {
-    "title": "Alla företag"
-  },
-  "time": {
-    "klo": "kl."
-  },
+  "yritykset": { "title": "Alla företag" },
+  "time": { "klo": "kl." },
   "kayttaja": {
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
@@ -171,7 +163,7 @@
     "paatoimintaalue": "Huvudverksamhetsområde",
     "muuttoimintaalueet": "Övriga verksamhetsområden",
     "julkisettiedot": "Välj offentliga uppgifter",
-    "todistustenlaatimiskielto": "Förbud mot upprättande av intyg",
+    "todistustenlaatimiskielto": "Förbud mot upprättande av certifikat",
     "api-key-header": "Kalkylprogram",
     "api-key": "Ange ett nytt lösenord för dataöverföringen (minst 8 tecken)",
     "messages": {
@@ -179,7 +171,8 @@
       "save-error": "Det uppstod ett oväntat fel i sparandet av upprättarnas uppgifter.",
       "validation-error": "Laatioiden tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen.",
       "load-error": "Sökningen av upprättarens uppgifter misslyckades.",
-      "upload-error": "Filen kunde inte laddas ner."
+      "upload-error": "Filen kunde inte laddas ner.",
+      "not-found": "Laatijaa ei löydy tästä palvelusta. SV?"
     },
     "yritykset": {
       "title": "Företag",
@@ -249,7 +242,7 @@
       "sarakkeet": {
         "tila": "Status",
         "tunnus": "Beteckning",
-        "e-luokka": "E--klass",
+        "e-luokka": "E-klass",
         "versio": "Version",
         "voimassa": "Giltig",
         "rakennuksen-nimi": "Byggnadens namn",
@@ -269,7 +262,6 @@
       "<=": "<=",
       ">=": ">=",
       "sisaltaa": "Innehåller",
-      "ei-sisällä": "Innehåller inte",
       "in": "Jokin SV?",
       "between": "Välillä SV?",
       "and": "Och",
@@ -280,7 +272,8 @@
       "false": "Nej",
       "laatimisvaihe": "Upprättandes period",
       "kaikki": "Alla",
-      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa. SV?"
+      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa. SV?",
+      "ei-sisalla": "Ei sisällä SV?"
     },
     "kaikki": "Allt",
     "korvaavuus": {
@@ -341,7 +334,7 @@
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
     "laskuriviviite": "Projektreferens (syns på fakturaraden)",
-    "korvattu-energiatodistus-id": "Ersätter intyget",
+    "korvattu-energiatodistus-id": "Ersätter certifikatet",
     "laskutus": {
       "title": "Laskutustiedot",
       "postiosoite": "Postadress",
@@ -372,19 +365,16 @@
       "julkinen-rakennus": "Offentlig byggnad",
       "keskeiset-suositukset": "De viktigaste rekommendationerna",
       "keskeiset-suositukset-heading": {
-        "2018": {
-          "h2": "Åtgärdsförslag för att förbättra E-talet",
-          "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
-        },
         "2013": {
           "h2": "Åtgärder som förbättrar energiprestandan",
           "h3": "Centrala rekommendationer angående åtgärder som förbättrar energiprestandan"
+        },
+        "2018": {
+          "h2": "Åtgärdsförslag för att förbättra E-talet",
+          "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
         }
       },
-      "yritys": {
-        "label-context": "$unused",
-        "nimi": "Företag"
-      }
+      "yritys": { "label-context": "$unused", "nimi": "Företag" }
     },
     "yhteensa": "Totalt",
     "lahtotiedot": {
@@ -420,7 +410,7 @@
           "ala": "A",
           "U": "U",
           "UA": "U*A",
-          "osuu-lampohaviosta": "Andel av värmeförlusten"
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä SV?"
         },
         "alapohja": {
           "label-context": "Klimatskal / Bottenbjälklag",
@@ -657,8 +647,8 @@
         "label-context": "Specifikation av E-tal",
         "kaytettavat-energiamuodot": "Använda energiformer",
         "ostoenergia": {
-          "2018": "Köpt energi beräknad vid standardanvändning",
-          "2013": "Beräknad mängd energi"
+          "2013": "Beräknad mängd energi",
+          "2018": "Köpt energi beräknad vid standardanvändning"
         },
         "energiamuodon-kerroin": "Energiformsfaktor",
         "kertoimella-painotettu-energiankulutus": "Energiförbrukning viktad med energiformsfaktorn",
@@ -694,9 +684,14 @@
         }
       },
       "uusiutuvat-omavaraisenergiat": {
+        "0": {
+          "label-context": "Förnybara självförsörjningsenergier",
+          "nimi": "Energinamn",
+          "vuosikulutus": "Produktion (kWh/vuosi)"
+        },
         "header": {
-          "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)",
-          "2013": "Utnyttjad andel av förnybar egenproducerad energi"
+          "2013": "Utnyttjad andel av förnybar egenproducerad energi",
+          "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)"
         },
         "label-context": "Uusiutuvat omavaraisenergiat",
         "labels": {
@@ -718,12 +713,7 @@
         "muusahko": "Annan energi som utvunnits ur närmiljön / El (kWh/år)",
         "muusahko-neliovuosikulutus": "Annan energi som utvunnits ur närmiljön / El (kWh/(m²år))",
         "lampopumppu": "Energi som en värmepump upptar från värmekällan (kWh/år)",
-        "lampopumppu-neliovuosikulutus": "Energi som en värmepump upptar från värmekällan (kWh/(m²år))",
-        "0": {
-          "label-context": "Förnybara självförsörjningsenergier",
-          "nimi": "Energinamn",
-          "vuosikulutus": "Produktion (kWh/vuosi)"
-        }
+        "lampopumppu-neliovuosikulutus": "Energi som en värmepump upptar från värmekällan (kWh/(m²år))"
       },
       "tekniset-jarjestelmat": {
         "header": "Energi som förbrukas av husets tekniska system",
@@ -809,8 +799,8 @@
       "header": "Faktisk energiförbrukning",
       "ostettu-energia": {
         "header": {
-          "2018": "Energi köpt från energinät",
-          "2013": "Köpt energi"
+          "2013": "Köpt energi",
+          "2018": "Energi köpt från energinät"
         },
         "labels": {
           "kaukolampo": "Fjärrvärme",
@@ -895,8 +885,8 @@
     },
     "huomiot": {
       "header": {
-        "2018": "Åtgärdsförslag för att förbättra e-talet",
-        "2013": "Förslag till åtgärder för att förbättra energiprestandan"
+        "2013": "Förslag till åtgärder för att förbättra energiprestandan",
+        "2018": "Åtgärdsförslag för att förbättra e-talet"
       },
       "label-context": "$unused",
       "toimenpide-table": {
@@ -907,8 +897,8 @@
         "eluvun-muutos": "E-tal, förändring"
       },
       "suositukset-header": {
-        "2018": "Rekommendationer för användning och underhåll av byggnaden (påverkar inte E-talet)",
-        "2013": "Rekommendationer för byggnadens användning och underhåll"
+        "2013": "Rekommendationer för byggnadens användning och underhåll",
+        "2018": "Rekommendationer för användning och underhåll av byggnaden (påverkar inte E-talet)"
       },
       "suositukset": "Rekommenderade åtgärdsförslag",
       "lisatietoja-header": "Ytterligare uppgifter om energiprestanda",
@@ -997,7 +987,6 @@
       "load-error": "Sökningen av uppgifterna i energicertifikatet misslyckades.",
       "not-found": "Det finns inget energicertifikat.",
       "validation-required-error": "Obligatoriska uppgifter saknas:",
-
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet",
       "discard-success": "Energiatodistus hylättiin onnistuneesti SV",
@@ -1051,9 +1040,7 @@
       "laskutusosoite": "Faktureringsadress",
       "valitse-laskutusosoite": "Välj en faktureringsadress"
     },
-    "laskutustiedot": {
-      "nimi": "Namn"
-    },
+    "laskutustiedot": { "nimi": "Namn" },
     "liitteet": {
       "title": "Bilagor",
       "empty": "Energicertifikatet har inga bilagor.",
@@ -1066,9 +1053,7 @@
         "author": "Adderare",
         "type": "Tyyppi SV?"
       },
-      "add-files": {
-        "title": "Lägg till fil"
-      },
+      "add-files": { "title": "Lägg till fil" },
       "add-link": {
         "title": "Lägg till länk",
         "nimi": "Linkin nimi SV?",
@@ -1086,7 +1071,7 @@
         },
         "delete-liite": {
           "success": "Bilagan till energicertifikatet har avlägsnats.",
-          "delete": "Det uppstod ett fel i avlägsnandet av bilagan till energicertifikatet."
+          "error": "Energiatodistuksen liitteen poistamisessa tapahtui virhe. SV?"
         },
         "valvonta": {
           "success": "Valvonnan tila päivitetty.",
@@ -1099,10 +1084,7 @@
   "energiatodistukset": {
     "title": "Energicertifikat",
     "not-found": "Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole yhtään energiatodistusta. SV?",
-    "tilat": {
-      "0": "Utkast",
-      "1": "Giltig"
-    },
+    "tilat": { "0": "Utkast", "1": "Giltig" },
     "messages": {
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet"
@@ -1181,21 +1163,15 @@
   "file-browse": "selaa tiedostoja SV?",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lägg till en fil i taget.",
   "country-not-found": "Felaktigt land",
-  "table": {
-    "actions": "Funktioner"
-  },
-  "pagination": {
-    "results": "Resultat {from}... {to} / {total}"
-  },
+  "table": { "actions": "Funktioner" },
+  "pagination": { "results": "Resultat {from}... {to} / {total}" },
   "unique-violations": {
     "kayttaja-email-key": "E-postadressen används redan.",
     "kayttaja-virtu-key": "Virtu-användarnamnet är redan i bruk.",
     "kayttaja_henkilotunnus_key": "Personbeteckningen är redan i bruk.",
     "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Företagsnummer, namn och mottagarens specifikation används av ett annat företag."
   },
-  "not-found": {
-    "message": "Valitsemaasi sivua ei ole olemassa. SV"
-  },
+  "not-found": { "message": "Valitsemaasi sivua ei ole olemassa. SV" },
   "footer": {
     "about": "Tietoa sivustosta SV?",
     "name": "Finansiering- och utvecklingcentralet för boendet",
@@ -1204,5 +1180,19 @@
     "contact-info": "Kontaktuppgifter",
     "phone": "Telefon",
     "email": "E-post"
+  },
+  "laatijaupload": {
+    "rivi": "Rivi SV?",
+    "etunimi": "Etunimi SV?",
+    "sukunimi": "Sukunimi SV?",
+    "henkilotunnus": "Henkilötunnus SV?",
+    "jakeluosoite": "Jakeluosoite SV?",
+    "postinumero": "Postinumero SV?",
+    "postitoimipaikka": "Postitoimipaikka SV?",
+    "email": "Sähköposti SV?",
+    "puhelin": "Puhelinnumero SV?",
+    "patevyystaso": "Pätevyystaso SV?",
+    "toteamispaivamaara": "Toteamispäivämäärä SV?",
+    "toteaja": "Toteaja SV?"
   }
 }
