@@ -117,12 +117,6 @@
   };
 </script>
 
-<style>
-  .success-icon {
-    font-size: 54px;
-  }
-</style>
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
     <div class="w-2/6 max-w-xs">

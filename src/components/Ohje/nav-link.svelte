@@ -1,15 +1,77 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import { dragdrop } from './dragdrop';
   import { slide } from 'svelte/transition';
 
   export let sivu;
   export let activeSivuId = -1;
   export let childrenShown = true;
-  export let disabled = false;
+  export let draggable = false;
+  export let updateSivu;
+
+  let isBeingDragged = false;
+  let isBeingTargeted = false;
+  let setDroppedAsChild = false;
+
+  const hoverTimeout = 3000;
+  let timer;
+
+  // when dragged
+  const dragStart = e => {
+    if (!draggable) return;
+
+    isBeingDragged = true;
+    e.dataTransfer.setData('text/plain', sivu.id);
+  };
+
+  const dragEnd = e => {
+    if (!draggable) return;
+    isBeingDragged = false;
+  };
+
+  // when targeted
+  const dragEnter = e => {
+    if (!draggable) return;
+    e.preventDefault();
+    isBeingTargeted = true;
+    setDroppedAsChild = false;
+    timer = setTimeout(() => {
+      setDroppedAsChild = true;
+    }, hoverTimeout);
+  };
+  const dragLeave = e => {
+    if (!draggable) return;
+    isBeingTargeted = false;
+    clearTimeout(timer);
+  };
+
+  const drop = e => {
+    if (!draggable) return;
+    isBeingTargeted = false;
+
+    const droppedSivuId = parseInt(e.dataTransfer.getData('text/plain'));
+    const targetSivuId = parseInt(sivu.id);
+
+    if (droppedSivuId === targetSivuId) return;
+
+    if (setDroppedAsChild) {
+      // set dropped as target's child
+      updateSivu(droppedSivuId, {
+        'parent-id': Maybe.Some(sivu.id),
+        ordinal: 0 // to do this right we would need to know the target's children's lowest or highest ordinal
+      });
+    } else {
+      // set dropped as target's sibling
+      updateSivu(droppedSivuId, {
+        'parent-id': sivu['parent-id'],
+        ordinal: parseInt(sivu.ordinal) + 1
+      });
+    }
+  };
 </script>
 
-<style>
+<style type="text/postcss">
   .root {
     @apply bg-secondary text-light border-light;
   }
@@ -35,19 +97,42 @@
   .root ~ .children {
     @apply border-b border-light;
   }
+  .draggable {
+    @apply cursor-move;
+  }
 
-  .disabled a {
+  .draggable a {
     @apply pointer-events-none text-disabled select-none;
+  }
+
+  .isBeingDragged {
+    @apply bg-warning;
+  }
+  .isBeingTargeted:not(.setDroppedAsChild) {
+    @apply border-b-4 border-error;
+  }
+  .isBeingTargeted.setDroppedAsChild.hasNoChildren {
+    @apply border-b-8 border-success;
+  }
+  .isBeingTargeted.setDroppedAsChild ~ .children {
+    @apply border-2 border-success;
   }
 </style>
 
 <div class="flex flex-col w-full">
   <div
+    use:dragdrop={{ dragStart, dragEnd, dragEnter, dragLeave, drop }}
+    id={sivu.id}
     class="flex w-full border-b items-center"
     class:active={sivu.id === parseInt(activeSivuId)}
     class:root={sivu['parent-id'].isNone()}
     class:child={sivu['parent-id'].isSome()}
-    class:disabled>
+    class:hasNoChildren={R.isEmpty(sivu.children)}
+    class:draggable
+    class:isBeingDragged
+    class:isBeingTargeted
+    class:setDroppedAsChild
+    {draggable}>
     {#if !R.isEmpty(sivu.children)}
       <button
         class="p-2"
@@ -71,8 +156,8 @@
         <span class="font-icon text-error"> visibility_off </span>
       {/if}
     </a>
-    {#if disabled}
-      <div class="p-2 cursor-move">
+    {#if draggable}
+      <div class="p-2">
         <span class="material-icons"> drag_handle </span>
       </div>
     {/if}
@@ -82,7 +167,7 @@
       class="children pl-1 bg-secondary"
       transition:slide|local={{ duration: 100 }}>
       {#each sivu.children as child}
-        <svelte:self sivu={child} {activeSivuId} {disabled} />
+        <svelte:self sivu={child} {activeSivuId} {draggable} {updateSivu} />
       {/each}
     </div>
   {/if}

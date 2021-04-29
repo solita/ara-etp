@@ -7,20 +7,20 @@
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as api from './ohje-api';
 
+  import { flashMessageStore } from '@/stores';
   import { location } from 'svelte-spa-router';
   import { _ } from '@Language/i18n';
   import TextButton from '@Component/Button/TextButton';
   import Link from '@Component/Link/Link';
-  import NavLink from '@Component/ohje/nav-link';
-  import Overlay from '@Component/Overlay/Overlay.svelte';
-  import Spinner from '@Component/Spinner/Spinner.svelte';
-  let overlay = true;
+  import NavLink from '@Component/Ohje/nav-link';
+  // import Overlay from '@Component/Overlay/Overlay.svelte';
+  // import Spinner from '@Component/Spinner/Spinner.svelte';
+  // let overlay = true;
 
   $: id = R.last(R.split('/ohje/', $location));
   let whoami = Maybe.None();
   let sivutTree = [];
   let sortMode = false;
-  $: console.log('sortMode', sortMode);
 
   const hasParent = s => R.prop('parent-id', s).isSome();
   const hasNoParent = s => R.prop('parent-id', s).isNone();
@@ -48,7 +48,7 @@
     )(data);
 
   const load = () => {
-    overlay = true;
+    // overlay = true;
     Future.fork(
       response => {
         const msg = $_(
@@ -59,12 +59,12 @@
         );
 
         flashMessageStore.add('viesti', 'error', msg);
-        overlay = false;
+        // overlay = false;
       },
       response => {
         sivutTree = toTree(response.sivut);
         whoami = Maybe.Some(response.whoami);
-        overlay = false;
+        // overlay = false;
       },
       Future.parallelObject(2, {
         whoami: kayttajaApi.whoami,
@@ -72,7 +72,31 @@
       })
     );
   };
-  $: load();
+
+  load();
+
+  const updateOhje = (id, body) =>
+    R.compose(
+      Future.fork(
+        response => {
+          const msg = $_(
+            Maybe.orSome(
+              `ohje.editor.error`,
+              Response.localizationKey(response)
+            )
+          );
+          flashMessageStore.add('ohje', 'error', msg);
+          // overlay = false;
+        },
+        _ => {
+          flashMessageStore.add('ohje', 'success', $_(`ohje.editor.success`));
+          // overlay = false;
+          load();
+        }
+      ),
+      // R.tap(enableOverlay),
+      api.putSivu(fetch, id)
+    )(body);
 
   const toggleSortMode = () => {
     sortMode = !sortMode;
@@ -81,7 +105,11 @@
 
 <nav class="w-full flex flex-col">
   {#each sivutTree as sivu}
-    <NavLink {sivu} activeSivuId={id} disabled={sortMode} />
+    <NavLink
+      {sivu}
+      activeSivuId={id}
+      draggable={sortMode}
+      updateSivu={updateOhje} />
   {/each}
   {#each Maybe.toArray(whoami) as whoami}
     {#if Kayttajat.isPaakayttaja(whoami)}
