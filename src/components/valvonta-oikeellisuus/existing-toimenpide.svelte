@@ -28,11 +28,15 @@
   let dirty = false;
   let overlay = true;
 
-  const errorMessage = (key, response) => i18n(
-    Response.notFound(response)
-      ? `${i18nRoot}.messages.not-found`
-      : Maybe.orSome(`${i18nRoot}.messages.${key}-error`,
-      Response.localizationKey(response)));
+  const errorMessage = (key, response) =>
+    i18n(
+      Response.notFound(response)
+        ? `${i18nRoot}.messages.not-found`
+        : Maybe.orSome(
+            `${i18nRoot}.messages.${key}-error`,
+            Response.localizationKey(response)
+          )
+    );
 
   const load = params => {
     overlay = true;
@@ -73,7 +77,8 @@
         );
         successCallback();
       },
-      future);
+      future
+    );
   };
 
   $: saveToimenpide = R.compose(
@@ -86,7 +91,9 @@
       dirty = false;
       Router.push(Links.valvonta(params));
     }),
-    Future.and(ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])),
+    Future.and(
+      ValvontaApi.publishToimenpide(params.id, params['toimenpide-id'])
+    ),
     ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
   );
 

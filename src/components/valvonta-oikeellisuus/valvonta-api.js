@@ -50,7 +50,8 @@ export const serializeToimenpide = R.compose(
       dfns.formatISO(date, { representation: 'date' })
     )
   }),
-  R.pick(['type-id', 'deadline-date', 'document', 'template-id']));
+  R.pick(['type-id', 'deadline-date', 'document', 'template-id'])
+);
 
 export const valvonnat = R.compose(
   R.map(R.map(deserializeValvontaStatus)),
@@ -97,16 +98,19 @@ export const postToimenpide = R.curry((id, toimenpide) =>
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.toimenpiteet(id))),
     serializeToimenpide
-  )(toimenpide));
+  )(toimenpide)
+);
 
 export const putToimenpide = R.curry((id, toimenpideId, toimenpide) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put',
-      url.toimenpide(id, toimenpideId))),
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'put', url.toimenpide(id, toimenpideId))
+    ),
     R.dissoc('type-id'),
     serializeToimenpide
-  )(toimenpide));
+  )(toimenpide)
+);
 
 export const putValvonta = R.curry((id, body) =>
   R.compose(
@@ -116,6 +120,10 @@ export const putValvonta = R.curry((id, body) =>
 );
 
 export const publishToimenpide = R.curry((id, toimenpideId) =>
-  R.chain(Fetch.rejectWithInvalidResponse,
-    Future.attemptP(_ => Fetch.postEmpty(fetch,
-      url.toimenpide(id, toimenpideId) + '/publish'))));
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ =>
+      Fetch.postEmpty(fetch, url.toimenpide(id, toimenpideId) + '/publish')
+    )
+  )
+);

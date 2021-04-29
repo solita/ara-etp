@@ -35,8 +35,10 @@
 
   Future.fork(
     response => {
-      const msg = $_(`${i18nRoot}.messages.load-error`,
-        Response.localizationKey(response));
+      const msg = $_(
+        `${i18nRoot}.messages.load-error`,
+        Response.localizationKey(response)
+      );
 
       flashMessageStore.add('viesti', 'error', msg);
       overlay = false;
@@ -47,7 +49,7 @@
     },
     Future.parallelObject(2, {
       whoami: KayttajaApi.whoami,
-      templatesByType: ValvontaApi.templatesByType,
+      templatesByType: ValvontaApi.templatesByType
     })
   );
 
@@ -70,31 +72,34 @@
           $_(`${i18nRoot}.messages.add-success`)
         );
         dirty = false;
-        Router.replace(Links.toimenpide(response, params))
+        Router.replace(Links.toimenpide(response, params));
       }
     ),
-    R.tap(_ => { overlay = true; }),
+    R.tap(_ => {
+      overlay = true;
+    }),
     ValvontaApi.postToimenpide(params.id)
   );
 
   const cancel = _ => {
     toimenpide = Toimenpiteet.emptyToimenpide(parseInt(params['type-id']));
-  }
+  };
 </script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <DirtyConfirmation {dirty}/>
-    {#each Maybe.toArray(resources) as {whoami, templatesByType}}
-      <ToimenpideForm {toimenpide}
-                      bind:dirty
-                      {whoami}
-                      {templatesByType}
-                      {cancel}
-                      submit={addToimenpide}/>
+    <DirtyConfirmation {dirty} />
+    {#each Maybe.toArray(resources) as { whoami, templatesByType }}
+      <ToimenpideForm
+        {toimenpide}
+        bind:dirty
+        {whoami}
+        {templatesByType}
+        {cancel}
+        submit={addToimenpide} />
     {/each}
   </div>
   <div slot="overlay-content">
-    <Spinner/>
+    <Spinner />
   </div>
 </Overlay>

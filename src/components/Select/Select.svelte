@@ -167,7 +167,9 @@
     {name}
     value={(inputValueParse || parse)(R.view(lens, model))}
     on:change
-    on:blur={_ => { blurred = true }}/>
+    on:blur={_ => {
+      blurred = true;
+    }} />
   <div
     {id}
     data-cy={name}

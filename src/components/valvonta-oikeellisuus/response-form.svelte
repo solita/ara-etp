@@ -18,20 +18,19 @@
   export let toimenpide;
   export let schema;
   export let disabled;
-
 </script>
 
 <div class="w-full py-4">
   <Textarea
-      id={'toimenpide.document'}
-      name={'toimenpide.document'}
-      label={text(toimenpide, 'document')}
-      {disabled}
-      bind:model={toimenpide}
-      lens={R.lensProp('document')}
-      required={false}
-      format={Maybe.orSome('')}
-      parse={Parsers.optionalString}
-      validators={schema.document}
-      {i18n} />
+    id={'toimenpide.document'}
+    name={'toimenpide.document'}
+    label={text(toimenpide, 'document')}
+    {disabled}
+    bind:model={toimenpide}
+    lens={R.lensProp('document')}
+    required={false}
+    format={Maybe.orSome('')}
+    parse={Parsers.optionalString}
+    validators={schema.document}
+    {i18n} />
 </div>

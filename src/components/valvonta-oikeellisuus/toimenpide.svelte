@@ -23,18 +23,19 @@
 
 <div class="flex items-center overflow-hidden">
   <div class="mr-4 whitespace-no-wrap">
-    {Formats.formatTimeInstantMinutes(Maybe.orSome(
-      toimenpide['create-time'],
-      toimenpide['publish-time']))}
+    {Formats.formatTimeInstantMinutes(
+      Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
+    )}
   </div>
   {#if Toimenpiteet.isDialogType(toimenpide['type-id'])}
     <div class="mr-2">
-    {typeLabel(toimenpide)}
+      {typeLabel(toimenpide)}
     </div>
   {:else}
     <div class="mr-2">
-      <Link text={typeLabel(toimenpide)}
-            href={Links.toimenpide(toimenpide, energiatodistus)}/>
+      <Link
+        text={typeLabel(toimenpide)}
+        href={Links.toimenpide(toimenpide, energiatodistus)} />
     </div>
   {/if}
   {#if Toimenpiteet.isDraft(toimenpide)}
