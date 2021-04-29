@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
 import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+import * as DeepObjects from '@Utility/deep-objects';
 
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
@@ -111,8 +112,8 @@ const versioluokkaEquals = key => ({
   operation: {
     ...eq,
     format: R.curry((command, key, versio, luokka) => [
-      ['=', 'versio', parseInt(versio)],
-      [command, 'perustiedot.kayttotarkoitus', luokka]
+      ['=', 'energiatodistus.versio', parseInt(versio)],
+      [command, 'energiatodistus.perustiedot.kayttotarkoitus', luokka]
     ])
   },
   key,
@@ -125,7 +126,7 @@ const versioluokkaSome = key => ({
     ...eq,
     format: R.curry((command, key, versio, luokat) => {
       return [
-        ['=', 'versio', parseInt(versio)],
+        ['=', 'energiatodistus.versio', parseInt(versio)],
         ['in', key, R.split(',', luokat)]
       ];
     })
@@ -169,8 +170,8 @@ const uudisrakennusEquals = key => ({
   operation: {
     ...eq,
     format: R.curry((command, key, uudisrakennus) => [
-      ['=', 'versio', 2013],
-      [command, 'perustiedot.uudisrakennus', uudisrakennus]
+      ['=', 'energiatodistus.versio', 2013],
+      [command, key, uudisrakennus]
     ])
   },
   key,
@@ -609,74 +610,61 @@ const huomiot = {
   }
 };
 
+const flattenSchema = R.compose(
+  R.reduce((acc, arr) => ({ ...acc, [arr[0].key]: arr }), {}),
+  R.map(R.converge(R.map, [R.compose(R.applyTo, R.head), R.last])),
+  R.toPairs,
+  DeepObjects.treeFlat('.', R.is(Array))
+);
+
 export const schema = {
-  id: [...numberComparisons],
-  'korvattu-energiatodistus-id': [...numberComparisons],
-  allekirjoitusaika: [...timeComparisons],
-  'voimassaolo-paattymisaika': [...timeComparisons],
-  'tila-id': [...tilaComparisons],
-  perustiedot,
-  lahtotiedot,
-  tulokset,
-  'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
-  huomiot,
-  versio: [versioEquals],
-  'lisamerkintoja-fi': [...stringComparisons],
-  'lisamerkintoja-sv': [...stringComparisons],
-  laskuriviviite: [...stringComparisons],
-  'laatija-id': [laatijaEquals]
+  energiatodistus: {
+    id: [...numberComparisons],
+    'korvattu-energiatodistus-id': [...numberComparisons],
+    allekirjoitusaika: [...timeComparisons],
+    'voimassaolo-paattymisaika': [...timeComparisons],
+    'tila-id': [...tilaComparisons],
+    perustiedot,
+    lahtotiedot,
+    tulokset,
+    'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
+    huomiot,
+    versio: [versioEquals],
+    'lisamerkintoja-fi': [stringContains],
+    'lisamerkintoja-sv': [stringContains],
+    laskuriviviite: [...stringComparisons],
+    'laatija-id': [laatijaEquals]
+  }
 };
-
-export const isOperationArray = R.compose(R.equals('Array'), R.type);
-
-export const flattenSchema = R.curry((path, schema) => {
-  const pairs = R.toPairs(schema);
-
-  return R.reduce(
-    (acc, obj) => {
-      if (!isOperationArray(R.last(obj))) {
-        return R.mergeRight(
-          acc,
-          flattenSchema(`${path}.${R.head(obj)}`, R.last(obj))
-        );
-      }
-
-      const newPath = R.drop(1, `${path}.${R.head(obj)}`);
-
-      return R.compose(
-        R.assoc(newPath, R.__, acc),
-        R.map(fn => fn(newPath)),
-        R.last
-      )(obj);
-    },
-    {},
-    pairs
-  );
-});
 
 const localizedField = key => [`${key}-fi`, `${key}-sv`];
 
 export const laatijaSchema = R.compose(
   R.omit([
-    'korvattu-energiatodistus-id',
-    'perustiedot.kiinteistotunnus',
-    'julkinen-rakennus',
-    ...localizedField('perustiedot.keskeiset-suositukset'),
-    ...localizedField('lisamerkintoja'),
-    'lahtotiedot.rakennusvaippa.ilmanvuotoluku',
-    'laatija-id',
-    ''
+    'energiatodistus.korvattu-energiatodistus-id',
+    'energiatodistus.perustiedot.kiinteistotunnus',
+    'energiatodistus.julkinen-rakennus',
+    ...localizedField('energiatodistus.perustiedot.keskeiset-suositukset'),
+    ...localizedField('energiatodistus.lisamerkintoja'),
+    'energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku',
+    'energiatodistus.laatija-id'
   ]),
-  flattenSchema(''),
-  R.over(R.lensProp('lahtotiedot'), R.pick(['lammitetty-nettoala'])),
-  R.over(R.lensProp('tulokset'), R.pick(['e-luku', 'e-luokka'])),
-  R.dissoc('toteutunut-ostoenergiankulutus'),
-  R.dissoc('huomiot')
+  flattenSchema,
+  R.over(
+    R.lensPath(['energiatodistus', 'lahtotiedot']),
+    R.pick(['lammitetty-nettoala'])
+  ),
+  R.over(
+    R.lensPath(['energiatodistus', 'tulokset']),
+    R.pick(['e-luku', 'e-luokka'])
+  ),
+  R.dissocPath(['energiatodistus', 'toteutunut-ostoenergiankulutus']),
+  R.dissocPath(['energiatodistus', 'huomiot'])
 )(schema);
 
 export const paakayttajaSchema = R.compose(
-  R.omit(['laskuriviviite']),
-  flattenSchema('')
+  R.omit(['energiatodistus.laskuriviviite']),
+  flattenSchema
 )(schema);
 
-export const flatSchema = flattenSchema('', schema);
+export const flatSchema = flattenSchema(schema);
