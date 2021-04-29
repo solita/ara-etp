@@ -15,6 +15,7 @@
   import Navigation from './navigation';
   import DOMPurify from 'dompurify';
   import Marked from 'marked';
+  import Style from '@Component/text-editor/style.svelte';
 
   export let params;
 
@@ -46,9 +47,6 @@
   }
 </script>
 
-<style>
-</style>
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
     <div class="w-2/6 max-w-xs">
@@ -76,8 +74,10 @@
             </div>
           {/if}
         </div>
-        <p class="whitespace-pre-wrap">
-          {@html Marked(DOMPurify.sanitize(sivu.body))}
+        <p class=" whitespace-pre-wrap">
+          <Style>
+            {@html Marked(DOMPurify.sanitize(sivu.body))}
+          </Style>
         </p>
       {/each}
     </div>
