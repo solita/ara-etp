@@ -1,13 +1,16 @@
 import Quill from 'quill';
 import { ImageDrop } from 'quill-image-drop-module';
+import MagicUrl from 'quill-magic-url';
 import DOMPurify from 'dompurify';
 
 Quill.register('modules/imageDrop', ImageDrop);
+Quill.register('modules/magicUrl', MagicUrl);
 
 export const quill = (node, content = '') => {
   const q = new Quill(node, {
     modules: {
       imageDrop: false,
+      magicUrl: true,
       toolbar: [
         [{ header: [1, 2, 3, false] }],
         [{ list: 'ordered' }, { list: 'bullet' }],

@@ -10,7 +10,7 @@
 
   const turndownService = new Turndown();
 
-  turndownService.keep(['sub', 'sup']);
+  turndownService.keep(['sub', 'sup', 'u']);
 
   Marked.use({
     tokenizer: {
