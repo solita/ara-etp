@@ -1254,7 +1254,7 @@
           "reset-button": "Peruuta",
           "delete-button": "Poista luonnos"
         },
-        "audit-reploy": {
+        "audit-reply": {
           "title": "Vastaus valvontamuistioon",
           "document": "Vastaus",
           "publish-button": "Lähetä vastaus",
