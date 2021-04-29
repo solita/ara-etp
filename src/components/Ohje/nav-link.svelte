@@ -85,7 +85,7 @@
     @apply bg-althover;
   }
   .active .title {
-    @apply font-bold;
+    @apply font-semibold;
   }
   .material-icons {
     @apply select-none;
@@ -106,18 +106,19 @@
   }
 
   .isBeingDragged {
-    @apply bg-warning;
+    @apply opacity-50;
   }
   .isBeingTargeted.hasNoChildren:not(.setDroppedAsChild),
   .isBeingTargeted:not(.childrenShown):not(.setDroppedAsChild),
   .isBeingTargeted:not(.setDroppedAsChild) ~ .children {
-    @apply border-b-4 border-error;
+    @apply border-b-8 border-hover;
   }
-  .isBeingTargeted.setDroppedAsChild.hasNoChildren {
-    @apply border-b-8 border-success;
+  .isBeingTargeted.setDroppedAsChild.hasNoChildren,
+  .isBeingTargeted:not(.childrenShown).setDroppedAsChild {
+    @apply border-b-8 border-warning;
   }
   .isBeingTargeted.setDroppedAsChild ~ .children {
-    @apply border-b-8 border-success;
+    @apply border-t-8 border-warning;
   }
 </style>
 
