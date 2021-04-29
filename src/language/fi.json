@@ -1254,6 +1254,13 @@
           "reset-button": "Peruuta",
           "delete-button": "Poista luonnos"
         },
+        "audit-reploy": {
+          "title": "Vastaus valvontamuistioon",
+          "document": "Vastaus",
+          "publish-button": "Lähetä vastaus",
+          "save-button": "Tallenna",
+          "reset-button": "Peruuta"
+        },
         "audit-order": {
           "title": "Valvontamuistio kehoitus",
           "description": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
