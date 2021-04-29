@@ -1295,7 +1295,9 @@
           "add-error": "Toimenpiteen lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
         }
-      },
+      }
+    }
+  },
   "ohje": {
     "navigation": {
       "create": "Uusi sivu",
@@ -1321,6 +1323,7 @@
       "published": "Julkaistu",
       "submit": "Tallenna",
       "delete": "Poista",
+      "cancel": "Peruuta",
       "success": "Sivun muokkaaminen onnistui",
       "error": "Sivun muokkaaminen epäonnistui",
       "delete-success": "Sivu poistettu",

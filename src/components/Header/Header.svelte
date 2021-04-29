@@ -41,7 +41,7 @@
     @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
   }
   .ohjelistlink {
-    @apply p-2 text-dark text-left font-normal normal-case tracking-normal cursor-pointer;
+    @apply w-full p-2 text-dark text-left font-normal normal-case tracking-normal cursor-pointer;
   }
 
   .listlink:not(:last-child),
@@ -102,10 +102,13 @@
           <span class="material-icons absolute">keyboard_arrow_down</span>
           {#if showOhjeDropdown}
             <div
-              class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
+              class="absolute mt-2 w-96 bg-light shadow-xl flex flex-col z-10">
               {#each ohjeNav as sivu}
-                <a class="ohjelistlink w-full" href={`/#/ohje/${sivu.id}`}>
-                  {sivu.title}
+                <a class="ohjelistlink" href={`/#/ohje/${sivu.id}`}>
+                  <span> {sivu.title} </span>
+                  {#if !sivu.published}
+                    <span class="font-icon text-dark"> visibility_off </span>
+                  {/if}
                 </a>
               {/each}
             </div>

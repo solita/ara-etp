@@ -1175,6 +1175,7 @@
       "published": "Julkaistu SV?",
       "submit": "Tallenna SV?",
       "delete": "Poista SV?",
+      "cancel": "Peruuta SV?",
       "success": "Sivun muokkaaminen onnistui SV?",
       "delete-success": "Sivu poistettu SV?",
       "delete-error": "Sivun poisto epäonnistui SV?",
