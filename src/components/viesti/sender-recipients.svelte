@@ -10,13 +10,14 @@
   export let whoami;
   export let recipients = [];
   export let recipientGroup = Maybe.None();
+  export let icons = false;
 
   $: formatSender = Viestit.formatSender($_);
 </script>
 
 <style>
   .from-me {
-    @apply text-primary;
+    @apply text-primary font-bold;
   }
   .to span:not(:last-child)::after {
     content: ', ';
@@ -24,10 +25,13 @@
 </style>
 
 <div class="flex">
+  {#if icons}
+    <span class="font-icon">person</span>
+  {/if}
   {#if R.eqProps('id', sender, whoami)}
-    <strong class="from-me whitespace-no-wrap">
+    <div class="from-me whitespace-no-wrap">
       {$_('viesti.ketju.existing.self')}
-    </strong>
+    </div>
   {:else}
     <span class="whitespace-no-wrap">{formatSender(sender)}</span>
   {/if}
@@ -38,10 +42,14 @@
 
   <div class="to truncate">
     {#each Maybe.toArray(recipientGroup) as group}
-      <span> {Locales.label($locale, group)} </span>
+      <span class="flex">
+        {#if icons}<span class="font-icon">group</span>{/if}
+        {Locales.label($locale, group)}
+      </span>
     {/each}
     {#each recipients as recipient}
-      <span>
+      <span class="flex">
+        {#if icons}<span class="font-icon">person</span>{/if}
         {formatSender(recipient)}
       </span>
     {/each}

@@ -190,6 +190,7 @@
           <strong>{ketju.subject}</strong>
           <SenderRecipients
             sender={R.prop('from', R.head(ketju.viestit))}
+            icons="true"
             {whoami}
             recipients={R.prop('vastaanottajat', ketju)}
             recipientGroup={Viestit.findKetjuVastaanottajaryhma(
