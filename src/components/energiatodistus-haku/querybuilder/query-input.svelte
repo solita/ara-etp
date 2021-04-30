@@ -11,6 +11,7 @@
   import DateBetweenInput from './query-inputs/date-between-input';
   import NumberInput from './query-inputs/number-input';
   import UnformattedNumberInput from './query-inputs/unformatted-number-input';
+  import PercentInput from './query-inputs/percent-input';
   import VersioInput from './query-inputs/versio-input';
   import VersioluokkaInput from './query-inputs/versioluokka-input';
   import KayttotarkoitusInput from './query-inputs/kayttotarkoitus-input';
@@ -38,6 +39,8 @@
         return NumberInput;
       case OPERATOR_TYPES.UNFORMATTED_NUMBER:
         return UnformattedNumberInput;
+      case OPERATOR_TYPES.PERCENT:
+        return PercentInput;
       case OPERATOR_TYPES.BOOLEAN:
         return BooleanInput;
       case OPERATOR_TYPES.DATE:

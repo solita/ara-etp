@@ -6,6 +6,7 @@ export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
   NUMBER: 'NUMBER',
   UNFORMATTED_NUMBER: 'UNFORMATTED_NUMBER',
+  PERCENT: 'PERCENT',
   DATE: 'DATE',
   DATE_BETWEEN: 'DATE_BETWEEN',
   BOOLEAN: 'BOOLEAN',
@@ -267,6 +268,8 @@ const unformattedNumberComparisons = numberComparisonsFromType(
   OPERATOR_TYPES.UNFORMATTED_NUMBER
 );
 
+const percentComparisons = numberComparisonsFromType(OPERATOR_TYPES.PERCENT);
+
 const dateComparisons = [
   dateEquals,
   dateGreaterThan,
@@ -353,31 +356,31 @@ const lahtotiedot = {
     ulkoseinat: {
       ala: [...numberComparisons],
       U: [...numberComparisons],
-      'osuus-lampohaviosta': [...numberComparisons],
+      'osuus-lampohaviosta': [...percentComparisons],
       UA: [...numberComparisons]
     },
     ylapohja: {
       ala: [...numberComparisons],
       U: [...numberComparisons],
-      'osuus-lampohaviosta': [...numberComparisons],
+      'osuus-lampohaviosta': [...percentComparisons],
       UA: [...numberComparisons]
     },
     alapohja: {
       ala: [...numberComparisons],
       U: [...numberComparisons],
-      'osuus-lampohaviosta': [...numberComparisons],
+      'osuus-lampohaviosta': [...percentComparisons],
       UA: [...numberComparisons]
     },
     ikkunat: {
       ala: [...numberComparisons],
       U: [...numberComparisons],
-      'osuus-lampohaviosta': [...numberComparisons],
+      'osuus-lampohaviosta': [...percentComparisons],
       UA: [...numberComparisons]
     },
     ulkoovet: {
       ala: [...numberComparisons],
       U: [...numberComparisons],
-      'osuus-lampohaviosta': [...numberComparisons],
+      'osuus-lampohaviosta': [...percentComparisons],
       UA: [...numberComparisons]
     },
     'kylmasillat-UA': [...numberComparisons],
