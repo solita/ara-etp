@@ -28,7 +28,10 @@ const createIdTranslateStore = () => {
       update(
         R.assocPath(
           ['viesti', R.prop('id', ketju)],
-          Maybe.fromNull(R.prop('energiatodistus-id', ketju))
+          R.compose(
+            R.evolve({ 'energiatodistus-id': Maybe.fromNull }),
+            R.pick(['id', 'subject', 'energiatodistus-id'])
+          )(ketju)
         )
       );
     }

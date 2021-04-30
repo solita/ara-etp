@@ -62,21 +62,18 @@ export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
         R.ifElse(
           R.hasPath(['viesti', parseInt(id, 10)]),
           R.compose(
-            Maybe.orSome([
+            ketju => [
               { url: '#/viesti/all', label: i18n('navigation.viesti') },
+              ...R.compose(
+                Maybe.orSome([]),
+                R.map(R.compose(Array.of, etKetjuCrumb(i18n))),
+                R.prop('energiatodistus-id')
+              )(ketju),
               {
-                url: `#/viesti/${id}`,
-                label: `${i18n('navigation.viestiketju')} ${id}`
+                url: `#/viesti/${ketju.id}`,
+                label: ketju.subject
               }
-            ]),
-            R.map(etId => [
-              { url: '#/viesti/all', label: i18n('navigation.viesti') },
-              etKetjuCrumb(i18n, etId),
-              {
-                url: `#/viesti/${id}`,
-                label: `${i18n('navigation.viestiketju')} ${id}`
-              }
-            ]),
+            ],
             R.path(['viesti', parseInt(id, 10)])
           ),
           R.always([
