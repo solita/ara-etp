@@ -25,6 +25,13 @@ export const parseNumber = R.compose(
   R.replace(/\s/g, '')
 );
 
+export const parsePercent = R.compose(
+  R.map(R.divide(R.__, 100)),
+  parseNumber,
+  R.trim,
+  R.replace('%', '')
+);
+
 export const parseDate = R.compose(
   R.ifElse(
     dfns.isValid,
