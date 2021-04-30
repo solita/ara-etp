@@ -204,7 +204,16 @@ const numberComparisonsFromType = type => [
   singleNumberOperation(lte, type)
 ];
 
+const numberComparisonsWithoutEqFromType = type => [
+  singleNumberOperation(gt, type),
+  singleNumberOperation(gte, type),
+  singleNumberOperation(lt, type),
+  singleNumberOperation(lte, type)
+];
+
 const numberComparisons = numberComparisonsFromType(OPERATOR_TYPES.NUMBER);
+
+const numberComparisonsWithoutEq = numberComparisonsWithoutEqFromType(OPERATOR_TYPES.NUMBER);
 
 const unformattedNumberComparisons = numberComparisonsFromType(
   OPERATOR_TYPES.UNFORMATTED_NUMBER
@@ -475,34 +484,34 @@ const tulokset = {
     'fossiilinen-polttoaine': [...numberComparisons],
     'fossiilinen-polttoaine-painotettu': [...numberComparisons],
     'fossiilinen-polttoaine-painotettu-neliovuosikulutus': [
-      ...numberComparisons
+      ...numberComparisonsWithoutEq
     ],
     sahko: [...numberComparisons],
     'sahko-painotettu': [...numberComparisons],
-    'sahko-painotettu-neliovuosikulutus': [...numberComparisons],
+    'sahko-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     kaukojaahdytys: [...numberComparisons],
     'kaukojaahdytys-painotettu': [...numberComparisons],
-    'kaukojaahdytys-painotettu-neliovuosikulutus': [...numberComparisons],
+    'kaukojaahdytys-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     kaukolampo: [...numberComparisons],
     'kaukolampo-painotettu': [...numberComparisons],
-    'kaukolampo-painotettu-neliovuosikulutus': [...numberComparisons],
+    'kaukolampo-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'uusiutuva-polttoaine': [...numberComparisons],
     'uusiutuva-polttoaine-painotettu': [...numberComparisons],
-    'uusiutuva-polttoaine-painotettu-neliovuosikulutus': [...numberComparisons]
+    'uusiutuva-polttoaine-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq]
   },
   'uusiutuvat-omavaraisenergiat': {
     aurinkosahko: [...numberComparisons],
-    'aurinkosahko-neliovuosikulutus': [...numberComparisons],
+    'aurinkosahko-neliovuosikulutus': [...numberComparisonsWithoutEq],
     tuulisahko: [...numberComparisons],
-    'tuulisahko-neliovuosikulutus': [...numberComparisons],
+    'tuulisahko-neliovuosikulutus': [...numberComparisonsWithoutEq],
     aurinkolampo: [...numberComparisons],
-    'aurinkolampo-neliovuosikulutus': [...numberComparisons],
+    'aurinkolampo-neliovuosikulutus': [...numberComparisonsWithoutEq],
     muulampo: [...numberComparisons],
-    'muulampo-neliovuosikulutus': [...numberComparisons],
+    'muulampo-neliovuosikulutus': [...numberComparisonsWithoutEq],
     muusahko: [...numberComparisons],
-    'muusahko-neliovuosikulutus': [...numberComparisons],
+    'muusahko-neliovuosikulutus': [...numberComparisonsWithoutEq],
     lampopumppu: [...numberComparisons],
-    'lampopumppu-neliovuosikulutus': [...numberComparisons]
+    'lampopumppu-neliovuosikulutus': [...numberComparisonsWithoutEq]
   },
   'tekniset-jarjestelmat': {
     'tilojen-lammitys': {
@@ -529,25 +538,25 @@ const tulokset = {
   },
   nettotarve: {
     'tilojen-lammitys-vuosikulutus': [...numberComparisons],
-    'tilojen-lammitys-neliovuosikulutus': [...numberComparisons],
+    'tilojen-lammitys-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'ilmanvaihdon-lammitys-vuosikulutus': [...numberComparisons],
-    'ilmanvaihdon-lammitys-neliovuosikulutus': [...numberComparisons],
+    'ilmanvaihdon-lammitys-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'kayttoveden-valmistus-vuosikulutus': [...numberComparisons],
-    'kayttoveden-valmistus-neliovuosikulutus': [...numberComparisons],
+    'kayttoveden-valmistus-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'jaahdytys-vuosikulutus': [...numberComparisons],
-    'jaahdytys-neliovuosikulutus': [...numberComparisons]
+    'jaahdytys-neliovuosikulutus': [...numberComparisonsWithoutEq]
   },
   lampokuormat: {
     aurinko: [...numberComparisons],
-    'aurinko-neliovuosikuorma': [...numberComparisons],
+    'aurinko-neliovuosikuorma': [...numberComparisonsWithoutEq],
     ihmiset: [...numberComparisons],
-    'ihmiset-neliovuosikuorma': [...numberComparisons],
+    'ihmiset-neliovuosikuorma': [...numberComparisonsWithoutEq],
     kuluttajalaitteet: [...numberComparisons],
-    'kuluttajalaitteet-neliovuosikuorma': [...numberComparisons],
+    'kuluttajalaitteet-neliovuosikuorma': [...numberComparisonsWithoutEq],
     valaistus: [...numberComparisons],
-    'valaistus-neliovuosikuorma': [...numberComparisons],
+    'valaistus-neliovuosikuorma': [...numberComparisonsWithoutEq],
     kvesi: [...numberComparisons],
-    'kvesi-neliovuosikuorma': [...numberComparisons]
+    'kvesi-neliovuosikuorma': [...numberComparisonsWithoutEq]
   },
   laskentatyokalu: [...stringComparisons]
 };
@@ -558,17 +567,17 @@ const toteutunutOstoenergiankulutus = {
   'kaukojaahdytys-vuosikulutus-yhteensa': [...numberComparisons],
   'polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
   'ostettu-energia': {
-    'kaukojaahdytys-neliovuosikulutus': [...numberComparisons],
-    'kaukolampo-neliovuosikulutus': [...numberComparisons],
-    'kayttajasahko-neliovuosikulutus': [...numberComparisons],
-    'kiinteistosahko-neliovuosikulutus': [...numberComparisons],
-    'kokonaissahko-neliovuosikulutus': [...numberComparisons]
+    'kaukojaahdytys-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'kaukolampo-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'kayttajasahko-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'kiinteistosahko-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'kokonaissahko-neliovuosikulutus': [...numberComparisonsWithoutEq]
   },
   'ostetut-polttoaineet': {
-    'kevyt-polttooljy-neliovuosikulutus': [...numberComparisons],
-    'pilkkeet-havu-sekapuu-neliovuosikulutus': [...numberComparisons],
-    'pilkkeet-koivu-neliovuosikulutus': [...numberComparisons],
-    'puupelletit-neliovuosikulutus': [...numberComparisons]
+    'kevyt-polttooljy-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'pilkkeet-havu-sekapuu-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'pilkkeet-koivu-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'puupelletit-neliovuosikulutus': [...numberComparisonsWithoutEq]
   }
 };
 
