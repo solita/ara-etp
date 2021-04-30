@@ -231,6 +231,7 @@
     "luo2013": "Skapa ett nytt energicertifikat 2013",
     "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
     "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
+    "voimassaolo-paattymisaika": "Todistuksen voimassaolon päättymispäivä SV?",
     "tila-id": "Energiatodistuksen tila SV?",
     "versio": "Version",
     "laatija-id": "Upprättare",
