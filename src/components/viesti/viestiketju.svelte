@@ -5,6 +5,7 @@
   import * as Viestit from '@Component/viesti/viesti-util';
 
   import SenderRecipients from './sender-recipients.svelte';
+  import User from './user.svelte';
 
   import { _ } from '@Language/i18n';
 
@@ -81,8 +82,8 @@
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
         <div class="font-bold">
-          <SenderRecipients
-            sender={R.prop('from', R.last(ketju.viestit))}
+          <User
+            user={R.prop('from', R.last(ketju.viestit))}
             {whoami} />
         </div>:
         <div class="truncate p-1">
