@@ -44,7 +44,8 @@
         {ketju.subject}
       </span>
 
-      <SenderRecipients icons="true"
+      <SenderRecipients
+        icons="true"
         sender={R.prop('from', R.head(ketju.viestit))}
         {whoami}
         recipients={R.prop('vastaanottajat', ketju)}
@@ -82,10 +83,9 @@
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
         <div class="font-bold">
-          <User
-            user={R.prop('from', R.last(ketju.viestit))}
-            {whoami} />
-        </div>:
+          <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
+        </div>
+        :
         <div class="truncate p-1">
           {R.last(ketju.viestit).body}
         </div>

@@ -27,10 +27,10 @@
       {#if icons}<span class="font-icon">group</span>{/if}
       <span>
         {Locales.label($locale, group)}
-      </span> <separator/>
+      </span> <separator />
     {/each}
     {#each recipients as recipient}
-      <User {icons} {whoami} user={recipient} /> <separator/>
+      <User {icons} {whoami} user={recipient} /> <separator />
     {/each}
   </div>
 </div>

@@ -12,10 +12,11 @@
 </script>
 
 <style>
-.from-me {
-  @apply text-primary font-bold;
-}
+  .from-me {
+    @apply text-primary font-bold;
+  }
 </style>
+
 {#if icons}<span class="font-icon">person</span>{/if}
 {#if R.eqProps('id', user, whoami)}
   <span class="from-me">
