@@ -29,7 +29,6 @@
   import * as Kayttajat from '@Utility/kayttajat';
 
   import ToolBar from '@Component/ToolBar/ToolBar';
-  import Button from '@Component/Button/Button';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { flashMessageStore } from '@/stores';
@@ -332,18 +331,6 @@
             {luokittelut}
             {validation}
             {whoami} />
-        </div>
-        <div class="flex -mx-4 pt-8">
-          <div class="px-4">
-            <Button type={'submit'} text={$_('tallenna')} disabled={!dirty} />
-          </div>
-          <div class="px-4">
-            <Button
-              text={$_('peruuta')}
-              type={'reset'}
-              style={'secondary'}
-              disabled={!dirty} />
-          </div>
         </div>
       </form>
     </div>
