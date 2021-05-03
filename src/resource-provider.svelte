@@ -41,7 +41,7 @@
         ],
         [
           R.propEq('type', 'viesti'),
-          R.compose(idTranslateStore.updateViesti, R.prop('payload'))
+          R.compose(idTranslateStore.updateKetju, R.prop('payload'))
         ]
       ])
     ),
