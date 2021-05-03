@@ -36,6 +36,8 @@
     overlay = true;
   };
 
+  let showViestiForm = false;
+
   const load = R.compose(
     Future.fork(
       response => {
@@ -173,6 +175,8 @@
   }
 </style>
 
+<!-- purgecss: hidden -->
+
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as { ketju, whoami, ryhmat, kasittelijat }}
@@ -244,7 +248,8 @@
 
       {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
         <form
-          class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf border"
+          class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf"
+          class:hidden={!showViestiForm}
           on:submit|preventDefault={submitNewViesti}
           on:input={_ => {
             dirty = true;
@@ -276,6 +281,14 @@
             {/if}
           </div>
         </form>
+        <div
+          class="w-full p-4 my-4 ml-8 space-y-2"
+          class:hidden={showViestiForm}>
+          <Button
+            prefix={'uusiviesti'}
+            text={i18n(i18nRoot + '.new-viesti')}
+            on:click={() => (showViestiForm = true)} />
+        </div>
       {/if}
 
       <div class="space-y-6">
