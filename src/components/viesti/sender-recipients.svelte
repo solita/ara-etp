@@ -14,7 +14,7 @@
 </script>
 
 <style>
-  .to separator:not(:last-child)::after {
+  .to .separator:not(:last-child)::after {
     content: ',';
   }
 </style>
@@ -27,10 +27,10 @@
       {#if icons}<span class="font-icon">group</span>{/if}
       <span>
         {Locales.label($locale, group)}
-      </span> <separator />
+      </span> <span class="separator" />
     {/each}
     {#each recipients as recipient}
-      <User {icons} {whoami} user={recipient} /> <separator />
+      <User {icons} {whoami} user={recipient} /> <span class="separator" />
     {/each}
   </div>
 </div>
