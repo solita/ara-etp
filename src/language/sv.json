@@ -1,5 +1,7 @@
 {
-  "document": { "title": "Ara - Energicertifikatservice" },
+  "document": {
+    "title": "Ara - Energicertifikatservice"
+  },
   "validation": {
     "required": "Obligatorisk uppgift",
     "min-length": "Längden ska vara minst {min} tecken",
@@ -18,7 +20,7 @@
     "no-selection": "Inget val",
     "warning": {
       "min-number": "Vanligtvis större än {min}",
-      "max-number": "Tyypillisesti pienempi kuin {max}"
+      "max-number": "Vanligtvis mindre än {max}"
     }
   },
   "parsing": {
@@ -133,16 +135,16 @@
     "kayttajatunnus": "Användarnamn för dataöverföring",
     "puhelinnumero": "Telefon",
     "virtu": {
-      "header": "Virtu kirjautumistiedot",
-      "localid": "Käyttäjätunnus (Virtu Local ID)",
-      "organisaatio": "Organisaatio"
+      "header": "Virtu kirjautumistiedot SV?",
+      "localid": "Käyttäjätunnus (Virtu Local ID) SV?",
+      "organisaatio": "Organisaatio SV?"
     },
     "messages": {
       "save-success": "Användarens uppgifter har sparats.",
       "save-error": "Det uppstod ett oväntat fel i sparandet av användarens uppgifter.",
       "validation-error": "Käyttäjän tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen. SV?",
       "load-error": "Sökningen av användarens uppgifter misslyckades.",
-      "not-found": "Käyttäjää ei löydy tästä palvelusta SV",
+      "not-found": "Käyttäjää ei löydy tästä palvelusta SV?",
       "upload-error": "Filen kunde inte laddas ner."
     }
   },
@@ -169,7 +171,7 @@
     "messages": {
       "save-success": "Upprättarnas uppgifter har sparats.",
       "save-error": "Det uppstod ett oväntat fel i sparandet av upprättarnas uppgifter.",
-      "validation-error": "Laatioiden tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen.",
+      "validation-error": "Laatioiden tiedoissa virheitä. Kontrollera de rödmärkta och ladda om filen. SV?",
       "load-error": "Sökningen av upprättarens uppgifter misslyckades.",
       "upload-error": "Filen kunde inte laddas ner.",
       "not-found": "Laatijaa ei löydy tästä palvelusta. SV?"
@@ -212,7 +214,7 @@
   "laatijahaku": {
     "title": "Sök upprättare",
     "kunta": "Kommun",
-    "energiatodistukset": "ET:t",
+    "energiatodistukset": "ET:t SV?",
     "results": "Resultat {count} ST.",
     "kaikki": "Alla",
     "voimassaolo": "Giltighetstid",
@@ -227,8 +229,8 @@
   "energiatodistus": {
     "title": "Energicertifikat",
     "et-lisays": "Du kan lägga till ett nytt energicertifikat här:",
-    "luo2018": "Skapa ett nytt energicertifikat 2018",
-    "luo2013": "Skapa ett nytt energicertifikat 2013",
+    "luo2018": "Skapa ett nytt EC 2018",
+    "luo2013": "Skapa ett nytt EC 2013",
     "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
     "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
     "tila-id": "Energiatodistuksen tila SV?",
@@ -288,8 +290,8 @@
       "korvaava-draft-info": "Korvaaminen tapahtuu kun korvaava energiatodistus allekirjoitetaan. SV",
       "table": {
         "tunnus": "Beteckning",
-        "etl": "ETL",
-        "ktl": "KTL",
+        "etl": "ETL SV?",
+        "ktl": "KTL SV?",
         "rakennustunnus": "Permanent byggnadsbeteckning",
         "nettoala": "Nettoarea",
         "nimi": "Byggnadens namn",
@@ -336,7 +338,7 @@
     "laskuriviviite": "Projektreferens (syns på fakturaraden)",
     "korvattu-energiatodistus-id": "Ersätter certifikatet",
     "laskutus": {
-      "title": "Laskutustiedot",
+      "title": "Laskutustiedot SV?",
       "postiosoite": "Postadress",
       "verkkolaskuosoite": "Adress för nätfaktura",
       "verkkolaskuoperaattori": "Förmedlingsnummer",
@@ -351,7 +353,7 @@
       "tilaaja": "Beställare",
       "kieli": "Språk",
       "laatimisvaihe": "Upprättandes period",
-      "uudisrakennus": "Uudisrakennus",
+      "uudisrakennus": "Uudisrakennus SV?",
       "havainnointikaynti": "Datum för iakttagelser på plats",
       "katuosoite": "Gatuadress",
       "postinumero": "Postnummer",
@@ -573,7 +575,7 @@
           "jaon-hyotysuhde": "Verkningsgraden för distribution och avgivning",
           "lampokerroin": "Temperaturkoefficient",
           "apulaitteet": "Hjälputrustningens elförbrukning",
-          "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus KÄÄNÖS",
+          "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus SV?",
           "lampohavio-lammittamaton-tila": "Värmeförluster i icke-uppvärmt utrymme"
         },
         "lammin-kayttovesi": {
@@ -660,20 +662,20 @@
           "uusiutuva-polttoaine": "Förrnybara bränslen"
         },
         "fossiilinen-polttoaine": "Köpt energi / Fossila bränslen",
-        "fossiilinen-polttoaine-painotettu": " Viktad energiförbrukning / Fossila bränslen (kWhE/vuosi)",
-        "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fossila bränslen (kWhE/(m²vuosi))",
+        "fossiilinen-polttoaine-painotettu": " Viktad energiförbrukning / Fossila bränslen (kWhE/år)",
+        "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fossila bränslen (kWhE/(m²år))",
         "sahko": "Köpt energi / El",
-        "sahko-painotettu": "Viktad energiförbrukning/ El (kWhE/vuosi)",
-        "sahko-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ El (kWhE/(m²vuosi))",
+        "sahko-painotettu": "Viktad energiförbrukning/ El (kWhE/år)",
+        "sahko-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ El (kWhE/(m²år))",
         "kaukojaahdytys": "Köpt energi / Fjärrkyla",
-        "kaukojaahdytys-painotettu": "Viktad energiförbrukning/ Fjärrkyla (kWhE/vuosi)",
-        "kaukojaahdytys-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrkyla (kWhE/(m²vuosi))",
+        "kaukojaahdytys-painotettu": "Viktad energiförbrukning/ Fjärrkyla (kWhE/år)",
+        "kaukojaahdytys-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrkyla (kWhE/(m²år))",
         "kaukolampo": "Köpt energi / Fjärrvärme",
-        "kaukolampo-painotettu": "Viktad energiförbrukning/ Fjärrvärme (kWhE/vuosi)",
-        "kaukolampo-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrvärme (kWhE/(m²vuosi))",
+        "kaukolampo-painotettu": "Viktad energiförbrukning/ Fjärrvärme (kWhE/år)",
+        "kaukolampo-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fjärrvärme (kWhE/(m²år))",
         "uusiutuva-polttoaine": "Köpt energi / Förrnybara bränslen",
-        "uusiutuva-polttoaine-painotettu": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/vuosi)",
-        "uusiutuva-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/(m²vuosi))",
+        "uusiutuva-polttoaine-painotettu": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/år)",
+        "uusiutuva-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Förrnybara bränslen (kWhE/(m²år))",
         "muu": {
           "0": {
             "label-context": "Specifikation av E-tal",
@@ -687,13 +689,13 @@
         "0": {
           "label-context": "Förnybara självförsörjningsenergier",
           "nimi": "Energinamn",
-          "vuosikulutus": "Produktion (kWh/vuosi)"
+          "vuosikulutus": "Produktion (kWh/år)"
         },
         "header": {
           "2013": "Utnyttjad andel av förnybar egenproducerad energi",
           "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)"
         },
-        "label-context": "Uusiutuvat omavaraisenergiat",
+        "label-context": "Uusiutuvat omavaraisenergiat SV?",
         "labels": {
           "aurinkosahko": "Solel",
           "tuulisahko": "Vindel",
@@ -810,16 +812,16 @@
           "kaukojaahdytys": "Fjärrkyla"
         },
         "label-context": "Köpt energi",
-        "kaukolampo-vuosikulutus": "Fjärrvärme (kWh/vuosi)",
-        "kaukolampo-neliovuosikulutus": "Fjärrvärme (kWh/(m²vuosi))",
-        "kokonaissahko-vuosikulutus": "Total elmängd (kWh/vuosi)",
-        "kokonaissahko-neliovuosikulutus": "Total elmängd (kWh/(m²vuosi))",
-        "kiinteistosahko-vuosikulutus": "Fastighetsel (kWh/vuosi)",
-        "kiinteistosahko-neliovuosikulutus": "Fastighetsel (kWh/(m²vuosi))",
-        "kayttajasahko-vuosikulutus": "Hushållsel (kWh/vuosi)",
-        "kayttajasahko-neliovuosikulutus": "Hushållsel (kWh/(m²vuosi))",
-        "kaukojaahdytys-vuosikulutus": "Fjärrkyla (kWh/vuosi)",
-        "kaukojaahdytys-neliovuosikulutus": "Fjärrkyla (kWh/(m²vuosi))",
+        "kaukolampo-vuosikulutus": "Fjärrvärme (kWh/år)",
+        "kaukolampo-neliovuosikulutus": "Fjärrvärme (kWh/(m²år))",
+        "kokonaissahko-vuosikulutus": "Total elmängd (kWh/år)",
+        "kokonaissahko-neliovuosikulutus": "Total elmängd (kWh/(m²år))",
+        "kiinteistosahko-vuosikulutus": "Fastighetsel (kWh/år)",
+        "kiinteistosahko-neliovuosikulutus": "Fastighetsel (kWh/(m²år))",
+        "kayttajasahko-vuosikulutus": "Hushållsel (kWh/år)",
+        "kayttajasahko-neliovuosikulutus": "Hushållsel (kWh/(m²år))",
+        "kaukojaahdytys-vuosikulutus": "Fjärrkyla (kWh/år)",
+        "kaukojaahdytys-neliovuosikulutus": "Fjärrkyla (kWh/(m²år))",
         "muu": {
           "0": {
             "label-context": "Övrig köpt energi",
@@ -860,7 +862,7 @@
             "muunnoskerroin": "Bränslets omvandlingsfaktor till kWh",
             "maara-vuodessa": "Inköpsmängd av bränsle per år",
             "vuosikulutus": "Bränsleförbrukning per år (kWh/år)",
-            "neliovuosikulutus": "Bränsleförbrukning per år per kvadrat (kWh/m ²)"
+            "neliovuosikulutus": "Bränsleförbrukning per år per kvadrat (kWh/m²)"
           }
         }
       },
@@ -877,7 +879,7 @@
       "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme (kWh/år)",
       "kaukolampo-neliovuosikulutus-yhteensa": "Fjärrvärme (kWh/m²år)",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning (kWh/år)",
-      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Fjärrkylning (kWh/m²vuosi)",
+      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Fjärrkylning (kWh/m²år)",
       "polttoaineet-vuosikulutus-yhteensa": "Bränsle (kWh/år)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Bränsle (kWh/(m²år))",
       "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",
@@ -989,10 +991,10 @@
       "validation-required-error": "Obligatoriska uppgifter saknas:",
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet",
-      "discard-success": "Energiatodistus hylättiin onnistuneesti SV",
-      "discard-error": "Energiatodistuksen hylkääminen epäonnistui SV",
-      "undodiscard-success": "Energiatodistuksen hylkääminen peruttiin onnistuneesti SV",
-      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui SV"
+      "discard-success": "Energiatodistus hylättiin onnistuneesti SV?",
+      "discard-error": "Energiatodistuksen hylkääminen epäonnistui SV?",
+      "undodiscard-success": "Energiatodistuksen hylkääminen peruttiin onnistuneesti SV?",
+      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui SV?"
     },
     "signing": {
       "header": "Undertecknande",
@@ -1010,7 +1012,7 @@
         "connection-check": "Kontakten till mPollux kontrolleras.",
         "already-started": "Undertecknandet har avbrutits av okänd orsak.",
         "connection-success": "Energicertifikatets uppgifter och koppling till mPollux har kontrollerats.",
-        "connection-failed": "Yhteyden avaus mPolluxiin epäonnistui. Undertecknandet förutsätter att signaturprogrammet mPollux är installerat och att webbläsaren är ansluten till signaturprogrammet."
+        "connection-failed": "Yhteyden avaus mPolluxiin epäonnistui. Undertecknandet förutsätter att signaturprogrammet mPollux är installerat och att webbläsaren är ansluten till signaturprogrammet. SV?"
       },
       "error": {
         "abort-failed": "Avbrytandet misslyckades",
@@ -1031,9 +1033,9 @@
         "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan. SV?"
       },
       "button": {
-        "start": "Allekirjoita",
-        "abort": "Keskeytä",
-        "close": "Sulje"
+        "start": "Allekirjoita SV?",
+        "abort": "Keskeytä SV?",
+        "close": "Sulje SV?"
       }
     },
     "allekirjoitus": {
@@ -1074,8 +1076,8 @@
           "error": "Energiatodistuksen liitteen poistamisessa tapahtui virhe. SV?"
         },
         "valvonta": {
-          "success": "Valvonnan tila päivitetty.",
-          "error": "Valvonnan tilan päivityksessä tapahtui virhe."
+          "success": "Valvonnan tila päivitetty. SV?",
+          "error": "Valvonnan tilan päivityksessä tapahtui virhe. SV?"
         },
         "load-error": "Sökningen av energicertifikatets bilagor misslyckades."
       }
@@ -1161,7 +1163,7 @@
   "drop-or-click-file": "Lägg till en fil genom att dra eller bläddra bland filer",
   "file-drop-or": "Lisää tiedosto raahaamalla tai SV?",
   "file-browse": "selaa tiedostoja SV?",
-  "file_upload_error_multiple_files": "Liikaa tiedostoja. Lägg till en fil i taget.",
+  "file_upload_error_multiple_files": "Liikaa tiedostoja. Lägg till en fil i taget. SV?",
   "country-not-found": "Felaktigt land",
   "table": { "actions": "Funktioner" },
   "pagination": { "results": "Resultat {from}... {to} / {total}" },
