@@ -5,6 +5,7 @@
   import * as Viestit from '@Component/viesti/viesti-util';
 
   import SenderRecipients from './sender-recipients.svelte';
+  import User from './user.svelte';
 
   import { _ } from '@Language/i18n';
 
@@ -39,11 +40,12 @@
     <div
       class="w-9/12 py-1 flex flex-wrap items-center"
       title={R.gt(R.length(ketju.subject), 40) ? ketju.subject : ''}>
-      <span class="subject truncate font-bold self-start mr-2">
+      <span class="subject truncate font-bold self-start mr-3">
         {ketju.subject}
       </span>
 
       <SenderRecipients
+        icons="true"
         sender={R.prop('from', R.head(ketju.viestit))}
         {whoami}
         recipients={R.prop('vastaanottajat', ketju)}
@@ -80,9 +82,10 @@
 
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
-        <SenderRecipients
-          sender={R.prop('from', R.last(ketju.viestit))}
-          {whoami} />:
+        <div class="font-bold">
+          <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
+        </div>
+        :
         <div class="truncate p-1">
           {R.last(ketju.viestit).body}
         </div>

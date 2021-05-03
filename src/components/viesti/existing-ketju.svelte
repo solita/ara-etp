@@ -5,7 +5,6 @@
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
   import * as Validation from '@Utility/validation';
-  import * as Locales from '@Language/locale-utils';
   import * as Kayttajat from '@Utility/kayttajat';
 
   import * as api from './viesti-api';
@@ -14,7 +13,7 @@
   import * as Schema from './schema';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
-  import { _, locale } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Button from '@Component/Button/Button.svelte';
@@ -23,6 +22,7 @@
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import SenderRecipients from './sender-recipients.svelte';
+  import User from './user.svelte';
 
   const i18nRoot = 'viesti.ketju.existing';
   const i18n = $_;
@@ -194,6 +194,7 @@
           <strong>{ketju.subject}</strong>
           <SenderRecipients
             sender={R.prop('from', R.head(ketju.viestit))}
+            icons="true"
             {whoami}
             recipients={R.prop('vastaanottajat', ketju)}
             recipientGroup={Viestit.findKetjuVastaanottajaryhma(
@@ -305,7 +306,7 @@
                 {ketju.subject}
               </span>
             </div>
-            <SenderRecipients sender={viesti.from} {whoami} />
+            <User user={viesti.from} {whoami} />
             <p>{viesti.body}</p>
           </div>
         {/each}
