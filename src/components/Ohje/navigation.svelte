@@ -12,7 +12,7 @@
   import { _ } from '@Language/i18n';
   import TextButton from '@Component/Button/TextButton';
   import Link from '@Component/Link/Link';
-  import NavLink from '@Component/Ohje/nav-link';
+  import NavLink from '@Component/ohje/nav-link';
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
