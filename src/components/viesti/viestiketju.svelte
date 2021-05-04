@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Viestit from '@Component/viesti/viesti-util';
@@ -20,11 +21,22 @@
     R.last,
     R.prop('viestit')
   );
+
+  const hasUnreadViesti = R.compose(R.not,
+    R.isNil, R.find(R.propSatisfies(Maybe.isNone, 'read-time')));
+
+  $: unread = hasUnreadViesti(ketju.viestit);
 </script>
 
 <style>
   a:first-child {
     @apply border-t-2;
+  }
+  .unread {
+    @apply bg-backgroundhalf;
+  }
+  .unread:hover {
+    @apply bg-althover;
   }
 </style>
 
@@ -32,7 +44,7 @@
 
 <a
   href={`#/viesti/${ketju.id}`}
-  class="flex flex-col border-b-2 border-background hover:bg-background p-2">
+  class="flex flex-col border-b-2 border-background hover:bg-althover p-2" class:unread={unread}>
   <div class="flex items-start w-full justify-start">
     <span class="w-2/12 py-1 border border-transparent">
       {sentTime(ketju)}
@@ -75,8 +87,8 @@
   <div class="flex items-center">
     <div class="flex flex-col w-2/12">
       <span class="block">
-        <span class="font-icon outline mr-1 text-primary"> chat </span>
-        <span>{R.length(ketju.viestit)}</span>
+        <span class="font-icon outline mr-1 text-primary" class:text-error={unread}> chat </span>
+        <span class:font-bold={unread}>{R.length(ketju.viestit)}</span>
       </span>
     </div>
 
@@ -86,7 +98,7 @@
           <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
         </div>
         :
-        <div class="truncate p-1">
+        <div class="truncate p-1" class:font-bold={unread}>
           {R.last(ketju.viestit).body}
         </div>
       </div>
