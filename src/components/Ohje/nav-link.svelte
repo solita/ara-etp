@@ -59,13 +59,13 @@
       // set dropped as target's child
       updateSivu(droppedSivuId, {
         'parent-id': Maybe.Some(sivu.id),
-        ordinal: 0 // to do this right we would need to know the target's children's lowest or highest ordinal
+        ordinal: 0
       });
     } else {
       // set dropped as target's sibling
       updateSivu(droppedSivuId, {
         'parent-id': sivu['parent-id'],
-        ordinal: parseInt(sivu.ordinal) + 1 // for this to work right, we need to manage sivu ordinals better, preferably in the back end
+        ordinal: parseInt(sivu.ordinal) + 1
       });
     }
   };
@@ -79,7 +79,7 @@
     @apply bg-light text-dark border-secondary;
   }
   .active.root {
-    @apply bg-dark;
+    @apply bg-primary;
   }
   .active.child {
     @apply bg-althover;
@@ -108,17 +108,28 @@
   .isBeingDragged {
     @apply opacity-50;
   }
+
   .isBeingTargeted.hasNoChildren:not(.setDroppedAsChild),
   .isBeingTargeted:not(.childrenShown):not(.setDroppedAsChild),
   .isBeingTargeted:not(.setDroppedAsChild) ~ .children {
-    @apply border-b-8 border-hover;
+    @apply;
   }
-  .isBeingTargeted.setDroppedAsChild.hasNoChildren,
-  .isBeingTargeted:not(.childrenShown).setDroppedAsChild {
-    @apply border-b-8 border-warning;
+  .isBeingTargeted.hasNoChildren:not(.setDroppedAsChild)::after,
+  .isBeingTargeted:not(.childrenShown):not(.setDroppedAsChild)::after,
+  .isBeingTargeted:not(.setDroppedAsChild) ~ .children::after {
+    content: 'Siirretään tähän';
+
+    @apply flex w-full p-1 bg-dark text-light justify-center content-center;
   }
-  .isBeingTargeted.setDroppedAsChild ~ .children {
-    @apply border-t-8 border-warning;
+  .isBeingTargeted:not(.setDroppedAsChild) ~ .children::after {
+    @apply -ml-1;
+  }
+  .isBeingTargeted.setDroppedAsChild.hasNoChildren::after,
+  .isBeingTargeted:not(.childrenShown).setDroppedAsChild::after,
+  .isBeingTargeted.setDroppedAsChild ~ .children::before {
+    content: 'Siirretään alisivuksi';
+    text-align: center;
+    @apply flex w-full p-1 bg-warning text-dark justify-center content-center;
   }
 </style>
 
@@ -126,10 +137,6 @@
   <div
     use:dragdrop={{ dragStart, dragEnd, dragEnter, dragLeave, drop }}
     id={sivu.id}
-    class="flex w-full border-b items-center"
-    class:active={sivu.id === parseInt(activeSivuId)}
-    class:root={sivu['parent-id'].isNone()}
-    class:child={sivu['parent-id'].isSome()}
     class:hasNoChildren={R.isEmpty(sivu.children)}
     class:draggable
     class:isBeingDragged
@@ -137,34 +144,40 @@
     class:setDroppedAsChild
     class:childrenShown
     {draggable}>
-    {#if !R.isEmpty(sivu.children)}
-      <button
-        class="p-2 focus:outline-none focus:underline"
-        on:click={() => {
-          childrenShown = !childrenShown;
-        }}>
-        {#if childrenShown}
-          <span class="material-icons">expand_more</span>
-        {:else}
-          <span class="material-icons">chevron_right</span>
-        {/if}
-      </button>
-    {:else}
-      <div class="text-transparent p-2 pointer-events-none">
-        <span class="material-icons">circle</span>
-      </div>
-    {/if}
-    <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
-      <span class="title"> {sivu.title} </span>
-      {#if !sivu.published}
-        <span class="font-icon text-dark"> visibility_off </span>
+    <div
+      class="flex w-full border-b items-center"
+      class:active={sivu.id === parseInt(activeSivuId)}
+      class:root={sivu['parent-id'].isNone()}
+      class:child={sivu['parent-id'].isSome()}>
+      {#if !R.isEmpty(sivu.children)}
+        <button
+          class="p-2 focus:outline-none focus:underline"
+          on:click={() => {
+            childrenShown = !childrenShown;
+          }}>
+          {#if childrenShown}
+            <span class="material-icons">expand_more</span>
+          {:else}
+            <span class="material-icons">chevron_right</span>
+          {/if}
+        </button>
+      {:else}
+        <div class="text-transparent p-2 pointer-events-none">
+          <span class="material-icons">circle</span>
+        </div>
       {/if}
-    </a>
-    {#if draggable}
-      <div class="p-2">
-        <span class="material-icons"> drag_handle </span>
-      </div>
-    {/if}
+      <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
+        <span class="title"> {sivu.title} </span>
+        {#if !sivu.published}
+          <span class="font-icon text-dark"> visibility_off </span>
+        {/if}
+      </a>
+      {#if draggable}
+        <div class="p-2">
+          <span class="material-icons"> drag_handle </span>
+        </div>
+      {/if}
+    </div>
   </div>
   {#if !R.isEmpty(sivu.children) && childrenShown}
     <div
