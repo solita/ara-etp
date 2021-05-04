@@ -720,7 +720,7 @@
       },
       "tekniset-jarjestelmat": {
         "header": "Energi som förbrukas av husets tekniska system",
-        "label-context": "$unused",
+        "label-context": "Tekniset järjestelmät SV?",
         "sahko": "El",
         "lampo": "Värme",
         "kaukojaahdytys": "Fjärrkyla",
@@ -734,23 +734,23 @@
           "kuluttajalaitteet-ja-valaistus-sahko": "Hushållsapparater och belysning"
         },
         "tilojen-lammitys": {
-          "label-context": "Uppvärmning av utrymmen",
+          "label-context": "Tekniset järjestelmät / Uppvärmning av utrymmen SV?",
           "sahko": "Elförbrukning",
           "lampo": "värmeförbrukning"
         },
         "tuloilman-lammitys": {
-          "label-context": "Uppvärmning av tilluft",
+          "label-context": "Tekniset järjestelmät / Uppvärmning av tilluft SV?",
           "sahko": "Elförbrukning",
           "lampo": "värmeförbrukning"
         },
         "kayttoveden-valmistus": {
-          "label-context": "Varmvattenberedning",
+          "label-context": "Tekniset järjestelmät / Varmvattenberedning SV?",
           "sahko": "Elförbrukning",
           "lampo": "värmeförbrukning"
         },
         "iv-sahko": "Elenergi som förbrukas av ventilationssystemet",
         "jaahdytys": {
-          "label-context": "$unused",
+          "label-context": "Tekniset järjestelmät SV?",
           "sahko": "Kylningens elförbrukning",
           "lampo": "Kylningens värmeförbrukning",
           "kaukojaahdytys": "Fjärrkylningens energiförbrukning"
