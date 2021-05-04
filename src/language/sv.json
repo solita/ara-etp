@@ -1156,7 +1156,9 @@
       "sort": "Järjestä SV?",
       "end-sort": "Lopeta järjestäminen SV?",
       "sort-success": "Navigaation järjestyksen muuttaminen onnistui SV?",
-      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui SV?"
+      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui SV?",
+      "destination-child": "Siirretään alisivuksi SV?",
+      "destination-sibling": "Siirretään tähän SV?"
     },
     "creator": {
       "title": "Otsikko SV?",

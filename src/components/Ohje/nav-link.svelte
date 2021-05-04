@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { dragdrop } from './dragdrop';
   import { slide } from 'svelte/transition';
+  import { _ } from '@Language/i18n';
 
   export let sivu;
   export let activeSivuId = -1;
@@ -14,26 +15,26 @@
   let isBeingTargeted = false;
   let setDroppedAsChild = false;
 
+  const i18n = $_;
   const hoverTime = 1000;
   let hoverTimeout;
 
-  // when dragged
+  // events when NavLink is being dragged
   const dragStart = e => {
     if (!draggable) return;
-
     isBeingDragged = true;
     e.dataTransfer.setData('text/plain', sivu.id);
   };
-
   const dragEnd = e => {
     if (!draggable) return;
     isBeingDragged = false;
   };
 
-  // when targeted
+  // events when NavLink is being targeted
   const dragEnter = e => {
     if (!draggable) return;
     e.preventDefault();
+
     isBeingTargeted = true;
     setDroppedAsChild = false;
     hoverTimeout = setTimeout(() => {
@@ -45,7 +46,6 @@
     isBeingTargeted = false;
     clearTimeout(hoverTimeout);
   };
-
   const drop = e => {
     if (!draggable) return;
     isBeingTargeted = false;
@@ -56,13 +56,11 @@
     if (droppedSivuId === targetSivuId) return;
 
     if (setDroppedAsChild) {
-      // set dropped as target's child
       updateSivu(droppedSivuId, {
         'parent-id': Maybe.Some(sivu.id),
-        ordinal: 0
+        ordinal: 0 // set to null if wanted as the last child
       });
     } else {
-      // set dropped as target's sibling
       updateSivu(droppedSivuId, {
         'parent-id': sivu['parent-id'],
         ordinal: parseInt(sivu.ordinal) + 1
@@ -72,19 +70,21 @@
 </script>
 
 <style type="text/postcss">
-  .root {
+  .root .link-content,
+  .root ~ .destination {
     @apply bg-secondary text-light border-light;
   }
-  .child {
+  .child .link-content,
+  .children .destination {
     @apply bg-light text-dark border-secondary;
   }
-  .active.root {
+  .active.root .link-content {
     @apply bg-primary;
   }
-  .active.child {
+  .active.child .link-content {
     @apply bg-althover;
   }
-  .active .title {
+  .active .link-content .title {
     @apply font-semibold;
   }
   .material-icons {
@@ -93,43 +93,17 @@
   .root .text-dark {
     @apply text-light;
   }
-
   .root ~ .children {
     @apply border-b border-light;
   }
   .draggable {
     @apply cursor-move;
   }
-
   .draggable a {
     @apply pointer-events-none font-hairline select-none;
   }
-
   .isBeingDragged {
     @apply opacity-50;
-  }
-
-  .isBeingTargeted.hasNoChildren:not(.setDroppedAsChild),
-  .isBeingTargeted:not(.childrenShown):not(.setDroppedAsChild),
-  .isBeingTargeted:not(.setDroppedAsChild) ~ .children {
-    @apply;
-  }
-  .isBeingTargeted.hasNoChildren:not(.setDroppedAsChild)::after,
-  .isBeingTargeted:not(.childrenShown):not(.setDroppedAsChild)::after,
-  .isBeingTargeted:not(.setDroppedAsChild) ~ .children::after {
-    content: 'Siirretään tähän';
-
-    @apply flex w-full p-1 bg-dark text-light justify-center content-center;
-  }
-  .isBeingTargeted:not(.setDroppedAsChild) ~ .children::after {
-    @apply -ml-1;
-  }
-  .isBeingTargeted.setDroppedAsChild.hasNoChildren::after,
-  .isBeingTargeted:not(.childrenShown).setDroppedAsChild::after,
-  .isBeingTargeted.setDroppedAsChild ~ .children::before {
-    content: 'Siirretään alisivuksi';
-    text-align: center;
-    @apply flex w-full p-1 bg-warning text-dark justify-center content-center;
   }
 </style>
 
@@ -137,6 +111,9 @@
   <div
     use:dragdrop={{ dragStart, dragEnd, dragEnter, dragLeave, drop }}
     id={sivu.id}
+    class:active={sivu.id === parseInt(activeSivuId)}
+    class:root={sivu['parent-id'].isNone()}
+    class:child={sivu['parent-id'].isSome()}
     class:hasNoChildren={R.isEmpty(sivu.children)}
     class:draggable
     class:isBeingDragged
@@ -144,11 +121,7 @@
     class:setDroppedAsChild
     class:childrenShown
     {draggable}>
-    <div
-      class="flex w-full border-b items-center"
-      class:active={sivu.id === parseInt(activeSivuId)}
-      class:root={sivu['parent-id'].isNone()}
-      class:child={sivu['parent-id'].isSome()}>
+    <div class="link-content flex w-full border-b items-center">
       {#if !R.isEmpty(sivu.children)}
         <button
           class="p-2 focus:outline-none focus:underline"
@@ -173,19 +146,38 @@
         {/if}
       </a>
       {#if draggable}
-        <div class="p-2">
+        <div class="p-2 pointer-events-none">
           <span class="material-icons"> drag_handle </span>
         </div>
       {/if}
     </div>
   </div>
-  {#if !R.isEmpty(sivu.children) && childrenShown}
+  {#if (!R.isEmpty(sivu.children) && childrenShown) || (draggable && isBeingTargeted && setDroppedAsChild)}
     <div
       class="children pl-1 bg-secondary"
       transition:slide|local={{ duration: 100 }}>
+      {#if draggable && isBeingTargeted && setDroppedAsChild}
+        <div
+          class="destination flex w-full border-b items-center pointer-events-none">
+          <span class="material-icons p-2"> subdirectory_arrow_right </span>
+          <span class="flex-grow p-2 items-center font-semibold">
+            {i18n('ohje.navigation.destination-child')}
+          </span>
+        </div>
+      {/if}
       {#each sivu.children as child}
         <svelte:self sivu={child} {activeSivuId} {draggable} {updateSivu} />
       {/each}
+    </div>
+  {/if}
+
+  {#if draggable && isBeingTargeted && !setDroppedAsChild}
+    <div
+      class="destination flex w-full border-b items-center pointer-events-none">
+      <span class="material-icons p-2"> east </span>
+      <span class="flex-grow p-2 items-center font-semibold">
+        {i18n('ohje.navigation.destination-sibling')}
+      </span>
     </div>
   {/if}
 </div>

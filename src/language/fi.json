@@ -1304,7 +1304,9 @@
       "sort": "Järjestä",
       "end-sort": "Lopeta järjestäminen",
       "sort-success": "Navigaation järjestyksen muuttaminen onnistui",
-      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui"
+      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui",
+      "destination-child": "Siirretään alisivuksi",
+      "destination-sibling": "Siirretään tähän"
     },
     "creator": {
       "title": "Otsikko",
