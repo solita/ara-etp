@@ -20,14 +20,13 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
-  import Navigation from './navigation';
 
   const emptySivu = {
     published: false,
     title: '',
     body: '',
     'parent-id': Maybe.None(),
-    ordinal: 0
+    ordinal: null
   };
 
   const i18nRoot = 'ohje.creator';
@@ -38,11 +37,6 @@
   let createSuccess = false;
   let enableOverlay = _ => {
     overlay = true;
-  };
-
-  const cancel = _ => {
-    sivu = emptySivu;
-    dirty = false;
   };
 
   const addOhje = R.compose(
@@ -95,10 +89,6 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
-    <!-- <div class="w-2/6 max-w-xs">
-      <Navigation />
-    </div>
-    <div class="w-4/6 flex-grow flex flex-col"> -->
     <div class="w-full flex flex-col">
       <DirtyConfirmation {dirty} />
       <div class="w-full flex flex-col">
@@ -159,12 +149,6 @@
               disabled={!dirty}
               type={'submit'}
               text={$_(`${i18nRoot}.submit`)} />
-            <!-- <Button
-              disabled={!dirty}
-              on:click={cancel}
-              text={$_(`${i18nRoot}.reset`)}
-              type={'reset'}
-              style={'secondary'} /> -->
           </div>
         </form>
       </div>
