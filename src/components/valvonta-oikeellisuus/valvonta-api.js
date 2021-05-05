@@ -131,6 +131,13 @@ export const putToimenpide = R.curry((id, toimenpideId, toimenpide) =>
   )(toimenpide)
 );
 
+export const getValvonta = id =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    url.valvonta
+  )(id);
+
 export const putValvonta = R.curry((id, body) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),

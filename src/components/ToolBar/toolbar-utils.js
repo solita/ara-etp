@@ -3,6 +3,7 @@ import * as Kayttaja from '@Utility/kayttajat';
 import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
 
 export const modules = [
+  'tyojono',
   'save',
   'sign',
   'copy',
@@ -21,7 +22,7 @@ export const paakayttajaFields = tila => {
     case EtUtils.tila['in-signing']:
       return [module.save, module.preview];
     case EtUtils.tila['signed']:
-      return [module.save, module.download, module.discard];
+      return [module.tyojono, module.save, module.download, module.discard];
     case EtUtils.tila['discarded']:
       return [module.download, module.undodiscard];
     case EtUtils.tila['replaced']:

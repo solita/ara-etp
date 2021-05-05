@@ -9,7 +9,9 @@
 
   import Confirm from '@Component/Confirm/Confirm';
   import Signing from '@Component/Energiatodistus/signing';
+  import TyojonoButton from './tyojono-button';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
+  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toolbar from './toolbar-utils';
 
@@ -22,6 +24,7 @@
   export let eTehokkuus = Maybe.None();
   export let dirty;
   export let whoami;
+  export let valvonta;
 
   const i18n = $_;
 
@@ -32,6 +35,7 @@
   let bilingual = true;
   let selectedLanguage = 'fi';
   let signingActive = false;
+  let tyojonoButtonDisabled = false;
 
   $: energiatodistusKieli = energiatodistus.perustiedot.kieli;
   $: bilingual = R.compose(
@@ -99,6 +103,18 @@
       operation(fetch, version, Maybe.get(id))
     );
   };
+
+  $: toggleTyojono = execute(
+    (fetch, _, id) => {
+      tyojonoButtonDisabled = true;
+      return R.chain(Future.after(200), ValvontaApi.putValvonta(id,{active: !valvonta.active, 'valvoja-id': valvonta.active ? null : whoami.id}));
+    },
+      `tyojono-${!valvonta.active ? 'add': 'remove'}`,
+    _ => {
+      valvonta = {...valvonta, active: !valvonta.active, 'valvoja-id': valvonta.active ? null : whoami.id};
+      tyojonoButtonDisabled = false;
+    }
+  );
 
   const deleteEnergiatodistus = execute(
     api.deleteEnergiatodistus,
@@ -220,6 +236,9 @@
       </div>
     {/if}
   </button>
+  {#if R.includes(Toolbar.module.tyojono, fields)}
+    <TyojonoButton disabled={tyojonoButtonDisabled} {valvonta} on:click={toggleTyojono}/>
+  {/if}
   {#if R.includes(Toolbar.module.save, fields)}
     <button disabled={!dirty} on:click={save(noop)}>
       <span class="description">

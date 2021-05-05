@@ -41,6 +41,7 @@
   export let luokittelut;
   export let whoami;
   export let validation;
+  export let valvonta;
 
   export let submit;
   export let title = '';
@@ -357,6 +358,7 @@
         {eTehokkuus}
         dirty={dirty || R.isNil(energiatodistus.id)}
         {whoami}
+        {valvonta}
         bind:inputLanguage />
     </div>
   </div>

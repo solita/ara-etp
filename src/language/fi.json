@@ -1025,7 +1025,11 @@
       "discard-success": "Energiatodistus hylättiin onnistuneesti",
       "discard-error": "Energiatodistuksen hylkääminen epäonnistui",
       "undodiscard-success": "Energiatodistuksen hylkääminen peruttiin onnistuneesti",
-      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui"
+      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui",
+      "tyojono-add-success": "Energiatodistus lisättiin työjonoon onnistuneesti",
+      "tyojono-add-error": "Energiatodistuksen lisääminen työjonoon epäonnistui",
+      "tyojono-remove-success": "Energiatodistus poistettiin työjonosta onnistuneesti",
+      "tyojono-remove-error": "Energiatodistuksen poistaminen työjonosta epäonnistui"
     },
     "signing": {
       "header": "Allekirjoittaminen",
