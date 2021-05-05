@@ -43,7 +43,8 @@
   const isAuditCase = toimenpiteet =>
     !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
 
-  const saveKasittelija = id => saveValvonta({ active: !isNaN(id), 'valvoja-id': id });
+  const saveKasittelija = id =>
+    saveValvonta({ pending: !isNaN(id), 'valvoja-id': id });
 
   const fullName = valvojat =>
     R.compose(

@@ -107,11 +107,11 @@
   $: toggleTyojono = execute(
     (fetch, _, id) => {
       tyojonoButtonDisabled = true;
-      return R.chain(Future.after(200), ValvontaApi.putValvonta(id,{active: !valvonta.active, 'valvoja-id': valvonta.active ? null : whoami.id}));
+      return R.chain(Future.after(200), ValvontaApi.putValvonta(id,{pending: !valvonta.pending, 'valvoja-id': valvonta.pending ? null : whoami.id}));
     },
-      `tyojono-${!valvonta.active ? 'add': 'remove'}`,
+      `tyojono-${!valvonta.pending ? 'add': 'remove'}`,
     _ => {
-      valvonta = {...valvonta, active: !valvonta.active, 'valvoja-id': valvonta.active ? null : whoami.id};
+      valvonta = {...valvonta, pending: !valvonta.pending, 'valvoja-id': valvonta.pending ? null : whoami.id};
       tyojonoButtonDisabled = false;
     }
   );
