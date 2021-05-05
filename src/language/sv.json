@@ -231,7 +231,7 @@
     "et-lisays": "Du kan lägga till ett nytt energicertifikat här:",
     "luo2018": "Skapa ett nytt EC 2018",
     "luo2013": "Skapa ett nytt EC 2013",
-    "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
+    "lataa-csv": "Ladda ner energicertifikat som CSV-fil",
     "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
     "voimassaolo-paattymisaika": "Todistuksen voimassaolon päättymispäivä SV?",
     "tila-id": "Energiatodistuksen tila SV?",
