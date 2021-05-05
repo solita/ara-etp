@@ -87,8 +87,8 @@
   .active .link-content .title {
     @apply font-semibold;
   }
-  .material-icons {
-    @apply select-none;
+  .font-icon:not(.icon-unpublished) {
+    @apply select-none text-2xl;
   }
   .root .text-dark {
     @apply text-light;
@@ -107,6 +107,8 @@
   }
 </style>
 
+<!-- purgecss: active root child hasNoChildren draggable isBeingDragged isBeingTargeted setDroppedAsChild childrenShown draggable icon-unpublished -->
+
 <div class="flex flex-col w-full">
   <div
     use:dragdrop={{ dragStart, dragEnd, dragEnter, dragLeave, drop }}
@@ -124,30 +126,32 @@
     <div class="link-content flex w-full border-b items-center">
       {#if !R.isEmpty(sivu.children)}
         <button
-          class="p-2 focus:outline-none focus:underline"
+          class="p-2 focus:outline-none"
           on:click={() => {
             childrenShown = !childrenShown;
           }}>
           {#if childrenShown}
-            <span class="material-icons">expand_more</span>
+            <span class="font-icon">expand_more</span>
           {:else}
-            <span class="material-icons">chevron_right</span>
+            <span class="font-icon">chevron_right</span>
           {/if}
         </button>
       {:else}
         <div class="text-transparent p-2 pointer-events-none">
-          <span class="material-icons">circle</span>
+          <span class="font-icon">circle</span>
         </div>
       {/if}
       <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
         <span class="title"> {sivu.title} </span>
         {#if !sivu.published}
-          <span class="font-icon text-dark"> visibility_off </span>
+          <span class="font-icon icon-unpublished text-dark select-none">
+            visibility_off
+          </span>
         {/if}
       </a>
       {#if draggable}
         <div class="p-2 pointer-events-none">
-          <span class="material-icons"> drag_handle </span>
+          <span class="font-icon"> drag_handle </span>
         </div>
       {/if}
     </div>
@@ -159,7 +163,7 @@
       {#if draggable && isBeingTargeted && setDroppedAsChild}
         <div
           class="destination flex w-full border-b items-center pointer-events-none">
-          <span class="material-icons p-2"> subdirectory_arrow_right </span>
+          <span class="font-icon p-2"> subdirectory_arrow_right </span>
           <span class="flex-grow p-2 items-center font-semibold">
             {i18n('ohje.navigation.destination-child')}
           </span>
@@ -174,7 +178,7 @@
   {#if draggable && isBeingTargeted && !setDroppedAsChild}
     <div
       class="destination flex w-full border-b items-center pointer-events-none">
-      <span class="material-icons p-2"> east </span>
+      <span class="font-icon p-2"> east </span>
       <span class="flex-grow p-2 items-center font-semibold">
         {i18n('ohje.navigation.destination-sibling')}
       </span>

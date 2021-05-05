@@ -8,7 +8,6 @@
   import * as api from './ohje-api';
 
   import { flashMessageStore } from '@/stores';
-  import { location } from 'svelte-spa-router';
   import { _ } from '@Language/i18n';
   import TextButton from '@Component/Button/TextButton';
   import Link from '@Component/Link/Link';
@@ -16,8 +15,9 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
+  export let id;
+
   const i18n = $_;
-  $: id = R.last(R.split('/ohje/', $location));
   let whoami = Maybe.None();
   let sivutTree = [];
   let sortMode = false;
@@ -27,8 +27,6 @@
     overlay = true;
   };
 
-  const hasParent = s => R.prop('parent-id', s).isSome();
-  const hasNoParent = s => R.prop('parent-id', s).isNone();
   const sortByOrdinalTitle = R.sortWith([
     R.ascend(R.prop('ordinal')),
     R.ascend(R.compose(R.toLower, R.prop('title')))
@@ -49,7 +47,7 @@
     R.compose(
       R.map(nestChildren(data)),
       sortByOrdinalTitle,
-      R.filter(hasNoParent)
+      R.filter(R.propSatisfies(Maybe.isNone, 'parent-id'))
     )(data);
 
   const load = () => {
@@ -133,13 +131,11 @@
                 text={i18n('ohje.navigation.end-sort')} />
             {/if}
           {/if}
-          {#if id !== 'new'}
-            <Link
-              href="/#/ohje/new"
-              disabled={sortMode}
-              icon={Maybe.Some('add_circle_outline')}
-              text={i18n('ohje.navigation.create')} />
-          {/if}
+          <Link
+            href="/#/ohje/new"
+            disabled={sortMode}
+            icon={Maybe.Some('add_circle_outline')}
+            text={i18n('ohje.navigation.create')} />
         </div>
       {/if}
     {/each}

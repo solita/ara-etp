@@ -40,7 +40,7 @@
       response => {
         const msg = i18n(
           Maybe.orSome(
-            `ohje.editor.load-error`,
+            'ohje.editor.load-error',
             Response.localizationKey(response)
           )
         );
@@ -60,13 +60,12 @@
     Future.fork(
       response => {
         const msg = i18n(
-          Maybe.orSome(`ohje.editor.error`, Response.localizationKey(response))
+          Maybe.orSome('ohje.editor.error', Response.localizationKey(response))
         );
         flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add('ohje', 'success', i18n(`ohje.editor.success`));
         dirty = false;
         overlay = false;
         push(`/ohje/${params.id}`);
@@ -80,7 +79,7 @@
       response => {
         const msg = i18n(
           Maybe.orSome(
-            `ohje.editor.delete-error`,
+            'ohje.editor.delete-error',
             Response.localizationKey(response)
           )
         );
@@ -88,11 +87,6 @@
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'ohje',
-          'success',
-          i18n(`ohje.editor.delete-success`)
-        );
         dirty = false;
         overlay = false;
         push('/ohje/deleted');
@@ -111,7 +105,7 @@
       flashMessageStore.add(
         'ohje',
         'error',
-        i18n(`ohje.editor.validation-error`)
+        i18n('ohje.editor.validation-error')
       );
       Validation.blurForm(event.target);
     }
@@ -121,7 +115,7 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
     <div class="w-2/6 max-w-xs">
-      <Navigation />
+      <Navigation id={params.id} />
     </div>
     <div class="w-4/6 flex-grow">
       {#if sivu}
@@ -142,7 +136,7 @@
                   <Input
                     id={'ohje.title'}
                     name={'ohje.title'}
-                    label={i18n(`ohje.editor.title`)}
+                    label={i18n('ohje.editor.title')}
                     required={true}
                     bind:model={sivu}
                     lens={R.lensProp('title')}
@@ -155,7 +149,7 @@
                   <Link
                     href={`/#/ohje/${sivu.id}`}
                     icon={Maybe.Some('cancel')}
-                    text={$_('ohje.editor.cancel')} />
+                    text={i18n('ohje.editor.cancel')} />
                 </div>
               </div>
 
@@ -163,7 +157,7 @@
                 <TextEditor
                   id={'ohje.body'}
                   name={'ohje.body'}
-                  label={i18n(`ohje.editor.body`)}
+                  label={i18n('ohje.editor.body')}
                   bind:model={sivu}
                   lens={R.lensProp('body')}
                   required={true}
@@ -176,7 +170,7 @@
                 <Checkbox
                   id={'ohje.published'}
                   name={'ohje.published'}
-                  label={i18n(`ohje.editor.published`)}
+                  label={i18n('ohje.editor.published')}
                   bind:model={sivu}
                   lens={R.lensProp('published')}
                   required={true}
@@ -186,7 +180,7 @@
                 <Button
                   disabled={!dirty}
                   type={'submit'}
-                  text={i18n(`ohje.editor.submit`)} />
+                  text={i18n('ohje.editor.submit')} />
                 <Confirm
                   let:confirm
                   confirmButtonLabel={i18n('confirm.button.delete')}
@@ -195,7 +189,7 @@
                     on:click={() => {
                       confirm(deleteOhje);
                     }}
-                    text={i18n(`ohje.editor.delete`)}
+                    text={i18n('ohje.editor.delete')}
                     style={'error'} />
                 </Confirm>
               </div>

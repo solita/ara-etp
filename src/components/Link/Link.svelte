@@ -22,6 +22,8 @@
   }
 </style>
 
+<!-- purgecss: disabled -->
+
 <a {href} {target} class:disabled>
   {#each Maybe.toArray(icon) as i}
     <span class="font-icon mr-1">{i}</span>

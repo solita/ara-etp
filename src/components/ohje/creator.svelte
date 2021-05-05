@@ -29,12 +29,11 @@
     ordinal: null
   };
 
-  const i18nRoot = 'ohje.creator';
+  const i18n = $_;
   let sivu = emptySivu;
 
   let dirty = false;
   let overlay = false;
-  let createSuccess = false;
   let enableOverlay = _ => {
     overlay = true;
   };
@@ -42,23 +41,17 @@
   const addOhje = R.compose(
     Future.fork(
       response => {
-        const msg = $_(
-          Maybe.orSome(`${i18nRoot}.error`, Response.localizationKey(response))
+        const msg = i18n(
+          Maybe.orSome(`ohje.creator.error`, Response.localizationKey(response))
         );
         flashMessageStore.add('ohje', 'error', msg);
         overlay = false;
       },
       response => {
-        flashMessageStore.add('ohje', 'success', $_(`${i18nRoot}.success`));
         dirty = false;
         createSuccess = true;
-        if (R.has('id', response)) {
-          setTimeout(() => {
-            push(`/ohje/${response.id}`);
-          }, 1000);
-        } else {
-          overlay = false;
-        }
+        overlay = false;
+        push(`/ohje/${response.id}`);
       }
     ),
     R.tap(enableOverlay),
@@ -74,18 +67,12 @@
       flashMessageStore.add(
         'ohje',
         'error',
-        $_(`${i18nRoot}.validation-error`)
+        i18n(`ohje.creator.validation-error`)
       );
       Validation.blurForm(event.target);
     }
   };
 </script>
-
-<style>
-  .success-icon {
-    font-size: 54px;
-  }
-</style>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
@@ -96,7 +83,7 @@
           <TextButton
             on:click={pop}
             icon="arrow_back"
-            text={$_(`${i18nRoot}.back`)}
+            text={i18n('ohje.creator.back')}
             style={'secondary'} />
         </div>
         <form
@@ -112,33 +99,33 @@
             <Input
               id={'ohje.title'}
               name={'ohje.title'}
-              label={$_(`${i18nRoot}.title`)}
+              label={i18n('ohje.creator.title')}
               required={true}
               bind:model={sivu}
               lens={R.lensProp('title')}
               parse={R.trim}
               validators={Schema.sivu.title}
-              i18n={$_} />
+              {i18n} />
           </div>
 
           <div class="w-full py-4">
             <TextEditor
               id={'ohje.body'}
               name={'ohje.body'}
-              label={$_(`${i18nRoot}.body`)}
+              label={i18n('ohje.creator.body')}
               required={true}
               bind:model={sivu}
               lens={R.lensProp('body')}
               parse={R.trim}
               validators={Schema.sivu.body}
-              i18n={$_} />
+              {i18n} />
           </div>
 
           <div class="flex space-x-4 pt-8">
             <Checkbox
               id={'ohje.published'}
               name={'ohje.published'}
-              label={$_(`${i18nRoot}.published`)}
+              label={i18n('ohje.creator.published')}
               bind:model={sivu}
               lens={R.lensProp('published')}
               required={true}
@@ -148,19 +135,13 @@
             <Button
               disabled={!dirty}
               type={'submit'}
-              text={$_(`${i18nRoot}.submit`)} />
+              text={i18n('ohje.creator.submit')} />
           </div>
         </form>
       </div>
     </div>
   </div>
   <div slot="overlay-content">
-    {#if createSuccess}
-      <span class="material-icons text-primary success-icon">
-        check_circle
-      </span>
-    {:else}
-      <Spinner />
-    {/if}
+    <Spinner />
   </div>
 </Overlay>

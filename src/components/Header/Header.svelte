@@ -24,12 +24,14 @@
     R.map(Navigation.roleBasedHeaderMenuLinks($_))
   )(whoami);
 
-  const hasNoParent = s => R.prop('parent-id', s).isNone();
   const sortByOrdinalTitle = R.sortWith([
     R.ascend(R.prop('ordinal')),
     R.ascend(R.compose(R.toLower, R.prop('title')))
   ]);
-  let ohjeNav = R.compose(sortByOrdinalTitle, R.filter(hasNoParent))(ohjeSivut);
+  let ohjeNav = R.compose(
+    sortByOrdinalTitle,
+    R.filter(R.propSatisfies(Maybe.isNone, 'parent-id'))
+  )(ohjeSivut);
 </script>
 
 <style type="text/postcss">

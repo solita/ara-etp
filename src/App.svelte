@@ -28,7 +28,7 @@
     response => {
       resources = Maybe.Some(response);
     },
-    Future.parallelObject(3, {
+    Future.parallelObject(4, {
       whoami: kayttajaApi.whoami,
       version: versionApi.getVersion,
       config: versionApi.getConfig,

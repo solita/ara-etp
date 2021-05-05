@@ -21,6 +21,7 @@
 
   $: id = params.id;
 
+  const i18n = $_;
   let overlay = true;
   let resources = Maybe.None();
 
@@ -28,7 +29,7 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome('ohje.load-error', Response.localizationKey(response))
         );
 
@@ -50,7 +51,7 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
     <div class="w-2/6 max-w-xs">
-      <Navigation />
+      <Navigation {id} />
     </div>
     <div class="w-4/6 flex-grow flex flex-col">
       {#each Maybe.toArray(resources) as { sivu, whoami }}
@@ -59,8 +60,8 @@
             <H1 text={sivu.title} />
             {#if !sivu.published}
               <span
-                class="material-icons select-none ml-1 text-error"
-                title={$_('ohje.viewer.unpublished')}>
+                class="font-icon text-xl select-none ml-1 text-error"
+                title={i18n('ohje.viewer.unpublished')}>
                 visibility_off
               </span>
             {/if}
@@ -70,7 +71,7 @@
               <Link
                 href={`/#/ohje/${sivu.id}/edit`}
                 icon={Maybe.Some('edit')}
-                text={$_('ohje.viewer.edit')} />
+                text={i18n('ohje.viewer.edit')} />
             </div>
           {/if}
         </div>
