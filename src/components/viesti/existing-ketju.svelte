@@ -97,6 +97,7 @@
         load(params.id);
         newViesti = '';
         dirty = false;
+        showViestiForm = false;
       }
     ),
     api.postNewViesti(fetch, params.id)
