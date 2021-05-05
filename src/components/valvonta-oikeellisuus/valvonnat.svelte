@@ -147,24 +147,30 @@
                   class="etp-table--tr etp-table--tr__link"
                   on:click={toValvontaView(energiatodistus)}>
                   <!-- valvonta -->
-                  <td class="etp-table--td">
-                    {Formats.formatTimeInstant(
-                      Maybe.orSome(
-                        lastToimenpide['create-time'],
-                        lastToimenpide['publish-time']
-                      )
-                    )}
-                  </td>
-                  <td class="etp-table--td">
-                    {Locales.labelForId(
-                      $locale,
-                      toimenpidetyypit
-                    )(lastToimenpide['type-id'])}
-                  </td>
-                  <td class="etp-table--td">
-                    {formatDeadline(lastToimenpide)}
-                  </td>
-
+                  {#each Maybe.toArray(lastToimenpide) as toimenpide}
+                    <td class="etp-table--td">
+                      {Formats.formatTimeInstant(
+                        Maybe.orSome(
+                          toimenpide['create-time'],
+                          toimenpide['publish-time']
+                        )
+                      )}
+                    </td>
+                    <td class="etp-table--td">
+                      {Locales.labelForId(
+                        $locale,
+                        toimenpidetyypit
+                      )(toimenpide['type-id'])}
+                    </td>
+                    <td class="etp-table--td">
+                      {formatDeadline(toimenpide)}
+                    </td>
+                  {/each}
+                  {#if Maybe.isNone(lastToimenpide)}
+                    <td class="etp-table--td">-</td>
+                    <td class="etp-table--td">Tarkastettava</td>
+                    <td class="etp-table--td">-</td>
+                  {/if}
                   <!-- energiatodistus -->
                   <td class="etp-table--td">
                     {$_(

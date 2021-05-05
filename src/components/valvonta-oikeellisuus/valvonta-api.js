@@ -32,7 +32,7 @@ export const deserializeToimenpide = R.evolve({
 
 export const deserializeValvontaStatus = R.compose(
   R.evolve({
-    lastToimenpide: deserializeToimenpide,
+    lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull),
     energiatodistus: energiatodistusApi.deserialize
   }),
   Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
