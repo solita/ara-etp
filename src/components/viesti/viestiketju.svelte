@@ -22,8 +22,11 @@
     R.prop('viestit')
   );
 
-  const hasUnreadViesti = R.compose(R.not,
-    R.isNil, R.find(R.propSatisfies(Maybe.isNone, 'read-time')));
+  const hasUnreadViesti = R.compose(
+    R.not,
+    R.isNil,
+    R.find(R.propSatisfies(Maybe.isNone, 'read-time'))
+  );
 
   $: unread = hasUnreadViesti(ketju.viestit);
 </script>
@@ -44,7 +47,8 @@
 
 <a
   href={`#/viesti/${ketju.id}`}
-  class="flex flex-col border-b-2 border-background hover:bg-althover p-2" class:unread={unread}>
+  class="flex flex-col border-b-2 border-background hover:bg-althover p-2"
+  class:unread>
   <div class="flex items-start w-full justify-start">
     <span class="w-2/12 py-1 border border-transparent">
       {sentTime(ketju)}
@@ -87,7 +91,11 @@
   <div class="flex items-center">
     <div class="flex flex-col w-2/12">
       <span class="block">
-        <span class="font-icon outline mr-1 text-primary" class:text-error={unread}> chat </span>
+        <span
+          class="font-icon outline mr-1 text-primary"
+          class:text-error={unread}>
+          chat
+        </span>
         <span class:font-bold={unread}>{R.length(ketju.viestit)}</span>
       </span>
     </div>
