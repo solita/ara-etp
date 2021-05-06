@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import { dragdrop } from './dragdrop';
+  import { dragdrop } from '@Utility/dragdrop';
   import { slide } from 'svelte/transition';
   import { _ } from '@Language/i18n';
 
