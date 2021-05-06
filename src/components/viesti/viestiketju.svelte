@@ -40,7 +40,7 @@
   }
 </style>
 
-<!-- purgecss: font-bold text-primary -->
+<!-- purgecss: font-bold text-primary unread -->
 
 <a
   href={`#/viesti/${ketju.id}`}
