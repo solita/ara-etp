@@ -111,12 +111,12 @@
         </div>
       </div>
       {#if !Kayttajat.isLaatija(whoami)}
-        {#if R.prop('kasittelija-id', ketju)}
+        {#if R.prop('kasittelija-id', ketju).isSome()}
           <span class="whitespace-no-wrap">
             {R.compose(
               R.join(' '),
               R.props(['etunimi', 'sukunimi']),
-              R.find(R.propEq('id', R.prop('kasittelija-id', ketju)))
+              R.find(R.propEq('id', R.prop('kasittelija-id', ketju).some()))
             )(kasittelijat)}
           </span>
         {:else}

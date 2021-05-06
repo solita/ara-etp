@@ -97,7 +97,7 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'update-error', msg);
+        flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
       },
       _ => {
