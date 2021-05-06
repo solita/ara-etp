@@ -76,12 +76,6 @@
 
   $: load(page);
 
-  const submitKasittelija = (ketjuId, kasittelijaId) => {
-    updateKetju(ketjuId, {
-      'kasittelija-id': kasittelijaId
-    });
-  };
-
   const submitKasitelty = (ketjuId, kasitelty) => {
     updateKetju(ketjuId, {
       kasitelty: kasitelty
