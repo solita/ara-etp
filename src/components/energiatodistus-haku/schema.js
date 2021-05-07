@@ -213,7 +213,9 @@ const numberComparisonsWithoutEqFromType = type => [
 
 const numberComparisons = numberComparisonsFromType(OPERATOR_TYPES.NUMBER);
 
-const numberComparisonsWithoutEq = numberComparisonsWithoutEqFromType(OPERATOR_TYPES.NUMBER);
+const numberComparisonsWithoutEq = numberComparisonsWithoutEqFromType(
+  OPERATOR_TYPES.NUMBER
+);
 
 const unformattedNumberComparisons = numberComparisonsFromType(
   OPERATOR_TYPES.UNFORMATTED_NUMBER
@@ -491,13 +493,17 @@ const tulokset = {
     'sahko-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     kaukojaahdytys: [...numberComparisons],
     'kaukojaahdytys-painotettu': [...numberComparisons],
-    'kaukojaahdytys-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq],
+    'kaukojaahdytys-painotettu-neliovuosikulutus': [
+      ...numberComparisonsWithoutEq
+    ],
     kaukolampo: [...numberComparisons],
     'kaukolampo-painotettu': [...numberComparisons],
     'kaukolampo-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'uusiutuva-polttoaine': [...numberComparisons],
     'uusiutuva-polttoaine-painotettu': [...numberComparisons],
-    'uusiutuva-polttoaine-painotettu-neliovuosikulutus': [...numberComparisonsWithoutEq]
+    'uusiutuva-polttoaine-painotettu-neliovuosikulutus': [
+      ...numberComparisonsWithoutEq
+    ]
   },
   'uusiutuvat-omavaraisenergiat': {
     aurinkosahko: [...numberComparisons],
