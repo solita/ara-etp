@@ -1211,42 +1211,42 @@
         "cancel-button": "Peruuta",
         "verified": {
           "title": "Merkitse katsotuksi",
-          "description": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",
-          "document": "Kommentti",
+          "info": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",
+          "description": "Kommentti",
           "publish-button": "Merkitse katsotuksi"
         },
         "anomaly": {
           "title": "Ilmoita poikkeamasta",
-          "description": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä.",
-          "document": "Poikkeamailmoitus",
+          "info": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä.",
+          "description": "Poikkeamailmoitus",
           "publish-button": "Lähetä ilmoitus"
         },
         "case": {
           "title": "Valvonnan aloitus",
-          "description": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
-          "document": "Kommentti",
+          "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
+          "description": "Kommentti",
           "publish-button": "Aloita valvonta"
         },
         "rfi-request": {
           "title": "Tietopyyntö",
-          "description": "Pyydetään laatijalta lisää tietoa.",
+          "info": "Pyydetään laatijalta lisää tietoa.",
           "publish-button": "Lähetä tietopyyntö"
         },
         "rfi-reply": {
           "title": "Vastaus tietopyyntöön",
-          "document": "Vastaus",
+          "description": "Vastaus",
           "save-button": "Tallenna",
           "reset-button": "Peruuta",
           "publish-button": "Lähetä vastaus"
         },
         "rfi-order": {
           "title": "Tietopyyntö kehoitus",
-          "description": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
+          "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
           "publish-button": "Lähetä kehoitus"
         },
         "rfi-warning": {
           "title": "Tietopyyntö varoitus",
-          "description": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
+          "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus"
         },
         "audit-report": {
@@ -1258,31 +1258,44 @@
         },
         "audit-reply": {
           "title": "Vastaus valvontamuistioon",
-          "document": "Vastaus",
+          "description": "Vastaus",
           "publish-button": "Lähetä vastaus",
           "save-button": "Tallenna",
           "reset-button": "Peruuta"
         },
         "audit-order": {
           "title": "Valvontamuistio kehoitus",
-          "description": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
+          "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
           "publish-button": "Lähetä kehoitus"
         },
         "audit-warning": {
           "title": "Valvontamuistio varoitus",
-          "description": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
+          "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus"
+        },
+        "rfc-request": {
+          "title": "Lisäselvityspyyntö",
+          "info": "Pyydetään laatijalta lisäselvityspyyntö.",
+          "description": "Lisäselvityspyyntö",
+          "publish-button": "Lähetä"
+        },
+        "rfc-reply": {
+          "title": "Vastaus lisäselvityspyyntöön",
+          "description": "Vastaus",
+          "save-button": "Tallenna",
+          "reset-button": "Peruuta",
+          "publish-button": "Lähetä vastaus"
         },
         "decision-prohibition": {
           "title": "Kieltopäätös",
-          "description": "Energiatodistus hylätään koska laatija ei halua korjata sitä.",
-          "document": "Kommentti",
+          "info": "Energiatodistus hylätään koska laatija ei halua korjata sitä.",
+          "description": "Kommentti",
           "publish-button": "Kirjaa päätös"
         },
         "closed": {
           "title": "Valvonnan lopetus",
-          "description": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
-          "document": "Kommentti",
+          "info": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
+          "description": "Kommentti",
           "publish-button": "Lopeta"
         },
         "messages": {

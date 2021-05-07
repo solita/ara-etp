@@ -25,11 +25,16 @@ export const type = {
     order: 9,
     warning: 10
   },
+  rfc: {
+    // lisäselvityspyyntö
+    request: 11,
+    reply: 12
+  },
   decision: {
     // päätökset
-    prohibition: 11 // kieltopäätös
+    prohibition: 13 // kieltopäätös
   },
-  closed: 12
+  closed: 14
 };
 
 const types = R.invertObj(Deep.treeFlat('-', R.F, type));
@@ -38,16 +43,29 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10]);
-export const isDialogType = R.includes(R.__, [0, 1, 2, 3, 5, 6, 9, 10, 11, 12]);
-const isResponseType = R.includes(R.__, [4, 8]);
+const isDeadlineType = R.includes(R.__, [3, 5, 6, 7, 9, 10, 11]);
+export const isDialogType = R.includes(R.__, [
+  0,
+  1,
+  2,
+  3,
+  5,
+  6,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14
+]);
+const isResponseType = R.includes(R.__, [4, 8, 12]);
 
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 export const isResponse = R.propSatisfies(isResponseType, 'type-id');
 
 export const isAuditCase = R.propSatisfies(R.gt(R.__, type.anomaly), 'type-id');
 export const isAuditCaseToimenpideType = R.propSatisfies(
-  R.includes(R.__, [3, 5, 6, 7, 9, 10, 11, 12]),
+  R.includes(R.__, [3, 5, 6, 7, 9, 10, 11, 13, 14]),
   'id'
 );
 
@@ -71,7 +89,7 @@ export const emptyToimenpide = typeId => ({
   'publish-time': Maybe.None(),
   'deadline-date': Either.Right(defaultDeadline(typeId)),
   'template-id': Maybe.None(),
-  document: Maybe.None()
+  description: Maybe.None()
 });
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
@@ -83,6 +101,7 @@ const responseTypes = {
   'rfi-request': type.rfi.reply,
   'rfi-order': type.rfi.reply,
   'rfi-warning': type.rfi.reply,
+  'rfc-request': type.rfc.reply,
   'audit-report': type.audit.reply,
   'audit-order': type.audit.reply,
   'audit-warning': type.audit.reply

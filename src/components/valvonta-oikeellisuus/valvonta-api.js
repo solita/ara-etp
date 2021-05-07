@@ -26,7 +26,7 @@ export const deserializeToimenpide = R.evolve({
     Maybe.fromNull
   ),
   diaarinumero: Maybe.fromNull,
-  document: Maybe.fromNull,
+  description: Maybe.fromNull,
   'template-id': Maybe.fromNull
 });
 
@@ -45,12 +45,12 @@ export const deserializeValvonta = R.evolve({
 export const serializeToimenpide = R.compose(
   R.evolve({
     'template-id': Maybe.orSome(null),
-    document: Maybe.orSome(null),
+    description: Maybe.orSome(null),
     'deadline-date': EM.fold(null, date =>
       dfns.formatISO(date, { representation: 'date' })
     )
   }),
-  R.pick(['type-id', 'deadline-date', 'document', 'template-id'])
+  R.pick(['type-id', 'deadline-date', 'description', 'template-id'])
 );
 
 export const valvonnat = R.compose(

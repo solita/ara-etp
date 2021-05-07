@@ -36,7 +36,7 @@
 
   const forms = {
     'audit-report': MuistioForm,
-    'rfi-extra': LisatietopyyntoForm,
+    'rfc-reply': ResponseForm,
     'rfi-reply': ResponseForm,
     'audit-reply': ResponseForm
   };

@@ -4,12 +4,12 @@ import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
 
-const isDocumentRequired = R.anyPass([
+const isDescriptionRequired = R.anyPass([
   Toimenpiteet.isType(Toimenpiteet.type.anomaly),
   Toimenpiteet.isResponse
 ]);
 
-const document = R.map(
+const description = R.map(
   Validation.liftValidator,
   Validation.LimitedString(2, 4000)
 );
@@ -21,7 +21,7 @@ export const toimenpideSave = {
   publish: false,
   'deadline-date': [],
   'template-id': [],
-  document: document
+  description: description
 };
 
 export const toimenpidePublish = (templates, toimenpide) =>
@@ -32,7 +32,7 @@ export const toimenpidePublish = (templates, toimenpide) =>
         Toimenpiteet.hasDeadline(toimenpide)
       ),
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
-      document: addRequiredValidator(isDocumentRequired(toimenpide))
+      description: addRequiredValidator(isDescriptionRequired(toimenpide))
     },
     toimenpideSave
   );

@@ -107,7 +107,7 @@
       </div>
     {/each}
 
-    <p>{text(toimenpide, 'description')}</p>
+    <p>{text(toimenpide, 'info')}</p>
 
     {#if Toimenpiteet.hasDeadline(toimenpide)}
       <div class="flex py-4">
@@ -139,15 +139,15 @@
     {:else}
       <div class="w-full py-4">
         <Textarea
-          id={'toimenpide.document'}
-          name={'toimenpide.document'}
-          label={text(toimenpide, 'document')}
+          id={'toimenpide.description'}
+          name={'toimenpide.description'}
+          label={text(toimenpide, 'description')}
           bind:model={toimenpide}
-          lens={R.lensProp('document')}
+          lens={R.lensProp('description')}
           required={false}
           format={Maybe.orSome('')}
           parse={Parsers.optionalString}
-          validators={schema.document}
+          validators={schema.description}
           {i18n} />
       </div>
     {/if}

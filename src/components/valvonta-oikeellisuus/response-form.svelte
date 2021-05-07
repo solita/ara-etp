@@ -22,15 +22,15 @@
 
 <div class="w-full py-4">
   <Textarea
-    id={'toimenpide.document'}
-    name={'toimenpide.document'}
-    label={text(toimenpide, 'document')}
+    id={'toimenpide.description'}
+    name={'toimenpide.description'}
+    label={text(toimenpide, 'description')}
     {disabled}
     bind:model={toimenpide}
-    lens={R.lensProp('document')}
+    lens={R.lensProp('description')}
     required={false}
     format={Maybe.orSome('')}
     parse={Parsers.optionalString}
-    validators={schema.document}
+    validators={schema.description}
     {i18n} />
 </div>

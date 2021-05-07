@@ -47,9 +47,9 @@
       {Formats.formatDateInstant(deadline)}
     </div>
   {/each}
-  {#each Maybe.toArray(toimenpide.document) as document}
+  {#each Maybe.toArray(toimenpide.description) as description}
     <div class="truncate">
-      - {document}
+      - {description}
     </div>
   {/each}
 </div>
