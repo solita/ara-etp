@@ -100,6 +100,7 @@
       id={'perustiedot.kieli'}
       label={$_('energiatodistus.perustiedot.kieli')}
       required={true}
+      validation={schema.$signature}
       {disabled}
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'kieli'])}

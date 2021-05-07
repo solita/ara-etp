@@ -61,8 +61,8 @@
     )
   )(schemas['v' + version]);
 
-  const requiredSchema = schemas.appendRequiredValidators(
-    saveSchema,
+  const signatureSchema = schemas.appendRequiredValidators(
+    R.assoc('$signature', true, saveSchema),
     isRequiredPredicate => isRequiredPredicate(inputLanguage)(energiatodistus)
   );
 
@@ -173,7 +173,7 @@
       validateAndSubmit(onSuccessfulSave)();
     } else {
       showMissingProperties(missing);
-      schema = requiredSchema;
+      schema = signatureSchema;
       tick().then(_ => Validations.blurForm(etFormElement));
     }
   };

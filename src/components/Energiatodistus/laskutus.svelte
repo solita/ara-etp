@@ -119,6 +119,7 @@
         name="laskutettava-yritys-id"
         label={$_('energiatodistus.laskutus.laskutettava')}
         required={true}
+        validation={schema.$signature}
         allowNone={true}
         noneLabel={'energiatodistus.laskutus.laatijalaskutus'}
         {disabled}

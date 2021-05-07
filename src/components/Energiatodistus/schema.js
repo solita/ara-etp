@@ -125,6 +125,7 @@ const Yritys = {
 };
 
 export const v2018 = {
+  $signature: false,
   laskuriviviite: String(50),
   perustiedot: {
     nimi: String(50),
