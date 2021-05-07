@@ -83,20 +83,22 @@
       <td class="et-table--td">
         {$_('energiatodistus.lahtotiedot.ilmanvaihto.labels.paaiv')}
       </td>
-      <td class="et-table--td flex flex-row items-center">
-        <Input
-          {disabled}
-          {schema}
-          compact={true}
-          bind:model={energiatodistus}
-          path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
-        <span class="block" class:pb-3={disabled}>/</span>
-        <Input
-          {disabled}
-          {schema}
-          compact={true}
-          bind:model={energiatodistus}
-          path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'poisto']} />
+      <td class="et-table--td">
+        <div class="flex flex-row items-center">
+          <Input
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
+          <span class="block" class:pb-3={disabled}>/</span>
+          <Input
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'poisto']} />
+        </div>
       </td>
       <td class="et-table--td">
         <Input
@@ -128,20 +130,22 @@
         <td class="et-table--td">
           {$_(`energiatodistus.lahtotiedot.ilmanvaihto.labels.${ilmanvaihto}`)}
         </td>
-        <td class="et-table--td flex flex-row items-center">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
-          <span class="block" class:pb-3={disabled}>/</span>
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'poisto']} />
+        <td class="et-table--td">
+          <div class="flex flex-row items-center">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
+            <span class="block" class:pb-3={disabled}>/</span>
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'poisto']} />
+          </div>
         </td>
         <td class="et-table--td">
           <Input
