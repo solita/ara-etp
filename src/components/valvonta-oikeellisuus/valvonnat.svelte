@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import * as dfns from 'date-fns';
   import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
@@ -70,7 +71,9 @@
         valvontaCount = response.count;
         overlay = false;
       },
-      Future.parallelObject(3, {
+      R.compose(
+        Future.parallelObject(3),
+      )({
         whoami: kayttajaApi.whoami,
         count: R.map(R.prop('count'), api.valvontaCount),
         luokittelut: EnergiatodistusApi.luokittelutAllVersions,
@@ -86,6 +89,16 @@
 
   const orEmpty = Maybe.orSome('');
   $: kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
+
+  const isTodayDeadline = R.compose(
+    EM.exists(dfns.isToday),
+    R.prop('deadline-date')
+  );
+
+  const isPastDeadline = R.compose(
+    EM.exists(R.both(R.complement(dfns.isToday), dfns.isPast)),
+    R.prop('deadline-date')
+  );
 
   const formatDeadline = R.compose(
     EM.fold('-', Formats.formatDateInstant),
@@ -108,6 +121,8 @@
     Maybe.fromNull
   )(id));
 </script>
+
+<!-- purgecss: font-bold text-primary text-error -->
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
@@ -160,7 +175,7 @@
                         toimenpidetyypit
                       )(toimenpide['type-id'])}
                     </td>
-                    <td class="etp-table--td">
+                    <td class="etp-table--td" class:font-bold={R.anyPass([isTodayDeadline, isPastDeadline])(toimenpide)} class:text-primary={isTodayDeadline(toimenpide)} class:text-error={isPastDeadline(toimenpide)}>
                       {formatDeadline(toimenpide)}
                     </td>
                   {/each}
