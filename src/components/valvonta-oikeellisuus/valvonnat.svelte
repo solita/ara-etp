@@ -35,6 +35,8 @@
   let overlay = true;
 
   const pageSize = 50;
+  const i18n = $_;
+
   let valvontaCount = 0;
   let page = Maybe.Some(1);
 
@@ -53,7 +55,7 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(
+        const msg = i18n(
           Maybe.orSome(
             'viesti.all.messages.load-error',
             Response.localizationKey(response)
@@ -76,7 +78,8 @@
         valvonnat: api.valvonnat({
           offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
           limit: Maybe.Some(pageSize)
-        })
+        }),
+        valvojat: api.valvojat
       })
     );
   }
@@ -92,70 +95,65 @@
   const toValvontaView = energiatodistus => {
     Router.push(Links.valvonta(energiatodistus));
   };
+
+  const isSelf = R.curry((whoami, id) => R.compose(
+    Maybe.exists(R.equals(whoami.id)),
+    Maybe.fromNull
+  )(id));
+
+  const formatValvoja = R.curry((valvojat, whoami, id) => R.compose(
+    Maybe.orSome('-'),
+    R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
+    R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
+    Maybe.fromNull
+  )(id));
 </script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit }}
-      <H1 text={$_('valvonta.oikeellisuus.all.title')} />
+    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
+      <H1 text={i18n('valvonta.oikeellisuus.all.title')} />
       {#if valvonnat.length === 0}
-        <span>{$_('valvonta.oikeellisuus.all.empty')}</span>
+        <span>{i18n('valvonta.oikeellisuus.all.empty')}</span>
       {:else}
         <div class="my-6">
           <table class="etp-table">
             <thead class="etp-table--thead">
               <tr class="etp-table--tr etp-table--tr__light">
                 <th class="etp-table--th">
-                  {$_('valvonta.oikeellisuus.all.table.publish-time')}
+                  {i18n('valvonta.oikeellisuus.all.table.kasittelija')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('valvonta.oikeellisuus.all.table.type')}
+                  {i18n('valvonta.oikeellisuus.all.table.previous-action')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('valvonta.oikeellisuus.all.table.deadline-date')}
-                </th>
-
-                <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.tila')}
+                  {i18n('valvonta.oikeellisuus.all.table.deadline-date')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.tunnus')}
+                  {i18n('energiatodistus.haku.sarakkeet.tunnus')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.e-luokka')}
+                  {i18n('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.versio')}
+                  {i18n('energiatodistus.haku.sarakkeet.osoite')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.rakennuksen-nimi')}
+                  {i18n('energiatodistus.haku.sarakkeet.ktl')}
                 </th>
                 <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.osoite')}
-                </th>
-                <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.ktl')}
-                </th>
-                <th class="etp-table--th">
-                  {$_('energiatodistus.haku.sarakkeet.laatija')}
+                  {i18n('energiatodistus.haku.sarakkeet.laatija')}
                 </th>
               </tr>
             </thead>
             <tbody class="etp-table--tbody">
-              {#each valvonnat as { energiatodistus, lastToimenpide }}
+              {#each valvonnat as valvonta}
                 <tr
                   class="etp-table--tr etp-table--tr__link"
-                  on:click={toValvontaView(energiatodistus)}>
+                  on:click={toValvontaView(valvonta.energiatodistus)}>
                   <!-- valvonta -->
-                  {#each Maybe.toArray(lastToimenpide) as toimenpide}
-                    <td class="etp-table--td">
-                      {Formats.formatTimeInstant(
-                        Maybe.orSome(
-                          toimenpide['create-time'],
-                          toimenpide['publish-time']
-                        )
-                      )}
-                    </td>
+                  <td class="etp-table--td" class:font-bold={isSelf(whoami, valvonta['valvoja-id'])} class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}>{R.ifElse(isSelf(whoami), R.always(i18n('valvonta.self')), formatValvoja(valvojat, whoami))(valvonta['valvoja-id'])}</td>
+                  {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(
                         $locale,
@@ -166,38 +164,27 @@
                       {formatDeadline(toimenpide)}
                     </td>
                   {/each}
-                  {#if Maybe.isNone(lastToimenpide)}
-                    <td class="etp-table--td">-</td>
+                  {#if Maybe.isNone(valvonta.lastToimenpide)}
                     <td class="etp-table--td">Tarkastettava</td>
                     <td class="etp-table--td">-</td>
                   {/if}
                   <!-- energiatodistus -->
+                  <td class="etp-table--td">{valvonta.energiatodistus.id}</td>
                   <td class="etp-table--td">
-                    {$_(
-                      'energiatodistus.tila.' +
-                        ET.tilaKey(energiatodistus['tila-id'])
-                    )}
-                  </td>
-                  <td class="etp-table--td">{energiatodistus.id}</td>
-                  <td class="etp-table--td">
-                    {orEmpty(energiatodistus.tulokset['e-luokka'])}
-                  </td>
-                  <td class="etp-table--td">{energiatodistus.versio}</td>
-                  <td class="etp-table--td">
-                    {orEmpty(energiatodistus.perustiedot.nimi)}
+                    {orEmpty(valvonta.energiatodistus.perustiedot.nimi)}
                   </td>
                   <td class="etp-table--td">
                     <Address
-                      {energiatodistus}
+                      energiatodistus={valvonta.energiatodistus}
                       postinumerot={luokittelut.postinumerot} />
                   </td>
                   <td
                     class="etp-table--td"
-                    title={kayttotarkoitusTitle(luokittelut, energiatodistus)}>
-                    {orEmpty(energiatodistus.perustiedot.kayttotarkoitus)}
+                    title={kayttotarkoitusTitle(luokittelut, valvonta.energiatodistus)}>
+                    {orEmpty(valvonta.energiatodistus.perustiedot.kayttotarkoitus)}
                   </td>
                   <td class="etp-table--td">
-                    {orEmpty(energiatodistus['laatija-fullname'])}
+                    {orEmpty(valvonta.energiatodistus['laatija-fullname'])}
                   </td>
                 </tr>
               {/each}

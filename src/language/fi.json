@@ -1195,6 +1195,7 @@
     }
   },
   "valvonta": {
+    "self": "Minä",
     "oikeellisuus": {
       "all": {
         "title": "Oikeellisuuden valvonta",
@@ -1203,7 +1204,9 @@
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",
           "type": "Tyyppi",
-          "diaarinumero": "Diaarinumero"
+          "diaarinumero": "Diaarinumero",
+          "kasittelija": "Käsittelijä",
+          "previous-action": "Edellinen tapahtuma"
         }
       },
       "valvonta": {
