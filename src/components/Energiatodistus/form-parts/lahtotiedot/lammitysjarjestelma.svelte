@@ -54,6 +54,7 @@
     format={ET.selectFormat(LocaleUtils.label($locale), lammitysmuoto)}
     parse={Maybe.Some}
     required={true}
+    validation={schema.$signature}
     allowNone={false}
     bind:model={energiatodistus}
     lens={R.compose(lammitysmuoto1Lens, R.lensProp('id'))}

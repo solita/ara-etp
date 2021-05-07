@@ -1,4 +1,5 @@
 <script>
+  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
   import { _ } from '@Language/i18n';
@@ -20,7 +21,7 @@
   export let labelUnit;
 
   const id = inputs.id(path);
-  const type = inputs.type(schema, path);
+  $: type = inputs.type(schema, path);
   $: required = inputs.required(inputLanguage, type, model);
 </script>
 
@@ -51,8 +52,8 @@
       lens={inputs.dataLens(inputLanguage, path)}
       format={type.format || format}
       parse={type.parse}
-      validators={type.validators}
-      warnValidators={type.warnValidators}
+      validators={R.defaultTo([], type.validators)}
+      warnValidators={R.defaultTo([], type.warnValidators)}
       i18n={$_}
       {labelUnit} />
   </div>

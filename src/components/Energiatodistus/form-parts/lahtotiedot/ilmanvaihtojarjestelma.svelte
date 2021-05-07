@@ -31,6 +31,7 @@
     format={ET.selectFormat(LocaleUtils.label($locale), ilmanvaihtotyypit)}
     parse={Maybe.Some}
     required={true}
+    validation={schema.$signature}
     allowNone={false}
     bind:model={energiatodistus}
     lens={tyyppiLens}

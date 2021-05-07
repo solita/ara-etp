@@ -151,6 +151,7 @@
       id={'perustiedot.kayttotarkoitusluokka'}
       label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
       required={true}
+      validation={schema.$signature}
       allowNone={false}
       {disabled}
       bind:model={kayttotarkoitusluokkaId}
@@ -165,6 +166,7 @@
       id={'perustiedot.kayttotarkoitus'}
       label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
       required={true}
+      validation={schema.$signature}
       allowNone={false}
       {disabled}
       bind:model={energiatodistus}
