@@ -131,7 +131,7 @@
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
       <H1 text={i18n('valvonta.oikeellisuus.all.title')} />
-      <Checkbox disabled={overlay} label={"Vain omat valvonnat"} bind:model={onlyOwnValvonnat} />
+      <Checkbox disabled={overlay} label={i18n('valvonta.oikeellisuus.all.only-own')} bind:model={onlyOwnValvonnat} />
       {#if valvonnat.length === 0}
         <span>{i18n('valvonta.oikeellisuus.all.empty')}</span>
       {:else}

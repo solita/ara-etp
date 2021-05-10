@@ -1200,6 +1200,7 @@
       "all": {
         "title": "Oikeellisuuden valvonta",
         "empty": "Ei valvontatoimenpiteitä",
+        "only-own": "Näytä vain omat",
         "table": {
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",
