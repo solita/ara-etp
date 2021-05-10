@@ -31,6 +31,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Pagination from '@Component/Pagination/Pagination';
   import Address from '@Component/Energiatodistus/address';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -40,6 +41,7 @@
 
   let valvontaCount = 0;
   let page = Maybe.Some(1);
+  let onlyOwnValvonnat = false;
 
   $: page = R.compose(
     R.chain(Either.toMaybe),
@@ -80,7 +82,8 @@
         toimenpidetyypit: api.toimenpidetyypit,
         valvonnat: api.valvonnat({
           offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
-          limit: Maybe.Some(pageSize)
+          limit: Maybe.Some(pageSize),
+          own: Maybe.Some(onlyOwnValvonnat)
         }),
         valvojat: api.valvojat
       })
@@ -128,6 +131,7 @@
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
       <H1 text={i18n('valvonta.oikeellisuus.all.title')} />
+      <Checkbox disabled={overlay} label={"Vain omat valvonnat"} bind:model={onlyOwnValvonnat} />
       {#if valvonnat.length === 0}
         <span>{i18n('valvonta.oikeellisuus.all.empty')}</span>
       {:else}
