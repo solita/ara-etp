@@ -77,14 +77,6 @@
 
   let newViesti = '';
 
-  const fullName = people =>
-    R.compose(
-      R.join(' '),
-      R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
-      R.find(R.__, people),
-      R.propEq('id')
-    );
-
   const addNewViesti = R.compose(
     Future.fork(
       response => {
@@ -227,7 +219,7 @@
                 on:change={event =>
                   submitKasittelija(parseInt(event.target.value))}
                 lens={R.lensProp('kasittelija-id')}
-                format={fullName(kasittelijat)}
+                format={Viestit.fullName(kasittelijat)}
                 items={R.pluck('id', kasittelijat)} />
             </div>
 

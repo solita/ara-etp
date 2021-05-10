@@ -111,19 +111,19 @@
         </div>
       </div>
       {#if !Kayttajat.isLaatija(whoami)}
-        {#if R.prop('kasittelija-id', ketju).isSome()}
+        {#each R.prop('kasittelija-id', ketju).toArray() as kasittelijaId}
           <span class="whitespace-no-wrap">
             {R.compose(
               R.join(' '),
               R.props(['etunimi', 'sukunimi']),
-              R.find(R.propEq('id', R.prop('kasittelija-id', ketju).some()))
+              R.find(R.propEq('id', kasittelijaId))
             )(kasittelijat)}
           </span>
         {:else}
           <span class="text-error whitespace-no-wrap">
             {$_('viesti.ketju.existing.no-handler')}
           </span>
-        {/if}
+        {/each}
       {/if}
     </div>
   </div>
