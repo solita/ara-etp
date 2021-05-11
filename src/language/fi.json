@@ -761,23 +761,23 @@
           "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteet ja valaistus"
         },
         "tilojen-lammitys": {
-          "label-context": "Tilojen lämmitys",
+          "label-context": "Tekniset järjestelmät / Tilojen lämmitys",
           "sahko": "Sähkönkulutus",
           "lampo": "Lämmönkulutus"
         },
         "tuloilman-lammitys": {
-          "label-context": "Tuloilman lämmitys",
+          "label-context": "Tekniset järjestelmät / Tuloilman lämmitys",
           "sahko": "Sähkönkulutus",
           "lampo": "Lämmönkulutus"
         },
         "kayttoveden-valmistus": {
-          "label-context": "Lämpimän käyttöveden valmistus",
+          "label-context": "Tekniset järjestelmät / Lämpimän käyttöveden valmistus",
           "sahko": "Sähkönkulutus",
           "lampo": "Lämmönkulutus"
         },
         "iv-sahko": "Ilmanvaihtojärjestelmän sähköenergiankulutus",
         "jaahdytys": {
-          "label-context": "$unused",
+          "label-context": "Tekniset järjestelmät",
           "sahko": "Jäähdytyksen sähkönkulutus",
           "lampo": "Jäähdytyksen lämmönkulutus",
           "kaukojaahdytys": "Kaukojäähdytyksen energiankulutus"
