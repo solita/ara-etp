@@ -144,7 +144,7 @@
   }
 
   .validation-label {
-    @apply absolute top-auto;
+    @apply absolute top-auto z-10;
     font-size: smaller;
   }
 </style>
