@@ -3,7 +3,9 @@
     font-size: 1em !important;
   }
 
-  div.markup :global(h1, h2, h3) {
+  div.markup :global(h1),
+  div.markup :global(h2),
+  div.markup :global(h3) {
     font-weight: 700 !important;
     text-transform: uppercase !important;
   }
@@ -43,7 +45,8 @@
     cursor: pointer !important;
     border-color: #538000 !important;
   }
-  div.markup :global(ul, ol) {
+  div.markup :global(ul),
+  div.markup :global(ol) {
     list-style: revert;
     margin: revert;
     padding: revert;
