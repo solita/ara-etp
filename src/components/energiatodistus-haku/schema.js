@@ -568,10 +568,6 @@ const tulokset = {
 };
 
 const toteutunutOstoenergiankulutus = {
-  'sahko-vuosikulutus-yhteensa': [...numberComparisons],
-  'kaukolampo-vuosikulutus-yhteensa': [...numberComparisons],
-  'kaukojaahdytys-vuosikulutus-yhteensa': [...numberComparisons],
-  'polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
   'ostettu-energia': {
     'kaukojaahdytys-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'kaukolampo-neliovuosikulutus': [...numberComparisonsWithoutEq],
