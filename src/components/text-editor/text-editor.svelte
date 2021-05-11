@@ -7,6 +7,7 @@
   import { quill } from './quill';
   import Marked from 'marked';
   import Turndown from 'turndown';
+  import Style from '@Component/text-editor/style.svelte';
 
   const turndownService = new Turndown();
 
@@ -67,29 +68,31 @@
 </style>
 
 <Label {id} {required} {label} {compact} error={highlightError} {focused} />
-<div
-  on:focusout={evt => {
-    focused = false;
-    model = R.set(
-      lens,
+<Style>
+  <div
+    on:focusout={evt => {
+      focused = false;
+      model = R.set(
+        lens,
+        R.compose(
+          parse,
+          R.bind(turndownService.turndown, turndownService)
+        )(evt.target.innerHTML),
+        model
+      );
+    }}
+    on:focusin={_ => (focused = true)}
+    on:text-change={evt =>
       R.compose(
+        validate,
+        R.join(''),
+        R.filter(R.test(/(\w|[ÅÄÖ])/i)),
+        R.replace(/<\/?[^>]+(>|$)/g, ''),
         parse,
         R.bind(turndownService.turndown, turndownService)
-      )(evt.target.innerHTML),
-      model
-    );
-  }}
-  on:focusin={_ => (focused = true)}
-  on:text-change={evt =>
-    R.compose(
-      validate,
-      R.join(''),
-      R.filter(R.test(/(\w|[ÅÄÖ])/i)),
-      R.replace(/<\/?[^>]+(>|$)/g, ''),
-      parse,
-      R.bind(turndownService.turndown, turndownService)
-    )(evt.detail.html)}
-  use:quill={viewValue} />
+      )(evt.detail.html)}
+    use:quill={viewValue} />
+</Style>
 
 {#if !valid}
   <div class="error-label">

@@ -6,7 +6,7 @@
 
 <style type="text/postcss">
   button {
-    @apply flex justify-center items-center text-primary border-b-1 border-transparent font-semibold;
+    @apply flex justify-start items-center text-primary border-b-1 border-transparent font-semibold;
   }
 
   button:hover {

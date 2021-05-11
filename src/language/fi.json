@@ -56,6 +56,7 @@
     "new-yritys": "Uusi yritys",
     "yritys": "Yritys",
     "yritys-laatijat": "Laatijat",
+    "ohjeet": "Laatijan ohjeet",
 
     "confirmation": {
       "title": "Varmistus poistumisesta",
@@ -1310,6 +1311,47 @@
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
         }
       }
+    }
+  },
+  "ohje": {
+    "navigation": {
+      "create": "Uusi sivu",
+      "sort": "Järjestä",
+      "end-sort": "Lopeta järjestäminen",
+      "sort-success": "Navigaation järjestyksen muuttaminen onnistui",
+      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui",
+      "destination-child": "Siirretään alisivuksi",
+      "destination-sibling": "Siirretään tähän"
+    },
+    "creator": {
+      "title": "Otsikko",
+      "body": "Sisältö",
+      "published": "Julkaistu",
+      "submit": "Luo",
+      "reset": "Tyhjennä",
+      "back": "Takaisin",
+      "success": "Uusi sivu lisätty",
+      "error": "Uuden sivun lisääminen epäonnistui",
+      "validation-error": "Tiedoissa virheitä, tarkista syötteet"
+    },
+    "editor": {
+      "title": "Otsikko",
+      "body": "Sisältö",
+      "published": "Julkaistu",
+      "submit": "Tallenna",
+      "delete": "Poista",
+      "cancel": "Peruuta",
+      "success": "Sivun muokkaaminen onnistui",
+      "error": "Sivun muokkaaminen epäonnistui",
+      "delete-success": "Sivu poistettu",
+      "delete-error": "Sivun poisto epäonnistui",
+      "validation-error": "Tiedoissa virheitä, tarkista syötteet",
+      "load-error": "Tietojen lataus epäonnistui."
+    },
+    "viewer": {
+      "unpublished": "Tämä sivu ei ole julkaistu laatijoille",
+      "edit": "Muokkaa",
+      "load-error": "Tietojen lataus epäonnistui."
     }
   },
   "confirm": {

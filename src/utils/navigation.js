@@ -260,6 +260,7 @@ export const navigationParse = R.curry(
           ),
           R.always(parseRoot(isDev, i18n, kayttaja))
         ],
+        [R.compose(R.equals('ohje'), R.head), R.always([])],
         [R.T, R.always([{ label: '...', href: '#/' }])]
       ]),
       locationParts

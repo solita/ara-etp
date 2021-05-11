@@ -43,6 +43,11 @@
     cursor: pointer !important;
     border-color: #538000 !important;
   }
+  div.markup :global(ul, ol) {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
 </style>
 
 <div class="markup"><slot /></div>

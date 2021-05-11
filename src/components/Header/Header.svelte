@@ -3,14 +3,18 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import * as Navigation from '@Utility/navigation';
+  import * as Kayttajat from '@Utility/kayttajat';
   import { _ } from '@Language/i18n';
 
   import LanguageSelect from './language-select';
 
   export let whoami = Maybe.None();
+  export let ohjeSivut = Maybe.None();
 
-  let showDropdown = false;
+  let showNameDropdown = false;
+  let showOhjeDropdown = false;
   let nameNode;
+  let ohjeNode;
 
   const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;
 
@@ -19,6 +23,15 @@
     Maybe.orSome([]),
     R.map(Navigation.roleBasedHeaderMenuLinks($_))
   )(whoami);
+
+  const sortByOrdinalTitle = R.sortWith([
+    R.ascend(R.prop('ordinal')),
+    R.ascend(R.compose(R.toLower, R.prop('title')))
+  ]);
+  let ohjeNav = R.compose(
+    sortByOrdinalTitle,
+    R.filter(R.propSatisfies(Maybe.isNone, 'parent-id'))
+  )(ohjeSivut);
 </script>
 
 <style type="text/postcss">
@@ -29,12 +42,17 @@
   .listlink {
     @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
   }
+  .ohjelistlink {
+    @apply w-full p-2 text-dark text-left font-normal normal-case tracking-normal cursor-pointer;
+  }
 
-  .listlink:not(:last-child) {
+  .listlink:not(:last-child),
+  .ohjelistlink:not(:last-child) {
     @apply border-b-1 border-disabled;
   }
 
-  .listlink:hover {
+  .listlink:hover,
+  .ohjelistlink:hover {
     @apply bg-background;
   }
 
@@ -54,7 +72,15 @@
         event.target !== nameNode &&
         event.target.parentElement !== nameNode
       ) {
-        showDropdown = false;
+        showNameDropdown = false;
+      }
+    }
+    if (!R.isNil(ohjeNode)) {
+      if (
+        event.target !== ohjeNode &&
+        event.target.parentElement !== ohjeNode
+      ) {
+        showOhjeDropdown = false;
       }
     }
   }} />
@@ -67,26 +93,59 @@
     <LanguageSelect />
   </div>
 
-  {#each whoami.toArray() as user}
-    <div class="flex flex-row justify-between">
-      <div
-        bind:this={nameNode}
-        class="relative cursor-pointer"
-        on:click={() => (showDropdown = !showDropdown)}>
-        <span>
-          {fullName(user)}
-        </span>
-        <span class="material-icons absolute">keyboard_arrow_down</span>
-        {#if showDropdown}
-          <div class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
-            {#each links as link}
-              <a class="listlink w-full" href={link.href}>{link.text}</a>
-            {/each}
-          </div>
-        {/if}
+  <div class="dropdowns flex space-x-8 items-center">
+    {#if !R.isEmpty(ohjeNav)}
+      <div class="flex flex-row justify-between">
+        <div
+          bind:this={ohjeNode}
+          class="relative cursor-pointer"
+          on:click={() => (showOhjeDropdown = !showOhjeDropdown)}>
+          <span> {$_('navigation.ohjeet')} </span>
+          <span class="material-icons absolute">keyboard_arrow_down</span>
+          {#if showOhjeDropdown}
+            <div
+              class="absolute mt-2 w-96 bg-light shadow-xl flex flex-col z-10">
+              {#each ohjeNav as sivu}
+                <a class="ohjelistlink" href={`/#/ohje/${sivu.id}`}>
+                  <span> {sivu.title} </span>
+                  {#if !sivu.published}
+                    <span class="font-icon text-dark"> visibility_off </span>
+                  {/if}
+                </a>
+              {/each}
+            </div>
+          {/if}
+        </div>
       </div>
-    </div>
-  {/each}
+    {:else if Kayttajat.isPaakayttaja(R.head(whoami.toArray()))}
+      <a class="text-light flex items-center" href={'/#/ohje/new'}>
+        <span class="material-icons"> add </span>
+        <span>{$_('navigation.ohjeet')}</span>
+      </a>
+    {/if}
+
+    {#each whoami.toArray() as user}
+      <div class="flex flex-row justify-between">
+        <div
+          bind:this={nameNode}
+          class="relative cursor-pointer"
+          on:click={() => (showNameDropdown = !showNameDropdown)}>
+          <span>
+            {fullName(user)}
+          </span>
+          <span class="material-icons absolute">keyboard_arrow_down</span>
+          {#if showNameDropdown}
+            <div
+              class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
+              {#each links as link}
+                <a class="listlink w-full" href={link.href}>{link.text}</a>
+              {/each}
+            </div>
+          {/if}
+        </div>
+      </div>
+    {/each}
+  </div>
 
   {#if whoami.isNone()}
     <div class="logout px-2">
