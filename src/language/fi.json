@@ -545,9 +545,9 @@
         "tulo": "tulo",
         "poisto": "poisto",
         "labels": {
-          "paaiv": "Pääilmanvaihtokoneet",
-          "erillispoistot": "Erillispoistot",
-          "ivjarjestelma": "Ilmanvaihtojärjestelmä"
+          "paaiv": "Pääilman\u00ADvaihto\u00ADkoneet",
+          "erillispoistot": "Erillis\u00ADpoistot",
+          "ivjarjestelma": "Ilmanvaihto\u00ADjärjestelmä"
         },
         "paaiv": {
           "label-context": "Pääilmanvaihtokoneet",
