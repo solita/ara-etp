@@ -11,8 +11,10 @@
   import Datepicker from '@Component/Input/Datepicker.svelte';
   import Select from '@Component/Select/Select.svelte';
   import H2 from '@Component/H/H2.svelte';
+  import Textarea from '@Component/Textarea/Textarea.svelte';
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
+  const i18n = $_;
 
   export let toimenpide;
   export let templates;
@@ -22,6 +24,7 @@
   export let schema;
 
   let virhetyyppi = Maybe.None();
+  let virheInEditMode = Maybe.None();
 
   $: formatTemplate = Locales.labelForId($locale, templates);
   $: formatVirhetyyppi = Locales.labelForId($locale, virhetyypit);
@@ -37,6 +40,21 @@
 
     toimenpide = R.over(R.lensProp('virheet'),
       R.prepend(newVirhe), toimenpide);
+
+    virhetyyppi = Maybe.None();
+  }
+
+  const removeVirhe = index => {
+    toimenpide = R.over(R.lensProp('virheet'),
+      R.remove(index, 1), toimenpide);
+  }
+
+  const edit = index => {
+    virheInEditMode = Maybe.Some(index);
+  }
+
+  const close = _ => {
+    virheInEditMode = Maybe.None();
   }
 </script>
 
@@ -85,10 +103,50 @@
 </div>
 
 <div class="my-5">
-  {#each toimenpide.virheet as virhe}
+  {#each toimenpide.virheet as virhe, index}
   <div class="my-5">
-    <div>{formatVirhetyyppi(virhe['type-id'])}</div>
-    <div>{virhe.description}</div>
+    <div class="flex mb-2">
+      <div class="text-primary font-bold truncate">{formatVirhetyyppi(virhe['type-id'])}</div>
+      <div class="ml-2 flex">
+        {#if Maybe.exists(R.equals(index), virheInEditMode)}
+          <button
+              on:click|preventDefault|stopPropagation={close}
+              class="flex items-center space-x-1 mx-1 text-primary">
+            <span class="font-icon">close</span> Sulje
+          </button>
+        {:else}
+          <button
+              on:click|preventDefault|stopPropagation={_ => edit(index)}
+              class="flex items-center space-x-1 mx-1 text-primary">
+            <span class="font-icon">edit</span> Muokkaa
+          </button>
+        {/if}
+        <button
+            on:click|preventDefault|stopPropagation={_ => removeVirhe(index)}
+            class="flex items-center space-x-1 mx-1 text-error">
+            <span class="font-icon">remove_circle</span> Poista
+        </button>
+      </div>
+    </div>
+    <div>
+    {#if Maybe.exists(R.equals(index), virheInEditMode)}
+      <Textarea
+          id={'virhe.description'}
+          name={'virhe.description'}
+          label={i18n(i18nRoot + '.virhe.description')}
+          bind:model={toimenpide}
+          lens={R.compose(
+            R.lensProp('virheet'),
+            R.lensIndex(index),
+            R.lensProp('description'))}
+          required={true}
+          parse={R.trim}
+          compact={false}
+          {i18n} />
+    {:else}
+      {virhe.description}
+    {/if}
+    </div>
   </div>
   {/each}
 

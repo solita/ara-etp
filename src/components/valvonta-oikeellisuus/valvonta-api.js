@@ -27,7 +27,8 @@ export const deserializeToimenpide = R.evolve({
   ),
   diaarinumero: Maybe.fromNull,
   description: Maybe.fromNull,
-  'template-id': Maybe.fromNull
+  'template-id': Maybe.fromNull,
+  'severity-id': Maybe.fromNull,
 });
 
 export const deserializeValvontaStatus = R.compose(

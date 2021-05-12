@@ -1255,7 +1255,10 @@
           "publish-button": "Lähetä valvontamuistio",
           "save-button": "Tallenna valvontamuistio",
           "reset-button": "Peruuta",
-          "delete-button": "Poista luonnos"
+          "delete-button": "Poista luonnos",
+          "virhe": {
+            "description": "Virheen kuvaus"
+          }
         },
         "audit-reply": {
           "title": "Vastaus valvontamuistioon",
