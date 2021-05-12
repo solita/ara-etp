@@ -1,49 +1,49 @@
 <style>
   div.markup :global(.ql-container) {
-    font-size: 1em !important;
+    font-size: 1em;
   }
 
   div.markup :global(h1),
   div.markup :global(h2),
   div.markup :global(h3) {
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 
   div.markup :global(h1) {
-    color: #2e5053 !important;
-    font-size: 1.125em !important;
-    margin-bottom: 2rem !important;
-    letter-spacing: 0.15em !important;
+    color: #2e5053;
+    font-size: 1.125em;
+    margin-bottom: 2rem;
+    letter-spacing: 0.15em;
   }
 
   div.markup :global(h2) {
-    color: #538000 !important;
-    font-size: 1rem !important;
-    margin-bottom: 1rem !important;
+    color: #538000;
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
 
   div.markup :global(h3) {
-    color: #fff !important;
-    width: 100% !important;
-    background-color: #2e5053 !important;
-    font-size: 0.875rem !important;
-    margin-top: 0 !important;
-    margin-bottom: 1rem !important;
-    padding: 0.75rem !important;
-    letter-spacing: 0.15em !important;
+    color: #fff;
+    width: 100%;
+    background-color: #2e5053;
+    font-size: 0.875rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    letter-spacing: 0.15em;
   }
 
   div.markup :global(a) {
-    position: relative !important;
-    color: #538000 !important;
-    border-bottom-width: 1px !important;
-    border-color: transparent !important;
+    position: relative;
+    color: #538000;
+    border-bottom-width: 1px;
+    border-color: transparent;
   }
 
   div.markup :global(a:hover) {
-    cursor: pointer !important;
-    border-color: #538000 !important;
+    cursor: pointer;
+    border-color: #538000;
   }
   div.markup :global(ul),
   div.markup :global(ol) {
