@@ -49,7 +49,6 @@
       },
       response => {
         dirty = false;
-        createSuccess = true;
         overlay = false;
         push(`/ohje/${response.id}`);
       }
