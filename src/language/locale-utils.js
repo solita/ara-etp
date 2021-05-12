@@ -7,15 +7,17 @@ export const shortLocale = R.compose(R.head, R.split('-'));
 
 export const isSV = R.compose(R.equals('sv'), shortLocale);
 
-export const label = R.curry((locale, item) =>
+export const prop = R.curry((name, locale, item) =>
   R.prop(
-    `label-${R.unless(
+    name + '-' + R.unless(
       R.includes(R.__, locales),
       R.always('fi')
-    )(shortLocale(locale))}`,
+    )(shortLocale(locale)),
     item
   )
 );
+
+export const label = prop('label');
 
 export const path = R.curry((locale, path) =>
   R.adjust(-1, R.concat(R.__, '-' + locale), path)
