@@ -22,6 +22,7 @@
   export let virhetyypit;
   export let disabled;
   export let schema;
+  export let dirty;
 
   let virhetyyppi = Maybe.None();
   let virheInEditMode = Maybe.None();
@@ -42,11 +43,13 @@
       R.prepend(newVirhe), toimenpide);
 
     virhetyyppi = Maybe.None();
+    dirty = true;
   }
 
   const removeVirhe = index => {
     toimenpide = R.over(R.lensProp('virheet'),
       R.remove(index, 1), toimenpide);
+    dirty = true;
   }
 
   const edit = index => {
@@ -111,19 +114,19 @@
         {#if Maybe.exists(R.equals(index), virheInEditMode)}
           <button
               on:click|preventDefault|stopPropagation={close}
-              class="flex items-center space-x-1 mx-1 text-primary">
-            <span class="font-icon">close</span> Sulje
+              class="flex items-center space-x-1 mx-1 text-primary text-sm">
+            <span class="font-icon">close</span> Sulje muokkaus
           </button>
         {:else}
           <button
               on:click|preventDefault|stopPropagation={_ => edit(index)}
-              class="flex items-center space-x-1 mx-1 text-primary">
+              class="flex items-center space-x-1 mx-1 text-primary text-sm">
             <span class="font-icon">edit</span> Muokkaa
           </button>
         {/if}
         <button
             on:click|preventDefault|stopPropagation={_ => removeVirhe(index)}
-            class="flex items-center space-x-1 mx-1 text-error">
+            class="flex items-center space-x-1 mx-1 text-error text-sm">
             <span class="font-icon">remove_circle</span> Poista
         </button>
       </div>

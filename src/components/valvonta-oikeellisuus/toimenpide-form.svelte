@@ -91,6 +91,7 @@
   on:change={setDirty}>
   <Content
     bind:toimenpide
+    bind:dirty
     {schema}
     {templates}
     {severities}
