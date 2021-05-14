@@ -89,7 +89,9 @@ export const emptyToimenpide = typeId => ({
   'publish-time': Maybe.None(),
   'deadline-date': Either.Right(defaultDeadline(typeId)),
   'template-id': Maybe.None(),
-  description: Maybe.None()
+  description: Maybe.None(),
+  virheet: [],
+  'severity-id': Maybe.None(),
 });
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));

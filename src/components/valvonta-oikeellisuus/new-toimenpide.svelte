@@ -47,8 +47,10 @@
       resources = Maybe.Some(response);
       overlay = false;
     },
-    Future.parallelObject(2, {
+    Future.parallelObject(4, {
       whoami: KayttajaApi.whoami,
+      virhetyypit: ValvontaApi.virhetyypit,
+      severities: ValvontaApi.severities,
       templatesByType: ValvontaApi.templatesByType
     })
   );
@@ -89,12 +91,14 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     <DirtyConfirmation {dirty} />
-    {#each Maybe.toArray(resources) as { whoami, templatesByType }}
+    {#each Maybe.toArray(resources) as { whoami, templatesByType, virhetyypit, severities }}
       <ToimenpideForm
         {toimenpide}
         bind:dirty
         {whoami}
         {templatesByType}
+        {virhetyypit}
+        {severities}
         {cancel}
         submit={addToimenpide} />
     {/each}

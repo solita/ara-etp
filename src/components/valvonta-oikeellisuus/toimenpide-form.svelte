@@ -25,6 +25,8 @@
 
   export let toimenpide;
   export let templatesByType;
+  export let severities;
+  export let virhetyypit;
   export let dirty;
   export let submit;
   export let cancel;
@@ -89,8 +91,11 @@
   on:change={setDirty}>
   <Content
     bind:toimenpide
+    bind:dirty
     {schema}
     {templates}
+    {severities}
+    {virhetyypit}
     disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">
