@@ -158,9 +158,11 @@
   {/if}
 </div>
 
+<H2 text="Vakavuus" />
+
 <div class="w-1/2 py-4">
   <Select
-      label="Vakavuus"
+      label="Valitse vakavuus"
       bind:model={toimenpide}
       lens={R.lensProp('severity-id')}
       parse={Maybe.fromNull}
