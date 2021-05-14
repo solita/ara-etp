@@ -78,7 +78,6 @@ const between = {
 const singleNumberOperation = R.curry((operation, type, key) => ({
   operation,
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type
 }));
@@ -86,7 +85,6 @@ const singleNumberOperation = R.curry((operation, type, key) => ({
 const stringContains = key => ({
   operation: contains,
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
 });
@@ -94,7 +92,6 @@ const stringContains = key => ({
 const stringContainsNo = key => ({
   operation: containsNo,
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
 });
@@ -105,7 +102,6 @@ const versioEquals = key => ({
     format: R.curry((command, key, value) => [[command, key, parseInt(value)]])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.VERSIO
 });
@@ -119,7 +115,6 @@ const versioluokkaEquals = key => ({
     ])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => [2018, ''],
   type: OPERATOR_TYPES.VERSIOLUOKKA
 });
@@ -135,7 +130,6 @@ const versioluokkaSome = key => ({
     })
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => [2018, ''],
   type: OPERATOR_TYPES.VERSIOKAYTTOTARKOITUSLUOKKA
 });
@@ -143,7 +137,6 @@ const versioluokkaSome = key => ({
 const eLuokkaOperation = R.curry((operation, key) => ({
   operation,
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.ELUOKKA
 }));
@@ -151,7 +144,6 @@ const eLuokkaOperation = R.curry((operation, key) => ({
 const eLuokkaSome = key => ({
   operation: some,
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.ELUOKKA
 });
@@ -159,7 +151,6 @@ const eLuokkaSome = key => ({
 const tilaOperation = R.curry((operation, key) => ({
   operation,
   key,
-  argumentNumber: 1,
   defaultValues: () => [EtUtils.tila.signed],
   type: OPERATOR_TYPES.TILA
 }));
@@ -169,7 +160,6 @@ const tilaEquals = tilaOperation(eq);
 const singleBoolean = key => ({
   operation: eq,
   key,
-  argumentNumber: 1,
   defaultValues: () => [true],
   type: OPERATOR_TYPES.BOOLEAN
 });
@@ -183,7 +173,6 @@ const uudisrakennusEquals = key => ({
     ])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => [true],
   type: OPERATOR_TYPES.BOOLEAN
 });
@@ -191,7 +180,6 @@ const uudisrakennusEquals = key => ({
 const laatijaEquals = key => ({
   operation: eq,
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.LAATIJA
 });
@@ -232,7 +220,6 @@ const tilaComparisons = [tilaEquals];
 const luokitteluEquals = R.curry((type, key) => ({
   operation: eq,
   key,
-  argumentNumber: 1,
   defaultValues: () => [0],
   type
 }));
@@ -245,7 +232,6 @@ const timeEquals = key => ({
     ])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.DATE
 });
@@ -263,7 +249,6 @@ const timeBetween = key => ({
     ])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => ['', ''],
   type: OPERATOR_TYPES.DATE_BETWEEN
 });
@@ -283,7 +268,6 @@ const havainnointikayntiEquals = key => ({
     ])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.DATE
 });
@@ -302,7 +286,6 @@ const havainnointikayntiBetween = key => ({
     ])
   },
   key,
-  argumentNumber: 1,
   defaultValues: () => ['', ''],
   type: OPERATOR_TYPES.DATE_BETWEEN
 });
