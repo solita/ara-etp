@@ -163,7 +163,7 @@
     })
   );
 
-  $: queryStringForCsv = R.compose(
+  $: queryStringForExport = R.compose(
     queryToQuerystring,
     R.omit(['offset', 'page', 'limit']),
     R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema))
@@ -396,12 +396,21 @@
         <Spinner />
       </div>
     </Overlay>
+    {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
+      <div class="flex flew-row mb-4 mr-4">
+        <span class="material-icons">attachment</span>
+        &nbsp;
+        <Link
+          text={i18n('energiatodistus.lataa-csv')}
+          href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
+      </div>
+    {/if}
     <div class="flex flew-row mb-4 mr-4">
       <span class="material-icons">attachment</span>
       &nbsp;
       <Link
-        text={i18n('energiatodistus.lataa-csv')}
-        href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForCsv}`} />
+        text={i18n('energiatodistus.lataa-xlsx')}
+        href={`/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx${queryStringForExport}`} />
     </div>
   {/each}
 </div>
