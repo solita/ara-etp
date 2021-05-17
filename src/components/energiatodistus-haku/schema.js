@@ -253,7 +253,22 @@ const timeBetween = key => ({
   type: OPERATOR_TYPES.DATE_BETWEEN
 });
 
-const timeComparisons = [timeEquals, timeBetween];
+const timeTodayAndDaysBefore = key => ({
+  operation: {
+    ...between,
+    format: R.curry((command, key, numDays) => {
+      const end = dfns.endOfDay(new Date());
+      const start = dfns.startOfDay(dfns.subDays(end, numDays));
+      return [[command, key, start.toISOString(), end.toISOString()]];
+    }),
+    browserCommand: 'kuluva-ja-edelliset'
+  },
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.NUMBER
+});
+
+const timeComparisons = [timeEquals, timeBetween, timeTodayAndDaysBefore];
 
 const havainnointikayntiEquals = key => ({
   operation: {
