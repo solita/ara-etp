@@ -1312,7 +1312,13 @@
           "publish-error": "Toimenpiteen lähetys epäonnistui.",
           "add-success": "Toimenpide lisätty.",
           "add-error": "Toimenpiteen lisääminen epäonnistui.",
-          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
+          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä.",
+          "add-files-success": "Liitetiedostot lisätty toimenpiteelle.",
+          "add-link-success": "Linkki lisätty toimenpiteelle.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui."
         },
         "liitteet": {
           "empty": "Toimenpiteellä ei ole liitteitä"
