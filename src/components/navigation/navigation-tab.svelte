@@ -34,11 +34,11 @@
 
   .badge {
     @apply inline-flex justify-center items-center absolute rounded-full bg-primary text-light font-medium text-xs;
-    top: -1em;
+    top: -1.5em;
     right: -1em;
-    padding-left: 0.5em;
-    padding-right: 0.3em;
-    height: 1.25em;
+    padding-left: 0.6em;
+    padding-right: 0.4em;
+    height: 1.75em;
   }
 </style>
 
@@ -56,7 +56,7 @@
     <span class="relative">
       {label}
       {#each Maybe.toArray(badge) as b}
-        <span class="badge">12</span>
+        <span class="badge">{b}</span>
       {/each}
     </span>
   </a>
