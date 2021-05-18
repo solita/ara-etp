@@ -57,7 +57,10 @@
     "yritys": "Yritys",
     "yritys-laatijat": "Laatijat",
     "ohjeet": "Laatijan ohjeet",
-
+    "valvonta": {
+      "valvonta": "Valvonta",
+      "oikeellisuus": "Oikeellisuuden valvonta"
+    },
     "confirmation": {
       "title": "Varmistus poistumisesta",
       "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta.",

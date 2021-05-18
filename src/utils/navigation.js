@@ -165,7 +165,7 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
     isDev
     ? [
         {
-          label: i18n('valvonta.oikeellisuus.all.title'),
+          label: i18n('navigation.valvonta.oikeellisuus'),
           href: '#/valvonta/oikeellisuus/all'
         }
       ]
