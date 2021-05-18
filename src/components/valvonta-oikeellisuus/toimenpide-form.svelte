@@ -31,7 +31,8 @@
   export let submit;
   export let cancel;
   export let publish = Maybe.None();
-
+  export let liiteApi;
+  export let liitteet;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   const text = R.compose($_, Toimenpiteet.i18nKey);
@@ -96,6 +97,8 @@
     {templates}
     {severities}
     {virhetyypit}
+    {liiteApi}
+    {liitteet}
     disabled={!Toimenpiteet.isDraft(toimenpide)} />
 
   <div class="flex space-x-4 pt-8">

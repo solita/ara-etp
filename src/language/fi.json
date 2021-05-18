@@ -1313,6 +1313,9 @@
           "add-success": "Toimenpide lisätty.",
           "add-error": "Toimenpiteen lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
+        },
+        "liitteet": {
+          "empty": "Toimenpiteellä ei ole liitteitä"
         }
       }
     }
