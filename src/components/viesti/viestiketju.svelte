@@ -113,11 +113,7 @@
       {#if !Kayttajat.isLaatija(whoami)}
         {#each R.prop('kasittelija-id', ketju).toArray() as kasittelijaId}
           <span class="whitespace-no-wrap">
-            {R.compose(
-              R.join(' '),
-              R.props(['etunimi', 'sukunimi']),
-              R.find(R.propEq('id', kasittelijaId))
-            )(kasittelijat)}
+            {Viestit.fullName(kasittelijat)(kasittelijaId)}
           </span>
         {:else}
           <span class="text-error whitespace-no-wrap">
