@@ -162,23 +162,24 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
     label: i18n('navigation.laatijat'),
     href: '#/laatija/all'
   },
-  {
-    label: i18n('navigation.viestit'),
-    href: '#/viesti/all',
-    badge: R.compose(
-      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+    isDev
+    ? [
+        {
+          label: i18n('valvonta.oikeellisuus.all.title'),
+          href: '#/valvonta/oikeellisuus/all'
+        }
+      ]
+    : [],
+  { label: i18n('navigation.viestit'), href: '#/viesti/all',badge: R.compose(
       R.map(R.prop('count'))
-    )(ViestiApi.getKetjutUnread)
-  }
+    )(ViestiApi.getKetjutUnread) }
 ]);
 
 export const linksForLaskuttaja = linksForPaakayttaja;
 
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,
-  1: linksForPatevyydentoteaja,
   2: linksForPaakayttaja,
-  3: linksForLaskuttaja
 });
 
 export const parseEnergiatodistus = R.curry(
@@ -240,18 +241,28 @@ export const navigationParse = R.curry(
           )
         ],
         [
+          R.compose(R.equals('valvonta'), R.head),
           R.compose(
-            R.includes(R.__, [
-              'yritys',
-              'laatija',
-              'halytykset',
-              'kaytonvalvonta',
-              'tyojono',
-              'viesti',
-              'myinfo'
+            R.cond([
+              [
+                R.compose(R.equals('oikeellisuus'), R.head),
+                R.compose(
+                  R.ifElse(
+                    R.equals('all'),
+                    R.always(parseRoot(isDev, i18n, kayttaja)),
+                    R.always([])
+                  ),
+                  R.head,
+                  R.tail
+                )
+              ],
+              [R.T, R.always([])]
             ]),
-            R.head
-          ),
+            R.drop(1)
+          )
+        ],
+        [
+          R.compose(R.includes(R.__, ['laatija', 'myinfo']), R.head),
           R.always(parseRoot(isDev, i18n, kayttaja))
         ],
         [R.compose(R.equals('ohje'), R.head), R.always([])],
