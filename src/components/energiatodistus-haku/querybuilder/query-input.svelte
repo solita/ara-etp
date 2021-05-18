@@ -9,6 +9,7 @@
   import TextInput from './query-inputs/text-input';
   import DateInput from './query-inputs/date-input';
   import DateBetweenInput from './query-inputs/date-between-input';
+  import DayCountInput from './query-inputs/day-count-input';
   import NumberInput from './query-inputs/number-input';
   import UnformattedNumberInput from './query-inputs/unformatted-number-input';
   import PercentInput from './query-inputs/percent-input';
@@ -35,6 +36,8 @@
 
   const inputForType = type => {
     switch (type) {
+      case OPERATOR_TYPES.DAYCOUNT:
+        return DayCountInput;
       case OPERATOR_TYPES.NUMBER:
         return NumberInput;
       case OPERATOR_TYPES.UNFORMATTED_NUMBER:

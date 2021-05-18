@@ -75,7 +75,7 @@
     "row-error": "Virhe rivillä SV?",
     "file-read-error": "Tiedoston lukemisessa tapahtui odottamaton virhe. SV?"
   },
-  "units": { "year": "år", "pieces": "St", "celsius": "°C" },
+  "units": { "days": "dagar", "year": "år", "pieces": "St", "celsius": "°C" },
   "login_redirect": "Vänta en stund, du hänvisas till inloggningssidan",
   "loading": "Laddar...",
   "tallenna": "Spara",

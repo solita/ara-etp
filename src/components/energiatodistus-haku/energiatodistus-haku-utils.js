@@ -92,6 +92,8 @@ export const parseValueByType = R.curry((type, value) => {
     case OPERATOR_TYPES.KIELISYYS:
     case OPERATOR_TYPES.ILMANVAIHTOTYYPPI:
       return parsers.parseNumber(value);
+    case OPERATOR_TYPES.DAYCOUNT:
+      return parsers.parseDayCount(value);
     case OPERATOR_TYPES.PERCENT:
       return parsers.parsePercent(value);
     case OPERATOR_TYPES.BOOLEAN:

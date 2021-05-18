@@ -9,6 +9,7 @@ export const OPERATOR_TYPES = Object.freeze({
   PERCENT: 'PERCENT',
   DATE: 'DATE',
   DATE_BETWEEN: 'DATE_BETWEEN',
+  DAYCOUNT: 'DAYCOUNT',
   BOOLEAN: 'BOOLEAN',
   VERSIO: 'VERSIO',
   ELUOKKA: 'ELUOKKA',
@@ -265,7 +266,7 @@ const timeTodayAndDaysBefore = key => ({
   },
   key,
   defaultValues: () => [''],
-  type: OPERATOR_TYPES.NUMBER
+  type: OPERATOR_TYPES.DAYCOUNT
 });
 
 const timeComparisons = [timeEquals, timeBetween, timeTodayAndDaysBefore];

@@ -32,6 +32,12 @@ export const parsePercent = R.compose(
   R.replace('%', '')
 );
 
+export const parseDayCount = R.compose(
+  parseNumber,
+  /* Trim out non-digits */
+  R.replace(/\D/g, '')
+);
+
 export const parseDate = R.compose(
   R.ifElse(
     dfns.isValid,

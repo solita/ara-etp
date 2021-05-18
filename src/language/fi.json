@@ -90,6 +90,7 @@
     "file-read-error": "Tiedoston lukemisessa tapahtui odottamaton virhe."
   },
   "units": {
+    "days": "vrk",
     "year": "vuosi",
     "pieces": "kpl",
     "celsius": "°C"
