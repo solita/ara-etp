@@ -234,6 +234,7 @@
     "luo2018": "Skapa ett nytt EC 2018",
     "luo2013": "Skapa ett nytt EC 2013",
     "lataa-csv": "Ladda ner energicertifikat som CSV-fil",
+    "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
     "allekirjoitusaika": "Todistuksen laatimispäivä SV?",
     "voimassaolo-paattymisaika": "Todistuksen voimassaolon päättymispäivä SV?",
     "tila-id": "Energiatodistuksen tila SV?",

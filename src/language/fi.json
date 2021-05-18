@@ -257,6 +257,7 @@
     "luo2018": "Luo ET 2018",
     "luo2013": "Luo ET 2013",
     "lataa-csv": "Lataa energiatodistukset CSV-tiedostona",
+    "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona",
     "allekirjoitusaika": "Todistuksen laatimispäivä",
     "voimassaolo-paattymisaika": "Todistuksen voimassaolon päättymispäivä",
     "tila-id": "Energiatodistuksen tila",
