@@ -1,7 +1,10 @@
 import * as R from 'ramda';
 import * as RUtils from '@Utility/ramda-utils';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Future from '@Utility/future-utils';
 import * as Kayttajat from '@Utility/kayttajat';
+
+import * as ViestiApi from '@Component/viesti/viesti-api';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
@@ -17,7 +20,18 @@ const linksForLaatija = R.curry((isDev, i18n, kayttaja) =>
         href: `#/laatija/${kayttaja.id}/yritykset`
       }
     ],
-    isDev ? [{ label: i18n('navigation.viestit'), href: '#/viesti/all' }] : []
+    isDev
+      ? [
+          {
+            label: i18n('navigation.viestit'),
+            href: '#/viesti/all',
+            badge: R.compose(
+              R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+              R.map(R.prop('count'))
+            )(ViestiApi.getKetjutUnread)
+          }
+        ]
+      : []
   )
 );
 
@@ -175,7 +189,14 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
     label: i18n('navigation.laatijat'),
     href: '#/laatija/all'
   },
-  { label: i18n('navigation.viestit'), href: '#/viesti/all' }
+  {
+    label: i18n('navigation.viestit'),
+    href: '#/viesti/all',
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ViestiApi.getKetjutUnread)
+  }
 ]);
 
 export const linksForLaskuttaja = linksForPaakayttaja;
