@@ -1,6 +1,6 @@
 <script>
   import * as R from 'ramda';
-  import NavigationTab from '@Component/NavigationTab/NavigationTab';
+  import NavigationTab from './navigation-tab';
   import BadgeProvider from './badge-provider';
   import * as Navigation from '@Utility/navigation';
 

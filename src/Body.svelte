@@ -5,7 +5,7 @@
   import { idTranslateStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
-  import NavigationTabBar from '@Component/NavigationTabBar/NavigationTabBar';
+  import NavigationTabBar from '@Component/navigation/navigation-tab-bar';
   import Breadcrumb from '@Component/Breadcrumb/breadcrumb';
   import ResourceProvider from './resource-provider';
   import { buildRoutes } from '@Component/routes';

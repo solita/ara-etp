@@ -1,4 +1,4 @@
-import NavigationTabBar from './NavigationTabBar';
+import NavigationTabBar from './navigation-tab-bar';
 
 export default { title: 'NavigationTabBar' };
 
