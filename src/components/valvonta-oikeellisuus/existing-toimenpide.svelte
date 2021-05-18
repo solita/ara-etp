@@ -110,8 +110,9 @@
     getUrl: api.url.liitteet(params.versio, params.id),
 
     addFiles: R.compose(
-    fork('add-files', _ => load(params)),
-    EtApi.postLiitteetFiles(fetch, params.versio, params.id)),
+      fork('add-files', _ => load(params)),
+      EtApi.postLiitteetFiles(fetch, params.versio, params.id)
+    ),
 
     addLink: R.compose(
       fork('add-link', _ => load(params)),
@@ -121,7 +122,8 @@
     deleteLiite: R.compose(
       fork('delete-liite', _ => load(params)),
       EtApi.deleteLiite(fetch, params.versio, params.id)
-    )};
+    )
+  };
 </script>
 
 <Overlay {overlay}>

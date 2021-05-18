@@ -25,12 +25,14 @@
   const last = R.compose(Maybe.fromNull, R.last);
 
   const newResponse = (responseType, energiatodistus) =>
-    fork(
-      'new-response',
-      response => Router.push(Links.toimenpide(response, energiatodistus)))
-      (ValvontaApi.postToimenpide(
+    fork('new-response', response =>
+      Router.push(Links.toimenpide(response, energiatodistus))
+    )(
+      ValvontaApi.postToimenpide(
         energiatodistus.id,
-        Toimenpiteet.emptyToimenpide(responseType)));
+        Toimenpiteet.emptyToimenpide(responseType)
+      )
+    );
 </script>
 
 <H2 text="Vastaus" />

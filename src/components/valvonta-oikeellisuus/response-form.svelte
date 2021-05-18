@@ -41,6 +41,8 @@
 
 <H2 text="Vastauksen liitteet" />
 
-<Liitteet {liiteApi} {liitteet}
-          emptyMessageKey="valvonta.oikeellisuus.toimenpide.liitteet.empty"
-          flashModule="valvonta-oikeellisuus" />
+<Liitteet
+  {liiteApi}
+  {liitteet}
+  emptyMessageKey="valvonta.oikeellisuus.toimenpide.liitteet.empty"
+  flashModule="valvonta-oikeellisuus" />

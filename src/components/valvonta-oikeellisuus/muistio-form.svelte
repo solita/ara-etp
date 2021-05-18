@@ -34,31 +34,30 @@
   const addVirhe = virhetyyppiId => {
     const newVirhe = {
       'type-id': virhetyyppiId,
-      'description': R.compose(
+      description: R.compose(
         Locales.prop('description', $locale),
-        R.find(R.propEq('id', virhetyyppiId)))(virhetyypit)
+        R.find(R.propEq('id', virhetyyppiId))
+      )(virhetyypit)
     };
 
-    toimenpide = R.over(R.lensProp('virheet'),
-      R.prepend(newVirhe), toimenpide);
+    toimenpide = R.over(R.lensProp('virheet'), R.prepend(newVirhe), toimenpide);
 
     virhetyyppi = Maybe.None();
     dirty = true;
-  }
+  };
 
   const removeVirhe = index => {
-    toimenpide = R.over(R.lensProp('virheet'),
-      R.remove(index, 1), toimenpide);
+    toimenpide = R.over(R.lensProp('virheet'), R.remove(index, 1), toimenpide);
     dirty = true;
-  }
+  };
 
   const edit = index => {
     virheInEditMode = Maybe.Some(index);
-  }
+  };
 
   const close = _ => {
     virheInEditMode = Maybe.None();
-  }
+  };
 </script>
 
 <div class="mb-5">
@@ -94,63 +93,66 @@
 
 <div class="w-1/2 py-4">
   <Select
-      label="Lisää uusi virhe"
-      bind:model={virhetyyppi}
-      lens={R.lens(R.identity, R.identity)}
-      inputValueParse={R.prop('id')}
-      format={Locales.label($locale)}
-      on:change={event => addVirhe(parseInt(event.target.value))}
-      required={true}
-      validation={schema.publish}
-      items={virhetyypit} />
+    label="Lisää uusi virhe"
+    bind:model={virhetyyppi}
+    lens={R.lens(R.identity, R.identity)}
+    inputValueParse={R.prop('id')}
+    format={Locales.label($locale)}
+    on:change={event => addVirhe(parseInt(event.target.value))}
+    required={true}
+    validation={schema.publish}
+    items={virhetyypit} />
 </div>
 
 <div class="my-5">
   {#each toimenpide.virheet as virhe, index}
-  <div class="my-5">
-    <div class="flex mb-2">
-      <div class="text-primary font-bold truncate">{formatVirhetyyppi(virhe['type-id'])}</div>
-      <div class="ml-2 flex">
-        {#if Maybe.exists(R.equals(index), virheInEditMode)}
-          <button
+    <div class="my-5">
+      <div class="flex mb-2">
+        <div class="text-primary font-bold truncate">
+          {formatVirhetyyppi(virhe['type-id'])}
+        </div>
+        <div class="ml-2 flex">
+          {#if Maybe.exists(R.equals(index), virheInEditMode)}
+            <button
               on:click|preventDefault|stopPropagation={close}
               class="flex items-center space-x-1 mx-1 text-primary text-sm">
-            <span class="font-icon">close</span> Sulje muokkaus
-          </button>
-        {:else}
-          <button
+              <span class="font-icon">close</span> Sulje muokkaus
+            </button>
+          {:else}
+            <button
               on:click|preventDefault|stopPropagation={_ => edit(index)}
               class="flex items-center space-x-1 mx-1 text-primary text-sm">
-            <span class="font-icon">edit</span> Muokkaa
-          </button>
-        {/if}
-        <button
+              <span class="font-icon">edit</span> Muokkaa
+            </button>
+          {/if}
+          <button
             on:click|preventDefault|stopPropagation={_ => removeVirhe(index)}
             class="flex items-center space-x-1 mx-1 text-error text-sm">
             <span class="font-icon">remove_circle</span> Poista
-        </button>
+          </button>
+        </div>
+      </div>
+      <div>
+        {#if Maybe.exists(R.equals(index), virheInEditMode)}
+          <Textarea
+            id={'virhe.description'}
+            name={'virhe.description'}
+            label={i18n(i18nRoot + '.virhe.description')}
+            bind:model={toimenpide}
+            lens={R.compose(
+              R.lensProp('virheet'),
+              R.lensIndex(index),
+              R.lensProp('description')
+            )}
+            required={true}
+            parse={R.trim}
+            compact={false}
+            {i18n} />
+        {:else}
+          {virhe.description}
+        {/if}
       </div>
     </div>
-    <div>
-    {#if Maybe.exists(R.equals(index), virheInEditMode)}
-      <Textarea
-          id={'virhe.description'}
-          name={'virhe.description'}
-          label={i18n(i18nRoot + '.virhe.description')}
-          bind:model={toimenpide}
-          lens={R.compose(
-            R.lensProp('virheet'),
-            R.lensIndex(index),
-            R.lensProp('description'))}
-          required={true}
-          parse={R.trim}
-          compact={false}
-          {i18n} />
-    {:else}
-      {virhe.description}
-    {/if}
-    </div>
-  </div>
   {/each}
 
   {#if R.isEmpty(toimenpide.virheet)}
@@ -162,13 +164,12 @@
 
 <div class="w-1/2 py-4">
   <Select
-      label="Valitse vakavuus"
-      bind:model={toimenpide}
-      lens={R.lensProp('severity-id')}
-      parse={Maybe.fromNull}
-      format={formatSeverity}
-      required={true}
-      validation={schema.publish}
-      items={R.pluck('id', severities)} />
+    label="Valitse vakavuus"
+    bind:model={toimenpide}
+    lens={R.lensProp('severity-id')}
+    parse={Maybe.fromNull}
+    format={formatSeverity}
+    required={true}
+    validation={schema.publish}
+    items={R.pluck('id', severities)} />
 </div>
-

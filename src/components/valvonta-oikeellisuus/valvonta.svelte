@@ -141,9 +141,7 @@
           reload={_ => load(params)} />
       {/if}
       {#if Kayttajat.isLaatija(whoami)}
-        <LaatijaResponse {energiatodistus}
-                         {toimenpiteet}
-                         {fork} />
+        <LaatijaResponse {energiatodistus} {toimenpiteet} {fork} />
       {/if}
 
       <H2 text="Toimenpiteet" />
