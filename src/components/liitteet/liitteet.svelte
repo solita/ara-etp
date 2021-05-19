@@ -141,12 +141,9 @@
                 <span
                   class="material-icons delete-icon"
                   class:text-disabled={disabled}
-                  title={disabled
-                    ? i18n(i18nRoot + '.poista-disabled')
-                    : ''}
+                  title={disabled ? i18n(i18nRoot + '.poista-disabled') : ''}
                   on:click|stopPropagation={_ => {
-                    if (!disabled)
-                      confirm(liiteApi.deleteLiite, liite.id);
+                    if (!disabled) confirm(liiteApi.deleteLiite, liite.id);
                   }}>
                   highlight_off
                 </span>

@@ -110,19 +110,31 @@
     fork(key, _ => load(params))(
       Future.parallel(2, [
         liiteFuture(liite),
-        ValvontaApi.putToimenpide(params.id, params['toimenpide-id'], toimenpide)]));
+        ValvontaApi.putToimenpide(
+          params.id,
+          params['toimenpide-id'],
+          toimenpide
+        )
+      ])
+    );
 
   const liiteApi = {
     getUrl: R.always(api.url.liitteet(params.versio, params.id)),
 
-    addFiles: liiteOperation('add-files',
-      EtApi.postLiitteetFiles(fetch, params.versio, params.id)),
+    addFiles: liiteOperation(
+      'add-files',
+      EtApi.postLiitteetFiles(fetch, params.versio, params.id)
+    ),
 
-    addLink: liiteOperation('add-link',
-      EtApi.postLiitteetLink(fetch, params.versio, params.id)),
+    addLink: liiteOperation(
+      'add-link',
+      EtApi.postLiitteetLink(fetch, params.versio, params.id)
+    ),
 
-    deleteLiite: liiteOperation('delete-liite',
-      EtApi.deleteLiite(fetch, params.versio, params.id))
+    deleteLiite: liiteOperation(
+      'delete-liite',
+      EtApi.deleteLiite(fetch, params.versio, params.id)
+    )
   };
 </script>
 
