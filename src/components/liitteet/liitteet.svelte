@@ -41,7 +41,10 @@
 
   const orEmpty = Maybe.orSome('');
 
-  $: files.length > 0 && liiteApi.addFiles(files);
+  $: if (files.length > 0) {
+    liiteApi.addFiles(files);
+    files = [];
+  }
 
   const submit = event => {
     if (isValidForm(newLink)) {
