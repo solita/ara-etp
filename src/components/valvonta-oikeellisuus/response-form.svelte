@@ -42,7 +42,7 @@
 <H2 text="Vastauksen liitteet" />
 
 <Liitteet
-  {liiteApi}
+  liiteApi={R.applySpec(liiteApi)(toimenpide)}
   {liitteet}
   emptyMessageKey="valvonta.oikeellisuus.toimenpide.liitteet.empty"
   flashModule="valvonta-oikeellisuus" />

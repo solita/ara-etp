@@ -106,23 +106,23 @@
     load(params);
   };
 
+  const liiteOperation = (key, liiteFuture) => toimenpide => liite =>
+    fork(key, _ => load(params))(
+      Future.parallel(2, [
+        liiteFuture(liite),
+        ValvontaApi.putToimenpide(params.id, params['toimenpide-id'], toimenpide)]));
+
   const liiteApi = {
-    getUrl: api.url.liitteet(params.versio, params.id),
+    getUrl: R.always(api.url.liitteet(params.versio, params.id)),
 
-    addFiles: R.compose(
-      fork('add-files', _ => load(params)),
-      EtApi.postLiitteetFiles(fetch, params.versio, params.id)
-    ),
+    addFiles: liiteOperation('add-files',
+      EtApi.postLiitteetFiles(fetch, params.versio, params.id)),
 
-    addLink: R.compose(
-      fork('add-link', _ => load(params)),
-      EtApi.postLiitteetLink(fetch, params.versio, params.id)
-    ),
+    addLink: liiteOperation('add-link',
+      EtApi.postLiitteetLink(fetch, params.versio, params.id)),
 
-    deleteLiite: R.compose(
-      fork('delete-liite', _ => load(params)),
-      EtApi.deleteLiite(fetch, params.versio, params.id)
-    )
+    deleteLiite: liiteOperation('delete-liite',
+      EtApi.deleteLiite(fetch, params.versio, params.id))
   };
 </script>
 
