@@ -71,6 +71,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 
 export const isVerified = isType(type.verified);
 export const isAnomaly = isType(type.anomaly);
+export const isAuditReport = isType(type.audit.report);
 
 const defaultDeadline = typeId =>
   isDeadlineType(typeId)

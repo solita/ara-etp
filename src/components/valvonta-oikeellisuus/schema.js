@@ -21,7 +21,8 @@ export const toimenpideSave = {
   publish: false,
   'deadline-date': [],
   'template-id': [],
-  description: description
+  description: description,
+  'severity-id': []
 };
 
 export const toimenpidePublish = (templates, toimenpide) =>
@@ -32,7 +33,8 @@ export const toimenpidePublish = (templates, toimenpide) =>
         Toimenpiteet.hasDeadline(toimenpide)
       ),
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
-      description: addRequiredValidator(isDescriptionRequired(toimenpide))
+      description: addRequiredValidator(isDescriptionRequired(toimenpide)),
+      'severity-id': addRequiredValidator(Toimenpiteet.isAuditReport(toimenpide))
     },
     toimenpideSave
   );

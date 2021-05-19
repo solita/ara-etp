@@ -18,7 +18,6 @@
   import Confirm from '@Component/Confirm/Confirm';
 
   export let liitteet = [];
-  export let whoami;
   export let disabled = false;
   export let emptyMessageKey = i18nRoot + '.empty';
 
