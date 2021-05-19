@@ -64,10 +64,6 @@ export const oikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
       R.T,
       R.always([
         {
-          url: '#/valvonta/oikeellisuus/all',
-          label: i18n('navigation.valvonta.oikeellisuus')
-        },
-        {
           url: `#/energiatodistus/${version}/${id}`,
           label: `${i18n('navigation.et')} ${id}`
         },
