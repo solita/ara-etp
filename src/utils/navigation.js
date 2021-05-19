@@ -17,6 +17,14 @@ const linksForLaatija = R.curry((isDev, i18n, kayttaja) => [
     label: i18n('navigation.yritykset'),
     href: `#/laatija/${kayttaja.id}/yritykset`
   },
+  // ...(isDev
+  //   ? [
+  //       {
+  //         label: i18n('navigation.valvonta.valvonta'),
+  //         href: '#/valvonta/oikeellisuus/all'
+  //       }
+  //     ]
+  //   : []),
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
@@ -27,7 +35,7 @@ const linksForLaatija = R.curry((isDev, i18n, kayttaja) => [
   }
 ]);
 
-export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
+export const linksForPatevyydentoteaja = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.laatijoidentuonti'),
     href: '#/laatija/laatijoidentuonti'
@@ -35,9 +43,9 @@ export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
   { label: i18n('navigation.laatijat'), href: '#/laatija/all' }
 ]);
 
-export const linksForEnergiatodistus = R.curry((i18n, kayttaja, version, id) =>
+export const linksForEnergiatodistus = R.curry((i18n, whoami, version, id) =>
   R.when(
-    R.always(!Kayttajat.isLaskuttaja(kayttaja)),
+    R.always(!Kayttajat.isLaskuttaja(whoami)),
     R.append({
       label: i18n('navigation.liitteet'),
       href: `#/energiatodistus/${version}/${id}/liitteet`
@@ -82,29 +90,47 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   //}
 ]);
 
-export const linksForLaatijaOmatTiedot = R.curry((i18n, id, idTranslate) => [
-  {
-    label: R.compose(
-      Maybe.orSome('...'),
-      R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`),
-      Maybe.fromNull,
-      R.path(['kayttaja', id])
-    )(idTranslate),
-    href: `#/kayttaja/${id}`
-  },
-  {
-    label: i18n('navigation.yritykset'),
-    href: `#/laatija/${id}/yritykset`
-  }
-]);
+const nameFromWhoamiOrStore = R.curry((idTranslate, whoami, id) =>
+  R.compose(
+    Maybe.orSome('...'),
+    R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`),
+    Maybe.fromNull,
+    R.ifElse(
+      R.equals(whoami.id),
+      R.always(whoami),
+      R.always(R.path(['kayttaja', id], idTranslate))
+    )
+  )(id)
+);
+
+export const linksForKayttaja = R.curry((i18n, whoami, id, idTranslate) => {
+  return [
+    {
+      label: nameFromWhoamiOrStore(idTranslate, whoami, id),
+      href: `#/kayttaja/${id}`
+    },
+    {
+      label: i18n('navigation.yritykset'),
+      href: `#/laatija/${id}/yritykset`
+    }
+  ];
+});
+
+export const linksForPaakayttajaOmatTiedot = R.curry(
+  (i18n, whoami, id, idTranslate) => [
+    {
+      label: nameFromWhoamiOrStore(idTranslate, whoami, id),
+      href: `#/kayttaja/${id}`
+    }
+  ]
+);
 
 export const parseKayttaja = R.curry(
-  (isDev, i18n, kayttaja, idTranslate, locationParts) => {
-    if (Kayttajat.isPatevyydentoteaja(kayttaja)) {
-      return linksForPatevyydentoteaja(isDev, i18n, kayttaja);
-    }
-
-    if (R.isEmpty(locationParts)) {
+  (isDev, i18n, whoami, idTranslate, locationParts) => {
+    if (Kayttajat.isPatevyydentoteaja(whoami)) {
+      if (R.equals('laatijoidentuonti', R.head(locationParts))) {
+        return linksForPatevyydentoteaja(isDev, i18n, whoami);
+      }
       return [];
     }
     const id = locationParts[0];
@@ -114,9 +140,9 @@ export const parseKayttaja = R.curry(
       return R.converge(R.apply, [
         R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
         R.append(R.__, [isDev, i18n])
-      ])(kayttaja);
-    } else if (Kayttajat.isLaatija(kayttaja)) {
-      return linksForLaatijaOmatTiedot(i18n, id, idTranslate);
+      ])(whoami);
+    } else if (Kayttajat.isLaatija(whoami)) {
+      return linksForKayttaja(i18n, whoami, parseInt(id, 10), idTranslate);
     } else {
       return [];
     }
@@ -140,7 +166,7 @@ export const linksForYritys = R.curry((i18n, idTranslate, id) => [
 ]);
 
 export const parseYritys = R.curry(
-  (i18n, kayttaja, idTranslate, locationParts) => {
+  (i18n, whoami, idTranslate, locationParts) => {
     if (R.isEmpty(locationParts)) {
       return [];
     }
@@ -153,7 +179,7 @@ export const parseYritys = R.curry(
   }
 );
 
-export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
+export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.energiatodistukset'),
     href: '#/energiatodistus/all'
@@ -162,28 +188,32 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, kayttaja) => [
     label: i18n('navigation.laatijat'),
     href: '#/laatija/all'
   },
-    isDev
+  ...(isDev
     ? [
         {
           label: i18n('navigation.valvonta.oikeellisuus'),
           href: '#/valvonta/oikeellisuus/all'
         }
       ]
-    : [],
-  { label: i18n('navigation.viestit'), href: '#/viesti/all',badge: R.compose(
-      R.map(R.prop('count'))
-    )(ViestiApi.getKetjutUnread) }
+    : []),
+  {
+    label: i18n('navigation.viestit'),
+    href: '#/viesti/all',
+    badge: R.compose(R.map(R.prop('count')))(ViestiApi.getKetjutUnread)
+  }
 ]);
 
 export const linksForLaskuttaja = linksForPaakayttaja;
 
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,
+  1: linksForPatevyydentoteaja,
   2: linksForPaakayttaja,
+  3: linksForLaskuttaja
 });
 
 export const parseEnergiatodistus = R.curry(
-  (isDev, i18n, kayttaja, locationParts) => {
+  (isDev, i18n, whoami, locationParts) => {
     const [version, id] = R.compose(
       RUtils.fillAndTake(2, Maybe.None),
       R.map(Maybe.fromNull)
@@ -194,79 +224,41 @@ export const parseEnergiatodistus = R.curry(
     }
 
     return R.compose(
-      Maybe.orSome(parseRoot(isDev, i18n, kayttaja)),
-      R.lift(linksForEnergiatodistus(i18n, kayttaja))
+      Maybe.orSome(parseRoot(isDev, i18n, whoami)),
+      R.lift(linksForEnergiatodistus(i18n, whoami))
     )(version, id);
   }
 );
 
-export const parseRoot = R.curry((isDev, i18n, kayttaja) =>
+export const parseRoot = R.curry((isDev, i18n, whoami) =>
   R.converge(R.apply, [
     R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
     R.append(R.__, [isDev, i18n])
-  ])(kayttaja)
+  ])(whoami)
 );
 
 export const navigationParse = R.curry(
-  (isDev, i18n, kayttaja, location, idTranslate) =>
+  (isDev, i18n, whoami, location, idTranslate) =>
     R.compose(
       R.flatten,
       Array.of,
       R.cond([
         [
           R.compose(R.equals('energiatodistus'), R.head),
-          R.compose(parseEnergiatodistus(isDev, i18n, kayttaja), R.tail)
+          R.compose(parseEnergiatodistus(isDev, i18n, whoami), R.tail)
         ],
         [
           R.compose(R.equals('yritys'), R.head),
-          R.compose(parseYritys(i18n, kayttaja, idTranslate), R.tail)
+          R.compose(parseYritys(i18n, whoami, idTranslate), R.tail)
         ],
         [
           R.compose(
             R.either(R.equals('kayttaja'), R.equals('laatija')),
             R.head
           ),
-          R.compose(parseKayttaja(isDev, i18n, kayttaja, idTranslate), R.tail)
+          R.compose(parseKayttaja(isDev, i18n, whoami, idTranslate), R.tail)
         ],
-        [
-          R.compose(R.equals('viesti'), R.head),
-          R.compose(
-            R.ifElse(
-              R.equals('all'),
-              R.always(parseRoot(isDev, i18n, kayttaja)),
-              R.always([])
-            ),
-            R.head,
-            R.tail
-          )
-        ],
-        [
-          R.compose(R.equals('valvonta'), R.head),
-          R.compose(
-            R.cond([
-              [
-                R.compose(R.equals('oikeellisuus'), R.head),
-                R.compose(
-                  R.ifElse(
-                    R.equals('all'),
-                    R.always(parseRoot(isDev, i18n, kayttaja)),
-                    R.always([])
-                  ),
-                  R.head,
-                  R.tail
-                )
-              ],
-              [R.T, R.always([])]
-            ]),
-            R.drop(1)
-          )
-        ],
-        [
-          R.compose(R.includes(R.__, ['laatija', 'myinfo']), R.head),
-          R.always(parseRoot(isDev, i18n, kayttaja))
-        ],
-        [R.compose(R.equals('ohje'), R.head), R.always([])],
-        [R.T, R.always([{ label: '...', href: '#/' }])]
+        [R.T, R.always([])]
       ]),
       locationParts
     )(location)
@@ -283,8 +275,8 @@ export const defaultHeaderMenuLinks = i18n => [
   }
 ];
 
-export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
-  if (Kayttajat.isPaakayttaja(kayttaja)) {
+export const roleBasedHeaderMenuLinks = R.curry((i18n, whoami) => {
+  if (Kayttajat.isPaakayttaja(whoami)) {
     return [
       {
         href: `#/kayttaja/all`,
@@ -297,7 +289,7 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, kayttaja) => {
     ];
   }
 
-  if (Kayttajat.isLaskuttaja(kayttaja)) {
+  if (Kayttajat.isLaskuttaja(whoami)) {
     return [
       {
         href: `#/yritys/all`,
