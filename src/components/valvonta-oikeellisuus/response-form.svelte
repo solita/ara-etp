@@ -44,5 +44,6 @@
 <Liitteet
   liiteApi={R.applySpec(liiteApi)(toimenpide)}
   {liitteet}
+  {disabled}
   emptyMessageKey="valvonta.oikeellisuus.toimenpide.liitteet.empty"
   flashModule="valvonta-oikeellisuus" />

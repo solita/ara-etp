@@ -19,7 +19,7 @@
 
   export let liitteet = [];
   export let whoami;
-  export let enabled = true;
+  export let disabled = false;
   export let emptyMessageKey = i18nRoot + '.empty';
 
   export let liiteApi;
@@ -71,8 +71,6 @@
     R.values,
     Validation.validateModelObject(Links.schema)
   );
-
-  $: isDeleteEnabled = enabled || Maybe.exists(Kayttajat.isPaakayttaja, whoami);
 
   const setDirty = _ => {
     dirty = true;
@@ -142,12 +140,12 @@
                 confirmMessage={i18n('confirm.you-want-to-delete')}>
                 <span
                   class="material-icons delete-icon"
-                  class:text-disabled={!isDeleteEnabled}
-                  title={!isDeleteEnabled
+                  class:text-disabled={disabled}
+                  title={disabled
                     ? i18n(i18nRoot + '.poista-disabled')
                     : ''}
                   on:click|stopPropagation={_ => {
-                    if (isDeleteEnabled)
+                    if (!disabled)
                       confirm(liiteApi.deleteLiite, liite.id);
                   }}>
                   highlight_off
@@ -161,7 +159,7 @@
   {/if}
 </div>
 
-{#if enabled && !R.isNil(liiteApi)}
+{#if !disabled && !R.isNil(liiteApi)}
   <div class="mb-4 flex lg:flex-row flex-col">
     <div class="lg:w-1/2 w-full mr-6 mb-6">
       <div class="flex space-x-1 text-primary">
