@@ -156,11 +156,11 @@
       {/if}
     </div>
   </div>
-  {#if (!R.isEmpty(sivu.children) && childrenShown) || (draggable && isBeingTargeted && setDroppedAsChild)}
+  {#if (!R.isEmpty(sivu.children) && childrenShown && !isBeingDragged) || (draggable && isBeingTargeted && setDroppedAsChild && !isBeingDragged)}
     <div
       class="children pl-1 bg-secondary"
       transition:slide|local={{ duration: 100 }}>
-      {#if draggable && isBeingTargeted && setDroppedAsChild}
+      {#if draggable && isBeingTargeted && setDroppedAsChild && !isBeingDragged}
         <div
           class="destination flex w-full border-b items-center pointer-events-none">
           <span class="font-icon p-2"> subdirectory_arrow_right </span>
@@ -175,7 +175,7 @@
     </div>
   {/if}
 
-  {#if draggable && isBeingTargeted && !setDroppedAsChild}
+  {#if draggable && isBeingTargeted && !setDroppedAsChild && !isBeingDragged}
     <div
       class="destination flex w-full border-b items-center pointer-events-none">
       <span class="font-icon p-2"> east </span>
