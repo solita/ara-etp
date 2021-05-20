@@ -17,3 +17,5 @@ export const fold = R.curry((defaultValue, fn, em) =>
 export const forEach = (fn, em) => toMaybe(em).forEach(fn);
 
 export const toArray = R.compose(Maybe.toArray, toMaybe);
+
+export const exists = R.curry((pred, em) => fold(false, pred, em));

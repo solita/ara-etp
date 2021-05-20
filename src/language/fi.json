@@ -1195,15 +1195,19 @@
     }
   },
   "valvonta": {
+    "self": "Minä",
     "oikeellisuus": {
       "all": {
         "title": "Oikeellisuuden valvonta",
         "empty": "Ei valvontatoimenpiteitä",
+        "only-own": "Näytä vain omat",
         "table": {
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",
           "type": "Tyyppi",
-          "diaarinumero": "Diaarinumero"
+          "diaarinumero": "Diaarinumero",
+          "kasittelija": "Käsittelijä",
+          "previous-action": "Edellinen tapahtuma"
         }
       },
       "valvonta": {
