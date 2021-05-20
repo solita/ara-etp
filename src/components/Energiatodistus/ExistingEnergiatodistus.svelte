@@ -10,6 +10,7 @@
 
   import * as et from './energiatodistus-utils';
   import * as api from './energiatodistus-api';
+  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
@@ -22,6 +23,7 @@
   let luokittelut = Maybe.None();
   let whoami = Maybe.None();
   let validation = Maybe.None();
+  let valvonta = Maybe.None();
 
   let overlay = true;
 
@@ -94,6 +96,7 @@
         luokittelut = Maybe.Some(response[1]);
         whoami = Maybe.Some(response[2]);
         validation = Maybe.Some(response[3]);
+        valvonta = Maybe.fromNull(response[4]);
         toggleOverlay(false);
       }
     ),
@@ -101,7 +104,8 @@
     R.prepend(R.__, [
       api.luokittelutForVersion(params.version),
       kayttajaApi.whoami,
-      api.validation(params.version)
+      api.validation(params.version),
+      ValvontaApi.getValvonta(params.id)
     ]),
     R.tap(() => toggleOverlay(true)),
     api.getEnergiatodistusById
@@ -126,6 +130,7 @@
         luokittelut={luokittelut.some()}
         whoami={whoami.some()}
         validation={validation.some()}
+        valvonta={valvonta.some()}
         bind:showMissingProperties
         {submit}
         {title} />

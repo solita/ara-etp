@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { fade } from 'svelte/transition';
 
   import { replace, push } from 'svelte-spa-router';
   import * as Maybe from '@Utility/maybe-utils';
@@ -9,7 +10,9 @@
 
   import Confirm from '@Component/Confirm/Confirm';
   import Signing from '@Component/Energiatodistus/signing';
+  import TyojonoButton from './tyojono-button';
   import * as api from '@Component/Energiatodistus/energiatodistus-api';
+  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toolbar from './toolbar-utils';
 
@@ -22,6 +25,7 @@
   export let eTehokkuus = Maybe.None();
   export let dirty;
   export let whoami;
+  export let valvonta;
 
   const i18n = $_;
 
@@ -32,6 +36,7 @@
   let bilingual = true;
   let selectedLanguage = 'fi';
   let signingActive = false;
+  let pendingExecution = false;
 
   $: energiatodistusKieli = energiatodistus.perustiedot.kieli;
   $: bilingual = R.compose(
@@ -97,6 +102,25 @@
         );
       },
       operation(fetch, version, Maybe.get(id))
+    );
+  };
+
+  $: toggleTyojono = _ => {
+    if (pendingExecution) return;
+    execute(
+      _,
+      (fetch, _, id) => {
+        pendingExecution = true;
+        return R.chain(
+          Future.after(200),
+          ValvontaApi.putValvonta(id, { pending: !valvonta.pending })
+        );
+      },
+      `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
+      _ => {
+        valvonta = { pending: !valvonta.pending };
+        pendingExecution = false;
+      }
     );
   };
 
@@ -220,8 +244,14 @@
       </div>
     {/if}
   </button>
+  {#if R.includes(Toolbar.module.tyojono, fields)}
+    <TyojonoButton
+      disabled={pendingExecution}
+      {valvonta}
+      on:click={toggleTyojono} />
+  {/if}
   {#if R.includes(Toolbar.module.save, fields)}
-    <button disabled={!dirty} on:click={save(noop)}>
+    <button disabled={!dirty || pendingExecution} on:click={save(noop)}>
       <span class="description">
         {id.isSome()
           ? i18n('energiatodistus.toolbar.save')
@@ -229,13 +259,16 @@
       </span>
       <span class="text-2xl font-icon">save</span>
     </button>
-    <button disabled={!dirty} on:click={cancel}>
+    <button disabled={!dirty || pendingExecution} on:click={cancel}>
       <span class="description">{i18n('energiatodistus.toolbar.undo')}</span>
       <span class="text-2xl font-icon">undo</span>
     </button>
   {/if}
   {#if R.includes(Toolbar.module.sign, fields)}
-    <button data-cy="allekirjoita-button" on:click={saveComplete(openSigning)}>
+    <button
+      disabled={pendingExecution}
+      data-cy="allekirjoita-button"
+      on:click={saveComplete(openSigning)}>
       <div class="description">{i18n('energiatodistus.toolbar.sign')}</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
         create
@@ -244,6 +277,7 @@
   {/if}
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
     <button
+      disabled={pendingExecution}
       on:click={save(_ =>
         push('/energiatodistus/' + version + '/new?copy-from-id=' + id.some())
       )}>
@@ -254,7 +288,9 @@
   {#if R.includes(Toolbar.module.preview, fields)}
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
-        <button on:click={save(() => openUrl(href))}>
+        <button
+          disabled={pendingExecution}
+          on:click={save(() => openUrl(href))}>
           <span class="block description"
             >{i18n('energiatodistus.toolbar.preview')}
             {R.toUpper(lang)}</span>
@@ -266,7 +302,7 @@
   {#if R.includes(Toolbar.module.download, fields)}
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
-        <button on:click={() => openUrl(href)}>
+        <button disabled={pendingExecution} on:click={() => openUrl(href)}>
           <span class="block description"
             >{i18n('energiatodistus.toolbar.download')}
             {R.toUpper(lang)}</span>
@@ -280,7 +316,9 @@
       let:confirm
       confirmButtonLabel={i18n('confirm.button.discard')}
       confirmMessage={i18n('confirm.you-want-to-discard')}>
-      <button on:click={() => confirm(discardEnergiatodistus)}>
+      <button
+        disabled={pendingExecution}
+        on:click={() => confirm(discardEnergiatodistus)}>
         <span class="description"
           >{i18n('energiatodistus.toolbar.discard')}</span>
         <span class="text-2xl font-icon">block</span>
@@ -292,7 +330,9 @@
       let:confirm
       confirmButtonLabel={i18n('confirm.button.undodiscard')}
       confirmMessage={i18n('confirm.you-want-to-undodiscard')}>
-      <button on:click={() => confirm(undoDiscardEnergiatodistus)}>
+      <button
+        disabled={pendingExecution}
+        on:click={() => confirm(undoDiscardEnergiatodistus)}>
         <span class="description"
           >{i18n('energiatodistus.toolbar.undodiscard')}</span>
         <span class="text-2xl font-icon">undo</span>
@@ -304,7 +344,9 @@
       let:confirm
       confirmButtonLabel={i18n('confirm.button.delete')}
       confirmMessage={i18n('confirm.you-want-to-delete')}>
-      <button on:click={() => confirm(deleteEnergiatodistus)}>
+      <button
+        disabled={pendingExecution}
+        on:click={() => confirm(deleteEnergiatodistus)}>
         <span class="description"
           >{i18n('energiatodistus.toolbar.delete')}</span>
         <span class="text-2xl font-icon">delete_forever</span>
@@ -323,4 +365,9 @@
       </div>
     </div>
   {/each}
+  {#if pendingExecution}
+    <div
+      transition:fade|local={{ duration: 50 }}
+      class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0" />
+  {/if}
 </div>
