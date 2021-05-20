@@ -73,9 +73,7 @@
         valvontaCount = response.count;
         overlay = false;
       },
-      R.compose(
-        Future.parallelObject(3),
-      )({
+      Future.parallelObject(3, {
         whoami: kayttajaApi.whoami,
         count: R.map(R.prop('count'), api.valvontaCount),
         luokittelut: EnergiatodistusApi.luokittelutAllVersions,
@@ -112,17 +110,18 @@
     Router.push(Links.valvonta(energiatodistus));
   };
 
-  const isSelf = R.curry((whoami, id) => R.compose(
-    Maybe.exists(R.equals(whoami.id)),
-    Maybe.fromNull
-  )(id));
+  const isSelf = R.curry((whoami, id) =>
+    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
+  );
 
-  const formatValvoja = R.curry((valvojat, whoami, id) => R.compose(
-    Maybe.orSome('-'),
-    R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-    R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
-    Maybe.fromNull
-  )(id));
+  const formatValvoja = R.curry((valvojat, whoami, id) =>
+    R.compose(
+      Maybe.orSome('-'),
+      R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
+      R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
+      Maybe.fromNull
+    )(id)
+  );
 </script>
 
 <!-- purgecss: font-bold text-primary text-error -->
@@ -131,7 +130,10 @@
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
       <H1 text={i18n('valvonta.oikeellisuus.all.title')} />
-      <Checkbox disabled={overlay} label={i18n('valvonta.oikeellisuus.all.only-own')} bind:model={onlyOwnValvonnat} />
+      <Checkbox
+        disabled={overlay}
+        label={i18n('valvonta.oikeellisuus.all.only-own')}
+        bind:model={onlyOwnValvonnat} />
       {#if valvonnat.length === 0}
         <span>{i18n('valvonta.oikeellisuus.all.empty')}</span>
       {:else}
@@ -171,7 +173,15 @@
                   class="etp-table--tr etp-table--tr__link"
                   on:click={toValvontaView(valvonta.energiatodistus)}>
                   <!-- valvonta -->
-                  <td class="etp-table--td" class:font-bold={isSelf(whoami, valvonta['valvoja-id'])} class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}>{R.ifElse(isSelf(whoami), R.always(i18n('valvonta.self')), formatValvoja(valvojat, whoami))(valvonta['valvoja-id'])}</td>
+                  <td
+                    class="etp-table--td"
+                    class:font-bold={isSelf(whoami, valvonta['valvoja-id'])}
+                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}
+                    >{R.ifElse(
+                      isSelf(whoami),
+                      R.always(i18n('valvonta.self')),
+                      formatValvoja(valvojat, whoami)
+                    )(valvonta['valvoja-id'])}</td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(
@@ -179,7 +189,14 @@
                         toimenpidetyypit
                       )(toimenpide['type-id'])}
                     </td>
-                    <td class="etp-table--td" class:font-bold={R.anyPass([isTodayDeadline, isPastDeadline])(toimenpide)} class:text-primary={isTodayDeadline(toimenpide)} class:text-error={isPastDeadline(toimenpide)}>
+                    <td
+                      class="etp-table--td"
+                      class:font-bold={R.anyPass([
+                        isTodayDeadline,
+                        isPastDeadline
+                      ])(toimenpide)}
+                      class:text-primary={isTodayDeadline(toimenpide)}
+                      class:text-error={isPastDeadline(toimenpide)}>
                       {formatDeadline(toimenpide)}
                     </td>
                   {/each}
@@ -199,8 +216,13 @@
                   </td>
                   <td
                     class="etp-table--td"
-                    title={kayttotarkoitusTitle(luokittelut, valvonta.energiatodistus)}>
-                    {orEmpty(valvonta.energiatodistus.perustiedot.kayttotarkoitus)}
+                    title={kayttotarkoitusTitle(
+                      luokittelut,
+                      valvonta.energiatodistus
+                    )}>
+                    {orEmpty(
+                      valvonta.energiatodistus.perustiedot.kayttotarkoitus
+                    )}
                   </td>
                   <td class="etp-table--td">
                     {orEmpty(valvonta.energiatodistus['laatija-fullname'])}
