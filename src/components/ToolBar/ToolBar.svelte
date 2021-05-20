@@ -105,20 +105,24 @@
     );
   };
 
-  $: toggleTyojono = execute(
-    (fetch, _, id) => {
-      pendingExecution = true;
-      return R.chain(
-        Future.after(200),
-        ValvontaApi.putValvonta(id, { pending: !valvonta.pending })
-      );
-    },
-    `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
-    _ => {
-      valvonta = { pending: !valvonta.pending };
-      pendingExecution = false;
-    }
-  );
+  $: toggleTyojono = _ => {
+    if (pendingExecution) return;
+    execute(
+      _,
+      (fetch, _, id) => {
+        pendingExecution = true;
+        return R.chain(
+          Future.after(200),
+          ValvontaApi.putValvonta(id, { pending: !valvonta.pending })
+        );
+      },
+      `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
+      _ => {
+        valvonta = { pending: !valvonta.pending };
+        pendingExecution = false;
+      }
+    );
+  };
 
   const deleteEnergiatodistus = execute(
     api.deleteEnergiatodistus,
