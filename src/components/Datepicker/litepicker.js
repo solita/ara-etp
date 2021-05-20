@@ -8,7 +8,12 @@ export const litepicker = (node, opts) => {
     format: 'D.M.YYYY',
     singleMode: true,
     lang: opts.lang,
-    dropdowns: { minYear: 1970, maxYear: null, months: true, years: true },
+    dropdowns: {
+      minYear: 2013,
+      maxYear: new Date().getFullYear() + 11,
+      months: true,
+      years: true
+    },
     onSelect: opts.update
   };
 
