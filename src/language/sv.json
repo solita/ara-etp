@@ -366,9 +366,9 @@
       "kiinteistotunnus": "Fastighetsbeteckning",
       "rakennusosa": "Del av byggnaden",
       "valmistumisvuosi": "Byggnaden färdigställd år",
-      "kayttotarkoitus": "Klasser med avseende på användningsändamål",
-      "kayttotarkoitusluokka": "Användningskategori",
-      "alakayttotarkoitusluokka": "Klasser med avseende på underanvändningsändamål",
+      "kayttotarkoitus": "Klass med avseende på användningsändamål",
+      "kayttotarkoitusluokka": "Klass med avseende på användningsändamål",
+      "alakayttotarkoitusluokka": "Klass med avseende på underanvändningsändamål",
       "julkinen-rakennus": "Offentlig byggnad",
       "keskeiset-suositukset": "De viktigaste rekommendationerna",
       "keskeiset-suositukset-heading": {
