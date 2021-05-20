@@ -11,6 +11,7 @@
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
 
   import { _ } from '@Language/i18n';
 
@@ -18,6 +19,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import ToimenpideForm from './toimenpide-form.svelte';
+  import * as api from '@Component/Energiatodistus/energiatodistus-api';
 
   export let params;
 
@@ -51,11 +53,12 @@
         overlay = false;
         dirty = false;
       },
-      Future.parallelObject(3, {
+      Future.parallelObject(5, {
         whoami: KayttajaApi.whoami,
         templatesByType: ValvontaApi.templatesByType,
         virhetyypit: ValvontaApi.virhetyypit,
         severities: ValvontaApi.severities,
+        liitteet: EtApi.getLiitteetById(fetch, params.versio, params.id),
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])
       })
     );
@@ -102,13 +105,44 @@
   const cancel = _ => {
     load(params);
   };
+
+  const liiteOperation = (key, liiteFuture) => toimenpide => liite =>
+    fork(key, _ => load(params))(
+      Future.parallel(2, [
+        liiteFuture(liite),
+        ValvontaApi.putToimenpide(
+          params.id,
+          params['toimenpide-id'],
+          toimenpide
+        )
+      ])
+    );
+
+  const liiteApi = {
+    getUrl: R.always(api.url.liitteet(params.versio, params.id)),
+
+    addFiles: liiteOperation(
+      'add-files',
+      EtApi.postLiitteetFiles(fetch, params.versio, params.id)
+    ),
+
+    addLink: liiteOperation(
+      'add-link',
+      EtApi.postLiitteetLink(fetch, params.versio, params.id)
+    ),
+
+    deleteLiite: liiteOperation(
+      'delete-liite',
+      EtApi.deleteLiite(fetch, params.versio, params.id)
+    )
+  };
 </script>
 
 <Overlay {overlay}>
   <slot />
   <div slot="content" class="w-full mt-3">
     <DirtyConfirmation {dirty} />
-    {#each Maybe.toArray(resources) as { whoami, templatesByType, virhetyypit, severities, toimenpide }}
+    {#each Maybe.toArray(resources) as { whoami, templatesByType, virhetyypit, severities, toimenpide, liitteet }}
       <ToimenpideForm
         {toimenpide}
         {templatesByType}
@@ -117,6 +151,8 @@
         bind:dirty
         {whoami}
         {cancel}
+        {liitteet}
+        {liiteApi}
         submit={saveToimenpide}
         publish={Maybe.Some(saveAndPublishToimenpide)} />
     {/each}

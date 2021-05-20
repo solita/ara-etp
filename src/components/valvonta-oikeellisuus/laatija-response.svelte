@@ -5,19 +5,34 @@
   import * as EM from '@Utility/either-maybe';
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
+  import * as Router from '@Component/Router/router';
 
   import { _, locale } from '@Language/i18n';
+
+  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
 
   import H2 from '@Component/H/H2.svelte';
   import Link from '@Component/Link/Link.svelte';
+  import TextButton from '@Component/Button/TextButton.svelte';
 
   export let toimenpiteet;
   export let energiatodistus;
+  export let fork;
 
   const last = R.compose(Maybe.fromNull, R.last);
+
+  const newResponse = (responseType, energiatodistus) =>
+    fork('new-response', response =>
+      Router.push(Links.toimenpide(response, energiatodistus))
+    )(
+      ValvontaApi.postToimenpide(
+        energiatodistus.id,
+        Toimenpiteet.emptyToimenpide(responseType)
+      )
+    );
 </script>
 
 <H2 text="Vastaus" />
@@ -37,9 +52,9 @@
         </p>
 
         <div class="flex">
-          <Link
-            href={Links.newToimenpide(responseType, energiatodistus)}
-            icon={Maybe.Some('create')}
+          <TextButton
+            on:click={newResponse(responseType, energiatodistus)}
+            icon="create"
             text="Aloita vastauksen tekeminen tietopyyntöön." />
         </div>
       </div>

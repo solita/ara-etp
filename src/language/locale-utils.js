@@ -9,10 +9,9 @@ export const isSV = R.compose(R.equals('sv'), shortLocale);
 
 export const prop = R.curry((name, locale, item) =>
   R.prop(
-    name + '-' + R.unless(
-      R.includes(R.__, locales),
-      R.always('fi')
-    )(shortLocale(locale)),
+    name +
+      '-' +
+      R.unless(R.includes(R.__, locales), R.always('fi'))(shortLocale(locale)),
     item
   )
 );

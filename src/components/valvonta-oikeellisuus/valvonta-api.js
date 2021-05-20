@@ -28,7 +28,7 @@ export const deserializeToimenpide = R.evolve({
   diaarinumero: Maybe.fromNull,
   description: Maybe.fromNull,
   'template-id': Maybe.fromNull,
-  'severity-id': Maybe.fromNull,
+  'severity-id': Maybe.fromNull
 });
 
 export const deserializeValvontaStatus = R.compose(
@@ -53,8 +53,13 @@ export const serializeToimenpide = R.compose(
     )
   }),
   R.pick([
-    'type-id', 'deadline-date', 'description',
-    'template-id', 'virheet', 'severity-id'])
+    'type-id',
+    'deadline-date',
+    'description',
+    'template-id',
+    'virheet',
+    'severity-id'
+  ])
 );
 
 export const valvonnat = R.compose(

@@ -25,7 +25,7 @@
   import Toimenpide from './toimenpide.svelte';
 
   const i18n = $_;
-  const i18nRoot = 'valvonta.oikeellisuus.existing';
+  const i18nRoot = 'valvonta.oikeellisuus.valvonta';
 
   export let params;
   export let resources = Maybe.None();
@@ -70,30 +70,36 @@
 
   const kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
 
-  const saveValvonta = valvonta => {
+  const fork = (key, successCallback) => future => {
     overlay = true;
     Future.fork(
       response => {
         const msg = i18n(
           Maybe.orSome(
-            `${i18nRoot}.messages.update-error`,
+            `${i18nRoot}.messages.${key}-error`,
             Response.localizationKey(response)
           )
         );
         flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
         overlay = false;
       },
-      _ => {
+      response => {
         flashMessageStore.add(
           'valvonta-oikeellisuus',
           'success',
-          i18n(`${i18nRoot}.messages.update-success`)
+          i18n(`${i18nRoot}.messages.${key}-success`)
         );
-        load(params);
+        overlay = false;
+        successCallback(response);
       },
-      ValvontaApi.putValvonta(params.id, valvonta)
+      future
     );
   };
+
+  const saveValvonta = R.compose(
+    fork('update', _ => load(params)),
+    ValvontaApi.putValvonta(params.id)
+  );
 
   const diaarinumero = R.compose(
     R.chain(R.prop('diaarinumero')),
@@ -135,7 +141,7 @@
           reload={_ => load(params)} />
       {/if}
       {#if Kayttajat.isLaatija(whoami)}
-        <LaatijaResponse {energiatodistus} {toimenpiteet} />
+        <LaatijaResponse {energiatodistus} {toimenpiteet} {fork} />
       {/if}
 
       <H2 text="Toimenpiteet" />

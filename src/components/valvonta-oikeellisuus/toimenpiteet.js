@@ -71,6 +71,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 
 export const isVerified = isType(type.verified);
 export const isAnomaly = isType(type.anomaly);
+export const isAuditReport = isType(type.audit.report);
 
 const defaultDeadline = typeId =>
   isDeadlineType(typeId)
@@ -91,7 +92,7 @@ export const emptyToimenpide = typeId => ({
   'template-id': Maybe.None(),
   description: Maybe.None(),
   virheet: [],
-  'severity-id': Maybe.None(),
+  'severity-id': Maybe.None()
 });
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
