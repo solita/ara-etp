@@ -4,6 +4,7 @@
   export let style = 'primary';
   export let disabled = false;
   export let prefix = '';
+  export let title = '';
 </script>
 
 <style type="text/postcss">
@@ -36,6 +37,7 @@
   class:error={style === 'error'}
   class:disabled
   {disabled}
+  {title}
   on:click|stopPropagation>
   {text}
 </button>

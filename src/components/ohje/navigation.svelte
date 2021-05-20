@@ -16,6 +16,8 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
   export let id;
+  export let sortDisabled = false;
+  export let sortButtonTitle = '';
 
   const i18n = $_;
   let whoami = Maybe.None();
@@ -122,11 +124,14 @@
             {#if !sortMode}
               <TextButton
                 on:click={toggleSortMode}
+                disabled={sortDisabled}
+                title={sortButtonTitle}
                 icon="swap_vert"
                 text={i18n('ohje.navigation.sort')} />
             {:else}
               <TextButton
                 on:click={toggleSortMode}
+                title={sortButtonTitle}
                 icon="highlight_off"
                 text={i18n('ohje.navigation.end-sort')} />
             {/if}

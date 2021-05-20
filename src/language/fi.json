@@ -1344,6 +1344,8 @@
       "published": "Julkaistu",
       "submit": "Tallenna",
       "delete": "Poista",
+      "delete-disabled": "Poistaminen ei ole mahdollista jos sivulla on alisivuja",
+      "sort-disabled": "Sivujen järjestäminen on estetty muokkausnäkymässä",
       "cancel": "Peruuta",
       "success": "Sivun muokkaaminen onnistui",
       "error": "Sivun muokkaaminen epäonnistui",

@@ -32,6 +32,8 @@
     overlay = true;
   };
   let sivu;
+  let sivut;
+  let isParent = false;
   $: load(params.id);
 
   const load = id => {
@@ -49,10 +51,19 @@
         overlay = false;
       },
       response => {
-        sivu = response;
+        sivu = response.sivu;
+        sivut = response.sivut;
+        isParent =
+          R.findIndex(
+            R.compose(Maybe.exists(R.equals(sivu['id'])), R.prop('parent-id'))
+          )(sivut) > -1;
+
         overlay = false;
       },
-      api.getSivu(id)
+      Future.parallelObject(2, {
+        sivu: api.getSivu(id),
+        sivut: api.getSivut
+      })
     );
   };
 
@@ -115,7 +126,10 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3 flex space-x-4">
     <div class="w-2/6 max-w-xs">
-      <Navigation id={params.id} />
+      <Navigation
+        id={params.id}
+        sortDisabled={true}
+        sortButtonTitle={i18n('ohje.editor.sort-disabled')} />
     </div>
     <div class="w-4/6 flex-grow">
       {#if sivu}
@@ -189,6 +203,8 @@
                     on:click={() => {
                       confirm(deleteOhje);
                     }}
+                    disabled={isParent}
+                    title={isParent ? i18n('ohje.editor.delete-disabled') : ''}
                     text={i18n('ohje.editor.delete')}
                     style={'error'} />
                 </Confirm>
