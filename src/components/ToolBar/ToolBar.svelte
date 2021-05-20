@@ -105,10 +105,9 @@
     );
   };
 
-  $: toggleTyojono = _ => {
+  $: toggleTyojono = evt => {
     if (pendingExecution) return;
     execute(
-      _,
       (fetch, _, id) => {
         pendingExecution = true;
         return R.chain(
@@ -121,7 +120,7 @@
         valvonta = { pending: !valvonta.pending };
         pendingExecution = false;
       }
-    );
+    )(evt);
   };
 
   const deleteEnergiatodistus = execute(
