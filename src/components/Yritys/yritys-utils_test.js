@@ -65,7 +65,7 @@ describe('Yritys api and utils tests:', () => {
 
   describe('validateYritys', () => {
     it('should run given validations for yritys', () => {
-      const schema = YritysUtils.formSchema();
+      const schema = YritysUtils.schema();
 
       const yritys = {
         nimi: '',
@@ -83,7 +83,7 @@ describe('Yritys api and utils tests:', () => {
       );
     });
     it('should run validate true for Nones', () => {
-      const schema = YritysUtils.formSchema();
+      const schema = YritysUtils.schema();
 
       const yritys = {
         nimi: '',

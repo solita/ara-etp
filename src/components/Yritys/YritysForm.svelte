@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { tick } from 'svelte';
 
   import { locale, _ } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -30,8 +31,11 @@
 
   export let luokittelut;
 
+  let form;
+
   const formParsers = YritysUtils.formParsers();
-  const formSchema = YritysUtils.formSchema();
+
+  $: schema = YritysUtils.schema(yritys.maa);
 
   const i18n = $_;
 
@@ -89,11 +93,11 @@
     findVerkkolaskuoperaattori(R.__, luokittelut.verkkolaskuoperaattorit)
   );
 
-  const isValidForm = R.compose(
+  $: isValidForm = R.compose(
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
-    Validation.validateModelObject(formSchema)
+    Validation.validateModelObject(schema)
   );
 
   const cancel = event => {
@@ -102,12 +106,13 @@
   };
 </script>
 
-<form
-  on:submit|preventDefault={_ => {
+<form bind:this={form}
+  on:submit|preventDefault={event => {
     if (isValidForm(yritys)) {
       flashMessageStore.flush();
       submit(yritys);
     } else {
+      Validation.blurForm(event.target);
       flashMessageStore.add(
         'Yritys',
         'error',
@@ -127,7 +132,7 @@
           bind:model={yritys}
           lens={R.lensProp('ytunnus')}
           parse={formParsers.ytunnus}
-          validators={formSchema.ytunnus}
+          validators={schema.ytunnus}
           {i18n}
           {disabled} />
       </div>
@@ -140,7 +145,7 @@
           bind:model={yritys}
           lens={R.lensProp('nimi')}
           parse={formParsers.nimi}
-          validators={formSchema.nimi}
+          validators={schema.nimi}
           {i18n}
           {disabled} />
       </div>
@@ -161,7 +166,7 @@
           lens={R.lensProp('vastaanottajan-tarkenne')}
           format={Maybe.orSome('')}
           parse={formParsers['vastaanottajan-tarkenne']}
-          validators={formSchema['vastaanottajan-tarkenne']}
+          validators={schema['vastaanottajan-tarkenne']}
           {i18n} />
       </div>
     </div>
@@ -176,7 +181,7 @@
           bind:model={yritys}
           lens={R.lensProp('jakeluosoite')}
           parse={formParsers.jakeluosoite}
-          validators={formSchema.jakeluosoite}
+          validators={schema.jakeluosoite}
           {i18n} />
       </div>
       <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
@@ -190,7 +195,7 @@
             bind:model={yritys}
             lens={R.lensProp('postinumero')}
             parse={formParsers.postinumero}
-            validators={formSchema.postinumero}
+            validators={schema.postinumero}
             {i18n} />
         </div>
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -203,10 +208,10 @@
             bind:model={yritys}
             lens={R.lensProp('postitoimipaikka')}
             parse={formParsers.postitoimipaikka}
-            validators={formSchema.postitoimipaikka}
+            validators={schema.postitoimipaikka}
             {i18n} />
         </div>
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4" on:change={tick().then(_ => Validation.blur(form.elements.postinumero))}>
           <Autocomplete items={countryNames}>
             <Input
               id={'maa'}
@@ -252,7 +257,7 @@
         lens={R.lensProp('verkkolaskuosoite')}
         format={Maybe.fold('', Formats.verkkolaskuosoite)}
         parse={formParsers.verkkolaskuosoite}
-        validators={formSchema['verkkolaskuosoite']}
+        validators={schema['verkkolaskuosoite']}
         {i18n} />
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">

@@ -243,7 +243,7 @@ export const isValidForm = schemaObject =>
     validateModelObject(schemaObject)
   );
 
-const blur = element =>
+export const blur = element =>
   element.dispatchEvent(
     new Event('blur', {
       bubbles: true,
