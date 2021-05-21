@@ -1,4 +1,4 @@
-import NavigationTab from './NavigationTab';
+import NavigationTab from './navigation-tab';
 
 export default { title: 'NavigationTab' };
 

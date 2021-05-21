@@ -9,6 +9,7 @@ import * as dfns from 'date-fns';
 const url = {
   ketjut: '/api/private/viestit',
   ketjutCount: '/api/private/viestit/count',
+  ketjutUnread: '/api/private/viestit/count/unread',
   ketju: id => `${url.ketjut}/${id}`,
   viestit: id => `${url.ketju(id)}/viestit`,
   kasittelijat: '/api/private/kasittelijat'
@@ -49,6 +50,11 @@ export const getKetjutCount = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))
 )(url.ketjutCount);
+
+export const getKetjutUnread = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch))
+)(url.ketjutUnread);
 
 export const getKasittelijat = R.compose(
   Fetch.responseAsJson,

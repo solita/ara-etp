@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
-  import NavigationTab from '@Component/NavigationTab/NavigationTab';
+  import NavigationTab from './navigation-tab';
+  import BadgeProvider from './badge-provider';
   import * as Navigation from '@Utility/navigation';
 
   export let idTranslate;
@@ -32,11 +33,22 @@
 {#if !R.isEmpty(links)}
   <div>
     {#each links as link}
-      <NavigationTab
-        label={link.label}
-        href={link.href}
-        activePath={link.activePath}
-        disabled={link.disabled} />
+      {#if link.badge}
+        <BadgeProvider badgeFuture={link.badge} let:badge>
+          <NavigationTab
+            label={link.label}
+            href={link.href}
+            activePath={link.activePath}
+            disabled={link.disabled}
+            {badge} />
+        </BadgeProvider>
+      {:else}
+        <NavigationTab
+          label={link.label}
+          href={link.href}
+          activePath={link.activePath}
+          disabled={link.disabled} />
+      {/if}
     {/each}
   </div>
 {/if}
