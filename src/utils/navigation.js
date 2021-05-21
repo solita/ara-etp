@@ -8,23 +8,23 @@ import * as ViestiApi from '@Component/viesti/viesti-api';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-const linksForLaatija = R.curry((isDev, i18n, kayttaja) => [
+const linksForLaatija = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.energiatodistukset'),
     href: '#/energiatodistus/all'
   },
   {
     label: i18n('navigation.yritykset'),
-    href: `#/laatija/${kayttaja.id}/yritykset`
+    href: `#/laatija/${whoami.id}/yritykset`
   },
-  // ...(isDev
-  //   ? [
-  //       {
-  //         label: i18n('navigation.valvonta.valvonta'),
-  //         href: '#/valvonta/oikeellisuus/all'
-  //       }
-  //     ]
-  //   : []),
+  ...(isDev
+    ? [
+        {
+          label: i18n('navigation.valvonta.valvonta'),
+          href: '#/valvonta/oikeellisuus/all'
+        }
+      ]
+    : []),
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
@@ -199,7 +199,10 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
-    badge: R.compose(R.map(R.prop('count')))(ViestiApi.getKetjutUnread)
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ViestiApi.getKetjutUnread)
   }
 ]);
 
