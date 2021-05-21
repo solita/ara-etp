@@ -176,11 +176,22 @@ export const searchString = searchItems =>
     )
   );
 
+const operatorName = R.path(['operation', 'browserCommand']);
+
 export const isValidBlock = R.curry((schema, [operator, key, ...values]) => {
   if (!R.all(R.length, [operator, key])) {
     return false;
   }
 
-  // Implement rest soon.
+  const op = R.filter(R.compose(R.equals(operator),
+                                operatorName),
+                      schema[key])[0];
+
+  if (op.type === OPERATOR_TYPES.STRING) {
+    if (!R.all(R.length, values)) {
+      return false;
+    }
+  }
+
   return true;
 });
