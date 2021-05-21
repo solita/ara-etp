@@ -100,8 +100,6 @@ export const parseValueByType = R.curry((type, value) => {
       return Either.Right(value === 'true');
     case OPERATOR_TYPES.ELUOKKA:
       return Either.Right(R.split(',', value));
-    case OPERATOR_TYPES.STRING_NONEMPTY:
-      return Either.Right(value);
     default:
       return Either.Right(value);
   }

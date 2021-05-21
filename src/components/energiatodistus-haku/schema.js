@@ -4,7 +4,6 @@ import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
 
 export const OPERATOR_TYPES = Object.freeze({
   STRING: 'STRING',
-  STRING_NONEMPTY: 'STRING_NONEMPTY',
   NUMBER: 'NUMBER',
   UNFORMATTED_NUMBER: 'UNFORMATTED_NUMBER',
   PERCENT: 'PERCENT',
@@ -54,15 +53,13 @@ const lte = {
 const contains = {
   browserCommand: 'sisaltaa',
   serverCommand: 'ilike',
-  format: R.curry((command, key, value) => [[command, key, `%${value}%`]]),
-  type: OPERATOR_TYPES.STRING_NONEMPTY
+  format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
 const containsNo = {
   browserCommand: 'ei-sisalla',
   serverCommand: 'not ilike',
-  format: R.curry((command, key, value) => [[command, key, `%${value}%`]]),
-  type: OPERATOR_TYPES.STRING_NONEMPTY
+  format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
 const some = {
