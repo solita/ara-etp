@@ -102,7 +102,7 @@ export const isPostinumero = R.test(/^\d{5}$/);
 
 export const postinumeroValidator = {
   predicate: isPostinumero,
-  label: R.applyTo('validation.invalid-postinumero')
+  label: R.applyTo('validation.invalid-postinumero-fi')
 };
 
 export const henkilotunnusChecksum = R.compose(
