@@ -31,8 +31,6 @@
 
   export let luokittelut;
 
-  let form;
-
   const formParsers = YritysUtils.formParsers();
 
   $: schema = YritysUtils.schema(yritys.maa);
@@ -106,8 +104,7 @@
   };
 </script>
 
-<form bind:this={form}
-  on:submit|preventDefault={event => {
+<form on:submit|preventDefault={event => {
     if (isValidForm(yritys)) {
       flashMessageStore.flush();
       submit(yritys);
@@ -211,7 +208,7 @@
             validators={schema.postitoimipaikka}
             {i18n} />
         </div>
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4" on:change={tick().then(_ => Validation.blur(form.elements.postinumero))}>
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
           <Autocomplete items={countryNames}>
             <Input
               id={'maa'}

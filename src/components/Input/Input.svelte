@@ -49,6 +49,7 @@
   bind:currentValue
   {id}
   {i18n}
+  {disabled}
   {parse}
   {format}
   {validators}
