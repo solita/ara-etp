@@ -104,7 +104,8 @@
   };
 </script>
 
-<form on:submit|preventDefault={event => {
+<form
+  on:submit|preventDefault={event => {
     if (isValidForm(yritys)) {
       flashMessageStore.flush();
       submit(yritys);

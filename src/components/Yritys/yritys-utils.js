@@ -44,9 +44,18 @@ const commonSchema = {
   verkkolaskuoperaattori: []
 };
 
-export const schema = maa => Maybe.exists(R.equals('FI'), Either.toMaybe(maa)) ?
-  R.over(R.lensProp('postinumero'), R.append(validation.postinumeroValidator), commonSchema) :
-    R.over(R.lensProp('postinumero'), R.concat(R.__, validation.LimitedString(2, 20)), commonSchema);
+export const schema = maa =>
+  Maybe.exists(R.equals('FI'), Either.toMaybe(maa))
+    ? R.over(
+        R.lensProp('postinumero'),
+        R.append(validation.postinumeroValidator),
+        commonSchema
+      )
+    : R.over(
+        R.lensProp('postinumero'),
+        R.concat(R.__, validation.LimitedString(2, 20)),
+        commonSchema
+      );
 
 export const formParsers = () => ({
   ytunnus: R.trim,
