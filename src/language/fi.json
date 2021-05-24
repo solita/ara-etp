@@ -11,7 +11,7 @@
     "invalid-url": "Virheellinen www-osoite",
     "invalid-email": "Virheellinen email",
     "invalid-ytunnus": "Virheellinen ytunnus",
-    "invalid-postinumero-fi": "Virheellinen suomalainen postinumero",
+    "invalid-postinumero-fi": "Suomen postinumerossa pitää olla 5 numeroa",
     "postinumero-not-found": "Postinumeroa ei ole olemassa",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "invalid-rakennustunnus": "Virheellinen rakennustunnus",
