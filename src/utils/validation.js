@@ -102,7 +102,7 @@ export const isPostinumero = R.test(/^\d{5}$/);
 
 export const postinumeroValidator = {
   predicate: isPostinumero,
-  label: R.applyTo('validation.invalid-postinumero')
+  label: R.applyTo('validation.invalid-postinumero-fi')
 };
 
 export const henkilotunnusChecksum = R.compose(
@@ -243,7 +243,7 @@ export const isValidForm = schemaObject =>
     validateModelObject(schemaObject)
   );
 
-const blur = element =>
+export const blur = element =>
   element.dispatchEvent(
     new Event('blur', {
       bubbles: true,

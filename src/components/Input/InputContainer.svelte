@@ -17,11 +17,13 @@
 
   export let currentValue = '';
   export let valid = true;
+  export let disabled;
 
   export let validationResult;
 
   export let tooltip = null;
 
+  let blurred = false;
   let viewValue;
 
   const requireNotNil = objects.requireNotNil(
@@ -75,12 +77,17 @@
       validate(parsedValue);
     });
   };
+
+  $: !disabled && blurred && validate(R.view(lens, model));
 </script>
 
 <div
   title={tooltip}
   on:focus|capture={event => validate(parse(event.target.value))}
-  on:blur|capture={event => updateModel(event.target.value)}
+  on:blur|capture={event => {
+    updateModel(event.target.value);
+    blurred = true;
+  }}
   on:input={event => {
     updateCurrentValue(event.target.value);
     validate(parse(event.target.value));

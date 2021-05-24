@@ -12,13 +12,13 @@ export const emptyYritys = () => ({
   jakeluosoite: '',
   postinumero: '',
   postitoimipaikka: '',
-  maa: '',
+  maa: Either.Right('FI'),
   laskutuskieli: 0,
   verkkolaskuosoite: Maybe.None(),
   verkkolaskuoperaattori: Either.Right(Maybe.None())
 });
 
-export const formSchema = () => ({
+const commonSchema = {
   ytunnus: [validation.isRequired, validation.ytunnusValidator],
   nimi: [
     validation.isRequired,
@@ -31,7 +31,7 @@ export const formSchema = () => ({
     validation.maxLengthConstraint(200)
   ]),
   jakeluosoite: [validation.isRequired],
-  postinumero: [validation.isRequired, validation.postinumeroValidator],
+  postinumero: [validation.isRequired],
   postitoimipaikka: [
     validation.isRequired,
     validation.minLengthConstraint(2),
@@ -42,7 +42,20 @@ export const formSchema = () => ({
     validation.VerkkolaskuosoiteValidator
   ]),
   verkkolaskuoperaattori: []
-});
+};
+
+export const schema = maa =>
+  Maybe.exists(R.equals('FI'), Either.toMaybe(maa))
+    ? R.over(
+        R.lensProp('postinumero'),
+        R.append(validation.postinumeroValidator),
+        commonSchema
+      )
+    : R.over(
+        R.lensProp('postinumero'),
+        R.concat(R.__, validation.LimitedString(2, 20)),
+        commonSchema
+      );
 
 export const formParsers = () => ({
   ytunnus: R.trim,
