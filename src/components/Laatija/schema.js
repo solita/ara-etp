@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 import * as Validation from '@Utility/validation';
 import * as parsers from '@Utility/parsers';
 
@@ -8,7 +9,7 @@ const RequiredString = (min, max) => [
   ...Validation.LimitedString(min, max)
 ];
 
-export const schema = {
+const commonSchema = {
   henkilotunnus: [
     Validation.isSome,
     Validation.liftValidator(Validation.henkilotunnusValidator)
@@ -23,7 +24,7 @@ export const schema = {
     Validation.LimitedString(2, 200)
   ),
   jakeluosoite: RequiredString(2, 200),
-  postinumero: [Validation.isRequired, Validation.postinumeroValidator],
+  postinumero: [Validation.isRequired],
   postitoimipaikka: RequiredString(2, 200),
 
   wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator]),
@@ -37,3 +38,16 @@ export const formParsers = () => ({
   postitoimipaikka: R.trim,
   wwwosoite: R.compose(Maybe.fromEmpty, parsers.addDefaultProtocol, R.trim)
 });
+
+export const schema = maa =>
+  Maybe.exists(R.equals('FI'), Either.toMaybe(maa))
+    ? R.over(
+        R.lensProp('postinumero'),
+        R.append(Validation.postinumeroValidator),
+        commonSchema
+      )
+    : R.over(
+        R.lensProp('postinumero'),
+        R.concat(R.__, Validation.LimitedString(2, 20)),
+        commonSchema
+      );
