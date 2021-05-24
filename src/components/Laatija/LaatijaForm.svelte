@@ -27,7 +27,8 @@
   const i18n = $_;
 
   const formParsers = LaatijaSchema.formParsers();
-  const formSchema = LaatijaSchema.schema;
+
+  $: schema = LaatijaSchema.schema(laatija.maa);
 
   export let laatija;
   export let whoami;
@@ -97,11 +98,11 @@
 
   $: parseLaskutuskieli = R.identity;
 
-  const isValidForm = R.compose(
+  $: isValidForm = R.compose(
     R.all(Either.isRight),
     R.filter(Either.isEither),
     R.values,
-    Validation.validateModelObject(formSchema)
+    Validation.validateModelObject(schema)
   );
 
   const validateAndSubmit = _ => {
@@ -144,7 +145,7 @@
           bind:model={laatija}
           lens={R.lensProp('etunimi')}
           parse={formParsers.etunimi}
-          validators={formSchema.etunimi}
+          validators={schema.etunimi}
           disabled={!isPaakayttaja}
           {i18n} />
       </div>
@@ -157,7 +158,7 @@
           bind:model={laatija}
           lens={R.lensProp('sukunimi')}
           parse={formParsers.sukunimi}
-          validators={formSchema.sukunimi}
+          validators={schema.sukunimi}
           disabled={!isPaakayttaja}
           {i18n} />
       </div>
@@ -171,7 +172,7 @@
           lens={R.lensProp('henkilotunnus')}
           format={Maybe.orSome('')}
           parse={formParsers.henkilotunnus}
-          validators={formSchema.henkilotunnus}
+          validators={schema.henkilotunnus}
           disabled={true}
           {i18n} />
       </div>
@@ -189,7 +190,7 @@
           bind:model={laatija}
           lens={R.lensProp('email')}
           parse={formParsers.email}
-          validators={formSchema.email}
+          validators={schema.email}
           {i18n} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -201,7 +202,7 @@
           bind:model={laatija}
           lens={R.lensProp('puhelin')}
           parse={formParsers.puhelin}
-          validators={formSchema.puhelin}
+          validators={schema.puhelin}
           {disabled}
           {i18n} />
       </div>
@@ -217,7 +218,7 @@
           lens={R.lensProp('vastaanottajan-tarkenne')}
           format={Maybe.orSome('')}
           parse={formParsers['vastaanottajan-tarkenne']}
-          validators={formSchema['vastaanottajan-tarkenne']}
+          validators={schema['vastaanottajan-tarkenne']}
           {disabled}
           {i18n} />
       </div>
@@ -232,7 +233,7 @@
           bind:model={laatija}
           lens={R.lensProp('jakeluosoite')}
           parse={formParsers.jakeluosoite}
-          validators={formSchema.jakeluosoite}
+          validators={schema.jakeluosoite}
           {disabled}
           {i18n} />
       </div>
@@ -247,7 +248,7 @@
           bind:model={laatija}
           lens={R.lensProp('postinumero')}
           parse={formParsers.postinumero}
-          validators={formSchema.postinumero}
+          validators={schema.postinumero}
           {disabled}
           {i18n} />
       </div>
@@ -260,7 +261,7 @@
           bind:model={laatija}
           lens={R.lensProp('postitoimipaikka')}
           parse={formParsers.postitoimipaikka}
-          validators={formSchema.postitoimipaikka}
+          validators={schema.postitoimipaikka}
           {disabled}
           {i18n} />
       </div>
@@ -375,7 +376,7 @@
           lens={R.lensProp('wwwosoite')}
           format={Maybe.orSome('')}
           parse={formParsers.wwwosoite}
-          validators={formSchema.wwwosoite}
+          validators={schema.wwwosoite}
           {disabled}
           {i18n} />
       </div>
@@ -394,7 +395,7 @@
         lens={R.lensProp('api-key')}
         format={Maybe.orSome('')}
         parse={R.compose(Maybe.fromEmpty, R.trim)}
-        validators={formSchema['api-key']}
+        validators={schema['api-key']}
         {disabled}
         {i18n} />
     </div>
