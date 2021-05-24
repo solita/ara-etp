@@ -43,3 +43,11 @@ export const findKetjuVastaanottajaryhma = (vastaanottajaryhmat, ketju) =>
     R.propEq('id', R.prop('vastaanottajaryhma-id', ketju)),
     vastaanottajaryhmat
   );
+
+export const fullName = people =>
+  R.compose(
+    R.join(' '),
+    R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
+    R.find(R.__, people),
+    R.propEq('id')
+  );

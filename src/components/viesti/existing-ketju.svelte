@@ -21,6 +21,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import Select from '@Component/Select/Select';
   import SenderRecipients from './sender-recipients.svelte';
   import User from './user.svelte';
 
@@ -124,7 +125,7 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'update-error', msg);
+        flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
       },
       _ => {
@@ -205,24 +206,21 @@
         </div>
 
         {#if !Kayttajat.isLaatija(whoami)}
-          <div class="flex items-end space-x-4 px-2">
-            <div class="flex flex-col">
-              <label for="handler" class="text-secondary">
-                {i18n(i18nRoot + '.handler')}
-              </label>
-              {#if R.prop('kasittelija-id', ketju)}
-                <span name="handler" class="whitespace-no-wrap">
-                  {R.compose(
-                    R.join(' '),
-                    R.props(['etunimi', 'sukunimi']),
-                    R.find(R.propEq('id', R.prop('kasittelija-id', ketju)))
-                  )(kasittelijat)}
-                </span>
-              {:else}
-                <span name="handler" class="text-error whitespace-no-wrap">
-                  {i18n(i18nRoot + '.no-handler')}
-                </span>
-              {/if}
+          <div class="flex items-end space-x-4 px-2 w-1/3">
+            <div class="w-full ">
+              <Select
+                id={'kasittelija'}
+                label={i18n(i18nRoot + '.handler')}
+                noneLabel={i18n(i18nRoot + '.no-handler')}
+                required={false}
+                disabled={false}
+                allowNone={true}
+                bind:model={ketju}
+                on:change={event =>
+                  submitKasittelija(parseInt(event.target.value))}
+                lens={R.lensProp('kasittelija-id')}
+                format={Viestit.fullName(kasittelijat)}
+                items={R.pluck('id', kasittelijat)} />
             </div>
 
             <button

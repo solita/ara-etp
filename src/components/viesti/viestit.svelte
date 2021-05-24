@@ -76,12 +76,6 @@
 
   $: load(page);
 
-  const submitKasittelija = (ketjuId, kasittelijaId) => {
-    updateKetju(ketjuId, {
-      'kasittelija-id': kasittelijaId
-    });
-  };
-
   const submitKasitelty = (ketjuId, kasitelty) => {
     updateKetju(ketjuId, {
       kasitelty: kasitelty
@@ -97,7 +91,7 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'update-error', msg);
+        flashMessageStore.add('viesti', 'error', msg);
         overlay = false;
       },
       _ => {
