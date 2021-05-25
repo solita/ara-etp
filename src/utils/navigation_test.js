@@ -131,7 +131,10 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
+        R.map(
+          R.dissoc('badge'),
+          Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
+        ),
         expected
       );
     });
