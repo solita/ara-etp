@@ -50,7 +50,7 @@ const emptyUploadLaatija = {
 const uploadSchema = {
   ...R.omit(
     ['henkilotunnus', 'vastaanottajan-tarkenne', 'wwwosoite', 'api-key'],
-    schema
+    schema(Either.Right('FI'))
   ),
   henkilotunnus: [Validation.isRequired, Validation.henkilotunnusValidator],
   toteaja: [Validation.isRequired],
