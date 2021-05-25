@@ -6,31 +6,23 @@
   div.markup :global(h1),
   div.markup :global(h2),
   div.markup :global(h3) {
+    color: #2e5053;
     font-weight: 700;
-    text-transform: uppercase;
+    margin: 0;
   }
 
   div.markup :global(h1) {
-    color: #2e5053;
-    font-size: 1.125em;
-    margin-bottom: 2rem;
+    font-size: 1.25rem;
     letter-spacing: 0.15em;
   }
 
   div.markup :global(h2) {
-    color: #538000;
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    font-size: 1.125em;
   }
 
   div.markup :global(h3) {
-    color: #fff;
-    width: 100%;
-    background-color: #2e5053;
-    font-size: 0.875rem;
-    margin-top: 0;
-    margin-bottom: 1rem;
-    padding: 0.75rem;
+    font-size: 1.125;
+    font-weight: normal;
     letter-spacing: 0.15em;
   }
 
@@ -48,8 +40,9 @@
   div.markup :global(ul),
   div.markup :global(ol) {
     list-style: revert;
-    margin: revert;
+    margin: 0;
     padding: revert;
+    white-space: normal;
   }
 </style>
 
