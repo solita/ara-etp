@@ -8,32 +8,24 @@ import * as ViestiApi from '@Component/viesti/viesti-api';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
-const linksForLaatija = R.curry((isDev, i18n, kayttaja) =>
-  R.concat(
-    [
-      {
-        label: i18n('navigation.energiatodistukset'),
-        href: '#/energiatodistus/all'
-      },
-      {
-        label: i18n('navigation.yritykset'),
-        href: `#/laatija/${kayttaja.id}/yritykset`
-      }
-    ],
-    isDev
-      ? [
-          {
-            label: i18n('navigation.viestit'),
-            href: '#/viesti/all',
-            badge: R.compose(
-              R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
-              R.map(R.prop('count'))
-            )(ViestiApi.getKetjutUnread)
-          }
-        ]
-      : []
-  )
-);
+const linksForLaatija = R.curry((isDev, i18n, kayttaja) => [
+  {
+    label: i18n('navigation.energiatodistukset'),
+    href: '#/energiatodistus/all'
+  },
+  {
+    label: i18n('navigation.yritykset'),
+    href: `#/laatija/${kayttaja.id}/yritykset`
+  },
+  {
+    label: i18n('navigation.viestit'),
+    href: '#/viesti/all',
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ViestiApi.getKetjutUnread)
+  }
+]);
 
 export const linksForPatevyydentoteaja = R.curry((isDev, i18n, kayttaja) => [
   {

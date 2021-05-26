@@ -65,12 +65,15 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/2/yritykset`
-        }
-        //{ label: 'Viestit', href: '#/viesti/all' }
+        },
+        { label: 'Viestit', href: '#/viesti/all' }
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
+        R.map(
+          R.dissoc('badge'),
+          Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
+        ),
         expected
       );
     });
@@ -96,12 +99,15 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/1/yritykset`
-        }
-        //{ label: 'Viestit', href: '#/viesti/all' }
+        },
+        { label: 'Viestit', href: '#/viesti/all' }
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
+        R.map(
+          R.dissoc('badge'),
+          Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
+        ),
         expected
       );
     });
