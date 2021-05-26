@@ -226,19 +226,15 @@
         }} />
     </div>
 
-    <div class="flex">
-      <div class="w-1/5">
-        <Button
-          disabled={!valid}
-          type="submit"
-          text={$_('energiatodistus.haku.hae')} />
-      </div>
-      <div class="w-1/3">
-        <Button
-          type="reset"
-          style="secondary"
-          text={$_('energiatodistus.haku.tyhjenna_hakuehdot')} />
-      </div>
+    <div class="flex space-x-8">
+      <Button
+        disabled={!valid}
+        type="submit"
+        text={$_('energiatodistus.haku.hae')} />
+      <Button
+        type="reset"
+        style="secondary"
+        text={$_('energiatodistus.haku.tyhjenna_hakuehdot')} />
     </div>
   </form>
 {/if}
