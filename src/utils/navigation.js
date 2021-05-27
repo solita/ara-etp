@@ -303,10 +303,11 @@ export const defaultHeaderMenuLinks = i18n => [
 export const roleBasedHeaderMenuLinks = R.curry((i18n, whoami) => {
   if (Kayttajat.isPaakayttaja(whoami)) {
     return [
-      {
-        href: `#/kayttaja/all`,
-        text: i18n('navigation.kayttajahallinta')
-      },
+      // Hidden until implemented
+      // {
+      //   href: `#/kayttaja/all`,
+      //   text: i18n('navigation.kayttajahallinta')
+      // },
       {
         href: `#/yritys/all`,
         text: i18n('navigation.yritykset')
