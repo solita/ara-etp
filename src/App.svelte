@@ -54,6 +54,10 @@
   .footercontainer {
     @apply bg-background;
   }
+
+  .appcontainer > div {
+    padding-left: calc(100vw - 100%);
+  }
 </style>
 
 <TableStyles />
@@ -80,7 +84,9 @@
       </div>
     </div>
 
-    <Body {whoami} {config} />
+    <div class="flex flex-col flex-grow">
+      <Body {whoami} {config} />
+    </div>
 
     <div class="footercontainer">
       <div class="w-full max-w-1440 mx-auto">
