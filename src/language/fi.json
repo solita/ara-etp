@@ -29,6 +29,7 @@
     "invalid-date": "Virheellinen päivämäärä"
   },
   "navigation": {
+    "etusivu": "Etusivu",
     "energiatodistukset": "Energiatodistukset",
     "uusi-energiatodistus": "Uusi energiatodistus",
     "viesti": "Viestikeskus",
