@@ -82,7 +82,7 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   //}
 ]);
 
-export const linksForKayttaja = R.curry((i18n, id, idTranslate) => [
+export const linksForLaatijaOmatTiedot = R.curry((i18n, id, idTranslate) => [
   {
     label: R.compose(
       Maybe.orSome('...'),
@@ -98,20 +98,6 @@ export const linksForKayttaja = R.curry((i18n, id, idTranslate) => [
   }
 ]);
 
-export const linksForPaakayttajaOmatTiedot = R.curry(
-  (i18n, id, idTranslate) => [
-    {
-      label: R.compose(
-        Maybe.orSome('...'),
-        R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`),
-        Maybe.fromNull,
-        R.path(['kayttaja', id])
-      )(idTranslate),
-      href: `#/kayttaja/${id}`
-    }
-  ]
-);
-
 export const parseKayttaja = R.curry(
   (isDev, i18n, kayttaja, idTranslate, locationParts) => {
     if (Kayttajat.isPatevyydentoteaja(kayttaja)) {
@@ -124,20 +110,15 @@ export const parseKayttaja = R.curry(
     const id = locationParts[0];
     if (R.equals('new', id)) {
       return [];
-    } else if (
-      R.and(
-        Kayttajat.isPaakayttaja(kayttaja),
-        R.propEq('id', parseInt(id), kayttaja)
-      )
-    ) {
-      return linksForPaakayttajaOmatTiedot(i18n, id, idTranslate);
     } else if (R.equals('all', id)) {
       return R.converge(R.apply, [
         R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
         R.append(R.__, [isDev, i18n])
       ])(kayttaja);
+    } else if (Kayttajat.isLaatija(kayttaja)) {
+      return linksForLaatijaOmatTiedot(i18n, id, idTranslate);
     } else {
-      return linksForKayttaja(i18n, id, idTranslate);
+      return [];
     }
   }
 );
