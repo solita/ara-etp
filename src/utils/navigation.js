@@ -43,30 +43,39 @@ export const linksForPatevyydentoteaja = R.curry((isDev, i18n, whoami) => [
   { label: i18n('navigation.laatijat'), href: '#/laatija/all' }
 ]);
 
-export const linksForEnergiatodistus = R.curry((i18n, whoami, version, id) =>
-  R.when(
-    R.always(!Kayttajat.isLaskuttaja(whoami)),
-    R.append({
-      label: i18n('navigation.liitteet'),
-      href: `#/energiatodistus/${version}/${id}/liitteet`
-    }),
-    [
-      // Hidden until implemented
-      //{
-      //  label: i18n('navigation.viestit'),
-      //  href: `#/energiatodistus/${version}/${id}/viestit`
-      //},
-      {
-        label: `${i18n('navigation.et')} ${id}`,
-        href: `#/energiatodistus/${version}/${id}`
-      }
-      // Hidden until implemented
-      // {
-      //  label: i18n('navigation.muutoshistoria'),
-      //  href: `#/energiatodistus/${version}/${id}/muutoshistoria`
-      // }
-    ]
-  )
+export const linksForEnergiatodistus = R.curry(
+  (isDev, i18n, whoami, version, id) => [
+    // Hidden until implemented
+    //{
+    //  label: i18n('navigation.viestit'),
+    //  href: `#/energiatodistus/${version}/${id}/viestit`
+    //},
+    {
+      label: `${i18n('navigation.et')} ${id}`,
+      href: `#/energiatodistus/${version}/${id}`
+    },
+    ...(!Kayttajat.isLaskuttaja(whoami)
+      ? [
+          {
+            label: i18n('navigation.liitteet'),
+            href: `#/energiatodistus/${version}/${id}/liitteet`
+          }
+        ]
+      : []),
+    // Hidden until implemented
+    // {
+    //  label: i18n('navigation.muutoshistoria'),
+    //  href: `#/energiatodistus/${version}/${id}/muutoshistoria`
+    // }
+    ...(isDev && !Kayttajat.isLaskuttaja(whoami)
+      ? [
+          {
+            label: i18n('navigation.valvonta.valvonta'),
+            href: `#/valvonta/oikeellisuus/${version}/${id}`
+          }
+        ]
+      : [])
+  ]
 );
 
 export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
@@ -133,18 +142,15 @@ export const parseKayttaja = R.curry(
       }
       return [];
     }
-    const id = locationParts[0];
-    if (R.equals('new', id)) {
-      return [];
-    } else if (R.equals('all', id)) {
-      return R.converge(R.apply, [
-        R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
-        R.append(R.__, [isDev, i18n])
-      ])(whoami);
-    } else if (Kayttajat.isLaatija(whoami)) {
-      return linksForKayttaja(i18n, whoami, parseInt(id, 10), idTranslate);
+    const id = R.head(locationParts);
+    if (
+      !locationParts.length ||
+      R.either(R.equals('new'), R.equals('all'))(id) ||
+      (Kayttajat.isPaakayttaja(whoami) && R.propEq('id', parseInt(id), whoami))
+    ) {
+      return parseRoot(isDev, i18n, whoami);
     } else {
-      return [];
+      return linksForKayttaja(i18n, whoami, parseInt(id, 10), idTranslate);
     }
   }
 );
@@ -176,6 +182,14 @@ export const parseYritys = R.curry(
     } else {
       return linksForYritys(i18n, idTranslate, id);
     }
+  }
+);
+
+export const parseValvontaOikeellisuus = R.curry(
+  (isDev, i18n, whoami, locationParts) => {
+    if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
+
+    return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
   }
 );
 
@@ -228,7 +242,7 @@ export const parseEnergiatodistus = R.curry(
 
     return R.compose(
       Maybe.orSome(parseRoot(isDev, i18n, whoami)),
-      R.lift(linksForEnergiatodistus(i18n, whoami))
+      R.lift(linksForEnergiatodistus(isDev, i18n, whoami))
     )(version, id);
   }
 );
@@ -260,6 +274,14 @@ export const navigationParse = R.curry(
             R.head
           ),
           R.compose(parseKayttaja(isDev, i18n, whoami, idTranslate), R.tail)
+        ],
+        [
+          R.compose(R.equals(['valvonta', 'oikeellisuus']), R.take(2)),
+          R.compose(parseValvontaOikeellisuus(isDev, i18n, whoami), R.drop(2))
+        ],
+        [
+          R.compose(R.equals('viesti'), R.head),
+          R.compose(R.always(parseRoot(isDev, i18n, whoami)))
         ],
         [R.T, R.always([])]
       ]),
