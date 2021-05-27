@@ -17,14 +17,15 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
     label: i18n('navigation.yritykset'),
     href: `#/laatija/${whoami.id}/yritykset`
   },
-  ...(isDev
-    ? [
-        {
-          label: i18n('navigation.valvonta.valvonta'),
-          href: '#/valvonta/oikeellisuus/all'
-        }
-      ]
-    : []),
+  // Hidden until implemented
+  // ...(isDev
+  //   ? [
+  //       {
+  //         label: i18n('navigation.valvonta.valvonta'),
+  //         href: '#/valvonta/oikeellisuus/all'
+  //       }
+  //     ]
+  //   : []),
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
