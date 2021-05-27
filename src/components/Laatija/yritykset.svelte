@@ -159,7 +159,7 @@
         {:else}
           <p class="mb-5">{i18n('laatija.yritykset.table.description')}</p>
 
-          <div class="mb-8">
+          <div class="mb-8 overflow-x-auto">
             <table class="etp-table">
               <thead class="etp-table--thead">
                 <tr class="etp-table--tr">

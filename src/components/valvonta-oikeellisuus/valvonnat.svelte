@@ -137,7 +137,7 @@
       {#if valvonnat.length === 0}
         <span>{i18n('valvonta.oikeellisuus.all.empty')}</span>
       {:else}
-        <div class="my-6">
+        <div class="my-6 overflow-x-auto">
           <table class="etp-table">
             <thead class="etp-table--thead">
               <tr class="etp-table--tr etp-table--tr__light">
