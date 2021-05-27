@@ -18,18 +18,14 @@
 
 <style type="text/postcss">
   #routecontainer {
-    @apply w-full pb-10 relative;
+    @apply w-full pb-10 relative max-w-1440;
   }
   #breadcrumbcontainer {
-    @apply flex justify-center;
-  }
-
-  #breadcrumbcontainer {
-    @apply bg-background;
+    @apply w-full mx-auto bg-background;
   }
 
   .content {
-    @apply flex flex-col items-center flex-grow py-8 px-10 mx-auto bg-light;
+    @apply w-full max-w-1440 flex flex-col items-center flex-grow py-8 px-10 mx-auto bg-light;
   }
 
   .content h1 :not(first) {
@@ -39,11 +35,11 @@
 
 <ResourceProvider let:idTranslate>
   <div id="breadcrumbcontainer">
-    <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+    <div class="w-full max-w-1440 mx-auto px-10">
       <Breadcrumb {whoami} {idTranslate} location={$location} />
     </div>
   </div>
-  <section class="content xl:w-xl lg:w-lg md:w-md sm:w-sm">
+  <section class="content">
     <div id="navigationcontainer" class="w-full">
       <NavigationTabBar
         {idTranslate}

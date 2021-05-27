@@ -39,12 +39,12 @@
 
 <style type="text/postcss">
   .appcontainer {
-    @apply flex flex-col flex-grow justify-between min-h-screen;
+    @apply w-full flex flex-col flex-grow justify-between min-h-screen;
   }
 
   .headercontainer,
   .footercontainer {
-    @apply flex justify-center;
+    @apply w-full flex justify-center;
   }
 
   .headercontainer {
@@ -75,7 +75,7 @@
 
   {#each Maybe.toArray(resources) as { whoami, config, version, ohjeSivut }}
     <div class="headercontainer">
-      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+      <div class="w-full max-w-1440 mx-auto">
         <Header whoami={Maybe.Some(whoami)} {ohjeSivut} />
       </div>
     </div>
@@ -83,7 +83,7 @@
     <Body {whoami} {config} />
 
     <div class="footercontainer">
-      <div class="xl:w-xl lg:w-lg md:w-md sm:w-sm">
+      <div class="w-full max-w-1440 mx-auto">
         <Footer {version} />
       </div>
     </div>
