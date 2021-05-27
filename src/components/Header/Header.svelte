@@ -93,7 +93,7 @@
     <LanguageSelect />
   </div>
 
-  <div class="dropdowns flex space-x-8 items-center">
+  <div class="dropdowns flex space-x-16 items-center">
     {#if !R.isEmpty(ohjeNav)}
       <div class="flex flex-row justify-between">
         <div
