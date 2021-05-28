@@ -6,7 +6,7 @@ import { flatSchema } from './schema';
 describe('EtHakuUtils:', () => {
   describe('blockToQueryParameter', () => {
     it('should return Just query parameter for given block', () => {
-      const block = ['sisaltaa', 'perustiedot.nimi', 'asdf'];
+      const block = ['sisaltaa', 'energiatodistus.perustiedot.nimi', 'asdf'];
       const expected = Maybe.Some([
         ['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%']
       ]);
@@ -32,10 +32,10 @@ describe('EtHakuUtils:', () => {
     it('should convert Where to Query', () => {
       const where = [
         [
-          ['sisaltaa', 'perustiedot.nimi', 'asdf'],
-          ['=', 'id', 2]
+          ['sisaltaa', 'energiatodistus.perustiedot.nimi', 'asdf'],
+          ['=', 'energiatodistus.id', 2]
         ],
-        [['>', 'id', 'value']]
+        [['>', 'energiatodistus.id', 'value']]
       ];
       const expected = [
         [
@@ -54,7 +54,7 @@ describe('EtHakuUtils:', () => {
     it('should remove empty blocks when converting Where to Query', () => {
       const where = [
         [
-          ['sisaltaa', 'perustiedot.nimi', 'asdf'],
+          ['sisaltaa', 'energiatodistus.perustiedot.nimi', 'asdf'],
           ['no-operation-named-this', 'id', 2]
         ],
         [['no-operation-named-this', 'key', 'value']]

@@ -610,7 +610,7 @@ const huomiot = {
   }
 };
 
-const flattenSchema = R.compose(
+export const flattenSchema = R.compose(
   R.reduce((acc, arr) => ({ ...acc, [arr[0].key]: arr }), {}),
   R.map(R.converge(R.map, [R.compose(R.applyTo, R.head), R.last])),
   R.toPairs,
