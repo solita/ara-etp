@@ -31,7 +31,7 @@
     )}`}</title>
 </svelte:head>
 
-<div class="px-10 flex h-16 items-center text-primary">
+<div class="flex h-16 items-center text-primary">
   {#if R.head(breadcrumb)}
     <Link
       href={R.head(breadcrumb).url}

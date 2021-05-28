@@ -273,7 +273,7 @@
         {#if R.isEmpty(energiatodistukset)}
           <p class="mb-10">{i18n('energiatodistukset.not-found')}</p>
         {:else}
-          <div class="mb-10">
+          <div class="mb-10 overflow-x-auto">
             <table class="etp-table">
               <thead class="etp-table--thead">
                 <tr class="etp-table--tr etp-table--tr__light">

@@ -113,85 +113,87 @@
     {#if R.isEmpty(laatijat)}
       {i18n('yritys.laatijat.empty')}
     {:else}
-      <table class="etp-table">
-        <thead class="etp-table--thead">
-          <tr class="etp-table--tr etp-table--tr__light">
-            <th class="etp-table--th">
-              {i18n('yritys.laatijat.table.laatija')}
-            </th>
-            <th class="etp-table--th">
-              {i18n('yritys.laatijat.table.liitetty')}
-            </th>
-            <th class="etp-table--th">
-              {i18n('yritys.laatijat.table.hyvaksyja')}
-            </th>
-            <th class="etp-table--th">
-              {i18n('yritys.laatijat.table.delete')}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="etp-table--tbody">
-          {#each laatijat as laatija}
-            <tr class="etp-table-tr">
-              <td class="etp-table--td">
-                {laatija.etunimi}
-                {laatija.sukunimi}
-              </td>
-              <td class="etp-table--td">
-                {#if Tila.isProposal(laatija) && hasModifyPermission}
+      <div class="overflow-x-auto">
+        <table class="etp-table">
+          <thead class="etp-table--thead">
+            <tr class="etp-table--tr etp-table--tr__light">
+              <th class="etp-table--th">
+                {i18n('yritys.laatijat.table.laatija')}
+              </th>
+              <th class="etp-table--th">
+                {i18n('yritys.laatijat.table.liitetty')}
+              </th>
+              <th class="etp-table--th">
+                {i18n('yritys.laatijat.table.hyvaksyja')}
+              </th>
+              <th class="etp-table--th">
+                {i18n('yritys.laatijat.table.delete')}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="etp-table--tbody">
+            {#each laatijat as laatija}
+              <tr class="etp-table-tr">
+                <td class="etp-table--td">
+                  {laatija.etunimi}
+                  {laatija.sukunimi}
+                </td>
+                <td class="etp-table--td">
+                  {#if Tila.isProposal(laatija) && hasModifyPermission}
+                    <Confirm
+                      let:confirm
+                      confirmButtonLabel={i18n(
+                        'yritys.laatijat.accept.confirm-button'
+                      )}
+                      confirmMessage={i18n(
+                        'yritys.laatijat.accept.confirm-message'
+                      )}>
+                      <div
+                        class="flex"
+                        on:click|stopPropagation={_ =>
+                          confirm(accept, laatija.id)}>
+                        <Link
+                          icon={Maybe.Some('person_add')}
+                          text={i18n('yritys.laatijat.accept.link')} />
+                      </div>
+                    </Confirm>
+                  {:else if Tila.isProposal(laatija)}
+                    {i18n('yritys.laatijat.table.proposal')}
+                  {:else}
+                    {Formats.formatTimeInstant(laatija.modifytime)}
+                  {/if}
+                </td>
+                <td class="etp-table--td">
+                  {#if Tila.isAccepted(laatija)}
+                    {laatija['modifiedby-name']}
+                  {/if}
+                </td>
+                <td class="etp-table--td">
                   <Confirm
                     let:confirm
                     confirmButtonLabel={i18n(
-                      'yritys.laatijat.accept.confirm-button'
+                      'yritys.laatijat.delete.confirm-button'
                     )}
                     confirmMessage={i18n(
-                      'yritys.laatijat.accept.confirm-message'
+                      'yritys.laatijat.delete.confirm-message'
                     )}>
-                    <div
-                      class="flex"
+                    <span
+                      class="material-icons cursor-pointer delete-icon"
+                      title={hasModifyPermission
+                        ? null
+                        : i18n('yritys.messages.missing-permission')}
+                      class:text-disabled={!hasModifyPermission}
                       on:click|stopPropagation={_ =>
-                        confirm(accept, laatija.id)}>
-                      <Link
-                        icon={Maybe.Some('person_add')}
-                        text={i18n('yritys.laatijat.accept.link')} />
-                    </div>
+                        hasModifyPermission && confirm(detach, laatija.id)}>
+                      delete
+                    </span>
                   </Confirm>
-                {:else if Tila.isProposal(laatija)}
-                  {i18n('yritys.laatijat.table.proposal')}
-                {:else}
-                  {Formats.formatTimeInstant(laatija.modifytime)}
-                {/if}
-              </td>
-              <td class="etp-table--td">
-                {#if Tila.isAccepted(laatija)}
-                  {laatija['modifiedby-name']}
-                {/if}
-              </td>
-              <td class="etp-table--td">
-                <Confirm
-                  let:confirm
-                  confirmButtonLabel={i18n(
-                    'yritys.laatijat.delete.confirm-button'
-                  )}
-                  confirmMessage={i18n(
-                    'yritys.laatijat.delete.confirm-message'
-                  )}>
-                  <span
-                    class="material-icons cursor-pointer delete-icon"
-                    title={hasModifyPermission
-                      ? null
-                      : i18n('yritys.messages.missing-permission')}
-                    class:text-disabled={!hasModifyPermission}
-                    on:click|stopPropagation={_ =>
-                      hasModifyPermission && confirm(detach, laatija.id)}>
-                    delete
-                  </span>
-                </Confirm>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
     {/if}
   </div>
   <div slot="overlay-content">

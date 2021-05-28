@@ -93,68 +93,70 @@
   {#if R.isEmpty(liitteet)}
     <p>{i18n(emptyMessageKey)}</p>
   {:else}
-    <table class="etp-table">
-      <thead class="etp-table--thead">
-        <tr class="etp-table--tr">
-          <th class="etp-table--th">
-            {i18n(i18nRoot + '.liite.createtime')}
-          </th>
-          <th class="etp-table--th">
-            {i18n(i18nRoot + '.liite.author')}
-          </th>
-          <th class="etp-table--th">
-            {i18n(i18nRoot + '.liite.nimi')}
-          </th>
-          <th class="etp-table--th">
-            {i18n(i18nRoot + '.liite.type')}
-          </th>
-          <th class="etp-table--th etp-table--th__center">
-            <span class="material-icons">delete_forever</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="etp-table--tbody">
-        {#each liitteet as liite}
+    <div class="overflow-x-auto">
+      <table class="etp-table">
+        <thead class="etp-table--thead">
           <tr class="etp-table--tr">
-            <td class="etp-table--td">
-              {formats.formatTimeInstant(liite.createtime)}
-            </td>
-            <td class="etp-table--td">{liite['author-fullname']}</td>
-            <td class="etp-table--td">
-              <a
-                class="hover:underline font-bold text-link"
-                target="_self"
-                href={liiteUrl(liite)}>
-                {liite.nimi}
-              </a>
-            </td>
-            <td class="etp-table--td etp-table--td__center">
-              <span
-                class="material-icons cursor-default"
-                title={liite['contenttype']}>
-                {Maybe.isSome(liite.url) ? 'link' : 'attachment'}
-              </span>
-            </td>
-            <td class="etp-table--td etp-table--td__center">
-              <Confirm
-                let:confirm
-                confirmButtonLabel={i18n('confirm.button.delete')}
-                confirmMessage={i18n('confirm.you-want-to-delete')}>
-                <span
-                  class="material-icons delete-icon"
-                  class:text-disabled={disabled}
-                  title={disabled ? i18n(i18nRoot + '.poista-disabled') : ''}
-                  on:click|stopPropagation={_ => {
-                    if (!disabled) confirm(liiteApi.deleteLiite, liite.id);
-                  }}>
-                  highlight_off
-                </span>
-              </Confirm>
-            </td>
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.liite.createtime')}
+            </th>
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.liite.author')}
+            </th>
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.liite.nimi')}
+            </th>
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.liite.type')}
+            </th>
+            <th class="etp-table--th etp-table--th__center">
+              <span class="material-icons">delete_forever</span>
+            </th>
           </tr>
-        {/each}
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="etp-table--tbody">
+          {#each liitteet as liite}
+            <tr class="etp-table--tr">
+              <td class="etp-table--td">
+                {formats.formatTimeInstant(liite.createtime)}
+              </td>
+              <td class="etp-table--td">{liite['author-fullname']}</td>
+              <td class="etp-table--td">
+                <a
+                  class="hover:underline font-bold text-link"
+                  target="_self"
+                  href={liiteUrl(liite)}>
+                  {liite.nimi}
+                </a>
+              </td>
+              <td class="etp-table--td etp-table--td__center">
+                <span
+                  class="material-icons cursor-default"
+                  title={liite['contenttype']}>
+                  {Maybe.isSome(liite.url) ? 'link' : 'attachment'}
+                </span>
+              </td>
+              <td class="etp-table--td etp-table--td__center">
+                <Confirm
+                  let:confirm
+                  confirmButtonLabel={i18n('confirm.button.delete')}
+                  confirmMessage={i18n('confirm.you-want-to-delete')}>
+                  <span
+                    class="material-icons delete-icon"
+                    class:text-disabled={disabled}
+                    title={disabled ? i18n(i18nRoot + '.poista-disabled') : ''}
+                    on:click|stopPropagation={_ => {
+                      if (!disabled) confirm(liiteApi.deleteLiite, liite.id);
+                    }}>
+                    highlight_off
+                  </span>
+                </Confirm>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
   {/if}
 </div>
 
