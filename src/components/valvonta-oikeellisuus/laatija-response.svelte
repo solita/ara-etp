@@ -83,12 +83,14 @@
   {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
     <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
     <p class="mb-5">
-      {i18n(i18nRoot + '.response-sent-start')}
+      {R.replace('{publish-date}',
+        Maybe.fold('', Formats.formatTimeInstantMinutes, lastToimenpide['publish-time']),
+        i18n(i18nRoot + '.response-sent-description'),)}
       <span class="inline-block">
         <Link
           href={Links.toimenpide(lastToimenpide, energiatodistus)}
           text={i18n(i18nRoot + '.response-sent-link')} />
-      </span>.
+      </span>
     </p>
   {/if}
 {/each}

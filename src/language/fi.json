@@ -1230,8 +1230,8 @@
         "note": "Kun vastaus ja mahdolliset liitteet on tallennettu järjestelmään, muista lopuksi vielä lähettää vastaus.",
         "start-button": "Aloita vastauksen tekeminen",
         "continue-link": "Jatka vastaamista",
-        "response-sent-start": "Laatija on lähettänyt",
-        "response-sent-link": "vastauksen"
+        "response-sent-description": "Vastaus annettu {publish-date}.",
+        "response-sent-link": "Katso vastaus."
       },
       "toimenpide": {
         "cancel-button": "Peruuta",
