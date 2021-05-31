@@ -6,11 +6,8 @@
   export let error;
   export let autocomplete = 'off';
   export let viewValue;
-  export let rawValue;
   export let type = 'text';
   export let placeholder = '';
-
-  export let focused;
 </script>
 
 <style type="text/postcss">
@@ -48,13 +45,6 @@
   {autocomplete}
   {placeholder}
   value={viewValue}
-  on:focus={event => {
-    focused = true;
-  }}
-  on:blur={event => {
-    focused = false;
-  }}
   on:blur
-  on:input={event => (rawValue = event.target.value)}
   on:input
   on:keypress />

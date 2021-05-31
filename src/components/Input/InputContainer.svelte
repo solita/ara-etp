@@ -16,15 +16,17 @@
   export let warnValidators = [];
 
   export let currentValue = '';
-  export let valid = true;
-  export let disabled;
-
-  export let validationResult;
-
   export let tooltip = null;
+  export let disabled = false;
 
   let blurred = false;
   let viewValue;
+  let focused = false;
+  let valid = true;
+  let validationResult = {
+    type: '',
+    message: ''
+  };
 
   const requireNotNil = objects.requireNotNil(
     R.__,
@@ -79,14 +81,20 @@
   };
 
   $: !disabled && blurred && validate(R.view(lens, model));
+  $: error = focused && !valid && validationResult.type === 'error';
+  $: warning = focused && !valid && validationResult.type === 'warning';
 </script>
 
 <div
   title={tooltip}
-  on:focus|capture={event => validate(parse(event.target.value))}
+  on:focus|capture={event => {
+    focused = true;
+    validate(parse(event.target.value));
+  }}
   on:blur|capture={event => {
-    updateModel(event.target.value);
+    focused = false;
     blurred = true;
+    updateModel(event.target.value);
   }}
   on:input={event => {
     updateCurrentValue(event.target.value);
@@ -97,5 +105,5 @@
       updateModel(event.target.value);
     }
   }}>
-  <slot {viewValue} />
+  <slot {viewValue} {focused} {valid} {validationResult} {warning} {error} />
 </div>
