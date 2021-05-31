@@ -42,28 +42,29 @@
     );
 </script>
 
-<H2 text={i18n(i18nRoot + '.title')} />
+{#each [...last(toimenpiteet)] as lastToimenpide}
+  {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
 
-<div class="mb-5">
-  {#each [...last(toimenpiteet)] as lastToimenpide}
-    {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
-      <div>
-        <p class="mb-2">
-          {R.replace('{deadline-date}',
-            deadlineDate(lastToimenpide),
-            toimenpideText(lastToimenpide, 'response-description'))}
-        </p>
+    <H2 text={toimenpideText(lastToimenpide, 'title')} />
+    <div class="mb-5">
+      <p class="mb-2">
+        {R.replace('{deadline-date}',
+          deadlineDate(lastToimenpide),
+          toimenpideText(lastToimenpide, 'response-description'))}
+      </p>
 
-        <div class="flex">
-          <TextButton
-            on:click={newResponse(responseType, energiatodistus)}
-            icon="create"
-            text="{toimenpideText({'type-id': responseType}, 'start')}" />
-        </div>
+      <div class="flex">
+        <TextButton
+          on:click={newResponse(responseType, energiatodistus)}
+          icon="create"
+          text="{i18n(i18nRoot + '.start-button')}" />
       </div>
-    {/each}
+    </div>
+  {/each}
 
-    {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
+  {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
+    <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
+    <div class="mb-5">
       <p class="mb-2">
         {R.replace('{deadline-date}',
           deadlineDate(request(toimenpiteet)),
@@ -76,24 +77,18 @@
         <Link
           href={Links.toimenpide(lastToimenpide, energiatodistus)}
           icon={Maybe.Some('edit')}
-          text="{toimenpideText(lastToimenpide, 'continue')}" />
+          text={i18n(i18nRoot + '.continue-link')} />
       </div>
-    {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
-      <p class="mb-2">
-        {i18n(i18nRoot + '.response-sent-start')}
-        <span class="inline-block">
-          <Link
-            href={Links.toimenpide(lastToimenpide, energiatodistus)}
-            text={i18n(i18nRoot + '.response-sent-link')} />
-        </span>
-        {i18n(i18nRoot + '.response-sent-end')}
-      </p>
-    {:else if Maybe.isNone(Toimenpiteet.responseTypeFor(lastToimenpide))}
-      {i18n(i18nRoot + '.empty')}
-    {/if}
-  {/each}
-
-  {#if R.isEmpty(toimenpiteet)}
-    {i18n(i18nRoot + '.empty')}
+    </div>
+  {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
+    <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
+    <p class="mb-5">
+      {i18n(i18nRoot + '.response-sent-start')}
+      <span class="inline-block">
+        <Link
+          href={Links.toimenpide(lastToimenpide, energiatodistus)}
+          text={i18n(i18nRoot + '.response-sent-link')} />
+      </span>.
+    </p>
   {/if}
-</div>
+{/each}

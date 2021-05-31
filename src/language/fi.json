@@ -1228,10 +1228,10 @@
       "laatija-response": {
         "title": "Vastaus",
         "note": "Kun vastaus ja mahdolliset liitteet on tallennettu järjestelmään, muista lopuksi vielä lähettää vastaus.",
-        "empty": "Laatijalla ei ole keskeneräisiä toimenpiteitä.",
+        "start-button": "Aloita vastauksen tekeminen",
+        "continue-link": "Jatka vastaamista",
         "response-sent-start": "Laatija on lähettänyt",
-        "response-sent-link": "vastauksen",
-        "response-sent-end": "tietopyyntöön."
+        "response-sent-link": "vastauksen"
       },
       "toimenpide": {
         "cancel-button": "Peruuta",
@@ -1258,12 +1258,10 @@
           "info": "Pyydetään laatijalta lisää tietoa.",
           "publish-button": "Lähetä tietopyyntö",
 
-          "response-description": "Laatijalta pyydetään vastausta liitteineen tietopyyntöön määräaikaan {deadline-date} mennessä."
+          "response-title": "Tietopyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-reply": {
-          "start": "Aloita vastaaminen tietopyyntöön",
-          "continue": "Jatka vastaamista tietopyyntöön",
-
           "title": "Vastaus tietopyyntöön",
           "description": "Vastaus",
           "save-button": "Tallenna",
@@ -1275,14 +1273,16 @@
           "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
           "publish-button": "Lähetä kehoitus",
 
-          "response-description": "Laatijaa kehotetaan vastaamaan tietopyyntöön määräaikaan {deadline-date} mennessä."
+          "response-title": "Kehotus vastata tietopyyntöön",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-warning": {
           "title": "Tietopyyntö varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
 
-          "response-description": "Laatijalle on annettu varoitus ja kehotetaan vastamaan tietopyyntöön määräaikaan {deadline-date} mennessä."
+          "response-title": "Varoitus tietopyyntöön liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
         "audit-report": {
           "title": "Valvontamuistio",
@@ -1294,12 +1294,10 @@
             "description": "Virheen kuvaus"
           },
 
-          "response-description": "Laatijaa pyydetään vastaamaan valvontamuistioon määräaikaan {deadline-date} mennessä."
+          "response-title": "Valvontamuistio",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "audit-reply": {
-          "start": "Aloita vastaaminen valvontamuistioon",
-          "continue": "Jatka vastaamista valvontamuistioon",
-
           "title": "Vastaus valvontamuistioon",
           "description": "Vastaus",
           "publish-button": "Lähetä vastaus",
@@ -1311,14 +1309,16 @@
           "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
           "publish-button": "Lähetä kehoitus",
 
-          "response-description": "Laatijaa kehoitetaan vastaamaan valvontamuistioon määräaikaan {deadline-date} mennessä."
+          "response-title": "Kehotus vastata valvontamuistioon",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "audit-warning": {
           "title": "Valvontamuistio varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
 
-          "response-description": "Laatijalle on annettu varoitus ja kehoitetaan vastaamaan valvontamuistioon määräaikaan {deadline-date} mennessä."
+          "response-title": "Varoitus valvontamuistioon liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
         "rfc-request": {
           "title": "Lisäselvityspyyntö",
@@ -1326,12 +1326,9 @@
           "description": "Lisäselvityspyyntö",
           "publish-button": "Lähetä",
 
-          "response-description": "Laatijalta pyydetään vastausta määräaikaan {deadline-date} mennessä."
+          "response-description": "Laatijalta pyytää vastausta {deadline-date} mennessä."
         },
         "rfc-reply": {
-          "start": "Aloita vastaaminen lisäselvityspyyntöön",
-          "continue": "Jatka vastaamista lisäselvityspyyntöön",
-
           "title": "Vastaus lisäselvityspyyntöön",
           "description": "Vastaus",
           "save-button": "Tallenna",
