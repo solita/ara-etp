@@ -93,7 +93,7 @@
         bind:model={id}
         label={$_('energiatodistus.id')}
         search={true}
-        wrapper={PillInputWrapper}
+        inputComponentWrapper={PillInputWrapper}
         on:keypress={evt => {
           if (evt.key === 'Enter') {
             form.dispatchEvent(new Event('submit'));

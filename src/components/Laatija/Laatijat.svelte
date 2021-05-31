@@ -200,7 +200,7 @@
     <div class="lg:w-2/3 w-full px-4 lg:pt-10">
       <Input
         model={Maybe.orSome('', model.search)}
-        wrapper={PillInputWrapper}
+        inputComponentWrapper={PillInputWrapper}
         search={true}
         on:input={evt => {
           cancel = R.compose(
