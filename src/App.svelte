@@ -54,10 +54,6 @@
   .footercontainer {
     @apply bg-background;
   }
-
-  .appcontainer > div {
-    padding-left: calc(100vw - 100%);
-  }
 </style>
 
 <TableStyles />
