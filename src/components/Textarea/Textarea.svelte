@@ -27,6 +27,21 @@
   export let i18n;
 </script>
 
+<style>
+  textarea::-webkit-scrollbar {
+    @apply w-2;
+  }
+  textarea::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  textarea::-webkit-scrollbar-thumb {
+    @apply bg-disabled;
+  }
+  textarea::-webkit-scrollbar-thumb:hover {
+    @apply bg-dark;
+  }
+</style>
+
 <Input
   {id}
   {name}
