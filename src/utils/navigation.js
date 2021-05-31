@@ -248,6 +248,14 @@ export const parseEnergiatodistus = R.curry(
   }
 );
 
+export const parseViesti = R.curry((isDev, i18n, whoami, locationParts) => {
+  if (R.equals('all', R.head(locationParts))) {
+    return parseRoot(isDev, i18n, whoami);
+  }
+
+  return [];
+});
+
 export const parseRoot = R.curry((isDev, i18n, whoami) =>
   R.converge(R.apply, [
     R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
@@ -282,7 +290,7 @@ export const navigationParse = R.curry(
         ],
         [
           R.compose(R.equals('viesti'), R.head),
-          R.compose(R.always(parseRoot(isDev, i18n, whoami)))
+          R.compose(parseViesti(isDev, i18n, whoami), R.tail)
         ],
         [R.T, R.always([])]
       ]),
