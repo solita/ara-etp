@@ -287,9 +287,10 @@ export const kayttajaCrumb = R.curry(
 );
 
 export const yritykset = R.curry((i18n, whoami) => ({
-  url: Kayttajat.isPaakayttaja(whoami)
-    ? '#/yritys/all'
-    : `#/laatija/${whoami.id}/yritykset`,
+  url:
+    Kayttajat.isPaakayttaja(whoami) || Kayttajat.isLaskuttaja(whoami)
+      ? '#/yritys/all'
+      : `#/laatija/${whoami.id}/yritykset`,
   label: i18n('navigation.yritykset')
 }));
 
@@ -369,7 +370,11 @@ export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
 export const rootCrumb = R.curry((i18n, whoami) =>
   R.cond([
     [
-      R.either(Kayttajat.isLaatija, Kayttajat.isPaakayttaja),
+      R.anyPass([
+        Kayttajat.isLaatija,
+        Kayttajat.isPaakayttaja,
+        Kayttajat.isLaskuttaja
+      ]),
       R.always({
         url: '#/energiatodistus/all',
         label: i18n('navigation.etusivu')

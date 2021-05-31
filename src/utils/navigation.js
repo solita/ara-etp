@@ -150,8 +150,10 @@ export const parseKayttaja = R.curry(
       (Kayttajat.isPaakayttaja(whoami) && R.propEq('id', parseInt(id), whoami))
     ) {
       return parseRoot(isDev, i18n, whoami);
-    } else {
+    } else if (Kayttajat.isLaatija(whoami)) {
       return linksForKayttaja(i18n, whoami, parseInt(id, 10), idTranslate);
+    } else {
+      return [];
     }
   }
 );
@@ -173,12 +175,12 @@ export const linksForYritys = R.curry((i18n, idTranslate, id) => [
 ]);
 
 export const parseYritys = R.curry(
-  (i18n, whoami, idTranslate, locationParts) => {
-    if (R.isEmpty(locationParts)) {
-      return [];
-    }
+  (isDev, i18n, whoami, idTranslate, locationParts) => {
     const id = locationParts[0];
-    if (R.equals('new', id) || R.equals('all', id)) {
+
+    if (R.equals('all', id)) return parseRoot(isDev, i18n, whoami);
+
+    if (R.equals('new', id)) {
       return [];
     } else {
       return linksForYritys(i18n, idTranslate, id);
@@ -221,7 +223,24 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   }
 ]);
 
-export const linksForLaskuttaja = linksForPaakayttaja;
+export const linksForLaskuttaja = R.curry((isDev, i18n, whoami) => [
+  {
+    label: i18n('navigation.energiatodistukset'),
+    href: '#/energiatodistus/all'
+  },
+  {
+    label: i18n('navigation.laatijat'),
+    href: '#/laatija/all'
+  },
+  {
+    label: i18n('navigation.viestit'),
+    href: '#/viesti/all',
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ViestiApi.getKetjutUnread)
+  }
+]);
 
 const kayttajaLinksMap = Object.freeze({
   0: linksForLaatija,
@@ -275,7 +294,7 @@ export const navigationParse = R.curry(
         ],
         [
           R.compose(R.equals('yritys'), R.head),
-          R.compose(parseYritys(i18n, whoami, idTranslate), R.tail)
+          R.compose(parseYritys(isDev, i18n, whoami, idTranslate), R.tail)
         ],
         [
           R.compose(
