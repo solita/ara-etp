@@ -137,16 +137,11 @@ export const linksForPaakayttajaOmatTiedot = R.curry(
 
 export const parseKayttaja = R.curry(
   (isDev, i18n, whoami, idTranslate, locationParts) => {
-    if (Kayttajat.isPatevyydentoteaja(whoami)) {
-      if (R.equals('laatijoidentuonti', R.head(locationParts))) {
-        return linksForPatevyydentoteaja(isDev, i18n, whoami);
-      }
-      return [];
-    }
     const id = R.head(locationParts);
     if (
       !locationParts.length ||
       R.either(R.equals('new'), R.equals('all'))(id) ||
+      Kayttajat.isPatevyydentoteaja(whoami) ||
       (Kayttajat.isPaakayttaja(whoami) && R.propEq('id', parseInt(id), whoami))
     ) {
       return parseRoot(isDev, i18n, whoami);

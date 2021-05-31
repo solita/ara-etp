@@ -204,7 +204,15 @@ export const laatijatForSelfRole = R.curry((i18n, whoami) =>
 export const laatijaCrumb = R.curry(
   (i18n, idTranslate, whoami, [id, ...rest]) =>
     R.cond([
-      [R.equals('laatijoidentuonti'), R.always([])],
+      [
+        R.equals('laatijoidentuonti'),
+        R.always([
+          {
+            url: `#/laatija/laatijoidentuonti`,
+            label: i18n('navigation.laatijoidentuonti')
+          }
+        ])
+      ],
       [R.equals('all'), R.always([laatijat(i18n)])],
       [
         R.T,
