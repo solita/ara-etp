@@ -23,6 +23,13 @@
   export let fork;
 
   const last = R.compose(Maybe.fromNull, R.last);
+  const request = R.nth(-2)
+
+  const i18nRoot = 'valvonta.oikeellisuus.laatija-response';
+  const i18n = $_;
+  const toimenpideText = R.compose(i18n, Toimenpiteet.i18nKey);
+
+  const deadlineDate = R.compose(EM.fold('', Formats.formatDateInstant), R.prop('deadline-date'));
 
   const newResponse = (responseType, energiatodistus) =>
     fork('new-response', response =>
@@ -35,67 +42,58 @@
     );
 </script>
 
-<H2 text="Vastaus" />
+<H2 text={i18n(i18nRoot + '.title')} />
 
 <div class="mb-5">
   {#each [...last(toimenpiteet)] as lastToimenpide}
     {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
       <div>
         <p class="mb-2">
-          Laatijalta pyydetään vastausta liitteineen tietopyyntöön
-          {EM.fold(
-            '',
-            Formats.formatDateInstant,
-            lastToimenpide['deadline-date']
-          )}
-          mennessä.
+          {R.replace('{deadline-date}',
+            deadlineDate(lastToimenpide),
+            toimenpideText(lastToimenpide, 'response-description'))}
         </p>
 
         <div class="flex">
           <TextButton
             on:click={newResponse(responseType, energiatodistus)}
             icon="create"
-            text="Aloita vastauksen tekeminen tietopyyntöön." />
+            text="{toimenpideText({'type-id': responseType}, 'start')}" />
         </div>
       </div>
     {/each}
 
     {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
       <p class="mb-2">
-        Laatijalta pyydetään vastausta liitteineen tietopyyntöön
-        {EM.fold(
-          '',
-          Formats.formatDateInstant,
-          toimenpiteet[R.length(toimenpiteet) - 2]['deadline-date']
-        )}
-        mennessä.
+        {R.replace('{deadline-date}',
+          deadlineDate(request(toimenpiteet)),
+          toimenpideText(request(toimenpiteet), 'response-description'))}
       </p>
       <p class="mb-2">
-        Kun vastaus ja liitteet on tallennettu järjestelmään, muista lopuksi
-        vielä lähettää vastaus.
+        {i18n(i18nRoot + '.note')}
       </p>
       <div class="flex">
         <Link
           href={Links.toimenpide(lastToimenpide, energiatodistus)}
           icon={Maybe.Some('edit')}
-          text="Jatka vastauksen tekemistä tietopyyntöön." />
+          text="{toimenpideText(lastToimenpide, 'continue')}" />
       </div>
     {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
       <p class="mb-2">
-        Laatija on lähettänyt
+        {i18n(i18nRoot + '.response-sent-start')}
         <span class="inline-block">
           <Link
             href={Links.toimenpide(lastToimenpide, energiatodistus)}
-            text="vastauksen" />
+            text={i18n(i18nRoot + '.response-sent-link')} />
         </span>
-        tietopyyntöön.
+        {i18n(i18nRoot + '.response-sent-end')}
       </p>
     {:else if Maybe.isNone(Toimenpiteet.responseTypeFor(lastToimenpide))}
-      Laatijalla ei ole keskeneräisiä toimenpiteitä.
+      {i18n(i18nRoot + '.empty')}
     {/if}
   {/each}
 
   {#if R.isEmpty(toimenpiteet)}
-    Laatijalla ei ole keskeneräisiä toimenpiteitä.
+    {i18n(i18nRoot + '.empty')}
   {/if}
 </div>
