@@ -1327,7 +1327,7 @@
           "publish-button": "Lähetä",
 
           "response-title": "Lisäselvityspyyntö",
-          "response-description": "Laatijalta pyytää vastausta {deadline-date} mennessä."
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfc-reply": {
           "title": "Vastaus lisäselvityspyyntöön",
