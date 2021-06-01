@@ -34,14 +34,56 @@ export const parseCrumb = R.curry((i18n, idTranslate, whoami, location) =>
       R.compose(R.equals('viesti'), R.head),
       R.compose(viestiCrumb(i18n, idTranslate), R.tail)
     ],
+    [
+      R.compose(R.equals('valvonta'), R.head),
+      R.compose(valvontaCrumb(i18n), R.tail)
+    ],
     [R.T, R.always([])]
   ])(location)
 );
 
-export const etKetjuCrumb = R.curry((i18n, etId) => ({
-  url: `#/energiatodistus/${etId}`,
-  label: `${i18n('navigation.et')} ${etId}`
-}));
+export const valvontaCrumb = R.curry((i18n, [type, ...rest]) =>
+  R.cond([
+    [R.equals('oikeellisuus'), oikeellisuusCrumb(i18n, [...rest])],
+    [R.T, R.always([])]
+  ])(type)
+);
+
+export const oikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
+  R.cond([
+    [
+      R.equals('all'),
+      R.always([
+        {
+          url: '#/valvonta/oikeellisuus/all',
+          label: i18n('navigation.valvonta.oikeellisuus')
+        }
+      ])
+    ],
+    [
+      R.T,
+      R.always([
+        energiatodistukset(i18n),
+        {
+          url: `#/energiatodistus/${version}/${id}`,
+          label: `${i18n('navigation.et')} ${id}`
+        },
+        {
+          url: `#/valvonta/oikeellisuus/${version}/${id}`,
+          label: `${i18n('navigation.valvonta.valvonta')}`
+        }
+      ])
+    ]
+  ])(version)
+);
+
+export const etKetjuCrumb = R.curry((i18n, etId) => [
+  energiatodistukset(i18n),
+  {
+    url: `#/energiatodistus/${etId}`,
+    label: `${i18n('navigation.et')} ${etId}`
+  }
+]);
 
 export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
   R.cond([
@@ -162,7 +204,15 @@ export const laatijatForSelfRole = R.curry((i18n, whoami) =>
 export const laatijaCrumb = R.curry(
   (i18n, idTranslate, whoami, [id, ...rest]) =>
     R.cond([
-      [R.equals('laatijoidentuonti'), R.always([])],
+      [
+        R.equals('laatijoidentuonti'),
+        R.always([
+          {
+            url: `#/laatija/laatijoidentuonti`,
+            label: i18n('navigation.laatijoidentuonti')
+          }
+        ])
+      ],
       [R.equals('all'), R.always([laatijat(i18n)])],
       [
         R.T,
@@ -245,9 +295,10 @@ export const kayttajaCrumb = R.curry(
 );
 
 export const yritykset = R.curry((i18n, whoami) => ({
-  url: Kayttajat.isPaakayttaja(whoami)
-    ? '#/yritys/all'
-    : `#/laatija/${whoami.id}/yritykset`,
+  url:
+    Kayttajat.isPaakayttaja(whoami) || Kayttajat.isLaskuttaja(whoami)
+      ? '#/yritys/all'
+      : `#/laatija/${whoami.id}/yritykset`,
   label: i18n('navigation.yritykset')
 }));
 
@@ -286,11 +337,32 @@ export const newYritysCrumb = R.curry((i18n, whoami) => [
 export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
   R.cond([
     [R.equals('all'), R.always([yritykset(i18n, whoami)])],
-    [R.equals('new'), R.always(newYritysCrumb(i18n, whoami))],
+    [
+      R.equals('new'),
+      R.always([
+        ...(Kayttajat.isLaatija(whoami)
+          ? [
+              {
+                url: `#/kayttaja/${whoami.id}`,
+                label: i18n('navigation.omattiedot')
+              }
+            ]
+          : []),
+        ...newYritysCrumb(i18n, whoami)
+      ])
+    ],
     [
       R.T,
-      id =>
-        R.ifElse(
+      id => [
+        ...(Kayttajat.isLaatija(whoami)
+          ? [
+              {
+                url: `#/kayttaja/${whoami.id}`,
+                label: i18n('navigation.omattiedot')
+              }
+            ]
+          : []),
+        ...R.ifElse(
           R.hasPath(['yritys', parseInt(id, 10)]),
           R.compose(
             yritys => yritysNimiCrumb(i18n, whoami, yritys, id, ...rest),
@@ -298,6 +370,7 @@ export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
           ),
           R.always(yritysIdCrumb(i18n, whoami, id, ...rest))
         )(idTranslate)
+      ]
     ]
   ])(id)
 );
@@ -305,14 +378,21 @@ export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
 export const rootCrumb = R.curry((i18n, whoami) =>
   R.cond([
     [
-      R.either(Kayttajat.isLaatija, Kayttajat.isPaakayttaja),
-      R.always(energiatodistukset(i18n))
+      R.anyPass([
+        Kayttajat.isLaatija,
+        Kayttajat.isPaakayttaja,
+        Kayttajat.isLaskuttaja
+      ]),
+      R.always({
+        url: '#/energiatodistus/all',
+        label: i18n('navigation.etusivu')
+      })
     ],
     [
       Kayttajat.isPatevyydentoteaja,
       R.always({
         url: '#/laatija/laatijoidentuonti',
-        label: i18n('navigation.laatijoidentuonti')
+        label: i18n('navigation.etusivu')
       })
     ]
   ])(whoami)

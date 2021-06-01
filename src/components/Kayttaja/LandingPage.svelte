@@ -9,28 +9,31 @@
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
 
-  let whoami = Maybe.None();
-  let isDev = Maybe.None();
   let failure = Maybe.None();
+
+  let resources = Maybe.None();
 
   Future.fork(
     response => {
       failure = Maybe.Some(response);
     },
     response => {
-      whoami = Maybe.Some(response[0]);
-      isDev = Maybe.Some(response[1].isDev);
+      resources = Maybe.Some(response);
     },
-    Future.parallel(2, [kayttajaApi.whoami, versionApi.getConfig])
+    Future.parallelObject(2, {
+      whoami: kayttajaApi.whoami,
+      isDev: R.map(R.prop('isDev'), versionApi.getConfig)
+    })
   );
 
   $: R.forEach(
-    R.compose(
-      replace,
-      R.prop('href'),
-      R.head,
-      Navigation.parseRoot(Maybe.orSome({ viestit: false }, isDev), $_)
-    ),
-    whoami
+    ({ whoami, isDev }) =>
+      R.compose(
+        replace,
+        R.prop('href'),
+        R.head,
+        Navigation.parseRoot(false, $_)
+      )(whoami),
+    resources
   );
 </script>
