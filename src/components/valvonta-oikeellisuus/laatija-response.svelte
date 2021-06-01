@@ -23,13 +23,16 @@
   export let fork;
 
   const last = R.compose(Maybe.fromNull, R.last);
-  const request = R.nth(-2)
+  const request = R.nth(-2);
 
   const i18nRoot = 'valvonta.oikeellisuus.laatija-response';
   const i18n = $_;
   const toimenpideText = R.compose(i18n, Toimenpiteet.i18nKey);
 
-  const deadlineDate = R.compose(EM.fold('', Formats.formatDateInstant), R.prop('deadline-date'));
+  const deadlineDate = R.compose(
+    EM.fold('', Formats.formatDateInstant),
+    R.prop('deadline-date')
+  );
 
   const newResponse = (responseType, energiatodistus) =>
     fork('new-response', response =>
@@ -44,20 +47,21 @@
 
 {#each [...last(toimenpiteet)] as lastToimenpide}
   {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
-
     <H2 text={toimenpideText(lastToimenpide, 'title')} />
     <div class="mb-5">
       <p class="mb-2">
-        {R.replace('{deadline-date}',
+        {R.replace(
+          '{deadline-date}',
           deadlineDate(lastToimenpide),
-          toimenpideText(lastToimenpide, 'response-description'))}
+          toimenpideText(lastToimenpide, 'response-description')
+        )}
       </p>
 
       <div class="flex">
         <TextButton
           on:click={newResponse(responseType, energiatodistus)}
           icon="create"
-          text="{i18n(i18nRoot + '.start-button')}" />
+          text={i18n(i18nRoot + '.start-button')} />
       </div>
     </div>
   {/each}
@@ -66,9 +70,11 @@
     <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
     <div class="mb-5">
       <p class="mb-2">
-        {R.replace('{deadline-date}',
+        {R.replace(
+          '{deadline-date}',
           deadlineDate(request(toimenpiteet)),
-          toimenpideText(request(toimenpiteet), 'response-description'))}
+          toimenpideText(request(toimenpiteet), 'response-description')
+        )}
       </p>
       <p class="mb-2">
         {i18n(i18nRoot + '.note')}
@@ -83,9 +89,15 @@
   {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
     <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
     <p class="mb-5">
-      {R.replace('{publish-date}',
-        Maybe.fold('', Formats.formatTimeInstantMinutes, lastToimenpide['publish-time']),
-        i18n(i18nRoot + '.response-sent-description'),)}
+      {R.replace(
+        '{publish-date}',
+        Maybe.fold(
+          '',
+          Formats.formatTimeInstantMinutes,
+          lastToimenpide['publish-time']
+        ),
+        i18n(i18nRoot + '.response-sent-description')
+      )}
       <span class="inline-block">
         <Link
           href={Links.toimenpide(lastToimenpide, energiatodistus)}
