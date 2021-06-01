@@ -46,25 +46,27 @@
 </script>
 
 {#each [...last(toimenpiteet)] as lastToimenpide}
-  {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
-    <H2 text={toimenpideText(lastToimenpide, 'title')} />
-    <div class="mb-5">
-      <p class="mb-2">
-        {R.replace(
-          '{deadline-date}',
-          deadlineDate(lastToimenpide),
-          toimenpideText(lastToimenpide, 'response-description')
-        )}
-      </p>
+  {#if !Toimenpiteet.isDraft(lastToimenpide)}
+    {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
+      <H2 text={toimenpideText(lastToimenpide, 'title')} />
+      <div class="mb-5">
+        <p class="mb-2">
+          {R.replace(
+            '{deadline-date}',
+            deadlineDate(lastToimenpide),
+            toimenpideText(lastToimenpide, 'response-description')
+          )}
+        </p>
 
-      <div class="flex">
-        <TextButton
-          on:click={newResponse(responseType, energiatodistus)}
-          icon="create"
-          text={i18n(i18nRoot + '.start-button')} />
+        <div class="flex">
+          <TextButton
+            on:click={newResponse(responseType, energiatodistus)}
+            icon="create"
+            text={i18n(i18nRoot + '.start-button')} />
+        </div>
       </div>
-    </div>
-  {/each}
+    {/each}
+  {/if}
 
   {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
     <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
