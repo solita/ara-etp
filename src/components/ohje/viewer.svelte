@@ -7,6 +7,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as api from './ohje-api';
+  import { flashMessageStore } from '@/stores';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
