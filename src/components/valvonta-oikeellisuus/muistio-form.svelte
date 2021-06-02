@@ -32,18 +32,20 @@
   $: formatSeverity = Locales.labelForId($locale, severities);
 
   const addVirhe = virhetyyppiId => {
-    const newVirhe = {
-      'type-id': virhetyyppiId,
-      description: R.compose(
-        Locales.prop('description', $locale),
-        R.find(R.propEq('id', virhetyyppiId))
-      )(virhetyypit)
-    };
+    if (!isNaN(virhetyyppiId)) {
+      const newVirhe = {
+        'type-id': virhetyyppiId,
+        description: R.compose(
+          Locales.prop('description', $locale),
+          R.find(R.propEq('id', virhetyyppiId))
+        )(virhetyypit)
+      };
 
-    toimenpide = R.over(R.lensProp('virheet'), R.prepend(newVirhe), toimenpide);
+      toimenpide = R.over(R.lensProp('virheet'), R.prepend(newVirhe), toimenpide);
 
-    virhetyyppi = Maybe.None();
-    dirty = true;
+      virhetyyppi = Maybe.None();
+      dirty = true;
+    }
   };
 
   const removeVirhe = index => {
@@ -83,6 +85,7 @@
         parse={Maybe.fromNull}
         format={formatTemplate}
         required={true}
+        {disabled}
         validation={schema.publish}
         items={R.pluck('id', templates)} />
     </div>
@@ -90,19 +93,21 @@
 </div>
 
 <H2 text="Virheet" />
-
-<div class="w-1/2 py-4">
-  <Select
-    label="Lisää uusi virhe"
-    bind:model={virhetyyppi}
-    lens={R.lens(R.identity, R.identity)}
-    inputValueParse={R.prop('id')}
-    format={Locales.label($locale)}
-    on:change={event => addVirhe(parseInt(event.target.value))}
-    required={true}
-    validation={schema.publish}
-    items={virhetyypit} />
-</div>
+{#if !disabled}
+  <div class="w-1/2 py-4">
+    <Select
+      label="Lisää uusi virhe"
+      bind:model={virhetyyppi}
+      lens={R.lens(R.identity, R.identity)}
+      inputValueParse={R.prop('id')}
+      format={Locales.label($locale)}
+      on:change={event => addVirhe(parseInt(event.target.value))}
+      required={false}
+      {disabled}
+      validation={schema.publish}
+      items={virhetyypit} />
+  </div>
+{/if}
 
 <div class="my-5">
   {#each toimenpide.virheet as virhe, index}
@@ -111,26 +116,28 @@
         <div class="text-primary font-bold truncate">
           {formatVirhetyyppi(virhe['type-id'])}
         </div>
-        <div class="ml-2 flex">
-          {#if Maybe.exists(R.equals(index), virheInEditMode)}
+        {#if !disabled}
+          <div class="ml-2 flex">
+            {#if Maybe.exists(R.equals(index), virheInEditMode)}
+              <button
+                on:click|preventDefault|stopPropagation={close}
+                class="flex items-center space-x-1 mx-1 text-primary text-sm">
+                <span class="font-icon">close</span> Sulje muokkaus
+              </button>
+            {:else}
+              <button
+                on:click|preventDefault|stopPropagation={_ => edit(index)}
+                class="flex items-center space-x-1 mx-1 text-primary text-sm">
+                <span class="font-icon">edit</span> Muokkaa
+              </button>
+            {/if}
             <button
-              on:click|preventDefault|stopPropagation={close}
-              class="flex items-center space-x-1 mx-1 text-primary text-sm">
-              <span class="font-icon">close</span> Sulje muokkaus
+              on:click|preventDefault|stopPropagation={_ => removeVirhe(index)}
+              class="flex items-center space-x-1 mx-1 text-error text-sm">
+              <span class="font-icon">remove_circle</span> Poista
             </button>
-          {:else}
-            <button
-              on:click|preventDefault|stopPropagation={_ => edit(index)}
-              class="flex items-center space-x-1 mx-1 text-primary text-sm">
-              <span class="font-icon">edit</span> Muokkaa
-            </button>
-          {/if}
-          <button
-            on:click|preventDefault|stopPropagation={_ => removeVirhe(index)}
-            class="flex items-center space-x-1 mx-1 text-error text-sm">
-            <span class="font-icon">remove_circle</span> Poista
-          </button>
-        </div>
+          </div>
+        {/if}
       </div>
       <div>
         {#if Maybe.exists(R.equals(index), virheInEditMode)}
@@ -170,6 +177,7 @@
     parse={Maybe.fromNull}
     format={formatSeverity}
     required={true}
+    {disabled}
     validation={schema.publish}
     items={R.pluck('id', severities)} />
 </div>
