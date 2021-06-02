@@ -23,6 +23,16 @@
   export let fork;
 
   const last = R.compose(Maybe.fromNull, R.last);
+  const request = R.nth(-2);
+
+  const i18nRoot = 'valvonta.oikeellisuus.laatija-response';
+  const i18n = $_;
+  const toimenpideText = R.compose(i18n, Toimenpiteet.i18nKey);
+
+  const deadlineDate = R.compose(
+    EM.fold('', Formats.formatDateInstant),
+    R.prop('deadline-date')
+  );
 
   const newResponse = (responseType, energiatodistus) =>
     fork('new-response', response =>
@@ -35,67 +45,66 @@
     );
 </script>
 
-<H2 text="Vastaus" />
-
-<div class="mb-5">
-  {#each [...last(toimenpiteet)] as lastToimenpide}
+{#each [...last(toimenpiteet)] as lastToimenpide}
+  {#if !Toimenpiteet.isDraft(lastToimenpide)}
     {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
-      <div>
+      <H2 text={toimenpideText(lastToimenpide, 'title')} />
+      <div class="mb-5">
         <p class="mb-2">
-          Laatijalta pyydetään vastausta liitteineen tietopyyntöön
-          {EM.fold(
-            '',
-            Formats.formatDateInstant,
-            lastToimenpide['deadline-date']
+          {R.replace(
+            '{deadline-date}',
+            deadlineDate(lastToimenpide),
+            toimenpideText(lastToimenpide, 'response-description')
           )}
-          mennessä.
         </p>
 
         <div class="flex">
           <TextButton
             on:click={newResponse(responseType, energiatodistus)}
             icon="create"
-            text="Aloita vastauksen tekeminen tietopyyntöön." />
+            text={i18n(i18nRoot + '.start-button')} />
         </div>
       </div>
     {/each}
+  {/if}
 
-    {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
+  {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
+    <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
+    <div class="mb-5">
       <p class="mb-2">
-        Laatijalta pyydetään vastausta liitteineen tietopyyntöön
-        {EM.fold(
-          '',
-          Formats.formatDateInstant,
-          toimenpiteet[R.length(toimenpiteet) - 2]['deadline-date']
+        {R.replace(
+          '{deadline-date}',
+          deadlineDate(request(toimenpiteet)),
+          toimenpideText(request(toimenpiteet), 'response-description')
         )}
-        mennessä.
       </p>
       <p class="mb-2">
-        Kun vastaus ja liitteet on tallennettu järjestelmään, muista lopuksi
-        vielä lähettää vastaus.
+        {i18n(i18nRoot + '.note')}
       </p>
       <div class="flex">
         <Link
           href={Links.toimenpide(lastToimenpide, energiatodistus)}
           icon={Maybe.Some('edit')}
-          text="Jatka vastauksen tekemistä tietopyyntöön." />
+          text={i18n(i18nRoot + '.continue-link')} />
       </div>
-    {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
-      <p class="mb-2">
-        Laatija on lähettänyt
-        <span class="inline-block">
-          <Link
-            href={Links.toimenpide(lastToimenpide, energiatodistus)}
-            text="vastauksen" />
-        </span>
-        tietopyyntöön.
-      </p>
-    {:else if Maybe.isNone(Toimenpiteet.responseTypeFor(lastToimenpide))}
-      Laatijalla ei ole keskeneräisiä toimenpiteitä.
-    {/if}
-  {/each}
-
-  {#if R.isEmpty(toimenpiteet)}
-    Laatijalla ei ole keskeneräisiä toimenpiteitä.
+    </div>
+  {:else if Toimenpiteet.isResponse(lastToimenpide) && !Toimenpiteet.isDraft(lastToimenpide)}
+    <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
+    <p class="mb-5">
+      {R.replace(
+        '{publish-date}',
+        Maybe.fold(
+          '',
+          Formats.formatTimeInstantMinutes,
+          lastToimenpide['publish-time']
+        ),
+        i18n(i18nRoot + '.response-sent-description')
+      )}
+      <span class="inline-block">
+        <Link
+          href={Links.toimenpide(lastToimenpide, energiatodistus)}
+          text={i18n(i18nRoot + '.response-sent-link')} />
+      </span>
+    </p>
   {/if}
-</div>
+{/each}

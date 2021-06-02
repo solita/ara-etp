@@ -1225,6 +1225,14 @@
           "new-response-error": "Vastauksen luonti epäonnistui."
         }
       },
+      "laatija-response": {
+        "title": "Vastaus",
+        "note": "Kun vastaus ja mahdolliset liitteet on tallennettu järjestelmään, muista lopuksi vielä lähettää vastaus.",
+        "start-button": "Aloita vastauksen tekeminen",
+        "continue-link": "Jatka vastaamista",
+        "response-sent-description": "Vastaus annettu {publish-date}.",
+        "response-sent-link": "Katso vastaus."
+      },
       "toimenpide": {
         "cancel-button": "Peruuta",
         "verified": {
@@ -1248,7 +1256,10 @@
         "rfi-request": {
           "title": "Tietopyyntö",
           "info": "Pyydetään laatijalta lisää tietoa.",
-          "publish-button": "Lähetä tietopyyntö"
+          "publish-button": "Lähetä tietopyyntö",
+
+          "response-title": "Tietopyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-reply": {
           "title": "Vastaus tietopyyntöön",
@@ -1260,12 +1271,18 @@
         "rfi-order": {
           "title": "Tietopyyntö kehoitus",
           "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
-          "publish-button": "Lähetä kehoitus"
+          "publish-button": "Lähetä kehoitus",
+
+          "response-title": "Kehotus vastata tietopyyntöön",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-warning": {
           "title": "Tietopyyntö varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
-          "publish-button": "Lähetä varoitus"
+          "publish-button": "Lähetä varoitus",
+
+          "response-title": "Varoitus tietopyyntöön liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
         "audit-report": {
           "title": "Valvontamuistio",
@@ -1275,7 +1292,10 @@
           "delete-button": "Poista luonnos",
           "virhe": {
             "description": "Virheen kuvaus"
-          }
+          },
+
+          "response-title": "Valvontamuistio",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "audit-reply": {
           "title": "Vastaus valvontamuistioon",
@@ -1287,18 +1307,27 @@
         "audit-order": {
           "title": "Valvontamuistio kehoitus",
           "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
-          "publish-button": "Lähetä kehoitus"
+          "publish-button": "Lähetä kehoitus",
+
+          "response-title": "Kehotus vastata valvontamuistioon",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "audit-warning": {
           "title": "Valvontamuistio varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
-          "publish-button": "Lähetä varoitus"
+          "publish-button": "Lähetä varoitus",
+
+          "response-title": "Varoitus valvontamuistioon liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
         "rfc-request": {
           "title": "Lisäselvityspyyntö",
           "info": "Pyydetään laatijalta lisäselvityspyyntö.",
           "description": "Lisäselvityspyyntö",
-          "publish-button": "Lähetä"
+          "publish-button": "Lähetä",
+
+          "response-title": "Lisäselvityspyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfc-reply": {
           "title": "Vastaus lisäselvityspyyntöön",

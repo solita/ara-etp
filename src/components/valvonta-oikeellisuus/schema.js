@@ -34,7 +34,9 @@ export const toimenpidePublish = (templates, toimenpide) =>
       ),
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
       description: addRequiredValidator(isDescriptionRequired(toimenpide)),
-      'severity-id': addRequiredValidator(Toimenpiteet.isAuditReport(toimenpide))
+      'severity-id': addRequiredValidator(
+        Toimenpiteet.isAuditReport(toimenpide)
+      )
     },
     toimenpideSave
   );
