@@ -47,13 +47,19 @@
     clearTimeout(hoverTimeout);
   };
   const drop = e => {
+    e.preventDefault();
     if (!draggable) return;
     isBeingTargeted = false;
 
     const droppedSivuId = parseInt(e.dataTransfer.getData('text/plain'));
     const targetSivuId = parseInt(sivu.id);
 
-    if (droppedSivuId === targetSivuId) return;
+    if (
+      droppedSivuId === targetSivuId ||
+      isNaN(droppedSivuId) ||
+      isNaN(targetSivuId)
+    )
+      return;
 
     if (setDroppedAsChild) {
       updateSivu(droppedSivuId, {
