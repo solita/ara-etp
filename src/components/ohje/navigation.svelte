@@ -86,7 +86,7 @@
         response => {
           const msg = i18n(
             Maybe.orSome(
-              'ohje.navigation.sort-success',
+              'ohje.navigation.sort-error',
               Response.localizationKey(response)
             )
           );
