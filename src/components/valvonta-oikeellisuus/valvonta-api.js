@@ -8,7 +8,7 @@ import * as EM from '@Utility/either-maybe';
 import * as Query from '@Utility/query';
 import * as dfns from 'date-fns';
 
-import * as energiatodistusApi from '@Component/Energiatodistus/energiatodistus-api';
+import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
 
 export const url = {
   valvonnat: 'api/private/valvonta/oikeellisuus',
@@ -17,7 +17,8 @@ export const url = {
   preview: id => `${url.valvonta(id)}/toimenpiteet/preview`,
   document: (id, toimenpideId, filename) =>
     `${url.toimenpiteet(id)}/${toimenpideId}/document/${filename}`,
-  toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`
+  toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`,
+  liitteet: (id, toimenpideId) => `${url.toimenpide(id, toimenpideId)}/liitteet`
 };
 
 export const deserializeToimenpide = R.evolve({
@@ -37,7 +38,7 @@ export const deserializeToimenpide = R.evolve({
 export const deserializeValvontaStatus = R.compose(
   R.evolve({
     lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull),
-    energiatodistus: energiatodistusApi.deserialize
+    energiatodistus: EtApi.deserialize
   }),
   Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
 );
@@ -163,4 +164,43 @@ export const previewToimenpide = R.curry((id, toimenpide) =>
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.preview(id))),
     serializeToimenpide
   )(toimenpide)
+);
+
+export const getLiitteet = R.curry((id, toimenpideId) =>
+  R.compose(
+    R.map(R.map(EtApi.deserializeLiite)),
+    Fetch.getJson(fetch),
+    url.liitteet
+  )(id, toimenpideId)
+);
+
+export const postLiitteetFiles = R.curry((id, toimenpideId, files) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(files =>
+      fetch(
+        url.liitteet(id, toimenpideId) + '/files', {
+          method: 'POST',
+          body: EtApi.toFormData('files', files)
+        })
+    )
+  )(files)
+);
+
+export const postLiitteetLink = R.curry((id, toimenpideId, link) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(id, toimenpideId) + '/link')
+    )
+  )(link)
+);
+
+export const deleteLiite = R.curry((id, toimenpideId, liiteId) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(liiteId =>
+      Fetch.deleteRequest(fetch, url.liitteet(id, toimenpideId) + '/' + liiteId)
+    )
+  )(liiteId)
 );

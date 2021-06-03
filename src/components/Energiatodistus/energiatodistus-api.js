@@ -180,7 +180,7 @@ export const getLiitteetById = R.curry((fetch, version, id) =>
   )(version, id)
 );
 
-const toFormData = (name, files) => {
+export const toFormData = (name, files) => {
   const data = new FormData();
   R.forEach(file => {
     data.append(name, file);
