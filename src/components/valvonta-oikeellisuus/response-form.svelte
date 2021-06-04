@@ -9,7 +9,7 @@
   import { _, locale } from '@Language/i18n';
 
   import * as Toimenpiteet from './toimenpiteet';
-  import Textarea from '@Component/Textarea/Textarea.svelte';
+  import TextEditor from '@Component/text-editor/text-editor';
   import Liitteet from '@Component/liitteet/liitteet.svelte';
   import H2 from '@Component/H/H2.svelte';
 
@@ -25,9 +25,8 @@
 </script>
 
 <div class="w-full py-4 mb-4">
-  <Textarea
+  <TextEditor
     id={'toimenpide.description'}
-    name={'toimenpide.description'}
     label={text(toimenpide, 'description')}
     {disabled}
     bind:model={toimenpide}
