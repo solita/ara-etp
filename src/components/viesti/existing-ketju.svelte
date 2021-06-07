@@ -14,9 +14,11 @@
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
   import { _ } from '@Language/i18n';
+  import { pop } from '@Component/Router/router';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Button from '@Component/Button/Button.svelte';
+  import TextButton from '@Component/Button/TextButton';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Link from '@Component/Link/Link.svelte';
@@ -184,10 +186,11 @@
     {#each resources.toArray() as { ketju, whoami, ryhmat, kasittelijat }}
       <DirtyConfirmation {dirty} />
       <div class="flex">
-        <Link
+        <TextButton
+          on:click={pop}
+          icon="arrow_back"
           text={i18n(i18nRoot + '.back')}
-          href="#/viesti/all"
-          icon={Maybe.Some('arrow_back')} />
+          style={'secondary'} />
       </div>
 
       <div
@@ -313,10 +316,11 @@
     {/each}
 
     <div class="flex mt-4">
-      <Link
-        text={$_(i18nRoot + '.back')}
-        href="#/viesti/all"
-        icon={Maybe.Some('arrow_back')} />
+      <TextButton
+        on:click={pop}
+        icon="arrow_back"
+        text={i18n(i18nRoot + '.back')}
+        style={'secondary'} />
     </div>
   </div>
   <div slot="overlay-content">
