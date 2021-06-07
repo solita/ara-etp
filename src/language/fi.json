@@ -1235,6 +1235,8 @@
       },
       "toimenpide": {
         "cancel-button": "Peruuta",
+        "preview-button": "Esikatsele",
+        "download-button": "Lataa",
         "verified": {
           "title": "Merkitse katsotuksi",
           "info": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",
@@ -1355,6 +1357,7 @@
           "save-error": "Toimenpiteen tallennus epäonnistui.",
           "publish-success": "Toimenpide on lähetetty.",
           "publish-error": "Toimenpiteen lähetys epäonnistui.",
+          "preview-error": "Toimenpiteen esikatselu epäonnistui.",
           "add-success": "Toimenpide lisätty.",
           "add-error": "Toimenpiteen lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä.",

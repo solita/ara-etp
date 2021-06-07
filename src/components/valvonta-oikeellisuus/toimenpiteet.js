@@ -97,6 +97,8 @@ export const emptyToimenpide = typeId => ({
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
 
+export const hasTemplate = R.compose(Maybe.isSome, R.prop('template-id'));
+
 export const templates = templatesByType =>
   R.compose(R.defaultTo([]), R.prop(R.__, templatesByType), R.prop('type-id'));
 

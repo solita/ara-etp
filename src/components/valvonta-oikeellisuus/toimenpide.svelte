@@ -11,6 +11,8 @@
   import * as Links from './links';
   import Link from '../Link/Link.svelte';
 
+  import * as valvontaApi from './valvonta-api';
+
   export let energiatodistus;
   export let toimenpide;
   export let toimenpidetyypit;
@@ -47,4 +49,17 @@
       {Formats.formatDateInstant(deadline)}
     </div>
   {/each}
+
+  {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
+    <div class="ml-2">
+      <Link
+        text={toimenpide.filename}
+        target={'_blank'}
+        href={valvontaApi.url.document(
+          toimenpide['energiatodistus-id'],
+          toimenpide.id,
+          toimenpide['filename']
+        )} />
+    </div>
+  {/if}
 </div>

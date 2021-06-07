@@ -68,6 +68,33 @@
       Validation.blurForm(form);
     }
   };
+
+  $: preview = toimenpide => {
+    if (isValidForm(toimenpide)) {
+      Future.fork(
+        response => {
+          const msg = i18n(
+            Maybe.orSome(
+              `${i18nRoot}.messages.preview-error`,
+              Response.localizationKey(response)
+            )
+          );
+          error = Maybe.Some(msg);
+        },
+        response => {
+          let link = document.createElement('a');
+          link.target = '_blank';
+          link.href = URL.createObjectURL(response);
+          link.click();
+          URL.revokeObjectURL(link.href);
+        },
+        ValvontaApi.previewToimenpide(id, toimenpide)
+      );
+    } else {
+      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      Validation.blurForm(form);
+    }
+  };
 </script>
 
 <style type="text/postcss">
@@ -165,6 +192,15 @@
           style={'secondary'}
           on:click={reload} />
       </div>
+
+      {#if !R.isEmpty(templates)}
+        <div class="mt-5 ml-5">
+          <Button
+            text={i18n(i18nRoot + '.preview-button')}
+            style={'secondary'}
+            on:click={preview(toimenpide)} />
+        </div>
+      {/if}
     </div>
   </form>
 </dialog>

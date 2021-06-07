@@ -8,6 +8,8 @@ export const toJson = Future.encaseP(response => response.json());
 
 export const toText = Future.encaseP(response => response.text());
 
+export const toBlob = Future.encaseP(response => response.blob());
+
 const contentType = R.compose(
   R.chain(headers => Maybe.fromNull(headers.get('content-type'))),
   Maybe.fromNull,
@@ -35,6 +37,11 @@ export const rejectWithInvalidResponse = R.ifElse(
 
 export const responseAsJson = R.compose(
   R.chain(toJson),
+  R.chain(rejectWithInvalidResponse)
+);
+
+export const responseAsBlob = R.compose(
+  R.chain(toBlob),
   R.chain(rejectWithInvalidResponse)
 );
 

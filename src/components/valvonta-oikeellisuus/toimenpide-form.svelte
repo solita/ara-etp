@@ -12,6 +12,7 @@
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Schema from './schema';
+  import * as valvontaApi from './valvonta-api';
 
   import { _ } from '@Language/i18n';
 
@@ -56,6 +57,26 @@
   const submitToimenpide = submit => {
     if (Validation.isValidForm(schema)(toimenpide)) {
       submit(toimenpide);
+    } else {
+      flashMessageStore.add(
+        'valvonta-oikeellisuus',
+        'error',
+        $_(`${i18nRoot}.messages.validation-error`)
+      );
+      Validation.blurForm(form);
+    }
+  };
+
+  const previewToimenpide = () => {
+    if (Validation.isValidForm(Schema.toimenpideSave)(toimenpide)) {
+      window.open(
+        valvontaApi.url.document(
+          toimenpide['energiatodistus-id'],
+          toimenpide.id,
+          toimenpide['filename']
+        ),
+        '_blank'
+      );
     } else {
       flashMessageStore.add(
         'valvonta-oikeellisuus',
@@ -119,6 +140,12 @@
       text={text(toimenpide, 'reset-button')}
       type={'reset'}
       style={'secondary'} />
+    <Button
+      disabled={Maybe.isNone(publish)}
+      on:click={previewToimenpide}
+      text={!Toimenpiteet.isDraft(toimenpide)
+        ? $_(i18nRoot + '.download-button')
+        : $_(i18nRoot + '.preview-button')} />
   </div>
 </form>
 

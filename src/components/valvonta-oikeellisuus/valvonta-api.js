@@ -10,10 +10,13 @@ import * as dfns from 'date-fns';
 
 import * as energiatodistusApi from '@Component/Energiatodistus/energiatodistus-api';
 
-const url = {
+export const url = {
   valvonnat: 'api/private/valvonta/oikeellisuus',
   valvonta: id => `${url.valvonnat}/${id}`,
   toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`,
+  preview: id => `${url.valvonta(id)}/toimenpiteet/preview`,
+  document: (id, toimenpideId, filename) =>
+    `${url.toimenpiteet(id)}/${toimenpideId}/document/${filename}`,
   toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`
 };
 
@@ -152,4 +155,12 @@ export const publishToimenpide = R.curry((id, toimenpideId) =>
       Fetch.postEmpty(fetch, url.toimenpide(id, toimenpideId) + '/publish')
     )
   )
+);
+
+export const previewToimenpide = R.curry((id, toimenpide) =>
+  R.compose(
+    Fetch.responseAsBlob,
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.preview(id))),
+    serializeToimenpide
+  )(toimenpide)
 );
