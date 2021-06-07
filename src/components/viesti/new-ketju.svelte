@@ -21,7 +21,7 @@
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
-  import { replace } from '@Component/Router/router';
+  import * as Router from '@Component/Router/router';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
@@ -36,16 +36,16 @@
   const i18nRoot = 'viesti.ketju.new';
   const i18n = $_;
 
+  export let etFuture = Future.resolve(Maybe.None());
+
   let resources = Maybe.None();
   let dirty = false;
   let overlay = true;
   let enableOverlay = _ => {
     overlay = true;
   };
-  let ketju = Viestit.emptyKetju();
 
-  const isAllowedToSendToEveryone = whoami =>
-    R.or(Kayttajat.isPaakayttaja(whoami), Kayttajat.isLaskuttaja(whoami));
+  let ketju = Viestit.emptyKetju();
 
   const formatVastaanottaja = kayttaja =>
     `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
@@ -80,17 +80,16 @@
       },
       response => {
         resources = Maybe.Some(response);
-        if (!isAllowedToSendToEveryone(response.whoami)) {
-          ketju['vastaanottajaryhma-id'] = Maybe.Some(0);
-        }
+        ketju = Viestit.defaultKetju(response.energiatodistus, response.whoami);
         overlay = false;
       }
     ),
     R.chain(whoami =>
-      Future.parallelObject(3, {
+      Future.parallelObject(4, {
         vastaanottajaryhmat: api.vastaanottajaryhmat,
         whoami: Future.resolve(whoami),
-        laatijat: isAllowedToSendToEveryone(whoami)
+        energiatodistus: etFuture,
+        laatijat: Viestit.isAllowedToSendToEveryone(whoami)
           ? laatijaApi.laatijat
           : Future.resolve([])
       })
@@ -116,7 +115,7 @@
           i18n(`${i18nRoot}.messages.success`)
         );
         dirty = false;
-        replace('#/viesti/all');
+        Router.pop();
       }
     ),
     api.postKetju(fetch)
@@ -161,9 +160,9 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={i18n(`${i18nRoot}.title`)} />
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as { whoami, laatijat, vastaanottajaryhmat }}
+    {#each resources.toArray() as { whoami, laatijat, vastaanottajaryhmat, energiatodistus }}
+      <H1 text={Maybe.fold('', et => 'ET ' + et.id + ' - ', energiatodistus)  + i18n(`${i18nRoot}.title`)} />
       <form
         id="ketju"
         on:submit|preventDefault={submitNewKetju}
@@ -173,7 +172,7 @@
         on:change={_ => {
           dirty = true;
         }}>
-        {#if isAllowedToSendToEveryone(whoami)}
+        {#if Viestit.isAllowedToSendToEveryone(whoami)}
           <div class="lg:w-1/2 w-full py-4">
             <Autocomplete
               items={R.map(formatVastaanottaja, laatijat)}
@@ -201,7 +200,7 @@
             id={'ketju.vastaanottajaryhma'}
             label={i18n('viesti.ketju.vastaanottajaryhma')}
             required={isVastaanottajaRyhmaRequired}
-            disabled={!isAllowedToSendToEveryone(whoami)}
+            disabled={!Viestit.isAllowedToSendToEveryone(whoami)}
             allowNone={true}
             bind:model={ketju}
             parse={Maybe.fromNull}

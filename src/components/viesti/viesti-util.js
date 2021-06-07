@@ -2,6 +2,18 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as Kayttajat from '@Utility/kayttajat';
 
+export const isAllowedToSendToEveryone = whoami =>
+  R.or(Kayttajat.isPaakayttaja(whoami), Kayttajat.isLaskuttaja(whoami));
+
+export const defaultKetju = (energiatodistus, whoami) => ({
+  vastaanottajat: isAllowedToSendToEveryone(whoami) ?
+    Maybe.fold([], R.compose(Maybe.toArray, R.prop('laatija-id')), energiatodistus) : [],
+  'vastaanottajaryhma-id': isAllowedToSendToEveryone(whoami) ? Maybe.None() : Maybe.Some(0),
+  'energiatodistus-id': R.map(R.prop('id'), energiatodistus),
+  subject: '',
+  body: ''
+});
+
 export const emptyKetju = _ => ({
   vastaanottajat: [],
   'vastaanottajaryhma-id': Maybe.None(),
