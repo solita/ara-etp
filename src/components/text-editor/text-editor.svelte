@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Either from '@Utility/either-utils';
   import * as Validation from '@Utility/validation';
+  import DOMPurify from 'dompurify';
   import Label from '@Component/Label/Label';
 
   import { quill } from './quill';
@@ -24,8 +25,8 @@
   export let required = true;
   export let compact = false;
 
-  export let model = { empty: 'fdsjafidjsiafds\n\nfdjsfpdjsipjfds\n' };
-  export let lens = R.lensProp('empty');
+  export let model = '';
+  export let lens = R.identity;
 
   export let parse = R.identity;
   export let format = R.identity;
@@ -43,6 +44,7 @@
   let errorMessage = '';
 
   export let i18n = R.identity;
+  export let disabled;
 
   $: highlightError = focused && !valid;
 
@@ -67,34 +69,40 @@
   }
 </style>
 
-<Label {id} {required} {label} {compact} error={highlightError} {focused} />
+{#if !disabled}
+  <Label {id} {required} {label} {compact} error={highlightError} {focused} />
+{/if}
 <Style>
-  <div
-    on:focusout={evt => {
-      focused = false;
-      model = R.set(
-        lens,
+  {#if !disabled}
+    <div
+      on:focusout={evt => {
+        focused = false;
+        model = R.set(
+          lens,
+          R.compose(
+            parse,
+            R.bind(turndownService.turndown, turndownService)
+          )(evt.target.innerHTML),
+          model
+        );
+      }}
+      on:focusin={_ => (focused = true)}
+      on:text-change={evt =>
         R.compose(
+          validate,
           parse,
+          R.join(''),
+          R.filter(R.test(/(\w|[ÅÄÖ])/i)),
+          R.replace(/<\/?[^>]+(>|$)/g, ''),
           R.bind(turndownService.turndown, turndownService)
-        )(evt.target.innerHTML),
-        model
-      );
-    }}
-    on:focusin={_ => (focused = true)}
-    on:text-change={evt =>
-      R.compose(
-        validate,
-        R.join(''),
-        R.filter(R.test(/(\w|[ÅÄÖ])/i)),
-        R.replace(/<\/?[^>]+(>|$)/g, ''),
-        parse,
-        R.bind(turndownService.turndown, turndownService)
-      )(evt.detail.html)}
-    use:quill={viewValue} />
+        )(evt.detail.html)}
+      use:quill={viewValue} />
+  {:else}
+    {@html DOMPurify.sanitize(Marked(format(R.view(lens, model))))}
+  {/if}
 </Style>
 
-{#if !valid}
+{#if !valid && !disabled}
   <div class="error-label">
     <span class="font-icon error-icon">error</span>
     {errorMessage}
