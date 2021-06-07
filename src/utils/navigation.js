@@ -75,6 +75,15 @@ export const linksForEnergiatodistus = R.curry(
             href: `#/valvonta/oikeellisuus/${version}/${id}`
           }
         ]
+      : []),
+
+    ...(isDev
+      ? [
+        {
+          label: i18n('navigation.energiatodistus-viestit'),
+          href: `#/energiatodistus/${version}/${id}/viestit`
+        }
+      ]
       : [])
   ]
 );

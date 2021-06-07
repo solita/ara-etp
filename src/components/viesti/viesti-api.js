@@ -12,7 +12,8 @@ const url = {
   ketjutUnread: '/api/private/viestit/count/unread',
   ketju: id => `${url.ketjut}/${id}`,
   viestit: id => `${url.ketju(id)}/viestit`,
-  kasittelijat: '/api/private/kasittelijat'
+  kasittelijat: '/api/private/kasittelijat',
+  energiatodistusKetjut: id => `/api/private/energiatodistukset/all/${id}/viestit`,
 };
 
 export const serialize = R.evolve({
@@ -85,3 +86,10 @@ export const postNewViesti = R.curry((fetch, id, body) =>
 );
 
 export const vastaanottajaryhmat = Fetch.cached(fetch, '/vastaanottajaryhmat');
+
+export const getEnergiatodistusKetjut = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.energiatodistusKetjut
+);
