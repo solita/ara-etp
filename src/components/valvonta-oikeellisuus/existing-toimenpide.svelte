@@ -19,7 +19,6 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import ToimenpideForm from './toimenpide-form.svelte';
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
 
   export let params;
 
@@ -58,7 +57,7 @@
         templatesByType: ValvontaApi.templatesByType,
         virhetyypit: ValvontaApi.virhetyypit,
         severities: ValvontaApi.severities,
-        liitteet: EtApi.getLiitteetById(fetch, params.versio, params.id),
+        liitteet: ValvontaApi.getLiitteet(params.id, params['toimenpide-id']),
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])
       })
     );
@@ -119,21 +118,21 @@
     );
 
   const liiteApi = {
-    getUrl: R.always(api.url.liitteet(params.versio, params.id)),
+    getUrl: R.always(EtApi.url.liitteet(params.versio, params.id)),
 
     addFiles: liiteOperation(
       'add-files',
-      EtApi.postLiitteetFiles(fetch, params.versio, params.id)
+      ValvontaApi.postLiitteetFiles(params.id, params['toimenpide-id'])
     ),
 
     addLink: liiteOperation(
       'add-link',
-      EtApi.postLiitteetLink(fetch, params.versio, params.id)
+      ValvontaApi.postLiitteetLink(params.id, params['toimenpide-id'])
     ),
 
     deleteLiite: liiteOperation(
       'delete-liite',
-      EtApi.deleteLiite(fetch, params.versio, params.id)
+      ValvontaApi.deleteLiite(params.id, params['toimenpide-id'])
     )
   };
 </script>
