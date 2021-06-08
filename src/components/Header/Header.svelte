@@ -98,7 +98,7 @@
       <div class="flex flex-row justify-between">
         <div
           bind:this={ohjeNode}
-          class="relative cursor-pointer"
+          class="relative cursor-pointer hover:underline"
           on:click={() => (showOhjeDropdown = !showOhjeDropdown)}>
           <span> {$_('navigation.ohjeet')} </span>
           <span class="material-icons absolute">keyboard_arrow_down</span>
@@ -120,7 +120,7 @@
     {:else if Kayttajat.isPaakayttaja(R.head(whoami.toArray()))}
       <a class="text-light flex items-center" href={'/#/ohje/new'}>
         <span class="material-icons"> add </span>
-        <span>{$_('navigation.ohjeet')}</span>
+        <span class="hover:underline">{$_('navigation.ohjeet')}</span>
       </a>
     {/if}
 
@@ -128,7 +128,7 @@
       <div class="flex flex-row justify-between">
         <div
           bind:this={nameNode}
-          class="relative cursor-pointer"
+          class="relative cursor-pointer hover:underline"
           on:click={() => (showNameDropdown = !showNameDropdown)}>
           <span>
             {fullName(user)}
