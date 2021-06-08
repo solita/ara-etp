@@ -1,12 +1,12 @@
 <script>
-  import { flashMessageStore } from '@/stores';
-  import { _ } from '@Language/i18n';
-
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import { push } from '@Component/Router/router';
+  import { loc } from 'svelte-spa-router';
+
+  import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
 
   import * as ViestiApi from '@Component/viesti/viesti-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -23,8 +23,6 @@
 
   let resources = Maybe.None();
   let overlay = true;
-
-  const nextPageCallback = nextPage => push(`#/viesti/all?page=${nextPage}`);
 
   const load = params => {
     overlay = true;
@@ -99,7 +97,7 @@
           <Link
             icon={Maybe.Some('add_circle_outline')}
             text={i18n('viesti.all.new-viesti')}
-            href="#/viesti/new" />
+            href={'#' + $loc.location + '/new'} />
         </div>
       </div>
       {#if ketjut.length === 0}

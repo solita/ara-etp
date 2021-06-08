@@ -7,6 +7,7 @@
   import Energiatodistukset from './energiatodistukset';
   import Liitteet from './liitteet';
   import Viestit from './viestit';
+  import NewKetju from './new-ketju';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
   import NotFound from '@Component/NotFound/NotFound';
@@ -19,6 +20,7 @@
     '/:version/:id': ExistingEnergiatodistus,
     '/:version/:id/liitteet': Liitteet,
     '/:version/:id/viestit': Viestit,
+    '/:version/:id/viestit/new': NewKetju,
     '*': NotFound
   };
 </script>
