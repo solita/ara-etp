@@ -32,14 +32,16 @@
   $: formatVirhetyyppi = Locales.labelForId($locale, virhetyypit);
   $: formatSeverity = Locales.labelForId($locale, severities);
 
+  $: toimenpideLocale = R.compose(
+    R.map(R.prop('language')),
+    R.chain(id => Maybe.findById(id, templates)),
+    R.prop('template-id'));
+
   const addVirhe = virhetyyppiId => {
     if (!isNaN(virhetyyppiId)) {
-
-      const locale = R.compose(
-        Maybe.orSome(i18nLocale),
-        R.map(R.prop('language')),
-        R.chain(id => Maybe.findById(id, templates)),
-        R.prop('template-id'))(toimenpide);
+      const locale = Maybe.orSome(
+        i18nLocale,
+        toimenpideLocale(toimenpide));
 
       const newVirhe = {
         'type-id': virhetyyppiId,
