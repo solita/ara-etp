@@ -48,6 +48,7 @@
     "kayttajat": "Käyttäjät",
     "kayttaja": "Käyttäjä",
     "et": "ET",
+    "energiatodistus-viestit": "Viestit",
     "liitteet": "Liitteet",
     "allekirjoitus": "Allekirjoitus",
     "muutoshistoria": "Muutoshistoria",
@@ -1126,6 +1127,9 @@
         },
         "load-error": "Energiatodistuksen liitteiden haku epäonnistui."
       }
+    },
+    "viestit": {
+      "title": "Viestit"
     }
   },
   "energiatodistukset": {

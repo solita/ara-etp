@@ -47,6 +47,7 @@
     "kayttajat": "Användare",
     "kayttaja": "Användare",
     "et": "EC",
+    "energiatodistus-viestit": "Viestit SV?",
     "liitteet": "Bilagor",
     "allekirjoitus": "Signatur",
     "muutoshistoria": "Ändringshistoria",
@@ -1086,6 +1087,9 @@
         },
         "load-error": "Sökningen av energicertifikatets bilagor misslyckades."
       }
+    },
+    "viestit": {
+      "title": "Viestit SV?"
     }
   },
   "energiatodistukset": {
