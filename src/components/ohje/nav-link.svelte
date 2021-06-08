@@ -52,7 +52,7 @@
     isBeingTargeted = false;
 
     const droppedSivuId = parseInt(e.dataTransfer.getData('text/plain'));
-    const targetSivuId = parseInt(sivu.id);
+    const targetSivuId = sivu.id;
 
     if (
       droppedSivuId === targetSivuId ||
@@ -69,7 +69,7 @@
     } else {
       updateSivu(droppedSivuId, {
         'parent-id': sivu['parent-id'],
-        ordinal: parseInt(sivu.ordinal) + 1
+        ordinal: sivu.ordinal + 1
       });
     }
   };
