@@ -8,6 +8,7 @@
   import * as Router from '@Component/Router/router';
 
   import * as Links from './links';
+  import * as Toimenpiteet from './toimenpiteet';
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
@@ -90,16 +91,23 @@
     ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
   );
 
-  $: saveAndPreviewToimenpide = toimenpide =>
-    fork('save', _ => {
-      load(params);
-      window.open(
-        ValvontaApi.url.document(
-          toimenpide['energiatodistus-id'],
-          toimenpide.id,
-          toimenpide.filename
-        ), '_blank');
-    })(ValvontaApi.putToimenpide(params.id, params['toimenpide-id'], toimenpide));
+  const openPreview = toimenpide => window.open(
+    ValvontaApi.url.document(
+      toimenpide['energiatodistus-id'],
+      toimenpide.id,
+      toimenpide.filename
+    ), '_blank');
+
+  $: saveAndPreviewToimenpide = toimenpide => {
+    if (!Toimenpiteet.isDraft || !dirty) {
+      openPreview(toimenpide);
+    } else {
+      fork('save', _ => {
+        load(params);
+        openPreview(toimenpide);
+      })(ValvontaApi.putToimenpide(params.id, params['toimenpide-id'], toimenpide));
+    }
+  };
 
   $: saveAndPublishToimenpide = R.compose(
     fork('publish', _ => {
