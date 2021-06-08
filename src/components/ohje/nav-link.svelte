@@ -54,12 +54,7 @@
     const droppedSivuId = parseInt(e.dataTransfer.getData('text/plain'));
     const targetSivuId = sivu.id;
 
-    if (
-      droppedSivuId === targetSivuId ||
-      isNaN(droppedSivuId) ||
-      isNaN(targetSivuId)
-    )
-      return;
+    if (droppedSivuId === targetSivuId || isNaN(droppedSivuId)) return;
 
     if (setDroppedAsChild) {
       updateSivu(droppedSivuId, {
