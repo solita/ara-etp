@@ -46,6 +46,7 @@
   };
 
   let ketju = Viestit.emptyKetju();
+  let defaultKetju = Viestit.emptyKetju();
 
   const formatVastaanottaja = kayttaja =>
     `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
@@ -80,6 +81,7 @@
       },
       response => {
         resources = Maybe.Some(response);
+        defaultKetju = Viestit.defaultKetju(response.energiatodistus, response.whoami);
         ketju = Viestit.defaultKetju(response.energiatodistus, response.whoami);
         overlay = false;
       }
@@ -137,7 +139,7 @@
   };
 
   const cancel = _ => {
-    ketju = Viestit.emptyKetju();
+    ketju = defaultKetju;
     dirty = false;
   };
 
