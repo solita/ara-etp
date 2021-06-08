@@ -15,9 +15,9 @@ export const url = {
   valvonta: id => `${url.valvonnat}/${id}`,
   toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`,
   preview: id => `${url.valvonta(id)}/toimenpiteet/preview`,
-  document: (id, toimenpideId, filename) =>
-    `${url.toimenpiteet(id)}/${toimenpideId}/document/${filename}`,
   toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`,
+  document: (id, toimenpideId, filename) =>
+    `${url.toimenpide(id, toimenpideId)}/document/${filename}`,
   liitteet: (id, toimenpideId) => `${url.toimenpide(id, toimenpideId)}/liitteet`
 };
 

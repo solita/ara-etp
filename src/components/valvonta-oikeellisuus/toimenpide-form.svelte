@@ -32,6 +32,7 @@
   export let submit;
   export let cancel;
   export let publish = Maybe.None();
+  export let preview = Maybe.None();
   export let liiteApi;
   export let liitteet;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
@@ -67,25 +68,7 @@
     }
   };
 
-  const previewToimenpide = () => {
-    if (Validation.isValidForm(Schema.toimenpideSave)(toimenpide)) {
-      window.open(
-        valvontaApi.url.document(
-          toimenpide['energiatodistus-id'],
-          toimenpide.id,
-          toimenpide['filename']
-        ),
-        '_blank'
-      );
-    } else {
-      flashMessageStore.add(
-        'valvonta-oikeellisuus',
-        'error',
-        $_(`${i18nRoot}.messages.validation-error`)
-      );
-      Validation.blurForm(form);
-    }
-  };
+  const previewToimenpide = _ => R.forEach(submitToimenpide, preview);
 
   const publishToimenpide = _ =>
     R.forEach(fn => {
@@ -93,10 +76,7 @@
       tick().then(_ => submitToimenpide(fn));
     }, publish);
 
-  const saveToimenpide = _ => {
-    schema = Schema.toimenpideSave;
-    submitToimenpide(submit);
-  };
+  const saveToimenpide = _ => submitToimenpide(submit);
 </script>
 
 <H1 text={text(toimenpide, 'title')} />
@@ -140,12 +120,16 @@
       text={text(toimenpide, 'reset-button')}
       type={'reset'}
       style={'secondary'} />
-    <Button
-      disabled={Maybe.isNone(publish)}
-      on:click={previewToimenpide}
-      text={!Toimenpiteet.isDraft(toimenpide)
-        ? $_(i18nRoot + '.download-button')
-        : $_(i18nRoot + '.preview-button')} />
+
+    {#if !R.isEmpty(templates) && Maybe.isSome(preview)}
+      <Button
+        disabled={!Toimenpiteet.hasTemplate(toimenpide)}
+        on:click={previewToimenpide}
+        text={!Toimenpiteet.isDraft(toimenpide)
+          ? $_(i18nRoot + '.download-button')
+          : $_(i18nRoot + '.preview-button')} />
+    {/if}
+
   </div>
 </form>
 
