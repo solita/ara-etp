@@ -20,7 +20,8 @@ export const OPERATOR_TYPES = Object.freeze({
   LAATIJA: 'LAATIJA',
   LAATIMISVAIHE: 'LAATIMISVAIHE',
   KIELISYYS: 'KIELISYYS',
-  ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI'
+  ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI',
+  PATEVYYSTASO: 'PATEVYYSTASO'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -186,6 +187,13 @@ const laatijaEquals = key => ({
   type: OPERATOR_TYPES.LAATIJA
 });
 
+const laatijaPatevyys = key => ({
+  operation: eq,
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.LAATIJA
+});
+
 const numberComparisonsFromType = type => [
   singleNumberOperation(eq, type),
   singleNumberOperation(gt, type),
@@ -219,10 +227,12 @@ const eLuokkaComparisons = [eLuokkaSome];
 
 const tilaComparisons = [tilaEquals];
 
+const luokitteluDefault = type => (type == OPERATOR_TYPES.PATEVYYSTASO ? 1 : 0);
+
 const luokitteluEquals = R.curry((type, key) => ({
   operation: eq,
   key,
-  defaultValues: () => [0],
+  defaultValues: () => [luokitteluDefault(type)],
   type
 }));
 
@@ -610,6 +620,10 @@ const huomiot = {
   }
 };
 
+const laatija = {
+  patevyystaso: [luokitteluEquals(OPERATOR_TYPES.PATEVYYSTASO)]
+};
+
 export const flattenSchema = R.compose(
   R.reduce((acc, arr) => ({ ...acc, [arr[0].key]: arr }), {}),
   R.map(R.converge(R.map, [R.compose(R.applyTo, R.head), R.last])),
@@ -634,7 +648,8 @@ export const schema = {
     'lisamerkintoja-sv': [stringContains],
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals]
-  }
+  },
+  laatija
 };
 
 const localizedField = key => [`${key}-fi`, `${key}-sv`];

@@ -22,6 +22,7 @@
   import LaatijaInput from './query-inputs/laatija-input';
   import LaatimisvaiheInput from './query-inputs/laatimisvaihe-input';
   import KielisyysInput from './query-inputs/kielisyys-input';
+  import PatevyystasoInput from './query-inputs/patevyystaso-input';
   import IlmanvaihtotyyppiInput from './query-inputs/ilmanvaihtotyyppi-input';
 
   import { _ } from '@Language/i18n';
@@ -68,6 +69,8 @@
         return KielisyysInput;
       case OPERATOR_TYPES.ILMANVAIHTOTYYPPI:
         return IlmanvaihtotyyppiInput;
+      case OPERATOR_TYPES.PATEVYYSTASO:
+        return PatevyystasoInput;
       default:
         return TextInput;
     }
