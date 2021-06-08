@@ -15,6 +15,7 @@
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
   const i18n = $_;
+  const i18nLocale = $locale;
 
   export let toimenpide;
   export let templates;
@@ -33,10 +34,17 @@
 
   const addVirhe = virhetyyppiId => {
     if (!isNaN(virhetyyppiId)) {
+
+      const locale = R.compose(
+        Maybe.orSome(i18nLocale),
+        R.map(R.prop('language')),
+        R.chain(id => Maybe.findById(id, templates)),
+        R.prop('template-id'))(toimenpide);
+
       const newVirhe = {
         'type-id': virhetyyppiId,
         description: R.compose(
-          Locales.prop('description', $locale),
+          Locales.prop('description', locale),
           R.find(R.propEq('id', virhetyyppiId))
         )(virhetyypit)
       };
