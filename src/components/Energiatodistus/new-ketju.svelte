@@ -7,7 +7,5 @@
 
   export let params;
 </script>
-<style>
-</style>
 
 <NewKetju etFuture={R.map(Maybe.Some, EtApi.getEnergiatodistusById(params.version, params.id))} />
