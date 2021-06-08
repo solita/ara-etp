@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Formats from '@Utility/formats';
   import * as Maybe from '@Utility/maybe-utils';
@@ -26,8 +27,16 @@
   let node;
   let truncate = true;
 
-  $: truncated = !!node && node.offsetWidth < node.scrollWidth;
+  let truncated;
+
+  onMount(() => {
+    truncated = !!node && node.offsetWidth < node.scrollWidth;
+  });
 </script>
+
+<svelte:window
+  on:resize={_ =>
+    (truncated = !!node && node.offsetWidth < node.scrollWidth)} />
 
 <div class="flex flex-col mb-3">
   <div class="flex class:items-center={truncated} overflow-hidden">
@@ -77,11 +86,13 @@
         <p bind:this={node} class:truncate>
           {description}
         </p>
-        <TextButton
-          on:click={_ => (truncate = !truncate)}
-          type={'button'}
-          icon={truncate ? 'expand_more' : 'expand_less'}
-          text={truncate ? 'Näytä lisää' : 'Näytä vähemmän'} />
+        {#if truncated}
+          <TextButton
+            on:click={_ => (truncate = !truncate)}
+            type={'button'}
+            icon={truncate ? 'expand_more' : 'expand_less'}
+            text={truncate ? 'Näytä lisää' : 'Näytä vähemmän'} />
+        {/if}
       </div>
     {/each}
   {/if}
