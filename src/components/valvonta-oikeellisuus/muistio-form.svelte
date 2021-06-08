@@ -60,6 +60,12 @@
   const close = _ => {
     virheInEditMode = Maybe.None();
   };
+
+  $: newVirhetypes = R.filter(
+    R.compose(R.not,
+      R.includes(R.__, R.pluck('type-id', toimenpide.virheet)),
+      R.prop('id')),
+    virhetyypit);
 </script>
 
 <div class="mb-5">
@@ -105,7 +111,7 @@
       required={false}
       {disabled}
       validation={schema.publish}
-      items={virhetyypit} />
+      items={newVirhetypes} />
   </div>
 {/if}
 
