@@ -162,7 +162,7 @@
   <div slot="content" class="w-full mt-3">
     <DirtyConfirmation {dirty} />
     {#each resources.toArray() as { whoami, laatijat, vastaanottajaryhmat, energiatodistus }}
-      <H1 text={Maybe.fold('', et => 'ET ' + et.id + ' - ', energiatodistus)  + i18n(`${i18nRoot}.title`)} />
+      <H1 text={i18n(`${i18nRoot}.title`)} />
       <form
         id="ketju"
         on:submit|preventDefault={submitNewKetju}
@@ -182,6 +182,7 @@
                 name={'ketju.vastaanottaja'}
                 label={i18n('viesti.ketju.vastaanottaja')}
                 required={isVastaanottajaRequired}
+                disabled={Maybe.isSome(energiatodistus)}
                 bind:model={ketju}
                 lens={R.compose(R.lensProp('vastaanottajat'), arrayHeadLens)}
                 parse={Parsers.optionalParser(parseVastaanottaja(laatijat))}
@@ -195,19 +196,21 @@
           </div>
         {/if}
 
-        <div class="lg:w-1/2 w-full py-4">
-          <Select
-            id={'ketju.vastaanottajaryhma'}
-            label={i18n('viesti.ketju.vastaanottajaryhma')}
-            required={isVastaanottajaRyhmaRequired}
-            disabled={!Viestit.isAllowedToSendToEveryone(whoami)}
-            allowNone={true}
-            bind:model={ketju}
-            parse={Maybe.fromNull}
-            lens={R.lensProp('vastaanottajaryhma-id')}
-            format={Locales.labelForId($locale, vastaanottajaryhmat)}
-            items={R.pluck('id', vastaanottajaryhmat)} />
-        </div>
+        {#if !Viestit.isAllowedToSendToEveryone(whoami) || Maybe.isNone(energiatodistus)}
+          <div class="lg:w-1/2 w-full py-4">
+            <Select
+              id={'ketju.vastaanottajaryhma'}
+              label={i18n('viesti.ketju.vastaanottajaryhma')}
+              required={isVastaanottajaRyhmaRequired}
+              disabled={!Viestit.isAllowedToSendToEveryone(whoami)}
+              allowNone={true}
+              bind:model={ketju}
+              parse={Maybe.fromNull}
+              lens={R.lensProp('vastaanottajaryhma-id')}
+              format={Locales.labelForId($locale, vastaanottajaryhmat)}
+              items={R.pluck('id', vastaanottajaryhmat)} />
+          </div>
+        {/if}
 
         <div class="w-full py-4">
           <Input
@@ -233,7 +236,9 @@
             validators={Schema.ketju.body}
             {i18n} />
         </div>
-
+        {#each Maybe.toArray(energiatodistus) as et}
+          <p>Liittyy energiatodistukseen {et.id}</p>
+        {/each}
         <div class="flex space-x-4 pt-8">
           <Button
             disabled={!dirty}
