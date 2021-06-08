@@ -90,6 +90,17 @@
     ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
   );
 
+  $: saveAndPreviewToimenpide = toimenpide =>
+    fork('save', _ => {
+      load(params);
+      window.open(
+        ValvontaApi.url.document(
+          toimenpide['energiatodistus-id'],
+          toimenpide.id,
+          toimenpide.filename
+        ), '_blank');
+    })(ValvontaApi.putToimenpide(params.id, params['toimenpide-id'], toimenpide));
+
   $: saveAndPublishToimenpide = R.compose(
     fork('publish', _ => {
       dirty = false;
@@ -153,6 +164,7 @@
         {liitteet}
         {liiteApi}
         submit={saveToimenpide}
+        preview={Maybe.Some(saveAndPreviewToimenpide)}
         publish={Maybe.Some(saveAndPublishToimenpide)} />
     {/each}
   </div>
