@@ -4,6 +4,7 @@
   import * as Formats from '@Utility/formats';
   import * as Maybe from '@Utility/maybe-utils';
   import * as EM from '@Utility/either-maybe';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import { _, locale } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
@@ -15,6 +16,7 @@
 
   import * as valvontaApi from './valvonta-api';
 
+  export let whoami;
   export let energiatodistus;
   export let toimenpide;
   export let toimenpidetyypit;
@@ -45,7 +47,7 @@
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}
     </div>
-    {#if Toimenpiteet.isDialogType(toimenpide['type-id'])}
+    {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || Kayttajat.isLaatija(whoami)}
       <div class="mr-2">
         {typeLabel(toimenpide)}
       </div>
