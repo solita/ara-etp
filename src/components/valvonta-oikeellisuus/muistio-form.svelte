@@ -15,6 +15,7 @@
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
   const i18n = $_;
+  const i18nLocale = $locale;
 
   export let toimenpide;
   export let templates;
@@ -31,12 +32,21 @@
   $: formatVirhetyyppi = Locales.labelForId($locale, virhetyypit);
   $: formatSeverity = Locales.labelForId($locale, severities);
 
+  $: toimenpideLocale = R.compose(
+    R.map(R.prop('language')),
+    R.chain(id => Maybe.findById(id, templates)),
+    R.prop('template-id'));
+
   const addVirhe = virhetyyppiId => {
     if (!isNaN(virhetyyppiId)) {
+      const locale = Maybe.orSome(
+        i18nLocale,
+        toimenpideLocale(toimenpide));
+
       const newVirhe = {
         'type-id': virhetyyppiId,
         description: R.compose(
-          Locales.prop('description', $locale),
+          Locales.prop('description', locale),
           R.find(R.propEq('id', virhetyyppiId))
         )(virhetyypit)
       };
@@ -60,6 +70,12 @@
   const close = _ => {
     virheInEditMode = Maybe.None();
   };
+
+  $: newVirhetypes = R.filter(
+    R.compose(R.not,
+      R.includes(R.__, R.pluck('type-id', toimenpide.virheet)),
+      R.prop('id')),
+    virhetyypit);
 </script>
 
 <div class="mb-5">
@@ -105,7 +121,7 @@
       required={false}
       {disabled}
       validation={schema.publish}
-      items={virhetyypit} />
+      items={newVirhetypes} />
   </div>
 {/if}
 
