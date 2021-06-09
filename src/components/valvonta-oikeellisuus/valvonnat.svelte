@@ -38,7 +38,7 @@
 
   const pageSize = 50;
   const i18n = $_;
-  const i18nRoot = 'valvonta.oikeellisuus.valvonta';
+  const i18nRoot = 'valvonta.oikeellisuus.all';
 
   let valvontaCount = 0;
   let page = Maybe.Some(1);
