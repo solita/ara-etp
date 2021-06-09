@@ -38,6 +38,7 @@
 
   const pageSize = 50;
   const i18n = $_;
+  const i18nRoot = 'valvonta.oikeellisuus.valvonta';
 
   let valvontaCount = 0;
   let page = Maybe.Some(1);
@@ -60,12 +61,12 @@
       response => {
         const msg = i18n(
           Maybe.orSome(
-            'viesti.all.messages.load-error',
+            i18nRoot + '.messages.load-error',
             Response.localizationKey(response)
           )
         );
 
-        flashMessageStore.add('viesti', 'error', msg);
+        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
         overlay = false;
       },
       response => {
@@ -129,26 +130,26 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
-      <H1 text={i18n('valvonta.oikeellisuus.all.title')} />
+      <H1 text={i18n(i18nRoot + '.title')} />
       <Checkbox
         disabled={overlay}
-        label={i18n('valvonta.oikeellisuus.all.only-own')}
+        label={i18n(i18nRoot + '.only-own')}
         bind:model={onlyOwnValvonnat} />
       {#if valvonnat.length === 0}
-        <span>{i18n('valvonta.oikeellisuus.all.empty')}</span>
+        <span>{i18n(i18nRoot + '.empty')}</span>
       {:else}
         <div class="my-6 overflow-x-auto">
           <table class="etp-table">
             <thead class="etp-table--thead">
               <tr class="etp-table--tr etp-table--tr__light">
                 <th class="etp-table--th">
-                  {i18n('valvonta.oikeellisuus.all.table.kasittelija')}
+                  {i18n(i18nRoot + '.table.valvoja')}
                 </th>
                 <th class="etp-table--th">
-                  {i18n('valvonta.oikeellisuus.all.table.previous-action')}
+                  {i18n(i18nRoot + '.table.last-toimenpide')}
                 </th>
                 <th class="etp-table--th">
-                  {i18n('valvonta.oikeellisuus.all.table.deadline-date')}
+                  {i18n(i18nRoot + '.table.deadline-date')}
                 </th>
                 <th class="etp-table--th">
                   {i18n('energiatodistus.haku.sarakkeet.tunnus')}

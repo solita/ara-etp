@@ -1214,8 +1214,11 @@
           "deadline-date": "Määräaika",
           "type": "Tyyppi",
           "diaarinumero": "Diaarinumero",
-          "kasittelija": "Käsittelijä",
-          "previous-action": "Edellinen tapahtuma"
+          "valvoja": "Käsittelijä",
+          "last-toimenpide": "Edellinen tapahtuma"
+        },
+        "messages": {
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
         }
       },
       "valvonta": {
