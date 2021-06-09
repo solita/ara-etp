@@ -13,6 +13,7 @@
   import Spinner from '@Component/Spinner/Spinner';
 
   export let params;
+  export let target = '';
 
   let overlay = true;
 
@@ -31,7 +32,7 @@
     },
     energiatodistus => {
       replace(
-        `#/energiatodistus/${energiatodistus.versio}/${energiatodistus.id}`
+        `#/energiatodistus/${energiatodistus.versio}/${energiatodistus.id}${target}`
       );
     },
     EtApi.getEnergiatodistusById('all', params.id)
