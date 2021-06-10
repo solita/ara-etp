@@ -213,3 +213,13 @@ export const postNote = R.curry((id, note) =>
     R.prop('description')
   )(note)
 );
+
+export const deserializeNote = R.evolve({
+  'create-time': dfns.parseJSON,
+});
+
+export const notes = R.compose(
+  R.map(R.map(deserializeNote)),
+  Fetch.getJson(fetch),
+  url.notes
+);
