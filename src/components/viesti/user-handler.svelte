@@ -14,7 +14,7 @@
 {#each R.prop('kasittelija-id', ketju).toArray() as kasittelijaId}
   <div class="flex font-bold">
     {#if icons}<span class="font-icon">person</span>{/if}
-    {#if R.eqProps('id', R.find(R.propEq('id', kasittelijaId), kasittelijat), whoami)}
+    {#if R.equals(whoami.id, kasittelijaId)}
       <span class="text-primary">
         {$_('viesti.ketju.existing.self')}
       </span>
