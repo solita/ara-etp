@@ -47,7 +47,7 @@
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}
     </div>
-    {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || Kayttajat.isLaatija(whoami)}
+    {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || (Kayttajat.isLaatija(whoami) && Toimenpiteet.isAuditReport(toimenpide))}
       <div class="mr-2">
         {typeLabel(toimenpide)}
       </div>
