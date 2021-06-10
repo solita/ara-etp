@@ -111,7 +111,9 @@
           {R.last(ketju.viestit).body}
         </div>
       </div>
-      <UserHandler {ketju} {kasittelijat} {whoami} />
+      {#if !Kayttajat.isLaatija(whoami)}
+        <UserHandler {ketju} {kasittelijat} {whoami} />
+      {/if}
     </div>
   </div>
 </a>
