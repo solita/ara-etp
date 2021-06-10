@@ -70,10 +70,6 @@
     @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
   }
 
-  p {
-    @apply mt-2;
-  }
-
   .buttons {
     @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
   }

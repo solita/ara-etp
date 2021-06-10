@@ -116,6 +116,8 @@
     R.reverse,
     R.sortBy(R.prop('create-time')),
     R.unnest)
+
+  const isToimenpide = R.has('type-id');
 </script>
 
 <style>
@@ -157,7 +159,7 @@
       <H2 text="Toimenpiteet" />
 
       {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
-        {#if !R.isNil(tapahtuma['type-id'])}
+        {#if isToimenpide(tapahtuma)}
           <Toimenpide
               {energiatodistus}
               {toimenpidetyypit}
