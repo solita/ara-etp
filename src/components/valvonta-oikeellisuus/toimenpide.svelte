@@ -77,12 +77,19 @@
       <div class="ml-2">(luonnos)</div>
     {/if}
     {#each EM.toArray(toimenpide['deadline-date']) as deadline}
-      <div
-        on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
-        class="flex items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer">
-        <span class="font-icon">alarm</span>
-        {Formats.formatDateInstant(deadline)}
-      </div>
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <div
+          on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
+          class="flex items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer">
+          <span class="font-icon">alarm</span>
+          {Formats.formatDateInstant(deadline)}
+        </div>
+      {:else}
+        <div class="flex items-center border-b-1 border-transparent">
+          <span class="font-icon">alarm</span>
+          {Formats.formatDateInstant(deadline)}
+        </div>
+      {/if}
     {/each}
 
     {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
