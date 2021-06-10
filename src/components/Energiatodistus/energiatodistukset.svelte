@@ -169,7 +169,7 @@
     R.over(R.lensProp('where'), EtHakuUtils.convertWhereToQuery(flatSchema))
   )(parsedQuery);
 
-  let currentQuery = 'where=[[]]';
+  let currentQuery;
 
   const setOffsetToQuery = query =>
     R.assoc('offset', R.lift(R.multiply)(query.limit, query.page), query);

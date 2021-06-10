@@ -20,16 +20,23 @@
 
   let input;
 
+  // There is pretty strong coupling in Inputs.propertyLabel for energiatodistus-namespace
+  // We could generalize this for laatijat also.
+  const keyLabel = R.cond([
+    [R.compose(R.equals('energiatodistus'), R.head, R.split('.')), R.compose(Inputs.propertyLabel($_), R.join('.'), R.tail, R.split('.'))],
+    [R.T, $_]
+  ]);
+
   const findKey = label =>
     R.compose(
       Maybe.fromNull,
-      R.find(R.compose(R.equals(label), Inputs.propertyLabel($_))),
+      R.find(R.compose(R.equals(label), keyLabel)),
       R.keys
     )(schema);
 
   const findLabel = R.compose(
     Maybe.orSome(''),
-    R.map(Inputs.propertyLabel($_)),
+    R.map(keyLabel),
     Maybe.fromEmpty
   );
 
@@ -70,7 +77,7 @@
   <div class="w-1/2 mr-4">
     <Autocomplete
       bind:completedValue
-      items={R.compose(R.map(Inputs.propertyLabel($_)), R.keys)(schema)}
+      items={R.compose(R.map(keyLabel), R.keys)(schema)}
       size={100000}>
       <Input
         bind:model={completedValue}

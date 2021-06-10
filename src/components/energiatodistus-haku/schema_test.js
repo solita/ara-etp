@@ -25,7 +25,7 @@ describe('EtHakuSchema', () => {
         ]
       };
 
-      assert.deepEqual(Schema.flattenSchema('', schema), expected);
+      assert.deepEqual(Schema.flattenSchema(schema), expected);
     });
 
     it('should flatten given schema with multiple items in single branch', () => {
@@ -58,7 +58,7 @@ describe('EtHakuSchema', () => {
         ]
       };
 
-      assert.deepEqual(Schema.flattenSchema('', schema), expected);
+      assert.deepEqual(Schema.flattenSchema(schema), expected);
     });
 
     it('should flatten given schema with multiple items in branching branch', () => {
@@ -93,7 +93,7 @@ describe('EtHakuSchema', () => {
         ]
       };
 
-      assert.deepEqual(Schema.flattenSchema('', schema), expected);
+      assert.deepEqual(Schema.flattenSchema(schema), expected);
     });
 
     it('should flatten given schema with multiple items in multiple branches', () => {
@@ -169,7 +169,7 @@ describe('EtHakuSchema', () => {
         ]
       };
 
-      assert.deepEqual(Schema.flattenSchema('', schema), expected);
+      assert.deepEqual(Schema.flattenSchema(schema), expected);
     });
 
     it('should work with multiple operations', () => {
@@ -192,7 +192,7 @@ describe('EtHakuSchema', () => {
         ]
       };
 
-      assert.deepEqual(Schema.flattenSchema('', schema), expected);
+      assert.deepEqual(Schema.flattenSchema(schema), expected);
     });
   });
 });
