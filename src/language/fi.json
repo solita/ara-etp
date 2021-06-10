@@ -1378,6 +1378,17 @@
         "liitteet": {
           "empty": "Toimenpiteellä ei ole liitteitä"
         }
+      },
+      "note": {
+        "title": "Muistiinpano",
+        "cancel-button": "Peruuta",
+        "description": "Sisältö",
+        "add-button": "Tallenna",
+        "messages": {
+          "add-success": "Uusi muistiinpano lisätty.",
+          "add-error": "Muistiinpanon lisääminen epäonnistui.",
+          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä."
+        }
       }
     }
   },
