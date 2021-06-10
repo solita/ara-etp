@@ -172,7 +172,7 @@
     @apply mr-8 bg-backgroundhalf;
   }
   .message.self {
-    @apply ml-8 bg-light border-backgroundhalf border;
+    @apply ml-8 bg-light border-disabled border;
   }
   .message p {
     @apply border-disabled whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
@@ -194,7 +194,7 @@
       </div>
 
       <div
-        class="flex justify-between items-center py-2 border-b border-backgroundhalf">
+        class="flex justify-between items-center py-2 border-b border-disabled">
         <div>
           <strong>{ketju.subject}</strong>
           <SenderRecipients
