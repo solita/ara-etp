@@ -14,12 +14,16 @@
   import Link from '../Link/Link.svelte';
   import TextButton from '@Component/Button/TextButton';
 
+  import ChangeDeadlineDialog from './change-deadline-dialog';
+
   import * as valvontaApi from './valvonta-api';
 
   export let whoami;
   export let energiatodistus;
   export let toimenpide;
   export let toimenpidetyypit;
+  export let i18n;
+  export let reload;
 
   $: typeLabel = R.compose(
     Locales.labelForId($locale, toimenpidetyypit),
@@ -34,11 +38,22 @@
   onMount(() => {
     truncated = !!node && node.offsetWidth < node.scrollWidth;
   });
+
+  let toimenpideToUpdate = Maybe.None();
 </script>
 
 <svelte:window
   on:resize={_ =>
     (truncated = !!node && node.offsetWidth < node.scrollWidth)} />
+
+{#each Maybe.toArray(toimenpideToUpdate) as toimenpide}
+  <ChangeDeadlineDialog
+    {energiatodistus}
+    {toimenpide}
+    {i18n}
+    cancel={() => (toimenpideToUpdate = Maybe.None())}
+    {reload} />
+{/each}
 
 <div class="flex flex-col mb-3">
   <div class="flex class:items-center={truncated} overflow-hidden">
@@ -62,8 +77,10 @@
       <div class="ml-2">(luonnos)</div>
     {/if}
     {#each EM.toArray(toimenpide['deadline-date']) as deadline}
-      <div class="flex items-center">
-        <span class="font-icon pb-1">alarm</span>
+      <div
+        on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
+        class="flex items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer">
+        <span class="font-icon">alarm</span>
         {Formats.formatDateInstant(deadline)}
       </div>
     {/each}

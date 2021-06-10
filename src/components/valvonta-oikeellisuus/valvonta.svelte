@@ -53,24 +53,29 @@
         resources = Maybe.Some(response);
         overlay = false;
       },
-      R.chain(whoami =>
-        Future.parallelObject(5, {
-          luokittelut: EnergiatodistusApi.luokittelutForVersion(params.versio),
-          energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
-            params.versio,
-            params.id
-          ),
-          toimenpiteet: ValvontaApi.toimenpiteet(params.id),
-          notes: Kayttajat.isPaakayttaja(whoami) ?
-            ValvontaApi.notes(params.id) :
-            Future.resolve([]),
-          toimenpidetyypit: ValvontaApi.toimenpidetyypit,
-          templatesByType: ValvontaApi.templatesByType,
-          valvojat: ValvontaApi.valvojat,
-          valvonta: ValvontaApi.valvonta(params.id),
-          whoami: Future.resolve(whoami)
-        })
-        , KayttajaApi.whoami));
+      R.chain(
+        whoami =>
+          Future.parallelObject(5, {
+            luokittelut: EnergiatodistusApi.luokittelutForVersion(
+              params.versio
+            ),
+            energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
+              params.versio,
+              params.id
+            ),
+            toimenpiteet: ValvontaApi.toimenpiteet(params.id),
+            notes: Kayttajat.isPaakayttaja(whoami)
+              ? ValvontaApi.notes(params.id)
+              : Future.resolve([]),
+            toimenpidetyypit: ValvontaApi.toimenpidetyypit,
+            templatesByType: ValvontaApi.templatesByType,
+            valvojat: ValvontaApi.valvojat,
+            valvonta: ValvontaApi.valvonta(params.id),
+            whoami: Future.resolve(whoami)
+          }),
+        KayttajaApi.whoami
+      )
+    );
   };
 
   const kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
@@ -115,7 +120,8 @@
   const tapahtumat = R.compose(
     R.reverse,
     R.sortBy(R.prop('create-time')),
-    R.unnest)
+    R.unnest
+  );
 
   const isToimenpide = R.has('type-id');
 </script>
@@ -161,15 +167,17 @@
       {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
         {#if isToimenpide(tapahtuma)}
           <Toimenpide
-              {energiatodistus}
-              {toimenpidetyypit}
-              toimenpide={tapahtuma}
-              {whoami} />
+            {energiatodistus}
+            {toimenpidetyypit}
+            toimenpide={tapahtuma}
+            {whoami}
+            {i18n}
+            reload={_ => load(params)} />
         {:else}
           <Note note={tapahtuma} />
         {/if}
       {/each}
-      {#if R.isEmpty(tapahtumat)}
+      {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
         <p>Ei tapahtumia</p>
       {/if}
     {/each}
