@@ -23,7 +23,14 @@
   // There is pretty strong coupling in Inputs.propertyLabel for energiatodistus-namespace
   // We could generalize this for laatijat also.
   const keyLabel = R.cond([
-    [R.compose(R.equals('energiatodistus'), R.head, R.split('.')), R.compose(Inputs.propertyLabel($_), R.join('.'), R.tail, R.split('.'))],
+    [
+      R.compose(R.equals('energiatodistus'), R.head, R.split('.')),
+      R.compose(Inputs.propertyLabel($_), R.join('.'), R.tail, R.split('.'))
+    ],
+    [
+      R.compose(R.equals('laatija'), R.head, R.split('.')),
+      R.compose($_, R.concat(R.__, '_haku'))
+    ],
     [R.T, $_]
   ]);
 

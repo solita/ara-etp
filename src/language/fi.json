@@ -181,6 +181,7 @@
   },
   "laatija": {
     "laatija": "Laatija",
+    "toteamispaivamaara_haku": "Laatija / Toteamispäivämäärä",
     "lisaa-laatijat": "Lisää laatijat",
     "henkilotunnus": "Henkilötunnus",
     "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
@@ -193,6 +194,7 @@
     "laatijatiedot": "Laatijatiedot",
     "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
     "patevyystaso": "Pätevyystaso",
+    "patevyystaso_haku": "Laatija / Pätevyystaso",
     "paatoimintaalue": "Päätoiminta-alue",
     "muuttoimintaalueet": "Muut toiminta-alueet",
     "julkisettiedot": "Valitse julkiset tiedot",

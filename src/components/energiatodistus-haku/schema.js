@@ -282,6 +282,61 @@ const timeTodayAndDaysBefore = key => ({
 
 const timeComparisons = [timeEquals, timeBetween, timeTodayAndDaysBefore];
 
+const dateISOFormat = 'yyyy-MM-dd';
+
+const dateEquals = key => ({
+  operation: {
+    ...eq,
+    format: R.curry((command, key, value) => [
+      ['=', key, dfns.format(dfns.parseISO(value), dateISOFormat)]
+    ])
+  },
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DATE
+});
+
+const dateBetween = key => ({
+  operation: {
+    ...between,
+    format: R.curry((command, key, startValue, endValue) => [
+      [
+        command,
+        key,
+        dfns.format(dfns.parseISO(startValue), dateISOFormat),
+        dfns.format(dfns.parseISO(endValue), dateISOFormat)
+      ]
+    ])
+  },
+  key,
+  defaultValues: () => ['', ''],
+  type: OPERATOR_TYPES.DATE_BETWEEN
+});
+
+const dateTodayAndDaysBefore = key => ({
+  operation: {
+    ...between,
+    format: R.curry((command, key, numDays) => {
+      const end = dfns.endOfDay(new Date());
+      const start = dfns.startOfDay(dfns.subDays(end, numDays));
+      return [
+        [
+          command,
+          key,
+          dfns.format(start, dateISOFormat),
+          dfns.format(end, dateISOFormat)
+        ]
+      ];
+    }),
+    browserCommand: 'kuluva-ja-edelliset'
+  },
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.DAYCOUNT
+});
+
+const dateComparisons = [dateEquals, dateBetween, dateTodayAndDaysBefore];
+
 const havainnointikayntiEquals = key => ({
   operation: {
     ...eq,
@@ -621,7 +676,8 @@ const huomiot = {
 };
 
 const laatija = {
-  patevyystaso: [luokitteluEquals(OPERATOR_TYPES.PATEVYYSTASO)]
+  patevyystaso: [luokitteluEquals(OPERATOR_TYPES.PATEVYYSTASO)],
+  toteamispaivamaara: dateComparisons
 };
 
 export const flattenSchema = R.compose(
@@ -662,7 +718,9 @@ export const laatijaSchema = R.compose(
     ...localizedField('energiatodistus.perustiedot.keskeiset-suositukset'),
     ...localizedField('energiatodistus.lisamerkintoja'),
     'energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku',
-    'energiatodistus.laatija-id'
+    'energiatodistus.laatija-id',
+    'laatija.patevyystaso',
+    'laatija.toteamispaivamaara'
   ]),
   flattenSchema,
   R.over(

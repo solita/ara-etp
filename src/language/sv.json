@@ -153,6 +153,7 @@
   },
   "laatija": {
     "laatija": "Upprättare",
+    "toteamispaivamaara": "Toteamispäivämäärä SV?",
     "lisaa-laatijat": "Lägg till upprättare",
     "henkilotunnus": "Personbeteckning",
     "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O ",
