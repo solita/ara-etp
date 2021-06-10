@@ -7,7 +7,7 @@
 
   import SenderRecipients from './sender-recipients.svelte';
   import User from './user.svelte';
-  import UserHandler from './user-handler.svelte';
+  import ViestiketjuHandler from './viestiketju-handler.svelte';
 
   import { _ } from '@Language/i18n';
 
@@ -112,7 +112,7 @@
         </div>
       </div>
       {#if !Kayttajat.isLaatija(whoami)}
-        <UserHandler {ketju} {kasittelijat} {whoami} />
+        <ViestiketjuHandler {ketju} {kasittelijat} {whoami} />
       {/if}
     </div>
   </div>
