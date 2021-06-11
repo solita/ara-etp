@@ -40,3 +40,7 @@ export const toimenpidePublish = (templates, toimenpide) =>
     },
     toimenpideSave
   );
+
+export const note = {
+  description: Validation.LimitedString(2, 4000)
+};

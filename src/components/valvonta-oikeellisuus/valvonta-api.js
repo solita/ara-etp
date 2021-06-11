@@ -18,7 +18,8 @@ export const url = {
   toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`,
   document: (id, toimenpideId, filename) =>
     `${url.toimenpide(id, toimenpideId)}/document/${filename}`,
-  liitteet: (id, toimenpideId) => `${url.toimenpide(id, toimenpideId)}/liitteet`
+  liitteet: (id, toimenpideId) => `${url.toimenpide(id, toimenpideId)}/liitteet`,
+  notes: id => `${url.valvonta(id)}/notes`,
 };
 
 export const deserializeToimenpide = R.evolve({
@@ -203,4 +204,22 @@ export const deleteLiite = R.curry((id, toimenpideId, liiteId) =>
       Fetch.deleteRequest(fetch, url.liitteet(id, toimenpideId) + '/' + liiteId)
     )
   )(liiteId)
+);
+
+export const postNote = R.curry((id, note) =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.notes(id))),
+    R.prop('description')
+  )(note)
+);
+
+export const deserializeNote = R.evolve({
+  'create-time': dfns.parseJSON,
+});
+
+export const notes = R.compose(
+  R.map(R.map(deserializeNote)),
+  Fetch.getJson(fetch),
+  url.notes
 );

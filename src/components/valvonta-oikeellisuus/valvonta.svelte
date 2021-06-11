@@ -23,6 +23,7 @@
   import Manager from './manager.svelte';
   import LaatijaResponse from './laatija-response.svelte';
   import Toimenpide from './toimenpide.svelte';
+  import Note from './note.svelte';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.valvonta';
@@ -52,20 +53,24 @@
         resources = Maybe.Some(response);
         overlay = false;
       },
-      Future.parallelObject(5, {
-        luokittelut: EnergiatodistusApi.luokittelutForVersion(params.versio),
-        energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
-          params.versio,
-          params.id
-        ),
-        toimenpiteet: ValvontaApi.toimenpiteet(params.id),
-        toimenpidetyypit: ValvontaApi.toimenpidetyypit,
-        templatesByType: ValvontaApi.templatesByType,
-        valvojat: ValvontaApi.valvojat,
-        valvonta: ValvontaApi.valvonta(params.id),
-        whoami: KayttajaApi.whoami
-      })
-    );
+      R.chain(whoami =>
+        Future.parallelObject(5, {
+          luokittelut: EnergiatodistusApi.luokittelutForVersion(params.versio),
+          energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
+            params.versio,
+            params.id
+          ),
+          toimenpiteet: ValvontaApi.toimenpiteet(params.id),
+          notes: Kayttajat.isPaakayttaja(whoami) ?
+            ValvontaApi.notes(params.id) :
+            Future.resolve([]),
+          toimenpidetyypit: ValvontaApi.toimenpidetyypit,
+          templatesByType: ValvontaApi.templatesByType,
+          valvojat: ValvontaApi.valvojat,
+          valvonta: ValvontaApi.valvonta(params.id),
+          whoami: Future.resolve(whoami)
+        })
+        , KayttajaApi.whoami));
   };
 
   const kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
@@ -106,6 +111,13 @@
     Maybe.fromNull,
     R.last
   );
+
+  const tapahtumat = R.compose(
+    R.reverse,
+    R.sortBy(R.prop('create-time')),
+    R.unnest)
+
+  const isToimenpide = R.has('type-id');
 </script>
 
 <style>
@@ -113,7 +125,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, notes, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -146,15 +158,19 @@
 
       <H2 text="Toimenpiteet" />
 
-      {#each R.reverse(toimenpiteet) as toimenpide}
-        <Toimenpide
-          {energiatodistus}
-          {toimenpidetyypit}
-          {toimenpide}
-          {whoami} />
+      {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
+        {#if isToimenpide(tapahtuma)}
+          <Toimenpide
+              {energiatodistus}
+              {toimenpidetyypit}
+              toimenpide={tapahtuma}
+              {whoami} />
+        {:else}
+          <Note note={tapahtuma} />
+        {/if}
       {/each}
-      {#if R.isEmpty(toimenpiteet)}
-        <p>Ei valvontatoimenpiteitä</p>
+      {#if R.isEmpty(tapahtumat)}
+        <p>Ei tapahtumia</p>
       {/if}
     {/each}
   </div>

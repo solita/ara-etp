@@ -11,6 +11,7 @@
   import * as Links from './links';
 
   import NewToimenpideDialog from './new-toimenpide-dialog.svelte';
+  import NoteDialog from './note-dialog.svelte';
 
   import Button from '@Component/Button/Button.svelte';
   import TextButton from '@Component/Button/TextButton.svelte';
@@ -28,6 +29,8 @@
   export let reload;
 
   let newToimenpide = Maybe.None();
+  let newNote = Maybe.None();
+
   let toimenpideTyyppi = Maybe.None();
 
   const openNewToimenpide = type => {
@@ -38,6 +41,10 @@
       // toimenpiteet, jotka käsitellään omalla näytöllä
       Router.push(Links.newToimenpide(type, energiatodistus));
     }
+  };
+
+  const openNewNote = _ => {
+    newNote = Maybe.Some({ description: "" });
   };
 
   const isAuditCase = toimenpiteet =>
@@ -55,6 +62,7 @@
 
   const load = _ => {
     newToimenpide = Maybe.None();
+    newNote = Maybe.None();
     toimenpideTyyppi = Maybe.None();
     reload();
   };
@@ -68,6 +76,13 @@
     reload={load} />
 {/each}
 
+{#each Maybe.toArray(newNote) as note}
+  <NoteDialog
+      id={energiatodistus.id}
+      {note}
+      reload={load} />
+{/each}
+
 <div class="lg:w-1/2 w-full mb-5">
   <Select
     label="Valitse käsittelijä"
@@ -79,7 +94,9 @@
 </div>
 
 <div class="flex space-x-4 mb-5">
-  <TextButton icon="add_comment" text="Lisää muistiinpano" on:click={load} />
+  <TextButton icon="add_comment"
+              text="Lisää muistiinpano"
+              on:click={openNewNote} />
   <TextButton
     disabled={isAuditCase(toimenpiteet)}
     icon="verified"
