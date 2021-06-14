@@ -44,7 +44,7 @@
   };
 
   const openNewNote = _ => {
-    newNote = Maybe.Some({ description: "" });
+    newNote = Maybe.Some({ description: '' });
   };
 
   const isAuditCase = toimenpiteet =>
@@ -77,10 +77,7 @@
 {/each}
 
 {#each Maybe.toArray(newNote) as note}
-  <NoteDialog
-      id={energiatodistus.id}
-      {note}
-      reload={load} />
+  <NoteDialog id={energiatodistus.id} {note} reload={load} />
 {/each}
 
 <div class="lg:w-1/2 w-full mb-5">
@@ -94,12 +91,13 @@
 </div>
 
 <div class="flex space-x-4 mb-5">
-  <TextButton icon="add_comment"
-              text="Lisää muistiinpano"
-              on:click={openNewNote} />
+  <TextButton
+    icon="add_comment"
+    text="Lisää muistiinpano"
+    on:click={openNewNote} />
   <TextButton
     disabled={isAuditCase(toimenpiteet)}
-    icon="verified"
+    icon="visibility"
     text="Merkitse katsotuksi"
     on:click={_ => openNewToimenpide(Toimenpiteet.type.verified)} />
   <TextButton

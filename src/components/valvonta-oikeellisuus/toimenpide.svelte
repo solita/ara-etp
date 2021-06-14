@@ -40,6 +40,13 @@
   });
 
   let toimenpideToUpdate = Maybe.None();
+  let icon = Maybe.None();
+
+  $: if (Toimenpiteet.isVerified(toimenpide)) {
+    icon = Maybe.Some('visibility');
+  } else if (Toimenpiteet.isAnomaly(toimenpide)) {
+    icon = Maybe.Some('bug_report');
+  }
 </script>
 
 <svelte:window
@@ -64,13 +71,17 @@
     </div>
     {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || (Kayttajat.isLaatija(whoami) && Toimenpiteet.isAuditReport(toimenpide))}
       <div class="mr-2">
+        {#each Maybe.toArray(icon) as icon}
+          <span class="font-icon">{icon}</span>
+        {/each}
         {typeLabel(toimenpide)}
       </div>
     {:else}
       <div class="mr-2">
         <Link
           text={typeLabel(toimenpide)}
-          href={Links.toimenpide(toimenpide, energiatodistus)} />
+          href={Links.toimenpide(toimenpide, energiatodistus)}
+          {icon} />
       </div>
     {/if}
     {#if Toimenpiteet.isDraft(toimenpide)}
