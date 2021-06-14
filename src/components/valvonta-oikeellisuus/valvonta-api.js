@@ -8,6 +8,8 @@ import * as EM from '@Utility/either-maybe';
 import * as Query from '@Utility/query';
 import * as dfns from 'date-fns';
 
+import * as Toimenpiteet from './toimenpiteet';
+
 import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
 
 export const url = {
@@ -98,6 +100,7 @@ export const templatesByType = R.compose(
 )(url.valvonnat + '/templates');
 
 export const toimenpiteet = R.compose(
+  R.map(R.sortBy(Toimenpiteet.time)),
   R.map(R.map(deserializeToimenpide)),
   Fetch.getJson(fetch),
   url.toimenpiteet

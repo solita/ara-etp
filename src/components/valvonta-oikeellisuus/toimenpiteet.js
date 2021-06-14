@@ -117,3 +117,5 @@ export const responseTypeFor = R.compose(
   typeId => responseTypes[typeKey(typeId)],
   R.prop('type-id')
 );
+
+export const time = R.converge(Maybe.orSome, [R.prop('create-time'), R.prop('publish-time')])
