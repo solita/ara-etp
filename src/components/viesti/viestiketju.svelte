@@ -7,6 +7,7 @@
 
   import SenderRecipients from './sender-recipients.svelte';
   import User from './user.svelte';
+  import ViestiketjuHandler from './viestiketju-handler.svelte';
 
   import { _ } from '@Language/i18n';
 
@@ -111,15 +112,7 @@
         </div>
       </div>
       {#if !Kayttajat.isLaatija(whoami)}
-        {#each R.prop('kasittelija-id', ketju).toArray() as kasittelijaId}
-          <span class="whitespace-no-wrap">
-            {Viestit.fullName(kasittelijat)(kasittelijaId)}
-          </span>
-        {:else}
-          <span class="text-error whitespace-no-wrap">
-            {$_('viesti.ketju.existing.no-handler')}
-          </span>
-        {/each}
+        <ViestiketjuHandler {ketju} {kasittelijat} {whoami} />
       {/if}
     </div>
   </div>

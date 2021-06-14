@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import * as Viestit from '@Component/viesti/viesti-util';
 
-  import { _, locale } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
 
   export let user;
   export let whoami;
@@ -12,14 +12,11 @@
 </script>
 
 <style>
-  .from-me {
-    @apply text-primary font-bold;
-  }
 </style>
 
 {#if icons}<span class="font-icon">person</span>{/if}
 {#if R.eqProps('id', user, whoami)}
-  <span class="from-me">
+  <span class="text-primary font-bold">
     {$_('viesti.ketju.existing.self')}
   </span>
 {:else}
