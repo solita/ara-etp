@@ -124,10 +124,11 @@
   );
 
   const isToimenpide = R.has('type-id');
-</script>
 
-<style>
-</style>
+  const keyed = R.curry((prefix, tapahtuma) =>
+    R.assoc('key', `${prefix}_${tapahtuma.id}`, tapahtuma)
+  );
+</script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
@@ -164,7 +165,10 @@
 
       <H2 text="Toimenpiteet" />
 
-      {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
+      {#each tapahtumat([
+        R.map(keyed('toimenpide'), toimenpiteet),
+        R.map(keyed('note'), notes)
+      ]) as tapahtuma (tapahtuma.key)}
         {#if isToimenpide(tapahtuma)}
           <Toimenpide
             {energiatodistus}
@@ -172,9 +176,10 @@
             toimenpide={tapahtuma}
             {whoami}
             {i18n}
-            reload={_ => load(params)} />
+            reload={_ => load(params)}
+            {valvojat} />
         {:else}
-          <Note note={tapahtuma} />
+          <Note note={tapahtuma} {valvojat} />
         {/if}
       {/each}
       {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}

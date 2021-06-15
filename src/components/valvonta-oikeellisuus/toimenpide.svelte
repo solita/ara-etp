@@ -30,15 +30,6 @@
     R.prop('type-id')
   );
 
-  let node;
-  let truncate = true;
-
-  let truncated;
-
-  onMount(() => {
-    truncated = !!node && node.offsetWidth < node.scrollWidth;
-  });
-
   let toimenpideToUpdate = Maybe.None();
   let icon = Maybe.None();
 
@@ -49,10 +40,6 @@
   }
 </script>
 
-<svelte:window
-  on:resize={_ =>
-    (truncated = !!node && node.offsetWidth < node.scrollWidth)} />
-
 {#each Maybe.toArray(toimenpideToUpdate) as toimenpide}
   <ChangeDeadlineDialog
     {energiatodistus}
@@ -62,8 +49,8 @@
     {reload} />
 {/each}
 
-<div class="flex flex-col mb-3">
-  <div class="flex class:items-center={truncated} overflow-hidden">
+<div class="flex flex-col mb-4">
+  <div class="flex overflow-hidden">
     <div class="mr-4 whitespace-no-wrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
@@ -75,6 +62,7 @@
           <span class="font-icon">{icon}</span>
         {/each}
         {typeLabel(toimenpide)}
+        {`(${toimenpide.author.etunimi} ${toimenpide.author.sukunimi})`}
       </div>
     {:else}
       <div class="mr-2">

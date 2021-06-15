@@ -14,8 +14,6 @@
       !!node.children[0] &&
       node.children[0].offsetWidth < node.children[0].scrollWidth;
   });
-
-  $: console.log(node);
 </script>
 
 <style>
