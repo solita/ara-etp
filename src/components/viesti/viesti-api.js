@@ -13,10 +13,14 @@ const url = {
   ketju: id => `${url.ketjut}/${id}`,
   viestit: id => `${url.ketju(id)}/viestit`,
   kasittelijat: '/api/private/kasittelijat',
-  energiatodistusKetjut: id => `/api/private/energiatodistukset/all/${id}/viestit`,
+  energiatodistusKetjut: id =>
+    `/api/private/energiatodistukset/all/${id}/viestit`
 };
 
 export const serialize = R.evolve({
+  'has-kasittelija': Maybe.orSome(null),
+  'include-kasitelty': Maybe.orSome(null),
+  'kasittelija-id': Maybe.orSome(null),
   'kayttajarooli-id': Maybe.orSome(null),
   'kasittelija-id': Maybe.orSome(null),
   'energiatodistus-id': Maybe.orSome(null),
@@ -24,6 +28,9 @@ export const serialize = R.evolve({
 });
 
 export const deserialize = R.evolve({
+  'has-kasittelija': Maybe.fromNull,
+  'include-kasitelty': Maybe.fromNull,
+  'kasittelija-id': Maybe.fromNull,
   'kayttajarooli-id': Maybe.fromNull,
   'kasittelija-id': Maybe.fromNull,
   viestit: R.map(
@@ -50,10 +57,12 @@ export const getKetjut = R.compose(
 );
 
 export const getKetjutCount = R.compose(
+  R.map(R.map(deserialize)),
   Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch))
-)(url.ketjutCount);
-
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(url.ketjutCount),
+  Query.toQueryString
+);
 export const getKetjutUnread = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch))

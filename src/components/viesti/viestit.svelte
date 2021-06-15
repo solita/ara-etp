@@ -21,6 +21,7 @@
   import Viestiketju from './viestiketju';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Pagination from '@Component/Pagination/Pagination';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   const i18n = $_;
 
@@ -30,6 +31,12 @@
   const pageSize = 50;
   let ketjutCount = 0;
   let page = Maybe.Some(1);
+
+  let filters = {
+    'kasittelija-self': false,
+    'no-kasittelija': true,
+    'include-kasitelty': false
+  };
 
   $: page = R.compose(
     R.chain(Either.toMaybe),
@@ -42,39 +49,58 @@
 
   const nextPageCallback = nextPage => push(`#/viesti/all?page=${nextPage}`);
 
-  const load = page => {
+  const load = (page, filters) => {
     overlay = true;
-    Future.fork(
-      response => {
-        const msg = i18n(
-          Maybe.orSome(
-            'viesti.all.messages.load-error',
-            Response.localizationKey(response)
-          )
-        );
+    R.compose(
+      Future.fork(
+        response => {
+          const msg = i18n(
+            Maybe.orSome(
+              'viesti.all.messages.load-error',
+              Response.localizationKey(response)
+            )
+          );
 
-        flashMessageStore.add('viesti', 'error', msg);
-        overlay = false;
-      },
-      response => {
-        resources = Maybe.Some(response);
-        ketjutCount = response.ketjutCount.count;
-        overlay = false;
-      },
-      Future.parallelObject(4, {
-        whoami: kayttajaApi.whoami,
-        ketjutCount: api.getKetjutCount,
-        ketjut: api.getKetjut({
-          offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
-          limit: Maybe.Some(pageSize)
-        }),
-        vastaanottajaryhmat: api.vastaanottajaryhmat,
-        kasittelijat: api.getKasittelijat
-      })
-    );
+          flashMessageStore.add('viesti', 'error', msg);
+          overlay = false;
+        },
+        response => {
+          resources = Maybe.Some(response);
+          ketjutCount = response.ketjutCount.count;
+          overlay = false;
+        }
+      ),
+      R.chain(whoami =>
+        Future.parallelObject(4, {
+          whoami: Future.resolve(whoami),
+          ketjutCount: api.getKetjutCount({
+            'kasittelija-id': filters['kasittelija-self']
+              ? Maybe.Some(whoami.id)
+              : Maybe.None(),
+            'has-kasittelija': filters['no-kasittelija']
+              ? Maybe.Some(false)
+              : Maybe.None(),
+            'include-kasitelty': Maybe.Some(filters['include-kasitelty'])
+          }),
+          ketjut: api.getKetjut({
+            'kasittelija-id': filters['kasittelija-self']
+              ? Maybe.Some(whoami.id)
+              : Maybe.None(),
+            'has-kasittelija': filters['no-kasittelija']
+              ? Maybe.Some(false)
+              : Maybe.None(),
+            'include-kasitelty': Maybe.Some(filters['include-kasitelty']),
+            offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
+            limit: Maybe.Some(pageSize)
+          }),
+          vastaanottajaryhmat: api.vastaanottajaryhmat,
+          kasittelijat: api.getKasittelijat
+        })
+      )
+    )(kayttajaApi.whoami);
   };
 
-  $: load(page);
+  $: load(page, filters);
 
   const submitKasitelty = (ketjuId, kasitelty) => {
     updateKetju(ketjuId, {
@@ -101,7 +127,7 @@
           i18n(`viesti.all.messages.update-success`)
         );
         overlay = false;
-        load(page);
+        load(page, filters);
       }
     ),
     R.tap(() => {
@@ -122,6 +148,31 @@
             text={i18n('viesti.all.new-viesti')}
             href="#/viesti/new" />
         </div>
+      </div>
+      <div class="flex justify-between mb-4">
+        <div class="flex">
+          <Checkbox
+            id={'checkbox.show-mine'}
+            name={'checkbox.show-mine'}
+            label={i18n('viesti.all.show-mine')}
+            lens={R.lensProp('kasittelija-self')}
+            bind:model={filters}
+            disabled={false} />
+          <Checkbox
+            id={'checkbox.no-handler'}
+            name={'checkbox.no-handler'}
+            label={i18n('viesti.all.no-handler')}
+            lens={R.lensProp('no-kasittelija')}
+            bind:model={filters}
+            disabled={false} />
+        </div>
+        <Checkbox
+          id={'checkbox.show-handled'}
+          name={'checkbox.show-handled'}
+          label={i18n('viesti.all.show-handled')}
+          lens={R.lensProp('include-kasitelty')}
+          bind:model={filters}
+          disabled={false} />
       </div>
       {#if ketjut.length === 0}
         <span>{i18n('viesti.all.no-messages')}</span>

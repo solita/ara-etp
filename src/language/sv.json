@@ -1114,6 +1114,9 @@
       "content": "Sisältö SV?",
       "new-viesti": "Uusi viesti SV?",
       "no-messages": "Ei viestejä SV?",
+      "show-mine": "Omat SV?",
+      "show-handled": "Näytä myös käsitellyt SV?",
+      "no-handler": "Ei käsittelijää SV?",
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui SV?",
         "update-error": "Viestiketjun päivitys epäonnistui SV?",
