@@ -15,6 +15,7 @@
   export let inputValueParse;
   export let label = '';
 
+  export let compact = false;
   export let disabled = false;
   export let required = false;
   export let allowNone = true;
@@ -158,7 +159,12 @@
   }} />
 
 <!-- purgecss: disabled -->
-<span class:focused class:required class:disabled class="label">{label}</span>
+<span
+  class:focused
+  class:required
+  class:disabled
+  class:sr-only={compact}
+  class="label">{label}</span>
 <div bind:this={node} on:keydown={handleKeydown}>
   <input
     bind:this={input}
