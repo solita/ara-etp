@@ -12,7 +12,7 @@
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
   import Link from '../Link/Link.svelte';
-  import TextButton from '@Component/Button/TextButton';
+  import ShowMore from '@Component/show-more/show-more';
 
   import ChangeDeadlineDialog from './change-deadline-dialog';
 
@@ -120,16 +120,11 @@
   {#if !Toimenpiteet.isResponse(toimenpide)}
     {#each Maybe.toArray(toimenpide.description) as description}
       <div class="mt-1 min-w-0 flex flex-wrap">
-        <p bind:this={node} class:truncate>
-          {description}
-        </p>
-        {#if truncated}
-          <TextButton
-            on:click={_ => (truncate = !truncate)}
-            type={'button'}
-            icon={truncate ? 'expand_more' : 'expand_less'}
-            text={truncate ? 'Näytä lisää' : 'Näytä vähemmän'} />
-        {/if}
+        <ShowMore>
+          <p>
+            {description}
+          </p>
+        </ShowMore>
       </div>
     {/each}
   {/if}
