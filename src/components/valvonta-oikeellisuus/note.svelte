@@ -9,6 +9,8 @@
   export let i18n;
   export let valvojat;
 
+  const i18nRoot = 'valvonta.oikeellisuus.note';
+
   $: author = Maybe.findById(R.prop('author-id', note), valvojat);
 </script>
 
@@ -17,7 +19,7 @@
     {Formats.formatTimeInstantMinutes(note['create-time'])}
   </span>
   <span class="font-icon">comment</span>
-  <span>Muistiinpano</span>
+  <span>{i18n(`${i18nRoot}.title`)}</span>
   {#each Maybe.toArray(author) as a}
     <span class="ml-1">
       ({`${R.prop('etunimi', a)} ${R.prop('sukunimi', a)}`})

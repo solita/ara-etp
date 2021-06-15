@@ -179,7 +179,7 @@
             reload={_ => load(params)}
             {valvojat} />
         {:else}
-          <Note note={tapahtuma} {valvojat} />
+          <Note note={tapahtuma} {valvojat} {i18n} />
         {/if}
       {/each}
       {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
