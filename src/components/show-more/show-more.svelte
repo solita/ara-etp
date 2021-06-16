@@ -42,12 +42,14 @@
 </div>
 
 {#if truncated || multiline}
-  <TextButton
-    on:click={_ => {
-      truncate = !truncate;
-      multiline = !multiline;
-    }}
-    type={'button'}
-    icon={truncate ? 'expand_more' : 'expand_less'}
-    text={truncate ? 'Näytä lisää' : 'Näytä vähemmän'} />
+  <div>
+    <TextButton
+      on:click={_ => {
+        truncate = !truncate;
+        multiline = !multiline;
+      }}
+      type={'button'}
+      icon={truncate ? 'expand_more' : 'expand_less'}
+      text={truncate ? 'Näytä lisää' : 'Näytä vähemmän'} />
+  </div>
 {/if}

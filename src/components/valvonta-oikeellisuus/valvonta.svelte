@@ -164,23 +164,24 @@
       {/if}
 
       <H2 text="Toimenpiteet" />
-
       {#each tapahtumat([
         R.map(keyed('toimenpide'), toimenpiteet),
         R.map(keyed('note'), notes)
       ]) as tapahtuma (tapahtuma.key)}
-        {#if isToimenpide(tapahtuma)}
-          <Toimenpide
-            {energiatodistus}
-            {toimenpidetyypit}
-            toimenpide={tapahtuma}
-            {whoami}
-            {i18n}
-            reload={_ => load(params)}
-            {valvojat} />
-        {:else}
-          <Note note={tapahtuma} {valvojat} {i18n} />
-        {/if}
+        <div class="mb-8">
+          {#if isToimenpide(tapahtuma)}
+            <Toimenpide
+              {energiatodistus}
+              {toimenpidetyypit}
+              toimenpide={tapahtuma}
+              {whoami}
+              {i18n}
+              reload={_ => load(params)}
+              {valvojat} />
+          {:else}
+            <Note note={tapahtuma} {valvojat} {i18n} />
+          {/if}
+        </div>
       {/each}
       {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
         <p>Ei tapahtumia</p>

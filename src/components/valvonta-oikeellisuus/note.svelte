@@ -14,17 +14,19 @@
   $: author = Maybe.findById(R.prop('author-id', note), valvojat);
 </script>
 
-<div class="mb-3">
-  <span class="mr-4 whitespace-no-wrap">
-    {Formats.formatTimeInstantMinutes(note['create-time'])}
-  </span>
-  <span class="font-icon">comment</span>
-  <span>{i18n(`${i18nRoot}.title`)}</span>
-  {#each Maybe.toArray(author) as a}
-    <span class="ml-1">
-      ({`${R.prop('etunimi', a)} ${R.prop('sukunimi', a)}`})
+<div class="flex flex-col space-y-1">
+  <div>
+    <span class="mr-2 whitespace-no-wrap">
+      {Formats.formatTimeInstantMinutes(note['create-time'])}
     </span>
-  {/each}
+    <span class="font-icon">comment</span>
+    <span>{i18n(`${i18nRoot}.title`)}</span>
+    {#each Maybe.toArray(author) as a}
+      <span class="ml-1">
+        ({`${R.prop('etunimi', a)} ${R.prop('sukunimi', a)}`})
+      </span>
+    {/each}
+  </div>
   <ShowMore>
     <p>{note.description}</p>
   </ShowMore>

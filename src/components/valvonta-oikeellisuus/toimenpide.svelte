@@ -1,10 +1,10 @@
 <script>
-  import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Formats from '@Utility/formats';
   import * as Maybe from '@Utility/maybe-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as dfns from 'date-fns';
 
   import { _, locale } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
@@ -38,7 +38,11 @@
   } else if (Toimenpiteet.isAnomaly(toimenpide)) {
     icon = Maybe.Some('bug_report');
   }
+
+  const isPastDeadline = R.both(R.complement(dfns.isToday), dfns.isPast);
 </script>
+
+<!-- purgecss: text-error hover:border-error -->
 
 {#each Maybe.toArray(toimenpideToUpdate) as toimenpide}
   <ChangeDeadlineDialog
@@ -49,9 +53,9 @@
     {reload} />
 {/each}
 
-<div class="flex flex-col mb-4">
+<div class="flex flex-col space-y-1">
   <div class="flex overflow-hidden">
-    <div class="mr-4 whitespace-no-wrap">
+    <div class="mr-2 whitespace-no-wrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}
@@ -75,45 +79,51 @@
     {#if Toimenpiteet.isDraft(toimenpide)}
       <div class="ml-2">(luonnos)</div>
     {/if}
-    {#each EM.toArray(toimenpide['deadline-date']) as deadline}
-      {#if Kayttajat.isPaakayttaja(whoami)}
-        <div
-          on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
-          class="flex items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer">
-          <span class="font-icon">alarm</span>
-          {Formats.formatDateInstant(deadline)}
-        </div>
-      {:else}
-        <div class="flex items-center border-b-1 border-transparent">
-          <span class="font-icon">alarm</span>
-          {Formats.formatDateInstant(deadline)}
-        </div>
-      {/if}
-    {/each}
-
-    {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
-      <div class="ml-2">
-        <Link
-          text={toimenpide.filename}
-          target={'_blank'}
-          href={valvontaApi.url.document(
-            toimenpide['energiatodistus-id'],
-            toimenpide.id,
-            toimenpide['filename']
-          )} />
-      </div>
-    {/if}
   </div>
 
   {#if !Toimenpiteet.isResponse(toimenpide)}
     {#each Maybe.toArray(toimenpide.description) as description}
-      <div class="mt-1 min-w-0 flex flex-wrap">
-        <ShowMore>
-          <p>
-            {description}
-          </p>
-        </ShowMore>
-      </div>
+      <ShowMore>
+        <p>
+          {description}
+        </p>
+      </ShowMore>
     {/each}
   {/if}
+
+  {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
+    <div>
+      <Link
+        text={toimenpide.filename}
+        target={'_blank'}
+        href={valvontaApi.url.document(
+          toimenpide['energiatodistus-id'],
+          toimenpide.id,
+          toimenpide['filename']
+        )} />
+    </div>
+  {/if}
+
+  {#each EM.toArray(toimenpide['deadline-date']) as deadline}
+    <div>
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <button
+          on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
+          class="inline-block font-bold items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer"
+          class:text-error={isPastDeadline(deadline)}
+          class:hover:border-error={isPastDeadline(deadline)}>
+          <span class="font-icon">schedule</span>
+          {Formats.formatDateInstant(deadline)}
+          <span class="font-icon">edit</span>
+        </button>
+      {:else}
+        <span
+          class="border-b-1 border-transparent"
+          class:text-error={isPastDeadline(deadline)}>
+          <span class="font-icon">schedule</span>
+          {Formats.formatDateInstant(deadline)}
+        </span>
+      {/if}
+    </div>
+  {/each}
 </div>
