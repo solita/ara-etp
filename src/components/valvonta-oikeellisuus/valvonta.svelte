@@ -19,6 +19,7 @@
   import Address from '@Component/Energiatodistus/address.svelte';
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
+  import HR from '@Component/HR/HR';
 
   import Manager from './manager.svelte';
   import LaatijaResponse from './laatija-response.svelte';
@@ -136,17 +137,21 @@
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
-      <div class="mb-2">
-        Energiatodistus {energiatodistus.versio}/{energiatodistus.id} -
-        {Maybe.orSome('', energiatodistus.perustiedot.nimi)} -
-        {kayttotarkoitusTitle(
-          R.objOf(energiatodistus.versio, luokittelut),
-          energiatodistus
-        )}
+      <div class="flex flex-col">
+        <div>{Maybe.orSome('', energiatodistus['laatija-fullname'])}</div>
+        <div class="flex space-x-1">
+          <div>{Maybe.orSome('', energiatodistus.perustiedot.nimi)}.</div>
+          <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
+        </div>
+        <div>
+          {kayttotarkoitusTitle(
+            R.objOf(energiatodistus.versio, luokittelut),
+            energiatodistus
+          )}
+        </div>
       </div>
-      <div class="mb-5">
-        <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
-      </div>
+
+      <HR />
 
       {#if Kayttajat.isPaakayttaja(whoami)}
         <Manager
