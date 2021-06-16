@@ -37,10 +37,10 @@
 
   $: updateDeadline = toimenpide => {
     if (isValidForm(toimenpide)) {
-      overlay = true;
+      pending = true;
       Future.fork(
         response => {
-          overlay = false;
+          pending = false;
           const msg = i18n(
             Maybe.orSome(
               `${i18nRoot}.messages.save-error`,
@@ -50,7 +50,7 @@
           error = Maybe.Some(msg);
         },
         _ => {
-          overlay = false;
+          pending = false;
           flashMessageStore.add(
             'valvonta-oikeellisuus',
             'success',
