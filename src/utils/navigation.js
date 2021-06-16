@@ -261,7 +261,7 @@ export const parseEnergiatodistus = R.curry(
       R.map(Maybe.fromNull)
     )(locationParts);
 
-    if (R.compose(Maybe.isSome, R.filter(R.equals('new')))(id)) {
+    if (R.compose(Maybe.isSome, R.filter(R.either(R.equals('new'), R.equals('viestit'))))(id)) {
       return [];
     }
 

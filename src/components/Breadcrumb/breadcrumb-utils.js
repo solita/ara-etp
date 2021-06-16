@@ -82,6 +82,10 @@ export const etKetjuCrumb = R.curry((i18n, etId) => [
   {
     url: `#/energiatodistus/${etId}`,
     label: `${i18n('navigation.et')} ${etId}`
+  },
+  {
+    url: `#/energiatodistus/${etId}/viestit`,
+    label: i18n('navigation.viestit')
   }
 ]);
 
@@ -104,10 +108,12 @@ export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
         R.ifElse(
           R.hasPath(['viesti', parseInt(id, 10)]),
           R.compose(
+            R.flatten,
             ketju => [
-              { url: '#/viesti/all', label: i18n('navigation.viesti') },
-              ...R.compose(
-                Maybe.orSome([]),
+              R.compose(
+                Maybe.orSome([
+                  { url: '#/viesti/all', label: i18n('navigation.viesti') }
+                ]),
                 R.map(R.compose(Array.of, etKetjuCrumb(i18n))),
                 R.prop('energiatodistus-id')
               )(ketju),
@@ -136,15 +142,36 @@ export const energiatodistukset = i18n => ({
   label: i18n('navigation.energiatodistukset')
 });
 
-export const energiatodistusExtra = R.curry((i18n, [versio, id, extra]) =>
-  R.equals('liitteet', extra)
+export const etViestitCrumb = R.curry((i18n, versio, id, [extra], _) => [
+  {
+    url: `#/energiatodistus/${versio}/${id}/viestit`,
+    label: i18n('navigation.viestit')
+  },
+  ...(R.equals('new', extra)
     ? [
         {
-          url: `#/energiatodistus/${versio}/${id}/liitteet`,
-          label: i18n('navigation.liitteet')
+          url: `#/energiatodistus/${versio}/${id}/viestit/new`,
+          label: i18n('navigation.uusi-viesti')
         }
       ]
-    : []
+    : [])
+]);
+
+export const energiatodistusExtra = R.curry(
+  (i18n, [versio, id, extra, ...rest]) =>
+    R.cond([
+      [
+        R.equals('liitteet'),
+        R.always([
+          {
+            url: `#/energiatodistus/${versio}/${id}/liitteet`,
+            label: i18n('navigation.liitteet')
+          }
+        ])
+      ],
+      [R.equals('viestit'), etViestitCrumb(i18n, versio, id, [...rest])],
+      [R.T, R.always([])]
+    ])(extra)
 );
 
 export const newEnergiatodistusCrumb = R.curry((i18n, versio) => [
@@ -164,10 +191,14 @@ export const energiatodistusCrumb = R.curry((i18n, [versio, id, ...rest]) =>
       R.always(
         R.flatten([
           energiatodistukset(i18n),
-          {
-            url: `#/energiatodistus/${versio}/${id}`,
-            label: `${i18n('navigation.et')} ${id}`
-          },
+          ...(id
+            ? [
+                {
+                  url: `#/energiatodistus/${versio}/${id}`,
+                  label: `${i18n('navigation.et')} ${id}`
+                }
+              ]
+            : []),
           energiatodistusExtra(i18n, [versio, id, ...rest])
         ])
       )
