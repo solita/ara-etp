@@ -17,10 +17,7 @@
   const routes = {
     '/all': Energiatodistukset,
     '/:id': EnergiatodistusResolver,
-    '/:id/viestit': wrap({
-      component: EnergiatodistusResolver,
-      props: { target: '/viestit' }
-    }),
+    '/:id/viestit': EnergiatodistusResolver,
     '/:version/new': NewEnergiatodistus,
     '/:version/:id': ExistingEnergiatodistus,
     '/:version/:id/liitteet': Liitteet,

@@ -1,4 +1,5 @@
 <script>
+  import * as R from 'ramda';
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
 
@@ -8,7 +9,7 @@
   import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';
 
-  import { replace } from 'svelte-spa-router';
+  import { replace, location } from 'svelte-spa-router';
 
   import Spinner from '@Component/Spinner/Spinner';
 
@@ -32,7 +33,14 @@
     },
     energiatodistus => {
       replace(
-        `#/energiatodistus/${energiatodistus.versio}/${energiatodistus.id}${target}`
+        `#/energiatodistus/${energiatodistus.versio}/${
+          energiatodistus.id
+        }${R.compose(
+          R.when(R.length, R.concat('/')),
+          R.join('/'),
+          R.drop(3),
+          R.split('/')
+        )($location)}`
       );
     },
     EtApi.getEnergiatodistusById('all', params.id)
