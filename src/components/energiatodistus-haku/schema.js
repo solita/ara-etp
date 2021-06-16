@@ -677,7 +677,8 @@ const huomiot = {
 
 const laatija = {
   patevyystaso: [luokitteluEquals(OPERATOR_TYPES.PATEVYYSTASO)],
-  toteamispaivamaara: dateComparisons
+  toteamispaivamaara: dateComparisons,
+  'voimassaolo-paattymisaika': timeComparisons
 };
 
 export const flattenSchema = R.compose(
