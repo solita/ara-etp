@@ -153,7 +153,7 @@
   },
   "laatija": {
     "laatija": "Upprättare",
-    "toteamispaivamaara": "Toteamispäivämäärä SV?",
+    "toteamispaivamaara_haku": "Upprättare / Toteamispäivämäärä SV?",
     "lisaa-laatijat": "Lägg till upprättare",
     "henkilotunnus": "Personbeteckning",
     "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O ",
@@ -166,6 +166,7 @@
     "laatijatiedot": "Uppgift om upprättare",
     "patevyydenvoimassaolo": "Befogenhetens giltighetstid",
     "patevyystaso": "Behörighetsnivå",
+    "patevyystaso_haku": "Upprättare / Behörighetsnivå",
     "paatoimintaalue": "Huvudverksamhetsområde",
     "muuttoimintaalueet": "Övriga verksamhetsområden",
     "julkisettiedot": "Välj offentliga uppgifter",
