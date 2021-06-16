@@ -14,7 +14,6 @@
   import Spinner from '@Component/Spinner/Spinner';
 
   export let params;
-  export let target = '';
 
   let overlay = true;
 
