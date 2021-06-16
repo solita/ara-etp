@@ -9,7 +9,7 @@
 
 <style type="text/postcss">
   button {
-    @apply flex justify-center items-center px-6 py-3 rounded-full font-bold uppercase text-light tracking-xl min-w-10;
+    @apply flex justify-center items-center rounded-full font-bold uppercase text-light tracking-xl min-w-10;
   }
 
   .primary {
@@ -29,15 +29,21 @@
   }
 </style>
 
+<!-- purgecss: primary secondary error disabled pr-12 -->
 <button
+  class="relative px-6 py-3"
   {type}
   data-cy={`${prefix}-${type}`}
   class:primary={style === 'primary'}
   class:secondary={style === 'secondary'}
   class:error={style === 'error'}
   class:disabled
+  class:pr-12={$$slots.default}
   {disabled}
   {title}
   on:click|stopPropagation>
   {text}
+  <div class="absolute top-0 right-0">
+    <slot />
+  </div>
 </button>
