@@ -123,6 +123,7 @@ export const url = {
       id
     )}/pdf/${language}/energiatodistus-${id}-${language}.pdf`,
   liitteet: (version, id) => `${url.id(version, id)}/liitteet`,
+  muutoshistoria: id => `${url.all}/all/${id}/history`,
   signature: (version, id) => `${url.id(version, id)}/signature`,
   start: (version, id) => `${url.signature(version, id)}/start`,
   digest: (version, id, language) =>
@@ -217,6 +218,14 @@ export const deleteLiite = R.curry((fetch, version, id, liiteId) =>
       Fetch.deleteRequest(fetch, url.liitteet(version, id) + '/' + liiteId)
     )
   )(liiteId)
+);
+
+export const getEnergiatodistusHistoryById = R.curry(id =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    url.muutoshistoria
+  )(id)
 );
 
 export const putEnergiatodistusById = R.curry(

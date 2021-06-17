@@ -1040,6 +1040,10 @@
       "tyojono-remove-success": "Energiatodistus poistettiin työjonosta onnistuneesti",
       "tyojono-remove-error": "Energiatodistuksen poistaminen työjonosta epäonnistui"
     },
+    "muutoshistoria": {
+      "not-found": "Energiatodistusta ei ole olemassa.",
+      "load-error": "Muutoshistorian lataaminen epäonnistui."
+    },
     "signing": {
       "header": "Allekirjoittaminen",
       "language-adjective": {

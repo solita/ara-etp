@@ -11,6 +11,7 @@
   import NewKetju from './new-ketju';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
+  import Muutoshistoria from './muutoshistoria';
   import NotFound from '@Component/NotFound/NotFound';
 
   const prefix = '/energiatodistus';
@@ -23,6 +24,7 @@
     '/:version/:id/liitteet': Liitteet,
     '/:version/:id/viestit': Viestit,
     '/:version/:id/viestit/new': NewKetju,
+    '/:version/:id/muutoshistoria': Muutoshistoria,
     '*': NotFound
   };
 </script>
