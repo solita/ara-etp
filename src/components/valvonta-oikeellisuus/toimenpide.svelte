@@ -61,15 +61,15 @@
       )}
     </div>
     {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || (Kayttajat.isLaatija(whoami) && Toimenpiteet.isAuditReport(toimenpide))}
-      <div class="mr-2">
+      <div class="flex mr-2">
         {#each Maybe.toArray(icon) as icon}
-          <span class="font-icon">{icon}</span>
+          <span class="font-icon mr-1">{icon}</span>
         {/each}
         {typeLabel(toimenpide)}
         {`(${toimenpide.author.etunimi} ${toimenpide.author.sukunimi})`}
       </div>
     {:else}
-      <div class="mr-2">
+      <div class="flex mr-2">
         <Link
           text={typeLabel(toimenpide)}
           href={Links.toimenpide(toimenpide, energiatodistus)}
@@ -109,20 +109,20 @@
       {#if Kayttajat.isPaakayttaja(whoami)}
         <button
           on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
-          class="inline-block font-bold items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer"
+          class="inline-flex space-x-1 font-bold items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer"
           class:text-error={isPastDeadline(deadline)}
           class:hover:border-error={isPastDeadline(deadline)}>
           <span class="font-icon">schedule</span>
-          {Formats.formatDateInstant(deadline)}
+          <span>Määräaika {Formats.formatDateInstant(deadline)}</span>
           <span class="font-icon">edit</span>
         </button>
       {:else}
-        <span
-          class="border-b-1 border-transparent"
+        <div
+          class="inline-flex space-x-1 items-center border-b-1 border-transparent"
           class:text-error={isPastDeadline(deadline)}>
           <span class="font-icon">schedule</span>
-          {Formats.formatDateInstant(deadline)}
-        </span>
+          <span>Määräaika {Formats.formatDateInstant(deadline)}</span>
+        </div>
       {/if}
     </div>
   {/each}

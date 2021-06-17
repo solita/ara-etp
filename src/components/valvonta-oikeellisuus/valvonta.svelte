@@ -137,7 +137,7 @@
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
-      <div class="flex flex-col">
+      <div class="flex flex-col mb-8">
         <div>{Maybe.orSome('', energiatodistus['laatija-fullname'])}</div>
         <div class="flex space-x-1">
           <div>{Maybe.orSome('', energiatodistus.perustiedot.nimi)}.</div>
@@ -150,8 +150,6 @@
           )}
         </div>
       </div>
-
-      <HR />
 
       {#if Kayttajat.isPaakayttaja(whoami)}
         <Manager
@@ -168,7 +166,9 @@
         <LaatijaResponse {energiatodistus} {toimenpiteet} {fork} />
       {/if}
 
-      <H2 text="Toimenpiteet" />
+      <HR compact={true} />
+
+      <H2 text="Tapahtumat" />
       {#each tapahtumat([
         R.map(keyed('toimenpide'), toimenpiteet),
         R.map(keyed('note'), notes)

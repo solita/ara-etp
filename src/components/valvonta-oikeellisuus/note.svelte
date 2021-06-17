@@ -15,11 +15,11 @@
 </script>
 
 <div class="flex flex-col space-y-1">
-  <div>
+  <div class="flex">
     <span class="mr-2 whitespace-no-wrap">
       {Formats.formatTimeInstantMinutes(note['create-time'])}
     </span>
-    <span class="font-icon">comment</span>
+    <span class="font-icon mr-1">comment</span>
     <span>{i18n(`${i18nRoot}.title`)}</span>
     {#each Maybe.toArray(author) as a}
       <span class="ml-1">
