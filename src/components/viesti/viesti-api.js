@@ -18,9 +18,6 @@ const url = {
 };
 
 export const serialize = R.evolve({
-  'has-kasittelija': Maybe.orSome(null),
-  'include-kasitelty': Maybe.orSome(null),
-  'kasittelija-id': Maybe.orSome(null),
   'kayttajarooli-id': Maybe.orSome(null),
   'kasittelija-id': Maybe.orSome(null),
   'energiatodistus-id': Maybe.orSome(null),
