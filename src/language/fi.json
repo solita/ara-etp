@@ -1158,6 +1158,9 @@
       "new-viesti": "Uusi viesti",
       "content": "Sisältö",
       "no-messages": "Ei viestejä",
+      "show-mine": "Omat",
+      "show-handled": "Näytä myös käsitellyt",
+      "no-handler": "Ei käsittelijää",
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
         "update-error": "Viestiketjun päivitys epäonnistui",
