@@ -31,6 +31,36 @@
   },
   {
     "appendMode": false,
+    "backgroundColor": "#6e1056",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-accesstoken",
+        "value": "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwYWFrYXl0dGFqYTJAc29saXRhLmZpIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJvcGVuaWQiLCJhdXRoX3RpbWUiOjE1ODMyMzA5NjksImlzcyI6Imh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9zb2xpdGEvZXRwLWNvcmUvZmVhdHVyZS9BRS00My1hdXRoLWhlYWRlcnMtaGFuZGxpbmcvZXRwLWJhY2tlbmQvc3JjL21haW4vcmVzb3VyY2VzIiwiZXhwIjoxODkzNDU2MDAwLCJpYXQiOjE1ODM0MTM0MjQsInZlcnNpb24iOjIsImp0aSI6IjVmZGQ3YTI5LTdlZWEtNGYzZC1hN2E2LWMyMjg0MjZmNjEyYiIsImNsaWVudF9pZCI6InRlc3QtY2xpZW50X2lkIiwidXNlcm5hbWUiOiJ0ZXN0LXVzZXJuYW1lIn0.UOj6_wEOkFLfK1YztGULLk0D2bRCaQyndbqibbA3KfWuM1QLRYdoquf6EeA1z0E7eqDQWcThJpWth7-RFpDTZZgGQuF6_OuoZQvRtDjtBhytHUyWoBLIzXGgzsAbKJcDiTXUI6_Ai5cgd6aSzfVd6V7pVXdpESnPMHCZcy40-QfU-tDGB5EHOopENrFsiCQ20qrTCaO13IkJRlLrS4NTYxJsje2xd6iWhcfsoSoxQohUldauYCSHwAxhmq9nulvvdm2U9iETet3Z0AFHScFFXVZQrwVcZu6YqyoETHbSiqpMljymFSHxf-iYMCC9juogfeXxtMomm-Cn1D425CXgXQ"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-identity",
+        "value": "paakayttaja2@solita.fi"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-data",
+        "value": "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJwYWFrYXl0dGFqYTJAc29saXRhLmZpIiwiZW1haWwiOiJwYWFrYXl0dGFqYTJAc29saXRhLmZpIiwidXNlcm5hbWUiOiJ0ZXN0LXVzZXJuYW1lIiwiZXhwIjoxODkzNDU2MDAwLCJpc3MiOiJ0ZXN0LWlzcyJ9.LWfrjA0Od2I8zeHVUbFng7sHWI0DcsVL1URGMBG4rV9Yx0PIOcfpUvY5mW3rmdTxp-Yo-IJh-bgV_oU2DsQOv7xT76yoZRluBRblwtbxjw5knQfPNxc10H4rtTmjLJpKw4qkbmWdrWHlv1ecgNAMmpMX2Hl7Qn_qVpvXUn4lHijCP5rvRzwgIj_T7AFWfLKR3MFumMmVDRi_OUkPIwJPfL1KawjE9dQPtv62d_7n96kau5KW_NH99Hz6Oi_aD4pmzyGz9XQyHbVGfMiFu51Hem3CiGdl9PIiQERTLkRRyd5dSZfs1-8VwqDZWUBrzwb0mOcUcB24EU4iiB8bpqzPjg"
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "title": "paakayttaja2@solita.fi",
+    "urlReplacements": []
+  },
+  {
+    "appendMode": false,
     "backgroundColor": "#105f24",
     "filters": [],
     "headers": [
