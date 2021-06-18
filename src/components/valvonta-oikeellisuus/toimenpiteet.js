@@ -54,7 +54,6 @@ export const isDialogType = R.includes(R.__, [
   9,
   10,
   11,
-  12,
   13,
   14
 ]);
@@ -118,4 +117,7 @@ export const responseTypeFor = R.compose(
   R.prop('type-id')
 );
 
-export const time = R.converge(Maybe.orSome, [R.prop('create-time'), R.prop('publish-time')])
+export const time = R.converge(Maybe.orSome, [
+  R.prop('create-time'),
+  R.prop('publish-time')
+]);
