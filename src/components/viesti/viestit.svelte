@@ -33,7 +33,7 @@
   let page = Maybe.Some(1);
 
   let filters = {
-    'kasittelija-self': false,
+    'kasittelija-self': true,
     'no-kasittelija': true,
     'include-kasitelty': false
   };
