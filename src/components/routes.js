@@ -10,6 +10,7 @@ import Kaytonvalvonta from '@Component/Kaytonvalvonta/Kaytonvalvonta';
 import Tyojono from '@Component/Tyojono/Tyojono';
 import Energiatodistus from '@Component/Energiatodistus/Energiatodistus';
 import Valvonta from '@Component/valvonta-oikeellisuus/router';
+import ValvontaKaytto from '@Component/valvonta-kaytto/router';
 import NotFound from '@Component/NotFound/NotFound';
 import MyInfo from '@Component/Kayttaja/MyInfo';
 import LandingPage from '@Component/Kayttaja/LandingPage';
@@ -26,6 +27,7 @@ export const buildRoutes = currentUser => ({
   '/ohje/*': Ohje,
   '/energiatodistus/*': Energiatodistus,
   '/valvonta/oikeellisuus/*': Valvonta,
+  '/valvonta/kaytto/*': ValvontaKaytto,
   '/myinfo': wrap({
     component: MyInfo,
     props: {

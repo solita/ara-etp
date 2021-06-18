@@ -1395,6 +1395,76 @@
           "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä."
         }
       }
+    },
+    "kaytto": {
+      "all": {
+        "title": "Käytönvalvonta",
+        "messages": {
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
+        }
+      },
+      "kohde": {
+        "title": "Kohde"
+      },
+      "new-kohde": {
+        "title": "Uusi käytönvalvonta"
+      },
+      "valvonta": {
+        "title": "Valvonta",
+        "messages": {
+          "not-found": "Käytönvalvonnan tietoja ei löydy"
+        }
+      },
+      "toimenpide": {
+        "cancel-button": "Peruuta",
+        "preview-button": "Esikatsele",
+        "download-button": "Lataa",
+        "case": {
+          "title": "Valvonnan aloitus",
+          "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
+          "description": "Kommentti",
+          "publish-button": "Aloita valvonta"
+        },
+        "rfi-request": {
+          "title": "Tietopyyntö",
+          "info": "Pyydetään rakennuksen omistajalta tietoa energiatodistuksesta.",
+          "publish-button": "Lähetä tietopyyntö",
+          "response-title": "Tietopyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfi-order": {
+          "title": "Tietopyyntö kehoitus",
+          "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön.",
+          "publish-button": "Lähetä kehoitus",
+          "response-title": "Kehotus vastata tietopyyntöön",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfi-warning": {
+          "title": "Tietopyyntö varoitus",
+          "info": "Varoitetaan rakennuksen omistajia seurauksista, jos tietopyyntöön ei vastata määräaikaan mennessä.",
+          "publish-button": "Lähetä varoitus",
+          "response-title": "Varoitus tietopyyntöön liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+        },
+        "closed": {
+          "title": "Valvonnan lopetus",
+          "info": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
+          "description": "Kommentti",
+          "publish-button": "Lopeta"
+        },
+        "messages": {
+          "not-found": "Toimenpidettä ei ole olemassa.",
+          "load-error": "Toimenpiteen tietojen haku epäonnistui.",
+          "save-success": "Toimenpiteen muutokset tallennettu.",
+          "save-error": "Toimenpiteen tallennus epäonnistui.",
+          "publish-success": "Toimenpide on lähetetty.",
+          "publish-error": "Toimenpiteen lähetys epäonnistui.",
+          "preview-error": "Toimenpiteen esikatselu epäonnistui.",
+          "add-success": "Toimenpide lisätty.",
+          "add-error": "Toimenpiteen lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
+        }
+      }
     }
   },
   "ohje": {
