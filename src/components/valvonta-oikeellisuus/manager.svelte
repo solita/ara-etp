@@ -44,7 +44,7 @@
   };
 
   const openNewNote = _ => {
-    newNote = Maybe.Some({ description: "" });
+    newNote = Maybe.Some({ description: '' });
   };
 
   const isAuditCase = toimenpiteet =>
@@ -77,15 +77,12 @@
 {/each}
 
 {#each Maybe.toArray(newNote) as note}
-  <NoteDialog
-      id={energiatodistus.id}
-      {note}
-      reload={load} />
+  <NoteDialog id={energiatodistus.id} {note} reload={load} />
 {/each}
 
-<div class="lg:w-1/2 w-full mb-5">
+<div class="lg:w-1/4 w-full mb-8">
   <Select
-    label="Valitse käsittelijä"
+    label="Valvoja"
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
@@ -93,13 +90,14 @@
     items={R.pluck('id', valvojat)} />
 </div>
 
-<div class="flex space-x-4 mb-5">
-  <TextButton icon="add_comment"
-              text="Lisää muistiinpano"
-              on:click={openNewNote} />
+<div class="flex space-x-4 mb-8">
+  <TextButton
+    icon="add_comment"
+    text="Lisää muistiinpano"
+    on:click={openNewNote} />
   <TextButton
     disabled={isAuditCase(toimenpiteet)}
-    icon="verified"
+    icon="visibility"
     text="Merkitse katsotuksi"
     on:click={_ => openNewToimenpide(Toimenpiteet.type.verified)} />
   <TextButton
@@ -116,11 +114,9 @@
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
 {:else}
-  <H2 text="Uusi toimenpide" />
-
   <div class="lg:w-1/2 w-full mb-5">
     <Select
-      label="Valitse toimenpide"
+      label="Lisää valvontatoimenpide"
       model={toimenpideTyyppi}
       lens={R.lens(R.identity, R.identity)}
       inputValueParse={R.prop('id')}

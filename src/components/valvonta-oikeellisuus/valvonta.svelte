@@ -19,6 +19,7 @@
   import Address from '@Component/Energiatodistus/address.svelte';
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
+  import HR from '@Component/HR/HR';
 
   import Manager from './manager.svelte';
   import LaatijaResponse from './laatija-response.svelte';
@@ -124,10 +125,11 @@
   );
 
   const isToimenpide = R.has('type-id');
-</script>
 
-<style>
-</style>
+  const keyed = R.curry((prefix, tapahtuma) =>
+    R.assoc('key', `${prefix}_${tapahtuma.id}`, tapahtuma)
+  );
+</script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
@@ -135,16 +137,18 @@
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
-      <div class="mb-2">
-        Energiatodistus {energiatodistus.versio}/{energiatodistus.id} -
-        {Maybe.orSome('', energiatodistus.perustiedot.nimi)} -
-        {kayttotarkoitusTitle(
-          R.objOf(energiatodistus.versio, luokittelut),
-          energiatodistus
-        )}
-      </div>
-      <div class="mb-5">
-        <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
+      <div class="flex flex-col mb-8">
+        <div>{Maybe.orSome('', energiatodistus['laatija-fullname'])}</div>
+        <div class="flex space-x-1">
+          <div>{Maybe.orSome('', energiatodistus.perustiedot.nimi)}.</div>
+          <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
+        </div>
+        <div>
+          {kayttotarkoitusTitle(
+            R.objOf(energiatodistus.versio, luokittelut),
+            energiatodistus
+          )}
+        </div>
       </div>
 
       {#if Kayttajat.isPaakayttaja(whoami)}
@@ -162,20 +166,27 @@
         <LaatijaResponse {energiatodistus} {toimenpiteet} {fork} />
       {/if}
 
-      <H2 text="Toimenpiteet" />
+      <HR compact={true} />
 
-      {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
-        {#if isToimenpide(tapahtuma)}
-          <Toimenpide
-            {energiatodistus}
-            {toimenpidetyypit}
-            toimenpide={tapahtuma}
-            {whoami}
-            {i18n}
-            reload={_ => load(params)} />
-        {:else}
-          <Note note={tapahtuma} />
-        {/if}
+      <H2 text="Tapahtumat" />
+      {#each tapahtumat([
+        R.map(keyed('toimenpide'), toimenpiteet),
+        R.map(keyed('note'), notes)
+      ]) as tapahtuma (tapahtuma.key)}
+        <div class="mb-8">
+          {#if isToimenpide(tapahtuma)}
+            <Toimenpide
+              {energiatodistus}
+              {toimenpidetyypit}
+              toimenpide={tapahtuma}
+              {whoami}
+              {i18n}
+              reload={_ => load(params)}
+              {valvojat} />
+          {:else}
+            <Note note={tapahtuma} {valvojat} {i18n} />
+          {/if}
+        </div>
       {/each}
       {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
         <p>Ei tapahtumia</p>

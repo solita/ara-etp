@@ -1,5 +1,6 @@
 <script>
   export let white = false;
+  export let smaller = false;
 </script>
 
 <style type="text/postcss">
@@ -11,6 +12,10 @@
     box-sizing: border-box;
     border-color: #538000 transparent transparent transparent;
     animation: spin 1.2s linear infinite;
+  }
+
+  .spinner.smaller {
+    transform: scale(0.75);
   }
 
   .white div {
@@ -27,7 +32,7 @@
   }
 </style>
 
-<!-- purgecss: white -->
-<div class="spinner" class:white>
+<!-- purgecss: white smaller -->
+<div class="spinner" class:smaller class:white>
   <div />
 </div>
