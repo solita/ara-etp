@@ -9,6 +9,14 @@ import * as ViestiApi from '@Component/viesti/viesti-api';
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
 const linksForLaatija = R.curry((isDev, i18n, whoami) => [
+  ...(isDev
+    ? [
+        {
+          label: i18n('navigation.valvonta.valvonta'),
+          href: '#/valvonta/oikeellisuus/all'
+        }
+      ]
+    : []),
   {
     label: i18n('navigation.energiatodistukset'),
     href: '#/energiatodistus/all'
@@ -17,15 +25,6 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
     label: i18n('navigation.yritykset'),
     href: `#/laatija/${whoami.id}/yritykset`
   },
-  // Hidden until implemented
-  // ...(isDev
-  //   ? [
-  //       {
-  //         label: i18n('navigation.valvonta.valvonta'),
-  //         href: '#/valvonta/oikeellisuus/all'
-  //       }
-  //     ]
-  //   : []),
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
