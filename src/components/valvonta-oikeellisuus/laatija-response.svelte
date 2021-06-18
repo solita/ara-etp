@@ -50,6 +50,18 @@
     {#each [...Toimenpiteet.responseTypeFor(lastToimenpide)] as responseType}
       <H2 text={toimenpideText(lastToimenpide, 'title')} />
       <div class="mb-5">
+        {#if Toimenpiteet.hasTemplate(lastToimenpide)}
+          <div class="mb-4">
+            <Link
+              text={lastToimenpide.filename}
+              target={'_blank'}
+              href={ValvontaApi.url.document(
+                lastToimenpide['energiatodistus-id'],
+                lastToimenpide.id,
+                lastToimenpide['filename']
+              )} />
+          </div>
+        {/if}
         <p class="mb-2">
           {R.replace(
             '{deadline-date}',
