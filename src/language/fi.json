@@ -1042,7 +1042,21 @@
     },
     "muutoshistoria": {
       "not-found": "Energiatodistusta ei ole olemassa.",
-      "load-error": "Muutoshistorian lataaminen epäonnistui."
+      "load-error": "Muutoshistorian lataaminen epäonnistui.",
+      "title": "Muutoshistoria",
+      "tilamuutokset": "Tilamuutokset",
+      "ajankohta": "Ajankohta",
+      "kayttaja": "Käyttäjä",
+      "tapahtuma": "Tapahtuma",
+      "lisatietoa": "Lisatietoa",
+      "luonnosLaskentaohjelmisto": "Luonnos / Laskentaohjelmisto",
+      "allekirjoitusAloitettiin": "Allekirjoitus aloitettiin",
+      "voimassa": "Voimassa",
+      "hylatty": "Hylätty",
+      "korvattu": "Korvattu",
+      "voimassaoloPaattyi": "Voimassaolo päättyi",
+      "allekirjoitettu": "Allekirjoitettu",
+      "korvattuTodistuksella": "Korvattu energiatodistuksella"
     },
     "signing": {
       "header": "Allekirjoittaminen",
