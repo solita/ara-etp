@@ -1221,6 +1221,15 @@
         "reset": "Tyhjennä",
         "back": "Takaisin",
         "reply-in-new": "Vastaa viestiin uudessa ketjussa",
+        "link-et": {
+          "linked-to": "Liittyy energiatodistukseen",
+          "title": "Liitä energiatodistukseen",
+          "button-link-et": "Liitä energiatodistukseen",
+          "button-edit": "Liitä energiatodistukseen",
+          "input-label": "Energiatodistus",
+          "button-link": "Liitä",
+          "button-unlink": "Poista liitos"
+        },
         "messages": {
           "not-found": "Viestiketjua ei ole olemassa.",
           "load-error": "Viestiketjun tietojen lataus epäonnistui.",

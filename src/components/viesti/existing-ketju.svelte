@@ -21,6 +21,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import PopupLinkEt from '@Component/viesti/popup-link-et';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Select from '@Component/Select/Select';
@@ -118,6 +119,12 @@
     });
   };
 
+  const linkToEnergiatodistus = etId => {
+    updateKetju({
+      'energiatodistus-id': etId
+    });
+  };
+
   const updateKetju = R.compose(
     Future.fork(
       response => {
@@ -209,34 +216,62 @@
         </div>
 
         {#if !Kayttajat.isLaatija(whoami)}
-          <div class="flex items-end space-x-4 px-2 w-1/3">
-            <div class="w-full ">
-              <Select
-                id={'kasittelija'}
-                label={i18n(i18nRoot + '.handler')}
-                noneLabel={i18n(i18nRoot + '.no-handler')}
-                compact={true}
-                required={false}
-                disabled={false}
-                allowNone={true}
-                bind:model={ketju}
-                on:change={event =>
-                  submitKasittelija(parseInt(event.target.value))}
-                lens={R.lensProp('kasittelija-id')}
-                format={Viestit.fullName(kasittelijat)}
-                items={R.pluck('id', kasittelijat)} />
-            </div>
+          <div class="flex flex-col w-1/3 items-end">
+            {#if ketju['energiatodistus-id']}
+              <div class="flex w-full">
+                <span>{i18n(i18nRoot + '.link-et.linked-to')}</span>
+                <span class="font-bold text-primary"
+                  >{ketju['energiatodistus-id']}</span>
+              </div>
+            {/if}
+            <PopupLinkEt
+              let:open
+              title={i18n(i18nRoot + '.link-et.title')}
+              inputLabel={i18n(i18nRoot + '.link-et.input-label')}
+              primaryButtonLabel={i18n(i18nRoot + '.link-et.button-link')}
+              primaryAction={linkToEnergiatodistus}
+              secondaryButtonLabel={i18n(i18nRoot + '.link-et.button-unlink')}
+              secondaryAction={() => {
+                linkToEnergiatodistus(Maybe.None());
+              }}>
+              <TextButton
+                on:click={open}
+                icon="edit"
+                text={ketju['energiatodistus-id']
+                  ? i18n(i18nRoot + '.link-et.button-edit')
+                  : i18n(i18nRoot + '.link-et.button-link-et')}
+                style={'secondary'} />
+            </PopupLinkEt>
 
-            <button
-              on:click={submitKasitelty(!ketju.kasitelty)}
-              class="flex items-center space-x-1">
-              {#if ketju.kasitelty}
-                <span class="material-icons text-primary"> check_box </span>
-              {:else}
-                <span class="material-icons"> check_box_outline_blank </span>
-              {/if}
-              <span>{i18n(i18nRoot + '.handled')}</span>
-            </button>
+            <div class="flex items-end space-x-4 px-2 w-full">
+              <div class="w-full">
+                <Select
+                  id={'kasittelija'}
+                  label={i18n(i18nRoot + '.handler')}
+                  noneLabel={i18n(i18nRoot + '.no-handler')}
+                  compact={true}
+                  required={false}
+                  disabled={false}
+                  allowNone={true}
+                  bind:model={ketju}
+                  on:change={event =>
+                    submitKasittelija(parseInt(event.target.value))}
+                  lens={R.lensProp('kasittelija-id')}
+                  format={Viestit.fullName(kasittelijat)}
+                  items={R.pluck('id', kasittelijat)} />
+              </div>
+
+              <button
+                on:click={submitKasitelty(!ketju.kasitelty)}
+                class="flex items-center space-x-1">
+                {#if ketju.kasitelty}
+                  <span class="material-icons text-primary"> check_box </span>
+                {:else}
+                  <span class="material-icons"> check_box_outline_blank </span>
+                {/if}
+                <span>{i18n(i18nRoot + '.handled')}</span>
+              </button>
+            </div>
           </div>
         {/if}
       </div>
