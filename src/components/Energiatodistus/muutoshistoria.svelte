@@ -124,7 +124,11 @@
                       text={event.v} />
                   {/if}
                 </td>
-                <td class="etp-table--td" />
+                <td class="etp-table--td">
+                  {#if R.equals(true, event['external-api'])}
+                    {$_(`${i18nRoot}.external-api`)}
+                  {/if}
+                </td>
               </tr>
             {/each}
           </tbody>
