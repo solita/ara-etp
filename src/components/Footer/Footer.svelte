@@ -1,6 +1,7 @@
 <script>
-  import Version from '@Component/Version/Version';
   import { locale, _ } from '@Language/i18n';
+
+  import Link from '@Component/Link/Link';
 
   export let version;
 </script>
@@ -19,11 +20,16 @@
         </div>
         <div class="flex flex-col">
           <span class="font-bold"> {$_('footer.phone')}: </span>
-          <a class="font-bold" href="tel:0295250800"> 029 525 0800 </a>
+          <div>
+            <Link bold={true} href="tel:0295250800" text={'029 525 0800'} />
+          </div>
           <span class="font-bold mt-2"> {$_('footer.email')}: </span>
-          <a class="font-bold" href="mailto:energiatodistus@ara.fi"
-            >energiatodistus@ara.fi
-          </a>
+          <div>
+            <Link
+              bold={true}
+              href={'mailto:energiatodistus@ara.fi'}
+              text={'energiatodistus@ara.fi'} />
+          </div>
         </div>
       </div>
     </div>
@@ -32,45 +38,49 @@
         {$_('footer.about')}
       </span>
       {#if $locale.startsWith('sv')}
-        <a
-          class="font-bold text-primary"
-          href="pdf/Dataskyddsbeskrivning_Energicertifikatregistret.pdf"
-          target="_blank">
-          Dataskyddsbeskrivning Energicertifikatregistret (pdf)
-        </a>
-        <a
-          class="font-bold text-primary"
-          href="pdf/Dataskyddsbeskrivning_Register_for_overvakningsuppgifter_om_energicertifikat.pdf"
-          target="_blank">
-          Dataskyddsbeskrivning Register för övervakningsuppgifter om
-          energicertifikat (pdf)
-        </a>
-        <a
-          class="font-bold text-primary"
-          href="pdf/Dataskyddsbeskrivning_Register_for_upprattare_av_energiferticikat.pdf"
-          target="_blank">
-          Dataskyddsbeskrivning Register för upprättare av energiferticikat
-          (pdf)
-        </a>
+        <div>
+          <Link
+            bold={true}
+            href={'pdf/Dataskyddsbeskrivning_Energicertifikatregistret.pdf'}
+            target={'_blank'}
+            text={'Dataskyddsbeskrivning Energicertifikatregistret (pdf)'} />
+        </div>
+        <div>
+          <Link
+            bold={true}
+            href={'pdf/Dataskyddsbeskrivning_Register_for_overvakningsuppgifter_om_energicertifikat.pdf'}
+            target={'_blank'}
+            text={'Dataskyddsbeskrivning Register för övervakningsuppgifter om energicertifikat (pdf)'} />
+        </div>
+        <div>
+          <Link
+            bold={true}
+            href={'pdf/Dataskyddsbeskrivning_Register_for_upprattare_av_energiferticikat.pdf'}
+            target={'_blank'}
+            text={'Dataskyddsbeskrivning Register för upprättare av energiferticikat (pdf)'} />
+        </div>
       {:else}
-        <a
-          class="font-bold text-primary"
-          href="pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf"
-          target="_blank">
-          Tietosuojaseloste Energiatodistusrekisteri (pdf)
-        </a>
-        <a
-          class="font-bold text-primary"
-          href="pdf/Tietosuojaseloste_Energiatodistusten_laatijarekisteri.pdf"
-          target="_blank">
-          Tietosuojaseloste Energiatodistusten laatijarekisteri (pdf)
-        </a>
-        <a
-          class="font-bold text-primary"
-          href="pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf"
-          target="_blank">
-          Tietosuojaseloste Energiatodistusten valvontatietorekisteri (pdf)
-        </a>
+        <div>
+          <Link
+            bold={true}
+            href={'pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf'}
+            target={'_blank'}
+            text={'Tietosuojaseloste Energiatodistusrekisteri (pdf)'} />
+        </div>
+        <div>
+          <Link
+            bold={true}
+            href={'pdf/Tietosuojaseloste_Energiatodistusten_laatijarekisteri.pdf'}
+            target={'_blank'}
+            text={'Tietosuojaseloste Energiatodistusten laatijarekisteri (pdf)'} />
+        </div>
+        <div>
+          <Link
+            bold={true}
+            href={'pdf/Tietosuojaseloste_Energiatodistusten_valvontatietorekisteri.pdf'}
+            target={'_blank'}
+            text={'Tietosuojaseloste Energiatodistusten valvontatietorekisteri (pdf)'} />
+        </div>
       {/if}
     </div>
   </div>
