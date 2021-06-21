@@ -8,6 +8,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
   import { querystring } from 'svelte-spa-router';
   import { push } from '@Component/Router/router';
   import qs from 'qs';
@@ -73,26 +74,34 @@
       R.chain(whoami =>
         Future.parallelObject(4, {
           whoami: Future.resolve(whoami),
-          ketjutCount: api.getKetjutCount({
-            'kasittelija-id': filters['kasittelija-self']
-              ? Maybe.Some(whoami.id)
-              : Maybe.None(),
-            'has-kasittelija': filters['no-kasittelija']
-              ? Maybe.Some(false)
-              : Maybe.None(),
-            'include-kasitelty': Maybe.Some(filters['include-kasitelty'])
-          }),
-          ketjut: api.getKetjut({
-            'kasittelija-id': filters['kasittelija-self']
-              ? Maybe.Some(whoami.id)
-              : Maybe.None(),
-            'has-kasittelija': filters['no-kasittelija']
-              ? Maybe.Some(false)
-              : Maybe.None(),
-            'include-kasitelty': Maybe.Some(filters['include-kasitelty']),
-            offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
-            limit: Maybe.Some(pageSize)
-          }),
+          ketjutCount: api.getKetjutCount(
+            Kayttajat.isLaatija()
+              ? {}
+              : {
+                  'kasittelija-id': filters['kasittelija-self']
+                    ? Maybe.Some(whoami.id)
+                    : Maybe.None(),
+                  'has-kasittelija': filters['no-kasittelija']
+                    ? Maybe.Some(false)
+                    : Maybe.None(),
+                  'include-kasitelty': Maybe.Some(filters['include-kasitelty'])
+                }
+          ),
+          ketjut: api.getKetjut(
+            Kayttajat.isLaatija()
+              ? {}
+              : {
+                  'kasittelija-id': filters['kasittelija-self']
+                    ? Maybe.Some(whoami.id)
+                    : Maybe.None(),
+                  'has-kasittelija': filters['no-kasittelija']
+                    ? Maybe.Some(false)
+                    : Maybe.None(),
+                  'include-kasitelty': Maybe.Some(filters['include-kasitelty']),
+                  offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
+                  limit: Maybe.Some(pageSize)
+                }
+          ),
           vastaanottajaryhmat: api.vastaanottajaryhmat,
           kasittelijat: api.getKasittelijat
         })
@@ -149,31 +158,33 @@
             href="#/viesti/new" />
         </div>
       </div>
-      <div class="flex justify-between mb-4">
-        <div class="flex">
+      {#if !Kayttajat.isLaatija(whoami)}
+        <div class="flex justify-between mb-4">
+          <div class="flex">
+            <Checkbox
+              id={'checkbox.show-mine'}
+              name={'checkbox.show-mine'}
+              label={i18n('viesti.all.show-mine')}
+              lens={R.lensProp('kasittelija-self')}
+              bind:model={filters}
+              disabled={false} />
+            <Checkbox
+              id={'checkbox.no-handler'}
+              name={'checkbox.no-handler'}
+              label={i18n('viesti.all.no-handler')}
+              lens={R.lensProp('no-kasittelija')}
+              bind:model={filters}
+              disabled={false} />
+          </div>
           <Checkbox
-            id={'checkbox.show-mine'}
-            name={'checkbox.show-mine'}
-            label={i18n('viesti.all.show-mine')}
-            lens={R.lensProp('kasittelija-self')}
-            bind:model={filters}
-            disabled={false} />
-          <Checkbox
-            id={'checkbox.no-handler'}
-            name={'checkbox.no-handler'}
-            label={i18n('viesti.all.no-handler')}
-            lens={R.lensProp('no-kasittelija')}
+            id={'checkbox.show-handled'}
+            name={'checkbox.show-handled'}
+            label={i18n('viesti.all.show-handled')}
+            lens={R.lensProp('include-kasitelty')}
             bind:model={filters}
             disabled={false} />
         </div>
-        <Checkbox
-          id={'checkbox.show-handled'}
-          name={'checkbox.show-handled'}
-          label={i18n('viesti.all.show-handled')}
-          lens={R.lensProp('include-kasitelty')}
-          bind:model={filters}
-          disabled={false} />
-      </div>
+      {/if}
       {#if ketjut.length === 0}
         <span>{i18n('viesti.all.no-messages')}</span>
       {/if}
