@@ -16,7 +16,7 @@
   import Button from '@Component/Button/Button.svelte';
   import TextButton from '@Component/Button/TextButton.svelte';
   import Select from '@Component/Select/Select.svelte';
-  import H2 from '@Component/H/H2.svelte';
+  import Link from '@Component/Link/Link.svelte';
 
   export let energiatodistus;
   export let valvojat;
@@ -49,6 +49,9 @@
 
   const isAuditCase = toimenpiteet =>
     !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
+
+  const isDraft = toimenpiteet =>
+    !R.isEmpty(toimenpiteet) && Toimenpiteet.isDraft(R.last(toimenpiteet));
 
   const saveKasittelija = id => saveValvonta({ 'valvoja-id': id });
 
@@ -113,7 +116,7 @@
       text="Aloita valvonta"
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
-{:else}
+{:else if !isDraft(toimenpiteet)}
   <div class="lg:w-1/2 w-full mb-5">
     <Select
       label="Lisää valvontatoimenpide"
@@ -126,5 +129,15 @@
         Toimenpiteet.isAuditCaseToimenpideType,
         toimenpidetyypit
       )} />
+  </div>
+{:else if isAuditCase && isDraft(toimenpiteet)}
+  <div class="mb-5">
+    Toimenpide <Link
+      href={Links.toimenpide(R.last(toimenpiteet), energiatodistus)}
+      text={R.compose($_, Toimenpiteet.i18nKey)(
+        R.last(toimenpiteet),
+        'title'
+      )} /> on luonnos tilassa. Et voi tehdä uutta toimenpidettä ennen kuin edellinen
+    toimenpide on suoritettu loppuun.
   </div>
 {/if}
