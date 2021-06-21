@@ -16,6 +16,7 @@
   import H2 from '@Component/H/H2';
   import Overlay from '@Component/Overlay/Overlay';
   import Link from '@Component/Link/Link.svelte';
+  import * as Inputs from './inputs';
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus.muutoshistoria';
@@ -37,11 +38,24 @@
     R.head,
     R.keys,
     R.pickBy(R.__, stateLocalizations),
-    event => (v, _) => R.and(R.equals(event.k, R.head(v)), R.last(v)(event.v))
+    event => (v, _) =>
+      R.and(R.equals(event.k, R.head(v)), R.last(v)(event['new-v']))
   );
 
   const assocLocalizationKey = event =>
-    R.assoc('localizationKey', stateLocalization(event), event)
+    R.assoc('localizationKey', stateLocalization(event), event);
+
+  const formattedValue = (event, prop) => {
+    let val = R.prop(prop, event);
+
+    return R.isNil(val)
+      ? '-'
+      : R.cond([
+          [R.equals('date'), _ => Formats.formatTimeInstantMinutes(val)],
+          [R.equals('bool'), _ => i18n(`${i18nRoot}.${val}`)],
+          [R.T, _ => val]
+        ])(event.type);
+  };
 
   const load = id => {
     overlay = true;
@@ -77,6 +91,12 @@
     R.filter(event => dfns.isPast(event.modifytime)),
     Maybe.orSome([]),
     R.chain(R.compose(Maybe.fromNull, R.path(['history', 'state-history'])))
+  )(resources);
+
+  $: formHistory = R.compose(
+    R.sort(R.descend(R.prop('modifytime'))),
+    Maybe.orSome([]),
+    R.chain(R.compose(Maybe.fromNull, R.path(['history', 'form-history'])))
   )(resources);
 
   load(params.id);
@@ -121,14 +141,60 @@
                   {$_(i18nRoot + '.' + event.localizationKey)}
                   {#if R.equals(event.k, 'korvaava-energiatodistus-id')}
                     <Link
-                      href={`#/energiatodistus/${event.v}`}
-                      text={event.v} />
+                      href={`#/energiatodistus/${event['new-v']}`}
+                      text={event['new-v']} />
                   {/if}
                 </td>
                 <td class="etp-table--td">
                   {#if R.equals(true, event['external-api'])}
                     {$_(`${i18nRoot}.external-api`)}
                   {/if}
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="overflow-x-auto my-10">
+        <H2 text={i18n(`${i18nRoot}.energiatodistuslomake`)} />
+        <table class="etp-table">
+          <thead class="etp-table--thead">
+            <tr class="etp-table--tr">
+              <th class="etp-table--th">
+                {i18n(`${i18nRoot}.ajankohta`)}
+              </th>
+              <th class="etp-table--th">
+                {i18n(`${i18nRoot}.kayttaja`)}
+              </th>
+              <th class="etp-table--th">
+                {i18n(`${i18nRoot}.kentta`)}
+              </th>
+              <th class="etp-table--th">
+                {i18n(`${i18nRoot}.rajapintaarvo`)}
+              </th>
+              <th class="etp-table--th">
+                {i18n(`${i18nRoot}.loppuarvo`)}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="etp-table--tbody">
+            {#each formHistory as event}
+              <tr class="etp-table--tr">
+                <td class="etp-table--td">
+                  {Formats.formatTimeInstantMinutes(event.modifytime)}
+                </td>
+                <td class="etp-table--td">
+                  {event['modifiedby-fullname']}
+                </td>
+                <td class="etp-table--td">
+                  {Inputs.propertyLabel($_, event.k)}
+                </td>
+                <td class="etp-table--td">
+                  {formattedValue(event, 'init-v')}
+                </td>
+                <td class="etp-table--td">
+                  {formattedValue(event, 'new-v')}
                 </td>
               </tr>
             {/each}
