@@ -1,5 +1,4 @@
 <script>
-  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
   export let href;
@@ -7,6 +6,7 @@
   export let target = '_self';
   export let icon = Maybe.None();
   export let disabled = false;
+  export let bold = false;
 </script>
 
 <style type="text/postcss">
@@ -22,9 +22,9 @@
   }
 </style>
 
-<!-- purgecss: disabled -->
+<!-- purgecss: disabled font-bold -->
 
-<a {href} {target} class:disabled>
+<a {href} {target} class:disabled class:font-bold={bold}>
   {#each Maybe.toArray(icon) as i}
     <span class="font-icon mr-1">{i}</span>
   {/each}
