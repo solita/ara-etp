@@ -154,6 +154,7 @@
   "laatija": {
     "laatija": "Upprättare",
     "toteamispaivamaara_haku": "Upprättare / Toteamispäivämäärä SV?",
+    "voimassaolo-paattymisaika_haku": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
     "lisaa-laatijat": "Lägg till upprättare",
     "henkilotunnus": "Personbeteckning",
     "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O ",
