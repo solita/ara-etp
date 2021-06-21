@@ -170,6 +170,16 @@ export const energiatodistusExtra = R.curry(
         ])
       ],
       [R.equals('viestit'), etViestitCrumb(i18n, versio, id, [...rest])],
+      [
+        R.equals('muutoshistoria'),
+        R.always([
+          {
+            url: `#/energiatodistus/${versio}/${id}/muutoshistoria`,
+            label: i18n('navigation.muutoshistoria')
+          }
+        ])
+      ],
+
       [R.T, R.always([])]
     ])(extra)
 );

@@ -46,11 +46,6 @@ export const linksForPatevyydentoteaja = R.curry((isDev, i18n, whoami) => [
 
 export const linksForEnergiatodistus = R.curry(
   (isDev, i18n, whoami, version, id) => [
-    // Hidden until implemented
-    //{
-    //  label: i18n('navigation.viestit'),
-    //  href: `#/energiatodistus/${version}/${id}/viestit`
-    //},
     {
       label: `${i18n('navigation.et')} ${id}`,
       href: `#/energiatodistus/${version}/${id}`
@@ -63,11 +58,6 @@ export const linksForEnergiatodistus = R.curry(
           }
         ]
       : []),
-    // Hidden until implemented
-    // {
-    //  label: i18n('navigation.muutoshistoria'),
-    //  href: `#/energiatodistus/${version}/${id}/muutoshistoria`
-    // }
     ...(isDev && !Kayttajat.isLaskuttaja(whoami)
       ? [
           {
@@ -79,11 +69,19 @@ export const linksForEnergiatodistus = R.curry(
 
     ...(isDev
       ? [
-        {
-          label: i18n('navigation.energiatodistus-viestit'),
-          href: `#/energiatodistus/${version}/${id}/viestit`
-        }
-      ]
+          {
+            label: i18n('navigation.energiatodistus-viestit'),
+            href: `#/energiatodistus/${version}/${id}/viestit`
+          }
+        ]
+      : []),
+    ...(isDev && !Kayttajat.isLaskuttaja(whoami)
+      ? [
+          {
+            label: i18n('navigation.muutoshistoria'),
+            href: `#/energiatodistus/${version}/${id}/muutoshistoria`
+          }
+        ]
       : [])
   ]
 );
@@ -101,12 +99,11 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   {
     label: i18n('navigation.liitteet'),
     disabled: true
+  },
+  {
+    label: i18n('navigation.muutoshistoria'),
+    disabled: true
   }
-  // Hidden until implemented
-  //{
-  //  label: i18n('navigation.muutoshistoria'),
-  //  disabled: true
-  //}
 ]);
 
 const nameFromWhoamiOrStore = R.curry((idTranslate, whoami, id) =>
@@ -261,7 +258,12 @@ export const parseEnergiatodistus = R.curry(
       R.map(Maybe.fromNull)
     )(locationParts);
 
-    if (R.compose(Maybe.isSome, R.filter(R.either(R.equals('new'), R.equals('viestit'))))(id)) {
+    if (
+      R.compose(
+        Maybe.isSome,
+        R.filter(R.either(R.equals('new'), R.equals('viestit')))
+      )(id)
+    ) {
       return [];
     }
 

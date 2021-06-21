@@ -1041,6 +1041,25 @@
       "tyojono-remove-success": "Energiatodistus poistettiin työjonosta onnistuneesti",
       "tyojono-remove-error": "Energiatodistuksen poistaminen työjonosta epäonnistui"
     },
+    "muutoshistoria": {
+      "not-found": "Energiatodistusta ei ole olemassa.",
+      "load-error": "Muutoshistorian lataaminen epäonnistui.",
+      "title": "Muutoshistoria",
+      "tilamuutokset": "Tilamuutokset",
+      "ajankohta": "Ajankohta",
+      "kayttaja": "Käyttäjä",
+      "tapahtuma": "Tapahtuma",
+      "lisatietoa": "Lisatietoa",
+      "external-api": "Tuotu ulkoisesta rajapinnasta",
+      "luonnosLaskentaohjelmisto": "Luonnos / Laskentaohjelmisto",
+      "allekirjoitusAloitettiin": "Allekirjoitus aloitettiin",
+      "voimassa": "Voimassa",
+      "hylatty": "Hylätty",
+      "korvattu": "Korvattu",
+      "voimassaoloPaattyi": "Voimassaolo päättyi",
+      "allekirjoitettu": "Allekirjoitettu",
+      "korvattuTodistuksella": "Korvattu energiatodistuksella"
+    },
     "signing": {
       "header": "Allekirjoittaminen",
       "language-adjective": {
