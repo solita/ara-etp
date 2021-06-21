@@ -75,7 +75,7 @@
         Future.parallelObject(4, {
           whoami: Future.resolve(whoami),
           ketjutCount: api.getKetjutCount(
-            Kayttajat.isLaatija()
+            Kayttajat.isLaatija(whoami)
               ? {}
               : {
                   'kasittelija-id': filters['kasittelija-self']
@@ -88,7 +88,7 @@
                 }
           ),
           ketjut: api.getKetjut(
-            Kayttajat.isLaatija()
+            Kayttajat.isLaatija(whoami)
               ? {}
               : {
                   'kasittelija-id': filters['kasittelija-self']
