@@ -40,6 +40,9 @@
     event => (v, _) => R.and(R.equals(event.k, R.head(v)), R.last(v)(event.v))
   );
 
+  const assocLocalizationKey = event =>
+    R.assoc('localizationKey', stateLocalization(event), event)
+
   const load = id => {
     overlay = true;
     Future.fork(
@@ -68,14 +71,12 @@
   };
 
   $: stateHistory = R.compose(
-    R.reverse,
+    R.sort(R.descend(R.prop('modifytime'))),
     R.filter(R.prop('localizationKey')),
-    R.map(event => R.assoc('localizationKey', stateLocalization(event), event)),
+    R.map(assocLocalizationKey),
     R.filter(event => dfns.isPast(event.modifytime)),
-    R.map(R.over(R.lensProp('modifytime'), dfns.parseJSON)),
     Maybe.orSome([]),
-    R.map(R.prop('state-history')),
-    R.map(R.prop('history'))
+    R.chain(R.compose(Maybe.fromNull, R.path(['history', 'state-history'])))
   )(resources);
 
   load(params.id);
