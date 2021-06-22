@@ -1,10 +1,8 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Formats from '@Utility/formats';
-  import * as Locales from '@Language/locale-utils';
   import * as Router from '@Component/Router/router';
 
   import { _, locale } from '@Language/i18n';
@@ -14,6 +12,7 @@
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
 
+  import DocumentLink from './document-link.svelte';
   import H2 from '@Component/H/H2.svelte';
   import Link from '@Component/Link/Link.svelte';
   import TextButton from '@Component/Button/TextButton.svelte';
@@ -52,14 +51,7 @@
       <div class="mb-5">
         {#if Toimenpiteet.hasTemplate(lastToimenpide)}
           <div class="mb-4">
-            <Link
-              text={lastToimenpide.filename}
-              target={'_blank'}
-              href={ValvontaApi.url.document(
-                lastToimenpide['energiatodistus-id'],
-                lastToimenpide.id,
-                lastToimenpide['filename']
-              )} />
+            <DocumentLink toimenpide={lastToimenpide} />
           </div>
         {/if}
         <p class="mb-2">
@@ -83,6 +75,13 @@
   {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
     <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
     <div class="mb-5">
+
+      {#if Toimenpiteet.hasTemplate(request(toimenpiteet))}
+        <div class="mb-4">
+          <DocumentLink toimenpide={request(toimenpiteet)} />
+        </div>
+      {/if}
+
       <p class="mb-2">
         {R.replace(
           '{deadline-date}',
