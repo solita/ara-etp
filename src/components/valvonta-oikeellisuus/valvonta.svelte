@@ -107,11 +107,6 @@
     );
   };
 
-  const saveValvonta = R.compose(
-    fork('update', _ => load(params)),
-    ValvontaApi.putValvonta(params.id)
-  );
-
   const diaarinumero = R.compose(
     R.chain(R.prop('diaarinumero')),
     Maybe.fromNull,
@@ -128,6 +123,11 @@
 
   const keyed = R.curry((prefix, tapahtuma) =>
     R.assoc('key', `${prefix}_${tapahtuma.id}`, tapahtuma)
+  );
+
+  $: saveValvonta = R.compose(
+    fork('update', _ => load(params)),
+    ValvontaApi.putValvonta(params.id)
   );
 </script>
 
