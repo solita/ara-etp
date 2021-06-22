@@ -8,14 +8,13 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import { querystring } from 'svelte-spa-router';
   import * as Router from '@Component/Router/router';
   import qs from 'qs';
 
   import * as ETViews from '@Component/Energiatodistus/views';
-  import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
-
   import * as Links from './links';
 
   import * as api from './valvonta-api';
@@ -129,13 +128,16 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
+    <H1 text={i18n(i18nRoot + '.title')} />
+
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
-      <H1 text={i18n(i18nRoot + '.title')} />
-      <Checkbox
-        disabled={overlay}
-        label={i18n(i18nRoot + '.only-own')}
-        bind:model={onlyOwnValvonnat} />
-      {#if valvonnat.length === 0}
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <Checkbox
+          disabled={overlay}
+          label={i18n(i18nRoot + '.only-own')}
+          bind:model={onlyOwnValvonnat} />
+      {/if}
+      {#if R.isEmpty(valvonnat.length)}
         <span>{i18n(i18nRoot + '.empty')}</span>
       {:else}
         <div class="my-6 overflow-x-auto">
