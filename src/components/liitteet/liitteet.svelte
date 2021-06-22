@@ -51,6 +51,7 @@
       flashMessageStore.flush();
       liiteApi.addLink(newLink);
       resetForm();
+      Validation.unblurForm(event.target);
     } else {
       Validation.blurForm(event.target);
       flashMessageStore.add(

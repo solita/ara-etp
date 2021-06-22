@@ -64,7 +64,7 @@
         'error',
         $_(`${i18nRoot}.messages.validation-error`)
       );
-      Validation.blurForm(form);
+      Validation.blurFormExcludeNested(form);
     }
   };
 
@@ -90,7 +90,8 @@
   bind:this={form}
   on:submit|preventDefault={saveToimenpide}
   on:input={setDirty}
-  on:change={setDirty}>
+  on:change={setDirty}
+  on:text-change={setDirty}>
   <Content
     bind:toimenpide
     bind:dirty

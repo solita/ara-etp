@@ -1,4 +1,6 @@
 <script>
+  import * as keys from '@Utility/keys';
+
   export let id;
   export let name;
   export let disabled;
@@ -8,6 +10,7 @@
   export let viewValue;
   export let type = 'text';
   export let placeholder = '';
+  export let api;
 </script>
 
 <style type="text/postcss">
@@ -45,6 +48,11 @@
   {autocomplete}
   {placeholder}
   value={viewValue}
-  on:blur
-  on:input
-  on:keypress />
+  on:focus={api.focus}
+  on:blur={event => api.blur(event.target.value)}
+  on:input={event => api.input(event.target.value)}
+  on:keydown={event => {
+    if (event.keyCode === keys.ENTER) {
+      api.update(event.target.value);
+    }
+  }} />

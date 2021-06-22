@@ -2,7 +2,6 @@
   import * as R from 'ramda';
   import * as Either from '@Utility/either-utils';
   import * as v from '@Utility/validation';
-  import * as keys from '@Utility/keys';
   import * as objects from '@Utility/objects';
   import { tick } from 'svelte';
 
@@ -80,30 +79,37 @@
     });
   };
 
-  $: !disabled && blurred && validate(R.view(lens, model));
+  $: !disabled && !focused && blurred && validate(R.view(lens, model));
   $: error = focused && !valid && validationResult.type === 'error';
   $: warning = focused && !valid && validationResult.type === 'warning';
+
+  $: api = {
+    focus: _ => {
+      if (!disabled) {
+        focused = true;
+        validate(R.view(lens, model));
+      }
+    },
+    blur: value => {
+      if (!disabled) {
+        focused = false;
+        blurred = true;
+        updateModel(value);
+      }
+    },
+    input: value => {
+      if (!disabled) {
+        updateCurrentValue(value);
+        validate(parse(value));
+      }
+    },
+    update: updateModel
+  }
 </script>
 
-<div
-  title={tooltip}
-  on:focus|capture={event => {
-    focused = true;
-    validate(parse(event.target.value));
-  }}
-  on:blur|capture={event => {
-    focused = false;
-    blurred = true;
-    updateModel(event.target.value);
-  }}
-  on:input={event => {
-    updateCurrentValue(event.target.value);
-    validate(parse(event.target.value));
-  }}
-  on:keydown={event => {
-    if (event.keyCode === keys.ENTER) {
-      updateModel(event.target.value);
-    }
-  }}>
-  <slot {viewValue} {focused} {valid} {validationResult} {warning} {error} />
+<div title={tooltip} class="input-container"
+     on:validation={event => {
+       blurred = event.detail.blurred
+     }}>
+  <slot {api} {viewValue} {focused} {valid} {validationResult} {warning} {error} />
 </div>

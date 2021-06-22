@@ -243,26 +243,25 @@ export const isValidForm = schemaObject =>
     validateModelObject(schemaObject)
   );
 
-export const blur = element =>
-  element.dispatchEvent(
-    new Event('blur', {
-      bubbles: true,
-      cancelable: true
-    })
-  );
+const dispatchValidationEvent = blurred => element =>
+  element.dispatchEvent(new CustomEvent('validation',
+    { detail: { blurred: blurred } }));
 
-const isInput = R.compose(
-  R.includes(R.__, ['input', 'textarea']),
-  R.toLower,
-  R.prop('tagName')
-);
+const dispatchValidationEvents = (blurred, elements) =>
+  R.forEach(dispatchValidationEvent(blurred), elements)
 
 /**
- * Dispatch blur event for all the form inputs to ensure
+ * Dispatch custom validation event for all the form inputs to ensure
  * that the inputs are validated and they show error message
  * if not valid.
  */
-export const blurForm = R.compose(
-  R.forEach(R.when(isInput, blur)),
-  R.prop('elements')
-);
+export const blurForm = form => dispatchValidationEvents(
+  true, form.getElementsByClassName('input-container'));
+
+export const blurFormExcludeNested = form => dispatchValidationEvents(
+  true,
+  R.filter(container => container.closest('form') === form,
+    form.getElementsByClassName('input-container')));
+
+export const unblurForm = form => dispatchValidationEvents(
+  false, form.getElementsByClassName('input-container'));

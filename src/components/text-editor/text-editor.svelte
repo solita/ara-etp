@@ -1,14 +1,12 @@
 <script>
   import * as R from 'ramda';
-  import * as Either from '@Utility/either-utils';
-  import * as Validation from '@Utility/validation';
   import DOMPurify from 'dompurify';
-  import Label from '@Component/Label/Label';
 
   import { quill } from './quill';
   import Marked from 'marked';
   import Turndown from 'turndown';
   import Style from '@Component/text-editor/style.svelte';
+  import Input from '@Component/Input/Input.svelte';
 
   const turndownService = new Turndown();
 
@@ -21,9 +19,10 @@
   });
 
   export let id;
+  export let required;
   export let label = '';
-  export let required = true;
-  export let compact = false;
+  export let disabled = false;
+  export let name = '';
 
   export let model = '';
   export let lens = R.identity;
@@ -31,80 +30,40 @@
   export let parse = R.identity;
   export let format = R.identity;
   export let validators = [];
+  export let warnValidators = [];
 
-  $: viewValue = R.compose(
-    Either.orSome(viewValue),
-    R.map(R.compose(Marked, format)),
-    Either.fromValueOrEither,
-    R.view(lens)
-  )(model);
+  export let compact;
+  export let i18n;
 
-  let focused = false;
-  let valid = true;
-  let errorMessage = '';
-
-  export let i18n = R.identity;
-  export let disabled;
-
-  $: highlightError = focused && !valid;
-
-  $: validate = value =>
-    Validation.validateModelValue(validators, value).cata(
-      error => {
-        valid = false;
-        errorMessage = error(i18n);
-      },
-      () => (valid = true)
-    );
+  const toMarkdown = R.bind(turndownService.turndown, turndownService);
 </script>
 
-<style type="text/postcss">
-  .error-icon {
-    @apply text-error;
-  }
+<Input
+  {id}
+  {name}
+  {required}
+  {disabled}
+  {label}
+  {parse}
+  {format}
+  {validators}
+  {warnValidators}
+  {compact}
+  {i18n}
+  {lens}
+  bind:model
+  let:viewValue
+  let:api>
 
-  .error-label {
-    @apply absolute top-auto;
-    font-size: smaller;
-  }
-</style>
-
-{#if !disabled}
-  <Label {id} {required} {label} {compact} error={highlightError} {focused} />
-{/if}
-<Style>
-  {#if !disabled}
-    <div
-      on:focusout={evt => {
-        focused = false;
-        model = R.set(
-          lens,
-          R.compose(
-            parse,
-            R.bind(turndownService.turndown, turndownService)
-          )(evt.target.innerHTML),
-          model
-        );
-      }}
-      on:focusin={_ => (focused = true)}
-      on:text-change={evt =>
-        R.compose(
-          validate,
-          parse,
-          R.join(''),
-          R.filter(R.test(/(\w|[ÅÄÖ])/i)),
-          R.replace(/<\/?[^>]+(>|$)/g, ''),
-          R.bind(turndownService.turndown, turndownService)
-        )(evt.detail.html)}
-      use:quill={viewValue} />
-  {:else}
-    {@html DOMPurify.sanitize(Marked(format(R.view(lens, model))))}
-  {/if}
-</Style>
-
-{#if !valid && !disabled}
-  <div class="error-label">
-    <span class="font-icon error-icon">error</span>
-    {errorMessage}
-  </div>
-{/if}
+  <Style>
+    {#if !disabled}
+      <div
+        on:focusin={api.focus}
+        on:focusout={event => api.blur(toMarkdown(event.target.innerHTML))}
+        on:text-change={event => api.input(toMarkdown(event.detail.html))}
+        use:quill={Marked(viewValue)} />
+    {:else}
+      {@html DOMPurify.sanitize(Marked(viewValue))}
+    {/if}
+  </Style>
+</Input>
