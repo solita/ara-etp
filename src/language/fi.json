@@ -1058,7 +1058,13 @@
       "korvattu": "Korvattu",
       "voimassaoloPaattyi": "Voimassaolo päättyi",
       "allekirjoitettu": "Allekirjoitettu",
-      "korvattuTodistuksella": "Korvattu energiatodistuksella"
+      "korvattuTodistuksella": "Korvattu energiatodistuksella",
+      "energiatodistuslomake": "Energiatodistuslomake",
+      "kentta": "Kenttä",
+      "rajapintaarvo": "Rajapinta-arvo",
+      "loppuarvo": "Loppuarvo",
+      "true": "Kyllä",
+      "false": "Ei"
     },
     "signing": {
       "header": "Allekirjoittaminen",
