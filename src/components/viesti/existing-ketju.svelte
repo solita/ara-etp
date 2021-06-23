@@ -211,35 +211,60 @@
             )} />
         </div>
 
-        {#if !Kayttajat.isLaatija(whoami)}
-          <div class="flex flex-col w-1/3 items-end">
-            {#if ketju['energiatodistus-id']}
-              <div class="flex w-full">
-                <span>{i18n(i18nRoot + '.link-et.linked-to')}</span>
-                <a
-                  class="font-bold text-primary"
-                  href={'/energiatodistus/' + ketju['energiatodistus-id']}
-                  >{ketju['energiatodistus-id']}</a>
-              </div>
-            {/if}
-            {#if showLinkEtDialog}
-              {console.log(ketju)}
-              <LinkEtDialog
-                ketjuId={ketju.id}
-                energiatodistusId={ketju['energiatodistus-id']}
-                close={() => {
-                  showLinkEtDialog = false;
-                }} />
-            {/if}
-            <TextButton
-              on:click={() => {
-                showLinkEtDialog = true;
-              }}
-              icon="edit"
-              text={ketju['energiatodistus-id']
-                ? i18n(i18nRoot + '.link-et.button-edit')
-                : i18n(i18nRoot + '.link-et.button-link-et')}
-              style={'secondary'} />
+        <div class="flex flex-col w-1/3 items-end">
+          {#if !Kayttajat.isLaatija(whoami)}
+            <div class="flex">
+              {#each ketju['energiatodistus-id'].toArray() as etId}
+                <div class="flex w-full mr-2 space-x-1 items-end">
+                  <span>{i18n(i18nRoot + '.link-et.linked-to')}</span>
+                  <Link
+                    bold={true}
+                    href={'/energiatodistus/' + etId}
+                    text={etId} />
+                </div>
+              {/each}
+              {#if showLinkEtDialog}
+                {#each ketju['energiatodistus-id'].toArray() as etId}
+                  <LinkEtDialog
+                    ketjuId={ketju.id}
+                    energiatodistusId={etId}
+                    close={success => {
+                      if (success === true) {
+                        flashMessageStore.add(
+                          'viesti',
+                          'success',
+                          i18n(`${i18nRoot}.link-et.messages.update-success`)
+                        );
+                        load(params.id);
+                      }
+                      showLinkEtDialog = false;
+                    }} />
+                {:else}
+                  <LinkEtDialog
+                    ketjuId={ketju.id}
+                    close={success => {
+                      if (success === true) {
+                        flashMessageStore.add(
+                          'viesti',
+                          'success',
+                          i18n(`${i18nRoot}.link-et.messages.update-success`)
+                        );
+                        load(params.id);
+                      }
+                      showLinkEtDialog = false;
+                    }} />
+                {/each}
+              {/if}
+              <TextButton
+                on:click={() => {
+                  showLinkEtDialog = true;
+                }}
+                icon="edit"
+                text={ketju['energiatodistus-id'].isSome()
+                  ? i18n(i18nRoot + '.link-et.button-edit')
+                  : i18n(i18nRoot + '.link-et.button-link-et')}
+                style={'secondary'} />
+            </div>
 
             <div class="flex items-end space-x-4 px-2 w-full">
               <div class="w-full">
@@ -270,8 +295,8 @@
                 <span>{i18n(i18nRoot + '.handled')}</span>
               </button>
             </div>
-          </div>
-        {/if}
+          {/if}
+        </div>
       </div>
 
       {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}

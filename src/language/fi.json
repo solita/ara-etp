@@ -1225,10 +1225,15 @@
           "linked-to": "Liittyy energiatodistukseen",
           "title": "Liitä energiatodistukseen",
           "button-link-et": "Liitä energiatodistukseen",
-          "button-edit": "Liitä energiatodistukseen",
+          "button-edit": "Muokkaa",
           "input-label": "Energiatodistus",
           "button-link": "Liitä",
-          "button-unlink": "Poista liitos"
+          "button-unlink": "Poista liitos",
+          "messages": {
+            "update-success": "Energiatodistus liitoksen päivittäminen onnistui",
+            "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui",
+            "validation-error": "Energiatodistus kenttä ei voi olla tyhjä"
+          }
         },
         "messages": {
           "not-found": "Viestiketjua ei ole olemassa.",

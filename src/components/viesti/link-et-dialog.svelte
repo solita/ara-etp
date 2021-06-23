@@ -12,59 +12,55 @@
 
   export let close;
   export let ketjuId;
-  export let energiatodistusId;
+  export let energiatodistusId = '';
 
   const i18n = $_;
   const i18nRoot = 'viesti.ketju.existing.link-et';
 
   let form;
   let error = Maybe.None();
-  let inputEtId = energiatodistusId || '';
 
-  const updateKetju = ketjuId =>
-    R.compose(
-      Future.fork(
-        response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.error`,
-              Response.localizationKey(response)
-            )
-          );
-          overlay = false;
-          error = Maybe.Some(msg);
-        },
-        _ => {
-          flashMessageStore.add(
-            'viesti',
-            'success',
-            i18n(`${i18nRoot}.messages.update-success`)
-          );
-          close();
-        }
-      ),
-      R.tap(enableOverlay),
-      api.putKetju(fetch, ketjuId)
-    );
+  const updateKetju = R.compose(
+    Future.fork(
+      response => {
+        const msg = i18n(
+          Maybe.orSome(
+            `${i18nRoot}.messages.update-error`,
+            Response.localizationKey(response)
+          )
+        );
+        buttonsDisabled = false;
+        error = Maybe.Some(msg);
+      },
+      _ => {
+        close(true);
+      }
+    ),
+    R.tap(() => {
+      buttonsDisabled = true;
+    }),
+    api.putKetju(fetch, ketjuId)
+  );
 
-  // const submitForm = () => {
-  //   if (!inputEtId) {
-  //     error = Maybe.Some('ei voi olla tyhja');
-  //   } else {
-  //     error = Maybe.None();
-  //     console.log('ketjuId', ketjuId);
-  //     console.log('inputEtId', inputEtId);
-  //     updateKetju(ketjuId, {
-  //       'energiatodistus-id': inputEtId
-  //     });
-  //   }
-  // };
+  const addLink = () => {
+    if (!energiatodistusId) {
+      error = Maybe.Some(`${i18nRoot}.messages.validation-error`);
+    } else {
+      error = Maybe.None();
 
-  let overlay = false;
-  let enableOverlay = _ => {
-    console.log('overlay?');
-    overlay = true;
+      updateKetju({
+        'energiatodistus-id': parseInt(energiatodistusId)
+      });
+    }
   };
+  const removeLink = () => {
+    error = Maybe.None();
+    updateKetju({
+      'energiatodistus-id': null
+    });
+  };
+
+  let buttonsDisabled = false;
 </script>
 
 <style type="text/postcss">
@@ -96,39 +92,37 @@
       </div>
     {/each}
 
-    <div class="mr-64">
+    <div class="md:mr-64">
       <Input
         id={'dialog.link-et.input'}
         name={'dialog.link-et.input'}
         label={i18n(i18nRoot + '.input-label')}
         compact={false}
         required={true}
-        bind:model={inputEtId}
+        bind:model={energiatodistusId}
         {i18n} />
     </div>
-    <div class="buttons">
-      <div class="mr-2">
+    <div class="buttons flex-col md:flex-row space-y-2 md:space-x-2">
+      <div class="">
         <Button
-          disabled={overlay}
-          on:click={updateKetju(ketjuId, {
-            'energiatodistus-id': inputEtId
-          })}
+          disabled={buttonsDisabled}
+          on:click={addLink}
           style="primary"
           text={i18n(i18nRoot + '.button-link')} />
       </div>
-      <div class="mr-2">
+      <div class="">
         <Button
-          disabled={energiatodistusId || overlay}
-          on:click={updateKetju(ketjuId, {
-            'energiatodistus-id': Maybe.None()
-          })}
+          disabled={!energiatodistusId || buttonsDisabled}
+          on:click={removeLink}
           style="secondary"
           text={i18n(i18nRoot + '.button-unlink')} />
       </div>
-      <div class="justify-self-end ml-auto">
+      <div class="md:justify-self-end md:ml-auto">
         <Button
-          disabled={overlay}
-          on:click={close}
+          disabled={buttonsDisabled}
+          on:click={() => {
+            close(false);
+          }}
           style="secondary"
           text={i18n('peruuta')} />
       </div>
