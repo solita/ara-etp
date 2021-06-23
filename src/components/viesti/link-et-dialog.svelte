@@ -16,11 +16,11 @@
   export let energiatodistusId = '';
 
   const i18n = $_;
-  const i18nRoot = 'viesti.ketju.existing.link-et';
+  const i18nRoot = 'viesti.ketju.existing.attach-to-et';
 
   let form;
-  let showLinkSpinner = false;
-  let showUnlinkSpinner = false;
+  let showAttachSpinner = false;
+  let showDetachSpinner = false;
   let error = Maybe.None();
 
   const updateKetju = R.compose(
@@ -33,14 +33,14 @@
           )
         );
         buttonsDisabled = false;
-        showLinkSpinner = false;
-        showUnlinkSpinner = false;
+        showAttachSpinner = false;
+        showDetachSpinner = false;
         error = Maybe.Some(msg);
       },
       _ => {
         buttonsDisabled = false;
-        showLinkSpinner = false;
-        showUnlinkSpinner = false;
+        showAttachSpinner = false;
+        showDetachSpinner = false;
         close(true);
       }
     ),
@@ -50,21 +50,21 @@
     api.putKetju(fetch, ketjuId)
   );
 
-  const addLink = () => {
+  const attach = () => {
     if (!energiatodistusId) {
       error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
     } else {
       error = Maybe.None();
-      showLinkSpinner = true;
+      showAttachSpinner = true;
 
       updateKetju({
         'energiatodistus-id': parseInt(energiatodistusId)
       });
     }
   };
-  const removeLink = () => {
+  const detach = () => {
     error = Maybe.None();
-    showUnlinkSpinner = true;
+    showDetachSpinner = true;
     updateKetju({
       'energiatodistus-id': null
     });
@@ -104,8 +104,8 @@
 
     <div class="lg:mr-64">
       <Input
-        id={'dialog.link-et.input'}
-        name={'dialog.link-et.input'}
+        id={'dialog.attach-et.input'}
+        name={'dialog.attach-et.input'}
         label={i18n(i18nRoot + '.input-label')}
         compact={false}
         required={true}
@@ -116,19 +116,19 @@
       class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
       <Button
         disabled={buttonsDisabled}
-        on:click={addLink}
+        on:click={attach}
         style="primary"
-        text={i18n(i18nRoot + '.button-link')}>
-        {#if showLinkSpinner}
+        text={i18n(i18nRoot + '.button-attach')}>
+        {#if showAttachSpinner}
           <Spinner smaller={true} white={true} />
         {/if}
       </Button>
       <Button
         disabled={!energiatodistusId || buttonsDisabled}
-        on:click={removeLink}
+        on:click={detach}
         style="secondary"
-        text={i18n(i18nRoot + '.button-unlink')}>
-        {#if showUnlinkSpinner}
+        text={i18n(i18nRoot + '.button-detach')}>
+        {#if showDetachSpinner}
           <Spinner smaller={true} />
         {/if}
       </Button>

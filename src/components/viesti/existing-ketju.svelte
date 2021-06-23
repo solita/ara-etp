@@ -21,7 +21,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
-  import LinkEtDialog from '@Component/viesti/link-et-dialog';
+  import AttachEtDialog from '@Component/viesti/link-et-dialog';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Select from '@Component/Select/Select';
@@ -164,7 +164,7 @@
 
   $: formatSender = Viestit.formatSender(i18n);
 
-  let showLinkEtDialog = false;
+  let showAttachEtDialog = false;
 </script>
 
 <style>
@@ -216,16 +216,16 @@
             <div class="flex">
               {#each ketju['energiatodistus-id'].toArray() as etId}
                 <div class="flex w-full mr-4 space-x-1 items-end">
-                  <span>{i18n(i18nRoot + '.link-et.linked-to')}</span>
+                  <span>{i18n(i18nRoot + '.attach-to-et.linked-to')}</span>
                   <Link
                     bold={true}
                     href={'/#/energiatodistus/' + etId}
                     text={etId} />
                 </div>
               {/each}
-              {#if showLinkEtDialog}
+              {#if showAttachEtDialog}
                 {#each ketju['energiatodistus-id'].toArray() as etId}
-                  <LinkEtDialog
+                  <AttachEtDialog
                     ketjuId={ketju.id}
                     energiatodistusId={etId}
                     close={success => {
@@ -233,37 +233,41 @@
                         flashMessageStore.add(
                           'viesti',
                           'success',
-                          i18n(`${i18nRoot}.link-et.messages.update-success`)
+                          i18n(
+                            `${i18nRoot}.attach-to-et.messages.update-success`
+                          )
                         );
                         load(params.id);
                       }
-                      showLinkEtDialog = false;
+                      showAttachEtDialog = false;
                     }} />
                 {:else}
-                  <LinkEtDialog
+                  <AttachEtDialog
                     ketjuId={ketju.id}
                     close={success => {
                       if (success === true) {
                         flashMessageStore.add(
                           'viesti',
                           'success',
-                          i18n(`${i18nRoot}.link-et.messages.update-success`)
+                          i18n(
+                            `${i18nRoot}.attach-to-et.messages.update-success`
+                          )
                         );
                         load(params.id);
                       }
-                      showLinkEtDialog = false;
+                      showAttachEtDialog = false;
                     }} />
                 {/each}
               {/if}
               <div class="mt-auto">
                 <TextButton
                   on:click={() => {
-                    showLinkEtDialog = true;
+                    showAttachEtDialog = true;
                   }}
                   icon="edit"
                   text={ketju['energiatodistus-id'].isSome()
-                    ? i18n(i18nRoot + '.link-et.button-edit')
-                    : i18n(i18nRoot + '.link-et.button-link-et')}
+                    ? i18n(i18nRoot + '.attach-to-et.button-edit')
+                    : i18n(i18nRoot + '.attach-to-et.button-attach-to-et')}
                   style={'secondary'} />
               </div>
             </div>

@@ -1221,14 +1221,14 @@
         "reset": "Tyhjennä",
         "back": "Takaisin",
         "reply-in-new": "Vastaa viestiin uudessa ketjussa",
-        "link-et": {
-          "linked-to": "Liittyy energiatodistukseen",
+        "attach-to-et": {
+          "attached-to": "Liittyy energiatodistukseen",
           "title": "Liitä energiatodistukseen",
-          "button-link-et": "Liitä energiatodistukseen",
+          "button-attach-to-et": "Liitä energiatodistukseen",
           "button-edit": "Muokkaa",
           "input-label": "Energiatodistus",
-          "button-link": "Liitä",
-          "button-unlink": "Poista liitos",
+          "button-attach": "Liitä",
+          "button-detach": "Poista liitos",
           "messages": {
             "update-success": "Energiatodistus liitoksen päivittäminen onnistui",
             "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui",
