@@ -14,6 +14,7 @@
   export let close;
   export let ketjuId;
   export let energiatodistusId = '';
+  $: inputEtId = energiatodistusId;
 
   const i18n = $_;
   const i18nRoot = 'viesti.ketju.existing.attach-to-et';
@@ -51,14 +52,14 @@
   );
 
   const attach = () => {
-    if (!energiatodistusId) {
+    if (!inputEtId || isNaN(parseInt(inputEtId))) {
       error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
     } else {
       error = Maybe.None();
       showAttachSpinner = true;
 
       updateKetju({
-        'energiatodistus-id': parseInt(energiatodistusId)
+        'energiatodistus-id': parseInt(inputEtId)
       });
     }
   };
@@ -91,7 +92,7 @@
   }
 </style>
 
-<dialog on:click|stopPropagation>
+<dialog on:click|stopPropagation on:submit|preventDefault={attach}>
   <form class="content" bind:this={form}>
     <H1 text={i18n(i18nRoot + '.title')} />
 
@@ -109,15 +110,15 @@
         label={i18n(i18nRoot + '.input-label')}
         compact={false}
         required={true}
-        bind:model={energiatodistusId}
+        bind:model={inputEtId}
         {i18n} />
     </div>
     <div
       class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
       <Button
         disabled={buttonsDisabled}
-        on:click={attach}
         style="primary"
+        type="submit"
         text={i18n(i18nRoot + '.button-attach')}>
         {#if showAttachSpinner}
           <Spinner smaller={true} white={true} />
