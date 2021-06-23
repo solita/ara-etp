@@ -1240,9 +1240,8 @@
         "title": "Oikeellisuuden valvonta",
         "empty": "Ei valvontatoimenpiteitä",
         "valvoja": "Valvoja",
-        "valvotut": "Valvotut",
         "include-closed": "Myös päätetyt valvonnat",
-        "valvomattomat": "Valvomattomat",
+        "ei-valvojaa": "Ei valvojaa",
         "table": {
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",

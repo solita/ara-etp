@@ -191,12 +191,11 @@
               items={R.pluck('id', valvojat)}
               format={formatValvoja(valvojat, whoami)}
               parse={Maybe.Some}
-              allowNone={true}
-              noneLabel={`${i18nRoot}.valvotut`} />
+              allowNone={true} />
           </div>
           <Checkbox
             disabled={overlay}
-            label={i18n(`${i18nRoot}.valvomattomat`)}
+            label={i18n(`${i18nRoot}.ei-valvojaa`)}
             bind:model={query}
             lens={R.lensProp('has-valvoja')}
             format={R.compose(R.not, Maybe.orSome(false))}
