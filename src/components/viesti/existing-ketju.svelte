@@ -211,11 +211,11 @@
             )} />
         </div>
 
-        <div class="flex flex-col items-end">
+        <div class="flex flex-col items-start">
           {#if !Kayttajat.isLaatija(whoami)}
-            <div class="flex">
+            <div class="flex w-full justify-between px-2">
               {#each ketju['energiatodistus-id'].toArray() as etId}
-                <div class="flex w-full mr-4 space-x-1 items-end">
+                <div class="flex w-full mr-auto space-x-1 items-end">
                   <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
                   <Link
                     bold={true}
@@ -259,7 +259,7 @@
                     }} />
                 {/each}
               {/if}
-              <div class="mt-auto">
+              <div class="mt-auto ml-auto justify-self-end">
                 <TextButton
                   on:click={() => {
                     showAttachEtDialog = true;
