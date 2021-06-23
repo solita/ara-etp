@@ -26,6 +26,7 @@ export const deserialize = R.evolve({
   'has-kasittelija': Maybe.fromNull,
   'include-kasitelty': Maybe.fromNull,
   'kayttajarooli-id': Maybe.fromNull,
+  'kasittelija-id': Maybe.fromNull,
   'energiatodistus-id': Maybe.fromNull,
   viestit: R.map(
     R.evolve({
