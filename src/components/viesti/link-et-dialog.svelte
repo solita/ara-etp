@@ -5,6 +5,7 @@
   import * as Response from '@Utility/response';
 
   import Button from '@Component/Button/Button';
+  import Spinner from '@Component/Spinner/Spinner';
   import Input from '@Component/Input/Input';
   import H1 from '@Component/H/H1';
   import { _ } from '@Language/i18n';
@@ -18,6 +19,8 @@
   const i18nRoot = 'viesti.ketju.existing.link-et';
 
   let form;
+  let showLinkSpinner = false;
+  let showUnlinkSpinner = false;
   let error = Maybe.None();
 
   const updateKetju = R.compose(
@@ -30,9 +33,14 @@
           )
         );
         buttonsDisabled = false;
+        showLinkSpinner = false;
+        showUnlinkSpinner = false;
         error = Maybe.Some(msg);
       },
       _ => {
+        buttonsDisabled = false;
+        showLinkSpinner = false;
+        showUnlinkSpinner = false;
         close(true);
       }
     ),
@@ -44,9 +52,10 @@
 
   const addLink = () => {
     if (!energiatodistusId) {
-      error = Maybe.Some(`${i18nRoot}.messages.validation-error`);
+      error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
     } else {
       error = Maybe.None();
+      showLinkSpinner = true;
 
       updateKetju({
         'energiatodistus-id': parseInt(energiatodistusId)
@@ -55,6 +64,7 @@
   };
   const removeLink = () => {
     error = Maybe.None();
+    showUnlinkSpinner = true;
     updateKetju({
       'energiatodistus-id': null
     });
@@ -108,18 +118,25 @@
           disabled={buttonsDisabled}
           on:click={addLink}
           style="primary"
-          text={i18n(i18nRoot + '.button-link')} />
+          text={i18n(i18nRoot + '.button-link')}>
+          {#if showLinkSpinner}
+            <Spinner smaller={true} white={true} />
+          {/if}
+        </Button>
       </div>
       <div class="">
         <Button
           disabled={!energiatodistusId || buttonsDisabled}
           on:click={removeLink}
           style="secondary"
-          text={i18n(i18nRoot + '.button-unlink')} />
+          text={i18n(i18nRoot + '.button-unlink')}>
+          {#if showUnlinkSpinner}
+            <Spinner smaller={true} />
+          {/if}
+        </Button>
       </div>
       <div class="md:justify-self-end md:ml-auto">
         <Button
-          disabled={buttonsDisabled}
           on:click={() => {
             close(false);
           }}
