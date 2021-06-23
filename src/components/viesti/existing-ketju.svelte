@@ -219,7 +219,7 @@
                   <span>{i18n(i18nRoot + '.link-et.linked-to')}</span>
                   <Link
                     bold={true}
-                    href={'/energiatodistus/' + etId}
+                    href={'/#/energiatodistus/' + etId}
                     text={etId} />
                 </div>
               {/each}
@@ -255,15 +255,17 @@
                     }} />
                 {/each}
               {/if}
-              <TextButton
-                on:click={() => {
-                  showLinkEtDialog = true;
-                }}
-                icon="edit"
-                text={ketju['energiatodistus-id'].isSome()
-                  ? i18n(i18nRoot + '.link-et.button-edit')
-                  : i18n(i18nRoot + '.link-et.button-link-et')}
-                style={'secondary'} />
+              <div class="mt-auto">
+                <TextButton
+                  on:click={() => {
+                    showLinkEtDialog = true;
+                  }}
+                  icon="edit"
+                  text={ketju['energiatodistus-id'].isSome()
+                    ? i18n(i18nRoot + '.link-et.button-edit')
+                    : i18n(i18nRoot + '.link-et.button-link-et')}
+                  style={'secondary'} />
+              </div>
             </div>
 
             <div class="flex items-end space-x-4 px-2 w-full">

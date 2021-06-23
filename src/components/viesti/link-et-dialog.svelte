@@ -83,7 +83,7 @@
   }
 
   .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+    @apply flex flex-wrap items-center mt-5 pt-4 border-t-1 border-tertiary;
   }
 
   .error {
@@ -102,7 +102,7 @@
       </div>
     {/each}
 
-    <div class="md:mr-64">
+    <div class="lg:mr-64">
       <Input
         id={'dialog.link-et.input'}
         name={'dialog.link-et.input'}
@@ -112,30 +112,27 @@
         bind:model={energiatodistusId}
         {i18n} />
     </div>
-    <div class="buttons flex-col md:flex-row space-y-2 md:space-x-2">
-      <div class="">
-        <Button
-          disabled={buttonsDisabled}
-          on:click={addLink}
-          style="primary"
-          text={i18n(i18nRoot + '.button-link')}>
-          {#if showLinkSpinner}
-            <Spinner smaller={true} white={true} />
-          {/if}
-        </Button>
-      </div>
-      <div class="">
-        <Button
-          disabled={!energiatodistusId || buttonsDisabled}
-          on:click={removeLink}
-          style="secondary"
-          text={i18n(i18nRoot + '.button-unlink')}>
-          {#if showUnlinkSpinner}
-            <Spinner smaller={true} />
-          {/if}
-        </Button>
-      </div>
-      <div class="md:justify-self-end md:ml-auto">
+    <div
+      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
+      <Button
+        disabled={buttonsDisabled}
+        on:click={addLink}
+        style="primary"
+        text={i18n(i18nRoot + '.button-link')}>
+        {#if showLinkSpinner}
+          <Spinner smaller={true} white={true} />
+        {/if}
+      </Button>
+      <Button
+        disabled={!energiatodistusId || buttonsDisabled}
+        on:click={removeLink}
+        style="secondary"
+        text={i18n(i18nRoot + '.button-unlink')}>
+        {#if showUnlinkSpinner}
+          <Spinner smaller={true} />
+        {/if}
+      </Button>
+      <div class="lg:justify-self-end lg:ml-auto">
         <Button
           on:click={() => {
             close(false);
