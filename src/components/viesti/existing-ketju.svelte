@@ -273,7 +273,7 @@
             </div>
 
             <div class="flex items-end space-x-4 px-2 w-full">
-              <div class="w-full">
+              <div class="w-64">
                 <Select
                   id={'kasittelija'}
                   label={i18n(i18nRoot + '.handler')}
