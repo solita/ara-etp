@@ -211,11 +211,11 @@
             )} />
         </div>
 
-        <div class="flex flex-col w-1/3 items-end">
+        <div class="flex flex-col items-end">
           {#if !Kayttajat.isLaatija(whoami)}
             <div class="flex">
               {#each ketju['energiatodistus-id'].toArray() as etId}
-                <div class="flex w-full mr-2 space-x-1 items-end">
+                <div class="flex w-full mr-4 space-x-1 items-end">
                   <span>{i18n(i18nRoot + '.link-et.linked-to')}</span>
                   <Link
                     bold={true}

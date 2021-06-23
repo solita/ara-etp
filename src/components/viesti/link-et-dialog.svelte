@@ -83,7 +83,7 @@
   }
 
   .buttons {
-    @apply flex flex-wrap items-center mt-5 pt-4 border-t-1 border-tertiary;
+    @apply flex flex-wrap items-start mt-5 pt-4 border-t-1 border-tertiary;
   }
 
   .error {
