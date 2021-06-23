@@ -21,7 +21,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
-  import AttachEtDialog from '@Component/viesti/link-et-dialog';
+  import AttachEtDialog from '@Component/viesti/attach-energiatodistus-dialog';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Select from '@Component/Select/Select';
