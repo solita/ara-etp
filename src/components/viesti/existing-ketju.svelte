@@ -216,7 +216,7 @@
             <div class="flex">
               {#each ketju['energiatodistus-id'].toArray() as etId}
                 <div class="flex w-full mr-4 space-x-1 items-end">
-                  <span>{i18n(i18nRoot + '.attach-to-et.linked-to')}</span>
+                  <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
                   <Link
                     bold={true}
                     href={'/#/energiatodistus/' + etId}
