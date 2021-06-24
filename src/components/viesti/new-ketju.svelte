@@ -81,7 +81,10 @@
       },
       response => {
         resources = Maybe.Some(response);
-        defaultKetju = Viestit.defaultKetju(response.energiatodistus, response.whoami);
+        defaultKetju = Viestit.defaultKetju(
+          response.energiatodistus,
+          response.whoami
+        );
         ketju = Viestit.defaultKetju(response.energiatodistus, response.whoami);
         overlay = false;
       }

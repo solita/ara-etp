@@ -75,7 +75,14 @@
     {focused}
     unit={labelUnit} />
 
-  <slot {api} {valid} {validationResult} {viewValue} {focused} {warning} {error} />
+  <slot
+    {api}
+    {valid}
+    {validationResult}
+    {viewValue}
+    {focused}
+    {warning}
+    {error} />
 
   {#if !$$slots.default}
     <svelte:component

@@ -91,12 +91,15 @@
     ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
   );
 
-  const openPreview = toimenpide => window.open(
-    ValvontaApi.url.document(
-      toimenpide['energiatodistus-id'],
-      toimenpide.id,
-      toimenpide.filename
-    ), '_blank');
+  const openPreview = toimenpide =>
+    window.open(
+      ValvontaApi.url.document(
+        toimenpide['energiatodistus-id'],
+        toimenpide.id,
+        toimenpide.filename
+      ),
+      '_blank'
+    );
 
   $: saveAndPreviewToimenpide = toimenpide => {
     if (!Toimenpiteet.isDraft || !dirty) {
@@ -105,7 +108,13 @@
       fork('save', _ => {
         load(params);
         openPreview(toimenpide);
-      })(ValvontaApi.putToimenpide(params.id, params['toimenpide-id'], toimenpide));
+      })(
+        ValvontaApi.putToimenpide(
+          params.id,
+          params['toimenpide-id'],
+          toimenpide
+        )
+      );
     }
   };
 

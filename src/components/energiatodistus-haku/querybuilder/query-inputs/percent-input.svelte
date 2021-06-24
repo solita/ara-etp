@@ -8,21 +8,13 @@
   export let nameprefix;
   export let index = 0;
 
- const format = R.compose(
-   num => num + ' %',
-   R.multiply(100)
- );
+  const format = R.compose(num => num + ' %', R.multiply(100));
 
- const parse = R.compose(
-   R.map(R.divide(R.__, 100)),
-   Parsers.parseNumber,
-   R.replace('%', '')
- );
+  const parse = R.compose(
+    R.map(R.divide(R.__, 100)),
+    Parsers.parseNumber,
+    R.replace('%', '')
+  );
 </script>
 
-<NumberInput
-  {values}
-  {nameprefix}
-  {index}
-  format={format}
-  {parse} />
+<NumberInput {values} {nameprefix} {index} {format} {parse} />

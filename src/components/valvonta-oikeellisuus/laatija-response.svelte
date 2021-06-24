@@ -75,7 +75,6 @@
   {#if Toimenpiteet.isResponse(lastToimenpide) && Toimenpiteet.isDraft(lastToimenpide)}
     <H2 text={toimenpideText(request(toimenpiteet), 'title')} />
     <div class="mb-5">
-
       {#if Toimenpiteet.hasTemplate(request(toimenpiteet))}
         <div class="mb-4">
           <DocumentLink toimenpide={request(toimenpiteet)} />

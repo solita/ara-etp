@@ -25,7 +25,7 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1,2,3]);
+const isDeadlineType = R.includes(R.__, [1, 2, 3]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isAuditCase = R.complement(isType(type.closed));
@@ -61,4 +61,7 @@ export const hasTemplate = R.compose(Maybe.isSome, R.prop('template-id'));
 export const templates = templatesByType =>
   R.compose(R.defaultTo([]), R.prop(R.__, templatesByType), R.prop('type-id'));
 
-export const time = R.converge(Maybe.orSome, [R.prop('create-time'), R.prop('publish-time')])
+export const time = R.converge(Maybe.orSome, [
+  R.prop('create-time'),
+  R.prop('publish-time')
+]);

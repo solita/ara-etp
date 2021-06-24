@@ -49,17 +49,20 @@
         resources = Maybe.Some(response);
         overlay = false;
       },
-      R.chain(whoami =>
-        Future.parallelObject(5, {
-          toimenpiteet: ValvontaApi.toimenpiteet(params.id),
-          notes: Future.resolve([]),
-          toimenpidetyypit: ValvontaApi.toimenpidetyypit,
-          templatesByType: ValvontaApi.templatesByType,
-          valvojat: ValvontaApi.valvojat,
-          valvonta: ValvontaApi.valvonta(params.id),
-          whoami: Future.resolve(whoami)
-        })
-        , KayttajaApi.whoami));
+      R.chain(
+        whoami =>
+          Future.parallelObject(5, {
+            toimenpiteet: ValvontaApi.toimenpiteet(params.id),
+            notes: Future.resolve([]),
+            toimenpidetyypit: ValvontaApi.toimenpidetyypit,
+            templatesByType: ValvontaApi.templatesByType,
+            valvojat: ValvontaApi.valvojat,
+            valvonta: ValvontaApi.valvonta(params.id),
+            whoami: Future.resolve(whoami)
+          }),
+        KayttajaApi.whoami
+      )
+    );
   };
 
   const kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
@@ -104,7 +107,8 @@
   const tapahtumat = R.compose(
     R.reverse,
     R.sortBy(R.prop('create-time')),
-    R.unnest)
+    R.unnest
+  );
 
   const isToimenpide = R.has('type-id');
 </script>
@@ -115,7 +119,9 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
-      <H1 text={i18n(i18nRoot + '.title') + Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
+      <H1
+        text={i18n(i18nRoot + '.title') +
+          Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
 
       <Manager
         {valvojat}
@@ -130,10 +136,7 @@
 
       {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
         {#if isToimenpide(tapahtuma)}
-          <Toimenpide
-              {toimenpidetyypit}
-              toimenpide={tapahtuma}
-              {whoami} />
+          <Toimenpide {toimenpidetyypit} toimenpide={tapahtuma} {whoami} />
         {:else}
           <Note note={tapahtuma} />
         {/if}

@@ -21,7 +21,7 @@ export const url = {
   document: (id, toimenpideId, filename) =>
     `${url.toimenpide(id, toimenpideId)}/document/${filename}`,
   liitteet: (id, toimenpideId) => `${url.valvonta(id)}/liitteet`,
-  notes: id => `${url.valvonta(id)}/notes`,
+  notes: id => `${url.valvonta(id)}/notes`
 };
 
 export const deserializeToimenpide = R.evolve({
@@ -39,7 +39,7 @@ export const deserializeToimenpide = R.evolve({
 
 export const deserializeValvontaStatus = R.compose(
   R.evolve({
-    lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull),
+    lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull)
   }),
   Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
 );
@@ -59,12 +59,7 @@ export const serializeToimenpide = R.compose(
       dfns.formatISO(date, { representation: 'date' })
     )
   }),
-  R.pick([
-    'type-id',
-    'deadline-date',
-    'description',
-    'template-id'
-  ])
+  R.pick(['type-id', 'deadline-date', 'description', 'template-id'])
 );
 
 export const valvonnat = R.compose(
@@ -162,11 +157,10 @@ export const postLiitteetFiles = R.curry((id, toimenpideId, files) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(files =>
-      fetch(
-        url.liitteet(id, toimenpideId) + '/files', {
-          method: 'POST',
-          body: EtApi.toFormData('files', files)
-        })
+      fetch(url.liitteet(id, toimenpideId) + '/files', {
+        method: 'POST',
+        body: EtApi.toFormData('files', files)
+      })
     )
   )(files)
 );
@@ -175,7 +169,11 @@ export const postLiitteetLink = R.curry((id, toimenpideId, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(id, toimenpideId) + '/link')
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        url.liitteet(id, toimenpideId) + '/link'
+      )
     )
   )(link)
 );
@@ -198,7 +196,7 @@ export const postNote = R.curry((id, note) =>
 );
 
 export const deserializeNote = R.evolve({
-  'create-time': dfns.parseJSON,
+  'create-time': dfns.parseJSON
 });
 
 export const notes = R.compose(
