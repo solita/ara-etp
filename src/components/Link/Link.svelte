@@ -11,7 +11,7 @@
 
 <style type="text/postcss">
   a {
-    @apply relative inline-flex items-start text-link border-b-1 border-transparent;
+    @apply relative inline-flex items-start text-link border-b-1 border-transparent font-semibold;
   }
 
   a:hover {
