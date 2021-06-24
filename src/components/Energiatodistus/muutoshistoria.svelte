@@ -26,7 +26,7 @@
   let overlay = true;
 
   const stateLocalizations = {
-    luonnosLaskentaohjelmisto: ['tila-id', R.equals(0)],
+    luonnos: ['tila-id', R.equals(0)],
     allekirjoitusAloitettiin: ['tila-id', R.equals(1)],
     hylatty: ['tila-id', R.equals(3)],
     voimassaoloPaattyi: ['voimassaolo-paattymisaika', R.T],
@@ -171,10 +171,10 @@
                 {i18n(`${i18nRoot}.kentta`)}
               </th>
               <th class="etp-table--th">
-                {i18n(`${i18nRoot}.rajapintaarvo`)}
+                {i18n(`${i18nRoot}.ensimmainenArvo`)}
               </th>
               <th class="etp-table--th">
-                {i18n(`${i18nRoot}.loppuarvo`)}
+                {i18n(`${i18nRoot}.nykyinenArvo`)}
               </th>
             </tr>
           </thead>
