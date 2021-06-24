@@ -1221,6 +1221,20 @@
         "reset": "Tyhjennä",
         "back": "Takaisin",
         "reply-in-new": "Vastaa viestiin uudessa ketjussa",
+        "attach-to-et": {
+          "attached-to": "Liittyy energiatodistukseen",
+          "title": "Liitä energiatodistukseen",
+          "button-attach-to-et": "Liitä energiatodistukseen",
+          "button-edit": "Muokkaa",
+          "input-label": "Energiatodistus",
+          "button-attach": "Liitä",
+          "button-detach": "Poista liitos",
+          "messages": {
+            "update-success": "Energiatodistus liitoksen päivittäminen onnistui",
+            "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui",
+            "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero"
+          }
+        },
         "messages": {
           "not-found": "Viestiketjua ei ole olemassa.",
           "load-error": "Viestiketjun tietojen lataus epäonnistui.",

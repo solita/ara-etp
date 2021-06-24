@@ -19,8 +19,8 @@ const url = {
 
 export const serialize = R.evolve({
   'kayttajarooli-id': Maybe.orSome(null),
-  'energiatodistus-id': Maybe.orSome(null),
-  'vastaanottajaryhma-id': Maybe.orSome(null)
+  'vastaanottajaryhma-id': Maybe.orSome(null),
+  'energiatodistus-id': Maybe.orSome(null)
 });
 
 export const deserialize = R.evolve({
@@ -28,6 +28,7 @@ export const deserialize = R.evolve({
   'include-kasitelty': Maybe.fromNull,
   'kayttajarooli-id': Maybe.fromNull,
   'kasittelija-id': Maybe.fromNull,
+  'energiatodistus-id': Maybe.fromNull,
   viestit: R.map(
     R.evolve({
       'sent-time': dfns.parseJSON,

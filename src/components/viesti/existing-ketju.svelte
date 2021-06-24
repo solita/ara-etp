@@ -21,6 +21,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import AttachEtDialog from '@Component/viesti/attach-energiatodistus-dialog';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Select from '@Component/Select/Select';
@@ -162,6 +163,8 @@
     R.propEq('id', R.path(['from', 'id'], viesti), whoami);
 
   $: formatSender = Viestit.formatSender(i18n);
+
+  let showAttachEtDialog = false;
 </script>
 
 <style>
@@ -208,37 +211,98 @@
             )} />
         </div>
 
-        {#if !Kayttajat.isLaatija(whoami)}
-          <div class="flex items-end space-x-4 px-2 w-1/3">
-            <div class="w-full ">
-              <Select
-                id={'kasittelija'}
-                label={i18n(i18nRoot + '.handler')}
-                noneLabel={i18n(i18nRoot + '.no-handler')}
-                compact={true}
-                required={false}
-                disabled={false}
-                allowNone={true}
-                bind:model={ketju}
-                on:change={event =>
-                  submitKasittelija(parseInt(event.target.value))}
-                lens={R.lensProp('kasittelija-id')}
-                format={Viestit.fullName(kasittelijat)}
-                items={R.pluck('id', kasittelijat)} />
+        <div class="flex flex-col items-start">
+          {#if !Kayttajat.isLaatija(whoami)}
+            <div class="flex w-full justify-between px-2">
+              {#each ketju['energiatodistus-id'].toArray() as etId}
+                <div class="flex w-full mr-auto space-x-1 items-end">
+                  <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
+                  <Link
+                    bold={true}
+                    href={'/#/energiatodistus/' + etId}
+                    text={etId} />
+                </div>
+              {/each}
+              {#if showAttachEtDialog}
+                {#each ketju['energiatodistus-id'].toArray() as etId}
+                  <AttachEtDialog
+                    ketjuId={ketju.id}
+                    energiatodistusId={etId}
+                    close={success => {
+                      if (success === true) {
+                        flashMessageStore.add(
+                          'viesti',
+                          'success',
+                          i18n(
+                            `${i18nRoot}.attach-to-et.messages.update-success`
+                          )
+                        );
+                        load(params.id);
+                      }
+                      showAttachEtDialog = false;
+                    }} />
+                {:else}
+                  <AttachEtDialog
+                    ketjuId={ketju.id}
+                    close={success => {
+                      if (success === true) {
+                        flashMessageStore.add(
+                          'viesti',
+                          'success',
+                          i18n(
+                            `${i18nRoot}.attach-to-et.messages.update-success`
+                          )
+                        );
+                        load(params.id);
+                      }
+                      showAttachEtDialog = false;
+                    }} />
+                {/each}
+              {/if}
+              <div class="mt-auto ml-auto justify-self-end">
+                <TextButton
+                  on:click={() => {
+                    showAttachEtDialog = true;
+                  }}
+                  icon="edit"
+                  text={ketju['energiatodistus-id'].isSome()
+                    ? i18n(i18nRoot + '.attach-to-et.button-edit')
+                    : i18n(i18nRoot + '.attach-to-et.button-attach-to-et')}
+                  style={'secondary'} />
+              </div>
             </div>
 
-            <button
-              on:click={submitKasitelty(!ketju.kasitelty)}
-              class="flex items-center space-x-1">
-              {#if ketju.kasitelty}
-                <span class="material-icons text-primary"> check_box </span>
-              {:else}
-                <span class="material-icons"> check_box_outline_blank </span>
-              {/if}
-              <span>{i18n(i18nRoot + '.handled')}</span>
-            </button>
-          </div>
-        {/if}
+            <div class="flex items-end space-x-4 px-2 w-full">
+              <div class="w-64">
+                <Select
+                  id={'kasittelija'}
+                  label={i18n(i18nRoot + '.handler')}
+                  noneLabel={i18n(i18nRoot + '.no-handler')}
+                  compact={true}
+                  required={false}
+                  disabled={false}
+                  allowNone={true}
+                  bind:model={ketju}
+                  on:change={event =>
+                    submitKasittelija(parseInt(event.target.value))}
+                  lens={R.lensProp('kasittelija-id')}
+                  format={Viestit.fullName(kasittelijat)}
+                  items={R.pluck('id', kasittelijat)} />
+              </div>
+
+              <button
+                on:click={submitKasitelty(!ketju.kasitelty)}
+                class="flex items-center space-x-1">
+                {#if ketju.kasitelty}
+                  <span class="material-icons text-primary"> check_box </span>
+                {:else}
+                  <span class="material-icons"> check_box_outline_blank </span>
+                {/if}
+                <span>{i18n(i18nRoot + '.handled')}</span>
+              </button>
+            </div>
+          {/if}
+        </div>
       </div>
 
       {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
