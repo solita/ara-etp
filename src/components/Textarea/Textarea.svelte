@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import { autoresize } from './autoresize';
 
+  import * as Keys from '@Utility/keys';
   import Input from '@Component/Input/Input';
   import SquareInputWrapper from '@Component/Input/SquareInputWrapper';
 
@@ -56,6 +57,7 @@
   {i18n}
   {lens}
   bind:model
+  let:api
   let:viewValue
   let:focused
   let:warning
@@ -70,10 +72,14 @@
       {autocomplete}
       use:autoresize={[min, max]}
       value={viewValue}
-      on:focus
-      on:blur
       on:click
-      on:keydown
-      on:input />
+      on:focus={api.focus}
+      on:blur={event => api.blur(event.target.value)}
+      on:input={event => api.input(event.target.value)}
+      on:keydown={event => {
+        if (event.keyCode === Keys.ENTER) {
+          api.update(event.target.value);
+        }
+      }} />
   </SquareInputWrapper>
 </Input>

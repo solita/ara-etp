@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
+import * as Markdown from '@Component/text-editor/markdown';
 
 const isDescriptionRequired = R.anyPass([
   Toimenpiteet.isType(Toimenpiteet.type.anomaly),
@@ -10,7 +11,7 @@ const isDescriptionRequired = R.anyPass([
 ]);
 
 const description = R.map(
-  Validation.liftValidator,
+  R.compose(Validation.liftValidator, Markdown.plainTextValidator),
   Validation.LimitedString(2, 4000)
 );
 

@@ -58,6 +58,7 @@
   {warnValidators}
   tooltip={compact ? label : null}
   on:keydown
+  let:api
   let:valid
   let:validationResult
   let:viewValue
@@ -74,7 +75,7 @@
     {focused}
     unit={labelUnit} />
 
-  <slot {valid} {validationResult} {viewValue} {focused} {warning} {error} />
+  <slot {api} {valid} {validationResult} {viewValue} {focused} {warning} {error} />
 
   {#if !$$slots.default}
     <svelte:component
@@ -95,6 +96,7 @@
         {autocomplete}
         {viewValue}
         {focused}
+        {api}
         on:input
         on:keypress />
     </svelte:component>

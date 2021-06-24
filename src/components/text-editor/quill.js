@@ -6,7 +6,7 @@ import DOMPurify from 'dompurify';
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/magicUrl', MagicUrl);
 
-export const quill = (node, content = '') => {
+export const quill = (node, html = '') => {
   const q = new Quill(node, {
     modules: {
       imageDrop: false,
@@ -24,13 +24,14 @@ export const quill = (node, content = '') => {
     theme: 'snow' // or 'bubble'
   });
 
-  q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(content));
+  q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(html));
 
   const container = node.getElementsByClassName('ql-editor')[0];
 
   const handler = (delta, oldDelta, source) => {
     node.dispatchEvent(
       new CustomEvent('text-change', {
+        bubbles: true,
         detail: {
           html: container.innerHTML
         }
