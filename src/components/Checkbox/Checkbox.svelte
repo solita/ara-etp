@@ -7,9 +7,12 @@
   export let model;
   export let lens = R.identity;
 
+  export let format = R.identity;
+  export let parse = R.identity;
+
   let focused = false;
 
-  $: checked = R.view(lens, model);
+  $: checked = format(R.view(lens, model));
 </script>
 
 <style type="text/postcss">
@@ -55,6 +58,6 @@
       {disabled}
       type="checkbox"
       {checked}
-      on:change={() => !disabled && (model = R.set(lens, !checked, model))} />
+      on:change={() => !disabled && (model = R.set(lens, parse(!checked), model))} />
   </label>
 </div>

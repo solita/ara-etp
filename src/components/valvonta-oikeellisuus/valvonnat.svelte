@@ -10,11 +10,12 @@
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
 
-  import { querystring } from 'svelte-spa-router';
+  import { replace, querystring, location } from 'svelte-spa-router';
   import * as Router from '@Component/Router/router';
   import qs from 'qs';
 
   import * as ETViews from '@Component/Energiatodistus/views';
+
   import * as Links from './links';
 
   import * as api from './valvonta-api';
@@ -31,6 +32,7 @@
   import Pagination from '@Component/Pagination/Pagination';
   import Address from '@Component/Energiatodistus/address';
   import Checkbox from '@Component/Checkbox/Checkbox';
+  import Select from '@Component/Select/Select';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -40,19 +42,53 @@
   const i18nRoot = 'valvonta.oikeellisuus.all';
 
   let valvontaCount = 0;
-  let page = Maybe.Some(1);
-  let onlyOwnValvonnat = false;
 
-  $: page = R.compose(
-    R.chain(Either.toMaybe),
-    R.map(Parsers.parseInteger),
-    Maybe.fromEmpty,
-    R.prop('page'),
-    qs.parse
-  )($querystring);
+  const queryStringIntegerProp = R.curry((querystring, prop) =>
+    R.compose(
+      R.chain(Either.toMaybe),
+      R.map(Parsers.parseInteger),
+      Maybe.fromEmpty,
+      R.prop(prop)
+    )(querystring)
+  );
+
+  const queryStringBooleanProp = R.curry((querystring, prop) =>
+    R.compose(
+      R.map(R.equals('true')),
+      Maybe.fromEmpty,
+      R.prop(prop)
+    )(querystring)
+  );
+
+  let parsedQs = qs.parse($querystring);
+
+  let query = {
+    page: Maybe.None(),
+    'valvoja-id': Maybe.None(),
+    'include-closed': Maybe.None(),
+    'has-valvoja': Maybe.None()
+  };
+
+  query = R.mergeRight(query, {
+    page: queryStringIntegerProp(parsedQs, 'page'),
+    'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
+    'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
+    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja')
+  });
 
   const nextPageCallback = nextPage =>
-    Router.push(`#/valvonta/oikeellisuus/all?page=${nextPage}`);
+    (query = R.assoc('page', Maybe.Some(nextPage), query));
+
+  const queryToBackendParams = query => ({
+    offset: R.compose(
+      R.map(R.compose(R.multiply(pageSize), R.dec)),
+      R.prop('page')
+    )(query),
+    limit: Maybe.Some(pageSize),
+    'valvoja-id': R.prop('valvoja-id', query),
+    'include-closed': R.prop('include-closed', query),
+    'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
+  });
 
   $: {
     overlay = true;
@@ -73,17 +109,18 @@
         valvontaCount = response.count;
         overlay = false;
       },
-      Future.parallelObject(3, {
+      Future.parallelObject(5, {
         whoami: kayttajaApi.whoami,
-        count: R.map(R.prop('count'), api.valvontaCount),
+        count: R.compose(
+          R.map(R.prop('count')),
+          api.valvontaCount,
+          R.omit(['offset', 'limit']),
+          queryToBackendParams
+        )(query),
         luokittelut: EnergiatodistusApi.luokittelutAllVersions,
         toimenpidetyypit: api.toimenpidetyypit,
-        valvonnat: api.valvonnat({
-          offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
-          limit: Maybe.Some(pageSize),
-          own: Maybe.Some(onlyOwnValvonnat)
-        }),
-        valvojat: api.valvojat
+        valvojat: api.valvojat,
+        valvonnat: api.valvonnat(queryToBackendParams(query))
       })
     );
   }
@@ -115,29 +152,64 @@
   );
 
   const formatValvoja = R.curry((valvojat, whoami, id) =>
-    R.compose(
-      Maybe.orSome('-'),
-      R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-      R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
-      Maybe.fromNull
+    R.ifElse(
+      isSelf(whoami),
+      R.always(i18n('valvonta.self')),
+      R.compose(
+        Maybe.orSome('-'),
+        R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
+        R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
+        Maybe.fromNull
+      )
     )(id)
   );
+
+  $: R.compose(
+    querystring =>
+      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
+    qs.stringify,
+    R.map(Maybe.get),
+    R.filter(Maybe.isSome)
+  )(query);
 </script>
 
 <!-- purgecss: font-bold text-primary text-error -->
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={i18n(i18nRoot + '.title')} />
-
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
+      <H1 text={i18n(i18nRoot + '.title')} />
       {#if Kayttajat.isPaakayttaja(whoami)}
-        <Checkbox
-          disabled={overlay}
-          label={i18n(i18nRoot + '.only-own')}
-          bind:model={onlyOwnValvonnat} />
+        <div class="flex flex-wrap items-end space-x-4 -ml-4">
+          <div class="ml-4 w-1/4">
+            <Select
+              disabled={overlay}
+              compact={true}
+              label={i18n(i18nRoot + '.valvoja')}
+              bind:model={query}
+              lens={R.lensProp('valvoja-id')}
+              items={R.pluck('id', valvojat)}
+              format={formatValvoja(valvojat, whoami)}
+              parse={Maybe.Some}
+              allowNone={true} />
+          </div>
+          <Checkbox
+            disabled={overlay}
+            label={i18n(`${i18nRoot}.ei-valvojaa`)}
+            bind:model={query}
+            lens={R.lensProp('has-valvoja')}
+            format={R.compose(R.not, Maybe.orSome(false))}
+            parse={R.compose(Maybe.Some, R.not)} />
+          <Checkbox
+            disabled={overlay}
+            label={i18n(`${i18nRoot}.include-closed`)}
+            bind:model={query}
+            lens={R.lensProp('include-closed')}
+            format={Maybe.orSome(false)}
+            parse={Maybe.Some} />
+        </div>
       {/if}
-      {#if R.isEmpty(valvonnat.length)}
+      {#if valvonnat.length === 0}
         <span>{i18n(i18nRoot + '.empty')}</span>
       {:else}
         <div class="my-6 overflow-x-auto">
@@ -180,11 +252,11 @@
                     class="etp-table--td"
                     class:font-bold={isSelf(whoami, valvonta['valvoja-id'])}
                     class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}
-                    >{R.ifElse(
-                      isSelf(whoami),
-                      R.always(i18n('valvonta.self')),
-                      formatValvoja(valvojat, whoami)
-                    )(valvonta['valvoja-id'])}</td>
+                    >{formatValvoja(
+                      valvojat,
+                      whoami,
+                      valvonta['valvoja-id']
+                    )}</td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(
@@ -240,7 +312,7 @@
     {#if R.gt(valvontaCount, pageSize)}
       <div class="pagination">
         <Pagination
-          pageNum={page.orSome(1)}
+          pageNum={Maybe.orSome(1, R.prop('page', query))}
           {nextPageCallback}
           itemsPerPage={pageSize}
           itemsCount={valvontaCount} />

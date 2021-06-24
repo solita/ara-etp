@@ -1239,7 +1239,9 @@
       "all": {
         "title": "Oikeellisuuden valvonta",
         "empty": "Ei valvontatoimenpiteitä",
-        "only-own": "Näytä vain omat",
+        "valvoja": "Valvoja",
+        "include-closed": "Myös päätetyt valvonnat",
+        "ei-valvojaa": "Ei valvojaa",
         "table": {
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",

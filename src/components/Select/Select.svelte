@@ -25,7 +25,7 @@
   export let name = '';
 
   export let model;
-  export let lens;
+  export let lens = R.identity;
 
   let input;
   let focused = false;

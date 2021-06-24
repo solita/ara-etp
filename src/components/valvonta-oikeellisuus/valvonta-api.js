@@ -20,8 +20,9 @@ export const url = {
   toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`,
   document: (id, toimenpideId, filename) =>
     `${url.toimenpide(id, toimenpideId)}/document/${filename}`,
-  liitteet: (id, toimenpideId) => `${url.toimenpide(id, toimenpideId)}/liitteet`,
-  notes: id => `${url.valvonta(id)}/notes`,
+  liitteet: (id, toimenpideId) =>
+    `${url.toimenpide(id, toimenpideId)}/liitteet`,
+  notes: id => `${url.valvonta(id)}/notes`
 };
 
 export const deserializeToimenpide = R.evolve({
@@ -76,7 +77,11 @@ export const valvonnat = R.compose(
   Query.toQueryString
 );
 
-export const valvontaCount = Fetch.getJson(fetch, url.valvonnat + '/count');
+export const valvontaCount = R.compose(
+  Fetch.getJson(fetch),
+  R.concat(`${url.valvonnat}/count`),
+  Query.toQueryString
+);
 
 export const toimenpidetyypit = Fetch.cached(
   fetch,
@@ -182,11 +187,10 @@ export const postLiitteetFiles = R.curry((id, toimenpideId, files) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(files =>
-      fetch(
-        url.liitteet(id, toimenpideId) + '/files', {
-          method: 'POST',
-          body: EtApi.toFormData('files', files)
-        })
+      fetch(url.liitteet(id, toimenpideId) + '/files', {
+        method: 'POST',
+        body: EtApi.toFormData('files', files)
+      })
     )
   )(files)
 );
@@ -195,7 +199,11 @@ export const postLiitteetLink = R.curry((id, toimenpideId, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(id, toimenpideId) + '/link')
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        url.liitteet(id, toimenpideId) + '/link'
+      )
     )
   )(link)
 );
@@ -218,7 +226,7 @@ export const postNote = R.curry((id, note) =>
 );
 
 export const deserializeNote = R.evolve({
-  'create-time': dfns.parseJSON,
+  'create-time': dfns.parseJSON
 });
 
 export const notes = R.compose(
