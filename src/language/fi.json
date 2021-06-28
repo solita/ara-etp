@@ -212,7 +212,7 @@
     },
     "yritykset": {
       "title": "Yritykset",
-      "empty": "Sinua ei ole liitetty vielä yhteenkään yritykseen.",
+      "empty": "Ei liitettyjä yrityksiä.",
       "table": {
         "description": "Sinut on liitetty laatijaksi seuraaviin yrityksiin:",
         "tila": "Tila",

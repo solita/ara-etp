@@ -105,56 +105,32 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   }
 ]);
 
-const nameFromWhoamiOrStore = R.curry((idTranslate, whoami, id) =>
-  R.compose(
-    Maybe.orSome('...'),
-    R.map(kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`),
-    Maybe.fromNull,
-    R.ifElse(
-      R.equals(whoami.id),
-      R.always(whoami),
-      R.always(R.path(['kayttaja', id], idTranslate))
-    )
-  )(id)
-);
-
-export const linksForKayttaja = R.curry((i18n, whoami, id, idTranslate) => {
+export const linksForKayttaja = R.curry((i18n, kayttaja) => {
   return [
     {
-      label: nameFromWhoamiOrStore(idTranslate, whoami, id),
-      href: `#/kayttaja/${id}`
+      label: `${kayttaja.etunimi} ${kayttaja.sukunimi}`,
+      href: `#/kayttaja/${kayttaja.id}`
     },
     {
       label: i18n('navigation.yritykset'),
-      href: `#/laatija/${id}/yritykset`
+      href: `#/laatija/${kayttaja.id}/yritykset`
     }
   ];
 });
 
-export const linksForPaakayttajaOmatTiedot = R.curry(
-  (i18n, whoami, id, idTranslate) => [
-    {
-      label: nameFromWhoamiOrStore(idTranslate, whoami, id),
-      href: `#/kayttaja/${id}`
-    }
-  ]
-);
-
 export const parseKayttaja = R.curry(
-  (isDev, i18n, whoami, idTranslate, locationParts) => {
+  (isDev, i18n, idTranslate, locationParts) => {
     const id = R.head(locationParts);
-    if (
-      !locationParts.length ||
-      R.either(R.equals('new'), R.equals('all'))(id) ||
-      Kayttajat.isPatevyydentoteaja(whoami) ||
-      (Kayttajat.isPaakayttaja(whoami) && R.propEq('id', parseInt(id), whoami))
-    ) {
-      return parseRoot(isDev, i18n, whoami);
-    } else if (Kayttajat.isLaatija(whoami)) {
-      return linksForKayttaja(i18n, whoami, parseInt(id, 10), idTranslate);
-    } else {
-      return [];
-    }
+    const kayttaja = R.compose(
+      Maybe.fromNull,
+      R.path(['kayttaja', parseInt(id, 10)])
+    )(idTranslate);
+
+    return R.compose(
+      Maybe.orSome([]),
+      R.map(linksForKayttaja(i18n)),
+      R.filter(Kayttajat.isLaatija)
+    )(kayttaja);
   }
 );
 
@@ -304,7 +280,7 @@ export const navigationParse = R.curry(
             R.either(R.equals('kayttaja'), R.equals('laatija')),
             R.head
           ),
-          R.compose(parseKayttaja(isDev, i18n, whoami, idTranslate), R.tail)
+          R.compose(parseKayttaja(isDev, i18n, idTranslate), R.tail)
         ],
         [
           R.compose(R.equals(['valvonta', 'oikeellisuus']), R.take(2)),
