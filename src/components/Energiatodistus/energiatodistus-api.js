@@ -113,7 +113,9 @@ export const deserializeLiite = R.evolve({
 });
 
 export const deserializeHistoryEvent = R.evolve({
-  modifytime: dfns.parseJSON
+  'init-v': Maybe.fromNull,
+  'new-v': Maybe.fromNull,
+  modifytime: dfns.parseISO
 });
 
 export const deserializeHistory = R.evolve({
@@ -132,7 +134,7 @@ export const url = {
       id
     )}/pdf/${language}/energiatodistus-${id}-${language}.pdf`,
   liitteet: (version, id) => `${url.id(version, id)}/liitteet`,
-  muutoshistoria: id => `${url.all}/all/${id}/history`,
+  history: id => `${url.all}/all/${id}/history`,
   signature: (version, id) => `${url.id(version, id)}/signature`,
   start: (version, id) => `${url.signature(version, id)}/start`,
   digest: (version, id, language) =>
@@ -234,7 +236,7 @@ export const getEnergiatodistusHistoryById = R.curry(id =>
     R.map(deserializeHistory),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
-    url.muutoshistoria
+    url.history
   )(id)
 );
 

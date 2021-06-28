@@ -31,7 +31,8 @@
     hylatty: ['tila-id', R.equals(3)],
     voimassaoloPaattyi: ['voimassaolo-paattymisaika', R.T],
     allekirjoitettu: ['allekirjoitusaika', R.T],
-    korvattuTodistuksella: ['korvaava-energiatodistus-id', R.T]
+    korvattuTodistuksella: ['korvaava-energiatodistus-id', R.T],
+    laskutettu: ['laskutusaika', R.T]
   };
 
   const stateLocalization = R.compose(
@@ -39,23 +40,22 @@
     R.keys,
     R.pickBy(R.__, stateLocalizations),
     event => (v, _) =>
-      R.and(R.equals(event.k, R.head(v)), R.last(v)(event['new-v']))
+      R.and(R.equals(event.k, R.head(v)), event['new-v'].fold(false, R.last(v)))
   );
 
   const assocLocalizationKey = event =>
     R.assoc('localizationKey', stateLocalization(event), event);
 
-  const formattedValue = (event, prop) => {
-    let val = R.prop(prop, event);
-
-    return R.isNil(val)
-      ? '-'
-      : R.cond([
-          [R.equals('date'), _ => Formats.formatTimeInstantMinutes(val)],
-          [R.equals('bool'), _ => i18n(`${i18nRoot}.${val}`)],
-          [R.T, _ => val]
-        ])(event.type);
-  };
+  const formattedValue = R.curry((type, val) =>
+    R.cond([
+      [
+        R.equals('date'),
+        _ => Formats.formatTimeInstantMinutes(dfns.parseISO(val))
+      ],
+      [R.equals('bool'), _ => i18n(`${i18nRoot}.${val}`)],
+      [R.T, _ => val]
+    ])(type)
+  );
 
   const load = id => {
     overlay = true;
@@ -139,9 +139,9 @@
                 </td>
                 <td class="etp-table--td">
                   {$_(i18nRoot + '.' + event.localizationKey)}
-                  {#if R.equals(event.k, 'korvaava-energiatodistus-id')}
+                  {#if R.and(R.equals(event.k, 'korvaava-energiatodistus-id'), event['new-v'].isSome())}
                     <Link
-                      href={`#/energiatodistus/${event['new-v']}`}
+                      href={`#/energiatodistus/${event['new-v'].orSome('')}`}
                       text={event['new-v']} />
                   {/if}
                 </td>
@@ -191,10 +191,10 @@
                   {Inputs.propertyLabel($_, event.k)}
                 </td>
                 <td class="etp-table--td">
-                  {formattedValue(event, 'init-v')}
+                  {event['init-v'].map(formattedValue(event.type)).orSome('-')}
                 </td>
                 <td class="etp-table--td">
-                  {formattedValue(event, 'new-v')}
+                  {event['new-v'].map(formattedValue(event.type)).orSome('-')}
                 </td>
               </tr>
             {/each}
