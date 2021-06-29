@@ -183,7 +183,7 @@
     },
     "yritykset": {
       "title": "Företag",
-      "empty": "Du har inte kopplats till något företag ännu.",
+      "empty": "Ei liitettyjä yrityksiä. SV?",
       "table": {
         "description": "Du har kopplats som upprättare till följande företag:",
         "tila": "Status",
