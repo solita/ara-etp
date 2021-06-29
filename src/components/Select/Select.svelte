@@ -165,17 +165,18 @@
   class:disabled
   class:sr-only={compact}
   class="label">{label}</span>
-<div bind:this={node} on:keydown={handleKeydown}>
+<div class="input-container"
+     bind:this={node} on:keydown={handleKeydown}
+     on:validation={_ => {
+      blurred = true;
+    }}>
   <input
     bind:this={input}
     class="sr-only"
     tabindex="-1"
     {name}
     value={(inputValueParse || parse)(R.view(lens, model))}
-    on:change
-    on:blur={_ => {
-      blurred = true;
-    }} />
+    on:change />
   <div
     {id}
     data-cy={name}
