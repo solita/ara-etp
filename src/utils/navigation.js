@@ -57,7 +57,7 @@ export const linksForEnergiatodistus = R.curry(
           }
         ]
       : []),
-    ...(isDev && !Kayttajat.isLaskuttaja(whoami)
+    ...(Kayttajat.isPaakayttaja(whoami)
       ? [
           {
             label: i18n('navigation.valvonta.valvonta'),
@@ -206,14 +206,11 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     label: i18n('navigation.laatijat'),
     href: '#/laatija/all'
   },
-  ...(isDev
-    ? [
-        {
-          label: i18n('navigation.valvonta.oikeellisuus'),
-          href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`
-        }
-      ]
-    : []),
+
+  {
+    label: i18n('navigation.valvonta.oikeellisuus'),
+    href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`
+  },
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',

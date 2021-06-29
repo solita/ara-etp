@@ -18,7 +18,8 @@ describe('Navigation', () => {
     'navigation.tyojono': 'Työjono',
     'navigation.kaytonvalvonta': 'Käytönvalvonta',
     'navigation.halytykset': 'Hälytykset',
-    'navigation.kayttajat': 'Käyttäjät'
+    'navigation.kayttajat': 'Käyttäjät',
+    'navigation.valvonta.oikeellisuus': 'Oikeellisuuden valvonta'
   });
 
   describe('locationParts', () => {
@@ -133,6 +134,10 @@ describe('Navigation', () => {
       const expected = [
         { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
         { label: 'Laatijat', href: '#/laatija/all' },
+        {
+          label: 'Oikeellisuuden valvonta',
+          href: `#/valvonta/oikeellisuus/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
+        },
         { label: 'Viestit', href: '#/viesti/all' }
       ];
 
