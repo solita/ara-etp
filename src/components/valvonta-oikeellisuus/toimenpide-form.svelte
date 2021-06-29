@@ -130,7 +130,6 @@
           ? $_(i18nRoot + '.download-button')
           : $_(i18nRoot + '.preview-button')} />
     {/if}
-
   </div>
 </form>
 

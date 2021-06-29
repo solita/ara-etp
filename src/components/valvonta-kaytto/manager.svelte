@@ -34,13 +34,14 @@
   };
 
   const openNewNote = _ => {
-    newNote = Maybe.Some({ description: "" });
+    newNote = Maybe.Some({ description: '' });
   };
 
   const isAuditCase = toimenpiteet =>
     !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
 
-  const saveKasittelija = id => saveValvonta(R.assoc('valvoja-id', id, valvonta));
+  const saveKasittelija = id =>
+    saveValvonta(R.assoc('valvoja-id', id, valvonta));
 
   const fullName = valvojat =>
     R.compose(
@@ -67,10 +68,7 @@
 {/each}
 
 {#each Maybe.toArray(newNote) as note}
-  <NoteDialog
-      id={valvonta.id}
-      {note}
-      reload={load} />
+  <NoteDialog id={valvonta.id} {note} reload={load} />
 {/each}
 
 <div class="lg:w-1/2 w-full mb-5">
@@ -84,9 +82,10 @@
 </div>
 
 <div class="flex space-x-4 mb-5">
-  <TextButton icon="add_comment"
-              text="Lisää muistiinpano"
-              on:click={openNewNote} />
+  <TextButton
+    icon="add_comment"
+    text="Lisää muistiinpano"
+    on:click={openNewNote} />
 </div>
 
 {#if !isAuditCase(toimenpiteet)}

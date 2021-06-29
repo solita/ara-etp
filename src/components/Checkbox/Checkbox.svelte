@@ -58,6 +58,7 @@
       {disabled}
       type="checkbox"
       {checked}
-      on:change={() => !disabled && (model = R.set(lens, parse(!checked), model))} />
+      on:change={() =>
+        !disabled && (model = R.set(lens, parse(!checked), model))} />
   </label>
 </div>

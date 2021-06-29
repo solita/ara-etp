@@ -244,24 +244,35 @@ export const isValidForm = schemaObject =>
   );
 
 const dispatchValidationEvent = blurred => element =>
-  element.dispatchEvent(new CustomEvent('validation',
-    { detail: { blurred: blurred } }));
+  element.dispatchEvent(
+    new CustomEvent('validation', { detail: { blurred: blurred } })
+  );
 
 const dispatchValidationEvents = (blurred, elements) =>
-  R.forEach(dispatchValidationEvent(blurred), elements)
+  R.forEach(dispatchValidationEvent(blurred), elements);
 
 /**
  * Dispatch custom validation event for all the form inputs to ensure
  * that the inputs are validated and they show error message
  * if not valid.
  */
-export const blurForm = form => dispatchValidationEvents(
-  true, form.getElementsByClassName('input-container'));
+export const blurForm = form =>
+  dispatchValidationEvents(
+    true,
+    form.getElementsByClassName('input-container')
+  );
 
-export const blurFormExcludeNested = form => dispatchValidationEvents(
-  true,
-  R.filter(container => container.closest('form') === form,
-    form.getElementsByClassName('input-container')));
+export const blurFormExcludeNested = form =>
+  dispatchValidationEvents(
+    true,
+    R.filter(
+      container => container.closest('form') === form,
+      form.getElementsByClassName('input-container')
+    )
+  );
 
-export const unblurForm = form => dispatchValidationEvents(
-  false, form.getElementsByClassName('input-container'));
+export const unblurForm = form =>
+  dispatchValidationEvents(
+    false,
+    form.getElementsByClassName('input-container')
+  );

@@ -7,4 +7,3 @@
 </script>
 
 <H1 text={i18n(i18nRoot + '.title')} />
-

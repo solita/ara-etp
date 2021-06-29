@@ -9,6 +9,7 @@
   text={toimenpide.filename}
   target={'_blank'}
   href={ValvontaApi.url.document(
-              toimenpide['energiatodistus-id'],
-              toimenpide.id,
-              toimenpide['filename'])} />
+    toimenpide['energiatodistus-id'],
+    toimenpide.id,
+    toimenpide['filename']
+  )} />

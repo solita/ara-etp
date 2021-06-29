@@ -20,7 +20,8 @@
   };
 </script>
 
-<svelte:window on:hashchange={_ => flashMessageStore.flush('valvonta-kaytto')} />
+<svelte:window
+  on:hashchange={_ => flashMessageStore.flush('valvonta-kaytto')} />
 
 <Router {routes} {prefix} />
 

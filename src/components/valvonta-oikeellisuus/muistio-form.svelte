@@ -35,13 +35,12 @@
   $: toimenpideLocale = R.compose(
     R.map(R.prop('language')),
     R.chain(id => Maybe.findById(id, templates)),
-    R.prop('template-id'));
+    R.prop('template-id')
+  );
 
   const addVirhe = virhetyyppiId => {
     if (!isNaN(virhetyyppiId)) {
-      const locale = Maybe.orSome(
-        i18nLocale,
-        toimenpideLocale(toimenpide));
+      const locale = Maybe.orSome(i18nLocale, toimenpideLocale(toimenpide));
 
       const newVirhe = {
         'type-id': virhetyyppiId,
@@ -51,7 +50,11 @@
         )(virhetyypit)
       };
 
-      toimenpide = R.over(R.lensProp('virheet'), R.prepend(newVirhe), toimenpide);
+      toimenpide = R.over(
+        R.lensProp('virheet'),
+        R.prepend(newVirhe),
+        toimenpide
+      );
 
       virhetyyppi = Maybe.None();
       dirty = true;
@@ -72,10 +75,13 @@
   };
 
   $: newVirhetypes = R.filter(
-    R.compose(R.not,
+    R.compose(
+      R.not,
       R.includes(R.__, R.pluck('type-id', toimenpide.virheet)),
-      R.prop('id')),
-    virhetyypit);
+      R.prop('id')
+    ),
+    virhetyypit
+  );
 </script>
 
 <div class="mb-5">

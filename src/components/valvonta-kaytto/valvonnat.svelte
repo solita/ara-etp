@@ -161,7 +161,6 @@
                 <tr
                   class="etp-table--tr etp-table--tr__link"
                   on:click={toValvontaView(valvonta)}>
-
                   <td class="etp-table--td">
                     {valvonta.id}
                   </td>
@@ -197,10 +196,8 @@
                     <td class="etp-table--td">-</td>
                   {/if}
 
-                  <td class="etp-table--td">
-                  </td>
-                  <td class="etp-table--td">
-                  </td>
+                  <td class="etp-table--td" />
+                  <td class="etp-table--td" />
                 </tr>
               {/each}
             </tbody>

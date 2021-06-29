@@ -8,4 +8,8 @@
   export let params;
 </script>
 
-<NewKetju etFuture={R.map(Maybe.Some, EtApi.getEnergiatodistusById(params.version, params.id))} />
+<NewKetju
+  etFuture={R.map(
+    Maybe.Some,
+    EtApi.getEnergiatodistusById(params.version, params.id)
+  )} />

@@ -54,7 +54,6 @@
       Validation.blurForm(form);
     }
   };
-
 </script>
 
 <style type="text/postcss">
@@ -104,9 +103,7 @@
 
     <div class="buttons">
       <div class="mr-5 mt-5">
-        <Button
-          text={i18n(i18nRoot + '.add-button')}
-          on:click={add(note)} />
+        <Button text={i18n(i18nRoot + '.add-button')} on:click={add(note)} />
       </div>
 
       <div class="mt-5">

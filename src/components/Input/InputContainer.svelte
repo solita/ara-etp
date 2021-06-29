@@ -104,12 +104,21 @@
       }
     },
     update: updateModel
-  }
+  };
 </script>
 
-<div title={tooltip} class="input-container"
-     on:validation={event => {
-       blurred = event.detail.blurred
-     }}>
-  <slot {api} {viewValue} {focused} {valid} {validationResult} {warning} {error} />
+<div
+  title={tooltip}
+  class="input-container"
+  on:validation={event => {
+    blurred = event.detail.blurred;
+  }}>
+  <slot
+    {api}
+    {viewValue}
+    {focused}
+    {valid}
+    {validationResult}
+    {warning}
+    {error} />
 </div>
