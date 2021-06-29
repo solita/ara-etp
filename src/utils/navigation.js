@@ -57,7 +57,7 @@ export const linksForEnergiatodistus = R.curry(
           }
         ]
       : []),
-    ...(isDev && !Kayttajat.isLaskuttaja(whoami)
+    ...(Kayttajat.isPaakayttaja(whoami)
       ? [
           {
             label: i18n('navigation.valvonta.valvonta'),
