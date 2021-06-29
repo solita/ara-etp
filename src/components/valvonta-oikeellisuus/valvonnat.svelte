@@ -200,17 +200,19 @@
             lens={R.lensProp('has-valvoja')}
             format={R.compose(R.not, Maybe.orSome(false))}
             parse={R.compose(Maybe.Some, R.not)} />
-          <Checkbox
-            disabled={overlay}
-            label={i18n(`${i18nRoot}.include-closed`)}
-            bind:model={query}
-            lens={R.lensProp('include-closed')}
-            format={Maybe.orSome(false)}
-            parse={Maybe.Some} />
+          <div class="flex flex-grow md:justify-end">
+            <Checkbox
+              disabled={overlay}
+              label={i18n(`${i18nRoot}.include-closed`)}
+              bind:model={query}
+              lens={R.lensProp('include-closed')}
+              format={Maybe.orSome(false)}
+              parse={Maybe.Some} />
+          </div>
         </div>
       {/if}
       {#if valvonnat.length === 0}
-        <span>{i18n(i18nRoot + '.empty')}</span>
+        <div class="my-6">{i18n(i18nRoot + '.empty')}</div>
       {:else}
         <div class="my-6 overflow-x-auto">
           <table class="etp-table">
