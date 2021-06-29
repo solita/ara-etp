@@ -297,7 +297,7 @@
                   <td class="etp-table--td">
                     <a
                       class="font-icon text-2xl text-primary hover:underline"
-                      href={`#/energiatodistus/all?where=[[["=","laatija-id",${laatija.id}]]]`}>
+                      href={`#/energiatodistus/all?where=[[["=","energiatodistus.laatija-id",${laatija.id}]]]`}>
                       view_list
                     </a>
                   </td>
