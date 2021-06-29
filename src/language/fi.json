@@ -1254,7 +1254,7 @@
         "title": "Oikeellisuuden valvonta",
         "empty": "Ei valvontatoimenpiteitä",
         "valvoja": "Valvoja",
-        "include-closed": "Myös päätetyt valvonnat",
+        "include-closed": "Näytä myös päättyneet",
         "ei-valvojaa": "Ei valvojaa",
         "table": {
           "publish-time": "Tapahtumaaika",
