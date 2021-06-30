@@ -129,7 +129,7 @@
   }
 
   .button.disabled {
-    @apply bg-light border-0 min-h-0 py-1 cursor-default;
+    @apply bg-light border-transparent min-h-0 cursor-default;
   }
 
   .label.focused {

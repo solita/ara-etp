@@ -53,7 +53,7 @@
   }
 
   div.disabled {
-    @apply border-0 pb-3;
+    @apply border-transparent;
   }
 </style>
 

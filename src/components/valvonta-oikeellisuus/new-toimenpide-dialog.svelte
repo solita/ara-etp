@@ -35,6 +35,9 @@
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
+  let publishPending = false;
+  let previewPending = false;
+
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
   $: formatTemplate = Locales.labelForId($locale, templates);
 
@@ -43,8 +46,10 @@
 
   $: publish = toimenpide => {
     if (isValidForm(toimenpide)) {
+      publishPending = true;
       Future.fork(
         response => {
+          publishPending = false;
           const msg = i18n(
             Maybe.orSome(
               `${i18nRoot}.messages.publish-error`,
@@ -54,6 +59,7 @@
           error = Maybe.Some(msg);
         },
         _ => {
+          publishPending = false;
           flashMessageStore.add(
             'valvonta-oikeellisuus',
             'success',
@@ -71,8 +77,10 @@
 
   $: preview = toimenpide => {
     if (isValidForm(toimenpide)) {
+      previewPending = true;
       Future.fork(
         response => {
+          previewPending = false;
           const msg = i18n(
             Maybe.orSome(
               `${i18nRoot}.messages.preview-error`,
@@ -82,6 +90,7 @@
           error = Maybe.Some(msg);
         },
         response => {
+          previewPending = false;
           let link = document.createElement('a');
           link.target = '_blank';
           link.href = URL.createObjectURL(response);
@@ -95,6 +104,8 @@
       Validation.blurForm(form);
     }
   };
+
+  $: disabled = publishPending || previewPending;
 </script>
 
 <style type="text/postcss">
@@ -135,6 +146,7 @@
     {#if Toimenpiteet.hasDeadline(toimenpide)}
       <div class="flex py-4">
         <Datepicker
+          {disabled}
           label="Määräpäivä"
           bind:model={toimenpide}
           required={true}
@@ -150,6 +162,7 @@
     {#if !R.isEmpty(templates)}
       <div class="w-1/2 py-4">
         <Select
+          {disabled}
           label="Valitse asiakirjapohja"
           bind:model={toimenpide}
           lens={R.lensProp('template-id')}
@@ -162,6 +175,7 @@
     {:else}
       <div class="w-full py-4">
         <Textarea
+          {disabled}
           id={'toimenpide.description'}
           name={'toimenpide.description'}
           label={text(toimenpide, 'description')}
@@ -175,26 +189,33 @@
       </div>
     {/if}
 
-    <div class="buttons">
-      <div class="mr-5 mt-5">
+    <div class="buttons mt-5">
+      <div>
         <Button
           text={text(toimenpide, 'publish-button')}
-          on:click={publish(toimenpide)} />
+          on:click={publish(toimenpide)}
+          {disabled}
+          spinner={true}
+          showSpinner={publishPending} />
       </div>
 
-      <div class="mt-5">
+      <div class="mr-12">
         <Button
           text={i18n(i18nRoot + '.cancel-button')}
           style={'secondary'}
+          {disabled}
           on:click={reload} />
       </div>
 
       {#if !R.isEmpty(templates)}
-        <div class="mt-5 ml-5">
+        <div>
           <Button
             text={i18n(i18nRoot + '.preview-button')}
             style={'secondary'}
-            on:click={preview(toimenpide)} />
+            on:click={preview(toimenpide)}
+            {disabled}
+            spinner={true}
+            showSpinner={previewPending} />
         </div>
       {/if}
     </div>
