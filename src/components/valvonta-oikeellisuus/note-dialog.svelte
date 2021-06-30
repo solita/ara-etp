@@ -25,12 +25,17 @@
   let error = Maybe.None();
 
   const schema = Schema.note;
+
+  let addPending = false;
+
   $: isValidForm = Validation.isValidForm(schema);
 
   $: add = toimenpide => {
     if (isValidForm(note)) {
+      addPending = true;
       Future.fork(
         response => {
+          addPending = false;
           const msg = i18n(
             Maybe.orSome(
               `${i18nRoot}.messages.add-error`,
@@ -40,6 +45,7 @@
           error = Maybe.Some(msg);
         },
         _ => {
+          addPending = false;
           flashMessageStore.add(
             'valvonta-oikeellisuus',
             'success',
@@ -91,6 +97,7 @@
 
     <div class="w-full py-4">
       <Textarea
+        disabled={addPending}
         id={'note.description'}
         name={'note.description'}
         label={i18n(i18nRoot + '.description')}
@@ -101,15 +108,21 @@
         {i18n} />
     </div>
 
-    <div class="buttons">
-      <div class="mr-5 mt-5">
-        <Button text={i18n(i18nRoot + '.add-button')} on:click={add(note)} />
+    <div
+      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
+      <div>
+        <Button
+          text={i18n(i18nRoot + '.add-button')}
+          disabled={addPending}
+          showSpinner={addPending}
+          on:click={add(note)} />
       </div>
 
-      <div class="mt-5">
+      <div>
         <Button
           text={i18n(i18nRoot + '.cancel-button')}
           style={'secondary'}
+          disabled={addPending}
           on:click={reload} />
       </div>
     </div>
