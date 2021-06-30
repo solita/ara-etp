@@ -118,11 +118,11 @@
   }
 
   h1 {
-    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
+    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-3 border-tertiary tracking-xl;
   }
 
   .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+    @apply flex flex-wrap items-center mt-5 pt-5 border-t-3 border-tertiary;
   }
 
   .error {
