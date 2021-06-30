@@ -1442,6 +1442,15 @@
     "kaytto": {
       "all": {
         "title": "Käytönvalvonta",
+        "empty": "Ei valvontatoimenpiteitä",
+        "ei-valvojaa": "Ei valvojaa",
+        "include-closed": "Näytä myös päättyneet",
+        "valvoja": "Valvoja",
+        "last-toimenpide": "Edellinen tapahtuma",
+        "deadline-date": "Määräaika",
+        "tunnus": "Tunnus",
+        "osoite": "Osoite",
+        "omistajat": "Omistaja(t)",
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
         }

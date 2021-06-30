@@ -10,8 +10,6 @@ import * as dfns from 'date-fns';
 
 import * as Toimenpiteet from './toimenpiteet';
 
-import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
-
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
   valvonta: id => `${url.valvonnat}/${id}`,
@@ -69,7 +67,11 @@ export const valvonnat = R.compose(
   Query.toQueryString
 );
 
-export const valvontaCount = Fetch.getJson(fetch, url.valvonnat + '/count');
+export const valvontaCount = R.compose(
+  Fetch.getJson(fetch),
+  R.concat(`${url.valvonnat}/count`),
+  Query.toQueryString
+);
 
 export const toimenpidetyypit = Fetch.cached(
   fetch,
