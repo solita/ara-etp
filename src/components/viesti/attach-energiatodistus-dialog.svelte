@@ -121,7 +121,6 @@
           style="primary"
           type="submit"
           text={i18n(i18nRoot + '.button-attach')}
-          spinner={true}
           showSpinner={showAttachSpinner} />
       </div>
       <div>
@@ -130,7 +129,6 @@
           on:click={detach}
           style="secondary"
           text={i18n(i18nRoot + '.button-detach')}
-          spinner={true}
           showSpinner={showDetachSpinner} />
       </div>
       <div class="lg:justify-self-end lg:ml-auto">

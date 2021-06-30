@@ -114,7 +114,6 @@
         <Button
           text={i18n(i18nRoot + '.add-button')}
           disabled={addPending}
-          spinner={true}
           showSpinner={addPending}
           on:click={add(note)} />
       </div>

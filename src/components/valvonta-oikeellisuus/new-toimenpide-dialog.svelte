@@ -196,7 +196,6 @@
           text={text(toimenpide, 'publish-button')}
           on:click={publish(toimenpide)}
           {disabled}
-          spinner={true}
           showSpinner={publishPending} />
       </div>
 
@@ -215,7 +214,6 @@
             style={'secondary'}
             on:click={preview(toimenpide)}
             {disabled}
-            spinner={true}
             showSpinner={previewPending} />
         </div>
       {/if}

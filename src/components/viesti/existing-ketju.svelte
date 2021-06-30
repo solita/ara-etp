@@ -277,7 +277,7 @@
                 <Select
                   id={'kasittelija'}
                   label={i18n(i18nRoot + '.handler')}
-                  noneLabel={i18n(i18nRoot + '.no-handler')}
+                  noneLabel={`${i18nRoot}.no-handler`}
                   compact={true}
                   required={false}
                   disabled={false}
