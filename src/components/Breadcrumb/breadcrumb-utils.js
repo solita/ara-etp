@@ -44,12 +44,13 @@ export const parseCrumb = R.curry((i18n, idTranslate, whoami, location) =>
 
 export const valvontaCrumb = R.curry((i18n, [type, ...rest]) =>
   R.cond([
-    [R.equals('oikeellisuus'), oikeellisuusCrumb(i18n, [...rest])],
+    [R.equals('oikeellisuus'), valvontaOikeellisuusCrumb(i18n, [...rest])],
+    [R.equals('kaytto'), valvontaKayttoCrumb(i18n, [...rest])],
     [R.T, R.always([])]
   ])(type)
 );
 
-export const oikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
+export const valvontaOikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
   R.cond([
     [
       R.equals('all'),
@@ -75,6 +76,29 @@ export const oikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
       ])
     ]
   ])(version)
+);
+
+export const valvontaKayttoCrumb = R.curry((i18n, [id], _) =>
+  R.cond([
+    [
+      R.equals('all'),
+      R.always([
+        {
+          url: '#/valvonta/kaytto/all',
+          label: i18n('navigation.kaytonvalvonta')
+        }
+      ])
+    ],
+    [
+      R.T,
+      R.always([
+        {
+          url: `#/valvonta/kaytto/${id}`,
+          label: `${i18n('navigation.kaytonvalvonta')}`
+        }
+      ])
+    ]
+  ])()
 );
 
 export const etKetjuCrumb = R.curry((i18n, etId) => [

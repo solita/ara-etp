@@ -164,14 +164,12 @@ export const parseYritys = R.curry(
   }
 );
 
-export const parseValvontaOikeellisuus = R.curry(
-  (isDev, i18n, whoami, locationParts) => {
-    if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
-    if (R.length(locationParts) > 2) return [];
+export const parseValvonta = R.curry((isDev, i18n, whoami, locationParts) => {
+  if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
+  if (R.length(locationParts) > 2) return [];
 
-    return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
-  }
-);
+  return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
+});
 
 export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   {
@@ -182,10 +180,13 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     label: i18n('navigation.laatijat'),
     href: '#/laatija/all'
   },
-
   {
     label: i18n('navigation.valvonta.oikeellisuus'),
     href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`
+  },
+  {
+    label: i18n('navigation.kaytonvalvonta'),
+    href: `#/valvonta/kaytto/all?valvoja-id=${whoami.id}&has-valvoja=false`
   },
   {
     label: i18n('navigation.viestit'),
@@ -284,7 +285,11 @@ export const navigationParse = R.curry(
         ],
         [
           R.compose(R.equals(['valvonta', 'oikeellisuus']), R.take(2)),
-          R.compose(parseValvontaOikeellisuus(isDev, i18n, whoami), R.drop(2))
+          R.compose(parseValvonta(isDev, i18n, whoami), R.drop(2))
+        ],
+        [
+          R.compose(R.equals(['valvonta', 'kaytto']), R.take(2)),
+          R.compose(parseValvonta(isDev, i18n, whoami), R.drop(2))
         ],
         [
           R.compose(R.equals('viesti'), R.head),
