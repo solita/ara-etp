@@ -33,13 +33,13 @@
   }
 
   .spinner {
-    @apply mr-12 pr-6;
+    @apply pr-6;
 
-    transition: padding-right 0.5s, margin-right 0.5s;
+    transition: padding-right 0.5s, padding-left 0.5s;
   }
 
   .disabled.spinner.spinner-showing {
-    @apply mr-6 pr-12;
+    @apply pr-10 pl-2;
   }
 
   .spinner-container {

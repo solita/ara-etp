@@ -189,7 +189,8 @@
       </div>
     {/if}
 
-    <div class="buttons mt-5">
+    <div
+      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
       <div>
         <Button
           text={text(toimenpide, 'publish-button')}
@@ -199,7 +200,7 @@
           showSpinner={publishPending} />
       </div>
 
-      <div class="mr-12">
+      <div>
         <Button
           text={i18n(i18nRoot + '.cancel-button')}
           style={'secondary'}

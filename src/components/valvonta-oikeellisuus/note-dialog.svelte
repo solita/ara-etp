@@ -108,8 +108,9 @@
         {i18n} />
     </div>
 
-    <div class="buttons">
-      <div class="mr-5 mt-5">
+    <div
+      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
+      <div>
         <Button
           text={i18n(i18nRoot + '.add-button')}
           disabled={addPending}
@@ -118,7 +119,7 @@
           on:click={add(note)} />
       </div>
 
-      <div class="mt-5">
+      <div>
         <Button
           text={i18n(i18nRoot + '.cancel-button')}
           style={'secondary'}
