@@ -7,6 +7,7 @@ import * as Markdown from '@Component/text-editor/markdown';
 
 const isDescriptionRequired = R.anyPass([
   Toimenpiteet.isType(Toimenpiteet.type.anomaly),
+  Toimenpiteet.isType(Toimenpiteet.type.rfc.request),
   Toimenpiteet.isResponse
 ]);
 
