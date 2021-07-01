@@ -149,7 +149,7 @@
       R.assoc(
         'where',
         EtHakuUtils.convertWhereToQuery(flatSchema, [
-          [['=', 'id', Maybe.get(q.id)]]
+          [['=', 'energiatodistus.id', Maybe.get(q.id)]]
         ]),
         q
       )
