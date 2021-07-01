@@ -53,7 +53,6 @@ export const getKetjut = R.compose(
 );
 
 export const getKetjutCount = R.compose(
-  R.map(R.map(deserialize)),
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch)),
   R.concat(url.ketjutCount),
