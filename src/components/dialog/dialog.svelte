@@ -30,7 +30,7 @@
 </style>
 
 <dialog on:click|stopPropagation>
-  <form class="content" bind:this={form}>
+  <form class="content" bind:this={form} on:submit>
     {#if header}
       <h1>{header}</h1>
     {/if}
