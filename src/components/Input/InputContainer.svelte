@@ -110,6 +110,7 @@
 <div
   title={tooltip}
   class="input-container"
+  on:input
   on:validation={event => {
     blurred = event.detail.blurred;
   }}>

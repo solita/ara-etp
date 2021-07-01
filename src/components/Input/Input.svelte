@@ -58,6 +58,7 @@
   {warnValidators}
   tooltip={compact ? label : null}
   on:keydown
+  on:input
   let:api
   let:valid
   let:validationResult
