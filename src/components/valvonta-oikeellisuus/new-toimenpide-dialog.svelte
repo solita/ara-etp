@@ -15,11 +15,11 @@
 
   import { _, locale } from '@Language/i18n';
 
-  import Button from '@Component/Button/Button';
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
   import { flashMessageStore } from '@/stores';
   import Select from '../Select/Select.svelte';
+  import Dialog from '@Component/dialog/dialog';
   import * as Validation from '@Utility/validation';
 
   const i18n = $_;
@@ -108,115 +108,76 @@
   $: disabled = publishPending || previewPending;
 </script>
 
-<style type="text/postcss">
-  dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
-  }
+<Dialog
+  bind:form
+  header={text(toimenpide, 'title')}
+  {error}
+  buttons={[
+    {
+      text: text(toimenpide, 'publish-button'),
+      'on:click': _ => publish(toimenpide),
+      disabled,
+      showSpinner: publishPending
+    },
+    {
+      text: i18n(i18nRoot + '.cancel-button'),
+      style: 'secondary',
+      'on:click': reload,
+      disabled
+    },
+    {
+      text: i18n(i18nRoot + '.preview-button'),
+      style: 'secondary',
+      'on:click': _ => preview(toimenpide),
+      disabled,
+      showSpinner: previewPending
+    }
+  ]}>
+  <p>{text(toimenpide, 'info')}</p>
 
-  .content {
-    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
-  }
-
-  h1 {
-    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-3 border-tertiary tracking-xl;
-  }
-
-  .buttons {
-    @apply flex flex-wrap items-center mt-5 pt-5 border-t-3 border-tertiary;
-  }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
-</style>
-
-<dialog on:click|stopPropagation>
-  <form class="content" bind:this={form}>
-    <h1>{text(toimenpide, 'title')}</h1>
-
-    {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
-      </div>
-    {/each}
-
-    <p>{text(toimenpide, 'info')}</p>
-
-    {#if Toimenpiteet.hasDeadline(toimenpide)}
-      <div class="flex py-4">
-        <Datepicker
-          {disabled}
-          label="Määräpäivä"
-          bind:model={toimenpide}
-          required={true}
-          lens={R.lensProp('deadline-date')}
-          format={Maybe.fold('', Formats.formatDateInstant)}
-          parse={Parsers.optionalParser(Parsers.parseDate)}
-          transform={EM.fromNull}
-          validators={schema['deadline-date']}
-          {i18n} />
-      </div>
-    {/if}
-
-    {#if !R.isEmpty(templates)}
-      <div class="w-1/2 py-4">
-        <Select
-          {disabled}
-          label="Valitse asiakirjapohja"
-          bind:model={toimenpide}
-          lens={R.lensProp('template-id')}
-          parse={Maybe.fromNull}
-          required={true}
-          validation={true}
-          format={formatTemplate}
-          items={R.pluck('id', templates)} />
-      </div>
-    {:else}
-      <div class="w-full py-4">
-        <Textarea
-          {disabled}
-          id={'toimenpide.description'}
-          name={'toimenpide.description'}
-          label={text(toimenpide, 'description')}
-          bind:model={toimenpide}
-          lens={R.lensProp('description')}
-          required={false}
-          format={Maybe.orSome('')}
-          parse={Parsers.optionalString}
-          validators={schema.description}
-          {i18n} />
-      </div>
-    {/if}
-
-    <div
-      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
-      <div>
-        <Button
-          text={text(toimenpide, 'publish-button')}
-          on:click={publish(toimenpide)}
-          {disabled}
-          showSpinner={publishPending} />
-      </div>
-
-      <div>
-        <Button
-          text={i18n(i18nRoot + '.cancel-button')}
-          style={'secondary'}
-          {disabled}
-          on:click={reload} />
-      </div>
-
-      {#if !R.isEmpty(templates)}
-        <div>
-          <Button
-            text={i18n(i18nRoot + '.preview-button')}
-            style={'secondary'}
-            on:click={preview(toimenpide)}
-            {disabled}
-            showSpinner={previewPending} />
-        </div>
-      {/if}
+  {#if Toimenpiteet.hasDeadline(toimenpide)}
+    <div class="flex py-4">
+      <Datepicker
+        {disabled}
+        label="Määräpäivä"
+        bind:model={toimenpide}
+        required={true}
+        lens={R.lensProp('deadline-date')}
+        format={Maybe.fold('', Formats.formatDateInstant)}
+        parse={Parsers.optionalParser(Parsers.parseDate)}
+        transform={EM.fromNull}
+        validators={schema['deadline-date']}
+        {i18n} />
     </div>
-  </form>
-</dialog>
+  {/if}
+
+  {#if !R.isEmpty(templates)}
+    <div class="w-1/2 py-4">
+      <Select
+        {disabled}
+        label="Valitse asiakirjapohja"
+        bind:model={toimenpide}
+        lens={R.lensProp('template-id')}
+        parse={Maybe.fromNull}
+        required={true}
+        validation={true}
+        format={formatTemplate}
+        items={R.pluck('id', templates)} />
+    </div>
+  {:else}
+    <div class="w-full py-4">
+      <Textarea
+        {disabled}
+        id={'toimenpide.description'}
+        name={'toimenpide.description'}
+        label={text(toimenpide, 'description')}
+        bind:model={toimenpide}
+        lens={R.lensProp('description')}
+        required={false}
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={schema.description}
+        {i18n} />
+    </div>
+  {/if}
+</Dialog>
