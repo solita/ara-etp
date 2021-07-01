@@ -119,7 +119,17 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
 });
 
 export const parseKayttaja = R.curry(
-  (isDev, i18n, idTranslate, locationParts) => {
+  (isDev, whoami, i18n, idTranslate, locationParts) => {
+    if (
+      Kayttajat.isPatevyydentoteaja(whoami) &&
+      R.compose(
+        R.either(R.equals('laatijoidentuonti'), R.equals('all')),
+        R.head
+      )(locationParts)
+    ) {
+      return parseRoot(isDev, i18n, whoami);
+    }
+
     const id = R.head(locationParts);
     const kayttaja = R.compose(
       Maybe.fromNull,
@@ -280,7 +290,7 @@ export const navigationParse = R.curry(
             R.either(R.equals('kayttaja'), R.equals('laatija')),
             R.head
           ),
-          R.compose(parseKayttaja(isDev, i18n, idTranslate), R.tail)
+          R.compose(parseKayttaja(isDev, whoami, i18n, idTranslate), R.tail)
         ],
         [
           R.compose(R.equals(['valvonta', 'oikeellisuus']), R.take(2)),
