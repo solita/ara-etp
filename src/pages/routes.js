@@ -3,7 +3,7 @@ import { wrap } from 'svelte-spa-router/wrap';
 import Yritys from '@Component/Yritys/Yritys';
 import Kayttaja from '@Component/Kayttaja/Kayttaja';
 import Viesti from '@Component/viesti/viesti';
-import Ohje from '@Component/ohje/ohje';
+import Ohje from '@Pages/ohje';
 import Laatija from '@Component/Laatija/Laatija';
 import Halytykset from '@Component/Halytykset/Halytykset';
 import Kaytonvalvonta from '@Component/Kaytonvalvonta/Kaytonvalvonta';

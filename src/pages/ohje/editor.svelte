@@ -8,8 +8,8 @@
   import { flashMessageStore } from '@/stores';
   import { push } from 'svelte-spa-router';
 
-  import * as api from './ohje-api';
-  import * as Schema from './schema';
+  import * as api from '@Component/ohje/ohje-api';
+  import * as Schema from '@Component/ohje/schema';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
@@ -20,7 +20,7 @@
   import Button from '@Component/Button/Button';
   import Link from '@Component/Link/Link';
   import Confirm from '@Component/Confirm/Confirm';
-  import Navigation from './navigation';
+  import Navigation from '@Component/ohje/navigation';
 
   const i18n = $_;
 

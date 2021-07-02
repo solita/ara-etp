@@ -9,8 +9,8 @@
   import { flashMessageStore } from '@/stores';
   import { push } from '@Component/Router/router';
 
-  import * as api from './ohje-api';
-  import * as Schema from './schema';
+  import * as api from '@Component/ohje/ohje-api';
+  import * as Schema from '@Component/ohje/schema';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
