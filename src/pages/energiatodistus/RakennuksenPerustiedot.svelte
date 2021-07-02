@@ -7,7 +7,7 @@
   import * as Laatimisvaiheet from '././laatimisvaiheet';
 
   import H2 from '@Component/H/H2';
-  import Input from '@Component/Energiatodistus/Input';
+  import Input from '@Pages/energiatodistus/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';

@@ -8,15 +8,15 @@
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  import * as ETViews from '@Component/Energiatodistus/views';
+  import * as ETViews from '@Pages/energiatodistus/views';
 
-  import * as EnergiatodistusApi from '@Component/Energiatodistus/energiatodistus-api';
+  import * as EnergiatodistusApi from '@Pages/energiatodistus/energiatodistus-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
-  import Address from '@Component/Energiatodistus/address.svelte';
+  import Address from '@Pages/energiatodistus/address.svelte';
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
   import HR from '@Component/HR/HR';

@@ -6,7 +6,7 @@
   import VersioInput from './versio-input';
   import Select from '@Component/Select/Select';
 
-  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
 
   export let luokittelut;

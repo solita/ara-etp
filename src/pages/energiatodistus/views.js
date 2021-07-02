@@ -1,6 +1,6 @@
 import * as Router from '@Component/Router/router';
 import * as Maybe from '@Utility/maybe-utils';
-import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
+import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
 import * as Locales from '@Language/locale-utils';
 
 export const toETView = energiatodistus => {

@@ -7,8 +7,8 @@
   import { locale, _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
+  import Input from '@Pages/energiatodistus/Input';
+  import * as et from '@Pages/energiatodistus/energiatodistus-utils';
 
   export let disabled;
   export let schema;

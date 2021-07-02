@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
+  import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
   import NewKetju from '@Component/viesti/new-ketju.svelte';
 
   export let params;

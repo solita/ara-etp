@@ -9,13 +9,13 @@
   import * as fxmath from '@Utility/fxmath';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
-  import EVuosiKulutusUnit from '@Component/Energiatodistus/form-parts/units/e-painotettu-vuosikulutus.svelte';
-  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
+  import Input from '@Pages/energiatodistus/Input';
+  import ELukuUnit from '@Pages/energiatodistus/form-parts/units/e-luku';
+  import EVuosiKulutusUnit from '@Pages/energiatodistus/form-parts/units/e-painotettu-vuosikulutus.svelte';
+  import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
 
-  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
+  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as api from '@Pages/energiatodistus/energiatodistus-api';
 
   export let disabled;
   export let schema;

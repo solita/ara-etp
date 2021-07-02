@@ -5,11 +5,11 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
-  import * as Validation from '@Component/Energiatodistus/validation';
+  import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as Validation from '@Pages/energiatodistus/validation';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
+  import Input from '@Pages/energiatodistus/Input';
   import Select from '@Component/Select/Select';
 
   export let disabled;

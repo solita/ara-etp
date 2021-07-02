@@ -5,17 +5,17 @@
 
   import { _ } from '@Language/i18n';
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
+  import Input from '@Pages/energiatodistus/Input';
 
-  import Area from '@Component/Energiatodistus/form-parts/units/area';
-  import CubicMetre from '@Component/Energiatodistus/form-parts/units/cubic-metre';
-  import LampokapasiteettiUnit from '@Component/Energiatodistus/form-parts/units/lampokapasiteetti';
-  import IlmanvuotolukuUnit from '@Component/Energiatodistus/form-parts/units/ilmanvuotoluku';
-  import Q50 from '@Component/Energiatodistus/form-parts/units/q50';
-  import Crak from '@Component/Energiatodistus/form-parts/units/c-rak';
-  import V from '@Component/Energiatodistus/form-parts/units/v';
+  import Area from '@Pages/energiatodistus/form-parts/units/area';
+  import CubicMetre from '@Pages/energiatodistus/form-parts/units/cubic-metre';
+  import LampokapasiteettiUnit from '@Pages/energiatodistus/form-parts/units/lampokapasiteetti';
+  import IlmanvuotolukuUnit from '@Pages/energiatodistus/form-parts/units/ilmanvuotoluku';
+  import Q50 from '@Pages/energiatodistus/form-parts/units/q50';
+  import Crak from '@Pages/energiatodistus/form-parts/units/c-rak';
+  import V from '@Pages/energiatodistus/form-parts/units/v';
 
-  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as formats from '@Utility/formats';
 
   export let disabled;

@@ -2,9 +2,9 @@
   import { _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
-  import LitraaPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-volume-over-area';
+  import Input from '@Pages/energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Pages/energiatodistus/form-parts/units/annual-energy-over-area';
+  import LitraaPerAlaUnit from '@Pages/energiatodistus/form-parts/units/annual-volume-over-area';
 
   export let disabled;
   export let schema;

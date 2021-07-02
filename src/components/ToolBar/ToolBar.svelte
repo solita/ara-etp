@@ -6,12 +6,12 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as et from '@Pages/energiatodistus/energiatodistus-utils';
 
   import Confirm from '@Component/Confirm/Confirm';
-  import Signing from '@Component/Energiatodistus/signing';
+  import Signing from '@Pages/energiatodistus/signing';
   import TyojonoButton from './tyojono-button';
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
+  import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toolbar from './toolbar-utils';

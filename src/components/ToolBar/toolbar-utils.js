@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import * as Kayttaja from '@Utility/kayttajat';
-import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
 
 export const modules = [
   'tyojono',

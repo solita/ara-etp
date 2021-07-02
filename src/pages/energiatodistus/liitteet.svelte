@@ -7,8 +7,8 @@
   import * as formats from '@Utility/formats';
   import * as parsers from '@Utility/parsers';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
-  import * as valvontaApi from '@Component/Energiatodistus/valvonta-api';
+  import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as valvontaApi from '@Pages/energiatodistus/valvonta-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';

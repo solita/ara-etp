@@ -14,13 +14,13 @@
   import * as Router from '@Component/Router/router';
   import qs from 'qs';
 
-  import * as ETViews from '@Component/Energiatodistus/views';
+  import * as ETViews from '@Pages/energiatodistus/views';
 
   import * as Links from './links';
 
   import * as api from './valvonta-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as EnergiatodistusApi from '@Component/Energiatodistus/energiatodistus-api';
+  import * as EnergiatodistusApi from '@Pages/energiatodistus/energiatodistus-api';
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
@@ -30,7 +30,7 @@
   import H1 from '@Component/H/H1.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Pagination from '@Component/Pagination/Pagination';
-  import Address from '@Component/Energiatodistus/address';
+  import Address from '@Pages/energiatodistus/address';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
 

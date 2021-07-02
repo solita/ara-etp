@@ -8,9 +8,9 @@
   import * as Response from '@Utility/response';
   import * as Query from '@Utility/query';
 
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
-  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
-  import * as ETViews from '@Component/Energiatodistus/views';
+  import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as et from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as ETViews from '@Pages/energiatodistus/views';
   import Pagination from '@Component/Pagination/Pagination';
 
   import { flatSchema } from '@Component/energiatodistus-haku/schema';
@@ -29,7 +29,7 @@
   import Link from '@Component/Link/Link';
   import Confirm from '@Component/Confirm/Confirm';
   import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
-  import Address from '@Component/Energiatodistus/address';
+  import Address from '@Pages/energiatodistus/address';
 
   import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';

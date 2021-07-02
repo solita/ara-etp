@@ -3,7 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import H3 from '@Component/H/H3';
-  import Textarea from '@Component/Energiatodistus/Textarea';
+  import Textarea from '@Pages/energiatodistus/Textarea';
 
   export let disabled;
   export let schema;

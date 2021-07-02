@@ -4,10 +4,10 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import Textarea from '@Component/Energiatodistus/Textarea';
-  import ELukuUnit from '@Component/Energiatodistus/form-parts/units/e-luku';
-  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
+  import Input from '@Pages/energiatodistus/Input';
+  import Textarea from '@Pages/energiatodistus/Textarea';
+  import ELukuUnit from '@Pages/energiatodistus/form-parts/units/e-luku';
+  import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
 
   export let disabled;
   export let schema;

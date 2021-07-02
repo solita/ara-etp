@@ -7,7 +7,7 @@
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  import * as ETViews from '@Component/Energiatodistus/views';
+  import * as ETViews from '@Pages/energiatodistus/views';
 
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';

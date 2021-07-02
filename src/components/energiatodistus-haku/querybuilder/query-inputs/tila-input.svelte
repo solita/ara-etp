@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
 
   import Select from '@Component/Select/Select';
 

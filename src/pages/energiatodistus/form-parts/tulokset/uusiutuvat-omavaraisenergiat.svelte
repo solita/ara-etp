@@ -1,13 +1,13 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import VuosituottoUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
-  import VuosituottoAreaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area.svelte';
+  import Input from '@Pages/energiatodistus/Input';
+  import VuosituottoUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
+  import VuosituottoAreaUnit from '@Pages/energiatodistus/form-parts/units/annual-energy-over-area.svelte';
 
   import * as formats from '@Utility/formats';
   import * as fxmath from '@Utility/fxmath';

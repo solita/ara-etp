@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
-import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
 import * as DeepObjects from '@Utility/deep-objects';
 
 export const OPERATOR_TYPES = Object.freeze({

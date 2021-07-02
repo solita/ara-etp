@@ -10,6 +10,8 @@ import * as dfns from 'date-fns';
 
 import * as Toimenpiteet from './toimenpiteet';
 
+import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
+
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
   valvonta: id => `${url.valvonnat}/${id}`,

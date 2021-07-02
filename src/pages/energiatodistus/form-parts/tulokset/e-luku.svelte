@@ -5,7 +5,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as formats from '@Utility/formats';
 
-  import Input from '@Component/Energiatodistus/Input';
+  import Input from '@Pages/energiatodistus/Input';
   import BasicInput from '@Component/Input/Input';
 
   export let eTehokkuus = Maybe.None();

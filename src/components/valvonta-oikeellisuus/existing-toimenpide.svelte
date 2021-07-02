@@ -12,7 +12,7 @@
 
   import * as ValvontaApi from './valvonta-api';
   import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
+  import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
 
   import { _ } from '@Language/i18n';
 

@@ -2,14 +2,14 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  import * as EtUtils from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as formats from '@Utility/formats';
   import * as fxmath from '@Utility/fxmath';
 
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
+  import Input from '@Pages/energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Pages/energiatodistus/form-parts/units/annual-energy-over-area';
 
   export let disabled;
   export let schema;

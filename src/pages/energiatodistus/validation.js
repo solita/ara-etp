@@ -1,13 +1,13 @@
-import * as laatimisvaiheet from '@Component/Energiatodistus/laatimisvaiheet';
-import * as kielisyys from '@Component/Energiatodistus/kielisyys';
+import * as laatimisvaiheet from '@Pages/energiatodistus/laatimisvaiheet';
+import * as kielisyys from '@Pages/energiatodistus/kielisyys';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
-import * as Inputs from '@Component/Energiatodistus/inputs';
+import * as Inputs from '@Pages/energiatodistus/inputs';
 import * as validation from '@Utility/validation';
 import * as deep from '@Utility/deep-objects';
 import * as Kayttajat from '@Utility/kayttajat';
-import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
+import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
 
 export const isIlmanvaihtoKuvausRequired = R.compose(
   Maybe.exists(R.equals(6)),

@@ -4,7 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { _ } from '@Language/i18n';
 
-  import * as Inputs from '@Component/Energiatodistus/inputs';
+  import * as Inputs from '@Pages/energiatodistus/inputs';
 
   import QueryInput from './query-input';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';

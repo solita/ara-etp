@@ -5,14 +5,14 @@
   import * as Maybe from '@Utility/maybe-utils';
   import { _, locale } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as Validation from '@Component/Energiatodistus/validation';
-  import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as Validation from '@Pages/energiatodistus/validation';
+  import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
 
   import Select from '@Component/Select/Select';
   import H3 from '@Component/H/H3';
-  import Input from '@Component/Energiatodistus/Input';
-  import VuosikulutusPerAlaUnit from '@Component/Energiatodistus/form-parts/units/annual-energy-over-area';
-  import VuosikulutusUnit from '@Component/Energiatodistus/form-parts/units/annual-energy';
+  import Input from '@Pages/energiatodistus/Input';
+  import VuosikulutusPerAlaUnit from '@Pages/energiatodistus/form-parts/units/annual-energy-over-area';
+  import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
 
   export let disabled;
   export let schema;

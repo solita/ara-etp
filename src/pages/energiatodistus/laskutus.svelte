@@ -10,11 +10,11 @@
   import Select from '@Component/Select/Select';
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as api from '@Component/Energiatodistus/energiatodistus-api';
+  import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
   import { flashMessageStore } from '@/stores';
-  import Loading from '../Loading/Loading.svelte';
+  import Loading from '@Component/Loading/Loading.svelte';
   import Input from '@Component/Input/Input';
   import EtInput from './Input';
   import HR from '@Component/HR/HR.svelte';
