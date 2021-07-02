@@ -3,7 +3,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import * as EtApi from './energiatodistus-api';
+  import * as EtApi from '@Component/Energiatodistus/energiatodistus-api';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';

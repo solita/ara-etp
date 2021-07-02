@@ -3,15 +3,15 @@
   import wrap from 'svelte-spa-router/wrap';
 
   import EnergiatodistusResolver from './energiatodistus-resolver';
-  import ExistingEnergiatodistus from './ExistingEnergiatodistus';
-  import NewEnergiatodistus from './NewEnergiatodistus';
+  import ExistingEnergiatodistus from './existing-energiatodistus';
+  import NewEnergiatodistus from './new-energiatodistus';
   import Energiatodistukset from './energiatodistukset';
   import Liitteet from './liitteet';
   import Viestit from './viestit';
   import NewKetju from './new-ketju';
-  import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
   import Muutoshistoria from './muutoshistoria';
+  import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import NotFound from '@Component/NotFound/NotFound';
 
   const prefix = '/energiatodistus';

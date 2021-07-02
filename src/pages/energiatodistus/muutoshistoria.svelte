@@ -6,7 +6,7 @@
   import * as Formats from '@Utility/formats';
   import * as dfns from 'date-fns';
 
-  import * as api from './energiatodistus-api';
+  import * as api from '@Component/Energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
@@ -16,7 +16,7 @@
   import H2 from '@Component/H/H2';
   import Overlay from '@Component/Overlay/Overlay';
   import Link from '@Component/Link/Link.svelte';
-  import * as Inputs from './inputs';
+  import * as Inputs from '@Component/Energiatodistus/inputs';
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus.muutoshistoria';

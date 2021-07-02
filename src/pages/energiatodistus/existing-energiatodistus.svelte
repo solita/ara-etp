@@ -6,10 +6,10 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import EnergiatodistusForm from './EnergiatodistusForm';
+  import EnergiatodistusForm from '@Component/Energiatodistus/EnergiatodistusForm';
 
-  import * as et from './energiatodistus-utils';
-  import * as api from './energiatodistus-api';
+  import * as et from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as api from '@Component/Energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import Overlay from '@Component/Overlay/Overlay';

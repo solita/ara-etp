@@ -11,10 +11,10 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import EnergiatodistusForm from './EnergiatodistusForm';
-  import * as empty from './empty';
-  import * as ET from './energiatodistus-utils';
-  import * as api from './energiatodistus-api';
+  import EnergiatodistusForm from '@Component/Energiatodistus/EnergiatodistusForm';
+  import * as empty from '@Component/Energiatodistus/empty';
+  import * as ET from '@Component/Energiatodistus/energiatodistus-utils';
+  import * as api from '@Component/Energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
