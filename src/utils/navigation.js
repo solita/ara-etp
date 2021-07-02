@@ -184,10 +184,14 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     label: i18n('navigation.valvonta.oikeellisuus'),
     href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`
   },
-  {
-    label: i18n('navigation.kaytonvalvonta'),
-    href: `#/valvonta/kaytto/all?valvoja-id=${whoami.id}&has-valvoja=false`
-  },
+  ...(isDev
+    ? [
+        {
+          label: i18n('navigation.kaytonvalvonta'),
+          href: `#/valvonta/kaytto/all?valvoja-id=${whoami.id}&has-valvoja=false`
+        }
+      ]
+    : []),
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
