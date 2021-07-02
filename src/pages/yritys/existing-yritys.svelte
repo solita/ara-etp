@@ -13,8 +13,8 @@
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
-  import * as api from './yritys-api';
-  import * as Yritykset from './yritys-utils';
+  import * as api from '@Component/Yritys/yritys-api';
+  import * as Yritykset from '@Component/Yritys/yritys-utils';
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 

@@ -6,11 +6,11 @@
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
 
-  import * as api from './yritys-api';
+  import * as api from '@Component/Yritys/yritys-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as Tila from './laatija-yritys-tila';
-  import * as Yritykset from './yritys-utils';
+  import * as Tila from '@Component/Yritys/laatija-yritys-tila';
+  import * as Yritykset from '@Component/Yritys/yritys-utils';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';

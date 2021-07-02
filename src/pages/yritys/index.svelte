@@ -1,8 +1,8 @@
 <script>
   import Router from 'svelte-spa-router';
 
-  import NewYritys from './NewYritys';
-  import ExistingYritys from './ExistingYritys';
+  import NewYritys from './new-yritys';
+  import ExistingYritys from './existing-yritys';
   import Yritykset from './yritykset';
   import Laatijat from './laatijat';
   import NotFound from '@Component/NotFound/NotFound';

@@ -10,10 +10,10 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import YritysForm from '@Component/Yritys/YritysForm';
-  import * as YritysUtils from './yritys-utils';
+  import * as YritysUtils from '@Component/Yritys/yritys-utils';
   import { flashMessageStore } from '@/stores';
 
-  import * as api from './yritys-api';
+  import * as api from '@Component/Yritys/yritys-api';
   import * as Locales from '@Language/locale-utils';
 
   let overlay = false;
