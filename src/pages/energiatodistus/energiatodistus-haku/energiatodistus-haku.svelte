@@ -11,7 +11,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
 
-  import * as EtHakuSchema from '@Component/energiatodistus-haku/schema';
+  import * as EtHakuSchema from './schema';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
 
   import * as EtHakuUtils from './energiatodistus-haku-utils';

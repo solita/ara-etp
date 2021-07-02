@@ -13,7 +13,7 @@
   import * as ETViews from '@Pages/energiatodistus/views';
   import Pagination from '@Component/Pagination/Pagination';
 
-  import { flatSchema } from '@Component/energiatodistus-haku/schema';
+  import { flatSchema } from '@Pages/energiatodistus/energiatodistus-haku/schema';
 
   import { querystring } from 'svelte-spa-router';
   import qs from 'qs';
@@ -28,10 +28,10 @@
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link';
   import Confirm from '@Component/Confirm/Confirm';
-  import EnergiatodistusHaku from '@Component/energiatodistus-haku/energiatodistus-haku';
+  import EnergiatodistusHaku from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku';
   import Address from '@Pages/energiatodistus/address';
 
-  import * as EtHakuUtils from '@Component/energiatodistus-haku/energiatodistus-haku-utils';
+  import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
   const i18n = $_;

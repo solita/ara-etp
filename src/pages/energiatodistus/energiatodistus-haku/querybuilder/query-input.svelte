@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import { OPERATOR_TYPES } from '@Component/energiatodistus-haku/schema';
+  import { OPERATOR_TYPES } from '@Pages/energiatodistus/energiatodistus-haku/schema';
 
   import Select from '@Component/Select/Select';
 
