@@ -9,7 +9,7 @@
   import H1 from '@Component/H/H1';
   import Select from '@Component/Select/Select';
   import Pagination from '@Component/Pagination/items-pagination';
-  import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as yritysApi from '@Pages/yritys/yritys-api';
   import * as geoApi from '@Component/Geo/geo-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';

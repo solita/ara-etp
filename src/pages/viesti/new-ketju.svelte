@@ -15,7 +15,7 @@
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
-  import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as Viestit from './viesti-util';
   import * as Schema from './schema';
 

@@ -12,7 +12,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
 
   import * as EtHakuSchema from './schema';
-  import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
 
   import * as EtHakuUtils from './energiatodistus-haku-utils';
   import Input from '@Component/Input/Input';

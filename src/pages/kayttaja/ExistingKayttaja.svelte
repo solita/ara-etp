@@ -6,15 +6,15 @@
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
   import * as geoApi from '@Component/Geo/geo-api';
-  import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
 
-  import KayttajaForm from './KayttajaForm.svelte';
-  import LaatijaForm from '@Component/Laatija/LaatijaForm.svelte';
+  import KayttajaForm from '../../components/Kayttaja/KayttajaForm.svelte';
+  import LaatijaForm from '@Pages/laatija/LaatijaForm.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 

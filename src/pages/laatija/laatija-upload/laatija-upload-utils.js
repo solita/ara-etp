@@ -4,7 +4,7 @@ import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as parsers from '@Utility/parsers';
 import * as Validation from '@Utility/validation';
-import { schema } from '@Component/Laatija/schema';
+import { schema } from '@Pages/laatija/schema';
 
 export const futurizeFileRead = file =>
   Future.Future((reject, resolve) => {

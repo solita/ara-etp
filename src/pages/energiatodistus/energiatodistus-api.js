@@ -6,7 +6,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as empty from './empty';
 import * as schema from './schema';
-import * as laatijaApi from '@Component/Laatija/laatija-api';
+import * as laatijaApi from '@Pages/laatija/laatija-api';
 import * as yritysApi from '@Pages/yritys/yritys-api';
 import * as dfns from 'date-fns';
 import * as LaatijaYritysTila from '@Pages/yritys/laatija-yritys-tila';

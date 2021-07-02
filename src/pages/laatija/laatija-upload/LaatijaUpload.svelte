@@ -14,7 +14,7 @@
   import { flashMessageStore } from '@/stores';
 
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as laatijaApi from '@Component/Laatija/laatija-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
