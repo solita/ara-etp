@@ -10,7 +10,7 @@
 
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
+  import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';

@@ -20,9 +20,9 @@
   import MuistioForm from './muistio-form.svelte';
   import LisatietopyyntoForm from './lisatietopyynto-form.svelte';
   import ResponseForm from './response-form.svelte';
-  import Button from '../Button/Button.svelte';
+  import Button from '@Component/Button/Button.svelte';
   import { flashMessageStore } from '@/stores';
-  import TextButton from '../Button/TextButton.svelte';
+  import TextButton from '@Component/Button/TextButton.svelte';
 
   export let toimenpide;
   export let templatesByType;

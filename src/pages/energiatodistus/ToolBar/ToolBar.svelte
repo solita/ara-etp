@@ -12,7 +12,7 @@
   import Signing from '@Pages/energiatodistus/signing';
   import TyojonoButton from './tyojono-button';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
+  import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toolbar from './toolbar-utils';
 

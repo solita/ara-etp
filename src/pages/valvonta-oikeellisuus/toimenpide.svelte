@@ -11,7 +11,7 @@
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
-  import Link from '../Link/Link.svelte';
+  import Link from '@Component/Link/Link.svelte';
   import ShowMore from '@Component/show-more/show-more';
 
   import ChangeDeadlineDialog from './change-deadline-dialog';

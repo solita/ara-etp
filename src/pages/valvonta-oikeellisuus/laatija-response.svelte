@@ -7,7 +7,7 @@
 
   import { _, locale } from '@Language/i18n';
 
-  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
+  import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';

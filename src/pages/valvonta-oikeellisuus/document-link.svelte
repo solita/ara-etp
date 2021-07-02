@@ -1,5 +1,5 @@
 <script>
-  import * as ValvontaApi from '@Component/valvonta-oikeellisuus/valvonta-api';
+  import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import Link from '@Component/Link/Link.svelte';
 
   export let toimenpide;
