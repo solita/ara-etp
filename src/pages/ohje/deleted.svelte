@@ -1,6 +1,6 @@
 <script>
   import { _ } from '@Language/i18n';
-  import Navigation from '@Component/ohje/navigation';
+  import Navigation from '@Pages/ohje/navigation';
 
   const i18n = $_;
 </script>

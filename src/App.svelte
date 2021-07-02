@@ -12,7 +12,7 @@
   import TableStyles from '@/TableStyles';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
-  import * as ohjeApi from '@Component/ohje/ohje-api';
+  import * as ohjeApi from '@Pages/ohje/ohje-api';
   import * as Future from '@Utility/future-utils';
   import Body from './Body.svelte';
 

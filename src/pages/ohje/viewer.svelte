@@ -6,14 +6,14 @@
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as api from '@Component/ohje/ohje-api';
+  import * as api from '@Pages/ohje/ohje-api';
   import { flashMessageStore } from '@/stores';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H1 from '@Component/H/H1';
   import Link from '@Component/Link/Link';
-  import Navigation from '@Component/ohje/navigation';
+  import Navigation from '@Pages/ohje/navigation';
   import DOMPurify from 'dompurify';
   import Marked from 'marked';
   import Style from '@Component/text-editor/style.svelte';
