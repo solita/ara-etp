@@ -3,7 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
 
-  import * as api from '@Component/Yritys/yritys-api';
+  import * as api from '@Pages/yritys/yritys-api';
 
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
@@ -11,7 +11,7 @@
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
-  import Address from '@Component/Yritys/address';
+  import Address from '@Pages/yritys/address';
 
   const i18n = $_;
 

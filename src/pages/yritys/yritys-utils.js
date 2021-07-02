@@ -3,7 +3,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as validation from '@Utility/validation';
-import * as Tila from '@Component/Yritys/laatija-yritys-tila';
+import * as Tila from '@Pages/yritys/laatija-yritys-tila';
 
 export const emptyYritys = () => ({
   ytunnus: '',

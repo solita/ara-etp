@@ -11,13 +11,13 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Confirm from '@Component/Confirm/Confirm';
   import Overlay from '@Component/Overlay/Overlay.svelte';
-  import Address from '@Component/Yritys/address.svelte';
+  import Address from '@Pages/yritys/address.svelte';
 
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as laatijaApi from './laatija-api';
-  import * as yritysApi from '@Component/Yritys/yritys-api';
-  import * as Tila from '@Component/Yritys/laatija-yritys-tila';
+  import * as yritysApi from '@Pages/yritys/yritys-api';
+  import * as Tila from '@Pages/yritys/laatija-yritys-tila';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';

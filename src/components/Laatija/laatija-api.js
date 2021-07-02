@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
-import * as yritysApi from '@Component/Yritys/yritys-api';
+import * as yritysApi from '@Pages/yritys/yritys-api';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as kayttajat from '@Utility/kayttajat';

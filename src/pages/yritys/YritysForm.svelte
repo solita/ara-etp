@@ -12,7 +12,7 @@
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Component/Geo/country-utils';
 
-  import Autocomplete from '../Autocomplete/Autocomplete';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';

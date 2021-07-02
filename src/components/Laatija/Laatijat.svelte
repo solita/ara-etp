@@ -10,7 +10,7 @@
   import Select from '@Component/Select/Select';
   import Pagination from '@Component/Pagination/items-pagination';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
-  import * as yritysApi from '@Component/Yritys/yritys-api';
+  import * as yritysApi from '@Pages/yritys/yritys-api';
   import * as geoApi from '@Component/Geo/geo-api';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
   import { locale, _ } from '@Language/i18n';

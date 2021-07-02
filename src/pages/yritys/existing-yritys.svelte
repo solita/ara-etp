@@ -7,14 +7,14 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
 
-  import YritysForm from '@Component/Yritys/YritysForm';
+  import YritysForm from '@Pages/yritys/YritysForm';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
-  import * as api from '@Component/Yritys/yritys-api';
-  import * as Yritykset from '@Component/Yritys/yritys-utils';
+  import * as api from '@Pages/yritys/yritys-api';
+  import * as Yritykset from '@Pages/yritys/yritys-utils';
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
 
