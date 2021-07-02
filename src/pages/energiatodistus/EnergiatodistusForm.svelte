@@ -31,7 +31,7 @@
   import * as Postinumero from './postinumero';
   import * as Kayttajat from '@Utility/kayttajat';
 
-  import ToolBar from '@Component/ToolBar/ToolBar';
+  import ToolBar from './ToolBar/ToolBar';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { flashMessageStore } from '@/stores';
