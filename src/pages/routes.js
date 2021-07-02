@@ -5,8 +5,6 @@ import Kayttaja from '@Pages/kayttaja/Kayttaja';
 import Viesti from '@Pages/viesti/viesti';
 import Ohje from '@Pages/ohje';
 import Laatija from '@Pages/laatija/Laatija';
-import Halytykset from '@Component/Halytykset/Halytykset';
-import Kaytonvalvonta from '@Component/Kaytonvalvonta/Kaytonvalvonta';
 import Tyojono from '@Component/Tyojono/Tyojono';
 import Energiatodistus from '@Pages/energiatodistus';
 import Valvonta from '@Component/valvonta-oikeellisuus/router';
@@ -18,8 +16,6 @@ import LandingPage from '@Pages/kayttaja/LandingPage';
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
   '/yritys/*': Yritys,
-  '/halytykset': Halytykset,
-  '/kaytonvalvonta': Kaytonvalvonta,
   '/tyojono': Tyojono,
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
