@@ -18,7 +18,7 @@
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
-  import Link from '../Link/Link.svelte';
+  import Link from '@Component/Link/Link.svelte';
   import Viestiketju from './viestiketju';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Pagination from '@Component/Pagination/Pagination';

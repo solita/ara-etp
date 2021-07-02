@@ -3,7 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as Viestit from '@Component/viesti/viesti-util';
+  import * as Viestit from '@Pages/viesti/viesti-util';
 
   import SenderRecipients from './sender-recipients.svelte';
   import User from './user.svelte';

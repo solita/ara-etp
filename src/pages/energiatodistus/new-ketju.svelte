@@ -3,7 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
-  import NewKetju from '@Component/viesti/new-ketju.svelte';
+  import NewKetju from '@Pages/viesti/new-ketju.svelte';
 
   export let params;
 </script>

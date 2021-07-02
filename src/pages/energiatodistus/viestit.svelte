@@ -8,14 +8,14 @@
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
-  import * as ViestiApi from '@Component/viesti/viesti-api';
+  import * as ViestiApi from '@Pages/viesti/viesti-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H1 from '@Component/H/H1.svelte';
   import Link from '@Component/Link/Link.svelte';
-  import Viestiketju from '@Component/viesti/viestiketju';
+  import Viestiketju from '@Pages/viesti/viestiketju';
 
   const i18n = $_;
 

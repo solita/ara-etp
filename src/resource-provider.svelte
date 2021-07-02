@@ -6,7 +6,7 @@
 
   import * as yritysApi from '@Pages/yritys/yritys-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
-  import * as viestiApi from '@Component/viesti/viesti-api';
+  import * as viestiApi from '@Pages/viesti/viesti-api';
 
   let cancel = () => {};
 

@@ -1,6 +1,6 @@
 <script>
   import * as R from 'ramda';
-  import * as Viestit from '@Component/viesti/viesti-util';
+  import * as Viestit from '@Pages/viesti/viesti-util';
 
   import { _ } from '@Language/i18n';
 

@@ -9,7 +9,7 @@
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
-  import * as Viestit from '@Component/viesti/viesti-util';
+  import * as Viestit from '@Pages/viesti/viesti-util';
   import * as Schema from './schema';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
@@ -21,7 +21,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Textarea from '@Component/Textarea/Textarea.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
-  import AttachEtDialog from '@Component/viesti/attach-energiatodistus-dialog';
+  import AttachEtDialog from '@Pages/viesti/attach-energiatodistus-dialog';
   import Link from '@Component/Link/Link.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Select from '@Component/Select/Select';
