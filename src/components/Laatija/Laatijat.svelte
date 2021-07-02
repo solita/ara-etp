@@ -12,7 +12,7 @@
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as yritysApi from '@Pages/yritys/yritys-api';
   import * as geoApi from '@Component/Geo/geo-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import { locale, _ } from '@Language/i18n';
   import * as locales from '@Language/locale-utils';
   import * as Kayttajat from '@Utility/kayttajat';

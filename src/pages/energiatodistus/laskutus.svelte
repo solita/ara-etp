@@ -11,7 +11,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
   import { flashMessageStore } from '@/stores';
   import Loading from '@Component/Loading/Loading.svelte';

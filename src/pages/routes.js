@@ -1,7 +1,7 @@
 import { wrap } from 'svelte-spa-router/wrap';
 
 import Yritys from '@Pages/yritys';
-import Kayttaja from '@Component/Kayttaja/Kayttaja';
+import Kayttaja from '@Pages/kayttaja/Kayttaja';
 import Viesti from '@Component/viesti/viesti';
 import Ohje from '@Pages/ohje';
 import Laatija from '@Component/Laatija/Laatija';
@@ -12,8 +12,8 @@ import Energiatodistus from '@Pages/energiatodistus';
 import Valvonta from '@Component/valvonta-oikeellisuus/router';
 import ValvontaKaytto from '@Component/valvonta-kaytto/router';
 import NotFound from '@Component/NotFound/NotFound';
-import MyInfo from '@Component/Kayttaja/MyInfo';
-import LandingPage from '@Component/Kayttaja/LandingPage';
+import MyInfo from '@Pages/kayttaja/MyInfo';
+import LandingPage from '@Pages/kayttaja/LandingPage';
 
 export const buildRoutes = currentUser => ({
   '/': LandingPage,

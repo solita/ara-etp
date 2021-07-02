@@ -9,7 +9,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as valvontaApi from '@Pages/energiatodistus/valvonta-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';

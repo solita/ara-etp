@@ -7,7 +7,7 @@
 
   import * as geoApi from '@Component/Geo/geo-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
 
   import * as Maybe from '@Utility/maybe-utils';

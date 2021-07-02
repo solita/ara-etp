@@ -8,7 +8,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
 
   import * as api from './viesti-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as Viestit from '@Component/viesti/viesti-util';
   import * as Schema from './schema';
 

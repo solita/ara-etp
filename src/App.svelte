@@ -10,7 +10,7 @@
   import Footer from '@Component/Footer/Footer';
 
   import TableStyles from '@/TableStyles';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
   import * as ohjeApi from '@Pages/ohje/ohje-api';
   import * as Future from '@Utility/future-utils';

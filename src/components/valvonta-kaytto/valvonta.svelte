@@ -9,7 +9,7 @@
 
   import * as ETViews from '@Pages/energiatodistus/views';
 
-  import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';

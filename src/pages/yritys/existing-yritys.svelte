@@ -16,7 +16,7 @@
   import * as api from '@Pages/yritys/yritys-api';
   import * as Yritykset from '@Pages/yritys/yritys-utils';
   import * as Locales from '@Language/locale-utils';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   export let params;
 

@@ -9,7 +9,7 @@
   import { _ } from '@Language/i18n';
 
   import * as ViestiApi from '@Component/viesti/viesti-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';

@@ -19,7 +19,7 @@
   import * as Links from './links';
 
   import * as api from './valvonta-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as EnergiatodistusApi from '@Pages/energiatodistus/energiatodistus-api';
 
   import { flashMessageStore } from '@/stores';

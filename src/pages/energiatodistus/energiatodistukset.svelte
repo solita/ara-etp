@@ -32,7 +32,7 @@
   import Address from '@Pages/energiatodistus/address';
 
   import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   const i18n = $_;
 

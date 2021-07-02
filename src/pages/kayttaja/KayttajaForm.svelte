@@ -6,7 +6,7 @@
   import H1 from '@Component/H/H1';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
-  import * as KayttajaSchema from '@Component/Kayttaja/schema';
+  import * as KayttajaSchema from '@Pages/kayttaja/schema';
   import { flashMessageStore } from '@/stores';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Maybe from '@Utility/maybe-utils';

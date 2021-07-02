@@ -15,7 +15,7 @@
   import * as Links from './links';
 
   import * as ValvontaApi from './valvonta-api';
-  import * as KayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';
 

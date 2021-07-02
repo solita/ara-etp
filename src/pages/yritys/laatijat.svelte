@@ -8,7 +8,7 @@
 
   import * as api from '@Pages/yritys/yritys-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as Tila from '@Pages/yritys/laatija-yritys-tila';
   import * as Yritykset from '@Pages/yritys/yritys-utils';
 

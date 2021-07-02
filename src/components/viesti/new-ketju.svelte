@@ -14,7 +14,7 @@
   import * as Locales from '@Language/locale-utils';
 
   import * as api from './viesti-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laatijaApi from '@Component/Laatija/laatija-api';
   import * as Viestit from './viesti-util';
   import * as Schema from './schema';

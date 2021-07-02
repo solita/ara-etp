@@ -7,7 +7,7 @@
   import * as dfns from 'date-fns';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';

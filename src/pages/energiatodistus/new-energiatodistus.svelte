@@ -15,7 +15,7 @@
   import * as empty from '@Pages/energiatodistus/empty';
   import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';

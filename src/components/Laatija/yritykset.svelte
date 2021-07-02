@@ -13,7 +13,7 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Address from '@Pages/yritys/address.svelte';
 
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as laatijaApi from './laatija-api';
   import * as yritysApi from '@Pages/yritys/yritys-api';

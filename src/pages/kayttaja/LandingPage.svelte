@@ -6,7 +6,7 @@
   import { _ } from '@Language/i18n';
   import * as Navigation from '@Utility/navigation';
 
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
 
   let failure = Maybe.None();

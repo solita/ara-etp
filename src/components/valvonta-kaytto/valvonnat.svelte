@@ -17,7 +17,7 @@
 
   import * as api from './valvonta-api';
   import * as osapuolet from './osapuolet';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
