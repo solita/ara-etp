@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import { _, locale } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
+  import * as ToimintaAlueUtils from '@Utility/toimintaalue';
 
   import * as Maybe from '@Utility/maybe-utils';
 

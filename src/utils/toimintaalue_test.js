@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 
-import * as ToimintaAlueUtils from './toimintaalue-utils';
+import * as ToimintaAlueUtils from './toimintaalue';
 import * as Maybe from '@Utility/maybe-utils';
 
 describe('ToimintaAlueUtils', () => {

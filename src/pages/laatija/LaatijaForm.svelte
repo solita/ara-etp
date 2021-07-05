@@ -18,9 +18,9 @@
   import { flashMessageStore } from '@/stores';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
-  import * as country from '@Component/Geo/country-utils';
+  import * as country from '@Utility/country';
   import * as Validation from '@Utility/validation';
-  import * as ToimintaAlueUtils from '@Component/Geo/toimintaalue-utils';
+  import * as ToimintaAlueUtils from '@Utility/toimintaalue';
   import * as formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
 

@@ -10,7 +10,7 @@
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
   import * as YritysUtils from './yritys-utils';
-  import * as country from '@Component/Geo/country-utils';
+  import * as country from '@Utility/country';
 
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';

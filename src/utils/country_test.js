@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import * as country from './country-utils';
+import * as country from './country';
 import * as Maybe from '@Utility/maybe-utils';
 
 const testFindCountry = (keyword, countries, expectedCountry) => {
