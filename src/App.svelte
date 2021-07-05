@@ -3,11 +3,11 @@
   import * as Response from '@Utility/response';
 
   import { setupI18n, _ } from '@Language/i18n';
-  import Header from '@Component/Header/Header';
+  import Header from '@Pages/header/Header';
   import Loading from '@Component/Loading/Loading';
   import Login from '@Component/Login/Login';
   import Error from './Error.svelte';
-  import Footer from '@Component/Footer/Footer';
+  import Footer from '@Pages/footer/Footer';
 
   import TableStyles from '@/TableStyles';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
