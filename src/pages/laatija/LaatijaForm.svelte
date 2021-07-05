@@ -11,7 +11,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
-  import ToimintaalueetChecklist from '@Component/ToimintaalueetChecklist/ToimintaalueetChecklist';
+  import ToimintaalueetChecklist from './toimintaalueet-checklist/toimintaalueet-checklist';
 
   import * as LaatijaSchema from './schema';
 
