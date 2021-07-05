@@ -1,4 +1,4 @@
-import NotFound from './NotFound';
+import NotFound from './not-found';
 
 export default { title: 'NotFound' };
 

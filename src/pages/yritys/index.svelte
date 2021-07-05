@@ -5,7 +5,7 @@
   import ExistingYritys from './existing-yritys';
   import Yritykset from './yritykset';
   import Laatijat from './laatijat';
-  import NotFound from '@Component/NotFound/NotFound';
+  import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';

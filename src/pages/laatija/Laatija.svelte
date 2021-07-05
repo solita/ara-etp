@@ -4,7 +4,7 @@
   import LaatijaUpload from '@Pages/laatija/laatija-upload/LaatijaUpload';
   import Yritykset from '@Pages/laatija/yritykset';
   import Laatijat from './Laatijat';
-  import NotFound from '@Component/NotFound/NotFound';
+  import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';

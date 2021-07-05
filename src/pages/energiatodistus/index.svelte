@@ -12,7 +12,7 @@
   import { flashMessageStore } from '@/stores';
   import Muutoshistoria from './muutoshistoria';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import NotFound from '@Component/NotFound/NotFound';
+  import NotFound from '@Pages/not-found/not-found';
 
   const prefix = '/energiatodistus';
   const routes = {

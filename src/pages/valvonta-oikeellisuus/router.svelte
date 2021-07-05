@@ -5,7 +5,7 @@
   import Valvonta from './valvonta';
   import NewToimenpide from './new-toimenpide';
   import ExistingToimenpide from './existing-toimenpide';
-  import NotFound from '@Component/NotFound/NotFound';
+  import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';

@@ -5,7 +5,7 @@
   import OhjeEditor from './editor';
   import OhjeCreator from './creator';
   import OhjeDeleted from './deleted';
-  import NotFound from '@Component/NotFound/NotFound';
+  import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
