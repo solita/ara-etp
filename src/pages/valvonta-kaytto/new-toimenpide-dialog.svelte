@@ -19,7 +19,7 @@
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
   import { flashMessageStore } from '@/stores';
-  import Select from '../Select/Select.svelte';
+  import Select from '@Component/Select/Select';
   import * as Validation from '@Utility/validation';
 
   const i18n = $_;
