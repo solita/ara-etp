@@ -121,7 +121,7 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
 export const parseKayttaja = R.curry(
   (isDev, whoami, i18n, idTranslate, locationParts) => {
     if (
-      Kayttajat.isPatevyydentoteaja(whoami) &&
+      (Kayttajat.isPatevyydentoteaja(whoami) || Kayttajat.isPaakayttaja) &&
       R.compose(
         R.either(R.equals('laatijoidentuonti'), R.equals('all')),
         R.head
@@ -135,6 +135,10 @@ export const parseKayttaja = R.curry(
       Maybe.fromNull,
       R.path(['kayttaja', parseInt(id, 10)])
     )(idTranslate);
+
+    if (R.contains('yritykset', locationParts)) {
+      return [];
+    }
 
     return R.compose(
       Maybe.orSome([]),
@@ -166,11 +170,11 @@ export const parseYritys = R.curry(
 
     if (R.equals('all', id)) return parseRoot(isDev, i18n, whoami);
 
-    if (R.equals('new', id)) {
+    if (R.equals('new', id) || R.contains('laatijat', locationParts)) {
       return [];
-    } else {
-      return linksForYritys(i18n, idTranslate, id);
     }
+
+    return linksForYritys(i18n, idTranslate, id);
   }
 );
 
