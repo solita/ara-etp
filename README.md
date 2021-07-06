@@ -84,22 +84,22 @@ Static assets (images, pdfs, etc.)
 Cypress tests
 
 
-## Best practices
+### Best practices
 
-### Naming things
+#### Naming things
 
 - Directories/files should be kebab-case
 - Imported namespaces should be pascal-case 
 - Otherwise use camel-case.
 
-### Monadic types
+#### Monadic types
 
 Always use proper monadic type for special cases.
 - Instead of null, use Maybe.
 - Everything that could fail (f.ex. parsing/validation) synchronously should be wrapped in Either where Left is error and Right is value.
 - Asynchronous operations should be wrapped in futures.
 
-### Programming style
+#### Programming style
 
 - In general prefer functional programming style.
 - Variable reassignment should only happen with svelte components. Always declare variables with const.
