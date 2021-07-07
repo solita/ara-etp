@@ -9,10 +9,10 @@
 
   import { _ } from '@Language/i18n';
 
-  import Button from '@Component/Button/Button';
   import Textarea from '@Component/Textarea/Textarea';
   import { flashMessageStore } from '@/stores';
   import * as Validation from '@Utility/validation';
+  import Dialog from '@Component/dialog/dialog';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.note';
@@ -62,69 +62,34 @@
   };
 </script>
 
-<style type="text/postcss">
-  dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
-  }
-
-  .content {
-    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
-  }
-
-  h1 {
-    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-3 border-tertiary tracking-xl;
-  }
-
-  .buttons {
-    @apply flex flex-wrap items-center pt-5 mt-5 border-t-3 border-tertiary;
-  }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
-</style>
-
-<dialog on:click|stopPropagation>
-  <form class="content" bind:this={form}>
-    <h1>{i18n(i18nRoot + '.title')}</h1>
-
-    {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
-      </div>
-    {/each}
-
-    <div class="w-full py-4">
-      <Textarea
-        disabled={addPending}
-        id={'note.description'}
-        name={'note.description'}
-        label={i18n(i18nRoot + '.description')}
-        bind:model={note}
-        lens={R.lensProp('description')}
-        required={false}
-        validators={schema.description}
-        {i18n} />
-    </div>
-
-    <div
-      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
-      <div>
-        <Button
-          text={i18n(i18nRoot + '.add-button')}
-          disabled={addPending}
-          showSpinner={addPending}
-          on:click={add(note)} />
-      </div>
-
-      <div>
-        <Button
-          text={i18n(i18nRoot + '.cancel-button')}
-          style={'secondary'}
-          disabled={addPending}
-          on:click={reload} />
-      </div>
-    </div>
-  </form>
-</dialog>
+<Dialog
+  bind:form
+  header={i18n(i18nRoot + '.title')}
+  {error}
+  buttons={[
+    {
+      text: i18n(i18nRoot + '.add-button'),
+      disabled: addPending,
+      showSpinner: addPending,
+      'on:click': _ => add(note)
+    },
+    {
+      text: i18n(i18nRoot + '.cancel-button'),
+      style: 'secondary',
+      disabled: addPending,
+      'on:click': reload
+    }
+  ]}>
+  <div class="w-full py-4">
+    <Textarea
+      disabled={addPending}
+      id={'note.description'}
+      name={'note.description'}
+      label={i18n(i18nRoot + '.description')}
+      bind:model={note}
+      lens={R.lensProp('description')}
+      required={false}
+      validators={schema.description}
+      {i18n} />
+  </div>
+</Dialog>

@@ -4,12 +4,10 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
 
-  import Button from '@Component/Button/Button';
-  import Spinner from '@Component/Spinner/Spinner';
   import Input from '@Component/Input/Input';
-  import H1 from '@Component/H/H1';
   import { _ } from '@Language/i18n';
   import * as api from './viesti-api';
+  import Dialog from '@Component/dialog/dialog';
 
   export let close;
   export let ketjuId;
@@ -74,72 +72,42 @@
   let buttonsDisabled = false;
 </script>
 
-<style type="text/postcss">
-  dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
-  }
-
-  .content {
-    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
-  }
-
-  .buttons {
-    @apply flex flex-wrap items-start mt-5 pt-3 border-t-3 border-tertiary;
-  }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
-</style>
-
-<dialog on:click|stopPropagation on:submit|preventDefault={attach}>
-  <form class="content" bind:this={form}>
-    <H1 text={i18n(i18nRoot + '.title')} />
-
-    {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
-      </div>
-    {/each}
-
-    <div class="lg:mr-64">
-      <Input
-        id={'dialog.attach-et.input'}
-        name={'dialog.attach-et.input'}
-        label={i18n(i18nRoot + '.input-label')}
-        compact={false}
-        required={true}
-        bind:model={inputEtId}
-        {i18n} />
-    </div>
-    <div
-      class="buttons flex-col lg:flex-row space-y-2 lg:space-x-2 lg:space-y-0">
-      <div>
-        <Button
-          disabled={buttonsDisabled}
-          style="primary"
-          type="submit"
-          text={i18n(i18nRoot + '.button-attach')}
-          showSpinner={showAttachSpinner} />
-      </div>
-      <div>
-        <Button
-          disabled={!energiatodistusId || buttonsDisabled}
-          on:click={detach}
-          style="secondary"
-          text={i18n(i18nRoot + '.button-detach')}
-          showSpinner={showDetachSpinner} />
-      </div>
-      <div class="lg:justify-self-end lg:ml-auto">
-        <Button
-          disabled={buttonsDisabled}
-          on:click={() => {
-            close(false);
-          }}
-          style="secondary"
-          text={i18n('peruuta')} />
-      </div>
-    </div>
-  </form>
-</dialog>
+<Dialog
+  bind:form
+  header={i18n(i18nRoot + '.title')}
+  {error}
+  buttons={[
+    {
+      disabled: buttonsDisabled,
+      'on:click': attach,
+      style: 'primary',
+      text: i18n(i18nRoot + '.button-attach'),
+      showSpinner: showAttachSpinner
+    },
+    {
+      disabled: !energiatodistusId || buttonsDisabled,
+      'on:click': detach,
+      style: 'secondary',
+      text: i18n(i18nRoot + '.button-detach'),
+      showSpinner: showDetachSpinner
+    },
+    {
+      disabled: buttonsDisabled,
+      'on:click': () => {
+        close(false);
+      },
+      style: 'secondary',
+      text: i18n('peruuta')
+    }
+  ]}>
+  <div class="lg:mr-64">
+    <Input
+      id={'dialog.attach-et.input'}
+      name={'dialog.attach-et.input'}
+      label={i18n(i18nRoot + '.input-label')}
+      compact={false}
+      required={true}
+      bind:model={inputEtId}
+      {i18n} />
+  </div>
+</Dialog>
