@@ -50,6 +50,8 @@
     {href}
     class:active={R.compose(
       R.equals($location),
+      R.head,
+      R.split('?'),
       R.dropWhile(R.equals('#')),
       R.defaultTo(href)
     )(activePath)}>
