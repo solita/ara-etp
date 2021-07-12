@@ -13,7 +13,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
 
-  import KayttajaForm from '../../components/Kayttaja/KayttajaForm.svelte';
+  import KayttajaForm from './KayttajaForm.svelte';
   import LaatijaForm from '@Pages/laatija/LaatijaForm.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
