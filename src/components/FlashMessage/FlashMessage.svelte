@@ -4,7 +4,7 @@
   import * as R from 'ramda';
   import { flashMessageStore } from '@/stores';
 
-  import Alert from '@Component/Alert/Alert';
+  import Alert from './Alert';
 
   export let module;
 

@@ -4,7 +4,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Future from '@Utility/future-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 
-import * as ViestiApi from '@Component/viesti/viesti-api';
+import * as ViestiApi from '@Pages/viesti/viesti-api';
 
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 

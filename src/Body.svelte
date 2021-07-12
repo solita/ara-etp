@@ -5,10 +5,10 @@
   import { idTranslateStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
-  import NavigationTabBar from '@Component/navigation/navigation-tab-bar';
-  import Breadcrumb from '@Component/Breadcrumb/breadcrumb';
+  import NavigationTabBar from '@Pages/navigation/navigation-tab-bar';
+  import Breadcrumb from '@Pages/breadcrumb/breadcrumb';
   import ResourceProvider from './resource-provider';
-  import { buildRoutes } from '@Component/routes';
+  import { buildRoutes } from '@Pages/routes';
 
   export let whoami;
   export let config;

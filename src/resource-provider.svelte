@@ -4,9 +4,9 @@
   import { location } from 'svelte-spa-router';
   import { idTranslateStore } from '@/stores';
 
-  import * as yritysApi from '@Component/Yritys/yritys-api';
-  import * as kayttajaApi from '@Component/Kayttaja/kayttaja-api';
-  import * as viestiApi from '@Component/viesti/viesti-api';
+  import * as yritysApi from '@Pages/yritys/yritys-api';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as viestiApi from '@Pages/viesti/viesti-api';
 
   let cancel = () => {};
 

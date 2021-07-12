@@ -15,6 +15,7 @@ module.exports = {
       {
         extensions: ['.svelte', '.js'],
         alias: {
+          '@Pages': './src/pages',
           '@Component': './src/components',
           '@Utility': './src/utils',
           '@Language': './src/language',

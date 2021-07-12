@@ -16,6 +16,7 @@ const ruleLens = (config, testString) =>
 module.exports = async ({ config, mode }) => {
   config.resolve.alias = {
     ...(config.resolve.alias || {}),
+    '@Pages': path.resolve(__dirname, '../src/pages'),
     '@Component': path.resolve(__dirname, '../src/components'),
     '@Utility': path.resolve(__dirname, '../src/utils'),
     '@Language': path.resolve(__dirname, '../src/language'),
