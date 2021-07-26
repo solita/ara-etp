@@ -1233,6 +1233,7 @@
           "messages": {
             "update-success": "Energiatodistus liitoksen päivittäminen onnistui",
             "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui",
+            "update-error-missing-et": "Energiatodistus ei ole olemassa",
             "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero"
           }
         },
