@@ -17,6 +17,8 @@
 
   export let valvojat;
   export let valvonta;
+  export let henkilot;
+  export let yritykset;
   export let toimenpiteet;
   export let toimenpidetyypit;
   export let templatesByType;
@@ -64,6 +66,8 @@
     id={valvonta.id}
     {toimenpide}
     {templatesByType}
+    {henkilot}
+    {yritykset}
     reload={load} />
 {/each}
 

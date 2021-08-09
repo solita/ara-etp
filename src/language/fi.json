@@ -1442,6 +1442,7 @@
     "kaytto": {
       "all": {
         "title": "Käytönvalvonta",
+        "new-kohde": "Uusi valvonta",
         "empty": "Ei valvontatoimenpiteitä",
         "ei-valvojaa": "Ei valvojaa",
         "include-closed": "Näytä myös päättyneet",
@@ -1456,13 +1457,89 @@
         }
       },
       "kohde": {
-        "title": "Kohde"
+        "rakennuksen-tiedot": "Rakennuksen tiedot",
+        "rakennustunnus": "Rakennustunnus",
+        "katuosoite": "Katuosoite",
+        "postinumero": "Postinumero",
+        "ilmoituksen-tiedot": "Ilmoituksen tiedot",
+        "havaintopaiva": "Havaintopäivä",
+        "ilmoituspaikka-id": "Ilmoituspaikka",
+        "ilmoituspaikka-description": "Ilmoituspaikan nimi",
+        "ilmoitustunnus": "Ilmoitustunnus",
+        "save": "Tallenna",
+        "reset": "Tyhjennä",
+        "revert": "Peru muutokset",
+        "cancel": "Peruuta",
+        "delete": "Poista",
+        "new-kohde": "Uusi käytönvalvonta",
+        "title": "Käytönvalvonta",
+        "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen",
+        "no-attachments": "Ei liitteitä",
+        "messages": {
+          "not-found": "Kohdetta ei löydy.",
+          "load-error": "Kohteen tietojen haku epäonnistui.",
+          "save-success": "Kohteen muutokset tallennettu.",
+          "save-error": "Kohteen tallennus epäonnistui.",
+          "delete-success": "Kohde poistettu.",
+          "delete-error": "Kohteen poistaminen epäonnistui.",
+          "add-success": "Kohde lisätty.",
+          "add-error": "Kohteen lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä."
+        }
       },
-      "new-kohde": {
-        "title": "Uusi käytönvalvonta"
+      "osapuolet": {
+        "uusi-henkilo": "Uusi henkilo",
+        "uusi-yritys": "Uusi yritys",
+        "nimi": "Nimi",
+        "etunimi": "Etunimi",
+        "sukunimi": "Sukunimi",
+        "henkilotunnus": "Henkilötunnus",
+        "ytunnus": "Y-tunnus",
+        "rooli-id": "Rooli",
+        "rooli-description": "Roolin kuvaus",
+        "email": "Sähköposti",
+        "puhelin": "Puhelinnumero",
+        "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
+        "jakeluosoite": "Katuosoite tai postilokero",
+        "postinumero": "Postinumero",
+        "postitoimipaikka": "Postitoimipaikka",
+        "maa": "Maa",
+        "toimitustapa-id": "Toimitustapa",
+        "warning-toimitustapa-suomifi-henkilo": "Kun toimitustapa on suomi.fi, tulee henkilötunnus ja osoitetiedot olla täytettynä",
+        "warning-toimitustapa-suomifi-yritys": "Kun toimitustapa on suomi.fi, tulee Y-tunnus ja osoitetiedot olla täytettynä",
+        "warning-toimitustapa-email": "Kun toimitustapa on sahköposti, tulee sahköpostiosoitteen olla täytettynä",
+        "save": "Tallenna",
+        "cancel": "Peru muutokset",
+        "delete": "Poista",
+        "messages": {
+          "not-found": "Osapuolta ei ole olemassa.",
+          "load-error": "Osapuolen tietojen haku epäonnistui.",
+          "save-success": "Osapuolen muutokset tallennettu.",
+          "save-error": "Osapuolen tallennus epäonnistui.",
+          "publish-success": "Osapuoli on lähetetty.",
+          "publish-error": "Osapuolen lähetys epäonnistui.",
+          "preview-error": "Osapuolen esikatselu epäonnistui.",
+          "add-success": "Osapuoli lisätty.",
+          "add-error": "Osapuolen lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
+        }
       },
       "valvonta": {
         "title": "Valvonta",
+        "toimenpiteet": "Toimenpiteet",
+        "rakennustunnus": "Pysyvä rakennustunnus",
+        "ilmoitustunnus": "Ilmoitustunnus",
+        "osapuolet": {
+          "title": "Osapuolet",
+          "nimi": "Nimi",
+          "rooli": "Rooli",
+          "osoite": "Osoite",
+          "email": "Sähköposti",
+          "toimitustapa": "Toimitustapa",
+          "new-henkilo": "Uusi henkilö",
+          "new-yritys": "Uusi yritys",
+          "empty": "Ei osapuolia"
+        },
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy"
         }

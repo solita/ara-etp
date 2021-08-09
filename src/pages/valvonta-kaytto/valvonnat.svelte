@@ -29,6 +29,7 @@
   import Pagination from '@Component/Pagination/Pagination';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
+  import Link from '@Component/Link/Link';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -181,7 +182,15 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={i18n(i18nRoot + '.title')} />
+    <div class="flex justify-between">
+      <H1 text={i18n(i18nRoot + '.title')} />
+      <div class="flex mb-auto">
+        <Link
+          href="/#/valvonta/kaytto/new"
+          icon={Maybe.Some('add_circle_outline')}
+          text={i18n(i18nRoot + '.new-kohde')} />
+      </div>
+    </div>
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
       <div class="flex flex-wrap items-end space-x-4 -ml-4">
         <div class="ml-4 w-1/4">

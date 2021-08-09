@@ -14,6 +14,9 @@
 
   import * as valvontaApi from './valvonta-api';
 
+  export let valvonta;
+  export let henkilot;
+  export let yritykset;
   export let toimenpide;
   export let toimenpidetyypit;
 
@@ -56,16 +59,32 @@
     {/each}
 
     {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
-      <div class="ml-2">
-        <Link
-          text={toimenpide.filename}
-          target={'_blank'}
-          href={valvontaApi.url.document(
-            toimenpide['energiatodistus-id'],
-            toimenpide.id,
-            toimenpide['filename']
-          )} />
-      </div>
+      {#each henkilot as henkilo}
+        <div class="ml-2">
+          <Link
+            text={toimenpide.filename}
+            target={'_blank'}
+            href={valvontaApi.url.documentHenkilo(
+              henkilo.id,
+              valvonta.id,
+              toimenpide.id,
+              toimenpide['filename']
+            )} />
+        </div>
+      {/each}
+      {#each yritykset as yritys}
+        <div class="ml-2">
+          <Link
+            text={toimenpide.filename}
+            target={'_blank'}
+            href={valvontaApi.url.documentYritys(
+              yritys.id,
+              valvonta.id,
+              toimenpide.id,
+              toimenpide['filename']
+            )} />
+        </div>
+      {/each}
     {/if}
   </div>
 

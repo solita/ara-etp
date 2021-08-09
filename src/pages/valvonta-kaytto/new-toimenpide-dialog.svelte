@@ -29,6 +29,8 @@
   export let templatesByType;
   export let toimenpide;
   export let reload;
+  export let henkilot;
+  export let yritykset;
 
   let form;
   let error = Maybe.None();
@@ -69,7 +71,7 @@
     }
   };
 
-  $: preview = toimenpide => {
+  $: preview = api => {
     if (isValidForm(toimenpide)) {
       Future.fork(
         response => {
@@ -88,7 +90,7 @@
           link.click();
           URL.revokeObjectURL(link.href);
         },
-        ValvontaApi.previewToimenpide(id, toimenpide)
+        api
       );
     } else {
       error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
@@ -175,6 +177,52 @@
       </div>
     {/if}
 
+    {#if !R.isEmpty(templates)}
+      <h2>Osapuolet</h2>
+      <div>
+        <table>
+          {#each henkilot as henkilo}
+            <tr>
+              <td>
+                {`${henkilo.etunimi} ${henkilo.sukunimi}`}
+              </td>
+              <td>
+                <Button
+                  text={i18n(i18nRoot + '.preview-button')}
+                  style={'secondary'}
+                  on:click={preview(
+                    ValvontaApi.previewToimenpideForHenkiloOsapuoli(
+                      id,
+                      henkilo.id,
+                      toimenpide
+                    )
+                  )} />
+              </td>
+            </tr>
+          {/each}
+          {#each yritykset as yritys}
+            <tr>
+              <td>
+                {`${yritys.nimi}`}
+              </td>
+              <td>
+                <Button
+                  text={i18n(i18nRoot + '.preview-button')}
+                  style={'secondary'}
+                  on:click={preview(
+                    ValvontaApi.previewToimenpideForYritysOsapuoli(
+                      id,
+                      yritys.id,
+                      toimenpide
+                    )
+                  )} />
+              </td>
+            </tr>
+          {/each}
+        </table>
+      </div>
+    {/if}
+
     <div class="buttons">
       <div class="mr-5 mt-5">
         <Button
@@ -188,15 +236,6 @@
           style={'secondary'}
           on:click={reload} />
       </div>
-
-      {#if !R.isEmpty(templates)}
-        <div class="mt-5 ml-5">
-          <Button
-            text={i18n(i18nRoot + '.preview-button')}
-            style={'secondary'}
-            on:click={preview(toimenpide)} />
-        </div>
-      {/if}
     </div>
   </form>
 </dialog>
