@@ -57,7 +57,7 @@ export const valvontaOikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
       R.always([
         {
           url: '#/valvonta/oikeellisuus/all',
-          label: i18n('navigation.valvonta.oikeellisuus')
+          label: i18n('navigation.valvonta.oikeellisuus.all')
         }
       ])
     ],
@@ -71,7 +71,7 @@ export const valvontaOikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
         },
         {
           url: `#/valvonta/oikeellisuus/${version}/${id}`,
-          label: `${i18n('navigation.valvonta.valvonta')}`
+          label: `${i18n('navigation.valvonta.oikeellisuus.valvonta')}`
         }
       ])
     ]
@@ -85,7 +85,7 @@ export const valvontaKayttoCrumb = R.curry((i18n, [id], _) =>
       R.always([
         {
           url: '#/valvonta/kaytto/all',
-          label: i18n('navigation.kaytonvalvonta')
+          label: i18n('navigation.valvonta.kaytto.all')
         }
       ])
     ],
@@ -94,7 +94,7 @@ export const valvontaKayttoCrumb = R.curry((i18n, [id], _) =>
       R.always([
         {
           url: `#/valvonta/kaytto/${id}`,
-          label: `${i18n('navigation.kaytonvalvonta')}`
+          label: `${i18n('navigation.valvonta.kaytto.all')}`
         }
       ])
     ]
