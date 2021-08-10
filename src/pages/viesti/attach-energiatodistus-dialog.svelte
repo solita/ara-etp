@@ -25,11 +25,15 @@
   const updateKetju = R.compose(
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            `${i18nRoot}.messages.update-error`,
-            Response.localizationKey(response)
-          )
+        const invalidEtId = (
+          response.body.constraint === 'viestiketju-energiatodistus-id-fkey' &&
+          response.body.type === 'foreign-key-violation');
+
+        const msg = i18n(invalidEtId ?
+                         `${i18nRoot}.messages.update-error-missing-et` :
+                         Maybe.orSome(
+                           `${i18nRoot}.messages.update-error`,
+                           Response.localizationKey(response))
         );
         buttonsDisabled = false;
         showAttachSpinner = false;
