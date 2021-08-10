@@ -22,11 +22,14 @@
   import Select from '@Component/Select/Select.svelte';
   import Datepicker from '@Component/Input/Datepicker';
   import Liitteet from '@Component/liitteet/liitteet.svelte';
+  import Link from '@Component/Link/Link';
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
   import * as api from './valvonta-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as ValvontaApi from './valvonta-api';
+  import * as geoApi from '@Component/Geo/geo-api';
 
   export let params;
 
@@ -63,7 +66,12 @@
         kohde: api.getKaytto(id),
         liitteet: api.getKayttoLiitteet(id),
         whoami: KayttajaApi.whoami,
-        ilmoituspaikat: api.ilmoituspaikat
+        ilmoituspaikat: api.ilmoituspaikat,
+        roolit: ValvontaApi.roolit,
+        henkilot: ValvontaApi.getHenkilot(params.id),
+        yritykset: ValvontaApi.getYritykset(params.id),
+        countries: geoApi.countries,
+        toimitustavat: ValvontaApi.toimitustavat
       })
     );
   };
@@ -195,7 +203,7 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { whoami, liitteet, ilmoituspaikat }}
+    {#each Maybe.toArray(resources) as { whoami, liitteet, ilmoituspaikat, roolit, countries, henkilot, yritykset, toimitustavat }}
       <form
         class="content"
         bind:this={form}
@@ -317,7 +325,126 @@
               style={'error'} />
           </Confirm>
         </div>
+        <H2 text={i18n(i18nRoot + '.osapuolet.title')} />
+
+        {#if R.isEmpty(henkilot) && R.isEmpty(yritykset)}
+          {i18n(i18nRoot + '.osapuolet.empty')}
+        {:else}
+          <div class="overflow-x-auto">
+            <table class="etp-table">
+              <thead class="etp-table--thead">
+                <tr class="etp-table--tr etp-table--tr__light">
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.osapuolet.nimi')}
+                  </th>
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.osapuolet.rooli')}
+                  </th>
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.osapuolet.osoite')}
+                  </th>
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.osapuolet.email')}
+                  </th>
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.osapuolet.toimitustapa')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="etp-table--tbody">
+                {#each henkilot as henkilo}
+                  <tr class="etp-table-tr">
+                    <td class="etp-table--td">
+                      <Link
+                        href={`/#/valvonta/kaytto/${params.id}/henkilo/${henkilo.id}`}
+                        text={`${henkilo.etunimi} ${henkilo.sukunimi}`} />
+                    </td>
+                    <td class="etp-table--td">
+                      {Locales.labelForId($locale, roolit)(henkilo['rooli-id'])}
+                      {#if henkilo['rooli-id'] === 2}
+                        {`- ${henkilo['rooli-description']}`}
+                      {/if}
+                    </td>
+                    <td class="etp-table--td">
+                      {`${henkilo.jakeluosoite}, 
+                      ${henkilo.postinumero} 
+                      ${henkilo.postitoimipaikka},
+                      ${Locales.labelForId(
+                        $locale,
+                        countries
+                      )(henkilo['maa'])}`}
+                    </td>
+                    <td class="etp-table--td">
+                      <Link
+                        href={`mailto:${henkilo.email}`}
+                        text={henkilo.email} />
+                    </td>
+                    <td class="etp-table--td">
+                      {Locales.labelForId(
+                        $locale,
+                        toimitustavat
+                      )(henkilo['toimitustapa-id'])}
+                      {#if henkilo['toimitustapa-id'] === 2}
+                        {`- ${henkilo['toimitustapa-description']}`}
+                      {/if}
+                    </td>
+                  </tr>
+                {/each}
+                {#each yritykset as yritys}
+                  <tr class="etp-table-tr">
+                    <td class="etp-table--td">
+                      <Link
+                        href={`/#/valvonta/kaytto/${params.id}/yritys/${yritys.id}`}
+                        text={yritys.nimi} />
+                    </td>
+                    <td class="etp-table--td">
+                      {Locales.labelForId($locale, roolit)(yritys['rooli-id'])}
+                      {#if yritys['rooli-id'] === 2}
+                        {`- ${yritys['rooli-description']}`}
+                      {/if}
+                    </td>
+                    <td class="etp-table--td">
+                      {`${yritys.jakeluosoite}, 
+                      ${yritys.postinumero} 
+                      ${yritys.postitoimipaikka},
+                      ${Locales.labelForId($locale, countries)(yritys['maa'])}`}
+                    </td>
+                    <td class="etp-table--td">
+                      <Link
+                        href={`mailto:${yritys.email}`}
+                        text={yritys.email} />
+                    </td>
+                    <td class="etp-table--td">
+                      {Locales.labelForId(
+                        $locale,
+                        toimitustavat
+                      )(yritys['toimitustapa-id'])}
+                      {#if yritys['toimitustapa-id'] === 2}
+                        {`- ${yritys['toimitustapa-description']}`}
+                      {/if}
+                    </td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </div>
+        {/if}
+        <div class="flex my-4 space-x-4">
+          <div class="flex mb-auto">
+            <Link
+              href="/#/valvonta/kaytto/{params.id}/henkilo/new"
+              icon={Maybe.Some('add_circle_outline')}
+              text={i18n(i18nRoot + '.osapuolet.new-henkilo')} />
+          </div>
+          <div class="flex mb-auto">
+            <Link
+              href="/#/valvonta/kaytto/{params.id}/yritys/new"
+              icon={Maybe.Some('add_circle_outline')}
+              text={i18n(i18nRoot + '.osapuolet.new-yritys')} />
+          </div>
+        </div>
         <div class="flex flex-col">
+          <H2 text={i18n(`${i18nRoot}.attachments`)} />
           <Liitteet
             {liiteApi}
             {liitteet}

@@ -10,13 +10,11 @@
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';
-  import * as geoApi from '@Component/Geo/geo-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
-  import Link from '@Component/Link/Link';
 
   import Manager from './manager.svelte';
   import Toimenpide from './toimenpide.svelte';
@@ -27,7 +25,6 @@
 
   export let params;
   export let resources = Maybe.None();
-  let osapuolet = Maybe.None();
   let overlay = true;
 
   $: load(params);
@@ -49,7 +46,6 @@
       },
       response => {
         resources = Maybe.Some(response);
-        osapuolet;
         overlay = false;
       },
       R.chain(
@@ -63,10 +59,7 @@
             henkilot: ValvontaApi.getHenkilot(params.id),
             yritykset: ValvontaApi.getYritykset(params.id),
             valvonta: ValvontaApi.valvonta(params.id),
-            whoami: Future.resolve(whoami),
-            roolit: ValvontaApi.roolit,
-            toimitustavat: ValvontaApi.toimitustavat,
-            countries: geoApi.countries
+            whoami: Future.resolve(whoami)
           }),
         KayttajaApi.whoami
       )
@@ -124,7 +117,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, templatesByType, valvojat, henkilot, yritykset, valvonta, whoami, roolit, toimitustavat, countries }}
+    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, templatesByType, valvojat, henkilot, yritykset, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -168,121 +161,6 @@
       {#if R.isEmpty(tapahtumat)}
         <p>{i18n(i18nRoot + '.ei-tapahtumia')}</p>
       {/if}
-
-      <H2 text={i18n(i18nRoot + '.osapuolet.title')} />
-
-      {#if R.isEmpty(henkilot) && R.isEmpty(yritykset)}
-        {i18n(i18nRoot + '.osapuolet.empty')}
-      {:else}
-        <div class="overflow-x-auto">
-          <table class="etp-table">
-            <thead class="etp-table--thead">
-              <tr class="etp-table--tr etp-table--tr__light">
-                <th class="etp-table--th">
-                  {i18n(i18nRoot + '.osapuolet.nimi')}
-                </th>
-                <th class="etp-table--th">
-                  {i18n(i18nRoot + '.osapuolet.rooli')}
-                </th>
-                <th class="etp-table--th">
-                  {i18n(i18nRoot + '.osapuolet.osoite')}
-                </th>
-                <th class="etp-table--th">
-                  {i18n(i18nRoot + '.osapuolet.email')}
-                </th>
-                <th class="etp-table--th">
-                  {i18n(i18nRoot + '.osapuolet.toimitustapa')}
-                </th>
-              </tr>
-            </thead>
-            <tbody class="etp-table--tbody">
-              {#each henkilot as henkilo}
-                <tr class="etp-table-tr">
-                  <td class="etp-table--td">
-                    <Link
-                      href={`/#/valvonta/kaytto/${params.id}/henkilo/${henkilo.id}`}
-                      text={`${henkilo.etunimi} ${henkilo.sukunimi}`} />
-                  </td>
-                  <td class="etp-table--td">
-                    {Locales.labelForId($locale, roolit)(henkilo['rooli-id'])}
-                    {#if henkilo['rooli-id'] === 2}
-                      {`- ${henkilo['rooli-description']}`}
-                    {/if}
-                  </td>
-                  <td class="etp-table--td">
-                    {`${henkilo.jakeluosoite}, 
-                    ${henkilo.postinumero} 
-                    ${henkilo.postitoimipaikka},
-                    ${Locales.labelForId($locale, countries)(henkilo['maa'])}`}
-                  </td>
-                  <td class="etp-table--td">
-                    <Link
-                      href={`mailto:${henkilo.email}`}
-                      text={henkilo.email} />
-                  </td>
-                  <td class="etp-table--td">
-                    {Locales.labelForId(
-                      $locale,
-                      toimitustavat
-                    )(henkilo['toimitustapa-id'])}
-                    {#if henkilo['toimitustapa-id'] === 2}
-                      {`- ${henkilo['toimitustapa-description']}`}
-                    {/if}
-                  </td>
-                </tr>
-              {/each}
-              {#each yritykset as yritys}
-                <tr class="etp-table-tr">
-                  <td class="etp-table--td">
-                    <Link
-                      href={`/#/valvonta/kaytto/${params.id}/yritys/${yritys.id}`}
-                      text={yritys.nimi} />
-                  </td>
-                  <td class="etp-table--td">
-                    {Locales.labelForId($locale, roolit)(yritys['rooli-id'])}
-                    {#if yritys['rooli-id'] === 2}
-                      {`- ${yritys['rooli-description']}`}
-                    {/if}
-                  </td>
-                  <td class="etp-table--td">
-                    {`${yritys.jakeluosoite}, 
-                    ${yritys.postinumero} 
-                    ${yritys.postitoimipaikka},
-                    ${Locales.labelForId($locale, countries)(yritys['maa'])}`}
-                  </td>
-                  <td class="etp-table--td">
-                    <Link href={`mailto:${yritys.email}`} text={yritys.email} />
-                  </td>
-                  <td class="etp-table--td">
-                    {Locales.labelForId(
-                      $locale,
-                      toimitustavat
-                    )(yritys['toimitustapa-id'])}
-                    {#if yritys['toimitustapa-id'] === 2}
-                      {`- ${yritys['toimitustapa-description']}`}
-                    {/if}
-                  </td>
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
-      {/if}
-
-      <div class="flex my-4 space-x-4">
-        <div class="flex mb-auto">
-          <Link
-            href="/#/valvonta/kaytto/{params.id}/henkilo/new"
-            icon={Maybe.Some('add_circle_outline')}
-            text={i18n(i18nRoot + '.osapuolet.new-henkilo')} />
-        </div>
-        <div class="flex mb-auto">
-          <Link
-            href="/#/valvonta/kaytto/{params.id}/yritys/new"
-            icon={Maybe.Some('add_circle_outline')}
-            text={i18n(i18nRoot + '.osapuolet.new-yritys')} />
-        </div>
-      </div>
     {/each}
   </div>
   <div slot="overlay-content">
