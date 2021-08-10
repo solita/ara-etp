@@ -26,7 +26,7 @@
   import { flashMessageStore } from '@/stores';
 
   import * as api from './valvonta-api';
-  import * as KayttajaApi from '@Pages/Kayttaja/kayttaja-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   export let params;
 
