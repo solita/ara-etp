@@ -20,7 +20,7 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
   ...(isDev
     ? [
         {
-          label: i18n('navigation.valvonta.valvonta'),
+          label: i18n('navigation.valvonta.oikeellisuus.all'),
           href: '#/valvonta/oikeellisuus/all'
         }
       ]
@@ -60,7 +60,7 @@ export const linksForEnergiatodistus = R.curry(
     ...(Kayttajat.isPaakayttaja(whoami) || isDev
       ? [
           {
-            label: i18n('navigation.valvonta.valvonta'),
+            label: i18n('navigation.valvonta.oikeellisuus.valvonta'),
             href: `#/valvonta/oikeellisuus/${version}/${id}`
           }
         ]
@@ -178,9 +178,30 @@ export const parseYritys = R.curry(
   }
 );
 
-export const parseValvonta = R.curry((isDev, i18n, whoami, locationParts) => {
+export const parseValvontaOikeellisuus = R.curry((isDev, i18n, whoami, locationParts) => {
   if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
   if (R.length(locationParts) > 2) return [];
+
+  return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
+});
+
+export const parseValvontaKaytto = R.curry((isDev, i18n, whoami, locationParts) => {
+  const id = locationParts[0];
+  if (R.equals(id, 'all')) {
+    return parseRoot(isDev, i18n, whoami);
+  } else if (R.equals(id, 'new')) {
+    return [];
+  } else {
+    return [
+      {
+        label: R.replace('{id}', id, i18n('navigation.valvonta.kaytto.kohde')),
+        href: `#/valvonta/kaytto/${id}/kohde`
+      },
+      {
+        label: i18n('navigation.valvonta.kaytto.valvonta'),
+        href: `#/valvonta/kaytto/${id}/valvonta`
+      }];
+  };
 
   return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
 });
@@ -195,13 +216,13 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     href: '#/laatija/all'
   },
   {
-    label: i18n('navigation.valvonta.oikeellisuus'),
+    label: i18n('navigation.valvonta.oikeellisuus.all'),
     href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`
   },
   ...(isDev
     ? [
         {
-          label: i18n('navigation.kaytonvalvonta'),
+          label: i18n('navigation.valvonta.kaytto.all'),
           href: `#/valvonta/kaytto/all?valvoja-id=${whoami.id}&has-valvoja=false`
         }
       ]
@@ -303,11 +324,11 @@ export const navigationParse = R.curry(
         ],
         [
           R.compose(R.equals(['valvonta', 'oikeellisuus']), R.take(2)),
-          R.compose(parseValvonta(isDev, i18n, whoami), R.drop(2))
+          R.compose(parseValvontaOikeellisuus(isDev, i18n, whoami), R.drop(2))
         ],
         [
           R.compose(R.equals(['valvonta', 'kaytto']), R.take(2)),
-          R.compose(parseValvonta(isDev, i18n, whoami), R.drop(2))
+          R.compose(parseValvontaKaytto(isDev, i18n, whoami), R.drop(2))
         ],
         [
           R.compose(R.equals('viesti'), R.head),

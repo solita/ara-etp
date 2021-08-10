@@ -16,10 +16,10 @@ describe('Navigation', () => {
     'navigation.laatijoidentuonti': 'Laatijoiden tuonti',
     'navigation.laatijat': 'Laatijat',
     'navigation.tyojono': 'Työjono',
-    'navigation.kaytonvalvonta': 'Käytönvalvonta',
     'navigation.halytykset': 'Hälytykset',
     'navigation.kayttajat': 'Käyttäjät',
-    'navigation.valvonta.oikeellisuus': 'Oikeellisuuden valvonta'
+    'navigation.valvonta.oikeellisuus.all': 'Oikeellisuuden valvonta',
+    'navigation.valvonta.kaytto.all': 'Käytönvalvonta',
   });
 
   describe('locationParts', () => {

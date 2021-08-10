@@ -42,7 +42,6 @@
     "laatijat": "Laatijat",
     "laskutusajot": "Laskutusajot",
     "tyojono": "Työjono",
-    "kaytonvalvonta": "Käytönvalvonta",
     "halytykset": "Hälytykset",
     "uusi-kayttaja": "Uusi käyttäjä",
     "kayttajat": "Käyttäjät",
@@ -60,8 +59,15 @@
     "yritys-laatijat": "Laatijat",
     "ohjeet": "Laatijan ohjeet",
     "valvonta": {
-      "valvonta": "Valvonta",
-      "oikeellisuus": "Oikeellisuuden valvonta"
+      "kaytto": {
+        "all": "Käytönvalvonta",
+        "kohde": "KV {id}",
+        "valvonta": "Valvonta"
+      },
+      "oikeellisuus": {
+        "all": "Oikeellisuuden valvonta",
+        "valvonta": "Valvonta"
+      }
     },
     "confirmation": {
       "title": "Varmistus poistumisesta",

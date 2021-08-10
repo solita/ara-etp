@@ -65,8 +65,15 @@
     "energiatodistus-viestit": "Meddelanden",
     "etusivu": "Etusivu SV?",
     "valvonta": {
-      "valvonta": "Valvonta SV?",
-      "oikeellisuus": "Oikeellisuuden valvonta SV?"
+      "kaytto": {
+        "all": "Käytönvalvonta SV?",
+        "kohde": "KV {id} SV?",
+        "valvonta": "Valvonta SV?"
+      },
+      "oikeellisuus": {
+        "all": "Oikeellisuuden valvonta SV?",
+        "valvonta": "Valvonta SV?"
+      }
     }
   },
   "errors": {
