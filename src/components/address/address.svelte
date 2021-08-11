@@ -1,4 +1,9 @@
 <script>
+  /**
+   * An html element to show any postal address.
+   * e.g. the postal address of any henkilo or yritys
+   */
+
   export let address;
 </script>
 

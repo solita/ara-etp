@@ -11,7 +11,7 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Confirm from '@Component/Confirm/Confirm';
   import Overlay from '@Component/Overlay/Overlay.svelte';
-  import Address from '@Pages/yritys/address.svelte';
+  import Address from '@Component/address/address.svelte';
 
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as Kayttajat from '@Utility/kayttajat';

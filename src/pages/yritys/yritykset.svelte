@@ -11,7 +11,7 @@
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
-  import Address from '@Pages/yritys/address';
+  import Address from '@Component/address/address';
 
   const i18n = $_;
 
