@@ -46,7 +46,6 @@
       toggleHighlight(false);
     }}
     type="file"
-    bind:files
     {multiple} />
   <span class="material-icons text-primary align-middle">arrow_downward</span>
   <span>{labelText}</span>
