@@ -3,7 +3,7 @@
   import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
-  import * as Postinumero from './postinumero';
+  import * as Postinumero from '@Component/address/postinumero-fi';
   import * as Laatimisvaiheet from '././laatimisvaiheet';
 
   import H2 from '@Component/H/H2';
