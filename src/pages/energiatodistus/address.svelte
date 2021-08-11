@@ -6,7 +6,7 @@
   import * as Locales from '@Language/locale-utils';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import * as Address from '@Component/address/building-address.svelte';
+  import Address from '@Component/address/building-address.svelte';
 
   export let energiatodistus;
   export let postinumerot;
