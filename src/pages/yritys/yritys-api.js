@@ -1,3 +1,6 @@
+/**
+ * @module YritysApi
+ */
 import * as Future from '@Utility/future-utils';
 import * as dfns from 'date-fns';
 import * as geoApi from '@Component/Geo/geo-api';

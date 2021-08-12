@@ -10,7 +10,9 @@
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require @babel/register --reporter dot",
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
     "format": "prettier --write './src/**/*' modheaders.json",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "build:docs": "jsdoc -r -c ./jsdoc/conf.json",
+    "watch:docs": "nodemon --exec npm run build:docs --watch src"
   },
   "browserslist": [
     "defaults"
@@ -79,6 +81,10 @@
     "turndown": "^7.0.0"
   },
   "optionalDependencies": {
-    "cypress": "^6.8.0"
+    "cypress": "^6.8.0",
+    "docdash": "^1.2.0",
+    "jsdoc": "^3.6.7",
+    "nodemon": "^2.0.12",
+    "sveltedoc-parser": "^4.1.0"
   }
 }

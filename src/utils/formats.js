@@ -1,3 +1,7 @@
+/**
+ * @module Formats
+ */
+
 import * as dfns from 'date-fns';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';

@@ -3,6 +3,7 @@
 /.vscode/
 /.nyc_output/
 /coverage/
+/jsdoc/out/
 
 .DS_Store
 

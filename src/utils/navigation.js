@@ -1,3 +1,15 @@
+/**
+ * @module Navigation
+ * @description Functions to return navigation links that should be shown within current page
+ */
+
+/**
+ * @typedef {Object} Link
+ * @property {string} label
+ * @property {string} href
+ * @property {Future?} badge
+ */
+
 import * as R from 'ramda';
 import * as RUtils from '@Utility/ramda-utils';
 import * as Maybe from '@Utility/maybe-utils';
@@ -6,8 +18,14 @@ import * as Kayttajat from '@Utility/kayttajat';
 
 import * as ViestiApi from '@Pages/viesti/viesti-api';
 
+/**
+ * @sig string -> Array [string]
+ */
 export const locationParts = R.compose(R.reject(R.isEmpty), R.split('/'));
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [Link]
+ */
 const linksForLaatija = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.energiatodistukset'),
@@ -35,6 +53,9 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
   }
 ]);
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [Link]
+ */
 export const linksForPatevyydentoteaja = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.laatijoidentuonti'),
@@ -43,6 +64,9 @@ export const linksForPatevyydentoteaja = R.curry((isDev, i18n, whoami) => [
   { label: i18n('navigation.laatijat'), href: '#/laatija/all' }
 ]);
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> string -> string -> Array [Link]
+ */
 export const linksForEnergiatodistus = R.curry(
   (isDev, i18n, whoami, version, id) => [
     {
@@ -85,6 +109,9 @@ export const linksForEnergiatodistus = R.curry(
   ]
 );
 
+/**
+ * @sig Translate -> string -> Array [Link]
+ */
 export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   {
     label: `${i18n('navigation.uusi-energiatodistus')}`,
@@ -105,6 +132,9 @@ export const linksForNewEnergiatodistus = R.curry((i18n, version) => [
   }
 ]);
 
+/**
+ * @sig Translate -> Kayttaja -> Array [Link]
+ */
 export const linksForKayttaja = R.curry((i18n, kayttaja) => {
   return [
     {
@@ -118,6 +148,9 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
   ];
 });
 
+/**
+ * @sig boolean -> Kayttaja -> Translate -> Object -> Array [string] -> Array [Link]
+ */
 export const parseKayttaja = R.curry(
   (isDev, whoami, i18n, idTranslate, locationParts) => {
     if (
@@ -148,6 +181,9 @@ export const parseKayttaja = R.curry(
   }
 );
 
+/**
+ * @sig Translate -> Object -> string -> Array [Link]
+ */
 export const linksForYritys = R.curry((i18n, idTranslate, id) => [
   R.hasPath(['yritys', parseInt(id, 10)], idTranslate)
     ? {
@@ -164,6 +200,9 @@ export const linksForYritys = R.curry((i18n, idTranslate, id) => [
   }
 ]);
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Object -> Array [string] -> Array [Link]
+ */
 export const parseYritys = R.curry(
   (isDev, i18n, whoami, idTranslate, locationParts) => {
     const id = locationParts[0];
@@ -178,6 +217,9 @@ export const parseYritys = R.curry(
   }
 );
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [string] -> Array [Link]
+ */
 export const parseValvontaOikeellisuus = R.curry((isDev, i18n, whoami, locationParts) => {
   if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
   if (R.length(locationParts) > 2) return [];
@@ -185,6 +227,9 @@ export const parseValvontaOikeellisuus = R.curry((isDev, i18n, whoami, locationP
   return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
 });
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [Link]
+ */
 export const parseValvontaKaytto = R.curry((isDev, i18n, whoami, locationParts) => {
   const id = locationParts[0];
   if (R.equals(id, 'all')) {
@@ -237,6 +282,9 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   }
 ]);
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [Link]
+ */
 export const linksForLaskuttaja = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.energiatodistukset'),
@@ -263,6 +311,9 @@ const kayttajaLinksMap = Object.freeze({
   3: linksForLaskuttaja
 });
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [string] -> Array [Link]
+ */
 export const parseEnergiatodistus = R.curry(
   (isDev, i18n, whoami, locationParts) => {
     const [version, id] = R.compose(
@@ -286,6 +337,9 @@ export const parseEnergiatodistus = R.curry(
   }
 );
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [string] -> Array [Link]
+ */
 export const parseViesti = R.curry((isDev, i18n, whoami, locationParts) => {
   if (R.equals('all', R.head(locationParts))) {
     return parseRoot(isDev, i18n, whoami);
@@ -294,6 +348,9 @@ export const parseViesti = R.curry((isDev, i18n, whoami, locationParts) => {
   return [];
 });
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [Link]
+ */
 export const parseRoot = R.curry((isDev, i18n, whoami) =>
   R.converge(R.apply, [
     R.compose(R.prop(R.__, kayttajaLinksMap), R.prop('rooli')),
@@ -301,6 +358,9 @@ export const parseRoot = R.curry((isDev, i18n, whoami) =>
   ])(whoami)
 );
 
+/**
+ * @sig boolean -> Translate -> Kayttaja -> string -> Object -> Array [Link]
+ */
 export const navigationParse = R.curry(
   (isDev, i18n, whoami, location, idTranslate) =>
     R.compose(

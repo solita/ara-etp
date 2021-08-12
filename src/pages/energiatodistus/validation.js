@@ -1,3 +1,6 @@
+/**
+ * @module EnergiatodistusValidation
+ */
 import * as laatimisvaiheet from '@Pages/energiatodistus/laatimisvaiheet';
 import * as kielisyys from '@Pages/energiatodistus/kielisyys';
 import * as R from 'ramda';
