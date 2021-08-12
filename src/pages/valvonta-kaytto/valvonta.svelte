@@ -10,11 +10,13 @@
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';
+  import * as GeoApi from '@Component/Geo/geo-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
+  import Address from '@Component/address/building-address';
 
   import Manager from './manager.svelte';
   import Toimenpide from './toimenpide.svelte';
@@ -59,6 +61,7 @@
             henkilot: ValvontaApi.getHenkilot(params.id),
             yritykset: ValvontaApi.getYritykset(params.id),
             valvonta: ValvontaApi.valvonta(params.id),
+            postinumerot: GeoApi.postinumerot,
             whoami: Future.resolve(whoami)
           }),
         KayttajaApi.whoami
@@ -117,13 +120,15 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, templatesByType, valvojat, henkilot, yritykset, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
 
       <div class="flex flex-col my-4">
-        <span>{`${valvonta.katuosoite}, ${valvonta.postinumero}`}</span>
+        <Address {postinumerot}
+                 katuosoite={Maybe.Some(valvonta.katuosoite)}
+                 postinumero={valvonta.postinumero} />
         <span>
           {`${i18n(i18nRoot + '.rakennustunnus')}: ${valvonta.rakennustunnus}`}
         </span>

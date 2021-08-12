@@ -52,16 +52,18 @@ export const deserializeToimenpide = R.evolve({
   'template-id': Maybe.fromNull
 });
 
+export const deserializeValvonta = R.evolve({
+  postinumero: Maybe.fromNull,
+  'valvoja-id': Maybe.fromNull
+});
+
 export const deserializeValvontaStatus = R.compose(
   R.evolve({
     lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull)
   }),
+  deserializeValvonta,
   Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
 );
-
-export const deserializeValvonta = R.evolve({
-  'valvoja-id': Maybe.fromNull
-});
 
 export const serializeValvonta = R.omit(['id']);
 

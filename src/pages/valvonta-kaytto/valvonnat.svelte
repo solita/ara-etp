@@ -18,6 +18,7 @@
   import * as api from './valvonta-api';
   import * as osapuolet from './osapuolet';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as geoApi from '@Component/Geo/geo-api';
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
@@ -30,6 +31,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
   import Link from '@Component/Link/Link';
+  import Address from '@Component/address/building-address';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -115,6 +117,7 @@
           queryToBackendParams
         )(query),
         toimenpidetyypit: api.toimenpidetyypit,
+        postinumerot: geoApi.postinumerot,
         valvojat: api.valvojat,
         valvonnat: api.valvonnat(queryToBackendParams(query))
       })
@@ -191,7 +194,7 @@
           text={i18n(i18nRoot + '.new-kohde')} />
       </div>
     </div>
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
+    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot }}
       <div class="flex flex-wrap items-end space-x-4 -ml-4">
         <div class="ml-4 w-1/4">
           <Select
@@ -288,11 +291,9 @@
                   {/if}
                   <td class="etp-table--td">{valvonta.id}</td>
                   <td class="etp-table--td">
-                    <!-- TODO implement generic address component
-                           <Address
-                      energiatodistus={valvonta.energiatodistus}
-                      postinumerot={luokittelut.postinumerot} />
-                      -->
+                    <Address {postinumerot}
+                             katuosoite={Maybe.Some(valvonta.katuosoite)}
+                             postinumero={valvonta.postinumero} />
                   </td>
                   <td class="etp-table--td">
                     {R.join(
