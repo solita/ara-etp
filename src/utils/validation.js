@@ -151,7 +151,7 @@ export const henkilotunnusValidator = {
 export const isLaatijanToteaja = R.test(/^(FISE|KIINKO)$/);
 
 export const isValidEmail = R.test(
-  /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+  /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,10})$/
 );
 
 export const emailValidator = {
