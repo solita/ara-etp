@@ -19,7 +19,7 @@
 </style>
 
 <address>
-  {Maybe.orSome('', katuosoite)}
+  {Maybe.orSome('', katuosoite)},
   <span class="whitespace-no-wrap">
     {Maybe.fold(
       '',

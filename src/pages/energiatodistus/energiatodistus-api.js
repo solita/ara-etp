@@ -8,6 +8,7 @@ import * as empty from './empty';
 import * as schema from './schema';
 import * as laatijaApi from '@Pages/laatija/laatija-api';
 import * as yritysApi from '@Pages/yritys/yritys-api';
+import * as geoApi from '@Component/Geo/geo-api';
 import * as dfns from 'date-fns';
 import * as LaatijaYritysTila from '@Pages/yritys/laatija-yritys-tila';
 
@@ -328,7 +329,7 @@ const luokittelut = {
   lammonjako: Fetch.cached(fetch, '/lammonjako'),
   lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
   ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
-  postinumerot: Fetch.cached(fetch, '/postinumerot'),
+  postinumerot: geoApi.postinumerot,
   kielisyys: Fetch.cached(fetch, '/kielisyys'),
   laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet'),
   patevyydet: Fetch.cached(fetch, '/patevyydet')
