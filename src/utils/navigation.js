@@ -220,37 +220,47 @@ export const parseYritys = R.curry(
 /**
  * @sig boolean -> Translate -> Kayttaja -> Array [string] -> Array [Link]
  */
-export const parseValvontaOikeellisuus = R.curry((isDev, i18n, whoami, locationParts) => {
-  if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
-  if (R.length(locationParts) > 2) return [];
+export const parseValvontaOikeellisuus = R.curry(
+  (isDev, i18n, whoami, locationParts) => {
+    if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
+    if (R.length(locationParts) > 2) return [];
 
-  return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
-});
+    return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
+  }
+);
 
 /**
  * @sig boolean -> Translate -> Kayttaja -> Array [Link]
  */
-export const parseValvontaKaytto = R.curry((isDev, i18n, whoami, locationParts) => {
-  const id = locationParts[0];
-  if (R.equals(id, 'all')) {
-    return parseRoot(isDev, i18n, whoami);
-  } else if (R.equals(id, 'new')) {
-    return [];
-  } else {
-    return [
-      {
-        label: R.replace('{id}', id, i18n('navigation.valvonta.kaytto.kohde')),
-        href: `#/valvonta/kaytto/${id}/kohde`
-      },
-      {
-        label: i18n('navigation.valvonta.kaytto.valvonta'),
-        href: `#/valvonta/kaytto/${id}/valvonta`
-      }];
-  };
+export const parseValvontaKaytto = R.curry(
+  (isDev, i18n, whoami, locationParts) => {
+    const id = locationParts[0];
+    if (R.equals(id, 'all')) {
+      return parseRoot(isDev, i18n, whoami);
+    } else if (R.equals(id, 'new')) {
+      return [];
+    } else {
+      return [
+        {
+          label: R.replace(
+            '{id}',
+            id,
+            i18n('navigation.valvonta.kaytto.kohde')
+          ),
+          href: `#/valvonta/kaytto/${id}/kohde`
+        },
+        {
+          label: i18n('navigation.valvonta.kaytto.valvonta'),
+          href: `#/valvonta/kaytto/${id}/valvonta`
+        }
+      ];
+    }
+  }
+);
 
-  return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
-});
-
+/**
+ * @sig boolean -> Translate -> Kayttaja -> Array [Link]
+ */
 export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   {
     label: i18n('navigation.energiatodistukset'),

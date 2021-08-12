@@ -148,4 +148,31 @@ describe('PaginationUtils:', () => {
       );
     });
   });
+
+  describe('truncate', () => {
+    it('should not truncate with little amount of pages', () => {
+      const numberOfPages = 3;
+      const page = 0;
+
+      const expected = [0, 1, 2];
+
+      assert.deepEqual(PaginationUtils.truncate(numberOfPages, page), expected);
+    });
+
+    it('should truncate with enough pages', () => {
+      const numberOfPages = 21;
+      const page = 0;
+
+      const expected = [0, 1, 19, 20];
+      assert.deepEqual(PaginationUtils.truncate(numberOfPages, page), expected);
+    });
+
+    it('should return near pages for current with enough pages', () => {
+      const numberOfPages = 21;
+      const page = 10;
+
+      const expected = [0, 1, 9, 10, 11, 19, 20];
+      assert.deepEqual(PaginationUtils.truncate(numberOfPages, page), expected);
+    });
+  });
 });

@@ -93,12 +93,16 @@ export const valvontaKayttoCrumb = R.curry((i18n, [id], _) =>
       R.T,
       R.always([
         {
-          url: `#/valvonta/kaytto/${id}`,
-          label: `${i18n('navigation.valvonta.kaytto.all')}`
+          url: '#/valvonta/kaytto/all',
+          label: i18n('navigation.valvonta.kaytto.all')
+        },
+        {
+          url: `#/valvonta/kaytto/${id}/kohde`,
+          label: R.replace('{id}', id, i18n('navigation.valvonta.kaytto.kohde'))
         }
       ])
     ]
-  ])()
+  ])(id)
 );
 
 export const etKetjuCrumb = R.curry((i18n, etId) => [

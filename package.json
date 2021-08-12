@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server --content-base public",
     "storybook": "start-storybook -s ./public -p 6006",
     "test": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
-    "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require @babel/register --reporter dot",
+    "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require init-mocha.js --require @babel/register --reporter dot",
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
     "format": "prettier --write './src/**/*' modheaders.json",
     "cypress": "cypress open",
@@ -86,5 +86,9 @@
     "jsdoc": "^3.6.7",
     "nodemon": "^2.0.12",
     "sveltedoc-parser": "^4.1.0"
+  },
+  "nyc": {
+    "include": "src",
+    "exclude": "src/**/*_test.js"
   }
 }
