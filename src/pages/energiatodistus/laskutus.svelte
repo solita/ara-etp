@@ -3,16 +3,13 @@
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
-  import * as localstorage from './local-storage';
-  import * as dfns from 'date-fns';
 
   import H2 from '@Component/H/H2';
   import Select from '@Component/Select/Select';
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laskutusApi from '@Component/Laskutus/laskutus-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
   import { flashMessageStore } from '@/stores';
   import Loading from '@Component/Loading/Loading.svelte';
   import Input from '@Component/Input/Input';
@@ -23,67 +20,41 @@
   export let whoami;
   export let schema;
 
-  let laatijaYritykset = [];
-  let verkkolaskuoperaattorit = [];
-  let loading = true;
-  let laatija = Maybe.None();
+  let resources = Maybe.None();
   let error = Maybe.None();
-  const toggleLoading = value => {
-    loading = value;
-  };
+
+  const i18n = $_;
 
   $: disabled =
-    energiatodistus['laskutusaika'].isSome() || Kayttajat.isLaskuttaja(whoami);
+    energiatodistus.laskutusaika.isSome() || Kayttajat.isLaskuttaja(whoami);
 
-  const getLaatija = id =>
-    R.equals(id, whoami.id) || Kayttajat.isPaakayttaja(whoami)
-      ? R.map(Maybe.Some, kayttajaApi.getLaatijaById(fetch, id))
-      : Future.resolve(Maybe.None());
-
-  R.compose(
-    Future.fork(
-      () => {
-        error = Maybe.Some($_('energiatodistus.laskutus.load-error'));
-        flashMessageStore.add('Energiatodistus', 'error', error.some());
-      },
-      response => {
-        laatijaYritykset = response[1][0];
-        laatija = response[1][1];
-        verkkolaskuoperaattorit = response[0];
-
-        localstorage.getDefaultLaskutettavaYritysId().forEach(id => {
-          if (
-            R.isNil(energiatodistus.id) &&
-            energiatodistus['laskutettava-yritys-id'].isNone() &&
-            R.any(R.propEq('id', id), laatijaYritykset)
-          ) {
-            energiatodistus = R.assoc(
-              'laskutettava-yritys-id',
-              Maybe.Some(id),
-              energiatodistus
-            );
-          }
-        });
-
-        toggleLoading(false);
-      }
-    ),
-    Future.both(laskutusApi.verkkolaskuoperaattorit),
-    R.converge(Future.both, [api.getLaatijaYritykset(fetch), getLaatija]),
-    Maybe.orSome(whoami.id),
-    R.prop('laatija-id'),
-    R.tap(() => toggleLoading(true))
-  )(energiatodistus);
+  Future.fork(
+    () => {
+      error = Maybe.Some($_('energiatodistus.laskutus.load-error'));
+      flashMessageStore.add('Energiatodistus', 'error', error.some());
+    },
+    response => {
+      resources = Maybe.Some(response);
+    },
+    Future.parallelObject(2, {
+      verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit,
+      laskutusosoitteet: laatijaApi.laskutusosoitteet(whoami.id)
+    }));
 
   const yritysLabel = yritys =>
     yritys.nimi +
-    ' / ' +
     R.compose(
       Maybe.orSome(''),
-      R.map(R.concat(R.__, ' | ')),
+      R.map(R.concat(' / ')),
       R.prop('vastaanottajan-tarkenne')
     )(yritys) +
-    yritys.ytunnus;
+    ' | ' +
+    Maybe.orSome('', yritys.ytunnus);
+
+  const osoiteLabel = R.ifElse(
+    R.compose(R.propEq('id', -1)),
+    _ => i18n('energiatodistus.laskutus.laatijalaskutus'),
+    yritysLabel);
 
   const postiosoite = entity =>
     entity.jakeluosoite +
@@ -92,54 +63,52 @@
     ' ' +
     entity.postitoimipaikka;
 
-  let laskutettavaYritys = Maybe.None();
-  $: laskutettavaYritys = Maybe.chain(
-    Maybe.findById(R.__, laatijaYritykset),
-    energiatodistus['laskutettava-yritys-id']
-  );
+  $: findLaskutusosoite = laskutusosoitteet =>
+    R.chain(Maybe.findById(R.__, laskutusosoitteet),
+      energiatodistus['laskutusosoite-id']);
 
-  $: verkkolaskuoperaattori = R.compose(
+  const verkkolaskuoperaattori = verkkolaskuoperaattorit => R.compose(
+    Maybe.orSome(''),
     R.map(et.selectFormat(R.prop('nimi'), verkkolaskuoperaattorit)),
     R.prop('verkkolaskuoperaattori')
   );
 
-  $: verkkolasku = R.compose(
-    Maybe.toMaybeList,
-    R.juxt([verkkolaskuoperaattori, R.prop('verkkolaskuosoite')])
+  const isVerkkolasku = R.compose(
+    R.all(Maybe.isSome),
+    R.juxt([R.prop('verkkolaskuoperaattori'), R.prop('verkkolaskuosoite')])
   );
 </script>
 
 <H2 text={'* ' + $_('energiatodistus.laskutus.title')} />
 
-{#if !loading}
+{#each Maybe.toArray(resources) as { verkkolaskuoperaattorit, laskutusosoitteet}}
   <div class="flex flex-col lg:flex-row -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Select
-        id={'laskutettava-yritys-id'}
-        name="laskutettava-yritys-id"
-        label={$_('energiatodistus.laskutus.laskutettava')}
+        id="laskutusosoite-id"
+        name="laskutusosoite-id"
+        label={$_('energiatodistus.laskutusosoite-id')}
         required={true}
+        allowNone={false}
         validation={schema.$signature}
-        allowNone={true}
-        noneLabel={'energiatodistus.laskutus.laatijalaskutus'}
         {disabled}
         bind:model={energiatodistus}
-        lens={R.lensPath(['laskutettava-yritys-id'])}
+        lens={R.lensProp('laskutusosoite-id')}
         parse={Maybe.Some}
-        format={et.selectFormat(yritysLabel, laatijaYritykset)}
-        items={R.pluck('id', laatijaYritykset)} />
+        format={et.selectFormat(osoiteLabel, laskutusosoitteet)}
+        items={R.pluck('id', laskutusosoitteet)} />
     </div>
   </div>
   <div class="flex flex-col lg:flex-row -mx-4">
-    {#each laskutettavaYritys.toArray() as yritys}
-      {#each verkkolasku(yritys).toArray() as [operaattori, osoite]}
+    {#each findLaskutusosoite(laskutusosoitteet).toArray() as osoite}
+      {#if isVerkkolasku(osoite)}
         <div class="lg:w-1/2 w-full px-4 py-4">
           <Input
             id="energiatodistus.laskutus.verkkolaskuoperaattori"
             name="energiatodistus.laskutus.verkkolaskuoperaattori"
             label={$_('energiatodistus.laskutus.verkkolaskuoperaattori')}
             disabled={true}
-            model={operaattori} />
+            model={verkkolaskuoperaattori(verkkolaskuoperaattorit)(osoite)} />
         </div>
         <div class="lg:w-1/2 w-full px-4 py-4">
           <Input
@@ -147,32 +116,19 @@
             name="energiatodistus.laskutus.verkkolaskuosoite"
             label={$_('energiatodistus.laskutus.verkkolaskuosoite')}
             disabled={true}
-            model={osoite} />
+            model={Maybe.orSome('', osoite.verkkolaskuosoite)} />
         </div>
-      {/each}
-      {#if verkkolasku(yritys).isNone()}
+      {:else}
         <div class="lg:w-1/2 w-full px-4 py-4">
           <Input
-            id="energiatodistus.laskutus.postiosoite"
-            name="energiatodistus.laskutus.postiosoite"
-            label={$_('energiatodistus.laskutus.postiosoite')}
-            disabled={true}
-            model={postiosoite(yritys)} />
+              id="energiatodistus.laskutus.postiosoite"
+              name="energiatodistus.laskutus.postiosoite"
+              label={$_('energiatodistus.laskutus.postiosoite')}
+              disabled={true}
+              model={postiosoite(osoite)} />
         </div>
       {/if}
     {/each}
-    {#if laskutettavaYritys.isNone()}
-      {#each laatija.toArray() as laatija}
-        <div class="lg:w-1/2 w-full px-4 py-4">
-          <Input
-            id="energiatodistus.laskutus.postiosoite"
-            name="energiatodistus.laskutus.postiosoite"
-            label={$_('energiatodistus.laskutus.postiosoite')}
-            disabled={true}
-            model={postiosoite(laatija)} />
-        </div>
-      {/each}
-    {/if}
   </div>
   <div class="flex flex-col lg:flex-row -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
@@ -184,7 +140,9 @@
         path={['laskuriviviite']} />
     </div>
   </div>
-{:else}
+{/each}
+
+{#if Maybe.isNone(resources)}
   <Loading {error} />
 {/if}
 

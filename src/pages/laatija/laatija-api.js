@@ -10,7 +10,8 @@ import * as dfns from 'date-fns';
 export const url = {
   laatijat: '/api/private/laatijat',
   laatija: id => `${url.laatijat}/${id}`,
-  yritykset: id => `${url.laatija(id)}/yritykset`
+  yritykset: id => `${url.laatija(id)}/yritykset`,
+  laskutusosoitteet: id => `${url.laatija(id)}/laskutusosoitteet`
 };
 
 export const laatijaUploadSerialize = R.evolve({
@@ -83,6 +84,16 @@ export const getYritykset = R.curry((fetch, id) =>
     url.yritykset
   )(id)
 );
+
+export const laskutusosoitteet = R.compose(
+  R.map(R.map(R.evolve({
+    'ytunnus': Maybe.fromNull,
+    'vastaanottajan-tarkenne': Maybe.fromNull,
+    verkkolaskuoperaattori: Maybe.fromNull,
+    verkkolaskuosoite: Maybe.fromNull,
+  }))),
+  Fetch.getJson(fetch),
+  url.laskutusosoitteet);
 
 export const laatijat = R.compose(
   Fetch.responseAsJson,

@@ -349,6 +349,7 @@
     "new": { "draft": "Nytt utkast", "copy-from": "Ny kopia av certifikat" },
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
+    "laskutusosoite-id": "Faktureringsuppgifter som används",
     "laskuriviviite": "Projektreferens (syns på fakturaraden)",
     "korvattu-energiatodistus-id": "Ersätter certifikatet",
     "laskutus": {
@@ -356,7 +357,6 @@
       "postiosoite": "Postadress",
       "verkkolaskuosoite": "Adress för nätfaktura",
       "verkkolaskuoperaattori": "Förmedlingsnummer",
-      "laskutettava": "Faktureringsuppgifter som används",
       "laatijalaskutus": "Personliga faktureringsuppgifter",
       "load-error": "Det gick inte att ladda ner faktureringsuppgifterna"
     },

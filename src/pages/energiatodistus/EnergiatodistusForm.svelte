@@ -9,7 +9,6 @@
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
   import { _ } from '@Language/i18n';
-  import * as localstorage from './local-storage';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
@@ -132,11 +131,6 @@
         dirty = false;
         onSuccessfulSave(...args);
       });
-      if (energiatodistus['laatija-id'].map(R.equals(whoami.id)).orSome(true)) {
-        localstorage.setDefaultLaskutettavaYritysId(
-          energiatodistus['laskutettava-yritys-id']
-        );
-      }
     } else {
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);

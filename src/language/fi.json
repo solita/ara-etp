@@ -378,6 +378,7 @@
     },
     "id": "Energiatodistustunnus",
     "laatija-fullname": "Laatija",
+    "laskutusosoite-id": "Käytettävät laskutustiedot",
     "laskuriviviite": "Projektiviite (näkyy laskurivillä)",
     "korvattu-energiatodistus-id": "Korvaa todistuksen",
     "laskutus": {
@@ -385,7 +386,6 @@
       "postiosoite": "Postiosoite",
       "verkkolaskuosoite": "Verkkolaskuosoite",
       "verkkolaskuoperaattori": "Välittäjätunnus",
-      "laskutettava": "Käytettävät laskutustiedot",
       "laatijalaskutus": "Henkilökohtaiset tiedot",
       "load-error": "Laskutustietojen lataus epäonnistui"
     },
