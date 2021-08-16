@@ -80,6 +80,7 @@ export const energiatodistus2018 = _ => ({
   'tila-id': EtUtils.tila.draft,
   'laatija-id': Maybe.None(),
   'laskutettava-yritys-id': Maybe.None(),
+  'laskutusosoite-id': Maybe.None(),
   'korvaava-energiatodistus-id': Maybe.None(),
   'korvattu-energiatodistus-id': Maybe.None(),
   'draft-visible-to-paakayttaja': false,
