@@ -365,16 +365,6 @@ export const replaceable = R.curry((fetch, id) =>
   )(`api/private/energiatodistukset/replaceable?id=${id}`)
 );
 
-export const getLaatijaYritykset = R.curry((fetch, laatijaId) =>
-  R.compose(
-    R.chain(Future.parallel(10)),
-    R.map(R.map(yritysApi.getYritysById)),
-    R.map(R.map(R.prop('id'))),
-    R.map(R.filter(LaatijaYritysTila.isAccepted)),
-    laatijaApi.getYritykset(fetch)
-  )(laatijaId)
-);
-
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
     numeric: Fetch.cached(fetch, '/validation/numeric/' + version),
