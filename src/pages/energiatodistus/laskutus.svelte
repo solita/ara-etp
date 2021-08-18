@@ -28,7 +28,14 @@
   $: disabled =
     energiatodistus.laskutusaika.isSome() || Kayttajat.isLaskuttaja(whoami);
 
-  Future.fork(
+  $: laatijaId = R.compose(
+    Maybe.orSome(whoami.id),
+    R.prop('laatija-id')
+  )(energiatodistus);
+
+  $: {
+    resources = Maybe.None();
+    Future.fork(
     () => {
       error = Maybe.Some($_('energiatodistus.laskutus.load-error'));
       flashMessageStore.add('Energiatodistus', 'error', error.some());
@@ -38,8 +45,9 @@
     },
     Future.parallelObject(2, {
       verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit,
-      laskutusosoitteet: laatijaApi.laskutusosoitteet(whoami.id)
+      laskutusosoitteet: laatijaApi.laskutusosoitteet(laatijaId)
     }));
+  }
 
   const yritysLabel = yritys =>
     yritys.nimi +
