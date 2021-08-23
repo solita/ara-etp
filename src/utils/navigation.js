@@ -35,14 +35,10 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
     label: i18n('navigation.yritykset'),
     href: `#/laatija/${whoami.id}/yritykset`
   },
-  ...(isDev
-    ? [
-        {
-          label: i18n('navigation.valvonta.oikeellisuus.all'),
-          href: '#/valvonta/oikeellisuus/all'
-        }
-      ]
-    : []),
+  {
+    label: i18n('navigation.valvonta.oikeellisuus.all'),
+    href: '#/valvonta/oikeellisuus/all'
+  },
   {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
@@ -78,26 +74,17 @@ export const linksForEnergiatodistus = R.curry(
           {
             label: i18n('navigation.liitteet'),
             href: `#/energiatodistus/${version}/${id}/liitteet`
-          }
-        ]
-      : []),
-    ...(Kayttajat.isPaakayttaja(whoami) || isDev
-      ? [
+          },
           {
             label: i18n('navigation.valvonta.oikeellisuus.valvonta'),
             href: `#/valvonta/oikeellisuus/${version}/${id}`
           }
         ]
       : []),
-
-    ...(isDev
-      ? [
-          {
-            label: i18n('navigation.energiatodistus-viestit'),
-            href: `#/energiatodistus/${version}/${id}/viestit`
-          }
-        ]
-      : []),
+    {
+      label: i18n('navigation.energiatodistus-viestit'),
+      href: `#/energiatodistus/${version}/${id}/viestit`
+    },
     ...(isDev && !Kayttajat.isLaskuttaja(whoami)
       ? [
           {
