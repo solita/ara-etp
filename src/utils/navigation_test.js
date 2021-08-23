@@ -8,6 +8,7 @@ describe('Navigation', () => {
     'navigation.et': 'ET',
     'navigation.uusi-energiatodistus': 'Uusi energiatodistus',
     'navigation.viestit': 'Viestit',
+    'navigation.energiatodistus-viestit': 'Viestit',
     'navigation.liitteet': 'Liitteet',
     'navigation.muutoshistoria': 'Muutoshistoria',
     'navigation.energiatodistukset': 'Energiatodistukset',
@@ -41,9 +42,9 @@ describe('Navigation', () => {
     it('should return energiatodistus-links when within energiatodistus', () => {
       const expected = [
         { label: 'ET 1', href: '#/energiatodistus/2018/1' },
-        // Hidden until implemented
-        //{ label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' },
-        { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet' }
+        { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet'},
+        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2018/1' },
+        { label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' }
         // Hidden until implemented
         //{
         //  label: 'Muutoshistoria',
@@ -70,6 +71,10 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/2/yritykset`
+        },
+        {
+          href: '#/valvonta/oikeellisuus/all',
+          label: 'Oikeellisuuden valvonta'
         },
         { label: 'Viestit', href: '#/viesti/all' }
       ];
@@ -104,6 +109,10 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/1/yritykset`
+        },
+        {
+          href: '#/valvonta/oikeellisuus/all',
+          label: 'Oikeellisuuden valvonta'
         },
         { label: 'Viestit', href: '#/viesti/all' }
       ];
@@ -168,6 +177,10 @@ describe('Navigation', () => {
         {
           label: 'Yritykset',
           href: `#/laatija/1/yritykset`
+        },
+        {
+          href: '#/valvonta/oikeellisuus/all',
+          label: 'Oikeellisuuden valvonta'
         },
         { label: 'Viestit', href: '#/viesti/all' }
       ];
@@ -429,7 +442,8 @@ describe('Navigation', () => {
       const expected = [
         { label: 'ET 1', href: '#/energiatodistus/2018/1' },
         { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet' },
-        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2018/1' }
+        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2018/1' },
+        { label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' }
       ];
 
       assert.deepEqual(
