@@ -15,6 +15,7 @@
   import qs from 'qs';
 
   import * as ETViews from '@Pages/energiatodistus/views';
+  import * as Toimenpiteet from '@Pages/valvonta-oikeellisuus/toimenpiteet';
 
   import * as Links from './links';
 
@@ -265,6 +266,9 @@
                         $locale,
                         toimenpidetyypit
                       )(toimenpide['type-id'])}
+                      {#if Toimenpiteet.isDraft(toimenpide)}
+                        ({i18n(i18nRoot + '.table.draft')})
+                      {/if}
                     </td>
                     <td
                       class="etp-table--td"

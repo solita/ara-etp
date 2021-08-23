@@ -1270,7 +1270,8 @@
           "type": "Tyyppi",
           "diaarinumero": "Diaarinumero",
           "valvoja": "Käsittelijä",
-          "last-toimenpide": "Edellinen tapahtuma"
+          "last-toimenpide": "Edellinen tapahtuma",
+          "draft": "luonnos"
         },
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
