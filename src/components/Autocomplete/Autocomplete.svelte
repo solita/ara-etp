@@ -26,6 +26,7 @@
     input.blur();
     input.focus();
     input.dispatchEvent(new Event('change', { bubbles: true }));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
   };
 
   $: showDropdown = items.length > 0 && active.isSome();
@@ -74,11 +75,13 @@
 
     input.addEventListener('input', inputHandler);
     input.addEventListener('focus', inputHandler);
+    input.addEventListener('click', inputHandler);
   });
 
   onDestroy(_ => {
     input.removeEventListener('input', inputHandler);
     input.removeEventListener('focus', inputHandler);
+    input.removeEventListener('click', inputHandler);
   });
 
   $: filteredItems = R.compose(

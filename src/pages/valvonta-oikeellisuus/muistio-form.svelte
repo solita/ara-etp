@@ -12,6 +12,8 @@
   import Select from '@Component/Select/Select.svelte';
   import H2 from '@Component/H/H2.svelte';
   import Textarea from '@Component/Textarea/Textarea.svelte';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
+  import Input from '@Component/Input/Input.svelte';
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
   const i18n = $_;
@@ -25,7 +27,6 @@
   export let schema;
   export let dirty;
 
-  let virhetyyppi = Maybe.None();
   let virheInEditMode = Maybe.None();
 
   $: formatTemplate = Locales.labelForId($locale, templates);
@@ -38,28 +39,22 @@
     R.prop('template-id')
   );
 
-  const addVirhe = virhetyyppiId => {
-    if (!isNaN(virhetyyppiId)) {
-      const locale = Maybe.orSome(i18nLocale, toimenpideLocale(toimenpide));
+  const addVirhe = R.forEach(tyyppi => {
+    const locale = Maybe.orSome(i18nLocale, toimenpideLocale(toimenpide));
 
-      const newVirhe = {
-        'type-id': virhetyyppiId,
-        description: R.compose(
-          Locales.prop('description', locale),
-          R.find(R.propEq('id', virhetyyppiId))
-        )(virhetyypit)
-      };
+    const newVirhe = {
+      'type-id': tyyppi.id,
+      description: Locales.prop('description', locale, tyyppi)
+    };
 
-      toimenpide = R.over(
-        R.lensProp('virheet'),
-        R.prepend(newVirhe),
-        toimenpide
-      );
+    toimenpide = R.over(
+      R.lensProp('virheet'),
+      R.prepend(newVirhe),
+      toimenpide
+    );
 
-      virhetyyppi = Maybe.None();
-      dirty = true;
-    }
-  };
+    dirty = true;
+  });
 
   const removeVirhe = index => {
     toimenpide = R.over(R.lensProp('virheet'), R.remove(index, 1), toimenpide);
@@ -82,6 +77,27 @@
     ),
     virhetyypit
   );
+
+  const findVirhetyyppi = (name, virhetyypit) =>
+    Maybe.find(
+      R.compose(
+        R.includes(R.toLower(name)),
+        R.map(R.toLower),
+        R.props(['label-fi', 'label-sv'])
+      ),
+      virhetyypit);
+
+  const selectNewVirhe = event => {
+    const newVirhetyyppi = findVirhetyyppi(event.target.value, virhetyypit);
+    addVirhe(newVirhetyyppi);
+    if (Maybe.isSome(newVirhetyyppi)) {
+      const input = event.target;
+      input.value = '';
+      input.blur();
+      input.focus();
+    }
+  }
+
 </script>
 
 <div class="mb-5">
@@ -117,17 +133,18 @@
 <H2 text="Virheet" />
 {#if !disabled}
   <div class="w-1/2 py-4">
-    <Select
-      label="Lisää uusi virhe"
-      bind:model={virhetyyppi}
-      lens={R.lens(R.identity, R.identity)}
-      inputValueParse={R.prop('id')}
-      format={Locales.label($locale)}
-      on:change={event => addVirhe(parseInt(event.target.value))}
-      required={false}
-      {disabled}
-      validation={schema.publish}
-      items={newVirhetypes} />
+    <Autocomplete items={R.map(Locales.label($locale), newVirhetypes)}
+                  size={10}>
+      <Input
+          id="add-virhe"
+          name="add-virhe"
+          label={i18n(i18nRoot + '.add-virhe')}
+          required={false}
+          {disabled}
+          on:input={selectNewVirhe}
+          search={true}
+          {i18n} />
+    </Autocomplete>
   </div>
 {/if}
 

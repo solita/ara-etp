@@ -1355,6 +1355,7 @@
           "save-button": "Tallenna valvontamuistio",
           "reset-button": "Peruuta",
           "delete-button": "Poista luonnos",
+          "add-virhe": "Lisää virhe",
           "virhe": {
             "description": "Virheen kuvaus"
           },
