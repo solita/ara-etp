@@ -31,7 +31,7 @@
     {disabled}
     bind:model={toimenpide}
     lens={R.lensProp('description')}
-    required={false}
+    required={true}
     format={Maybe.orSome('')}
     parse={Parsers.optionalString}
     validators={schema.description}
