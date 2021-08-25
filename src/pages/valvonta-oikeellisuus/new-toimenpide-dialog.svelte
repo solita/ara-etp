@@ -125,13 +125,17 @@
       'on:click': reload,
       disabled
     },
-    {
-      text: i18n(i18nRoot + '.preview-button'),
-      style: 'secondary',
-      'on:click': _ => preview(toimenpide),
-      disabled,
-      showSpinner: previewPending
-    }
+    ...(Toimenpiteet.hasTemplate(toimenpide)
+      ? [
+          {
+            text: i18n(i18nRoot + '.preview-button'),
+            style: 'secondary',
+            'on:click': _ => preview(toimenpide),
+            disabled,
+            showSpinner: previewPending
+          }
+        ]
+      : [])
   ]}>
   <p>{text(toimenpide, 'info')}</p>
 
