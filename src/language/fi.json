@@ -1333,8 +1333,9 @@
           "title": "Vastaus tietopyyntöön",
           "description": "Vastaus",
           "save-button": "Tallenna",
-          "reset-button": "Peruuta",
-          "publish-button": "Lähetä vastaus"
+          "reset-button": "Peru muutokset",
+          "publish-button": "Lähetä vastaus",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin"
         },
         "rfi-order": {
           "title": "Tietopyyntö kehoitus",
@@ -1356,7 +1357,7 @@
           "title": "Valvontamuistio",
           "publish-button": "Lähetä",
           "save-button": "Tallenna",
-          "reset-button": "Peruuta muutokset",
+          "reset-button": "Peru muutokset",
           "delete-button": "Poista luonnos",
           "add-virhe": "Lisää virhe",
           "virheet-title": "Virheet",
@@ -1367,14 +1368,16 @@
           "severity-title": "Vakavuus",
           "select-severity": "Valitse vakavuus",
           "response-title": "Valvontamuistio",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä.",
+          "draft-info": "Voit jatkaa valvontamuistion tekemistä myöhemmin"
         },
         "audit-reply": {
           "title": "Vastaus valvontamuistioon",
           "description": "Vastaus",
           "publish-button": "Lähetä vastaus",
           "save-button": "Tallenna",
-          "reset-button": "Peruuta"
+          "reset-button": "Peru muutokset",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin"
         },
         "audit-order": {
           "title": "Valvontamuistio kehoitus",
@@ -1405,8 +1408,9 @@
           "title": "Vastaus lisäselvityspyyntöön",
           "description": "Vastaus",
           "save-button": "Tallenna",
-          "reset-button": "Peruuta",
-          "publish-button": "Lähetä vastaus"
+          "reset-button": "Peru muutokset",
+          "publish-button": "Lähetä vastaus",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin"
         },
         "decision-prohibition": {
           "title": "Kieltopäätös",

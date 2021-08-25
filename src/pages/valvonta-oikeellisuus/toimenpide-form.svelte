@@ -134,4 +134,8 @@
     text={i18n(i18nRoot + '.back')}
     icon="arrow_back"
     on:click={_ => Router.pop()} />
+
+  {#if Toimenpiteet.isDraft(toimenpide) && !R.isNil(toimenpide.id)}
+    <p class="mt-2">{text(toimenpide, 'draft-info')}</p>
+  {/if}
 </div>
