@@ -103,7 +103,9 @@
 <div class="mb-5">
   <div class="flex py-4">
     <Datepicker
-      label="Määräpäivä"
+      id="deadline-date"
+      name="deadline-date"
+      label={i18n('valvonta.oikeellisuus.toimenpide.deadline-date')}
       {disabled}
       bind:model={toimenpide}
       lens={R.lensProp('deadline-date')}
@@ -117,7 +119,9 @@
   {#if !R.isEmpty(templates)}
     <div class="w-1/2 py-4">
       <Select
-        label="Valitse asiakirjapohja"
+          id="template-id"
+          name="template-id"
+          label={i18n('valvonta.oikeellisuus.toimenpide.select-template')}
         bind:model={toimenpide}
         lens={R.lensProp('template-id')}
         parse={Maybe.fromNull}
@@ -130,7 +134,7 @@
   {/if}
 </div>
 
-<H2 text="Virheet" />
+<H2 text={i18n(i18nRoot + '.virheet-title')} />
 {#if !disabled}
   <div class="w-1/2 py-4">
     <Autocomplete items={R.map(Locales.label($locale), newVirhetypes)}
@@ -202,15 +206,17 @@
   {/each}
 
   {#if R.isEmpty(toimenpide.virheet)}
-    Ei virheitä
+    {i18n(i18nRoot + '.virheet-empty')}
   {/if}
 </div>
 
-<H2 text="Vakavuus" />
+<H2 text={i18n(i18nRoot + '.severity-title')} />
 
 <div class="w-1/2 py-4">
   <Select
-    label="Valitse vakavuus"
+    id="severity-id"
+    name="severity-id"
+    label={i18n(i18nRoot + '.select-severity')}
     bind:model={toimenpide}
     lens={R.lensProp('severity-id')}
     parse={Maybe.fromNull}

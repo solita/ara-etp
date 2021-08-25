@@ -1297,6 +1297,8 @@
         "response-sent-link": "Katso vastaus."
       },
       "toimenpide": {
+        "deadline-date": "Määräaika",
+        "select-template": "Valitse asiakirjapohja",
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
         "download-button": "Lataa",
@@ -1351,15 +1353,18 @@
         },
         "audit-report": {
           "title": "Valvontamuistio",
-          "publish-button": "Lähetä valvontamuistio",
-          "save-button": "Tallenna valvontamuistio",
-          "reset-button": "Peruuta",
+          "publish-button": "Lähetä",
+          "save-button": "Tallenna",
+          "reset-button": "Peruuta muutokset",
           "delete-button": "Poista luonnos",
           "add-virhe": "Lisää virhe",
+          "virheet-title": "Virheet",
+          "virheet-empty": "Ei virheitä",
           "virhe": {
             "description": "Virheen kuvaus"
           },
-
+          "severity-title": "Vakavuus",
+          "select-severity": "Valitse vakavuus",
           "response-title": "Valvontamuistio",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
