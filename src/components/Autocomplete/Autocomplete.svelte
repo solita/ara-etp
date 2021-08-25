@@ -32,7 +32,7 @@
   $: showDropdown = items.length > 0 && active.isSome();
 
   const keyHandlers = {
-    [keys.DOWN_ARROW]: (_, active) => {
+    [keys.DOWN_ARROW]: (event, active) => {
       if (showDropdown) event.preventDefault();
       return R.compose(
         Maybe.orElse(Maybe.Some(0)),
