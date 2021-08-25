@@ -1302,6 +1302,7 @@
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
         "download-button": "Lataa",
+        "back": "Takaisin",
         "verified": {
           "title": "Merkitse katsotuksi",
           "info": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",

@@ -35,8 +35,9 @@
   export let preview = Maybe.None();
   export let liiteApi;
   export let liitteet;
-  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
+  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
+  const i18n = $_;
   const text = R.compose($_, Toimenpiteet.i18nKey);
 
   const forms = {
@@ -62,7 +63,7 @@
       flashMessageStore.add(
         'valvonta-oikeellisuus',
         'error',
-        $_(`${i18nRoot}.messages.validation-error`)
+        i18n(`${i18nRoot}.messages.validation-error`)
       );
       Validation.blurFormExcludeNested(form);
     }
@@ -80,11 +81,6 @@
 </script>
 
 <H1 text={text(toimenpide, 'title')} />
-
-<TextButton
-  text="Takaisin valvontaan"
-  icon="arrow_back"
-  on:click={_ => Router.pop()} />
 
 <form
   bind:this={form}
@@ -127,15 +123,15 @@
         disabled={!Toimenpiteet.hasTemplate(toimenpide)}
         on:click={previewToimenpide}
         text={!Toimenpiteet.isDraft(toimenpide)
-          ? $_(i18nRoot + '.download-button')
-          : $_(i18nRoot + '.preview-button')} />
+          ? i18n(i18nRoot + '.download-button')
+          : i18n(i18nRoot + '.preview-button')} />
     {/if}
   </div>
 </form>
 
 <div class="mt-5">
   <TextButton
-    text="Takaisin valvontaan"
+    text={i18n(i18nRoot + '.back')}
     icon="arrow_back"
     on:click={_ => Router.pop()} />
 </div>
