@@ -125,7 +125,7 @@
       'on:click': reload,
       disabled
     },
-    ...(Toimenpiteet.hasTemplate(toimenpide)
+    ...(!R.isEmpty(templates)
       ? [
           {
             text: i18n(i18nRoot + '.preview-button'),
