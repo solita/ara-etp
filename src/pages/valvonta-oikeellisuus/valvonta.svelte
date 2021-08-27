@@ -9,10 +9,13 @@
   import { flashMessageStore } from '@/stores';
 
   import * as ETViews from '@Pages/energiatodistus/views';
+  import * as ViestiLinks from '@Pages/viesti/links';
+  import * as Viestit from '@Pages/viesti/viesti-util';
 
   import * as EnergiatodistusApi from '@Pages/energiatodistus/energiatodistus-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
+  import * as ViestiApi from '@Pages/viesti/viesti-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
@@ -25,6 +28,7 @@
   import LaatijaResponse from './laatija-response.svelte';
   import Toimenpide from './toimenpide.svelte';
   import Note from './note.svelte';
+  import Link from '../../components/Link/Link.svelte';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.valvonta';
@@ -71,6 +75,7 @@
             toimenpidetyypit: ValvontaApi.toimenpidetyypit,
             templatesByType: ValvontaApi.templatesByType,
             valvojat: ValvontaApi.valvojat,
+            ketjut: ViestiApi.getEnergiatodistusKetjut(params.id),
             valvonta: ValvontaApi.valvonta(params.id),
             whoami: Future.resolve(whoami)
           }),
@@ -129,11 +134,17 @@
     fork('update', _ => load(params)),
     ValvontaApi.putValvonta(params.id)
   );
+
+  const findketju = (toimenpide, ketjut) =>
+    Maybe.find(R.propEq('vo-toimenpide-id', Maybe.Some(toimenpide.id)), ketjut);
+
+  const ketjuIcon = ketju => Viestit.hasUnreadViesti(ketju.viestit) ?
+    Maybe.Some('mark_email_unread') : Maybe.Some('mail');
 </script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, notes, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -183,6 +194,11 @@
               {i18n}
               reload={_ => load(params)}
               {valvojat} />
+            {#each findketju(tapahtuma, ketjut).toArray() as ketju}
+              <Link href={ViestiLinks.ketju(ketju)}
+                    icon={ketjuIcon(ketju)}
+                    text={ketju.subject}/>
+            {/each}
           {:else}
             <Note note={tapahtuma} {valvojat} {i18n} />
           {/if}

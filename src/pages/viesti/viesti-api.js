@@ -29,6 +29,7 @@ export const deserialize = R.evolve({
   'kayttajarooli-id': Maybe.fromNull,
   'kasittelija-id': Maybe.fromNull,
   'energiatodistus-id': Maybe.fromNull,
+  'vo-toimenpide-id': Maybe.fromNull,
   viestit: R.map(
     R.evolve({
       'sent-time': dfns.parseJSON,
