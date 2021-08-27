@@ -6,19 +6,12 @@ import DOMPurify from 'dompurify';
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/magicUrl', MagicUrl);
 
-export const quill = (node, html = '') => {
+export const quill = (node, {html, toolbar}) => {
   const q = new Quill(node, {
     modules: {
       imageDrop: false,
       magicUrl: true,
-      toolbar: [
-        [{ header: [1, 2, 3, false] }],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        [{ script: 'sub' }, { script: 'super' }],
-        ['bold', 'italic', 'underline'],
-        ['link'],
-        ['clean']
-      ]
+      toolbar: toolbar
     },
     placeholder: '',
     theme: 'snow' // or 'bubble'
@@ -42,7 +35,7 @@ export const quill = (node, html = '') => {
   q.on('text-change', handler);
 
   return {
-    update: html => q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(html)),
+    update: ({html, _}) => q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(html)),
     destroy: _ => q.off('text-change', handler)
   };
 };

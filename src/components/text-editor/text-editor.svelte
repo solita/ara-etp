@@ -35,6 +35,15 @@
   export let compact;
   export let i18n;
 
+  export let toolbar = [
+    [{ header: [1, 2, 3, false] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ script: 'sub' }, { script: 'super' }],
+    ['bold', 'italic', 'underline'],
+    ['link'],
+    ['clean']
+  ];
+
   const toMarkdown = R.bind(turndownService.turndown, turndownService);
 </script>
 
@@ -60,7 +69,7 @@
         on:focusin={api.focus}
         on:focusout={event => api.blur(toMarkdown(event.target.innerHTML))}
         on:text-change={event => api.input(toMarkdown(event.detail.html))}
-        use:quill={Marked(viewValue)} />
+        use:quill={{html: Marked(viewValue), toolbar}} />
     {:else}
       {@html DOMPurify.sanitize(Marked(viewValue))}
     {/if}
