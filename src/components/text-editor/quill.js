@@ -41,5 +41,8 @@ export const quill = (node, html = '') => {
 
   q.on('text-change', handler);
 
-  return () => q.off('text-change', handler);
+  return {
+    update: html => q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(html)),
+    destroy: _ => q.off('text-change', handler)
+  };
 };
