@@ -23,13 +23,7 @@
     R.prop('viestit')
   );
 
-  const hasUnreadViesti = R.compose(
-    R.not,
-    R.isNil,
-    R.find(R.propSatisfies(Maybe.isNone, 'read-time'))
-  );
-
-  $: unread = hasUnreadViesti(ketju.viestit);
+  $: unread = Viestit.hasUnreadViesti(ketju.viestit);
 </script>
 
 <style>

@@ -70,3 +70,9 @@ export const fullName = people =>
     R.find(R.__, people),
     R.propEq('id')
   );
+
+export const hasUnreadViesti = R.compose(
+  R.not,
+  R.isNil,
+  R.find(R.propSatisfies(Maybe.isNone, 'read-time'))
+);
