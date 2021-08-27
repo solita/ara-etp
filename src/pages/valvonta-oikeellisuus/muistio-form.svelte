@@ -138,7 +138,7 @@
 {#if !disabled}
   <div class="w-1/2 py-4">
     <Autocomplete items={R.map(Locales.label($locale), newVirhetypes)}
-                  size={10}>
+                  size={1000}>
       <Input
           id="add-virhe"
           name="add-virhe"
