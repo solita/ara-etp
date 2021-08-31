@@ -2,6 +2,7 @@ import Quill from 'quill';
 import { ImageDrop } from 'quill-image-drop-module';
 import MagicUrl from 'quill-magic-url';
 import DOMPurify from 'dompurify';
+import * as Objects from '@Utility/objects';
 
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/magicUrl', MagicUrl);
@@ -39,9 +40,13 @@ export const quill = (node, {html, toolbar}) => {
 
   // add href for link action anchor elements
   // so that they are visible in focusout.relatedTarget
-  const action = root.getElementsByClassName('ql-action')[0];
+  const action = Objects.requireNotNil(
+    root.getElementsByClassName('ql-action')[0],
+    "Link tool action anchor does not found.");
   action.href="";
-  const remove = root.getElementsByClassName('ql-remove')[0];
+  const remove = Objects.requireNotNil(
+    root.getElementsByClassName('ql-remove')[0],
+    "Link tool remove anchor does not found.");
   remove.href="";
 
   const focusout = event => {
