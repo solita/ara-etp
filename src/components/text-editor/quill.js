@@ -1,7 +1,6 @@
 import Quill from 'quill';
 import { ImageDrop } from 'quill-image-drop-module';
 import MagicUrl from 'quill-magic-url';
-import DOMPurify from 'dompurify';
 import * as Objects from '@Utility/objects';
 
 Quill.register('modules/imageDrop', ImageDrop);
@@ -28,7 +27,7 @@ export const quill = (node, {html, toolbar}) => {
     theme: 'snow' // or 'bubble'
   });
 
-  q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(html));
+  q.clipboard.dangerouslyPasteHTML(html);
 
   const root = node.parentElement;
   const editor = node.getElementsByClassName('ql-editor')[0];
@@ -58,7 +57,7 @@ export const quill = (node, {html, toolbar}) => {
   root.addEventListener('focusout', focusout);
 
   return {
-    update: ({html, _}) => q.clipboard.dangerouslyPasteHTML(DOMPurify.sanitize(html)),
+    update: ({html, _}) => q.clipboard.dangerouslyPasteHTML(html),
     destroy: _ => {
       q.off('text-change', textChange);
       root.removeEventListener('focusout', focusout);
