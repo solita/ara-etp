@@ -9,8 +9,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
-  import { querystring } from 'svelte-spa-router';
-  import { push } from '@Component/Router/router';
+  import { querystring, location, replace } from 'svelte-spa-router';
   import qs from 'qs';
 
   import * as api from './viesti-api';
@@ -23,6 +22,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Pagination from '@Component/Pagination/Pagination';
   import Checkbox from '@Component/Checkbox/Checkbox';
+  import Select from '@Component/Select/Select';
 
   const i18n = $_;
 
@@ -31,26 +31,60 @@
 
   const pageSize = 50;
   let ketjutCount = 0;
-  let page = Maybe.Some(1);
 
-  let filters = {
-    'kasittelija-self': true,
-    'no-kasittelija': true,
-    'include-kasitelty': false
+  const queryStringIntegerProp = R.curry((querystring, prop) =>
+    R.compose(
+      R.chain(Either.toMaybe),
+      R.map(Parsers.parseInteger),
+      Maybe.fromEmpty,
+      R.prop(prop)
+    )(querystring)
+  );
+
+  const queryStringBooleanProp = R.curry((querystring, prop) =>
+    R.compose(
+      R.map(R.equals('true')),
+      Maybe.fromEmpty,
+      R.prop(prop)
+    )(querystring)
+  );
+
+  let query = {
+    page: Maybe.None(),
+    'kasittelija-id': Maybe.None(),
+    'has-kasittelija': Maybe.None(),
+    'include-kasitelty': Maybe.None()
   };
 
-  $: page = R.compose(
-    R.chain(Either.toMaybe),
-    R.map(Parsers.parseInteger),
-    Maybe.fromEmpty,
-    R.prop('page'),
-    qs.parse
-  )($querystring);
+  let parsedQs = qs.parse($querystring);
+
+  query = R.mergeRight(query, {
+    page: queryStringIntegerProp(parsedQs, 'page'),
+    'kasittelija-id': queryStringIntegerProp(parsedQs, 'kasittelija-id'),
+    'has-kasittelija': queryStringBooleanProp(parsedQs, 'has-kasittelija'),
+    'include-kasitelty': queryStringBooleanProp(parsedQs, 'include-kasitelty')
+  });
+
   $: pageCount = Math.ceil(R.divide(ketjutCount, pageSize));
 
-  const nextPageCallback = nextPage => push(`#/viesti/all?page=${nextPage}`);
+  const nextPageCallback = nextPage =>
+    (query = R.assoc('page', Maybe.fromNull(nextPage), query));
 
-  const load = (page, filters) => {
+  const queryToBackendParams = query => ({
+    offset: R.compose(
+      R.map(R.compose(R.multiply(pageSize), R.dec)),
+      R.prop('page')
+    )(query),
+    limit: Maybe.Some(pageSize),
+    'kasittelija-id': R.prop('kasittelija-id', query),
+    'include-kasitelty': R.prop('include-kasitelty', query),
+    'has-kasittelija': R.compose(
+      R.filter(R.not),
+      R.prop('has-kasittelija')
+    )(query)
+  });
+
+  const load = query => {
     overlay = true;
     R.compose(
       Future.fork(
@@ -77,30 +111,13 @@
           ketjutCount: api.getKetjutCount(
             Kayttajat.isLaatija(whoami)
               ? {}
-              : {
-                  'kasittelija-id': filters['kasittelija-self']
-                    ? Maybe.Some(whoami.id)
-                    : Maybe.None(),
-                  'has-kasittelija': filters['no-kasittelija']
-                    ? Maybe.Some(false)
-                    : Maybe.None(),
-                  'include-kasitelty': Maybe.Some(filters['include-kasitelty'])
-                }
+              : R.compose(
+                  R.omit(['offset', 'limit']),
+                  queryToBackendParams
+                )(query)
           ),
           ketjut: api.getKetjut(
-            Kayttajat.isLaatija(whoami)
-              ? {}
-              : {
-                  'kasittelija-id': filters['kasittelija-self']
-                    ? Maybe.Some(whoami.id)
-                    : Maybe.None(),
-                  'has-kasittelija': filters['no-kasittelija']
-                    ? Maybe.Some(false)
-                    : Maybe.None(),
-                  'include-kasitelty': Maybe.Some(filters['include-kasitelty']),
-                  offset: R.map(R.compose(R.multiply(pageSize), R.dec), page),
-                  limit: Maybe.Some(pageSize)
-                }
+            Kayttajat.isLaatija(whoami) ? {} : queryToBackendParams(query)
           ),
           vastaanottajaryhmat: api.vastaanottajaryhmat,
           kasittelijat: api.getKasittelijat
@@ -108,8 +125,6 @@
       )
     )(kayttajaApi.whoami);
   };
-
-  $: load(page, filters);
 
   const submitKasitelty = (ketjuId, kasitelty) => {
     updateKetju(ketjuId, {
@@ -136,7 +151,7 @@
           i18n(`viesti.all.messages.update-success`)
         );
         overlay = false;
-        load(page, filters);
+        load(query);
       }
     ),
     R.tap(() => {
@@ -144,6 +159,33 @@
     }),
     api.putKetju(fetch)
   );
+
+  const isSelf = R.curry((whoami, id) =>
+    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
+  );
+
+  const formatKasittelija = R.curry((kasittelijat, whoami, id) =>
+    R.ifElse(
+      isSelf(whoami),
+      R.always(i18n('viesti.mina')),
+      R.compose(
+        Maybe.orSome('-'),
+        R.map(kasittelija => `${kasittelija.etunimi} ${kasittelija.sukunimi}`),
+        R.chain(id => Maybe.find(R.propEq('id', id), kasittelijat)),
+        Maybe.fromNull
+      )
+    )(id)
+  );
+
+  $: load(query);
+
+  $: R.compose(
+    querystring =>
+      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
+    qs.stringify,
+    R.map(Maybe.get),
+    R.filter(Maybe.isSome)
+  )(query);
 </script>
 
 <Overlay {overlay}>
@@ -160,20 +202,33 @@
       </div>
       {#if !Kayttajat.isLaatija(whoami)}
         <div class="flex justify-between mb-4">
-          <div class="flex">
-            <Checkbox
+          <div class="flex flex-grow">
+            <!--<Checkbox
               id={'checkbox.show-mine'}
               name={'checkbox.show-mine'}
               label={i18n('viesti.all.show-mine')}
               lens={R.lensProp('kasittelija-self')}
               bind:model={filters}
-              disabled={false} />
+              disabled={false} /> -->
+            <div class="w-1/4">
+              <Select
+                compact={true}
+                label={i18n('viesti.kasittelija')}
+                bind:model={query}
+                lens={R.lensProp('kasittelija-id')}
+                items={R.pluck('id', kasittelijat)}
+                format={formatKasittelija(kasittelijat, whoami)}
+                parse={Maybe.Some}
+                allowNone={true} />
+            </div>
             <Checkbox
               id={'checkbox.no-handler'}
               name={'checkbox.no-handler'}
               label={i18n('viesti.all.no-handler')}
-              lens={R.lensProp('no-kasittelija')}
-              bind:model={filters}
+              lens={R.lensProp('has-kasittelija')}
+              bind:model={query}
+              format={R.compose(R.not, Maybe.orSome(false))}
+              parse={R.compose(Maybe.Some, R.not)}
               disabled={false} />
           </div>
           <Checkbox
@@ -181,7 +236,9 @@
             name={'checkbox.show-handled'}
             label={i18n('viesti.all.show-handled')}
             lens={R.lensProp('include-kasitelty')}
-            bind:model={filters}
+            bind:model={query}
+            format={R.compose(Maybe.orSome(false))}
+            parse={R.compose(Maybe.Some)}
             disabled={false} />
         </div>
       {/if}
@@ -203,7 +260,7 @@
       <div class="pagination">
         <Pagination
           {pageCount}
-          pageNum={page.orSome(1)}
+          pageNum={R.compose(Maybe.orSome(1), R.prop('page'))(query)}
           {nextPageCallback}
           itemsPerPage={pageSize}
           itemsCount={ketjutCount} />

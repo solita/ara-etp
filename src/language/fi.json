@@ -1184,6 +1184,7 @@
     "mina": "Minä",
     "message": "viesti",
     "messages": "viestiä",
+    "kasittelija": "Käsittelijä",
     "all": {
       "title": "Viestikeskus",
       "senttime": "Lähetysaika",
@@ -1192,7 +1193,7 @@
       "content": "Sisältö",
       "no-messages": "Ei viestejä",
       "show-mine": "Minä käsittelijänä",
-      "show-handled": "Näytä myös käsitellyt",
+      "show-handled": "Käsitellyt",
       "no-handler": "Ei käsittelijää",
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
