@@ -5,13 +5,14 @@
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
+  import * as MD from '@Component/text-editor/markdown';
 
   import { _, locale } from '@Language/i18n';
 
   import Datepicker from '@Component/Input/Datepicker.svelte';
   import Select from '@Component/Select/Select.svelte';
   import H2 from '@Component/H/H2.svelte';
-  import Textarea from '@Component/Textarea/Textarea.svelte';
+  import TextEditor from '@Component/text-editor/text-editor';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
   import Input from '@Component/Input/Input.svelte';
 
@@ -184,10 +185,15 @@
       </div>
       <div>
         {#if Maybe.exists(R.equals(index), virheInEditMode)}
-          <Textarea
+          <TextEditor
             id={'virhe.description'}
             name={'virhe.description'}
             label={i18n(i18nRoot + '.virhe.description')}
+            toolbar={[
+              [{ script: 'sub' }, { script: 'super' }],
+              ['bold', 'italic', 'underline'],
+              ['clean']
+            ]}
             bind:model={toimenpide}
             lens={R.compose(
               R.lensProp('virheet'),
@@ -199,7 +205,7 @@
             compact={false}
             {i18n} />
         {:else}
-          {virhe.description}
+          {@html MD.toHtml(virhe.description)}
         {/if}
       </div>
     </div>

@@ -1,4 +1,17 @@
 import * as R from 'ramda';
+import DOMPurify from 'dompurify';
+import Marked from 'marked';
+
+Marked.use({
+  tokenizer: {
+    url: _ => null
+  }
+});
+
+export const toHtml = R.compose(
+  DOMPurify.sanitize,
+  Marked
+);
 
 export const toPlainText = R.compose(
   R.join(''),
