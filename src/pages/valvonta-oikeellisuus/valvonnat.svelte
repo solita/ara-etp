@@ -199,8 +199,8 @@
             label={i18n(`${i18nRoot}.ei-valvojaa`)}
             bind:model={query}
             lens={R.lensProp('has-valvoja')}
-            format={R.compose(Maybe.orSome(false))}
-            parse={R.compose(Maybe.Some)} />
+            format={R.compose(R.not, Maybe.orSome(false))}
+            parse={R.compose(Maybe.Some, R.not)} />
           <div class="flex flex-grow md:justify-end">
             <Checkbox
               disabled={overlay}
