@@ -89,6 +89,11 @@ export const LimitedString = (min, max) => [
   maxLengthConstraint(max)
 ];
 
+export const RequiredString = (min, max) => [
+  isRequired,
+  ...LimitedString(min, max)
+];
+
 export const isUrl = R.test(
   /^https?:\/\/(www\.)?[-a-zA-ZäöåÄÖÅ0-9@:%._\+~#=]{1,256}\.[a-zA-ZäöåÄÖÅ0-9()]{1,6}\b([-a-zA-ZäöåÄÖÅ0-9()@:%_\+.~#?&//=]*)$/
 );
