@@ -151,7 +151,7 @@ describe('Navigation', () => {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
         },
-        { label: 'Viestit', href: '#/viesti/all' }
+        { label: 'Viestit', href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false' }
       ];
 
       assert.deepEqual(
@@ -398,7 +398,7 @@ describe('Navigation', () => {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false`
         },
-        { label: 'Viestit', href: '#/viesti/all' }
+        { label: 'Viestit', href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false' }
       ];
 
       assert.deepEqual(
@@ -477,7 +477,7 @@ describe('Navigation', () => {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false`
         },
-        { label: 'Viestit', href: '#/viesti/all' }
+        { label: 'Viestit', href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false' }
       ];
 
       assert.deepEqual(

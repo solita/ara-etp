@@ -553,23 +553,47 @@ describe('BreadcrumbUtils', () => {
   });
 
   describe('viestiCrumb', () => {
-    it('should return all', () => {
+    const laatija = {id: 1, rooli: 0};
+    const paakayttaja = {id: 1, rooli: 2};
+
+    it('should return all for laatija', () => {
       const expected = [{ url: '#/viesti/all', label: 'navigation.viesti' }];
 
       assert.deepEqual(
-        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, locations.all),
+        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, locations.all),
         expected
       );
     });
 
-    it('should return new', () => {
+    it('should return all for paakayttaja', () => {
+      const expected = [{ url: '#/viesti/all?kasittelija-id=1&has-kasittelija=false', label: 'navigation.viesti' }];
+
+      assert.deepEqual(
+        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, paakayttaja, locations.all),
+        expected
+      );
+    });
+
+    it('should return new for laatija', () => {
       const expected = [
         { url: '#/viesti/all', label: 'navigation.viesti' },
         { url: '#/viesti/new', label: 'navigation.uusi-viesti' }
       ];
 
       assert.deepEqual(
-        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, locations.new),
+        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, locations.new),
+        expected
+      );
+    });
+
+    it('should return new for paakayttaja', () => {
+      const expected = [
+        { url: '#/viesti/all?kasittelija-id=1&has-kasittelija=false', label: 'navigation.viesti' },
+        { url: '#/viesti/new', label: 'navigation.uusi-viesti' }
+      ];
+
+      assert.deepEqual(
+        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, paakayttaja, locations.new),
         expected
       );
     });
@@ -582,7 +606,7 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.viestiCrumb(i18n, {}, ['1']),
+          BreadcrumbUtils.viestiCrumb(i18n, {}, laatija, ['1']),
           expected
         );
       });
@@ -594,7 +618,7 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, ['1']),
+          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, ['1']),
           expected
         );
       });
@@ -611,7 +635,7 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, ['2']),
+          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, ['2']),
           expected
         );
       });
@@ -619,17 +643,18 @@ describe('BreadcrumbUtils', () => {
   });
 
   describe('valvontaCrumb', () => {
+    const whoami = {id: 1};
     describe('oikeellisuus', () => {
       it('should return all', () => {
         const expected = [
           {
-            url: '#/valvonta/oikeellisuus/all',
+            url: '#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false',
             label: 'navigation.valvonta.oikeellisuus.all'
           }
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, [
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, [
             'oikeellisuus',
             ...locations.all
           ]),
@@ -654,7 +679,7 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, ['oikeellisuus', '2018', '1']),
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['oikeellisuus', '2018', '1']),
           expected
         );
       });
@@ -669,7 +694,7 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, ['kaytto', ...locations.all]),
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['kaytto', ...locations.all]),
           expected
         );
       });
@@ -687,7 +712,7 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, ['kaytto', '1']),
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['kaytto', '1']),
           expected
         );
       });

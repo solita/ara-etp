@@ -271,7 +271,7 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     : []),
   {
     label: i18n('navigation.viestit'),
-    href: '#/viesti/all',
+    href: `#/viesti/all?kasittelija-id=${whoami.id}&has-kasittelija=false`,
     badge: R.compose(
       R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
       R.map(R.prop('count'))
@@ -293,7 +293,7 @@ export const linksForLaskuttaja = R.curry((isDev, i18n, whoami) => [
   },
   {
     label: i18n('navigation.viestit'),
-    href: '#/viesti/all',
+    href: `#/viesti/all?kasittelija-id=${whoami.id}&has-kasittelija=false`,
     badge: R.compose(
       R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
       R.map(R.prop('count'))
