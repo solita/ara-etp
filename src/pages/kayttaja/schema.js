@@ -2,24 +2,18 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Validation from '@Utility/validation';
 
-const RequiredString = (min, max) => [
-  Validation.isRequired,
-  Validation.minLengthConstraint(min),
-  Validation.maxLengthConstraint(max)
-];
-
 const schema = {
   henkilotunnus: [
     Validation.isSome,
     Validation.liftValidator(Validation.henkilotunnusValidator)
   ],
-  etunimi: RequiredString(2, 200),
-  sukunimi: RequiredString(2, 200),
-  email: [...RequiredString(2, 200), Validation.emailValidator],
-  puhelin: RequiredString(2, 200),
+  etunimi: Validation.RequiredString(2, 200),
+  sukunimi: Validation.RequiredString(2, 200),
+  email: [...Validation.RequiredString(2, 200), Validation.emailValidator],
+  puhelin: Validation.RequiredString(2, 200),
   virtu: {
-    localid: RequiredString(2, 200),
-    organisaatio: RequiredString(2, 200)
+    localid: Validation.RequiredString(2, 200),
+    organisaatio: Validation.RequiredString(2, 200)
   }
 };
 
