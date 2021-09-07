@@ -32,31 +32,31 @@ export const parseCrumb = R.curry((i18n, idTranslate, whoami, location) =>
     ],
     [
       R.compose(R.equals('viesti'), R.head),
-      R.compose(viestiCrumb(i18n, idTranslate), R.tail)
+      R.compose(viestiCrumb(i18n, idTranslate, whoami), R.tail)
     ],
     [
       R.compose(R.equals('valvonta'), R.head),
-      R.compose(valvontaCrumb(i18n), R.tail)
+      R.compose(valvontaCrumb(i18n, whoami), R.tail)
     ],
     [R.T, R.always([])]
   ])(location)
 );
 
-export const valvontaCrumb = R.curry((i18n, [type, ...rest]) =>
+export const valvontaCrumb = R.curry((i18n, whoami, [type, ...rest]) =>
   R.cond([
-    [R.equals('oikeellisuus'), valvontaOikeellisuusCrumb(i18n, [...rest])],
+    [R.equals('oikeellisuus'), valvontaOikeellisuusCrumb(i18n, whoami, [...rest])],
     [R.equals('kaytto'), valvontaKayttoCrumb(i18n, [...rest])],
     [R.T, R.always([])]
   ])(type)
 );
 
-export const valvontaOikeellisuusCrumb = R.curry((i18n, [version, id], _) =>
+export const valvontaOikeellisuusCrumb = R.curry((i18n, whoami, [version, id], _) =>
   R.cond([
     [
       R.equals('all'),
       R.always([
         {
-          url: '#/valvonta/oikeellisuus/all',
+          url: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
           label: i18n('navigation.valvonta.oikeellisuus.all')
         }
       ])
@@ -117,16 +117,23 @@ export const etKetjuCrumb = R.curry((i18n, etId) => [
   }
 ]);
 
-export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
+export const viestiAllCrumb = R.curry((i18n, whoami) => (
+{
+  url: `#/viesti/all${Kayttajat.isPaakayttajaOrLaskuttaja(whoami) ? `?kasittelija-id=${whoami.id}&has-kasittelija=false` : ''}`,
+  label: i18n('navigation.viesti')
+}
+));
+
+export const viestiCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
   R.cond([
     [
       R.equals('all'),
-      R.always([{ url: '#/viesti/all', label: i18n('navigation.viesti') }])
+      R.always([viestiAllCrumb(i18n, whoami)])
     ],
     [
       R.equals('new'),
       R.always([
-        { url: '#/viesti/all', label: i18n('navigation.viesti') },
+        viestiAllCrumb(i18n, whoami),
         { url: '#/viesti/new', label: i18n('navigation.uusi-viesti') }
       ])
     ],
@@ -140,7 +147,7 @@ export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
             ketju => [
               R.compose(
                 Maybe.orSome([
-                  { url: '#/viesti/all', label: i18n('navigation.viesti') }
+                  viestiAllCrumb(i18n, whoami)
                 ]),
                 R.map(R.compose(Array.of, etKetjuCrumb(i18n))),
                 R.prop('energiatodistus-id')
@@ -153,7 +160,7 @@ export const viestiCrumb = R.curry((i18n, idTranslate, [id, ...rest]) =>
             R.path(['viesti', parseInt(id, 10)])
           ),
           R.always([
-            { url: '#/viesti/all', label: i18n('navigation.viesti') },
+            viestiAllCrumb(i18n, whoami),
             {
               url: `#/viesti/${id}`,
               label: `${i18n('navigation.viestiketju')} ${id}`
