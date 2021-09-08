@@ -9,25 +9,38 @@
   import Select from '@Component/Select/Select.svelte';
   import Confirm from '@Component/Confirm/Confirm';
   import { _, locale } from '@Language/i18n';
+  import * as Validation from '@Utility/validation';
+  import { henkilo as schema } from '@Pages/valvonta-kaytto/schema';
+  import { flashMessageStore } from '@/stores';
 
   export let henkilo;
   export let roolit;
   export let toimitustavat;
   export let countries;
-  export let submitHenkilo;
-  export let deleteHenkilo;
-  export let i18n;
-  export let i18nRoot;
-  export let dirty;
+  export let save;
+  export let revert;
+  export let remove = Maybe.None();
+  export let dirty = false;
 
+  const i18n = $_;
+  const i18nRoot = 'valvonta.kaytto.osapuolet';
   let form;
-
-  const submit = event => {
-    submitHenkilo(henkilo, event);
-  };
 
   const setDirty = _ => {
     dirty = true;
+  };
+
+  const submit = _ => {
+    if (Validation.isValidForm(schema)(henkilo)) {
+      save(henkilo);
+    } else {
+      flashMessageStore.add(
+        'valvonta-kaytto',
+        'error',
+        i18n(`${i18nRoot}.messages.validation-error`)
+      );
+      Validation.blurForm(form);
+    }
   };
 </script>
 
@@ -50,6 +63,7 @@
           bind:model={henkilo}
           lens={R.lensProp('etunimi')}
           parse={R.trim}
+          validators={schema.etunimi}
           {i18n} />
       </div>
       <div class="w-full">
@@ -61,6 +75,7 @@
           bind:model={henkilo}
           lens={R.lensProp('sukunimi')}
           parse={R.trim}
+          validators={schema.sukunimi}
           {i18n} />
       </div>
     </div>
@@ -74,6 +89,7 @@
         lens={R.lensProp('henkilotunnus')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
+        validators={schema.henkilotunnus}
         {i18n} />
     </div>
 
@@ -100,6 +116,7 @@
             bind:model={henkilo}
             lens={R.lensProp('rooli-description')}
             parse={R.trim}
+            validators={schema['rooli-description']}
             {i18n} />
         </div>
       {/if}
@@ -116,6 +133,7 @@
           lens={R.lensProp('email')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.email}
           {i18n} />
       </div>
       <div class="w-full">
@@ -127,6 +145,7 @@
           lens={R.lensProp('puhelin')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.puhelin}
           {i18n} />
       </div>
     </div>
@@ -140,6 +159,7 @@
         lens={R.lensProp('vastaanottajan-tarkenne')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
+        validators={schema['vastaanottajan-tarkenne']}
         {i18n} />
     </div>
     <div class="py-4 w-full">
@@ -151,6 +171,7 @@
         lens={R.lensProp('jakeluosoite')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
+        validators={schema.jakeluosoite}
         {i18n} />
     </div>
     <div
@@ -227,18 +248,23 @@
   {/each}
   <div class="flex space-x-4 py-8">
     <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />
-    {#if deleteHenkilo}
+    <Button
+        disabled={!dirty}
+        on:click={revert}
+        text={i18n(`${i18nRoot}.revert`)}
+        style={'secondary'}/>
+    {#each Maybe.toArray(remove) as deleteHenkilo}
       <Confirm
         let:confirm
         confirmButtonLabel={i18n('confirm.button.delete')}
         confirmMessage={i18n('confirm.you-want-to-delete')}>
         <Button
           on:click={() => {
-            confirm(deleteHenkilo);
+            confirm(_ => deleteHenkilo(henkilo.id));
           }}
           text={i18n(`${i18nRoot}.delete`)}
           style={'error'} />
       </Confirm>
-    {/if}
+    {/each}
   </div>
 </form>

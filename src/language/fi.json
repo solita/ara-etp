@@ -1541,7 +1541,7 @@
         "warning-toimitustapa-suomifi-yritys": "Kun toimitustapa on suomi.fi, tulee Y-tunnus ja osoitetiedot olla täytettynä",
         "warning-toimitustapa-email": "Kun toimitustapa on sahköposti, tulee sahköpostiosoitteen olla täytettynä",
         "save": "Tallenna",
-        "cancel": "Peru muutokset",
+        "revert": "Peru muutokset",
         "delete": "Poista",
         "messages": {
           "not-found": "Osapuolta ei ole olemassa.",

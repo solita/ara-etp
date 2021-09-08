@@ -3,8 +3,8 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Validation from '@Utility/validation';
   import { push } from '@Component/Router/router';
+  import * as Links from './links';
 
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import Overlay from '@Component/Overlay/Overlay.svelte';
@@ -14,14 +14,14 @@
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  export let params;
-
   import * as api from './valvonta-api';
   import * as geoApi from '@Component/Geo/geo-api';
 
+  export let params;
+
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuolet';
-  const emptyHenkilo = {
+  const emptyHenkilo = _ => ({
     etunimi: '',
     sukunimi: '',
     henkilotunnus: Maybe.None(),
@@ -36,10 +36,10 @@
     maa: Maybe.None(),
     'toimitustapa-id': Maybe.None(),
     'toimitustapa-description': Maybe.None()
-  };
+  });
 
   let overlay = true;
-  let henkilo = emptyHenkilo;
+  let henkilo = emptyHenkilo();
   let dirty = false;
 
   let resources = Maybe.None();
@@ -65,20 +65,6 @@
     })
   );
 
-  const submitNewHenkilo = (henkilo, event) => {
-    if (henkilo.etunimi?.length >= 1 && henkilo.sukunimi?.length >= 1) {
-      overlay = true;
-      addHenkilo(henkilo);
-    } else {
-      flashMessageStore.add(
-        'henkilo',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
-      Validation.blurForm(event.target);
-    }
-  };
-
   const addHenkilo = R.compose(
     Future.fork(
       response => {
@@ -91,17 +77,17 @@
         flashMessageStore.add('henkilo', 'error', msg);
         overlay = false;
       },
-      _ => {
+      response => {
         flashMessageStore.add(
           'henkilo',
           'success',
           i18n(`${i18nRoot}.messages.success`)
         );
         dirty = false;
-        push('/valvonta/kaytto/' + params['kohde-id'] + '/henkilo/' + _.id);
+        push('/valvonta/kaytto/' + params['valvonta-id'] + '/henkilo/' + response.id);
       }
     ),
-    api.postHenkilo(fetch, params['kohde-id'])
+    api.postHenkilo(params['valvonta-id'])
   );
 </script>
 
@@ -116,9 +102,7 @@
         {roolit}
         {toimitustavat}
         {countries}
-        {i18n}
-        {i18nRoot}
-        submitHenkilo={submitNewHenkilo}
+        save={addHenkilo}
         bind:dirty />
     {/each}
   </div>

@@ -118,6 +118,9 @@ export const deleteRequest = R.curry((fetch, url) =>
   fetch(url, { method: 'delete' })
 );
 
+/**
+ * @sig string -> Future
+ */
 export const deleteFuture = R.compose(
   R.chain(rejectWithInvalidResponse),
   Future.encaseP(deleteRequest(fetch)));

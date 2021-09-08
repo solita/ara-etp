@@ -3,6 +3,9 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
 
+  import * as Osapuolet from './osapuolet';
+  import * as Links from './links';
+
   import { _, locale } from '@Language/i18n';
   import H2 from '@Component/H/H2.svelte';
   import Link from '@Component/Link/Link';
@@ -16,6 +19,12 @@
   export let roolit;
   export let toimitustavat;
   export let countries;
+
+  const postiosoite = osapuoli =>
+    osapuoli.jakeluosoite + ', ' +
+    osapuoli.postinumero + ' ' +
+    osapuoli.postitoimipaikka + ', ' +
+    Locales.labelForId($locale, countries)(osapuoli['maa']);
 </script>
 
 <H2 text={i18n(i18nRoot + '.title')}/>
@@ -48,23 +57,17 @@
         <tr class="etp-table-tr">
           <td class="etp-table--td">
             <Link
-                href={`/#/valvonta/kaytto/${valvonta.id}/henkilo/${henkilo.id}`}
+                href={Links.henkilo(valvonta, henkilo)}
                 text={`${henkilo.etunimi} ${henkilo.sukunimi}`}/>
           </td>
           <td class="etp-table--td">
             {Locales.labelForId($locale, roolit)(henkilo['rooli-id'])}
-            {#if henkilo['rooli-id'] === 2}
+            {#if Osapuolet.otherRooli(henkilo)}
               {`- ${henkilo['rooli-description']}`}
             {/if}
           </td>
           <td class="etp-table--td">
-            {`${henkilo.jakeluosoite},
-                      ${henkilo.postinumero}
-                      ${henkilo.postitoimipaikka},
-                      ${Locales.labelForId(
-              $locale,
-              countries
-            )(henkilo['maa'])}`}
+            {postiosoite(henkilo)}
           </td>
           <td class="etp-table--td">
             <Link
@@ -76,7 +79,7 @@
               $locale,
               toimitustavat
             )(henkilo['toimitustapa-id'])}
-            {#if henkilo['toimitustapa-id'] === 2}
+            {#if Osapuolet.otherToimitustapa(henkilo)}
               {`- ${henkilo['toimitustapa-description']}`}
             {/if}
           </td>
@@ -86,20 +89,17 @@
         <tr class="etp-table-tr">
           <td class="etp-table--td">
             <Link
-                href={`/#/valvonta/kaytto/${valvonta.id}/yritys/${yritys.id}`}
+                href={Links.yritys(valvonta, yritys)}
                 text={yritys.nimi}/>
           </td>
           <td class="etp-table--td">
             {Locales.labelForId($locale, roolit)(yritys['rooli-id'])}
-            {#if yritys['rooli-id'] === 2}
+            {#if Osapuolet.otherRooli(yritys)}
               {`- ${yritys['rooli-description']}`}
             {/if}
           </td>
           <td class="etp-table--td">
-            {`${yritys.jakeluosoite},
-                      ${yritys.postinumero}
-                      ${yritys.postitoimipaikka},
-                      ${Locales.labelForId($locale, countries)(yritys['maa'])}`}
+            {postiosoite(yritys)}
           </td>
           <td class="etp-table--td">
             <Link
@@ -111,7 +111,7 @@
               $locale,
               toimitustavat
             )(yritys['toimitustapa-id'])}
-            {#if yritys['toimitustapa-id'] === 2}
+            {#if Osapuolet.otherToimitustapa(yritys)}
               {`- ${yritys['toimitustapa-description']}`}
             {/if}
           </td>
@@ -124,13 +124,13 @@
 <div class="flex my-4 space-x-4">
   <div class="flex mb-auto">
     <Link
-        href="/#/valvonta/kaytto/{valvonta.id}/henkilo/new"
+        href='{Links.newHenkilo(valvonta)}'
         icon={Maybe.Some('add_circle_outline')}
         text={i18n(i18nRoot + '.new-henkilo')}/>
   </div>
   <div class="flex mb-auto">
     <Link
-        href="/#/valvonta/kaytto/{valvonta.id}/yritys/new"
+        href='{Links.newYritys(valvonta)}'
         icon={Maybe.Some('add_circle_outline')}
         text={i18n(i18nRoot + '.new-yritys')}/>
   </div>

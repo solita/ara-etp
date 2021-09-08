@@ -11,7 +11,7 @@ import * as dfns from 'date-fns';
 import * as Toimenpiteet from './toimenpiteet';
 
 import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
-import { deleteFuture } from '@Utility/fetch-utils';
+import { deleteFuture, rejectWithInvalidResponse } from '@Utility/fetch-utils';
 
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
@@ -134,27 +134,26 @@ export const getHenkilo = R.compose(
   url.henkilo
 );
 
-export const postHenkilo = R.curry((fetch, kohdeId, henkilo) =>
+export const postHenkilo = R.curry((valvontaId, henkilo) =>
   R.compose(
     Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.henkilot(kohdeId))),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.henkilot(valvontaId))),
     serializeHenkiloOsapuoli
   )(henkilo)
 );
 
-export const putHenkilo = R.curry((fetch, id, kohdeId, henkilo) =>
+export const putHenkilo = R.curry((valvontaId, id, henkilo) =>
   R.compose(
-    Fetch.responseAsJson,
+    R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'put', url.henkilo(id, kohdeId))
+      Fetch.fetchWithMethod(fetch, 'put', url.henkilo(id, valvontaId))
     ),
-    R.dissoc('id'),
     serializeHenkiloOsapuoli
   )(henkilo)
 );
 
-export const deleteHenkilo = (id, kohdeId) =>
-  Fetch.deleteFuture(url.henkilo(id, kohdeId));
+export const deleteHenkilo = R.curry((valvontaId, id) =>
+  Fetch.deleteFuture(url.henkilo(id, valvontaId)));
 
 export const getYritys = R.compose(
   R.map(deserializeYritysOsapuoli),
@@ -174,7 +173,7 @@ export const postYritys = R.curry((fetch, kohdeId, yritys) =>
 
 export const putYritys = R.curry((fetch, id, kohdeId, yritys) =>
   R.compose(
-    Fetch.responseAsJson,
+    R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
       Fetch.fetchWithMethod(fetch, 'put', url.yritys(id, kohdeId))
     ),

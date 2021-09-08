@@ -20,10 +20,10 @@
     '/new': NewKohde,
     '/:id/valvonta': Valvonta,
     '/:id/kohde': Kohde,
-    '/:kohde-id/henkilo/new': NewHenkilo,
-    '/:kohde-id/henkilo/:id': Henkilo,
-    '/:kohde-id/yritys/new': NewYritys,
-    '/:kohde-id/yritys/:id': Yritys,
+    '/:valvonta-id/henkilo/new': NewHenkilo,
+    '/:valvonta-id/henkilo/:id': Henkilo,
+    '/:valvonta-id/yritys/new': NewYritys,
+    '/:valvonta-id/yritys/:id': Yritys,
     '*': NotFound
   };
 </script>
