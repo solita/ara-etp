@@ -8,10 +8,10 @@ export const henkilo = (valvonta, henkilo) =>
   `${root}/${valvonta.id}/henkilo/${henkilo.id}`;
 
 export const yritys = (valvonta, yritys) =>
-  `${root}/${valvonta.id}/henkilo/${yritys.id}`;
+  `${root}/${valvonta.id}/yritys/${yritys.id}`;
 
 export const newHenkilo = (valvonta) =>
   `${root}/${valvonta.id}/henkilo/new`;
 
 export const newYritys = (valvonta) =>
-  `${root}/${valvonta.id}/henkilo/new`;
+  `${root}/${valvonta.id}/yritys/new`;

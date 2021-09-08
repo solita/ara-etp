@@ -157,32 +157,32 @@ export const deleteHenkilo = R.curry((valvontaId, id) =>
 
 export const getYritys = R.compose(
   R.map(deserializeYritysOsapuoli),
-  Fetch.getJson,
+  Fetch.getJson(fetch),
   url.yritys
 );
 
-export const postYritys = R.curry((fetch, kohdeId, yritys) =>
+export const postYritys = R.curry((valvontaId, yritys) =>
   R.compose(
     Fetch.responseAsJson,
     Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.yritykset(kohdeId))
+      Fetch.fetchWithMethod(fetch, 'post', url.yritykset(valvontaId))
     ),
     serializeYritysOsapuoli
   )(yritys)
 );
 
-export const putYritys = R.curry((fetch, id, kohdeId, yritys) =>
+export const putYritys = R.curry((valvontaId, id, yritys) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'put', url.yritys(id, kohdeId))
+      Fetch.fetchWithMethod(fetch, 'put', url.yritys(id, valvontaId))
     ),
     serializeYritysOsapuoli
   )(yritys)
 );
 
-export const deleteYritys = (id, kohdeId) =>
-  Fetch.deleteFuture(url.yritys(id, kohdeId));
+export const deleteYritys = R.curry((valvontaId, id) =>
+  Fetch.deleteFuture(url.yritys(id, valvontaId)));
 
 /* Toimenpiteen palvelut */
 

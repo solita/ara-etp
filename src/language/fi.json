@@ -1519,9 +1519,9 @@
         },
         "attachments": "Liitteet ja linkit"
       },
-      "osapuolet": {
-        "uusi-henkilo": "Uusi henkilo",
-        "uusi-yritys": "Uusi yritys",
+      "osapuoli": {
+        "new-henkilo-title": "Uusi henkilo",
+        "new-yritys-title": "Uusi yritys",
         "nimi": "Nimi",
         "etunimi": "Etunimi",
         "sukunimi": "Sukunimi",

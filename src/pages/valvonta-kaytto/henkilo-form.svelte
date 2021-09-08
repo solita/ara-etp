@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
   import * as Parsers from '@Utility/parsers';
+  import * as Osapuolet from './osapuolet';
 
   import Input from '@Component/Input/Input.svelte';
   import Button from '@Component/Button/Button.svelte';
@@ -13,7 +14,7 @@
   import { henkilo as schema } from '@Pages/valvonta-kaytto/schema';
   import { flashMessageStore } from '@/stores';
 
-  export let henkilo;
+  export let osapuoli;
   export let roolit;
   export let toimitustavat;
   export let countries;
@@ -23,7 +24,7 @@
   export let dirty = false;
 
   const i18n = $_;
-  const i18nRoot = 'valvonta.kaytto.osapuolet';
+  const i18nRoot = 'valvonta.kaytto.osapuoli';
   let form;
 
   const setDirty = _ => {
@@ -31,8 +32,8 @@
   };
 
   const submit = _ => {
-    if (Validation.isValidForm(schema)(henkilo)) {
-      save(henkilo);
+    if (Validation.isValidForm(schema)(osapuoli)) {
+      save(osapuoli);
     } else {
       flashMessageStore.add(
         'valvonta-kaytto',
@@ -60,7 +61,7 @@
           name={'henkilo.etunimi'}
           label={i18n(`${i18nRoot}.etunimi`)}
           required={true}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           lens={R.lensProp('etunimi')}
           parse={R.trim}
           validators={schema.etunimi}
@@ -72,7 +73,7 @@
           name={'henkilo.sukunimi'}
           label={i18n(`${i18nRoot}.sukunimi`)}
           required={true}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           lens={R.lensProp('sukunimi')}
           parse={R.trim}
           validators={schema.sukunimi}
@@ -85,7 +86,7 @@
         id={'henkilo.henkilotunnus'}
         name={'henkilo.henkilotunnus'}
         label={i18n(`${i18nRoot}.henkilotunnus`)}
-        bind:model={henkilo}
+        bind:model={osapuoli}
         lens={R.lensProp('henkilotunnus')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
@@ -100,28 +101,26 @@
         required={false}
         disabled={false}
         allowNone={true}
-        bind:model={henkilo}
+        bind:model={osapuoli}
         parse={Maybe.fromNull}
         lens={R.lensProp('rooli-id')}
         format={Locales.labelForId($locale, roolit)}
         items={R.pluck('id', roolit)} />
     </div>
-    {#each Maybe.toArray(henkilo['rooli-id']) as rooliId}
-      {#if rooliId === 2}
-        <div class="py-4 w-full md:w-1/3 md:pr-2">
-          <Input
-            id={'henkilo.rooli-description'}
-            name={'henkilo.rooli-description'}
-            label={i18n(`${i18nRoot}.rooli-description`)}
-            bind:model={henkilo}
-            lens={R.lensProp('rooli-description')}
-            parse={R.trim}
-            validators={schema['rooli-description']}
-            {i18n} />
-        </div>
-      {/if}
-    {/each}
-
+    {#if Osapuolet.otherRooli(osapuoli)}
+      <div class="py-4 w-full md:w-1/3 md:pr-2">
+        <Input
+          id={'henkilo.rooli-description'}
+          name={'henkilo.rooli-description'}
+          label={i18n(`${i18nRoot}.rooli-description`)}
+          bind:model={osapuoli}
+          lens={R.lensProp('rooli-description')}
+          parse={Parsers.optionalString}
+          format={Maybe.orSome('')}
+          validators={schema['rooli-description']}
+          {i18n} />
+      </div>
+    {/if}
     <div
       class="py-4 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 w-full md:w-2/3">
       <div class="w-full">
@@ -129,7 +128,7 @@
           id={'henkilo.email'}
           name={'henkilo.email'}
           label={i18n(`${i18nRoot}.email`)}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           lens={R.lensProp('email')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
@@ -141,7 +140,7 @@
           id={'henkilo.puhelin'}
           name={'henkilo.puhelin'}
           label={i18n(`${i18nRoot}.puhelin`)}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           lens={R.lensProp('puhelin')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
@@ -155,7 +154,7 @@
         id={'henkilo.vastaanottajan-tarkenne'}
         name={'henkilo.vastaanottajan-tarkenne'}
         label={i18n(`${i18nRoot}.vastaanottajan-tarkenne`)}
-        bind:model={henkilo}
+        bind:model={osapuoli}
         lens={R.lensProp('vastaanottajan-tarkenne')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
@@ -167,7 +166,7 @@
         id={'henkilo.jakeluosoite'}
         name={'henkilo.jakeluosoite'}
         label={i18n(`${i18nRoot}.jakeluosoite`)}
-        bind:model={henkilo}
+        bind:model={osapuoli}
         lens={R.lensProp('jakeluosoite')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
@@ -181,7 +180,7 @@
           id={'henkilo.postinumero'}
           name={'henkilo.postinumero'}
           label={i18n(`${i18nRoot}.postinumero`)}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           lens={R.lensProp('postinumero')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
@@ -192,7 +191,7 @@
           id={'henkilo.postitoimipaikka'}
           name={'henkilo.postitoimipaikka'}
           label={i18n(`${i18nRoot}.postitoimipaikka`)}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           lens={R.lensProp('postitoimipaikka')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
@@ -205,7 +204,7 @@
           required={false}
           disabled={false}
           allowNone={true}
-          bind:model={henkilo}
+          bind:model={osapuoli}
           parse={Maybe.fromNull}
           lens={R.lensProp('maa')}
           format={Locales.labelForId($locale, countries)}
@@ -219,33 +218,45 @@
         required={false}
         disabled={false}
         allowNone={true}
-        bind:model={henkilo}
+        bind:model={osapuoli}
         parse={Maybe.fromNull}
         lens={R.lensProp('toimitustapa-id')}
         format={Locales.labelForId($locale, toimitustavat)}
         items={R.pluck('id', toimitustavat)} />
     </div>
+    {#if Osapuolet.toimitustapa.other(osapuoli)}
+      <div class="py-4 w-full md:w-1/3 md:pr-2">
+        <Input
+            id={'henkilo.toimitustapa-description'}
+            name={'henkilo.toimitustapa-description'}
+            label={i18n(`${i18nRoot}.toimitustapa-description`)}
+            bind:model={osapuoli}
+            lens={R.lensProp('toimitustapa-description')}
+            parse={Parsers.optionalString}
+            format={Maybe.orSome('')}
+            validators={schema['toimitustapa-description']}
+            {i18n} />
+      </div>
+    {/if}
   </div>
-  {#each Maybe.toArray(henkilo['toimitustapa-id']) as toimitustapa}
-    <div class="flex flex-col">
-      {#if toimitustapa === 0 && !henkilo.henkilotunnus}
-        <div class="flex space-x-2">
-          <span class="font-icon text-warning">info</span>
-          <span>
-            {i18n(`${i18nRoot}.warning-toimitustapa-suomifi-henkilo`)}
-          </span>
-        </div>
-      {/if}
-      {#if toimitustapa === 1 && !henkilo.email}
-        <div class="flex space-x-2">
-          <span class="font-icon text-warning">info</span>
-          <span>
-            {i18n(`${i18nRoot}.warning-toimitustapa-email`)}
-          </span>
-        </div>
-      {/if}
-    </div>
-  {/each}
+  <div class="flex flex-col">
+    {#if Osapuolet.toimitustapa.suomifi(osapuoli) && Maybe.None(osapuoli.henkilotunnus)}
+      <div class="flex space-x-2">
+        <span class="font-icon text-warning">info</span>
+        <span>
+          {i18n(`${i18nRoot}.warning-toimitustapa-suomifi-henkilo`)}
+        </span>
+      </div>
+    {/if}
+    {#if Osapuolet.toimitustapa.email(osapuoli) && Maybe.None(osapuoli.email)}
+      <div class="flex space-x-2">
+        <span class="font-icon text-warning">info</span>
+        <span>
+          {i18n(`${i18nRoot}.warning-toimitustapa-email`)}
+        </span>
+      </div>
+    {/if}
+  </div>
   <div class="flex space-x-4 py-8">
     <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />
     <Button
@@ -260,7 +271,7 @@
         confirmMessage={i18n('confirm.you-want-to-delete')}>
         <Button
           on:click={() => {
-            confirm(_ => deleteHenkilo(henkilo.id));
+            confirm(_ => deleteHenkilo(osapuoli.id));
           }}
           text={i18n(`${i18nRoot}.delete`)}
           style={'error'} />

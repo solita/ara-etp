@@ -38,6 +38,13 @@ export const henkilo = R.mergeLeft(osapuoli, {
   sukunimi: Validation.RequiredString(2, 200),
 });
 
+export const yritys = R.mergeLeft(osapuoli, {
+  ytunnus: [
+    Validation.liftValidator(Validation.ytunnusValidator)
+  ],
+  nimi: Validation.RequiredString(2, 200)
+});
+
 const description = R.map(
   Validation.liftValidator,
   Validation.LimitedString(2, 4000)

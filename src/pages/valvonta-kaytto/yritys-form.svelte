@@ -3,31 +3,45 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
   import * as Parsers from '@Utility/parsers';
+  import * as Osapuolet from './osapuolet';
 
   import Input from '@Component/Input/Input.svelte';
   import Button from '@Component/Button/Button.svelte';
   import Select from '@Component/Select/Select.svelte';
   import Confirm from '@Component/Confirm/Confirm';
   import { _, locale } from '@Language/i18n';
+  import * as Validation from '@Utility/validation';
+  import { yritys as schema } from '@Pages/valvonta-kaytto/schema';
+  import { flashMessageStore } from '@/stores';
 
-  export let yritys;
+  export let osapuoli;
   export let roolit;
   export let toimitustavat;
   export let countries;
-  export let submitYritys;
-  export let deleteYritys;
-  export let i18n;
-  export let i18nRoot;
-  export let dirty;
+  export let save;
+  export let revert;
+  export let remove = Maybe.None();
+  export let dirty = false;
 
+  const i18n = $_;
+  const i18nRoot = 'valvonta.kaytto.osapuoli';
   let form;
-
-  const submit = event => {
-    submitYritys(yritys, event);
-  };
 
   const setDirty = _ => {
     dirty = true;
+  };
+
+  const submit = _ => {
+    if (Validation.isValidForm(schema)(osapuoli)) {
+      save(osapuoli);
+    } else {
+      flashMessageStore.add(
+        'valvonta-kaytto',
+        'error',
+        i18n(`${i18nRoot}.messages.validation-error`)
+      );
+      Validation.blurForm(form);
+    }
   };
 </script>
 
@@ -47,9 +61,10 @@
           name={'yritys.nimi'}
           label={i18n(`${i18nRoot}.nimi`)}
           required={true}
-          bind:model={yritys}
+          bind:model={osapuoli}
           lens={R.lensProp('nimi')}
           parse={R.trim}
+          validators={schema.nimi}
           {i18n} />
       </div>
       <div class="w-full">
@@ -57,10 +72,11 @@
           id={'yritys.ytunnus'}
           name={'yritys.ytunnus'}
           label={i18n(`${i18nRoot}.ytunnus`)}
-          bind:model={yritys}
+          bind:model={osapuoli}
           lens={R.lensProp('ytunnus')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.ytunnus}
           {i18n} />
       </div>
     </div>
@@ -72,26 +88,26 @@
         required={false}
         disabled={false}
         allowNone={true}
-        bind:model={yritys}
+        bind:model={osapuoli}
         parse={Maybe.fromNull}
         lens={R.lensProp('rooli-id')}
         format={Locales.labelForId($locale, roolit)}
         items={R.pluck('id', roolit)} />
     </div>
-    {#each Maybe.toArray(yritys['rooli-id']) as rooliId}
-      {#if rooliId === 2}
-        <div class="py-4 w-full md:w-1/3 md:pr-2">
-          <Input
-            id={'yritys.rooli-description'}
-            name={'yritys.rooli-description'}
-            label={i18n(`${i18nRoot}.rooli-description`)}
-            bind:model={yritys}
-            lens={R.lensProp('rooli-description')}
-            parse={R.trim}
-            {i18n} />
-        </div>
-      {/if}
-    {/each}
+    {#if Osapuolet.otherRooli(osapuoli)}
+      <div class="py-4 w-full md:w-1/3 md:pr-2">
+        <Input
+          id={'yritys.rooli-description'}
+          name={'yritys.rooli-description'}
+          label={i18n(`${i18nRoot}.rooli-description`)}
+          bind:model={osapuoli}
+          lens={R.lensProp('rooli-description')}
+          parse={Parsers.optionalString}
+          format={Maybe.orSome('')}
+          validators={schema['rooli-description']}
+          {i18n} />
+      </div>
+    {/if}
 
     <div
       class="py-4 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 w-full md:w-2/3">
@@ -100,10 +116,11 @@
           id={'yritys.email'}
           name={'yritys.email'}
           label={i18n(`${i18nRoot}.email`)}
-          bind:model={yritys}
+          bind:model={osapuoli}
           lens={R.lensProp('email')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.email}
           {i18n} />
       </div>
       <div class="w-full">
@@ -111,10 +128,11 @@
           id={'yritys.puhelin'}
           name={'yritys.puhelin'}
           label={i18n(`${i18nRoot}.puhelin`)}
-          bind:model={yritys}
+          bind:model={osapuoli}
           lens={R.lensProp('puhelin')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.puhelin}
           {i18n} />
       </div>
     </div>
@@ -124,10 +142,11 @@
         id={'yritys.vastaanottajan-tarkenne'}
         name={'yritys.vastaanottajan-tarkenne'}
         label={i18n(`${i18nRoot}.vastaanottajan-tarkenne`)}
-        bind:model={yritys}
+        bind:model={osapuoli}
         lens={R.lensProp('vastaanottajan-tarkenne')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
+        validators={schema['vastaanottajan-tarkenne']}
         {i18n} />
     </div>
     <div class="py-4 w-full">
@@ -135,10 +154,11 @@
         id={'yritys.jakeluosoite'}
         name={'yritys.jakeluosoite'}
         label={i18n(`${i18nRoot}.jakeluosoite`)}
-        bind:model={yritys}
+        bind:model={osapuoli}
         lens={R.lensProp('jakeluosoite')}
         parse={Parsers.optionalString}
         format={Maybe.orSome('')}
+        validators={schema.jakeluosoite}
         {i18n} />
     </div>
     <div
@@ -148,10 +168,11 @@
           id={'yritys.postinumero'}
           name={'yritys.postinumero'}
           label={i18n(`${i18nRoot}.postinumero`)}
-          bind:model={yritys}
+          bind:model={osapuoli}
           lens={R.lensProp('postinumero')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.postinumero}
           {i18n} />
       </div>
       <div class="w-full">
@@ -159,10 +180,11 @@
           id={'yritys.postitoimipaikka'}
           name={'yritys.postitoimipaikka'}
           label={i18n(`${i18nRoot}.postitoimipaikka`)}
-          bind:model={yritys}
+          bind:model={osapuoli}
           lens={R.lensProp('postitoimipaikka')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.postitoimipaikka}
           {i18n} />
       </div>
       <div class="w-full">
@@ -172,7 +194,7 @@
           required={false}
           disabled={false}
           allowNone={true}
-          bind:model={yritys}
+          bind:model={osapuoli}
           parse={Maybe.fromNull}
           lens={R.lensProp('maa')}
           format={Locales.labelForId($locale, countries)}
@@ -186,47 +208,64 @@
         required={false}
         disabled={false}
         allowNone={true}
-        bind:model={yritys}
+        bind:model={osapuoli}
         parse={Maybe.fromNull}
         lens={R.lensProp('toimitustapa-id')}
         format={Locales.labelForId($locale, toimitustavat)}
         items={R.pluck('id', toimitustavat)} />
     </div>
+    {#if Osapuolet.toimitustapa.other(osapuoli)}
+      <div class="py-4 w-full md:w-1/3 md:pr-2">
+        <Input
+            id={'yritys.toimitustapa-description'}
+            name={'yritys.toimitustapa-description'}
+            label={i18n(`${i18nRoot}.toimitustapa-description`)}
+            bind:model={osapuoli}
+            lens={R.lensProp('toimitustapa-description')}
+            parse={Parsers.optionalString}
+            format={Maybe.orSome('')}
+            validators={schema['toimitustapa-description']}
+            {i18n} />
+      </div>
+    {/if}
   </div>
-  {#each Maybe.toArray(yritys['toimitustapa-id']) as toimitustapa}
-    <div class="flex flex-col">
-      {#if toimitustapa === 0 && !yritys.yritystunnus}
-        <div class="flex space-x-2">
-          <span class="font-icon text-warning">info</span>
-          <span>
-            {i18n(`${i18nRoot}.warning-toimitustapa-suomifi-yritys`)}
-          </span>
-        </div>
-      {/if}
-      {#if toimitustapa === 1 && !yritys.email}
-        <div class="flex space-x-2">
-          <span class="font-icon text-warning">info</span>
-          <span>
-            {i18n(`${i18nRoot}.warning-toimitustapa-email`)}
-          </span>
-        </div>
-      {/if}
-    </div>
-  {/each}
+  <div class="flex flex-col">
+    {#if Osapuolet.toimitustapa.suomifi(osapuoli) && Maybe.None(osapuoli.ytunnus)}
+      <div class="flex space-x-2">
+        <span class="font-icon text-warning">info</span>
+        <span>
+          {i18n(`${i18nRoot}.warning-toimitustapa-suomifi-yritys`)}
+        </span>
+      </div>
+    {/if}
+    {#if Osapuolet.toimitustapa.email(osapuoli) && Maybe.None(osapuoli.email)}
+      <div class="flex space-x-2">
+        <span class="font-icon text-warning">info</span>
+        <span>
+          {i18n(`${i18nRoot}.warning-toimitustapa-email`)}
+        </span>
+      </div>
+    {/if}
+  </div>
   <div class="flex space-x-4 py-8">
     <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />
-    {#if deleteYritys}
+    <Button
+        disabled={!dirty}
+        on:click={revert}
+        text={i18n(`${i18nRoot}.revert`)}
+        style={'secondary'}/>
+    {#each Maybe.toArray(remove) as deleteYritys}
       <Confirm
-        let:confirm
-        confirmButtonLabel={i18n('confirm.button.delete')}
-        confirmMessage={i18n('confirm.you-want-to-delete')}>
+          let:confirm
+          confirmButtonLabel={i18n('confirm.button.delete')}
+          confirmMessage={i18n('confirm.you-want-to-delete')}>
         <Button
-          on:click={() => {
-            confirm(deleteYritys);
+            on:click={() => {
+            confirm(_ => deleteYritys(osapuoli.id));
           }}
-          text={i18n(`${i18nRoot}.delete`)}
-          style={'error'} />
+            text={i18n(`${i18nRoot}.delete`)}
+            style={'error'} />
       </Confirm>
-    {/if}
+    {/each}
   </div>
 </form>

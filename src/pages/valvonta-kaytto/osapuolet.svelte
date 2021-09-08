@@ -79,7 +79,7 @@
               $locale,
               toimitustavat
             )(henkilo['toimitustapa-id'])}
-            {#if Osapuolet.otherToimitustapa(henkilo)}
+            {#if Osapuolet.toimitustapa.other(henkilo)}
               {`- ${henkilo['toimitustapa-description']}`}
             {/if}
           </td>
@@ -111,7 +111,7 @@
               $locale,
               toimitustavat
             )(yritys['toimitustapa-id'])}
-            {#if Osapuolet.otherToimitustapa(yritys)}
+            {#if Osapuolet.toimitustapa.other(yritys)}
               {`- ${yritys['toimitustapa-description']}`}
             {/if}
           </td>

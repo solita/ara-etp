@@ -1,29 +1,35 @@
 <script>
   import Router from 'svelte-spa-router';
+  import { wrap } from 'svelte-spa-router/wrap';
 
   import Valvonnat from './valvonnat';
   import Valvonta from './valvonta';
   import Kohde from './kohde';
   import NewKohde from './new-kohde';
   import NotFound from '@Pages/not-found/not-found';
-  import Henkilo from './henkilo';
-  import NewHenkilo from './new-henkilo';
-  import Yritys from './yritys';
-  import NewYritys from './new-yritys';
+  import Osapuoli from './osapuoli';
+  import NewOsapuoli from './new-osapuoli';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
+
+  const route = (type, component) => wrap({
+    component: component,
+    props: {
+      type: type
+    }
+  });
 
   const prefix = '/valvonta/kaytto';
   const routes = {
     '/all': Valvonnat,
     '/new': NewKohde,
-    '/:id/valvonta': Valvonta,
     '/:id/kohde': Kohde,
-    '/:valvonta-id/henkilo/new': NewHenkilo,
-    '/:valvonta-id/henkilo/:id': Henkilo,
-    '/:valvonta-id/yritys/new': NewYritys,
-    '/:valvonta-id/yritys/:id': Yritys,
+    '/:id/valvonta': Valvonta,
+    '/:valvonta-id/henkilo/new': route('henkilo', NewOsapuoli),
+    '/:valvonta-id/henkilo/:id': route('henkilo', Osapuoli),
+    '/:valvonta-id/yritys/new': route('yritys', NewOsapuoli),
+    '/:valvonta-id/yritys/:id': route('yritys', Osapuoli),
     '*': NotFound
   };
 </script>
