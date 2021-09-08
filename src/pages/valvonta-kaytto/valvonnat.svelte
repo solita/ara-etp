@@ -108,7 +108,7 @@
         valvontaCount = response.count;
         overlay = false;
       },
-      Future.parallelObject(5, {
+      Future.parallelObject(6, {
         whoami: kayttajaApi.whoami,
         count: R.compose(
           R.map(R.prop('count')),

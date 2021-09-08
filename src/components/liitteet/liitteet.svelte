@@ -27,7 +27,7 @@
   const i18nRoot = 'energiatodistus.liitteet';
   const i18n = $_;
 
-  let dirty = false;
+  export let dirty = false;
   let newLink;
   let files = [];
 

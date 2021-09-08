@@ -11,6 +11,7 @@ import * as dfns from 'date-fns';
 import * as Toimenpiteet from './toimenpiteet';
 
 import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
+import { deleteFuture } from '@Utility/fetch-utils';
 
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
@@ -39,72 +40,30 @@ export const url = {
   notes: id => `${url.valvonta(id)}/notes`
 };
 
-export const deserializeToimenpide = R.evolve({
-  'create-time': dfns.parseJSON,
-  'publish-time': R.compose(R.map(dfns.parseJSON), Maybe.fromNull),
-  'deadline-date': R.compose(
-    Parsers.toEitherMaybe,
-    R.map(Parsers.parseISODate),
-    Maybe.fromNull
-  ),
-  diaarinumero: Maybe.fromNull,
-  description: Maybe.fromNull,
-  'template-id': Maybe.fromNull
-});
-
-export const deserializeValvonta = R.evolve({
-  postinumero: Maybe.fromNull,
-  'valvoja-id': Maybe.fromNull
-});
-
-export const deserializeValvontaStatus = R.compose(
-  R.evolve({
-    lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull)
-  }),
-  deserializeValvonta,
-  Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
+export const toimenpidetyypit = Fetch.cached(
+  fetch,
+  '/valvonta/kaytto/toimenpidetyypit'
 );
 
-export const serializeValvonta = R.omit(['id']);
-
-export const serializeToimenpide = R.compose(
-  R.evolve({
-    'template-id': Maybe.orSome(null),
-    'severity-id': Maybe.orSome(null),
-    description: Maybe.orSome(null),
-    'deadline-date': EM.fold(null, date =>
-      dfns.formatISO(date, { representation: 'date' })
-    )
-  }),
-  R.pick(['type-id', 'deadline-date', 'description', 'template-id'])
+export const ilmoituspaikat = Fetch.cached(
+  fetch,
+  '/valvonta/kaytto/ilmoituspaikat'
 );
-
-export const serializeKaytto = R.compose(
-  R.evolve({
-    'valvoja-id': Maybe.orSome(null),
-    'ilmoituspaikka-id': Maybe.orSome(null),
-    'ilmoituspaikka-description': Maybe.orSome(null),
-    ilmoitustunnus: Maybe.orSome(null),
-    postinumero: Maybe.orSome(null),
-    rakennustunnus: Maybe.orSome(null),
-    havaintopaiva: EM.fold(null, date =>
-      dfns.formatISO(date, { representation: 'date' })
-    )
-  })
+export const toimitustavat = Fetch.cached(
+  fetch,
+  '/valvonta/kaytto/toimitustavat'
 );
-export const deserializeKaytto = R.evolve({
-  'ilmoituspaikka-id': Maybe.fromNull,
-  'valvoja-id': Maybe.fromNull,
-  'ilmoituspaikka-description': Maybe.fromNull,
-  ilmoitustunnus: Maybe.fromNull,
-  postinumero: Maybe.fromNull,
-  rakennustunnus: Maybe.fromNull,
-  havaintopaiva: R.compose(
-    Parsers.toEitherMaybe,
-    R.map(Parsers.parseISODate),
-    Maybe.fromNull
-  )
-});
+export const roolit = Fetch.cached(fetch, '/valvonta/kaytto/roolit');
+
+export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
+
+export const templatesByType = R.compose(
+  Future.cache,
+  R.map(R.groupBy(R.prop('toimenpidetype-id'))),
+  Fetch.getJson(fetch)
+)(url.valvonnat + '/templates');
+
+/* Osapuolten palvelut */
 
 export const serializeOsapuoli = R.compose(
   R.evolve({
@@ -120,8 +79,10 @@ export const serializeOsapuoli = R.compose(
     'toimitustapa-description': Maybe.getOrElse(null),
     'vastaanottajan-tarkenne': Maybe.getOrElse(null)
   }),
-  R.dissoc('valvonta-id')
+  R.dissoc('valvonta-id'),
+  R.dissoc('id'),
 );
+
 export const deserializeOsapuoli = R.evolve({
   'rooli-id': Maybe.fromNull,
   maa: Maybe.fromNull,
@@ -156,53 +117,20 @@ export const deserializeYritysOsapuoli = R.compose(
   deserializeOsapuoli
 );
 
-export const getKaytto = R.compose(
-  R.map(deserializeKaytto),
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch)),
-  url.valvonta
-);
-
-export const postKaytto = R.curry((fetch, kaytto) =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.valvonnat)),
-    serializeKaytto
-  )(kaytto)
-);
-
-export const putKaytto = R.curry((fetch, id, kaytto) =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.valvonta(id))),
-    serializeKaytto
-  )(kaytto)
-);
-
-export const deleteKaytto = R.curry((fetch, id) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'delete', url.valvonta(id)))
-  )
-);
-
 export const getHenkilot = R.compose(
   R.map(deserializeHenkiloOsapuoli),
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch)),
+  Fetch.getJson(fetch),
   url.henkilot
 );
 export const getYritykset = R.compose(
   R.map(deserializeYritysOsapuoli),
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch)),
+  Fetch.getJson(fetch),
   url.yritykset
 );
 
 export const getHenkilo = R.compose(
   R.map(deserializeHenkiloOsapuoli),
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch)),
+  Fetch.getJson(fetch),
   url.henkilo
 );
 
@@ -225,18 +153,12 @@ export const putHenkilo = R.curry((fetch, id, kohdeId, henkilo) =>
   )(henkilo)
 );
 
-export const deleteHenkilo = R.curry((fetch, id, kohdeId) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'delete', url.henkilo(id, kohdeId))
-    )
-  )
-);
+export const deleteHenkilo = (id, kohdeId) =>
+  Fetch.deleteFuture(url.henkilo(id, kohdeId));
+
 export const getYritys = R.compose(
   R.map(deserializeYritysOsapuoli),
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(fetch)),
+  Fetch.getJson,
   url.yritys
 );
 
@@ -256,53 +178,39 @@ export const putYritys = R.curry((fetch, id, kohdeId, yritys) =>
     Future.encaseP(
       Fetch.fetchWithMethod(fetch, 'put', url.yritys(id, kohdeId))
     ),
-    R.dissoc('id'),
     serializeYritysOsapuoli
   )(yritys)
 );
 
-export const deleteYritys = R.curry((fetch, id, kohdeId) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'delete', url.yritys(id, kohdeId))
+export const deleteYritys = (id, kohdeId) =>
+  Fetch.deleteFuture(url.yritys(id, kohdeId));
+
+/* Toimenpiteen palvelut */
+
+const deserializeToimenpide = R.evolve({
+  'create-time': dfns.parseJSON,
+  'publish-time': R.compose(R.map(dfns.parseJSON), Maybe.fromNull),
+  'deadline-date': R.compose(
+    Parsers.toEitherMaybe,
+    R.map(Parsers.parseISODate),
+    Maybe.fromNull
+  ),
+  diaarinumero: Maybe.fromNull,
+  description: Maybe.fromNull,
+  'template-id': Maybe.fromNull
+});
+
+const serializeToimenpide = R.compose(
+  R.evolve({
+    'template-id': Maybe.orSome(null),
+    'severity-id': Maybe.orSome(null),
+    description: Maybe.orSome(null),
+    'deadline-date': EM.fold(null, date =>
+      dfns.formatISO(date, { representation: 'date' })
     )
-  )
+  }),
+  R.pick(['type-id', 'deadline-date', 'description', 'template-id'])
 );
-
-export const valvonnat = R.compose(
-  R.map(R.map(deserializeValvontaStatus)),
-  Fetch.getJson(fetch),
-  R.concat(url.valvonnat),
-  Query.toQueryString
-);
-
-export const valvontaCount = R.compose(
-  Fetch.getJson(fetch),
-  R.concat(`${url.valvonnat}/count`),
-  Query.toQueryString
-);
-
-export const toimenpidetyypit = Fetch.cached(
-  fetch,
-  '/valvonta/kaytto/toimenpidetyypit'
-);
-
-export const ilmoituspaikat = Fetch.cached(
-  fetch,
-  '/valvonta/kaytto/ilmoituspaikat'
-);
-export const toimitustavat = Fetch.cached(
-  fetch,
-  '/valvonta/kaytto/toimitustavat'
-);
-export const roolit = Fetch.cached(fetch, '/valvonta/kaytto/roolit');
-
-export const templatesByType = R.compose(
-  Future.cache,
-  R.map(R.groupBy(R.prop('toimenpidetype-id'))),
-  Fetch.getJson(fetch)
-)(url.valvonnat + '/templates');
 
 export const toimenpiteet = R.compose(
   R.map(R.sortBy(Toimenpiteet.time)),
@@ -316,14 +224,6 @@ export const toimenpide = R.compose(
   Fetch.getJson(fetch),
   url.toimenpide
 );
-
-export const valvonta = R.compose(
-  R.map(deserializeValvonta),
-  Fetch.getJson(fetch),
-  url.valvonta
-);
-
-export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 
 export const postToimenpide = R.curry((id, toimenpide) =>
   R.compose(
@@ -342,21 +242,6 @@ export const putToimenpide = R.curry((id, toimenpideId, toimenpide) =>
     R.dissoc('type-id'),
     serializeToimenpide
   )(toimenpide)
-);
-
-export const getValvonta = id =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    url.valvonta
-  )(id);
-
-export const putValvonta = R.curry((id, body) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.valvonta(id))),
-    serializeValvonta
-  )(body)
 );
 
 export const previewToimenpideForHenkiloOsapuoli = R.curry(
@@ -381,84 +266,87 @@ export const previewToimenpideForYritysOsapuoli = R.curry(
     )(toimenpide)
 );
 
-export const getKayttoLiitteet = id =>
-  R.compose(
-    R.map(R.map(EtApi.deserializeLiite)),
-    Fetch.getJson(fetch),
-    url.liitteet
-  )(id);
+/* Valvonnan palvelut */
 
-export const postKayttoLiitteetFiles = R.curry((id, files) =>
+const deserializeValvonta = R.evolve({
+  'ilmoituspaikka-id': Maybe.fromNull,
+  'valvoja-id': Maybe.fromNull,
+  'ilmoituspaikka-description': Maybe.fromNull,
+  ilmoitustunnus: Maybe.fromNull,
+  postinumero: Maybe.fromNull,
+  rakennustunnus: Maybe.fromNull,
+  havaintopaiva: R.compose(
+    Parsers.toEitherMaybe,
+    R.map(Parsers.parseISODate),
+    Maybe.fromNull
+  )
+});
+
+const serializeValvonta = R.compose(
+  R.evolve({
+    'valvoja-id': Maybe.orSome(null),
+    'ilmoituspaikka-id': Maybe.orSome(null),
+    'ilmoituspaikka-description': Maybe.orSome(null),
+    ilmoitustunnus: Maybe.orSome(null),
+    postinumero: Maybe.orSome(null),
+    rakennustunnus: Maybe.orSome(null),
+    havaintopaiva: EM.fold(null, date =>
+      dfns.formatISO(date, { representation: 'date' })
+    )
+  }),
+  R.omit(['id'])
+);
+
+const deserializeValvontaStatus = R.compose(
+  R.evolve({
+    lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull)
+  }),
+  deserializeValvonta,
+  Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
+);
+
+export const valvonnat = R.compose(
+  R.map(R.map(deserializeValvontaStatus)),
+  Fetch.getJson(fetch),
+  R.concat(url.valvonnat),
+  Query.toQueryString
+);
+
+export const valvontaCount = R.compose(
+  Fetch.getJson(fetch),
+  R.concat(`${url.valvonnat}/count`),
+  Query.toQueryString
+);
+
+export const valvonta = R.compose(
+  R.map(deserializeValvonta),
+  Fetch.getJson(fetch),
+  url.valvonta
+);
+
+export const postValvonta = R.curry((fetch, valvonta) =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.valvonnat)),
+    serializeValvonta
+  )(valvonta)
+);
+
+export const putValvonta = R.curry((id, valvonta) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(files =>
-      fetch(url.liitteet(id) + '/files', {
-        method: 'POST',
-        body: EtApi.toFormData('files', files)
-      })
-    )
-  )(files)
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.valvonta(id))),
+    serializeValvonta
+  )(valvonta)
 );
 
-export const postKayttoLiitteetLink = R.curry((id, link) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(id) + '/link')
-    )
-  )(link)
-);
+export const deleteValvonta = R.compose(deleteFuture, url.valvonta);
 
-export const deleteKayttoLiite = R.curry((id, liiteId) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(liiteId =>
-      Fetch.deleteRequest(fetch, url.liitteet(id) + '/' + liiteId)
-    )
-  )(liiteId)
-);
+/* Muistiinpanojen palvelut */
 
-export const getLiitteet = R.curry((id, toimenpideId) =>
-  R.compose(
-    R.map(R.map(EtApi.deserializeLiite)),
-    Fetch.getJson(fetch),
-    url.liitteet
-  )(id, toimenpideId)
-);
-
-export const postLiitteetFiles = R.curry((id, toimenpideId, files) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(files =>
-      fetch(url.liitteet(id, toimenpideId) + '/files', {
-        method: 'POST',
-        body: EtApi.toFormData('files', files)
-      })
-    )
-  )(files)
-);
-
-export const postLiitteetLink = R.curry((id, toimenpideId, link) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(
-        fetch,
-        'post',
-        url.liitteet(id, toimenpideId) + '/link'
-      )
-    )
-  )(link)
-);
-
-export const deleteLiite = R.curry((id, toimenpideId, liiteId) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(liiteId =>
-      Fetch.deleteRequest(fetch, url.liitteet(id, toimenpideId) + '/' + liiteId)
-    )
-  )(liiteId)
-);
+const deserializeNote = R.evolve({
+  'create-time': dfns.parseJSON
+});
 
 export const postNote = R.curry((id, note) =>
   R.compose(
@@ -468,12 +356,44 @@ export const postNote = R.curry((id, note) =>
   )(note)
 );
 
-export const deserializeNote = R.evolve({
-  'create-time': dfns.parseJSON
-});
-
 export const notes = R.compose(
   R.map(R.map(deserializeNote)),
   Fetch.getJson(fetch),
   url.notes
 );
+
+/* Liitteiden palvelut */
+
+export const liitteet = R.compose(
+  R.map(R.map(EtApi.deserializeLiite)),
+  Fetch.getJson(fetch),
+  url.liitteet
+);
+
+export const postLiitteetFiles = R.curry((valvontaId, files) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(files =>
+      fetch(url.liitteet(valvontaId) + '/files', {
+        method: 'POST',
+        body: EtApi.toFormData('files', files)
+      })
+    )
+  )(files)
+);
+
+export const postLiitteetLink = R.curry((valvontaId, link) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        url.liitteet(valvontaId) + '/link'
+      )
+    )
+  )(link)
+);
+
+export const deleteLiite = (valvontaId, liiteId) =>
+  Fetch.deleteFuture(url.liitteet(valvontaId) + '/' + liiteId);

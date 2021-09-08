@@ -4,6 +4,22 @@ import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
 
+export const kohde = {
+  rakennustunnus: [
+    Validation.liftValidator(Validation.rakennustunnusValidator)
+  ],
+  katuosoite: Validation.RequiredString(2, 200),
+  postinumero: [
+    Validation.liftValidator(Validation.postinumeroValidator)
+  ],
+  ilmoituspaikka_description: R.map(
+    Validation.liftValidator,
+    Validation.LimitedString(2, 200)),
+  ilmoitustunnus: R.map(
+    Validation.liftValidator,
+    Validation.LimitedString(2, 200))
+};
+
 const description = R.map(
   Validation.liftValidator,
   Validation.LimitedString(2, 4000)
