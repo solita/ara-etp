@@ -27,7 +27,7 @@
     @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
   }
   .content {
-    @apply relative bg-light w-2/3 py-32 border-dark border-1 flex flex-col justify-center;
+    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
   }
 
   .close {
