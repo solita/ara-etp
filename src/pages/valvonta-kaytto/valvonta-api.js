@@ -11,7 +11,6 @@ import * as dfns from 'date-fns';
 import * as Toimenpiteet from './toimenpiteet';
 
 import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
-import { deleteFuture, rejectWithInvalidResponse } from '@Utility/fetch-utils';
 
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
@@ -339,7 +338,7 @@ export const putValvonta = R.curry((id, valvonta) =>
   )(valvonta)
 );
 
-export const deleteValvonta = R.compose(deleteFuture, url.valvonta);
+export const deleteValvonta = R.compose(Fetch.deleteFuture, url.valvonta);
 
 /* Muistiinpanojen palvelut */
 
