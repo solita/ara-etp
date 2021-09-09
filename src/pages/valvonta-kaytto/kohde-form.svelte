@@ -45,13 +45,15 @@
       Validation.blurForm(form);
     }
   };
+
+  const setDirty = _ => { dirty = true; }
 </script>
 <form
     class="content"
     bind:this={form}
     on:submit|preventDefault={submit}
-    on:input={_ => { dirty = true; }}
-    on:change={_ => { dirty = true;}}>
+    on:input={setDirty}
+    on:change={setDirty}>
 
   <div class="flex flex-col w-full py-8">
     <H2 text={i18n(`${i18nRoot}.rakennuksen-tiedot`)}/>
