@@ -5,7 +5,7 @@
   import Valvonnat from './valvonnat';
   import Valvonta from './valvonta';
   import Kohde from './kohde';
-  import NewKohde from './new-kohde';
+  import NewValvonta from './new-valvonta';
   import NotFound from '@Pages/not-found/not-found';
   import Osapuoli from './osapuoli';
   import NewOsapuoli from './new-osapuoli';
@@ -23,7 +23,7 @@
   const prefix = '/valvonta/kaytto';
   const routes = {
     '/all': Valvonnat,
-    '/new': NewKohde,
+    '/new': NewValvonta,
     '/:id/kohde': Kohde,
     '/:id/valvonta': Valvonta,
     '/:valvonta-id/henkilo/new': route('henkilo', NewOsapuoli),
