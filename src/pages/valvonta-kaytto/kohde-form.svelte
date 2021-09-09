@@ -7,9 +7,10 @@
   import * as Validation from '@Utility/validation';
   import * as Locales from '@Language/locale-utils';
   import * as Ilmoituspaikka from './ilmoituspaikka';
+  import * as Postinumero from '@Component/address/postinumero-fi';
 
   import { _, locale } from '@Language/i18n';
-  import { kohde as schema } from '@Pages/valvonta-kaytto/schema';
+  import { kohde as kohdeSchema } from '@Pages/valvonta-kaytto/schema';
 
   import H2 from '@Component/H/H2.svelte';
   import Input from '@Component/Input/Input.svelte';
@@ -19,12 +20,14 @@
   import Confirm from '@Component/Confirm/Confirm.svelte';
 
   import { flashMessageStore } from '@/stores';
+  import Autocomplete from '../../components/Autocomplete/Autocomplete.svelte';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
 
   export let kohde;
   export let ilmoituspaikat;
+  export let postinumerot;
 
   export let save;
   export let revert;
@@ -46,7 +49,13 @@
     }
   };
 
-  const setDirty = _ => { dirty = true; }
+  const setDirty = _ => {
+    dirty = true;
+  };
+
+  $: postinumeroNames = R.map(Postinumero.fullLabel($locale), postinumerot);
+  $: PostinumeroType = Postinumero.Type(postinumerot);
+  $: schema = R.assoc('postinumero', PostinumeroType.validators, kohdeSchema);
 </script>
 <form
     class="content"
@@ -82,16 +91,20 @@
           {i18n}/>
     </div>
     <div class="py-4 w-full md:w-1/3">
-      <Input
-          id={'kohde.postinumero'}
-          name={'kohde.postinumero'}
-          label={i18n(`${i18nRoot}.postinumero`)}
-          bind:model={kohde}
-          lens={R.lensProp('postinumero')}
-          parse={Parsers.optionalString}
-          format={Maybe.orSome('')}
-          validators={schema.postinumero}
-          {i18n}/>
+      <Autocomplete items={postinumeroNames} size={10}>
+        <Input
+            id={'kohde.postinumero'}
+            name={'kohde.postinumero'}
+            label={i18n(`${i18nRoot}.postinumero`)}
+            search={true}
+            bind:model={kohde}
+            lens={R.lensProp('postinumero')}
+            parse={PostinumeroType.parse}
+            format={Maybe.fold('',
+              Postinumero.formatPostinumero(postinumerot, $locale))}
+            validators={schema.postinumero}
+            {i18n}/>
+      </Autocomplete>
     </div>
   </div>
   <div class="flex flex-col w-full py-8">

@@ -64,6 +64,7 @@
         henkilot: ValvontaApi.getHenkilot(params.id),
         yritykset: ValvontaApi.getYritykset(params.id),
         countries: geoApi.countries,
+        postinumerot: geoApi.postinumerot,
         toimitustavat: ValvontaApi.toimitustavat
       })
     );
@@ -139,6 +140,7 @@
       ilmoituspaikat,
       roolit,
       toimitustavat,
+      postinumerot,
       countries,
       henkilot,
       yritykset,
@@ -146,6 +148,7 @@
 
       <DirtyConfirmation dirty={dirtyKohde || dirtyLiitteet}/>
       <KohdeForm bind:dirty={dirtyKohde} kohde={valvonta} {ilmoituspaikat}
+                 {postinumerot}
                  save={updateKohde}
                  revert={_ => load(params.id)}
                  remove={Maybe.Some(deleteKohde)}/>
