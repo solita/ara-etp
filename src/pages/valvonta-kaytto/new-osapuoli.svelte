@@ -74,7 +74,7 @@
       response => {
         const msg = i18n(
           Maybe.orSome(
-            `${i18nRoot}.messages.error`,
+            `${i18nRoot}.messages.add-error`,
             Response.localizationKey(response)
           )
         );
@@ -85,7 +85,7 @@
         flashMessageStore.add(
           'henkilo',
           'success',
-          i18n(`${i18nRoot}.messages.success`)
+          i18n(`${i18nRoot}.messages.add-success`)
         );
         dirty = false;
         push(osapuoliType.link({id: params['valvonta-id']}, response));

@@ -1548,9 +1548,6 @@
           "load-error": "Osapuolen tietojen haku epäonnistui.",
           "save-success": "Osapuolen muutokset tallennettu.",
           "save-error": "Osapuolen tallennus epäonnistui.",
-          "publish-success": "Osapuoli on lähetetty.",
-          "publish-error": "Osapuolen lähetys epäonnistui.",
-          "preview-error": "Osapuolen esikatselu epäonnistui.",
           "add-success": "Osapuoli lisätty.",
           "add-error": "Osapuolen lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
