@@ -6,6 +6,7 @@
   import * as Formats from '@Utility/formats';
   import * as Validation from '@Utility/validation';
   import * as Locales from '@Language/locale-utils';
+  import * as Ilmoituspaikka from './ilmoituspaikka';
 
   import { _, locale } from '@Language/i18n';
   import { kohde as schema } from '@Pages/valvonta-kaytto/schema';
@@ -117,20 +118,20 @@
           format={Locales.labelForId($locale, ilmoituspaikat)}
           items={R.pluck('id', ilmoituspaikat)}/>
     </div>
-    {#each Maybe.toArray(kohde['ilmoituspaikka-id']) as ilmoituspaikkaId}
-      {#if ilmoituspaikkaId === 2}
-        <div class="py-4 w-full md:w-1/3">
-          <Input
-              id={'kohde.ilmoituspaikka-description'}
-              name={'kohde.ilmoituspaikka-description'}
-              label={i18n(`${i18nRoot}.ilmoituspaikka-description`)}
-              bind:model={kohde}
-              lens={R.lensProp('ilmoituspaikka-description')}
-              parse={R.trim}
-              {i18n}/>
-        </div>
-      {/if}
-    {/each}
+    {#if Ilmoituspaikka.other(kohde)}
+      <div class="py-4 w-full md:w-1/3">
+        <Input
+            id={'kohde.ilmoituspaikka-description'}
+            name={'kohde.ilmoituspaikka-description'}
+            label={i18n(`${i18nRoot}.ilmoituspaikka-description`)}
+            bind:model={kohde}
+            lens={R.lensProp('ilmoituspaikka-description')}
+            parse={Parsers.optionalString}
+            format={Maybe.orSome('')}
+            validators={schema['ilmoituspaikka_description']}
+            {i18n}/>
+      </div>
+    {/if}
     <div class="py-4 w-full md:w-1/3">
       <Input
           id={'kohde.ilmoitustunnus'}
