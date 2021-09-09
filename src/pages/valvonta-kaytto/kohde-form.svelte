@@ -143,6 +143,7 @@
           lens={R.lensProp('ilmoitustunnus')}
           parse={Parsers.optionalString}
           format={Maybe.orSome('')}
+          validators={schema.ilmoitustunnus}
           {i18n}/>
     </div>
   </div>
