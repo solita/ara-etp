@@ -119,6 +119,13 @@ export const deleteRequest = R.curry((fetch, url) =>
 );
 
 /**
+ * @sig string -> Future
+ */
+export const deleteFuture = R.compose(
+  R.chain(rejectWithInvalidResponse),
+  Future.encaseP(deleteRequest(fetch)));
+
+/**
  * @sig Fetch -> string -> Future [ErrorResponse, Response]
  * @description Cached future to fetch static data from backend
  */

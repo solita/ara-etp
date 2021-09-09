@@ -3,7 +3,9 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Validation from '@Utility/validation';
+  import * as Objects from '@Utility/objects';
+  import * as Links from './links';
+  import * as Osapuolet from './osapuolet';
   import { push } from '@Component/Router/router';
 
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
@@ -14,32 +16,34 @@
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  export let params;
+  import * as GeoApi from '@Component/Geo/geo-api';
+  import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
+  import YritysForm from '@Pages/valvonta-kaytto/yritys-form';
 
-  import * as api from './valvonta-api';
-  import * as geoApi from '@Component/Geo/geo-api';
+  export let params;
+  export let type;
 
   const i18n = $_;
-  const i18nRoot = 'valvonta.kaytto.osapuolet';
-  const emptyHenkilo = {
-    etunimi: '',
-    sukunimi: '',
-    henkilotunnus: Maybe.None(),
-    'rooli-id': Maybe.None(),
-    'rooli-description': Maybe.None(),
-    email: Maybe.None(),
-    puhelin: Maybe.None(),
-    'vastaanottajan-tarkenne': Maybe.None(),
-    jakeluosoite: Maybe.None(),
-    postinumero: Maybe.None(),
-    postitoimipaikka: Maybe.None(),
-    maa: Maybe.None(),
-    'toimitustapa-id': Maybe.None(),
-    'toimitustapa-description': Maybe.None()
-  };
+  const i18nRoot = 'valvonta.kaytto.osapuoli';
+  const types = {
+    henkilo: {
+      form: HenkiloForm,
+      post: ValvontaApi.postHenkilo,
+      empty: Osapuolet.emptyHenkilo,
+      link: Links.henkilo,
+      title: 'new-henkilo'
+    },
+    yritys: {
+      form: YritysForm,
+      post: ValvontaApi.postYritys,
+      empty: Osapuolet.emptyYritys,
+      link: Links.yritys,
+      title: 'new-yritys'
+    }
+  }
 
   let overlay = true;
-  let henkilo = emptyHenkilo;
+  let osapuoli = types[type].empty();
   let dirty = false;
 
   let resources = Maybe.None();
@@ -59,66 +63,53 @@
       overlay = false;
     },
     Future.parallelObject(3, {
-      roolit: api.roolit,
-      toimitustavat: api.toimitustavat,
-      countries: geoApi.countries
+      roolit: ValvontaApi.roolit,
+      toimitustavat: ValvontaApi.toimitustavat,
+      countries: GeoApi.countries
     })
   );
 
-  const submitNewHenkilo = (henkilo, event) => {
-    if (henkilo.etunimi?.length >= 1 && henkilo.sukunimi?.length >= 1) {
-      overlay = true;
-      addHenkilo(henkilo);
-    } else {
-      flashMessageStore.add(
-        'henkilo',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
-      Validation.blurForm(event.target);
-    }
-  };
-
-  const addHenkilo = R.compose(
+  const addOsapuoli = osapuoliType => R.compose(
     Future.fork(
       response => {
         const msg = i18n(
           Maybe.orSome(
-            `${i18nRoot}.messages.error`,
+            `${i18nRoot}.messages.add-error`,
             Response.localizationKey(response)
           )
         );
         flashMessageStore.add('henkilo', 'error', msg);
         overlay = false;
       },
-      _ => {
+      response => {
         flashMessageStore.add(
           'henkilo',
           'success',
-          i18n(`${i18nRoot}.messages.success`)
+          i18n(`${i18nRoot}.messages.add-success`)
         );
         dirty = false;
-        push('/valvonta/kaytto/' + params['kohde-id'] + '/henkilo/' + _.id);
+        push(osapuoliType.link({id: params['valvonta-id']}, response));
       }
     ),
-    api.postHenkilo(fetch, params['kohde-id'])
+    osapuoliType.post(params['valvonta-id'])
   );
+
+  $: osapuoliType = Objects.requireNotNil(types[type],
+    "Unsupported osapuolitype: " + type);
 </script>
 
-<H1 text={i18n(i18nRoot + '.uusi-henkilo')} />
+<H1 text={i18n(i18nRoot + '.' + osapuoliType.title + '-title')} />
 
 <Overlay {overlay}>
   <div slot="content">
     <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { roolit, toimitustavat, countries }}
-      <HenkiloForm
-        {henkilo}
+      <svelte:component this={osapuoliType.form}
+        {osapuoli}
         {roolit}
         {toimitustavat}
         {countries}
-        {i18n}
-        {i18nRoot}
-        submitHenkilo={submitNewHenkilo}
+        save={addOsapuoli(osapuoliType)}
         bind:dirty />
     {/each}
   </div>
