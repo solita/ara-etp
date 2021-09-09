@@ -69,7 +69,7 @@
     })
   );
 
-  const addHenkilo = osapuoliType => R.compose(
+  const addOsapuoli = osapuoliType => R.compose(
     Future.fork(
       response => {
         const msg = i18n(
@@ -109,7 +109,7 @@
         {roolit}
         {toimitustavat}
         {countries}
-        save={addHenkilo(osapuoliType)}
+        save={addOsapuoli(osapuoliType)}
         bind:dirty />
     {/each}
   </div>
