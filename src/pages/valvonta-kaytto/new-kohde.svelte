@@ -17,6 +17,7 @@
 
   import * as api from './valvonta-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as GeoApi from '@Component/Geo/geo-api';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
@@ -58,6 +59,7 @@
     },
     Future.parallelObject(2, {
       whoami: KayttajaApi.whoami,
+      postinumerot: GeoApi.postinumerot,
       ilmoituspaikat: api.ilmoituspaikat
     })
   );
@@ -92,9 +94,9 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { ilmoituspaikat }}
+    {#each Maybe.toArray(resources) as { ilmoituspaikat, postinumerot }}
       <DirtyConfirmation {dirty} />
-      <KohdeForm bind:dirty {kohde} {ilmoituspaikat}
+      <KohdeForm bind:dirty {kohde} {ilmoituspaikat} {postinumerot}
                  save={addKohde}
                  revert={resetForm} />
       <div class="flex">
