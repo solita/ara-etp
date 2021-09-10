@@ -1544,6 +1544,7 @@
         "postitoimipaikka": "Postitoimipaikka",
         "maa": "Maa",
         "toimitustapa-id": "Toimitustapa",
+        "toimitustapa-description": "Toimitustavan kuvaus",
         "warning-toimitustapa-suomifi-henkilo": "Kun toimitustapa on suomi.fi, tulee henkilötunnus ja osoitetiedot olla täytettynä",
         "warning-toimitustapa-suomifi-yritys": "Kun toimitustapa on suomi.fi, tulee Y-tunnus ja osoitetiedot olla täytettynä",
         "warning-toimitustapa-email": "Kun toimitustapa on sahköposti, tulee sahköpostiosoitteen olla täytettynä",
