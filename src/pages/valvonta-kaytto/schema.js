@@ -18,10 +18,11 @@ export const kohde = {
 };
 
 const osapuoli = {
-  email: OptionalLimitedString(2, 200),
+  email: [Validation.liftValidator(Validation.emailValidator)],
   puhelin: OptionalLimitedString(2, 200),
-  'vastanottajan-tarkenne': OptionalLimitedString(2, 200),
-  postinumero: OptionalLimitedString(2, 200),
+  'vastaanottajan-tarkenne': OptionalLimitedString(2, 200),
+  'jakeluosoite': OptionalLimitedString(2, 200),
+  postinumero: OptionalLimitedString(2, 10),
   postitoimipaikka: OptionalLimitedString(2, 200),
   rooli_description: OptionalLimitedString(2, 200),
   toimitustapa_description: OptionalLimitedString(2, 200),

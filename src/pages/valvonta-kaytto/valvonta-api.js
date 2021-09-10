@@ -117,12 +117,12 @@ export const deserializeYritysOsapuoli = R.compose(
 );
 
 export const getHenkilot = R.compose(
-  R.map(deserializeHenkiloOsapuoli),
+  R.map(R.map(deserializeHenkiloOsapuoli)),
   Fetch.getJson(fetch),
   url.henkilot
 );
 export const getYritykset = R.compose(
-  R.map(deserializeYritysOsapuoli),
+  R.map(R.map(R.map(deserializeYritysOsapuoli))),
   Fetch.getJson(fetch),
   url.yritykset
 );

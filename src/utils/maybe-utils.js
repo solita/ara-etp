@@ -120,6 +120,16 @@ export const toMaybeList = R.compose(
 );
 
 /**
+ * Find all some values of a list of maybe.
+ * @sig Array [Maybe *] -> Array [*]
+ */
+export const findAllSome = R.compose(
+  orSome([]),
+  R.sequence(of),
+  R.filter(isSome)
+);
+
+/**
  * @sig (a -> b) -> a -> Maybe b
  */
 export const nullReturning = fn => R.compose(Maybe.fromNull, fn);
