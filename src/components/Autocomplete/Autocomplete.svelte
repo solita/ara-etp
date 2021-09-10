@@ -13,6 +13,7 @@
   export let items = [];
   export let completedValue = '';
   export let size = 5;
+  export let component = null;
 
   let active = Maybe.None();
   let input;
@@ -115,6 +116,7 @@
       onclick={(item, index) => {
         setInputValue(item);
         active = Maybe.None();
-      }} />
+      }}
+      {component} />
   {/if}
 </div>

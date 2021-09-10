@@ -15,6 +15,7 @@
   import TextEditor from '@Component/text-editor/text-editor';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
   import Input from '@Component/Input/Input.svelte';
+  import UnescapedItem from '@Component/DropdownList/UnescapedItem.svelte';
   import TextButton from '@Component/Button/TextButton';
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
@@ -151,7 +152,8 @@
   <div class="w-1/2 py-4">
     <Autocomplete
       items={R.map(Locales.label($locale), newVirhetypes)}
-      size={1000}>
+      size={1000}
+      component={UnescapedItem}>
       <Input
         id="add-virhe"
         name="add-virhe"
@@ -170,7 +172,7 @@
     <div class="my-5">
       <div class="flex mb-2">
         <div class="text-primary font-bold truncate">
-          {formatVirhetyyppi(virhe['type-id'])}
+          {@html formatVirhetyyppi(virhe['type-id'])}
         </div>
         {#if !disabled}
           <div class="ml-2 flex">
