@@ -1567,7 +1567,8 @@
         "ilmoitustunnus": "Ilmoitustunnus",
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy"
-        }
+        },
+        "no-events": "Ei tapahtumia"
       },
       "toimenpide": {
         "cancel-button": "Peruuta",
@@ -1617,6 +1618,17 @@
           "add-success": "Toimenpide lisätty.",
           "add-error": "Toimenpiteen lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
+        }
+      },
+      "note": {
+        "title": "Muistiinpano",
+        "cancel-button": "Peruuta",
+        "description": "Sisältö",
+        "add-button": "Tallenna",
+        "messages": {
+          "add-success": "Uusi muistiinpano lisätty.",
+          "add-error": "Muistiinpanon lisääminen epäonnistui.",
+          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä."
         }
       }
     }
