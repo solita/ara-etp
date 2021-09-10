@@ -24,7 +24,13 @@ export const toimenpideSave = {
   'deadline-date': [],
   'template-id': [],
   description: description,
-  'severity-id': []
+  'severity-id': [],
+  tiedoksi: [
+    {
+      name: Validation.LimitedString(2, 200),
+      email: [Validation.liftValidator(Validation.emailValidator)]
+    }
+  ]
 };
 
 export const toimenpidePublish = (templates, toimenpide) =>

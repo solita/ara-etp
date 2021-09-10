@@ -91,7 +91,8 @@ export const emptyToimenpide = typeId => ({
   'template-id': Maybe.None(),
   description: Maybe.None(),
   virheet: [],
-  'severity-id': Maybe.None()
+  'severity-id': Maybe.None(),
+  tiedoksi: []
 });
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));

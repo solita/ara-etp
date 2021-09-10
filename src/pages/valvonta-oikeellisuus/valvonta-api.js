@@ -36,7 +36,8 @@ export const deserializeToimenpide = R.evolve({
   diaarinumero: Maybe.fromNull,
   description: Maybe.fromNull,
   'template-id': Maybe.fromNull,
-  'severity-id': Maybe.fromNull
+  'severity-id': Maybe.fromNull,
+  tiedoksi: R.map(R.evolve({ email: Maybe.fromNull }))
 });
 
 export const deserializeValvontaStatus = R.compose(
@@ -58,7 +59,8 @@ export const serializeToimenpide = R.compose(
     description: Maybe.orSome(null),
     'deadline-date': EM.fold(null, date =>
       dfns.formatISO(date, { representation: 'date' })
-    )
+    ),
+    tiedoksi: R.map(R.evolve({ email: Maybe.orSome(null) }))
   }),
   R.pick([
     'type-id',
@@ -66,7 +68,8 @@ export const serializeToimenpide = R.compose(
     'description',
     'template-id',
     'virheet',
-    'severity-id'
+    'severity-id',
+    'tiedoksi'
   ])
 );
 

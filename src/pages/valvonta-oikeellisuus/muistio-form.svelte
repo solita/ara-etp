@@ -15,6 +15,7 @@
   import TextEditor from '@Component/text-editor/text-editor';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
   import Input from '@Component/Input/Input.svelte';
+  import TextButton from '@Component/Button/TextButton';
 
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide.audit-report';
   const i18n = $_;
@@ -48,11 +49,7 @@
       description: Locales.prop('description', locale, tyyppi)
     };
 
-    toimenpide = R.over(
-      R.lensProp('virheet'),
-      R.prepend(newVirhe),
-      toimenpide
-    );
+    toimenpide = R.over(R.lensProp('virheet'), R.prepend(newVirhe), toimenpide);
 
     dirty = true;
   });
@@ -86,7 +83,8 @@
         R.map(R.toLower),
         R.props(['label-fi', 'label-sv'])
       ),
-      virhetyypit);
+      virhetyypit
+    );
 
   const selectNewVirhe = event => {
     const newVirhetyyppi = findVirhetyyppi(event.target.value, virhetyypit);
@@ -97,8 +95,21 @@
       input.blur();
       input.focus();
     }
-  }
+  };
 
+  const addTiedoksiRecipient = _ => {
+    toimenpide = R.over(
+      R.lensProp('tiedoksi'),
+      R.append({ name: '', email: Maybe.None() }),
+      toimenpide
+    );
+    dirty = true;
+  };
+
+  const removeTiedoksiRecipient = index => {
+    toimenpide = R.over(R.lensProp('tiedoksi'), R.remove(index, 1), toimenpide);
+    dirty = true;
+  };
 </script>
 
 <div class="mb-5">
@@ -120,9 +131,9 @@
   {#if !R.isEmpty(templates)}
     <div class="w-1/2 py-4">
       <Select
-          id="template-id"
-          name="template-id"
-          label={i18n('valvonta.oikeellisuus.toimenpide.select-template')}
+        id="template-id"
+        name="template-id"
+        label={i18n('valvonta.oikeellisuus.toimenpide.select-template')}
         bind:model={toimenpide}
         lens={R.lensProp('template-id')}
         parse={Maybe.fromNull}
@@ -138,17 +149,18 @@
 <H2 text={i18n(i18nRoot + '.virheet-title')} />
 {#if !disabled}
   <div class="w-1/2 py-4">
-    <Autocomplete items={R.map(Locales.label($locale), newVirhetypes)}
-                  size={1000}>
+    <Autocomplete
+      items={R.map(Locales.label($locale), newVirhetypes)}
+      size={1000}>
       <Input
-          id="add-virhe"
-          name="add-virhe"
-          label={i18n(i18nRoot + '.add-virhe')}
-          required={false}
-          {disabled}
-          on:input={selectNewVirhe}
-          search={true}
-          {i18n} />
+        id="add-virhe"
+        name="add-virhe"
+        label={i18n(i18nRoot + '.add-virhe')}
+        required={false}
+        {disabled}
+        on:input={selectNewVirhe}
+        search={true}
+        {i18n} />
     </Autocomplete>
   </div>
 {/if}
@@ -218,7 +230,7 @@
 
 <H2 text={i18n(i18nRoot + '.severity-title')} />
 
-<div class="w-1/2 py-4">
+<div class="w-1/2 py-4 mb-5">
   <Select
     id="severity-id"
     name="severity-id"
@@ -232,3 +244,44 @@
     validation={schema.publish}
     items={R.pluck('id', severities)} />
 </div>
+
+<H2 text={i18n(i18nRoot + '.tiedoksi.title')} />
+
+<p>{i18n(i18nRoot + '.tiedoksi.description')}</p>
+
+{#each toimenpide.tiedoksi as _, i}
+  <div class="flex space-x-4 mb-8 mt-4">
+    <Input
+      id={`tiedoksi.${i}.name`}
+      name={`tiedoksi.${i}.name`}
+      label={i18n(i18nRoot + '.tiedoksi.name')}
+      required={true}
+      bind:model={toimenpide}
+      lens={R.lensPath(['tiedoksi', i, 'name'])}
+      validators={schema.tiedoksi[0].name}
+      {i18n} />
+
+    <Input
+      id={`tiedoksi.${i}.email`}
+      name={`tiedoksi.${i}.email`}
+      label={i18n(i18nRoot + '.tiedoksi.email')}
+      bind:model={toimenpide}
+      lens={R.lensPath(['tiedoksi', i, 'email'])}
+      parse={Maybe.fromNull}
+      format={Maybe.orSome('')}
+      validators={schema.tiedoksi[0].email}
+      {i18n} />
+
+    <span
+      class="material-icons delete-icon cursor-pointer mt-6"
+      on:click|stopPropagation={_ => removeTiedoksiRecipient(i)}>
+      highlight_off
+    </span>
+  </div>
+{/each}
+
+<TextButton
+  icon="add"
+  text={i18n(i18nRoot + '.tiedoksi.add')}
+  type="button"
+  on:click={addTiedoksiRecipient} />
