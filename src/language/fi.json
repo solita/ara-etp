@@ -1503,14 +1503,14 @@
         "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen",
         "no-attachments": "Ei liitteitä",
         "messages": {
-          "not-found": "Kohdetta ei löydy.",
-          "load-error": "Kohteen tietojen haku epäonnistui.",
-          "save-success": "Kohteen muutokset tallennettu.",
-          "save-error": "Kohteen tallennus epäonnistui.",
-          "delete-success": "Kohde poistettu.",
-          "delete-error": "Kohteen poistaminen epäonnistui.",
-          "add-success": "Kohde lisätty.",
-          "add-error": "Kohteen lisääminen epäonnistui.",
+          "not-found": "Käytönvalvontaa ei ole olemassa.",
+          "load-error": "Käytönvalvonnan kohteen tietojen haku epäonnistui.",
+          "save-success": "Käytönvalvonnan muutokset tallennettu.",
+          "save-error": "Käytönvalvonnan tallennus epäonnistui.",
+          "delete-success": "Käytönvalvonta poistettu.",
+          "delete-error": "Käytönvalvonnan poistaminen epäonnistui.",
+          "add-success": "Käytönvalvonta lisätty.",
+          "add-error": "Käytönvalvonnan lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä."
         },
         "osapuolet": {
