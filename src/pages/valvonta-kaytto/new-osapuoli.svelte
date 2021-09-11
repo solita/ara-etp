@@ -50,12 +50,8 @@
 
   Future.fork(
     response => {
-      const msg = $_(
-        `${i18nRoot}.messages.load-error`,
-        Response.localizationKey(response)
-      );
-
-      flashMessageStore.add('henkilo', 'error', msg);
+      flashMessageStore.add('valvonta-kaytto', 'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response)));
       overlay = false;
     },
     response => {
@@ -72,18 +68,13 @@
   const addOsapuoli = osapuoliType => R.compose(
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            `${i18nRoot}.messages.add-error`,
-            Response.localizationKey(response)
-          )
-        );
-        flashMessageStore.add('henkilo', 'error', msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey(i18nRoot, 'add', response)));
         overlay = false;
       },
       response => {
-        flashMessageStore.add(
-          'henkilo',
+        flashMessageStore.addPersist(
+          'valvonta-kaytto',
           'success',
           i18n(`${i18nRoot}.messages.add-success`)
         );
