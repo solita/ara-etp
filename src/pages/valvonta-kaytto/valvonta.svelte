@@ -35,15 +35,8 @@
     Future.fork(
       response => {
         overlay = false;
-        const msg = Response.notFound(response)
-          ? i18n(`${i18nRoot}.messages.not-found`)
-          : i18n(
-              Maybe.orSome(
-                `${i18nRoot}.messages.load-error`,
-                Response.localizationKey(response)
-              )
-            );
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);
@@ -72,13 +65,8 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            `${i18nRoot}.messages.${key}-error`,
-            Response.localizationKey(response)
-          )
-        );
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey(i18nRoot, key, response)));
         overlay = false;
       },
       response => {
@@ -133,10 +121,12 @@
           katuosoite={Maybe.Some(valvonta.katuosoite)}
           postinumero={valvonta.postinumero} />
         <span>
-          {`${i18n(i18nRoot + '.rakennustunnus')}: ${valvonta.rakennustunnus}`}
+          {i18n(i18nRoot + '.rakennustunnus')}:
+          {Maybe.orSome('', valvonta.rakennustunnus)}
         </span>
         <span>
-          {`${i18n(i18nRoot + '.ilmoitustunnus')}: ${valvonta.ilmoitustunnus}`}
+          {i18n(i18nRoot + '.ilmoitustunnus')}:
+          {Maybe.orSome('', valvonta.ilmoitustunnus)}
         </span>
       </div>
 
