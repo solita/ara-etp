@@ -25,12 +25,12 @@ const localizationKeys = {
 export const localizationKey = response =>
   Maybe.fromNull(localizationKeys[response.status]);
 
-export const postErrorKey = (i18nRoot, action, response) =>
+export const errorKey = (i18nRoot, action, response) =>
   Maybe.orSome(
     `${i18nRoot}.messages.${action}-error`,
-    Response.localizationKey(response));
+    localizationKey(response));
 
-export const errorKey = (i18nRoot, action, response) =>
+export const errorKey404 = (i18nRoot, action, response) =>
   notFound(response)
     ? `${i18nRoot}.messages.not-found`
-    : postErrorKey(i18nroot, action, response);
+    : errorKey(i18nroot, action, response);

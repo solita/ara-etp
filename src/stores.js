@@ -47,7 +47,7 @@ const createFlashMessageStore = () => {
 
       if (type === 'success') {
         setTimeout(
-          () => update(R.reject(R.eqBy(R.omit('persist'), message))),
+          () => update(R.reject(R.eqBy(R.omit(['persist']), message))),
           5000
         );
       }
@@ -55,11 +55,11 @@ const createFlashMessageStore = () => {
       return set([message]);
     }),
     addPersist: R.curry((module, type, text) => {
-      const message = { module, type, text, persist: false };
+      const message = { module, type, text, persist: true };
 
       if (type === 'success') {
         setTimeout(
-          () => update(R.reject(R.eqBy(R.omit('persist'), message))),
+          () => update(R.reject(R.eqBy(R.omit(['persist']), message))),
           5000
         );
       }
