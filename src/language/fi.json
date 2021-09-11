@@ -1559,6 +1559,8 @@
           "save-error": "Osapuolen tallennus epäonnistui.",
           "add-success": "Osapuoli lisätty.",
           "add-error": "Osapuolen lisääminen epäonnistui.",
+          "delete-success": "Osapuoli on poistettu.",
+          "delete-error": "Osapuolen poistaminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
         }
       },
