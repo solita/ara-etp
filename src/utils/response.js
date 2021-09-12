@@ -33,4 +33,4 @@ export const errorKey = (i18nRoot, action, response) =>
 export const errorKey404 = (i18nRoot, action, response) =>
   notFound(response)
     ? `${i18nRoot}.messages.not-found`
-    : errorKey(i18nroot, action, response);
+    : errorKey(i18nRoot, action, response);
