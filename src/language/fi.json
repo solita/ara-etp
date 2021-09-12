@@ -1570,7 +1570,10 @@
         "rakennustunnus": "Pysyvä rakennustunnus",
         "ilmoitustunnus": "Ilmoitustunnus",
         "messages": {
-          "not-found": "Käytönvalvonnan tietoja ei löydy"
+          "not-found": "Käytönvalvonnan tietoja ei löydy",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui",
+          "update-success": "Käytönvalvonnan tiedot päivitetty"
         },
         "no-events": "Ei tapahtumia"
       },

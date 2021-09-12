@@ -36,7 +36,7 @@
       response => {
         overlay = false;
         flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey(i18nRoot, 'load', response)));
+          i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);
@@ -66,7 +66,7 @@
     Future.fork(
       response => {
         flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey(i18nRoot, key, response)));
+          i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
       response => {
