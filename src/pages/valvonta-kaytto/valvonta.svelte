@@ -3,7 +3,6 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Locales from '@Language/locale-utils';
 
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
@@ -54,7 +53,7 @@
         whoami =>
           Future.parallelObject(7, {
             toimenpiteet: ValvontaApi.toimenpiteet(params.id),
-            notes: Future.resolve([]),
+            notes: ValvontaApi.notes(params.id),
             toimenpidetyypit: ValvontaApi.toimenpidetyypit,
             templatesByType: ValvontaApi.templatesByType,
             valvojat: ValvontaApi.valvojat,
@@ -113,6 +112,9 @@
   );
 
   const isToimenpide = R.has('type-id');
+  const keyed = R.curry((prefix, tapahtuma) =>
+    R.assoc('key', `${prefix}_${tapahtuma.id}`, tapahtuma)
+  );
 </script>
 
 <style>
@@ -126,9 +128,10 @@
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
 
       <div class="flex flex-col my-4">
-        <Address {postinumerot}
-                 katuosoite={Maybe.Some(valvonta.katuosoite)}
-                 postinumero={valvonta.postinumero} />
+        <Address
+          {postinumerot}
+          katuosoite={Maybe.Some(valvonta.katuosoite)}
+          postinumero={valvonta.postinumero} />
         <span>
           {`${i18n(i18nRoot + '.rakennustunnus')}: ${valvonta.rakennustunnus}`}
         </span>
@@ -150,21 +153,26 @@
 
       <H2 text={i18n(i18nRoot + '.toimenpiteet')} />
 
-      {#each tapahtumat([toimenpiteet, notes]) as tapahtuma}
-        {#if isToimenpide(tapahtuma)}
-          <Toimenpide
-            {valvonta}
-            {henkilot}
-            {yritykset}
-            {toimenpidetyypit}
-            toimenpide={tapahtuma}
-            {whoami} />
-        {:else}
-          <Note note={tapahtuma} />
-        {/if}
+      {#each tapahtumat([
+        R.map(keyed('toimenpide'), toimenpiteet),
+        R.map(keyed('note'), notes)
+      ]) as tapahtuma (tapahtuma.key)}
+        <div class="mb-8">
+          {#if isToimenpide(tapahtuma)}
+            <Toimenpide
+              {valvonta}
+              {henkilot}
+              {yritykset}
+              {toimenpidetyypit}
+              toimenpide={tapahtuma}
+              {whoami} />
+          {:else}
+            <Note note={tapahtuma} {valvojat} {i18n} />
+          {/if}
+        </div>
       {/each}
-      {#if R.isEmpty(tapahtumat)}
-        <p>{i18n(i18nRoot + '.ei-tapahtumia')}</p>
+      {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
+        <p>{i18n(i18nRoot + '.no-events')}</p>
       {/if}
     {/each}
   </div>
