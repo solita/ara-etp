@@ -84,7 +84,8 @@
       saveKasittelija,
       R.map(parseInt),
       Maybe.fromNull,
-      R.path(['target', 'value']))}
+      R.path(['target', 'value'])
+    )}
     format={fullName(valvojat)}
     items={R.pluck('id', valvojat)} />
 </div>

@@ -22,17 +22,23 @@
   export let type;
 
   const types = {
-    henkilo: { pdf: valvontaApi.url.documentHenkilo},
-    yritys: { pdf: valvontaApi.url.documentYritys}
-  }
+    henkilo: { pdf: valvontaApi.url.documentHenkilo },
+    yritys: { pdf: valvontaApi.url.documentYritys }
+  };
 
   $: rooliLabel = R.compose(
-    Maybe.fold(i18n(i18nRoot + '.rooli-none'), Locales.labelForId($locale, roolit)),
+    Maybe.fold(
+      i18n(i18nRoot + '.rooli-none'),
+      Locales.labelForId($locale, roolit)
+    ),
     R.prop('rooli-id')
   );
 
   $: toimitustapaLabel = R.compose(
-    Maybe.fold(i18n(i18nRoot + '.toimitustapa-none'), Locales.labelForId($locale, toimitustavat)),
+    Maybe.fold(
+      i18n(i18nRoot + '.toimitustapa-none'),
+      Locales.labelForId($locale, toimitustavat)
+    ),
     R.prop('toimitustapa-id')
   );
 
@@ -46,9 +52,8 @@
   });
 </script>
 
-
 {#if Osapuolet.isOmistaja(osapuoli)}
-(<Link
+  (<Link
     text="pdf"
     target={'_blank'}
     href={types[type].pdf(

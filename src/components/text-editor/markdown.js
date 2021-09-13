@@ -8,10 +8,7 @@ Marked.use({
   }
 });
 
-export const toHtml = R.compose(
-  DOMPurify.sanitize,
-  Marked
-);
+export const toHtml = R.compose(DOMPurify.sanitize, Marked);
 
 export const toPlainText = R.compose(
   R.join(''),

@@ -20,7 +20,10 @@
     ? R.reverse(katuosoitteet)
     : katuosoitteet;
 
-  $: katuosoite = Maybe.orElse(katuosoitteetOrdered[1], katuosoitteetOrdered[0]);
+  $: katuosoite = Maybe.orElse(
+    katuosoitteetOrdered[1],
+    katuosoitteetOrdered[0]
+  );
   $: postinumero = energiatodistus.perustiedot.postinumero;
 </script>
 

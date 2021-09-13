@@ -61,25 +61,32 @@
   </div>
 
   {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
-      {#each toimenpide.henkilot as henkilo}
-        <div>
-          {henkilo.etunimi}
-          {henkilo.sukunimi}
-          <Osapuoli osapuoli={henkilo}
-                    type="henkilo"
-                    {valvonta} {toimenpide}
-                    {roolit} {toimitustavat}/>
-        </div>
-      {/each}
-      {#each toimenpide.yritykset as yritys}
-        <div>
-          {yritys.nimi} {Maybe.orSome('', yritys.ytunnus)}
-          <Osapuoli osapuoli={yritys}
-                    type="yritys"
-                    {valvonta} {toimenpide}
-                    {roolit} {toimitustavat}/>
-        </div>
-      {/each}
+    {#each toimenpide.henkilot as henkilo}
+      <div>
+        {henkilo.etunimi}
+        {henkilo.sukunimi}
+        <Osapuoli
+          osapuoli={henkilo}
+          type="henkilo"
+          {valvonta}
+          {toimenpide}
+          {roolit}
+          {toimitustavat} />
+      </div>
+    {/each}
+    {#each toimenpide.yritykset as yritys}
+      <div>
+        {yritys.nimi}
+        {Maybe.orSome('', yritys.ytunnus)}
+        <Osapuoli
+          osapuoli={yritys}
+          type="yritys"
+          {valvonta}
+          {toimenpide}
+          {roolit}
+          {toimitustavat} />
+      </div>
+    {/each}
   {/if}
 
   {#each Maybe.toArray(toimenpide.description) as description}

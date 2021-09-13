@@ -553,8 +553,8 @@ describe('BreadcrumbUtils', () => {
   });
 
   describe('viestiCrumb', () => {
-    const laatija = {id: 1, rooli: 0};
-    const paakayttaja = {id: 1, rooli: 2};
+    const laatija = { id: 1, rooli: 0 };
+    const paakayttaja = { id: 1, rooli: 2 };
 
     it('should return all for laatija', () => {
       const expected = [{ url: '#/viesti/all', label: 'navigation.viesti' }];
@@ -566,10 +566,20 @@ describe('BreadcrumbUtils', () => {
     });
 
     it('should return all for paakayttaja', () => {
-      const expected = [{ url: '#/viesti/all?kasittelija-id=1&has-kasittelija=false', label: 'navigation.viesti' }];
+      const expected = [
+        {
+          url: '#/viesti/all?kasittelija-id=1&has-kasittelija=false',
+          label: 'navigation.viesti'
+        }
+      ];
 
       assert.deepEqual(
-        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, paakayttaja, locations.all),
+        BreadcrumbUtils.viestiCrumb(
+          i18n,
+          idTranslate,
+          paakayttaja,
+          locations.all
+        ),
         expected
       );
     });
@@ -588,12 +598,20 @@ describe('BreadcrumbUtils', () => {
 
     it('should return new for paakayttaja', () => {
       const expected = [
-        { url: '#/viesti/all?kasittelija-id=1&has-kasittelija=false', label: 'navigation.viesti' },
+        {
+          url: '#/viesti/all?kasittelija-id=1&has-kasittelija=false',
+          label: 'navigation.viesti'
+        },
         { url: '#/viesti/new', label: 'navigation.uusi-viesti' }
       ];
 
       assert.deepEqual(
-        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, paakayttaja, locations.new),
+        BreadcrumbUtils.viestiCrumb(
+          i18n,
+          idTranslate,
+          paakayttaja,
+          locations.new
+        ),
         expected
       );
     });
@@ -643,7 +661,7 @@ describe('BreadcrumbUtils', () => {
   });
 
   describe('valvontaCrumb', () => {
-    const whoami = {id: 1};
+    const whoami = { id: 1 };
     describe('oikeellisuus', () => {
       it('should return all', () => {
         const expected = [
@@ -679,7 +697,11 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['oikeellisuus', '2018', '1']),
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, [
+            'oikeellisuus',
+            '2018',
+            '1'
+          ]),
           expected
         );
       });
@@ -694,7 +716,10 @@ describe('BreadcrumbUtils', () => {
         ];
 
         assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['kaytto', ...locations.all]),
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, [
+            'kaytto',
+            ...locations.all
+          ]),
           expected
         );
       });

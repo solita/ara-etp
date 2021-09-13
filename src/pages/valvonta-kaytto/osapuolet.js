@@ -8,7 +8,7 @@ export const toimitustapa = {
   suomifi: R.propEq('toimitustapa-id', Maybe.Some(0)),
   email: R.propEq('toimitustapa-id', Maybe.Some(1)),
   other: R.propEq('toimitustapa-id', Maybe.Some(2))
-}
+};
 
 const emptyOsapuoli = {
   'rooli-id': Maybe.None(),
@@ -24,13 +24,15 @@ const emptyOsapuoli = {
   'toimitustapa-description': Maybe.None()
 };
 
-export const emptyHenkilo = _ => R.mergeLeft(emptyOsapuoli, {
-  etunimi: '',
-  sukunimi: '',
-  henkilotunnus: Maybe.None()
-});
+export const emptyHenkilo = _ =>
+  R.mergeLeft(emptyOsapuoli, {
+    etunimi: '',
+    sukunimi: '',
+    henkilotunnus: Maybe.None()
+  });
 
-export const emptyYritys = _ => R.mergeLeft(emptyOsapuoli, {
-  nimi: '',
-  ytunnus: Maybe.None()
-});
+export const emptyYritys = _ =>
+  R.mergeLeft(emptyOsapuoli, {
+    nimi: '',
+    ytunnus: Maybe.None()
+  });

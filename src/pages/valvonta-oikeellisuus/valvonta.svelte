@@ -138,8 +138,10 @@
   const findketju = (toimenpide, ketjut) =>
     Maybe.find(R.propEq('vo-toimenpide-id', Maybe.Some(toimenpide.id)), ketjut);
 
-  const ketjuIcon = ketju => Viestit.hasUnreadViesti(ketju.viestit) ?
-    Maybe.Some('mark_email_unread') : Maybe.Some('mail');
+  const ketjuIcon = ketju =>
+    Viestit.hasUnreadViesti(ketju.viestit)
+      ? Maybe.Some('mark_email_unread')
+      : Maybe.Some('mail');
 </script>
 
 <Overlay {overlay}>
@@ -195,9 +197,10 @@
               reload={_ => load(params)}
               {valvojat} />
             {#each findketju(tapahtuma, ketjut).toArray() as ketju}
-              <Link href={ViestiLinks.ketju(ketju)}
-                    icon={ketjuIcon(ketju)}
-                    text={ketju.subject}/>
+              <Link
+                href={ViestiLinks.ketju(ketju)}
+                icon={ketjuIcon(ketju)}
+                text={ketju.subject} />
             {/each}
           {:else}
             <Note note={tapahtuma} {valvojat} {i18n} />

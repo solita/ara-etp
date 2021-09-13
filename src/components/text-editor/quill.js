@@ -16,7 +16,7 @@ const dispatchEvent = (name, node, editor) =>
     })
   );
 
-export const quill = (node, {html, toolbar}) => {
+export const quill = (node, { html, toolbar }) => {
   const q = new Quill(node, {
     modules: {
       imageDrop: false,
@@ -41,23 +41,24 @@ export const quill = (node, {html, toolbar}) => {
   // so that they are visible in focusout.relatedTarget
   const action = Objects.requireNotNil(
     root.getElementsByClassName('ql-action')[0],
-    "Link tool action anchor does not found.");
-  action.href="";
+    'Link tool action anchor does not found.'
+  );
+  action.href = '';
   const remove = Objects.requireNotNil(
     root.getElementsByClassName('ql-remove')[0],
-    "Link tool remove anchor does not found.");
-  remove.href="";
+    'Link tool remove anchor does not found.'
+  );
+  remove.href = '';
 
   const focusout = event => {
-    if (!root.contains(event.relatedTarget) &&
-        event.target !== action) {
+    if (!root.contains(event.relatedTarget) && event.target !== action) {
       dispatchEvent('editor-focus-out', node, editor);
     }
-  }
+  };
   root.addEventListener('focusout', focusout);
 
   return {
-    update: ({html, _}) => q.clipboard.dangerouslyPasteHTML(html),
+    update: ({ html, _ }) => q.clipboard.dangerouslyPasteHTML(html),
     destroy: _ => {
       q.off('text-change', textChange);
       root.removeEventListener('focusout', focusout);

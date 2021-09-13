@@ -40,7 +40,7 @@
       put: ValvontaApi.putYritys,
       delete: ValvontaApi.deleteYritys
     }
-  }
+  };
 
   let overlay = true;
   let dirty = false;
@@ -77,8 +77,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey(i18nRoot, key, response)));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey(i18nRoot, key, response))
+        );
         overlay = false;
       },
       _ => {
@@ -95,18 +98,22 @@
     );
   };
 
-  const updateOsapuoli = osapuoliApi => R.compose(
-    fork('save', _ => load(osapuoliApi, params)),
-    osapuoliApi.put(params['valvonta-id'], params.id)
-  );
+  const updateOsapuoli = osapuoliApi =>
+    R.compose(
+      fork('save', _ => load(osapuoliApi, params)),
+      osapuoliApi.put(params['valvonta-id'], params.id)
+    );
 
-  const deleteOsapuoli = osapuoliApi => R.compose(
-    fork('delete', _ => push(Links.kohde({id: params['valvonta-id']}))),
-    osapuoliApi.delete(params['valvonta-id'])
-  );
+  const deleteOsapuoli = osapuoliApi =>
+    R.compose(
+      fork('delete', _ => push(Links.kohde({ id: params['valvonta-id'] }))),
+      osapuoliApi.delete(params['valvonta-id'])
+    );
 
-  $: osapuoliType = Objects.requireNotNil(types[type],
-    "Unsupported osapuolitype: " + type);
+  $: osapuoliType = Objects.requireNotNil(
+    types[type],
+    'Unsupported osapuolitype: ' + type
+  );
   $: load(osapuoliType, params);
 </script>
 
@@ -115,7 +122,8 @@
     <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { osapuoli, roolit, toimitustavat, countries }}
       <H1 text={osapuoliType.name(osapuoli)} />
-      <svelte:component this={osapuoliType.form}
+      <svelte:component
+        this={osapuoliType.form}
         {osapuoli}
         {roolit}
         {toimitustavat}

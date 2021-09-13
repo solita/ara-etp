@@ -291,9 +291,10 @@
                   {/if}
                   <td class="etp-table--td">{valvonta.id}</td>
                   <td class="etp-table--td">
-                    <Address {postinumerot}
-                             katuosoite={Maybe.Some(valvonta.katuosoite)}
-                             postinumero={valvonta.postinumero} />
+                    <Address
+                      {postinumerot}
+                      katuosoite={Maybe.Some(valvonta.katuosoite)}
+                      postinumero={valvonta.postinumero} />
                   </td>
                   <td class="etp-table--td">
                     {R.join(

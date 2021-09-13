@@ -79,7 +79,7 @@ export const serializeOsapuoli = R.compose(
     'vastaanottajan-tarkenne': Maybe.getOrElse(null)
   }),
   R.dissoc('valvonta-id'),
-  R.dissoc('id'),
+  R.dissoc('id')
 );
 
 export const deserializeOsapuoli = R.evolve({
@@ -136,7 +136,9 @@ export const getHenkilo = R.compose(
 export const postHenkilo = R.curry((valvontaId, henkilo) =>
   R.compose(
     Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.henkilot(valvontaId))),
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'post', url.henkilot(valvontaId))
+    ),
     serializeHenkiloOsapuoli
   )(henkilo)
 );
@@ -152,7 +154,8 @@ export const putHenkilo = R.curry((valvontaId, id, henkilo) =>
 );
 
 export const deleteHenkilo = R.curry((valvontaId, id) =>
-  Fetch.deleteFuture(url.henkilo(id, valvontaId)));
+  Fetch.deleteFuture(url.henkilo(id, valvontaId))
+);
 
 export const getYritys = R.compose(
   R.map(deserializeYritysOsapuoli),
@@ -181,7 +184,8 @@ export const putYritys = R.curry((valvontaId, id, yritys) =>
 );
 
 export const deleteYritys = R.curry((valvontaId, id) =>
-  Fetch.deleteFuture(url.yritys(id, valvontaId)));
+  Fetch.deleteFuture(url.yritys(id, valvontaId))
+);
 
 /* Toimenpiteen palvelut */
 
@@ -212,10 +216,14 @@ const serializeToimenpide = R.compose(
 
 export const toimenpiteet = R.compose(
   R.map(R.sortBy(Toimenpiteet.time)),
-  R.map(R.map(R.evolve({
-    henkilot: R.map(deserializeHenkiloOsapuoli),
-    yritykset: R.map(deserializeYritysOsapuoli)
-  }))),
+  R.map(
+    R.map(
+      R.evolve({
+        henkilot: R.map(deserializeHenkiloOsapuoli),
+        yritykset: R.map(deserializeYritysOsapuoli)
+      })
+    )
+  ),
   R.map(R.map(deserializeToimenpide)),
   Fetch.getJson(fetch),
   url.toimenpiteet
@@ -388,11 +396,7 @@ export const postLiitteetLink = R.curry((valvontaId, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
-      Fetch.fetchWithMethod(
-        fetch,
-        'post',
-        url.liitteet(valvontaId) + '/link'
-      )
+      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(valvontaId) + '/link')
     )
   )(link)
 );

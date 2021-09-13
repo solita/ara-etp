@@ -40,7 +40,7 @@
       link: Links.yritys,
       title: 'new-yritys'
     }
-  }
+  };
 
   let overlay = true;
   let osapuoli = types[type].empty();
@@ -50,8 +50,11 @@
 
   Future.fork(
     response => {
-      flashMessageStore.add('valvonta-kaytto', 'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response)));
+      flashMessageStore.add(
+        'valvonta-kaytto',
+        'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response))
+      );
       overlay = false;
     },
     response => {
@@ -65,28 +68,34 @@
     })
   );
 
-  const addOsapuoli = osapuoliType => R.compose(
-    Future.fork(
-      response => {
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey(i18nRoot, 'add', response)));
-        overlay = false;
-      },
-      response => {
-        flashMessageStore.addPersist(
-          'valvonta-kaytto',
-          'success',
-          i18n(`${i18nRoot}.messages.add-success`)
-        );
-        dirty = false;
-        push(osapuoliType.link({id: params['valvonta-id']}, response));
-      }
-    ),
-    osapuoliType.post(params['valvonta-id'])
-  );
+  const addOsapuoli = osapuoliType =>
+    R.compose(
+      Future.fork(
+        response => {
+          flashMessageStore.add(
+            'valvonta-kaytto',
+            'error',
+            i18n(Response.errorKey(i18nRoot, 'add', response))
+          );
+          overlay = false;
+        },
+        response => {
+          flashMessageStore.addPersist(
+            'valvonta-kaytto',
+            'success',
+            i18n(`${i18nRoot}.messages.add-success`)
+          );
+          dirty = false;
+          push(osapuoliType.link({ id: params['valvonta-id'] }, response));
+        }
+      ),
+      osapuoliType.post(params['valvonta-id'])
+    );
 
-  $: osapuoliType = Objects.requireNotNil(types[type],
-    "Unsupported osapuolitype: " + type);
+  $: osapuoliType = Objects.requireNotNil(
+    types[type],
+    'Unsupported osapuolitype: ' + type
+  );
 </script>
 
 <H1 text={i18n(i18nRoot + '.' + osapuoliType.title + '-title')} />
@@ -95,7 +104,8 @@
   <div slot="content">
     <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { roolit, toimitustavat, countries }}
-      <svelte:component this={osapuoliType.form}
+      <svelte:component
+        this={osapuoliType.form}
         {osapuoli}
         {roolit}
         {toimitustavat}

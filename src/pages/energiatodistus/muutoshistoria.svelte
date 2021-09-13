@@ -40,7 +40,10 @@
     R.keys,
     R.pickBy(R.__, stateLocalizations),
     event => (v, _) =>
-      R.and(R.equals(event.k, R.head(v)), Maybe.fold(false, R.last(v), event['new-v']))
+      R.and(
+        R.equals(event.k, R.head(v)),
+        Maybe.fold(false, R.last(v), event['new-v'])
+      )
   );
 
   const assocLocalizationKey = event =>
@@ -141,7 +144,10 @@
                   {$_(i18nRoot + '.' + event.localizationKey)}
                   {#if R.and(R.equals(event.k, 'korvaava-energiatodistus-id'), event['new-v'].isSome())}
                     <Link
-                      href={`#/energiatodistus/${Maybe.orSome('', event['new-v'])}`}
+                      href={`#/energiatodistus/${Maybe.orSome(
+                        '',
+                        event['new-v']
+                      )}`}
                       text={Maybe.orSome('', event['new-v'])} />
                   {/if}
                 </td>

@@ -57,128 +57,129 @@
   $: PostinumeroType = Postinumero.Type(postinumerot);
   $: schema = R.assoc('postinumero', PostinumeroType.validators, kohdeSchema);
 </script>
-<form
-    class="content"
-    bind:this={form}
-    on:submit|preventDefault={submit}
-    on:input={setDirty}
-    on:change={setDirty}>
 
+<form
+  class="content"
+  bind:this={form}
+  on:submit|preventDefault={submit}
+  on:input={setDirty}
+  on:change={setDirty}>
   <div class="flex flex-col w-full py-8">
-    <H2 text={i18n(`${i18nRoot}.rakennuksen-tiedot`)}/>
+    <H2 text={i18n(`${i18nRoot}.rakennuksen-tiedot`)} />
     <div class="py-4 w-full md:w-1/3">
       <Input
-          id={'kohde.rakennustunnus'}
-          name={'kohde.rakennustunnus'}
-          label={i18n(`${i18nRoot}.rakennustunnus`)}
-          bind:model={kohde}
-          lens={R.lensProp('rakennustunnus')}
-          parse={Parsers.optionalString}
-          format={Maybe.orSome('')}
-          validators={schema.rakennustunnus}
-          {i18n} />
+        id={'kohde.rakennustunnus'}
+        name={'kohde.rakennustunnus'}
+        label={i18n(`${i18nRoot}.rakennustunnus`)}
+        bind:model={kohde}
+        lens={R.lensProp('rakennustunnus')}
+        parse={Parsers.optionalString}
+        format={Maybe.orSome('')}
+        validators={schema.rakennustunnus}
+        {i18n} />
     </div>
     <div class="py-4 w-full md:w-1/2">
       <Input
-          id={'kohde.katuosoite'}
-          name={'kohde.katuosoite'}
-          label={i18n(`${i18nRoot}.katuosoite`)}
-          required={true}
-          bind:model={kohde}
-          lens={R.lensProp('katuosoite')}
-          parse={R.trim}
-          validators={schema.katuosoite}
-          {i18n}/>
+        id={'kohde.katuosoite'}
+        name={'kohde.katuosoite'}
+        label={i18n(`${i18nRoot}.katuosoite`)}
+        required={true}
+        bind:model={kohde}
+        lens={R.lensProp('katuosoite')}
+        parse={R.trim}
+        validators={schema.katuosoite}
+        {i18n} />
     </div>
     <div class="py-4 w-full md:w-1/3">
       <Autocomplete items={postinumeroNames} size={10}>
         <Input
-            id={'kohde.postinumero'}
-            name={'kohde.postinumero'}
-            label={i18n(`${i18nRoot}.postinumero`)}
-            search={true}
-            bind:model={kohde}
-            lens={R.lensProp('postinumero')}
-            parse={PostinumeroType.parse}
-            format={Maybe.fold('',
-              Postinumero.formatPostinumero(postinumerot, $locale))}
-            validators={schema.postinumero}
-            {i18n}/>
+          id={'kohde.postinumero'}
+          name={'kohde.postinumero'}
+          label={i18n(`${i18nRoot}.postinumero`)}
+          search={true}
+          bind:model={kohde}
+          lens={R.lensProp('postinumero')}
+          parse={PostinumeroType.parse}
+          format={Maybe.fold(
+            '',
+            Postinumero.formatPostinumero(postinumerot, $locale)
+          )}
+          validators={schema.postinumero}
+          {i18n} />
       </Autocomplete>
     </div>
   </div>
   <div class="flex flex-col w-full py-8">
-    <H2 text={i18n(`${i18nRoot}.ilmoituksen-tiedot`)}/>
+    <H2 text={i18n(`${i18nRoot}.ilmoituksen-tiedot`)} />
 
     <div class="py-4 w-full md:w-1/3">
       <Datepicker
-          label={i18n(`${i18nRoot}.havaintopaiva`)}
-          bind:model={kohde}
-          lens={R.lensProp('havaintopaiva')}
-          format={Maybe.fold('', Formats.formatDateInstant)}
-          parse={Parsers.optionalParser(Parsers.parseDate)}
-          transform={EM.fromNull}
-          {i18n}/>
+        label={i18n(`${i18nRoot}.havaintopaiva`)}
+        bind:model={kohde}
+        lens={R.lensProp('havaintopaiva')}
+        format={Maybe.fold('', Formats.formatDateInstant)}
+        parse={Parsers.optionalParser(Parsers.parseDate)}
+        transform={EM.fromNull}
+        {i18n} />
     </div>
     <div class="py-4 w-full md:w-1/3">
       <Select
-          id={'kohde.ilmoituspaikka-id'}
-          label={i18n(`${i18nRoot}.ilmoituspaikka-id`)}
-          required={false}
-          disabled={false}
-          allowNone={true}
-          bind:model={kohde}
-          parse={Maybe.fromNull}
-          lens={R.lensProp('ilmoituspaikka-id')}
-          format={Locales.labelForId($locale, ilmoituspaikat)}
-          items={R.pluck('id', ilmoituspaikat)}/>
+        id={'kohde.ilmoituspaikka-id'}
+        label={i18n(`${i18nRoot}.ilmoituspaikka-id`)}
+        required={false}
+        disabled={false}
+        allowNone={true}
+        bind:model={kohde}
+        parse={Maybe.fromNull}
+        lens={R.lensProp('ilmoituspaikka-id')}
+        format={Locales.labelForId($locale, ilmoituspaikat)}
+        items={R.pluck('id', ilmoituspaikat)} />
     </div>
     {#if Ilmoituspaikka.other(kohde)}
       <div class="py-4 w-full md:w-1/3">
         <Input
-            id={'kohde.ilmoituspaikka-description'}
-            name={'kohde.ilmoituspaikka-description'}
-            label={i18n(`${i18nRoot}.ilmoituspaikka-description`)}
-            bind:model={kohde}
-            lens={R.lensProp('ilmoituspaikka-description')}
-            parse={Parsers.optionalString}
-            format={Maybe.orSome('')}
-            validators={schema['ilmoituspaikka_description']}
-            {i18n}/>
+          id={'kohde.ilmoituspaikka-description'}
+          name={'kohde.ilmoituspaikka-description'}
+          label={i18n(`${i18nRoot}.ilmoituspaikka-description`)}
+          bind:model={kohde}
+          lens={R.lensProp('ilmoituspaikka-description')}
+          parse={Parsers.optionalString}
+          format={Maybe.orSome('')}
+          validators={schema['ilmoituspaikka_description']}
+          {i18n} />
       </div>
     {/if}
     <div class="py-4 w-full md:w-1/3">
       <Input
-          id={'kohde.ilmoitustunnus'}
-          name={'kohde.ilmoitustunnus'}
-          label={i18n(`${i18nRoot}.ilmoitustunnus`)}
-          bind:model={kohde}
-          lens={R.lensProp('ilmoitustunnus')}
-          parse={Parsers.optionalString}
-          format={Maybe.orSome('')}
-          validators={schema.ilmoitustunnus}
-          {i18n}/>
+        id={'kohde.ilmoitustunnus'}
+        name={'kohde.ilmoitustunnus'}
+        label={i18n(`${i18nRoot}.ilmoitustunnus`)}
+        bind:model={kohde}
+        lens={R.lensProp('ilmoitustunnus')}
+        parse={Parsers.optionalString}
+        format={Maybe.orSome('')}
+        validators={schema.ilmoitustunnus}
+        {i18n} />
     </div>
   </div>
   <div class="flex space-x-4 py-8">
+    <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />
     <Button
-        disabled={!dirty}
-        type={'submit'}
-        text={i18n(`${i18nRoot}.save`)}/>
-    <Button
-        disabled={!dirty}
-        on:click={revert}
-        text={i18n(`${i18nRoot}.revert`)}
-        style={'secondary'}/>
+      disabled={!dirty}
+      on:click={revert}
+      text={i18n(`${i18nRoot}.revert`)}
+      style={'secondary'} />
     {#each Maybe.toArray(remove) as deleteKohde}
       <Confirm
-          let:confirm
-          confirmButtonLabel={i18n('confirm.button.delete')}
-          confirmMessage={i18n('confirm.you-want-to-delete')}>
+        let:confirm
+        confirmButtonLabel={i18n('confirm.button.delete')}
+        confirmMessage={i18n('confirm.you-want-to-delete')}>
         <Button
-            on:click={() => {confirm(_ => deleteKohde(kohde.id));}}
-            text={i18n(`${i18nRoot}.delete`)}
-            style={'error'}/>
+          on:click={() => {
+            confirm(_ => deleteKohde(kohde.id));
+          }}
+          text={i18n(`${i18nRoot}.delete`)}
+          style={'error'} />
       </Confirm>
     {/each}
   </div>

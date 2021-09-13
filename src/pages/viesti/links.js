@@ -1,4 +1,3 @@
 const root = '#/viesti';
 
-export const ketju = ketju =>
-  `${root}/${ketju.id}`;
+export const ketju = ketju => `${root}/${ketju.id}`;
