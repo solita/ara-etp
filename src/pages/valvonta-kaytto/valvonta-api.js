@@ -212,6 +212,10 @@ const serializeToimenpide = R.compose(
 
 export const toimenpiteet = R.compose(
   R.map(R.sortBy(Toimenpiteet.time)),
+  R.map(R.map(R.evolve({
+    henkilot: R.map(deserializeHenkiloOsapuoli),
+    yritykset: R.map(deserializeYritysOsapuoli)
+  }))),
   R.map(R.map(deserializeToimenpide)),
   Fetch.getJson(fetch),
   url.toimenpiteet

@@ -1569,6 +1569,11 @@
         "toimenpiteet": "Toimenpiteet",
         "rakennustunnus": "Pysyvä rakennustunnus",
         "ilmoitustunnus": "Ilmoitustunnus",
+        "toimenpide": {
+          "rooli-none": "Ei roolia",
+          "toimitustapa-none": "Ei toimitustapaa",
+          "fyi": "Tiedoksi"
+        },
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy",
           "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",

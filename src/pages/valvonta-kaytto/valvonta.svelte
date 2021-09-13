@@ -49,6 +49,8 @@
             notes: ValvontaApi.notes(params.id),
             toimenpidetyypit: ValvontaApi.toimenpidetyypit,
             templatesByType: ValvontaApi.templatesByType,
+            roolit: ValvontaApi.roolit,
+            toimitustavat: ValvontaApi.toimitustavat,
             valvojat: ValvontaApi.valvojat,
             henkilot: ValvontaApi.getHenkilot(params.id),
             yritykset: ValvontaApi.getYritykset(params.id),
@@ -110,7 +112,9 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as {
+      toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat,
+      templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -151,9 +155,8 @@
           {#if isToimenpide(tapahtuma)}
             <Toimenpide
               {valvonta}
-              {henkilot}
-              {yritykset}
               {toimenpidetyypit}
+              {roolit} {toimitustavat}
               toimenpide={tapahtuma}
               {whoami} />
           {:else}
