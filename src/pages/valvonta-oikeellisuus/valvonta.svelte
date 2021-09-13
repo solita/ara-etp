@@ -162,6 +162,15 @@
             energiatodistus
           )}
         </div>
+        <div>
+          {#each energiatodistus['korvaava-energiatodistus-id'].toArray() as korvaavaId}
+            <span>{i18n('energiatodistus.korvaavuus.header.korvaava')}</span>
+            <Link
+              bold={true}
+              href={'/#/energiatodistus/' + korvaavaId}
+              text={korvaavaId} />
+          {/each}
+        </div>
       </div>
 
       {#if Kayttajat.isPaakayttaja(whoami)}
