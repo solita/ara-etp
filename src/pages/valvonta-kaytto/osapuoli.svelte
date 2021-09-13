@@ -62,6 +62,7 @@
       response => {
         resources = Maybe.Some(response);
         overlay = false;
+        dirty = false;
       },
       Future.parallelObject(4, {
         osapuoli: osapuoliType.get(params.id, params['valvonta-id']),
