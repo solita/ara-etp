@@ -124,9 +124,7 @@
       </div>
     {/if}
 
-    <ContactDetails bind:osapuoli {schema}
-                    {toimitustavat}
-                    {countries}/>
+    <ContactDetails bind:osapuoli {schema} {toimitustavat} {countries} />
   </div>
   <div class="flex flex-col">
     {#if Osapuolet.toimitustapa.suomifi(osapuoli) && Maybe.None(osapuoli.henkilotunnus)}
@@ -149,10 +147,10 @@
   <div class="flex space-x-4 py-8">
     <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />
     <Button
-        disabled={!dirty}
-        on:click={revert}
-        text={i18n(`${i18nRoot}.revert`)}
-        style={'secondary'}/>
+      disabled={!dirty}
+      on:click={revert}
+      text={i18n(`${i18nRoot}.revert`)}
+      style={'secondary'} />
     {#each Maybe.toArray(remove) as deleteHenkilo}
       <Confirm
         let:confirm

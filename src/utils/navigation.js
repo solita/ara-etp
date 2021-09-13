@@ -226,7 +226,8 @@ export const parseValvontaKaytto = R.curry(
       return parseRoot(isDev, i18n, whoami);
     } else if (
       R.equals(id, 'new') ||
-      R.includes(locationParts[1], ['henkilo', 'yritys'])) {
+      R.includes(locationParts[1], ['henkilo', 'yritys'])
+    ) {
       return [];
     } else {
       return [

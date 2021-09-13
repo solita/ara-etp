@@ -42,8 +42,11 @@
 
   Future.fork(
     response => {
-      flashMessageStore.add('valvonta-kaytto', 'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response)));
+      flashMessageStore.add(
+        'valvonta-kaytto',
+        'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response))
+      );
       overlay = false;
     },
     response => {
@@ -62,8 +65,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey(i18nRoot, 'add', response)));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey(i18nRoot, 'add', response))
+        );
         overlay = false;
       },
       response => {
@@ -75,7 +81,8 @@
         dirty = false;
         push('/valvonta/kaytto/' + response.id + '/kohde');
       },
-      api.postValvonta(fetch, kohde));
+      api.postValvonta(fetch, kohde)
+    );
   };
 </script>
 
@@ -85,9 +92,13 @@
   <div slot="content">
     {#each Maybe.toArray(resources) as { ilmoituspaikat, postinumerot }}
       <DirtyConfirmation {dirty} />
-      <KohdeForm bind:dirty {kohde} {ilmoituspaikat} {postinumerot}
-                 save={addKohde}
-                 revert={resetForm} />
+      <KohdeForm
+        bind:dirty
+        {kohde}
+        {ilmoituspaikat}
+        {postinumerot}
+        save={addKohde}
+        revert={resetForm} />
       <div class="flex">
         <span>{i18n(`${i18nRoot}.after-save-notice`)}</span>
       </div>

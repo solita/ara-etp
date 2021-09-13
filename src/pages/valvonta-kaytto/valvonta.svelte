@@ -35,8 +35,11 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
+        );
       },
       response => {
         resources = Maybe.Some(response);
@@ -67,8 +70,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey404(i18nRoot, key, response)));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, key, response))
+        );
         overlay = false;
       },
       response => {
@@ -112,9 +118,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as {
-      toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat,
-      templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -156,7 +160,8 @@
             <Toimenpide
               {valvonta}
               {toimenpidetyypit}
-              {roolit} {toimitustavat}
+              {roolit}
+              {toimitustavat}
               toimenpide={tapahtuma}
               {whoami} />
           {:else}

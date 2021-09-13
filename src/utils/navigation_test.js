@@ -42,7 +42,7 @@ describe('Navigation', () => {
     it('should return energiatodistus-links when within energiatodistus', () => {
       const expected = [
         { label: 'ET 1', href: '#/energiatodistus/2018/1' },
-        { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet'},
+        { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet' },
         { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2018/1' },
         { label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' }
         // Hidden until implemented
@@ -151,7 +151,10 @@ describe('Navigation', () => {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
         },
-        { label: 'Viestit', href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false' }
+        {
+          label: 'Viestit',
+          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
+        }
       ];
 
       assert.deepEqual(
@@ -398,7 +401,10 @@ describe('Navigation', () => {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false`
         },
-        { label: 'Viestit', href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false' }
+        {
+          label: 'Viestit',
+          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
+        }
       ];
 
       assert.deepEqual(
@@ -477,7 +483,10 @@ describe('Navigation', () => {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false`
         },
-        { label: 'Viestit', href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false' }
+        {
+          label: 'Viestit',
+          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
+        }
       ];
 
       assert.deepEqual(

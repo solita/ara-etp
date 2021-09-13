@@ -44,38 +44,42 @@ export const parseCrumb = R.curry((i18n, idTranslate, whoami, location) =>
 
 export const valvontaCrumb = R.curry((i18n, whoami, [type, ...rest]) =>
   R.cond([
-    [R.equals('oikeellisuus'), valvontaOikeellisuusCrumb(i18n, whoami, [...rest])],
+    [
+      R.equals('oikeellisuus'),
+      valvontaOikeellisuusCrumb(i18n, whoami, [...rest])
+    ],
     [R.equals('kaytto'), valvontaKayttoCrumb(i18n, [...rest])],
     [R.T, R.always([])]
   ])(type)
 );
 
-export const valvontaOikeellisuusCrumb = R.curry((i18n, whoami, [version, id], _) =>
-  R.cond([
-    [
-      R.equals('all'),
-      R.always([
-        {
-          url: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
-          label: i18n('navigation.valvonta.oikeellisuus.all')
-        }
-      ])
-    ],
-    [
-      R.T,
-      R.always([
-        energiatodistukset(i18n),
-        {
-          url: `#/energiatodistus/${version}/${id}`,
-          label: `${i18n('navigation.et')} ${id}`
-        },
-        {
-          url: `#/valvonta/oikeellisuus/${version}/${id}`,
-          label: `${i18n('navigation.valvonta.oikeellisuus.valvonta')}`
-        }
-      ])
-    ]
-  ])(version)
+export const valvontaOikeellisuusCrumb = R.curry(
+  (i18n, whoami, [version, id], _) =>
+    R.cond([
+      [
+        R.equals('all'),
+        R.always([
+          {
+            url: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
+            label: i18n('navigation.valvonta.oikeellisuus.all')
+          }
+        ])
+      ],
+      [
+        R.T,
+        R.always([
+          energiatodistukset(i18n),
+          {
+            url: `#/energiatodistus/${version}/${id}`,
+            label: `${i18n('navigation.et')} ${id}`
+          },
+          {
+            url: `#/valvonta/oikeellisuus/${version}/${id}`,
+            label: `${i18n('navigation.valvonta.oikeellisuus.valvonta')}`
+          }
+        ])
+      ]
+    ])(version)
 );
 
 export const valvontaKayttoCrumb = R.curry((i18n, [id], _) =>
@@ -117,19 +121,18 @@ export const etKetjuCrumb = R.curry((i18n, etId) => [
   }
 ]);
 
-export const viestiAllCrumb = R.curry((i18n, whoami) => (
-{
-  url: `#/viesti/all${Kayttajat.isPaakayttajaOrLaskuttaja(whoami) ? `?kasittelija-id=${whoami.id}&has-kasittelija=false` : ''}`,
+export const viestiAllCrumb = R.curry((i18n, whoami) => ({
+  url: `#/viesti/all${
+    Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
+      ? `?kasittelija-id=${whoami.id}&has-kasittelija=false`
+      : ''
+  }`,
   label: i18n('navigation.viesti')
-}
-));
+}));
 
 export const viestiCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
   R.cond([
-    [
-      R.equals('all'),
-      R.always([viestiAllCrumb(i18n, whoami)])
-    ],
+    [R.equals('all'), R.always([viestiAllCrumb(i18n, whoami)])],
     [
       R.equals('new'),
       R.always([
@@ -146,9 +149,7 @@ export const viestiCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
             R.flatten,
             ketju => [
               R.compose(
-                Maybe.orSome([
-                  viestiAllCrumb(i18n, whoami)
-                ]),
+                Maybe.orSome([viestiAllCrumb(i18n, whoami)]),
                 R.map(R.compose(Array.of, etKetjuCrumb(i18n))),
                 R.prop('energiatodistus-id')
               )(ketju),

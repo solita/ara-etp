@@ -58,7 +58,8 @@
 </style>
 
 {#if !disabled}
-  <div bind:this={input}
+  <div
+    bind:this={input}
     use:litepicker={{
       lang: $locale,
       update: date => {

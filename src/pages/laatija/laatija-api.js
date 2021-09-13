@@ -86,14 +86,19 @@ export const getYritykset = R.curry((fetch, id) =>
 );
 
 export const laskutusosoitteet = R.compose(
-  R.map(R.map(R.evolve({
-    'ytunnus': Maybe.fromNull,
-    'vastaanottajan-tarkenne': Maybe.fromNull,
-    verkkolaskuoperaattori: Maybe.fromNull,
-    verkkolaskuosoite: Maybe.fromNull,
-  }))),
+  R.map(
+    R.map(
+      R.evolve({
+        ytunnus: Maybe.fromNull,
+        'vastaanottajan-tarkenne': Maybe.fromNull,
+        verkkolaskuoperaattori: Maybe.fromNull,
+        verkkolaskuosoite: Maybe.fromNull
+      })
+    )
+  ),
   Fetch.getJson(fetch),
-  url.laskutusosoitteet);
+  url.laskutusosoitteet
+);
 
 export const laatijat = R.compose(
   Fetch.responseAsJson,

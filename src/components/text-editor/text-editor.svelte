@@ -61,7 +61,7 @@
         on:focusin={api.focus}
         on:editor-focus-out={event => api.blur(toMarkdown(event.detail.html))}
         on:text-change={event => api.input(toMarkdown(event.detail.html))}
-        use:quill={{html: MD.toHtml(viewValue), toolbar}} />
+        use:quill={{ html: MD.toHtml(viewValue), toolbar }} />
     {:else}
       {@html MD.toHtml(viewValue)}
     {/if}

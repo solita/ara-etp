@@ -28,7 +28,8 @@ export const localizationKey = response =>
 export const errorKey = (i18nRoot, action, response) =>
   Maybe.orSome(
     `${i18nRoot}.messages.${action}-error`,
-    localizationKey(response));
+    localizationKey(response)
+  );
 
 export const errorKey404 = (i18nRoot, action, response) =>
   notFound(response)

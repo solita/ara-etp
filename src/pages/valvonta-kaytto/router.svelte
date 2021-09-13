@@ -13,12 +13,13 @@
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import { flashMessageStore } from '@/stores';
 
-  const route = (type, component) => wrap({
-    component: component,
-    props: {
-      type: type
-    }
-  });
+  const route = (type, component) =>
+    wrap({
+      component: component,
+      props: {
+        type: type
+      }
+    });
 
   const prefix = '/valvonta/kaytto';
   const routes = {

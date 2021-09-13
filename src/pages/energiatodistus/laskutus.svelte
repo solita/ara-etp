@@ -36,17 +36,18 @@
   $: {
     resources = Maybe.None();
     Future.fork(
-    () => {
-      error = Maybe.Some($_('energiatodistus.laskutus.load-error'));
-      flashMessageStore.add('Energiatodistus', 'error', error.some());
-    },
-    response => {
-      resources = Maybe.Some(response);
-    },
-    Future.parallelObject(2, {
-      verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit,
-      laskutusosoitteet: laatijaApi.laskutusosoitteet(laatijaId)
-    }));
+      () => {
+        error = Maybe.Some($_('energiatodistus.laskutus.load-error'));
+        flashMessageStore.add('Energiatodistus', 'error', error.some());
+      },
+      response => {
+        resources = Maybe.Some(response);
+      },
+      Future.parallelObject(2, {
+        verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit,
+        laskutusosoitteet: laatijaApi.laskutusosoitteet(laatijaId)
+      })
+    );
   }
 
   const yritysLabel = yritys =>
@@ -62,7 +63,8 @@
   const osoiteLabel = R.ifElse(
     R.compose(R.propEq('id', -1)),
     _ => i18n('energiatodistus.laskutus.laatijalaskutus'),
-    yritysLabel);
+    yritysLabel
+  );
 
   const postiosoite = entity =>
     entity.jakeluosoite +
@@ -72,14 +74,17 @@
     entity.postitoimipaikka;
 
   $: findLaskutusosoite = laskutusosoitteet =>
-    R.chain(Maybe.findById(R.__, laskutusosoitteet),
-      energiatodistus['laskutusosoite-id']);
+    R.chain(
+      Maybe.findById(R.__, laskutusosoitteet),
+      energiatodistus['laskutusosoite-id']
+    );
 
-  const verkkolaskuoperaattori = verkkolaskuoperaattorit => R.compose(
-    Maybe.orSome(''),
-    R.map(et.selectFormat(R.prop('nimi'), verkkolaskuoperaattorit)),
-    R.prop('verkkolaskuoperaattori')
-  );
+  const verkkolaskuoperaattori = verkkolaskuoperaattorit =>
+    R.compose(
+      Maybe.orSome(''),
+      R.map(et.selectFormat(R.prop('nimi'), verkkolaskuoperaattorit)),
+      R.prop('verkkolaskuoperaattori')
+    );
 
   const isVerkkolasku = R.compose(
     R.all(Maybe.isSome),
@@ -89,7 +94,7 @@
 
 <H2 text={'* ' + $_('energiatodistus.laskutus.title')} />
 
-{#each Maybe.toArray(resources) as { verkkolaskuoperaattorit, laskutusosoitteet}}
+{#each Maybe.toArray(resources) as { verkkolaskuoperaattorit, laskutusosoitteet }}
   <div class="flex flex-col lg:flex-row -mx-4">
     <div class="lg:w-1/2 w-full px-4 py-4">
       <Select
@@ -129,11 +134,11 @@
       {:else}
         <div class="lg:w-1/2 w-full px-4 py-4">
           <Input
-              id="energiatodistus.laskutus.postiosoite"
-              name="energiatodistus.laskutus.postiosoite"
-              label={$_('energiatodistus.laskutus.postiosoite')}
-              disabled={true}
-              model={postiosoite(osoite)} />
+            id="energiatodistus.laskutus.postiosoite"
+            name="energiatodistus.laskutus.postiosoite"
+            label={$_('energiatodistus.laskutus.postiosoite')}
+            disabled={true}
+            model={postiosoite(osoite)} />
         </div>
       {/if}
     {/each}

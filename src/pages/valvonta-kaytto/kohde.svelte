@@ -36,8 +36,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
+        );
         overlay = false;
       },
       response => {
@@ -65,13 +68,19 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-kaytto', 'error',
-          i18n(Response.errorKey404(i18nRoot, action, response)));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, action, response))
+        );
         overlay = false;
       },
       _ => {
-        flashMessageStore.add('valvonta-kaytto', 'success',
-          i18n(`${i18nRoot}.messages.${action}-success`));
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'success',
+          i18n(`${i18nRoot}.messages.${action}-success`)
+        );
         overlay = false;
         successCallback();
       },
@@ -100,7 +109,10 @@
       ValvontaApi.postLiitteetFiles(params.id)
     ),
 
-    addLink: liiteOperation('add-link', ValvontaApi.postLiitteetLink(params.id)),
+    addLink: liiteOperation(
+      'add-link',
+      ValvontaApi.postLiitteetLink(params.id)
+    ),
 
     deleteLiite: liiteOperation(
       'delete-liite',
@@ -113,41 +125,37 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as {
-      whoami,
-      valvonta,
-      liitteet,
-      ilmoituspaikat,
-      roolit,
-      toimitustavat,
-      postinumerot,
-      countries,
-      henkilot,
-      yritykset,
-    }}
+    {#each Maybe.toArray(resources) as { whoami, valvonta, liitteet, ilmoituspaikat, roolit, toimitustavat, postinumerot, countries, henkilot, yritykset }}
+      <DirtyConfirmation dirty={dirtyKohde || dirtyLiitteet} />
+      <KohdeForm
+        bind:dirty={dirtyKohde}
+        kohde={valvonta}
+        {ilmoituspaikat}
+        {postinumerot}
+        save={updateKohde}
+        revert={_ => load(params.id)}
+        remove={Maybe.Some(deleteKohde)} />
 
-      <DirtyConfirmation dirty={dirtyKohde || dirtyLiitteet}/>
-      <KohdeForm bind:dirty={dirtyKohde} kohde={valvonta} {ilmoituspaikat}
-                 {postinumerot}
-                 save={updateKohde}
-                 revert={_ => load(params.id)}
-                 remove={Maybe.Some(deleteKohde)}/>
-
-      <Osapuolet {valvonta} {henkilot} {yritykset}
-                 {roolit} {toimitustavat} {countries}/>
+      <Osapuolet
+        {valvonta}
+        {henkilot}
+        {yritykset}
+        {roolit}
+        {toimitustavat}
+        {countries} />
 
       <div class="flex flex-col">
-        <H2 text={i18n(`${i18nRoot}.attachments`)}/>
+        <H2 text={i18n(`${i18nRoot}.attachments`)} />
         <Liitteet
-            {liiteApi}
-            bind:dirty={dirtyLiitteet}
-            {liitteet}
-            emptyMessageKey={`${i18nRoot}.no-attachments`}
-            flashModule="valvonta-kaytto"/>
+          {liiteApi}
+          bind:dirty={dirtyLiitteet}
+          {liitteet}
+          emptyMessageKey={`${i18nRoot}.no-attachments`}
+          flashModule="valvonta-kaytto" />
       </div>
     {/each}
   </div>
   <div slot="overlay-content">
-    <Spinner/>
+    <Spinner />
   </div>
 </Overlay>

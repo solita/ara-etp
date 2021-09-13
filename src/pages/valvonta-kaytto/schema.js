@@ -4,9 +4,8 @@ import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
 
-const OptionalLimitedString = (min, max) => R.map(
-  Validation.liftValidator,
-  Validation.LimitedString(2, 200))
+const OptionalLimitedString = (min, max) =>
+  R.map(Validation.liftValidator, Validation.LimitedString(2, 200));
 
 export const kohde = {
   rakennustunnus: [
@@ -21,25 +20,21 @@ const osapuoli = {
   email: [Validation.liftValidator(Validation.emailValidator)],
   puhelin: OptionalLimitedString(2, 200),
   'vastaanottajan-tarkenne': OptionalLimitedString(2, 200),
-  'jakeluosoite': OptionalLimitedString(2, 200),
+  jakeluosoite: OptionalLimitedString(2, 200),
   postinumero: OptionalLimitedString(2, 10),
   postitoimipaikka: OptionalLimitedString(2, 200),
   rooli_description: OptionalLimitedString(2, 200),
-  toimitustapa_description: OptionalLimitedString(2, 200),
+  toimitustapa_description: OptionalLimitedString(2, 200)
 };
 
 export const henkilo = R.mergeLeft(osapuoli, {
-  henkilotunnus: [
-    Validation.liftValidator(Validation.henkilotunnusValidator)
-  ],
+  henkilotunnus: [Validation.liftValidator(Validation.henkilotunnusValidator)],
   etunimi: Validation.RequiredString(2, 200),
-  sukunimi: Validation.RequiredString(2, 200),
+  sukunimi: Validation.RequiredString(2, 200)
 });
 
 export const yritys = R.mergeLeft(osapuoli, {
-  ytunnus: [
-    Validation.liftValidator(Validation.ytunnusValidator)
-  ],
+  ytunnus: [Validation.liftValidator(Validation.ytunnusValidator)],
   nimi: Validation.RequiredString(2, 200)
 });
 

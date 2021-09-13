@@ -111,9 +111,7 @@
       </div>
     {/if}
 
-    <ContactDetails {osapuoli} {schema}
-                    {toimitustavat}
-                    {countries}/>
+    <ContactDetails {osapuoli} {schema} {toimitustavat} {countries} />
   </div>
   <div class="flex flex-col">
     {#if Osapuolet.toimitustapa.suomifi(osapuoli) && Maybe.None(osapuoli.ytunnus)}
@@ -136,21 +134,21 @@
   <div class="flex space-x-4 py-8">
     <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />
     <Button
-        disabled={!dirty}
-        on:click={revert}
-        text={i18n(`${i18nRoot}.revert`)}
-        style={'secondary'}/>
+      disabled={!dirty}
+      on:click={revert}
+      text={i18n(`${i18nRoot}.revert`)}
+      style={'secondary'} />
     {#each Maybe.toArray(remove) as deleteYritys}
       <Confirm
-          let:confirm
-          confirmButtonLabel={i18n('confirm.button.delete')}
-          confirmMessage={i18n('confirm.you-want-to-delete')}>
+        let:confirm
+        confirmButtonLabel={i18n('confirm.button.delete')}
+        confirmMessage={i18n('confirm.you-want-to-delete')}>
         <Button
-            on:click={() => {
+          on:click={() => {
             confirm(_ => deleteYritys(osapuoli.id));
           }}
-            text={i18n(`${i18nRoot}.delete`)}
-            style={'error'} />
+          text={i18n(`${i18nRoot}.delete`)}
+          style={'error'} />
       </Confirm>
     {/each}
   </div>

@@ -165,11 +165,13 @@
   class:disabled
   class:sr-only={compact}
   class="label">{label}</span>
-<div class="input-container"
-     bind:this={node} on:keydown={handleKeydown}
-     on:validation={_ => {
-      blurred = true;
-    }}>
+<div
+  class="input-container"
+  bind:this={node}
+  on:keydown={handleKeydown}
+  on:validation={_ => {
+    blurred = true;
+  }}>
   <input
     bind:this={input}
     class="sr-only"
