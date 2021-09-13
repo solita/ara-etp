@@ -1,10 +1,8 @@
 <script>
-  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Validation from '@Utility/validation';
   import { push } from '@Component/Router/router';
 
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
@@ -12,7 +10,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H1 from '@Component/H/H1.svelte';
   import KohdeForm from './kohde-form';
-  import { _, locale } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
   import * as api from './valvonta-api';
@@ -44,12 +42,8 @@
 
   Future.fork(
     response => {
-      const msg = $_(
-        `${i18nRoot}.messages.load-error`,
-        Response.localizationKey(response)
-      );
-
-      flashMessageStore.add('kohde', 'error', msg);
+      flashMessageStore.add('valvonta-kaytto', 'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response)));
       overlay = false;
     },
     response => {
@@ -68,29 +62,24 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            `${i18nRoot}.messages.error`,
-            Response.localizationKey(response)
-          )
-        );
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey(i18nRoot, 'add', response)));
         overlay = false;
       },
-      _ => {
-        flashMessageStore.add(
+      response => {
+        flashMessageStore.addPersist(
           'valvonta-kaytto',
           'success',
-          i18n(`${i18nRoot}.messages.success`)
+          i18n(`${i18nRoot}.messages.add-success`)
         );
         dirty = false;
-        push('/valvonta/kaytto/' + _.id + '/kohde');
+        push('/valvonta/kaytto/' + response.id + '/kohde');
       },
       api.postValvonta(fetch, kohde));
   };
 </script>
 
-<H1 text={i18n(i18nRoot + '.new-kohde')} />
+<H1 text={i18n(i18nRoot + '.new-valvonta-title')} />
 
 <Overlay {overlay}>
   <div slot="content">

@@ -9,16 +9,17 @@
   import * as Locales from '@Language/locale-utils';
 
   import * as Toimenpiteet from './toimenpiteet';
-  import Link from '@Component/Link/Link.svelte';
   import TextButton from '@Component/Button/TextButton';
+  import Osapuoli from './toimenpide-osapuoli.svelte';
 
-  import * as valvontaApi from './valvonta-api';
+  const i18n = $_;
+  const i18nRoot = 'valvonta.kaytto.valvonta.toimenpide';
 
   export let valvonta;
-  export let henkilot;
-  export let yritykset;
   export let toimenpide;
   export let toimenpidetyypit;
+  export let roolit;
+  export let toimitustavat;
 
   $: typeLabel = R.compose(
     Locales.labelForId($locale, toimenpidetyypit),
@@ -57,36 +58,29 @@
         {Formats.formatDateInstant(deadline)}
       </div>
     {/each}
-
-    {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
-      {#each henkilot as henkilo}
-        <div class="ml-2">
-          <Link
-            text={toimenpide.filename}
-            target={'_blank'}
-            href={valvontaApi.url.documentHenkilo(
-              henkilo.id,
-              valvonta.id,
-              toimenpide.id,
-              toimenpide['filename']
-            )} />
-        </div>
-      {/each}
-      {#each yritykset as yritys}
-        <div class="ml-2">
-          <Link
-            text={toimenpide.filename}
-            target={'_blank'}
-            href={valvontaApi.url.documentYritys(
-              yritys.id,
-              valvonta.id,
-              toimenpide.id,
-              toimenpide['filename']
-            )} />
-        </div>
-      {/each}
-    {/if}
   </div>
+
+  {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
+      {#each toimenpide.henkilot as henkilo}
+        <div>
+          {henkilo.etunimi}
+          {henkilo.sukunimi}
+          <Osapuoli osapuoli={henkilo}
+                    type="henkilo"
+                    {valvonta} {toimenpide}
+                    {roolit} {toimitustavat}/>
+        </div>
+      {/each}
+      {#each toimenpide.yritykset as yritys}
+        <div>
+          {yritys.nimi} {Maybe.orSome('', yritys.ytunnus)}
+          <Osapuoli osapuoli={yritys}
+                    type="yritys"
+                    {valvonta} {toimenpide}
+                    {roolit} {toimitustavat}/>
+        </div>
+      {/each}
+  {/if}
 
   {#each Maybe.toArray(toimenpide.description) as description}
     <div class="mt-1 min-w-0 flex flex-wrap">

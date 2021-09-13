@@ -32,6 +32,7 @@
 
   export let transform = R.identity;
 
+  let input;
   $: inputProps = {
     id,
     name,
@@ -57,11 +58,12 @@
 </style>
 
 {#if !disabled}
-  <div
+  <div bind:this={input}
     use:litepicker={{
       lang: $locale,
       update: date => {
         model = R.set(lens, transform(date), model);
+        input.dispatchEvent(new Event('change', { bubbles: true }));
       }
     }}>
     <Input bind:model {...inputProps} />

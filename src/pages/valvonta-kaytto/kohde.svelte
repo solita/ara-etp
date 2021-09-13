@@ -32,21 +32,12 @@
 
   let resources = Maybe.None();
 
-  const message = {
-    success: message => flashMessageStore.add('valvonta-kaytto', 'success', message),
-    error: message => flashMessageStore.add('valvonta-kaytto', 'error', message)
-  };
-
   const load = id => {
     overlay = true;
     Future.fork(
       response => {
-        const msg = $_(
-          `${i18nRoot}.messages.load-error`,
-          Response.localizationKey(response)
-        );
-
-        message.error(msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -70,26 +61,17 @@
     );
   };
 
-  const errorMessage = (key, response) =>
-    i18n(
-      Response.notFound(response)
-        ? `${i18nRoot}.messages.not-found`
-        : Maybe.orSome(
-          `${i18nRoot}.messages.${key}-error`,
-          Response.localizationKey(response)
-        )
-    );
-
-  const fork = (key, successCallback) => future => {
+  const fork = (action, successCallback) => future => {
     overlay = true;
     Future.fork(
       response => {
-        const msg = errorMessage(key, response);
-        message.error(msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey404(i18nRoot, action, response)));
         overlay = false;
       },
       _ => {
-        message.success(i18n(`${i18nRoot}.messages.${key}-success`));
+        flashMessageStore.add('valvonta-kaytto', 'success',
+          i18n(`${i18nRoot}.messages.${action}-success`));
         overlay = false;
         successCallback();
       },
@@ -128,8 +110,6 @@
 
   $: load(params.id);
 </script>
-
-<!-- <H1 text={i18n(i18nRoot + '.title')} /> -->
 
 <Overlay {overlay}>
   <div slot="content">

@@ -7,6 +7,8 @@
 
   import Input from '@Component/Input/Input.svelte';
   import Select from '@Component/Select/Select.svelte';
+  import H2 from '@Component/H/H2.svelte';
+
   import { _, locale } from '@Language/i18n';
 
   export let osapuoli;
@@ -18,6 +20,9 @@
   const i18nRoot = 'valvonta.kaytto.osapuoli';
 </script>
 
+<div class="mt-4">
+  <H2 text={i18n(i18nRoot + '.contact-details-title')} />
+</div>
 <div class="py-4 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 w-full md:w-2/3">
   <div class="w-full">
     <Input

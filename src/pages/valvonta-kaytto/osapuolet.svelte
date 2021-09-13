@@ -20,11 +20,28 @@
   export let toimitustavat;
   export let countries;
 
-  const postiosoite = osapuoli =>
-    osapuoli.jakeluosoite + ', ' +
-    osapuoli.postinumero + ' ' +
-    osapuoli.postitoimipaikka + ', ' +
-    Locales.labelForId($locale, countries)(osapuoli['maa']);
+  const postinumeroLine = R.compose(
+    Maybe.fromEmpty,
+    R.join(' '),
+    Maybe.findAllSome,
+    R.juxt([R.prop('postinumero'), R.prop('postitoimipaikka')])
+  );
+
+  $: countryLabel = R.compose(
+    R.map(Locales.labelForId($locale, countries)),
+    R.prop('maa')
+  )
+
+  $: postiosoite = R.compose(
+    R.join(', '),
+    Maybe.findAllSome,
+    R.juxt([R.prop('jakeluosoite'), postinumeroLine, countryLabel])
+  );
+
+  $: rooliLabel = R.compose(
+    Maybe.fold('', Locales.labelForId($locale, roolit)),
+    R.prop('rooli-id')
+  );
 </script>
 
 <H2 text={i18n(i18nRoot + '.title')}/>
@@ -61,7 +78,7 @@
                 text={`${henkilo.etunimi} ${henkilo.sukunimi}`}/>
           </td>
           <td class="etp-table--td">
-            {Locales.labelForId($locale, roolit)(henkilo['rooli-id'])}
+            {rooliLabel(henkilo)}
             {#if Osapuolet.otherRooli(henkilo)}
               {`- ${henkilo['rooli-description']}`}
             {/if}
@@ -70,9 +87,11 @@
             {postiosoite(henkilo)}
           </td>
           <td class="etp-table--td">
-            <Link
-                href={`mailto:${henkilo.email}`}
-                text={henkilo.email}/>
+            {#each Maybe.toArray(henkilo.email) as email}
+              <Link
+                  href={`mailto:${email}`}
+                  text={email}/>
+            {/each}
           </td>
           <td class="etp-table--td">
             {Locales.labelForId(
@@ -102,9 +121,11 @@
             {postiosoite(yritys)}
           </td>
           <td class="etp-table--td">
-            <Link
-                href={`mailto:${yritys.email}`}
-                text={yritys.email}/>
+            {#each Maybe.toArray(yritys.email) as email}
+              <Link
+                  href={`mailto:${email}`}
+                  text={email}/>
+            {/each}
           </td>
           <td class="etp-table--td">
             {Locales.labelForId(

@@ -1240,7 +1240,7 @@
           "messages": {
             "update-success": "Energiatodistus liitoksen päivittäminen onnistui",
             "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui",
-            "update-error-missing-et": "Energiatodistus ei ole olemassa",
+            "update-error-missing-et": "Energiatodistusta ei ole olemassa",
             "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero"
           }
         },
@@ -1498,19 +1498,19 @@
         "revert": "Peru muutokset",
         "cancel": "Peruuta",
         "delete": "Poista",
-        "new-kohde": "Uusi käytönvalvonta",
+        "new-valvonta-title": "Uusi käytönvalvonta",
         "title": "Käytönvalvonta",
         "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen",
         "no-attachments": "Ei liitteitä",
         "messages": {
-          "not-found": "Kohdetta ei löydy.",
-          "load-error": "Kohteen tietojen haku epäonnistui.",
-          "save-success": "Kohteen muutokset tallennettu.",
-          "save-error": "Kohteen tallennus epäonnistui.",
-          "delete-success": "Kohde poistettu.",
-          "delete-error": "Kohteen poistaminen epäonnistui.",
-          "add-success": "Kohde lisätty.",
-          "add-error": "Kohteen lisääminen epäonnistui.",
+          "not-found": "Käytönvalvontaa ei ole olemassa.",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "save-success": "Käytönvalvonnan muutokset tallennettu.",
+          "save-error": "Käytönvalvonnan tallennus epäonnistui.",
+          "delete-success": "Käytönvalvonta poistettu.",
+          "delete-error": "Käytönvalvonnan poistaminen epäonnistui.",
+          "add-success": "Uusi käytönvalvonta lisätty.",
+          "add-error": "Käytönvalvonnan lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä."
         },
         "osapuolet": {
@@ -1536,6 +1536,7 @@
         "ytunnus": "Y-tunnus",
         "rooli-id": "Rooli",
         "rooli-description": "Roolin kuvaus",
+        "contact-details-title": "Yhteystiedot",
         "email": "Sähköposti",
         "puhelin": "Puhelinnumero",
         "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
@@ -1544,6 +1545,7 @@
         "postitoimipaikka": "Postitoimipaikka",
         "maa": "Maa",
         "toimitustapa-id": "Toimitustapa",
+        "toimitustapa-description": "Toimitustavan kuvaus",
         "warning-toimitustapa-suomifi-henkilo": "Kun toimitustapa on suomi.fi, tulee henkilötunnus ja osoitetiedot olla täytettynä",
         "warning-toimitustapa-suomifi-yritys": "Kun toimitustapa on suomi.fi, tulee Y-tunnus ja osoitetiedot olla täytettynä",
         "warning-toimitustapa-email": "Kun toimitustapa on sahköposti, tulee sahköpostiosoitteen olla täytettynä",
@@ -1557,6 +1559,8 @@
           "save-error": "Osapuolen tallennus epäonnistui.",
           "add-success": "Osapuoli lisätty.",
           "add-error": "Osapuolen lisääminen epäonnistui.",
+          "delete-success": "Osapuoli on poistettu.",
+          "delete-error": "Osapuolen poistaminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
         }
       },
@@ -1565,8 +1569,16 @@
         "toimenpiteet": "Toimenpiteet",
         "rakennustunnus": "Pysyvä rakennustunnus",
         "ilmoitustunnus": "Ilmoitustunnus",
+        "toimenpide": {
+          "rooli-none": "Ei roolia",
+          "toimitustapa-none": "Ei toimitustapaa",
+          "fyi": "Tiedoksi"
+        },
         "messages": {
-          "not-found": "Käytönvalvonnan tietoja ei löydy"
+          "not-found": "Käytönvalvonnan tietoja ei löydy",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui",
+          "update-success": "Käytönvalvonnan tiedot päivitetty"
         },
         "no-events": "Ei tapahtumia"
       },

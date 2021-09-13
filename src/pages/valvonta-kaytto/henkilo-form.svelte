@@ -124,7 +124,7 @@
       </div>
     {/if}
 
-    <ContactDetails {osapuoli} {schema}
+    <ContactDetails bind:osapuoli {schema}
                     {toimitustavat}
                     {countries}/>
   </div>

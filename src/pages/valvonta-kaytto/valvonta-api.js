@@ -117,12 +117,12 @@ export const deserializeYritysOsapuoli = R.compose(
 );
 
 export const getHenkilot = R.compose(
-  R.map(deserializeHenkiloOsapuoli),
+  R.map(R.map(deserializeHenkiloOsapuoli)),
   Fetch.getJson(fetch),
   url.henkilot
 );
 export const getYritykset = R.compose(
-  R.map(deserializeYritysOsapuoli),
+  R.map(R.map(deserializeYritysOsapuoli)),
   Fetch.getJson(fetch),
   url.yritykset
 );
@@ -212,6 +212,10 @@ const serializeToimenpide = R.compose(
 
 export const toimenpiteet = R.compose(
   R.map(R.sortBy(Toimenpiteet.time)),
+  R.map(R.map(R.evolve({
+    henkilot: R.map(deserializeHenkiloOsapuoli),
+    yritykset: R.map(deserializeYritysOsapuoli)
+  }))),
   R.map(R.map(deserializeToimenpide)),
   Fetch.getJson(fetch),
   url.toimenpiteet

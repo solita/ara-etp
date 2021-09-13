@@ -80,7 +80,11 @@
     label="Valitse käsittelijä"
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
-    on:change={event => saveKasittelija(parseInt(event.target.value))}
+    on:change={R.compose(
+      saveKasittelija,
+      R.map(parseInt),
+      Maybe.fromNull,
+      R.path(['target', 'value']))}
     format={fullName(valvojat)}
     items={R.pluck('id', valvojat)} />
 </div>

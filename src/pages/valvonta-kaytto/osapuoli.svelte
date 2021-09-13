@@ -62,6 +62,7 @@
       response => {
         resources = Maybe.Some(response);
         overlay = false;
+        dirty = false;
       },
       Future.parallelObject(4, {
         osapuoli: osapuoliType.get(params.id, params['valvonta-id']),
@@ -76,14 +77,8 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            `${i18nRoot}.messages.${key}-error`,
-            Response.localizationKey(response)
-          )
-        );
-
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        flashMessageStore.add('valvonta-kaytto', 'error',
+          i18n(Response.errorKey(i18nRoot, key, response)));
         overlay = false;
       },
       _ => {
