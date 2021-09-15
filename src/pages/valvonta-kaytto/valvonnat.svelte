@@ -143,9 +143,7 @@
     Router.push(Links.valvonta(valvonta));
   };
 
-  const isSelf = R.curry((whoami, id) =>
-    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
-  );
+  const isSelf = R.curry((whoami, id) => Maybe.exists(R.equals(whoami.id), id));
 
   const formatValvoja = R.curry((valvojat, whoami, id) =>
     R.ifElse(
@@ -154,10 +152,8 @@
       R.compose(
         Maybe.orSome('-'),
         R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-        R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
-        Maybe.fromNull
-      )
-    )(id)
+        R.chain(id => Maybe.find(R.propEq('id', id), valvojat))
+      ))(id)
   );
 
   const formatHenkiloOmistajat = R.compose(
@@ -204,7 +200,7 @@
             bind:model={query}
             lens={R.lensProp('valvoja-id')}
             items={R.pluck('id', valvojat)}
-            format={formatValvoja(valvojat, whoami)}
+            format={R.compose(formatValvoja(valvojat, whoami), Maybe.fromNull)}
             parse={Maybe.Some}
             allowNone={true} />
         </div>
