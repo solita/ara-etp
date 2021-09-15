@@ -111,7 +111,7 @@
       </div>
     {/if}
 
-    <ContactDetails {osapuoli} {schema} {toimitustavat} {countries} />
+    <ContactDetails bind:osapuoli {schema} {toimitustavat} {countries} />
   </div>
   <div class="flex flex-col">
     {#if Osapuolet.toimitustapa.suomifi(osapuoli) && Maybe.None(osapuoli.ytunnus)}
