@@ -168,6 +168,11 @@
     R.prop('yritykset')
   );
 
+  const diaarinumero = R.compose(
+    R.chain(R.prop('diaarinumero')),
+    R.prop('lastToimenpide')
+  );
+
   $: R.compose(
     querystring =>
       replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
@@ -232,13 +237,16 @@
                   {i18n(i18nRoot + '.valvoja')}
                 </th>
                 <th class="etp-table--th">
+                  {i18n(i18nRoot + '.diaarinumero')}
+                </th>
+                <th class="etp-table--th">
                   {i18n(i18nRoot + '.last-toimenpide')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.deadline-date')}
                 </th>
                 <th class="etp-table--th">
-                  {i18n(i18nRoot + '.tunnus')}
+                  {i18n(i18nRoot + '.rakennustunnus')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.osoite')}
@@ -257,12 +265,10 @@
                   <td
                     class="etp-table--td"
                     class:font-bold={isSelf(whoami, valvonta['valvoja-id'])}
-                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}
-                    >{formatValvoja(
-                      valvojat,
-                      whoami,
-                      valvonta['valvoja-id']
-                    )}</td>
+                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}>
+                    {formatValvoja(valvojat, whoami, valvonta['valvoja-id'])}
+                  </td>
+                  <td class="etp-table--td">{Maybe.orSome('-', diaarinumero(valvonta))}</td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(
@@ -285,7 +291,7 @@
                     <td class="etp-table--td">Tarkastettava</td>
                     <td class="etp-table--td">-</td>
                   {/if}
-                  <td class="etp-table--td">{valvonta.id}</td>
+                  <td class="etp-table--td">{Maybe.orSome('-', valvonta.rakennustunnus)}</td>
                   <td class="etp-table--td">
                     <Address
                       {postinumerot}

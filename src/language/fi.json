@@ -1474,9 +1474,11 @@
         "ei-valvojaa": "Ei valvojaa",
         "include-closed": "Näytä myös päättyneet",
         "valvoja": "Valvoja",
+        "diaarinumero": "Diaarinumero",
         "last-toimenpide": "Edellinen tapahtuma",
         "deadline-date": "Määräaika",
         "tunnus": "Tunnus",
+        "rakennustunnus": "Rakennustunnus",
         "osoite": "Osoite",
         "omistajat": "Omistaja(t)",
         "messages": {
