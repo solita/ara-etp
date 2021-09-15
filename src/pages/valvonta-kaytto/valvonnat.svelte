@@ -254,6 +254,9 @@
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.omistajat')}
                 </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.energiatodistus')}
+                </th>
               </tr>
             </thead>
             <tbody class="etp-table--tbody">
@@ -288,7 +291,7 @@
                     </td>
                   {/each}
                   {#if Maybe.isNone(valvonta.lastToimenpide)}
-                    <td class="etp-table--td">Tarkastettava</td>
+                    <td class="etp-table--td">{i18n(i18nRoot + '.last-toimenpide-none')}</td>
                     <td class="etp-table--td">-</td>
                   {/if}
                   <td class="etp-table--td">{Maybe.orSome('-', valvonta.rakennustunnus)}</td>
@@ -306,6 +309,12 @@
                         formatYritysOmistajat(valvonta)
                       )
                     )}
+                  </td>
+                  <td class="etp-table--td" on:click|stopPropagation>
+                    {#each Maybe.toArray(valvonta.energiatodistus) as energiatodistus}
+                      <Link href={`#/energiatodistus/${energiatodistus.id}`}
+                            text={`ET ${energiatodistus.id}`}/>
+                    {/each}
                   </td>
                 </tr>
               {/each}

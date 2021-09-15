@@ -1476,11 +1476,13 @@
         "valvoja": "Valvoja",
         "diaarinumero": "Diaarinumero",
         "last-toimenpide": "Edellinen tapahtuma",
+        "last-toimenpide-none": "Tarkastettava",
         "deadline-date": "Määräaika",
         "tunnus": "Tunnus",
         "rakennustunnus": "Rakennustunnus",
         "osoite": "Osoite",
         "omistajat": "Omistaja(t)",
+        "energiatodistus": "Energiatodistus",
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
         }

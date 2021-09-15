@@ -311,7 +311,8 @@ const deserializeValvontaStatus = R.compose(
   R.evolve({
     lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull),
     henkilot: R.map(deserializeHenkiloOsapuoli),
-    yritykset: R.map(deserializeYritysOsapuoli)
+    yritykset: R.map(deserializeYritysOsapuoli),
+    energiatodistus: Maybe.fromNull
   }),
   deserializeValvonta,
   Objects.renameKeys({ 'last-toimenpide': 'lastToimenpide' })
