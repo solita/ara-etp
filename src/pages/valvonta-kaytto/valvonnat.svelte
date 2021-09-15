@@ -153,7 +153,8 @@
         Maybe.orSome('-'),
         R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
         R.chain(id => Maybe.find(R.propEq('id', id), valvojat))
-      ))(id)
+      )
+    )(id)
   );
 
   const formatHenkiloOmistajat = R.compose(
@@ -271,7 +272,9 @@
                     class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}>
                     {formatValvoja(valvojat, whoami, valvonta['valvoja-id'])}
                   </td>
-                  <td class="etp-table--td">{Maybe.orSome('-', diaarinumero(valvonta))}</td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('-', diaarinumero(valvonta))}
+                  </td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(
@@ -291,10 +294,14 @@
                     </td>
                   {/each}
                   {#if Maybe.isNone(valvonta.lastToimenpide)}
-                    <td class="etp-table--td">{i18n(i18nRoot + '.last-toimenpide-none')}</td>
+                    <td class="etp-table--td">
+                      {i18n(i18nRoot + '.last-toimenpide-none')}
+                    </td>
                     <td class="etp-table--td">-</td>
                   {/if}
-                  <td class="etp-table--td">{Maybe.orSome('-', valvonta.rakennustunnus)}</td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('-', valvonta.rakennustunnus)}
+                  </td>
                   <td class="etp-table--td">
                     <Address
                       {postinumerot}
@@ -312,8 +319,9 @@
                   </td>
                   <td class="etp-table--td" on:click|stopPropagation>
                     {#each Maybe.toArray(valvonta.energiatodistus) as energiatodistus}
-                      <Link href={`#/energiatodistus/${energiatodistus.id}`}
-                            text={`ET ${energiatodistus.id}`}/>
+                      <Link
+                        href={`#/energiatodistus/${energiatodistus.id}`}
+                        text={`ET ${energiatodistus.id}`} />
                     {/each}
                   </td>
                 </tr>
