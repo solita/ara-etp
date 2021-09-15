@@ -143,9 +143,7 @@
     Router.push(Links.valvonta(valvonta));
   };
 
-  const isSelf = R.curry((whoami, id) =>
-    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
-  );
+  const isSelf = R.curry((whoami, id) => Maybe.exists(R.equals(whoami.id), id));
 
   const formatValvoja = R.curry((valvojat, whoami, id) =>
     R.ifElse(
@@ -154,10 +152,8 @@
       R.compose(
         Maybe.orSome('-'),
         R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-        R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
-        Maybe.fromNull
-      )
-    )(id)
+        R.chain(id => Maybe.find(R.propEq('id', id), valvojat))
+      ))(id)
   );
 
   const formatHenkiloOmistajat = R.compose(
@@ -170,6 +166,11 @@
     R.map(R.prop('nimi')),
     R.filter(osapuolet.isOmistaja),
     R.prop('yritykset')
+  );
+
+  const diaarinumero = R.compose(
+    R.chain(R.prop('diaarinumero')),
+    R.prop('lastToimenpide')
   );
 
   $: R.compose(
@@ -204,7 +205,7 @@
             bind:model={query}
             lens={R.lensProp('valvoja-id')}
             items={R.pluck('id', valvojat)}
-            format={formatValvoja(valvojat, whoami)}
+            format={R.compose(formatValvoja(valvojat, whoami), Maybe.fromNull)}
             parse={Maybe.Some}
             allowNone={true} />
         </div>
@@ -236,19 +237,25 @@
                   {i18n(i18nRoot + '.valvoja')}
                 </th>
                 <th class="etp-table--th">
+                  {i18n(i18nRoot + '.diaarinumero')}
+                </th>
+                <th class="etp-table--th">
                   {i18n(i18nRoot + '.last-toimenpide')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.deadline-date')}
                 </th>
                 <th class="etp-table--th">
-                  {i18n(i18nRoot + '.tunnus')}
+                  {i18n(i18nRoot + '.rakennustunnus')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.osoite')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.omistajat')}
+                </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.energiatodistus')}
                 </th>
               </tr>
             </thead>
@@ -261,12 +268,10 @@
                   <td
                     class="etp-table--td"
                     class:font-bold={isSelf(whoami, valvonta['valvoja-id'])}
-                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}
-                    >{formatValvoja(
-                      valvojat,
-                      whoami,
-                      valvonta['valvoja-id']
-                    )}</td>
+                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}>
+                    {formatValvoja(valvojat, whoami, valvonta['valvoja-id'])}
+                  </td>
+                  <td class="etp-table--td">{Maybe.orSome('-', diaarinumero(valvonta))}</td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(
@@ -286,10 +291,10 @@
                     </td>
                   {/each}
                   {#if Maybe.isNone(valvonta.lastToimenpide)}
-                    <td class="etp-table--td">Tarkastettava</td>
+                    <td class="etp-table--td">{i18n(i18nRoot + '.last-toimenpide-none')}</td>
                     <td class="etp-table--td">-</td>
                   {/if}
-                  <td class="etp-table--td">{valvonta.id}</td>
+                  <td class="etp-table--td">{Maybe.orSome('-', valvonta.rakennustunnus)}</td>
                   <td class="etp-table--td">
                     <Address
                       {postinumerot}
@@ -304,6 +309,12 @@
                         formatYritysOmistajat(valvonta)
                       )
                     )}
+                  </td>
+                  <td class="etp-table--td" on:click|stopPropagation>
+                    {#each Maybe.toArray(valvonta.energiatodistus) as energiatodistus}
+                      <Link href={`#/energiatodistus/${energiatodistus.id}`}
+                            text={`ET ${energiatodistus.id}`}/>
+                    {/each}
                   </td>
                 </tr>
               {/each}
