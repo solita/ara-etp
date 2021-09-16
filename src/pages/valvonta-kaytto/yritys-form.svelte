@@ -114,22 +114,14 @@
     <ContactDetails bind:osapuoli {schema} {toimitustavat} {countries} />
   </div>
   <div class="flex flex-col">
-    {#if Osapuolet.toimitustapa.suomifi(osapuoli) && Maybe.None(osapuoli.ytunnus)}
+    {#each Maybe.toArray(Osapuolet.toimitustapaErrorKey.yritys(osapuoli)) as errorKey}
       <div class="flex space-x-2">
         <span class="font-icon text-warning">info</span>
         <span>
-          {i18n(`${i18nRoot}.warning-toimitustapa-suomifi-yritys`)}
+          {i18n(`${i18nRoot}.toimitustapa-errors.${errorKey}`)}
         </span>
       </div>
-    {/if}
-    {#if Osapuolet.toimitustapa.email(osapuoli) && Maybe.None(osapuoli.email)}
-      <div class="flex space-x-2">
-        <span class="font-icon text-warning">info</span>
-        <span>
-          {i18n(`${i18nRoot}.warning-toimitustapa-email`)}
-        </span>
-      </div>
-    {/if}
+    {/each}
   </div>
   <div class="flex space-x-4 py-8">
     <Button disabled={!dirty} type={'submit'} text={i18n(`${i18nRoot}.save`)} />

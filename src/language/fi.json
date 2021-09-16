@@ -1551,9 +1551,6 @@
         "maa": "Maa",
         "toimitustapa-id": "Toimitustapa",
         "toimitustapa-description": "Toimitustavan kuvaus",
-        "warning-toimitustapa-suomifi-henkilo": "Kun toimitustapa on suomi.fi, tulee henkilötunnus ja osoitetiedot olla täytettynä",
-        "warning-toimitustapa-suomifi-yritys": "Kun toimitustapa on suomi.fi, tulee Y-tunnus ja osoitetiedot olla täytettynä",
-        "warning-toimitustapa-email": "Kun toimitustapa on sahköposti, tulee sahköpostiosoitteen olla täytettynä",
         "save": "Tallenna",
         "revert": "Peru muutokset",
         "delete": "Poista",
@@ -1567,6 +1564,11 @@
           "delete-success": "Osapuoli on poistettu.",
           "delete-error": "Osapuolen poistaminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
+        },
+        "toimitustapa-errors": {
+          "suomifi-henkilo": "Kun toimitustapa on suomi.fi, pitää henkilötunnus ja osoitetiedot olla täytettynä",
+          "suomifi-yritys": "Kun toimitustapa on suomi.fi, pitää Y-tunnus ja osoitetiedot olla täytettynä",
+          "email": "Kun toimitustapa on sahköposti, pitää sahköpostiosoitteen olla täytettynä"
         }
       },
       "valvonta": {

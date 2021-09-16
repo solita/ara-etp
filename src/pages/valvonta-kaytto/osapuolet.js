@@ -36,3 +36,30 @@ export const emptyYritys = _ =>
     nimi: '',
     ytunnus: Maybe.None()
   });
+
+const invalidOsoite = R.anyPass([
+  R.propSatisfies(Maybe.isNone, 'jakeluosoite'),
+  R.propSatisfies(Maybe.isNone, 'maa')
+]);
+
+const invalidEmail = R.allPass([
+  toimitustapa.email,
+  R.propSatisfies(Maybe.isNone, 'email')
+]);
+
+export const toimitustapaErrorKey = {
+  yritys: yritys =>
+    toimitustapa.suomifi(yritys) &&
+    (Maybe.isNone(yritys.ytunnus) || invalidOsoite(yritys))
+      ? Maybe.Some('suomifi-yritys')
+      : invalidEmail(yritys)
+      ? Maybe.Some('email')
+      : Maybe.None(),
+  henkilo: henkilo =>
+    toimitustapa.suomifi(henkilo) &&
+    (Maybe.isNone(henkilo.henkilotunnus) || invalidOsoite(henkilo))
+      ? Maybe.Some('suomifi-henkilo')
+      : invalidEmail(henkilo)
+      ? Maybe.Some('email')
+      : Maybe.None()
+};
