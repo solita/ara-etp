@@ -1,11 +1,6 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
-  import * as Parsers from '@Utility/parsers';
-  import * as Formats from '@Utility/formats';
-  import * as Future from '@Utility/future-utils';
-  import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
 
   import * as Osapuolet from './osapuolet';
@@ -23,13 +18,25 @@
   export let roolit;
   export let toimitustavat;
 
-  let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
-    R.concat(henkilot, yritykset)
-  );
+  const types = {
+    yritys: {
+      label: yritys => yritys.nimi,
+      preview: ValvontaApi.previewToimenpideForYritysOsapuoli,
+      errorKey: Osapuolet.toimitustapaErrorKey.yritys
+    },
+    henkilo: {
+      label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
+      preview: ValvontaApi.previewToimenpideForYritysOsapuoli,
+      errorKey: Osapuolet.toimitustapaErrorKey.henkilo
+    }
+  };
 
-  $: hasErrorToimitustapaHtunnus = false;
-  $: hasErrorToimitustapaYtunnus = false;
-  $: hasErrorToimitustapaEmail = false;
+  let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
+    R.concat(
+      R.map(R.assoc('type', types.henkilo), henkilot),
+      R.map(R.assoc('type', types.yritys), yritykset)
+    )
+  );
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
@@ -74,11 +81,7 @@
           {#each osapuolet as osapuoli}
             <tr class="etp-table-tr">
               <td class="etp-table--td">
-                {#if osapuoli.nimi}
-                  {`${osapuoli.nimi}`}
-                {:else}
-                  {`${osapuoli.etunimi} ${osapuoli.sukunimi}`}
-                {/if}
+                {osapuoli.type.label(osapuoli)}
               </td>
               <td class="etp-table--td">
                 {rooliLabel(osapuoli)}
@@ -88,44 +91,31 @@
               </td>
               <td
                 class="etp-table--td"
-                class:text-error={(Osapuolet.toimitustapa.email(osapuoli) &&
-                  Maybe.isNone(osapuoli.email)) ||
-                  (Osapuolet.toimitustapa.suomifi(osapuoli) &&
-                    ((R.has('henkilotunnus')(osapuoli) &&
-                      Maybe.isNone(osapuoli.henkilotunnus)) ||
-                      (R.has('ytunnus')(osapuoli) &&
-                        Maybe.isNone(osapuoli.ytunnus))))}>
+                class:text-error={Maybe.isSome(
+                  osapuoli.type.errorKey(osapuoli)
+                )}
+                title={Maybe.fold(
+                  '',
+                  key =>
+                    i18n('valvonta.kaytto.osapuoli.toimitustapa-errors.' + key),
+                  osapuoli.type.errorKey(osapuoli)
+                )}>
+                {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
+                  <span class="font-icon">warning</span>
+                {/if}
                 {toimitustapaLabel(osapuoli)}
                 {#if Osapuolet.toimitustapa.other(osapuoli)}
                   {`- ${osapuoli['toimitustapa-description']}`}
                 {/if}
               </td>
               <td class="etp-table--td">
-                {#if osapuoli.nimi}
-                  <div
-                    class="text-primary cursor-pointer etp-table--td__center"
-                    on:click|stopPropagation={preview(
-                      ValvontaApi.previewToimenpideForYritysOsapuoli(
-                        id,
-                        osapuoli.id,
-                        toimenpide
-                      )
-                    )}>
-                    <span class="font-icon text-2xl"> visibility </span>
-                  </div>
-                {:else}
-                  <div
-                    class="text-primary cursor-pointer etp-table--td__center"
-                    on:click|stopPropagation={preview(
-                      ValvontaApi.previewToimenpideForHenkiloOsapuoli(
-                        id,
-                        osapuoli.id,
-                        toimenpide
-                      )
-                    )}>
-                    <span class="font-icon text-2xl"> visibility </span>
-                  </div>
-                {/if}
+                <div
+                  class="text-primary cursor-pointer etp-table--td__center"
+                  on:click|stopPropagation={preview(
+                    osapuoli.type.preview(id, osapuoli.id, toimenpide)
+                  )}>
+                  <span class="font-icon text-2xl"> visibility </span>
+                </div>
               </td>
             </tr>
           {/each}
@@ -133,22 +123,4 @@
       </table>
     </table>
   </div>
-</div>
-<div class="w-full">
-  {#if hasErrorToimitustapaHtunnus}
-    <div class="w-full flex items-center space-x-2 ml-2">
-      <span class="font-icon text-error text-2xl">info</span>
-      <span>{i18n(i18nRoot + '.messages.error-toimitustapa-htunnus')}</span>
-    </div>
-  {:else if hasErrorToimitustapaYtunnus}
-    <div class="w-full flex items-center space-x-2 ml-2">
-      <span class="font-icon text-error text-2xl">info</span>
-      <span>{i18n(i18nRoot + '.messages.error-toimitustapa-ytunnus')}</span>
-    </div>
-  {:else if hasErrorToimitustapaEmail}
-    <div class="w-full flex items-center space-x-2 ml-2">
-      <span class="font-icon text-error text-2xl">info</span>
-      <span>{i18n(i18nRoot + '.messages.error-toimitustapa-email')}</span>
-    </div>
-  {/if}
 </div>
