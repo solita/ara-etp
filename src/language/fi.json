@@ -1587,6 +1587,11 @@
         "no-events": "Ei tapahtumia"
       },
       "toimenpide": {
+        "vastaanottajat": "Vastaanottajat",
+        "nimi": "Nimi",
+        "rooli": "Rooli",
+        "toimitustapa": "Toimitustapa",
+        "esikatselu": "Esikatselu",
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
         "download-button": "Lataa",

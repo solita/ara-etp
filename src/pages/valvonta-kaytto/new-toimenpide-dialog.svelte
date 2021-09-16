@@ -20,6 +20,7 @@
   import Datepicker from '@Component/Input/Datepicker';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
+  import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
   import * as Validation from '@Utility/validation';
 
   const i18n = $_;
@@ -31,9 +32,12 @@
   export let reload;
   export let henkilot;
   export let yritykset;
+  export let roolit;
+  export let toimitustavat;
 
   let form;
   let error = Maybe.None();
+  let osapuolet = R.concat(henkilot, yritykset);
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
@@ -178,49 +182,14 @@
     {/if}
 
     {#if !R.isEmpty(templates)}
-      <h2>Osapuolet</h2>
-      <div>
-        <table>
-          {#each henkilot as henkilo}
-            <tr>
-              <td>
-                {`${henkilo.etunimi} ${henkilo.sukunimi}`}
-              </td>
-              <td>
-                <Button
-                  text={i18n(i18nRoot + '.preview-button')}
-                  style={'secondary'}
-                  on:click={preview(
-                    ValvontaApi.previewToimenpideForHenkiloOsapuoli(
-                      id,
-                      henkilo.id,
-                      toimenpide
-                    )
-                  )} />
-              </td>
-            </tr>
-          {/each}
-          {#each yritykset as yritys}
-            <tr>
-              <td>
-                {`${yritys.nimi}`}
-              </td>
-              <td>
-                <Button
-                  text={i18n(i18nRoot + '.preview-button')}
-                  style={'secondary'}
-                  on:click={preview(
-                    ValvontaApi.previewToimenpideForYritysOsapuoli(
-                      id,
-                      yritys.id,
-                      toimenpide
-                    )
-                  )} />
-              </td>
-            </tr>
-          {/each}
-        </table>
-      </div>
+      <OsapuoletTable
+        {id}
+        {toimenpide}
+        {henkilot}
+        {yritykset}
+        {preview}
+        {roolit}
+        {toimitustavat} />
     {/if}
 
     <div class="buttons">

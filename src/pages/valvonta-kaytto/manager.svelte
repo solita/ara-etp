@@ -17,6 +17,8 @@
 
   export let valvojat;
   export let valvonta;
+  export let roolit;
+  export let toimitustavat;
   export let henkilot;
   export let yritykset;
   export let toimenpiteet;
@@ -68,6 +70,8 @@
     {templatesByType}
     {henkilot}
     {yritykset}
+    {roolit}
+    {toimitustavat}
     reload={load} />
 {/each}
 
