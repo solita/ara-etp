@@ -10,11 +10,13 @@
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Schema from './schema';
+  import * as Osapuolet from './osapuolet';
 
   import * as ValvontaApi from './valvonta-api';
 
   import { _, locale } from '@Language/i18n';
 
+  import H2 from '@Component/H/H2.svelte';
   import Button from '@Component/Button/Button';
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
@@ -34,6 +36,9 @@
 
   let form;
   let error = Maybe.None();
+  let roolit = Maybe.None();
+  let toimitustavat = Maybe.None();
+  let osapuolet = R.concat(henkilot, yritykset);
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
@@ -42,6 +47,10 @@
 
   $: schema = Schema.toimenpidePublish(templates, toimenpide);
   $: isValidForm = Validation.isValidForm(schema);
+
+  $: hasErrorToimitustapaHtunnus = false;
+  $: hasErrorToimitustapaYtunnus = false;
+  $: hasErrorToimitustapaEmail = false;
 
   $: publish = toimenpide => {
     if (isValidForm(toimenpide)) {
@@ -97,6 +106,33 @@
       Validation.blurForm(form);
     }
   };
+
+  Future.fork(
+    response => {
+      flashMessageStore.add(
+        'valvonta-kaytto',
+        'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response))
+      );
+    },
+    response => {
+      roolit = response.roolit;
+      toimitustavat = response.toimitustavat;
+    },
+    Future.parallelObject(2, {
+      roolit: ValvontaApi.roolit,
+      toimitustavat: ValvontaApi.toimitustavat
+    })
+  );
+
+  $: rooliLabel = R.compose(
+    Maybe.fold('', Locales.labelForId($locale, roolit)),
+    R.prop('rooli-id')
+  );
+  $: toimitustapaLabel = R.compose(
+    Maybe.fold('', Locales.labelForId($locale, toimitustavat)),
+    R.prop('toimitustapa-id')
+  );
 </script>
 
 <style type="text/postcss">
@@ -178,48 +214,101 @@
     {/if}
 
     {#if !R.isEmpty(templates)}
-      <h2>Osapuolet</h2>
-      <div>
-        <table>
-          {#each henkilot as henkilo}
-            <tr>
-              <td>
-                {`${henkilo.etunimi} ${henkilo.sukunimi}`}
-              </td>
-              <td>
-                <Button
-                  text={i18n(i18nRoot + '.preview-button')}
-                  style={'secondary'}
-                  on:click={preview(
-                    ValvontaApi.previewToimenpideForHenkiloOsapuoli(
-                      id,
-                      henkilo.id,
-                      toimenpide
-                    )
-                  )} />
-              </td>
-            </tr>
-          {/each}
-          {#each yritykset as yritys}
-            <tr>
-              <td>
-                {`${yritys.nimi}`}
-              </td>
-              <td>
-                <Button
-                  text={i18n(i18nRoot + '.preview-button')}
-                  style={'secondary'}
-                  on:click={preview(
-                    ValvontaApi.previewToimenpideForYritysOsapuoli(
-                      id,
-                      yritys.id,
-                      toimenpide
-                    )
-                  )} />
-              </td>
-            </tr>
-          {/each}
-        </table>
+      <div class="w-2/3">
+        <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
+        <div class="flex flex-row my-4">
+          <table class="etp-table">
+            <table class="etp-table">
+              <thead class="etp-table--thead">
+                <tr class="etp-table--tr etp-table--tr__light">
+                  <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
+
+                  <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
+
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.toimitustapa')}
+                  </th>
+
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.esikatselu')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="etp-table--tbody">
+                {#each osapuolet as osapuoli}
+                  <tr class="etp-table-tr">
+                    <td class="etp-table--td">
+                      {#if osapuoli.nimi}
+                        {`${osapuoli.nimi}`}
+                      {:else}
+                        {`${osapuoli.etunimi} ${osapuoli.sukunimi}`}
+                      {/if}
+                    </td>
+                    <td class="etp-table--td">
+                      {rooliLabel(osapuoli)}
+                      {#if Osapuolet.otherRooli(osapuoli)}
+                        {`- ${osapuoli['rooli-description']}`}
+                      {/if}
+                    </td>
+                    <td class="etp-table--td">
+                      {toimitustapaLabel(osapuoli)}
+                      {#if Osapuolet.toimitustapa.other(osapuoli)}
+                        {`- ${osapuoli['toimitustapa-description']}`}
+                      {/if}
+                    </td>
+                    <td class="etp-table--td">
+                      {#if osapuoli.nimi}
+                        <div
+                          class="text-primary cursor-pointer etp-table--td__center"
+                          on:click|stopPropagation={preview(
+                            ValvontaApi.previewToimenpideForYritysOsapuoli(
+                              id,
+                              osapuoli.id,
+                              toimenpide
+                            )
+                          )}>
+                          <span class="font-icon text-2xl"> visibility </span>
+                        </div>
+                      {:else}
+                        <div
+                          class="text-primary cursor-pointer etp-table--td__center"
+                          on:click|stopPropagation={preview(
+                            ValvontaApi.previewToimenpideForHenkiloOsapuoli(
+                              id,
+                              osapuoli.id,
+                              toimenpide
+                            )
+                          )}>
+                          <span class="font-icon text-2xl"> visibility </span>
+                        </div>
+                      {/if}
+                    </td>
+                  </tr>
+                {/each}
+              </tbody>
+            </table>
+          </table>
+        </div>
+      </div>
+      <div class="w-full">
+        {#if hasErrorToimitustapaHtunnus}
+          <div class="w-full flex items-center space-x-2 ml-2">
+            <span class="font-icon text-error text-2xl">info</span>
+            <span
+              >{i18n(i18nRoot + '.messages.error-toimitustapa-htunnus')}</span>
+          </div>
+        {:else if hasErrorToimitustapaYtunnus}
+          <div class="w-full flex items-center space-x-2 ml-2">
+            <span class="font-icon text-error text-2xl">info</span>
+            <span
+              >{i18n(i18nRoot + '.messages.error-toimitustapa-ytunnus')}</span>
+          </div>
+        {:else if hasErrorToimitustapaEmail}
+          <div class="w-full flex items-center space-x-2 ml-2">
+            <span class="font-icon text-error text-2xl">info</span>
+            <span>{i18n(i18nRoot + '.messages.error-toimitustapa-email')}</span>
+          </div>
+        {/if}
       </div>
     {/if}
 
