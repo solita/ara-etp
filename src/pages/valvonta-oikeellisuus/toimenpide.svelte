@@ -17,6 +17,7 @@
   import ChangeDeadlineDialog from './change-deadline-dialog';
 
   import * as valvontaApi from './valvonta-api';
+  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
 
   export let whoami;
   export let energiatodistus;
@@ -60,25 +61,26 @@
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}
     </div>
-    {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || (Kayttajat.isLaatija(whoami) && Toimenpiteet.isAuditReport(toimenpide))}
-      <div class="flex mr-2">
-        {#each Maybe.toArray(icon) as icon}
-          <span class="font-icon mr-1">{icon}</span>
-        {/each}
-        {typeLabel(toimenpide)}
-        {`(${toimenpide.author.etunimi} ${toimenpide.author.sukunimi})`}
-      </div>
-    {:else}
-      <div class="flex mr-2">
-        <Link
-          text={typeLabel(toimenpide)}
-          href={Links.toimenpide(toimenpide, energiatodistus)}
-          {icon} />
-      </div>
-    {/if}
-    {#if Toimenpiteet.isDraft(toimenpide)}
-      <div class="ml-2">(luonnos)</div>
-    {/if}
+    <div class="flex mr-2">
+      {#each Maybe.toArray(icon) as icon}
+        <span class="font-icon mr-1">{icon}</span>
+      {/each}
+
+      <span class="mr-1">
+        {#if Toimenpiteet.isDialogType(toimenpide['type-id']) || (Kayttajat.isLaatija(whoami) && Toimenpiteet.isAuditReport(toimenpide))}
+          {typeLabel(toimenpide)}
+        {:else}
+          <Link
+            text={typeLabel(toimenpide)}
+            href={Links.toimenpide(toimenpide, energiatodistus)}
+            {icon} />
+        {/if}
+      </span>
+      {#if Toimenpiteet.isDraft(toimenpide)}
+        <span class="font-icon mr-1" title="{i18n(i18nRoot + '.draft')}">mode_edit</span>
+      {/if}
+      <span>({toimenpide.author.etunimi + toimenpide.author.sukunimi})</span>
+    </div>
   </div>
 
   {#if !Toimenpiteet.isResponse(toimenpide)}
