@@ -1516,7 +1516,13 @@
           "delete-error": "Käytönvalvonnan poistaminen epäonnistui.",
           "add-success": "Uusi käytönvalvonta lisätty.",
           "add-error": "Käytönvalvonnan lisääminen epäonnistui.",
-          "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä."
+          "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä.",
+          "add-link-success": "Linkki lisätty käytönvalvontaan.",
+          "add-files-success": "Liitetiedostot lisätty käytönvalvontaan.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui."
         },
         "osapuolet": {
           "title": "Osapuolet",
