@@ -143,6 +143,8 @@
         {valvonta}
         {henkilot}
         {yritykset}
+        {roolit}
+        {toimitustavat}
         {toimenpiteet}
         {toimenpidetyypit}
         {templatesByType}
