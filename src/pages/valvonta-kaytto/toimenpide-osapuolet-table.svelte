@@ -26,7 +26,7 @@
     },
     henkilo: {
       label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
-      preview: ValvontaApi.previewToimenpideForYritysOsapuoli,
+      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli,
       errorKey: Osapuolet.toimitustapaErrorKey.henkilo
     }
   };
