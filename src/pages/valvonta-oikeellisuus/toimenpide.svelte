@@ -2,9 +2,7 @@
   import * as R from 'ramda';
   import * as Formats from '@Utility/formats';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as dfns from 'date-fns';
 
   import { _, locale } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
@@ -14,7 +12,7 @@
   import Link from '@Component/Link/Link.svelte';
   import ShowMore from '@Component/show-more/show-more';
 
-  import ChangeDeadlineDialog from './change-deadline-dialog';
+  import Deadline from '@Pages/valvonta/deadline';
 
   import * as valvontaApi from './valvonta-api';
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
@@ -39,20 +37,9 @@
   } else if (Toimenpiteet.isAnomaly(toimenpide)) {
     icon = Maybe.Some('bug_report');
   }
-
-  const isPastDeadline = R.both(R.complement(dfns.isToday), dfns.isPast);
 </script>
 
 <!-- purgecss: text-error hover:border-error -->
-
-{#each Maybe.toArray(toimenpideToUpdate) as toimenpide}
-  <ChangeDeadlineDialog
-    {energiatodistus}
-    {toimenpide}
-    {i18n}
-    cancel={() => (toimenpideToUpdate = Maybe.None())}
-    {reload} />
-{/each}
 
 <div class="flex flex-col space-y-1">
   <div class="flex overflow-hidden">
@@ -106,26 +93,10 @@
     </div>
   {/if}
 
-  {#each EM.toArray(toimenpide['deadline-date']) as deadline}
-    <div>
-      {#if Kayttajat.isPaakayttaja(whoami)}
-        <button
-          on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
-          class="inline-flex space-x-1 font-bold items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer"
-          class:text-error={isPastDeadline(deadline)}
-          class:hover:border-error={isPastDeadline(deadline)}>
-          <span class="font-icon">schedule</span>
-          <span>Määräaika {Formats.formatDateInstant(deadline)}</span>
-          <span class="font-icon">edit</span>
-        </button>
-      {:else}
-        <div
-          class="inline-flex space-x-1 items-center border-b-1 border-transparent"
-          class:text-error={isPastDeadline(deadline)}>
-          <span class="font-icon">schedule</span>
-          <span>Määräaika {Formats.formatDateInstant(deadline)}</span>
-        </div>
-      {/if}
-    </div>
-  {/each}
+  <Deadline
+    {whoami}
+    {toimenpide}
+    {i18nRoot}
+    putToimenpide={valvontaApi.putToimenpide(energiatodistus.id)}
+    {reload} />
 </div>

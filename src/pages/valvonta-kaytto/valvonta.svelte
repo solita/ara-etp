@@ -165,6 +165,7 @@
               {roolit}
               {toimitustavat}
               toimenpide={tapahtuma}
+              reload={_ => load(params)}
               {whoami} />
           {:else}
             <Note note={tapahtuma} {valvojat} {i18n} />

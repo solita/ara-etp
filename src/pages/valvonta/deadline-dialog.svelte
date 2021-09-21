@@ -8,19 +8,17 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
 
-  import * as ValvontaApi from './valvonta-api';
-
   import Datepicker from '@Component/Input/Datepicker';
   import Button from '@Component/Button/Button';
   import Spinner from '@Component/Spinner/Spinner';
 
   import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
+  const i18n = $_;
 
-  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
-
-  export let energiatodistus;
+  export let i18nRoot;
+  export let putToimenpide;
   export let toimenpide;
-  export let i18n;
 
   export let cancel;
   export let reload;
@@ -59,7 +57,7 @@
           cancel();
           reload();
         },
-        ValvontaApi.putToimenpide(energiatodistus.id, toimenpide.id, toimenpide)
+        putToimenpide(toimenpide.id, toimenpide)
       );
     } else {
       error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
@@ -76,28 +74,28 @@
     bind:this={form}>
     <h1
       class="text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl">
-      Muuta määräaikaa
+      {i18n(i18nRoot + '.deadline-date-dialog.title')}
     </h1>
-
-    <Datepicker
-      label="Määräpäivä"
-      bind:model={toimenpide}
-      required={true}
-      lens={R.lensProp('deadline-date')}
-      format={Maybe.fold('', Formats.formatDateInstant)}
-      parse={Parsers.optionalParser(Parsers.parseDate)}
-      transform={EM.fromNull}
-      validators={schema['deadline-date']}
-      {i18n} />
-
+    <div class="flex">
+      <Datepicker
+        label={i18n(i18nRoot + '.deadline-date')}
+        bind:model={toimenpide}
+        required={true}
+        lens={R.lensProp('deadline-date')}
+        format={Maybe.fold('', Formats.formatDateInstant)}
+        parse={Parsers.optionalParser(Parsers.parseDate)}
+        transform={EM.fromNull}
+        validators={schema['deadline-date']}
+        {i18n} />
+    </div>
     <div
-      class="flex flex-wrap items-center mt-8 border-t-1 border-tertiary space-x-5">
+      class="flex flex-wrap items-center mt-6 pt-6 border-t-1 border-tertiary space-x-5">
       {#if !pending}
         <Button
-          text={'Päivitä määräaika'}
+          text={i18n(i18nRoot + '.deadline-date-dialog.save')}
           disabled={!isValidForm(toimenpide)}
           on:click={_ => updateDeadline(toimenpide)} />
-        <Button text={'Peruuta'} style={'secondary'} on:click={cancel} />
+        <Button text={i18n(i18nRoot + '.deadline-date-dialog.cancel')} style={'secondary'} on:click={cancel} />
       {:else}
         <Spinner />
       {/if}
