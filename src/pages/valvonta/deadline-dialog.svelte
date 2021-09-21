@@ -95,7 +95,10 @@
           text={i18n(i18nRoot + '.deadline-date-dialog.save')}
           disabled={!isValidForm(toimenpide)}
           on:click={_ => updateDeadline(toimenpide)} />
-        <Button text={i18n(i18nRoot + '.deadline-date-dialog.cancel')} style={'secondary'} on:click={cancel} />
+        <Button
+          text={i18n(i18nRoot + '.deadline-date-dialog.cancel')}
+          style={'secondary'}
+          on:click={cancel} />
       {:else}
         <Spinner />
       {/if}

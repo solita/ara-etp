@@ -287,9 +287,9 @@
 {/each}
 
 {#if !disabled}
-<TextButton
-  icon="add"
-  text={i18n(i18nRoot + '.tiedoksi.add')}
-  type="button"
-  on:click={addTiedoksiRecipient} />
+  <TextButton
+    icon="add"
+    text={i18n(i18nRoot + '.tiedoksi.add')}
+    type="button"
+    on:click={addTiedoksiRecipient} />
 {/if}

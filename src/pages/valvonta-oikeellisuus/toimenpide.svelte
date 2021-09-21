@@ -64,7 +64,8 @@
         {/if}
       </span>
       {#if Toimenpiteet.isDraft(toimenpide)}
-        <span class="font-icon mr-1" title="{i18n(i18nRoot + '.draft')}">mode_edit</span>
+        <span class="font-icon mr-1" title={i18n(i18nRoot + '.draft')}
+          >mode_edit</span>
       {/if}
       <span>({toimenpide.author.etunimi + toimenpide.author.sukunimi})</span>
     </div>
