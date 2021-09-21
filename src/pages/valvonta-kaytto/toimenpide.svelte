@@ -29,7 +29,6 @@
     Locales.labelForId($locale, toimenpidetyypit),
     R.prop('type-id')
   );
-
 </script>
 
 <div class="flex flex-col mb-3">
@@ -84,15 +83,15 @@
   {#each Maybe.toArray(toimenpide.description) as description}
     <div class="mt-1">
       <ShowMore>
-        <p> {description} </p>
+        <p>{description}</p>
       </ShowMore>
     </div>
   {/each}
 
   <Deadline
-      {whoami}
-      {toimenpide}
-      i18nRoot={'valvonta.kaytto.toimenpide'}
-      putToimenpide={ValvontaApi.putToimenpide(valvonta.id)}
-      {reload} />
+    {whoami}
+    {toimenpide}
+    i18nRoot={'valvonta.kaytto.toimenpide'}
+    putToimenpide={ValvontaApi.putToimenpide(valvonta.id)}
+    {reload} />
 </div>
