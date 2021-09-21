@@ -1299,6 +1299,11 @@
       },
       "toimenpide": {
         "deadline-date": "Määräaika",
+        "deadline-date-dialog": {
+          "title": "Muuta määräaikaa",
+          "save": "Päivitä määräaika",
+          "cancel": "Peruuta"
+        },
         "select-template": "Valitse asiakirjapohja",
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
@@ -1596,6 +1601,12 @@
         "no-events": "Ei tapahtumia"
       },
       "toimenpide": {
+        "deadline-date": "Määräaika",
+        "deadline-date-dialog": {
+          "title": "Muuta määräaikaa",
+          "save": "Päivitä määräaika",
+          "cancel": "Peruuta"
+        },
         "vastaanottajat": "Vastaanottajat",
         "nimi": "Nimi",
         "rooli": "Rooli",

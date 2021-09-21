@@ -74,28 +74,28 @@
     bind:this={form}>
     <h1
       class="text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl">
-      Muuta määräaikaa
+      {i18n(i18nRoot + '.deadline-date-dialog.title')}
     </h1>
-
-    <Datepicker
-      label="Määräpäivä"
-      bind:model={toimenpide}
-      required={true}
-      lens={R.lensProp('deadline-date')}
-      format={Maybe.fold('', Formats.formatDateInstant)}
-      parse={Parsers.optionalParser(Parsers.parseDate)}
-      transform={EM.fromNull}
-      validators={schema['deadline-date']}
-      {i18n} />
-
+    <div class="flex">
+      <Datepicker
+        label={i18n(i18nRoot + '.deadline-date')}
+        bind:model={toimenpide}
+        required={true}
+        lens={R.lensProp('deadline-date')}
+        format={Maybe.fold('', Formats.formatDateInstant)}
+        parse={Parsers.optionalParser(Parsers.parseDate)}
+        transform={EM.fromNull}
+        validators={schema['deadline-date']}
+        {i18n} />
+    </div>
     <div
-      class="flex flex-wrap items-center mt-8 border-t-1 border-tertiary space-x-5">
+      class="flex flex-wrap items-center mt-6 pt-6 border-t-1 border-tertiary space-x-5">
       {#if !pending}
         <Button
-          text={'Päivitä määräaika'}
+          text={i18n(i18nRoot + '.deadline-date-dialog.save')}
           disabled={!isValidForm(toimenpide)}
           on:click={_ => updateDeadline(toimenpide)} />
-        <Button text={'Peruuta'} style={'secondary'} on:click={cancel} />
+        <Button text={i18n(i18nRoot + '.deadline-date-dialog.cancel')} style={'secondary'} on:click={cancel} />
       {:else}
         <Spinner />
       {/if}

@@ -112,7 +112,7 @@
   <Deadline
       {whoami}
       {toimenpide}
-      {i18nRoot}
+      i18nRoot={'valvonta.kaytto.toimenpide'}
       putToimenpide={ValvontaApi.putToimenpide(valvonta.id)}
       {reload} />
 </div>
