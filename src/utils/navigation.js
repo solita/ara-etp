@@ -156,10 +156,6 @@ export const parseKayttaja = R.curry(
       R.path(['kayttaja', parseInt(id, 10)])
     )(idTranslate);
 
-    if (R.contains('yritykset', locationParts)) {
-      return [];
-    }
-
     return R.compose(
       Maybe.orSome([]),
       R.map(linksForKayttaja(i18n)),
@@ -194,9 +190,7 @@ export const parseYritys = R.curry(
   (isDev, i18n, whoami, idTranslate, locationParts) => {
     const id = locationParts[0];
 
-    if (R.equals('all', id)) return parseRoot(isDev, i18n, whoami);
-
-    if (R.equals('new', id) || R.contains('laatijat', locationParts)) {
+    if (R.equals('new', id) || R.equals('all', id)) {
       return [];
     }
 

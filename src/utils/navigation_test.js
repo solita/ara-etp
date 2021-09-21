@@ -172,25 +172,11 @@ describe('Navigation', () => {
   });
 
   describe('parseYritys', () => {
-    it('should return root for all', () => {
+    it('should return empty for all', () => {
       const isDev = false;
       const locationParts = ['all'];
       const whoami = { rooli: 0, id: 1 };
-      const expected = [
-        {
-          label: 'Energiatodistukset',
-          href: '#/energiatodistus/all'
-        },
-        {
-          label: 'Yritykset',
-          href: `#/laatija/1/yritykset`
-        },
-        {
-          href: '#/valvonta/oikeellisuus/all',
-          label: 'Oikeellisuuden valvonta'
-        },
-        { label: 'Viestit', href: '#/viesti/all' }
-      ];
+      const expected = [];
 
       assert.deepEqual(
         R.map(
