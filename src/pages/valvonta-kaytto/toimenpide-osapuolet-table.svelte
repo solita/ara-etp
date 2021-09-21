@@ -114,7 +114,7 @@
                 {#if Osapuolet.isOmistaja(osapuoli)}
                   {#if previewPending}
                     <div class="etp-table--td__center">
-                    <Spinner smaller={true}/>
+                      <Spinner smaller={true} />
                     </div>
                   {:else}
                     <div
