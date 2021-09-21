@@ -109,13 +109,18 @@
                 {/if}
               </td>
               <td class="etp-table--td">
-                <div
-                  class="text-primary cursor-pointer etp-table--td__center"
-                  on:click|stopPropagation={preview(
-                    osapuoli.type.preview(id, osapuoli.id, toimenpide)
-                  )}>
-                  <span class="font-icon text-2xl"> visibility </span>
-                </div>
+                {#if Osapuolet.isOmistaja(osapuoli)}
+                  <div
+                    class="text-primary cursor-pointer etp-table--td__center"
+                    on:click|stopPropagation={preview(
+                      osapuoli.type.preview(id, osapuoli.id, toimenpide)
+                    )}>
+                    <span class="font-icon text-2xl"> visibility </span>
+                  </div>
+                {:else}
+                  <span class="font-icon">info</span>
+                  {i18n(i18nRoot + '.fyi')}
+                {/if}
               </td>
             </tr>
           {/each}
