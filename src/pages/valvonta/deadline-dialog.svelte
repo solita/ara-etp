@@ -8,19 +8,17 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
 
-  import * as ValvontaApi from './valvonta-api';
-
   import Datepicker from '@Component/Input/Datepicker';
   import Button from '@Component/Button/Button';
   import Spinner from '@Component/Spinner/Spinner';
 
   import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
+  const i18n = $_;
 
-  const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
-
-  export let energiatodistus;
+  export let i18nRoot;
+  export let putToimenpide;
   export let toimenpide;
-  export let i18n;
 
   export let cancel;
   export let reload;
@@ -59,7 +57,7 @@
           cancel();
           reload();
         },
-        ValvontaApi.putToimenpide(energiatodistus.id, toimenpide.id, toimenpide)
+        putToimenpide(toimenpide.id, toimenpide)
       );
     } else {
       error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
