@@ -93,6 +93,7 @@
           link.href = URL.createObjectURL(response);
           link.click();
           URL.revokeObjectURL(link.href);
+          error = Maybe.None();
         },
         api
       );
@@ -182,14 +183,16 @@
     {/if}
 
     {#if !R.isEmpty(templates)}
-      <OsapuoletTable
-        {id}
-        {toimenpide}
-        {henkilot}
-        {yritykset}
-        {preview}
-        {roolit}
-        {toimitustavat} />
+      <div class="mt-2">
+        <OsapuoletTable
+          {id}
+          {toimenpide}
+          {henkilot}
+          {yritykset}
+          {preview}
+          {roolit}
+          {toimitustavat} />
+      </div>
     {/if}
 
     <div class="buttons">

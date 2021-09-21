@@ -1585,7 +1585,7 @@
         "toimenpide": {
           "rooli-none": "Ei roolia",
           "toimitustapa-none": "Ei toimitustapaa",
-          "fyi": "Tiedoksi"
+          "fyi": "tiedoksi"
         },
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy",
@@ -1599,6 +1599,7 @@
         "vastaanottajat": "Vastaanottajat",
         "nimi": "Nimi",
         "rooli": "Rooli",
+        "fyi": "Omistajien dokumentit tiedoksi",
         "toimitustapa": "Toimitustapa",
         "esikatselu": "Esikatselu",
         "cancel-button": "Peruuta",
