@@ -98,6 +98,5 @@
     {toimenpide}
     {i18nRoot}
     putToimenpide={valvontaApi.putToimenpide(energiatodistus.id)}
-    cancel={() => (toimenpideToUpdate = Maybe.None())}
     {reload} />
 </div>

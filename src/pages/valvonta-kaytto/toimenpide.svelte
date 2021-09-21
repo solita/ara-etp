@@ -9,17 +9,22 @@
   import * as Locales from '@Language/locale-utils';
 
   import * as Toimenpiteet from './toimenpiteet';
+  import * as ValvontaApi from './valvonta-api';
+
   import TextButton from '@Component/Button/TextButton';
   import Osapuoli from './toimenpide-osapuoli.svelte';
+  import Deadline from '@Pages/valvonta/deadline';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.valvonta.toimenpide';
 
+  export let whoami;
   export let valvonta;
   export let toimenpide;
   export let toimenpidetyypit;
   export let roolit;
   export let toimitustavat;
+  export let reload;
 
   $: typeLabel = R.compose(
     Locales.labelForId($locale, toimenpidetyypit),
@@ -103,4 +108,11 @@
       {/if}
     </div>
   {/each}
+
+  <Deadline
+      {whoami}
+      {toimenpide}
+      {i18nRoot}
+      putToimenpide={ValvontaApi.putToimenpide(valvonta.id)}
+      {reload} />
 </div>
