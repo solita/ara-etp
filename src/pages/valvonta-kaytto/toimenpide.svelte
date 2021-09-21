@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Formats from '@Utility/formats';
   import * as Maybe from '@Utility/maybe-utils';
@@ -11,7 +10,6 @@
   import * as Toimenpiteet from './toimenpiteet';
   import * as ValvontaApi from './valvonta-api';
 
-  import TextButton from '@Component/Button/TextButton';
   import Osapuoli from './toimenpide-osapuoli.svelte';
   import Deadline from '@Pages/valvonta/deadline';
   import ShowMore from '@Component/show-more/show-more';
