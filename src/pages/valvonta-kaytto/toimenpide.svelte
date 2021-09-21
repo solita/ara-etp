@@ -14,6 +14,7 @@
   import TextButton from '@Component/Button/TextButton';
   import Osapuoli from './toimenpide-osapuoli.svelte';
   import Deadline from '@Pages/valvonta/deadline';
+  import ShowMore from '@Component/show-more/show-more';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.valvonta.toimenpide';
@@ -31,22 +32,10 @@
     R.prop('type-id')
   );
 
-  let node;
-  let truncate = true;
-
-  let truncated;
-
-  onMount(() => {
-    truncated = !!node && node.offsetWidth < node.scrollWidth;
-  });
 </script>
 
-<svelte:window
-  on:resize={_ =>
-    (truncated = !!node && node.offsetWidth < node.scrollWidth)} />
-
 <div class="flex flex-col mb-3">
-  <div class="flex class:items-center={truncated} overflow-hidden">
+  <div class="flex overflow-hidden">
     <div class="mr-4 whitespace-no-wrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
@@ -95,17 +84,10 @@
   {/if}
 
   {#each Maybe.toArray(toimenpide.description) as description}
-    <div class="mt-1 min-w-0 flex flex-wrap">
-      <p bind:this={node} class:truncate>
-        {description}
-      </p>
-      {#if truncated}
-        <TextButton
-          on:click={_ => (truncate = !truncate)}
-          type={'button'}
-          icon={truncate ? 'expand_more' : 'expand_less'}
-          text={truncate ? 'Näytä lisää' : 'Näytä vähemmän'} />
-      {/if}
+    <div class="mt-1">
+      <ShowMore>
+        <p> {description} </p>
+      </ShowMore>
     </div>
   {/each}
 
