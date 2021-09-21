@@ -258,6 +258,7 @@
       name={`tiedoksi.${i}.name`}
       label={i18n(i18nRoot + '.tiedoksi.name')}
       required={true}
+      {disabled}
       bind:model={toimenpide}
       lens={R.lensPath(['tiedoksi', i, 'name'])}
       validators={schema.tiedoksi[0].name}
@@ -267,6 +268,7 @@
       id={`tiedoksi.${i}.email`}
       name={`tiedoksi.${i}.email`}
       label={i18n(i18nRoot + '.tiedoksi.email')}
+      {disabled}
       bind:model={toimenpide}
       lens={R.lensPath(['tiedoksi', i, 'email'])}
       parse={Maybe.fromNull}
@@ -274,16 +276,20 @@
       validators={schema.tiedoksi[0].email}
       {i18n} />
 
-    <span
-      class="material-icons delete-icon cursor-pointer mt-6"
-      on:click|stopPropagation={_ => removeTiedoksiRecipient(i)}>
-      highlight_off
-    </span>
+    {#if !disabled}
+      <span
+        class="material-icons delete-icon cursor-pointer mt-6"
+        on:click|stopPropagation={_ => removeTiedoksiRecipient(i)}>
+        highlight_off
+      </span>
+    {/if}
   </div>
 {/each}
 
+{#if !disabled}
 <TextButton
   icon="add"
   text={i18n(i18nRoot + '.tiedoksi.add')}
   type="button"
   on:click={addTiedoksiRecipient} />
+{/if}
