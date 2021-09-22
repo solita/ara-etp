@@ -34,7 +34,7 @@
   let toimenpideTyyppi = Maybe.None();
 
   const openNewToimenpide = type => {
-    newToimenpide = Maybe.Some(Toimenpiteet.emptyToimenpide(type));
+    newToimenpide = Maybe.Some(Toimenpiteet.emptyToimenpide(type, templatesByType));
   };
 
   const openNewNote = _ => {
