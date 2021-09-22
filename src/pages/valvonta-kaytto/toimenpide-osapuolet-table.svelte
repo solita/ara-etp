@@ -19,6 +19,7 @@
   export let roolit;
   export let toimitustavat;
   export let previewPending;
+  export let disabled;
 
   const types = {
     yritys: {
@@ -118,7 +119,9 @@
                     </div>
                   {:else}
                     <div
-                      class="text-primary cursor-pointer etp-table--td__center"
+                      class:text-primary={!disabled}
+                      class:text-disabled={disabled}
+                      class="cursor-pointer etp-table--td__center"
                       on:click|stopPropagation={preview(
                         osapuoli.type.preview(id, osapuoli.id, toimenpide)
                       )}>

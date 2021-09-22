@@ -52,64 +52,68 @@
   $: isValidForm = Validation.isValidForm(schema);
 
   $: publish = toimenpide => {
-    if (isValidForm(toimenpide)) {
-      publishPending = true;
-      Future.fork(
-        response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.publish-error`,
-              Response.localizationKey(response)
-            )
-          );
-          error = Maybe.Some(msg);
-          publishPending = false;
-        },
-        _ => {
-          flashMessageStore.add(
-            'valvonta-kaytto',
-            'success',
-            i18n(`${i18nRoot}.messages.publish-success`)
-          );
-          publishPending = false;
-          reload();
-        },
-        ValvontaApi.postToimenpide(id, toimenpide)
-      );
-    } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
-      Validation.blurForm(form);
+    if (!disabled) {
+      if (isValidForm(toimenpide)) {
+        publishPending = true;
+        Future.fork(
+          response => {
+            const msg = i18n(
+              Maybe.orSome(
+                `${i18nRoot}.messages.publish-error`,
+                Response.localizationKey(response)
+              )
+            );
+            error = Maybe.Some(msg);
+            publishPending = false;
+          },
+          _ => {
+            flashMessageStore.add(
+              'valvonta-kaytto',
+              'success',
+              i18n(`${i18nRoot}.messages.publish-success`)
+            );
+            publishPending = false;
+            reload();
+          },
+          ValvontaApi.postToimenpide(id, toimenpide)
+        );
+      } else {
+        error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+        Validation.blurForm(form);
+      }
     }
   };
 
   $: preview = api => {
-    if (isValidForm(toimenpide)) {
-      previewPending = true;
-      Future.fork(
-        response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.preview-error`,
-              Response.localizationKey(response)
-            )
-          );
-          error = Maybe.Some(msg);
-          previewPending = false;
-        },
-        response => {
-          previewPending = false;
-          let link = document.createElement('a');
-          link.target = '_blank';
-          link.href = URL.createObjectURL(response);
-          link.click();
-          URL.revokeObjectURL(link.href);
-          error = Maybe.None();
-        },
-        api
-      );
-    } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
-      Validation.blurForm(form);
+    if (!disabled) {
+      if (isValidForm(toimenpide)) {
+        previewPending = true;
+        Future.fork(
+          response => {
+            const msg = i18n(
+              Maybe.orSome(
+                `${i18nRoot}.messages.preview-error`,
+                Response.localizationKey(response)
+              )
+            );
+            error = Maybe.Some(msg);
+            previewPending = false;
+          },
+          response => {
+            previewPending = false;
+            let link = document.createElement('a');
+            link.target = '_blank';
+            link.href = URL.createObjectURL(response);
+            link.click();
+            URL.revokeObjectURL(link.href);
+            error = Maybe.None();
+          },
+          api
+        );
+      } else {
+        error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+        Validation.blurForm(form);
+      }
     }
   };
 </script>
@@ -201,6 +205,7 @@
           {yritykset}
           {preview}
           {previewPending}
+          {disabled}
           {roolit}
           {toimitustavat} />
       </div>
