@@ -215,7 +215,7 @@
           {#if !Kayttajat.isLaatija(whoami)}
             <div class="flex w-full justify-between px-2">
               {#each ketju['energiatodistus-id'].toArray() as etId}
-                <div class="flex w-full mr-auto space-x-1 items-end">
+                <div class="flex w-full mr-auto space-x-1">
                   <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
                   <Link
                     bold={true}
