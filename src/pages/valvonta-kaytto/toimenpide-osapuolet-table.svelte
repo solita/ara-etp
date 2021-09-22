@@ -9,6 +9,7 @@
 
   import { _, locale } from '@Language/i18n';
   import H2 from '@Component/H/H2.svelte';
+  import Spinner from '@Component/Spinner/Spinner.svelte';
 
   export let id;
   export let toimenpide;
@@ -17,6 +18,8 @@
   export let preview;
   export let roolit;
   export let toimitustavat;
+  export let previewPending;
+  export let disabled;
 
   const types = {
     yritys: {
@@ -110,13 +113,22 @@
               </td>
               <td class="etp-table--td">
                 {#if Osapuolet.isOmistaja(osapuoli)}
-                  <div
-                    class="text-primary cursor-pointer etp-table--td__center"
-                    on:click|stopPropagation={preview(
-                      osapuoli.type.preview(id, osapuoli.id, toimenpide)
-                    )}>
-                    <span class="font-icon text-2xl"> visibility </span>
-                  </div>
+                  {#if previewPending}
+                    <div class="etp-table--td__center">
+                      <Spinner smaller={true} />
+                    </div>
+                  {:else}
+                    <div
+                      class:text-primary={!disabled}
+                      class:text-disabled={disabled}
+                      class="cursor-pointer etp-table--td__center"
+                      on:click|stopPropagation={disabled ||
+                        preview(
+                          osapuoli.type.preview(id, osapuoli.id, toimenpide)
+                        )}>
+                      <span class="font-icon text-2xl"> visibility </span>
+                    </div>
+                  {/if}
                 {:else}
                   <span class="font-icon">info</span>
                   {i18n(i18nRoot + '.fyi')}

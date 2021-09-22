@@ -38,6 +38,10 @@
   let form;
   let error = Maybe.None();
   let osapuolet = R.concat(henkilot, yritykset);
+  let publishPending = false;
+  let previewPending = false;
+
+  $: disabled = publishPending || previewPending;
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
@@ -49,15 +53,13 @@
 
   $: publish = toimenpide => {
     if (isValidForm(toimenpide)) {
+      publishPending = true;
       Future.fork(
         response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.publish-error`,
-              Response.localizationKey(response)
-            )
+          error = Maybe.Some(
+            i18n(Response.errorKey(i18nRoot, 'publish', response))
           );
-          error = Maybe.Some(msg);
+          publishPending = false;
         },
         _ => {
           flashMessageStore.add(
@@ -65,6 +67,7 @@
             'success',
             i18n(`${i18nRoot}.messages.publish-success`)
           );
+          publishPending = false;
           reload();
         },
         ValvontaApi.postToimenpide(id, toimenpide)
@@ -77,17 +80,16 @@
 
   $: preview = api => {
     if (isValidForm(toimenpide)) {
+      previewPending = true;
       Future.fork(
         response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.preview-error`,
-              Response.localizationKey(response)
-            )
+          error = Maybe.Some(
+            i18n(Response.errorKey(i18nRoot, 'preview', response))
           );
-          error = Maybe.Some(msg);
+          previewPending = false;
         },
         response => {
+          previewPending = false;
           let link = document.createElement('a');
           link.target = '_blank';
           link.href = URL.createObjectURL(response);
@@ -190,6 +192,8 @@
           {henkilot}
           {yritykset}
           {preview}
+          {previewPending}
+          {disabled}
           {roolit}
           {toimitustavat} />
       </div>
@@ -199,12 +203,15 @@
       <div class="mr-5 mt-5">
         <Button
           text={text(toimenpide, 'publish-button')}
+          showSpinner={publishPending}
+          {disabled}
           on:click={publish(toimenpide)} />
       </div>
 
       <div class="mt-5">
         <Button
           text={i18n(i18nRoot + '.cancel-button')}
+          {disabled}
           style={'secondary'}
           on:click={reload} />
       </div>
