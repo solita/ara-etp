@@ -56,13 +56,7 @@
       publishPending = true;
       Future.fork(
         response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.publish-error`,
-              Response.localizationKey(response)
-            )
-          );
-          error = Maybe.Some(msg);
+          error = Maybe.Some(i18n(Response.errorKey(i18nRoot, 'publish', response)));
           publishPending = false;
         },
         _ => {
@@ -87,13 +81,7 @@
       previewPending = true;
       Future.fork(
         response => {
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.preview-error`,
-              Response.localizationKey(response)
-            )
-          );
-          error = Maybe.Some(msg);
+          error = Maybe.Some(i18n(Response.errorKey(i18nRoot, 'preview', response)));
           previewPending = false;
         },
         response => {
