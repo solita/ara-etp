@@ -56,7 +56,9 @@
       publishPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some(i18n(Response.errorKey(i18nRoot, 'publish', response)));
+          error = Maybe.Some(
+            i18n(Response.errorKey(i18nRoot, 'publish', response))
+          );
           publishPending = false;
         },
         _ => {
@@ -81,7 +83,9 @@
       previewPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some(i18n(Response.errorKey(i18nRoot, 'preview', response)));
+          error = Maybe.Some(
+            i18n(Response.errorKey(i18nRoot, 'preview', response))
+          );
           previewPending = false;
         },
         response => {
