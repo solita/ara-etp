@@ -41,6 +41,7 @@
   const i18nRoot = 'valvonta.kaytto.all';
 
   let valvontaCount = 0;
+  $: pageCount = Math.ceil(R.divide(valvontaCount, pageSize));
 
   const queryStringIntegerProp = R.curry((querystring, prop) =>
     R.compose(
@@ -182,6 +183,12 @@
     R.filter(Maybe.isSome)
   )(query);
 </script>
+
+<style>
+  .pagination:not(empty) {
+    @apply mt-4;
+  }
+</style>
 
 <!-- purgecss: font-bold text-primary text-error -->
 
@@ -328,6 +335,17 @@
               {/each}
             </tbody>
           </table>
+
+          {#if R.gt(pageCount, 1)}
+            <div class="pagination">
+              <Pagination
+                {pageCount}
+                pageNum={Maybe.orSome(1, R.prop('page', query))}
+                {nextPageCallback}
+                itemsPerPage={pageSize}
+                itemsCount={valvontaCount} />
+            </div>
+          {/if}
         </div>
       {/if}
     {/each}
