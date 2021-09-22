@@ -26,7 +26,7 @@
     'ilmoituspaikka-id': Maybe.None(),
     'ilmoituspaikka-description': Maybe.None(),
     ilmoitustunnus: Maybe.None(),
-    havaintopaiva: Either.Right(Maybe.None()),
+    havaintopaiva: Either.Right(Maybe.Some(new Date())),
     'valvoja-id': Maybe.None()
   });
 
