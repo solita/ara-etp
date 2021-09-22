@@ -122,7 +122,7 @@
                       class:text-primary={!disabled}
                       class:text-disabled={disabled}
                       class="cursor-pointer etp-table--td__center"
-                      on:click|stopPropagation={preview(
+                      on:click|stopPropagation={disabled || preview(
                         osapuoli.type.preview(id, osapuoli.id, toimenpide)
                       )}>
                       <span class="font-icon text-2xl"> visibility </span>
