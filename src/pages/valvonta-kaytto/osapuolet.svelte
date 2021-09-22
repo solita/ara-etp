@@ -20,6 +20,24 @@
   export let toimitustavat;
   export let countries;
 
+  const types = {
+    yritys: {
+      label: yritys => yritys.nimi,
+      link: (valvonta, yritys) => Links.yritys(valvonta, yritys)
+    },
+    henkilo: {
+      label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
+      link: (valvonta, henkilo) => Links.henkilo(valvonta, henkilo)
+    }
+  };
+
+  let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
+    R.concat(
+      R.map(R.assoc('type', types.henkilo), henkilot),
+      R.map(R.assoc('type', types.yritys), yritykset)
+    )
+  );
+
   const postinumeroLine = R.compose(
     Maybe.fromEmpty,
     R.join(' '),
@@ -45,7 +63,7 @@
 </script>
 
 <H2 text={i18n(i18nRoot + '.title')} />
-{#if R.isEmpty(henkilot) && R.isEmpty(yritykset)}
+{#if R.isEmpty(osapuolet)}
   {i18n(i18nRoot + '.empty')}
 {:else}
   <div class="overflow-x-auto">
@@ -70,24 +88,24 @@
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
-        {#each henkilot as henkilo}
+        {#each osapuolet as osapuoli}
           <tr class="etp-table-tr">
             <td class="etp-table--td">
               <Link
-                href={Links.henkilo(valvonta, henkilo)}
-                text={`${henkilo.etunimi} ${henkilo.sukunimi}`} />
+                href={osapuoli.type.link(valvonta, osapuoli)}
+                text={osapuoli.type.label(osapuoli)} />
             </td>
             <td class="etp-table--td">
-              {rooliLabel(henkilo)}
-              {#if Osapuolet.otherRooli(henkilo)}
-                {`- ${henkilo['rooli-description']}`}
+              {rooliLabel(osapuoli)}
+              {#if Osapuolet.otherRooli(osapuoli)}
+                {`- ${osapuoli['rooli-description']}`}
               {/if}
             </td>
             <td class="etp-table--td">
-              {postiosoite(henkilo)}
+              {postiosoite(osapuoli)}
             </td>
             <td class="etp-table--td">
-              {#each Maybe.toArray(henkilo.email) as email}
+              {#each Maybe.toArray(osapuoli.email) as email}
                 <Link href={`mailto:${email}`} text={email} />
               {/each}
             </td>
@@ -95,39 +113,9 @@
               {Locales.labelForId(
                 $locale,
                 toimitustavat
-              )(henkilo['toimitustapa-id'])}
-              {#if Osapuolet.toimitustapa.other(henkilo)}
-                {`- ${henkilo['toimitustapa-description']}`}
-              {/if}
-            </td>
-          </tr>
-        {/each}
-        {#each yritykset as yritys}
-          <tr class="etp-table-tr">
-            <td class="etp-table--td">
-              <Link href={Links.yritys(valvonta, yritys)} text={yritys.nimi} />
-            </td>
-            <td class="etp-table--td">
-              {Locales.labelForId($locale, roolit)(yritys['rooli-id'])}
-              {#if Osapuolet.otherRooli(yritys)}
-                {`- ${yritys['rooli-description']}`}
-              {/if}
-            </td>
-            <td class="etp-table--td">
-              {postiosoite(yritys)}
-            </td>
-            <td class="etp-table--td">
-              {#each Maybe.toArray(yritys.email) as email}
-                <Link href={`mailto:${email}`} text={email} />
-              {/each}
-            </td>
-            <td class="etp-table--td">
-              {Locales.labelForId(
-                $locale,
-                toimitustavat
-              )(yritys['toimitustapa-id'])}
-              {#if Osapuolet.toimitustapa.other(yritys)}
-                {`- ${yritys['toimitustapa-description']}`}
+              )(osapuoli['toimitustapa-id'])}
+              {#if Osapuolet.toimitustapa.other(osapuoli)}
+                {`- ${osapuoli['toimitustapa-description']}`}
               {/if}
             </td>
           </tr>
