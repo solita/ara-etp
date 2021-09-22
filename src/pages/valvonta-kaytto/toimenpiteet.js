@@ -46,11 +46,18 @@ export const i18nKey = (toimenpide, key) =>
     key
   ]);
 
-export const emptyToimenpide = typeId => ({
+const defaultTemplateId = (typeId, templatesByType) => {
+  const templates = R.defaultTo([], templatesByType[typeId]);
+  return R.length(templates) === 1 ?
+    Maybe.Some(R.head(templates).id) :
+    Maybe.None();
+}
+
+export const emptyToimenpide = (typeId, templatesByType) => ({
   'type-id': typeId,
   'publish-time': Maybe.None(),
   'deadline-date': Either.Right(defaultDeadline(typeId)),
-  'template-id': Maybe.None(),
+  'template-id': defaultTemplateId(typeId, templatesByType),
   description: Maybe.None()
 });
 
