@@ -60,6 +60,11 @@
     Maybe.fold('', Locales.labelForId($locale, roolit)),
     R.prop('rooli-id')
   );
+
+  $: toimitustapaLabel = R.compose(
+    Maybe.fold('', Locales.labelForId($locale, toimitustavat)),
+    R.prop('toimitustapa-id')
+  );
 </script>
 
 <H2 text={i18n(i18nRoot + '.title')} />
@@ -98,7 +103,7 @@
             <td class="etp-table--td">
               {rooliLabel(osapuoli)}
               {#if Osapuolet.otherRooli(osapuoli)}
-                {`- ${osapuoli['rooli-description']}`}
+                - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
             <td class="etp-table--td">
@@ -110,12 +115,9 @@
               {/each}
             </td>
             <td class="etp-table--td">
-              {Locales.labelForId(
-                $locale,
-                toimitustavat
-              )(osapuoli['toimitustapa-id'])}
+              {toimitustapaLabel(osapuoli)}
               {#if Osapuolet.toimitustapa.other(osapuoli)}
-                {`- ${osapuoli['toimitustapa-description']}`}
+                - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
               {/if}
             </td>
           </tr>
