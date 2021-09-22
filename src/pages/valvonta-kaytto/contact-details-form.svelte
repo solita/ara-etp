@@ -10,6 +10,8 @@
   import H2 from '@Component/H/H2.svelte';
 
   import { _, locale } from '@Language/i18n';
+  import Autocomplete from '../../components/Autocomplete/Autocomplete.svelte';
+  import * as Country from '@Utility/country';
 
   export let osapuoli;
   export let toimitustavat;
@@ -18,6 +20,11 @@
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuoli';
+
+  $: parseCountry = R.compose(
+    R.map(R.prop('id')),
+    Country.findCountry(R.__, countries)
+  );
 </script>
 
 <div class="mt-4">
@@ -100,17 +107,20 @@
       {i18n} />
   </div>
   <div class="w-full">
-    <Select
-      id={'osapuoli.maa'}
-      label={i18n(`${i18nRoot}.maa`)}
-      required={false}
-      disabled={false}
-      allowNone={true}
-      bind:model={osapuoli}
-      parse={Maybe.fromNull}
-      lens={R.lensProp('maa')}
-      format={Locales.labelForId($locale, countries)}
-      items={R.pluck('id', countries)} />
+    <Autocomplete items={R.map(Locales.label($locale), countries)}>
+      <Input
+          id={'osapuoli.maa'}
+          name={'osapuoli.maa'}
+          label={i18n(`${i18nRoot}.maa`)}
+          required={false}
+          disabled={false}
+          bind:model={osapuoli}
+          lens={R.lensProp('maa')}
+          format={Maybe.fold('', Locales.labelForId($locale, countries))}
+          parse={parseCountry}
+          search={true}
+          {i18n}/>
+    </Autocomplete>
   </div>
 </div>
 <div class="py-4 w-full md:w-1/3 md:pr-2">
