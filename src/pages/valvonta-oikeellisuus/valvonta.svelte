@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import * as Formats from '@Utility/formats';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Maybe from '@Utility/maybe-utils';
@@ -29,6 +30,7 @@
   import Toimenpide from './toimenpide.svelte';
   import Note from './note.svelte';
   import Link from '../../components/Link/Link.svelte';
+  import Energiatodistukset from '../energiatodistus/energiatodistukset.svelte';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.valvonta';
@@ -38,6 +40,28 @@
   let overlay = true;
 
   $: load(params);
+
+  // whoami -> versio -> id -> Future {energiatodistus: ET, korvattuEnergiatodistus: Maybe ET}
+  const fetchEnergiatodistus = (whoami, versio, id) => {
+    const energiatodistus = EnergiatodistusApi.getEnergiatodistusById(
+      versio,
+      id
+    );
+
+    const korvaavaEnergiatodistus = R.chain(et => {
+      const korvaavaEtId = et['korvaava-energiatodistus-id'];
+      if (Maybe.isNone(korvaavaEtId)) {
+        return Future.resolve(Maybe.None());
+      }
+
+      return R.map(
+        Maybe.Some,
+        EnergiatodistusApi.getEnergiatodistusById('all', korvaavaEtId.some())
+      );
+    }, energiatodistus);
+
+    return { energiatodistus, korvaavaEnergiatodistus };
+  };
 
   const load = params => {
     overlay = true;
@@ -64,10 +88,7 @@
             luokittelut: EnergiatodistusApi.luokittelutForVersion(
               params.versio
             ),
-            energiatodistus: EnergiatodistusApi.getEnergiatodistusById(
-              params.versio,
-              params.id
-            ),
+            ...fetchEnergiatodistus(whoami, params.versio, params.id),
             toimenpiteet: ValvontaApi.toimenpiteet(params.id),
             notes: Kayttajat.isPaakayttaja(whoami)
               ? ValvontaApi.notes(params.id)
@@ -146,7 +167,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { energiatodistus, korvaavaEnergiatodistus, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -163,12 +184,20 @@
           )}
         </div>
         <div>
-          {#each energiatodistus['korvaava-energiatodistus-id'].toArray() as korvaavaId}
-            <span>{i18n('energiatodistus.korvaavuus.header.korvaava')}</span>
+          {#each korvaavaEnergiatodistus
+            .toArray()
+            .filter(R.propEq('tila-id', 2)) as korvaavaEt}
+            <span
+              >{Maybe.fold(
+                '',
+                Formats.formatTimeInstantMinutes,
+                korvaavaEt.allekirjoitusaika
+              )}
+              {i18n('energiatodistus.korvaavuus.header.korvaava')}</span>
             <Link
               bold={true}
-              href={'/#/energiatodistus/' + korvaavaId}
-              text={korvaavaId} />
+              href={'/#/energiatodistus/' + korvaavaEt.id}
+              text={korvaavaEt.id} />
           {/each}
         </div>
       </div>
