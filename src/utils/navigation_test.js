@@ -443,7 +443,11 @@ describe('Navigation', () => {
         { label: 'ET 1', href: '#/energiatodistus/2018/1' },
         { label: 'Liitteet', href: '#/energiatodistus/2018/1/liitteet' },
         { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2018/1' },
-        { label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' }
+        { label: 'Viestit', href: '#/energiatodistus/2018/1/viestit' },
+        {
+          label: 'Muutoshistoria',
+          href: '#/energiatodistus/2018/1/muutoshistoria'
+        }
       ];
 
       assert.deepEqual(
