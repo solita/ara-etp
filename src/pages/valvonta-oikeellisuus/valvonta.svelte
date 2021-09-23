@@ -41,11 +41,9 @@
 
   $: load(params);
 
-  // whoami -> versio -> id -> Future {energiatodistus: ET, korvattuEnergiatodistus: Maybe ET}
   const fetchEnergiatodistus = (whoami, versio, id) => {
-    const energiatodistus = EnergiatodistusApi.getEnergiatodistusById(
-      versio,
-      id
+    const energiatodistus = Future.cache(
+      EnergiatodistusApi.getEnergiatodistusById(versio, id)
     );
 
     const korvaavaEnergiatodistus = R.chain(et => {
