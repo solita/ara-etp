@@ -46,17 +46,15 @@
       EnergiatodistusApi.getEnergiatodistusById(versio, id)
     );
 
-    const korvaavaEnergiatodistus = R.chain(et => {
-      const korvaavaEtId = et['korvaava-energiatodistus-id'];
-      if (Maybe.isNone(korvaavaEtId)) {
-        return Future.resolve(Maybe.None());
-      }
-
-      return R.map(
-        Maybe.Some,
-        EnergiatodistusApi.getEnergiatodistusById('all', korvaavaEtId.some())
-      );
-    }, energiatodistus);
+    const korvaavaEnergiatodistus = R.chain(
+      R.compose(
+        Maybe.orSome(Future.resolve(Maybe.None())), // Future<Maybe<ET>>
+        R.map(R.map(Maybe.Some)), // Maybe<Future<Maybe<ET>>>
+        R.map(EnergiatodistusApi.getEnergiatodistusById('all')), // Maybe<Future<ET>>
+        R.prop('korvaava-energiatodistus-id') // Maybe<id>
+      ),
+      energiatodistus
+    );
 
     return { energiatodistus, korvaavaEnergiatodistus };
   };
