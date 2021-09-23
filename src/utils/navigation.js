@@ -85,7 +85,8 @@ export const linksForEnergiatodistus = R.curry(
       label: i18n('navigation.energiatodistus-viestit'),
       href: `#/energiatodistus/${version}/${id}/viestit`
     },
-    ...(isDev && !Kayttajat.isLaskuttaja(whoami)
+    ...((isDev && !Kayttajat.isLaskuttaja(whoami)) ||
+    Kayttajat.isPaakayttaja(whoami)
       ? [
           {
             label: i18n('navigation.muutoshistoria'),
