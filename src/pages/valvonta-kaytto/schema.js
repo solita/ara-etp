@@ -3,6 +3,9 @@ import * as R from 'ramda';
 import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
+import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
+import { liftValidator } from '@Utility/validation';
 
 const OptionalLimitedString = (min, max) =>
   R.map(Validation.liftValidator, Validation.LimitedString(2, 200));
@@ -21,7 +24,7 @@ const osapuoli = {
   puhelin: OptionalLimitedString(2, 200),
   'vastaanottajan-tarkenne': OptionalLimitedString(2, 200),
   jakeluosoite: OptionalLimitedString(2, 200),
-  postinumero: OptionalLimitedString(2, 10),
+  postinumero: [],
   postitoimipaikka: OptionalLimitedString(2, 200),
   rooli_description: OptionalLimitedString(2, 200),
   toimitustapa_description: OptionalLimitedString(2, 200)
@@ -37,6 +40,18 @@ export const yritys = R.mergeLeft(osapuoli, {
   ytunnus: [Validation.liftValidator(Validation.ytunnusValidator)],
   nimi: Validation.RequiredString(2, 200)
 });
+
+export const appendPostinumeroValidatorForCountry = (osapuoli, schema) =>
+  R.over(
+    R.lensProp('postinumero'),
+    Maybe.exists(R.equals('FI'), osapuoli.maa)
+      ? R.append(Validation.liftValidator(Validation.postinumeroFIValidator))
+      : R.concat(
+          R.__,
+          R.map(Validation.liftValidator, Validation.LimitedString(2, 20))
+        ),
+    schema
+  );
 
 const description = R.map(
   Validation.liftValidator,

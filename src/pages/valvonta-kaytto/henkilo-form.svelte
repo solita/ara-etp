@@ -7,7 +7,7 @@
   import * as Osapuolet from './osapuolet';
 
   import { _, locale } from '@Language/i18n';
-  import { henkilo as schema } from '@Pages/valvonta-kaytto/schema';
+  import * as Schema from '@Pages/valvonta-kaytto/schema';
   import { flashMessageStore } from '@/stores';
 
   import Input from '@Component/Input/Input.svelte';
@@ -28,6 +28,8 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuoli';
   let form;
+
+  $: schema = Schema.appendPostinumeroValidatorForCountry(osapuoli, Schema.henkilo);
 
   const setDirty = _ => {
     dirty = true;
