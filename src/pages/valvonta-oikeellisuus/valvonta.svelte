@@ -9,6 +9,7 @@
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
+  import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as ETViews from '@Pages/energiatodistus/views';
   import * as ViestiLinks from '@Pages/viesti/links';
   import * as Viestit from '@Pages/viesti/viesti-util';
@@ -181,7 +182,7 @@
         <div>
           {#each korvaavaEnergiatodistus
             .toArray()
-            .filter(R.propEq('tila-id', 2)) as korvaavaEt}
+            .filter(ETUtils.isSigned) as korvaavaEt}
             <span
               >{Maybe.fold(
                 '',
