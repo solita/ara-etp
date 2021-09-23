@@ -48,8 +48,7 @@
 
     const korvaavaEnergiatodistus = R.chain(
       R.compose(
-        Maybe.orSome(Future.resolve(Maybe.None())), // Future<Maybe<ET>>
-        R.map(R.map(Maybe.Some)), // Maybe<Future<Maybe<ET>>>
+        Maybe.fold(Future.resolve(Maybe.None()), R.map(Maybe.Some)), // Future<Maybe<ET>>
         R.map(EnergiatodistusApi.getEnergiatodistusById('all')), // Maybe<Future<ET>>
         R.prop('korvaava-energiatodistus-id') // Maybe<id>
       ),
