@@ -28,7 +28,7 @@
       overlay = false;
     },
     response => {
-      yritykset = response;
+      yritykset = R.sort(R.ascend(R.prop('nimi')))(response);
       overlay = false;
     },
     api.getAllYritykset
