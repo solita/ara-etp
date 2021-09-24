@@ -31,7 +31,10 @@
     Future.fork(
       response => {
         const msg = i18n(
-          Maybe.orSome('ohje.load-error', Response.localizationKey(response))
+          Maybe.orSome(
+            'ohje.viewer.load-error',
+            Response.localizationKey(response)
+          )
         );
 
         flashMessageStore.add('ohje', 'error', msg);
