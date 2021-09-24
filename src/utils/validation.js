@@ -123,10 +123,10 @@ export const liftValidator = validator =>
     validator
   );
 
-export const isPostinumero = R.test(/^\d{5}$/);
+export const isPostinumeroFI = R.test(/^\d{5}$/);
 
-export const postinumeroValidator = {
-  predicate: isPostinumero,
+export const postinumeroFIValidator = {
+  predicate: isPostinumeroFI,
   label: R.applyTo('validation.invalid-postinumero-fi')
 };
 

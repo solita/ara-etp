@@ -5,6 +5,7 @@
   import * as Parsers from '@Utility/parsers';
   import * as Validation from '@Utility/validation';
   import * as Osapuolet from './osapuolet';
+  import * as Schema from '@Pages/valvonta-kaytto/schema';
 
   import Input from '@Component/Input/Input.svelte';
   import Button from '@Component/Button/Button.svelte';
@@ -13,7 +14,6 @@
   import ContactDetails from './contact-details-form.svelte';
 
   import { _, locale } from '@Language/i18n';
-  import { yritys as schema } from '@Pages/valvonta-kaytto/schema';
   import { flashMessageStore } from '@/stores';
 
   export let osapuoli;
@@ -28,6 +28,8 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuoli';
   let form;
+
+  $: schema = Schema.appendPostinumeroValidatorForCountry(osapuoli, Schema.yritys);
 
   const setDirty = _ => {
     dirty = true;

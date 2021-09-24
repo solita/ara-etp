@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
-import * as validation from '@Utility/validation';
+import * as Validation from '@Utility/validation';
 import * as Tila from '@Pages/yritys/laatija-yritys-tila';
 
 export const emptyYritys = () => ({
@@ -19,27 +19,18 @@ export const emptyYritys = () => ({
 });
 
 const commonSchema = {
-  ytunnus: [validation.isRequired, validation.ytunnusValidator],
-  nimi: [
-    validation.isRequired,
-    validation.minLengthConstraint(2),
-    validation.maxLengthConstraint(200)
-  ],
-  'vastaanottajan-tarkenne': R.map(validation.liftValidator, [
-    validation.isRequired,
-    validation.minLengthConstraint(2),
-    validation.maxLengthConstraint(200)
-  ]),
-  jakeluosoite: [validation.isRequired],
-  postinumero: [validation.isRequired],
-  postitoimipaikka: [
-    validation.isRequired,
-    validation.minLengthConstraint(2),
-    validation.maxLengthConstraint(200)
-  ],
+  ytunnus: [Validation.isRequired, Validation.ytunnusValidator],
+  nimi: Validation.RequiredString(2, 200),
+  'vastaanottajan-tarkenne': R.map(
+    Validation.liftValidator,
+    Validation.LimitedString(2, 200)
+  ),
+  jakeluosoite: Validation.RequiredString(2, 200),
+  postinumero: [Validation.isRequired],
+  postitoimipaikka: Validation.RequiredString(2, 200),
   maa: [],
-  verkkolaskuosoite: R.map(validation.liftValidator, [
-    validation.VerkkolaskuosoiteValidator
+  verkkolaskuosoite: R.map(Validation.liftValidator, [
+    Validation.VerkkolaskuosoiteValidator
   ]),
   verkkolaskuoperaattori: []
 };
@@ -48,12 +39,12 @@ export const schema = maa =>
   Maybe.exists(R.equals('FI'), Either.toMaybe(maa))
     ? R.over(
         R.lensProp('postinumero'),
-        R.append(validation.postinumeroValidator),
+        R.append(Validation.postinumeroFIValidator),
         commonSchema
       )
     : R.over(
         R.lensProp('postinumero'),
-        R.concat(R.__, validation.LimitedString(2, 20)),
+        R.concat(R.__, Validation.LimitedString(2, 20)),
         commonSchema
       );
 

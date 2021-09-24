@@ -93,6 +93,7 @@
       lens={R.lensProp('postinumero')}
       parse={Parsers.optionalString}
       format={Maybe.orSome('')}
+      validators={schema.postinumero}
       {i18n} />
   </div>
   <div class="w-full">
@@ -104,6 +105,7 @@
       lens={R.lensProp('postitoimipaikka')}
       parse={Parsers.optionalString}
       format={Maybe.orSome('')}
+      validators={schema.postitoimipaikka}
       {i18n} />
   </div>
   <div class="w-full">
