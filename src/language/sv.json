@@ -66,7 +66,7 @@
     "etusivu": "Etusivu SV?",
     "valvonta": {
       "kaytto": {
-        "all": "Käytönvalvonta SV?",
+        "all": "Käytön valvonta SV?",
         "kohde": "KV {id} SV?",
         "valvonta": "Valvonnat SV?"
       },
@@ -1480,16 +1480,16 @@
     },
     "kaytto": {
       "all": {
-        "title": "Käytönvalvonta SV?",
+        "title": "Käytön valvonta SV?",
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui SV?"
         }
       },
       "kohde": { "title": "Kohde SV?" },
-      "new-kohde": { "title": "Uusi käytönvalvonta SV?" },
+      "new-kohde": { "title": "Uusi käytön valvonta SV?" },
       "valvonta": {
         "title": "Valvonta SV?",
-        "messages": { "not-found": "Käytönvalvonnan tietoja ei löydy SV?" }
+        "messages": { "not-found": "Käytön valvonnan tietoja ei löydy SV?" }
       },
       "toimenpide": {
         "cancel-button": "Peruuta SV?",

@@ -252,8 +252,12 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     href: '#/energiatodistus/all'
   },
   {
-    label: i18n('navigation.laatijat'),
-    href: '#/laatija/all'
+    label: i18n('navigation.viestit'),
+    href: `#/viesti/all?kasittelija-id=${whoami.id}&has-kasittelija=false`,
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ViestiApi.getKetjutUnread)
   },
   {
     label: i18n('navigation.valvonta.oikeellisuus.all'),
@@ -264,12 +268,8 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     href: `#/valvonta/kaytto/all?valvoja-id=${whoami.id}&has-valvoja=false`
   },
   {
-    label: i18n('navigation.viestit'),
-    href: `#/viesti/all?kasittelija-id=${whoami.id}&has-kasittelija=false`,
-    badge: R.compose(
-      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
-      R.map(R.prop('count'))
-    )(ViestiApi.getKetjutUnread)
+    label: i18n('navigation.laatijat'),
+    href: '#/laatija/all'
   }
 ]);
 
