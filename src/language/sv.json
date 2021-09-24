@@ -68,11 +68,11 @@
       "kaytto": {
         "all": "Käytönvalvonta SV?",
         "kohde": "KV {id} SV?",
-        "valvonta": "Valvonta SV?"
+        "valvonta": "Valvonnat SV?"
       },
       "oikeellisuus": {
         "all": "Oikeellisuuden valvonta SV?",
-        "valvonta": "Valvonta SV?"
+        "valvonta": "Valvonnat SV?"
       }
     }
   },

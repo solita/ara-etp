@@ -32,20 +32,20 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
     href: '#/energiatodistus/all'
   },
   {
-    label: i18n('navigation.yritykset'),
-    href: `#/laatija/${whoami.id}/yritykset`
-  },
-  {
-    label: i18n('navigation.valvonta.oikeellisuus.all'),
-    href: '#/valvonta/oikeellisuus/all'
-  },
-  {
     label: i18n('navigation.viestit'),
     href: '#/viesti/all',
     badge: R.compose(
       R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
       R.map(R.prop('count'))
     )(ViestiApi.getKetjutUnread)
+  },
+  {
+    label: i18n('navigation.valvonta.oikeellisuus.all'),
+    href: '#/valvonta/oikeellisuus/all'
+  },
+  {
+    label: i18n('navigation.yritykset'),
+    href: `#/laatija/${whoami.id}/yritykset`
   }
 ]);
 

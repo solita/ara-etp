@@ -62,11 +62,11 @@
       "kaytto": {
         "all": "Käytönvalvonta",
         "kohde": "KV {id}",
-        "valvonta": "Valvonta"
+        "valvonta": "Valvonnat"
       },
       "oikeellisuus": {
         "all": "Oikeellisuuden valvonta",
-        "valvonta": "Valvonta"
+        "valvonta": "Valvonnat"
       }
     },
     "confirmation": {
