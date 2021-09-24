@@ -183,13 +183,14 @@
           {#each korvaavaEnergiatodistus
             .toArray()
             .filter(ETUtils.isSigned) as korvaavaEt}
-            <span
-              >{Maybe.fold(
+            <span>
+              {Maybe.fold(
                 '',
                 Formats.formatTimeInstantMinutes,
                 korvaavaEt.allekirjoitusaika
               )}
-              {i18n('energiatodistus.korvaavuus.header.korvaava')}</span>
+              {i18n('energiatodistus.korvaavuus.header.korvaava')}
+            </span>
             <Link
               bold={true}
               href={'/#/energiatodistus/' + korvaavaEt.id}
