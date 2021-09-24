@@ -89,7 +89,7 @@
               <td class="etp-table--td">
                 {rooliLabel(osapuoli)}
                 {#if Osapuolet.otherRooli(osapuoli)}
-                  {`- ${osapuoli['rooli-description']}`}
+                  - {Maybe.orSome('', osapuoli['rooli-description'])}
                 {/if}
               </td>
               <td
@@ -108,7 +108,7 @@
                 {/if}
                 {toimitustapaLabel(osapuoli)}
                 {#if Osapuolet.toimitustapa.other(osapuoli)}
-                  {`- ${osapuoli['toimitustapa-description']}`}
+                  - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
                 {/if}
               </td>
               <td class="etp-table--td">
