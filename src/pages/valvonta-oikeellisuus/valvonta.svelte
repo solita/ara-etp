@@ -193,7 +193,7 @@
             </span>
             <Link
               bold={true}
-              href={'/#/energiatodistus/' + korvaavaEt.id}
+              href={`/#/energiatodistus/${korvaavaEt.versio}/${korvaavaEt.id}`}
               text={korvaavaEt.id} />
           {/each}
         </div>
