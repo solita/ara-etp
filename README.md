@@ -65,15 +65,33 @@ Contains all the application code divided into subfolders for different purposes
 
 ##### ./src/components
 
-General components to be used in UI building
+General components to be used in UI building e.g. inputs, buttons etc. 
+These components can be used in any page.
 
 ##### ./src/pages
 
-All specialized pages and their components. Somewhat grouped by feature-basis.
+All pages and their components. Pages are grouped by feature-basis.
+Each feature contains:
+* index (`index.svelte`)
+* page components and specialized components used from these pages (`*.svelte`)
+* api modules (`*-api.js`) to create backend futures
+* datamodel validation schemas (`schema.js`)
+* other functional utility modules (`*.js`)
+
+Specialized components (used only from a specific place) are:
+* header
+* breadcrumb
+* navigation
+* footer
+* valvonta (used from valvonta-oikeellisuus/valvonta-kaytto)
 
 ##### ./src/language
 
 Translations, i18n riggings and some utilities for handling objects with fi/sv-label fields.
+
+##### ./src/utils
+
+General purpose pure function libraries.
 
 #### ./assets
 
@@ -90,6 +108,7 @@ Cypress tests
 
 - Directories/files should be kebab-case
 - Imported namespaces should be pascal-case 
+- Data models used with backend are kebab-case
 - Otherwise use camel-case.
 
 #### Monadic types
