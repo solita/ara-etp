@@ -1,7 +1,7 @@
 import { wrap } from 'svelte-spa-router/wrap';
 
 import Yritys from '@Pages/yritys';
-import Kayttaja from '@Pages/kayttaja/Kayttaja';
+import Kayttaja from '@Pages/kayttaja';
 import Viesti from '@Pages/viesti';
 import Ohje from '@Pages/ohje';
 import Laatija from '@Pages/laatija';
