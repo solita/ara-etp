@@ -1,6 +1,7 @@
 # ARA - Energiatodistuspavelu
 
-_Note that you will need to have [Node.js](https://nodejs.org) installed._
+[Node.js](https://nodejs.org) has to be installed and preferred node version manager tool is 
+[node version manager](https://github.com/nvm-sh/nvm).
 
 ## Node version manager
 
