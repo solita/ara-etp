@@ -19,7 +19,7 @@
 
   const i18n = $_;
 
-  let yritykset = Maybe.None();
+  let yritykset = [];
   let overlay = true;
   let cancel = () => {};
 
@@ -33,21 +33,11 @@
       overlay = false;
     },
     response => {
-      yritykset = Maybe.Some(R.sort(R.ascend(R.prop('nimi')))(response));
+      yritykset = R.sort(R.ascend(R.prop('nimi')), response);
       overlay = false;
     },
     api.getAllYritykset
   );
-
-  $: model = R.compose(
-    R.mergeRight({
-      search: Maybe.None()
-    }),
-    R.evolve({
-      search: Maybe.Some
-    }),
-    R.pick(['search'])
-  )(qs.parse($querystring));
 
   const matchSearch = R.curry((search, yritys) =>
     R.compose(
@@ -65,18 +55,15 @@
     )(yritys)
   );
 
+  $: searchKeyword = Maybe.fromEmpty((qs.parse($querystring)).search);
+  $: results = Maybe.fold(yritykset, search => R.filter(matchSearch(search), yritykset), searchKeyword);
+
   $: R.compose(
     querystring => replace(`${$location}?${querystring}`),
     qs.stringify,
-    R.evolve({
-      search: Maybe.orSome('')
-    })
-  )(model);
+    R.objOf('search')
+  )(Maybe.orSome('', searchKeyword));
 
-  $: results = R.compose(
-    Maybe.orSome([]),
-    R.map(R.filter(matchSearch(Maybe.orSome('', model.search))))
-  )(yritykset);
 </script>
 
 <style>
@@ -90,15 +77,13 @@
       <div class="flex flex-col lg:w-2/3 w-full">
         <H2 text={i18n('yritykset.search')} />
         <Input
-          model={Maybe.orSome('', model.search)}
+          model={Maybe.orSome('', searchKeyword)}
           inputComponentWrapper={PillInputWrapper}
           search={true}
           on:input={evt => {
             cancel = R.compose(
               Future.value(val => {
-                model = R.mergeRight(model, {
-                  search: Maybe.Some(val)
-                });
+                searchKeyword = Maybe.fromEmpty(R.trim(val));
               }),
               Future.after(200),
               R.tap(cancel)
