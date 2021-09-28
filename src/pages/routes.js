@@ -6,7 +6,7 @@ import Viesti from '@Pages/viesti';
 import Ohje from '@Pages/ohje';
 import Laatija from '@Pages/laatija/Laatija';
 import Energiatodistus from '@Pages/energiatodistus';
-import Valvonta from '@Pages/valvonta-oikeellisuus/router';
+import ValvontaOikeellisuus from '@Pages/valvonta-oikeellisuus';
 import ValvontaKaytto from '@Pages/valvonta-kaytto/router';
 import NotFound from '@Pages/not-found/not-found';
 import MyInfo from '@Pages/kayttaja/MyInfo';
@@ -20,7 +20,7 @@ export const buildRoutes = currentUser => ({
   '/viesti/*': Viesti,
   '/ohje/*': Ohje,
   '/energiatodistus/*': Energiatodistus,
-  '/valvonta/oikeellisuus/*': Valvonta,
+  '/valvonta/oikeellisuus/*': ValvontaOikeellisuus,
   '/valvonta/kaytto/*': ValvontaKaytto,
   '/myinfo': wrap({
     component: MyInfo,
