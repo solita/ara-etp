@@ -2,6 +2,15 @@
 
 _Note that you will need to have [Node.js](https://nodejs.org) installed._
 
+## Node version manager
+
+https://github.com/nvm-sh/nvm#git-install
+
+```bash
+source ~/.nvm/nvm.sh
+nvm use
+```
+
 ## Get started
 
 Install the dependencies...
