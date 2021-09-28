@@ -111,7 +111,7 @@
       <H1 text={`${i18n('yritykset.results')} ${R.length(results)}`} />
     </div>
 
-    {#if R.gt(R.length(results), 1)}
+    {#if R.not(R.isEmpty(results))}
       <div class="overflow-x-auto">
         <table class="etp-table">
           <thead class="etp-table--thead">
