@@ -135,7 +135,10 @@
       "missing-permission": "Inga rättigheter att ändra företagets uppgifter."
     }
   },
-  "yritykset": { "title": "Alla företag" },
+  "yritykset": {
+    "title": "Företag",
+    "all": "Alla företag"
+  },
   "time": { "klo": "kl." },
   "kayttaja": {
     "last-login": "Senast inloggad",

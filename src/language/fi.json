@@ -157,7 +157,13 @@
     }
   },
   "yritykset": {
-    "title": "Kaikki yritykset"
+    "title": "Yritykset",
+    "all": "Kaikki yritykset",
+    "search": "Haku",
+    "results": "Tuloksia",
+    "messages": {
+      "load-error": "Yritystietojen lataus epäonnistui"
+    }
   },
   "time": {
     "klo": "klo"
