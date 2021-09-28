@@ -68,15 +68,15 @@ describe('Navigation', () => {
           label: 'Energiatodistukset',
           href: '#/energiatodistus/all'
         },
-        {
-          label: 'Yritykset',
-          href: `#/laatija/2/yritykset`
-        },
+        { label: 'Viestit', href: '#/viesti/all' },
         {
           href: '#/valvonta/oikeellisuus/all',
           label: 'Oikeellisuuden valvonta'
         },
-        { label: 'Viestit', href: '#/viesti/all' }
+        {
+          label: 'Yritykset',
+          href: `#/laatija/2/yritykset`
+        }
       ];
 
       assert.deepEqual(
@@ -106,15 +106,15 @@ describe('Navigation', () => {
           label: 'Energiatodistukset',
           href: '#/energiatodistus/all'
         },
-        {
-          label: 'Yritykset',
-          href: `#/laatija/1/yritykset`
-        },
+        { label: 'Viestit', href: '#/viesti/all' },
         {
           href: '#/valvonta/oikeellisuus/all',
           label: 'Oikeellisuuden valvonta'
         },
-        { label: 'Viestit', href: '#/viesti/all' }
+        {
+          label: 'Yritykset',
+          href: `#/laatija/1/yritykset`
+        }
       ];
 
       assert.deepEqual(
@@ -146,7 +146,10 @@ describe('Navigation', () => {
       const kayttaja = { rooli: 2, id: 1 };
       const expected = [
         { label: 'Energiatodistukset', href: '#/energiatodistus/all' },
-        { label: 'Laatijat', href: '#/laatija/all' },
+        {
+          label: 'Viestit',
+          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
+        },
         {
           label: 'Oikeellisuuden valvonta',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
@@ -155,10 +158,7 @@ describe('Navigation', () => {
           label: 'Käytönvalvonta',
           href: `#/valvonta/kaytto/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
         },
-        {
-          label: 'Viestit',
-          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
-        }
+        { label: 'Laatijat', href: '#/laatija/all' }
       ];
 
       assert.deepEqual(
@@ -384,8 +384,8 @@ describe('Navigation', () => {
           href: '#/energiatodistus/all'
         },
         {
-          label: 'Laatijat',
-          href: `#/laatija/all`
+          label: 'Viestit',
+          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
         },
         {
           label: 'Oikeellisuuden valvonta',
@@ -396,8 +396,8 @@ describe('Navigation', () => {
           href: `#/valvonta/kaytto/all?valvoja-id=1&has-valvoja=false`
         },
         {
-          label: 'Viestit',
-          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
+          label: 'Laatijat',
+          href: `#/laatija/all`
         }
       ];
 
@@ -474,8 +474,8 @@ describe('Navigation', () => {
           href: '#/energiatodistus/all'
         },
         {
-          label: 'Laatijat',
-          href: `#/laatija/all`
+          label: 'Viestit',
+          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
         },
         {
           label: 'Oikeellisuuden valvonta',
@@ -486,8 +486,8 @@ describe('Navigation', () => {
           href: `#/valvonta/kaytto/all?valvoja-id=1&has-valvoja=false`
         },
         {
-          label: 'Viestit',
-          href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
+          label: 'Laatijat',
+          href: `#/laatija/all`
         }
       ];
 
