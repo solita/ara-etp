@@ -1,4 +1,10 @@
-# ARA - Energiatodistuspavelu
+# ARA - Energiatodistuspalvelu
+
+Tämä on web sovellus energiatodistusten laadintaan 
+ja todistuksiin liittyvään viranomaistoimintaan.
+
+This is a web application for managing energy performance certificates and related activities. 
+This application is for accredited certificate experts and public authorities.
 
 [Node.js](https://nodejs.org) has to be installed and preferred node version manager tool is 
 [node version manager](https://github.com/nvm-sh/nvm).
