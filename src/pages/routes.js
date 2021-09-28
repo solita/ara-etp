@@ -7,7 +7,7 @@ import Ohje from '@Pages/ohje';
 import Laatija from '@Pages/laatija/Laatija';
 import Energiatodistus from '@Pages/energiatodistus';
 import ValvontaOikeellisuus from '@Pages/valvonta-oikeellisuus';
-import ValvontaKaytto from '@Pages/valvonta-kaytto/router';
+import ValvontaKaytto from '@Pages/valvonta-kaytto';
 import NotFound from '@Pages/not-found/not-found';
 import MyInfo from '@Pages/kayttaja/MyInfo';
 import LandingPage from '@Pages/kayttaja/LandingPage';
