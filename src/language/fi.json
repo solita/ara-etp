@@ -157,7 +157,10 @@
     }
   },
   "yritykset": {
-    "title": "Kaikki yritykset"
+    "title": "Yritykset",
+    "all": "Kaikki yritykset",
+    "search": "Haku",
+    "results": "Tuloksia"
   },
   "time": {
     "klo": "klo"
