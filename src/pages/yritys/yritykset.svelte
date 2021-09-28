@@ -28,8 +28,9 @@
       flashMessageStore.add(
         'Yritys',
         'error',
-        i18n('laatija.yritykset.error.detach-failed')
+        i18n(Response.errorKey(i18nRoot, 'load', response))
       );
+
       overlay = false;
     },
     response => {
@@ -55,15 +56,18 @@
     )(yritys)
   );
 
-  $: searchKeyword = Maybe.fromEmpty((qs.parse($querystring)).search);
-  $: results = Maybe.fold(yritykset, search => R.filter(matchSearch(search), yritykset), searchKeyword);
+  $: searchKeyword = Maybe.fromEmpty(qs.parse($querystring).search);
+  $: results = Maybe.fold(
+    yritykset,
+    search => R.filter(matchSearch(search), yritykset),
+    searchKeyword
+  );
 
   $: R.compose(
     querystring => replace(`${$location}?${querystring}`),
     qs.stringify,
     R.objOf('search')
   )(Maybe.orSome('', searchKeyword));
-
 </script>
 
 <style>

@@ -160,7 +160,10 @@
     "title": "Yritykset",
     "all": "Kaikki yritykset",
     "search": "Haku",
-    "results": "Tuloksia"
+    "results": "Tuloksia",
+    "messages": {
+      "load-error": "Yritystietojen lataus epäonnistui"
+    }
   },
   "time": {
     "klo": "klo"
