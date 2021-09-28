@@ -4,7 +4,7 @@ import Yritys from '@Pages/yritys';
 import Kayttaja from '@Pages/kayttaja/Kayttaja';
 import Viesti from '@Pages/viesti';
 import Ohje from '@Pages/ohje';
-import Laatija from '@Pages/laatija/Laatija';
+import Laatija from '@Pages/laatija';
 import Energiatodistus from '@Pages/energiatodistus';
 import ValvontaOikeellisuus from '@Pages/valvonta-oikeellisuus';
 import ValvontaKaytto from '@Pages/valvonta-kaytto';
