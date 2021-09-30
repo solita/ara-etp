@@ -60,7 +60,7 @@
     "ohjeet": "Laatijan ohjeet",
     "valvonta": {
       "kaytto": {
-        "all": "Käytön valvonnat",
+        "all": "Käytön\u00ADvalvonnat",
         "kohde": "KV {id}",
         "valvonta": "Valvonta"
       },
@@ -1480,7 +1480,7 @@
     },
     "kaytto": {
       "all": {
-        "title": "Käytön valvonnat",
+        "title": "Käytönvalvonnat",
         "new-kohde": "Uusi valvonta",
         "empty": "Ei valvontatoimenpiteitä",
         "ei-valvojaa": "Ei valvojaa",
@@ -1514,22 +1514,22 @@
         "revert": "Peru muutokset",
         "cancel": "Peruuta",
         "delete": "Poista",
-        "new-valvonta-title": "Uusi käytön valvonta",
-        "title": "Käytön valvonta",
+        "new-valvonta-title": "Uusi käytönvalvonta",
+        "title": "Käytönvalvonta",
         "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen",
         "no-attachments": "Ei liitteitä",
         "messages": {
-          "not-found": "Käytön valvontaa ei ole olemassa.",
-          "load-error": "Käytön valvonnan tietojen haku epäonnistui.",
-          "save-success": "Käytön valvonnan muutokset tallennettu.",
-          "save-error": "Käytön valvonnan tallennus epäonnistui.",
-          "delete-success": "Käytön valvonta poistettu.",
-          "delete-error": "Käytön valvonnan poistaminen epäonnistui.",
-          "add-success": "Uusi käytön valvonta lisätty.",
-          "add-error": "Käytön valvonnan lisääminen epäonnistui.",
+          "not-found": "Käytönvalvontaa ei ole olemassa.",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "save-success": "Käytönvalvonnan muutokset tallennettu.",
+          "save-error": "Käytönvalvonnan tallennus epäonnistui.",
+          "delete-success": "Käytönvalvonta poistettu.",
+          "delete-error": "Käytönvalvonnan poistaminen epäonnistui.",
+          "add-success": "Uusi käytönvalvonta lisätty.",
+          "add-error": "Käytönvalvonnan lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä.",
-          "add-link-success": "Linkki lisätty käytön valvontaan.",
-          "add-files-success": "Liitetiedostot lisätty käytön valvontaan.",
+          "add-link-success": "Linkki lisätty käytönvalvontaan.",
+          "add-files-success": "Liitetiedostot lisätty käytönvalvontaan.",
           "delete-liite-success": "Liite poistettu.",
           "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
           "add-link-error": "Linkin lisääminen epäonnistui.",
@@ -1599,10 +1599,10 @@
           "fyi": "tiedoksi"
         },
         "messages": {
-          "not-found": "Käytön valvonnan tietoja ei löydy",
-          "load-error": "Käytön valvonnan tietojen haku epäonnistui.",
-          "update-error": "Käytön valvonnan tietojen päivitys epäonnistui",
-          "update-success": "Käytön valvonnan tiedot päivitetty"
+          "not-found": "Käytönvalvonnan tietoja ei löydy",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui",
+          "update-success": "Käytönvalvonnan tiedot päivitetty"
         },
         "no-events": "Ei tapahtumia"
       },
