@@ -60,13 +60,13 @@
     "ohjeet": "Laatijan ohjeet",
     "valvonta": {
       "kaytto": {
-        "all": "Käytön valvonta",
+        "all": "Käytön valvonnat",
         "kohde": "KV {id}",
-        "valvonta": "Valvonnat"
+        "valvonta": "Valvonta"
       },
       "oikeellisuus": {
-        "all": "Oikeellisuuden valvonta",
-        "valvonta": "Valvonnat"
+        "all": "Oikeellisuuden valvonnat",
+        "valvonta": "Valvonta"
       }
     },
     "confirmation": {
@@ -1266,7 +1266,7 @@
     "self": "Minä",
     "oikeellisuus": {
       "all": {
-        "title": "Oikeellisuuden valvonta",
+        "title": "Oikeellisuuden valvonnat",
         "empty": "Ei valvontatoimenpiteitä",
         "valvoja": "Valvoja",
         "include-closed": "Näytä myös päättyneet",
@@ -1480,7 +1480,7 @@
     },
     "kaytto": {
       "all": {
-        "title": "Käytön valvonta",
+        "title": "Käytön valvonnat",
         "new-kohde": "Uusi valvonta",
         "empty": "Ei valvontatoimenpiteitä",
         "ei-valvojaa": "Ei valvojaa",
