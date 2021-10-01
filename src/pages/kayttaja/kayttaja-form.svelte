@@ -245,13 +245,14 @@
     </div>
   </div>
 
-  <div class="flex -mx-4 mt-20">
+  <div class="flex -mx-4 mt-10">
     <div class="px-4">
       <Button type={'submit'} text={i18n('tallenna')} {disabled} />
     </div>
     <div class="px-4">
       <Button
         on:click={cancel}
+        {disabled}
         text={i18n(i18nRoot + '.cancel')}
         type={'reset'}
         style={'secondary'} />
