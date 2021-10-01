@@ -11,13 +11,14 @@
   import { locale, _ } from '@Language/i18n';
 
   import H1 from '@Component/H/H1';
-  import H2 from '../../components/H/H2.svelte';
+  import H2 from '@Component/H/H2';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/Select.svelte';
 
   export let kayttaja;
+  export let dirty;
   export let submit;
   export let cancel;
   export let whoami;
@@ -68,6 +69,10 @@
       Validation.blurForm(form);
     }
   };
+
+  const setDirty = _ => {
+    dirty = true;
+  }
 </script>
 
 <style type="text/postcss">
@@ -76,7 +81,10 @@
   }
 </style>
 
-<form bind:this={form} on:submit|preventDefault={saveKayttaja}>
+<form bind:this={form}
+      on:submit|preventDefault={saveKayttaja}
+      on:input={setDirty}
+      on:change={setDirty}>
   <div class="w-full mt-3">
     <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
 
@@ -247,12 +255,12 @@
 
   <div class="flex -mx-4 mt-10">
     <div class="px-4">
-      <Button type={'submit'} text={i18n('tallenna')} {disabled} />
+      <Button type={'submit'} text={i18n('tallenna')} disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       <Button
         on:click={cancel}
-        {disabled}
+        disabled={disabled || !dirty}
         text={i18n(i18nRoot + '.cancel')}
         type={'reset'}
         style={'secondary'} />

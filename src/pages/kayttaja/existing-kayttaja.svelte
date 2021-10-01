@@ -17,6 +17,7 @@
   import LaatijaForm from '@Pages/laatija/LaatijaForm.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
+  import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   export let params;
 
@@ -25,6 +26,7 @@
 
   let resources = Maybe.None();
   let overlay = true;
+  let dirty = false;
 
   const errorMessage = (type, response) =>
     Locales.uniqueViolationMessage(
@@ -53,6 +55,7 @@
         load(params);
         onSuccessfulSave();
         overlay = false;
+        dirty = false;
       },
       putFuture
     );
@@ -91,6 +94,7 @@
         idTranslateStore.updateKayttaja(response.kayttaja);
         resources = Maybe.Some(response);
         overlay = false;
+        dirty = false;
       },
       Future.parallelObject(5, {
         kayttaja: KayttajaApi.getKayttajaById(params.id),
@@ -121,6 +125,7 @@
 
 <Overlay {overlay}>
   <div slot="content">
+    <DirtyConfirmation {dirty} />
     {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit }}
       {#if Maybe.isSome(laatija)}
         <LaatijaForm
@@ -133,6 +138,7 @@
         <KayttajaForm
           submit={submitKayttaja(whoami, params.id)}
           cancel={_ => load(params)}
+          bind:dirty
           {kayttaja}
           {whoami}
           {roolit} />
