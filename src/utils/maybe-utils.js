@@ -30,16 +30,19 @@ export const cata = R.curry((noneFn, someFn, m) => m.cata(noneFn, someFn));
 
 /**
  * @sig (a -> b) -> Maybe a -> Maybe b
+ * @deprecated use R.map instead - TODO: remove this
  */
 export const map = R.curry((fn, maybe) => maybe.map(fn));
 
 /**
  * @sig (a -> Maybe b) -> Maybe a -> Maybe b
+ * @deprecated use R.chain instead - TODO: remove this
  */
 export const chain = R.curry((fn, maybe) => maybe.chain(fn));
 
 /**
  * @sig a -> Maybe a -> a
+ * @deprecated use orSome instead - TODO: remove this
  */
 export const getOrElse = R.curry((defaultValue, m) =>
   m.fold(defaultValue)(R.identity)

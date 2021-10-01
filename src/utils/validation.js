@@ -239,7 +239,7 @@ export const VerkkolaskuosoiteValidator = {
 /**
  * @sig Array [Validator] -> a -> Either [Validator,a]
  */
-export const validate = (validators, value) =>
+const validate = (validators, value) =>
   Maybe.fromUndefined(
     R.find(R.compose(R.not, R.applyTo(value), R.prop('predicate')), validators)
   )

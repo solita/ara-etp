@@ -2,7 +2,7 @@
   import Router from 'svelte-spa-router';
 
   import Kayttajat from './kayttajat';
-  import ExistingKayttaja from './ExistingKayttaja';
+  import ExistingKayttaja from './existing-kayttaja';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
 
   import { flashMessageStore } from '@/stores';
@@ -14,7 +14,7 @@
   };
 </script>
 
-<svelte:window on:hashchange={_ => flashMessageStore.flush('Kayttaja')} />
+<svelte:window on:hashchange={_ => flashMessageStore.flush('kayttaja')} />
 
 <Router {routes} {prefix} />
-<FlashMessage module={'Kayttaja'} />
+<FlashMessage module={'kayttaja'} />

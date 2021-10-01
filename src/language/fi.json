@@ -171,24 +171,30 @@
   "kayttaja": {
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
-    "omattiedot": "Omat tiedot",
+    "passivoitu": "Passivoi käyttäjätunnus",
+    "rooli": "Käyttäjärooli",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
     "sahkoposti": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
     "puhelinnumero": "Puhelinnumero",
+    "cancel": "Peruuta muutokset",
+    "save": "Tallenna",
     "virtu": {
       "header": "Virtu kirjautumistiedot",
       "localid": "Käyttäjätunnus (Virtu Local ID)",
       "organisaatio": "Organisaatio"
     },
+    "suomifi": {
+      "header": "Suomi-fi kirjautumistiedot",
+      "henkilotunnus": "Henkilötunnus"
+    },
     "messages": {
       "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
       "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
+      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista lomakkeen kentät.",
       "load-error": "Käyttäjän tietojen haku epäonnistui.",
-      "not-found": "Käyttäjää ei löydy tästä palvelusta.",
-      "upload-error": "Tiedoston lataaminen epäonnistui."
+      "not-found": "Käyttäjää ei löydy tästä palvelusta."
     }
   },
   "laatija": {
