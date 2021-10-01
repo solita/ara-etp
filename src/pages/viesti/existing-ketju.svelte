@@ -314,7 +314,7 @@
         </div>
       {/if}
 
-      {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
+      {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami) || Kayttajat.isLaskuttaja(whoami)}
         <form
           class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf"
           class:hidden={!showViestiForm}
@@ -340,7 +340,7 @@
           </div>
 
           <div class="w-full flex">
-            {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami)}
+            {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami) || Kayttajat.isLaskuttaja(whoami)}
               <Button
                 prefix={'viesti'}
                 disabled={!dirty}
