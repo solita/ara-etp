@@ -110,6 +110,8 @@
           id={'rooli'}
           label={$_(i18nRoot + '.rooli')}
           required={true}
+          validation={true}
+          allowNone={false}
           disabled={disabledAdmin || isOwnSettings}
           bind:model={kayttaja}
           lens={R.lensProp('rooli')}
@@ -151,9 +153,9 @@
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4 items-end">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
-          id={'sahkoposti'}
-          name={'sahkoposti'}
-          label={`${i18n('kayttaja.sahkoposti')}`}
+          id={'email'}
+          name={'email'}
+          label={`${i18n('kayttaja.email')}`}
           required={true}
           bind:model={kayttaja}
           lens={R.lensProp('email')}
@@ -164,9 +166,9 @@
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
-          id={'puhelinnumero'}
-          name={'puhelinnumero'}
-          label={i18n('kayttaja.puhelinnumero')}
+          id={'puhelin'}
+          name={'puhelin'}
+          label={i18n('kayttaja.puhelin')}
           required={false}
           bind:model={kayttaja}
           lens={R.lensProp('puhelin')}

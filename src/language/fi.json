@@ -175,9 +175,9 @@
     "rooli": "Käyttäjärooli",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
-    "sahkoposti": "Sähköpostiosoite",
+    "email": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
-    "puhelinnumero": "Puhelinnumero",
+    "puhelin": "Puhelinnumero",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
     "virtu": {
