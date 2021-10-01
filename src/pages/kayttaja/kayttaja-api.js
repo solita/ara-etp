@@ -8,10 +8,14 @@ import * as Kayttajat from '@Utility/kayttajat';
 import * as Parsers from '@Utility/parsers';
 
 const deserialize = R.evolve({
-  login: R.compose(R.chain(Either.toMaybe), R.map(Parsers.parseISODate), Maybe.fromNull),
+  login: R.compose(
+    R.chain(Either.toMaybe),
+    R.map(Parsers.parseISODate),
+    Maybe.fromNull
+  ),
   cognitoid: Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
-  virtu: Maybe.fromNull,
+  virtu: Maybe.fromNull
 });
 
 const deserializeLaatija = R.compose(
@@ -82,4 +86,4 @@ export const putKayttajaById = R.curry((rooli, fetch, id, kayttaja) =>
   )(kayttaja)
 );
 
-export const roolit = Fetch.cached(fetch, '/roolit')
+export const roolit = Fetch.cached(fetch, '/roolit');

@@ -5,17 +5,15 @@ import * as Validation from '@Utility/validation';
 const VirtuID = {
   localid: Validation.RequiredString(2, 200),
   organisaatio: Validation.RequiredString(2, 200)
-}
+};
 
 const VirtuIDValidator = {
   predicate: Validation.isValidForm(VirtuID),
   label: R.applyTo('kayttaja.messages.invalid-virtu-id')
-}
+};
 
 export const Kayttaja = {
-  henkilotunnus: [
-    Validation.liftValidator(Validation.henkilotunnusValidator)
-  ],
+  henkilotunnus: [Validation.liftValidator(Validation.henkilotunnusValidator)],
   etunimi: Validation.RequiredString(2, 200),
   sukunimi: Validation.RequiredString(2, 200),
   email: [...Validation.RequiredString(2, 200), Validation.emailValidator],
@@ -24,6 +22,4 @@ export const Kayttaja = {
 };
 
 export const virtuSchema = kayttaja =>
-  Maybe.isSome(kayttaja.virtu) ?
-    VirtuID :
-    R.map(R.always([]), VirtuID);
+  Maybe.isSome(kayttaja.virtu) ? VirtuID : R.map(R.always([]), VirtuID);

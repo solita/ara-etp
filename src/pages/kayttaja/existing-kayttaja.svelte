@@ -56,28 +56,34 @@
       },
       putFuture
     );
-  }
+  };
 
   const submitLaatija = (whoami, id) => updatedLaatija =>
     fork(
       'laatija',
       LaatijaApi.putLaatijaById(whoami.rooli, fetch, id, updatedLaatija),
-      _ => {});
+      _ => {}
+    );
 
   const submitKayttaja = (whoami, id) => updatedKayttaja =>
-    fork('kayttaja',
+    fork(
+      'kayttaja',
       KayttajaApi.putKayttajaById(whoami.rooli, fetch, id, updatedKayttaja),
       _ => {
-        idTranslateStore.updateKayttaja(updatedKayttaja)
-      });
+        idTranslateStore.updateKayttaja(updatedKayttaja);
+      }
+    );
 
   const load = params => {
     overlay = true;
     resources = Maybe.None();
     Future.fork(
       response => {
-        flashMessageStore.add('kayttaja', 'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'kayttaja',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
+        );
         resources = Maybe.None();
         overlay = false;
       },
@@ -98,11 +104,11 @@
           countries: GeoApi.countries,
           toimintaalueet: GeoApi.toimintaalueet,
           patevyydet: LaatijaApi.patevyydet,
-          laskutuskielet: LaskutusApi.laskutuskielet,
+          laskutuskielet: LaskutusApi.laskutuskielet
         })
       })
     );
-  }
+  };
 
   const mergeKayttajaLaatija = (kayttaja, laatija) =>
     R.compose(
@@ -111,7 +117,6 @@
     )(kayttaja, laatija);
 
   $: load(params);
-
 </script>
 
 <Overlay {overlay}>
@@ -130,7 +135,7 @@
           cancel={_ => load(params)}
           {kayttaja}
           {whoami}
-          {roolit}/>
+          {roolit} />
       {/if}
     {/each}
   </div>

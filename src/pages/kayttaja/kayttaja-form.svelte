@@ -27,29 +27,34 @@
   const i18nRoot = 'kayttaja';
 
   const schema = Schema.Kayttaja;
-  $: virtuSchema = Schema.virtuSchema(kayttaja)
+  $: virtuSchema = Schema.virtuSchema(kayttaja);
 
   $: isValidForm = Validation.isValidForm(schema);
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
-  $: disabled = Kayttajat.isSystem(kayttaja) || (!isPaakayttaja && !isOwnSettings);
+  $: disabled =
+    Kayttajat.isSystem(kayttaja) || (!isPaakayttaja && !isOwnSettings);
   $: disabledAdmin = Kayttajat.isSystem(kayttaja) || !isPaakayttaja;
 
   $: formatRooli = Locales.labelForId($locale, roolit);
 
   const filterRoolit = R.filter(
     R.propSatisfies(
-      R.complement(R.anyPass([Kayttajat.isLaatijaRole, Kayttajat.isSystemRole])),
-      'id'));
+      R.complement(
+        R.anyPass([Kayttajat.isLaatijaRole, Kayttajat.isSystemRole])
+      ),
+      'id'
+    )
+  );
 
   $: if (Kayttajat.isLaatija(kayttaja)) {
-    throw "This form should not be used for laatija."
+    throw 'This form should not be used for laatija.';
   }
 
-  const emptyVirtuId = { organisaatio: "", localid: "" };
+  const emptyVirtuId = { organisaatio: '', localid: '' };
 
-  let form
+  let form;
   const saveKayttaja = _ => {
     if (isValidForm(kayttaja)) {
       flashMessageStore.flush();
@@ -62,7 +67,7 @@
       );
       Validation.blurForm(form);
     }
-  }
+  };
 </script>
 
 <style type="text/postcss">
@@ -71,10 +76,7 @@
   }
 </style>
 
-<form
-  bind:this={form}
-  on:submit|preventDefault={saveKayttaja}>
-
+<form bind:this={form} on:submit|preventDefault={saveKayttaja}>
   <div class="w-full mt-3">
     <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
 
@@ -89,22 +91,22 @@
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Checkbox
-            bind:model={kayttaja}
-            lens={R.lensProp('passivoitu')}
-            label={$_(i18nRoot + '.passivoitu')}
-            disabled={disabledAdmin || isOwnSettings} />
+          bind:model={kayttaja}
+          lens={R.lensProp('passivoitu')}
+          label={$_(i18nRoot + '.passivoitu')}
+          disabled={disabledAdmin || isOwnSettings} />
       </div>
 
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Select
-            id={'rooli'}
-            label={$_(i18nRoot + '.rooli')}
-            required={true}
-            disabled={disabledAdmin || isOwnSettings}
-            bind:model={kayttaja}
-            lens={R.lensProp('rooli')}
-            format={formatRooli}
-            items={R.pluck('id', filterRoolit(roolit))} />
+          id={'rooli'}
+          label={$_(i18nRoot + '.rooli')}
+          required={true}
+          disabled={disabledAdmin || isOwnSettings}
+          bind:model={kayttaja}
+          lens={R.lensProp('rooli')}
+          format={formatRooli}
+          items={R.pluck('id', filterRoolit(roolit))} />
       </div>
     </div>
 
@@ -169,10 +171,15 @@
 
     <H2 text={i18n('kayttaja.virtu.header')} />
     <Checkbox
-        bind:model={kayttaja}
-        lens={R.compose(R.lensProp('virtu'), R.lens(Maybe.isSome, active => active ? Maybe.Some(emptyVirtuId) : Maybe.None()))}
-        label={'Virtu-kirjautuminen käytössä'}
-        disabled={disabledAdmin} />
+      bind:model={kayttaja}
+      lens={R.compose(
+        R.lensProp('virtu'),
+        R.lens(Maybe.isSome, active =>
+          active ? Maybe.Some(emptyVirtuId) : Maybe.None()
+        )
+      )}
+      label={'Virtu-kirjautuminen käytössä'}
+      disabled={disabledAdmin} />
 
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -183,7 +190,11 @@
           required={false}
           disabled={disabledAdmin}
           bind:model={kayttaja}
-          lens={R.compose(R.lensProp('virtu'), R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some), R.lensProp('organisaatio'))}
+          lens={R.compose(
+            R.lensProp('virtu'),
+            R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
+            R.lensProp('organisaatio')
+          )}
           parse={R.trim}
           validators={virtuSchema.organisaatio}
           {i18n} />
@@ -196,7 +207,11 @@
           required={false}
           disabled={disabledAdmin}
           bind:model={kayttaja}
-          lens={R.compose(R.lensProp('virtu'), R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some), R.lensProp('localid'))}
+          lens={R.compose(
+            R.lensProp('virtu'),
+            R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
+            R.lensProp('localid')
+          )}
           parse={R.trim}
           validators={virtuSchema.localid}
           {i18n} />
@@ -205,24 +220,27 @@
 
     <H2 text={i18n('kayttaja.suomifi.header')} />
     <Checkbox
-        bind:model={kayttaja}
-        lens={R.compose(R.lensProp('henkilotunnus'), R.lens(Maybe.isSome, active => active ? Maybe.Some("") : Maybe.None()))}
-        label={'Suomi-fi-kirjautuminen käytössä'}
-        disabled={disabledAdmin}/>
+      bind:model={kayttaja}
+      lens={R.compose(
+        R.lensProp('henkilotunnus'),
+        R.lens(Maybe.isSome, active => (active ? Maybe.Some('') : Maybe.None()))
+      )}
+      label={'Suomi-fi-kirjautuminen käytössä'}
+      disabled={disabledAdmin} />
 
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
-            id={'henkilotunnus'}
-            name={'henkilotunnus'}
-            label={i18n('kayttaja.suomifi.henkilotunnus')}
-            bind:model={kayttaja}
-            lens={R.lensProp('henkilotunnus')}
-            format={Maybe.orSome('')}
-            parse={R.compose(Maybe.fromEmpty, R.trim)}
-            validators={schema.henkilotunnus}
-            disabled={disabledAdmin}
-            {i18n} />
+          id={'henkilotunnus'}
+          name={'henkilotunnus'}
+          label={i18n('kayttaja.suomifi.henkilotunnus')}
+          bind:model={kayttaja}
+          lens={R.lensProp('henkilotunnus')}
+          format={Maybe.orSome('')}
+          parse={R.compose(Maybe.fromEmpty, R.trim)}
+          validators={schema.henkilotunnus}
+          disabled={disabledAdmin}
+          {i18n} />
       </div>
     </div>
   </div>
