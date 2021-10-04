@@ -16,7 +16,7 @@
   import * as Future from '@Utility/future-utils';
 
   import KayttajaForm from './kayttaja-form.svelte';
-  import LaatijaForm from '@Pages/laatija/LaatijaForm.svelte';
+  import LaatijaForm from '@Pages/laatija/laatija-form.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
