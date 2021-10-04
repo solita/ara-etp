@@ -322,7 +322,7 @@ export const laatijaCrumb = R.curry(
     ])(id)
 );
 
-export const laatijatForTargetRole = R.curry((i18n, whoami, kayttaja) =>
+const folderForKayttajaRole = R.curry((i18n, whoami, kayttaja) =>
   R.eqProps('id', whoami, kayttaja) ? [] :
     Kayttajat.isLaatija(kayttaja)
       ? laatijat(i18n)
@@ -365,7 +365,7 @@ export const kayttajaCrumb = R.curry(
             R.compose(
               kayttaja =>
                 R.flatten([
-                  laatijatForTargetRole(i18n, whoami, kayttaja),
+                  folderForKayttajaRole(i18n, whoami, kayttaja),
                   kayttajaNimiCrumb(i18n, whoami, kayttaja)
                 ]),
               R.path(['kayttaja', parseInt(id, 10)])
