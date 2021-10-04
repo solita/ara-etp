@@ -184,7 +184,9 @@ describe('BreadcrumbUtils', () => {
 
   describe('kayttajaCrumb', () => {
     it('should return kayttajat with all', () => {
-      const expected = [{ url: '#/kayttaja/all', label: 'navigation.kayttajat' }];
+      const expected = [
+        { url: '#/kayttaja/all', label: 'navigation.kayttajat' }
+      ];
 
       assert.deepEqual(
         BreadcrumbUtils.kayttajaCrumb(
@@ -230,8 +232,8 @@ describe('BreadcrumbUtils', () => {
       it('should return kayttaja crumb with id when contained in translate and is not laatija', () => {
         const expected = [
           {
-            label: "navigation.kayttajat",
-            url: "#/kayttaja/all"
+            label: 'navigation.kayttajat',
+            url: '#/kayttaja/all'
           },
           {
             url: '#/kayttaja/3',

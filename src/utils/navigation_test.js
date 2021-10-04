@@ -524,8 +524,8 @@ describe('Navigation', () => {
     it('should return links for paakayttaja', () => {
       const expected = [
         {
-          href: "#/kayttaja/all",
-          text: "Käyttäjät"
+          href: '#/kayttaja/all',
+          text: 'Käyttäjät'
         },
         {
           href: `#/yritys/all`,

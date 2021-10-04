@@ -104,9 +104,10 @@
       Future.parallelObject(5, {
         kayttaja: kayttajaFuture,
         laatija: R.chain(
-          kayttaja => Kayttajat.isLaatija(kayttaja) ?
-            R.map(Maybe.Some, KayttajaApi.getLaatijaById(fetch, params.id)) :
-            Future.resolve(Maybe.None()),
+          kayttaja =>
+            Kayttajat.isLaatija(kayttaja)
+              ? R.map(Maybe.Some, KayttajaApi.getLaatijaById(fetch, params.id))
+              : Future.resolve(Maybe.None()),
           kayttajaFuture
         ),
         whoami: KayttajaApi.whoami,
