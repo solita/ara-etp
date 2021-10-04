@@ -262,6 +262,11 @@ export const kayttajat = i18n => ({
   label: i18n('navigation.kayttajat')
 });
 
+export const newKayttaja = i18n => ({
+  url: '#/kayttaja/new',
+  label: i18n('navigation.new-kayttaja')
+});
+
 export const laatijaExtra = R.curry((i18n, [id, extra]) =>
   R.cond([
     [
@@ -357,6 +362,7 @@ export const kayttajaCrumb = R.curry(
   (i18n, idTranslate, whoami, [id, ...rest]) =>
     R.cond([
       [R.equals('all'), R.always([kayttajat(i18n)])],
+      [R.equals('new'), R.always([kayttajat(i18n), newKayttaja(i18n)])],
       [
         R.T,
         id =>
