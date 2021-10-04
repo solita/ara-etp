@@ -13,9 +13,9 @@
 </script>
 
 <style type="text/postcss">
-    .last-login {
-        @apply text-secondary mb-4;
-    }
+  .last-login {
+    @apply text-secondary mb-4;
+  }
 </style>
 
 <span class="last-login">

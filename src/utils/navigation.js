@@ -141,7 +141,8 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
  */
 export const parseKayttaja = R.curry(
   (isDev, whoami, i18n, idTranslate, locationParts) => {
-    if (R.compose(
+    if (
+      R.compose(
         R.anyPass([R.equals('all'), R.equals('new')]),
         R.head
       )(locationParts)
@@ -168,7 +169,8 @@ export const parseKayttaja = R.curry(
  */
 export const parseLaatija = R.curry(
   (isDev, whoami, i18n, idTranslate, locationParts) => {
-    if (R.compose(
+    if (
+      R.compose(
         R.anyPass([R.equals('laatijoidentuonti'), R.equals('all')]),
         R.head
       )(locationParts)
@@ -382,17 +384,11 @@ export const navigationParse = R.curry(
           R.compose(parseYritys(isDev, i18n, whoami, idTranslate), R.tail)
         ],
         [
-          R.compose(
-            R.equals('kayttaja'),
-            R.head
-          ),
+          R.compose(R.equals('kayttaja'), R.head),
           R.compose(parseKayttaja(isDev, whoami, i18n, idTranslate), R.tail)
         ],
         [
-          R.compose(
-            R.equals('laatija'),
-            R.head
-          ),
+          R.compose(R.equals('laatija'), R.head),
           R.compose(parseLaatija(isDev, whoami, i18n, idTranslate), R.tail)
         ],
         [

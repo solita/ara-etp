@@ -70,14 +70,14 @@
 
   const setDirty = _ => {
     dirty = true;
-  }
+  };
 </script>
 
-<form bind:this={form}
-      on:submit|preventDefault={saveKayttaja}
-      on:input={setDirty}
-      on:change={setDirty}>
-
+<form
+  bind:this={form}
+  on:submit|preventDefault={saveKayttaja}
+  on:input={setDirty}
+  on:change={setDirty}>
   <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Checkbox
@@ -240,7 +240,10 @@
 
   <div class="flex -mx-4 mt-10">
     <div class="px-4">
-      <Button type={'submit'} text={i18n('tallenna')} disabled={disabled || !dirty} />
+      <Button
+        type={'submit'}
+        text={i18n('tallenna')}
+        disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       <Button

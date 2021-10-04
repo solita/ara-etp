@@ -50,9 +50,9 @@
         <H1 text={i18n(i18nRoot + '.title')} />
         <div class="font-bold">
           <Link
-              icon={Maybe.Some('add_circle_outline')}
-              text={i18n(i18nRoot + '.new-kayttaja')}
-              href="#/kayttaja/new" />
+            icon={Maybe.Some('add_circle_outline')}
+            text={i18n(i18nRoot + '.new-kayttaja')}
+            href="#/kayttaja/new" />
         </div>
       </div>
 
@@ -60,36 +60,42 @@
         <div class="overflow-x-auto">
           <table class="etp-table">
             <thead class="etp-table--thead">
-            <tr class="etp-table--tr">
-              <th class="etp-table--th">{i18n(i18nRoot + '.nimi')}</th>
-              <th class="etp-table--th">{i18n(i18nRoot + '.rooli')}</th>
-              <th class="etp-table--th">{i18n(i18nRoot + '.email')}</th>
-              <th class="etp-table--th">{i18n(i18nRoot + '.puhelin')}</th>
-              <th class="etp-table--th">{i18n(i18nRoot + '.login')}</th>
-              <th class="etp-table--th">{i18n(i18nRoot + '.state.header')}</th>
-            </tr>
+              <tr class="etp-table--tr">
+                <th class="etp-table--th">{i18n(i18nRoot + '.nimi')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.rooli')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.email')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.puhelin')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.login')}</th>
+                <th class="etp-table--th"
+                  >{i18n(i18nRoot + '.state.header')}</th>
+              </tr>
             </thead>
             <tbody class="etp-table--tbody">
-            {#each kayttajat as kayttaja}
-              <tr
+              {#each kayttajat as kayttaja}
+                <tr
                   class="etp-table--tr etp-table--tr__link"
                   on:click={() => push('#/kayttaja/' + kayttaja.id)}>
-                <td class="etp-table--td">
-                  {kayttaja.etunimi} {kayttaja.sukunimi}
-                </td>
-                <td class="etp-table--td">{kayttaja.rooli}</td>
-                <td class="etp-table--td">{kayttaja.email}</td>
-                <td class="etp-table--td">{kayttaja.puhelin}</td>
-                <td class="etp-table--td">
-                  {Maybe.fold(i18n('kayttaja.no-login'), Formats.formatTimeInstantMinutes, kayttaja.login)}
-                </td>
-                <td class="etp-table--td">
-                  {kayttaja.passivoitu ?
-                    i18n(i18nRoot + '.state.passivoitu') :
-                    i18n(i18nRoot + '.state.active')}
-                </td>
-              </tr>
-            {/each}
+                  <td class="etp-table--td">
+                    {kayttaja.etunimi}
+                    {kayttaja.sukunimi}
+                  </td>
+                  <td class="etp-table--td">{kayttaja.rooli}</td>
+                  <td class="etp-table--td">{kayttaja.email}</td>
+                  <td class="etp-table--td">{kayttaja.puhelin}</td>
+                  <td class="etp-table--td">
+                    {Maybe.fold(
+                      i18n('kayttaja.no-login'),
+                      Formats.formatTimeInstantMinutes,
+                      kayttaja.login
+                    )}
+                  </td>
+                  <td class="etp-table--td">
+                    {kayttaja.passivoitu
+                      ? i18n(i18nRoot + '.state.passivoitu')
+                      : i18n(i18nRoot + '.state.active')}
+                  </td>
+                </tr>
+              {/each}
             </tbody>
           </table>
         </div>
@@ -98,7 +104,7 @@
       <p class="mt-8">
         <span class="font-icon">info</span>
         {i18n(i18nRoot + '.info')}
-        <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')}/>
+        <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')} />
       </p>
     {/each}
   </div>

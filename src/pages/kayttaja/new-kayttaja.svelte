@@ -94,7 +94,9 @@
     {#each resources.toArray() as { whoami, roolit }}
       <KayttajaForm
         submit={addKayttaja}
-        cancel={_ => { kayttaja = emptyKayttaja }}
+        cancel={_ => {
+          kayttaja = emptyKayttaja;
+        }}
         bind:dirty
         {kayttaja}
         {whoami}
