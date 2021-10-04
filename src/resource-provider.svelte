@@ -16,7 +16,7 @@
       : yritysApi.getYritysById(id);
 
   const kayttajaFuture = ([id]) =>
-    R.includes(id, ['all', 'laatijoidentuonti'])
+    R.includes(id, ['all', 'laatijoidentuonti', 'new'])
       ? Future.reject()
       : kayttajaApi.getKayttajaById(id);
 

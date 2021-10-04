@@ -4,8 +4,6 @@
   import * as Formats from '@Utility/formats';
   import * as Maybe from '@Utility/maybe-utils';
 
-  export let params;
-
   const i18n = $_;
   const i18nRoot = 'kayttaja';
 
