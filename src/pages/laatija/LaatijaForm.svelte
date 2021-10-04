@@ -195,9 +195,9 @@
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
-          id={'puhelinnumero'}
-          name={'puhelinnumero'}
-          label={i18n('kayttaja.puhelinnumero')}
+          id={'puhelin'}
+          name={'puhelin'}
+          label={i18n('kayttaja.puhelin')}
           required={true}
           bind:model={laatija}
           lens={R.lensProp('puhelin')}

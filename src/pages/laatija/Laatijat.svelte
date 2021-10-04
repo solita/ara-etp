@@ -256,7 +256,7 @@
         <table class="etp-table">
           <thead class="etp-table--thead">
             <th class="etp-table--th">{$_('laatija.laatija')}</th>
-            <th class="etp-table--th">{$_('kayttaja.puhelinnumero')}</th>
+            <th class="etp-table--th">{$_('kayttaja.puhelin')}</th>
             <th class="etp-table--th">{$_('laatija.patevyystaso')}</th>
             <th class="etp-table--th">{$_('laatijahaku.voimassaolo')}</th>
             <th class="etp-table--th">{$_('laatija.paatoimintaalue')}</th>
