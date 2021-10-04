@@ -1,19 +1,19 @@
 <script>
-  import * as Locales from '@Language/locale-utils';
-  import * as Response from '@Utility/response';
-  import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
-
-  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
-
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Locales from '@Language/locale-utils';
+  import * as Response from '@Utility/response';
+
+  import { _ } from '@Language/i18n';
+  import { flashMessageStore } from '@/stores';
+  import { push } from '@Component/Router/router';
+
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import KayttajaForm from './kayttaja-form.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
-  import { push } from '@Component/Router/router';
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
