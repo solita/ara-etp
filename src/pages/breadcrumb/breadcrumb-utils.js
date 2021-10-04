@@ -257,6 +257,11 @@ export const laatijat = i18n => ({
   label: i18n('navigation.laatijat')
 });
 
+export const kayttajat = i18n => ({
+  url: '#/kayttaja/all',
+  label: i18n('navigation.kayttajat')
+});
+
 export const laatijaExtra = R.curry((i18n, [id, extra]) =>
   R.cond([
     [
@@ -318,10 +323,9 @@ export const laatijaCrumb = R.curry(
 );
 
 export const laatijatForTargetRole = R.curry((i18n, whoami, kayttaja) =>
-  R.either(Kayttajat.isPaakayttaja, Kayttajat.isPatevyydentoteaja)(whoami) &&
   Kayttajat.isLaatija(kayttaja)
     ? laatijat(i18n)
-    : []
+    : kayttajat(i18n)
 );
 
 export const kayttajaIdCrumb = R.curry((i18n, whoami, id) => [
@@ -351,7 +355,7 @@ export const kayttajaNimiCrumb = R.curry((i18n, whoami, kayttaja) =>
 export const kayttajaCrumb = R.curry(
   (i18n, idTranslate, whoami, [id, ...rest]) =>
     R.cond([
-      [R.equals('all'), R.always([laatijat(i18n)])],
+      [R.equals('all'), R.always([kayttajat(i18n)])],
       [
         R.T,
         id =>
