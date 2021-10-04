@@ -1,8 +1,7 @@
 <script>
-  import * as R from 'ramda';
-  import { _ } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
   import * as Response from '@Utility/response';
+  import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
