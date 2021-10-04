@@ -14,9 +14,10 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import H1 from '@Component/H/H1.svelte';
 
   const i18n = $_;
-  const i18nRoot = 'kayttaja';
+  const i18nRoot = 'kayttaja.new';
 
   let resources = Maybe.None();
   const emptyKayttaja = {
@@ -28,7 +29,7 @@
     email: '',
     puhelin: '',
     virtu: Maybe.None(),
-    henkilotunnus: Maybe.None(),
+    henkilotunnus: Maybe.None()
   };
 
   let kayttaja = emptyKayttaja;
@@ -65,30 +66,31 @@
   };
 
   $: Future.fork(
-      response => {
-        flashMessageStore.add(
-          'kayttaja',
-          'error',
-          i18n(Response.errorKey(i18nRoot, 'load', response))
-        );
-        resources = Maybe.None();
-        overlay = false;
-      },
-      response => {
-        resources = Maybe.Some(response);
-        overlay = false;
-        dirty = false;
-      },
-      Future.parallelObject(2, {
-        whoami: KayttajaApi.whoami,
-        roolit: KayttajaApi.roolit
-      })
-    );
+    response => {
+      flashMessageStore.add(
+        'kayttaja',
+        'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response))
+      );
+      resources = Maybe.None();
+      overlay = false;
+    },
+    response => {
+      resources = Maybe.Some(response);
+      overlay = false;
+      dirty = false;
+    },
+    Future.parallelObject(2, {
+      whoami: KayttajaApi.whoami,
+      roolit: KayttajaApi.roolit
+    })
+  );
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
     <DirtyConfirmation {dirty} />
+    <H1 text={i18n(i18nRoot + '.title')} />
     {#each resources.toArray() as { whoami, roolit }}
       <KayttajaForm
         submit={addKayttaja}

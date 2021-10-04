@@ -3,6 +3,8 @@
   import { _ } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
   import * as Response from '@Utility/response';
+  import * as Formats from '@Utility/formats';
+
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
   import * as GeoApi from '@Component/Geo/geo-api';
@@ -18,6 +20,8 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import H1 from '@Component/H/H1.svelte';
+  import LastLogin from './last-login.svelte';
 
   export let params;
 
@@ -65,7 +69,8 @@
     fork(
       'laatija',
       LaatijaApi.putLaatijaById(whoami.rooli, fetch, id, updatedLaatija),
-      _ => {}
+      _ => {
+      }
     );
 
   const submitKayttaja = (whoami, id) => updatedKayttaja =>
@@ -128,13 +133,18 @@
     <DirtyConfirmation {dirty} />
     {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit }}
       {#if Maybe.isSome(laatija)}
-        <LaatijaForm
-          submit={submitLaatija(whoami, params.id)}
-          cancel={_ => load(params)}
-          {whoami}
-          {luokittelut}
-          laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
+        <div class="mt-6">
+          <LastLogin {kayttaja} />
+          <LaatijaForm
+            submit={submitLaatija(whoami, params.id)}
+            cancel={_ => load(params)}
+            {whoami}
+            {luokittelut}
+            laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
+        </div>
       {:else}
+        <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
+        <LastLogin {kayttaja} />
         <KayttajaForm
           submit={submitKayttaja(whoami, params.id)}
           cancel={_ => load(params)}

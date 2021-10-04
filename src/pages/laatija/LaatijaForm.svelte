@@ -119,22 +119,9 @@
   };
 </script>
 
-<style type="text/postcss">
-  .lastlogin {
-    @apply text-secondary mb-4;
-  }
-</style>
-
 <form on:submit|preventDefault={validateAndSubmit}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
-    <span class="lastlogin">
-      {R.compose(
-        Maybe.orSome(i18n('kayttaja.no-login')),
-        Maybe.map(R.concat(i18n('kayttaja.last-login') + ' ')),
-        Maybe.map(formats.formatTimeInstant)
-      )(laatija.login)}
-    </span>
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
