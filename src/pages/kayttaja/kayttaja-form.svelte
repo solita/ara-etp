@@ -32,9 +32,10 @@
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
-  $: disabled =
-    Kayttajat.isSystem(kayttaja) || (!isPaakayttaja && !isOwnSettings);
-  $: disabledAdmin = Kayttajat.isSystem(kayttaja) || !isPaakayttaja;
+
+  $: isSystem = Maybe.exists(Kayttajat.isSystemRole, kayttaja.rooli);
+  $: disabled = isSystem || (!isPaakayttaja && !isOwnSettings);
+  $: disabledAdmin = isSystem || !isPaakayttaja;
 
   $: formatRooli = Locales.labelForId($locale, roolit);
 
@@ -47,7 +48,7 @@
     )
   );
 
-  $: if (Kayttajat.isLaatija(kayttaja)) {
+  $: if (Maybe.exists(Kayttajat.isLaatijaRole, kayttaja.rooli)) {
     throw 'This form should not be used for laatija.';
   }
 
