@@ -409,7 +409,7 @@
           bind:model={laatija}
           lens={R.lensProp('julkinenpuhelin')}
           {disabled}
-          label={i18n('kayttaja.puhelinnumero')} />
+          label={i18n('kayttaja.puhelin')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
