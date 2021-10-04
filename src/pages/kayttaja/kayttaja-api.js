@@ -45,6 +45,8 @@ export const getKayttajaById = R.compose(
   url.id
 );
 
+export const kayttajat = R.map(R.map(deserialize), Fetch.getJson(fetch, url.all));
+
 export const getLaatijaById = R.curry((fetch, id) =>
   R.compose(
     Future.chainRej(
@@ -85,5 +87,14 @@ export const putKayttajaById = R.curry((rooli, fetch, id, kayttaja) =>
     )(rooli)
   )(kayttaja)
 );
+
+export const postKayttaja =
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'post', url.all)
+    ),
+    serialize
+  );
 
 export const roolit = Fetch.cached(fetch, '/roolit');
