@@ -194,40 +194,42 @@
       disabled={disabledAdmin} />
 
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'virtu.organisaatio'}
-          name={'virtu.organisaatio'}
-          label={i18n('kayttaja.virtu.organisaatio')}
-          required={false}
-          disabled={disabledAdmin}
-          bind:model={kayttaja}
-          lens={R.compose(
-            R.lensProp('virtu'),
-            R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
-            R.lensProp('organisaatio')
-          )}
-          parse={R.trim}
-          validators={virtuSchema.organisaatio}
-          {i18n} />
-      </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'virtu.localid'}
-          name={'virtu.localid'}
-          label={i18n('kayttaja.virtu.localid')}
-          required={false}
-          disabled={disabledAdmin}
-          bind:model={kayttaja}
-          lens={R.compose(
-            R.lensProp('virtu'),
-            R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
-            R.lensProp('localid')
-          )}
-          parse={R.trim}
-          validators={virtuSchema.localid}
-          {i18n} />
-      </div>
+      {#if Maybe.isSome(kayttaja.virtu)}
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Input
+            id={'virtu.organisaatio'}
+            name={'virtu.organisaatio'}
+            label={i18n('kayttaja.virtu.organisaatio')}
+            required={false}
+            disabled={disabledAdmin}
+            bind:model={kayttaja}
+            lens={R.compose(
+              R.lensProp('virtu'),
+              R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
+              R.lensProp('organisaatio')
+            )}
+            parse={R.trim}
+            validators={virtuSchema.organisaatio}
+            {i18n} />
+        </div>
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Input
+            id={'virtu.localid'}
+            name={'virtu.localid'}
+            label={i18n('kayttaja.virtu.localid')}
+            required={false}
+            disabled={disabledAdmin}
+            bind:model={kayttaja}
+            lens={R.compose(
+              R.lensProp('virtu'),
+              R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
+              R.lensProp('localid')
+            )}
+            parse={R.trim}
+            validators={virtuSchema.localid}
+            {i18n} />
+        </div>
+      {/if}
     </div>
 
     <H2 text={i18n('kayttaja.suomifi.header')} />
