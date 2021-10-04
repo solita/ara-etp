@@ -3,7 +3,7 @@
   import { _ } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
   import * as Response from '@Utility/response';
-  import * as Formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
@@ -84,6 +84,7 @@
   const load = params => {
     overlay = true;
     resources = Maybe.None();
+    const kayttajaFuture = Future.cache(KayttajaApi.getKayttajaById(params.id));
     Future.fork(
       response => {
         flashMessageStore.add(
@@ -101,10 +102,12 @@
         dirty = false;
       },
       Future.parallelObject(5, {
-        kayttaja: KayttajaApi.getKayttajaById(params.id),
-        laatija: R.map(
-          Maybe.fromNull,
-          KayttajaApi.getLaatijaById(fetch, params.id)
+        kayttaja: kayttajaFuture,
+        laatija: R.chain(
+          kayttaja => Kayttajat.isLaatija(kayttaja) ?
+            R.map(Maybe.Some, KayttajaApi.getLaatijaById(fetch, params.id)) :
+            Future.resolve(Maybe.None()),
+          kayttajaFuture
         ),
         whoami: KayttajaApi.whoami,
         roolit: KayttajaApi.roolit,

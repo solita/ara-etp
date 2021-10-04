@@ -52,13 +52,6 @@ export const kayttajat = R.map(
 
 export const getLaatijaById = R.curry((fetch, id) =>
   R.compose(
-    Future.chainRej(
-      R.ifElse(
-        R.propEq('status', 404),
-        R.always(Future.resolve(null)),
-        Future.reject
-      )
-    ),
     R.map(deserializeLaatija),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
