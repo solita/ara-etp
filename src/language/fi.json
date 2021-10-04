@@ -205,6 +205,8 @@
     "email": "Sähköposti",
     "puhelin": "Puhelin",
     "login": "Kirjautunut",
+    "info": "Tässä näkyy kaikki muut käyttäjät paitsi laatijat.",
+    "laatija-link": "Laatijat löytyy täältä.",
     "state": {
       "header": "Tila",
       "active": "Aktiivinen",

@@ -94,5 +94,10 @@
         </div>
       {/if}
     {/each}
+    <p class="mt-8">
+      <span class="font-icon">info</span>
+      {i18n(i18nRoot + '.info')}
+      <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')}/>
+    </p>
   </div>
 </Overlay>
