@@ -152,7 +152,7 @@
           submit={submitKayttaja(whoami, params.id)}
           cancel={_ => load(params)}
           bind:dirty
-          {kayttaja}
+          kayttaja={R.evolve({ rooli: Maybe.fromNull }, kayttaja)}
           {whoami}
           {roolit} />
       {/if}

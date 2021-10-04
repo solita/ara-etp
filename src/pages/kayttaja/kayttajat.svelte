@@ -81,11 +81,7 @@
                     {kayttaja.sukunimi}
                   </td>
                   <td class="etp-table--td">
-                    {Maybe.fold(
-                      '',
-                      Locales.labelForId($locale, roolit),
-                      kayttaja.rooli
-                    )}
+                    {Locales.labelForId($locale, roolit)(kayttaja.rooli)}
                   </td>
                   <td class="etp-table--td">{kayttaja.email}</td>
                   <td class="etp-table--td">{kayttaja.puhelin}</td>
