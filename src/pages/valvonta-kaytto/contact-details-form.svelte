@@ -111,17 +111,17 @@
   <div class="w-full">
     <Autocomplete items={R.map(Locales.label($locale), countries)}>
       <Input
-          id={'osapuoli.maa'}
-          name={'osapuoli.maa'}
-          label={i18n(`${i18nRoot}.maa`)}
-          required={false}
-          disabled={false}
-          bind:model={osapuoli}
-          lens={R.lensProp('maa')}
-          format={Maybe.fold('', Locales.labelForId($locale, countries))}
-          parse={parseCountry}
-          search={true}
-          {i18n}/>
+        id={'osapuoli.maa'}
+        name={'osapuoli.maa'}
+        label={i18n(`${i18nRoot}.maa`)}
+        required={false}
+        disabled={false}
+        bind:model={osapuoli}
+        lens={R.lensProp('maa')}
+        format={Maybe.fold('', Locales.labelForId($locale, countries))}
+        parse={parseCountry}
+        search={true}
+        {i18n} />
     </Autocomplete>
   </div>
 </div>

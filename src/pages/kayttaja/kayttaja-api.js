@@ -4,17 +4,19 @@ import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
-
-import * as kayttajat from '@Utility/kayttajat';
+import * as Kayttajat from '@Utility/kayttajat';
+import * as Parsers from '@Utility/parsers';
 
 const deserialize = R.evolve({
-  login: R.compose(R.map(Date.parse), Maybe.fromNull),
+  login: R.compose(
+    R.chain(Either.toMaybe),
+    R.map(Parsers.parseISODate),
+    Maybe.fromNull
+  ),
   cognitoid: Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
-  virtu: R.when(
-    R.allPass([R.isNil, kayttajat.isPaakayttajaRole]),
-    R.always({ localid: '', organisaatio: '' })
-  )
+  virtu: Maybe.fromNull,
+  rooli: Maybe.fromNull
 });
 
 const deserializeLaatija = R.compose(
@@ -44,15 +46,13 @@ export const getKayttajaById = R.compose(
   url.id
 );
 
+export const kayttajat = R.map(
+  R.map(deserialize),
+  Fetch.getJson(fetch, url.all)
+);
+
 export const getLaatijaById = R.curry((fetch, id) =>
   R.compose(
-    Future.chainRej(
-      R.ifElse(
-        R.propEq('status', 404),
-        R.always(Future.resolve(null)),
-        Future.reject
-      )
-    ),
     R.map(deserializeLaatija),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
@@ -62,7 +62,9 @@ export const getLaatijaById = R.curry((fetch, id) =>
 
 export const serialize = R.compose(
   R.evolve({
-    henkilotunnus: Maybe.getOrElse(null)
+    henkilotunnus: Maybe.orSome(null),
+    virtu: Maybe.orSome(null),
+    rooli: Maybe.orSome(null)
   }),
   R.omit(['id', 'login', 'cognitoid', 'ensitallennus'])
 );
@@ -72,14 +74,22 @@ export const serializeForNonAdmin = R.compose(
   serialize
 );
 
-export const putKayttajaById = R.curry((rooli, fetch, id, laatija) =>
+export const putKayttajaById = R.curry((rooli, fetch, id, kayttaja) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.id(id))),
     R.ifElse(
-      kayttajat.isPaakayttajaRole,
+      Kayttajat.isPaakayttajaRole,
       R.always(serialize),
       R.always(serializeForNonAdmin)
     )(rooli)
-  )(laatija)
+  )(kayttaja)
 );
+
+export const postKayttaja = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.all)),
+  serialize
+);
+
+export const roolit = Fetch.cached(fetch, '/roolit');

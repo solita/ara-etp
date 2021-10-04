@@ -142,13 +142,12 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
 export const parseKayttaja = R.curry(
   (isDev, whoami, i18n, idTranslate, locationParts) => {
     if (
-      (Kayttajat.isPatevyydentoteaja(whoami) || Kayttajat.isPaakayttaja) &&
       R.compose(
-        R.either(R.equals('laatijoidentuonti'), R.equals('all')),
+        R.anyPass([R.equals('all'), R.equals('new')]),
         R.head
       )(locationParts)
     ) {
-      return parseRoot(isDev, i18n, whoami);
+      return [];
     }
 
     const id = R.head(locationParts);
@@ -162,6 +161,24 @@ export const parseKayttaja = R.curry(
       R.map(linksForKayttaja(i18n)),
       R.filter(Kayttajat.isLaatija)
     )(kayttaja);
+  }
+);
+
+/**
+ * @sig boolean -> Kayttaja -> Translate -> Object -> Array [string] -> Array [Link]
+ */
+export const parseLaatija = R.curry(
+  (isDev, whoami, i18n, idTranslate, locationParts) => {
+    if (
+      R.compose(
+        R.anyPass([R.equals('laatijoidentuonti'), R.equals('all')]),
+        R.head
+      )(locationParts)
+    ) {
+      return parseRoot(isDev, i18n, whoami);
+    } else {
+      return parseKayttaja(isDev, whoami, i18n, idTranslate, locationParts);
+    }
   }
 );
 
@@ -367,11 +384,12 @@ export const navigationParse = R.curry(
           R.compose(parseYritys(isDev, i18n, whoami, idTranslate), R.tail)
         ],
         [
-          R.compose(
-            R.either(R.equals('kayttaja'), R.equals('laatija')),
-            R.head
-          ),
+          R.compose(R.equals('kayttaja'), R.head),
           R.compose(parseKayttaja(isDev, whoami, i18n, idTranslate), R.tail)
+        ],
+        [
+          R.compose(R.equals('laatija'), R.head),
+          R.compose(parseLaatija(isDev, whoami, i18n, idTranslate), R.tail)
         ],
         [
           R.compose(R.equals(['valvonta', 'oikeellisuus']), R.take(2)),
@@ -405,19 +423,16 @@ export const defaultHeaderMenuLinks = i18n => [
 export const roleBasedHeaderMenuLinks = R.curry((i18n, whoami) => {
   if (Kayttajat.isPaakayttaja(whoami)) {
     return [
-      // Hidden until implemented
-      // {
-      //   href: `#/kayttaja/all`,
-      //   text: i18n('navigation.kayttajahallinta')
-      // },
+      {
+        href: `#/kayttaja/all`,
+        text: i18n('navigation.kayttajat')
+      },
       {
         href: `#/yritys/all`,
         text: i18n('navigation.yritykset')
       }
     ];
-  }
-
-  if (Kayttajat.isLaskuttaja(whoami)) {
+  } else if (Kayttajat.isLaskuttaja(whoami)) {
     return [
       {
         href: `#/yritys/all`,

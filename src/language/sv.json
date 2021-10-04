@@ -143,16 +143,20 @@
   "kayttaja": {
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
-    "omattiedot": "Egna uppgifter",
+    "passivoitu": "Passivera användarnamn",
     "etunimi": "Förnamn",
     "sukunimi": "Efternamn",
-    "sahkoposti": "E-postadress",
+    "email": "E-postadress",
     "kayttajatunnus": "Användarnamn för dataöverföring",
-    "puhelinnumero": "Telefon",
+    "puhelin": "Telefon",
     "virtu": {
       "header": "Inloggningsuppgifter till Virtu",
       "localid": "Användarnamn (Virtu Local ID)",
       "organisaatio": "Organisation"
+    },
+    "suomifi": {
+      "header": "Inloggningsuppgifter till Suomi-fi",
+      "henkilotunnus": "Personbeteckning"
     },
     "messages": {
       "save-success": "Användarens uppgifter har sparats.",

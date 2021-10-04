@@ -270,7 +270,7 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseKayttaja(
+        Navigation.parseLaatija(
           isDev,
           patevyydentoteaja,
           i18n,
@@ -294,7 +294,7 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseKayttaja(
+        Navigation.parseLaatija(
           isDev,
           patevyydentoteaja,
           i18n,
@@ -523,6 +523,10 @@ describe('Navigation', () => {
     const laskuttaja = { id: 1, rooli: 3 };
     it('should return links for paakayttaja', () => {
       const expected = [
+        {
+          href: '#/kayttaja/all',
+          text: 'Käyttäjät'
+        },
         {
           href: `#/yritys/all`,
           text: 'Yritykset'

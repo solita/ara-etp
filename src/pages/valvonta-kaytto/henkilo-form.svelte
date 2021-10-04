@@ -29,7 +29,10 @@
   const i18nRoot = 'valvonta.kaytto.osapuoli';
   let form;
 
-  $: schema = Schema.appendPostinumeroValidatorForCountry(osapuoli, Schema.henkilo);
+  $: schema = Schema.appendPostinumeroValidatorForCountry(
+    osapuoli,
+    Schema.henkilo
+  );
 
   const setDirty = _ => {
     dirty = true;

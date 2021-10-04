@@ -46,6 +46,7 @@
     "uusi-kayttaja": "Uusi käyttäjä",
     "kayttajat": "Käyttäjät",
     "kayttaja": "Käyttäjä",
+    "new-kayttaja": "Uusi käyttäjä",
     "et": "ET",
     "energiatodistus-viestit": "Viestit",
     "liitteet": "Liitteet",
@@ -53,7 +54,6 @@
     "muutoshistoria": "Muutoshistoria",
     "myinfo": "Omat Tiedot",
     "kirjaudu-ulos": "Kirjaudu ulos",
-    "kayttajahallinta": "Käyttäjähallinta",
     "new-yritys": "Uusi yritys",
     "yritys": "Yritys",
     "yritys-laatijat": "Laatijat",
@@ -171,24 +171,57 @@
   "kayttaja": {
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
-    "omattiedot": "Omat tiedot",
+    "passivoitu": "Passivoi käyttäjätunnus",
+    "rooli": "Käyttäjärooli",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
-    "sahkoposti": "Sähköpostiosoite",
+    "email": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
-    "puhelinnumero": "Puhelinnumero",
+    "puhelin": "Puhelinnumero",
+    "perustiedot-header": "Perustiedot",
+    "cancel": "Peruuta muutokset",
+    "save": "Tallenna",
     "virtu": {
       "header": "Virtu kirjautumistiedot",
       "localid": "Käyttäjätunnus (Virtu Local ID)",
       "organisaatio": "Organisaatio"
     },
+    "suomifi": {
+      "header": "Suomi-fi kirjautumistiedot",
+      "henkilotunnus": "Henkilötunnus"
+    },
     "messages": {
       "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
       "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
+      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista lomakkeen kentät.",
       "load-error": "Käyttäjän tietojen haku epäonnistui.",
-      "not-found": "Käyttäjää ei löydy tästä palvelusta.",
-      "upload-error": "Tiedoston lataaminen epäonnistui."
+      "not-found": "Käyttäjää ei löydy tästä palvelusta."
+    },
+    "new": {
+      "title": "Uusi käyttäjä",
+      "messages": {
+        "add-success": "Uusi käyttäjä tallennettu järjestelmään.",
+        "add-error": "Uuden käyttäjän tallennus epäonnistui."
+      }
+    }
+  },
+  "kayttajat": {
+    "title": "Käyttäjät",
+    "new-kayttaja": "Uusi käyttäjä",
+    "nimi": "Nimi",
+    "rooli": "Rooli",
+    "email": "Sähköposti",
+    "puhelin": "Puhelin",
+    "login": "Kirjautunut",
+    "info": "Tässä näkyy kaikki muut käyttäjät paitsi laatijat.",
+    "laatija-link": "Laatijat löytyy täältä.",
+    "state": {
+      "header": "Tila",
+      "active": "Aktiivinen",
+      "passivoitu": "Passivoitu"
+    },
+    "messages": {
+      "load-error": "Käyttäjätietojen haku epäonnistui."
     }
   },
   "laatija": {

@@ -56,6 +56,10 @@ export const isPaakayttajaRole = R.equals(role.paakayttaja);
  * @sig Rooli -> boolean
  */
 export const isLaskuttajaRole = R.equals(role.laskuttaja);
+/**
+ * @sig Rooli -> boolean
+ */
+export const isSystemRole = R.equals(-1);
 
 /**
  * @sig Kayttaja -> boolean
@@ -80,6 +84,11 @@ export const isPaakayttajaOrLaskuttaja = R.anyPass([
   isPaakayttaja,
   isLaskuttaja
 ]);
+
+/**
+ * @sig Kayttaja -> boolean
+ */
+export const isSystem = R.propSatisfies(isSystemRole, 'rooli');
 
 /**
  * @sig Kayttaja -> string
