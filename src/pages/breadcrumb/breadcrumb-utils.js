@@ -323,9 +323,10 @@ export const laatijaCrumb = R.curry(
 );
 
 export const laatijatForTargetRole = R.curry((i18n, whoami, kayttaja) =>
-  Kayttajat.isLaatija(kayttaja)
-    ? laatijat(i18n)
-    : kayttajat(i18n)
+  R.eqProps('id', whoami, kayttaja) ? [] :
+    Kayttajat.isLaatija(kayttaja)
+      ? laatijat(i18n)
+      : kayttajat(i18n)
 );
 
 export const kayttajaIdCrumb = R.curry((i18n, whoami, id) => [
