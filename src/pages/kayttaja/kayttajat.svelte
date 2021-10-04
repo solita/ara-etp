@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Formats from '@Utility/formats';
+  import * as Response from '@Utility/response';
   import * as api from '@Pages/kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
@@ -44,17 +45,17 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-
-    <div class="flex justify-between">
-      <H1 text={i18n(i18nRoot + '.title')} />
-      <div class="font-bold">
-        <Link
-            icon={Maybe.Some('add_circle_outline')}
-            text={i18n(i18nRoot + '.new-kayttaja')}
-            href="#/kayttaja/new" />
-      </div>
-    </div>
     {#each Maybe.toArray(resources) as { roolit, kayttajat }}
+      <div class="flex justify-between">
+        <H1 text={i18n(i18nRoot + '.title')} />
+        <div class="font-bold">
+          <Link
+              icon={Maybe.Some('add_circle_outline')}
+              text={i18n(i18nRoot + '.new-kayttaja')}
+              href="#/kayttaja/new" />
+        </div>
+      </div>
+
       {#if R.not(R.isEmpty(kayttajat))}
         <div class="overflow-x-auto">
           <table class="etp-table">
@@ -93,11 +94,12 @@
           </table>
         </div>
       {/if}
+
+      <p class="mt-8">
+        <span class="font-icon">info</span>
+        {i18n(i18nRoot + '.info')}
+        <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')}/>
+      </p>
     {/each}
-    <p class="mt-8">
-      <span class="font-icon">info</span>
-      {i18n(i18nRoot + '.info')}
-      <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')}/>
-    </p>
   </div>
 </Overlay>
