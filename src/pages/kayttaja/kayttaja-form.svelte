@@ -57,7 +57,7 @@
   const saveKayttaja = _ => {
     if (isValidForm(kayttaja)) {
       flashMessageStore.flush();
-      submit(kayttaja);
+      submit(R.evolve({ rooli: Maybe.get }, kayttaja));
     } else {
       flashMessageStore.add(
         'kayttaja',
