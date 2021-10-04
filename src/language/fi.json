@@ -197,6 +197,23 @@
       "not-found": "Käyttäjää ei löydy tästä palvelusta."
     }
   },
+  "kayttajat": {
+    "title": "Käyttäjät",
+    "new-kayttaja": "Uusi käyttäjä",
+    "nimi": "Nimi",
+    "rooli": "Rooli",
+    "email": "Sähköposti",
+    "puhelin": "Puhelin",
+    "login": "Kirjautunut",
+    "state": {
+      "header": "Tila",
+      "active": "Aktiivinen",
+      "passivoitu": "Passivoitu"
+    },
+    "messages": {
+      "load-error": "Käyttäjätietojen haku epäonnistui."
+    }
+  },
   "laatija": {
     "laatija": "Laatija",
     "toteamispaivamaara_haku": "Laatija / Toteamispäivämäärä",
