@@ -180,9 +180,9 @@
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4 items-end">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
-          id={'sahkoposti'}
-          name={'sahkoposti'}
-          label={`${i18n('kayttaja.sahkoposti')} (${R.toLower(
+          id={'email'}
+          name={'email'}
+          label={`${i18n('kayttaja.email')} (${R.toLower(
             i18n('kayttaja.kayttajatunnus')
           )})`}
           required={true}
@@ -416,7 +416,7 @@
           bind:model={laatija}
           lens={R.lensProp('julkinenemail')}
           {disabled}
-          label={i18n('kayttaja.sahkoposti')} />
+          label={i18n('kayttaja.email')} />
       </div>
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
