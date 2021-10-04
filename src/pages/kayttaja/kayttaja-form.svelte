@@ -98,6 +98,7 @@
         bind:model={kayttaja}
         lens={R.lensProp('rooli')}
         format={formatRooli}
+        parse={Maybe.fromNull}
         items={R.pluck('id', filterRoolit(roolit))} />
     </div>
   </div>

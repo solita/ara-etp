@@ -13,6 +13,7 @@ const VirtuIDValidator = {
 };
 
 export const Kayttaja = {
+  rooli: [Validation.isSome],
   henkilotunnus: [Validation.liftValidator(Validation.henkilotunnusValidator)],
   etunimi: Validation.RequiredString(2, 200),
   sukunimi: Validation.RequiredString(2, 200),

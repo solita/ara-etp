@@ -4,10 +4,11 @@
   import * as Future from '@Utility/future-utils';
   import * as Formats from '@Utility/formats';
   import * as Response from '@Utility/response';
+  import * as Locales from '@Language/locale-utils';
   import * as api from '@Pages/kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
   import { push } from '@Component/Router/router';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
@@ -79,7 +80,9 @@
                     {kayttaja.etunimi}
                     {kayttaja.sukunimi}
                   </td>
-                  <td class="etp-table--td">{kayttaja.rooli}</td>
+                  <td class="etp-table--td">
+                    {Maybe.fold('', Locales.labelForId($locale, roolit), kayttaja.rooli)}
+                  </td>
                   <td class="etp-table--td">{kayttaja.email}</td>
                   <td class="etp-table--td">{kayttaja.puhelin}</td>
                   <td class="etp-table--td">

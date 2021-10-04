@@ -15,7 +15,8 @@ const deserialize = R.evolve({
   ),
   cognitoid: Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
-  virtu: Maybe.fromNull
+  virtu: Maybe.fromNull,
+  rooli: Maybe.fromNull
 });
 
 const deserializeLaatija = R.compose(
@@ -62,7 +63,8 @@ export const getLaatijaById = R.curry((fetch, id) =>
 export const serialize = R.compose(
   R.evolve({
     henkilotunnus: Maybe.orSome(null),
-    virtu: Maybe.orSome(null)
+    virtu: Maybe.orSome(null),
+    rooli: Maybe.orSome(null)
   }),
   R.omit(['id', 'login', 'cognitoid', 'ensitallennus'])
 );
