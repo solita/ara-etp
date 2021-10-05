@@ -49,9 +49,9 @@
   $: inputLanguage = bilingual
     ? selectedLanguage
     : Maybe.orSome(
-      selectedLanguage,
-      R.map(et.kielisyysKey, energiatodistusKieli)
-    );
+        selectedLanguage,
+        R.map(et.kielisyysKey, energiatodistusKieli)
+      );
 
   function toggleLanguageSelection() {
     if (bilingual) {
@@ -79,8 +79,7 @@
     signingActive = true;
   };
 
-  const noop = () => {
-  };
+  const noop = () => {};
 
   const execute = (operation, name, onSuccess) => _ => {
     if (pendingExecution) return;
@@ -91,7 +90,8 @@
         flashMessageStore.add(
           'Energiatodistus',
           'error',
-          i18n(Response.errorKey404('energiatodistus', name, response)));
+          i18n(Response.errorKey404('energiatodistus', name, response))
+        );
       },
       _ => {
         onSuccess();
@@ -107,9 +107,11 @@
   };
 
   $: toggleTyojono = execute(
-    (fetch, _, id) => R.chain(
+    (fetch, _, id) =>
+      R.chain(
         Future.after(200),
-        ValvontaApi.putValvonta(id, { pending: !valvonta.pending })),
+        ValvontaApi.putValvonta(id, { pending: !valvonta.pending })
+      ),
     `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
     _ => {
       valvonta = R.over(R.lensProp('pending'), R.not, valvonta);
@@ -134,12 +136,9 @@
     cancel
   );
 
-  export let save = _ => {
-  };
-  export let saveComplete = _ => {
-  };
-  export let cancel = _ => {
-  };
+  export let save = _ => {};
+  export let saveComplete = _ => {};
+  export let cancel = _ => {};
 
   const openUrl = url => {
     window.open(url, '_blank');
@@ -365,7 +364,7 @@
     <div
       transition:fade|local={{ duration: 50 }}
       class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0">
-        <Spinner />
+      <Spinner />
     </div>
   {/if}
 </div>
