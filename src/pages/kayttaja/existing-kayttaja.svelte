@@ -1,19 +1,18 @@
 <script>
   import * as R from 'ramda';
-  import { _ } from '@Language/i18n';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Future from '@Utility/future-utils';
   import * as Locales from '@Language/locale-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
 
+  import { _ } from '@Language/i18n';
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
   import * as GeoApi from '@Component/Geo/geo-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaskutusApi from '@Component/Laskutus/laskutus-api';
-
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as Future from '@Utility/future-utils';
 
   import KayttajaForm from './kayttaja-form.svelte';
   import LaatijaForm from '@Pages/laatija/laatija-form.svelte';
