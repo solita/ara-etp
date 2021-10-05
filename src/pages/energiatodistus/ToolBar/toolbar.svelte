@@ -220,7 +220,8 @@
   <Signing {energiatodistus} reload={cancel} />
 {/if}
 
-<div class="toolbar relative flex flex-col text-secondary border-1 border-disabled">
+<div
+  class="toolbar relative flex flex-col text-secondary border-1 border-disabled">
   <button on:click={toggleLanguageSelection}>
     {#if bilingual}
       <div class="flex flex-row w-full">
