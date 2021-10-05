@@ -220,7 +220,7 @@
   <Signing {energiatodistus} reload={cancel} />
 {/if}
 
-<div class="toolbar flex flex-col text-secondary border-1 border-disabled">
+<div class="toolbar relative flex flex-col text-secondary border-1 border-disabled">
   <button on:click={toggleLanguageSelection}>
     {#if bilingual}
       <div class="flex flex-row w-full">
@@ -363,7 +363,7 @@
   {#if pendingExecution}
     <div
       transition:fade|local={{ duration: 50 }}
-      class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0">
+      class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0 flex flex-wrap justify-center content-center">
       <Spinner />
     </div>
   {/if}
