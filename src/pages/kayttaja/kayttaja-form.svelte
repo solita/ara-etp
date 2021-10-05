@@ -15,6 +15,11 @@
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/Select.svelte';
 
+  /*
+   * Note: kayttaja.rooli :: Maybe[Id]
+   * Otherwise kayttaja is the same as defined in
+   * get api/private/kayttajat/:id and KayttajaApi.deserialize
+   */
   export let kayttaja;
   export let dirty;
   export let submit;
