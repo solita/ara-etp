@@ -9,7 +9,7 @@ import Energiatodistus from '@Pages/energiatodistus';
 import ValvontaOikeellisuus from '@Pages/valvonta-oikeellisuus';
 import ValvontaKaytto from '@Pages/valvonta-kaytto';
 import NotFound from '@Pages/not-found/not-found';
-import MyInfo from '@Pages/kayttaja/MyInfo';
+import MyInfo from '@Pages/kayttaja/my-info';
 import LandingPage from '@Pages/kayttaja/landing-page';
 
 export const buildRoutes = currentUser => ({
