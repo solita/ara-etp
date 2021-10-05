@@ -26,8 +26,8 @@ const osapuoli = {
   jakeluosoite: OptionalLimitedString(2, 200),
   postinumero: [],
   postitoimipaikka: OptionalLimitedString(2, 200),
-  rooli_description: OptionalLimitedString(2, 200),
-  toimitustapa_description: OptionalLimitedString(2, 200)
+  'rooli-description': OptionalLimitedString(2, 200),
+  'toimitustapa-description': OptionalLimitedString(2, 200)
 };
 
 export const henkilo = R.mergeLeft(osapuoli, {
