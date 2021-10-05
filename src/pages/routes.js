@@ -10,7 +10,7 @@ import ValvontaOikeellisuus from '@Pages/valvonta-oikeellisuus';
 import ValvontaKaytto from '@Pages/valvonta-kaytto';
 import NotFound from '@Pages/not-found/not-found';
 import MyInfo from '@Pages/kayttaja/MyInfo';
-import LandingPage from '@Pages/kayttaja/LandingPage';
+import LandingPage from '@Pages/kayttaja/landing-page';
 
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
