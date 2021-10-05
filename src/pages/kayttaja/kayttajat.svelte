@@ -5,7 +5,7 @@
   import * as Formats from '@Utility/formats';
   import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
-  import * as api from '@Pages/kayttaja/kayttaja-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
@@ -35,8 +35,8 @@
       overlay = false;
     },
     Future.parallelObject(4, {
-      kayttajat: api.kayttajat,
-      roolit: api.roolit
+      kayttajat: KayttajaApi.kayttajat,
+      roolit: KayttajaApi.roolit
     })
   );
 </script>
