@@ -1,4 +1,4 @@
-import ToolBar from './ToolBar';
+import ToolBar from './toolbar';
 
 export default { title: 'ToolBar' };
 

@@ -30,7 +30,7 @@
   import * as Postinumero from '@Component/address/postinumero-fi';
   import * as Kayttajat from '@Utility/kayttajat';
 
-  import ToolBar from './ToolBar/ToolBar';
+  import ToolBar from './ToolBar/toolbar';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { flashMessageStore } from '@/stores';
