@@ -11,6 +11,8 @@
   import Confirm from '@Component/Confirm/Confirm';
   import Signing from '@Pages/energiatodistus/signing';
   import TyojonoButton from './tyojono-button';
+  import Spinner from '@Component/Spinner/Spinner.svelte';
+
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
@@ -25,7 +27,7 @@
   export let eTehokkuus = Maybe.None();
   export let dirty;
   export let whoami;
-  export let valvonta;
+  export let valvonta = { ongoing: false, pending: false };
 
   const i18n = $_;
 
@@ -47,9 +49,9 @@
   $: inputLanguage = bilingual
     ? selectedLanguage
     : Maybe.orSome(
-        selectedLanguage,
-        R.map(et.kielisyysKey, energiatodistusKieli)
-      );
+      selectedLanguage,
+      R.map(et.kielisyysKey, energiatodistusKieli)
+    );
 
   function toggleLanguageSelection() {
     if (bilingual) {
@@ -77,24 +79,23 @@
     signingActive = true;
   };
 
-  const noop = () => {};
+  const noop = () => {
+  };
 
   const execute = (operation, name, onSuccess) => _ => {
+    if (pendingExecution) return;
+    pendingExecution = true;
     Future.fork(
       response => {
-        const msg = Response.notFound(response)
-          ? i18n('energiatodistus.messages.not-found')
-          : i18n(
-              Maybe.orSome(
-                `energiatodistus.messages.${name}-error`,
-                Response.localizationKey(response)
-              )
-            );
-
-        flashMessageStore.add('Energiatodistus', 'error', msg);
+        pendingExecution = false;
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          i18n(Response.errorKey404('energiatodistus', name, response)));
       },
       _ => {
         onSuccess();
+        pendingExecution = false;
         flashMessageStore.add(
           'Energiatodistus',
           'success',
@@ -105,23 +106,15 @@
     );
   };
 
-  $: toggleTyojono = evt => {
-    if (pendingExecution) return;
-    execute(
-      (fetch, _, id) => {
-        pendingExecution = true;
-        return R.chain(
-          Future.after(200),
-          ValvontaApi.putValvonta(id, { pending: !valvonta.pending })
-        );
-      },
-      `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
-      _ => {
-        valvonta = { pending: !valvonta.pending };
-        pendingExecution = false;
-      }
-    )(evt);
-  };
+  $: toggleTyojono = execute(
+    (fetch, _, id) => R.chain(
+        Future.after(200),
+        ValvontaApi.putValvonta(id, { pending: !valvonta.pending })),
+    `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
+    _ => {
+      valvonta = R.over(R.lensProp('pending'), R.not, valvonta);
+    }
+  );
 
   const deleteEnergiatodistus = execute(
     api.deleteEnergiatodistus,
@@ -134,15 +127,19 @@
     'discard',
     cancel
   );
+
   $: undoDiscardEnergiatodistus = execute(
     api.undoDiscardEnergiatodistus,
     'undodiscard',
     cancel
   );
 
-  export let save = _ => {};
-  export let saveComplete = _ => {};
-  export let cancel = _ => {};
+  export let save = _ => {
+  };
+  export let saveComplete = _ => {
+  };
+  export let cancel = _ => {
+  };
 
   const openUrl = url => {
     window.open(url, '_blank');
@@ -367,6 +364,8 @@
   {#if pendingExecution}
     <div
       transition:fade|local={{ duration: 50 }}
-      class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0" />
+      class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0">
+        <Spinner />
+    </div>
   {/if}
 </div>
