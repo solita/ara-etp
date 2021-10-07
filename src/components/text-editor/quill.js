@@ -27,7 +27,7 @@ export const quill = (node, { html, toolbar }) => {
     theme: 'snow' // or 'bubble'
   });
 
-  q.clipboard.dangerouslyPasteHTML(html);
+  q.setContents(q.clipboard.convert(html), 'silent');
 
   const root = node.parentElement;
   const editor = node.getElementsByClassName('ql-editor')[0];
@@ -58,7 +58,8 @@ export const quill = (node, { html, toolbar }) => {
   root.addEventListener('focusout', focusout);
 
   return {
-    update: ({ html, _ }) => q.clipboard.dangerouslyPasteHTML(html),
+    update: ({ html, _ }) => q.setContents(
+      q.clipboard.convert(html), 'silent'),
     destroy: _ => {
       q.off('text-change', textChange);
       root.removeEventListener('focusout', focusout);
