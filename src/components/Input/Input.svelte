@@ -10,6 +10,7 @@
   export let name;
 
   export let label = '';
+  export let placeholder;
   export let caret = false;
   export let search = false;
   export let required = false;
@@ -98,6 +99,7 @@
         this={inputComponent}
         {id}
         {name}
+        {placeholder}
         {disabled}
         {center}
         {error}

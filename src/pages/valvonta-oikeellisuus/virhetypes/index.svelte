@@ -112,11 +112,14 @@
     <H1 text={i18n(i18nRoot + '.title')} />
 
     {#each Maybe.toArray(resources) as { virhetypes }}
-      <div class="my-4">
-        <div class="flex flex-col lg:w-2/3 w-full">
+      <div class="flex my-4">
+        <div class="lg:w-1/2 w-full">
           <Input
             model={Maybe.orSome('', searchKeyword)}
             inputComponentWrapper={PillInputWrapper}
+            placeholder={i18n(i18nRoot + '.search')}
+            label={i18n(i18nRoot + '.search')}
+            compact={true}
             search={true}
             on:input={evt => {
               cancel = R.compose(
