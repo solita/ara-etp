@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as MD from '@Component/text-editor/markdown';
+  import * as Schema from './schema';
 
   import { _ } from '@Language/i18n';
 
@@ -12,11 +13,18 @@
   const i18nRoot = 'valvonta.oikeellisuus.virhetypes';
 
   export let virhetypes;
+  export let newVirhetype;
   export let api;
   export let dirty;
 
+  const closeNew = _ => {
+    if (!dirty) {
+      newVirhetype = Maybe.None();
+    }
+  };
+
   let virheInEditMode = Maybe.None();
-  const close = _ => {
+  const closeEdit = _ => {
     if (!dirty) {
       virheInEditMode = Maybe.None();
     }
@@ -28,7 +36,27 @@
     }
   }
 
-  const toForm = R.evolve({ ordinal: Either.Right });
+  const toForm = R.evolve({
+    id: Maybe.Some,
+    ordinal: Either.Right
+  });
+
+  const serialize = R.evolve({ id: Maybe.get, ordinal: Either.right })
+
+  const editApi = {
+    save: virhetype => api.save(serialize(virhetype), api.reload),
+    cancel: api.reload,
+    close: closeEdit
+  }
+
+  const addApi = {
+    save: virhetype => api.add(serialize(R.dissoc('id', virhetype)), api.reload),
+    cancel: _ => {
+      newVirhetype = Maybe.Some(Schema.newVirhetype);
+      dirty = false;
+    },
+    close: closeNew
+  }
 </script>
 
 <style>
@@ -44,6 +72,15 @@
   </tr>
   </thead>
   <tbody class="etp-table--tbody">
+  {#each Maybe.toArray(newVirhetype) as virhetype}
+    <tr class="etp-table--tr">
+      <td colspan="4">
+        <TypeForm virhetype={R.assoc('id', Maybe.None(), toForm(virhetype))}
+                  bind:dirty
+                  api = {addApi} />
+      </td>
+    </tr>
+  {/each}
   {#each virhetypes as virhetype (virhetype.id)}
     {#if !Maybe.exists(R.equals(virhetype.id), virheInEditMode)}
       <tr class="etp-table--tr" class:etp-table--tr__link={!dirty}
@@ -67,7 +104,7 @@
         <td colspan="4">
           <TypeForm virhetype={toForm(virhetype)}
                     bind:dirty
-                    api = {R.assoc('close', close, api)} />
+                    api = {editApi} />
         </td>
       </tr>
     {/if}

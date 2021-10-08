@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Validation from '@Utility/validation';
   import * as Either from '@Utility/either-utils';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as Parsers from '@Utility/parsers';
   import { Virhetype as schema } from './schema';
 
@@ -30,12 +31,10 @@
     dirty = true;
   };
 
-  const serialize = R.evolve({ ordinal: Either.right })
-
   let form;
   const save = virhetype => {
     if (Validation.isValidForm(schema)(virhetype)) {
-      api.save(serialize(virhetype), api.reload);
+      api.save(virhetype);
     } else {
       flashMessageStore.add(
         'valvonta-oikeellisuus',
@@ -66,7 +65,7 @@
           lens={R.lensProp('id')}
           required={false}
           disabled={true}
-          parse={R.trim}
+          format={Maybe.orSome(i18n(i18nRoot + '.new-virhetype'))}
           {i18n}/>
     </div>
     <div class="w-1/6 py-4 px-2">
@@ -110,6 +109,7 @@
           lens={R.lensProp('label-sv')}
           required={true}
           parse={R.trim}
+          validators={schema['label-sv']}
           {i18n}/>
     </div>
     <div class="lg:w-1/2 w-full py-4 px-2">
@@ -122,6 +122,7 @@
           lens={R.lensProp('description-fi')}
           required={true}
           parse={R.trim}
+          validators={schema['description-fi']}
           {i18n}/>
     </div>
     <div class="lg:w-1/2 w-full py-4 px-2">
@@ -134,6 +135,7 @@
           lens={R.lensProp('description-sv')}
           required={true}
           parse={R.trim}
+          validators={schema['description-sv']}
           {i18n}/>
     </div>
     <div class="flex space-x-4 b-t-1 pt-4">
@@ -144,7 +146,7 @@
 
       <Button
           disabled={!dirty}
-          on:click={api.reload}
+          on:click={api.cancel}
           text={i18n(i18nRoot + '.cancel-button')}
           style={'secondary'}/>
 

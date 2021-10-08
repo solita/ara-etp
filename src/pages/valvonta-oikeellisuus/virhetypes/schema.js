@@ -13,4 +13,5 @@ export const newVirhetype = {
   'label-sv': '',
   'description-fi': '',
   'description-sv': '',
+  valid: true
 }

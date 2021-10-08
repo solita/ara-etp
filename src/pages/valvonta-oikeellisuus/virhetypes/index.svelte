@@ -4,6 +4,7 @@
   import * as Future from '@Utility/future-utils';
   import * as qs from 'qs';
   import * as Response from '@Utility/response';
+  import * as Schema from './schema';
 
   import * as VirhetyyppiApi from './api';
 
@@ -17,14 +18,18 @@
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import Table from './table.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
+  import TextButton from '@Component/Button/TextButton.svelte';
 
   const i18n = $_;
-  const i18nRoot = 'valvonta.oikeellisuus.virhetypes'
+  const i18nRoot = 'valvonta.oikeellisuus.virhetypes';
 
   let resources = Maybe.None();
   let overlay = true;
   let dirty = false;
-  let cancel = () => {};
+  let newVirhetype = Maybe.None();
+
+  let cancel = () => {
+  };
 
   const load = _ => {
     overlay = true;
@@ -39,6 +44,7 @@
       },
       response => {
         resources = Maybe.Some(response);
+        newVirhetype = Maybe.None();
         overlay = false;
         dirty = false;
       },
@@ -46,7 +52,7 @@
         virhetypes: VirhetyyppiApi.virhetyypit
       })
     );
-  }
+  };
   load();
 
   const matchSearch = R.curry((search, virhetyyppi) =>
@@ -79,7 +85,7 @@
     Future.fork(
       response => {
         flashMessageStore.add('valvonta-oikeellisuus', 'error',
-          Response.errorKey(i18nRoot, key, response));
+          i18n(Response.errorKey(i18nRoot, key, response)));
         overlay = false;
       },
       response => {
@@ -99,8 +105,14 @@
   const api = {
     reload: load,
     save: (virhetype, successCallback) =>
-      fork('save', successCallback, VirhetyyppiApi.putVirhetype(virhetype.id, virhetype))
-  }
+      fork('save', successCallback, VirhetyyppiApi.putVirhetype(virhetype.id, virhetype)),
+    add: (virhetype, successCallback) =>
+      fork('add', successCallback, VirhetyyppiApi.postVirhetype(virhetype)),
+  };
+
+  const addNewVirhetype = _ => {
+    newVirhetype = Maybe.Some(Schema.newVirhetype);
+  };
 </script>
 
 <style>
@@ -108,7 +120,15 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    <H1 text={i18n(i18nRoot + '.title')} />
+    <div class="flex justify-between">
+      <H1 text={i18n(i18nRoot + '.title')} />
+      <div class="font-bold">
+        <TextButton
+            icon="add_circle_outline"
+            text={i18n(i18nRoot + '.new-virhetype')}
+            on:click={addNewVirhetype} />
+      </div>
+    </div>
     <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { virhetypes }}
       <div class="flex my-4">
@@ -132,7 +152,7 @@
         </div>
       </div>
       <div class="mt-4">
-        <Table virhetypes={search(virhetypes)} {api} bind:dirty />
+        <Table virhetypes={search(virhetypes)} {api} bind:dirty bind:newVirhetype />
       </div>
     {/each}
   </div>

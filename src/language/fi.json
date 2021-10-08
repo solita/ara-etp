@@ -1513,6 +1513,7 @@
       "virhetypes": {
         "title": "Virhetyypit",
         "search": "Haku",
+        "new-virhetype": "Uusi virhetyyppi",
         "id": "Tunniste",
         "ordinal": "Järjestys",
         "valid": "Käytössä",
@@ -1527,6 +1528,8 @@
           "load-error": "Virhetyyppien tietojen haku epäonnistui.",
           "save-success": "Virhetyypin muutokset tallennettu.",
           "save-error": "Virhetyypin tallennus epäonnistui.",
+          "add-success": "Uusi virhetyyppi lisätty.",
+          "add-error": "Virhetyypin lisäys epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista virhetyypin tiedot ennen lähettämistä."
         }
       }
