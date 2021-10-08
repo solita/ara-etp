@@ -17,11 +17,15 @@
 
   let virheInEditMode = Maybe.None();
   const close = _ => {
-    virheInEditMode = Maybe.None();
+    if (!dirty) {
+      virheInEditMode = Maybe.None();
+    }
   };
 
   const edit = virhetype => {
-    virheInEditMode = Maybe.Some(virhetype.id);
+    if (!dirty) {
+      virheInEditMode = Maybe.Some(virhetype.id);
+    }
   }
 
   const toForm = R.evolve({ ordinal: Either.Right });
@@ -42,7 +46,7 @@
   <tbody class="etp-table--tbody">
   {#each virhetypes as virhetype (virhetype.id)}
     {#if !Maybe.exists(R.equals(virhetype.id), virheInEditMode)}
-      <tr class="etp-table--tr etp-table--tr__link"
+      <tr class="etp-table--tr" class:etp-table--tr__link={!dirty}
           on:click={_ => edit(virhetype)}>
 
           <td class="etp-table--td">

@@ -3,10 +3,9 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as qs from 'qs';
-  import { tick } from 'svelte';
+  import * as Response from '@Utility/response';
 
   import * as VirhetyyppiApi from './api';
-  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { replace, location, querystring } from 'svelte-spa-router';
   import { flashMessageStore } from '@/stores';
@@ -17,7 +16,7 @@
   import Input from '@Component/Input/Input';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import Table from './table.svelte';
-  import * as Response from '@Utility/response';
+  import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.virhetypes'
@@ -110,7 +109,7 @@
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     <H1 text={i18n(i18nRoot + '.title')} />
-
+    <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { virhetypes }}
       <div class="flex my-4">
         <div class="lg:w-1/2 w-full">
