@@ -222,6 +222,7 @@ export const parseYritys = R.curry(
 export const parseValvontaOikeellisuus = R.curry(
   (isDev, i18n, whoami, locationParts) => {
     if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
+    if (R.head(locationParts) === 'virhetypes') return [];
     if (R.length(locationParts) > 2) return [];
 
     return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
