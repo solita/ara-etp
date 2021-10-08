@@ -66,7 +66,8 @@
       },
       "oikeellisuus": {
         "all": "Oikeellisuuden valvonnat",
-        "valvonta": "Valvonta"
+        "valvonta": "Valvonta",
+        "virhetypes": "Virhetyypit"
       }
     },
     "confirmation": {
