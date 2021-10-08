@@ -1,6 +1,8 @@
 <script>
   import * as R from 'ramda';
   import * as Validation from '@Utility/validation';
+  import * as Either from '@Utility/either-utils';
+  import * as Parsers from '@Utility/parsers';
   import { Virhetype as schema } from './schema';
 
   import { _ } from '@Language/i18n';
@@ -28,10 +30,12 @@
     dirty = true;
   };
 
+  const serialize = R.evolve({ ordinal: Either.right })
+
   let form;
   const save = virhetype => {
     if (Validation.isValidForm(schema)(virhetype)) {
-      api.save(virhetype, api.reload);
+      api.save(serialize(virhetype), api.reload);
     } else {
       flashMessageStore.add(
         'valvonta-oikeellisuus',
@@ -71,9 +75,9 @@
           name={'ordinal'}
           label={i18n(i18nRoot + '.ordinal')}
           bind:model={virhetype}
-          lens={R.lensProp('id')}
+          lens={R.lensProp('ordinal')}
           required={true}
-          parse={R.trim}
+          parse={Parsers.parseInteger}
           {i18n}/>
     </div>
     <div class="w-4/6 py-4 px-4 flex justify-end flex-wrap content-center">

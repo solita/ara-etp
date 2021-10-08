@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as MD from '@Component/text-editor/markdown';
 
   import { _ } from '@Language/i18n';
@@ -22,6 +23,8 @@
   const edit = virhetype => {
     virheInEditMode = Maybe.Some(virhetype.id);
   }
+
+  const toForm = R.evolve({ ordinal: Either.Right });
 </script>
 
 <style>
@@ -58,7 +61,9 @@
     {:else}
       <tr class="etp-table--tr">
         <td colspan="4">
-          <TypeForm {virhetype} bind:dirty api = {R.assoc('close', close, api)} />
+          <TypeForm virhetype={toForm(virhetype)}
+                    bind:dirty
+                    api = {R.assoc('close', close, api)} />
         </td>
       </tr>
     {/if}
