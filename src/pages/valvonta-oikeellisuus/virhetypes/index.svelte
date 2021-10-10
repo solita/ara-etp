@@ -126,6 +126,7 @@
         <TextButton
             icon="add_circle_outline"
             text={i18n(i18nRoot + '.new-virhetype')}
+            disabled={dirty}
             on:click={addNewVirhetype} />
       </div>
     </div>
@@ -139,6 +140,7 @@
             placeholder={i18n(i18nRoot + '.search')}
             label={i18n(i18nRoot + '.search')}
             compact={true}
+            disabled={dirty}
             search={true}
             on:input={evt => {
               cancel = R.compose(
