@@ -44,6 +44,9 @@
       Validation.blurForm(form);
     }
   };
+
+  const canonizeWhitespace = R.replace(/\s+/g, ' ')
+  const parseLabel = R.compose(canonizeWhitespace, R.trim)
 </script>
 
 <style>
@@ -95,7 +98,7 @@
           bind:model={virhetype}
           lens={R.lensProp('label-fi')}
           required={true}
-          parse={R.trim}
+          parse={parseLabel}
           validators={schema['label-fi']}
           {i18n}/>
     </div>
@@ -108,7 +111,7 @@
           bind:model={virhetype}
           lens={R.lensProp('label-sv')}
           required={true}
-          parse={R.trim}
+          parse={parseLabel}
           validators={schema['label-sv']}
           {i18n}/>
     </div>
