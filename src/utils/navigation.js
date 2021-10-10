@@ -431,6 +431,10 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, whoami) => {
       {
         href: `#/yritys/all`,
         text: i18n('navigation.yritykset')
+      },
+      {
+        href: `#/valvonta/oikeellisuus/virhetypes`,
+        text: i18n('navigation.valvonta.oikeellisuus.virhetypes')
       }
     ];
   } else if (Kayttajat.isLaskuttaja(whoami)) {
