@@ -23,6 +23,10 @@
     }
   };
 
+  $: if (Maybe.isSome(newVirhetype)) {
+    closeEdit();
+  }
+
   let virheInEditMode = Maybe.None();
   const closeEdit = _ => {
     if (!dirty) {
