@@ -533,8 +533,8 @@ describe('Navigation', () => {
           text: 'Yritykset'
         },
         {
-          href: "#/valvonta/oikeellisuus/virhetypes",
-          text: "Virhetyypit"
+          href: '#/valvonta/oikeellisuus/virhetypes',
+          text: 'Virhetyypit'
         }
       ];
 

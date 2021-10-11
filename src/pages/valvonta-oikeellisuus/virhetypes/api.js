@@ -9,19 +9,17 @@ const url = {
 
 export const virhetypes = Fetch.getJson(fetch, url.virhetypes);
 
-export const postVirhetype = R.curry((virhetype) =>
+export const postVirhetype = R.curry(virhetype =>
   R.compose(
     Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.virhetypes)),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.virhetypes))
   )(virhetype)
 );
 
 export const putVirhetype = R.curry((id, virhetype) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'put', url.virhetype(id))
-    ),
+    Future.encaseP(Fetch.fetchWithMethod(fetch, 'put', url.virhetype(id))),
     R.dissoc('id')
   )(virhetype)
 );

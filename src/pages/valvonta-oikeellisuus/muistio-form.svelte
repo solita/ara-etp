@@ -75,7 +75,8 @@
         R.includes(R.__, R.pluck('type-id', toimenpide.virheet)),
         R.prop('id')
       ),
-      R.prop('valid')]),
+      R.prop('valid')
+    ]),
     virhetyypit
   );
 

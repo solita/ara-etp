@@ -28,8 +28,7 @@
   let dirty = false;
   let newVirhetype = Maybe.None();
 
-  let cancel = () => {
-  };
+  let cancel = () => {};
 
   const load = _ => {
     overlay = true;
@@ -60,19 +59,18 @@
       R.any(R.includes(R.compose(R.toLower, R.trim)(search))),
       R.map(R.toLower),
       R.values,
-      R.pick([
-        'label-fi',
-        'label-sv'
-      ])
+      R.pick(['label-fi', 'label-sv'])
     )(virhetyyppi)
   );
 
   $: searchKeyword = Maybe.fromEmpty(qs.parse($querystring).search);
 
-  $: search = tyypit => Maybe.fold(
-    tyypit,
-    search => R.filter(matchSearch(search), tyypit),
-    searchKeyword);
+  $: search = tyypit =>
+    Maybe.fold(
+      tyypit,
+      search => R.filter(matchSearch(search), tyypit),
+      searchKeyword
+    );
 
   $: R.compose(
     querystring => replace(`${$location}?${querystring}`),
@@ -84,8 +82,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-oikeellisuus', 'error',
-          i18n(Response.errorKey(i18nRoot, key, response)));
+        flashMessageStore.add(
+          'valvonta-oikeellisuus',
+          'error',
+          i18n(Response.errorKey(i18nRoot, key, response))
+        );
         overlay = false;
       },
       response => {
@@ -105,9 +106,13 @@
   const api = {
     reload: load,
     save: (virhetype, successCallback) =>
-      fork('save', successCallback, VirhetyyppiApi.putVirhetype(virhetype.id, virhetype)),
+      fork(
+        'save',
+        successCallback,
+        VirhetyyppiApi.putVirhetype(virhetype.id, virhetype)
+      ),
     add: (virhetype, successCallback) =>
-      fork('add', successCallback, VirhetyyppiApi.postVirhetype(virhetype)),
+      fork('add', successCallback, VirhetyyppiApi.postVirhetype(virhetype))
   };
 
   const addNewVirhetype = _ => {
@@ -124,10 +129,10 @@
       <H1 text={i18n(i18nRoot + '.title')} />
       <div class="font-bold">
         <TextButton
-            icon="add_circle_outline"
-            text={i18n(i18nRoot + '.new-virhetype')}
-            disabled={dirty}
-            on:click={addNewVirhetype} />
+          icon="add_circle_outline"
+          text={i18n(i18nRoot + '.new-virhetype')}
+          disabled={dirty}
+          on:click={addNewVirhetype} />
       </div>
     </div>
     <DirtyConfirmation {dirty} />
@@ -154,7 +159,11 @@
         </div>
       </div>
       <div class="mt-4">
-        <Table virhetypes={search(virhetypes)} {api} bind:dirty bind:newVirhetype />
+        <Table
+          virhetypes={search(virhetypes)}
+          {api}
+          bind:dirty
+          bind:newVirhetype />
       </div>
     {/each}
   </div>

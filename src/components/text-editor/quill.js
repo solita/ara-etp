@@ -58,8 +58,7 @@ export const quill = (node, { html, toolbar }) => {
   root.addEventListener('focusout', focusout);
 
   return {
-    update: ({ html, _ }) => q.setContents(
-      q.clipboard.convert(html), 'silent'),
+    update: ({ html, _ }) => q.setContents(q.clipboard.convert(html), 'silent'),
     destroy: _ => {
       q.off('text-change', textChange);
       root.removeEventListener('focusout', focusout);

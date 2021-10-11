@@ -45,119 +45,120 @@
     }
   };
 
-  const canonizeWhitespace = R.replace(/\s+/g, ' ')
-  const parseLabel = R.compose(canonizeWhitespace, R.trim)
+  const canonizeWhitespace = R.replace(/\s+/g, ' ');
+  const parseLabel = R.compose(canonizeWhitespace, R.trim);
 </script>
 
 <style>
 </style>
 
-<form id="virhetype-form"
-      bind:this={form}
-      on:submit|preventDefault={_ => save(virhetype)}
-      on:input={setDirty}
-      on:change={setDirty}
-      on:text-change={setDirty}>
+<form
+  id="virhetype-form"
+  bind:this={form}
+  on:submit|preventDefault={_ => save(virhetype)}
+  on:input={setDirty}
+  on:change={setDirty}
+  on:text-change={setDirty}>
   <div class="flex flex-wrap bg-light text-base m-2 p-2">
     <div class="w-1/6 py-4 px-2">
       <Input
-          id={'id'}
-          name={'id'}
-          label={i18n(i18nRoot + '.id')}
-          bind:model={virhetype}
-          lens={R.lensProp('id')}
-          required={false}
-          disabled={true}
-          format={Maybe.orSome(i18n(i18nRoot + '.new-virhetype'))}
-          {i18n}/>
+        id={'id'}
+        name={'id'}
+        label={i18n(i18nRoot + '.id')}
+        bind:model={virhetype}
+        lens={R.lensProp('id')}
+        required={false}
+        disabled={true}
+        format={Maybe.orSome(i18n(i18nRoot + '.new-virhetype'))}
+        {i18n} />
     </div>
     <div class="w-1/6 py-4 px-2">
       <Input
-          id={'ordinal'}
-          name={'ordinal'}
-          label={i18n(i18nRoot + '.ordinal')}
-          bind:model={virhetype}
-          lens={R.lensProp('ordinal')}
-          required={true}
-          parse={Parsers.parseInteger}
-          {i18n}/>
+        id={'ordinal'}
+        name={'ordinal'}
+        label={i18n(i18nRoot + '.ordinal')}
+        bind:model={virhetype}
+        lens={R.lensProp('ordinal')}
+        required={true}
+        parse={Parsers.parseInteger}
+        {i18n} />
     </div>
     <div class="w-4/6 py-4 px-4 flex justify-end flex-wrap content-center">
       <Checkbox
-          disabled={false}
-          label={i18n(`${i18nRoot}.valid`)}
-          bind:model={virhetype}
-          lens={R.lensProp('valid')}/>
+        disabled={false}
+        label={i18n(`${i18nRoot}.valid`)}
+        bind:model={virhetype}
+        lens={R.lensProp('valid')} />
     </div>
     <div class="lg:w-1/2 w-full py-4 px-2">
       <TextEditor
-          id={'label-fi'}
-          name={'label-fi'}
-          label={i18n(i18nRoot + '.label-fi')}
-          {toolbar}
-          bind:model={virhetype}
-          lens={R.lensProp('label-fi')}
-          required={true}
-          parse={parseLabel}
-          validators={schema['label-fi']}
-          {i18n}/>
+        id={'label-fi'}
+        name={'label-fi'}
+        label={i18n(i18nRoot + '.label-fi')}
+        {toolbar}
+        bind:model={virhetype}
+        lens={R.lensProp('label-fi')}
+        required={true}
+        parse={parseLabel}
+        validators={schema['label-fi']}
+        {i18n} />
     </div>
     <div class="lg:w-1/2 w-full py-4 px-2">
       <TextEditor
-          id={'label-sv'}
-          name={'label-sv'}
-          label={i18n(i18nRoot + '.label-sv')}
-          {toolbar}
-          bind:model={virhetype}
-          lens={R.lensProp('label-sv')}
-          required={true}
-          parse={parseLabel}
-          validators={schema['label-sv']}
-          {i18n}/>
+        id={'label-sv'}
+        name={'label-sv'}
+        label={i18n(i18nRoot + '.label-sv')}
+        {toolbar}
+        bind:model={virhetype}
+        lens={R.lensProp('label-sv')}
+        required={true}
+        parse={parseLabel}
+        validators={schema['label-sv']}
+        {i18n} />
     </div>
     <div class="lg:w-1/2 w-full py-4 px-2">
       <TextEditor
-          id={'description-fi'}
-          name={'description-fi'}
-          label={i18n(i18nRoot + '.description-fi')}
-          {toolbar}
-          bind:model={virhetype}
-          lens={R.lensProp('description-fi')}
-          required={true}
-          parse={R.trim}
-          validators={schema['description-fi']}
-          {i18n}/>
+        id={'description-fi'}
+        name={'description-fi'}
+        label={i18n(i18nRoot + '.description-fi')}
+        {toolbar}
+        bind:model={virhetype}
+        lens={R.lensProp('description-fi')}
+        required={true}
+        parse={R.trim}
+        validators={schema['description-fi']}
+        {i18n} />
     </div>
     <div class="lg:w-1/2 w-full py-4 px-2">
       <TextEditor
-          id={'description-sv'}
-          name={'description-sv'}
-          label={i18n(i18nRoot + '.description-sv')}
-          {toolbar}
-          bind:model={virhetype}
-          lens={R.lensProp('description-sv')}
-          required={true}
-          parse={R.trim}
-          validators={schema['description-sv']}
-          {i18n}/>
+        id={'description-sv'}
+        name={'description-sv'}
+        label={i18n(i18nRoot + '.description-sv')}
+        {toolbar}
+        bind:model={virhetype}
+        lens={R.lensProp('description-sv')}
+        required={true}
+        parse={R.trim}
+        validators={schema['description-sv']}
+        {i18n} />
     </div>
     <div class="flex space-x-4 b-t-1 pt-4">
       <Button
-          disabled={!dirty}
-          type={'submit'}
-          text={i18n(i18nRoot + '.save-button')}/>
+        disabled={!dirty}
+        type={'submit'}
+        text={i18n(i18nRoot + '.save-button')} />
 
       <Button
-          disabled={!dirty}
-          on:click={api.cancel}
-          text={i18n(i18nRoot + '.cancel-button')}
-          style={'secondary'}/>
+        disabled={!dirty}
+        on:click={api.cancel}
+        text={i18n(i18nRoot + '.cancel-button')}
+        style={'secondary'} />
 
       <Button
-          disabled={dirty}
-          on:click={api.close}
-          text={i18n(i18nRoot + '.close-button')}
-          style={'secondary'}/>
+        disabled={dirty}
+        on:click={api.close}
+        text={i18n(i18nRoot + '.close-button')}
+        style={'secondary'} />
     </div>
   </div>
 </form>

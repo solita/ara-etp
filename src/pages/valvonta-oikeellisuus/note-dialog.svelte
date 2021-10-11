@@ -36,7 +36,9 @@
       Future.fork(
         response => {
           addPending = false;
-          error = Maybe.Some(i18n(Response.errorKey(i18nRoot, 'add', response)));
+          error = Maybe.Some(
+            i18n(Response.errorKey(i18nRoot, 'add', response))
+          );
         },
         _ => {
           addPending = false;
