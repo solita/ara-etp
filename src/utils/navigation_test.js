@@ -24,6 +24,7 @@ describe('Navigation', () => {
     'navigation.valvonta.valvonta': 'Valvonta',
     'navigation.valvonta.oikeellisuus.all': 'Oikeellisuuden valvonta',
     'navigation.valvonta.oikeellisuus.valvonta': 'Valvonta',
+    'navigation.valvonta.oikeellisuus.virhetypes': 'Virhetyypit',
     'navigation.valvonta.kaytto.all': 'Käytönvalvonta'
   });
 
@@ -530,6 +531,10 @@ describe('Navigation', () => {
         {
           href: `#/yritys/all`,
           text: 'Yritykset'
+        },
+        {
+          href: "#/valvonta/oikeellisuus/virhetypes",
+          text: "Virhetyypit"
         }
       ];
 

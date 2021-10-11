@@ -425,15 +425,15 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, whoami) => {
   if (Kayttajat.isPaakayttaja(whoami)) {
     return [
       {
-        href: `#/kayttaja/all`,
+        href: '#/kayttaja/all',
         text: i18n('navigation.kayttajat')
       },
       {
-        href: `#/yritys/all`,
+        href: '#/yritys/all',
         text: i18n('navigation.yritykset')
       },
       {
-        href: `#/valvonta/oikeellisuus/virhetypes`,
+        href: '#/valvonta/oikeellisuus/virhetypes',
         text: i18n('navigation.valvonta.oikeellisuus.virhetypes')
       }
     ];
