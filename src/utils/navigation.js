@@ -222,6 +222,7 @@ export const parseYritys = R.curry(
 export const parseValvontaOikeellisuus = R.curry(
   (isDev, i18n, whoami, locationParts) => {
     if (R.head(locationParts) === 'all') return parseRoot(isDev, i18n, whoami);
+    if (R.head(locationParts) === 'virhetypes') return [];
     if (R.length(locationParts) > 2) return [];
 
     return parseEnergiatodistus(isDev, i18n, whoami, locationParts);
@@ -424,12 +425,16 @@ export const roleBasedHeaderMenuLinks = R.curry((i18n, whoami) => {
   if (Kayttajat.isPaakayttaja(whoami)) {
     return [
       {
-        href: `#/kayttaja/all`,
+        href: '#/kayttaja/all',
         text: i18n('navigation.kayttajat')
       },
       {
-        href: `#/yritys/all`,
+        href: '#/yritys/all',
         text: i18n('navigation.yritykset')
+      },
+      {
+        href: '#/valvonta/oikeellisuus/virhetypes',
+        text: i18n('navigation.valvonta.oikeellisuus.virhetypes')
       }
     ];
   } else if (Kayttajat.isLaskuttaja(whoami)) {

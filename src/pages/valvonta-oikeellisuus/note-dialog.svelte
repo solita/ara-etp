@@ -36,13 +36,9 @@
       Future.fork(
         response => {
           addPending = false;
-          const msg = i18n(
-            Maybe.orSome(
-              `${i18nRoot}.messages.add-error`,
-              Response.localizationKey(response)
-            )
+          error = Maybe.Some(
+            i18n(Response.errorKey(i18nRoot, 'add', response))
           );
-          error = Maybe.Some(msg);
         },
         _ => {
           addPending = false;
@@ -56,7 +52,7 @@
         ValvontaApi.postNote(id, note)
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurForm(form);
     }
   };

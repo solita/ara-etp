@@ -66,6 +66,15 @@ export const valvontaOikeellisuusCrumb = R.curry(
         ])
       ],
       [
+        R.equals('virhetypes'),
+        R.always([
+          {
+            url: `#/valvonta/oikeellisuus/virhetypes`,
+            label: i18n('navigation.valvonta.oikeellisuus.virhetypes')
+          }
+        ])
+      ],
+      [
         R.T,
         R.always([
           energiatodistukset(i18n),

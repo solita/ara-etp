@@ -11,6 +11,7 @@
   import * as Toimenpiteet from './toimenpiteet';
 
   import * as ValvontaApi from './valvonta-api';
+  import * as VirhetyyppiApi from './virhetypes/api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
 
@@ -56,7 +57,7 @@
       Future.parallelObject(5, {
         whoami: KayttajaApi.whoami,
         templatesByType: ValvontaApi.templatesByType,
-        virhetyypit: ValvontaApi.virhetyypit,
+        virhetyypit: VirhetyyppiApi.virhetypes,
         severities: ValvontaApi.severities,
         liitteet: ValvontaApi.getLiitteet(params.id, params['toimenpide-id']),
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])

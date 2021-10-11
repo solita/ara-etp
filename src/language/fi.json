@@ -66,7 +66,8 @@
       },
       "oikeellisuus": {
         "all": "Oikeellisuuden valvonnat",
-        "valvonta": "Valvonta"
+        "valvonta": "Valvonta",
+        "virhetypes": "Virhetyypit"
       }
     },
     "confirmation": {
@@ -1508,6 +1509,29 @@
           "add-success": "Uusi muistiinpano lisätty.",
           "add-error": "Muistiinpanon lisääminen epäonnistui.",
           "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä."
+        }
+      },
+      "virhetypes": {
+        "title": "Virhetyypit",
+        "search": "Haku",
+        "new-virhetype": "Uusi virhetyyppi",
+        "id": "Tunniste",
+        "ordinal": "Järjestys",
+        "valid": "Käytössä",
+        "label-fi": "Otsikko (fi)",
+        "label-sv": "Otsikko (sv)",
+        "description-fi": "Kuvaus (fi)",
+        "description-sv": "Kuvaus (sv)",
+        "save-button": "Tallenna",
+        "cancel-button": "Peru muutokset",
+        "close-button": "Sulje",
+        "messages": {
+          "load-error": "Virhetyyppien tietojen haku epäonnistui.",
+          "save-success": "Virhetyypin muutokset tallennettu.",
+          "save-error": "Virhetyypin tallennus epäonnistui.",
+          "add-success": "Uusi virhetyyppi lisätty.",
+          "add-error": "Virhetyypin lisäys epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista virhetyypin tiedot ennen lähettämistä."
         }
       }
     },

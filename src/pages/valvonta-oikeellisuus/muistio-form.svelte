@@ -69,11 +69,14 @@
   };
 
   $: newVirhetypes = R.filter(
-    R.compose(
-      R.not,
-      R.includes(R.__, R.pluck('type-id', toimenpide.virheet)),
-      R.prop('id')
-    ),
+    R.allPass([
+      R.compose(
+        R.not,
+        R.includes(R.__, R.pluck('type-id', toimenpide.virheet)),
+        R.prop('id')
+      ),
+      R.prop('valid')
+    ]),
     virhetyypit
   );
 
