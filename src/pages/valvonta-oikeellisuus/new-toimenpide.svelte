@@ -1,12 +1,8 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
-  import * as Parsers from '@Utility/parsers';
-  import * as Formats from '@Utility/formats';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Validation from '@Utility/validation';
 
   import { flashMessageStore } from '@/stores';
   import * as Router from '@Component/Router/router';
@@ -15,6 +11,7 @@
   import * as Links from './links';
 
   import * as ValvontaApi from './valvonta-api';
+  import * as VirhetypeApi from './virhetypes/api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';
@@ -49,7 +46,7 @@
     },
     Future.parallelObject(4, {
       whoami: KayttajaApi.whoami,
-      virhetyypit: ValvontaApi.virhetyypit,
+      virhetyypit: VirhetypeApi.virhetypes,
       severities: ValvontaApi.severities,
       templatesByType: ValvontaApi.templatesByType
     })
