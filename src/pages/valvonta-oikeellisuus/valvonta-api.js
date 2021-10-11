@@ -91,11 +91,6 @@ export const toimenpidetyypit = Fetch.cached(
   '/valvonta/oikeellisuus/toimenpidetyypit'
 );
 
-export const virhetyypit = Fetch.cached(
-  fetch,
-  '/valvonta/oikeellisuus/virhetyypit'
-);
-
 export const severities = Fetch.cached(
   fetch,
   '/valvonta/oikeellisuus/severities'

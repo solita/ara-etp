@@ -57,7 +57,7 @@
       Future.parallelObject(5, {
         whoami: KayttajaApi.whoami,
         templatesByType: ValvontaApi.templatesByType,
-        virhetyypit: VirhetyyppiApi.virhetyypit,
+        virhetyypit: VirhetyyppiApi.virhetypes,
         severities: ValvontaApi.severities,
         liitteet: ValvontaApi.getLiitteet(params.id, params['toimenpide-id']),
         toimenpide: ValvontaApi.toimenpide(params.id, params['toimenpide-id'])

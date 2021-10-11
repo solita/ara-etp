@@ -49,7 +49,7 @@
         dirty = false;
       },
       Future.parallelObject(1, {
-        virhetypes: VirhetyyppiApi.virhetyypit
+        virhetypes: VirhetyyppiApi.virhetypes
       })
     );
   };
