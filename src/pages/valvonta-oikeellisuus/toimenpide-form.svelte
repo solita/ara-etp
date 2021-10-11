@@ -115,7 +115,6 @@
       disabled={!Toimenpiteet.isDraft(toimenpide) || !dirty}
       on:click={cancel}
       text={text(toimenpide, 'reset-button')}
-      type={'reset'}
       style={'secondary'} />
 
     {#if !R.isEmpty(templates) && Maybe.isSome(preview)}
