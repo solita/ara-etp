@@ -223,10 +223,10 @@
       </div>
 
       <div class="lg:w-1/2 w-full px-4 py-4 flex flex-wrap">
-        <div class="w-full px-4">
+        <div class="w-full">
           <Label label={i18n(i18nRoot + '.voimassaolo-paattymisaika.label')}/>
         </div>
-        <div class="lg:w-1/3 w-full px-4 flex flex-row">
+        <div class="lg:w-1/3 w-full">
           <Datepicker
               label={i18n(i18nRoot + '.voimassaolo-paattymisaika.after')}
               compact="true"
@@ -236,8 +236,8 @@
               transform={Maybe.Some}
               format={Maybe.fold('', Formats.formatDateInstant)}/>
         </div>
-        <span class="w-min">-</span>
-        <div class="lg:w-1/3 w-full px-4">
+        <span class="w-min px-4 invisible lg:visible">-</span>
+        <div class="lg:w-1/3 w-full">
           <Datepicker
               label={i18n(i18nRoot + '.voimassaolo-paattymisaika.before')}
               compact="true"
