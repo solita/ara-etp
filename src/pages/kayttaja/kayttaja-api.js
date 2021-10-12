@@ -7,7 +7,7 @@ import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as Parsers from '@Utility/parsers';
 
-const deserialize = R.evolve({
+export const deserialize = R.evolve({
   login: R.compose(
     R.chain(Either.toMaybe),
     R.map(Parsers.parseISODate),
@@ -18,14 +18,17 @@ const deserialize = R.evolve({
   virtu: Maybe.fromNull
 });
 
-const deserializeLaatija = R.compose(
+export const deserializeLaatija = R.compose(
   R.assoc('api-key', Maybe.None()),
   R.evolve({
     'vastaanottajan-tarkenne': Maybe.fromNull,
-    henkilotunnus: Maybe.fromNull,
     maa: Either.Right,
     toimintaalue: Maybe.fromNull,
-    wwwosoite: Maybe.fromNull
+    wwwosoite: Maybe.fromNull,
+
+    // we assume that these dates are always valid from backend
+    'toteamispaivamaara': R.compose(Either.right, Parsers.parseISODate),
+    'voimassaolo-paattymisaika': R.compose(Either.right, Parsers.parseISODate)
   })
 );
 
