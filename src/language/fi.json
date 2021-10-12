@@ -300,7 +300,12 @@
     "voimassaolo": "Voimassaolo",
     "patevyystaso": "Pätevyystaso",
     "toimintaalue": "Päätoimintaalue",
-    "keyword-search": "Tekstihaku",
+    "keyword-search": "Tekstihaku (nimi, hetu, yhteystiedot)",
+    "voimassaolo-paattymisaika": {
+      "label": "Pätevyyden päättymisaika",
+      "after": "Voimassaolo päättyy myöhemmin tai samana päivänä kuin",
+      "before": "Voimassaolo päättyy aikaisemmin tai samana päivänä kuin"
+    },
     "filters": {
       "label": "Tila",
       "all": "Kaikki",

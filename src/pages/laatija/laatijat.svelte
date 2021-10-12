@@ -9,6 +9,7 @@
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as dfns from 'date-fns';
 
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as YritysApi from '@Pages/yritys/yritys-api';
@@ -20,15 +21,18 @@
   import { flashMessageStore } from '@/stores';
 
   import Input from '@Component/Input/Input';
+  import Datepicker from '@Component/Input/Datepicker.svelte';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import H1 from '@Component/H/H1';
   import Select from '@Component/Select/Select';
   import Results from './laatijat-results.svelte';
+  import Label from '../../components/Label/Label.svelte';
 
   const i18n = $_;
   const i18nRoot = 'laatijat';
   let resources = Maybe.None();
-  let cancel = () => {};
+  let cancel = () => {
+  };
 
   // Load all page resources
   Future.fork(
@@ -37,7 +41,7 @@
         i18n(Response.errorKey404(i18nRoot, 'load', response)));
     },
     response => {
-      resources = Maybe.Some(response)
+      resources = Maybe.Some(response);
     },
     Future.parallelObject(5, {
       laatijat: LaatijaApi.laatijat,
@@ -62,6 +66,15 @@
     Either.toMaybe,
     Parsers.parseInteger);
 
+  const parseISODate = R.compose(
+    Either.toMaybe,
+    Parsers.parseISODate);
+
+  const parseDate = R.compose(
+    R.chain(Either.toMaybe),
+    R.map(Parsers.parseDate),
+    Parsers.optionalString);
+
   const formatFilter = state => i18n('laatijat.filters.' + state);
 
   const keywordSearch = search =>
@@ -73,7 +86,7 @@
       R.pick([
         'etunimi', 'sukunimi',
         'henkilotunnus', 'email',
-        'postinumero', 'postitoimipaikka',
+        'jakeluosoite', 'postinumero', 'postitoimipaikka',
         'puhelin'
       ]),
       R.evolve({
@@ -86,6 +99,8 @@
     filter: Maybe.None(),
     'patevyystaso-id': Maybe.None(),
     'toimintaalue-id': Maybe.None(),
+    'voimassaolo-paattymisaika-after': Maybe.None(),
+    'voimassaolo-paattymisaika-before': Maybe.None(),
     page: 1
   };
 
@@ -97,10 +112,14 @@
       page: R.compose(Maybe.orSome(1), parseInt),
       filter: parseInt,
       'patevyystaso-id': parseInt,
-      'toimintaalue-id': parseInt
+      'toimintaalue-id': parseInt,
+      'voimassaolo-paattymisaika-after': parseISODate,
+      'voimassaolo-paattymisaika-before': parseISODate
     }),
     R.pick(['search', 'page', 'filter',
-      'patevyystaso-id', 'toimintaalue-id'])
+      'patevyystaso-id', 'toimintaalue-id',
+      'voimassaolo-paattymisaika-after',
+      'voimassaolo-paattymisaika-before'])
   )(qs.parse($querystring));
 
   // update querystring from query
@@ -114,6 +133,9 @@
     })
   )(query);
 
+  const isAfter = d2 => d1 => dfns.isAfter(d1, d2);
+  const isBefore = d2 => d1 => dfns.isBefore(d1, d2);
+
   // predicate from query
   const predicate = R.compose(
     R.allPass,
@@ -123,15 +145,19 @@
       search: R.map(keywordSearch),
       filter: R.map(R.nth(R.__, filters)),
       'patevyystaso-id': R.map(R.propEq('patevyystaso')),
-      'toimintaalue-id': R.map(R.compose(R.propEq('toimintaalue'), Maybe.Some))
+      'toimintaalue-id': R.map(R.compose(R.propEq('toimintaalue'), Maybe.Some)),
+      'voimassaolo-paattymisaika-after': R.map(d => R.propSatisfies(isAfter(d), 'voimassaolo-paattymisaika')),
+      'voimassaolo-paattymisaika-before': R.map(d => R.propSatisfies(isBefore(d), 'voimassaolo-paattymisaika'))
     }),
     R.pick(['search', 'filter',
-      'patevyystaso-id', 'toimintaalue-id'])
-  )
+      'patevyystaso-id', 'toimintaalue-id',
+      'voimassaolo-paattymisaika-after',
+      'voimassaolo-paattymisaika-before'])
+  );
 
   const toPage = nextPage => {
     query = R.assoc('page', nextPage, query);
-  }
+  };
 </script>
 
 <div class="w-full mt-3">
@@ -139,27 +165,6 @@
 
   {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami }}
     <div class="flex flex-wrap">
-      <div class="lg:w-1/2 w-full px-4 py-4">
-        <Input
-            label={i18n(i18nRoot + '.keyword-search')}
-            compact="true"
-            model={Maybe.orSome('', query.search)}
-            inputComponentWrapper={PillInputWrapper}
-            search={true}
-            on:input={evt => {
-            cancel = R.compose(
-              Future.value(val => {
-                query = R.mergeRight(query, {
-                  search: Maybe.Some(val),
-                  page: 0
-                });
-              }),
-              Future.after(200),
-              R.tap(cancel)
-            )(evt.target.value);
-          }}/>
-      </div>
-
       <div class="lg:w-1/3 w-full px-4 py-4">
         <Select
           label={i18n(i18nRoot + '.filters.label')}
@@ -194,6 +199,52 @@
             parse={Maybe.Some}
             noneLabel={i18nRoot + '.filters.all'}
             items={R.pluck('id', toimintaalueet)} />
+      </div>
+
+      <div class="lg:w-1/2 w-full px-4 py-4">
+        <Input
+            label={i18n(i18nRoot + '.keyword-search')}
+            model={Maybe.orSome('', query.search)}
+            search={true}
+            on:input={evt => {
+            cancel = R.compose(
+              Future.value(val => {
+                query = R.mergeRight(query, {
+                  search: Maybe.Some(val),
+                  page: 0
+                });
+              }),
+              Future.after(200),
+              R.tap(cancel)
+            )(evt.target.value);
+          }}/>
+      </div>
+
+      <div class="lg:w-1/2 w-full px-4 py-4 flex flex-wrap">
+        <div class="w-full px-4">
+          <Label label={i18n(i18nRoot + '.voimassaolo-paattymisaika.label')}/>
+        </div>
+        <div class="lg:w-1/3 w-full px-4 flex flex-row">
+          <Datepicker
+              label={i18n(i18nRoot + '.voimassaolo-paattymisaika.after')}
+              compact="true"
+              bind:model={query}
+              lens={R.lensProp('voimassaolo-paattymisaika-after')}
+              parse={parseDate}
+              transform={Maybe.Some}
+              format={Maybe.fold('', Formats.formatDateInstant)}/>
+        </div>
+        <span class="w-min">-</span>
+        <div class="lg:w-1/3 w-full px-4">
+          <Datepicker
+              label={i18n(i18nRoot + '.voimassaolo-paattymisaika.before')}
+              compact="true"
+              bind:model={query}
+              lens={R.lensProp('voimassaolo-paattymisaika-before')}
+              parse={parseDate}
+              transform={Maybe.Some}
+              format={Maybe.fold('', Formats.formatDateInstant)}/>
+        </div>
       </div>
     </div>
 
