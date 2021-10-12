@@ -117,6 +117,10 @@
       );
     }
   };
+
+  const formatPatevyydenVoimassaoloaika = laatija =>
+    formats.formatDateInstant(laatija.toteamispaivamaara) + ' - ' +
+    formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika'])
 </script>
 
 <form on:submit|preventDefault={validateAndSubmit}>
@@ -307,9 +311,7 @@
           name={'patevyydenvoimassaolo'}
           label={i18n('laatija.patevyydenvoimassaolo')}
           bind:model={laatija}
-          lens={R.lensProp('toteamispaivamaara')}
-          format={formats.formatPatevyydenVoimassaoloaika}
-          parse={R.always(R.prop('toteamispaivamaara', laatija))}
+          format={formatPatevyydenVoimassaoloaika}
           disabled={true}
           required={true}
           {i18n} />

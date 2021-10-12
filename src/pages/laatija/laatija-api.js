@@ -51,6 +51,7 @@ export const serialize = R.compose(
     'rooli',
     'passivoitu',
     'voimassaolo-paattymisaika',
+    'toteamispaivamaara',
     'voimassa'
   ])
 );
