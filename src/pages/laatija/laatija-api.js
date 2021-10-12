@@ -104,11 +104,8 @@ export const laskutusosoitteet = R.compose(
   url.laskutusosoitteet
 );
 
-export const laatijat = R.compose(
-  R.map(
-    R.map(R.compose(
-      KayttajaApi.deserialize,
-      KayttajaApi.deserializeLaatija))),
+export const laatijat = R.map(
+  R.map(R.compose(KayttajaApi.deserialize, KayttajaApi.deserializeLaatija)),
   Fetch.getJson(fetch, url.laatijat)
 );
 
