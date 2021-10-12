@@ -84,6 +84,7 @@
   const defaultQuery = {
     search: Maybe.None(),
     filter: Maybe.None(),
+    'patevyystaso-id': Maybe.None(),
     page: 1
   };
 
@@ -93,9 +94,10 @@
     R.evolve({
       search: Maybe.fromEmpty,
       page: R.compose(Maybe.orSome(1), parseInt),
-      filter: parseInt
+      filter: parseInt,
+      'patevyystaso-id': parseInt
     }),
-    R.pick(['search', 'page', 'filter'])
+    R.pick(['search', 'page', 'filter', 'patevyystaso-id'])
   )(qs.parse($querystring));
 
   // update querystring from query
@@ -110,15 +112,16 @@
   )(query);
 
   // predicate from query
-  const predicate = R.compose(
+  const predicate = patevyydet => R.compose(
     R.allPass,
     Maybe.findAllSome,
     R.values,
     R.evolve({
       search: R.map(keywordSearch),
-      filter: R.map(R.nth(R.__, filters))
+      filter: R.map(R.nth(R.__, filters)),
+      'patevyystaso-id': R.map(R.propEq('patevyystaso'))
     }),
-    R.pick(['search', 'filter'])
+    R.pick(['search', 'filter', 'patevyystaso-id'])
   )
 
   const toPage = nextPage => {
@@ -130,8 +133,8 @@
   <H1 text={i18n(i18nRoot + '.title')} />
 
   {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami }}
-    <div class="flex lg:flex-row flex-col -mx-4 my-4">
-      <div class="lg:w-2/3 w-full px-4 lg:pt-10">
+    <div class="flex flex-wrap flex-col">
+      <div class="lg:w-1/2 w-full px-4">
         <Input
           model={Maybe.orSome('', query.search)}
           inputComponentWrapper={PillInputWrapper}
@@ -161,10 +164,22 @@
           noneLabel={i18nRoot + '.filters.all'}
           items={R.range(0, R.length(filters))} />
       </div>
+
+      <div class="lg:w-1/3 w-full px-4 py-4">
+        <Select
+            label={i18n(i18nRoot + '.patevyystaso')}
+            disabled={false}
+            bind:model={query}
+            lens={R.lensProp('patevyystaso-id')}
+            format={Locales.labelForId($locale, patevyydet)}
+            parse={Maybe.Some}
+            noneLabel={i18nRoot + '.filters.all'}
+            items={R.pluck('id', patevyydet)} />
+      </div>
     </div>
 
     <div>
-      <Results laatijat={R.filter(predicate(query), laatijat)}
+      <Results laatijat={R.filter(predicate(patevyydet)(query), laatijat)}
                page={query.page}
                {toPage}
                {yritykset}

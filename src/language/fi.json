@@ -298,6 +298,7 @@
     "results": "Tuloksia {count} KPL",
     "kaikki": "Kaikki",
     "voimassaolo": "Voimassaolo",
+    "patevyystaso": "Pätevyystaso",
     "filters": {
       "label": "Tila",
       "all": "Kaikki",
