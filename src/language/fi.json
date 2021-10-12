@@ -299,6 +299,8 @@
     "kaikki": "Kaikki",
     "voimassaolo": "Voimassaolo",
     "patevyystaso": "Pätevyystaso",
+    "toimintaalue": "Päätoimintaalue",
+    "keyword-search": "Tekstihaku",
     "filters": {
       "label": "Tila",
       "all": "Kaikki",

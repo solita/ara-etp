@@ -85,6 +85,7 @@
     search: Maybe.None(),
     filter: Maybe.None(),
     'patevyystaso-id': Maybe.None(),
+    'toimintaalue-id': Maybe.None(),
     page: 1
   };
 
@@ -95,9 +96,11 @@
       search: Maybe.fromEmpty,
       page: R.compose(Maybe.orSome(1), parseInt),
       filter: parseInt,
-      'patevyystaso-id': parseInt
+      'patevyystaso-id': parseInt,
+      'toimintaalue-id': parseInt
     }),
-    R.pick(['search', 'page', 'filter', 'patevyystaso-id'])
+    R.pick(['search', 'page', 'filter',
+      'patevyystaso-id', 'toimintaalue-id'])
   )(qs.parse($querystring));
 
   // update querystring from query
@@ -112,16 +115,18 @@
   )(query);
 
   // predicate from query
-  const predicate = patevyydet => R.compose(
+  const predicate = R.compose(
     R.allPass,
     Maybe.findAllSome,
     R.values,
     R.evolve({
       search: R.map(keywordSearch),
       filter: R.map(R.nth(R.__, filters)),
-      'patevyystaso-id': R.map(R.propEq('patevyystaso'))
+      'patevyystaso-id': R.map(R.propEq('patevyystaso')),
+      'toimintaalue-id': R.map(R.compose(R.propEq('toimintaalue'), Maybe.Some))
     }),
-    R.pick(['search', 'filter', 'patevyystaso-id'])
+    R.pick(['search', 'filter',
+      'patevyystaso-id', 'toimintaalue-id'])
   )
 
   const toPage = nextPage => {
@@ -133,13 +138,15 @@
   <H1 text={i18n(i18nRoot + '.title')} />
 
   {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami }}
-    <div class="flex flex-wrap flex-col">
-      <div class="lg:w-1/2 w-full px-4">
+    <div class="flex flex-wrap">
+      <div class="lg:w-1/2 w-full px-4 py-4">
         <Input
-          model={Maybe.orSome('', query.search)}
-          inputComponentWrapper={PillInputWrapper}
-          search={true}
-          on:input={evt => {
+            label={i18n(i18nRoot + '.keyword-search')}
+            compact="true"
+            model={Maybe.orSome('', query.search)}
+            inputComponentWrapper={PillInputWrapper}
+            search={true}
+            on:input={evt => {
             cancel = R.compose(
               Future.value(val => {
                 query = R.mergeRight(query, {
@@ -150,7 +157,7 @@
               Future.after(200),
               R.tap(cancel)
             )(evt.target.value);
-          }} />
+          }}/>
       </div>
 
       <div class="lg:w-1/3 w-full px-4 py-4">
@@ -176,10 +183,22 @@
             noneLabel={i18nRoot + '.filters.all'}
             items={R.pluck('id', patevyydet)} />
       </div>
+
+      <div class="lg:w-1/3 w-full px-4 py-4">
+        <Select
+            label={i18n(i18nRoot + '.toimintaalue')}
+            disabled={false}
+            bind:model={query}
+            lens={R.lensProp('toimintaalue-id')}
+            format={Locales.labelForId($locale, toimintaalueet)}
+            parse={Maybe.Some}
+            noneLabel={i18nRoot + '.filters.all'}
+            items={R.pluck('id', toimintaalueet)} />
+      </div>
     </div>
 
     <div>
-      <Results laatijat={R.filter(predicate(patevyydet)(query), laatijat)}
+      <Results laatijat={R.filter(predicate(query), laatijat)}
                page={query.page}
                {toPage}
                {yritykset}
