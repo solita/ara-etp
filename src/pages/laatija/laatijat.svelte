@@ -141,14 +141,14 @@
     R.allPass,
     Maybe.findAllSome,
     R.values,
-    R.evolve({
-      search: R.map(keywordSearch),
-      filter: R.map(R.nth(R.__, filters)),
-      'patevyystaso-id': R.map(R.propEq('patevyystaso')),
-      'toimintaalue-id': R.map(R.compose(R.propEq('toimintaalue'), Maybe.Some)),
-      'voimassaolo-paattymisaika-after': R.map(d => R.propSatisfies(isAfter(d), 'voimassaolo-paattymisaika')),
-      'voimassaolo-paattymisaika-before': R.map(d => R.propSatisfies(isBefore(d), 'voimassaolo-paattymisaika'))
-    }),
+    R.evolve(R.map(R.map, {
+      search: keywordSearch,
+      filter: R.nth(R.__, filters),
+      'patevyystaso-id': R.propEq('patevyystaso'),
+      'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
+      'voimassaolo-paattymisaika-after': d => R.propSatisfies(isAfter(d), 'voimassaolo-paattymisaika'),
+      'voimassaolo-paattymisaika-before': d => R.propSatisfies(isBefore(d), 'voimassaolo-paattymisaika')
+    })),
     R.pick(['search', 'filter',
       'patevyystaso-id', 'toimintaalue-id',
       'voimassaolo-paattymisaika-after',
