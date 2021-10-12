@@ -9,6 +9,11 @@
   export let value = new Date();
 
   let input;
+
+  /**
+   * @deprecated use input/datepicker instead of this
+   * TODO: remove this
+   */
 </script>
 
 <style>
