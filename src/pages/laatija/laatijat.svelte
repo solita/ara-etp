@@ -8,7 +8,6 @@
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
-  import * as Kayttajat from '@Utility/kayttajat';
   import * as dfns from 'date-fns';
 
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
@@ -22,7 +21,6 @@
 
   import Input from '@Component/Input/Input';
   import Datepicker from '@Component/Input/Datepicker.svelte';
-  import PillInputWrapper from '@Component/Input/PillInputWrapper';
   import H1 from '@Component/H/H1';
   import Select from '@Component/Select/Select';
   import Results from './laatijat-results.svelte';
@@ -149,7 +147,9 @@
       'patevyystaso-id': R.propEq('patevyystaso'),
       'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
       'voimassaolo-paattymisaika-after': propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
-      'voimassaolo-paattymisaika-before': propSatisfies(isBefore, 'voimassaolo-paattymisaika')
+      'voimassaolo-paattymisaika-before': R.compose(
+        propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
+        d => dfns.add(d, { days: 1, hours: 1 }))
     })),
     R.pick(['search', 'filter',
       'patevyystaso-id', 'toimintaalue-id',
