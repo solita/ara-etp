@@ -135,6 +135,8 @@
 
   const isAfter = d2 => d1 => dfns.isAfter(d1, d2);
   const isBefore = d2 => d1 => dfns.isBefore(d1, d2);
+  const propSatisfies = (binaryPredicate, name) =>
+    R.compose(R.propSatisfies(R.__, name), binaryPredicate);
 
   // predicate from query
   const predicate = R.compose(
@@ -146,8 +148,8 @@
       filter: R.nth(R.__, filters),
       'patevyystaso-id': R.propEq('patevyystaso'),
       'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
-      'voimassaolo-paattymisaika-after': d => R.propSatisfies(isAfter(d), 'voimassaolo-paattymisaika'),
-      'voimassaolo-paattymisaika-before': d => R.propSatisfies(isBefore(d), 'voimassaolo-paattymisaika')
+      'voimassaolo-paattymisaika-after': propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+      'voimassaolo-paattymisaika-before': propSatisfies(isBefore, 'voimassaolo-paattymisaika')
     })),
     R.pick(['search', 'filter',
       'patevyystaso-id', 'toimintaalue-id',
