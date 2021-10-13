@@ -135,10 +135,8 @@
     })
   )(query);
 
-  const isAfter = startOfDayLocal => startOfDayInHEL =>
-    dfns.isAfter(startOfDayInHEL, dfnstz.zonedTimeToUtc(startOfDayLocal, 'Europe/Helsinki'));
-  const isBefore = startOfDayLocal => startOfDayInHEL =>
-    dfns.isBefore(startOfDayInHEL, dfnstz.zonedTimeToUtc(startOfDayLocal, 'Europe/Helsinki'));
+  const isAfter = dateToCompare => date => dfns.isAfter(date, dateToCompare);
+  const isBefore = dateToCompare => date => dfns.isBefore(date, dateToCompare);
 
   const propSatisfies = (binaryPredicate, name) =>
     R.compose(R.propSatisfies(R.__, name), binaryPredicate);
@@ -153,9 +151,13 @@
       filter: R.nth(R.__, filters),
       'patevyystaso-id': R.propEq('patevyystaso'),
       'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
-      'voimassaolo-paattymisaika-after': propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+      'voimassaolo-paattymisaika-after': R.compose(
+        propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')
+      ),
       'voimassaolo-paattymisaika-before': R.compose(
         propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
+        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
         // this is for inclusive end date range
         d => dfns.add(d, { days: 1, hours: 1 }))
     })),
