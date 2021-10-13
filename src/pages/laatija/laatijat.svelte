@@ -9,6 +9,7 @@
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
   import * as dfns from 'date-fns';
+  import * as dfnstz from 'date-fns-tz';
 
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as YritysApi from '@Pages/yritys/yritys-api';
@@ -146,9 +147,13 @@
       filter: R.nth(R.__, filters),
       'patevyystaso-id': R.propEq('patevyystaso'),
       'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
-      'voimassaolo-paattymisaika-after': propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+      'voimassaolo-paattymisaika-after': R.compose(
+        propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')),
       'voimassaolo-paattymisaika-before': R.compose(
         propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
+        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
+        // this is for inclusive end date range
         d => dfns.add(d, { days: 1, hours: 1 }))
     })),
     R.pick(['search', 'filter',
