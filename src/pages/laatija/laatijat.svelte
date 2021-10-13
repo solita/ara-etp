@@ -37,8 +37,11 @@
   // Load all page resources
   Future.fork(
     response => {
-      flashMessageStore.add('Laatija', 'error',
-        i18n(Response.errorKey404(i18nRoot, 'load', response)));
+      flashMessageStore.add(
+        'Laatija',
+        'error',
+        i18n(Response.errorKey404(i18nRoot, 'load', response))
+      );
       overlay = false;
     },
     response => {
@@ -55,27 +58,21 @@
   );
 
   const filters = [
-    R.allPass([
-      R.prop('voimassa'),
-      R.complement(R.prop('laatimiskielto'))
-    ]),
+    R.allPass([R.prop('voimassa'), R.complement(R.prop('laatimiskielto'))]),
     R.propSatisfies(Maybe.isNone, 'login'),
     R.prop('laatimiskielto'),
     R.complement(R.prop('voimassa'))
   ];
 
-  const parseInt = R.compose(
-    Either.toMaybe,
-    Parsers.parseInteger);
+  const parseInt = R.compose(Either.toMaybe, Parsers.parseInteger);
 
-  const parseISODate = R.compose(
-    Either.toMaybe,
-    Parsers.parseISODate);
+  const parseISODate = R.compose(Either.toMaybe, Parsers.parseISODate);
 
   const parseDate = R.compose(
     R.chain(Either.toMaybe),
     R.map(Parsers.parseDate),
-    Parsers.optionalString);
+    Parsers.optionalString
+  );
 
   const formatFilter = state => i18n('laatijat.filters.' + state);
 
@@ -86,9 +83,13 @@
       R.flatten,
       R.values,
       R.pick([
-        'etunimi', 'sukunimi',
-        'henkilotunnus', 'email',
-        'jakeluosoite', 'postinumero', 'postitoimipaikka',
+        'etunimi',
+        'sukunimi',
+        'henkilotunnus',
+        'email',
+        'jakeluosoite',
+        'postinumero',
+        'postitoimipaikka',
         'puhelin'
       ]),
       R.evolve({
@@ -118,10 +119,15 @@
       'voimassaolo-paattymisaika-after': parseISODate,
       'voimassaolo-paattymisaika-before': parseISODate
     }),
-    R.pick(['search', 'page', 'filter',
-      'patevyystaso-id', 'toimintaalue-id',
+    R.pick([
+      'search',
+      'page',
+      'filter',
+      'patevyystaso-id',
+      'toimintaalue-id',
       'voimassaolo-paattymisaika-after',
-      'voimassaolo-paattymisaika-before'])
+      'voimassaolo-paattymisaika-before'
+    ])
   )(qs.parse($querystring));
 
   // update querystring from query
@@ -146,25 +152,32 @@
     R.allPass,
     Maybe.findAllSome,
     R.values,
-    R.evolve(R.map(R.map, {
-      search: keywordSearch,
-      filter: R.nth(R.__, filters),
-      'patevyystaso-id': R.propEq('patevyystaso'),
-      'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
-      'voimassaolo-paattymisaika-after': R.compose(
-        propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
-        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')
-      ),
-      'voimassaolo-paattymisaika-before': R.compose(
-        propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
-        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
-        // this is for inclusive end date range
-        d => dfns.add(d, { days: 1, hours: 1 }))
-    })),
-    R.pick(['search', 'filter',
-      'patevyystaso-id', 'toimintaalue-id',
+    R.evolve(
+      R.map(R.map, {
+        search: keywordSearch,
+        filter: R.nth(R.__, filters),
+        'patevyystaso-id': R.propEq('patevyystaso'),
+        'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
+        'voimassaolo-paattymisaika-after': R.compose(
+          propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+          d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')
+        ),
+        'voimassaolo-paattymisaika-before': R.compose(
+          propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
+          d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
+          // this is for inclusive end date range
+          d => dfns.add(d, { days: 1, hours: 1 })
+        )
+      })
+    ),
+    R.pick([
+      'search',
+      'filter',
+      'patevyystaso-id',
+      'toimintaalue-id',
       'voimassaolo-paattymisaika-after',
-      'voimassaolo-paattymisaika-before'])
+      'voimassaolo-paattymisaika-before'
+    ])
   );
 
   const toPage = nextPage => {
@@ -176,18 +189,18 @@
     return Future.timeout(_ => {
       overlay = false;
       return R.filter(predicate(query), laatijat);
-    }, 200)
-  }
+    }, 200);
+  };
 </script>
 
 <div class="w-full mt-3">
   <H1 text={i18n(i18nRoot + '.title')} />
 
   <Overlay {overlay}>
-    <div slot='content'>
+    <div slot="content">
       {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami }}
-        <div class='flex flex-wrap'>
-          <div class='lg:w-1/3 w-full px-4 py-4'>
+        <div class="flex flex-wrap">
+          <div class="lg:w-1/3 w-full px-4 py-4">
             <Select
               label={i18n(i18nRoot + '.filters.label')}
               disabled={false}
@@ -199,7 +212,7 @@
               items={R.range(0, R.length(filters))} />
           </div>
 
-          <div class='lg:w-1/3 w-full px-4 py-4'>
+          <div class="lg:w-1/3 w-full px-4 py-4">
             <Select
               label={i18n(i18nRoot + '.patevyystaso')}
               disabled={false}
@@ -211,7 +224,7 @@
               items={R.pluck('id', patevyydet)} />
           </div>
 
-          <div class='lg:w-1/3 w-full px-4 py-4'>
+          <div class="lg:w-1/3 w-full px-4 py-4">
             <Select
               label={i18n(i18nRoot + '.toimintaalue')}
               disabled={false}
@@ -223,7 +236,7 @@
               items={R.pluck('id', toimintaalueet)} />
           </div>
 
-          <div class='lg:w-1/2 w-full px-4 py-4'>
+          <div class="lg:w-1/2 w-full px-4 py-4">
             <Input
               label={i18n(i18nRoot + '.keyword-search')}
               model={query}
@@ -232,31 +245,34 @@
               parse={Parsers.optionalString}
               search={true}
               on:input={evt => {
-                query = R.assoc('search',
+                query = R.assoc(
+                  'search',
                   Maybe.Some(R.trim(evt.target.value)),
-                  query);
+                  query
+                );
               }} />
           </div>
 
-          <div class='lg:w-1/2 w-full px-4 py-4 flex flex-wrap'>
-            <div class='w-full'>
-              <Label label={i18n(i18nRoot + '.voimassaolo-paattymisaika.label')} />
+          <div class="lg:w-1/2 w-full px-4 py-4 flex flex-wrap">
+            <div class="w-full">
+              <Label
+                label={i18n(i18nRoot + '.voimassaolo-paattymisaika.label')} />
             </div>
-            <div class='lg:w-1/3 w-full'>
+            <div class="lg:w-1/3 w-full">
               <Datepicker
                 label={i18n(i18nRoot + '.voimassaolo-paattymisaika.after')}
-                compact='true'
+                compact="true"
                 bind:model={query}
                 lens={R.lensProp('voimassaolo-paattymisaika-after')}
                 parse={parseDate}
                 transform={Maybe.Some}
                 format={Maybe.fold('', Formats.formatDateInstant)} />
             </div>
-            <span class='w-min px-4 invisible lg:visible'>-</span>
-            <div class='lg:w-1/3 w-full'>
+            <span class="w-min px-4 invisible lg:visible">-</span>
+            <div class="lg:w-1/3 w-full">
               <Datepicker
                 label={i18n(i18nRoot + '.voimassaolo-paattymisaika.before')}
-                compact='true'
+                compact="true"
                 bind:model={query}
                 lens={R.lensProp('voimassaolo-paattymisaika-before')}
                 parse={parseDate}
@@ -267,17 +283,18 @@
         </div>
 
         <div>
-          <Results laatijatFuture={filter(query, laatijat)}
-                   page={query.page}
-                   {toPage}
-                   {yritykset}
-                   {patevyydet}
-                   {toimintaalueet}
-                   {whoami} />
+          <Results
+            laatijatFuture={filter(query, laatijat)}
+            page={query.page}
+            {toPage}
+            {yritykset}
+            {patevyydet}
+            {toimintaalueet}
+            {whoami} />
         </div>
       {/each}
     </div>
-    <div slot='overlay-content'>
+    <div slot="overlay-content">
       <Spinner />
     </div>
   </Overlay>

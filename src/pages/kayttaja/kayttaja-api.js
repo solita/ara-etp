@@ -27,7 +27,7 @@ export const deserializeLaatija = R.compose(
     wwwosoite: Maybe.fromNull,
 
     // we assume that these dates are always valid from backend
-    'toteamispaivamaara': R.compose(Either.right, Parsers.parseISODate),
+    toteamispaivamaara: R.compose(Either.right, Parsers.parseISODate),
     'voimassaolo-paattymisaika': R.compose(Either.right, Parsers.parseISODate)
   })
 );

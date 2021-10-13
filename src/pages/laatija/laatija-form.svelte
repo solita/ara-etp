@@ -114,12 +114,12 @@
   };
 
   const formatPatevyydenVoimassaoloaika = laatija =>
-    formats.formatDateInstant(laatija.toteamispaivamaara) + ' - ' +
-    formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika'])
+    formats.formatDateInstant(laatija.toteamispaivamaara) +
+    ' - ' +
+    formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika']);
 </script>
 
-<form bind:this={form}
-      on:submit|preventDefault={validateAndSubmit}>
+<form bind:this={form} on:submit|preventDefault={validateAndSubmit}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
