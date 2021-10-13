@@ -291,15 +291,24 @@
       }
     }
   },
-  "laatijahaku": {
+  "laatijat": {
     "title": "Laatijahaku",
     "kunta": "Kunta",
     "energiatodistukset": "ET:t",
     "results": "Tuloksia {count} KPL",
     "kaikki": "Kaikki",
     "voimassaolo": "Voimassaolo",
-    "tila": "Tila",
-    "tilat": {
+    "patevyystaso": "Pätevyystaso",
+    "toimintaalue": "Päätoimintaalue",
+    "keyword-search": "Tekstihaku (nimi, hetu, yhteystiedot)",
+    "voimassaolo-paattymisaika": {
+      "label": "Pätevyyden päättymisaika",
+      "after": "Voimassaolo päättyy myöhemmin tai samana päivänä kuin",
+      "before": "Voimassaolo päättyy aikaisemmin tai samana päivänä kuin"
+    },
+    "filters": {
+      "label": "Tila",
+      "all": "Kaikki",
       "0": "Pätevyys voimassa",
       "1": "Ei kirjautunut",
       "2": "Pätevyys peruttu / Laatimiskiellossa",

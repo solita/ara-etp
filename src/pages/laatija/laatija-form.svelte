@@ -98,28 +98,28 @@
 
   $: parseLaskutuskieli = R.identity;
 
-  $: isValidForm = R.compose(
-    R.all(Either.isRight),
-    R.filter(Either.isEither),
-    R.values,
-    Validation.validateModelObject(schema)
-  );
-
+  let form;
   const validateAndSubmit = _ => {
-    if (isValidForm(laatija)) {
+    if (Validation.isValidForm(schema)(laatija)) {
       flashMessageStore.flush();
       submit(laatija);
     } else {
       flashMessageStore.add(
-        'Kayttaja',
+        'kayttaja',
         'error',
         i18n('laatija.messages.validation-error')
       );
+      Validation.blurForm(form);
     }
   };
+
+  const formatPatevyydenVoimassaoloaika = laatija =>
+    formats.formatDateInstant(laatija.toteamispaivamaara) +
+    ' - ' +
+    formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika']);
 </script>
 
-<form on:submit|preventDefault={validateAndSubmit}>
+<form bind:this={form} on:submit|preventDefault={validateAndSubmit}>
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -307,9 +307,7 @@
           name={'patevyydenvoimassaolo'}
           label={i18n('laatija.patevyydenvoimassaolo')}
           bind:model={laatija}
-          lens={R.lensProp('toteamispaivamaara')}
-          format={formats.formatPatevyydenVoimassaoloaika}
-          parse={R.always(R.prop('toteamispaivamaara', laatija))}
+          format={formatPatevyydenVoimassaoloaika}
           disabled={true}
           required={true}
           {i18n} />

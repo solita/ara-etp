@@ -1,11 +1,12 @@
 import * as R from 'ramda';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
-import * as yritysApi from '@Pages/yritys/yritys-api';
 import * as Either from '@Utility/either-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as kayttajat from '@Utility/kayttajat';
 import * as dfns from 'date-fns';
+
+import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
 export const url = {
   laatijat: '/api/private/laatijat',
@@ -14,6 +15,9 @@ export const url = {
   laskutusosoitteet: id => `${url.laatija(id)}/laskutusosoitteet`
 };
 
+/**
+ * @deprecated - do not use for anything and do not copy this for anything
+ */
 export const laatijaUploadSerialize = R.evolve({
   etunimi: Either.right,
   sukunimi: Either.right,
@@ -47,6 +51,7 @@ export const serialize = R.compose(
     'rooli',
     'passivoitu',
     'voimassaolo-paattymisaika',
+    'toteamispaivamaara',
     'voimassa'
   ])
 );
@@ -100,10 +105,10 @@ export const laskutusosoitteet = R.compose(
   url.laskutusosoitteet
 );
 
-export const laatijat = R.compose(
-  Fetch.responseAsJson,
-  Future.encaseP(Fetch.getFetch(R.__, url.laatijat))
-)(fetch);
+export const laatijat = R.map(
+  R.map(R.compose(KayttajaApi.deserialize, KayttajaApi.deserializeLaatija)),
+  Fetch.getJson(fetch, url.laatijat)
+);
 
 export const yritykset = R.compose(
   R.map(R.map(R.evolve({ modifytime: dfns.parseJSON }))),

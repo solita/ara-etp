@@ -125,7 +125,7 @@
     R.compose(
       R.omit(['kayttaja', 'cognitoid', 'ensitallennus', 'virtu']),
       R.mergeRight
-    )(kayttaja, laatija);
+    )(kayttaja, R.omit(['henkilotunnus'], laatija));
 
   $: load(params);
 </script>
