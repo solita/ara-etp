@@ -150,26 +150,36 @@
   // predicate from query
   const predicate = R.compose(
     R.allPass,
-    Maybe.findAllSome,
     R.values,
-    R.evolve(
-      R.map(R.map, {
-        search: keywordSearch,
-        filter: R.nth(R.__, filters),
-        'patevyystaso-id': R.propEq('patevyystaso'),
-        'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
-        'voimassaolo-paattymisaika-after': R.compose(
-          propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
-          d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')
-        ),
-        'voimassaolo-paattymisaika-before': R.compose(
-          propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
-          d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
-          // this is for inclusive end date range
-          d => dfns.add(d, { days: 1, hours: 1 })
-        )
-      })
-    ),
+    R.evolve({
+      search: keywordSearch,
+      filter: R.nth(R.__, filters),
+      'patevyystaso-id': R.propEq('patevyystaso'),
+      'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
+      'voimassaolo-paattymisaika-after': R.compose(
+        propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
+        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')
+      ),
+      'voimassaolo-paattymisaika-before': R.compose(
+        propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
+        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
+        // this is for inclusive end date range
+        d => dfns.add(d, { days: 1, hours: 1 })
+      )
+    })
+  );
+
+  const filter = (query, laatijat) => {
+    overlay = true;
+    return Future.timeout(_ => {
+      overlay = false;
+      return R.filter(predicate(query), laatijat);
+    }, 200);
+  };
+
+  const newFilterQuery = R.compose(
+    R.map(Maybe.get),
+    R.filter(Maybe.isSome),
     R.pick([
       'search',
       'filter',
@@ -178,18 +188,19 @@
       'voimassaolo-paattymisaika-after',
       'voimassaolo-paattymisaika-before'
     ])
-  );
+  )
 
+  let filterQuery = {};
+  const updateSearch = query => {
+    const newQuery = newFilterQuery(query)
+    if (!R.equals(filterQuery, newQuery)) {
+      filterQuery = newQuery;
+    }
+  }
+  $: updateSearch(query);
+  
   const toPage = nextPage => {
     query = R.assoc('page', nextPage, query);
-  };
-
-  const filter = (query, laatijat) => {
-    overlay = true;
-    return Future.timeout(_ => {
-      overlay = false;
-      return R.filter(predicate(query), laatijat);
-    }, 200);
   };
 </script>
 
@@ -284,7 +295,7 @@
 
         <div>
           <Results
-            laatijatFuture={filter(query, laatijat)}
+            laatijatFuture={filter(filterQuery, laatijat)}
             page={query.page}
             {toPage}
             {yritykset}
