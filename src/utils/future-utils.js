@@ -123,3 +123,12 @@ export const filter = R.curry((predicate, rejectValue, f) =>
     f
   )
 );
+
+export const timeout = (fn, timeout) => Future ((reject, resolve) => {
+
+  const timeoutId = setTimeout (_ => resolve(fn()), timeout)
+
+  return function onCancel () {
+    clearTimeout (timeoutId)
+  }
+});

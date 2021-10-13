@@ -33,8 +33,6 @@
   const i18nRoot = 'laatijat';
   let resources = Maybe.None();
   let overlay = true;
-  let cancel = () => {
-  };
 
   // Load all page resources
   Future.fork(
@@ -170,6 +168,14 @@
   const toPage = nextPage => {
     query = R.assoc('page', nextPage, query);
   };
+
+  const filter = (query, laatijat) => {
+    overlay = true;
+    return Future.timeout(_ => {
+      overlay = false;
+      return R.filter(predicate(query), laatijat);
+    }, 200)
+  }
 </script>
 
 <div class="w-full mt-3">
@@ -218,20 +224,16 @@
           <div class='lg:w-1/2 w-full px-4 py-4'>
             <Input
               label={i18n(i18nRoot + '.keyword-search')}
-              model={Maybe.orSome('', query.search)}
+              model={query}
+              lens={R.lensProp('search')}
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
               search={true}
               on:input={evt => {
-            cancel = R.compose(
-              Future.value(val => {
-                query = R.mergeRight(query, {
-                  search: Maybe.Some(val),
-                  page: 0
-                });
-              }),
-              Future.after(200),
-              R.tap(cancel)
-            )(evt.target.value);
-          }} />
+                query = R.assoc('search',
+                  Maybe.Some(R.trim(evt.target.value)),
+                  query);
+              }} />
           </div>
 
           <div class='lg:w-1/2 w-full px-4 py-4 flex flex-wrap'>
@@ -263,7 +265,7 @@
         </div>
 
         <div>
-          <Results laatijat={R.filter(predicate(query), laatijat)}
+          <Results laatijatFuture={filter(query, laatijat)}
                    page={query.page}
                    {toPage}
                    {yritykset}

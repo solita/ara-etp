@@ -4,6 +4,7 @@
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Future from '@Utility/future-utils';
   import { push } from '@Component/Router/router';
 
   import { locale, _ } from '@Language/i18n';
@@ -17,12 +18,26 @@
   export let page = 1;
   export let toPage;
   export let itemsPerPage = 10;
-  export let laatijat;
+  export let laatijatFuture;
   export let yritykset;
   export let patevyydet;
   export let toimintaalueet;
   export let whoami;
 
+  let laatijat = [];
+
+  let cancel = () => {};
+  const search = future => {
+    cancel();
+    cancel = Future.value(
+      result => {
+        laatijat = result;
+      },
+      future
+    );
+  }
+
+  $: search(laatijatFuture);
 </script>
 
 <div class="mt-10">
