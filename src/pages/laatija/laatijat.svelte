@@ -137,8 +137,11 @@
     })
   )(query);
 
-  const isAfter = d2 => d1 => dfns.isAfter(d1, dfnstz.zonedTimeToUtc(d2, 'Europe/Helsinki'));
-  const isBefore = d2 => d1 => dfns.isBefore(d1, dfnstz.zonedTimeToUtc(d2, 'Europe/Helsinki'));
+  const isAfter = startOfDayLocal => startOfDayInHEL =>
+    dfns.isAfter(startOfDayInHEL, dfnstz.zonedTimeToUtc(startOfDayLocal, 'Europe/Helsinki'));
+  const isBefore = startOfDayLocal => startOfDayInHEL =>
+    dfns.isBefore(startOfDayInHEL, dfnstz.zonedTimeToUtc(startOfDayLocal, 'Europe/Helsinki'));
+
   const propSatisfies = (binaryPredicate, name) =>
     R.compose(R.propSatisfies(R.__, name), binaryPredicate);
 
