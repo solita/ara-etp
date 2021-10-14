@@ -132,7 +132,7 @@
       on:change={setDirty}>
 
   <div class="w-full mt-3">
-    <H1 text="Perustiedot" />
+    <H1 text={i18n(i18nRoot + '.perustiedot-header')} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
