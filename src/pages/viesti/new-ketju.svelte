@@ -149,7 +149,7 @@
   $: {
     const query = qs.parse($querystring);
     if (R.has('subject', query)) {
-      ketju = R.assoc('subject', `Re: [${query.subject}]`, ketju);
+      ketju = R.assoc('subject', `Re: ${query.subject}`, ketju);
     }
   }
 
