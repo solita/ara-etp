@@ -140,6 +140,7 @@
           <LaatijaForm
             submit={submitLaatija(whoami, params.id)}
             cancel={_ => load(params)}
+            bind:dirty
             {whoami}
             {luokittelut}
             laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />

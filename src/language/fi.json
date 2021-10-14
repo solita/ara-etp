@@ -248,6 +248,8 @@
     "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa",
     "api-key-header": "Laskentaohjelmisto",
     "api-key": "Anna uusi tiedonsiirron salasana (vähintään 8 merkkiä)",
+    "cancel": "Peruuta muutokset",
+    "save": "Tallenna",
     "messages": {
       "not-found": "Laatijaa ei löydy tästä palvelusta.",
       "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
