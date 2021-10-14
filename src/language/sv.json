@@ -194,6 +194,18 @@
       "load-error": "Sökningen av upprättarens uppgifter misslyckades."
     },
     "upload": {
+      "rivi": "Rad",
+      "etunimi": "Förnamn",
+      "sukunimi": "Efternamn",
+      "henkilotunnus": "Personbeteckning",
+      "jakeluosoite": "Distributionsadress",
+      "postinumero": "Postnummer",
+      "postitoimipaikka": "Postanstalt",
+      "email": "E-post",
+      "puhelin": "Telefonnummer",
+      "patevyystaso": "Behörighetsnivå",
+      "toteamispaivamaara": "Datum för konstaterande",
+      "toteaja": "Konstaterad av",
       "save": "Lägg till upprättare",
       "cancel": "Ångra",
       "messages": {
@@ -1298,20 +1310,6 @@
     "contact-info": "Kontaktuppgifter",
     "phone": "Telefon",
     "email": "E-post"
-  },
-  "laatijaupload": {
-    "rivi": "Rad",
-    "etunimi": "Förnamn",
-    "sukunimi": "Efternamn",
-    "henkilotunnus": "Personbeteckning",
-    "jakeluosoite": "Distributionsadress",
-    "postinumero": "Postnummer",
-    "postitoimipaikka": "Postanstalt",
-    "email": "E-post",
-    "puhelin": "Telefonnummer",
-    "patevyystaso": "Behörighetsnivå",
-    "toteamispaivamaara": "Datum för konstaterande",
-    "toteaja": "Konstaterad av"
   },
   "valvonta": {
     "self": "Minä SV?",

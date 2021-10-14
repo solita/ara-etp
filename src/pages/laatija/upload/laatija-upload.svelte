@@ -144,9 +144,9 @@
         <table class="etp-table">
           <thead class="etp-table--thead">
             <tr class="etp-table--tr">
-              <th class="etp-table--th">{i18n('rivi')}</th>
+              <th class="etp-table--th">{i18n(i18nRoot + '.rivi')}</th>
               {#each fields as field}
-                <th class="etp-table--th">{i18n(`laatijaupload.${field}`)}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.' + field)}</th>
               {/each}
             </tr>
           </thead>

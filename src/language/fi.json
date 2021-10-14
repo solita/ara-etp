@@ -78,20 +78,6 @@
       "cancel": "Peruuta"
     }
   },
-  "laatijaupload": {
-    "rivi": "Rivi",
-    "etunimi": "Etunimi",
-    "sukunimi": "Sukunimi",
-    "henkilotunnus": "Henkilötunnus",
-    "jakeluosoite": "Jakeluosoite",
-    "postinumero": "Postinumero",
-    "postitoimipaikka": "Postitoimipaikka",
-    "email": "Sähköposti",
-    "puhelin": "Puhelinnumero",
-    "patevyystaso": "Pätevyystaso",
-    "toteamispaivamaara": "Toteamispäivämäärä",
-    "toteaja": "Toteaja"
-  },
   "errors": {
     "row-error": "Virhe rivillä",
     "load-error": "Tietojen haku epäonnistui.",
@@ -257,6 +243,18 @@
       "load-error": "Laatijan tietojen haku epäonnistui."
     },
     "upload": {
+      "rivi": "Rivi",
+      "etunimi": "Etunimi",
+      "sukunimi": "Sukunimi",
+      "henkilotunnus": "Henkilötunnus",
+      "jakeluosoite": "Jakeluosoite",
+      "postinumero": "Postinumero",
+      "postitoimipaikka": "Postitoimipaikka",
+      "email": "Sähköposti",
+      "puhelin": "Puhelinnumero",
+      "patevyystaso": "Pätevyystaso",
+      "toteamispaivamaara": "Toteamispäivämäärä",
+      "toteaja": "Toteaja",
       "save": "Lisää laatijat",
       "cancel": "Peruuta",
       "messages": {

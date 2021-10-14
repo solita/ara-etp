@@ -66,7 +66,7 @@ export const formatRowErrors = R.curry((i18n, rowErrors) =>
     R.map(
       R.compose(
         R.join(' - '),
-        R.over(R.lensIndex(0), R.compose(i18n, R.concat('laatijaupload.')))
+        R.over(R.lensIndex(0), R.compose(i18n, R.concat('laatija.upload.')))
       )
     ),
     R.toPairs
