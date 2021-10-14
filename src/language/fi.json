@@ -1394,9 +1394,9 @@
           "draft-info": "Voit jatkaa vastaamista myöhemmin"
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehoitus",
+          "title": "Tietopyyntö kehotus",
           "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
-          "publish-button": "Lähetä kehoitus",
+          "publish-button": "Lähetä kehotus",
 
           "response-title": "Kehotus vastata tietopyyntöön",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
@@ -1443,9 +1443,9 @@
           "draft-info": "Voit jatkaa vastaamista myöhemmin"
         },
         "audit-order": {
-          "title": "Valvontamuistio kehoitus",
+          "title": "Valvontamuistio kehotus",
           "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
-          "publish-button": "Lähetä kehoitus",
+          "publish-button": "Lähetä kehotus",
 
           "response-title": "Kehotus vastata valvontamuistioon",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
@@ -1702,9 +1702,9 @@
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehoitus",
+          "title": "Tietopyyntö kehotus",
           "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön.",
-          "publish-button": "Lähetä kehoitus",
+          "publish-button": "Lähetä kehotus",
           "response-title": "Kehotus vastata tietopyyntöön",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
