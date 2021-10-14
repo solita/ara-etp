@@ -1,7 +1,7 @@
 <script>
   import Router, { wrap } from 'svelte-spa-router';
 
-  import LaatijaUpload from '@Pages/laatija/laatija-upload/LaatijaUpload';
+  import LaatijaUpload from '@Pages/laatija/upload/laatija-upload';
   import Yritykset from '@Pages/laatija/yritykset';
   import Laatijat from './laatijat';
   import NotFound from '@Pages/not-found/not-found';
