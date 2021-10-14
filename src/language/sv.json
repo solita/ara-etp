@@ -1382,9 +1382,9 @@
           "publish-button": "Lähetä vastaus SV?"
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehoitus SV?",
+          "title": "Tietopyyntö kehotus SV?",
           "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot. SV?",
-          "publish-button": "Lähetä kehoitus SV?",
+          "publish-button": "Lähetä kehotus SV?",
           "response-title": "Kehotus vastata tietopyyntöön SV?",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
         },
@@ -1413,9 +1413,9 @@
           "reset-button": "Peruuta SV?"
         },
         "audit-order": {
-          "title": "Valvontamuistio kehoitus SV?",
+          "title": "Valvontamuistio kehotus SV?",
           "info": "Kehoitetaan laatijaa korjaamaan energiatodistus. SV?",
-          "publish-button": "Lähetä kehoitus SV?",
+          "publish-button": "Lähetä kehotus SV?",
           "response-title": "Kehotus vastata valvontamuistioon SV?",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
         },
@@ -1516,9 +1516,9 @@
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehoitus SV?",
+          "title": "Tietopyyntö kehotus SV?",
           "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön. SV?",
-          "publish-button": "Lähetä kehoitus SV?",
+          "publish-button": "Lähetä kehotus SV?",
           "response-title": "Kehotus vastata tietopyyntöön SV?",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
         },
