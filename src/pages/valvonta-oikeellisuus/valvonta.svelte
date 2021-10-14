@@ -180,9 +180,7 @@
           )}
         </div>
         <div>
-          {#each korvaavaEnergiatodistus
-            .toArray()
-            .filter(ETUtils.isSigned) as korvaavaEt}
+          {#each korvaavaEnergiatodistus.toArray() as korvaavaEt}
             <span>
               {Maybe.fold(
                 '',
