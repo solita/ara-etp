@@ -25,6 +25,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
 
   const i18n = $_;
+  const i18nRoot = 'laatija';
 
   const formParsers = LaatijaSchema.formParsers();
 
@@ -34,6 +35,8 @@
   export let whoami;
   export let luokittelut;
   export let submit;
+  export let dirty;
+  export let cancel;
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
 
@@ -117,9 +120,17 @@
     formats.formatDateInstant(laatija.toteamispaivamaara) +
     ' - ' +
     formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika']);
+
+  const setDirty = _ => {
+    dirty = true;
+  };
 </script>
 
-<form bind:this={form} on:submit|preventDefault={validateAndSubmit}>
+<form bind:this={form}
+      on:submit|preventDefault={validateAndSubmit}
+      on:input={setDirty}
+      on:change={setDirty}>
+
   <div class="w-full mt-3">
     <H1 text="Perustiedot" />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -422,15 +433,13 @@
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={i18n('tallenna')} {disabled} />
+      <Button type={'submit'} text={i18n(i18nRoot + '.save')} disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       <Button
-        on:click={event => {
-          event.preventDefault();
-          window.location.reload();
-        }}
-        text={i18n('peruuta')}
+        on:click={cancel}
+        disabled={disabled || !dirty}
+        text={i18n(i18nRoot + '.cancel')}
         type={'reset'}
         style={'secondary'} />
     </div>
