@@ -229,7 +229,6 @@
     "laatija": "Laatija",
     "toteamispaivamaara_haku": "Laatija / Toteamispäivämäärä",
     "voimassaolo-paattymisaika_haku": "Laatija / Pätevyyden voimassaolon päättymispäivä",
-    "lisaa-laatijat": "Lisää laatijat",
     "henkilotunnus": "Henkilötunnus",
     "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
     "katuosoite": "Katuosoite",
@@ -252,11 +251,20 @@
     "save": "Tallenna",
     "messages": {
       "not-found": "Laatijaa ei löydy tästä palvelusta.",
-      "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
-      "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
-      "load-error": "Laatijan tietojen haku epäonnistui.",
-      "upload-error": "Tiedoston lataaminen epäonnistui."
+      "save-success": "Laatijan tiedot tallennettu onnistuneesti.",
+      "save-error": "Laatijan tietojen tallennus epäonnistui.",
+      "validation-error": "Laatijan tiedoissa virheitä. Tarkista lomakkeelta punaisella merkityt kentät.",
+      "load-error": "Laatijan tietojen haku epäonnistui."
+    },
+    "upload": {
+      "save": "Lisää laatijat",
+      "cancel": "Peruuta",
+      "messages": {
+        "load-error": "Laatijoiden tuonnissa tarvittavien tietojen haku epäonnistui.",
+        "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
+        "save-error": "Laatijoiden tietojen tallennus epäonnistui.",
+        "validation-error": "Laatijoiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan."
+      }
     },
     "yritykset": {
       "title": "Yritykset",
