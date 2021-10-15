@@ -144,19 +144,25 @@
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
     "passivoitu": "Passivera användarnamn",
+    "rooli": "Roll",
     "etunimi": "Förnamn",
     "sukunimi": "Efternamn",
     "email": "E-postadress",
     "kayttajatunnus": "Användarnamn för dataöverföring",
     "puhelin": "Telefon",
+    "perustiedot": "Basuppgifter",
+    "cancel": "Återkalla ändringar",
+    "save": "Spara",
     "virtu": {
       "header": "Inloggningsuppgifter till Virtu",
       "localid": "Användarnamn (Virtu Local ID)",
-      "organisaatio": "Organisation"
+      "organisaatio": "Organisation",
+      "checkbox": "I användning"
     },
     "suomifi": {
       "header": "Inloggningsuppgifter till Suomi-fi",
-      "henkilotunnus": "Personbeteckning"
+      "henkilotunnus": "Personbeteckning",
+      "checkbox": "I användning"
     },
     "messages": {
       "save-success": "Användarens uppgifter har sparats.",
@@ -165,6 +171,32 @@
       "load-error": "Sökningen av användarens uppgifter misslyckades.",
       "not-found": "Hittar inte användaren i denna tjänst",
       "upload-error": "Filen kunde inte laddas ner."
+    },
+    "new": {
+      "title": "Ny användare",
+      "messages": {
+        "add-success": "Uusi käyttäjä tallennettu järjestelmään. SV?",
+        "add-error": "Uuden käyttäjän tallennus epäonnistui. SV?"
+      }
+    }
+  },
+  "kayttajat": {
+    "title": "Användare",
+    "new-kayttaja": "Ny användare",
+    "nimi": "Namn",
+    "rooli": "Roll",
+    "email": "E-post",
+    "phone": "Telefon",
+    "login": "Inloggad",
+    "info": "Tässä näkyvät käyttäjät jotka eivät ole laatijoita. SV?",
+    "laatija-link": "Laatijat löytyvät täältä SV?",
+    "state": {
+      "header": "Status",
+      "active": "Aktiva",
+      "passivoitu": "Passiverad"
+    },
+    "messages": {
+      "load-error": "Laddningen av uppgifter misslyckades."
     }
   },
   "laatija": {
@@ -233,15 +265,16 @@
     "voimassaolo-paattymisaika_haku": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
     "patevyystaso_haku": "Upprättare / Behörighetsnivå"
   },
-  "laatijahaku": {
+  "laatijat": {
     "title": "Sök upprättare",
     "kunta": "Kommun",
     "energiatodistukset": "EC:er",
     "results": "Resultat {count} ST.",
     "kaikki": "Alla",
     "voimassaolo": "Giltighetstid",
-    "tila": "Status",
     "tilat": {
+      "label": "Status",
+      "all": "Alla",
       "0": "Giltig behörighet",
       "1": "Ej inloggad",
       "2": "Behörigheten återkallad / Förbud mot upprättande",
