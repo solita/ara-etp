@@ -179,7 +179,7 @@
     "email": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
     "puhelin": "Puhelinnumero",
-    "perustiedot": "Perustiedot",
+    "perustiedot-header": "Perustiedot",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
     "virtu": {
