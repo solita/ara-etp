@@ -89,14 +89,14 @@
       <Checkbox
         bind:model={kayttaja}
         lens={R.lensProp('passivoitu')}
-        label={$_(i18nRoot + '.passivoitu')}
+        label={i18n(i18nRoot + '.passivoitu')}
         disabled={disabledAdmin || isOwnSettings} />
     </div>
 
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Select
         id={'rooli'}
-        label={$_(i18nRoot + '.rooli')}
+        label={i18n(i18nRoot + '.rooli')}
         required={true}
         validation={true}
         allowNone={false}
@@ -109,7 +109,7 @@
     </div>
   </div>
 
-  <H2 text="Perustiedot" />
+  <H2 text={i18n('kayttaja.perustiedot-header')} />
 
   <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -169,6 +169,7 @@
   </div>
 
   <H2 text={i18n('kayttaja.virtu.header')} />
+
   <Checkbox
     bind:model={kayttaja}
     lens={R.compose(
@@ -177,7 +178,7 @@
         active ? Maybe.Some(emptyVirtuId) : Maybe.None()
       )
     )}
-    label={'Virtu-kirjautuminen käytössä'}
+    label={i18n('kayttaja.virtu.checkbox')}
     disabled={disabledAdmin} />
 
   <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -226,7 +227,7 @@
       R.lensProp('henkilotunnus'),
       R.lens(Maybe.isSome, active => (active ? Maybe.Some('') : Maybe.None()))
     )}
-    label={'Suomi-fi-kirjautuminen käytössä'}
+    label={i18n('kayttaja.suomifi.checkbox')}
     disabled={disabledAdmin} />
 
   <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">

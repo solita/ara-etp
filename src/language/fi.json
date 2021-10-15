@@ -171,11 +171,13 @@
     "virtu": {
       "header": "Virtu kirjautumistiedot",
       "localid": "Käyttäjätunnus (Virtu Local ID)",
-      "organisaatio": "Organisaatio"
+      "organisaatio": "Organisaatio",
+      "checkbox": "Virtu-kirjautuminen käytössä"
     },
     "suomifi": {
       "header": "Suomi-fi kirjautumistiedot",
-      "henkilotunnus": "Henkilötunnus"
+      "henkilotunnus": "Henkilötunnus",
+      "checkbox": "Suomi-fi-kirjautuminen käytössä"
     },
     "messages": {
       "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
@@ -200,8 +202,8 @@
     "email": "Sähköposti",
     "puhelin": "Puhelin",
     "login": "Kirjautunut",
-    "info": "Tässä näkyy kaikki muut käyttäjät paitsi laatijat.",
-    "laatija-link": "Laatijat löytyy täältä.",
+    "info": "Tässä näkyvät käyttäjät jotka eivät ole laatijoita.",
+    "laatija-link": "Laatijat löytyvät täältä",
     "state": {
       "header": "Tila",
       "active": "Aktiivinen",
