@@ -248,8 +248,7 @@
         "attach-failed": "Kopplingen till företaget misslyckades",
         "detach-failed": "Det gick inte att avlägsna upprättaren från företaget"
       }
-    },
-    "patevyystaso_haku": "Upprättare / Behörighetsnivå"
+    }
   },
   "laatijahaku": {
     "title": "Sök upprättare",
