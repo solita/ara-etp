@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Response from '@Utility/response';
 
   import { locale, _ } from '@Language/i18n';
 
@@ -18,8 +19,10 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
+  import * as Locales from '@Language/locale-utils';
 
   const i18n = $_;
+  const i18nRoot = 'laatija.upload';
 
   let overlay = false;
 
@@ -30,9 +33,10 @@
   let files = [];
 
   $: Future.fork(
-    () => {
+    response => {
       toggleOverlay(false);
-      flashMessageStore.add('Laatija', 'error', i18n('errors.unexpected'));
+      flashMessageStore.add('Laatija', 'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response)));
     },
     response => {
       toggleOverlay(false);
@@ -59,10 +63,10 @@
     Future.fork(
       response => {
         toggleOverlay(false);
-        const msg = LocaleUtils.uniqueViolationMessage(
+        const msg = Locales.uniqueViolationMessage(
           i18n,
           response,
-          'laatija.messages.save-error'
+          Response.errorKey(i18nRoot, 'save', response)
         );
         flashMessageStore.add('Laatija', 'error', msg);
       },
@@ -71,7 +75,7 @@
         flashMessageStore.add(
           'Laatija',
           'success',
-          i18n('laatija.messages.save-success')
+          i18n(i18nRoot + '.messages.save-success')
         );
         laatijat = [];
       }
@@ -140,9 +144,9 @@
         <table class="etp-table">
           <thead class="etp-table--thead">
             <tr class="etp-table--tr">
-              <th class="etp-table--th">{i18n('rivi')}</th>
+              <th class="etp-table--th">{i18n(i18nRoot + '.rivi')}</th>
               {#each fields as field}
-                <th class="etp-table--th">{i18n(`laatijaupload.${field}`)}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.' + field)}</th>
               {/each}
             </tr>
           </thead>
@@ -185,14 +189,14 @@
               prefix="laatija-upload"
               disabled={errors.length}
               type={'submit'}
-              text={i18n('laatija.lisaa-laatijat')} />
+              text={i18n(i18nRoot + '.save')} />
           </div>
           <div class="px-4">
             <Button
               prefix="laatija-upload"
               style={'secondary'}
               type={'reset'}
-              text={i18n('peruuta')} />
+              text={i18n(i18nRoot + '.cancel')} />
           </div>
         </div>
       </form>

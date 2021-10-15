@@ -169,7 +169,6 @@
   },
   "laatija": {
     "laatija": "Upprättare",
-    "lisaa-laatijat": "Lägg till upprättare",
     "henkilotunnus": "Personbeteckning",
     "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O",
     "katuosoite": "Gatuadress",
@@ -178,22 +177,43 @@
     "maa": "Land",
     "laskutuskieli": "Faktureringsspråk",
     "www-osoite": "Verksamhetens www-adress",
-    "laatijatiedot": "Uppgift om upprättare",
+    "laatijatiedot-header": "Uppgift om upprättare",
     "patevyydenvoimassaolo": "Befogenhetens giltighetstid",
     "patevyystaso": "Behörighetsnivå",
     "paatoimintaalue": "Huvudverksamhetsområde",
     "muuttoimintaalueet": "Övriga verksamhetsområden",
-    "julkisettiedot": "Välj offentliga uppgifter",
+    "julkisettiedot-header": "Välj offentliga uppgifter",
     "todistustenlaatimiskielto": "Förbud mot upprättande av certifikat",
     "api-key-header": "Kalkylprogram",
     "api-key": "Ange ett nytt lösenord för dataöverföringen (minst 8 tecken)",
     "messages": {
+      "not-found": "Hittar inte upprättaren i denna tjänst.",
       "save-success": "Upprättarnas uppgifter har sparats.",
       "save-error": "Det uppstod ett oväntat fel i sparandet av upprättarnas uppgifter.",
       "validation-error": "Fel i uppgifterna om upprättare. Kontrollera de rödmärkta och ladda om filen.",
-      "load-error": "Sökningen av upprättarens uppgifter misslyckades.",
-      "upload-error": "Filen kunde inte laddas ner.",
-      "not-found": "Hittar inte upprättaren i denna tjänst."
+      "load-error": "Sökningen av upprättarens uppgifter misslyckades."
+    },
+    "upload": {
+      "rivi": "Rad",
+      "etunimi": "Förnamn",
+      "sukunimi": "Efternamn",
+      "henkilotunnus": "Personbeteckning",
+      "jakeluosoite": "Distributionsadress",
+      "postinumero": "Postnummer",
+      "postitoimipaikka": "Postanstalt",
+      "email": "E-post",
+      "puhelin": "Telefonnummer",
+      "patevyystaso": "Behörighetsnivå",
+      "toteamispaivamaara": "Datum för konstaterande",
+      "toteaja": "Konstaterad av",
+      "save": "Lägg till upprättare",
+      "cancel": "Ångra",
+      "messages": {
+        "load-error": "Sökningen av upprättarens uppgifter misslyckades.",
+        "save-success": "Upprättarnas uppgifter har sparats.",
+        "save-error": "Det uppstod ett oväntat fel i sparandet av upprättarnas uppgifter.",
+        "validation-error": "Fel i uppgifterna om upprättare. Kontrollera de rödmärkta och ladda om filen."
+      }
     },
     "yritykset": {
       "title": "Företag",
@@ -228,10 +248,7 @@
         "attach-failed": "Kopplingen till företaget misslyckades",
         "detach-failed": "Det gick inte att avlägsna upprättaren från företaget"
       }
-    },
-    "toteamispaivamaara_haku": "Upprättare / Toteamispäivämäärä SV?",
-    "voimassaolo-paattymisaika_haku": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
-    "patevyystaso_haku": "Upprättare / Behörighetsnivå"
+    }
   },
   "laatijahaku": {
     "title": "Sök upprättare",
@@ -1290,20 +1307,6 @@
     "contact-info": "Kontaktuppgifter",
     "phone": "Telefon",
     "email": "E-post"
-  },
-  "laatijaupload": {
-    "rivi": "Rad",
-    "etunimi": "Förnamn",
-    "sukunimi": "Efternamn",
-    "henkilotunnus": "Personbeteckning",
-    "jakeluosoite": "Distributionsadress",
-    "postinumero": "Postnummer",
-    "postitoimipaikka": "Postanstalt",
-    "email": "E-post",
-    "puhelin": "Telefonnummer",
-    "patevyystaso": "Behörighetsnivå",
-    "toteamispaivamaara": "Datum för konstaterande",
-    "toteaja": "Konstaterad av"
   },
   "valvonta": {
     "self": "Minä SV?",

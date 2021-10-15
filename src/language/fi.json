@@ -78,20 +78,6 @@
       "cancel": "Peruuta"
     }
   },
-  "laatijaupload": {
-    "rivi": "Rivi",
-    "etunimi": "Etunimi",
-    "sukunimi": "Sukunimi",
-    "henkilotunnus": "Henkilötunnus",
-    "jakeluosoite": "Jakeluosoite",
-    "postinumero": "Postinumero",
-    "postitoimipaikka": "Postitoimipaikka",
-    "email": "Sähköposti",
-    "puhelin": "Puhelinnumero",
-    "patevyystaso": "Pätevyystaso",
-    "toteamispaivamaara": "Toteamispäivämäärä",
-    "toteaja": "Toteaja"
-  },
   "errors": {
     "row-error": "Virhe rivillä",
     "load-error": "Tietojen haku epäonnistui.",
@@ -227,9 +213,6 @@
   },
   "laatija": {
     "laatija": "Laatija",
-    "toteamispaivamaara_haku": "Laatija / Toteamispäivämäärä",
-    "voimassaolo-paattymisaika_haku": "Laatija / Pätevyyden voimassaolon päättymispäivä",
-    "lisaa-laatijat": "Lisää laatijat",
     "henkilotunnus": "Henkilötunnus",
     "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
     "katuosoite": "Katuosoite",
@@ -238,13 +221,13 @@
     "maa": "Maa",
     "laskutuskieli": "Laskutuskieli",
     "www-osoite": "Toiminnan www-osoite",
-    "laatijatiedot": "Laatijatiedot",
+    "perustiedot-header": "Perustiedot",
+    "laatijatiedot-header": "Laatijatiedot",
     "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
     "patevyystaso": "Pätevyystaso",
-    "patevyystaso_haku": "Laatija / Pätevyystaso",
     "paatoimintaalue": "Päätoiminta-alue",
     "muuttoimintaalueet": "Muut toiminta-alueet",
-    "julkisettiedot": "Valitse julkiset tiedot",
+    "julkisettiedot-header": "Valitse julkiset tiedot",
     "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa",
     "api-key-header": "Laskentaohjelmisto",
     "api-key": "Anna uusi tiedonsiirron salasana (vähintään 8 merkkiä)",
@@ -252,11 +235,32 @@
     "save": "Tallenna",
     "messages": {
       "not-found": "Laatijaa ei löydy tästä palvelusta.",
-      "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
-      "save-error": "Laatijoiden tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Laatioiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan.",
-      "load-error": "Laatijan tietojen haku epäonnistui.",
-      "upload-error": "Tiedoston lataaminen epäonnistui."
+      "save-success": "Laatijan tiedot tallennettu onnistuneesti.",
+      "save-error": "Laatijan tietojen tallennus epäonnistui.",
+      "validation-error": "Laatijan tiedoissa virheitä. Tarkista lomakkeelta punaisella merkityt kentät.",
+      "load-error": "Laatijan tietojen haku epäonnistui."
+    },
+    "upload": {
+      "rivi": "Rivi",
+      "etunimi": "Etunimi",
+      "sukunimi": "Sukunimi",
+      "henkilotunnus": "Henkilötunnus",
+      "jakeluosoite": "Jakeluosoite",
+      "postinumero": "Postinumero",
+      "postitoimipaikka": "Postitoimipaikka",
+      "email": "Sähköposti",
+      "puhelin": "Puhelinnumero",
+      "patevyystaso": "Pätevyystaso",
+      "toteamispaivamaara": "Toteamispäivämäärä",
+      "toteaja": "Toteaja",
+      "save": "Lisää laatijat",
+      "cancel": "Peruuta",
+      "messages": {
+        "load-error": "Laatijoiden tuonnissa tarvittavien tietojen haku epäonnistui.",
+        "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
+        "save-error": "Laatijoiden tietojen tallennus epäonnistui.",
+        "validation-error": "Laatijoiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan."
+      }
     },
     "yritykset": {
       "title": "Yritykset",
