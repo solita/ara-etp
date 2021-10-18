@@ -7,7 +7,7 @@
 
   export let sivu;
   export let activeSivuId = -1;
-  export let childrenShown = true;
+  export let childrenShown = false;
   export let draggable = false;
   export let updateSivu;
 
