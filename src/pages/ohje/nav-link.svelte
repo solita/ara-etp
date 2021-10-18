@@ -1,8 +1,8 @@
 <script>
+  import { onMount } from 'svelte';
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import { dragdrop } from '@Utility/dragdrop';
-  import { slide } from 'svelte/transition';
   import { _ } from '@Language/i18n';
 
   export let sivu;
@@ -10,6 +10,7 @@
   export let childrenShown = false;
   export let draggable = false;
   export let updateSivu;
+  export let showChildrenAndSiblingsInParent;
 
   let isBeingDragged = false;
   let isBeingTargeted = false;
@@ -18,6 +19,18 @@
   const i18n = $_;
   const hoverTime = 1000;
   let hoverTimeout;
+  $: isActive = sivu.id === parseInt(activeSivuId);
+  $: childrenShown =
+    (!R.isEmpty(sivu.children) && childrenShown && !isBeingDragged) ||
+    (draggable && isBeingTargeted && setDroppedAsChild && !isBeingDragged);
+
+  const showChildrenAndSiblings = () => {
+    childrenShown = true;
+
+    if (showChildrenAndSiblingsInParent) {
+      showChildrenAndSiblingsInParent();
+    }
+  };
 
   // events when NavLink is being dragged
   const dragStart = e => {
@@ -68,6 +81,12 @@
       });
     }
   };
+
+  onMount(() => {
+    if (isActive) {
+      showChildrenAndSiblings();
+    }
+  });
 </script>
 
 <style type="text/postcss">
@@ -108,13 +127,13 @@
   }
 </style>
 
-<!-- purgecss: active root child hasNoChildren draggable isBeingDragged isBeingTargeted setDroppedAsChild childrenShown draggable icon-unpublished -->
+<!-- purgecss: active root child hasNoChildren draggable isBeingDragged isBeingTargeted setDroppedAsChild childrenShown draggable icon-unpublished hidden -->
 
 <div class="flex flex-col w-full">
   <div
     use:dragdrop={{ dragStart, dragEnd, dragEnter, dragLeave, drop }}
     id={sivu.id}
-    class:active={sivu.id === parseInt(activeSivuId)}
+    class:active={isActive}
     class:root={sivu['parent-id'].isNone()}
     class:child={sivu['parent-id'].isSome()}
     class:hasNoChildren={R.isEmpty(sivu.children)}
@@ -157,24 +176,25 @@
       {/if}
     </div>
   </div>
-  {#if (!R.isEmpty(sivu.children) && childrenShown && !isBeingDragged) || (draggable && isBeingTargeted && setDroppedAsChild && !isBeingDragged)}
-    <div
-      class="children pl-1 bg-secondary"
-      transition:slide|local={{ duration: 100 }}>
-      {#if draggable && isBeingTargeted && setDroppedAsChild && !isBeingDragged}
-        <div
-          class="destination flex w-full border-b items-center pointer-events-none">
-          <span class="font-icon p-2"> subdirectory_arrow_right </span>
-          <span class="flex-grow p-2 items-center font-semibold">
-            {i18n('ohje.navigation.destination-child')}
-          </span>
-        </div>
-      {/if}
-      {#each sivu.children as child}
-        <svelte:self sivu={child} {activeSivuId} {draggable} {updateSivu} />
-      {/each}
-    </div>
-  {/if}
+  <div class="children pl-1 bg-secondary" class:hidden={!childrenShown}>
+    {#if draggable && isBeingTargeted && setDroppedAsChild && !isBeingDragged}
+      <div
+        class="destination flex w-full border-b items-center pointer-events-none">
+        <span class="font-icon p-2"> subdirectory_arrow_right </span>
+        <span class="flex-grow p-2 items-center font-semibold">
+          {i18n('ohje.navigation.destination-child')}
+        </span>
+      </div>
+    {/if}
+    {#each sivu.children as child}
+      <svelte:self
+        sivu={child}
+        {activeSivuId}
+        {draggable}
+        {updateSivu}
+        showChildrenAndSiblingsInParent={showChildrenAndSiblings} />
+    {/each}
+  </div>
 
   {#if draggable && isBeingTargeted && !setDroppedAsChild && !isBeingDragged}
     <div
