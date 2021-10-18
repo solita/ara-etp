@@ -30,10 +30,10 @@ const uniqueViolationKey = R.compose(
   R.prop('body')
 );
 
-export const uniqueViolationMessage = (i18n, response, defaultKey) => {
-  const key = Maybe.orSome(defaultKey, uniqueViolationKey(response));
-  return R.replace('{value}', response.body.value, i18n(key));
-};
+export const uniqueViolationMessage = (i18n, response, defaultKey) =>
+  Maybe.fold(i18n(defaultKey),
+    key => R.replace('{value}', response.body.value, i18n(key)),
+    uniqueViolationKey(response));
 
 export const labelForId = (locale, items) =>
   R.compose(
