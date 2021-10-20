@@ -6,6 +6,7 @@
   import * as Formats from '@Utility/formats';
   import * as Validation from '@Utility/validation';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as MD from '@Component/text-editor/markdown';
 
   import * as api from './viesti-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
@@ -19,7 +20,8 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Button from '@Component/Button/Button.svelte';
   import TextButton from '@Component/Button/TextButton';
-  import Textarea from '@Component/Textarea/Textarea.svelte';
+  import TextEditor from '@Component/text-editor/text-editor';
+  import MDStyle from '@Component/text-editor/style.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import AttachEtDialog from '@Pages/viesti/attach-energiatodistus-dialog';
   import Link from '@Component/Link/Link.svelte';
@@ -326,7 +328,7 @@
             dirty = true;
           }}>
           <div class="w-full mb-8 space-y-2">
-            <Textarea
+            <TextEditor
               id={'ketju.new-viesti'}
               name={'ketju.new-viesti'}
               label={i18n(i18nRoot + '.new-viesti')}
@@ -374,7 +376,11 @@
               </span>
             </div>
             <User user={viesti.from} {whoami} />
-            <p>{viesti.body}</p>
+            <p>
+              <MDStyle>
+                {@html MD.toHtml(viesti.body)}
+              </MDStyle>
+            </p>
           </div>
         {/each}
       </div>
