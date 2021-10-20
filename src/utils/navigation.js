@@ -17,6 +17,7 @@ import * as Future from '@Utility/future-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 
 import * as ViestiApi from '@Pages/viesti/viesti-api';
+import * as ValvontaOikeellisuusApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
 /**
  * @sig string -> Array [string]
@@ -41,7 +42,11 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
   },
   {
     label: i18n('navigation.valvonta.oikeellisuus.all'),
-    href: '#/valvonta/oikeellisuus/all'
+    href: '#/valvonta/oikeellisuus/all',
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ValvontaOikeellisuusApi.valvontaCountUnfinished)
   },
   {
     label: i18n('navigation.yritykset'),
@@ -279,7 +284,11 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
   },
   {
     label: i18n('navigation.valvonta.oikeellisuus.all'),
-    href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`
+    href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
+    badge: R.compose(
+      R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+      R.map(R.prop('count'))
+    )(ValvontaOikeellisuusApi.valvontaCountUnfinished)
   },
   {
     label: i18n('navigation.valvonta.kaytto.all'),

@@ -86,6 +86,9 @@ export const valvontaCount = R.compose(
   Query.toQueryString
 );
 
+export const valvontaCountUnfinished = Fetch.getJson(fetch,
+  `${url.valvonnat}/count/unfinished`);
+
 export const toimenpidetyypit = Fetch.cached(
   fetch,
   '/valvonta/oikeellisuus/toimenpidetyypit'
