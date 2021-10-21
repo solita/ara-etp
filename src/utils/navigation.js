@@ -41,7 +41,7 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
     )(ViestiApi.getKetjutUnread)
   },
   {
-    label: i18n('navigation.valvonta.oikeellisuus.all'),
+    label: i18n('navigation.valvonta.oikeellisuus.valvonnat'),
     href: '#/valvonta/oikeellisuus/all',
     badge: R.compose(
       R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
