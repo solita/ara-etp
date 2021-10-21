@@ -180,7 +180,7 @@
     @apply ml-8 bg-light border-disabled border;
   }
   .message p {
-    @apply border-disabled whitespace-pre-wrap mt-2 pt-2 border-t overflow-x-auto;
+    @apply border-disabled mt-2 pt-2 border-t overflow-x-auto;
   }
 </style>
 
