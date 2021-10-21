@@ -41,7 +41,7 @@ const linksForLaatija = R.curry((isDev, i18n, whoami) => [
     )(ViestiApi.getKetjutUnread)
   },
   {
-    label: i18n('navigation.valvonta.oikeellisuus.valvonnat'),
+    label: i18n('navigation.valvonta.oikeellisuus.all.laatija'),
     href: '#/valvonta/oikeellisuus/all',
     badge: R.compose(
       R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
@@ -283,7 +283,7 @@ export const linksForPaakayttaja = R.curry((isDev, i18n, whoami) => [
     )(ViestiApi.getKetjutUnread)
   },
   {
-    label: i18n('navigation.valvonta.oikeellisuus.all'),
+    label: i18n('navigation.valvonta.oikeellisuus.all.valvoja'),
     href: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
     badge: R.compose(
       R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
