@@ -65,8 +65,10 @@
         "valvonta": "Valvonta"
       },
       "oikeellisuus": {
-        "all": "Oikeellisuuden valvonnat",
-        "valvonnat": "Valvonnat",
+        "all": {
+          "valvoja": "Oikeellisuuden valvonnat",
+          "laatija": "Valvonnat"
+        },
         "valvonta": "Valvonta",
         "virhetypes": "Virhetyypit"
       }

@@ -22,11 +22,11 @@ describe('Navigation', () => {
     'navigation.halytykset': 'Hälytykset',
     'navigation.kayttajat': 'Käyttäjät',
     'navigation.valvonta.valvonta': 'Valvonta',
-    'navigation.valvonta.oikeellisuus.all': 'Oikeellisuuden valvonta',
-    'navigation.valvonta.oikeellisuus.valvonnat': 'Valvonnat',
+    'navigation.valvonta.oikeellisuus.all.valvoja': 'Oikeellisuuden valvonnat',
+    'navigation.valvonta.oikeellisuus.all.laatija': 'Valvonnat',
     'navigation.valvonta.oikeellisuus.valvonta': 'Valvonta',
     'navigation.valvonta.oikeellisuus.virhetypes': 'Virhetyypit',
-    'navigation.valvonta.kaytto.all': 'Käytönvalvonta'
+    'navigation.valvonta.kaytto.all': 'Käytön valvonta'
   });
 
   describe('locationParts', () => {
@@ -153,11 +153,11 @@ describe('Navigation', () => {
           href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
         },
         {
-          label: 'Oikeellisuuden valvonta',
+          label: 'Oikeellisuuden valvonnat',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
         },
         {
-          label: 'Käytönvalvonta',
+          label: 'Käytön valvonta',
           href: `#/valvonta/kaytto/all?valvoja-id=${kayttaja.id}&has-valvoja=false`
         },
         { label: 'Laatijat', href: '#/laatija/all' }
@@ -390,11 +390,11 @@ describe('Navigation', () => {
           href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
         },
         {
-          label: 'Oikeellisuuden valvonta',
+          label: 'Oikeellisuuden valvonnat',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false`
         },
         {
-          label: 'Käytönvalvonta',
+          label: 'Käytön valvonta',
           href: `#/valvonta/kaytto/all?valvoja-id=1&has-valvoja=false`
         },
         {
@@ -480,11 +480,11 @@ describe('Navigation', () => {
           href: '#/viesti/all?kasittelija-id=1&has-kasittelija=false'
         },
         {
-          label: 'Oikeellisuuden valvonta',
+          label: 'Oikeellisuuden valvonnat',
           href: `#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false`
         },
         {
-          label: 'Käytönvalvonta',
+          label: 'Käytön valvonta',
           href: `#/valvonta/kaytto/all?valvoja-id=1&has-valvoja=false`
         },
         {
