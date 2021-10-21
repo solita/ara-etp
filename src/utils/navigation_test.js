@@ -23,6 +23,7 @@ describe('Navigation', () => {
     'navigation.kayttajat': 'Käyttäjät',
     'navigation.valvonta.valvonta': 'Valvonta',
     'navigation.valvonta.oikeellisuus.all': 'Oikeellisuuden valvonta',
+    'navigation.valvonta.oikeellisuus.valvonnat': 'Valvonnat',
     'navigation.valvonta.oikeellisuus.valvonta': 'Valvonta',
     'navigation.valvonta.oikeellisuus.virhetypes': 'Virhetyypit',
     'navigation.valvonta.kaytto.all': 'Käytönvalvonta'
@@ -72,7 +73,7 @@ describe('Navigation', () => {
         { label: 'Viestit', href: '#/viesti/all' },
         {
           href: '#/valvonta/oikeellisuus/all',
-          label: 'Oikeellisuuden valvonta'
+          label: 'Valvonnat'
         },
         {
           label: 'Yritykset',
@@ -110,7 +111,7 @@ describe('Navigation', () => {
         { label: 'Viestit', href: '#/viesti/all' },
         {
           href: '#/valvonta/oikeellisuus/all',
-          label: 'Oikeellisuuden valvonta'
+          label: 'Valvonnat'
         },
         {
           label: 'Yritykset',
