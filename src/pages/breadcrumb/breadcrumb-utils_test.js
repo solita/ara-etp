@@ -672,8 +672,8 @@ describe('BreadcrumbUtils', () => {
       it('should return all', () => {
         const expected = [
           {
-            url: '#/valvonta/oikeellisuus/all?valvoja-id=1&has-valvoja=false',
-            label: 'navigation.valvonta.oikeellisuus.all'
+            url: '#/valvonta/oikeellisuus/all',
+            label: 'navigation.valvonta.oikeellisuus.all.laatija'
           }
         ];
 
