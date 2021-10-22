@@ -2,8 +2,12 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as Kayttajat from '@Utility/kayttajat';
 
-export const isAllowedToSendToEveryone = whoami =>
-  R.or(Kayttajat.isPaakayttaja(whoami), Kayttajat.isLaskuttaja(whoami));
+export const isKasittelija = R.anyPass([
+  Kayttajat.isPaakayttaja,
+  Kayttajat.isLaskuttaja
+]);
+
+export const isAllowedToSendToEveryone = isKasittelija;
 
 export const defaultKetju = (energiatodistus, whoami) => ({
   vastaanottajat: isAllowedToSendToEveryone(whoami)

@@ -9,7 +9,6 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
-  import * as Kayttajat from '@Utility/kayttajat';
   import * as Parsers from '@Utility/parsers';
   import * as Locales from '@Language/locale-utils';
 
@@ -26,7 +25,7 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
   import Button from '@Component/Button/Button.svelte';
-  import Textarea from '@Component/Textarea/Textarea.svelte';
+  import TextEditor from '@Component/text-editor/text-editor';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Input from '@Component/Input/Input.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
@@ -230,7 +229,7 @@
             {i18n} />
         </div>
         <div class="w-full py-4">
-          <Textarea
+          <TextEditor
             id={'ketju.body'}
             name={'ketju.body'}
             label={i18n('viesti.ketju.body')}

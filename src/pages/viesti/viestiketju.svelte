@@ -1,15 +1,12 @@
 <script>
   import * as R from 'ramda';
-  import * as Maybe from '@Utility/maybe-utils';
   import * as Formats from '@Utility/formats';
-  import * as Kayttajat from '@Utility/kayttajat';
   import * as Viestit from '@Pages/viesti/viesti-util';
+  import * as MD from '@Component/text-editor/markdown';
 
   import SenderRecipients from './sender-recipients.svelte';
   import User from './user.svelte';
   import ViestiketjuHandler from './viestiketju-handler.svelte';
-
-  import { _ } from '@Language/i18n';
 
   export let ketju;
   export let whoami;
@@ -65,7 +62,7 @@
           ketju
         )} />
     </div>
-    {#if !Kayttajat.isLaatija(whoami)}
+    {#if Viestit.isKasittelija(whoami)}
       <div class="flex-shrink justify-self-end ml-auto">
         <button
           on:click|preventDefault|stopPropagation={submitKasitelty(
@@ -101,11 +98,11 @@
           <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
         </div>
         :
-        <div class="truncate p-1" class:font-bold={unread}>
-          {R.last(ketju.viestit).body}
+        <div class="truncate p-1 flex space-x-1" class:font-bold={unread}>
+          {@html MD.toHtml(R.last(ketju.viestit).body)}
         </div>
       </div>
-      {#if !Kayttajat.isLaatija(whoami)}
+      {#if Viestit.isKasittelija(whoami)}
         <ViestiketjuHandler {ketju} {kasittelijat} {whoami} />
       {/if}
     </div>
