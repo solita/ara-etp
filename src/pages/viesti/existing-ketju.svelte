@@ -151,6 +151,7 @@
   const submitNewViesti = event => {
     if (isValidForm(newViesti).isRight()) {
       addNewViesti(newViesti);
+      Validation.unblurForm(event.target);
     } else {
       flashMessageStore.add(
         'viesti',
