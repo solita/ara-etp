@@ -35,8 +35,11 @@
   $: Future.fork(
     response => {
       toggleOverlay(false);
-      flashMessageStore.add('Laatija', 'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response)));
+      flashMessageStore.add(
+        'Laatija',
+        'error',
+        i18n(Response.errorKey(i18nRoot, 'load', response))
+      );
     },
     response => {
       toggleOverlay(false);

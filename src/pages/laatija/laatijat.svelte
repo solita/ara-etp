@@ -188,17 +188,17 @@
       'voimassaolo-paattymisaika-after',
       'voimassaolo-paattymisaika-before'
     ])
-  )
+  );
 
   let filterQuery = {};
   const updateSearch = query => {
-    const newQuery = newFilterQuery(query)
+    const newQuery = newFilterQuery(query);
     if (!R.equals(filterQuery, newQuery)) {
       filterQuery = newQuery;
     }
-  }
+  };
   $: updateSearch(query);
-  
+
   const toPage = nextPage => {
     query = R.assoc('page', nextPage, query);
   };
