@@ -1,8 +1,12 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Parsers from '@Utility/parsers';
+  import * as Validation from '@Utility/validation';
 
   import Input from '@Component/Input/Input';
   import { _ } from '@Language/i18n';
@@ -11,8 +15,8 @@
 
   export let close;
   export let ketjuId;
-  export let energiatodistusId = '';
-  $: inputEtId = energiatodistusId;
+  export let energiatodistusId;
+  $: inputEtId = Either.Right(energiatodistusId);
 
   const i18n = $_;
   const i18nRoot = 'viesti.ketju.existing.attach-to-et';
@@ -56,14 +60,14 @@
   );
 
   const attach = () => {
-    if (!inputEtId || isNaN(parseInt(inputEtId))) {
+    if (Maybe.isNone(EM.toMaybe(inputEtId))) {
       error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
     } else {
       error = Maybe.None();
       showAttachSpinner = true;
 
       updateKetju({
-        'energiatodistus-id': parseInt(inputEtId)
+        'energiatodistus-id': EM.orSome(null, inputEtId)
       });
     }
   };
@@ -91,7 +95,7 @@
       showSpinner: showAttachSpinner
     },
     {
-      disabled: !energiatodistusId || buttonsDisabled,
+      disabled: Maybe.isNone(energiatodistusId) || buttonsDisabled,
       'on:click': detach,
       style: 'secondary',
       text: i18n(i18nRoot + '.button-detach'),
@@ -114,6 +118,9 @@
       compact={false}
       required={true}
       bind:model={inputEtId}
+      format={Maybe.orSome('')}
+      parse={Parsers.optionalParser(Parsers.parseInteger)}
+      validators={[Validation.isSome]}
       {i18n} />
   </div>
 </Dialog>

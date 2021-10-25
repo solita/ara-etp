@@ -1313,6 +1313,9 @@
           "update-error": "Viestiketjun päivitys epäonnistui",
           "validation-error": "Vastauksessa on virhe. Tarkista vastauksen tiedot ennen lähettämistä."
         }
+      },
+      "liitteet": {
+        "empty": "Viestiketjulla ei ole liitteitä."
       }
     }
   },

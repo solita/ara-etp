@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
@@ -51,9 +52,9 @@
           Response.notFound(response)
             ? `${i18nRoot}.messages.not-found`
             : Maybe.orSome(
-                `${i18nRoot}.messages.load-error`,
-                Response.localizationKey(response)
-              )
+              `${i18nRoot}.messages.load-error`,
+              Response.localizationKey(response)
+            )
         );
 
         flashMessageStore.add('viesti', 'error', msg);
@@ -183,6 +184,9 @@
   .message p {
     @apply border-disabled mt-2 pt-2 border-t overflow-x-auto;
   }
+  h1 {
+      @apply text-lg mb-2;
+  }
 </style>
 
 <!-- purgecss: hidden -->
@@ -191,18 +195,11 @@
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as { ketju, whoami, ryhmat, kasittelijat }}
       <DirtyConfirmation {dirty} />
-      <div class="flex">
-        <TextButton
-          on:click={pop}
-          icon="arrow_back"
-          text={i18n(i18nRoot + '.back')}
-          style={'secondary'} />
-      </div>
 
       <div
         class="flex justify-between items-center py-2 border-b border-disabled">
         <div>
-          <strong>{ketju.subject}</strong>
+          <h1>{ketju.subject}</h1>
           <SenderRecipients
             sender={R.prop('from', R.head(ketju.viestit))}
             icons="true"
@@ -215,7 +212,7 @@
         </div>
 
         <div class="flex flex-col items-start">
-          {#if !Kayttajat.isLaatija(whoami)}
+          {#if Viestit.isKasittelija(whoami)}
             <div class="flex w-full justify-between px-2">
               {#each ketju['energiatodistus-id'].toArray() as etId}
                 <div class="flex w-full mr-auto space-x-1">
@@ -227,40 +224,22 @@
                 </div>
               {/each}
               {#if showAttachEtDialog}
-                {#each ketju['energiatodistus-id'].toArray() as etId}
-                  <AttachEtDialog
-                    ketjuId={ketju.id}
-                    energiatodistusId={etId}
-                    close={success => {
-                      if (success === true) {
-                        flashMessageStore.add(
-                          'viesti',
-                          'success',
-                          i18n(
-                            `${i18nRoot}.attach-to-et.messages.update-success`
-                          )
-                        );
-                        load(params.id);
-                      }
-                      showAttachEtDialog = false;
-                    }} />
-                {:else}
-                  <AttachEtDialog
-                    ketjuId={ketju.id}
-                    close={success => {
-                      if (success === true) {
-                        flashMessageStore.add(
-                          'viesti',
-                          'success',
-                          i18n(
-                            `${i18nRoot}.attach-to-et.messages.update-success`
-                          )
-                        );
-                        load(params.id);
-                      }
-                      showAttachEtDialog = false;
-                    }} />
-                {/each}
+                <AttachEtDialog
+                  ketjuId={ketju.id}
+                  energiatodistusId={ketju['energiatodistus-id']}
+                  close={success => {
+                    if (success === true) {
+                      flashMessageStore.add(
+                        'viesti',
+                        'success',
+                        i18n(
+                          `${i18nRoot}.attach-to-et.messages.update-success`
+                        )
+                      );
+                      load(params.id);
+                    }
+                    showAttachEtDialog = false;
+                  }} />
               {/if}
               <div class="mt-auto ml-auto justify-self-end">
                 <TextButton

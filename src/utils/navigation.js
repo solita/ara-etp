@@ -355,15 +355,37 @@ export const parseEnergiatodistus = R.curry(
   }
 );
 
+const truncate = max => R.when(
+  R.propSatisfies(R.lt(max), 'length'),
+  R.compose(R.concat(R.__, ' ...'), R.slice(0, max)))
+
+export const linksForViesti = R.curry(
+  (isDev, idTranslate, i18n, whoami, id) => [
+    {
+      label: R.compose(
+        Maybe.fold(`${i18n('navigation.viestiketju')} ${id}`, truncate(20)),
+        Maybe.fromNull,
+        R.path(['viesti', parseInt(id, 10), 'subject']))
+        (idTranslate),
+      href: `#/viesti/${id}`
+    },
+    {
+      label: i18n('navigation.liitteet'),
+      href: `#/viesti/${id}/liitteet`,
+      badge: Future.resolve(3)
+    }
+  ]
+);
+
 /**
  * @sig boolean -> Translate -> Kayttaja -> Array [string] -> Array [Link]
  */
-export const parseViesti = R.curry((isDev, i18n, whoami, locationParts) => {
+export const parseViesti = R.curry((isDev, i18n, whoami, idTranslate, locationParts) => {
   if (R.equals('all', R.head(locationParts))) {
     return parseRoot(isDev, i18n, whoami);
   }
 
-  return [];
+  return linksForViesti(isDev, idTranslate, i18n, whoami, R.head(locationParts));
 });
 
 /**
@@ -411,7 +433,7 @@ export const navigationParse = R.curry(
         ],
         [
           R.compose(R.equals('viesti'), R.head),
-          R.compose(parseViesti(isDev, i18n, whoami), R.tail)
+          R.compose(parseViesti(isDev, i18n, whoami, idTranslate), R.tail)
         ],
         [R.T, R.always([])]
       ]),
