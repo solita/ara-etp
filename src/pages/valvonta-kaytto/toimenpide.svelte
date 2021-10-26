@@ -32,7 +32,7 @@
 </script>
 
 <div class="flex flex-col mb-3">
-  <div class="flex overflow-hidden">
+  <div class="flex overflow-hidden items-center">
     <div class="mr-4 whitespace-no-wrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
@@ -44,11 +44,12 @@
     </div>
 
     {#each EM.toArray(toimenpide['deadline-date']) as deadline}
-      <div class="flex items-center">
+      <div class="flex items-center mr-1">
         <span class="font-icon pb-1">alarm</span>
         {Formats.formatDateInstant(deadline)}
       </div>
     {/each}
+    <span> ({toimenpide.author.etunimi} {toimenpide.author.sukunimi}) </span>
   </div>
 
   {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
