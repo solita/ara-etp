@@ -24,9 +24,11 @@
   export let toimenpiteet;
   export let toimenpidetyypit;
   export let templatesByType;
+  export let whoami;
 
   export let saveValvonta;
   export let reload;
+  const i18n = $_;
 
   let newToimenpide = Maybe.None();
   let newNote = Maybe.None();
@@ -49,13 +51,21 @@
   const saveKasittelija = id =>
     saveValvonta(R.assoc('valvoja-id', id, valvonta));
 
-  const fullName = valvojat =>
-    R.compose(
-      R.join(' '),
-      R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
-      R.find(R.__, valvojat),
-      R.propEq('id')
-    );
+  const isSelf = R.curry((whoami, id) =>
+    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
+  );
+  const formatValvoja = R.curry((valvojat, whoami, id) =>
+    R.ifElse(
+      isSelf(whoami),
+      R.always(i18n('valvonta.self')),
+      R.compose(
+        Maybe.orSome('-'),
+        R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
+        R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
+        Maybe.fromNull
+      )
+    )(id)
+  );
 
   const load = _ => {
     newToimenpide = Maybe.None();
@@ -92,7 +102,7 @@
       Maybe.fromNull,
       R.path(['target', 'value'])
     )}
-    format={fullName(valvojat)}
+    format={formatValvoja(valvojat, whoami)}
     items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 
