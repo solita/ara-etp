@@ -1713,14 +1713,14 @@
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehotus",
+          "title": "Kehotus",
           "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön.",
           "publish-button": "Lähetä kehotus",
           "response-title": "Kehotus vastata tietopyyntöön",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-warning": {
-          "title": "Tietopyyntö varoitus",
+          "title": "Varoitus",
           "info": "Varoitetaan rakennuksen omistajia seurauksista, jos tietopyyntöön ei vastata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
           "response-title": "Varoitus tietopyyntöön liittyen",
