@@ -16,6 +16,7 @@
 
   import * as ETViews from '@Pages/energiatodistus/views';
   import * as Toimenpiteet from '@Pages/valvonta-oikeellisuus/toimenpiteet';
+  import * as Valvojat from '@Pages/valvonta/valvojat';
 
   import * as Links from './links';
 
@@ -148,23 +149,6 @@
     Router.push(Links.valvonta(energiatodistus));
   };
 
-  const isSelf = R.curry((whoami, id) =>
-    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
-  );
-
-  const formatValvoja = R.curry((valvojat, whoami, id) =>
-    R.ifElse(
-      isSelf(whoami),
-      R.always(i18n('valvonta.self')),
-      R.compose(
-        Maybe.orSome('-'),
-        R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-        R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
-        Maybe.fromNull
-      )
-    )(id)
-  );
-
   $: R.compose(
     querystring =>
       replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
@@ -193,7 +177,7 @@
                 'id',
                 R.filter(R.propEq('passivoitu', false), valvojat)
               )}
-              format={formatValvoja(valvojat, whoami)}
+              format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
               parse={Maybe.Some}
               allowNone={true} />
           </div>
@@ -256,13 +240,16 @@
                   <!-- valvonta -->
                   <td
                     class="etp-table--td"
-                    class:font-bold={isSelf(whoami, valvonta['valvoja-id'])}
-                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}
-                    >{formatValvoja(
-                      valvojat,
+                    class:font-bold={Valvojat.isSelf(
                       whoami,
                       valvonta['valvoja-id']
-                    )}</td>
+                    )}
+                    class:text-primary={Valvojat.isSelf(
+                      whoami,
+                      valvonta['valvoja-id']
+                    )}>
+                    {Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+                  </td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       {Locales.labelForId(

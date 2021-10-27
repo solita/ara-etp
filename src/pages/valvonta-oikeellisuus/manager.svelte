@@ -1,12 +1,12 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Locales from '@Language/locale-utils';
 
   import { _, locale } from '@Language/i18n';
   import * as Router from '@Component/Router/router';
 
+  import * as Valvojat from '@Pages/valvonta/valvojat';
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
 
@@ -57,22 +57,6 @@
 
   const saveKasittelija = id => saveValvonta({ 'valvoja-id': id });
 
-  const isSelf = R.curry((whoami, id) =>
-    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
-  );
-  const formatValvoja = R.curry((valvojat, whoami, id) =>
-    R.ifElse(
-      isSelf(whoami),
-      R.always(i18n('valvonta.self')),
-      R.compose(
-        Maybe.orSome('-'),
-        R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-        R.chain(id => Maybe.find(R.propEq('id', id), valvojat)),
-        Maybe.fromNull
-      )
-    )(id)
-  );
-
   const load = _ => {
     newToimenpide = Maybe.None();
     newNote = Maybe.None();
@@ -99,7 +83,7 @@
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
-    format={formatValvoja(valvojat, whoami)}
+    format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
     items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 

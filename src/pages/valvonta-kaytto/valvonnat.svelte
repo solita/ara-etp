@@ -14,6 +14,7 @@
   import qs from 'qs';
 
   import * as Links from './links';
+  import * as Valvojat from '@Pages/valvonta/valvojat';
 
   import * as api from './valvonta-api';
   import * as osapuolet from './osapuolet';
@@ -144,20 +145,6 @@
     Router.push(Links.valvonta(valvonta));
   };
 
-  const isSelf = R.curry((whoami, id) => Maybe.exists(R.equals(whoami.id), id));
-
-  const formatValvoja = R.curry((valvojat, whoami, id) =>
-    R.ifElse(
-      isSelf(whoami),
-      R.always(i18n('valvonta.self')),
-      R.compose(
-        Maybe.orSome('-'),
-        R.map(valvoja => `${valvoja.etunimi} ${valvoja.sukunimi}`),
-        R.chain(id => Maybe.find(R.propEq('id', id), valvojat))
-      )
-    )(id)
-  );
-
   const formatHenkiloOmistajat = R.compose(
     R.map(henkilo => henkilo.etunimi + ' ' + henkilo.sukunimi),
     R.filter(osapuolet.isOmistaja),
@@ -216,7 +203,10 @@
               'id',
               R.filter(R.propEq('passivoitu', false), valvojat)
             )}
-            format={R.compose(formatValvoja(valvojat, whoami), Maybe.fromNull)}
+            format={R.compose(
+              Valvojat.format(i18n('valvonta.self'), valvojat, whoami),
+              Maybe.fromNull
+            )}
             parse={Maybe.Some}
             allowNone={true} />
         </div>
@@ -278,9 +268,15 @@
                   <!-- valvonta -->
                   <td
                     class="etp-table--td"
-                    class:font-bold={isSelf(whoami, valvonta['valvoja-id'])}
-                    class:text-primary={isSelf(whoami, valvonta['valvoja-id'])}>
-                    {formatValvoja(valvojat, whoami, valvonta['valvoja-id'])}
+                    class:font-bold={Valvojat.isSelf(
+                      whoami,
+                      valvonta['valvoja-id']
+                    )}
+                    class:text-primary={Valvojat.isSelf(
+                      whoami,
+                      valvonta['valvoja-id']
+                    )}>
+                    {Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
                   </td>
                   <td class="etp-table--td">
                     {Maybe.orSome('-', diaarinumero(valvonta))}
