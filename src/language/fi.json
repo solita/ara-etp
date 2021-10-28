@@ -1315,7 +1315,15 @@
         }
       },
       "liitteet": {
-        "empty": "Viestiketjulla ei ole liitteitä."
+        "empty": "Viestiketjulla ei ole liitteitä.",
+        "messages" : {
+          "add-link-success": "Linkki lisätty viestiin.",
+          "add-files-success": "Liitetiedostot lisätty viestiin.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui."
+        }
       }
     }
   },

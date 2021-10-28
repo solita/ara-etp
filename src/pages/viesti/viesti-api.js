@@ -5,8 +5,9 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Query from '@Utility/query';
 
 import * as dfns from 'date-fns';
+import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
 
-const url = {
+export const url = {
   ketjut: '/api/private/viestit',
   ketjutCount: '/api/private/viestit/count',
   ketjutUnread: '/api/private/viestit/count/unread',
@@ -14,7 +15,8 @@ const url = {
   viestit: id => `${url.ketju(id)}/viestit`,
   kasittelijat: '/api/private/kasittelijat',
   energiatodistusKetjut: id =>
-    `/api/private/energiatodistukset/all/${id}/viestit`
+    `/api/private/energiatodistukset/all/${id}/viestit`,
+  liitteet: id => url.ketju(id) + '/liitteet'
 };
 
 export const serialize = R.evolve({
@@ -97,4 +99,37 @@ export const getEnergiatodistusKetjut = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch)),
   url.energiatodistusKetjut
+);
+
+/* Liitteiden palvelut */
+
+export const liitteet = R.compose(
+  R.map(R.map(EtApi.deserializeLiite)),
+  Fetch.getJson(fetch),
+  url.liitteet
+);
+
+export const postLiitteetFiles = R.curry((viestiketjuId, files) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(files =>
+      fetch(url.liitteet(viestiketjuId) + '/files', {
+        method: 'POST',
+        body: EtApi.toFormData('files', files)
+      })
+    )
+  )(files)
+);
+
+export const postLiitteetLink = R.curry((viestiketjuId, link) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(viestiketjuId) + '/link')
+    )
+  )(link)
+);
+
+export const deleteLiite = R.curry((viestiketjuId, liiteId) =>
+  Fetch.deleteFuture(url.liitteet(viestiketjuId) + '/' + liiteId)
 );

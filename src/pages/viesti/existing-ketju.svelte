@@ -45,41 +45,32 @@
 
   let showViestiForm = false;
 
-  const load = R.compose(
+  const load = id => {
+    enableOverlay();
     Future.fork(
       response => {
-        const msg = i18n(
-          Response.notFound(response)
-            ? `${i18nRoot}.messages.not-found`
-            : Maybe.orSome(
-              `${i18nRoot}.messages.load-error`,
-              Response.localizationKey(response)
-            )
-        );
-
-        flashMessageStore.add('viesti', 'error', msg);
+        flashMessageStore.add('viesti', 'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
-        resources = Maybe.Some({
-          whoami: response[0],
-          ketju: response[1],
-          ryhmat: response[2],
-          kasittelijat: response[3]
-        });
+        resources = Maybe.Some(response);
         overlay = false;
-        idTranslateStore.updateKetju(response[1]);
-      }
-    ),
-    Future.parallel(4),
-    R.tap(enableOverlay),
-    R.append(api.getKasittelijat),
-    R.append(api.vastaanottajaryhmat),
-    R.pair(kayttajaApi.whoami),
-    api.ketju
-  );
+        idTranslateStore.updateKetju(R.assoc(
+          'liitteet',
+          response.liitteet,
+          response.ketju));
+      },
+      Future.parallelObject(5, {
+        liitteet: api.liitteet(id),
+        ketju: api.ketju(id),
+        whoami: kayttajaApi.whoami,
+        kasittelijat: api.getKasittelijat,
+        ryhmat: api.vastaanottajaryhmat
+      }));
+  };
 
-  $: load(params.id);
+  load(params.id);
 
   let newViesti = '';
 
@@ -151,6 +142,7 @@
 
   const submitNewViesti = event => {
     if (isValidForm(newViesti).isRight()) {
+      enableOverlay();
       addNewViesti(newViesti);
       Validation.unblurForm(event.target);
     } else {

@@ -359,20 +359,30 @@ const truncate = max => R.when(
   R.propSatisfies(R.lt(max), 'length'),
   R.compose(R.concat(R.__, ' ...'), R.slice(0, max)))
 
+const viestiketju = id => R.compose(
+  Maybe.fromNull,
+  R.path(['viesti', parseInt(id, 10)])
+)
+
 export const linksForViesti = R.curry(
   (isDev, idTranslate, i18n, whoami, id) => [
     {
       label: R.compose(
         Maybe.fold(`${i18n('navigation.viestiketju')} ${id}`, truncate(20)),
-        Maybe.fromNull,
-        R.path(['viesti', parseInt(id, 10), 'subject']))
-        (idTranslate),
+        R.map(R.prop('subject')),
+        viestiketju(id)
+      )(idTranslate),
       href: `#/viesti/${id}`
     },
     {
       label: i18n('navigation.liitteet'),
       href: `#/viesti/${id}/liitteet`,
-      badge: Future.resolve(3)
+      badgeValue: R.compose(
+        R.filter(R.lt(0)),
+        R.map(R.length),
+        R.map(R.prop('liitteet')),
+        viestiketju(id)
+      )(idTranslate)
     }
   ]
 );
