@@ -20,9 +20,6 @@
       ? Future.reject()
       : kayttajaApi.getKayttajaById(id);
 
-  const viestiFuture = ([id]) =>
-    R.includes(id, ['all', 'new']) ? Future.reject() : viestiApi.ketju(id);
-
   const mapRoot = R.when(R.equals('laatija'), R.always('kayttaja'));
 
   $: [root, id] = R.compose(R.split('/'), R.tail)($location);
@@ -38,10 +35,6 @@
         [
           R.propEq('type', 'kayttaja'),
           R.compose(idTranslateStore.updateKayttaja, R.prop('payload'))
-        ],
-        [
-          R.propEq('type', 'viesti'),
-          R.compose(idTranslateStore.updateKetju, R.prop('payload'))
         ]
       ])
     ),
@@ -62,14 +55,6 @@
           R.compose(
             R.assoc('payload', R.__, { type: Future.resolve('kayttaja') }),
             kayttajaFuture,
-            R.tail
-          )
-        ],
-        [
-          R.compose(R.equals('viesti'), R.head),
-          R.compose(
-            R.assoc('payload', R.__, { type: Future.resolve('viesti') }),
-            viestiFuture,
             R.tail
           )
         ],

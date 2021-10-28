@@ -56,10 +56,7 @@
       response => {
         resources = Maybe.Some(response);
         overlay = false;
-        idTranslateStore.updateKetju(R.assoc(
-          'liitteet',
-          response.liitteet,
-          response.ketju));
+        idTranslateStore.updateKetju(response.ketju, response.liitteet);
       },
       Future.parallelObject(5, {
         liitteet: api.liitteet(id),
