@@ -1,9 +1,11 @@
 <style>
   div.markup :global(ul),
   div.markup :global(ol) {
-    margin: 0;
-    padding: 0;
-    @apply mx-2 whitespace-no-wrap;
+    @apply whitespace-no-wrap;
+  }
+
+  div.markup :global(li)::before {
+    content: '·';
   }
 
   div.markup {
@@ -11,8 +13,8 @@
   }
 
   div.markup :global(li) {
-    display: inline;
+    @apply mr-1 inline;
   }
 </style>
 
-<div class="markup"><slot /></div>
+<div class="markup space-x-2"><slot /></div>
