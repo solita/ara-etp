@@ -1,15 +1,13 @@
 <style>
   div.markup :global(ul),
   div.markup :global(ol) {
-    list-style: revert;
     margin: 0;
     padding: 0;
-    white-space: normal;
-    @apply mx-2;
+    @apply mx-2 whitespace-no-wrap;
   }
 
   div.markup {
-    @apply flex truncate;
+    @apply flex truncate whitespace-no-wrap;
   }
 
   div.markup :global(li) {
