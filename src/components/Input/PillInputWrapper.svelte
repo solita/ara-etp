@@ -45,7 +45,8 @@
   class:focused
   class:error
   class:warning
-  class:disabled>
+  class:disabled
+  on:keypress>
   <slot />
   {#if search}
     <span class:focused class:error class:warning>search</span>
