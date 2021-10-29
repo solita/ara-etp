@@ -7,6 +7,7 @@
   import SenderRecipients from './sender-recipients.svelte';
   import User from './user.svelte';
   import ViestiketjuHandler from './viestiketju-handler.svelte';
+  import Style from './style-body-preview.svelte';
 
   export let ketju;
   export let whoami;
@@ -99,7 +100,9 @@
         </div>
         :
         <div class="truncate p-1 flex space-x-1" class:font-bold={unread}>
-          {@html MD.toHtml(R.last(ketju.viestit).body)}
+          <Style>
+            {@html MD.toHtml(R.last(ketju.viestit).body)}
+          </Style>
         </div>
       </div>
       {#if Viestit.isKasittelija(whoami)}
