@@ -39,7 +39,6 @@
     "laatijat": "Upprättare",
     "laskutusajot": "Faktureringskörningar",
     "tyojono": "Arbetskö",
-    "kaytonvalvonta": "Driftsövervakning",
     "halytykset": "Larm",
     "uusi-kayttaja": "Ny användare",
     "kayttajat": "Användare",
@@ -50,7 +49,6 @@
     "muutoshistoria": "Ändringshistoria",
     "myinfo": "Egna uppgifter",
     "kirjaudu-ulos": "Logga ut",
-    "kayttajahallinta": "Användarkontroll",
     "new-yritys": "Nytt företag?",
     "yritys": "Företag",
     "yritys-laatijat": "Upprättare",
@@ -66,15 +64,20 @@
     "etusivu": "Etusivu SV?",
     "valvonta": {
       "kaytto": {
-        "all": "Käytön\u00ADvalvonnat SV?",
+        "all": "Käytön­valvonnat SV?",
         "kohde": "KV {id} SV?",
         "valvonta": "Valvonta SV?"
       },
       "oikeellisuus": {
-        "all": "Oikeellisuuden valvonnat SV?",
-        "valvonta": "Valvonta SV?"
+        "valvonta": "Valvonta SV?",
+        "all": {
+          "valvoja": "Oikeellisuuden valvonnat SV?",
+          "laatija": "Valvonnat SV?"
+        },
+        "virhetypes": "Virhetyypit SV?"
       }
-    }
+    },
+    "new-kayttaja": "Ny användare"
   },
   "errors": {
     "load-error": "Sökningen av uppgifterna misslyckades.",
@@ -137,7 +140,10 @@
   },
   "yritykset": {
     "title": "Företag",
-    "all": "Alla företag"
+    "all": "Alla företag",
+    "search": "Haku SV?",
+    "results": "Tuloksia SV?",
+    "messages": { "load-error": "Yritystietojen lataus epäonnistui SV?" }
   },
   "time": { "klo": "kl." },
   "kayttaja": {
@@ -169,8 +175,7 @@
       "save-error": "Det uppstod ett oväntat fel i sparandet av användarens uppgifter.",
       "validation-error": "Fel i uppgifterna om användaren. Kontrollera de rödmärkta och ladda om filen.",
       "load-error": "Sökningen av användarens uppgifter misslyckades.",
-      "not-found": "Hittar inte användaren i denna tjänst",
-      "upload-error": "Filen kunde inte laddas ner."
+      "not-found": "Hittar inte användaren i denna tjänst"
     },
     "new": {
       "title": "Ny användare",
@@ -186,7 +191,7 @@
     "nimi": "Namn",
     "rooli": "Roll",
     "email": "E-post",
-    "phone": "Telefon",
+    "puhelin": "Telefon",
     "login": "Inloggad",
     "info": "Tässä näkyvät käyttäjät jotka eivät ole laatijoita. SV?",
     "laatija-link": "Laatijat löytyvät täältä SV?",
@@ -195,9 +200,7 @@
       "active": "Aktiva",
       "passivoitu": "Passiverad"
     },
-    "messages": {
-      "load-error": "Laddningen av uppgifter misslyckades."
-    }
+    "messages": { "load-error": "Laddningen av uppgifter misslyckades." }
   },
   "laatija": {
     "laatija": "Upprättare",
@@ -280,7 +283,10 @@
         "attach-failed": "Kopplingen till företaget misslyckades",
         "detach-failed": "Det gick inte att avlägsna upprättaren från företaget"
       }
-    }
+    },
+    "perustiedot-header": "Perustiedot SV?",
+    "cancel": "Peruuta muutokset SV?",
+    "save": "Tallenna SV?"
   },
   "laatijat": {
     "title": "Sök upprättare",
@@ -289,7 +295,16 @@
     "results": "Resultat {count} ST.",
     "kaikki": "Alla",
     "voimassaolo": "Giltighetstid",
-    "tilat": {
+    "tilat": {},
+    "patevyystaso": "Behörighetsnivå",
+    "toimintaalue": "Huvudverksamhetsområde",
+    "keyword-search": "Tekstihaku (nimi, hetu, yhteystiedot) SV?",
+    "voimassaolo-paattymisaika": {
+      "label": "Slutdatum för certifikatets giltighetstid",
+      "after": "Voimassaolo päättyy myöhemmin tai samana päivänä kuin SV?",
+      "before": "Voimassaolo päättyy aikaisemmin tai samana päivänä kuin SV?"
+    },
+    "filters": {
       "label": "Status",
       "all": "Alla",
       "0": "Giltig behörighet",
@@ -1165,7 +1180,6 @@
       "tapahtuma": "Tapahtuma SV?",
       "lisatietoa": "Lisatietoa SV?",
       "external-api": "Tuotu ulkoisesta rajapinnasta SV?",
-      "luonnosLaskentaohjelmisto": "Luonnos / Laskentaohjelmisto SV?",
       "allekirjoitusAloitettiin": "Allekirjoitus aloitettiin SV?",
       "voimassa": "Voimassa SV?",
       "hylatty": "Hylätty SV?",
@@ -1175,10 +1189,12 @@
       "korvattuTodistuksella": "Korvattu energiatodistuksella SV?",
       "energiatodistuslomake": "Energiatodistuslomake SV?",
       "kentta": "Kenttä SV?",
-      "rajapintaarvo": "Rajapinta-arvo SV?",
-      "loppuarvo": "Loppuarvo SV?",
       "true": "Kyllä SV?",
-      "false": "Ei SV?"
+      "false": "Ei SV?",
+      "luonnos": "Luonnos SV?",
+      "laskutettu": "Laskutettu SV?",
+      "ensimmainenArvo": "Ensimmäinen arvo SV?",
+      "nykyinenArvo": "Nykyinen arvo SV?"
     }
   },
   "energiatodistukset": {
@@ -1259,11 +1275,13 @@
           "messages": {
             "update-success": "Energiatodistus liitoksen päivittäminen onnistui SV?",
             "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui SV?",
-            "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero SV?"
+            "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero SV?",
+            "update-error-missing-et": "Energiatodistusta ei ole olemassa SV?"
           }
         }
       }
-    }
+    },
+    "kasittelija": "Käsittelijä SV?"
   },
   "ohje": {
     "navigation": {
@@ -1356,7 +1374,8 @@
           "type": "Tyyppi SV?",
           "diaarinumero": "Diaarinumero SV?",
           "valvoja": "Käsittelijä SV?",
-          "last-toimenpide": "Edellinen tapahtuma SV?"
+          "last-toimenpide": "Edellinen tapahtuma SV?",
+          "draft": "luonnos SV?"
         },
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui SV?"
@@ -1415,7 +1434,8 @@
           "description": "Vastaus SV?",
           "save-button": "Tallenna SV?",
           "reset-button": "Peruuta SV?",
-          "publish-button": "Lähetä vastaus SV?"
+          "publish-button": "Lähetä vastaus SV?",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin SV?"
         },
         "rfi-order": {
           "title": "Tietopyyntö kehotus SV?",
@@ -1439,14 +1459,28 @@
           "delete-button": "Poista luonnos SV?",
           "virhe": { "description": "Virheen kuvaus SV?" },
           "response-title": "Valvontamuistio SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?",
+          "add-virhe": "Lisää virhe SV?",
+          "virheet-title": "Virheet SV?",
+          "virheet-empty": "Ei virheitä SV?",
+          "severity-title": "Vakavuus SV?",
+          "select-severity": "Valitse vakavuus SV?",
+          "draft-info": "Voit jatkaa valvontamuistion tekemistä myöhemmin SV?",
+          "tiedoksi": {
+            "title": "Lähetä valvontamuistio tiedoksi SV?",
+            "description": "Jos sähköpostiosoitetta ei ole syötetty, tulee valvontamuistio lähettää manuaalisesti SV?",
+            "name": "Vastaanottaja SV?",
+            "email": "Sähköpostiosoite SV?",
+            "add": "Lisää vastaanottaja SV?"
+          }
         },
         "audit-reply": {
           "title": "Vastaus valvontamuistioon SV?",
           "description": "Vastaus SV?",
           "publish-button": "Lähetä vastaus SV?",
           "save-button": "Tallenna SV?",
-          "reset-button": "Peruuta SV?"
+          "reset-button": "Peruuta SV?",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin SV?"
         },
         "audit-order": {
           "title": "Valvontamuistio kehotus SV?",
@@ -1475,7 +1509,8 @@
           "description": "Vastaus SV?",
           "save-button": "Tallenna SV?",
           "reset-button": "Peruuta SV?",
-          "publish-button": "Lähetä vastaus SV?"
+          "publish-button": "Lähetä vastaus SV?",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin SV?"
         },
         "decision-prohibition": {
           "title": "Kieltopäätös SV?",
@@ -1507,7 +1542,16 @@
           "add-link-error": "Linkin lisääminen epäonnistui. SV?",
           "delete-liite-error": "Liitteen poisto epäonnistui. SV?"
         },
-        "liitteet": { "empty": "Toimenpiteellä ei ole liitteitä SV?" }
+        "liitteet": { "empty": "Toimenpiteellä ei ole liitteitä SV?" },
+        "deadline-date": "Määräaika SV?",
+        "deadline-date-dialog": {
+          "title": "Muuta määräaikaa SV?",
+          "save": "Päivitä määräaika SV?",
+          "cancel": "Peruuta SV?"
+        },
+        "select-template": "Valitse asiakirjapohja SV?",
+        "draft": "Luonnos SV?",
+        "back": "Takaisin SV?"
       },
       "note": {
         "title": "Muistiinpano SV?",
@@ -1519,6 +1563,29 @@
           "add-error": "Muistiinpanon lisääminen epäonnistui. SV?",
           "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä. SV?"
         }
+      },
+      "virhetypes": {
+        "title": "Virhetyypit SV?",
+        "search": "Haku SV?",
+        "new-virhetype": "Uusi virhetyyppi SV?",
+        "id": "Tunniste SV?",
+        "ordinal": "Järjestys SV?",
+        "valid": "Käytössä SV?",
+        "label-fi": "Otsikko (fi) SV?",
+        "label-sv": "Otsikko (sv) SV?",
+        "description-fi": "Kuvaus (fi) SV?",
+        "description-sv": "Kuvaus (sv) SV?",
+        "save-button": "Tallenna SV?",
+        "cancel-button": "Peru muutokset SV?",
+        "close-button": "Sulje SV?",
+        "messages": {
+          "load-error": "Virhetyyppien tietojen haku epäonnistui. SV?",
+          "save-success": "Virhetyypin muutokset tallennettu. SV?",
+          "save-error": "Virhetyypin tallennus epäonnistui. SV?",
+          "add-success": "Uusi virhetyyppi lisätty. SV?",
+          "add-error": "Virhetyypin lisäys epäonnistui. SV?",
+          "validation-error": "Tiedoissa on virhe. Tarkista virhetyypin tiedot ennen lähettämistä. SV?"
+        }
       }
     },
     "kaytto": {
@@ -1526,13 +1593,89 @@
         "title": "Käytönvalvonnat SV?",
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui SV?"
-        }
+        },
+        "new-kohde": "Uusi valvonta SV?",
+        "empty": "Ei valvontatoimenpiteitä SV?",
+        "ei-valvojaa": "Ei valvojaa SV?",
+        "include-closed": "Näytä myös päättyneet SV?",
+        "valvoja": "Valvoja SV?",
+        "diaarinumero": "Diaarinumero SV?",
+        "last-toimenpide": "Edellinen tapahtuma SV?",
+        "last-toimenpide-none": "Tarkastettava SV?",
+        "deadline-date": "Määräaika SV?",
+        "tunnus": "Tunnus SV?",
+        "rakennustunnus": "Rakennustunnus SV?",
+        "osoite": "Osoite SV?",
+        "omistajat": "Omistaja(t) SV?",
+        "energiatodistus": "Energiatodistus SV?"
       },
-      "kohde": { "title": "Kohde SV?" },
-      "new-kohde": { "title": "Uusi käytönvalvonta SV?" },
+      "kohde": {
+        "title": "Kohde SV?",
+        "rakennuksen-tiedot": "Rakennuksen tiedot SV?",
+        "rakennustunnus": "Rakennustunnus SV?",
+        "katuosoite": "Katuosoite SV?",
+        "postinumero": "Postinumero SV?",
+        "ilmoituksen-tiedot": "Ilmoituksen tiedot SV?",
+        "havaintopaiva": "Havaintopäivä SV?",
+        "ilmoituspaikka-id": "Ilmoituspaikka SV?",
+        "ilmoituspaikka-description": "Ilmoituspaikan nimi SV?",
+        "ilmoitustunnus": "Ilmoitustunnus SV?",
+        "save": "Tallenna SV?",
+        "reset": "Tyhjennä SV?",
+        "revert": "Peru muutokset SV?",
+        "cancel": "Peruuta SV?",
+        "delete": "Poista SV?",
+        "new-valvonta-title": "Uusi käytönvalvonta SV?",
+        "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen SV?",
+        "no-attachments": "Ei liitteitä SV?",
+        "messages": {
+          "not-found": "Käytönvalvontaa ei ole olemassa. SV?",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui. SV?",
+          "save-success": "Käytönvalvonnan muutokset tallennettu. SV?",
+          "save-error": "Käytönvalvonnan tallennus epäonnistui. SV?",
+          "delete-success": "Käytönvalvonta poistettu. SV?",
+          "delete-error": "Käytönvalvonnan poistaminen epäonnistui. SV?",
+          "add-success": "Uusi käytönvalvonta lisätty. SV?",
+          "add-error": "Käytönvalvonnan lisääminen epäonnistui. SV?",
+          "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä. SV?",
+          "add-link-success": "Linkki lisätty käytönvalvontaan. SV?",
+          "add-files-success": "Liitetiedostot lisätty käytönvalvontaan. SV?",
+          "delete-liite-success": "Liite poistettu. SV?",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui. SV?",
+          "add-link-error": "Linkin lisääminen epäonnistui. SV?",
+          "delete-liite-error": "Liitteen poisto epäonnistui. SV?"
+        },
+        "osapuolet": {
+          "title": "Osapuolet SV?",
+          "nimi": "Nimi SV?",
+          "rooli": "Rooli SV?",
+          "osoite": "Osoite SV?",
+          "email": "Sähköposti SV?",
+          "toimitustapa": "Toimitustapa SV?",
+          "new-henkilo": "Uusi henkilö SV?",
+          "new-yritys": "Uusi yritys SV?",
+          "empty": "Ei osapuolia SV?"
+        },
+        "attachments": "Liitteet ja linkit SV?"
+      },
+      "new-kohde": {},
       "valvonta": {
         "title": "Valvonta SV?",
-        "messages": { "not-found": "Käytönvalvonnan tietoja ei löydy SV?" }
+        "messages": {
+          "not-found": "Käytönvalvonnan tietoja ei löydy SV?",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui. SV?",
+          "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui SV?",
+          "update-success": "Käytönvalvonnan tiedot päivitetty SV?"
+        },
+        "toimenpiteet": "Toimenpiteet SV?",
+        "rakennustunnus": "Pysyvä rakennustunnus SV?",
+        "ilmoitustunnus": "Ilmoitustunnus SV?",
+        "toimenpide": {
+          "rooli-none": "Ei roolia SV?",
+          "toimitustapa-none": "Ei toimitustapaa SV?",
+          "fyi": "tiedoksi SV?"
+        },
+        "no-events": "Ei tapahtumia SV?"
       },
       "toimenpide": {
         "cancel-button": "Peruuta SV?",
@@ -1582,6 +1725,69 @@
           "add-success": "Toimenpide lisätty. SV?",
           "add-error": "Toimenpiteen lisääminen epäonnistui. SV?",
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä. SV?"
+        },
+        "deadline-date": "Määräaika SV?",
+        "deadline-date-dialog": {
+          "title": "Muuta määräaikaa SV?",
+          "save": "Päivitä määräaika SV?",
+          "cancel": "Peruuta SV?"
+        },
+        "vastaanottajat": "Vastaanottajat SV?",
+        "nimi": "Nimi SV?",
+        "rooli": "Rooli SV?",
+        "fyi": "Omistajien dokumentit tiedoksi SV?",
+        "toimitustapa": "Toimitustapa SV?",
+        "esikatselu": "Esikatselu SV?"
+      },
+      "osapuoli": {
+        "new-henkilo-title": "Uusi henkilo SV?",
+        "new-yritys-title": "Uusi yritys SV?",
+        "nimi": "Nimi SV?",
+        "etunimi": "Etunimi SV?",
+        "sukunimi": "Sukunimi SV?",
+        "henkilotunnus": "Henkilötunnus SV?",
+        "ytunnus": "Y-tunnus SV?",
+        "rooli-id": "Rooli SV?",
+        "rooli-description": "Roolin kuvaus SV?",
+        "contact-details-title": "Yhteystiedot SV?",
+        "email": "Sähköposti SV?",
+        "puhelin": "Puhelinnumero SV?",
+        "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O SV?",
+        "jakeluosoite": "Katuosoite tai postilokero SV?",
+        "postinumero": "Postinumero SV?",
+        "postitoimipaikka": "Postitoimipaikka SV?",
+        "maa": "Maa SV?",
+        "toimitustapa-id": "Toimitustapa SV?",
+        "toimitustapa-description": "Toimitustavan kuvaus SV?",
+        "save": "Tallenna SV?",
+        "revert": "Peru muutokset SV?",
+        "delete": "Poista SV?",
+        "messages": {
+          "not-found": "Osapuolta ei ole olemassa. SV?",
+          "load-error": "Osapuolen tietojen haku epäonnistui. SV?",
+          "save-success": "Osapuolen muutokset tallennettu. SV?",
+          "save-error": "Osapuolen tallennus epäonnistui. SV?",
+          "add-success": "Osapuoli lisätty. SV?",
+          "add-error": "Osapuolen lisääminen epäonnistui. SV?",
+          "delete-success": "Osapuoli on poistettu. SV?",
+          "delete-error": "Osapuolen poistaminen epäonnistui. SV?",
+          "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä. SV?"
+        },
+        "toimitustapa-errors": {
+          "suomifi-henkilo": "Kun toimitustapa on suomi.fi, pitää henkilötunnus ja osoitetiedot olla täytettynä SV?",
+          "suomifi-yritys": "Kun toimitustapa on suomi.fi, pitää Y-tunnus ja osoitetiedot olla täytettynä SV?",
+          "email": "Kun toimitustapa on sahköposti, pitää sahköpostiosoitteen olla täytettynä SV?"
+        }
+      },
+      "note": {
+        "title": "Muistiinpano SV?",
+        "cancel-button": "Peruuta SV?",
+        "description": "Sisältö SV?",
+        "add-button": "Tallenna SV?",
+        "messages": {
+          "add-success": "Uusi muistiinpano lisätty. SV?",
+          "add-error": "Muistiinpanon lisääminen epäonnistui. SV?",
+          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä. SV?"
         }
       }
     }

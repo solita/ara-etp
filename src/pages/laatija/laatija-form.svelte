@@ -126,11 +126,11 @@
   };
 </script>
 
-<form bind:this={form}
-      on:submit|preventDefault={validateAndSubmit}
-      on:input={setDirty}
-      on:change={setDirty}>
-
+<form
+  bind:this={form}
+  on:submit|preventDefault={validateAndSubmit}
+  on:input={setDirty}
+  on:change={setDirty}>
   <div class="w-full mt-3">
     <H1 text={i18n(i18nRoot + '.perustiedot-header')} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -433,7 +433,10 @@
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={i18n(i18nRoot + '.save')} disabled={disabled || !dirty} />
+      <Button
+        type={'submit'}
+        text={i18n(i18nRoot + '.save')}
+        disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       <Button
