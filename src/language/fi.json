@@ -1579,6 +1579,7 @@
       "kohde": {
         "rakennuksen-tiedot": "Rakennuksen tiedot",
         "rakennustunnus": "Rakennustunnus",
+        "rakennustunnus-existing-et": "Rakennustunnukselle on jo energiatodistuksia",
         "katuosoite": "Katuosoite",
         "postinumero": "Postinumero",
         "ilmoituksen-tiedot": "Ilmoituksen tiedot",

@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as EM from '@Utility/either-maybe';
+  import * as Future from '@Utility/future-utils';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
   import * as Validation from '@Utility/validation';
@@ -18,9 +19,12 @@
   import Datepicker from '@Component/Input/Datepicker';
   import Button from '@Component/Button/Button.svelte';
   import Confirm from '@Component/Confirm/Confirm.svelte';
+  import Link from '@Component/Link/Link.svelte';
+  import Spinner from '@Component/Spinner/Spinner';
 
   import { flashMessageStore } from '@/stores';
   import Autocomplete from '../../components/Autocomplete/Autocomplete.svelte';
+  import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
@@ -35,6 +39,40 @@
   export let dirty;
 
   let form;
+  let showRakennustunnusSpinner = false;
+  let etForRakennustunnus = Maybe.None();
+  $: getEnergiatodistuksetByRakennustunnus(kohde.rakennustunnus);
+
+  const getEnergiatodistuksetByRakennustunnus = rakennustunnus => {
+    if (rakennustunnus.isSome()) {
+      showRakennustunnusSpinner = true;
+      Future.fork(
+        response => {
+          showRakennustunnusSpinner = false;
+          const msg = i18n(
+            Maybe.orSome(
+              'valvonta-kaytto.load-error',
+              Response.localizationKey(response)
+            )
+          );
+          flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        },
+        response => {
+          showRakennustunnusSpinner = false;
+          etForRakennustunnus = Maybe.Some(response);
+        },
+        etApi.getEnergiatodistukset(
+          `?where=${encodeURI(
+            `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${R.head(
+              Maybe.toArray(rakennustunnus)
+            )}"],["=","energiatodistus.tila-id",2]]]`
+          )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
+        )
+      );
+    } else {
+      etForRakennustunnus = Maybe.None();
+    }
+  };
 
   const submit = _ => {
     if (Validation.isValidForm(schema)(kohde)) {
@@ -66,17 +104,46 @@
   on:change={setDirty}>
   <div class="flex flex-col w-full py-8">
     <H2 text={i18n(`${i18nRoot}.rakennuksen-tiedot`)} />
-    <div class="py-4 w-full md:w-1/3">
-      <Input
-        id={'kohde.rakennustunnus'}
-        name={'kohde.rakennustunnus'}
-        label={i18n(`${i18nRoot}.rakennustunnus`)}
-        bind:model={kohde}
-        lens={R.lensProp('rakennustunnus')}
-        parse={Parsers.optionalString}
-        format={Maybe.orSome('')}
-        validators={schema.rakennustunnus}
-        {i18n} />
+
+    <div class="py-4 w-full flex flex-col md:flex-row md:space-x-4">
+      <div class="w-full md:w-1/3">
+        <Input
+          id={'kohde.rakennustunnus'}
+          name={'kohde.rakennustunnus'}
+          label={i18n(`${i18nRoot}.rakennustunnus`)}
+          bind:model={kohde}
+          lens={R.lensProp('rakennustunnus')}
+          parse={Parsers.optionalString}
+          format={Maybe.orSome('')}
+          validators={schema.rakennustunnus}
+          {i18n} />
+      </div>
+      <div class="w-full md:w-2/3">
+        {#if showRakennustunnusSpinner}
+          <Spinner smaller={true} />
+        {/if}
+        {#each Maybe.toArray(etForRakennustunnus) as energiatodistukset}
+          {#if energiatodistukset.length > 0}
+            <div class="flex flex-col">
+              <div class="flex items-center">
+                <span class="font-icon mr-1 text-xl">info</span>
+                <span>{i18n(`${i18nRoot}.rakennustunnus-existing-et`)}</span>
+              </div>
+              <div class="flex space-x-1 pl-6">
+                {#each energiatodistukset as et}
+                  <Link
+                    bold={true}
+                    href={`/#/energiatodistus/${et.id}`}
+                    text={et.id} />
+                {/each}
+                {#if energiatodistukset.length > 10}
+                  <span>...</span>
+                {/if}
+              </div>
+            </div>
+          {/if}
+        {/each}
+      </div>
     </div>
     <div class="py-4 w-full md:w-1/2">
       <Input
