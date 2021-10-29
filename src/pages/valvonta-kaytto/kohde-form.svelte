@@ -40,8 +40,9 @@
 
   let form;
   let showRakennustunnusSpinner = false;
-  let etForRakennustunnus = Maybe.None();
-  $: getEnergiatodistuksetByRakennustunnus(kohde.rakennustunnus);
+  let etForRakennustunnus = [];
+  $: rakennustunnus = kohde.rakennustunnus;
+  $: getEnergiatodistuksetByRakennustunnus(rakennustunnus);
 
   const getEnergiatodistuksetByRakennustunnus = rakennustunnus => {
     if (rakennustunnus.isSome()) {
@@ -59,7 +60,7 @@
         },
         response => {
           showRakennustunnusSpinner = false;
-          etForRakennustunnus = Maybe.Some(response);
+          etForRakennustunnus = response;
         },
         etApi.getEnergiatodistukset(
           `?where=${encodeURI(
@@ -70,7 +71,7 @@
         )
       );
     } else {
-      etForRakennustunnus = Maybe.None();
+      etForRakennustunnus = [];
     }
   };
 
@@ -122,27 +123,25 @@
         {#if showRakennustunnusSpinner}
           <Spinner smaller={true} />
         {/if}
-        {#each Maybe.toArray(etForRakennustunnus) as energiatodistukset}
-          {#if energiatodistukset.length > 0}
-            <div class="flex flex-col">
-              <div class="flex items-center">
-                <span class="font-icon mr-1 text-xl">info</span>
-                <span>{i18n(`${i18nRoot}.rakennustunnus-existing-et`)}</span>
-              </div>
-              <div class="flex space-x-1 pl-6">
-                {#each energiatodistukset as et}
-                  <Link
-                    bold={true}
-                    href={`/#/energiatodistus/${et.id}`}
-                    text={et.id} />
-                {/each}
-                {#if energiatodistukset.length > 10}
-                  <span>...</span>
-                {/if}
-              </div>
+        {#if !R.isEmpty(etForRakennustunnus)}
+          <div class="flex flex-col">
+            <div class="flex items-center">
+              <span class="font-icon mr-1 text-xl">info</span>
+              <span>{i18n(`${i18nRoot}.rakennustunnus-existing-et`)}</span>
             </div>
-          {/if}
-        {/each}
+            <div class="flex space-x-1 pl-6">
+              {#each etForRakennustunnus as et}
+                <Link
+                  bold={true}
+                  href={`/#/energiatodistus/${et.id}`}
+                  text={et.id} />
+              {/each}
+              {#if etForRakennustunnus.length > 10}
+                <span>...</span>
+              {/if}
+            </div>
+          </div>
+        {/if}
       </div>
     </div>
     <div class="py-4 w-full md:w-1/2">
