@@ -21,6 +21,7 @@ describe('Navigation', () => {
     'navigation.tyojono': 'Työjono',
     'navigation.halytykset': 'Hälytykset',
     'navigation.kayttajat': 'Käyttäjät',
+    'navigation.viestiketju': 'Viestiketju',
     'navigation.valvonta.valvonta': 'Valvonta',
     'navigation.valvonta.oikeellisuus.all.valvoja': 'Oikeellisuuden valvonnat',
     'navigation.valvonta.oikeellisuus.all.laatija': 'Valvonnat',
@@ -496,22 +497,31 @@ describe('Navigation', () => {
       assert.deepEqual(
         R.map(
           R.dissoc('badge'),
-          Navigation.parseViesti(isDev, i18n, whoami, locationParts)
+          Navigation.parseViesti(isDev, i18n, whoami, {}, locationParts)
         ),
         expected
       );
     });
-    it('should return empty for others', () => {
+    it('should return viesti links for others', () => {
       const isDev = false;
       const whoami = { id: 1, rooli: 2 };
-      const locationParts = ['not-all'];
+      const locationParts = ['1'];
 
-      const expected = [];
+      const expected = [
+        {
+          'href': '#/viesti/1',
+          'label': 'Viestiketju 1'
+        },
+        {
+          'href': '#/viesti/1/liitteet',
+          'label': 'Liitteet'
+        }
+      ];
 
       assert.deepEqual(
         R.map(
-          R.dissoc('badge'),
-          Navigation.parseViesti(isDev, i18n, whoami, locationParts)
+          R.dissoc('badgeValue'),
+          Navigation.parseViesti(isDev, i18n, whoami, {}, locationParts)
         ),
         expected
       );
