@@ -21,6 +21,7 @@ describe('Navigation', () => {
     'navigation.tyojono': 'Työjono',
     'navigation.halytykset': 'Hälytykset',
     'navigation.kayttajat': 'Käyttäjät',
+    'navigation.viestiketju': 'Viestiketju',
     'navigation.valvonta.valvonta': 'Valvonta',
     'navigation.valvonta.oikeellisuus.all.valvoja': 'Oikeellisuuden valvonnat',
     'navigation.valvonta.oikeellisuus.all.laatija': 'Valvonnat',
@@ -509,7 +510,7 @@ describe('Navigation', () => {
       const expected = [
         {
           'href': '#/viesti/1',
-          'label': 'undefined 1'
+          'label': 'Viestiketju 1'
         },
         {
           'href': '#/viesti/1/liitteet',
