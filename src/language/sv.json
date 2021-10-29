@@ -217,7 +217,8 @@
     "julkisettiedot-header": "Välj offentliga uppgifter",
     "todistustenlaatimiskielto": "Förbud mot upprättande av certifikat",
     "api-key-header": "Kalkylprogram",
-    "api-key": "Ange ett nytt lösenord för dataöverföringen (minst 8 tecken)",
+    "api-key": "Ange ett nytt lösenord för dataöverföringen",
+    "api-key-requirements": "Minst 8 tecken. A-Z, 0-9, .-_!",
     "messages": {
       "not-found": "Hittar inte upprättaren i denna tjänst.",
       "save-success": "Upprättarnas uppgifter har sparats.",

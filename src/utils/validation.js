@@ -164,6 +164,13 @@ export const emailValidator = {
   label: R.applyTo('validation.invalid-email')
 };
 
+export const isValidApiPassword = R.test(/^([a-zA-Z0-9_\-\.\!]){8,200}$/);
+
+export const apiPasswordValidator = {
+  predicate: isValidApiPassword,
+  label: R.applyTo('validation.invalid-api-key')
+};
+
 export const isPuhelin = R.test(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
 
 export const isPatevyystaso = R.test(/^(1|2)$/);

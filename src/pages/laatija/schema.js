@@ -23,7 +23,7 @@ const commonSchema = {
   postitoimipaikka: Validation.RequiredString(2, 200),
 
   wwwosoite: R.map(Validation.liftValidator, [Validation.urlValidator]),
-  'api-key': R.map(Validation.liftValidator, Validation.LimitedString(8, 200))
+  'api-key': [Validation.liftValidator(Validation.apiPasswordValidator)]
 };
 
 export const formParsers = () => ({

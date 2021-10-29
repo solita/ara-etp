@@ -95,7 +95,9 @@
         search={true}
         inputComponentWrapper={PillInputWrapper}
         on:keypress={evt => {
+          console.log('event: ' + evt);
           if (evt.key === 'Enter') {
+            console.log('Enter');
             form.dispatchEvent(new Event('submit'));
           }
         }} />

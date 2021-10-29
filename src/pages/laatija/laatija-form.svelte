@@ -126,11 +126,11 @@
   };
 </script>
 
-<form bind:this={form}
-      on:submit|preventDefault={validateAndSubmit}
-      on:input={setDirty}
-      on:change={setDirty}>
-
+<form
+  bind:this={form}
+  on:submit|preventDefault={validateAndSubmit}
+  on:input={setDirty}
+  on:change={setDirty}>
   <div class="w-full mt-3">
     <H1 text={i18n(i18nRoot + '.perustiedot-header')} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
@@ -381,19 +381,25 @@
 
   <div class="mt-8">
     <H1 text={i18n('laatija.api-key-header')} />
-    <div class="lg:w-1/2 w-full">
-      <Input
-        id={'api-key'}
-        name={'api-key'}
-        label={i18n('laatija.api-key')}
-        required={false}
-        bind:model={laatija}
-        lens={R.lensProp('api-key')}
-        format={Maybe.orSome('')}
-        parse={R.compose(Maybe.fromEmpty, R.trim)}
-        validators={schema['api-key']}
-        {disabled}
-        {i18n} />
+    <div class="flex flex-col">
+      <div class="lg:w-1/2 w-full">
+        <Input
+          id={'api-key'}
+          name={'api-key'}
+          label={i18n('laatija.api-key')}
+          required={false}
+          bind:model={laatija}
+          lens={R.lensProp('api-key')}
+          format={Maybe.orSome('')}
+          parse={R.compose(Maybe.fromEmpty, R.trim)}
+          validators={schema['api-key']}
+          {disabled}
+          {i18n} />
+      </div>
+      <div class="flex mt-4 items-center">
+        <span class="font-icon mr-1 text-xl">info</span>
+        <span>{i18n('laatija.api-key-requirements')}</span>
+      </div>
     </div>
   </div>
   <HR />
@@ -433,7 +439,10 @@
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={i18n(i18nRoot + '.save')} disabled={disabled || !dirty} />
+      <Button
+        type={'submit'}
+        text={i18n(i18nRoot + '.save')}
+        disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       <Button
