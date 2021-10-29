@@ -64,9 +64,7 @@
         },
         etApi.getEnergiatodistukset(
           `?where=${encodeURI(
-            `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${R.head(
-              Maybe.toArray(rakennustunnus)
-            )}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
+            `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus.some()}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
           )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
         )
       );
