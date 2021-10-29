@@ -7,6 +7,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Router from '@Component/Router/router';
   import { tick } from 'svelte';
 
@@ -23,7 +24,9 @@
   import Button from '@Component/Button/Button.svelte';
   import { flashMessageStore } from '@/stores';
   import TextButton from '@Component/Button/TextButton.svelte';
+  import Confirm from '@Component/Confirm/Confirm';
 
+  export let whoami;
   export let toimenpide;
   export let templatesByType;
   export let severities;
@@ -33,6 +36,7 @@
   export let cancel;
   export let publish = Maybe.None();
   export let preview = Maybe.None();
+  export let deleteDraft = Maybe.None();
   export let liiteApi;
   export let liitteet;
 
@@ -78,6 +82,8 @@
     }, publish);
 
   const saveToimenpide = _ => submitToimenpide(submit);
+  const deleteToimenpide = _ =>
+    R.forEach(deleteDraft => deleteDraft(), deleteDraft);
 </script>
 
 <H1 text={text(toimenpide, 'title')} />
@@ -116,6 +122,18 @@
       on:click={cancel}
       text={text(toimenpide, 'reset-button')}
       style={'secondary'} />
+
+    {#if Kayttajat.isPaakayttaja(whoami) && Toimenpiteet.isDraft(toimenpide) && Maybe.isSome(deleteDraft)}
+      <Confirm
+        let:confirm
+        confirmButtonLabel={i18n('confirm.button.delete')}
+        confirmMessage={i18n('confirm.you-want-to-delete')}>
+        <Button
+          on:click={confirm(deleteToimenpide)}
+          text={text(toimenpide, 'delete-button')}
+          style={'secondary'} />
+      </Confirm>
+    {/if}
 
     {#if !R.isEmpty(templates) && Maybe.isSome(preview)}
       <Button

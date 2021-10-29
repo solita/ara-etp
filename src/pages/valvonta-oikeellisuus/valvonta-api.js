@@ -86,8 +86,10 @@ export const valvontaCount = R.compose(
   Query.toQueryString
 );
 
-export const valvontaCountUnfinished = Fetch.getJson(fetch,
-  `${url.valvonnat}/count/unfinished`);
+export const valvontaCountUnfinished = Fetch.getJson(
+  fetch,
+  `${url.valvonnat}/count/unfinished`
+);
 
 export const toimenpidetyypit = Fetch.cached(
   fetch,
@@ -174,6 +176,15 @@ export const previewToimenpide = R.curry((id, toimenpide) =>
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.preview(id))),
     serializeToimenpide
   )(toimenpide)
+);
+
+export const deleteDraftToimenpide = R.curry((id, toimenpideId) =>
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ =>
+      Fetch.deleteRequest(fetch, url.toimenpide(id, toimenpideId))
+    )
+  )
 );
 
 export const getLiitteet = R.curry((id, toimenpideId) =>

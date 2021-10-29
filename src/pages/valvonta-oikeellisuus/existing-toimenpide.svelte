@@ -76,7 +76,7 @@
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
+        flashMessageStore.addPersist(
           'valvonta-oikeellisuus',
           'success',
           i18n(`${i18nRoot}.messages.${key}-success`)
@@ -129,6 +129,12 @@
     ),
     ValvontaApi.putToimenpide(params.id, params['toimenpide-id'])
   );
+
+  const deleteDraftToimenpide = _ =>
+    fork('delete', _ => {
+      dirty = false;
+      Router.push(Links.valvonta(params));
+    })(ValvontaApi.deleteDraftToimenpide(params.id, params['toimenpide-id']));
 
   const cancel = _ => {
     load(params);
@@ -183,7 +189,8 @@
         {liiteApi}
         submit={saveToimenpide}
         preview={Maybe.Some(saveAndPreviewToimenpide)}
-        publish={Maybe.Some(saveAndPublishToimenpide)} />
+        publish={Maybe.Some(saveAndPublishToimenpide)}
+        deleteDraft={Maybe.Some(deleteDraftToimenpide)} />
     {/each}
   </div>
   <div slot="overlay-content">

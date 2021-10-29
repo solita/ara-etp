@@ -1449,6 +1449,7 @@
           "title": "Vastaus valvontamuistioon",
           "description": "Vastaus",
           "publish-button": "Lähetä vastaus",
+          "delete-button": "Poista luonnos",
           "save-button": "Tallenna",
           "reset-button": "Peru muutokset",
           "draft-info": "Voit jatkaa vastaamista myöhemmin"
@@ -1508,6 +1509,8 @@
           "preview-error": "Toimenpiteen esikatselu epäonnistui.",
           "add-success": "Toimenpide lisätty.",
           "add-error": "Toimenpiteen lisääminen epäonnistui.",
+          "delete-success": "Toimenpiteen poistaminen onnistui.",
+          "delete-error": "Toimenpiteen poistaminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä.",
           "add-files-success": "Liitetiedostot lisätty toimenpiteelle.",
           "add-link-success": "Linkki lisätty toimenpiteelle.",
