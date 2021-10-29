@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
   import NavigationTab from './navigation-tab';
   import BadgeProvider from './badge-provider';
   import * as Navigation from '@Utility/navigation';
@@ -47,7 +48,8 @@
           label={link.label}
           href={link.href}
           activePath={link.activePath}
-          disabled={link.disabled} />
+          disabled={link.disabled}
+          badge={R.isNil(link.badgeValue) ? Maybe.None() : link.badgeValue}/>
       {/if}
     {/each}
   </div>

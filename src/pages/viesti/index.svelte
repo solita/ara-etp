@@ -4,6 +4,7 @@
   import Viestit from './viestit';
   import NewKetju from './new-ketju';
   import ExistingKetju from './existing-ketju';
+  import Liitteet from './liitteet';
   import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
@@ -14,6 +15,7 @@
     '/all': Viestit,
     '/new': NewKetju,
     '/:id': ExistingKetju,
+    '/:id/liitteet': Liitteet,
     '*': NotFound
   };
 </script>

@@ -24,12 +24,14 @@ const createIdTranslateStore = () => {
           R.pick(['etunimi', 'sukunimi', 'id', 'rooli'], kayttaja)
         )
       ),
-    updateKetju: ketju => {
+    updateKetju: (ketju, liitteet) => {
       update(
         R.assocPath(
           ['viesti', R.prop('id', ketju)],
-          R.compose(R.pick(['id', 'subject', 'energiatodistus-id']))(ketju)
-        )
+          R.assoc(
+            'liitteet',
+            liitteet,
+            R.pick(['id', 'subject', 'energiatodistus-id'], ketju)))
       );
     }
   };
