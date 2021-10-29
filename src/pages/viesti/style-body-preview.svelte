@@ -5,7 +5,7 @@
   }
 
   div.markup :global(li)::before {
-    content: '·';
+    content: '\2022';
   }
 
   div.markup {
