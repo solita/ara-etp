@@ -90,7 +90,7 @@
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
     format={fullName(valvojat)}
-    items={R.pluck('id', valvojat)} />
+    items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 
 <div class="flex space-x-4 mb-8">
