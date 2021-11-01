@@ -368,7 +368,8 @@ export const replaceable = R.curry((fetch, id) =>
 export const validation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(5, {
     numeric: Fetch.cached(fetch, '/validation/numeric/' + version),
-    required: Fetch.cached(fetch, '/validation/required/' + version),
+    requiredAll: Fetch.cached(fetch, '/validation/required/' + version + '/all'),
+    requiredBypass: Fetch.cached(fetch, '/validation/required/' + version + '/bypass'),
     kuormat: Fetch.cached(fetch, '/validation/sisaiset-kuormat/' + version)
   })
 );
