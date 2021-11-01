@@ -94,7 +94,8 @@
       {focused}
       {error}
       {warning}
-      {disabled}>
+      {disabled}
+      on:keypress>
       <svelte:component
         this={inputComponent}
         {id}
