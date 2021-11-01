@@ -44,34 +44,30 @@
   $: rakennustunnus = kohde.rakennustunnus;
   $: getEnergiatodistuksetByRakennustunnus(rakennustunnus);
 
-  const getEnergiatodistuksetByRakennustunnus = rakennustunnus => {
-    if (rakennustunnus.isSome()) {
-      showRakennustunnusSpinner = true;
-      Future.fork(
-        response => {
-          showRakennustunnusSpinner = false;
-          const msg = i18n(
-            Maybe.orSome(
-              'valvonta-kaytto.load-error',
-              Response.localizationKey(response)
-            )
-          );
-          flashMessageStore.add('valvonta-kaytto', 'error', msg);
-        },
-        response => {
-          showRakennustunnusSpinner = false;
-          etForRakennustunnus = response;
-        },
-        etApi.getEnergiatodistukset(
-          `?where=${encodeURI(
-            `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus.some()}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
-          )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
-        )
-      );
-    } else {
-      etForRakennustunnus = [];
-    }
-  };
+  const getEnergiatodistuksetByRakennustunnus = R.forEach(rakennustunnus => {
+    showRakennustunnusSpinner = true;
+    Future.fork(
+      response => {
+        showRakennustunnusSpinner = false;
+        const msg = i18n(
+          Maybe.orSome(
+            'valvonta-kaytto.load-error',
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+      },
+      response => {
+        showRakennustunnusSpinner = false;
+        etForRakennustunnus = response;
+      },
+      etApi.getEnergiatodistukset(
+        `?where=${encodeURI(
+          `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
+        )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
+      )
+    );
+  }, R.__);
 
   const submit = _ => {
     if (Validation.isValidForm(schema)(kohde)) {
