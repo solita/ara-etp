@@ -25,7 +25,7 @@
     Future.fork(
       response => {
         flashMessageStore.add('viesti', 'error',
-          Response.errorKey404(i18nRoot, 'load', response));
+          i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -48,7 +48,7 @@
     Future.fork(
       response => {
         flashMessageStore.add('valvonta-oikeellisuus', 'error',
-          Response.errorKey404(i18nRoot, key, response));
+          i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
       _ => {

@@ -1317,6 +1317,7 @@
       "liitteet": {
         "empty": "Viestiketjulla ei ole liitteitä.",
         "messages" : {
+          "load-error": "Liitetietojen lataus epäonnistui.",
           "add-link-success": "Linkki lisätty viestiin.",
           "add-files-success": "Liitetiedostot lisätty viestiin.",
           "delete-liite-success": "Liite poistettu.",
