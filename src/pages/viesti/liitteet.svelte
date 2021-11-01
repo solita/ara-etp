@@ -47,7 +47,7 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('valvonta-oikeellisuus', 'error',
+        flashMessageStore.add('viesti', 'error',
           i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
