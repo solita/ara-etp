@@ -393,9 +393,11 @@ export const linksForViesti = R.curry(
 export const parseViesti = R.curry((isDev, i18n, whoami, idTranslate, locationParts) => {
   if (R.equals('all', R.head(locationParts))) {
     return parseRoot(isDev, i18n, whoami);
+  } else if (R.equals('new', R.head(locationParts))) {
+    return [];
+  } else {
+    return linksForViesti(isDev, idTranslate, i18n, whoami, R.head(locationParts));
   }
-
-  return linksForViesti(isDev, idTranslate, i18n, whoami, R.head(locationParts));
 });
 
 /**
