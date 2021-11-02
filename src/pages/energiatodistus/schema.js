@@ -9,11 +9,11 @@ import * as Inputs from './inputs';
 import * as Validation from './validation';
 import * as Deep from '@Utility/deep-objects';
 
-const String = max => ({
+const String = (min, max) => ({
   parse: parsers.optionalString,
   format: formats.optionalString,
   validators: [
-    validations.liftValidator(validations.minLengthConstraint(2)),
+    validations.liftValidator(validations.minLengthConstraint(min)),
     validations.liftValidator(validations.maxLengthConstraint(max))
   ]
 });
@@ -95,17 +95,17 @@ const SahkoLampo = {
 };
 
 const MuuPolttoaine = {
-  nimi: String(30),
-  yksikko: String(12),
+  nimi: String(2, 30),
+  yksikko: String(1, 12),
   muunnoskerroin: FloatNonNegative,
   'maara-vuodessa': FloatNonNegative
 };
 
 const Huomio = {
-  teksti: String(1000),
+  teksti: String(2, 1000),
   toimenpide: R.repeat(
     {
-      nimi: String(100),
+      nimi: String(2, 100),
       lampo: AnyFloat,
       sahko: AnyFloat,
       jaahdytys: AnyFloat,
@@ -115,33 +115,33 @@ const Huomio = {
   )
 };
 
-const YritysPostinumero = String(8);
+const YritysPostinumero = String(2, 8);
 
 const Yritys = {
-  nimi: String(40),
-  katuosoite: String(40),
-  postitoimipaikka: String(30),
+  nimi: String(2, 40),
+  katuosoite: String(2, 40),
+  postitoimipaikka: String(2, 30),
   postinumero: YritysPostinumero
 };
 
 export const v2018 = {
   $signature: false,
-  laskuriviviite: String(50),
+  laskuriviviite: String(2, 50),
   perustiedot: {
-    nimi: String(50),
+    nimi: String(2, 50),
     rakennustunnus: Rakennustunnus,
-    kiinteistotunnus: String(50),
-    rakennusosa: String(100),
-    katuosoite: String(50),
-    postinumero: String(5),
+    kiinteistotunnus: String(2, 50),
+    rakennusosa: String(2, 100),
+    katuosoite: String(2, 50),
+    postinumero: String(2, 5),
     valmistumisvuosi: {
       ...Integer(100, new Date().getFullYear()),
       format: formats.optionalYear
     },
-    tilaaja: String(200),
+    tilaaja: String(2, 200),
     yritys: Yritys,
     havainnointikaynti: DateValue(),
-    'keskeiset-suositukset': String(2500)
+    'keskeiset-suositukset': String(2, 2500)
   },
   lahtotiedot: {
     'lammitetty-nettoala': FloatNonNegative,
@@ -167,7 +167,7 @@ export const v2018 = {
       luode: Ikkuna
     },
     ilmanvaihto: {
-      kuvaus: String(75),
+      kuvaus: String(2, 75),
       paaiv: {
         ...PoistoTuloSfp,
         lampotilasuhde: Float1,
@@ -180,13 +180,13 @@ export const v2018 = {
     },
     lammitys: {
       'lammitysmuoto-1': {
-        kuvaus: String(75)
+        kuvaus: String(2, 75)
       },
       'lammitysmuoto-2': {
-        kuvaus: String(75)
+        kuvaus: String(2, 75)
       },
       lammonjako: {
-        kuvaus: String(75)
+        kuvaus: String(2, 75)
       },
       'tilat-ja-iv': Hyotysuhde,
       'lammin-kayttovesi': Hyotysuhde,
@@ -243,7 +243,7 @@ export const v2018 = {
       valaistus: FloatNonNegative,
       kvesi: FloatNonNegative
     },
-    laskentatyokalu: String(60)
+    laskentatyokalu: String(2, 60)
   },
   'toteutunut-ostoenergiankulutus': {
     'ostettu-energia': {
@@ -266,27 +266,27 @@ export const v2018 = {
     'kaukojaahdytys-vuosikulutus-yhteensa': FloatNonNegative
   },
   huomiot: {
-    suositukset: String(1500),
-    lisatietoja: String(500),
+    suositukset: String(2, 1500),
+    lisatietoja: String(2, 500),
     'iv-ilmastointi': Huomio,
     'valaistus-muut': Huomio,
     lammitys: Huomio,
     ymparys: Huomio,
     'alapohja-ylapohja': Huomio
   },
-  lisamerkintoja: String(6300),
-  kommentti: String(6300),
-  'bypass-validation-limits-reason': String(6300)
+  lisamerkintoja: String(2, 6300),
+  kommentti: String(2, 6300),
+  'bypass-validation-limits-reason': String(2, 6300)
 };
 
 const MuuEnergiamuoto = {
-  nimi: String(30),
+  nimi: String(2, 30),
   muotokerroin: FloatNonNegative,
   ostoenergia: FloatNonNegative
 };
 
 const MuuEnergia = {
-  nimi: String(30),
+  nimi: String(2, 30),
   vuosikulutus: FloatNonNegative
 };
 
