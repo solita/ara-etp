@@ -248,7 +248,11 @@
                       whoami,
                       valvonta['valvoja-id']
                     )}>
-                    {Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+                    {Maybe.fold(
+                      '-',
+                      Valvojat.format(i18n('valvonta.self'), valvojat, whoami),
+                      valvonta['valvoja-id']
+                    )}
                   </td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">

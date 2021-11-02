@@ -203,10 +203,7 @@
               'id',
               R.filter(R.propEq('passivoitu', false), valvojat)
             )}
-            format={R.compose(
-              Valvojat.format(i18n('valvonta.self'), valvojat, whoami),
-              Maybe.fromNull
-            )}
+            format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
             parse={Maybe.Some}
             allowNone={true} />
         </div>
@@ -276,7 +273,11 @@
                       whoami,
                       valvonta['valvoja-id']
                     )}>
-                    {Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+                    {Maybe.fold(
+                      '-',
+                      Valvojat.format(i18n('valvonta.self'), valvojat, whoami),
+                      valvonta['valvoja-id']
+                    )}
                   </td>
                   <td class="etp-table--td">
                     {Maybe.orSome('-', diaarinumero(valvonta))}
