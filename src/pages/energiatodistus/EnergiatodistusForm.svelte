@@ -45,16 +45,19 @@
   export let submit;
   export let title = '';
 
+  const required = energiatodistus => energiatodistus['bypass-validation-limits'] ?
+    validation.requiredBypass : validation.requiredAll;
+
   const saveSchema = R.compose(
-    R.reduce(schemas.assocRequired, R.__, validation.required),
+    R.reduce(schemas.assocRequired, R.__, required(energiatodistus)),
     schema =>
-      R.propEq('bypass-validation-limits', false, energiatodistus)
-        ? R.reduce(
+      energiatodistus['bypass-validation-limits']
+        ? schema :
+        R.reduce(
             schemas.redefineNumericValidation,
             schema,
             validation.numeric
-          )
-        : schema,
+          ),
     R.assocPath(
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
@@ -161,7 +164,7 @@
   let etFormElement;
   const validateCompleteAndSubmit = onSuccessfulSave => () => {
     const missing = EtValidations.missingProperties(
-      validation.required,
+      required(energiatodistus),
       energiatodistus
     );
     if (R.isEmpty(missing)) {
