@@ -189,7 +189,10 @@
               label={i18n(i18nRoot + '.valvoja')}
               bind:model={query}
               lens={R.lensProp('valvoja-id')}
-              items={R.pluck('id', valvojat)}
+              items={R.pluck(
+                'id',
+                R.filter(R.propEq('passivoitu', false), valvojat)
+              )}
               format={formatValvoja(valvojat, whoami)}
               parse={Maybe.Some}
               allowNone={true} />
