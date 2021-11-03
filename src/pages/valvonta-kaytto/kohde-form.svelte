@@ -49,13 +49,11 @@
     Future.fork(
       response => {
         showRakennustunnusSpinner = false;
-        const msg = i18n(
-          Maybe.orSome(
-            'valvonta-kaytto.load-error',
-            Response.localizationKey(response)
-          )
+        flashMessageStore.add(
+          'valvonta-kaytto',
+          'error',
+          i18n(Response.errorKey(i18nRoot, 'find-rakennustunnus', response))
         );
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
       },
       response => {
         showRakennustunnusSpinner = false;
@@ -67,7 +65,7 @@
         )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
       )
     );
-  }, R.__);
+  });
 
   const submit = _ => {
     if (Validation.isValidForm(schema)(kohde)) {
