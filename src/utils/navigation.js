@@ -82,7 +82,11 @@ export const linksForEnergiatodistus = R.curry(
           },
           {
             label: i18n('navigation.valvonta.oikeellisuus.valvonta'),
-            href: `#/valvonta/oikeellisuus/${version}/${id}`
+            href: `#/valvonta/oikeellisuus/${version}/${id}`,
+            badge: R.compose(
+              R.chain(R.ifElse(R.equals(0), Future.reject, Future.resolve)),
+              R.map(R.length)
+            )(ValvontaOikeellisuusApi.toimenpiteet(id))
           }
         ]
       : []),
@@ -355,14 +359,14 @@ export const parseEnergiatodistus = R.curry(
   }
 );
 
-const truncate = max => R.when(
-  R.propSatisfies(R.lt(max), 'length'),
-  R.compose(R.concat(R.__, ' ...'), R.slice(0, max)))
+const truncate = max =>
+  R.when(
+    R.propSatisfies(R.lt(max), 'length'),
+    R.compose(R.concat(R.__, ' ...'), R.slice(0, max))
+  );
 
-const viestiketju = id => R.compose(
-  Maybe.fromNull,
-  R.path(['viesti', parseInt(id, 10)])
-)
+const viestiketju = id =>
+  R.compose(Maybe.fromNull, R.path(['viesti', parseInt(id, 10)]));
 
 export const linksForViesti = R.curry(
   (isDev, idTranslate, i18n, whoami, id) => [
@@ -390,15 +394,23 @@ export const linksForViesti = R.curry(
 /**
  * @sig boolean -> Translate -> Kayttaja -> Array [string] -> Array [Link]
  */
-export const parseViesti = R.curry((isDev, i18n, whoami, idTranslate, locationParts) => {
-  if (R.equals('all', R.head(locationParts))) {
-    return parseRoot(isDev, i18n, whoami);
-  } else if (R.equals('new', R.head(locationParts))) {
-    return [];
-  } else {
-    return linksForViesti(isDev, idTranslate, i18n, whoami, R.head(locationParts));
+export const parseViesti = R.curry(
+  (isDev, i18n, whoami, idTranslate, locationParts) => {
+    if (R.equals('all', R.head(locationParts))) {
+      return parseRoot(isDev, i18n, whoami);
+    } else if (R.equals('new', R.head(locationParts))) {
+      return [];
+    } else {
+      return linksForViesti(
+        isDev,
+        idTranslate,
+        i18n,
+        whoami,
+        R.head(locationParts)
+      );
+    }
   }
-});
+);
 
 /**
  * @sig boolean -> Translate -> Kayttaja -> Array [Link]
