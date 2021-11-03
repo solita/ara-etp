@@ -381,19 +381,25 @@
 
   <div class="mt-8">
     <H1 text={i18n('laatija.api-key-header')} />
-    <div class="lg:w-1/2 w-full">
-      <Input
-        id={'api-key'}
-        name={'api-key'}
-        label={i18n('laatija.api-key')}
-        required={false}
-        bind:model={laatija}
-        lens={R.lensProp('api-key')}
-        format={Maybe.orSome('')}
-        parse={R.compose(Maybe.fromEmpty, R.trim)}
-        validators={schema['api-key']}
-        {disabled}
-        {i18n} />
+    <div class="flex flex-col">
+      <div class="lg:w-1/2 w-full">
+        <Input
+          id={'api-key'}
+          name={'api-key'}
+          label={i18n('laatija.api-key')}
+          required={false}
+          bind:model={laatija}
+          lens={R.lensProp('api-key')}
+          format={Maybe.orSome('')}
+          parse={R.compose(Maybe.fromEmpty, R.trim)}
+          validators={schema['api-key']}
+          {disabled}
+          {i18n} />
+      </div>
+      <div class="flex mt-4 items-center">
+        <span class="font-icon mr-1 text-xl">info</span>
+        <span>{i18n('laatija.api-key-requirements')}</span>
+      </div>
     </div>
   </div>
   <HR />

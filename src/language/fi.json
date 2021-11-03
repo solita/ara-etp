@@ -17,6 +17,7 @@
     "invalid-rakennustunnus": "Virheellinen rakennustunnus",
     "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
     "invalid-verkkolaskuoperaattori": "Virheellinen verkkolaskuoperaattori",
+    "invalid-api-key": "Virheellinen tiedonsiirron salasana",
     "no-selection": "Ei valintaa",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min}",
@@ -235,7 +236,8 @@
     "julkisettiedot-header": "Valitse julkiset tiedot",
     "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa",
     "api-key-header": "Laskentaohjelmisto",
-    "api-key": "Anna uusi tiedonsiirron salasana (vähintään 8 merkkiä)",
+    "api-key": "Anna uusi tiedonsiirron salasana",
+    "api-key-requirements": "Vähintään 8 merkkiä. Sallitut merkit: A-Z, 0-9, .-_!",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
     "messages": {
