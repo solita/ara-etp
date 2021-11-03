@@ -10,7 +10,7 @@
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require init-mocha.js --require @babel/register --reporter dot",
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
     "format": "prettier --write './src/**/*' modheaders.json",
-    "check-format": "git diff --name-only | grep src/ | xargs -r prettier --check",
+    "check-format": "git diff --name-only origin/develop -- src package.json | xargs -r prettier --check",
     "cypress": "cypress open",
     "build:docs": "jsdoc -r -c ./jsdoc/conf.json",
     "watch:docs": "nodemon --exec npm run build:docs --watch src"
