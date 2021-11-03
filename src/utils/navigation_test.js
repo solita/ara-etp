@@ -56,11 +56,10 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseEnergiatodistus(false, i18n, kayttaja, [
-          '2018',
-          '1',
-          'allekirjoitus'
-        ]),
+        R.map(
+          R.pick(['label', 'href']),
+          Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2018', '1'])
+        ),
         expected
       );
     });
@@ -454,11 +453,14 @@ describe('Navigation', () => {
       ];
 
       assert.deepEqual(
-        Navigation.parseValvontaOikeellisuus(
-          isDev,
-          i18n,
-          whoami,
-          locationParts
+        R.map(
+          R.dissoc('badge'),
+          Navigation.parseValvontaOikeellisuus(
+            isDev,
+            i18n,
+            whoami,
+            locationParts
+          )
         ),
         expected
       );
@@ -509,12 +511,12 @@ describe('Navigation', () => {
 
       const expected = [
         {
-          'href': '#/viesti/1',
-          'label': 'Viestiketju 1'
+          href: '#/viesti/1',
+          label: 'Viestiketju 1'
         },
         {
-          'href': '#/viesti/1/liitteet',
-          'label': 'Liitteet'
+          href: '#/viesti/1/liitteet',
+          label: 'Liitteet'
         }
       ];
 
