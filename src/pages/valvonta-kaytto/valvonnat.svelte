@@ -265,12 +265,14 @@
                   <!-- valvonta -->
                   <td
                     class="etp-table--td"
-                    class:font-bold={Valvojat.isSelf(
-                      whoami,
+                    class:font-bold={Maybe.fold(
+                      false,
+                      Valvojat.isSelf(whoami),
                       valvonta['valvoja-id']
                     )}
-                    class:text-primary={Valvojat.isSelf(
-                      whoami,
+                    class:text-primary={Maybe.fold(
+                      false,
+                      Valvojat.isSelf(whoami),
                       valvonta['valvoja-id']
                     )}>
                     {Maybe.fold(
