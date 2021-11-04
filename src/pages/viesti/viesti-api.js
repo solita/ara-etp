@@ -125,7 +125,11 @@ export const postLiitteetLink = R.curry((viestiketjuId, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.liitteet(viestiketjuId) + '/link')
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        url.liitteet(viestiketjuId) + '/link'
+      )
     )
   )(link)
 );

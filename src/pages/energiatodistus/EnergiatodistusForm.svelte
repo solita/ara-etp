@@ -45,15 +45,17 @@
   export let submit;
   export let title = '';
 
-  const required = energiatodistus => energiatodistus['bypass-validation-limits'] ?
-    validation.requiredBypass : validation.requiredAll;
+  const required = energiatodistus =>
+    energiatodistus['bypass-validation-limits']
+      ? validation.requiredBypass
+      : validation.requiredAll;
 
   const saveSchema = R.compose(
     R.reduce(schemas.assocRequired, R.__, required(energiatodistus)),
     schema =>
       energiatodistus['bypass-validation-limits']
-        ? schema :
-        R.reduce(
+        ? schema
+        : R.reduce(
             schemas.redefineNumericValidation,
             schema,
             validation.numeric

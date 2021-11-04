@@ -24,8 +24,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('viesti', 'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'viesti',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
+        );
         overlay = false;
       },
       response => {
@@ -47,8 +50,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('viesti', 'error',
-          i18n(Response.errorKey404(i18nRoot, key, response)));
+        flashMessageStore.add(
+          'viesti',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, key, response))
+        );
         overlay = false;
       },
       _ => {
@@ -61,7 +67,7 @@
       },
       liiteFuture(liite)
     );
-  }
+  };
 
   const liiteApi = {
     getUrl: ViestiApi.url.liitteet(params.id),
@@ -71,10 +77,7 @@
       ViestiApi.postLiitteetFiles(params.id)
     ),
 
-    addLink: liiteOperation(
-      'add-link',
-      ViestiApi.postLiitteetLink(params.id)
-    ),
+    addLink: liiteOperation('add-link', ViestiApi.postLiitteetLink(params.id)),
 
     deleteLiite: liiteOperation(
       'delete-liite',
@@ -83,15 +86,15 @@
   };
 </script>
 
-{#each Maybe.toArray(resources) as {liitteet}}
+{#each Maybe.toArray(resources) as { liitteet }}
   <Overlay {overlay}>
     <div slot="content" class="w-full mt-3">
-    <Liitteet
-      liiteApi={liiteApi}
-      liitteet={liitteet}
-      disabled={false}
-      emptyMessageKey={i18nRoot + '.empty'}
-      flashModule="viesti" />
+      <Liitteet
+        {liiteApi}
+        {liitteet}
+        disabled={false}
+        emptyMessageKey={i18nRoot + '.empty'}
+        flashModule="viesti" />
     </div>
     <div slot="overlay-content">
       <Spinner />
