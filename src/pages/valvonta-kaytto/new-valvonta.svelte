@@ -54,7 +54,7 @@
       overlay = false;
       dirty = false;
     },
-    Future.parallelObject(2, {
+    Future.parallelObject(3, {
       whoami: KayttajaApi.whoami,
       postinumerot: GeoApi.postinumerot,
       ilmoituspaikat: api.ilmoituspaikat

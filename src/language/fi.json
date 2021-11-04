@@ -1596,6 +1596,7 @@
       "kohde": {
         "rakennuksen-tiedot": "Rakennuksen tiedot",
         "rakennustunnus": "Rakennustunnus",
+        "rakennustunnus-existing-et": "Rakennustunnukselle on jo energiatodistuksia",
         "katuosoite": "Katuosoite",
         "postinumero": "Postinumero",
         "ilmoituksen-tiedot": "Ilmoituksen tiedot",
@@ -1627,7 +1628,8 @@
           "delete-liite-success": "Liite poistettu.",
           "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
           "add-link-error": "Linkin lisääminen epäonnistui.",
-          "delete-liite-error": "Liitteen poisto epäonnistui."
+          "delete-liite-error": "Liitteen poisto epäonnistui.",
+          "find-rakennustunnus-error": "Rakennustunnus haku epäonnistui."
         },
         "osapuolet": {
           "title": "Osapuolet",
