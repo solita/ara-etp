@@ -681,6 +681,11 @@ const laatija = {
   'voimassaolo-paattymisaika': timeComparisons
 };
 
+const kunta = {
+  'label-fi': stringComparisons,
+  'label-sv': stringComparisons
+}
+
 export const flattenSchema = R.compose(
   R.reduce((acc, arr) => ({ ...acc, [arr[0].key]: arr }), {}),
   R.map(R.converge(R.map, [R.compose(R.applyTo, R.head), R.last])),
@@ -706,7 +711,8 @@ export const schema = {
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals]
   },
-  laatija
+  laatija,
+  kunta
 };
 
 const localizedField = key => [`${key}-fi`, `${key}-sv`];
