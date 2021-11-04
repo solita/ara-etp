@@ -49,7 +49,7 @@
           href={link.href}
           activePath={link.activePath}
           disabled={link.disabled}
-          badge={R.isNil(link.badgeValue) ? Maybe.None() : link.badgeValue}/>
+          badge={R.isNil(link.badgeValue) ? Maybe.None() : link.badgeValue} />
       {/if}
     {/each}
   </div>

@@ -31,7 +31,9 @@ const createIdTranslateStore = () => {
           R.assoc(
             'liitteet',
             liitteet,
-            R.pick(['id', 'subject', 'energiatodistus-id'], ketju)))
+            R.pick(['id', 'subject', 'energiatodistus-id'], ketju)
+          )
+        )
       );
     }
   };

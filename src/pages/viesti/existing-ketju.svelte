@@ -49,8 +49,11 @@
     enableOverlay();
     Future.fork(
       response => {
-        flashMessageStore.add('viesti', 'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'viesti',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
+        );
         overlay = false;
       },
       response => {
@@ -64,7 +67,8 @@
         whoami: kayttajaApi.whoami,
         kasittelijat: api.getKasittelijat,
         ryhmat: api.vastaanottajaryhmat
-      }));
+      })
+    );
   };
 
   load(params.id);
@@ -174,7 +178,7 @@
     @apply border-disabled mt-2 pt-2 border-t overflow-x-auto;
   }
   h1 {
-      @apply text-lg mb-2;
+    @apply text-lg mb-2;
   }
 </style>
 
@@ -221,9 +225,7 @@
                       flashMessageStore.add(
                         'viesti',
                         'success',
-                        i18n(
-                          `${i18nRoot}.attach-to-et.messages.update-success`
-                        )
+                        i18n(`${i18nRoot}.attach-to-et.messages.update-success`)
                       );
                       load(params.id);
                     }

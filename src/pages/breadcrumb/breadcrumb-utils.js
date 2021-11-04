@@ -59,15 +59,15 @@ export const valvontaOikeellisuusCrumb = R.curry(
       [
         R.equals('all'),
         R.always([
-          Kayttajat.isPaakayttaja(whoami) ?
-          {
-            url: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
-            label: i18n('navigation.valvonta.oikeellisuus.all.valvoja')
-          } :
-          {
-            url: `#/valvonta/oikeellisuus/all`,
-            label: i18n('navigation.valvonta.oikeellisuus.all.laatija')
-          }
+          Kayttajat.isPaakayttaja(whoami)
+            ? {
+                url: `#/valvonta/oikeellisuus/all?valvoja-id=${whoami.id}&has-valvoja=false`,
+                label: i18n('navigation.valvonta.oikeellisuus.all.valvoja')
+              }
+            : {
+                url: `#/valvonta/oikeellisuus/all`,
+                label: i18n('navigation.valvonta.oikeellisuus.all.laatija')
+              }
         ])
       ],
       [
