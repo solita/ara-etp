@@ -27,11 +27,7 @@
       R.compose(R.equals('energiatodistus'), R.head, R.split('.')),
       R.compose(Inputs.propertyLabel($_), R.join('.'), R.tail, R.split('.'))
     ],
-    [
-      R.compose(R.equals('laatija'), R.head, R.split('.')),
-      R.compose($_, R.concat(R.__, '_haku'))
-    ],
-    [R.T, $_]
+    [R.T, R.compose($_, R.concat('energiatodistus.haku.'))]
   ]);
 
   const findKey = label =>

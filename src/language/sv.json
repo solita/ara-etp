@@ -365,7 +365,12 @@
       "kaikki": "Alla",
       "poista-disabled": "Energicertifikatet kan endast raderas i utkaststatus.",
       "ei-sisalla": "Innehåller inte",
-      "kuluva-ja-edelliset": "Kuluva ja edelliset SV?"
+      "kuluva-ja-edelliset": "Kuluva ja edelliset SV?",
+      "laatija": {
+        "toteamispaivamaara": "Upprättare / Toteamispäivämäärä SV?",
+        "voimassaolo-paattymisaika": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
+        "patevyystaso": "Upprättare / Behörighetsnivå"
+      }
     },
     "kaikki": "Allt",
     "korvaavuus": {

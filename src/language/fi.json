@@ -380,7 +380,12 @@
       "false": "Ei",
       "laatimisvaihe": "Laatimisvaihe",
       "kaikki": "Kaikki",
-      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa."
+      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa.",
+      "laatija": {
+        "toteamispaivamaara": "Laatija / Toteamispäivämäärä",
+        "voimassaolo-paattymisaika": "Laatija / Pätevyyden voimassaolon päättymispäivä",
+        "patevyystaso": "Laatija / Pätevyystaso"
+      }
     },
     "kaikki": "Kaikki",
     "korvaavuus": {
