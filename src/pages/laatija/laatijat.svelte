@@ -13,7 +13,7 @@
 
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as YritysApi from '@Pages/yritys/yritys-api';
-  import * as GeoApi from '@Component/Geo/geo-api';
+  import * as GeoApi from '@Utility/api/geo-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { replace, location, querystring } from 'svelte-spa-router';

@@ -8,7 +8,7 @@ import * as empty from './empty';
 import * as schema from './schema';
 import * as laatijaApi from '@Pages/laatija/laatija-api';
 import * as yritysApi from '@Pages/yritys/yritys-api';
-import * as geoApi from '@Component/Geo/geo-api';
+import * as geoApi from '@Utility/api/geo-api';
 import * as dfns from 'date-fns';
 import * as LaatijaYritysTila from '@Pages/yritys/laatija-yritys-tila';
 

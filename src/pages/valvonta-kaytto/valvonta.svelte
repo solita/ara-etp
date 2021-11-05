@@ -9,7 +9,7 @@
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';
-  import * as GeoApi from '@Component/Geo/geo-api';
+  import * as GeoApi from '@Utility/api/geo-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';

@@ -19,7 +19,7 @@
   import * as api from './valvonta-api';
   import * as osapuolet from './osapuolet';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
-  import * as geoApi from '@Component/Geo/geo-api';
+  import * as geoApi from '@Utility/api/geo-api';
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';

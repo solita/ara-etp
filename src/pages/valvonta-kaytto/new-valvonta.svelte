@@ -15,7 +15,7 @@
 
   import * as api from './valvonta-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
-  import * as GeoApi from '@Component/Geo/geo-api';
+  import * as GeoApi from '@Utility/api/geo-api';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';

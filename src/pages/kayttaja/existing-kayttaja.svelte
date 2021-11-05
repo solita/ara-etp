@@ -9,10 +9,10 @@
   import { _ } from '@Language/i18n';
   import { flashMessageStore, idTranslateStore } from '@/stores';
 
-  import * as GeoApi from '@Component/Geo/geo-api';
+  import * as GeoApi from '@Utility/api/geo-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
-  import * as LaskutusApi from '@Component/Laskutus/laskutus-api';
+  import * as LaskutusApi from '@Utility/api/laskutus-api';
 
   import KayttajaForm from './kayttaja-form.svelte';
   import LaatijaForm from '@Pages/laatija/laatija-form.svelte';
