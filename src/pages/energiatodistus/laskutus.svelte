@@ -8,7 +8,7 @@
   import Select from '@Component/Select/Select';
   import * as Future from '@Utility/future-utils';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as laskutusApi from '@Component/Laskutus/laskutus-api';
+  import * as laskutusApi from '@Utility/api/laskutus-api';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
   import { flashMessageStore } from '@/stores';
   import Loading from '@Component/Loading/Loading.svelte';

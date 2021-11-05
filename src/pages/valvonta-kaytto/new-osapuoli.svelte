@@ -16,7 +16,7 @@
   import { _ } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
-  import * as GeoApi from '@Component/Geo/geo-api';
+  import * as GeoApi from '@Utility/api/geo-api';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import YritysForm from '@Pages/valvonta-kaytto/yritys-form';
 

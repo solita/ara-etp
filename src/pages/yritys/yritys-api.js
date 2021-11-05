@@ -3,8 +3,8 @@
  */
 import * as Future from '@Utility/future-utils';
 import * as dfns from 'date-fns';
-import * as geoApi from '@Component/Geo/geo-api';
-import * as laskutusApi from '@Component/Laskutus/laskutus-api';
+import * as geoApi from '@Utility/api/geo-api';
+import * as laskutusApi from '@Utility/api/laskutus-api';
 import * as R from 'ramda';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Maybe from '@Utility/maybe-utils';
