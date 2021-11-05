@@ -149,6 +149,7 @@
         {toimenpidetyypit}
         {templatesByType}
         {saveValvonta}
+        {whoami}
         reload={_ => load(params)} />
 
       <H2 text={i18n(i18nRoot + '.toimenpiteet')} />

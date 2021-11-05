@@ -1,12 +1,12 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Locales from '@Language/locale-utils';
 
   import { _, locale } from '@Language/i18n';
   import * as Router from '@Component/Router/router';
 
+  import * as Valvojat from '@Pages/valvonta/valvojat';
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
 
@@ -24,9 +24,11 @@
   export let toimenpiteet;
   export let toimenpidetyypit;
   export let templatesByType;
+  export let whoami;
 
   export let saveValvonta;
   export let reload;
+  const i18n = $_;
 
   let newToimenpide = Maybe.None();
   let newNote = Maybe.None();
@@ -55,14 +57,6 @@
 
   const saveKasittelija = id => saveValvonta({ 'valvoja-id': id });
 
-  const fullName = valvojat =>
-    R.compose(
-      R.join(' '),
-      R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
-      R.find(R.__, valvojat),
-      R.propEq('id')
-    );
-
   const load = _ => {
     newToimenpide = Maybe.None();
     newNote = Maybe.None();
@@ -89,7 +83,7 @@
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
-    format={fullName(valvojat)}
+    format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
     items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 

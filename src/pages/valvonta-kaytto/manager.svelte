@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
+  import * as Valvojat from '@Pages/valvonta/valvojat';
 
   import { _, locale } from '@Language/i18n';
 
@@ -24,9 +25,11 @@
   export let toimenpiteet;
   export let toimenpidetyypit;
   export let templatesByType;
+  export let whoami;
 
   export let saveValvonta;
   export let reload;
+  const i18n = $_;
 
   let newToimenpide = Maybe.None();
   let newNote = Maybe.None();
@@ -48,14 +51,6 @@
 
   const saveKasittelija = id =>
     saveValvonta(R.assoc('valvoja-id', id, valvonta));
-
-  const fullName = valvojat =>
-    R.compose(
-      R.join(' '),
-      R.juxt([R.prop('etunimi'), R.prop('sukunimi')]),
-      R.find(R.__, valvojat),
-      R.propEq('id')
-    );
 
   const load = _ => {
     newToimenpide = Maybe.None();
@@ -92,7 +87,7 @@
       Maybe.fromNull,
       R.path(['target', 'value'])
     )}
-    format={fullName(valvojat)}
+    format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
     items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 

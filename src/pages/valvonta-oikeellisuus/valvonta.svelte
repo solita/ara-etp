@@ -206,6 +206,7 @@
           {toimenpidetyypit}
           {templatesByType}
           {saveValvonta}
+          {whoami}
           reload={_ => load(params)} />
       {/if}
       {#if Kayttajat.isLaatija(whoami)}
