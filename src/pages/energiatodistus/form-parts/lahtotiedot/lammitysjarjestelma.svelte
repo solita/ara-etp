@@ -35,6 +35,10 @@
   );
 
   const lammonjakoLens = R.compose(lammitysLens, R.lensProp('lammonjako'));
+
+  let lammitysmuoto1KuvausParent,
+    lammitysmuoto2KuvausParent,
+    lammonjakoKuvausParent;
 </script>
 
 <style>
@@ -63,7 +67,14 @@
 </div>
 
 {#if Validation.isLammitysmuoto1KuvausRequired(energiatodistus)}
-  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
+  <div
+    bind:this={lammitysmuoto1KuvausParent}
+    transition:slide|local={{ duration: 200 }}
+    on:introend={() => {
+      const input = lammitysmuoto1KuvausParent.getElementsByTagName('input')[0];
+      input.focus();
+    }}
+    class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
@@ -88,7 +99,14 @@
 </div>
 
 {#if Validation.isLammitysmuoto2KuvausRequired(energiatodistus)}
-  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
+  <div
+    bind:this={lammitysmuoto2KuvausParent}
+    transition:slide|local={{ duration: 200 }}
+    on:introend={() => {
+      const input = lammitysmuoto2KuvausParent.getElementsByTagName('input')[0];
+      input.focus();
+    }}
+    class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
@@ -114,7 +132,14 @@
 </div>
 
 {#if Validation.isLammonjakoKuvausRequired(energiatodistus)}
-  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
+  <div
+    bind:this={lammonjakoKuvausParent}
+    transition:slide|local={{ duration: 200 }}
+    on:introend={() => {
+      const input = lammonjakoKuvausParent.getElementsByTagName('input')[0];
+      input.focus();
+    }}
+    class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}

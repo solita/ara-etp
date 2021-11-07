@@ -18,6 +18,7 @@
 
   export let ilmanvaihtotyypit;
   export let inputLanguage;
+  let kuvausInputParent;
 
   const tyyppiLens = R.lensPath(['lahtotiedot', 'ilmanvaihto', 'tyyppi-id']);
 </script>
@@ -40,7 +41,14 @@
 </div>
 
 {#if Validation.isIlmanvaihtoKuvausRequired(energiatodistus)}
-  <div transition:slide|local={{ duration: 200 }} class="w-full py-4 mb-4">
+  <div
+    bind:this={kuvausInputParent}
+    transition:slide|local={{ duration: 200 }}
+    on:introend={() => {
+      const input = kuvausInputParent.getElementsByTagName('input')[0];
+      input.focus();
+    }}
+    class="w-full py-4 mb-4">
     <Input
       {disabled}
       {schema}
