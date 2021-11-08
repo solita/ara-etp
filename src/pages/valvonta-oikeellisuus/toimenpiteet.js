@@ -68,6 +68,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
   'id'
 );
 
+export const isRFCRequest = isType(type.rfc.request);
 export const isVerified = isType(type.verified);
 export const isAnomaly = isType(type.anomaly);
 export const isAuditReport = isType(type.audit.report);

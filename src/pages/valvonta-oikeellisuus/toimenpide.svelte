@@ -73,11 +73,17 @@
 
   {#if !Toimenpiteet.isResponse(toimenpide)}
     {#each Maybe.toArray(toimenpide.description) as description}
-      <ShowMore>
+      {#if Toimenpiteet.isRFCRequest(toimenpide)}
         <p>
           {description}
         </p>
-      </ShowMore>
+      {:else}
+        <ShowMore>
+          <p>
+            {description}
+          </p>
+        </ShowMore>
+      {/if}
     {/each}
   {/if}
 
