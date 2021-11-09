@@ -21,7 +21,8 @@ export const OPERATOR_TYPES = Object.freeze({
   LAATIMISVAIHE: 'LAATIMISVAIHE',
   KIELISYYS: 'KIELISYYS',
   ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI',
-  PATEVYYSTASO: 'PATEVYYSTASO'
+  PATEVYYSTASO: 'PATEVYYSTASO',
+  KUNTA: 'KUNTA'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -192,6 +193,13 @@ const laatijaPatevyys = key => ({
   key,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.LAATIJA
+});
+
+const kuntaEquals = key => ({
+  operation: eq,
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.KUNTA
 });
 
 const numberComparisonsFromType = type => [
@@ -682,9 +690,8 @@ const laatija = {
 };
 
 const kunta = {
-  'label-fi': stringComparisons,
-  'label-sv': stringComparisons
-}
+  id: [kuntaEquals]
+};
 
 export const flattenSchema = R.compose(
   R.reduce((acc, arr) => ({ ...acc, [arr[0].key]: arr }), {}),
