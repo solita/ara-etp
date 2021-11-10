@@ -1,7 +1,6 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
@@ -259,7 +258,11 @@
                   on:change={event =>
                     submitKasittelija(parseInt(event.target.value))}
                   lens={R.lensProp('kasittelija-id')}
-                  format={Viestit.fullName(kasittelijat)}
+                  format={Kayttajat.format(
+                    i18n('viesti.mina'),
+                    kasittelijat,
+                    whoami
+                  )}
                   items={R.pluck('id', kasittelijat)} />
               </div>
 

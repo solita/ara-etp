@@ -177,7 +177,7 @@
                 'id',
                 R.filter(R.propEq('passivoitu', false), valvojat)
               )}
-              format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+              format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
               parse={Maybe.Some}
               allowNone={true} />
           </div>
@@ -250,7 +250,7 @@
                     )}>
                     {Maybe.fold(
                       '-',
-                      Valvojat.format(i18n('valvonta.self'), valvojat, whoami),
+                      Kayttajat.format(i18n('valvonta.self'), valvojat, whoami),
                       valvonta['valvoja-id']
                     )}
                   </td>

@@ -26,6 +26,7 @@
  */
 
 import * as R from 'ramda';
+import * as Maybe from '@Utility/maybe-utils';
 
 const roles = ['laatija', 'patevyydentoteaja', 'paakayttaja', 'laskuttaja'];
 
@@ -94,3 +95,15 @@ export const isSystem = R.propSatisfies(isSystemRole, 'rooli');
  * @sig Kayttaja -> string
  */
 export const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;
+
+export const isSelf = R.curry((whoami, id) => whoami.id === id);
+
+export const format = R.curry((selfLabel, kayttajat, whoami, id) =>
+  R.ifElse(
+    isSelf(whoami),
+    R.always(selfLabel),
+    R.compose(Maybe.fold('', fullName), id =>
+      Maybe.find(R.propEq('id', id), kayttajat)
+    )
+  )(id)
+);

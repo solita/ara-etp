@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
-  import * as Valvojat from '@Pages/valvonta/valvojat';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import { _, locale } from '@Language/i18n';
 
@@ -87,7 +87,7 @@
       Maybe.fromNull,
       R.path(['target', 'value'])
     )}
-    format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+    format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
     items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 
