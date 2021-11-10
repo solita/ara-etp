@@ -5,7 +5,7 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
 
   import { locale } from '@Language/i18n';
-  import { label } from '@Language/locale-utils';
+  import { label, labelForId } from '@Language/locale-utils';
 
   export let values = [];
   export let nameprefix;
@@ -16,12 +16,8 @@
 
   const formatKunta = label; // formatKunta: locale -> item -> label
 
-  const completedValueWithLocale = locale =>
-    R.compose(
-      Maybe.orSome(''),
-      R.map(formatKunta(locale)),
-      Maybe.nullReturning(R.find(R.propEq('id', value)))
-    )(kunnat);
+  const completedValueWithLocale = (locale, val) =>
+    labelForId(locale, kunnat)(val);
 
   $: value = R.compose(
     Maybe.orSome(''),
@@ -29,7 +25,7 @@
     Maybe.nullReturning(
       R.find(
         R.compose(
-          R.equals(completedValueWithLocale($locale)),
+          R.equals(completedValueWithLocale($locale, value)),
           formatKunta($locale)
         )
       )
@@ -40,7 +36,7 @@
     input && (input.value = value);
     input && input.dispatchEvent(new Event('change', { bubbles: true }));
   }
-  $: completedValue = completedValueWithLocale($locale);
+  $: completedValue = completedValueWithLocale($locale, value);
 </script>
 
 <style>
