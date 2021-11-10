@@ -383,6 +383,9 @@
         "toteamispaivamaara": "Upprättare / Toteamispäivämäärä SV?",
         "voimassaolo-paattymisaika": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
         "patevyystaso": "Upprättare / Behörighetsnivå"
+      },
+      "kunta": {
+        "id": "Kommun"
       }
     },
     "kaikki": "Allt",
