@@ -4,27 +4,35 @@
 
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
 
+  import { locale } from '@Language/i18n';
+  import { label } from '@Language/locale-utils';
+
   export let values = [];
   export let nameprefix;
   export let kunnat;
 
   let value = R.defaultTo('', R.head(values));
-
-  const formatKunta = kunta => kunta['label-fi'];
-
   let input;
 
-  let completedValue = R.compose(
-    Maybe.orSome(''),
-    R.map(formatKunta),
-    Maybe.nullReturning(R.find(R.propEq('id', value)))
-  )(kunnat);
+  const formatKunta = label; // formatKunta: locale -> item -> label
+
+  const completedValueWithLocale = locale =>
+    R.compose(
+      Maybe.orSome(''),
+      R.map(formatKunta(locale)),
+      Maybe.nullReturning(R.find(R.propEq('id', value)))
+    )(kunnat);
 
   $: value = R.compose(
     Maybe.orSome(''),
     R.map(R.prop('id')),
     Maybe.nullReturning(
-      R.find(R.compose(R.equals(completedValue), formatKunta))
+      R.find(
+        R.compose(
+          R.equals(completedValueWithLocale($locale)),
+          formatKunta($locale)
+        )
+      )
     )
   )(kunnat);
 
@@ -32,6 +40,7 @@
     input && (input.value = value);
     input && input.dispatchEvent(new Event('change', { bubbles: true }));
   }
+  $: completedValue = completedValueWithLocale($locale);
 </script>
 
 <style>
@@ -39,7 +48,7 @@
 
 <Autocomplete
   bind:completedValue
-  items={R.map(formatKunta, kunnat)}
+  items={R.map(formatKunta($locale), kunnat)}
   size={10000} />
 <input
   bind:this={input}
