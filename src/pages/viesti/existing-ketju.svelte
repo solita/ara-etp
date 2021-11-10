@@ -259,7 +259,7 @@
                     submitKasittelija(parseInt(event.target.value))}
                   lens={R.lensProp('kasittelija-id')}
                   format={Kayttajat.format(
-                    i18n('valvonta.self'),
+                    i18n('viesti.mina'),
                     kasittelijat,
                     whoami
                   )}
