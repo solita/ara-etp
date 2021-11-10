@@ -15,6 +15,7 @@
 
   import * as Links from './links';
   import * as Valvojat from '@Pages/valvonta/valvojat';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import * as api from './valvonta-api';
   import * as osapuolet from './osapuolet';
@@ -203,7 +204,7 @@
               'id',
               R.filter(R.propEq('passivoitu', false), valvojat)
             )}
-            format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+            format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
             parse={Maybe.Some}
             allowNone={true} />
         </div>
@@ -275,7 +276,7 @@
                     )}>
                     {Maybe.fold(
                       '-',
-                      Valvojat.format(i18n('valvonta.self'), valvojat, whoami),
+                      Kayttajat.format(i18n('valvonta.self'), valvojat, whoami),
                       valvonta['valvoja-id']
                     )}
                   </td>

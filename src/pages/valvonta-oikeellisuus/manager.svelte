@@ -6,7 +6,7 @@
   import { _, locale } from '@Language/i18n';
   import * as Router from '@Component/Router/router';
 
-  import * as Valvojat from '@Pages/valvonta/valvojat';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Toimenpiteet from './toimenpiteet';
   import * as Links from './links';
 
@@ -83,7 +83,7 @@
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
-    format={Valvojat.format(i18n('valvonta.self'), valvojat, whoami)}
+    format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
     items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
 </div>
 
