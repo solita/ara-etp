@@ -160,23 +160,6 @@
     api.putKetju(fetch)
   );
 
-  const isSelf = R.curry((whoami, id) =>
-    R.compose(Maybe.exists(R.equals(whoami.id)), Maybe.fromNull)(id)
-  );
-
-  const formatKasittelija = R.curry((kasittelijat, whoami, id) =>
-    R.ifElse(
-      isSelf(whoami),
-      R.always(i18n('viesti.mina')),
-      R.compose(
-        Maybe.orSome('-'),
-        R.map(kasittelija => `${kasittelija.etunimi} ${kasittelija.sukunimi}`),
-        R.chain(id => Maybe.find(R.propEq('id', id), kasittelijat)),
-        Maybe.fromNull
-      )
-    )(id)
-  );
-
   $: load(query);
 
   $: R.compose(
@@ -203,13 +186,6 @@
       {#if !Kayttajat.isLaatija(whoami)}
         <div class="flex justify-between mb-4">
           <div class="flex flex-grow">
-            <!--<Checkbox
-              id={'checkbox.show-mine'}
-              name={'checkbox.show-mine'}
-              label={i18n('viesti.all.show-mine')}
-              lens={R.lensProp('kasittelija-self')}
-              bind:model={filters}
-              disabled={false} /> -->
             <div class="w-1/4">
               <Select
                 compact={true}
@@ -217,7 +193,11 @@
                 bind:model={query}
                 lens={R.lensProp('kasittelija-id')}
                 items={R.pluck('id', kasittelijat)}
-                format={formatKasittelija(kasittelijat, whoami)}
+                format={Kayttajat.format(
+                  i18n('viesti.mina'),
+                  kasittelijat,
+                  whoami
+                )}
                 parse={Maybe.Some}
                 allowNone={true} />
             </div>
