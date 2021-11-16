@@ -1,5 +1,7 @@
 {
-  "document": { "title": "Ara - Energicertifikatservice" },
+  "document": {
+    "title": "Ara - Energicertifikatservice"
+  },
   "validation": {
     "required": "Obligatorisk uppgift",
     "min-length": "Längden ska vara minst {min} tecken",
@@ -61,20 +63,20 @@
       "cancel": "Avbryt"
     },
     "energiatodistus-viestit": "Meddelanden",
-    "etusivu": "Etusivu SV?",
+    "etusivu": "Förstasidan",
     "valvonta": {
       "kaytto": {
-        "all": "Käytön­valvonnat SV?",
-        "kohde": "KV {id} SV?",
-        "valvonta": "Valvonta SV?"
+        "all": "Användningskontroller",
+        "kohde": "AK {id}",
+        "valvonta": "Kontroll"
       },
       "oikeellisuus": {
-        "valvonta": "Valvonta SV?",
+        "valvonta": "Kontroll",
         "all": {
-          "valvoja": "Oikeellisuuden valvonnat SV?",
-          "laatija": "Valvonnat SV?"
+          "valvoja": "Kontroller av riktigheten",
+          "laatija": "Kontroller"
         },
-        "virhetypes": "Virhetyypit SV?"
+        "virhetypes": "Feltyper"
       }
     },
     "new-kayttaja": "Ny användare"
@@ -88,7 +90,12 @@
     "row-error": "Fel på rad",
     "file-read-error": "Ett oväntat fel inträffade vid läsning av filen."
   },
-  "units": { "year": "år", "pieces": "St", "celsius": "°C", "days": "dagar" },
+  "units": {
+    "year": "år",
+    "pieces": "St",
+    "celsius": "°C",
+    "days": "dagar"
+  },
   "login_redirect": "Vänta en stund, du hänvisas till inloggningssidan",
   "loading": "Laddar...",
   "tallenna": "Spara",
@@ -141,11 +148,15 @@
   "yritykset": {
     "title": "Företag",
     "all": "Alla företag",
-    "search": "Haku SV?",
-    "results": "Tuloksia SV?",
-    "messages": { "load-error": "Yritystietojen lataus epäonnistui SV?" }
+    "search": "Sökning",
+    "results": "Resultat",
+    "messages": {
+      "load-error": "Det gick inte att ladda ned företagsuppgifterna"
+    }
   },
-  "time": { "klo": "kl." },
+  "time": {
+    "klo": "kl."
+  },
   "kayttaja": {
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
@@ -180,8 +191,8 @@
     "new": {
       "title": "Ny användare",
       "messages": {
-        "add-success": "Uusi käyttäjä tallennettu järjestelmään. SV?",
-        "add-error": "Uuden käyttäjän tallennus epäonnistui. SV?"
+        "add-success": "En ny användare har registrerats i systemet.",
+        "add-error": "Det gick inte att registrera den nya användaren."
       }
     }
   },
@@ -193,14 +204,16 @@
     "email": "E-post",
     "puhelin": "Telefon",
     "login": "Inloggad",
-    "info": "Tässä näkyvät käyttäjät jotka eivät ole laatijoita. SV?",
-    "laatija-link": "Laatijat löytyvät täältä SV?",
+    "info": "Här visas de användare som inte är upprättare.",
+    "laatija-link": "Upprättarna finns här",
     "state": {
       "header": "Status",
       "active": "Aktiva",
       "passivoitu": "Passiverad"
     },
-    "messages": { "load-error": "Laddningen av uppgifter misslyckades." }
+    "messages": {
+      "load-error": "Laddningen av uppgifter misslyckades."
+    }
   },
   "laatija": {
     "laatija": "Upprättare",
@@ -220,8 +233,7 @@
     "julkisettiedot-header": "Välj offentliga uppgifter",
     "todistustenlaatimiskielto": "Förbud mot upprättande av certifikat",
     "api-key-header": "Kalkylprogram",
-    "api-key": "Ange ett nytt lösenord för dataöverföringen",
-    "api-key-requirements": "Minst 8 tecken. A-Z, 0-9, .-_!",
+    "api-key": "Ange ett nytt lösenord för dataöverföringen (minst 8 tecken)",
     "messages": {
       "not-found": "Hittar inte upprättaren i denna tjänst.",
       "save-success": "Upprättarnas uppgifter har sparats.",
@@ -253,7 +265,7 @@
     },
     "yritykset": {
       "title": "Företag",
-      "empty": "Ei liitettyjä yrityksiä. SV?",
+      "empty": "Inga kopplade företag.",
       "table": {
         "description": "Du har kopplats som upprättare till följande företag:",
         "tila": "Status",
@@ -285,9 +297,9 @@
         "detach-failed": "Det gick inte att avlägsna upprättaren från företaget"
       }
     },
-    "perustiedot-header": "Perustiedot SV?",
-    "cancel": "Peruuta muutokset SV?",
-    "save": "Tallenna SV?"
+    "perustiedot-header": "Basuppgifter",
+    "cancel": "Återkalla ändringar",
+    "save": "Spara"
   },
   "laatijat": {
     "title": "Sök upprättare",
@@ -299,11 +311,11 @@
     "tilat": {},
     "patevyystaso": "Behörighetsnivå",
     "toimintaalue": "Huvudverksamhetsområde",
-    "keyword-search": "Tekstihaku (nimi, hetu, yhteystiedot) SV?",
+    "keyword-search": "Textsökning (namn, personbeteckning, kontaktuppgifter)",
     "voimassaolo-paattymisaika": {
       "label": "Slutdatum för certifikatets giltighetstid",
-      "after": "Voimassaolo päättyy myöhemmin tai samana päivänä kuin SV?",
-      "before": "Voimassaolo päättyy aikaisemmin tai samana päivänä kuin SV?"
+      "after": "Giltigheten upphör senare eller samma dag som",
+      "before": "Giltigheten upphör tidigare eller samma dag som"
     },
     "filters": {
       "label": "Status",
@@ -365,7 +377,7 @@
       "kaikki": "Alla",
       "poista-disabled": "Energicertifikatet kan endast raderas i utkaststatus.",
       "ei-sisalla": "Innehåller inte",
-      "kuluva-ja-edelliset": "Kuluva ja edelliset SV?",
+      "kuluva-ja-edelliset": "Innevarande och föregående",
       "laatija": {
         "toteamispaivamaara": "Upprättare / Toteamispäivämäärä SV?",
         "voimassaolo-paattymisaika": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
@@ -424,7 +436,10 @@
       "undodiscard": "Ångra funktionen Förkasta",
       "delete": "Radera"
     },
-    "new": { "draft": "Nytt utkast", "copy-from": "Ny kopia av certifikat" },
+    "new": {
+      "draft": "Nytt utkast",
+      "copy-from": "Ny kopia av certifikat"
+    },
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
     "laskutusosoite-id": "Faktureringsuppgifter som används",
@@ -468,7 +483,10 @@
           "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
         }
       },
-      "yritys": { "label-context": "$unused", "nimi": "Företag" }
+      "yritys": {
+        "label-context": "$unused",
+        "nimi": "Företag"
+      }
     },
     "yhteensa": "Totalt",
     "lahtotiedot": {
@@ -1087,10 +1105,10 @@
       "discard-error": "Funktionen Förkasta energicertifikat misslyckades",
       "undodiscard-success": "Funktionen Förkasta energicertifikat har avbrutits",
       "undodiscard-error": "Funktionen Förkasta energicertifikat kunde inte avbrytas",
-      "tyojono-add-success": "Energiatodistus lisättiin työjonoon onnistuneesti SV?",
-      "tyojono-add-error": "Energiatodistuksen lisääminen työjonoon epäonnistui SV?",
-      "tyojono-remove-success": "Energiatodistus poistettiin työjonosta onnistuneesti SV?",
-      "tyojono-remove-error": "Energiatodistuksen poistaminen työjonosta epäonnistui SV?"
+      "tyojono-add-success": "Energicertifikatet lades till arbetskön",
+      "tyojono-add-error": "Det gick inte att lägga till energicertifikat i arbetskön",
+      "tyojono-remove-success": "Energicertifikatet togs bort från arbetskön",
+      "tyojono-remove-error": "Det gick inte att ta bort energicertifikatet från arbetskön"
     },
     "signing": {
       "header": "Undertecknande",
@@ -1128,13 +1146,19 @@
         "signed": "{language} energicertifikatet har undertecknats.",
         "aborted": "Du avbröt underteckningsprocessen. Utkaststatus har återställts för energicertifikatet."
       },
-      "button": { "start": "Underteckna", "abort": "Avbryt", "close": "Stäng" }
+      "button": {
+        "start": "Underteckna",
+        "abort": "Avbryt",
+        "close": "Stäng"
+      }
     },
     "allekirjoitus": {
       "laskutusosoite": "Faktureringsadress",
       "valitse-laskutusosoite": "Välj en faktureringsadress"
     },
-    "laskutustiedot": { "nimi": "Namn" },
+    "laskutustiedot": {
+      "nimi": "Namn"
+    },
     "liitteet": {
       "title": "Bilagor",
       "empty": "Energicertifikatet har inga bilagor.",
@@ -1147,7 +1171,9 @@
         "author": "Adderare",
         "type": "Typ"
       },
-      "add-files": { "title": "Lägg till fil" },
+      "add-files": {
+        "title": "Lägg till fil"
+      },
       "add-link": {
         "title": "Lägg till länk",
         "nimi": "Länkens namn",
@@ -1175,38 +1201,43 @@
       }
     },
     "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
-    "viestit": { "title": "Meddelanden" },
+    "viestit": {
+      "title": "Meddelanden"
+    },
     "muutoshistoria": {
-      "not-found": "Energiatodistusta ei ole olemassa. SV?",
-      "load-error": "Muutoshistorian lataaminen epäonnistui. SV?",
-      "title": "Muutoshistoria SV?",
-      "tilamuutokset": "Tilamuutokset SV?",
-      "ajankohta": "Ajankohta SV?",
-      "kayttaja": "Käyttäjä SV?",
-      "tapahtuma": "Tapahtuma SV?",
-      "lisatietoa": "Lisatietoa SV?",
-      "external-api": "Tuotu ulkoisesta rajapinnasta SV?",
-      "allekirjoitusAloitettiin": "Allekirjoitus aloitettiin SV?",
-      "voimassa": "Voimassa SV?",
-      "hylatty": "Hylätty SV?",
-      "korvattu": "Korvattu SV?",
-      "voimassaoloPaattyi": "Voimassaolo päättyi SV?",
-      "allekirjoitettu": "Allekirjoitettu SV?",
-      "korvattuTodistuksella": "Korvattu energiatodistuksella SV?",
-      "energiatodistuslomake": "Energiatodistuslomake SV?",
-      "kentta": "Kenttä SV?",
-      "true": "Kyllä SV?",
-      "false": "Ei SV?",
-      "luonnos": "Luonnos SV?",
-      "laskutettu": "Laskutettu SV?",
-      "ensimmainenArvo": "Ensimmäinen arvo SV?",
-      "nykyinenArvo": "Nykyinen arvo SV?"
+      "not-found": "Det existerar inget energicertifikat.",
+      "load-error": "Det gick inte att ladda ned ändringshistoriken.",
+      "title": "Ändringshistorik",
+      "tilamuutokset": "Statusändringar",
+      "ajankohta": "Tidpunkt",
+      "kayttaja": "Användare",
+      "tapahtuma": "Händelse",
+      "lisatietoa": "Mer information",
+      "external-api": "Importerat från externt gränssnitt",
+      "allekirjoitusAloitettiin": "Underskriften inleddes",
+      "voimassa": "I kraft",
+      "hylatty": "Förkastat",
+      "korvattu": "Ersatt",
+      "voimassaoloPaattyi": "Giltighetstiden gick ut",
+      "allekirjoitettu": "Undertecknat",
+      "korvattuTodistuksella": "Ersatt med energicertifikat",
+      "energiatodistuslomake": "Formulär för energicertifikat",
+      "kentta": "Fält",
+      "true": "Ja",
+      "false": "Nej",
+      "luonnos": "Utkast",
+      "laskutettu": "Fakturerat",
+      "ensimmainenArvo": "Första värde",
+      "nykyinenArvo": "Nuvarande värde"
     }
   },
   "energiatodistukset": {
     "title": "Energicertifikat",
     "not-found": "Hittar inte energicertifikatet med angivna sökvillkor eller så har du inget energicertifikat.",
-    "tilat": { "0": "Utkast", "1": "Giltig" },
+    "tilat": {
+      "0": "Utkast",
+      "1": "Giltig"
+    },
     "messages": {
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet"
@@ -1229,9 +1260,9 @@
         "update-error": "Uppdateringen av meddelandekedjan misslyckades",
         "load-error": "Laddningen av meddelanden misslyckades."
       },
-      "show-mine": "Minä käsittelijänä SV?",
-      "show-handled": "Näytä myös käsitellyt SV?",
-      "no-handler": "Ei käsittelijää SV?"
+      "show-mine": "Jag som handläggare",
+      "show-handled": "Visa även behandlade",
+      "no-handler": "Ingen handläggare"
     },
     "ketju": {
       "vastaanottaja": "Mottagare",
@@ -1271,23 +1302,23 @@
           "validation-error": "Fel i svaret. Kontrollera uppgifterna i svaret innan du skickar det."
         },
         "attach-to-et": {
-          "attached-to": "Liittyy energiatodistukseen SV?",
-          "title": "Liitä energiatodistukseen SV?",
-          "button-attach-to-et": "Liitä energiatodistukseen SV?",
-          "button-edit": "Muokkaa SV?",
-          "input-label": "Energiatodistus SV?",
-          "button-attach": "Liitä SV?",
-          "button-detach": "Poista liitos SV?",
+          "attached-to": "Anknyter till energicertifikatet",
+          "title": "Koppla till energicertifikatet",
+          "button-attach-to-et": "Koppla till energicertifikatet",
+          "button-edit": "Redigera",
+          "input-label": "Energicertifikat",
+          "button-attach": "Koppla",
+          "button-detach": "Ta bort koppling",
           "messages": {
-            "update-success": "Energiatodistus liitoksen päivittäminen onnistui SV?",
-            "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui SV?",
-            "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero SV?",
-            "update-error-missing-et": "Energiatodistusta ei ole olemassa SV?"
+            "update-success": "Kopplingen till energicertifikatet har uppdaterats",
+            "update-error": "Det gick inte att uppdatera kopplingen till energicertifikatet",
+            "validation-error": "Fältet för energicertifikat kan inte vara tomt och värdet ska vara ett nummer",
+            "update-error-missing-et": "Det existerar inget energicertifikat."
           }
         }
       }
     },
-    "kasittelija": "Käsittelijä SV?"
+    "kasittelija": "Handläggare"
   },
   "ohje": {
     "navigation": {
@@ -1323,8 +1354,8 @@
       "error": "Redigeringen av sidan misslyckades",
       "validation-error": "Fel i uppgifter, kontrollera de inmatade uppgifterna",
       "load-error": "Laddningen av uppgifter misslyckades.",
-      "delete-disabled": "Poistaminen ei ole mahdollista jos sivulla on alisivuja SV?",
-      "sort-disabled": "Sivujen järjestäminen on estetty muokkausnäkymässä SV?"
+      "delete-disabled": "Borttagning är inte möjlig om sidan har undersidor",
+      "sort-disabled": "Det går inte att ordna sidor i redigeringsvyn"
     },
     "viewer": {
       "unpublished": "Denna sida har inte publicerats för upprättarna",
@@ -1347,15 +1378,21 @@
   "file-browse": "bläddra bland filer",
   "file_upload_error_multiple_files": "För många filer. Lägg till en fil i taget.",
   "country-not-found": "Felaktigt land",
-  "table": { "actions": "Funktioner" },
-  "pagination": { "results": "Resultat {from}... {to} / {total}" },
+  "table": {
+    "actions": "Funktioner"
+  },
+  "pagination": {
+    "results": "Resultat {from}... {to} / {total}"
+  },
   "unique-violations": {
     "kayttaja-email-key": "E-postadressen används redan.",
     "kayttaja-virtu-key": "Virtu-användarnamnet är redan i bruk.",
     "kayttaja_henkilotunnus_key": "Personbeteckningen är redan i bruk.",
     "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Företagsnummer, namn och mottagarens specifikation används av ett annat företag."
   },
-  "not-found": { "message": "Sidan du valde finns inte." },
+  "not-found": {
+    "message": "Sidan du valde finns inte."
+  },
   "footer": {
     "about": "Information om webbplatsen",
     "name": "Finansiering- och utvecklingcentralet för boendet",
@@ -1366,434 +1403,438 @@
     "email": "E-post"
   },
   "valvonta": {
-    "self": "Minä SV?",
+    "self": "Jag",
     "oikeellisuus": {
       "all": {
-        "title": "Oikeellisuuden valvonta SV?",
-        "empty": "Ei valvontatoimenpiteitä SV?",
-        "valvoja": "Valvoja SV?",
-        "include-closed": "Myös päätetyt valvonnat SV?",
-        "ei-valvojaa": "Ei valvojaa SV?",
+        "title": "Kontroll av riktigheten",
+        "empty": "Inga kontrollåtgärder",
+        "valvoja": "Övervakare",
+        "include-closed": "Även avslutade kontroller",
+        "ei-valvojaa": "Ingen övervakare",
         "table": {
-          "publish-time": "Tapahtumaaika SV?",
-          "deadline-date": "Määräaika SV?",
-          "type": "Tyyppi SV?",
-          "diaarinumero": "Diaarinumero SV?",
-          "valvoja": "Käsittelijä SV?",
-          "last-toimenpide": "Edellinen tapahtuma SV?",
-          "draft": "luonnos SV?"
+          "publish-time": "Tidpunkt för händelsen",
+          "deadline-date": "Tidsfrist",
+          "type": "Typ",
+          "diaarinumero": "Diarienummer",
+          "valvoja": "Handläggare",
+          "last-toimenpide": "Föregående händelse",
+          "draft": "Utkast"
         },
         "messages": {
-          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui SV?"
+          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll"
         }
       },
       "valvonta": {
-        "title": "Oikeellisuuden valvonta SV?",
+        "title": "Kontroll av riktigheten",
         "messages": {
-          "not-found": "Energiatodistusta ei ole olemassa SV?",
-          "load-error": "Valvonnan tietojen lataus epäonnistui SV?",
-          "update-error": "Valvonnan tietojen päivitys epäonnistui SV?",
-          "update-success": "Valvonnan tiedot päivitetty SV?",
-          "new-response-success": "Vastaaminen aloitettu. SV?",
-          "new-response-error": "Vastauksen luonti epäonnistui. SV?"
+          "not-found": "Det existerar inget energicertifikat.",
+          "load-error": "Det gick inte att ladda ner kontrolluppgifterna",
+          "update-error": "Det gick inte att uppdatera kontrolluppgifterna",
+          "update-success": "Kontrolluppgifterna har uppdaterats",
+          "new-response-success": "Svaret har påbörjats",
+          "new-response-error": "Det gick inte att skapa svaret"
         }
       },
       "laatija-response": {
-        "title": "Vastaus SV?",
-        "note": "Kun vastaus ja mahdolliset liitteet on tallennettu järjestelmään, muista lopuksi vielä lähettää vastaus. SV?",
-        "start-button": "Aloita vastauksen tekeminen SV?",
-        "continue-link": "Jatka vastaamista SV?",
-        "response-sent-description": "Vastaus annettu {publish-date}. SV?",
-        "response-sent-link": "Katso vastaus. SV?"
+        "title": "Svar",
+        "note": "När du har sparat svaret och eventuella bilagor i systemet, kom ihåg att till sist skicka svaret.",
+        "start-button": "Börja svara",
+        "continue-link": "Fortsätt svara",
+        "response-sent-description": "Svaret gavs {publish-date}.",
+        "response-sent-link": "Läs svaret."
       },
       "toimenpide": {
-        "cancel-button": "Peruuta SV?",
-        "preview-button": "Esikatsele SV?",
-        "download-button": "Lataa SV?",
+        "cancel-button": "Återkalla",
+        "preview-button": "Förhandsvisa",
+        "download-button": "Ladda ner",
         "verified": {
-          "title": "Merkitse katsotuksi SV?",
-          "info": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä. SV?",
-          "description": "Kommentti SV?",
-          "publish-button": "Merkitse katsotuksi SV?"
+          "title": "Markera som läst",
+          "info": "Med den här åtgärden markeras energicertifikatet som kontrollerat och felfritt.",
+          "description": "Kommentar",
+          "publish-button": "Markera som läst"
         },
         "anomaly": {
-          "title": "Ilmoita poikkeamasta SV?",
-          "info": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä. SV?",
-          "description": "Poikkeamailmoitus SV?",
-          "publish-button": "Lähetä ilmoitus SV?"
+          "title": "Anmäl avvikelse",
+          "info": "Med den här åtgärden antecknas en avvikelse på energicertifikatet, men ingen omfattande kontroll inleds.",
+          "description": "Anmälan om avvikelse",
+          "publish-button": "Skicka anmälan"
         },
         "case": {
-          "title": "Valvonnan aloitus SV?",
-          "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan. SV?",
-          "description": "Kommentti SV?",
-          "publish-button": "Aloita valvonta SV?"
+          "title": "Inledande av kontroll",
+          "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",
+          "description": "Kommentar",
+          "publish-button": "Inled kontroll"
         },
         "rfi-request": {
-          "title": "Tietopyyntö SV?",
-          "info": "Pyydetään laatijalta lisää tietoa. SV?",
-          "publish-button": "Lähetä tietopyyntö SV?",
-          "response-title": "Tietopyyntö SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "title": "Begäran om information",
+          "info": "Mer information begärs av upprättaren.",
+          "publish-button": "Skicka begäran om information",
+          "response-title": "Begäran om information",
+          "response-description": "ARA ber om svar senast {deadline-date}."
         },
         "rfi-reply": {
-          "title": "Vastaus tietopyyntöön SV?",
-          "description": "Vastaus SV?",
-          "save-button": "Tallenna SV?",
-          "reset-button": "Peruuta SV?",
-          "publish-button": "Lähetä vastaus SV?",
-          "draft-info": "Voit jatkaa vastaamista myöhemmin SV?"
+          "title": "Svar på begäran om information",
+          "description": "Svar",
+          "save-button": "Spara",
+          "reset-button": "Återkalla",
+          "publish-button": "Skicka svaret",
+          "draft-info": "Du kan fortsätta svara senare"
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehotus SV?",
-          "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot. SV?",
-          "publish-button": "Lähetä kehotus SV?",
-          "response-title": "Kehotus vastata tietopyyntöön SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "title": "Uppmaning angående begäran om information",
+          "info": "Upprättaren uppmanas lämna ut den information som begärdes tidigare.",
+          "publish-button": "Skicka uppmaning",
+          "response-title": "Uppmaning att besvara begäran om information",
+          "response-description": "ARA ber om svar senast {deadline-date}."
         },
         "rfi-warning": {
-          "title": "Tietopyyntö varoitus SV?",
-          "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä. SV?",
-          "publish-button": "Lähetä varoitus SV?",
-          "response-title": "Varoitus tietopyyntöön liittyen SV?",
-          "response-description": "ARA vaatii vastausta {deadline-date} mennessä. SV?"
+          "title": "Varning angående begäran om information",
+          "info": "Upprättaren varnas om påföljderna ifall informationen inte lämnas ut inom utsatt tid.",
+          "publish-button": "Skicka varning",
+          "response-title": "Varning angående begäran om information",
+          "response-description": "ARA kräver svar senast {deadline-date}."
         },
         "audit-report": {
-          "title": "Valvontamuistio SV?",
-          "publish-button": "Lähetä valvontamuistio SV?",
-          "save-button": "Tallenna valvontamuistio SV?",
-          "reset-button": "Peruuta SV?",
-          "delete-button": "Poista luonnos SV?",
-          "virhe": { "description": "Virheen kuvaus SV?" },
-          "response-title": "Valvontamuistio SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?",
-          "add-virhe": "Lisää virhe SV?",
-          "virheet-title": "Virheet SV?",
-          "virheet-empty": "Ei virheitä SV?",
-          "severity-title": "Vakavuus SV?",
-          "select-severity": "Valitse vakavuus SV?",
-          "draft-info": "Voit jatkaa valvontamuistion tekemistä myöhemmin SV?",
+          "title": "Kontrollpromemoria",
+          "publish-button": "Skicka kontrollpromemoria",
+          "save-button": "Spara kontrollpromemoria",
+          "reset-button": "Återkalla",
+          "delete-button": "Ta bort utkast",
+          "virhe": {
+            "description": "Felbeskrivning"
+          },
+          "response-title": "Kontrollpromemoria",
+          "response-description": "ARA ber om svar senast {deadline-date}.",
+          "add-virhe": "Lägg till fel",
+          "virheet-title": "Fel",
+          "virheet-empty": "Inga fel",
+          "severity-title": "Allvarlighet",
+          "select-severity": "Välj allvarlighet",
+          "draft-info": "Du kan fortsätta upprätta kontrollpromemorian senare.",
           "tiedoksi": {
-            "title": "Lähetä valvontamuistio tiedoksi SV?",
-            "description": "Jos sähköpostiosoitetta ei ole syötetty, tulee valvontamuistio lähettää manuaalisesti SV?",
-            "name": "Vastaanottaja SV?",
-            "email": "Sähköpostiosoite SV?",
-            "add": "Lisää vastaanottaja SV?"
+            "title": "Skicka kontrollpromemorian för kännedom",
+            "description": "Ska kontrollpromemorian skickas manuellt om ingen e-postadress har registrerats?",
+            "name": "Mottagare",
+            "email": "E-postadress",
+            "add": "Lägg till mottagare"
           }
         },
         "audit-reply": {
-          "title": "Vastaus valvontamuistioon SV?",
-          "description": "Vastaus SV?",
-          "publish-button": "Lähetä vastaus SV?",
-          "save-button": "Tallenna SV?",
-          "reset-button": "Peruuta SV?",
-          "draft-info": "Voit jatkaa vastaamista myöhemmin SV?"
+          "title": "Svar på kontrollpromemoria",
+          "description": "Svar",
+          "publish-button": "Skicka svaret",
+          "save-button": "Spara",
+          "reset-button": "Återkalla",
+          "draft-info": "Du kan fortsätta svara senare"
         },
         "audit-order": {
-          "title": "Valvontamuistio kehotus SV?",
-          "info": "Kehoitetaan laatijaa korjaamaan energiatodistus. SV?",
-          "publish-button": "Lähetä kehotus SV?",
-          "response-title": "Kehotus vastata valvontamuistioon SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "title": "Uppmaning angående kontrollpromemoria",
+          "info": "Upprättaren uppmanas att korrigera energicertifikatet.",
+          "publish-button": "Skicka uppmaning",
+          "response-title": "Uppmaning att svara på kontrollpromemorian",
+          "response-description": "ARA ber om svar senast {deadline-date}."
         },
         "audit-warning": {
-          "title": "Valvontamuistio varoitus SV?",
-          "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä. SV?",
-          "publish-button": "Lähetä varoitus SV?",
-          "response-title": "Varoitus valvontamuistioon liittyen SV?",
-          "response-description": "ARA vaatii vastausta {deadline-date} mennessä. SV?"
+          "title": "Varning angående kontrollpromemoria",
+          "info": "Upprättaren varnas om påföljderna ifall energicertifikatet inte korrigeras inom utsatt tid.",
+          "publish-button": "Skicka varning",
+          "response-title": "Varning angående begäran om information",
+          "response-description": "ARA kräver svar senast {deadline-date}."
         },
         "rfc-request": {
-          "title": "Lisäselvityspyyntö SV?",
-          "info": "Pyydetään laatijalta lisäselvityspyyntö. SV?",
-          "description": "Lisäselvityspyyntö SV?",
-          "publish-button": "Lähetä SV?",
-          "response-title": "Lisäselvityspyyntö SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "title": "Begäran om tilläggsutredning",
+          "info": "En tilläggsutredning begärs av upprättaren.",
+          "description": "Begäran om tilläggsutredning",
+          "publish-button": "Skicka",
+          "response-title": "Begäran om tilläggsutredning",
+          "response-description": "ARA ber om svar senast {deadline-date}."
         },
         "rfc-reply": {
-          "title": "Vastaus lisäselvityspyyntöön SV?",
-          "description": "Vastaus SV?",
-          "save-button": "Tallenna SV?",
-          "reset-button": "Peruuta SV?",
-          "publish-button": "Lähetä vastaus SV?",
-          "draft-info": "Voit jatkaa vastaamista myöhemmin SV?"
+          "title": "Svar på begäran om tilläggsutredning",
+          "description": "Svar",
+          "save-button": "Spara",
+          "reset-button": "Återkalla",
+          "publish-button": "Skicka svaret",
+          "draft-info": "Du kan fortsätta svara senare"
         },
         "decision-prohibition": {
-          "title": "Kieltopäätös SV?",
-          "info": "Energiatodistus hylätään koska laatija ei halua korjata sitä. SV?",
-          "description": "Kommentti SV?",
-          "publish-button": "Kirjaa päätös SV?"
+          "title": "Förbudsbeslut",
+          "info": "Energicertifikatet förkastas eftersom upprättaren inte vill korrigera det.",
+          "description": "Kommentar",
+          "publish-button": "Registrera beslutet"
         },
         "closed": {
-          "title": "Valvonnan lopetus SV?",
-          "info": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa. SV?",
-          "description": "Kommentti SV?",
-          "publish-button": "Lopeta SV?"
+          "title": "Avslutande av kontroll",
+          "info": "Med den här åtgärden avslutas den officiella kontrollprocessen och ärendet stängs i ärendehanteringen.",
+          "description": "Kommentar",
+          "publish-button": "Avsluta"
         },
         "messages": {
-          "not-found": "Toimenpidettä ei ole olemassa. SV?",
-          "load-error": "Toimenpiteen tietojen haku epäonnistui. SV?",
-          "save-success": "Toimenpiteen muutokset tallennettu. SV?",
-          "save-error": "Toimenpiteen tallennus epäonnistui. SV?",
-          "publish-success": "Toimenpide on lähetetty. SV?",
-          "publish-error": "Toimenpiteen lähetys epäonnistui. SV?",
-          "preview-error": "Toimenpiteen esikatselu epäonnistui. SV?",
-          "add-success": "Toimenpide lisätty. SV?",
-          "add-error": "Toimenpiteen lisääminen epäonnistui. SV?",
-          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä. SV?",
-          "add-files-success": "Liitetiedostot lisätty toimenpiteelle. SV?",
-          "add-link-success": "Linkki lisätty toimenpiteelle. SV?",
-          "delete-liite-success": "Liite poistettu. SV?",
-          "add-files-error": "Liitetiedoston lisääminen epäonnistui. SV?",
-          "add-link-error": "Linkin lisääminen epäonnistui. SV?",
-          "delete-liite-error": "Liitteen poisto epäonnistui. SV?"
+          "not-found": "Det existerar ingen åtgärd.",
+          "load-error": "Det gick inte att söka uppgifter om åtgärden.",
+          "save-success": "Ändringarna i åtgärden har sparats.",
+          "save-error": "Det gick inte att spara åtgärden.",
+          "publish-success": "Åtgärden har skickats.",
+          "publish-error": "Det gick inte att skicka åtgärden.",
+          "preview-error": "Det gick inte att förhandsvisa åtgärden.",
+          "add-success": "Åtgärden har lagts till.",
+          "add-error": "Det gick inte att lägga till åtgärden.",
+          "validation-error": "Det finns ett fel i uppgifterna. Kontrollera uppgifterna om åtgärden innan du skickar.",
+          "add-files-success": "Filbilagor har lagts till åtgärden.",
+          "add-link-success": "En länk har lagts till åtgärden.",
+          "delete-liite-success": "Bilagan har tagits bort.",
+          "add-files-error": "Det gick inte att lägga till filbilagan.",
+          "add-link-error": "Det gick inte att lägga till länken.",
+          "delete-liite-error": "Det gick inte att ta bort bilagan."
         },
-        "liitteet": { "empty": "Toimenpiteellä ei ole liitteitä SV?" },
-        "deadline-date": "Määräaika SV?",
+        "liitteet": {
+          "empty": "Åtgärden har inga bilagor"
+        },
+        "deadline-date": "Tidsfrist",
         "deadline-date-dialog": {
-          "title": "Muuta määräaikaa SV?",
-          "save": "Päivitä määräaika SV?",
-          "cancel": "Peruuta SV?"
+          "title": "Ändra tidsfristen",
+          "save": "Uppdatera tidsfristen",
+          "cancel": "Återkalla"
         },
-        "select-template": "Valitse asiakirjapohja SV?",
-        "draft": "Luonnos SV?",
-        "back": "Takaisin SV?"
+        "select-template": "Välj dokumentmall",
+        "draft": "Utkast",
+        "back": "Tillbaka"
       },
       "note": {
-        "title": "Muistiinpano SV?",
-        "cancel-button": "Peruuta SV?",
-        "description": "Sisältö SV?",
-        "add-button": "Tallenna SV?",
+        "title": "Anteckning",
+        "cancel-button": "Återkalla",
+        "description": "Innehåll",
+        "add-button": "Spara",
         "messages": {
-          "add-success": "Uusi muistiinpano lisätty. SV?",
-          "add-error": "Muistiinpanon lisääminen epäonnistui. SV?",
-          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä. SV?"
+          "add-success": "Ny anteckning har lagts till.",
+          "add-error": "Det gick inte att lägga till anteckningen.",
+          "validation-error": "Innehållet är felaktigt. Kontrollera uppgifterna i anteckningen innan du skickar."
         }
       },
       "virhetypes": {
-        "title": "Virhetyypit SV?",
-        "search": "Haku SV?",
-        "new-virhetype": "Uusi virhetyyppi SV?",
-        "id": "Tunniste SV?",
-        "ordinal": "Järjestys SV?",
-        "valid": "Käytössä SV?",
-        "label-fi": "Otsikko (fi) SV?",
-        "label-sv": "Otsikko (sv) SV?",
-        "description-fi": "Kuvaus (fi) SV?",
-        "description-sv": "Kuvaus (sv) SV?",
-        "save-button": "Tallenna SV?",
-        "cancel-button": "Peru muutokset SV?",
-        "close-button": "Sulje SV?",
+        "title": "Feltyper",
+        "search": "Sökning",
+        "new-virhetype": "Ny feltyp",
+        "id": "Kod",
+        "ordinal": "Ordning",
+        "valid": "I användning",
+        "label-fi": "Rubrik (fi)",
+        "label-sv": "Rubrik (sv)",
+        "description-fi": "Beskrivning (fi)",
+        "description-sv": "Beskrivning (sv)",
+        "save-button": "Spara",
+        "cancel-button": "Ångra ändringar",
+        "close-button": "Stäng",
         "messages": {
-          "load-error": "Virhetyyppien tietojen haku epäonnistui. SV?",
-          "save-success": "Virhetyypin muutokset tallennettu. SV?",
-          "save-error": "Virhetyypin tallennus epäonnistui. SV?",
-          "add-success": "Uusi virhetyyppi lisätty. SV?",
-          "add-error": "Virhetyypin lisäys epäonnistui. SV?",
-          "validation-error": "Tiedoissa on virhe. Tarkista virhetyypin tiedot ennen lähettämistä. SV?"
+          "load-error": "Det gick inte att söka uppgifter om feltyper.",
+          "save-success": "Ändringarna i feltypen har sparats.",
+          "save-error": "Det gick inte att spara feltypen.",
+          "add-success": "Ny feltyp har lagts till.",
+          "add-error": "Det gick inte att lägga till feltypen.",
+          "validation-error": "Det finns ett fel i uppgifterna. Kontrollera uppgifterna om feltyp innan du skickar."
         }
       }
     },
     "kaytto": {
       "all": {
-        "title": "Käytönvalvonnat SV?",
+        "title": "Användningskontroller",
         "messages": {
-          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui SV?"
+          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll"
         },
-        "new-kohde": "Uusi valvonta SV?",
-        "empty": "Ei valvontatoimenpiteitä SV?",
-        "ei-valvojaa": "Ei valvojaa SV?",
-        "include-closed": "Näytä myös päättyneet SV?",
-        "valvoja": "Valvoja SV?",
-        "diaarinumero": "Diaarinumero SV?",
-        "last-toimenpide": "Edellinen tapahtuma SV?",
-        "last-toimenpide-none": "Tarkastettava SV?",
-        "deadline-date": "Määräaika SV?",
-        "tunnus": "Tunnus SV?",
-        "rakennustunnus": "Rakennustunnus SV?",
-        "osoite": "Osoite SV?",
-        "omistajat": "Omistaja(t) SV?",
-        "energiatodistus": "Energiatodistus SV?"
+        "new-kohde": "Ny kontroll",
+        "empty": "Inga kontrollåtgärder",
+        "ei-valvojaa": "Ingen övervakare",
+        "include-closed": "Visa även avslutade",
+        "valvoja": "Övervakare",
+        "diaarinumero": "Diarienummer",
+        "last-toimenpide": "Föregående händelse",
+        "last-toimenpide-none": "Ska granskas",
+        "deadline-date": "Tidsfrist",
+        "tunnus": "Kod",
+        "rakennustunnus": "Byggnadsbeteckning",
+        "osoite": "Adress",
+        "omistajat": "Ägare",
+        "energiatodistus": "Energicertifikat"
       },
       "kohde": {
-        "title": "Kohde SV?",
-        "rakennuksen-tiedot": "Rakennuksen tiedot SV?",
-        "rakennustunnus": "Rakennustunnus SV?",
-        "katuosoite": "Katuosoite SV?",
-        "postinumero": "Postinumero SV?",
-        "ilmoituksen-tiedot": "Ilmoituksen tiedot SV?",
-        "havaintopaiva": "Havaintopäivä SV?",
-        "ilmoituspaikka-id": "Ilmoituspaikka SV?",
-        "ilmoituspaikka-description": "Ilmoituspaikan nimi SV?",
-        "ilmoitustunnus": "Ilmoitustunnus SV?",
-        "save": "Tallenna SV?",
-        "reset": "Tyhjennä SV?",
-        "revert": "Peru muutokset SV?",
-        "cancel": "Peruuta SV?",
-        "delete": "Poista SV?",
-        "new-valvonta-title": "Uusi käytönvalvonta SV?",
-        "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen SV?",
-        "no-attachments": "Ei liitteitä SV?",
+        "title": "Objekt",
+        "rakennuksen-tiedot": "Uppgifter om byggnaden",
+        "rakennustunnus": "Byggnadsbeteckning",
+        "katuosoite": "Gatuadress",
+        "postinumero": "Postnummer",
+        "ilmoituksen-tiedot": "Uppgifter om meddelandet",
+        "havaintopaiva": "Dag för observation",
+        "ilmoituspaikka-id": "Meddelandeplats",
+        "ilmoituspaikka-description": "Meddelandeplatsens namn",
+        "ilmoitustunnus": "Meddelandekod",
+        "save": "Spara",
+        "reset": "Töm",
+        "revert": "Ångra ändringar",
+        "cancel": "Återkalla",
+        "delete": "Ta bort",
+        "new-valvonta-title": "Ny användningskontroll",
+        "after-save-notice": "Efter att du sparat kan du lägga till bilagor och parter",
+        "no-attachments": "Inga bilagor",
         "messages": {
-          "not-found": "Käytönvalvontaa ei ole olemassa. SV?",
-          "load-error": "Käytönvalvonnan tietojen haku epäonnistui. SV?",
-          "save-success": "Käytönvalvonnan muutokset tallennettu. SV?",
-          "save-error": "Käytönvalvonnan tallennus epäonnistui. SV?",
-          "delete-success": "Käytönvalvonta poistettu. SV?",
-          "delete-error": "Käytönvalvonnan poistaminen epäonnistui. SV?",
-          "add-success": "Uusi käytönvalvonta lisätty. SV?",
-          "add-error": "Käytönvalvonnan lisääminen epäonnistui. SV?",
-          "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä. SV?",
-          "add-link-success": "Linkki lisätty käytönvalvontaan. SV?",
-          "add-files-success": "Liitetiedostot lisätty käytönvalvontaan. SV?",
-          "delete-liite-success": "Liite poistettu. SV?",
-          "add-files-error": "Liitetiedoston lisääminen epäonnistui. SV?",
-          "add-link-error": "Linkin lisääminen epäonnistui. SV?",
-          "delete-liite-error": "Liitteen poisto epäonnistui. SV?"
+          "not-found": "Det existerar ingen användningskontroll",
+          "load-error": "Det gick inte att söka uppgifter om användningskontrollen.",
+          "save-success": "Ändringarna i användningskontrollen har sparats.",
+          "save-error": "Det gick inte att spara användningskontrollen.",
+          "delete-success": "Användningskontrollen har tagits bort.",
+          "delete-error": "Det gick inte att ta bort användningskontrollen.",
+          "add-success": "Ny användningskontroll har lagts till.",
+          "add-error": "Det gick inte att lägga till användningskontrollen.",
+          "validation-error": "Det finns ett fel i uppgifterna. Granska uppgifterna om objektet innan du skickar.",
+          "add-link-success": "En länk har lagts till användningskontrollen.",
+          "add-files-success": "Filbilagor har lagts till användningskontrollen.",
+          "delete-liite-success": "Bilagan har tagits bort.",
+          "add-files-error": "Det gick inte att lägga till filbilagan.",
+          "add-link-error": "Det gick inte att lägga till länken.",
+          "delete-liite-error": "Det gick inte att ta bort bilagan."
         },
         "osapuolet": {
-          "title": "Osapuolet SV?",
-          "nimi": "Nimi SV?",
-          "rooli": "Rooli SV?",
-          "osoite": "Osoite SV?",
-          "email": "Sähköposti SV?",
-          "toimitustapa": "Toimitustapa SV?",
-          "new-henkilo": "Uusi henkilö SV?",
-          "new-yritys": "Uusi yritys SV?",
-          "empty": "Ei osapuolia SV?"
+          "title": "Parter",
+          "nimi": "Namn",
+          "rooli": "Roll",
+          "osoite": "Adress",
+          "email": "E-post",
+          "toimitustapa": "Leveranssätt",
+          "new-henkilo": "Ny person",
+          "new-yritys": "Nytt företag",
+          "empty": "Inga parter"
         },
-        "attachments": "Liitteet ja linkit SV?"
+        "attachments": "Bilagor och länkar"
       },
       "new-kohde": {},
       "valvonta": {
-        "title": "Valvonta SV?",
+        "title": "Kontroll",
         "messages": {
-          "not-found": "Käytönvalvonnan tietoja ei löydy SV?",
-          "load-error": "Käytönvalvonnan tietojen haku epäonnistui. SV?",
-          "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui SV?",
-          "update-success": "Käytönvalvonnan tiedot päivitetty SV?"
+          "not-found": "Uppgifter om användningskontrollen hittas inte",
+          "load-error": "Det gick inte att söka uppgifter om användningskontrollen.",
+          "update-error": "Det gick inte att uppdatera uppgifterna om användningskontrollen.",
+          "update-success": "Uppgifterna om användningskontrollen har uppdaterats"
         },
-        "toimenpiteet": "Toimenpiteet SV?",
-        "rakennustunnus": "Pysyvä rakennustunnus SV?",
-        "ilmoitustunnus": "Ilmoitustunnus SV?",
+        "toimenpiteet": "Åtgärder",
+        "rakennustunnus": "Permanent byggnadsbeteckning",
+        "ilmoitustunnus": "Meddelandekod",
         "toimenpide": {
-          "rooli-none": "Ei roolia SV?",
-          "toimitustapa-none": "Ei toimitustapaa SV?",
-          "fyi": "tiedoksi SV?"
+          "rooli-none": "Ingen roll",
+          "toimitustapa-none": "Inget leveranssätt",
+          "fyi": "För kännedom"
         },
-        "no-events": "Ei tapahtumia SV?"
+        "no-events": "Inga händelser"
       },
       "toimenpide": {
-        "cancel-button": "Peruuta SV?",
-        "preview-button": "Esikatsele SV?",
-        "download-button": "Lataa SV?",
+        "cancel-button": "Återkalla",
+        "preview-button": "Förhandsvisa",
+        "download-button": "Ladda ner",
         "case": {
-          "title": "Valvonnan aloitus SV?",
-          "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan. SV?",
-          "description": "Kommentti SV?",
-          "publish-button": "Aloita valvonta SV?"
+          "title": "Inledande av kontroll",
+          "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",
+          "description": "Kommentar",
+          "publish-button": "Inled kontroll"
         },
         "rfi-request": {
-          "title": "Tietopyyntö SV?",
-          "info": "Pyydetään rakennuksen omistajalta tietoa energiatodistuksesta. SV?",
-          "publish-button": "Lähetä tietopyyntö SV?",
-          "response-title": "Tietopyyntö SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "title": "Begäran om information",
+          "info": "Uppgifter om energicertifikatet begäras av byggnadens ägare.",
+          "publish-button": "Skicka begäran om information",
+          "response-title": "Begäran om information",
+          "response-description": "ARA ber om svar senast {deadline-date}."
         },
         "rfi-order": {
-          "title": "Tietopyyntö kehotus SV?",
-          "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön. SV?",
-          "publish-button": "Lähetä kehotus SV?",
-          "response-title": "Kehotus vastata tietopyyntöön SV?",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä. SV?"
+          "title": "Uppmaning angående begäran om information",
+          "info": "Byggnadens ägare uppmanas att besvara begäran om information.",
+          "publish-button": "Skicka uppmaning",
+          "response-title": "Uppmaning att besvara begäran om information",
+          "response-description": "ARA ber om svar senast {deadline-date}."
         },
         "rfi-warning": {
-          "title": "Tietopyyntö varoitus SV?",
-          "info": "Varoitetaan rakennuksen omistajia seurauksista, jos tietopyyntöön ei vastata määräaikaan mennessä. SV?",
-          "publish-button": "Lähetä varoitus SV?",
-          "response-title": "Varoitus tietopyyntöön liittyen SV?",
-          "response-description": "ARA vaatii vastausta {deadline-date} mennessä. SV?"
+          "title": "Varning angående begäran om information",
+          "info": "Byggandens ägare varnas för påföljderna ifall begäran om information inte besvaras inom utsatt tid.",
+          "publish-button": "Skicka varning",
+          "response-title": "Varning angående begäran om information",
+          "response-description": "ARA kräver svar senast {deadline-date}."
         },
         "closed": {
-          "title": "Valvonnan lopetus SV?",
-          "info": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa. SV?",
-          "description": "Kommentti SV?",
-          "publish-button": "Lopeta SV?"
+          "title": "Avslutande av kontroll",
+          "info": "Med den här åtgärden avslutas den officiella kontrollprocessen och ärendet stängs i ärendehanteringen.",
+          "description": "Kommentar",
+          "publish-button": "Avsluta"
         },
         "messages": {
-          "not-found": "Toimenpidettä ei ole olemassa. SV?",
-          "load-error": "Toimenpiteen tietojen haku epäonnistui. SV?",
-          "save-success": "Toimenpiteen muutokset tallennettu. SV?",
-          "save-error": "Toimenpiteen tallennus epäonnistui. SV?",
-          "publish-success": "Toimenpide on lähetetty. SV?",
-          "publish-error": "Toimenpiteen lähetys epäonnistui. SV?",
-          "preview-error": "Toimenpiteen esikatselu epäonnistui. SV?",
-          "add-success": "Toimenpide lisätty. SV?",
-          "add-error": "Toimenpiteen lisääminen epäonnistui. SV?",
-          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä. SV?"
+          "not-found": "Det existerar ingen åtgärd.",
+          "load-error": "Det gick inte att söka uppgifter om åtgärden.",
+          "save-success": "Ändringarna i åtgärden har sparats.",
+          "save-error": "Det gick inte att spara åtgärden.",
+          "publish-success": "Åtgärden har skickats.",
+          "publish-error": "Det gick inte att skicka åtgärden.",
+          "preview-error": "Det gick inte att förhandsvisa åtgärden.",
+          "add-success": "Åtgärden har lagts till.",
+          "add-error": "Det gick inte att lägga till åtgärden.",
+          "validation-error": "Det finns ett fel i uppgifterna. Kontrollera uppgifterna om åtgärden innan du skickar."
         },
-        "deadline-date": "Määräaika SV?",
+        "deadline-date": "Tidsfrist",
         "deadline-date-dialog": {
-          "title": "Muuta määräaikaa SV?",
-          "save": "Päivitä määräaika SV?",
-          "cancel": "Peruuta SV?"
+          "title": "Ändra tidsfristen",
+          "save": "Uppdatera tidsfristen",
+          "cancel": "Återkalla"
         },
-        "vastaanottajat": "Vastaanottajat SV?",
-        "nimi": "Nimi SV?",
-        "rooli": "Rooli SV?",
-        "fyi": "Omistajien dokumentit tiedoksi SV?",
-        "toimitustapa": "Toimitustapa SV?",
-        "esikatselu": "Esikatselu SV?"
+        "vastaanottajat": "Mottagare",
+        "nimi": "Namn",
+        "rooli": "Roll",
+        "fyi": "Ägarnas dokument för kännedom",
+        "toimitustapa": "Leveranssätt",
+        "esikatselu": "Förhandsvisning"
       },
       "osapuoli": {
-        "new-henkilo-title": "Uusi henkilo SV?",
-        "new-yritys-title": "Uusi yritys SV?",
-        "nimi": "Nimi SV?",
-        "etunimi": "Etunimi SV?",
-        "sukunimi": "Sukunimi SV?",
-        "henkilotunnus": "Henkilötunnus SV?",
-        "ytunnus": "Y-tunnus SV?",
-        "rooli-id": "Rooli SV?",
-        "rooli-description": "Roolin kuvaus SV?",
-        "contact-details-title": "Yhteystiedot SV?",
-        "email": "Sähköposti SV?",
-        "puhelin": "Puhelinnumero SV?",
-        "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O SV?",
-        "jakeluosoite": "Katuosoite tai postilokero SV?",
-        "postinumero": "Postinumero SV?",
-        "postitoimipaikka": "Postitoimipaikka SV?",
-        "maa": "Maa SV?",
-        "toimitustapa-id": "Toimitustapa SV?",
-        "toimitustapa-description": "Toimitustavan kuvaus SV?",
-        "save": "Tallenna SV?",
-        "revert": "Peru muutokset SV?",
-        "delete": "Poista SV?",
+        "new-henkilo-title": "Ny person",
+        "new-yritys-title": "Nytt företag",
+        "nimi": "Namn",
+        "etunimi": "Förnamn",
+        "sukunimi": "Efternamn",
+        "henkilotunnus": "Personbeteckning",
+        "ytunnus": "FO-nummer",
+        "rooli-id": "Roll",
+        "rooli-description": "Beskrivning av rollen",
+        "contact-details-title": "Kontaktuppgifter",
+        "email": "E-post",
+        "puhelin": "Telefonnummer",
+        "vastaanottajan-tarkenne": "Precisering av mottagaren eller c/o",
+        "jakeluosoite": "Gatuadress eller postbox",
+        "postinumero": "Postnummer",
+        "postitoimipaikka": "Postanstalt",
+        "maa": "Land",
+        "toimitustapa-id": "Leveranssätt",
+        "toimitustapa-description": "Beskrivning av leveranssättet",
+        "save": "Spara",
+        "revert": "Ångra ändringar",
+        "delete": "Ta bort",
         "messages": {
-          "not-found": "Osapuolta ei ole olemassa. SV?",
-          "load-error": "Osapuolen tietojen haku epäonnistui. SV?",
-          "save-success": "Osapuolen muutokset tallennettu. SV?",
-          "save-error": "Osapuolen tallennus epäonnistui. SV?",
-          "add-success": "Osapuoli lisätty. SV?",
-          "add-error": "Osapuolen lisääminen epäonnistui. SV?",
-          "delete-success": "Osapuoli on poistettu. SV?",
-          "delete-error": "Osapuolen poistaminen epäonnistui. SV?",
-          "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä. SV?"
+          "not-found": "Det existerar ingen part.",
+          "load-error": "Det gick inte att söka uppgifter om parterna.",
+          "save-success": "Ändringarna i parterna har sparats.",
+          "save-error": "Det gick inte att spara parterna.",
+          "add-success": "Parten har lagts till.",
+          "add-error": "Det gick inte att lägga till parten.",
+          "delete-success": "Parten har tagits bort.",
+          "delete-error": "Det gick inte att ta bort parten.",
+          "validation-error": "Det finns ett fel i uppgifterna. Granska uppgifterna om parten innan du skickar."
         },
         "toimitustapa-errors": {
-          "suomifi-henkilo": "Kun toimitustapa on suomi.fi, pitää henkilötunnus ja osoitetiedot olla täytettynä SV?",
-          "suomifi-yritys": "Kun toimitustapa on suomi.fi, pitää Y-tunnus ja osoitetiedot olla täytettynä SV?",
-          "email": "Kun toimitustapa on sahköposti, pitää sahköpostiosoitteen olla täytettynä SV?"
+          "suomifi-henkilo": "När leveranssättet är suomi.fi ska personbeteckningen och adressuppgifterna vara ifyllda",
+          "suomifi-yritys": "När leveranssättet är suomi.fi ska FO-numret och adressuppgifterna vara ifyllda",
+          "email": "När leveranssättet är e-post ska e-postadressen vara ifylld"
         }
       },
       "note": {
-        "title": "Muistiinpano SV?",
-        "cancel-button": "Peruuta SV?",
-        "description": "Sisältö SV?",
-        "add-button": "Tallenna SV?",
+        "title": "Anteckning",
+        "cancel-button": "Återkalla",
+        "description": "Innehåll",
+        "add-button": "Spara",
         "messages": {
-          "add-success": "Uusi muistiinpano lisätty. SV?",
-          "add-error": "Muistiinpanon lisääminen epäonnistui. SV?",
-          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä. SV?"
+          "add-success": "Ny anteckning har lagts till.",
+          "add-error": "Det gick inte att lägga till anteckningen.",
+          "validation-error": "Innehållet är felaktigt. Kontrollera uppgifterna om anteckningen innan du skickar."
         }
       }
     }
