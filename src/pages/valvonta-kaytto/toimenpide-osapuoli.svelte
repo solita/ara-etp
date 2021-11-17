@@ -3,6 +3,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Osapuolet from './osapuolet';
+  import * as Toimenpiteet from './toimenpiteet';
 
   import { _, locale } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
@@ -63,6 +64,10 @@
       toimenpide.filename
     )} />),
 {:else}
-  ({i18n(i18nRoot + '.fyi')}),
+  {#if Toimenpiteet.sendTiedoksi(toimenpide)}
+    ({i18n(i18nRoot + '.fyi')}),
+  {:else}
+    ({i18n(i18nRoot + '.fyi-disabled')})
+  {/if}
 {/if}
 {rooliLabel(osapuoli)}, {toimitustapaLabel(osapuoli)}

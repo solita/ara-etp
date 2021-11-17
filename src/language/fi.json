@@ -1697,7 +1697,8 @@
         "toimenpide": {
           "rooli-none": "Ei roolia",
           "toimitustapa-none": "Ei toimitustapaa",
-          "fyi": "tiedoksi"
+          "fyi": "tiedoksi",
+          "fyi-disabled": "ei tiedoteta"
         },
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy",
@@ -1718,6 +1719,7 @@
         "nimi": "Nimi",
         "rooli": "Rooli",
         "fyi": "Omistajien dokumentit tiedoksi",
+        "fyi-disabled": "Ei lähetetä dokumentteja tiedoksi",
         "toimitustapa": "Toimitustapa",
         "esikatselu": "Esikatselu",
         "cancel-button": "Peruuta",
