@@ -63,11 +63,9 @@
       toimenpide.id,
       toimenpide.filename
     )} />),
+{:else if Toimenpiteet.sendTiedoksi(toimenpide)}
+  ({i18n(i18nRoot + '.fyi')}),
 {:else}
-  {#if Toimenpiteet.sendTiedoksi(toimenpide)}
-    ({i18n(i18nRoot + '.fyi')}),
-  {:else}
-    ({i18n(i18nRoot + '.fyi-disabled')})
-  {/if}
+  ({i18n(i18nRoot + '.fyi-disabled')})
 {/if}
 {rooliLabel(osapuoli)}, {toimitustapaLabel(osapuoli)}

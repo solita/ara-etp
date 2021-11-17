@@ -129,14 +129,12 @@
                       <span class="font-icon text-2xl"> visibility </span>
                     </div>
                   {/if}
+                {:else if Toimenpiteet.sendTiedoksi(toimenpide)}
+                  <span class="font-icon">info</span>
+                  {i18n(i18nRoot + '.fyi')}
                 {:else}
-                  {#if Toimenpiteet.sendTiedoksi(toimenpide)}
-                    <span class="font-icon">info</span>
-                    {i18n(i18nRoot + '.fyi')}
-                  {:else}
-                    <span class="font-icon">info</span>
-                    {i18n(i18nRoot + '.fyi-disabled')}
-                  {/if}
+                  <span class="font-icon">info</span>
+                  {i18n(i18nRoot + '.fyi-disabled')}
                 {/if}
               </td>
             </tr>
