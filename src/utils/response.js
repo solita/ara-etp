@@ -48,4 +48,4 @@ export const openBlob = blob => {
     window.URL.revokeObjectURL(pdfUrl);
     document.body.removeChild(link);
   }, 1000);
-}
+};
