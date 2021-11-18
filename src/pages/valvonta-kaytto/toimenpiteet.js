@@ -72,3 +72,5 @@ export const time = R.converge(Maybe.orSome, [
   R.prop('create-time'),
   R.prop('publish-time')
 ]);
+
+export const sendTiedoksi = isType(type.rfi.request);

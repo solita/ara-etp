@@ -2,8 +2,8 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
-
   import * as Osapuolet from './osapuolet';
+  import * as Toimenpiteet from './toimenpiteet';
 
   import * as ValvontaApi from './valvonta-api';
 
@@ -129,9 +129,12 @@
                       <span class="font-icon text-2xl"> visibility </span>
                     </div>
                   {/if}
-                {:else}
+                {:else if Toimenpiteet.sendTiedoksi(toimenpide)}
                   <span class="font-icon">info</span>
                   {i18n(i18nRoot + '.fyi')}
+                {:else}
+                  <span class="font-icon">info</span>
+                  {i18n(i18nRoot + '.fyi-disabled')}
                 {/if}
               </td>
             </tr>
