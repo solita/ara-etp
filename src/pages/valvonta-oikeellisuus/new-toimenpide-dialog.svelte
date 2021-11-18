@@ -91,11 +91,8 @@
         },
         response => {
           previewPending = false;
-          let link = document.createElement('a');
-          link.target = '_blank';
-          link.href = URL.createObjectURL(response);
-          link.click();
-          URL.revokeObjectURL(link.href);
+          error = Maybe.None();
+          Response.openBlob(response);
         },
         ValvontaApi.previewToimenpide(id, toimenpide)
       );
