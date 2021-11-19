@@ -35,3 +35,17 @@ export const errorKey404 = (i18nRoot, action, response) =>
   notFound(response)
     ? `${i18nRoot}.messages.not-found`
     : errorKey(i18nRoot, action, response);
+
+export const openBlob = blob => {
+  const pdfUrl = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = pdfUrl;
+  link.target = '_blank';
+  document.body.appendChild(link);
+  link.click();
+
+  setTimeout(() => {
+    window.URL.revokeObjectURL(pdfUrl);
+    document.body.removeChild(link);
+  }, 1000);
+};
