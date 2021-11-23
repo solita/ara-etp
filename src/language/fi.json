@@ -101,6 +101,8 @@
   "loading": "Ladataan...",
   "tallenna": "Tallenna",
   "peruuta": "Peruuta",
+  "yes": "Kyllä",
+  "no": "Ei",
   "yritys": {
     "yritykset": "Yritykset",
     "yritys": "Yritys",
@@ -158,6 +160,25 @@
   },
   "time": {
     "klo": "klo"
+  },
+  "muutoshistoria": {
+    "kayttajatiedot": "Käyttäjätiedot",
+    "laatijatiedot": "Laatijatiedot",
+    "muokkausaika": "Muokkausaika",
+    "muokkaaja": "Muokkaaja",
+    "laatimiskielto": "Laatimiskielto",
+    "toteaja": "Toteaja",
+    "virtu": "Virtu",
+    "cognitoid": "Cognito ID",
+    "passivoitu": "Passivoitu",
+    "julkiset": "Julkiset tiedot",
+    "osoite": "Osoite",
+    "puhelin": "Puhelin",
+    "email": "Email",
+    "rooli": "Rooli",
+    "patevyystaso": "Patevyys",
+    "laskutuskieli": "Laskutuskieli",
+    "www-osoite": "www"
   },
   "kayttaja": {
     "last-login": "Kirjautunut viimeksi",
