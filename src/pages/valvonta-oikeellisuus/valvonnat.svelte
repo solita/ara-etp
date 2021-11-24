@@ -276,7 +276,7 @@
                     </td>
                   {/each}
                   {#if Maybe.isNone(valvonta.lastToimenpide)}
-                    <td class="etp-table--td">Tarkastettava</td>
+                    <td class="etp-table--td">{i18n('valvonta.oikeellisuus.pending')}</td>
                     <td class="etp-table--td">-</td>
                   {/if}
                   <!-- energiatodistus -->

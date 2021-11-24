@@ -1364,6 +1364,7 @@
   "valvonta": {
     "self": "Minä",
     "oikeellisuus": {
+      "pending": "Tarkastettava",
       "all": {
         "title": "Oikeellisuuden valvonnat",
         "empty": "Ei valvontatoimenpiteitä",
