@@ -18,8 +18,8 @@
     <thead class="etp-table--thead">
       <th class="etp-table--th">{i18n(i18nRoot + '.muokkausaika')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.muokkaaja')}</th>
-      <th class="etp-table--th">{i18n('kayttajat.nimi')}</th>
-      <th class="etp-table--th">{i18n('laatija.henkilotunnus')}</th>
+      <th class="etp-table--th">{i18n(i18nRoot + '.nimi')}</th>
+      <th class="etp-table--th">{i18n(i18nRoot + '.henkilotunnus')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.puhelin')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.email')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.rooli')}</th>
