@@ -48,7 +48,6 @@ export const url = {
   id: id => `${url.all}/${id}`,
   history: id => `${url.id(id)}/history`,
   laatija: id => `${url.id(id)}/laatija`,
-  laatijaHistory: id => `${url.laatija(id)}/history`,
   whoami: '/api/private/whoami'
 };
 
