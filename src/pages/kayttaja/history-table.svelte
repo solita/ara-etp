@@ -1,6 +1,4 @@
 <script>
-  import * as R from 'ramda';
-  import * as Maybe from '@Utility/maybe-utils';
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
   import { locale, _ } from '@Language/i18n';
@@ -58,8 +56,8 @@
             {h.virtu.orSome()?.localid || '-'}
 
             {#if h.virtu.orSome()?.organisaatio}
-              <span class="font-icon text-primary">alternate_email</span>
               <span>
+                {'/'}
                 {h.virtu.orSome().organisaatio}
               </span>
             {/if}

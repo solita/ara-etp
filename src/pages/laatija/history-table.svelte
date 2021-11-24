@@ -1,6 +1,6 @@
 <script>
-  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
   import { locale, _ } from '@Language/i18n';
@@ -14,8 +14,6 @@
   export let toimintaalueet;
   export let countries;
   export let laskutuskielet;
-
-  $: publicInfoClass = 'font-bold text-primary';
 </script>
 
 <style>
@@ -67,7 +65,11 @@
             {h.jakeluosoite},
             {h.postinumero}
             {h.postitoimipaikka},
-            {Locales.labelForId($locale, countries)(h.maa.right())}
+            {Maybe.fold(
+              '',
+              Locales.labelForId($locale, countries),
+              Either.toMaybe(h.maa)
+            )}
           </td>
           <td class="etp-table--td">
             <div class="flex flex-col">
