@@ -169,6 +169,7 @@
     "laatimiskielto": "Laatimiskielto",
     "toteaja": "Toteaja",
     "toteamispaivamaara": "Toteamispäivä",
+    "toimintaalueet": "Toiminta-alueet",
     "virtu": "Virtu",
     "cognitoid": "Cognito ID",
     "passivoitu": "Passivoitu",
@@ -179,7 +180,7 @@
     "rooli": "Rooli",
     "patevyystaso": "Patevyys",
     "laskutuskieli": "Laskutuskieli",
-    "www-osoite": "www"
+    "www-osoite": "www-osoite"
   },
   "kayttaja": {
     "last-login": "Kirjautunut viimeksi",

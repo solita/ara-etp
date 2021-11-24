@@ -55,7 +55,14 @@
             {Locales.labelForId($locale, roolit)(h.rooli)}
           </td>
           <td class="etp-table--td">
-            {h.virtu.orSome('-')}
+            {h.virtu.orSome()?.localid || '-'}
+
+            {#if h.virtu.orSome()?.organisaatio}
+              <span class="font-icon text-primary">alternate_email</span>
+              <span>
+                {h.virtu.orSome().organisaatio}
+              </span>
+            {/if}
           </td>
           <td class="etp-table--td">
             {h.cognitoid.orSome('-')}

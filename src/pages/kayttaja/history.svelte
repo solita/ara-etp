@@ -65,14 +65,14 @@
       <div>
         <H2 text={i18n('muutoshistoria.kayttajatiedot')} />
 
-        <KayttajaHistoryTable history={kayttajaHistory} {roolit} />
+        <KayttajaHistoryTable history={R.reverse(kayttajaHistory)} {roolit} />
       </div>
       {#if Kayttajat.isLaatija(kayttaja)}
         <div>
           <H2 text={i18n('muutoshistoria.laatijatiedot')} />
 
           <LaatijaHistoryTable
-            history={laatijaHistory}
+            history={R.reverse(laatijaHistory)}
             {patevyydet}
             {toimintaalueet}
             {countries}

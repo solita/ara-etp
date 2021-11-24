@@ -14,6 +14,8 @@
   export let toimintaalueet;
   export let countries;
   export let laskutuskielet;
+
+  $: publicInfoClass = 'font-bold text-primary';
 </script>
 
 <style>
@@ -28,8 +30,7 @@
       <th class="etp-table--th">{i18n(i18nRoot + '.www-osoite')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.osoite')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.julkiset')}</th>
-      <th class="etp-table--th">{i18n('laatija.paatoimintaalue')}</th>
-      <th class="etp-table--th">{i18n('laatija.muuttoimintaalueet')}</th>
+      <th class="etp-table--th">{i18n(i18nRoot + '.toimintaalueet')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.toteaja')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.toteamispaivamaara')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.laskutuskieli')}</th>
@@ -69,28 +70,52 @@
             {Locales.labelForId($locale, countries)(h.maa.right())}
           </td>
           <td class="etp-table--td">
-            {i18n(i18nRoot + '.osoite') +
-              `: ${h.julkinenosoite ? i18n('yes') : i18n('no')}`}
-            {i18n(i18nRoot + '.puhelin') +
-              `: ${h.julkinenpuhelin ? i18n('yes') : i18n('no')}`}
-            {i18n(i18nRoot + '.email') +
-              `: ${h.julkinenemail ? i18n('yes') : i18n('no')}`}
-            {i18n(i18nRoot + '.www-osoite') +
-              `: ${h.julkinenwwwosoite ? i18n('yes') : i18n('no')}`}
-          </td>
-          <td class="etp-table--td">
-            {Maybe.fold(
-              '-',
-              Locales.labelForId($locale, toimintaalueet),
-              h.toimintaalue
-            )}
-          </td>
-          <td class="etp-table--td">
-            {#each h.muuttoimintaalueet as alue}
-              <span class="flex flex-no-wrap truncate">
-                {Locales.labelForId($locale, toimintaalueet)(alue)}
+            <div class="flex flex-col">
+              <span
+                class={h.julkinenosoite
+                  ? 'font-bold text-primary'
+                  : 'text-disabled'}>
+                {i18n(i18nRoot + '.osoite')}
               </span>
-            {/each}
+              <span
+                class={h.julkinenpuhelin
+                  ? 'font-bold text-primary'
+                  : 'text-disabled'}>
+                {i18n(i18nRoot + '.puhelin')}
+              </span>
+              <span
+                class={h.julkinenemail
+                  ? 'font-bold text-primary'
+                  : 'text-disabled'}>
+                {i18n(i18nRoot + '.email')}
+              </span>
+              <span
+                class={h.julkinenwwwosoite
+                  ? 'font-bold text-primary'
+                  : 'text-disabled'}>
+                {i18n(i18nRoot + '.www-osoite')}
+              </span>
+            </div>
+          </td>
+          <td class="etp-table--td">
+            <div class="flex flex-col">
+              <span
+                class="font-bold text-primary"
+                title={i18n('laatija.paatoimintaalue')}>
+                {Maybe.fold(
+                  '-',
+                  Locales.labelForId($locale, toimintaalueet),
+                  h.toimintaalue
+                )}
+              </span>
+              {#each h.muuttoimintaalueet as alue}
+                <span
+                  class="flex flex-no-wrap truncate"
+                  title={i18n('laatija.muuttoimintaalueet')}>
+                  {Locales.labelForId($locale, toimintaalueet)(alue)}
+                </span>
+              {/each}
+            </div>
           </td>
           <td class="etp-table--td">
             {h.toteaja}
