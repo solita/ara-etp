@@ -355,7 +355,8 @@
         "osoite": "Osoite",
         "ktl": "KTL",
         "laatija": "Laatija",
-        "toiminnot": "Toiminnot"
+        "toiminnot": "Toiminnot",
+        "valvonta": "Valvonta"
       },
       "valitse_hakuehto": "Valitse hakuehto",
       "lisaa_hakuehtoja": "Lisää hakuehtoja",

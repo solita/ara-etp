@@ -7,6 +7,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Response from '@Utility/response';
   import * as Query from '@Utility/query';
+  import * as Locales from '@Language/locale-utils';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
@@ -19,9 +20,8 @@
   import qs from 'qs';
 
   import { _, locale } from '@Language/i18n';
-  import * as Locales from '@Language/locale-utils';
   import { flashMessageStore } from '@/stores';
-  import { push, replace } from '@Component/Router/router';
+  import { push } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
   import Overlay from '@Component/Overlay/Overlay';
@@ -33,6 +33,7 @@
 
   import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
   const i18n = $_;
 
@@ -213,12 +214,13 @@
   Future.fork(
     loadError,
     response => {
-      resources = Maybe.Some({
-        whoami: response[0],
-        luokittelut: response[1]
-      });
+      resources = Maybe.Some(response);
     },
-    Future.parallel(2, [kayttajaApi.whoami, api.luokittelutAllVersions])
+    Future.parallelObject(2, {
+      whoami: kayttajaApi.whoami,
+      luokittelut: api.luokittelutAllVersions,
+      toimenpidetyypit: ValvontaApi.toimenpidetyypit
+    })
   );
 
   $: kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
@@ -239,7 +241,7 @@
 </style>
 
 <div class="w-full mt-3">
-  {#each resources.toArray() as { luokittelut, whoami }}
+  {#each resources.toArray() as { luokittelut, toimenpidetyypit, whoami }}
     <div class="flex flex-col lg:flex-row justify-between">
       <H1 text={i18n('energiatodistukset.title')} />
       {#if Kayttajat.isLaatija(whoami)}
@@ -304,9 +306,16 @@
                   <th class="etp-table--th">
                     {i18n('energiatodistus.haku.sarakkeet.laatija')}
                   </th>
-                  <th class="etp-table--th  etp-table--th__center">
-                    <span class="material-icons"> delete_forever </span>
-                  </th>
+                  {#if Kayttajat.isLaatija(whoami)}
+                    <th class="etp-table--th  etp-table--th__center">
+                      <span class="material-icons"> delete_forever </span>
+                    </th>
+                  {/if}
+                  {#if Kayttajat.isPaakayttaja(whoami)}
+                    <th class="etp-table--th">
+                      {i18n('energiatodistus.haku.sarakkeet.valvonta')}
+                    </th>
+                  {/if}
                 </tr>
               </thead>
               <tbody class="etp-table--tbody">
@@ -352,29 +361,42 @@
                     <td class="etp-table--td">
                       {orEmpty(energiatodistus['laatija-fullname'])}
                     </td>
-                    <td class="etp-table--td etp-table--td__center">
-                      <Confirm
-                        let:confirm
-                        confirmButtonLabel={i18n('confirm.button.delete')}
-                        confirmMessage={i18n('confirm.you-want-to-delete')}>
-                        <span
-                          class="material-icons delete-icon"
-                          class:text-disabled={!et.isDraft(energiatodistus)}
-                          title={!et.isDraft(energiatodistus)
-                            ? i18n('energiatodistus.haku.poista-disabled')
-                            : ''}
-                          on:click|stopPropagation={_ => {
-                            if (et.isDraft(energiatodistus))
-                              confirm(
-                                deleteEnergiatodistus,
-                                energiatodistus.versio,
-                                energiatodistus.id
-                              );
-                          }}>
-                          highlight_off
-                        </span>
-                      </Confirm>
-                    </td>
+                    {#if Kayttajat.isLaatija(whoami)}
+                      <td class="etp-table--td etp-table--td__center">
+                        <Confirm
+                          let:confirm
+                          confirmButtonLabel={i18n('confirm.button.delete')}
+                          confirmMessage={i18n('confirm.you-want-to-delete')}>
+                          <span
+                            class="material-icons delete-icon"
+                            class:text-disabled={!et.isDraft(energiatodistus)}
+                            title={!et.isDraft(energiatodistus)
+                              ? i18n('energiatodistus.haku.poista-disabled')
+                              : ''}
+                            on:click|stopPropagation={_ => {
+                              if (et.isDraft(energiatodistus))
+                                confirm(
+                                  deleteEnergiatodistus,
+                                  energiatodistus.versio,
+                                  energiatodistus.id
+                                );
+                            }}>
+                            highlight_off
+                          </span>
+                        </Confirm>
+                      </td>
+                    {/if}
+                    {#if Kayttajat.isPaakayttaja(whoami)}
+                      <td class="etp-table--td etp-table--td__center">
+                        {Maybe.fold(
+                          '',
+                          R.compose(
+                            Locales.labelForId($locale, toimenpidetyypit)
+                          ),
+                          energiatodistus.valvonta['type-id']
+                        )}
+                      </td>
+                    {/if}
                   </tr>
                 {/each}
               </tbody>
