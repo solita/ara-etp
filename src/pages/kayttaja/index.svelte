@@ -14,7 +14,7 @@
     '/all': Kayttajat,
     '/new': NewKayttaja,
     '/:id': ExistingKayttaja,
-    '/:id/historia': History
+    '/:id/muutoshistoria': History
   };
 </script>
 

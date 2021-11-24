@@ -144,7 +144,7 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
     },
     {
       label: i18n('navigation.muutoshistoria'),
-      href: `#/kayttaja/${kayttaja.id}/historia`
+      href: `#/kayttaja/${kayttaja.id}/muutoshistoria`
     }
   ];
 });

@@ -42,7 +42,6 @@
       },
       response => {
         resources = Maybe.Some(response);
-        console.log(response);
         overlay = false;
       },
       Future.parallelObject(8, {
