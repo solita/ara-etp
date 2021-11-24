@@ -42,7 +42,7 @@
           <td class="etp-table--td">
             {h['modifiedby-name']}
           </td>
-          <td class="etp-table--td space-y-1 space-x-1">
+          <td class="etp-table--td">
             <span>
               {Locales.labelForId($locale, patevyydet)(h.patevyystaso)}
             </span>
