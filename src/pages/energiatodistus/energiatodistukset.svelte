@@ -312,7 +312,9 @@
                     </th>
                   {/if}
                   {#if Kayttajat.isPaakayttaja(whoami)}
-                    <th class="etp-table--th"> {i18n('energiatodistus.haku.sarakkeet.valvonta')} </th>
+                    <th class="etp-table--th">
+                      {i18n('energiatodistus.haku.sarakkeet.valvonta')}
+                    </th>
                   {/if}
                 </tr>
               </thead>
