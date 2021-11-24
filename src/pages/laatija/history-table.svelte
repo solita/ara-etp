@@ -17,6 +17,9 @@
 </script>
 
 <style>
+  .www-container {
+    max-width: 200px;
+  }
 </style>
 
 <div class="overflow-x-auto">
@@ -54,9 +57,12 @@
           </td>
           <td class="etp-table--td">
             {#if Maybe.isSome(h.wwwosoite)}
-              <Link
-                href={h.wwwosoite.orSome('')}
-                text={h.wwwosoite.orSome('')} />
+              <div class="truncate www-container">
+                <a
+                  class="text-link cursor-pointer font-bold hover:underline"
+                  title={h.wwwosoite.orSome('')}
+                  href={h.wwwosoite.orSome('')}>{h.wwwosoite.orSome('')}</a>
+              </div>
             {:else}
               {'-'}
             {/if}
