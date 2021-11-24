@@ -34,6 +34,7 @@
   import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
+  import { deserialize } from '@Pages/energiatodistus/energiatodistus-api';
 
   const i18n = $_;
 
@@ -194,6 +195,9 @@
       Future.parallel(2),
       R.juxt([
         R.compose(
+          R.map(
+            R.map(R.evolve({ valvonta: { pending: Maybe.orSome(false) } }))
+          ),
           api.getEnergiatodistukset,
           queryToQuerystring,
           R.dissoc('page'),
@@ -387,12 +391,12 @@
                       </td>
                     {/if}
                     {#if Kayttajat.isPaakayttaja(whoami)}
-                      <td class="etp-table--td etp-table--td__center">
+                      <td class="etp-table--td">
                         {Maybe.fold(
-                          '',
-                          R.compose(
-                            Locales.labelForId($locale, toimenpidetyypit)
-                          ),
+                          energiatodistus.valvonta.pending
+                            ? i18n('valvonta.oikeellisuus.pending')
+                            : '',
+                          Locales.labelForId($locale, toimenpidetyypit),
                           energiatodistus.valvonta['type-id']
                         )}
                       </td>
