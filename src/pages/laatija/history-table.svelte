@@ -19,7 +19,7 @@
 <style>
 </style>
 
-<div>
+<div class="overflow-x-auto">
   <table class="etp-table">
     <thead class="etp-table--thead">
       <th class="etp-table--th">{i18n(i18nRoot + '.muokkausaika')}</th>
@@ -31,7 +31,7 @@
       <th class="etp-table--th">{i18n('laatija.paatoimintaalue')}</th>
       <th class="etp-table--th">{i18n('laatija.muuttoimintaalueet')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.toteaja')}</th>
-      <th class="etp-table--th">{i18n('laatija.upload.toteamispaivamaara')}</th>
+      <th class="etp-table--th">{i18n(i18nRoot + '.toteamispaivamaara')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.laskutuskieli')}</th>
     </thead><tbody class="etp-table--tbody">
       {#each history as h}
@@ -42,23 +42,31 @@
           <td class="etp-table--td">
             {h['modifiedby-name']}
           </td>
-          <td class="etp-table--td">
-            {Locales.labelForId($locale, patevyydet)(h.patevyystaso)}
+          <td class="etp-table--td space-y-1 space-x-1">
+            <span>
+              {Locales.labelForId($locale, patevyydet)(h.patevyystaso)}
+            </span>
 
             {#if h.laatimiskielto}
-              <span class="text-error font-bold p-1">
+              <span class="text-error font-bold">
                 {i18n(i18nRoot + '.laatimiskielto')}
               </span>
             {/if}
           </td>
           <td class="etp-table--td">
-            {h.wwwosoite.orSome('-')}
+            {#if Maybe.isSome(h.wwwosoite)}
+              <Link
+                href={h.wwwosoite.orSome('')}
+                text={h.wwwosoite.orSome('')} />
+            {:else}
+              {'-'}
+            {/if}
           </td>
           <td class="etp-table--td">
             {h.jakeluosoite},
             {h.postinumero}
             {h.postitoimipaikka},
-            {h.maa}
+            {Locales.labelForId($locale, countries)(h.maa.right())}
           </td>
           <td class="etp-table--td">
             {i18n(i18nRoot + '.osoite') +
@@ -71,7 +79,6 @@
               `: ${h.julkinenwwwosoite ? i18n('yes') : i18n('no')}`}
           </td>
           <td class="etp-table--td">
-            <!-- {Locales.labelForId($locale, toimintaalueet)(h.toimintaalue)} -->
             {Maybe.fold(
               '-',
               Locales.labelForId($locale, toimintaalueet),

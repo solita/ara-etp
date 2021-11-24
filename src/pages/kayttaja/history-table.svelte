@@ -15,7 +15,7 @@
 <style>
 </style>
 
-<div>
+<div class="overflow-x-auto">
   <table class="etp-table">
     <thead class="etp-table--thead">
       <th class="etp-table--th">{i18n(i18nRoot + '.muokkausaika')}</th>
