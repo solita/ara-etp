@@ -141,6 +141,10 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
     {
       label: i18n('navigation.yritykset'),
       href: `#/laatija/${kayttaja.id}/yritykset`
+    },
+    {
+      label: i18n('navigation.muutoshistoria'),
+      href: `#/kayttaja/${kayttaja.id}/muutoshistoria`
     }
   ];
 });

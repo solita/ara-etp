@@ -11,6 +11,7 @@ import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 export const url = {
   laatijat: '/api/private/laatijat',
   laatija: id => `${url.laatijat}/${id}`,
+  history: id => `${url.laatijat}/${id}/history`,
   yritykset: id => `${url.laatija(id)}/yritykset`,
   laskutusosoitteet: id => `${url.laatija(id)}/laskutusosoitteet`
 };
@@ -103,6 +104,13 @@ export const laskutusosoitteet = R.compose(
   ),
   Fetch.getJson(fetch),
   url.laskutusosoitteet
+);
+
+export const getLaatijaHistory = R.compose(
+  R.map(R.map(KayttajaApi.deserializeHistory)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.history
 );
 
 export const laatijat = R.map(

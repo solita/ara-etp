@@ -18,6 +18,17 @@ export const deserialize = R.evolve({
   virtu: Maybe.fromNull
 });
 
+export const deserializeHistory = R.evolve({
+  cognitoid: Maybe.fromNull,
+  henkilotunnus: Maybe.fromNull,
+  virtu: Maybe.fromNull,
+  maa: Either.Right,
+  toimintaalue: Maybe.fromNull,
+  wwwosoite: Maybe.fromNull,
+  toteamispaivamaara: R.compose(Either.right, Parsers.parseISODate),
+  modifytime: R.compose(Either.right, Parsers.parseISODate)
+});
+
 export const deserializeLaatija = R.compose(
   R.assoc('api-key', Maybe.None()),
   R.evolve({
@@ -35,11 +46,19 @@ export const deserializeLaatija = R.compose(
 export const url = {
   all: 'api/private/kayttajat',
   id: id => `${url.all}/${id}`,
+  history: id => `${url.id(id)}/history`,
   laatija: id => `${url.id(id)}/laatija`,
   whoami: '/api/private/whoami'
 };
 
 export const whoami = Future.cache(Fetch.getJson(fetch, url.whoami));
+
+export const getKayttajaHistory = R.compose(
+  R.map(R.map(deserializeHistory)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  url.history
+);
 
 export const getKayttajaById = R.compose(
   R.map(deserialize),

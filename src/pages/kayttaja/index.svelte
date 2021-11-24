@@ -4,6 +4,7 @@
   import Kayttajat from './kayttajat';
   import ExistingKayttaja from './existing-kayttaja';
   import NewKayttaja from './new-kayttaja';
+  import History from '@Pages/kayttaja/history';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
 
   import { flashMessageStore } from '@/stores';
@@ -12,7 +13,8 @@
   const routes = {
     '/all': Kayttajat,
     '/new': NewKayttaja,
-    '/:id': ExistingKayttaja
+    '/:id': ExistingKayttaja,
+    '/:id/muutoshistoria': History
   };
 </script>
 

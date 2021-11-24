@@ -316,7 +316,8 @@ describe('Navigation', () => {
           label: 'Testi Laatija',
           href: '#/kayttaja/1'
         },
-        { label: 'Yritykset', href: '#/laatija/1/yritykset' }
+        { label: 'Yritykset', href: '#/laatija/1/yritykset' },
+        { label: 'Muutoshistoria', href: '#/kayttaja/1/muutoshistoria' }
       ];
 
       assert.deepEqual(
