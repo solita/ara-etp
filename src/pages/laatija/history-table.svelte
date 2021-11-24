@@ -7,7 +7,7 @@
   import Link from '@Component/Link/Link';
 
   const i18n = $_;
-  const i18nRoot = 'muutoshistoria';
+  const i18nRoot = 'kayttaja.muutoshistoria';
 
   export let history = [];
   export let patevyydet;

@@ -4,7 +4,7 @@
   import { locale, _ } from '@Language/i18n';
 
   const i18n = $_;
-  const i18nRoot = 'muutoshistoria';
+  const i18nRoot = 'kayttaja.muutoshistoria';
 
   export let history = [];
   export let roolit = [];

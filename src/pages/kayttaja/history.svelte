@@ -62,13 +62,13 @@
   <div slot="content" class="w-full mt-3 flex flex-col space-y-8">
     {#each Maybe.toArray(resources) as { kayttaja, kayttajaHistory, laatijaHistory, roolit, patevyydet, toimintaalueet, countries, laskutuskielet }}
       <div>
-        <H2 text={i18n('muutoshistoria.kayttajatiedot')} />
+        <H2 text={i18n('kayttaja.muutoshistoria.kayttajatiedot')} />
 
         <KayttajaHistoryTable history={R.reverse(kayttajaHistory)} {roolit} />
       </div>
       {#if Kayttajat.isLaatija(kayttaja)}
         <div>
-          <H2 text={i18n('muutoshistoria.laatijatiedot')} />
+          <H2 text={i18n('kayttaja.muutoshistoria.laatijatiedot')} />
 
           <LaatijaHistoryTable
             history={R.reverse(laatijaHistory)}

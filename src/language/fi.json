@@ -161,29 +161,6 @@
   "time": {
     "klo": "klo"
   },
-  "muutoshistoria": {
-    "nimi": "Nimi",
-    "henkilotunnus": "Henkilötunnus",
-    "kayttajatiedot": "Käyttäjätiedot",
-    "laatijatiedot": "Laatijatiedot",
-    "muokkausaika": "Muokkausaika",
-    "muokkaaja": "Muokkaaja",
-    "laatimiskielto": "Laatimiskielto",
-    "toteaja": "Toteaja",
-    "toteamispaivamaara": "Toteamispäivä",
-    "toimintaalueet": "Toiminta-alueet",
-    "virtu": "Virtu",
-    "cognitoid": "Cognito ID",
-    "passivoitu": "Passivoitu",
-    "julkiset": "Julkiset tiedot",
-    "osoite": "Osoite",
-    "puhelin": "Puhelin",
-    "email": "Sähköposti",
-    "rooli": "Rooli",
-    "patevyystaso": "Pätevyys",
-    "laskutuskieli": "Laskutuskieli",
-    "www-osoite": "www-osoite"
-  },
   "kayttaja": {
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
@@ -221,6 +198,29 @@
         "add-success": "Uusi käyttäjä tallennettu järjestelmään.",
         "add-error": "Uuden käyttäjän tallennus epäonnistui."
       }
+    },
+    "muutoshistoria": {
+      "nimi": "Nimi",
+      "henkilotunnus": "Henkilötunnus",
+      "kayttajatiedot": "Käyttäjätiedot",
+      "laatijatiedot": "Laatijatiedot",
+      "muokkausaika": "Muokkausaika",
+      "muokkaaja": "Muokkaaja",
+      "laatimiskielto": "Laatimiskielto",
+      "toteaja": "Toteaja",
+      "toteamispaivamaara": "Toteamispäivä",
+      "toimintaalueet": "Toiminta-alueet",
+      "virtu": "Virtu",
+      "cognitoid": "Cognito ID",
+      "passivoitu": "Passivoitu",
+      "julkiset": "Julkiset tiedot",
+      "osoite": "Osoite",
+      "puhelin": "Puhelin",
+      "email": "Sähköposti",
+      "rooli": "Rooli",
+      "patevyystaso": "Pätevyys",
+      "laskutuskieli": "Laskutuskieli",
+      "www-osoite": "www-osoite"
     }
   },
   "kayttajat": {
