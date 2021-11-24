@@ -195,7 +195,9 @@
       Future.parallel(2),
       R.juxt([
         R.compose(
-          R.map(R.map(R.evolve({ valvonta: { pending: Maybe.orSome(false) }}))),
+          R.map(
+            R.map(R.evolve({ valvonta: { pending: Maybe.orSome(false) } }))
+          ),
           api.getEnergiatodistukset,
           queryToQuerystring,
           R.dissoc('page'),
@@ -391,7 +393,9 @@
                     {#if Kayttajat.isPaakayttaja(whoami)}
                       <td class="etp-table--td">
                         {Maybe.fold(
-                          energiatodistus.valvonta.pending ? i18n('valvonta.oikeellisuus.pending') : '',
+                          energiatodistus.valvonta.pending
+                            ? i18n('valvonta.oikeellisuus.pending')
+                            : '',
                           Locales.labelForId($locale, toimenpidetyypit),
                           energiatodistus.valvonta['type-id']
                         )}
