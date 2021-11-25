@@ -20,7 +20,7 @@
   export let checked;
 
   const i18n = $_;
-  const i18nRoot = 'energiatodistus.korvaavuus'
+  const i18nRoot = 'energiatodistus.korvaavuus';
 
   let loading = false;
   let korvattavat = [];
@@ -50,15 +50,15 @@
   $: if (
     ET.isDraft(energiatodistus) &&
     Maybe.isNone(energiatodistus['korvattu-energiatodistus-id']) &&
-    !checked) {
-
+    !checked
+  ) {
     loadKorvattavat(energiatodistus.id);
   } else {
     korvattavat = [];
   }
 </script>
 
-<style type='text/postcss'>
+<style type="text/postcss">
   h3 {
     @apply text-primary uppercase font-bold text-sm;
   }
@@ -75,77 +75,90 @@
 {/if}
 
 {#if !R.isEmpty(korvattavat)}
-  <div class='my-4 border-primary border-2 border-opacity-15 rounded-md p-4 shadow-md'>
-    <h3><span class='font-icon'>info_outline</span> {i18n(i18nRoot + '.header.ehdotus')}</h3>
-    <p class='my-2'>{i18n(i18nRoot + '.ehdotus.info-p1')}</p>
-    <p class='my-2'>{i18n(i18nRoot + '.ehdotus.info-p2')}</p>
-    <p class='my-2'>
+  <div
+    class="my-4 border-primary border-2 border-opacity-15 rounded-md p-4 shadow-md">
+    <h3>
+      <span class="font-icon">info_outline</span>
+      {i18n(i18nRoot + '.header.ehdotus')}
+    </h3>
+    <p class="my-2">{i18n(i18nRoot + '.ehdotus.info-p1')}</p>
+    <p class="my-2">{i18n(i18nRoot + '.ehdotus.info-p2')}</p>
+    <p class="my-2">
       {i18n(i18nRoot + '.ehdotus.info-p3-1')}
-      <Link on:click={_ => { checked = true}} text={i18n(i18nRoot + '.ehdotus.info-p3-2')}/>
+      <Link
+        on:click={_ => {
+          checked = true;
+        }}
+        text={i18n(i18nRoot + '.ehdotus.info-p3-2')} />
       {i18n(i18nRoot + '.ehdotus.info-p3-3')}
     </p>
-    <div class='flex flex-col -mx-4 mt-2'>
+    <div class="flex flex-col -mx-4 mt-2">
       <div
-        class='w-full px-4 py-4 relative'
+        class="w-full px-4 py-4 relative"
         transition:slide|local={{ duration: 200 }}>
-
-        <table class='etp-table'>
-          <thead class='etp-table--thead'>
-          <tr class='etp-table--tr etp-table--tr__light'>
-            <th class='etp-table--th'>
-              {i18n(i18nRoot + '.table.tunnus')}
-            </th>
-            <th class='etp-table--th'>
-              {i18n(i18nRoot + '.table.ktl')}
-            </th>
-            <th class='etp-table--th'>
-              {i18n(i18nRoot + '.table.rakennustunnus')}
-            </th>
-            <th class='etp-table--th'>
-              {i18n(i18nRoot + '.table.nimi')}
-            </th>
-            <th class='etp-table--th'>
-              {i18n(i18nRoot + '.table.osoite')}
-            </th>
-            <th class='etp-table--th'>
-              {i18n(i18nRoot + '.table.laatija')}
-            </th>
-          </tr>
-          </thead>
-          <tbody class='etp-table--tbody'>
-          {#each korvattavat as korvattava}
-            <tr
-              class='etp-table-tr etp-table--tr__link'
-              on:click={() => { energiatodistus = R.assoc('korvattu-energiatodistus-id', Maybe.Some(korvattava.id), energiatodistus)}}>
-              <td class='etp-table--td'>
-                {korvattava.id}
-              </td>
-              <td class='etp-table--td'>
-                {Maybe.orSome('', korvattava.perustiedot.kayttotarkoitus)}
-              </td>
-              <td class='etp-table--td'>
-                {Maybe.orSome('', korvattava.perustiedot.rakennustunnus)}
-              </td>
-              <td class='etp-table--td'>
-                {Maybe.orSome('', korvattava.perustiedot.nimi)}
-              </td>
-              <td class='etp-table--td'>
-                <address>
-                  {Maybe.orSome('', korvattava.perustiedot['katuosoite-fi'])}
-                  <span class='whitespace-no-wrap'>
-                {Maybe.fold(
-                  '',
-                  Postinumerot.formatPostinumero(postinumerot, $locale),
-                  korvattava.perustiedot.postinumero
-                )}
-              </span>
-                </address>
-              </td>
-              <td class='etp-table--td'>
-                {Maybe.orSome('', korvattava['laatija-fullname'])}
-              </td>
+        <table class="etp-table">
+          <thead class="etp-table--thead">
+            <tr class="etp-table--tr etp-table--tr__light">
+              <th class="etp-table--th">
+                {i18n(i18nRoot + '.table.tunnus')}
+              </th>
+              <th class="etp-table--th">
+                {i18n(i18nRoot + '.table.ktl')}
+              </th>
+              <th class="etp-table--th">
+                {i18n(i18nRoot + '.table.rakennustunnus')}
+              </th>
+              <th class="etp-table--th">
+                {i18n(i18nRoot + '.table.nimi')}
+              </th>
+              <th class="etp-table--th">
+                {i18n(i18nRoot + '.table.osoite')}
+              </th>
+              <th class="etp-table--th">
+                {i18n(i18nRoot + '.table.laatija')}
+              </th>
             </tr>
-          {/each}
+          </thead>
+          <tbody class="etp-table--tbody">
+            {#each korvattavat as korvattava}
+              <tr
+                class="etp-table-tr etp-table--tr__link"
+                on:click={() => {
+                  energiatodistus = R.assoc(
+                    'korvattu-energiatodistus-id',
+                    Maybe.Some(korvattava.id),
+                    energiatodistus
+                  );
+                }}>
+                <td class="etp-table--td">
+                  {korvattava.id}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', korvattava.perustiedot.kayttotarkoitus)}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', korvattava.perustiedot.rakennustunnus)}
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', korvattava.perustiedot.nimi)}
+                </td>
+                <td class="etp-table--td">
+                  <address>
+                    {Maybe.orSome('', korvattava.perustiedot['katuosoite-fi'])}
+                    <span class="whitespace-no-wrap">
+                      {Maybe.fold(
+                        '',
+                        Postinumerot.formatPostinumero(postinumerot, $locale),
+                        korvattava.perustiedot.postinumero
+                      )}
+                    </span>
+                  </address>
+                </td>
+                <td class="etp-table--td">
+                  {Maybe.orSome('', korvattava['laatija-fullname'])}
+                </td>
+              </tr>
+            {/each}
           </tbody>
         </table>
       </div>

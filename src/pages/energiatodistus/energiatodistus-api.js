@@ -395,4 +395,5 @@ export const korvattavat = R.compose(
   Fetch.responseAsJson,
   Future.encaseP(Fetch.getFetch(fetch)),
   R.concat(R.__, '/korvattavat'),
-  id => url.id('all', id));
+  id => url.id('all', id)
+);

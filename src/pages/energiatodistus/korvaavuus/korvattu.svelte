@@ -92,7 +92,10 @@
     )(id);
   };
 
-  $: R.forEach(fetchKorvattavaEnergiatodistus(0), R.view(lens, energiatodistus));
+  $: R.forEach(
+    fetchKorvattavaEnergiatodistus(0),
+    R.view(lens, energiatodistus)
+  );
 
   $: if (enabled) {
     if (checked) {
