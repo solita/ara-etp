@@ -389,3 +389,10 @@ export const getEluokka = R.curry(
       `api/private/e-luokka/${versio}/${alakayttotarkoitusId}/${nettoala}/${eLuku}`
     )
 );
+
+export const korvattavat = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(R.__, '/korvattavat'),
+  id => url.id('all', id));

@@ -7,6 +7,7 @@
   import Input from '@Component/Input/Input';
   import Spinner from '@Component/Spinner/Spinner';
   import EtTable from './energiatodistus-table';
+  import EnergiatodistusKorvausEhdotus from './ehdotus';
 
   import { flashMessageStore } from '@/stores';
 
@@ -37,9 +38,9 @@
   let cancel = () => {};
   let searching = false;
   let updated = true;
-  let query = R.view(lens, energiatodistus);
+  $: query = R.view(lens, energiatodistus);
   let korvattavaEnergiatodistus = Maybe.None();
-  let checked = Maybe.isSome(R.view(lens, energiatodistus));
+  $: checked = Maybe.isSome(R.view(lens, energiatodistus));
 
   const parseId = R.compose(Maybe.fromFalsy, value => parseInt(value, 10));
 
@@ -76,7 +77,7 @@
           korvattavaEnergiatodistus = Maybe.fromNull(response);
         }
       ),
-      Future.delay(200),
+      R.chain(Future.after(200)),
       R.chain(EtApi.findEnergiatodistusById),
       R.map(
         R.tap(_ => {
@@ -91,7 +92,7 @@
     )(id);
   };
 
-  R.forEach(fetchKorvattavaEnergiatodistus(0), R.view(lens, energiatodistus));
+  $: R.forEach(fetchKorvattavaEnergiatodistus(0), R.view(lens, energiatodistus));
 
   $: if (enabled) {
     if (checked) {
@@ -138,6 +139,11 @@
   }
 </style>
 
+<EnergiatodistusKorvausEhdotus
+  {postinumerot}
+  bind:checked
+  bind:energiatodistus />
+
 {#if checked || enabled}
   {#if enabled}
     <Checkbox
@@ -164,7 +170,6 @@
             lens={R.lens(R.identity, R.identity)}
             format={Maybe.orSome('')}
             parse={Parsers.optionalString}
-            search={true}
             {i18n} />
         </div>
       {/if}

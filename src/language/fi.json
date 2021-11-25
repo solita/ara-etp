@@ -422,7 +422,7 @@
         "korvaavuus": "Energiatodistuksen korvaavuus"
       },
       "checkbox": "Korvaa todistuksen",
-      "input": "Valitse korvattava todistus",
+      "input": "Korvattava todistustunnus",
       "korvaava-draft-info": "Korvaaminen tapahtuu kun korvaava energiatodistus allekirjoitetaan.",
       "table": {
         "tunnus": "Tunnus",
