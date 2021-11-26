@@ -31,6 +31,7 @@
     cancel();
     cancel = Future.value(result => {
       laatijat = result;
+      toPage(1);
     }, future);
   };
 
