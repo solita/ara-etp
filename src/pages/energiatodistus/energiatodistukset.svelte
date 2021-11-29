@@ -32,10 +32,9 @@
   import Address from '@Pages/energiatodistus/address';
 
   import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
-  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
-  import { deserialize } from '@Pages/energiatodistus/energiatodistus-api';
-  import * as geoApi from '@Utility/api/geo-api';
+  import * as GeoApi from '@Utility/api/geo-api';
 
   const i18n = $_;
 
@@ -222,10 +221,10 @@
       resources = Maybe.Some(response);
     },
     Future.parallelObject(2, {
-      whoami: kayttajaApi.whoami,
+      whoami: KayttajaApi.whoami,
       luokittelut: api.luokittelutAllVersions,
       toimenpidetyypit: ValvontaApi.toimenpidetyypit,
-      geoApi.kunnat
+      kunnat: GeoApi.kunnat
     })
   );
 
