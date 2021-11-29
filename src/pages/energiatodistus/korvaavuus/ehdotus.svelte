@@ -45,9 +45,12 @@
         korvattavat = response;
         loading = false;
       },
-      EnergiatodistusApi.korvattavat(R.pick(
-        ['rakennustunnus', 'postinumero', 'katuosoite-fi', 'katuosoite-sv'],
-        energiatodistus.perustiedot))
+      EnergiatodistusApi.korvattavat(
+        R.pick(
+          ['rakennustunnus', 'postinumero', 'katuosoite-fi', 'katuosoite-sv'],
+          energiatodistus.perustiedot
+        )
+      )
     );
   };
 
