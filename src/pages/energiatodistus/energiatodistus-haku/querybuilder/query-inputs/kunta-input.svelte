@@ -1,50 +1,40 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Locales from '@Language/locale-utils';
 
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
 
   import { locale } from '@Language/i18n';
-  import { label, labelForId } from '@Language/locale-utils';
 
   export let values = [];
   export let nameprefix;
   export let kunnat;
 
-  let value = R.defaultTo('', R.head(values));
+  const kuntaLabel = Locales.label($locale);
+
+  let queryKuntaId = R.defaultTo('', R.head(values));
+  let queryKuntaLabel = Locales.labelForId($locale, kunnat)(queryKuntaId);
   let input;
 
-  const formatKunta = label; // formatKunta: locale -> item -> label
+  const updateInput = label => {
+    const kunta = Maybe.find(R.compose(R.equals(label), kuntaLabel), kunnat);
 
-  const completedValueWithLocale = (locale, val) =>
-    labelForId(locale, kunnat)(val);
+    R.forEach(id => {
+      input.value = id;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }, R.map(R.prop('id'), kunta));
+  };
 
-  $: value = R.compose(
-    Maybe.orSome(''),
-    R.map(R.prop('id')),
-    Maybe.nullReturning(
-      R.find(
-        R.compose(
-          R.equals(completedValueWithLocale($locale, value)),
-          formatKunta($locale)
-        )
-      )
-    )
-  )(kunnat);
-
-  $: {
-    input && (input.value = value);
-    input && input.dispatchEvent(new Event('change', { bubbles: true }));
-  }
-  $: completedValue = completedValueWithLocale($locale, value);
+  $: !R.isNil(input) && updateInput(queryKuntaLabel);
 </script>
 
 <style>
 </style>
 
 <Autocomplete
-  bind:completedValue
-  items={R.map(formatKunta($locale), kunnat)}
+  bind:completedValue={queryKuntaLabel}
+  items={R.map(kuntaLabel, kunnat)}
   size={10000} />
 <input
   bind:this={input}
