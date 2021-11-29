@@ -124,7 +124,8 @@
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Yrityksen tietojen haku epäonnistui.",
-      "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen."
+      "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen.",
+      "not-found": "Yritystä ei löydy järjestelmästä."
     },
     "laatijat": {
       "empty": "Yrityksellä ei ole laatijoita.",
