@@ -21,7 +21,8 @@ export const OPERATOR_TYPES = Object.freeze({
   LAATIMISVAIHE: 'LAATIMISVAIHE',
   KIELISYYS: 'KIELISYYS',
   ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI',
-  PATEVYYSTASO: 'PATEVYYSTASO'
+  PATEVYYSTASO: 'PATEVYYSTASO',
+  KUNTA: 'KUNTA'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -192,6 +193,13 @@ const laatijaPatevyys = key => ({
   key,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.LAATIJA
+});
+
+const kuntaEquals = key => ({
+  operation: eq,
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.KUNTA
 });
 
 const numberComparisonsFromType = type => [
@@ -681,6 +689,10 @@ const laatija = {
   'voimassaolo-paattymisaika': timeComparisons
 };
 
+const kunta = {
+  id: [kuntaEquals]
+};
+
 export const flattenSchema = R.compose(
   R.reduce((acc, arr) => ({ ...acc, [arr[0].key]: arr }), {}),
   R.map(R.converge(R.map, [R.compose(R.applyTo, R.head), R.last])),
@@ -706,7 +718,8 @@ export const schema = {
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals]
   },
-  laatija
+  laatija,
+  kunta
 };
 
 const localizedField = key => [`${key}-fi`, `${key}-sv`];

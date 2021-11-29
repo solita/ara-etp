@@ -26,6 +26,7 @@
 
   export let where;
   export let keyword;
+  export let kunnat;
   export let id;
   export let luokittelut;
   export let whoami;
@@ -170,6 +171,7 @@
           {values}
           {index}
           {luokittelut}
+          {kunnat}
           {schema}
           laatijat={Maybe.get(laatijat)} />
         <span

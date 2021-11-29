@@ -411,6 +411,9 @@
         "toteamispaivamaara": "Laatija / Toteamispäivämäärä",
         "voimassaolo-paattymisaika": "Laatija / Pätevyyden voimassaolon päättymispäivä",
         "patevyystaso": "Laatija / Pätevyystaso"
+      },
+      "kunta": {
+        "id": "Kunta"
       }
     },
     "kaikki": "Kaikki",

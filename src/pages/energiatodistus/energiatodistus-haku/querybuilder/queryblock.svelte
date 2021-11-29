@@ -16,6 +16,7 @@
   export let index;
   export let schema;
   export let luokittelut;
+  export let kunnat;
   export let laatijat;
 
   let input;
@@ -101,6 +102,7 @@
         {values}
         operations={Maybe.orSome([], R.map(R.prop(R.__, schema), maybeKey))}
         {luokittelut}
+        {kunnat}
         {laatijat} />
     </div>
   {/if}

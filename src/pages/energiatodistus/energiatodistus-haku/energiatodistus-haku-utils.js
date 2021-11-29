@@ -84,6 +84,7 @@ export const parseValueByType = R.curry((type, value) => {
     case OPERATOR_TYPES.UNFORMATTED_NUMBER:
     case OPERATOR_TYPES.VERSIO:
     case OPERATOR_TYPES.TILA:
+    case OPERATOR_TYPES.KUNTA:
     case OPERATOR_TYPES.LAATIJA:
     case OPERATOR_TYPES.LAATIMISVAIHE:
     case OPERATOR_TYPES.KIELISYYS:

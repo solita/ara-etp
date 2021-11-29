@@ -32,9 +32,9 @@
   import Address from '@Pages/energiatodistus/address';
 
   import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
-  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
-  import { deserialize } from '@Pages/energiatodistus/energiatodistus-api';
+  import * as GeoApi from '@Utility/api/geo-api';
 
   const i18n = $_;
 
@@ -221,9 +221,10 @@
       resources = Maybe.Some(response);
     },
     Future.parallelObject(2, {
-      whoami: kayttajaApi.whoami,
+      whoami: KayttajaApi.whoami,
       luokittelut: api.luokittelutAllVersions,
-      toimenpidetyypit: ValvontaApi.toimenpidetyypit
+      toimenpidetyypit: ValvontaApi.toimenpidetyypit,
+      kunnat: GeoApi.kunnat
     })
   );
 
@@ -245,7 +246,7 @@
 </style>
 
 <div class="w-full mt-3">
-  {#each resources.toArray() as { luokittelut, toimenpidetyypit, whoami }}
+  {#each resources.toArray() as { luokittelut, toimenpidetyypit, kunnat, whoami }}
     <div class="flex flex-col lg:flex-row justify-between">
       <H1 text={i18n('energiatodistukset.title')} />
       {#if Kayttajat.isLaatija(whoami)}
@@ -271,6 +272,7 @@
         {where}
         {luokittelut}
         {whoami}
+        {kunnat}
         keyword={Maybe.orSome('', keyword)}
         id={Maybe.orSome('', id)} />
     </div>

@@ -20,6 +20,7 @@
   import EluokkaInput from './query-inputs/e-luokka-input';
   import TilaInput from './query-inputs/tila-input';
   import LaatijaInput from './query-inputs/laatija-input';
+  import KuntaInput from './query-inputs/kunta-input';
   import LaatimisvaiheInput from './query-inputs/laatimisvaihe-input';
   import KielisyysInput from './query-inputs/kielisyys-input';
   import PatevyystasoInput from './query-inputs/patevyystaso-input';
@@ -34,6 +35,7 @@
   export let values;
   export let luokittelut;
   export let laatijat;
+  export let kunnat;
 
   const inputForType = type => {
     switch (type) {
@@ -71,6 +73,8 @@
         return IlmanvaihtotyyppiInput;
       case OPERATOR_TYPES.PATEVYYSTASO:
         return PatevyystasoInput;
+      case OPERATOR_TYPES.KUNTA:
+        return KuntaInput;
       default:
         return TextInput;
     }
@@ -126,7 +130,8 @@
         {values}
         {nameprefix}
         {luokittelut}
-        {laatijat} />
+        {laatijat}
+        {kunnat} />
     </div>
   </div>
 </div>
