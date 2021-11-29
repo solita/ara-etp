@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Postinumerot from '@Component/address/postinumero-fi';
 
   import { _, locale } from '@Language/i18n';
@@ -18,6 +19,7 @@
   export let energiatodistus;
   export let postinumerot;
   export let checked;
+  export let whoami;
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus.korvaavuus';
@@ -25,7 +27,7 @@
   let loading = false;
   let korvattavat = [];
 
-  const loadKorvattavat = id => {
+  const loadKorvattavat = energiatodistus => {
     loading = true;
     Future.fork(
       response => {
@@ -43,16 +45,19 @@
         korvattavat = response;
         loading = false;
       },
-      EnergiatodistusApi.korvattavat(id)
+      EnergiatodistusApi.korvattavat(R.pick(
+        ['rakennustunnus', 'postinumero', 'katuosoite-fi', 'katuosoite-sv'],
+        energiatodistus.perustiedot))
     );
   };
 
   $: if (
     ET.isDraft(energiatodistus) &&
     Maybe.isNone(energiatodistus['korvattu-energiatodistus-id']) &&
+    Kayttajat.isLaatija(whoami) &&
     !checked
   ) {
-    loadKorvattavat(energiatodistus.id);
+    loadKorvattavat(energiatodistus);
   } else {
     korvattavat = [];
   }

@@ -144,6 +144,7 @@
 
 <EnergiatodistusKorvausEhdotus
   {postinumerot}
+  {whoami}
   bind:checked
   bind:energiatodistus />
 
