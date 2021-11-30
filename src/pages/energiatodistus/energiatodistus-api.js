@@ -6,11 +6,9 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as deep from '@Utility/deep-objects';
 import * as empty from './empty';
 import * as schema from './schema';
-import * as laatijaApi from '@Pages/laatija/laatija-api';
-import * as yritysApi from '@Pages/yritys/yritys-api';
 import * as geoApi from '@Utility/api/geo-api';
 import * as dfns from 'date-fns';
-import * as LaatijaYritysTila from '@Pages/yritys/laatija-yritys-tila';
+import * as Query from '@Utility/query';
 
 /*
 This deserializer is for all energiatodistus versions.
@@ -388,4 +386,12 @@ export const getEluokka = R.curry(
     )(
       `api/private/e-luokka/${versio}/${alakayttotarkoitusId}/${nettoala}/${eLuku}`
     )
+);
+
+export const korvattavat = R.compose(
+  R.map(R.map(deserialize)),
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.getFetch(fetch)),
+  R.concat(url.all + '/korvattavat'),
+  Query.toQueryString
 );

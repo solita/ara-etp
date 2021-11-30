@@ -423,10 +423,11 @@
         "korvattu": "Korvaa energiatodistuksen",
         "korvaava": "Korvattu energiatodistuksella",
         "korvaava-draft": "Korvataan energiatodistuksella (luonnos)",
-        "korvaavuus": "Energiatodistuksen korvaavuus"
+        "korvaavuus": "Energiatodistuksen korvaavuus",
+        "ehdotus": "Ehdotus korvattavaksi energiatodistukseksi"
       },
       "checkbox": "Korvaa todistuksen",
-      "input": "Valitse korvattava todistus",
+      "input": "Korvattava todistustunnus",
       "korvaava-draft-info": "Korvaaminen tapahtuu kun korvaava energiatodistus allekirjoitetaan.",
       "table": {
         "tunnus": "Tunnus",
@@ -437,6 +438,13 @@
         "nimi": "Rakennuksen nimi",
         "osoite": "Osoite",
         "laatija": "Laatija"
+      },
+      "ehdotus": {
+        "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen.",
+        "info-p2": "Valitse näistä korvattava energiatodistus tai jos mitään todistusta ei korvata niin tämän kohdan voi ohittaa.",
+        "info-p3-1": "Jos halutaan korvata jokin muu niin valitse kohta ",
+        "info-p3-2": "Korvaa todistuksen",
+        "info-p3-3": "ja syötä korvattava todistustunnus käsin."
       },
       "validation": {
         "invalid-tila": "Korvattava energiatodistus pitää olla allekirjoitettu tai hylätty.",

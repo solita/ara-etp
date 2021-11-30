@@ -1,13 +1,9 @@
 <script>
-  import * as R from 'ramda';
-
   import { push } from '@Component/Router/router';
   import { _, locale } from '@Language/i18n';
 
   import * as Postinumerot from '@Component/address/postinumero-fi';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
-  import * as str from '@Utility/strings';
 
   export let energiatodistus;
   export let postinumerot;
@@ -43,7 +39,7 @@
         </th>
       </tr>
     </thead>
-    <tbody class="etp-table--tbody">
+    <tbody>
       <tr
         class="etp-table-tr etp-table--tr__link"
         on:click={() =>
