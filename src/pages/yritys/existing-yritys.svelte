@@ -6,6 +6,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Response from '@Utility/response';
 
   import YritysForm from '@Pages/yritys/YritysForm';
   import Overlay from '@Component/Overlay/Overlay';
@@ -17,6 +18,9 @@
   import * as Yritykset from '@Pages/yritys/yritys-utils';
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+
+  const i18n = $_;
+  const i18nRoot = 'yritys';
 
   export let params;
 
@@ -64,12 +68,12 @@
   // Load yritys and all luokittelut used in yritys form
   $: R.compose(
     Future.fork(
-      () => {
+      response => {
         toggleOverlay(false);
         flashMessageStore.add(
           'Yritys',
           'error',
-          $_('yritys.messages.load-error')
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
         );
       },
       response => {
