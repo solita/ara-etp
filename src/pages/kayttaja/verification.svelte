@@ -19,7 +19,7 @@
 </style>
 
 {#if Kayttajat.isVerificationActive(whoami, kayttaja)}
-  <div class='flex'>
+  <div class="flex">
     <div
       class="my-4 border-primary border-2 border-opacity-15 rounded-md p-4 shadow-md">
       <h1>

@@ -54,7 +54,9 @@ export const url = {
   whoami: '/api/private/whoami'
 };
 
-export const whoami = Future.cache(R.map(deserialize, Fetch.getJson(fetch, url.whoami)));
+export const whoami = Future.cache(
+  R.map(deserialize, Fetch.getJson(fetch, url.whoami))
+);
 
 export const getKayttajaHistory = R.compose(
   R.map(R.map(deserializeHistory)),

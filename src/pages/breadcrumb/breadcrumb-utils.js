@@ -479,6 +479,6 @@ export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
 );
 
 export const rootCrumb = R.curry((i18n, whoami) => ({
-    url: '/',
-    label: i18n('navigation.etusivu')
+  url: '/',
+  label: i18n('navigation.etusivu')
 }));

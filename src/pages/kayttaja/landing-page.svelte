@@ -27,19 +27,16 @@
     })
   );
 
-  $: R.forEach(
-    ({ whoami, isDev }) => {
-      if (Kayttajat.isVerified(whoami)) {
-        R.compose (
-          replace,
-          R.prop('href'),
-          R.head,
-          Navigation.parseRoot(isDev, $_)
-        )(whoami);
-      } else {
-        replace('/myinfo');
-      }
-    },
-    resources
-  );
+  $: R.forEach(({ whoami, isDev }) => {
+    if (Kayttajat.isVerified(whoami)) {
+      R.compose(
+        replace,
+        R.prop('href'),
+        R.head,
+        Navigation.parseRoot(isDev, $_)
+      )(whoami);
+    } else {
+      replace('/myinfo');
+    }
+  }, resources);
 </script>
