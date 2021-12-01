@@ -478,25 +478,7 @@ export const yritysCrumb = R.curry((i18n, idTranslate, whoami, [id, ...rest]) =>
   ])(id)
 );
 
-export const rootCrumb = R.curry((i18n, whoami) =>
-  R.cond([
-    [
-      R.anyPass([
-        Kayttajat.isLaatija,
-        Kayttajat.isPaakayttaja,
-        Kayttajat.isLaskuttaja
-      ]),
-      R.always({
-        url: '#/energiatodistus/all',
-        label: i18n('navigation.etusivu')
-      })
-    ],
-    [
-      Kayttajat.isPatevyydentoteaja,
-      R.always({
-        url: '#/laatija/laatijoidentuonti',
-        label: i18n('navigation.etusivu')
-      })
-    ]
-  ])(whoami)
-);
+export const rootCrumb = R.curry((i18n, whoami) => ({
+    url: '/',
+    label: i18n('navigation.etusivu')
+}));

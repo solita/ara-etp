@@ -222,6 +222,12 @@
       "patevyystaso": "Pätevyys",
       "laskutuskieli": "Laskutuskieli",
       "www-osoite": "www-osoite"
+    },
+    "verification": {
+      "header": "Muistutus henkilötietojen tarkistamisesta",
+      "p-1": "Henkilötiedot on hyvä tarkistaa säännöllisin väliajoin. Tällä varmistat palvelun virheettömän toiminnan.",
+      "p-2": "Jos tiedoissa on puutteita, niin korjaa virheelliset tiedot ja tallenna muutokset.",
+      "p-3": "Jos tiedot ovat virheettömät, niin saat tämän muistutuksen pois painamalla alhaalta painiketta Tarkistettu."
     }
   },
   "kayttajat": {
@@ -266,6 +272,7 @@
     "api-key-requirements": "Vähintään 8 merkkiä. Sallitut merkit: A-Z, 0-9, .-_!",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
+    "verify": "Tarkistettu",
     "messages": {
       "not-found": "Laatijaa ei löydy tästä palvelusta.",
       "save-success": "Laatijan tiedot tallennettu onnistuneesti.",
