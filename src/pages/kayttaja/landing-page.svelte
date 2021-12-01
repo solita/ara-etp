@@ -28,7 +28,7 @@
   );
 
   $: R.forEach(({ whoami, isDev }) => {
-    if (Kayttajat.isVerified(whoami)) {
+    if (Kayttajat.isVerified(whoami) || !Kayttajat.isLaatija(whoami)) {
       R.compose(
         replace,
         R.prop('href'),
