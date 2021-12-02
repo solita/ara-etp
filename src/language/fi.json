@@ -441,7 +441,7 @@
       },
       "ehdotus": {
         "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen.",
-        "info-p2": "Valitse näistä korvattava energiatodistus tai jos mitään todistusta ei korvata niin tämän kohdan voi ohittaa.",
+        "info-p2": "<b>Valitse näistä korvattava energiatodistus</b> tai jos mitään todistusta ei korvata niin tämän kohdan voi ohittaa.",
         "info-p3-1": "Jos halutaan korvata jokin muu niin valitse kohta ",
         "info-p3-2": "Korvaa todistuksen",
         "info-p3-3": "ja syötä korvattava todistustunnus käsin."

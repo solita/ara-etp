@@ -88,7 +88,7 @@
       {i18n(i18nRoot + '.header.ehdotus')}
     </h3>
     <p class="my-2">{i18n(i18nRoot + '.ehdotus.info-p1')}</p>
-    <p class="my-2">{i18n(i18nRoot + '.ehdotus.info-p2')}</p>
+    <p class="my-2">{@html i18n(i18nRoot + '.ehdotus.info-p2')}</p>
     <p class="my-2">
       {i18n(i18nRoot + '.ehdotus.info-p3-1')}
       <Link
