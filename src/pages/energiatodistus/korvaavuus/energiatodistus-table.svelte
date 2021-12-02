@@ -8,11 +8,13 @@
 
   import Address from '@Pages/energiatodistus/address.svelte';
 
-  export let whoami
+  export let whoami;
   export let energiatodistus;
   export let postinumerot;
 
-  $: hasPermission = !Kayttajat.isLaatija(whoami) || Maybe.fold(false, R.equals(whoami.id), energiatodistus['laatija-id']);
+  $: hasPermission =
+    !Kayttajat.isLaatija(whoami) ||
+    Maybe.fold(false, R.equals(whoami.id), energiatodistus['laatija-id']);
 </script>
 
 <div class="overflow-x-auto">
@@ -43,7 +45,8 @@
       <tr
         class:etp-table--tr__link={hasPermission}
         class="etp-table-tr"
-        on:click={() => hasPermission &&
+        on:click={() =>
+          hasPermission &&
           push(
             '#/energiatodistus/' +
               energiatodistus.versio +

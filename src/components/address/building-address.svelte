@@ -11,7 +11,8 @@
   export let postinumero = Maybe.None();
   export let postinumerot;
 
-  $: separator = Maybe.isSome(katuosoite) && Maybe.isSome(postinumero) ? ',' : '';
+  $: separator =
+    Maybe.isSome(katuosoite) && Maybe.isSome(postinumero) ? ',' : '';
 </script>
 
 <style type="text/postcss">
