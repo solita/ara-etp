@@ -5,13 +5,13 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
-  import * as Postinumerot from '@Component/address/postinumero-fi';
 
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
 
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link.svelte';
+  import Address from '@Pages/energiatodistus/address.svelte';
 
   import * as EnergiatodistusApi from '../energiatodistus-api';
   import * as ET from '../energiatodistus-utils';
@@ -20,6 +20,7 @@
   export let postinumerot;
   export let checked;
   export let whoami;
+  export let dirty;
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus.korvaavuus';
@@ -73,9 +74,6 @@
   h3 span {
     @apply lowercase text-lg font-normal;
   }
-  address {
-    @apply not-italic;
-  }
 </style>
 
 {#if loading}
@@ -96,6 +94,7 @@
       <Link
         on:click={_ => {
           checked = true;
+          dirty = true;
         }}
         text={i18n(i18nRoot + '.ehdotus.info-p3-2')} />
       {i18n(i18nRoot + '.ehdotus.info-p3-3')}
@@ -137,6 +136,7 @@
                     Maybe.Some(korvattava.id),
                     energiatodistus
                   );
+                  dirty = true;
                 }}>
                 <td class="etp-table--td">
                   {korvattava.id}
@@ -151,16 +151,7 @@
                   {Maybe.orSome('', korvattava.perustiedot.nimi)}
                 </td>
                 <td class="etp-table--td">
-                  <address>
-                    {Maybe.orSome('', korvattava.perustiedot['katuosoite-fi'])}
-                    <span class="whitespace-no-wrap">
-                      {Maybe.fold(
-                        '',
-                        Postinumerot.formatPostinumero(postinumerot, $locale),
-                        korvattava.perustiedot.postinumero
-                      )}
-                    </span>
-                  </address>
+                  <Address energiatodistus={korvattava} {postinumerot} />
                 </td>
                 <td class="etp-table--td">
                   {Maybe.orSome('', korvattava['laatija-fullname'])}
