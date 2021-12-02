@@ -68,14 +68,16 @@
     page: Maybe.None(),
     'valvoja-id': Maybe.None(),
     'include-closed': Maybe.None(),
-    'has-valvoja': Maybe.None()
+    'has-valvoja': Maybe.None(),
+    'toimenpidetype-id': Maybe.None()
   };
 
   query = R.mergeRight(query, {
     page: queryStringIntegerProp(parsedQs, 'page'),
     'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
-    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja')
+    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
+    'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
   });
 
   const nextPageCallback = nextPage =>
@@ -88,6 +90,7 @@
     )(query),
     limit: Maybe.Some(pageSize),
     'valvoja-id': R.prop('valvoja-id', query),
+    'toimenpidetype-id': R.prop('toimenpidetype-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
@@ -223,6 +226,24 @@
             lens={R.lensProp('include-closed')}
             format={Maybe.orSome(false)}
             parse={Maybe.Some} />
+        </div>
+      </div>
+      <div class="flex">
+        <div class="w-1/4">
+          <Select
+            disabled={overlay}
+            compact={false}
+            label={i18n(i18nRoot + '.last-toimenpide')}
+            bind:model={query}
+            lens={R.lensProp('toimenpidetype-id')}
+            items={R.pluck('id', toimenpidetyypit)}
+            format={id =>
+              Locales.label(
+                $locale,
+                R.find(R.propEq('id', id), toimenpidetyypit)
+              )}
+            parse={Maybe.Some}
+            allowNone={true} />
         </div>
       </div>
       {#if valvonnat.length === 0}
