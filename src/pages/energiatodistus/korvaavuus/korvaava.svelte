@@ -16,6 +16,7 @@
   import { flashMessageStore } from '@/stores';
 
   export let korvaavaEnergiatodistusId = Maybe.None();
+  export let whoami;
   export let postinumerot;
 
   const i18n = $_;
@@ -73,7 +74,7 @@
         <div
           class="w-full px-4 py-4 relative"
           transition:slide|local={{ duration: 200 }}>
-          <EtTable energiatodistus={et} {postinumerot} />
+          <EtTable energiatodistus={et} {whoami} {postinumerot} />
           {#if Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)}
             <p class="text-sm flex mt-2">
               <span class="font-icon mr-1">info</span>

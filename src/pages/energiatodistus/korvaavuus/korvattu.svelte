@@ -24,6 +24,7 @@
   export let whoami;
   export let error = Maybe.None();
   export let postinumerot;
+  export let dirty;
 
   const i18n = $_;
 
@@ -145,6 +146,7 @@
 <EnergiatodistusKorvausEhdotus
   {postinumerot}
   {whoami}
+  bind:dirty
   bind:checked
   bind:energiatodistus />
 
@@ -181,7 +183,7 @@
         <div class="w-full px-4">
           {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
             <div class="w-full py-4" transition:slide|local={{ duration: 200 }}>
-              <EtTable energiatodistus={et} {postinumerot} />
+              <EtTable energiatodistus={et} {whoami} {postinumerot} />
             </div>
           {/each}
           {#each Maybe.toArray(error) as key}

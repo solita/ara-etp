@@ -1,19 +1,19 @@
 <script>
-  import { push } from '@Component/Router/router';
-  import { _, locale } from '@Language/i18n';
-
-  import * as Postinumerot from '@Component/address/postinumero-fi';
+  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Kayttajat from '@Utility/kayttajat';
 
+  import { push } from '@Component/Router/router';
+  import { _ } from '@Language/i18n';
+
+  import Address from '@Pages/energiatodistus/address.svelte';
+
+  export let whoami
   export let energiatodistus;
   export let postinumerot;
-</script>
 
-<style type="text/postcss">
-  address {
-    @apply not-italic;
-  }
-</style>
+  $: hasPermission = !Kayttajat.isLaatija(whoami) || Maybe.fold(false, R.equals(whoami.id), energiatodistus['laatija-id']);
+</script>
 
 <div class="overflow-x-auto">
   <table class="etp-table">
@@ -41,8 +41,9 @@
     </thead>
     <tbody>
       <tr
-        class="etp-table-tr etp-table--tr__link"
-        on:click={() =>
+        class:etp-table--tr__link={hasPermission}
+        class="etp-table-tr"
+        on:click={() => hasPermission &&
           push(
             '#/energiatodistus/' +
               energiatodistus.versio +
@@ -62,16 +63,7 @@
           {Maybe.orSome('', energiatodistus.perustiedot.nimi)}
         </td>
         <td class="etp-table--td">
-          <address>
-            {Maybe.orSome('', energiatodistus.perustiedot['katuosoite-fi'])}
-            <span class="whitespace-no-wrap">
-              {Maybe.fold(
-                '',
-                Postinumerot.formatPostinumero(postinumerot, $locale),
-                energiatodistus.perustiedot.postinumero
-              )}
-            </span>
-          </address>
+          <Address {energiatodistus} {postinumerot} />
         </td>
         <td class="etp-table--td">
           {Maybe.orSome('', energiatodistus['laatija-fullname'])}

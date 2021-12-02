@@ -10,6 +10,8 @@
   export let katuosoite = Maybe.None();
   export let postinumero = Maybe.None();
   export let postinumerot;
+
+  $: separator = Maybe.isSome(katuosoite) && Maybe.isSome(postinumero) ? ',' : '';
 </script>
 
 <style type="text/postcss">
@@ -19,7 +21,7 @@
 </style>
 
 <address>
-  {Maybe.orSome('', katuosoite)},
+  {Maybe.orSome('', katuosoite)}{separator}
   <span class="whitespace-no-wrap">
     {Maybe.fold(
       '',
