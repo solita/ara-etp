@@ -34,6 +34,7 @@
   import Select from '@Component/Select/Select';
   import Link from '@Component/Link/Link';
   import Address from '@Component/address/building-address';
+  import Input from '@Component/Input/Input';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -69,6 +70,7 @@
     'valvoja-id': Maybe.None(),
     'include-closed': Maybe.None(),
     'has-valvoja': Maybe.None(),
+    'keyword': Maybe.None(),
     'toimenpidetype-id': Maybe.None()
   };
 
@@ -77,11 +79,14 @@
     'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
     'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
+    'keyword': Maybe.fromEmpty(R.prop('keyword', parsedQs)),
     'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
   });
 
   const nextPageCallback = nextPage =>
     (query = R.assoc('page', Maybe.Some(nextPage), query));
+
+  const wrapPercent = q => `%${q}%`;
 
   const queryToBackendParams = query => ({
     offset: R.compose(
@@ -90,6 +95,7 @@
     )(query),
     limit: Maybe.Some(pageSize),
     'valvoja-id': R.prop('valvoja-id', query),
+    'keyword': R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
     'toimenpidetype-id': R.prop('toimenpidetype-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
@@ -228,8 +234,20 @@
             parse={Maybe.Some} />
         </div>
       </div>
-      <div class="flex">
-        <div class="w-1/4">
+      <div class="flex flex-wrap items-end space-x-4 -ml-4">
+        <div class="lg:w-1/2 w-full px-4 py-4">
+          <Input
+            label={i18n(i18nRoot + '.keyword-search')}
+            model={query}
+            lens={R.lensProp('keyword')}
+            format={Maybe.orSome('')}
+            parse={Parsers.optionalString}
+            search={true}
+            on:input={evt => {
+              query = R.assoc('keyword',Maybe.fromEmpty(R.trim(evt.target.value)),query);
+            }} />
+        </div>
+        <div class="w-1/4 px-4 py-4">
           <Select
             disabled={overlay}
             compact={false}
