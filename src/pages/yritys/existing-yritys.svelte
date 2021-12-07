@@ -33,10 +33,7 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'yritys',
-          'error',
-          errorMessage(response));
+        flashMessageStore.add('yritys', 'error', errorMessage(response));
         overlay = false;
       },
       _ => {
@@ -52,15 +49,24 @@
     );
   };
 
-  const submit = updatedYritys => fork(
-    'save',
-    response => Locales.uniqueViolationMessage(i18n, response, 'yritys.messages.save-error'),
-    api.putYritysById(fetch, params.id, updatedYritys));
+  const submit = updatedYritys =>
+    fork(
+      'save',
+      response =>
+        Locales.uniqueViolationMessage(
+          i18n,
+          response,
+          'yritys.messages.save-error'
+        ),
+      api.putYritysById(fetch, params.id, updatedYritys)
+    );
 
-  const setDeleted = deleted => fork(
-    deleted ? 'delete' : 'undelete',
-    response => Response.errorKey(i18nRoot, 'delete', response),
-    api.putDeleted(params.id, deleted));
+  const setDeleted = deleted =>
+    fork(
+      deleted ? 'delete' : 'undelete',
+      response => Response.errorKey(i18nRoot, 'delete', response),
+      api.putDeleted(params.id, deleted)
+    );
 
   // Load yritys and all luokittelut used in yritys form
   const load = id => {
@@ -77,7 +83,10 @@
       response => {
         resources = Maybe.Some(response);
         overlay = false;
-        disabled = !Yritykset.hasModifyPermission(response.laatijat, response.whoami);
+        disabled = !Yritykset.hasModifyPermission(
+          response.laatijat,
+          response.whoami
+        );
         idTranslateStore.updateYritys(response.yritys);
       },
       Future.parallelObject(4, {
@@ -85,14 +94,14 @@
         whoami: kayttajaApi.whoami,
         yritys: R.map(
           R.over(R.lensProp('verkkolaskuoperaattori'), Either.Right),
-          api.getYritysById(id)),
+          api.getYritysById(id)
+        ),
         laatijat: api.getLaatijatById(fetch, id)
       })
     );
   };
 
   $: load(params.id);
-
 </script>
 
 <Overlay {overlay}>

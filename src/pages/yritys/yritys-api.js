@@ -99,4 +99,8 @@ export const putAcceptedLaatijaYritys = R.curry((fetch, laatijaId, yritysId) =>
 export const putDeleted = R.curry((id, deleted) =>
   R.chain(
     Fetch.rejectWithInvalidResponse,
-    Future.attemptP(_ => Fetch.fetchWithMethod(fetch, 'put', url.yritys(id) + '/deleted', deleted))));
+    Future.attemptP(_ =>
+      Fetch.fetchWithMethod(fetch, 'put', url.yritys(id) + '/deleted', deleted)
+    )
+  )
+);

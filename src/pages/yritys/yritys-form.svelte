@@ -97,7 +97,8 @@
   );
 
   $: toggleDeletedKey = yritys.deleted ? 'undelete' : 'delete';
-  $: perustiedotHeader = i18n(i18nRoot + '.perustiedot-header') +
+  $: perustiedotHeader =
+    i18n(i18nRoot + '.perustiedot-header') +
     (yritys.deleted ? ` (${i18n(i18nRoot + '.deleted')})` : '');
 </script>
 
@@ -276,15 +277,16 @@
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'}
-              text={i18n(i18nRoot + '.save-button')}
-              {disabled} />
+      <Button
+        type={'submit'}
+        text={i18n(i18nRoot + '.save-button')}
+        {disabled} />
     </div>
     <div class="px-4">
       <Button
         on:click={cancel}
         text={i18n(i18nRoot + '.cancel-button')}
-        type='button'
+        type="button"
         style={'secondary'}
         {disabled} />
     </div>
@@ -294,10 +296,11 @@
           let:confirm
           confirmButtonLabel={i18n(`${i18nRoot}.${toggleDeletedKey}.button`)}
           confirmMessage={i18n(`${i18nRoot}.${toggleDeletedKey}.confirm`)}>
-          <Button type='button'
-                  on:click={_ => confirm(_ => update(!yritys.deleted))}
-                  text={i18n(`${i18nRoot}.${toggleDeletedKey}.button`)}
-                  disabled={disabled} />
+          <Button
+            type="button"
+            on:click={_ => confirm(_ => update(!yritys.deleted))}
+            text={i18n(`${i18nRoot}.${toggleDeletedKey}.button`)}
+            {disabled} />
         </Confirm>
       {/each}
     </div>

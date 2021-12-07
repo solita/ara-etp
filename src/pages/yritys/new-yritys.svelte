@@ -78,8 +78,11 @@
 <Overlay {overlay}>
   <div slot="content">
     {#if luokittelut.isSome()}
-      <YritysForm {yritys} luokittelut={luokittelut.some()}
-                  {submit} cancel={clean}/>
+      <YritysForm
+        {yritys}
+        luokittelut={luokittelut.some()}
+        {submit}
+        cancel={clean} />
     {/if}
   </div>
   <div slot="overlay-content">
