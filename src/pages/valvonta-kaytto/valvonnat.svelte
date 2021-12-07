@@ -70,7 +70,7 @@
     'valvoja-id': Maybe.None(),
     'include-closed': Maybe.None(),
     'has-valvoja': Maybe.None(),
-    'keyword': Maybe.None(),
+    keyword: Maybe.None(),
     'toimenpidetype-id': Maybe.None()
   };
 
@@ -79,7 +79,7 @@
     'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
     'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
-    'keyword': Maybe.fromEmpty(R.prop('keyword', parsedQs)),
+    keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
     'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
   });
 
@@ -95,7 +95,7 @@
     )(query),
     limit: Maybe.Some(pageSize),
     'valvoja-id': R.prop('valvoja-id', query),
-    'keyword': R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
+    keyword: R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
     'toimenpidetype-id': R.prop('toimenpidetype-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
@@ -244,7 +244,11 @@
             parse={Parsers.optionalString}
             search={true}
             on:input={evt => {
-              query = R.assoc('keyword',Maybe.fromEmpty(R.trim(evt.target.value)),query);
+              query = R.assoc(
+                'keyword',
+                Maybe.fromEmpty(R.trim(evt.target.value)),
+                query
+              );
             }} />
         </div>
         <div class="w-1/4 px-4 py-4">
