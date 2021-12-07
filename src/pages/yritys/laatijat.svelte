@@ -34,7 +34,7 @@
       response => {
         overlay = false;
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
           'error',
           i18n(
             Maybe.orSome(
@@ -64,14 +64,14 @@
     Future.fork(
       _ =>
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
           'error',
           i18n('laatija.yritykset.error.detach-failed')
         ),
       _ => {
         load(params.id);
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
           'success',
           i18n('laatija.yritykset.success.detach')
         );
@@ -84,14 +84,14 @@
     Future.fork(
       _ =>
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
           'error',
           i18n('yritys.laatijat.accept.error')
         ),
       _ => {
         load(params.id);
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
           'success',
           i18n('yritys.laatijat.accept.success')
         );

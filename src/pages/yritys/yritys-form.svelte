@@ -18,24 +18,22 @@
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
+  import Confirm from '@Component/Confirm/Confirm';
 
   import { flashMessageStore } from '@/stores';
 
-  const update = fn => (yritys = fn(yritys));
-
   export let submit;
+  export let cancel;
+  export let setDeleted = Maybe.None();
 
   export let yritys;
-
-  export let disabled = false;
-
   export let luokittelut;
-
-  const formParsers = YritysUtils.formParsers();
+  export let disabled = false;
 
   $: schema = YritysUtils.schema(yritys.maa);
 
   const i18n = $_;
+  const i18nRoot = 'yritys';
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -98,10 +96,9 @@
     Validation.validateModelObject(schema)
   );
 
-  const cancel = event => {
-    event.preventDefault();
-    window.location.reload();
-  };
+  $: toggleDeletedKey = yritys.deleted ? 'undelete' : 'delete';
+  $: perustiedotHeader = i18n(i18nRoot + '.perustiedot-header') +
+    (yritys.deleted ? ` (${i18n(i18nRoot + '.deleted')})` : '');
 </script>
 
 <form
@@ -112,14 +109,14 @@
     } else {
       Validation.blurForm(event.target);
       flashMessageStore.add(
-        'Yritys',
+        'yritys',
         'error',
         i18n('yritys.messages.validation-error')
       );
     }
   }}>
   <div class="w-full mt-3">
-    <H1 text="Perustiedot" />
+    <H1 text={perustiedotHeader} />
     <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
       <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
         <Input
@@ -129,7 +126,7 @@
           required={true}
           bind:model={yritys}
           lens={R.lensProp('ytunnus')}
-          parse={formParsers.ytunnus}
+          parse={R.trim}
           validators={schema.ytunnus}
           {i18n}
           {disabled} />
@@ -142,7 +139,7 @@
           required={true}
           bind:model={yritys}
           lens={R.lensProp('nimi')}
-          parse={formParsers.nimi}
+          parse={R.trim}
           validators={schema.nimi}
           {i18n}
           {disabled} />
@@ -151,7 +148,7 @@
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={i18n('yritys.laskutusosoite')} />
+    <H1 text={i18n(i18nRoot + '.laskutusosoite')} />
     <div class="flex flex-col">
       <div class="py-4">
         <Input
@@ -163,7 +160,7 @@
           bind:model={yritys}
           lens={R.lensProp('vastaanottajan-tarkenne')}
           format={Maybe.orSome('')}
-          parse={formParsers['vastaanottajan-tarkenne']}
+          parse={R.compose(Maybe.fromEmpty, R.trim)}
           validators={schema['vastaanottajan-tarkenne']}
           {i18n} />
       </div>
@@ -178,7 +175,7 @@
           required={true}
           bind:model={yritys}
           lens={R.lensProp('jakeluosoite')}
-          parse={formParsers.jakeluosoite}
+          parse={R.trim}
           validators={schema.jakeluosoite}
           {i18n} />
       </div>
@@ -192,7 +189,7 @@
             required={true}
             bind:model={yritys}
             lens={R.lensProp('postinumero')}
-            parse={formParsers.postinumero}
+            parse={R.trim}
             validators={schema.postinumero}
             {i18n} />
         </div>
@@ -205,7 +202,7 @@
             required={true}
             bind:model={yritys}
             lens={R.lensProp('postitoimipaikka')}
-            parse={formParsers.postitoimipaikka}
+            parse={R.trim}
             validators={schema.postitoimipaikka}
             {i18n} />
         </div>
@@ -254,7 +251,7 @@
         bind:model={yritys}
         lens={R.lensProp('verkkolaskuosoite')}
         format={Maybe.fold('', Formats.verkkolaskuosoite)}
-        parse={formParsers.verkkolaskuosoite}
+        parse={YritysUtils.parseVerkkolaskuosoite}
         validators={schema['verkkolaskuosoite']}
         {i18n} />
     </div>
@@ -279,15 +276,30 @@
   </div>
   <div class="flex -mx-4 mt-20">
     <div class="px-4">
-      <Button type={'submit'} text={i18n('tallenna')} {disabled} />
+      <Button type={'submit'}
+              text={i18n(i18nRoot + '.save-button')}
+              {disabled} />
     </div>
     <div class="px-4">
       <Button
         on:click={cancel}
-        text={i18n('peruuta')}
-        type={'reset'}
+        text={i18n(i18nRoot + '.cancel-button')}
+        type='button'
         style={'secondary'}
         {disabled} />
+    </div>
+    <div class="px-4">
+      {#each Maybe.toArray(setDeleted) as update}
+        <Confirm
+          let:confirm
+          confirmButtonLabel={i18n(`${i18nRoot}.${toggleDeletedKey}.button`)}
+          confirmMessage={i18n(`${i18nRoot}.${toggleDeletedKey}.confirm`)}>
+          <Button type='button'
+                  on:click={_ => confirm(_ => update(!yritys.deleted))}
+                  text={i18n(`${i18nRoot}.${toggleDeletedKey}.button`)}
+                  disabled={disabled} />
+        </Confirm>
+      {/each}
     </div>
   </div>
 </form>

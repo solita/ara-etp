@@ -5,7 +5,8 @@ import * as Kayttajat from '@Utility/kayttajat';
 import * as Validation from '@Utility/validation';
 import * as Tila from '@Pages/yritys/laatija-yritys-tila';
 
-export const emptyYritys = () => ({
+export const emptyYritys = {
+  deleted: false,
   ytunnus: '',
   nimi: '',
   'vastaanottajan-tarkenne': Maybe.None(),
@@ -16,7 +17,7 @@ export const emptyYritys = () => ({
   laskutuskieli: 0,
   verkkolaskuosoite: Maybe.None(),
   verkkolaskuoperaattori: Either.Right(Maybe.None())
-});
+};
 
 const commonSchema = {
   ytunnus: [Validation.isRequired, Validation.ytunnusValidator],
@@ -48,22 +49,12 @@ export const schema = maa =>
         commonSchema
       );
 
-export const formParsers = () => ({
-  ytunnus: R.trim,
-  nimi: R.trim,
-  'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
-  jakeluosoite: R.trim,
-  postinumero: R.trim,
-  postitoimipaikka: R.trim,
-  maa: R.trim,
-  verkkolaskuosoite: R.compose(
-    Maybe.fromEmpty,
-    R.trim,
-    R.toUpper,
-    R.replace(/\s/g, '')
-  ),
-  verkkolaskuoperaattori: R.compose(Maybe.fromEmpty, R.trim)
-});
+export const parseVerkkolaskuosoite = R.compose(
+  Maybe.fromEmpty,
+  R.trim,
+  R.toUpper,
+  R.replace(/\s/g, '')
+);
 
 const isInYritys = (laatijat, whoami) =>
   R.any(R.propEq('id', whoami.id), R.filter(Tila.isAccepted, laatijat));

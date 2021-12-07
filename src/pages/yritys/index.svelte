@@ -27,4 +27,4 @@
 
 <Router {routes} {prefix} />
 
-<FlashMessage module={'Yritys'} />
+<FlashMessage module={'yritys'} />

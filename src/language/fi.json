@@ -119,13 +119,29 @@
     "laskutuskieli": "Laskutuskieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "Verkkolaskuosoite",
+    "perustiedot-header": "Perustiedot",
+    "deleted": "Poistettu",
+    "cancel-button": "Peru muutokset",
+    "save-button": "Tallenna",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Yrityksen tietojen haku epäonnistui.",
       "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen.",
-      "not-found": "Yritystä ei löydy järjestelmästä."
+      "not-found": "Yritystä ei löydy järjestelmästä.",
+      "delete-success": "Yritys on merkitty poistetuksi. Yrityksen tiedot ei ole enää käytettävissä laskutuksessa.",
+      "delete-error": "Yrityksen poistaminen epäonnistui.",
+      "undelete-success": "Yritys poistaminen on peruttu ja yritys on nyt käytettävissä.",
+      "undelete-error": "Yrityksen poiston peruuttaminen epäonnistui."
+    },
+    "delete": {
+      "confirm": "Oletko varma että haluat merkitä yrityksen poistetuksi. Poistettua yritystä ei voi enää käyttää laskutuksessa.",
+      "button": "Poista yritys"
+    },
+    "undelete": {
+      "confirm": "Oletko varma että haluat palauttaa yrityksen takaisin voimaan",
+      "button": "Peru poistaminen"
     },
     "laatijat": {
       "empty": "Yrityksellä ei ole laatijoita.",

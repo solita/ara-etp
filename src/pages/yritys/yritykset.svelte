@@ -26,7 +26,7 @@
   Future.fork(
     _ => {
       flashMessageStore.add(
-        'Yritys',
+        'yritys',
         'error',
         i18n(Response.errorKey(i18nRoot, 'load', response))
       );

@@ -9,7 +9,7 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import YritysForm from '@Pages/yritys/YritysForm';
+  import YritysForm from '@Pages/yritys/yritys-form';
   import * as YritysUtils from '@Pages/yritys/yritys-utils';
   import { flashMessageStore } from '@/stores';
 
@@ -22,15 +22,19 @@
     overlay = value;
   };
 
-  let yritys = YritysUtils.emptyYritys();
+  let yritys = YritysUtils.emptyYritys;
   let luokittelut = Maybe.None();
+
+  const clean = _ => {
+    yritys = YritysUtils.emptyYritys;
+  };
 
   const submit = R.compose(
     Future.fork(
       response => {
         toggleOverlay(false);
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
           'error',
           Locales.uniqueViolationMessage(
             $_,
@@ -41,7 +45,7 @@
       },
       ({ id }) => {
         flashMessageStore.addPersist(
-          'Yritys',
+          'yritys',
           'success',
           $_('yritys.messages.save-success')
         );
@@ -58,7 +62,7 @@
     () => {
       toggleOverlay(false);
       flashMessageStore.add(
-        'Yritys',
+        'yritys',
         'error',
         $_('yritys.messages.load-error')
       );
@@ -74,7 +78,8 @@
 <Overlay {overlay}>
   <div slot="content">
     {#if luokittelut.isSome()}
-      <YritysForm {yritys} luokittelut={luokittelut.some()} {submit} />
+      <YritysForm {yritys} luokittelut={luokittelut.some()}
+                  {submit} cancel={clean}/>
     {/if}
   </div>
   <div slot="overlay-content">

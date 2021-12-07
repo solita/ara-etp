@@ -39,7 +39,8 @@ export const serialize = R.compose(
       Maybe.orSome(null)
     )
   }),
-  R.dissoc('id')
+  R.dissoc('id'),
+  R.dissoc('deleted')
 );
 
 export const luokittelut = Future.parallelObject(3, {
@@ -94,3 +95,8 @@ export const putAcceptedLaatijaYritys = R.curry((fetch, laatijaId, yritysId) =>
     )
   )
 );
+
+export const putDeleted = R.curry((id, deleted) =>
+  R.chain(
+    Fetch.rejectWithInvalidResponse,
+    Future.attemptP(_ => Fetch.fetchWithMethod(fetch, 'put', url.yritys(id) + '/deleted', deleted))));
