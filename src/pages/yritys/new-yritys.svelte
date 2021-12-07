@@ -79,7 +79,7 @@
   <div slot="content">
     {#if luokittelut.isSome()}
       <YritysForm
-        {yritys}
+        bind:yritys
         luokittelut={luokittelut.some()}
         {submit}
         cancel={clean} />
