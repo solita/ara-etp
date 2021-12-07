@@ -7,12 +7,15 @@ import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as Parsers from '@Utility/parsers';
 
+const parseValidISODate = R.compose(
+  R.chain(Either.toMaybe),
+  R.map(Parsers.parseISODate),
+  Maybe.fromNull
+);
+
 export const deserialize = R.evolve({
-  login: R.compose(
-    R.chain(Either.toMaybe),
-    R.map(Parsers.parseISODate),
-    Maybe.fromNull
-  ),
+  login: parseValidISODate,
+  verifytime: parseValidISODate,
   cognitoid: Maybe.fromNull,
   henkilotunnus: Maybe.fromNull,
   virtu: Maybe.fromNull
@@ -51,7 +54,9 @@ export const url = {
   whoami: '/api/private/whoami'
 };
 
-export const whoami = Future.cache(Fetch.getJson(fetch, url.whoami));
+export const whoami = Future.cache(
+  R.map(deserialize, Fetch.getJson(fetch, url.whoami))
+);
 
 export const getKayttajaHistory = R.compose(
   R.map(R.map(deserializeHistory)),
@@ -86,7 +91,7 @@ export const serialize = R.compose(
     henkilotunnus: Maybe.orSome(null),
     virtu: Maybe.orSome(null)
   }),
-  R.omit(['id', 'login', 'cognitoid', 'ensitallennus'])
+  R.omit(['id', 'login', 'cognitoid', 'verifytime'])
 );
 
 export const serializeForNonAdmin = R.compose(

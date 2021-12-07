@@ -21,6 +21,7 @@
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import H1 from '@Component/H/H1.svelte';
   import LastLogin from './last-login.svelte';
+  import Verification from './verification.svelte';
 
   export let params;
 
@@ -137,6 +138,7 @@
       {#if Maybe.isSome(laatija)}
         <div class="mt-6">
           <LastLogin {kayttaja} />
+          <Verification {whoami} {kayttaja} />
           <LaatijaForm
             submit={submitLaatija(whoami, params.id)}
             cancel={_ => load(params)}

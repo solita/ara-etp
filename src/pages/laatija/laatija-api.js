@@ -49,6 +49,7 @@ export const serialize = R.compose(
   R.omit([
     'id',
     'login',
+    'verifytime',
     'rooli',
     'passivoitu',
     'voimassaolo-paattymisaika',

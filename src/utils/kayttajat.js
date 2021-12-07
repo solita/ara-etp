@@ -26,6 +26,7 @@
  */
 
 import * as R from 'ramda';
+import * as dfns from 'date-fns';
 import * as Maybe from '@Utility/maybe-utils';
 
 const roles = ['laatija', 'patevyydentoteaja', 'paakayttaja', 'laskuttaja'];
@@ -107,3 +108,13 @@ export const format = R.curry((selfLabel, kayttajat, whoami, id) =>
     )
   )(id)
 );
+
+export const isVerified = kayttaja =>
+  Maybe.fold(
+    false,
+    verifytime => dfns.isAfter(dfns.addMonths(verifytime, 6), new Date()),
+    kayttaja.verifytime
+  );
+
+export const isVerificationActive = (whoami, kayttaja) =>
+  !isVerified(kayttaja) && isSelf(whoami, kayttaja.id);

@@ -438,6 +438,14 @@
     </div>
   </div>
   <div class="flex -mx-4 mt-20">
+    {#if Kayttajat.isVerificationActive(whoami, laatija)}
+      <div class="px-4">
+        <Button
+          type={'submit'}
+          text={i18n(i18nRoot + '.verify')}
+          disabled={disabled || dirty} />
+      </div>
+    {/if}
     <div class="px-4">
       <Button
         type={'submit'}
