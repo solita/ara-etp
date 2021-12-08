@@ -247,8 +247,7 @@
             search={true}
             on:input={evt => {
               textCancel();
-              textCancel = Future.fork(
-                () => {},
+              textCancel = Future.value(
                 keyword => {
                   query = R.assoc('keyword', keyword, query);
                 },
