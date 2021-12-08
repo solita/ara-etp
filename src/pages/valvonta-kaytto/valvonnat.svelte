@@ -101,12 +101,9 @@
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
 
-  let cancel = () => {};
-
   $: {
     overlay = true;
-    cancel();
-    cancel = Future.fork(
+    Future.fork(
       response => {
         const msg = i18n(
           Maybe.orSome(
@@ -123,30 +120,19 @@
         valvontaCount = response.count;
         overlay = false;
       },
-      R.chain(
-        q => {
-          R.compose(
-            querystring =>
-            replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
-            qs.stringify,
-            R.map(Maybe.get),
-            R.filter(Maybe.isSome)
-          )(query);
-          return Future.parallelObject(6, {
-            whoami: kayttajaApi.whoami,
-            count: R.compose(
-              R.map(R.prop('count')),
-              api.valvontaCount,
-              R.omit(['offset', 'limit']),
-              queryToBackendParams
-            )(q),
-            toimenpidetyypit: api.toimenpidetyypit,
-            postinumerot: geoApi.postinumerot,
-            valvojat: api.valvojat,
-            valvonnat: api.valvonnat(queryToBackendParams(query))
-          });},
-        Future.after(1000, query)
-      )
+      Future.parallelObject(6, {
+        whoami: kayttajaApi.whoami,
+        count: R.compose(
+          R.map(R.prop('count')),
+          api.valvontaCount,
+          R.omit(['offset', 'limit']),
+          queryToBackendParams
+        )(query),
+        toimenpidetyypit: api.toimenpidetyypit,
+        postinumerot: geoApi.postinumerot,
+        valvojat: api.valvojat,
+        valvonnat: api.valvonnat(queryToBackendParams(query))
+      })
     );
   }
 
@@ -186,7 +172,13 @@
     R.prop('lastToimenpide')
   );
 
-  $: ;
+  $: R.compose(
+    querystring =>
+      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
+    qs.stringify,
+    R.map(Maybe.get),
+    R.filter(Maybe.isSome)
+  )(query);
 </script>
 
 <style>
