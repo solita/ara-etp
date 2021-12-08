@@ -101,9 +101,12 @@
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
 
+  let cancel = () => {};
+
   $: {
     overlay = true;
-    Future.fork(
+    cancel();
+    cancel = Future.fork(
       response => {
         const msg = i18n(
           Maybe.orSome(
@@ -120,19 +123,23 @@
         valvontaCount = response.count;
         overlay = false;
       },
-      Future.parallelObject(6, {
-        whoami: kayttajaApi.whoami,
-        count: R.compose(
-          R.map(R.prop('count')),
-          api.valvontaCount,
-          R.omit(['offset', 'limit']),
-          queryToBackendParams
-        )(query),
-        toimenpidetyypit: api.toimenpidetyypit,
-        postinumerot: geoApi.postinumerot,
-        valvojat: api.valvojat,
-        valvonnat: api.valvonnat(queryToBackendParams(query))
-      })
+      R.chain(
+        q =>
+          Future.parallelObject(6, {
+            whoami: kayttajaApi.whoami,
+            count: R.compose(
+              R.map(R.prop('count')),
+              api.valvontaCount,
+              R.omit(['offset', 'limit']),
+              queryToBackendParams
+            )(q),
+            toimenpidetyypit: api.toimenpidetyypit,
+            postinumerot: geoApi.postinumerot,
+            valvojat: api.valvojat,
+            valvonnat: api.valvonnat(queryToBackendParams(query))
+          }),
+        Future.after(1000, query)
+      )
     );
   }
 
