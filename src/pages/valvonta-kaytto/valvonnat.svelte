@@ -124,8 +124,15 @@
         overlay = false;
       },
       R.chain(
-        q =>
-          Future.parallelObject(6, {
+        q => {
+          R.compose(
+            querystring =>
+            replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
+            qs.stringify,
+            R.map(Maybe.get),
+            R.filter(Maybe.isSome)
+          )(query);
+          return Future.parallelObject(6, {
             whoami: kayttajaApi.whoami,
             count: R.compose(
               R.map(R.prop('count')),
@@ -137,7 +144,7 @@
             postinumerot: geoApi.postinumerot,
             valvojat: api.valvojat,
             valvonnat: api.valvonnat(queryToBackendParams(query))
-          }),
+          });},
         Future.after(1000, query)
       )
     );
@@ -179,13 +186,7 @@
     R.prop('lastToimenpide')
   );
 
-  $: R.compose(
-    querystring =>
-      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
-    qs.stringify,
-    R.map(Maybe.get),
-    R.filter(Maybe.isSome)
-  )(query);
+  $: ;
 </script>
 
 <style>
