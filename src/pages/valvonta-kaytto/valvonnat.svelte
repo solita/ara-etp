@@ -43,6 +43,8 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.all';
 
+  let textCancel = () => {};
+
   let valvontaCount = 0;
   $: pageCount = Math.ceil(R.divide(valvontaCount, pageSize));
 
@@ -244,10 +246,13 @@
             parse={Parsers.optionalString}
             search={true}
             on:input={evt => {
-              query = R.assoc(
-                'keyword',
-                Maybe.fromEmpty(R.trim(evt.target.value)),
-                query
+              textCancel();
+              textCancel = Future.fork(
+                () => {},
+                keyword => {
+                  query = R.assoc('keyword', keyword, query);
+                },
+                Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value)))
               );
             }} />
         </div>
