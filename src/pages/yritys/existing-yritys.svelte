@@ -25,6 +25,7 @@
   export let params;
 
   let resources = Maybe.None();
+  let dirty = false;
 
   let overlay = true;
   let disabled = true;
@@ -83,6 +84,7 @@
       response => {
         resources = Maybe.Some(response);
         overlay = false;
+        dirty = false;
         disabled = !Yritykset.hasModifyPermission(
           response.laatijat,
           response.whoami
@@ -112,6 +114,7 @@
         setDeleted={Maybe.Some(setDeleted)}
         cancel={_ => load(params.id)}
         {disabled}
+        bind:dirty
         {luokittelut}
         existing={false}
         {yritys} />

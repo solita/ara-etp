@@ -1,6 +1,5 @@
 <script>
   import * as R from 'ramda';
-  import { tick } from 'svelte';
 
   import { locale, _ } from '@Language/i18n';
   import * as LocaleUtils from '@Language/locale-utils';
@@ -19,6 +18,7 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Confirm from '@Component/Confirm/Confirm';
+  import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { flashMessageStore } from '@/stores';
 
@@ -29,6 +29,11 @@
   export let yritys;
   export let luokittelut;
   export let disabled = false;
+  export let dirty = false;
+
+  const setDirty = _ => {
+    dirty = true;
+  }
 
   $: schema = YritysUtils.schema(yritys.maa);
 
@@ -102,7 +107,10 @@
     (yritys.deleted ? ` (${i18n(i18nRoot + '.deleted')})` : '');
 </script>
 
+<DirtyConfirmation {dirty} />
 <form
+  on:input={setDirty}
+  on:change={setDirty}
   on:submit|preventDefault={event => {
     if (isValidForm(yritys)) {
       flashMessageStore.flush();
@@ -280,7 +288,7 @@
       <Button
         type={'submit'}
         text={i18n(i18nRoot + '.save-button')}
-        {disabled} />
+        disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       <Button
@@ -288,7 +296,7 @@
         text={i18n(i18nRoot + '.cancel-button')}
         type="button"
         style={'secondary'}
-        {disabled} />
+        disabled={disabled || !dirty} />
     </div>
     <div class="px-4">
       {#each Maybe.toArray(setDeleted) as update}
