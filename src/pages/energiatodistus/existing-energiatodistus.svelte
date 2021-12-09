@@ -19,7 +19,6 @@
   import Spinner from '@Component/Spinner/Spinner';
 
   import { flashMessageStore } from '@/stores';
-  import * as Inputs from '@Pages/energiatodistus/inputs';
 
   export let params;
 

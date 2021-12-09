@@ -2,7 +2,6 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Validation from '@Utility/validation';
   import * as et from './energiatodistus-utils';
 
   import H2 from '@Component/H/H2';
