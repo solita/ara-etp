@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Validation from '@Utility/validation';
   import * as et from './energiatodistus-utils';
 
   import H2 from '@Component/H/H2';
@@ -24,6 +25,7 @@
   let error = Maybe.None();
 
   const i18n = $_;
+  const i18nRoot = 'energiatodistus.laskutus'
 
   $: disabled =
     energiatodistus.laskutusaika.isSome() || Kayttajat.isLaskuttaja(whoami);
@@ -33,7 +35,7 @@
     R.prop('laatija-id')
   )(energiatodistus);
 
-  $: {
+  const load = laatijaId => {
     resources = Maybe.None();
     Future.fork(
       () => {
@@ -49,6 +51,7 @@
       })
     );
   }
+  $: load(laatijaId);
 
   const yritysLabel = yritys =>
     yritys.nimi +
@@ -62,7 +65,7 @@
 
   const osoiteLabel = R.ifElse(
     R.compose(R.propEq('id', -1)),
-    _ => i18n('energiatodistus.laskutus.laatijalaskutus'),
+    _ => i18n(i18nRoot + '.laatijalaskutus'),
     yritysLabel
   );
 
@@ -109,7 +112,8 @@
         lens={R.lensProp('laskutusosoite-id')}
         parse={Maybe.Some}
         format={et.selectFormat(osoiteLabel, laskutusosoitteet)}
-        items={R.pluck('id', laskutusosoitteet)} />
+        validators={[Validation.isValidId(laskutusosoitteet)]}
+        items={R.pluck('id', R.filter(R.prop('valid'), laskutusosoitteet))} />
     </div>
   </div>
   <div class="flex flex-col lg:flex-row -mx-4">

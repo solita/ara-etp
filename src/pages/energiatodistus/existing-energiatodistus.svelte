@@ -12,31 +12,24 @@
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
   import { flashMessageStore } from '@/stores';
+  import * as Inputs from '@Pages/energiatodistus/inputs';
 
   export let params;
 
-  let energiatodistus = Maybe.None();
-  let luokittelut = Maybe.None();
-  let whoami = Maybe.None();
-  let validation = Maybe.None();
-  let valvonta = Maybe.None();
+  const i18n = $_;
+  const i18nRoot = 'energiatodistus';
+  let resources = Maybe.None();
 
   let overlay = true;
 
   const toggleOverlay = value => {
     overlay = value;
   };
-
-  const resetView = () => {
-    overlay = true;
-    energiatodistus = Maybe.None();
-  };
-
-  $: params.id && resetView();
 
   let showMissingProperties;
 
@@ -45,19 +38,18 @@
       Future.fork(
         response => {
           toggleOverlay(false);
-          if (R.pathEq(['body', 'type'], 'missing-value', response)) {
-            showMissingProperties(response.body.missing);
-          } else {
+          if (R.pathEq(['body', 'type'], 'invalid-laskutusosoite', response)) {
             flashMessageStore.add(
               'Energiatodistus',
               'error',
-              $_(
-                Maybe.orSome(
-                  'energiatodistus.messages.save-error',
-                  Response.localizationKey(response)
-                )
-              )
+              $_('energiatodistus.messages.invalid-laskutusosoite')
             );
+            Inputs.scrollIntoView(document, 'laskutusosoite-id');
+          } else if (R.pathEq(['body', 'type'], 'missing-value', response)) {
+            showMissingProperties(response.body.missing);
+          } else {
+            flashMessageStore.add('Energiatodistus', 'error',
+              i18n(Response.errorKey(i18nRoot, 'save', response)));
           }
         },
         () => {
@@ -70,71 +62,56 @@
           onSuccessfulSave();
         }
       ),
-      Future.delay(500),
+      R.chain(Future.after(400)),
       api.putEnergiatodistusById(fetch, params.version, params.id),
       R.tap(() => toggleOverlay(true))
     )(energiatodistus);
 
   // load energiatodistus and classifications in parallel
-  $: R.compose(
+  const load = params => {
+    toggleOverlay(true);
     Future.fork(
       response => {
         toggleOverlay(false);
-        const msg = Response.notFound(response)
-          ? $_('energiatodistus.messages.not-found')
-          : $_(
-              Maybe.orSome(
-                'energiatodistus.messages.load-error',
-                Response.localizationKey(response)
-              )
-            );
-
-        flashMessageStore.add('Energiatodistus', 'error', msg);
+        flashMessageStore.add('Energiatodistus', 'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
-        energiatodistus = Maybe.Some(response[0]);
-        luokittelut = Maybe.Some(response[1]);
-        whoami = Maybe.Some(response[2]);
-        validation = Maybe.Some(response[3]);
-        valvonta = Maybe.fromNull(response[4]);
+        resources = Maybe.Some(response);
         toggleOverlay(false);
-      }
-    ),
-    Future.parallel(5),
-    R.prepend(R.__, [
-      api.luokittelutForVersion(params.version),
-      kayttajaApi.whoami,
-      api.validation(params.version),
-      ValvontaApi.getValvonta(params.id)
-    ]),
-    R.tap(() => toggleOverlay(true)),
-    api.getEnergiatodistusById
-  )(params.version, params.id);
+      },
+      Future.parallelObject(5, {
+        energiatodistus: api.getEnergiatodistusById(params.version, params.id),
+        luokittelut: api.luokittelutForVersion(params.version),
+        whoami: kayttajaApi.whoami,
+        validation: api.validation(params.version),
+        valvonta: ValvontaApi.getValvonta(params.id)
+      })
+    );
+  }
+  $: load(params);
 
-  const tilaLabel = R.compose(
-    Maybe.orSome($_('energiatodistus.tila.loading')),
-    R.map(e => $_('energiatodistus.tila.' + et.tilaKey(e['tila-id'])))
-  );
+  const tilaLabel = energiatodistus =>
+    $_('energiatodistus.tila.' + et.tilaKey(energiatodistus['tila-id']));
 
-  $: title = `${$_('energiatodistus.title')} ${params.version}/${
+  const title = energiatodistus => `${$_('energiatodistus.title')} ${params.version}/${
     params.id
   } - ${tilaLabel(energiatodistus)}`;
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if energiatodistus.isSome()}
+    {#each Maybe.toArray(resources) as
+        {energiatodistus, luokittelut, whoami, validation, valvonta}}
       <EnergiatodistusForm
         version={params.version}
-        energiatodistus={energiatodistus.some()}
-        luokittelut={luokittelut.some()}
-        whoami={whoami.some()}
-        validation={validation.some()}
-        valvonta={valvonta.some()}
+        {energiatodistus}
+        {luokittelut} {whoami}
+        {validation} {valvonta}
         bind:showMissingProperties
         {submit}
-        {title} />
-    {/if}
+        title={title(energiatodistus)} />
+    {/each}
   </div>
   <div slot="overlay-content">
     <Spinner />

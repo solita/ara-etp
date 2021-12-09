@@ -30,6 +30,11 @@ export const cata = R.curry((leftFn, rigthFn, either) =>
 );
 
 /**
+ * @sig Either [a,b] -> Either [b,a]
+ */
+export const swap = e => e.swap();
+
+/**
  * @sig Either a -> Maybe a
  */
 export const toMaybe = e => e.toMaybe();

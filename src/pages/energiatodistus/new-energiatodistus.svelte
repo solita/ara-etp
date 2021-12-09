@@ -21,6 +21,8 @@
   import * as Response from '@Utility/response';
 
   export let params;
+  const i18n = $_;
+  const i18nRoot = 'energiatodistus';
 
   let overlay = false;
 
@@ -56,13 +58,10 @@
   const submit = (energiatodistus, onSuccessfulSave) =>
     R.compose(
       Future.fork(
-        () => {
+        response => {
           toggleOverlay(false);
-          flashMessageStore.add(
-            'Energiatodistus',
-            'error',
-            $_('energiatodistus.messages.save-error')
-          );
+          flashMessageStore.add('Energiatodistus', 'save',
+            i18n(Response.errorKey(i18nRoot, 'load', response)));
         },
         ({ id }) => {
           toggleOverlay(false);
@@ -91,45 +90,35 @@
       copyFromId
     );
 
+
   // Load all page resources
-  $: R.compose(
+  const load = (version, copyFromId) => {
+    toggleOverlay(true);
     Future.fork(
       response => {
         toggleOverlay(false);
-        const msg = $_(
-          Maybe.orSome(
-            'energiatodistus.messages.load-error',
-            Response.localizationKey(response)
-          )
-        );
-
-        flashMessageStore.add('Energiatodistus', 'error', msg);
+        flashMessageStore.add('Energiatodistus', 'error',
+          i18n(Response.errorKey(i18nRoot, 'load', response)));
       },
       response => {
-        resources = Maybe.Some({
-          energiatodistus: R.compose(
-            Maybe.orSome(emptyEnergiatodistus(params.version)),
-            R.map(cleanEnergiatodistusCopy),
-            Maybe.fromNull
-          )(response[0]),
-          whoami: response[1],
-          luokittelut: response[2],
-          validation: response[3]
-        });
+        resources = Maybe.Some(response);
         toggleOverlay(false);
-      }
-    ),
-    Future.parallel(5),
-    R.prepend(
-      Maybe.fold(
-        Future.resolve(null),
-        api.getEnergiatodistusById(params.version),
-        copyFromId
-      )
-    ),
-    R.prepend(kayttajaApi.whoami),
-    R.juxt([api.luokittelutForVersion, api.validation])
-  )(params.version);
+      },
+      Future.parallelObject(5, {
+        energiatodistus: Maybe.fold(
+          Future.resolve(emptyEnergiatodistus(version)),
+          R.compose(
+            R.map(cleanEnergiatodistusCopy),
+            api.getEnergiatodistusById(version)),
+          copyFromId),
+        luokittelut: api.luokittelutForVersion(version),
+        whoami: kayttajaApi.whoami,
+        validation: api.validation(version)
+      })
+    );
+  }
+
+  $: load(params.version, copyFromId);
 </script>
 
 <Overlay {overlay}>
