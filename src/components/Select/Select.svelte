@@ -100,9 +100,11 @@
   };
 
   $: validationError = disabled ? Maybe.None() :
-    R.chain(
-      R.compose(Either.toMaybe, Either.swap, Validation.validateModelValue(validators)),
-      selected);
+    R.compose(
+      Either.toMaybe,
+      Either.swap,
+      Validation.validateModelValue(validators),
+      R.view(lens))(model);
 </script>
 
 <style type="text/postcss">

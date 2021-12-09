@@ -16,6 +16,8 @@
   import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
+  import * as laskutusApi from '@Utility/api/laskutus-api';
 
   import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';
@@ -74,7 +76,7 @@
           replace(`/energiatodistus/${params.version}/${id}`);
         }
       ),
-      Future.delay(500),
+      R.chain(Future.after(400)),
       api.postEnergiatodistus(fetch, params.version),
       R.tap(() => toggleOverlay(true))
     )(energiatodistus);
@@ -104,17 +106,21 @@
         resources = Maybe.Some(response);
         toggleOverlay(false);
       },
-      Future.parallelObject(5, {
-        energiatodistus: Maybe.fold(
-          Future.resolve(emptyEnergiatodistus(version)),
-          R.compose(
-            R.map(cleanEnergiatodistusCopy),
-            api.getEnergiatodistusById(version)),
-          copyFromId),
-        luokittelut: api.luokittelutForVersion(version),
-        whoami: kayttajaApi.whoami,
-        validation: api.validation(version)
-      })
+      R.chain(response => R.map(
+          R.assoc('laskutusosoitteet', R.__, response),
+          laatijaApi.laskutusosoitteet(response.whoami.id)),
+        Future.parallelObject(6, {
+          energiatodistus: Maybe.fold(
+            Future.resolve(emptyEnergiatodistus(version)),
+            R.compose(
+              R.map(cleanEnergiatodistusCopy),
+              api.getEnergiatodistusById(version)),
+            copyFromId),
+          luokittelut: api.luokittelutForVersion(version),
+          whoami: kayttajaApi.whoami,
+          validation: api.validation(version),
+          verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
+        }))
     );
   }
 

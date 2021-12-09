@@ -8,6 +8,8 @@ import * as dfns from 'date-fns';
 import * as Inputs from './inputs';
 import * as Validation from './validation';
 import * as Deep from '@Utility/deep-objects';
+import * as Validations from '@Utility/validation';
+import { laskutusosoitteet } from '@Pages/energiatodistus/EnergiatodistusForm';
 
 const String = (min, max) => ({
   parse: parsers.optionalString,
@@ -359,3 +361,7 @@ export const appendRequiredValidators = (schema, isRequired) =>
     }),
     schema
   );
+
+export const EnumerationIdType = values => ({
+  validators: [ Validations.liftValidator(validations.isValidId(values))]
+});

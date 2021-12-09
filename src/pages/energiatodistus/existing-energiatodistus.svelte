@@ -12,6 +12,8 @@
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
+  import * as laskutusApi from '@Utility/api/laskutus-api';
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
@@ -38,14 +40,7 @@
       Future.fork(
         response => {
           toggleOverlay(false);
-          if (R.pathEq(['body', 'type'], 'invalid-laskutusosoite', response)) {
-            flashMessageStore.add(
-              'Energiatodistus',
-              'error',
-              $_('energiatodistus.messages.invalid-laskutusosoite')
-            );
-            Inputs.scrollIntoView(document, 'laskutusosoite-id');
-          } else if (R.pathEq(['body', 'type'], 'missing-value', response)) {
+          if (R.pathEq(['body', 'type'], 'missing-value', response)) {
             showMissingProperties(response.body.missing);
           } else {
             flashMessageStore.add('Energiatodistus', 'error',
@@ -70,6 +65,8 @@
   // load energiatodistus and classifications in parallel
   const load = params => {
     toggleOverlay(true);
+    // form is recreated in reload - side effect is scroll to up
+    resources = Maybe.None();
     Future.fork(
       response => {
         toggleOverlay(false);
@@ -80,13 +77,17 @@
         resources = Maybe.Some(response);
         toggleOverlay(false);
       },
-      Future.parallelObject(5, {
-        energiatodistus: api.getEnergiatodistusById(params.version, params.id),
-        luokittelut: api.luokittelutForVersion(params.version),
-        whoami: kayttajaApi.whoami,
-        validation: api.validation(params.version),
-        valvonta: ValvontaApi.getValvonta(params.id)
-      })
+      R.chain(response => R.map(
+          R.assoc('laskutusosoitteet', R.__, response),
+          laatijaApi.laskutusosoitteet(Maybe.get(response.energiatodistus['laatija-id']))),
+        Future.parallelObject(6, {
+          energiatodistus: api.getEnergiatodistusById(params.version, params.id),
+          luokittelut: api.luokittelutForVersion(params.version),
+          whoami: kayttajaApi.whoami,
+          validation: api.validation(params.version),
+          valvonta: ValvontaApi.getValvonta(params.id),
+          verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
+        }))
     );
   }
   $: load(params);
@@ -102,12 +103,15 @@
 <Overlay {overlay}>
   <div slot="content">
     {#each Maybe.toArray(resources) as
-        {energiatodistus, luokittelut, whoami, validation, valvonta}}
+        {energiatodistus, luokittelut, whoami,
+          validation, valvonta,
+          verkkolaskuoperaattorit, laskutusosoitteet}}
       <EnergiatodistusForm
         version={params.version}
         {energiatodistus}
         {luokittelut} {whoami}
         {validation} {valvonta}
+        {verkkolaskuoperaattorit} {laskutusosoitteet}
         bind:showMissingProperties
         {submit}
         title={title(energiatodistus)} />
