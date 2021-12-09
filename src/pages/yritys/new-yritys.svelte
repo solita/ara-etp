@@ -17,6 +17,7 @@
   import * as Locales from '@Language/locale-utils';
 
   let overlay = false;
+  let dirty = false;
 
   const toggleOverlay = value => {
     overlay = value;
@@ -49,7 +50,7 @@
           'success',
           $_('yritys.messages.save-success')
         );
-        toggleOverlay(false);
+        dirty = false;
         replace(`/yritys/${id}`);
       }
     ),
@@ -80,6 +81,7 @@
     {#if luokittelut.isSome()}
       <YritysForm
         bind:yritys
+        bind:dirty
         luokittelut={luokittelut.some()}
         {submit}
         cancel={clean} />
