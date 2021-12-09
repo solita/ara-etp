@@ -1915,7 +1915,8 @@
     "kayttaja-email-key": "Sähköpostiosoite {value} on jo käytössä.",
     "kayttaja-virtu-key": "Virtu käyttäjätunnus on jo käytössä.",
     "kayttaja_henkilotunnus_key": "Henkilötunnus on jo käytössä.",
-    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä."
+    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä.",
+    "yritys-ytunnus-nimi-key": "Yritystunnus, nimi on käytössä toisella yrityksellä. Voit käyttää vastaanottajan tarkennetta erottamaan yritykset."
   },
   "not-found": {
     "message": "Valitsemaasi sivua ei ole olemassa."
