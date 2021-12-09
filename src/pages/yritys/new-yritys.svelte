@@ -49,7 +49,7 @@
           'success',
           $_('yritys.messages.save-success')
         );
-
+        toggleOverlay(false);
         replace(`/yritys/${id}`);
       }
     ),
