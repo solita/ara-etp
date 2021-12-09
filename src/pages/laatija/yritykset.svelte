@@ -81,8 +81,12 @@
   );
 
   const formatYritys = yritys =>
-    yritys.id + ' | ' + yritys.ytunnus + ' | ' + yritys.nimi +
-      Maybe.fold('', R.concat(' / '), yritys['vastaanottajan-tarkenne']);
+    yritys.id +
+    ' | ' +
+    yritys.ytunnus +
+    ' | ' +
+    yritys.nimi +
+    Maybe.fold('', R.concat(' / '), yritys['vastaanottajan-tarkenne']);
 
   const load = id => {
     toggleOverlay(true);
@@ -244,9 +248,11 @@
           <form class="mb-5" on:submit|preventDefault={attach}>
             <div class="flex lg:flex-row flex-col py-4 -mx-4">
               <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-                <Autocomplete items={R.map(
+                <Autocomplete
+                  items={R.map(
                     formatYritys,
-                    R.filter(R.complement(R.prop('deleted')), allYritykset))}>
+                    R.filter(R.complement(R.prop('deleted')), allYritykset)
+                  )}>
                   <Input
                     id={'yritys'}
                     name={'yritys'}

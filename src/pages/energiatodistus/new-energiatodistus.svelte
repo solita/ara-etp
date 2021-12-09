@@ -62,8 +62,11 @@
       Future.fork(
         response => {
           toggleOverlay(false);
-          flashMessageStore.add('Energiatodistus', 'save',
-            i18n(Response.errorKey(i18nRoot, 'load', response)));
+          flashMessageStore.add(
+            'Energiatodistus',
+            'save',
+            i18n(Response.errorKey(i18nRoot, 'load', response))
+          );
         },
         ({ id }) => {
           toggleOverlay(false);
@@ -92,37 +95,45 @@
       copyFromId
     );
 
-
   // Load all page resources
   const load = (version, copyFromId) => {
     toggleOverlay(true);
     Future.fork(
       response => {
         toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-          i18n(Response.errorKey(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          i18n(Response.errorKey(i18nRoot, 'load', response))
+        );
       },
       response => {
         resources = Maybe.Some(response);
         toggleOverlay(false);
       },
-      R.chain(response => R.map(
-          R.assoc('laskutusosoitteet', R.__, response),
-          laatijaApi.laskutusosoitteet(response.whoami.id)),
+      R.chain(
+        response =>
+          R.map(
+            R.assoc('laskutusosoitteet', R.__, response),
+            laatijaApi.laskutusosoitteet(response.whoami.id)
+          ),
         Future.parallelObject(6, {
           energiatodistus: Maybe.fold(
             Future.resolve(emptyEnergiatodistus(version)),
             R.compose(
               R.map(cleanEnergiatodistusCopy),
-              api.getEnergiatodistusById(version)),
-            copyFromId),
+              api.getEnergiatodistusById(version)
+            ),
+            copyFromId
+          ),
           luokittelut: api.luokittelutForVersion(version),
           whoami: kayttajaApi.whoami,
           validation: api.validation(version),
           verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
-        }))
+        })
+      )
     );
-  }
+  };
 
   $: load(params.version, copyFromId);
 </script>

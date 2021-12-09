@@ -99,12 +99,14 @@
     )(event);
   };
 
-  $: validationError = disabled ? Maybe.None() :
-    R.compose(
-      Either.toMaybe,
-      Either.swap,
-      Validation.validateModelValue(validators),
-      R.view(lens))(model);
+  $: validationError = disabled
+    ? Maybe.None()
+    : R.compose(
+        Either.toMaybe,
+        Either.swap,
+        Validation.validateModelValue(validators),
+        R.view(lens)
+      )(model);
 </script>
 
 <style type="text/postcss">

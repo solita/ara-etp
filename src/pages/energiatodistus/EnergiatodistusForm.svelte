@@ -67,9 +67,13 @@
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
     ),
-    R.assoc('laskutusosoite-id', schemas.EnumerationIdType(
-      laskutusosoitteet,
-      'energiatodistus.messages.invalid-laskutusosoite-id'))
+    R.assoc(
+      'laskutusosoite-id',
+      schemas.EnumerationIdType(
+        laskutusosoitteet,
+        'energiatodistus.messages.invalid-laskutusosoite-id'
+      )
+    )
   )(schemas['v' + version]);
 
   const signatureSchema = schemas.appendRequiredValidators(
@@ -343,8 +347,12 @@
             bind:error={korvausError} />
           <HR />
 
-          <Laskutus {schema} {whoami} bind:energiatodistus
-                    {verkkolaskuoperaattorit} {laskutusosoitteet} />
+          <Laskutus
+            {schema}
+            {whoami}
+            bind:energiatodistus
+            {verkkolaskuoperaattorit}
+            {laskutusosoitteet} />
           <ETForm
             bind:energiatodistus
             bind:eTehokkuus

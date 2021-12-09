@@ -43,8 +43,11 @@
           if (R.pathEq(['body', 'type'], 'missing-value', response)) {
             showMissingProperties(response.body.missing);
           } else {
-            flashMessageStore.add('Energiatodistus', 'error',
-              i18n(Response.errorKey(i18nRoot, 'save', response)));
+            flashMessageStore.add(
+              'Energiatodistus',
+              'error',
+              i18n(Response.errorKey(i18nRoot, 'save', response))
+            );
           }
         },
         () => {
@@ -70,48 +73,61 @@
     Future.fork(
       response => {
         toggleOverlay(false);
-        flashMessageStore.add('Energiatodistus', 'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          i18n(Response.errorKey404(i18nRoot, 'load', response))
+        );
       },
       response => {
         resources = Maybe.Some(response);
         toggleOverlay(false);
       },
-      R.chain(response => R.map(
-          R.assoc('laskutusosoitteet', R.__, response),
-          laatijaApi.laskutusosoitteet(Maybe.get(response.energiatodistus['laatija-id']))),
+      R.chain(
+        response =>
+          R.map(
+            R.assoc('laskutusosoitteet', R.__, response),
+            laatijaApi.laskutusosoitteet(
+              Maybe.get(response.energiatodistus['laatija-id'])
+            )
+          ),
         Future.parallelObject(6, {
-          energiatodistus: api.getEnergiatodistusById(params.version, params.id),
+          energiatodistus: api.getEnergiatodistusById(
+            params.version,
+            params.id
+          ),
           luokittelut: api.luokittelutForVersion(params.version),
           whoami: kayttajaApi.whoami,
           validation: api.validation(params.version),
           valvonta: ValvontaApi.getValvonta(params.id),
           verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
-        }))
+        })
+      )
     );
-  }
+  };
   $: load(params);
 
   const tilaLabel = energiatodistus =>
     $_('energiatodistus.tila.' + et.tilaKey(energiatodistus['tila-id']));
 
-  const title = energiatodistus => `${$_('energiatodistus.title')} ${params.version}/${
-    params.id
-  } - ${tilaLabel(energiatodistus)}`;
+  const title = energiatodistus =>
+    `${$_('energiatodistus.title')} ${params.version}/${
+      params.id
+    } - ${tilaLabel(energiatodistus)}`;
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as
-        {energiatodistus, luokittelut, whoami,
-          validation, valvonta,
-          verkkolaskuoperaattorit, laskutusosoitteet}}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, whoami, validation, valvonta, verkkolaskuoperaattorit, laskutusosoitteet }}
       <EnergiatodistusForm
         version={params.version}
         {energiatodistus}
-        {luokittelut} {whoami}
-        {validation} {valvonta}
-        {verkkolaskuoperaattorit} {laskutusosoitteet}
+        {luokittelut}
+        {whoami}
+        {validation}
+        {valvonta}
+        {verkkolaskuoperaattorit}
+        {laskutusosoitteet}
         bind:showMissingProperties
         {submit}
         title={title(energiatodistus)} />

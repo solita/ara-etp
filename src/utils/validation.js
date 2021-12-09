@@ -57,7 +57,9 @@ export const isSome = {
 };
 
 export const isValidId = (values, i18nKey) => ({
-  predicate: R.compose(R.prop('valid'), id => R.find(R.propEq('id', id), values)),
+  predicate: R.compose(R.prop('valid'), id =>
+    R.find(R.propEq('id', id), values)
+  ),
   label: R.applyTo(i18nKey)
 });
 

@@ -22,7 +22,7 @@
   let error = Maybe.None();
 
   const i18n = $_;
-  const i18nRoot = 'energiatodistus.laskutus'
+  const i18nRoot = 'energiatodistus.laskutus';
 
   $: disabled =
     energiatodistus.laskutusaika.isSome() || Kayttajat.isLaskuttaja(whoami);
