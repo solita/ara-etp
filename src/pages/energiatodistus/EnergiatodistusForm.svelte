@@ -67,7 +67,9 @@
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
     ),
-    R.assoc('laskutusosoite-id', schemas.EnumerationIdType(laskutusosoitteet))
+    R.assoc('laskutusosoite-id', schemas.EnumerationIdType(
+      laskutusosoitteet,
+      'energiatodistus.messages.invalid-laskutusosoite-id'))
   )(schemas['v' + version]);
 
   const signatureSchema = schemas.appendRequiredValidators(

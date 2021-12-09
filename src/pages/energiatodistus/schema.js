@@ -362,6 +362,6 @@ export const appendRequiredValidators = (schema, isRequired) =>
     schema
   );
 
-export const EnumerationIdType = values => ({
-  validators: [ Validations.liftValidator(validations.isValidId(values))]
+export const EnumerationIdType = (values, i18nKey) => ({
+  validators: [ Validations.liftValidator(validations.isValidId(values, i18nKey))]
 });

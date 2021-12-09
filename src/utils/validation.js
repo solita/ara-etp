@@ -56,9 +56,9 @@ export const isSome = {
   label: R.applyTo('validation.required')
 };
 
-export const isValidId = values => ({
+export const isValidId = (values, i18nKey) => ({
   predicate: R.compose(R.prop('valid'), id => R.find(R.propEq('id', id), values)),
-  label: R.applyTo('validation.valid')
+  label: R.applyTo(i18nKey)
 });
 
 export const interpolate = R.curry((template, values) =>
