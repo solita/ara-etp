@@ -6,6 +6,7 @@
   import * as Formats from '@Utility/formats';
   import * as Parsers from '@Utility/parsers';
   import * as Tila from '@Pages/yritys/laatija-yritys-tila';
+  import * as Yritys from '@Pages/yritys/yritys-utils';
 
   import { _ } from '@Language/i18n';
   import { push } from '@Component/Router/router';
@@ -189,12 +190,7 @@
                         push('#/yritys/' + yritys.id);
                     }}>
                     <td class="etp-table--td">
-                      {yritys.nimi}
-                      {Maybe.fold(
-                        '',
-                        R.concat('/ ', R.__),
-                        yritys['vastaanottajan-tarkenne']
-                      )}
+                      {Yritys.label(yritys, i18n)}
                     </td>
                     <td class="etp-table--td">{yritys.ytunnus}</td>
                     <td class="etp-table--td"><Address address={yritys} /></td>

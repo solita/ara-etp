@@ -4,6 +4,7 @@ import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as Validation from '@Utility/validation';
 import * as Tila from '@Pages/yritys/laatija-yritys-tila';
+import { yritys } from '@Pages/yritys/yritys-form';
 
 export const emptyYritys = {
   deleted: false,
@@ -63,3 +64,10 @@ export const hasModifyPermission = R.curry(
   (laatijat, whoami) =>
     Kayttajat.isPaakayttaja(whoami) || isInYritys(laatijat, whoami)
 );
+
+export const label = (yritys, i18n) => yritys.nimi +
+  Maybe.fold(
+    '',
+    R.concat(' / ', R.__),
+    yritys['vastaanottajan-tarkenne']
+  ) + (yritys.deleted ? ` (${i18n('yritys.deleted')})` : '');
