@@ -33,7 +33,7 @@
 
   const setDirty = _ => {
     dirty = true;
-  }
+  };
 
   $: schema = YritysUtils.schema(yritys.maa);
 

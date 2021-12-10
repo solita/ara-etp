@@ -64,9 +64,7 @@ export const hasModifyPermission = R.curry(
     Kayttajat.isPaakayttaja(whoami) || isInYritys(laatijat, whoami)
 );
 
-export const label = (yritys, i18n) => yritys.nimi +
-  Maybe.fold(
-    '',
-    R.concat(' / ', R.__),
-    yritys['vastaanottajan-tarkenne']
-  ) + (yritys.deleted ? ` (${i18n('yritys.deleted')})` : '');
+export const label = (yritys, i18n) =>
+  yritys.nimi +
+  Maybe.fold('', R.concat(' / ', R.__), yritys['vastaanottajan-tarkenne']) +
+  (yritys.deleted ? ` (${i18n('yritys.deleted')})` : '');
