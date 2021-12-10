@@ -4,7 +4,6 @@ import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as Validation from '@Utility/validation';
 import * as Tila from '@Pages/yritys/laatija-yritys-tila';
-import { yritys } from '@Pages/yritys/yritys-form';
 
 export const emptyYritys = {
   deleted: false,
