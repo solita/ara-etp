@@ -9,7 +9,6 @@ import * as Inputs from './inputs';
 import * as Validation from './validation';
 import * as Deep from '@Utility/deep-objects';
 import * as Validations from '@Utility/validation';
-import { laskutusosoitteet } from '@Pages/energiatodistus/EnergiatodistusForm';
 
 const String = (min, max) => ({
   parse: parsers.optionalString,
