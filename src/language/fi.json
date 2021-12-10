@@ -1640,6 +1640,7 @@
         "osoite": "Osoite",
         "omistajat": "Omistaja(t)",
         "energiatodistus": "Energiatodistus",
+        "keyword-search": "Tekstihaku",
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
         }
