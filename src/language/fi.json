@@ -119,13 +119,29 @@
     "laskutuskieli": "Laskutuskieli",
     "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
     "verkkolaskuosoite": "Verkkolaskuosoite",
+    "perustiedot-header": "Perustiedot",
+    "deleted": "poistettu",
+    "cancel-button": "Peru muutokset",
+    "save-button": "Tallenna",
     "messages": {
       "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
       "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
       "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
       "load-error": "Yrityksen tietojen haku epäonnistui.",
       "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen.",
-      "not-found": "Yritystä ei löydy järjestelmästä."
+      "not-found": "Yritystä ei löydy järjestelmästä.",
+      "delete-success": "Yritys on merkitty poistetuksi. Yrityksen tiedot ei ole enää käytettävissä laskutuksessa.",
+      "delete-error": "Yrityksen poistaminen epäonnistui.",
+      "undelete-success": "Yritys poistaminen on peruttu ja yritys on nyt käytettävissä.",
+      "undelete-error": "Yrityksen poiston peruuttaminen epäonnistui."
+    },
+    "delete": {
+      "confirm": "Oletko varma että haluat merkitä yrityksen poistetuksi. Poistettua yritystä ei voi enää käyttää laskutuksessa.",
+      "button": "Poista yritys"
+    },
+    "undelete": {
+      "confirm": "Oletko varma että haluat palauttaa yrityksen takaisin voimaan",
+      "button": "Peru poistaminen"
     },
     "laatijat": {
       "empty": "Yrityksellä ei ole laatijoita.",
@@ -1147,6 +1163,7 @@
       "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
       "not-found": "Energiatodistusta ei ole olemassa.",
       "validation-required-error": "Pakolliset tiedot puuttuvat: ",
+      "invalid-laskutusosoite-id": "Ei enää käytössä. Valitse voimassaoleva laskutustieto.",
 
       "delete-success": "Energiatodistus poistettiin onnistuneesti",
       "delete-error": "Energiatodistuksen poistaminen epäonnistui",
@@ -1899,7 +1916,8 @@
     "kayttaja-email-key": "Sähköpostiosoite {value} on jo käytössä.",
     "kayttaja-virtu-key": "Virtu käyttäjätunnus on jo käytössä.",
     "kayttaja_henkilotunnus_key": "Henkilötunnus on jo käytössä.",
-    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä."
+    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä.",
+    "yritys-ytunnus-nimi-key": "Yritystunnus, nimi on käytössä toisella yrityksellä. Voit käyttää vastaanottajan tarkennetta erottamaan yritykset."
   },
   "not-found": {
     "message": "Valitsemaasi sivua ei ole olemassa."

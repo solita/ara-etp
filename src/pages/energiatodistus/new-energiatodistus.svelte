@@ -16,11 +16,15 @@
   import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
+  import * as laskutusApi from '@Utility/api/laskutus-api';
 
   import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';
 
   export let params;
+  const i18n = $_;
+  const i18nRoot = 'energiatodistus';
 
   let overlay = false;
 
@@ -56,12 +60,12 @@
   const submit = (energiatodistus, onSuccessfulSave) =>
     R.compose(
       Future.fork(
-        () => {
+        response => {
           toggleOverlay(false);
           flashMessageStore.add(
             'Energiatodistus',
-            'error',
-            $_('energiatodistus.messages.save-error')
+            'save',
+            i18n(Response.errorKey(i18nRoot, 'load', response))
           );
         },
         ({ id }) => {
@@ -75,7 +79,7 @@
           replace(`/energiatodistus/${params.version}/${id}`);
         }
       ),
-      Future.delay(500),
+      R.chain(Future.after(400)),
       api.postEnergiatodistus(fetch, params.version),
       R.tap(() => toggleOverlay(true))
     )(energiatodistus);
@@ -92,44 +96,46 @@
     );
 
   // Load all page resources
-  $: R.compose(
+  const load = (version, copyFromId) => {
+    toggleOverlay(true);
     Future.fork(
       response => {
         toggleOverlay(false);
-        const msg = $_(
-          Maybe.orSome(
-            'energiatodistus.messages.load-error',
-            Response.localizationKey(response)
-          )
+        flashMessageStore.add(
+          'Energiatodistus',
+          'error',
+          i18n(Response.errorKey(i18nRoot, 'load', response))
         );
-
-        flashMessageStore.add('Energiatodistus', 'error', msg);
       },
       response => {
-        resources = Maybe.Some({
-          energiatodistus: R.compose(
-            Maybe.orSome(emptyEnergiatodistus(params.version)),
-            R.map(cleanEnergiatodistusCopy),
-            Maybe.fromNull
-          )(response[0]),
-          whoami: response[1],
-          luokittelut: response[2],
-          validation: response[3]
-        });
+        resources = Maybe.Some(response);
         toggleOverlay(false);
-      }
-    ),
-    Future.parallel(5),
-    R.prepend(
-      Maybe.fold(
-        Future.resolve(null),
-        api.getEnergiatodistusById(params.version),
-        copyFromId
+      },
+      R.chain(
+        response =>
+          R.map(
+            R.assoc('laskutusosoitteet', R.__, response),
+            laatijaApi.laskutusosoitteet(response.whoami.id)
+          ),
+        Future.parallelObject(6, {
+          energiatodistus: Maybe.fold(
+            Future.resolve(emptyEnergiatodistus(version)),
+            R.compose(
+              R.map(cleanEnergiatodistusCopy),
+              api.getEnergiatodistusById(version)
+            ),
+            copyFromId
+          ),
+          luokittelut: api.luokittelutForVersion(version),
+          whoami: kayttajaApi.whoami,
+          validation: api.validation(version),
+          verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
+        })
       )
-    ),
-    R.prepend(kayttajaApi.whoami),
-    R.juxt([api.luokittelutForVersion, api.validation])
-  )(params.version);
+    );
+  };
+
+  $: load(params.version, copyFromId);
 </script>
 
 <Overlay {overlay}>

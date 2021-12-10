@@ -8,7 +8,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
 
-  import YritysForm from '@Pages/yritys/YritysForm';
+  import YritysForm from '@Pages/yritys/yritys-form';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
@@ -24,86 +24,101 @@
 
   export let params;
 
-  let yritys = Maybe.None();
+  let resources = Maybe.None();
+  let dirty = false;
 
   let overlay = true;
   let disabled = true;
 
-  let luokittelut = Maybe.None();
-
-  const toggleOverlay = value => {
-    overlay = value;
-  };
-
-  $: submit = updatedYritys =>
-    R.compose(
-      Future.fork(
-        response => {
-          toggleOverlay(false);
-          flashMessageStore.add(
-            'Yritys',
-            'error',
-            Locales.uniqueViolationMessage(
-              $_,
-              response,
-              'yritys.messages.save-error'
-            )
-          );
-        },
-        () => {
-          toggleOverlay(false);
-          flashMessageStore.add(
-            'Yritys',
-            'success',
-            $_('yritys.messages.save-success')
-          );
-          idTranslateStore.updateYritys(updatedYritys);
-        }
-      ),
-      Future.delay(400),
-      api.putYritysById(fetch, params.id),
-      R.tap(() => toggleOverlay(true))
-    )(updatedYritys);
-
-  // Load yritys and all luokittelut used in yritys form
-  $: R.compose(
+  const fork = (action, errorMessage, future) => {
+    overlay = true;
     Future.fork(
       response => {
-        toggleOverlay(false);
+        flashMessageStore.add('yritys', 'error', errorMessage(response));
+        overlay = false;
+      },
+      _ => {
         flashMessageStore.add(
-          'Yritys',
+          'yritys',
+          'success',
+          i18n(`${i18nRoot}.messages.${action}-success`)
+        );
+        overlay = false;
+        load(params.id);
+      },
+      future
+    );
+  };
+
+  const submit = updatedYritys =>
+    fork(
+      'save',
+      response =>
+        Locales.uniqueViolationMessage(
+          i18n,
+          response,
+          'yritys.messages.save-error'
+        ),
+      api.putYritysById(fetch, params.id, updatedYritys)
+    );
+
+  const setDeleted = deleted =>
+    fork(
+      deleted ? 'delete' : 'undelete',
+      response => Response.errorKey(i18nRoot, 'delete', response),
+      api.putDeleted(params.id, deleted)
+    );
+
+  // Load yritys and all luokittelut used in yritys form
+  const load = id => {
+    overlay = true;
+    Future.fork(
+      response => {
+        overlay = false;
+        flashMessageStore.add(
+          'yritys',
           'error',
           i18n(Response.errorKey404(i18nRoot, 'load', response))
         );
       },
       response => {
-        luokittelut = Maybe.Some(response[2]);
-        yritys = R.compose(
-          Maybe.Some,
-          R.over(R.lensProp('verkkolaskuoperaattori'), Either.Right)
-        )(response[0]);
-        toggleOverlay(false);
-        disabled = !Yritykset.hasModifyPermission(response[1], response[3]);
-        idTranslateStore.updateYritys(response[0]);
-      }
-    ),
-    Future.delay(300),
-    Future.parallel(4),
-    R.concat(R.__, [api.luokittelut, kayttajaApi.whoami]),
-    R.juxt([api.getYritysById, api.getLaatijatById(fetch)])
-  )(params.id);
+        resources = Maybe.Some(response);
+        overlay = false;
+        dirty = false;
+        disabled = !Yritykset.hasModifyPermission(
+          response.laatijat,
+          response.whoami
+        );
+        idTranslateStore.updateYritys(response.yritys);
+      },
+      Future.parallelObject(4, {
+        luokittelut: api.luokittelut,
+        whoami: kayttajaApi.whoami,
+        yritys: R.map(
+          R.over(R.lensProp('verkkolaskuoperaattori'), Either.Right),
+          api.getYritysById(id)
+        ),
+        laatijat: api.getLaatijatById(fetch, id)
+      })
+    );
+  };
+
+  $: load(params.id);
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if luokittelut.isSome()}
+    {#each Maybe.toArray(resources) as { yritys, luokittelut }}
       <YritysForm
         {submit}
+        setDeleted={Maybe.Some(setDeleted)}
+        cancel={_ => load(params.id)}
         {disabled}
-        luokittelut={luokittelut.some()}
+        bind:dirty
+        {luokittelut}
         existing={false}
-        yritys={yritys.some()} />
-    {/if}
+        {yritys} />
+    {/each}
   </div>
   <div slot="overlay-content">
     <Spinner />

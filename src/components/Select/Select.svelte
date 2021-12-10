@@ -4,7 +4,9 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as keys from '@Utility/keys';
+  import * as Validation from '@Utility/validation';
 
   import DropdownList from '@Component/DropdownList/DropdownList';
 
@@ -26,6 +28,9 @@
 
   export let model;
   export let lens = R.identity;
+  export let validators = [];
+
+  const i18n = $_;
 
   let input;
   let focused = false;
@@ -93,6 +98,15 @@
       R.prop('keyCode')
     )(event);
   };
+
+  $: validationError = disabled
+    ? Maybe.None()
+    : R.compose(
+        Either.toMaybe,
+        Either.swap,
+        Validation.validateModelValue(validators),
+        R.view(lens)
+      )(model);
 </script>
 
 <style type="text/postcss">
@@ -220,7 +234,13 @@
   {#if validation && required && Maybe.isNone(selected) && blurred}
     <div class="validation-label">
       <span class="font-icon text-error">error</span>
-      {$_('validation.required')}
+      {i18n('validation.required')}
     </div>
   {/if}
+  {#each Maybe.toArray(validationError) as msg}
+    <div class="validation-label">
+      <span class="font-icon text-error">error</span>
+      {msg(i18n)}
+    </div>
+  {/each}
 </div>

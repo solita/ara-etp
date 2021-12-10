@@ -1,5 +1,12 @@
 <script>
   import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as Future from '@Utility/future-utils';
+  import * as Formats from '@Utility/formats';
+  import * as Parsers from '@Utility/parsers';
+  import * as Tila from '@Pages/yritys/laatija-yritys-tila';
+  import * as Yritys from '@Pages/yritys/yritys-utils';
 
   import { _ } from '@Language/i18n';
   import { push } from '@Component/Router/router';
@@ -17,13 +24,6 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as laatijaApi from './laatija-api';
   import * as yritysApi from '@Pages/yritys/yritys-api';
-  import * as Tila from '@Pages/yritys/laatija-yritys-tila';
-
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as Future from '@Utility/future-utils';
-  import * as Formats from '@Utility/formats';
-  import * as Parsers from '@Utility/parsers';
 
   import { flashMessageStore } from '@/stores';
 
@@ -82,7 +82,12 @@
   );
 
   const formatYritys = yritys =>
-    yritys.id + ' | ' + yritys.ytunnus + ' | ' + yritys.nimi;
+    yritys.id +
+    ' | ' +
+    yritys.ytunnus +
+    ' | ' +
+    yritys.nimi +
+    Maybe.fold('', R.concat(' / '), yritys['vastaanottajan-tarkenne']);
 
   const load = id => {
     toggleOverlay(true);
@@ -101,6 +106,7 @@
           R.filter(R.complement(Tila.isDeleted))
         )(response.yritykset);
         whoami = Maybe.Some(response.whoami);
+        newLaatijaYritys = Either.Right(Maybe.None());
         toggleOverlay(false);
       },
       Future.parallelObject(3, {
@@ -184,12 +190,7 @@
                         push('#/yritys/' + yritys.id);
                     }}>
                     <td class="etp-table--td">
-                      {yritys.nimi}
-                      {Maybe.fold(
-                        '',
-                        R.concat('/ ', R.__),
-                        yritys['vastaanottajan-tarkenne']
-                      )}
+                      {Yritys.label(yritys, i18n)}
                     </td>
                     <td class="etp-table--td">{yritys.ytunnus}</td>
                     <td class="etp-table--td"><Address address={yritys} /></td>
@@ -243,7 +244,11 @@
           <form class="mb-5" on:submit|preventDefault={attach}>
             <div class="flex lg:flex-row flex-col py-4 -mx-4">
               <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-                <Autocomplete items={R.map(formatYritys, allYritykset)}>
+                <Autocomplete
+                  items={R.map(
+                    formatYritys,
+                    R.filter(R.complement(R.prop('deleted')), allYritykset)
+                  )}>
                   <Input
                     id={'yritys'}
                     name={'yritys'}

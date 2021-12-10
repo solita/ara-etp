@@ -8,6 +8,7 @@ import * as dfns from 'date-fns';
 import * as Inputs from './inputs';
 import * as Validation from './validation';
 import * as Deep from '@Utility/deep-objects';
+import * as Validations from '@Utility/validation';
 
 const String = (min, max) => ({
   parse: parsers.optionalString,
@@ -359,3 +360,9 @@ export const appendRequiredValidators = (schema, isRequired) =>
     }),
     schema
   );
+
+export const EnumerationIdType = (values, i18nKey) => ({
+  validators: [
+    Validations.liftValidator(validations.isValidId(values, i18nKey))
+  ]
+});

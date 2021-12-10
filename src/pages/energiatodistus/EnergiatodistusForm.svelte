@@ -34,6 +34,7 @@
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { flashMessageStore } from '@/stores';
+  import * as Validation from '@Utility/validation';
 
   export let version;
   export let energiatodistus;
@@ -41,6 +42,8 @@
   export let whoami;
   export let validation;
   export let valvonta;
+  export let laskutusosoitteet;
+  export let verkkolaskuoperaattorit;
 
   export let submit;
   export let title = '';
@@ -63,6 +66,13 @@
     R.assocPath(
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
+    ),
+    R.assoc(
+      'laskutusosoite-id',
+      schemas.EnumerationIdType(
+        laskutusosoitteet,
+        'energiatodistus.messages.invalid-laskutusosoite-id'
+      )
     )
   )(schemas['v' + version]);
 
@@ -337,7 +347,12 @@
             bind:error={korvausError} />
           <HR />
 
-          <Laskutus {schema} {whoami} bind:energiatodistus />
+          <Laskutus
+            {schema}
+            {whoami}
+            bind:energiatodistus
+            {verkkolaskuoperaattorit}
+            {laskutusosoitteet} />
           <ETForm
             bind:energiatodistus
             bind:eTehokkuus

@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as api from '@Pages/yritys/yritys-api';
+  import * as Yritys from '@Pages/yritys/yritys-utils';
   import * as qs from 'qs';
   import { replace, location, querystring } from 'svelte-spa-router';
 
@@ -26,7 +27,7 @@
   Future.fork(
     _ => {
       flashMessageStore.add(
-        'Yritys',
+        'yritys',
         'error',
         i18n(Response.errorKey(i18nRoot, 'load', response))
       );
@@ -116,12 +117,7 @@
                 class="etp-table--tr etp-table--tr__link"
                 on:click={() => push('#/yritys/' + yritys.id)}>
                 <td class="etp-table--td">
-                  {yritys.nimi}
-                  {Maybe.fold(
-                    '',
-                    R.concat('/ ', R.__),
-                    yritys['vastaanottajan-tarkenne']
-                  )}
+                  {Yritys.label(yritys, i18n)}
                 </td>
                 <td class="etp-table--td">{yritys.ytunnus}</td>
                 <td class="etp-table--td"><Address address={yritys} /></td>
