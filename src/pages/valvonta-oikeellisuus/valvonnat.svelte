@@ -325,7 +325,7 @@
       {#if Kayttajat.isPaakayttaja(whoami)}
         <Link
           icon={Maybe.Some('download_for_offline')}
-          href='api/private/valvonta/oikeellisuus/csv/valvonta.csv'
+          href="api/private/valvonta/oikeellisuus/csv/valvonta.csv"
           text={i18n(i18nRoot + '.download-all')} />
       {/if}
     {/each}
