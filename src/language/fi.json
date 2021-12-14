@@ -1659,6 +1659,7 @@
         "omistajat": "Omistaja(t)",
         "energiatodistus": "Energiatodistus",
         "keyword-search": "Tekstihaku",
+        "download-all": "Lataa kaikki valvonnat",
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
         }
