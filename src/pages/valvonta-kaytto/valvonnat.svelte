@@ -393,7 +393,7 @@
           {/if}
         </div>
       {/if}
-      
+
       {#if Kayttajat.isPaakayttaja(whoami)}
         <Link
           icon={Maybe.Some('download_for_offline')}
