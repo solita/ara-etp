@@ -14,10 +14,10 @@
   import * as Router from '@Component/Router/router';
   import qs from 'qs';
 
-  import * as ETViews from '@Pages/energiatodistus/views';
   import * as Toimenpiteet from '@Pages/valvonta-oikeellisuus/toimenpiteet';
   import * as Valvojat from '@Pages/valvonta/valvojat';
 
+  import * as ETViews from '@Pages/energiatodistus/views';
   import * as Links from './links';
 
   import * as api from './valvonta-api';
@@ -35,6 +35,7 @@
   import Address from '@Pages/energiatodistus/address';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
+  import Link from '@Component/Link/Link.svelte';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -310,16 +311,24 @@
           </table>
         </div>
       {/if}
+
+      {#if R.gt(valvontaCount, pageSize)}
+        <div class="pagination">
+          <Pagination
+            pageNum={Maybe.orSome(1, R.prop('page', query))}
+            {nextPageCallback}
+            itemsPerPage={pageSize}
+            itemsCount={valvontaCount} />
+        </div>
+      {/if}
+
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <Link
+          icon={Maybe.Some('download_for_offline')}
+          href="api/private/valvonta/oikeellisuus/csv/valvonta.csv"
+          text={i18n(i18nRoot + '.download-all')} />
+      {/if}
     {/each}
-    {#if R.gt(valvontaCount, pageSize)}
-      <div class="pagination">
-        <Pagination
-          pageNum={Maybe.orSome(1, R.prop('page', query))}
-          {nextPageCallback}
-          itemsPerPage={pageSize}
-          itemsCount={valvontaCount} />
-      </div>
-    {/if}
   </div>
   <div slot="overlay-content">
     <Spinner />
