@@ -74,7 +74,7 @@ export const isAnomaly = isType(type.anomaly);
 export const isAuditReport = isType(type.audit.report);
 
 const defaultDeadline = typeId =>
-  (isDeadlineType(typeId) || R.equals(typeId, type.audit.report))
+  isDeadlineType(typeId) || R.equals(typeId, type.audit.report)
     ? Maybe.Some(dfns.addMonths(new Date(), 1))
     : Maybe.None();
 
