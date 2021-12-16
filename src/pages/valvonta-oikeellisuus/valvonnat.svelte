@@ -36,6 +36,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
   import Link from '@Component/Link/Link.svelte';
+  import Input from '@Component/Input/Input';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -45,6 +46,7 @@
   const i18nRoot = 'valvonta.oikeellisuus.all';
 
   let valvontaCount = 0;
+  let textCancel = () => {};
 
   const queryStringIntegerProp = R.curry((querystring, prop) =>
     R.compose(
@@ -69,18 +71,24 @@
     page: Maybe.None(),
     'valvoja-id': Maybe.None(),
     'include-closed': Maybe.None(),
-    'has-valvoja': Maybe.None()
+    'has-valvoja': Maybe.None(),
+    keyword: Maybe.None(),
+    'toimenpidetype-id': Maybe.None()
   };
 
   query = R.mergeRight(query, {
     page: queryStringIntegerProp(parsedQs, 'page'),
     'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
-    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja')
+    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
+    keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
+    'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
   });
 
   const nextPageCallback = nextPage =>
     (query = R.assoc('page', Maybe.Some(nextPage), query));
+
+  const wrapPercent = q => `%${q}%`;
 
   const queryToBackendParams = query => ({
     offset: R.compose(
@@ -89,6 +97,8 @@
     )(query),
     limit: Maybe.Some(pageSize),
     'valvoja-id': R.prop('valvoja-id', query),
+    keyword: R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
+    'toimenpidetype-id': R.prop('toimenpidetype-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
@@ -166,8 +176,8 @@
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
       <H1 text={i18n(i18nRoot + '.title')} />
       {#if Kayttajat.isPaakayttaja(whoami)}
-        <div class="flex flex-wrap items-end space-x-4 -ml-4">
-          <div class="ml-4 w-1/4">
+        <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
+          <div class="w-1/4 mr-4">
             <Select
               disabled={overlay}
               compact={true}
@@ -200,6 +210,41 @@
           </div>
         </div>
       {/if}
+
+      <div
+        class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
+        <div class="lg:w-1/2 w-full px-4 py-4">
+          <Input
+            label={i18n(i18nRoot + '.keyword-search')}
+            model={query}
+            lens={R.lensProp('keyword')}
+            format={Maybe.orSome('')}
+            parse={Parsers.optionalString}
+            search={true}
+            on:input={evt => {
+              textCancel();
+              textCancel = Future.value(keyword => {
+                query = R.assoc('keyword', keyword, query);
+              }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
+            }} />
+        </div>
+        <div class="w-1/2 lg:w-1/4">
+          <Select
+            disabled={overlay}
+            compact={false}
+            label={i18n(i18nRoot + '.last-toimenpide')}
+            bind:model={query}
+            lens={R.lensProp('toimenpidetype-id')}
+            items={R.pluck('id', toimenpidetyypit)}
+            format={id =>
+              Locales.label(
+                $locale,
+                R.find(R.propEq('id', id), toimenpidetyypit)
+              )}
+            parse={Maybe.Some}
+            allowNone={true} />
+        </div>
+      </div>
       {#if valvonnat.length === 0}
         <div class="my-6">{i18n(i18nRoot + '.empty')}</div>
       {:else}
