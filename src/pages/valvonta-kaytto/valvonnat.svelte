@@ -203,8 +203,8 @@
       </div>
     </div>
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot }}
-      <div class="flex flex-wrap items-end space-x-4 -ml-4">
-        <div class="ml-4 w-1/4">
+      <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
+        <div class="w-1/4 mr-4">
           <Select
             disabled={overlay}
             compact={true}
@@ -236,8 +236,9 @@
             parse={Maybe.Some} />
         </div>
       </div>
-      <div class="flex flex-wrap items-end space-x-4 -ml-4">
-        <div class="lg:w-1/2 w-full px-4 py-4">
+      <div
+        class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
+        <div class="lg:w-1/2 w-full">
           <Input
             label={i18n(i18nRoot + '.keyword-search')}
             model={query}
@@ -252,7 +253,7 @@
               }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
             }} />
         </div>
-        <div class="w-1/4 px-4 py-4">
+        <div class="w-1/2 lg:w-1/4">
           <Select
             disabled={overlay}
             compact={false}
