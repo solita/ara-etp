@@ -1818,9 +1818,15 @@
           "response-title": "Varoitus tietopyyntöön liittyen",
           "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
+        "decision-order": {
+          "title": "Käskypäätös",
+          "info": "Jos energiatodistusta ei saada niin voidaan lopulta tehdä käskypäätös ja asettaa uhkasakko. Vaiheen dokumentit tehdään tämän järjestelmän ulkopuolella.",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa päätös"
+        },
         "closed": {
           "title": "Valvonnan lopetus",
-          "info": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
+          "info": "Tällä toimenpiteellä lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
           "description": "Kommentti",
           "publish-button": "Lopeta"
         },
