@@ -140,7 +140,7 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami }}
+    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet }}
       <EnergiatodistusForm
         version={params.version}
         {title}
@@ -148,6 +148,8 @@
         {whoami}
         {luokittelut}
         {validation}
+        {verkkolaskuoperaattorit}
+        {laskutusosoitteet}
         {submit} />
     {/each}
   </div>
