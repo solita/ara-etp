@@ -277,7 +277,7 @@
               id={'oikeellisuus.laatija'}
               name={'oikeellisuus.laatija'}
               label={i18n(i18nRoot + '.laatija')}
-              bind:model={query}
+              model={query}
               lens={R.lensProp('laatija-id')}
               parse={Parsers.optionalParser(parseLaatija(laatijat))}
               format={R.compose(
@@ -285,6 +285,13 @@
                 R.map(formatLaatija),
                 R.chain(id => Maybe.findById(id, laatijat))
               )}
+              on:input={evt => {
+                const parse = Parsers.optionalParser(parseLaatija(laatijat))
+                const laatijaId = parse(evt.target.value);
+                R.forEach(id => {
+                  query = R.assoc('laatija-id', id, query)
+                }, laatijaId);
+              }}
               {i18n} />
           </Autocomplete>
         </div>
