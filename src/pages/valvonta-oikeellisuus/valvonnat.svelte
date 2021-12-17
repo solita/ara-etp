@@ -22,6 +22,7 @@
 
   import * as api from './valvonta-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as EnergiatodistusApi from '@Pages/energiatodistus/energiatodistus-api';
 
   import { flashMessageStore } from '@/stores';
@@ -37,6 +38,7 @@
   import Select from '@Component/Select/Select';
   import Link from '@Component/Link/Link.svelte';
   import Input from '@Component/Input/Input';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -45,8 +47,21 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.all';
 
+  $: console.log(query);
+
   let valvontaCount = 0;
   let textCancel = () => {};
+  const formatLaatija = kayttaja =>
+    `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
+
+  const parseLaatija = kayttajat =>
+    R.compose(
+      Maybe.toEither(R.applyTo(`${i18nRoot}.messages.laatija-not-found`)),
+      R.map(R.prop('id')),
+      predicate => Maybe.find(predicate, kayttajat),
+      R.propEq('email'),
+      R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
+    );
 
   const queryStringIntegerProp = R.curry((querystring, prop) =>
     R.compose(
@@ -70,18 +85,22 @@
   let query = {
     page: Maybe.None(),
     'valvoja-id': Maybe.None(),
+    'laatija-id': Maybe.None(),
     'include-closed': Maybe.None(),
     'has-valvoja': Maybe.None(),
     keyword: Maybe.None(),
-    'toimenpidetype-id': Maybe.None()
+    'toimenpidetype-id': Maybe.None(),
+    'kayttotarkoitus-id': Maybe.None()
   };
 
   query = R.mergeRight(query, {
     page: queryStringIntegerProp(parsedQs, 'page'),
     'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
+    'laatija-id': queryStringIntegerProp(parsedQs, 'laatija-id'),
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
     'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
     keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
+    'kayttotarkoitus-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id'),
     'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
   });
 
@@ -97,8 +116,10 @@
     )(query),
     limit: Maybe.Some(pageSize),
     'valvoja-id': R.prop('valvoja-id', query),
+    'laatija-id': R.prop('laatija-id', query),
     keyword: R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
     'toimenpidetype-id': R.prop('toimenpidetype-id', query),
+    'kayttotarkoitus-id': R.prop('kayttotarkoitus-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
@@ -132,8 +153,10 @@
         )(query),
         luokittelut: EnergiatodistusApi.luokittelutAllVersions,
         toimenpidetyypit: api.toimenpidetyypit,
+        kayttotarkoitukset: api.kayttotarkoitukset,
         valvojat: api.valvojat,
-        valvonnat: api.valvonnat(queryToBackendParams(query))
+        valvonnat: api.valvonnat(queryToBackendParams(query)),
+        laatijat: laatijaApi.laatijat
       })
     );
   }
@@ -173,7 +196,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat }}
+    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, laatijat, kayttotarkoitukset }}
       <H1 text={i18n(i18nRoot + '.title')} />
       {#if Kayttajat.isPaakayttaja(whoami)}
         <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
@@ -213,7 +236,7 @@
 
       <div
         class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
-        <div class="lg:w-1/2 w-full px-4 py-4">
+        <div class="lg:w-1/2 w-full">
           <Input
             label={i18n(i18nRoot + '.keyword-search')}
             model={query}
@@ -240,6 +263,43 @@
               Locales.label(
                 $locale,
                 R.find(R.propEq('id', id), toimenpidetyypit)
+              )}
+            parse={Maybe.Some}
+            allowNone={true} />
+        </div>
+      </div>
+
+      <div
+        class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
+        <div class="lg:w-1/2 w-full">
+          <Autocomplete items={R.map(formatLaatija, laatijat)} size="10">
+            <Input
+              id={'oikeellisuus.laatija'}
+              name={'oikeellisuus.laatija'}
+              label={i18n(i18nRoot + '.laatija')}
+              bind:model={query}
+              lens={R.lensProp('laatija-id')}
+              parse={Parsers.optionalParser(parseLaatija(laatijat))}
+              format={R.compose(
+                Maybe.orSome(''),
+                R.map(formatLaatija),
+                R.chain(id => Maybe.findById(id, laatijat))
+              )}
+              {i18n} />
+          </Autocomplete>
+        </div>
+        <div class="w-1/2 lg:w-1/4">
+          <Select
+            disabled={overlay}
+            compact={false}
+            label={i18n(i18nRoot + '.kayttotarkoitusluokka')}
+            bind:model={query}
+            lens={R.lensProp('kayttotarkoitus-id')}
+            items={R.pluck('id', kayttotarkoitukset)}
+            format={id =>
+              Locales.label(
+                $locale,
+                R.find(R.propEq('id', id), kayttotarkoitukset)
               )}
             parse={Maybe.Some}
             allowNone={true} />

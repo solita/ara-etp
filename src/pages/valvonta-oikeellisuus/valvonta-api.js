@@ -22,7 +22,8 @@ export const url = {
     `${url.toimenpide(id, toimenpideId)}/document/${filename}`,
   liitteet: (id, toimenpideId) =>
     `${url.toimenpide(id, toimenpideId)}/liitteet`,
-  notes: id => `${url.valvonta(id)}/notes`
+  notes: id => `${url.valvonta(id)}/notes`,
+  kayttotarkoituksetPublic: '/api/public/statistics/kayttotarkoitukset'
 };
 
 export const deserializeToimenpide = R.evolve({
@@ -100,6 +101,11 @@ export const toimenpidetyypit = Fetch.cached(
 export const severities = Fetch.cached(
   fetch,
   '/valvonta/oikeellisuus/severities'
+);
+
+export const kayttotarkoitukset = Fetch.cachedNoPrefix(
+  fetch,
+  url.kayttotarkoituksetPublic
 );
 
 export const templatesByType = R.compose(

@@ -133,3 +133,7 @@ export const deleteFuture = R.compose(
 export const cached = R.curry((fetch, url) =>
   R.compose(Future.cache, getJson)(fetch, api + url)
 );
+
+export const cachedNoPrefix = R.curry((fetch, url) =>
+  R.compose(Future.cache, getJson)(fetch, url)
+);
