@@ -47,8 +47,6 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.all';
 
-  $: console.log(query);
-
   let valvontaCount = 0;
   let textCancel = () => {};
   const formatLaatija = kayttaja =>
@@ -280,16 +278,17 @@
               model={query}
               lens={R.lensProp('laatija-id')}
               parse={Parsers.optionalParser(parseLaatija(laatijat))}
+              caret={true}
               format={R.compose(
                 Maybe.orSome(''),
                 R.map(formatLaatija),
                 R.chain(id => Maybe.findById(id, laatijat))
               )}
               on:input={evt => {
-                const parse = Parsers.optionalParser(parseLaatija(laatijat))
+                const parse = Parsers.optionalParser(parseLaatija(laatijat));
                 const laatijaId = parse(evt.target.value);
                 R.forEach(id => {
-                  query = R.assoc('laatija-id', id, query)
+                  query = R.assoc('laatija-id', id, query);
                 }, laatijaId);
               }}
               {i18n} />

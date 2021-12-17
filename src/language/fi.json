@@ -1422,7 +1422,8 @@
           "draft": "luonnos"
         },
         "messages": {
-          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
+          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta."
         }
       },
       "valvonta": {
