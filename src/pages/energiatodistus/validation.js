@@ -152,7 +152,7 @@ export const isValidationRequired = R.curry(
     ET.isDraft(energiatodistus) ||
     // jos ei laskutettu -> validate laskutustiedot
     (!ET.isLaskutettu(energiatodistus) &&
-      R.includes(property, ['laskuriviviite', 'laskutettava-yritys-id'])) ||
+      R.includes(property, ['laskuriviviite', 'laskutusosoite-id'])) ||
     // rakennustunnus validoidaan aina
     R.equals(property, 'perustiedot.rakennustunnus') ||
     // pääkäyttäjältä validoidaan aina kommentti ja korvattu energiatodistus
