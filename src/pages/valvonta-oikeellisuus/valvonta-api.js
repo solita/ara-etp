@@ -102,6 +102,11 @@ export const severities = Fetch.cached(
   '/valvonta/oikeellisuus/severities'
 );
 
+export const kayttotarkoitukset = Fetch.cached(
+  fetch,
+  '/statistics/kayttotarkoitukset'
+);
+
 export const templatesByType = R.compose(
   Future.cache,
   R.map(R.groupBy(R.prop('toimenpidetype-id'))),

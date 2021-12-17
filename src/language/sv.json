@@ -1413,8 +1413,12 @@
         "title": "Kontroll av riktigheten",
         "empty": "Inga kontrollåtgärder",
         "valvoja": "Övervakare",
+        "laatija": "Upprättare",
         "include-closed": "Även avslutade kontroller",
         "ei-valvojaa": "Ingen övervakare",
+        "last-toimenpide": "Föregående händelse",
+        "keyword-search": "Textsökning",
+        "kayttotarkoitusluokka": "Användningskategori",
         "table": {
           "publish-time": "Tidpunkt för händelsen",
           "deadline-date": "Tidsfrist",
@@ -1425,7 +1429,8 @@
           "draft": "Utkast"
         },
         "messages": {
-          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll"
+          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll",
+          "laatija-not-found": "Hittar inte upprättaren i denna tjänst."
         }
       },
       "valvonta": {

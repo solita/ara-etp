@@ -1405,9 +1405,13 @@
         "title": "Oikeellisuuden valvonnat",
         "empty": "Ei valvontatoimenpiteitä",
         "valvoja": "Valvoja",
+        "laatija": "Laatija",
         "include-closed": "Näytä myös päättyneet",
         "ei-valvojaa": "Ei valvojaa",
         "download-all": "Lataa kaikki valvonnat",
+        "last-toimenpide": "Edellinen tapahtuma",
+        "keyword-search": "Tekstihaku",
+        "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
         "table": {
           "publish-time": "Tapahtumaaika",
           "deadline-date": "Määräaika",
@@ -1418,7 +1422,8 @@
           "draft": "luonnos"
         },
         "messages": {
-          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
+          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta."
         }
       },
       "valvonta": {
