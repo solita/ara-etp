@@ -126,14 +126,11 @@
     overlay = true;
     Future.fork(
       response => {
-        const msg = i18n(
-          Maybe.orSome(
-            i18nRoot + '.messages.load-error',
-            Response.localizationKey(response)
-          )
+        flashMessageStore.add(
+          'valvonta-oikeellisuus',
+          'error',
+          i18n(Response.errorKey(i18nRoot, 'load', response))
         );
-
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
         overlay = false;
       },
       response => {
@@ -154,7 +151,13 @@
         kayttotarkoitukset: api.kayttotarkoitukset,
         valvojat: api.valvojat,
         valvonnat: api.valvonnat(queryToBackendParams(query)),
-        laatijat: laatijaApi.laatijat
+        laatijat: R.chain(
+          whoami =>
+            Kayttajat.isPaakayttaja(whoami)
+              ? laatijaApi.laatijat
+              : Future.resolve([]),
+          kayttajaApi.whoami
+        )
       })
     );
   }
@@ -230,87 +233,86 @@
               parse={Maybe.Some} />
           </div>
         </div>
-      {/if}
-
-      <div
-        class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
-        <div class="lg:w-1/2 w-full">
-          <Input
-            label={i18n(i18nRoot + '.keyword-search')}
-            model={query}
-            lens={R.lensProp('keyword')}
-            format={Maybe.orSome('')}
-            parse={Parsers.optionalString}
-            search={true}
-            on:input={evt => {
-              textCancel();
-              textCancel = Future.value(keyword => {
-                query = R.assoc('keyword', keyword, query);
-              }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
-            }} />
-        </div>
-        <div class="w-1/2 lg:w-1/4">
-          <Select
-            disabled={overlay}
-            compact={false}
-            label={i18n(i18nRoot + '.last-toimenpide')}
-            bind:model={query}
-            lens={R.lensProp('toimenpidetype-id')}
-            items={R.pluck('id', toimenpidetyypit)}
-            format={id =>
-              Locales.label(
-                $locale,
-                R.find(R.propEq('id', id), toimenpidetyypit)
-              )}
-            parse={Maybe.Some}
-            allowNone={true} />
-        </div>
-      </div>
-
-      <div
-        class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
-        <div class="lg:w-1/2 w-full">
-          <Autocomplete items={R.map(formatLaatija, laatijat)} size="10">
+        <div
+          class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
+          <div class="lg:w-1/2 w-full">
             <Input
-              id={'oikeellisuus.laatija'}
-              name={'oikeellisuus.laatija'}
-              label={i18n(i18nRoot + '.laatija')}
+              label={i18n(i18nRoot + '.keyword-search')}
               model={query}
-              lens={R.lensProp('laatija-id')}
-              parse={Parsers.optionalParser(parseLaatija(laatijat))}
-              caret={true}
-              format={R.compose(
-                Maybe.orSome(''),
-                R.map(formatLaatija),
-                R.chain(id => Maybe.findById(id, laatijat))
-              )}
+              lens={R.lensProp('keyword')}
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              search={true}
               on:input={evt => {
-                const parse = Parsers.optionalParser(parseLaatija(laatijat));
-                const laatijaId = parse(evt.target.value);
-                R.forEach(id => {
-                  query = R.assoc('laatija-id', id, query);
-                }, laatijaId);
-              }}
-              {i18n} />
-          </Autocomplete>
+                textCancel();
+                textCancel = Future.value(keyword => {
+                  query = R.assoc('keyword', keyword, query);
+                }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
+              }} />
+          </div>
+          <div class="w-1/2 lg:w-1/4">
+            <Select
+              disabled={overlay}
+              compact={false}
+              label={i18n(i18nRoot + '.last-toimenpide')}
+              bind:model={query}
+              lens={R.lensProp('toimenpidetype-id')}
+              items={R.pluck('id', toimenpidetyypit)}
+              format={id =>
+                Locales.label(
+                  $locale,
+                  R.find(R.propEq('id', id), toimenpidetyypit)
+                )}
+              parse={Maybe.Some}
+              allowNone={true} />
+          </div>
         </div>
-        <div class="w-1/2 lg:w-1/4">
-          <Select
-            disabled={overlay}
-            compact={false}
-            label={i18n(i18nRoot + '.kayttotarkoitusluokka')}
-            bind:model={query}
-            lens={R.lensProp('kayttotarkoitus-id')}
-            items={R.pluck('id', kayttotarkoitukset)}
-            format={id =>
-              Locales.label(
-                $locale,
-                R.find(R.propEq('id', id), kayttotarkoitukset)
-              )}
-            parse={Maybe.Some}
-            allowNone={true} />
+
+        <div
+          class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
+          <div class="lg:w-1/2 w-full">
+            <Autocomplete items={R.map(formatLaatija, laatijat)} size="10">
+              <Input
+                id={'oikeellisuus.laatija'}
+                name={'oikeellisuus.laatija'}
+                label={i18n(i18nRoot + '.laatija')}
+                model={query}
+                lens={R.lensProp('laatija-id')}
+                parse={Parsers.optionalParser(parseLaatija(laatijat))}
+                caret={true}
+                format={R.compose(
+                  Maybe.orSome(''),
+                  R.map(formatLaatija),
+                  R.chain(id => Maybe.findById(id, laatijat))
+                )}
+                on:input={evt => {
+                  const parse = Parsers.optionalParser(parseLaatija(laatijat));
+                  const laatijaId = parse(evt.target.value);
+                  R.forEach(id => {
+                    query = R.assoc('laatija-id', id, query);
+                  }, laatijaId);
+                }}
+                {i18n} />
+            </Autocomplete>
+          </div>
+          <div class="w-1/2 lg:w-1/4">
+            <Select
+              disabled={overlay}
+              compact={false}
+              label={i18n(i18nRoot + '.kayttotarkoitusluokka')}
+              bind:model={query}
+              lens={R.lensProp('kayttotarkoitus-id')}
+              items={R.pluck('id', kayttotarkoitukset)}
+              format={id =>
+                Locales.label(
+                  $locale,
+                  R.find(R.propEq('id', id), kayttotarkoitukset)
+                )}
+              parse={Maybe.Some}
+              allowNone={true} />
+          </div>
         </div>
-      </div>
+      {/if}
       {#if valvonnat.length === 0}
         <div class="my-6">{i18n(i18nRoot + '.empty')}</div>
       {:else}
