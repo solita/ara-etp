@@ -169,7 +169,7 @@
           bind:model={laatija}
           lens={R.lensProp('henkilotunnus')}
           format={Maybe.orSome('')}
-          parse={formParsers.henkilotunnus}
+          parse={R.compose(Maybe.fromEmpty, R.trim)}
           validators={schema.henkilotunnus}
           disabled={true}
           {i18n} />
