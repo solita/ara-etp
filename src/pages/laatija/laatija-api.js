@@ -83,6 +83,12 @@ export const putLaatijaById = R.curry((rooli, fetch, id, laatija) =>
   )(laatija)
 );
 
+export const postLaatija = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.laatijat)),
+  serialize
+);
+
 export const getYritykset = R.curry((fetch, id) =>
   R.compose(
     R.map(R.map(R.evolve({ modifytime: dfns.parseJSON }))),
