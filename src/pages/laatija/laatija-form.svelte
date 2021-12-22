@@ -39,7 +39,7 @@
   export let cancel;
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
-
+  $: isPartner = R.propEq('ispartner', true, laatija);
   $: isOwnSettings = R.eqProps('id', laatija, whoami);
 
   $: disabled = !R.or(isPaakayttaja, isOwnSettings);
@@ -171,7 +171,7 @@
           format={Maybe.orSome('')}
           parse={R.compose(Maybe.fromEmpty, R.trim)}
           validators={schema.henkilotunnus}
-          disabled={true}
+          disabled={!isPaakayttaja || !isPartner}
           {i18n} />
       </div>
     </div>
