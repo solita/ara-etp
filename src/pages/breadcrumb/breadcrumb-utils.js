@@ -271,6 +271,11 @@ export const laatijat = i18n => ({
   label: i18n('navigation.laatijat')
 });
 
+export const newLaatija = i18n => ({
+  url: '#/laatija/new',
+  label: i18n('navigation.new-laatija')
+});
+
 export const kayttajat = i18n => ({
   url: '#/kayttaja/all',
   label: i18n('navigation.kayttajat')
@@ -315,6 +320,7 @@ export const laatijaCrumb = R.curry(
         ])
       ],
       [R.equals('all'), R.always([laatijat(i18n)])],
+      [R.equals('new'), R.always([laatijat(i18n), newLaatija(i18n)])],
       [
         R.T,
         id =>

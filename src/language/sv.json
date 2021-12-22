@@ -78,7 +78,8 @@
         "virhetypes": "Feltyper"
       }
     },
-    "new-kayttaja": "Ny användare"
+    "new-kayttaja": "Ny användare",
+    "new-laatija": "Ny upprättare"
   },
   "errors": {
     "load-error": "Sökningen av uppgifterna misslyckades.",
