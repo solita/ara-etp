@@ -1,7 +1,5 @@
 {
-  "document": {
-    "title": "Ara - Energicertifikatservice"
-  },
+  "document": { "title": "Ara - Energicertifikatservice" },
   "validation": {
     "required": "Obligatorisk uppgift",
     "min-length": "Längden ska vara minst {min} tecken",
@@ -16,6 +14,7 @@
     "invalid-rakennustunnus": "Felaktig byggnadsbeteckning",
     "invalid-verkkolaskuosoite": "Felaktig nätfakturaadress",
     "invalid-verkkolaskuoperaattori": "Felaktig nätfakturaoperatör",
+    "invalid-api-key": "Felaktigt lösenord för dataöverföring",
     "no-selection": "Inget val",
     "warning": {
       "min-number": "Vanligtvis större än {min}",
@@ -90,12 +89,7 @@
     "row-error": "Fel på rad",
     "file-read-error": "Ett oväntat fel inträffade vid läsning av filen."
   },
-  "units": {
-    "year": "år",
-    "pieces": "St",
-    "celsius": "°C",
-    "days": "dagar"
-  },
+  "units": { "year": "år", "pieces": "St", "celsius": "°C", "days": "dagar" },
   "login_redirect": "Vänta en stund, du hänvisas till inloggningssidan",
   "loading": "Laddar...",
   "tallenna": "Spara",
@@ -142,7 +136,24 @@
       "save-error": "Ett oväntat fel inträffade när uppgifterna om företaget skulle sparas.",
       "validation-error": "Fel i blanketten, kontrollera de inmatade uppgifterna.",
       "load-error": "Sökning av uppgifter om företaget misslyckades.",
-      "missing-permission": "Inga rättigheter att ändra företagets uppgifter."
+      "missing-permission": "Inga rättigheter att ändra företagets uppgifter.",
+      "not-found": "Yritystä ei löydy järjestelmästä. SV?",
+      "delete-success": "Yritys on merkitty poistetuksi. Yrityksen tiedot ei ole enää käytettävissä laskutuksessa. SV?",
+      "delete-error": "Yrityksen poistaminen epäonnistui. SV?",
+      "undelete-success": "Yritys poistaminen on peruttu ja yritys on nyt käytettävissä. SV?",
+      "undelete-error": "Yrityksen poiston peruuttaminen epäonnistui. SV?"
+    },
+    "perustiedot-header": "Perustiedot SV?",
+    "deleted": "poistettu SV?",
+    "cancel-button": "Peru muutokset SV?",
+    "save-button": "Tallenna SV?",
+    "delete": {
+      "confirm": "Oletko varma että haluat merkitä yrityksen poistetuksi. Poistettua yritystä ei voi enää käyttää laskutuksessa. SV?",
+      "button": "Poista yritys SV?"
+    },
+    "undelete": {
+      "confirm": "Oletko varma että haluat palauttaa yrityksen takaisin voimaan SV?",
+      "button": "Peru poistaminen SV?"
     }
   },
   "yritykset": {
@@ -154,9 +165,7 @@
       "load-error": "Det gick inte att ladda ned företagsuppgifterna"
     }
   },
-  "time": {
-    "klo": "kl."
-  },
+  "time": { "klo": "kl." },
   "kayttaja": {
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
@@ -194,6 +203,35 @@
         "add-success": "En ny användare har registrerats i systemet.",
         "add-error": "Det gick inte att registrera den nya användaren."
       }
+    },
+    "muutoshistoria": {
+      "nimi": "Nimi SV?",
+      "henkilotunnus": "Henkilötunnus SV?",
+      "kayttajatiedot": "Käyttäjätiedot SV?",
+      "laatijatiedot": "Laatijatiedot SV?",
+      "muokkausaika": "Muokkausaika SV?",
+      "muokkaaja": "Muokkaaja SV?",
+      "laatimiskielto": "Laatimiskielto SV?",
+      "toteaja": "Toteaja SV?",
+      "toteamispaivamaara": "Toteamispäivä SV?",
+      "toimintaalueet": "Toiminta-alueet SV?",
+      "virtu": "Virtu SV?",
+      "cognitoid": "Cognito ID SV?",
+      "passivoitu": "Passivoitu SV?",
+      "julkiset": "Julkiset tiedot SV?",
+      "osoite": "Osoite SV?",
+      "puhelin": "Puhelin SV?",
+      "email": "Sähköposti SV?",
+      "rooli": "Rooli SV?",
+      "patevyystaso": "Pätevyys SV?",
+      "laskutuskieli": "Laskutuskieli SV?",
+      "www-osoite": "www-osoite SV?"
+    },
+    "verification": {
+      "header": "Muistutus henkilötietojen tarkistamisesta SV?",
+      "p-1": "Henkilötiedot on hyvä tarkistaa säännöllisin väliajoin. Tällä varmistat palvelun virheettömän toiminnan. SV?",
+      "p-2": "Jos tiedoissa on puutteita, niin korjaa virheelliset tiedot ja tallenna muutokset. SV?",
+      "p-3": "Jos tiedot ovat virheettömät, niin saat tämän muistutuksen pois painamalla alhaalta painiketta Tarkistettu. SV?"
     }
   },
   "kayttajat": {
@@ -211,9 +249,7 @@
       "active": "Aktiva",
       "passivoitu": "Passiverad"
     },
-    "messages": {
-      "load-error": "Laddningen av uppgifter misslyckades."
-    }
+    "messages": { "load-error": "Laddningen av uppgifter misslyckades." }
   },
   "laatija": {
     "laatija": "Upprättare",
@@ -300,7 +336,8 @@
     },
     "perustiedot-header": "Basuppgifter",
     "cancel": "Återkalla ändringar",
-    "save": "Spara"
+    "save": "Spara",
+    "verify": "Tarkistettu SV?"
   },
   "laatijat": {
     "title": "Sök upprättare",
@@ -319,12 +356,12 @@
       "before": "Giltigheten upphör tidigare eller samma dag som"
     },
     "filters": {
-      "label": "Status",
-      "all": "Alla",
       "0": "Giltig behörighet",
       "1": "Ej inloggad",
       "2": "Behörigheten återkallad / Förbud mot upprättande",
-      "3": "Behörigheten har upphört"
+      "3": "Behörigheten har upphört",
+      "label": "Status",
+      "all": "Alla"
     }
   },
   "energiatodistus": {
@@ -353,7 +390,8 @@
         "osoite": "Adress",
         "ktl": "Lagen om räntestöd för hyresbostadslån och bostadsrättshuslån",
         "laatija": "Upprättare",
-        "toiminnot": "Funktioner"
+        "toiminnot": "Funktioner",
+        "valvonta": "Valvonta SV?"
       },
       "valitse_hakuehto": "Välj sökvillkor",
       "lisaa_hakuehtoja": "Fler sökkriterier",
@@ -380,13 +418,11 @@
       "ei-sisalla": "Innehåller inte",
       "kuluva-ja-edelliset": "Innevarande och föregående",
       "laatija": {
-        "toteamispaivamaara": "Upprättare / Toteamispäivämäärä SV?",
-        "voimassaolo-paattymisaika": "Upprättare / Pätevyyden voimassaolon päättymispäivä SV?",
+        "toteamispaivamaara": "Upprättare / Datum för konstaterande",
+        "voimassaolo-paattymisaika": "Upprättare / Behörighetens sista giltighetsdag",
         "patevyystaso": "Upprättare / Behörighetsnivå"
       },
-      "kunta": {
-        "id": "Kommun"
-      }
+      "kunta": { "id": "Kommun" }
     },
     "kaikki": "Allt",
     "korvaavuus": {
@@ -394,7 +430,8 @@
         "korvattu": "Ersätter energicertifikatet",
         "korvaava": "Ersatt med energicertifikat",
         "korvaava-draft": "Ersätts med energicertifikat",
-        "korvaavuus": "Energicertifikatets ersättbarhet"
+        "korvaavuus": "Energicertifikatets ersättbarhet",
+        "ehdotus": "Ehdotus korvattavaksi energiatodistukseksi SV?"
       },
       "checkbox": "Ersätter certifikatet",
       "input": "Välj certifikat som ska ersättas",
@@ -416,6 +453,13 @@
         "is-same": "Ett energicertifikat kan inte ersätta sig självt.",
         "not-found": "Det finns inget energicertifikat.",
         "invalid-id": "Energicertifikatets ID innehåller inga bokstäver."
+      },
+      "ehdotus": {
+        "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen. SV?",
+        "info-p2": "<b>Valitse näistä korvattava energiatodistus</b> tai jos mitään todistusta ei korvata niin tämän kohdan voi ohittaa. SV?",
+        "info-p3-1": "Jos halutaan korvata jokin muu niin valitse kohta  SV?",
+        "info-p3-2": "Korvaa todistuksen SV?",
+        "info-p3-3": "ja syötä korvattava todistustunnus käsin. SV?"
       }
     },
     "tila": {
@@ -440,10 +484,7 @@
       "undodiscard": "Ångra funktionen Förkasta",
       "delete": "Radera"
     },
-    "new": {
-      "draft": "Nytt utkast",
-      "copy-from": "Ny kopia av certifikat"
-    },
+    "new": { "draft": "Nytt utkast", "copy-from": "Ny kopia av certifikat" },
     "id": "Energicertifikatkod",
     "laatija-fullname": "Upprättare",
     "laskutusosoite-id": "Faktureringsuppgifter som används",
@@ -487,10 +528,7 @@
           "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
         }
       },
-      "yritys": {
-        "label-context": "$unused",
-        "nimi": "Företag"
-      }
+      "yritys": { "label-context": "$unused", "nimi": "Företag" }
     },
     "yhteensa": "Totalt",
     "lahtotiedot": {
@@ -1112,7 +1150,8 @@
       "tyojono-add-success": "Energicertifikatet lades till arbetskön",
       "tyojono-add-error": "Det gick inte att lägga till energicertifikat i arbetskön",
       "tyojono-remove-success": "Energicertifikatet togs bort från arbetskön",
-      "tyojono-remove-error": "Det gick inte att ta bort energicertifikatet från arbetskön"
+      "tyojono-remove-error": "Det gick inte att ta bort energicertifikatet från arbetskön",
+      "invalid-laskutusosoite-id": "Ei enää käytössä. Valitse voimassaoleva laskutustieto. SV?"
     },
     "signing": {
       "header": "Undertecknande",
@@ -1150,19 +1189,13 @@
         "signed": "{language} energicertifikatet har undertecknats.",
         "aborted": "Du avbröt underteckningsprocessen. Utkaststatus har återställts för energicertifikatet."
       },
-      "button": {
-        "start": "Underteckna",
-        "abort": "Avbryt",
-        "close": "Stäng"
-      }
+      "button": { "start": "Underteckna", "abort": "Avbryt", "close": "Stäng" }
     },
     "allekirjoitus": {
       "laskutusosoite": "Faktureringsadress",
       "valitse-laskutusosoite": "Välj en faktureringsadress"
     },
-    "laskutustiedot": {
-      "nimi": "Namn"
-    },
+    "laskutustiedot": { "nimi": "Namn" },
     "liitteet": {
       "title": "Bilagor",
       "empty": "Energicertifikatet har inga bilagor.",
@@ -1175,9 +1208,7 @@
         "author": "Adderare",
         "type": "Typ"
       },
-      "add-files": {
-        "title": "Lägg till fil"
-      },
+      "add-files": { "title": "Lägg till fil" },
       "add-link": {
         "title": "Lägg till länk",
         "nimi": "Länkens namn",
@@ -1205,9 +1236,7 @@
       }
     },
     "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
-    "viestit": {
-      "title": "Meddelanden"
-    },
+    "viestit": { "title": "Meddelanden" },
     "muutoshistoria": {
       "not-found": "Det existerar inget energicertifikat.",
       "load-error": "Det gick inte att ladda ned ändringshistoriken.",
@@ -1238,10 +1267,7 @@
   "energiatodistukset": {
     "title": "Energicertifikat",
     "not-found": "Hittar inte energicertifikatet med angivna sökvillkor eller så har du inget energicertifikat.",
-    "tilat": {
-      "0": "Utkast",
-      "1": "Giltig"
-    },
+    "tilat": { "0": "Utkast", "1": "Giltig" },
     "messages": {
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet"
@@ -1320,6 +1346,18 @@
             "update-error-missing-et": "Det existerar inget energicertifikat."
           }
         }
+      },
+      "liitteet": {
+        "empty": "Meddelandekedjan har inga bilagor.",
+        "messages": {
+          "load-error": "Det gick inte att ladda ner noterna.",
+          "add-link-success": "Länken har lagts till i meddelandet.",
+          "add-files-success": "De bifogade filerna har lagts till i meddelandet.",
+          "delete-liite-success": "Bilagan har tagits bort.",
+          "add-files-error": "Det gick inte att lägga till bilagan.",
+          "add-link-error": "Det gick inte att lägga till länken.",
+          "delete-liite-error": "Det gick inte att ta bort bilagan."
+        }
       }
     },
     "kasittelija": "Handläggare"
@@ -1382,21 +1420,16 @@
   "file-browse": "bläddra bland filer",
   "file_upload_error_multiple_files": "För många filer. Lägg till en fil i taget.",
   "country-not-found": "Felaktigt land",
-  "table": {
-    "actions": "Funktioner"
-  },
-  "pagination": {
-    "results": "Resultat {from}... {to} / {total}"
-  },
+  "table": { "actions": "Funktioner" },
+  "pagination": { "results": "Resultat {from}... {to} / {total}" },
   "unique-violations": {
     "kayttaja-email-key": "E-postadressen används redan.",
     "kayttaja-virtu-key": "Virtu-användarnamnet är redan i bruk.",
     "kayttaja_henkilotunnus_key": "Personbeteckningen är redan i bruk.",
-    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Företagsnummer, namn och mottagarens specifikation används av ett annat företag."
+    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Företagsnummer, namn och mottagarens specifikation används av ett annat företag.",
+    "yritys-ytunnus-nimi-key": "Yritystunnus, nimi on käytössä toisella yrityksellä. Voit käyttää vastaanottajan tarkennetta erottamaan yritykset. SV?"
   },
-  "not-found": {
-    "message": "Sidan du valde finns inte."
-  },
+  "not-found": { "message": "Sidan du valde finns inte." },
   "footer": {
     "about": "Information om webbplatsen",
     "name": "Finansiering- och utvecklingcentralet för boendet",
@@ -1431,7 +1464,8 @@
         "messages": {
           "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll",
           "laatija-not-found": "Hittar inte upprättaren i denna tjänst."
-        }
+        },
+        "download-all": "Lataa kaikki valvonnat SV?"
       },
       "valvonta": {
         "title": "Kontroll av riktigheten",
@@ -1509,9 +1543,7 @@
           "save-button": "Spara kontrollpromemoria",
           "reset-button": "Återkalla",
           "delete-button": "Ta bort utkast",
-          "virhe": {
-            "description": "Felbeskrivning"
-          },
+          "virhe": { "description": "Felbeskrivning" },
           "response-title": "Kontrollpromemoria",
           "response-description": "ARA ber om svar senast {deadline-date}.",
           "add-virhe": "Lägg till fel",
@@ -1534,7 +1566,8 @@
           "publish-button": "Skicka svaret",
           "save-button": "Spara",
           "reset-button": "Återkalla",
-          "draft-info": "Du kan fortsätta svara senare"
+          "draft-info": "Du kan fortsätta svara senare",
+          "delete-button": "Ta bort utkastet."
         },
         "audit-order": {
           "title": "Uppmaning angående kontrollpromemoria",
@@ -1594,11 +1627,11 @@
           "delete-liite-success": "Bilagan har tagits bort.",
           "add-files-error": "Det gick inte att lägga till filbilagan.",
           "add-link-error": "Det gick inte att lägga till länken.",
-          "delete-liite-error": "Det gick inte att ta bort bilagan."
+          "delete-liite-error": "Det gick inte att ta bort bilagan.",
+          "delete-success": "Att ta bort åtgärden lyckades.",
+          "delete-error": "Det gick inte att ta bort åtgärden."
         },
-        "liitteet": {
-          "empty": "Åtgärden har inga bilagor"
-        },
+        "liitteet": { "empty": "Åtgärden har inga bilagor" },
         "deadline-date": "Tidsfrist",
         "deadline-date-dialog": {
           "title": "Ändra tidsfristen",
@@ -1642,7 +1675,8 @@
           "add-error": "Det gick inte att lägga till feltypen.",
           "validation-error": "Det finns ett fel i uppgifterna. Kontrollera uppgifterna om feltyp innan du skickar."
         }
-      }
+      },
+      "pending": "Tarkastettava SV?"
     },
     "kaytto": {
       "all": {
@@ -1663,7 +1697,9 @@
         "rakennustunnus": "Byggnadsbeteckning",
         "osoite": "Adress",
         "omistajat": "Ägare",
-        "energiatodistus": "Energicertifikat"
+        "energiatodistus": "Energicertifikat",
+        "keyword-search": "Tekstihaku SV?",
+        "download-all": "Lataa kaikki valvonnat SV?"
       },
       "kohde": {
         "title": "Objekt",
@@ -1699,7 +1735,8 @@
           "delete-liite-success": "Bilagan har tagits bort.",
           "add-files-error": "Det gick inte att lägga till filbilagan.",
           "add-link-error": "Det gick inte att lägga till länken.",
-          "delete-liite-error": "Det gick inte att ta bort bilagan."
+          "delete-liite-error": "Det gick inte att ta bort bilagan.",
+          "find-rakennustunnus-error": "Sökningen av byggnadsbeteckningen misslyckades."
         },
         "osapuolet": {
           "title": "Parter",
@@ -1712,7 +1749,8 @@
           "new-yritys": "Nytt företag",
           "empty": "Inga parter"
         },
-        "attachments": "Bilagor och länkar"
+        "attachments": "Bilagor och länkar",
+        "rakennustunnus-existing-et": "Det finns redan energicertifikat för byggnadsbeteckningen"
       },
       "new-kohde": {},
       "valvonta": {
@@ -1729,7 +1767,8 @@
         "toimenpide": {
           "rooli-none": "Ingen roll",
           "toimitustapa-none": "Inget leveranssätt",
-          "fyi": "För kännedom"
+          "fyi": "För kännedom",
+          "fyi-disabled": "ei tiedoteta SV?"
         },
         "no-events": "Inga händelser"
       },
@@ -1793,7 +1832,14 @@
         "rooli": "Roll",
         "fyi": "Ägarnas dokument för kännedom",
         "toimitustapa": "Leveranssätt",
-        "esikatselu": "Förhandsvisning"
+        "esikatselu": "Förhandsvisning",
+        "fyi-disabled": "Ei lähetetä dokumentteja tiedoksi SV?",
+        "decision-order": {
+          "title": "Käskypäätös SV?",
+          "info": "Jos energiatodistusta ei saada niin voidaan lopulta tehdä käskypäätös ja asettaa uhkasakko. Vaiheen dokumentit tehdään tämän järjestelmän ulkopuolella. SV?",
+          "description": "Kommentti SV?",
+          "publish-button": "Kirjaa päätös SV?"
+        }
       },
       "osapuoli": {
         "new-henkilo-title": "Ny person",
@@ -1847,5 +1893,7 @@
         }
       }
     }
-  }
+  },
+  "yes": "Kyllä SV?",
+  "no": "Ei SV?"
 }
