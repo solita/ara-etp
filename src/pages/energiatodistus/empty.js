@@ -89,7 +89,8 @@ export const energiatodistus2018 = _ => ({
   laskuriviviite: Maybe.None(),
   laskutusaika: Maybe.None(),
   perustiedot: {
-    nimi: Maybe.None(),
+    'nimi-fi': Maybe.None(),
+    'nimi-sv': Maybe.None(),
     rakennustunnus: Maybe.None(),
     kiinteistotunnus: Maybe.None(),
     kieli: Maybe.None(),
