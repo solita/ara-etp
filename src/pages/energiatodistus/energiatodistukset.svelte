@@ -349,7 +349,7 @@
                       )}
                     </td>
                     <td class="etp-table--td">
-                      {orEmpty(energiatodistus.perustiedot.nimi)}
+                      {orEmpty(energiatodistus.perustiedot['nimi-fi'])}
                     </td>
                     <td class="etp-table--td">
                       <Address

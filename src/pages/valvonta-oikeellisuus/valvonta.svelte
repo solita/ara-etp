@@ -170,7 +170,7 @@
       <div class="flex flex-col mb-8">
         <div>{Maybe.orSome('', energiatodistus['laatija-fullname'])}</div>
         <div class="flex space-x-1">
-          <div>{Maybe.orSome('', energiatodistus.perustiedot.nimi)}.</div>
+          <div>{Maybe.orSome('', energiatodistus.perustiedot['nimi-fi'])}.</div>
           <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
         </div>
         <div>

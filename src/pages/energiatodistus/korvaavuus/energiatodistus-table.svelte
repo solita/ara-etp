@@ -63,7 +63,7 @@
           {Maybe.orSome('', energiatodistus.perustiedot.rakennustunnus)}
         </td>
         <td class="etp-table--td">
-          {Maybe.orSome('', energiatodistus.perustiedot.nimi)}
+          {Maybe.orSome('', energiatodistus.perustiedot['nimi-fi'])}
         </td>
         <td class="etp-table--td">
           <Address {energiatodistus} {postinumerot} />

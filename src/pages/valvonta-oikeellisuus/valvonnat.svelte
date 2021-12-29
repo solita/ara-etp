@@ -398,7 +398,7 @@
                   <!-- energiatodistus -->
                   <td class="etp-table--td">{valvonta.energiatodistus.id}</td>
                   <td class="etp-table--td">
-                    {orEmpty(valvonta.energiatodistus.perustiedot.nimi)}
+                    {orEmpty(valvonta.energiatodistus.perustiedot['nimi-fi'])}
                   </td>
                   <td class="etp-table--td">
                     <Address
