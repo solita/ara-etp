@@ -12,6 +12,7 @@
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link.svelte';
   import Address from '@Pages/energiatodistus/address.svelte';
+  import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
 
   import * as EnergiatodistusApi from '../energiatodistus-api';
   import * as ET from '../energiatodistus-utils';
@@ -148,7 +149,7 @@
                   {Maybe.orSome('', korvattava.perustiedot.rakennustunnus)}
                 </td>
                 <td class="etp-table--td">
-                  {Maybe.orSome('', korvattava.perustiedot.nimi)}
+                  <RakennuksenNimi energiatodistus={korvattava} />
                 </td>
                 <td class="etp-table--td">
                   <Address energiatodistus={korvattava} {postinumerot} />

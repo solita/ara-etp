@@ -18,6 +18,7 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as ViestiApi from '@Pages/viesti/viesti-api';
+  import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
@@ -170,7 +171,7 @@
       <div class="flex flex-col mb-8">
         <div>{Maybe.orSome('', energiatodistus['laatija-fullname'])}</div>
         <div class="flex space-x-1">
-          <div>{Maybe.orSome('', energiatodistus.perustiedot['nimi-fi'])}.</div>
+          <div><RakennuksenNimi {energiatodistus} />.</div>
           <Address postinumerot={luokittelut.postinumerot} {energiatodistus} />
         </div>
         <div>
