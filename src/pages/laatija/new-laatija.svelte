@@ -2,6 +2,10 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Router from '@Component/Router/router';
+  import * as Locales from '@Language/locale-utils';
+  import * as Response from '@Utility/response';
+  import * as Laatija from './laatija';
 
   import * as GeoApi from '@Utility/api/geo-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
@@ -12,16 +16,21 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
+  import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
+
+  const i18n = $_;
+  const i18nRoot = 'laatija';
 
   let overlay = true;
+  let dirty = false;
 
   let resources = Maybe.None();
-  let laatija = Maybe.Some({});
 
   const emptyLaatija = {
     login: Maybe.None(),
     passivoitu: false,
-    rooli: Maybe.None(),
+    rooli: Maybe.Some(0),
     etunimi: '',
     sukunimi: '',
     email: '',
@@ -30,9 +39,7 @@
     toimintaalue: Maybe.None(),
     muuttoimintaalueet: [],
     wwwosoite: Maybe.None(),
-    julkinenwwwosoite: false,
     maa: Either.Right('FI'),
-    rooli: 0,
     patevyystaso: 0,
     verifytime: Maybe.None(),
     'vastaanottajan-tarkenne': Maybe.None(),
@@ -40,10 +47,19 @@
     postinumero: '',
     postitoimipaikka: '',
     laskutuskieli: 0,
-    toteamispaivamaara: new Date(),
+    toteamispaivamaara: Either.Right(new Date()),
     'voimassaolo-paattymisaika': new Date(),
-    'api-key': Maybe.None()
+    'api-key': Maybe.None(),
+    julkinenwwwosoite: false,
+    julkinenemail: false,
+    julkinenosoite: false,
+    julkinenpuhelin: false
   };
+
+  let laatija = emptyLaatija;
+  const clean = _ => {
+    laatija = emptyLaatija;
+  }
 
   $: Future.fork(
     response => {
@@ -67,12 +83,29 @@
   const addLaatija = laatija => {
     overlay = true;
     Future.fork(
-      errResponse => null,
       response => {
         overlay = false;
-        push('/kayttaja/' + response.id);
+        flashMessageStore.add(
+          'Laatija',
+          'error',
+          Locales.uniqueViolationMessage(
+            i18n,
+            response,
+            Response.errorKey(i18nRoot, 'add', response)
+          )
+        );
       },
-      LaatijaApi.postLaatija(laatija)
+      response => {
+        flashMessageStore.addPersist(
+          'Laatija',
+          'success',
+          i18n(`${i18nRoot}.messages.add-success`)
+        );
+        overlay = false;
+        dirty = false;
+        Router.push('/kayttaja/' + response.id);
+      },
+      LaatijaApi.postLaatija(Laatija.fromLaatijaForm(laatija))
     );
   };
 </script>
@@ -82,9 +115,11 @@
     {#each resources.toArray() as { whoami, luokittelut }}
       <LaatijaForm
         {luokittelut}
-        laatija={emptyLaatija}
+        {laatija}
         {whoami}
-        submit={addLaatija} />
+        {dirty}
+        submit={addLaatija}
+        cancel={clean}/>
     {/each}
   </div>
   <div slot="overlay-content">

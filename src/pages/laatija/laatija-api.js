@@ -44,7 +44,8 @@ export const serialize = R.compose(
     maa: Either.right,
     toimintaalue: Maybe.orSome(null),
     wwwosoite: Maybe.orSome(null),
-    'api-key': Maybe.orSome(null)
+    'api-key': Maybe.orSome(null),
+    toteamispaivamaara: date => dfns.format(date, 'yyyy-MM-dd')
   }),
   R.omit([
     'id',
@@ -53,7 +54,6 @@ export const serialize = R.compose(
     'rooli',
     'passivoitu',
     'voimassaolo-paattymisaika',
-    'toteamispaivamaara',
     'voimassa'
   ])
 );

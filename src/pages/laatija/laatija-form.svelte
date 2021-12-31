@@ -1,13 +1,21 @@
 <script>
   import * as R from 'ramda';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
+  import * as country from '@Utility/country';
+  import * as Validation from '@Utility/validation';
+  import * as ToimintaAlueUtils from '@Utility/toimintaalue';
+  import * as Formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
+  import * as LocaleUtils from '@Language/locale-utils';
 
   import { locale, _ } from '@Language/i18n';
-  import * as LocaleUtils from '@Language/locale-utils';
 
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
+  import Datepicker from '@Component/Input/Datepicker';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
@@ -16,18 +24,10 @@
   import * as LaatijaSchema from './schema';
 
   import { flashMessageStore } from '@/stores';
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as country from '@Utility/country';
-  import * as Validation from '@Utility/validation';
-  import * as ToimintaAlueUtils from '@Utility/toimintaalue';
-  import * as formats from '@Utility/formats';
-  import * as Kayttajat from '@Utility/kayttajat';
+
 
   const i18n = $_;
   const i18nRoot = 'laatija';
-
-  const formParsers = LaatijaSchema.formParsers();
 
   $: schema = LaatijaSchema.schema(laatija.maa);
 
@@ -117,9 +117,10 @@
   };
 
   const formatPatevyydenVoimassaoloaika = laatija =>
-    formats.formatDateInstant(laatija.toteamispaivamaara) +
+    Maybe.fold('-', Formats.formatDateInstant,
+      Either.toMaybe(laatija.toteamispaivamaara)) +
     ' - ' +
-    formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika']);
+    Formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika']);
 
   const setDirty = _ => {
     dirty = true;
@@ -142,7 +143,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('etunimi')}
-          parse={formParsers.etunimi}
+          parse={R.trim}
           validators={schema.etunimi}
           disabled={!isPaakayttaja}
           {i18n} />
@@ -155,7 +156,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('sukunimi')}
-          parse={formParsers.sukunimi}
+          parse={R.trim}
           validators={schema.sukunimi}
           disabled={!isPaakayttaja}
           {i18n} />
@@ -187,7 +188,7 @@
           {disabled}
           bind:model={laatija}
           lens={R.lensProp('email')}
-          parse={formParsers.email}
+          parse={R.trim}
           validators={schema.email}
           {i18n} />
       </div>
@@ -199,7 +200,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('puhelin')}
-          parse={formParsers.puhelin}
+          parse={R.trim}
           validators={schema.puhelin}
           {disabled}
           {i18n} />
@@ -215,7 +216,7 @@
           bind:model={laatija}
           lens={R.lensProp('vastaanottajan-tarkenne')}
           format={Maybe.orSome('')}
-          parse={formParsers['vastaanottajan-tarkenne']}
+          parse={R.compose(Maybe.fromEmpty, R.trim)}
           validators={schema['vastaanottajan-tarkenne']}
           {disabled}
           {i18n} />
@@ -230,7 +231,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('jakeluosoite')}
-          parse={formParsers.jakeluosoite}
+          parse={R.trim}
           validators={schema.jakeluosoite}
           {disabled}
           {i18n} />
@@ -245,7 +246,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('postinumero')}
-          parse={formParsers.postinumero}
+          parse={R.trim}
           validators={schema.postinumero}
           {disabled}
           {i18n} />
@@ -258,7 +259,7 @@
           required={true}
           bind:model={laatija}
           lens={R.lensProp('postitoimipaikka')}
-          parse={formParsers.postitoimipaikka}
+          parse={R.trim}
           validators={schema.postitoimipaikka}
           {disabled}
           {i18n} />
@@ -302,7 +303,7 @@
 
     {#if R.or(laatija.laatimiskielto, isPaakayttaja)}
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <div class="lg:w-1/3 w-full px-4">
           <Checkbox
             bind:model={laatija}
             lens={R.lensProp('laatimiskielto')}
@@ -312,7 +313,7 @@
       </div>
     {/if}
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="lg:w-1/3 w-full px-4">
         <Input
           id={'patevyydenvoimassaolo'}
           name={'patevyydenvoimassaolo'}
@@ -323,6 +324,19 @@
           required={true}
           {i18n} />
       </div>
+      {#if isPaakayttaja}
+        <div class="md:w-1/3 w-full px-4 lg:py-0 py-4">
+          <Datepicker
+            id={'toteamispaivamaara'}
+            name={'toteamispaivamaara'}
+            label={i18n('laatija.toteamispaivamaara')}
+            bind:model={laatija}
+            lens={R.lensProp('toteamispaivamaara')}
+            required={true}
+            transform={Either.Right}
+            {i18n} />
+        </div>
+      {/if}
     </div>
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -371,7 +385,7 @@
           bind:model={laatija}
           lens={R.lensProp('wwwosoite')}
           format={Maybe.orSome('')}
-          parse={formParsers.wwwosoite}
+          parse={LaatijaSchema.parseWWWOsoite}
           validators={schema.wwwosoite}
           {disabled}
           {i18n} />
