@@ -19,7 +19,7 @@ describe('Query', () => {
     const queryObject = {
       'should-not-be-included': Maybe.None()
     };
-    const expected = '?';
+    const expected = '';
 
     assert.equal(Query.toQueryString(queryObject), expected);
   });
