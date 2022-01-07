@@ -70,7 +70,8 @@
       'has-valvoja': Query.parseBoolean,
       keyword: Parsers.optionalString,
       'toimenpidetype-id': Parsers.toMaybe(Parsers.parseInteger),
-      'kayttotarkoitus-id': Parsers.toMaybe(Parsers.parseInteger)}),
+      'kayttotarkoitus-id': Parsers.toMaybe(Parsers.parseInteger)
+    }),
     qs.parse
   );
 
@@ -78,10 +79,14 @@
 
   const queryToBackendParams = R.compose(
     R.omit(['page']),
-    query => R.mergeLeft({
-      offset: R.map(R.compose(R.multiply(pageSize), R.dec), query.page),
-      limit: Maybe.Some(pageSize)
-    }, query),
+    query =>
+      R.mergeLeft(
+        {
+          offset: R.map(R.compose(R.multiply(pageSize), R.dec), query.page),
+          limit: Maybe.Some(pageSize)
+        },
+        query
+      ),
     R.evolve({
       keyword: R.map(R.compose(encodeURI, wrapPercent)),
       'has-valvoja': R.filter(R.not)
@@ -125,7 +130,7 @@
         )
       })
     );
-  }
+  };
 
   // use fixed location so that location is not reactive
   const originalLocation = $location;
@@ -133,7 +138,10 @@
   $: query = parseQuery($querystring);
   $: {
     // do not load if query is already loaded or the location is changed
-    if (!R.equals(loadedQuery, query) && R.equals(originalLocation, $location)) {
+    if (
+      !R.equals(loadedQuery, query) &&
+      R.equals(originalLocation, $location)
+    ) {
       load(query);
       Router.push(originalLocation + Query.toQueryString(query));
       loadedQuery = query;

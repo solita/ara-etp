@@ -128,6 +128,5 @@ export const optionalParser = parse =>
  *
  * @sig (string -> Either[(Translate -> string),a]) -> (string -> Maybe[a])
  */
-export const toMaybe = parse => R.compose(
-  R.chain(Either.toMaybe),
-  R.map(parse), optionalString);
+export const toMaybe = parse =>
+  R.compose(R.chain(Either.toMaybe), R.map(parse), optionalString);

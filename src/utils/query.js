@@ -13,4 +13,5 @@ export const toQueryString = R.compose(
 
 export const parseBoolean = R.compose(
   R.map(R.equals('true')),
-  Parsers.optionalString);
+  Parsers.optionalString
+);
