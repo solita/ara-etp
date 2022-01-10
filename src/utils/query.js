@@ -15,3 +15,5 @@ export const parseBoolean = R.compose(
   R.map(R.equals('true')),
   Parsers.optionalString
 );
+
+export const parseInteger = Parsers.toMaybe(Parsers.parseInteger);

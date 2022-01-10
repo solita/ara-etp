@@ -63,14 +63,14 @@
   const parseQuery = R.compose(
     R.mergeRight(defaultQuery),
     R.evolve({
-      page: Parsers.toMaybe(Parsers.parseInteger),
-      'valvoja-id': Parsers.toMaybe(Parsers.parseInteger),
-      'laatija-id': Parsers.toMaybe(Parsers.parseInteger),
+      page: Query.parseInteger,
+      'valvoja-id': Query.parseInteger,
+      'laatija-id': Query.parseInteger,
       'include-closed': Query.parseBoolean,
       'has-valvoja': Query.parseBoolean,
       keyword: Parsers.optionalString,
-      'toimenpidetype-id': Parsers.toMaybe(Parsers.parseInteger),
-      'kayttotarkoitus-id': Parsers.toMaybe(Parsers.parseInteger)
+      'toimenpidetype-id': Query.parseInteger,
+      'kayttotarkoitus-id': Query.parseInteger
     }),
     qs.parse
   );
