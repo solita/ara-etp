@@ -88,7 +88,7 @@
         query
       ),
     R.evolve({
-      keyword: R.map(R.compose(encodeURI, wrapPercent)),
+      keyword: R.map(wrapPercent),
       'has-valvoja': R.filter(R.not)
     })
   );
