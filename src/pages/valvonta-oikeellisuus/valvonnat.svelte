@@ -399,7 +399,8 @@
                   <!-- energiatodistus -->
                   <td class="etp-table--td">{valvonta.energiatodistus.id}</td>
                   <td class="etp-table--td">
-                    <RakennuksenNimi energiatodistus={valvonta.energiatodistus} />
+                    <RakennuksenNimi
+                      energiatodistus={valvonta.energiatodistus} />
                   </td>
                   <td class="etp-table--td">
                     <Address

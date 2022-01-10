@@ -13,14 +13,9 @@
     energiatodistus.perustiedot['nimi-sv']
   ];
 
-  $: namesOrdered = Locales.isSV($locale)
-    ? R.reverse(names)
-    : names;
+  $: namesOrdered = Locales.isSV($locale) ? R.reverse(names) : names;
 
-  $: name = Maybe.orElse(
-    namesOrdered[1],
-    namesOrdered[0]
-  );
+  $: name = Maybe.orElse(namesOrdered[1], namesOrdered[0]);
 </script>
 
 {Maybe.orSome('', name)}
