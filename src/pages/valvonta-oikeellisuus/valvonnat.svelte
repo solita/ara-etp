@@ -3,14 +3,15 @@
   import * as dfns from 'date-fns';
   import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Query from '@Utility/query';
+  import * as Locales from '@Language/locale-utils';
 
-  import { replace, querystring, location } from 'svelte-spa-router';
+  import { querystring, location } from 'svelte-spa-router';
   import * as Router from '@Component/Router/router';
   import qs from 'qs';
 
@@ -27,7 +28,6 @@
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
-  import * as Locales from '@Language/locale-utils';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
@@ -47,40 +47,9 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.all';
 
-  let valvontaCount = 0;
   let textCancel = () => {};
-  const formatLaatija = kayttaja =>
-    `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
 
-  const parseLaatija = kayttajat =>
-    R.compose(
-      Maybe.toEither(R.applyTo(`${i18nRoot}.messages.laatija-not-found`)),
-      R.map(R.prop('id')),
-      predicate => Maybe.find(predicate, kayttajat),
-      R.propEq('email'),
-      R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
-    );
-
-  const queryStringIntegerProp = R.curry((querystring, prop) =>
-    R.compose(
-      R.chain(Either.toMaybe),
-      R.map(Parsers.parseInteger),
-      Maybe.fromEmpty,
-      R.prop(prop)
-    )(querystring)
-  );
-
-  const queryStringBooleanProp = R.curry((querystring, prop) =>
-    R.compose(
-      R.map(R.equals('true')),
-      Maybe.fromEmpty,
-      R.prop(prop)
-    )(querystring)
-  );
-
-  let parsedQs = qs.parse($querystring);
-
-  let query = {
+  const defaultQuery = {
     page: Maybe.None(),
     'valvoja-id': Maybe.None(),
     'laatija-id': Maybe.None(),
@@ -91,38 +60,40 @@
     'kayttotarkoitus-id': Maybe.None()
   };
 
-  query = R.mergeRight(query, {
-    page: queryStringIntegerProp(parsedQs, 'page'),
-    'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
-    'laatija-id': queryStringIntegerProp(parsedQs, 'laatija-id'),
-    'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
-    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
-    keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
-    'kayttotarkoitus-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id'),
-    'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
-  });
-
-  const nextPageCallback = nextPage =>
-    (query = R.assoc('page', Maybe.Some(nextPage), query));
+  const parseQuery = R.compose(
+    R.mergeRight(defaultQuery),
+    R.evolve({
+      page: Query.parseInteger,
+      'valvoja-id': Query.parseInteger,
+      'laatija-id': Query.parseInteger,
+      'include-closed': Query.parseBoolean,
+      'has-valvoja': Query.parseBoolean,
+      keyword: Parsers.optionalString,
+      'toimenpidetype-id': Query.parseInteger,
+      'kayttotarkoitus-id': Query.parseInteger
+    }),
+    qs.parse
+  );
 
   const wrapPercent = q => `%${q}%`;
 
-  const queryToBackendParams = query => ({
-    offset: R.compose(
-      R.map(R.compose(R.multiply(pageSize), R.dec)),
-      R.prop('page')
-    )(query),
-    limit: Maybe.Some(pageSize),
-    'valvoja-id': R.prop('valvoja-id', query),
-    'laatija-id': R.prop('laatija-id', query),
-    keyword: R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
-    'toimenpidetype-id': R.prop('toimenpidetype-id', query),
-    'kayttotarkoitus-id': R.prop('kayttotarkoitus-id', query),
-    'include-closed': R.prop('include-closed', query),
-    'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
-  });
+  const queryToBackendParams = R.compose(
+    R.omit(['page']),
+    query =>
+      R.mergeLeft(
+        {
+          offset: R.map(R.compose(R.multiply(pageSize), R.dec), query.page),
+          limit: Maybe.Some(pageSize)
+        },
+        query
+      ),
+    R.evolve({
+      keyword: R.map(wrapPercent),
+      'has-valvoja': R.filter(R.not)
+    })
+  );
 
-  $: {
+  const load = query => {
     overlay = true;
     Future.fork(
       response => {
@@ -135,7 +106,6 @@
       },
       response => {
         resources = Maybe.Some(response);
-        valvontaCount = response.count;
         overlay = false;
       },
       Future.parallelObject(5, {
@@ -160,7 +130,38 @@
         )
       })
     );
+  };
+
+  // use fixed location so that location is not reactive
+  const originalLocation = $location;
+  let loadedQuery = {};
+  $: query = parseQuery($querystring);
+  $: {
+    // do not load if query is already loaded or the location is changed
+    if (
+      !R.equals(loadedQuery, query) &&
+      R.equals(originalLocation, $location)
+    ) {
+      load(query);
+      Router.push(originalLocation + Query.toQueryString(query));
+      loadedQuery = query;
+    }
   }
+
+  const formatLaatija = kayttaja =>
+    `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
+
+  const parseLaatija = kayttajat =>
+    R.compose(
+      Maybe.toEither(R.applyTo(`${i18nRoot}.messages.laatija-not-found`)),
+      R.map(R.prop('id')),
+      predicate => Maybe.find(predicate, kayttajat),
+      R.propEq('email'),
+      R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
+    );
+
+  const nextPageCallback = nextPage =>
+    (query = R.assoc('page', Maybe.Some(nextPage), query));
 
   const orEmpty = Maybe.orSome('');
   $: kayttotarkoitusTitle = ETViews.kayttotarkoitusTitle($locale);
@@ -183,21 +184,13 @@
   const toValvontaView = energiatodistus => {
     Router.push(Links.valvonta(energiatodistus));
   };
-
-  $: R.compose(
-    querystring =>
-      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
-    qs.stringify,
-    R.map(Maybe.get),
-    R.filter(Maybe.isSome)
-  )(query);
 </script>
 
 <!-- purgecss: font-bold text-primary text-error -->
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, laatijat, kayttotarkoitukset }}
+    {#each Maybe.toArray(resources) as { valvonnat, count, whoami, luokittelut, toimenpidetyypit, valvojat, laatijat, kayttotarkoitukset }}
       <H1 text={i18n(i18nRoot + '.title')} />
       {#if Kayttajat.isPaakayttaja(whoami)}
         <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
@@ -425,13 +418,13 @@
         </div>
       {/if}
 
-      {#if R.gt(valvontaCount, pageSize)}
+      {#if R.gt(count, pageSize)}
         <div class="pagination">
           <Pagination
             pageNum={Maybe.orSome(1, R.prop('page', query))}
             {nextPageCallback}
             itemsPerPage={pageSize}
-            itemsCount={valvontaCount} />
+            itemsCount={count} />
         </div>
       {/if}
 

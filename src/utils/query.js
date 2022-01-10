@@ -1,13 +1,19 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Parsers from '@Utility/parsers';
+import qs from 'qs';
 
 export const toQueryString = R.compose(
-  Maybe.orSome(''),
-  R.map(R.compose(R.concat('?'), R.join('&'))),
-  Maybe.toMaybeList,
-  R.filter(Maybe.isSome),
-  R.map(([key, optionalValue]) =>
-    R.map(value => `${key}=${value}`, optionalValue)
-  ),
-  R.toPairs
+  Maybe.fold('', R.concat('?')),
+  Parsers.optionalString,
+  qs.stringify,
+  R.map(Maybe.get),
+  R.filter(Maybe.isSome)
 );
+
+export const parseBoolean = R.compose(
+  R.map(R.equals('true')),
+  Parsers.optionalString
+);
+
+export const parseInteger = Parsers.toMaybe(Parsers.parseInteger);
