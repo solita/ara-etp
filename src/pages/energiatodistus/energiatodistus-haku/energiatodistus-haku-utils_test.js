@@ -21,7 +21,7 @@ describe('EtHakuUtils:', () => {
       const expected = Maybe.Some([
         ['ilike', 'energiatodistus.perustiedot.nimi-fi', '%asdf%']
       ]);
-      
+
       assert.deepEqual(
         EtHakuUtils.blockToQueryParameter(flatSchema, block),
         expected
