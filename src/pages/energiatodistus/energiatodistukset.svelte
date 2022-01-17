@@ -144,7 +144,7 @@
     Query.toQueryString,
     R.pickBy(Maybe.isSome),
     R.evolve({
-      where: R.compose(R.map(encodeURI), R.map(JSON.stringify), Maybe.fromEmpty)
+      where: R.compose(R.map(JSON.stringify), Maybe.fromEmpty)
     }),
     R.dissoc('id'),
     R.when(R.propSatisfies(Maybe.isSome, 'id'), q =>
