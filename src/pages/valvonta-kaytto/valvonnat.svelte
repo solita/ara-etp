@@ -97,7 +97,7 @@
     )(query),
     limit: Maybe.Some(pageSize),
     'valvoja-id': R.prop('valvoja-id', query),
-    keyword: R.map(R.compose(encodeURI, wrapPercent), R.prop('keyword', query)),
+    keyword: R.map(wrapPercent, R.prop('keyword', query)),
     'toimenpidetype-id': R.prop('toimenpidetype-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
