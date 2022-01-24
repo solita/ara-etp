@@ -39,6 +39,7 @@
   import Link from '@Component/Link/Link.svelte';
   import Input from '@Component/Input/Input';
   import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
+  import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -391,7 +392,8 @@
                   <!-- energiatodistus -->
                   <td class="etp-table--td">{valvonta.energiatodistus.id}</td>
                   <td class="etp-table--td">
-                    {orEmpty(valvonta.energiatodistus.perustiedot.nimi)}
+                    <RakennuksenNimi
+                      energiatodistus={valvonta.energiatodistus} />
                   </td>
                   <td class="etp-table--td">
                     <Address

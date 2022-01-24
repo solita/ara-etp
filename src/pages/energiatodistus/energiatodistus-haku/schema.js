@@ -381,7 +381,8 @@ const havainnointikayntiBetween = key => ({
 });
 
 const perustiedot = {
-  nimi: [...stringComparisons],
+  'nimi-fi': [...stringComparisons],
+  'nimi-sv': [...stringComparisons],
   rakennustunnus: [...stringComparisons],
   kiinteistotunnus: [...stringComparisons],
   'julkinen-rakennus': [singleBoolean],

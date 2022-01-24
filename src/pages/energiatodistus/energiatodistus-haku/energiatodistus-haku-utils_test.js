@@ -8,7 +8,7 @@ import { OPERATOR_TYPES, flatSchema } from './schema';
 describe('EtHakuUtils:', () => {
   describe('blockToQueryParameter', () => {
     it('should return None on empty input', () => {
-      const block = ['sisaltaa', 'energiatodistus.perustiedot.nimi', ''];
+      const block = ['sisaltaa', 'energiatodistus.perustiedot.nimi-fi', ''];
       const expected = Maybe.None();
 
       assert.deepEqual(
@@ -17,9 +17,9 @@ describe('EtHakuUtils:', () => {
       );
     });
     it('should return Just query parameter for given block', () => {
-      const block = ['sisaltaa', 'energiatodistus.perustiedot.nimi', 'asdf'];
+      const block = ['sisaltaa', 'energiatodistus.perustiedot.nimi-fi', 'asdf'];
       const expected = Maybe.Some([
-        ['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%']
+        ['ilike', 'energiatodistus.perustiedot.nimi-fi', '%asdf%']
       ]);
 
       assert.deepEqual(
@@ -43,14 +43,14 @@ describe('EtHakuUtils:', () => {
     it('should convert Where to Query', () => {
       const where = [
         [
-          ['sisaltaa', 'energiatodistus.perustiedot.nimi', 'asdf'],
+          ['sisaltaa', 'energiatodistus.perustiedot.nimi-fi', 'asdf'],
           ['=', 'energiatodistus.id', 2]
         ],
         [['>', 'energiatodistus.id', 'value']]
       ];
       const expected = [
         [
-          ['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%'],
+          ['ilike', 'energiatodistus.perustiedot.nimi-fi', '%asdf%'],
           ['=', 'energiatodistus.id', 2]
         ],
         [['>', 'energiatodistus.id', 'value']]
@@ -65,13 +65,13 @@ describe('EtHakuUtils:', () => {
     it('should remove empty blocks when converting Where to Query', () => {
       const where = [
         [
-          ['sisaltaa', 'energiatodistus.perustiedot.nimi', 'asdf'],
+          ['sisaltaa', 'energiatodistus.perustiedot.nimi-fi', 'asdf'],
           ['no-operation-named-this', 'id', 2]
         ],
         [['no-operation-named-this', 'key', 'value']]
       ];
       const expected = [
-        [['ilike', 'energiatodistus.perustiedot.nimi', '%asdf%']]
+        [['ilike', 'energiatodistus.perustiedot.nimi-fi', '%asdf%']]
       ];
 
       assert.deepEqual(

@@ -30,6 +30,7 @@
   import Confirm from '@Component/Confirm/Confirm';
   import EnergiatodistusHaku from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku';
   import Address from '@Pages/energiatodistus/address';
+  import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
 
   import * as EtHakuUtils from '@Pages/energiatodistus/energiatodistus-haku/energiatodistus-haku-utils';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
@@ -349,7 +350,7 @@
                       )}
                     </td>
                     <td class="etp-table--td">
-                      {orEmpty(energiatodistus.perustiedot.nimi)}
+                      <RakennuksenNimi {energiatodistus} />
                     </td>
                     <td class="etp-table--td">
                       <Address

@@ -7,6 +7,7 @@
   import { _ } from '@Language/i18n';
 
   import Address from '@Pages/energiatodistus/address.svelte';
+  import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
 
   export let whoami;
   export let energiatodistus;
@@ -63,7 +64,7 @@
           {Maybe.orSome('', energiatodistus.perustiedot.rakennustunnus)}
         </td>
         <td class="etp-table--td">
-          {Maybe.orSome('', energiatodistus.perustiedot.nimi)}
+          <RakennuksenNimi {energiatodistus} />
         </td>
         <td class="etp-table--td">
           <Address {energiatodistus} {postinumerot} />

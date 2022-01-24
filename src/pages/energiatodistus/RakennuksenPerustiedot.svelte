@@ -69,6 +69,7 @@
       {disabled}
       {schema}
       {center}
+      inputLanguage={Maybe.Some(inputLanguage)}
       bind:model={energiatodistus}
       path={['perustiedot', 'nimi']} />
   </div>
