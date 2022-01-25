@@ -214,24 +214,25 @@
                   text={etId} />
               </div>
             {/each}
-            {#if showAttachEtDialog}
-              <AttachEtDialog
-                ketjuId={ketju.id}
-                energiatodistusId={ketju['energiatodistus-id']}
-                close={success => {
-                  if (success === true) {
-                    flashMessageStore.add(
-                      'viesti',
-                      'success',
-                      i18n(`${i18nRoot}.attach-to-et.messages.update-success`)
-                    );
-                    load(params.id);
-                  }
-                  showAttachEtDialog = false;
-                }} />
-            {/if}
 
             {#if Viestit.isKasittelija(whoami)}
+              {#if showAttachEtDialog}
+                <AttachEtDialog
+                  ketjuId={ketju.id}
+                  energiatodistusId={ketju['energiatodistus-id']}
+                  close={success => {
+                    if (success === true) {
+                      flashMessageStore.add(
+                        'viesti',
+                        'success',
+                        i18n(`${i18nRoot}.attach-to-et.messages.update-success`)
+                      );
+                      load(params.id);
+                    }
+                    showAttachEtDialog = false;
+                  }} />
+              {/if}
+
               <div class="mt-auto ml-auto justify-self-end">
                 <TextButton
                   on:click={() => {
