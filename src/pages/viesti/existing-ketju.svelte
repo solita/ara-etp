@@ -204,17 +204,18 @@
         </div>
 
         <div class="flex flex-col items-start">
-          {#if Viestit.isKasittelija(whoami)}
-            <div class="flex w-full justify-between px-2">
-              {#each ketju['energiatodistus-id'].toArray() as etId}
-                <div class="flex w-full mr-auto space-x-1">
-                  <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
-                  <Link
-                    bold={true}
-                    href={'/#/energiatodistus/' + etId}
-                    text={etId} />
-                </div>
-              {/each}
+          <div class="flex w-full justify-between px-2">
+            {#each ketju['energiatodistus-id'].toArray() as etId}
+              <div class="flex w-full mr-auto space-x-1">
+                <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
+                <Link
+                  bold={true}
+                  href={'/#/energiatodistus/' + etId}
+                  text={etId} />
+              </div>
+            {/each}
+
+            {#if Viestit.isKasittelija(whoami)}
               {#if showAttachEtDialog}
                 <AttachEtDialog
                   ketjuId={ketju.id}
@@ -231,6 +232,7 @@
                     showAttachEtDialog = false;
                   }} />
               {/if}
+
               <div class="mt-auto ml-auto justify-self-end">
                 <TextButton
                   on:click={() => {
@@ -242,8 +244,10 @@
                     : i18n(i18nRoot + '.attach-to-et.button-attach-to-et')}
                   style={'secondary'} />
               </div>
-            </div>
+            {/if}
+          </div>
 
+          {#if Viestit.isKasittelija(whoami)}
             <div class="flex items-end space-x-4 px-2 w-full">
               <div class="w-64">
                 <Select
