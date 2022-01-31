@@ -57,8 +57,8 @@
   }
 </script>
 
-<input bind:value={versio} class="sr-only" name={`${nameprefix}_value_0`} />
-<input bind:this={input} class="sr-only" name={`${nameprefix}_value_1`} />
+<input bind:value={versio} class="hidden" name={`${nameprefix}_value_0`} />
+<input bind:this={input} class="hidden" name={`${nameprefix}_value_1`} />
 
 <VersioLuokkaInput
   bind:versio

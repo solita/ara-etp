@@ -188,7 +188,7 @@
   }}>
   <input
     bind:this={input}
-    class="sr-only"
+    class="hidden"
     tabindex="-1"
     {name}
     value={(inputValueParse || parse)(R.view(lens, model))}

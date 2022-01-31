@@ -45,5 +45,5 @@
 <input
   bind:this={input}
   tabindex="-1"
-  class="sr-only"
+  class="hidden"
   name={`${nameprefix}_value_0`} />

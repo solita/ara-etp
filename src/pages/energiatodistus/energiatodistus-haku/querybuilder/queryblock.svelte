@@ -91,7 +91,7 @@
     <input
       bind:this={input}
       tabindex="-1"
-      class="sr-only"
+      class="hidden"
       name={`${index}_key`} />
   </div>
   {#if Maybe.isSome(maybeKey) && values.length > 0}

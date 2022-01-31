@@ -213,7 +213,7 @@
             queryItems = Either.right(newItems);
             await tick();
             form.dispatchEvent(new Event('change'));
-            R.last([...form.querySelectorAll('input:not(.sr-only)')]).focus();
+            R.last([...form.querySelectorAll('input:not(.hidden)')]).focus();
           } else {
             flashMessageStore.add(
               'energiatodistus',

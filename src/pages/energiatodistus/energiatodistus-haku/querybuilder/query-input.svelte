@@ -95,7 +95,7 @@
 
 <div class="flex">
   <input
-    class="sr-only"
+    class="hidden"
     tabindex="-1"
     name={`${nameprefix}_type`}
     value={op.type} />
@@ -118,7 +118,7 @@
     </div>
   {:else}
     <input
-      class="sr-only"
+      class="hidden"
       tabindex="-1"
       name={`${nameprefix}_operation`}
       value="=" />

@@ -26,7 +26,7 @@
 
 <input
   bind:this={input}
-  class="sr-only"
+  class="hidden"
   name={`${nameprefix}_value_${index}`}
   value={inputValue} />
 <Datepicker bind:value />

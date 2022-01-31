@@ -38,13 +38,13 @@
 <div class="flex">
   <input
     bind:this={startInput}
-    class="sr-only"
+    class="hidden"
     name={`${nameprefix}_value_0`}
     value={startInputValue} />
   <Datepicker bind:value={startValue} />
   <input
     bind:this={endInput}
-    class="sr-only"
+    class="hidden"
     name={`${nameprefix}_value_1`}
     value={endInputValue} />
   <Datepicker bind:value={endValue} />

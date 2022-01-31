@@ -35,14 +35,11 @@
 
 <!-- purgecss: checked -->
 
-<input
-  bind:this={input}
-  class="sr-only"
-  name={`${nameprefix}_value_${index}`} />
+<input bind:this={input} class="hidden" name={`${nameprefix}_value_${index}`} />
 
 <div class="flex flex-row">
   <label>
-    <input class="sr-only" type="radio" bind:group={value} value={''} />
+    <input class="hidden" type="radio" bind:group={value} value={''} />
     <div class="flex items-center">
       <span
         class="material-icons"
@@ -52,7 +49,7 @@
   </label>
   {#each versiot as versio}
     <label>
-      <input class="sr-only" type="radio" bind:group={value} value={versio} />
+      <input class="hidden" type="radio" bind:group={value} value={versio} />
       <div class="flex items-center">
         <span class="material-icons" class:checked={value === versio} />
         {versio}
