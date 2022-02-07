@@ -27,7 +27,10 @@ const commonSchema = {
 };
 
 export const parseWWWOsoite = R.compose(
-  Maybe.fromEmpty, parsers.addDefaultProtocol, R.trim);
+  Maybe.fromEmpty,
+  parsers.addDefaultProtocol,
+  R.trim
+);
 
 export const schema = maa =>
   Maybe.exists(R.equals('FI'), Either.toMaybe(maa))

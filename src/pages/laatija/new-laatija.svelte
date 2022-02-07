@@ -59,7 +59,7 @@
   let laatija = emptyLaatija;
   const clean = _ => {
     laatija = emptyLaatija;
-  }
+  };
 
   $: Future.fork(
     response => {
@@ -119,7 +119,7 @@
         {whoami}
         {dirty}
         submit={addLaatija}
-        cancel={clean}/>
+        cancel={clean} />
     {/each}
   </div>
   <div slot="overlay-content">

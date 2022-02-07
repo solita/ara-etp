@@ -69,8 +69,12 @@
   const submitLaatija = (whoami, id) => updatedLaatija =>
     fork(
       'laatija',
-      LaatijaApi.putLaatijaById(whoami.rooli, fetch, id,
-        Laatija.fromLaatijaForm(updatedLaatija)),
+      LaatijaApi.putLaatijaById(
+        whoami.rooli,
+        fetch,
+        id,
+        Laatija.fromLaatijaForm(updatedLaatija)
+      ),
       _ => {}
     );
 

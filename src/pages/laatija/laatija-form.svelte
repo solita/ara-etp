@@ -25,7 +25,6 @@
 
   import { flashMessageStore } from '@/stores';
 
-
   const i18n = $_;
   const i18nRoot = 'laatija';
 
@@ -117,8 +116,11 @@
   };
 
   const formatPatevyydenVoimassaoloaika = laatija =>
-    Maybe.fold('-', Formats.formatDateInstant,
-      Either.toMaybe(laatija.toteamispaivamaara)) +
+    Maybe.fold(
+      '-',
+      Formats.formatDateInstant,
+      Either.toMaybe(laatija.toteamispaivamaara)
+    ) +
     ' - ' +
     Formats.inclusiveEndDate(laatija['voimassaolo-paattymisaika']);
 
