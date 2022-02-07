@@ -49,7 +49,10 @@
       overlay = false;
     },
     Future.parallelObject(5, {
-      laatijat: LaatijaApi.laatijat,
+      laatijat: R.map(
+        R.filter(R.propEq('ispartner', false)),
+        LaatijaApi.laatijat
+      ),
       yritykset: YritysApi.getAllYritykset,
       patevyydet: LaatijaApi.patevyydet,
       toimintaalueet: GeoApi.toimintaalueet,
