@@ -249,7 +249,9 @@
   },
   "kayttajat": {
     "title": "Käyttäjät",
+    "kumppanit": "Kumppanit",
     "new-kayttaja": "Uusi käyttäjä",
+    "new-kumppani": "Uusi kumppani",
     "nimi": "Nimi",
     "rooli": "Rooli",
     "email": "Sähköposti",

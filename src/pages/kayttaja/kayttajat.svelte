@@ -6,6 +6,7 @@
   import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as LaatijaApi from '@Pages/laatija/laatija-api';
 
   import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
@@ -36,6 +37,10 @@
     },
     Future.parallelObject(4, {
       kayttajat: KayttajaApi.kayttajat,
+      kumppanit: R.map(
+        R.filter(R.propEq('ispartner', true)),
+        LaatijaApi.laatijat
+      ),
       roolit: KayttajaApi.roolit
     })
   );
@@ -46,7 +51,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { roolit, kayttajat }}
+    {#each Maybe.toArray(resources) as { roolit, kumppanit, kayttajat }}
       <div class="flex justify-between">
         <H1 text={i18n(i18nRoot + '.title')} />
         <div class="font-bold">
@@ -104,11 +109,64 @@
         </div>
       {/if}
 
-      <p class="mt-8">
+      <p class="mt-8 mb-8">
         <span class="font-icon">info</span>
         {i18n(i18nRoot + '.info')}
         <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')} />
       </p>
+
+      <div class="flex justify-between">
+        <H1 text={i18n(i18nRoot + '.kumppanit')} />
+        <div class="font-bold">
+          <Link
+            icon={Maybe.Some('add_circle_outline')}
+            text={i18n(i18nRoot + '.new-kumppani')}
+            href="#/laatija/new" />
+        </div>
+      </div>
+
+      {#if R.not(R.isEmpty(kumppanit))}
+        <div class="overflow-x-auto">
+          <table class="etp-table">
+            <thead class="etp-table--thead">
+              <tr class="etp-table--tr">
+                <th class="etp-table--th">{i18n(i18nRoot + '.nimi')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.email')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.puhelin')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.login')}</th>
+                <th class="etp-table--th"
+                  >{i18n(i18nRoot + '.state.header')}</th>
+              </tr>
+            </thead>
+            <tbody class="etp-table--tbody">
+              {#each kumppanit as kumppani}
+                <tr
+                  class="etp-table--tr etp-table--tr__link"
+                  on:click={() => push('#/kayttaja/' + kumppani.id)}>
+                  <td class="etp-table--td">
+                    {kumppani.etunimi}
+                    {kumppani.sukunimi}
+                  </td>
+                  <td class="etp-table--td">{kumppani.email}</td>
+                  <td class="etp-table--td">{kumppani.puhelin}</td>
+                  <td class="etp-table--td">
+                    {Maybe.fold(
+                      i18n('kayttaja.no-login'),
+                      Formats.formatTimeInstantMinutes,
+                      kumppani.login
+                    )}
+                  </td>
+                  <td class="etp-table--td">
+                    {kumppani.passivoitu
+                      ? i18n(i18nRoot + '.state.passivoitu')
+                      : i18n(i18nRoot + '.state.active')}
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
     {/each}
   </div>
 </Overlay>
