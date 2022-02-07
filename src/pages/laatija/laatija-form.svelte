@@ -314,6 +314,17 @@
         </div>
       </div>
     {/if}
+    {#if laatija.ispartner}
+      <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+        <div class="lg:w-1/3 w-full px-4">
+          <Checkbox
+            bind:model={laatija}
+            lens={R.lensProp('ispartner')}
+            label={i18n('laatija.ispartner')}
+            disabled={true} />
+        </div>
+      </div>
+    {/if}
     <div class="flex lg:flex-row flex-col py-4 -mx-4">
       <div class="lg:w-1/3 w-full px-4">
         <Input
