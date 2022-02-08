@@ -158,8 +158,6 @@
   const isSenderSelf = (viesti, whoami) =>
     R.propEq('id', R.path(['from', 'id'], viesti), whoami);
 
-  $: formatSender = Viestit.formatSender(i18n);
-
   let showAttachEtDialog = false;
 </script>
 

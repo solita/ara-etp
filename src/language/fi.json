@@ -1310,6 +1310,7 @@
   },
   "viesti": {
     "valvoja": "Valvojat",
+    "system": "Järjestelmä",
     "mina": "Minä",
     "message": "viesti",
     "messages": "viestiä",
