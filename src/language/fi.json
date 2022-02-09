@@ -270,7 +270,7 @@
   },
   "laatija": {
     "laatija": "Laatija",
-    "ispartner": "Kumppani",
+    "partner": "Kumppani",
     "henkilotunnus": "Henkilötunnus",
     "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
     "katuosoite": "Katuosoite",

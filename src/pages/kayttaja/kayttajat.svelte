@@ -38,7 +38,7 @@
     Future.parallelObject(4, {
       kayttajat: KayttajaApi.kayttajat,
       kumppanit: R.map(
-        R.filter(R.propEq('ispartner', true)),
+        R.filter(R.propEq('partner', true)),
         LaatijaApi.laatijat
       ),
       roolit: KayttajaApi.roolit

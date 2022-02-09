@@ -50,7 +50,7 @@
     },
     Future.parallelObject(5, {
       laatijat: R.map(
-        R.filter(R.propEq('ispartner', false)),
+        R.filter(R.complement(R.prop('partner'))),
         LaatijaApi.laatijat
       ),
       yritykset: YritysApi.getAllYritykset,

@@ -38,7 +38,7 @@
   export let cancel;
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
-  $: isPartner = R.propEq('ispartner', true, laatija);
+  $: isPartner = R.prop('partner', laatija);
   $: isOwnSettings = R.eqProps('id', laatija, whoami);
 
   $: disabled = !R.or(isPaakayttaja, isOwnSettings);
@@ -314,13 +314,13 @@
         </div>
       </div>
     {/if}
-    {#if laatija.ispartner}
+    {#if laatija.partner}
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
         <div class="lg:w-1/3 w-full px-4">
           <Checkbox
             bind:model={laatija}
-            lens={R.lensProp('ispartner')}
-            label={i18n('laatija.ispartner')}
+            lens={R.lensProp('partner')}
+            label={i18n('laatija.partner')}
             disabled={true} />
         </div>
       </div>

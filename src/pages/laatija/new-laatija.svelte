@@ -35,7 +35,7 @@
     sukunimi: '',
     email: '',
     puhelin: '',
-    ispartner: true,
+    partner: true,
     henkilotunnus: Maybe.None(),
     toimintaalue: Maybe.None(),
     muuttoimintaalueet: [],

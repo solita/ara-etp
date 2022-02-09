@@ -53,6 +53,7 @@ export const serialize = R.compose(
     'verifytime',
     'rooli',
     'passivoitu',
+    'partner',
     'voimassaolo-paattymisaika',
     'voimassa'
   ])
