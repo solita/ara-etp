@@ -119,6 +119,7 @@
         {laatija}
         {whoami}
         {dirty}
+        errorModule={'Laatija'}
         submit={addLaatija}
         cancel={clean} />
     {/each}

@@ -36,6 +36,7 @@
   export let submit;
   export let dirty;
   export let cancel;
+  export let errorModule = 'kayttaja';
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isPartner = R.prop('partner', laatija);
@@ -107,7 +108,7 @@
       submit(laatija);
     } else {
       flashMessageStore.add(
-        'kayttaja',
+        errorModule,
         'error',
         i18n('laatija.messages.validation-error')
       );
