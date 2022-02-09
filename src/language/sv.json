@@ -1275,6 +1275,7 @@
   },
   "viesti": {
     "valvoja": "Övervakare",
+    "system": "System",
     "mina": "Jag",
     "message": "meddelande",
     "messages": "meddelanden",

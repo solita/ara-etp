@@ -29,7 +29,8 @@ module.exports = {
       fontFamily: {
         display: ['Montserrat', 'sans-serif'],
         body: ['Montserrat', 'sans-serif'],
-        icon: 'Material Icons'
+        icon: 'Material Icons',
+        'icon-outlined': 'Material Icons Outlined'
       },
       borderWidth: {
         '1': '1px',

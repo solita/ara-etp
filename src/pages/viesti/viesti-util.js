@@ -33,13 +33,19 @@ export const emptyKetju = _ => ({
   body: ''
 });
 
-export const formatSender = R.curry((i18n, viesti) =>
-  R.ifElse(
-    R.propSatisfies(Kayttajat.isPaakayttajaRole, 'rooli-id'),
-    from => i18n('viesti.valvoja') + ' (' + from.etunimi + ')',
-    Kayttajat.fullName
-  )(viesti)
-);
+const valvojaName = i18n => valvoja =>
+  i18n('viesti.valvoja') + ' (' + valvoja.etunimi + ')';
+const systemName = i18n => R.always(i18n('viesti.system'));
+
+export const formatUser = i18n =>
+  R.cond([
+    [
+      R.propSatisfies(Kayttajat.isPaakayttajaRole, 'rooli-id'),
+      valvojaName(i18n)
+    ],
+    [R.propSatisfies(Kayttajat.isSystemRole, 'rooli-id'), systemName(i18n)],
+    [R.T, Kayttajat.fullName]
+  ]);
 
 export const isSelfSent = R.curry((viesti, currentUser) =>
   R.propEq('id', R.path(['from', 'id'], viesti), currentUser)
