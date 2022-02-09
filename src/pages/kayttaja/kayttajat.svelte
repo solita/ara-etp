@@ -109,13 +109,7 @@
         </div>
       {/if}
 
-      <p class="mt-8 mb-8">
-        <span class="font-icon">info</span>
-        {i18n(i18nRoot + '.info')}
-        <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')} />
-      </p>
-
-      <div class="flex justify-between">
+      <div class="flex justify-between mt-8">
         <H1 text={i18n(i18nRoot + '.kumppanit')} />
         <div class="font-bold">
           <Link
@@ -167,6 +161,12 @@
           </table>
         </div>
       {/if}
+
+      <p class="mt-8">
+        <span class="font-icon">info</span>
+        {i18n(i18nRoot + '.info')}
+        <Link href="#/laatija/all" text={i18n(i18nRoot + '.laatija-link')} />
+      </p>
     {/each}
   </div>
 </Overlay>

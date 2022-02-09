@@ -320,7 +320,7 @@ export const laatijaCrumb = R.curry(
         ])
       ],
       [R.equals('all'), R.always([laatijat(i18n)])],
-      [R.equals('new'), R.always([laatijat(i18n), newLaatija(i18n)])],
+      [R.equals('new'), R.always([kayttajat(i18n), newLaatija(i18n)])],
       [
         R.T,
         id =>
@@ -350,7 +350,7 @@ export const laatijaCrumb = R.curry(
 const folderForKayttajaRole = R.curry((i18n, whoami, kayttaja) =>
   R.eqProps('id', whoami, kayttaja)
     ? []
-    : Kayttajat.isLaatija(kayttaja)
+    : Kayttajat.isAccreditedLaatija(kayttaja)
     ? laatijat(i18n)
     : kayttajat(i18n)
 );

@@ -64,9 +64,16 @@ export const isLaskuttajaRole = R.equals(role.laskuttaja);
 export const isSystemRole = R.equals(-1);
 
 /**
+ * User is any laatija.
  * @sig Kayttaja -> boolean
  */
 export const isLaatija = R.propSatisfies(isLaatijaRole, 'rooli');
+
+/**
+ * User is an accredited laatija.
+ * @sig Kayttaja -> boolean
+ */
+export const isAccreditedLaatija = R.allPass([isLaatija, R.complement(R.prop('partner'))])
 /**
  * @sig Kayttaja -> boolean
  */

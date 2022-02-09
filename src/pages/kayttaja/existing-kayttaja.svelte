@@ -102,7 +102,10 @@
         overlay = false;
       },
       response => {
-        idTranslateStore.updateKayttaja(response.kayttaja);
+        idTranslateStore.updateKayttaja(
+          R.assoc('partner',
+            Maybe.fold(false, R.prop('partner'), response.laatija),
+            response.kayttaja));
         resources = Maybe.Some(response);
         overlay = false;
         dirty = false;
