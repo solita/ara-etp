@@ -137,8 +137,15 @@
   on:change={setDirty}>
   <div class="w-full mt-3">
 
-    {#if laatija.partner}
+    {#if isPaakayttaja}
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-2">
+        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+          <Checkbox
+            bind:model={laatija}
+            lens={R.lensProp('passivoitu')}
+            label={i18n('kayttaja.passivoitu')}
+            disabled={false} />
+        </div>
         <div class="lg:w-1/3 w-full px-4">
           <Checkbox
             bind:model={laatija}
