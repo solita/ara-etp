@@ -136,7 +136,6 @@
   on:input={setDirty}
   on:change={setDirty}>
   <div class="w-full mt-3">
-
     {#if isPaakayttaja}
       <div class="flex lg:flex-row flex-col py-4 -mx-4 my-2">
         <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">

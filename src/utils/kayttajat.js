@@ -73,7 +73,10 @@ export const isLaatija = R.propSatisfies(isLaatijaRole, 'rooli');
  * User is an accredited laatija.
  * @sig Kayttaja -> boolean
  */
-export const isAccreditedLaatija = R.allPass([isLaatija, R.complement(R.prop('partner'))])
+export const isAccreditedLaatija = R.allPass([
+  isLaatija,
+  R.complement(R.prop('partner'))
+]);
 /**
  * @sig Kayttaja -> boolean
  */
