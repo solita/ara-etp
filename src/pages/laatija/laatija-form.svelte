@@ -136,6 +136,19 @@
   on:input={setDirty}
   on:change={setDirty}>
   <div class="w-full mt-3">
+
+    {#if laatija.partner}
+      <div class="flex lg:flex-row flex-col py-4 -mx-4 my-2">
+        <div class="lg:w-1/3 w-full px-4">
+          <Checkbox
+            bind:model={laatija}
+            lens={R.lensProp('partner')}
+            label={i18n('laatija.partner')}
+            disabled={true} />
+        </div>
+      </div>
+    {/if}
+
     <H1 text={i18n(i18nRoot + '.perustiedot-header')} />
     <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -312,17 +325,6 @@
             lens={R.lensProp('laatimiskielto')}
             label={i18n('laatija.todistustenlaatimiskielto')}
             disabled={!isPaakayttaja} />
-        </div>
-      </div>
-    {/if}
-    {#if laatija.partner}
-      <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-        <div class="lg:w-1/3 w-full px-4">
-          <Checkbox
-            bind:model={laatija}
-            lens={R.lensProp('partner')}
-            label={i18n('laatija.partner')}
-            disabled={true} />
         </div>
       </div>
     {/if}
