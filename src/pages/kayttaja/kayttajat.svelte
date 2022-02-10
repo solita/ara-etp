@@ -14,6 +14,7 @@
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
+  import H2 from '@Component/H/H2.svelte';
   import Link from '../../components/Link/Link.svelte';
 
   const i18n = $_;
@@ -38,7 +39,7 @@
     Future.parallelObject(4, {
       kayttajat: KayttajaApi.kayttajat,
       kumppanit: R.map(
-        R.filter(R.propEq('partner', true)),
+        R.filter(R.prop('partner')),
         LaatijaApi.laatijat
       ),
       roolit: KayttajaApi.roolit
@@ -110,7 +111,7 @@
       {/if}
 
       <div class="flex justify-between mt-8">
-        <H1 text={i18n(i18nRoot + '.kumppanit')} />
+        <H2 text={i18n(i18nRoot + '.kumppanit')} />
         <div class="font-bold">
           <Link
             icon={Maybe.Some('add_circle_outline')}
