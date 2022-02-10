@@ -108,11 +108,11 @@
       {/if}
 
       <div class="flex justify-between mt-8">
-        <H2 text={i18n(i18nRoot + '.kumppanit')} />
+        <H2 text={i18n(i18nRoot + '.partners')} />
         <div class="font-bold">
           <Link
             icon={Maybe.Some('add_circle_outline')}
-            text={i18n(i18nRoot + '.new-kumppani')}
+            text={i18n(i18nRoot + '.new-partner')}
             href="#/laatija/new" />
         </div>
       </div>
