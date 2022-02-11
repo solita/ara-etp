@@ -44,16 +44,16 @@ export const serialize = R.compose(
     maa: Either.right,
     toimintaalue: Maybe.orSome(null),
     wwwosoite: Maybe.orSome(null),
-    'api-key': Maybe.orSome(null)
+    'api-key': Maybe.orSome(null),
+    toteamispaivamaara: date => dfns.format(date, 'yyyy-MM-dd')
   }),
   R.omit([
     'id',
     'login',
     'verifytime',
     'rooli',
-    'passivoitu',
+    'partner',
     'voimassaolo-paattymisaika',
-    'toteamispaivamaara',
     'voimassa'
   ])
 );
@@ -66,7 +66,8 @@ export const serializeForLaatija = R.compose(
     'patevyystaso',
     'toteamispaivamaara',
     'toteaja',
-    'laatimiskielto'
+    'laatimiskielto',
+    'passivoitu'
   ]),
   serialize
 );
@@ -81,6 +82,12 @@ export const putLaatijaById = R.curry((rooli, fetch, id, laatija) =>
       R.always(serializeForLaatija)
     )(rooli)
   )(laatija)
+);
+
+export const postLaatija = R.compose(
+  Fetch.responseAsJson,
+  Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.laatijat)),
+  serialize
 );
 
 export const getYritykset = R.curry((fetch, id) =>

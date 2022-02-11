@@ -26,13 +26,11 @@ const commonSchema = {
   'api-key': [Validation.liftValidator(Validation.apiPasswordValidator)]
 };
 
-export const formParsers = () => ({
-  'vastaanottajan-tarkenne': R.compose(Maybe.fromEmpty, R.trim),
-  jakeluosoite: R.trim,
-  postinumero: R.trim,
-  postitoimipaikka: R.trim,
-  wwwosoite: R.compose(Maybe.fromEmpty, parsers.addDefaultProtocol, R.trim)
-});
+export const parseWWWOsoite = R.compose(
+  Maybe.fromEmpty,
+  parsers.addDefaultProtocol,
+  R.trim
+);
 
 export const schema = maa =>
   Maybe.exists(R.equals('FI'), Either.toMaybe(maa))

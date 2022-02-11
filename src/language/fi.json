@@ -48,6 +48,7 @@
     "kayttajat": "Käyttäjät",
     "kayttaja": "Käyttäjä",
     "new-kayttaja": "Uusi käyttäjä",
+    "new-laatija": "Uusi kumppani",
     "et": "ET",
     "energiatodistus-viestit": "Viestit",
     "liitteet": "Liitteet",
@@ -248,13 +249,15 @@
   },
   "kayttajat": {
     "title": "Käyttäjät",
+    "partners": "Kumppanit",
     "new-kayttaja": "Uusi käyttäjä",
+    "new-partner": "Uusi kumppani",
     "nimi": "Nimi",
     "rooli": "Rooli",
     "email": "Sähköposti",
     "puhelin": "Puhelin",
     "login": "Kirjautunut",
-    "info": "Tässä näkyvät käyttäjät jotka eivät ole laatijoita.",
+    "info": "Tällä sivulla näkyvät kaikki käyttäjät, jotka eivät ole virallisia laatijoita.",
     "laatija-link": "Laatijat löytyvät täältä",
     "state": {
       "header": "Tila",
@@ -267,6 +270,7 @@
   },
   "laatija": {
     "laatija": "Laatija",
+    "partner": "Kumppani",
     "henkilotunnus": "Henkilötunnus",
     "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
     "katuosoite": "Katuosoite",
@@ -278,6 +282,7 @@
     "perustiedot-header": "Perustiedot",
     "laatijatiedot-header": "Laatijatiedot",
     "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
+    "toteamispaivamaara": "Toteamispäivämäärä",
     "patevyystaso": "Pätevyystaso",
     "paatoimintaalue": "Päätoiminta-alue",
     "muuttoimintaalueet": "Muut toiminta-alueet",
@@ -1929,7 +1934,7 @@
   "unique-violations": {
     "kayttaja-email-key": "Sähköpostiosoite {value} on jo käytössä.",
     "kayttaja-virtu-key": "Virtu käyttäjätunnus on jo käytössä.",
-    "kayttaja_henkilotunnus_key": "Henkilötunnus on jo käytössä.",
+    "kayttaja-henkilotunnus-key": "Henkilötunnus on jo käytössä.",
     "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä.",
     "yritys-ytunnus-nimi-key": "Yritystunnus, nimi on käytössä toisella yrityksellä. Voit käyttää vastaanottajan tarkennetta erottamaan yritykset."
   },

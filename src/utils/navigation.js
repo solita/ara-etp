@@ -138,10 +138,14 @@ export const linksForKayttaja = R.curry((i18n, kayttaja) => {
       label: `${kayttaja.etunimi} ${kayttaja.sukunimi}`,
       href: `#/kayttaja/${kayttaja.id}`
     },
-    {
-      label: i18n('navigation.yritykset'),
-      href: `#/laatija/${kayttaja.id}/yritykset`
-    },
+    ...(kayttaja.partner
+      ? []
+      : [
+          {
+            label: i18n('navigation.yritykset'),
+            href: `#/laatija/${kayttaja.id}/yritykset`
+          }
+        ]),
     {
       label: i18n('navigation.muutoshistoria'),
       href: `#/kayttaja/${kayttaja.id}/muutoshistoria`

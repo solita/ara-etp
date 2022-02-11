@@ -5,6 +5,7 @@
   import * as Locales from '@Language/locale-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Laatija from '@Pages/laatija/laatija';
 
   import { _ } from '@Language/i18n';
   import { flashMessageStore, idTranslateStore } from '@/stores';
@@ -68,7 +69,12 @@
   const submitLaatija = (whoami, id) => updatedLaatija =>
     fork(
       'laatija',
-      LaatijaApi.putLaatijaById(whoami.rooli, fetch, id, updatedLaatija),
+      LaatijaApi.putLaatijaById(
+        whoami.rooli,
+        fetch,
+        id,
+        Laatija.fromLaatijaForm(updatedLaatija)
+      ),
       _ => {}
     );
 
@@ -96,7 +102,13 @@
         overlay = false;
       },
       response => {
-        idTranslateStore.updateKayttaja(response.kayttaja);
+        idTranslateStore.updateKayttaja(
+          R.assoc(
+            'partner',
+            Maybe.fold(false, R.prop('partner'), response.laatija),
+            response.kayttaja
+          )
+        );
         resources = Maybe.Some(response);
         overlay = false;
         dirty = false;
@@ -124,6 +136,7 @@
 
   const mergeKayttajaLaatija = (kayttaja, laatija) =>
     R.compose(
+      Laatija.toLaatijaForm,
       R.omit(['kayttaja', 'cognitoid', 'ensitallennus', 'virtu']),
       R.mergeRight
     )(kayttaja, R.omit(['henkilotunnus'], laatija));

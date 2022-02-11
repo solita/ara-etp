@@ -216,5 +216,36 @@
     "textColor": "#ffffff",
     "title": "laskuttaja@solita.fi",
     "urlReplacements": []
+  },
+  {
+    "appendMode": false,
+    "backgroundColor": "#43175a",
+    "filters": [],
+    "headers": [
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-accesstoken",
+        "value": "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJrdW1wcGFuaUBzb2xpdGEuZmkiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6Im9wZW5pZCIsImF1dGhfdGltZSI6MTU4MzIzMDk2OSwiaXNzIjoiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NvbGl0YS9ldHAtY29yZS9mZWF0dXJlL0FFLTQzLWF1dGgtaGVhZGVycy1oYW5kbGluZy9ldHAtYmFja2VuZC9zcmMvbWFpbi9yZXNvdXJjZXMiLCJleHAiOjE4OTM0NTYwMDAsImlhdCI6MTYwMTUxMDQwMCwidmVyc2lvbiI6MiwianRpIjoiYjU4NWU0NGYtNDQwNC00ZGQ3LWIxYmYtNzJhYTFlYWUxNzliIiwiY2xpZW50X2lkIjoidGVzdC1jbGllbnRfaWQiLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUifQ.PV0KYlEnpZhQfBzAJjrRb0l2XbW9yRCqk2StfZaIxyTJbZm5oROKnJa40vNK91EyNthXixIZ8SnbSmYrJYIi_Np7pvAuQQtA8tGkZb7JDJqKMLPxIlgGAwnZPqVcPcU-XrOCIcdhxKuBhOUhcGmX8rdtJJv_jmakiQQGr8UTmS6UprooNG7dcE_P80NuoTDsjeCLeh8dnafL_FuRk0_kwxgQd429FvC-szPO9sNl6cUvZ9KRhaKkVexSWW6_pkiC55ysZAjS615j-2p_yA1XbgZA42iJJ40hkNl6YsWHTMqqmcOsRlJSrEHcyFJq7VIZMf61Mb0r2TCOPVurwDHC5g"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-identity",
+        "value": "kumppani@solita.fi"
+      },
+      {
+        "comment": "",
+        "enabled": true,
+        "name": "x-amzn-oidc-data",
+        "value": "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJrdW1wcGFuaUBzb2xpdGEuZmkiLCJjdXN0b206RklfbmF0aW9uYWxJTiI6IjAxMDQ2OS05OThWIiwidXNlcm5hbWUiOiJ0ZXN0LXVzZXJuYW1lIiwiZXhwIjoxODkzNDU2MDAwLCJpc3MiOiJ0ZXN0LWlzcyJ9.I_-kn0iIt5oPLuxXGal5V55LhHs0iLz95JxPrtjlwZuz6fHXxRwLW-_3cDIVFRiXx99ogohFGCHMCsnaCRlUvu3KYSfL5zNFjVmaK0dCZWhGHdPAYf0l7dCvG0fUNZNbDmWVUYiuhr2jS8LsvPucPfZ1DAuFMj3McNbiAYXAuEJAQFJtemirPB-hEBZ5wSCHSheLJH9Jj9b74MbfxXe8omUv8T1kYjkJopnZoDi0pe41RaBvn7pZZigwXuyAlUv6KejbM8NKMO01FHFLFN3kroQMUEQqCLOcEGJVTN6ZsRPB94pAsBfbibpsNb5UiFHiq0qpclN9trjw8jps7bK3RQ"
+      }
+    ],
+    "hideComment": true,
+    "respHeaders": [],
+    "shortTitle": "1",
+    "textColor": "#ffffff",
+    "title": "kumppani@solita.fi",
+    "urlReplacements": []
   }
 ]

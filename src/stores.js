@@ -21,7 +21,7 @@ const createIdTranslateStore = () => {
       update(
         R.assocPath(
           ['kayttaja', R.prop('id', kayttaja)],
-          R.pick(['etunimi', 'sukunimi', 'id', 'rooli'], kayttaja)
+          R.pick(['etunimi', 'sukunimi', 'id', 'rooli', 'partner'], kayttaja)
         )
       ),
     updateKetju: (ketju, liitteet) => {
