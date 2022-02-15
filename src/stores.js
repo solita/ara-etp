@@ -30,7 +30,7 @@ const createIdTranslateStore = () => {
           ['viesti', R.prop('id', ketju)],
           R.assoc(
             'liitteet',
-            liitteet,
+            R.filter(R.complement(R.prop('deleted')), liitteet),
             R.pick(['id', 'subject', 'energiatodistus-id'], ketju)
           )
         )

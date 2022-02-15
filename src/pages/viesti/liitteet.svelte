@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import { _, locale } from '@Language/i18n';
 
@@ -9,6 +10,7 @@
   import * as Future from '@Utility/future-utils';
   import { flashMessageStore, idTranslateStore } from '@/stores';
   import * as ViestiApi from '@Pages/viesti/viesti-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import Overlay from '../../components/Overlay/Overlay.svelte';
   import Spinner from '../../components/Spinner/Spinner.svelte';
 
@@ -39,7 +41,8 @@
       },
       Future.parallelObject(5, {
         liitteet: ViestiApi.liitteet(params.id),
-        ketju: ViestiApi.ketju(params.id)
+        ketju: ViestiApi.ketju(params.id),
+        whoami: KayttajaApi.whoami
       })
     );
   };
@@ -86,12 +89,13 @@
   };
 </script>
 
-{#each Maybe.toArray(resources) as { liitteet }}
+{#each Maybe.toArray(resources) as { liitteet, whoami }}
   <Overlay {overlay}>
     <div slot="content" class="w-full mt-3">
       <Liitteet
         {liiteApi}
         {liitteet}
+        enableShowDeleted={Kayttajat.isPaakayttaja(whoami)}
         disabled={false}
         emptyMessageKey={i18nRoot + '.empty'}
         flashModule="viesti" />

@@ -1225,7 +1225,8 @@
     "liitteet": {
       "title": "Bilagor",
       "empty": "Energicertifikatet har inga bilagor.",
-      "poista-disabled": "Du kan inte ta bort en bilaga till ett energicertifikat som inte övervakas.",
+      "delete-disabled": "Du kan inte ta bort en bilaga till ett energicertifikat som inte övervakas.",
+      "delete": "Ta bort en bilaga",
       "enabled-checkbox-label": "Upprättaren får lägga till bilagor till certifikatet",
       "attachments-disabled": "Bilagorna kan inte läggas till eftersom energicertifikatet inte övervakas",
       "liite": {
