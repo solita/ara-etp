@@ -1260,7 +1260,7 @@
       "title": "Liitteet",
       "show-deleted": "Näytä poistetut",
       "empty": "Energiatodistuksella ei ole liitteitä.",
-      "delete-disabled": "Et voi poistaa liitettä energiatodistukselta, joka ei ole valvonnassa.",
+      "delete-disabled": "Liitteiden poisto ei ole sallittu.",
       "delete": "Poista liite",
       "enabled-checkbox-label": "Laatija saa lisätä todistukselle liitteitä",
       "attachments-disabled": "Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa",
