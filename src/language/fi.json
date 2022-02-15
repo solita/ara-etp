@@ -1258,15 +1258,18 @@
     },
     "liitteet": {
       "title": "Liitteet",
+      "show-deleted": "Näytä poistetut",
       "empty": "Energiatodistuksella ei ole liitteitä.",
-      "poista-disabled": "Et voi poistaa liitettä energiatodistukselta joka ei ole valvonnassa.",
+      "delete-disabled": "Liitteiden poisto ei ole sallittu.",
+      "delete": "Poista liite",
       "enabled-checkbox-label": "Laatija saa lisätä todistukselle liitteitä",
       "attachments-disabled": "Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa",
       "liite": {
         "createtime": "Lisätty",
         "nimi": "Tiedosto / Linkki",
         "author": "Lisääjä",
-        "type": "Tyyppi"
+        "type": "Tyyppi",
+        "deleted": "Poistettu"
       },
       "add-files": {
         "title": "Lisää tiedostoja"

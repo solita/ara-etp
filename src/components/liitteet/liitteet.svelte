@@ -5,7 +5,6 @@
   import * as Validation from '@Utility/validation';
   import * as formats from '@Utility/formats';
   import * as parsers from '@Utility/parsers';
-  import * as Kayttajat from '@Utility/kayttajat';
   import * as Links from './links';
 
   import { _ } from '@Language/i18n';
@@ -16,10 +15,14 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Confirm from '@Component/Confirm/Confirm';
+  import Checkbox from '@Component/Checkbox/Checkbox.svelte';
 
   export let liitteet = [];
   export let disabled = false;
   export let emptyMessageKey = i18nRoot + '.empty';
+
+  export let enableShowDeleted = false;
+  export let showDeleted = false;
 
   export let liiteApi;
   export let flashModule;
@@ -78,6 +81,12 @@
   const setDirty = _ => {
     dirty = true;
   };
+
+  const deleted = R.compose(R.defaultTo(false), R.prop('deleted'));
+
+  $: filteredLiitteet = showDeleted
+    ? liitteet
+    : R.filter(R.complement(deleted), liitteet);
 </script>
 
 <style>
@@ -91,7 +100,16 @@
 </style>
 
 <div class="mb-5">
-  {#if R.isEmpty(liitteet)}
+  {#if enableShowDeleted}
+    <div class="my-2">
+      <Checkbox
+        bind:model={showDeleted}
+        lens={R.identity}
+        label={i18n(i18nRoot + '.show-deleted')}
+        disabled={false} />
+    </div>
+  {/if}
+  {#if R.isEmpty(filteredLiitteet)}
     <p>{i18n(emptyMessageKey)}</p>
   {:else}
     <div class="overflow-x-auto">
@@ -116,7 +134,7 @@
           </tr>
         </thead>
         <tbody class="etp-table--tbody">
-          {#each liitteet as liite}
+          {#each filteredLiitteet as liite}
             <tr class="etp-table--tr">
               <td class="etp-table--td">
                 {formats.formatTimeInstant(liite.createtime)}
@@ -132,26 +150,38 @@
               </td>
               <td class="etp-table--td etp-table--td__center">
                 <span
-                  class="material-icons cursor-default"
+                  class="font-icon-outlined cursor-default text-2xl"
                   title={liite['contenttype']}>
                   {Maybe.isSome(liite.url) ? 'link' : 'attachment'}
                 </span>
               </td>
               <td class="etp-table--td etp-table--td__center">
-                <Confirm
-                  let:confirm
-                  confirmButtonLabel={i18n('confirm.button.delete')}
-                  confirmMessage={i18n('confirm.you-want-to-delete')}>
+                {#if !liite.deleted}
+                  <Confirm
+                    let:confirm
+                    confirmButtonLabel={i18n('confirm.button.delete')}
+                    confirmMessage={i18n('confirm.you-want-to-delete')}>
+                    <span
+                      class="delete-icon font-icon-outlined text-2xl"
+                      class:text-disabled={disabled}
+                      title={i18n(
+                        i18nRoot +
+                          '.' +
+                          (disabled ? 'delete-disabled' : 'delete')
+                      )}
+                      on:click|stopPropagation={_ => {
+                        if (!disabled) confirm(liiteApi.deleteLiite, liite.id);
+                      }}>
+                      highlight_off
+                    </span>
+                  </Confirm>
+                {:else}
                   <span
-                    class="material-icons delete-icon"
-                    class:text-disabled={disabled}
-                    title={disabled ? i18n(i18nRoot + '.poista-disabled') : ''}
-                    on:click|stopPropagation={_ => {
-                      if (!disabled) confirm(liiteApi.deleteLiite, liite.id);
-                    }}>
-                    highlight_off
+                    class="font-icon text-2xl text-error cursor-default"
+                    title={i18n(i18nRoot + '.liite.deleted')}>
+                    delete_forever
                   </span>
-                </Confirm>
+                {/if}
               </td>
             </tr>
           {/each}
