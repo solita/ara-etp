@@ -84,8 +84,9 @@
 
   const deleted = R.compose(R.defaultTo(false), R.prop('deleted'));
 
-  $: filteredLiitteet = showDeleted ? liitteet :
-    R.filter(R.complement(deleted), liitteet);
+  $: filteredLiitteet = showDeleted
+    ? liitteet
+    : R.filter(R.complement(deleted), liitteet);
 </script>
 
 <style>
@@ -163,16 +164,21 @@
                     <span
                       class="delete-icon font-icon-outlined text-2xl"
                       class:text-disabled={disabled}
-                      title={i18n(i18nRoot + '.' + (disabled ? 'delete-disabled': 'delete')) }
+                      title={i18n(
+                        i18nRoot +
+                          '.' +
+                          (disabled ? 'delete-disabled' : 'delete')
+                      )}
                       on:click|stopPropagation={_ => {
                         if (!disabled) confirm(liiteApi.deleteLiite, liite.id);
                       }}>
-                    highlight_off
+                      highlight_off
                     </span>
                   </Confirm>
                 {:else}
-                  <span class='font-icon text-2xl text-error cursor-default'
-                        title={i18n(i18nRoot + '.liite.deleted')}>
+                  <span
+                    class="font-icon text-2xl text-error cursor-default"
+                    title={i18n(i18nRoot + '.liite.deleted')}>
                     delete_forever
                   </span>
                 {/if}
