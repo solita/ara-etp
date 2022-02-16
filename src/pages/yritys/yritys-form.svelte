@@ -30,6 +30,7 @@
   export let luokittelut;
   export let disabled = false;
   export let dirty = false;
+  export let paakayttaja = false;
 
   const setDirty = _ => {
     dirty = true;
@@ -70,6 +71,16 @@
   );
 
   $: parseLaskutuskieli = R.identity;
+
+  $: tyyppiIds = R.pluck('id', luokittelut.tyypit);
+
+  $: formatTyyppi = R.compose(
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.tyypit)
+  );
+
+  $: parseTyyppi = R.identity;
 
   const formatVerkkolaskuoperaattori = R.compose(
     Maybe.orSome(''),
@@ -153,7 +164,23 @@
           {i18n}
           {disabled} />
       </div>
-      <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+      {#if paakayttaja}
+        <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+          <Select
+            label={i18n('yritys.tyyppi')}
+            required={true}
+            {disabled}
+            format={formatTyyppi}
+            parse={parseTyyppi}
+            bind:model={yritys}
+            lens={R.lensProp('type-id')}
+            allowNone={false}
+            items={tyyppiIds} />
+        </div>
+      {/if}
+    </div>
+    <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
+      <div class="lg:py-0 w-full px-4 py-4">
         <Input
           id={'nimi'}
           name={'nimi'}

@@ -16,7 +16,8 @@ export const emptyYritys = {
   maa: Either.Right('FI'),
   laskutuskieli: 0,
   verkkolaskuosoite: Maybe.None(),
-  verkkolaskuoperaattori: Either.Right(Maybe.None())
+  verkkolaskuoperaattori: Either.Right(Maybe.None()),
+  'type-id': 1
 };
 
 const commonSchema = {

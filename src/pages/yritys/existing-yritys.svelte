@@ -7,6 +7,7 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import YritysForm from '@Pages/yritys/yritys-form';
   import Overlay from '@Component/Overlay/Overlay';
@@ -108,7 +109,7 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { yritys, luokittelut }}
+    {#each Maybe.toArray(resources) as { yritys, luokittelut, whoami }}
       <YritysForm
         {submit}
         setDeleted={Maybe.Some(setDeleted)}
@@ -116,6 +117,7 @@
         {disabled}
         bind:dirty
         {luokittelut}
+        paakayttaja={Kayttajat.isPaakayttaja(whoami)}
         existing={false}
         {yritys} />
     {/each}
