@@ -182,13 +182,10 @@ export const findEnergiatodistusById = R.compose(
   getEnergiatodistusById('all')
 );
 
-export const getLiitteetById = R.curry((fetch, version, id) =>
-  R.compose(
-    R.map(R.map(deserializeLiite)),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch)),
-    url.liitteet
-  )(version, id)
+export const liitteet = R.compose(
+  R.map(R.map(deserializeLiite)),
+  Fetch.getJson(fetch),
+  url.liitteet
 );
 
 export const toFormData = (name, files) => {
@@ -199,7 +196,7 @@ export const toFormData = (name, files) => {
   return data;
 };
 
-export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
+export const postLiitteetFiles = R.curry((version, id, files) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(uri =>
@@ -212,7 +209,7 @@ export const postLiitteetFiles = R.curry((fetch, version, id, files) =>
   )(version, id)
 );
 
-export const postLiitteetLink = R.curry((fetch, version, id, link) =>
+export const postLiitteetLink = R.curry((version, id, link) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
@@ -221,7 +218,7 @@ export const postLiitteetLink = R.curry((fetch, version, id, link) =>
   )(link)
 );
 
-export const deleteLiite = R.curry((fetch, version, id, liiteId) =>
+export const deleteLiite = R.curry((version, id, liiteId) =>
   R.compose(
     R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(liiteId =>
