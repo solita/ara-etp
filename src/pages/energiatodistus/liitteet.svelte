@@ -77,7 +77,10 @@
       api.postLiitteetFiles(params.version, params.id)
     ),
 
-    addLink: liiteOperation('add-link', api.postLiitteetLink(params.version, params.id)),
+    addLink: liiteOperation(
+      'add-link',
+      api.postLiitteetLink(params.version, params.id)
+    ),
 
     deleteLiite: liiteOperation(
       'delete-liite',
