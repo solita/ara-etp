@@ -85,6 +85,7 @@
       R.map(R.toLower),
       R.flatten,
       R.values,
+      l => ({...l, etunimisukunimi: l.etunimi + ' ' + l.sukunimi}),
       R.pick([
         'etunimi',
         'sukunimi',
