@@ -8,6 +8,7 @@
 
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Toimenpiteet from './toimenpiteet';
+  import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as Links from './links';
 
   import NewToimenpideDialog from './new-toimenpide-dialog.svelte';
@@ -93,24 +94,24 @@
     text="Lisää muistiinpano"
     on:click={openNewNote} />
   <TextButton
-    disabled={isAuditCase(toimenpiteet)}
+    disabled={isAuditCase(toimenpiteet) || ET.isDraft(energiatodistus)}
     icon="visibility"
     text="Merkitse katsotuksi"
     on:click={_ => openNewToimenpide(Toimenpiteet.type.verified)} />
   <TextButton
-    disabled={isAuditCase(toimenpiteet)}
+    disabled={isAuditCase(toimenpiteet) || ET.isDraft(energiatodistus)}
     icon="bug_report"
     text="Ilmoita poikkeamasta"
     on:click={_ => openNewToimenpide(Toimenpiteet.type.anomaly)} />
 </div>
 
-{#if !isAuditCase(toimenpiteet)}
+{#if !isAuditCase(toimenpiteet) && !ET.isDraft(energiatodistus)}
   <div class="mb-5">
     <Button
       text="Aloita valvonta"
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
-{:else if !isDraft(toimenpiteet)}
+{:else if !isDraft(toimenpiteet) && !ET.isDraft(energiatodistus)}
   <div class="lg:w-1/2 w-full mb-5">
     <Select
       label="Lisää valvontatoimenpide"
