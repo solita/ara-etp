@@ -41,7 +41,7 @@ export const laatijaFields = tila => {
     case EtUtils.tila['signed']:
       return [module.save, module.download];
     case EtUtils.tila['discarded']:
-      return [module.preview, module.download, module.undodiscard];
+      return [];
     case EtUtils.tila['replaced']:
     case EtUtils.tila['deleted']:
       return [module.download];
