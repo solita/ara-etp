@@ -44,7 +44,6 @@ export const laatijaFields = tila => {
       return [];
     case EtUtils.tila['replaced']:
     case EtUtils.tila['deleted']:
-      return [module.download];
     default:
       return [];
   }
