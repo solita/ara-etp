@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
-  import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+
   import * as api from '@Pages/yritys/yritys-api';
   import * as Yritys from '@Pages/yritys/yritys-utils';
   import * as qs from 'qs';
@@ -17,6 +17,7 @@
   import Address from '@Component/address/address';
   import Input from '@Component/Input/Input';
   import PillInputWrapper from '@Component/Input/PillInputWrapper';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   const i18n = $_;
 
@@ -57,18 +58,28 @@
     )(yritys)
   );
 
-  $: searchKeyword = Maybe.fromEmpty(qs.parse($querystring).search);
-  $: results = Maybe.fold(
-    yritykset,
-    search => R.filter(matchSearch(search), yritykset),
-    searchKeyword
+  const parseQuery = R.compose(
+    R.mergeRight({ deleted: false, search: '' }),
+    R.evolve({ deleted: R.equals('true') }),
+    qs.parse
   );
 
-  $: R.compose(
-    querystring => replace(`${$location}?${querystring}`),
-    qs.stringify,
-    R.objOf('search')
-  )(Maybe.orSome('', searchKeyword));
+  $: query = parseQuery($querystring);
+
+  $: results = R.filter(
+    R.allPass([
+      matchSearch(query.search),
+      query.deleted ? R.T : R.complement(R.prop('deleted'))
+    ]),
+    yritykset
+  );
+
+  // use fixed location so that location is not reactive
+  const originalLocation = $location;
+
+  $: if (R.equals(originalLocation, $location)) {
+    replace(`${originalLocation}?${qs.stringify(query)}`);
+  }
 </script>
 
 <style>
@@ -79,21 +90,31 @@
     <H1 text={i18n('yritykset.title')} />
 
     <div class="my-4">
-      <div class="flex flex-col lg:w-2/3 w-full">
-        <H2 text={i18n('yritykset.search')} />
-        <Input
-          model={Maybe.orSome('', searchKeyword)}
-          inputComponentWrapper={PillInputWrapper}
-          search={true}
-          on:input={evt => {
-            cancel = R.compose(
-              Future.value(val => {
-                searchKeyword = Maybe.fromEmpty(R.trim(val));
-              }),
-              Future.after(200),
-              R.tap(cancel)
-            )(evt.target.value);
-          }} />
+      <H2 text={i18n('yritykset.search')} />
+      <div class="flex flex-col lg:flex-row">
+        <div class="lg:w-1/2 w-full mr-4">
+          <Input
+            model={query}
+            lens={R.lensProp('search')}
+            inputComponentWrapper={PillInputWrapper}
+            search={true}
+            on:input={evt => {
+              cancel = R.compose(
+                Future.value(val => {
+                  query = R.assoc('search', R.trim(val), query);
+                }),
+                Future.after(200),
+                R.tap(cancel)
+              )(evt.target.value);
+            }} />
+        </div>
+        <Checkbox
+          id={'query.deleted'}
+          name={'query.deleted'}
+          label={i18n('yritykset.include-deleted')}
+          lens={R.lensProp('deleted')}
+          bind:model={query}
+          disabled={false} />
       </div>
     </div>
 

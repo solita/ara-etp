@@ -171,6 +171,7 @@
     "title": "Yritykset",
     "all": "Kaikki yritykset",
     "search": "Haku",
+    "include-deleted": "Näytä poistetut",
     "results": "Tuloksia",
     "messages": {
       "load-error": "Yritystietojen lataus epäonnistui"
