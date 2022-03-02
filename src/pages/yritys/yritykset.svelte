@@ -66,9 +66,13 @@
 
   $: query = parseQuery($querystring);
 
-  $: results = R.filter(R.allPass([
-    matchSearch(query.search),
-    query.deleted ? R.T : R.complement(R.prop('deleted'))]), yritykset);
+  $: results = R.filter(
+    R.allPass([
+      matchSearch(query.search),
+      query.deleted ? R.T : R.complement(R.prop('deleted'))
+    ]),
+    yritykset
+  );
 
   // use fixed location so that location is not reactive
   const originalLocation = $location;
@@ -88,7 +92,7 @@
     <div class="my-4">
       <H2 text={i18n('yritykset.search')} />
       <div class="flex flex-col lg:flex-row">
-        <div class='lg:w-1/2 w-full mr-4'>
+        <div class="lg:w-1/2 w-full mr-4">
           <Input
             model={query}
             lens={R.lensProp('search')}
