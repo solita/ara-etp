@@ -127,7 +127,20 @@
   <div class="w-full mt-3">
     <H1 text={perustiedotHeader} />
     <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
-      <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+      {#if !R.isNil(yritys.id)}
+        <div class="lg:w-1/6 lg:py-0 w-full px-4 py-4">
+          <Input
+            id={'id'}
+            name={'id'}
+            label={i18n('yritys.id')}
+            required={true}
+            bind:model={yritys}
+            lens={R.lensProp('id')}
+            {i18n}
+            disabled='true' />
+        </div>
+      {/if}
+      <div class="lg:w-2/6 lg:py-0 w-full px-4 py-4">
         <Input
           id={'ytunnus'}
           name={'ytunnus'}
@@ -154,6 +167,7 @@
           {disabled} />
       </div>
     </div>
+
   </div>
   <HR />
   <div class="mt-8">

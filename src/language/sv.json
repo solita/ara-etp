@@ -129,6 +129,7 @@
       "empty": "Företaget har inga upprättare."
     },
     "y-tunnus": "FO-nummer",
+    "id": "ID",
     "nimi": "Namn",
     "vastaanottajan-tarkenne": "Mottagarens identifikation eller C/O",
     "laskutusosoite": "Faktureringsadress",
