@@ -137,7 +137,7 @@
             bind:model={yritys}
             lens={R.lensProp('id')}
             {i18n}
-            disabled='true' />
+            disabled="true" />
         </div>
       {/if}
       <div class="lg:w-2/6 lg:py-0 w-full px-4 py-4">
@@ -167,7 +167,6 @@
           {disabled} />
       </div>
     </div>
-
   </div>
   <HR />
   <div class="mt-8">
