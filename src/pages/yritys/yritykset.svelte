@@ -127,6 +127,7 @@
         <table class="etp-table">
           <thead class="etp-table--thead">
             <tr class="etp-table--tr">
+              <th class="etp-table--th">{i18n('yritys.id')}</th>
               <th class="etp-table--th">{i18n('yritys.nimi')}</th>
               <th class="etp-table--th">{i18n('yritys.y-tunnus')}</th>
               <th class="etp-table--th">{i18n('yritys.laskutusosoite')}</th>
@@ -137,6 +138,9 @@
               <tr
                 class="etp-table--tr etp-table--tr__link"
                 on:click={() => push('#/yritys/' + yritys.id)}>
+                <td class="etp-table--td">
+                  {yritys.id}
+                </td>
                 <td class="etp-table--td">
                   {Yritys.label(yritys, i18n)}
                 </td>
