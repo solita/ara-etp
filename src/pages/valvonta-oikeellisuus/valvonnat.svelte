@@ -265,9 +265,12 @@
               lens={R.lensProp('laatija-id')}
               modelToItem={R.chain(id => Maybe.findById(id, laatijat))}
               itemToModel={R.map(R.prop('id'))}
-              format={Maybe.fold(i18n('validation.no-selection'), formatLaatija)}
+              format={Maybe.fold(
+                i18n('validation.no-selection'),
+                formatLaatija
+              )}
               items={Selects.addNoSelection(laatijat)}
-              searchable={true}/>
+              searchable={true} />
           </div>
 
           <div class="w-1/2 lg:w-1/4">

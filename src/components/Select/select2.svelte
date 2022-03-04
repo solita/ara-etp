@@ -44,8 +44,15 @@
   let textCancel = () => {};
 
   $: modelValue = R.view(lens, model);
-  $: selected = Objects.requireNotNil(modelToItem(modelValue),
-    "Select " + name + '#' + id + " - item is not found by model value: " + modelValue);
+  $: selected = Objects.requireNotNil(
+    modelToItem(modelValue),
+    'Select ' +
+      name +
+      '#' +
+      id +
+      ' - item is not found by model value: ' +
+      modelValue
+  );
 
   $: showDropdown = Maybe.isSome(active);
 
@@ -53,18 +60,22 @@
   $: {
     selectableItems = items;
     R.forEach(txt => {
-      selectableItems = R.filter(R.compose(R.includes(R.toLower(txt)), R.toLower, format), items);
+      selectableItems = R.filter(
+        R.compose(R.includes(R.toLower(txt)), R.toLower, format),
+        items
+      );
     }, searchText);
   }
 
   const previousItem = R.compose(R.filter(R.lte(0)), Maybe.Some, R.dec);
 
   const nextItem = R.curry((items, active) =>
-    R.compose(R.min(R.inc(active)), R.dec, R.length)(items));
+    R.compose(R.min(R.inc(active)), R.dec, R.length)(items)
+  );
 
   const setModel = index => {
     model = R.set(lens, itemToModel(R.nth(index, selectableItems)), model);
-  }
+  };
 
   const keyHandlers = {
     [keys.DOWN_ARROW]: (event, active) => {
@@ -235,15 +246,15 @@
             }} />
         </div>
       {/if}
-    <DropdownList
-      items={R.map(format, selectableItems)}
-      {active}
-      onclick={async (item, index) => {
-        setModel(index);
-        active = Maybe.None();
-        await tick();
-        input.dispatchEvent(new Event('change', { bubbles: true }));
-      }} />
+      <DropdownList
+        items={R.map(format, selectableItems)}
+        {active}
+        onclick={async (item, index) => {
+          setModel(index);
+          active = Maybe.None();
+          await tick();
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }} />
     </div>
   {/if}
 
