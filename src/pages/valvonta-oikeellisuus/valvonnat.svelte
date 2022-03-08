@@ -10,6 +10,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Query from '@Utility/query';
   import * as Locales from '@Language/locale-utils';
+  import * as Selects from '@Component/Select/select-util';
 
   import { querystring, location } from 'svelte-spa-router';
   import * as Router from '@Component/Router/router';
@@ -36,9 +37,9 @@
   import Address from '@Pages/energiatodistus/address';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
+  import Select2 from '@Component/Select/select2';
   import Link from '@Component/Link/Link.svelte';
   import Input from '@Component/Input/Input';
-  import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
   import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
 
   let resources = Maybe.None();
@@ -152,15 +153,6 @@
   const formatLaatija = kayttaja =>
     `${kayttaja.etunimi} ${kayttaja.sukunimi} | ${kayttaja.email}`;
 
-  const parseLaatija = kayttajat =>
-    R.compose(
-      Maybe.toEither(R.applyTo(`${i18nRoot}.messages.laatija-not-found`)),
-      R.map(R.prop('id')),
-      predicate => Maybe.find(predicate, kayttajat),
-      R.propEq('email'),
-      R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
-    );
-
   const nextPageCallback = nextPage =>
     (query = R.assoc('page', Maybe.Some(nextPage), query));
 
@@ -265,30 +257,22 @@
         <div
           class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
           <div class="lg:w-1/2 w-full">
-            <Autocomplete items={R.map(formatLaatija, laatijat)} size="10">
-              <Input
-                id={'oikeellisuus.laatija'}
-                name={'oikeellisuus.laatija'}
-                label={i18n(i18nRoot + '.laatija')}
-                model={query}
-                lens={R.lensProp('laatija-id')}
-                parse={Parsers.optionalParser(parseLaatija(laatijat))}
-                caret={true}
-                format={R.compose(
-                  Maybe.orSome(''),
-                  R.map(formatLaatija),
-                  R.chain(id => Maybe.findById(id, laatijat))
-                )}
-                on:input={evt => {
-                  const parse = Parsers.optionalParser(parseLaatija(laatijat));
-                  const laatijaId = parse(evt.target.value);
-                  R.forEach(id => {
-                    query = R.assoc('laatija-id', id, query);
-                  }, laatijaId);
-                }}
-                {i18n} />
-            </Autocomplete>
+            <Select2
+              id={'oikeellisuus.laatija'}
+              name={'oikeellisuus.laatija'}
+              label={i18n(i18nRoot + '.laatija')}
+              bind:model={query}
+              lens={R.lensProp('laatija-id')}
+              modelToItem={R.chain(id => Maybe.findById(id, laatijat))}
+              itemToModel={R.map(R.prop('id'))}
+              format={Maybe.fold(
+                i18n('validation.no-selection'),
+                formatLaatija
+              )}
+              items={Selects.addNoSelection(laatijat)}
+              searchable={true} />
           </div>
+
           <div class="w-1/2 lg:w-1/4">
             <Select
               disabled={overlay}
