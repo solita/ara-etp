@@ -31,7 +31,7 @@
   $: postinumeroNames = R.map(
     Postinumero.fullLabel($locale),
     R.filter(
-      R.allPass([R.propEq('valid', true), R.propEq('type-id', 1)]),
+      R.allPass([R.propEq('valid', true), Postinumero.isNormal]),
       postinumerot
     )
   );
