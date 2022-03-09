@@ -32,9 +32,13 @@
 
   const loadKorvattavat = energiatodistus => {
     loading = true;
-    if (Maybe.fold(true, Validation.isPostinumeroFI,
-      energiatodistus.perustiedot.postinumero)) {
-
+    if (
+      Maybe.fold(
+        true,
+        Validation.isPostinumeroFI,
+        energiatodistus.perustiedot.postinumero
+      )
+    ) {
       Future.fork(
         response => {
           const msg = i18n(
