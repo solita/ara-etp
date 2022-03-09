@@ -40,9 +40,14 @@ export const deserializeToimenpide = R.evolve({
   tiedoksi: R.map(R.evolve({ email: Maybe.fromNull }))
 });
 
+export const deserializeViesti = R.evolve({
+  'sent-time': dfns.parseJSON
+});
+
 export const deserializeValvontaStatus = R.compose(
   R.evolve({
     lastToimenpide: R.compose(R.map(deserializeToimenpide), Maybe.fromNull),
+    'last-viesti': R.compose(R.map(deserializeViesti), Maybe.fromNull),
     energiatodistus: EtApi.deserialize,
     'valvoja-id': Maybe.fromNull
   }),

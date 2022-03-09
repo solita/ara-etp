@@ -348,13 +348,31 @@
                   </td>
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
-                      {Locales.labelForId(
-                        $locale,
-                        toimenpidetyypit
-                      )(toimenpide['type-id'])}
-                      {#if Toimenpiteet.isDraft(toimenpide)}
-                        ({i18n(i18nRoot + '.table.draft')})
-                      {/if}
+                      <div class="flex flex-wrap">
+                        <div class="flex items-center mr-1">
+                          {Locales.labelForId(
+                            $locale,
+                            toimenpidetyypit
+                          )(toimenpide['type-id'])}
+                          {#if Toimenpiteet.isDraft(toimenpide)}
+                            ({i18n(i18nRoot + '.table.draft')})
+                          {/if}
+                        </div>
+                        {#each Maybe.toArray(valvonta['last-viesti']) as viesti}
+                          <span
+                            title={Formats.formatTimeInstantMinutes(
+                              viesti['sent-time']
+                            ) +
+                              ' / ' +
+                              Kayttajat.fullName(viesti.from)}
+                            class="font-icon-outlined text-lg"
+                            class:text-primary={!Kayttajat.isLaatijaRole(
+                              viesti.from['rooli-id']
+                            )}>
+                            {viesti.kasitelty ? 'mark_email_read' : 'mail'}
+                          </span>
+                        {/each}
+                      </div>
                     </td>
                     <td
                       class="etp-table--td"
