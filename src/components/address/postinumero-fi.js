@@ -21,6 +21,8 @@ export const formatPostinumero = (postinumerot, locale) => postinumero =>
     parseInt
   )(postinumero);
 
+export const isNormal = R.propEq('type-id', 1);
+
 const parsePostinumero = R.compose(
   R.map(R.slice(0, 5)),
   Parsers.optionalString
