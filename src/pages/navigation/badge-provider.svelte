@@ -12,8 +12,12 @@
   const getBadgeContent = _ => {
     cancel = R.compose(
       Future.fork(
-        _ => {},
-        value => (badge = Maybe.Some(value))
+        _ => {
+          badge = Maybe.None();
+        },
+        value => {
+          badge = Maybe.Some(value);
+        }
       ),
       R.chain(R.always(badgeFuture)),
       Future.after(200),
