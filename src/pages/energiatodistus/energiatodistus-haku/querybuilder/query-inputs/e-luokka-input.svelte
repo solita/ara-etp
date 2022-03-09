@@ -31,16 +31,13 @@
 
 <!-- purgecss: checked -->
 
-<input
-  bind:this={input}
-  class="sr-only"
-  name={`${nameprefix}_value_${index}`} />
+<input bind:this={input} class="hidden" name={`${nameprefix}_value_${index}`} />
 
 <div class="flex flex-row">
   {#each luokat as luokka}
     <label class="mr-4">
       <input
-        class="sr-only"
+        class="hidden"
         on:change|stopPropagation
         type="checkbox"
         bind:group
