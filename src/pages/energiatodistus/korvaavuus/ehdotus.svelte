@@ -5,6 +5,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Validation from '@Utility/validation';
 
   import { _, locale } from '@Language/i18n';
   import { flashMessageStore } from '@/stores';
@@ -31,29 +32,37 @@
 
   const loadKorvattavat = energiatodistus => {
     loading = true;
-    Future.fork(
-      response => {
-        const msg = i18n(
-          Maybe.orSome(
-            i18nRoot + '.messages.load-error',
-            Response.localizationKey(response)
-          )
-        );
-
-        flashMessageStore.add('energiatodistus', 'error', msg);
-        loading = false;
-      },
-      response => {
-        korvattavat = response;
-        loading = false;
-      },
-      EnergiatodistusApi.korvattavat(
-        R.pick(
-          ['rakennustunnus', 'postinumero', 'katuosoite-fi', 'katuosoite-sv'],
-          energiatodistus.perustiedot
-        )
+    if (
+      Maybe.fold(
+        true,
+        Validation.isPostinumeroFI,
+        energiatodistus.perustiedot.postinumero
       )
-    );
+    ) {
+      Future.fork(
+        response => {
+          const msg = i18n(
+            Maybe.orSome(
+              i18nRoot + '.messages.load-error',
+              Response.localizationKey(response)
+            )
+          );
+
+          flashMessageStore.add('Energiatodistus', 'error', msg);
+          loading = false;
+        },
+        response => {
+          korvattavat = response;
+          loading = false;
+        },
+        EnergiatodistusApi.korvattavat(
+          R.pick(
+            ['rakennustunnus', 'postinumero', 'katuosoite-fi', 'katuosoite-sv'],
+            energiatodistus.perustiedot
+          )
+        )
+      );
+    }
   };
 
   $: if (

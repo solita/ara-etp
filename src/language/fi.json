@@ -483,6 +483,9 @@
         "is-same": "Energiatodistus ei voi korvata itseään.",
         "not-found": "Energiatodistusta ei ole olemassa.",
         "invalid-id": "Energiatodistustunnus ei sisällä kirjaimia."
+      },
+      "messages": {
+        "load-error": "Korvaavuustietojen haku epäonnistui"
       }
     },
     "tila": {
