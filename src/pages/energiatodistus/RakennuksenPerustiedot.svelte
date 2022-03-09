@@ -28,7 +28,13 @@
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  $: postinumeroNames = R.map(Postinumero.fullLabel($locale), postinumerot);
+  $: postinumeroNames = R.map(
+    Postinumero.fullLabel($locale),
+    R.filter(
+      R.allPass([R.propEq('valid', true), R.propEq('type-id', 1)]),
+      postinumerot
+    )
+  );
 
   let kayttotarkoitusluokkaId = Maybe.None();
   $: if (
