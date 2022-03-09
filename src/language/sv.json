@@ -476,6 +476,9 @@
         "info-p3-1": "Om du vill ersätta något annat, välj",
         "info-p3-2": "Ersätter certifikatet",
         "info-p3-3": "och för in den certifikatkod som ska ersättas för hand."
+      },
+      "messages": {
+        "load-error": "Sökningen av ersättningsdata misslyckades."
       }
     },
     "tila": {
