@@ -178,7 +178,10 @@
     Router.push(Links.valvonta(energiatodistus));
   };
 
-  const isLaatijaViesti = R.pathSatisfies(Kayttajat.isLaatijaRole, ['from', 'rooli-id']);
+  const isLaatijaViesti = R.pathSatisfies(Kayttajat.isLaatijaRole, [
+    'from',
+    'rooli-id'
+  ]);
 </script>
 
 <!-- purgecss: font-bold text-primary text-error -->
