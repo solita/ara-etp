@@ -177,6 +177,8 @@
   const toValvontaView = energiatodistus => {
     Router.push(Links.valvonta(energiatodistus));
   };
+
+  const isLaatijaViesti = R.pathSatisfies(Kayttajat.isLaatijaRole, ['from', 'rooli-id']);
 </script>
 
 <!-- purgecss: font-bold text-primary text-error -->
@@ -365,10 +367,9 @@
                             ) +
                               ' / ' +
                               Kayttajat.fullName(viesti.from)}
-                            class="font-icon-outlined text-lg"
-                            class:text-primary={!Kayttajat.isLaatijaRole(
-                              viesti.from['rooli-id']
-                            )}>
+                            class="text-primary text-lg"
+                            class:font-icon={isLaatijaViesti(viesti)}
+                            class:font-icon-outlined={!isLaatijaViesti(viesti)}>
                             {viesti.kasitelty ? 'mark_email_read' : 'mail'}
                           </span>
                         {/each}
