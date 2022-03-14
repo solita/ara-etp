@@ -43,13 +43,13 @@ export const serialize = R.compose(
   R.dissoc('deleted')
 );
 
-const getTyypit = Fetch.cached(fetch, '/yritystyypit');
+const tyypit = Fetch.cached(fetch, '/yritystyypit');
 
 export const luokittelut = Future.parallelObject(3, {
   laskutuskielet: laskutusApi.laskutuskielet,
   verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit,
   countries: geoApi.countries,
-  tyypit: getTyypit
+  tyypit
 });
 
 export const getAllYritykset = R.compose(
