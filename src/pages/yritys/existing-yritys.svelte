@@ -7,7 +7,6 @@
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as Kayttajat from '@Utility/kayttajat';
 
   import YritysForm from '@Pages/yritys/yritys-form';
   import Overlay from '@Component/Overlay/Overlay';
@@ -117,7 +116,7 @@
         {disabled}
         bind:dirty
         {luokittelut}
-        paakayttaja={Kayttajat.isPaakayttaja(whoami)}
+        {whoami}
         existing={false}
         {yritys} />
     {/each}

@@ -8,6 +8,7 @@
   import * as Validation from '@Utility/validation';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Utility/country';
 
@@ -30,7 +31,7 @@
   export let luokittelut;
   export let disabled = false;
   export let dirty = false;
-  export let paakayttaja = false;
+  export let whoami;
 
   const setDirty = _ => {
     dirty = true;
@@ -164,7 +165,7 @@
           {i18n}
           {disabled} />
       </div>
-      {#if paakayttaja}
+      {#if Kayttajat.isPaakayttaja(whoami)}
         <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
           <Select
             label={i18n('yritys.tyyppi')}
