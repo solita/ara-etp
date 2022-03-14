@@ -20,10 +20,6 @@
   let overlay = false;
   let dirty = false;
 
-  const toggleOverlay = value => {
-    overlay = value;
-  };
-
   let yritys = YritysUtils.emptyYritys;
   let resources = Maybe.None();
 
@@ -34,7 +30,7 @@
   const submit = R.compose(
     Future.fork(
       response => {
-        toggleOverlay(false);
+        overlay = false;
         flashMessageStore.add(
           'yritys',
           'error',
@@ -56,13 +52,15 @@
       }
     ),
     api.postYritys(fetch),
-    R.tap(() => toggleOverlay(true))
+    R.tap(() => {
+      overlay = true;
+    })
   );
 
   // Load classifications
   Future.fork(
     () => {
-      toggleOverlay(false);
+      overlay = false;
       flashMessageStore.add(
         'yritys',
         'error',
@@ -71,7 +69,7 @@
     },
     response => {
       resources = Maybe.Some(response);
-      toggleOverlay(false);
+      overlay = false;
     },
     Future.parallelObject(4, {
       luokittelut: api.luokittelut,
