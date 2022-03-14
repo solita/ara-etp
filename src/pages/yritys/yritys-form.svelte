@@ -14,6 +14,7 @@
 
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
+  import Select2 from '@Component/Select/select2';
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
@@ -80,8 +81,6 @@
     R.map(labelLocale),
     Maybe.findById(R.__, luokittelut.tyypit)
   );
-
-  $: parseTyyppi = R.identity;
 
   const formatVerkkolaskuoperaattori = R.compose(
     Maybe.orSome(''),
@@ -167,15 +166,13 @@
       </div>
       {#if Kayttajat.isPaakayttaja(whoami)}
         <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
-          <Select
+          <Select2
             label={i18n('yritys.tyyppi')}
             required={true}
             {disabled}
             format={formatTyyppi}
-            parse={parseTyyppi}
             bind:model={yritys}
             lens={R.lensProp('type-id')}
-            allowNone={false}
             items={tyyppiIds} />
         </div>
       {/if}
