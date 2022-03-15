@@ -8,11 +8,13 @@
   import * as Validation from '@Utility/validation';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as YritysUtils from './yritys-utils';
   import * as country from '@Utility/country';
 
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
+  import Select2 from '@Component/Select/select2';
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
@@ -30,6 +32,7 @@
   export let luokittelut;
   export let disabled = false;
   export let dirty = false;
+  export let whoami;
 
   const setDirty = _ => {
     dirty = true;
@@ -70,6 +73,14 @@
   );
 
   $: parseLaskutuskieli = R.identity;
+
+  $: tyyppiIds = R.pluck('id', luokittelut.tyypit);
+
+  $: formatTyyppi = R.compose(
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    Maybe.findById(R.__, luokittelut.tyypit)
+  );
 
   const formatVerkkolaskuoperaattori = R.compose(
     Maybe.orSome(''),
@@ -153,7 +164,21 @@
           {i18n}
           {disabled} />
       </div>
-      <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+      {#if Kayttajat.isPaakayttaja(whoami)}
+        <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+          <Select2
+            label={i18n('yritys.tyyppi')}
+            required={true}
+            {disabled}
+            format={formatTyyppi}
+            bind:model={yritys}
+            lens={R.lensProp('type-id')}
+            items={tyyppiIds} />
+        </div>
+      {/if}
+    </div>
+    <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
+      <div class="lg:py-0 w-full px-4 py-4">
         <Input
           id={'nimi'}
           name={'nimi'}

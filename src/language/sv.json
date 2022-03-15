@@ -105,6 +105,7 @@
   "yritys": {
     "yritykset": "Företag",
     "yritys": "Företag",
+    "tyyppi": "Typ",
     "uusi-yritys": "Nytt företag",
     "laatijat": {
       "table": {

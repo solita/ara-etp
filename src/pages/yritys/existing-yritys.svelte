@@ -108,7 +108,7 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { yritys, luokittelut }}
+    {#each Maybe.toArray(resources) as { yritys, luokittelut, whoami }}
       <YritysForm
         {submit}
         setDeleted={Maybe.Some(setDeleted)}
@@ -116,6 +116,7 @@
         {disabled}
         bind:dirty
         {luokittelut}
+        {whoami}
         existing={false}
         {yritys} />
     {/each}

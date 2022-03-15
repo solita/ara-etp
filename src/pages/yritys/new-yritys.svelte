@@ -15,16 +15,13 @@
 
   import * as api from '@Pages/yritys/yritys-api';
   import * as Locales from '@Language/locale-utils';
+  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   let overlay = false;
   let dirty = false;
 
-  const toggleOverlay = value => {
-    overlay = value;
-  };
-
   let yritys = YritysUtils.emptyYritys;
-  let luokittelut = Maybe.None();
+  let resources = Maybe.None();
 
   const clean = _ => {
     yritys = YritysUtils.emptyYritys;
@@ -33,7 +30,7 @@
   const submit = R.compose(
     Future.fork(
       response => {
-        toggleOverlay(false);
+        overlay = false;
         flashMessageStore.add(
           'yritys',
           'error',
@@ -55,13 +52,15 @@
       }
     ),
     api.postYritys(fetch),
-    R.tap(() => toggleOverlay(true))
+    R.tap(() => {
+      overlay = true;
+    })
   );
 
   // Load classifications
-  $: Future.fork(
+  Future.fork(
     () => {
-      toggleOverlay(false);
+      overlay = false;
       flashMessageStore.add(
         'yritys',
         'error',
@@ -69,23 +68,27 @@
       );
     },
     response => {
-      luokittelut = Maybe.Some(response);
-      toggleOverlay(false);
+      resources = Maybe.Some(response);
+      overlay = false;
     },
-    api.luokittelut
+    Future.parallelObject(4, {
+      luokittelut: api.luokittelut,
+      whoami: kayttajaApi.whoami
+    })
   );
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#if luokittelut.isSome()}
+    {#each Maybe.toArray(resources) as { luokittelut, whoami }}
       <YritysForm
         bind:yritys
         bind:dirty
-        luokittelut={luokittelut.some()}
+        {luokittelut}
+        {whoami}
         {submit}
         cancel={clean} />
-    {/if}
+    {/each}
   </div>
   <div slot="overlay-content">
     <Spinner />
