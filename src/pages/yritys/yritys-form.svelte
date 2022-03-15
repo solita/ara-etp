@@ -164,7 +164,7 @@
           {i18n}
           {disabled} />
       </div>
-      {#if Kayttajat.isPaakayttaja(whoami)}
+      {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
         <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
           <Select2
             label={i18n('yritys.tyyppi')}
