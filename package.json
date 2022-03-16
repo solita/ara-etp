@@ -79,7 +79,7 @@
     "ramda": "^0.26.1",
     "sirv-cli": "^0.4.4",
     "svelte-i18n": "^3.0.4",
-    "svelte-spa-router": "git://github.com/hkorpi/svelte-spa-router.git#v3.1.0+locking",
+    "svelte-spa-router": "https://github.com/hkorpi/svelte-spa-router.git#v3.1.0+locking",
     "turndown": "^7.0.0"
   },
   "optionalDependencies": {
