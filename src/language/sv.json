@@ -12,6 +12,7 @@
     "invalid-email": "Felaktig e-post",
     "invalid-ytunnus": "Felaktigt FO-nummer",
     "postinumero-not-found": "Postnummer saknas",
+    "postinumero-not-normal": "Vain normaalit postinumerot on sallittu SV?",
     "invalid-henkilotunnus": "Felaktig personbeteckning",
     "invalid-rakennustunnus": "Felaktig byggnadsbeteckning",
     "invalid-verkkolaskuosoite": "Felaktig nätfakturaadress",

@@ -13,6 +13,7 @@
     "invalid-ytunnus": "Virheellinen ytunnus",
     "invalid-postinumero-fi": "Suomen postinumerossa pitää olla 5 numeroa",
     "postinumero-not-found": "Postinumeroa ei ole olemassa",
+    "postinumero-not-normal": "Vain normaalit postinumerot on sallittu",
     "invalid-henkilotunnus": "Virheellinen henkilötunnus",
     "invalid-rakennustunnus": "Virheellinen rakennustunnus",
     "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
