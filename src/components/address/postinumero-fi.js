@@ -39,6 +39,10 @@ export const Type = postinumerot => ({
     Validation.liftValidator({
       predicate: validatePostinumero(postinumerot),
       label: R.applyTo('validation.postinumero-not-found')
+    }),
+    Validation.liftValidator({
+      predicate: validatePostinumero(R.filter(isNormal, postinumerot)),
+      label: R.applyTo('validation.postinumero-not-normal')
     })
   ]
 });
