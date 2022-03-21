@@ -88,24 +88,28 @@
         ketjutCount = response.ketjutCount.count;
         overlay = false;
       },
-      R.chain(whoami =>
-        Future.parallelObject(4, {
-          whoami: Future.resolve(whoami),
-          ketjutCount: ViestiApi.getKetjutCount(
-            Kayttajat.isLaatija(whoami)
-              ? {}
-              : R.compose(
-                  R.omit(['offset', 'limit']),
-                  queryToBackendParams
-                )(query)
-          ),
-          ketjut: ViestiApi.getKetjut(
-            Kayttajat.isLaatija(whoami) ? {} : queryToBackendParams(query)
-          ),
-          osapuolet: ViestiApi.osapuolet,
-          vastaanottajaryhmat: ViestiApi.vastaanottajaryhmat,
-          kasittelijat: ViestiApi.getKasittelijat
-        }), KayttajaApi.whoami));
+      R.chain(
+        whoami =>
+          Future.parallelObject(4, {
+            whoami: Future.resolve(whoami),
+            ketjutCount: ViestiApi.getKetjutCount(
+              Kayttajat.isLaatija(whoami)
+                ? {}
+                : R.compose(
+                    R.omit(['offset', 'limit']),
+                    queryToBackendParams
+                  )(query)
+            ),
+            ketjut: ViestiApi.getKetjut(
+              Kayttajat.isLaatija(whoami) ? {} : queryToBackendParams(query)
+            ),
+            osapuolet: ViestiApi.osapuolet,
+            vastaanottajaryhmat: ViestiApi.vastaanottajaryhmat,
+            kasittelijat: ViestiApi.getKasittelijat
+          }),
+        KayttajaApi.whoami
+      )
+    );
   };
 
   // use fixed location so that location is not reactive
@@ -123,7 +127,6 @@
       loadedQuery = query;
     }
   }
-
 
   $: pageCount = Math.ceil(R.divide(ketjutCount, pageSize));
   const nextPageCallback = nextPage => {
@@ -163,7 +166,6 @@
     }),
     ViestiApi.putKetju(fetch)
   );
-
 </script>
 
 <Overlay {overlay}>
