@@ -1340,6 +1340,8 @@
       "show-mine": "Minä käsittelijänä",
       "show-handled": "Käsitellyt",
       "no-handler": "Ei käsittelijää",
+      "from-id": "Lähettäjä",
+      "vastaanottaja-id": "Vastaanottaja",
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
         "update-error": "Viestiketjun päivitys epäonnistui",

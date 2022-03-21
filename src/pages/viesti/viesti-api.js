@@ -94,6 +94,8 @@ export const postNewViesti = R.curry((fetch, id, body) =>
 
 export const vastaanottajaryhmat = Fetch.cached(fetch, '/vastaanottajaryhmat');
 
+export const osapuolet = Fetch.getJson(fetch, 'api/private/viestit/osapuolet');
+
 export const getEnergiatodistusKetjut = R.compose(
   R.map(R.map(deserialize)),
   Fetch.responseAsJson,
