@@ -350,6 +350,7 @@ export const isTilaInTilat = tilat =>
 
 export const isDraft = R.propEq('tila-id', tila.draft);
 export const isSigned = R.propEq('tila-id', tila.signed);
+export const shouldSaveBeforeCopy = R.anyPass([isDraft]);
 
 const kielisyydet = ['fi', 'sv', 'bilingual'];
 
