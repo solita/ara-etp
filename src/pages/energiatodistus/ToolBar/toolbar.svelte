@@ -140,17 +140,6 @@
   export let saveComplete = _ => {};
   export let cancel = _ => {};
 
-  const copyUsingExisting = (cont) => {
-    const sv = save(cont);
-    return _ => {
-      if (et.shouldSaveBeforeCopy(energiatodistus)) {
-        sv();
-      } else {
-        cont();
-      }
-    }
-  };
-
   const openUrl = url => {
     window.open(url, '_blank');
   };
@@ -285,9 +274,18 @@
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
     <button
       disabled={pendingExecution}
-      on:click={copyUsingExisting(_ =>
-        push('/energiatodistus/' + version + '/new?copy-from-id=' + id.some())
-      )}>
+      on:click={_ => {
+        const pushPath = _ =>
+          push(
+            '/energiatodistus/' + version + '/new?copy-from-id=' + id.some()
+          );
+
+        if (et.shouldSaveBeforeCopy(energiatodistus)) {
+          save(pushPath)();
+        } else {
+          pushPath();
+        }
+      }}>
       <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
       <span class="text-2xl font-icon">file_copy</span>
     </button>
