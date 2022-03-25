@@ -274,9 +274,18 @@
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
     <button
       disabled={pendingExecution}
-      on:click={save(_ =>
-        push('/energiatodistus/' + version + '/new?copy-from-id=' + id.some())
-      )}>
+      on:click={_ => {
+        const newEtPage = _ =>
+          push(
+            '/energiatodistus/' + version + '/new?copy-from-id=' + id.some()
+          );
+
+        if (et.shouldSaveBeforeCopy(energiatodistus)) {
+          save(newEtPage)();
+        } else {
+          newEtPage();
+        }
+      }}>
       <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
       <span class="text-2xl font-icon">file_copy</span>
     </button>
