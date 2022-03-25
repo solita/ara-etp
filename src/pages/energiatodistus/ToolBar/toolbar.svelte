@@ -275,15 +275,15 @@
     <button
       disabled={pendingExecution}
       on:click={_ => {
-        const pushPath = _ =>
+        const newEtPage = _ =>
           push(
             '/energiatodistus/' + version + '/new?copy-from-id=' + id.some()
           );
 
         if (et.shouldSaveBeforeCopy(energiatodistus)) {
-          save(pushPath)();
+          save(newEtPage)();
         } else {
-          pushPath();
+          newEtPage();
         }
       }}>
       <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
