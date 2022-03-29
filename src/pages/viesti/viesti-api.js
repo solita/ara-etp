@@ -3,6 +3,7 @@ import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Query from '@Utility/query';
+import * as Kayttajat from '@Utility/kayttajat';
 
 import * as dfns from 'date-fns';
 import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
@@ -94,7 +95,9 @@ export const postNewViesti = R.curry((fetch, id, body) =>
 
 export const vastaanottajaryhmat = Fetch.cached(fetch, '/vastaanottajaryhmat');
 
-export const osapuolet = Fetch.getJson(fetch, 'api/private/viestit/osapuolet');
+export const osapuolet = R.map(
+  R.filter(R.propSatisfies(R.complement(Kayttajat.isSystemRole), 'rooli-id')),
+  Fetch.getJson(fetch, 'api/private/viestit/osapuolet'));
 
 export const getEnergiatodistusKetjut = R.compose(
   R.map(R.map(deserialize)),
