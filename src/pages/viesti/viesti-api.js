@@ -97,7 +97,8 @@ export const vastaanottajaryhmat = Fetch.cached(fetch, '/vastaanottajaryhmat');
 
 export const osapuolet = R.map(
   R.filter(R.propSatisfies(R.complement(Kayttajat.isSystemRole), 'rooli-id')),
-  Fetch.getJson(fetch, 'api/private/viestit/osapuolet'));
+  Fetch.getJson(fetch, 'api/private/viestit/osapuolet')
+);
 
 export const getEnergiatodistusKetjut = R.compose(
   R.map(R.map(deserialize)),

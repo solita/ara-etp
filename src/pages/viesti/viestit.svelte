@@ -103,7 +103,9 @@
             ketjut: ViestiApi.getKetjut(
               Kayttajat.isLaatija(whoami) ? {} : queryToBackendParams(query)
             ),
-            osapuolet: Kayttajat.isLaatija(whoami) ? Future.resolve([]) : ViestiApi.osapuolet,
+            osapuolet: Kayttajat.isLaatija(whoami)
+              ? Future.resolve([])
+              : ViestiApi.osapuolet,
             vastaanottajaryhmat: ViestiApi.vastaanottajaryhmat,
             kasittelijat: ViestiApi.getKasittelijat
           }),
