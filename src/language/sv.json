@@ -1327,6 +1327,8 @@
       "content": "Innehåll",
       "new-viesti": "Nytt meddelande",
       "no-messages": "Inga meddelanden",
+      "from-id": "Avsändare",
+      "vastaanottaja-id": "Mottagare",
       "messages": {
         "update-success": "Meddelandekedjan har uppdaterats",
         "update-error": "Uppdateringen av meddelandekedjan misslyckades",

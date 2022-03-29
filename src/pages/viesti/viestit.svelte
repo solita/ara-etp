@@ -3,17 +3,19 @@
   import { _ } from '@Language/i18n';
 
   import * as R from 'ramda';
-  import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
-  import { querystring, location, replace } from 'svelte-spa-router';
+  import * as Selects from '@Component/Select/select-util';
+  import * as Query from '@Utility/query';
   import qs from 'qs';
 
-  import * as api from './viesti-api';
-  import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import { querystring, location } from 'svelte-spa-router';
+  import * as Router from '@Component/Router/router';
+
+  import * as ViestiApi from './viesti-api';
+  import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import H1 from '@Component/H/H1.svelte';
@@ -23,6 +25,7 @@
   import Pagination from '@Component/Pagination/Pagination';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
+  import Select2 from '@Component/Select/select2';
 
   const i18n = $_;
 
@@ -32,98 +35,104 @@
   const pageSize = 50;
   let ketjutCount = 0;
 
-  const queryStringIntegerProp = R.curry((querystring, prop) =>
-    R.compose(
-      R.chain(Either.toMaybe),
-      R.map(Parsers.parseInteger),
-      Maybe.fromEmpty,
-      R.prop(prop)
-    )(querystring)
-  );
-
-  const queryStringBooleanProp = R.curry((querystring, prop) =>
-    R.compose(
-      R.map(R.equals('true')),
-      Maybe.fromEmpty,
-      R.prop(prop)
-    )(querystring)
-  );
-
-  let query = {
+  const defaultQuery = {
     page: Maybe.None(),
+    'from-id': Maybe.None(),
+    'vastaanottaja-id': Maybe.None(),
     'kasittelija-id': Maybe.None(),
     'has-kasittelija': Maybe.None(),
     'include-kasitelty': Maybe.None()
   };
 
-  let parsedQs = qs.parse($querystring);
+  const parseQuery = R.compose(
+    R.mergeRight(defaultQuery),
+    R.evolve({
+      page: Query.parseInteger,
+      'from-id': Query.parseInteger,
+      'vastaanottaja-id': Query.parseInteger,
+      'kasittelija-id': Query.parseInteger,
+      'include-kasitelty': Query.parseBoolean,
+      'has-kasittelija': Query.parseBoolean
+    }),
+    qs.parse
+  );
 
-  query = R.mergeRight(query, {
-    page: queryStringIntegerProp(parsedQs, 'page'),
-    'kasittelija-id': queryStringIntegerProp(parsedQs, 'kasittelija-id'),
-    'has-kasittelija': queryStringBooleanProp(parsedQs, 'has-kasittelija'),
-    'include-kasitelty': queryStringBooleanProp(parsedQs, 'include-kasitelty')
+  const queryWindow = query => ({
+    offset: R.map(R.compose(R.multiply(pageSize), R.dec), query.page),
+    limit: Maybe.Some(pageSize)
   });
 
-  $: pageCount = Math.ceil(R.divide(ketjutCount, pageSize));
-
-  const nextPageCallback = nextPage =>
-    (query = R.assoc('page', Maybe.fromNull(nextPage), query));
-
-  const queryToBackendParams = query => ({
-    offset: R.compose(
-      R.map(R.compose(R.multiply(pageSize), R.dec)),
-      R.prop('page')
-    )(query),
-    limit: Maybe.Some(pageSize),
-    'kasittelija-id': R.prop('kasittelija-id', query),
-    'include-kasitelty': R.prop('include-kasitelty', query),
-    'has-kasittelija': R.compose(
-      R.filter(R.not),
-      R.prop('has-kasittelija')
-    )(query)
-  });
+  const queryToBackendParams = R.compose(
+    R.omit(['page']),
+    query => R.mergeLeft(queryWindow(query), query),
+    R.evolve({
+      'has-kasittelija': R.filter(R.not)
+    })
+  );
 
   const load = query => {
     overlay = true;
-    R.compose(
-      Future.fork(
-        response => {
-          const msg = i18n(
-            Maybe.orSome(
-              'viesti.all.messages.load-error',
-              Response.localizationKey(response)
-            )
-          );
-
-          flashMessageStore.add('viesti', 'error', msg);
-          overlay = false;
-        },
-        response => {
-          resources = Maybe.Some(response);
-          ketjutCount = response.ketjutCount.count;
-          overlay = false;
-        }
-      ),
-      R.chain(whoami =>
-        Future.parallelObject(4, {
-          whoami: Future.resolve(whoami),
-          ketjutCount: api.getKetjutCount(
-            Kayttajat.isLaatija(whoami)
-              ? {}
-              : R.compose(
-                  R.omit(['offset', 'limit']),
-                  queryToBackendParams
-                )(query)
-          ),
-          ketjut: api.getKetjut(
-            Kayttajat.isLaatija(whoami) ? {} : queryToBackendParams(query)
-          ),
-          vastaanottajaryhmat: api.vastaanottajaryhmat,
-          kasittelijat: api.getKasittelijat
-        })
+    Future.fork(
+      response => {
+        const msg = i18n(
+          Maybe.orSome(
+            'viesti.all.messages.load-error',
+            Response.localizationKey(response)
+          )
+        );
+        flashMessageStore.add('viesti', 'error', msg);
+        overlay = false;
+      },
+      response => {
+        resources = Maybe.Some(response);
+        ketjutCount = response.ketjutCount.count;
+        overlay = false;
+      },
+      R.chain(
+        whoami =>
+          Future.parallelObject(4, {
+            whoami: Future.resolve(whoami),
+            ketjutCount: ViestiApi.getKetjutCount(
+              Kayttajat.isLaatija(whoami)
+                ? {}
+                : R.compose(
+                    R.omit(['offset', 'limit']),
+                    queryToBackendParams
+                  )(query)
+            ),
+            ketjut: ViestiApi.getKetjut(
+              Kayttajat.isLaatija(whoami) ? {} : queryToBackendParams(query)
+            ),
+            osapuolet: Kayttajat.isLaatija(whoami)
+              ? Future.resolve([])
+              : ViestiApi.osapuolet,
+            vastaanottajaryhmat: ViestiApi.vastaanottajaryhmat,
+            kasittelijat: ViestiApi.getKasittelijat
+          }),
+        KayttajaApi.whoami
       )
-    )(kayttajaApi.whoami);
+    );
+  };
+
+  // use fixed location so that location is not reactive
+  const originalLocation = $location;
+  let loadedQuery = {};
+  $: query = parseQuery($querystring);
+  $: {
+    // do not load if query is already loaded or the location is changed
+    if (
+      !R.equals(loadedQuery, query) &&
+      R.equals(originalLocation, $location)
+    ) {
+      load(query);
+      Router.push(originalLocation + Query.toQueryString(query));
+      loadedQuery = query;
+    }
+  }
+
+  $: pageCount = Math.ceil(R.divide(ketjutCount, pageSize));
+  const nextPageCallback = nextPage => {
+    query = R.assoc('page', Maybe.fromNull(nextPage), query);
   };
 
   const submitKasitelty = (ketjuId, kasitelty) => {
@@ -157,23 +166,13 @@
     R.tap(() => {
       overlay = true;
     }),
-    api.putKetju(fetch)
+    ViestiApi.putKetju(fetch)
   );
-
-  $: load(query);
-
-  $: R.compose(
-    querystring =>
-      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
-    qs.stringify,
-    R.map(Maybe.get),
-    R.filter(Maybe.isSome)
-  )(query);
 </script>
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { ketjut, whoami, vastaanottajaryhmat, kasittelijat }}
+    {#each Maybe.toArray(resources) as { ketjut, whoami, vastaanottajaryhmat, kasittelijat, osapuolet }}
       <div class="flex justify-between">
         <H1 text={i18n('viesti.all.title')} />
         <div class="font-bold">
@@ -221,9 +220,47 @@
             parse={R.compose(Maybe.Some)}
             disabled={false} />
         </div>
+
+        <div class="flex lg:flex-row flex-col mb-8">
+          <div class="lg:w-1/2 w-full mr-4 my-4">
+            <Select2
+              id={'viesti.from-id'}
+              name={'viesti.from-id'}
+              label={i18n('viesti.all.from-id')}
+              bind:model={query}
+              lens={R.lensProp('from-id')}
+              modelToItem={R.chain(Maybe.findById(R.__, osapuolet))}
+              itemToModel={R.map(R.prop('id'))}
+              format={Maybe.fold(
+                i18n('validation.no-selection'),
+                Kayttajat.fullName
+              )}
+              items={Selects.addNoSelection(osapuolet)}
+              searchable={true} />
+          </div>
+
+          <div class="lg:w-1/2 w-full my-4">
+            <Select2
+              id={'viesti.vastaanottaja-id'}
+              name={'viesti.vastaanottaja-id'}
+              label={i18n('viesti.all.vastaanottaja-id')}
+              bind:model={query}
+              lens={R.lensProp('vastaanottaja-id')}
+              modelToItem={R.chain(Maybe.findById(R.__, osapuolet))}
+              itemToModel={R.map(R.prop('id'))}
+              format={Maybe.fold(
+                i18n('validation.no-selection'),
+                Kayttajat.fullName
+              )}
+              items={Selects.addNoSelection(osapuolet)}
+              searchable={true} />
+          </div>
+        </div>
       {/if}
       {#if ketjut.length === 0}
-        <span>{i18n('viesti.all.no-messages')}</span>
+        <div>
+          <span>{i18n('viesti.all.no-messages')}</span>
+        </div>
       {/if}
       <div class="my-6">
         {#each ketjut as ketju}
