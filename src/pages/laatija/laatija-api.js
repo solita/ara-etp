@@ -34,7 +34,8 @@ export const laatijaUploadSerialize = R.evolve({
     R.map(date => dfns.format(date, 'yyyy-MM-dd'))
   ),
   toteaja: Either.right,
-  maa: Either.right
+  maa: Either.right,
+  passivoitu: Either.right
 });
 
 export const serialize = R.compose(
