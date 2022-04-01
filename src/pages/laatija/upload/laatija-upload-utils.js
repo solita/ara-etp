@@ -44,7 +44,8 @@ const emptyUploadLaatija = {
   email: '',
   puhelin: '',
   patevyystaso: '',
-  toteamispaivamaara: ''
+  toteamispaivamaara: '',
+  passivoitu: false
 };
 
 const uploadSchema = {
@@ -55,7 +56,8 @@ const uploadSchema = {
   henkilotunnus: [Validation.isRequired, Validation.henkilotunnusValidator],
   toteaja: [Validation.isRequired],
   patevyystaso: [Validation.isRequired],
-  maa: [Validation.isRequired]
+  maa: [Validation.isRequired],
+  passivoitu: [Validation.isRequired]
 };
 
 export const validate = Validation.validateModelObject(uploadSchema);
