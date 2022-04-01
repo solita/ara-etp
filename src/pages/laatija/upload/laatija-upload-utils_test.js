@@ -25,7 +25,8 @@ describe('Laatija utils', () => {
           puhelin: '0400123456',
           patevyystaso: '2',
           toteamispaivamaara: '21.3.2019',
-          maa: 'FI'
+          maa: 'FI',
+          passivoitu: false
         }
       ];
 
@@ -50,7 +51,8 @@ describe('Laatija utils', () => {
           puhelin: '0400123456',
           patevyystaso: '2',
           toteamispaivamaara: '21.3.2019',
-          maa: 'FI'
+          maa: 'FI',
+          passivoitu: false
         },
         {
           toteaja: 'FISE',
@@ -64,7 +66,8 @@ describe('Laatija utils', () => {
           puhelin: '0400123456',
           patevyystaso: '2',
           toteamispaivamaara: '21.3.2019',
-          maa: 'FI'
+          maa: 'FI',
+          passivoitu: false
         },
         {
           toteaja: 'FISE',
@@ -78,7 +81,8 @@ describe('Laatija utils', () => {
           puhelin: '0400123456',
           patevyystaso: '2',
           toteamispaivamaara: '21.3.2019',
-          maa: 'FI'
+          maa: 'FI',
+          passivoitu: false
         }
       ];
 
@@ -103,7 +107,8 @@ describe('Laatija utils', () => {
           puhelin: '0400123456',
           patevyystaso: '2',
           toteamispaivamaara: '21.3.2019',
-          maa: 'FI'
+          maa: 'FI',
+          passivoitu: false
         }
       ];
 
@@ -125,7 +130,8 @@ describe('Laatija utils', () => {
         puhelin: '0400123456',
         patevyystaso: '2',
         toteamispaivamaara: '21.3.2019',
-        maa: 'FI'
+        maa: 'FI',
+        passivoitu: false
       };
 
       const expected = {
@@ -142,7 +148,8 @@ describe('Laatija utils', () => {
         toteamispaivamaara: Either.Right(
           dfns.parse('21.3.2019', 'dd.M.yyyy', 0)
         ),
-        maa: 'FI'
+        maa: 'FI',
+        passivoitu: false
       };
 
       assert.deepEqual(expected, LaatijaUploadUtils.parse(data));
@@ -161,7 +168,8 @@ describe('Laatija utils', () => {
         puhelin: '0400123456',
         patevyystaso: '2a',
         toteamispaivamaara: 'a21.3.2019',
-        maa: 'FI'
+        maa: 'FI',
+        passivoitu: false
       };
 
       const result = LaatijaUploadUtils.parse(data);
