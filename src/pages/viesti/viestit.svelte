@@ -41,7 +41,7 @@
     'vastaanottaja-id': Maybe.None(),
     'kasittelija-id': Maybe.None(),
     'has-kasittelija': Maybe.None(),
-    'valvonta': Maybe.None(),
+    valvonta: Maybe.None(),
     'include-kasitelty': Maybe.None()
   };
 
@@ -54,7 +54,7 @@
       'kasittelija-id': Query.parseInteger,
       'include-kasitelty': Query.parseBoolean,
       'has-kasittelija': Query.parseBoolean,
-      'valvonta': Query.parseBoolean
+      valvonta: Query.parseBoolean
     }),
     qs.parse
   );
@@ -69,7 +69,7 @@
     query => R.mergeLeft(queryWindow(query), query),
     R.evolve({
       'has-kasittelija': R.filter(R.not),
-      'valvonta': R.filter(R.identity)
+      valvonta: R.filter(R.identity)
     })
   );
 
