@@ -1343,6 +1343,7 @@
       "from-id": "Lähettäjä",
       "vastaanottaja-id": "Vastaanottaja",
       "valvonta": "Näytä vain valvontaviestit",
+      "keyword-search": "Tekstihaku",
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
         "update-error": "Viestiketjun päivitys epäonnistui",

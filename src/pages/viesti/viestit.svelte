@@ -7,6 +7,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Parsers from '@Utility/parsers';
   import * as Selects from '@Component/Select/select-util';
   import * as Query from '@Utility/query';
   import qs from 'qs';
@@ -26,6 +27,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
   import Select2 from '@Component/Select/select2';
+  import Input from '@Component/Input/Input';
 
   const i18n = $_;
 
@@ -42,6 +44,7 @@
     'kasittelija-id': Maybe.None(),
     'has-kasittelija': Maybe.None(),
     valvonta: Maybe.None(),
+    keyword: Maybe.None(),
     'include-kasitelty': Maybe.None()
   };
 
@@ -54,7 +57,8 @@
       'kasittelija-id': Query.parseInteger,
       'include-kasitelty': Query.parseBoolean,
       'has-kasittelija': Query.parseBoolean,
-      valvonta: Query.parseBoolean
+      valvonta: Query.parseBoolean,
+      keyword: Parsers.optionalString
     }),
     qs.parse
   );
@@ -69,7 +73,8 @@
     query => R.mergeLeft(queryWindow(query), query),
     R.evolve({
       'has-kasittelija': R.filter(R.not),
-      valvonta: R.filter(R.identity)
+      valvonta: R.filter(R.identity),
+      keyword: R.map(txt => `%${txt}%`)
     })
   );
 
@@ -171,6 +176,8 @@
     }),
     ViestiApi.putKetju(fetch)
   );
+
+  let cancelKeywordSearch = () => {};
 </script>
 
 <Overlay {overlay}>
@@ -262,6 +269,23 @@
 
         <div class="flex lg:flex-row flex-col mb-8">
           <div class="lg:w-1/2 w-full mr-4 my-4">
+            <Input
+              id='keyword'
+              name='keyword'
+              label={i18n('viesti.all.keyword-search')}
+              model={query}
+              lens={R.lensProp('keyword')}
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              search={true}
+              on:input={evt => {
+                cancelKeywordSearch();
+                cancelKeywordSearch = Future.value(keyword => {
+                  query = R.assoc('keyword', keyword, query);
+                }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
+              }} />
+          </div>
+          <div class="lg:w-1/2 w-full mr-4 my-4 lg:my-8">
             <Checkbox
               id={'valvonta'}
               name={'valvonta'}
@@ -269,8 +293,7 @@
               lens={R.lensProp('valvonta')}
               bind:model={query}
               format={Maybe.orSome(false)}
-              parse={Maybe.Some}
-              disabled={false} />
+              parse={Maybe.Some} />
           </div>
         </div>
       {/if}
