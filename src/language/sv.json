@@ -1329,6 +1329,7 @@
       "no-messages": "Inga meddelanden",
       "from-id": "Avsändare",
       "vastaanottaja-id": "Mottagare",
+      "valvonta": "Visa endast övervakningsmeddelanden",
       "messages": {
         "update-success": "Meddelandekedjan har uppdaterats",
         "update-error": "Uppdateringen av meddelandekedjan misslyckades",

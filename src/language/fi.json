@@ -1342,6 +1342,7 @@
       "no-handler": "Ei käsittelijää",
       "from-id": "Lähettäjä",
       "vastaanottaja-id": "Vastaanottaja",
+      "valvonta": "Näytä vain valvontaviestit",
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
         "update-error": "Viestiketjun päivitys epäonnistui",

@@ -41,6 +41,7 @@
     'vastaanottaja-id': Maybe.None(),
     'kasittelija-id': Maybe.None(),
     'has-kasittelija': Maybe.None(),
+    valvonta: Maybe.None(),
     'include-kasitelty': Maybe.None()
   };
 
@@ -52,7 +53,8 @@
       'vastaanottaja-id': Query.parseInteger,
       'kasittelija-id': Query.parseInteger,
       'include-kasitelty': Query.parseBoolean,
-      'has-kasittelija': Query.parseBoolean
+      'has-kasittelija': Query.parseBoolean,
+      valvonta: Query.parseBoolean
     }),
     qs.parse
   );
@@ -66,7 +68,8 @@
     R.omit(['page']),
     query => R.mergeLeft(queryWindow(query), query),
     R.evolve({
-      'has-kasittelija': R.filter(R.not)
+      'has-kasittelija': R.filter(R.not),
+      valvonta: R.filter(R.identity)
     })
   );
 
@@ -221,7 +224,7 @@
             disabled={false} />
         </div>
 
-        <div class="flex lg:flex-row flex-col mb-8">
+        <div class="flex lg:flex-row flex-col">
           <div class="lg:w-1/2 w-full mr-4 my-4">
             <Select2
               id={'viesti.from-id'}
@@ -254,6 +257,20 @@
               )}
               items={Selects.addNoSelection(osapuolet)}
               searchable={true} />
+          </div>
+        </div>
+
+        <div class="flex lg:flex-row flex-col mb-8">
+          <div class="lg:w-1/2 w-full mr-4 my-4">
+            <Checkbox
+              id={'valvonta'}
+              name={'valvonta'}
+              label={i18n('viesti.all.valvonta')}
+              lens={R.lensProp('valvonta')}
+              bind:model={query}
+              format={Maybe.orSome(false)}
+              parse={Maybe.Some}
+              disabled={false} />
           </div>
         </div>
       {/if}
