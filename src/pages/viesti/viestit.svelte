@@ -270,8 +270,8 @@
         <div class="flex lg:flex-row flex-col mb-8">
           <div class="lg:w-1/2 w-full mr-4 my-4">
             <Input
-              id='keyword'
-              name='keyword'
+              id="keyword"
+              name="keyword"
               label={i18n('viesti.all.keyword-search')}
               model={query}
               lens={R.lensProp('keyword')}
