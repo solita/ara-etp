@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
+  import * as Valvojat from '@Pages/valvonta/valvojat';
 
   import { _, locale } from '@Language/i18n';
   import * as Router from '@Component/Router/router';
@@ -85,7 +86,7 @@
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
     format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
-    items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
+    items={R.pluck('id', Valvojat.filterActive(valvojat))} />
 </div>
 
 <div class="flex space-x-4 mb-8">

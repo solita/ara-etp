@@ -95,7 +95,7 @@ export const serialize = R.compose(
 );
 
 export const serializeForNonAdmin = R.compose(
-  R.omit(['rooli', 'passivoitu', 'henkilotunnus', 'virtu']),
+  R.omit(['rooli', 'passivoitu', 'valvoja', 'henkilotunnus', 'virtu']),
   serialize
 );
 

@@ -3,6 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Valvojat from '@Pages/valvonta/valvojat';
 
   import { _, locale } from '@Language/i18n';
 
@@ -88,7 +89,7 @@
       R.path(['target', 'value'])
     )}
     format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
-    items={R.pluck('id', R.filter(R.propEq('passivoitu', false), valvojat))} />
+    items={R.pluck('id', Valvojat.filterActive(valvojat))} />
 </div>
 
 <div class="flex space-x-4 mb-5">

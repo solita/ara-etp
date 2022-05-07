@@ -84,15 +84,16 @@
   on:submit|preventDefault={saveKayttaja}
   on:input={setDirty}
   on:change={setDirty}>
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-      <Checkbox
-        bind:model={kayttaja}
-        lens={R.lensProp('passivoitu')}
-        label={i18n(i18nRoot + '.passivoitu')}
-        disabled={disabledAdmin || isOwnSettings} />
-    </div>
 
+  <div class="w-full my-4">
+    <Checkbox
+      bind:model={kayttaja}
+      lens={R.lensProp('passivoitu')}
+      label={i18n(i18nRoot + '.passivoitu')}
+      disabled={disabledAdmin || isOwnSettings} />
+  </div>
+
+  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Select
         id={'rooli'}
@@ -106,6 +107,14 @@
         format={formatRooli}
         parse={Maybe.fromNull}
         items={R.pluck('id', filterRoolit(roolit))} />
+    </div>
+
+    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <Checkbox
+        bind:model={kayttaja}
+        lens={R.lensProp('valvoja')}
+        label={i18n(i18nRoot + '.valvoja')}
+        disabled={disabledAdmin} />
     </div>
   </div>
 
