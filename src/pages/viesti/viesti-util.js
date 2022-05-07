@@ -87,7 +87,6 @@ export const hasUnreadViesti = R.compose(
   R.find(R.propSatisfies(Maybe.isNone, 'read-time'))
 );
 
-export const filterActiveKasittelija =
-  R.filter(R.allPass([
-    R.complement(R.prop('passivoitu')),
-    R.prop('valvoja')]));
+export const filterActiveKasittelija = R.filter(
+  R.allPass([R.complement(R.prop('passivoitu')), R.prop('valvoja')])
+);

@@ -84,7 +84,6 @@
   on:submit|preventDefault={saveKayttaja}
   on:input={setDirty}
   on:change={setDirty}>
-
   <div class="w-full my-4">
     <Checkbox
       bind:model={kayttaja}
