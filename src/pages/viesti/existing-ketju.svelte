@@ -265,7 +265,10 @@
                     kasittelijat,
                     whoami
                   )}
-                  items={R.pluck('id', kasittelijat)} />
+                  items={R.pluck(
+                    'id',
+                    Viestit.filterActiveKasittelija(kasittelijat)
+                  )} />
               </div>
 
               <button
