@@ -405,7 +405,7 @@
         "voimassa": "Giltig",
         "rakennuksen-nimi": "Byggnadens namn",
         "osoite": "Adress",
-        "ktl": "Lagen om räntestöd för hyresbostadslån och bostadsrättshuslån",
+        "ktl": "Användingskategori",
         "laatija": "Upprättare",
         "toiminnot": "Funktioner",
         "valvonta": "Kontroll"
@@ -458,7 +458,7 @@
       "table": {
         "tunnus": "Beteckning",
         "etl": "Energieffektivitetslagen",
-        "ktl": "Lagen om räntestöd för hyresbostadslån och bostadsrättshuslån",
+        "ktl": "Användingskategori",
         "rakennustunnus": "Permanent byggnadsbeteckning",
         "nettoala": "Nettoarea",
         "nimi": "Byggnadens namn",
