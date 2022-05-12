@@ -79,7 +79,7 @@
 
 <div class="lg:w-1/2 w-full mb-5">
   <Select
-    label="Valitse käsittelijä"
+    label={i18n('valvonta.kaytto.all.valvoja')}
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={R.compose(
@@ -95,22 +95,22 @@
 <div class="flex space-x-4 mb-5">
   <TextButton
     icon="add_comment"
-    text="Lisää muistiinpano"
+    text={i18n('valvonta.add-muistiinpano')}
     on:click={openNewNote} />
 </div>
 
 {#if !isAuditCase(toimenpiteet)}
   <div class="mb-5">
     <Button
-      text="Aloita valvonta"
+      text={i18n('valvonta.aloita-valvonta')}
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
 {:else}
-  <H2 text="Uusi toimenpide" />
+  <H2 text={i18n('valvonta.new-toimenpide')} />
 
   <div class="lg:w-1/2 w-full mb-5">
     <Select
-      label="Valitse toimenpide"
+      label={i18n('valvonta.select-toimenpide')}
       model={toimenpideTyyppi}
       lens={R.lens(R.identity, R.identity)}
       inputValueParse={R.prop('id')}

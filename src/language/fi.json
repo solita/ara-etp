@@ -1420,6 +1420,10 @@
   },
   "valvonta": {
     "self": "Minä",
+    "aloita-valvonta": "Aloita valvonta",
+    "add-muistiinpano": "Lisää muistiinpano",
+    "new-toimenpide": "Uusi toimenpide",
+    "select-toimenpide": "Valitse toimenpide",
     "oikeellisuus": {
       "pending": "Tarkastettava",
       "all": {
@@ -1449,6 +1453,9 @@
       },
       "valvonta": {
         "title": "Oikeellisuuden valvonta",
+        "toimenpiteet": "Toimenpiteet",
+        "mark-as-verified": "Merkitse katsotuksi",
+        "mark-anomaly": "Ilmoita poikkeamasta",
         "messages": {
           "not-found": "Energiatodistusta ei ole olemassa",
           "load-error": "Valvonnan tietojen lataus epäonnistui",
