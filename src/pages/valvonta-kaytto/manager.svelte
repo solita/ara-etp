@@ -79,7 +79,7 @@
 
 <div class="lg:w-1/2 w-full mb-5">
   <Select
-    label={i18n('valvonta.kaytto.all.valvoja')}
+    label={i18n('valvonta.valvoja')}
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={R.compose(

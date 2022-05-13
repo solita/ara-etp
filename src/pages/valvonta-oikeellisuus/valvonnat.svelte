@@ -304,7 +304,7 @@
             <thead class="etp-table--thead">
               <tr class="etp-table--tr etp-table--tr__light">
                 <th class="etp-table--th">
-                  {i18n(i18nRoot + '.table.valvoja')}
+                  {i18n('valvonta.valvoja')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.table.last-toimenpide')}

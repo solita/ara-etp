@@ -82,7 +82,7 @@
 
 <div class="lg:w-1/4 w-full mb-8">
   <Select
-    label={i18n('valvonta.oikeellisuus.all.valvoja')}
+    label={i18n('valvonta.valvoja')}
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}

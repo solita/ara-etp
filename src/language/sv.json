@@ -1494,6 +1494,7 @@
   },
   "valvonta": {
     "self": "Jag",
+    "valvoja": "Övervakare",
     "aloita-valvonta": "Inled kontroll",
     "add-muistiinpano": "Lägg till anteckning",
     "new-toimenpide": "Ny åtgärd",
@@ -1502,7 +1503,6 @@
       "all": {
         "title": "Kontroll av riktigheten",
         "empty": "Inga kontrollåtgärder",
-        "valvoja": "Övervakare",
         "laatija": "Upprättare",
         "include-closed": "Även avslutade kontroller",
         "ei-valvojaa": "Ingen övervakare",
@@ -1514,7 +1514,6 @@
           "deadline-date": "Tidsfrist",
           "type": "Typ",
           "diaarinumero": "Diarienummer",
-          "valvoja": "Övervakare",
           "last-toimenpide": "Föregående händelse",
           "draft": "Utkast"
         },
@@ -1752,7 +1751,6 @@
         "empty": "Inga kontrollåtgärder",
         "ei-valvojaa": "Ingen övervakare",
         "include-closed": "Visa även avslutade",
-        "valvoja": "Övervakare",
         "diaarinumero": "Diarienummer",
         "last-toimenpide": "Föregående händelse",
         "last-toimenpide-none": "Ska granskas",

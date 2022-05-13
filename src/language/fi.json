@@ -1420,6 +1420,7 @@
   },
   "valvonta": {
     "self": "Minä",
+    "valvoja": "Valvoja",
     "aloita-valvonta": "Aloita valvonta",
     "add-muistiinpano": "Lisää muistiinpano",
     "new-toimenpide": "Uusi toimenpide",
@@ -1429,7 +1430,6 @@
       "all": {
         "title": "Oikeellisuuden valvonnat",
         "empty": "Ei valvontatoimenpiteitä",
-        "valvoja": "Valvoja",
         "laatija": "Laatija",
         "include-closed": "Näytä myös päättyneet",
         "ei-valvojaa": "Ei valvojaa",
@@ -1442,7 +1442,6 @@
           "deadline-date": "Määräaika",
           "type": "Tyyppi",
           "diaarinumero": "Diaarinumero",
-          "valvoja": "Käsittelijä",
           "last-toimenpide": "Edellinen tapahtuma",
           "draft": "luonnos"
         },
@@ -1681,7 +1680,6 @@
         "empty": "Ei valvontatoimenpiteitä",
         "ei-valvojaa": "Ei valvojaa",
         "include-closed": "Näytä myös päättyneet",
-        "valvoja": "Valvoja",
         "diaarinumero": "Diaarinumero",
         "last-toimenpide": "Edellinen tapahtuma",
         "last-toimenpide-none": "Tarkastettava",
