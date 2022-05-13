@@ -19,6 +19,7 @@
   import TextButton from '@Component/Button/TextButton.svelte';
   import Select from '@Component/Select/Select.svelte';
   import Link from '@Component/Link/Link.svelte';
+  import H2 from '@Component/H/H2.svelte';
 
   export let energiatodistus;
   export let valvojat;
@@ -81,7 +82,7 @@
 
 <div class="lg:w-1/4 w-full mb-8">
   <Select
-    label="Valvoja"
+    label={i18n('valvonta.valvoja')}
     model={valvonta}
     lens={R.lensProp('valvoja-id')}
     on:change={event => saveKasittelija(parseInt(event.target.value))}
@@ -92,30 +93,31 @@
 <div class="flex space-x-4 mb-8">
   <TextButton
     icon="add_comment"
-    text="Lisää muistiinpano"
+    text={i18n('valvonta.add-muistiinpano')}
     on:click={openNewNote} />
   <TextButton
     disabled={isAuditCase(toimenpiteet) || ET.isDraft(energiatodistus)}
     icon="visibility"
-    text="Merkitse katsotuksi"
+    text={i18n('valvonta.oikeellisuus.valvonta.mark-as-verified')}
     on:click={_ => openNewToimenpide(Toimenpiteet.type.verified)} />
   <TextButton
     disabled={isAuditCase(toimenpiteet) || ET.isDraft(energiatodistus)}
     icon="bug_report"
-    text="Ilmoita poikkeamasta"
+    text={i18n('valvonta.oikeellisuus.valvonta.mark-anomaly')}
     on:click={_ => openNewToimenpide(Toimenpiteet.type.anomaly)} />
 </div>
 
 {#if !isAuditCase(toimenpiteet) && !ET.isDraft(energiatodistus)}
   <div class="mb-5">
     <Button
-      text="Aloita valvonta"
+      text={i18n('valvonta.aloita-valvonta')}
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
 {:else if !isDraft(toimenpiteet) && !ET.isDraft(energiatodistus)}
+  <H2 text={i18n('valvonta.new-toimenpide')} />
   <div class="lg:w-1/2 w-full mb-5">
     <Select
-      label="Lisää valvontatoimenpide"
+      label={i18n('valvonta.select-toimenpide')}
       model={toimenpideTyyppi}
       lens={R.lens(R.identity, R.identity)}
       inputValueParse={R.prop('id')}

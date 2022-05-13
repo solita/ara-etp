@@ -208,7 +208,7 @@
           <Select
             disabled={overlay}
             compact={true}
-            label={i18n(i18nRoot + '.valvoja')}
+            label={i18n('valvonta.valvoja')}
             bind:model={query}
             lens={R.lensProp('valvoja-id')}
             items={R.pluck(
@@ -278,7 +278,7 @@
             <thead class="etp-table--thead">
               <tr class="etp-table--tr etp-table--tr__light">
                 <th class="etp-table--th">
-                  {i18n(i18nRoot + '.valvoja')}
+                  {i18n('valvonta.valvoja')}
                 </th>
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.diaarinumero')}

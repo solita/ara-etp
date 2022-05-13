@@ -216,7 +216,7 @@
 
       <HR compact={true} />
 
-      <H2 text="Tapahtumat" />
+      <H2 text={i18n(i18nRoot + '.toimenpiteet')} />
       {#each tapahtumat([
         R.map(keyed('toimenpide'), toimenpiteet),
         R.map(keyed('note'), notes)

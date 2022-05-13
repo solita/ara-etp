@@ -43,7 +43,9 @@
         class:text-error={isPastDeadline(deadline)}
         class:hover:border-error={isPastDeadline(deadline)}>
         <span class="font-icon">schedule</span>
-        <span>Määräaika {Formats.formatDateInstant(deadline)}</span>
+        <span
+          >{i18n(i18nRoot + '.deadline-date')}
+          {Formats.formatDateInstant(deadline)}</span>
         <span class="font-icon">edit</span>
       </button>
     {:else}
@@ -51,7 +53,9 @@
         class="inline-flex space-x-1 items-center border-b-1 border-transparent"
         class:text-error={isPastDeadline(deadline)}>
         <span class="font-icon">schedule</span>
-        <span>Määräaika {Formats.formatDateInstant(deadline)}</span>
+        <span
+          >{i18n(i18nRoot + '.deadline-date')}
+          {Formats.formatDateInstant(deadline)}</span>
       </div>
     {/if}
   </div>

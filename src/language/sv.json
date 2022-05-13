@@ -1494,11 +1494,15 @@
   },
   "valvonta": {
     "self": "Jag",
+    "valvoja": "Övervakare",
+    "aloita-valvonta": "Inled kontroll",
+    "add-muistiinpano": "Lägg till anteckning",
+    "new-toimenpide": "Ny åtgärd",
+    "select-toimenpide": "Välj åtgärd",
     "oikeellisuus": {
       "all": {
         "title": "Kontroll av riktigheten",
         "empty": "Inga kontrollåtgärder",
-        "valvoja": "Övervakare",
         "laatija": "Upprättare",
         "include-closed": "Även avslutade kontroller",
         "ei-valvojaa": "Ingen övervakare",
@@ -1510,7 +1514,6 @@
           "deadline-date": "Tidsfrist",
           "type": "Typ",
           "diaarinumero": "Diarienummer",
-          "valvoja": "Handläggare",
           "last-toimenpide": "Föregående händelse",
           "draft": "Utkast"
         },
@@ -1522,6 +1525,9 @@
       },
       "valvonta": {
         "title": "Kontroll av riktigheten",
+        "toimenpiteet": "Åtgärder",
+        "mark-as-verified": "Markera som läst",
+        "mark-anomaly": "Anmäl avvikelse",
         "messages": {
           "not-found": "Det existerar inget energicertifikat.",
           "load-error": "Det gick inte att ladda ner kontrolluppgifterna",
@@ -1745,7 +1751,6 @@
         "empty": "Inga kontrollåtgärder",
         "ei-valvojaa": "Ingen övervakare",
         "include-closed": "Visa även avslutade",
-        "valvoja": "Övervakare",
         "diaarinumero": "Diarienummer",
         "last-toimenpide": "Föregående händelse",
         "last-toimenpide-none": "Ska granskas",
