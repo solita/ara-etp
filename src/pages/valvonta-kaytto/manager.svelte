@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { isValid } from '@Utility/classification';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
   import * as Kayttajat from '@Utility/kayttajat';
@@ -117,7 +118,7 @@
       format={Locales.label($locale)}
       on:change={event => openNewToimenpide(parseInt(event.target.value))}
       items={R.filter(
-        Toimenpiteet.isAuditCaseToimenpideType,
+        R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]),
         toimenpidetyypit
       )} />
   </div>

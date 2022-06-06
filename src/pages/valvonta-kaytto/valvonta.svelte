@@ -146,7 +146,7 @@
         {roolit}
         {toimitustavat}
         {toimenpiteet}
-        toimenpidetyypit={R.filter(R.prop('valid'), toimenpidetyypit)}
+        {toimenpidetyypit}
         {templatesByType}
         {saveValvonta}
         {whoami}
