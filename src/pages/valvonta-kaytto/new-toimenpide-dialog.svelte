@@ -45,7 +45,10 @@
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
-  $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
+  $: templates = R.filter(
+    R.prop('valid'),
+    Toimenpiteet.templates(templatesByType)(toimenpide)
+  );
   $: formatTemplate = Locales.labelForId($locale, templates);
 
   $: schema = Schema.toimenpidePublish(templates, toimenpide);
