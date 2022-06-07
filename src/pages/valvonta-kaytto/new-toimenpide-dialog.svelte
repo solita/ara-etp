@@ -4,6 +4,7 @@
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
+  import { filterValid } from '@Utility/classification';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
@@ -162,7 +163,7 @@
           required={true}
           validation={true}
           format={formatTemplate}
-          items={R.pluck('id', templates)} />
+          items={R.pluck('id', filterValid(templates))} />
       </div>
     {:else}
       <div class="w-full py-4">
