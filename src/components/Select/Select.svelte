@@ -62,9 +62,22 @@
     )(items)
   );
 
-  const selectedItem = R.curry((items, active) =>
+  const selectedNonelessItem = R.curry((items, active) =>
     R.compose(Maybe.fromNull, R.nth(R.__, items))(active)
   );
+
+  const selectedNonefulItem = R.curry((items, active) =>
+    R.compose(
+      Maybe.fromNull,
+      R.ifElse(
+        R.equals(0),
+        R.always(null),
+        R.compose(R.nth(R.__, items), R.dec)
+      ),
+    )(active)
+  );
+
+  $: selectedItem = allowNone ? selectedNonefulItem : selectedNonelessItem;
 
   const keyHandlers = {
     [keys.DOWN_ARROW]: (_, active) => {
@@ -85,9 +98,10 @@
         event.preventDefault();
         return R.compose(
           Maybe.None,
-          R.forEach(item => {
+          item => {
             model = R.set(lens, parse(item), model);
-          }),
+          },
+          Maybe.orSome(Maybe.None()),
           R.chain(selectedItem(items))
         )(active);
       }
