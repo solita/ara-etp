@@ -62,22 +62,13 @@
     )(items)
   );
 
-  const selectedNonelessItem = R.curry((items, active) =>
-    R.compose(Maybe.fromNull, R.nth(R.__, items))(active)
-  );
-
-  const selectedNonefulItem = R.curry((items, active) =>
-    R.compose(
-      Maybe.fromNull,
-      R.ifElse(
-        R.equals(0),
-        R.always(null),
-        R.compose(R.nth(R.__, items), R.dec)
-      ),
-    )(active)
-  );
-
-  $: selectedItem = allowNone ? selectedNonefulItem : selectedNonelessItem;
+  const selectedItem = R.curry((items, index) => {
+    if (allowNone && index === 0) {
+      return Maybe.None();
+    } else {
+      return parse(items[allowNone ? index - 1 : index]);
+    }
+  });
 
   const keyHandlers = {
     [keys.DOWN_ARROW]: (_, active) => {
@@ -99,9 +90,8 @@
         return R.compose(
           Maybe.None,
           item => {
-            model = R.set(lens, parse(item), model);
+            model = R.set(lens, item, model);
           },
-          Maybe.orSome(Maybe.None()),
           R.chain(selectedItem(items))
         )(active);
       }
@@ -234,16 +224,7 @@
       items={selectableItems}
       {active}
       onclick={async (item, index) => {
-        if (allowNone && index === 0) {
-          model = R.set(lens, Maybe.None(), model);
-        } else {
-          model = R.compose(
-            R.set(lens, R.__, model),
-            parse,
-            R.nth(R.__, items),
-            R.when(R.always(allowNone), R.dec)
-          )(index);
-        }
+        model = R.set(lens, selectedItem(items, index), model);
         active = Maybe.None();
         await tick();
         input.dispatchEvent(new Event('change', { bubbles: true }));
