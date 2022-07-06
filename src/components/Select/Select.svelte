@@ -54,7 +54,12 @@
   const previousItem = R.compose(R.filter(R.lte(0)), Maybe.Some, R.dec);
 
   const nextItem = R.curry((items, active) =>
-    R.compose(Maybe.Some, R.min(R.inc(active)), R.dec, R.length)(items)
+    R.compose(
+      Maybe.Some,
+      R.min(R.inc(active)),
+      R.when(() => !allowNone, R.dec),
+      R.length
+    )(items)
   );
 
   const selectedItem = R.curry((items, active) =>
