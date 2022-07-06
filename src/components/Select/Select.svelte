@@ -57,19 +57,13 @@
     R.compose(
       Maybe.Some,
       R.min(R.inc(active)),
-      R.when(R.always(!allowNone), R.dec),
+      R.when(() => !allowNone, R.dec),
       R.length
     )(items)
   );
 
-  const selectedItem = R.curry((allowNone, items, active) =>
-    R.compose(
-      Maybe.fromNull,
-      R.tap(x => console.log("nth item:", x)),
-      R.nth(R.__, items),
-      R.tap(x => console.log("n:", x)),
-      R.when(R.always(allowNone), R.dec)
-    )(active)
+  const selectedItem = R.curry((items, active) =>
+    R.compose(Maybe.fromNull, R.nth(R.__, items))(active)
   );
 
   const keyHandlers = {
@@ -94,7 +88,7 @@
           R.forEach(item => {
             model = R.set(lens, parse(item), model);
           }),
-          R.chain(selectedItem(allowNone, items))
+          R.chain(selectedItem(items))
         )(active);
       }
       return Maybe.Some(0);
