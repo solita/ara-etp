@@ -4,6 +4,7 @@
 
   import * as Navigation from '@Utility/navigation';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as keys from '@Utility/keys';
   import { _ } from '@Language/i18n';
 
   import LanguageSelect from './language-select';
@@ -20,7 +21,7 @@
   const toggleOhjeDropdown = () => (showOhjeDropdown = !showOhjeDropdown);
 
   const enterHandler = handler => e => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === keys.ENTER) {
       handler();
     }
   };
