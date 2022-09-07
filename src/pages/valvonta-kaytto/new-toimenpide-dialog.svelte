@@ -52,6 +52,11 @@
   $: schema = Schema.toimenpidePublish(templates, toimenpide);
   $: isValidForm = Validation.isValidForm(schema);
 
+  $: template = R.compose(
+    R.chain(Maybe.findById(R.__, templates)),
+    R.prop('template-id')
+  )(toimenpide);
+
   $: publish = toimenpide => {
     if (isValidForm(toimenpide)) {
       publishPending = true;
@@ -192,7 +197,8 @@
           {previewPending}
           {disabled}
           {roolit}
-          {toimitustavat} />
+          {toimitustavat}
+          {template} />
       </div>
     {/if}
 

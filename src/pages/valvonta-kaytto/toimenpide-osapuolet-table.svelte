@@ -3,7 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Locales from '@Language/locale-utils';
   import * as Osapuolet from './osapuolet';
-  import * as Toimenpiteet from './toimenpiteet';
+  import * as Templates from './templates';
 
   import * as ValvontaApi from './valvonta-api';
 
@@ -18,6 +18,7 @@
   export let preview;
   export let roolit;
   export let toimitustavat;
+  export let template;
   export let previewPending;
   export let disabled;
 
@@ -129,7 +130,7 @@
                       <span class="font-icon text-2xl"> visibility </span>
                     </div>
                   {/if}
-                {:else if Toimenpiteet.sendTiedoksi(toimenpide)}
+                {:else if Maybe.orSome(false, R.lift(Templates.sendTiedoksi)(template))}
                   <span class="font-icon">info</span>
                   {i18n(i18nRoot + '.fyi')}
                 {:else}
