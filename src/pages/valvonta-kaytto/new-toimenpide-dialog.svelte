@@ -186,19 +186,21 @@
       </div>
     {/if}
 
-    <div class="mt-2">
-      <OsapuoletTable
-        {id}
-        {toimenpide}
-        {henkilot}
-        {yritykset}
-        {preview}
-        {previewPending}
-        {disabled}
-        {roolit}
-        {toimitustavat}
-        {template} />
-    </div>
+    {#if !R.isEmpty(templates)}
+      <div class="mt-2">
+        <OsapuoletTable
+          {id}
+          {toimenpide}
+          {henkilot}
+          {yritykset}
+          {preview}
+          {previewPending}
+          {disabled}
+          {roolit}
+          {toimitustavat}
+          {template} />
+      </div>
+    {/if}
 
     <div class="buttons">
       <div class="mr-5 mt-5">
