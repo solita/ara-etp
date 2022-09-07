@@ -130,7 +130,7 @@
                       <span class="font-icon text-2xl"> visibility </span>
                     </div>
                   {/if}
-                {:else if Templates.sendTiedoksi(template)}
+                {:else if Maybe.orSome(false, R.lift(Templates.sendTiedoksi)(template))}
                   <span class="font-icon">info</span>
                   {i18n(i18nRoot + '.fyi')}
                 {:else}

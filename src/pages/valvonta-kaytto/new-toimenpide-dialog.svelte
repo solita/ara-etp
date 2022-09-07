@@ -186,21 +186,19 @@
       </div>
     {/if}
 
-    {#each template.toArray() as template}
-      <div class="mt-2">
-        <OsapuoletTable
-          {id}
-          {toimenpide}
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {toimitustavat}
-          {template} />
-      </div>
-    {/each}
+    <div class="mt-2">
+      <OsapuoletTable
+        {id}
+        {toimenpide}
+        {henkilot}
+        {yritykset}
+        {preview}
+        {previewPending}
+        {disabled}
+        {roolit}
+        {toimitustavat}
+        {template} />
+    </div>
 
     <div class="buttons">
       <div class="mr-5 mt-5">
