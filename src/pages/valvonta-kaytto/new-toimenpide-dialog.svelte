@@ -57,7 +57,7 @@
     R.prop('template-id')
   )(toimenpide);
 
-  $: publish = toimenpide => {
+  $: publish = (publishFn, toimenpide) => {
     if (isValidForm(toimenpide)) {
       publishPending = true;
       Future.fork(
@@ -76,7 +76,7 @@
           publishPending = false;
           reload();
         },
-        ValvontaApi.postToimenpide(id, toimenpide)
+        publishFn(id, toimenpide)
       );
     } else {
       error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
@@ -208,7 +208,7 @@
           text={text(toimenpide, 'publish-button')}
           showSpinner={publishPending}
           {disabled}
-          on:click={publish(toimenpide)} />
+          on:click={publish(ValvontaApi.postToimenpide, toimenpide)} />
       </div>
 
       <div class="mt-5">
@@ -218,6 +218,19 @@
           style={'secondary'}
           on:click={reload} />
       </div>
+
+      {#each error.toArray() as txt}
+        <div class="ml-auto mt-5">
+          <Button
+            text={text(toimenpide, 'force-button')}
+            showSpinner={publishPending}
+            {disabled}
+            on:click={publish(
+              ValvontaApi.postToimenpideBypassAsha,
+              toimenpide
+            )} />
+        </div>
+      {/each}
     </div>
   </form>
 </dialog>

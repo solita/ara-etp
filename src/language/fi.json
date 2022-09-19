@@ -1859,7 +1859,8 @@
           "title": "Valvonnan lopetus",
           "info": "Tällä toimenpiteellä lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
           "description": "Kommentti",
-          "publish-button": "Lopeta"
+          "publish-button": "Lopeta",
+          "force-button": "Lopeta (vain ETP)"
         },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
