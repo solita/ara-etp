@@ -243,7 +243,7 @@
         </div>
       {/each}
       {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
-        <p>Ei tapahtumia</p>
+        <p>{i18n('valvonta.no-events')}</p>
       {/if}
     {/each}
   </div>

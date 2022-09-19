@@ -1422,6 +1422,7 @@
     "self": "Minä",
     "valvoja": "Valvoja",
     "aloita-valvonta": "Aloita valvonta",
+    "no-events": "Ei tapahtumia",
     "add-muistiinpano": "Lisää muistiinpano",
     "new-toimenpide": "Uusi toimenpide",
     "select-toimenpide": "Valitse toimenpide",
@@ -1802,8 +1803,7 @@
           "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
           "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui",
           "update-success": "Käytönvalvonnan tiedot päivitetty"
-        },
-        "no-events": "Ei tapahtumia"
+        }
       },
       "toimenpide": {
         "deadline-date": "Määräaika",
