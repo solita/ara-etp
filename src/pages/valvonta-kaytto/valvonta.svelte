@@ -174,7 +174,7 @@
         </div>
       {/each}
       {#if R.isEmpty(tapahtumat([toimenpiteet, notes]))}
-        <p>{i18n(i18nRoot + '.no-events')}</p>
+        <p>{i18n('valvonta.no-events')}</p>
       {/if}
     {/each}
   </div>

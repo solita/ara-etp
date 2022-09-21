@@ -1496,6 +1496,7 @@
     "self": "Jag",
     "valvoja": "Övervakare",
     "aloita-valvonta": "Inled kontroll",
+    "no-events": "Inga händelser",
     "add-muistiinpano": "Lägg till anteckning",
     "new-toimenpide": "Ny åtgärd",
     "select-toimenpide": "Välj åtgärd",
@@ -1831,8 +1832,7 @@
           "toimitustapa-none": "Inget leveranssätt",
           "fyi": "För kännedom",
           "fyi-disabled": "meddelas inte"
-        },
-        "no-events": "Inga händelser"
+        }
       },
       "toimenpide": {
         "cancel-button": "Återkalla",
