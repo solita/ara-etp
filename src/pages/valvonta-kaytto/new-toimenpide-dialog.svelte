@@ -63,7 +63,9 @@
       Future.fork(
         response => {
           error = Maybe.Some({
-            ashaRequestDidFail: response?.body?.type === 'asha-request-failed',
+            mayBypassAsha:
+              Toimenpiteet.isCloseCase(toimenpide) &&
+              ValvontaApi.isAshaFailure(response),
             message: i18n(Response.errorKey(i18nRoot, 'publish', response))
           });
           publishPending = false;
@@ -81,7 +83,7 @@
       );
     } else {
       error = Maybe.Some({
-        ashaRequestDidFail: false,
+        mayBypassAsha: false,
         message: $_(`${i18nRoot}.messages.validation-error`)
       });
       Validation.blurForm(form);
@@ -95,7 +97,7 @@
         response => {
           error = Maybe.Some({
             message: i18n(Response.errorKey(i18nRoot, 'preview', response)),
-            ashaRequestDidFail: false
+            mayBypassAsha: false
           });
           previewPending = false;
         },
@@ -109,7 +111,7 @@
     } else {
       error = Maybe.Some({
         message: $_(`${i18nRoot}.messages.validation-error`),
-        ashaRequestDidFail: false
+        mayBypassAsha: false
       });
       Validation.blurForm(form);
     }
@@ -227,7 +229,7 @@
           on:click={reload} />
       </div>
 
-      {#each error.toArray().filter(e => e.ashaRequestDidFail) as _}
+      {#each error.toArray().filter(e => e.mayBypassAsha) as _}
         <div class="ml-auto mt-5">
           <Button
             text={text(toimenpide, 'force-button')}

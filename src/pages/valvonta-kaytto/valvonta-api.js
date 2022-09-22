@@ -12,6 +12,9 @@ import * as Toimenpiteet from './toimenpiteet';
 
 import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
 
+export const isAshaFailure = response =>
+  response?.body?.type === 'asha-request-failed';
+
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
   valvonta: id => `${url.valvonnat}/${id}`,
