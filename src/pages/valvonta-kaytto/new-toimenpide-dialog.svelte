@@ -62,9 +62,10 @@
       publishPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some(
-            i18n(Response.errorKey(i18nRoot, 'publish', response))
-          );
+          error = Maybe.Some({
+            ashaRequestDidFail: response?.body?.type === 'asha-request-failed',
+            message: i18n(Response.errorKey(i18nRoot, 'publish', response))
+          });
           publishPending = false;
         },
         _ => {
@@ -79,7 +80,10 @@
         publishFn(id, toimenpide)
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      error = Maybe.Some({
+        ashaRequestDidFail: false,
+        message: $_(`${i18nRoot}.messages.validation-error`)
+      });
       Validation.blurForm(form);
     }
   };
@@ -89,9 +93,10 @@
       previewPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some(
-            i18n(Response.errorKey(i18nRoot, 'preview', response))
-          );
+          error = Maybe.Some({
+            message: i18n(Response.errorKey(i18nRoot, 'preview', response)),
+            ashaRequestDidFail: false
+          });
           previewPending = false;
         },
         response => {
@@ -102,7 +107,10 @@
         api
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      error = Maybe.Some({
+        message: $_(`${i18nRoot}.messages.validation-error`),
+        ashaRequestDidFail: false
+      });
       Validation.blurForm(form);
     }
   };
@@ -134,10 +142,10 @@
   <form class="content" bind:this={form}>
     <h1>{text(toimenpide, 'title')}</h1>
 
-    {#each error.toArray() as txt}
+    {#each error.toArray() as { message }}
       <div class="my-2 error">
         <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
+        <div>{message}</div>
       </div>
     {/each}
 
@@ -219,7 +227,7 @@
           on:click={reload} />
       </div>
 
-      {#each error.toArray() as txt}
+      {#each error.toArray().filter(e => e.ashaRequestDidFail) as _}
         <div class="ml-auto mt-5">
           <Button
             text={text(toimenpide, 'force-button')}
