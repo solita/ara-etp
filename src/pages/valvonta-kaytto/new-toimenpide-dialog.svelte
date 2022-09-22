@@ -229,7 +229,7 @@
           on:click={reload} />
       </div>
 
-      {#each error.toArray().filter(e => e.mayBypassAsha) as _}
+      {#if error.exists(e => e.mayBypassAsha)}
         <div class="ml-auto mt-5">
           <Button
             text={text(toimenpide, 'force-button')}
@@ -237,7 +237,7 @@
             {disabled}
             on:click={publish({ 'bypass-asha': true, ...toimenpide })} />
         </div>
-      {/each}
+      {/if}
     </div>
   </form>
 </dialog>
