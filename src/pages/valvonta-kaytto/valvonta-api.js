@@ -20,8 +20,6 @@ export const url = {
   yritykset: kohdeId => `${url.valvonta(kohdeId)}/yritykset`,
   yritys: (id, kohdeId) => `${url.yritykset(kohdeId)}/${id}`,
   toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`,
-  toimenpiteetBypassAsha: id =>
-    `${url.valvonta(id)}/toimenpiteet/bypassing-asha`,
   previewHenkilo: (id, henkiloId) =>
     `${url.valvonta(id)}/toimenpiteet/henkilot/${henkiloId}/preview`,
   previewYritys: (id, yritysId) =>
@@ -213,7 +211,13 @@ const serializeToimenpide = R.compose(
       dfns.formatISO(date, { representation: 'date' })
     )
   }),
-  R.pick(['type-id', 'deadline-date', 'description', 'template-id'])
+  R.pick([
+    'type-id',
+    'deadline-date',
+    'description',
+    'template-id',
+    'bypass-asha'
+  ])
 );
 
 export const toimenpiteet = R.compose(
@@ -241,16 +245,6 @@ export const postToimenpide = R.curry((id, toimenpide) =>
   R.compose(
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.toimenpiteet(id))),
-    serializeToimenpide
-  )(toimenpide)
-);
-
-export const postToimenpideBypassAsha = R.curry((id, toimenpide) =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(
-      Fetch.fetchWithMethod(fetch, 'post', url.toimenpiteetBypassAsha(id))
-    ),
     serializeToimenpide
   )(toimenpide)
 );

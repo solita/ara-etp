@@ -57,7 +57,7 @@
     R.prop('template-id')
   )(toimenpide);
 
-  $: publish = (publishFn, toimenpide) => {
+  $: publish = toimenpide => {
     if (isValidForm(toimenpide)) {
       publishPending = true;
       Future.fork(
@@ -77,7 +77,7 @@
           publishPending = false;
           reload();
         },
-        publishFn(id, toimenpide)
+        ValvontaApi.postToimenpide(id, toimenpide)
       );
     } else {
       error = Maybe.Some({
@@ -216,7 +216,7 @@
           text={text(toimenpide, 'publish-button')}
           showSpinner={publishPending}
           {disabled}
-          on:click={publish(ValvontaApi.postToimenpide, toimenpide)} />
+          on:click={publish({ 'bypass-asha': false, ...toimenpide })} />
       </div>
 
       <div class="mt-5">
@@ -233,10 +233,7 @@
             text={text(toimenpide, 'force-button')}
             showSpinner={publishPending}
             {disabled}
-            on:click={publish(
-              ValvontaApi.postToimenpideBypassAsha,
-              toimenpide
-            )} />
+            on:click={publish({ 'bypass-asha': true, ...toimenpide })} />
         </div>
       {/each}
     </div>
