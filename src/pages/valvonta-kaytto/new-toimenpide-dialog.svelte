@@ -62,9 +62,12 @@
       publishPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some(
-            i18n(Response.errorKey(i18nRoot, 'publish', response))
-          );
+          error = Maybe.Some({
+            mayBypassAsha:
+              Toimenpiteet.isCloseCase(toimenpide) &&
+              ValvontaApi.isAshaFailure(response),
+            message: i18n(Response.errorKey(i18nRoot, 'publish', response))
+          });
           publishPending = false;
         },
         _ => {
@@ -79,7 +82,10 @@
         ValvontaApi.postToimenpide(id, toimenpide)
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      error = Maybe.Some({
+        mayBypassAsha: false,
+        message: $_(`${i18nRoot}.messages.validation-error`)
+      });
       Validation.blurForm(form);
     }
   };
@@ -89,9 +95,10 @@
       previewPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some(
-            i18n(Response.errorKey(i18nRoot, 'preview', response))
-          );
+          error = Maybe.Some({
+            message: i18n(Response.errorKey(i18nRoot, 'preview', response)),
+            mayBypassAsha: false
+          });
           previewPending = false;
         },
         response => {
@@ -102,7 +109,10 @@
         api
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      error = Maybe.Some({
+        message: $_(`${i18nRoot}.messages.validation-error`),
+        mayBypassAsha: false
+      });
       Validation.blurForm(form);
     }
   };
@@ -134,10 +144,10 @@
   <form class="content" bind:this={form}>
     <h1>{text(toimenpide, 'title')}</h1>
 
-    {#each error.toArray() as txt}
+    {#each error.toArray() as { message }}
       <div class="my-2 error">
         <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
+        <div>{message}</div>
       </div>
     {/each}
 
@@ -208,7 +218,7 @@
           text={text(toimenpide, 'publish-button')}
           showSpinner={publishPending}
           {disabled}
-          on:click={publish(toimenpide)} />
+          on:click={publish({ 'bypass-asha': false, ...toimenpide })} />
       </div>
 
       <div class="mt-5">
@@ -218,6 +228,16 @@
           style={'secondary'}
           on:click={reload} />
       </div>
+
+      {#if error.exists(e => e.mayBypassAsha)}
+        <div class="ml-auto mt-5">
+          <Button
+            text={text(toimenpide, 'force-button')}
+            showSpinner={publishPending}
+            {disabled}
+            on:click={publish({ 'bypass-asha': true, ...toimenpide })} />
+        </div>
+      {/if}
     </div>
   </form>
 </dialog>

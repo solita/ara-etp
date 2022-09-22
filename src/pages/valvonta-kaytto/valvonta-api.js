@@ -12,6 +12,9 @@ import * as Toimenpiteet from './toimenpiteet';
 
 import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
 
+export const isAshaFailure = response =>
+  response?.body?.type === 'asha-request-failed';
+
 export const url = {
   valvonnat: 'api/private/valvonta/kaytto',
   valvonta: id => `${url.valvonnat}/${id}`,
@@ -211,7 +214,13 @@ const serializeToimenpide = R.compose(
       dfns.formatISO(date, { representation: 'date' })
     )
   }),
-  R.pick(['type-id', 'deadline-date', 'description', 'template-id'])
+  R.pick([
+    'type-id',
+    'deadline-date',
+    'description',
+    'template-id',
+    'bypass-asha'
+  ])
 );
 
 export const toimenpiteet = R.compose(

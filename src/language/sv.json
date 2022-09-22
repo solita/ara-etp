@@ -1869,7 +1869,8 @@
           "title": "Avslutande av kontroll",
           "info": "Med den här åtgärden avslutas den officiella kontrollprocessen och ärendet stängs i ärendehanteringen.",
           "description": "Kommentar",
-          "publish-button": "Avsluta"
+          "publish-button": "Avsluta",
+          "force-button": "Avsulta (endast ETP)"
         },
         "messages": {
           "not-found": "Det existerar ingen åtgärd.",

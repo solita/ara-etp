@@ -28,6 +28,7 @@ export const isType = R.propEq('type-id');
 const isDeadlineType = R.includes(R.__, [1, 2, 3, 4]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
+export const isCloseCase = isType(type.closed);
 export const isAuditCase = R.complement(isType(type.closed));
 export const isAuditCaseToimenpideType = R.propSatisfies(
   R.includes(R.__, [1, 2, 3, 4, 5]),
