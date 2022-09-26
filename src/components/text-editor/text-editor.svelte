@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import { quill } from './quill';
 
+  import * as keys from '@Utility/keys';
   import * as MD from './markdown';
   import Turndown from 'turndown';
   import Style from '@Component/text-editor/style.svelte';
@@ -36,6 +37,22 @@
     ['clean']
   ];
 
+  const keyboard = {
+    bindings: {
+      tab: {
+        key: keys.TAB,
+        handler: R.always(true)
+      },
+      'remove tab': {
+        key: keys.TAB,
+        shiftKey: true,
+        collapsed: true,
+        prefix: /\t$/,
+        handler: R.always(true)
+      }
+    }
+  };
+
   const toMarkdown = R.bind(turndownService.turndown, turndownService);
 </script>
 
@@ -61,7 +78,7 @@
         on:focusin={api.focus}
         on:editor-focus-out={event => api.blur(toMarkdown(event.detail.html))}
         on:text-change={event => api.input(toMarkdown(event.detail.html))}
-        use:quill={{ html: MD.toHtml(viewValue), toolbar }} />
+        use:quill={{ html: MD.toHtml(viewValue), toolbar, keyboard }} />
     {:else}
       {@html MD.toHtml(viewValue)}
     {/if}

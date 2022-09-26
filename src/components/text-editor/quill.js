@@ -16,12 +16,13 @@ const dispatchEvent = (name, node, editor) =>
     })
   );
 
-export const quill = (node, { html, toolbar }) => {
+export const quill = (node, { html, toolbar, keyboard }) => {
   const q = new Quill(node, {
     modules: {
       imageDrop: false,
       magicUrl: true,
-      toolbar: toolbar
+      toolbar,
+      keyboard
     },
     placeholder: '',
     theme: 'snow' // or 'bubble'
