@@ -4,6 +4,7 @@
 
   import * as Navigation from '@Utility/navigation';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as keys from '@Utility/keys';
   import { _ } from '@Language/i18n';
 
   import LanguageSelect from './language-select';
@@ -15,6 +16,15 @@
   let showOhjeDropdown = false;
   let nameNode;
   let ohjeNode;
+
+  const toggleNameDropdown = () => (showNameDropdown = !showNameDropdown);
+  const toggleOhjeDropdown = () => (showOhjeDropdown = !showOhjeDropdown);
+
+  const enterHandler = handler => e => {
+    if (e.keyCode === keys.ENTER) {
+      handler();
+    }
+  };
 
   const fullName = kayttaja => `${kayttaja.etunimi} ${kayttaja.sukunimi}`;
 
@@ -99,8 +109,10 @@
         <div
           bind:this={ohjeNode}
           class="relative cursor-pointer hover:underline"
-          on:click={() => (showOhjeDropdown = !showOhjeDropdown)}>
-          <span> {$_('navigation.ohjeet')} </span>
+          on:click={toggleOhjeDropdown}>
+          <span tabindex="0" on:keydown={enterHandler(toggleOhjeDropdown)}>
+            {$_('navigation.ohjeet')}
+          </span>
           <span class="material-icons absolute">keyboard_arrow_down</span>
           {#if showOhjeDropdown}
             <div
@@ -129,8 +141,8 @@
         <div
           bind:this={nameNode}
           class="relative cursor-pointer hover:underline"
-          on:click={() => (showNameDropdown = !showNameDropdown)}>
-          <span>
+          on:click={toggleNameDropdown}>
+          <span tabindex="0" on:keydown={enterHandler(toggleNameDropdown)}>
             {fullName(user)}
           </span>
           <span class="material-icons absolute">keyboard_arrow_down</span>
