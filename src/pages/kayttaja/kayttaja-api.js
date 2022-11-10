@@ -13,13 +13,16 @@ const parseValidISODate = R.compose(
   Maybe.fromNull
 );
 
-export const deserialize = R.evolve({
-  login: parseValidISODate,
-  verifytime: parseValidISODate,
-  cognitoid: Maybe.fromNull,
-  henkilotunnus: Maybe.fromNull,
-  virtu: Maybe.fromNull
-});
+export const deserialize = R.compose(
+  R.assoc('api-key', Maybe.None()),
+  R.evolve({
+    login: parseValidISODate,
+    verifytime: parseValidISODate,
+    cognitoid: Maybe.fromNull,
+    henkilotunnus: Maybe.fromNull,
+    virtu: Maybe.fromNull
+  })
+);
 
 export const deserializeHistory = R.evolve({
   cognitoid: Maybe.fromNull,
@@ -89,7 +92,8 @@ export const getLaatijaById = R.curry((fetch, id) =>
 export const serialize = R.compose(
   R.evolve({
     henkilotunnus: Maybe.orSome(null),
-    virtu: Maybe.orSome(null)
+    virtu: Maybe.orSome(null),
+    'api-key': Maybe.orSome(null)
   }),
   R.omit(['id', 'login', 'cognitoid', 'verifytime'])
 );
