@@ -19,7 +19,8 @@ export const Kayttaja = {
   sukunimi: Validation.RequiredString(2, 200),
   email: [...Validation.RequiredString(2, 200), Validation.emailValidator],
   puhelin: Validation.RequiredString(2, 200),
-  virtu: [Validation.liftValidator(VirtuIDValidator)]
+  virtu: [Validation.liftValidator(VirtuIDValidator)],
+  'api-key': [Validation.liftValidator(Validation.apiPasswordValidator)]
 };
 
 export const virtuSchema = kayttaja =>

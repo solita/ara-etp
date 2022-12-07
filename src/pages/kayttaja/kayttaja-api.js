@@ -13,13 +13,16 @@ const parseValidISODate = R.compose(
   Maybe.fromNull
 );
 
-export const deserialize = R.evolve({
-  login: parseValidISODate,
-  verifytime: parseValidISODate,
-  cognitoid: Maybe.fromNull,
-  henkilotunnus: Maybe.fromNull,
-  virtu: Maybe.fromNull
-});
+export const deserialize = R.compose(
+  R.assoc('api-key', Maybe.None()),
+  R.evolve({
+    login: parseValidISODate,
+    verifytime: parseValidISODate,
+    cognitoid: Maybe.fromNull,
+    henkilotunnus: Maybe.fromNull,
+    virtu: Maybe.fromNull
+  })
+);
 
 export const deserializeHistory = R.evolve({
   cognitoid: Maybe.fromNull,
@@ -32,19 +35,16 @@ export const deserializeHistory = R.evolve({
   modifytime: R.compose(Either.right, Parsers.parseISODate)
 });
 
-export const deserializeLaatija = R.compose(
-  R.assoc('api-key', Maybe.None()),
-  R.evolve({
-    'vastaanottajan-tarkenne': Maybe.fromNull,
-    maa: Either.Right,
-    toimintaalue: Maybe.fromNull,
-    wwwosoite: Maybe.fromNull,
+export const deserializeLaatija = R.evolve({
+  'vastaanottajan-tarkenne': Maybe.fromNull,
+  maa: Either.Right,
+  toimintaalue: Maybe.fromNull,
+  wwwosoite: Maybe.fromNull,
 
-    // we assume that these dates are always valid from backend
-    toteamispaivamaara: R.compose(Either.right, Parsers.parseISODate),
-    'voimassaolo-paattymisaika': R.compose(Either.right, Parsers.parseISODate)
-  })
-);
+  // we assume that these dates are always valid from backend
+  toteamispaivamaara: R.compose(Either.right, Parsers.parseISODate),
+  'voimassaolo-paattymisaika': R.compose(Either.right, Parsers.parseISODate)
+});
 
 export const url = {
   all: 'api/private/kayttajat',
@@ -89,7 +89,8 @@ export const getLaatijaById = R.curry((fetch, id) =>
 export const serialize = R.compose(
   R.evolve({
     henkilotunnus: Maybe.orSome(null),
-    virtu: Maybe.orSome(null)
+    virtu: Maybe.orSome(null),
+    'api-key': Maybe.orSome(null)
   }),
   R.omit(['id', 'login', 'cognitoid', 'verifytime'])
 );

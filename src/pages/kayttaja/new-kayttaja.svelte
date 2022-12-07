@@ -29,7 +29,8 @@
     email: '',
     puhelin: '',
     virtu: Maybe.None(),
-    henkilotunnus: Maybe.None()
+    henkilotunnus: Maybe.None(),
+    'api-key': Maybe.None()
   };
 
   let kayttaja = emptyKayttaja;
