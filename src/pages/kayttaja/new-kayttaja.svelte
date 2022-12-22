@@ -30,6 +30,7 @@
     puhelin: '',
     virtu: Maybe.None(),
     henkilotunnus: Maybe.None(),
+    organisaatio: '',
     'api-key': Maybe.None()
   };
 
