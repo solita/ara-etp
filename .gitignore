@@ -11,3 +11,6 @@
 *.iml
 .idea
 .nrepl-port
+
+# Emacs
+.projectile
