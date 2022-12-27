@@ -161,6 +161,60 @@
         </div>
       {/if}
 
+      <div class="flex justify-between mt-8">
+        <H2 text={i18n(i18nRoot + '.aineistoasiakkaat')} />
+        <div class="font-bold">
+          <Link
+            icon={Maybe.Some('add_circle_outline')}
+            text={i18n(i18nRoot + '.new-aineistoasiakas')}
+            href="#/aineistoasiakas/new" />
+        </div>
+      </div>
+
+      {#if R.not(R.isEmpty(kayttajat))}
+        <div class="overflow-x-auto">
+          <table class="etp-table">
+            <thead class="etp-table--thead">
+              <tr class="etp-table--tr">
+                <th class="etp-table--th">{i18n(i18nRoot + '.nimi')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.rooli')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.email')}</th>
+                <th class="etp-table--th">{i18n(i18nRoot + '.puhelin')}</th>
+                <th class="etp-table--th"
+                  >{i18n(i18nRoot + '.organisaatio')}</th>
+                <th class="etp-table--th"
+                  >{i18n(i18nRoot + '.state.header')}</th>
+              </tr>
+            </thead>
+            <tbody class="etp-table--tbody">
+              {#each R.filter(Kayttajat.isAineistoasiakas, kayttajat) as kayttaja}
+                <tr
+                  class="etp-table--tr etp-table--tr__link"
+                  on:click={() => push('#/kayttaja/' + kayttaja.id)}>
+                  <td class="etp-table--td">
+                    {kayttaja.etunimi}
+                    {kayttaja.sukunimi}
+                  </td>
+                  <td class="etp-table--td">
+                    {Locales.labelForId($locale, roolit)(kayttaja.rooli)}
+                  </td>
+                  <td class="etp-table--td">{kayttaja.email}</td>
+                  <td class="etp-table--td">{kayttaja.puhelin}</td>
+                  <td class="etp-table--td">
+                    {kayttaja.organisaatio}
+                  </td>
+                  <td class="etp-table--td">
+                    {kayttaja.passivoitu
+                      ? i18n(i18nRoot + '.state.passivoitu')
+                      : i18n(i18nRoot + '.state.active')}
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+
       <p class="mt-8">
         <span class="font-icon">info</span>
         {i18n(i18nRoot + '.info')}
