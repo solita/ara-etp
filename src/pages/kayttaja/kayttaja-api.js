@@ -51,6 +51,8 @@ export const url = {
   id: id => `${url.all}/${id}`,
   history: id => `${url.id(id)}/history`,
   laatija: id => `${url.id(id)}/laatija`,
+  aineistot: 'api/private/aineistot',
+  kayttajaAineistot: id => `${url.id(id)}/aineistot`,
   whoami: '/api/private/whoami'
 };
 
@@ -86,6 +88,25 @@ export const getLaatijaById = R.curry((fetch, id) =>
   )(id)
 );
 
+const deserializeKayttajaAineisto = R.evolve({
+  'valid-until': R.compose(Either.right, Parsers.parseISODate)
+});
+
+export const getAineistotByKayttajaId = R.curry((fetch, id) =>
+  R.compose(
+    R.map(R.map(deserializeKayttajaAineisto)),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    url.kayttajaAineistot
+  )(id)
+);
+
+export const getAineistot = fetch =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch))
+  )(url.aineistot);
+
 export const serialize = R.compose(
   R.evolve({
     henkilotunnus: Maybe.orSome(null),
@@ -119,3 +140,4 @@ export const postKayttaja = R.compose(
 );
 
 export const roolit = Fetch.cached(fetch, '/roolit');
+export const aineistot = Fetch.cached(fetch, '/aineistot');

@@ -15,6 +15,7 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
 
+  import AineistoasiakasForm from './aineistoasiakas-form.svelte';
   import KayttajaForm from './kayttaja-form.svelte';
   import LaatijaForm from '@Pages/laatija/laatija-form.svelte';
   import Overlay from '@Component/Overlay/Overlay';
@@ -113,7 +114,7 @@
         overlay = false;
         dirty = false;
       },
-      Future.parallelObject(5, {
+      Future.parallelObject(7, {
         kayttaja: kayttajaFuture,
         laatija: R.chain(
           kayttaja =>
@@ -122,8 +123,16 @@
               : Future.resolve(Maybe.None()),
           kayttajaFuture
         ),
+        kayttajaAineistot: R.chain(
+          kayttaja =>
+            Kayttajat.isAineistoasiakas(kayttaja)
+              ? KayttajaApi.getAineistotByKayttajaId(fetch, params.id)
+              : Future.resolve([]),
+          kayttajaFuture
+        ),
         whoami: KayttajaApi.whoami,
         roolit: KayttajaApi.roolit,
+        aineistot: KayttajaApi.aineistot,
         luokittelut: Future.parallelObject(5, {
           countries: GeoApi.countries,
           toimintaalueet: GeoApi.toimintaalueet,
@@ -147,7 +156,7 @@
 <Overlay {overlay}>
   <div slot="content">
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit }}
+    {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit, aineistot, kayttajaAineistot }}
       {#if Maybe.isSome(laatija)}
         <div class="mt-6">
           <LastLogin {kayttaja} />
@@ -160,6 +169,22 @@
             {luokittelut}
             laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
         </div>
+      {:else if Kayttajat.isAineistoasiakas(kayttaja)}
+        <H1
+          text={kayttaja.etunimi +
+            ' ' +
+            kayttaja.sukunimi +
+            ' (' +
+            kayttaja.organisaatio +
+            ')'} />
+        <AineistoasiakasForm
+          submit={submitKayttaja(whoami, params.id)}
+          cancel={_ => load(params)}
+          bind:dirty
+          kayttaja={R.evolve({ rooli: Maybe.fromNull }, kayttaja)}
+          {aineistot}
+          {kayttajaAineistot}
+          {whoami} />
       {:else}
         <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
         <LastLogin {kayttaja} />

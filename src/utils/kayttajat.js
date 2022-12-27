@@ -67,7 +67,7 @@ export const isLaskuttajaRole = R.equals(role.laskuttaja);
 /**
  * @sig Rooli -> boolean
  */
-const isAineistoasiakasRole = R.equals(role.aineistoasiakas);
+export const isAineistoasiakasRole = R.equals(role.aineistoasiakas);
 /**
  * @sig Rooli -> boolean
  */

@@ -5,6 +5,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Validation from '@Utility/validation';
   import * as Locales from '@Language/locale-utils';
+  import * as Formats from '@Utility/formats';
 
   import { flashMessageStore } from '@/stores';
   import { locale, _ } from '@Language/i18n';
@@ -21,11 +22,12 @@
    * get api/private/kayttajat/:id and KayttajaApi.deserialize
    */
   export let kayttaja;
+  export let aineistot;
+  export let kayttajaAineistot;
   export let dirty;
   export let submit;
   export let cancel;
   export let whoami;
-  export let roolit;
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
@@ -38,24 +40,8 @@
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
 
-  $: isSystem = Maybe.exists(Kayttajat.isSystemRole, kayttaja.rooli);
-  $: disabled = isSystem || (!isPaakayttaja && !isOwnSettings);
-  $: disabledAdmin = isSystem || !isPaakayttaja;
-
-  $: formatRooli = Locales.labelForId($locale, roolit);
-
-  const filterRoolit = R.filter(
-    R.propSatisfies(
-      R.complement(
-        R.anyPass([
-          Kayttajat.isLaatijaRole,
-          Kayttajat.isSystemRole,
-          Kayttajat.isAineistoasiakasRole
-        ])
-      ),
-      'id'
-    )
-  );
+  $: disabled = !isPaakayttaja && !isOwnSettings;
+  $: disabledAdmin = !isPaakayttaja;
 
   $: if (Maybe.exists(Kayttajat.isLaatijaRole, kayttaja.rooli)) {
     throw 'This form should not be used for laatija.';
@@ -90,29 +76,6 @@
   on:change={setDirty}>
   <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-      <Select
-        id={'rooli'}
-        label={i18n(i18nRoot + '.rooli')}
-        required={true}
-        validation={true}
-        allowNone={false}
-        disabled={disabledAdmin || isOwnSettings}
-        bind:model={kayttaja}
-        lens={R.lensProp('rooli')}
-        format={formatRooli}
-        parse={Maybe.fromNull}
-        items={R.pluck('id', filterRoolit(roolit))} />
-    </div>
-
-    <div class="lg:w-1/6 lg:py-0 w-full px-4 py-4">
-      <Checkbox
-        bind:model={kayttaja}
-        lens={R.lensProp('valvoja')}
-        label={i18n(i18nRoot + '.valvoja')}
-        disabled={disabledAdmin} />
-    </div>
-
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Checkbox
         bind:model={kayttaja}
         lens={R.lensProp('passivoitu')}
@@ -122,6 +85,22 @@
   </div>
 
   <H2 text={i18n('kayttaja.perustiedot-header')} />
+
+  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <Input
+        id={'organisaatio'}
+        name={'organisaatio'}
+        label={i18n('kayttaja.organisaatio')}
+        required={false}
+        bind:model={kayttaja}
+        lens={R.lensProp('organisaatio')}
+        parse={R.trim}
+        validators={schema.organisaatio}
+        {disabled}
+        {i18n} />
+    </div>
+  </div>
 
   <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
@@ -180,83 +159,62 @@
     </div>
   </div>
 
-  <H2 text={i18n('kayttaja.virtu.header')} />
+  <H2 text={i18n('kayttaja.api-header')} />
 
-  <Checkbox
-    bind:model={kayttaja}
-    lens={R.compose(
-      R.lensProp('virtu'),
-      R.lens(Maybe.isSome, active =>
-        active ? Maybe.Some(emptyVirtuId) : Maybe.None()
-      )
-    )}
-    label={i18n('kayttaja.virtu.checkbox')}
-    disabled={disabledAdmin} />
-
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-    {#if Maybe.isSome(kayttaja.virtu)}
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'virtu.organisaatio'}
-          name={'virtu.organisaatio'}
-          label={i18n('kayttaja.virtu.organisaatio')}
-          required={false}
-          disabled={disabledAdmin}
-          bind:model={kayttaja}
-          lens={R.compose(
-            R.lensProp('virtu'),
-            R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
-            R.lensProp('organisaatio')
-          )}
-          parse={R.trim}
-          validators={virtuSchema.organisaatio}
-          {i18n} />
-      </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
-        <Input
-          id={'virtu.localid'}
-          name={'virtu.localid'}
-          label={i18n('kayttaja.virtu.localid')}
-          required={false}
-          disabled={disabledAdmin}
-          bind:model={kayttaja}
-          lens={R.compose(
-            R.lensProp('virtu'),
-            R.lens(Maybe.orSome(emptyVirtuId), Maybe.Some),
-            R.lensProp('localid')
-          )}
-          parse={R.trim}
-          validators={virtuSchema.localid}
-          {i18n} />
-      </div>
-    {/if}
-  </div>
-
-  <H2 text={i18n('kayttaja.suomifi.header')} />
-  <Checkbox
-    bind:model={kayttaja}
-    lens={R.compose(
-      R.lensProp('henkilotunnus'),
-      R.lens(Maybe.isSome, active => (active ? Maybe.Some('') : Maybe.None()))
-    )}
-    label={i18n('kayttaja.suomifi.checkbox')}
-    disabled={disabledAdmin} />
-
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="flex flex-col py-4">
+    <div class="lg:w-1/2 w-full">
       <Input
-        id={'henkilotunnus'}
-        name={'henkilotunnus'}
-        label={i18n('kayttaja.suomifi.henkilotunnus')}
+        id={'api-key'}
+        name={'api-key'}
+        label={i18n('laatija.api-key')}
+        required={false}
         bind:model={kayttaja}
-        lens={R.lensProp('henkilotunnus')}
+        lens={R.lensProp('api-key')}
         format={Maybe.orSome('')}
         parse={R.compose(Maybe.fromEmpty, R.trim)}
-        validators={schema.henkilotunnus}
-        disabled={disabledAdmin}
+        validators={schema['api-key']}
+        {disabled}
         {i18n} />
     </div>
+    <div class="flex mt-4 items-center">
+      <span class="font-icon mr-1 text-xl">info</span>
+      <span>{i18n('laatija.api-key-requirements')}</span>
+    </div>
   </div>
+
+  <H2 text={i18n('kayttaja.aineistot-header')} />
+
+  {#if R.not(R.isEmpty(kayttajaAineistot))}
+    <div class="overflow-x-auto">
+      <table class="etp-table">
+        <thead class="etp-table--thead">
+          <tr class="etp-table--tr">
+            <th class="etp-table--th">{i18n(i18nRoot + '.aineisto')}</th>
+            <th class="etp-table--th"
+              >{i18n(i18nRoot + '.aineisto-lupa-paattymisaika')}</th>
+            <th class="etp-table--th"
+              >{i18n(i18nRoot + '.aineisto-ip-osoite')}</th>
+          </tr>
+        </thead>
+        <tbody class="etp-table--tbody">
+          {#each kayttajaAineistot as aineisto}
+            <tr class="etp-table--tr">
+              <td class="etp-table--td">
+                {Locales.labelForId(
+                  $locale,
+                  aineistot
+                )(aineisto['aineisto-id'])}
+              </td>
+              <td class="etp-table--td">
+                {Formats.formatTimeInstantMinutes(aineisto['valid-until'])}
+              </td>
+              <td class="etp-table--td">{aineisto['ip-address']}</td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
+  {/if}
 
   <div class="flex -mx-4 mt-10">
     <div class="px-4">
