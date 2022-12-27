@@ -4,6 +4,7 @@
   import * as Future from '@Utility/future-utils';
   import * as Formats from '@Utility/formats';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
   import * as Locales from '@Language/locale-utils';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
@@ -75,7 +76,7 @@
               </tr>
             </thead>
             <tbody class="etp-table--tbody">
-              {#each kayttajat as kayttaja}
+              {#each R.filter(R.complement(Kayttajat.isAineistoasiakas), kayttajat) as kayttaja}
                 <tr
                   class="etp-table--tr etp-table--tr__link"
                   on:click={() => push('#/kayttaja/' + kayttaja.id)}>
