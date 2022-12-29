@@ -11,6 +11,7 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import LaatijaForm from './laatija-form.svelte';
 
@@ -30,7 +31,7 @@
   const emptyLaatija = {
     login: Maybe.None(),
     passivoitu: false,
-    rooli: Maybe.Some(0),
+    rooli: Maybe.Some(Kayttajat.role.laatija),
     etunimi: '',
     sukunimi: '',
     email: '',
