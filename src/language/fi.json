@@ -50,6 +50,7 @@
     "kayttaja": "Käyttäjä",
     "new-kayttaja": "Uusi käyttäjä",
     "new-laatija": "Uusi kumppani",
+    "new-aineistoasiakas": "Uusi aineistoasiakas",
     "et": "ET",
     "energiatodistus-viestit": "Viestit",
     "liitteet": "Liitteet",
@@ -394,6 +395,15 @@
       "1": "Ei kirjautunut",
       "2": "Pätevyys peruttu / Laatimiskiellossa",
       "3": "Pätevyys päättynyt"
+    }
+  },
+  "aineistoasiakas": {
+    "new": {
+      "title": "Uusi aineistoasiakas",
+      "messages": {
+        "add-success": "Uusi aineistoasiakas tallennettu järjestelmään.",
+        "add-error": "Uuden aineistoasiakkaan tallennus epäonnistui."
+      }
     }
   },
   "energiatodistus": {
