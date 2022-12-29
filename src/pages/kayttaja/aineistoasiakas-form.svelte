@@ -184,37 +184,46 @@
 
   <H2 text={i18n('kayttaja.aineistot-header')} />
 
-  {#if R.not(R.isEmpty(kayttajaAineistot))}
-    <div class="overflow-x-auto">
-      <table class="etp-table">
-        <thead class="etp-table--thead">
+  <div class="overflow-x-auto">
+    <table class="etp-table">
+      <thead class="etp-table--thead">
+        <tr class="etp-table--tr">
+          <th class="etp-table--th">{i18n(i18nRoot + '.aineisto')}</th>
+          <th class="etp-table--th"
+            >{i18n(i18nRoot + '.aineisto-lupa-paattymisaika')}</th>
+          <th class="etp-table--th"
+            >{i18n(i18nRoot + '.aineisto-ip-osoite')}</th>
+        </tr>
+      </thead>
+      <tbody class="etp-table--tbody">
+        {#each aineistot as aineisto}
           <tr class="etp-table--tr">
-            <th class="etp-table--th">{i18n(i18nRoot + '.aineisto')}</th>
-            <th class="etp-table--th"
-              >{i18n(i18nRoot + '.aineisto-lupa-paattymisaika')}</th>
-            <th class="etp-table--th"
-              >{i18n(i18nRoot + '.aineisto-ip-osoite')}</th>
+            <td class="etp-table--td">
+              {Locales.labelForId($locale, aineistot)(aineisto.id)}
+            </td>
+            <td class="etp-table--td">
+              {R.compose(
+                Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
+                Maybe.map(
+                  R.compose(
+                    Formats.formatTimeInstantMinutes,
+                    R.prop('valid-until')
+                  )
+                ),
+                Maybe.find(R.propEq('aineisto-id', aineisto.id))
+              )(kayttajaAineistot)}
+            </td>
+            <td class="etp-table--td"
+              >{R.compose(
+                Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
+                Maybe.map(R.prop('ip-address')),
+                Maybe.find(R.propEq('aineisto-id', aineisto.id))
+              )(kayttajaAineistot)}</td>
           </tr>
-        </thead>
-        <tbody class="etp-table--tbody">
-          {#each kayttajaAineistot as aineisto}
-            <tr class="etp-table--tr">
-              <td class="etp-table--td">
-                {Locales.labelForId(
-                  $locale,
-                  aineistot
-                )(aineisto['aineisto-id'])}
-              </td>
-              <td class="etp-table--td">
-                {Formats.formatTimeInstantMinutes(aineisto['valid-until'])}
-              </td>
-              <td class="etp-table--td">{aineisto['ip-address']}</td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
-    </div>
-  {/if}
+        {/each}
+      </tbody>
+    </table>
+  </div>
 
   <div class="flex -mx-4 mt-10">
     <div class="px-4">

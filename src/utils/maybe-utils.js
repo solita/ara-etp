@@ -106,7 +106,7 @@ export const isMaybe = any => Object.getPrototypeOf(any) === Maybe.prototype;
 /**
  * @sig (a -> boolean) -> Array a -> Maybe a
  */
-export const find = R.compose(Maybe.fromNull, R.find);
+export const find = R.curry(R.compose(Maybe.fromNull, R.find));
 
 /**
  * @sig {string|number} -> Array b -> Maybe b
