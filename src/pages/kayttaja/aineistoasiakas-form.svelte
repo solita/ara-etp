@@ -15,6 +15,7 @@
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/Select.svelte';
+  import AineistolupaDialog from './aineistolupa-dialog.svelte';
 
   /*
    * Note: kayttaja.rooli :: Maybe[Id]
@@ -28,6 +29,8 @@
   export let submit;
   export let cancel;
   export let whoami;
+
+  let configAineistoId = Maybe.None();
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
@@ -67,6 +70,11 @@
   const setDirty = _ => {
     dirty = true;
   };
+
+  const reload = () => {
+    configAineistoId = Maybe.None();
+  }
+
 </script>
 
 <form
@@ -197,7 +205,8 @@
       </thead>
       <tbody class="etp-table--tbody">
         {#each aineistot as aineisto}
-          <tr class="etp-table--tr">
+          <tr class="etp-table--tr etp-table--tr__link"
+          on:click={() => configAineistoId = Maybe.Some(aineisto.id)}>
             <td class="etp-table--td">
               {Locales.labelForId($locale, aineistot)(aineisto.id)}
             </td>
@@ -242,3 +251,8 @@
     </div>
   </div>
 </form>
+
+
+{#each Maybe.toArray(configAineistoId) as aineistoId}
+  <AineistolupaDialog bind:model={kayttajaAineistot} {aineistoId} {kayttaja} {reload} {aineistot}/>
+{/each}

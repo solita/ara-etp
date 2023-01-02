@@ -26,3 +26,8 @@ export const Kayttaja = {
 
 export const virtuSchema = kayttaja =>
   Maybe.isSome(kayttaja.virtu) ? VirtuID : R.map(R.always([]), VirtuID);
+
+export const aineistolupa = {
+  'voimassaolo-paattymisaika': Validation.isPaivamaara,
+  'ip-address': Validation.LimitedString(15)
+};

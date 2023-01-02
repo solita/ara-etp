@@ -6,6 +6,8 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as Parsers from '@Utility/parsers';
+import * as EM from '@Utility/either-maybe';
+import * as dfns from 'date-fns';
 
 const parseValidISODate = R.compose(
   R.chain(Either.toMaybe),
@@ -100,6 +102,26 @@ export const getAineistotByKayttajaId = R.curry((fetch, id) =>
     url.kayttajaAineistot
   )(id)
 );
+
+const serializeAineisto = R.evolve({
+  'valid-until': EM.fold(null, date =>
+    dfns.formatISO(date, { representation: 'date' })
+  )
+});
+
+const serializeAineistot = R.map(serializeAineisto);
+
+export const putKayttajaAineistot = R.curry((fetch, id, aineistot) => {
+  return (
+    R.compose(
+      R.chain(Fetch.rejectWithInvalidResponse),
+      Future.encaseP(
+        Fetch.fetchWithMethod(fetch, 'put', url.kayttajaAineistot(id))
+      )
+    )(aineistot),
+    serializeAineistot
+  );
+});
 
 export const getAineistot = fetch =>
   R.compose(
