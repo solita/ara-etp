@@ -19,6 +19,7 @@
     "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
     "invalid-verkkolaskuoperaattori": "Virheellinen verkkolaskuoperaattori",
     "invalid-api-key": "Virheellinen tiedonsiirron salasana",
+    "invalid-ip-address": "Virheellinen IP-osoite",
     "no-selection": "Ei valintaa",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min}",

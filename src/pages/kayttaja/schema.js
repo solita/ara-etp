@@ -29,5 +29,8 @@ export const virtuSchema = kayttaja =>
 
 export const aineistolupa = {
   'voimassaolo-paattymisaika': Validation.isPaivamaara,
-  'ip-address': Validation.LimitedString(15)
+  'ip-address': [
+    ...Validation.RequiredString(7, 15),
+    Validation.ipAddressValidator
+  ]
 };

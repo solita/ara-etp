@@ -1,18 +1,15 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
-  import * as Future from '@Utility/future-utils';
-  import * as Response from '@Utility/response';
   import * as Schema from './schema';
 
-  import * as KayttajaApi from './kayttaja-api';
   import * as Kayttajat from '@Utility/kayttajat';
 
   import { _ } from '@Language/i18n';
 
+  import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Datepicker from '@Component/Input/Datepicker';
   import Textarea from '@Component/Textarea/Textarea';
@@ -31,9 +28,10 @@
 
   export let reload;
   export let save = () =>
-    console.log('Should save aineistot', model, 'for kayttaja', kayttaja);
+    console.log('Should add', permit, 'to', model, 'for kayttaja', kayttaja);
 
   let error = Maybe.None();
+  let form;
 
   const aineistoLabel = Maybe.orSome(
     '',
@@ -88,7 +86,7 @@
 </style>
 
 <dialog on:click|stopPropagation>
-  <form class="content">
+  <form bind:this={form} class="content">
     <h1>{i18n(i18nRoot + '.aineisto-lupa')}</h1>
 
     <div class="w-full py-4">
@@ -102,14 +100,23 @@
     </div>
 
     <Datepicker
-      id="kayttaja.aineisto.valid-until"
-      name="kayttaja.aineisto.valid-until"
+      id="valid-until"
+      name="valid-until"
       label="Voimassa"
       bind:model={permit}
       lens={R.lensProp('valid-until')}
       format={Maybe.fold('', Formats.formatDateInstant)}
       parse={Parsers.optionalParser(Parsers.parseDate)}
       transform={Maybe.fromNull} />
+
+    <Input
+      id="ip-address"
+      name="ip-address"
+      label="IP-osoite"
+      bind:model={permit}
+      lens={R.lensProp('ip-address')}
+      validators={schema['ip-address']}
+      {i18n} />
 
     {#each error.toArray() as txt}
       <div class="my-2 error">
