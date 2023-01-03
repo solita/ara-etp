@@ -19,6 +19,8 @@
   import { flashMessageStore } from '@/stores';
   import * as Validation from '@Utility/validation';
 
+  import * as dfns from 'date-fns';
+
   const i18n = $_;
   const i18nRoot = 'kayttaja';
 
@@ -33,8 +35,13 @@
 
   let error = Maybe.None();
 
+  const aineistoLabel = Maybe.orSome(
+    '',
+    R.map(R.prop('label-fi'), Maybe.findById(aineistoId, aineistot))
+  );
+
   const defaultPermit = {
-    'valid-until': Maybe.None(),
+    'valid-until': Maybe.Some(dfns.add(new Date(), { years: 1 })),
     'ip-address': ''
   };
 
@@ -47,9 +54,6 @@
     )(model);
 
   let permit = existingPermit(aineistoId, model);
-
-  $: console.log(model);
-  $: console.log(permit);
 
   const schema = Schema.aineistolupa;
   //$: isValidForm = Validation.isValidForm(schema);
@@ -87,7 +91,7 @@
         <dd>{Kayttajat.fullName(kayttaja)}</dd>
 
         <dt>Aineisto:</dt>
-        <dd>{aineistot[aineistoId]['label-fi']}</dd>
+        <dd>{aineistoLabel}</dd>
       </dl>
     </div>
 
@@ -113,10 +117,16 @@
         <Button text={i18n('tallenna')} on:click={save} />
       </div>
 
-      <div class="mt-5">
+      <div class="mr-5 mt-5">
         <Button
           text={i18n(i18nRoot + '.cancel')}
           style={'secondary'}
+          on:click={reload} />
+      </div>
+      <div class="mt-5">
+        <Button
+          text={i18n(i18nRoot + '.remove')}
+          style={'error'}
           on:click={reload} />
       </div>
     </div>
