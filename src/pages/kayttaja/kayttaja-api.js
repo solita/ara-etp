@@ -94,9 +94,11 @@ const deserializeKayttajaAineisto = R.evolve({
   'valid-until': R.compose(Either.right, Parsers.parseISODate)
 });
 
+const deserializeKayttajaAineistot = R.map(deserializeKayttajaAineisto);
+
 export const getAineistotByKayttajaId = R.curry((fetch, id) =>
   R.compose(
-    R.map(R.map(deserializeKayttajaAineisto)),
+    R.map(deserializeKayttajaAineistot),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch)),
     url.kayttajaAineistot
