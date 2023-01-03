@@ -42,14 +42,20 @@
 
   const defaultPermit = {
     'valid-until': Maybe.Some(dfns.add(new Date(), { years: 1 })),
-    'ip-address': ''
+    'ip-address': '',
+    existingPermit: false
   };
 
   const existingPermit = (aineistoId, model) =>
     R.compose(
       R.assoc('asd', Maybe.Some(new Date())),
       Maybe.orSome(defaultPermit),
-      R.map(R.compose(R.evolve({ 'valid-until': Maybe.Some }))),
+      R.map(
+        R.compose(
+          R.assoc('existingPermit', true),
+          R.evolve({ 'valid-until': Maybe.Some })
+        )
+      ),
       Maybe.find(R.propEq('aineisto-id', aineistoId))
     )(model);
 
@@ -114,19 +120,24 @@
 
     <div class="buttons">
       <div class="mr-5 mt-5">
-        <Button text={i18n('tallenna')} on:click={save} />
+        <Button
+          text={i18n(i18nRoot + '.aineisto-lupa-grant')}
+          on:click={save} />
       </div>
 
-      <div class="mr-5 mt-5">
+      {#if permit.existingPermit}
+        <div class="mr-5 mt-5">
+          <Button
+            text={i18n(i18nRoot + '.aineisto-lupa-revoke')}
+            style={'error'}
+            on:click={reload} />
+        </div>
+      {/if}
+
+      <div class="mt-5">
         <Button
           text={i18n(i18nRoot + '.cancel')}
           style={'secondary'}
-          on:click={reload} />
-      </div>
-      <div class="mt-5">
-        <Button
-          text={i18n(i18nRoot + '.remove')}
-          style={'error'}
           on:click={reload} />
       </div>
     </div>

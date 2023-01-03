@@ -204,6 +204,8 @@
     "aineisto-ip-osoite": "IP-osoite",
     "aineisto-ei-lupaa": "(ei lupaa)",
     "aineisto-lupa": "Lupa aineistoon",
+    "aineisto-lupa-grant": "Lisää",
+    "aineisto-lupa-revoke": "Poista",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
     "virtu": {
