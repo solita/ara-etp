@@ -73,8 +73,7 @@
 
   const reload = () => {
     configAineistoId = Maybe.None();
-  }
-
+  };
 </script>
 
 <form
@@ -205,8 +204,9 @@
       </thead>
       <tbody class="etp-table--tbody">
         {#each aineistot as aineisto}
-          <tr class="etp-table--tr etp-table--tr__link"
-          on:click={() => configAineistoId = Maybe.Some(aineisto.id)}>
+          <tr
+            class="etp-table--tr etp-table--tr__link"
+            on:click={() => (configAineistoId = Maybe.Some(aineisto.id))}>
             <td class="etp-table--td">
               {Locales.labelForId($locale, aineistot)(aineisto.id)}
             </td>
@@ -214,10 +214,7 @@
               {R.compose(
                 Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
                 Maybe.map(
-                  R.compose(
-                    Formats.formatTimeInstantMinutes,
-                    R.prop('valid-until')
-                  )
+                  R.compose(Formats.formatDateInstant, R.prop('valid-until'))
                 ),
                 Maybe.find(R.propEq('aineisto-id', aineisto.id))
               )(kayttajaAineistot)}
@@ -252,7 +249,11 @@
   </div>
 </form>
 
-
 {#each Maybe.toArray(configAineistoId) as aineistoId}
-  <AineistolupaDialog bind:model={kayttajaAineistot} {aineistoId} {kayttaja} {reload} {aineistot}/>
+  <AineistolupaDialog
+    bind:model={kayttajaAineistot}
+    {aineistoId}
+    {kayttaja}
+    {reload}
+    {aineistot} />
 {/each}

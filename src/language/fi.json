@@ -203,6 +203,7 @@
     "aineisto-lupa-paattymisaika": "Luvan päättymisaika",
     "aineisto-ip-osoite": "IP-osoite",
     "aineisto-ei-lupaa": "(ei lupaa)",
+    "aineisto-lupa": "Lupa aineistoon",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
     "virtu": {
