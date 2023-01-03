@@ -6,8 +6,6 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as Kayttajat from '@Utility/kayttajat';
 import * as Parsers from '@Utility/parsers';
-import * as EM from '@Utility/either-maybe';
-import * as dfns from 'date-fns';
 
 const parseValidISODate = R.compose(
   R.chain(Either.toMaybe),
@@ -91,10 +89,31 @@ export const getLaatijaById = R.curry((fetch, id) =>
 );
 
 const deserializeKayttajaAineisto = R.evolve({
-  'valid-until': R.compose(Either.right, Parsers.parseISODate)
+  'valid-until': R.compose(Maybe.Some, Either.right, Parsers.parseISODate)
 });
 
-const deserializeKayttajaAineistot = R.map(deserializeKayttajaAineisto);
+const fillMissingAineistot = aineistot => deserialized =>
+  R.concat(
+    deserialized,
+    R.differenceWith(
+      R.eqProps('aineisto-id'),
+      R.map(
+        a => ({
+          'aineisto-id': a.id,
+          'valid-until': Maybe.None(),
+          'ip-address': ''
+        }),
+        aineistot
+      ),
+      deserialized
+    )
+  );
+
+export const deserializeKayttajaAineistot = aineistot =>
+  R.compose(
+    fillMissingAineistot(aineistot),
+    R.map(deserializeKayttajaAineisto)
+  );
 
 export const getAineistotByKayttajaId = R.curry((fetch, id) =>
   R.compose(
@@ -105,13 +124,17 @@ export const getAineistotByKayttajaId = R.curry((fetch, id) =>
   )(id)
 );
 
-const serializeAineisto = R.evolve({
-  'valid-until': EM.fold(null, date =>
-    dfns.formatISO(date, { representation: 'date' })
+const serializeKayttajaAineisto = R.evolve({
+  'valid-until': R.compose(
+    Maybe.orSome(''),
+    R.map(date => date.toISOString())
   )
 });
 
-const serializeAineistot = R.map(serializeAineisto);
+export const serializeKayttajaAineistot = R.compose(
+  R.map(serializeKayttajaAineisto),
+  R.filter(R.compose(Maybe.isSome, R.prop('valid-until')))
+);
 
 export const putKayttajaAineistot = R.curry((fetch, id, aineistot) => {
   return (
@@ -121,7 +144,7 @@ export const putKayttajaAineistot = R.curry((fetch, id, aineistot) => {
         Fetch.fetchWithMethod(fetch, 'put', url.kayttajaAineistot(id))
       )
     )(aineistot),
-    serializeAineistot
+    serializeKayttajaAineistot
   );
 });
 
