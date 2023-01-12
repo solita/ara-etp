@@ -37,7 +37,6 @@
   const i18nRoot = 'kayttaja';
 
   const schema = Schema.Kayttaja;
-  $: virtuSchema = Schema.virtuSchema(kayttaja);
 
   $: isValidForm = Validation.isValidForm(schema);
 
@@ -50,8 +49,6 @@
   $: if (Maybe.exists(Kayttajat.isLaatijaRole, kayttaja.rooli)) {
     throw 'This form should not be used for laatija.';
   }
-
-  const emptyVirtuId = { organisaatio: '', localid: '' };
 
   let form;
   const saveKayttaja = _ => {
