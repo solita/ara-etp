@@ -214,10 +214,8 @@
             <td class="etp-table--td">
               {R.compose(
                 Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
-                R.tap(valid => console.log('mapped valid-until is', valid)),
                 R.map(Formats.formatDateInstant),
-                EM.toMaybe,
-                R.tap(valid => console.log('valid-until is', valid))
+                EM.toMaybe
               )(aineisto['valid-until'])}
             </td>
             <td class="etp-table--td"

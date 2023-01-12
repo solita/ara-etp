@@ -209,6 +209,8 @@
     "aineisto-lupa-revoke": "Poista",
     "cancel": "Peruuta muutokset",
     "save": "Tallenna",
+    "back": "Takaisin",
+    "clear": "Tyhjennä",
     "virtu": {
       "header": "Virtu kirjautumistiedot",
       "localid": "Käyttäjätunnus (Virtu Local ID)",

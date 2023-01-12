@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
@@ -13,11 +14,6 @@
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
   import Datepicker from '@Component/Input/Datepicker';
-  import Textarea from '@Component/Textarea/Textarea';
-  import { flashMessageStore } from '@/stores';
-  import * as Validation from '@Utility/validation';
-
-  import * as dfns from 'date-fns';
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
@@ -29,16 +25,18 @@
 
   export let reload;
 
-  let error = Maybe.None();
-  let form;
-
   const aineistoLabel = Maybe.orSome(
     '',
     R.map(R.prop('label-fi'), Maybe.findById(model[aineistoIndex], aineistot))
   );
 
+  const clearModel = R.compose(
+    R.set(R.lensPath([aineistoIndex, 'valid-until']), Either.Right(Maybe.None())),
+    R.set(R.lensPath([aineistoIndex, 'ip-address']), '')
+  );
+  const clear = () => model = clearModel(model);
+
   const schema = Schema.aineistolupa;
-  $: console.log(model);
 </script>
 
 <style type="text/postcss">
@@ -57,14 +55,10 @@
   .buttons {
     @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
   }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
 </style>
 
 <dialog on:click|stopPropagation>
-  <form bind:this={form} class="content">
+  <form class="content">
     <h1>{i18n(i18nRoot + '.aineisto-lupa')}</h1>
 
     <div class="w-full py-4">
@@ -85,6 +79,7 @@
       lens={R.lensPath([aineistoIndex, 'valid-until'])}
       format={Maybe.fold('', Formats.formatDateInstant)}
       parse={Parsers.optionalParser(Parsers.parseDate)}
+      required={false}
       transform={EM.fromNull} />
 
     <Input
@@ -96,19 +91,19 @@
       validators={schema['ip-address']}
       {i18n} />
 
-    {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
-      </div>
-    {/each}
-
     <div class="buttons">
-      <div class="mt-5">
+      <div class="mr-5 mt-5">
         <Button
-          text={i18n(i18nRoot + '.close')}
+          text={i18n(i18nRoot + '.back')}
           style={'secondary'}
           on:click={reload} />
+      </div>
+      <div class="mt-5">
+        <Button
+          text={i18n(i18nRoot + '.clear')}
+          on:click={clear}
+          style={'error'}
+      />
       </div>
     </div>
   </form>
