@@ -124,11 +124,18 @@
           kayttajaFuture
         ),
         kayttajaAineistot: R.chain(
-          kayttaja =>
+          ({ kayttaja, aineistot }) =>
             Kayttajat.isAineistoasiakas(kayttaja)
-              ? KayttajaApi.getAineistotByKayttajaId(fetch, params.id)
+              ? KayttajaApi.getAineistotByKayttajaId(
+                  aineistot,
+                  fetch,
+                  params.id
+                )
               : Future.resolve([]),
-          kayttajaFuture
+          Future.parallelObject(2, {
+            kayttaja: kayttajaFuture,
+            aineistot: KayttajaApi.aineistot
+          })
         ),
         whoami: KayttajaApi.whoami,
         roolit: KayttajaApi.roolit,

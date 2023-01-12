@@ -3,6 +3,7 @@
   import * as Schema from '@Pages/kayttaja/schema';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as Validation from '@Utility/validation';
   import * as Locales from '@Language/locale-utils';
   import * as Formats from '@Utility/formats';
@@ -30,7 +31,7 @@
   export let cancel;
   export let whoami;
 
-  let configAineistoId = Maybe.None();
+  let configAineistoIndex = Maybe.None();
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
@@ -72,7 +73,7 @@
   };
 
   const reload = () => {
-    configAineistoId = Maybe.None();
+    configAineistoIndex = Maybe.None();
   };
 </script>
 
@@ -203,28 +204,24 @@
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
-        {#each aineistot as aineisto}
+        {#each kayttajaAineistot as aineisto, index}
           <tr
             class="etp-table--tr etp-table--tr__link"
-            on:click={() => (configAineistoId = Maybe.Some(aineisto.id))}>
+            on:click={() => (configAineistoIndex = Maybe.Some(index))}>
             <td class="etp-table--td">
-              {Locales.labelForId($locale, aineistot)(aineisto.id)}
+              {Locales.labelForId($locale, aineistot)(aineisto['aineisto-id'])}
             </td>
             <td class="etp-table--td">
               {R.compose(
                 Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
-                Maybe.map(
-                  R.compose(Formats.formatDateInstant, R.prop('valid-until'))
-                ),
-                Maybe.find(R.propEq('aineisto-id', aineisto.id))
-              )(kayttajaAineistot)}
+                R.tap(valid => console.log('mapped valid-until is', valid)),
+                R.map(Formats.formatDateInstant),
+                EM.toMaybe,
+                R.tap(valid => console.log('valid-until is', valid))
+              )(aineisto['valid-until'])}
             </td>
             <td class="etp-table--td"
-              >{R.compose(
-                Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
-                Maybe.map(R.prop('ip-address')),
-                Maybe.find(R.propEq('aineisto-id', aineisto.id))
-              )(kayttajaAineistot)}</td>
+              >{aineisto['ip-address']}</td>
           </tr>
         {/each}
       </tbody>
@@ -249,10 +246,10 @@
   </div>
 </form>
 
-{#each Maybe.toArray(configAineistoId) as aineistoId}
+{#each Maybe.toArray(configAineistoIndex) as aineistoIndex}
   <AineistolupaDialog
     bind:model={kayttajaAineistot}
-    {aineistoId}
+    aineistoIndex={aineistoIndex}
     {kayttaja}
     {reload}
     {aineistot} />

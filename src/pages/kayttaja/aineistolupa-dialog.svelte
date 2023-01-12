@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
   import * as Schema from './schema';
@@ -23,44 +24,21 @@
 
   export let aineistot;
   export let model;
-  export let aineistoId;
+  export let aineistoIndex;
   export let kayttaja;
 
   export let reload;
-  export let save = () =>
-    console.log('Should add', permit, 'to', model, 'for kayttaja', kayttaja);
 
   let error = Maybe.None();
   let form;
 
   const aineistoLabel = Maybe.orSome(
     '',
-    R.map(R.prop('label-fi'), Maybe.findById(aineistoId, aineistot))
+    R.map(R.prop('label-fi'), Maybe.findById(model[aineistoIndex], aineistot))
   );
 
-  const defaultPermit = {
-    'valid-until': Maybe.Some(dfns.add(new Date(), { years: 1 })),
-    'ip-address': '',
-    existingPermit: false
-  };
-
-  const existingPermit = (aineistoId, model) =>
-    R.compose(
-      R.assoc('asd', Maybe.Some(new Date())),
-      Maybe.orSome(defaultPermit),
-      R.map(
-        R.compose(
-          R.assoc('existingPermit', true),
-          R.evolve({ 'valid-until': Maybe.Some })
-        )
-      ),
-      Maybe.find(R.propEq('aineisto-id', aineistoId))
-    )(model);
-
-  let permit = existingPermit(aineistoId, model);
-
   const schema = Schema.aineistolupa;
-  //$: isValidForm = Validation.isValidForm(schema);
+  $: console.log(model);
 </script>
 
 <style type="text/postcss">
@@ -103,18 +81,18 @@
       id="valid-until"
       name="valid-until"
       label="Voimassa"
-      bind:model={permit}
-      lens={R.lensProp('valid-until')}
+      bind:model={model}
+      lens={R.lensPath([aineistoIndex, 'valid-until'])}
       format={Maybe.fold('', Formats.formatDateInstant)}
       parse={Parsers.optionalParser(Parsers.parseDate)}
-      transform={Maybe.fromNull} />
+      transform={EM.fromNull} />
 
     <Input
       id="ip-address"
       name="ip-address"
       label="IP-osoite"
-      bind:model={permit}
-      lens={R.lensProp('ip-address')}
+      bind:model={model}
+      lens={R.lensPath([aineistoIndex, 'ip-address'])}
       validators={schema['ip-address']}
       {i18n} />
 
@@ -126,24 +104,9 @@
     {/each}
 
     <div class="buttons">
-      <div class="mr-5 mt-5">
-        <Button
-          text={i18n(i18nRoot + '.aineisto-lupa-grant')}
-          on:click={save} />
-      </div>
-
-      {#if permit.existingPermit}
-        <div class="mr-5 mt-5">
-          <Button
-            text={i18n(i18nRoot + '.aineisto-lupa-revoke')}
-            style={'error'}
-            on:click={reload} />
-        </div>
-      {/if}
-
       <div class="mt-5">
         <Button
-          text={i18n(i18nRoot + '.cancel')}
+          text={i18n(i18nRoot + '.close')}
           style={'secondary'}
           on:click={reload} />
       </div>
