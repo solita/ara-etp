@@ -3,6 +3,7 @@ import * as Future from '@Utility/future-utils';
 import * as api from './kayttaja-api';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 
 const aineistot = [
   {
@@ -107,17 +108,17 @@ describe('Kayttaja-api-suite: ', () => {
       const expected = [
         {
           'aineisto-id': 1,
-          'valid-until': Maybe.Some(new Date('2023-12-09T09:41:37.509347Z')),
+          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-09T09:41:37.509347Z'))),
           'ip-address': '127.0.0.1'
         },
         {
           'aineisto-id': 2,
-          'valid-until': Maybe.Some(new Date('2023-12-16T12:22:04.391373Z')),
+          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-16T12:22:04.391373Z'))),
           'ip-address': '127.0.0.1'
         },
         {
           'aineisto-id': 3,
-          'valid-until': Maybe.None(),
+          'valid-until': Either.Right(Maybe.None()),
           'ip-address': ''
         }
       ];
@@ -130,17 +131,17 @@ describe('Kayttaja-api-suite: ', () => {
       const localModel = [
         {
           'aineisto-id': 1,
-          'valid-until': Maybe.Some(new Date('2023-12-09T09:41:37.509347Z')),
+          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-09T09:41:37.509347Z'))),
           'ip-address': '127.0.0.1'
         },
         {
           'aineisto-id': 2,
-          'valid-until': Maybe.Some(new Date('2023-12-16T12:22:04.391373Z')),
+          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-16T12:22:04.391373Z'))),
           'ip-address': '127.0.0.1'
         },
         {
           'aineisto-id': 3,
-          'valid-until': Maybe.None(),
+          'valid-until': Either.Right(Maybe.None()),
           'ip-address': ''
         }
       ];
