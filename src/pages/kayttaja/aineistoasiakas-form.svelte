@@ -244,6 +244,7 @@
 {#each Maybe.toArray(configAineistoIndex) as aineistoIndex}
   <AineistolupaDialog
     bind:model={kayttajaAineistot}
+    bind:dirty
     aineistoIndex={aineistoIndex}
     {kayttaja}
     {reload}

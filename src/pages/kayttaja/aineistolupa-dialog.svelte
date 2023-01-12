@@ -19,6 +19,7 @@
   const i18nRoot = 'kayttaja';
 
   export let aineistot;
+  export let dirty;
   export let model;
   export let aineistoIndex;
   export let kayttaja;
@@ -37,6 +38,8 @@
   const clear = () => model = clearModel(model);
 
   const schema = Schema.aineistolupa;
+
+  let form;
 </script>
 
 <style type="text/postcss">
@@ -58,7 +61,7 @@
 </style>
 
 <dialog on:click|stopPropagation>
-  <form class="content">
+  <form bind:this={form} on:change={() => { dirty = true;}} class="content">
     <h1>{i18n(i18nRoot + '.aineisto-lupa')}</h1>
 
     <div class="w-full py-4">
