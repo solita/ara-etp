@@ -1,4 +1,5 @@
 <script>
+  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Locales from '@Language/locale-utils';
@@ -36,10 +37,11 @@
   };
 
   let kayttaja = emptyKayttaja;
+  let kayttajaAineistot = [];
   let overlay = true;
   let dirty = false;
 
-  const addKayttaja = kayttaja => {
+  const submit = kayttaja => {
     overlay = true;
     Future.fork(
       response => {
@@ -68,6 +70,8 @@
     );
   };
 
+  const aineistotFuture = KayttajaApi.aineistot;
+
   $: Future.fork(
     response => {
       flashMessageStore.add(
@@ -82,11 +86,18 @@
       resources = Maybe.Some(response);
       overlay = false;
       dirty = false;
+      if (kayttajaAineistot.length === 0) {
+        kayttajaAineistot = response.emptyAineistot;
+      }
     },
     Future.parallelObject(3, {
       whoami: KayttajaApi.whoami,
       roolit: KayttajaApi.roolit,
-      aineistot: KayttajaApi.aineistot
+      aineistot: aineistotFuture,
+      emptyAineistot: R.map(
+        aineistot => KayttajaApi.deserializeKayttajaAineistot(aineistot)([]),
+        aineistotFuture
+      )
     })
   );
 </script>
@@ -95,18 +106,19 @@
   <div slot="content">
     <DirtyConfirmation {dirty} />
     <H1 text={i18n(i18nRoot + '.title')} />
-    {#each resources.toArray() as { whoami, roolit, aineistot }}
+    {#each resources.toArray() as { whoami, roolit, aineistot, emptyAineistot }}
       <AineistoasiakasForm
-        submit={addKayttaja}
+        {submit}
         cancel={_ => {
           kayttaja = emptyKayttaja;
+          kayttajaAineistot = emptyAineistot;
         }}
         bind:dirty
         {kayttaja}
         {whoami}
         {roolit}
         {aineistot}
-        kayttajaAineistot={[]} />
+        bind:kayttajaAineistot />
     {/each}
   </div>
   <div slot="overlay-content">
