@@ -41,6 +41,12 @@
   let overlay = true;
   let dirty = false;
 
+  const submitAineistot = ({ id }) =>
+    R.map(
+      R.always({ id }),
+      KayttajaApi.putKayttajaAineistot(fetch, id, kayttajaAineistot)
+    );
+
   const submit = kayttaja => {
     overlay = true;
     Future.fork(
@@ -66,7 +72,7 @@
         dirty = false;
         push('/kayttaja/' + response.id);
       },
-      KayttajaApi.postKayttaja(kayttaja)
+      R.chain(submitAineistot, KayttajaApi.postKayttaja(kayttaja))
     );
   };
 
