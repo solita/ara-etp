@@ -108,12 +108,16 @@ describe('Kayttaja-api-suite: ', () => {
       const expected = [
         {
           'aineisto-id': 1,
-          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-09T09:41:37.509347Z'))),
+          'valid-until': Either.Right(
+            Maybe.Some(new Date('2023-12-09T09:41:37.509347Z'))
+          ),
           'ip-address': '127.0.0.1'
         },
         {
           'aineisto-id': 2,
-          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-16T12:22:04.391373Z'))),
+          'valid-until': Either.Right(
+            Maybe.Some(new Date('2023-12-16T12:22:04.391373Z'))
+          ),
           'ip-address': '127.0.0.1'
         },
         {
@@ -131,12 +135,16 @@ describe('Kayttaja-api-suite: ', () => {
       const localModel = [
         {
           'aineisto-id': 1,
-          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-09T09:41:37.509347Z'))),
+          'valid-until': Either.Right(
+            Maybe.Some(new Date('2023-12-09T09:41:37.509347Z'))
+          ),
           'ip-address': '127.0.0.1'
         },
         {
           'aineisto-id': 2,
-          'valid-until': Either.Right(Maybe.Some(new Date('2023-12-16T12:22:04.391373Z'))),
+          'valid-until': Either.Right(
+            Maybe.Some(new Date('2023-12-16T12:22:04.391373Z'))
+          ),
           'ip-address': '127.0.0.1'
         },
         {

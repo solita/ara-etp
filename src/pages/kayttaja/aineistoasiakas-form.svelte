@@ -54,7 +54,7 @@
   const saveKayttaja = _ => {
     if (isValidForm(kayttaja)) {
       flashMessageStore.flush();
-      submit(R.evolve({ rooli: Maybe.get }, kayttaja));
+      submit(R.evolve({ rooli: Maybe.get }, kayttaja), kayttajaAineistot);
     } else {
       flashMessageStore.add(
         'kayttaja',
@@ -215,8 +215,7 @@
                 EM.toMaybe
               )(aineisto['valid-until'])}
             </td>
-            <td class="etp-table--td"
-              >{aineisto['ip-address']}</td>
+            <td class="etp-table--td">{aineisto['ip-address']}</td>
           </tr>
         {/each}
       </tbody>
@@ -245,7 +244,7 @@
   <AineistolupaDialog
     bind:model={kayttajaAineistot}
     bind:dirty
-    aineistoIndex={aineistoIndex}
+    {aineistoIndex}
     {kayttaja}
     {reload}
     {aineistot} />

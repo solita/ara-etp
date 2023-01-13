@@ -88,6 +88,30 @@
       }
     );
 
+  const submitAineistoasiakas = (whoami, id) => (
+    updatedKayttaja,
+    updatedKayttajaAineistot
+  ) =>
+    fork(
+      'kayttaja',
+      Future.parallelObject(2, {
+        kayttaja: KayttajaApi.putKayttajaById(
+          whoami.rooli,
+          fetch,
+          id,
+          updatedKayttaja
+        ),
+        aineistot: KayttajaApi.putKayttajaAineistot(
+          fetch,
+          id,
+          updatedKayttajaAineistot
+        )
+      }),
+      _ => {
+        idTranslateStore.updateKayttaja(updatedKayttaja);
+      }
+    );
+
   const load = params => {
     overlay = true;
     resources = Maybe.None();
@@ -185,7 +209,7 @@
             kayttaja.organisaatio +
             ')'} />
         <AineistoasiakasForm
-          submit={submitKayttaja(whoami, params.id)}
+          submit={submitAineistoasiakas(whoami, params.id)}
           cancel={_ => load(params)}
           bind:dirty
           kayttaja={R.evolve({ rooli: Maybe.fromNull }, kayttaja)}

@@ -32,10 +32,13 @@
   );
 
   const clearModel = R.compose(
-    R.set(R.lensPath([aineistoIndex, 'valid-until']), Either.Right(Maybe.None())),
+    R.set(
+      R.lensPath([aineistoIndex, 'valid-until']),
+      Either.Right(Maybe.None())
+    ),
     R.set(R.lensPath([aineistoIndex, 'ip-address']), '')
   );
-  const clear = () => model = clearModel(model);
+  const clear = () => (model = clearModel(model));
 
   const schema = Schema.aineistolupa;
 
@@ -61,7 +64,12 @@
 </style>
 
 <dialog on:click|stopPropagation>
-  <form bind:this={form} on:change={() => { dirty = true;}} class="content">
+  <form
+    bind:this={form}
+    on:change={() => {
+      dirty = true;
+    }}
+    class="content">
     <h1>{i18n(i18nRoot + '.aineisto-lupa')}</h1>
 
     <div class="w-full py-4">
@@ -78,7 +86,7 @@
       id="valid-until"
       name="valid-until"
       label="Voimassa"
-      bind:model={model}
+      bind:model
       lens={R.lensPath([aineistoIndex, 'valid-until'])}
       format={Maybe.fold('', Formats.formatDateInstant)}
       parse={Parsers.optionalParser(Parsers.parseDate)}
@@ -89,7 +97,7 @@
       id="ip-address"
       name="ip-address"
       label="IP-osoite"
-      bind:model={model}
+      bind:model
       lens={R.lensPath([aineistoIndex, 'ip-address'])}
       validators={schema['ip-address']}
       {i18n} />
@@ -105,8 +113,7 @@
         <Button
           text={i18n(i18nRoot + '.clear')}
           on:click={clear}
-          style={'error'}
-      />
+          style={'error'} />
       </div>
     </div>
   </form>

@@ -139,15 +139,13 @@ export const serializeKayttajaAineistot = R.compose(
 );
 
 export const putKayttajaAineistot = R.curry((fetch, id, aineistot) => {
-  return (
-    R.compose(
-      R.chain(Fetch.rejectWithInvalidResponse),
-      Future.encaseP(
-        Fetch.fetchWithMethod(fetch, 'put', url.kayttajaAineistot(id))
-      )
-    )(aineistot),
+  return R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'put', url.kayttajaAineistot(id))
+    ),
     serializeKayttajaAineistot
-  );
+  )(aineistot);
 });
 
 export const getAineistot = fetch =>
