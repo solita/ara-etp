@@ -208,6 +208,11 @@
     "aineisto-lupa-grant": "Lisää",
     "aineisto-lupa-revoke": "Poista",
     "cancel": "Peruuta muutokset",
+    "api-key": {
+      "label": "Uusi rajapinta-avain",
+      "placeholder": "Ei muuteta",
+      "luo-uusi": "Aseta"
+    },
     "save": "Tallenna",
     "back": "Takaisin",
     "clear": "Tyhjennä",

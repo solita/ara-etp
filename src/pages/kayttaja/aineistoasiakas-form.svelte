@@ -11,6 +11,7 @@
   import { flashMessageStore } from '@/stores';
   import { locale, _ } from '@Language/i18n';
 
+  import ApiKey from './api-key.svelte';
   import H2 from '@Component/H/H2';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
@@ -167,24 +168,7 @@
   <H2 text={i18n('kayttaja.api-header')} />
 
   <div class="flex flex-col py-4">
-    <div class="lg:w-1/2 w-full">
-      <Input
-        id={'api-key'}
-        name={'api-key'}
-        label={i18n('laatija.api-key')}
-        required={false}
-        bind:model={kayttaja}
-        lens={R.lensProp('api-key')}
-        format={Maybe.orSome('')}
-        parse={R.compose(Maybe.fromEmpty, R.trim)}
-        validators={schema['api-key']}
-        {disabled}
-        {i18n} />
-    </div>
-    <div class="flex mt-4 items-center">
-      <span class="font-icon mr-1 text-xl">info</span>
-      <span>{i18n('laatija.api-key-requirements')}</span>
-    </div>
+    <ApiKey bind:dirty bind:kayttaja />
   </div>
 
   <H2 text={i18n('kayttaja.aineistot-header')} />
