@@ -52,7 +52,6 @@ export const url = {
   id: id => `${url.all}/${id}`,
   history: id => `${url.id(id)}/history`,
   laatija: id => `${url.id(id)}/laatija`,
-  aineistot: 'api/private/aineistot',
   kayttajaAineistot: id => `${url.id(id)}/aineistot`,
   whoami: '/api/private/whoami'
 };
@@ -147,12 +146,6 @@ export const putKayttajaAineistot = R.curry((fetch, id, aineistot) => {
     serializeKayttajaAineistot
   )(aineistot);
 });
-
-export const getAineistot = fetch =>
-  R.compose(
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(url.aineistot);
 
 export const serialize = R.compose(
   R.evolve({
