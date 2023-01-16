@@ -116,6 +116,14 @@
     overlay = true;
     resources = Maybe.None();
     const kayttajaFuture = Future.cache(KayttajaApi.getKayttajaById(params.id));
+    const aineistotFuture = R.chain(
+      R.ifElse(
+        Kayttajat.isPaakayttaja,
+        R.always(KayttajaApi.aineistot),
+        R.always(Future.resolve([]))
+      ),
+      KayttajaApi.whoami
+    );
     Future.fork(
       response => {
         flashMessageStore.add(
@@ -158,12 +166,12 @@
               : Future.resolve([]),
           Future.parallelObject(2, {
             kayttaja: kayttajaFuture,
-            aineistot: KayttajaApi.aineistot
+            aineistot: aineistotFuture
           })
         ),
         whoami: KayttajaApi.whoami,
         roolit: KayttajaApi.roolit,
-        aineistot: KayttajaApi.aineistot,
+        aineistot: aineistotFuture,
         luokittelut: Future.parallelObject(5, {
           countries: GeoApi.countries,
           toimintaalueet: GeoApi.toimintaalueet,
