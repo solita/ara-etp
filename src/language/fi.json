@@ -19,6 +19,7 @@
     "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
     "invalid-verkkolaskuoperaattori": "Virheellinen verkkolaskuoperaattori",
     "invalid-api-key": "Virheellinen tiedonsiirron salasana",
+    "invalid-ip-address": "Virheellinen IP-osoite",
     "no-selection": "Ei valintaa",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min}",
@@ -50,6 +51,7 @@
     "kayttaja": "Käyttäjä",
     "new-kayttaja": "Uusi käyttäjä",
     "new-laatija": "Uusi kumppani",
+    "new-aineistoasiakas": "Uusi aineistoasiakas",
     "et": "ET",
     "energiatodistus-viestit": "Viestit",
     "liitteet": "Liitteet",
@@ -189,14 +191,31 @@
     "passivoitu": "Passivoi käyttäjätunnus",
     "valvoja": "Valvoja",
     "rooli": "Käyttäjärooli",
+    "organisaatio": "Organisaatio",
     "etunimi": "Etunimi",
     "sukunimi": "Sukunimi",
     "email": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
     "puhelin": "Puhelinnumero",
     "perustiedot-header": "Perustiedot",
+    "api-header": "Rajapinta",
+    "aineistot-header": "Aineistot",
+    "aineisto": "Aineisto",
+    "aineisto-lupa-paattymisaika": "Luvan päättymisaika",
+    "aineisto-ip-osoite": "IP-osoite",
+    "aineisto-ei-lupaa": "(ei lupaa)",
+    "aineisto-lupa": "Lupa aineistoon",
+    "aineisto-lupa-grant": "Lisää",
+    "aineisto-lupa-revoke": "Poista",
     "cancel": "Peruuta muutokset",
+    "api-key": {
+      "label": "Uusi rajapinta-avain",
+      "placeholder": "Ei muuteta",
+      "luo-uusi": "Aseta"
+    },
     "save": "Tallenna",
+    "back": "Takaisin",
+    "clear": "Tyhjennä",
     "virtu": {
       "header": "Virtu kirjautumistiedot",
       "localid": "Käyttäjätunnus (Virtu Local ID)",
@@ -255,12 +274,15 @@
   "kayttajat": {
     "title": "Käyttäjät",
     "partners": "Kumppanit",
+    "aineistoasiakkaat": "Aineistoasiakkaat",
     "new-kayttaja": "Uusi käyttäjä",
     "new-partner": "Uusi kumppani",
+    "new-aineistoasiakas": "Uusi aineistoasiakas",
     "nimi": "Nimi",
     "rooli": "Rooli",
     "email": "Sähköposti",
     "puhelin": "Puhelin",
+    "organisaatio": "Organisaatio",
     "login": "Kirjautunut",
     "info": "Tällä sivulla näkyvät kaikki käyttäjät, jotka eivät ole virallisia laatijoita.",
     "laatija-link": "Laatijat löytyvät täältä",
@@ -385,6 +407,15 @@
       "1": "Ei kirjautunut",
       "2": "Pätevyys peruttu / Laatimiskiellossa",
       "3": "Pätevyys päättynyt"
+    }
+  },
+  "aineistoasiakas": {
+    "new": {
+      "title": "Uusi aineistoasiakas",
+      "messages": {
+        "add-success": "Uusi aineistoasiakas tallennettu järjestelmään.",
+        "add-error": "Uuden aineistoasiakkaan tallennus epäonnistui."
+      }
     }
   },
   "energiatodistus": {

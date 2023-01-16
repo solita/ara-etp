@@ -20,8 +20,17 @@ export const Kayttaja = {
   email: [...Validation.RequiredString(2, 200), Validation.emailValidator],
   puhelin: Validation.RequiredString(2, 200),
   virtu: [Validation.liftValidator(VirtuIDValidator)],
+  organisaatio: Validation.LimitedString(0, 200),
   'api-key': [Validation.liftValidator(Validation.apiPasswordValidator)]
 };
 
 export const virtuSchema = kayttaja =>
   Maybe.isSome(kayttaja.virtu) ? VirtuID : R.map(R.always([]), VirtuID);
+
+export const aineistolupa = {
+  'voimassaolo-paattymisaika': Validation.isPaivamaara,
+  'ip-address': [
+    ...Validation.RequiredString(7, 15),
+    Validation.ipAddressValidator
+  ]
+};

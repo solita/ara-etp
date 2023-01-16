@@ -15,6 +15,7 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
 
+  import AineistoasiakasForm from './aineistoasiakas-form.svelte';
   import KayttajaForm from './kayttaja-form.svelte';
   import LaatijaForm from '@Pages/laatija/laatija-form.svelte';
   import Overlay from '@Component/Overlay/Overlay';
@@ -87,10 +88,42 @@
       }
     );
 
+  const submitAineistoasiakas = (whoami, id) => (
+    updatedKayttaja,
+    updatedKayttajaAineistot
+  ) =>
+    fork(
+      'kayttaja',
+      Future.parallelObject(2, {
+        kayttaja: KayttajaApi.putKayttajaById(
+          whoami.rooli,
+          fetch,
+          id,
+          updatedKayttaja
+        ),
+        aineistot: KayttajaApi.putKayttajaAineistot(
+          fetch,
+          id,
+          updatedKayttajaAineistot
+        )
+      }),
+      _ => {
+        idTranslateStore.updateKayttaja(updatedKayttaja);
+      }
+    );
+
   const load = params => {
     overlay = true;
     resources = Maybe.None();
     const kayttajaFuture = Future.cache(KayttajaApi.getKayttajaById(params.id));
+    const aineistotFuture = R.chain(
+      R.ifElse(
+        Kayttajat.isPaakayttaja,
+        R.always(KayttajaApi.aineistot),
+        R.always(Future.resolve([]))
+      ),
+      KayttajaApi.whoami
+    );
     Future.fork(
       response => {
         flashMessageStore.add(
@@ -113,7 +146,7 @@
         overlay = false;
         dirty = false;
       },
-      Future.parallelObject(5, {
+      Future.parallelObject(7, {
         kayttaja: kayttajaFuture,
         laatija: R.chain(
           kayttaja =>
@@ -122,8 +155,23 @@
               : Future.resolve(Maybe.None()),
           kayttajaFuture
         ),
+        kayttajaAineistot: R.chain(
+          ({ kayttaja, aineistot }) =>
+            Kayttajat.isAineistoasiakas(kayttaja)
+              ? KayttajaApi.getAineistotByKayttajaId(
+                  aineistot,
+                  fetch,
+                  params.id
+                )
+              : Future.resolve([]),
+          Future.parallelObject(2, {
+            kayttaja: kayttajaFuture,
+            aineistot: aineistotFuture
+          })
+        ),
         whoami: KayttajaApi.whoami,
         roolit: KayttajaApi.roolit,
+        aineistot: aineistotFuture,
         luokittelut: Future.parallelObject(5, {
           countries: GeoApi.countries,
           toimintaalueet: GeoApi.toimintaalueet,
@@ -147,7 +195,7 @@
 <Overlay {overlay}>
   <div slot="content">
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit }}
+    {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit, aineistot, kayttajaAineistot }}
       {#if Maybe.isSome(laatija)}
         <div class="mt-6">
           <LastLogin {kayttaja} />
@@ -160,6 +208,22 @@
             {luokittelut}
             laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
         </div>
+      {:else if Kayttajat.isAineistoasiakas(kayttaja)}
+        <H1
+          text={kayttaja.etunimi +
+            ' ' +
+            kayttaja.sukunimi +
+            ' (' +
+            kayttaja.organisaatio +
+            ')'} />
+        <AineistoasiakasForm
+          submit={submitAineistoasiakas(whoami, params.id)}
+          cancel={_ => load(params)}
+          bind:dirty
+          kayttaja={R.evolve({ rooli: Maybe.fromNull }, kayttaja)}
+          {aineistot}
+          {kayttajaAineistot}
+          {whoami} />
       {:else}
         <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
         <LastLogin {kayttaja} />

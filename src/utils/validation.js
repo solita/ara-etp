@@ -180,6 +180,24 @@ export const apiPasswordValidator = {
 
 export const isPuhelin = R.test(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/);
 
+const isIpAddress = R.compose(
+  R.allPass([
+    R.compose(R.equals(4), R.length),
+    R.all(R.compose(R.both(R.lte(0), R.gte(255)), Number.parseInt))
+  ]),
+  R.split('.')
+);
+
+export const ipAddressValidator = {
+  predicate: isIpAddress,
+  label: R.applyTo('validation.invalid-ip-address')
+};
+
+export const ipAddress = [
+  ...LimitedString(0, 15),
+  { predicate: isIpAddress, label: R.applyTo('validation.invalid-ip-address') }
+];
+
 export const isPatevyystaso = R.test(/^(1|2)$/);
 
 export const isPaivamaara = R.compose(

@@ -5,6 +5,7 @@ import Kayttaja from '@Pages/kayttaja';
 import Viesti from '@Pages/viesti';
 import Ohje from '@Pages/ohje';
 import Laatija from '@Pages/laatija';
+import Aineistoasiakas from '@Pages/aineistoasiakas';
 import Energiatodistus from '@Pages/energiatodistus';
 import ValvontaOikeellisuus from '@Pages/valvonta-oikeellisuus';
 import ValvontaKaytto from '@Pages/valvonta-kaytto';
@@ -17,6 +18,7 @@ export const buildRoutes = currentUser => ({
   '/yritys/*': Yritys,
   '/kayttaja/*': Kayttaja,
   '/laatija/*': Laatija,
+  '/aineistoasiakas/*': Aineistoasiakas,
   '/viesti/*': Viesti,
   '/ohje/*': Ohje,
   '/energiatodistus/*': Energiatodistus,

@@ -1,4 +1,5 @@
 <script>
+  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Locales from '@Language/locale-utils';
@@ -9,21 +10,22 @@
   import { push } from '@Component/Router/router';
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as Kayttajat from '@Utility/kayttajat';
 
-  import KayttajaForm from './kayttaja-form.svelte';
+  import AineistoasiakasForm from '@Pages/kayttaja/aineistoasiakas-form.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import H1 from '@Component/H/H1.svelte';
 
   const i18n = $_;
-  const i18nRoot = 'kayttaja.new';
+  const i18nRoot = 'aineistoasiakas.new';
 
   let resources = Maybe.None();
   const emptyKayttaja = {
     login: Maybe.None(),
     passivoitu: false,
-    rooli: Maybe.None(),
+    rooli: Maybe.Some(Kayttajat.role.aineistoasiakas),
     etunimi: '',
     sukunimi: '',
     email: '',
@@ -35,10 +37,17 @@
   };
 
   let kayttaja = emptyKayttaja;
+  let kayttajaAineistot = [];
   let overlay = true;
   let dirty = false;
 
-  const addKayttaja = kayttaja => {
+  const submitAineistot = ({ id }) =>
+    R.map(
+      R.always({ id }),
+      KayttajaApi.putKayttajaAineistot(fetch, id, kayttajaAineistot)
+    );
+
+  const submit = kayttaja => {
     overlay = true;
     Future.fork(
       response => {
@@ -63,9 +72,11 @@
         dirty = false;
         push('/kayttaja/' + response.id);
       },
-      KayttajaApi.postKayttaja(kayttaja)
+      R.chain(submitAineistot, KayttajaApi.postKayttaja(kayttaja))
     );
   };
+
+  const aineistotFuture = KayttajaApi.aineistot;
 
   $: Future.fork(
     response => {
@@ -81,10 +92,18 @@
       resources = Maybe.Some(response);
       overlay = false;
       dirty = false;
+      if (kayttajaAineistot.length === 0) {
+        kayttajaAineistot = response.emptyAineistot;
+      }
     },
-    Future.parallelObject(2, {
+    Future.parallelObject(3, {
       whoami: KayttajaApi.whoami,
-      roolit: KayttajaApi.roolit
+      roolit: KayttajaApi.roolit,
+      aineistot: aineistotFuture,
+      emptyAineistot: R.map(
+        aineistot => KayttajaApi.deserializeKayttajaAineistot(aineistot)([]),
+        aineistotFuture
+      )
     })
   );
 </script>
@@ -93,16 +112,19 @@
   <div slot="content">
     <DirtyConfirmation {dirty} />
     <H1 text={i18n(i18nRoot + '.title')} />
-    {#each resources.toArray() as { whoami, roolit }}
-      <KayttajaForm
-        submit={addKayttaja}
+    {#each resources.toArray() as { whoami, roolit, aineistot, emptyAineistot }}
+      <AineistoasiakasForm
+        {submit}
         cancel={_ => {
           kayttaja = emptyKayttaja;
+          kayttajaAineistot = emptyAineistot;
         }}
         bind:dirty
         {kayttaja}
         {whoami}
-        {roolit} />
+        {roolit}
+        {aineistot}
+        bind:kayttajaAineistot />
     {/each}
   </div>
   <div slot="overlay-content">

@@ -27,6 +27,10 @@ export const parseCrumb = R.curry((i18n, idTranslate, whoami, location) =>
       R.compose(laatijaCrumb(i18n, idTranslate, whoami), R.tail)
     ],
     [
+      R.compose(R.equals('aineistoasiakas'), R.head),
+      R.compose(aineistoasiakasCrumb(i18n, idTranslate, whoami), R.tail)
+    ],
+    [
       R.compose(R.equals('energiatodistus'), R.head),
       R.compose(energiatodistusCrumb(i18n), R.tail)
     ],
@@ -276,6 +280,11 @@ export const newLaatija = i18n => ({
   label: i18n('navigation.new-laatija')
 });
 
+export const newAineistoasiakas = i18n => ({
+  url: '#/aineistoasiakas/new',
+  label: i18n('navigation.new-aineistoasiakas')
+});
+
 export const kayttajat = i18n => ({
   url: '#/kayttaja/all',
   label: i18n('navigation.kayttajat')
@@ -344,6 +353,13 @@ export const laatijaCrumb = R.curry(
             )
           )(idTranslate)
       ]
+    ])(id)
+);
+
+const aineistoasiakasCrumb = R.curry(
+  (i18n, idTranslate, whoami, [id, ...rest]) =>
+    R.cond([
+      [R.equals('new'), R.always([kayttajat(i18n), newAineistoasiakas(i18n)])]
     ])(id)
 );
 
