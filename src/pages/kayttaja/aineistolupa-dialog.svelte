@@ -91,7 +91,8 @@
       format={Maybe.fold('', Formats.formatDateInstant)}
       parse={Parsers.optionalParser(Parsers.parseDate)}
       required={false}
-      transform={EM.fromNull} />
+      transform={EM.fromNull}
+      {i18n} />
 
     <Input
       id="ip-address"
