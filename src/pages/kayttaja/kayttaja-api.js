@@ -89,6 +89,10 @@ export const getLaatijaById = R.curry((fetch, id) =>
 );
 
 const deserializeKayttajaAineisto = R.evolve({
+  'ip-address': R.when(
+    addr => addr.endsWith('/32'),
+    addr => addr.substring(0, addr.length - 3)
+  ),
   'valid-until': Parsers.optionalParser(Parsers.parseISODate)
 });
 
