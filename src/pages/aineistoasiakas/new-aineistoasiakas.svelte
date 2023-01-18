@@ -91,7 +91,6 @@
     response => {
       resources = Maybe.Some(response);
       overlay = false;
-      dirty = false;
       if (kayttajaAineistot.length === 0) {
         kayttajaAineistot = response.emptyAineistot;
       }
