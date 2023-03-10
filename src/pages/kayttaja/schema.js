@@ -24,6 +24,12 @@ export const Kayttaja = {
   'api-key': [Validation.liftValidator(Validation.apiPasswordValidator)]
 };
 
+export const Aineistoasiakas = R.assoc(
+  'puhelin',
+  Validation.LimitedString(0, 200),
+  Kayttaja
+);
+
 export const virtuSchema = kayttaja =>
   Maybe.isSome(kayttaja.virtu) ? VirtuID : R.map(R.always([]), VirtuID);
 
