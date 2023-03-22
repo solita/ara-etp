@@ -1,4 +1,4 @@
-import ToimintaalueetChecklist from './ToimintaalueetChecklist';
+import ToimintaalueetChecklist from './toimintaalueet-checklist';
 
 const toimintaalueet = [
   {
