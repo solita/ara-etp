@@ -28,20 +28,19 @@
     EtUtils.polttoaineet
   )(energiatodistus);
 
-  $: muunnoskerrotutPolttoaineetPerLammitettyNettoala = EtUtils.perLammitettyNettoala(
-    energiatodistus,
-    muunnoskerrotutPolttoaineet
-  );
+  $: muunnoskerrotutPolttoaineetPerLammitettyNettoala =
+    EtUtils.perLammitettyNettoala(energiatodistus, muunnoskerrotutPolttoaineet);
 
   $: muunnoskerrotutVapaatPolttoaineet = R.compose(
     R.map(R.apply(EtUtils.multiplyWithKerroin)),
     R.converge(R.zip, [EtUtils.vapaatKertoimet, EtUtils.vapaatPolttoaineet])
   )(energiatodistus);
 
-  $: muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala = EtUtils.perLammitettyNettoala(
-    energiatodistus,
-    muunnoskerrotutVapaatPolttoaineet
-  );
+  $: muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala =
+    EtUtils.perLammitettyNettoala(
+      energiatodistus,
+      muunnoskerrotutVapaatPolttoaineet
+    );
 </script>
 
 <H3

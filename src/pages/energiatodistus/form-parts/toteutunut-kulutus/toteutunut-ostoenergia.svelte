@@ -19,10 +19,8 @@
 
   $: ostoenergiatSum = EtUtils.sumEtValues(ostoenergiat);
 
-  $: toteutuneetOstoenergiatPerLammitettyNettoala = EtUtils.perLammitettyNettoala(
-    energiatodistus,
-    ostoenergiat
-  );
+  $: toteutuneetOstoenergiatPerLammitettyNettoala =
+    EtUtils.perLammitettyNettoala(energiatodistus, ostoenergiat);
 
   $: toteutuneetOstoenergiatPerLammitettyNettoalaSum = R.compose(
     EtUtils.sumEtValues

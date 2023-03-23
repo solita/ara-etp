@@ -40,11 +40,11 @@ const transformationFromSchema = name =>
   );
 
 const versions = {
-  '2018': {
+  2018: {
     deserializer: transformationFromSchema('deserialize')(schema.v2018),
     serializer: transformationFromSchema('serialize')(schema.v2018)
   },
-  '2013': {
+  2013: {
     deserializer: transformationFromSchema('deserialize')(schema.v2013),
     serializer: transformationFromSchema('serialize')(schema.v2013)
   }

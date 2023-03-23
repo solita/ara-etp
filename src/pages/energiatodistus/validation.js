@@ -49,11 +49,15 @@ const requiredCondition = {
   'lahtotiedot.ilmanvaihto.kuvaus-fi': isIlmanvaihtoKuvausRequired,
   'lahtotiedot.ilmanvaihto.kuvaus-sv': isIlmanvaihtoKuvausRequired,
 
-  'lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-fi': isLammitysmuoto1KuvausRequired,
-  'lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-sv': isLammitysmuoto1KuvausRequired,
+  'lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-fi':
+    isLammitysmuoto1KuvausRequired,
+  'lahtotiedot.lammitys.lammitysmuoto-1.kuvaus-sv':
+    isLammitysmuoto1KuvausRequired,
 
-  'lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-fi': isLammitysmuoto2KuvausRequired,
-  'lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-sv': isLammitysmuoto2KuvausRequired,
+  'lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-fi':
+    isLammitysmuoto2KuvausRequired,
+  'lahtotiedot.lammitys.lammitysmuoto-2.kuvaus-sv':
+    isLammitysmuoto2KuvausRequired,
 
   'lahtotiedot.lammitys.lammonjako.kuvaus-fi': isLammonjakoKuvausRequired,
   'lahtotiedot.lammitys.lammonjako.kuvaus-sv': isLammonjakoKuvausRequired,
@@ -88,11 +92,13 @@ const requiredConstraints = R.map(R.juxt([predicate, R.identity]));
 
 const assertValue = R.curry((property, value) => {
   if (R.isNil(value) || !Maybe.isMaybe(value)) {
-    throw 'Required property: ' +
+    throw (
+      'Required property: ' +
       property +
       ' value: ' +
       value +
-      ' must be in monad Maybe[A] or Either[Maybe[A]].';
+      ' must be in monad Maybe[A] or Either[Maybe[A]].'
+    );
   }
 });
 

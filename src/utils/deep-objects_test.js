@@ -34,10 +34,10 @@ describe('Deep objects:', () => {
       assert.deepEqual(objects.values(R.F, { a: { b: { c: 1 } } }), [1]);
 
       assert.deepEqual(objects.values(R.F, { a: { b: 1 }, c: 1 }), [1, 1]);
-      assert.deepEqual(objects.values(R.F, { a: { b: 1 }, c: { d: 1 } }), [
-        1,
-        1
-      ]);
+      assert.deepEqual(
+        objects.values(R.F, { a: { b: 1 }, c: { d: 1 } }),
+        [1, 1]
+      );
     });
 
     it('Value objects', () => {
@@ -97,7 +97,7 @@ describe('Deep objects:', () => {
 
     it('Mixed', () => {
       assert.deepEqual(objects.mergeRight(R.F, [1], { a: 2 }), {
-        '0': 1,
+        0: 1,
         a: 2
       });
     });

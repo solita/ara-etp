@@ -88,29 +88,27 @@
       }
     );
 
-  const submitAineistoasiakas = (whoami, id) => (
-    updatedKayttaja,
-    updatedKayttajaAineistot
-  ) =>
-    fork(
-      'kayttaja',
-      Future.parallelObject(2, {
-        kayttaja: KayttajaApi.putKayttajaById(
-          whoami.rooli,
-          fetch,
-          id,
-          updatedKayttaja
-        ),
-        aineistot: KayttajaApi.putKayttajaAineistot(
-          fetch,
-          id,
-          updatedKayttajaAineistot
-        )
-      }),
-      _ => {
-        idTranslateStore.updateKayttaja(updatedKayttaja);
-      }
-    );
+  const submitAineistoasiakas =
+    (whoami, id) => (updatedKayttaja, updatedKayttajaAineistot) =>
+      fork(
+        'kayttaja',
+        Future.parallelObject(2, {
+          kayttaja: KayttajaApi.putKayttajaById(
+            whoami.rooli,
+            fetch,
+            id,
+            updatedKayttaja
+          ),
+          aineistot: KayttajaApi.putKayttajaAineistot(
+            fetch,
+            id,
+            updatedKayttajaAineistot
+          )
+        }),
+        _ => {
+          idTranslateStore.updateKayttaja(updatedKayttaja);
+        }
+      );
 
   const load = params => {
     overlay = true;
