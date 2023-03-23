@@ -9,5 +9,5 @@
   "arrowParens": "avoid",
   "svelteSortOrder": "options-scripts-styles-markup",
   "svelteAllowShorthand": true,
-  "svelteBracketNewLine": false
+  "bracketSameLine": true
 }
