@@ -12,15 +12,8 @@ import * as R from 'ramda';
 
 export { Fluture };
 
-export const {
-  Future,
-  resolve,
-  reject,
-  encaseP,
-  promise,
-  attemptP,
-  cache
-} = Fluture;
+export const { Future, resolve, reject, encaseP, promise, attemptP, cache } =
+  Fluture;
 
 /**
  * @sig Future [a,c] -> Future [a,b] -> Future [a,c]

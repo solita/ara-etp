@@ -154,10 +154,7 @@
 
       <H2 text={i18n(i18nRoot + '.toimenpiteet')} />
 
-      {#each tapahtumat([
-        R.map(keyed('toimenpide'), toimenpiteet),
-        R.map(keyed('note'), notes)
-      ]) as tapahtuma (tapahtuma.key)}
+      {#each tapahtumat( [R.map(keyed('toimenpide'), toimenpiteet), R.map(keyed('note'), notes)] ) as tapahtuma (tapahtuma.key)}
         <div class="mb-8">
           {#if isToimenpide(tapahtuma)}
             <Toimenpide

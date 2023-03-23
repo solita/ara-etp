@@ -215,10 +215,7 @@
         </p>
       {/if}
 
-      {#if R.includes(currentState.status, [
-        status.not_started,
-        status.already_started
-      ])}
+      {#if R.includes( currentState.status, [status.not_started, status.already_started] )}
         <p>
           {i18n('energiatodistus.signing.messages.connection-success')}
         </p>
@@ -266,10 +263,7 @@
     {/each}
 
     <div class="buttons">
-      {#if (R.includes(currentState.status, [
-        status.not_started,
-        status.already_started
-      ]) && mPollux.version.isSome()) || error.isSome()}
+      {#if (R.includes( currentState.status, [status.not_started, status.already_started] ) && mPollux.version.isSome()) || error.isSome()}
         <div class="mr-10 mt-5">
           <Button
             prefix="signing-submit"

@@ -314,7 +314,7 @@
                     {i18n('energiatodistus.haku.sarakkeet.laatija')}
                   </th>
                   {#if Kayttajat.isLaatija(whoami)}
-                    <th class="etp-table--th  etp-table--th__center">
+                    <th class="etp-table--th etp-table--th__center">
                       <span class="material-icons"> delete_forever </span>
                     </th>
                   {/if}
