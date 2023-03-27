@@ -37,7 +37,7 @@
   const i18n = $_;
   const i18nRoot = 'kayttaja';
 
-  const schema = Schema.Kayttaja;
+  const schema = Schema.Aineistoasiakas;
 
   $: isValidForm = Validation.isValidForm(schema);
 
