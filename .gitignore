@@ -4,7 +4,7 @@
 /.nyc_output/
 /coverage/
 /jsdoc/out/
-
+/storybook-static/
 .DS_Store
 
 # IntelliJ IDEA
