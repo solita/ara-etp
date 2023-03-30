@@ -6,10 +6,12 @@
 
 <style>
   ul {
-    list-style: disc;
-    @apply my-4;
+    @apply my-4 list-disc;
   }
 
+  .contact-info {
+    @apply list-none;
+  }
   p {
     @apply mb-4;
   }
@@ -121,4 +123,23 @@
     Vastaamme viestiisi niin pian kuin mahdollista. Huomaathan, että
     vastauksessamme voi kuitenkin kulua jopa 14 päivää.
   </p>
+
+  <H2 text="Täytäntöönpanomenettely" />
+  <p>
+    Jos huomaat sivustolla saavutettavuusongelmia, anna ensin palautetta
+    sivuston ylläpitäjälle. Vastauksessa voi mennä 14 päivää. Jos et ole
+    tyytyväinen saamaasi vastaukseen tai et saa vastausta lainkaan kahden viikon
+    aikana, voit antaa palautteen Etelä-Suomen aluehallintovirastoon.
+  </p>
+
+  <H2 text="Valvontaviranomaisen yhteystiedot" />
+  <ul class="contact-info">
+    <li>Saavutettavuuden valvonnan yksikkö</li>
+    <li>
+      <Link
+        href="https://www.saavutettavuusvaatimukset.fi/"
+        text="Saavutettavuusvaatimukset.fi" />
+    </li>
+    <li>saavutettavuus(at)avi.fi vaihde 0295 016 000</li>
+  </ul>
 </div>
