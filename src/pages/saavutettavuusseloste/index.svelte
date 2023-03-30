@@ -1,7 +1,14 @@
 <script>
+  import { onMount } from 'svelte';
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
   import Link from '@Component/Link/Link';
+
+  let component;
+
+  onMount(() => {
+    component?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 </script>
 
 <style>
@@ -12,12 +19,13 @@
   .contact-info {
     @apply list-none;
   }
+
   p {
     @apply mb-4;
   }
 </style>
 
-<div>
+<div bind:this={component}>
   <H1 text="Saavutettavuusseloste" />
   <p>
     ARA pyrkii takaamaan private.energiatodistusrekisteri.fi saavutettavuuden
@@ -138,7 +146,8 @@
     <li>
       <Link
         href="https://www.saavutettavuusvaatimukset.fi/"
-        text="Saavutettavuusvaatimukset.fi" />
+        text="Saavutettavuusvaatimukset.fi"
+        target="_blank" />
     </li>
     <li>saavutettavuus(at)avi.fi vaihde 0295 016 000</li>
   </ul>
