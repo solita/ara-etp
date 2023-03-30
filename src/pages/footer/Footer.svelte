@@ -63,6 +63,12 @@
         <div>
           <Link
             bold={true}
+            href={'#/saavutettavuusseloste'}
+            text={$_('footer.accessibility-report')} />
+        </div>
+        <div>
+          <Link
+            bold={true}
             href={'pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf'}
             target={'_blank'}
             text={'Tietosuojaseloste Energiatodistusrekisteri (pdf)'} />

@@ -12,6 +12,7 @@ import ValvontaKaytto from '@Pages/valvonta-kaytto';
 import NotFound from '@Pages/not-found/not-found';
 import MyInfo from '@Pages/kayttaja/my-info';
 import LandingPage from '@Pages/kayttaja/landing-page';
+import Saavutettavuusseloste from '@Pages/saavutettavuusseloste';
 
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
@@ -30,5 +31,6 @@ export const buildRoutes = currentUser => ({
       whoami: currentUser
     }
   }),
+  '/saavutettavuusseloste': Saavutettavuusseloste,
   '*': NotFound
 });
