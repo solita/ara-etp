@@ -1,7 +1,15 @@
 <script>
+  import { onMount } from 'svelte';
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
   import Link from '@Component/Link/Link';
+
+  let component;
+
+  onMount(() => {
+    console.log('component', component)
+    component?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 </script>
 
 <style>
@@ -12,12 +20,13 @@
   .contact-info {
     @apply list-none;
   }
+
   p {
     @apply mb-4;
   }
 </style>
 
-<div>
+<div bind:this={component}>
   <H1 text="Saavutettavuusseloste" />
   <p>
     ARA pyrkii takaamaan private.energiatodistusrekisteri.fi saavutettavuuden
