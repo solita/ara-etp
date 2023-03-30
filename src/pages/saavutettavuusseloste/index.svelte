@@ -147,7 +147,8 @@
     <li>
       <Link
         href="https://www.saavutettavuusvaatimukset.fi/"
-        text="Saavutettavuusvaatimukset.fi" />
+        text="Saavutettavuusvaatimukset.fi"
+        target="_blank" />
     </li>
     <li>saavutettavuus(at)avi.fi vaihde 0295 016 000</li>
   </ul>
