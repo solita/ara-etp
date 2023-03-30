@@ -64,7 +64,7 @@
           <Link
             bold={true}
             href={'#/saavutettavuusseloste'}
-            text="Saavutettavuusseloste" />
+            text={$_('footer.accessibility-report')} />
         </div>
         <div>
           <Link
