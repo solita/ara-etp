@@ -16,7 +16,7 @@
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
-  import Select from '@Component/Select/Select.svelte';
+  import Select from '@Component/Select/select2';
   import AineistolupaDialog from './aineistolupa-dialog.svelte';
 
   /*
@@ -173,7 +173,7 @@
 
   <H2 text={i18n('kayttaja.aineistot-header')} />
 
-  <div class="overflow-x-auto">
+  <div>
     <table class="etp-table">
       <thead class="etp-table--thead">
         <tr class="etp-table--tr">
@@ -186,20 +186,39 @@
       </thead>
       <tbody class="etp-table--tbody">
         {#each kayttajaAineistot as aineisto, index}
-          <tr
-            class="etp-table--tr etp-table--tr__link"
-            on:click={() => (configAineistoIndex = Maybe.Some(index))}>
+          <tr class="etp-table--tr etp-table--tr__link">
             <td class="etp-table--td">
-              {Locales.labelForId($locale, aineistot)(aineisto['aineisto-id'])}
+              <Select
+                items={R.pluck('id', aineistot)}
+                format={R.compose(
+                        R.prop('label-fi'),
+                        Maybe.orSome(''),
+                        Maybe.findById(R.__, aineistot)
+                )}
+                bind:model={kayttajaAineistot}
+                lens={R.lensPath([index, 'aineisto-id'])} />
             </td>
             <td class="etp-table--td">
-              {R.compose(
-                Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
-                R.map(Formats.formatDateInstant),
-                EM.toMaybe
-              )(aineisto['valid-until'])}
+              <Datepicker
+                id="valid-until"
+                name="valid-until"
+                bind:model={kayttajaAineistot}
+                lens={R.lensPath([index, 'valid-until'])}
+                format={Maybe.fold('', Formats.formatDateInstant)}
+                parse={Parsers.optionalParser(Parsers.parseDate)}
+                required={false}
+                transform={EM.fromNull}
+                {i18n} />
             </td>
-            <td class="etp-table--td">{aineisto['ip-address']}</td>
+            <td>
+              <Input
+                id="ip-address"
+                name="ip-address"
+                bind:model={kayttajaAineistot}
+                lens={R.lensPath([index, 'ip-address'])}
+                validators={schema['ip-address']}
+                {i18n} />
+            </td>
           </tr>
         {/each}
       </tbody>
