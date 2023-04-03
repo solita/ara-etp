@@ -79,7 +79,7 @@
     dirty = true;
   };
 
-  $: isMaximum = kayttajaAineistot.length >= 10;
+  $: maximumNumberOfIPsGiven = kayttajaAineistot.length >= 10;
 
   const reload = () => {
     configAineistoIndex = Maybe.None();
@@ -202,8 +202,8 @@
               <Select
                 items={R.pluck('id', aineistot)}
                 format={R.compose(
-                  R.prop(`label-${Locales.shortLocale($locale)}`),
-                  Maybe.orSome({}),
+                  Maybe.orSome(''),
+                  R.map(R.prop(`label-${Locales.shortLocale($locale)}`)),
                   Maybe.findById(R.__, aineistot)
                 )}
                 bind:model={kayttajaAineistot}
@@ -237,7 +237,7 @@
     <div class="px-4">
       <Button
         on:click={addNewAineisto}
-        disabled={isMaximum}
+        disabled={maximumNumberOfIPsGiven}
         text={'Lisää'}
         style={'secondary'} />
     </div>
