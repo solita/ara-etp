@@ -18,7 +18,6 @@
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/select2';
   import AineistolupaDialog from './aineistolupa-dialog.svelte';
-  import DropdownList from '@Component/DropdownList/DropdownList';
   import Datepicker from '@Component/Input/Datepicker';
   import * as Parsers from '@Utility/parsers';
 
@@ -41,10 +40,7 @@
   const i18nRoot = 'kayttaja';
 
   const schema = Schema.Aineistoasiakas;
-  console.log('aineistot', aineistot);
 
-  $: console.log('kayttajaAineistot', kayttajaAineistot);
-  $: console.log('locale', $locale)
   $: isValidForm = Validation.isValidForm(schema);
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
@@ -72,9 +68,18 @@
     }
   };
 
+  const addNewAineisto = _ => {
+    kayttajaAineistot = R.append(
+      { 'aineisto-id': 1, 'valid-until': Maybe.None(), 'ip-address': '' },
+      kayttajaAineistot
+    );
+  };
+
   const setDirty = _ => {
     dirty = true;
   };
+
+  $: isMaximum = kayttajaAineistot.length >= 10;
 
   const reload = () => {
     configAineistoIndex = Maybe.None();
@@ -197,9 +202,9 @@
               <Select
                 items={R.pluck('id', aineistot)}
                 format={R.compose(
-                        R.prop(`label-${Locales.shortLocale($locale)}`),
-                        Maybe.orSome({}),
-                        Maybe.findById(R.__, aineistot)
+                  R.prop(`label-${Locales.shortLocale($locale)}`),
+                  Maybe.orSome({}),
+                  Maybe.findById(R.__, aineistot)
                 )}
                 bind:model={kayttajaAineistot}
                 lens={R.lensPath([index, 'aineisto-id'])} />
@@ -229,6 +234,13 @@
         {/each}
       </tbody>
     </table>
+    <div class="px-4">
+      <Button
+        on:click={addNewAineisto}
+        disabled={isMaximum}
+        text={'Lisää'}
+        style={'secondary'} />
+    </div>
   </div>
 
   <div class="flex -mx-4 mt-10">
