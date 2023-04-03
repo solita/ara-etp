@@ -18,6 +18,9 @@
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/select2';
   import AineistolupaDialog from './aineistolupa-dialog.svelte';
+  import DropdownList from '@Component/DropdownList/DropdownList';
+  import Datepicker from '@Component/Input/Datepicker';
+  import * as Parsers from '@Utility/parsers';
 
   /*
    * Note: kayttaja.rooli :: Maybe[Id]
@@ -38,7 +41,10 @@
   const i18nRoot = 'kayttaja';
 
   const schema = Schema.Aineistoasiakas;
+  console.log('aineistot', aineistot);
 
+  $: console.log('kayttajaAineistot', kayttajaAineistot);
+  $: console.log('locale', $locale)
   $: isValidForm = Validation.isValidForm(schema);
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
@@ -191,8 +197,8 @@
               <Select
                 items={R.pluck('id', aineistot)}
                 format={R.compose(
-                        R.prop('label-fi'),
-                        Maybe.orSome(''),
+                        R.prop(`label-${Locales.shortLocale($locale)}`),
+                        Maybe.orSome({}),
                         Maybe.findById(R.__, aineistot)
                 )}
                 bind:model={kayttajaAineistot}
