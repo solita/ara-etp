@@ -199,7 +199,7 @@
             >{i18n(i18nRoot + '.aineisto-lupa-paattymisaika')}</th>
           <th class="etp-table--th" scope="col"
             >{i18n(i18nRoot + '.aineisto-ip-osoite')}</th>
-          <th class="etp-table--th" scope="col"></th>
+          <th class="etp-table--th" scope="col" />
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -238,9 +238,7 @@
                 {i18n} />
             </td>
             <td class="etp-table--td etp-table--td__center">
-              <button
-                type="button"
-                on:click={deleteAineisto(index)}>
+              <button type="button" on:click={deleteAineisto(index)}>
                 <span class="material-icons">delete_forever</span>
               </button>
             </td>
