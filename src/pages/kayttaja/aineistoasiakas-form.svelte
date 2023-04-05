@@ -204,7 +204,7 @@
       </thead>
       <tbody class="etp-table--tbody">
         {#each kayttajaAineistot as aineisto, index}
-          <tr class="etp-table--tr etp-table--tr__link">
+          <tr class="etp-table--tr">
             <td class="etp-table--td">
               <Select
                 items={R.pluck('id', aineistot)}
@@ -238,7 +238,10 @@
                 {i18n} />
             </td>
             <td class="etp-table--td etp-table--td__center">
-              <button type="button" on:click={deleteAineisto(index)}>
+              <button
+                class="hover:bg-althover"
+                type="button"
+                on:click={deleteAineisto(index)}>
                 <span class="material-icons">delete_forever</span>
               </button>
             </td>
