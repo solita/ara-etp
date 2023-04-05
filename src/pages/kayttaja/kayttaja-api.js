@@ -96,26 +96,8 @@ const deserializeKayttajaAineisto = R.evolve({
   'valid-until': Parsers.optionalParser(Parsers.parseISODate)
 });
 
-const fillMissingAineistot = aineistot => deserialized =>
-  R.concat(
-    deserialized,
-    R.differenceWith(
-      R.eqProps('aineisto-id'),
-      R.map(
-        a => ({
-          'aineisto-id': a.id,
-          'valid-until': Either.Right(Maybe.None()),
-          'ip-address': ''
-        }),
-        aineistot
-      ),
-      deserialized
-    )
-  );
-
 export const deserializeKayttajaAineistot = aineistot =>
   R.compose(
-    fillMissingAineistot(aineistot),
     R.map(deserializeKayttajaAineisto)
   );
 
