@@ -75,6 +75,11 @@
     );
   };
 
+  const deleteAineisto = aineistoIndex => _ => {
+    kayttajaAineistot = R.remove(aineistoIndex, 1, kayttajaAineistot);
+    setDirty();
+  };
+
   const setDirty = _ => {
     dirty = true;
   };
@@ -188,11 +193,13 @@
     <table class="etp-table">
       <thead class="etp-table--thead">
         <tr class="etp-table--tr">
-          <th class="etp-table--th">{i18n(i18nRoot + '.aineisto')}</th>
-          <th class="etp-table--th"
+          <th class="etp-table--th" scope="col"
+            >{i18n(i18nRoot + '.aineisto')}</th>
+          <th class="etp-table--th" scope="col"
             >{i18n(i18nRoot + '.aineisto-lupa-paattymisaika')}</th>
-          <th class="etp-table--th"
+          <th class="etp-table--th" scope="col"
             >{i18n(i18nRoot + '.aineisto-ip-osoite')}</th>
+          <th class="etp-table--th" scope="col"></th>
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -221,7 +228,7 @@
                 transform={EM.fromNull}
                 {i18n} />
             </td>
-            <td>
+            <td class="etp-table--td">
               <Input
                 id="ip-address"
                 name="ip-address"
@@ -229,6 +236,13 @@
                 lens={R.lensPath([index, 'ip-address'])}
                 validators={schema['ip-address']}
                 {i18n} />
+            </td>
+            <td class="etp-table--td etp-table--td__center">
+              <button
+                type="button"
+                on:click={deleteAineisto(index)}>
+                <span class="material-icons">delete_forever</span>
+              </button>
             </td>
           </tr>
         {/each}
