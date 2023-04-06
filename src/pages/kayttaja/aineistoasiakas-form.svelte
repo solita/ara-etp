@@ -240,6 +240,10 @@
             <td class="etp-table--td etp-table--td__center">
               <button
                 class="hover:bg-althover"
+                title={i18n(`${i18nRoot}.aineisto-lupa-revoke`)}
+                aria-label={`${i18n(`${i18nRoot}.aineisto-lupa-revoke`)} ${
+                  aineisto['ip-address']
+                }`}
                 type="button"
                 on:click={deleteAineisto(index)}>
                 <span class="material-icons">delete_forever</span>
