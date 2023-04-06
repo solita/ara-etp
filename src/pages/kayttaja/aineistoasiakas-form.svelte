@@ -253,7 +253,7 @@
         {/each}
       </tbody>
     </table>
-    <div class="px-4">
+    <div class="mt-10">
       <Button
         on:click={addNewAineisto}
         disabled={maximumNumberOfIPsGiven}
