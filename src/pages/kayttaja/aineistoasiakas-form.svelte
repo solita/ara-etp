@@ -17,7 +17,6 @@
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/select2';
-  import AineistolupaDialog from './aineistolupa-dialog.svelte';
   import Datepicker from '@Component/Input/Datepicker';
   import * as Parsers from '@Utility/parsers';
 
@@ -33,8 +32,6 @@
   export let submit;
   export let cancel;
   export let whoami;
-
-  let configAineistoIndex = Maybe.None();
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
@@ -87,10 +84,6 @@
   };
 
   $: maximumNumberOfIPsGiven = kayttajaAineistot.length >= 10;
-
-  const reload = () => {
-    configAineistoIndex = Maybe.None();
-  };
 </script>
 
 <form
@@ -281,13 +274,3 @@
     </div>
   </div>
 </form>
-
-{#each Maybe.toArray(configAineistoIndex) as aineistoIndex}
-  <AineistolupaDialog
-    bind:model={kayttajaAineistot}
-    bind:dirty
-    {aineistoIndex}
-    {kayttaja}
-    {reload}
-    {aineistot} />
-{/each}
