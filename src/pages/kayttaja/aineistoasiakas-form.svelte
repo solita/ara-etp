@@ -40,8 +40,10 @@
   const i18nRoot = 'kayttaja';
 
   const schema = Schema.Aineistoasiakas;
+  const aineistoPermitSchema = Schema.aineistolupa;
 
   $: isValidForm = Validation.isValidForm(schema);
+  $: isValidAineisto = Validation.isValidForm(aineistoPermitSchema);
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
@@ -55,7 +57,7 @@
 
   let form;
   const saveKayttaja = _ => {
-    if (isValidForm(kayttaja)) {
+    if (isValidForm(kayttaja) && isValidAineisto(kayttajaAineistot)) {
       flashMessageStore.flush();
       submit(R.evolve({ rooli: Maybe.get }, kayttaja), kayttajaAineistot);
     } else {

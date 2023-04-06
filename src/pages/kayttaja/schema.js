@@ -33,10 +33,12 @@ export const Aineistoasiakas = R.assoc(
 export const virtuSchema = kayttaja =>
   Maybe.isSome(kayttaja.virtu) ? VirtuID : R.map(R.always([]), VirtuID);
 
-export const aineistolupa = {
-  'voimassaolo-paattymisaika': Validation.isPaivamaara,
-  'ip-address': [
-    ...Validation.RequiredString(7, 15),
-    Validation.ipAddressValidator
-  ]
-};
+export const aineistolupa = [
+  {
+    'voimassaolo-paattymisaika': Validation.isPaivamaara,
+    'ip-address': [
+      ...Validation.RequiredString(7, 15),
+      Validation.ipAddressValidator
+    ]
+  }
+];
