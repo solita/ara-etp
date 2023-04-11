@@ -5,7 +5,7 @@ export default { title: 'DropdownList' };
 export const withItems = () => ({
   Component: DropdownList,
   props: {
-    state: [
+    items: [
       'dropitem1',
       'dropitem2',
       'dropitem1',
