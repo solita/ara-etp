@@ -252,7 +252,7 @@
       <Button
         on:click={addNewAineisto}
         disabled={maximumNumberOfIPsGiven}
-        text={'Lisää'}
+        text={i18n(`${i18nRoot}.aineisto-lupa-grant`)}
         style={'secondary'} />
     </div>
   </div>
