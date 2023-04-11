@@ -287,6 +287,14 @@ export const validateModelValue = R.curry((validators, value) =>
   )
 );
 
+const expandSchemaToObjectSize = (schemaObject, object) =>
+  Array.isArray(schemaObject) &&
+  schemaObject.length === 1 &&
+  Array.isArray(object) &&
+  object.length > 1
+    ? R.map(R.always(schemaObject[0]), R.range(0, object.length))
+    : schemaObject;
+
 /**
  * @sig Object -> Object -> Object
  */
@@ -295,7 +303,7 @@ export const validateModelObject = R.curry((schemaObject, object) =>
     deep.map(
       R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
       v => validateModelValue(v),
-      schemaObject
+      expandSchemaToObjectSize(schemaObject, object)
     ),
     object
   )

@@ -16,8 +16,9 @@
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
-  import Select from '@Component/Select/Select.svelte';
-  import AineistolupaDialog from './aineistolupa-dialog.svelte';
+  import Select from '@Component/Select/select2';
+  import Datepicker from '@Component/Input/Datepicker';
+  import * as Parsers from '@Utility/parsers';
 
   /*
    * Note: kayttaja.rooli :: Maybe[Id]
@@ -32,14 +33,14 @@
   export let cancel;
   export let whoami;
 
-  let configAineistoIndex = Maybe.None();
-
   const i18n = $_;
   const i18nRoot = 'kayttaja';
 
   const schema = Schema.Aineistoasiakas;
+  const aineistoPermitSchema = Schema.aineistolupa;
 
   $: isValidForm = Validation.isValidForm(schema);
+  $: isValidAineisto = Validation.isValidForm(aineistoPermitSchema);
 
   $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
@@ -53,7 +54,7 @@
 
   let form;
   const saveKayttaja = _ => {
-    if (isValidForm(kayttaja)) {
+    if (isValidForm(kayttaja) && isValidAineisto(kayttajaAineistot)) {
       flashMessageStore.flush();
       submit(R.evolve({ rooli: Maybe.get }, kayttaja), kayttajaAineistot);
     } else {
@@ -66,13 +67,23 @@
     }
   };
 
+  const addNewAineisto = _ => {
+    kayttajaAineistot = R.append(
+      { 'aineisto-id': 1, 'valid-until': Maybe.None(), 'ip-address': '' },
+      kayttajaAineistot
+    );
+  };
+
+  const deleteAineisto = aineistoIndex => _ => {
+    kayttajaAineistot = R.remove(aineistoIndex, 1, kayttajaAineistot);
+    setDirty();
+  };
+
   const setDirty = _ => {
     dirty = true;
   };
 
-  const reload = () => {
-    configAineistoIndex = Maybe.None();
-  };
+  $: maximumNumberOfIPsGiven = kayttajaAineistot.length >= 10;
 </script>
 
 <form
@@ -173,37 +184,77 @@
 
   <H2 text={i18n('kayttaja.aineistot-header')} />
 
-  <div class="overflow-x-auto">
+  <div>
     <table class="etp-table">
       <thead class="etp-table--thead">
         <tr class="etp-table--tr">
-          <th class="etp-table--th">{i18n(i18nRoot + '.aineisto')}</th>
-          <th class="etp-table--th"
+          <th class="etp-table--th" scope="col"
+            >{i18n(i18nRoot + '.aineisto')}</th>
+          <th class="etp-table--th" scope="col"
             >{i18n(i18nRoot + '.aineisto-lupa-paattymisaika')}</th>
-          <th class="etp-table--th"
+          <th class="etp-table--th" scope="col"
             >{i18n(i18nRoot + '.aineisto-ip-osoite')}</th>
+          <th class="etp-table--th" scope="col" />
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
         {#each kayttajaAineistot as aineisto, index}
-          <tr
-            class="etp-table--tr etp-table--tr__link"
-            on:click={() => (configAineistoIndex = Maybe.Some(index))}>
+          <tr class="etp-table--tr">
             <td class="etp-table--td">
-              {Locales.labelForId($locale, aineistot)(aineisto['aineisto-id'])}
+              <Select
+                items={R.pluck('id', aineistot)}
+                format={R.compose(
+                  Maybe.orSome(''),
+                  R.map(R.prop(`label-${Locales.shortLocale($locale)}`)),
+                  Maybe.findById(R.__, aineistot)
+                )}
+                bind:model={kayttajaAineistot}
+                lens={R.lensPath([index, 'aineisto-id'])} />
             </td>
             <td class="etp-table--td">
-              {R.compose(
-                Maybe.orSome(i18n(i18nRoot + '.aineisto-ei-lupaa')),
-                R.map(Formats.formatDateInstant),
-                EM.toMaybe
-              )(aineisto['valid-until'])}
+              <Datepicker
+                id="valid-until"
+                name="valid-until"
+                bind:model={kayttajaAineistot}
+                lens={R.lensPath([index, 'valid-until'])}
+                format={Maybe.fold('', Formats.formatDateInstant)}
+                parse={Parsers.optionalParser(Parsers.parseDate)}
+                required={false}
+                transform={EM.fromNull}
+                {i18n} />
             </td>
-            <td class="etp-table--td">{aineisto['ip-address']}</td>
+            <td class="etp-table--td">
+              <Input
+                id="ip-address"
+                name="ip-address"
+                bind:model={kayttajaAineistot}
+                lens={R.lensPath([index, 'ip-address'])}
+                validators={schema['ip-address']}
+                {i18n} />
+            </td>
+            <td class="etp-table--td etp-table--td__center">
+              <button
+                class="hover:bg-althover"
+                title={i18n(`${i18nRoot}.aineisto-lupa-revoke`)}
+                aria-label={`${i18n(`${i18nRoot}.aineisto-lupa-revoke`)} ${
+                  aineisto['ip-address']
+                }`}
+                type="button"
+                on:click={deleteAineisto(index)}>
+                <span class="material-icons">delete_forever</span>
+              </button>
+            </td>
           </tr>
         {/each}
       </tbody>
     </table>
+    <div class="mt-10">
+      <Button
+        on:click={addNewAineisto}
+        disabled={maximumNumberOfIPsGiven}
+        text={i18n(`${i18nRoot}.aineisto-lupa-grant`)}
+        style={'secondary'} />
+    </div>
   </div>
 
   <div class="flex -mx-4 mt-10">
@@ -223,13 +274,3 @@
     </div>
   </div>
 </form>
-
-{#each Maybe.toArray(configAineistoIndex) as aineistoIndex}
-  <AineistolupaDialog
-    bind:model={kayttajaAineistot}
-    bind:dirty
-    {aineistoIndex}
-    {kayttaja}
-    {reload}
-    {aineistot} />
-{/each}
