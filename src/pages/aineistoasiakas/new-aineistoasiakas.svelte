@@ -91,18 +91,11 @@
     response => {
       resources = Maybe.Some(response);
       overlay = false;
-      if (kayttajaAineistot.length === 0) {
-        kayttajaAineistot = response.emptyAineistot;
-      }
     },
     Future.parallelObject(3, {
       whoami: KayttajaApi.whoami,
       roolit: KayttajaApi.roolit,
-      aineistot: aineistotFuture,
-      emptyAineistot: R.map(
-        aineistot => KayttajaApi.deserializeKayttajaAineistot(aineistot)([]),
-        aineistotFuture
-      )
+      aineistot: aineistotFuture
     })
   );
 </script>
