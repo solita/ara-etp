@@ -20,6 +20,10 @@
   import Manager from './manager.svelte';
   import Toimenpide from './toimenpide.svelte';
   import Note from './note.svelte';
+  import * as versionApi from '@Component/Version/version-api';
+  import { isProduction } from '@Utility/config-utils';
+
+  const TOIMENPIDETYPES_ALLOWED_IN_PRODUCTION = [0, 1, 2, 3, 4, 5];
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.valvonta';
@@ -46,11 +50,22 @@
         overlay = false;
       },
       R.chain(
-        whoami =>
+        ({ whoami, environment }) =>
           Future.parallelObject(7, {
             toimenpiteet: ValvontaApi.toimenpiteet(params.id),
             notes: ValvontaApi.notes(params.id),
-            toimenpidetyypit: ValvontaApi.toimenpidetyypit,
+            toimenpidetyypit: R.when(
+              R.always(isProduction(environment)),
+              R.map(
+                R.filter(
+                  R.propSatisfies(
+                    R.includes(R.__, TOIMENPIDETYPES_ALLOWED_IN_PRODUCTION),
+                    'id'
+                  )
+                )
+              ),
+              ValvontaApi.toimenpidetyypit
+            ),
             templatesByType: ValvontaApi.templatesByType,
             roolit: ValvontaApi.roolit,
             toimitustavat: ValvontaApi.toimitustavat,
@@ -61,7 +76,10 @@
             postinumerot: GeoApi.postinumerot,
             whoami: Future.resolve(whoami)
           }),
-        KayttajaApi.whoami
+        Future.parallelObject(2, {
+          whoami: KayttajaApi.whoami,
+          environment: R.map(R.prop('environment'), versionApi.getConfig)
+        })
       )
     );
   };
