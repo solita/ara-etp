@@ -72,7 +72,7 @@
 <div class="flex lg:flex-row flex-col -mx-4">
   <div class="lg:w-3/5 w-full px-4 py-4">
     <Input
-      {disabled}
+      disabled={Kayttajat.isPaakayttaja(whoami) ? false : disabled}
       {schema}
       {center}
       inputLanguage={Maybe.Some(inputLanguage)}
