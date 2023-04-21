@@ -55,7 +55,8 @@
     julkinenwwwosoite: false,
     julkinenemail: false,
     julkinenosoite: false,
-    julkinenpuhelin: false
+    julkinenpuhelin: false,
+    julkinenpostinumero: false
   };
 
   let laatija = emptyLaatija;
