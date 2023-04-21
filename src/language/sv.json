@@ -1210,7 +1210,8 @@
         "signing-failed": "Undertecknandet avbröts av okänd anledning. Du kan börja underteckna på nytt eller avbryta undertecknandet.",
         "name-does-not-match": "Undertecknarens namn på personcertifikatet motsvarar inte användarens namn i systemet.",
         "laatimiskielto": "Ingen underteckningsprocess är möjlig eftersom upprättaren har förbjudits att upprätta dokument.",
-        "patevyys-expired": "Ingen underteckningsprocess är möjlig eftersom upprättarens behörighet har upphört."
+        "patevyys-expired": "Ingen underteckningsprocess är möjlig eftersom upprättarens behörighet har upphört.",
+        "expired-signing-certificate": "Ingen underteckningsprocess är möjlig eftersom identitetskortet har föråldrats."
       },
       "status": {
         "not-started": "Du kan nu underteckna energicertifikatet {language-genitive}.",
