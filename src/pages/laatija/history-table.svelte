@@ -4,7 +4,6 @@
   import * as Formats from '@Utility/formats';
   import * as Locales from '@Language/locale-utils';
   import { locale, _ } from '@Language/i18n';
-  import Link from '@Component/Link/Link';
 
   const i18n = $_;
   const i18nRoot = 'kayttaja.muutoshistoria';
@@ -84,6 +83,12 @@
                   ? 'font-bold text-primary'
                   : 'text-disabled'}>
                 {i18n(i18nRoot + '.osoite')}
+              </span>
+              <span
+                class={h.julkinenpostinumero
+                  ? 'font-bold text-primary'
+                  : 'text-disabled'}>
+                {i18n(i18nRoot + '.postinumero')}
               </span>
               <span
                 class={h.julkinenpuhelin

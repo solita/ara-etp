@@ -243,7 +243,8 @@
       "rooli": "Roll",
       "patevyystaso": "Behörighet",
       "laskutuskieli": "Faktureringsspråk",
-      "www-osoite": "webbadress"
+      "www-osoite": "webbadress",
+      "postinumero": "Postnummer"
     },
     "verification": {
       "header": "Påminnelse om kontroll av personuppgifter",
