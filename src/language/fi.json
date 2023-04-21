@@ -1268,9 +1268,9 @@
         "abort-failed": "Keskeyttäminen epäonnistui",
         "signing-failed": "Allekirjoittaminen keskeytyi tuntemattomasta syystä. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
         "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä.",
-        "laatimiskielto": "Allekirjoittamen ei ole mahdollista koska laatija on laatimiskiellossa.",
-        "patevyys-expired": "Allekirjoittamen ei ole mahdollista, koska laatijan pätevyys on päättynyt.",
-        "expired-signing-certificate": "Allekirjoittamen ei ole mahdollista, koska henkilökortin voimassaolo on päättynyt."
+        "laatimiskielto": "Allekirjoittaminen ei ole mahdollista koska laatija on laatimiskiellossa.",
+        "patevyys-expired": "Allekirjoittaminen ei ole mahdollista, koska laatijan pätevyys on päättynyt.",
+        "expired-signing-certificate": "Allekirjoittaminen ei ole mahdollista, koska henkilökortin voimassaolo on päättynyt."
       },
       "status": {
         "not-started": "Voit nyt allekirjoittaa {language-genitive} energiatodistuksen.",
