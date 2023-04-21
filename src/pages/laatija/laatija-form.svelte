@@ -466,6 +466,13 @@
       <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
         <Checkbox
           bind:model={laatija}
+          lens={R.lensProp('julkinenpostinumero')}
+          {disabled}
+          label={i18n('laatija.postinumero')} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+        <Checkbox
+          bind:model={laatija}
           lens={R.lensProp('julkinenwwwosoite')}
           disabled={disabled ||
             !R.compose(Maybe.isSome, R.prop('wwwosoite'))(laatija)}

@@ -262,7 +262,8 @@
       "rooli": "Rooli",
       "patevyystaso": "Pätevyys",
       "laskutuskieli": "Laskutuskieli",
-      "www-osoite": "www-osoite"
+      "www-osoite": "www-osoite",
+      "postinumero": "Postinumero"
     },
     "verification": {
       "header": "Muistutus henkilötietojen tarkistamisesta",
