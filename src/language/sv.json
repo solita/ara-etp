@@ -1567,7 +1567,11 @@
         "anomaly": {
           "title": "Anmäl avvikelse",
           "info": "Med den här åtgärden antecknas en avvikelse på energicertifikatet, men ingen omfattande kontroll inleds.",
-          "description": "Anmälan om avvikelse",
+          "description-fi": "Poikkeamailmoitus",
+          "description-sv": "Anmälan om avvikelse",
+          "language-selection": "Språket för anmälan om avvikelse",
+          "fi": "finska",
+          "sv": "svenska",
           "publish-button": "Skicka anmälan"
         },
         "case": {

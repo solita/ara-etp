@@ -21,6 +21,8 @@
   import Dialog from '@Component/dialog/dialog';
   import Select from '@Component/Select/Select.svelte';
   import * as Validation from '@Utility/validation';
+  import Radio from '@Component/Radio/Radio';
+  import Fieldset from '@Component/Fieldset';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
@@ -37,6 +39,8 @@
 
   let publishPending = false;
   let previewPending = false;
+
+  let anomalyMessageLanguage = 'fi';
 
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
   $: formatTemplate = Locales.labelForId($locale, templates);
@@ -67,7 +71,9 @@
           );
           reload();
         },
-        ValvontaApi.postToimenpide(id, toimenpide)
+        Toimenpiteet.isAnomaly(toimenpide)
+          ? ValvontaApi.postAnomaly(id, toimenpide, anomalyMessageLanguage)
+          : ValvontaApi.postToimenpide(id, toimenpide)
       );
     } else {
       error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
@@ -164,6 +170,31 @@
         validation={true}
         format={formatTemplate}
         items={R.pluck('id', templates)} />
+    </div>
+  {:else if Toimenpiteet.isAnomaly(toimenpide)}
+    <div class="w-full py-4">
+      <Fieldset legendText={text(toimenpide, 'language-selection')}>
+        <Radio
+          bind:group={anomalyMessageLanguage}
+          value="fi"
+          label={text(toimenpide, 'fi')} />
+        <Radio
+          bind:group={anomalyMessageLanguage}
+          value="sv"
+          label={text(toimenpide, 'sv')} />
+      </Fieldset>
+      <Textarea
+        {disabled}
+        id={'toimenpide.description'}
+        name={'toimenpide.description'}
+        label={text(toimenpide, `description-${anomalyMessageLanguage}`)}
+        bind:model={toimenpide}
+        lens={R.lensProp('description')}
+        required={false}
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={schema.description}
+        {i18n} />
     </div>
   {:else}
     <div class="w-full py-4">
