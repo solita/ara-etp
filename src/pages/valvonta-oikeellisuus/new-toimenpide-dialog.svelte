@@ -22,7 +22,7 @@
   import Select from '@Component/Select/Select.svelte';
   import * as Validation from '@Utility/validation';
   import Radio from '@Component/Radio/Radio';
-  import Fieldset from '@Component/Fieldset';
+  import Fieldset from '@Component/Fieldset/Fieldset';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
