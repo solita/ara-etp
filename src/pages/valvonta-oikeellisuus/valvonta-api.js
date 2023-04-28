@@ -16,6 +16,8 @@ export const url = {
   valvonnat: 'api/private/valvonta/oikeellisuus',
   valvonta: id => `${url.valvonnat}/${id}`,
   toimenpiteet: id => `${url.valvonta(id)}/toimenpiteet`,
+  anomaly: (id, language) =>
+    `${url.valvonta(id)}/toimenpiteet?language=${language}`,
   preview: id => `${url.valvonta(id)}/toimenpiteet/preview`,
   toimenpide: (id, toimenpideId) => `${url.toimenpiteet(id)}/${toimenpideId}`,
   document: (id, toimenpideId, filename) =>
@@ -143,6 +145,16 @@ export const postToimenpide = R.curry((id, toimenpide) =>
   R.compose(
     Fetch.responseAsJson,
     Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', url.toimenpiteet(id))),
+    serializeToimenpide
+  )(toimenpide)
+);
+
+export const postAnomaly = R.curry((id, toimenpide, language) =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(
+      Fetch.fetchWithMethod(fetch, 'post', url.anomaly(id, language))
+    ),
     serializeToimenpide
   )(toimenpide)
 );

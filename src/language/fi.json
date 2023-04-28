@@ -1528,7 +1528,11 @@
         "anomaly": {
           "title": "Ilmoita poikkeamasta",
           "info": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä.",
-          "description": "Poikkeamailmoitus",
+          "description-fi": "Poikkeamailmoitus",
+          "description-sv": "Anmälan om avvikelse",
+          "language-selection": "Poikkeamailmoituksen kieli",
+          "fi": "suomi",
+          "sv": "ruotsi",
           "publish-button": "Lähetä ilmoitus"
         },
         "case": {
