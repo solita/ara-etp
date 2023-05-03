@@ -25,6 +25,7 @@
   import { flashMessageStore } from '@/stores';
   import Autocomplete from '../../components/Autocomplete/Autocomplete.svelte';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
+  import * as ValvontaApi from './valvonta-api';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
@@ -41,29 +42,41 @@
   let form;
   let showRakennustunnusSpinner = false;
   let etForRakennustunnus = [];
+  let existingValvonnatForRakennustunnus = Maybe.None();
+
   $: rakennustunnus = kohde.rakennustunnus;
   $: getEnergiatodistuksetByRakennustunnus(rakennustunnus);
 
   const getEnergiatodistuksetByRakennustunnus = R.forEach(rakennustunnus => {
     showRakennustunnusSpinner = true;
     Future.fork(
-      response => {
+      ({ energiatodistukset }) => {
         showRakennustunnusSpinner = false;
         flashMessageStore.add(
           'valvonta-kaytto',
           'error',
-          i18n(Response.errorKey(i18nRoot, 'find-rakennustunnus', response))
+          i18n(
+            Response.errorKey(
+              i18nRoot,
+              'find-rakennustunnus',
+              energiatodistukset
+            )
+          )
         );
       },
-      response => {
+      ({ energiatodistukset, valvonnat }) => {
         showRakennustunnusSpinner = false;
-        etForRakennustunnus = response;
+        etForRakennustunnus = energiatodistukset;
+        existingValvonnatForRakennustunnus = Maybe.Some(valvonnat);
       },
-      etApi.getEnergiatodistukset(
-        `?where=${encodeURI(
-          `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
-        )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
-      )
+      Future.parallelObject(2, {
+        energiatodistukset: etApi.getEnergiatodistukset(
+          `?where=${encodeURI(
+            `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
+          )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
+        ),
+        valvonnat: ValvontaApi.getValvonnatByRakennusTunnus(rakennustunnus)
+      })
     );
   });
 
@@ -166,6 +179,18 @@
           {i18n} />
       </Autocomplete>
     </div>
+
+    {#if existingValvonnatForRakennustunnus.isSome()}
+      <div>
+        <h3>Aiemmat valvonnat</h3>
+        {#each existingValvonnatForRakennustunnus.some() as valvonta, index}
+          <Link
+            href={`#/valvonta/kaytto/${valvonta.id}/valvonta`}
+            target="_blank"
+            text={valvonta.id} />
+        {/each}
+      </div>
+    {/if}
   </div>
   <div class="flex flex-col w-full py-8">
     <H2 text={i18n(`${i18nRoot}.ilmoituksen-tiedot`)} />

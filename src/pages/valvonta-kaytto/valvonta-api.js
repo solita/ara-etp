@@ -416,3 +416,6 @@ export const postLiitteetLink = R.curry((valvontaId, link) =>
 export const deleteLiite = R.curry((valvontaId, liiteId) =>
   Fetch.deleteFuture(url.liitteet(valvontaId) + '/' + liiteId)
 );
+
+export const getValvonnatByRakennusTunnus = rakennustunnus =>
+  Fetch.cached(fetch, `/valvonta/kaytto/rakennustunnus/${rakennustunnus}/`);
