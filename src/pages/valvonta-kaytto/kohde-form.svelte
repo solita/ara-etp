@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Parsers from '@Utility/parsers';
@@ -43,7 +44,7 @@
   let form;
   let showRakennustunnusSpinner = false;
   let etForRakennustunnus = [];
-  let existingValvonnatForRakennustunnus = Maybe.None();
+  let existingValvonnatForRakennustunnus = [];
 
   $: rakennustunnus = kohde.rakennustunnus;
   $: getEnergiatodistuksetByRakennustunnus(rakennustunnus);
@@ -68,7 +69,11 @@
       ({ energiatodistukset, valvonnat }) => {
         showRakennustunnusSpinner = false;
         etForRakennustunnus = energiatodistukset;
-        existingValvonnatForRakennustunnus = Maybe.Some(valvonnat);
+
+        existingValvonnatForRakennustunnus = R.map(
+          R.evolve({ id: parseInt, 'end-time': Maybe.fromNull }),
+          valvonnat
+        );
       },
       Future.parallelObject(2, {
         energiatodistukset: etApi.getEnergiatodistukset(
@@ -101,6 +106,17 @@
   $: postinumeroNames = R.map(Postinumero.fullLabel($locale), postinumerot);
   $: PostinumeroType = Postinumero.Type(postinumerot);
   $: schema = R.assoc('postinumero', PostinumeroType.validators, kohdeSchema);
+
+  const formatExistingValvontaEndDate = Maybe.fold(
+    '',
+    R.compose(
+      R.concat(', valvonta päättynyt '),
+      Formats.formatDateInstant,
+      Maybe.get,
+      Either.toMaybe,
+      Parsers.parseISODate
+    )
+  );
 </script>
 
 <form
@@ -181,14 +197,18 @@
       </Autocomplete>
     </div>
 
-    {#if isNew && existingValvonnatForRakennustunnus.isSome()}
+    {#if isNew && !R.isEmpty(existingValvonnatForRakennustunnus)}
       <div>
         <h3>Aiemmat valvonnat</h3>
-        {#each existingValvonnatForRakennustunnus.some() as valvonta, index}
-          <Link
-            href={`#/valvonta/kaytto/${valvonta.id}/valvonta`}
-            target="_blank"
-            text={valvonta.id} />
+        {#each existingValvonnatForRakennustunnus as valvonta, index}
+          <div>
+            <Link
+              href={`#/valvonta/kaytto/${valvonta.id}/valvonta`}
+              target="_blank"
+              text={`Käytönvalvonta ${
+                valvonta.id
+              }${formatExistingValvontaEndDate(valvonta['end-time'])}`} />
+          </div>
         {/each}
       </div>
     {/if}
