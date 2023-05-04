@@ -1753,6 +1753,10 @@
         "title": "Käytönvalvonta",
         "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen",
         "no-attachments": "Ei liitteitä",
+        "previous": {
+          "title": "Aiemmat käytönvalvonnat",
+          "ended": "valvonta päättynyt"
+        },
         "messages": {
           "not-found": "Käytönvalvontaa ei ole olemassa.",
           "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",

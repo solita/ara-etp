@@ -106,7 +106,7 @@
   const formatExistingValvontaEndDate = Maybe.fold(
     '',
     R.compose(
-      R.concat(', valvonta päättynyt '),
+      R.concat(`, ${i18n(`${i18nRoot}.previous.ended`)} `),
       Formats.formatDateInstant,
       Maybe.get
     )
@@ -193,13 +193,13 @@
 
     {#if isNew && !R.isEmpty(existingValvonnatForRakennustunnus)}
       <div>
-        <h3>Aiemmat valvonnat</h3>
+        <h3>{`${i18n(`${i18nRoot}.previous.title`)}`}</h3>
         {#each existingValvonnatForRakennustunnus as valvonta, index}
           <div>
             <Link
               href={`#/valvonta/kaytto/${valvonta.id}/valvonta`}
               target="_blank"
-              text={`Käytönvalvonta ${
+              text={`${i18n(`${i18nRoot}.title`)} ${
                 valvonta.id
               }${formatExistingValvontaEndDate(valvonta['end-time'])}`} />
           </div>
