@@ -1,7 +1,6 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Parsers from '@Utility/parsers';
@@ -69,11 +68,7 @@
       ({ energiatodistukset, valvonnat }) => {
         showRakennustunnusSpinner = false;
         etForRakennustunnus = energiatodistukset;
-
-        existingValvonnatForRakennustunnus = R.map(
-          R.evolve({ id: parseInt, 'end-time': Maybe.fromNull }),
-          valvonnat
-        );
+        existingValvonnatForRakennustunnus = valvonnat;
       },
       Future.parallelObject(2, {
         energiatodistukset: etApi.getEnergiatodistukset(
@@ -81,7 +76,8 @@
             `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
           )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
         ),
-        valvonnat: ValvontaApi.getValvonnatByRakennusTunnus(rakennustunnus)
+        valvonnat:
+          ValvontaApi.getExistingValvonnatByRakennusTunnus(rakennustunnus)
       })
     );
   });
@@ -112,9 +108,7 @@
     R.compose(
       R.concat(', valvonta päättynyt '),
       Formats.formatDateInstant,
-      Maybe.get,
-      Either.toMaybe,
-      Parsers.parseISODate
+      Maybe.get
     )
   );
 </script>

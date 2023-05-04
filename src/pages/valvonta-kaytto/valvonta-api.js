@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Objects from '@Utility/objects';
+import * as Either from '@Utility/either-utils';
 import * as Fetch from '@Utility/fetch-utils';
 import * as Future from '@Utility/future-utils';
 import * as Maybe from '@Utility/maybe-utils';
@@ -417,5 +418,18 @@ export const deleteLiite = R.curry((valvontaId, liiteId) =>
   Fetch.deleteFuture(url.liitteet(valvontaId) + '/' + liiteId)
 );
 
-export const getValvonnatByRakennusTunnus = rakennustunnus =>
-  Fetch.cached(fetch, `/valvonta/kaytto/rakennustunnus/${rakennustunnus}/`);
+const deserializeExistingValvonnat = R.map(
+  R.evolve({
+    id: parseInt,
+    'end-time': R.compose(
+      R.map(Either.toMaybe),
+      R.map(Parsers.parseISODate),
+      R.tap(console.log),
+      Maybe.fromNull
+    )
+  })
+);
+export const getExistingValvonnatByRakennusTunnus = rakennustunnus =>
+  R.compose(R.map(deserializeExistingValvonnat), () =>
+    Fetch.cached(fetch, `/valvonta/kaytto/rakennustunnus/${rakennustunnus}/`)
+  )();
