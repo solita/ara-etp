@@ -98,7 +98,8 @@
         {ilmoituspaikat}
         {postinumerot}
         save={addKohde}
-        revert={resetForm} />
+        revert={resetForm}
+        isNew={true} />
       <div class="flex">
         <span>{i18n(`${i18nRoot}.after-save-notice`)}</span>
       </div>

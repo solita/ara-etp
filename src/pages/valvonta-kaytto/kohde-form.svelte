@@ -38,6 +38,7 @@
   export let revert;
   export let remove = Maybe.None();
   export let dirty;
+  export let isNew = true;
 
   let form;
   let showRakennustunnusSpinner = false;
@@ -180,7 +181,7 @@
       </Autocomplete>
     </div>
 
-    {#if existingValvonnatForRakennustunnus.isSome()}
+    {#if isNew && existingValvonnatForRakennustunnus.isSome()}
       <div>
         <h3>Aiemmat valvonnat</h3>
         {#each existingValvonnatForRakennustunnus.some() as valvonta, index}
