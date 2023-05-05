@@ -113,6 +113,12 @@
   );
 </script>
 
+<style>
+  h3 {
+    @apply font-bold my-2;
+  }
+</style>
+
 <form
   class="content"
   bind:this={form}
