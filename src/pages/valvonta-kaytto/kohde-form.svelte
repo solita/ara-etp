@@ -107,8 +107,7 @@
     '',
     R.compose(
       R.concat(`, ${i18n(`${i18nRoot}.previous.ended`)} `),
-      Formats.formatDateInstant,
-      Maybe.get
+      Formats.formatDateInstant
     )
   );
 </script>

@@ -422,14 +422,15 @@ const deserializeExistingValvonnat = R.map(
   R.evolve({
     id: parseInt,
     'end-time': R.compose(
-      R.map(Either.toMaybe),
+      R.chain(Either.toMaybe),
       R.map(Parsers.parseISODate),
-      R.tap(console.log),
       Maybe.fromNull
     )
   })
 );
+
 export const getExistingValvonnatByRakennusTunnus = rakennustunnus =>
-  R.compose(R.map(deserializeExistingValvonnat), () =>
+  R.map(
+    deserializeExistingValvonnat,
     Fetch.cached(fetch, `/valvonta/kaytto/rakennustunnus/${rakennustunnus}/`)
-  )();
+  );
