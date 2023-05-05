@@ -1777,7 +1777,7 @@
         "download-all": "Ladda alla kontroller"
       },
       "kohde": {
-        "title": "Objekt",
+        "title": "Användningskontroll",
         "rakennuksen-tiedot": "Uppgifter om byggnaden",
         "rakennustunnus": "Byggnadsbeteckning",
         "katuosoite": "Gatuadress",
@@ -1795,6 +1795,10 @@
         "new-valvonta-title": "Ny användningskontroll",
         "after-save-notice": "Efter att du sparat kan du lägga till bilagor och parter",
         "no-attachments": "Inga bilagor",
+        "previous": {
+          "title": "Tidigare användningskontroller",
+          "ended": "färdig"
+        },
         "messages": {
           "not-found": "Det existerar ingen användningskontroll",
           "load-error": "Det gick inte att söka uppgifter om användningskontrollen.",
