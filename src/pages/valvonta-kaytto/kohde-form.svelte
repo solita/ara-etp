@@ -9,6 +9,7 @@
   import * as Locales from '@Language/locale-utils';
   import * as Ilmoituspaikka from './ilmoituspaikka';
   import * as Postinumero from '@Component/address/postinumero-fi';
+  import * as Response from '@Utility/response';
 
   import { _, locale } from '@Language/i18n';
   import { kohde as kohdeSchema } from '@Pages/valvonta-kaytto/schema';
@@ -51,18 +52,12 @@
   const getEnergiatodistuksetByRakennustunnus = R.forEach(rakennustunnus => {
     showRakennustunnusSpinner = true;
     Future.fork(
-      ({ energiatodistukset }) => {
+      response => {
         showRakennustunnusSpinner = false;
         flashMessageStore.add(
           'valvonta-kaytto',
           'error',
-          i18n(
-            Response.errorKey(
-              i18nRoot,
-              'find-rakennustunnus',
-              energiatodistukset
-            )
-          )
+          i18n(Response.errorKey(i18nRoot, 'find-rakennustunnus', response))
         );
       },
       ({ energiatodistukset, valvonnat }) => {
