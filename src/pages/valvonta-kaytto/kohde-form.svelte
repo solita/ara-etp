@@ -9,6 +9,7 @@
   import * as Locales from '@Language/locale-utils';
   import * as Ilmoituspaikka from './ilmoituspaikka';
   import * as Postinumero from '@Component/address/postinumero-fi';
+  import * as Response from '@Utility/response';
 
   import { _, locale } from '@Language/i18n';
   import { kohde as kohdeSchema } from '@Pages/valvonta-kaytto/schema';
@@ -25,6 +26,7 @@
   import { flashMessageStore } from '@/stores';
   import Autocomplete from '../../components/Autocomplete/Autocomplete.svelte';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
+  import * as ValvontaApi from './valvonta-api';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
@@ -37,10 +39,13 @@
   export let revert;
   export let remove = Maybe.None();
   export let dirty;
+  export let isNew = true;
 
   let form;
   let showRakennustunnusSpinner = false;
   let etForRakennustunnus = [];
+  let existingValvonnatForRakennustunnus = [];
+
   $: rakennustunnus = kohde.rakennustunnus;
   $: getEnergiatodistuksetByRakennustunnus(rakennustunnus);
 
@@ -55,15 +60,20 @@
           i18n(Response.errorKey(i18nRoot, 'find-rakennustunnus', response))
         );
       },
-      response => {
+      ({ energiatodistukset, valvonnat }) => {
         showRakennustunnusSpinner = false;
-        etForRakennustunnus = response;
+        etForRakennustunnus = energiatodistukset;
+        existingValvonnatForRakennustunnus = valvonnat;
       },
-      etApi.getEnergiatodistukset(
-        `?where=${encodeURI(
-          `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
-        )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
-      )
+      Future.parallelObject(2, {
+        energiatodistukset: etApi.getEnergiatodistukset(
+          `?where=${encodeURI(
+            `[[["ilike","energiatodistus.perustiedot.rakennustunnus","${rakennustunnus}"],["in","energiatodistus.tila-id", [0,1,2]]]]`
+          )}&limit=11&order=asc&sort=energiatodistus.id&offset=0`
+        ),
+        valvonnat:
+          ValvontaApi.getExistingValvonnatByRakennusTunnus(rakennustunnus)
+      })
     );
   });
 
@@ -87,7 +97,21 @@
   $: postinumeroNames = R.map(Postinumero.fullLabel($locale), postinumerot);
   $: PostinumeroType = Postinumero.Type(postinumerot);
   $: schema = R.assoc('postinumero', PostinumeroType.validators, kohdeSchema);
+
+  const formatExistingValvontaEndDate = Maybe.fold(
+    '',
+    R.compose(
+      R.concat(`, ${i18n(`${i18nRoot}.previous.ended`)} `),
+      Formats.formatDateInstant
+    )
+  );
 </script>
+
+<style>
+  h3 {
+    @apply font-bold my-2;
+  }
+</style>
 
 <form
   class="content"
@@ -166,6 +190,22 @@
           {i18n} />
       </Autocomplete>
     </div>
+
+    {#if isNew && !R.isEmpty(existingValvonnatForRakennustunnus)}
+      <div>
+        <h3>{`${i18n(`${i18nRoot}.previous.title`)}`}</h3>
+        {#each existingValvonnatForRakennustunnus as valvonta, index}
+          <div>
+            <Link
+              href={`#/valvonta/kaytto/${valvonta.id}/valvonta`}
+              target="_blank"
+              text={`${i18n(`${i18nRoot}.title`)} ${
+                valvonta.id
+              }${formatExistingValvontaEndDate(valvonta['end-time'])}`} />
+          </div>
+        {/each}
+      </div>
+    {/if}
   </div>
   <div class="flex flex-col w-full py-8">
     <H2 text={i18n(`${i18nRoot}.ilmoituksen-tiedot`)} />

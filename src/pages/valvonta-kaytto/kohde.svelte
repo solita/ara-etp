@@ -134,7 +134,8 @@
         {postinumerot}
         save={updateKohde}
         revert={_ => load(params.id)}
-        remove={Maybe.Some(deleteKohde)} />
+        remove={Maybe.Some(deleteKohde)}
+        isNew={false} />
 
       <Osapuolet
         {valvonta}
