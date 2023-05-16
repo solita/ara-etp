@@ -37,9 +37,6 @@ export const uniqueViolationMessage = (i18n, response, defaultKey) =>
     uniqueViolationKey(response)
   );
 
-export const labelForId = (locale, items) =>
-  R.compose(
-    Maybe.orSome(''),
-    R.map(label(locale)),
-    Maybe.findById(R.__, items)
-  );
+export const labelForId = R.curry((locale, items) =>
+  R.compose(Maybe.orSome(''), R.map(label(locale)), Maybe.findById(R.__, items))
+);

@@ -35,6 +35,8 @@
   import Link from '@Component/Link/Link';
   import Address from '@Component/address/building-address';
   import Input from '@Component/Input/Input';
+  import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
+  import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -133,7 +135,8 @@
         toimenpidetyypit: api.toimenpidetyypit,
         postinumerot: geoApi.postinumerot,
         valvojat: api.valvojat,
-        valvonnat: api.valvonnat(queryToBackendParams(query))
+        valvonnat: api.valvonnat(queryToBackendParams(query)),
+        templatesByType: ValvontaApi.templatesByType
       })
     );
   }
@@ -181,6 +184,12 @@
     R.map(Maybe.get),
     R.filter(Maybe.isSome)
   )(query);
+
+  const getTemplateName = (templates, toimenpide) =>
+    R.compose(
+      Locales.labelForId($locale),
+      Toimenpiteet.templates(templates)
+    )(toimenpide);
 </script>
 
 <style>
@@ -202,7 +211,7 @@
           text={i18n(i18nRoot + '.new-kohde')} />
       </div>
     </div>
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot }}
+    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot, templatesByType }}
       <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
         <div class="w-1/4 mr-4">
           <Select
@@ -287,6 +296,9 @@
                   {i18n(i18nRoot + '.last-toimenpide')}
                 </th>
                 <th class="etp-table--th">
+                  {i18n(i18nRoot + '.last-template')}
+                </th>
+                <th class="etp-table--th">
                   {i18n(i18nRoot + '.deadline-date')}
                 </th>
                 <th class="etp-table--th">
@@ -334,6 +346,13 @@
                         $locale,
                         toimenpidetyypit
                       )(toimenpide['type-id'])}
+                    </td>
+                    <td class="etp-table--td">
+                      {Maybe.fold(
+                        '',
+                        getTemplateName(templatesByType, toimenpide),
+                        toimenpide['template-id']
+                      )}
                     </td>
                     <td
                       class="etp-table--td"
