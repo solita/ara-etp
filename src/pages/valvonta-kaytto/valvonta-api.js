@@ -66,6 +66,10 @@ export const templatesByType = R.compose(
   Fetch.getJson(fetch)
 )(url.valvonnat + '/templates');
 
+export const templates = R.compose(
+  Future.cache,
+  Fetch.getJson(fetch)
+)(url.valvonnat + '/templates');
 /* Osapuolten palvelut */
 
 export const serializeOsapuoli = R.compose(
