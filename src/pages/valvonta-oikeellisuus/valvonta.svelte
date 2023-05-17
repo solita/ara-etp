@@ -48,16 +48,26 @@
       EnergiatodistusApi.getEnergiatodistusById(versio, id)
     );
 
-    const korvaavaEnergiatodistus = R.chain(
-      R.compose(
-        Maybe.fold(Future.resolve(Maybe.None()), R.map(Maybe.Some)), // Future<Maybe<ET>>
-        R.map(EnergiatodistusApi.getEnergiatodistusById('all')), // Maybe<Future<ET>>
-        R.prop('korvaava-energiatodistus-id') // Maybe<id>
-      ),
+    // [path, et] -> Future path
+    const korvaavuusPath = ([path, et]) =>
+      Maybe.fold(
+        // Future path
+        Future.resolve(path),
+        // Compose produces a korvaavaId => Future path function
+        R.compose(
+          R.chain(korvaavuusPath),
+          R.map(korvaavaEt => [R.concat(path, [korvaavaEt]), korvaavaEt]), // Future [path, ET]
+          EnergiatodistusApi.getEnergiatodistusById('all') // Future ET
+        ),
+        et['korvaava-energiatodistus-id']
+      );
+
+    const korvaavatEnergiatodistukset = R.chain(
+      R.compose(korvaavuusPath, et => [[], et]),
       energiatodistus
     );
 
-    return { energiatodistus, korvaavaEnergiatodistus };
+    return { energiatodistus, korvaavatEnergiatodistukset };
   };
 
   const load = params => {
@@ -164,7 +174,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { energiatodistus, korvaavaEnergiatodistus, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { energiatodistus, korvaavatEnergiatodistukset, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -181,19 +191,43 @@
           )}
         </div>
         <div>
-          {#each korvaavaEnergiatodistus.toArray() as korvaavaEt}
-            <span>
-              {Maybe.fold(
-                '',
-                Formats.formatTimeInstantMinutes,
-                korvaavaEt.allekirjoitusaika
-              )}
-              {i18n('energiatodistus.korvaavuus.header.korvaava')}
-            </span>
-            <Link
-              bold={true}
-              href={`/#/energiatodistus/${korvaavaEt.versio}/${korvaavaEt.id}`}
-              text={korvaavaEt.id} />
+          {#if korvaavatEnergiatodistukset.length > 0}
+            <div>
+              <span>
+                {i18n('energiatodistus.title')}
+              </span>
+              <Link
+                bold={true}
+                href={`/#/energiatodistus/${energiatodistus.versio}/${energiatodistus.id}`}
+                text={energiatodistus.id} />
+              <span>
+                {Maybe.fold(
+                  '',
+                  Formats.formatTimeInstantMinutes,
+                  energiatodistus.allekirjoitusaika
+                )}
+              </span>
+            </div>
+          {/if}
+          {#each korvaavatEnergiatodistukset as korvaavaEt}
+            <div>
+              <span>
+                {ETUtils.isDraft(korvaavaEt)
+                  ? i18n('energiatodistus.korvaavuus.header.korvaava-draft')
+                  : i18n('energiatodistus.korvaavuus.header.korvaava')}
+              </span>
+              <Link
+                bold={true}
+                href={`/#/energiatodistus/${korvaavaEt.versio}/${korvaavaEt.id}`}
+                text={korvaavaEt.id} />
+              <span>
+                {Maybe.fold(
+                  '',
+                  Formats.formatTimeInstantMinutes,
+                  korvaavaEt.allekirjoitusaika
+                )}
+              </span>
+            </div>
           {/each}
         </div>
       </div>
