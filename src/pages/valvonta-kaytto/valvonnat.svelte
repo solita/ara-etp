@@ -136,7 +136,7 @@
         postinumerot: geoApi.postinumerot,
         valvojat: api.valvojat,
         valvonnat: api.valvonnat(queryToBackendParams(query)),
-        templatesByType: ValvontaApi.templatesByType
+        templates: ValvontaApi.templates
       })
     );
   }
@@ -185,11 +185,8 @@
     R.filter(Maybe.isSome)
   )(query);
 
-  const getTemplateName = (templates, toimenpide) =>
-    R.compose(
-      Locales.labelForId($locale),
-      Toimenpiteet.templates(templates)
-    )(toimenpide);
+  const getTemplateName = templates =>
+    R.compose(Locales.labelForId($locale))(templates);
 </script>
 
 <style>
@@ -211,7 +208,7 @@
           text={i18n(i18nRoot + '.new-kohde')} />
       </div>
     </div>
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot, templatesByType }}
+    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot, templates }}
       <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
         <div class="w-1/4 mr-4">
           <Select
@@ -350,7 +347,7 @@
                     <td class="etp-table--td">
                       {Maybe.fold(
                         '',
-                        getTemplateName(templatesByType, toimenpide),
+                        getTemplateName(templates),
                         toimenpide['template-id']
                       )}
                     </td>
