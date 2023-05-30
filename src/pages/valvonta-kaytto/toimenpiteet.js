@@ -28,7 +28,8 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4]);
+// Lisää tähän uusi
+const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 7]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
@@ -38,10 +39,17 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
   'id'
 );
 
-const defaultDeadline = typeId =>
-  isDeadlineType(typeId)
-    ? Maybe.Some(dfns.addMonths(new Date(), 1))
-    : Maybe.None();
+const defaultDeadlineForTypeId = typeId => {
+  switch (typeId) {
+    case 7:
+      return Maybe.Some(dfns.addWeeks(new Date(), 2));
+    default:
+      return Maybe.Some(dfns.addMonths(new Date(), 1));
+  }
+};
+
+export const defaultDeadline = typeId =>
+  isDeadlineType(typeId) ? defaultDeadlineForTypeId(typeId) : Maybe.None();
 
 export const i18nKey = (toimenpide, key) =>
   R.join('.', [
