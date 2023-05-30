@@ -1906,7 +1906,8 @@
         },
         "decision-order-hearing-letter": {
           "title": "Käskypäätös / kuulemiskirje",
-          "description": "Kommentti"
+          "description": "Kommentti",
+          "publish-button": "Lähetä kuulemiskirje"
         },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
