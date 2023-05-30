@@ -1889,6 +1889,10 @@
           "publish-button": "Avsluta",
           "force-button": "Avsulta (endast ETP)"
         },
+        "decision-order-hearing-letter": {
+          "title": "Käskypäätös / kuulemiskirje (sv)",
+          "description": "Kommentar"
+        },
         "messages": {
           "not-found": "Det existerar ingen åtgärd.",
           "load-error": "Det gick inte att söka uppgifter om åtgärden.",

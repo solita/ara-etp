@@ -16,7 +16,10 @@ export const type = {
     // päätökset
     order: 4 // käskypäätös
   },
-  closed: 5
+  closed: 5,
+  'decision-order': {
+    'hearing-letter': 7
+  }
 };
 
 const types = R.invertObj(Deep.treeFlat('-', R.F, type));

@@ -1904,6 +1904,10 @@
           "publish-button": "Lopeta",
           "force-button": "Lopeta (vain ETP)"
         },
+        "decision-order-hearing-letter": {
+          "title": "Käskypäätös / kuulemiskirje",
+          "description": "Kommentti"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
