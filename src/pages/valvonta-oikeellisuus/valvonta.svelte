@@ -32,7 +32,7 @@
   import Toimenpide from './toimenpide.svelte';
   import Note from './note.svelte';
   import Link from '../../components/Link/Link.svelte';
-  import Energiatodistukset from '../energiatodistus/energiatodistukset.svelte';
+  import * as ETValvonta from '@Pages/valvonta-oikeellisuus/energiatodistus-valvonta';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.valvonta';
@@ -42,33 +42,6 @@
   let overlay = true;
 
   $: load(params);
-
-  const fetchEnergiatodistus = (whoami, versio, id) => {
-    const energiatodistus = Future.cache(
-      EnergiatodistusApi.getEnergiatodistusById(versio, id)
-    );
-
-    // [path, et] -> Future path
-    const korvaavuusPath = ([path, et]) =>
-      Maybe.fold(
-        // Future path
-        Future.resolve(path),
-        // Compose produces a korvaavaId => Future path function
-        R.compose(
-          R.chain(korvaavuusPath),
-          R.map(korvaavaEt => [R.concat(path, [korvaavaEt]), korvaavaEt]), // Future [path, ET]
-          EnergiatodistusApi.getEnergiatodistusById('all') // Future ET
-        ),
-        et['korvaava-energiatodistus-id']
-      );
-
-    const korvaavatEnergiatodistukset = R.chain(
-      R.compose(korvaavuusPath, et => [[], et]),
-      energiatodistus
-    );
-
-    return { energiatodistus, korvaavatEnergiatodistukset };
-  };
 
   const load = params => {
     overlay = true;
@@ -95,7 +68,11 @@
             luokittelut: EnergiatodistusApi.luokittelutForVersion(
               params.versio
             ),
-            ...fetchEnergiatodistus(whoami, params.versio, params.id),
+            ...ETValvonta.fetchEnergiatodistusWithKorvaavat(
+              whoami,
+              params.versio,
+              params.id
+            ),
             toimenpiteet: ValvontaApi.toimenpiteet(params.id),
             notes: Kayttajat.isPaakayttaja(whoami)
               ? ValvontaApi.notes(params.id)
