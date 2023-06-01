@@ -32,6 +32,7 @@
   import Toimenpide from './toimenpide.svelte';
   import Note from './note.svelte';
   import Link from '../../components/Link/Link.svelte';
+  import EtLink from '@Component/EtLink/EtLink.svelte';
   import * as ETValvonta from '@Pages/valvonta-oikeellisuus/energiatodistus-valvonta';
 
   const i18n = $_;
@@ -171,13 +172,11 @@
           {#if korvaavatEnergiatodistukset.length > 0}
             <div>
               <span>
-                {i18n('energiatodistus.title')}
+                {i18n(i18nRoot + '.energiatodistus.original')}
               </span>
-              <Link
-                bold={true}
-                href={`/#/energiatodistus/${energiatodistus.versio}/${energiatodistus.id}`}
-                text={energiatodistus.id} />
+              <EtLink {energiatodistus} />
               <span>
+                {i18n(i18nRoot + '.energiatodistus.signed')}
                 {Maybe.fold(
                   '',
                   Formats.formatTimeInstantMinutes,
@@ -188,22 +187,20 @@
           {/if}
           {#each korvaavatEnergiatodistukset as korvaavaEt}
             <div>
-              <span>
-                {ETUtils.isDraft(korvaavaEt)
-                  ? i18n('energiatodistus.korvaavuus.header.korvaava-draft')
-                  : i18n('energiatodistus.korvaavuus.header.korvaava')}
-              </span>
-              <Link
-                bold={true}
-                href={`/#/energiatodistus/${korvaavaEt.versio}/${korvaavaEt.id}`}
-                text={korvaavaEt.id} />
-              <span>
-                {Maybe.fold(
-                  '',
-                  Formats.formatTimeInstantMinutes,
-                  korvaavaEt.allekirjoitusaika
-                )}
-              </span>
+              <span>{i18n(i18nRoot + '.energiatodistus.korvaava')}</span>
+              <EtLink energiatodistus={korvaavaEt} />
+              {#if ETUtils.isDraft(korvaavaEt)}
+                <span>({i18n(i18nRoot + '.energiatodistus.draft')})</span>
+              {:else}
+                <span>
+                  {i18n(i18nRoot + '.energiatodistus.signed')}
+                  {Maybe.fold(
+                    '',
+                    Formats.formatTimeInstantMinutes,
+                    korvaavaEt.allekirjoitusaika
+                  )}
+                </span>
+              {/if}
             </div>
           {/each}
         </div>

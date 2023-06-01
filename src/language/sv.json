@@ -1537,6 +1537,12 @@
         "toimenpiteet": "Åtgärder",
         "mark-as-verified": "Markera som läst",
         "mark-anomaly": "Anmäl avvikelse",
+        "energiatodistus": {
+          "original": "Original",
+          "signed": "undertecknat",
+          "korvaava": "Ersättning",
+          "draft": "utkast"
+        },
         "messages": {
           "not-found": "Det existerar inget energicertifikat.",
           "load-error": "Det gick inte att ladda ner kontrolluppgifterna",
