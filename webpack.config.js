@@ -124,7 +124,7 @@ module.exports = {
   devServer: {
     before: (app, server, compiler) =>
       app.get('/config.json', (req, res) =>
-        res.json({ isDev: true, environment: 'dev' })
+        res.json({ isDev: true, environment: 'dev', publicSiteUrl: 'https://localhost:3000' })
       ),
     headers: {
       'Content-Security-Policy':

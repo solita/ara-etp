@@ -2004,6 +2004,10 @@
   "not-found": {
     "message": "Valitsemaasi sivua ei ole olemassa."
   },
+  "log-out-done": {
+    "message": "Olet kirjautunut ulos.",
+    "link": "Tästä linkistä pääset takaisin etusivulle."
+  },
   "footer": {
     "about": "Tietoa Sivustosta",
     "name": "Asumisen rahoitus- ja kehittämiskeskus",

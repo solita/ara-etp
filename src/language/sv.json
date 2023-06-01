@@ -1491,6 +1491,10 @@
   "not-found": {
     "message": "Sidan du valde finns inte."
   },
+  "log-out-done": {
+    "message": "Du är utloggad.",
+    "link": "Denna länk tar dig tillbaka till startsidan."
+  },
   "footer": {
     "about": "Information om webbplatsen",
     "name": "Finansiering- och utvecklingcentralet för boendet",

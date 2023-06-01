@@ -1,4 +1,6 @@
 <script>
+  import { location } from 'svelte-spa-router';
+
   import * as Maybe from '@Utility/maybe-utils';
   import * as Response from '@Utility/response';
 
@@ -8,6 +10,7 @@
   import Login from '@Component/Login/Login';
   import Error from './Error.svelte';
   import Footer from '@Pages/footer/Footer';
+  import Uloskirjauduttu from '@Pages/uloskirjauduttu/uloskirjauduttu';
 
   import TableStyles from '@/TableStyles';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
@@ -66,7 +69,9 @@
   {/if}
 
   {#each Maybe.toArray(failure) as error}
-    {#if Response.isUnauthorized(error)}
+    {#if $location === '/uloskirjauduttu'}
+      <Uloskirjauduttu />
+    {:else if Response.isUnauthorized(error)}
       <Login redirectTimeout={2000} />
     {:else}
       <Error {error} />
