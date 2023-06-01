@@ -9,14 +9,14 @@ export const fetchEnergiatodistusWithKorvaavat = (whoami, versio, id) => {
   );
 
   // [path, et] -> Future path
-  const korvaavuusChain = ([path, et]) =>
+  const korvaavuusChain = ([korvaavat, et]) =>
     Maybe.fold(
-      // Future path
-      Future.resolve(path),
+      // Future sequence of korvaava ET
+      Future.resolve(korvaavat),
       // Compose produces a korvaavaId => Future path function
       R.compose(
         R.chain(korvaavuusChain),
-        R.map(korvaavaEt => [R.concat(path, [korvaavaEt]), korvaavaEt]), // Future [path, ET]
+        R.map(korvaavaEt => [R.concat(korvaavat, [korvaavaEt]), korvaavaEt]), // Future [path, ET]
         EnergiatodistusApi.getEnergiatodistusById('all') // Future ET
       ),
       et['korvaava-energiatodistus-id']
