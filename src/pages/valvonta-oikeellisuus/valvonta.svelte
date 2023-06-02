@@ -32,7 +32,8 @@
   import Toimenpide from './toimenpide.svelte';
   import Note from './note.svelte';
   import Link from '../../components/Link/Link.svelte';
-  import Energiatodistukset from '../energiatodistus/energiatodistukset.svelte';
+  import EtLink from '@Component/EtLink/EtLink.svelte';
+  import * as ETValvonta from '@Pages/valvonta-oikeellisuus/energiatodistus-valvonta';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.valvonta';
@@ -42,23 +43,6 @@
   let overlay = true;
 
   $: load(params);
-
-  const fetchEnergiatodistus = (whoami, versio, id) => {
-    const energiatodistus = Future.cache(
-      EnergiatodistusApi.getEnergiatodistusById(versio, id)
-    );
-
-    const korvaavaEnergiatodistus = R.chain(
-      R.compose(
-        Maybe.fold(Future.resolve(Maybe.None()), R.map(Maybe.Some)), // Future<Maybe<ET>>
-        R.map(EnergiatodistusApi.getEnergiatodistusById('all')), // Maybe<Future<ET>>
-        R.prop('korvaava-energiatodistus-id') // Maybe<id>
-      ),
-      energiatodistus
-    );
-
-    return { energiatodistus, korvaavaEnergiatodistus };
-  };
 
   const load = params => {
     overlay = true;
@@ -85,7 +69,11 @@
             luokittelut: EnergiatodistusApi.luokittelutForVersion(
               params.versio
             ),
-            ...fetchEnergiatodistus(whoami, params.versio, params.id),
+            ...ETValvonta.fetchEnergiatodistusWithKorvaavat(
+              whoami,
+              params.versio,
+              params.id
+            ),
             toimenpiteet: ValvontaApi.toimenpiteet(params.id),
             notes: Kayttajat.isPaakayttaja(whoami)
               ? ValvontaApi.notes(params.id)
@@ -164,7 +152,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { energiatodistus, korvaavaEnergiatodistus, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { energiatodistus, korvaavatEnergiatodistukset, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -181,19 +169,39 @@
           )}
         </div>
         <div>
-          {#each korvaavaEnergiatodistus.toArray() as korvaavaEt}
-            <span>
-              {Maybe.fold(
-                '',
-                Formats.formatTimeInstantMinutes,
-                korvaavaEt.allekirjoitusaika
-              )}
-              {i18n('energiatodistus.korvaavuus.header.korvaava')}
-            </span>
-            <Link
-              bold={true}
-              href={`/#/energiatodistus/${korvaavaEt.versio}/${korvaavaEt.id}`}
-              text={korvaavaEt.id} />
+          {#if korvaavatEnergiatodistukset.length > 0}
+            <div>
+              <span>
+                {i18n(i18nRoot + '.energiatodistus.original')}
+              </span>
+              <EtLink {energiatodistus} />
+              <span>
+                {i18n(i18nRoot + '.energiatodistus.signed')}
+                {Maybe.fold(
+                  '',
+                  Formats.formatTimeInstantMinutes,
+                  energiatodistus.allekirjoitusaika
+                )}
+              </span>
+            </div>
+          {/if}
+          {#each korvaavatEnergiatodistukset as korvaavaEt}
+            <div>
+              <span>{i18n(i18nRoot + '.energiatodistus.korvaava')}</span>
+              <EtLink energiatodistus={korvaavaEt} />
+              {#if ETUtils.isDraft(korvaavaEt)}
+                <span>({i18n(i18nRoot + '.energiatodistus.draft')})</span>
+              {:else}
+                <span>
+                  {i18n(i18nRoot + '.energiatodistus.signed')}
+                  {Maybe.fold(
+                    '',
+                    Formats.formatTimeInstantMinutes,
+                    korvaavaEt.allekirjoitusaika
+                  )}
+                </span>
+              {/if}
+            </div>
           {/each}
         </div>
       </div>

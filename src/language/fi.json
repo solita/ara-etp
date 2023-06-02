@@ -1489,6 +1489,12 @@
         "toimenpiteet": "Toimenpiteet",
         "mark-as-verified": "Merkitse katsotuksi",
         "mark-anomaly": "Ilmoita poikkeamasta",
+        "energiatodistus": {
+          "original": "Alkuperäinen",
+          "signed": "allekirjoitettu",
+          "korvaava": "Korvaava",
+          "draft": "luonnos"
+        },
         "messages": {
           "not-found": "Energiatodistusta ei ole olemassa",
           "load-error": "Valvonnan tietojen lataus epäonnistui",
