@@ -48,12 +48,12 @@
   </div>
 </div>
 
-<div class="flex flex-col justify-center items-center">
+<div class="flex flex-col justify-center items-center text-3xl">
   <div>
-    <span class="font-bold text-primary">{$_('log-out-done.message')}</span>
+    <span class="font-semibold text-primary">{$_('log-out-done.message')}</span>
     {#each Maybe.toArray(resources) as { config }}
       <Link
-        bold={true}
+        bold={false}
         href={config.publicSiteUrl}
         text={$_('log-out-done.link')} />
     {/each}
