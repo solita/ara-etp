@@ -1906,6 +1906,7 @@
         },
         "decision-order-hearing-letter": {
           "title": "Käskypäätös / kuulemiskirje",
+          "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
           "description": "Kommentti",
           "publish-button": "Lähetä kuulemiskirje"
         },
