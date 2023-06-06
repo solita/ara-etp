@@ -71,87 +71,83 @@
   <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
   <div class="flex flex-row my-4">
     <table class="etp-table">
-      <table class="etp-table">
-        <thead class="etp-table--thead">
-          <tr class="etp-table--tr etp-table--tr__light">
-            <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
+      <thead class="etp-table--thead">
+        <tr class="etp-table--tr etp-table--tr__light">
+          <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
-            <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
+          <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
 
-            <th class="etp-table--th">
-              {i18n(i18nRoot + '.toimitustapa')}
-            </th>
+          <th class="etp-table--th">
+            {i18n(i18nRoot + '.toimitustapa')}
+          </th>
 
-            <th class="etp-table--th">
-              {i18n(i18nRoot + '.esikatselu')}
-            </th>
+          <th class="etp-table--th">
+            {i18n(i18nRoot + '.esikatselu')}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="etp-table--tbody">
+        {#each osapuolet as osapuoli}
+          <tr class="etp-table-tr">
+            <td class="etp-table--td">
+              {osapuoli.type.label(osapuoli)}
+            </td>
+            <td class="etp-table--td">
+              {rooliLabel(osapuoli)}
+              {#if Osapuolet.otherRooli(osapuoli)}
+                - {Maybe.orSome('', osapuoli['rooli-description'])}
+              {/if}
+            </td>
+            <td
+              class="etp-table--td"
+              class:text-error={Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
+              title={Maybe.fold(
+                '',
+                key =>
+                  i18n('valvonta.kaytto.osapuoli.toimitustapa-errors.' + key),
+                osapuoli.type.errorKey(osapuoli)
+              )}>
+              {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
+                <span class="font-icon">warning</span>
+              {/if}
+              {#if isToimenpideSentManually(toimenpide)}
+                {i18n('valvonta.kaytto.toimenpide.manually-sent')}
+              {:else}
+                {toimitustapaLabel(osapuoli)}
+              {/if}
+              {#if Osapuolet.toimitustapa.other(osapuoli)}
+                - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
+              {/if}
+            </td>
+            <td class="etp-table--td">
+              {#if Osapuolet.isOmistaja(osapuoli)}
+                {#if previewPending}
+                  <div class="etp-table--td__center">
+                    <Spinner smaller={true} />
+                  </div>
+                {:else}
+                  <div
+                    class:text-primary={!disabled}
+                    class:text-disabled={disabled}
+                    class="cursor-pointer etp-table--td__center"
+                    on:click|stopPropagation={disabled ||
+                      preview(
+                        osapuoli.type.preview(id, osapuoli.id, toimenpide)
+                      )}>
+                    <span class="font-icon text-2xl"> visibility </span>
+                  </div>
+                {/if}
+              {:else if Maybe.orSome(false, R.lift(Templates.sendTiedoksi)(template))}
+                <span class="font-icon">info</span>
+                {i18n(i18nRoot + '.fyi')}
+              {:else}
+                <span class="font-icon">info</span>
+                {i18n(i18nRoot + '.fyi-disabled')}
+              {/if}
+            </td>
           </tr>
-        </thead>
-        <tbody class="etp-table--tbody">
-          {#each osapuolet as osapuoli}
-            <tr class="etp-table-tr">
-              <td class="etp-table--td">
-                {osapuoli.type.label(osapuoli)}
-              </td>
-              <td class="etp-table--td">
-                {rooliLabel(osapuoli)}
-                {#if Osapuolet.otherRooli(osapuoli)}
-                  - {Maybe.orSome('', osapuoli['rooli-description'])}
-                {/if}
-              </td>
-              <td
-                class="etp-table--td"
-                class:text-error={Maybe.isSome(
-                  osapuoli.type.errorKey(osapuoli)
-                )}
-                title={Maybe.fold(
-                  '',
-                  key =>
-                    i18n('valvonta.kaytto.osapuoli.toimitustapa-errors.' + key),
-                  osapuoli.type.errorKey(osapuoli)
-                )}>
-                {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
-                  <span class="font-icon">warning</span>
-                {/if}
-                {#if isToimenpideSentManually(toimenpide)}
-                  {i18n('valvonta.kaytto.toimenpide.manually-sent')}
-                {:else}
-                  {toimitustapaLabel(osapuoli)}
-                {/if}
-                {#if Osapuolet.toimitustapa.other(osapuoli)}
-                  - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
-                {/if}
-              </td>
-              <td class="etp-table--td">
-                {#if Osapuolet.isOmistaja(osapuoli)}
-                  {#if previewPending}
-                    <div class="etp-table--td__center">
-                      <Spinner smaller={true} />
-                    </div>
-                  {:else}
-                    <div
-                      class:text-primary={!disabled}
-                      class:text-disabled={disabled}
-                      class="cursor-pointer etp-table--td__center"
-                      on:click|stopPropagation={disabled ||
-                        preview(
-                          osapuoli.type.preview(id, osapuoli.id, toimenpide)
-                        )}>
-                      <span class="font-icon text-2xl"> visibility </span>
-                    </div>
-                  {/if}
-                {:else if Maybe.orSome(false, R.lift(Templates.sendTiedoksi)(template))}
-                  <span class="font-icon">info</span>
-                  {i18n(i18nRoot + '.fyi')}
-                {:else}
-                  <span class="font-icon">info</span>
-                  {i18n(i18nRoot + '.fyi-disabled')}
-                {/if}
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+        {/each}
+      </tbody>
     </table>
   </div>
 </div>
