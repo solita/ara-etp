@@ -28,7 +28,6 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-// Lisää tähän uusi
 const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 7]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
@@ -86,3 +85,5 @@ export const time = R.converge(Maybe.orSome, [
 ]);
 
 export const sendTiedoksi = isType(type.rfi.request);
+
+export const isSentManually = R.includes(R.__, [7]);

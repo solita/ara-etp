@@ -1855,6 +1855,7 @@
         "cancel-button": "Återkalla",
         "preview-button": "Förhandsvisa",
         "download-button": "Ladda ner",
+        "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti (sv)",
         "case": {
           "title": "Inledande av kontroll",
           "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",

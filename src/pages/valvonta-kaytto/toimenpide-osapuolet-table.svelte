@@ -4,6 +4,7 @@
   import * as Locales from '@Language/locale-utils';
   import * as Osapuolet from './osapuolet';
   import * as Templates from './templates';
+  import * as Toimenpiteet from './toimenpiteet';
 
   import * as ValvontaApi from './valvonta-api';
 
@@ -44,6 +45,11 @@
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
+
+  const isToimenpideSentManually = R.compose(
+    Toimenpiteet.isSentManually,
+    R.prop('type-id')
+  );
 
   $: rooliLabel = R.compose(
     Maybe.fold('', Locales.labelForId($locale, roolit)),
@@ -107,7 +113,11 @@
                 {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
                   <span class="font-icon">warning</span>
                 {/if}
-                {toimitustapaLabel(osapuoli)}
+                {#if isToimenpideSentManually(toimenpide)}
+                  {i18n('valvonta.kaytto.toimenpide.manually-sent')}
+                {:else}
+                  {toimitustapaLabel(osapuoli)}
+                {/if}
                 {#if Osapuolet.toimitustapa.other(osapuoli)}
                   - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
                 {/if}

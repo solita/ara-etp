@@ -1864,6 +1864,7 @@
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
         "download-button": "Lataa",
+        "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti",
         "case": {
           "title": "Valvonnan aloitus",
           "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
