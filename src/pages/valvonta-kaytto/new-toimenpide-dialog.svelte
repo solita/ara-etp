@@ -36,6 +36,8 @@
   export let roolit;
   export let toimitustavat;
 
+  export let manuallyDeliverableToimenpide = false;
+
   let form;
   let error = Maybe.None();
   let osapuolet = R.concat(henkilot, yritykset);
@@ -208,7 +210,8 @@
           {disabled}
           {roolit}
           {toimitustavat}
-          {template} />
+          {template}
+          {manuallyDeliverableToimenpide} />
       </div>
     {/if}
 

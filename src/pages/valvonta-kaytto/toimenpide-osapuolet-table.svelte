@@ -23,6 +23,8 @@
   export let previewPending;
   export let disabled;
 
+  export let manuallyDeliverableToimenpide = false;
+
   const types = {
     yritys: {
       label: yritys => yritys.nimi,
@@ -45,11 +47,6 @@
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
-
-  const isToimenpideSentManually = R.compose(
-    Toimenpiteet.isSentManually,
-    R.prop('type-id')
-  );
 
   $: rooliLabel = R.compose(
     Maybe.fold('', Locales.labelForId($locale, roolit)),
@@ -110,7 +107,7 @@
               {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
                 <span class="font-icon">warning</span>
               {/if}
-              {#if isToimenpideSentManually(toimenpide)}
+              {#if manuallyDeliverableToimenpide}
                 {i18n('valvonta.kaytto.toimenpide.manually-sent')}
               {:else}
                 {toimitustapaLabel(osapuoli)}

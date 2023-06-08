@@ -36,4 +36,25 @@ describe('Toimenpiteet: ', () => {
       assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 7 }));
     });
   });
+
+  describe('Toimenpidetypes with manually-deliverable are recognized correctly', () => {
+    assert.isTrue(
+      Toimenpiteet.isToimenpideDeliveredManually([7])({ 'type-id': 7 })
+    );
+    assert.isFalse(
+      Toimenpiteet.isToimenpideDeliveredManually([7])({ 'type-id': 1 })
+    );
+  });
+});
+
+describe('Given toimenpidetypes, find the ids of manually deliverable types', () => {
+  assert.deepEqual(
+    Toimenpiteet.manuallyDeliverableToimenpideTypes([
+      { id: 2, 'manually-deliverable': false },
+      { id: 7, 'manually-deliverable': true },
+      { id: 1, 'manually-deliverable': false },
+      { id: 8, 'manually-deliverable': true }
+    ]),
+    [7, 8]
+  );
 });
