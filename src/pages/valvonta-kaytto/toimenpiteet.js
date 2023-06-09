@@ -108,12 +108,28 @@ export const isToimenpideDeliveredManually = R.curry(
 );
 
 /**
+ * Given a key, return a function that takes an array of objects
+ * and returns an array of ids of objects where the given key has value true
+ * @param {string} key
+ * @return {Function}
+ */
+const findIdsOfObjectsWhereGivenKeyHasValueTrue = key =>
+  R.compose(R.map(R.prop('id')), R.filter(R.propEq(key, true)));
+
+/**
  * Given an array of toimenpidetype objects of form {id: Number, 'manually-deliverable: Boolean},
  * return an array of toimenpidetype IDs of the manually deliverable toimenpidetypes
  * @param {Object[]} toimenpideTypes
  * @returns {number[]} Toimenpide type IDs of manuallly deliverable types
  */
-export const manuallyDeliverableToimenpideTypes = R.compose(
-  R.map(R.prop('id')),
-  R.filter(R.propEq('manually-deliverable', true))
-);
+export const manuallyDeliverableToimenpideTypes =
+  findIdsOfObjectsWhereGivenKeyHasValueTrue('manually-deliverable');
+
+/**
+ * Given an array of toimenpidetype objects of form {id: Number, 'allow-comments: Boolean},
+ * return an array of toimenpidetype IDs of the toimenpidetypes that allow comments
+ * @param {Object[]} toimenpideTypes
+ * @returns {number[]} Toimenpide type IDs of types that allow comments
+ */
+export const toimenpideTypesThatAllowComments =
+  findIdsOfObjectsWhereGivenKeyHasValueTrue('allow-comments');

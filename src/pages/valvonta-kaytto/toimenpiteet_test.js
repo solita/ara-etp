@@ -47,14 +47,28 @@ describe('Toimenpiteet: ', () => {
   });
 });
 
-describe('Given toimenpidetypes, find the ids of manually deliverable types', () => {
-  assert.deepEqual(
-    Toimenpiteet.manuallyDeliverableToimenpideTypes([
-      { id: 2, 'manually-deliverable': false },
-      { id: 7, 'manually-deliverable': true },
-      { id: 1, 'manually-deliverable': false },
-      { id: 8, 'manually-deliverable': true }
-    ]),
-    [7, 8]
-  );
+describe('Given toimenpidetypes', () => {
+  it('find the ids of manually deliverable types', () => {
+    assert.deepEqual(
+      Toimenpiteet.manuallyDeliverableToimenpideTypes([
+        { id: 2, 'manually-deliverable': false },
+        { id: 7, 'manually-deliverable': true },
+        { id: 1, 'manually-deliverable': false },
+        { id: 8, 'manually-deliverable': true }
+      ]),
+      [7, 8]
+    );
+  });
+
+  it('find the ids of toimenpidetypes that allow comments', () => {
+    assert.deepEqual(
+      Toimenpiteet.toimenpideTypesThatAllowComments([
+        { id: 2, 'allow-comments': false },
+        { id: 7, 'allow-comments': true },
+        { id: 1, 'allow-comments': false },
+        { id: 8, 'allow-comments': true }
+      ]),
+      [7, 8]
+    );
+  });
 });
