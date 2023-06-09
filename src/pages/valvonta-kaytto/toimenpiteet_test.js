@@ -37,12 +37,10 @@ describe('Toimenpiteet: ', () => {
     });
   });
 
-  describe('Toimenpidetypes with manually-deliverable are recognized correctly', () => {
-    assert.isTrue(
-      Toimenpiteet.isToimenpideDeliveredManually([7])({ 'type-id': 7 })
-    );
+  describe('Toimenpide object is recognized correctly whether it is part of the given types', () => {
+    assert.isTrue(Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 7 }));
     assert.isFalse(
-      Toimenpiteet.isToimenpideDeliveredManually([7])({ 'type-id': 1 })
+      Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 1 })
     );
   });
 });

@@ -86,23 +86,18 @@ export const time = R.converge(Maybe.orSome, [
 
 export const sendTiedoksi = isType(type.rfi.request);
 
-const isDeliveredManually = R.curry(
-  (manuallyDeliverableTypes, toimenpideTypeId) =>
-    R.includes(toimenpideTypeId, manuallyDeliverableTypes)
-);
-
 /**
  *
- * Takes an array of toimenpidetype IDs and an id
- * and checks if the id is in the array
- * @param {number[]} manuallyDeliverableToimenpideTypes
- * @param {number} toimenpideTypeId
- * @returns {boolean} is toimenpidetype manually deliverable
+ * Takes an array of toimenpidetype IDs and a toimenpide object
+ * and checks if its type id is in the array
+ * @param {number[]} toimenPideTypeIds
+ * @param {Object} toimenpide
+ * @returns {boolean} is toimenpidetype of the given toimenpide one in the array
  */
-export const isToimenpideDeliveredManually = R.curry(
-  (manuallyDeliverableTypes, toimenpide) =>
+export const isToimenpideOfGivenTypes = R.curry(
+  (toimenpideTypeIds, toimenpide) =>
     R.compose(
-      isDeliveredManually(manuallyDeliverableTypes),
+      R.includes(R.__, toimenpideTypeIds),
       R.prop('type-id')
     )(toimenpide)
 );

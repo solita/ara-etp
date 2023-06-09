@@ -52,8 +52,13 @@
     !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
 
   const isManuallyDeliverable = R.compose(
-    Toimenpiteet.isToimenpideDeliveredManually,
+    Toimenpiteet.isToimenpideOfGivenTypes,
     Toimenpiteet.manuallyDeliverableToimenpideTypes
+  )(toimenpidetyypit);
+
+  const isCommentingAllowed = R.compose(
+    Toimenpiteet.isToimenpideOfGivenTypes,
+    Toimenpiteet.toimenpideTypesThatAllowComments
   )(toimenpidetyypit);
 
   const saveKasittelija = id =>
@@ -77,6 +82,7 @@
     {roolit}
     {toimitustavat}
     manuallyDeliverableToimenpide={isManuallyDeliverable(toimenpide)}
+    commentingAllowed={isCommentingAllowed(toimenpide)}
     reload={load} />
 {/each}
 

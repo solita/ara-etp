@@ -37,6 +37,7 @@
   export let toimitustavat;
 
   export let manuallyDeliverableToimenpide = false;
+  export let commentingAllowed = false;
 
   let form;
   let error = Maybe.None();
@@ -182,7 +183,9 @@
           format={formatTemplate}
           items={R.pluck('id', filterValid(templates))} />
       </div>
-    {:else}
+    {/if}
+
+    {#if commentingAllowed || R.isEmpty(templates)}
       <div class="w-full py-4">
         <Textarea
           id={'toimenpide.description'}
