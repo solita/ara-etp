@@ -7,7 +7,7 @@ const defaultProps = {
   id: 'prefilledid',
   name: 'prefilledname',
   label: 'Pre-filled label',
-  value: 'Pre-filled value'
+  model: 'Pre-filled value'
 };
 
 export const withText = () => ({
