@@ -29,3 +29,17 @@ export const withFailedValidation = () => ({
   Component: Input,
   props: R.assoc('validation', R.always(false), defaultProps)
 });
+
+export const numberInput = () => {
+  let value = 69;
+  return {
+    Component: Input,
+    props: {
+      id: 'prefilledid',
+      name: 'number-input',
+      label: 'Number input',
+      model: value,
+      type: 'number'
+    }
+  };
+};

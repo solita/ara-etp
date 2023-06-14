@@ -34,6 +34,8 @@
   export let inputComponentWrapper = SquareInputWrapper;
   export let inputComponent = InputField;
 
+  export let type = 'text';
+
   export let i18n;
 
   let focused = false;
@@ -108,6 +110,7 @@
         {viewValue}
         {focused}
         {api}
+        {type}
         on:input
         on:keypress />
     </svelte:component>
