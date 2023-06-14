@@ -37,7 +37,7 @@
   import Address from '@Pages/energiatodistus/address';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
-  import Select2 from '@Component/Select/select2';
+  import Select2 from '@Component/Select/Select2.svelte';
   import Link from '@Component/Link/Link.svelte';
   import Input from '@Component/Input/Input';
   import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';

@@ -16,7 +16,7 @@
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
-  import Select from '@Component/Select/select2';
+  import Select from '@Component/Select/Select2';
   import Datepicker from '@Component/Input/Datepicker';
   import * as Parsers from '@Utility/parsers';
 

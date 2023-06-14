@@ -32,14 +32,17 @@
   import Pagination from '@Component/Pagination/Pagination';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
+  import Select2 from '@Component/Select/Select2';
   import Link from '@Component/Link/Link';
   import Address from '@Component/address/building-address';
   import Input from '@Component/Input/Input';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
+  import * as Selects from '@Component/Select/select-util';
 
   let resources = Maybe.None();
   let overlay = true;
+  export let templates;
 
   const pageSize = 50;
   const i18n = $_;
@@ -48,6 +51,7 @@
   let textCancel = () => {};
 
   let valvontaCount = 0;
+  let pageCount;
   $: pageCount = Math.ceil(R.divide(valvontaCount, pageSize));
 
   const queryStringIntegerProp = R.curry((querystring, prop) =>
@@ -75,7 +79,8 @@
     'include-closed': Maybe.None(),
     'has-valvoja': Maybe.None(),
     keyword: Maybe.None(),
-    'toimenpidetype-id': Maybe.None()
+    'toimenpidetype-id': Maybe.None(),
+    'asiakirjapohja-id': Maybe.None()
   };
 
   query = R.mergeRight(query, {
@@ -84,7 +89,8 @@
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
     'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
     keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
-    'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id')
+    'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id'),
+    'asiakirjapohja-id': queryStringIntegerProp(parsedQs, 'asiakirjapohja-id')
   });
 
   const nextPageCallback = nextPage =>
@@ -101,6 +107,7 @@
     'valvoja-id': R.prop('valvoja-id', query),
     keyword: R.map(wrapPercent, R.prop('keyword', query)),
     'toimenpidetype-id': R.prop('toimenpidetype-id', query),
+    'asiakirjapohja-id': R.prop('asiakirjapohja-id', query),
     'include-closed': R.prop('include-closed', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
@@ -242,9 +249,8 @@
             parse={Maybe.Some} />
         </div>
       </div>
-      <div
-        class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
-        <div class="lg:w-1/2 w-full">
+      <div class="grid grid-cols-4 items-end gap-4 lg:space-y-0 space-y-4 my-4">
+        <div class="lg:col-span-2 col-span-4">
           <Input
             label={i18n(i18nRoot + '.keyword-search')}
             model={query}
@@ -259,7 +265,7 @@
               }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
             }} />
         </div>
-        <div class="w-1/2 lg:w-1/4">
+        <div class="lg:col-span-1 md:col-span-2 col-span-4">
           <Select
             disabled={overlay}
             compact={false}
@@ -274,6 +280,22 @@
               )}
             parse={Maybe.Some}
             allowNone={true} />
+        </div>
+        <div class="lg:col-span-1 md:col-span-2 col-span-4">
+          <Select2
+            label={i18n('valvonta.kaytto.all.last-template')}
+            bind:model={query}
+            lens={R.lensProp('asiakirjapohja-id')}
+            modelToItem={Maybe.fold(
+              Maybe.None(),
+              Maybe.findById(R.__, templates)
+            )}
+            itemToModel={Maybe.fold(Maybe.None(), it => Maybe.Some(it.id))}
+            format={Maybe.fold(
+              i18n('validation.no-selection'),
+              Locales.label($locale)
+            )}
+            items={Selects.addNoSelection(templates)} />
         </div>
       </div>
       {#if valvonnat.length === 0}
