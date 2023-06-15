@@ -1909,6 +1909,7 @@
           "title": "Käskypäätös / kuulemiskirje",
           "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
           "description": "Kommentti",
+          "fine": "Sakon suuruus €",
           "publish-button": "Lähetä kuulemiskirje"
         },
         "messages": {

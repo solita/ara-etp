@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
@@ -19,6 +20,7 @@
   import Button from '@Component/Button/Button';
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
+  import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
@@ -199,6 +201,19 @@
           validators={schema.description}
           {i18n} />
       </div>
+    {/if}
+
+    {#if Toimenpiteet.hasFine(toimenpide)}
+      <Input
+        id="toimenpide.fine"
+        name="toimenpide.fine"
+        label={text(toimenpide, 'fine')}
+        bind:model={toimenpide}
+        lens={R.lensProp('fine')}
+        required={true}
+        type="number"
+        format={R.compose(Formats.numberFormat, Maybe.get)}
+        parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
     {/if}
 
     {#if !R.isEmpty(templates)}

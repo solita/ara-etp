@@ -64,13 +64,23 @@ const defaultTemplateId = (typeId, templatesByType) => {
     : Maybe.None();
 };
 
-export const emptyToimenpide = (typeId, templatesByType) => ({
-  'type-id': typeId,
-  'publish-time': Maybe.None(),
-  'deadline-date': Either.Right(defaultDeadline(typeId)),
-  'template-id': defaultTemplateId(typeId, templatesByType),
-  description: Maybe.None()
-});
+export const emptyToimenpide = (typeId, templatesByType) => {
+  const toimenpide = {
+    'type-id': typeId,
+    'publish-time': Maybe.None(),
+    'deadline-date': Either.Right(defaultDeadline(typeId)),
+    'template-id': defaultTemplateId(typeId, templatesByType),
+    description: Maybe.None()
+  };
+
+  switch (typeId) {
+    case 7:
+      return R.assoc('fine', Maybe.Some(800), toimenpide);
+
+    default:
+      return toimenpide;
+  }
+};
 
 export const isDraft = R.compose(Maybe.isNone, R.prop('publish-time'));
 
@@ -128,3 +138,6 @@ export const manuallyDeliverableToimenpideTypes =
  */
 export const toimenpideTypesThatAllowComments =
   findIdsOfObjectsWhereGivenKeyHasValueTrue('allow-comments');
+
+export const hasFine = toimenpide =>
+  R.compose(Maybe.isSome, R.propOr(Maybe.None(), 'fine'))(toimenpide);

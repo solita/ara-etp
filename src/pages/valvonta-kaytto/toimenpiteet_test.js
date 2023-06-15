@@ -70,3 +70,38 @@ describe('Given toimenpidetypes', () => {
     );
   });
 });
+
+describe('Empty toimenpide', () => {
+  it('Contains correct keys for toimenpidetype 1', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description'
+    ]);
+  });
+
+  it('Contains correct keys for toimenpidetype 7 which includes fine', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'fine'
+    ]);
+  });
+
+  it('with a fine is recognized as having a fine', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
+    assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
+  });
+
+  it('without a fine is recognized as not having a fine', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
+    assert.isFalse(Toimenpiteet.hasFine(emptyToimenpide));
+  });
+});
