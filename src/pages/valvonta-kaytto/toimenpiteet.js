@@ -139,5 +139,4 @@ export const manuallyDeliverableToimenpideTypes =
 export const toimenpideTypesThatAllowComments =
   findIdsOfObjectsWhereGivenKeyHasValueTrue('allow-comments');
 
-export const hasFine = toimenpide =>
-  R.compose(Maybe.isSome, R.propOr(Maybe.None(), 'fine'))(toimenpide);
+export const hasFine = toimenpide => R.has('fine', toimenpide);

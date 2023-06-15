@@ -100,6 +100,12 @@ describe('Empty toimenpide', () => {
     assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
   });
 
+  it('with a fine key but no value is recognized as having a fine', () => {
+    let emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
+    emptyToimenpide.fine = Maybe.fromNull(null);
+    assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
+  });
+
   it('without a fine is recognized as not having a fine', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
     assert.isFalse(Toimenpiteet.hasFine(emptyToimenpide));

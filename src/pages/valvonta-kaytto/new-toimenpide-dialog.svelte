@@ -212,7 +212,7 @@
         lens={R.lensProp('fine')}
         required={true}
         type="number"
-        format={R.compose(Formats.numberFormat, Maybe.get)}
+        format={Maybe.orSome('')}
         parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
     {/if}
 
