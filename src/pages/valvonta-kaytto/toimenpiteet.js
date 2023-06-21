@@ -40,7 +40,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 
 const defaultDeadlineForTypeId = typeId => {
   switch (typeId) {
-    case 7:
+    case R.path(['decision-order', 'hearing-letter'], type):
       return Maybe.Some(dfns.addWeeks(new Date(), 2));
     default:
       return Maybe.Some(dfns.addMonths(new Date(), 1));
@@ -74,7 +74,7 @@ export const emptyToimenpide = (typeId, templatesByType) => {
   };
 
   switch (typeId) {
-    case 7:
+    case R.path(['decision-order', 'hearing-letter'], type):
       return R.assoc('fine', Maybe.Some(800), toimenpide);
 
     default:
@@ -97,10 +97,9 @@ export const time = R.converge(Maybe.orSome, [
 export const sendTiedoksi = isType(type.rfi.request);
 
 /**
- *
  * Takes an array of toimenpidetype IDs and a toimenpide object
  * and checks if its type id is in the array
- * @param {number[]} toimenPideTypeIds
+ * @param {number[]} toimenpideTypeIds
  * @param {Object} toimenpide
  * @returns {boolean} is toimenpidetype of the given toimenpide one in the array
  */
