@@ -1895,7 +1895,7 @@
           "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu. (sv)",
           "description": "Kommentar",
           "fine": "Sakon suuruus € (sv)",
-          "publish-button": "Lähetä kuulemiskirje (sv)"
+          "publish-button": "Luo toimenpide (sv)"
         },
         "messages": {
           "not-found": "Det existerar ingen åtgärd.",
