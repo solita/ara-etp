@@ -7,7 +7,7 @@ const defaultProps = {
   id: 'prefilledid',
   name: 'prefilledname',
   label: 'Pre-filled label',
-  value: 'Pre-filled value'
+  model: 'Pre-filled value'
 };
 
 export const withText = () => ({
@@ -29,3 +29,17 @@ export const withFailedValidation = () => ({
   Component: Input,
   props: R.assoc('validation', R.always(false), defaultProps)
 });
+
+export const numberInput = () => {
+  let value = 69;
+  return {
+    Component: Input,
+    props: {
+      id: 'prefilledid',
+      name: 'number-input',
+      label: 'Number input',
+      model: value,
+      type: 'number'
+    }
+  };
+};

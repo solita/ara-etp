@@ -25,7 +25,7 @@
   export let henkilot;
   export let yritykset;
   export let toimenpiteet;
-  export let toimenpidetyypit;
+  export let toimenpidetyypit = [];
   export let templatesByType;
   export let whoami;
 
@@ -51,6 +51,16 @@
   const isAuditCase = toimenpiteet =>
     !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
 
+  const isManuallyDeliverable = R.compose(
+    Toimenpiteet.isToimenpideOfGivenTypes,
+    Toimenpiteet.manuallyDeliverableToimenpideTypes
+  )(toimenpidetyypit);
+
+  const isCommentingAllowed = R.compose(
+    Toimenpiteet.isToimenpideOfGivenTypes,
+    Toimenpiteet.toimenpideTypesThatAllowComments
+  )(toimenpidetyypit);
+
   const saveKasittelija = id =>
     saveValvonta(R.assoc('valvoja-id', id, valvonta));
 
@@ -71,6 +81,8 @@
     {yritykset}
     {roolit}
     {toimitustavat}
+    manuallyDeliverableToimenpide={isManuallyDeliverable(toimenpide)}
+    commentingAllowed={isCommentingAllowed(toimenpide)}
     reload={load} />
 {/each}
 

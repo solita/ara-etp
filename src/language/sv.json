@@ -1865,6 +1865,7 @@
         "cancel-button": "Återkalla",
         "preview-button": "Förhandsvisa",
         "download-button": "Ladda ner",
+        "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti (sv)",
         "case": {
           "title": "Inledande av kontroll",
           "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",
@@ -1898,6 +1899,13 @@
           "description": "Kommentar",
           "publish-button": "Avsluta",
           "force-button": "Avsulta (endast ETP)"
+        },
+        "decision-order-hearing-letter": {
+          "title": "Käskypäätös / kuulemiskirje (sv)",
+          "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu. (sv)",
+          "description": "Kommentar",
+          "fine": "Sakon suuruus € (sv)",
+          "publish-button": "Luo toimenpide (sv)"
         },
         "messages": {
           "not-found": "Det existerar ingen åtgärd.",

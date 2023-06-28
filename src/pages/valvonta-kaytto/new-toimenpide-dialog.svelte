@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
@@ -19,6 +20,7 @@
   import Button from '@Component/Button/Button';
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
+  import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
@@ -35,6 +37,9 @@
   export let yritykset;
   export let roolit;
   export let toimitustavat;
+
+  export let manuallyDeliverableToimenpide = false;
+  export let commentingAllowed = false;
 
   let form;
   let error = Maybe.None();
@@ -180,7 +185,9 @@
           format={formatTemplate}
           items={R.pluck('id', filterValid(templates))} />
       </div>
-    {:else}
+    {/if}
+
+    {#if commentingAllowed || R.isEmpty(templates)}
       <div class="w-full py-4">
         <Textarea
           id={'toimenpide.description'}
@@ -196,6 +203,19 @@
       </div>
     {/if}
 
+    {#if Toimenpiteet.hasFine(toimenpide)}
+      <Input
+        id="toimenpide.fine"
+        name="toimenpide.fine"
+        label={text(toimenpide, 'fine')}
+        bind:model={toimenpide}
+        lens={R.lensProp('fine')}
+        required={true}
+        type="number"
+        format={Maybe.orSome('')}
+        parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
+    {/if}
+
     {#if !R.isEmpty(templates)}
       <div class="mt-2">
         <OsapuoletTable
@@ -208,7 +228,8 @@
           {disabled}
           {roolit}
           {toimitustavat}
-          {template} />
+          {template}
+          {manuallyDeliverableToimenpide} />
       </div>
     {/if}
 

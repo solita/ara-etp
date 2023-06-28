@@ -1870,6 +1870,7 @@
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
         "download-button": "Lataa",
+        "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti",
         "case": {
           "title": "Valvonnan aloitus",
           "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
@@ -1909,6 +1910,13 @@
           "description": "Kommentti",
           "publish-button": "Lopeta",
           "force-button": "Lopeta (vain ETP)"
+        },
+        "decision-order-hearing-letter": {
+          "title": "Käskypäätös / kuulemiskirje",
+          "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus €",
+          "publish-button": "Luo toimenpide"
         },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
