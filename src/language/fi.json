@@ -1904,6 +1904,12 @@
           "description": "Kommentti",
           "publish-button": "Kirjaa päätös"
         },
+        "court-hearing": {
+          "title": "HaO-käsittely",
+          "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen.",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa kommentti"
+        },
         "closed": {
           "title": "Valvonnan lopetus",
           "info": "Tällä toimenpiteellä lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
