@@ -14,7 +14,7 @@
 
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
-  import Select2 from '@Component/Select/select2';
+  import Select2 from '@Component/Select/Select2';
   import H1 from '@Component/H/H1';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';

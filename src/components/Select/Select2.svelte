@@ -54,6 +54,7 @@
       modelValue
   );
 
+  let showDropdown;
   $: showDropdown = Maybe.isSome(active);
 
   let selectableItems = items;

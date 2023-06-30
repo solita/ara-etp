@@ -26,7 +26,7 @@
   import Pagination from '@Component/Pagination/Pagination';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
-  import Select2 from '@Component/Select/select2';
+  import Select2 from '@Component/Select/Select2';
   import Input from '@Component/Input/Input';
 
   const i18n = $_;
