@@ -1907,6 +1907,12 @@
           "fine": "Sakon suuruus € (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "court-hearing": {
+          "title": "HaO-käsittely (sv)",
+          "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Kirjaa kommentti (sv)"
+        },
         "messages": {
           "not-found": "Det existerar ingen åtgärd.",
           "load-error": "Det gick inte att söka uppgifter om åtgärden.",

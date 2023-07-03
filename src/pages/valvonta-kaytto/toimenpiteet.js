@@ -17,6 +17,7 @@ export const type = {
     order: 4 // käskypäätös
   },
   closed: 5,
+  'court-hearing': 6,
   'decision-order': {
     'hearing-letter': 7
   }
@@ -28,7 +29,7 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 7]);
+const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
