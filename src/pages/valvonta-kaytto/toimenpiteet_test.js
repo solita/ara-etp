@@ -25,6 +25,15 @@ describe('Toimenpiteet: ', () => {
         )
       );
     });
+
+    it('is by default 37 days for type 8', () => {
+      assert.isTrue(
+        dfns.isSameDay(
+          dfns.addDays(new Date(), 37),
+          Maybe.get(Toimenpiteet.defaultDeadline(8))
+        )
+      );
+    });
   });
 
   describe('Käskypäätös / Kuulemiskirje', () => {
@@ -34,6 +43,16 @@ describe('Toimenpiteet: ', () => {
 
     it('is a type with a deadline', () => {
       assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 7 }));
+    });
+  });
+
+  describe('Käskypäätös / varsinainen päätös', () => {
+    it('id is mapped correctly to the type key', () => {
+      assert.equal('decision-order-actual-decision', Toimenpiteet.typeKey(8));
+    });
+
+    it('is a type with a deadline', () => {
+      assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 8 }));
     });
   });
 

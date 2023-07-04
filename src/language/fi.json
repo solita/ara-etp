@@ -1924,6 +1924,12 @@
           "fine": "Sakon suuruus €",
           "publish-button": "Luo toimenpide"
         },
+        "decision-order-actual-decision": {
+          "title": "Käskypäätös / varsinainen päätös",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
