@@ -57,7 +57,7 @@ const bilingualIeqOperation = {
   browserCommand: 'bl-ieq',
   serverCommand: 'bilingual-ieq',
   format: defaultFormat
-}
+};
 
 const contains = {
   browserCommand: 'sisaltaa',
@@ -106,7 +106,7 @@ const stringContainsNo = key => ({
   type: OPERATOR_TYPES.STRING
 });
 
-const stringBilingualCaseInsensitiveEquals =  key => ({
+const stringBilingualCaseInsensitiveEquals = key => ({
   operation: bilingualIeqOperation,
   key,
   defaultValues: () => [''],
@@ -735,7 +735,7 @@ export const schema = {
   laatija,
   kunta,
   postinumero: {
-    'label': [stringBilingualCaseInsensitiveEquals]
+    label: [stringBilingualCaseInsensitiveEquals]
   }
 };
 
