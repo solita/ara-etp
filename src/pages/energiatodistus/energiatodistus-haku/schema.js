@@ -53,6 +53,12 @@ const lte = {
   format: defaultFormat
 };
 
+const bilingualIeqOperation = {
+  browserCommand: 'bl-ieq',
+  serverCommand: 'bilingual-ieq',
+  format: defaultFormat
+}
+
 const contains = {
   browserCommand: 'sisaltaa',
   serverCommand: 'ilike',
@@ -95,6 +101,13 @@ const stringContains = key => ({
 
 const stringContainsNo = key => ({
   operation: containsNo,
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.STRING
+});
+
+const stringBilingualCaseInsensitiveEquals =  key => ({
+  operation: bilingualIeqOperation,
   key,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
@@ -720,7 +733,10 @@ export const schema = {
     'laatija-id': [laatijaEquals]
   },
   laatija,
-  kunta
+  kunta,
+  postinumero: {
+    'label': [stringBilingualCaseInsensitiveEquals]
+  }
 };
 
 const localizedField = key => [`${key}-fi`, `${key}-sv`];

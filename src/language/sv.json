@@ -441,6 +441,7 @@
       "poista-disabled": "Energicertifikatet kan endast raderas i utkaststatus.",
       "ei-sisalla": "Innehåller inte",
       "kuluva-ja-edelliset": "Innevarande och föregående",
+      "bl-ieq": "=",
       "laatija": {
         "toteamispaivamaara": "Upprättare / Datum för konstaterande",
         "voimassaolo-paattymisaika": "Upprättare / Behörighetens sista giltighetsdag",
@@ -448,6 +449,9 @@
       },
       "kunta": {
         "id": "Kommun"
+      },
+      "postinumero": {
+        "label": "Postanstalt"
       }
     },
     "kaikki": "Allt",

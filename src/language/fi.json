@@ -464,6 +464,7 @@
       "in": "Jokin",
       "between": "Välillä",
       "kuluva-ja-edelliset": "Kuluva ja edelliset",
+      "bl-ieq": "=",
       "and": "Ja",
       "or": "Tai",
       "suosikkihaut": "Suosikkihaut",
@@ -480,6 +481,9 @@
       },
       "kunta": {
         "id": "Kunta"
+      },
+      "postinumero": {
+        "label": "Postitoimipaikka"
       }
     },
     "kaikki": "Kaikki",
