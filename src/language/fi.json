@@ -464,7 +464,7 @@
       "in": "Jokin",
       "between": "Välillä",
       "kuluva-ja-edelliset": "Kuluva ja edelliset",
-      "bl-ieq": "=",
+      "ieq": "=",
       "and": "Ja",
       "or": "Tai",
       "suosikkihaut": "Suosikkihaut",

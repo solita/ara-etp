@@ -53,12 +53,6 @@ const lte = {
   format: defaultFormat
 };
 
-const bilingualIeqOperation = {
-  browserCommand: 'bl-ieq',
-  serverCommand: 'bilingual-ieq',
-  format: defaultFormat
-};
-
 const contains = {
   browserCommand: 'sisaltaa',
   serverCommand: 'ilike',
@@ -69,6 +63,12 @@ const containsNo = {
   browserCommand: 'ei-sisalla',
   serverCommand: 'not ilike',
   format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
+};
+
+const caseIntensitiveEqualsOperation = {
+  browserCommand: 'ieq',
+  serverCommand: 'ilike',
+  format: R.curry((command, key, value) => [[command, key, value]])
 };
 
 const some = {
@@ -106,8 +106,8 @@ const stringContainsNo = key => ({
   type: OPERATOR_TYPES.STRING
 });
 
-const stringBilingualCaseInsensitiveEquals = key => ({
-  operation: bilingualIeqOperation,
+const stringIsCaseInsentivelyEqual = key => ({
+  operation: caseIntensitiveEqualsOperation,
   key,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
@@ -735,7 +735,7 @@ export const schema = {
   laatija,
   kunta,
   postinumero: {
-    label: [stringBilingualCaseInsensitiveEquals]
+    label: [...stringComparisons, stringIsCaseInsentivelyEqual]
   }
 };
 
