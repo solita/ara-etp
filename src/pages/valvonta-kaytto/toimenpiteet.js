@@ -79,7 +79,11 @@ export const emptyToimenpide = (typeId, templatesByType) => {
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
-      return R.assoc('fine', Maybe.Some(800), toimenpide);
+      return R.assocPath(
+        ['type-specific-data', 'fine'],
+        Maybe.Some(800),
+        toimenpide
+      );
 
     default:
       return toimenpide;
@@ -142,4 +146,5 @@ export const manuallyDeliverableToimenpideTypes =
 export const toimenpideTypesThatAllowComments =
   findIdsOfObjectsWhereGivenKeyHasValueTrue('allow-comments');
 
-export const hasFine = toimenpide => R.has('fine', toimenpide);
+export const hasFine = toimenpide =>
+  R.hasPath(['type-specific-data', 'fine'], toimenpide);

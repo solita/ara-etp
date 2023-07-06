@@ -218,7 +218,7 @@ const serializeToimenpide = R.compose(
     'deadline-date': EM.fold(null, date =>
       dfns.formatISO(date, { representation: 'date' })
     ),
-    fine: Maybe.orSome(null)
+    'type-specific-data': { fine: Maybe.orSome(null) }
   }),
   R.pick([
     'type-id',
@@ -226,7 +226,7 @@ const serializeToimenpide = R.compose(
     'description',
     'template-id',
     'bypass-asha',
-    'fine'
+    'type-specific-data'
   ])
 );
 

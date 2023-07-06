@@ -102,7 +102,7 @@ describe('Empty toimenpide', () => {
     ]);
   });
 
-  it('Contains correct keys for toimenpidetype 7 which includes fine', () => {
+  it('Contains correct keys for toimenpidetype 7 which includes fine under type-specific-data', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
@@ -110,6 +110,10 @@ describe('Empty toimenpide', () => {
       'deadline-date',
       'template-id',
       'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
       'fine'
     ]);
   });

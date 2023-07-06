@@ -209,7 +209,7 @@
         name="toimenpide.fine"
         label={text(toimenpide, 'fine')}
         bind:model={toimenpide}
-        lens={R.lensProp('fine')}
+        lens={R.lensPath(['type-specific-data', 'fine'])}
         required={true}
         type="number"
         format={Maybe.orSome('')}
