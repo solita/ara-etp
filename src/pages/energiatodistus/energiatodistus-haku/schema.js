@@ -65,6 +65,12 @@ const containsNo = {
   format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
+const caseInsensitiveEqualsOperation = {
+  browserCommand: 'ieq',
+  serverCommand: 'ilike',
+  format: R.curry((command, key, value) => [[command, key, value]])
+};
+
 const some = {
   browserCommand: 'in',
   serverCommand: 'in',
@@ -95,6 +101,13 @@ const stringContains = key => ({
 
 const stringContainsNo = key => ({
   operation: containsNo,
+  key,
+  defaultValues: () => [''],
+  type: OPERATOR_TYPES.STRING
+});
+
+const stringIsCaseInsensitivelyEqual = key => ({
+  operation: caseInsensitiveEqualsOperation,
   key,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
@@ -229,7 +242,11 @@ const unformattedNumberComparisons = numberComparisonsFromType(
 
 const percentComparisons = numberComparisonsFromType(OPERATOR_TYPES.PERCENT);
 
-const stringComparisons = [stringContains, stringContainsNo];
+const stringComparisons = [
+  stringContains,
+  stringContainsNo,
+  stringIsCaseInsensitivelyEqual
+];
 
 const eLuokkaComparisons = [eLuokkaSome];
 
@@ -720,7 +737,10 @@ export const schema = {
     'laatija-id': [laatijaEquals]
   },
   laatija,
-  kunta
+  kunta,
+  postinumero: {
+    label: [...stringComparisons]
+  }
 };
 
 const localizedField = key => [`${key}-fi`, `${key}-sv`];
