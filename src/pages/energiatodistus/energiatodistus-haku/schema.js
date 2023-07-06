@@ -65,7 +65,7 @@ const containsNo = {
   format: R.curry((command, key, value) => [[command, key, `%${value}%`]])
 };
 
-const caseIntensitiveEqualsOperation = {
+const caseInsensitiveEqualsOperation = {
   browserCommand: 'ieq',
   serverCommand: 'ilike',
   format: R.curry((command, key, value) => [[command, key, value]])
@@ -106,8 +106,8 @@ const stringContainsNo = key => ({
   type: OPERATOR_TYPES.STRING
 });
 
-const stringIsCaseInsentivelyEqual = key => ({
-  operation: caseIntensitiveEqualsOperation,
+const stringIsCaseInsensitivelyEqual = key => ({
+  operation: caseInsensitiveEqualsOperation,
   key,
   defaultValues: () => [''],
   type: OPERATOR_TYPES.STRING
@@ -735,7 +735,7 @@ export const schema = {
   laatija,
   kunta,
   postinumero: {
-    label: [...stringComparisons, stringIsCaseInsentivelyEqual]
+    label: [...stringComparisons, stringIsCaseInsensitivelyEqual]
   }
 };
 
