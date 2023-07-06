@@ -242,7 +242,11 @@ const unformattedNumberComparisons = numberComparisonsFromType(
 
 const percentComparisons = numberComparisonsFromType(OPERATOR_TYPES.PERCENT);
 
-const stringComparisons = [stringContains, stringContainsNo];
+const stringComparisons = [
+  stringContains,
+  stringContainsNo,
+  stringIsCaseInsensitivelyEqual
+];
 
 const eLuokkaComparisons = [eLuokkaSome];
 
@@ -735,7 +739,7 @@ export const schema = {
   laatija,
   kunta,
   postinumero: {
-    label: [...stringComparisons, stringIsCaseInsensitivelyEqual]
+    label: [...stringComparisons]
   }
 };
 
