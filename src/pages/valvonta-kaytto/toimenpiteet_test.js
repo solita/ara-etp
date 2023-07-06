@@ -118,6 +118,22 @@ describe('Empty toimenpide', () => {
     ]);
   });
 
+  it('Contains correct keys for toimenpidetype 8 which includes fine under type-specific-data', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'fine'
+    ]);
+  });
+
   it('with a fine is recognized as having a fine', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
     assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));

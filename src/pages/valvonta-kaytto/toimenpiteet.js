@@ -85,6 +85,14 @@ export const emptyToimenpide = (typeId, templatesByType) => {
         toimenpide
       );
 
+    case R.path(['decision-order', 'actual-decision'], type):
+      return R.assocPath(
+        ['type-specific-data', 'fine'],
+        // TODO: Defaultiksi kuulemiskirjeen sakko
+        Maybe.Some(800),
+        toimenpide
+      );
+
     default:
       return toimenpide;
   }

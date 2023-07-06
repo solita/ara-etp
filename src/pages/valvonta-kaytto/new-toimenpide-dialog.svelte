@@ -216,6 +216,7 @@
         parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
     {/if}
 
+    <!-- Toimenpidekohtainen alinäkymä kenties tähän? Tai ainakin omansa tuolle varsinaiselle päätökselle, koska siihen tulee niin monta kenttää -->
     {#if !R.isEmpty(templates)}
       <div class="mt-2">
         <OsapuoletTable

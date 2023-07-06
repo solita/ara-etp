@@ -1909,7 +1909,9 @@
         },
         "decision-order-actual-decision": {
           "title": "Käskypäätös / varsinainen päätös (sv)",
-          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. (sv)"
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. (sv)",
+          "fine": "Sakon suuruus € (sv)",
+          "publish-button": "Luo toimenpide (sv)"
         },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",
