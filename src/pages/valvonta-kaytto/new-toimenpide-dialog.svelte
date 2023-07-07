@@ -23,6 +23,7 @@
   import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
+  import Select2 from '@Component/Select/Select2';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
   import * as Validation from '@Utility/validation';
 
@@ -51,6 +52,7 @@
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
+  let templates;
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
   $: formatTemplate = Locales.labelForId($locale, templates);
 
@@ -204,19 +206,32 @@
     {/if}
 
     {#if Toimenpiteet.hasFine(toimenpide)}
-      <Input
-        id="toimenpide.fine"
-        name="toimenpide.fine"
-        label={text(toimenpide, 'fine')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'fine'])}
-        required={true}
-        type="number"
-        format={Maybe.orSome('')}
-        parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
+      <div class="w-full py-4">
+        <Input
+          id="toimenpide.fine"
+          name="toimenpide.fine"
+          label={text(toimenpide, 'fine')}
+          bind:model={toimenpide}
+          lens={R.lensPath(['type-specific-data', 'fine'])}
+          required={true}
+          type="number"
+          format={Maybe.orSome('')}
+          parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
+      </div>
     {/if}
 
-    <!-- Toimenpidekohtainen alinäkymä kenties tähän? Tai ainakin omansa tuolle varsinaiselle päätökselle, koska siihen tulee niin monta kenttää -->
+    <!-- TODO: Toimenpidekohtainen alinäkymä kenties tähän? Tai ainakin omansa tuolle varsinaiselle päätökselle, koska siihen tulee niin monta kenttää -->
+    {#if Toimenpiteet.isActualDecision(toimenpide)}
+      <div class="w-full py-4">
+        <Select2
+          bind:model={toimenpide}
+          lens={R.lensPath(['type-specific-data', 'recipient-answered'])}
+          format={value => text(toimenpide, `hearing-letter-answered.${value}`)}
+          label={text(toimenpide, 'hearing-letter-answered.label')}
+          items={[true, false]} />
+      </div>
+    {/if}
+
     {#if !R.isEmpty(templates)}
       <div class="mt-2">
         <OsapuoletTable

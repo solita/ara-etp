@@ -86,10 +86,10 @@ export const emptyToimenpide = (typeId, templatesByType) => {
       );
 
     case R.path(['decision-order', 'actual-decision'], type):
-      return R.assocPath(
-        ['type-specific-data', 'fine'],
+      return R.assoc(
+        'type-specific-data',
         // TODO: Defaultiksi kuulemiskirjeen sakko
-        Maybe.Some(800),
+        { fine: Maybe.Some(800), 'recipient-answered': false },
         toimenpide
       );
 
@@ -156,3 +156,7 @@ export const toimenpideTypesThatAllowComments =
 
 export const hasFine = toimenpide =>
   R.hasPath(['type-specific-data', 'fine'], toimenpide);
+
+export const isActualDecision = isType(
+  R.path(['decision-order', 'actual-decision'], type)
+);

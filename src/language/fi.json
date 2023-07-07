@@ -1927,6 +1927,11 @@
         "decision-order-actual-decision": {
           "title": "Käskypäätös / varsinainen päätös",
           "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "hearing-letter-answered": {
+            "label": "Omistaja vastasi kuulemiskirjeeseen",
+            "true": "Kyllä",
+            "false": "Ei"
+          },
           "description": "Kommentti",
           "fine": "Sakon suuruus €",
           "publish-button": "Luo toimenpide"

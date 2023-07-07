@@ -54,6 +54,11 @@ describe('Toimenpiteet: ', () => {
     it('is a type with a deadline', () => {
       assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 8 }));
     });
+
+    it('is recognized correctly with isActualDecision function', () => {
+      assert.isTrue(Toimenpiteet.isActualDecision({ 'type-id': 8 }));
+      assert.isFalse(Toimenpiteet.isActualDecision({ 'type-id': 7 }));
+    });
   });
 
   describe('Toimenpide object is recognized correctly whether it is part of the given types', () => {
@@ -118,7 +123,7 @@ describe('Empty toimenpide', () => {
     ]);
   });
 
-  it('Contains correct keys for toimenpidetype 8 which includes fine under type-specific-data', () => {
+  it('Contains correct keys for toimenpidetype 8', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
@@ -129,8 +134,10 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
+    //  Includes fine and whether the recipient answered
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
-      'fine'
+      'fine',
+      'recipient-answered'
     ]);
   });
 
