@@ -17,7 +17,7 @@
 
   import { _, locale } from '@Language/i18n';
 
-  import Button from '@Component/Button/Button';
+  import Dialog from '@Component/dialog/dialog';
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
   import Input from '@Component/Input/Input';
@@ -125,156 +125,122 @@
   };
 </script>
 
-<style type="text/postcss">
-  dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
-  }
+<Dialog
+  bind:form
+  header={text(toimenpide, 'title')}
+  error={R.map(R.prop('message'), error)}
+  buttons={[
+    {
+      text: text(toimenpide, 'publish-button'),
+      showSpinner: publishPending,
+      disabled,
+      'on:click': _ => publish({ 'bypass-asha': false, ...toimenpide })
+    },
+    {
+      text: i18n(i18nRoot + '.cancel-button'),
+      disabled,
+      style: 'secondary',
+      'on:click': reload
+    },
+    ...(Maybe.exists(e => e.mayBypassAsha, error)
+      ? [
+          {
+            text: text(toimenpide, 'force-button'),
+            showSpinner: publishPending,
+            disabled,
+            'on:click': _ => publish({ 'bypass-asha': true, ...toimenpide })
+          }
+        ]
+      : [])
+  ]}>
+  <p>{text(toimenpide, 'info')}</p>
 
-  .content {
-    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
-  }
-
-  h1 {
-    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
-  }
-
-  .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-  }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
-</style>
-
-<dialog on:click|stopPropagation>
-  <form class="content" bind:this={form}>
-    <h1>{text(toimenpide, 'title')}</h1>
-
-    {#each error.toArray() as { message }}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{message}</div>
-      </div>
-    {/each}
-
-    <p>{text(toimenpide, 'info')}</p>
-
-    {#if Toimenpiteet.hasDeadline(toimenpide)}
-      <div class="flex py-4">
-        <Datepicker
-          label="Määräpäivä"
-          bind:model={toimenpide}
-          required={true}
-          lens={R.lensProp('deadline-date')}
-          format={Maybe.fold('', Formats.formatDateInstant)}
-          parse={Parsers.optionalParser(Parsers.parseDate)}
-          transform={EM.fromNull}
-          validators={schema['deadline-date']}
-          {i18n} />
-      </div>
-    {/if}
-
-    {#if !R.isEmpty(templates)}
-      <div class="w-1/2 py-4">
-        <Select
-          label="Valitse asiakirjapohja"
-          bind:model={toimenpide}
-          lens={R.lensProp('template-id')}
-          parse={Maybe.fromNull}
-          required={true}
-          validation={true}
-          format={formatTemplate}
-          items={R.pluck('id', filterValid(templates))} />
-      </div>
-    {/if}
-
-    {#if commentingAllowed || R.isEmpty(templates)}
-      <div class="w-full py-4">
-        <Textarea
-          id={'toimenpide.description'}
-          name={'toimenpide.description'}
-          label={text(toimenpide, 'description')}
-          bind:model={toimenpide}
-          lens={R.lensProp('description')}
-          required={false}
-          format={Maybe.orSome('')}
-          parse={Parsers.optionalString}
-          validators={schema.description}
-          {i18n} />
-      </div>
-    {/if}
-
-    {#if Toimenpiteet.hasFine(toimenpide)}
-      <div class="w-full py-4">
-        <Input
-          id="toimenpide.fine"
-          name="toimenpide.fine"
-          label={text(toimenpide, 'fine')}
-          bind:model={toimenpide}
-          lens={R.lensPath(['type-specific-data', 'fine'])}
-          required={true}
-          type="number"
-          format={Maybe.orSome('')}
-          parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
-      </div>
-    {/if}
-
-    <!-- TODO: Toimenpidekohtainen alinäkymä kenties tähän? Tai ainakin omansa tuolle varsinaiselle päätökselle, koska siihen tulee niin monta kenttää -->
-    {#if Toimenpiteet.isActualDecision(toimenpide)}
-      <div class="w-full py-4">
-        <Select2
-          bind:model={toimenpide}
-          lens={R.lensPath(['type-specific-data', 'recipient-answered'])}
-          format={value => text(toimenpide, `hearing-letter-answered.${value}`)}
-          label={text(toimenpide, 'hearing-letter-answered.label')}
-          items={[true, false]} />
-      </div>
-    {/if}
-
-    {#if !R.isEmpty(templates)}
-      <div class="mt-2">
-        <OsapuoletTable
-          {id}
-          {toimenpide}
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {toimitustavat}
-          {template}
-          {manuallyDeliverableToimenpide} />
-      </div>
-    {/if}
-
-    <div class="buttons">
-      <div class="mr-5 mt-5">
-        <Button
-          text={text(toimenpide, 'publish-button')}
-          showSpinner={publishPending}
-          {disabled}
-          on:click={publish({ 'bypass-asha': false, ...toimenpide })} />
-      </div>
-
-      <div class="mt-5">
-        <Button
-          text={i18n(i18nRoot + '.cancel-button')}
-          {disabled}
-          style={'secondary'}
-          on:click={reload} />
-      </div>
-
-      {#if error.exists(e => e.mayBypassAsha)}
-        <div class="ml-auto mt-5">
-          <Button
-            text={text(toimenpide, 'force-button')}
-            showSpinner={publishPending}
-            {disabled}
-            on:click={publish({ 'bypass-asha': true, ...toimenpide })} />
-        </div>
-      {/if}
+  {#if Toimenpiteet.hasDeadline(toimenpide)}
+    <div class="flex py-4">
+      <Datepicker
+        label="Määräpäivä"
+        bind:model={toimenpide}
+        required={true}
+        lens={R.lensProp('deadline-date')}
+        format={Maybe.fold('', Formats.formatDateInstant)}
+        parse={Parsers.optionalParser(Parsers.parseDate)}
+        transform={EM.fromNull}
+        validators={schema['deadline-date']}
+        {i18n} />
     </div>
-  </form>
-</dialog>
+  {/if}
+
+  {#if !R.isEmpty(templates)}
+    <div class="w-1/2 py-4">
+      <Select
+        label="Valitse asiakirjapohja"
+        bind:model={toimenpide}
+        lens={R.lensProp('template-id')}
+        parse={Maybe.fromNull}
+        required={true}
+        validation={true}
+        format={formatTemplate}
+        items={R.pluck('id', filterValid(templates))} />
+    </div>
+  {/if}
+
+  {#if commentingAllowed || R.isEmpty(templates)}
+    <div class="w-full py-4">
+      <Textarea
+        id={'toimenpide.description'}
+        name={'toimenpide.description'}
+        label={text(toimenpide, 'description')}
+        bind:model={toimenpide}
+        lens={R.lensProp('description')}
+        required={false}
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={schema.description}
+        {i18n} />
+    </div>
+  {/if}
+
+  {#if Toimenpiteet.hasFine(toimenpide)}
+    <div class="w-full py-4">
+      <Input
+        id="toimenpide.fine"
+        name="toimenpide.fine"
+        label={text(toimenpide, 'fine')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'fine'])}
+        required={true}
+        type="number"
+        format={Maybe.orSome('')}
+        parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
+    </div>
+  {/if}
+
+  <!-- TODO: Toimenpidekohtainen alinäkymä kenties tähän? Tai ainakin omansa tuolle varsinaiselle päätökselle, koska siihen tulee niin monta kenttää -->
+  {#if Toimenpiteet.isActualDecision(toimenpide)}
+    <div class="w-full py-4">
+      <Select2
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'recipient-answered'])}
+        format={value => text(toimenpide, `hearing-letter-answered.${value}`)}
+        label={text(toimenpide, 'hearing-letter-answered.label')}
+        items={[true, false]} />
+    </div>
+  {/if}
+
+  {#if !R.isEmpty(templates)}
+    <div class="mt-2">
+      <OsapuoletTable
+        {id}
+        {toimenpide}
+        {henkilot}
+        {yritykset}
+        {preview}
+        {previewPending}
+        {disabled}
+        {roolit}
+        {toimitustavat}
+        {template}
+        {manuallyDeliverableToimenpide} />
+    </div>
+  {/if}
+</Dialog>
