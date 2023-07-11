@@ -89,7 +89,11 @@ export const emptyToimenpide = (typeId, templatesByType) => {
       return R.assoc(
         'type-specific-data',
         // TODO: Defaultiksi kuulemiskirjeen sakko
-        { fine: Maybe.Some(800), 'recipient-answered': false },
+        {
+          fine: Maybe.Some(800),
+          'recipient-answered': false,
+          'answer-commentary': Maybe.None()
+        },
         toimenpide
       );
 

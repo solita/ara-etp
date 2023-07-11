@@ -1915,6 +1915,7 @@
             "true": "Kyllä (sv)",
             "false": "Ei (sv)"
           },
+          "answer-commentary": "Vastineen kommentit (sv)",
           "description": "Kommentti (sv)",
           "fine": "Sakon suuruus € (sv)",
           "publish-button": "Luo toimenpide (sv)"

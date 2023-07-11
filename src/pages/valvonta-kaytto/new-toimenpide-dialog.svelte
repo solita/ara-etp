@@ -225,6 +225,20 @@
         label={text(toimenpide, 'hearing-letter-answered.label')}
         items={[true, false]} />
     </div>
+
+    <!--  TODO: Validaattori?  -->
+    <div class="w-full py-4">
+      <Textarea
+        id={'toimenpide.answer-commentary'}
+        name={'toimenpide.answer-commentary'}
+        label={text(toimenpide, 'answer-commentary')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'answer-commentary'])}
+        required={false}
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        {i18n} />
+    </div>
   {/if}
 
   {#if !R.isEmpty(templates)}
