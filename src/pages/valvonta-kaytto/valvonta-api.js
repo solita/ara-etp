@@ -58,6 +58,11 @@ export const toimitustavat = Fetch.cached(
 );
 export const roolit = Fetch.cached(fetch, '/valvonta/kaytto/roolit');
 
+export const hallintoOikeudet = Fetch.cached(
+  fetch,
+  '/valvonta/kaytto/hallinto-oikeudet'
+);
+
 export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 
 export const templatesByType = R.compose(
@@ -221,7 +226,8 @@ const serializeToimenpide = R.compose(
     'type-specific-data': {
       fine: Maybe.orSome(null),
       'answer-commentary': Maybe.orSome(null),
-      statement: Maybe.orSome(null)
+      statement: Maybe.orSome(null),
+      court: Maybe.orSome(null)
     }
   }),
   R.pick([

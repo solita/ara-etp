@@ -27,6 +27,8 @@
   export let toimenpiteet;
   export let toimenpidetyypit = [];
   export let templatesByType;
+
+  export let hallintoOikeudet;
   export let whoami;
 
   export let saveValvonta;
@@ -81,6 +83,7 @@
     {yritykset}
     {roolit}
     {toimitustavat}
+    {hallintoOikeudet}
     manuallyDeliverableToimenpide={isManuallyDeliverable(toimenpide)}
     commentingAllowed={isCommentingAllowed(toimenpide)}
     reload={load} />

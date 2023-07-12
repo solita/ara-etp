@@ -139,7 +139,8 @@ describe('Empty toimenpide', () => {
       'fine',
       'recipient-answered',
       'answer-commentary',
-      'statement'
+      'statement',
+      'court'
     ]);
   });
 

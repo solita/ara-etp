@@ -5,7 +5,7 @@
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
-  import { filterValid } from '@Utility/classification';
+  import { filterValid, isValid } from '@Utility/classification';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
@@ -26,6 +26,7 @@
   import Select2 from '@Component/Select/Select2';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
   import * as Validation from '@Utility/validation';
+  import * as Selects from '@Component/Select/select-util';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
@@ -38,6 +39,7 @@
   export let yritykset;
   export let roolit;
   export let toimitustavat;
+  export let hallintoOikeudet;
 
   export let manuallyDeliverableToimenpide = false;
   export let commentingAllowed = false;
@@ -251,6 +253,23 @@
         format={Maybe.orSome('')}
         parse={Parsers.optionalString}
         {i18n} />
+    </div>
+
+    <div class="w-full py-4">
+      <Select2
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'court'])}
+        modelToItem={Maybe.fold(
+          Maybe.None(),
+          Maybe.findById(R.__, hallintoOikeudet)
+        )}
+        itemToModel={Maybe.fold(Maybe.None(), it => Maybe.Some(it.id))}
+        format={Maybe.fold(
+          i18n('validation.no-selection'),
+          Locales.label($locale)
+        )}
+        label={text(toimenpide, 'court')}
+        items={Selects.addNoSelection(R.filter(isValid, hallintoOikeudet))} />
     </div>
   {/if}
 

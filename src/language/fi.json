@@ -1936,6 +1936,7 @@
           "statement": "Kannanotto vastineeseen",
           "description": "Kommentti",
           "fine": "Sakon suuruus €",
+          "court": "Hallinto-oikeus",
           "publish-button": "Luo toimenpide"
         },
         "messages": {

@@ -1919,6 +1919,7 @@
           "statement": "Kannanotto vastineeseen (sv)",
           "description": "Kommentti (sv)",
           "fine": "Sakon suuruus € (sv)",
+          "court": "Hallinto-oikeus (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
         "court-hearing": {
