@@ -1916,6 +1916,7 @@
             "false": "Ei (sv)"
           },
           "answer-commentary": "Vastineen kommentit (sv)",
+          "statement": "Kannanotto vastineeseen (sv)",
           "description": "Kommentti (sv)",
           "fine": "Sakon suuruus € (sv)",
           "publish-button": "Luo toimenpide (sv)"

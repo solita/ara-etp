@@ -138,7 +138,8 @@ describe('Empty toimenpide', () => {
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
       'fine',
       'recipient-answered',
-      'answer-commentary'
+      'answer-commentary',
+      'statement'
     ]);
   });
 

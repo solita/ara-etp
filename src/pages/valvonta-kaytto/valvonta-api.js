@@ -220,7 +220,8 @@ const serializeToimenpide = R.compose(
     ),
     'type-specific-data': {
       fine: Maybe.orSome(null),
-      'answer-commentary': Maybe.orSome(null)
+      'answer-commentary': Maybe.orSome(null),
+      statement: Maybe.orSome(null)
     }
   }),
   R.pick([

@@ -239,6 +239,19 @@
         parse={Parsers.optionalString}
         {i18n} />
     </div>
+
+    <div class="w-full py-4">
+      <Textarea
+        id={'toimenpide.statement'}
+        name={'toimenpide.statement'}
+        label={text(toimenpide, 'statement')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'statement'])}
+        required={false}
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        {i18n} />
+    </div>
   {/if}
 
   {#if !R.isEmpty(templates)}
