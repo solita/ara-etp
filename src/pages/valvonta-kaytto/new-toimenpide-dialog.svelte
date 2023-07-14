@@ -213,7 +213,9 @@
         required={true}
         type="number"
         format={Maybe.orSome('')}
-        parse={R.compose(Either.toMaybe, Parsers.parseNumber)} />
+        parse={R.compose(Either.toMaybe, Parsers.parseNumber)}
+        validators={R.path(['type-specific-data', 'fine'], schema)}
+        {i18n} />
     </div>
   {/if}
 
@@ -225,10 +227,10 @@
         lens={R.lensPath(['type-specific-data', 'recipient-answered'])}
         format={value => text(toimenpide, `hearing-letter-answered.${value}`)}
         label={text(toimenpide, 'hearing-letter-answered.label')}
+        required
         items={[true, false]} />
     </div>
 
-    <!--  TODO: Validaattori?  -->
     <div class="w-full py-4">
       <Textarea
         id={'toimenpide.answer-commentary'}
@@ -236,9 +238,10 @@
         label={text(toimenpide, 'answer-commentary')}
         bind:model={toimenpide}
         lens={R.lensPath(['type-specific-data', 'answer-commentary'])}
-        required={false}
+        required
         format={Maybe.orSome('')}
         parse={Parsers.optionalString}
+        validators={R.path(['type-specific-data', 'answer-commentary'], schema)}
         {i18n} />
     </div>
 
@@ -249,9 +252,10 @@
         label={text(toimenpide, 'statement')}
         bind:model={toimenpide}
         lens={R.lensPath(['type-specific-data', 'statement'])}
-        required={false}
+        required
         format={Maybe.orSome('')}
         parse={Parsers.optionalString}
+        validators={R.path(['type-specific-data', 'statement'], schema)}
         {i18n} />
     </div>
 
@@ -269,6 +273,8 @@
           Locales.label($locale)
         )}
         label={text(toimenpide, 'court')}
+        validators={R.path(['type-specific-data', 'court'], schema)}
+        required
         items={Selects.addNoSelection(R.filter(isValid, hallintoOikeudet))} />
     </div>
   {/if}
