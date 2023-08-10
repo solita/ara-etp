@@ -9,6 +9,7 @@ import {
 
 import fi from './fi.json';
 import sv from './sv.json';
+import { shortLocale } from '@Language/locale-utils';
 
 const setupI18n = () => {
   addMessages('fi-FI', fi);
@@ -16,9 +17,15 @@ const setupI18n = () => {
   addMessages('sv-FI', sv);
   addMessages('sv', sv);
 
+  const safeNavigatorLocale = ['fi', 'sv'].includes(
+    shortLocale(getLocaleFromNavigator())
+  )
+    ? getLocaleFromNavigator()
+    : 'fi';
+
   init({
     fallbackLocale: 'fi-FI',
-    initialLocale: localStorage.getItem('locale') || getLocaleFromNavigator()
+    initialLocale: localStorage.getItem('locale') || safeNavigatorLocale
   });
 };
 
