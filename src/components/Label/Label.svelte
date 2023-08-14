@@ -1,4 +1,6 @@
 <script>
+  import { _ } from '@Language/i18n';
+
   export let id;
   export let required;
   export let error;
@@ -8,6 +10,8 @@
   export let compact = false;
 
   export let unit;
+
+  const i18n = $_;
 </script>
 
 <style type="text/postcss">
@@ -15,9 +19,8 @@
     @apply text-secondary;
   }
 
-  label.required::before {
+  .required-marker {
     @apply font-icon text-xs align-top mr-1;
-    content: '*';
   }
 
   label.warning,
@@ -44,6 +47,12 @@
   class:warning
   class:error
   class:focused>
+  {#if required}
+    <span class="required-marker" aria-hidden="true">*</span>
+  {/if}
   {label}
+  {#if required}
+    <span class="sr-only">({i18n('validation.required')})</span>
+  {/if}
   <svelte:component this={unit} />
 </label>
