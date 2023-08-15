@@ -14,7 +14,6 @@
   import UnformattedNumberInput from './query-inputs/unformatted-number-input';
   import PercentInput from './query-inputs/percent-input';
   import VersioInput from './query-inputs/versio-input';
-  import VersioluokkaInput from './query-inputs/versioluokka-input';
   import KayttotarkoitusInput from './query-inputs/kayttotarkoitus-input';
   import AlakayttotarkoitusInput from './query-inputs/alakayttotarkoitus-input';
   import EluokkaInput from './query-inputs/e-luokka-input';
@@ -25,6 +24,7 @@
   import KielisyysInput from './query-inputs/kielisyys-input';
   import PatevyystasoInput from './query-inputs/patevyystaso-input';
   import IlmanvaihtotyyppiInput from './query-inputs/ilmanvaihtotyyppi-input';
+  import LammitysMuotoInput from './query-inputs/lammitysmuoto-input';
 
   import { _ } from '@Language/i18n';
 
@@ -75,6 +75,8 @@
         return PatevyystasoInput;
       case OPERATOR_TYPES.KUNTA:
         return KuntaInput;
+      case OPERATOR_TYPES.LAMMITYSMUOTO:
+        return LammitysMuotoInput;
       default:
         return TextInput;
     }
