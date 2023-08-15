@@ -159,7 +159,7 @@
   kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
   alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
 
-<ELuku {eTehokkuus} />
+<ELuku {eTehokkuus} context="perustiedot" />
 <HR />
 <ToimenpideEhdotukset
   versio={'2018'}
@@ -210,7 +210,7 @@
 
 <H2 text={$_('energiatodistus.tulokset.header')} />
 
-<ELuku {eTehokkuus} />
+<ELuku {eTehokkuus} context="tulokset" />
 <ELuvunErittely
   bind:eTehokkuus
   {disabled}
