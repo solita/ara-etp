@@ -166,3 +166,21 @@ export const hasFine = toimenpide =>
 export const isActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
+
+const isHearingLetter = isType(
+  R.path(['decision-order', 'hearing-letter'], type)
+);
+
+/**
+ * Given an array of toimenpide objects, returns the fine found in the newest toimenpide of type 7 (käskypäätös / kuulemiskirje)
+ * @param {Object[]} toimenpiteet
+ * @return {number}
+ */
+export const findFineFromToimenpiteet = R.compose(
+  R.path(['type-specific-data', 'fine']),
+  R.head,
+  R.sort((a, b) =>
+    dfns.compareDesc(R.prop('create-time', a), R.prop('create-time', b))
+  ),
+  R.filter(isHearingLetter)
+);

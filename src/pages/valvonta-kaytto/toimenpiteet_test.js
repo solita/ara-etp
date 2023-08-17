@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as dfns from 'date-fns';
 import * as Toimenpiteet from './toimenpiteet';
+import { deserializeToimenpide } from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
 describe('Toimenpiteet: ', () => {
   describe('deadline', () => {
@@ -158,5 +159,76 @@ describe('Empty toimenpide', () => {
   it('without a fine is recognized as not having a fine', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
     assert.isFalse(Toimenpiteet.hasFine(emptyToimenpide));
+  });
+});
+
+describe('findFineFromToimenpiteet returns the fine present in the newest toimenpide of type 7', () => {
+  it('when there is only one toimenpide of type 7', () => {
+    const toimenpiteet = R.map(deserializeToimenpide, [
+      {
+        'type-id': 7,
+        'create-time': '2023-08-17T06:56:31.747903Z',
+        'type-specific-data': {
+          fine: 1000
+        }
+      }
+    ]);
+
+    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 1000);
+  });
+
+  it('when there are other toimenpiteet also present', () => {
+    const toimenpiteet = R.map(deserializeToimenpide, [
+      {
+        'type-id': 1
+      },
+      {
+        'type-id': 7,
+        'create-time': '2023-08-18T06:56:31.747903Z',
+        'type-specific-data': {
+          fine: 2000
+        }
+      }
+    ]);
+
+    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 2000);
+  });
+
+  it('when there are multiple toimenpiteet of type 7', () => {
+    const toimenpiteet = R.map(deserializeToimenpide, [
+      {
+        'type-id': 1
+      },
+      {
+        'type-id': 7,
+        'create-time': '2023-08-17T06:56:31.747903Z',
+        'type-specific-data': {
+          fine: 1000
+        }
+      },
+      {
+        'type-id': 7,
+        'create-time': '2023-08-18T06:56:31.747903Z',
+        'type-specific-data': {
+          fine: 3000
+        }
+      },
+      {
+        'type-id': 8,
+        'create-time': '2023-08-17T06:56:31.747903Z',
+        'type-specific-data': {
+          fine: 666
+        }
+      },
+      {
+        'type-id': 7,
+        'create-time': '2023-08-14T06:56:31.747903Z',
+        'type-specific-data': {
+          fine: 120
+        }
+      }
+    ]);
+
+    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 3000);
   });
 });
