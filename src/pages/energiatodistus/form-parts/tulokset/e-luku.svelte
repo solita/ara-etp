@@ -8,13 +8,13 @@
   import Input from '@Component/Input/Input';
 
   export let eTehokkuus = Maybe.None();
-  export let context;
+  export let idSuffix;
 </script>
 
 <div class="flex lg:flex-row flex-col">
   <div class="lg:w-1/5 w-full py-2">
     <Input
-      id={'energiatodistus.tulokset.e-luku.' + context}
+      id={'energiatodistus.tulokset.e-luku.' + idSuffix}
       name="energiatodistus.tulokset.e-luku"
       label={$_('energiatodistus.tulokset.e-luku')}
       disabled={true}
@@ -28,7 +28,7 @@
   </div>
   <div class="lg:w-1/5 w-full py-2">
     <Input
-      id={'energiatodistus.tulokset.e-luokka.' + context}
+      id={'energiatodistus.tulokset.e-luokka.' + idSuffix}
       name="energiatodistus.tulokset.e-luokka"
       label={$_('energiatodistus.tulokset.e-luokka')}
       disabled={true}
