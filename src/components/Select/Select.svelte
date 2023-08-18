@@ -119,9 +119,8 @@
 </script>
 
 <style type="text/postcss">
-  span.required::before {
+  .required-marker {
     @apply font-icon text-xs align-top mr-1;
-    content: '*';
   }
 
   div {
@@ -182,12 +181,20 @@
   }} />
 
 <!-- purgecss: disabled -->
-<span
-  class:focused
-  class:required
-  class:disabled
-  class:sr-only={compact}
-  class="label">{label}</span>
+<div>
+  {#if required}
+    <span class="required-marker" aria-hidden="true">*</span>
+  {/if}
+  <span
+    class:focused
+    class:required
+    class:disabled
+    class:sr-only={compact}
+    class="label">{label}</span>
+  {#if required}
+    <span class="sr-only">({i18n('validation.required')})</span>
+  {/if}
+</div>
 <div
   class="input-container"
   bind:this={node}

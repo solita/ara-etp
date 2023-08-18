@@ -68,7 +68,7 @@
   );
 </script>
 
-<H2 text={'* ' + $_('energiatodistus.laskutus.title')} />
+<H2 text={$_('energiatodistus.laskutus.title')} />
 
 <div class="flex flex-col lg:flex-row -mx-4">
   <div class="lg:w-1/2 w-full px-4 py-4">

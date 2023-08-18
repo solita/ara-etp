@@ -139,7 +139,7 @@
   postinumerot={luokittelut.postinumerot}
   kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
   alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
-<ELuku {eTehokkuus} />
+<ELuku {eTehokkuus} idSuffix="perustiedot" />
 <HR />
 <ToimenpideEhdotukset
   versio={'2013'}
@@ -191,7 +191,7 @@
 
 <H2 text={$_('energiatodistus.tulokset.header')} />
 
-<ELuku {eTehokkuus} />
+<ELuku {eTehokkuus} idSuffix="tulokset" />
 <ELuvunErittely
   {disabled}
   {schema}

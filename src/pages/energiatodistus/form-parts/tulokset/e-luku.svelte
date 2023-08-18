@@ -5,16 +5,16 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as formats from '@Utility/formats';
 
-  import Input from '@Pages/energiatodistus/Input';
-  import BasicInput from '@Component/Input/Input';
+  import Input from '@Component/Input/Input';
 
   export let eTehokkuus = Maybe.None();
+  export let idSuffix;
 </script>
 
 <div class="flex lg:flex-row flex-col">
   <div class="lg:w-1/5 w-full py-2">
-    <BasicInput
-      id="energiatodistus.tulokset.e-luku"
+    <Input
+      id={'energiatodistus.tulokset.e-luku.' + idSuffix}
       name="energiatodistus.tulokset.e-luku"
       label={$_('energiatodistus.tulokset.e-luku')}
       disabled={true}
@@ -27,8 +27,8 @@
       i18n={$_} />
   </div>
   <div class="lg:w-1/5 w-full py-2">
-    <BasicInput
-      id="energiatodistus.tulokset.e-luokka"
+    <Input
+      id={'energiatodistus.tulokset.e-luokka.' + idSuffix}
       name="energiatodistus.tulokset.e-luokka"
       label={$_('energiatodistus.tulokset.e-luokka')}
       disabled={true}
