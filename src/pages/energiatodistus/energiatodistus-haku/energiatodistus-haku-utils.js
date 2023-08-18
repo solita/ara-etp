@@ -90,6 +90,7 @@ export const parseValueByType = R.curry((type, value) => {
     case OPERATOR_TYPES.KIELISYYS:
     case OPERATOR_TYPES.ILMANVAIHTOTYYPPI:
     case OPERATOR_TYPES.PATEVYYSTASO:
+    case OPERATOR_TYPES.LAMMITYSMUOTO:
       return parsers.parseNumber(value);
     case OPERATOR_TYPES.DAYCOUNT:
       return parsers.parseDayCount(value);

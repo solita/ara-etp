@@ -767,6 +767,11 @@
       "lammitys": {
         "header": "Lämmitysjärjestelmä",
         "label-context": "Lämmitysjärjestelmä",
+        "lammitysmuoto": {
+          "label-context": "$unused",
+          "id": "Lämmitysjärjestelmä",
+          "kuvaus": "Lämmitysjärjestelmän kuvaus"
+        },
         "lammitysmuoto-1": {
           "label-context": "$unused",
           "id": "Ensisijainen lämmitysjärjestelmä",

@@ -22,7 +22,8 @@ export const OPERATOR_TYPES = Object.freeze({
   KIELISYYS: 'KIELISYYS',
   ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI',
   PATEVYYSTASO: 'PATEVYYSTASO',
-  KUNTA: 'KUNTA'
+  KUNTA: 'KUNTA',
+  LAMMITYSMUOTO: 'LAMMITYSMUOTO'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -520,6 +521,11 @@ const lahtotiedot = {
     'lto-vuosihyotysuhde': [...numberComparisons]
   },
   lammitys: {
+    lammitysmuoto: {
+      id: [luokitteluEquals(OPERATOR_TYPES.LAMMITYSMUOTO)],
+      'kuvaus-fi': [...stringComparisons],
+      'kuvaus-sv': [...stringComparisons]
+    },
     lammonjako: {
       id: [...numberComparisons],
       'kuvaus-fi': [...stringComparisons],
