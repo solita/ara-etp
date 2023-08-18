@@ -42,7 +42,13 @@
 
   const openNewToimenpide = type => {
     newToimenpide = Maybe.Some(
-      Toimenpiteet.emptyToimenpide(type, templatesByType)
+      Toimenpiteet.emptyToimenpide(
+        type,
+        templatesByType,
+        Toimenpiteet.isActualDecision({ 'type-id': type })
+          ? Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
+          : undefined
+      )
     );
   };
 

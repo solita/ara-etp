@@ -150,6 +150,44 @@ describe('Empty toimenpide', () => {
     assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
   });
 
+  it('of type 7 has a default fine of 800', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
+
+    assert.equal(
+      800,
+      Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
+    );
+  });
+
+  it('of type 8 has a default fine of 800', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
+    assert.equal(
+      800,
+      Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
+    );
+  });
+
+  it('of type 8 can have its default fine overridden', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], 1000);
+    assert.equal(
+      1000,
+      Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
+    );
+  });
+
+  it('of type 8 has a default fine of 800 when toimenpiteet does not contain a previous fine', () => {
+    const toimenpiteet = [];
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(
+      8,
+      [],
+      Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
+    );
+    assert.equal(
+      800,
+      Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
+    );
+  });
+
   it('with a fine key but no value is recognized as having a fine', () => {
     let emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
     emptyToimenpide.fine = Maybe.fromNull(null);

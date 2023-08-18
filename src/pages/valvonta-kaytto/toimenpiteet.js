@@ -68,7 +68,7 @@ const defaultTemplateId = (typeId, templatesByType) => {
     : Maybe.None();
 };
 
-export const emptyToimenpide = (typeId, templatesByType) => {
+export const emptyToimenpide = (typeId, templatesByType, fine = 800) => {
   const toimenpide = {
     'type-id': typeId,
     'publish-time': Maybe.None(),
@@ -81,16 +81,15 @@ export const emptyToimenpide = (typeId, templatesByType) => {
     case R.path(['decision-order', 'hearing-letter'], type):
       return R.assocPath(
         ['type-specific-data', 'fine'],
-        Maybe.Some(800),
+        Maybe.Some(fine),
         toimenpide
       );
 
     case R.path(['decision-order', 'actual-decision'], type):
       return R.assoc(
         'type-specific-data',
-        // TODO: Defaultiksi kuulemiskirjeen sakko
         {
-          fine: Maybe.Some(800),
+          fine: Maybe.Some(fine),
           'recipient-answered': false,
           'answer-commentary': Maybe.None(),
           statement: Maybe.None(),
