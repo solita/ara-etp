@@ -70,7 +70,9 @@ export const toimenpideSave = {
     'answer-commentary': description,
     statement: description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
-    court: Validation.MaybeInterval(0, 5)
+    court: Validation.MaybeInterval(0, 5),
+    'department-head-title': description,
+    'department-head-name': description
   }
 };
 
@@ -90,7 +92,13 @@ export const toimenpidePublish = (templates, toimenpide) =>
           Toimenpiteet.isActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
-        court: addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide))
+        court: addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide)),
+        'department-head-title': addRequiredValidator(
+          Toimenpiteet.isActualDecision(toimenpide)
+        ),
+        'department-head-name': addRequiredValidator(
+          Toimenpiteet.isActualDecision(toimenpide)
+        )
       }
     },
     toimenpideSave

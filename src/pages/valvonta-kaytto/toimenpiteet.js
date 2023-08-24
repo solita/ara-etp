@@ -93,7 +93,9 @@ export const emptyToimenpide = (typeId, templatesByType, fine = 800) => {
           'recipient-answered': false,
           'answer-commentary': Maybe.None(),
           statement: Maybe.None(),
-          court: Maybe.None()
+          court: Maybe.None(),
+          'department-head-title': Maybe.None(),
+          'department-head-name': Maybe.None()
         },
         toimenpide
       );

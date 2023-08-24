@@ -227,7 +227,9 @@ const serializeToimenpide = R.compose(
       fine: Maybe.orSome(null),
       'answer-commentary': Maybe.orSome(null),
       statement: Maybe.orSome(null),
-      court: Maybe.orSome(null)
+      court: Maybe.orSome(null),
+      'department-head-title': Maybe.orSome(null),
+      'department-head-name': Maybe.orSome(null)
     }
   }),
   R.pick([

@@ -1920,6 +1920,8 @@
           "description": "Kommentti (sv)",
           "fine": "Sakon suuruus € (sv)",
           "court": "Hallinto-oikeus (sv)",
+          "department-head-title": "Yksikön päällikön titteli (sv)",
+          "department-head-name": "Yksikön päällikön nimi (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
         "court-hearing": {

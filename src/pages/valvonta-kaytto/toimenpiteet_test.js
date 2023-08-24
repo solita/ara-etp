@@ -135,13 +135,14 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    //  Includes fine, whether the recipient answered and the answer commentary
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
       'fine',
       'recipient-answered',
       'answer-commentary',
       'statement',
-      'court'
+      'court',
+      'department-head-title',
+      'department-head-name'
     ]);
   });
 

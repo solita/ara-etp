@@ -1937,6 +1937,8 @@
           "description": "Kommentti",
           "fine": "Sakon suuruus €",
           "court": "Hallinto-oikeus",
+          "department-head-title": "Yksikön päällikön titteli",
+          "department-head-name": "Yksikön päällikön nimi",
           "publish-button": "Luo toimenpide"
         },
         "messages": {

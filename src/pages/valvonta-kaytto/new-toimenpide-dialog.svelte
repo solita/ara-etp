@@ -260,6 +260,42 @@
     </div>
 
     <div class="w-full py-4">
+      <Input
+        id="toimenpide.department-head-title"
+        name="toimenpide.department-head-title"
+        label={text(toimenpide, 'department-head-title')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'department-head-title'])}
+        required={true}
+        type="text"
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={R.path(
+          ['type-specific-data', 'department-head-title'],
+          schema
+        )}
+        {i18n} />
+    </div>
+
+    <div class="w-full py-4">
+      <Input
+        id="toimenpide.department-head-name"
+        name="toimenpide.department-head-name"
+        label={text(toimenpide, 'department-head-name')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'department-head-name'])}
+        required={true}
+        type="text"
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={R.path(
+          ['type-specific-data', 'department-head-name'],
+          schema
+        )}
+        {i18n} />
+    </div>
+
+    <div class="w-full py-4">
       <Select2
         bind:model={toimenpide}
         lens={R.lensPath(['type-specific-data', 'court'])}
