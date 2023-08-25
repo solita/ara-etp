@@ -160,19 +160,49 @@ describe('Empty toimenpide', () => {
     );
   });
 
-  it('of type 8 has a default fine of 800', () => {
+  it('of type 8 has a default fine of 800 and no department head fields filled by default', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
     assert.equal(
       800,
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
     );
+
+    assert.isTrue(
+      Maybe.isNone(
+        R.path(['type-specific-data', 'department-head-title'], emptyToimenpide)
+      )
+    );
+
+    assert.isTrue(
+      Maybe.isNone(
+        R.path(['type-specific-data', 'department-head-name'], emptyToimenpide)
+      )
+    );
   });
 
-  it('of type 8 can have its default fine overridden', () => {
-    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], 1000);
+  it('of type 8 can have its default values overridden', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      fine: 1000,
+      departmentHeadTitle: 'Prefilled title',
+      departmentHeadName: 'Prefilled Name'
+    });
     assert.equal(
       1000,
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
+    );
+
+    assert.equal(
+      'Prefilled title',
+      Maybe.get(
+        R.path(['type-specific-data', 'department-head-title'], emptyToimenpide)
+      )
+    );
+
+    assert.equal(
+      'Prefilled Name',
+      Maybe.get(
+        R.path(['type-specific-data', 'department-head-name'], emptyToimenpide)
+      )
     );
   });
 

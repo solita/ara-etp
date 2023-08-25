@@ -68,7 +68,11 @@ const defaultTemplateId = (typeId, templatesByType) => {
     : Maybe.None();
 };
 
-export const emptyToimenpide = (typeId, templatesByType, fine = 800) => {
+export const emptyToimenpide = (
+  typeId,
+  templatesByType,
+  { fine = 800, departmentHeadTitle = null, departmentHeadName = null } = {}
+) => {
   const toimenpide = {
     'type-id': typeId,
     'publish-time': Maybe.None(),
@@ -94,8 +98,8 @@ export const emptyToimenpide = (typeId, templatesByType, fine = 800) => {
           'answer-commentary': Maybe.None(),
           statement: Maybe.None(),
           court: Maybe.None(),
-          'department-head-title': Maybe.None(),
-          'department-head-name': Maybe.None()
+          'department-head-title': Maybe.fromNull(departmentHeadTitle),
+          'department-head-name': Maybe.fromNull(departmentHeadName)
         },
         toimenpide
       );
