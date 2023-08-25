@@ -8,7 +8,7 @@
 
 <footer class="flex flex-col w-full text-sm">
   <div class="flex flex-col md:flex-row justify-between p-8">
-    <div class="flex flex-col text-primary mr-4">
+    <div class="flex flex-col mr-4 text-ara-2021-green-small-text">
       <span class="uppercase font-bold text-secondary">
         {$_('footer.contact-info')}
       </span>
@@ -21,12 +21,17 @@
         <div class="flex flex-col">
           <span class="font-bold"> {$_('footer.phone')}: </span>
           <div>
-            <Link bold={true} href="tel:0295250800" text={'029 525 0800'} />
+            <Link
+              bold={true}
+              additionalClasses="text-ara-2021-green-small-text"
+              href="tel:0295250800"
+              text={'029 525 0800'} />
           </div>
           <span class="font-bold mt-2"> {$_('footer.email')}: </span>
           <div>
             <Link
               bold={true}
+              additionalClasses="text-ara-2021-green-small-text"
               href={'mailto:energiatodistus@ara.fi'}
               text={'energiatodistus@ara.fi'} />
           </div>
@@ -41,6 +46,7 @@
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'pdf/Dataskyddsbeskrivning_Energicertifikatregistret.pdf'}
             target={'_blank'}
             text={'Dataskyddsbeskrivning Energicertifikatregistret (pdf)'} />
@@ -48,6 +54,7 @@
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'pdf/Dataskyddsbeskrivning_Register_for_overvakningsuppgifter_om_energicertifikat.pdf'}
             target={'_blank'}
             text={'Dataskyddsbeskrivning Register för övervakningsuppgifter om energicertifikat (pdf)'} />
@@ -55,6 +62,7 @@
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'pdf/Dataskyddsbeskrivning_Register_for_upprattare_av_energiferticikat.pdf'}
             target={'_blank'}
             text={'Dataskyddsbeskrivning Register för upprättare av energiferticikat (pdf)'} />
@@ -63,12 +71,14 @@
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'#/saavutettavuusseloste'}
             text={$_('footer.accessibility-report')} />
         </div>
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'pdf/Tietosuojaseloste_Energiatodistusrekisteri.pdf'}
             target={'_blank'}
             text={'Tietosuojaseloste Energiatodistusrekisteri (pdf)'} />
@@ -76,6 +86,7 @@
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'pdf/Tietosuojaseloste_Energiatodistusten_laatijarekisteri.pdf'}
             target={'_blank'}
             text={'Tietosuojaseloste Energiatodistusten laatijarekisteri (pdf)'} />
@@ -83,6 +94,7 @@
         <div>
           <Link
             bold={true}
+            additionalClasses="text-ara-2021-green-small-text"
             href={'pdf/Tietosuojaseloste_Energiatodistusten_valvontatietorekisteri.pdf'}
             target={'_blank'}
             text={'Tietosuojaseloste Energiatodistusten valvontatietorekisteri (pdf)'} />

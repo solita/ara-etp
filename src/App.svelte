@@ -42,7 +42,7 @@
 
 <style type="text/postcss">
   .appcontainer {
-    @apply w-full flex flex-col flex-grow justify-between min-h-screen;
+    @apply w-full flex flex-col flex-grow justify-between min-h-screen bg-ara-2021-light-gray-background;
   }
 
   .headercontainer,
@@ -52,10 +52,6 @@
 
   .headercontainer {
     @apply bg-secondary;
-  }
-
-  .footercontainer {
-    @apply bg-background;
   }
 </style>
 

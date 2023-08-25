@@ -7,6 +7,7 @@
   export let icon = Maybe.None();
   export let disabled = false;
   export let bold = false;
+  export let additionalClasses = '';
 </script>
 
 <style type="text/postcss">
@@ -29,6 +30,6 @@
     <span class="font-icon mr-1">{i}</span>
   {/each}
   {#if text}
-    <span>{text}</span>
+    <span class={additionalClasses}>{text}</span>
   {/if}
 </a>
