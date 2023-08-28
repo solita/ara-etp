@@ -1915,12 +1915,15 @@
             "true": "Kyllä (sv)",
             "false": "Ei (sv)"
           },
-          "answer-commentary": "Vastineen kommentit (sv)",
-          "statement": "Kannanotto vastineeseen (sv)",
+          "answer-commentary-fi": "Vastineen kommentit, suomi (sv)",
+          "answer-commentary-sv": "Vastineen kommentit, ruotsi (sv)",
+          "statement-fi": "Kannanotto vastineeseen, suomi (sv)",
+          "statement-sv": "Kannanotto vastineeseen, ruotsi (sv)",
           "description": "Kommentti (sv)",
           "fine": "Sakon suuruus € (sv)",
           "court": "Hallinto-oikeus (sv)",
-          "department-head-title": "Yksikön päällikön titteli (sv)",
+          "department-head-title-fi": "Yksikön päällikön titteli, suomi (sv)",
+          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi (sv)",
           "department-head-name": "Yksikön päällikön nimi (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },

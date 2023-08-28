@@ -138,10 +138,13 @@ describe('Empty toimenpide', () => {
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
       'fine',
       'recipient-answered',
-      'answer-commentary',
-      'statement',
+      'answer-commentary-fi',
+      'answer-commentary-sv',
+      'statement-fi',
+      'statement-sv',
       'court',
-      'department-head-title',
+      'department-head-title-fi',
+      'department-head-title-sv',
       'department-head-name'
     ]);
   });
@@ -169,7 +172,19 @@ describe('Empty toimenpide', () => {
 
     assert.isTrue(
       Maybe.isNone(
-        R.path(['type-specific-data', 'department-head-title'], emptyToimenpide)
+        R.path(
+          ['type-specific-data', 'department-head-title-fi'],
+          emptyToimenpide
+        )
+      )
+    );
+
+    assert.isTrue(
+      Maybe.isNone(
+        R.path(
+          ['type-specific-data', 'department-head-title-sv'],
+          emptyToimenpide
+        )
       )
     );
 
@@ -183,9 +198,11 @@ describe('Empty toimenpide', () => {
   it('of type 8 can have its default values overridden', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], {
       fine: 1000,
-      departmentHeadTitle: 'Prefilled title',
+      departmentHeadTitleFi: 'Prefilled title',
+      departmentHeadTitleSv: 'Prefilled title på Svenska',
       departmentHeadName: 'Prefilled Name'
     });
+
     assert.equal(
       1000,
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
@@ -194,7 +211,20 @@ describe('Empty toimenpide', () => {
     assert.equal(
       'Prefilled title',
       Maybe.get(
-        R.path(['type-specific-data', 'department-head-title'], emptyToimenpide)
+        R.path(
+          ['type-specific-data', 'department-head-title-fi'],
+          emptyToimenpide
+        )
+      )
+    );
+
+    assert.equal(
+      'Prefilled title på Svenska',
+      Maybe.get(
+        R.path(
+          ['type-specific-data', 'department-head-title-sv'],
+          emptyToimenpide
+        )
       )
     );
 

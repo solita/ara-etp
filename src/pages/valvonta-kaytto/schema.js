@@ -67,11 +67,14 @@ export const toimenpideSave = {
   'severity-id': [],
   'type-specific-data': {
     'recipient-answered': [Validation.isBoolean],
-    'answer-commentary': description,
-    statement: description,
+    'answer-commentary-fi': description,
+    'answer-commentary-sv': description,
+    'statement-fi': description,
+    'statement-sv': description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
     court: Validation.MaybeInterval(0, 5),
-    'department-head-title': description,
+    'department-head-title-fi': description,
+    'department-head-title-sv': description,
     'department-head-name': description
   }
 };
@@ -85,15 +88,24 @@ export const toimenpidePublish = (templates, toimenpide) =>
       ),
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
       'type-specific-data': {
-        'answer-commentary': addRequiredValidator(
+        'answer-commentary-fi': addRequiredValidator(
           Toimenpiteet.isActualDecision(toimenpide)
         ),
-        statement: addRequiredValidator(
+        'answer-commentary-sv': addRequiredValidator(
+          Toimenpiteet.isActualDecision(toimenpide)
+        ),
+        'statement-fi': addRequiredValidator(
+          Toimenpiteet.isActualDecision(toimenpide)
+        ),
+        'statement-sv': addRequiredValidator(
           Toimenpiteet.isActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
         court: addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide)),
-        'department-head-title': addRequiredValidator(
+        'department-head-title-fi': addRequiredValidator(
+          Toimenpiteet.isActualDecision(toimenpide)
+        ),
+        'department-head-title-sv': addRequiredValidator(
           Toimenpiteet.isActualDecision(toimenpide)
         ),
         'department-head-name': addRequiredValidator(

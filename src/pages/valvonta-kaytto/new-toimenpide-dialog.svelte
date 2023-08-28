@@ -233,45 +233,97 @@
 
     <div class="w-full py-4">
       <Textarea
-        id={'toimenpide.answer-commentary'}
-        name={'toimenpide.answer-commentary'}
-        label={text(toimenpide, 'answer-commentary')}
+        id={'toimenpide.answer-commentary-fi'}
+        name={'toimenpide.answer-commentary-fi'}
+        label={text(toimenpide, 'answer-commentary-fi')}
         bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'answer-commentary'])}
+        lens={R.lensPath(['type-specific-data', 'answer-commentary-fi'])}
         required
         format={Maybe.orSome('')}
         parse={Parsers.optionalString}
-        validators={R.path(['type-specific-data', 'answer-commentary'], schema)}
+        validators={R.path(
+          ['type-specific-data', 'answer-commentary-fi'],
+          schema
+        )}
         {i18n} />
     </div>
 
     <div class="w-full py-4">
       <Textarea
-        id={'toimenpide.statement'}
-        name={'toimenpide.statement'}
-        label={text(toimenpide, 'statement')}
+        id={'toimenpide.answer-commentary-sv'}
+        name={'toimenpide.answer-commentary-sv'}
+        label={text(toimenpide, 'answer-commentary-sv')}
         bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'statement'])}
+        lens={R.lensPath(['type-specific-data', 'answer-commentary-sv'])}
         required
         format={Maybe.orSome('')}
         parse={Parsers.optionalString}
-        validators={R.path(['type-specific-data', 'statement'], schema)}
+        validators={R.path(
+          ['type-specific-data', 'answer-commentary-sv'],
+          schema
+        )}
+        {i18n} />
+    </div>
+
+    <div class="w-full py-4">
+      <Textarea
+        id={'toimenpide.statement-fi'}
+        name={'toimenpide.statement-fi'}
+        label={text(toimenpide, 'statement-fi')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'statement-fi'])}
+        required
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={R.path(['type-specific-data', 'statement-fi'], schema)}
+        {i18n} />
+    </div>
+
+    <div class="w-full py-4">
+      <Textarea
+        id={'toimenpide.statement-sv'}
+        name={'toimenpide.statement-sv'}
+        label={text(toimenpide, 'statement-sv')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'statement-sv'])}
+        required
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={R.path(['type-specific-data', 'statement-sv'], schema)}
         {i18n} />
     </div>
 
     <div class="w-full py-4">
       <Input
-        id="toimenpide.department-head-title"
-        name="toimenpide.department-head-title"
-        label={text(toimenpide, 'department-head-title')}
+        id="toimenpide.department-head-title-fi"
+        name="toimenpide.department-head-title-fi"
+        label={text(toimenpide, 'department-head-title-fi')}
         bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'department-head-title'])}
+        lens={R.lensPath(['type-specific-data', 'department-head-title-fi'])}
         required={true}
         type="text"
         format={Maybe.orSome('')}
         parse={Parsers.optionalString}
         validators={R.path(
-          ['type-specific-data', 'department-head-title'],
+          ['type-specific-data', 'department-head-title-fi'],
+          schema
+        )}
+        {i18n} />
+    </div>
+
+    <div class="w-full py-4">
+      <Input
+        id="toimenpide.department-head-title-sv"
+        name="toimenpide.department-head-title-sv"
+        label={text(toimenpide, 'department-head-title-sv')}
+        bind:model={toimenpide}
+        lens={R.lensPath(['type-specific-data', 'department-head-title-sv'])}
+        required={true}
+        type="text"
+        format={Maybe.orSome('')}
+        parse={Parsers.optionalString}
+        validators={R.path(
+          ['type-specific-data', 'department-head-title-sv'],
           schema
         )}
         {i18n} />
