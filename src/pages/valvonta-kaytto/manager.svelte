@@ -46,7 +46,12 @@
         type,
         templatesByType,
         Toimenpiteet.isActualDecision({ 'type-id': type })
-          ? Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
+          ? {
+              fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
+              departmentHeadName: valvonta['department-head-name'],
+              departmentHeadTitleFi: valvonta['department-head-title-fi'],
+              departmentHeadTitleSv: valvonta['department-head-title-sv']
+            }
           : undefined
       )
     );
