@@ -238,11 +238,9 @@ describe('Empty toimenpide', () => {
 
   it('of type 8 has a default fine of 800 when toimenpiteet does not contain a previous fine', () => {
     const toimenpiteet = [];
-    const emptyToimenpide = Toimenpiteet.emptyToimenpide(
-      8,
-      [],
-      Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
-    );
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
+    });
     assert.equal(
       800,
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
