@@ -63,6 +63,8 @@ export const hallintoOikeudet = Fetch.cached(
   '/valvonta/kaytto/hallinto-oikeudet'
 );
 
+export const johtaja = Fetch.cached(fetch, '/valvonta/kaytto/johtaja');
+
 export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 
 export const templatesByType = R.compose(

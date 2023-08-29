@@ -29,6 +29,7 @@
   export let templatesByType;
 
   export let hallintoOikeudet;
+  export let johtaja;
   export let whoami;
 
   export let saveValvonta;
@@ -48,9 +49,9 @@
         Toimenpiteet.isActualDecision({ 'type-id': type })
           ? {
               fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
-              departmentHeadName: valvonta['department-head-name'],
-              departmentHeadTitleFi: valvonta['department-head-title-fi'],
-              departmentHeadTitleSv: valvonta['department-head-title-sv']
+              departmentHeadName: johtaja['department-head-name'],
+              departmentHeadTitleFi: johtaja['department-head-title-fi'],
+              departmentHeadTitleSv: johtaja['department-head-title-sv']
             }
           : undefined
       )

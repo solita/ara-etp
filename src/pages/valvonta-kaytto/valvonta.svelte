@@ -75,6 +75,7 @@
             valvonta: ValvontaApi.valvonta(params.id),
             postinumerot: GeoApi.postinumerot,
             hallintoOikeudet: ValvontaApi.hallintoOikeudet,
+            johtaja: ValvontaApi.johtaja,
             whoami: Future.resolve(whoami)
           }),
         Future.parallelObject(2, {
@@ -137,7 +138,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, hallintoOikeudet, whoami }}
+    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, hallintoOikeudet, johtaja, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -168,6 +169,7 @@
         {toimenpidetyypit}
         {templatesByType}
         {hallintoOikeudet}
+        {johtaja}
         {saveValvonta}
         {whoami}
         reload={_ => load(params)} />
