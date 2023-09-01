@@ -353,3 +353,5 @@ export const unblurForm = form =>
     false,
     form.getElementsByClassName('input-container')
   );
+
+export const isBoolean = val => 'boolean' === typeof val;

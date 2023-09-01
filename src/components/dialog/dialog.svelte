@@ -9,7 +9,8 @@
 
 <style type="text/postcss">
   dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
+    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center overflow-y-auto;
+    align-items: safe center;
   }
 
   .content {

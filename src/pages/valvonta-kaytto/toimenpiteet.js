@@ -19,7 +19,8 @@ export const type = {
   closed: 5,
   'court-hearing': 6,
   'decision-order': {
-    'hearing-letter': 7
+    'hearing-letter': 7,
+    'actual-decision': 8
   }
 };
 
@@ -29,7 +30,7 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7]);
+const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
@@ -43,6 +44,8 @@ const defaultDeadlineForTypeId = typeId => {
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
       return Maybe.Some(dfns.addWeeks(new Date(), 2));
+    case R.path(['decision-order', 'actual-decision'], type):
+      return Maybe.Some(dfns.addDays(new Date(), 37));
     default:
       return Maybe.Some(dfns.addMonths(new Date(), 1));
   }
@@ -65,7 +68,16 @@ const defaultTemplateId = (typeId, templatesByType) => {
     : Maybe.None();
 };
 
-export const emptyToimenpide = (typeId, templatesByType) => {
+export const emptyToimenpide = (
+  typeId,
+  templatesByType,
+  {
+    fine = 800,
+    departmentHeadTitleFi = null,
+    departmentHeadTitleSv = null,
+    departmentHeadName = null
+  } = {}
+) => {
   const toimenpide = {
     'type-id': typeId,
     'publish-time': Maybe.None(),
@@ -76,7 +88,29 @@ export const emptyToimenpide = (typeId, templatesByType) => {
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
-      return R.assoc('fine', Maybe.Some(800), toimenpide);
+      return R.assocPath(
+        ['type-specific-data', 'fine'],
+        Maybe.Some(fine),
+        toimenpide
+      );
+
+    case R.path(['decision-order', 'actual-decision'], type):
+      return R.assoc(
+        'type-specific-data',
+        {
+          fine: Maybe.Some(fine),
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.None(),
+          'statement-sv': Maybe.None(),
+          court: Maybe.None(),
+          'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
+          'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
+          'department-head-name': Maybe.fromNull(departmentHeadName)
+        },
+        toimenpide
+      );
 
     default:
       return toimenpide;
@@ -139,4 +173,27 @@ export const manuallyDeliverableToimenpideTypes =
 export const toimenpideTypesThatAllowComments =
   findIdsOfObjectsWhereGivenKeyHasValueTrue('allow-comments');
 
-export const hasFine = toimenpide => R.has('fine', toimenpide);
+export const hasFine = toimenpide =>
+  R.hasPath(['type-specific-data', 'fine'], toimenpide);
+
+export const isActualDecision = isType(
+  R.path(['decision-order', 'actual-decision'], type)
+);
+
+const isHearingLetter = isType(
+  R.path(['decision-order', 'hearing-letter'], type)
+);
+
+/**
+ * Given an array of toimenpide objects, returns the fine found in the newest toimenpide of type 7 (käskypäätös / kuulemiskirje)
+ * @param {Object[]} toimenpiteet
+ * @return {number}
+ */
+export const findFineFromToimenpiteet = R.compose(
+  R.path(['type-specific-data', 'fine']),
+  R.head,
+  R.sort((a, b) =>
+    dfns.compareDesc(R.prop('create-time', a), R.prop('create-time', b))
+  ),
+  R.filter(isHearingLetter)
+);

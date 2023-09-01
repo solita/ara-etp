@@ -27,6 +27,9 @@
   export let toimenpiteet;
   export let toimenpidetyypit = [];
   export let templatesByType;
+
+  export let hallintoOikeudet;
+  export let johtaja;
   export let whoami;
 
   export let saveValvonta;
@@ -40,7 +43,18 @@
 
   const openNewToimenpide = type => {
     newToimenpide = Maybe.Some(
-      Toimenpiteet.emptyToimenpide(type, templatesByType)
+      Toimenpiteet.emptyToimenpide(
+        type,
+        templatesByType,
+        Toimenpiteet.isActualDecision({ 'type-id': type })
+          ? {
+              fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
+              departmentHeadName: johtaja['department-head-name'],
+              departmentHeadTitleFi: johtaja['department-head-title-fi'],
+              departmentHeadTitleSv: johtaja['department-head-title-sv']
+            }
+          : undefined
+      )
     );
   };
 
@@ -81,6 +95,7 @@
     {yritykset}
     {roolit}
     {toimitustavat}
+    {hallintoOikeudet}
     manuallyDeliverableToimenpide={isManuallyDeliverable(toimenpide)}
     commentingAllowed={isCommentingAllowed(toimenpide)}
     reload={load} />

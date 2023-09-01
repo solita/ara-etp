@@ -29,7 +29,7 @@
   const i18nRoot = 'valvonta.kaytto.valvonta';
 
   export let params;
-  export let resources = Maybe.None();
+  let resources = Maybe.None();
   let overlay = true;
 
   $: load(params);
@@ -74,6 +74,8 @@
             yritykset: ValvontaApi.getYritykset(params.id),
             valvonta: ValvontaApi.valvonta(params.id),
             postinumerot: GeoApi.postinumerot,
+            hallintoOikeudet: ValvontaApi.hallintoOikeudet,
+            johtaja: ValvontaApi.johtaja,
             whoami: Future.resolve(whoami)
           }),
         Future.parallelObject(2, {
@@ -136,7 +138,7 @@
 
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
-    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, whoami }}
+    {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, hallintoOikeudet, johtaja, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
@@ -166,6 +168,8 @@
         {toimenpiteet}
         {toimenpidetyypit}
         {templatesByType}
+        {hallintoOikeudet}
+        {johtaja}
         {saveValvonta}
         {whoami}
         reload={_ => load(params)} />

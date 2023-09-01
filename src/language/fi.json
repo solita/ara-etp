@@ -1933,6 +1933,26 @@
           "fine": "Sakon suuruus €",
           "publish-button": "Luo toimenpide"
         },
+        "decision-order-actual-decision": {
+          "title": "Käskypäätös / varsinainen päätös",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "hearing-letter-answered": {
+            "label": "Omistaja vastasi kuulemiskirjeeseen",
+            "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
+            "false": "Asianosainen ei vastannut kuulemiskirjeeseen"
+          },
+          "answer-commentary-fi": "Vastineen kommentit, suomi",
+          "answer-commentary-sv": "Vastineen kommentit, ruotsi",
+          "statement-fi": "Kannanotto vastineeseen, suomi",
+          "statement-sv": "Kannanotto vastineeseen, ruotsi",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus €",
+          "court": "Hallinto-oikeus",
+          "department-head-title-fi": "Yksikön päällikön titteli, suomi",
+          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
+          "department-head-name": "Yksikön päällikön nimi",
+          "publish-button": "Luo toimenpide"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",

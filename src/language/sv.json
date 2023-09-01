@@ -1911,6 +1911,26 @@
           "fine": "Sakon suuruus € (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "decision-order-actual-decision": {
+          "title": "Käskypäätös / varsinainen päätös (sv)",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. (sv)",
+          "hearing-letter-answered": {
+            "label": "Omistaja vastasi kuulemiskirjeeseen (sv)",
+            "true": "Kyllä (sv)",
+            "false": "Ei (sv)"
+          },
+          "answer-commentary-fi": "Vastineen kommentit, suomi (sv)",
+          "answer-commentary-sv": "Vastineen kommentit, ruotsi (sv)",
+          "statement-fi": "Kannanotto vastineeseen, suomi (sv)",
+          "statement-sv": "Kannanotto vastineeseen, ruotsi (sv)",
+          "description": "Kommentti (sv)",
+          "fine": "Sakon suuruus € (sv)",
+          "court": "Hallinto-oikeus (sv)",
+          "department-head-title-fi": "Yksikön päällikön titteli, suomi (sv)",
+          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi (sv)",
+          "department-head-name": "Yksikön päällikön nimi (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",
           "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",

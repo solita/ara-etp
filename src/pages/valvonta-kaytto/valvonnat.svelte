@@ -42,7 +42,6 @@
 
   let resources = Maybe.None();
   let overlay = true;
-  export let templates;
 
   const pageSize = 50;
   const i18n = $_;

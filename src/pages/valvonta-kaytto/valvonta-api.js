@@ -58,6 +58,13 @@ export const toimitustavat = Fetch.cached(
 );
 export const roolit = Fetch.cached(fetch, '/valvonta/kaytto/roolit');
 
+export const hallintoOikeudet = Fetch.cached(
+  fetch,
+  '/valvonta/kaytto/hallinto-oikeudet'
+);
+
+export const johtaja = Fetch.cached(fetch, '/valvonta/kaytto/johtaja');
+
 export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 
 export const templatesByType = R.compose(
@@ -218,7 +225,17 @@ const serializeToimenpide = R.compose(
     'deadline-date': EM.fold(null, date =>
       dfns.formatISO(date, { representation: 'date' })
     ),
-    fine: Maybe.orSome(null)
+    'type-specific-data': {
+      fine: Maybe.orSome(null),
+      'answer-commentary-fi': Maybe.orSome(null),
+      'answer-commentary-sv': Maybe.orSome(null),
+      'statement-fi': Maybe.orSome(null),
+      'statement-sv': Maybe.orSome(null),
+      court: Maybe.orSome(null),
+      'department-head-title-fi': Maybe.orSome(null),
+      'department-head-title-sv': Maybe.orSome(null),
+      'department-head-name': Maybe.orSome(null)
+    }
   }),
   R.pick([
     'type-id',
@@ -226,7 +243,7 @@ const serializeToimenpide = R.compose(
     'description',
     'template-id',
     'bypass-asha',
-    'fine'
+    'type-specific-data'
   ])
 );
 
