@@ -229,7 +229,10 @@
           <div
             class="languageselect"
             class:bg-primary={R.equals(selectedLanguage, language)}
-            class:bg-disabled={!R.equals(selectedLanguage, language)}>
+            class:bg-ara-2021-basic-gray={!R.equals(
+              selectedLanguage,
+              language
+            )}>
             {language}
           </div>
         {/each}

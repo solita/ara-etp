@@ -23,7 +23,14 @@ module.exports = {
       hr: 'rgba(52, 56, 65, 0.3)',
       transparent: 'rgba(0,0,0,0)',
       tableborder: 'rgba(167,167,167,0.3)',
-      beige: '#f2f8e7'
+      beige: '#f2f8e7',
+      // These are from official ARA style guide. When doing new work, check if you can use these
+      'ara-2021-green': '#94c43a', // Ara basic green color. Not necessarily accessible
+      'ara-2021-green-background': '#e5efcd', // Basic background green when not using white
+      'ara-2021-green-large-text': '#79a130', // Accessible when used for large texts 18pt, 14pt bold
+      'ara-2021-green-small-text': '#59771e', // Accessible even with smaller text. Can be used as colored background for small white text
+      'ara-2021-light-gray-background': '#f1f1f1', // One of the basic background colors
+      'ara-2021-basic-gray': '#686767', // Basic gray color. Accessible when paired with white. Same as the disabled color
     },
     extend: {
       fontFamily: {

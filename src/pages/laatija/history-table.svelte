@@ -34,7 +34,8 @@
       <th class="etp-table--th">{i18n(i18nRoot + '.toteaja')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.toteamispaivamaara')}</th>
       <th class="etp-table--th">{i18n(i18nRoot + '.laskutuskieli')}</th>
-    </thead><tbody class="etp-table--tbody">
+    </thead>
+    <tbody class="etp-table--tbody">
       {#each history as h}
         <tr class="etp-table--tr etp-table--tr">
           <td class="etp-table--td">
@@ -78,36 +79,21 @@
           </td>
           <td class="etp-table--td">
             <div class="flex flex-col">
-              <span
-                class={h.julkinenosoite
-                  ? 'font-bold text-primary'
-                  : 'text-disabled'}>
-                {i18n(i18nRoot + '.osoite')}
-              </span>
-              <span
-                class={h.julkinenpostinumero
-                  ? 'font-bold text-primary'
-                  : 'text-disabled'}>
-                {i18n(i18nRoot + '.postinumero')}
-              </span>
-              <span
-                class={h.julkinenpuhelin
-                  ? 'font-bold text-primary'
-                  : 'text-disabled'}>
-                {i18n(i18nRoot + '.puhelin')}
-              </span>
-              <span
-                class={h.julkinenemail
-                  ? 'font-bold text-primary'
-                  : 'text-disabled'}>
-                {i18n(i18nRoot + '.email')}
-              </span>
-              <span
-                class={h.julkinenwwwosoite
-                  ? 'font-bold text-primary'
-                  : 'text-disabled'}>
-                {i18n(i18nRoot + '.www-osoite')}
-              </span>
+              {#if h.julkinenosoite}
+                <span>{i18n(i18nRoot + '.osoite')} </span>
+              {/if}
+              {#if h.julkinenpostinumero}
+                <span>{i18n(i18nRoot + '.postinumero')} </span>
+              {/if}
+              {#if h.julkinenpuhelin}
+                <span>{i18n(i18nRoot + '.puhelin')} </span>
+              {/if}
+              {#if h.julkinenemail}
+                <span>{i18n(i18nRoot + '.email')} </span>
+              {/if}
+              {#if h.julkinenwwwosoite}
+                <span>{i18n(i18nRoot + '.www-osoite')} </span>
+              {/if}
             </div>
           </td>
           <td class="etp-table--td">
