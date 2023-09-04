@@ -5,7 +5,7 @@
   import * as EM from '@Utility/either-maybe';
   import * as Parsers from '@Utility/parsers';
   import * as Formats from '@Utility/formats';
-  import { filterValid, isValid } from '@Utility/classification';
+  import { filterValid } from '@Utility/classification';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Locales from '@Language/locale-utils';
@@ -23,10 +23,10 @@
   import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
-  import Select2 from '@Component/Select/Select2';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
   import * as Validation from '@Utility/validation';
-  import * as Selects from '@Component/Select/select-util';
+
+  import ActualDecisionSubView from './new-actual-decision-toimenpide';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
@@ -54,6 +54,7 @@
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
+  $: console.log('toimenpide', toimenpide);
   let templates;
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
   $: formatTemplate = Locales.labelForId($locale, templates);
@@ -219,152 +220,13 @@
     </div>
   {/if}
 
-  <!-- TODO: Toimenpidekohtainen alinäkymä kenties tähän? Tai ainakin omansa tuolle varsinaiselle päätökselle, koska siihen tulee niin monta kenttää -->
   {#if Toimenpiteet.isActualDecision(toimenpide)}
-    <div class="w-full py-4">
-      <Select2
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'recipient-answered'])}
-        format={value => text(toimenpide, `hearing-letter-answered.${value}`)}
-        label={text(toimenpide, 'hearing-letter-answered.label')}
-        required
-        items={[true, false]} />
-    </div>
-
-    <div class="w-full py-4">
-      <Textarea
-        id={'toimenpide.answer-commentary-fi'}
-        name={'toimenpide.answer-commentary-fi'}
-        label={text(toimenpide, 'answer-commentary-fi')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'answer-commentary-fi'])}
-        required
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(
-          ['type-specific-data', 'answer-commentary-fi'],
-          schema
-        )}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Textarea
-        id={'toimenpide.answer-commentary-sv'}
-        name={'toimenpide.answer-commentary-sv'}
-        label={text(toimenpide, 'answer-commentary-sv')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'answer-commentary-sv'])}
-        required
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(
-          ['type-specific-data', 'answer-commentary-sv'],
-          schema
-        )}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Textarea
-        id={'toimenpide.statement-fi'}
-        name={'toimenpide.statement-fi'}
-        label={text(toimenpide, 'statement-fi')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'statement-fi'])}
-        required
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(['type-specific-data', 'statement-fi'], schema)}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Textarea
-        id={'toimenpide.statement-sv'}
-        name={'toimenpide.statement-sv'}
-        label={text(toimenpide, 'statement-sv')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'statement-sv'])}
-        required
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(['type-specific-data', 'statement-sv'], schema)}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Input
-        id="toimenpide.department-head-title-fi"
-        name="toimenpide.department-head-title-fi"
-        label={text(toimenpide, 'department-head-title-fi')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'department-head-title-fi'])}
-        required={true}
-        type="text"
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(
-          ['type-specific-data', 'department-head-title-fi'],
-          schema
-        )}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Input
-        id="toimenpide.department-head-title-sv"
-        name="toimenpide.department-head-title-sv"
-        label={text(toimenpide, 'department-head-title-sv')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'department-head-title-sv'])}
-        required={true}
-        type="text"
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(
-          ['type-specific-data', 'department-head-title-sv'],
-          schema
-        )}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Input
-        id="toimenpide.department-head-name"
-        name="toimenpide.department-head-name"
-        label={text(toimenpide, 'department-head-name')}
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'department-head-name'])}
-        required={true}
-        type="text"
-        format={Maybe.orSome('')}
-        parse={Parsers.optionalString}
-        validators={R.path(
-          ['type-specific-data', 'department-head-name'],
-          schema
-        )}
-        {i18n} />
-    </div>
-
-    <div class="w-full py-4">
-      <Select2
-        bind:model={toimenpide}
-        lens={R.lensPath(['type-specific-data', 'court'])}
-        modelToItem={Maybe.fold(
-          Maybe.None(),
-          Maybe.findById(R.__, hallintoOikeudet)
-        )}
-        itemToModel={Maybe.fold(Maybe.None(), it => Maybe.Some(it.id))}
-        format={Maybe.fold(
-          i18n('validation.no-selection'),
-          Locales.label($locale)
-        )}
-        label={text(toimenpide, 'court')}
-        validators={R.path(['type-specific-data', 'court'], schema)}
-        required
-        items={Selects.addNoSelection(R.filter(isValid, hallintoOikeudet))} />
-    </div>
+    <ActualDecisionSubView
+      bind:toimenpide
+      {i18n}
+      {text}
+      {schema}
+      {hallintoOikeudet} />
   {/if}
 
   {#if !R.isEmpty(templates)}
