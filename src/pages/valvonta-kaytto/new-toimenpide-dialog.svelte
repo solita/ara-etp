@@ -54,7 +54,6 @@
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
-  $: console.log('toimenpide', toimenpide);
   let templates;
   $: templates = Toimenpiteet.templates(templatesByType)(toimenpide);
   $: formatTemplate = Locales.labelForId($locale, templates);
