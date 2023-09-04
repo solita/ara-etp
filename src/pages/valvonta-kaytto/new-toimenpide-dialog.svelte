@@ -243,9 +243,7 @@
           {previewPending}
           {disabled}
           {roolit}
-          {toimitustavat}
-          {template}
-          {manuallyDeliverableToimenpide} />
+          {template} />
       {:else}
         <OsapuoletTable
           {id}

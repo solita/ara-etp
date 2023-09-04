@@ -17,23 +17,18 @@
   export let yritykset;
   export let preview;
   export let roolit;
-  export let toimitustavat;
   export let template;
   export let previewPending;
   export let disabled;
 
-  export let manuallyDeliverableToimenpide = false;
-
   const types = {
     yritys: {
       label: yritys => yritys.nimi,
-      preview: ValvontaApi.previewToimenpideForYritysOsapuoli,
-      errorKey: Osapuolet.toimitustapaErrorKey.yritys
+      preview: ValvontaApi.previewToimenpideForYritysOsapuoli
     },
     henkilo: {
       label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
-      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli,
-      errorKey: Osapuolet.toimitustapaErrorKey.henkilo
+      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli
     }
   };
 
@@ -51,17 +46,7 @@
     Maybe.fold('', Locales.labelForId($locale, roolit)),
     R.prop('rooli-id')
   );
-  $: toimitustapaLabel = R.compose(
-    Maybe.fold('', Locales.labelForId($locale, toimitustavat)),
-    R.prop('toimitustapa-id')
-  );
 </script>
-
-<style>
-  .etp-table--td.text-error {
-    @apply font-bold;
-  }
-</style>
 
 <div class="w-full">
   <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
@@ -94,26 +79,8 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
-            <td
-              class="etp-table--td"
-              class:text-error={Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
-              title={Maybe.fold(
-                '',
-                key =>
-                  i18n('valvonta.kaytto.osapuoli.toimitustapa-errors.' + key),
-                osapuoli.type.errorKey(osapuoli)
-              )}>
-              {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
-                <span class="font-icon">warning</span>
-              {/if}
-              {#if manuallyDeliverableToimenpide}
-                {i18n('valvonta.kaytto.toimenpide.manually-sent')}
-              {:else}
-                {toimitustapaLabel(osapuoli)}
-              {/if}
-              {#if Osapuolet.toimitustapa.other(osapuoli)}
-                - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
-              {/if}
+            <td class="etp-table--td">
+              {i18n('valvonta.kaytto.toimenpide.manually-sent')}
             </td>
             <td class="etp-table--td">
               {#if Osapuolet.isOmistaja(osapuoli)}
