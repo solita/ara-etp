@@ -10,6 +10,9 @@
   import { _, locale } from '@Language/i18n';
   import H2 from '@Component/H/H2.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import * as Selects from '@Component/Select/select-util';
+  import { isValid } from '@Utility/classification';
+  import Select2 from '@Component/Select/Select2';
 
   export let id;
   export let toimenpide;
@@ -20,6 +23,8 @@
   export let template;
   export let previewPending;
   export let disabled;
+  export let schema;
+  export let hallintoOikeudet = [];
 
   const types = {
     yritys: {
@@ -50,6 +55,7 @@
 
 <div class="w-full">
   <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
+
   <div class="flex flex-row my-4">
     <table class="etp-table">
       <thead class="etp-table--thead">
@@ -57,6 +63,7 @@
           <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
           <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
+          <th class="etp-table--th"> Hallinto-oikeus</th>
 
           <th class="etp-table--th">
             {i18n(i18nRoot + '.toimitustapa')}
@@ -78,6 +85,28 @@
               {#if Osapuolet.otherRooli(osapuoli)}
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
+            </td>
+            <td class="etp-table--td">
+              <Select2
+                bind:model={toimenpide}
+                lens={R.lensPath(['type-specific-data', 'courts', osapuoli.id])}
+                modelToItem={Maybe.fold(
+                  Maybe.None(),
+                  Maybe.findById(R.__, hallintoOikeudet)
+                )}
+                itemToModel={Maybe.fold(Maybe.None(), it => Maybe.Some(it.id))}
+                format={Maybe.fold(
+                  i18n('validation.no-selection'),
+                  Locales.label($locale)
+                )}
+                validators={R.path(
+                  ['type-specific-data', 'courts', osapuoli.id],
+                  schema
+                )}
+                required
+                items={Selects.addNoSelection(
+                  R.filter(isValid, hallintoOikeudet)
+                )} />
             </td>
             <td class="etp-table--td">
               {i18n('valvonta.kaytto.toimenpide.manually-sent')}

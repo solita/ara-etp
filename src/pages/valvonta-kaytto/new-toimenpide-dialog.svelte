@@ -232,7 +232,6 @@
 
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
-      <!-- Pitäisikö tämä erottaa omakseen tälle toimenpiteelle -->
       {#if Toimenpiteet.isActualDecision(toimenpide)}
         <ActualDecisionOsapuoletTable
           {id}
@@ -243,7 +242,10 @@
           {previewPending}
           {disabled}
           {roolit}
-          {template} />
+          {template}
+          {text}
+          {schema}
+          {hallintoOikeudet} />
       {:else}
         <OsapuoletTable
           {id}

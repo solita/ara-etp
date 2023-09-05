@@ -75,7 +75,8 @@ export const emptyToimenpide = (
     fine = 800,
     departmentHeadTitleFi = null,
     departmentHeadTitleSv = null,
-    departmentHeadName = null
+    departmentHeadName = null,
+    osapuoliIds = []
   } = {}
 ) => {
   const toimenpide = {
@@ -104,7 +105,7 @@ export const emptyToimenpide = (
           'answer-commentary-sv': Maybe.None(),
           'statement-fi': Maybe.None(),
           'statement-sv': Maybe.None(),
-          court: Maybe.None(),
+          courts: Object.fromEntries(osapuoliIds.map(id => [id, Maybe.None()])),
           'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
           'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
           'department-head-name': Maybe.fromNull(departmentHeadName)

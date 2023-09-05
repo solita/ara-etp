@@ -125,7 +125,9 @@ describe('Empty toimenpide', () => {
   });
 
   it('Contains correct keys for toimenpidetype 8', () => {
-    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}], {
+      osapuoliIds: [1, 7]
+    });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
       'publish-time',
@@ -142,11 +144,20 @@ describe('Empty toimenpide', () => {
       'answer-commentary-sv',
       'statement-fi',
       'statement-sv',
-      'court',
+      'courts',
       'department-head-title-fi',
       'department-head-title-sv',
       'department-head-name'
     ]);
+
+    //   courts contains an object with osapuoli id as key and None as a value for each osapuoli
+    assert.deepEqual(
+      R.path(['type-specific-data', 'courts'], emptyToimenpide),
+      {
+        1: Maybe.None(),
+        7: Maybe.None()
+      }
+    );
   });
 
   it('with a fine is recognized as having a fine', () => {
