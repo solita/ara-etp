@@ -27,13 +27,15 @@ describe('Toimenpiteet: ', () => {
       );
     });
 
-    it('is by default 37 days for type 8', () => {
-      assert.isTrue(
-        dfns.isSameDay(
-          dfns.addDays(new Date(), 37),
-          Maybe.get(Toimenpiteet.defaultDeadline(8))
-        )
-      );
+    it('is by default 37 days for types 8, 9 and 10', () => {
+      R.range(8, 11).forEach(typeId => {
+        assert.isTrue(
+          dfns.isSameDay(
+            dfns.addDays(new Date(), 37),
+            Maybe.get(Toimenpiteet.defaultDeadline(typeId))
+          )
+        );
+      });
     });
   });
 
