@@ -12,6 +12,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import * as Selects from '@Component/Select/select-util';
   import { isValid } from '@Utility/classification';
+  import { ARRAY_VALIDATOR_INDEX } from '@Utility/validation';
   import Select2 from '@Component/Select/Select2';
 
   export let id;
@@ -114,7 +115,7 @@
                   [
                     'type-specific-data',
                     'courts',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    ARRAY_VALIDATOR_INDEX,
                     'hallinto-oikeus-id'
                   ],
                   schema
