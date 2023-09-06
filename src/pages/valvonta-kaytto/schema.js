@@ -72,7 +72,12 @@ export const toimenpideSave = {
     'statement-fi': description,
     'statement-sv': description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
-    court: Validation.MaybeInterval(0, 5),
+    courts: [
+      {
+        'osapuoli-id': [],
+        'hallinto-oikeus-id': Validation.MaybeInterval(0, 5)
+      }
+    ],
     'department-head-title-fi': description,
     'department-head-title-sv': description,
     'department-head-name': description
@@ -101,7 +106,15 @@ export const toimenpidePublish = (templates, toimenpide) =>
           Toimenpiteet.isActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
-        court: addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide)),
+        courts: courtsSchema => {
+          return R.map(
+            R.over(
+              R.lensProp('hallinto-oikeus-id'),
+              addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide))
+            ),
+            courtsSchema
+          );
+        },
         'department-head-title-fi': addRequiredValidator(
           Toimenpiteet.isActualDecision(toimenpide)
         ),

@@ -150,13 +150,16 @@ describe('Empty toimenpide', () => {
       'department-head-name'
     ]);
 
-    //   courts contains an object with osapuoli id as key and None as a value for each osapuoli
+    // courts contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
     assert.deepEqual(
       R.path(['type-specific-data', 'courts'], emptyToimenpide),
-      {
-        1: Maybe.None(),
-        7: Maybe.None()
-      }
+      [
+        { 'osapuoli-id': 1, 'hallinto-oikeus-id': Maybe.None() },
+        {
+          'osapuoli-id': 7,
+          'hallinto-oikeus-id': Maybe.None()
+        }
+      ]
     );
   });
 

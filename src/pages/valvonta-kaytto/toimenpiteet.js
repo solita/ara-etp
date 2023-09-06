@@ -105,7 +105,13 @@ export const emptyToimenpide = (
           'answer-commentary-sv': Maybe.None(),
           'statement-fi': Maybe.None(),
           'statement-sv': Maybe.None(),
-          courts: Object.fromEntries(osapuoliIds.map(id => [id, Maybe.None()])),
+          courts: R.map(
+            osapuoliId => ({
+              'osapuoli-id': osapuoliId,
+              'hallinto-oikeus-id': Maybe.None()
+            }),
+            osapuoliIds
+          ),
           'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
           'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
           'department-head-name': Maybe.fromNull(departmentHeadName)

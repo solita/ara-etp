@@ -235,7 +235,7 @@
       {#if Toimenpiteet.isActualDecision(toimenpide)}
         <ActualDecisionOsapuoletTable
           {id}
-          {toimenpide}
+          bind:toimenpide
           {henkilot}
           {yritykset}
           {preview}

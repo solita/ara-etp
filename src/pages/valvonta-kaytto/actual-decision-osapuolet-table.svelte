@@ -51,6 +51,12 @@
     Maybe.fold('', Locales.labelForId($locale, roolit)),
     R.prop('rooli-id')
   );
+
+  const courtDataIndexForOsapuoli = osapuoliId =>
+    R.findIndex(
+      R.propEq('osapuoli-id', osapuoliId),
+      R.path(['type-specific-data', 'courts'], toimenpide)
+    );
 </script>
 
 <div class="w-full">
@@ -89,7 +95,12 @@
             <td class="etp-table--td">
               <Select2
                 bind:model={toimenpide}
-                lens={R.lensPath(['type-specific-data', 'courts', osapuoli.id])}
+                lens={R.lensPath([
+                  'type-specific-data',
+                  'courts',
+                  courtDataIndexForOsapuoli(osapuoli.id),
+                  'hallinto-oikeus-id'
+                ])}
                 modelToItem={Maybe.fold(
                   Maybe.None(),
                   Maybe.findById(R.__, hallintoOikeudet)
@@ -100,7 +111,12 @@
                   Locales.label($locale)
                 )}
                 validators={R.path(
-                  ['type-specific-data', 'courts', osapuoli.id],
+                  [
+                    'type-specific-data',
+                    'courts',
+                    courtDataIndexForOsapuoli(osapuoli.id),
+                    'hallinto-oikeus-id'
+                  ],
                   schema
                 )}
                 required
