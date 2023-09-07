@@ -60,6 +60,12 @@
     );
 </script>
 
+<style  type="text/postcss">
+  .hao-container {
+    @apply pb-5;
+  }
+</style>
+
 <div class="w-full">
   <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
 
@@ -93,7 +99,7 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
-            <td class="etp-table--td">
+            <td class="etp-table--td hao-container">
               {#if Osapuolet.isOmistaja(osapuoli)}
                 <Select2
                   bind:model={toimenpide}
