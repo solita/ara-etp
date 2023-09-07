@@ -1218,7 +1218,6 @@
       "not-found": "Energiatodistusta ei ole olemassa.",
       "validation-required-error": "Pakolliset tiedot puuttuvat: ",
       "invalid-laskutusosoite-id": "Ei enää käytössä. Valitse voimassaoleva laskutustieto.",
-
       "delete-success": "Energiatodistus poistettiin onnistuneesti",
       "delete-error": "Energiatodistuksen poistaminen epäonnistui",
       "discard-success": "Energiatodistus hylättiin onnistuneesti",
@@ -1560,7 +1559,6 @@
           "title": "Tietopyyntö",
           "info": "Pyydetään laatijalta lisää tietoa.",
           "publish-button": "Lähetä tietopyyntö",
-
           "response-title": "Tietopyyntö",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
@@ -1576,7 +1574,6 @@
           "title": "Tietopyyntö kehotus",
           "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
           "publish-button": "Lähetä kehotus",
-
           "response-title": "Kehotus vastata tietopyyntöön",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
@@ -1584,7 +1581,6 @@
           "title": "Tietopyyntö varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
-
           "response-title": "Varoitus tietopyyntöön liittyen",
           "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
@@ -1626,7 +1622,6 @@
           "title": "Valvontamuistio kehotus",
           "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
           "publish-button": "Lähetä kehotus",
-
           "response-title": "Kehotus vastata valvontamuistioon",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
@@ -1634,7 +1629,6 @@
           "title": "Valvontamuistio varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
-
           "response-title": "Varoitus valvontamuistioon liittyen",
           "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
         },
@@ -1643,7 +1637,6 @@
           "info": "Pyydetään laatijalta lisäselvityspyyntö.",
           "description": "Lisäselvityspyyntö",
           "publish-button": "Lähetä",
-
           "response-title": "Lisäselvityspyyntö",
           "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
         },
@@ -1951,6 +1944,18 @@
           "department-head-title-fi": "Yksikön päällikön titteli, suomi",
           "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
           "department-head-name": "Yksikön päällikön nimi",
+          "publish-button": "Luo toimenpide"
+        },
+        "decision-order-notice-first-mailing": {
+          "title": "Käskypäätös tiedoksianto / (ensimmäinen postitus)",
+          "info": "Käskypäätös postitetaan liitteineen kirjeitse kirjaamon kautta saantitodistuksella.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "decision-order-notice-second-mailing": {
+          "title": "Käskypäätös tiedoksianto / (toinen postitus)",
+          "info": "Käskypäätös postitetaan liitteineen uudestaan kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin.",
+          "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
         "messages": {

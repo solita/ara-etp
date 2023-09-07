@@ -1931,6 +1931,18 @@
           "department-head-name": "Yksikön päällikön nimi (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "decision-order-notice-first-mailing": {
+          "title": "Käskypäätös tiedoksianto / (ensimmäinen postitus) (sv)",
+          "info": "Käskypäätös postitetaan liitteineen kirjeitse kirjaamon kautta saantitodistuksella. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
+        "decision-order-notice-second-mailing": {
+          "title": "Käskypäätös tiedoksianto / (toinen postitus) (sv)",
+          "info": "Käskypäätös postitetaan liitteineen uudestaan kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",
           "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",
