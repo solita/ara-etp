@@ -94,36 +94,39 @@
               {/if}
             </td>
             <td class="etp-table--td">
-              <Select2
-                bind:model={toimenpide}
-                lens={R.lensPath([
-                  'type-specific-data',
-                  'courts',
-                  courtDataIndexForOsapuoli(osapuoli.id),
-                  'hallinto-oikeus-id'
-                ])}
-                modelToItem={Maybe.fold(
-                  Maybe.None(),
-                  Maybe.findById(R.__, hallintoOikeudet)
-                )}
-                itemToModel={Maybe.fold(Maybe.None(), it => Maybe.Some(it.id))}
-                format={Maybe.fold(
-                  i18n('validation.no-selection'),
-                  Locales.label($locale)
-                )}
-                validators={R.path(
-                  [
+              {#if Osapuolet.isOmistaja(osapuoli)}
+                <Select2
+                  bind:model={toimenpide}
+                  lens={R.lensPath([
                     'type-specific-data',
                     'courts',
-                    ARRAY_VALIDATOR_INDEX,
+                    courtDataIndexForOsapuoli(osapuoli.id),
                     'hallinto-oikeus-id'
-                  ],
-                  schema
-                )}
-                required
-                items={Selects.addNoSelection(
-                  R.filter(isValid, hallintoOikeudet)
-                )} />
+                  ])}
+                  modelToItem={Maybe.fold(
+                    Maybe.None(),
+                    Maybe.findById(R.__, hallintoOikeudet)
+                  )}
+                  itemToModel={Maybe.fold(Maybe.None(), it =>
+                    Maybe.Some(it.id)
+                  )}
+                  format={Maybe.fold(
+                    i18n('validation.no-selection'),
+                    Locales.label($locale)
+                  )}
+                  validators={R.path(
+                    [
+                      'type-specific-data',
+                      'courts',
+                      ARRAY_VALIDATOR_INDEX,
+                      'hallinto-oikeus-id'
+                    ],
+                    schema
+                  )}
+                  items={Selects.addNoSelection(
+                    R.filter(isValid, hallintoOikeudet)
+                  )} />
+              {/if}
             </td>
             <td class="etp-table--td">
               {i18n('valvonta.kaytto.toimenpide.manually-sent')}
