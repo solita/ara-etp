@@ -1869,6 +1869,7 @@
         "cancel-button": "Återkalla",
         "preview-button": "Förhandsvisa",
         "download-button": "Ladda ner",
+        "court": "Hallinto-oikeuden valinta (sv)",
         "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti (sv)",
         "case": {
           "title": "Inledande av kontroll",

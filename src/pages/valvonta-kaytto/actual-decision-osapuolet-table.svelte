@@ -60,7 +60,7 @@
     );
 </script>
 
-<style  type="text/postcss">
+<style type="text/postcss">
   .hao-container {
     @apply pb-5;
   }
@@ -76,7 +76,7 @@
           <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
           <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
-          <th class="etp-table--th"> Hallinto-oikeus</th>
+          <th class="etp-table--th"> {i18n(i18nRoot + '.court')} </th>
 
           <th class="etp-table--th">
             {i18n(i18nRoot + '.toimitustapa')}
