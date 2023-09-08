@@ -1874,6 +1874,7 @@
         "rooli": "Rooli",
         "fyi": "Omistajien dokumentit tiedoksi",
         "fyi-disabled": "Ei lähetetä dokumentteja tiedoksi",
+        "delete": "Poista osapuoli vastaanottajista",
         "toimitustapa": "Toimitustapa",
         "esikatselu": "Esikatselu",
         "cancel-button": "Peruuta",

@@ -204,3 +204,11 @@ export const findFineFromToimenpiteet = R.compose(
   ),
   R.filter(isHearingLetter)
 );
+
+export const deleteOsapuoliCourtData = (toimenpide, osapuoliId) => {
+  return R.over(
+    R.lensPath(['type-specific-data', 'courts']),
+    R.reject(R.propEq('osapuoli-id', osapuoliId)),
+    toimenpide
+  );
+};

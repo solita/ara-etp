@@ -343,3 +343,28 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
     assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 3000);
   });
 });
+
+describe('deleteOsaPuoliCourtdata takes toimenpide object', () => {
+  it('and deletes the court data of the given osapuoli from it', () => {
+    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      osapuoliIds: [1, 3, 7]
+    });
+
+    const toimenpideWithoutCourtDataForOsapuoli3 =
+      Toimenpiteet.deleteOsapuoliCourtData(toimenpide, 3);
+
+    assert.deepEqual(
+      R.path(
+        ['type-specific-data', 'courts'],
+        toimenpideWithoutCourtDataForOsapuoli3
+      ),
+      [
+        { 'osapuoli-id': 1, 'hallinto-oikeus-id': Maybe.None() },
+        {
+          'osapuoli-id': 7,
+          'hallinto-oikeus-id': Maybe.None()
+        }
+      ]
+    );
+  });
+});

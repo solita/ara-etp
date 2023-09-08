@@ -14,6 +14,7 @@
   import { isValid } from '@Utility/classification';
   import { ARRAY_VALIDATOR_INDEX } from '@Utility/validation';
   import Select2 from '@Component/Select/Select2';
+  import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
 
   export let id;
   export let toimenpide;
@@ -58,6 +59,12 @@
       R.propEq('osapuoli-id', osapuoliId),
       R.path(['type-specific-data', 'courts'], toimenpide)
     );
+
+  const deleteOsapuoliCourtData = osapuoliId => _ => {
+    osapuolet = R.reject(R.propEq('id', osapuoliId), osapuolet);
+
+    toimenpide = Toimenpiteet.deleteOsapuoliCourtData(toimenpide, osapuoliId);
+  };
 </script>
 
 <style type="text/postcss">
@@ -85,6 +92,7 @@
           <th class="etp-table--th">
             {i18n(i18nRoot + '.esikatselu')}
           </th>
+          <th class="etp-table--th" />
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -162,6 +170,16 @@
                 <span class="font-icon">info</span>
                 {i18n(i18nRoot + '.fyi-disabled')}
               {/if}
+            </td>
+            <td class="etp-table--td">
+              <button
+                class="hover:bg-althover"
+                title={i18n(i18nRoot + '.delete')}
+                aria-label={i18n(i18nRoot + '.delete')}
+                type="button"
+                on:click={deleteOsapuoliCourtData(osapuoli.id)}>
+                <span class="material-icons">delete_forever</span>
+              </button>
             </td>
           </tr>
         {/each}
