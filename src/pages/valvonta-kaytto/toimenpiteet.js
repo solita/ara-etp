@@ -105,7 +105,7 @@ export const emptyToimenpide = (
           'answer-commentary-sv': Maybe.None(),
           'statement-fi': Maybe.None(),
           'statement-sv': Maybe.None(),
-          courts: R.map(
+          'osapuoli-specific': R.map(
             osapuoliId => ({
               'osapuoli-id': osapuoliId,
               'hallinto-oikeus-id': Maybe.None()
@@ -207,7 +207,7 @@ export const findFineFromToimenpiteet = R.compose(
 
 export const deleteOsapuoliCourtData = (toimenpide, osapuoliId) => {
   return R.over(
-    R.lensPath(['type-specific-data', 'courts']),
+    R.lensPath(['type-specific-data', 'osapuoli-specific']),
     R.reject(R.propEq('osapuoli-id', osapuoliId)),
     toimenpide
   );

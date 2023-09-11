@@ -72,7 +72,7 @@ export const toimenpideSave = {
     'statement-fi': description,
     'statement-sv': description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
-    courts: [
+    'osapuoli-specific': [
       {
         'osapuoli-id': [],
         'hallinto-oikeus-id': Validation.MaybeInterval(0, 5)
@@ -106,13 +106,13 @@ export const toimenpidePublish = (templates, toimenpide) =>
           Toimenpiteet.isActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
-        courts: courtsSchema => {
+        'osapuoli-specific': osapuoliSpecificSchema => {
           return R.map(
             R.over(
               R.lensProp('hallinto-oikeus-id'),
               addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide))
             ),
-            courtsSchema
+            osapuoliSpecificSchema
           );
         },
         'department-head-title-fi': addRequiredValidator(

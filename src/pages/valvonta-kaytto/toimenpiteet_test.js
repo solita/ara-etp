@@ -144,15 +144,15 @@ describe('Empty toimenpide', () => {
       'answer-commentary-sv',
       'statement-fi',
       'statement-sv',
-      'courts',
+      'osapuoli-specific',
       'department-head-title-fi',
       'department-head-title-sv',
       'department-head-name'
     ]);
 
-    // courts contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
+    // osapuoli-specific contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
     assert.deepEqual(
-      R.path(['type-specific-data', 'courts'], emptyToimenpide),
+      R.path(['type-specific-data', 'osapuoli-specific'], emptyToimenpide),
       [
         { 'osapuoli-id': 1, 'hallinto-oikeus-id': Maybe.None() },
         {
@@ -355,7 +355,7 @@ describe('deleteOsaPuoliCourtdata takes toimenpide object', () => {
 
     assert.deepEqual(
       R.path(
-        ['type-specific-data', 'courts'],
+        ['type-specific-data', 'osapuoli-specific'],
         toimenpideWithoutCourtDataForOsapuoli3
       ),
       [

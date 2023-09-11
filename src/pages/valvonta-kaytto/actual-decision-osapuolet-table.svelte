@@ -57,7 +57,7 @@
   const courtDataIndexForOsapuoli = osapuoliId =>
     R.findIndex(
       R.propEq('osapuoli-id', osapuoliId),
-      R.path(['type-specific-data', 'courts'], toimenpide)
+      R.path(['type-specific-data', 'osapuoli-specific'], toimenpide)
     );
 
   const deleteOsapuoliCourtData = osapuoliId => _ => {
@@ -113,7 +113,7 @@
                   bind:model={toimenpide}
                   lens={R.lensPath([
                     'type-specific-data',
-                    'courts',
+                    'osapuoli-specific',
                     courtDataIndexForOsapuoli(osapuoli.id),
                     'hallinto-oikeus-id'
                   ])}
@@ -131,7 +131,7 @@
                   validators={R.path(
                     [
                       'type-specific-data',
-                      'courts',
+                      'osapuoli-specific',
                       ARRAY_VALIDATOR_INDEX,
                       'hallinto-oikeus-id'
                     ],
