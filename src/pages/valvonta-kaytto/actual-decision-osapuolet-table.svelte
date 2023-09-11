@@ -60,10 +60,13 @@
       R.path(['type-specific-data', 'osapuoli-specific'], toimenpide)
     );
 
-  const deleteOsapuoliCourtData = osapuoliId => _ => {
+  const removeOsapuoliFromRecipients = osapuoliId => _ => {
     osapuolet = R.reject(R.propEq('id', osapuoliId), osapuolet);
 
-    toimenpide = Toimenpiteet.deleteOsapuoliCourtData(toimenpide, osapuoliId);
+    toimenpide = R.compose(
+      Toimenpiteet.removeCourt(osapuoliId),
+      Toimenpiteet.setDocumentForOsapuoli(osapuoliId)
+    )(toimenpide);
   };
 </script>
 
@@ -177,7 +180,7 @@
                 title={i18n(i18nRoot + '.delete')}
                 aria-label={i18n(i18nRoot + '.delete')}
                 type="button"
-                on:click={deleteOsapuoliCourtData(osapuoli.id)}>
+                on:click={removeOsapuoliFromRecipients(osapuoli.id)}>
                 <span class="material-icons">delete_forever</span>
               </button>
             </td>

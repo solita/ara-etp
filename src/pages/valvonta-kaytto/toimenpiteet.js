@@ -108,7 +108,8 @@ export const emptyToimenpide = (
           'osapuoli-specific': R.map(
             osapuoliId => ({
               'osapuoli-id': osapuoliId,
-              'hallinto-oikeus-id': Maybe.None()
+              'hallinto-oikeus-id': Maybe.None(),
+              document: true
             }),
             osapuoliIds
           ),
@@ -205,10 +206,47 @@ export const findFineFromToimenpiteet = R.compose(
   R.filter(isHearingLetter)
 );
 
-export const deleteOsapuoliCourtData = (toimenpide, osapuoliId) => {
+/**
+ * Removes the hallinto-oikeus-id from the osapuoli-specific data under
+ * toimenpide-specific-data in the toimenpide object for the give osapuoli
+ *
+ * @param toimenpide
+ * @param osapuoliId
+ * @return {Object} toimenpide
+ */
+
+export const removeCourt = R.curry((osapuoliId, toimenpide) => {
   return R.over(
     R.lensPath(['type-specific-data', 'osapuoli-specific']),
-    R.reject(R.propEq('osapuoli-id', osapuoliId)),
+    R.map(
+      R.when(
+        R.propEq('osapuoli-id', osapuoliId),
+        R.assoc('hallinto-oikeus-id', Maybe.None())
+      )
+    ),
     toimenpide
   );
-};
+});
+
+/**
+ * Sets document value in the osapuoli-specific data under
+ * toimenpide-specific-data in the toimenpide object for the give osapuoli
+ *
+ * @param toimenpide
+ * @param osapuoliId
+ * @return {Object} toimenpide
+ */
+export const setDocumentForOsapuoli = R.curry(
+  (osapuoliId, toimenpide, document = false) => {
+    return R.over(
+      R.lensPath(['type-specific-data', 'osapuoli-specific']),
+      R.map(
+        R.when(
+          R.propEq('osapuoli-id', osapuoliId),
+          R.assoc('document', document)
+        )
+      ),
+      toimenpide
+    );
+  }
+);
