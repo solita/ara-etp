@@ -54,30 +54,48 @@
 
   {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
     {#each toimenpide.henkilot as henkilo}
-      <div>
-        {henkilo.etunimi}
-        {henkilo.sukunimi}
-        <Osapuoli
-          osapuoli={henkilo}
-          type="henkilo"
-          {valvonta}
-          {toimenpide}
-          {roolit}
-          {toimitustavat} />
-      </div>
+      {#if Toimenpiteet.isActualDecision(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, henkilo.id)}
+        <div>
+          {henkilo.etunimi}
+          {henkilo.sukunimi}
+          ,
+          {i18n(i18nRoot + '.no-document')}
+        </div>
+      {:else}
+        <div>
+          {henkilo.etunimi}
+          {henkilo.sukunimi}
+          <Osapuoli
+            osapuoli={henkilo}
+            type="henkilo"
+            {valvonta}
+            {toimenpide}
+            {roolit}
+            {toimitustavat} />
+        </div>
+      {/if}
     {/each}
     {#each toimenpide.yritykset as yritys}
-      <div>
-        {yritys.nimi}
-        {Maybe.orSome('', yritys.ytunnus)}
-        <Osapuoli
-          osapuoli={yritys}
-          type="yritys"
-          {valvonta}
-          {toimenpide}
-          {roolit}
-          {toimitustavat} />
-      </div>
+      {#if Toimenpiteet.isActualDecision(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, yritys.id)}
+        <div>
+          {yritys.nimi}
+          {Maybe.orSome('', yritys.ytunnus)}
+          ,
+          {i18n(i18nRoot + '.no-document')}
+        </div>
+      {:else}
+        <div>
+          {yritys.nimi}
+          {Maybe.orSome('', yritys.ytunnus)}
+          <Osapuoli
+            osapuoli={yritys}
+            type="yritys"
+            {valvonta}
+            {toimenpide}
+            {roolit}
+            {toimitustavat} />
+        </div>
+      {/if}
     {/each}
   {/if}
 

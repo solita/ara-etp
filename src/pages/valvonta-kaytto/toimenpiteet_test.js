@@ -440,3 +440,34 @@ describe('setDocumentForOsapuoli toimenpide object', () => {
     );
   });
 });
+
+describe('documentExistsForOsapuoli', () => {
+  it('returns false for for the osapuoli who has their document set to false, true for others', () => {
+    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      osapuoliIds: [1, 3, 7]
+    });
+
+    const toimenpideWithoutDocumentForOsapuoli3 =
+      Toimenpiteet.setDocumentForOsapuoli(3, toimenpide, false);
+
+    assert.isTrue(
+      Toimenpiteet.documentExistsForOsapuoli(
+        toimenpideWithoutDocumentForOsapuoli3,
+        1
+      )
+    );
+    assert.isFalse(
+      Toimenpiteet.documentExistsForOsapuoli(
+        toimenpideWithoutDocumentForOsapuoli3,
+        3
+      )
+    );
+
+    assert.isTrue(
+      Toimenpiteet.documentExistsForOsapuoli(
+        toimenpideWithoutDocumentForOsapuoli3,
+        7
+      )
+    );
+  });
+});

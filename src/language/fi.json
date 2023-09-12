@@ -1853,7 +1853,8 @@
           "rooli-none": "Ei roolia",
           "toimitustapa-none": "Ei toimitustapaa",
           "fyi": "tiedoksi",
-          "fyi-disabled": "ei tiedoteta"
+          "fyi-disabled": "ei tiedoteta",
+          "no-document": "osapuolelle ei luotu dokumenttia"
         },
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy",

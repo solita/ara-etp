@@ -1862,7 +1862,8 @@
           "rooli-none": "Ingen roll",
           "toimitustapa-none": "Inget leveranssätt",
           "fyi": "För kännedom",
-          "fyi-disabled": "meddelas inte"
+          "fyi-disabled": "meddelas inte",
+          "no-document": "osapuolelle ei luotu dokumenttia (sv)"
         }
       },
       "toimenpide": {
