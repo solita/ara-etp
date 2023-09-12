@@ -13,7 +13,7 @@
   import * as Selects from '@Component/Select/select-util';
   import { isValid } from '@Utility/classification';
   import { ARRAY_VALIDATOR_INDEX } from '@Utility/validation';
-  import Select2 from '@Component/Select/Select2';
+  import Select from '@Component/Select/Select2';
   import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
 
   export let id;
@@ -112,7 +112,7 @@
             </td>
             <td class="etp-table--td hao-container">
               {#if Osapuolet.isOmistaja(osapuoli)}
-                <Select2
+                <Select
                   bind:model={toimenpide}
                   lens={R.lensPath([
                     'type-specific-data',
