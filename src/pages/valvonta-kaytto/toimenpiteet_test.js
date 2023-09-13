@@ -144,15 +144,15 @@ describe('Empty toimenpide', () => {
       'answer-commentary-sv',
       'statement-fi',
       'statement-sv',
-      'osapuoli-specific',
+      'osapuoli-specific-data',
       'department-head-title-fi',
       'department-head-title-sv',
       'department-head-name'
     ]);
 
-    // osapuoli-specific contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
+    // osapuoli-specific-data contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
     assert.deepEqual(
-      R.path(['type-specific-data', 'osapuoli-specific'], emptyToimenpide),
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
       [
         {
           'osapuoli-id': 1,
@@ -352,7 +352,7 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
 describe('removeCourt takes toimenpide object', () => {
   it('and sets the hallinto-oikeus-id  of the given osapuoli to None', () => {
     const toimenpide = R.set(
-      R.lensPath(['type-specific-data', 'osapuoli-specific']),
+      R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
       [
         {
           'osapuoli-id': 1,
@@ -382,7 +382,7 @@ describe('removeCourt takes toimenpide object', () => {
 
     assert.deepEqual(
       R.path(
-        ['type-specific-data', 'osapuoli-specific'],
+        ['type-specific-data', 'osapuoli-specific-data'],
         toimenpideWithoutCourtDataForOsapuoli3
       ),
       [
@@ -417,7 +417,7 @@ describe('setDocumentForOsapuoli toimenpide object', () => {
 
     assert.deepEqual(
       R.path(
-        ['type-specific-data', 'osapuoli-specific'],
+        ['type-specific-data', 'osapuoli-specific-data'],
         toimenpideWithoutDocumentForOsapuoli3
       ),
       [

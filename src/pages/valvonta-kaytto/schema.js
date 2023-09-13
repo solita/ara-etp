@@ -72,7 +72,7 @@ export const toimenpideSave = {
     'statement-fi': description,
     'statement-sv': description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
-    'osapuoli-specific': [
+    'osapuoli-specific-data': [
       {
         'osapuoli-id': [],
         'hallinto-oikeus-id': Validation.MaybeInterval(0, 5)
@@ -106,7 +106,7 @@ export const toimenpidePublish = (templates, toimenpide) =>
           Toimenpiteet.isActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
-        'osapuoli-specific': osapuoliSpecificSchema => {
+        'osapuoli-specific-data': osapuoliSpecificSchema => {
           return R.map(
             R.over(
               R.lensProp('hallinto-oikeus-id'),

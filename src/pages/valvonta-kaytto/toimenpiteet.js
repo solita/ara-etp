@@ -105,7 +105,7 @@ export const emptyToimenpide = (
           'answer-commentary-sv': Maybe.None(),
           'statement-fi': Maybe.None(),
           'statement-sv': Maybe.None(),
-          'osapuoli-specific': R.map(
+          'osapuoli-specific-data': R.map(
             osapuoliId => ({
               'osapuoli-id': osapuoliId,
               'hallinto-oikeus-id': Maybe.None(),
@@ -217,7 +217,7 @@ export const findFineFromToimenpiteet = R.compose(
 
 export const removeCourt = R.curry((osapuoliId, toimenpide) => {
   return R.over(
-    R.lensPath(['type-specific-data', 'osapuoli-specific']),
+    R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
     R.map(
       R.when(
         R.propEq('osapuoli-id', osapuoliId),
@@ -229,7 +229,7 @@ export const removeCourt = R.curry((osapuoliId, toimenpide) => {
 });
 
 /**
- * Sets document value in the osapuoli-specific data under
+ * Sets document value in the osapuoli-specific-data data under
  * toimenpide-specific-data in the toimenpide object for the give osapuoli
  *
  * @param toimenpide
@@ -239,7 +239,7 @@ export const removeCourt = R.curry((osapuoliId, toimenpide) => {
 export const setDocumentForOsapuoli = R.curry(
   (osapuoliId, toimenpide, document = false) => {
     return R.over(
-      R.lensPath(['type-specific-data', 'osapuoli-specific']),
+      R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
       R.map(
         R.when(
           R.propEq('osapuoli-id', osapuoliId),
@@ -252,7 +252,7 @@ export const setDocumentForOsapuoli = R.curry(
 );
 
 /**
- * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific field
+ * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific-data field
  * document set to true for the given osapuoliId
  * @param toimenpide
  * @param osapuoliId
@@ -262,6 +262,6 @@ export const documentExistsForOsapuoli = (toimenpide, osapuoliId) => {
   return R.compose(
     R.prop('document'),
     R.find(R.propEq('osapuoli-id', osapuoliId)),
-    R.path(['type-specific-data', 'osapuoli-specific'])
+    R.path(['type-specific-data', 'osapuoli-specific-data'])
   )(toimenpide);
 };

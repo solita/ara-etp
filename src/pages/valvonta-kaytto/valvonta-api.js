@@ -231,7 +231,7 @@ const serializeToimenpide = R.compose(
       'answer-commentary-sv': Maybe.orSome(null),
       'statement-fi': Maybe.orSome(null),
       'statement-sv': Maybe.orSome(null),
-      'osapuoli-specific': R.map(
+      'osapuoli-specific-data': R.map(
         R.over(R.lensProp('hallinto-oikeus-id'), Maybe.orSome(null))
       ),
       'department-head-title-fi': Maybe.orSome(null),
