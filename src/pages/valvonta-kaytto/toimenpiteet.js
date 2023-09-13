@@ -260,7 +260,6 @@ export const setDocumentForOsapuoli = R.curry(
  */
 export const documentExistsForOsapuoli = (toimenpide, osapuoliId) => {
   return R.compose(
-    R.defaultTo(true),
     R.prop('document'),
     R.find(R.propEq('osapuoli-id', osapuoliId)),
     R.path(['type-specific-data', 'osapuoli-specific'])
