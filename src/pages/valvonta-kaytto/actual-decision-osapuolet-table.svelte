@@ -61,7 +61,7 @@
 
 <style type="text/postcss">
   .hao-container {
-    @apply pb-5;
+    height: 5rem;
   }
 </style>
 
@@ -99,12 +99,7 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
-            <td
-              class="etp-table--td"
-              class:hao-container={Toimenpiteet.documentExistsForOsapuoli(
-                toimenpide,
-                osapuoli.id
-              )}>
+            <td class="etp-table--td hao-container">
               {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id)}
                 <Select
                   bind:model={toimenpide}
