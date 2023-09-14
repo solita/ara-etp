@@ -1872,6 +1872,7 @@
         "download-button": "Ladda ner",
         "court": "Hallinto-oikeuden valinta (sv)",
         "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti (sv)",
+        "no-delivery": "Dokumenttia ei toimiteta osapuolelle (sv)",
         "case": {
           "title": "Inledande av kontroll",
           "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",

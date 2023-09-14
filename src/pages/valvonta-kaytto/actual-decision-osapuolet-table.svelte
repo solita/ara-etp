@@ -15,6 +15,7 @@
   import { ARRAY_VALIDATOR_INDEX } from '@Utility/validation';
   import Select from '@Component/Select/Select2';
   import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   export let id;
   export let toimenpide;
@@ -55,19 +56,7 @@
   );
 
   const courtDataIndexForOsapuoli = osapuoliId =>
-    R.findIndex(
-      R.propEq('osapuoli-id', osapuoliId),
-      R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
-    );
-
-  const removeOsapuoliFromRecipients = osapuoliId => _ => {
-    osapuolet = R.reject(R.propEq('id', osapuoliId), osapuolet);
-
-    toimenpide = R.compose(
-      Toimenpiteet.removeCourt(osapuoliId),
-      Toimenpiteet.setDocumentForOsapuoli(osapuoliId)
-    )(toimenpide);
-  };
+    Toimenpiteet.courtDataIndexForOsapuoli(toimenpide, osapuoliId);
 </script>
 
 <style type="text/postcss">
@@ -95,7 +84,7 @@
           <th class="etp-table--th">
             {i18n(i18nRoot + '.esikatselu')}
           </th>
-          <th class="etp-table--th" />
+          <th class="etp-table--th">{i18n(i18nRoot + '.create-document')}</th>
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -110,8 +99,13 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
-            <td class="etp-table--td hao-container">
-              {#if Osapuolet.isOmistaja(osapuoli)}
+            <td
+              class="etp-table--td"
+              class:hao-container={Toimenpiteet.documentExistsForOsapuoli(
+                toimenpide,
+                osapuoli.id
+              )}>
+              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id)}
                 <Select
                   bind:model={toimenpide}
                   lens={R.lensPath([
@@ -143,6 +137,8 @@
                   items={Selects.addNoSelection(
                     R.filter(isValid, hallintoOikeudet)
                   )} />
+              {:else}
+                {i18n('valvonta.kaytto.toimenpide.no-delivery')}
               {/if}
             </td>
             <td class="etp-table--td">
@@ -159,6 +155,11 @@
                     class:text-primary={!disabled}
                     class:text-disabled={disabled}
                     class="cursor-pointer etp-table--td__center"
+                    role="button"
+                    hidden={!Toimenpiteet.documentExistsForOsapuoli(
+                      toimenpide,
+                      osapuoli.id
+                    )}
                     on:click|stopPropagation={disabled ||
                       preview(
                         osapuoli.type.preview(id, osapuoli.id, toimenpide)
@@ -174,15 +175,17 @@
                 {i18n(i18nRoot + '.fyi-disabled')}
               {/if}
             </td>
-            <td class="etp-table--td">
-              <button
-                class="hover:bg-althover"
-                title={i18n(i18nRoot + '.delete')}
-                aria-label={i18n(i18nRoot + '.delete')}
-                type="button"
-                on:click={removeOsapuoliFromRecipients(osapuoli.id)}>
-                <span class="material-icons">delete_forever</span>
-              </button>
+            <td class="etp-table--td__center">
+              {#if Osapuolet.isOmistaja(osapuoli)}
+                <Checkbox
+                  bind:model={toimenpide}
+                  lens={R.lensPath([
+                    'type-specific-data',
+                    'osapuoli-specific-data',
+                    courtDataIndexForOsapuoli(osapuoli.id),
+                    'document'
+                  ])} />
+              {/if}
             </td>
           </tr>
         {/each}

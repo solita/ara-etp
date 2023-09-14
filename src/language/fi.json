@@ -1882,7 +1882,9 @@
         "preview-button": "Esikatsele",
         "download-button": "Lataa",
         "court": "Hallinto-oikeuden valinta",
+        "create-document": "Luo dokumentti",
         "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti",
+        "no-delivery": "Dokumenttia ei toimiteta osapuolelle",
         "case": {
           "title": "Valvonnan aloitus",
           "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
