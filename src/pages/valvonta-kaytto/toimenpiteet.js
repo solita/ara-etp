@@ -207,51 +207,6 @@ export const findFineFromToimenpiteet = R.compose(
 );
 
 /**
- * Removes the hallinto-oikeus-id from the osapuoli-specific data under
- * toimenpide-specific-data in the toimenpide object for the give osapuoli
- *
- * @param toimenpide
- * @param osapuoliId
- * @return {Object} toimenpide
- */
-
-export const removeCourt = R.curry((osapuoliId, toimenpide) => {
-  return R.over(
-    R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
-    R.map(
-      R.when(
-        R.propEq('osapuoli-id', osapuoliId),
-        R.assoc('hallinto-oikeus-id', Maybe.None())
-      )
-    ),
-    toimenpide
-  );
-});
-
-/**
- * Sets document value in the osapuoli-specific-data data under
- * toimenpide-specific-data in the toimenpide object for the give osapuoli
- *
- * @param toimenpide
- * @param osapuoliId
- * @return {Object} toimenpide
- */
-export const setDocumentForOsapuoli = R.curry(
-  (osapuoliId, toimenpide, document = false) => {
-    return R.over(
-      R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
-      R.map(
-        R.when(
-          R.propEq('osapuoli-id', osapuoliId),
-          R.assoc('document', document)
-        )
-      ),
-      toimenpide
-    );
-  }
-);
-
-/**
  * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific-data field
  * document set to true for the given osapuoliId
  * @param toimenpide

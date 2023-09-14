@@ -349,8 +349,8 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
   });
 });
 
-describe('removeCourt takes toimenpide object', () => {
-  it('and sets the hallinto-oikeus-id  of the given osapuoli to None', () => {
+describe('documentExistsForOsapuoli', () => {
+  it('returns false for for the osapuoli who has their document set to false, true for others', () => {
     const toimenpide = R.set(
       R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
       [
@@ -362,7 +362,7 @@ describe('removeCourt takes toimenpide object', () => {
         {
           'osapuoli-id': 3,
           'hallinto-oikeus-id': Maybe.Some(2),
-          document: true
+          document: false
         },
         {
           'osapuoli-id': 7,
@@ -375,99 +375,9 @@ describe('removeCourt takes toimenpide object', () => {
       })
     );
 
-    const toimenpideWithoutCourtDataForOsapuoli3 = Toimenpiteet.removeCourt(
-      3,
-      toimenpide
-    );
+    assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1));
+    assert.isFalse(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 3));
 
-    assert.deepEqual(
-      R.path(
-        ['type-specific-data', 'osapuoli-specific-data'],
-        toimenpideWithoutCourtDataForOsapuoli3
-      ),
-      [
-        {
-          'osapuoli-id': 1,
-          'hallinto-oikeus-id': Maybe.Some(5),
-          document: true
-        },
-        {
-          'osapuoli-id': 3,
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true
-        },
-        {
-          'osapuoli-id': 7,
-          'hallinto-oikeus-id': Maybe.Some(1),
-          document: true
-        }
-      ]
-    );
-  });
-});
-
-describe('setDocumentForOsapuoli toimenpide object', () => {
-  it('and sets the document value of the given osapuoli to false', () => {
-    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      osapuoliIds: [1, 3, 7]
-    });
-
-    const toimenpideWithoutDocumentForOsapuoli3 =
-      Toimenpiteet.setDocumentForOsapuoli(3, toimenpide);
-
-    assert.deepEqual(
-      R.path(
-        ['type-specific-data', 'osapuoli-specific-data'],
-        toimenpideWithoutDocumentForOsapuoli3
-      ),
-      [
-        {
-          'osapuoli-id': 1,
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true
-        },
-        {
-          'osapuoli-id': 3,
-          'hallinto-oikeus-id': Maybe.None(),
-          document: false
-        },
-        {
-          'osapuoli-id': 7,
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true
-        }
-      ]
-    );
-  });
-});
-
-describe('documentExistsForOsapuoli', () => {
-  it('returns false for for the osapuoli who has their document set to false, true for others', () => {
-    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      osapuoliIds: [1, 3, 7]
-    });
-
-    const toimenpideWithoutDocumentForOsapuoli3 =
-      Toimenpiteet.setDocumentForOsapuoli(3, toimenpide, false);
-
-    assert.isTrue(
-      Toimenpiteet.documentExistsForOsapuoli(
-        toimenpideWithoutDocumentForOsapuoli3,
-        1
-      )
-    );
-    assert.isFalse(
-      Toimenpiteet.documentExistsForOsapuoli(
-        toimenpideWithoutDocumentForOsapuoli3,
-        3
-      )
-    );
-
-    assert.isTrue(
-      Toimenpiteet.documentExistsForOsapuoli(
-        toimenpideWithoutDocumentForOsapuoli3,
-        7
-      )
-    );
+    assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7));
   });
 });
