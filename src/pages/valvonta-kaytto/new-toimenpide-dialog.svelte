@@ -48,7 +48,6 @@
 
   let form;
   let error = Maybe.None();
-  let osapuolet = R.concat(henkilot, yritykset);
   let publishPending = false;
   let previewPending = false;
 
