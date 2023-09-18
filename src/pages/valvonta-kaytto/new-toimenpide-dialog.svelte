@@ -24,6 +24,8 @@
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
+  import ActualDecisionOsapuoletTable from './actual-decision-osapuolet-table';
+
   import * as Validation from '@Utility/validation';
 
   import ActualDecisionSubView from './new-actual-decision-toimenpide';
@@ -230,18 +232,34 @@
 
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
-      <OsapuoletTable
-        {id}
-        {toimenpide}
-        {henkilot}
-        {yritykset}
-        {preview}
-        {previewPending}
-        {disabled}
-        {roolit}
-        {toimitustavat}
-        {template}
-        {manuallyDeliverableToimenpide} />
+      {#if Toimenpiteet.isActualDecision(toimenpide)}
+        <ActualDecisionOsapuoletTable
+          {id}
+          bind:toimenpide
+          {henkilot}
+          {yritykset}
+          {preview}
+          {previewPending}
+          {disabled}
+          {roolit}
+          {template}
+          {text}
+          {schema}
+          {hallintoOikeudet} />
+      {:else}
+        <OsapuoletTable
+          {id}
+          {toimenpide}
+          {henkilot}
+          {yritykset}
+          {preview}
+          {previewPending}
+          {disabled}
+          {roolit}
+          {toimitustavat}
+          {template}
+          {manuallyDeliverableToimenpide} />
+      {/if}
     </div>
   {/if}
 </Dialog>

@@ -10,6 +10,12 @@
   import { _, locale } from '@Language/i18n';
   import H2 from '@Component/H/H2.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import * as Selects from '@Component/Select/select-util';
+  import { isValid } from '@Utility/classification';
+  import { ARRAY_VALIDATOR_INDEX } from '@Utility/validation';
+  import Select from '@Component/Select/Select2';
+  import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   export let id;
   export let toimenpide;
@@ -17,23 +23,20 @@
   export let yritykset;
   export let preview;
   export let roolit;
-  export let toimitustavat;
   export let template;
   export let previewPending;
   export let disabled;
-
-  export let manuallyDeliverableToimenpide = false;
+  export let schema;
+  export let hallintoOikeudet = [];
 
   const types = {
     yritys: {
       label: yritys => yritys.nimi,
-      preview: ValvontaApi.previewToimenpideForYritysOsapuoli,
-      errorKey: Osapuolet.toimitustapaErrorKey.yritys
+      preview: ValvontaApi.previewToimenpideForYritysOsapuoli
     },
     henkilo: {
       label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
-      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli,
-      errorKey: Osapuolet.toimitustapaErrorKey.henkilo
+      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli
     }
   };
 
@@ -51,20 +54,20 @@
     Maybe.fold('', Locales.labelForId($locale, roolit)),
     R.prop('rooli-id')
   );
-  $: toimitustapaLabel = R.compose(
-    Maybe.fold('', Locales.labelForId($locale, toimitustavat)),
-    R.prop('toimitustapa-id')
-  );
+
+  const courtDataIndexForOsapuoli = osapuoliId =>
+    Toimenpiteet.courtDataIndexForOsapuoli(toimenpide, osapuoliId);
 </script>
 
-<style>
-  .etp-table--td.text-error {
-    @apply font-bold;
+<style type="text/postcss">
+  .hao-container {
+    height: 5rem;
   }
 </style>
 
 <div class="w-full">
   <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
+
   <div class="flex flex-row my-4">
     <table class="etp-table">
       <thead class="etp-table--thead">
@@ -72,6 +75,7 @@
           <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
           <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
+          <th class="etp-table--th"> {i18n(i18nRoot + '.court')} </th>
 
           <th class="etp-table--th">
             {i18n(i18nRoot + '.toimitustapa')}
@@ -80,6 +84,7 @@
           <th class="etp-table--th">
             {i18n(i18nRoot + '.esikatselu')}
           </th>
+          <th class="etp-table--th">{i18n(i18nRoot + '.create-document')}</th>
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -94,26 +99,45 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
-            <td
-              class="etp-table--td"
-              class:text-error={Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
-              title={Maybe.fold(
-                '',
-                key =>
-                  i18n('valvonta.kaytto.osapuoli.toimitustapa-errors.' + key),
-                osapuoli.type.errorKey(osapuoli)
-              )}>
-              {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
-                <span class="font-icon">warning</span>
-              {/if}
-              {#if manuallyDeliverableToimenpide}
-                {i18n('valvonta.kaytto.toimenpide.manually-sent')}
+            <td class="etp-table--td hao-container">
+              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id)}
+                <Select
+                  bind:model={toimenpide}
+                  lens={R.lensPath([
+                    'type-specific-data',
+                    'osapuoli-specific-data',
+                    courtDataIndexForOsapuoli(osapuoli.id),
+                    'hallinto-oikeus-id'
+                  ])}
+                  modelToItem={Maybe.fold(
+                    Maybe.None(),
+                    Maybe.findById(R.__, hallintoOikeudet)
+                  )}
+                  itemToModel={Maybe.fold(Maybe.None(), it =>
+                    Maybe.Some(it.id)
+                  )}
+                  format={Maybe.fold(
+                    i18n('validation.no-selection'),
+                    Locales.label($locale)
+                  )}
+                  validators={R.path(
+                    [
+                      'type-specific-data',
+                      'osapuoli-specific-data',
+                      ARRAY_VALIDATOR_INDEX,
+                      'hallinto-oikeus-id'
+                    ],
+                    schema
+                  )}
+                  items={Selects.addNoSelection(
+                    R.filter(isValid, hallintoOikeudet)
+                  )} />
               {:else}
-                {toimitustapaLabel(osapuoli)}
+                {i18n('valvonta.kaytto.toimenpide.no-delivery')}
               {/if}
-              {#if Osapuolet.toimitustapa.other(osapuoli)}
-                - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
-              {/if}
+            </td>
+            <td class="etp-table--td">
+              {i18n('valvonta.kaytto.toimenpide.manually-sent')}
             </td>
             <td class="etp-table--td">
               {#if Osapuolet.isOmistaja(osapuoli)}
@@ -126,6 +150,11 @@
                     class:text-primary={!disabled}
                     class:text-disabled={disabled}
                     class="cursor-pointer etp-table--td__center"
+                    role="button"
+                    hidden={!Toimenpiteet.documentExistsForOsapuoli(
+                      toimenpide,
+                      osapuoli.id
+                    )}
                     on:click|stopPropagation={disabled ||
                       preview(
                         osapuoli.type.preview(id, osapuoli.id, toimenpide)
@@ -139,6 +168,18 @@
               {:else}
                 <span class="font-icon">info</span>
                 {i18n(i18nRoot + '.fyi-disabled')}
+              {/if}
+            </td>
+            <td class="etp-table--td__center">
+              {#if Osapuolet.isOmistaja(osapuoli)}
+                <Checkbox
+                  bind:model={toimenpide}
+                  lens={R.lensPath([
+                    'type-specific-data',
+                    'osapuoli-specific-data',
+                    courtDataIndexForOsapuoli(osapuoli.id),
+                    'document'
+                  ])} />
               {/if}
             </td>
           </tr>

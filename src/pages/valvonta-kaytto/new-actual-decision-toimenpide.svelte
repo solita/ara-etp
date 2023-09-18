@@ -2,10 +2,6 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Parsers from '@Utility/parsers';
-  import * as Locales from '@Language/locale-utils';
-  import { locale } from '@Language/i18n';
-  import * as Selects from '@Component/Select/select-util';
-  import { isValid } from '@Utility/classification';
   import Select2 from '@Component/Select/Select2';
   import Textarea from '@Component/Textarea/Textarea';
   import Input from '@Component/Input/Input';
@@ -14,7 +10,6 @@
   export let text;
   export let i18n;
   export let schema;
-  export let hallintoOikeudet = [];
 </script>
 
 <div>
@@ -142,24 +137,5 @@
         schema
       )}
       {i18n} />
-  </div>
-
-  <div class="w-full py-4">
-    <Select2
-      bind:model={toimenpide}
-      lens={R.lensPath(['type-specific-data', 'court'])}
-      modelToItem={Maybe.fold(
-        Maybe.None(),
-        Maybe.findById(R.__, hallintoOikeudet)
-      )}
-      itemToModel={Maybe.fold(Maybe.None(), it => Maybe.Some(it.id))}
-      format={Maybe.fold(
-        i18n('validation.no-selection'),
-        Locales.label($locale)
-      )}
-      label={text(toimenpide, 'court')}
-      validators={R.path(['type-specific-data', 'court'], schema)}
-      required
-      items={Selects.addNoSelection(R.filter(isValid, hallintoOikeudet))} />
   </div>
 </div>

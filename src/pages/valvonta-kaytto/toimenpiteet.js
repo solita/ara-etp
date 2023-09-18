@@ -79,7 +79,8 @@ export const emptyToimenpide = (
     fine = 800,
     departmentHeadTitleFi = null,
     departmentHeadTitleSv = null,
-    departmentHeadName = null
+    departmentHeadName = null,
+    osapuoliIds = []
   } = {}
 ) => {
   const toimenpide = {
@@ -108,7 +109,14 @@ export const emptyToimenpide = (
           'answer-commentary-sv': Maybe.None(),
           'statement-fi': Maybe.None(),
           'statement-sv': Maybe.None(),
-          court: Maybe.None(),
+          'osapuoli-specific-data': R.map(
+            osapuoliId => ({
+              'osapuoli-id': osapuoliId,
+              'hallinto-oikeus-id': Maybe.None(),
+              document: true
+            }),
+            osapuoliIds
+          ),
           'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
           'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
           'department-head-name': Maybe.fromNull(departmentHeadName)
@@ -201,3 +209,24 @@ export const findFineFromToimenpiteet = R.compose(
   ),
   R.filter(isHearingLetter)
 );
+
+/**
+ * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific-data field
+ * document set to true for the given osapuoliId
+ * @param toimenpide
+ * @param osapuoliId
+ * @return {boolean}
+ */
+export const documentExistsForOsapuoli = (toimenpide, osapuoliId) => {
+  return R.compose(
+    R.prop('document'),
+    R.find(R.propEq('osapuoli-id', osapuoliId)),
+    R.path(['type-specific-data', 'osapuoli-specific-data'])
+  )(toimenpide);
+};
+
+export const courtDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
+  R.findIndex(
+    R.propEq('osapuoli-id', osapuoliId),
+    R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
+  );

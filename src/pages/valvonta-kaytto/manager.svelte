@@ -17,6 +17,7 @@
   import TextButton from '@Component/Button/TextButton.svelte';
   import Select from '@Component/Select/Select.svelte';
   import H2 from '@Component/H/H2.svelte';
+  import * as Osapuolet from '@Pages/valvonta-kaytto/osapuolet';
 
   export let valvojat;
   export let valvonta;
@@ -51,7 +52,11 @@
               fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
               departmentHeadName: johtaja['department-head-name'],
               departmentHeadTitleFi: johtaja['department-head-title-fi'],
-              departmentHeadTitleSv: johtaja['department-head-title-sv']
+              departmentHeadTitleSv: johtaja['department-head-title-sv'],
+              osapuoliIds: R.map(
+                R.prop('id'),
+                R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
+              )
             }
           : undefined
       )

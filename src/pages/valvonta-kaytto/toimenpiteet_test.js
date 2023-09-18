@@ -127,7 +127,9 @@ describe('Empty toimenpide', () => {
   });
 
   it('Contains correct keys for toimenpidetype 8', () => {
-    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}], {
+      osapuoliIds: [1, 7]
+    });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
       'publish-time',
@@ -144,11 +146,28 @@ describe('Empty toimenpide', () => {
       'answer-commentary-sv',
       'statement-fi',
       'statement-sv',
-      'court',
+      'osapuoli-specific-data',
       'department-head-title-fi',
       'department-head-title-sv',
       'department-head-name'
     ]);
+
+    // osapuoli-specific-data contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
+    assert.deepEqual(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
+      [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.None(),
+          document: true
+        },
+        {
+          'osapuoli-id': 7,
+          'hallinto-oikeus-id': Maybe.None(),
+          document: true
+        }
+      ]
+    );
   });
 
   it('with a fine is recognized as having a fine', () => {
@@ -329,5 +348,38 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
     ]);
 
     assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 3000);
+  });
+});
+
+describe('documentExistsForOsapuoli', () => {
+  it('returns false for for the osapuoli who has their document set to false, true for others', () => {
+    const toimenpide = R.set(
+      R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
+      [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.Some(5),
+          document: true
+        },
+        {
+          'osapuoli-id': 3,
+          'hallinto-oikeus-id': Maybe.Some(2),
+          document: false
+        },
+        {
+          'osapuoli-id': 7,
+          'hallinto-oikeus-id': Maybe.Some(1),
+          document: true
+        }
+      ],
+      Toimenpiteet.emptyToimenpide(8, [], {
+        osapuoliIds: [1, 3, 7]
+      })
+    );
+
+    assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1));
+    assert.isFalse(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 3));
+
+    assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7));
   });
 });

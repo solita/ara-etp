@@ -217,6 +217,18 @@ const deserializeToimenpide = R.evolve({
   'template-id': Maybe.fromNull
 });
 
+const serializeOsaPuoliSpecificData = osapuoliSpecificData => {
+  return R.compose(
+    R.map(R.over(R.lensProp('hallinto-oikeus-id'), Maybe.orSome(null))),
+    R.map(
+      R.when(
+        R.propEq('document', false),
+        R.set(R.lensProp('hallinto-oikeus-id'), Maybe.None())
+      )
+    )
+  )(osapuoliSpecificData);
+};
+
 const serializeToimenpide = R.compose(
   R.evolve({
     'template-id': Maybe.orSome(null),
@@ -231,7 +243,7 @@ const serializeToimenpide = R.compose(
       'answer-commentary-sv': Maybe.orSome(null),
       'statement-fi': Maybe.orSome(null),
       'statement-sv': Maybe.orSome(null),
-      court: Maybe.orSome(null),
+      'osapuoli-specific-data': serializeOsaPuoliSpecificData,
       'department-head-title-fi': Maybe.orSome(null),
       'department-head-title-sv': Maybe.orSome(null),
       'department-head-name': Maybe.orSome(null)

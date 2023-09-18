@@ -37,7 +37,6 @@
   import Address from '@Component/address/building-address';
   import Input from '@Component/Input/Input';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
-  import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
   import * as Selects from '@Component/Select/select-util';
 
   let resources = Maybe.None();

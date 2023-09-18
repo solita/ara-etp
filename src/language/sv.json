@@ -1862,14 +1862,17 @@
           "rooli-none": "Ingen roll",
           "toimitustapa-none": "Inget leveranssätt",
           "fyi": "För kännedom",
-          "fyi-disabled": "meddelas inte"
+          "fyi-disabled": "meddelas inte",
+          "no-document": "osapuolelle ei luotu dokumenttia (sv)"
         }
       },
       "toimenpide": {
         "cancel-button": "Återkalla",
         "preview-button": "Förhandsvisa",
         "download-button": "Ladda ner",
+        "court": "Hallinto-oikeuden valinta (sv)",
         "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti (sv)",
+        "no-delivery": "Dokumenttia ei toimiteta osapuolelle (sv)",
         "case": {
           "title": "Inledande av kontroll",
           "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",
@@ -1974,6 +1977,7 @@
         "toimitustapa": "Leveranssätt",
         "esikatselu": "Förhandsvisning",
         "fyi-disabled": "Dokument skickas inte för kännedom",
+        "delete": "Poista osapuoli vastaanottajista (sv)",
         "decision-order": {
           "title": "Beslut om påbud",
           "info": "Om energicertifikatet inte fås kan man slutligen fatta ett beslut om påbud och förelägga vite. Dokumenten för fasen upprättas utanför detta system.",
