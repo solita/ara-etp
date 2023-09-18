@@ -75,7 +75,11 @@ export const toimenpideSave = {
     'osapuoli-specific-data': [
       {
         'osapuoli-id': [],
-        'hallinto-oikeus-id': Validation.MaybeInterval(0, 5)
+        'hallinto-oikeus-id': Validation.MaybeInterval(0, 5),
+        'karajaoikeus-id': Validation.MaybeInterval(0, 19),
+        'haastemies-email': [
+          Validation.liftValidator(Validation.emailValidator)
+        ]
       }
     ],
     'department-head-title-fi': description,
@@ -117,14 +121,27 @@ export const toimenpidePublish = (templates, toimenpide) =>
               ],
               toimenpide
             );
-            return R.over(
-              R.lensProp('hallinto-oikeus-id'),
-              addRequiredValidator(
-                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                  hasDocument
+            return R.compose(
+              R.over(
+                R.lensProp('hallinto-oikeus-id'),
+                addRequiredValidator(
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                    hasDocument
+                )
               ),
-              item
-            );
+              R.over(
+                R.lensProp('karajaoikeus-id'),
+                addRequiredValidator(
+                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument
+                )
+              ),
+              R.over(
+                R.lensProp('haastemies-email'),
+                addRequiredValidator(
+                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument
+                )
+              )
+            )(item);
           }, R.map(R.always(osapuoliSpecificSchema[0]), R.range(0, R.length(R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide))))),
         'department-head-title-fi': addRequiredValidator(
           Toimenpiteet.isDecisionOrderActualDecision(toimenpide)

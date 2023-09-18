@@ -1946,6 +1946,14 @@
           "description": "Kommentti (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "decision-order-notice-bailiff": {
+          "title": "Tiedoksianto haastemiehelle (sv)",
+          "info": "Käskypäätös toimitetaan haastemiehen välityksellä. Vastaamo hoitaa tiedoksiannon haastemiehelle. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)",
+          "district-court": "Käräjäoikeus (sv)",
+          "bailiff-email": "Haastemiehen sähköpostiosoite (sv)"
+        },
         "decision-order-waiting-for-deadline": {
           "title": "Käskypäätös / odotetaan valitusajan umpeutumista (sv)",
           "info": "Rakennuksen omistajilla on mahdollisuus valittaa käskypäätöksestä hallinto-oikeuteen. (sv)",

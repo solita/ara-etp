@@ -25,6 +25,7 @@
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
   import ActualDecisionOsapuoletTable from './actual-decision-osapuolet-table';
+  import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
 
   import * as Validation from '@Utility/validation';
 
@@ -42,6 +43,8 @@
   export let roolit;
   export let toimitustavat;
   export let hallintoOikeudet;
+
+  export let karajaoikeudet;
 
   export let manuallyDeliverableToimenpide = false;
   export let commentingAllowed = false;
@@ -245,6 +248,20 @@
           {text}
           {schema}
           {hallintoOikeudet} />
+      {:else if Toimenpiteet.isNoticeBailiff(toimenpide)}
+        <NoticeBailiffOsapuoletTable
+          {id}
+          bind:toimenpide
+          {henkilot}
+          {yritykset}
+          {preview}
+          {previewPending}
+          {disabled}
+          {roolit}
+          {template}
+          {text}
+          {schema}
+          {karajaoikeudet} />
       {:else}
         <OsapuoletTable
           {id}

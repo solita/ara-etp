@@ -63,6 +63,11 @@ export const hallintoOikeudet = Fetch.cached(
   '/valvonta/kaytto/hallinto-oikeudet'
 );
 
+export const karajaoikeudet = Fetch.cached(
+  fetch,
+  '/valvonta/kaytto/karajaoikeudet'
+);
+
 export const johtaja = Fetch.cached(fetch, '/valvonta/kaytto/johtaja');
 
 export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
@@ -217,14 +222,38 @@ const deserializeToimenpide = R.evolve({
   'template-id': Maybe.fromNull
 });
 
-const serializeOsaPuoliSpecificData = osapuoliSpecificData => {
-  return R.compose(
-    R.map(R.over(R.lensProp('hallinto-oikeus-id'), Maybe.orSome(null))),
-    R.map(
-      R.when(
-        R.propEq('document', false),
-        R.set(R.lensProp('hallinto-oikeus-id'), Maybe.None())
-      )
+/**
+ * Sets field to none if document is false and the field exists
+ */
+const setFieldToNoneIfNoDocument = field => data => {
+  return R.when(
+    R.both(R.propEq('document', false), R.has(field)),
+    R.set(R.lensProp(field), Maybe.None())
+  )(data);
+};
+
+/**
+ * Unwraps the maybe to the value if the field exists
+ */
+const unwrapMaybeIfExists = field => data => {
+  return R.when(
+    R.has(field),
+    R.over(R.lensProp(field), Maybe.orSome(null))
+  )(data);
+};
+
+/**
+ * Unwraps maybes if document is true for the osapuoli
+ */
+export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
+  return R.map(
+    R.compose(
+      unwrapMaybeIfExists('hallinto-oikeus-id'),
+      setFieldToNoneIfNoDocument('hallinto-oikeus-id'),
+      unwrapMaybeIfExists('karajaoikeus-id'),
+      setFieldToNoneIfNoDocument('karajaoikeus-id'),
+      unwrapMaybeIfExists('haastemies-email'),
+      setFieldToNoneIfNoDocument('haastemies-email')
     )
   )(osapuoliSpecificData);
 };
@@ -243,7 +272,7 @@ const serializeToimenpide = R.compose(
       'answer-commentary-sv': Maybe.orSome(null),
       'statement-fi': Maybe.orSome(null),
       'statement-sv': Maybe.orSome(null),
-      'osapuoli-specific-data': serializeOsaPuoliSpecificData,
+      'osapuoli-specific-data': serializeOsapuoliSpecificData,
       'department-head-title-fi': Maybe.orSome(null),
       'department-head-title-sv': Maybe.orSome(null),
       'department-head-name': Maybe.orSome(null)

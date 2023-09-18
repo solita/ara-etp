@@ -4,7 +4,6 @@
   import * as Future from '@Utility/future-utils';
 
   import Autocomplete from './Autocomplete';
-  import Input from '@Component/Input/Input';
 
   export let createFutureFn;
   export let completedValue = '';
