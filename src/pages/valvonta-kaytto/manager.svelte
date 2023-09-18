@@ -49,7 +49,10 @@
         templatesByType,
         Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': type })
           ? {
-              fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
+              fine: Toimenpiteet.findFineFromToimenpiteet(
+                Toimenpiteet.isDecisionOrderHearingLetter,
+                toimenpiteet
+              ),
               departmentHeadName: johtaja['department-head-name'],
               departmentHeadTitleFi: johtaja['department-head-title-fi'],
               departmentHeadTitleSv: johtaja['department-head-title-sv'],

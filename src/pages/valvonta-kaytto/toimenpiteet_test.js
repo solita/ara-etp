@@ -299,7 +299,10 @@ describe('Empty toimenpide', () => {
   it('of type 8 has a default fine of 800 when toimenpiteet does not contain a previous fine', () => {
     const toimenpiteet = [];
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
+      fine: Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      )
     });
     assert.equal(
       800,
@@ -331,7 +334,13 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 1000);
+    assert.equal(
+      Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      ),
+      1000
+    );
   });
 
   it('when there are other toimenpiteet also present', () => {
@@ -348,7 +357,13 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 2000);
+    assert.equal(
+      Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      ),
+      2000
+    );
   });
 
   it('when there are multiple toimenpiteet of type 7', () => {
@@ -386,7 +401,13 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 3000);
+    assert.equal(
+      Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      ),
+      3000
+    );
   });
 });
 
