@@ -201,6 +201,10 @@ export const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)
 );
 
+export const isPenaltyDecisionHearingLetter = isType(
+  R.path(['penalty-decision', 'hearing-letter'], type)
+);
+
 /**
  * Given an array of toimenpide objects, returns the fine found using the toimenpidetype predicate function parameter
  * @param {Function} toimenpidetypePredicate
