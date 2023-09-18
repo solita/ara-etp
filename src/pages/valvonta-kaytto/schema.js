@@ -94,35 +94,37 @@ export const toimenpidePublish = (templates, toimenpide) =>
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
       'type-specific-data': {
         'answer-commentary-fi': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         'answer-commentary-sv': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         'statement-fi': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         'statement-sv': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
         'osapuoli-specific-data': osapuoliSpecificSchema => {
           return R.map(
             R.over(
               R.lensProp('hallinto-oikeus-id'),
-              addRequiredValidator(Toimenpiteet.isActualDecision(toimenpide))
+              addRequiredValidator(
+                Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+              )
             ),
             osapuoliSpecificSchema
           );
         },
         'department-head-title-fi': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         'department-head-title-sv': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         'department-head-name': addRequiredValidator(
-          Toimenpiteet.isActualDecision(toimenpide)
+          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         )
       }
     },

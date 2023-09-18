@@ -47,7 +47,7 @@
       Toimenpiteet.emptyToimenpide(
         type,
         templatesByType,
-        Toimenpiteet.isActualDecision({ 'type-id': type })
+        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': type })
           ? {
               fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
               departmentHeadName: johtaja['department-head-name'],

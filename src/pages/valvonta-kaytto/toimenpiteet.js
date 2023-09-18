@@ -193,11 +193,11 @@ export const toimenpideTypesThatAllowComments =
 export const hasFine = toimenpide =>
   R.hasPath(['type-specific-data', 'fine'], toimenpide);
 
-export const isActualDecision = isType(
+export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
 
-const isHearingLetter = isType(
+const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)
 );
 
@@ -212,7 +212,7 @@ export const findFineFromToimenpiteet = R.compose(
   R.sort((a, b) =>
     dfns.compareDesc(R.prop('create-time', a), R.prop('create-time', b))
   ),
-  R.filter(isHearingLetter)
+  R.filter(isDecisionOrderHearingLetter)
 );
 
 /**

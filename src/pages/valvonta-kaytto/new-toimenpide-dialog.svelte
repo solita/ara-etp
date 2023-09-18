@@ -221,7 +221,7 @@
     </div>
   {/if}
 
-  {#if Toimenpiteet.isActualDecision(toimenpide)}
+  {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
     <ActualDecisionSubView
       bind:toimenpide
       {i18n}
@@ -232,7 +232,7 @@
 
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
-      {#if Toimenpiteet.isActualDecision(toimenpide)}
+      {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
         <ActualDecisionOsapuoletTable
           {id}
           bind:toimenpide

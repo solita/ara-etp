@@ -68,8 +68,12 @@ describe('Toimenpiteet: ', () => {
     });
 
     it('is recognized correctly with isActualDecision function', () => {
-      assert.isTrue(Toimenpiteet.isActualDecision({ 'type-id': 8 }));
-      assert.isFalse(Toimenpiteet.isActualDecision({ 'type-id': 7 }));
+      assert.isTrue(
+        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 8 })
+      );
+      assert.isFalse(
+        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 7 })
+      );
     });
   });
 
