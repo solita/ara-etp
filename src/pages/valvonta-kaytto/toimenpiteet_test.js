@@ -37,6 +37,15 @@ describe('Toimenpiteet: ', () => {
         );
       });
     });
+
+    it('is by default two weeks for type 14', () => {
+      assert.isTrue(
+        dfns.isSameDay(
+          dfns.addWeeks(new Date(), 2),
+          Maybe.get(Toimenpiteet.defaultDeadline(14))
+        )
+      );
+    });
   });
 
   describe('Käskypäätös / Kuulemiskirje', () => {
@@ -69,6 +78,16 @@ describe('Toimenpiteet: ', () => {
     assert.isFalse(
       Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 1 })
     );
+  });
+});
+
+describe('Sakkopäätös / Kuulemiskirje', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-decision-hearing-letter', Toimenpiteet.typeKey(14));
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 14 }));
   });
 });
 
@@ -168,6 +187,22 @@ describe('Empty toimenpide', () => {
         }
       ]
     );
+  });
+
+  it('Contains correct keys for toimenpidetype 14 which includes fine under type-specific-data', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(14, [{}]);
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'fine'
+    ]);
   });
 
   it('with a fine is recognized as having a fine', () => {

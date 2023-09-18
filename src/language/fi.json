@@ -1962,6 +1962,13 @@
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-decision-hearing-letter": {
+          "title": "Sakkopäätös / kuulemiskirje",
+          "info": "Rakennuksen omistajilla on viimeinen mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus €",
+          "publish-button": "Luo toimenpide"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",

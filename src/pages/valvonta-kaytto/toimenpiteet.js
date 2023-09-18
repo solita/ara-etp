@@ -23,6 +23,9 @@ export const type = {
     'actual-decision': 8,
     'notice-first-mailing': 9,
     'notice-second-mailing': 10
+  },
+  'penalty-decision': {
+    'hearing-letter': 14
   }
 };
 
@@ -32,7 +35,7 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10]);
+const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10, 14]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
@@ -45,6 +48,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 const defaultDeadlineForTypeId = typeId => {
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
+    case R.path(['penalty-decision', 'hearing-letter'], type):
       return Maybe.Some(dfns.addWeeks(new Date(), 2));
     case R.path(['decision-order', 'actual-decision'], type):
     case R.path(['decision-order', 'notice-first-mailing'], type):
@@ -93,6 +97,7 @@ export const emptyToimenpide = (
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
+    case R.path(['penalty-decision', 'hearing-letter'], type):
       return R.assocPath(
         ['type-specific-data', 'fine'],
         Maybe.Some(fine),
