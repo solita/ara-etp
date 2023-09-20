@@ -294,9 +294,8 @@ export const putToimenpide = R.curry((id, toimenpideId, toimenpide) =>
     Future.encaseP(
       Fetch.fetchWithMethod(fetch, 'put', url.toimenpide(id, toimenpideId))
     ),
-    R.dissoc('type-specific-data'),
-    R.dissoc('type-id'),
-    serializeToimenpide
+    serializeToimenpide,
+    R.omit(['type-specific-data', 'type-id']),
   )(toimenpide)
 );
 
