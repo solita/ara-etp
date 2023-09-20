@@ -106,17 +106,26 @@ export const toimenpidePublish = (templates, toimenpide) =>
           Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
-        'osapuoli-specific-data': osapuoliSpecificSchema => {
-          return R.map(
-            R.over(
+        'osapuoli-specific-data': osapuoliSpecificSchema =>
+          R.addIndex(R.map)((item, index) => {
+            const hasDocument = R.path(
+              [
+                'type-specific-data',
+                'osapuoli-specific-data',
+                index,
+                'document'
+              ],
+              toimenpide
+            );
+            return R.over(
               R.lensProp('hallinto-oikeus-id'),
               addRequiredValidator(
-                Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-              )
-            ),
-            osapuoliSpecificSchema
-          );
-        },
+                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                  hasDocument
+              ),
+              item
+            );
+          }, R.map(R.always(osapuoliSpecificSchema[0]), R.range(0, R.length(R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide))))),
         'department-head-title-fi': addRequiredValidator(
           Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),

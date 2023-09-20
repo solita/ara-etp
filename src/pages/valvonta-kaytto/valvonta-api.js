@@ -295,7 +295,7 @@ export const putToimenpide = R.curry((id, toimenpideId, toimenpide) =>
       Fetch.fetchWithMethod(fetch, 'put', url.toimenpide(id, toimenpideId))
     ),
     serializeToimenpide,
-    R.omit(['type-specific-data', 'type-id']),
+    R.omit(['type-specific-data', 'type-id'])
   )(toimenpide)
 );
 
