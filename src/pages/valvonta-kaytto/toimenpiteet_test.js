@@ -37,6 +37,15 @@ describe('Toimenpiteet: ', () => {
         );
       });
     });
+
+    it('is by default two weeks for type 14', () => {
+      assert.isTrue(
+        dfns.isSameDay(
+          dfns.addWeeks(new Date(), 2),
+          Maybe.get(Toimenpiteet.defaultDeadline(14))
+        )
+      );
+    });
   });
 
   describe('Käskypäätös / Kuulemiskirje', () => {
@@ -59,8 +68,12 @@ describe('Toimenpiteet: ', () => {
     });
 
     it('is recognized correctly with isActualDecision function', () => {
-      assert.isTrue(Toimenpiteet.isActualDecision({ 'type-id': 8 }));
-      assert.isFalse(Toimenpiteet.isActualDecision({ 'type-id': 7 }));
+      assert.isTrue(
+        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 8 })
+      );
+      assert.isFalse(
+        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 7 })
+      );
     });
   });
 
@@ -69,6 +82,16 @@ describe('Toimenpiteet: ', () => {
     assert.isFalse(
       Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 1 })
     );
+  });
+});
+
+describe('Sakkopäätös / Kuulemiskirje', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-decision-hearing-letter', Toimenpiteet.typeKey(14));
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 14 }));
   });
 });
 
@@ -170,6 +193,22 @@ describe('Empty toimenpide', () => {
     );
   });
 
+  it('Contains correct keys for toimenpidetype 14 which includes fine under type-specific-data', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(14, [{}]);
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'fine'
+    ]);
+  });
+
   it('with a fine is recognized as having a fine', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
     assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
@@ -260,7 +299,10 @@ describe('Empty toimenpide', () => {
   it('of type 8 has a default fine of 800 when toimenpiteet does not contain a previous fine', () => {
     const toimenpiteet = [];
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet)
+      fine: Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      )
     });
     assert.equal(
       800,
@@ -292,7 +334,13 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 1000);
+    assert.equal(
+      Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      ),
+      1000
+    );
   });
 
   it('when there are other toimenpiteet also present', () => {
@@ -309,7 +357,13 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 2000);
+    assert.equal(
+      Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      ),
+      2000
+    );
   });
 
   it('when there are multiple toimenpiteet of type 7', () => {
@@ -347,7 +401,13 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(Toimenpiteet.findFineFromToimenpiteet(toimenpiteet), 3000);
+    assert.equal(
+      Toimenpiteet.findFineFromToimenpiteet(
+        Toimenpiteet.isDecisionOrderHearingLetter,
+        toimenpiteet
+      ),
+      3000
+    );
   });
 });
 

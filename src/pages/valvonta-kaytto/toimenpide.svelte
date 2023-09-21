@@ -54,7 +54,7 @@
 
   {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
     {#each toimenpide.henkilot as henkilo}
-      {#if Toimenpiteet.isActualDecision(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, henkilo.id)}
+      {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, henkilo.id)}
         <div>
           {henkilo.etunimi}
           {henkilo.sukunimi}
@@ -76,7 +76,7 @@
       {/if}
     {/each}
     {#each toimenpide.yritykset as yritys}
-      {#if Toimenpiteet.isActualDecision(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, yritys.id)}
+      {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, yritys.id)}
         <div>
           {yritys.nimi}
           {Maybe.orSome('', yritys.ytunnus)}

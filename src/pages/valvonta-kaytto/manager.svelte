@@ -42,23 +42,47 @@
 
   let toimenpideTyyppi = Maybe.None();
 
+  const toimenpideTypeSpecificDefaultValues = toimenpideTypeId => {
+    if (
+      Toimenpiteet.isDecisionOrderActualDecision({
+        'type-id': toimenpideTypeId
+      })
+    ) {
+      return {
+        fine: Toimenpiteet.findFineFromToimenpiteet(
+          Toimenpiteet.isDecisionOrderHearingLetter,
+          toimenpiteet
+        ),
+        departmentHeadName: johtaja['department-head-name'],
+        departmentHeadTitleFi: johtaja['department-head-title-fi'],
+        departmentHeadTitleSv: johtaja['department-head-title-sv'],
+        osapuoliIds: R.map(
+          R.prop('id'),
+          R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
+        )
+      };
+    } else if (
+      Toimenpiteet.isPenaltyDecisionHearingLetter({
+        'type-id': toimenpideTypeId
+      })
+    ) {
+      return {
+        fine: Toimenpiteet.findFineFromToimenpiteet(
+          Toimenpiteet.isDecisionOrderActualDecision,
+          toimenpiteet
+        )
+      };
+    }
+
+    return undefined;
+  };
+
   const openNewToimenpide = type => {
     newToimenpide = Maybe.Some(
       Toimenpiteet.emptyToimenpide(
         type,
         templatesByType,
-        Toimenpiteet.isActualDecision({ 'type-id': type })
-          ? {
-              fine: Toimenpiteet.findFineFromToimenpiteet(toimenpiteet),
-              departmentHeadName: johtaja['department-head-name'],
-              departmentHeadTitleFi: johtaja['department-head-title-fi'],
-              departmentHeadTitleSv: johtaja['department-head-title-sv'],
-              osapuoliIds: R.map(
-                R.prop('id'),
-                R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
-              )
-            }
-          : undefined
+        toimenpideTypeSpecificDefaultValues(type)
       )
     );
   };

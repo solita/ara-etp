@@ -23,6 +23,9 @@ export const type = {
     'actual-decision': 8,
     'notice-first-mailing': 9,
     'notice-second-mailing': 10
+  },
+  'penalty-decision': {
+    'hearing-letter': 14
   }
 };
 
@@ -32,7 +35,7 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10]);
+const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10, 14]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
@@ -45,6 +48,7 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
 const defaultDeadlineForTypeId = typeId => {
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
+    case R.path(['penalty-decision', 'hearing-letter'], type):
       return Maybe.Some(dfns.addWeeks(new Date(), 2));
     case R.path(['decision-order', 'actual-decision'], type):
     case R.path(['decision-order', 'notice-first-mailing'], type):
@@ -93,6 +97,7 @@ export const emptyToimenpide = (
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
+    case R.path(['penalty-decision', 'hearing-letter'], type):
       return R.assocPath(
         ['type-specific-data', 'fine'],
         Maybe.Some(fine),
@@ -188,16 +193,21 @@ export const toimenpideTypesThatAllowComments =
 export const hasFine = toimenpide =>
   R.hasPath(['type-specific-data', 'fine'], toimenpide);
 
-export const isActualDecision = isType(
+export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
 
-const isHearingLetter = isType(
+export const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)
 );
 
+export const isPenaltyDecisionHearingLetter = isType(
+  R.path(['penalty-decision', 'hearing-letter'], type)
+);
+
 /**
- * Given an array of toimenpide objects, returns the fine found in the newest toimenpide of type 7 (käskypäätös / kuulemiskirje)
+ * Given an array of toimenpide objects, returns the fine found using the toimenpidetype predicate function parameter
+ * @param {Function} toimenpidetypePredicate
  * @param {Object[]} toimenpiteet
  * @return {number}
  */
@@ -207,7 +217,7 @@ export const findFineFromToimenpiteet = R.compose(
   R.sort((a, b) =>
     dfns.compareDesc(R.prop('create-time', a), R.prop('create-time', b))
   ),
-  R.filter(isHearingLetter)
+  R.filter
 );
 
 /**
