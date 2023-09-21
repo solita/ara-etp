@@ -22,7 +22,8 @@ export const type = {
     'hearing-letter': 7,
     'actual-decision': 8,
     'notice-first-mailing': 9,
-    'notice-second-mailing': 10
+    'notice-second-mailing': 10,
+    'waiting-for-deadline': 12
   },
   'penalty-decision': {
     'hearing-letter': 14
@@ -35,7 +36,7 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10, 14]);
+const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 14]);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
