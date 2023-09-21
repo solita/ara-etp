@@ -61,9 +61,7 @@
           R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
         )
       };
-    }
-
-    if (
+    } else if (
       Toimenpiteet.isPenaltyDecisionHearingLetter({
         'type-id': toimenpideTypeId
       })
