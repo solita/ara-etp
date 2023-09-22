@@ -38,6 +38,15 @@ describe('Toimenpiteet: ', () => {
       });
     });
 
+    it('is by default 30 day for type 12', () => {
+      assert.isTrue(
+        dfns.isSameDay(
+          dfns.addDays(new Date(), 30),
+          Maybe.get(Toimenpiteet.defaultDeadline(12))
+        )
+      );
+    });
+
     it('is by default two weeks for type 14', () => {
       assert.isTrue(
         dfns.isSameDay(
@@ -82,6 +91,19 @@ describe('Toimenpiteet: ', () => {
     assert.isFalse(
       Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 1 })
     );
+  });
+});
+
+describe('Käskypäätös / odotetaan valitusajan umpeutumista', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal(
+      'decision-order-waiting-for-deadline',
+      Toimenpiteet.typeKey(12)
+    );
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 12 }));
   });
 });
 

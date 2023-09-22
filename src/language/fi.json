@@ -1962,6 +1962,12 @@
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
+        "decision-order-waiting-for-deadline": {
+          "title": "Käskypäätös / odotetaan valitusajan umpeutumista",
+          "info": "Rakennuksen omistajilla on mahdollisuus valittaa käskypäätöksestä hallinto-oikeuteen.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
         "penalty-decision-hearing-letter": {
           "title": "Sakkopäätös / kuulemiskirje",
           "info": "Rakennuksen omistajilla on viimeinen mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
