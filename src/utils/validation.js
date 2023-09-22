@@ -279,12 +279,6 @@ const validate = (validators, value) =>
     .swap();
 
 /**
- * When validating an array, the first validator is used for all the elements.
- * Use this as an index when creating a path to the validator in schema data.
- */
-export const ARRAY_VALIDATOR_INDEX = 0;
-
-/**
  * @sig Array [Validator] -> a -> Either [(Translate -> string),a]
  */
 export const validateModelValue = R.curry((validators, value) =>
