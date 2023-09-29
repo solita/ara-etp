@@ -94,7 +94,7 @@ describe('Toimenpiteet: ', () => {
   });
 });
 
-describe('Käskypäätös / odotetaan valitusajan umpeutumista', () => {
+describe('Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
   it('id is mapped correctly to the type key', () => {
     assert.equal(
       'decision-order-waiting-for-deadline',

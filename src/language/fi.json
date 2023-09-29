@@ -1963,8 +1963,8 @@
           "publish-button": "Luo toimenpide"
         },
         "decision-order-waiting-for-deadline": {
-          "title": "Käskypäätös / odotetaan valitusajan umpeutumista",
-          "info": "Rakennuksen omistajilla on mahdollisuus valittaa käskypäätöksestä hallinto-oikeuteen.",
+          "title": "Käskypäätös / valitusajan odotus ja umpeutuminen",
+          "info": "Rakennuksen omistajilla on mahdollisuus valittaa käskypäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko käskypäätöksestä valitettu.",
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
