@@ -12,7 +12,6 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import * as Selects from '@Component/Select/select-util';
   import { isValid } from '@Utility/classification';
-  import { ARRAY_VALIDATOR_INDEX } from '@Utility/validation';
   import Select from '@Component/Select/Select2';
   import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
   import Checkbox from '@Component/Checkbox/Checkbox';
@@ -124,7 +123,7 @@
                     [
                       'type-specific-data',
                       'osapuoli-specific-data',
-                      ARRAY_VALIDATOR_INDEX,
+                      courtDataIndexForOsapuoli(osapuoli.id),
                       'hallinto-oikeus-id'
                     ],
                     schema
