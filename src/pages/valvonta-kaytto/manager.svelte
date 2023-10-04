@@ -67,19 +67,11 @@
         'type-id': toimenpideTypeId
       })
     ) {
-      const osapuoliIds = R.map(
-        R.prop('id'),
-        R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
-      );
       return {
-        osapuoliIds: osapuoliIds,
-        'osapuoli-specific-data': R.map(function (id) {
-          return {
-            'osapuoli-id': id,
-            'karajaoikeus-id': Maybe.None(),
-            'haastemies-email': Maybe.None()
-          };
-        }, osapuoliIds)
+        osapuoliIds: R.map(
+          R.prop('id'),
+          R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
+        )
       };
     } else if (
       Toimenpiteet.isPenaltyDecisionHearingLetter({
