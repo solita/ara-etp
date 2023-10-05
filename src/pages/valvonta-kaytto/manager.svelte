@@ -30,6 +30,7 @@
   export let templatesByType;
 
   export let hallintoOikeudet;
+  export let karajaoikeudet;
   export let johtaja;
   export let whoami;
 
@@ -62,6 +63,17 @@
         )
       };
     } else if (
+      Toimenpiteet.isNoticeBailiff({
+        'type-id': toimenpideTypeId
+      })
+    ) {
+      return {
+        osapuoliIds: R.map(
+          R.prop('id'),
+          R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
+        )
+      };
+    } else if (
       Toimenpiteet.isPenaltyDecisionHearingLetter({
         'type-id': toimenpideTypeId
       })
@@ -72,9 +84,9 @@
           toimenpiteet
         )
       };
+    } else {
+      return undefined;
     }
-
-    return undefined;
   };
 
   const openNewToimenpide = type => {
@@ -125,6 +137,7 @@
     {roolit}
     {toimitustavat}
     {hallintoOikeudet}
+    {karajaoikeudet}
     manuallyDeliverableToimenpide={isManuallyDeliverable(toimenpide)}
     commentingAllowed={isCommentingAllowed(toimenpide)}
     reload={load} />

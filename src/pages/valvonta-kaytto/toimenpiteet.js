@@ -23,6 +23,7 @@ export const type = {
     'actual-decision': 8,
     'notice-first-mailing': 9,
     'notice-second-mailing': 10,
+    'notice-bailiff': 11,
     'waiting-for-deadline': 12
   },
   'penalty-decision': {
@@ -36,7 +37,10 @@ export const typeKey = id => types[id];
 
 export const isType = R.propEq('type-id');
 
-const isDeadlineType = R.includes(R.__, [1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 14]);
+const isDeadlineType = R.includes(
+  R.__,
+  [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14]
+);
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
 export const isCloseCase = isType(type.closed);
@@ -51,6 +55,9 @@ const defaultDeadlineForTypeId = typeId => {
     case R.path(['decision-order', 'hearing-letter'], type):
     case R.path(['penalty-decision', 'hearing-letter'], type):
       return Maybe.Some(dfns.addWeeks(new Date(), 2));
+    case R.path(['decision-order', 'notice-bailiff'], type):
+    case R.path(['decision-order', 'waiting-for-deadline'], type):
+      return Maybe.Some(dfns.addDays(new Date(), 30));
     case R.path(['decision-order', 'actual-decision'], type):
     case R.path(['decision-order', 'notice-first-mailing'], type):
     case R.path(['decision-order', 'notice-second-mailing'], type):
@@ -129,7 +136,22 @@ export const emptyToimenpide = (
         },
         toimenpide
       );
-
+    case R.path(['decision-order', 'notice-bailiff'], type):
+      return R.assoc(
+        'type-specific-data',
+        {
+          'osapuoli-specific-data': R.map(
+            osapuoliId => ({
+              'osapuoli-id': osapuoliId,
+              'karajaoikeus-id': Maybe.None(),
+              'haastemies-email': Maybe.None(),
+              document: true
+            }),
+            osapuoliIds
+          )
+        },
+        toimenpide
+      );
     default:
       return toimenpide;
   }
@@ -197,6 +219,18 @@ export const hasFine = toimenpide =>
 export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
+
+export const isNoticeBailiff = isType(
+  R.path(['decision-order', 'notice-bailiff'], type)
+);
+
+/**
+ * These toimenpide types have a osapuoli specific boolean field document
+ */
+export const hasOptionalDocument = R.anyPass([
+  isDecisionOrderActualDecision,
+  isNoticeBailiff
+]);
 
 export const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)

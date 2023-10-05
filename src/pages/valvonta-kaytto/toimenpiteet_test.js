@@ -38,6 +38,15 @@ describe('Toimenpiteet: ', () => {
       });
     });
 
+    it('is by default 30 day for type 11', () => {
+      assert.isTrue(
+        dfns.isSameDay(
+          dfns.addDays(new Date(), 30),
+          Maybe.get(Toimenpiteet.defaultDeadline(11))
+        )
+      );
+    });
+
     it('is by default 30 day for type 12', () => {
       assert.isTrue(
         dfns.isSameDay(
