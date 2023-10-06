@@ -121,30 +121,44 @@ export const toimenpidePublish = (templates, toimenpide) =>
               ],
               toimenpide
             );
-            // TODO: Siisti toisteisuus, pakollisuudet kentille sen perusteella saatiinko vastaus
+
+            const recipientAnswered = R.path(
+              [
+                'type-specific-data',
+                'osapuoli-specific-data',
+                index,
+                'recipient-answered'
+              ],
+              toimenpide
+            );
+            // TODO: Siisti toisteisuus
             return R.compose(
               R.over(
                 R.lensProp('statement-sv'),
                 addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                    recipientAnswered
                 )
               ),
               R.over(
                 R.lensProp('statement-fi'),
                 addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                    recipientAnswered
                 )
               ),
               R.over(
                 R.lensProp('answer-commentary-sv'),
                 addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                    recipientAnswered
                 )
               ),
               R.over(
                 R.lensProp('answer-commentary-fi'),
                 addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                    recipientAnswered
                 )
               ),
               R.over(
