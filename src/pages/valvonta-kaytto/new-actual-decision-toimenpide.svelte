@@ -5,7 +5,6 @@
   import Select2 from '@Component/Select/Select2';
   import Textarea from '@Component/Textarea/Textarea';
   import Input from '@Component/Input/Input';
-  import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import * as Osapuolet from '@Pages/valvonta-kaytto/osapuolet';
   import H2 from '@Component/H/H2';
   import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
@@ -17,26 +16,11 @@
   export let i18n;
   export let schema;
 
-  // TODO: Siisti tämä, previewiä ei tarvita tässä
-  const types = {
-    yritys: {
-      label: yritys => yritys.nimi,
-      preview: ValvontaApi.previewToimenpideForYritysOsapuoli
-    },
-    henkilo: {
-      label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
-      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli
-    }
-  };
+  const formatOsapuoliName = osapuoli =>
+    osapuoli.nimi || `${osapuoli.etunimi} ${osapuoli.sukunimi}`;
 
   let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
-    R.filter(
-      Osapuolet.isOmistaja,
-      R.concat(
-        R.map(R.assoc('type', types.henkilo), henkilot),
-        R.map(R.assoc('type', types.yritys), yritykset)
-      )
-    )
+    R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
   );
 
   const courtDataIndexForOsapuoli = osapuoliId =>
@@ -99,7 +83,7 @@
   </div>
 
   {#each osapuolet as osapuoli}
-    <H2 text={osapuoli.type.label(osapuoli)} />
+    <H2 text={formatOsapuoliName(osapuoli)} />
 
     <div class="w-full py-4">
       <Select2
