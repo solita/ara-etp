@@ -229,7 +229,9 @@
       {i18n}
       {text}
       {schema}
-      {hallintoOikeudet} />
+      {hallintoOikeudet}
+      {henkilot}
+      {yritykset} />
   {/if}
 
   {#if !R.isEmpty(templates)}

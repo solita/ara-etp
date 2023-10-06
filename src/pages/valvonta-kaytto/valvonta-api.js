@@ -248,6 +248,10 @@ const unwrapMaybeIfExists = field => data => {
 export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   return R.map(
     R.compose(
+      unwrapMaybeIfExists('answer-commentary-fi'),
+      unwrapMaybeIfExists('answer-commentary-sv'),
+      unwrapMaybeIfExists('statement-fi'),
+      unwrapMaybeIfExists('statement-sv'),
       unwrapMaybeIfExists('hallinto-oikeus-id'),
       setFieldToNoneIfNoDocument('hallinto-oikeus-id'),
       unwrapMaybeIfExists('karajaoikeus-id'),

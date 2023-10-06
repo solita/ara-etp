@@ -121,7 +121,32 @@ export const toimenpidePublish = (templates, toimenpide) =>
               ],
               toimenpide
             );
+            // TODO: Siisti toisteisuus, pakollisuudet kentille sen perusteella saatiinko vastaus
             return R.compose(
+              R.over(
+                R.lensProp('statement-sv'),
+                addRequiredValidator(
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                )
+              ),
+              R.over(
+                R.lensProp('statement-fi'),
+                addRequiredValidator(
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                )
+              ),
+              R.over(
+                R.lensProp('answer-commentary-sv'),
+                addRequiredValidator(
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                )
+              ),
+              R.over(
+                R.lensProp('answer-commentary-fi'),
+                addRequiredValidator(
+                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
+                )
+              ),
               R.over(
                 R.lensProp('hallinto-oikeus-id'),
                 addRequiredValidator(

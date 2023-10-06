@@ -117,14 +117,14 @@ export const emptyToimenpide = (
         'type-specific-data',
         {
           fine: Maybe.Some(fine),
-          'recipient-answered': false,
-          'answer-commentary-fi': Maybe.None(),
-          'answer-commentary-sv': Maybe.None(),
-          'statement-fi': Maybe.None(),
-          'statement-sv': Maybe.None(),
           'osapuoli-specific-data': R.map(
             osapuoliId => ({
               'osapuoli-id': osapuoliId,
+              'recipient-answered': false,
+              'answer-commentary-fi': Maybe.None(),
+              'answer-commentary-sv': Maybe.None(),
+              'statement-fi': Maybe.None(),
+              'statement-sv': Maybe.None(),
               'hallinto-oikeus-id': Maybe.None(),
               document: true
             }),

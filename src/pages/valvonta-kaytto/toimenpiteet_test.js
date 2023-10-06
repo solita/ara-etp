@@ -195,30 +195,37 @@ describe('Empty toimenpide', () => {
 
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
       'fine',
-      'recipient-answered',
-      'answer-commentary-fi',
-      'answer-commentary-sv',
-      'statement-fi',
-      'statement-sv',
       'osapuoli-specific-data',
       'department-head-title-fi',
       'department-head-title-sv',
       'department-head-name'
     ]);
 
-    // osapuoli-specific-data contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
+    // osapuoli-specific-data contains a list of objects with osapuoli-id,
+    // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
+    // and the answer-commentary and statement fields
     assert.deepEqual(
       R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
       [
         {
           'osapuoli-id': 1,
           'hallinto-oikeus-id': Maybe.None(),
-          document: true
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.None(),
+          'statement-sv': Maybe.None()
         },
         {
           'osapuoli-id': 7,
           'hallinto-oikeus-id': Maybe.None(),
-          document: true
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.None(),
+          'statement-sv': Maybe.None()
         }
       ]
     );

@@ -2,6 +2,7 @@ import { assert } from 'chai';
 import { serializeOsapuoliSpecificData } from '@Pages/valvonta-kaytto/valvonta-api';
 import { Maybe } from '@Utility/maybe-utils';
 import * as R from 'ramda';
+import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
 
 describe('Valvonta API test', () => {
   describe('Serialize osapuoli specific data', () => {
@@ -97,5 +98,29 @@ describe('Valvonta API test', () => {
       const result = serializeOsapuoliSpecificData(data);
       assert.deepEqual(result, expected);
     });
+  });
+
+  it('for käskypäätös / varsinainen päätös', () => {
+    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      osapuoliIds: [1]
+    });
+
+    assert.deepEqual(
+      serializeOsapuoliSpecificData(
+        R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
+      ),
+      [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': null,
+          'recipient-answered': false,
+          'answer-commentary-fi': null,
+          'answer-commentary-sv': null,
+          'statement-fi': null,
+          'statement-sv': null,
+          document: true
+        }
+      ]
+    );
   });
 });
