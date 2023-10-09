@@ -232,6 +232,12 @@ const setFieldToNoneIfNoDocument = field => data => {
   )(data);
 };
 
+const setFieldToNoneIfNoAnswer = field => data => {
+  return R.when(
+    R.both(R.propEq('recipient-answered', false), R.has(field)),
+    R.set(R.lensProp(field), Maybe.None())
+  )(data);
+};
 /**
  * Unwraps the maybe to the value if the field exists
  */
@@ -252,6 +258,10 @@ export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
       unwrapMaybeIfExists('answer-commentary-sv'),
       unwrapMaybeIfExists('statement-fi'),
       unwrapMaybeIfExists('statement-sv'),
+      setFieldToNoneIfNoAnswer('answer-commentary-fi'),
+      setFieldToNoneIfNoAnswer('answer-commentary-sv'),
+      setFieldToNoneIfNoAnswer('statement-fi'),
+      setFieldToNoneIfNoAnswer('statement-sv'),
       unwrapMaybeIfExists('hallinto-oikeus-id'),
       setFieldToNoneIfNoDocument('hallinto-oikeus-id'),
       unwrapMaybeIfExists('karajaoikeus-id'),

@@ -98,18 +98,47 @@ describe('Valvonta API test', () => {
       const result = serializeOsapuoliSpecificData(data);
       assert.deepEqual(result, expected);
     });
-  });
 
-  it('for käskypäätös / varsinainen päätös', () => {
-    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      osapuoliIds: [1]
+    it('for käskypäätös / varsinainen päätös', () => {
+      const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+        osapuoliIds: [1]
+      });
+
+      assert.deepEqual(
+        serializeOsapuoliSpecificData(
+          R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
+        ),
+        [
+          {
+            'osapuoli-id': 1,
+            'hallinto-oikeus-id': null,
+            'recipient-answered': false,
+            'answer-commentary-fi': null,
+            'answer-commentary-sv': null,
+            'statement-fi': null,
+            'statement-sv': null,
+            document: true
+          }
+        ]
+      );
     });
 
-    assert.deepEqual(
-      serializeOsapuoliSpecificData(
-        R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
-      ),
-      [
+    it('for käskypäätös / varsinainen päätös when recipient-answered is false but fields depending on it have data in them', () => {
+      const osapuoliSpecificData = [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.None(),
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
+          'answer-commentary-sv': Maybe.Some('answer-commentary-sv'),
+          'statement-fi': Maybe.Some('statement-fi'),
+          'statement-sv': Maybe.Some('statement-sv'),
+          document: true
+        }
+      ];
+
+      // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been set to null
+      assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
           'osapuoli-id': 1,
           'hallinto-oikeus-id': null,
@@ -120,7 +149,36 @@ describe('Valvonta API test', () => {
           'statement-sv': null,
           document: true
         }
-      ]
-    );
+      ]);
+    });
+
+    it('for käskypäätös / varsinainen päätös when recipient-answered is true but fields depending on it have data in them', () => {
+      const osapuoliSpecificData = [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.None(),
+          'recipient-answered': true,
+          'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
+          'answer-commentary-sv': Maybe.Some('answer-commentary-sv'),
+          'statement-fi': Maybe.Some('statement-fi'),
+          'statement-sv': Maybe.Some('statement-sv'),
+          document: true
+        }
+      ];
+
+      // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been set to null
+      assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': null,
+          'recipient-answered': true,
+          'answer-commentary-fi': 'answer-commentary-fi',
+          'answer-commentary-sv': 'answer-commentary-sv',
+          'statement-fi': 'statement-fi',
+          'statement-sv': 'statement-sv',
+          document: true
+        }
+      ]);
+    });
   });
 });
