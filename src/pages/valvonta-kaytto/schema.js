@@ -66,11 +66,6 @@ export const toimenpideSave = {
   description: description,
   'severity-id': [],
   'type-specific-data': {
-    'recipient-answered': [Validation.isBoolean],
-    'answer-commentary-fi': description,
-    'answer-commentary-sv': description,
-    'statement-fi': description,
-    'statement-sv': description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
     'osapuoli-specific-data': [
       {
@@ -79,7 +74,12 @@ export const toimenpideSave = {
         'karajaoikeus-id': Validation.MaybeInterval(0, 19),
         'haastemies-email': [
           Validation.liftValidator(Validation.emailValidator)
-        ]
+        ],
+        'recipient-answered': [Validation.isBoolean],
+        'answer-commentary-fi': description,
+        'answer-commentary-sv': description,
+        'statement-fi': description,
+        'statement-sv': description
       }
     ],
     'department-head-title-fi': description,
@@ -97,18 +97,6 @@ export const toimenpidePublish = (templates, toimenpide) =>
       ),
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
       'type-specific-data': {
-        'answer-commentary-fi': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
-        'answer-commentary-sv': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
-        'statement-fi': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
-        'statement-sv': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
         'osapuoli-specific-data': osapuoliSpecificSchema =>
           R.addIndex(R.map)((item, index) => {
