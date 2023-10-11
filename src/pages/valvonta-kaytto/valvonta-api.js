@@ -249,11 +249,22 @@ const unwrapMaybeIfExists = field => data => {
 };
 
 /**
+ * Removes all keys from object that have null or undefined values
+ * @param {Object} object
+ */
+const removeNullValues = R.compose(
+  R.fromPairs,
+  R.reject(R.compose(R.isNil, R.prop(1))),
+  R.toPairs
+);
+
+/**
  * Unwraps maybes if document is true for the osapuoli
  */
 export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   return R.map(
     R.compose(
+      removeNullValues,
       unwrapMaybeIfExists('answer-commentary-fi'),
       unwrapMaybeIfExists('answer-commentary-sv'),
       unwrapMaybeIfExists('statement-fi'),

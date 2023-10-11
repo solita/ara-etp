@@ -31,7 +31,7 @@ describe('Valvonta API test', () => {
       });
     });
 
-    it('When document is set to false, hallinto-oikeus-id is set to null', () => {
+    it('When document is set to false, hallinto-oikeus-id removed', () => {
       const input = [
         {
           document: false,
@@ -40,8 +40,7 @@ describe('Valvonta API test', () => {
       ];
       const expected = [
         {
-          document: false,
-          'hallinto-oikeus-id': null
+          document: false
         }
       ];
       const result = serializeOsapuoliSpecificData(input);
@@ -65,7 +64,8 @@ describe('Valvonta API test', () => {
       assert.deepEqual(result, expected);
     });
 
-    it('When document is set to false, karajaoikeus-id is set to null', () => {
+    // TODO: Kysy Antilta onko ok
+    it('When document is set to false, karajaoikeus-id is removed', () => {
       const input = [
         {
           document: false,
@@ -74,8 +74,7 @@ describe('Valvonta API test', () => {
       ];
       const expected = [
         {
-          document: false,
-          'karajaoikeus-id': null
+          document: false
         }
       ];
       const result = serializeOsapuoliSpecificData(input);
@@ -111,12 +110,7 @@ describe('Valvonta API test', () => {
         [
           {
             'osapuoli-id': 1,
-            'hallinto-oikeus-id': null,
             'recipient-answered': false,
-            'answer-commentary-fi': null,
-            'answer-commentary-sv': null,
-            'statement-fi': null,
-            'statement-sv': null,
             document: true
           }
         ]
@@ -127,7 +121,7 @@ describe('Valvonta API test', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
-          'hallinto-oikeus-id': Maybe.None(),
+          'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
           'answer-commentary-sv': Maybe.Some('answer-commentary-sv'),
@@ -137,16 +131,12 @@ describe('Valvonta API test', () => {
         }
       ];
 
-      // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been set to null
+      // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been removed
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
           'osapuoli-id': 1,
-          'hallinto-oikeus-id': null,
+          'hallinto-oikeus-id': 1,
           'recipient-answered': false,
-          'answer-commentary-fi': null,
-          'answer-commentary-sv': null,
-          'statement-fi': null,
-          'statement-sv': null,
           document: true
         }
       ]);
@@ -156,7 +146,7 @@ describe('Valvonta API test', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
-          'hallinto-oikeus-id': Maybe.None(),
+          'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': true,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
           'answer-commentary-sv': Maybe.Some('answer-commentary-sv'),
@@ -170,7 +160,7 @@ describe('Valvonta API test', () => {
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
           'osapuoli-id': 1,
-          'hallinto-oikeus-id': null,
+          'hallinto-oikeus-id': 1,
           'recipient-answered': true,
           'answer-commentary-fi': 'answer-commentary-fi',
           'answer-commentary-sv': 'answer-commentary-sv',
