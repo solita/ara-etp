@@ -1967,6 +1967,12 @@
           "fine": "Sakon suuruus € (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "penalty-decision-notice-first-mailing": {
+          "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus) (sv)",
+          "info": "Sakkopäätös postitetaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",
           "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",

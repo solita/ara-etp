@@ -27,8 +27,8 @@ describe('Toimenpiteet: ', () => {
       );
     });
 
-    it('is by default 37 days for types 8, 9 and 10', () => {
-      R.range(8, 11).forEach(typeId => {
+    it('is by default 37 days for types 8, 9, 10 and 16', () => {
+      [8, 9, 10, 16].forEach(typeId => {
         assert.isTrue(
           dfns.isSameDay(
             dfns.addDays(new Date(), 37),
@@ -123,6 +123,19 @@ describe('Sakkopäätös / Kuulemiskirje', () => {
 
   it('is a type with a deadline', () => {
     assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 14 }));
+  });
+});
+
+describe('Sakkopäätös / tiedoksianto (ensimmäinen postitus)', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal(
+      'penalty-decision-notice-first-mailing',
+      Toimenpiteet.typeKey(16)
+    );
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 16 }));
   });
 });
 

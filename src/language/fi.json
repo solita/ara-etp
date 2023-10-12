@@ -1983,6 +1983,12 @@
           "fine": "Sakon suuruus €",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-decision-notice-first-mailing": {
+          "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus)",
+          "info": "Sakkopäätös postitetaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
