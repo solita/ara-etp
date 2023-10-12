@@ -24,7 +24,6 @@
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
-  import ActualDecisionOsapuoletTable from './actual-decision-osapuolet-table';
   import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
 
   import * as Validation from '@Utility/validation';
@@ -226,6 +225,10 @@
   {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
     <ActualDecisionSubView
       bind:toimenpide
+      {id}
+      {preview}
+      {previewPending}
+      {disabled}
       {i18n}
       {text}
       {schema}
@@ -236,21 +239,7 @@
 
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
-      {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
-        <ActualDecisionOsapuoletTable
-          {id}
-          bind:toimenpide
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {template}
-          {text}
-          {schema}
-          {hallintoOikeudet} />
-      {:else if Toimenpiteet.isNoticeBailiff(toimenpide)}
+      {#if Toimenpiteet.isNoticeBailiff(toimenpide)}
         <NoticeBailiffOsapuoletTable
           {id}
           bind:toimenpide
@@ -264,7 +253,7 @@
           {text}
           {schema}
           {karajaoikeudet} />
-      {:else}
+      {:else if !Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
         <OsapuoletTable
           {id}
           {toimenpide}
