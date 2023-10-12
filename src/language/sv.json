@@ -1973,6 +1973,12 @@
           "description": "Kommentti (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "penalty-decision-notice-second-mailing": {
+          "title": "Sakkopäätös / tiedoksianto (toinen postitus) (sv)",
+          "info": "Sakkopäätös postitetaan uudestaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",
           "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",

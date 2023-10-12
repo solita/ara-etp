@@ -1989,6 +1989,12 @@
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-decision-notice-second-mailing": {
+          "title": "Sakkopäätös / tiedoksianto (toinen postitus)",
+          "info": "Sakkopäätös postitetaan uudestaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
