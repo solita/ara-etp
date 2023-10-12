@@ -142,7 +142,7 @@ describe('Valvonta API test', () => {
       ]);
     });
 
-    it('for käskypäätös / varsinainen päätös when recipient-answered is true but fields depending on it have data in them', () => {
+    it('for käskypäätös / varsinainen päätös when recipient-answered is true and fields depending on it have data in them', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
@@ -169,6 +169,24 @@ describe('Valvonta API test', () => {
           document: true
         }
       ]);
+    });
+
+    it('if document is set to false, recipient-answered is removed', () => {
+      assert.deepEqual(
+        serializeOsapuoliSpecificData([
+          {
+            'osapuoli-id': 1,
+            document: false,
+            'recipient-answered': false
+          }
+        ]),
+        [
+          {
+            'osapuoli-id': 1,
+            document: false
+          }
+        ]
+      );
     });
   });
 });

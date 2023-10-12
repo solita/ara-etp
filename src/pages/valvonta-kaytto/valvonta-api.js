@@ -265,6 +265,8 @@ export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   return R.map(
     R.compose(
       removeNullValues,
+      unwrapMaybeIfExists('recipient-answered'),
+      setFieldToNoneIfNoDocument('recipient-answered'),
       unwrapMaybeIfExists('answer-commentary-fi'),
       unwrapMaybeIfExists('answer-commentary-sv'),
       unwrapMaybeIfExists('statement-fi'),
