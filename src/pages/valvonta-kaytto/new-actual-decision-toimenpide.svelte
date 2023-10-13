@@ -16,6 +16,7 @@
   import { isValid } from '@Utility/classification';
   import TextButton from '@Component/Button/TextButton';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
+  import Spinner from '@Component/Spinner/Spinner';
 
   export let id;
   export let toimenpide;
@@ -290,6 +291,9 @@
               on:click={_ =>
                 preview(osapuoli.type.preview(id, osapuoli.id, toimenpide))}
               {disabled} />
+            {#if previewPending}
+              <Spinner smaller={true} />
+            {/if}
           </div>
         {/if}
       </div>
