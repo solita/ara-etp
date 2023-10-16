@@ -102,8 +102,8 @@
     }
   };
 
-  $: preview = api => {
-    if (isValidForm(toimenpide)) {
+  $: preview = (api, previewToimenpide = toimenpide) => {
+    if (isValidForm(previewToimenpide)) {
       previewPending = true;
       Future.fork(
         response => {

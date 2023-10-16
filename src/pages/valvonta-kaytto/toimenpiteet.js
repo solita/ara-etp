@@ -275,3 +275,17 @@ export const courtDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
     R.propEq('osapuoli-id', osapuoliId),
     R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
   );
+
+/**
+ * Takes a toimenpide object and returns it with only the osapuoli-specific-data for the
+ * given osapuoli
+ * @param {Object} toimenpide
+ * @param {number} osapuoliId
+ * @returns {Object} toimenpide with only the osapuoli-specific-data for the given osapuoli
+ */
+export const toimenpideForOsapuoli = (toimenpide, osapuoliId) =>
+  R.over(
+    R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
+    R.filter(R.propEq('osapuoli-id', osapuoliId)),
+    toimenpide
+  );

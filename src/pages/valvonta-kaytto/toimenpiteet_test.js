@@ -481,3 +481,37 @@ describe('documentExistsForOsapuoli', () => {
     assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7));
   });
 });
+
+describe('toimenpideForOsapuoli', () => {
+  it('returns the original toimenpide object but with the osapuoli-specific-data for other osapuolis removed', () => {
+    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      osapuoliIds: [1, 3, 7]
+    });
+
+    const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3);
+    assert.deepEqual(R.dissoc('deadline-date', result), {
+      'type-id': 8,
+      'publish-time': Maybe.None(),
+      'template-id': Maybe.None(),
+      description: Maybe.None(),
+      'type-specific-data': {
+        fine: Maybe.Some(800),
+        'osapuoli-specific-data': [
+          {
+            'osapuoli-id': 3,
+            'recipient-answered': false,
+            'answer-commentary-fi': Maybe.None(),
+            'answer-commentary-sv': Maybe.None(),
+            'statement-fi': Maybe.None(),
+            'statement-sv': Maybe.None(),
+            'hallinto-oikeus-id': Maybe.None(),
+            document: true
+          }
+        ],
+        'department-head-title-fi': Maybe.None(),
+        'department-head-title-sv': Maybe.None(),
+        'department-head-name': Maybe.None()
+      }
+    });
+  });
+});

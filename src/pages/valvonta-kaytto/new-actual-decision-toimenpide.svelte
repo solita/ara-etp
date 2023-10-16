@@ -54,6 +54,20 @@
 
   const courtDataIndexForOsapuoli = osapuoliId =>
     Toimenpiteet.courtDataIndexForOsapuoli(toimenpide, osapuoliId);
+
+  const previewOsapuoliDocument = osapuoli => _ => {
+    // Include osapuoli-specific-data for only the current osapuoli in the
+    // preview api call and validation so unfilled osapuoli data doesn't
+    // affect previewing filled ones
+    const previewToimenpide = Toimenpiteet.toimenpideForOsapuoli(
+      toimenpide,
+      osapuoli.id
+    );
+    preview(
+      osapuoli.type.preview(id, osapuoli.id, previewToimenpide),
+      previewToimenpide
+    );
+  };
 </script>
 
 <div>
@@ -288,8 +302,7 @@
               text={text(toimenpide, 'preview-button')}
               icon="visibility"
               type="button"
-              on:click={_ =>
-                preview(osapuoli.type.preview(id, osapuoli.id, toimenpide))}
+              on:click={previewOsapuoliDocument(osapuoli)}
               {disabled} />
             {#if previewPending}
               <Spinner smaller={true} />
