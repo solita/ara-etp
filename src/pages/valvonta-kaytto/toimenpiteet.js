@@ -270,7 +270,7 @@ export const documentExistsForOsapuoli = (toimenpide, osapuoliId) => {
   )(toimenpide);
 };
 
-export const courtDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
+export const osapuoliSpecificDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
   R.findIndex(
     R.propEq('osapuoli-id', osapuoliId),
     R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)

@@ -55,8 +55,8 @@
     R.prop('rooli-id')
   );
 
-  const courtDataIndexForOsapuoli = osapuoliId =>
-    Toimenpiteet.courtDataIndexForOsapuoli(toimenpide, osapuoliId);
+  const osapuoliSpecificDataIndexForOsapuoli = osapuoliId =>
+    Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(toimenpide, osapuoliId);
 </script>
 
 <style type="text/postcss">
@@ -108,7 +108,7 @@
                   lens={R.lensPath([
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'karajaoikeus-id'
                   ])}
                   modelToItem={Maybe.fold(
@@ -126,7 +126,7 @@
                     [
                       'type-specific-data',
                       'osapuoli-specific-data',
-                      courtDataIndexForOsapuoli(osapuoli.id),
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                       'karajaoikeus-id'
                     ],
                     schema
@@ -147,14 +147,14 @@
                   lens={R.lensPath([
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'haastemies-email'
                   ])}
                   validators={R.path(
                     [
                       'type-specific-data',
                       'osapuoli-specific-data',
-                      courtDataIndexForOsapuoli(osapuoli.id),
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                       'haastemies-email'
                     ],
                     schema
@@ -208,7 +208,7 @@
                   lens={R.lensPath([
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'document'
                   ])} />
               {/if}

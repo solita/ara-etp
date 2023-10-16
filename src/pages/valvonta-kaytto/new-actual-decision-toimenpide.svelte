@@ -53,8 +53,8 @@
     )
   );
 
-  const courtDataIndexForOsapuoli = osapuoliId =>
-    Toimenpiteet.courtDataIndexForOsapuoli(toimenpide, osapuoliId);
+  const osapuoliSpecificDataIndexForOsapuoli = osapuoliId =>
+    Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(toimenpide, osapuoliId);
 
   const previewOsapuoliDocument = osapuoli => _ => {
     // Include osapuoli-specific-data for only the current osapuoli in the
@@ -143,7 +143,7 @@
           lens={R.lensPath([
             'type-specific-data',
             'osapuoli-specific-data',
-            courtDataIndexForOsapuoli(osapuoli.id),
+            osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
             'document'
           ])} />
         {#if Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id)}
@@ -153,7 +153,7 @@
               lens={R.lensPath([
                 'type-specific-data',
                 'osapuoli-specific-data',
-                courtDataIndexForOsapuoli(osapuoli.id),
+                osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                 'recipient-answered'
               ])}
               format={value =>
@@ -163,7 +163,7 @@
               items={[true, false]} />
           </div>
 
-          {#if R.path(['type-specific-data', 'osapuoli-specific-data', courtDataIndexForOsapuoli(osapuoli.id), 'recipient-answered'], toimenpide)}
+          {#if R.path(['type-specific-data', 'osapuoli-specific-data', osapuoliSpecificDataIndexForOsapuoli(osapuoli.id), 'recipient-answered'], toimenpide)}
             <div class="w-full py-4">
               <Textarea
                 id={'toimenpide.answer-commentary-fi'}
@@ -173,7 +173,7 @@
                 lens={R.lensPath([
                   'type-specific-data',
                   'osapuoli-specific-data',
-                  courtDataIndexForOsapuoli(osapuoli.id),
+                  osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'answer-commentary-fi'
                 ])}
                 required
@@ -183,7 +183,7 @@
                   [
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'answer-commentary-fi'
                   ],
                   schema
@@ -199,7 +199,7 @@
                 lens={R.lensPath([
                   'type-specific-data',
                   'osapuoli-specific-data',
-                  courtDataIndexForOsapuoli(osapuoli.id),
+                  osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'answer-commentary-sv'
                 ])}
                 required
@@ -209,7 +209,7 @@
                   [
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'answer-commentary-sv'
                   ],
                   schema
@@ -226,7 +226,7 @@
                 lens={R.lensPath([
                   'type-specific-data',
                   'osapuoli-specific-data',
-                  courtDataIndexForOsapuoli(osapuoli.id),
+                  osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'statement-fi'
                 ])}
                 required
@@ -236,7 +236,7 @@
                   [
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'statement-fi'
                   ],
                   schema
@@ -253,7 +253,7 @@
                 lens={R.lensPath([
                   'type-specific-data',
                   'osapuoli-specific-data',
-                  courtDataIndexForOsapuoli(osapuoli.id),
+                  osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'statement-sv'
                 ])}
                 required
@@ -263,7 +263,7 @@
                   [
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    courtDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                     'statement-sv'
                   ],
                   schema
@@ -279,7 +279,7 @@
               lens={R.lensPath([
                 'type-specific-data',
                 'osapuoli-specific-data',
-                courtDataIndexForOsapuoli(osapuoli.id),
+                osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                 'hallinto-oikeus-id'
               ])}
               modelToItem={Maybe.fold(
@@ -295,7 +295,7 @@
                 [
                   'type-specific-data',
                   'osapuoli-specific-data',
-                  courtDataIndexForOsapuoli(osapuoli.id),
+                  osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'hallinto-oikeus-id'
                 ],
                 schema
