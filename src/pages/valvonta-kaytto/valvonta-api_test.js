@@ -64,7 +64,6 @@ describe('Valvonta API test', () => {
       assert.deepEqual(result, expected);
     });
 
-    // TODO: Kysy Antilta onko ok
     it('When document is set to false, karajaoikeus-id is removed', () => {
       const input = [
         {
@@ -156,7 +155,6 @@ describe('Valvonta API test', () => {
         }
       ];
 
-      // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been set to null
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
           'osapuoli-id': 1,
