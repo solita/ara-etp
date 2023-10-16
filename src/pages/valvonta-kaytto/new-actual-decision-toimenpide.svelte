@@ -28,6 +28,7 @@
   export let previewPending;
   export let disabled;
   export let text;
+  export let error;
   export let i18n;
   export let schema;
 
@@ -69,6 +70,12 @@
     );
   };
 </script>
+
+<style type="text/postcss">
+  .error {
+    @apply flex py-2 px-2 bg-error text-light;
+  }
+</style>
 
 <div>
   <div class="w-full py-4">
@@ -307,6 +314,12 @@
             {#if previewPending}
               <Spinner smaller={true} />
             {/if}
+            {#each error.toArray() as txt}
+              <div class="my-2 error">
+                <span class="font-icon mr-2">error_outline</span>
+                <div>{txt}</div>
+              </div>
+            {/each}
           </div>
         {/if}
       </div>

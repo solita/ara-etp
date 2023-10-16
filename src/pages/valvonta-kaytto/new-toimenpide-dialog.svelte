@@ -229,6 +229,7 @@
       {preview}
       {previewPending}
       {disabled}
+      error={R.map(R.prop('message'), error)}
       {i18n}
       {text}
       {schema}
