@@ -5,8 +5,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack-dev-server --content-base public",
-    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -s ./public -p 6006",
-    "storybook:build": "NODE_OPTIONS=--openssl-legacy-provider build-storybook",
+    "storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider start-storybook -s ./public -p 6006",
+    "storybook:build": "cross-env NODE_OPTIONS=--openssl-legacy-provider build-storybook",
     "test": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require init-mocha.js --require @babel/register --reporter dot",
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
