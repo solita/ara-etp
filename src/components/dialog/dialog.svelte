@@ -1,5 +1,6 @@
 <script>
   import Button from '@Component/Button/Button';
+  import Error from '@Component/Error/Error';
 
   export let header;
   export let error;
@@ -24,10 +25,6 @@
   .buttons {
     @apply flex flex-wrap items-center mt-5 pt-5 border-t-1 border-tertiary;
   }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
 </style>
 
 <dialog on:click|stopPropagation>
@@ -36,10 +33,7 @@
       <h1>{header}</h1>
     {/if}
     {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
-      </div>
+      <Error text={txt} />
     {/each}
     <slot />
     <div
