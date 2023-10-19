@@ -274,7 +274,7 @@
           <div class="w-full py-4">
             <Select2
               bind:model={toimenpide}
-              label="Hallinto-oikeus"
+              label={text(toimenpide, 'court')}
               required
               lens={R.lensPath([
                 'type-specific-data',
