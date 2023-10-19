@@ -5,8 +5,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack-dev-server --content-base public",
-    "storybook": "start-storybook -s ./public -p 6006",
-    "storybook:build": "build-storybook",
+    "storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider start-storybook -s ./public -p 6006",
+    "storybook:build": "cross-env NODE_OPTIONS=--openssl-legacy-provider build-storybook",
     "test": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
     "coverage": "nyc --reporter=html --reporter=text mocha './src/**/*_test.js' --require init-mocha.js --require @babel/register --reporter dot",
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
@@ -56,7 +56,7 @@
     "svelte-preprocess": "^3.3.0",
     "tailwindcss": "^1.7.6",
     "terser-webpack-plugin": "^4.1.0",
-    "webpack": "^4.44.1",
+    "webpack": "^4.47.0",
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
