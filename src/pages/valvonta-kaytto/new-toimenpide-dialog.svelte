@@ -103,7 +103,14 @@
   };
 
   $: preview = (api, previewToimenpide = toimenpide) => {
-    if (isValidForm(previewToimenpide)) {
+    // If validating only partial data, we need to create
+    // the schema and validation function based on that data
+    const previewSchema = Schema.toimenpidePublish(
+      templates,
+      previewToimenpide
+    );
+    const isValidPreview = Validation.isValidForm(previewSchema);
+    if (isValidPreview(previewToimenpide)) {
       previewPending = true;
       Future.fork(
         response => {
