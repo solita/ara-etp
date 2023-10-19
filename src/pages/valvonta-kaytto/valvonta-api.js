@@ -232,12 +232,32 @@ const setFieldToNoneIfNoDocument = field => data => {
   )(data);
 };
 
+/**
+ * Sets all given fields to none if document is false and the field exists
+ */
+const setFieldsToNoneIfNoDocument = fields => data =>
+  R.reduce(
+    (acc, field) => setFieldToNoneIfNoDocument(field)(acc),
+    data,
+    fields
+  );
+
+/**
+ * Sets field to none if recipient-answered is false and the field exists
+ */
 const setFieldToNoneIfNoAnswer = field => data => {
   return R.when(
     R.both(R.propEq('recipient-answered', false), R.has(field)),
     R.set(R.lensProp(field), Maybe.None())
   )(data);
 };
+
+/**
+ * Sets all given fields to none if recipient-answered is false and the field exists
+ */
+const setFieldsToNoneIfNoAnswer = fields => data =>
+  R.reduce((acc, field) => setFieldToNoneIfNoAnswer(field)(acc), data, fields);
+
 /**
  * Unwraps the maybe to the value if the field exists
  */
@@ -245,6 +265,22 @@ const unwrapMaybeIfExists = field => data => {
   return R.when(
     R.has(field),
     R.over(R.lensProp(field), Maybe.orSome(null))
+  )(data);
+};
+
+/**
+ * Unwraps the maybe to the value in all the given fields if the field exists
+ */
+const unwrapMaybesIfExists = fields => data =>
+  R.reduce((acc, field) => unwrapMaybeIfExists(field)(acc), data, fields);
+
+/**
+ * Sets field to none if document is false and the field exists
+ */
+const setFieldToNullIfNoDocument = field => data => {
+  return R.when(
+    R.both(R.propEq('document', false), R.has(field)),
+    R.set(R.lensProp(field), null)
   )(data);
 };
 
@@ -265,26 +301,31 @@ export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   return R.map(
     R.compose(
       removeNullValues,
-      unwrapMaybeIfExists('recipient-answered'),
-      setFieldToNoneIfNoDocument('recipient-answered'),
-      unwrapMaybeIfExists('answer-commentary-fi'),
-      unwrapMaybeIfExists('answer-commentary-sv'),
-      unwrapMaybeIfExists('statement-fi'),
-      unwrapMaybeIfExists('statement-sv'),
-      setFieldToNoneIfNoAnswer('answer-commentary-fi'),
-      setFieldToNoneIfNoAnswer('answer-commentary-sv'),
-      setFieldToNoneIfNoAnswer('statement-fi'),
-      setFieldToNoneIfNoAnswer('statement-sv'),
-      setFieldToNoneIfNoDocument('answer-commentary-fi'),
-      setFieldToNoneIfNoDocument('answer-commentary-sv'),
-      setFieldToNoneIfNoDocument('statement-fi'),
-      setFieldToNoneIfNoDocument('statement-sv'),
-      unwrapMaybeIfExists('hallinto-oikeus-id'),
-      setFieldToNoneIfNoDocument('hallinto-oikeus-id'),
-      unwrapMaybeIfExists('karajaoikeus-id'),
-      setFieldToNoneIfNoDocument('karajaoikeus-id'),
-      unwrapMaybeIfExists('haastemies-email'),
-      setFieldToNoneIfNoDocument('haastemies-email')
+      setFieldToNullIfNoDocument('recipient-answered'),
+      unwrapMaybesIfExists([
+        'answer-commentary-fi',
+        'answer-commentary-sv',
+        'statement-fi',
+        'statement-sv',
+        'hallinto-oikeus-id',
+        'karajaoikeus-id',
+        'haastemies-email'
+      ]),
+      setFieldsToNoneIfNoAnswer([
+        'answer-commentary-fi',
+        'answer-commentary-sv',
+        'statement-fi',
+        'statement-sv'
+      ]),
+      setFieldsToNoneIfNoDocument([
+        'answer-commentary-fi',
+        'answer-commentary-sv',
+        'statement-fi',
+        'statement-sv',
+        'hallinto-oikeus-id',
+        'karajaoikeus-id',
+        'haastemies-email'
+      ])
     )
   )(osapuoliSpecificData);
 };
