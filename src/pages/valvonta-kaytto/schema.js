@@ -88,6 +88,15 @@ export const toimenpideSave = {
   }
 };
 
+const addRequiredValidatorToFieldsWhen = (when, fields) => osapuoliData =>
+  R.reduce(
+    (acc, field) => {
+      return R.over(R.lensProp(field), addRequiredValidator(when), acc);
+    },
+    osapuoliData,
+    fields
+  );
+
 export const toimenpidePublish = (templates, toimenpide) =>
   R.evolve(
     {
@@ -119,54 +128,25 @@ export const toimenpidePublish = (templates, toimenpide) =>
               ],
               toimenpide
             );
-            // TODO: Siisti toisteisuus
             return R.compose(
-              R.over(
-                R.lensProp('statement-sv'),
-                addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                    recipientAnswered
-                )
+              addRequiredValidatorToFieldsWhen(
+                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                  recipientAnswered,
+                [
+                  'statement-sv',
+                  'statement-fi',
+                  'answer-commentary-sv',
+                  'answer-commentary-fi'
+                ]
               ),
-              R.over(
-                R.lensProp('statement-fi'),
-                addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                    recipientAnswered
-                )
+              addRequiredValidatorToFieldsWhen(
+                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                  hasDocument,
+                ['hallinto-oikeus-id']
               ),
-              R.over(
-                R.lensProp('answer-commentary-sv'),
-                addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                    recipientAnswered
-                )
-              ),
-              R.over(
-                R.lensProp('answer-commentary-fi'),
-                addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                    recipientAnswered
-                )
-              ),
-              R.over(
-                R.lensProp('hallinto-oikeus-id'),
-                addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                    hasDocument
-                )
-              ),
-              R.over(
-                R.lensProp('karajaoikeus-id'),
-                addRequiredValidator(
-                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument
-                )
-              ),
-              R.over(
-                R.lensProp('haastemies-email'),
-                addRequiredValidator(
-                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument
-                )
+              addRequiredValidatorToFieldsWhen(
+                Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument,
+                ['karajaoikeus-id', 'haastemies-email']
               )
             )(item);
           }, R.map(R.always(osapuoliSpecificSchema[0]), R.range(0, R.length(R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide))))),
