@@ -18,6 +18,7 @@
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import Spinner from '@Component/Spinner/Spinner';
   import Error from '@Component/Error/Error';
+  import HR from '@Component/HR/HR';
 
   export let id;
   export let toimenpide;
@@ -318,7 +319,7 @@
     {/each}
   </div>
 
-  <div class="w-full py-4">
+  <div class="w-full pt-4 border-t-1">
     <p>
       <span class="font-icon mr-1">info</span>{i18n(
         'valvonta.kaytto.toimenpide.manually-sent'
