@@ -66,11 +66,6 @@ export const toimenpideSave = {
   description: description,
   'severity-id': [],
   'type-specific-data': {
-    'recipient-answered': [Validation.isBoolean],
-    'answer-commentary-fi': description,
-    'answer-commentary-sv': description,
-    'statement-fi': description,
-    'statement-sv': description,
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
     'osapuoli-specific-data': [
       {
@@ -79,7 +74,12 @@ export const toimenpideSave = {
         'karajaoikeus-id': Validation.MaybeInterval(0, 19),
         'haastemies-email': [
           Validation.liftValidator(Validation.emailValidator)
-        ]
+        ],
+        'recipient-answered': [Validation.isBoolean],
+        'answer-commentary-fi': description,
+        'answer-commentary-sv': description,
+        'statement-fi': description,
+        'statement-sv': description
       }
     ],
     'department-head-title-fi': description,
@@ -87,6 +87,15 @@ export const toimenpideSave = {
     'department-head-name': description
   }
 };
+
+const addRequiredValidatorToFieldsWhen = (when, fields) => osapuoliData =>
+  R.reduce(
+    (acc, field) => {
+      return R.over(R.lensProp(field), addRequiredValidator(when), acc);
+    },
+    osapuoliData,
+    fields
+  );
 
 export const toimenpidePublish = (templates, toimenpide) =>
   R.evolve(
@@ -97,18 +106,6 @@ export const toimenpidePublish = (templates, toimenpide) =>
       ),
       'template-id': addRequiredValidator(!R.isEmpty(templates)),
       'type-specific-data': {
-        'answer-commentary-fi': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
-        'answer-commentary-sv': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
-        'statement-fi': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
-        'statement-sv': addRequiredValidator(
-          Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
-        ),
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
         'osapuoli-specific-data': osapuoliSpecificSchema =>
           R.addIndex(R.map)((item, index) => {
@@ -121,25 +118,35 @@ export const toimenpidePublish = (templates, toimenpide) =>
               ],
               toimenpide
             );
+
+            const recipientAnswered = R.path(
+              [
+                'type-specific-data',
+                'osapuoli-specific-data',
+                index,
+                'recipient-answered'
+              ],
+              toimenpide
+            );
             return R.compose(
-              R.over(
-                R.lensProp('hallinto-oikeus-id'),
-                addRequiredValidator(
-                  Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                    hasDocument
-                )
+              addRequiredValidatorToFieldsWhen(
+                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                  recipientAnswered,
+                [
+                  'statement-sv',
+                  'statement-fi',
+                  'answer-commentary-sv',
+                  'answer-commentary-fi'
+                ]
               ),
-              R.over(
-                R.lensProp('karajaoikeus-id'),
-                addRequiredValidator(
-                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument
-                )
+              addRequiredValidatorToFieldsWhen(
+                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                  hasDocument,
+                ['hallinto-oikeus-id']
               ),
-              R.over(
-                R.lensProp('haastemies-email'),
-                addRequiredValidator(
-                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument
-                )
+              addRequiredValidatorToFieldsWhen(
+                Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument,
+                ['karajaoikeus-id', 'haastemies-email']
               )
             )(item);
           }, R.map(R.always(osapuoliSpecificSchema[0]), R.range(0, R.length(R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide))))),

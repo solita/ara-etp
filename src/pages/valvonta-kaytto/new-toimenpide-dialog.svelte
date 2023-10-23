@@ -24,7 +24,6 @@
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
-  import ActualDecisionOsapuoletTable from './actual-decision-osapuolet-table';
   import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
 
   import * as Validation from '@Utility/validation';
@@ -103,8 +102,15 @@
     }
   };
 
-  $: preview = api => {
-    if (isValidForm(toimenpide)) {
+  $: preview = (api, previewToimenpide = toimenpide) => {
+    // If validating only partial data, we need to create
+    // the schema and validation function based on that data
+    const previewSchema = Schema.toimenpidePublish(
+      templates,
+      previewToimenpide
+    );
+    const isValidPreview = Validation.isValidForm(previewSchema);
+    if (isValidPreview(previewToimenpide)) {
       previewPending = true;
       Future.fork(
         response => {
@@ -226,29 +232,22 @@
   {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
     <ActualDecisionSubView
       bind:toimenpide
+      {id}
+      {preview}
+      {previewPending}
+      {disabled}
+      error={R.map(R.prop('message'), error)}
       {i18n}
       {text}
       {schema}
-      {hallintoOikeudet} />
+      {hallintoOikeudet}
+      {henkilot}
+      {yritykset} />
   {/if}
 
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
-      {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
-        <ActualDecisionOsapuoletTable
-          {id}
-          bind:toimenpide
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {template}
-          {text}
-          {schema}
-          {hallintoOikeudet} />
-      {:else if Toimenpiteet.isNoticeBailiff(toimenpide)}
+      {#if Toimenpiteet.isNoticeBailiff(toimenpide)}
         <NoticeBailiffOsapuoletTable
           {id}
           bind:toimenpide
@@ -262,7 +261,7 @@
           {text}
           {schema}
           {karajaoikeudet} />
-      {:else}
+      {:else if !Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
         <OsapuoletTable
           {id}
           {toimenpide}

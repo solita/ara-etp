@@ -1874,7 +1874,6 @@
         "cancel-button": "Peruuta",
         "preview-button": "Esikatsele",
         "download-button": "Lataa",
-        "court": "Hallinto-oikeuden valinta",
         "create-document": "Luo dokumentti",
         "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti",
         "no-delivery": "Dokumenttia ei toimiteta osapuolelle",
@@ -1934,6 +1933,9 @@
         "decision-order-actual-decision": {
           "title": "Käskypäätös / varsinainen päätös",
           "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "osapuoli-specific-data": "Osapuolikohtaiset tiedot",
+          "document": "Osapuolelle toimitetaan dokumentti",
+          "preview-button": "Esikatsele osapuolen dokumentti",
           "hearing-letter-answered": {
             "label": "Omistaja vastasi kuulemiskirjeeseen",
             "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
@@ -1945,6 +1947,7 @@
           "statement-sv": "Kannanotto vastineeseen, ruotsi",
           "description": "Kommentti",
           "fine": "Sakon suuruus €",
+          "court": "Hallinto-oikeus",
           "department-head-title-fi": "Yksikön päällikön titteli, suomi",
           "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
           "department-head-name": "Yksikön päällikön nimi",

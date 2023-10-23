@@ -233,6 +233,32 @@ const setFieldToNoneIfNoDocument = field => data => {
 };
 
 /**
+ * Sets all given fields to none if document is false and the field exists
+ */
+const setFieldsToNoneIfNoDocument = fields => data =>
+  R.reduce(
+    (acc, field) => setFieldToNoneIfNoDocument(field)(acc),
+    data,
+    fields
+  );
+
+/**
+ * Sets field to none if recipient-answered is false and the field exists
+ */
+const setFieldToNoneIfNoAnswer = field => data => {
+  return R.when(
+    R.both(R.propEq('recipient-answered', false), R.has(field)),
+    R.set(R.lensProp(field), Maybe.None())
+  )(data);
+};
+
+/**
+ * Sets all given fields to none if recipient-answered is false and the field exists
+ */
+const setFieldsToNoneIfNoAnswer = fields => data =>
+  R.reduce((acc, field) => setFieldToNoneIfNoAnswer(field)(acc), data, fields);
+
+/**
  * Unwraps the maybe to the value if the field exists
  */
 const unwrapMaybeIfExists = field => data => {
@@ -243,17 +269,63 @@ const unwrapMaybeIfExists = field => data => {
 };
 
 /**
+ * Unwraps the maybe to the value in all the given fields if the field exists
+ */
+const unwrapMaybesIfExists = fields => data =>
+  R.reduce((acc, field) => unwrapMaybeIfExists(field)(acc), data, fields);
+
+/**
+ * Sets field to none if document is false and the field exists
+ */
+const setFieldToNullIfNoDocument = field => data => {
+  return R.when(
+    R.both(R.propEq('document', false), R.has(field)),
+    R.set(R.lensProp(field), null)
+  )(data);
+};
+
+/**
+ * Removes all keys from object that have null or undefined values
+ * @param {Object} object
+ */
+const removeNullValues = R.compose(
+  R.fromPairs,
+  R.reject(R.compose(R.isNil, R.prop(1))),
+  R.toPairs
+);
+
+/**
  * Unwraps maybes if document is true for the osapuoli
  */
 export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   return R.map(
     R.compose(
-      unwrapMaybeIfExists('hallinto-oikeus-id'),
-      setFieldToNoneIfNoDocument('hallinto-oikeus-id'),
-      unwrapMaybeIfExists('karajaoikeus-id'),
-      setFieldToNoneIfNoDocument('karajaoikeus-id'),
-      unwrapMaybeIfExists('haastemies-email'),
-      setFieldToNoneIfNoDocument('haastemies-email')
+      removeNullValues,
+      setFieldToNullIfNoDocument('recipient-answered'),
+      unwrapMaybesIfExists([
+        'answer-commentary-fi',
+        'answer-commentary-sv',
+        'statement-fi',
+        'statement-sv',
+        'hallinto-oikeus-id',
+        'karajaoikeus-id',
+        'haastemies-email'
+      ]),
+      setFieldsToNoneIfNoAnswer([
+        'answer-commentary-fi',
+        'answer-commentary-sv',
+        'statement-fi',
+        'statement-sv'
+      ]),
+      setFieldsToNoneIfNoDocument([
+        'answer-commentary-fi',
+        'answer-commentary-sv',
+        'statement-fi',
+        'statement-sv',
+        'hallinto-oikeus-id',
+        'karajaoikeus-id',
+        'haastemies-email'
+      ])
     )
   )(osapuoliSpecificData);
 };

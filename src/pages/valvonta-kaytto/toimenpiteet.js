@@ -121,14 +121,14 @@ export const emptyToimenpide = (
         'type-specific-data',
         {
           fine: Maybe.Some(fine),
-          'recipient-answered': false,
-          'answer-commentary-fi': Maybe.None(),
-          'answer-commentary-sv': Maybe.None(),
-          'statement-fi': Maybe.None(),
-          'statement-sv': Maybe.None(),
           'osapuoli-specific-data': R.map(
             osapuoliId => ({
               'osapuoli-id': osapuoliId,
+              'recipient-answered': false,
+              'answer-commentary-fi': Maybe.None(),
+              'answer-commentary-sv': Maybe.None(),
+              'statement-fi': Maybe.None(),
+              'statement-sv': Maybe.None(),
               'hallinto-oikeus-id': Maybe.None(),
               document: true
             }),
@@ -274,8 +274,22 @@ export const documentExistsForOsapuoli = (toimenpide, osapuoliId) => {
   )(toimenpide);
 };
 
-export const courtDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
+export const osapuoliSpecificDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
   R.findIndex(
     R.propEq('osapuoli-id', osapuoliId),
     R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
+  );
+
+/**
+ * Takes a toimenpide object and returns it with only the osapuoli-specific-data for the
+ * given osapuoli
+ * @param {Object} toimenpide
+ * @param {number} osapuoliId
+ * @returns {Object} toimenpide with only the osapuoli-specific-data for the given osapuoli
+ */
+export const toimenpideForOsapuoli = (toimenpide, osapuoliId) =>
+  R.over(
+    R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
+    R.filter(R.propEq('osapuoli-id', osapuoliId)),
+    toimenpide
   );

@@ -220,30 +220,37 @@ describe('Empty toimenpide', () => {
 
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
       'fine',
-      'recipient-answered',
-      'answer-commentary-fi',
-      'answer-commentary-sv',
-      'statement-fi',
-      'statement-sv',
       'osapuoli-specific-data',
       'department-head-title-fi',
       'department-head-title-sv',
       'department-head-name'
     ]);
 
-    // osapuoli-specific-data contains a list of objects with osapuoli-id and associated hallinto-oikeus-id
+    // osapuoli-specific-data contains a list of objects with osapuoli-id,
+    // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
+    // and the answer-commentary and statement fields
     assert.deepEqual(
       R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
       [
         {
           'osapuoli-id': 1,
           'hallinto-oikeus-id': Maybe.None(),
-          document: true
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.None(),
+          'statement-sv': Maybe.None()
         },
         {
           'osapuoli-id': 7,
           'hallinto-oikeus-id': Maybe.None(),
-          document: true
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.None(),
+          'statement-sv': Maybe.None()
         }
       ]
     );
@@ -497,5 +504,39 @@ describe('documentExistsForOsapuoli', () => {
     assert.isFalse(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 3));
 
     assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7));
+  });
+});
+
+describe('toimenpideForOsapuoli', () => {
+  it('returns the original toimenpide object but with the osapuoli-specific-data for other osapuolis removed', () => {
+    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      osapuoliIds: [1, 3, 7]
+    });
+
+    const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3);
+    assert.deepEqual(R.dissoc('deadline-date', result), {
+      'type-id': 8,
+      'publish-time': Maybe.None(),
+      'template-id': Maybe.None(),
+      description: Maybe.None(),
+      'type-specific-data': {
+        fine: Maybe.Some(800),
+        'osapuoli-specific-data': [
+          {
+            'osapuoli-id': 3,
+            'recipient-answered': false,
+            'answer-commentary-fi': Maybe.None(),
+            'answer-commentary-sv': Maybe.None(),
+            'statement-fi': Maybe.None(),
+            'statement-sv': Maybe.None(),
+            'hallinto-oikeus-id': Maybe.None(),
+            document: true
+          }
+        ],
+        'department-head-title-fi': Maybe.None(),
+        'department-head-title-sv': Maybe.None(),
+        'department-head-name': Maybe.None()
+      }
+    });
   });
 });
