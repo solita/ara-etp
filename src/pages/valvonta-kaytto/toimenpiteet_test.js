@@ -38,13 +38,15 @@ describe('Toimenpiteet: ', () => {
       });
     });
 
-    it('is by default 30 day for type 11', () => {
-      assert.isTrue(
-        dfns.isSameDay(
-          dfns.addDays(new Date(), 30),
-          Maybe.get(Toimenpiteet.defaultDeadline(11))
-        )
-      );
+    it('is by default 30 day for types 11 and 19', () => {
+      [11, 19].forEach(typeId => {
+        assert.isTrue(
+          dfns.isSameDay(
+            dfns.addDays(new Date(), 30),
+            Maybe.get(Toimenpiteet.defaultDeadline(typeId))
+          )
+        );
+      });
     });
 
     it('is by default 30 day for type 12', () => {
@@ -151,6 +153,19 @@ describe('Sakkopäätös / tiedoksianto (toinen postitus)', () => {
     assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 17 }));
   });
 });
+describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal(
+      'penalty-decision-waiting-for-deadline',
+      Toimenpiteet.typeKey(19)
+    );
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 19 }));
+  });
+});
+
 describe('Given toimenpidetypes', () => {
   it('find the ids of manually deliverable types', () => {
     assert.deepEqual(

@@ -29,7 +29,8 @@ export const type = {
   'penalty-decision': {
     'hearing-letter': 14,
     'notice-first-mailing': 16,
-    'notice-second-mailing': 17
+    'notice-second-mailing': 17,
+    'waiting-for-deadline': 19
   }
 };
 
@@ -41,7 +42,7 @@ export const isType = R.propEq('type-id');
 
 const isDeadlineType = R.includes(
   R.__,
-  [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17]
+  [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 19]
 );
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
@@ -59,6 +60,7 @@ const defaultDeadlineForTypeId = typeId => {
       return Maybe.Some(dfns.addWeeks(new Date(), 2));
     case R.path(['decision-order', 'notice-bailiff'], type):
     case R.path(['decision-order', 'waiting-for-deadline'], type):
+    case R.path(['penalty-decision', 'waiting-for-deadline'], type):
       return Maybe.Some(dfns.addDays(new Date(), 30));
     case R.path(['decision-order', 'actual-decision'], type):
     case R.path(['decision-order', 'notice-first-mailing'], type):
