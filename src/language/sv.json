@@ -1979,6 +1979,12 @@
           "description": "Kommentti (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "penalty-decision-waiting-for-deadline": {
+          "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen (sv)",
+          "info": "Rakennuksen omistajilla on mahdollisuus valittaa sakkopäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko sakkopäätöksestä valitettu. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",
           "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",

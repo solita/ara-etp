@@ -1995,6 +1995,12 @@
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-decision-waiting-for-deadline": {
+          "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen",
+          "info": "Rakennuksen omistajilla on mahdollisuus valittaa sakkopäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko sakkopäätöksestä valitettu.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
