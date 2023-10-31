@@ -166,6 +166,11 @@ describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
   });
 });
 
+describe('Sakkoluettelon lähetys menossa', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-list-delivery-in-progress', Toimenpiteet.typeKey(21));
+  });
+});
 describe('Given toimenpidetypes', () => {
   it('find the ids of manually deliverable types', () => {
     assert.deepEqual(

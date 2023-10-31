@@ -31,7 +31,8 @@ export const type = {
     'notice-first-mailing': 16,
     'notice-second-mailing': 17,
     'waiting-for-deadline': 19
-  }
+  },
+  'penalty-list-delivery-in-progress': 21
 };
 
 const types = R.invertObj(Deep.treeFlat('-', R.F, type));
