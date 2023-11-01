@@ -1970,6 +1970,13 @@
           "fine": "Sakon suuruus € (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "penalty-decision-actual-decision": {
+          "title": "Sakkopäätös / varsinainen päätös (sv)",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten tehdään uhkasakkopäätös. Sakkopäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. (sv)",
+          "description": "Kommentti (sv)",
+          "fine": "Sakon suuruus € (sv)",
+          "publish-button": "Luo toimenpide (sv)"
+        },
         "penalty-decision-notice-first-mailing": {
           "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus) (sv)",
           "info": "Sakkopäätös postitetaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella. (sv)",

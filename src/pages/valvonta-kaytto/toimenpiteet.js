@@ -28,6 +28,7 @@ export const type = {
   },
   'penalty-decision': {
     'hearing-letter': 14,
+    'actual-decision': 15,
     'notice-first-mailing': 16,
     'notice-second-mailing': 17,
     'waiting-for-deadline': 19

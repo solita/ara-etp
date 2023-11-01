@@ -128,6 +128,12 @@ describe('Sakkopäätös / Kuulemiskirje', () => {
   });
 });
 
+describe('Sakkopäätös / Varsinainen päätös', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-decision-actual-decision', Toimenpiteet.typeKey(15));
+  });
+});
+
 describe('Sakkopäätös / tiedoksianto (ensimmäinen postitus)', () => {
   it('id is mapped correctly to the type key', () => {
     assert.equal(
