@@ -2004,6 +2004,12 @@
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-list-delivery-in-progress": {
+          "title": "Sakkoluettelon lähetys menossa",
+          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.org (at) om.fi.sec",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa kommentti"
+        },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
           "load-error": "Toimenpiteen tietojen haku epäonnistui.",
