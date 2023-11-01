@@ -408,6 +408,67 @@ describe('Empty toimenpide', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
     assert.isFalse(Toimenpiteet.hasFine(emptyToimenpide));
   });
+
+  it('Contains correct keys and default values for toimenpidetype 15', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(15, [{}], {
+      osapuoliIds: [1, 7],
+      defaultStatementFi: 'Statementin default-arvo voidaan antaa parametrina',
+      defaultStatementSv: 'Standardvärdet för satsen kan anges som en parameter'
+    });
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'fine',
+      'osapuoli-specific-data',
+      'department-head-title-fi',
+      'department-head-title-sv',
+      'department-head-name'
+    ]);
+
+    // osapuoli-specific-data contains a list of objects with osapuoli-id,
+    // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
+    // and the answer-commentary and statement fields
+    assert.deepEqual(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
+      [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.None(),
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.Some(
+            'Statementin default-arvo voidaan antaa parametrina'
+          ),
+          'statement-sv': Maybe.Some(
+            'Standardvärdet för satsen kan anges som en parameter'
+          )
+        },
+        {
+          'osapuoli-id': 7,
+          'hallinto-oikeus-id': Maybe.None(),
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.Some(
+            'Statementin default-arvo voidaan antaa parametrina'
+          ),
+          'statement-sv': Maybe.Some(
+            'Standardvärdet för satsen kan anges som en parameter'
+          )
+        }
+      ]
+    );
+  });
 });
 
 describe('findFineFromToimenpiteet returns the fine present in the newest toimenpide of type 7', () => {

@@ -100,7 +100,9 @@ export const emptyToimenpide = (
     departmentHeadTitleFi = null,
     departmentHeadTitleSv = null,
     departmentHeadName = null,
-    osapuoliIds = []
+    osapuoliIds = [],
+    defaultStatementFi = null,
+    defaultStatementSv = null
   } = {}
 ) => {
   const toimenpide = {
@@ -157,6 +159,31 @@ export const emptyToimenpide = (
             }),
             osapuoliIds
           )
+        },
+        toimenpide
+      );
+
+    case R.path(['penalty-decision', 'actual-decision'], type):
+      return R.assoc(
+        'type-specific-data',
+        {
+          fine: Maybe.Some(fine),
+          'osapuoli-specific-data': R.map(
+            osapuoliId => ({
+              'osapuoli-id': osapuoliId,
+              'recipient-answered': false,
+              'answer-commentary-fi': Maybe.None(),
+              'answer-commentary-sv': Maybe.None(),
+              'statement-fi': Maybe.fromNull(defaultStatementFi),
+              'statement-sv': Maybe.fromNull(defaultStatementSv),
+              'hallinto-oikeus-id': Maybe.None(),
+              document: true
+            }),
+            osapuoliIds
+          ),
+          'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
+          'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
+          'department-head-name': Maybe.fromNull(departmentHeadName)
         },
         toimenpide
       );
