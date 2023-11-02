@@ -232,7 +232,7 @@ describe('Empty toimenpide', () => {
 
   it('Contains correct keys for toimenpidetype 8', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}], {
-      osapuoliIds: [1, 7]
+      osapuolis: [{ id: 1 }, { id: 7 }]
     });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
@@ -411,9 +411,13 @@ describe('Empty toimenpide', () => {
 
   it('Contains correct keys and default values for toimenpidetype 15', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(15, [{}], {
-      osapuoliIds: [1, 7],
+      osapuolis: [
+        { id: 1, sukunimi: 'Mallinen' },
+        { id: 7, nimi: 'Yritys' }
+      ],
       defaultStatementFi: 'Statementin default-arvo voidaan antaa parametrina',
-      defaultStatementSv: 'Standardvärdet för satsen kan anges som en parameter'
+      defaultStatementSv:
+        'Ruotsinkieliselle statementille voi antaa %s käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
     });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
@@ -449,7 +453,7 @@ describe('Empty toimenpide', () => {
             'Statementin default-arvo voidaan antaa parametrina'
           ),
           'statement-sv': Maybe.Some(
-            'Standardvärdet för satsen kan anges som en parameter'
+            'Ruotsinkieliselle statementille voi antaa Mallinen käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
           )
         },
         {
@@ -463,7 +467,7 @@ describe('Empty toimenpide', () => {
             'Statementin default-arvo voidaan antaa parametrina'
           ),
           'statement-sv': Maybe.Some(
-            'Standardvärdet för satsen kan anges som en parameter'
+            'Ruotsinkieliselle statementille voi antaa Yritys käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
           )
         }
       ]
@@ -582,7 +586,7 @@ describe('documentExistsForOsapuoli', () => {
         }
       ],
       Toimenpiteet.emptyToimenpide(8, [], {
-        osapuoliIds: [1, 3, 7]
+        osapuolis: [{ id: 1 }, { id: 3 }, { id: 7 }]
       })
     );
 
@@ -596,7 +600,7 @@ describe('documentExistsForOsapuoli', () => {
 describe('toimenpideForOsapuoli', () => {
   it('returns the original toimenpide object but with the osapuoli-specific-data for other osapuolis removed', () => {
     const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      osapuoliIds: [1, 3, 7]
+      osapuolis: [{ id: 1 }, { id: 3 }, { id: 7 }]
     });
 
     const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3);

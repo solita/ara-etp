@@ -100,7 +100,7 @@ export const emptyToimenpide = (
     departmentHeadTitleFi = null,
     departmentHeadTitleSv = null,
     departmentHeadName = null,
-    osapuoliIds = [],
+    osapuolis = [],
     defaultStatementFi = null,
     defaultStatementSv = null
   } = {}
@@ -112,6 +112,8 @@ export const emptyToimenpide = (
     'template-id': defaultTemplateId(typeId, templatesByType),
     description: Maybe.None()
   };
+
+  const osapuoliIds = R.map(R.prop('id'), osapuolis);
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
@@ -168,19 +170,24 @@ export const emptyToimenpide = (
         'type-specific-data',
         {
           fine: Maybe.Some(fine),
-          'osapuoli-specific-data': R.map(
-            osapuoliId => ({
-              'osapuoli-id': osapuoliId,
+          'osapuoli-specific-data': R.map(osapuoli => {
+            const nameForSwedishStatement =
+              R.prop('sukunimi', osapuoli) || R.prop('nimi', osapuoli);
+
+            return {
+              'osapuoli-id': R.prop('id', osapuoli),
               'recipient-answered': false,
               'answer-commentary-fi': Maybe.None(),
               'answer-commentary-sv': Maybe.None(),
               'statement-fi': Maybe.fromNull(defaultStatementFi),
-              'statement-sv': Maybe.fromNull(defaultStatementSv),
+              'statement-sv': R.map(
+                R.replace('%s', nameForSwedishStatement),
+                Maybe.fromNull(defaultStatementSv)
+              ),
               'hallinto-oikeus-id': Maybe.None(),
               document: true
-            }),
-            osapuoliIds
-          ),
+            };
+          }, osapuolis),
           'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
           'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
           'department-head-name': Maybe.fromNull(departmentHeadName)
@@ -273,6 +280,10 @@ export const isDecisionOrderHearingLetter = isType(
 
 export const isPenaltyDecisionHearingLetter = isType(
   R.path(['penalty-decision', 'hearing-letter'], type)
+);
+
+export const isPenaltyDecisionActualDecision = isType(
+  R.path(['penalty-decision', 'actual-decision'], type)
 );
 
 /**

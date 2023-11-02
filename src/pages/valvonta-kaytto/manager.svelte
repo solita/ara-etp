@@ -57,10 +57,7 @@
         departmentHeadName: johtaja['department-head-name'],
         departmentHeadTitleFi: johtaja['department-head-title-fi'],
         departmentHeadTitleSv: johtaja['department-head-title-sv'],
-        osapuoliIds: R.map(
-          R.prop('id'),
-          R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
-        )
+        osapuolis: R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
       };
     } else if (
       Toimenpiteet.isNoticeBailiff({
@@ -68,10 +65,7 @@
       })
     ) {
       return {
-        osapuoliIds: R.map(
-          R.prop('id'),
-          R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
-        )
+        osapuolis: R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
       };
     } else if (
       Toimenpiteet.isPenaltyDecisionHearingLetter({
@@ -84,6 +78,32 @@
           toimenpiteet
         )
       };
+    } else if (
+      Toimenpiteet.isPenaltyDecisionActualDecision({
+        'type-id': toimenpideTypeId
+      })
+    ) {
+      {
+        return {
+          fine: Toimenpiteet.findFineFromToimenpiteet(
+            Toimenpiteet.isPenaltyDecisionHearingLetter,
+            toimenpiteet
+          ),
+          departmentHeadName: johtaja['department-head-name'],
+          departmentHeadTitleFi: johtaja['department-head-title-fi'],
+          departmentHeadTitleSv: johtaja['department-head-title-sv'],
+          osapuolis: R.filter(
+            Osapuolet.isOmistaja,
+            R.concat(henkilot, yritykset)
+          ),
+          defaultStatementFi: i18n(
+            'valvonta.kaytto.toimenpide.penalty-decision-actual-decision.default-statement-fi'
+          ),
+          defaultStatementSv: i18n(
+            'valvonta.kaytto.toimenpide.penalty-decision-actual-decision.default-statement-sv'
+          )
+        };
+      }
     } else {
       return undefined;
     }

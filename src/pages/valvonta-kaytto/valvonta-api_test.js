@@ -99,7 +99,7 @@ describe('Valvonta API test', () => {
 
     it('for käskypäätös / varsinainen päätös', () => {
       const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-        osapuoliIds: [1]
+        osapuolis: [{ id: 1 }]
       });
 
       assert.deepEqual(
