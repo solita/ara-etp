@@ -18,7 +18,6 @@
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import Spinner from '@Component/Spinner/Spinner';
   import Error from '@Component/Error/Error';
-  import HR from '@Component/HR/HR';
 
   export let id;
   export let toimenpide;

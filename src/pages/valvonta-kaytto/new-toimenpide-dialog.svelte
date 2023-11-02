@@ -28,7 +28,7 @@
 
   import * as Validation from '@Utility/validation';
 
-  import ActualDecisionSubView from './new-actual-decision-toimenpide';
+  import DecisionOrderActualDecisionSubView from './new-decision-order-actual-decision-toimenpide';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
@@ -228,9 +228,8 @@
         {i18n} />
     </div>
   {/if}
-
   {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
-    <ActualDecisionSubView
+    <DecisionOrderActualDecisionSubView
       bind:toimenpide
       {id}
       {preview}
