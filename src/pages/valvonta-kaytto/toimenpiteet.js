@@ -266,14 +266,6 @@ export const isNoticeBailiff = isType(
   R.path(['decision-order', 'notice-bailiff'], type)
 );
 
-/**
- * These toimenpide types have a osapuoli specific boolean field document
- */
-export const hasOptionalDocument = R.anyPass([
-  isDecisionOrderActualDecision,
-  isNoticeBailiff
-]);
-
 export const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)
 );
@@ -285,6 +277,15 @@ export const isPenaltyDecisionHearingLetter = isType(
 export const isPenaltyDecisionActualDecision = isType(
   R.path(['penalty-decision', 'actual-decision'], type)
 );
+
+/**
+ * These toimenpide types have a osapuoli specific boolean field document
+ */
+export const hasOptionalDocument = R.anyPass([
+  isDecisionOrderActualDecision,
+  isNoticeBailiff,
+  isPenaltyDecisionActualDecision
+]);
 
 /**
  * Given an array of toimenpide objects, returns the fine found using the toimenpidetype predicate function parameter

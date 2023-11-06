@@ -57,8 +57,7 @@
       {#if Toimenpiteet.hasOptionalDocument(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, henkilo.id)}
         <div>
           {henkilo.etunimi}
-          {henkilo.sukunimi}
-          ,
+          {henkilo.sukunimi},
           {i18n(i18nRoot + '.no-document')}
         </div>
       {:else}
@@ -79,8 +78,7 @@
       {#if Toimenpiteet.hasOptionalDocument(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, yritys.id)}
         <div>
           {yritys.nimi}
-          {Maybe.orSome('', yritys.ytunnus)}
-          ,
+          {Maybe.orSome('', yritys.ytunnus)},
           {i18n(i18nRoot + '.no-document')}
         </div>
       {:else}
