@@ -275,7 +275,7 @@
           {text}
           {schema}
           {karajaoikeudet} />
-      {:else if !Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
+      {:else if Toimenpiteet.showNormalOsapuoliTable(toimenpide)}
         <OsapuoletTable
           {id}
           {toimenpide}

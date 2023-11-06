@@ -287,6 +287,14 @@ export const hasOptionalDocument = R.anyPass([
   isPenaltyDecisionActualDecision
 ]);
 
+export const showNormalOsapuoliTable = R.complement(
+  R.anyPass([
+    isDecisionOrderActualDecision,
+    isPenaltyDecisionActualDecision,
+    isNoticeBailiff
+  ])
+);
+
 /**
  * Given an array of toimenpide objects, returns the fine found using the toimenpidetype predicate function parameter
  * @param {Function} toimenpidetypePredicate
