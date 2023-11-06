@@ -1,5 +1,8 @@
 import { assert } from 'chai';
-import { serializeOsapuoliSpecificData } from '@Pages/valvonta-kaytto/valvonta-api';
+import {
+  serializeOsapuoliSpecificData,
+  serializePenaltyDecisionActualDecisionOsapuoliSpecificData
+} from '@Pages/valvonta-kaytto/valvonta-api';
 import { Maybe } from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as Toimenpiteet from '@Pages/valvonta-kaytto/toimenpiteet';
@@ -176,6 +179,93 @@ describe('Valvonta API test', () => {
             'osapuoli-id': 1,
             document: false,
             'recipient-answered': false
+          }
+        ]),
+        [
+          {
+            'osapuoli-id': 1,
+            document: false
+          }
+        ]
+      );
+    });
+
+    it('for sakkopäätös / varsinainen päätös when recipient-answered is false, all fields are included', () => {
+      const osapuoliSpecificData = [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.Some(1),
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
+          'answer-commentary-sv': Maybe.Some('answer-commentary-sv'),
+          'statement-fi': Maybe.Some('statement-fi'),
+          'statement-sv': Maybe.Some('statement-sv'),
+          document: true
+        }
+      ];
+
+      assert.deepEqual(
+        serializePenaltyDecisionActualDecisionOsapuoliSpecificData(
+          osapuoliSpecificData
+        ),
+        [
+          {
+            'osapuoli-id': 1,
+            'hallinto-oikeus-id': 1,
+            'recipient-answered': false,
+            'answer-commentary-fi': 'answer-commentary-fi',
+            'answer-commentary-sv': 'answer-commentary-sv',
+            'statement-fi': 'statement-fi',
+            'statement-sv': 'statement-sv',
+            document: true
+          }
+        ]
+      );
+    });
+
+    it('for sakkopäätös / varsinainen päätös when answer-commentary is None the fields are removed', () => {
+      const osapuoliSpecificData = [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.Some(1),
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.Some('statement-fi'),
+          'statement-sv': Maybe.Some('statement-sv'),
+          document: true
+        }
+      ];
+
+      assert.deepEqual(
+        serializePenaltyDecisionActualDecisionOsapuoliSpecificData(
+          osapuoliSpecificData
+        ),
+        [
+          {
+            'osapuoli-id': 1,
+            'hallinto-oikeus-id': 1,
+            'recipient-answered': false,
+            'statement-fi': 'statement-fi',
+            'statement-sv': 'statement-sv',
+            document: true
+          }
+        ]
+      );
+    });
+
+    it('for sakkopäätös / varsinainen päätös if document is set to false, all other fields are removed', () => {
+      assert.deepEqual(
+        serializePenaltyDecisionActualDecisionOsapuoliSpecificData([
+          {
+            'osapuoli-id': 1,
+            document: false,
+            'recipient-answered': false,
+            'hallinto-oikeus-id': Maybe.Some(1),
+            'answer-commentary-fi': Maybe.None(),
+            'answer-commentary-sv': Maybe.None(),
+            'statement-fi': Maybe.Some('statement-fi'),
+            'statement-sv': Maybe.Some('statement-sv')
           }
         ]),
         [

@@ -294,9 +294,30 @@ const removeNullValues = R.compose(
   R.toPairs
 );
 
-/**
- * Unwraps maybes if document is true for the osapuoli
- */
+export const serializePenaltyDecisionActualDecisionOsapuoliSpecificData =
+  osapuoliSpecificData => {
+    return R.map(
+      R.compose(
+        removeNullValues,
+        setFieldToNullIfNoDocument('recipient-answered'),
+        unwrapMaybesIfExists([
+          'answer-commentary-fi',
+          'answer-commentary-sv',
+          'statement-fi',
+          'statement-sv',
+          'hallinto-oikeus-id'
+        ]),
+        setFieldsToNoneIfNoDocument([
+          'answer-commentary-fi',
+          'answer-commentary-sv',
+          'statement-fi',
+          'statement-sv',
+          'hallinto-oikeus-id'
+        ])
+      )
+    )(osapuoliSpecificData);
+  };
+
 export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   return R.map(
     R.compose(
@@ -330,35 +351,36 @@ export const serializeOsapuoliSpecificData = osapuoliSpecificData => {
   )(osapuoliSpecificData);
 };
 
-const serializeToimenpide = R.compose(
-  R.evolve({
-    'template-id': Maybe.orSome(null),
-    'severity-id': Maybe.orSome(null),
-    description: Maybe.orSome(null),
-    'deadline-date': EM.fold(null, date =>
-      dfns.formatISO(date, { representation: 'date' })
-    ),
-    'type-specific-data': {
-      fine: Maybe.orSome(null),
-      'answer-commentary-fi': Maybe.orSome(null),
-      'answer-commentary-sv': Maybe.orSome(null),
-      'statement-fi': Maybe.orSome(null),
-      'statement-sv': Maybe.orSome(null),
-      'osapuoli-specific-data': serializeOsapuoliSpecificData,
-      'department-head-title-fi': Maybe.orSome(null),
-      'department-head-title-sv': Maybe.orSome(null),
-      'department-head-name': Maybe.orSome(null)
-    }
-  }),
-  R.pick([
-    'type-id',
-    'deadline-date',
-    'description',
-    'template-id',
-    'bypass-asha',
-    'type-specific-data'
-  ])
-);
+const serializeToimenpide = toimenpide =>
+  R.compose(
+    R.evolve({
+      'template-id': Maybe.orSome(null),
+      'severity-id': Maybe.orSome(null),
+      description: Maybe.orSome(null),
+      'deadline-date': EM.fold(null, date =>
+        dfns.formatISO(date, { representation: 'date' })
+      ),
+      'type-specific-data': {
+        fine: Maybe.orSome(null),
+        'osapuoli-specific-data': Toimenpiteet.isPenaltyDecisionActualDecision(
+          toimenpide
+        )
+          ? serializePenaltyDecisionActualDecisionOsapuoliSpecificData
+          : serializeOsapuoliSpecificData,
+        'department-head-title-fi': Maybe.orSome(null),
+        'department-head-title-sv': Maybe.orSome(null),
+        'department-head-name': Maybe.orSome(null)
+      }
+    }),
+    R.pick([
+      'type-id',
+      'deadline-date',
+      'description',
+      'template-id',
+      'bypass-asha',
+      'type-specific-data'
+    ])
+  )(toimenpide);
 
 export const toimenpiteet = R.compose(
   R.map(R.sortBy(Toimenpiteet.time)),
