@@ -27,8 +27,8 @@ describe('Toimenpiteet: ', () => {
       );
     });
 
-    it('is by default 37 days for types 8, 9, 10, 16 and 17', () => {
-      [8, 9, 10, 16, 17].forEach(typeId => {
+    it('is by default 37 days for types 8, 9, 10, 15, 16 and 17', () => {
+      [8, 9, 10, 15, 16, 17].forEach(typeId => {
         assert.isTrue(
           dfns.isSameDay(
             dfns.addDays(new Date(), 37),
@@ -125,6 +125,16 @@ describe('Sakkopäätös / Kuulemiskirje', () => {
 
   it('is a type with a deadline', () => {
     assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 14 }));
+  });
+});
+
+describe('Sakkopäätös / Varsinainen päätös', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-decision-actual-decision', Toimenpiteet.typeKey(15));
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 15 }));
   });
 });
 
@@ -227,7 +237,7 @@ describe('Empty toimenpide', () => {
 
   it('Contains correct keys for toimenpidetype 8', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}], {
-      osapuoliIds: [1, 7]
+      osapuolis: [{ id: 1 }, { id: 7 }]
     });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
@@ -403,6 +413,71 @@ describe('Empty toimenpide', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
     assert.isFalse(Toimenpiteet.hasFine(emptyToimenpide));
   });
+
+  it('Contains correct keys and default values for toimenpidetype 15', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(15, [{}], {
+      osapuolis: [
+        { id: 1, sukunimi: 'Mallinen' },
+        { id: 7, nimi: 'Yritys' }
+      ],
+      defaultStatementFi: 'Statementin default-arvo voidaan antaa parametrina',
+      defaultStatementSv:
+        'Ruotsinkieliselle statementille voi antaa %s käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
+    });
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'fine',
+      'osapuoli-specific-data',
+      'department-head-title-fi',
+      'department-head-title-sv',
+      'department-head-name'
+    ]);
+
+    // osapuoli-specific-data contains a list of objects with osapuoli-id,
+    // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
+    // and the answer-commentary and statement fields
+    assert.deepEqual(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
+      [
+        {
+          'osapuoli-id': 1,
+          'hallinto-oikeus-id': Maybe.None(),
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.Some(
+            'Statementin default-arvo voidaan antaa parametrina'
+          ),
+          'statement-sv': Maybe.Some(
+            'Ruotsinkieliselle statementille voi antaa Mallinen käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
+          )
+        },
+        {
+          'osapuoli-id': 7,
+          'hallinto-oikeus-id': Maybe.None(),
+          document: true,
+          'recipient-answered': false,
+          'answer-commentary-fi': Maybe.None(),
+          'answer-commentary-sv': Maybe.None(),
+          'statement-fi': Maybe.Some(
+            'Statementin default-arvo voidaan antaa parametrina'
+          ),
+          'statement-sv': Maybe.Some(
+            'Ruotsinkieliselle statementille voi antaa Yritys käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
+          )
+        }
+      ]
+    );
+  });
 });
 
 describe('findFineFromToimenpiteet returns the fine present in the newest toimenpide of type 7', () => {
@@ -516,7 +591,7 @@ describe('documentExistsForOsapuoli', () => {
         }
       ],
       Toimenpiteet.emptyToimenpide(8, [], {
-        osapuoliIds: [1, 3, 7]
+        osapuolis: [{ id: 1 }, { id: 3 }, { id: 7 }]
       })
     );
 
@@ -530,7 +605,7 @@ describe('documentExistsForOsapuoli', () => {
 describe('toimenpideForOsapuoli', () => {
   it('returns the original toimenpide object but with the osapuoli-specific-data for other osapuolis removed', () => {
     const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      osapuoliIds: [1, 3, 7]
+      osapuolis: [{ id: 1 }, { id: 3 }, { id: 7 }]
     });
 
     const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3);

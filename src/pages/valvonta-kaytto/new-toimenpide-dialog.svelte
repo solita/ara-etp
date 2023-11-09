@@ -28,7 +28,8 @@
 
   import * as Validation from '@Utility/validation';
 
-  import ActualDecisionSubView from './new-actual-decision-toimenpide';
+  import DecisionOrderActualDecisionSubView from './new-decision-order-actual-decision-toimenpide';
+  import PenaltyDecisionActualDecisionSubView from './new-penalty-decision-actual-decision-toimenpide';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
@@ -228,9 +229,22 @@
         {i18n} />
     </div>
   {/if}
-
   {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
-    <ActualDecisionSubView
+    <DecisionOrderActualDecisionSubView
+      bind:toimenpide
+      {id}
+      {preview}
+      {previewPending}
+      {disabled}
+      error={R.map(R.prop('message'), error)}
+      {i18n}
+      {text}
+      {schema}
+      {hallintoOikeudet}
+      {henkilot}
+      {yritykset} />
+  {:else if Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)}
+    <PenaltyDecisionActualDecisionSubView
       bind:toimenpide
       {id}
       {preview}
@@ -261,7 +275,7 @@
           {text}
           {schema}
           {karajaoikeudet} />
-      {:else if !Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
+      {:else if Toimenpiteet.showNormalOsapuoliTable(toimenpide)}
         <OsapuoletTable
           {id}
           {toimenpide}

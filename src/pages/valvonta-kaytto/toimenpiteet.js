@@ -28,6 +28,7 @@ export const type = {
   },
   'penalty-decision': {
     'hearing-letter': 14,
+    'actual-decision': 15,
     'notice-first-mailing': 16,
     'notice-second-mailing': 17,
     'waiting-for-deadline': 19
@@ -43,7 +44,7 @@ export const isType = R.propEq('type-id');
 
 const isDeadlineType = R.includes(
   R.__,
-  [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 19]
+  [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 19]
 );
 export const hasDeadline = R.propSatisfies(isDeadlineType, 'type-id');
 
@@ -64,6 +65,7 @@ const defaultDeadlineForTypeId = typeId => {
     case R.path(['penalty-decision', 'waiting-for-deadline'], type):
       return Maybe.Some(dfns.addDays(new Date(), 30));
     case R.path(['decision-order', 'actual-decision'], type):
+    case R.path(['penalty-decision', 'actual-decision'], type):
     case R.path(['decision-order', 'notice-first-mailing'], type):
     case R.path(['decision-order', 'notice-second-mailing'], type):
     case R.path(['penalty-decision', 'notice-first-mailing'], type):
@@ -99,7 +101,9 @@ export const emptyToimenpide = (
     departmentHeadTitleFi = null,
     departmentHeadTitleSv = null,
     departmentHeadName = null,
-    osapuoliIds = []
+    osapuolis = [],
+    defaultStatementFi = null,
+    defaultStatementSv = null
   } = {}
 ) => {
   const toimenpide = {
@@ -109,6 +113,8 @@ export const emptyToimenpide = (
     'template-id': defaultTemplateId(typeId, templatesByType),
     description: Maybe.None()
   };
+
+  const osapuoliIds = R.map(R.prop('id'), osapuolis);
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
@@ -156,6 +162,36 @@ export const emptyToimenpide = (
             }),
             osapuoliIds
           )
+        },
+        toimenpide
+      );
+
+    case R.path(['penalty-decision', 'actual-decision'], type):
+      return R.assoc(
+        'type-specific-data',
+        {
+          fine: Maybe.Some(fine),
+          'osapuoli-specific-data': R.map(osapuoli => {
+            const nameForSwedishStatement =
+              R.prop('sukunimi', osapuoli) || R.prop('nimi', osapuoli);
+
+            return {
+              'osapuoli-id': R.prop('id', osapuoli),
+              'recipient-answered': false,
+              'answer-commentary-fi': Maybe.None(),
+              'answer-commentary-sv': Maybe.None(),
+              'statement-fi': Maybe.fromNull(defaultStatementFi),
+              'statement-sv': R.map(
+                R.replace('%s', nameForSwedishStatement),
+                Maybe.fromNull(defaultStatementSv)
+              ),
+              'hallinto-oikeus-id': Maybe.None(),
+              document: true
+            };
+          }, osapuolis),
+          'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
+          'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
+          'department-head-name': Maybe.fromNull(departmentHeadName)
         },
         toimenpide
       );
@@ -231,20 +267,33 @@ export const isNoticeBailiff = isType(
   R.path(['decision-order', 'notice-bailiff'], type)
 );
 
-/**
- * These toimenpide types have a osapuoli specific boolean field document
- */
-export const hasOptionalDocument = R.anyPass([
-  isDecisionOrderActualDecision,
-  isNoticeBailiff
-]);
-
 export const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)
 );
 
 export const isPenaltyDecisionHearingLetter = isType(
   R.path(['penalty-decision', 'hearing-letter'], type)
+);
+
+export const isPenaltyDecisionActualDecision = isType(
+  R.path(['penalty-decision', 'actual-decision'], type)
+);
+
+/**
+ * These toimenpide types have a osapuoli specific boolean field document
+ */
+export const hasOptionalDocument = R.anyPass([
+  isDecisionOrderActualDecision,
+  isNoticeBailiff,
+  isPenaltyDecisionActualDecision
+]);
+
+export const showNormalOsapuoliTable = R.complement(
+  R.anyPass([
+    isDecisionOrderActualDecision,
+    isPenaltyDecisionActualDecision,
+    isNoticeBailiff
+  ])
 );
 
 /**

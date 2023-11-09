@@ -4,6 +4,7 @@ import * as Validation from '@Utility/validation';
 
 import * as Toimenpiteet from './toimenpiteet';
 import * as Maybe from '@Utility/maybe-utils';
+import { isDecisionOrderActualDecision } from './toimenpiteet';
 
 const OptionalLimitedString = (min, max) =>
   R.map(Validation.liftValidator, Validation.LimitedString(2, 200));
@@ -132,15 +133,17 @@ export const toimenpidePublish = (templates, toimenpide) =>
               addRequiredValidatorToFieldsWhen(
                 Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
                   recipientAnswered,
-                [
-                  'statement-sv',
-                  'statement-fi',
-                  'answer-commentary-sv',
-                  'answer-commentary-fi'
-                ]
+                ['answer-commentary-sv', 'answer-commentary-fi']
               ),
               addRequiredValidatorToFieldsWhen(
-                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
+                (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
+                  Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
+                  recipientAnswered,
+                ['statement-sv', 'statement-fi']
+              ),
+              addRequiredValidatorToFieldsWhen(
+                (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
+                  Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
                   hasDocument,
                 ['hallinto-oikeus-id']
               ),

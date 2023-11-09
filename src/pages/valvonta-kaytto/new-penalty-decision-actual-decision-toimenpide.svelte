@@ -18,7 +18,6 @@
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import Spinner from '@Component/Spinner/Spinner';
   import Error from '@Component/Error/Error';
-  import HR from '@Component/HR/HR';
 
   export let id;
   export let toimenpide;
@@ -159,114 +158,113 @@
               items={[true, false]} />
           </div>
 
-          {#if R.path(['type-specific-data', 'osapuoli-specific-data', osapuoliSpecificDataIndexForOsapuoli(osapuoli.id), 'recipient-answered'], toimenpide)}
-            <div class="w-full py-4">
-              <Textarea
-                id={'toimenpide.answer-commentary-fi'}
-                name={'toimenpide.answer-commentary-fi'}
-                label={text(toimenpide, 'answer-commentary-fi')}
-                bind:model={toimenpide}
-                lens={R.lensPath([
+          <div class="w-full py-4">
+            <Textarea
+              id={'toimenpide.answer-commentary-fi'}
+              name={'toimenpide.answer-commentary-fi'}
+              label={text(toimenpide, 'answer-commentary-fi')}
+              bind:model={toimenpide}
+              lens={R.lensPath([
+                'type-specific-data',
+                'osapuoli-specific-data',
+                osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                'answer-commentary-fi'
+              ])}
+              required
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              validators={R.path(
+                [
                   'type-specific-data',
                   'osapuoli-specific-data',
                   osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'answer-commentary-fi'
-                ])}
-                required
-                format={Maybe.orSome('')}
-                parse={Parsers.optionalString}
-                validators={R.path(
-                  [
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
-                    'answer-commentary-fi'
-                  ],
-                  schema
-                )}
-                {i18n} />
-            </div>
-            <div class="w-full py-4">
-              <Textarea
-                id={'toimenpide.answer-commentary-sv'}
-                name={'toimenpide.answer-commentary-sv'}
-                label={text(toimenpide, 'answer-commentary-sv')}
-                bind:model={toimenpide}
-                lens={R.lensPath([
+                ],
+                schema
+              )}
+              {i18n} />
+          </div>
+          <div class="w-full py-4">
+            <Textarea
+              id={'toimenpide.answer-commentary-sv'}
+              name={'toimenpide.answer-commentary-sv'}
+              label={text(toimenpide, 'answer-commentary-sv')}
+              bind:model={toimenpide}
+              lens={R.lensPath([
+                'type-specific-data',
+                'osapuoli-specific-data',
+                osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                'answer-commentary-sv'
+              ])}
+              required
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              validators={R.path(
+                [
                   'type-specific-data',
                   'osapuoli-specific-data',
                   osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'answer-commentary-sv'
-                ])}
-                required
-                format={Maybe.orSome('')}
-                parse={Parsers.optionalString}
-                validators={R.path(
-                  [
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
-                    'answer-commentary-sv'
-                  ],
-                  schema
-                )}
-                {i18n} />
-            </div>
+                ],
+                schema
+              )}
+              {i18n} />
+          </div>
 
-            <div class="w-full py-4">
-              <Textarea
-                id={'toimenpide.statement-fi'}
-                name={'toimenpide.statement-fi'}
-                label={text(toimenpide, 'statement-fi')}
-                bind:model={toimenpide}
-                lens={R.lensPath([
+          <div class="w-full py-4">
+            <Textarea
+              id={'toimenpide.statement-fi'}
+              name={'toimenpide.statement-fi'}
+              label={text(toimenpide, 'statement-fi')}
+              bind:model={toimenpide}
+              lens={R.lensPath([
+                'type-specific-data',
+                'osapuoli-specific-data',
+                osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                'statement-fi'
+              ])}
+              required
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              validators={R.path(
+                [
                   'type-specific-data',
                   'osapuoli-specific-data',
                   osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'statement-fi'
-                ])}
-                required
-                format={Maybe.orSome('')}
-                parse={Parsers.optionalString}
-                validators={R.path(
-                  [
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
-                    'statement-fi'
-                  ],
-                  schema
-                )}
-                {i18n} />
-            </div>
+                ],
+                schema
+              )}
+              {i18n} />
+          </div>
 
-            <div class="w-full py-4">
-              <Textarea
-                id={'toimenpide.statement-sv'}
-                name={'toimenpide.statement-sv'}
-                label={text(toimenpide, 'statement-sv')}
-                bind:model={toimenpide}
-                lens={R.lensPath([
+          <div class="w-full py-4">
+            <Textarea
+              id={'toimenpide.statement-sv'}
+              name={'toimenpide.statement-sv'}
+              label={text(toimenpide, 'statement-sv')}
+              bind:model={toimenpide}
+              lens={R.lensPath([
+                'type-specific-data',
+                'osapuoli-specific-data',
+                osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                'statement-sv'
+              ])}
+              required
+              format={Maybe.orSome('')}
+              parse={Parsers.optionalString}
+              validators={R.path(
+                [
                   'type-specific-data',
                   'osapuoli-specific-data',
                   osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
                   'statement-sv'
-                ])}
-                required
-                format={Maybe.orSome('')}
-                parse={Parsers.optionalString}
-                validators={R.path(
-                  [
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
-                    'statement-sv'
-                  ],
-                  schema
-                )}
-                {i18n} />
-            </div>
-          {/if}
+                ],
+                schema
+              )}
+              {i18n} />
+          </div>
+
           <div class="w-full py-4">
             <Select2
               bind:model={toimenpide}
@@ -300,6 +298,7 @@
                 R.filter(isValid, hallintoOikeudet)
               )} />
           </div>
+
           <div class="w-full py-6">
             <TextButton
               text={text(toimenpide, 'preview-button')}

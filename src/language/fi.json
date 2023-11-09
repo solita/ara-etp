@@ -1986,6 +1986,31 @@
           "fine": "Sakon suuruus €",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-decision-actual-decision": {
+          "title": "Sakkopäätös / varsinainen päätös",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten tehdään uhkasakkopäätös. Sakkopäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus €",
+          "publish-button": "Luo toimenpide",
+          "osapuoli-specific-data": "Osapuolikohtaiset tiedot",
+          "document": "Osapuolelle toimitetaan dokumentti",
+          "preview-button": "Esikatsele osapuolen dokumentti",
+          "hearing-letter-answered": {
+            "label": "Omistaja vastasi kuulemiskirjeeseen",
+            "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
+            "false": "Asianosainen ei vastannut kuulemiskirjeeseen"
+          },
+          "answer-commentary-fi": "Vastineen kommentit, suomi",
+          "answer-commentary-sv": "Vastineen kommentit, ruotsi",
+          "statement-fi": "Kannanotto vastineeseen, suomi",
+          "statement-sv": "Kannanotto vastineeseen, ruotsi",
+          "court": "Hallinto-oikeus",
+          "department-head-title-fi": "Yksikön päällikön titteli, suomi",
+          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
+          "department-head-name": "Yksikön päällikön nimi",
+          "default-statement-fi": "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
+          "default-statement-sv": "Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
+        },
         "penalty-decision-notice-first-mailing": {
           "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus)",
           "info": "Sakkopäätös postitetaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella.",
