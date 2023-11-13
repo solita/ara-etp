@@ -197,6 +197,23 @@ export const emptyToimenpide = (
         },
         toimenpide
       );
+
+    case R.path(['penalty-decision', 'notice-bailiff'], type):
+      return R.assoc(
+        'type-specific-data',
+        {
+          'osapuoli-specific-data': R.map(
+            osapuoliId => ({
+              'osapuoli-id': osapuoliId,
+              'karajaoikeus-id': Maybe.None(),
+              'haastemies-email': Maybe.None(),
+              document: true
+            }),
+            osapuoliIds
+          )
+        },
+        toimenpide
+      );
     default:
       return toimenpide;
   }
