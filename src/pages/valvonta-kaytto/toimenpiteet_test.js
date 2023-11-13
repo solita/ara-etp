@@ -38,8 +38,8 @@ describe('Toimenpiteet: ', () => {
       });
     });
 
-    it('is by default 30 day for types 11 and 19', () => {
-      [11, 19].forEach(typeId => {
+    it('is by default 30 day for types 11, 18 and 19', () => {
+      [11, 18, 19].forEach(typeId => {
         assert.isTrue(
           dfns.isSameDay(
             dfns.addDays(new Date(), 30),
@@ -163,6 +163,7 @@ describe('Sakkopäätös / tiedoksianto (toinen postitus)', () => {
     assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 17 }));
   });
 });
+
 describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
   it('id is mapped correctly to the type key', () => {
     assert.equal(
@@ -173,6 +174,16 @@ describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
 
   it('is a type with a deadline', () => {
     assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 19 }));
+  });
+});
+
+describe('Sakkopäätös / Tiedoksianto (Haastemies)', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-decision-notice-bailiff', Toimenpiteet.typeKey(18));
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 18 }));
   });
 });
 
