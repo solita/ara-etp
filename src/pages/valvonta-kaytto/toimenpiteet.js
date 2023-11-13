@@ -282,9 +282,10 @@ export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
 
-export const isNoticeBailiff = isType(
-  R.path(['decision-order', 'notice-bailiff'], type)
-);
+export const isNoticeBailiff = R.anyPass([
+  isType(R.path(['penalty-decision', 'notice-bailiff'], type)),
+  isType(R.path(['decision-order', 'notice-bailiff'], type))
+]);
 
 export const isDecisionOrderHearingLetter = isType(
   R.path(['decision-order', 'hearing-letter'], type)
