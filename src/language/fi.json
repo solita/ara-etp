@@ -2023,6 +2023,14 @@
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
         },
+        "penalty-decision-notice-bailiff": {
+          "title": "Tiedoksianto haastemiehelle",
+          "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide",
+          "district-court": "Käräjäoikeus",
+          "bailiff-email": "Haastemiehen sähköpostiosoite"
+        },
         "penalty-decision-waiting-for-deadline": {
           "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen",
           "info": "Rakennuksen omistajilla on mahdollisuus valittaa sakkopäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko sakkopäätöksestä valitettu.",

@@ -2007,6 +2007,14 @@
           "description": "Kommentti (sv)",
           "publish-button": "Luo toimenpide (sv)"
         },
+        "penalty-decision-notice-bailiff": {
+          "title": "Tiedoksianto haastemiehelle (sv)",
+          "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Luo toimenpide (sv)",
+          "district-court": "Käräjäoikeus (sv)",
+          "bailiff-email": "Haastemiehen sähköpostiosoite (sv)"
+        },
         "penalty-decision-waiting-for-deadline": {
           "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen (sv)",
           "info": "Rakennuksen omistajilla on mahdollisuus valittaa sakkopäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko sakkopäätöksestä valitettu. (sv)",
