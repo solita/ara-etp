@@ -1967,7 +1967,7 @@
         },
         "decision-order-notice-bailiff": {
           "title": "Tiedoksianto haastemiehelle",
-          "info": "Käskypäätös toimitetaan haastemiehen välityksellä. Vastaamo hoitaa tiedoksiannon haastemiehelle.",
+          "info": "Käskypäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
           "description": "Kommentti",
           "publish-button": "Luo toimenpide",
           "district-court": "Käräjäoikeus",
