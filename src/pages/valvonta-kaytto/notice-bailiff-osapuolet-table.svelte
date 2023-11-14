@@ -201,16 +201,18 @@
                 {i18n(i18nRoot + '.fyi-disabled')}
               {/if}
             </td>
-            <td class="etp-table--td__center">
+            <td class="etp-table--td">
               {#if Osapuolet.isOmistaja(osapuoli)}
-                <Checkbox
-                  bind:model={toimenpide}
-                  lens={R.lensPath([
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
-                    'document'
-                  ])} />
+                <div class="etp-table--td__center">
+                  <Checkbox
+                    bind:model={toimenpide}
+                    lens={R.lensPath([
+                      'type-specific-data',
+                      'osapuoli-specific-data',
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                      'document'
+                    ])} />
+                </div>
               {/if}
             </td>
           </tr>
