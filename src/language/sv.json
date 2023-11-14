@@ -1863,7 +1863,8 @@
           "toimitustapa-none": "Inget leveranssätt",
           "fyi": "För kännedom",
           "fyi-disabled": "meddelas inte",
-          "no-document": "osapuolelle ei luotu dokumenttia (sv)"
+          "no-document": "osapuolelle ei luotu dokumenttia (sv)",
+          "court-attachment": "hallinto-oikeuden liite (sv)"
         }
       },
       "toimenpide": {

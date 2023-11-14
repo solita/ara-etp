@@ -23,8 +23,14 @@
   export let type;
 
   const types = {
-    henkilo: { pdf: valvontaApi.url.documentHenkilo },
-    yritys: { pdf: valvontaApi.url.documentYritys }
+    henkilo: {
+      pdf: valvontaApi.url.documentHenkilo,
+      courtAttachment: valvontaApi.url.courtAttachmentHenkilo
+    },
+    yritys: {
+      pdf: valvontaApi.url.documentYritys,
+      courtAttachment: valvontaApi.url.courtAttachmentYritys
+    }
   };
 
   $: rooliLabel = R.compose(
@@ -54,15 +60,35 @@
 </script>
 
 {#if Osapuolet.isOmistaja(osapuoli)}
-  (<Link
-    text="pdf"
-    target={'_blank'}
-    href={types[type].pdf(
-      osapuoli.id,
-      valvonta.id,
-      toimenpide.id,
-      toimenpide.filename
-    )} />),
+  {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
+    (<Link
+      text="pdf"
+      target={'_blank'}
+      href={types[type].pdf(
+        osapuoli.id,
+        valvonta.id,
+        toimenpide.id,
+        toimenpide.filename
+      )} />,
+    <Link
+      text={i18n(i18nRoot + '.court-attachment')}
+      target={'_blank'}
+      href={types[type].courtAttachment(
+        osapuoli.id,
+        valvonta.id,
+        toimenpide.id
+      )} />),
+  {:else}
+    (<Link
+      text="pdf"
+      target={'_blank'}
+      href={types[type].pdf(
+        osapuoli.id,
+        valvonta.id,
+        toimenpide.id,
+        toimenpide.filename
+      )} />),
+  {/if}
 {:else if Toimenpiteet.sendTiedoksi(toimenpide)}
   ({i18n(i18nRoot + '.fyi')}),
 {:else}
