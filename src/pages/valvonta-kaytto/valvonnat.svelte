@@ -337,7 +337,7 @@
                 <tr
                   class="etp-table--tr etp-table--tr__link"
                   on:click={toValvontaView(valvonta)}>
-                  <!-- valvonta -->
+                  <!-- Valvonta -->
                   <td
                     class="etp-table--td"
                     class:font-bold={Valvojat.isSelfInValvonta(
@@ -354,49 +354,71 @@
                       valvonta['valvoja-id']
                     )}
                   </td>
+                  <!-- Diaarinumero -->
                   <td class="etp-table--td">
                     {Maybe.orSome('-', diaarinumero(valvonta))}
                   </td>
-                  {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
-                    <td class="etp-table--td">
-                      {Locales.labelForId(
-                        $locale,
-                        toimenpidetyypit
-                      )(toimenpide['type-id'])}
-                    </td>
-                    <td class="etp-table--td">
-                      {Maybe.fold(
-                        '',
-                        getTemplateName(templates),
-                        toimenpide['template-id']
-                      )}
-                    </td>
-                    <td
-                      class="etp-table--td"
-                      class:font-bold={R.anyPass([
-                        isTodayDeadline,
-                        isPastDeadline
-                      ])(toimenpide)}
-                      class:text-primary={isTodayDeadline(toimenpide)}
-                      class:text-error={isPastDeadline(toimenpide)}>
-                      {formatDeadline(toimenpide)}
-                    </td>
-                  {/each}
-                  {#if Maybe.isNone(valvonta.lastToimenpide)}
-                    <td class="etp-table--td">
-                      {i18n(i18nRoot + '.last-toimenpide-none')}
-                    </td>
-                    <td class="etp-table--td">-</td>
-                  {/if}
+                  <!-- Edellinen tapahtuma -->
+                  <td class="etp-table--td">
+                    {Maybe.fold(
+                      i18n(i18nRoot + '.last-toimenpide-none'),
+                      toimenpide =>
+                        Locales.labelForId(
+                          $locale,
+                          toimenpidetyypit
+                        )(toimenpide['type-id']),
+                      valvonta.lastToimenpide
+                    )}
+                  </td>
+                  <!-- Asiakirjapohja -->
+                  <td class="etp-table--td">
+                    {Maybe.fold(
+                      '-',
+                      toimenpide =>
+                        Maybe.fold(
+                          '',
+                          getTemplateName(templates),
+                          toimenpide['template-id']
+                        ),
+                      valvonta.lastToimenpide
+                    )}
+                  </td>
+                  <!-- Määräaika -->
+                  <td
+                    class="etp-table--td"
+                    class:text-error={Maybe.fold(
+                      false,
+                      isPastDeadline,
+                      valvonta.lastToimenpide
+                    )}
+                    class:text-primary={Maybe.fold(
+                      false,
+                      isTodayDeadline,
+                      valvonta.lastToimenpide
+                    )}
+                    class:font-bold={Maybe.fold(
+                      false,
+                      R.anyPass([isTodayDeadline, isPastDeadline]),
+                      valvonta.lastToimenpide
+                    )}>
+                    {Maybe.fold(
+                      '-',
+                      toimenpide => formatDeadline(toimenpide),
+                      valvonta.lastToimenpide
+                    )}
+                  </td>
+                  <!-- Rakennustunnus -->
                   <td class="etp-table--td">
                     {Maybe.orSome('-', valvonta.rakennustunnus)}
                   </td>
+                  <!-- Osoite -->
                   <td class="etp-table--td">
                     <Address
                       {postinumerot}
                       katuosoite={Maybe.Some(valvonta.katuosoite)}
                       postinumero={valvonta.postinumero} />
                   </td>
+                  <!-- Omistajat -->
                   <td class="etp-table--td">
                     {R.join(
                       ', ',
@@ -406,6 +428,7 @@
                       )
                     )}
                   </td>
+                  <!-- Energiatodistus -->
                   <td class="etp-table--td" on:click|stopPropagation>
                     {#each Maybe.toArray(valvonta.energiatodistus) as energiatodistus}
                       <Link
