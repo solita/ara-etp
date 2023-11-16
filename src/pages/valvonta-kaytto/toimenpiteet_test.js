@@ -249,7 +249,14 @@ describe('Empty toimenpide', () => {
 
   it('Contains correct keys for toimenpidetype 8', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}], {
-      osapuolis: [{ id: 1 }, { id: 7 }]
+      osapuolis: [
+        { id: 1, nimi: 'Emme hanki Energiatodistuksia Oyj' },
+        {
+          id: 7,
+          etunimi: 'Marjo',
+          sukunimi: 'Koivukuja'
+        }
+      ]
     });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
@@ -276,6 +283,7 @@ describe('Empty toimenpide', () => {
       [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'yritys',
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -286,6 +294,7 @@ describe('Empty toimenpide', () => {
         },
         {
           'osapuoli-id': 7,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -429,7 +438,7 @@ describe('Empty toimenpide', () => {
   it('Contains correct keys and default values for toimenpidetype 15', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(15, [{}], {
       osapuolis: [
-        { id: 1, sukunimi: 'Mallinen' },
+        { id: 1, etunimi: 'Jake', sukunimi: 'Mallinen' },
         { id: 7, nimi: 'Yritys' }
       ],
       defaultStatementFi: 'Statementin default-arvo voidaan antaa parametrina',
@@ -461,6 +470,7 @@ describe('Empty toimenpide', () => {
       [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -475,6 +485,7 @@ describe('Empty toimenpide', () => {
         },
         {
           'osapuoli-id': 7,
+          'osapuoli-type': 'yritys',
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -582,45 +593,69 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
 });
 
 describe('documentExistsForOsapuoli', () => {
-  it('returns false for for the osapuoli who has their document set to false, true for others', () => {
+  it('returns false for for the henkilo osapuoli who has their document set to false, true for others', () => {
     const toimenpide = R.set(
       R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
       [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'yritys',
+          document: false
+        },
+        {
+          'osapuoli-id': 1,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': Maybe.Some(5),
           document: true
         },
+
         {
           'osapuoli-id': 3,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': Maybe.Some(2),
           document: false
         },
         {
           'osapuoli-id': 7,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': Maybe.Some(1),
           document: true
         }
       ],
-      Toimenpiteet.emptyToimenpide(8, [], {
-        osapuolis: [{ id: 1 }, { id: 3 }, { id: 7 }]
-      })
+      Toimenpiteet.emptyToimenpide(8, [])
     );
 
-    assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1));
-    assert.isFalse(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 3));
-
-    assert.isTrue(Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7));
+    assert.isTrue(
+      Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1, 'henkilo')
+    );
+    assert.isFalse(
+      Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1, 'yritys')
+    );
+    assert.isFalse(
+      Toimenpiteet.documentExistsForOsapuoli(toimenpide, 3, 'henkilo')
+    );
+    assert.isTrue(
+      Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7, 'henkilo')
+    );
   });
 });
 
 describe('toimenpideForOsapuoli', () => {
   it('returns the original toimenpide object but with the osapuoli-specific-data for other osapuolis removed', () => {
     const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-      osapuolis: [{ id: 1 }, { id: 3 }, { id: 7 }]
+      osapuolis: [
+        { id: 1, etunimi: 'Heimo', sukunimi: 'Järvenperä' },
+        { id: 3, nimi: 'Asunnonomistajat Oy' },
+        { id: 3, etunimi: 'Väärä', sukunimi: 'Osapuoli' },
+        {
+          id: 7,
+          etunimi: 'Maaret',
+          sukunimi: 'Laidanoja'
+        }
+      ]
     });
 
-    const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3);
+    const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3, 'yritys');
     assert.deepEqual(R.dissoc('deadline-date', result), {
       'type-id': 8,
       'publish-time': Maybe.None(),
@@ -631,6 +666,7 @@ describe('toimenpideForOsapuoli', () => {
         'osapuoli-specific-data': [
           {
             'osapuoli-id': 3,
+            'osapuoli-type': 'yritys',
             'recipient-answered': false,
             'answer-commentary-fi': Maybe.None(),
             'answer-commentary-sv': Maybe.None(),
@@ -670,5 +706,81 @@ describe('isNoticeBailiff', () => {
   it('returns false for some other typeId than 11 or 18', () => {
     const someOtherToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
     assert.isFalse(Toimenpiteet.isNoticeBailiff(someOtherToimenpide));
+  });
+});
+
+describe('isCorrectOsapuoli', () => {
+  it('returns true when both osapuoli-id and osapuoli-type match', () => {
+    assert.isTrue(
+      Toimenpiteet.findOsapuoli(
+        1,
+        'henkilo'
+      )({ 'osapuoli-id': 1, 'osapuoli-type': 'henkilo' })
+    );
+  });
+
+  it('returns false when neither osapuoli-id or osapuoli-type match', () => {
+    assert.isFalse(
+      Toimenpiteet.findOsapuoli(
+        1,
+        'henkilo'
+      )({ 'osapuoli-id': 2, 'osapuoli-type': 'yritys' })
+    );
+  });
+
+  it('returns false when only osapuoli-id matches', () => {
+    assert.isFalse(
+      Toimenpiteet.findOsapuoli(
+        1,
+        'henkilo'
+      )({ 'osapuoli-id': 1, 'osapuoli-type': 'yritys' })
+    );
+  });
+
+  it('returns false when only osapuoli-type matches', () => {
+    assert.isFalse(
+      Toimenpiteet.findOsapuoli(
+        1,
+        'henkilo'
+      )({ 'osapuoli-id': 2, 'osapuoli-type': 'henkilo' })
+    );
+  });
+});
+
+describe('osapuoliSpecificDataIndexForOsapuoli', () => {
+  it('finds correct index when there are multiple osapuolis', () => {
+    const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
+      osapuolis: [
+        { id: 1, etunimi: 'Janice', sukunimi: 'Korvensuo' },
+        { id: 3, nimi: 'AB Energiatodistuksettomat Oy' },
+        { id: 7, etunimi: 'Karri', sukunimi: 'Poromäki' }
+      ]
+    });
+    assert.equal(
+      Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
+        toimenpide,
+        1,
+        'henkilo'
+      ),
+      0
+    );
+
+    assert.equal(
+      Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
+        toimenpide,
+        3,
+        'yritys'
+      ),
+      1
+    );
+
+    assert.equal(
+      Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
+        toimenpide,
+        7,
+        'henkilo'
+      ),
+      2
+    );
   });
 });

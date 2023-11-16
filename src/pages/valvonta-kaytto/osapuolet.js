@@ -63,3 +63,13 @@ export const toimitustapaErrorKey = {
       ? Maybe.Some('email')
       : Maybe.None()
 };
+
+/**
+ * Osapuoli is henkilo if the object has props etunimi and sukunimi, otherwise it's yritys
+ * @param {Object} osapuoli
+ * @returns {('henkilo'|'yritys')}
+ */
+export const getOsapuoliType = osapuoli =>
+  R.has('etunimi', osapuoli) && R.has('sukunimi', osapuoli)
+    ? 'henkilo'
+    : 'yritys';

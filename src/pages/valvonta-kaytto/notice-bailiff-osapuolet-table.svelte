@@ -55,8 +55,12 @@
     R.prop('rooli-id')
   );
 
-  const osapuoliSpecificDataIndexForOsapuoli = osapuoliId =>
-    Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(toimenpide, osapuoliId);
+  const osapuoliSpecificDataIndexForOsapuoli = osapuoli =>
+    Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
+      toimenpide,
+      osapuoli.id,
+      Osapuolet.getOsapuoliType(osapuoli)
+    );
 </script>
 
 <style type="text/postcss">
@@ -102,13 +106,13 @@
               {/if}
             </td>
             <td class="etp-table--td court-container">
-              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id)}
+              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
                 <Select
                   bind:model={toimenpide}
                   lens={R.lensPath([
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                     'karajaoikeus-id'
                   ])}
                   modelToItem={Maybe.fold(
@@ -126,7 +130,7 @@
                     [
                       'type-specific-data',
                       'osapuoli-specific-data',
-                      osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                       'karajaoikeus-id'
                     ],
                     schema
@@ -139,7 +143,7 @@
               {/if}
             </td>
             <td class="etp-table--td">
-              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id)}
+              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
                 <Input
                   bind:model={toimenpide}
                   required={true}
@@ -147,14 +151,14 @@
                   lens={R.lensPath([
                     'type-specific-data',
                     'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                    osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                     'haastemies-email'
                   ])}
                   validators={R.path(
                     [
                       'type-specific-data',
                       'osapuoli-specific-data',
-                      osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                       'haastemies-email'
                     ],
                     schema
@@ -184,7 +188,8 @@
                     role="button"
                     hidden={!Toimenpiteet.documentExistsForOsapuoli(
                       toimenpide,
-                      osapuoli.id
+                      osapuoli.id,
+                      Osapuolet.getOsapuoliType(osapuoli)
                     )}
                     on:click|stopPropagation={disabled ||
                       preview(
@@ -209,7 +214,7 @@
                     lens={R.lensPath([
                       'type-specific-data',
                       'osapuoli-specific-data',
-                      osapuoliSpecificDataIndexForOsapuoli(osapuoli.id),
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                       'document'
                     ])} />
                 </div>

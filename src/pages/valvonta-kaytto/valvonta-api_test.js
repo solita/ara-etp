@@ -102,7 +102,7 @@ describe('Valvonta API test', () => {
 
     it('for käskypäätös / varsinainen päätös', () => {
       const toimenpide = Toimenpiteet.emptyToimenpide(8, [], {
-        osapuolis: [{ id: 1 }]
+        osapuolis: [{ id: 1, etunimi: 'Jarmo', sukunimi: 'Martikainen' }]
       });
 
       assert.deepEqual(
@@ -112,6 +112,7 @@ describe('Valvonta API test', () => {
         [
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'henkilo',
             'recipient-answered': false,
             document: true
           }
@@ -123,6 +124,7 @@ describe('Valvonta API test', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
@@ -137,6 +139,7 @@ describe('Valvonta API test', () => {
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'henkilo',
           'hallinto-oikeus-id': 1,
           'recipient-answered': false,
           document: true
@@ -148,6 +151,7 @@ describe('Valvonta API test', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'yritys',
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': true,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
@@ -161,6 +165,7 @@ describe('Valvonta API test', () => {
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'yritys',
           'hallinto-oikeus-id': 1,
           'recipient-answered': true,
           'answer-commentary-fi': 'answer-commentary-fi',
@@ -177,6 +182,7 @@ describe('Valvonta API test', () => {
         serializeOsapuoliSpecificData([
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'yritys',
             document: false,
             'recipient-answered': false
           }
@@ -184,6 +190,7 @@ describe('Valvonta API test', () => {
         [
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'yritys',
             document: false
           }
         ]
@@ -194,6 +201,7 @@ describe('Valvonta API test', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'yritys',
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
@@ -211,6 +219,7 @@ describe('Valvonta API test', () => {
         [
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'yritys',
             'hallinto-oikeus-id': 1,
             'recipient-answered': false,
             'answer-commentary-fi': 'answer-commentary-fi',
@@ -227,6 +236,7 @@ describe('Valvonta API test', () => {
       const osapuoliSpecificData = [
         {
           'osapuoli-id': 1,
+          'osapuoli-type': 'yritys',
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.None(),
@@ -244,6 +254,7 @@ describe('Valvonta API test', () => {
         [
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'yritys',
             'hallinto-oikeus-id': 1,
             'recipient-answered': false,
             'statement-fi': 'statement-fi',
@@ -259,6 +270,7 @@ describe('Valvonta API test', () => {
         serializePenaltyDecisionActualDecisionOsapuoliSpecificData([
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'henkilo',
             document: false,
             'recipient-answered': false,
             'hallinto-oikeus-id': Maybe.Some(1),
@@ -271,6 +283,7 @@ describe('Valvonta API test', () => {
         [
           {
             'osapuoli-id': 1,
+            'osapuoli-type': 'henkilo',
             document: false
           }
         ]
