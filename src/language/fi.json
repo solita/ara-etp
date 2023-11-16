@@ -1967,7 +1967,7 @@
         },
         "decision-order-notice-bailiff": {
           "title": "Tiedoksianto haastemiehelle",
-          "info": "Käskypäätös toimitetaan haastemiehen välityksellä. Vastaamo hoitaa tiedoksiannon haastemiehelle.",
+          "info": "Käskypäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
           "description": "Kommentti",
           "publish-button": "Luo toimenpide",
           "district-court": "Käräjäoikeus",
@@ -2022,6 +2022,14 @@
           "info": "Sakkopäätös postitetaan uudestaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin.",
           "description": "Kommentti",
           "publish-button": "Luo toimenpide"
+        },
+        "penalty-decision-notice-bailiff": {
+          "title": "Tiedoksianto haastemiehelle",
+          "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide",
+          "district-court": "Käräjäoikeus",
+          "bailiff-email": "Haastemiehen sähköpostiosoite"
         },
         "penalty-decision-waiting-for-deadline": {
           "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen",

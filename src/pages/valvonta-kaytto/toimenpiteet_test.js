@@ -38,8 +38,8 @@ describe('Toimenpiteet: ', () => {
       });
     });
 
-    it('is by default 30 day for types 11 and 19', () => {
-      [11, 19].forEach(typeId => {
+    it('is by default 30 day for types 11, 18 and 19', () => {
+      [11, 18, 19].forEach(typeId => {
         assert.isTrue(
           dfns.isSameDay(
             dfns.addDays(new Date(), 30),
@@ -163,6 +163,7 @@ describe('Sakkopäätös / tiedoksianto (toinen postitus)', () => {
     assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 17 }));
   });
 });
+
 describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
   it('id is mapped correctly to the type key', () => {
     assert.equal(
@@ -176,11 +177,22 @@ describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
   });
 });
 
+describe('Sakkopäätös / Tiedoksianto (Haastemies)', () => {
+  it('id is mapped correctly to the type key', () => {
+    assert.equal('penalty-decision-notice-bailiff', Toimenpiteet.typeKey(18));
+  });
+
+  it('is a type with a deadline', () => {
+    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 18 }));
+  });
+});
+
 describe('Sakkoluettelon lähetys menossa', () => {
   it('id is mapped correctly to the type key', () => {
     assert.equal('penalty-list-delivery-in-progress', Toimenpiteet.typeKey(21));
   });
 });
+
 describe('Given toimenpidetypes', () => {
   it('find the ids of manually deliverable types', () => {
     assert.deepEqual(
@@ -633,5 +645,30 @@ describe('toimenpideForOsapuoli', () => {
         'department-head-name': Maybe.None()
       }
     });
+  });
+});
+
+describe('isNoticeBailiff', () => {
+  it('returns true for typeId 11', () => {
+    const kaskypaatosNoticeBailiffToimenpide = Toimenpiteet.emptyToimenpide(
+      11,
+      [{}]
+    );
+    assert.isTrue(
+      Toimenpiteet.isNoticeBailiff(kaskypaatosNoticeBailiffToimenpide)
+    );
+  });
+  it('returns true for typeId 18', () => {
+    const sakkopaatosNoticeBailiffToimenpide = Toimenpiteet.emptyToimenpide(
+      18,
+      [{}]
+    );
+    assert.isTrue(
+      Toimenpiteet.isNoticeBailiff(sakkopaatosNoticeBailiffToimenpide)
+    );
+  });
+  it('returns false for some other typeId than 11 or 18', () => {
+    const someOtherToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
+    assert.isFalse(Toimenpiteet.isNoticeBailiff(someOtherToimenpide));
   });
 });
