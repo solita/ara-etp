@@ -39,6 +39,16 @@ export const url = {
       id,
       toimenpideId
     )}/yritykset/${yritysId}/document/${filename}`,
+  courtAttachmentHenkilo: (henkiloId, id, toimenpideId) =>
+    `${url.toimenpide(
+      id,
+      toimenpideId
+    )}/henkilot/${henkiloId}/attachment/hallinto-oikeus.pdf`,
+  courtAttachmentYritys: (yritysId, id, toimenpideId) =>
+    `${url.toimenpide(
+      id,
+      toimenpideId
+    )}/yritykset/${yritysId}/attachment/hallinto-oikeus.pdf`,
   liitteet: id => `${url.valvonta(id)}/liitteet`,
   notes: id => `${url.valvonta(id)}/notes`
 };

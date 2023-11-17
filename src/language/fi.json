@@ -1847,7 +1847,8 @@
           "toimitustapa-none": "Ei toimitustapaa",
           "fyi": "tiedoksi",
           "fyi-disabled": "ei tiedoteta",
-          "no-document": "osapuolelle ei luotu dokumenttia"
+          "no-document": "osapuolelle ei luotu dokumenttia",
+          "court-attachment": "hallinto-oikeuden liite"
         },
         "messages": {
           "not-found": "Käytönvalvonnan tietoja ei löydy",
