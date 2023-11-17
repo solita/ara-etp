@@ -60,7 +60,7 @@
 </script>
 
 {#if Osapuolet.isOmistaja(osapuoli)}
-  {#if Toimenpiteet.isDecisionOrderActualDecision(toimenpide)}
+  {#if Toimenpiteet.hasCourtAttachment(toimenpide)}
     (<Link
       text="pdf"
       target={'_blank'}

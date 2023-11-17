@@ -299,6 +299,10 @@ export const isPenaltyDecisionActualDecision = isType(
   R.path(['penalty-decision', 'actual-decision'], type)
 );
 
+export const hasCourtAttachment = R.anyPass([
+  isDecisionOrderActualDecision,
+  isPenaltyDecisionActualDecision
+]);
 /**
  * These toimenpide types have a osapuoli specific boolean field document
  */
