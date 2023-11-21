@@ -275,15 +275,17 @@ describe('Empty toimenpide', () => {
       'department-head-name'
     ]);
 
-    // osapuoli-specific-data contains a list of objects with osapuoli-id,
+    // osapuoli-specific-data contains a list of objects with osapuoli,
     // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
     // and the answer-commentary and statement fields
     assert.deepEqual(
       R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
       [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -293,8 +295,10 @@ describe('Empty toimenpide', () => {
           'statement-sv': Maybe.None()
         },
         {
-          'osapuoli-id': 7,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 7,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -302,6 +306,78 @@ describe('Empty toimenpide', () => {
           'answer-commentary-sv': Maybe.None(),
           'statement-fi': Maybe.None(),
           'statement-sv': Maybe.None()
+        }
+      ]
+    );
+  });
+
+  it('Contains correct keys for toimenpidetype 11', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(11, [{}], {
+      osapuolis: [{ id: 1, nimi: 'Emme hanki Energiatodistuksia Oyj' }]
+    });
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'osapuoli-specific-data'
+    ]);
+
+    // osapuoli-specific-data contains a list of objects with osapuoli,
+    // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
+    // and the answer-commentary and statement fields
+    assert.deepEqual(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
+      [
+        {
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
+          'karajaoikeus-id': Maybe.None(),
+          document: true,
+          'haastemies-email': Maybe.None()
+        }
+      ]
+    );
+  });
+
+  it('Contains correct keys for toimenpidetype 18', () => {
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(18, [{}], {
+      osapuolis: [{ id: 1, nimi: 'Emme hanki Energiatodistuksia Oyj' }]
+    });
+    assert.deepEqual(Object.keys(emptyToimenpide), [
+      'type-id',
+      'publish-time',
+      'deadline-date',
+      'template-id',
+      'description',
+      'type-specific-data'
+    ]);
+
+    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+      'osapuoli-specific-data'
+    ]);
+
+    // osapuoli-specific-data contains a list of objects with osapuoli,
+    // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
+    // and the answer-commentary and statement fields
+    assert.deepEqual(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
+      [
+        {
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
+          'karajaoikeus-id': Maybe.None(),
+          document: true,
+          'haastemies-email': Maybe.None()
         }
       ]
     );
@@ -462,15 +538,17 @@ describe('Empty toimenpide', () => {
       'department-head-name'
     ]);
 
-    // osapuoli-specific-data contains a list of objects with osapuoli-id,
+    // osapuoli-specific-data contains a list of objects with osapuoli,
     // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
     // and the answer-commentary and statement fields
     assert.deepEqual(
       R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
       [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -484,8 +562,10 @@ describe('Empty toimenpide', () => {
           )
         },
         {
-          'osapuoli-id': 7,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 7,
+            type: 'yritys'
+          },
           'hallinto-oikeus-id': Maybe.None(),
           document: true,
           'recipient-answered': false,
@@ -598,26 +678,34 @@ describe('documentExistsForOsapuoli', () => {
       R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
       [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
           document: false
         },
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': Maybe.Some(5),
           document: true
         },
 
         {
-          'osapuoli-id': 3,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 3,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': Maybe.Some(2),
           document: false
         },
         {
-          'osapuoli-id': 7,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 7,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': Maybe.Some(1),
           document: true
         }
@@ -665,8 +753,10 @@ describe('toimenpideForOsapuoli', () => {
         fine: Maybe.Some(800),
         'osapuoli-specific-data': [
           {
-            'osapuoli-id': 3,
-            'osapuoli-type': 'yritys',
+            osapuoli: {
+              id: 3,
+              type: 'yritys'
+            },
             'recipient-answered': false,
             'answer-commentary-fi': Maybe.None(),
             'answer-commentary-sv': Maybe.None(),
@@ -712,37 +802,25 @@ describe('isNoticeBailiff', () => {
 describe('isCorrectOsapuoli', () => {
   it('returns true when both osapuoli-id and osapuoli-type match', () => {
     assert.isTrue(
-      Toimenpiteet.findOsapuoli(
-        1,
-        'henkilo'
-      )({ 'osapuoli-id': 1, 'osapuoli-type': 'henkilo' })
+      Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 1, type: 'henkilo' })
     );
   });
 
   it('returns false when neither osapuoli-id or osapuoli-type match', () => {
     assert.isFalse(
-      Toimenpiteet.findOsapuoli(
-        1,
-        'henkilo'
-      )({ 'osapuoli-id': 2, 'osapuoli-type': 'yritys' })
+      Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 2, type: 'yritys' })
     );
   });
 
   it('returns false when only osapuoli-id matches', () => {
     assert.isFalse(
-      Toimenpiteet.findOsapuoli(
-        1,
-        'henkilo'
-      )({ 'osapuoli-id': 1, 'osapuoli-type': 'yritys' })
+      Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 1, type: 'yritys' })
     );
   });
 
   it('returns false when only osapuoli-type matches', () => {
     assert.isFalse(
-      Toimenpiteet.findOsapuoli(
-        1,
-        'henkilo'
-      )({ 'osapuoli-id': 2, 'osapuoli-type': 'henkilo' })
+      Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 2, type: 'henkilo' })
     );
   });
 });

@@ -111,8 +111,10 @@ describe('Valvonta API test', () => {
         ),
         [
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'henkilo',
+            osapuoli: {
+              id: 1,
+              type: 'henkilo'
+            },
             'recipient-answered': false,
             document: true
           }
@@ -123,8 +125,10 @@ describe('Valvonta API test', () => {
     it('for käskypäätös / varsinainen päätös when recipient-answered is false but fields depending on it have data in them', () => {
       const osapuoliSpecificData = [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
@@ -138,8 +142,10 @@ describe('Valvonta API test', () => {
       // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been removed
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'henkilo',
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
           'hallinto-oikeus-id': 1,
           'recipient-answered': false,
           document: true
@@ -150,8 +156,10 @@ describe('Valvonta API test', () => {
     it('for käskypäätös / varsinainen päätös when recipient-answered is true and fields depending on it have data in them', () => {
       const osapuoliSpecificData = [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': true,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
@@ -164,8 +172,10 @@ describe('Valvonta API test', () => {
 
       assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
           'hallinto-oikeus-id': 1,
           'recipient-answered': true,
           'answer-commentary-fi': 'answer-commentary-fi',
@@ -181,16 +191,20 @@ describe('Valvonta API test', () => {
       assert.deepEqual(
         serializeOsapuoliSpecificData([
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'yritys',
+            osapuoli: {
+              id: 1,
+              type: 'yritys'
+            },
             document: false,
             'recipient-answered': false
           }
         ]),
         [
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'yritys',
+            osapuoli: {
+              id: 1,
+              type: 'yritys'
+            },
             document: false
           }
         ]
@@ -200,8 +214,10 @@ describe('Valvonta API test', () => {
     it('for sakkopäätös / varsinainen päätös when recipient-answered is false, all fields are included', () => {
       const osapuoliSpecificData = [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.Some('answer-commentary-fi'),
@@ -218,8 +234,10 @@ describe('Valvonta API test', () => {
         ),
         [
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'yritys',
+            osapuoli: {
+              id: 1,
+              type: 'yritys'
+            },
             'hallinto-oikeus-id': 1,
             'recipient-answered': false,
             'answer-commentary-fi': 'answer-commentary-fi',
@@ -235,8 +253,10 @@ describe('Valvonta API test', () => {
     it('for sakkopäätös / varsinainen päätös when answer-commentary is None the fields are removed', () => {
       const osapuoliSpecificData = [
         {
-          'osapuoli-id': 1,
-          'osapuoli-type': 'yritys',
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
           'hallinto-oikeus-id': Maybe.Some(1),
           'recipient-answered': false,
           'answer-commentary-fi': Maybe.None(),
@@ -253,8 +273,10 @@ describe('Valvonta API test', () => {
         ),
         [
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'yritys',
+            osapuoli: {
+              id: 1,
+              type: 'yritys'
+            },
             'hallinto-oikeus-id': 1,
             'recipient-answered': false,
             'statement-fi': 'statement-fi',
@@ -269,8 +291,10 @@ describe('Valvonta API test', () => {
       assert.deepEqual(
         serializePenaltyDecisionActualDecisionOsapuoliSpecificData([
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'henkilo',
+            osapuoli: {
+              id: 1,
+              type: 'henkilo'
+            },
             document: false,
             'recipient-answered': false,
             'hallinto-oikeus-id': Maybe.Some(1),
@@ -282,8 +306,10 @@ describe('Valvonta API test', () => {
         ]),
         [
           {
-            'osapuoli-id': 1,
-            'osapuoli-type': 'henkilo',
+            osapuoli: {
+              id: 1,
+              type: 'henkilo'
+            },
             document: false
           }
         ]

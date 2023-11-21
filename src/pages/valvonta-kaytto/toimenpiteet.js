@@ -133,8 +133,10 @@ export const emptyToimenpide = (
           fine: Maybe.Some(fine),
           'osapuoli-specific-data': R.map(
             osapuoli => ({
-              'osapuoli-id': R.prop('id', osapuoli),
-              'osapuoli-type': Osapuolet.getOsapuoliType(osapuoli),
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'recipient-answered': false,
               'answer-commentary-fi': Maybe.None(),
               'answer-commentary-sv': Maybe.None(),
@@ -157,8 +159,10 @@ export const emptyToimenpide = (
         {
           'osapuoli-specific-data': R.map(
             osapuoli => ({
-              'osapuoli-id': R.prop('id', osapuoli),
-              'osapuoli-type': Osapuolet.getOsapuoliType(osapuoli),
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
               document: true
@@ -179,8 +183,10 @@ export const emptyToimenpide = (
               R.prop('sukunimi', osapuoli) || R.prop('nimi', osapuoli);
 
             return {
-              'osapuoli-id': R.prop('id', osapuoli),
-              'osapuoli-type': Osapuolet.getOsapuoliType(osapuoli),
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'recipient-answered': false,
               'answer-commentary-fi': Maybe.None(),
               'answer-commentary-sv': Maybe.None(),
@@ -206,8 +212,10 @@ export const emptyToimenpide = (
         {
           'osapuoli-specific-data': R.map(
             osapuoli => ({
-              'osapuoli-id': R.prop('id', osapuoli),
-              'osapuoli-type': Osapuolet.getOsapuoliType(osapuoli),
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
               document: true
@@ -343,10 +351,7 @@ export const findFineFromToimenpiteet = R.compose(
  * @param {('henkilo'|'yritys')} osapuoliType
  */
 export const findOsapuoli = (osapuoliId, osapuoliType) =>
-  R.allPass([
-    R.propEq('osapuoli-id', osapuoliId),
-    R.propEq('osapuoli-type', osapuoliType)
-  ]);
+  R.allPass([R.propEq('id', osapuoliId), R.propEq('type', osapuoliType)]);
 
 /**
  * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific-data field
@@ -363,7 +368,9 @@ export const documentExistsForOsapuoli = (
 ) => {
   return R.compose(
     R.prop('document'),
-    R.find(findOsapuoli(osapuoliId, osapuoliType)),
+    R.find(
+      R.compose(findOsapuoli(osapuoliId, osapuoliType), R.prop('osapuoli'))
+    ),
     R.path(['type-specific-data', 'osapuoli-specific-data'])
   )(toimenpide);
 };
@@ -382,7 +389,7 @@ export const osapuoliSpecificDataIndexForOsapuoli = (
   osapuoliType
 ) =>
   R.findIndex(
-    findOsapuoli(osapuoliId, osapuoliType),
+    R.compose(findOsapuoli(osapuoliId, osapuoliType), R.prop('osapuoli')),
     R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
   );
 
@@ -397,6 +404,8 @@ export const osapuoliSpecificDataIndexForOsapuoli = (
 export const toimenpideForOsapuoli = (toimenpide, osapuoliId, osapuoliType) =>
   R.over(
     R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
-    R.filter(findOsapuoli(osapuoliId, osapuoliType)),
+    R.filter(
+      R.compose(findOsapuoli(osapuoliId, osapuoliType), R.prop('osapuoli'))
+    ),
     toimenpide
   );
