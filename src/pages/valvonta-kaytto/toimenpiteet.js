@@ -3,6 +3,7 @@ import * as Deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as dfns from 'date-fns';
 import * as Either from '@Utility/either-utils';
+import * as Osapuolet from '@Pages/valvonta-kaytto/osapuolet';
 
 export const type = {
   case: 0,
@@ -116,8 +117,6 @@ export const emptyToimenpide = (
     description: Maybe.None()
   };
 
-  const osapuoliIds = R.map(R.prop('id'), osapuolis);
-
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
     case R.path(['penalty-decision', 'hearing-letter'], type):
@@ -133,8 +132,11 @@ export const emptyToimenpide = (
         {
           fine: Maybe.Some(fine),
           'osapuoli-specific-data': R.map(
-            osapuoliId => ({
-              'osapuoli-id': osapuoliId,
+            osapuoli => ({
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'recipient-answered': false,
               'answer-commentary-fi': Maybe.None(),
               'answer-commentary-sv': Maybe.None(),
@@ -143,7 +145,7 @@ export const emptyToimenpide = (
               'hallinto-oikeus-id': Maybe.None(),
               document: true
             }),
-            osapuoliIds
+            osapuolis
           ),
           'department-head-title-fi': Maybe.fromNull(departmentHeadTitleFi),
           'department-head-title-sv': Maybe.fromNull(departmentHeadTitleSv),
@@ -156,13 +158,16 @@ export const emptyToimenpide = (
         'type-specific-data',
         {
           'osapuoli-specific-data': R.map(
-            osapuoliId => ({
-              'osapuoli-id': osapuoliId,
+            osapuoli => ({
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
               document: true
             }),
-            osapuoliIds
+            osapuolis
           )
         },
         toimenpide
@@ -178,7 +183,10 @@ export const emptyToimenpide = (
               R.prop('sukunimi', osapuoli) || R.prop('nimi', osapuoli);
 
             return {
-              'osapuoli-id': R.prop('id', osapuoli),
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'recipient-answered': false,
               'answer-commentary-fi': Maybe.None(),
               'answer-commentary-sv': Maybe.None(),
@@ -203,13 +211,16 @@ export const emptyToimenpide = (
         'type-specific-data',
         {
           'osapuoli-specific-data': R.map(
-            osapuoliId => ({
-              'osapuoli-id': osapuoliId,
+            osapuoli => ({
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
               document: true
             }),
-            osapuoliIds
+            osapuolis
           )
         },
         toimenpide
@@ -336,23 +347,49 @@ export const findFineFromToimenpiteet = R.compose(
 );
 
 /**
+ * @param osapuoliId
+ * @param {('henkilo'|'yritys')} osapuoliType
+ */
+export const findOsapuoli = (osapuoliId, osapuoliType) =>
+  R.allPass([R.propEq('id', osapuoliId), R.propEq('type', osapuoliType)]);
+
+/**
  * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific-data field
  * document set to true for the given osapuoliId
  * @param toimenpide
  * @param osapuoliId
+ * @param {('henkilo'|'yritys')} osapuoliType
  * @return {boolean}
  */
-export const documentExistsForOsapuoli = (toimenpide, osapuoliId) => {
+export const documentExistsForOsapuoli = (
+  toimenpide,
+  osapuoliId,
+  osapuoliType
+) => {
   return R.compose(
     R.prop('document'),
-    R.find(R.propEq('osapuoli-id', osapuoliId)),
+    R.find(
+      R.compose(findOsapuoli(osapuoliId, osapuoliType), R.prop('osapuoli'))
+    ),
     R.path(['type-specific-data', 'osapuoli-specific-data'])
   )(toimenpide);
 };
 
-export const osapuoliSpecificDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
+/**
+ * Returns the index where the data for the osapuoli with the given osapuoliId
+ * and type has their data in the osapuoli-specific-data
+ * @param toimenpide
+ * @param osapuoliId
+ * @param {('henkilo'|'yritys')} osapuoliType
+ * @return {number}
+ */
+export const osapuoliSpecificDataIndexForOsapuoli = (
+  toimenpide,
+  osapuoliId,
+  osapuoliType
+) =>
   R.findIndex(
-    R.propEq('osapuoli-id', osapuoliId),
+    R.compose(findOsapuoli(osapuoliId, osapuoliType), R.prop('osapuoli')),
     R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
   );
 
@@ -361,11 +398,14 @@ export const osapuoliSpecificDataIndexForOsapuoli = (toimenpide, osapuoliId) =>
  * given osapuoli
  * @param {Object} toimenpide
  * @param {number} osapuoliId
+ * @param {('henkilo'|'yritys')} osapuoliType
  * @returns {Object} toimenpide with only the osapuoli-specific-data for the given osapuoli
  */
-export const toimenpideForOsapuoli = (toimenpide, osapuoliId) =>
+export const toimenpideForOsapuoli = (toimenpide, osapuoliId, osapuoliType) =>
   R.over(
     R.lensPath(['type-specific-data', 'osapuoli-specific-data']),
-    R.filter(R.propEq('osapuoli-id', osapuoliId)),
+    R.filter(
+      R.compose(findOsapuoli(osapuoliId, osapuoliType), R.prop('osapuoli'))
+    ),
     toimenpide
   );

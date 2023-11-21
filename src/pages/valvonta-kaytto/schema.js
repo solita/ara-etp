@@ -70,7 +70,7 @@ export const toimenpideSave = {
     fine: Validation.MaybeInterval(0, Number.MAX_VALUE),
     'osapuoli-specific-data': [
       {
-        'osapuoli-id': [],
+        osapuoli: { id: [], type: [] },
         'hallinto-oikeus-id': Validation.MaybeInterval(0, 5),
         'karajaoikeus-id': Validation.MaybeInterval(0, 19),
         'haastemies-email': [

@@ -13,6 +13,7 @@
   import Osapuoli from './toimenpide-osapuoli.svelte';
   import Deadline from '@Pages/valvonta/deadline';
   import ShowMore from '@Component/show-more/show-more';
+  import * as Osapuolet from '@Pages/valvonta-kaytto/osapuolet';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.valvonta.toimenpide';
@@ -54,7 +55,7 @@
 
   {#if !Toimenpiteet.isDraft(toimenpide) && Toimenpiteet.hasTemplate(toimenpide)}
     {#each toimenpide.henkilot as henkilo}
-      {#if Toimenpiteet.hasOptionalDocument(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, henkilo.id)}
+      {#if Toimenpiteet.hasOptionalDocument(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, henkilo.id, Osapuolet.getOsapuoliType(henkilo))}
         <div>
           {henkilo.etunimi}
           {henkilo.sukunimi},
@@ -75,7 +76,7 @@
       {/if}
     {/each}
     {#each toimenpide.yritykset as yritys}
-      {#if Toimenpiteet.hasOptionalDocument(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, yritys.id)}
+      {#if Toimenpiteet.hasOptionalDocument(toimenpide) && !Toimenpiteet.documentExistsForOsapuoli(toimenpide, yritys.id, Osapuolet.getOsapuoliType(yritys))}
         <div>
           {yritys.nimi}
           {Maybe.orSome('', yritys.ytunnus)},
