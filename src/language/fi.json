@@ -1999,7 +1999,8 @@
           "hearing-letter-answered": {
             "label": "Omistaja vastasi kuulemiskirjeeseen",
             "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
-            "false": "Asianosainen ei vastannut kuulemiskirjeeseen"
+            "false": "Asianosainen ei vastannut kuulemiskirjeeseen",
+            "warning": "Tarkista ja muuta teksti kohdassa kannanotto vastineeseen"
           },
           "answer-commentary-fi": "Vastineen kommentit, suomi",
           "answer-commentary-sv": "Vastineen kommentit, ruotsi",

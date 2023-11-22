@@ -163,7 +163,7 @@
               items={[true, false]} />
           </div>
 
-          {#if R.path(['type-specific-data', 'osapuoli-specific-data', osapuoliSpecificDataIndexForOsapuoli(osapuoli), 'recipient-answered'], toimenpide)}
+          {#if Toimenpiteet.didRecipientAnswer(toimenpide, osapuoli)}
             <div class="w-full py-4">
               <Textarea
                 id={'toimenpide.answer-commentary-fi'}

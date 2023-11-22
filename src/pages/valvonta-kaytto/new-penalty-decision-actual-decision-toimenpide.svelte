@@ -18,6 +18,7 @@
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import Spinner from '@Component/Spinner/Spinner';
   import Error from '@Component/Error/Error';
+  import { didRecipientAnswer } from '@Pages/valvonta-kaytto/toimenpiteet';
 
   export let id;
   export let toimenpide;
@@ -76,6 +77,13 @@
     );
   };
 </script>
+
+<style type="text/postcss">
+  .warning-label {
+    @apply font-normal z-10;
+    font-size: smaller;
+  }
+</style>
 
 <div>
   <div class="w-full py-4">
@@ -162,6 +170,13 @@
               required
               items={[true, false]} />
           </div>
+
+          {#if Toimenpiteet.didRecipientAnswer(toimenpide, osapuoli)}
+            <div class="warning-label">
+              <span class="font-icon text-warning">warning</span>
+              {text(toimenpide, 'hearing-letter-answered.warning')}
+            </div>
+          {/if}
 
           <div class="w-full py-4">
             <Textarea

@@ -1983,7 +1983,8 @@
           "hearing-letter-answered": {
             "label": "Omistaja vastasi kuulemiskirjeeseen (sv)",
             "true": "Kyllä (sv)",
-            "false": "Ei (sv)"
+            "false": "Ei (sv)",
+            "warning": "Tarkista ja muuta teksti kohdassa kannanotto vastineeseen (sv)"
           },
           "answer-commentary-fi": "Vastineen kommentit, suomi (sv)",
           "answer-commentary-sv": "Vastineen kommentit, ruotsi (sv)",
