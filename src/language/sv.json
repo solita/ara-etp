@@ -2024,7 +2024,7 @@
         },
         "penalty-list-delivery-in-progress": {
           "title": "Sakkoluettelon lähetys menossa (sv)",
-          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.org (at) om.fi.sec (sv)",
+          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.ork (at) om.fi.sec (sv)",
           "description": "Kommentti (sv)",
           "publish-button": "Kirjaa kommentti (sv)"
         },
