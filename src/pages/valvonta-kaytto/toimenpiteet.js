@@ -409,3 +409,18 @@ export const toimenpideForOsapuoli = (toimenpide, osapuoliId, osapuoliType) =>
     ),
     toimenpide
   );
+
+export const didRecipientAnswer = (toimenpide, osapuoli) =>
+  R.path(
+    [
+      'type-specific-data',
+      'osapuoli-specific-data',
+      osapuoliSpecificDataIndexForOsapuoli(
+        toimenpide,
+        osapuoli.id,
+        Osapuolet.getOsapuoliType(osapuoli)
+      ),
+      'recipient-answered'
+    ],
+    toimenpide
+  );

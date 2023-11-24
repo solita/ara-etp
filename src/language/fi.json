@@ -1999,7 +1999,8 @@
           "hearing-letter-answered": {
             "label": "Omistaja vastasi kuulemiskirjeeseen",
             "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
-            "false": "Asianosainen ei vastannut kuulemiskirjeeseen"
+            "false": "Asianosainen ei vastannut kuulemiskirjeeseen",
+            "warning": "Tarkista ja muuta teksti kohdassa kannanotto vastineeseen"
           },
           "answer-commentary-fi": "Vastineen kommentit, suomi",
           "answer-commentary-sv": "Vastineen kommentit, ruotsi",
@@ -2040,7 +2041,7 @@
         },
         "penalty-list-delivery-in-progress": {
           "title": "Sakkoluettelon lähetys menossa",
-          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.org (at) om.fi.sec",
+          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.ork (at) om.fi.sec",
           "description": "Kommentti",
           "publish-button": "Kirjaa kommentti"
         },

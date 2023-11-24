@@ -131,15 +131,15 @@ export const toimenpidePublish = (templates, toimenpide) =>
             );
             return R.compose(
               addRequiredValidatorToFieldsWhen(
-                Toimenpiteet.isDecisionOrderActualDecision(toimenpide) &&
-                  recipientAnswered,
-                ['answer-commentary-sv', 'answer-commentary-fi']
-              ),
-              addRequiredValidatorToFieldsWhen(
                 (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
                   Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
                   recipientAnswered,
-                ['statement-sv', 'statement-fi']
+                [
+                  'answer-commentary-sv',
+                  'answer-commentary-fi',
+                  'statement-sv',
+                  'statement-fi'
+                ]
               ),
               addRequiredValidatorToFieldsWhen(
                 (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
