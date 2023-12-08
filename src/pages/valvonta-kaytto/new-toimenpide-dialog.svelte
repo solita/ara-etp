@@ -23,7 +23,8 @@
   import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
-  import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
+  import OsapuoletTable from './toimenpide-osapuolet-table';
+  import OsapuoletTableWithDocumentSelection from './osapuolet-table-with-document-selection';
   import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
 
   import * as Validation from '@Utility/validation';
@@ -272,9 +273,19 @@
           {disabled}
           {roolit}
           {template}
-          {text}
           {schema}
           {karajaoikeudet} />
+      {:else if Toimenpiteet.isPenaltyDecisionHearingLetter(toimenpide)}
+        <OsapuoletTableWithDocumentSelection
+          {id}
+          bind:toimenpide
+          {henkilot}
+          {yritykset}
+          {preview}
+          {previewPending}
+          {disabled}
+          {roolit}
+          {template} />
       {:else if Toimenpiteet.showNormalOsapuoliTable(toimenpide)}
         <OsapuoletTable
           {id}

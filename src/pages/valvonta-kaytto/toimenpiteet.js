@@ -119,7 +119,6 @@ export const emptyToimenpide = (
 
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
-    case R.path(['penalty-decision', 'hearing-letter'], type):
       return R.assocPath(
         ['type-specific-data', 'fine'],
         Maybe.Some(fine),
@@ -165,6 +164,25 @@ export const emptyToimenpide = (
               },
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
+              document: true
+            }),
+            osapuolis
+          )
+        },
+        toimenpide
+      );
+
+    case R.path(['penalty-decision', 'hearing-letter'], type):
+      return R.assoc(
+        'type-specific-data',
+        {
+          fine: Maybe.Some(fine),
+          'osapuoli-specific-data': R.map(
+            osapuoli => ({
+              osapuoli: {
+                id: R.prop('id', osapuoli),
+                type: Osapuolet.getOsapuoliType(osapuoli)
+              },
               document: true
             }),
             osapuolis
@@ -320,12 +338,14 @@ export const hasCourtAttachment = R.anyPass([
 export const hasOptionalDocument = R.anyPass([
   isDecisionOrderActualDecision,
   isNoticeBailiff,
+  isPenaltyDecisionHearingLetter,
   isPenaltyDecisionActualDecision
 ]);
 
 export const showNormalOsapuoliTable = R.complement(
   R.anyPass([
     isDecisionOrderActualDecision,
+    isPenaltyDecisionHearingLetter,
     isPenaltyDecisionActualDecision,
     isNoticeBailiff
   ])

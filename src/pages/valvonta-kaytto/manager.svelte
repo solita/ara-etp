@@ -76,7 +76,8 @@
         fine: Toimenpiteet.findFineFromToimenpiteet(
           Toimenpiteet.isDecisionOrderActualDecision,
           toimenpiteet
-        )
+        ),
+        osapuolis: R.filter(Osapuolet.isOmistaja, R.concat(henkilot, yritykset))
       };
     } else if (
       Toimenpiteet.isPenaltyDecisionActualDecision({
