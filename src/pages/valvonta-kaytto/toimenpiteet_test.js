@@ -384,7 +384,15 @@ describe('Empty toimenpide', () => {
   });
 
   it('Contains correct keys for toimenpidetype 14 which includes fine under type-specific-data', () => {
-    const emptyToimenpide = Toimenpiteet.emptyToimenpide(14, [{}]);
+    const emptyToimenpide = Toimenpiteet.emptyToimenpide(14, [{}], {
+      osapuolis: [
+        {
+          id: 6,
+          etunimi: 'Janina',
+          sukunimi: 'Mäkiaho'
+        }
+      ]
+    });
     assert.deepEqual(Object.keys(emptyToimenpide), [
       'type-id',
       'publish-time',
@@ -395,8 +403,22 @@ describe('Empty toimenpide', () => {
     ]);
 
     assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
-      'fine'
+      'fine',
+      'osapuoli-specific-data'
     ]);
+
+    assert.deepEqual(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
+      [
+        {
+          osapuoli: {
+            id: 6,
+            type: 'henkilo'
+          },
+          document: true
+        }
+      ]
+    );
   });
 
   it('with a fine is recognized as having a fine', () => {
