@@ -106,6 +106,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       title: 'Ara - Energiatodistuspalvelu',
+      template: './src/template.html',
       favicon: './assets/favicon.png'
     }),
     new CopyWebpackPlugin({
