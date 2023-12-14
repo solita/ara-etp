@@ -270,6 +270,12 @@ export const VerkkolaskuosoiteValidator = {
 
 /**
  * @sig Array [Validator] -> a -> Either [Validator,a]
+ *
+ * This function checks a single value from the data
+ * model against an array of validators.
+ *
+ * On success returns Either.Right(value),
+ * on failure returns Either.Left(validator).
  */
 const validate = (validators, value) =>
   Maybe.fromUndefined(
@@ -280,6 +286,11 @@ const validate = (validators, value) =>
 
 /**
  * @sig Array [Validator] -> a -> Either [(Translate -> string),a]
+ *
+ * This function checks a single value from the data model
+ * against an array of validators. The value is pasesd through
+ * as-is from `validate` if the validations succeed, but on failure
+ * the Left validator is mapped to a Left label function.
  */
 export const validateModelValue = R.curry((validators, value) =>
   Either.fromValueOrEither(value).flatMap(modelValue =>
@@ -296,13 +307,27 @@ const expandSchemaToObjectSize = (schemaObject, object) =>
     : schemaObject;
 
 /**
+ * @sig Object -> boolean
+ *
+ * deep.map needs this kind of a predicate function to decide what should be considered
+ * a leaf object that is mapped  instead of walked through
+ */
+const isValidatorArray = R.allPass([
+  R.is(Array),
+  R.all(R.propIs(Function, 'predicate'))
+]);
+
+/**
  * @sig Object -> Object -> Object
+ *
+ * This function is used to validate a data model object against
+ * a schema object.
  */
 export const validateModelObject = R.curry((schemaObject, object) =>
   R.evolve(
     deep.map(
-      R.allPass([R.is(Array), R.all(R.propIs(Function, 'predicate'))]),
-      v => validateModelValue(v),
+      isValidatorArray,
+      validators => validateModelValue(validators),
       expandSchemaToObjectSize(schemaObject, object)
     ),
     object
