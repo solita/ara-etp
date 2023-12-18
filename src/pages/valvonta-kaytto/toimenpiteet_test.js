@@ -375,6 +375,7 @@ describe('Empty toimenpide', () => {
             id: 1,
             type: 'yritys'
           },
+          'hallinto-oikeus-id': Maybe.None(),
           'karajaoikeus-id': Maybe.None(),
           document: true,
           'haastemies-email': Maybe.None()

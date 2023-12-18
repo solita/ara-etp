@@ -234,6 +234,7 @@ export const emptyToimenpide = (
                 id: R.prop('id', osapuoli),
                 type: Osapuolet.getOsapuoliType(osapuoli)
               },
+              'hallinto-oikeus-id': Maybe.None(),
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
               document: true
@@ -311,9 +312,16 @@ export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
 
+export const isDecisionOrderNoticeBailiff = isType(
+  R.path(['decision-order', 'notice-bailiff'], type)
+);
+export const isPenaltyDecisionNoticeBailiff = isType(
+  R.path(['penalty-decision', 'notice-bailiff'], type)
+);
+
 export const isNoticeBailiff = R.anyPass([
-  isType(R.path(['penalty-decision', 'notice-bailiff'], type)),
-  isType(R.path(['decision-order', 'notice-bailiff'], type))
+  isPenaltyDecisionNoticeBailiff,
+  isDecisionOrderNoticeBailiff
 ]);
 
 export const isDecisionOrderHearingLetter = isType(
@@ -332,6 +340,7 @@ export const hasCourtAttachment = R.anyPass([
   isDecisionOrderActualDecision,
   isPenaltyDecisionActualDecision
 ]);
+
 /**
  * These toimenpide types have a osapuoli specific boolean field document
  */
