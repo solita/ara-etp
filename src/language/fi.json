@@ -2028,6 +2028,7 @@
         "penalty-decision-notice-bailiff": {
           "title": "Tiedoksianto haastemiehelle",
           "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
+          "court": "Hallinto-oikeus",
           "description": "Kommentti",
           "publish-button": "Luo toimenpide",
           "district-court": "Käräjäoikeus",

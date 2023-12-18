@@ -80,7 +80,7 @@
           <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
           <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
-          <th class="etp-table--th"> Hallinto-oikeus</th>
+          <th class="etp-table--th"> {i18n(i18nRoot + '.court')} </th>
           <th class="etp-table--th">
             {i18n(i18nRoot + '.decision-order-notice-bailiff.district-court')}
           </th>
