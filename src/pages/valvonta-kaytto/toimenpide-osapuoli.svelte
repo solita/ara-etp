@@ -60,7 +60,7 @@
 </script>
 
 {#if Osapuolet.isOmistaja(osapuoli)}
-  {#if Toimenpiteet.hasCourtAttachment(toimenpide)}
+  {#if Toimenpiteet.hasCourtAttachment(toimenpide) && Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, osapuoli)}
     (<Link
       text="pdf"
       target={'_blank'}

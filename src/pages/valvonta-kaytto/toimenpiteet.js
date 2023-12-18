@@ -338,7 +338,8 @@ export const isPenaltyDecisionActualDecision = isType(
 
 export const hasCourtAttachment = R.anyPass([
   isDecisionOrderActualDecision,
-  isPenaltyDecisionActualDecision
+  isPenaltyDecisionActualDecision,
+  isPenaltyDecisionNoticeBailiff
 ]);
 
 /**
@@ -452,4 +453,30 @@ export const didRecipientAnswer = (toimenpide, osapuoli) =>
       'recipient-answered'
     ],
     toimenpide
+  );
+
+/**
+ * To be used with toimenpide objects retrieved from the backend which, at least for the time being,
+ * have not been deserialized to contain Maybes in toimenpide-specific-data
+ *
+ * Check whether given osapuoli has hallinto-oikeus-id in the toimenpide object
+ * @param toimenpide
+ * @param osapuoli
+ * @return {boolean}
+ */
+export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
+  !R.isNil(
+    R.path(
+      [
+        'type-specific-data',
+        'osapuoli-specific-data',
+        osapuoliSpecificDataIndexForOsapuoli(
+          toimenpide,
+          osapuoli.id,
+          Osapuolet.getOsapuoliType(osapuoli)
+        ),
+        'hallinto-oikeus-id'
+      ],
+      toimenpide
+    )
   );
