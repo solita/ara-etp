@@ -27,7 +27,9 @@
   export let previewPending;
   export let disabled;
   export let schema;
+  export let hallintoOikeudet = [];
   export let karajaoikeudet = [];
+  export let showHallintoOikeudetSelection = false;
 
   const types = {
     yritys: {
@@ -79,6 +81,9 @@
           <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
           <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
+          {#if showHallintoOikeudetSelection}
+            <th class="etp-table--th"> {i18n(i18nRoot + '.court')} </th>
+          {/if}
           <th class="etp-table--th">
             {i18n(i18nRoot + '.decision-order-notice-bailiff.district-court')}
           </th>
@@ -105,6 +110,45 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
+            {#if showHallintoOikeudetSelection}
+              <td class="etp-table--td court-container">
+                {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
+                  <Select
+                    bind:model={toimenpide}
+                    lens={R.lensPath([
+                      'type-specific-data',
+                      'osapuoli-specific-data',
+                      osapuoliSpecificDataIndexForOsapuoli(osapuoli),
+                      'hallinto-oikeus-id'
+                    ])}
+                    modelToItem={Maybe.fold(
+                      Maybe.None(),
+                      Maybe.findById(R.__, hallintoOikeudet)
+                    )}
+                    itemToModel={Maybe.fold(Maybe.None(), it =>
+                      Maybe.Some(it.id)
+                    )}
+                    format={Maybe.fold(
+                      i18n('validation.no-selection'),
+                      Locales.label($locale)
+                    )}
+                    validators={R.path(
+                      [
+                        'type-specific-data',
+                        'osapuoli-specific-data',
+                        osapuoliSpecificDataIndexForOsapuoli(osapuoli),
+                        'hallinto-oikeus-id'
+                      ],
+                      schema
+                    )}
+                    items={Selects.addNoSelection(
+                      R.filter(isValid, hallintoOikeudet)
+                    )} />
+                {:else}
+                  {i18n('valvonta.kaytto.toimenpide.no-delivery')}
+                {/if}
+              </td>
+            {/if}
             <td class="etp-table--td court-container">
               {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
                 <Select

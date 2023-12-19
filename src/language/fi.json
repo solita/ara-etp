@@ -1867,6 +1867,7 @@
         "vastaanottajat": "Vastaanottajat",
         "nimi": "Nimi",
         "rooli": "Rooli",
+        "court": "Hallinto-oikeus",
         "fyi": "Omistajien dokumentit tiedoksi",
         "fyi-disabled": "Ei lähetetä dokumentteja tiedoksi",
         "delete": "Poista osapuoli vastaanottajista",
@@ -2028,7 +2029,6 @@
         "penalty-decision-notice-bailiff": {
           "title": "Tiedoksianto haastemiehelle",
           "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
-          "court": "Hallinto-oikeus",
           "description": "Kommentti",
           "publish-button": "Luo toimenpide",
           "district-court": "Käräjäoikeus",

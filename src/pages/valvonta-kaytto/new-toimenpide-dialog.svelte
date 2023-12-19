@@ -26,7 +26,6 @@
   import OsapuoletTable from './toimenpide-osapuolet-table';
   import OsapuoletTableWithDocumentSelection from './osapuolet-table-with-document-selection';
   import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
-  import PenaltyDecisionNoticeBailiffOsapuoletTable from './penalty-decision-notice-bailiff-osapuolet-table';
 
   import * as Validation from '@Utility/validation';
 
@@ -263,7 +262,7 @@
 
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
-      {#if Toimenpiteet.isDecisionOrderNoticeBailiff(toimenpide)}
+      {#if Toimenpiteet.isNoticeBailiff(toimenpide)}
         <NoticeBailiffOsapuoletTable
           {id}
           bind:toimenpide
@@ -275,21 +274,11 @@
           {roolit}
           {template}
           {schema}
-          {karajaoikeudet} />
-      {:else if Toimenpiteet.isPenaltyDecisionNoticeBailiff(toimenpide)}
-        <PenaltyDecisionNoticeBailiffOsapuoletTable
-          {id}
-          bind:toimenpide
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {template}
-          {schema}
+          {karajaoikeudet}
           {hallintoOikeudet}
-          {karajaoikeudet} />
+          showHallintoOikeudetSelection={Toimenpiteet.isPenaltyDecisionNoticeBailiff(
+            toimenpide
+          )} />
       {:else if Toimenpiteet.isPenaltyDecisionHearingLetter(toimenpide)}
         <OsapuoletTableWithDocumentSelection
           {id}
