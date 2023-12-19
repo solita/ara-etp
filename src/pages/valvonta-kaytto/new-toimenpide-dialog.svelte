@@ -23,7 +23,7 @@
   import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
-  import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
+  import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
 
   import * as Validation from '@Utility/validation';
 
@@ -261,7 +261,7 @@
   {#if !R.isEmpty(templates)}
     <div class="mt-2">
       {#if Toimenpiteet.isNoticeBailiff(toimenpide)}
-        <NoticeBailiffOsapuoletTable
+        <OsapuoletTable
           {id}
           bind:toimenpide
           {henkilot}
@@ -282,7 +282,7 @@
           showKarajaOikeudetSelection
           showCreateDocument />
       {:else if Toimenpiteet.isPenaltyDecisionHearingLetter(toimenpide)}
-        <NoticeBailiffOsapuoletTable
+        <OsapuoletTable
           {id}
           bind:toimenpide
           {henkilot}
@@ -301,7 +301,7 @@
           showKarajaOikeudetSelection={false}
           showCreateDocument />
       {:else if Toimenpiteet.showNormalOsapuoliTable(toimenpide)}
-        <NoticeBailiffOsapuoletTable
+        <OsapuoletTable
           {id}
           bind:toimenpide
           {henkilot}
