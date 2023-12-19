@@ -298,8 +298,6 @@
                     <Spinner smaller={true} />
                   </div>
                 {:else}
-                  <!-- TODO: Tämä pitää saada näkymään myös aina? -->
-
                   <div
                     class:text-primary={!disabled}
                     class:text-disabled={disabled}
