@@ -29,7 +29,9 @@
   export let schema;
   export let hallintoOikeudet = [];
   export let karajaoikeudet = [];
+  export let showDeliveryMethod = false;
   export let showHallintoOikeudetSelection = false;
+  export let showKarajaOikeudetSelection = false;
 
   const types = {
     yritys: {
@@ -81,16 +83,26 @@
           <th class="etp-table--th"> {i18n(i18nRoot + '.nimi')} </th>
 
           <th class="etp-table--th"> {i18n(i18nRoot + '.rooli')} </th>
+
+          {#if showDeliveryMethod}
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.toimitustapa')}
+            </th>
+          {/if}
+
           {#if showHallintoOikeudetSelection}
             <th class="etp-table--th"> {i18n(i18nRoot + '.court')} </th>
           {/if}
-          <th class="etp-table--th">
-            {i18n(i18nRoot + '.decision-order-notice-bailiff.district-court')}
-          </th>
 
-          <th class="etp-table--th">
-            {i18n(i18nRoot + '.decision-order-notice-bailiff.bailiff-email')}
-          </th>
+          {#if showKarajaOikeudetSelection}
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.decision-order-notice-bailiff.district-court')}
+            </th>
+
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.decision-order-notice-bailiff.bailiff-email')}
+            </th>
+          {/if}
 
           <th class="etp-table--th">
             {i18n(i18nRoot + '.esikatselu')}
@@ -110,6 +122,12 @@
                 - {Maybe.orSome('', osapuoli['rooli-description'])}
               {/if}
             </td>
+
+            {#if showDeliveryMethod}
+              <td class="etp-table--td">
+                {i18n('valvonta.kaytto.toimenpide.manually-sent')}
+              </td>
+            {/if}
             {#if showHallintoOikeudetSelection}
               <td class="etp-table--td court-container">
                 {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
@@ -149,75 +167,79 @@
                 {/if}
               </td>
             {/if}
-            <td class="etp-table--td court-container">
-              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
-                <Select
-                  bind:model={toimenpide}
-                  lens={R.lensPath([
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli),
-                    'karajaoikeus-id'
-                  ])}
-                  modelToItem={Maybe.fold(
-                    Maybe.None(),
-                    Maybe.findById(R.__, karajaoikeudet)
-                  )}
-                  itemToModel={Maybe.fold(Maybe.None(), it =>
-                    Maybe.Some(it.id)
-                  )}
-                  format={Maybe.fold(
-                    i18n('validation.no-selection'),
-                    Locales.label($locale)
-                  )}
-                  validators={R.path(
-                    [
+
+            {#if showKarajaOikeudetSelection}
+              <td class="etp-table--td court-container">
+                {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
+                  <Select
+                    bind:model={toimenpide}
+                    lens={R.lensPath([
                       'type-specific-data',
                       'osapuoli-specific-data',
                       osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                       'karajaoikeus-id'
-                    ],
-                    schema
-                  )}
-                  items={Selects.addNoSelection(
-                    R.filter(isValid, karajaoikeudet)
-                  )} />
-              {:else}
-                {i18n('valvonta.kaytto.toimenpide.no-delivery')}
-              {/if}
-            </td>
-            <td class="etp-table--td">
-              {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
-                <Input
-                  bind:model={toimenpide}
-                  required={true}
-                  type="email"
-                  lens={R.lensPath([
-                    'type-specific-data',
-                    'osapuoli-specific-data',
-                    osapuoliSpecificDataIndexForOsapuoli(osapuoli),
-                    'haastemies-email'
-                  ])}
-                  validators={R.path(
-                    [
+                    ])}
+                    modelToItem={Maybe.fold(
+                      Maybe.None(),
+                      Maybe.findById(R.__, karajaoikeudet)
+                    )}
+                    itemToModel={Maybe.fold(Maybe.None(), it =>
+                      Maybe.Some(it.id)
+                    )}
+                    format={Maybe.fold(
+                      i18n('validation.no-selection'),
+                      Locales.label($locale)
+                    )}
+                    validators={R.path(
+                      [
+                        'type-specific-data',
+                        'osapuoli-specific-data',
+                        osapuoliSpecificDataIndexForOsapuoli(osapuoli),
+                        'karajaoikeus-id'
+                      ],
+                      schema
+                    )}
+                    items={Selects.addNoSelection(
+                      R.filter(isValid, karajaoikeudet)
+                    )} />
+                {:else}
+                  {i18n('valvonta.kaytto.toimenpide.no-delivery')}
+                {/if}
+              </td>
+              <td class="etp-table--td">
+                {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
+                  <Input
+                    bind:model={toimenpide}
+                    required={true}
+                    type="email"
+                    lens={R.lensPath([
                       'type-specific-data',
                       'osapuoli-specific-data',
                       osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                       'haastemies-email'
-                    ],
-                    schema
-                  )}
-                  format={Maybe.orSome('')}
-                  parse={R.ifElse(
-                    R.isEmpty,
-                    R.always(Maybe.None()),
-                    Maybe.Some
-                  )}
-                  {i18n} />
-              {:else}
-                {i18n('valvonta.kaytto.toimenpide.no-delivery')}
-              {/if}
-            </td>
+                    ])}
+                    validators={R.path(
+                      [
+                        'type-specific-data',
+                        'osapuoli-specific-data',
+                        osapuoliSpecificDataIndexForOsapuoli(osapuoli),
+                        'haastemies-email'
+                      ],
+                      schema
+                    )}
+                    format={Maybe.orSome('')}
+                    parse={R.ifElse(
+                      R.isEmpty,
+                      R.always(Maybe.None()),
+                      Maybe.Some
+                    )}
+                    {i18n} />
+                {:else}
+                  {i18n('valvonta.kaytto.toimenpide.no-delivery')}
+                {/if}
+              </td>
+            {/if}
+
             <td class="etp-table--td">
               {#if Osapuolet.isOmistaja(osapuoli)}
                 {#if previewPending}
@@ -230,7 +252,7 @@
                     class:text-disabled={disabled}
                     class="cursor-pointer etp-table--td__center"
                     role="button"
-                    hidden={!Toimenpiteet.documentExistsForOsapuoli(
+                    class:invisible={!Toimenpiteet.documentExistsForOsapuoli(
                       toimenpide,
                       osapuoli.id,
                       Osapuolet.getOsapuoliType(osapuoli)
@@ -251,8 +273,8 @@
               {/if}
             </td>
             <td class="etp-table--td">
-              {#if Osapuolet.isOmistaja(osapuoli)}
-                <div class="etp-table--td__center">
+              <div class="etp-table--td__center">
+                {#if Osapuolet.isOmistaja(osapuoli)}
                   <Checkbox
                     bind:model={toimenpide}
                     lens={R.lensPath([
@@ -261,8 +283,8 @@
                       osapuoliSpecificDataIndexForOsapuoli(osapuoli),
                       'document'
                     ])} />
-                </div>
-              {/if}
+                {/if}
+              </div>
             </td>
           </tr>
         {/each}
