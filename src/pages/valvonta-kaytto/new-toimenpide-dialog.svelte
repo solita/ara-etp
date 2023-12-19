@@ -23,7 +23,6 @@
   import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
-  import OsapuoletTable from './toimenpide-osapuolet-table';
   import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
 
   import * as Validation from '@Utility/validation';
@@ -271,6 +270,7 @@
           {previewPending}
           {disabled}
           {roolit}
+          {toimitustavat}
           {template}
           {schema}
           {karajaoikeudet}
@@ -279,7 +279,8 @@
           showHallintoOikeudetSelection={Toimenpiteet.isPenaltyDecisionNoticeBailiff(
             toimenpide
           )}
-          showKarajaOikeudetSelection />
+          showKarajaOikeudetSelection
+          showCreateDocument />
       {:else if Toimenpiteet.isPenaltyDecisionHearingLetter(toimenpide)}
         <NoticeBailiffOsapuoletTable
           {id}
@@ -290,17 +291,19 @@
           {previewPending}
           {disabled}
           {roolit}
+          {toimitustavat}
           {template}
           {schema}
           {karajaoikeudet}
           {hallintoOikeudet}
           showDeliveryMethod
           showHallintoOikeudetSelection={false}
-          showKarajaOikeudetSelection={false} />
+          showKarajaOikeudetSelection={false}
+          showCreateDocument />
       {:else if Toimenpiteet.showNormalOsapuoliTable(toimenpide)}
-        <OsapuoletTable
+        <NoticeBailiffOsapuoletTable
           {id}
-          {toimenpide}
+          bind:toimenpide
           {henkilot}
           {yritykset}
           {preview}
@@ -309,7 +312,15 @@
           {roolit}
           {toimitustavat}
           {template}
-          {manuallyDeliverableToimenpide} />
+          {schema}
+          {karajaoikeudet}
+          {hallintoOikeudet}
+          {manuallyDeliverableToimenpide}
+          showDeliveryMethod
+          showHallintoOikeudetSelection={false}
+          showKarajaOikeudetSelection={false}
+          showCreateDocument={false}
+          allowPreviewAlways />
       {/if}
     </div>
   {/if}

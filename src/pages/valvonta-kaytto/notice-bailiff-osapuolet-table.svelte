@@ -23,24 +23,30 @@
   export let yritykset;
   export let preview;
   export let roolit;
+  export let toimitustavat;
   export let template;
   export let previewPending;
   export let disabled;
   export let schema;
   export let hallintoOikeudet = [];
   export let karajaoikeudet = [];
+  export let manuallyDeliverableToimenpide = false;
   export let showDeliveryMethod = false;
   export let showHallintoOikeudetSelection = false;
   export let showKarajaOikeudetSelection = false;
+  export let showCreateDocument = false;
+  export let allowPreviewAlways = false;
 
   const types = {
     yritys: {
       label: yritys => yritys.nimi,
-      preview: ValvontaApi.previewToimenpideForYritysOsapuoli
+      preview: ValvontaApi.previewToimenpideForYritysOsapuoli,
+      errorKey: Osapuolet.toimitustapaErrorKey.yritys
     },
     henkilo: {
       label: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
-      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli
+      preview: ValvontaApi.previewToimenpideForHenkiloOsapuoli,
+      errorKey: Osapuolet.toimitustapaErrorKey.henkilo
     }
   };
 
@@ -59,17 +65,38 @@
     R.prop('rooli-id')
   );
 
+  $: toimitustapaLabel = R.compose(
+    Maybe.fold('', Locales.labelForId($locale, toimitustavat)),
+    R.prop('toimitustapa-id')
+  );
+
   const osapuoliSpecificDataIndexForOsapuoli = osapuoli =>
     Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
       toimenpide,
       osapuoli.id,
       Osapuolet.getOsapuoliType(osapuoli)
     );
+
+  const isPreviewHidden = (toimenpide, osapuoli) => {
+    if (allowPreviewAlways) {
+      return false;
+    } else {
+      return !Toimenpiteet.documentExistsForOsapuoli(
+        toimenpide,
+        osapuoli.id,
+        Osapuolet.getOsapuoliType(osapuoli)
+      );
+    }
+  };
 </script>
 
 <style type="text/postcss">
   .court-container {
     height: 5rem;
+  }
+
+  .etp-table--td.text-error {
+    @apply font-bold;
   }
 </style>
 
@@ -107,7 +134,10 @@
           <th class="etp-table--th">
             {i18n(i18nRoot + '.esikatselu')}
           </th>
-          <th class="etp-table--th">{i18n(i18nRoot + '.create-document')}</th>
+
+          {#if showCreateDocument}
+            <th class="etp-table--th">{i18n(i18nRoot + '.create-document')}</th>
+          {/if}
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
@@ -124,10 +154,31 @@
             </td>
 
             {#if showDeliveryMethod}
-              <td class="etp-table--td">
-                {i18n('valvonta.kaytto.toimenpide.manually-sent')}
+              <td
+                class="etp-table--td"
+                class:text-error={Maybe.isSome(
+                  osapuoli.type.errorKey(osapuoli)
+                )}
+                title={Maybe.fold(
+                  '',
+                  key =>
+                    i18n('valvonta.kaytto.osapuoli.toimitustapa-errors.' + key),
+                  osapuoli.type.errorKey(osapuoli)
+                )}>
+                {#if Maybe.isSome(osapuoli.type.errorKey(osapuoli))}
+                  <span class="font-icon">warning</span>
+                {/if}
+                {#if manuallyDeliverableToimenpide}
+                  {i18n('valvonta.kaytto.toimenpide.manually-sent')}
+                {:else}
+                  {toimitustapaLabel(osapuoli)}
+                {/if}
+                {#if Osapuolet.toimitustapa.other(osapuoli)}
+                  - {Maybe.orSome('', osapuoli['toimitustapa-description'])}
+                {/if}
               </td>
             {/if}
+
             {#if showHallintoOikeudetSelection}
               <td class="etp-table--td court-container">
                 {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
@@ -247,16 +298,14 @@
                     <Spinner smaller={true} />
                   </div>
                 {:else}
+                  <!-- TODO: Tämä pitää saada näkymään myös aina? -->
+
                   <div
                     class:text-primary={!disabled}
                     class:text-disabled={disabled}
                     class="cursor-pointer etp-table--td__center"
                     role="button"
-                    class:invisible={!Toimenpiteet.documentExistsForOsapuoli(
-                      toimenpide,
-                      osapuoli.id,
-                      Osapuolet.getOsapuoliType(osapuoli)
-                    )}
+                    class:invisible={isPreviewHidden(toimenpide, osapuoli)}
                     on:click|stopPropagation={disabled ||
                       preview(
                         osapuoli.type.preview(id, osapuoli.id, toimenpide)
@@ -272,20 +321,23 @@
                 {i18n(i18nRoot + '.fyi-disabled')}
               {/if}
             </td>
-            <td class="etp-table--td">
-              <div class="etp-table--td__center">
-                {#if Osapuolet.isOmistaja(osapuoli)}
-                  <Checkbox
-                    bind:model={toimenpide}
-                    lens={R.lensPath([
-                      'type-specific-data',
-                      'osapuoli-specific-data',
-                      osapuoliSpecificDataIndexForOsapuoli(osapuoli),
-                      'document'
-                    ])} />
-                {/if}
-              </div>
-            </td>
+
+            {#if showCreateDocument}
+              <td class="etp-table--td">
+                <div class="etp-table--td__center">
+                  {#if Osapuolet.isOmistaja(osapuoli)}
+                    <Checkbox
+                      bind:model={toimenpide}
+                      lens={R.lensPath([
+                        'type-specific-data',
+                        'osapuoli-specific-data',
+                        osapuoliSpecificDataIndexForOsapuoli(osapuoli),
+                        'document'
+                      ])} />
+                  {/if}
+                </div>
+              </td>
+            {/if}
           </tr>
         {/each}
       </tbody>
