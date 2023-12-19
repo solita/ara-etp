@@ -44,6 +44,7 @@
   class="input"
   class:center
   class:error
+  aria-invalid={error && viewValue.length > 0 ? "true" : "false"}
   {type}
   {autocomplete}
   {placeholder}
