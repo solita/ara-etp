@@ -1,6 +1,4 @@
 <script>
-  import { announceAssertively } from '@Utility/announce';
-
   export let type;
   export let text;
   export let close = () => {};
@@ -10,8 +8,6 @@
     warn: 'warning',
     success: 'check_circle_outline'
   }[type];
-
-  $: announceAssertively(text);
 </script>
 
 <style type="text/postcss">
