@@ -118,7 +118,9 @@
           {/if}
 
           {#if showHallintoOikeudetSelection}
-            <th class="etp-table--th"> {i18n(i18nRoot + '.court')} </th>
+            <th class="etp-table--th">
+              {i18n(i18nRoot + '.administrative-court')}
+            </th>
           {/if}
 
           {#if showKarajaOikeudetSelection}
