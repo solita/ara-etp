@@ -288,7 +288,7 @@ const validate = (validators, value) =>
  * @sig Array [Validator] -> a -> Either [(Translate -> string),a]
  *
  * This function checks a single value from the data model
- * against an array of validators. The value is pasesd through
+ * against an array of validators. The value is passed through
  * as-is from `validate` if the validations succeed, but on failure
  * the Left validator is mapped to a Left label function.
  */
