@@ -45,7 +45,7 @@
   class:center
   class:error
   aria-describedby={`${id}-error-label`}
-  aria-invalid={error && viewValue.length > 0 ? "true" : "false"}
+  aria-invalid={error && viewValue.length > 0 ? 'true' : 'false'}
   {type}
   {autocomplete}
   {placeholder}
