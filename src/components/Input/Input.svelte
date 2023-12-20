@@ -116,6 +116,8 @@
     </svelte:component>
   {/if}
 
+  <div class="sr-only" id={`${id}-error-label`}>{validationResult.message}</div>
+
   {#if !valid}
     <div class="validation-label">
       {#if validationResult.type === 'error'}
