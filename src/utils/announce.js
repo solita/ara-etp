@@ -1,16 +1,20 @@
-const assertiveAnnouncerId = 'assertive-announcer';
-const politeAnnouncerId = 'polite-announcer';
+import { flashMessageStore } from '@/stores';
+import { announceAssertively } from '@Utility/aria-live';
 
-const announce = announcerId => msg => {
-  const announcer = document.getElementById(announcerId);
-  const previous = announcer.children[0];
-  if (previous !== undefined) {
-    announcer.removeChild(previous);
-  }
-  const p = document.createElement('p');
-  p.textContent = msg;
-  announcer.appendChild(p);
+const announceSuccess = module => msg => {
+  announceAssertively(msg);
+  flashMessageStore.add(module, 'success', msg);
 };
 
-export const announceAssertively = announce(assertiveAnnouncerId);
-export const announcePolitely = announce(politeAnnouncerId);
+const announceError = module => msg => {
+  announceAssertively(msg);
+  flashMessageStore.add(module, 'error', msg);
+};
+
+const flush = module => () => flashMessageStore.flush(module);
+
+export const announcementsForModule = module => ({
+  announceSuccess: announceSuccess(module),
+  announceError: announceError(module),
+  clearAnnouncements: flush(module)
+});
