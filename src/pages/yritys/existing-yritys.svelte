@@ -12,7 +12,8 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
-  import { flashMessageStore, idTranslateStore } from '@/stores';
+  import { idTranslateStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   import * as api from '@Pages/yritys/yritys-api';
   import * as Yritykset from '@Pages/yritys/yritys-utils';
@@ -21,6 +22,7 @@
 
   const i18n = $_;
   const i18nRoot = 'yritys';
+  const { announceError, announceSuccess } = announcementsForModule('yritys');
 
   export let params;
 
@@ -34,15 +36,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add('yritys', 'error', errorMessage(response));
+        announceError(errorMessage(response));
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'yritys',
-          'success',
-          i18n(`${i18nRoot}.messages.${action}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${action}-success`));
         overlay = false;
         load(params.id);
       },
@@ -75,11 +73,7 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'yritys',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);

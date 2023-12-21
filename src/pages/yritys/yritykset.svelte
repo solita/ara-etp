@@ -7,7 +7,7 @@
   import * as qs from 'qs';
   import { replace, location, querystring } from 'svelte-spa-router';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { _ } from '@Language/i18n';
   import { push } from '@Component/Router/router';
 
@@ -20,6 +20,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
 
   const i18n = $_;
+  const { announceError } = announcementsForModule('yritys');
 
   let yritykset = [];
   let overlay = true;
@@ -27,12 +28,7 @@
 
   Future.fork(
     _ => {
-      flashMessageStore.add(
-        'yritys',
-        'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response))
-      );
-
+      announceError(i18n('yritykset.messages.load-error'));
       overlay = false;
     },
     response => {

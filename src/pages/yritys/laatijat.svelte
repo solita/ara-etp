@@ -4,7 +4,6 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as Formats from '@Utility/formats';
-  import * as Kayttajat from '@Utility/kayttajat';
 
   import * as api from '@Pages/yritys/yritys-api';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
@@ -13,7 +12,7 @@
   import * as Yritykset from '@Pages/yritys/yritys-utils';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   import H1 from '@Component/H/H1.svelte';
   import Overlay from '@Component/Overlay/Overlay.svelte';
@@ -24,6 +23,7 @@
   export let params;
 
   const i18n = $_;
+  const { announceError, announceSuccess } = announcementsForModule('yritys');
 
   let overlay = false;
   let laatijat = [];
@@ -33,9 +33,7 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'yritys',
-          'error',
+        announceError(
           i18n(
             Maybe.orSome(
               'yritys.messages.load-error',
@@ -62,19 +60,10 @@
 
   const detach = id => {
     Future.fork(
-      _ =>
-        flashMessageStore.add(
-          'yritys',
-          'error',
-          i18n('laatija.yritykset.error.detach-failed')
-        ),
+      _ => announceError(i18n('laatija.yritykset.error.detach-failed')),
       _ => {
         load(params.id);
-        flashMessageStore.add(
-          'yritys',
-          'success',
-          i18n('laatija.yritykset.success.detach')
-        );
+        announceSuccess(i18n('laatija.yritykset.success.detach'));
       },
       laatijaApi.deleteLaatijaYritys(fetch, id, params.id)
     );
@@ -82,19 +71,10 @@
 
   const accept = id =>
     Future.fork(
-      _ =>
-        flashMessageStore.add(
-          'yritys',
-          'error',
-          i18n('yritys.laatijat.accept.error')
-        ),
+      _ => announceError(i18n('yritys.laatijat.accept.error')),
       _ => {
         load(params.id);
-        flashMessageStore.add(
-          'yritys',
-          'success',
-          i18n('yritys.laatijat.accept.success')
-        );
+        announceSuccess(i18n('yritys.laatijat.accept.success'));
       },
       api.putAcceptedLaatijaYritys(fetch, id, params.id)
     );
