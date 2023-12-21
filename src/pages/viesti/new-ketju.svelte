@@ -18,7 +18,7 @@
   import * as Viestit from './viesti-util';
   import * as Schema from './schema';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { _, locale } from '@Language/i18n';
   import * as Router from '@Component/Router/router';
 
@@ -34,6 +34,8 @@
 
   const i18nRoot = 'viesti.ketju.new';
   const i18n = $_;
+
+  const { announceError, announceSuccess } = announcementsForModule('viesti');
 
   export let etFuture = Future.resolve(Maybe.None());
 
@@ -75,7 +77,7 @@
           )
         );
 
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -109,15 +111,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'viesti',
-          'success',
-          i18n(`${i18nRoot}.messages.success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.success`));
         dirty = false;
         Router.pop();
       }
@@ -131,11 +129,7 @@
     if (isValidForm(ketju)) {
       addKetju(ketju);
     } else {
-      flashMessageStore.add(
-        'viesti',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
+      announceError(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurForm(event.target);
     }
   };

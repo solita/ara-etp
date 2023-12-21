@@ -13,7 +13,8 @@
   import * as Viestit from '@Pages/viesti/viesti-util';
   import * as Schema from './schema';
 
-  import { flashMessageStore, idTranslateStore } from '@/stores';
+  import { idTranslateStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { _ } from '@Language/i18n';
   import { pop } from '@Component/Router/router';
 
@@ -32,6 +33,7 @@
 
   const i18nRoot = 'viesti.ketju.existing';
   const i18n = $_;
+  const { announceError, announceSuccess } = announcementsForModule('viesti');
 
   export let params;
 
@@ -48,11 +50,7 @@
     enableOverlay();
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'viesti',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -83,15 +81,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'viesti',
-          'success',
-          i18n(`${i18nRoot}.messages.success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.success`));
         load(params.id);
         newViesti = '';
         dirty = false;
@@ -122,15 +116,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'viesti',
-          'success',
-          i18n(`${i18nRoot}.messages.update-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.update-success`));
         load(params.id);
       }
     ),
@@ -146,11 +136,7 @@
       addNewViesti(newViesti);
       Validation.unblurForm(event.target);
     } else {
-      flashMessageStore.add(
-        'viesti',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
+      announceError(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurForm(event.target);
     }
   };
@@ -220,9 +206,7 @@
                   energiatodistusId={ketju['energiatodistus-id']}
                   close={success => {
                     if (success === true) {
-                      flashMessageStore.add(
-                        'viesti',
-                        'success',
+                      announceSuccess(
                         i18n(`${i18nRoot}.attach-to-et.messages.update-success`)
                       );
                       load(params.id);

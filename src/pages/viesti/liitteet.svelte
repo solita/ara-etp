@@ -1,5 +1,4 @@
 <script>
-  import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
@@ -8,7 +7,8 @@
 
   import Liitteet from '@Component/liitteet/liitteet.svelte';
   import * as Future from '@Utility/future-utils';
-  import { flashMessageStore, idTranslateStore } from '@/stores';
+  import { idTranslateStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import * as ViestiApi from '@Pages/viesti/viesti-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import Overlay from '../../components/Overlay/Overlay.svelte';
@@ -17,26 +17,22 @@
   const i18nRoot = 'viesti.ketju.liitteet';
   const i18n = $_;
 
+  const { announceError, announceSuccess } = announcementsForModule('viesti');
+
   export let params;
   let overlay = true;
-  let dirty = true;
   let resources = Maybe.None();
 
   const load = params => {
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'viesti',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
         resources = Maybe.Some(response);
         overlay = false;
-        dirty = false;
         idTranslateStore.updateKetju(response.ketju, response.liitteet);
       },
       Future.parallelObject(5, {
@@ -53,19 +49,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'viesti',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, key, response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'viesti',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         load(params);
       },
       liiteFuture(liite)
