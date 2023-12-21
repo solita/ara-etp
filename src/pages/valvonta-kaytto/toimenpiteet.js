@@ -234,6 +234,7 @@ export const emptyToimenpide = (
                 id: R.prop('id', osapuoli),
                 type: Osapuolet.getOsapuoliType(osapuoli)
               },
+              'hallinto-oikeus-id': Maybe.None(),
               'karajaoikeus-id': Maybe.None(),
               'haastemies-email': Maybe.None(),
               document: true
@@ -311,9 +312,16 @@ export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );
 
+export const isDecisionOrderNoticeBailiff = isType(
+  R.path(['decision-order', 'notice-bailiff'], type)
+);
+export const isPenaltyDecisionNoticeBailiff = isType(
+  R.path(['penalty-decision', 'notice-bailiff'], type)
+);
+
 export const isNoticeBailiff = R.anyPass([
-  isType(R.path(['penalty-decision', 'notice-bailiff'], type)),
-  isType(R.path(['decision-order', 'notice-bailiff'], type))
+  isPenaltyDecisionNoticeBailiff,
+  isDecisionOrderNoticeBailiff
 ]);
 
 export const isDecisionOrderHearingLetter = isType(
@@ -330,8 +338,10 @@ export const isPenaltyDecisionActualDecision = isType(
 
 export const hasCourtAttachment = R.anyPass([
   isDecisionOrderActualDecision,
-  isPenaltyDecisionActualDecision
+  isPenaltyDecisionActualDecision,
+  isPenaltyDecisionNoticeBailiff
 ]);
+
 /**
  * These toimenpide types have a osapuoli specific boolean field document
  */
@@ -443,4 +453,30 @@ export const didRecipientAnswer = (toimenpide, osapuoli) =>
       'recipient-answered'
     ],
     toimenpide
+  );
+
+/**
+ * To be used with toimenpide objects retrieved from the backend which, at least for the time being,
+ * have not been deserialized to contain Maybes in toimenpide-specific-data
+ *
+ * Check whether given osapuoli has hallinto-oikeus-id in the toimenpide object
+ * @param toimenpide
+ * @param osapuoli
+ * @return {boolean}
+ */
+export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
+  !R.isNil(
+    R.path(
+      [
+        'type-specific-data',
+        'osapuoli-specific-data',
+        osapuoliSpecificDataIndexForOsapuoli(
+          toimenpide,
+          osapuoli.id,
+          Osapuolet.getOsapuoliType(osapuoli)
+        ),
+        'hallinto-oikeus-id'
+      ],
+      toimenpide
+    )
   );

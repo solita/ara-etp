@@ -23,9 +23,7 @@
   import Input from '@Component/Input/Input';
   import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
-  import OsapuoletTable from './toimenpide-osapuolet-table';
-  import OsapuoletTableWithDocumentSelection from './osapuolet-table-with-document-selection';
-  import NoticeBailiffOsapuoletTable from './notice-bailiff-osapuolet-table';
+  import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
 
   import * as Validation from '@Utility/validation';
 
@@ -260,46 +258,30 @@
       {yritykset} />
   {/if}
 
-  {#if !R.isEmpty(templates)}
+  {#if !R.isEmpty(templates) && !Toimenpiteet.isDecisionOrderActualDecision(toimenpide) && !Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)}
     <div class="mt-2">
-      {#if Toimenpiteet.isNoticeBailiff(toimenpide)}
-        <NoticeBailiffOsapuoletTable
-          {id}
-          bind:toimenpide
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {template}
-          {schema}
-          {karajaoikeudet} />
-      {:else if Toimenpiteet.isPenaltyDecisionHearingLetter(toimenpide)}
-        <OsapuoletTableWithDocumentSelection
-          {id}
-          bind:toimenpide
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {template} />
-      {:else if Toimenpiteet.showNormalOsapuoliTable(toimenpide)}
-        <OsapuoletTable
-          {id}
-          {toimenpide}
-          {henkilot}
-          {yritykset}
-          {preview}
-          {previewPending}
-          {disabled}
-          {roolit}
-          {toimitustavat}
-          {template}
-          {manuallyDeliverableToimenpide} />
-      {/if}
+      <OsapuoletTable
+        {id}
+        bind:toimenpide
+        {henkilot}
+        {yritykset}
+        {preview}
+        {previewPending}
+        {disabled}
+        {roolit}
+        {toimitustavat}
+        {template}
+        {schema}
+        {karajaoikeudet}
+        {hallintoOikeudet}
+        {manuallyDeliverableToimenpide}
+        showDeliveryMethod={!Toimenpiteet.isNoticeBailiff(toimenpide)}
+        showHallintoOikeudetSelection={Toimenpiteet.hasCourtAttachment(
+          toimenpide
+        )}
+        showKarajaOikeudetSelection={Toimenpiteet.isNoticeBailiff(toimenpide)}
+        showCreateDocument={Toimenpiteet.hasOptionalDocument(toimenpide)}
+        allowPreviewAlways={!Toimenpiteet.hasOptionalDocument(toimenpide)} />
     </div>
   {/if}
 </Dialog>

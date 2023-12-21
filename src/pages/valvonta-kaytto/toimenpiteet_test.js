@@ -375,6 +375,7 @@ describe('Empty toimenpide', () => {
             id: 1,
             type: 'yritys'
           },
+          'hallinto-oikeus-id': Maybe.None(),
           'karajaoikeus-id': Maybe.None(),
           document: true,
           'haastemies-email': Maybe.None()
@@ -881,6 +882,87 @@ describe('osapuoliSpecificDataIndexForOsapuoli', () => {
         'henkilo'
       ),
       2
+    );
+  });
+});
+
+describe('osapuoliHasHallintoOikeus', () => {
+  const toimenpide = {
+    'type-specific-data': {
+      'osapuoli-specific-data': [
+        {
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
+          'karajaoikeus-id': 1,
+          'hallinto-oikeus-id': 1,
+          'haastemies-email': 'juho.leinonen@solita.fi',
+          document: true
+        },
+        {
+          osapuoli: {
+            id: 2,
+            type: 'henkilo'
+          },
+          'karajaoikeus-id': 0,
+          'haastemies-email': 'juho.leinonen@solita.fi',
+          document: true
+        },
+        {
+          osapuoli: {
+            id: 3,
+            type: 'yritys'
+          },
+          document: false
+        },
+        {
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
+          'hallinto-oikeus-id': 4,
+          document: true
+        }
+      ]
+    }
+  };
+
+  it('returns true when henkilö-osapuoli has hallinto-oikeus-id', () => {
+    assert.isTrue(
+      Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
+        etunimi: 'Samuel',
+        sukunimi: 'Laatikainen',
+        id: 1
+      })
+    );
+  });
+
+  it('returns false when henkilö-osapuoli does not have hallinto-oikeus-id', () => {
+    assert.isFalse(
+      Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
+        etunimi: 'Peter',
+        sukunimi: 'Mannninen',
+        id: 2
+      })
+    );
+  });
+
+  it('returns true when yritys-osapuoli has hallinto-oikeus-id', () => {
+    assert.isTrue(
+      Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
+        nimi: 'Firma Oy',
+        id: 1
+      })
+    );
+  });
+
+  it('returns false when yritys-osapuoli does not have hallinto-oikeus-id', () => {
+    assert.isFalse(
+      Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
+        nimi: 'Yhtiö Ky',
+        id: 3
+      })
     );
   });
 });
