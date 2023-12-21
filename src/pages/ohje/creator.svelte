@@ -6,7 +6,7 @@
   import * as Validation from '@Utility/validation';
   import { pop } from '@Component/Router/router';
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { push } from '@Component/Router/router';
 
   import * as api from '@Pages/ohje/ohje-api';
@@ -20,6 +20,8 @@
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
+
+  const { announceError } = announcementsForModule('ohje');
 
   const emptySivu = {
     published: false,
@@ -44,7 +46,7 @@
         const msg = i18n(
           Maybe.orSome(`ohje.creator.error`, Response.localizationKey(response))
         );
-        flashMessageStore.add('ohje', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -63,11 +65,7 @@
     if (isValidForm(sivu)) {
       addOhje(sivu);
     } else {
-      flashMessageStore.add(
-        'ohje',
-        'error',
-        i18n(`ohje.creator.validation-error`)
-      );
+      announceError(i18n(`ohje.creator.validation-error`));
       Validation.blurForm(event.target);
     }
   };

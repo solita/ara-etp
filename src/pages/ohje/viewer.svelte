@@ -7,7 +7,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as api from '@Pages/ohje/ohje-api';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
@@ -17,6 +17,8 @@
   import DOMPurify from 'dompurify';
   import Marked from 'marked';
   import Style from '@Component/text-editor/style.svelte';
+
+  const { announceError } = announcementsForModule('ohje');
 
   export let params;
 
@@ -37,7 +39,7 @@
           )
         );
 
-        flashMessageStore.add('ohje', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {

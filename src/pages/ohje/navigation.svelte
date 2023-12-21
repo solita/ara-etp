@@ -7,7 +7,7 @@
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as api from './ohje-api';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { _ } from '@Language/i18n';
   import TextButton from '@Component/Button/TextButton';
   import Link from '@Component/Link/Link';
@@ -24,6 +24,8 @@
   let sivutTree = [];
   let sortMode = false;
   let overlay = true;
+
+  const { announceError, announceSuccess } = announcementsForModule('ohje');
 
   const enableOverlay = _ => {
     overlay = true;
@@ -63,7 +65,7 @@
           )
         );
 
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -90,15 +92,11 @@
               Response.localizationKey(response)
             )
           );
-          flashMessageStore.add('ohje', 'error', msg);
+          announceError(msg);
           overlay = false;
         },
         _ => {
-          flashMessageStore.add(
-            'ohje',
-            'success',
-            i18n('ohje.navigation.sort-success')
-          );
+          announceSuccess(i18n('ohje.navigation.sort-success'));
           overlay = false;
           load();
         }
