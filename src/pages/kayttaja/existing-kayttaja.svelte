@@ -8,7 +8,7 @@
   import * as Laatija from '@Pages/laatija/laatija';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore, idTranslateStore } from '@/stores';
+  import { idTranslateStore } from '@/stores';
 
   import * as GeoApi from '@Utility/api/geo-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
@@ -24,11 +24,13 @@
   import H1 from '@Component/H/H1.svelte';
   import LastLogin from './last-login.svelte';
   import Verification from './verification.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
+  const { announceError, announceSuccess } = announcementsForModule('kayttaja');
 
   let resources = Maybe.None();
   let overlay = true;
@@ -46,18 +48,10 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'kayttaja',
-          'error',
-          errorMessage(type, response)
-        );
+        announceError(errorMessage(type, response));
       },
       _ => {
-        flashMessageStore.add(
-          'kayttaja',
-          'success',
-          i18n(`${type}.messages.save-success`)
-        );
+        announceSuccess(i18n(`${type}.messages.save-success`));
         load(params);
         onSuccessfulSave();
         overlay = false;
@@ -124,11 +118,7 @@
     );
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'kayttaja',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         resources = Maybe.None();
         overlay = false;
       },

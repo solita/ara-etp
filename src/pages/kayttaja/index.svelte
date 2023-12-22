@@ -7,7 +7,9 @@
   import History from '@Pages/kayttaja/history';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
+
+  const { clearAnnouncements } = announcementsForModule('kayttaja');
 
   const prefix = '/kayttaja';
   const routes = {
@@ -18,7 +20,7 @@
   };
 </script>
 
-<svelte:window on:hashchange={_ => flashMessageStore.flush('kayttaja')} />
+<svelte:window on:hashchange={clearAnnouncements} />
 
 <Router {routes} {prefix} />
 <FlashMessage module={'kayttaja'} />

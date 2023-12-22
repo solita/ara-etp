@@ -8,7 +8,6 @@
   import * as Locales from '@Language/locale-utils';
   import * as Formats from '@Utility/formats';
 
-  import { flashMessageStore } from '@/stores';
   import { locale, _ } from '@Language/i18n';
 
   import ApiKey from './api-key.svelte';
@@ -19,6 +18,7 @@
   import Select from '@Component/Select/Select2';
   import Datepicker from '@Component/Input/Datepicker';
   import * as Parsers from '@Utility/parsers';
+  import { announcementsForModule } from '@Utility/announce';
 
   /*
    * Note: kayttaja.rooli :: Maybe[Id]
@@ -35,6 +35,8 @@
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
+  const { announceError, clearAnnouncements } =
+    announcementsForModule('kayttaja');
 
   const schema = Schema.Aineistoasiakas;
   const aineistoPermitSchema = Schema.aineistolupa;
@@ -55,14 +57,10 @@
   let form;
   const saveKayttaja = _ => {
     if (isValidForm(kayttaja) && isValidAineisto(kayttajaAineistot)) {
-      flashMessageStore.flush();
+      clearAnnouncements();
       submit(R.evolve({ rooli: Maybe.get }, kayttaja), kayttajaAineistot);
     } else {
-      flashMessageStore.add(
-        'kayttaja',
-        'error',
-        i18n('kayttaja.messages.validation-error')
-      );
+      announceError(i18n('kayttaja.messages.validation-error'));
       Validation.blurForm(form);
     }
   };

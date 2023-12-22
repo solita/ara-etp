@@ -9,7 +9,6 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
 
-  import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
   import { push } from '@Component/Router/router';
 
@@ -17,20 +16,18 @@
   import H1 from '@Component/H/H1.svelte';
   import H2 from '@Component/H/H2.svelte';
   import Link from '../../components/Link/Link.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'kayttajat';
+  const { announceError } = announcementsForModule('kayttaja');
 
   let resources = Maybe.None();
   let overlay = true;
 
   Future.fork(
     response => {
-      flashMessageStore.add(
-        'kayttaja',
-        'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response))
-      );
+      announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
       overlay = false;
     },
     response => {
