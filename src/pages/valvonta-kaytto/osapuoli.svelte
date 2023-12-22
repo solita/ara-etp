@@ -15,16 +15,19 @@
   import HenkiloForm from './henkilo-form.svelte';
   import YritysForm from './yritys-form.svelte';
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import * as GeoApi from '@Utility/api/geo-api';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
   export let type;
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuoli';
+  const { announceError, announceSuccess } =
+    announcementsForModule('valvonta-kaytto');
+
   const types = {
     henkilo: {
       name: henkilo => `${henkilo.etunimi} ${henkilo.sukunimi}`,
@@ -56,7 +59,7 @@
           Response.localizationKey(response)
         );
 
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -77,19 +80,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
-          i18n(Response.errorKey(i18nRoot, key, response))
-        );
+        announceError(i18n(Response.errorKey(i18nRoot, key, response)));
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         dirty = false;
         overlay = false;
         successCallback();

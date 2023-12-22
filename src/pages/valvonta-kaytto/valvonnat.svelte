@@ -22,7 +22,6 @@
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as geoApi from '@Utility/api/geo-api';
 
-  import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
   import * as Locales from '@Language/locale-utils';
 
@@ -38,6 +37,7 @@
   import Input from '@Component/Input/Input';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import * as Selects from '@Component/Select/select-util';
+  import { announcementsForModule } from '@Utility/announce';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -45,6 +45,7 @@
   const pageSize = 50;
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.all';
+  const { announceError } = announcementsForModule('valvonta-kaytto');
 
   let textCancel = () => {};
 
@@ -121,7 +122,7 @@
           )
         );
 
-        flashMessageStore.add('valvonta-kaytto', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {

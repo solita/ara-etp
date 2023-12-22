@@ -5,8 +5,7 @@
   import * as Response from '@Utility/response';
   import { push } from '@Component/Router/router';
 
-  import { _, locale } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';
@@ -19,11 +18,14 @@
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import KohdeForm from './kohde-form';
   import Osapuolet from './osapuolet.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
+  const { announceError, announceSuccess } =
+    announcementsForModule('valvonta-kaytto');
 
   let overlay = true;
   let dirtyKohde = false;
@@ -36,11 +38,7 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -68,19 +66,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, action, response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, action, response)));
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'success',
-          i18n(`${i18nRoot}.messages.${action}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${action}-success`));
         overlay = false;
         successCallback();
       },

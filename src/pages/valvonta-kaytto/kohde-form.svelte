@@ -23,13 +23,14 @@
   import Link from '@Component/Link/Link.svelte';
   import Spinner from '@Component/Spinner/Spinner';
 
-  import { flashMessageStore } from '@/stores';
   import Autocomplete from '../../components/Autocomplete/Autocomplete.svelte';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from './valvonta-api';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
+  const { announceError } = announcementsForModule('valvonta-kaytto');
 
   export let kohde;
   export let ilmoituspaikat;
@@ -54,9 +55,7 @@
     Future.fork(
       response => {
         showRakennustunnusSpinner = false;
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
+        announceError(
           i18n(Response.errorKey(i18nRoot, 'find-rakennustunnus', response))
         );
       },
@@ -81,11 +80,7 @@
     if (Validation.isValidForm(schema)(kohde)) {
       save(kohde);
     } else {
-      flashMessageStore.add(
-        'valvonta-kaytto',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
+      announceError(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurForm(form);
     }
   };

@@ -8,13 +8,13 @@
 
   import { _, locale } from '@Language/i18n';
   import * as Schema from '@Pages/valvonta-kaytto/schema';
-  import { flashMessageStore } from '@/stores';
 
   import Input from '@Component/Input/Input.svelte';
   import Button from '@Component/Button/Button.svelte';
   import Select from '@Component/Select/Select.svelte';
   import Confirm from '@Component/Confirm/Confirm';
   import ContactDetails from './contact-details-form.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let osapuoli;
   export let roolit;
@@ -27,6 +27,8 @@
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuoli';
+  const { announceError } = announcementsForModule('valvonta-kaytto');
+
   let form;
 
   $: schema = Schema.appendPostinumeroValidatorForCountry(
@@ -42,11 +44,7 @@
     if (Validation.isValidForm(schema)(osapuoli)) {
       save(osapuoli);
     } else {
-      flashMessageStore.add(
-        'valvonta-kaytto',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
+      announceError(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurForm(form);
     }
   };

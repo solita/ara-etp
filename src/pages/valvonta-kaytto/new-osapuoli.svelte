@@ -14,17 +14,20 @@
   import H1 from '@Component/H/H1.svelte';
   import HenkiloForm from './henkilo-form.svelte';
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import * as GeoApi from '@Utility/api/geo-api';
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import YritysForm from '@Pages/valvonta-kaytto/yritys-form';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
   export let type;
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.osapuoli';
+  const { announceError, announceSuccess } =
+    announcementsForModule('valvonta-kaytto');
+
   const types = {
     henkilo: {
       form: HenkiloForm,
@@ -50,11 +53,7 @@
 
   Future.fork(
     response => {
-      flashMessageStore.add(
-        'valvonta-kaytto',
-        'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response))
-      );
+      announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
       overlay = false;
     },
     response => {
@@ -72,19 +71,11 @@
     R.compose(
       Future.fork(
         response => {
-          flashMessageStore.add(
-            'valvonta-kaytto',
-            'error',
-            i18n(Response.errorKey(i18nRoot, 'add', response))
-          );
+          announceError(i18n(Response.errorKey(i18nRoot, 'add', response)));
           overlay = false;
         },
         response => {
-          flashMessageStore.addPersist(
-            'valvonta-kaytto',
-            'success',
-            i18n(`${i18nRoot}.messages.add-success`)
-          );
+          announceSuccess(i18n(`${i18nRoot}.messages.add-success`));
           dirty = false;
           push(osapuoliType.link({ id: params['valvonta-id'] }, response));
         }
