@@ -10,12 +10,13 @@
   import { _ } from '@Language/i18n';
 
   import Textarea from '@Component/Textarea/Textarea';
-  import { flashMessageStore } from '@/stores';
   import * as Validation from '@Utility/validation';
   import Dialog from '@Component/dialog/dialog';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.note';
+  const { announceSuccess } = announcementsForModule('valvonta-oikeellisuus');
 
   export let id;
   export let note;
@@ -42,11 +43,7 @@
         },
         _ => {
           addPending = false;
-          flashMessageStore.add(
-            'valvonta-oikeellisuus',
-            'success',
-            i18n(`${i18nRoot}.messages.add-success`)
-          );
+          announceSuccess(i18n(`${i18nRoot}.messages.add-success`));
           reload();
         },
         ValvontaApi.postNote(id, note)

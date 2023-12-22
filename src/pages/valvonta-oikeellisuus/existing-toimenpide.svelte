@@ -4,7 +4,6 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
 
-  import { flashMessageStore } from '@/stores';
   import * as Router from '@Component/Router/router';
 
   import * as Links from './links';
@@ -21,11 +20,15 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import ToimenpideForm from './toimenpide-form.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
+  const { announceError, announceSuccess } = announcementsForModule(
+    'valvonta-oikeellisuus'
+  );
 
   let resources = Maybe.None();
   let dirty = false;
@@ -46,7 +49,7 @@
     Future.fork(
       response => {
         const msg = errorMessage('load', response);
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -72,15 +75,11 @@
     Future.fork(
       response => {
         const msg = errorMessage(key, response);
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.addPersist(
-          'valvonta-oikeellisuus',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         successCallback();
       },
       future

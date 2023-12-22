@@ -1,11 +1,6 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe';
-  import * as Parsers from '@Utility/parsers';
-  import * as Formats from '@Utility/formats';
-  import * as Future from '@Utility/future-utils';
-  import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Router from '@Component/Router/router';
@@ -13,18 +8,16 @@
 
   import * as Toimenpiteet from './toimenpiteet';
   import * as Schema from './schema';
-  import * as valvontaApi from './valvonta-api';
 
   import { _ } from '@Language/i18n';
 
   import H1 from '@Component/H/H1';
   import MuistioForm from './muistio-form.svelte';
-  import LisatietopyyntoForm from './lisatietopyynto-form.svelte';
   import ResponseForm from './response-form.svelte';
   import Button from '@Component/Button/Button.svelte';
-  import { flashMessageStore } from '@/stores';
   import TextButton from '@Component/Button/TextButton.svelte';
   import Confirm from '@Component/Confirm/Confirm';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let whoami;
   export let toimenpide;
@@ -43,6 +36,7 @@
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
   const i18n = $_;
   const text = R.compose($_, Toimenpiteet.i18nKey);
+  const { announceError } = announcementsForModule('valvonta-oikeellisuus');
 
   const forms = {
     'audit-report': MuistioForm,
@@ -64,11 +58,7 @@
     if (Validation.isValidForm(schema)(toimenpide)) {
       submit(toimenpide);
     } else {
-      flashMessageStore.add(
-        'valvonta-oikeellisuus',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
+      announceError(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurFormExcludeNested(form);
     }
   };

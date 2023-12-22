@@ -27,7 +27,6 @@
   import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as EnergiatodistusApi from '@Pages/energiatodistus/energiatodistus-api';
 
-  import { flashMessageStore } from '@/stores';
   import { _, locale } from '@Language/i18n';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
@@ -41,6 +40,7 @@
   import Link from '@Component/Link/Link.svelte';
   import Input from '@Component/Input/Input';
   import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
+  import { announcementsForModule } from '@Utility/announce';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -48,6 +48,7 @@
   const pageSize = 50;
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.all';
+  const { announceError } = announcementsForModule('valvonta-oikeellisuus');
 
   let textCancel = () => {};
 
@@ -99,11 +100,7 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'error',
-          i18n(Response.errorKey(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {

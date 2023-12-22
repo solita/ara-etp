@@ -9,7 +9,11 @@
   import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
+
+  const { clearAnnouncements } = announcementsForModule(
+    'valvonta-oikeellisuus'
+  );
 
   const prefix = '/valvonta/oikeellisuus';
   const routes = {
@@ -22,8 +26,7 @@
   };
 </script>
 
-<svelte:window
-  on:hashchange={_ => flashMessageStore.flush('valvonta-oikeellisuus')} />
+<svelte:window on:hashchange={clearAnnouncements} />
 
 <Router {routes} {prefix} />
 
