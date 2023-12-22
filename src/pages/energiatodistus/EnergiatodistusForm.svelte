@@ -33,8 +33,7 @@
   import ToolBar from './ToolBar/toolbar';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
-  import { flashMessageStore } from '@/stores';
-  import * as Validation from '@Utility/validation';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let version;
   export let energiatodistus;
@@ -47,6 +46,9 @@
 
   export let submit;
   export let title = '';
+
+  const { announceError, clearAnnouncements } =
+    announcementsForModule('Energiatodistus');
 
   const required = energiatodistus =>
     energiatodistus['bypass-validation-limits']
@@ -113,9 +115,7 @@
         R.map(R.nth(0))
       )(invalidProperties);
 
-      flashMessageStore.add(
-        'Energiatodistus',
-        'error',
+      announceError(
         $_('energiatodistus.messages.validation-error') + invalidTxt
       );
 
@@ -125,7 +125,7 @@
 
   const showKorvausErrorMessage = R.forEach(
     R.compose(
-      flashMessageStore.add('Energiatodistus', 'error'),
+      announceError,
       $_,
       R.concat('energiatodistus.korvaavuus.validation.')
     )
@@ -141,7 +141,7 @@
     );
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
-      flashMessageStore.flush();
+      clearAnnouncements();
       submit(energiatodistus, (...args) => {
         dirty = false;
         onSuccessfulSave(...args);
@@ -164,9 +164,7 @@
       R.map(Inputs.propertyLabel($_))
     )(missing);
 
-    flashMessageStore.add(
-      'Energiatodistus',
-      'error',
+    announceError(
       $_('energiatodistus.messages.validation-required-error') + missingTxt
     );
 

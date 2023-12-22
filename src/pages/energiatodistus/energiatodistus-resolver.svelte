@@ -6,15 +6,16 @@
   import * as EtApi from '@Pages/energiatodistus/energiatodistus-api';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';
 
   import { replace, location } from 'svelte-spa-router';
 
   import Spinner from '@Component/Spinner/Spinner';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
+  const { announceError } = announcementsForModule('Energiatodistus');
   let overlay = true;
 
   Future.fork(
@@ -28,7 +29,7 @@
             )
           );
       overlay = false;
-      flashMessageStore.add('Energiatodistus', 'error', msg);
+      announceError(msg);
     },
     energiatodistus => {
       replace(

@@ -5,7 +5,6 @@
   import * as Response from '@Utility/response';
   import { loc } from 'svelte-spa-router';
 
-  import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
   import * as ViestiApi from '@Pages/viesti/viesti-api';
@@ -16,8 +15,11 @@
   import H1 from '@Component/H/H1.svelte';
   import Link from '@Component/Link/Link.svelte';
   import Viestiketju from '@Pages/viesti/viestiketju';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
+  const { announceError, announceSuccess } =
+    announcementsForModule('Energiatodistus');
 
   export let params;
 
@@ -35,7 +37,7 @@
           )
         );
 
-        flashMessageStore.add('Energiatodistus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -68,15 +70,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('Energiatodistus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'Energiatodistus',
-          'success',
-          i18n(`viesti.all.messages.update-success`)
-        );
+        announceSuccess(i18n(`viesti.all.messages.update-success`));
         overlay = false;
         load(params);
       }

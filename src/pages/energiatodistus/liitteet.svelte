@@ -7,14 +7,16 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import Liitteet from '@Component/liitteet/liitteet.svelte';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18nRoot = 'energiatodistus.liitteet';
   const i18n = $_;
+  const { announceError, announceSuccess } =
+    announcementsForModule('Energiatodistus');
 
   export let params;
   let overlay = true;
@@ -25,11 +27,7 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -50,19 +48,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, key, response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'Energiatodistus',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         load(params);
       },
       liiteFuture(liite)

@@ -9,7 +9,6 @@
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
-  import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
   import H1 from '@Component/H/H1';
@@ -17,9 +16,12 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Link from '@Component/Link/Link.svelte';
   import * as Inputs from '@Pages/energiatodistus/inputs';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus.muutoshistoria';
+  const { announceError } = announcementsForModule('Energiatodistus');
+
   export let params;
 
   let resources = Maybe.None();
@@ -73,7 +75,7 @@
               )
         );
 
-        flashMessageStore.add('Energiatodistus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {

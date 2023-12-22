@@ -18,12 +18,14 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus';
+  const { announceError, announceSuccess } =
+    announcementsForModule('Energiatodistus');
   let resources = Maybe.None();
 
   let overlay = true;
@@ -42,20 +44,12 @@
           if (R.pathEq(['body', 'type'], 'missing-value', response)) {
             showMissingProperties(response.body.missing);
           } else {
-            flashMessageStore.add(
-              'Energiatodistus',
-              'error',
-              i18n(Response.errorKey(i18nRoot, 'save', response))
-            );
+            announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
           }
         },
         () => {
           toggleOverlay(false);
-          flashMessageStore.add(
-            'Energiatodistus',
-            'success',
-            $_('energiatodistus.messages.save-success')
-          );
+          announceSuccess($_('energiatodistus.messages.save-success'));
           onSuccessfulSave();
         }
       ),
@@ -72,11 +66,7 @@
     Future.fork(
       response => {
         toggleOverlay(false);
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);
