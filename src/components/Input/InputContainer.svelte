@@ -37,6 +37,10 @@
 
   $: validate = value => {
     valid = true;
+    validationResult = {
+      type: '',
+      message: ''
+    };
 
     v.validateModelValue(warnValidators, value).forEachLeft(error => {
       valid = false;
