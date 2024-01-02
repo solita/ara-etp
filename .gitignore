@@ -1,0 +1,10 @@
+*.iml
+.calva
+.clj-kondo
+.dir-locals.el
+.idea
+.lsp
+.nrepl-port
+.projectile
+.vscode
+.DS_Store
