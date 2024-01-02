@@ -1,0 +1,114 @@
+@tailwind base;
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+html {
+  overflow-y: scroll;
+}
+
+@tailwind components;
+
+@tailwind utilities;
+
+input {
+  text-align: unset;
+}
+
+.applicationcontainer {
+  min-width: 300px;
+  min-height: 100vh;
+}
+
+/* Table */
+.table-container th {
+  @apply uppercase text-green;
+}
+
+.table-container th,
+.table-container td {
+  @apply px-4 py-2 border border-solid border-darkgrey;
+}
+
+.table-container th:first-child,
+.table-container td:first-child,
+.table-container th:last-child,
+.table-container td:last-child {
+  border: none;
+}
+
+.table-container tr,
+.table-container th,
+.table-container td {
+  border-top: none;
+  border-bottom: none;
+}
+
+.table-container tbody tr:nth-child(odd) {
+  @apply bg-grey;
+}
+
+.table-container tbody tr:hover {
+  @apply bg-lightgreen;
+}
+.table-container tbody tr:hover .text-darkgreen {
+  @apply text-black underline;
+}
+.table-container tbody tr:hover .material-icons.text-darkgreen {
+  @apply no-underline;
+}
+.table-container td span.m-title {
+  @apply hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .table-container tbody {
+    @apply border-t border-b;
+  }
+
+  .table-container tr {
+    @apply py-1;
+  }
+
+  .table-container table,
+  .table-container thead,
+  .table-container tbody,
+  .table-container th,
+  /* .table-container td, */
+  .table-container tr {
+    display: block;
+  }
+
+  .table-container thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-container tr {
+    @apply border border-darkgrey;
+  }
+
+  .table-container td {
+    /* padding-left: 50%; */
+    text-align: left;
+    min-height: 2.5em;
+    @apply flex flex-col border-0 border-b border-black whitespace-normal;
+  }
+
+  .table-container td span.m-title {
+    @apply block text-green font-bold whitespace-no-wrap;
+  }
+
+  /* .table-container td:before {
+    top: 0.5em;
+    left: 0.5em;
+    text-align: left;
+
+    @apply text-green absolute font-bold whitespace-no-wrap pr-1 w-1/2;
+  }
+
+  .table-container td:before {
+    content: attr(data-title);
+  } */
+}
