@@ -1,0 +1,26 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap-env:Header>
+        <ns0:MessageHeader xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:messageVersion>1.0</ns0:messageVersion>
+            <ns0:requestId>{{request-id}}</ns0:requestId>
+            <ns0:senderId>{{sender-id}}</ns0:senderId>
+        </ns0:MessageHeader>
+    </soap-env:Header>
+    <soap-env:Body>
+        <ns0:executeOperations xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:operationRequest>
+                <ns0:IdentityChain>
+                    <ns0:CaseNumberIdentity>
+                        <ns0:caseNumber>{{case-number}}</ns0:caseNumber>
+                    </ns0:CaseNumberIdentity>
+                    <ns0:ProcessingActionNameIdentity>
+                        <ns0:name>{{processing-action}}</ns0:name>
+                    </ns0:ProcessingActionNameIdentity>
+                </ns0:IdentityChain>
+                <ns0:ProceedOperation>
+                    <ns0:decision>Valmis</ns0:decision>
+                </ns0:ProceedOperation>
+            </ns0:operationRequest>
+        </ns0:executeOperations>
+    </soap-env:Body>
+</soap-env:Envelope>

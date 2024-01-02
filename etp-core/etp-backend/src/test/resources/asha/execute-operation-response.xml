@@ -1,0 +1,7 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <executeOperationsResponse xmlns="http://vismaconsulting.fi/ebs/1.0">
+            <return/>
+        </executeOperationsResponse>
+    </soap:Body>
+</soap:Envelope>

@@ -1,0 +1,30 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap-env:Header>
+        <ns0:MessageHeader xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:messageVersion>1.0</ns0:messageVersion>
+            <ns0:requestId>{{request-id}}</ns0:requestId>
+            <ns0:senderId>{{sender-id}}</ns0:senderId>
+        </ns0:MessageHeader>
+    </soap-env:Header>
+    <soap-env:Body>
+        <ns0:executeOperations xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:operationRequest>
+                <ns0:IdentityChain>
+                    <ns0:CaseNumberIdentity>
+                        <ns0:caseNumber>{{case-number}}</ns0:caseNumber>
+                    </ns0:CaseNumberIdentity>
+                    <ns0:ProcessingActionNameIdentity>
+                        <ns0:name>{{processing-action}}</ns0:name>
+                    </ns0:ProcessingActionNameIdentity>
+                </ns0:IdentityChain>
+                <ns0:CreateProcessingActionOperation>
+                    <ns0:name>{{processing-action-operation-name}}</ns0:name>
+                    <!--TODO: required? <ns0:createFromProcess></ns0:createFromProcess>-->
+                    <ns0:receptionDate>{{reception-date}}</ns0:receptionDate>
+                    <ns0:contactingDirection></ns0:contactingDirection>
+                    <ns0:description>{{description}}</ns0:description>
+                </ns0:CreateProcessingActionOperation>
+            </ns0:operationRequest>
+        </ns0:executeOperations>
+    </soap-env:Body>
+</soap-env:Envelope>

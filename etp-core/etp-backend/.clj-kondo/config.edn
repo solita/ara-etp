@@ -1,0 +1,4 @@
+{:ns-groups    [{:pattern ".*-db$" :name db-namespaces}]
+ :linters
+ {:unresolved-namespace {:exclude [db-namespaces]}}
+ :lint-as {solita.common.logic/if-let* clojure.core/for}}

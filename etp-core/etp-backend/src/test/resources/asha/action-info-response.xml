@@ -1,0 +1,44 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <executeOperationsResponse xmlns="http://vismaconsulting.fi/ebs/1.0">
+            <return>
+                <ActionInfoResponse>
+                    <objectIdentity>
+                        <objectClass>ProcessingAction</objectClass>
+                        <id>578877</id>
+                        <version>8</version>
+                    </objectIdentity>
+                    <processingAction>
+                        <objectIdentity>
+                            <objectClass>ProcessingAction</objectClass>
+                            <id>578877</id>
+                            <version>8</version>
+                        </objectIdentity>
+                        <contactingDirection>NONE</contactingDirection>
+                        <name>Vireillepano</name>
+                        <description>Luodaan uusi asia.</description>
+                        <status>READY</status>
+                        <created>2021-03-25T12:47:08+02:00</created>
+                    </processingAction>
+                    <assignee>FFAB23AE-E49F-4E3B-98D9-40C3DE0E4B46</assignee>
+                    <queue>24</queue>
+                    <selectedDecision>
+                        <decision>Siirry käsittelyyn</decision>
+                        <nextProcessingAction>
+                            <objectIdentity>
+                                <objectClass>ProcessingAction</objectClass>
+                                <id>579176</id>
+                                <version>1</version>
+                            </objectIdentity>
+                            <contactingDirection>NONE</contactingDirection>
+                            <name>Käsittely</name>
+                            <description>Asian käsittelyn toimenpiteitä, esim. lausunnon laatiminen, selvityksen tekeminen, päätöksen valmistelu</description>
+                            <status>NEW</status>
+                            <created>2021-03-25T14:01:07+02:00</created>
+                        </nextProcessingAction>
+                    </selectedDecision>
+                </ActionInfoResponse>
+            </return>
+        </executeOperationsResponse>
+    </soap:Body>
+</soap:Envelope>

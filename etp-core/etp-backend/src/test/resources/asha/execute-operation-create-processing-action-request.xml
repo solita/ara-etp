@@ -1,0 +1,38 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap-env:Header>
+        <ns0:MessageHeader xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:messageVersion>1.0</ns0:messageVersion>
+            <ns0:requestId>ETP-1</ns0:requestId>
+            <ns0:senderId>test@example.com</ns0:senderId>
+        </ns0:MessageHeader>
+    </soap-env:Header>
+    <soap-env:Body>
+        <ns0:executeOperations xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:operationRequest>
+                <ns0:IdentityChain>
+                    <ns0:CaseNumberIdentity>
+                        <ns0:caseNumber>ARA-05.03.02-2021-8</ns0:caseNumber>
+                    </ns0:CaseNumberIdentity>
+                    <ns0:ProcessingActionNameIdentity>
+                        <ns0:name>Vireillepano</ns0:name>
+                    </ns0:ProcessingActionNameIdentity>
+                </ns0:IdentityChain>
+                <ns0:CreateProcessingActionOperation>
+                    <ns0:name>Tietopyyntö</ns0:name>
+                    <!--TODO: required? <ns0:createFromProcess></ns0:createFromProcess>-->
+                    <ns0:receptionDate>2021-03-02T12:54:00</ns0:receptionDate>
+                    <ns0:contactingDirection>SENT</ns0:contactingDirection>
+                    <ns0:description></ns0:description>
+                    <ns0:Contact>
+                        <ns0:type>PERSON</ns0:type>
+                        <ns0:emailAddress></ns0:emailAddress>
+                        <ns0:firstName>Liisa</ns0:firstName>
+                        <ns0:lastName>Meikäläinen</ns0:lastName>
+                        <ns0:phoneNumber></ns0:phoneNumber>
+                        <ns0:organizationalUnitName></ns0:organizationalUnitName>
+                    </ns0:Contact>
+                </ns0:CreateProcessingActionOperation>
+            </ns0:operationRequest>
+        </ns0:executeOperations>
+    </soap-env:Body>
+</soap-env:Envelope>

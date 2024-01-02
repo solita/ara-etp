@@ -1,0 +1,24 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <executeOperationsResponse xmlns="http://vismaconsulting.fi/ebs/1.0">
+            <return>
+                <CaseInfoResponse>
+                    <objectIdentity>
+                        <objectClass>ECase</objectClass>
+                        <id>38444</id>
+                        <version>1</version>
+                    </objectIdentity>
+                    <caseNumber>ARA-05.03.02-2021-31</caseNumber>
+                    <status>NEW</status>
+                    <service>general</service>
+                    <classification>
+                        <code>05.03.02</code>
+                    </classification>
+                    <name>Asunnot Oy</name>
+                    <description>Helsinki, Katu 1</description>
+                    <created>2021-03-22T10:28:13+02:00</created>
+                </CaseInfoResponse>
+            </return>
+        </executeOperationsResponse>
+    </soap:Body>
+</soap:Envelope>

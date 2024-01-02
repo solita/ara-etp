@@ -1,0 +1,30 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap-env:Header>
+        <ns0:MessageHeader xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:messageVersion>1.0</ns0:messageVersion>
+            <ns0:requestId>ETP-1</ns0:requestId>
+            <ns0:senderId>test@example.com</ns0:senderId>
+        </ns0:MessageHeader>
+    </soap-env:Header>
+    <soap-env:Body>
+        <ns0:executeOperations xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:operationRequest>
+                <ns0:IdentityChain>
+                    <ns0:CaseNumberIdentity>
+                        <ns0:caseNumber>ARA-05.03.02-2021-8</ns0:caseNumber>
+                    </ns0:CaseNumberIdentity>
+                    <ns0:ProcessingActionNameIdentity>
+                        <ns0:name>Tietopyyntö</ns0:name>
+                    </ns0:ProcessingActionNameIdentity>
+                </ns0:IdentityChain>
+                <ns0:AttachOperation>
+                    <ns0:Document>                                                                                                               |
+                        <ns0:name>Tietopyyntö.txt</ns0:name>
+                        <ns0:type>Pyyntö</ns0:type>
+                        <ns0:content>VGVzdA==</ns0:content>
+                    </ns0:Document>
+                </ns0:AttachOperation>
+            </ns0:operationRequest>
+        </ns0:executeOperations>
+    </soap-env:Body>
+</soap-env:Envelope>

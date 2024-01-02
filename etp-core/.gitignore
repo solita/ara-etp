@@ -1,0 +1,22 @@
+# IntelliJ IDEA
+*.iml
+.calva
+.clj-kondo
+.dir-locals.el
+.idea
+.lsp
+.nrepl-port
+.projectile
+.vscode
+
+# target-folders and other build related files
+etp-backend/target
+etp-backend/tmp-energiatodistukset
+etp-backend/tmp-laskutus
+etp-backend/tmp-csv
+etp-db/target
+docker/smtp/received-emails
+
+# clojure
+.cpcache
+.nrepl-port

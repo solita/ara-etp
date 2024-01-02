@@ -1,0 +1,20 @@
+insert into hallinto_oikeus (id, ordinal, label_fi, label_sv, attachment_name, document_template_wording_fi,
+                             document_template_wording_sv)
+values (0, 1, 'Helsingin hallinto-oikeus', 'Helsingfors förvaltningsdomstol', 'Valitusosoitus_30_pv_HELSINGIN_HAO.pdf',
+        'Helsingin hallinto-oikeudelta', 'Helsingfors'),
+       (1, 2, 'Hämeenlinnan hallinto-oikeus', 'Tavastehus förvaltningsdomstol',
+        'Valitusosoitus_30_pv_HAMEENLINNAN_HAO.pdf', 'Hämeenlinnan hallinto-oikeudelta', 'Tavastehus'),
+       (2, 3, 'Itä-Suomen hallinto-oikeus', 'Östra Finlands förvaltningsdomstol',
+        'Valitusosoitus_30_pv_ITA-SUOMEN_HAO.pdf', 'Itä-Suomen hallinto-oikeudelta', 'Östra Finland'),
+       (3, 4, 'Pohjois-Suomen hallinto-oikeus', 'Norra Finlands förvaltningsdomstol',
+        'Valitusosoitus_30_pv_POHJOIS-SUOMEN_HAO.pdf', 'Pohjois-Suomen hallinto-oikeudelta', 'Norra Finland'),
+       (4, 5, 'Turun hallinto-oikeus', 'Åbo förvaltningsdomstol', 'Valitusosoitus_30_pv_TURUN_HAO.pdf',
+        'Turun hallinto-oikeudelta', 'Åbo'),
+       (5, 6, 'Vaasan hallinto-oikeus', 'Vasa förvaltningsdomstol', 'Valitusosoitus_30_pv_VAASAN_HAO.pdf',
+        'Vaasan hallinto-oikeudelta', 'Vasa')
+on conflict (id) do update set label_fi                     = excluded.label_fi,
+                               label_sv                     = excluded.label_sv,
+                               ordinal                      = excluded.ordinal,
+                               attachment_name              = excluded.attachment_name,
+                               document_template_wording_fi = excluded.document_template_wording_fi,
+                               document_template_wording_sv = excluded.document_template_wording_sv;

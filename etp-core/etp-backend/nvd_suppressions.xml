@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <!-- This is an automatically generated config file by nvd-clojure. -->
+    <!-- Feel free to tweak it, version-control it and remove any comment. -->
+    <!-- You can find suppression examples in https://jeremylong.github.io/DependencyCheck/general/suppression.html -->
+
+    <!-- Axis-vulnerabilities: These affect when using it as a server,
+    we use it as a client to communicate with a trusted party (suomi.fi)-->
+    <suppress>
+        <notes><![CDATA[
+   file name: axis-1.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.axis/axis@.*$</packageUrl>
+        <cve>CVE-2019-0227</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: axis-1.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.axis/axis@.*$</packageUrl>
+        <cve>CVE-2018-8032</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: axis-1.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.axis/axis@.*$</packageUrl>
+        <cve>CVE-2012-5784</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: axis-1.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.axis/axis@.*$</packageUrl>
+        <cve>CVE-2014-3596</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: axis-1.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.axis/axis@.*$</packageUrl>
+        <vulnerabilityName>CVE-2007-2353</vulnerabilityName>
+    </suppress>
+    <!-- ServiceFactory.getService is vulnerable. We don't use it. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: axis-1.4.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.axis/axis@.*$</packageUrl>
+        <vulnerabilityName>CVE-2023-40743</vulnerabilityName>
+    </suppress>
+
+    <!--  CVE itself is false  -->
+    <suppress>
+        <notes><![CDATA[
+   file name: jackson-databind-2.14.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson\-databind@.*$</packageUrl>
+        <cve>CVE-2023-35116</cve>
+    </suppress>
+
+    <!-- CVE is completely unrelated to commons-discovery -->
+    <suppress>
+        <notes><![CDATA[
+   file name: commons-discovery-0.5.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/commons\-discovery/commons\-discovery@.*$</packageUrl>
+        <cve>CVE-2022-0869</cve>
+    </suppress>
+
+<!-- OpenSAML C++, not Java -->
+    <suppress>
+        <notes><![CDATA[
+   file name: opensaml-2.5.1-1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.opensaml/opensaml@.*$</packageUrl>
+        <cve>CVE-2017-16853</cve>
+    </suppress>
+</suppressions>

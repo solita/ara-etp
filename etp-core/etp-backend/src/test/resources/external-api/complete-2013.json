@@ -1,0 +1,449 @@
+{
+  "korvattu-energiatodistus-id": null,
+  "perustiedot": {
+    "rakennustunnus": "101089527F",
+    "uudisrakennus": false,
+    "havainnointikaynti": "2020-04-15",
+    "postinumero": "33100",
+    "kieli": 0,
+    "keskeiset-suositukset-sv": "keskeiset suositukset sv",
+    "rakennusosa": "rakennusosa",
+    "katuosoite-fi": "katuosoite-fi",
+    "nimi": "rakennuksen nimi",
+    "valmistumisvuosi": 2020,
+    "julkinen-rakennus": true,
+    "tilaaja": "tilaaja",
+    "keskeiset-suositukset-fi": "Seuraavia toimenpiteitä voisi tehdä:\n\n * TODO 1\n * TODO 2",
+    "yritys": {
+      "nimi": "yrityksen nimi",
+      "katuosoite": "yrityksen katuosoite",
+      "postinumero": "33100",
+      "postitoimipaikka": "tampere"
+    },
+    "kayttotarkoitus": "T",
+    "kiinteistotunnus": "kiinteistötunnus",
+    "katuosoite-sv": "katuosoite-sv"
+  },
+  "lahtotiedot": {
+    "lammitetty-nettoala": 150,
+    "rakennusvaippa": {
+      "ilmanvuotoluku": 0,
+      "ilmatilavuus": 12.345,
+      "lampokapasiteetti": 1.2345,
+      "ulkoseinat": {
+        "ala": 200,
+        "U": 2
+      },
+      "ylapohja": {
+        "ala": 0.5,
+        "U": 1.2
+      },
+      "alapohja": {
+        "ala": 25,
+        "U": 1.5
+      },
+      "ikkunat": {
+        "ala": 2,
+        "U": 2
+      },
+      "ulkoovet": {
+        "ala": 1500,
+        "U": 1.9
+      },
+      "kylmasillat-UA": 1.5
+    },
+    "ikkunat": {
+      "pohjoinen": {
+        "ala": 0,
+        "U": 1,
+        "g-ks": 1
+      },
+      "koillinen": {
+        "ala": 1.2,
+        "U": 1.2,
+        "g-ks": 1
+      },
+      "ita": {
+        "ala": 1.5,
+        "U": 1.5,
+        "g-ks": 1
+      },
+      "kaakko": {
+        "ala": 0,
+        "U": 1.9,
+        "g-ks": 0.8
+      },
+      "etela": {
+        "ala": 1.4,
+        "U": 1.6,
+        "g-ks": 0.9
+      },
+      "lounas": {
+        "ala": 0.5,
+        "U": 0.9,
+        "g-ks": 1
+      },
+      "lansi": {
+        "ala": 1.2,
+        "U": 0.8,
+        "g-ks": 1
+      },
+      "luode": {
+        "ala": 1.3,
+        "U": 2.2,
+        "g-ks": 1
+      },
+      "valokupu": {
+        "ala": 0,
+        "U": 0.4,
+        "g-ks": 1
+      },
+      "katto": {
+        "ala": 1,
+        "U": 1,
+        "g-ks": 1
+      }
+    },
+    "ilmanvaihto": {
+      "tuloilma-lampotila": 123,
+      "erillispoistot": {
+        "poisto": 2,
+        "tulo": 1,
+        "sfp": 2
+      },
+      "ivjarjestelma": {
+        "poisto": 1,
+        "tulo": 2,
+        "sfp": 1
+      },
+      "tyyppi-id": 2,
+      "kuvaus-fi": "ilmanvaihdon kuvaus fi",
+      "kuvaus-sv": "ilmanvaihdon kuvaus sv",
+      "lto-vuosihyotysuhde": 0.97,
+      "paaiv": {
+        "poisto": 3,
+        "tulo": 1,
+        "sfp": 2,
+        "lampotilasuhde": 0,
+        "jaatymisenesto": 0
+      }
+    },
+    "lammitys": {
+      "lammitysmuoto-1": {
+        "id": 4,
+        "kuvaus-fi": null,
+        "kuvaus-sv": null
+      },
+      "lammitysmuoto-2": {
+        "id": 5,
+        "kuvaus-fi": null,
+        "kuvaus-sv": null
+      },
+      "lammonjako": {
+        "id": 1,
+        "kuvaus-fi": null,
+        "kuvaus-sv": null
+      },
+      "tilat-ja-iv": {
+        "lampohavio-lammittamaton-tila": 10,
+        "lampopumppu-tuotto-osuus": 0.1,
+        "tuoton-hyotysuhde": 1,
+        "jaon-hyotysuhde": 2,
+        "lampokerroin": 2.24,
+        "apulaitteet": 1.23
+      },
+      "lammin-kayttovesi": {
+        "lampohavio-lammittamaton-tila": 10,
+        "lampopumppu-tuotto-osuus": 0.1,
+        "tuoton-hyotysuhde": 1,
+        "jaon-hyotysuhde": 2,
+        "lampokerroin": 3,
+        "apulaitteet": 3
+      },
+      "takka": {
+        "maara": 1,
+        "tuotto": 2
+      },
+      "ilmalampopumppu": {
+        "maara": 1,
+        "tuotto": 2
+      }
+    },
+    "jaahdytysjarjestelma": {
+      "jaahdytyskauden-painotettu-kylmakerroin": 4.45
+    },
+    "lkvn-kaytto": {
+      "ominaiskulutus": 1234.12,
+      "lammitysenergian-nettotarve": 12345.67
+    },
+    "sis-kuorma": {
+      "henkilot": {
+        "kayttoaste": 0.65,
+        "lampokuorma": 5
+      },
+      "kuluttajalaitteet": {
+        "kayttoaste": 0.65,
+        "lampokuorma": 12
+      },
+      "valaistus": {
+        "kayttoaste": 0.65,
+        "lampokuorma": 1.5
+      }
+    }
+  },
+  "tulokset": {
+    "kaytettavat-energiamuodot": {
+      "fossiilinen-polttoaine": 1500,
+      "sahko": 2000,
+      "kaukojaahdytys": 300,
+      "kaukolampo": 4000,
+      "uusiutuva-polttoaine": 5500,
+      "muu": [
+        {
+          "nimi": "turve",
+          "muotokerroin": 12.5,
+          "ostoenergia": 1234.12
+        }
+      ]
+    },
+    "uusiutuvat-omavaraisenergiat": [
+      {
+        "nimi-fi": "uusituva 1 suomeksi",
+        "nimi-sv": "uusiutuva 2 ruotsiksi",
+        "vuosikulutus": 100
+      },
+      {
+        "nimi-fi": "uusituva 2 suomeksi",
+        "nimi-sv": "uusiutuva 2 ruotsiksi",
+        "vuosikulutus": 1234.56
+      }
+    ],
+    "kuukausierittely": [
+      {
+        "tuotto": {
+          "aurinkosahko": 1,
+          "tuulisahko": 2,
+          "muusahko": 3,
+          "aurinkolampo": 4,
+          "muulampo": 5,
+          "lampopumppu": 6
+        },
+        "kulutus": {
+          "sahko": 7,
+          "lampo": 8
+        }
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "tuotto": {
+          "aurinkosahko": 9,
+          "tuulisahko": 10,
+          "muusahko": 11,
+          "aurinkolampo": 12,
+          "muulampo": 13,
+          "lampopumppu": 14
+        },
+        "kulutus": {
+          "sahko": null,
+          "lampo": 15
+        }
+      },
+      {
+        "tuotto": {
+          "aurinkosahko": null,
+          "tuulisahko": null,
+          "muusahko": null,
+          "aurinkolampo": 16,
+          "muulampo": 17.12345,
+          "lampopumppu": null
+        },
+        "kulutus": {
+          "sahko": 18,
+          "lampo": 19
+        }
+      }
+    ],
+    "tekniset-jarjestelmat": {
+      "tilojen-lammitys": {
+        "sahko": 1,
+        "lampo": 2
+      },
+      "tuloilman-lammitys": {
+        "sahko": 3,
+        "lampo": 4
+      },
+      "kayttoveden-valmistus": {
+        "sahko": 5,
+        "lampo": 6
+      },
+      "iv-sahko": 7,
+      "jaahdytys": {
+        "sahko": 1,
+        "lampo": 2,
+        "kaukojaahdytys": 3
+      },
+      "kuluttajalaitteet-ja-valaistus-sahko": 4
+    },
+    "nettotarve": {
+      "tilojen-lammitys-vuosikulutus": 1000,
+      "ilmanvaihdon-lammitys-vuosikulutus": 2000,
+      "kayttoveden-valmistus-vuosikulutus": 3000,
+      "jaahdytys-vuosikulutus": 4000
+    },
+    "lampokuormat": {
+      "aurinko": 100,
+      "ihmiset": 200,
+      "kuluttajalaitteet": 300,
+      "valaistus": 400,
+      "kvesi": 500
+    },
+    "laskentatyokalu": "laskentatyökalu v1.2"
+  },
+  "toteutunut-ostoenergiankulutus": {
+    "ostettu-energia": {
+      "kaukolampo-vuosikulutus": 10000,
+      "kokonaissahko-vuosikulutus": 20000,
+      "kiinteistosahko-vuosikulutus": 30000,
+      "kayttajasahko-vuosikulutus": 40000,
+      "kaukojaahdytys-vuosikulutus": 50000,
+      "muu": [
+        {
+          "nimi-fi": "ostettu energia 1 suomeksi",
+          "nimi-sv": "ostettu energia 1 ruotsiksi",
+          "vuosikulutus": 1234.56
+        },
+        {
+          "nimi-fi": "ostettu energia 2 suomeksi",
+          "nimi-sv": "ostettu energia 2 ruotsiksi",
+          "vuosikulutus": 1234.56
+        }
+      ]
+    },
+    "ostetut-polttoaineet": {
+      "kevyt-polttooljy": 1000,
+      "pilkkeet-havu-sekapuu": 2000,
+      "pilkkeet-koivu": 3000,
+      "puupelletit": 4000,
+      "muu": [
+        {
+          "nimi": "Turvetta perhaps?",
+          "yksikko": "Kiloa",
+          "muunnoskerroin": 0.8,
+          "maara-vuodessa": 1000
+        },
+        {
+          "nimi": "ostettu polttoaine 2",
+          "yksikko": "litraa",
+          "muunnoskerroin": 9.5,
+          "maara-vuodessa": 42000.123
+        },
+        {
+          "nimi": "ostettu polttoaine 3",
+          "yksikko": "kg",
+          "muunnoskerroin": 1.23,
+          "maara-vuodessa": 98.2
+        }
+      ]
+    },
+    "sahko-vuosikulutus-yhteensa": 50000,
+    "kaukolampo-vuosikulutus-yhteensa": 40000,
+    "polttoaineet-vuosikulutus-yhteensa": 30000,
+    "kaukojaahdytys-vuosikulutus-yhteensa": 20000
+  },
+  "huomiot": {
+    "lammitys": {
+      "teksti-fi": "Lämmityshuomio suomeksi!",
+      "teksti-sv": "Lämmityshuomio ruotsiksi!",
+      "toimenpide": [
+        {
+          "nimi-fi": "muutosehdotus 1",
+          "nimi-sv": "muutosehdotus ruotsiksi 1",
+          "lampo": -200,
+          "sahko": 204.52,
+          "jaahdytys": -123.45,
+          "eluvun-muutos": 456.6789
+        }
+      ]
+    },
+    "alapohja-ylapohja": {
+      "teksti-fi": "alapohja suomeksi",
+      "teksti-sv": "alapohja ruotsiksi",
+      "toimenpide": [
+        {
+          "nimi-fi": "alapohja toimenpide fi",
+          "nimi-sv": "alapohja toimenpide sv",
+          "lampo": 1,
+          "sahko": 2,
+          "jaahdytys": 3,
+          "eluvun-muutos": 4
+        }
+      ]
+    },
+    "iv-ilmastointi": {
+      "teksti-fi": "iv 1",
+      "teksti-sv": "iv sv 1",
+      "toimenpide": [
+        {
+          "nimi-fi": "iv muutos 1",
+          "nimi-sv": "iv muutos 1 sv",
+          "lampo": 1,
+          "sahko": 5,
+          "jaahdytys": 10,
+          "eluvun-muutos": 20
+        },
+        {
+          "nimi-fi": "iv muutos 2",
+          "nimi-sv": "iv muutos 2",
+          "lampo": 10,
+          "sahko": 50,
+          "jaahdytys": 100,
+          "eluvun-muutos": 200
+        }
+      ]
+    },
+    "ymparys": {
+      "teksti-fi": "asdk aöslkd aslkd alskdö laskdöalskdaskdaölskdaölsdkasöl dkasödksaödlk aösldkaslödka sldk asöldk asöldkasdlkasödlkasdl kasöld kaös ldkasöldk aösldkaslödka ösldkaösldkasöl dkasödl kasödlkasdl ökasdöl kasödlaskdöaksdölas kdöalskd ösalkd fi",
+      "teksti-sv": "ympäristö sv",
+      "toimenpide": [
+        {
+          "nimi-fi": "ympäristön muutos 1",
+          "nimi-sv": "ympäristön muutos sv 1",
+          "lampo": 9,
+          "sahko": 8,
+          "jaahdytys": 7,
+          "eluvun-muutos": 6
+        }
+      ]
+    },
+    "suositukset-fi": "suositus fi",
+    "lisatietoja-fi": "lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja lisatietoja ",
+    "valaistus-muut": {
+      "teksti-fi": "valaistus fi",
+      "teksti-sv": "valaistus sv",
+      "toimenpide": [
+        {
+          "nimi-fi": "valaistus toimenpide",
+          "nimi-sv": "valaistus toimenpide sv",
+          "lampo": 0,
+          "sahko": 0,
+          "jaahdytys": 0,
+          "eluvun-muutos": 0
+        }
+      ]
+    },
+    "lisatietoja-sv": "lisätietoja sv",
+    "suositukset-sv": "suositukset sv"
+  },
+  "lisamerkintoja-fi": "Tämä on hyvin hyvin hyvin pitkä (sanoinko jo että todella pitkä?) lisämerkintöjä fi - kentän teksti. Tämä on hyvin hyvin hyvin pitkä (sanoinko jo että todella pitkä?) lisämerkintöjä fi - kentän teksti.",
+  "lisamerkintoja-sv": "lisamerkintoja sv",
+  "laskutettava-yritys-id": null,
+  "laskuriviviite": "laskuriviviite"
+}

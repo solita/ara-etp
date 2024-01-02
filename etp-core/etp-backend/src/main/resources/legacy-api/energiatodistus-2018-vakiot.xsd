@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.3.0 svn-revision#3528ea595bd29309f69172d231bbce272d21035c. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:vakiot="http://www.energiatodistusrekisteri.fi/ws/energiatodistustypes-2018/vakiot" targetNamespace="http://www.energiatodistusrekisteri.fi/ws/energiatodistustypes-2018/vakiot" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:simpleType name="LengthLimitedDecimalType">
+		<xsd:annotation>
+			<xsd:documentation>
+				10 numeroon rajoitettu desimaaliarvo.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="PosDecimalType">
+		<xsd:annotation>
+			<xsd:documentation>
+				10 numeroon rajoitettu 0 tai suurempi desimaaliarvo.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+			<xsd:minInclusive value="0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="PosExcDecimalType">
+		<xsd:annotation>
+			<xsd:documentation>
+				10 numeroon rajoitettu positiivinen desimaaliarvo.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+			<xsd:minExclusive value="0"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="PostinumeroType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Suomalaisen formaatin mukainen postinumero.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]{5}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="KayttotarkoitusType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Rakennuksen käyttötarkoitus. Suluissa käyttötarkoituksesta johdettava rakennusluokka.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AR">
+				<xsd:annotation>
+					<xsd:documentation>
+						Arkistot (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="AK2">
+				<xsd:annotation>
+					<xsd:documentation>Asuinkerrostalot, joissa on asuinkerroksia enintään kahdessa kerroksessa (Rivitalot ja 2-kerroksiset asuinkerrostalot)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="AK3">
+				<xsd:annotation>
+					<xsd:documentation>Asuinkerrostalot, joissa on asuinkerroksia vähintään kolmessa kerroksessa (Asuinkerrostalot)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="A">
+				<xsd:annotation>
+					<xsd:documentation>Asuntolat (Majoitusliikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="E">
+				<xsd:annotation>
+					<xsd:documentation>Elokuvateatterit (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="HL">
+				<xsd:annotation>
+					<xsd:documentation>Hoitolaitokset (Majoitusliikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="H">
+				<xsd:annotation>
+					<xsd:documentation>Hotellit (Majoitusliikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="JH">
+				<xsd:annotation>
+					<xsd:documentation>Jäähallit (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KAT">
+				<xsd:annotation>
+					<xsd:documentation>Kahden asunnon talot (Pienet asuinrakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KK">
+				<xsd:annotation>
+					<xsd:documentation>Kauppakeskukset (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KREP">
+				<xsd:annotation>
+					<xsd:documentation>Ketjutalon osana olevat rakennukset ja muut erilliset pientalot (Pienet asuinrakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="KIR">
+				<xsd:annotation>
+					<xsd:documentation>Kirjastot (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MLR">
+				<xsd:annotation>
+					<xsd:documentation>Liikenteen rakennukset (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="LR">
+				<xsd:annotation>
+					<xsd:documentation>Liikerakennukset (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="LH">
+				<xsd:annotation>
+					<xsd:documentation>Liikuntahallit (Liikuntahallit, lukuun ottamatta uimahalleja ja jäähalleja)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MU">
+				<xsd:annotation>
+					<xsd:documentation>Museot (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MR">
+				<xsd:annotation>
+					<xsd:documentation>Muut rakennukset, jotka eivät sisälly aiemmin tässä liitteessä lueteltuihin käyttötarkoitusluokkiin (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MH">
+				<xsd:annotation>
+					<xsd:documentation>Myymälähallit (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MYR">
+				<xsd:annotation>
+					<xsd:documentation>Myymälärakennukset (poislukien päivittäistavarakaupan alle 2000m2 yksiköt) (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="N">
+				<xsd:annotation>
+					<xsd:documentation>Näyttelyhallit (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="OR">
+				<xsd:annotation>
+					<xsd:documentation>Opetusrakennukset (Opetusrakennukset ja päiväkodit)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PK">
+				<xsd:annotation>
+					<xsd:documentation>Päiväkodit (Opetusrakennukset ja päiväkodit)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PTK">
+				<xsd:annotation>
+					<xsd:documentation>Päivittäistavarakaupan alle 2000m2 yksiköt (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PT">
+				<xsd:annotation>
+					<xsd:documentation>Palvelutalo (Majoitusliikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="RT">
+				<xsd:annotation>
+					<xsd:documentation>Rivitalot (Rivitalot ja 2-kerroksiset asuinkerrostalot)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="S">
+				<xsd:annotation>
+					<xsd:documentation>Sairaalat (Sairaalat)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="SR">
+				<xsd:annotation>
+					<xsd:documentation>Siirtokelpoiset rakennukset (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TG">
+				<xsd:annotation>
+					<xsd:documentation>Taidegalleriat (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TT">
+				<xsd:annotation>
+					<xsd:documentation>Tavaratalot (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TOKK">
+				<xsd:annotation>
+					<xsd:documentation>Teatteri-, ooppera-, konsertti- ja kongressitalot (Liikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="TE">
+				<xsd:annotation>
+					<xsd:documentation>Terveyskeskukset (Toimistorakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="T">
+				<xsd:annotation>
+					<xsd:documentation>Toimistorakennukset (Toimistorakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="UH">
+				<xsd:annotation>
+					<xsd:documentation>Uimahallit (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="V">
+				<xsd:annotation>
+					<xsd:documentation>Vanhainkodit (Majoitusliikerakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="MRVR">
+				<xsd:annotation>
+					<xsd:documentation>Varastorakennukset (Muut rakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="YAT">
+				<xsd:annotation>
+					<xsd:documentation>Yhden asunnon talot (Pienet asuinrakennukset)
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="EnergiamuotoNimiVakioType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Energiamuodon vakioidut nimet.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="fossiilinen polttoaine">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio fossiiliselle polttoaineelle.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="kaukojäähdytys">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio kaukojäähdytykselle.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="kaukolämpö">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio kaukolämmölle.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="sähkö">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio sähkölle.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="uusiutuva polttoaine">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio uusituvalle polttoaineelle.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="UusiutuvaOmavaraisenergiaNimiVakioType">
+		<xsd:annotation>
+			<xsd:documentation>
+				Uusiutuvan omavaraisenergian vakioidut nimet.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="aurinkosahko">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio: Aurinkosähkö
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="aurinkolampo">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio: Aurinkolämpö
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="tuulisahko">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio: Tuulisähkö
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="lampopumppu">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio: Lämpöpumpun lämmönlähteestä ottama energia
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="muusahko">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio: Muu ympäristöstä otettu energia, sähkö
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="muulampo">
+				<xsd:annotation>
+					<xsd:documentation>
+						Vakio: Muu ympäristöstä otettu energia, lämpö
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,54 @@
+<soapenv:Envelope xmlns:asi="http://www.suomi.fi/asiointitili" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header><wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"><wsse:BinarySecurityToken EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" ValueType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3" wsu:Id="X509-B1AA38BF58D7745B1316884738657522">MIICqjCCAZICCQCWuHuS7T9O8DANBgkqhkiG9w0BAQsFADAWMRQwEgYDVQQDDAtUZXN0aW5nIGV0cDAgFw0yMzA3MDQwOTM3MTBaGA8yMTIzMDYxMDA5MzcxMFowFjEUMBIGA1UEAwwLVGVzdGluZyBldHAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCrUBLhTr17mVcaLrGDcO6i+WyF81pwO76gF0p+9a0z7bwhkRz+SC4dcr9cikRWZcI5t6KVeyLJlSmpQW2lZwf3Y36776lEWs6U1xSdJrc+g/SF4XAyy2kpil73AkGUxhVKdkR1UKLnvXZB7ik/RiAkkYvS/y5enUBQ8jBF5tV6fA8koDht/SPgF/sZJObfj/XBANX6Zs4yS1jqNn74c6DWwvUkO+ieiZtyXeRynnFbNebXv0gszrmLuaDojZqXmu5RMUi47tcmE/F5fiueeDMImGiht2AidgThlZspK84mV2MZfEEyAtkL3JEeU6ouhRKTK9bX+j5XqYXtFeQ4dj/hAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAC4t2ZW2A+UyCI6AOhRZ9DGzmkHEYFkcoE+q2hFBUm+uNnnK0IrJzmC6Sb4dnmB4xdEA/HqmE3IjL/8ITTuyE8bwx7kYlqcvzL6wLpChuLNFSPR8FCuBA9DKjgJpJGlkaoPbLnQuSMuQ7u+DZpzmVMIQLtB+8Ih3dQZk7J8J92cuy2YO/jj3nMCLtLaqTGE1dxc34M/C9WQjQGln03W0M7NkVcCMC8VffjIpkM7L/bcq9aI0EiBnqpT5n5F7yGMHCJ2aHFeGJMtjKZqcjKTKnQRAwDJJgCxygQurGLnswt5xEHZQgEUlxxF/iO/cGuW4Gp2ASL27fRtTKiicskCvlrs=</wsse:BinarySecurityToken><ds:Signature Id="SIG-B1AA38BF58D7745B1316884738658226" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"><ec:InclusiveNamespaces PrefixList="asi soapenv" xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:CanonicalizationMethod><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI="#TS-B1AA38BF58D7745B1316884738657501"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"><ec:InclusiveNamespaces PrefixList="wsse asi soapenv" xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transform></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>c8ZscSKhEa7QDMi64ilTt1qfBc8=</ds:DigestValue></ds:Reference><ds:Reference URI="#id-B1AA38BF58D7745B1316884738657885"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"><ec:InclusiveNamespaces PrefixList="asi" xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transform></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>vGechQ2SqaMU/hHXvIsypJYDet4=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>LHDGSI/n9PGQnOdZhkp6G/zPcQLOmfiFHzaNrTYd2Wfq1WMYzT1Sj24Rdviw0Kg+2dLmB9Z0TkPX
+98b3/k6TC+Ol1mEd8zoa9zQO6ZfHl9zsETfUJqUhxLkdwcv4/CqwaAhjB+TM7Esq+F9FaVOUiYZ+
+ZiBXRiZsJMJ9A9avl+OHXc1elZ/VquPL/UVZj9slhrTKiyFdzhDdO9fTQb0v57z9oCXXW5r91P4j
+zMFOhQFs3WnTu8LBit2cP7tC9mH4hz6+1vmYvaCdG/b3lA5Dtj0hXYIJalyi7bpcHRzz1lJN40LG
+IEYsd+Mzl5iR7qUHMPkRgqZyCEF6IAFy6+l2og==</ds:SignatureValue><ds:KeyInfo Id="KI-B1AA38BF58D7745B1316884738657813"><wsse:SecurityTokenReference wsu:Id="STR-B1AA38BF58D7745B1316884738657824"><wsse:Reference URI="#X509-B1AA38BF58D7745B1316884738657522" ValueType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3"/></wsse:SecurityTokenReference></ds:KeyInfo></ds:Signature><wsu:Timestamp wsu:Id="TS-B1AA38BF58D7745B1316884738657501"><wsu:Created>2023-07-04T12:31:05.742Z</wsu:Created><wsu:Expires>2023-07-04T12:32:05.742Z</wsu:Expires></wsu:Timestamp></wsse:Security></soapenv:Header><soapenv:Body wsu:Id="id-B1AA38BF58D7745B1316884738657885" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"><asi:LahetaViesti>
+            <asi:Viranomainen>
+                <asi:ViranomaisTunnus>Organisaatio</asi:ViranomaisTunnus>
+                <asi:PalveluTunnus>OR</asi:PalveluTunnus>
+                <asi:Yhteyshenkilo Nimi="Henkil&#xF6;" Sahkoposti="testi.kayttaja@organisaatio.or"/>
+                <asi:SanomaTunniste>ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1</asi:SanomaTunniste>
+                <asi:SanomaVersio>1.0</asi:SanomaVersio>
+                <asi:SanomaVarmenneNimi>OR</asi:SanomaVarmenneNimi>
+            </asi:Viranomainen>
+            <asi:Kysely>
+                <asi:Paperi>false</asi:Paperi>
+                <asi:Kohteet>
+                    <asi:Kohde>
+                        <asi:Asiakas AsiakasTunnus="010120-3319" TunnusTyyppi="SSN">
+                            <asi:Osoite>
+                                <asi:Nimi>Testi Vastaanottaja</asi:Nimi>
+                                <asi:Lahiosoite>Testitie 1 A</asi:Lahiosoite>
+                                <asi:Postinumero>00000</asi:Postinumero>
+                                <asi:Postitoimipaikka>Kaupunki</asi:Postitoimipaikka>
+                                <asi:Maa>FI</asi:Maa>
+                            </asi:Osoite>
+                        </asi:Asiakas>
+                        <asi:ViranomaisTunniste>ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1</asi:ViranomaisTunniste>
+                        <asi:Nimeke>Tietopyynt&#xF6;</asi:Nimeke>
+                        <asi:LahetysPvm>2021-09-08T06:21:03.625667Z</asi:LahetysPvm>
+                        <asi:KuvausTeksti>T&#xE4;m&#xE4;n viestin liitteen&#xE4; on tietopyynt&#xF6; koskien rakennustasi: 103515074X
+H&#xE4;meenkatu 10, 333100 Tampere
+Tietopyynt&#xF6;&#xF6;n on vastattava 01.01.2022 menness&#xE4;.
+
+Som bilaga till detta meddelande finns en beg&#xE4;ran om information som g&#xE4;ller din byggnad: 103515074X
+H&#xE4;meenkatu 10, 333100 Tammerfors
+Beg&#xE4;ran om information ska besvaras senast den 01.01.2022.</asi:KuvausTeksti>
+                        <asi:Tiedostot>
+                            <asi:Tiedosto>
+                                <asi:TiedostonKuvaus>Tietopyynt&#xF6; liitteen&#xE4;</asi:TiedostonKuvaus>
+                                <asi:TiedostoSisalto>dGVzdGk=</asi:TiedostoSisalto>
+                                <asi:TiedostoMuoto>application/pdf</asi:TiedostoMuoto>
+                                <asi:TiedostoNimi>tietopyynto.pdf</asi:TiedostoNimi>
+                            </asi:Tiedosto>
+                        </asi:Tiedostot>
+                    </asi:Kohde>
+                </asi:Kohteet>
+                <asi:Tulostustoimittaja>Edita</asi:Tulostustoimittaja>
+                <asi:LahetaTulostukseen>false</asi:LahetaTulostukseen>
+                <asi:Laskutus>
+                    <asi:Tunniste>0000</asi:Tunniste>
+                    <asi:Salasana>0000</asi:Salasana>
+                </asi:Laskutus>
+            </asi:Kysely>
+        </asi:LahetaViesti></soapenv:Body></soapenv:Envelope>

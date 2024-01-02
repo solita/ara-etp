@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header xmlns:asi="http://www.suomi.fi/asiointitili"/>
+    <soapenv:Body xmlns:asi="http://www.suomi.fi/asiointitili">
+        <LahetaViestiResponse xmlns="http://www.suomi.fi/asiointitili"
+                              xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+            <LahetaViestiResult>
+                <TilaKoodi>
+                    <TilaKoodi>202</TilaKoodi>
+                    <TilaKoodiKuvaus>Asia tallennettuna asiointitilipalvelun käsittelyjonoon, mutta se ei vielä näy asiakkaan asiointi-tilillä. Lopullinen vastaus on haettavissa erikseen erillisellä kutsulla.</TilaKoodiKuvaus>
+                    <SanomaTunniste>ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1</SanomaTunniste>
+                </TilaKoodi>
+            </LahetaViestiResult>
+        </LahetaViestiResponse>
+    </soapenv:Body>
+</soapenv:Envelope>

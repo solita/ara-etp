@@ -1,0 +1,56 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:asi="http://www.suomi.fi/asiointitili">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <asi:LahetaViesti xmlns:asi="http://www.suomi.fi/asiointitili">
+            <asi:Viranomainen>
+                <asi:ViranomaisTunnus>Organisaatio</asi:ViranomaisTunnus>
+                <asi:PalveluTunnus>OR</asi:PalveluTunnus>
+                <asi:Yhteyshenkilo Nimi="Henkilö" Sahkoposti="testi.kayttaja@organisaatio.or" />
+                <asi:SanomaTunniste>ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1</asi:SanomaTunniste>
+                <asi:SanomaVersio>1.0</asi:SanomaVersio>
+                <asi:SanomaVarmenneNimi>OR</asi:SanomaVarmenneNimi>
+            </asi:Viranomainen>
+            <asi:Kysely>
+                <asi:Paperi>false</asi:Paperi>
+                <asi:Kohteet>
+                    <asi:Kohde>
+                        <asi:Asiakas AsiakasTunnus="010120-3319" TunnusTyyppi="SSN">
+                            <asi:Osoite>
+                                <asi:Nimi>Testi Vastaanottaja</asi:Nimi>
+                                <asi:Lahiosoite>Testitie 1 A</asi:Lahiosoite>
+                                <asi:Postinumero>00000</asi:Postinumero>
+                                <asi:Postitoimipaikka>Kaupunki</asi:Postitoimipaikka>
+                                <asi:Maa>FI</asi:Maa>
+                            </asi:Osoite>
+                        </asi:Asiakas>
+                        <asi:ViranomaisTunniste>ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1</asi:ViranomaisTunniste>
+                        <asi:Nimeke>Tietopyyntö</asi:Nimeke>
+                        <asi:LahetysPvm>2021-09-08T06:21:03.625667Z</asi:LahetysPvm>
+                        <asi:KuvausTeksti>Tämän viestin liitteenä on tietopyyntö koskien rakennustasi: 103515074X
+Hämeenkatu 10, 333100 Tampere
+Tietopyyntöön on vastattava 01.01.2022 mennessä.
+
+Som bilaga till detta meddelande finns en begäran om information som gäller din byggnad: 103515074X
+Hämeenkatu 10, 333100 Tammerfors
+Begäran om information ska besvaras senast den 01.01.2022.</asi:KuvausTeksti>
+                        <asi:Tiedostot>
+                            <asi:Tiedosto>
+                                <asi:TiedostonKuvaus>Tietopyyntö liitteenä</asi:TiedostonKuvaus>
+                                <asi:TiedostoSisalto>dGVzdGk=</asi:TiedostoSisalto>
+                                <asi:TiedostoMuoto>application/pdf</asi:TiedostoMuoto>
+                                <asi:TiedostoNimi>tietopyynto.pdf</asi:TiedostoNimi>
+                            </asi:Tiedosto>
+                        </asi:Tiedostot>
+                    </asi:Kohde>
+                </asi:Kohteet>
+                <asi:Tulostustoimittaja>Edita</asi:Tulostustoimittaja>
+                <asi:LahetaTulostukseen>false</asi:LahetaTulostukseen>
+                <asi:Laskutus>
+                    <asi:Tunniste>0000</asi:Tunniste>
+                    <asi:Salasana>0000</asi:Salasana>
+                </asi:Laskutus>
+            </asi:Kysely>
+        </asi:LahetaViesti>
+    </soapenv:Body>
+</soapenv:Envelope>

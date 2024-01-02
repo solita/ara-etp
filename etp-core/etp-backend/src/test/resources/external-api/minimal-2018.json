@@ -1,0 +1,86 @@
+{
+  "perustiedot": {
+    "julkinen-rakennus": false,
+    "yritys": {}
+  },
+  "lahtotiedot": {
+    "rakennusvaippa": {
+      "ulkoseinat": {},
+      "ylapohja": {},
+      "alapohja": {},
+      "ikkunat": {},
+      "ulkoovet": {}
+    },
+    "ikkunat": {
+      "pohjoinen": {},
+      "koillinen": {},
+      "ita": {},
+      "kaakko": {},
+      "etela": {},
+      "lounas": {},
+      "lansi": {},
+      "luode": {},
+      "valokupu": {},
+      "katto": {}
+    },
+    "ilmanvaihto": {
+      "erillispoistot": {},
+      "ivjarjestelma": {},
+      "paaiv": {}
+    },
+    "lammitys": {
+      "lammitysmuoto-1": {},
+      "lammitysmuoto-2": {},
+      "lammonjako": {},
+      "tilat-ja-iv": {},
+      "lammin-kayttovesi": {},
+      "takka": {},
+      "ilmalampopumppu": {}
+    },
+    "jaahdytysjarjestelma": {},
+    "lkvn-kaytto": {},
+    "sis-kuorma": {
+      "henkilot": {},
+      "kuluttajalaitteet": {},
+      "valaistus": {}
+    }
+  },
+  "tulokset": {
+    "kaytettavat-energiamuodot": {},
+    "uusiutuvat-omavaraisenergiat": {},
+    "kuukausierittely": [],
+    "tekniset-jarjestelmat": {
+      "tilojen-lammitys": {},
+      "tuloilman-lammitys": {},
+      "kayttoveden-valmistus": {},
+      "jaahdytys": {}
+    },
+    "nettotarve": {},
+    "lampokuormat": {}
+  },
+  "toteutunut-ostoenergiankulutus": {
+    "ostettu-energia": {},
+    "ostetut-polttoaineet": {
+      "muu": []
+    }
+  },
+  "huomiot": {
+    "lammitys": {
+      "toimenpide": []
+    },
+    "alapohja-ylapohja": {
+      "toimenpide": []
+    },
+    "iv-ilmastointi": {
+      "toimenpide": []
+    },
+    "ymparys": {
+      "toimenpide": []
+    },
+    "valaistus-muut": {
+      "toimenpide": []
+    }
+  }
+}
+
+

@@ -1,0 +1,16 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <createECaseResponse xmlns="http://vismaconsulting.fi/ebs/1.0">
+            <return>
+                <objectIdentity>
+                    <objectClass>ECase</objectClass>
+                    <id>38444</id>
+                    <version>1</version>
+                </objectIdentity>
+                <caseNumber>ARA-05.03.02-2021-31</caseNumber>
+                <status>NEW</status>
+                <operationResponses/>
+            </return>
+        </createECaseResponse>
+    </soap:Body>
+</soap:Envelope>

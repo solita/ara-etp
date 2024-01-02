@@ -1,0 +1,476 @@
+<html>
+<head>
+    <style>
+        .document-header {
+            position: running(document-header);
+            margin-left: -1.2cm;
+            margin-top: 0.5cm;
+        }
+
+        .document-footer {
+            position: running(document-footer);
+            font-size: 8pt;
+        }
+
+        .document-footer > table {
+            letter-spacing: 0px;
+        }
+
+        .document-footer > table td {
+            padding: 10px 10px 20px 10px;
+            border-left: 1px solid black;
+            white-space: nowrap;
+            vertical-align: top;
+
+        }
+
+        .otsikko-ja-vastaanottaja-container {
+            position: relative;
+            height: 4.24cm;
+            width: 18.0cm;
+        }
+
+        .otsikko {
+            margin-left: 9.30cm;
+            text-transform: uppercase;
+        }
+
+        .otsikko-ja-vastaanottaja-container .otsikko {
+            position: absolute;
+            top: 0;
+            width: 7.2cm;
+            height: 3cm;
+        }
+
+        @page {
+            margin: 3.5cm 1.6cm 4.5cm 2.5cm;
+            size: A4 portrait;
+            @top-left {
+                content: element(document-header);
+
+            }
+            @top-right {
+                font-family: roboto;
+                font-size: 11pt;
+                content: counter(page) " / " counter(pages);
+            }
+
+            @bottom-center {
+                font-family: roboto;
+                content: element(document-footer)
+            };
+
+            @footnote {
+                width: 100%;
+                border-top: 1px solid black;
+                margin-top: 1.2cm;
+            }
+        }
+
+        body {
+            font-family: roboto;
+            font-size: 11pt;
+            letter-spacing: 0.8px;
+        }
+
+        b {
+            font-family: roboto;
+            font-weight: bold;
+        }
+
+
+        ul {
+            margin-top: 1.28cm;
+            margin-bottom: 1.28cm;
+            margin-left: 0;
+            padding-left: 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin-left: 0.78cm;
+            margin-top: 0.40cm;
+            line-height: 1.4;
+        }
+
+        li:before {
+            margin-left: -0.78cm;
+            display: inline-block;
+            width: 0.78cm;
+            content: '—';
+        }
+
+        li.slim {
+            margin-left: 0.4cm;
+        }
+        li.slim:before {
+            margin-left: -0.4cm;
+            width: 0.4cm;
+        }
+
+        li.no-indicator:before {
+            content:'';
+        }
+
+        p {
+            margin-bottom: 1.15cm;
+            line-height: 1.4;
+        }
+
+        h1 {
+            font-size: 16pt;
+        }
+
+        .sivunvaihto {
+            page-break-after: always
+        }
+
+        .isot-kirjaimet {
+            text-transform: uppercase;
+        }
+
+        .sarake {
+            border-spacing: 0;
+        }
+
+        .sarake td {
+            vertical-align: top;
+            white-space: nowrap;
+        }
+
+        .sarake td + td {
+            padding-left: 10px;
+        }
+
+        .max-width {
+            width: 100%;
+        }
+
+        .oikeellisuus-kohde {
+            margin-top: 1.7cm;
+        }
+
+        .kaytto-omistaja {
+            margin-top: 0.5cm;
+        }
+
+        .kaytto-kohde {
+            margin-top: 0.5cm;
+            margin-left: 1cm;
+            margin-bottom: 1.2cm;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .list-item:after {
+          content: ", ";
+        }
+
+        .list-item:last-child:after {
+          content: "";
+        }
+
+        .page-break-avoid {
+          page-break-inside: avoid;
+        }
+
+        .mt-0 {
+          margin-top: 0;
+        }
+
+        .mb-0 {
+          margin-bottom: 0;
+        }
+
+        .vastaanottaja {
+            height: 3cm;
+            width: 7.2cm;
+        }
+
+        .otsikko-ja-vastaanottaja-container .vastaanottaja {
+            position: absolute;
+            top: 0;
+        }
+
+        .footnote {
+            font-size: 10pt;
+            float: footnote;
+        }
+
+        .respect-new-lines {
+            white-space: pre-line;
+        }
+        ::footnote-call {
+            counter-increment: footnote 1;
+            content: "";
+        }
+        ::footnote-marker {
+            content: "";
+        }
+
+        .small-text {
+            font-size: 10pt;
+        }
+
+        i {
+            font-style: italic;
+        }
+    </style>
+
+</head>
+<body>
+<div class="document-header">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 459.75 110.54" width="200px" height="48.08px">
+        <defs>
+            <style>.cls-1 {
+                fill-rule: evenodd;
+            }</style>
+        </defs>
+        <g id="Layer_2" data-name="Layer 2">
+            <g id="Layer_1-2" data-name="Layer 1">
+                <path d="M92.8,103.86h12.53l0-37.95c0-18.3,2.64-34.32,30.49-46.9V7.07c-14.93,5.64-25.23,15.82-31.23,23.53l-.06-2.94s0-16.92.54-23.85c-1.68,0-12.72,0-12.72,0,.8,7.36.45,22.29.45,33.43l0,66.6Z"/>
+                <path class="cls-1"
+                      d="M200,103.86h12.34c-1-7-1-13.13-1-21.29V37.81c0-26.46-10.54-37.39-35.61-37.8a100.76,100.76,0,0,0-29.8,4.25V15.57a99.66,99.66,0,0,1,29.8-4.82c16.91,0,23.08,8.76,23.08,26.06V42h-2.39c-26.26,0-62.47,1.59-62.47,35.61,0,9.15,4.58,28.64,33.43,28.64,12.53,0,26.65-6.56,32.22-18.7h.4v16.32Zm-1.19-45c0,10.94-.6,36.6-30,36.6-11.54,0-21.09-5-21.09-18.3,0-22.28,25.86-24.47,47.55-24.47h3.58V58.9Z"/>
+                <path class="cls-1"
+                      d="M66.05,103.86H78.38c-1-7-1-13.13-1-21.29V37.81C77.39,11.35,66.84.42,41.78,0A100.71,100.71,0,0,0,12,4.26V15.57a99.66,99.66,0,0,1,29.8-4.82c16.91,0,23.08,8.76,23.08,26.06V42H62.47C36.21,42,0,43.58,0,77.6c0,9.15,4.58,28.64,33.42,28.64,12.54,0,26.66-6.56,32.23-18.7h.4v16.32Zm-1.19-45c0,10.94-.6,36.6-30,36.6-11.54,0-21.09-5-21.09-18.3,0-22.28,25.86-24.47,47.55-24.47h3.58V58.9Z"/>
+                <path class="cls-1"
+                      d="M243.71,110.41a7.46,7.46,0,0,0,1.45.13c2.42,0,3-1.63,3-3.79V91.45h-1.65v15.09c0,1.4-.14,2.58-1.82,2.58a3.81,3.81,0,0,1-1-.16v1.45Zm4.47-24.75h-1.65v2.21h1.65V85.66Z"/>
+                <path class="cls-1"
+                      d="M260.07,104.86h1.63a19.35,19.35,0,0,1-.13-2.82V96.13c0-3.5-1.4-5-4.71-5a10.58,10.58,0,0,0-4,.92v1.61a7.13,7.13,0,0,1,4-1.11c2.23,0,3.05,1.16,3.05,3.45v.68h-.32c-3.47,0-8.26.21-8.26,4.71,0,1.21.61,3.78,4.42,3.78A4.7,4.7,0,0,0,260,102.7h.06v2.16Zm-.16-5.94c0,1.44-.08,4.83-4,4.83-1.53,0-2.79-.65-2.79-2.42,0-2.94,3.42-3.23,6.29-3.23h.47v.82Z"/>
+                <polygon
+                        points="272.82 104.86 274.48 104.86 274.48 97.97 281.1 104.86 283.39 104.86 276.05 97.39 282.6 91.45 280.47 91.45 274.48 96.94 274.48 85.13 272.82 85.13 272.82 104.86 272.82 104.86"/>
+                <path class="cls-1"
+                      d="M295,102.76a8.81,8.81,0,0,1-3.77,1c-2.89,0-4.41-2.28-4.41-5.12H296v-.85c0-3.6-1.56-6.65-5.34-6.65-3.4,0-5.66,2.92-5.66,7s1.66,7,6.1,7a11.1,11.1,0,0,0,3.9-.73v-1.68Zm-8.18-5.55c0-2.21,1.5-4.66,3.94-4.66s3.42,2.31,3.42,4.66Z"/>
+                <path d="M299.12,104.86h1.66V97.68c0-2.34,1-5.13,4-5.13,2.74,0,3.18,2,3.18,4.31v8h1.66v-8c0-3.32-1-5.71-4.58-5.71a4.56,4.56,0,0,0-4.18,2.58h-.05V85.13h-1.66v19.73Z"/>
+                <path class="cls-1" d="M313.74,104.86h1.66V91.45h-1.66v13.41Zm1.66-19.2h-1.66v2.21h1.66V85.66Z"/>
+                <path d="M325.36,91.45h-3.05V87.63l-1.65.58v3.24H318v1.42h2.63v7.83c0,2.45.1,4.47,3,4.47a6.26,6.26,0,0,0,2-.36l-.1-1.37a4,4,0,0,1-1.53.31c-1.34,0-1.79-1-1.79-2.21V92.87h3.05V91.45Z"/>
+                <path d="M334.11,91.45h-3.05V87.63l-1.65.58v3.24h-2.63v1.42h2.63v7.83c0,2.45.1,4.47,3,4.47a6.26,6.26,0,0,0,2-.36l-.1-1.37a4,4,0,0,1-1.53.31c-1.34,0-1.79-1-1.79-2.21V92.87h3.05V91.45Z"/>
+                <path class="cls-1"
+                      d="M342.84,89.21h2V87h-2v2.21Zm-4.5,0h2V87h-2v2.21Zm6.44,15.65h1.63a19.35,19.35,0,0,1-.13-2.82V96.13c0-3.5-1.39-5-4.7-5a10.58,10.58,0,0,0-3.95.92v1.61a7.13,7.13,0,0,1,3.95-1.11c2.23,0,3.05,1.16,3.05,3.45v.68h-.32c-3.47,0-8.26.21-8.26,4.71,0,1.21.61,3.78,4.42,3.78a4.7,4.7,0,0,0,4.26-2.47h0v2.16Zm-.15-5.94c0,1.44-.08,4.83-4,4.83-1.53,0-2.79-.65-2.79-2.42,0-2.94,3.42-3.23,6.28-3.23h.48v.82Z"/>
+                <path d="M368.09,104.86V95.63c0-2.61-1.53-4.5-4.24-4.5A4.49,4.49,0,0,0,359.57,94h-.06A3.37,3.37,0,0,0,356,91.13a4.22,4.22,0,0,0-4.18,2.6l0,0V91.45h-1.61a30.62,30.62,0,0,1,.11,3.15v10.26h1.66V97.44c0-3.34,1.79-4.89,3.6-4.89,2.13,0,2.84,1.5,2.84,3.39v8.92H360V97.44c0-3.34,1.79-4.89,3.6-4.89,2.13,0,2.84,1.5,2.84,3.39v8.92Z"/>
+                <path class="cls-1" d="M372.13,104.86h1.66V91.45h-1.66v13.41Zm1.66-19.2h-1.66v2.21h1.66V85.66Z"/>
+                <path d="M376.78,104.54a10,10,0,0,0,3.76.63c2,0,4.69-1,4.69-3.81,0-4.39-6.61-4.08-6.61-6.57,0-1.71,1.19-2.24,2.9-2.24a7.91,7.91,0,0,1,3,.63l.16-1.44a10.58,10.58,0,0,0-3.32-.61c-2.21,0-4.36,1-4.36,3.66,0,3.89,6.44,3.39,6.44,6.57,0,1.53-1.39,2.39-3,2.39a7.89,7.89,0,0,1-3.5-.84l-.16,1.63Z"/>
+                <polygon
+                        points="388.19 104.86 389.85 104.86 389.85 97.97 396.48 104.86 398.77 104.86 391.43 97.39 397.98 91.45 395.85 91.45 389.85 96.94 389.85 85.13 388.19 85.13 388.19 104.86 388.19 104.86"/>
+                <path class="cls-1"
+                      d="M410.34,102.76a8.76,8.76,0,0,1-3.76,1c-2.89,0-4.42-2.28-4.42-5.12h9.18v-.85c0-3.6-1.55-6.65-5.34-6.65-3.39,0-5.65,2.92-5.65,7s1.65,7,6.1,7a11.09,11.09,0,0,0,3.89-.73v-1.68Zm-8.18-5.55c0-2.21,1.5-4.66,3.95-4.66s3.41,2.31,3.41,4.66Z"/>
+                <path d="M413.31,104.54a10,10,0,0,0,3.76.63c2,0,4.69-1,4.69-3.81,0-4.39-6.61-4.08-6.61-6.57,0-1.71,1.19-2.24,2.9-2.24a7.91,7.91,0,0,1,3,.63l.16-1.44a10.58,10.58,0,0,0-3.32-.61c-2.21,0-4.36,1-4.36,3.66,0,3.89,6.44,3.39,6.44,6.57,0,1.53-1.39,2.39-3,2.39a7.89,7.89,0,0,1-3.5-.84l-.16,1.63Z"/>
+                <polygon
+                        points="424.72 104.86 426.38 104.86 426.38 97.97 433.01 104.86 435.3 104.86 427.96 97.39 434.51 91.45 432.38 91.45 426.38 96.94 426.38 85.13 424.72 85.13 424.72 104.86 424.72 104.86"/>
+                <path d="M448.34,91.45h-1.65v7.41c0,2.24-.95,4.89-4,4.89-2.29,0-3.19-1.63-3.19-4.15V91.45h-1.65V100c0,2.94,1.26,5.15,4.57,5.15a4.25,4.25,0,0,0,4.34-2.7h0v2.39h1.61a30.82,30.82,0,0,1-.11-3.16V91.45Z"/>
+                <path d="M451.31,104.54a10,10,0,0,0,3.76.63c2,0,4.68-1,4.68-3.81,0-4.39-6.6-4.08-6.6-6.57,0-1.71,1.19-2.24,2.9-2.24a7.91,7.91,0,0,1,3,.63l.16-1.44a10.58,10.58,0,0,0-3.32-.61c-2.21,0-4.36,1-4.36,3.66,0,3.89,6.44,3.39,6.44,6.57,0,1.53-1.39,2.39-3,2.39a7.89,7.89,0,0,1-3.5-.84l-.16,1.63Z"/>
+                <path class="cls-1"
+                      d="M244.79,78.56h1.76l2-4.92h9.26l2,4.92h1.9L254.36,60.2h-2.05l-7.52,18.36Zm12.39-6.5h-8l4-10.12,4,10.12Z"/>
+                <path d="M262.89,78.24a10,10,0,0,0,3.76.63c2,0,4.68-1,4.68-3.81,0-4.39-6.6-4.08-6.6-6.57,0-1.71,1.18-2.24,2.89-2.24a7.91,7.91,0,0,1,3,.63l.16-1.44a10.48,10.48,0,0,0-3.31-.61c-2.21,0-4.37,1-4.37,3.66,0,3.89,6.44,3.39,6.44,6.57,0,1.53-1.39,2.39-3,2.39a7.89,7.89,0,0,1-3.5-.84l-.15,1.63Z"/>
+                <path d="M284.76,65.15h-1.65v7.41c0,2.24-.95,4.89-4,4.89-2.29,0-3.19-1.63-3.19-4.15V65.15H274.3v8.57c0,3,1.26,5.15,4.57,5.15a4.25,4.25,0,0,0,4.34-2.7h.05v2.39h1.61a30.82,30.82,0,0,1-.11-3.16V65.15Z"/>
+                <path d="M306.77,78.56V69.33c0-2.61-1.52-4.5-4.23-4.5a4.51,4.51,0,0,0-4.29,2.84h-.05a3.38,3.38,0,0,0-3.55-2.84,4.2,4.2,0,0,0-4.18,2.6l-.05,0V65.15h-1.61a30.62,30.62,0,0,1,.11,3.15V78.56h1.65V71.14c0-3.34,1.79-4.89,3.61-4.89,2.13,0,2.84,1.5,2.84,3.39v8.92h1.65V71.14c0-3.34,1.79-4.89,3.61-4.89,2.13,0,2.84,1.5,2.84,3.39v8.92Z"/>
+                <path class="cls-1" d="M310.82,78.56h1.66V65.15h-1.66V78.56Zm1.66-19.2h-1.66v2.21h1.66V59.36Z"/>
+                <path d="M315.47,78.24a10,10,0,0,0,3.76.63c2,0,4.68-1,4.68-3.81,0-4.39-6.6-4.08-6.6-6.57,0-1.71,1.18-2.24,2.89-2.24a8,8,0,0,1,3,.63l.15-1.44a10.48,10.48,0,0,0-3.31-.61c-2.21,0-4.37,1-4.37,3.66,0,3.89,6.45,3.39,6.45,6.57,0,1.53-1.4,2.39-3,2.39a7.89,7.89,0,0,1-3.5-.84l-.16,1.63Z"/>
+                <path class="cls-1"
+                      d="M335.88,76.45a8.67,8.67,0,0,1-3.77,1c-2.89,0-4.41-2.28-4.41-5.12h9.17v-.85c0-3.6-1.55-6.65-5.33-6.65-3.4,0-5.66,2.92-5.66,7s1.66,7,6.1,7a11.1,11.1,0,0,0,3.9-.73V76.45Zm-8.18-5.54c0-2.21,1.49-4.66,3.94-4.66s3.42,2.32,3.42,4.66Z"/>
+                <path d="M340,78.56h1.66V71.14c0-2.23.95-4.89,4-4.89,2.29,0,3.18,1.63,3.18,4.16v8.15h1.66V70c0-2.95-1.26-5.16-4.58-5.16a4.27,4.27,0,0,0-4.34,2.71h-.05V65.15h-1.6c.1,1.07.1,2.13.1,3.15V78.56Z"/>
+                <path d="M362,78.56h1.66V71.93c0-2.42.71-5.36,3.34-5.36a4.61,4.61,0,0,1,1.21.15V65a4.92,4.92,0,0,0-1.16-.16c-1.71,0-2.84,1.39-3.45,2.89h-.05V65.15h-1.66a22.92,22.92,0,0,1,.11,3V78.56Z"/>
+                <path class="cls-1"
+                      d="M378.42,78.56h1.63a19.28,19.28,0,0,1-.13-2.81V69.83c0-3.5-1.4-5-4.71-5a10.58,10.58,0,0,0-3.95.92v1.6a7.2,7.2,0,0,1,3.95-1.1c2.23,0,3.05,1.16,3.05,3.45v.68h-.32c-3.47,0-8.26.21-8.26,4.71,0,1.21.61,3.78,4.42,3.78a4.7,4.7,0,0,0,4.26-2.47h.06v2.16Zm-.16-5.94c0,1.44-.08,4.83-4,4.83-1.53,0-2.79-.65-2.79-2.42,0-2.94,3.42-3.23,6.29-3.23h.47v.82Z"/>
+                <path d="M383.86,78.56h1.66V71.38c0-2.34,1-5.13,4-5.13,2.74,0,3.18,2,3.18,4.31v8h1.66v-8c0-3.32-1-5.71-4.58-5.71a4.54,4.54,0,0,0-4.18,2.58h-.05V58.83h-1.66V78.56Z"/>
+                <path class="cls-1"
+                      d="M397.46,71.85c0,3.66,1.92,7,6.26,7s6.25-3.36,6.25-7-1.92-7-6.25-7-6.26,3.37-6.26,7Zm1.81,0c0-3.1,1.55-5.6,4.45-5.6s4.44,2.5,4.44,5.6-1.55,5.6-4.44,5.6-4.45-2.49-4.45-5.6Z"/>
+                <path class="cls-1" d="M413.1,78.56h1.66V65.15H413.1V78.56Zm1.66-19.2H413.1v2.21h1.66V59.36Z"/>
+                <path d="M424.72,65.15h-3.05V61.33l-1.66.58v3.24h-2.63v1.42H420V74.4c0,2.45.11,4.47,3.06,4.47a6.26,6.26,0,0,0,2-.36l-.1-1.37a4,4,0,0,1-1.53.31c-1.34,0-1.79-1-1.79-2.21V66.57h3.05V65.15Z"/>
+                <path d="M438.15,65.15H436.5v7.41c0,2.24-.95,4.89-4,4.89-2.29,0-3.19-1.63-3.19-4.15V65.15h-1.65v8.57c0,3,1.26,5.15,4.57,5.15a4.25,4.25,0,0,0,4.34-2.7h0v2.39h1.61a30.82,30.82,0,0,1-.11-3.16V65.15Z"/>
+                <path d="M441.12,78.24a10,10,0,0,0,3.76.63c2,0,4.69-1,4.69-3.81,0-4.39-6.61-4.08-6.61-6.57,0-1.71,1.19-2.24,2.9-2.24a7.91,7.91,0,0,1,3,.63l.16-1.44a10.58,10.58,0,0,0-3.32-.61c-2.21,0-4.36,1-4.36,3.66,0,3.89,6.44,3.39,6.44,6.57,0,1.53-1.39,2.39-3,2.39a7.89,7.89,0,0,1-3.5-.84l-.16,1.63Z"/>
+                <polygon points="451.54 72.38 458.14 72.38 458.14 70.56 451.54 70.56 451.54 72.38 451.54 72.38"/>
+            </g>
+        </g>
+    </svg>
+</div>
+
+<div class="document-footer">
+    <table>
+        <tr>
+            <td>
+                <div>
+                    <div><b>Osoite</b></div>
+                    <div>PL 30</div>
+                    <div>Kirkkokatu 12</div>
+                    <div>15141 Lahti</div>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <div><b>Adress</b></div>
+                    <div>PB 30</div>
+                    <div>Kirkkokatu 12</div>
+                    <div>15141 Lahtis</div>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <div><b>Puhelin . Telefon</b></div>
+                    <div>029 525 0800</div>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <div><b>E-mail</b></div>
+                    <div>kirjaamo.ara@ara.fi</div>
+                    <div>etunimi.sukunimi@ara.fi</div>
+                    <div>förnamn.släktnamn@ara.fi</div>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <div><b>Web</b></div>
+                    <div><b>www.ara.fi</b></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div class="otsikko-ja-vastaanottaja-container">
+    <div class="otsikko">
+        <b>Kuulemiskirje</b>
+        <b>26.06.2023</b> <br/>
+        Dnro: 
+    </div>
+
+    <div class="vastaanottaja">
+        Talonomistaja Testi<br/>
+        Testikatu 12<br/>
+        00100 Helsinki
+    </div>
+</div>
+
+<h1>Kuuleminen uhkasakon asettamisesta</h1>
+
+<div>
+    Rakennuksen omistaja: Talonomistaja Testi<br/>
+    Rakennus: Testitie 5 90100 OULU
+</div>
+
+<h2>Asian tausta</h2>
+
+<p>Rakennuksen energiatodistuksesta annetun lain (50/2013, energiatodistuslaki) 6 §:n mukaan rakennusta, huoneistoa tai
+    niiden hallintaoikeutta myytäessä tai vuokrattaessa täytyy olla energiatodistus. Energiatodistus on annettava joko
+    alkuperäisenä tai jäljennöksenä ostajalle tai vuokralaiselle. Kohteen julkisessa myynti- tai vuokrausilmoituksessa
+    on mainittava myytävän tai vuokrattavan kohteen energiatehokkuusluokka. Rakennuksen omistaja tai haltija vastaa
+    siitä, että rakennuksen energiatodistus hankitaan ja sitä käytetään laissa säädetyissä tilanteissa
+    (energiatodistuslain 2 §).</p>
+
+<p>Seuraamuksista säädetään energiatodistuslain 24 §:ssä. Jos rakennuksen omistaja ei täytä energiatodistuslaissa
+    säädettyjä velvollisuuksiaan tai toimii muutoin energiatodistuslain tai sen nojalla annettujen säännösten
+    vastaisesti, ARAn on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa ei
+    korjata määräajassa, ARAn on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
+    määräajassa korjata, ARAn tulee antaa tilanteen mukainen käsky- tai kieltopäätös. ARA voi tehostaa käskyä tai
+    kieltoa vakavissa tai olennaisissa rikkomuksissa uhkasakolla tai teettämis- tai keskeyttämisuhalla, joista
+    säädetään uhkasakkolaissa (1113/1990).</p>
+
+<p>Omistamaanne omakotitaloa osoitteessa Testitie 5 90100 OULU on markkinoitu julkisesti
+    Etuovi -sivustolla ilman energiatodistusta.
+    Tästä syystä ARA ryhtyi energiatodistuslain 24 §:n
+    mukaisiin toimenpiteisiin ja on lähettänyt Teille 12.06.2023 kehotuksen.</p>
+
+<p>Kehotuksessa Teitä on pyydetty 12.07.2023 mennessä antamaan ARAlle tietoa mahdollisesta
+    energiatodistuksesta tai
+    jos todistusta ei ole, sen laadinta-aikataulusta. Kun kehotusta ei noudatettu, ARA antoi Teille varoituksen, jonka
+    määräaika oli 13.08.2023. Asiantilaa ei kehotuksesta ja varoituksesta huolimatta korjattu, ja ARAn
+    energiatodistusrekisteristä ilmenee, ettei kohteelle ole edelleenkään laadittu energiatodistusta<sup>1</sup>.</p>
+<p>ARA voi energiatodistuslain 24 §:n mukaisena viimesijaisena keinona antaa käskypäätöksen, jolla Teidät velvoitetaan
+    hankkimaan energiatodistus. Käskyä voidaan tehostaa uhkasakolla, jonka määrä on arviolta 800 euroa.</p>
+
+<h2>Asianosaisen kuuleminen</h2>
+
+<p>Ennen asian ratkaisemista ARA varaa Teille hallintolain (434/2003) 34 §:n mukaisen tilaisuuden lausua mielipiteenne
+    asiasta sekä antaa selitys sellaisista vaatimuksista ja selvityksistä, jotka voivat vaikuttaa asian ratkaisuun.
+    Vastaus on annettava viimeistään 22.07.2023. Vastauksen antamatta jättäminen ei estä
+    asian ratkaisemista.</p>
+
+<div class="page-break-avoid">
+<p>Vastaus pyydetään toimittamaan ARAn kirjaamoon joko sähköpostitse <br/>kirjaamo.ara@ara.fi tai postitse Asumisen rahoitus-
+    ja kehittämiskeskus, PL 30, 15141 Lahti.</p>
+
+Asian Tuntija
+<br/>
+energia-asiantuntija
+</div>
+
+<p class="footnote mb-0"><sup>1</sup> ARAn energiatodistusrekisterissä ovat 1.5.2015 jälkeen laaditut energiatodistukset.</p>
+
+<div class="sivunvaihto"></div>
+
+<div class="otsikko-ja-vastaanottaja-container">
+    <div class="otsikko">
+        <b>Brev om hörande</b>
+        <b>26.06.2023</b> <br/>
+        Dnro: 
+    </div>
+
+    <div class="vastaanottaja">
+        Talonomistaja Testi<br/>
+        Testikatu 12<br/>
+        00100 Helsinki
+    </div>
+</div>
+
+<h1>Hörande om föreläggande av vite</h1>
+
+<div>
+    Byggnadens ägare: Talonomistaja Testi<br/>
+    Byggnad: Testitie 5 90100 OULU
+</div>
+
+<h2>Ärendets bakgrund</h2>
+
+<p>Enligt 6 § i lagen om energicertifikat för byggnader (50/2013, lagen om energicertifikat för byggnader) ska det
+    finnas ett energicertifikat vid försäljning eller uthyrning av en byggnad eller lägenhet eller besittningsrätten
+    till dem. Energicertifikatet ska överlämnas till köparen eller hyrestagaren antingen i original eller som kopia. I
+    en offentlig anmälan om försäljning eller uthyrning av ett objekt ska energieffektivitetsklassen för det objekt som
+    säljs eller hyrs ut nämnas. Byggnadens ägare eller innehavare ansvarar för att byggnadens energicertifikat skaffas
+    och används i de situationer som regleras i lagen (2 § i lagen om energicertifikat).</p>
+
+<p>Bestämmelser om påföljderna finns i 24 § i lagen om energicertifikat. Om byggnadens ägare inte fullgör sina
+    skyldigheter enligt lagen om energicertifikat eller i övrigt handlar i strid med lagen om energicertifikat eller
+    bestämmelserna som utfärdats med stöd av den, ska ARA uppmana ägaren att rätta till situationen och ange en
+    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska ARA ge den som
+    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska ARA enligt
+    vad situationen kräver meddela beslut om föreläggande eller förbud. Vid allvarliga eller väsentliga överträdelser
+    kan ARA förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
+    vilka det bestäms i viteslagen (1113/1990).</p>
+
+<p>Ert egnahemshus på Testitie 5 90100 OULU har marknadsförts offentligt på webbplatsen
+    Etuovi utan energicertifikat.
+    Därför vidtog ARA åtgärder enligt 24 § i lagen om energicertifikat och har skickat en
+    uppmaning till Er den 12.06.2023.</p>
+
+<p>I uppmaningen har Ni ombetts att senast 12.07.2023 ge ARA information om ett eventuellt energicertifikat
+    eller, om ett sådant inte finns, tidtabellen för upprättandet av certifikatet. När uppmaningen inte följdes gav ARA
+    Er en varning vars tidsfrist var 13.08.2023. Situationen korrigerades inte trots uppmaning och varning,
+    och av ARAs energicertifikatregister framgår att det fortfarande inte har upprättats något energicertifikat för
+    adressen<sup>2</sup>.</p>
+<p>ARA kan som sista utväg i enlighet med 24 § i lagen om energicertifikat meddela ett beslut genom vilket Ni åläggs
+    att skaffa ett energicertifikat. Ordern kan förenas med vite som uppgår till uppskattningsvis 800 euro.</p>
+
+<h2>Hörande av parter</h2>
+
+<p>Innan ärendet avgörs ger ARA Er tillfälle enligt 34 § i förvaltningslagen (434/2003) att uttala Er åsikt i ärendet
+    samt att ge en förklaring till sådana yrkanden och utredningar som kan inverka på avgörandet av ärendet. Svaret ska
+    ges senast 22.07.2023. Avsaknaden av svar hindrar inte att ärendet avgörs. </p>
+
+<div class="page-break-avoid">
+<p>Vi ber Er skicka svaret till ARAs registratorskontor antingen per e-post till <br/>kirjaamo.ara@ara.fi eller per post till
+    Finansierings- och ut-vecklingscentralen för boendet, PB 30, 15141 Lahtis.</p>
+
+Asian Tuntija
+<br/>
+energiexpert
+</div>
+
+<p class="footnote mb-0"><sup>2</sup> I ARAs energicertifikatregister finns energicertifikat som upprättats efter 1 maj 2015.</p>
+
+
+</body>
+</html>

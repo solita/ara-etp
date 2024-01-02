@@ -1,0 +1,1 @@
+CREATE INDEX viesti_viestiketju_sent_time_idx ON viesti (viestiketju_id, sent_time);

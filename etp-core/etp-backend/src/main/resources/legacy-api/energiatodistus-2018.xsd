@@ -1,0 +1,1346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.3.0 svn-revision#3528ea595bd29309f69172d231bbce272d21035c. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.energiatodistusrekisteri.fi/ws/energiatodistustypes-2018" xmlns:vakiot="http://www.energiatodistusrekisteri.fi/ws/energiatodistustypes-2018/vakiot" targetNamespace="http://www.energiatodistusrekisteri.fi/ws/energiatodistustypes-2018" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.energiatodistusrekisteri.fi/ws/energiatodistustypes-2018/vakiot" schemaLocation="energiatodistus-2018-vakiot.xsd"/>
+	<xsd:element name="EnergiatodistusIlmoitus" type="EnergiatodistusRequestType"/>
+	<xsd:element name="EnergiatodistusVastaus" type="EnergiatodistusResponseType"/>
+	<xsd:complexType name="EnergiatodistusResponseType">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="TodistusTunnus" type="xsd:int">
+					<xsd:annotation>
+						<xsd:documentation>Tallennetun todistuksen tunnistenumero. Elementtiä jää puuttumaan, 
+						jos tallennus epäonnistuu esimerkiksi tarkistusten vuoksi.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>					
+				<xsd:element name="Virhe" type="xsd:string" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>Jos tallennus epäonnistuu, Virhe-elementeissä kuvaillaan 
+						kaikki energiatodistuksen tarkisteissa havaitut puutteet. Osa niistä ei välttämättä
+						yksinään riitä hylkäämään todistusta.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="Huomautus" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Jos tallennus on onnistunut onnistuu, Huomautus-elementeissä palautetaan 
+					energiatodistuksen tarkisteiden havainnot. Huomautukset eivät estä energiatodistuksen
+					tallentamista.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="EnergiatodistusRequestType">
+		<xsd:sequence>
+			<xsd:element name="Energiatodistus">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Perustiedot">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Nimi" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>Rakennuksen nimi</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="50"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Rakennustunnus" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Pysyvä rakennustunnus. 10 merkkiä pitkä, sisältää 9 numeerista merkkiä.
+												Alkaa aina 1:llä. Tunnuksen lopussa aakkosnumeerinen (kirjain tai numero) tarkistemerkki. Esim. 100012345N
+												Pakollinen jos Laatimisvaihe = 1 tai 2.
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="10"/>
+												<xsd:maxLength value="10"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Kiinteistotunnus" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Kiinteistötunnus.
+												Pakollinen jos Laatimisvaihe = 0.</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="50"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Katuosoite_Fi" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Rakennuksen katuosoite suomeksi</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="100"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Katuosoite_Sv" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Rakennuksen katuosoite ruotsiksi</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="100"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Postinumero" type="vakiot:PostinumeroType">
+										<xsd:annotation>
+											<xsd:documentation>Rakennuksen postinumero
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="OnkoJulkinenRakennus" minOccurs="1" maxOccurs="1" type="xsd:boolean">
+										<xsd:annotation>
+											<xsd:documentation>Kertoo, onko rakennus julkinen. false=ei,
+												true=kyllä</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Laatimisvaihe" minOccurs="1" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>Missä vaiheessa energiatodistus on laadittu? 0 = Rakennuslupaa haettaessa, 1 = Käyttöönottovaiheessa, 2 = Olemassa olevalle rakennukselle.
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:integer">
+												<xsd:minInclusive value="0"/>
+												<xsd:maxInclusive value="2"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Havainnointikaynti" minOccurs="0" maxOccurs="1" type="xsd:date">
+										<xsd:annotation>
+											<xsd:documentation>Päivämäärä jolloin havainnointikäynti on suoritettu. Pakollinen jos Laatimisvaihe = 2.
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Rakennusosa" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>Rakennuksen osan nimi.</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="100"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Valmistumisvuosi" type="xsd:gYear">
+										<xsd:annotation>
+											<xsd:documentation>Valmistumisvuosi</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Kayttotarkoitus" minOccurs="1" maxOccurs="1" type="vakiot:KayttotarkoitusType">
+										<xsd:annotation>
+											<xsd:documentation>Käyttötarkoitusluokka, viittaus
+												kayttotarkoitusluokkakoodistoon.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Kieli" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>
+												Energiatodistuksen kieli. 0 = Suomi, 1 = Ruotsi, 2 = kaksikielinen.
+												Jos uupuu niin ei määritelty.
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:integer">
+												<xsd:minInclusive value="0"/>
+												<xsd:maxInclusive value="2"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Tilaaja" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>Energiatodistuksen tilaaja
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="200"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="Yritys" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation> Todistuskohtainen yritys
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="Nimi">
+													<xsd:annotation>
+														<xsd:documentation>Todistuskohtaisen yrityksen nimi
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="150"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="Katuosoite" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Todistuskohtaisen yrityksen katuosoite
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="100"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="Postinumero" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Todistuskohtaisen yrityksen postinumero
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="8"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="Postitoimipaikka" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>
+														Todistuskohtaisen yrityksen postitoimipaikka. 
+														Mikäli postinumero on suomalainen, postitoimipaikkaa ei tarvitse antaa.
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="30"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="KeskeisetSuositukset_Fi" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>
+												Keskeiset suositukset rakennuksen energiatehokkuutta parantaviksi
+												toimenpiteiksi suomeksi. Osio ei koske uudisrakennuksia, mutta
+												pakollinen vanhoille rakennuksille.
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:maxLength value="2500"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="KeskeisetSuositukset_Sv" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>
+												Keskeiset suositukset rakennuksen energiatehokkuutta parantaviksi
+												toimenpiteiksi ruotsiksi. Osio ei koske uudisrakennuksia, mutta
+												pakollinen vanhoille rakennuksille.
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:maxLength value="2500"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Lahtotiedot">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="LammitettyNettoala" minOccurs="1" maxOccurs="1" type="vakiot:PosDecimalType">
+										<xsd:annotation>
+											<xsd:documentation>Rakennuksen lämmitetty nettoala (m2).
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="LahtotiedotRakennusvaippa" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="Ilmanvuotoluku" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Rakennuksen ilmanvuotoluku (m3/(h*m2))
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+															<xsd:minInclusive value="0.0"/>
+															<xsd:maxInclusive value="50.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="RvUlkoseinat" minOccurs="0" maxOccurs="1">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="RvA" type="vakiot:PosDecimalType"/>
+															<xsd:element name="RvU">
+																<xsd:annotation>
+																	<xsd:documentation>Rakennusvaipan ulkoseinien U-arvo
+																		(W/(m2*K))</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+																		<xsd:minInclusive value="0.05"/>
+																		<xsd:maxInclusive value="2.0"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="RvYlapohja" minOccurs="0" maxOccurs="1">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="RvA" type="vakiot:PosDecimalType"/>
+															<xsd:element name="RvU">
+																<xsd:annotation>
+																	<xsd:documentation>Rakennusvaipan yläpohjan U-arvo
+																		(W/(m2*K))</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+																		<xsd:minInclusive value="0.03"/>
+																		<xsd:maxInclusive value="2.0"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="RvAlapohja" minOccurs="0" maxOccurs="1">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="RvA" type="vakiot:PosDecimalType"/>
+															<xsd:element name="RvU">
+																<xsd:annotation>
+																	<xsd:documentation>Rakennusvaipan alapohjan U-arvo
+																		(W/(m2*K))</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+																		<xsd:minInclusive value="0.03"/>
+																		<xsd:maxInclusive value="4.0"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="RvIkkunat" minOccurs="0" maxOccurs="1">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="RvA" type="vakiot:PosDecimalType"/>
+															<xsd:element name="RvU">
+																<xsd:annotation>
+																	<xsd:documentation>Rakennusvaipan ikkunoiden U-arvo
+																		(W/(m2*K))</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+																		<xsd:minInclusive value="0.4"/>
+																		<xsd:maxInclusive value="6.5"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="RvUlkoovet" minOccurs="0" maxOccurs="1">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="RvA" type="vakiot:PosDecimalType"/>
+															<xsd:element name="RvU">
+																<xsd:annotation>
+																	<xsd:documentation>Rakennusvaipan ulko-ovien U-arvo
+																		(W/(m2*K))</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+																		<xsd:minInclusive value="0.2"/>
+																		<xsd:maxInclusive value="6.5"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="RvKylmasillatUA" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Rakennusvaipan kylmäsiltojen pinta-alan
+															ja U-arvon tulo.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="LahtotiedotIkkunat" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="Pohjoinen" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Pohjoisikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Koillinen" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Koillisikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Ita" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Itäikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Kaakko" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Kaakkoisikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Etela" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Eteläikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Lounas" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Lounasikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Lansi" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Länsi-ikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="Luode" minOccurs="0" maxOccurs="1" type="IkkunaType">
+													<xsd:annotation>
+														<xsd:documentation>Luoteisikkunoiden tiedot.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="LahtotiedotIlmanvaihto" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="IvKuvaus_Fi" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihtojärjestelmän kuvaus suomeksi.
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="75"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvKuvaus_Sv" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihtojärjestelmän kuvaus ruotsiksi.
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="75"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvPaaivTulo" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Pääilmanvaihtokoneen tuloilmavirta
+															(m3/s).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="IvPaaivPoisto" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Pääilmanvaihtokoneen poistoilmavirta
+															(m3/s).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="IvPaaivSfp" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Pääilmanvaihtokoneen ilmanvaihdon
+															ominaissähköteho (kW/(m3*s)).</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:PosDecimalType">
+															<xsd:maxInclusive value="10.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvPaaivLampotilasuhde" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Pääilmanvaihtokoneen lämmöntalteenoton
+															lämpötilasuhde.</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:PosDecimalType">
+															<xsd:maxInclusive value="1.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvPaaivJaatymisenesto" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Pääilmanvaihtokoneen jäätymisenesto.
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+															<xsd:minInclusive value="-20.0"/>
+															<xsd:maxInclusive value="10.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvErillispoistotTulo" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihdon erillispoiston
+															tuloilmavirta (m3/s).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="IvErillispoistotPoisto" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihdon erillispoiston
+															poistoilmavirta (m3/s).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="IvErillispoistotSfp" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Ilmvaihdon erillispoiston
+															ominaissähköteho (kW/(m3*s)).</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:PosDecimalType">
+															<xsd:maxInclusive value="10.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvIvjarjestelmaTulo" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihtojärjestelmän tuloilmavirta
+															(m3/s).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="IvIvjarjestelmaPoisto" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihtojärjestelmän poistoilmavirta
+															(m3/s).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="IvIvjarjestelmaSfp" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihtojärjestelmän
+															ominaissähköteho (kW/(m3*s)).</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:PosDecimalType">
+															<xsd:maxInclusive value="10.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="IvLtoVuosihyotysuhde" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Rakennuksen ilmanvaihtojärjestelmän
+															LTO:n vuosihyötysuhde</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:PosDecimalType">
+															<xsd:maxInclusive value="1"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="LahtotiedotLammitys" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="LammitysKuvaus_Fi" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Lämmitysjärjestelmän kuvaus suomeksi.
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="75"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="LammitysKuvaus_Sv" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Lämmitysjärjestelmän kuvaus ruotsiksi.
+														</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="xsd:string">
+															<xsd:minLength value="1"/>
+															<xsd:maxLength value="75"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+												<xsd:element name="LammitysTilatJaIv" minOccurs="0" maxOccurs="1" type="LammitysjarjestelmaType">
+													<xsd:annotation>
+														<xsd:documentation>Tilojen ja ilmanvaihdon lämmitys
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LammitysLamminKayttovesi" minOccurs="0" maxOccurs="1" type="LammitysjarjestelmaType">
+													<xsd:annotation>
+														<xsd:documentation>Lämpimän käyttöveden valmistus.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LammitysTakka" minOccurs="0" maxOccurs="1" type="LammitysMaaraTuottoType">
+													<xsd:annotation>
+														<xsd:documentation>Varaavien tulisijojen lukumäärä ja
+															tuotto.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LammitysIlmanlampopumppu" minOccurs="0" maxOccurs="1" type="LammitysMaaraTuottoType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmalämpöpumppujen lukumäärä ja tuotto.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="LahtotiedotJaahdytysjarjestelma" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="JaahdytysjarjestelmaJaahdytyskaudenPainotettuKylmakerroin" minOccurs="0" maxOccurs="1">
+													<xsd:annotation>
+														<xsd:documentation>Jäähdytysjärjestelmän jäähdytyskauden
+															painotettu kylmäkerroin.</xsd:documentation>
+													</xsd:annotation>
+													<xsd:simpleType>
+														<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+															<xsd:minInclusive value="0.0"/>
+															<xsd:maxInclusive value="30.0"/>
+														</xsd:restriction>
+													</xsd:simpleType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="LahtotiedotLkvnKaytto" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="LkvnKayttoKulutusPerNelio" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Lämpimän käyttöveden ominaiskulutus
+															(dm3/(m2*a)).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LkvnKayttoVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Lämpimän käyttöveden lämmitysenergian
+															nettotarve (kWh/(m2*a)).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="LahtotiedotSisKuormat" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="SisKuorma" type="SisaisetKuormatType" minOccurs="1" maxOccurs="3"/>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Tulokset">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="TuloksetKaytettavatEnergiamuodot" minOccurs="0" maxOccurs="1">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="KaytettavaEnergiamuoto" minOccurs="1" maxOccurs="5">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="EnergiamuotoVakio" type="vakiot:EnergiamuotoNimiVakioType">
+																<xsd:annotation>
+																	<xsd:documentation>Energiamuodon vakioitu nimi. Järjestelmä täyttää energiamuodon
+																		kertoimen automaattisesti.
+																	</xsd:documentation>
+																</xsd:annotation>
+															</xsd:element>
+															<xsd:element name="LaskettuOstoenergia" type="vakiot:LengthLimitedDecimalType">
+																<xsd:annotation>
+																	<xsd:documentation>Lasketun ostoenergia määrä (kWh/a)
+																	</xsd:documentation>
+																</xsd:annotation>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="TuloksetUusiutuvatOmavaraisenergiat" minOccurs="0" maxOccurs="1">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="UusiutuvaOmavaraisenergia" minOccurs="1" maxOccurs="6">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="NimiVakio" type="vakiot:UusiutuvaOmavaraisenergiaNimiVakioType">
+																<xsd:annotation>
+																	<xsd:documentation>Uusiutuvan omavaraisenergian vakioitu nimi.
+																	</xsd:documentation>
+																</xsd:annotation>
+															</xsd:element>
+															<xsd:element name="Vuosikulutus" type="vakiot:PosDecimalType">
+																<xsd:annotation>
+																	<xsd:documentation>Uusiutuvan omavaraisenergian
+																		vuosikulutus.</xsd:documentation>
+																</xsd:annotation>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="TuloksetTeknisetJarjestelmat" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="TjTilojenLammitys" minOccurs="0" maxOccurs="1" type="LammitysSahkoLampoType">
+													<xsd:annotation>
+														<xsd:documentation>Tilojen lämmitykseen käytetty energia.
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="TjTuloilmanLammitys" minOccurs="0" maxOccurs="1" type="LammitysSahkoLampoType">
+													<xsd:annotation>
+														<xsd:documentation>Tuloilman lämmitykseen käytetty
+															energia.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="TjKayttovedenValmistus" minOccurs="0" maxOccurs="1" type="LammitysSahkoLampoJaahdytysType">
+													<xsd:annotation>
+														<xsd:documentation>Käyttöveden valmistukseen käytetty
+															energia (kWh/(m2*a)).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="TjIvSahko" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihtojärjestelmän
+															sähköenergiankulutus (kWh/(m2*a)).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="TjJaahdytys" minOccurs="0" maxOccurs="1" type="LammitysSahkoLampoJaahdytysType">
+													<xsd:annotation>
+														<xsd:documentation>Jäähdytysjärjestelmän energiankulutus
+															(kWh/(m2*a)).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="TjKuluttajalaitteetJaValaistusSahko" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Kuluttajalaitteiden ja valaistuksen
+															sähköenergiankulutus (kWh/(m2*a)).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="TuloksetNettotarve" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="NtTilojenLammitysVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Tilojen lämmityksen energian nettotarve
+															(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="NtIlmanvaihdonLammitysVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ilmanvaihdon lämmitysenergian
+															nettotarve (kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="NtKayttovedenValmistusVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Käyttöveden valmistuksen energian
+															nettotarve (kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="NtJaahdytysVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Jäähdytysenergian nettotarve (kWh/a).
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="TuloksetLampokuormat" minOccurs="0">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="LkAurinko" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Auringon tuottama lämpöenergia (kWh/a).
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LkIhmiset" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ihmisten tuottama lämpöenergia (kWh/a).
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LkKuluttajalaitteet" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Kuluttajalaitteiden tuottama
+															lämpöenergia (kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LkValaistus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Valaistuksen tuottama lämpöenergia
+															(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="LkKvesi" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Lämpimän käyttöveden kierrosta ja
+															varastoinnin häviöistä saatu lämpöenergia (kWh/a).
+														</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="TuloksetLaskentatyokalu" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>
+												Laskentatyökalun nimi ja versionumero.
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="60"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ToteutunutOstoenergiankulutus" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="OstettuEnergia" minOccurs="0" maxOccurs="1">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="ToKaukolampoVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ostettu kaukolämpöenergia vuodessa
+															(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="ToKokonaissahkoVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ostettu kokonaissähköenergia
+															vuodessa(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="ToKiinteistosahkoVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ostettu kiinteistösähköenergia
+															vuodessa(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="ToKayttajasahkoVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ostettu käyttäjäsähköenergia
+															vuodessa(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="ToKaukojaahdytysVuosikulutus" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Ostettu kaukojäähdytysenergia
+															vuodessa(kWh/a).</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="OstetutPolttoaineet" minOccurs="0" maxOccurs="1">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="OpKevytPolttooljy" minOccurs="0" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Kevyen polttoöljyn vuosikulutus
+															litroina</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="OpPilkkeetHavuSekapuu" minOccurs="0" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Havu- ja sekapilkkeiden vuosikulutus
+															pinokuutioina.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="OpPilkkeetKoivu" minOccurs="0" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Koivupilkkeiden vuosikulutus
+															pinokuutioina.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="OpPuupelletit" minOccurs="0" type="vakiot:PosDecimalType">
+													<xsd:annotation>
+														<xsd:documentation>Puupellettien vuosikulutus
+															kilogrammoina.</xsd:documentation>
+													</xsd:annotation>
+												</xsd:element>
+												<xsd:element name="OpVapaa" minOccurs="0" maxOccurs="4">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="OpNimi">
+																<xsd:annotation>
+																	<xsd:documentation>Polttoaineen vapaamuotoinen nimi
+																	</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:minLength value="1"/>
+																		<xsd:maxLength value="30"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element name="OpYksikko">
+																<xsd:annotation>
+																	<xsd:documentation>Polttoaineen vapaamuotoinen yksikkö
+																	</xsd:documentation>
+																</xsd:annotation>
+																<xsd:simpleType>
+																	<xsd:restriction base="xsd:string">
+																		<xsd:minLength value="1"/>
+																		<xsd:maxLength value="12"/>
+																	</xsd:restriction>
+																</xsd:simpleType>
+															</xsd:element>
+															<xsd:element name="OpMuunnoskerroin" type="vakiot:PosDecimalType">
+																<xsd:annotation>
+																	<xsd:documentation>Polttoaineen yksikön muunnoskerroin
+																		energiaksi.</xsd:documentation>
+																</xsd:annotation>
+															</xsd:element>
+															<xsd:element name="OpMaaraVuodessa" type="vakiot:PosDecimalType">
+																<xsd:annotation>
+																	<xsd:documentation>Polttoaineen kulutus vuodessa
+																		ilmaistuna OpYksikko-elementissä käytetyssä
+																		mittayksikössä.</xsd:documentation>
+																</xsd:annotation>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="ToSahkoVuosikulutusYhteensa" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+										<xsd:annotation>
+											<xsd:documentation>Toteutunut ostettu sähköenergia vuodessa
+												(kWh/a).</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="ToKaukolampoVuosikulutusYhteensa" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+										<xsd:annotation>
+											<xsd:documentation>Toteutunut ostettu kaukolämmön kulutus
+												vuodessa (kWh/a).</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="ToPolttoaineetVuosikulutusYhteensa" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+										<xsd:annotation>
+											<xsd:documentation>Toteutunut ostettujen polttoaineiden määrä
+												vuodessa (kWh/a).</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="ToKaukojaahdytysVuosikulutusYhteensa" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+										<xsd:annotation>
+											<xsd:documentation>Toteutunut ostettu kaukojäähdytysenergian
+												kulutus vuodessa (kWh/a).</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Huomiot" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="HuomiotYmparys" minOccurs="0" maxOccurs="1" type="HuomioToimenpideEhdotusType">
+										<xsd:annotation>
+											<xsd:documentation>Huomiot - ulkoseinät, ulko-ovet ja ikkunat
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotAlapohjaYlapohja" minOccurs="0" maxOccurs="1" type="HuomioToimenpideEhdotusType">
+										<xsd:annotation>
+											<xsd:documentation>Huomiot ylä- ja alapohja
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotLammitys" minOccurs="0" maxOccurs="1" type="HuomioToimenpideEhdotusType">
+										<xsd:annotation>
+											<xsd:documentation>Huomiot - tilojen ja käyttöveden
+												lämmitysjärjestelmät</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotIvIlmastointi" minOccurs="0" maxOccurs="1" type="HuomioToimenpideEhdotusType">
+										<xsd:annotation>
+											<xsd:documentation>Huomiot - ilmanvaihto- ja
+												ilmastointijärjestelmät</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotValaistusMuut" minOccurs="0" maxOccurs="1" type="HuomioToimenpideEhdotusType">
+										<xsd:annotation>
+											<xsd:documentation>Huomiot - valaistus,
+												jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut
+											</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotSuositukset_Fi" minOccurs="0" maxOccurs="1" type="HuomioSuositusStringType">
+										<xsd:annotation>
+											<xsd:documentation>Suosituksia rakennuksen käyttöön ja
+												ylläpitoon suomeksi</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotSuositukset_Sv" minOccurs="0" maxOccurs="1" type="HuomioSuositusStringType">
+										<xsd:annotation>
+											<xsd:documentation>Suosituksia rakennuksen käyttöön ja
+												ylläpitoon ruotsiksi</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="HuomiotLisatietoja_Fi" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>Lisätietoja energiatehokkuudesta suomeksi
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="500"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element name="HuomiotLisatietoja_Sv" minOccurs="0" maxOccurs="1">
+										<xsd:annotation>
+											<xsd:documentation>Lisätietoja energiatehokkuudesta ruotsiksi
+											</xsd:documentation>
+										</xsd:annotation>
+										<xsd:simpleType>
+											<xsd:restriction base="xsd:string">
+												<xsd:minLength value="1"/>
+												<xsd:maxLength value="500"/>
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Lisamerkintoja_Fi" minOccurs="0" maxOccurs="1">
+							<xsd:annotation>
+								<xsd:documentation>Energiatodistuksen lisämerkintöjä suomeksi.
+								</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:minLength value="1"/>
+									<xsd:maxLength value="6300"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="Lisamerkintoja_Sv" minOccurs="0" maxOccurs="1">
+							<xsd:annotation>
+								<xsd:documentation>Energiatodistuksen lisämerkintöjä ruotsiksi.
+								</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:minLength value="1"/>
+									<xsd:maxLength value="6300"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="IkkunaType">
+		<xsd:sequence>
+			<xsd:element name="IkkA" minOccurs="1" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Ikkunoiden pinta-ala (m2).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="IkkU" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Ikkunoiden U-arvo (W/(m2*K))</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+						<xsd:minInclusive value="0.4"/>
+						<xsd:maxInclusive value="6.5"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="IkkG" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Ikkunoiden kohtisuoran auringonsäteilyn
+						kokonaisläpäisykerroin (g).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+						<xsd:minInclusive value="0.1"/>
+						<xsd:maxInclusive value="1.0"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="LammitysjarjestelmaType">
+		<xsd:sequence>
+			<xsd:element name="TuotonHyotysuhde" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmitysjärjestelmän tuoton hyötysuhde
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JaonHyotysuhde" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmitysjärjestelmän jaon ja luovutuksen
+						hyötysuhde.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Lampokerroin" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmitysjärjestelmän lämpökerroin.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Apulaitteet" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmitysjärjestelmän apulaitteiden sähkönkäyttö.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="LammitysMaaraTuottoType">
+		<xsd:sequence>
+			<xsd:element name="Maara" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Lämmityslaitteiden lukumäärä.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:integer">
+						<xsd:minInclusive value="0"/>
+						<xsd:maxInclusive value="100"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Tuotto" minOccurs="1" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmityslaitteiden tuotto (kWh).
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="LammitysSahkoLampoType">
+		<xsd:sequence>
+			<xsd:element name="Sahko" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmitykseen käytetty sähköenergia (kWh/(m2*a)).
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Lampo" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+				<xsd:annotation>
+					<xsd:documentation>Lämmitykseen käytetty lämpöenergia (kWh/(m2*a)).
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="LammitysSahkoLampoJaahdytysType">
+		<xsd:complexContent>
+			<xsd:extension base="LammitysSahkoLampoType">
+				<xsd:sequence>
+					<xsd:element name="Kaukojaahdytys" minOccurs="0" maxOccurs="1" type="vakiot:PosDecimalType">
+						<xsd:annotation>
+							<xsd:documentation>Käytetty jäähdytysenergia (kWh/(m2*a)).
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:simpleType name="HuomioStringType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="HuomioSuositusStringType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1500"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="SisaisetKuormatType">
+		<xsd:sequence>
+			<xsd:element name="Selite_Fi" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Sisäisen lämpökuorman selite suomeksi.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="35"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Selite_Sv" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Sisäisen lämpökuorman selite ruotsiksi.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="35"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Kayttoaste" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Sisäisen lämpökuorman käyttöaste.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+						<xsd:minInclusive value="0.1"/>
+						<xsd:maxInclusive value="1.0"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Henkilot" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Sisäinen lämpökuorma: henkilöiden energiantuotto
+						(W/m2).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+						<xsd:minInclusive value="0.0"/>
+						<xsd:maxInclusive value="14.0"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Kuluttajalaitteet" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Sisäinen lämpökuorma: kuluttajalaitteiden
+						energiantuotto (W/m2).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+						<xsd:minInclusive value="0.0"/>
+						<xsd:maxInclusive value="12.0"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="Valaistus" minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Sisäinen lämpökuorma: valaistuksen
+						energiantuotto (W/m2).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="vakiot:LengthLimitedDecimalType">
+						<xsd:minInclusive value="0.0"/>
+						<xsd:maxInclusive value="19.0"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="HuomioToimenpideEhdotusType">
+		<xsd:sequence>
+			<xsd:element name="HuomiotTeksti_Fi" type="HuomioStringType" minOccurs="0"/>
+			<xsd:element name="HuomiotTeksti_Sv" type="HuomioStringType" minOccurs="0"/>
+			<xsd:element name="Toimenpide" type="ToimenpideEhdotusType" minOccurs="0" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ToimenpideEhdotusType">
+		<xsd:sequence>
+			<xsd:element name="Nimi_Fi" minOccurs="0" maxOccurs="1">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="100"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+
+			<xsd:element name="Nimi_Sv" minOccurs="0" maxOccurs="1">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="100"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+
+			<xsd:element name="Lampo" minOccurs="0" maxOccurs="1" type="vakiot:LengthLimitedDecimalType"/>
+			<xsd:element name="Sahko" minOccurs="0" maxOccurs="1" type="vakiot:LengthLimitedDecimalType"/>
+			<xsd:element name="Jaahdytys" minOccurs="0" maxOccurs="1" type="vakiot:LengthLimitedDecimalType"/>
+			<xsd:element name="EluvunMuutos" minOccurs="0" maxOccurs="1" type="vakiot:LengthLimitedDecimalType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

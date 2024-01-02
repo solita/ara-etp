@@ -1,0 +1,378 @@
+{
+  "laskuriviviite": "String [1, 6300]?",
+  "laskutettava-yritys-id": "Integer YritysId?",
+  "laskutusosoite-id": "Integer LaskutusosoiteId?",
+  "korvattu-energiatodistus-id": "Integer EnergiatodistusId?",
+
+  "lisamerkintoja-fi": "String [1, 6300]?",
+  "lisamerkintoja-sv": "String [1, 6300]?",
+
+  "perustiedot": {
+    "havainnointikaynti": "String LocalDate?",
+    "julkinen-rakennus": "Boolean",
+    "katuosoite-fi": "String [1, 75]?",
+    "katuosoite-sv": "String [1, 75]?",
+    "kayttotarkoitus": "String AlakayttotarkoitusluokkaId?",
+    "keskeiset-suositukset-fi": "String [1, 2500]?",
+    "keskeiset-suositukset-sv": "String [1, 2500]?",
+    "kieli": "Integer KieliId?",
+    "kiinteistotunnus": "String [1, 75]?",
+    "laatimisvaihe": "Integer LaatimisvaiheId?",
+    "nimi": "String [1, 75]?",
+    "nimi-fi": "String [1, 75]?",
+    "nimi-sv": "String [1, 75]?",
+    "postinumero": "String Postinumero?",
+    "rakennusosa": "String [1, 100]?",
+    "rakennustunnus": "String Rakennustunnus?",
+    "tilaaja": "String [1, 200]?",
+    "valmistumisvuosi": "Integer Year?",
+    "yritys": {
+      "katuosoite": "String [1, 75]?",
+      "nimi": "String [1, 150]?",
+      "postinumero": "String [1, 8]?",
+      "postitoimipaikka": "String [1, 30]?"
+    }
+  },
+
+  "lahtotiedot": {
+    "ikkunat": {
+      "etela": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "ita": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "kaakko": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "katto": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "koillinen": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "lansi": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "lounas": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "luode": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "pohjoinen": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      },
+      "valokupu": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?",
+        "g-ks": "Number [0, max]?"
+      }
+    },
+    "ilmanvaihto": {
+      "erillispoistot": {
+        "poisto": "Number [0, max]?",
+        "sfp": "Number [0, max]?",
+        "tulo": "Number [0, max]?"
+      },
+      "ivjarjestelma": {
+        "poisto": "Number [0, max]?",
+        "sfp": "Number [0, max]?",
+        "tulo": "Number [0, max]?"
+      },
+      "kuvaus-fi": "String [1, 75]?",
+      "kuvaus-sv": "String [1, 75]?",
+      "lto-vuosihyotysuhde": "Number [0, 1]?",
+      "paaiv": {
+        "jaatymisenesto": "Number?",
+        "lampotilasuhde": "Number [0, 1]?",
+        "poisto": "Number [0, max]?",
+        "sfp": "Number [0, max]?",
+        "tulo": "Number [0, max]?"
+      },
+      "tuloilma-lampotila": "Number [0, max]?",
+      "tyyppi-id": "Integer IlmanvaihtotyyppiId?"
+    },
+    "jaahdytysjarjestelma": {
+      "jaahdytyskauden-painotettu-kylmakerroin": "Number [0, max]?"
+    },
+    "lammitetty-nettoala": "Number [0, max]?",
+    "lammitys": {
+      "ilmalampopumppu": {
+        "maara": "Integer [0, max]?",
+        "tuotto": "Number [0, max]?"
+      },
+      "lammin-kayttovesi": {
+        "apulaitteet": "Number [0, max]?",
+        "jaon-hyotysuhde": "Number [0, max]?",
+        "lampohavio-lammittamaton-tila": "Number [0, max]?",
+        "lampokerroin": "Number [0, max]?",
+        "lampopumppu-tuotto-osuus": "Number [0, 1]?",
+        "tuoton-hyotysuhde": "Number [0, max]?"
+      },
+      "lammitysmuoto-1": {
+        "id": "Integer LammitusmuotoId?",
+        "kuvaus-fi": "String [1, 75]?",
+        "kuvaus-sv": "String [1, 75]?"
+      },
+      "lammitysmuoto-2": {
+        "id": "Integer LammitusmuotoId?",
+        "kuvaus-fi": "String [1, 75]?",
+        "kuvaus-sv": "String [1, 75]?"
+      },
+      "lammonjako": {
+        "id": "Integer LammonjakoId?",
+        "kuvaus-fi": "String [1, 75]?",
+        "kuvaus-sv": "String [1, 75]?"
+      },
+      "takka": {
+        "maara": "Integer [0, max]?",
+        "tuotto": "Number [0, max]?"
+      },
+      "tilat-ja-iv": {
+        "apulaitteet": "Number [0, max]?",
+        "jaon-hyotysuhde": "Number [0, max]?",
+        "lampohavio-lammittamaton-tila": "Number [0, max]?",
+        "lampokerroin": "Number [0, max]?",
+        "lampopumppu-tuotto-osuus": "Number [0, 1]?",
+        "tuoton-hyotysuhde": "Number [0, max]?"
+      }
+    },
+    "lkvn-kaytto": {
+      "lammitysenergian-nettotarve": "Number [0, max]?",
+      "ominaiskulutus": "Number [0, max]?"
+    },
+    "rakennusvaippa": {
+      "alapohja": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?"
+      },
+      "ikkunat": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?"
+      },
+      "ilmanvuotoluku": "Number [0, max]?",
+      "ilmatilavuus": "Number [0, max]?",
+      "kylmasillat-UA": "Number [0, max]?",
+      "lampokapasiteetti": "Number [0, max]?",
+      "ulkoovet": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?"
+      },
+      "ulkoseinat": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?"
+      },
+      "ylapohja": {
+        "U": "Number [0, max]?",
+        "ala": "Number [0, max]?"
+      }
+    },
+    "sis-kuorma": {
+      "henkilot": {
+        "kayttoaste": "Number [0, 1]?",
+        "lampokuorma": "Number [0, max]?"
+      },
+      "kuluttajalaitteet": {
+        "kayttoaste": "Number [0, 1]?",
+        "lampokuorma": "Number [0, max]?"
+      },
+      "valaistus": {
+        "kayttoaste": "Number [0, 1]?",
+        "lampokuorma": "Number [0, max]?"
+      }
+    }
+  },
+
+  "tulokset": {
+    "kaytettavat-energiamuodot": {
+      "fossiilinen-polttoaine": "Number [0, max]?",
+      "kaukojaahdytys": "Number [0, max]?",
+      "kaukolampo": "Number [0, max]?",
+      "sahko": "Number [0, max]?",
+      "uusiutuva-polttoaine": "Number [0, max]?"
+    },
+    "kuukausierittely": [
+      {
+        "kulutus": {
+          "lampo": "Number [0, max]?",
+          "sahko": "Number [0, max]?"
+        },
+        "tuotto": {
+          "aurinkolampo": "Number [0, max]?",
+          "aurinkosahko": "Number [0, max]?",
+          "lampopumppu": "Number [0, max]?",
+          "muulampo": "Number [0, max]?",
+          "muusahko": "Number [0, max]?",
+          "tuulisahko": "Number [0, max]?"
+        }
+      }
+    ],
+    "lampokuormat": {
+      "aurinko": "Number [0, max]?",
+      "ihmiset": "Number [0, max]?",
+      "kuluttajalaitteet": "Number [0, max]?",
+      "kvesi": "Number [0, max]?",
+      "valaistus": "Number [0, max]?"
+    },
+    "laskentatyokalu": "String [1, 60]?",
+    "nettotarve": {
+      "ilmanvaihdon-lammitys-vuosikulutus": "Number [0, max]?",
+      "jaahdytys-vuosikulutus": "Number [0, max]?",
+      "kayttoveden-valmistus-vuosikulutus": "Number [0, max]?",
+      "tilojen-lammitys-vuosikulutus": "Number [0, max]?"
+    },
+    "tekniset-jarjestelmat": {
+      "iv-sahko": "Number [0, max]?",
+      "jaahdytys": {
+        "kaukojaahdytys": "Number [0, max]?",
+        "lampo": "Number [0, max]?",
+        "sahko": "Number [0, max]?"
+      },
+      "kayttoveden-valmistus": {
+        "lampo": "Number [0, max]?",
+        "sahko": "Number [0, max]?"
+      },
+      "kuluttajalaitteet-ja-valaistus-sahko": "Number [0, max]?",
+      "tilojen-lammitys": {
+        "lampo": "Number [0, max]?",
+        "sahko": "Number [0, max]?"
+      },
+      "tuloilman-lammitys": {
+        "lampo": "Number [0, max]?",
+        "sahko": "Number [0, max]?"
+      }
+    },
+    "uusiutuvat-omavaraisenergiat": {
+      "aurinkolampo": "Number [0, max]?",
+      "aurinkosahko": "Number [0, max]?",
+      "lampopumppu": "Number [0, max]?",
+      "muulampo": "Number [0, max]?",
+      "muusahko": "Number [0, max]?",
+      "tuulisahko": "Number [0, max]?"
+    }
+  },
+
+  "toteutunut-ostoenergiankulutus": {
+    "kaukojaahdytys-vuosikulutus-yhteensa": "Number [0, max]?",
+    "kaukolampo-vuosikulutus-yhteensa": "Number [0, max]?",
+    "ostettu-energia": {
+      "kaukojaahdytys-vuosikulutus": "Number [0, max]?",
+      "kaukolampo-vuosikulutus": "Number [0, max]?",
+      "kayttajasahko-vuosikulutus": "Number [0, max]?",
+      "kiinteistosahko-vuosikulutus": "Number [0, max]?",
+      "kokonaissahko-vuosikulutus": "Number [0, max]?"
+    },
+    "ostetut-polttoaineet": {
+      "kevyt-polttooljy": "Number [0, max]?",
+      "muu": [
+        {
+          "maara-vuodessa": "Number [0, max]?",
+          "muunnoskerroin": "Number [0, max]?",
+          "nimi": "String [1, 30]?",
+          "yksikko": "String [1, 12]?"
+        }
+      ],
+      "pilkkeet-havu-sekapuu": "Number [0, max]?",
+      "pilkkeet-koivu": "Number [0, max]?",
+      "puupelletit": "Number [0, max]?"
+    },
+    "polttoaineet-vuosikulutus-yhteensa": "Number [0, max]?",
+    "sahko-vuosikulutus-yhteensa": "Number [0, max]?"
+  },
+
+  "huomiot": {
+    "alapohja-ylapohja": {
+      "teksti-fi": "String [1, 1000]?",
+      "teksti-sv": "String [1, 1000]?",
+      "toimenpide": [
+        {
+          "eluvun-muutos": "Number?",
+          "jaahdytys": "Number?",
+          "lampo": "Number?",
+          "nimi-fi": "String [1, 100]?",
+          "nimi-sv": "String [1, 100]?",
+          "sahko": "Number?"
+        }
+      ]
+    },
+    "iv-ilmastointi": {
+      "teksti-fi": "String [1, 1000]?",
+      "teksti-sv": "String [1, 1000]?",
+      "toimenpide": [
+        {
+          "eluvun-muutos": "Number?",
+          "jaahdytys": "Number?",
+          "lampo": "Number?",
+          "nimi-fi": "String [1, 100]?",
+          "nimi-sv": "String [1, 100]?",
+          "sahko": "Number?"
+        }
+      ]
+    },
+    "lammitys": {
+      "teksti-fi": "String [1, 1000]?",
+      "teksti-sv": "String [1, 1000]?",
+      "toimenpide": [
+        {
+          "eluvun-muutos": "Number?",
+          "jaahdytys": "Number?",
+          "lampo": "Number?",
+          "nimi-fi": "String [1, 100]?",
+          "nimi-sv": "String [1, 100]?",
+          "sahko": "Number?"
+        }
+      ]
+    },
+    "valaistus-muut": {
+      "teksti-fi": "String [1, 1000]?",
+      "teksti-sv": "String [1, 1000]?",
+      "toimenpide": [
+        {
+          "eluvun-muutos": "Number?",
+          "jaahdytys": "Number?",
+          "lampo": "Number?",
+          "nimi-fi": "String [1, 100]?",
+          "nimi-sv": "String [1, 100]?",
+          "sahko": "Number?"
+        }
+      ]
+    },
+    "ymparys": {
+      "teksti-fi": "String [1, 1000]?",
+      "teksti-sv": "String [1, 1000]?",
+      "toimenpide": [
+        {
+          "eluvun-muutos": "Number?",
+          "jaahdytys": "Number?",
+          "lampo": "Number?",
+          "nimi-fi": "String [1, 100]?",
+          "nimi-sv": "String [1, 100]?",
+          "sahko": "Number?"
+        }
+      ]
+    },
+    "lisatietoja-fi": "String [1, 500]?",
+    "lisatietoja-sv": "String [1, 500]?",
+    "suositukset-fi": "String [1, 1500]?",
+    "suositukset-sv": "String [1, 1500]?"
+  }
+}

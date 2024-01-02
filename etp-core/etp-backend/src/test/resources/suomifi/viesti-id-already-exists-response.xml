@@ -1,0 +1,15 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <LahetaViestiResponse xmlns="http://www.suomi.fi/asiointitili">
+            <LahetaViestiResult>
+                <TilaKoodi>
+                    <TilaKoodi>525</TilaKoodi>
+                    <TilaKoodiKuvaus>Asian tietosisällössä virheitä. Viranomaistunnisteella löytyy jo asia, joka on
+                        tallennettu asiakkaan tilille Viestit-palveluun
+                    </TilaKoodiKuvaus>
+                    <SanomaTunniste>ARA-05.03.02-2021-31-ETP-1-2-PERSON-1</SanomaTunniste>
+                </TilaKoodi>
+            </LahetaViestiResult>
+        </LahetaViestiResponse>
+    </soap:Body>
+</soap:Envelope>

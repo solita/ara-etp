@@ -1,0 +1,21 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap-env:Header>
+        <ns0:MessageHeader xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:messageVersion>1.0</ns0:messageVersion>
+            <ns0:requestId>ETP-1</ns0:requestId>
+            <ns0:senderId>test@example.com</ns0:senderId>
+        </ns0:MessageHeader>
+    </soap-env:Header>
+    <soap-env:Body>
+        <ns0:createECase xmlns:ns0="http://vismaconsulting.fi/ebs/1.0">
+            <ns0:createCaseOperation>
+                <ns0:classification>
+                    <ns0:code>05.03.02</ns0:code>
+                </ns0:classification>
+                <ns0:service>general</ns0:service>
+                <ns0:name>Asunnot Oy</ns0:name>
+                <ns0:description>Helsinki, Katu 1</ns0:description>
+            </ns0:createCaseOperation>
+        </ns0:createECase>
+    </soap-env:Body>
+</soap-env:Envelope>

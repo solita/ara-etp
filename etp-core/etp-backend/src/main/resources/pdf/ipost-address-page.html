@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <style>
+            @page {
+                margin: 0;
+                size: A4 portrait;
+            }
+            body {
+                font-family: roboto;
+                font-size: 11pt;
+                letter-spacing: 0.8px;
+                margin: 0;
+                padding: 0;
+            }
+            .lahettaja {
+                margin-top: 2cm;
+                margin-left: 2.1cm;
+                height: 2.5cm;
+                width: 5.9cm;
+            }
+            .vastaanottaja {
+                margin-top: 1cm;
+                margin-left: 2.1cm;
+                height: 3cm;
+                width: 7.2cm;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="lahettaja">
+            {{#lahettaja}}
+                {{nimi}} <br />
+                {{jakeluosoite}} <br />
+                {{postinumero}} {{postitoimipaikka}}
+            {{/lahettaja}}
+        </div>
+
+        <div class="vastaanottaja">
+            {{#vastaanottaja}}
+                {{nimi}} <br />
+                {{#tarkenne?}}{{tarkenne}} <br />{{/tarkenne?}}
+                {{jakeluosoite}} <br />
+                {{postinumero}} {{postitoimipaikka}}
+            {{/vastaanottaja}}
+        </div>
+
+        <div style="page-break-after: always"></div>
+        <div style="visibility: hidden">hidden</div>
+    </body>
+</html>
