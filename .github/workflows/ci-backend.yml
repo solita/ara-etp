@@ -1,0 +1,76 @@
+name: backend CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: etp-core/etp-backend
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@10.3
+        with:
+          cli: 1.11.1.1273
+      - name: Build
+        run: clojure -M:uberjar
+
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: etp-core/etp-backend
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@10.3
+        with:
+          cli: 1.11.1.1273
+      - name: Lint
+        run: clojure -M:lint --fail-level error
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@10.3
+        with:
+          cli: 1.11.1.1273
+      - name: Install Libreoffice
+        run: sudo apt-get update && sudo apt-get install libreoffice
+      - name: Docker Compose
+        working-directory: etp-core/docker
+        run: ./start.sh
+      - name: Test
+        working-directory: etp-core/etp-backend
+        run: clojure -M:dev:test-ci
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+         report_paths: 'etp-backend/target/test.xml'
