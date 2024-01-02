@@ -1,5 +1,5 @@
 version: '3.7'
-
+name: 'etp'
 services:
   db:
     image: postgres:15.2-alpine
