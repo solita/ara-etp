@@ -29,6 +29,7 @@
   import DecisionOrderActualDecisionSubView from './new-decision-order-actual-decision-toimenpide';
   import PenaltyDecisionActualDecisionSubView from './new-penalty-decision-actual-decision-toimenpide';
   import { announcementsForModule } from '@Utility/announce';
+  import { announceAssertively } from '@Utility/aria-live';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
@@ -51,6 +52,15 @@
 
   let form;
   let error = Maybe.None();
+
+  // setError is used instead of the more common announceError from
+  // @Utility/announce, because the visual error needs a mechanism
+  // different from the common route through FlashMessage
+  const setError = er => {
+    error = er;
+    R.forEach(announceAssertively, R.map(R.prop('message'), error));
+  };
+
   let publishPending = false;
   let previewPending = false;
 
@@ -75,12 +85,14 @@
       publishPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some({
-            mayBypassAsha:
-              Toimenpiteet.isCloseCase(toimenpide) &&
-              ValvontaApi.isAshaFailure(response),
-            message: i18n(Response.errorKey(i18nRoot, 'publish', response))
-          });
+          setError(
+            Maybe.Some({
+              mayBypassAsha:
+                Toimenpiteet.isCloseCase(toimenpide) &&
+                ValvontaApi.isAshaFailure(response),
+              message: i18n(Response.errorKey(i18nRoot, 'publish', response))
+            })
+          );
           publishPending = false;
         },
         _ => {
@@ -91,10 +103,12 @@
         ValvontaApi.postToimenpide(id, toimenpide)
       );
     } else {
-      error = Maybe.Some({
-        mayBypassAsha: false,
-        message: $_(`${i18nRoot}.messages.validation-error`)
-      });
+      setError(
+        Maybe.Some({
+          mayBypassAsha: false,
+          message: $_(`${i18nRoot}.messages.validation-error`)
+        })
+      );
       Validation.blurForm(form);
     }
   };
@@ -111,24 +125,28 @@
       previewPending = true;
       Future.fork(
         response => {
-          error = Maybe.Some({
-            message: i18n(Response.errorKey(i18nRoot, 'preview', response)),
-            mayBypassAsha: false
-          });
+          setError(
+            Maybe.Some({
+              message: i18n(Response.errorKey(i18nRoot, 'preview', response)),
+              mayBypassAsha: false
+            })
+          );
           previewPending = false;
         },
         response => {
           previewPending = false;
-          error = Maybe.None();
+          setError(Maybe.None());
           Response.openBlob(response);
         },
         api
       );
     } else {
-      error = Maybe.Some({
-        message: $_(`${i18nRoot}.messages.validation-error`),
-        mayBypassAsha: false
-      });
+      setError(
+        Maybe.Some({
+          message: $_(`${i18nRoot}.messages.validation-error`),
+          mayBypassAsha: false
+        })
+      );
       Validation.blurForm(form);
     }
   };
