@@ -1,0 +1,2163 @@
+{
+  "document": {
+    "title": "Ara - Energiatodistuspalvelu"
+  },
+  "validation": {
+    "required": "Pakollinen tieto",
+    "min-length": "Pituus pitää olla vähintään {min} merkkiä",
+    "max-length": "Pituus saa olla enintään {max} merkkiä",
+    "min-number": "Pienin sallittu arvo on {min}.",
+    "max-number": "Suurin sallittu arvo on {max}.",
+    "invalid-url": "Virheellinen www-osoite",
+    "invalid-email": "Virheellinen email",
+    "invalid-ytunnus": "Virheellinen ytunnus",
+    "invalid-postinumero-fi": "Suomen postinumerossa pitää olla 5 numeroa",
+    "postinumero-not-found": "Postinumeroa ei ole olemassa",
+    "postinumero-not-normal": "Vain normaalit postinumerot on sallittu",
+    "invalid-henkilotunnus": "Virheellinen henkilötunnus",
+    "invalid-rakennustunnus": "Virheellinen rakennustunnus",
+    "invalid-verkkolaskuosoite": "Virheellinen verkkolaskuosoite",
+    "invalid-verkkolaskuoperaattori": "Virheellinen verkkolaskuoperaattori",
+    "invalid-api-key": "Virheellinen tiedonsiirron salasana",
+    "invalid-ip-address": "Virheellinen IP-osoite",
+    "no-selection": "Ei valintaa",
+    "warning": {
+      "min-number": "Tyypillisesti suurempi kuin {min}",
+      "max-number": "Tyypillisesti pienempi kuin {max}"
+    }
+  },
+  "parsing": {
+    "invalid-integer": "Virheellinen kokonaislukunumero",
+    "invalid-number": "Virheellinen numero",
+    "invalid-date": "Virheellinen päivämäärä"
+  },
+  "navigation": {
+    "etusivu": "Etusivu",
+    "energiatodistukset": "Energiatodistukset",
+    "uusi-energiatodistus": "Uusi energiatodistus",
+    "viesti": "Viestikeskus",
+    "viestit": "Viestit",
+    "uusi-viesti": "Uusi viesti",
+    "viestiketju": "Viestiketju",
+    "yritykset": "Yritykset",
+    "omattiedot": "Omat tiedot",
+    "laatijoidentuonti": "Laatijoiden tuonti",
+    "laatijat": "Laatijat",
+    "laskutusajot": "Laskutusajot",
+    "tyojono": "Työjono",
+    "halytykset": "Hälytykset",
+    "uusi-kayttaja": "Uusi käyttäjä",
+    "kayttajat": "Käyttäjät",
+    "kayttaja": "Käyttäjä",
+    "new-kayttaja": "Uusi käyttäjä",
+    "new-laatija": "Uusi kumppani",
+    "new-aineistoasiakas": "Uusi aineistoasiakas",
+    "et": "ET",
+    "energiatodistus-viestit": "Viestit",
+    "liitteet": "Liitteet",
+    "allekirjoitus": "Allekirjoitus",
+    "muutoshistoria": "Muutoshistoria",
+    "myinfo": "Omat Tiedot",
+    "kirjaudu-ulos": "Kirjaudu ulos",
+    "new-yritys": "Uusi yritys",
+    "yritys": "Yritys",
+    "yritys-laatijat": "Laatijat",
+    "ohjeet": "Laatijan ohjeet",
+    "valvonta": {
+      "kaytto": {
+        "all": "Käytön\u00ADvalvonnat",
+        "kohde": "KV {id}",
+        "valvonta": "Valvonta"
+      },
+      "oikeellisuus": {
+        "all": {
+          "valvoja": "Oikeellisuuden valvonnat",
+          "laatija": "Valvonnat"
+        },
+        "valvonta": "Valvonta",
+        "virhetypes": "Virhetyypit"
+      }
+    },
+    "confirmation": {
+      "title": "Varmistus poistumisesta",
+      "description": "Lomakkeella on tallentamattomia muutoksia. Menetät kaikki tallentamattomat muutokset, jos poistut sivulta.",
+      "message": "Oletko varma, että haluat poistua sivulta?",
+      "forward": "Poistu sivulta",
+      "cancel": "Peruuta"
+    }
+  },
+  "errors": {
+    "row-error": "Virhe rivillä",
+    "load-error": "Tietojen haku epäonnistui.",
+    "unauthorized": "Olet kirjautunut ulos järjestelmästä. Voit kirjautua uudestaan toisella välilehdellä, jos tällä välilehdellä on jotakin kesken.",
+    "forbidden": "Puutteelliset käyttöoikeudet",
+    "unavailable": "Järjestelmä on väliaikaisesti pois käytöstä. Yritä hetken kuluttua uudestaan.",
+    "whoami": "Käyttäjätietojen hakemisessa tapahtui odottamaton virhe. Uloskirjautuminen voi korjata ongelman.",
+    "file-read-error": "Tiedoston lukemisessa tapahtui odottamaton virhe."
+  },
+  "units": {
+    "days": "vrk",
+    "year": "vuosi",
+    "pieces": "kpl",
+    "celsius": "°C"
+  },
+  "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
+  "loading": "Ladataan...",
+  "tallenna": "Tallenna",
+  "peruuta": "Peruuta",
+  "yes": "Kyllä",
+  "no": "Ei",
+  "yritys": {
+    "yritykset": "Yritykset",
+    "yritys": "Yritys",
+    "uusi-yritys": "Uusi yritys",
+    "laatijat": "Laatijat",
+    "y-tunnus": "Y-Tunnus",
+    "tyyppi": "Tyyppi",
+    "id": "Tunnus",
+    "nimi": "Nimi",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
+    "laskutusosoite": "Laskutusosoite",
+    "jakeluosoite": "Katuosoite",
+    "postinumero": "Postinumero",
+    "postitoimipaikka": "Postitoimipaikka",
+    "maa": "Maa",
+    "laskutuskieli": "Laskutuskieli",
+    "verkkolaskuoperaattori": "Verkkolaskuoperaattori",
+    "verkkolaskuosoite": "Verkkolaskuosoite",
+    "perustiedot-header": "Perustiedot",
+    "deleted": "poistettu",
+    "cancel-button": "Peru muutokset",
+    "save-button": "Tallenna",
+    "messages": {
+      "save-success": "Yrityksen tiedot tallennettu onnistuneesti.",
+      "save-error": "Yrityksen tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Lomakkeella virheitä, tarkista syötteet.",
+      "load-error": "Yrityksen tietojen haku epäonnistui.",
+      "missing-permission": "Ei oikeuksia yrityksen tietojen muuttamiseen.",
+      "not-found": "Yritystä ei löydy järjestelmästä.",
+      "delete-success": "Yritys on merkitty poistetuksi. Yrityksen tiedot ei ole enää käytettävissä laskutuksessa.",
+      "delete-error": "Yrityksen poistaminen epäonnistui.",
+      "undelete-success": "Yritys poistaminen on peruttu ja yritys on nyt käytettävissä.",
+      "undelete-error": "Yrityksen poiston peruuttaminen epäonnistui."
+    },
+    "delete": {
+      "confirm": "Oletko varma että haluat merkitä yrityksen poistetuksi. Poistettua yritystä ei voi enää käyttää laskutuksessa.",
+      "button": "Poista yritys"
+    },
+    "undelete": {
+      "confirm": "Oletko varma että haluat palauttaa yrityksen takaisin voimaan",
+      "button": "Peru poistaminen"
+    },
+    "laatijat": {
+      "empty": "Yrityksellä ei ole laatijoita.",
+      "table": {
+        "laatija": "Laatija",
+        "liitetty": "Liitetty",
+        "hyvaksyja": "Hyväksyjä",
+        "delete": "Poista",
+        "proposal": "Odottaa hyväksymistä"
+      },
+      "accept": {
+        "confirm-message": "Oletko varma että haluat liittää laatijan yritykseen.",
+        "confirm-button": "Hyväksy",
+        "link": "Hyväksy liittäminen",
+        "success": "Laatijan hyväksyminen yritykseen onnistui",
+        "error": "Laatijan hyväksyminen yritykseen epäonnistui"
+      },
+      "delete": {
+        "confirm-message": "Oletko varma että haluat poistaa laatijan yrityksestä.",
+        "confirm-button": "Poista",
+        "link": "Poista"
+      }
+    }
+  },
+  "yritykset": {
+    "title": "Yritykset",
+    "all": "Kaikki yritykset",
+    "search": "Haku",
+    "include-deleted": "Näytä poistetut",
+    "results": "Tuloksia",
+    "messages": {
+      "load-error": "Yritystietojen lataus epäonnistui"
+    }
+  },
+  "time": {
+    "klo": "klo"
+  },
+  "kayttaja": {
+    "last-login": "Kirjautunut viimeksi",
+    "no-login": "Ei vielä kirjautunut.",
+    "passivoitu": "Passivoi käyttäjätunnus",
+    "valvoja": "Valvoja",
+    "rooli": "Käyttäjärooli",
+    "organisaatio": "Organisaatio",
+    "etunimi": "Etunimi",
+    "sukunimi": "Sukunimi",
+    "email": "Sähköpostiosoite",
+    "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
+    "puhelin": "Puhelinnumero",
+    "perustiedot-header": "Perustiedot",
+    "api-header": "Rajapinta",
+    "aineistot-header": "Aineistot",
+    "aineisto": "Aineisto",
+    "aineisto-lupa-paattymisaika": "Luvan päättymisaika",
+    "aineisto-ip-osoite": "IP-osoite",
+    "aineisto-ei-lupaa": "(ei lupaa)",
+    "aineisto-lupa": "Lupa aineistoon",
+    "aineisto-lupa-grant": "Lisää",
+    "aineisto-lupa-revoke": "Poista",
+    "cancel": "Peruuta muutokset",
+    "api-key": {
+      "label": "Uusi rajapinta-avain",
+      "placeholder": "Ei muuteta",
+      "luo-uusi": "Aseta"
+    },
+    "save": "Tallenna",
+    "back": "Takaisin",
+    "clear": "Tyhjennä",
+    "virtu": {
+      "header": "Virtu kirjautumistiedot",
+      "localid": "Käyttäjätunnus (Virtu Local ID)",
+      "organisaatio": "Organisaatio",
+      "checkbox": "Virtu-kirjautuminen käytössä"
+    },
+    "suomifi": {
+      "header": "Suomi-fi kirjautumistiedot",
+      "henkilotunnus": "Henkilötunnus",
+      "checkbox": "Suomi-fi-kirjautuminen käytössä"
+    },
+    "messages": {
+      "save-success": "Käyttäjän tiedot tallennettu onnistuneesti.",
+      "save-error": "Käyttäjän tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Käyttäjän tiedoissa virheitä. Tarkista lomakkeen kentät.",
+      "load-error": "Käyttäjän tietojen haku epäonnistui.",
+      "not-found": "Käyttäjää ei löydy tästä palvelusta."
+    },
+    "new": {
+      "title": "Uusi käyttäjä",
+      "messages": {
+        "add-success": "Uusi käyttäjä tallennettu järjestelmään.",
+        "add-error": "Uuden käyttäjän tallennus epäonnistui."
+      }
+    },
+    "muutoshistoria": {
+      "nimi": "Nimi",
+      "henkilotunnus": "Henkilötunnus",
+      "kayttajatiedot": "Käyttäjätiedot",
+      "laatijatiedot": "Laatijatiedot",
+      "muokkausaika": "Muokkausaika",
+      "muokkaaja": "Muokkaaja",
+      "laatimiskielto": "Laatimiskielto",
+      "toteaja": "Toteaja",
+      "toteamispaivamaara": "Toteamispäivä",
+      "toimintaalueet": "Toiminta-alueet",
+      "virtu": "Virtu",
+      "cognitoid": "Cognito ID",
+      "passivoitu": "Passivoitu",
+      "julkiset": "Julkiset tiedot",
+      "osoite": "Osoite",
+      "puhelin": "Puhelin",
+      "email": "Sähköposti",
+      "rooli": "Rooli",
+      "patevyystaso": "Pätevyys",
+      "laskutuskieli": "Laskutuskieli",
+      "www-osoite": "www-osoite",
+      "postinumero": "Postinumero"
+    },
+    "verification": {
+      "header": "Muistutus henkilötietojen tarkistamisesta",
+      "p-1": "Henkilötiedot on hyvä tarkistaa säännöllisin väliajoin. Tällä varmistat palvelun virheettömän toiminnan.",
+      "p-2": "Jos tiedoissa on puutteita, niin korjaa virheelliset tiedot ja tallenna muutokset.",
+      "p-3": "Jos tiedot ovat virheettömät, niin saat tämän muistutuksen pois painamalla alhaalta painiketta Tarkistettu."
+    }
+  },
+  "kayttajat": {
+    "title": "Käyttäjät",
+    "partners": "Kumppanit",
+    "aineistoasiakkaat": "Aineistoasiakkaat",
+    "new-kayttaja": "Uusi käyttäjä",
+    "new-partner": "Uusi kumppani",
+    "new-aineistoasiakas": "Uusi aineistoasiakas",
+    "nimi": "Nimi",
+    "rooli": "Rooli",
+    "email": "Sähköposti",
+    "puhelin": "Puhelin",
+    "organisaatio": "Organisaatio",
+    "login": "Kirjautunut",
+    "info": "Tällä sivulla näkyvät kaikki käyttäjät, jotka eivät ole virallisia laatijoita.",
+    "laatija-link": "Laatijat löytyvät täältä",
+    "state": {
+      "header": "Tila",
+      "active": "Aktiivinen",
+      "passivoitu": "Passivoitu"
+    },
+    "messages": {
+      "load-error": "Käyttäjätietojen haku epäonnistui."
+    }
+  },
+  "laatija": {
+    "laatija": "Laatija",
+    "partner": "Kumppani",
+    "henkilotunnus": "Henkilötunnus",
+    "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
+    "katuosoite": "Katuosoite",
+    "postinumero": "Postinumero",
+    "postitoimipaikka": "Postitoimipaikka",
+    "maa": "Maa",
+    "laskutuskieli": "Laskutuskieli",
+    "www-osoite": "Toiminnan www-osoite",
+    "perustiedot-header": "Perustiedot",
+    "laatijatiedot-header": "Laatijatiedot",
+    "patevyydenvoimassaolo": "Pätevyyden voimassaoloaika",
+    "toteamispaivamaara": "Toteamispäivämäärä",
+    "patevyystaso": "Pätevyystaso",
+    "paatoimintaalue": "Päätoiminta-alue",
+    "muuttoimintaalueet": "Muut toiminta-alueet",
+    "julkisettiedot-header": "Valitse julkiset tiedot",
+    "todistustenlaatimiskielto": "Todistustenlaatimiskiellossa",
+    "api-key-header": "Laskentaohjelmisto",
+    "api-key": "Anna uusi tiedonsiirron salasana",
+    "api-key-requirements": "Vähintään 8 merkkiä. Sallitut merkit: A-Z, 0-9, .-_!",
+    "cancel": "Peruuta muutokset",
+    "save": "Tallenna",
+    "verify": "Tarkistettu",
+    "messages": {
+      "not-found": "Laatijaa ei löydy tästä palvelusta.",
+      "save-success": "Laatijan tiedot tallennettu onnistuneesti.",
+      "save-error": "Laatijan tietojen tallennus epäonnistui.",
+      "validation-error": "Laatijan tiedoissa virheitä. Tarkista lomakkeelta punaisella merkityt kentät.",
+      "load-error": "Laatijan tietojen haku epäonnistui."
+    },
+    "upload": {
+      "rivi": "Rivi",
+      "etunimi": "Etunimi",
+      "sukunimi": "Sukunimi",
+      "henkilotunnus": "Henkilötunnus",
+      "jakeluosoite": "Jakeluosoite",
+      "postinumero": "Postinumero",
+      "postitoimipaikka": "Postitoimipaikka",
+      "email": "Sähköposti",
+      "puhelin": "Puhelinnumero",
+      "patevyystaso": "Pätevyystaso",
+      "toteamispaivamaara": "Toteamispäivämäärä",
+      "toteaja": "Toteaja",
+      "save": "Lisää laatijat",
+      "cancel": "Peruuta",
+      "messages": {
+        "load-error": "Laatijoiden tuonnissa tarvittavien tietojen haku epäonnistui.",
+        "save-success": "Laatijoiden tiedot tallennettu onnistuneesti.",
+        "save-error": "Laatijoiden tietojen tallennus epäonnistui.",
+        "validation-error": "Laatijoiden tiedoissa virheitä. Tarkista punaisella merkityt ja lataa tiedosto uudestaan."
+      }
+    },
+    "yritykset": {
+      "title": "Yritykset",
+      "empty": "Ei liitettyjä yrityksiä.",
+      "table": {
+        "description": "Sinut on liitetty laatijaksi seuraaviin yrityksiin:",
+        "tila": "Tila",
+        "proposal": "Odottaa hyväksymistä",
+        "accepted": "Liitetty {time}",
+        "delete": "Poista",
+        "footer": "Liitettyjen yritysten laskutusosoitteet ovat käytössäsi energiatodistuksen allekirjoitusvaiheessa."
+      },
+      "joining": {
+        "heading": "Liity yrityksen laatijaksi",
+        "step-1": "Hae yritystä. (Jos yritystä ei ole niin voit itse luoda yrityksen palveluun)",
+        "step-2": "Liitä yritys.",
+        "step-3": "Ota yhteyttä yrityksesi muihin laatijoihin. He voivat nyt hyväksyä sinut yrityksen laatijaksi."
+      },
+      "find-yritys": "Etsi yrityksistä (ytunnus tai nimi)",
+      "attach-to-yritys": "Liitä yritykseen",
+      "yritys-not-found": "Yritystä ei ole tässä palvelussa",
+      "already-attached": "Sinut on jo liitetty yritykseen",
+      "create-new": "Luo uusi yritys",
+      "add-new": "Lisää uusi yritys",
+      "create-info": "Jos yritystä ei löydy energiatodistuspalvelusta, voit lisätä sen itse.",
+      "success": {
+        "attach": "Liittäminen yritykseen onnistui",
+        "detach": "Laatija on poistettu yrityksestä"
+      },
+      "error": {
+        "select-yritys": "Valitse liitettävä yritys",
+        "attach-failed": "Liittäminen yritykseen epäonnistui",
+        "detach-failed": "Laatijan poistaminen yrityksestä epäonnistui"
+      }
+    }
+  },
+  "laatijat": {
+    "title": "Laatijahaku",
+    "kunta": "Kunta",
+    "energiatodistukset": "ET:t",
+    "results": "Tuloksia {count} KPL",
+    "kaikki": "Kaikki",
+    "voimassaolo": "Voimassaolo",
+    "patevyystaso": "Pätevyystaso",
+    "toimintaalue": "Päätoimintaalue",
+    "keyword-search": "Tekstihaku (nimi, hetu, yhteystiedot)",
+    "voimassaolo-paattymisaika": {
+      "label": "Pätevyyden päättymisaika",
+      "after": "Voimassaolo päättyy myöhemmin tai samana päivänä kuin",
+      "before": "Voimassaolo päättyy aikaisemmin tai samana päivänä kuin"
+    },
+    "filters": {
+      "label": "Tila",
+      "all": "Kaikki",
+      "0": "Pätevyys voimassa",
+      "1": "Ei kirjautunut",
+      "2": "Pätevyys peruttu / Laatimiskiellossa",
+      "3": "Pätevyys päättynyt"
+    }
+  },
+  "aineistoasiakas": {
+    "new": {
+      "title": "Uusi aineistoasiakas",
+      "messages": {
+        "add-success": "Uusi aineistoasiakas tallennettu järjestelmään.",
+        "add-error": "Uuden aineistoasiakkaan tallennus epäonnistui."
+      }
+    }
+  },
+  "energiatodistus": {
+    "title": "Energiatodistus",
+    "et-lisays": "Uuden energiatodistuksen voit lisätä täältä:",
+    "luo2018": "Luo ET 2018",
+    "luo2013": "Luo ET 2013",
+    "lataa-csv": "Lataa energiatodistukset CSV-tiedostona",
+    "lataa-xlsx": "Lataa energiatodistukset XLSX-tiedostona",
+    "allekirjoitusaika": "Todistuksen laatimispäivä",
+    "voimassaolo-paattymisaika": "Todistuksen voimassaolon päättymispäivä",
+    "tila-id": "Energiatodistuksen tila",
+    "versio": "Versio",
+    "laatija-id": "Laatija",
+    "kommentti": "Pääkäyttäjän kommentti",
+    "draft-visible-to-paakayttaja": "Valvojat saavat nähdä luonnostilaisen energiatodistuksen",
+    "bypass-validation-limits": "Ohita tarkistukset allekirjoittaessa",
+    "bypass-validation-limits-reason": "Selite tarkistusten ohittamisesta",
+    "haku": {
+      "sarakkeet": {
+        "tila": "Tila",
+        "tunnus": "Tunnus",
+        "e-luokka": "E-luokka",
+        "versio": "Versio",
+        "voimassa": "Voimassa",
+        "rakennuksen-nimi": "Rakennuksen nimi",
+        "osoite": "Osoite",
+        "ktl": "KTL",
+        "laatija": "Laatija",
+        "toiminnot": "Toiminnot",
+        "valvonta": "Valvonta"
+      },
+      "valitse_hakuehto": "Valitse hakuehto",
+      "lisaa_hakuehtoja": "Lisää hakuehtoja",
+      "lisaa_hakuehto": "Lisää hakuehto",
+      "tyhjenna_hakuehdot": "Tyhjennä hakuehdot",
+      "hae": "Hae",
+      "=": "=",
+      "<": "<",
+      ">": ">",
+      "<=": "<=",
+      ">=": ">=",
+      "sisaltaa": "Sisältää",
+      "ei-sisalla": "Ei sisällä",
+      "in": "Jokin",
+      "between": "Välillä",
+      "kuluva-ja-edelliset": "Kuluva ja edelliset",
+      "ieq": "=",
+      "and": "Ja",
+      "or": "Tai",
+      "suosikkihaut": "Suosikkihaut",
+      "id": "Tunnus",
+      "true": "Kyllä",
+      "false": "Ei",
+      "laatimisvaihe": "Laatimisvaihe",
+      "kaikki": "Kaikki",
+      "poista-disabled": "Energiatodistuksen voi poistaa vain luonnostilassa.",
+      "laatija": {
+        "toteamispaivamaara": "Laatija / Toteamispäivämäärä",
+        "voimassaolo-paattymisaika": "Laatija / Pätevyyden voimassaolon päättymispäivä",
+        "patevyystaso": "Laatija / Pätevyystaso"
+      },
+      "kunta": {
+        "id": "Kunta"
+      },
+      "postinumero": {
+        "label": "Postitoimipaikka"
+      }
+    },
+    "kaikki": "Kaikki",
+    "korvaavuus": {
+      "header": {
+        "korvattu": "Korvaa energiatodistuksen",
+        "korvaava": "Korvattu energiatodistuksella",
+        "korvaava-draft": "Korvataan energiatodistuksella (luonnos)",
+        "korvaavuus": "Energiatodistuksen korvaavuus",
+        "ehdotus": "Ehdotus korvattavaksi energiatodistukseksi"
+      },
+      "checkbox": "Korvaa todistuksen",
+      "input": "Korvattava todistustunnus",
+      "korvaava-draft-info": "Korvaaminen tapahtuu kun korvaava energiatodistus allekirjoitetaan.",
+      "table": {
+        "tunnus": "Tunnus",
+        "etl": "ETL",
+        "ktl": "KTL",
+        "rakennustunnus": "Pysyvä rakennustunnus",
+        "nettoala": "Nettoala",
+        "nimi": "Rakennuksen nimi",
+        "osoite": "Osoite",
+        "laatija": "Laatija"
+      },
+      "ehdotus": {
+        "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen.",
+        "info-p2": "<b>Valitse näistä korvattava energiatodistus</b> tai jos mitään todistusta ei korvata niin tämän kohdan voi ohittaa.",
+        "info-p3-1": "Jos halutaan korvata jokin muu niin valitse kohta ",
+        "info-p3-2": "Korvaa todistuksen",
+        "info-p3-3": "ja syötä korvattava todistustunnus käsin."
+      },
+      "validation": {
+        "invalid-tila": "Korvattava energiatodistus pitää olla allekirjoitettu tai hylätty.",
+        "already-replaced": "Korvattavalla energiatodistuksella on jo toinen korvaava energiatodistus.",
+        "invalid-location": "Käyttötarkoitusluokka ja postinumero eroavat, joten et voi korvata energiatodistusta.",
+        "is-same": "Energiatodistus ei voi korvata itseään.",
+        "not-found": "Energiatodistusta ei ole olemassa.",
+        "invalid-id": "Energiatodistustunnus ei sisällä kirjaimia."
+      },
+      "messages": {
+        "load-error": "Korvaavuustietojen haku epäonnistui"
+      }
+    },
+    "tila": {
+      "draft": "Luonnos",
+      "in-signing": "Allekirjoitus",
+      "signed": "Voimassa",
+      "discarded": "Hylätty",
+      "replaced": "Korvattu",
+      "deleted": "Poistettu",
+      "expired": "Vanhentunut",
+      "loading": "Ladataan"
+    },
+    "toolbar": {
+      "new": "Tallenna",
+      "save": "Tallenna",
+      "undo": "Peruuta muutokset",
+      "sign": "Allekirjoita",
+      "copy": "Kopioi pohjaksi",
+      "preview": "Esikatsele",
+      "download": "Lataa",
+      "discard": "Hylkää",
+      "undodiscard": "Kumoa hylkäys",
+      "delete": "Poista"
+    },
+    "new": {
+      "draft": "Uusi luonnos",
+      "copy-from": "Uusi kopio todistuksesta"
+    },
+    "id": "Energiatodistustunnus",
+    "laatija-fullname": "Laatija",
+    "laskutusosoite-id": "Käytettävät laskutustiedot",
+    "laskuriviviite": "Projektiviite (näkyy laskurivillä)",
+    "korvattu-energiatodistus-id": "Korvaa todistuksen",
+    "laskutus": {
+      "title": "Laskutustiedot",
+      "postiosoite": "Postiosoite",
+      "verkkolaskuosoite": "Verkkolaskuosoite",
+      "verkkolaskuoperaattori": "Välittäjätunnus",
+      "laatijalaskutus": "Henkilökohtaiset tiedot",
+      "load-error": "Laskutustietojen lataus epäonnistui"
+    },
+    "perustiedot": {
+      "header": "Energiatodistuksen perustiedot",
+      "label-context": "$unused",
+      "nimi": "Rakennuksen nimi",
+      "tilaaja": "Tilaaja",
+      "kieli": "Kieli",
+      "laatimisvaihe": "Laatimisvaihe",
+      "uudisrakennus": "Uudisrakennus",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä",
+      "katuosoite": "Katuosoite",
+      "postinumero": "Postinumero",
+      "rakennustunnus": "Pysyvä rakennustunnus",
+      "kiinteistotunnus": "Kiinteistötunnus",
+      "rakennusosa": "Rakennuksen osa",
+      "valmistumisvuosi": "Rakennuksen valmistumisvuosi",
+      "kayttotarkoitus": "Käyttötarkoitusluokka",
+      "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
+      "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
+      "julkinen-rakennus": "Julkinen rakennus",
+      "keskeiset-suositukset": "Keskeiset suositukset",
+      "keskeiset-suositukset-heading": {
+        "2018": {
+          "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
+          "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia)"
+        },
+        "2013": {
+          "h2": "Energiatehokkuutta parantavat toimenpiteet",
+          "h3": "Keskeiset suositukset rakennuksen energiatehokkuutta parantaviksi toimenpiteiksi"
+        }
+      },
+      "yritys": {
+        "label-context": "$unused",
+        "nimi": "Yritys"
+      }
+    },
+    "yhteensa": "Yhteensä",
+    "lahtotiedot": {
+      "header": "E-luvun laskennan lähtötiedot",
+      "label-context": "$unused",
+      "ala": "A",
+      "U": "U",
+      "lammitetty-nettoala": "Lämmitetty nettoala",
+      "rakennusvaippa": {
+        "header": "Rakennusvaippa",
+        "label-context": "Rakennusvaippa",
+        "U*A": "U*A",
+        "osuus-lampohaviosta": "Osuus lämpöhäviöstä",
+        "ilmanvuotoluku": "Ilmanvuotoluku",
+        "lampokapasiteetti": "Lämpökapasiteetti",
+        "ilmatilavuus": "Ilmatilavuus",
+        "labels": {
+          "ulkoseinat": "Ulkoseinät",
+          "ylapohja": "Yläpohja",
+          "alapohja": "Alapohja",
+          "ikkunat": "Ikkunat",
+          "ulkoovet": "Ulko-ovet"
+        },
+        "ulkoseinat": {
+          "label-context": "Rakennusvaippa / Ulkoseinät",
+          "ala": "A",
+          "U": "U",
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
+        },
+        "ylapohja": {
+          "label-context": "Rakennusvaippa / Yläpohja",
+          "ala": "A",
+          "U": "U",
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
+        },
+        "alapohja": {
+          "label-context": "Rakennusvaippa / Alapohja",
+          "ala": "A",
+          "U": "U",
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
+        },
+        "ikkunat": {
+          "label-context": "Rakennusvaippa / Ikkunat",
+          "ala": "A",
+          "U": "U",
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
+        },
+        "ulkoovet": {
+          "label-context": "Rakennusvaippa / Ulko-ovet",
+          "ala": "A",
+          "U": "U",
+          "UA": "U*A",
+          "osuus-lampohaviosta": "Osuus lämpöhäviöstä"
+        },
+        "kylmasillat": "Kylmäsillat",
+        "kylmasillat-UA": "Kylmäsillat U*A",
+        "kylmasillat-osuus-lampohaviosta": "Kylmäsillat / Osuus lämpöhäviöstä"
+      },
+      "ikkunat": {
+        "header": "Ikkunat ilmansuunnittain",
+        "kohtisuora": "kohtisuora",
+        "arvo": "arvo",
+        "labels": {
+          "pohjoinen": "Pohjoinen",
+          "koillinen": "Koillinen",
+          "ita": "Itä",
+          "kaakko": "Kaakko",
+          "etela": "Etelä",
+          "lounas": "Lounas",
+          "lansi": "Länsi",
+          "luode": "Luode"
+        },
+        "pohjoinen": {
+          "label-context": "Ikkunat / Pohjoinen",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "koillinen": {
+          "label-context": "Ikkunat / Koillinen",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "ita": {
+          "label-context": "Ikkunat / Itä",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "kaakko": {
+          "label-context": "Ikkunat / Kaakko",
+          "ala": " A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "etela": {
+          "label-context": "Ikkunat / Etelä",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "lounas": {
+          "label-context": "Ikkunat / Lounas",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "lansi": {
+          "label-context": "Ikkunat / Länsi",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        },
+        "luode": {
+          "label-context": "Ikkunat / Luode",
+          "ala": "A",
+          "U": "U",
+          "g-ks": "g-ks"
+        }
+      },
+      "ilmanvaihto": {
+        "header": "Ilmanvaihtojärjestelmä",
+        "label-context": "Ilmanvaihtojärjestelmä",
+        "tyyppi-id": "Ilmanvaihtojärjestelmän tyyppi",
+        "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
+        "lampotilasuhde": "LTO:n lämpötilasuhde",
+        "jaatymisenesto": "Jäätymisenesto",
+        "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
+        "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
+        "tuloilma-lampotila": "Tuloilman sisäänpuhalluslämpötila °C",
+        "ilmavirta": "Ilmavirta",
+        "tulo": "tulo",
+        "poisto": "poisto",
+        "labels": {
+          "paaiv": "Pääilman\u00ADvaihto\u00ADkoneet",
+          "erillispoistot": "Erillis\u00ADpoistot",
+          "ivjarjestelma": "Ilmanvaihto\u00ADjärjestelmä"
+        },
+        "paaiv": {
+          "label-context": "Pääilmanvaihtokoneet",
+          "tulo": "Tulo",
+          "poisto": "Poisto ",
+          "sfp": "SFP-luku",
+          "lampotilasuhde": "LTO:n lämpötilasuhde",
+          "jaatymisenesto": "Jäätymisenesto"
+        },
+        "erillispoistot": {
+          "label-context": "Erillispoistot",
+          "tulo": "Tulo",
+          "poisto": "Poisto",
+          "sfp": "SFP-luku"
+        },
+        "ivjarjestelma": {
+          "label-context": "Ilmanvaihtojärjestelmä",
+          "tulo": "Tulo",
+          "poisto": "Poisto",
+          "sfp": "SFP-luku"
+        }
+      },
+      "lammitys": {
+        "header": "Lämmitysjärjestelmä",
+        "label-context": "Lämmitysjärjestelmä",
+        "lammitysmuoto": {
+          "label-context": "$unused",
+          "id": "Lämmitysjärjestelmä",
+          "kuvaus": "Lämmitysjärjestelmän kuvaus"
+        },
+        "lammitysmuoto-1": {
+          "label-context": "$unused",
+          "id": "Ensisijainen lämmitysjärjestelmä",
+          "kuvaus": "Ensisijaisen lämmitysjärjestelmän kuvaus"
+        },
+        "lammitysmuoto-2": {
+          "label-context": "$unused",
+          "id": "Toissijainen lämmitysjärjestelmä",
+          "kuvaus": "Toissijaisen lämmitysjärjestelmän kuvaus"
+        },
+        "lammonjako": {
+          "label-context": "$unused",
+          "id": "Lämmönjako",
+          "kuvaus": "Lämmönjaon kuvaus"
+        },
+        "tuotonhyotysuhde": "Tuoton hyötysuhde",
+        "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
+        "lampokerroin": "Lämpökerroin",
+        "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö",
+        "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus",
+        "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämät-tömään tilaan",
+        "maara": "Määrä",
+        "tuotto": "Tuotto",
+        "kuvaus": "Lämmitysjärjestelmän kuvaus",
+        "tilat-ja-iv": {
+          "label": "Tilojen ja IV:n lämmitys",
+          "label-context": "Tilojen ja IV:n lämmitys",
+          "tuoton-hyotysuhde": "Tuoton hyötysuhde",
+          "jaon-hyotysuhde": "Jaon ja luovutuksen hyötysuhde",
+          "lampokerroin": "Lämpökerroin",
+          "apulaitteet": "Apulaitteiden sähkönkäyttö",
+          "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus",
+          "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämättömään tilaan"
+        },
+        "lammin-kayttovesi": {
+          "label": "Lämpimän käyttöveden valmistus",
+          "label-context": "Lämpimän käyttöveden valmistus",
+          "tuoton-hyotysuhde": "Tuoton hyötysuhde",
+          "jaon-hyotysuhde": "Jaon ja luovutuksen hyötysuhde",
+          "lampokerroin": "Lämpökerroin",
+          "apulaitteet": "Apulaitteiden sähkönkäyttö",
+          "lampopumppu-tuotto-osuus": "Lämpäpumpun tuotto-osuus",
+          "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämättömään tilaan"
+        },
+        "takka": {
+          "label": "Varaava tulisija",
+          "label-context": "$unused",
+          "maara": "Varaavien tulisijojen lukumäärä",
+          "tuotto": "Varaavien tulisijojen tuotto"
+        },
+        "ilmalampopumppu": {
+          "label": "Ilmalämpöpumppu",
+          "label-context": "$unused",
+          "maara": "Ilmalämpöpumppujen lukumäärä",
+          "tuotto": "Ilmalämpöpumppujen tuotto"
+        }
+      },
+      "jaahdytysjarjestelma": {
+        "header": "Jäähdytysjärjestelmä",
+        "label-context": "Jäähdytysjärjestelmä",
+        "jaahdytyskauden-painotettu-kylmakerroin": "Jäähdytyskauden painotettu kylmäkerroin"
+      },
+      "lkvn-kaytto": {
+        "header": "Lämmin käyttövesi",
+        "label-context": "Lämmin käyttövesi",
+        "ominaiskulutus": "Ominaiskulutus",
+        "lammitysenergian-nettotarve": "Lämmitysenergian nettotarve"
+      },
+      "sis-kuorma": {
+        "header": "Sisäiset lämpökuormat eri käyttöasteilla",
+        "kayttoaste": "Käyttöaste",
+        "lampokuorma": "Lämpökuorma",
+        "labels": {
+          "henkilot": "Henkilöt",
+          "kuluttajalaitteet": "Kuluttajalaitteet",
+          "valaistus": "Valaistus"
+        },
+        "henkilot": {
+          "label-context": "Sisäiset lämpökuormat / Henkilöt",
+          "kayttoaste": "Käyttöaste",
+          "lampokuorma": "Lämpökuorma"
+        },
+        "kuluttajalaitteet": {
+          "label-context": "Sisäiset lämpökuormat / Kuluttajalaitteet",
+          "kayttoaste": "Käyttöaste",
+          "lampokuorma": "Lämpökuorma"
+        },
+        "valaistus": {
+          "label-context": "Sisäiset lämpökuormat / Valaistus",
+          "kayttoaste": "Käyttöaste",
+          "lampokuorma": "Lämpökuorma"
+        }
+      }
+    },
+    "tulokset": {
+      "header": "E-luvun laskennan tulokset",
+      "label-context": "$unused",
+      "yhteensa": "Yhteensä",
+      "e-luku": "E-luku",
+      "e-luokka": "E-luokka",
+      "kaytettavat-energiamuodot": {
+        "header": "E-Luvun erittely",
+        "label-context": "E-luvun erittely",
+        "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
+        "ostoenergia": {
+          "2018": "Vakioidulla käytöllä laskettu ostoenergia",
+          "2013": "Laskettu ostoenergia"
+        },
+        "energiamuodon-kerroin": "Energiamuodon kerroin",
+        "kertoimella-painotettu-energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
+        "labels": {
+          "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+          "sahko": "Sähkö",
+          "kaukojaahdytys": "Kaukojäähdytys",
+          "kaukolampo": "Kaukolämpö",
+          "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+        },
+        "fossiilinen-polttoaine": "Ostoenergia / Fossiilinen polttoaine",
+        "fossiilinen-polttoaine-painotettu": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/vuosi)",
+        "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/(m²vuosi))",
+        "sahko": "Ostoenergia / Sähkö",
+        "sahko-painotettu": "Painotettu kulutus / Sähkö (kWhE/vuosi)",
+        "sahko-painotettu-neliovuosikulutus": "Painotettu kulutus / Sähkö (kWhE/(m²vuosi))",
+        "kaukojaahdytys": "Ostoenergia / Kaukojäähdytys",
+        "kaukojaahdytys-painotettu": "Painotettu kulutus / Kaukojäähdytys (kWhE/vuosi)",
+        "kaukojaahdytys-painotettu-neliovuosikulutus": "Painotettu kulutus / Kaukojäähdytys (kWhE/(m²vuosi))",
+        "kaukolampo": "Ostoenergia / Kaukolämpö",
+        "kaukolampo-painotettu": "Painotettu kulutus / Kaukolämpö (kWhE/vuosi)",
+        "kaukolampo-painotettu-neliovuosikulutus": "Painotettu kulutus / Kaukolämpö (kWhE/(m²vuosi))",
+        "uusiutuva-polttoaine": "Ostoenergia / Uusiutuva polttoaine",
+        "uusiutuva-polttoaine-painotettu": "Painotettu kulutus / Uusiutuva polttoaine (kWhE/vuosi)",
+        "uusiutuva-polttoaine-painotettu-neliovuosikulutus": "Painotettu kulutus / Uusiutuva polttoaine (kWhE/(m²vuosi))",
+        "muu": {
+          "0": {
+            "label-context": "E-luvun erittely",
+            "nimi": "Energiamuodon nimi",
+            "muotokerroin": "Energiamuodon kerroin",
+            "ostoenergia": "Ostoenergia"
+          }
+        }
+      },
+      "uusiutuvat-omavaraisenergiat": {
+        "header": {
+          "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
+          "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
+        },
+        "label-context": "Uusiutuvat omavaraisenergiat",
+        "labels": {
+          "aurinkosahko": "Aurinkosähkö",
+          "tuulisahko": "Tuulisähkö",
+          "aurinkolampo": "Aurinkolämpö",
+          "muulampo": "Muu ympäristöstä otettu energia, lämpö",
+          "muusahko": "Muu ympäristöstä otettu energia, sähkö",
+          "lampopumppu": "Lämpöpumppu"
+        },
+        "aurinkosahko": "Aurinkosähkö (kWh/vuosi)",
+        "aurinkosahko-neliovuosikulutus": "Aurinkosähkö (kWh/(m²vuosi))",
+        "tuulisahko": "Tuulisähkö (kWh/vuosi)",
+        "tuulisahko-neliovuosikulutus": "Tuulisähkö (kWh/(m²vuosi))",
+        "aurinkolampo": "Aurinkolämpö (kWh/vuosi)",
+        "aurinkolampo-neliovuosikulutus": "Aurinkolämpö (kWh/(m²vuosi))",
+        "muulampo": "Muu ympäristöstä otettu energia / Lämpö (kWh/vuosi)",
+        "muulampo-neliovuosikulutus": "Muu ympäristöstä otettu energia / Lämpö (kWh/(m²vuosi))",
+        "muusahko": "Muu ympäristöstä otettu energia / Sähkö (kWh/vuosi)",
+        "muusahko-neliovuosikulutus": "Muu ympäristöstä otettu energia / Sähkö (kWh/(m²vuosi))",
+        "lampopumppu": "Lämpöpumpun lämmönlähteestä ottama energia (kWh/vuosi)",
+        "lampopumppu-neliovuosikulutus": "Lämpöpumpun lämmönlähteestä ottama energia (kWh/(m²vuosi))",
+        "0": {
+          "label-context": "Uusiutuvat omavaraisenergiat",
+          "nimi": "Energian nimi",
+          "vuosikulutus": "Tuotto (kWh/vuosi)"
+        }
+      },
+      "tekniset-jarjestelmat": {
+        "header": "Rakennuksen teknisten järjestelmien energiankulutus",
+        "label-context": "Tekniset järjestelmät",
+        "sahko": "Sähkö",
+        "lampo": "Lämpö",
+        "kaukojaahdytys": "Kaukojäähdytys",
+        "lammitysjarjestelma": "Lämmitysjärjestelmä",
+        "labels": {
+          "tilojen-lammitys": "Tilojen lämmitys",
+          "tuloilman-lammitys": "Tuloilman lämmitys",
+          "kayttoveden-valmistus": "Lämpimän käyttöveden valmistus",
+          "iv-sahko": "Ilmanvaihtojärjestelmän sähköenergiankulutus",
+          "jaahdytys": "Jäähdytysjärjestelmä",
+          "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteet ja valaistus"
+        },
+        "tilojen-lammitys": {
+          "label-context": "Tekniset järjestelmät / Tilojen lämmitys",
+          "sahko": "Sähkönkulutus",
+          "lampo": "Lämmönkulutus"
+        },
+        "tuloilman-lammitys": {
+          "label-context": "Tekniset järjestelmät / Tuloilman lämmitys",
+          "sahko": "Sähkönkulutus",
+          "lampo": "Lämmönkulutus"
+        },
+        "kayttoveden-valmistus": {
+          "label-context": "Tekniset järjestelmät / Lämpimän käyttöveden valmistus",
+          "sahko": "Sähkönkulutus",
+          "lampo": "Lämmönkulutus"
+        },
+        "iv-sahko": "Ilmanvaihtojärjestelmän sähköenergiankulutus",
+        "jaahdytys": {
+          "label-context": "Tekniset järjestelmät",
+          "sahko": "Jäähdytyksen sähkönkulutus",
+          "lampo": "Jäähdytyksen lämmönkulutus",
+          "kaukojaahdytys": "Kaukojäähdytyksen energiankulutus"
+        },
+        "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteiden ja valaistuksen sähkönkulutus"
+      },
+      "nettotarve": {
+        "header": "Energian nettotarve",
+        "labels": {
+          "tilojen-lammitys-vuosikulutus": "Tilojen lämmitys",
+          "ilmanvaihdon-lammitys-vuosikulutus": "Ilmanvaihdon lämmitys",
+          "kayttoveden-valmistus-vuosikulutus": "Lämpimän käyttöveden valmistus",
+          "jaahdytys-vuosikulutus": "Jäähdytys"
+        },
+        "label-context": "Energian nettotarve",
+        "tilojen-lammitys-vuosikulutus": "Tilojen lämmitys (kWh/vuosi)",
+        "tilojen-lammitys-neliovuosikulutus": "Tilojen lämmitys (kWh/(m²vuosi))",
+        "ilmanvaihdon-lammitys-vuosikulutus": "Ilmanvaihdon lämmitys (kWh/vuosi)",
+        "ilmanvaihdon-lammitys-neliovuosikulutus": "Ilmanvaihdon lämmitys (kWh/(m²vuosi))",
+        "kayttoveden-valmistus-vuosikulutus": "Lämpimän käyttöveden valmistus (kWh/vuosi)",
+        "kayttoveden-valmistus-neliovuosikulutus": "Lämpimän käyttöveden valmistus (kWh/(m²vuosi))",
+        "jaahdytys-vuosikulutus": "Jäähdytys (kWh/vuosi)",
+        "jaahdytys-neliovuosikulutus": "Jäähdytys (kWh/(m²vuosi))"
+      },
+      "lampokuormat": {
+        "header": "Lämpökuormat",
+        "label-context": "Lämpökuormat",
+        "labels": {
+          "aurinko": "Aurinko",
+          "ihmiset": "Henkilöt",
+          "kuluttajalaitteet": "Kuluttajalaitteet",
+          "valaistus": "Valaistus",
+          "kvesi": "Lämpimän käyttöveden kierrosta ja varastoinnin häviöistä"
+        },
+        "aurinko": "Aurinko (kWh/vuosi)",
+        "aurinko-neliovuosikuorma": "Aurinko (kWh/(m²vuosi))",
+        "ihmiset": "Henkilöt (kWh/vuosi)",
+        "ihmiset-neliovuosikuorma": "Henkilöt (kWh/(m²vuosi))",
+        "kuluttajalaitteet": "Kuluttajalaitteet (kWh/vuosi)",
+        "kuluttajalaitteet-neliovuosikuorma": "Kuluttajalaitteet (kWh/(m²vuosi))",
+        "valaistus": "Valaistus (kWh/vuosi)",
+        "valaistus-neliovuosikuorma": "Valaistus (kWh/(m²vuosi))",
+        "kvesi": "Lämpimän käyttöveden kierto ja varastoinnin häviöt (kWh/vuosi)",
+        "kvesi-neliovuosikuorma": "Lämpimän käyttöveden kierto ja varastoinnin häviöt (kWh/(m²vuosi))"
+      },
+      "laskentatyokalu": "Energiatodistuksen laadintaohjelmisto ja versio"
+    },
+    "toteutunut-ostoenergiankulutus": {
+      "header": "Toteutunut energiankulutus",
+      "ostettu-energia": {
+        "header": {
+          "2018": "Energiaverkosta ostettu energia",
+          "2013": "Ostettu energia"
+        },
+        "labels": {
+          "kaukolampo": "Kaukolämpö",
+          "kokonaissahko": "Kokonaissähkö",
+          "kiinteistosahko": "Kiinteistösähkö",
+          "kayttajasahko": "Käyttäjäsähkö",
+          "kaukojaahdytys": "Kaukojäähdytys"
+        },
+        "label-context": "Ostettu energia",
+        "kaukolampo-vuosikulutus": "Kaukolämpö (kWh/vuosi)",
+        "kaukolampo-neliovuosikulutus": "Kaukolämpö (kWh/(m²vuosi))",
+        "kokonaissahko-vuosikulutus": "Kokonaissähkö (kWh/vuosi)",
+        "kokonaissahko-neliovuosikulutus": "Kokonaissähkö (kWh/(m²vuosi))",
+        "kiinteistosahko-vuosikulutus": "Kiinteistösähkö (kWh/vuosi)",
+        "kiinteistosahko-neliovuosikulutus": "Kiinteistösähkö (kWh/(m²vuosi))",
+        "kayttajasahko-vuosikulutus": "Käyttäjäsähkö (kWh/vuosi)",
+        "kayttajasahko-neliovuosikulutus": "Käyttäjäsähkö (kWh/(m²vuosi))",
+        "kaukojaahdytys-vuosikulutus": "Kaukojäähdytys (kWh/vuosi)",
+        "kaukojaahdytys-neliovuosikulutus": "Kaukojäähdytys (kWh/(m²vuosi))",
+        "muu": {
+          "0": {
+            "label-context": "Muu ostettu energia",
+            "nimi": "Energiamuodon nimi",
+            "vuosikulutus": "Energian vuosikulutus"
+          }
+        }
+      },
+      "ostetut-polttoaineet": {
+        "header": "Ostetut polttoaineet",
+        "table-header": {
+          "maara": "Polttoaineen määrä vuodessa",
+          "yksikko": "Yksikkö",
+          "muunnoskerroin": "Muunnoskerroin kWh:ksi"
+        },
+        "label-context": "Ostetut polttoaineet",
+        "kevyt-polttooljy": "Kevyt polttoöljy",
+        "kevyt-polttooljy-yksikko": "litra",
+        "kevyt-polttooljy-vuosikulutus": "Kevyt polttoöljy (kWh/vuosi)",
+        "kevyt-polttooljy-neliovuosikulutus": "Kevyt polttoöljy (kWh/(m²vuosi))",
+        "pilkkeet-havu-sekapuu": "Pilkkeet (havu- ja sekapuu)",
+        "pilkkeet-havu-sekapuu-yksikko": "pino-m³",
+        "pilkkeet-havu-sekapuu-vuosikulutus": "Pilkkeet (havu- ja sekapuu) (kWh/vuosi)",
+        "pilkkeet-havu-sekapuu-neliovuosikulutus": "Pilkkeet (havu- ja sekapuu) (kWh/(m²vuosi))",
+        "pilkkeet-koivu": "Pilkkeet (koivu)",
+        "pilkkeet-koivu-yksikko": "pino-m³",
+        "pilkkeet-koivu-vuosikulutus": "Pilkkeet (koivu) (kWh/vuosi)",
+        "pilkkeet-koivu-neliovuosikulutus": "Pilkkeet (koivu) (kWh/(m²vuosi))",
+        "puupelletit": "Puupelletit",
+        "puupelletit-yksikko": "kg",
+        "puupelletit-vuosikulutus": "Puupelletit (kWh/vuosi)",
+        "puupelletit-neliovuosikulutus": "Puupelletit (kWh/(m²vuosi))",
+        "muu": {
+          "0": {
+            "label-context": "Muut ostetut polttoaineet",
+            "nimi": "Polttoaineen nimi",
+            "yksikko": "Polttoaineen yksikkö",
+            "muunnoskerroin": "Polttoaineen muunnoskerroin kWh:ksi",
+            "maara-vuodessa": "Polttoaineen ostomäärä vuodessa",
+            "vuosikulutus": "Polttoaineen vuosikulutus (kWh/vuosi)",
+            "neliovuosikulutus": "Polttoaineen neliovuosikulutus (kWh/m²vuosi)"
+          }
+        }
+      },
+      "toteutuneet-yhteensa-header": "Toteutunut ostenergia yhteensä",
+      "label-context": "Toteutunut ostoenergia",
+      "labels": {
+        "sahko-vuosikulutus-yhteensa": "Sähkö",
+        "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö",
+        "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet",
+        "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys"
+      },
+      "sahko-vuosikulutus-yhteensa": "Sähkö (kWh/vuosi)",
+      "sahko-neliovuosikulutus-yhteensa": "Sähkö (kWh/m²vuosi)",
+      "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö (kWh/vuosi)",
+      "kaukolampo-neliovuosikulutus-yhteensa": "Kaukolämpö (kWh/m²vuosi)",
+      "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys (kWh/vuosi)",
+      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Kaukojäähdytys (kWh/m²vuosi)",
+      "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet (kWh/vuosi)",
+      "polttoaineet-neliovuosikulutus-yhteensa": "Polttoaineet (kWh/(m²vuosi))",
+      "toteutunut-vuosikulutus-yhteensä": "Yhteensä (kWh/vuosi)",
+      "toteutunut-neliovuosikulutus-yhteensä": "Yhteensä (kWh/(m²vuosi))"
+    },
+    "huomiot": {
+      "header": {
+        "2018": "Toimenpide-ehdotukset e-luvun parantamiseksi",
+        "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
+      },
+      "label-context": "$unused",
+      "toimenpide-table": {
+        "ehdotus": "Toimenpide-ehdotus",
+        "lampo": "Lämpö, ostoenergian muutos",
+        "sahko": "Sähkö, ostoenergian muutos",
+        "jaahdytys": "Jäähdytys, ostoenergian muutos",
+        "eluvun-muutos": "E-luvun muutos"
+      },
+      "suositukset-header": {
+        "2018": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
+        "2013": "Suosituksia rakennuksen käyttöön ja ylläpitoon"
+      },
+      "suositukset": "Suositellut toimenpide-ehdotukset",
+      "lisatietoja-header": "Lisätietoja energiatehokkuudesta",
+      "lisatietoja": "Lisätiedot",
+      "iv-ilmastointi": {
+        "header": "Huomiot - Ilmanvaihto- ja ilmastointijärjestelmät",
+        "label-context": "$unused",
+        "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
+        "toimenpide": [
+          {
+            "label-context": "Huomiot / Ilmanvaihto",
+            "nimi": "Toimenpide-ehdotus",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen"
+          }
+        ]
+      },
+      "valaistus-muut": {
+        "header": "Huomiot - Valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät",
+        "label-context": "$unused",
+        "teksti": "Valaistuksen, jäähdytysjärjestelmien, sähköisten erillislämmitysten ja muiden järjestelmien huomiot",
+        "toimenpide": [
+          {
+            "label-context": "Huomiot / Valaistus ja muut",
+            "nimi": "Toimenpide-ehdotus",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen"
+          }
+        ]
+      },
+      "lammitys": {
+        "header": "Huomiot - Tilojen ja käyttöveden lämmitysjärjestelmät",
+        "label-context": "$unused",
+        "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
+        "toimenpide": [
+          {
+            "label-context": "Huomiot / Lämmitysjärjestelmät",
+            "nimi": "Toimenpide-ehdotus",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen"
+          }
+        ]
+      },
+      "ymparys": {
+        "header": "Huomiot - Ulkoseinät, ulko-ovet ja ikkunat",
+        "label-context": "$unused",
+        "teksti": "Ulkoseinien, ulko-ovien ja ikkunoiden huomiot",
+        "toimenpide": [
+          {
+            "label-context": "Huomiot / Ulkoseinät...",
+            "nimi": "Toimenpide-ehdotus",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen"
+          }
+        ]
+      },
+      "alapohja-ylapohja": {
+        "header": "Huomiot - Ylä- ja alapohja",
+        "label-context": "$unused",
+        "teksti": "Ylä- ja alapohjan huomiot",
+        "toimenpide": [
+          {
+            "label-context": "Huomiot / Ylä- ja alapohja",
+            "nimi": "Toimenpide-ehdotus",
+            "lampo": "Toimenpiteen vaikutukset lämmön kulutukseen",
+            "sahko": "Toimenpiteen vaikutukset sähkön kulutukseen",
+            "jaahdytys": "Toimenpiteen vaikutukset jäähdytyksen energiankulutukseen",
+            "eluvun-muutos": "Toimenpiteen vaikutus e-luvun muutokseen"
+          }
+        ]
+      }
+    },
+    "lisamerkintoja": "Lisämerkintojä",
+    "messages": {
+      "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
+      "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
+      "validation-error": "Lomakkeella virheitä, tarkista kentät: ",
+      "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
+      "not-found": "Energiatodistusta ei ole olemassa.",
+      "validation-required-error": "Pakolliset tiedot puuttuvat: ",
+      "invalid-laskutusosoite-id": "Ei enää käytössä. Valitse voimassaoleva laskutustieto.",
+      "delete-success": "Energiatodistus poistettiin onnistuneesti",
+      "delete-error": "Energiatodistuksen poistaminen epäonnistui",
+      "discard-success": "Energiatodistus hylättiin onnistuneesti",
+      "discard-error": "Energiatodistuksen hylkääminen epäonnistui",
+      "undodiscard-success": "Energiatodistuksen hylkääminen peruttiin onnistuneesti",
+      "undodiscard-error": "Energiatodistuksen hylkäämisen peruminen epäonnistui",
+      "tyojono-add-success": "Energiatodistus lisättiin työjonoon onnistuneesti",
+      "tyojono-add-error": "Energiatodistuksen lisääminen työjonoon epäonnistui",
+      "tyojono-remove-success": "Energiatodistus poistettiin työjonosta onnistuneesti",
+      "tyojono-remove-error": "Energiatodistuksen poistaminen työjonosta epäonnistui"
+    },
+    "muutoshistoria": {
+      "not-found": "Energiatodistusta ei ole olemassa.",
+      "load-error": "Muutoshistorian lataaminen epäonnistui.",
+      "title": "Muutoshistoria",
+      "tilamuutokset": "Tilamuutokset",
+      "ajankohta": "Ajankohta",
+      "kayttaja": "Käyttäjä",
+      "tapahtuma": "Tapahtuma",
+      "lisatietoa": "Lisatietoa",
+      "external-api": "Tuotu ulkoisesta rajapinnasta",
+      "luonnos": "Luonnos",
+      "allekirjoitusAloitettiin": "Allekirjoitus aloitettiin",
+      "voimassa": "Voimassa",
+      "hylatty": "Hylätty",
+      "korvattu": "Korvattu",
+      "voimassaoloPaattyi": "Voimassaolo päättyi",
+      "allekirjoitettu": "Allekirjoitettu",
+      "korvattuTodistuksella": "Korvattu energiatodistuksella",
+      "laskutettu": "Laskutettu",
+      "energiatodistuslomake": "Energiatodistuslomake",
+      "kentta": "Kenttä",
+      "ensimmainenArvo": "Ensimmäinen arvo",
+      "nykyinenArvo": "Nykyinen arvo",
+      "true": "Kyllä",
+      "false": "Ei"
+    },
+    "signing": {
+      "header": "Allekirjoittaminen",
+      "language-adjective": {
+        "fi": "suomenkielinen",
+        "sv": "ruotsinkielinen",
+        "bilingual": "kaksikielinen"
+      },
+      "language-genitive": {
+        "fi": "suomenkielisen",
+        "sv": "ruotsinkielisen",
+        "bilingual": "kaksikielisen"
+      },
+      "messages": {
+        "connection-check": "Tarkistetaan yhteyttä mPolluxiin.",
+        "already-started": "Allekirjoitus on keskeytynyt tuntemattomasta syystä.",
+        "connection-success": "Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu.",
+        "connection-failed": "Yhteyden avaus mPolluxiin epäonnistui. Allekirjoittaminen edellyttää että allekirjoitusohjelma mPollux on asennettu ja selaimesta on yhteys allekirjoitusohjelmaan."
+      },
+      "error": {
+        "abort-failed": "Keskeyttäminen epäonnistui",
+        "signing-failed": "Allekirjoittaminen keskeytyi tuntemattomasta syystä. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
+        "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä.",
+        "laatimiskielto": "Allekirjoittaminen ei ole mahdollista koska laatija on laatimiskiellossa.",
+        "patevyys-expired": "Allekirjoittaminen ei ole mahdollista, koska laatijan pätevyys on päättynyt.",
+        "expired-signing-certificate": "Allekirjoittaminen ei ole mahdollista, koska henkilökortin voimassaolo on päättynyt."
+      },
+      "status": {
+        "not-started": "Voit nyt allekirjoittaa {language-genitive} energiatodistuksen.",
+        "already-started": "Voit aloittaa energiatodistuksen allekirjoittamisen uudestaan tai keskeyttää allekirjoittamisen ja palata luonnostilaan.",
+        "start": "Käynnistetään {language} allekirjoitusprosessi.",
+        "digest": "Muodostetaan {language} energiatodistus.",
+        "signature": "Allekirjoita {language} energiatodistus mPollux-ohjelmistossa.",
+        "pdf": "Allekirjoitetaan {language} energiatodistus.",
+        "finish": "Allekirjoitusprosessin päättäminen.",
+        "signed": "{language} energiatodistus on allekirjoitettu onnistuneesti.",
+        "aborted": "Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan."
+      },
+      "button": {
+        "start": "Allekirjoita",
+        "abort": "Keskeytä",
+        "close": "Sulje"
+      }
+    },
+    "allekirjoitus": {
+      "laskutusosoite": "Laskutusosoite",
+      "valitse-laskutusosoite": "Valitse laskutusosoite"
+    },
+    "laskutustiedot": {
+      "nimi": "Nimi"
+    },
+    "liitteet": {
+      "title": "Liitteet",
+      "show-deleted": "Näytä poistetut",
+      "empty": "Energiatodistuksella ei ole liitteitä.",
+      "delete-disabled": "Liitteiden poisto ei ole sallittu.",
+      "delete": "Poista liite",
+      "enabled-checkbox-label": "Laatija saa lisätä todistukselle liitteitä",
+      "attachments-disabled": "Liitteitä ei voi lisätä koska energiatodistus ei ole valvonnassa",
+      "liite": {
+        "createtime": "Lisätty",
+        "nimi": "Tiedosto / Linkki",
+        "author": "Lisääjä",
+        "type": "Tyyppi",
+        "deleted": "Poistettu"
+      },
+      "add-files": {
+        "title": "Lisää tiedostoja"
+      },
+      "add-link": {
+        "title": "Lisää linkki",
+        "nimi": "Linkin nimi",
+        "url": "www-osoite"
+      },
+      "messages": {
+        "add-files": {
+          "success": "Energiatodistuksen liitteet lisätty onnistuneesti.",
+          "error": "Energiatodistuksen liitteiden lisäämisessä tapahtui virhe."
+        },
+        "add-link": {
+          "success": "Energiatodistuksen linkki lisätty onnistuneesti.",
+          "error": "Energiatodistuksen linkin lisäämisessä tapahtui odottamaton virhe.",
+          "validation": "Lisää linkki lomakkeella virheitä, tarkista kentät."
+        },
+        "delete-liite": {
+          "success": "Energiatodistuksen liite poistettu.",
+          "error": "Energiatodistuksen liitteen poistamisessa tapahtui virhe."
+        },
+        "valvonta": {
+          "success": "Valvonnan tila päivitetty.",
+          "error": "Valvonnan tilan päivityksessä tapahtui virhe."
+        },
+        "load-error": "Energiatodistuksen liitteiden haku epäonnistui."
+      }
+    },
+    "viestit": {
+      "title": "Viestit"
+    }
+  },
+  "energiatodistukset": {
+    "title": "Energiatodistukset",
+    "not-found": "Energiatodistuksia ei löydy annetuilla hakuehdoilla tai sinulle ei ole yhtään energiatodistusta.",
+    "tilat": {
+      "0": "Luonnos",
+      "1": "Voimassa"
+    },
+    "messages": {
+      "delete-success": "Energiatodistus poistettiin onnistuneesti",
+      "delete-error": "Energiatodistuksen poistaminen epäonnistui"
+    }
+  },
+  "viesti": {
+    "valvoja": "Valvojat",
+    "system": "Järjestelmä",
+    "mina": "Minä",
+    "message": "viesti",
+    "messages": "viestiä",
+    "kasittelija": "Käsittelijä",
+    "all": {
+      "title": "Viestikeskus",
+      "senttime": "Lähetysaika",
+      "osallistujat": "Osallistujat",
+      "new-viesti": "Uusi viesti",
+      "content": "Sisältö",
+      "no-messages": "Ei viestejä",
+      "show-mine": "Minä käsittelijänä",
+      "show-handled": "Käsitellyt",
+      "no-handler": "Ei käsittelijää",
+      "from-id": "Lähettäjä",
+      "vastaanottaja-id": "Vastaanottaja",
+      "valvonta": "Näytä vain valvontaviestit",
+      "keyword-search": "Tekstihaku",
+      "messages": {
+        "update-success": "Viestiketjun päivitys onnistui",
+        "update-error": "Viestiketjun päivitys epäonnistui",
+        "load-error": "Viestien lataus epäonnistui."
+      }
+    },
+    "ketju": {
+      "vastaanottaja": "Vastaanottaja",
+      "vastaanottajaryhma": "Vastaanottajaryhmä",
+      "subject": "Aihe",
+      "body": "Viesti",
+      "new": {
+        "title": "Uusi viestiketju",
+        "submit": "Lähetä",
+        "reset": "Tyhjennä",
+        "messages": {
+          "load-error": "Tietojen lataus epäonnistui.",
+          "success": "Uusi viestiketju lisätty.",
+          "error": "Uuden viestiketjun lisääminen epäonnistui.",
+          "validation-error": "Viestiketjun tiedoissa virheitä, tarkista syötteet.",
+          "vastaanottaja-not-found": "Vastaanottajaa ei ole järjestelmässä."
+        }
+      },
+      "existing": {
+        "title": "Viestiketju",
+        "self": "Minä",
+        "handled": "Käsitelty",
+        "handler": "Käsittelijä",
+        "no-handler": "Ei käsittelijää",
+        "new-viesti": "Uusi viesti",
+        "submit": "Lähetä",
+        "reset": "Tyhjennä",
+        "back": "Takaisin",
+        "reply-in-new": "Vastaa viestiin uudessa ketjussa",
+        "attach-to-et": {
+          "attached-to": "Liittyy energiatodistukseen",
+          "title": "Liitä energiatodistukseen",
+          "button-attach-to-et": "Liitä energiatodistukseen",
+          "button-edit": "Muokkaa",
+          "input-label": "Energiatodistus",
+          "button-attach": "Liitä",
+          "button-detach": "Poista liitos",
+          "messages": {
+            "update-success": "Energiatodistus liitoksen päivittäminen onnistui",
+            "update-error": "Energiatodistus liitoksen päivittäminen epäonnistui",
+            "update-error-missing-et": "Energiatodistusta ei ole olemassa",
+            "validation-error": "Energiatodistus kenttä ei voi olla tyhjä ja arvon pitää olla numero"
+          }
+        },
+        "messages": {
+          "not-found": "Viestiketjua ei ole olemassa.",
+          "load-error": "Viestiketjun tietojen lataus epäonnistui.",
+          "success": "Uusi viesti lisätty",
+          "error": "Uuden viestin lisääminen epäonnistui",
+          "update-success": "Viestiketjun päivitys onnistui",
+          "update-error": "Viestiketjun päivitys epäonnistui",
+          "validation-error": "Vastauksessa on virhe. Tarkista vastauksen tiedot ennen lähettämistä."
+        }
+      },
+      "liitteet": {
+        "empty": "Viestiketjulla ei ole liitteitä.",
+        "messages": {
+          "load-error": "Liitetietojen lataus epäonnistui.",
+          "add-link-success": "Linkki lisätty viestiin.",
+          "add-files-success": "Liitetiedostot lisätty viestiin.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui."
+        }
+      }
+    }
+  },
+  "valvonta": {
+    "self": "Minä",
+    "valvoja": "Valvoja",
+    "aloita-valvonta": "Aloita valvonta",
+    "no-events": "Ei tapahtumia",
+    "add-muistiinpano": "Lisää muistiinpano",
+    "new-toimenpide": "Uusi toimenpide",
+    "select-toimenpide": "Valitse toimenpide",
+    "oikeellisuus": {
+      "pending": "Tarkastettava",
+      "all": {
+        "title": "Oikeellisuuden valvonnat",
+        "empty": "Ei valvontatoimenpiteitä",
+        "laatija": "Laatija",
+        "include-closed": "Näytä myös päättyneet",
+        "ei-valvojaa": "Ei valvojaa",
+        "download-all": "Lataa kaikki valvonnat",
+        "last-toimenpide": "Edellinen tapahtuma",
+        "keyword-search": "Tekstihaku",
+        "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
+        "table": {
+          "publish-time": "Tapahtumaaika",
+          "deadline-date": "Määräaika",
+          "type": "Tyyppi",
+          "diaarinumero": "Diaarinumero",
+          "last-toimenpide": "Edellinen tapahtuma",
+          "draft": "luonnos"
+        },
+        "messages": {
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
+          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta."
+        }
+      },
+      "valvonta": {
+        "title": "Oikeellisuuden valvonta",
+        "toimenpiteet": "Toimenpiteet",
+        "mark-as-verified": "Merkitse katsotuksi",
+        "mark-anomaly": "Ilmoita poikkeamasta",
+        "energiatodistus": {
+          "original": "Alkuperäinen",
+          "signed": "allekirjoitettu",
+          "korvaava": "Korvaava",
+          "draft": "luonnos"
+        },
+        "messages": {
+          "not-found": "Energiatodistusta ei ole olemassa",
+          "load-error": "Valvonnan tietojen lataus epäonnistui",
+          "update-error": "Valvonnan tietojen päivitys epäonnistui",
+          "update-success": "Valvonnan tiedot päivitetty",
+          "new-response-success": "Vastaaminen aloitettu.",
+          "new-response-error": "Vastauksen luonti epäonnistui."
+        }
+      },
+      "laatija-response": {
+        "title": "Vastaus",
+        "note": "Kun vastaus ja mahdolliset liitteet on tallennettu järjestelmään, muista lopuksi vielä lähettää vastaus.",
+        "start-button": "Aloita vastauksen tekeminen",
+        "continue-link": "Jatka vastaamista",
+        "response-sent-description": "Vastaus annettu {publish-date}.",
+        "response-sent-link": "Katso vastaus."
+      },
+      "toimenpide": {
+        "deadline-date": "Määräaika",
+        "deadline-date-dialog": {
+          "title": "Muuta määräaikaa",
+          "save": "Päivitä määräaika",
+          "cancel": "Peruuta"
+        },
+        "select-template": "Valitse asiakirjapohja",
+        "cancel-button": "Peruuta",
+        "preview-button": "Esikatsele",
+        "download-button": "Lataa",
+        "draft": "Luonnos",
+        "back": "Takaisin",
+        "verified": {
+          "title": "Merkitse katsotuksi",
+          "info": "Tällä toimenpiteelle energiatodistus merkitään tarkastetuksi ilman virheitä.",
+          "description": "Kommentti",
+          "publish-button": "Merkitse katsotuksi"
+        },
+        "anomaly": {
+          "title": "Ilmoita poikkeamasta",
+          "info": "Tällä toimenpiteelle energiatodistukseen merkitään poikkeama, mutta raskaaseen valvontaan ei ryhdytä.",
+          "description-fi": "Poikkeamailmoitus",
+          "description-sv": "Anmälan om avvikelse",
+          "language-selection": "Poikkeamailmoituksen kieli",
+          "fi": "suomi",
+          "sv": "ruotsi",
+          "publish-button": "Lähetä ilmoitus"
+        },
+        "case": {
+          "title": "Valvonnan aloitus",
+          "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
+          "description": "Kommentti",
+          "publish-button": "Aloita valvonta"
+        },
+        "rfi-request": {
+          "title": "Tietopyyntö",
+          "info": "Pyydetään laatijalta lisää tietoa.",
+          "publish-button": "Lähetä tietopyyntö",
+          "response-title": "Tietopyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfi-reply": {
+          "title": "Vastaus tietopyyntöön",
+          "description": "Vastaus",
+          "save-button": "Tallenna",
+          "reset-button": "Peru muutokset",
+          "publish-button": "Lähetä vastaus",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin"
+        },
+        "rfi-order": {
+          "title": "Tietopyyntö kehotus",
+          "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
+          "publish-button": "Lähetä kehotus",
+          "response-title": "Kehotus vastata tietopyyntöön",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfi-warning": {
+          "title": "Tietopyyntö varoitus",
+          "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
+          "publish-button": "Lähetä varoitus",
+          "response-title": "Varoitus tietopyyntöön liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+        },
+        "audit-report": {
+          "title": "Valvontamuistio",
+          "publish-button": "Lähetä",
+          "save-button": "Tallenna",
+          "reset-button": "Peru muutokset",
+          "delete-button": "Poista luonnos",
+          "add-virhe": "Lisää virhe",
+          "virheet-title": "Virheet",
+          "virheet-empty": "Ei virheitä",
+          "virhe": {
+            "description": "Virheen kuvaus"
+          },
+          "severity-title": "Vakavuus",
+          "select-severity": "Valitse vakavuus",
+          "response-title": "Valvontamuistio",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä.",
+          "draft-info": "Voit jatkaa valvontamuistion tekemistä myöhemmin",
+          "tiedoksi": {
+            "title": "Lähetä valvontamuistio tiedoksi",
+            "description": "Jos sähköpostiosoitetta ei ole syötetty, tulee valvontamuistio lähettää manuaalisesti",
+            "name": "Vastaanottaja",
+            "email": "Sähköpostiosoite",
+            "add": "Lisää vastaanottaja"
+          }
+        },
+        "audit-reply": {
+          "title": "Vastaus valvontamuistioon",
+          "description": "Vastaus",
+          "publish-button": "Lähetä vastaus",
+          "delete-button": "Poista luonnos",
+          "save-button": "Tallenna",
+          "reset-button": "Peru muutokset",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin"
+        },
+        "audit-order": {
+          "title": "Valvontamuistio kehotus",
+          "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
+          "publish-button": "Lähetä kehotus",
+          "response-title": "Kehotus vastata valvontamuistioon",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "audit-warning": {
+          "title": "Valvontamuistio varoitus",
+          "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
+          "publish-button": "Lähetä varoitus",
+          "response-title": "Varoitus valvontamuistioon liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+        },
+        "rfc-request": {
+          "title": "Lisäselvityspyyntö",
+          "info": "Pyydetään laatijalta lisäselvityspyyntö.",
+          "description": "Lisäselvityspyyntö",
+          "publish-button": "Lähetä",
+          "response-title": "Lisäselvityspyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfc-reply": {
+          "title": "Vastaus lisäselvityspyyntöön",
+          "description": "Vastaus",
+          "save-button": "Tallenna",
+          "reset-button": "Peru muutokset",
+          "publish-button": "Lähetä vastaus",
+          "draft-info": "Voit jatkaa vastaamista myöhemmin"
+        },
+        "decision-prohibition": {
+          "title": "Kieltopäätös",
+          "info": "Energiatodistus hylätään koska laatija ei halua korjata sitä.",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa päätös"
+        },
+        "closed": {
+          "title": "Valvonnan lopetus",
+          "info": "Tällä toimenpiteelle lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
+          "description": "Kommentti",
+          "publish-button": "Lopeta"
+        },
+        "messages": {
+          "not-found": "Toimenpidettä ei ole olemassa.",
+          "load-error": "Toimenpiteen tietojen haku epäonnistui.",
+          "save-success": "Toimenpiteen muutokset tallennettu.",
+          "save-error": "Toimenpiteen tallennus epäonnistui.",
+          "publish-success": "Toimenpide on lähetetty.",
+          "publish-error": "Toimenpiteen lähetys epäonnistui.",
+          "preview-error": "Toimenpiteen esikatselu epäonnistui.",
+          "add-success": "Toimenpide lisätty.",
+          "add-error": "Toimenpiteen lisääminen epäonnistui.",
+          "delete-success": "Toimenpiteen poistaminen onnistui.",
+          "delete-error": "Toimenpiteen poistaminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä.",
+          "add-files-success": "Liitetiedostot lisätty toimenpiteelle.",
+          "add-link-success": "Linkki lisätty toimenpiteelle.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui."
+        },
+        "liitteet": {
+          "empty": "Toimenpiteellä ei ole liitteitä"
+        }
+      },
+      "note": {
+        "title": "Muistiinpano",
+        "cancel-button": "Peruuta",
+        "description": "Sisältö",
+        "add-button": "Tallenna",
+        "messages": {
+          "add-success": "Uusi muistiinpano lisätty.",
+          "add-error": "Muistiinpanon lisääminen epäonnistui.",
+          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä."
+        }
+      },
+      "virhetypes": {
+        "title": "Virhetyypit",
+        "search": "Haku",
+        "new-virhetype": "Uusi virhetyyppi",
+        "id": "Tunniste",
+        "ordinal": "Järjestys",
+        "valid": "Käytössä",
+        "label-fi": "Otsikko (fi)",
+        "label-sv": "Otsikko (sv)",
+        "description-fi": "Kuvaus (fi)",
+        "description-sv": "Kuvaus (sv)",
+        "save-button": "Tallenna",
+        "cancel-button": "Peru muutokset",
+        "close-button": "Sulje",
+        "messages": {
+          "load-error": "Virhetyyppien tietojen haku epäonnistui.",
+          "save-success": "Virhetyypin muutokset tallennettu.",
+          "save-error": "Virhetyypin tallennus epäonnistui.",
+          "add-success": "Uusi virhetyyppi lisätty.",
+          "add-error": "Virhetyypin lisäys epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista virhetyypin tiedot ennen lähettämistä."
+        }
+      }
+    },
+    "kaytto": {
+      "all": {
+        "title": "Käytönvalvonnat",
+        "new-kohde": "Uusi valvonta",
+        "empty": "Ei valvontatoimenpiteitä",
+        "ei-valvojaa": "Ei valvojaa",
+        "include-closed": "Näytä myös päättyneet",
+        "diaarinumero": "Diaarinumero",
+        "last-toimenpide": "Edellinen tapahtuma",
+        "last-template": "Asiakirjapohja",
+        "last-toimenpide-none": "Tarkastettava",
+        "deadline-date": "Määräaika",
+        "tunnus": "Tunnus",
+        "rakennustunnus": "Rakennustunnus",
+        "osoite": "Osoite",
+        "omistajat": "Omistaja(t)",
+        "energiatodistus": "Energiatodistus",
+        "keyword-search": "Tekstihaku",
+        "download-all": "Lataa kaikki valvonnat",
+        "messages": {
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
+        }
+      },
+      "kohde": {
+        "rakennuksen-tiedot": "Rakennuksen tiedot",
+        "rakennustunnus": "Rakennustunnus",
+        "rakennustunnus-existing-et": "Rakennustunnukselle on jo energiatodistuksia",
+        "katuosoite": "Katuosoite",
+        "postinumero": "Postinumero",
+        "ilmoituksen-tiedot": "Ilmoituksen tiedot",
+        "havaintopaiva": "Havaintopäivä",
+        "ilmoituspaikka-id": "Ilmoituspaikka",
+        "ilmoituspaikka-description": "Ilmoituspaikan nimi",
+        "ilmoitustunnus": "Ilmoitustunnus",
+        "save": "Tallenna",
+        "reset": "Tyhjennä",
+        "revert": "Peru muutokset",
+        "cancel": "Peruuta",
+        "delete": "Poista",
+        "new-valvonta-title": "Uusi käytönvalvonta",
+        "title": "Käytönvalvonta",
+        "after-save-notice": "Voit lisätä liitteitä ja osapuolia tallentamisen jälkeen",
+        "no-attachments": "Ei liitteitä",
+        "previous": {
+          "title": "Aiemmat käytönvalvonnat",
+          "ended": "valvonta päättynyt"
+        },
+        "messages": {
+          "not-found": "Käytönvalvontaa ei ole olemassa.",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "save-success": "Käytönvalvonnan muutokset tallennettu.",
+          "save-error": "Käytönvalvonnan tallennus epäonnistui.",
+          "delete-success": "Käytönvalvonta poistettu.",
+          "delete-error": "Käytönvalvonnan poistaminen epäonnistui.",
+          "add-success": "Uusi käytönvalvonta lisätty.",
+          "add-error": "Käytönvalvonnan lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä.",
+          "add-link-success": "Linkki lisätty käytönvalvontaan.",
+          "add-files-success": "Liitetiedostot lisätty käytönvalvontaan.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui.",
+          "find-rakennustunnus-error": "Rakennustunnus haku epäonnistui."
+        },
+        "osapuolet": {
+          "title": "Osapuolet",
+          "nimi": "Nimi",
+          "rooli": "Rooli",
+          "osoite": "Osoite",
+          "email": "Sähköposti",
+          "toimitustapa": "Toimitustapa",
+          "new-henkilo": "Uusi henkilö",
+          "new-yritys": "Uusi yritys",
+          "empty": "Ei osapuolia"
+        },
+        "attachments": "Liitteet ja linkit"
+      },
+      "osapuoli": {
+        "new-henkilo-title": "Uusi henkilo",
+        "new-yritys-title": "Uusi yritys",
+        "nimi": "Nimi",
+        "etunimi": "Etunimi",
+        "sukunimi": "Sukunimi",
+        "henkilotunnus": "Henkilötunnus",
+        "ytunnus": "Y-tunnus",
+        "rooli-id": "Rooli",
+        "rooli-description": "Roolin kuvaus",
+        "contact-details-title": "Yhteystiedot",
+        "email": "Sähköposti",
+        "puhelin": "Puhelinnumero",
+        "vastaanottajan-tarkenne": "Vastaanottajan tarkenne tai C/O",
+        "jakeluosoite": "Katuosoite tai postilokero",
+        "postinumero": "Postinumero",
+        "postitoimipaikka": "Postitoimipaikka",
+        "maa": "Maa",
+        "toimitustapa-id": "Toimitustapa",
+        "toimitustapa-description": "Toimitustavan kuvaus",
+        "save": "Tallenna",
+        "revert": "Peru muutokset",
+        "delete": "Poista",
+        "messages": {
+          "not-found": "Osapuolta ei ole olemassa.",
+          "load-error": "Osapuolen tietojen haku epäonnistui.",
+          "save-success": "Osapuolen muutokset tallennettu.",
+          "save-error": "Osapuolen tallennus epäonnistui.",
+          "add-success": "Osapuoli lisätty.",
+          "add-error": "Osapuolen lisääminen epäonnistui.",
+          "delete-success": "Osapuoli on poistettu.",
+          "delete-error": "Osapuolen poistaminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
+        },
+        "toimitustapa-errors": {
+          "suomifi-henkilo": "Kun toimitustapa on suomi.fi, pitää henkilötunnus ja osoitetiedot olla täytettynä",
+          "suomifi-yritys": "Kun toimitustapa on suomi.fi, pitää Y-tunnus ja osoitetiedot olla täytettynä",
+          "email": "Kun toimitustapa on sahköposti, pitää sahköpostiosoitteen olla täytettynä"
+        }
+      },
+      "valvonta": {
+        "title": "Valvonta",
+        "toimenpiteet": "Toimenpiteet",
+        "rakennustunnus": "Pysyvä rakennustunnus",
+        "ilmoitustunnus": "Ilmoitustunnus",
+        "toimenpide": {
+          "rooli-none": "Ei roolia",
+          "toimitustapa-none": "Ei toimitustapaa",
+          "fyi": "tiedoksi",
+          "fyi-disabled": "ei tiedoteta",
+          "no-document": "osapuolelle ei luotu dokumenttia",
+          "court-attachment": "hallinto-oikeuden liite"
+        },
+        "messages": {
+          "not-found": "Käytönvalvonnan tietoja ei löydy",
+          "load-error": "Käytönvalvonnan tietojen haku epäonnistui.",
+          "update-error": "Käytönvalvonnan tietojen päivitys epäonnistui",
+          "update-success": "Käytönvalvonnan tiedot päivitetty"
+        }
+      },
+      "toimenpide": {
+        "deadline-date": "Määräaika",
+        "deadline-date-dialog": {
+          "title": "Muuta määräaikaa",
+          "save": "Päivitä määräaika",
+          "cancel": "Peruuta"
+        },
+        "vastaanottajat": "Vastaanottajat",
+        "nimi": "Nimi",
+        "rooli": "Rooli",
+        "administrative-court": "Hallinto-oikeus",
+        "fyi": "Omistajien dokumentit tiedoksi",
+        "fyi-disabled": "Ei lähetetä dokumentteja tiedoksi",
+        "delete": "Poista osapuoli vastaanottajista",
+        "toimitustapa": "Toimitustapa",
+        "esikatselu": "Esikatselu",
+        "cancel-button": "Peruuta",
+        "preview-button": "Esikatsele",
+        "download-button": "Lataa",
+        "create-document": "Luo dokumentti",
+        "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti",
+        "no-delivery": "Dokumenttia ei toimiteta osapuolelle",
+        "case": {
+          "title": "Valvonnan aloitus",
+          "info": "Tällä toimenpiteelle aloitetaan virallinen valvontaprosessi ja laitetaan asia vireille asiahallintaan.",
+          "description": "Kommentti",
+          "publish-button": "Aloita valvonta"
+        },
+        "rfi-request": {
+          "title": "Tietopyyntö",
+          "info": "Pyydetään rakennuksen omistajalta tietoa energiatodistuksesta.",
+          "publish-button": "Lähetä tietopyyntö",
+          "response-title": "Tietopyyntö",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfi-order": {
+          "title": "Kehotus",
+          "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön.",
+          "publish-button": "Lähetä kehotus",
+          "response-title": "Kehotus vastata tietopyyntöön",
+          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+        },
+        "rfi-warning": {
+          "title": "Varoitus",
+          "info": "Varoitetaan rakennuksen omistajia seurauksista, jos tietopyyntöön ei vastata määräaikaan mennessä.",
+          "publish-button": "Lähetä varoitus",
+          "response-title": "Varoitus tietopyyntöön liittyen",
+          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+        },
+        "decision-order": {
+          "title": "Käskypäätös",
+          "info": "Jos energiatodistusta ei saada niin voidaan lopulta tehdä käskypäätös ja asettaa uhkasakko. Vaiheen dokumentit tehdään tämän järjestelmän ulkopuolella.",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa päätös"
+        },
+        "court-hearing": {
+          "title": "HaO-käsittely",
+          "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen.",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa kommentti"
+        },
+        "closed": {
+          "title": "Valvonnan lopetus",
+          "info": "Tällä toimenpiteellä lopetaan virallinen valvontaprosessi ja suljetaan asia asiahallinnassa.",
+          "description": "Kommentti",
+          "publish-button": "Lopeta",
+          "force-button": "Lopeta (vain ETP)"
+        },
+        "decision-order-hearing-letter": {
+          "title": "Käskypäätös / kuulemiskirje",
+          "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus €",
+          "publish-button": "Luo toimenpide"
+        },
+        "decision-order-actual-decision": {
+          "title": "Käskypäätös / varsinainen päätös",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "osapuoli-specific-data": "Osapuolikohtaiset tiedot",
+          "document": "Osapuolelle toimitetaan dokumentti",
+          "preview-button": "Esikatsele osapuolen dokumentti",
+          "hearing-letter-answered": {
+            "label": "Omistaja vastasi kuulemiskirjeeseen",
+            "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
+            "false": "Asianosainen ei vastannut kuulemiskirjeeseen"
+          },
+          "answer-commentary-fi": "Vastineen kommentit, suomi",
+          "answer-commentary-sv": "Vastineen kommentit, ruotsi",
+          "statement-fi": "Kannanotto vastineeseen, suomi",
+          "statement-sv": "Kannanotto vastineeseen, ruotsi",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus € (sakko jaetaan sakotettavien lukumäärällä)",
+          "administrative-court": "Hallinto-oikeus",
+          "department-head-title-fi": "Yksikön päällikön titteli, suomi",
+          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
+          "department-head-name": "Yksikön päällikön nimi",
+          "publish-button": "Luo toimenpide"
+        },
+        "decision-order-notice-first-mailing": {
+          "title": "Käskypäätös tiedoksianto / (ensimmäinen postitus)",
+          "info": "Käskypäätös postitetaan liitteineen kirjeitse kirjaamon kautta saantitodistuksella.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "decision-order-notice-second-mailing": {
+          "title": "Käskypäätös tiedoksianto / (toinen postitus)",
+          "info": "Käskypäätös postitetaan liitteineen uudestaan kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "decision-order-notice-bailiff": {
+          "title": "Tiedoksianto haastemiehelle",
+          "info": "Käskypäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide",
+          "district-court": "Käräjäoikeus",
+          "bailiff-email": "Haastemiehen sähköpostiosoite"
+        },
+        "decision-order-waiting-for-deadline": {
+          "title": "Käskypäätös / valitusajan odotus ja umpeutuminen",
+          "info": "Rakennuksen omistajilla on mahdollisuus valittaa käskypäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko käskypäätöksestä valitettu.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "penalty-decision-hearing-letter": {
+          "title": "Sakkopäätös / kuulemiskirje",
+          "info": "Rakennuksen omistajilla on viimeinen mahdollisuus perustella, miksi energiatodistusta ei ole hankittu.",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus € (sakko jaetaan sakotettavien lukumäärällä)",
+          "publish-button": "Luo toimenpide"
+        },
+        "penalty-decision-actual-decision": {
+          "title": "Sakkopäätös / varsinainen päätös",
+          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten tehdään uhkasakkopäätös. Sakkopäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella.",
+          "description": "Kommentti",
+          "fine": "Sakon suuruus € (sakko jaetaan sakotettavien lukumäärällä)",
+          "publish-button": "Luo toimenpide",
+          "osapuoli-specific-data": "Osapuolikohtaiset tiedot",
+          "document": "Osapuolelle toimitetaan dokumentti",
+          "preview-button": "Esikatsele osapuolen dokumentti",
+          "hearing-letter-answered": {
+            "label": "Omistaja vastasi kuulemiskirjeeseen",
+            "true": "Asianosainen antoi vastineen kuulemiskirjeeseen",
+            "false": "Asianosainen ei vastannut kuulemiskirjeeseen",
+            "warning": "Tarkista ja muuta teksti kohdassa kannanotto vastineeseen"
+          },
+          "answer-commentary-fi": "Vastineen kommentit, suomi",
+          "answer-commentary-sv": "Vastineen kommentit, ruotsi",
+          "statement-fi": "Kannanotto vastineeseen, suomi",
+          "statement-sv": "Kannanotto vastineeseen, ruotsi",
+          "administrative-court": "Hallinto-oikeus",
+          "department-head-title-fi": "Yksikön päällikön titteli, suomi",
+          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
+          "department-head-name": "Yksikön päällikön nimi",
+          "default-statement-fi": "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
+          "default-statement-sv": "Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
+        },
+        "penalty-decision-notice-first-mailing": {
+          "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus)",
+          "info": "Sakkopäätös postitetaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "penalty-decision-notice-second-mailing": {
+          "title": "Sakkopäätös / tiedoksianto (toinen postitus)",
+          "info": "Sakkopäätös postitetaan uudestaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "penalty-decision-notice-bailiff": {
+          "title": "Tiedoksianto haastemiehelle",
+          "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide",
+          "district-court": "Käräjäoikeus",
+          "bailiff-email": "Haastemiehen sähköpostiosoite"
+        },
+        "penalty-decision-waiting-for-deadline": {
+          "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen",
+          "info": "Rakennuksen omistajilla on mahdollisuus valittaa sakkopäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko sakkopäätöksestä valitettu.",
+          "description": "Kommentti",
+          "publish-button": "Luo toimenpide"
+        },
+        "penalty-list-delivery-in-progress": {
+          "title": "Sakkoluettelon lähetys menossa",
+          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.ork (at) om.fi.sec",
+          "description": "Kommentti",
+          "publish-button": "Kirjaa kommentti"
+        },
+        "messages": {
+          "not-found": "Toimenpidettä ei ole olemassa.",
+          "load-error": "Toimenpiteen tietojen haku epäonnistui.",
+          "save-success": "Toimenpiteen muutokset tallennettu.",
+          "save-error": "Toimenpiteen tallennus epäonnistui.",
+          "publish-success": "Toimenpide on lähetetty.",
+          "publish-error": "Toimenpiteen lähetys epäonnistui.",
+          "preview-error": "Toimenpiteen esikatselu epäonnistui.",
+          "add-success": "Toimenpide lisätty.",
+          "add-error": "Toimenpiteen lisääminen epäonnistui.",
+          "validation-error": "Tiedoissa on virhe. Tarkista toimenpiteen tiedot ennen lähettämistä."
+        }
+      },
+      "note": {
+        "title": "Muistiinpano",
+        "cancel-button": "Peruuta",
+        "description": "Sisältö",
+        "add-button": "Tallenna",
+        "messages": {
+          "add-success": "Uusi muistiinpano lisätty.",
+          "add-error": "Muistiinpanon lisääminen epäonnistui.",
+          "validation-error": "Sisällössä on virhe. Tarkista muistiinpanon tiedot ennen lähettämistä."
+        }
+      }
+    }
+  },
+  "ohje": {
+    "navigation": {
+      "create": "Uusi sivu",
+      "sort": "Järjestä",
+      "end-sort": "Lopeta järjestäminen",
+      "sort-success": "Navigaation järjestyksen muuttaminen onnistui",
+      "sort-error": "Navigaation järjestyksen muuttaminen epäonnistui",
+      "destination-child": "Siirretään alisivuksi",
+      "destination-sibling": "Siirretään tähän"
+    },
+    "creator": {
+      "title": "Otsikko",
+      "body": "Sisältö",
+      "published": "Julkaistu",
+      "submit": "Luo",
+      "reset": "Tyhjennä",
+      "back": "Takaisin",
+      "success": "Uusi sivu lisätty",
+      "error": "Uuden sivun lisääminen epäonnistui",
+      "validation-error": "Tiedoissa virheitä, tarkista syötteet"
+    },
+    "editor": {
+      "title": "Otsikko",
+      "body": "Sisältö",
+      "published": "Julkaistu",
+      "submit": "Tallenna",
+      "delete": "Poista",
+      "delete-disabled": "Poistaminen ei ole mahdollista jos sivulla on alisivuja",
+      "sort-disabled": "Sivujen järjestäminen on estetty muokkausnäkymässä",
+      "cancel": "Peruuta",
+      "success": "Sivun muokkaaminen onnistui",
+      "error": "Sivun muokkaaminen epäonnistui",
+      "delete-success": "Sivu poistettu",
+      "delete-error": "Sivun poisto epäonnistui",
+      "validation-error": "Tiedoissa virheitä, tarkista syötteet",
+      "load-error": "Tietojen lataus epäonnistui."
+    },
+    "viewer": {
+      "unpublished": "Tämä sivu ei ole julkaistu laatijoille",
+      "edit": "Muokkaa",
+      "load-error": "Tietojen lataus epäonnistui."
+    }
+  },
+  "confirm": {
+    "you-want-to-delete": "Oletko varma, että haluat poistaa?",
+    "you-want-to-discard": "Oletko varma, että haluat hylätä?",
+    "you-want-to-undodiscard": "Oletko varma, että haluat kumota hylkäyksen?",
+    "button": {
+      "delete": "Poista",
+      "discard": "Hylkää",
+      "undodiscard": "Kumoa hylkäys"
+    }
+  },
+  "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
+  "file-drop-or": "Lisää tiedosto raahaamalla tai ",
+  "file-browse": "selaa tiedostoja",
+  "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
+  "country-not-found": "Virheellinen maa",
+  "table": {
+    "actions": "Toiminnot"
+  },
+  "pagination": {
+    "results": "Tuloksia {from}...{to} / {total}"
+  },
+  "unique-violations": {
+    "kayttaja-email-key": "Sähköpostiosoite {value} on jo käytössä.",
+    "kayttaja-virtu-key": "Virtu käyttäjätunnus on jo käytössä.",
+    "kayttaja-henkilotunnus-key": "Henkilötunnus on jo käytössä.",
+    "yritys-ytunnus-nimi-vastaanottajan-tarkenne-key": "Yritystunnus, nimi ja vastaanottajan tarkenne on käytössä toisella yrityksellä.",
+    "yritys-ytunnus-nimi-key": "Yritystunnus, nimi on käytössä toisella yrityksellä. Voit käyttää vastaanottajan tarkennetta erottamaan yritykset."
+  },
+  "not-found": {
+    "message": "Valitsemaasi sivua ei ole olemassa."
+  },
+  "log-out-done": {
+    "message": "Olet kirjautunut ulos.",
+    "link": "Tästä linkistä pääset takaisin etusivulle."
+  },
+  "footer": {
+    "about": "Tietoa Sivustosta",
+    "name": "Asumisen rahoitus- ja kehittämiskeskus",
+    "po-box": "PL 30",
+    "post-num": "15141 LAHTI",
+    "contact-info": "Yhteystiedot",
+    "phone": "Puhelin",
+    "email": "Sähköposti",
+    "accessibility-report": "Saavutettavuusseloste"
+  }
+}
