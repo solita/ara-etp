@@ -9,7 +9,7 @@
   import * as VirhetyyppiApi from './api';
 
   import { replace, location, querystring } from 'svelte-spa-router';
-  import { flashMessageStore } from '@/stores';
+
   import { _ } from '@Language/i18n';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
@@ -19,9 +19,13 @@
   import Table from './table.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import TextButton from '@Component/Button/TextButton.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.virhetypes';
+  const { announceError, announceSuccess } = announcementsForModule(
+    'valvonta-oikeellisuus'
+  );
 
   let resources = Maybe.None();
   let overlay = true;
@@ -34,11 +38,7 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'error',
-          i18n(Response.errorKey(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -82,19 +82,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'error',
-          i18n(Response.errorKey(i18nRoot, key, response))
-        );
+        announceError(i18n(Response.errorKey(i18nRoot, key, response)));
         overlay = false;
       },
       response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         overlay = false;
         dirty = false;
         successCallback(response);

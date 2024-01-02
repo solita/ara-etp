@@ -19,8 +19,8 @@
   import * as Toolbar from './toolbar-utils';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let energiatodistus;
   export let inputLanguage = 'fi';
@@ -30,6 +30,8 @@
   export let valvonta = { ongoing: false, pending: false };
 
   const i18n = $_;
+  const { announceError, announceSuccess } =
+    announcementsForModule('Energiatodistus');
 
   const version = energiatodistus.versio;
   const id = Maybe.fromNull(energiatodistus.id);
@@ -87,20 +89,14 @@
     Future.fork(
       response => {
         pendingExecution = false;
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
+        announceError(
           i18n(Response.errorKey404('energiatodistus', name, response))
         );
       },
       _ => {
         onSuccess();
         pendingExecution = false;
-        flashMessageStore.add(
-          'Energiatodistus',
-          'success',
-          i18n(`energiatodistus.messages.${name}-success`)
-        );
+        announceSuccess(i18n(`energiatodistus.messages.${name}-success`));
       },
       operation(fetch, version, Maybe.get(id))
     );

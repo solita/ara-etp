@@ -18,7 +18,6 @@
 
   import { replace, location, querystring } from 'svelte-spa-router';
   import { locale, _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import Input from '@Component/Input/Input';
   import Datepicker from '@Component/Input/Datepicker.svelte';
@@ -28,20 +27,19 @@
   import Label from '@Component/Label/Label.svelte';
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'laatijat';
+  const { announceError, announceSuccess, clearAnnouncements } =
+    announcementsForModule('Laatija');
   let resources = Maybe.None();
   let overlay = true;
 
   // Load all page resources
   Future.fork(
     response => {
-      flashMessageStore.add(
-        'Laatija',
-        'error',
-        i18n(Response.errorKey404(i18nRoot, 'load', response))
-      );
+      announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       overlay = false;
     },
     response => {

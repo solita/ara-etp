@@ -11,7 +11,9 @@
   import NewOsapuoli from './new-osapuoli';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
+
+  const { clearAnnouncements } = announcementsForModule('valvonta-kaytto');
 
   const route = (type, component) =>
     wrap({
@@ -35,8 +37,7 @@
   };
 </script>
 
-<svelte:window
-  on:hashchange={_ => flashMessageStore.flush('valvonta-kaytto')} />
+<svelte:window on:hashchange={clearAnnouncements} />
 
 <Router {routes} {prefix} />
 

@@ -7,8 +7,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as Validation from '@Utility/validation';
 
-  import { _, locale } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
 
   import Spinner from '@Component/Spinner/Spinner';
   import Link from '@Component/Link/Link.svelte';
@@ -17,6 +16,7 @@
 
   import * as EnergiatodistusApi from '../energiatodistus-api';
   import * as ET from '../energiatodistus-utils';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let energiatodistus;
   export let postinumerot;
@@ -26,6 +26,7 @@
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus.korvaavuus';
+  const { announceError } = announcementsForModule('Energiatodistus');
 
   let loading = false;
   let korvattavat = [];
@@ -48,7 +49,7 @@
             )
           );
 
-          flashMessageStore.add('Energiatodistus', 'error', msg);
+          announceError(msg);
           loading = false;
         },
         response => {

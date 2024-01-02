@@ -10,19 +10,21 @@
   import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as GeoApi from '@Utility/api/geo-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
-  import { flashMessageStore } from '@/stores';
 
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import H2 from '@Component/H/H2';
   import KayttajaHistoryTable from './history-table';
   import LaatijaHistoryTable from '@Pages/laatija/history-table';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
   $: id = params.id;
 
   const i18n = $_;
+  const { announceError } = announcementsForModule('kayttaja');
+
   let overlay = true;
   let resources = Maybe.None();
 
@@ -37,7 +39,7 @@
           )
         );
 
-        flashMessageStore.add('ohje', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {

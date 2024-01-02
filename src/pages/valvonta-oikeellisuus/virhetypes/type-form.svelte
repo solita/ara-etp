@@ -1,21 +1,21 @@
 <script>
   import * as R from 'ramda';
   import * as Validation from '@Utility/validation';
-  import * as Either from '@Utility/either-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Parsers from '@Utility/parsers';
   import { Virhetype as schema } from './schema';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import TextEditor from '@Component/text-editor/text-editor';
   import Input from '@Component/Input/Input.svelte';
   import Button from '@Component/Button/Button.svelte';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.virhetypes';
+  const { announceError } = announcementsForModule('valvonta-oikeellisuus');
 
   export let virhetype;
   export let api;
@@ -36,11 +36,7 @@
     if (Validation.isValidForm(schema)(virhetype)) {
       api.save(virhetype);
     } else {
-      flashMessageStore.add(
-        'valvonta-oikeellisuus',
-        'error',
-        i18n(`${i18nRoot}.messages.validation-error`)
-      );
+      announceError(i18n(`${i18nRoot}.messages.validation-error`));
       Validation.blurForm(form);
     }
   };

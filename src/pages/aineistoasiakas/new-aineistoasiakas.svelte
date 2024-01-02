@@ -6,7 +6,7 @@
   import * as Response from '@Utility/response';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { push } from '@Component/Router/router';
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
@@ -20,6 +20,8 @@
 
   const i18n = $_;
   const i18nRoot = 'aineistoasiakas.new';
+  const { announceError, announceSuccess } =
+    announcementsForModule('aineistoasiakas');
 
   let resources = Maybe.None();
   const emptyKayttaja = {
@@ -52,9 +54,7 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'kayttaja',
-          'error',
+        announceError(
           Locales.uniqueViolationMessage(
             i18n,
             response,
@@ -63,11 +63,7 @@
         );
       },
       response => {
-        flashMessageStore.add(
-          'kayttaja',
-          'success',
-          i18n(`${i18nRoot}.messages.add-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.add-success`));
         overlay = false;
         dirty = false;
         push('/kayttaja/' + response.id);
@@ -80,11 +76,7 @@
 
   $: Future.fork(
     response => {
-      flashMessageStore.add(
-        'kayttaja',
-        'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response))
-      );
+      announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
       resources = Maybe.None();
       overlay = false;
     },

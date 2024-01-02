@@ -4,7 +4,6 @@
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
 
-  import { flashMessageStore } from '@/stores';
   import * as Router from '@Component/Router/router';
 
   import * as Toimenpiteet from './toimenpiteet';
@@ -20,9 +19,13 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
   import ToimenpideForm from './toimenpide-form.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
+  const { announceError, announceSuccess } = announcementsForModule(
+    'valvonta-oikeellisuus'
+  );
 
   let resources = Maybe.None();
   let dirty = false;
@@ -37,7 +40,7 @@
         Response.localizationKey(response)
       );
 
-      flashMessageStore.add('viesti', 'error', msg);
+      announceError(msg);
       overlay = false;
     },
     response => {
@@ -61,15 +64,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'success',
-          $_(`${i18nRoot}.messages.add-success`)
-        );
+        announceSuccess($_(`${i18nRoot}.messages.add-success`));
         dirty = false;
         Router.replace(Links.toimenpide(response, params));
       }

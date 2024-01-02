@@ -8,7 +8,7 @@
   import NotFound from '@Pages/not-found/not-found';
 
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   const prefix = '/laatija';
   const routes = {
@@ -18,9 +18,10 @@
     '/:id/yritykset': Yritykset,
     '*': NotFound
   };
+  const { clearAnnouncements } = announcementsForModule('Laatija');
 </script>
 
-<svelte:window on:hashchange={_ => flashMessageStore.flush('Laatija')} />
+<svelte:window on:hashchange={clearAnnouncements} />
 
 <Router {routes} {prefix} />
 

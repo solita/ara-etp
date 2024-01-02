@@ -4,8 +4,7 @@
   import * as Response from '@Utility/response';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import { _, locale } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { _ } from '@Language/i18n';
 
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from './valvonta-api';
@@ -22,11 +21,14 @@
   import Note from './note.svelte';
   import * as versionApi from '@Component/Version/version-api';
   import { isProduction } from '@Utility/config-utils';
+  import { announcementsForModule } from '@Utility/announce';
 
   const TOIMENPIDETYPES_ALLOWED_IN_PRODUCTION = [0, 1, 2, 3, 4, 5];
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.valvonta';
+  const { announceError, announceSuccess } =
+    announcementsForModule('valvonta-kaytto');
 
   export let params;
   let resources = Maybe.None();
@@ -39,11 +41,7 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);
@@ -91,19 +89,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
-          i18n(Response.errorKey404(i18nRoot, key, response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
       response => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         overlay = false;
         successCallback(response);
       },

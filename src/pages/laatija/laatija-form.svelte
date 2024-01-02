@@ -23,7 +23,7 @@
 
   import * as LaatijaSchema from './schema';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'laatija';
@@ -103,15 +103,14 @@
 
   let form;
   const validateAndSubmit = _ => {
+    const { announceError, clearAnnouncements } =
+      announcementsForModule(errorModule);
+
     if (Validation.isValidForm(schema)(laatija)) {
-      flashMessageStore.flush();
+      clearAnnouncements();
       submit(laatija);
     } else {
-      flashMessageStore.add(
-        errorModule,
-        'error',
-        i18n('laatija.messages.validation-error')
-      );
+      announceError(i18n('laatija.messages.validation-error'));
       Validation.blurForm(form);
     }
   };

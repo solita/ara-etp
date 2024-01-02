@@ -22,7 +22,7 @@
   import Confirm from '@Component/Confirm/Confirm';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let submit;
   export let cancel;
@@ -37,6 +37,8 @@
   const setDirty = _ => {
     dirty = true;
   };
+  const { announceError, clearAnnouncements } =
+    announcementsForModule('yritys');
 
   $: schema = YritysUtils.schema(yritys.maa);
 
@@ -124,15 +126,11 @@
   on:change={setDirty}
   on:submit|preventDefault={event => {
     if (isValidForm(yritys)) {
-      flashMessageStore.flush();
+      clearAnnouncements();
       submit(yritys);
     } else {
       Validation.blurForm(event.target);
-      flashMessageStore.add(
-        'yritys',
-        'error',
-        i18n('yritys.messages.validation-error')
-      );
+      announceError(i18n('yritys.messages.validation-error'));
     }
   }}>
   <div class="w-full mt-3">

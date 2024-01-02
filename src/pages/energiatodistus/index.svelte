@@ -1,6 +1,5 @@
 <script>
   import Router from 'svelte-spa-router';
-  import wrap from 'svelte-spa-router/wrap';
 
   import EnergiatodistusResolver from './energiatodistus-resolver';
   import ExistingEnergiatodistus from './existing-energiatodistus';
@@ -9,10 +8,12 @@
   import Liitteet from './liitteet';
   import Viestit from './viestit';
   import NewKetju from './new-ketju';
-  import { flashMessageStore } from '@/stores';
   import Muutoshistoria from './muutoshistoria';
   import FlashMessage from '@Component/FlashMessage/FlashMessage';
   import NotFound from '@Pages/not-found/not-found';
+  import { announcementsForModule } from '@Utility/announce';
+
+  const { clearAnnouncements } = announcementsForModule('Energiatodistus');
 
   const prefix = '/energiatodistus';
   const routes = {
@@ -29,8 +30,7 @@
   };
 </script>
 
-<svelte:window
-  on:hashchange={_ => flashMessageStore.flush('Energiatodistus')} />
+<svelte:window on:hashchange={clearAnnouncements} />
 
 <Router {routes} {prefix} />
 <div class="w-full min-h-3em sticky bottom-0">

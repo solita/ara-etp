@@ -4,8 +4,6 @@
   import qs from 'qs';
   import * as R from 'ramda';
 
-  import { flashMessageStore } from '@/stores';
-
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
@@ -23,6 +21,7 @@
   import Radio from '@Component/Radio/Radio';
 
   import { _ } from '@Language/i18n';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let where;
   export let keyword;
@@ -35,6 +34,8 @@
   let schema = Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
     ? EtHakuSchema.paakayttajaSchema
     : EtHakuSchema.laatijaSchema;
+
+  const { announceWarning } = announcementsForModule('Energiatodistus');
 
   let laatijat = Maybe.None();
 
@@ -187,11 +188,7 @@
               await tick();
               form.dispatchEvent(new Event('change'));
             } else {
-              flashMessageStore.add(
-                'energiatodistus',
-                'warn',
-                'Hakukriteerin poistamisessa tapahtui virhe.'
-              );
+              announceWarning('Hakukriteerin poistamisessa tapahtui virhe.');
             }
           }}>
           cancel
@@ -215,11 +212,7 @@
             form.dispatchEvent(new Event('change'));
             R.last([...form.querySelectorAll('input:not(.hidden)')]).focus();
           } else {
-            flashMessageStore.add(
-              'energiatodistus',
-              'warn',
-              'Hakukriteerin lisäyksessä tapahtui virhe.'
-            );
+            announceWarning('Hakukriteerin lisäyksessä tapahtui virhe.');
           }
         }} />
     </div>

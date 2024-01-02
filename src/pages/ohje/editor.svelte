@@ -5,7 +5,7 @@
   import * as Response from '@Utility/response';
   import * as Validation from '@Utility/validation';
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { push } from 'svelte-spa-router';
 
   import * as api from '@Pages/ohje/ohje-api';
@@ -23,6 +23,7 @@
   import Navigation from '@Pages/ohje/navigation';
 
   const i18n = $_;
+  const { announceError } = announcementsForModule('ohje');
 
   export let params;
 
@@ -47,7 +48,7 @@
           )
         );
 
-        flashMessageStore.add('ohje', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -73,7 +74,7 @@
         const msg = i18n(
           Maybe.orSome('ohje.editor.error', Response.localizationKey(response))
         );
-        flashMessageStore.add('ohje', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
@@ -94,7 +95,7 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('ohje', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
@@ -113,11 +114,7 @@
     if (isValidForm(sivu)) {
       updateOhje(sivu);
     } else {
-      flashMessageStore.add(
-        'ohje',
-        'error',
-        i18n('ohje.editor.validation-error')
-      );
+      announceError(i18n('ohje.editor.validation-error'));
       Validation.blurForm(event.target);
     }
   };

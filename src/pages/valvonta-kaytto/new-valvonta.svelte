@@ -11,14 +11,17 @@
   import H1 from '@Component/H/H1.svelte';
   import KohdeForm from './kohde-form';
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import * as api from './valvonta-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as GeoApi from '@Utility/api/geo-api';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.kohde';
+  const { announceError, announceSuccess } =
+    announcementsForModule('valvonta-kaytto');
+
   const emptyKohde = _ => ({
     rakennustunnus: Maybe.None(),
     katuosoite: '',
@@ -42,11 +45,7 @@
 
   Future.fork(
     response => {
-      flashMessageStore.add(
-        'valvonta-kaytto',
-        'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response))
-      );
+      announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
       overlay = false;
     },
     response => {
@@ -65,19 +64,11 @@
     overlay = true;
     Future.fork(
       response => {
-        flashMessageStore.add(
-          'valvonta-kaytto',
-          'error',
-          i18n(Response.errorKey(i18nRoot, 'add', response))
-        );
+        announceError(i18n(Response.errorKey(i18nRoot, 'add', response)));
         overlay = false;
       },
       response => {
-        flashMessageStore.addPersist(
-          'valvonta-kaytto',
-          'success',
-          i18n(`${i18nRoot}.messages.add-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.add-success`));
         dirty = false;
         push('/valvonta/kaytto/' + response.id + '/kohde');
       },

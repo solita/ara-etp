@@ -8,7 +8,7 @@
   import * as Links from './links';
 
   import { _ } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   import H2 from '@Component/H/H2';
   import FileDropArea from '@Component/FileDropArea/FileDropArea';
@@ -50,18 +50,17 @@
   }
 
   const submit = event => {
+    const { announceError, clearAnnouncements } =
+      announcementsForModule(flashModule);
+
     if (isValidForm(newLink)) {
-      flashMessageStore.flush();
+      clearAnnouncements();
       liiteApi.addLink(newLink);
       resetForm();
       Validation.unblurForm(event.target);
     } else {
       Validation.blurForm(event.target);
-      flashMessageStore.add(
-        flashModule,
-        'error',
-        i18n(i18nRoot + '.messages.add-link.validation')
-      );
+      announceError(i18n(i18nRoot + '.messages.add-link.validation'));
     }
   };
 

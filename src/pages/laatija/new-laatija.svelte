@@ -17,11 +17,12 @@
 
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { _ } from '@Language/i18n';
 
   const i18n = $_;
   const i18nRoot = 'laatija';
+  const { announceError, announceSuccess } = announcementsForModule('Laatija');
 
   let overlay = true;
   let dirty = false;
@@ -88,9 +89,7 @@
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'Laatija',
-          'error',
+        announceError(
           Locales.uniqueViolationMessage(
             i18n,
             response,
@@ -99,11 +98,7 @@
         );
       },
       response => {
-        flashMessageStore.addPersist(
-          'Laatija',
-          'success',
-          i18n(`${i18nRoot}.messages.add-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.add-success`));
         overlay = false;
         dirty = false;
         Router.push('/kayttaja/' + response.id);

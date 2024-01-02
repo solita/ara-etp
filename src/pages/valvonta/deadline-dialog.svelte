@@ -12,9 +12,11 @@
   import Button from '@Component/Button/Button';
   import Spinner from '@Component/Spinner/Spinner';
 
-  import { flashMessageStore } from '@/stores';
   import { _ } from '@Language/i18n';
+  import { announcementsForModule } from '@Utility/announce';
+
   const i18n = $_;
+  const { announceSuccess } = announcementsForModule('valvonta-oikeellisuus');
 
   export let i18nRoot;
   export let putToimenpide;
@@ -49,11 +51,7 @@
         },
         _ => {
           pending = false;
-          flashMessageStore.add(
-            'valvonta-oikeellisuus',
-            'success',
-            i18n(`${i18nRoot}.messages.save-success`)
-          );
+          announceSuccess(i18n(`${i18nRoot}.messages.save-success`));
           cancel();
           reload();
         },

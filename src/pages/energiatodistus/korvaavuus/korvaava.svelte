@@ -13,13 +13,14 @@
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let korvaavaEnergiatodistusId = Maybe.None();
   export let whoami;
   export let postinumerot;
 
   const i18n = $_;
+  const { announceError } = announcementsForModule('Energiatodistus');
 
   let overlay = false;
 
@@ -34,11 +35,7 @@
         _ => {
           overlay = false;
           korvaavaEnergiatodistus = Maybe.None();
-          flashMessageStore.add(
-            'Energiatodistus',
-            'error',
-            i18n('energiatodistus.messages.load-error')
-          );
+          announceError(i18n('energiatodistus.messages.load-error'));
         },
         response => {
           overlay = false;

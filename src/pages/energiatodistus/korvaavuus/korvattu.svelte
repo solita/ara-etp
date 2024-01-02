@@ -9,8 +9,6 @@
   import EtTable from './energiatodistus-table';
   import EnergiatodistusKorvausEhdotus from './ehdotus';
 
-  import { flashMessageStore } from '@/stores';
-
   import * as EtApi from '../energiatodistus-api';
 
   import * as Korvaus from './korvaus';
@@ -19,6 +17,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Parsers from '@Utility/parsers';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let energiatodistus;
   export let whoami;
@@ -27,6 +26,7 @@
   export let dirty;
 
   const i18n = $_;
+  const { announceError } = announcementsForModule('Energiatodistus');
 
   const enabled =
     (Kayttajat.isLaatija(whoami) &&
@@ -66,11 +66,7 @@
         _ => {
           searching = false;
           updated = true;
-          flashMessageStore.add(
-            'Energiatodistus',
-            'error',
-            i18n('energiatodistus.messages.load-error')
-          );
+          announceError(i18n('energiatodistus.messages.load-error'));
         },
         response => {
           searching = false;

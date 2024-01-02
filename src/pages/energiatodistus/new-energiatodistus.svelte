@@ -19,12 +19,14 @@
   import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as laskutusApi from '@Utility/api/laskutus-api';
 
-  import { flashMessageStore } from '@/stores';
   import * as Response from '@Utility/response';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
   const i18n = $_;
   const i18nRoot = 'energiatodistus';
+  const { announceError, announceSuccess } =
+    announcementsForModule('Energiatodistus');
 
   let overlay = false;
 
@@ -62,19 +64,11 @@
       Future.fork(
         response => {
           toggleOverlay(false);
-          flashMessageStore.add(
-            'Energiatodistus',
-            'save',
-            i18n(Response.errorKey(i18nRoot, 'load', response))
-          );
+          announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
         },
         ({ id }) => {
           toggleOverlay(false);
-          flashMessageStore.addPersist(
-            'Energiatodistus',
-            'success',
-            $_('energiatodistus.messages.save-success')
-          );
+          announceSuccess($_('energiatodistus.messages.save-success'));
           onSuccessfulSave();
           replace(`/energiatodistus/${params.version}/${id}`);
         }
@@ -101,11 +95,7 @@
     Future.fork(
       response => {
         toggleOverlay(false);
-        flashMessageStore.add(
-          'Energiatodistus',
-          'error',
-          i18n(Response.errorKey(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);

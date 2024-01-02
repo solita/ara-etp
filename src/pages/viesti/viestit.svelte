@@ -1,5 +1,5 @@
 <script>
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
   import { _ } from '@Language/i18n';
 
   import * as R from 'ramda';
@@ -30,6 +30,7 @@
   import Input from '@Component/Input/Input';
 
   const i18n = $_;
+  const { announceError, announceSuccess } = announcementsForModule('viesti');
 
   let resources = Maybe.None();
   let overlay = true;
@@ -88,7 +89,7 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
@@ -158,15 +159,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('viesti', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       _ => {
-        flashMessageStore.add(
-          'viesti',
-          'success',
-          i18n(`viesti.all.messages.update-success`)
-        );
+        announceSuccess(i18n(`viesti.all.messages.update-success`));
         overlay = false;
         load(query);
       }

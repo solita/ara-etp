@@ -7,7 +7,6 @@
   import * as Kayttajat from '@Utility/kayttajat';
 
   import { _, locale } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
 
   import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as ETViews from '@Pages/energiatodistus/views';
@@ -34,9 +33,13 @@
   import Link from '../../components/Link/Link.svelte';
   import EtLink from '@Component/EtLink/EtLink.svelte';
   import * as ETValvonta from '@Pages/valvonta-oikeellisuus/energiatodistus-valvonta';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.valvonta';
+  const { announceError, announceSuccess } = announcementsForModule(
+    'valvonta-oikeellisuus'
+  );
 
   export let params;
   export let resources = Maybe.None();
@@ -57,7 +60,7 @@
                 Response.localizationKey(response)
               )
             );
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        announceError(msg);
       },
       response => {
         resources = Maybe.Some(response);
@@ -102,15 +105,11 @@
             Response.localizationKey(response)
           )
         );
-        flashMessageStore.add('valvonta-oikeellisuus', 'error', msg);
+        announceError(msg);
         overlay = false;
       },
       response => {
-        flashMessageStore.add(
-          'valvonta-oikeellisuus',
-          'success',
-          i18n(`${i18nRoot}.messages.${key}-success`)
-        );
+        announceSuccess(i18n(`${i18nRoot}.messages.${key}-success`));
         overlay = false;
         successCallback(response);
       },

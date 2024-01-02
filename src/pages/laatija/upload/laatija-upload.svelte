@@ -12,7 +12,7 @@
   import * as LaatijaUploadUtils from './laatija-upload-utils';
   import Button from '@Component/Button/Button';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   import * as LocaleUtils from '@Language/locale-utils';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
@@ -23,6 +23,8 @@
 
   const i18n = $_;
   const i18nRoot = 'laatija.upload';
+  const { announceError, announceSuccess, clearAnnouncements } =
+    announcementsForModule('Laatija');
 
   let overlay = false;
 
@@ -35,11 +37,7 @@
   $: Future.fork(
     response => {
       toggleOverlay(false);
-      flashMessageStore.add(
-        'Laatija',
-        'error',
-        i18n(Response.errorKey(i18nRoot, 'load', response))
-      );
+      announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
     },
     response => {
       toggleOverlay(false);
@@ -71,15 +69,11 @@
           response,
           Response.errorKey(i18nRoot, 'save', response)
         );
-        flashMessageStore.add('Laatija', 'error', msg);
+        announceError(msg);
       },
       _ => {
         toggleOverlay(false);
-        flashMessageStore.add(
-          'Laatija',
-          'success',
-          i18n(i18nRoot + '.messages.save-success')
-        );
+        announceSuccess(i18n(i18nRoot + '.messages.save-success'));
         laatijat = [];
       }
     ),
@@ -121,7 +115,7 @@
   )(model);
 
   $: if (errors.length) {
-    flashMessageStore.add('Laatija', 'error', R.join(' | ', errors));
+    announceError(R.join(' | ', errors));
   }
 </script>
 
@@ -178,11 +172,11 @@
       </div>
       <form
         on:submit|preventDefault={_ => {
-          flashMessageStore.flush('Laatija');
+          clearAnnouncements();
           submit(model);
         }}
         on:reset|preventDefault={_ => {
-          flashMessageStore.flush('Laatija');
+          clearAnnouncements();
           files = [];
           laatijat = [];
         }}>

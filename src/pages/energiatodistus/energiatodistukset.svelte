@@ -20,7 +20,6 @@
   import qs from 'qs';
 
   import { _, locale } from '@Language/i18n';
-  import { flashMessageStore } from '@/stores';
   import { push } from '@Component/Router/router';
 
   import H1 from '@Component/H/H1';
@@ -36,8 +35,11 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as GeoApi from '@Utility/api/geo-api';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
+  const { announceError, announceSuccess } =
+    announcementsForModule('Energiatodistus');
 
   let overlay = true;
   let failure = false;
@@ -66,7 +68,7 @@
       Maybe.orSome(defaultKey, Response.localizationKey(response))
     );
 
-    flashMessageStore.add('Energiatodistus', 'error', msg);
+    announceError(msg);
   };
 
   const loadError = showError('energiatodistus.messages.load-error');
@@ -89,11 +91,7 @@
           id
         )(energiatodistukset);
 
-        flashMessageStore.add(
-          'Energiatodistus',
-          'success',
-          i18n('energiatodistukset.messages.delete-success')
-        );
+        announceSuccess(i18n('energiatodistukset.messages.delete-success'));
         nextPageCallback(1);
       },
       api.deleteEnergiatodistus(fetch, versio, id)

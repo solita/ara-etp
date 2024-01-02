@@ -25,11 +25,12 @@
   import * as laatijaApi from './laatija-api';
   import * as yritysApi from '@Pages/yritys/yritys-api';
 
-  import { flashMessageStore } from '@/stores';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let params;
 
   const i18n = $_;
+  const { announceError, announceSuccess } = announcementsForModule('Laatija');
 
   let newLaatijaYritys = Either.Right(Maybe.None());
   let laatijaYritykset = [];
@@ -40,19 +41,10 @@
 
   const detach = index => {
     Future.fork(
-      _ =>
-        flashMessageStore.add(
-          'Laatija',
-          'error',
-          i18n('laatija.yritykset.error.detach-failed')
-        ),
+      _ => announceError(i18n('laatija.yritykset.error.detach-failed')),
       _ => {
         load(params.id);
-        flashMessageStore.add(
-          'Laatija',
-          'success',
-          i18n('laatija.yritykset.success.detach')
-        );
+        announceSuccess(i18n('laatija.yritykset.success.detach'));
       },
       laatijaApi.deleteLaatijaYritys(
         fetch,
@@ -93,7 +85,7 @@
     toggleOverlay(true);
     return Future.fork(
       _ => {
-        flashMessageStore.add('Laatija', 'error', i18n('errors.load-error'));
+        announceError(i18n('errors.load-error'));
         toggleOverlay(false);
       },
       response => {
@@ -125,21 +117,12 @@
         Maybe.toEither(R.applyTo('laatija.yritykset.error.select-yritys'))
       )
       .leftMap(R.applyTo(i18n))
-      .cata(flashMessageStore.add('Laatija', 'error'), yritys => {
+      .cata(announceError, yritys => {
         Future.fork(
-          _ =>
-            flashMessageStore.add(
-              'Laatija',
-              'error',
-              i18n('laatija.yritykset.error.attach-failed')
-            ),
+          _ => announceError(i18n('laatija.yritykset.error.attach-failed')),
           _ => {
             load(params.id);
-            flashMessageStore.add(
-              'Laatija',
-              'success',
-              i18n('laatija.yritykset.success.attach')
-            );
+            announceSuccess(i18n('laatija.yritykset.success.attach'));
           },
           laatijaApi.putLaatijaYritys(fetch, params.id, yritys.id)
         );

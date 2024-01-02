@@ -21,7 +21,6 @@
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
   import Input from '@Component/Input/Input';
-  import { flashMessageStore } from '@/stores';
   import Select from '@Component/Select/Select';
   import OsapuoletTable from './toimenpide-osapuolet-table.svelte';
 
@@ -29,9 +28,11 @@
 
   import DecisionOrderActualDecisionSubView from './new-decision-order-actual-decision-toimenpide';
   import PenaltyDecisionActualDecisionSubView from './new-penalty-decision-actual-decision-toimenpide';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.toimenpide';
+  const { announceSuccess } = announcementsForModule('valvonta-kaytto');
 
   export let id;
   export let templatesByType;
@@ -83,11 +84,7 @@
           publishPending = false;
         },
         _ => {
-          flashMessageStore.add(
-            'valvonta-kaytto',
-            'success',
-            i18n(`${i18nRoot}.messages.publish-success`)
-          );
+          announceSuccess(i18n(`${i18nRoot}.messages.publish-success`));
           publishPending = false;
           reload();
         },

@@ -6,7 +6,6 @@
   import * as Validation from '@Utility/validation';
   import * as Locales from '@Language/locale-utils';
 
-  import { flashMessageStore } from '@/stores';
   import { locale, _ } from '@Language/i18n';
 
   import H2 from '@Component/H/H2';
@@ -14,6 +13,7 @@
   import Input from '@Component/Input/Input';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/Select.svelte';
+  import { announcementsForModule } from '@Utility/announce';
 
   /*
    * Note: kayttaja.rooli :: Maybe[Id]
@@ -29,6 +29,8 @@
 
   const i18n = $_;
   const i18nRoot = 'kayttaja';
+  const { announceError, clearAnnouncements } =
+    announcementsForModule('kayttaja');
 
   const schema = Schema.Kayttaja;
   $: virtuSchema = Schema.virtuSchema(kayttaja);
@@ -66,14 +68,10 @@
   let form;
   const saveKayttaja = _ => {
     if (isValidForm(kayttaja)) {
-      flashMessageStore.flush();
+      clearAnnouncements();
       submit(R.evolve({ rooli: Maybe.get }, kayttaja));
     } else {
-      flashMessageStore.add(
-        'kayttaja',
-        'error',
-        i18n('kayttaja.messages.validation-error')
-      );
+      announceError(i18n('kayttaja.messages.validation-error'));
       Validation.blurForm(form);
     }
   };

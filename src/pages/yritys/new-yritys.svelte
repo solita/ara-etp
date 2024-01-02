@@ -11,11 +11,11 @@
   import Spinner from '@Component/Spinner/Spinner';
   import YritysForm from '@Pages/yritys/yritys-form';
   import * as YritysUtils from '@Pages/yritys/yritys-utils';
-  import { flashMessageStore } from '@/stores';
 
   import * as api from '@Pages/yritys/yritys-api';
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import { announcementsForModule } from '@Utility/announce';
 
   let overlay = false;
   let dirty = false;
@@ -27,13 +27,13 @@
     yritys = YritysUtils.emptyYritys;
   };
 
+  const { announceError, announceSuccess } = announcementsForModule('yritys');
+
   const submit = R.compose(
     Future.fork(
       response => {
         overlay = false;
-        flashMessageStore.add(
-          'yritys',
-          'error',
+        announceError(
           Locales.uniqueViolationMessage(
             $_,
             response,
@@ -42,11 +42,7 @@
         );
       },
       ({ id }) => {
-        flashMessageStore.addPersist(
-          'yritys',
-          'success',
-          $_('yritys.messages.save-success')
-        );
+        announceSuccess($_('yritys.messages.save-success'));
         dirty = false;
         replace(`/yritys/${id}`);
       }
@@ -61,11 +57,7 @@
   Future.fork(
     () => {
       overlay = false;
-      flashMessageStore.add(
-        'yritys',
-        'error',
-        $_('yritys.messages.load-error')
-      );
+      announceError($_('yritys.messages.load-error'));
     },
     response => {
       resources = Maybe.Some(response);

@@ -17,15 +17,16 @@
 
   import Textarea from '@Component/Textarea/Textarea';
   import Datepicker from '@Component/Input/Datepicker';
-  import { flashMessageStore } from '@/stores';
   import Dialog from '@Component/dialog/dialog';
   import Select from '@Component/Select/Select.svelte';
   import * as Validation from '@Utility/validation';
   import Radio from '@Component/Radio/Radio';
   import Fieldset from '@Component/Fieldset/Fieldset';
+  import { announcementsForModule } from '@Utility/announce';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
+  const { announceSuccess } = announcementsForModule('valvonta-oikeellisuus');
 
   export let id;
   export let templatesByType;
@@ -64,11 +65,7 @@
         },
         _ => {
           publishPending = false;
-          flashMessageStore.add(
-            'valvonta-oikeellisuus',
-            'success',
-            i18n(`${i18nRoot}.messages.publish-success`)
-          );
+          announceSuccess(i18n(`${i18nRoot}.messages.publish-success`));
           reload();
         },
         Toimenpiteet.isAnomaly(toimenpide)
