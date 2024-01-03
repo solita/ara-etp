@@ -20,7 +20,7 @@ jobs:
         node-version: [ 18.x, 20.x ]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
@@ -41,7 +41,7 @@ jobs:
       matrix:
         node-version: [ 18.x, 20.x ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
@@ -62,7 +62,7 @@ jobs:
       matrix:
         node-version: [ 18.x, 20.x ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
@@ -83,7 +83,7 @@ jobs:
       matrix:
         node-version: [ 18.x, 20.x ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
