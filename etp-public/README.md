@@ -1,4 +1,4 @@
-# ARA - Energiatodistusrekisteri
+# ARA - Energiatodistusrekisteri public frontend
 
 *Note that you will need to have [Node.js](https://nodejs.org) installed.*
 
@@ -10,7 +10,7 @@ Install the dependencies...
 npm install
 ```
 
-You also need to start [backend](https://github.com/solita/etp-core) services found in different repository.
+You also need to start [backend](../etp-core) services
 
 
 ...then start [webpack](https://webpack.js.org)

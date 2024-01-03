@@ -1,4 +1,4 @@
-# ARA - Energiatodistuspalvelu
+# ARA - Energiatodistuspalvelu frontend
 
 Tämä on web sovellus energiatodistusten laadintaan 
 ja todistuksiin liittyvään viranomaistoimintaan.
@@ -26,7 +26,7 @@ Install the dependencies...
 npm install
 ```
 
-You also need to start [backend](https://github.com/solita/etp-core) services found in different repository.
+You also need to start [backend](../etp-core) services.
 
 ...then start [webpack](https://webpack.js.org)
 
