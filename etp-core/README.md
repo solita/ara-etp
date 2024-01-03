@@ -37,8 +37,9 @@ Remember to follow the
 [Docker postinstall](https://docs.docker.com/install/linux/linux-postinstall/)
 -guide. Then logout and login.
 
-Docker-compose used to be required, but nowadays Docker includes equivalent
-functionality directly in the compose plugin.
+Docker-compose is also required:
+
+https://docs.docker.com/compose/install/
 
 ### Clojure + CLI Tools
 
