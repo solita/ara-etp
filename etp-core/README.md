@@ -1,11 +1,6 @@
 ARA - Energiatodistuspalvelu
 ===
 
-The components of the system are:
-- User interface for different stakeholders
-- Backend / application layer
-- Database (PostgreSQL)
-
 Backend / Application layer
 --------------
 The backend contains the following components:
@@ -16,7 +11,7 @@ The backend contains the following components:
 User interface
 ---------------
 
-Separate repositories at https://github.com/solita/etp-front and https://github.com/solita/etp-public
+See top-level directories etp-front and etp-public
 
 Installing the development environment
 -----------------------------
