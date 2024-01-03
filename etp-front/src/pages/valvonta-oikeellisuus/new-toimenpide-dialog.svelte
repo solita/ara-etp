@@ -23,6 +23,7 @@
   import Radio from '@Component/Radio/Radio';
   import Fieldset from '@Component/Fieldset/Fieldset';
   import { announcementsForModule } from '@Utility/announce';
+  import { announceAssertively } from '@Utility/aria-live';
 
   const i18n = $_;
   const i18nRoot = 'valvonta.oikeellisuus.toimenpide';
@@ -35,6 +36,14 @@
 
   let form;
   let error = Maybe.None();
+
+  // setError is used instead of the more common announceError from
+  // @Utility/announce, because the visual error needs a mechanism
+  // different from the common route through FlashMessage
+  const setError = er => {
+    error = er;
+    R.forEach(announceAssertively, error);
+  };
 
   const text = R.compose(i18n, Toimenpiteet.i18nKey);
 
@@ -61,7 +70,7 @@
               Response.localizationKey(response)
             )
           );
-          error = Maybe.Some(msg);
+          setError(Maybe.Some(msg));
         },
         _ => {
           publishPending = false;
@@ -73,7 +82,7 @@
           : ValvontaApi.postToimenpide(id, toimenpide)
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      setError(Maybe.Some($_(`${i18nRoot}.messages.validation-error`)));
       Validation.blurForm(form);
     }
   };
@@ -90,17 +99,17 @@
               Response.localizationKey(response)
             )
           );
-          error = Maybe.Some(msg);
+          setError(Maybe.Some(msg));
         },
         response => {
           previewPending = false;
-          error = Maybe.None();
+          setError(Maybe.None());
           Response.openBlob(response);
         },
         ValvontaApi.previewToimenpide(id, toimenpide)
       );
     } else {
-      error = Maybe.Some($_(`${i18nRoot}.messages.validation-error`));
+      setError(Maybe.Some($_(`${i18nRoot}.messages.validation-error`)));
       Validation.blurForm(form);
     }
   };
