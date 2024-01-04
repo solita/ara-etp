@@ -97,7 +97,7 @@
 (defn update-aineisto-in-s3! [db whoami aws-s3-client aineisto-id]
   (log/info (str "Starting updating of aineisto (id: " aineisto-id ")."))
   (let [csv-reducible-query (aineisto-reducible-query db whoami aineisto-id)
-        key (str "/aineistot/" aineisto-id "/energiatodistukset.csv")
+        key (str "/api/signed/aineistot/" aineisto-id "/energiatodistukset.csv")
         ;; This part is used to store rows until it reaches 5MB which
         ;; is the minimum requirement by `upload-part-fn`.
         current-part (ByteBuffer/allocate (* 8 1024 1024))
