@@ -4,7 +4,7 @@ values
 (1, 'Tietopyyntö 2021', 'Begäran om uppgifter 2021', 2, false, false, false),
 (2, 'Kehotus', ' Uppmaning', 3, true, false, false),
 (3, 'Varoitus', 'Varning', 4, true, false, false),
-(4, 'Käskypäätös', 'Käskypäätös (sv)', 5, true, false, false),
+(4, 'Käskypäätös', 'Käskypäätös (sv)', 5, false, false, false),
 (5, 'Valvonnan lopetus', 'Valvonnan lopetus (sv)', 6, true, false, false),
 (6, 'HaO-käsittely', 'HaO-käsittely (sv)', 7, true, false, true),
 (7, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (sv)', 8, true, true, true),
