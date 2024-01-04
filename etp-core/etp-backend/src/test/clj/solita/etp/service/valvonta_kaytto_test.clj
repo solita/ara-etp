@@ -41,7 +41,7 @@
                 {:id                   4
                  :label-fi             "Käskypäätös"
                  :label-sv             "Käskypäätös (sv)"
-                 :valid                true
+                 :valid                false
                  :manually-deliverable false
                  :allow-comments       true}
                 {:id                   5
