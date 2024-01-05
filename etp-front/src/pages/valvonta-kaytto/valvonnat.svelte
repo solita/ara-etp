@@ -77,6 +77,7 @@
     'valvoja-id': Maybe.None(),
     'include-closed': Maybe.None(),
     'has-valvoja': Maybe.None(),
+    'only-uhkasakkoprosessi': Maybe.None(),
     keyword: Maybe.None(),
     'toimenpidetype-id': Maybe.None(),
     'asiakirjapohja-id': Maybe.None()
@@ -87,6 +88,10 @@
     'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
     'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
     'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
+    'only-uhkasakkoprosessi': queryStringBooleanProp(
+      parsedQs,
+      'only-uhkasakkoprosessi'
+    ),
     keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
     'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id'),
     'asiakirjapohja-id': queryStringIntegerProp(parsedQs, 'asiakirjapohja-id')
@@ -108,6 +113,7 @@
     'toimenpidetype-id': R.prop('toimenpidetype-id', query),
     'asiakirjapohja-id': R.prop('asiakirjapohja-id', query),
     'include-closed': R.prop('include-closed', query),
+    'only-uhkasakkoprosessi': R.prop('only-uhkasakkoprosessi', query),
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
 
@@ -214,7 +220,7 @@
           text={i18n(i18nRoot + '.new-kohde')} />
       </div>
     </div>
-    {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot, templates }}
+    {#each Maybe.toArray(resources) as { valvonnat, whoami, toimenpidetyypit, valvojat, postinumerot, templates }}
       <div class="flex flex-wrap items-end md:space-y-0 space-y-4">
         <div class="w-1/4 mr-4">
           <Select
@@ -238,6 +244,17 @@
           lens={R.lensProp('has-valvoja')}
           format={R.compose(R.not, Maybe.orSome(false))}
           parse={R.compose(Maybe.Some, R.not)} />
+
+        <div class="flex flex-grow md:justify-center">
+          <Checkbox
+            disabled={overlay}
+            label={i18n(`${i18nRoot}.only-uhkasakkoprosessi`)}
+            bind:model={query}
+            lens={R.lensProp('only-uhkasakkoprosessi')}
+            format={Maybe.orSome(false)}
+            parse={Maybe.Some} />
+        </div>
+
         <div class="flex flex-grow justify-end">
           <Checkbox
             disabled={overlay}

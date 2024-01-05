@@ -1780,6 +1780,7 @@
         "empty": "Inga kontrollåtgärder",
         "ei-valvojaa": "Ingen övervakare",
         "include-closed": "Visa även avslutade",
+        "only-uhkasakkoprosessi": "Näytä vain uhkasakkoprosessissa olevat valvonnat (sv)",
         "diaarinumero": "Diarienummer",
         "last-toimenpide": "Föregående händelse",
         "last-template": "Dokumentmall",
