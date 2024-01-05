@@ -7,7 +7,7 @@
 </script>
 
 <footer class="flex flex-col w-full text-sm">
-  <div class="flex flex-col md:flex-row justify-between p-8">
+  <div class="flex flex-col md:flex-row justify-between p-2 lg:p-8">
     <div class="flex flex-col mr-4 text-ara-2021-green-small-text">
       <span class="uppercase font-bold text-secondary">
         {$_('footer.contact-info')}

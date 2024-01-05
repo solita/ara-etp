@@ -25,7 +25,7 @@
   }
 
   .content {
-    @apply w-full max-w-1440 flex flex-col items-center flex-grow py-8 px-10 mx-auto bg-light;
+    @apply w-full max-w-1440 flex flex-col items-center flex-grow py-8 mx-auto bg-light;
   }
 
   .content h1 :not(first) {
@@ -35,11 +35,11 @@
 
 <ResourceProvider let:idTranslate>
   <div id="breadcrumbcontainer">
-    <div class="w-full max-w-1440 mx-auto px-10">
+    <div class="w-full max-w-1440 mx-auto px-2 lg:px-10">
       <Breadcrumb {whoami} {idTranslate} location={$location} />
     </div>
   </div>
-  <section class="content">
+  <section class="content px-2 lg:px-10">
     <div id="navigationcontainer" class="w-full">
       <NavigationTabBar
         {idTranslate}
