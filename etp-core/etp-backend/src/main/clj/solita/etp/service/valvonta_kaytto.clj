@@ -32,14 +32,15 @@
   (update valvonta-db-row :postinumero (maybe/lift1 #(format "%05d" %))))
 
 (def ^:private default-valvonta-query
-  {:valvoja-id        nil
-   :has-valvoja       nil
-   :include-closed    false
-   :keyword           nil
-   :toimenpidetype-id nil
-   :asiakirjapohja-id nil
-   :limit             10
-   :offset            0})
+  {:valvoja-id             nil
+   :has-valvoja            nil
+   :include-closed         false
+   :only-uhkasakkoprosessi false
+   :keyword                nil
+   :toimenpidetype-id      nil
+   :asiakirjapohja-id      nil
+   :limit                  10
+   :offset                 0})
 
 (defn department-head-data
   "Finds the previously used department head title

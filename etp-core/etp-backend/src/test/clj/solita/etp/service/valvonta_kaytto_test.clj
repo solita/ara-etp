@@ -273,3 +273,50 @@
                    {:department-head-title-fi "Yliyliylitarkastaja"
                     :department-head-title-sv "Yliyliylitarkastaja på svenska"
                     :department-head-name     "Vielä Uudempi Tarkastaja"})))))))
+
+(t/deftest find-valvonnat-test
+  (t/testing "find-valvonnat returns"
+    (t/testing "an empty list when there are no valvonnat"
+      (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* {}))))
+
+    ;; Create a valvonta
+    (let [valvonta-not-in-uhkasakkoprosessi (valvonta-kaytto/add-valvonta! ts/*db* {:katuosoite "Testitie 5"})]
+      (t/testing "a valvonta when valvonta exists"
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {}))
+                 1)))
+
+      (t/testing "an empty list when valvonta exists but is not in uhkasakkoprosessi and we want only valvonnat in uhkasakkoprosessi"
+        (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* {:only-uhkasakkoprosessi true}))))
+
+      (t/testing "returns a valvonta that is in uhkasakkoprosessi when only-uhkasakkoprosessi is true"
+        (let [valvonta-in-uhkasakkoprosessi (valvonta-kaytto/add-valvonta! ts/*db* {:katuosoite "Testitie 6"})]
+          ;; Create a toimenpide that is part of uhkasakkoprosessi
+          (jdbc/insert! ts/*db*
+                        :vk_toimenpide
+                        {:valvonta_id        valvonta-in-uhkasakkoprosessi
+                         :type_id            7
+                         :create_time        (-> (LocalDate/of 2023 8 12)
+                                                 (.atStartOfDay (ZoneId/systemDefault))
+                                                 .toInstant)
+                         :publish_time       (-> (LocalDate/of 2023 8 12)
+                                                 (.atStartOfDay (ZoneId/systemDefault))
+                                                 .toInstant)
+                         :deadline_date      (LocalDate/of 2023 8 28)
+                         :diaarinumero       "ARA-05.03.01-2023-235"
+                         :type_specific_data {:fine 6100}})
+
+          (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:only-uhkasakkoprosessi true}))
+                   1))
+          (t/is (= (-> (valvonta-kaytto/find-valvonnat ts/*db* {:only-uhkasakkoprosessi true})
+                       first
+                       :id)
+                   valvonta-in-uhkasakkoprosessi))
+
+          (t/testing "and both valvonnat when only-uhkasakkoprosessi is false"
+            (let [valvonnat (valvonta-kaytto/find-valvonnat ts/*db* {:only-uhkasakkoprosessi false})]
+              (t/is (= (count valvonnat)
+                       2))
+
+              (t/is (= (->> valvonnat
+                            (map :id))
+                       [valvonta-not-in-uhkasakkoprosessi valvonta-in-uhkasakkoprosessi])))))))))
