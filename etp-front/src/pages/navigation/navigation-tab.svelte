@@ -15,7 +15,7 @@
 <style type="text/postcss">
   a,
   .disabled {
-    @apply relative flex py-4 px-6 font-bold justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none tracking-xl outline-none;
+    @apply relative flex py-4 font-bold justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none tracking-xl outline-none;
     transition: box-shadow 0.1s ease-in-out;
   }
 
@@ -39,15 +39,17 @@
     padding-left: 0.6em;
     padding-right: 0.4em;
     height: 1.75em;
+    z-index: 1;
   }
 </style>
 
 <!-- purgecss: active -->
 {#if disabled}
-  <span class="disabled">{label}</span>
+  <span class="disabled px-2 lg:px-6">{label}</span>
 {:else}
   <a
     {href}
+    class="px-2 lg:px-6"
     class:active={R.compose(
       R.equals($location),
       R.head,
