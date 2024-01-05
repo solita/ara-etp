@@ -18,7 +18,7 @@
                  :label-sv             "Valvonnan aloitus (sv)"
                  :valid                true
                  :manually-deliverable false
-                 :allow-comments       false}
+                 :allow-comments       true}
                 {:id                   1
                  :label-fi             "Tietopyyntö 2021"
                  :label-sv             "Begäran om uppgifter 2021"
@@ -42,13 +42,13 @@
                  :label-sv             "Käskypäätös (sv)"
                  :valid                true
                  :manually-deliverable false
-                 :allow-comments       false}
+                 :allow-comments       true}
                 {:id                   5
                  :label-fi             "Valvonnan lopetus"
                  :label-sv             "Valvonnan lopetus (sv)"
                  :valid                true
                  :manually-deliverable false
-                 :allow-comments       false}
+                 :allow-comments       true}
                 {:id                   6
                  :label-fi             "HaO-käsittely"
                  :label-sv             "HaO-käsittely (sv)"

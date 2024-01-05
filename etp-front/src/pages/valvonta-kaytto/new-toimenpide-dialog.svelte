@@ -211,7 +211,7 @@
     </div>
   {/if}
 
-  {#if commentingAllowed || R.isEmpty(templates)}
+  {#if commentingAllowed}
     <div class="w-full py-4">
       <Textarea
         id={'toimenpide.description'}
