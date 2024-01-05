@@ -114,63 +114,65 @@
       <div
         class="w-full px-4 py-4 relative"
         transition:slide|local={{ duration: 200 }}>
-        <table class="etp-table">
-          <thead class="etp-table--thead">
-            <tr class="etp-table--tr etp-table--tr__light">
-              <th class="etp-table--th">
-                {i18n(i18nRoot + '.table.tunnus')}
-              </th>
-              <th class="etp-table--th">
-                {i18n(i18nRoot + '.table.ktl')}
-              </th>
-              <th class="etp-table--th">
-                {i18n(i18nRoot + '.table.rakennustunnus')}
-              </th>
-              <th class="etp-table--th">
-                {i18n(i18nRoot + '.table.nimi')}
-              </th>
-              <th class="etp-table--th">
-                {i18n(i18nRoot + '.table.osoite')}
-              </th>
-              <th class="etp-table--th">
-                {i18n(i18nRoot + '.table.laatija')}
-              </th>
-            </tr>
-          </thead>
-          <tbody class="etp-table--tbody">
-            {#each korvattavat as korvattava}
-              <tr
-                class="etp-table-tr etp-table--tr__link"
-                on:click={() => {
-                  energiatodistus = R.assoc(
-                    'korvattu-energiatodistus-id',
-                    Maybe.Some(korvattava.id),
-                    energiatodistus
-                  );
-                  dirty = true;
-                }}>
-                <td class="etp-table--td">
-                  {korvattava.id}
-                </td>
-                <td class="etp-table--td">
-                  {Maybe.orSome('', korvattava.perustiedot.kayttotarkoitus)}
-                </td>
-                <td class="etp-table--td">
-                  {Maybe.orSome('', korvattava.perustiedot.rakennustunnus)}
-                </td>
-                <td class="etp-table--td">
-                  <RakennuksenNimi energiatodistus={korvattava} />
-                </td>
-                <td class="etp-table--td">
-                  <Address energiatodistus={korvattava} {postinumerot} />
-                </td>
-                <td class="etp-table--td">
-                  {Maybe.orSome('', korvattava['laatija-fullname'])}
-                </td>
+        <div class="overflow-auto">
+          <table class="etp-table">
+            <thead class="etp-table--thead">
+              <tr class="etp-table--tr etp-table--tr__light">
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.table.tunnus')}
+                </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.table.ktl')}
+                </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.table.rakennustunnus')}
+                </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.table.nimi')}
+                </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.table.osoite')}
+                </th>
+                <th class="etp-table--th">
+                  {i18n(i18nRoot + '.table.laatija')}
+                </th>
               </tr>
-            {/each}
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="etp-table--tbody">
+              {#each korvattavat as korvattava}
+                <tr
+                  class="etp-table-tr etp-table--tr__link"
+                  on:click={() => {
+                    energiatodistus = R.assoc(
+                      'korvattu-energiatodistus-id',
+                      Maybe.Some(korvattava.id),
+                      energiatodistus
+                    );
+                    dirty = true;
+                  }}>
+                  <td class="etp-table--td">
+                    {korvattava.id}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', korvattava.perustiedot.kayttotarkoitus)}
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', korvattava.perustiedot.rakennustunnus)}
+                  </td>
+                  <td class="etp-table--td">
+                    <RakennuksenNimi energiatodistus={korvattava} />
+                  </td>
+                  <td class="etp-table--td">
+                    <Address energiatodistus={korvattava} {postinumerot} />
+                  </td>
+                  <td class="etp-table--td">
+                    {Maybe.orSome('', korvattava['laatija-fullname'])}
+                  </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
