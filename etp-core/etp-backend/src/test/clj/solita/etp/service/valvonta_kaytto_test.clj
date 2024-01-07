@@ -320,3 +320,49 @@
               (t/is (= (->> valvonnat
                             (map :id))
                        [valvonta-not-in-uhkasakkoprosessi valvonta-in-uhkasakkoprosessi])))))))))
+
+
+(def toimenpide-types-not-part-of-uhkasakkoprosessi [0 1 2 3 4 5])
+(def uhkasakkoprosessi-toimenpide-types [6 7 8 9 10 11 12 14 15 16 17 18 19 21])
+
+(t/deftest find-valvonnat-in-every-toimenpide-type-test
+  (t/testing "There are valvonnat in every possible toimenpide"
+    (doseq [toimenpide-type-id (concat
+                                 toimenpide-types-not-part-of-uhkasakkoprosessi
+                                 uhkasakkoprosessi-toimenpide-types)
+            :let [valvonta-id (valvonta-kaytto/add-valvonta!
+                                ts/*db*
+                                {:katuosoite (str "Testikatu " toimenpide-type-id)})]]
+      ;; Create a toimenpide for valvonta completely disregarding what kind of toimenpide-speficic-data
+      ;; the toimenpidetype might have
+      (jdbc/insert! ts/*db*
+                    :vk_toimenpide
+                    {:valvonta_id        valvonta-id
+                     :type_id            toimenpide-type-id
+                     :create_time        (-> (LocalDate/of 2024 1 7)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :publish_time       (-> (LocalDate/of 2024 1 7)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :deadline_date      (LocalDate/of 2024 2 7)
+                     :diaarinumero       (str "ARA-05.03.01-2024-235-" toimenpide-type-id)
+                     :type_specific_data {:fine 6100}}))
+
+    (t/testing "and find-valvonnat returns all of them when searching for all, including closed ones"
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 100
+                                                               :include-closed true}))
+               20
+               (count (concat
+                        toimenpide-types-not-part-of-uhkasakkoprosessi
+                        uhkasakkoprosessi-toimenpide-types)))))
+
+    (t/testing "and find-valvonnat returns all of them except the one that is closed (toimenpide-type 5) when closed ones are not included"
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 100}))
+               19)))
+
+    (t/testing "and find-valvonnat returns only those that are part of uhkasakkoprosessi when :only-uhkasakkoprosessi is true"
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 100
+                                                               :only-uhkasakkoprosessi true}))
+               14
+               (count uhkasakkoprosessi-toimenpide-types))))))
