@@ -350,7 +350,7 @@
                      :type_specific_data {:fine 6100}}))
 
     (t/testing "and find-valvonnat returns all of them when searching for all, including closed ones"
-      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 100
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit          100
                                                                :include-closed true}))
                20
                (count (concat
@@ -362,7 +362,19 @@
                19)))
 
     (t/testing "and find-valvonnat returns only those that are part of uhkasakkoprosessi when :only-uhkasakkoprosessi is true"
-      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 100
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit                  100
                                                                :only-uhkasakkoprosessi true}))
                14
-               (count uhkasakkoprosessi-toimenpide-types))))))
+               (count uhkasakkoprosessi-toimenpide-types))))
+
+    (t/testing "and find-valvonnat returns only one when searching by each individual toimenpide-type"
+      (doseq [toimenpide-type-id (concat
+                                   toimenpide-types-not-part-of-uhkasakkoprosessi
+                                   uhkasakkoprosessi-toimenpide-types)
+              :let [results (valvonta-kaytto/find-valvonnat ts/*db* {:limit             100
+                                                                     :include-closed    true
+                                                                     :toimenpidetype-id toimenpide-type-id})]]
+        (t/is (= (count results)
+                 1))
+        (t/is (= (->> results first :last-toimenpide :type-id)
+                 toimenpide-type-id))))))
