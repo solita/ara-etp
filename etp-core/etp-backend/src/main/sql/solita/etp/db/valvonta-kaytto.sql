@@ -86,6 +86,7 @@ left join postinumero on valvonta.postinumero = postinumero.id
 where
   not valvonta.deleted and
   (last_toimenpide.id is null or last_toimenpide.type_id <> 5 or :include-closed) and
+  ((:only-uhkasakkoprosessi is true and int4range(6, 22) @> last_toimenpide.type_id) or :only-uhkasakkoprosessi is false) and
   (:toimenpidetype-id::int is null or :toimenpidetype-id = last_toimenpide.type_id) and
   (:asiakirjapohja-id::int is null or :asiakirjapohja-id = last_toimenpide.template_id) and
   (:keyword::text is null or
