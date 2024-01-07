@@ -377,4 +377,16 @@
         (t/is (= (count results)
                  1))
         (t/is (= (->> results first :last-toimenpide :type-id)
-                 toimenpide-type-id))))))
+                 toimenpide-type-id))))
+
+    (t/testing "and find-valvonnat returns only the amount of valvonnat that is given as a limit"
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 2}))
+               2)))
+
+    (t/testing "and find-valvonnat returns the same results when retrieving 4 items and 2 with offset of 2 twice"
+      (let [one-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit 4})
+            first-half-of-offset-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit 2})
+            second-half-of-offset-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit  2
+                                                                                  :offset 2})]
+        (t/is (= one-search
+                 (concat first-half-of-offset-search second-half-of-offset-search)))))))
