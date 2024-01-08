@@ -437,4 +437,35 @@
             second-half-of-offset-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit  2
                                                                                   :offset 2})]
         (t/is (= one-search
-                 (concat first-half-of-offset-search second-half-of-offset-search)))))))
+                 (concat first-half-of-offset-search second-half-of-offset-search)))))
+
+    (t/testing "and find-valvonnat returns empty list when searching for valvonnat with document template that none has"
+      (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* {:asiakirjapohja-id 4})))
+
+      (t/testing "count-valvonnat matches the actual count"
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:asiakirjapohja-id 4}))
+                 0)))))
+
+  (t/testing "find-valvonnat returns a valvonta that has a toimenpide with a given document template"
+    (let [valvonta-id (valvonta-kaytto/add-valvonta!
+                        ts/*db*
+                        {:katuosoite "Asiakirjapohjakatu"})]
+      (jdbc/insert! ts/*db*
+                    :vk_toimenpide
+                    {:valvonta_id        valvonta-id
+                     :type_id            2
+                     :template_id        3
+                     :create_time        (-> (LocalDate/of 2024 1 7)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :publish_time       (-> (LocalDate/of 2024 1 7)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :deadline_date      (LocalDate/of 2024 2 7)
+                     :diaarinumero        "ARA-05.03.01-2024-238"}))
+    (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:asiakirjapohja-id 3}))
+             1))
+
+    (t/testing "count-valvonnat matches the actual count"
+      (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:asiakirjapohja-id 3}))
+               1)))))
