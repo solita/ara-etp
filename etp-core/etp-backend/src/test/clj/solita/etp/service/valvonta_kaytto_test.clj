@@ -397,7 +397,7 @@
                (count uhkasakkoprosessi-toimenpide-types)))
 
       (t/testing "count-valvonnat matches the actual count"
-        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:limit 100
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:limit                  100
                                                                    :only-uhkasakkoprosessi true}))
                  14))))
 
@@ -424,6 +424,12 @@
     (t/testing "and find-valvonnat returns only the amount of valvonnat that is given as a limit"
       (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 2}))
                2)))
+
+    (t/testing "count-valvonnat does not respect limit or offset as it's used to determine the pagination"
+      (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:include-closed true
+                                                                 :limit          2
+                                                                 :offset         15}))
+               20)))
 
     (t/testing "and find-valvonnat returns the same results when retrieving 4 items and 2 with offset of 2 twice"
       (let [one-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit 4})
