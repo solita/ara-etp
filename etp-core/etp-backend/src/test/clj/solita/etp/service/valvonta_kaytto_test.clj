@@ -294,6 +294,14 @@
           (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {}))
                    1))))
 
+      (t/testing "a valvonta when searching by address"
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:keyword "Testitie 5"}))
+                 1))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:keyword "Testitie 5"}))
+                   1))))
+
       (t/testing "an empty list when valvonta exists but is not in uhkasakkoprosessi and we want only valvonnat in uhkasakkoprosessi"
         (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* {:only-uhkasakkoprosessi true})))
 
