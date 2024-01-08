@@ -4,6 +4,7 @@
             [schema.core :as schema]
             [solita.etp.schema.valvonta-kaytto :as valvonta-kaytto-schema]
             [solita.etp.service.valvonta-kaytto :as valvonta-kaytto]
+            [solita.etp.test-data.kayttaja :as test-kayttajat]
             [solita.etp.test-system :as ts])
   (:import (java.time LocalDate ZoneId)))
 
@@ -444,6 +445,13 @@
 
       (t/testing "count-valvonnat matches the actual count"
         (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:asiakirjapohja-id 4}))
+                 0))))
+
+    (t/testing "and find-valvonnat returns empty list when searching for valvonnat with valvoja as none have one"
+      (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* {:has-valvoja true})))
+
+      (t/testing "count-valvonnat matches the actual count"
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:has-valvoja true}))
                  0)))))
 
   (t/testing "find-valvonnat returns a valvonta that has a toimenpide with a given document template"
@@ -452,20 +460,51 @@
                         {:katuosoite "Asiakirjapohjakatu"})]
       (jdbc/insert! ts/*db*
                     :vk_toimenpide
-                    {:valvonta_id        valvonta-id
-                     :type_id            2
-                     :template_id        3
-                     :create_time        (-> (LocalDate/of 2024 1 7)
-                                             (.atStartOfDay (ZoneId/systemDefault))
-                                             .toInstant)
-                     :publish_time       (-> (LocalDate/of 2024 1 7)
-                                             (.atStartOfDay (ZoneId/systemDefault))
-                                             .toInstant)
-                     :deadline_date      (LocalDate/of 2024 2 7)
-                     :diaarinumero        "ARA-05.03.01-2024-238"}))
+                    {:valvonta_id   valvonta-id
+                     :type_id       2
+                     :template_id   3
+                     :create_time   (-> (LocalDate/of 2024 1 7)
+                                        (.atStartOfDay (ZoneId/systemDefault))
+                                        .toInstant)
+                     :publish_time  (-> (LocalDate/of 2024 1 7)
+                                        (.atStartOfDay (ZoneId/systemDefault))
+                                        .toInstant)
+                     :deadline_date (LocalDate/of 2024 2 7)
+                     :diaarinumero  "ARA-05.03.01-2024-238"}))
     (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:asiakirjapohja-id 3}))
              1))
 
     (t/testing "count-valvonnat matches the actual count"
       (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:asiakirjapohja-id 3}))
-               1)))))
+               1))))
+
+  (let [kayttaja-id (test-kayttajat/insert-virtu-paakayttaja!
+                      {:etunimi  "Asian"
+                       :sukunimi "Tuntija"
+                       :email    "testi@ara.fi"
+                       :puhelin  "0504363675457"})]
+    (valvonta-kaytto/add-valvonta!
+      ts/*db*
+      {:katuosoite "Asiakirjapohjakatu"
+       :valvoja-id kayttaja-id})
+
+    (t/testing "and find-valvonnat returns a valvonta that has a valvoja when has-valvoja is true"
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:has-valvoja true}))
+               1))
+
+      (t/testing "count-valvonnat matches the actual count"
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:has-valvoja true}))
+                 1)))
+
+      (t/testing "and find-valvonnat returns a valvonta when a correct valvoja-id is given"
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:valvoja-id kayttaja-id}))
+                 1))
+
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:valvoja-id kayttaja-id}))
+                 1)))
+
+      (t/testing "and find-valvonnat returns empty list when incorrect valvova-id is given"
+        (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* {:valvoja-id 666})))
+
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:valvoja-id 666}))
+                 0))))))
