@@ -64,7 +64,12 @@
        (pmap #(assoc % :henkilot (find-henkilot db (:id %))
                        :yritykset (find-yritykset db (:id %))))))
 
-(defn count-valvonnat [db query]
+(defn count-valvonnat
+  "Returns the number of valvonnat that matches the query.
+   Takes the same query parameters as find-valvonnat
+   but does not respect limit and offset as the count is used to
+   determine the need for pagination for find-valvonnat."
+  [db query]
   (first
     (valvonta-kaytto-db/select-valvonnat-count
       db (merge default-valvonta-query query))))
