@@ -215,7 +215,7 @@
       </div>
     </div>
     {#each Maybe.toArray(resources) as { valvonnat, whoami, luokittelut, toimenpidetyypit, valvojat, postinumerot, templates }}
-      <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
+      <div class="flex flex-wrap items-end md:space-y-0 space-y-4">
         <div class="w-1/4 mr-4">
           <Select
             disabled={overlay}
@@ -238,7 +238,7 @@
           lens={R.lensProp('has-valvoja')}
           format={R.compose(R.not, Maybe.orSome(false))}
           parse={R.compose(Maybe.Some, R.not)} />
-        <div class="flex flex-grow md:justify-end">
+        <div class="flex flex-grow justify-end">
           <Checkbox
             disabled={overlay}
             label={i18n(`${i18nRoot}.include-closed`)}
@@ -248,8 +248,8 @@
             parse={Maybe.Some} />
         </div>
       </div>
-      <div class="grid grid-cols-4 items-end gap-4 lg:space-y-0 space-y-4 my-4">
-        <div class="lg:col-span-2 col-span-4">
+      <div class="grid grid-cols-4 items-end gap-4 md:space-y-0 space-y-4 my-4">
+        <div class="md:col-span-2 col-span-4">
           <Input
             label={i18n(i18nRoot + '.keyword-search')}
             model={query}
@@ -264,7 +264,7 @@
               }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
             }} />
         </div>
-        <div class="lg:col-span-1 md:col-span-2 col-span-4">
+        <div class="md:col-span-1 col-span-4">
           <Select
             disabled={overlay}
             compact={false}
@@ -280,7 +280,7 @@
             parse={Maybe.Some}
             allowNone={true} />
         </div>
-        <div class="lg:col-span-1 md:col-span-2 col-span-4">
+        <div class="md:col-span-1 col-span-4">
           <Select2
             label={i18n('valvonta.kaytto.all.last-template')}
             bind:model={query}
