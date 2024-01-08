@@ -135,9 +135,9 @@
   }}>
   <div class="w-full mt-3">
     <H1 text={perustiedotHeader} />
-    <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
+    <div class="flex lg:flex-row flex-col lg:py-4 lg:-mx-4">
       {#if !R.isNil(yritys.id)}
-        <div class="lg:w-1/6 lg:py-0 w-full px-4 py-4">
+        <div class="lg:w-1/6 lg:py-0 w-full lg:px-4 py-4">
           <Input
             id={'id'}
             name={'id'}
@@ -149,7 +149,7 @@
             disabled="true" />
         </div>
       {/if}
-      <div class="lg:w-2/6 lg:py-0 w-full px-4 py-4">
+      <div class="lg:w-2/6 lg:py-0 w-full lg:px-4 py-4">
         <Input
           id={'ytunnus'}
           name={'ytunnus'}
@@ -163,7 +163,7 @@
           {disabled} />
       </div>
       {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
-        <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+        <div class="lg:w-1/2 lg:py-0 w-full lg:px-4 py-4">
           <Select2
             label={i18n('yritys.tyyppi')}
             required={true}
@@ -175,8 +175,8 @@
         </div>
       {/if}
     </div>
-    <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
-      <div class="lg:py-0 w-full px-4 py-4">
+    <div class="flex lg:flex-row flex-col lg:py-4 lg:-mx-4">
+      <div class="lg:py-0 w-full lg:px-4 py-4">
         <Input
           id={'nimi'}
           name={'nimi'}
@@ -224,8 +224,8 @@
           validators={schema.jakeluosoite}
           {i18n} />
       </div>
-      <div class="flex lg:flex-row flex-col lg:py-4 -mx-4">
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="flex lg:flex-row flex-col lg:py-4 lg:-mx-4">
+        <div class="lg:w-1/3 lg:py-0 w-full lg:px-4 py-4">
           <Input
             {disabled}
             id={'postinumero'}
@@ -238,7 +238,7 @@
             validators={schema.postinumero}
             {i18n} />
         </div>
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <div class="lg:w-1/3 lg:py-0 w-full lg:px-4 py-4">
           <Input
             {disabled}
             id={'postitoimipaikka'}
@@ -251,7 +251,7 @@
             validators={schema.postitoimipaikka}
             {i18n} />
         </div>
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <div class="lg:w-1/3 lg:py-0 w-full lg:px-4 py-4">
           <Autocomplete items={countryNames}>
             <Input
               id={'maa'}
@@ -268,8 +268,8 @@
           </Autocomplete>
         </div>
       </div>
-      <div class="flex lg:flex-row flex-col py-4 -mx-4">
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
+        <div class="lg:w-1/3 lg:py-0 w-full lg:px-4 py-4">
           <Select
             label={i18n('yritys.laskutuskieli')}
             required={true}
@@ -300,8 +300,8 @@
         validators={schema['verkkolaskuosoite']}
         {i18n} />
     </div>
-    <div class="flex lg:flex-row flex-col py-4 -mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
+      <div class="lg:w-1/3 lg:py-0 w-full lg:px-4 py-4">
         <Autocomplete items={verkkolaskuoperaattoriNames} size={20}>
           <Input
             id={'verkkolaskuoperaattori'}
@@ -319,7 +319,7 @@
       </div>
     </div>
   </div>
-  <div class="flex -mx-4 mt-20">
+  <div class="flex lg:-mx-4 mt-20">
     <div class="px-4">
       <Button
         type={'submit'}
