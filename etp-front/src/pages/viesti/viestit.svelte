@@ -228,8 +228,8 @@
             disabled={false} />
         </div>
 
-        <div class="flex lg:flex-row flex-col">
-          <div class="lg:w-1/2 w-full mr-4 my-4">
+        <div class="flex md:flex-row flex-col">
+          <div class="md:w-1/2 w-full mr-4 my-4">
             <Select2
               id={'viesti.from-id'}
               name={'viesti.from-id'}
@@ -246,7 +246,7 @@
               searchable={true} />
           </div>
 
-          <div class="lg:w-1/2 w-full my-4">
+          <div class="md:w-1/2 w-full my-4">
             <Select2
               id={'viesti.vastaanottaja-id'}
               name={'viesti.vastaanottaja-id'}
@@ -264,8 +264,8 @@
           </div>
         </div>
 
-        <div class="flex lg:flex-row flex-col mb-8">
-          <div class="lg:w-1/2 w-full mr-4 my-4">
+        <div class="flex md:flex-row flex-col mb-8">
+          <div class="md:w-1/2 w-full mr-4 my-4">
             <Input
               id="keyword"
               name="keyword"
@@ -282,7 +282,7 @@
                 }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
               }} />
           </div>
-          <div class="lg:w-1/2 w-full mr-4 my-4 lg:my-8">
+          <div class="md:w-1/2 w-full mr-4 my-4 md:my-8">
             <Checkbox
               id={'valvonta'}
               name={'valvonta'}
