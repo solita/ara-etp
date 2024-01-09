@@ -1,7 +1,7 @@
 {:paths ["src/main/clj" "src/main/sql" "src/main/resources"]
  :deps
  {org.clojure/clojure {:mvn/version "1.11.1"}
-  org.flywaydb/flyway-core {:mvn/version "9.22.3"}
+  org.flywaydb/flyway-core {:mvn/version "10.4.1"}
   org.postgresql/postgresql {:mvn/version "42.7.1"}
   ch.qos.logback/logback-classic {:mvn/version "1.4.14"}}
  :aliases {:test {:extra-paths ["src/test/sql"]}
