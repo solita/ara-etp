@@ -188,7 +188,7 @@
     {#each Maybe.toArray(resources) as { valvonnat, count, whoami, luokittelut, toimenpidetyypit, valvojat, laatijat, kayttotarkoitukset }}
       <H1 text={i18n(i18nRoot + '.title')} />
       {#if Kayttajat.isPaakayttaja(whoami)}
-        <div class="flex flex-wrap items-end lg:space-y-0 space-y-4">
+        <div class="flex flex-wrap items-end md:space-y-0 space-y-4">
           <div class="w-1/4 mr-4">
             <Select
               disabled={overlay}
@@ -222,8 +222,8 @@
           </div>
         </div>
         <div
-          class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
-          <div class="lg:w-1/2 w-full">
+          class="flex flex-wrap items-end md:space-x-4 md:space-y-0 space-y-4 my-4">
+          <div class="md:w-1/2 w-full">
             <Input
               label={i18n(i18nRoot + '.keyword-search')}
               model={query}
@@ -238,7 +238,7 @@
                 }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
               }} />
           </div>
-          <div class="w-1/2 lg:w-1/4">
+          <div class="w-1/2 md:w-1/4">
             <Select
               disabled={overlay}
               compact={false}
@@ -257,8 +257,8 @@
         </div>
 
         <div
-          class="flex flex-wrap items-end lg:space-x-4 lg:space-y-0 space-y-4 my-4">
-          <div class="lg:w-1/2 w-full">
+          class="flex flex-wrap items-end md:space-x-4 md:space-y-0 space-y-4 my-4">
+          <div class="md:w-1/2 w-full">
             <Select2
               id={'oikeellisuus.laatija'}
               name={'oikeellisuus.laatija'}
@@ -275,7 +275,7 @@
               searchable={true} />
           </div>
 
-          <div class="w-1/2 lg:w-1/4">
+          <div class="w-1/2 md:w-1/4">
             <Select
               disabled={overlay}
               compact={false}

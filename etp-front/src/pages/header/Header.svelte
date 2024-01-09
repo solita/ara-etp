@@ -46,7 +46,7 @@
 
 <style type="text/postcss">
   header {
-    @apply flex px-10 h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
   }
 
   .listlink {
@@ -95,7 +95,7 @@
     }
   }} />
 
-<header class="flex justify-between">
+<header class="flex justify-between px-2 lg:px-10">
   <div class="flex flex-1 items-center">
     <a href="/">
       <img class="mr-8" src="images/ara_logo_simple_nega.svg" alt="Ara" />
@@ -140,7 +140,7 @@
       <div class="flex flex-row justify-between">
         <div
           bind:this={nameNode}
-          class="relative cursor-pointer hover:underline"
+          class="relative cursor-pointer hover:underline mr-6"
           on:click={toggleNameDropdown}>
           <span tabindex="0" on:keydown={enterHandler(toggleNameDropdown)}>
             {fullName(user)}

@@ -225,7 +225,7 @@
           </ol>
 
           <form class="mb-5" on:submit|preventDefault={attach}>
-            <div class="flex lg:flex-row flex-col py-4 -mx-4">
+            <div class="flex lg:flex-row flex-col py-4 -ml-4 lg:-mr-4">
               <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
                 <Autocomplete
                   items={R.map(

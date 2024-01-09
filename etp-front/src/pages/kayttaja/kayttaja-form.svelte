@@ -86,7 +86,7 @@
   on:submit|preventDefault={saveKayttaja}
   on:input={setDirty}
   on:change={setDirty}>
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Select
         id={'rooli'}
@@ -121,7 +121,7 @@
 
   <H2 text={i18n('kayttaja.perustiedot-header')} />
 
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Input
         id={'etunimi'}
@@ -149,7 +149,7 @@
         {i18n} />
     </div>
   </div>
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4 items-end">
+  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4 items-end">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Input
         id={'email'}
@@ -191,7 +191,7 @@
     label={i18n('kayttaja.virtu.checkbox')}
     disabled={disabledAdmin} />
 
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
     {#if Maybe.isSome(kayttaja.virtu)}
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -240,7 +240,7 @@
     label={i18n('kayttaja.suomifi.checkbox')}
     disabled={disabledAdmin} />
 
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
+  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Input
         id={'henkilotunnus'}
@@ -256,7 +256,7 @@
     </div>
   </div>
 
-  <div class="flex -mx-4 mt-10">
+  <div class="flex lg:-mx-4 mt-10">
     <div class="px-4">
       <Button
         type={'submit'}
