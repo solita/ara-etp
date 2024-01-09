@@ -37,7 +37,7 @@
              buddy/buddy-hashers                       {:mvn/version "2.0.167"}
              org.apache.poi/poi                        {:mvn/version "5.2.5"}
              org.apache.poi/poi-ooxml                  {:mvn/version "5.2.5"}
-             org.apache.pdfbox/pdfbox                  {:mvn/version "2.0.30"}
+             org.apache.pdfbox/pdfbox                  {:mvn/version "3.0.1"}
              puumerkki/puumerkki                       {:mvn/version "0.9.2"
                                                         :exclusions  [ring/ring
                                                                       ring/ring-core
