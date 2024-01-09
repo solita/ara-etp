@@ -4,7 +4,7 @@
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
  :deps      {org.clojure/clojure                       {:mvn/version "1.11.1"}
              ch.qos.logback/logback-classic            {:mvn/version "1.4.14"}
-             org.slf4j/log4j-over-slf4j                {:mvn/version "2.0.9"}
+             org.slf4j/log4j-over-slf4j                {:mvn/version "2.0.11"}
              flathead/flathead                         {:mvn/version "0.0.6"}
              integrant/integrant                       {:mvn/version "0.8.1"}
              hikari-cp/hikari-cp                       {:mvn/version "3.0.1"}
