@@ -4,5 +4,6 @@
   "platform": "github",
   "repositories": [
     "solita/ara-etp"
-  ]
+  ],
+  "dependencyDashboard": true
 }
