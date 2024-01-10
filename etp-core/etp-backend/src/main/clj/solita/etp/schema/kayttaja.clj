@@ -20,7 +20,9 @@
    :rooli      (schema/enum 1 2 3 4)
    :henkilotunnus (schema/maybe common-schema/Henkilotunnus)
    :virtu (schema/maybe VirtuId)
-   :organisaatio schema/Str})
+   :organisaatio schema/Str
+   :titteli-fi (schema/maybe schema/Str)
+   :titteli-sv (schema/maybe schema/Str)})
 
 (def Password
   (schema/constrained schema/Str
@@ -52,10 +54,12 @@
           :sukunimi      schema/Str
           :puhelin       schema/Str
           :email         schema/Str
-          :organisaatio  schema/Str}))
+          :organisaatio  schema/Str
+          :titteli-fi (schema/maybe schema/Str)
+          :titteli-sv (schema/maybe schema/Str)}))
 
 (def Whoami (-> Kayttaja
-                (dissoc :passivoitu :valvoja :login :api-key)
+                (dissoc :passivoitu :valvoja :login :api-key :titteli-fi :titteli-sv)
                 (assoc :partner schema/Bool)))
 
 (def KayttajaHistory

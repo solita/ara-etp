@@ -4,7 +4,7 @@ select
   valvoja, passivoitu, rooli_id as rooli,
   login, verifytime, cognito_id as cognitoid,
   virtu$localid, virtu$organisaatio, henkilotunnus,
-  organisaatio
+  organisaatio, titteli_fi, titteli_sv
 from kayttaja where id = :id
 
 -- name: select-kayttajat
