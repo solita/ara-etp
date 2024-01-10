@@ -14,11 +14,12 @@
 
   div {
     @apply font-light text-sm;
+    min-width: 100px;
   }
 </style>
 
 <!-- purgecss: active -->
-<div>
+<div class="mx-2">
   <button
     class="hover:underline"
     on:click={changeLanguage('fi-FI')}
