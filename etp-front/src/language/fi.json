@@ -33,7 +33,7 @@
   },
   "navigation": {
     "etusivu": "Etusivu",
-    "energiatodistukset": "Energiatodistukset",
+    "energiatodistukset": "Energia\u00adtodis\u00adtukset",
     "uusi-energiatodistus": "Uusi energiatodistus",
     "viesti": "Viestikeskus",
     "viestit": "Viestit",
@@ -65,13 +65,13 @@
     "ohjeet": "Laatijan ohjeet",
     "valvonta": {
       "kaytto": {
-        "all": "Käytön\u00ADvalvonnat",
+        "all": "Käytön\u00ADvalvon\u00ADnat",
         "kohde": "KV {id}",
         "valvonta": "Valvonta"
       },
       "oikeellisuus": {
         "all": {
-          "valvoja": "Oikeellisuuden valvonnat",
+          "valvoja": "Oikeelli\u00ADsuuden val\u00ADvon\u00ADnat",
           "laatija": "Valvonnat"
         },
         "valvonta": "Valvonta",

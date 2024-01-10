@@ -31,16 +31,16 @@
     "invalid-date": "Felaktigt datum"
   },
   "navigation": {
-    "energiatodistukset": "Energicertifikat",
+    "energiatodistukset": "En\u00ADer\u00ADgi\u00adcer\u00adti\u00ADfi\u00ADkat",
     "uusi-energiatodistus": "Nytt energicertifikat",
     "viesti": "Meddelandecentral",
-    "viestit": "Meddelanden",
+    "viestit": "Med\u00ADdel\u00adand\u00ADen",
     "uusi-viesti": "Nytt meddelande",
     "viestiketju": "Meddelandekedja",
     "yritykset": "Företag",
     "omattiedot": "Egna uppgifter",
     "laatijoidentuonti": "Import av upprättare",
-    "laatijat": "Upprättare",
+    "laatijat": "Upp\u00ADrät\u00adtare",
     "laskutusajot": "Faktureringskörningar",
     "tyojono": "Arbetskö",
     "halytykset": "Larm",
@@ -68,14 +68,14 @@
     "etusivu": "Förstasidan",
     "valvonta": {
       "kaytto": {
-        "all": "Användningskontroller",
+        "all": "An\u00ADvänd\u00ADnings\u00ADkont\u00adrol\u00ADler",
         "kohde": "AK {id}",
         "valvonta": "Kontroll"
       },
       "oikeellisuus": {
         "valvonta": "Kontroll",
         "all": {
-          "valvoja": "Kontroller av riktigheten",
+          "valvoja": "Kon\u00adtrol\u00adler av riktig\u00adheten",
           "laatija": "Kontroller"
         },
         "virhetypes": "Feltyper"

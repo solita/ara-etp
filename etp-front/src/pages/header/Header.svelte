@@ -49,6 +49,10 @@
     @apply flex h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
   }
 
+  .logo-link {
+    flex-shrink: 0;
+  }
+
   .listlink {
     @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
   }
@@ -96,9 +100,12 @@
   }} />
 
 <header class="flex justify-between px-2 lg:px-10">
-  <div class="flex flex-1 items-center">
-    <a href="/">
-      <img class="mr-8" src="images/ara_logo_simple_nega.svg" alt="Ara" />
+  <div class="flex grow items-center">
+    <a class="logo-link" href="/">
+      <img
+        class="mr-2 lg:mr-6"
+        src="images/ara_logo_simple_nega.svg"
+        alt="Ara" />
     </a>
     <LanguageSelect />
   </div>
