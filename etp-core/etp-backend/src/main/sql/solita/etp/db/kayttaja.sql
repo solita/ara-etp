@@ -13,7 +13,7 @@ select
   valvoja, passivoitu, rooli_id as rooli,
   login, verifytime, cognito_id as cognitoid,
   virtu$localid, virtu$organisaatio, henkilotunnus,
-  organisaatio
+  organisaatio, titteli_fi, titteli_sv
 from kayttaja where rooli_id in (1, 2, 3, 4)
 
 -- name: select-kayttaja-history

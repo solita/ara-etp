@@ -86,3 +86,19 @@
                       :verifytime    nil
                       :virtu         {:localid      "vvirkamies"
                                       :organisaatio "testivirasto.fi"}}))))))))
+
+(t/deftest retrieve-users-test
+  (test-kayttaja/insert-virtu-paakayttaja!
+    {:etunimi  "Asian"
+     :sukunimi "Tuntija"
+     :email    "testi@ara.fi"
+     :puhelin  "0504363675457"})
+  (t/testing "Users can be retrieved through the api"
+    ;; Create users, together with the pääkäyttäjä there are 200 users
+    (test-kayttaja/generate-and-insert! 199)
+    (let [response (ts/handler (-> (mock/request :get "/api/private/kayttajat")
+                          (test-kayttaja/with-virtu-user)
+                          (mock/header "Accept" "application/json")))]
+      (t/is (= (:status response) 200))
+      (t/is (= (count (-> response :body (j/read-value j/keyword-keys-object-mapper)))
+               200)))))
