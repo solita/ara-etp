@@ -59,7 +59,7 @@
           :titteli-sv (schema/maybe schema/Str)}))
 
 (def Whoami (-> Kayttaja
-                (dissoc :passivoitu :valvoja :login :api-key :titteli-fi :titteli-sv)
+                (dissoc :passivoitu :valvoja :login :api-key)
                 (assoc :partner schema/Bool)))
 
 (def KayttajaHistory

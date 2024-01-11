@@ -19,7 +19,9 @@
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
      :email    "testi@ara.fi"
-     :puhelin  "0504363675457"})
+     :puhelin  "0504363675457"
+     :titteli-fi "energia-asiantuntija"
+     :titteli-sv "energiexpert"})
   (t/testing "Preview api call for sakkopäätös / kuulemiskirje toimenpide succeeds"
     (let [valvonta-id (valvonta-service/add-valvonta! ts/*db*
                                                       {:katuosoite        "Testitie 5"

@@ -71,8 +71,9 @@ values (7, 'Sakkopäätös / kuulemiskirje', 'Sakkopäätös / kuulemiskirje (sv
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
-{{/valvoja}}<br/>
-energia-asiantuntija
+<br/>
+{{titteli-fi}}
+{{/valvoja}}
 </div>
 
 <div class="sivunvaihto"></div>
@@ -137,8 +138,9 @@ energia-asiantuntija
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
-{{/valvoja}}<br/>
-energiexpert
+<br/>
+{{titteli-sv}}
+{{/valvoja}}
 </div>
 $$)
 on conflict (id) do update set label_fi          = excluded.label_fi,
