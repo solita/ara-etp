@@ -196,6 +196,8 @@
     "email": "Sähköpostiosoite",
     "kayttajatunnus": "Tiedonsiirron käyttäjätunnus",
     "puhelin": "Puhelinnumero",
+    "titteli-fi": "Titteli (suomi)",
+    "titteli-sv": "Titteli (ruotsi)",
     "perustiedot-header": "Perustiedot",
     "api-header": "Rajapinta",
     "aineistot-header": "Aineistot",
