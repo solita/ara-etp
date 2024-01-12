@@ -3,6 +3,7 @@
             [jsonista.core :as j]
             [ring.mock.request :as mock]
             [solita.etp.test-data.kayttaja :as test-kayttaja]
+            [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts]))
 
 (t/use-fixtures :each ts/fixture)
@@ -97,8 +98,30 @@
     ;; Create users, together with the pääkäyttäjä there are 200 users
     (test-kayttaja/generate-and-insert! 199)
     (let [response (ts/handler (-> (mock/request :get "/api/private/kayttajat")
-                          (test-kayttaja/with-virtu-user)
-                          (mock/header "Accept" "application/json")))]
+                                   (test-kayttaja/with-virtu-user)
+                                   (mock/header "Accept" "application/json")))
+          users (-> response :body (j/read-value j/keyword-keys-object-mapper))]
       (t/is (= (:status response) 200))
-      (t/is (= (count (-> response :body (j/read-value j/keyword-keys-object-mapper)))
-               200)))))
+      (t/is (= (count users)
+               200))
+
+      (t/testing "Users have title fields"
+        (doseq [laatija users]
+          (t/is (true? (contains? laatija :titteli-fi)))
+          (t/is (true? (contains? laatija :titteli-sv)))))))
+
+  (t/testing "Laatija users can be retrieved through the api"
+    (laatija-test-data/generate-and-insert! 200)
+    (let [response (ts/handler (-> (mock/request :get "/api/private/laatijat")
+                                   (test-kayttaja/with-virtu-user)
+                                   (mock/header "Accept" "application/json")))
+          laatijat (-> response :body (j/read-value j/keyword-keys-object-mapper))]
+      (t/is (= (:status response) 200))
+
+      (t/is (= (count laatijat)
+               200))
+
+      (t/testing "Laatija users don't have title fields"
+        (doseq [laatija laatijat]
+          (t/is (false? (contains? laatija :titteli-fi)))
+          (t/is (false? (contains? laatija :titteli-sv))))))))
