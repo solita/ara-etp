@@ -166,7 +166,14 @@
   const mergeKayttajaLaatija = (kayttaja, laatija) =>
     R.compose(
       Laatija.toLaatijaForm,
-      R.omit(['kayttaja', 'cognitoid', 'ensitallennus', 'virtu']),
+      R.omit([
+        'kayttaja',
+        'cognitoid',
+        'ensitallennus',
+        'virtu',
+        'titteli-fi',
+        'titteli-sv'
+      ]),
       R.mergeRight
     )(kayttaja, R.omit(['henkilotunnus'], laatija));
 
