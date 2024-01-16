@@ -697,16 +697,17 @@
     is))
 
 (defn find-existing-pdf [aws-s3-client id kieli]
-  (file-service/file-exists? aws-s3-client (energiatodistus-service/file-key id kieli))
-  (->> (energiatodistus-service/file-key id kieli)
-       (file-service/find-file aws-s3-client)
-       io/input-stream))
+  (when (file-service/file-exists? aws-s3-client (energiatodistus-service/file-key id kieli))
+    (->> (energiatodistus-service/file-key id kieli)
+         (file-service/find-file aws-s3-client)
+         io/input-stream)))
 
 (defn find-energiatodistus-pdf [db aws-s3-client whoami id kieli]
   (when-let [{:keys [allekirjoitusaika] :as complete-energiatodistus}
              (-> (complete-energiatodistus-service/find-complete-energiatodistus db whoami id)
                  (#(when (or (= (-> % :perustiedot :kieli) 2) ; Accept the todistus if it's multilingual (kieli is 2) or the language code matches
-                             (contains? (-> % :perustiedot :kieli energiatodistus-service/language-id->codes set) kieli)) %)))]
+                             (contains? (-> % :perustiedot :kieli energiatodistus-service/language-id->codes set) kieli)
+                             (= (-> % :perustiedot :kieli) nil)) %)))] ; Old todistus entries have language set as nil. We'll just have to give it a try
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true))))
