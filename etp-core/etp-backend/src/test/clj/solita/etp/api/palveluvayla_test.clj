@@ -1,5 +1,6 @@
 (ns solita.etp.api.palveluvayla-test
   (:require [clojure.java.io :as io]
+            [clojure.java.jdbc :as jdbc]
             [clojure.test :as t]
             [jsonista.core :as j]
             [solita.etp.schema.energiatodistus :as schema.energiatodistus]
@@ -30,17 +31,21 @@
         todistus-2018-sv (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :rakennustunnus] rakennustunnus-1) (assoc-in [:perustiedot :kieli] 1))
         todistus-2013-multilingual (-> (test-data.energiatodistus/generate-add 2013 true) (assoc-in [:perustiedot :rakennustunnus] rakennustunnus-1) (assoc-in [:perustiedot :kieli] 2))
         todistus-2018-multilingual (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :rakennustunnus] rakennustunnus-1) (assoc-in [:perustiedot :kieli] 2))
+        old-todistus-2013-fi (-> (test-data.energiatodistus/generate-add 2013 true) (assoc-in [:perustiedot :kieli] 0))
 
         ; Create two energiatodistus with rakennustunnus 2
         todistus-2013-rakennustunnus-2 (-> (test-data.energiatodistus/generate-add 2013 true) (assoc-in [:perustiedot :rakennustunnus] rakennustunnus-2))
         todistus-2018-rakennustunnus-2 (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :rakennustunnus] rakennustunnus-2))
 
         ; Insert all energiatodistus
-        [todistus-2013-fi-id todistus-2018-fi-id todistus-2013-sv-id todistus-2018-sv-id todistus-2013-multilingual-id todistus-2018-multilingual-id todistus-2013-rakennustunnus-2-id todistus-2018-rakennustunnus-2-id] (test-data.energiatodistus/insert! [todistus-2013-fi todistus-2018-fi todistus-2013-sv todistus-2018-sv todistus-2013-multilingual todistus-2018-multilingual todistus-2013-rakennustunnus-2 todistus-2018-rakennustunnus-2] laatija-id)]
+        [todistus-2013-fi-id todistus-2018-fi-id todistus-2013-sv-id todistus-2018-sv-id todistus-2013-multilingual-id todistus-2018-multilingual-id todistus-2013-rakennustunnus-2-id todistus-2018-rakennustunnus-2-id old-todistus-2013-fi-id] (test-data.energiatodistus/insert! [todistus-2013-fi todistus-2018-fi todistus-2013-sv todistus-2018-sv todistus-2013-multilingual todistus-2018-multilingual todistus-2013-rakennustunnus-2 todistus-2018-rakennustunnus-2 old-todistus-2013-fi] laatija-id)]
 
     ; Sign all energiatodistus
     ; LibreOffice is quite slow so do signing in parallel
-    (doall (pmap #(test-data.energiatodistus/sign! % laatija-id false) [todistus-2013-fi-id todistus-2018-fi-id todistus-2013-sv-id todistus-2018-sv-id todistus-2013-multilingual-id todistus-2018-multilingual-id todistus-2013-rakennustunnus-2-id todistus-2018-rakennustunnus-2-id]))
+    (doall (pmap #(test-data.energiatodistus/sign! % laatija-id false) [todistus-2013-fi-id todistus-2018-fi-id todistus-2013-sv-id todistus-2018-sv-id todistus-2013-multilingual-id todistus-2018-multilingual-id todistus-2013-rakennustunnus-2-id todistus-2018-rakennustunnus-2-id old-todistus-2013-fi-id]))
+
+    ; Update the old todistus to have nil language
+    (jdbc/update! ts/*db* "energiatodistus" {:pt$kieli nil} ["id = ?" old-todistus-2013-fi-id])
 
     (t/testing "Fetching energiatodistus basic information by id returns it"
       (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/json/any/%s" todistus-2013-fi-id)))))
@@ -138,7 +143,23 @@
       (t/testing "Asking for pdf in non-existing language returns 404"
         (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/pdf/%s" todistus-2018-fi-id)))
                                        (mock/header "Accept-Language" "sv")))]
-          (t/is (= 404 (:status response))))))
+          (t/is (= 404 (:status response)))))
+
+      (t/testing "Asking for a pdf of an old energiatodistus where language is null"
+        (t/testing "Asking for an existing version of it works"
+          (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/pdf/%s" old-todistus-2013-fi-id)))
+                                         (mock/header "Accept-Language" "fi")))]
+            (t/is (= 200 (:status response)))))
+
+        (t/testing "Asking for a non-existing version of it returns 404"
+          (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/pdf/%s" old-todistus-2013-fi-id)))
+                                         (mock/header "Accept-Language" "sv")))]
+            (t/is (= 404 (:status response)))))
+
+        (t/testing "Prioritizing a non-existing version of it works"
+          (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/pdf/%s" old-todistus-2013-fi-id)))
+                                         (mock/header "Accept-Language" "sv, fi;q=0.5")))]
+            (t/is (= 200 (:status response)))))))
 
     (t/testing "Searching for basic information by rakennustunnus returns all versions"
       (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/json/any?rakennustunnus=%s" rakennustunnus-1)))))
