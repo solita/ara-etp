@@ -50,7 +50,7 @@
     "et": "EC",
     "liitteet": "Bilagor",
     "allekirjoitus": "Signatur",
-    "muutoshistoria": "Ändringshistoria",
+    "muutoshistoria": "Ändrings\u00adhistoria",
     "myinfo": "Egna uppgifter",
     "kirjaudu-ulos": "Logga ut",
     "new-yritys": "Nytt företag?",
@@ -412,7 +412,7 @@
         "voimassa": "Giltig",
         "rakennuksen-nimi": "Byggnadens namn",
         "osoite": "Adress",
-        "ktl": "Användingskategori",
+        "ktl": "Användningskategori",
         "laatija": "Upprättare",
         "toiminnot": "Funktioner",
         "valvonta": "Kontroll"
@@ -469,7 +469,7 @@
       "table": {
         "tunnus": "Beteckning",
         "etl": "Energieffektivitetslagen",
-        "ktl": "Användingskategori",
+        "ktl": "Användningskategori",
         "rakennustunnus": "Permanent byggnadsbeteckning",
         "nettoala": "Nettoarea",
         "nimi": "Byggnadens namn",
@@ -805,21 +805,21 @@
       },
       "sis-kuorma": {
         "header": "Interna värmelaster enligt användningsgrad",
-        "kayttoaste": "Användningsgrad",
+        "kayttoaste": "Använd\u00ADnings\u00adgrad",
         "lampokuorma": "Värmelast",
         "labels": {
           "henkilot": "Personer",
-          "kuluttajalaitteet": "Hushållsapparater",
+          "kuluttajalaitteet": "Hushålls\u00ADappa\u00ADrater",
           "valaistus": "Belysning"
         },
         "henkilot": {
           "label-context": "Interna värmelaster / Personer",
-          "kayttoaste": "Användningsgrad",
+          "kayttoaste": "Använd\u00ADnings\u00ADgrad",
           "lampokuorma": "Värmelast"
         },
         "kuluttajalaitteet": {
           "label-context": "Interna värmelaster / Hushållsapparater",
-          "kayttoaste": "Användningsgrad",
+          "kayttoaste": "Använd\u00ADnings\u00ADgrad",
           "lampokuorma": "Värmelast"
         },
         "valaistus": {
@@ -1083,7 +1083,7 @@
       },
       "label-context": "$unused",
       "toimenpide-table": {
-        "ehdotus": "Åtgärdsförslag",
+        "ehdotus": "Åtgärds\u00ADförslag",
         "lampo": "Värme, förändring i köpt energi",
         "sahko": "El, förändring i köpt energi",
         "jaahdytys": "Kylning, förändring i köpt energi",
