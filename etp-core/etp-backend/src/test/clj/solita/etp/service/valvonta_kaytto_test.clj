@@ -357,7 +357,9 @@
                          2))))))))))
 
 
-(def toimenpide-types-not-part-of-uhkasakkoprosessi [0 1 2 3 4 5])
+(def toimenpide-types-not-part-of-uhkasakkoprosessi
+  "toimenpide-types 0 - 5 are not part of uhkasakkoprosessi"
+  (range 0 6))
 (def uhkasakkoprosessi-toimenpide-types [6 7 8 9 10 11 12 14 15 16 17 18 19 21])
 
 (t/deftest find-valvonnat-in-every-toimenpide-type-test
