@@ -265,7 +265,7 @@
   <DirtyConfirmation {dirty} />
 
   <div class="w-full relative flex">
-    <div class="w-5/6">
+    <div class="flex-grow overflow-auto">
       <form
         bind:this={etFormElement}
         on:submit|preventDefault={validateAndSubmit(noop)}
@@ -363,7 +363,7 @@
         </div>
       </form>
     </div>
-    <div class="sticky top-3em w-1/6 self-start flex justify-end">
+    <div class="sticky top-3em lg:ml-10 self-start flex justify-end">
       <ToolBar
         save={validateAndSubmit}
         saveComplete={validateCompleteAndSubmit}
