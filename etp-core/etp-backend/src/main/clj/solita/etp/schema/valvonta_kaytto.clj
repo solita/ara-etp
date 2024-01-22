@@ -10,12 +10,13 @@
   (assoc schema :id common-schema/Key :valvonta-id common-schema/Key))
 
 (def ValvontaQuery
-  {(schema/optional-key :valvoja-id)        common-schema/Key
-   (schema/optional-key :has-valvoja)       schema/Bool
-   (schema/optional-key :include-closed)    schema/Bool
-   (schema/optional-key :keyword)           schema/Str
-   (schema/optional-key :toimenpidetype-id) common-schema/Key
-   (schema/optional-key :asiakirjapohja-id) common-schema/Key})
+  {(schema/optional-key :valvoja-id)             common-schema/Key
+   (schema/optional-key :has-valvoja)            schema/Bool
+   (schema/optional-key :include-closed)         schema/Bool
+   (schema/optional-key :only-uhkasakkoprosessi) schema/Bool
+   (schema/optional-key :keyword)                schema/Str
+   (schema/optional-key :toimenpidetype-id)      common-schema/Key
+   (schema/optional-key :asiakirjapohja-id)      common-schema/Key})
 
 (def ValvontaSave
   {:rakennustunnus             (schema/maybe common-schema/Rakennustunnus)

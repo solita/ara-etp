@@ -4,6 +4,7 @@
             [schema.core :as schema]
             [solita.etp.schema.valvonta-kaytto :as valvonta-kaytto-schema]
             [solita.etp.service.valvonta-kaytto :as valvonta-kaytto]
+            [solita.etp.test-data.kayttaja :as test-kayttajat]
             [solita.etp.test-system :as ts])
   (:import (java.time LocalDate ZoneId)))
 
@@ -273,3 +274,259 @@
                    {:department-head-title-fi "Yliyliylitarkastaja"
                     :department-head-title-sv "Yliyliylitarkastaja på svenska"
                     :department-head-name     "Vielä Uudempi Tarkastaja"})))))))
+
+(t/deftest find-valvonnat-test
+  (t/testing "find-valvonnat returns"
+    (t/testing "an empty list when there are no valvonnat"
+      (let [query {}]
+        (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* query)))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   0)))))
+
+    ;; Create a valvonta
+    (let [valvonta-not-in-uhkasakkoprosessi (valvonta-kaytto/add-valvonta! ts/*db* {:katuosoite "Testitie 5"})]
+      (t/testing "a valvonta when valvonta exists"
+        (let [query {}]
+          (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                   1))
+
+          (t/testing "count-valvonnat matches the actual count"
+            (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                     1)))))
+
+      (t/testing "a valvonta when searching by address"
+        (let [query {:keyword "Testitie 5"}]
+          (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                   1))
+
+          (t/testing "count-valvonnat matches the actual count"
+            (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                     1)))))
+
+      (t/testing "an empty list when valvonta exists but is not in uhkasakkoprosessi and we want only valvonnat in uhkasakkoprosessi"
+        (let [query {:only-uhkasakkoprosessi true}]
+          (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* query)))
+
+          (t/testing "count-valvonnat matches the actual count"
+            (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                     0)))))
+
+      (t/testing "returns a valvonta that is in uhkasakkoprosessi when only-uhkasakkoprosessi is true"
+        (let [valvonta-in-uhkasakkoprosessi (valvonta-kaytto/add-valvonta! ts/*db* {:katuosoite "Testitie 6"})
+              query {:only-uhkasakkoprosessi true}]
+          ;; Create a toimenpide that is part of uhkasakkoprosessi
+          (jdbc/insert! ts/*db*
+                        :vk_toimenpide
+                        {:valvonta_id        valvonta-in-uhkasakkoprosessi
+                         :type_id            7
+                         :create_time        (-> (LocalDate/of 2023 8 12)
+                                                 (.atStartOfDay (ZoneId/systemDefault))
+                                                 .toInstant)
+                         :publish_time       (-> (LocalDate/of 2023 8 12)
+                                                 (.atStartOfDay (ZoneId/systemDefault))
+                                                 .toInstant)
+                         :deadline_date      (LocalDate/of 2023 8 28)
+                         :diaarinumero       "ARA-05.03.01-2023-235"
+                         :type_specific_data {:fine 6100}})
+
+          (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                   1))
+          (t/is (= (-> (valvonta-kaytto/find-valvonnat ts/*db* query)
+                       first
+                       :id)
+                   valvonta-in-uhkasakkoprosessi))
+
+          (t/testing "count-valvonnat matches the actual count"
+            (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                     1)))
+
+          (t/testing "and both valvonnat when only-uhkasakkoprosessi is false"
+            (let [query {:only-uhkasakkoprosessi false}
+                  valvonnat (valvonta-kaytto/find-valvonnat ts/*db* query)]
+              (t/is (= (count valvonnat)
+                       2))
+
+              (t/is (= (->> valvonnat
+                            (map :id))
+                       [valvonta-not-in-uhkasakkoprosessi valvonta-in-uhkasakkoprosessi]))
+
+              (t/testing "count-valvonnat matches the actual count"
+                (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                         2))))))))))
+
+
+(def toimenpide-types-not-part-of-uhkasakkoprosessi
+  "toimenpide-types 0 - 5 are not part of uhkasakkoprosessi"
+  (range 0 6))
+(def uhkasakkoprosessi-toimenpide-types [6 7 8 9 10 11 12 14 15 16 17 18 19 21])
+
+(t/deftest find-valvonnat-in-every-toimenpide-type-test
+  (t/testing "There are valvonnat in every possible toimenpide"
+    (doseq [toimenpide-type-id (concat
+                                 toimenpide-types-not-part-of-uhkasakkoprosessi
+                                 uhkasakkoprosessi-toimenpide-types)
+            :let [valvonta-id (valvonta-kaytto/add-valvonta!
+                                ts/*db*
+                                {:katuosoite (str "Testikatu " toimenpide-type-id)})]]
+      ;; Create a toimenpide for valvonta completely disregarding what kind of toimenpide-speficic-data
+      ;; the toimenpidetype might have
+      (jdbc/insert! ts/*db*
+                    :vk_toimenpide
+                    {:valvonta_id        valvonta-id
+                     :type_id            toimenpide-type-id
+                     :create_time        (-> (LocalDate/of 2024 1 7)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :publish_time       (-> (LocalDate/of 2024 1 7)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :deadline_date      (LocalDate/of 2024 2 7)
+                     :diaarinumero       (str "ARA-05.03.01-2024-235-" toimenpide-type-id)
+                     :type_specific_data {:fine 6100}}))
+
+    (t/testing "and find-valvonnat returns all of them when searching for all, including closed ones"
+      (let [query {:limit          100
+                   :include-closed true}]
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                 20
+                 (count (concat
+                          toimenpide-types-not-part-of-uhkasakkoprosessi
+                          uhkasakkoprosessi-toimenpide-types))))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   20)))))
+
+    (t/testing "and find-valvonnat returns all of them except the one that is closed (toimenpide-type 5) when closed ones are not included"
+      (let [query {:limit 100}]
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                 19))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   19)))))
+
+    (t/testing "and find-valvonnat returns only those that are part of uhkasakkoprosessi when :only-uhkasakkoprosessi is true"
+      (let [query {:limit                  100
+                   :only-uhkasakkoprosessi true}]
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                 14
+                 (count uhkasakkoprosessi-toimenpide-types)))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   14)))))
+
+    (t/testing "and find-valvonnat returns only one when searching by each individual toimenpide-type"
+      (doseq [toimenpide-type-id (concat
+                                   toimenpide-types-not-part-of-uhkasakkoprosessi
+                                   uhkasakkoprosessi-toimenpide-types)
+              :let [query {:limit             100
+                           :include-closed    true
+                           :toimenpidetype-id toimenpide-type-id}
+                    results (valvonta-kaytto/find-valvonnat ts/*db* query)]]
+
+        (t/testing (str "for toimenpide-type " toimenpide-type-id)
+          (t/is (= (count results)
+                   1))
+          (t/is (= (->> results first :last-toimenpide :type-id)
+                   toimenpide-type-id))
+
+          (t/testing "count-valvonnat matches the actual count"
+            (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                     1))))))
+
+    (t/testing "and find-valvonnat returns only the amount of valvonnat that is given as a limit"
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* {:limit 2}))
+               2)))
+
+    (t/testing "count-valvonnat does not respect limit or offset as it's used to determine the pagination"
+      (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* {:include-closed true
+                                                                 :limit          2
+                                                                 :offset         15}))
+               20)))
+
+    (t/testing "and find-valvonnat returns the same results when retrieving 4 items and 2 with offset of 2 twice"
+      (let [one-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit 4})
+            first-half-of-offset-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit 2})
+            second-half-of-offset-search (valvonta-kaytto/find-valvonnat ts/*db* {:limit  2
+                                                                                  :offset 2})]
+        (t/is (= one-search
+                 (concat first-half-of-offset-search second-half-of-offset-search)))))
+
+    (t/testing "and find-valvonnat returns empty list when searching for valvonnat with document template that none has"
+      (let [query {:asiakirjapohja-id 4}]
+        (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* query)))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   0)))))
+
+    (t/testing "and find-valvonnat returns empty list when searching for valvonnat with valvoja as none have one"
+      (let [query {:has-valvoja true}]
+        (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* query)))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   0))))))
+
+  (t/testing "find-valvonnat returns a valvonta that has a toimenpide with a given document template"
+    (let [valvonta-id (valvonta-kaytto/add-valvonta!
+                        ts/*db*
+                        {:katuosoite "Asiakirjapohjakatu"})
+          query {:asiakirjapohja-id 3}]
+      (jdbc/insert! ts/*db*
+                    :vk_toimenpide
+                    {:valvonta_id   valvonta-id
+                     :type_id       2
+                     :template_id   3
+                     :create_time   (-> (LocalDate/of 2024 1 7)
+                                        (.atStartOfDay (ZoneId/systemDefault))
+                                        .toInstant)
+                     :publish_time  (-> (LocalDate/of 2024 1 7)
+                                        (.atStartOfDay (ZoneId/systemDefault))
+                                        .toInstant)
+                     :deadline_date (LocalDate/of 2024 2 7)
+                     :diaarinumero  "ARA-05.03.01-2024-238"})
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+               1))
+
+      (t/testing "count-valvonnat matches the actual count"
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                 1)))))
+
+  (let [kayttaja-id (test-kayttajat/insert-virtu-paakayttaja!
+                      {:etunimi  "Asian"
+                       :sukunimi "Tuntija"
+                       :email    "testi@ara.fi"
+                       :puhelin  "0504363675457"})]
+    (valvonta-kaytto/add-valvonta!
+      ts/*db*
+      {:katuosoite "Asiakirjapohjakatu"
+       :valvoja-id kayttaja-id})
+
+    (t/testing "and find-valvonnat returns a valvonta that has a valvoja when has-valvoja is true"
+      (let [query {:has-valvoja true}]
+        (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                 1))
+
+        (t/testing "count-valvonnat matches the actual count"
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   1))))
+
+      (t/testing "and find-valvonnat returns a valvonta when a correct valvoja-id is given"
+        (let [query {:valvoja-id kayttaja-id}]
+          (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+                   1))
+
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   1))))
+
+      (t/testing "and find-valvonnat returns empty list when incorrect valvova-id is given"
+        (let [query {:valvoja-id 666}]
+          (t/is (empty? (valvonta-kaytto/find-valvonnat ts/*db* query)))
+
+          (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                   0)))))))

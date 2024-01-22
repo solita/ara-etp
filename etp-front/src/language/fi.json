@@ -1727,6 +1727,7 @@
         "empty": "Ei valvontatoimenpiteitä",
         "ei-valvojaa": "Ei valvojaa",
         "include-closed": "Näytä myös päättyneet",
+        "only-uhkasakkoprosessi": "Näytä vain uhkasakkoprosessissa olevat valvonnat",
         "diaarinumero": "Diaarinumero",
         "last-toimenpide": "Edellinen tapahtuma",
         "last-template": "Asiakirjapohja",
