@@ -192,6 +192,8 @@
     "email": "E-postadress",
     "kayttajatunnus": "Användarnamn för dataöverföring",
     "puhelin": "Telefon",
+    "titteli-fi": "Titteli (suomi) (sv)",
+    "titteli-sv": "Titteli (ruotsi) (sv)",
     "perustiedot-header": "Basuppgifter",
     "api-header": "API",
     "aineistot-header": "Materialer",

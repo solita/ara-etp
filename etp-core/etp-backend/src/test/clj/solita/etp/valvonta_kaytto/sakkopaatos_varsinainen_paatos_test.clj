@@ -24,7 +24,9 @@
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
      :email    "testi@ara.fi"
-     :puhelin  "0504363675457"})
+     :puhelin  "0504363675457"
+     :titteli-fi "energia-asiantuntija"
+     :titteli-sv "energiexpert"})
   (t/testing "Sakkopäätös / varsinainen päätös toimenpide is created successfully for yksityishenkilö and document is generated with correct information"
     ;; Add the valvonta and previous toimenpides
     ;; so that käskypäätös / kuulemiskirje toimenpide can be created

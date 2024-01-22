@@ -21,7 +21,9 @@ export const deserialize = R.compose(
     verifytime: parseValidISODate,
     cognitoid: Maybe.fromNull,
     henkilotunnus: Maybe.fromNull,
-    virtu: Maybe.fromNull
+    virtu: Maybe.fromNull,
+    'titteli-fi': Maybe.fromNull,
+    'titteli-sv': Maybe.fromNull
   })
 );
 
@@ -133,7 +135,9 @@ export const serialize = R.compose(
   R.evolve({
     henkilotunnus: Maybe.orSome(null),
     virtu: Maybe.orSome(null),
-    'api-key': Maybe.orSome(null)
+    'api-key': Maybe.orSome(null),
+    'titteli-fi': Maybe.orSome(null),
+    'titteli-sv': Maybe.orSome(null)
   }),
   R.omit(['id', 'login', 'cognitoid', 'verifytime'])
 );

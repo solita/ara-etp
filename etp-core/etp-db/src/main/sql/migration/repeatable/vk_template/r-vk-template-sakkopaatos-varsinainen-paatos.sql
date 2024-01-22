@@ -126,7 +126,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 
 <div class="page-break-avoid">
 {{#valvoja}}
-<p>Lisätietoja päätöksestä antaa energia-asiantuntija {{etunimi}} {{sukunimi}}, <br/>puh. {{puhelin}} / s-posti
+<p>Lisätietoja päätöksestä antaa {{titteli-fi}} {{etunimi}} {{sukunimi}}, <br/>puh. {{puhelin}} / s-posti
     {{email}}.</p>
 {{/valvoja}}
 
@@ -142,8 +142,8 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
         <td>
             {{#valvoja}}
             <div>{{etunimi}} {{sukunimi}}</div>
+            <div>{{titteli-fi}}</div>
             {{/valvoja}}
-            <div>energia-asiantuntija</div>
         </td>
     </tr>
 </table>
@@ -298,7 +298,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 
 <div class="page-break-avoid">
 {{#valvoja}}
-<p>Mer information om beslutet ges av energiexpert {{etunimi}} {{sukunimi}}, <br />tfn {{puhelin}} / e-post
+<p>Mer information om beslutet ges av {{titteli-sv}} {{etunimi}} {{sukunimi}}, <br />tfn {{puhelin}} / e-post
     {{email}}.</p>
 {{/valvoja}}
 
@@ -314,8 +314,8 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
         <td>
             {{#valvoja}}
             <div>{{etunimi}} {{sukunimi}}</div>
+            <div>{{titteli-sv}}</div>
             {{/valvoja}}
-            <div>energiexpert</div>
         </td>
     </tr>
 </table>

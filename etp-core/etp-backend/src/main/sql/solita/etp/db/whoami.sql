@@ -4,7 +4,8 @@ SELECT k.id id, k.etunimi etunimi, k.sukunimi sukunimi, k.email email, k.puhelin
        k.virtu$organisaatio, k.henkilotunnus henkilotunnus,
        k.organisaatio,
        k.api_key_hash api_key_hash, k.verifytime,
-       coalesce(l.partner, false) as partner
+       coalesce(l.partner, false) as partner,
+       k.titteli_fi, k.titteli_sv
 FROM kayttaja k
 LEFT JOIN laatija l ON l.id = k.id
 WHERE (not k.passivoitu) AND

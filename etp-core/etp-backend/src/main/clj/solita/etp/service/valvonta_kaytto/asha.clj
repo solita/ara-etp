@@ -77,7 +77,7 @@
   {:päivä                  (time/today)
    :määräpäivä             (time/format-date (:deadline-date toimenpide))
    :diaarinumero           (:diaarinumero toimenpide)
-   :valvoja                (select-keys whoami [:etunimi :sukunimi :email :puhelin])
+   :valvoja                (select-keys whoami [:etunimi :sukunimi :email :puhelin :titteli-fi :titteli-sv])
    :omistaja-henkilo       (when (osapuoli/henkilo? osapuoli)
                              (-> (select-keys osapuoli [:etunimi :sukunimi :jakeluosoite :postinumero :postitoimipaikka :henkilotunnus])
                                  (update-in [:henkilotunnus] (fn [henkilotunnus] (when henkilotunnus (string/replace henkilotunnus "-" "‑")))))) ; Replace hyphen with non-breaking variant

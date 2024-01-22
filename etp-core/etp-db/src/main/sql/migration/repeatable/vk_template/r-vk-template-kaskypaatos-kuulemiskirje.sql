@@ -85,8 +85,9 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
-{{/valvoja}}<br/>
-energia-asiantuntija
+<br/>
+{{titteli-fi}}
+{{/valvoja}}
 </div>
 
 <p class="footnote mb-0"><sup>1</sup> ARAn energiatodistusrekisterissä ovat 1.5.2015 jälkeen laaditut energiatodistukset.</p>
@@ -169,8 +170,9 @@ energia-asiantuntija
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
-{{/valvoja}}<br/>
-energiexpert
+<br/>
+{{titteli-sv}}
+{{/valvoja}}
 </div>
 
 <p class="footnote mb-0"><sup>2</sup> I ARAs energicertifikatregister finns energicertifikat som upprättats efter 1 maj 2015.</p>

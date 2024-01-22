@@ -14,6 +14,7 @@
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
   import Select from '@Component/Select/Select.svelte';
   import { announcementsForModule } from '@Utility/announce';
+  import * as Parsers from '@Utility/parsers';
 
   /*
    * Note: kayttaja.rooli :: Maybe[Id]
@@ -149,7 +150,8 @@
         {i18n} />
     </div>
   </div>
-  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4 items-end">
+
+  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Input
         id={'email'}
@@ -177,6 +179,35 @@
         {i18n} />
     </div>
   </div>
+
+  {#if isPaakayttaja && isOwnSettings}
+    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4 items-end">
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'titteli-fi'}
+          name={'titteli-fi'}
+          label={i18n('kayttaja.titteli-fi')}
+          bind:model={kayttaja}
+          format={Maybe.orSome('')}
+          lens={R.lensProp('titteli-fi')}
+          parse={Parsers.optionalString}
+          {disabled}
+          {i18n} />
+      </div>
+      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+        <Input
+          id={'titteli-sv'}
+          name={'titteli-sv'}
+          label={i18n('kayttaja.titteli-sv')}
+          bind:model={kayttaja}
+          format={Maybe.orSome('')}
+          lens={R.lensProp('titteli-sv')}
+          parse={Parsers.optionalString}
+          {disabled}
+          {i18n} />
+      </div>
+    </div>
+  {/if}
 
   <H2 text={i18n('kayttaja.virtu.header')} />
 
