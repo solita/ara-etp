@@ -1,7 +1,11 @@
 (ns solita.etp.document-assertion
   (:require [clojure.java.io :as io]
             [clojure.test :as t]
-            [solita.etp.service.pdf :as pdf]))
+            [solita.etp.service.pdf :as pdf])
+  (:import (java.io ByteArrayOutputStream InputStream)
+           (org.apache.pdfbox.pdmodel PDDocument)
+           (org.apache.pdfbox.rendering ImageType PDFRenderer)
+           (org.apache.pdfbox.tools.imageio ImageIOUtil)))
 
 (def original-html->pdf pdf/html->pdf)
 
@@ -17,3 +21,37 @@
   (reset! html->pdf-called? true)
   ;;Calling original implementation to ensure the functionality doesn't change
   (original-html->pdf html-doc output-stream))
+
+(defn read-pdf
+  "Reads a pdf into PDFBox Document class from an input stream. This object can then be used for assertions."
+  ^PDDocument
+  [^InputStream input]
+  (PDDocument/load input))
+
+(defn- pdf-page->image-byte-array
+  "Renders the page of given pdf to a png image and converts that to a byte array"
+  [^PDDocument pdf page-number]
+  (let [renderer (PDFRenderer. pdf)
+        image (.renderImageWithDPI renderer page-number 72 ImageType/GRAY)]
+    (with-open [output (ByteArrayOutputStream.)]
+      (ImageIOUtil/writeImage image "png" output)
+      (.toByteArray output))))
+
+(defn assert-pdf-matches-visually
+  "Checks that the given pdf document object matches visually to the baseline-pdf at the given resource path"
+  [^PDDocument pdf-under-testing baseline-pdf-resource-path]
+  (let [baseline-pdf (-> baseline-pdf-resource-path
+                         io/resource
+                         io/input-stream
+                         read-pdf)]
+
+    ;; Assert that PDFs have pages and the number of pages match
+    (t/is (not (zero? (.getNumberOfPages pdf-under-testing))))
+    (t/is (not (zero? (.getNumberOfPages baseline-pdf))))
+    (t/is (= (.getNumberOfPages pdf-under-testing)
+             (.getNumberOfPages baseline-pdf)))
+
+    ;; Asserts that every page matches visually
+    (doseq [page-number (range 0 (.getNumberOfPages pdf-under-testing))]
+      (t/is (= (seq (pdf-page->image-byte-array pdf-under-testing page-number))
+               (seq (pdf-page->image-byte-array baseline-pdf page-number)))))))
