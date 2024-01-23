@@ -4,7 +4,7 @@
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
-    [solita.etp.document-assertion :refer [html->pdf-with-assertion]]
+    [solita.etp.document-assertion :as doc]
     [solita.etp.service.pdf :as pdf]
     [solita.etp.service.valvonta-kaytto :as valvonta-service]
     [solita.etp.test-data.kayttaja :as test-kayttajat]
@@ -24,32 +24,31 @@
     (let [valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
                                                                :postinumero       "90100"
                                                                :ilmoituspaikka-id 0})
-          html->pdf-called? (atom false)]
-
-      ;; Add osapuoli to the valvonta
-      (valvonta-service/add-henkilo! ts/*db*
-                                     valvonta-id
-                                     {:toimitustapa-description nil
-                                      :toimitustapa-id          0
-                                      :email                    nil
-                                      :rooli-id                 0
-                                      :jakeluosoite             "Testikatu 12"
-                                      :postitoimipaikka         "Helsinki"
-                                      :puhelin                  nil
-                                      :sukunimi                 "Talonomistaja"
-                                      :postinumero              "00100"
-                                      :henkilotunnus            "000000-0000"
-                                      :rooli-description        "Omistaja"
-                                      :etunimi                  "Testi"
-                                      :vastaanottajan-tarkenne  nil
-                                      :maa                      "FI"})
+          html->pdf-called? (atom false)
+          ;; Add osapuoli to the valvonta
+          osapuoli-id (valvonta-service/add-henkilo! ts/*db*
+                                                     valvonta-id
+                                                     {:toimitustapa-description nil
+                                                      :toimitustapa-id          0
+                                                      :email                    nil
+                                                      :rooli-id                 0
+                                                      :jakeluosoite             "Testikatu 12"
+                                                      :postitoimipaikka         "Helsinki"
+                                                      :puhelin                  nil
+                                                      :sukunimi                 "Talonomistaja"
+                                                      :postinumero              "00100"
+                                                      :henkilotunnus            "000000-0000"
+                                                      :rooli-description        "Omistaja"
+                                                      :etunimi                  "Testi"
+                                                      :vastaanottajan-tarkenne  nil
+                                                      :maa                      "FI"})]
 
       ;; Mock the current time to ensure that the document has a fixed date
       (with-bindings {#'time/clock    (Clock/fixed (-> (LocalDate/of 2023 6 26)
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatos-haastemies-yksityishenkilo.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            11
@@ -116,37 +115,51 @@
                                                                    :osapuoli {:id   2
                                                                               :type "yritys"}}]}
                     :valvonta-id        valvonta-id
-                    :yritykset          []}))))))
+                    :yritykset          []}))))
+
+      (t/testing "Created document can be downloaded through the api"
+        (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/haastemies-tiedoksianto.pdf" valvonta-id 1 osapuoli-id))
+                                       (test-kayttajat/with-virtu-user)
+                                       (mock/header "Accept" "application/pdf")))
+              pdf-document (doc/read-pdf (:body response))]
+          (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
+          (t/is (= (:status response) 200))
+
+          (t/testing "and document has one page"
+            (t/is (= (.getNumberOfPages pdf-document)
+                     1)))
+
+          (t/testing "and document looks as it should"
+            (doc/assert-pdf-matches-visually pdf-document "documents/kaskypaatos-haastemies-yksityishenkilo.pdf"))))))
 
   (t/testing "Käskypäätös / Tiedoksianto (Haastemies) toimenpide is created successfully for yritys and document is generated with correct information"
     ;; Add the valvonta
     (let [valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
                                                                :postinumero       "90100"
                                                                :ilmoituspaikka-id 0})
-          html->pdf-called? (atom false)]
-
-      ;; Add osapuoli to the valvonta
-      (valvonta-service/add-yritys! ts/*db*
-                                    valvonta-id
-                                    {:nimi                     "Yritysomistaja"
-                                     :toimitustapa-description nil
-                                     :toimitustapa-id          0
-                                     :email                    nil
-                                     :rooli-id                 0
-                                     :jakeluosoite             "Testikatu 12"
-                                     :vastaanottajan-tarkenne  "Lisäselite C/O"
-                                     :postitoimipaikka         "Helsinki"
-                                     :puhelin                  nil
-                                     :postinumero              "00100"
-                                     :rooli-description        "Omistaja"
-                                     :maa                      "FI"})
+          html->pdf-called? (atom false)
+          ;; Add osapuoli to the valvonta
+          osapuoli-id (valvonta-service/add-yritys! ts/*db*
+                                                    valvonta-id
+                                                    {:nimi                     "Yritysomistaja"
+                                                     :toimitustapa-description nil
+                                                     :toimitustapa-id          0
+                                                     :email                    nil
+                                                     :rooli-id                 0
+                                                     :jakeluosoite             "Testikatu 12"
+                                                     :vastaanottajan-tarkenne  "Lisäselite C/O"
+                                                     :postitoimipaikka         "Helsinki"
+                                                     :puhelin                  nil
+                                                     :postinumero              "00100"
+                                                     :rooli-description        "Omistaja"
+                                                     :maa                      "FI"})]
 
       ;; Mock the current time to ensure that the document has a fixed date
       (with-bindings {#'time/clock    (Clock/fixed (-> (LocalDate/of 2023 6 26)
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatos-haastemies-yritys.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            11
@@ -164,6 +177,7 @@
                                        (mock/header "Accept" "application/json")))]
           (t/is (true? @html->pdf-called?))
           (t/is (= (:status response) 201))))
+
       (t/testing "Toimenpide is returned through the api"
         (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet" valvonta-id))
                                        (test-kayttajat/with-virtu-user)
@@ -206,4 +220,19 @@
                                           :id                       1,
                                           :rooli-description        "Omistaja",
                                           :vastaanottajan-tarkenne  "Lisäselite C/O",
-                                          :maa                      "FI"}]})))))))
+                                          :maa                      "FI"}]}))))
+
+      (t/testing "Created document can be downloaded through the api"
+        (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/yritykset/%s/document/haastemies-tiedoksianto.pdf" valvonta-id 2 osapuoli-id))
+                                       (test-kayttajat/with-virtu-user)
+                                       (mock/header "Accept" "application/pdf")))
+              pdf-document (doc/read-pdf (:body response))]
+          (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
+          (t/is (= (:status response) 200))
+
+          (t/testing "and document has one page"
+            (t/is (= (.getNumberOfPages pdf-document)
+                     1)))
+
+          (t/testing "and document looks as it should"
+            (doc/assert-pdf-matches-visually pdf-document "documents/kaskypaatos-haastemies-yritys.pdf")))))))
