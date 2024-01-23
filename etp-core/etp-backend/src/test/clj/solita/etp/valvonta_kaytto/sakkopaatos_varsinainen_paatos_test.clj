@@ -6,7 +6,7 @@
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
-    [solita.etp.document-assertion :refer [html->pdf-with-assertion]]
+    [solita.etp.document-assertion :as doc]
     [solita.etp.service.pdf :as pdf]
     [solita.etp.service.valvonta-kaytto :as valvonta-service]
     [solita.etp.service.valvonta-kaytto.store :as file-store]
@@ -132,7 +132,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/sakkopaatos-varsinainen-paatos-yksityishenkilo.html"
                                                html->pdf-called?)
                       #'file-store/store-hallinto-oikeus-attachment!
@@ -220,11 +220,19 @@
                                 :template-id   9}))))
 
           (t/testing "Created document can be downloaded through the api"
-            (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/kaskypaatos.pdf" valvonta-id 6 osapuoli-id))
+            (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/sakkopaatos.pdf" valvonta-id 6 osapuoli-id))
                                            (test-kayttajat/with-virtu-user)
-                                           (mock/header "Accept" "application/pdf")))]
+                                           (mock/header "Accept" "application/pdf")))
+                  pdf-document (doc/read-pdf (:body response))]
               (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
-              (t/is (= (:status response) 200))))
+              (t/is (= (:status response) 200))
+
+              (t/testing "and document has eight pages"
+                (t/is (= (.getNumberOfPages pdf-document)
+                         8)))
+
+              (t/testing "and document looks as it should"
+                (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-varsinainen-paatos-yksityishenkilo.pdf"))))
 
           (t/testing "hallinto-oikeus-liite can be downloaded through the api"
             (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/attachment/hallinto-oikeus.pdf" valvonta-id 6 osapuoli-id))
@@ -338,7 +346,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/sakkopaatos-varsinainen-paatos-yritys.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            15
@@ -419,7 +427,22 @@
                            :answer-commentary-sv "Nej ansverat han."}],
                          :department-head-title-sv "Kungen",
                          :fine                     857},
-                        :template-id   9}))))))))
+                        :template-id   9}))))
+
+          (t/testing "Created document can be downloaded through the api"
+            (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/yritykset/%s/document/sakkopaatos.pdf" valvonta-id 12 osapuoli-id))
+                                           (test-kayttajat/with-virtu-user)
+                                           (mock/header "Accept" "application/pdf")))
+                  pdf-document (doc/read-pdf (:body response))]
+              (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
+              (t/is (= (:status response) 200))
+
+              (t/testing "and document has eight pages"
+                (t/is (= (.getNumberOfPages pdf-document)
+                         8)))
+
+              (t/testing "and document looks as it should"
+                (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-varsinainen-paatos-yritys.pdf"))))))))
 
   (t/testing "Preview api call for Sakkopäätös / varsinainen päätös toimenpide succeeds"
     (t/testing "for yksityishenkilö"
