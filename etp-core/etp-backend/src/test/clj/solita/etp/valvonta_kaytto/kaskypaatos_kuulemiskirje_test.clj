@@ -3,9 +3,10 @@
     [clojure.java.io :as io]
     [clojure.java.jdbc :as jdbc]
     [clojure.test :as t]
+    [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
-    [solita.etp.document-assertion :refer [html->pdf-with-assertion]]
+    [solita.etp.document-assertion :as doc]
     [solita.etp.service.pdf :as pdf]
     [solita.etp.service.valvonta-kaytto :as valvonta-service]
     [solita.etp.test-data.kayttaja :as test-kayttajat]
@@ -19,10 +20,10 @@
 (t/deftest kaskypaatos-kuulemiskirje-test
   ;; Add the main user for the following tests
   (test-kayttajat/insert-virtu-paakayttaja!
-    {:etunimi  "Asian"
-     :sukunimi "Tuntija"
-     :email    "testi@ara.fi"
-     :puhelin  "0504363675457"
+    {:etunimi    "Asian"
+     :sukunimi   "Tuntija"
+     :email      "testi@ara.fi"
+     :puhelin    "0504363675457"
      :titteli-fi "energia-asiantuntija"
      :titteli-sv "energiexpert"})
   (t/testing "Käskypäätös / Kuulemiskirje toimenpide is created successfully for yksityishenkilö and document is generated with correct information"
@@ -37,25 +38,24 @@
           varoitus-timestamp (-> (LocalDate/of 2023 7 13)
                                  (.atStartOfDay (ZoneId/systemDefault))
                                  .toInstant)
-          html->pdf-called? (atom false)]
-
-      ;; Add osapuoli to the valvonta
-      (valvonta-service/add-henkilo! ts/*db*
-                                     valvonta-id
-                                     {:toimitustapa-description nil
-                                      :toimitustapa-id          0
-                                      :email                    nil
-                                      :rooli-id                 0
-                                      :jakeluosoite             "Testikatu 12"
-                                      :postitoimipaikka         "Helsinki"
-                                      :puhelin                  nil
-                                      :sukunimi                 "Talonomistaja"
-                                      :postinumero              "00100"
-                                      :henkilotunnus            "000000-0000"
-                                      :rooli-description        ""
-                                      :etunimi                  "Testi"
-                                      :vastaanottajan-tarkenne  nil
-                                      :maa                      "FI"})
+          html->pdf-called? (atom false)
+          ;; Add osapuoli to the valvonta
+          osapuoli-id (valvonta-service/add-henkilo! ts/*db*
+                                                     valvonta-id
+                                                     {:toimitustapa-description nil
+                                                      :toimitustapa-id          0
+                                                      :email                    nil
+                                                      :rooli-id                 0
+                                                      :jakeluosoite             "Testikatu 12"
+                                                      :postitoimipaikka         "Helsinki"
+                                                      :puhelin                  nil
+                                                      :sukunimi                 "Talonomistaja"
+                                                      :postinumero              "00100"
+                                                      :henkilotunnus            "000000-0000"
+                                                      :rooli-description        "Omistaja"
+                                                      :etunimi                  "Testi"
+                                                      :vastaanottajan-tarkenne  nil
+                                                      :maa                      "FI"})]
 
       ;; Add kehotus-toimenpide to the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id   valvonta-id
@@ -75,7 +75,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatoskuulemiskirje-yksityishenkilo.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            7
@@ -88,7 +88,63 @@
                                        (test-kayttajat/with-virtu-user)
                                        (mock/header "Accept" "application/json")))]
           (t/is (true? @html->pdf-called?))
-          (t/is (= (:status response) 201))))))
+          (t/is (= (:status response) 201))
+
+          (t/testing "Toimenpide is returned through the api"
+            (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet" valvonta-id))
+                                           (test-kayttajat/with-virtu-user)
+                                           (mock/header "Accept" "application/json")))
+                  response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+              (t/is (= (:status response) 200))
+              (t/is (= (count response-body) 3))
+              (t/is (= (-> response-body
+                           last
+                           (dissoc :publish-time :create-time))
+                       {:author             {:etunimi  "Asian"
+                                             :id       1
+                                             :rooli-id 2
+                                             :sukunimi "Tuntija"}
+                        :deadline-date      "2023-07-22"
+                        :description        "Lähetetään kuulemiskirje, kun myyjä ei ole hankkinut energiatodistusta eikä vastannut kehotukseen tai varoitukseen"
+                        :diaarinumero       nil
+                        :filename           "kuulemiskirje.pdf"
+                        :henkilot           [{:email                    nil
+                                              :etunimi                  "Testi"
+                                              :henkilotunnus            "000000-0000"
+                                              :id                       1
+                                              :jakeluosoite             "Testikatu 12"
+                                              :maa                      "FI"
+                                              :postinumero              "00100"
+                                              :postitoimipaikka         "Helsinki"
+                                              :puhelin                  nil
+                                              :rooli-description        "Omistaja"
+                                              :rooli-id                 0
+                                              :sukunimi                 "Talonomistaja"
+                                              :toimitustapa-description nil
+                                              :toimitustapa-id          0
+                                              :valvonta-id              1
+                                              :vastaanottajan-tarkenne  nil}]
+                        :id                 3
+                        :template-id        5
+                        :type-id            7
+                        :type-specific-data {:fine 800}
+                        :valvonta-id        1
+                        :yritykset          []}))))
+
+          (t/testing "Created document can be downloaded through the api"
+            (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/kuulemiskirje.pdf" valvonta-id 3 osapuoli-id))
+                                           (test-kayttajat/with-virtu-user)
+                                           (mock/header "Accept" "application/pdf")))
+                  pdf-document (doc/read-pdf (:body response))]
+              (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
+              (t/is (= (:status response) 200))
+
+              (t/testing "and document has five pages"
+                (t/is (= (.getNumberOfPages pdf-document)
+                         5)))
+
+              (t/testing "and document looks as it should"
+                (doc/assert-pdf-matches-visually pdf-document "documents/kaskypaatos-kuulemiskirje-yksityishenkilo.pdf"))))))))
 
   (t/testing "Käskypäätös / Kuulemiskirje toimenpide is created successfully for two yksityishenkilö owners and both are mentioned in each document"
     ;; Add the valvonta and previous toimenpides
@@ -196,23 +252,22 @@
           varoitus-timestamp (-> (LocalDate/of 2023 7 13)
                                  (.atStartOfDay (ZoneId/systemDefault))
                                  .toInstant)
-          html->pdf-called? (atom false)]
-
-      ;; Add osapuoli to the valvonta
-      (valvonta-service/add-yritys! ts/*db*
-                                    valvonta-id
-                                    {:nimi                     "Yritysomistaja"
-                                     :toimitustapa-description nil
-                                     :toimitustapa-id          0
-                                     :email                    nil
-                                     :rooli-id                 0
-                                     :jakeluosoite             "Testikatu 12"
-                                     :vastaanottajan-tarkenne  "Lisäselite C/O"
-                                     :postitoimipaikka         "Helsinki"
-                                     :puhelin                  nil
-                                     :postinumero              "00100"
-                                     :rooli-description        ""
-                                     :maa                      "FI"})
+          html->pdf-called? (atom false)
+          ;; Add osapuoli to the valvonta
+          osapuoli-id (valvonta-service/add-yritys! ts/*db*
+                                                    valvonta-id
+                                                    {:nimi                     "Yritysomistaja"
+                                                     :toimitustapa-description nil
+                                                     :toimitustapa-id          0
+                                                     :email                    nil
+                                                     :rooli-id                 0
+                                                     :jakeluosoite             "Testikatu 12"
+                                                     :vastaanottajan-tarkenne  "Lisäselite C/O"
+                                                     :postitoimipaikka         "Helsinki"
+                                                     :puhelin                  nil
+                                                     :postinumero              "00100"
+                                                     :rooli-description        "Omistaja"
+                                                     :maa                      "FI"})]
 
       ;; Add kehotus-toimenpide to the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id   valvonta-id
@@ -232,7 +287,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatoskuulemiskirje-yritys.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            7
@@ -245,4 +300,59 @@
                                        (test-kayttajat/with-virtu-user)
                                        (mock/header "Accept" "application/json")))]
           (t/is (true? @html->pdf-called?))
-          (t/is (= (:status response) 201)))))))
+          (t/is (= (:status response) 201))
+
+          (t/testing "Toimenpide is returned through the api"
+            (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet" valvonta-id))
+                                           (test-kayttajat/with-virtu-user)
+                                           (mock/header "Accept" "application/json")))
+                  response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+              (t/is (= (:status response) 200))
+              (t/is (= (count response-body) 3))
+              (t/is (= (-> response-body
+                           last
+                           (dissoc :publish-time :create-time))
+                       {:author             {:etunimi  "Asian"
+                                             :id       1
+                                             :rooli-id 2
+                                             :sukunimi "Tuntija"}
+                        :deadline-date      "2023-07-22"
+                        :description        "Lähetetään kuulemiskirje, kun myyjä ei ole hankkinut energiatodistusta eikä vastannut kehotukseen tai varoitukseen"
+                        :diaarinumero       nil
+                        :filename           "kuulemiskirje.pdf"
+                        :henkilot           []
+                        :id                 9
+                        :template-id        5
+                        :type-id            7
+                        :type-specific-data {:fine 9000}
+                        :valvonta-id        3
+                        :yritykset          [{:email                    nil
+                                              :id                       1
+                                              :jakeluosoite             "Testikatu 12"
+                                              :maa                      "FI"
+                                              :nimi                     "Yritysomistaja"
+                                              :postinumero              "00100"
+                                              :postitoimipaikka         "Helsinki"
+                                              :puhelin                  nil
+                                              :rooli-description        "Omistaja"
+                                              :rooli-id                 0
+                                              :toimitustapa-description nil
+                                              :toimitustapa-id          0
+                                              :valvonta-id              3
+                                              :vastaanottajan-tarkenne  "Lisäselite C/O"
+                                              :ytunnus                  nil}]}))
+
+              (t/testing "Created document can be downloaded through the api"
+                (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/yritykset/%s/document/kuulemiskirje.pdf" valvonta-id 9 osapuoli-id))
+                                               (test-kayttajat/with-virtu-user)
+                                               (mock/header "Accept" "application/pdf")))
+                      pdf-document (doc/read-pdf (:body response))]
+                  (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
+                  (t/is (= (:status response) 200))
+
+                  (t/testing "and document has five pages"
+                    (t/is (= (.getNumberOfPages pdf-document)
+                             5)))
+
+                  (t/testing "and document looks as it should"
+                    (doc/assert-pdf-matches-visually pdf-document "documents/kaskypaatos-kuulemiskirje-yritys.pdf")))))))))))
