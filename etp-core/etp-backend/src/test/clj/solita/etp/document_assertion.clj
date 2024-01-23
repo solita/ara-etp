@@ -60,8 +60,9 @@
     ;; Asserts that every page matches visually
     (doseq [page-number (range 0 (.getNumberOfPages pdf-under-testing))
             :let [rendered-image (pdf-page->image-byte-array pdf-under-testing page-number)]]
-      (t/is (= (seq (pdf-page->image-byte-array pdf-under-testing page-number))
-               (seq (pdf-page->image-byte-array baseline-pdf page-number))))
+      (t/testing (str "page " (inc page-number))
+        (t/is (= (seq (pdf-page->image-byte-array pdf-under-testing page-number))
+                 (seq (pdf-page->image-byte-array baseline-pdf page-number)))))
 
       ;; Write the image in build directory so it can be compared manually
       (with-open [output (FileOutputStream. (str "./target/" filename "-page-" (inc page-number) ".png"))]
