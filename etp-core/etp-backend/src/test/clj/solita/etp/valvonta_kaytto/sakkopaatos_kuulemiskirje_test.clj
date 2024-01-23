@@ -5,7 +5,7 @@
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
-    [solita.etp.document-assertion :refer [html->pdf-with-assertion]]
+    [solita.etp.document-assertion :as doc]
     [solita.etp.service.pdf :as pdf]
     [solita.etp.service.valvonta-kaytto :as valvonta-service]
     [solita.etp.test-data.kayttaja :as test-kayttajat]
@@ -141,7 +141,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/sakkopaatos-kuulemiskirje-yksityishenkilo.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            14
@@ -202,7 +202,22 @@
                                                                    :osapuoli {:id   2
                                                                               :type "henkilo"}}]}
                     :valvonta-id        2
-                    :yritykset          []}))))))
+                    :yritykset          []}))))
+
+      (t/testing "Created document can be downloaded through the api"
+        (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/sakkopaatos-kuulemiskirje.pdf" valvonta-id 5 osapuoli-id))
+                                       (test-kayttajat/with-virtu-user)
+                                       (mock/header "Accept" "application/pdf")))
+              pdf-document (doc/read-pdf (:body response))]
+          (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
+          (t/is (= (:status response) 200))
+
+          (t/testing "and document has four pages"
+            (t/is (= (.getNumberOfPages pdf-document)
+                     4)))
+
+          (t/testing "and document looks as it should"
+            (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-kuulemiskirje-yksityishenkilo.pdf"))))))
 
   (t/testing "Sakkopäätös / kuulemiskirje toimenpide is created successfully but no document is generated as it's marked false for the osapuoli"
     ;; Add the valvonta and previous toimenpides
