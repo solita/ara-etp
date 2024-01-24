@@ -151,8 +151,12 @@
     id={valvonta.id}
     {toimenpide}
     {templatesByType}
-    {henkilot}
-    {yritykset}
+    henkilot={Toimenpiteet.isOrder(toimenpide)
+      ? henkilot
+      : R.filter(Osapuolet.isOmistaja, henkilot)}
+    yritykset={Toimenpiteet.isOrder(toimenpide)
+      ? yritykset
+      : R.filter(Osapuolet.isOmistaja, yritykset)}
     {roolit}
     {toimitustavat}
     {hallintoOikeudet}
