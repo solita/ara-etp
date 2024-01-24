@@ -65,8 +65,12 @@
             :let [rendered-image (pdf-page->image-byte-array pdf-under-testing page-number)]]
       (t/testing (str "page " (inc page-number))
         (t/is (= (seq (pdf-page->image-byte-array pdf-under-testing page-number))
-                 (seq (pdf-page->image-byte-array baseline-pdf page-number)))))
+                 (seq (pdf-page->image-byte-array baseline-pdf page-number)))
+              "If change is intended, save new document snapshot in the test with save-new-snapshot function"))
 
       ;; Write the image in build directory so it can be compared manually
       (with-open [output (FileOutputStream. (str "./target/" filename "-page-" (inc page-number) ".png"))]
         (.write output rendered-image)))))
+
+(defn save-new-snapshot [new-snapshot snapshot-path-in-resources]
+  (io/copy new-snapshot (io/file (str "./src/test/resources/" snapshot-path-in-resources))))
