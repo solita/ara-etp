@@ -286,7 +286,7 @@
           toimenpide-id (:id toimenpide)]
       (insert-toimenpide-osapuolet! tx valvonta-id toimenpide-id)
       (let [case-close (toimenpide/case-close? toimenpide)
-            bypass-asha (:bypass-asha toimenpide)
+            bypass-asha (:bypass-asha toimenpide-add)
             asha-toimenpide (toimenpide/asha-toimenpide? toimenpide-add)]
         (cond
           ;; Close in asha unless bypassed
