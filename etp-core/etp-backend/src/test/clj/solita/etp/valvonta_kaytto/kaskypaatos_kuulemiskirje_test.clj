@@ -218,14 +218,18 @@
                                         (when (= 0 @html->pdf-called?)
                                           (t/is
                                             (= html-doc
-                                               (slurp
-                                                 (io/resource "documents/kaskypaatoskuulemiskirje-yksityishenkilo-two-owners-1.html")))))
+                                               (str
+                                                 (slurp (io/resource "documents/base-template.html"))
+                                                 (slurp
+                                                   (io/resource "documents/kaskypaatoskuulemiskirje-yksityishenkilo-two-owners-1.html"))))))
 
                                         (when (= 1 @html->pdf-called?)
                                           (t/is
                                             (= html-doc
-                                               (slurp
-                                                 (io/resource "documents/kaskypaatoskuulemiskirje-yksityishenkilo-two-owners-2.html")))))
+                                               (str
+                                                 (slurp (io/resource "documents/base-template.html"))
+                                                 (slurp
+                                                   (io/resource "documents/kaskypaatoskuulemiskirje-yksityishenkilo-two-owners-2.html"))))))
                                         (swap! html->pdf-called? inc)
                                         (original-html->pdf html-doc output-stream))}
         (let [new-toimenpide {:type-id            7

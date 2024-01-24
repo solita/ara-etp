@@ -9,6 +9,7 @@
            (org.apache.pdfbox.tools.imageio ImageIOUtil)))
 
 (def original-html->pdf pdf/html->pdf)
+(def html-base-template-path "documents/base-template.html")
 
 (defn html->pdf-with-assertion
   "Wraps solita.etp.service.pdf/html->pdf so that the document can be asserted in html format before it's
@@ -18,7 +19,9 @@
   ;; Mocking the pdf rendering function so that the document contents can be asserted
   ;; Compare the created document to the snapshot
   (t/is (= html-doc
-           (slurp (io/resource doc-path-to-compare-to))))
+           (str
+             (slurp (io/resource html-base-template-path))
+             (slurp (io/resource doc-path-to-compare-to)))))
   (reset! html->pdf-called? true)
   ;;Calling original implementation to ensure the functionality doesn't change
   (original-html->pdf html-doc output-stream))
