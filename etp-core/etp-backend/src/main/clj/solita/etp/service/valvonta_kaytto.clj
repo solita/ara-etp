@@ -389,9 +389,9 @@
          toimenpide.id, toimenpidetype.label_fi, toimenpide.publish_time,
          fullname(kayttaja)
        from vk_valvonta valvonta
-         inner join postinumero on postinumero.id = valvonta.postinumero
-         inner join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
-         inner join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
+         left join postinumero on postinumero.id = valvonta.postinumero
+         left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
+         left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
          left join kayttaja on kayttaja.id = valvonta.valvoja_id
        where not deleted"
       {:row-fn        (comp write! csv-service/csv-line)
