@@ -16,7 +16,23 @@ const dispatchEvent = (name, node, editor) =>
     })
   );
 
-export const quill = (node, { html, toolbar, keyboard }) => {
+/**
+ * Quill editor wrapper
+ * @param node - the node to attach the editor to, a HTMLElement object
+ * @param html - function to convert to HTML
+ * @param toolbar - toolbar configuration
+ * @param keyboard - keyboard configuration
+ * @param id - id of the input, used to set aria-describedby attribute
+ * @param required - used to set aria-required attribute
+ * @param onEditorSetup - callback for when the editor is setup. This enables
+ *                        the calling Svelte component to update if the inserted
+ *                        value is valid or not.
+ * @returns {{update: (function({html: *, _: *}): any), destroy: *}}
+ */
+export const quill = (
+  node,
+  { html, toolbar, keyboard, id, required, onEditorSetup }
+) => {
   const q = new Quill(node, {
     modules: {
       imageDrop: false,
@@ -57,6 +73,21 @@ export const quill = (node, { html, toolbar, keyboard }) => {
     }
   };
   root.addEventListener('focusout', focusout);
+
+  /* Here the code assumes that quill will keep making
+   * the editable div with this class */
+  const editorElement = node.querySelector('.ql-editor');
+  if (id !== undefined) {
+    editorElement.setAttribute('aria-describedby', `${id}-error-label`);
+  }
+
+  if (required !== undefined) {
+    editorElement.setAttribute('aria-required', required);
+  }
+
+  if (onEditorSetup !== undefined) {
+    onEditorSetup(editorElement);
+  }
 
   return {
     update: ({ html, _ }) => q.setContents(q.clipboard.convert(html), 'silent'),

@@ -54,6 +54,19 @@
   };
 
   const toMarkdown = R.bind(turndownService.turndown, turndownService);
+
+  let editorElement = null;
+
+  const onEditorSetup = editor => {
+    editorElement = editor;
+  };
+
+  const setValid = (editorElement, valid) => {
+    editorElement?.setAttribute('aria-invalid', valid ? 'false' : 'true');
+  };
+
+  let valid = true;
+  $: setValid(editorElement, valid);
 </script>
 
 <Input
@@ -70,6 +83,7 @@
   {i18n}
   {lens}
   bind:model
+  bind:valid
   let:viewValue
   let:api>
   <Style>
@@ -78,7 +92,14 @@
         on:focusin={api.focus}
         on:editor-focus-out={event => api.blur(toMarkdown(event.detail.html))}
         on:text-change={event => api.input(toMarkdown(event.detail.html))}
-        use:quill={{ html: MD.toHtml(viewValue), toolbar, keyboard }} />
+        use:quill={{
+          html: MD.toHtml(viewValue),
+          toolbar,
+          keyboard,
+          id,
+          required,
+          onEditorSetup
+        }} />
     {:else}
       {@html MD.toHtml(viewValue)}
     {/if}

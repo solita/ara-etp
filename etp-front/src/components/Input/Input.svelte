@@ -38,6 +38,8 @@
 
   export let i18n;
 
+  export let valid;
+
   let focused = false;
 </script>
 
@@ -63,7 +65,7 @@
   on:keydown
   on:input
   let:api
-  let:valid
+  bind:valid
   let:validationResult
   let:viewValue
   let:focused
