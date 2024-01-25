@@ -6,7 +6,7 @@
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
-    [solita.etp.document-assertion :refer [html->pdf-with-assertion]]
+    [solita.etp.document-assertion :as doc]
     [solita.etp.schema.valvonta-kaytto :as valvonta-schema]
     [solita.etp.service.pdf :as pdf]
     [solita.etp.service.valvonta-kaytto :as valvonta-service]
@@ -90,7 +90,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatos-varsinainen-paatos-yksityishenkilo.html"
                                                html->pdf-called?)
                       #'file-store/store-hallinto-oikeus-attachment!
@@ -125,9 +125,17 @@
       (t/testing "Created document can be downloaded through the api"
         (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/kaskypaatos.pdf" valvonta-id 4 osapuoli-id))
                                        (test-kayttajat/with-virtu-user)
-                                       (mock/header "Accept" "application/pdf")))]
+                                       (mock/header "Accept" "application/pdf")))
+              pdf-document (doc/read-pdf (:body response))]
           (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
-          (t/is (= (:status response) 200))))
+          (t/is (= (:status response) 200))
+
+          (t/testing "and document has eight pages"
+            (t/is (= (.getNumberOfPages pdf-document)
+                     8)))
+
+          (t/testing "and document looks as it should"
+            (doc/assert-pdf-matches-visually pdf-document "documents/kaskypaatos-varsinainen-paatos-henkilo.pdf"))))
 
       (t/testing "Created document is not available without authentication"
         (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/henkilot/%s/document/kaskypaatos.pdf" valvonta-id 4 osapuoli-id))
@@ -211,7 +219,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatos-varsinainen-paatos-yritys.html"
                                                html->pdf-called?)
                       #'file-store/store-hallinto-oikeus-attachment!
@@ -291,9 +299,17 @@
           (t/testing "Created document can be downloaded through the api"
             (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/yritykset/%s/document/kaskypaatos.pdf" valvonta-id 8 osapuoli-id))
                                            (test-kayttajat/with-virtu-user)
-                                           (mock/header "Accept" "application/pdf")))]
+                                           (mock/header "Accept" "application/pdf")))
+                  pdf-document (doc/read-pdf (:body response))]
               (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
-              (t/is (= (:status response) 200))))
+              (t/is (= (:status response) 200))
+
+              (t/testing "and document has eight pages"
+                (t/is (= (.getNumberOfPages pdf-document)
+                         8)))
+
+              (t/testing "and document looks as it should"
+                (doc/assert-pdf-matches-visually pdf-document "documents/kaskypaatos-varsinainen-paatos-yritys.pdf"))))
 
           (t/testing "Created document is not available without authentication"
             (let [response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/%s/toimenpiteet/%s/yritykset/%s/document/kaskypaatos.pdf" valvonta-id 8 osapuoli-id))
@@ -396,7 +412,7 @@
                                                        .toInstant)
                                                    time/timezone)
                       ;; Assert that the created document is for the correct osapuoli
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatos-varsinainen-paatos-yksityishenkilo.html"
                                                html->pdf-called?)}
         (let [new-toimenpide {:type-id            8
@@ -654,7 +670,7 @@
                                                        (.atStartOfDay time/timezone)
                                                        .toInstant)
                                                    time/timezone)
-                      #'pdf/html->pdf (partial html->pdf-with-assertion
+                      #'pdf/html->pdf (partial doc/html->pdf-with-assertion
                                                "documents/kaskypaatos-varsinainen-paatos-yksityishenkilo.html"
                                                html->pdf-called?)
                       #'file-store/store-hallinto-oikeus-attachment!

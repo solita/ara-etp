@@ -28,7 +28,7 @@ values (10, 'Sakkopäätös / tiedoksianto (Haastemies)', 'Sakkopäätös / tied
 </div>
 
 <h1>Asiakirjan toimituspyyntö</h1>
-<div style="height: 2.5cm">
+<div style="height: 2cm">
 <div style="float: left;">Vastaanottaja:</div>
 <div style="float: none; overflow: hidden; padding-left: 3.5cm">
 {{#omistaja-henkilo}}

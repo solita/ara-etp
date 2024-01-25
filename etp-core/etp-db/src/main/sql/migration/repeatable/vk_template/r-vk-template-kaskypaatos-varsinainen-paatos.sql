@@ -185,7 +185,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     </div>
 </div>
 
-<h1>Order att skaffa energicertifikat och föreläg-gande av vite</h1>
+<h1>Order att skaffa energicertifikat och föreläggande av vite</h1>
 
 <div>
     Mottagare: {{#omistaja-henkilo}}{{sukunimi}}
