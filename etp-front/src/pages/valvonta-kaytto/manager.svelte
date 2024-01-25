@@ -146,6 +146,8 @@
   };
 </script>
 
+<!--  According to ARA's process, all osapuolet receive information for the order toimenpidetype
+      and only the owners for the other toimenpidetypes -->
 {#each Maybe.toArray(newToimenpide) as toimenpide}
   <NewToimenpideDialog
     id={valvonta.id}

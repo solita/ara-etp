@@ -39,8 +39,12 @@
   export let templatesByType;
   export let toimenpide;
   export let reload;
+
+  // Depending on the toimenpidetype of the toimenpide we are creating here, these can
+  // contain either all the osapuolet or only the owners. Filtering is done outside of this view
   export let henkilot;
   export let yritykset;
+
   export let roolit;
   export let toimitustavat;
   export let hallintoOikeudet;
@@ -255,8 +259,8 @@
       {text}
       {schema}
       {hallintoOikeudet}
-      {henkilot}
-      {yritykset} />
+      henkiloOmistajat={henkilot}
+      yritysOmistajat={yritykset} />
   {:else if Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)}
     <PenaltyDecisionActualDecisionSubView
       bind:toimenpide
@@ -269,8 +273,8 @@
       {text}
       {schema}
       {hallintoOikeudet}
-      {henkilot}
-      {yritykset} />
+      henkiloOmistajat={henkilot}
+      yritysOmistajat={yritykset} />
   {/if}
 
   {#if !R.isEmpty(templates) && !Toimenpiteet.isDecisionOrderActualDecision(toimenpide) && !Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)}
