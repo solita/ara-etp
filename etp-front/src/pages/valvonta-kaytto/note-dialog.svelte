@@ -82,7 +82,7 @@
     {#each error.toArray() as txt}
       <div class="my-2 error">
         <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
+        <div role="alert">{txt}</div>
       </div>
     {/each}
 

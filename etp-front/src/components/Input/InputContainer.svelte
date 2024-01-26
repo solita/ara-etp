@@ -21,7 +21,7 @@
   let blurred = false;
   let viewValue;
   let focused = false;
-  let valid = true;
+  export let valid = true;
   let validationResult = {
     type: '',
     message: ''

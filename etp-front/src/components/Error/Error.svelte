@@ -10,5 +10,5 @@
 
 <div class="my-2 error">
   <span class="font-icon mr-2">error_outline</span>
-  <div>{text}</div>
+  <div role="alert">{text}</div>
 </div>

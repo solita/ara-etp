@@ -70,6 +70,8 @@
       data-cy={name}
       {disabled}
       {autocomplete}
+      aria-describedby={`${id}-error-label`}
+      aria-invalid={error && viewValue.length > 0 ? 'true' : 'false'}
       use:autoresize={[min, max]}
       value={viewValue}
       on:click
