@@ -46,12 +46,9 @@
   };
 
   let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
-    R.filter(
-      Osapuolet.isOmistaja,
-      R.concat(
-        R.map(R.assoc('type', types.henkilo), henkilot),
-        R.map(R.assoc('type', types.yritys), yritykset)
-      )
+    R.concat(
+      R.map(R.assoc('type', types.henkilo), henkilot),
+      R.map(R.assoc('type', types.yritys), yritykset)
     )
   );
 

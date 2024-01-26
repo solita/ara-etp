@@ -308,6 +308,8 @@ export const toimenpideTypesThatAllowComments =
 export const hasFine = toimenpide =>
   R.hasPath(['type-specific-data', 'fine'], toimenpide);
 
+export const isOrder = isType(R.path(['rfi', 'order'], type));
+
 export const isDecisionOrderActualDecision = isType(
   R.path(['decision-order', 'actual-decision'], type)
 );

@@ -21,8 +21,8 @@
 
   export let id;
   export let toimenpide;
-  export let henkilot;
-  export let yritykset;
+  export let henkiloOmistajat;
+  export let yritysOmistajat;
   export let hallintoOikeudet = [];
 
   export let preview;
@@ -45,12 +45,9 @@
   };
 
   let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
-    R.filter(
-      Osapuolet.isOmistaja,
-      R.concat(
-        R.map(R.assoc('type', types.henkilo), henkilot),
-        R.map(R.assoc('type', types.yritys), yritykset)
-      )
+    R.concat(
+      R.map(R.assoc('type', types.henkilo), henkiloOmistajat),
+      R.map(R.assoc('type', types.yritys), yritysOmistajat)
     )
   );
 
