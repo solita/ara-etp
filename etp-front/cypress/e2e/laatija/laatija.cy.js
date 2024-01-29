@@ -129,13 +129,13 @@ context('Laatija', () => {
     });
   });
 
-  it('should redirect to energiatodistukset', () => {
+  it('should redirect to laatija\'s personal information page', () => {
     cy.visit('https://localhost:3000');
 
     cy.location().should(loc =>
       assert.equal(
         loc.toString(),
-        'https://localhost:3000/#/energiatodistus/all'
+        'https://localhost:3000/#/kayttaja/2'
       )
     );
   });
