@@ -142,7 +142,7 @@ context('Laatija', () => {
 
   describe('energiatodistukset', () => {
     it('should navigate to energiatodistus', () => {
-      cy.visit('https://localhost:3000');
+      cy.visit('https://localhost:3000/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-row"]')
         .first()
