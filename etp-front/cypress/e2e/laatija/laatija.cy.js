@@ -124,7 +124,7 @@ const FIXTURES = {
 
 context('Laatija', () => {
   beforeEach(() => {
-    cy.intercept('https://localhost:3000/api/private/', req => {
+    cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
   });
