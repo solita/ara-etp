@@ -1,4 +1,5 @@
 <script>
+  export let name;
   export let text = '';
 
   let element = undefined;
@@ -42,4 +43,5 @@
   }
 </style>
 
-<h1 tabindex="-1" use:setFocus>{text}</h1>
+<h1 {name} data-cy={name} tabindex="-1" use:setFocus>{text}</h1>
+
