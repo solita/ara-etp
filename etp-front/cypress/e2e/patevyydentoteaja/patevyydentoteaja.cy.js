@@ -92,7 +92,7 @@ context('Patevyyden toteaja', () => {
   });
 
   describe('laatijat', () => {
-    it.only('should navigate to laatijat', () => {
+    it('should navigate to laatijat', () => {
       cy.visit('https://localhost:3000');
       cy.contains('Laatijat').click();
 
@@ -108,7 +108,7 @@ context('Patevyyden toteaja', () => {
 
     it('should filter laatijat', () => {
       cy.visit('https://localhost:3000/#/laatija/all');
-      cy.get('input[type="text"]')
+      cy.get('[data-cy="keyword-search"]')
         .as('input')
         .type('laat');
 
@@ -116,17 +116,17 @@ context('Patevyyden toteaja', () => {
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
-          'https://localhost:3000/#/laatija/all?search=laat&page=0&state='
+          'https://localhost:3000/#/laatija/all?search=laat&page=1'
         )
       );
 
       cy.get('@input').type('{selectall}{backspace}');
 
-      cy.get('[data-cy="laatija-row"]').should('have.length', 15);
+      cy.get('[data-cy="laatijat-results-header"]').contains('15');
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
-          'https://localhost:3000/#/laatija/all?search=&page=0&state='
+          'https://localhost:3000/#/laatija/all?page=1'
         )
       );
     });
