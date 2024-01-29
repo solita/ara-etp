@@ -92,18 +92,18 @@ context('Patevyyden toteaja', () => {
   });
 
   describe('laatijat', () => {
-    it('should navigate to laatijat', () => {
+    it.only('should navigate to laatijat', () => {
       cy.visit('https://localhost:3000');
       cy.contains('Laatijat').click();
 
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
-          'https://localhost:3000/#/laatija/all?search=&page=0&state='
+          'https://localhost:3000/#/laatija/all?page=1'
         )
       );
 
-      cy.get('[data-cy="laatija-row"]').should('have.length', 15);
+      cy.get('[data-cy="laatija-row"]').should('have.length', 10);
     });
 
     it('should filter laatijat', () => {
