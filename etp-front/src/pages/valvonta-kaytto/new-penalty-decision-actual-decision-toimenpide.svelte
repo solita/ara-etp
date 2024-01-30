@@ -18,12 +18,11 @@
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import Spinner from '@Component/Spinner/Spinner';
   import Error from '@Component/Error/Error';
-  import { didRecipientAnswer } from '@Pages/valvonta-kaytto/toimenpiteet';
 
   export let id;
   export let toimenpide;
-  export let henkilot;
-  export let yritykset;
+  export let henkiloOmistajat;
+  export let yritysOmistajat;
   export let hallintoOikeudet = [];
 
   export let preview;
@@ -47,8 +46,8 @@
 
   let osapuolet = R.sort(R.ascend(R.prop('toimitustapa-id')))(
     R.concat(
-      R.map(R.assoc('type', types.henkilo), henkilot),
-      R.map(R.assoc('type', types.yritys), yritykset)
+      R.map(R.assoc('type', types.henkilo), henkiloOmistajat),
+      R.map(R.assoc('type', types.yritys), yritysOmistajat)
     )
   );
 
