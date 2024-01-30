@@ -169,6 +169,8 @@ context('Laatija', () => {
         { statusCode: 200 }
       ).as('signStart');
       cy.visit('https://localhost:3000/#/energiatodistus/2018/5');
+      cy.get('[data-cy="laskutusosoite-id"]', { timeout: 15000 }).click();
+      cy.contains('Henkilökohtaiset tiedot').click()
       cy.get('[data-cy="allekirjoita-button"]').click();
 
       cy.wait('@signStart');
