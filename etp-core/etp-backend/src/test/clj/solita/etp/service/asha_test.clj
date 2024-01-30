@@ -324,5 +324,5 @@
                                                           :response-status  200
                                                           :request-received move-called}})]
             (asha-service/move-processing-action! sender-id request-id case-number {"Tiedoksianto ja toimeenpano" "UNFINISHED"
-                                                                                    "Käsittely" "FINISHED"} "Käsittely")
+                                                                                    "Käsittely" "READY"} "Käsittely")
             (t/is (= 1 @move-called))))))))

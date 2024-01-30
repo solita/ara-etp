@@ -189,10 +189,10 @@
   Note that this is used for both käytönvalvonta and oikeellisuuden valvonta."
   [sender-id request-id case-number processing-action-states wanted-processing-action]
   (when-let [action (cond
-                      ;; First time going to käsittely, Tiedoksianto ja toimeenpano toimenpide doesn't exist yet
+                      ;; First time going to käsittely, there shouldn't be Käsittely in any state yet
                       ;; Transition from Vireillepano to Käsittely is Siirry käsittelyyn
                       (and (= wanted-processing-action "Käsittely")
-                           (every? #(not= ["Tiedoksianto ja toimeenpano" "UNFINISHED"] %) processing-action-states))
+                           (every? #(not= "Käsittely" (first %)) processing-action-states))
                       {:processing-action "Vireillepano"
                        :decision          "Siirry käsittelyyn"}
 
@@ -210,17 +210,14 @@
                       {:processing-action "Päätöksenteko"
                        :decision          "Siirry tiedoksiantoon"}
 
-                      ;; Moving from Tiedoksianto ja toimeenpano to Käsittely is done by Uudelleenkäsittele asia transition.
-                      ;; If wanted-processing-action is Käsittely and Tiedoksianto ja toimeenpano toimenpide exists
-                      ;; and is UNFINISHED, Uudelleenkäsittele asia transition is used.
-                      ;; This is used in käytönvalvonta when moving to Sakkopäätös / kuulemiskirje toimenpide.
+                      ;; Käsittely is already ready so we need to use "Uudelleenkäsittele asia" to open new käsittely toimenpide
+                      ;; This is only used to move from Tiedoksianto ja toimeenpano
                       (and (= wanted-processing-action "Käsittely")
-                           (some #(= ["Tiedoksianto ja toimeenpano" "UNFINISHED"] %) processing-action-states))
+                           (some #(= ["Käsittely" "READY"] %) processing-action-states))
                       {:processing-action "Tiedoksianto ja toimeenpano"
                        :decision          "Uudelleenkäsittele asia"}
 
                       :else nil)]
-
     ;; If the action is already in the desired state, do nothing. It is allowed to move to a state that
     ;; has already been handled previously (state is READY).
     (when-not (contains? #{"NEW" "UNFINISHED"} (get processing-action-states wanted-processing-action))
