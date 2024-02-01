@@ -11,9 +11,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
+
     steps:
       - uses: actions/checkout@v4
       - name: Prepare java
@@ -33,15 +31,15 @@ jobs:
       - name: Run backend
         working-directory: etp-core/etp-backend
         run: clojure -M:dev -e "(reset)" &
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
           cache: 'npm'
           cache-dependency-path: etp-front/package-lock.json
       - name: Cypress run
         uses: cypress-io/github-action@v6
-        working-directory: etp-front
         with:
+          working-directory: etp-front
           start: npm run dev
           wait-on: 'http://localhost:8000, http://localhost:3000'
