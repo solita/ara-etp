@@ -97,8 +97,8 @@ $$
 <p>
     {{#valvoja}}
     {{etunimi}} {{sukunimi}}
-    {{/valvoja}}<br/>
-    energia-asiantuntija/energiexpert, ARA
+    <br/>
+    {{titteli-fi}}/{{titteli-sv}}{{/valvoja}}, ARA
 </p>
 
 <table class="sarake max-width">
