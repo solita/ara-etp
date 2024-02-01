@@ -3,6 +3,7 @@
             [solita.common.time :as time]
             [solita.etp.service.asha :as asha]
             [solita.etp.schema.valvonta-kaytto :as vk-schema]
+            [solita.etp.service.luokittelu :as luokittelu]
             [solita.etp.service.valvonta-kaytto.hallinto-oikeus-attachment :as hao-attachment]
             [solita.etp.service.valvonta-kaytto.previous-toimenpide-data :as previous-toimenpide]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
@@ -116,7 +117,22 @@
      :phone-number        (:puhelin osapuoli)
      :email-address       (:email osapuoli)}))
 
-(defn- available-processing-actions [toimenpide osapuolet]
+(defn- karajaoikeudet-id-name-mapping
+  "Retrieves käräjäoikeudet from db
+   and returns a map where id is key and label-fi is value"
+  [db]
+  (into {} (map (juxt :id :label-fi) (luokittelu/find-karajaoikeudet db))))
+
+(defn- osapuoli-specific-data->karajaoikeus-contacts [db osapuoli-specific-data]
+  (let [karajaoikeudet (karajaoikeudet-id-name-mapping db)]
+    (map
+      (fn [osapuoli-data]
+        {:type                "ORGANIZATION"
+         :organizational-name (get karajaoikeudet (:karajaoikeus-id osapuoli-data))
+         :email-address       (:haastemies-email osapuoli-data)})
+      osapuoli-specific-data)))
+
+(defn- available-processing-actions [db toimenpide osapuolet]
   {:rfi-request                      {:identity          {:case              {:number (:diaarinumero toimenpide)}
                                                           :processing-action {:name-identity "Vireillepano"}}
                                       :processing-action {:name                 "Tietopyyntö"
@@ -159,7 +175,11 @@
                                       :processing-action {:name                 "Asiakirjan toimituspyyntö haastemiehelle"
                                                           :reception-date       (Instant/now)
                                                           :contacting-direction "SENT"
-                                                          :contact              (map osapuoli->contact osapuolet)}}
+                                                          :contact              (osapuoli-specific-data->karajaoikeus-contacts
+                                                                                  db
+                                                                                  (-> toimenpide
+                                                                                      :type-specific-data
+                                                                                      :osapuoli-specific-data))}}
    :penalty-decision-hearing-letter  {:identity          {:case              {:number (:diaarinumero toimenpide)}
                                                           :processing-action {:name-identity "Käsittely"}}
                                       :document          (toimenpide-type->document (:type-id toimenpide))
@@ -182,10 +202,14 @@
                                       :processing-action {:name                 "Asiakirjan toimituspyyntö haastemiehelle"
                                                           :reception-date       (Instant/now)
                                                           :contacting-direction "SENT"
-                                                          :contact              (map osapuoli->contact osapuolet)}}})
+                                                          :contact              (osapuoli-specific-data->karajaoikeus-contacts
+                                                                                  db
+                                                                                  (-> toimenpide
+                                                                                      :type-specific-data
+                                                                                      :osapuoli-specific-data))}}})
 
-(defn- resolve-processing-action [toimenpide osapuolet]
-  (let [processing-actions (available-processing-actions toimenpide osapuolet)
+(defn- resolve-processing-action [db toimenpide osapuolet]
+  (let [processing-actions (available-processing-actions db toimenpide osapuolet)
         type-key (toimenpide/type-key (:type-id toimenpide))]
     (get processing-actions type-key)))
 
@@ -253,7 +277,7 @@
   (let [request-id (request-id (:id valvonta) (:id toimenpide))
         sender-id (:email whoami)
         case-number (:diaarinumero toimenpide)
-        processing-action (resolve-processing-action toimenpide osapuolet)
+        processing-action (resolve-processing-action db toimenpide osapuolet)
         documents (when (:document processing-action)
                     (->> osapuolet
                          (filter osapuoli/omistaja?)
