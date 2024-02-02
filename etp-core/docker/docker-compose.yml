@@ -13,6 +13,9 @@ services:
       - 127.0.0.1:5432:5432
     environment:
       POSTGRES_PASSWORD: etp
+        # This seems to be unnecessary with these network settings.
+        #expose:
+        #- "5432"
 
   admin:
     image: dpage/pgadmin4
