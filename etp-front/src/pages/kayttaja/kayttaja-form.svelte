@@ -38,12 +38,18 @@
 
   $: isValidForm = Validation.isValidForm(schema);
 
-  $: isPaakayttaja = Kayttajat.isPaakayttaja(whoami);
+  $: isCurrentUserPaakayttaja = Kayttajat.isPaakayttaja(whoami);
   $: isOwnSettings = R.eqProps('id', kayttaja, whoami);
 
+  $: isEditedUserPaakayttaja = Maybe.fold(
+    false,
+    Kayttajat.isPaakayttajaRole,
+    kayttaja.rooli
+  );
+
   $: isSystem = Maybe.exists(Kayttajat.isSystemRole, kayttaja.rooli);
-  $: disabled = isSystem || (!isPaakayttaja && !isOwnSettings);
-  $: disabledAdmin = isSystem || !isPaakayttaja;
+  $: disabled = isSystem || (!isCurrentUserPaakayttaja && !isOwnSettings);
+  $: disabledAdmin = isSystem || !isCurrentUserPaakayttaja;
 
   $: formatRooli = Locales.labelForId($locale, roolit);
 
@@ -180,7 +186,7 @@
     </div>
   </div>
 
-  {#if isPaakayttaja}
+  {#if isCurrentUserPaakayttaja && isEditedUserPaakayttaja}
     <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4 items-end">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
