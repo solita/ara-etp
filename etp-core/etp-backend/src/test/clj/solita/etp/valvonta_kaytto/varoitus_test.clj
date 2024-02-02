@@ -14,7 +14,7 @@
 
 (t/use-fixtures :each ts/fixture)
 
-(t/deftest kehotus-test
+(t/deftest varoitus-test
   ;; Add the main user for the following tests
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi    "Asian"
