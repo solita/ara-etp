@@ -55,10 +55,16 @@
                      (string/split #"/")
                      last)]
     ;; Assert that PDFs have pages and the number of pages match
-    (t/is (not (zero? (.getNumberOfPages pdf-under-testing))))
-    (t/is (not (zero? (.getNumberOfPages baseline-pdf))))
+
+    (t/is (not (zero? (.getNumberOfPages pdf-under-testing)))
+          "Generated document should have pages")
+
+    (t/is (not (zero? (.getNumberOfPages baseline-pdf)))
+          "Baseline document should have pages")
+
     (t/is (= (.getNumberOfPages pdf-under-testing)
-             (.getNumberOfPages baseline-pdf)))
+             (.getNumberOfPages baseline-pdf))
+          "Page count of generated and baseline documents should match")
 
     ;; Asserts that every page matches visually
     (doseq [page-number (range 0 (.getNumberOfPages pdf-under-testing))
