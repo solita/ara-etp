@@ -23,43 +23,45 @@
 
 <H3 compact={true} text={$_('energiatodistus.tulokset.nettotarve.header')} />
 
-<table class="et-table mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th">
-        <VuosikulutusUnit />
-      </th>
-      <th class="et-table--th">
-        <VuosikulutusPerAlaUnit />
-      </th>
-      <th class="et-table--th" />
-    </tr>
-  </thead>
-
-  <tbody class="et-table--tbody">
-    {#each ['tilojen-lammitys-vuosikulutus', 'ilmanvaihdon-lammitys-vuosikulutus', 'kayttoveden-valmistus-vuosikulutus', 'jaahdytys-vuosikulutus'] as tarve}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table mb-6">
+    <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_(`energiatodistus.tulokset.nettotarve.labels.${tarve}`)}
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['tulokset', 'nettotarve', tarve]} />
-        </td>
-        <td class="et-table--td">
-          {R.compose(
-            Maybe.orSome(''),
-            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-            R.prop(tarve)
-          )(nettotarpeetPerLammitettyNettoala)}
-        </td>
-        <td class="et-table--td" />
+        <th class="et-table--th et-table--th__twocells" />
+        <th class="et-table--th">
+          <VuosikulutusUnit />
+        </th>
+        <th class="et-table--th">
+          <VuosikulutusPerAlaUnit />
+        </th>
+        <th class="et-table--th" />
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody class="et-table--tbody">
+      {#each ['tilojen-lammitys-vuosikulutus', 'ilmanvaihdon-lammitys-vuosikulutus', 'kayttoveden-valmistus-vuosikulutus', 'jaahdytys-vuosikulutus'] as tarve}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            {$_(`energiatodistus.tulokset.nettotarve.labels.${tarve}`)}
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['tulokset', 'nettotarve', tarve]} />
+          </td>
+          <td class="et-table--td">
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+              R.prop(tarve)
+            )(nettotarpeetPerLammitettyNettoala)}
+          </td>
+          <td class="et-table--td" />
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

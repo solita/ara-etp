@@ -28,45 +28,51 @@
     'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2018'
   )} />
 
-<table class="et-table mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th">
-        <VuosituottoUnit />
-      </th>
-      <th class="et-table--th">
-        <VuosituottoAreaUnit />
-      </th>
-      <th class="et-table--th" />
-    </tr>
-  </thead>
-
-  <tbody class="et-table--tbody">
-    {#each ['aurinkosahko', 'aurinkolampo', 'tuulisahko', 'lampopumppu', 'muusahko', 'muulampo'] as energiamuoto}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table mb-6">
+    <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_(
-            `energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.labels.${energiamuoto}`
-          )}
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['tulokset', 'uusiutuvat-omavaraisenergiat', energiamuoto]} />
-        </td>
-        <td class="et-table--td">
-          {R.compose(
-            Maybe.orSome(''),
-            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-            R.prop(energiamuoto)
-          )(omavaraisenergiatPerLammitettyNettoala)}
-        </td>
-        <td class="et-table--td" />
+        <th class="et-table--th et-table--th__twocells" />
+        <th class="et-table--th">
+          <VuosituottoUnit />
+        </th>
+        <th class="et-table--th">
+          <VuosituottoAreaUnit />
+        </th>
+        <th class="et-table--th" />
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody class="et-table--tbody">
+      {#each ['aurinkosahko', 'aurinkolampo', 'tuulisahko', 'lampopumppu', 'muusahko', 'muulampo'] as energiamuoto}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            {$_(
+              `energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.labels.${energiamuoto}`
+            )}
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'tulokset',
+                'uusiutuvat-omavaraisenergiat',
+                energiamuoto
+              ]} />
+          </td>
+          <td class="et-table--td">
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+              R.prop(energiamuoto)
+            )(omavaraisenergiatPerLammitettyNettoala)}
+          </td>
+          <td class="et-table--td" />
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

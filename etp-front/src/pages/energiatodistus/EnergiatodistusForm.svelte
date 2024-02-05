@@ -198,7 +198,8 @@
 
 <style type="text/postcss">
   :global(.et-table) {
-    @apply border-b-1 border-disabled pb-8 table-fixed w-full overflow-x-auto;
+    @apply border-b-1 border-disabled pb-8 table-fixed;
+    width: max(100%, 640px);
   }
 
   :global(.et-table__noborder) {

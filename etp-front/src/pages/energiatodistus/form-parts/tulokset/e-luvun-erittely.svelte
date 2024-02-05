@@ -91,168 +91,170 @@
   compact={true}
   text={$_('energiatodistus.tulokset.kaytettavat-energiamuodot.header')} />
 
-<table class="et-table et-table__noborder mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th">
-        {$_(
-          'energiatodistus.tulokset.kaytettavat-energiamuodot.kaytettavat-energiamuodot'
-        )}
-      </th>
-      <th class="et-table--th">
-        <span>
-          {$_(
-            `energiatodistus.tulokset.kaytettavat-energiamuodot.ostoenergia.${versio}`
-          )}
-        </span>
-        <span class="block">
-          <VuosikulutusUnit />
-        </span>
-      </th>
-      <th class="et-table--th">
-        {$_(
-          'energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon-kerroin'
-        )}
-      </th>
-      <th class="et-table--th et-table--th__twocells" colspan="2">
-        <div>
-          {$_(
-            'energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella-painotettu-energiankulutus'
-          )}
-        </div>
-        <div class="flex flex-row justify-around">
-          <span>
-            <EVuosiKulutusUnit />
-          </span>
-          <span>
-            <ELukuUnit />
-          </span>
-        </div>
-      </th>
-    </tr>
-  </thead>
-  <tbody class="et-table--tbody">
-    {#each ['kaukolampo', 'sahko', 'uusiutuva-polttoaine', 'fossiilinen-polttoaine', 'kaukojaahdytys'] as energiamuoto}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table et-table__noborder mb-6">
+    <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <td class="et-table--td">
+        <th class="et-table--th">
           {$_(
-            `energiatodistus.tulokset.kaytettavat-energiamuodot.labels.${energiamuoto}`
+            'energiatodistus.tulokset.kaytettavat-energiamuodot.kaytettavat-energiamuodot'
           )}
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['tulokset', 'kaytettavat-energiamuodot', energiamuoto]} />
+        </th>
+        <th class="et-table--th">
+          <span>
+            {$_(
+              `energiatodistus.tulokset.kaytettavat-energiamuodot.ostoenergia.${versio}`
+            )}
+          </span>
+          <span class="block">
+            <VuosikulutusUnit />
+          </span>
+        </th>
+        <th class="et-table--th">
+          {$_(
+            'energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon-kerroin'
+          )}
+        </th>
+        <th class="et-table--th et-table--th__twocells" colspan="2">
+          <div>
+            {$_(
+              'energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella-painotettu-energiankulutus'
+            )}
+          </div>
+          <div class="flex flex-row justify-around">
+            <span>
+              <EVuosiKulutusUnit />
+            </span>
+            <span>
+              <ELukuUnit />
+            </span>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="et-table--tbody">
+      {#each ['kaukolampo', 'sahko', 'uusiutuva-polttoaine', 'fossiilinen-polttoaine', 'kaukojaahdytys'] as energiamuoto}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            {$_(
+              `energiatodistus.tulokset.kaytettavat-energiamuodot.labels.${energiamuoto}`
+            )}
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['tulokset', 'kaytettavat-energiamuodot', energiamuoto]} />
+          </td>
+          <td class="et-table--td">
+            {R.compose(
+              Maybe.get,
+              R.map(formats.numberFormat),
+              R.prop(energiamuoto)
+            )(energiamuotokertoimet)}
+          </td>
+          <td class="et-table--td et-table--td__fifth">
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+              R.prop(energiamuoto)
+            )(painotetutOstoenergiankulutukset)}
+          </td>
+          <td class="et-table--td et-table--td__fifth">
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+              R.prop(energiamuoto)
+            )(painotetutOstoenergiankulutuksetPerNelio)}
+          </td>
+        </tr>
+      {/each}
+      {#each R.defaultTo([], energiatodistus.tulokset['kaytettavat-energiamuodot'].muu) as _, index}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'tulokset',
+                'kaytettavat-energiamuodot',
+                'muu',
+                index,
+                'nimi'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'tulokset',
+                'kaytettavat-energiamuodot',
+                'muu',
+                index,
+                'ostoenergia'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'tulokset',
+                'kaytettavat-energiamuodot',
+                'muu',
+                index,
+                'muotokerroin'
+              ]} />
+          </td>
+          <td class="et-table--td et-table--td__fifth">
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(fxmath.round(0)),
+              R.prop('muu-' + index)
+            )(painotetutOstoenergiankulutukset)}
+          </td>
+          <td class="et-table--td et-table--td__fifth">
+            {R.compose(
+              Maybe.orSome(''),
+              R.map(fxmath.round(0)),
+              R.prop('muu-' + index)
+            )(painotetutOstoenergiankulutuksetPerNelio)}
+          </td>
+        </tr>
+      {/each}
+      <tr class="et-table--tr border-t-1 border-disabled">
+        <td class="et-table--td uppercase">
+          {$_('energiatodistus.tulokset.yhteensa')}
         </td>
         <td class="et-table--td">
           {R.compose(
             Maybe.get,
-            R.map(formats.numberFormat),
-            R.prop(energiamuoto)
-          )(energiamuotokertoimet)}
+            R.map(R.compose(formats.numberFormat, fxmath.round(0)))
+          )(ostoenergiaSum)}
+        </td>
+        <td class="et-table--td" />
+        <td class="et-table--td et-table--td__fifth">
+          {R.compose(
+            Maybe.get,
+            R.map(R.compose(formats.numberFormat, fxmath.round(0)))
+          )(painotetutOstoenergiankulutuksetSum)}
         </td>
         <td class="et-table--td et-table--td__fifth">
           {R.compose(
-            Maybe.orSome(''),
-            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-            R.prop(energiamuoto)
-          )(painotetutOstoenergiankulutukset)}
-        </td>
-        <td class="et-table--td et-table--td__fifth">
-          {R.compose(
-            Maybe.orSome(''),
-            R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-            R.prop(energiamuoto)
-          )(painotetutOstoenergiankulutuksetPerNelio)}
+            Maybe.get,
+            R.map(R.compose(formats.numberFormat, Math.ceil))
+          )(painotetutOstoenergiankulutuksetPerNelioSum)}
         </td>
       </tr>
-    {/each}
-    {#each R.defaultTo([], energiatodistus.tulokset['kaytettavat-energiamuodot'].muu) as _, index}
-      <tr class="et-table--tr">
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'tulokset',
-              'kaytettavat-energiamuodot',
-              'muu',
-              index,
-              'nimi'
-            ]} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'tulokset',
-              'kaytettavat-energiamuodot',
-              'muu',
-              index,
-              'ostoenergia'
-            ]} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'tulokset',
-              'kaytettavat-energiamuodot',
-              'muu',
-              index,
-              'muotokerroin'
-            ]} />
-        </td>
-        <td class="et-table--td et-table--td__fifth">
-          {R.compose(
-            Maybe.orSome(''),
-            R.map(fxmath.round(0)),
-            R.prop('muu-' + index)
-          )(painotetutOstoenergiankulutukset)}
-        </td>
-        <td class="et-table--td et-table--td__fifth">
-          {R.compose(
-            Maybe.orSome(''),
-            R.map(fxmath.round(0)),
-            R.prop('muu-' + index)
-          )(painotetutOstoenergiankulutuksetPerNelio)}
-        </td>
-      </tr>
-    {/each}
-    <tr class="et-table--tr border-t-1 border-disabled">
-      <td class="et-table--td uppercase">
-        {$_('energiatodistus.tulokset.yhteensa')}
-      </td>
-      <td class="et-table--td">
-        {R.compose(
-          Maybe.get,
-          R.map(R.compose(formats.numberFormat, fxmath.round(0)))
-        )(ostoenergiaSum)}
-      </td>
-      <td class="et-table--td" />
-      <td class="et-table--td et-table--td__fifth">
-        {R.compose(
-          Maybe.get,
-          R.map(R.compose(formats.numberFormat, fxmath.round(0)))
-        )(painotetutOstoenergiankulutuksetSum)}
-      </td>
-      <td class="et-table--td et-table--td__fifth">
-        {R.compose(
-          Maybe.get,
-          R.map(R.compose(formats.numberFormat, Math.ceil))
-        )(painotetutOstoenergiankulutuksetPerNelioSum)}
-      </td>
-    </tr>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
