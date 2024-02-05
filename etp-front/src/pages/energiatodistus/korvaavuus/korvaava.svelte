@@ -2,7 +2,6 @@
   import { slide } from 'svelte/transition';
   import * as R from 'ramda';
 
-  import { push } from '@Component/Router/router';
   import { _ } from '@Language/i18n';
 
   import Spinner from '@Component/Spinner/Spinner';
