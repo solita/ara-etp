@@ -65,11 +65,11 @@
       ? i18n('energiatodistus.korvaavuus.header.korvaava-draft')
       : i18n('energiatodistus.korvaavuus.header.korvaava')}
   </h3>
-  <div class="flex flex-col -mx-4 mt-2">
+  <div class="flex flex-col mt-2">
     {#if !overlay}
       {#each Maybe.toArray(korvaavaEnergiatodistus) as et}
         <div
-          class="w-full px-4 py-4 relative"
+          class="w-full py-4 relative"
           transition:slide|local={{ duration: 200 }}>
           <EtTable energiatodistus={et} {whoami} {postinumerot} />
           {#if Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)}

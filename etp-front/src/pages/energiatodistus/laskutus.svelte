@@ -70,8 +70,8 @@
 
 <H2 text={$_('energiatodistus.laskutus.title')} />
 
-<div class="flex flex-col lg:flex-row -mx-4">
-  <div class="lg:w-1/2 w-full px-4 py-4">
+<div class="flex flex-col lg:flex-row lg:space-x-8">
+  <div class="lg:w-1/2 w-full py-4">
     <Select
       id="laskutusosoite-id"
       name="laskutusosoite-id"
@@ -88,10 +88,10 @@
       items={R.pluck('id', R.filter(R.prop('valid'), laskutusosoitteet))} />
   </div>
 </div>
-<div class="flex flex-col lg:flex-row -mx-4">
+<div class="flex flex-col lg:flex-row lg:space-x-8">
   {#each findLaskutusosoite(laskutusosoitteet).toArray() as osoite}
     {#if isVerkkolasku(osoite)}
-      <div class="lg:w-1/2 w-full px-4 py-4">
+      <div class="lg:w-1/2 w-full py-4">
         <Input
           id="energiatodistus.laskutus.verkkolaskuoperaattori"
           name="energiatodistus.laskutus.verkkolaskuoperaattori"
@@ -99,7 +99,7 @@
           disabled={true}
           model={verkkolaskuoperaattori(verkkolaskuoperaattorit)(osoite)} />
       </div>
-      <div class="lg:w-1/2 w-full px-4 py-4">
+      <div class="lg:w-1/2 w-full py-4">
         <Input
           id="energiatodistus.laskutus.verkkolaskuosoite"
           name="energiatodistus.laskutus.verkkolaskuosoite"
@@ -108,7 +108,7 @@
           model={Maybe.orSome('', osoite.verkkolaskuosoite)} />
       </div>
     {:else}
-      <div class="lg:w-1/2 w-full px-4 py-4">
+      <div class="lg:w-1/2 w-full py-4">
         <Input
           id="energiatodistus.laskutus.postiosoite"
           name="energiatodistus.laskutus.postiosoite"
@@ -119,8 +119,8 @@
     {/if}
   {/each}
 </div>
-<div class="flex flex-col lg:flex-row -mx-4">
-  <div class="lg:w-1/2 w-full px-4 py-4">
+<div class="flex flex-col lg:flex-row lg:space-x-8">
+  <div class="lg:w-1/2 w-full py-4">
     <EtInput
       {disabled}
       {schema}

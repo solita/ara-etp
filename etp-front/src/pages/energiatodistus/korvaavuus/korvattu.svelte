@@ -159,11 +159,9 @@
   {/if}
 
   {#if checked}
-    <div
-      class="flex flex-col -mx-4 mt-2"
-      transition:slide|local={{ duration: 200 }}>
+    <div class="flex flex-col mt-2" transition:slide|local={{ duration: 200 }}>
       {#if enabled}
-        <div class="w-full lg:w-1/2 px-4 py-2" on:input={updateQuery}>
+        <div class="w-full lg:w-1/2 py-2" on:input={updateQuery}>
           <Input
             model={query}
             id={'korvattavaenergiatodistus'}
@@ -176,7 +174,7 @@
         </div>
       {/if}
       {#if !searching}
-        <div class="w-full px-4">
+        <div class="w-full">
           {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
             <div class="w-full py-4" transition:slide|local={{ duration: 200 }}>
               <EtTable energiatodistus={et} {whoami} {postinumerot} />
