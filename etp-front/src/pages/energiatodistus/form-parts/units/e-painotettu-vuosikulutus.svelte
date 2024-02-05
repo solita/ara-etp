@@ -2,4 +2,4 @@
   import { _ } from '@Language/i18n';
 </script>
 
-kWh<sub>E</sub>/{$_('units.year')}
+kWh<sub>E</sub>/&thinsp;{$_('units.year')}
