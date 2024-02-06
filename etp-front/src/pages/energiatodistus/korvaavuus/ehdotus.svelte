@@ -110,9 +110,9 @@
         text={i18n(i18nRoot + '.ehdotus.info-p3-2')} />
       {i18n(i18nRoot + '.ehdotus.info-p3-3')}
     </p>
-    <div class="flex flex-col -mx-4 mt-2">
+    <div class="flex flex-col gap-x-8 mt-2">
       <div
-        class="w-full px-4 py-4 relative"
+        class="w-full py-4 relative"
         transition:slide|local={{ duration: 200 }}>
         <div class="overflow-auto">
           <table class="etp-table">
