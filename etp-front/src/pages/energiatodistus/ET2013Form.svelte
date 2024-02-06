@@ -55,9 +55,9 @@
 
 <H2 text={$_('energiatodistus.perustiedot.header')} />
 
-<div class="flex lg:flex-row flex-col lg:space-x-8">
+<div class="flex lg:flex-row flex-col -mx-4">
   {#if R.complement(R.isNil)(energiatodistus.id)}
-    <div class="lg:w-1/2 w-full py-2">
+    <div class="lg:w-1/2 w-full px-4 py-2">
       <BasicInput
         id="energiatodistus.id"
         name="energiatodistus.id"
@@ -69,13 +69,13 @@
     </div>
   {/if}
   {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
-    <div class="lg:w-1/2 w-full py-2">
+    <div class="lg:w-1/2 w-full px-4 py-2">
       <EnergiatodistusLaatija {whoami} {energiatodistus} />
     </div>
   {/if}
 </div>
-<div class="flex lg:flex-row flex-col lg:space-x-8">
-  <div class="lg:w-1/2 w-full py-4">
+<div class="flex lg:flex-row flex-col -mx-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -84,7 +84,7 @@
       path={['perustiedot', 'yritys', 'nimi']} />
   </div>
 
-  <div class="lg:w-1/2 w-full py-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -94,8 +94,8 @@
   </div>
 </div>
 
-<div class="flex flex-col">
-  <div class="lg:w-1/2 w-full py-4">
+<div class="flex flex-col -mx-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Select
       id={'perustiedot.kieli'}
       label={$_('energiatodistus.perustiedot.kieli')}
@@ -109,7 +109,7 @@
       items={R.pluck('id', luokittelut.kielisyys)} />
   </div>
 
-  <div class="w-full py-4 mt-4">
+  <div class="w-full px-4 py-4 mt-4">
     <Checkbox
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'uudisrakennus'])}
@@ -117,7 +117,7 @@
       disabled={true} />
   </div>
 
-  <div class="lg:w-1/2 w-full py-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}

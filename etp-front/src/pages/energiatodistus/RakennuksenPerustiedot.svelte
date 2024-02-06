@@ -69,8 +69,8 @@
 
 <H2 text="Rakennuksen perustiedot" />
 
-<div class="flex lg:flex-row flex-col lg:space-x-8">
-  <div class="lg:w-3/5 w-full py-4">
+<div class="flex lg:flex-row flex-col -mx-4">
+  <div class="lg:w-3/5 w-full px-4 py-4">
     <Input
       disabled={Kayttajat.isPaakayttaja(whoami) ? false : disabled}
       {schema}
@@ -80,7 +80,7 @@
       path={['perustiedot', 'nimi']} />
   </div>
 
-  <div class="lg:w-2/5 py-4">
+  <div class="lg:w-2/5 px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -90,8 +90,8 @@
   </div>
 </div>
 
-<div class="flex lg:flex-row flex-col lg:space-x-8 my-4">
-  <div class="w-full py-4">
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -101,8 +101,8 @@
   </div>
 </div>
 
-<div class="flex lg:flex-row flex-col lg:space-x-8 my-4">
-  <div class="lg:w-2/3 w-full py-4">
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="lg:w-2/3 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -112,7 +112,7 @@
       path={['perustiedot', 'katuosoite']} />
   </div>
 
-  <div class="lg:w-1/3 w-full py-4">
+  <div class="lg:w-1/3 w-full px-4 py-4">
     <Autocomplete items={postinumeroNames} size={10}>
       <Input
         {disabled}
@@ -129,8 +129,8 @@
   </div>
 </div>
 
-<div class="flex lg:flex-row flex-col lg:space-x-8 my-4">
-  <div class="lg:w-1/2 w-full py-4">
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       disabled={Kayttajat.isLaskuttaja(whoami) ||
         R.allPass([R.propEq('versio', 2018), Laatimisvaiheet.isRakennuslupa])(
@@ -142,7 +142,7 @@
       path={['perustiedot', 'rakennustunnus']} />
   </div>
 
-  <div class="lg:w-1/2 w-full py-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Input
       {disabled}
       {schema}
@@ -152,8 +152,8 @@
   </div>
 </div>
 
-<div class="flex lg:flex-row flex-col lg:space-x-8 my-4">
-  <div class="lg:w-1/2 w-full py-4">
+<div class="flex lg:flex-row flex-col -mx-4 my-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Select
       id={'perustiedot.kayttotarkoitusluokka'}
       label={$_('energiatodistus.perustiedot.kayttotarkoitusluokka')}
@@ -168,7 +168,7 @@
       items={R.pluck('id', kayttotarkoitusluokat)} />
   </div>
 
-  <div class="lg:w-1/2 w-full py-4">
+  <div class="lg:w-1/2 w-full px-4 py-4">
     <Select
       id={'perustiedot.kayttotarkoitus'}
       label={$_('energiatodistus.perustiedot.alakayttotarkoitusluokka')}
@@ -184,8 +184,8 @@
   </div>
 </div>
 
-<div class="flex flex-col space-x-8 my-4">
-  <div class="w-full py-4">
+<div class="flex flex-col -mx-4 my-4">
+  <div class="w-full px-4 py-4">
     <Checkbox
       bind:model={energiatodistus}
       lens={R.lensPath(['perustiedot', 'julkinen-rakennus'])}
