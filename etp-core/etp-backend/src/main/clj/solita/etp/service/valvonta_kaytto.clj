@@ -1,5 +1,6 @@
 (ns solita.etp.service.valvonta-kaytto
   (:require [solita.etp.service.valvonta-kaytto.asha :as asha]
+            [solita.etp.service.valvonta-kaytto.osapuoli :as osapuoli]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
             [solita.etp.service.valvonta-kaytto.suomifi-viestit :as suomifi-viestit]
             [clojure.java.io :as io]
@@ -294,9 +295,11 @@
           (when (not bypass-asha) (asha/close-case! whoami valvonta-id toimenpide))
 
           ;; Log asha-toimenpide and send messages
+          ;; kehotus-toimenpide has all osapuolet, everything else in the process targets only the owners
           asha-toimenpide
           (let [find-toimenpide-osapuolet (comp flatten (juxt find-toimenpide-henkilot find-toimenpide-yritykset))
-                osapuolet (find-toimenpide-osapuolet tx (:id toimenpide))]
+                osapuolet (cond->> (find-toimenpide-osapuolet tx (:id toimenpide))
+                                   (not (toimenpide/kehotus? toimenpide)) (filter osapuoli/omistaja?))]
             (asha/log-toimenpide!
               tx aws-s3-client whoami valvonta toimenpide
               osapuolet ilmoituspaikat roolit)
