@@ -1,8 +1,12 @@
 # Build image
 FROM --platform=amd64 clojure:temurin-17-tools-deps-1.11.1.1347-alpine as builder
 
-COPY . /usr/src/etp-backend/
+# Preload dependencies for better caching
+COPY deps.edn /usr/src/etp-backend/
 WORKDIR /usr/src/etp-backend
+RUN clojure -P -M:uberjar
+
+COPY . /usr/src/etp-backend
 RUN clojure -M:uberjar
 
 
