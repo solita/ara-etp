@@ -40,7 +40,11 @@ where
   not valvonta.deleted and
   (last_toimenpide.id is null or last_toimenpide.type_id <> 5 or :include-closed) and
 --   int4range below represents the toimenpidetypes that are part of uhkasakkoprosessi
-  ((:only-uhkasakkoprosessi is true and int4range(6, 22) @> last_toimenpide.type_id) or :only-uhkasakkoprosessi is false) and
+  ((:only-uhkasakkoprosessi is true and (select exists(select 1
+                                                       from vk_toimenpide
+                                                       where vk_toimenpide.valvonta_id = valvonta.id
+                                                         and int4range(6, 22) @> vk_toimenpide.type_id
+                                                       order by vk_toimenpide.type_id desc))) or :only-uhkasakkoprosessi is false) and
   (:toimenpidetype-id::int is null or :toimenpidetype-id = last_toimenpide.type_id) and
   (:asiakirjapohja-id::int is null or :asiakirjapohja-id = last_toimenpide.template_id) and
   (:keyword::text is null or
@@ -88,7 +92,11 @@ where
   not valvonta.deleted and
   (last_toimenpide.id is null or last_toimenpide.type_id <> 5 or :include-closed) and
 --   int4range below represents the toimenpidetypes that are part of uhkasakkoprosessi
-    ((:only-uhkasakkoprosessi is true and int4range(6, 22) @> last_toimenpide.type_id) or :only-uhkasakkoprosessi is false) and
+    ((:only-uhkasakkoprosessi is true and (select exists(select 1
+                                                         from vk_toimenpide
+                                                         where vk_toimenpide.valvonta_id = valvonta.id
+                                                           and int4range(6, 22) @> vk_toimenpide.type_id
+                                                         order by vk_toimenpide.type_id desc))) or :only-uhkasakkoprosessi is false) and
   (:toimenpidetype-id::int is null or :toimenpidetype-id = last_toimenpide.type_id) and
   (:asiakirjapohja-id::int is null or :asiakirjapohja-id = last_toimenpide.template_id) and
   (:keyword::text is null or

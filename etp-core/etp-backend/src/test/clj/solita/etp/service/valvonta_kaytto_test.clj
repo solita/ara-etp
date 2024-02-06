@@ -530,3 +530,44 @@
 
           (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
                    0)))))))
+
+(t/deftest only-uhkasakkoprosessi-and-include-closed-test
+  (t/testing "Toimenpide that has been in uhkasakkoprosessi but is now closed should be returned when in-uhkasakkoprosessi and include-closed are true"
+    (let [valvonta-id (valvonta-kaytto/add-valvonta!
+                        ts/*db*
+                        {:katuosoite (str "Testikatu")})
+          query {:include-closed true
+                 :only-uhkasakkoprosessi true}]
+      ;; Create a toimenpide that is part of uhkasakkoprosessi
+      (jdbc/insert! ts/*db*
+                    :vk_toimenpide
+                    {:valvonta_id        valvonta-id
+                     :type_id            7
+                     :create_time        (-> (LocalDate/of 2023 8 12)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :publish_time       (-> (LocalDate/of 2023 8 12)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :deadline_date      (LocalDate/of 2023 8 28)
+                     :diaarinumero       "ARA-05.03.01-2023-235"
+                     :type_specific_data {:fine 6100}})
+
+      ;; Create valvonnan lopetus toimenpide
+      (jdbc/insert! ts/*db*
+                    :vk_toimenpide
+                    {:valvonta_id        valvonta-id
+                     :type_id            5
+                     :create_time        (-> (LocalDate/of 2023 8 13)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :publish_time       (-> (LocalDate/of 2023 8 13)
+                                             (.atStartOfDay (ZoneId/systemDefault))
+                                             .toInstant)
+                     :diaarinumero       "ARA-05.03.01-2023-235"})
+
+      (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
+               1))
+      (t/testing "count-valvonnat matches the actual count"
+        (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
+                 1))))))
