@@ -9,7 +9,7 @@ insert into vk_template (id,
                          content)
 values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (sv)', 1, 7, 'fi', true, true,
         $$
-<div class="otsikko-ja-vastaanottaja-container">
+<div class="otsikko-ja-vastaanottaja-container" style="margin-bottom: -1cm">
     <div class="otsikko">
         <b>Kuulemiskirje</b>
         <b>{{päivä}}</b> <br/>
@@ -94,7 +94,7 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 
 <div class="sivunvaihto"></div>
 
-<div class="otsikko-ja-vastaanottaja-container">
+<div class="otsikko-ja-vastaanottaja-container" style="margin-bottom: -1cm">
     <div class="otsikko">
         <b>Brev om hörande</b>
         <b>{{päivä}}</b> <br/>
