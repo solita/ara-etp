@@ -266,7 +266,7 @@
   <DirtyConfirmation {dirty} />
 
   <div class="w-full relative flex">
-    <div class="flex-grow overflow-auto">
+    <div class="flex-grow overflow-x-hidden">
       <form
         bind:this={etFormElement}
         on:submit|preventDefault={validateAndSubmit(noop)}
