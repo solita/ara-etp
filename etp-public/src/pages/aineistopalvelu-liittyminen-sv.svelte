@@ -71,7 +71,7 @@
     <p>
       Nedan beskrivs informationsmaterialet kortfattat. Närmare fältspecifika
       materialbeskrivningar finns i <Link
-        href="https://github.com/solita/etp-core/wiki/Aineistopalvelu">
+        href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu">
         GitHub</Link
       >.
     </p>
@@ -178,7 +178,7 @@
       <li>
         Materialtjänsten är tillgänglig för dig. Se närmare anvisningar om
         anslutning till gränssnittet i <Link
-          href="https://github.com/solita/etp-core/wiki/Aineistopalvelu">
+          href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu">
           GitHub</Link
         >.
       </li>

@@ -70,7 +70,7 @@
     <p>
       Alla lyhyesti tietoaineistojen kuvaukset. Tarkemmat kenttäkohtaiset
       aineistokuvaukset löytyvät
-      <Link href="https://github.com/solita/etp-core/wiki/Aineistopalvelu"
+      <Link href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu"
         >GitHubista</Link
       >.
     </p>
@@ -175,7 +175,7 @@
       <li>
         Aineistopalvelu on käytettävissäsi. Ks. tarkemmat ohjeet rajapintaan
         liittymisestä <Link
-          href="https://github.com/solita/etp-core/wiki/Aineistopalvelu">
+          href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu">
           GitHubissa</Link
         >.
       </li>
