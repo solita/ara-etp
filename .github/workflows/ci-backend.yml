@@ -70,7 +70,7 @@ jobs:
         working-directory: etp-core/etp-backend
         run: clojure -M:dev:test-ci
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@v4
         if: success() || failure()
         with:
          report_paths: 'etp-core/etp-backend/target/test.xml'
