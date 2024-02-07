@@ -133,7 +133,7 @@ module.exports = {
     },
     https: true,
     ...(process.env.WEBPACK_HOST && {host: process.env.WEBPACK_HOST}),
-    port: 3000,
+    port: process.env.WEBPACK_PORT || 3000,
     proxy: {
       '/api': {
         //TODO: Figure out how to configure this.
