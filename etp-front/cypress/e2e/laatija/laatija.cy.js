@@ -129,8 +129,8 @@ context('Laatija', () => {
     });
   });
 
-  it('should redirect to laatija\'s personal information page', () => {
-    cy.visit('https://localhost:3000');
+  it.only('should redirect to laatija\'s personal information page', () => {
+    cy.visit('https://localhost:3009');
 
     cy.location().should(loc =>
       assert.equal(
@@ -141,7 +141,7 @@ context('Laatija', () => {
   });
 
   describe('energiatodistukset', () => {
-    it('should navigate to energiatodistus', () => {
+    it.only('should navigate to energiatodistus', () => {
       cy.visit('https://localhost:3000/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-row"]')

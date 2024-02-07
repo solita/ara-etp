@@ -7,5 +7,6 @@ module.exports = defineConfig({
   e2e: {
     setupNodeEvents(on, config) {},
     supportFile: false,
+    baseUrl: 'https://localhost:3009',
   },
 })

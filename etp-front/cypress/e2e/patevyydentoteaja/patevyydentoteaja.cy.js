@@ -10,6 +10,8 @@ const FIXTURES = {
   invalidFile: `FISE;Etunimi;Sukunimi;240301A921G;Jakeluosoite 1;12345;Postitoimipaikka;a@example.com;000000000;1;24.3.2021\nFISE;Etunimi2;Sukunimi2;090999-9431;Jakeluosoite 2;54321;Postitoimipaikka2;b@example.com;11111111;2;24.3.2021`
 };
 
+const baseUrl = Cypress.config('baseUrl');
+
 context('Patevyyden toteaja', () => {
   beforeEach(() => {
     cy.intercept(/\/api\/private/, req => {
@@ -18,19 +20,19 @@ context('Patevyyden toteaja', () => {
   });
 
   it('should redirect to laatijoidentuonti', () => {
-    cy.visit('https://localhost:3000');
+    cy.visit('/');
 
     cy.location().should(loc =>
       assert.equal(
         loc.toString(),
-        'https://localhost:3000/#/laatija/laatijoidentuonti'
+        `${baseUrl}/#/laatija/laatijoidentuonti`
       )
     );
   });
 
   describe('laatija upload', () => {
     it('should highlight and unhighlight on dragevents', () => {
-      cy.visit('https://localhost:3000/#/laatija/laatijoidentuonti');
+      cy.visit('/#/laatija/laatijoidentuonti');
       cy.get('[data-cy="droparea"]').as('upload');
 
       cy.get('@upload').should('exist');
@@ -45,7 +47,7 @@ context('Patevyyden toteaja', () => {
 
     it('should read and submit file', () => {
       const files = [new File(FIXTURES.validFile.split(''), 'laatijat.txt')];
-      cy.visit('https://localhost:3000/#/laatija/laatijoidentuonti');
+      cy.visit('/#/laatija/laatijoidentuonti');
 
       cy.get('[data-cy="droparea"]').trigger('drop', {
         dataTransfer: { files }
@@ -77,7 +79,7 @@ context('Patevyyden toteaja', () => {
 
     it('should read invalid file', () => {
       const files = [new File(FIXTURES.invalidFile.split(''), 'laatijat.txt')];
-      cy.visit('https://localhost:3000/#/laatija/laatijoidentuonti');
+      cy.visit('/#/laatija/laatijoidentuonti');
 
       cy.get('[data-cy="droparea"]').trigger('drop', {
         dataTransfer: { files }
@@ -93,13 +95,13 @@ context('Patevyyden toteaja', () => {
 
   describe('laatijat', () => {
     it('should navigate to laatijat', () => {
-      cy.visit('https://localhost:3000');
+      cy.visit('/');
       cy.contains('Laatijat').click();
 
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
-          'https://localhost:3000/#/laatija/all?page=1'
+          `${baseUrl}/#/laatija/all?page=1`
         )
       );
 
@@ -107,7 +109,7 @@ context('Patevyyden toteaja', () => {
     });
 
     it('should filter laatijat', () => {
-      cy.visit('https://localhost:3000/#/laatija/all');
+      cy.visit('/#/laatija/all');
       cy.get('[data-cy="keyword-search"]')
         .as('input')
         .type('laat');
@@ -116,7 +118,7 @@ context('Patevyyden toteaja', () => {
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
-          'https://localhost:3000/#/laatija/all?search=laat&page=1'
+          `${baseUrl}/#/laatija/all?search=laat&page=1`
         )
       );
 
@@ -126,7 +128,7 @@ context('Patevyyden toteaja', () => {
       cy.location().should(loc =>
         assert.equal(
           loc.toString(),
-          'https://localhost:3000/#/laatija/all?page=1'
+          `${baseUrl}/#/laatija/all?page=1`
         )
       );
     });
