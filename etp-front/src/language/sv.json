@@ -582,16 +582,16 @@
         "header": "Klimatskal",
         "label-context": "Klimatskal",
         "U*A": "U*A",
-        "osuus-lampohaviosta": "Andel av värmeförlusten",
+        "osuus-lampohaviosta": "Andel av värme\u00ADförlusten",
         "ilmanvuotoluku": "Luftläckagetal",
         "lampokapasiteetti": "Värmekapacitet",
         "ilmatilavuus": "Luftvolym",
         "labels": {
-          "ulkoseinat": "Ytterväggar",
-          "ylapohja": "Vindsbjälklag",
-          "alapohja": "Bottenbjälklag",
+          "ulkoseinat": "Ytter\u00ADväggar",
+          "ylapohja": "Vinds\u00ADbjälklag",
+          "alapohja": "Botten\u00ADbjälklag",
           "ikkunat": "Fönster",
-          "ulkoovet": "Ytterdörrar"
+          "ulkoovet": "Ytter\u00ADdörrar"
         },
         "ulkoseinat": {
           "label-context": "Klimatskal / Ytterväggar",
@@ -628,7 +628,7 @@
           "UA": "U*A",
           "osuus-lampohaviosta": "Andel av värmeförlusten"
         },
-        "kylmasillat": "Köldbryggor",
+        "kylmasillat": "Köld\u00ADbryggor",
         "kylmasillat-UA": "Köldbryggor U*A",
         "kylmasillat-osuus-lampohaviosta": "Köldbryggor / Andel av värmeförlusten"
       },
@@ -700,7 +700,7 @@
         "label-context": "Ventilationssystem",
         "tyyppi-id": "Typ av ventilationssystem",
         "sfp-luku": "Systemets SFP-värde kW/(m³/s)",
-        "lampotilasuhde": "Temperaturrelation för VÅV",
+        "lampotilasuhde": "Tempe\u00ADratur\u00ADrelation för VÅV",
         "jaatymisenesto": "Frostskydd",
         "kuvaus": "Beskrivning av ventilationssystemet",
         "lto-vuosihyotysuhde": "Årsverkningsgraden för VÅV från byggnadens ventilationssystem",
@@ -709,9 +709,9 @@
         "tulo": "in",
         "poisto": "frånluft",
         "labels": {
-          "paaiv": "Huvudaggregat (ventilation)",
+          "paaiv": "Huvud\u00ADaggregat (venti\u00ADlation)",
           "erillispoistot": "Separata utsug",
-          "ivjarjestelma": "Ventilationssystem"
+          "ivjarjestelma": "Venti\u00ADlations\u00ADsystem"
         },
         "paaiv": {
           "label-context": "Huvudaggregat (ventilation)",
@@ -752,17 +752,17 @@
           "id": "Värmedistribution",
           "kuvaus": "Beskrivning av värmedistributionen"
         },
-        "tuotonhyotysuhde": "Verkningsgrad för produktionen",
+        "tuotonhyotysuhde": "Verknings\u00ADgrad för produktionen",
         "jaonjaluovutuksenhyotysuhde": "Verknings-graden för distribution och avgivning",
         "lampokerroin": "Temperatur-koefficient",
-        "apulaitteidensahkonkaytto": "Hjälputrustningens elförbrukning",
+        "apulaitteidensahkonkaytto": "Hjälp\u00ADutrust\u00ADningens elför\u00ADbrukning",
         "lampopumppu-tuotto-osuus": "Värme-pumpens avkastnings-andel",
         "lampohavio-lammittamaton-tila": "Värmeförluster i icke-uppvärmt utrymme",
         "maara": "Mängd",
         "tuotto": "Produktion",
         "kuvaus": "Beskrivning av uppvärmningssystemet",
         "tilat-ja-iv": {
-          "label": "Uppvärmning av utrymmen och ventilationsluft",
+          "label": "Uppvärmning av utrymmen och ventilations\u00ADluft",
           "label-context": "Uppvärmning av utrymmen och ventilationsluft",
           "tuoton-hyotysuhde": "Verkningsgrad för produktionen",
           "jaon-hyotysuhde": "Verkningsgraden för distribution och avgivning",
@@ -772,7 +772,7 @@
           "lampohavio-lammittamaton-tila": "Värmeförluster i icke-uppvärmt utrymme"
         },
         "lammin-kayttovesi": {
-          "label": "Varmvattenberedning",
+          "label": "Varmvatten\u00ADberedning",
           "label-context": "Varmvattenberedning",
           "tuoton-hyotysuhde": "Verkningsgrad för produktionen",
           "jaon-hyotysuhde": "Verkningsgraden för distribution och avgivning",
@@ -782,13 +782,13 @@
           "lampohavio-lammittamaton-tila": "Värmeförluster i icke-uppvärmt utrymme"
         },
         "takka": {
-          "label": "Värmelagrande eldstad",
+          "label": "Värme\u00ADlagrande eldstad",
           "label-context": "$unused",
           "maara": "Antal reserverande eldstäder",
           "tuotto": "Avkastningen från reserverande eldstäder"
         },
         "ilmalampopumppu": {
-          "label": "Luftvärmepump",
+          "label": "Luft\u00ADvärme\u00ADpump",
           "label-context": "$unused",
           "maara": "Antal luftvärmepumpar",
           "tuotto": "Avkastningen från luftvärmepumpar"
@@ -840,19 +840,19 @@
       "kaytettavat-energiamuodot": {
         "header": "Specifikation av E-tal",
         "label-context": "Specifikation av E-tal",
-        "kaytettavat-energiamuodot": "Använda energiformer",
+        "kaytettavat-energiamuodot": "Använda energi\u00ADformer",
         "ostoenergia": {
           "2013": "Beräknad mängd energi",
-          "2018": "Köpt energi beräknad vid standardanvändning"
+          "2018": "Köpt energi beräknad vid standard\u00ADanvändning"
         },
-        "energiamuodon-kerroin": "Energiformsfaktor",
-        "kertoimella-painotettu-energiankulutus": "Energiförbrukning viktad med energiformsfaktorn",
+        "energiamuodon-kerroin": "Energi\u00ADforms\u00ADfaktor",
+        "kertoimella-painotettu-energiankulutus": "Energi\u00ADförbrukning viktad med energi\u00ADforms\u00ADfaktorn",
         "labels": {
           "fossiilinen-polttoaine": "Fossila bränslen",
           "sahko": "El",
           "kaukojaahdytys": "Fjärrkyla",
-          "kaukolampo": "Fjärrvärme",
-          "uusiutuva-polttoaine": "Förrnybara bränslen"
+          "kaukolampo": "Fjärr\u00ADvärme",
+          "uusiutuva-polttoaine": "Förr\u00ADnybara bränslen"
         },
         "fossiilinen-polttoaine": "Köpt energi / Fossila bränslen",
         "fossiilinen-polttoaine-painotettu": "Viktad energiförbrukning / Fossila bränslen (kWhE/år)",
@@ -916,14 +916,14 @@
         "sahko": "El",
         "lampo": "Värme",
         "kaukojaahdytys": "Fjärrkyla",
-        "lammitysjarjestelma": "Uppvärmningssystemet",
+        "lammitysjarjestelma": "Uppvärmnings\u00ADsystemet",
         "labels": {
-          "tilojen-lammitys": "Uppvärmning av utrymmen",
-          "tuloilman-lammitys": "Uppvärmning av tilluft",
-          "kayttoveden-valmistus": "Varmvattenberedning",
-          "iv-sahko": "Elenergi som förbrukas av ventilationssystemet",
+          "tilojen-lammitys": "Uppvärm\u00ADning av utrymmen",
+          "tuloilman-lammitys": "Uppvärm\u00ADning av tilluft",
+          "kayttoveden-valmistus": "Varmvatten\u00ADberedning",
+          "iv-sahko": "Elenergi som förbrukas av ventilations\u00ADsystemet",
           "jaahdytys": "Kylsystem",
-          "kuluttajalaitteet-ja-valaistus-sahko": "Hushållsapparater och belysning"
+          "kuluttajalaitteet-ja-valaistus-sahko": "Hushålls\u00ADapparater och belysning"
         },
         "tilojen-lammitys": {
           "label-context": "Tekniska system / Uppvärmning av utrymmen",
@@ -954,7 +954,7 @@
         "labels": {
           "tilojen-lammitys-vuosikulutus": "Uppvärmning av utrymmen",
           "ilmanvaihdon-lammitys-vuosikulutus": "Uppvärmning av ventilationsluft",
-          "kayttoveden-valmistus-vuosikulutus": "Varmvattenberedning",
+          "kayttoveden-valmistus-vuosikulutus": "Varmvatten\u00ADberedning",
           "jaahdytys-vuosikulutus": "Kylning"
         },
         "label-context": "Nettoenergibehov",
@@ -973,7 +973,7 @@
         "labels": {
           "aurinko": "Solen",
           "ihmiset": "Personer",
-          "kuluttajalaitteet": "Hushållsapparater",
+          "kuluttajalaitteet": "Hushålls\u00ADapparater",
           "valaistus": "Belysning",
           "kvesi": "Cirkul. varmt tappvatten och förluster från varmvattenb."
         },

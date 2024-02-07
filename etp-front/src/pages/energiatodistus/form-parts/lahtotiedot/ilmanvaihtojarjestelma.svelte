@@ -67,9 +67,9 @@
         <th class="et-table--th">
           {$_('energiatodistus.lahtotiedot.ilmanvaihto.ilmavirta')}
           <br />
-          {$_('energiatodistus.lahtotiedot.ilmanvaihto.tulo')}(m³/s) / {$_(
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.tulo')} (m³/s) / {$_(
             'energiatodistus.lahtotiedot.ilmanvaihto.poisto'
-          )}(m³/s)
+          )} (m³/s)
         </th>
         <th class="et-table--th">
           {$_('energiatodistus.lahtotiedot.ilmanvaihto.sfp-luku')}
