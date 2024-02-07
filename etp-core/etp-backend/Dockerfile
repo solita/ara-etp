@@ -1,8 +1,12 @@
 # Build image
 FROM --platform=amd64 clojure:temurin-17-tools-deps-1.11.1.1347-alpine as builder
 
-COPY . /usr/src/app
-WORKDIR /usr/src/app
+# Preload dependencies for better caching
+COPY deps.edn /usr/src/etp-backend/
+WORKDIR /usr/src/etp-backend
+RUN clojure -P -M:uberjar
+
+COPY . /usr/src/etp-backend
 RUN clojure -M:uberjar
 
 
@@ -20,7 +24,7 @@ ln -s /usr/local/bin/libreoffice7.1 /usr/local/bin/libreoffice
 
 # The application
 COPY libreoffice/ /opt/etp/libreoffice/
-COPY --from=builder /usr/src/app/target/etp-backend.jar /opt/etp/target/
+COPY --from=builder /usr/src/etp-backend/target/etp-backend.jar /opt/etp/target/
 COPY start.sh /opt/etp/
 
 WORKDIR /opt/etp

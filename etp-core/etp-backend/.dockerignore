@@ -1,0 +1,7 @@
+# Ignore all files, and then whitelist only required
+*
+
+!deps.edn
+!src/
+!libreoffice/
+!start.sh
