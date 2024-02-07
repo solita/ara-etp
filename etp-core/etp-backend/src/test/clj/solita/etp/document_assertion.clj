@@ -4,6 +4,7 @@
             [clojure.test :as t]
             [solita.etp.service.pdf :as pdf])
   (:import (java.io ByteArrayOutputStream FileOutputStream InputStream)
+           (java.util Arrays)
            (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.pdfbox.rendering ImageType PDFRenderer)
            (org.apache.pdfbox.tools.imageio ImageIOUtil)))
@@ -70,8 +71,8 @@
     (doseq [page-number (range 0 (.getNumberOfPages pdf-under-testing))
             :let [rendered-image (pdf-page->image-byte-array pdf-under-testing page-number)]]
       (t/testing (str "page " (inc page-number))
-        (t/is (= (seq (pdf-page->image-byte-array pdf-under-testing page-number))
-                 (seq (pdf-page->image-byte-array baseline-pdf page-number)))
+        (t/is (Arrays/equals (pdf-page->image-byte-array pdf-under-testing page-number)
+                             (pdf-page->image-byte-array baseline-pdf page-number))
               "If change is intended, save new document snapshot in the test with save-new-snapshot function"))
 
       ;; Write the image in build directory so it can be compared manually
