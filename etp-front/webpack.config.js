@@ -132,10 +132,12 @@ module.exports = {
         "default-src 'self';script-src 'self';connect-src 'self' localhost:53952;style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com;font-src 'self' fonts.gstatic.com;img-src 'self' data:"
     },
     https: true,
+    ...(process.env.WEBPACK_HOST && {host: process.env.WEBPACK_HOST}),
     port: 3000,
     proxy: {
       '/api': {
-        target: `http://localhost:8080`,
+        //TODO: Figure out how to configure this.
+        target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
         changeOrigin: true,
         xfwd: true

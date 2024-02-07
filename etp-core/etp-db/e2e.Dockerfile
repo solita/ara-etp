@@ -1,9 +1,8 @@
 # Build image
 FROM --platform=amd64 clojure:temurin-17-tools-deps-1.11.1.1347-alpine as builder
 
-# TODO: Copy less stuff to invalidate the cached layer less often.
-COPY . /usr/src/etp-db
-WORKDIR /usr/src/etp-db
+COPY . /usr/src/app
+WORKDIR /usr/src/app
 RUN clojure -M:uberjar
 RUN unzip target/etp-db.jar -d target/etp-db && \
     cp -rf src/test target/test && \
@@ -13,8 +12,9 @@ RUN unzip target/etp-db.jar -d target/etp-db && \
 FROM --platform=amd64 eclipse-temurin:17.0.8_7-jre-jammy
 
 # TODO: Fix docker. Use builder
-COPY --from=builder /usr/src/etp-db/target /target
+COPY --from=builder /usr/src/app/target /target
 COPY ./src /src
 COPY db.sh /
 
-CMD ["./db.sh", "migrate"]
+#CMD ["DB_URL=jdbc:postgresql://db:5432/postgres" "clojure" "-M" "-m" "solita.etp.db.flywaydb" "migrate"]
+CMD [ "clojure" "-M:test" "-m" "solita.etp.db.flywaydb" "migrate"]

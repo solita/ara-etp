@@ -1,4 +1,5 @@
 version: '3.7'
+name: 'etp'
 
 services:
   db:
@@ -13,9 +14,6 @@ services:
       - 127.0.0.1:5432:5432
     environment:
       POSTGRES_PASSWORD: etp
-        # This seems to be unnecessary with these network settings.
-        #expose:
-        #- "5432"
 
   admin:
     image: dpage/pgadmin4
@@ -42,7 +40,7 @@ services:
         source: ./mpollux/keys
         target: /keys
         read_only: true
-        
+
   minio:
     image: minio/minio:RELEASE.2022-10-24T18-35-07Z
     ports:

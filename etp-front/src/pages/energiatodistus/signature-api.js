@@ -2,6 +2,7 @@ import * as R from 'ramda';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@Utility/fetch-utils';
 
+//TODO: Put to env
 const mpolluxUrl = 'https://localhost:53952';
 const mpolluxVersionUrl = `${mpolluxUrl}/version`;
 const mpolluxSignUrl = `${mpolluxUrl}/sign`;

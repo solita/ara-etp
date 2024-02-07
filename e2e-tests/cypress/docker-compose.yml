@@ -1,19 +1,52 @@
 version: '3.7'
 
+name: 'etp-e2e'
+include:
+  - ../../etp-core/docker/docker-compose.yml
+
 services:
   backend:
     build: ../../etp-core/etp-backend
     environment:
-        # solita.etp.config
+      # solita.etp.config
       DB_HOST: db
       SMTP_HOST: smtp
+      SMTP_PORT: 25
       LASKUTUS_SFTP_HOST: sftp
+      LASKUTUS_SFTP_PORT: 22
       # TODO: Täytyy muutta envistä luettavaksi. Ehkä.
       # S3:
     env_file: 
       - ./backend.env
-    expose:
-      - "8080"
+    depends_on:
+      db:
+        condition: service_started
+      migration-runner:
+        condition: service_completed_successfully
 
-        # frontend-private:
-        #   image: 
+
+  frontend:
+    build: ../../etp-front
+    environment:
+      # solita.etp.config
+      WEBPACK_PROXY_TARGET: http://backend:8080
+      WEBPACK_HOST: 0.0.0.0
+    ports:
+      - 127.0.0.1:3009:3000
+
+  migration-runner:
+    build: ../../etp-core/etp-db
+      #context: ../../etp-core/etp-db
+        #dockerfile: e2e.Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/etp_dev
+    command:
+      ./db.sh migrate test
+    depends_on:
+      db:
+        condition: service_started
+
+
+
+
+
