@@ -100,8 +100,8 @@
           </a>
         </li>
         <li>
-          <a href="/aineistopalvelu-liittyminen" class="text-darkgreen"
-            >{$_('AINEISTOPALVELU_LIITTYMINEN')}</a>
+          <a href="/tietojenluovutus-ja-rajapinnat" class="text-darkgreen"
+            >{$_('TIETOJENLUOVUTUS_JA_RAJAPINNAT')}</a>
         </li>
       </ul>
     </div>

@@ -1,0 +1,209 @@
+<script>
+  import { onMount } from 'svelte';
+  import ButtonLink, {
+    styles as buttonLinkStyles
+  } from '@Component/buttonlink';
+  import Container, { styles as containerStyles } from '@Component/container';
+  import InfoBlock from '@Component/info-block';
+  import Link from '@Component/link';
+  import SopimusTietopalvelunKaytosta from '@Asset/sopimus-tietopalvelun-kaytosta-luonnos.pdf';
+  import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake.pdf';
+  import { announceAssertively } from '@/utilities/announce';
+
+  const title = 'Energiatodistusrekisterin aineistopalvelu';
+  announceAssertively(title);
+
+  let component;
+  onMount(() => {
+    component?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+</script>
+
+<style>
+  ol {
+    list-style: decimal;
+    @apply my-4;
+  }
+
+  ul {
+    list-style: disc;
+    @apply my-4;
+  }
+
+  h2 {
+    @apply mb-2 mt-8;
+  }
+
+  h3 {
+    @apply underline font-bold;
+  }
+
+  p {
+    @apply mb-4;
+  }
+</style>
+
+<Container {...containerStyles.beige}>
+  <div bind:this={component}>
+    <InfoBlock {title}>
+      <p>
+        Energiatodistusrekisterin aineistopalvelu on tarkoitettu
+        energiatodistustietojen siirtoon rajapinnan kautta rekisteristä
+        Aineistopalvelun käyttäjälle.
+      </p>
+    </InfoBlock>
+  </div>
+</Container>
+
+<Container {...containerStyles.white}>
+  <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
+    <p>
+      Energiatodistusrekisterin aineistopalvelussa on kolme erilaita
+      tietoaineistoa:
+    </p>
+    <ol class="ml-6">
+      <li>suppea henkilötietoja sisältävä aineisto</li>
+      <li>laaja henkilötietoja sisältävä aineisto</li>
+      <li>laaja ei henkilötietoja sisältävä aineisto</li>
+    </ol>
+    <h2>AINEISTOKUVAUKSET</h2>
+    <p>
+      Tietoaineistot on kuvattu lyhyesti alla. Tarkemmat kenttäkohtaiset
+      aineistokuvaukset löytyvät <Link
+        href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu"
+        >GitHubista</Link
+      >.
+    </p>
+
+    <h3>Suppea henkilötietoja sisältävä aineisto</h3>
+    <ul class="ml-6">
+      <li>
+        voimassa olevien energiatodistusten tietoja energiatodistusrekisteristä
+        toukokuusta 2015 lähtien
+      </li>
+      <li>
+        energiatodistuksen yksilöiviä tietoja, kuten osoite ja pysyvä
+        rakennustunnus
+      </li>
+      <li>suppeasti energiatodistuslaskennasta saatavia tuloksia</li>
+      <li>tiedot myös yhden ja kahden asunnon rakennuksista</li>
+    </ul>
+    <p>
+      Soveltuu esimerkiksi lainoja ja vakuuksia antavien tahojen käyttöön,
+      joilla on oikeus käsitellä henkilötietoja.
+    </p>
+    <h3>Laaja, henkilötietoja sisältävä aineisto</h3>
+    <ul class="ml-6">
+      <li>
+        energiatodistusten tietoja energiatodistusrekisteristä toukokuusta 2015
+        lähtien
+      </li>
+      <li>
+        energiatodistuksen yksilöiviä tietoja, kuten osoite ja pysyvä
+        rakennustunnus
+      </li>
+      <li>
+        laajasti energiatodistuslaskennassa käytettäviä rakennusten tietoja ja
+        laskentatuloksia
+      </li>
+      <li>tiedot myös yhden ja kahden asunnon rakennuksista</li>
+    </ul>
+    <p>
+      Soveltuu esimerkiksi tutkimuskäyttöön tahoille, joilla on oikeus käsitellä
+      henkilötietoja.
+    </p>
+    <h3>Laaja, ei henkilötietoja sisältävä aineisto</h3>
+    <ul class="ml-6">
+      <li>
+        energiatodistusten tietoja energiatodistusrekisteristä toukokuusta 2015
+        lähtien
+      </li>
+      <li>
+        laajasti energiatodistuslaskennassa käytettäviä rakennuksen tietoja ja
+        laskentatuloksia
+      </li>
+      <li>ei henkilötietoja</li>
+    </ul>
+    <p>
+      Aineistosta on poistettu laatijan tiedot, todistustunnus, rakennuksen
+      yksilöivät tiedot (nimi, katuosoite, pysyvä rakennustunnus).
+      Osoitetiedoista postinumero ja -toimipaikka on poistettu, jos rekisterissä
+      on kyseiseltä postinumeroalueelta vähemmän kuin 4 rakennusta.
+    </p>
+    <p>Soveltuu esimerkiksi tutkimuskäyttöön.</p>
+    <h2>KÄYTTÖEHDOT</h2>
+    <p>
+      Aineistopalvelun käyttäminen edellyttää, että ARA on myöntänyt käyttäjälle
+      tietoluvan. Lisäksi Ara ja käyttäjä solmivat erillisen sopimuksen
+      Aineistopalvelun käytöstä.
+    </p>
+    <p>
+      Aineistopalveluun liittymisestä perimme hinnastomme mukaisen
+      liittymismaksun. Liittymisvuotta seuraavilta vuosilta perimme palvelun
+      käytöstä vuosimaksua. Vuosimaksu laskutetaan aina kalenterivuoden alussa.
+    </p>
+    <p>
+      Aineistopalvelu voidaan myös avata kertaluonteisesti esim.
+      tutkimuskäyttöön, jolloin perimme kertamaksun hinnastomme mukaisesti.
+    </p>
+    <p>
+      Ilman rajapintaa toteutettavat tietopyynnöt käsittelemme tapauskohtaisesti
+      ja veloitamme niistä tuntihinnastomme mukaisesti.
+    </p>
+    <p>
+      Hinnastomme löydät
+      <Link href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+        >Aran sivuilta</Link>
+      .
+    </p>
+    <h2>AINEISTOPALVELUUN LIITTYMINEN</h2>
+    <ol class="ml-6">
+      <li>
+        Täytä
+        <Link
+          href="https://energiatodistusrekisteri.fi/tietolupa-hakemuslomake.pdf"
+          >hakemus (pdf)</Link>
+        sekä tutustu
+        <Link
+          href="https://energiatodistusrekisteri.fi/sopimus-tietopalvelun-kaytosta-luonnos.pdf">
+          sopimusluonnokseen (pdf)
+        </Link>.
+      </li>
+      <li>
+        Lähetä hakemus sähköpostitse Aran kirjaamoon (<Link
+          href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
+        >). Jos hakemus sisältää salassa pidettävää tietoa, niin lähetä hakemus <Link
+          href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+          >turvapostilla</Link
+        >.
+      </li>
+      <li>
+        Odota tietolupapäätöstä, jonka lähetämme hakemuksessa ilmoitetulle
+        yhteyshenkilölle ja hakijan viralliselle edustajalle sähköpostitse. Jos
+        tietolupapäätös on myönteinen, hakijan viralliselle edustajalle
+        toimitetaan myös Aineistopalvelua koskeva sopimus allekirjoitettavaksi.
+      </li>
+      <li>
+        Sopimuksen allekirjoittamisen jälkeen toimitamme rajapinta-avaimen
+        (API-key) turvapostilla hakemuksessa ilmoitetulle tekniselle
+        yhteyshenkilölle.
+      </li>
+      <li>
+        Aineistopalvelu on käytettävissäsi. <Link
+          href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu"
+          >Katso tarkemmat ohjeet rajapintaan liittymisestä GitHubissa.</Link>
+      </li>
+    </ol>
+    <h2>
+      <ButtonLink
+        href="https://energiatodistusrekisteri.fi/tietolupa-hakemuslomake.pdf"
+        target="_blank"
+        {...buttonLinkStyles.green}>HAKEMUS</ButtonLink>
+    </h2>
+    <h2>TOIMINTA HÄIRIÖTILANTEISSA</h2>
+    <p>
+      Aineistopalveluun liittyvissä häiriötilanteissa ota yhteyttä sähköpostitse
+      <Link href="mailto:energiatodistus@ara.fi">energiatodistus@ara.fi</Link>.
+    </p>
+  </div>
+</Container>
