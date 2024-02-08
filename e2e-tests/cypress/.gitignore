@@ -1,0 +1,16 @@
+/node_modules/
+/public/
+/.vscode/
+/.nyc_output/
+/coverage/
+/jsdoc/out/
+/storybook-static/
+.DS_Store
+
+# IntelliJ IDEA
+*.iml
+.idea
+.nrepl-port
+
+# Emacs
+.projectile

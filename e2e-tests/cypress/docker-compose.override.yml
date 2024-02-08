@@ -5,6 +5,8 @@ services:
     ports: !reset []
 
   admin:
+    profiles:
+      - dev
     ports: !reset []
 
   mpollux:
