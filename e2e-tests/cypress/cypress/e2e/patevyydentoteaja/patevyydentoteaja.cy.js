@@ -23,10 +23,7 @@ context('Patevyyden toteaja', () => {
     cy.visit('/');
 
     cy.location().should(loc =>
-      assert.equal(
-        loc.toString(),
-        `${baseUrl}/#/laatija/laatijoidentuonti`
-      )
+      assert.equal(loc.toString(), `${baseUrl}/#/laatija/laatijoidentuonti`)
     );
   });
 
@@ -99,10 +96,7 @@ context('Patevyyden toteaja', () => {
       cy.contains('Laatijat').click();
 
       cy.location().should(loc =>
-        assert.equal(
-          loc.toString(),
-          `${baseUrl}/#/laatija/all?page=1`
-        )
+        assert.equal(loc.toString(), `${baseUrl}/#/laatija/all?page=1`)
       );
 
       cy.get('[data-cy="laatija-row"]').should('have.length', 10);
@@ -110,9 +104,7 @@ context('Patevyyden toteaja', () => {
 
     it('should filter laatijat', () => {
       cy.visit('/#/laatija/all');
-      cy.get('[data-cy="keyword-search"]')
-        .as('input')
-        .type('laat');
+      cy.get('[data-cy="keyword-search"]').as('input').type('laat');
 
       cy.get('[data-cy="laatija-row"]').should('have.length', 9);
       cy.location().should(loc =>
@@ -126,10 +118,7 @@ context('Patevyyden toteaja', () => {
 
       cy.get('[data-cy="laatijat-results-header"]').contains('15');
       cy.location().should(loc =>
-        assert.equal(
-          loc.toString(),
-          `${baseUrl}/#/laatija/all?page=1`
-        )
+        assert.equal(loc.toString(), `${baseUrl}/#/laatija/all?page=1`)
       );
     });
   });

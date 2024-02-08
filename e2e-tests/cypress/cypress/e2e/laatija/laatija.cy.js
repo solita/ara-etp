@@ -131,14 +131,11 @@ context('Laatija', () => {
     });
   });
 
-  it('should redirect to laatija\'s personal information page', () => {
+  it("should redirect to laatija's personal information page", () => {
     cy.visit('/');
 
     cy.location().should(loc =>
-      assert.equal(
-        loc.toString(),
-        `${baseUrl}/#/kayttaja/2`
-      )
+      assert.equal(loc.toString(), `${baseUrl}/#/kayttaja/2`)
     );
   });
 
@@ -146,15 +143,10 @@ context('Laatija', () => {
     it('should navigate to energiatodistus', () => {
       cy.visit('/#/energiatodistus/all');
 
-      cy.get('[data-cy="energiatodistus-row"]')
-        .first()
-        .click();
+      cy.get('[data-cy="energiatodistus-row"]').first().click();
 
       cy.location().should(loc =>
-        assert.equal(
-          loc.toString(),
-          `${baseUrl}/#/energiatodistus/2018/5`
-        )
+        assert.equal(loc.toString(), `${baseUrl}/#/energiatodistus/2018/5`)
       );
     });
 
@@ -172,7 +164,7 @@ context('Laatija', () => {
       ).as('signStart');
       cy.visit('/#/energiatodistus/2018/5');
       cy.get('[data-cy="laskutusosoite-id"]').click();
-      cy.contains('Henkilökohtaiset tiedot').click()
+      cy.contains('Henkilökohtaiset tiedot').click();
       cy.get('[data-cy="allekirjoita-button"]').click();
 
       cy.wait('@signStart');
@@ -181,7 +173,8 @@ context('Laatija', () => {
       cy.intercept(
         {
           method: 'POST',
-          pathname: /\/api\/private\/energiatodistukset\/2018\/5\/signature\/start/
+          pathname:
+            /\/api\/private\/energiatodistukset\/2018\/5\/signature\/start/
         },
         { statusCode: 200, body: 'Ok' }
       ).as('start');
@@ -189,7 +182,8 @@ context('Laatija', () => {
       cy.intercept(
         {
           method: 'GET',
-          pathname: /\/api\/private\/energiatodistukset\/2018\/5\/signature\/digest\/fi/
+          pathname:
+            /\/api\/private\/energiatodistukset\/2018\/5\/signature\/digest\/fi/
         },
         {
           digest: FIXTURES.mpollux.digest
@@ -205,7 +199,8 @@ context('Laatija', () => {
       cy.intercept(
         {
           method: 'PUT',
-          pathname: /\/api\/private\/energiatodistukset\/2018\/5\/signature\/pdf\/fi/
+          pathname:
+            /\/api\/private\/energiatodistukset\/2018\/5\/signature\/pdf\/fi/
         },
         { statusCode: 200, body: FIXTURES.mpollux.pdf(5) }
       ).as('pdf');
@@ -213,7 +208,8 @@ context('Laatija', () => {
       cy.intercept(
         {
           method: 'POST',
-          pathname: /\/api\/private\/energiatodistukset\/2018\/5\/signature\/finish/
+          pathname:
+            /\/api\/private\/energiatodistukset\/2018\/5\/signature\/finish/
         },
         { statusCode: 200, body: 'Ok' }
       ).as('finish');
@@ -237,10 +233,9 @@ context('Laatija', () => {
         FIXTURES.laatija.yritykset
       ).as('yritykset');
 
-      cy.intercept(
-        /\/api\/private\/yritykset\/1$/,
-        FIXTURES.yritys[1]
-      ).as('yritys1');
+      cy.intercept(/\/api\/private\/yritykset\/1$/, FIXTURES.yritys[1]).as(
+        'yritys1'
+      );
 
       cy.visit('/#/energiatodistus/2018/5');
 
@@ -258,9 +253,7 @@ context('Laatija', () => {
     it('should delete energiatodistus from energiatodistus page', () => {
       cy.visit('/#/energiatodistus/all');
 
-      cy.get('[data-cy="energiatodistus-row"]')
-        .first()
-        .click();
+      cy.get('[data-cy="energiatodistus-row"]').first().click();
 
       cy.intercept(
         {
@@ -346,10 +339,7 @@ context('Laatija', () => {
       cy.contains('Yritykset').click();
 
       cy.location().should(loc =>
-        assert.equal(
-          loc.toString(),
-          `${baseUrl}/#/laatija/2/yritykset`
-        )
+        assert.equal(loc.toString(), `${baseUrl}/#/laatija/2/yritykset`)
       );
     });
 
@@ -396,16 +386,12 @@ context('Laatija', () => {
       cy.wait('@yritys');
 
       cy.get('[data-cy="ytunnus"]').should('have.value', '1111112-8');
-      cy.get('#breadcrumbcontainer a')
-        .last()
-        .should('contain.text', 'nimi');
-      cy.get('#navigationcontainer a')
-        .first()
-        .should('contain.text', 'nimi');
+      cy.get('#breadcrumbcontainer a').last().should('contain.text', 'nimi');
+      cy.get('#navigationcontainer a').first().should('contain.text', 'nimi');
     });
 
     it('should join yritys', () => {
-      function*  laatijaYrityksetResponseGenerator() {
+      function* laatijaYrityksetResponseGenerator() {
         yield FIXTURES.laatija.yritykset;
         yield [
           ...FIXTURES.laatija.yritykset,
@@ -416,7 +402,7 @@ context('Laatija', () => {
             'tila-id': 0
           }
         ];
-      };
+      }
 
       const laatijaYrityksetResponse = laatijaYrityksetResponseGenerator();
 
@@ -471,7 +457,7 @@ context('Laatija', () => {
           }
         ];
         yield FIXTURES.laatija.yritykset;
-      };
+      }
 
       const laatijaYrityksetResponse = laatijaYrityksetResponseGenerator();
 
@@ -503,9 +489,7 @@ context('Laatija', () => {
         { statusCode: 200 }
       ).as('deleteLaatija');
 
-      cy.get('[data-cy="yritys-row"] span')
-        .last()
-        .click();
+      cy.get('[data-cy="yritys-row"] span').last().click();
 
       cy.get('[data-cy="confirm-submit-button"]').click();
 
@@ -518,15 +502,15 @@ context('Laatija', () => {
   });
 
   describe('viestiketjut', () => {
-    function* viestiResponseGenerator () {
+    function* viestiResponseGenerator() {
       yield FIXTURES.viesti;
       yield FIXTURES.respondedViesti;
-    };
+    }
 
     it('should navigate to viestit', () => {
       cy.visit('/#/energiatodistus/all');
 
-      cy.contains('Viestit' ).click();
+      cy.contains('Viestit').click();
 
       cy.location().should(loc =>
         assert.equal(loc.toString(), `${baseUrl}/#/viesti/all`)
@@ -639,9 +623,7 @@ context('Laatija', () => {
 
       cy.wait('@viesti');
 
-      cy.get('[data-cy="uusiviesti-button"]')
-        .type('Vastaus')
-        .blur();
+      cy.get('[data-cy="uusiviesti-button"]').type('Vastaus').blur();
       cy.intercept(
         {
           method: 'POST',
@@ -682,9 +664,7 @@ context('Laatija', () => {
       cy.visit('/#/kayttaja/2');
       cy.contains('Ei valintaa').click();
       cy.contains('Etelä-Karjala').click();
-      cy.get('#muuttoimintaalueet ol li input')
-        .first()
-        .should('be.disabled');
+      cy.get('#muuttoimintaalueet ol li input').first().should('be.disabled');
     });
 
     it('should disable all with many toimintaalueet selected', () => {
@@ -701,12 +681,7 @@ context('Laatija', () => {
         'Satakunta'
       ];
 
-      toimintaalueet.forEach(item =>
-        cy
-          .get('@root')
-          .contains(item)
-          .click()
-      );
+      toimintaalueet.forEach(item => cy.get('@root').contains(item).click());
 
       cy.get('#muuttoimintaalueet [type="checkbox"]:disabled').should(
         'have.length',
@@ -721,9 +696,7 @@ context('Laatija', () => {
 
       cy.get('@input').should('be.disabled');
 
-      cy.get('[data-cy="wwwosoite"]')
-        .type('example.com')
-        .blur();
+      cy.get('[data-cy="wwwosoite"]').type('example.com').blur();
 
       cy.get('@input').should('not.be.disabled');
     });
