@@ -2,5 +2,5 @@
 
 set -euxo pipefail
 
-docker compose up
+docker compose up -d
 
