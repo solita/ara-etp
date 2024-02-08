@@ -730,9 +730,9 @@
         "header": "Ilmanvaihtojärjestelmä",
         "label-context": "Ilmanvaihtojärjestelmä",
         "tyyppi-id": "Ilmanvaihtojärjestelmän tyyppi",
-        "sfp-luku": "Järjestelmän SFP-luku kW/(m³/s)",
-        "lampotilasuhde": "LTO:n lämpötilasuhde",
-        "jaatymisenesto": "Jäätymisenesto",
+        "sfp-luku": "Järjes\u00ADtelmän SFP-luku kW/(m³/s)",
+        "lampotilasuhde": "LTO:n lämpö\u00ADtila\u00ADsuhde",
+        "jaatymisenesto": "Jäätymi\u00ADsenesto",
         "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
         "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
         "tuloilma-lampotila": "Tuloilman sisäänpuhalluslämpötila °C",
@@ -740,16 +740,16 @@
         "tulo": "tulo",
         "poisto": "poisto",
         "labels": {
-          "paaiv": "Pääilman\u00ADvaihto\u00ADkoneet",
+          "paaiv": "Pääil\u00ADman\u00ADvaihto\u00ADkoneet",
           "erillispoistot": "Erillis\u00ADpoistot",
-          "ivjarjestelma": "Ilmanvaihto\u00ADjärjestelmä"
+          "ivjarjestelma": "Ilman\u00ADvaihto\u00ADjärjes\u00ADtelmä"
         },
         "paaiv": {
           "label-context": "Pääilmanvaihtokoneet",
           "tulo": "Tulo",
           "poisto": "Poisto ",
           "sfp": "SFP-luku",
-          "lampotilasuhde": "LTO:n lämpötilasuhde",
+          "lampotilasuhde": "LTO:n lämpö\u00ADtilasuhde",
           "jaatymisenesto": "Jäätymisenesto"
         },
         "erillispoistot": {
@@ -788,12 +788,12 @@
           "id": "Lämmönjako",
           "kuvaus": "Lämmönjaon kuvaus"
         },
-        "tuotonhyotysuhde": "Tuoton hyötysuhde",
-        "jaonjaluovutuksenhyotysuhde": "Jaon ja luovutuksen hyötysuhde",
-        "lampokerroin": "Lämpökerroin",
-        "apulaitteidensahkonkaytto": "Apulaitteiden sähkönkäyttö",
-        "lampopumppu-tuotto-osuus": "Lämpöpumpun tuotto-osuus",
-        "lampohavio-lammittamaton-tila": "Lämpöhäviöt lämmittämät-tömään tilaan",
+        "tuotonhyotysuhde": "Tuoton hyöty\u00ADsuhde",
+        "jaonjaluovutuksenhyotysuhde": "Jaon ja luovu\u00ADtuksen hyöty\u00ADsuhde",
+        "lampokerroin": "Lämpö\u00ADkerroin",
+        "apulaitteidensahkonkaytto": "Apulait\u00ADteiden sähkön\u00ADkäyttö",
+        "lampopumppu-tuotto-osuus": "Lämpö\u00ADpumpun tuotto-osuus",
+        "lampohavio-lammittamaton-tila": "Lämpö\u00ADhäviöt lämmit\u00ADtämät\u00ADtömään tilaan",
         "maara": "Määrä",
         "tuotto": "Tuotto",
         "kuvaus": "Lämmitysjärjestelmän kuvaus",
@@ -876,19 +876,19 @@
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "label-context": "E-luvun erittely",
-        "kaytettavat-energiamuodot": "Käytettävät energiamuodot",
+        "kaytettavat-energiamuodot": "Käytet\u00ADtävät energia\u00ADmuodot",
         "ostoenergia": {
-          "2018": "Vakioidulla käytöllä laskettu ostoenergia",
-          "2013": "Laskettu ostoenergia"
+          "2018": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
+          "2013": "Laskettu osto\u00ADenergia"
         },
-        "energiamuodon-kerroin": "Energiamuodon kerroin",
+        "energiamuodon-kerroin": "Energia\u00ADmuodon kerroin",
         "kertoimella-painotettu-energiankulutus": "Energiamuodon kertoimella painotettu energiankulutus",
         "labels": {
-          "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+          "fossiilinen-polttoaine": "Fossii\u00ADlinen poltto\u00ADaine",
           "sahko": "Sähkö",
-          "kaukojaahdytys": "Kaukojäähdytys",
-          "kaukolampo": "Kaukolämpö",
-          "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+          "kaukojaahdytys": "Kauko\u00ADjäähdytys",
+          "kaukolampo": "Kauko\u00ADlämpö",
+          "uusiutuva-polttoaine": "Uusiu\u00ADtuva poltto\u00ADaine"
         },
         "fossiilinen-polttoaine": "Ostoenergia / Fossiilinen polttoaine",
         "fossiilinen-polttoaine-painotettu": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/vuosi)",
@@ -951,15 +951,15 @@
         "label-context": "Tekniset järjestelmät",
         "sahko": "Sähkö",
         "lampo": "Lämpö",
-        "kaukojaahdytys": "Kaukojäähdytys",
-        "lammitysjarjestelma": "Lämmitysjärjestelmä",
+        "kaukojaahdytys": "Kauko\u00ADjäähdytys",
+        "lammitysjarjestelma": "Lämmitys\u00ADjärjestelmä",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
           "tuloilman-lammitys": "Tuloilman lämmitys",
           "kayttoveden-valmistus": "Lämpimän käyttöveden valmistus",
-          "iv-sahko": "Ilmanvaihtojärjestelmän sähköenergiankulutus",
-          "jaahdytys": "Jäähdytysjärjestelmä",
-          "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttajalaitteet ja valaistus"
+          "iv-sahko": "Ilmanvaihto\u00ADjärjestelmän sähköener\u00ADgiankulutus",
+          "jaahdytys": "Jäähdytys\u00ADjärjestelmä",
+          "kuluttajalaitteet-ja-valaistus-sahko": "Kuluttaja\u00ADlaitteet ja valaistus"
         },
         "tilojen-lammitys": {
           "label-context": "Tekniset järjestelmät / Tilojen lämmitys",
@@ -1062,12 +1062,12 @@
       "ostetut-polttoaineet": {
         "header": "Ostetut polttoaineet",
         "table-header": {
-          "maara": "Polttoaineen määrä vuodessa",
+          "maara": "Poltto\u00ADaineen määrä vuodessa",
           "yksikko": "Yksikkö",
-          "muunnoskerroin": "Muunnoskerroin kWh:ksi"
+          "muunnoskerroin": "Muunnos\u00ADkerroin kWh:ksi"
         },
         "label-context": "Ostetut polttoaineet",
-        "kevyt-polttooljy": "Kevyt polttoöljy",
+        "kevyt-polttooljy": "Kevyt poltto\u00ADöljy",
         "kevyt-polttooljy-yksikko": "litra",
         "kevyt-polttooljy-vuosikulutus": "Kevyt polttoöljy (kWh/vuosi)",
         "kevyt-polttooljy-neliovuosikulutus": "Kevyt polttoöljy (kWh/(m²vuosi))",
@@ -1079,7 +1079,7 @@
         "pilkkeet-koivu-yksikko": "pino-m³",
         "pilkkeet-koivu-vuosikulutus": "Pilkkeet (koivu) (kWh/vuosi)",
         "pilkkeet-koivu-neliovuosikulutus": "Pilkkeet (koivu) (kWh/(m²vuosi))",
-        "puupelletit": "Puupelletit",
+        "puupelletit": "Puupel\u00ADletit",
         "puupelletit-yksikko": "kg",
         "puupelletit-vuosikulutus": "Puupelletit (kWh/vuosi)",
         "puupelletit-neliovuosikulutus": "Puupelletit (kWh/(m²vuosi))",
@@ -1108,7 +1108,7 @@
       "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö (kWh/vuosi)",
       "kaukolampo-neliovuosikulutus-yhteensa": "Kaukolämpö (kWh/m²vuosi)",
       "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys (kWh/vuosi)",
-      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Kaukojäähdytys (kWh/m²vuosi)",
+      "kaukojaahdytys-neliovuosikulutus-yhteensa": "Kauko\u00ADjäähdytys (kWh/m²vuosi)",
       "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet (kWh/vuosi)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Polttoaineet (kWh/(m²vuosi))",
       "toteutunut-vuosikulutus-yhteensä": "Yhteensä (kWh/vuosi)",
@@ -1121,10 +1121,10 @@
       },
       "label-context": "$unused",
       "toimenpide-table": {
-        "ehdotus": "Toimenpide-ehdotus",
-        "lampo": "Lämpö, ostoenergian muutos",
-        "sahko": "Sähkö, ostoenergian muutos",
-        "jaahdytys": "Jäähdytys, ostoenergian muutos",
+        "ehdotus": "Toimen\u00ADpide-ehdotus",
+        "lampo": "Lämpö, osto\u00ADenergian muutos",
+        "sahko": "Sähkö, osto\u00ADenergian muutos",
+        "jaahdytys": "Jäähdytys, osto\u00ADenergian muutos",
         "eluvun-muutos": "E-luvun muutos"
       },
       "suositukset-header": {

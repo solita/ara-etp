@@ -29,54 +29,56 @@
     'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2013'
   )} />
 
-<table class="et-table mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th et-table--th__twocells" />
-      <th class="et-table--th"><VuosituottoUnit /></th>
-      <th class="et-table--th"><VuosituottoAreaUnit /></th>
-      <th class="et-table--th" />
-    </tr>
-  </thead>
-
-  <tbody class="et-table--tbody">
-    {#each energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'] as _, index}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table mb-6">
+    <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            inputLanguage={Maybe.Some(inputLanguage)}
-            path={[
-              'tulokset',
-              'uusiutuvat-omavaraisenergiat',
-              index,
-              'nimi'
-            ]} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'tulokset',
-              'uusiutuvat-omavaraisenergiat',
-              index,
-              'vuosikulutus'
-            ]} />
-        </td>
-        <td class="et-table--td">
-          {Maybe.orSome(
-            '',
-            energiaPerLammitettyNettoala(index)(energiatodistus)
-          )}
-        </td>
-        <td class="et-table--td" />
+        <th class="et-table--th et-table--th__twocells" />
+        <th class="et-table--th"><VuosituottoUnit /></th>
+        <th class="et-table--th"><VuosituottoAreaUnit /></th>
+        <th class="et-table--th" />
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+
+    <tbody class="et-table--tbody">
+      {#each energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'] as _, index}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              inputLanguage={Maybe.Some(inputLanguage)}
+              path={[
+                'tulokset',
+                'uusiutuvat-omavaraisenergiat',
+                index,
+                'nimi'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'tulokset',
+                'uusiutuvat-omavaraisenergiat',
+                index,
+                'vuosikulutus'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            {Maybe.orSome(
+              '',
+              energiaPerLammitettyNettoala(index)(energiatodistus)
+            )}
+          </td>
+          <td class="et-table--td" />
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

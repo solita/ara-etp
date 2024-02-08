@@ -143,175 +143,186 @@
   </div>
 {/if}
 
-<table class="et-table mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th" />
-      <th
-        class="et-table--th"
-        title={$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}>
-        {$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}
-      </th>
-      <th
-        class="et-table--th"
-        title={$_(
-          'energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde'
-        )}>
-        {$_('energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde')}
-      </th>
-      <th
-        class="et-table--th"
-        title={$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}>
-        {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
-      </th>
-      <th
-        class="et-table--th"
-        title={$_(
-          'energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto'
-        )}>
-        {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
-        <span class="block">
-          <VuosikulutusPerAlaUnit />
-        </span>
-      </th>
-      <th
-        class="et-table--th"
-        title={$_(
-          'energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus'
-        )}>
-        {$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}
-      </th>
-      <th
-        class="et-table--th"
-        title={$_(
-          'energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila'
-        )}>
-        {$_(
-          'energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila'
-        )}
-        <VuosikulutusUnit />
-      </th>
-    </tr>
-  </thead>
-  <tbody class="et-table--tbody">
-    {#each ['tilat-ja-iv', 'lammin-kayttovesi'] as hyotysuhde}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table mb-6">
+    <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <td
-          class="et-table--td"
+        <th class="et-table--th" />
+        <th
+          class="et-table--th"
+          title={$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}>
+          {$_('energiatodistus.lahtotiedot.lammitys.tuotonhyotysuhde')}
+        </th>
+        <th
+          class="et-table--th"
           title={$_(
-            `energiatodistus.lahtotiedot.lammitys.${hyotysuhde}.label`
+            'energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde'
           )}>
-          {$_(`energiatodistus.lahtotiedot.lammitys.${hyotysuhde}.label`)}
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'lahtotiedot',
-              'lammitys',
-              hyotysuhde,
-              'tuoton-hyotysuhde'
-            ]} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', hyotysuhde, 'jaon-hyotysuhde']} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampokerroin']} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', hyotysuhde, 'apulaitteet']} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'lahtotiedot',
-              'lammitys',
-              hyotysuhde,
-              'lampopumppu-tuotto-osuus'
-            ]} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={[
-              'lahtotiedot',
-              'lammitys',
-              hyotysuhde,
-              'lampohavio-lammittamaton-tila'
-            ]} />
-        </td>
+          {$_(
+            'energiatodistus.lahtotiedot.lammitys.jaonjaluovutuksenhyotysuhde'
+          )}
+        </th>
+        <th
+          class="et-table--th"
+          title={$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}>
+          {$_('energiatodistus.lahtotiedot.lammitys.lampokerroin')}
+        </th>
+        <th
+          class="et-table--th"
+          title={$_(
+            'energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto'
+          )}>
+          {$_('energiatodistus.lahtotiedot.lammitys.apulaitteidensahkonkaytto')}
+          <span class="block">
+            <VuosikulutusPerAlaUnit />
+          </span>
+        </th>
+        <th
+          class="et-table--th"
+          title={$_(
+            'energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus'
+          )}>
+          {$_('energiatodistus.lahtotiedot.lammitys.lampopumppu-tuotto-osuus')}
+        </th>
+        <th
+          class="et-table--th"
+          title={$_(
+            'energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila'
+          )}>
+          {$_(
+            'energiatodistus.lahtotiedot.lammitys.lampohavio-lammittamaton-tila'
+          )}
+          <VuosikulutusUnit />
+        </th>
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody class="et-table--tbody">
+      {#each ['tilat-ja-iv', 'lammin-kayttovesi'] as hyotysuhde}
+        <tr class="et-table--tr">
+          <td
+            class="et-table--td"
+            title={$_(
+              `energiatodistus.lahtotiedot.lammitys.${hyotysuhde}.label`
+            )}>
+            {$_(`energiatodistus.lahtotiedot.lammitys.${hyotysuhde}.label`)}
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'lahtotiedot',
+                'lammitys',
+                hyotysuhde,
+                'tuoton-hyotysuhde'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'lahtotiedot',
+                'lammitys',
+                hyotysuhde,
+                'jaon-hyotysuhde'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'lammitys', hyotysuhde, 'lampokerroin']} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'lammitys', hyotysuhde, 'apulaitteet']} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'lahtotiedot',
+                'lammitys',
+                hyotysuhde,
+                'lampopumppu-tuotto-osuus'
+              ]} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={[
+                'lahtotiedot',
+                'lammitys',
+                hyotysuhde,
+                'lampohavio-lammittamaton-tila'
+              ]} />
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
 
-<table class="et-table mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th" />
-      <th class="et-table--th">
-        <span>{$_('energiatodistus.lahtotiedot.lammitys.maara')}</span>
-        <span class="block">{$_('units.pieces')}</span>
-      </th>
-      <th class="et-table--th">
-        <span>{$_('energiatodistus.lahtotiedot.lammitys.tuotto')}</span>
-        <span class="block">kWh</span>
-      </th>
-      <th class="et-table--th" />
-      <th class="et-table--th" />
-    </tr>
-  </thead>
-  <tbody class="et-table--tbody">
-    {#each ['takka', 'ilmalampopumppu'] as maaratuotto}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table mb-6">
+    <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_(`energiatodistus.lahtotiedot.lammitys.${maaratuotto}.label`)}
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', maaratuotto, 'maara']} />
-        </td>
-        <td class="et-table--td">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'lammitys', maaratuotto, 'tuotto']} />
-        </td>
-        <td class="et-table--td" />
-        <td class="et-table--td" />
+        <th class="et-table--th" />
+        <th class="et-table--th">
+          <span>{$_('energiatodistus.lahtotiedot.lammitys.maara')}</span>
+          <span class="block">{$_('units.pieces')}</span>
+        </th>
+        <th class="et-table--th">
+          <span>{$_('energiatodistus.lahtotiedot.lammitys.tuotto')}</span>
+          <span class="block">kWh</span>
+        </th>
+        <th class="et-table--th" />
+        <th class="et-table--th" />
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody class="et-table--tbody">
+      {#each ['takka', 'ilmalampopumppu'] as maaratuotto}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            {$_(`energiatodistus.lahtotiedot.lammitys.${maaratuotto}.label`)}
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'lammitys', maaratuotto, 'maara']} />
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'lammitys', maaratuotto, 'tuotto']} />
+          </td>
+          <td class="et-table--td" />
+          <td class="et-table--td" />
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

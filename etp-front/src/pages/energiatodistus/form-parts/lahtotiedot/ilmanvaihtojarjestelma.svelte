@@ -59,82 +59,36 @@
 
 <!-- purgecss: pb-3 -->
 
-<table class="et-table mb-6">
-  <thead class="et-table--thead">
-    <tr class="et-table--tr">
-      <th class="et-table--th" />
-      <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ilmanvaihto.ilmavirta')}
-        <br />
-        {$_('energiatodistus.lahtotiedot.ilmanvaihto.tulo')}(m³/s) / {$_(
-          'energiatodistus.lahtotiedot.ilmanvaihto.poisto'
-        )}(m³/s)
-      </th>
-      <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ilmanvaihto.sfp-luku')}
-      </th>
-      <th class="et-table--th">
-        {$_('energiatodistus.lahtotiedot.ilmanvaihto.lampotilasuhde')}
-      </th>
-      <th class="et-table--th">
-        <span>
-          {$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}
-        </span>
-        <span class="block">{$_('units.celsius')}</span>
-      </th>
-    </tr>
-  </thead>
-  <tbody class="et-table--tbody">
-    <tr class="et-table--tr">
-      <td class="et-table--td">
-        {$_('energiatodistus.lahtotiedot.ilmanvaihto.labels.paaiv')}
-      </td>
-      <td class="et-table--td">
-        <div class="flex flex-row items-center">
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
-          <span class="block" class:pb-3={disabled}>/</span>
-          <Input
-            {disabled}
-            {schema}
-            compact={true}
-            bind:model={energiatodistus}
-            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'poisto']} />
-        </div>
-      </td>
-      <td class="et-table--td">
-        <Input
-          {disabled}
-          {schema}
-          compact={true}
-          bind:model={energiatodistus}
-          path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'sfp']} />
-      </td>
-      <td class="et-table--td">
-        <Input
-          {disabled}
-          {schema}
-          compact={true}
-          bind:model={energiatodistus}
-          path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'lampotilasuhde']} />
-      </td>
-      <td class="et-table--td">
-        <Input
-          {disabled}
-          {schema}
-          compact={true}
-          bind:model={energiatodistus}
-          path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'jaatymisenesto']} />
-      </td>
-    </tr>
-    {#each ['erillispoistot', 'ivjarjestelma'] as ilmanvaihto}
+<div class="min-w-full overflow-x-auto">
+  <table class="et-table mb-6">
+    <thead class="et-table--thead">
+      <tr class="et-table--tr">
+        <th class="et-table--th" />
+        <th class="et-table--th">
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.ilmavirta')}
+          <br />
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.tulo')} (m³/s) / {$_(
+            'energiatodistus.lahtotiedot.ilmanvaihto.poisto'
+          )} (m³/s)
+        </th>
+        <th class="et-table--th">
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.sfp-luku')}
+        </th>
+        <th class="et-table--th">
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.lampotilasuhde')}
+        </th>
+        <th class="et-table--th">
+          <span>
+            {$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}
+          </span>
+          <span class="block">{$_('units.celsius')}</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="et-table--tbody">
       <tr class="et-table--tr">
         <td class="et-table--td">
-          {$_(`energiatodistus.lahtotiedot.ilmanvaihto.labels.${ilmanvaihto}`)}
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.labels.paaiv')}
         </td>
         <td class="et-table--td">
           <div class="flex flex-row items-center">
@@ -143,14 +97,14 @@
               {schema}
               compact={true}
               bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
             <span class="block" class:pb-3={disabled}>/</span>
             <Input
               {disabled}
               {schema}
               compact={true}
               bind:model={energiatodistus}
-              path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'poisto']} />
+              path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'poisto']} />
           </div>
         </td>
         <td class="et-table--td">
@@ -159,14 +113,64 @@
             {schema}
             compact={true}
             bind:model={energiatodistus}
-            path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'sfp']} />
+            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'sfp']} />
         </td>
-        <td class="et-table--td" />
-        <td class="et-table--td" />
+        <td class="et-table--td">
+          <Input
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'lampotilasuhde']} />
+        </td>
+        <td class="et-table--td">
+          <Input
+            {disabled}
+            {schema}
+            compact={true}
+            bind:model={energiatodistus}
+            path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'jaatymisenesto']} />
+        </td>
       </tr>
-    {/each}
-  </tbody>
-</table>
+      {#each ['erillispoistot', 'ivjarjestelma'] as ilmanvaihto}
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            {$_(
+              `energiatodistus.lahtotiedot.ilmanvaihto.labels.${ilmanvaihto}`
+            )}
+          </td>
+          <td class="et-table--td">
+            <div class="flex flex-row items-center">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
+              <span class="block" class:pb-3={disabled}>/</span>
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'poisto']} />
+            </div>
+          </td>
+          <td class="et-table--td">
+            <Input
+              {disabled}
+              {schema}
+              compact={true}
+              bind:model={energiatodistus}
+              path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'sfp']} />
+          </td>
+          <td class="et-table--td" />
+          <td class="et-table--td" />
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
 
 <div class="flex lg:flex-row flex-col lg:items-end">
   <div class="w-1/2 py-4 mb-4 mr-8">
