@@ -17,7 +17,7 @@ jobs:
         run: mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
       - name: Docker Compose
         working-directory: e2e-tests/cypress
-        run: ./start-e2e.sh
+        run: docker compose up
       - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
