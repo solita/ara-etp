@@ -65,7 +65,7 @@
                                            :secret-access-key "minio123"})
                   :endpoint-override    {:protocol :http
                                          :hostname "localhost"
-                                         :port     9000}})
+                                         :port     9002}})
                client)
      :bucket (or bucket (env "FILES_BUCKET_NAME" "files"))}}))
 
