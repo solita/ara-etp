@@ -1,5 +1,5 @@
 # Build image
-FROM --platform=amd64 clojure:temurin-17-tools-deps-1.11.1.1347-alpine as builder
+FROM --platform=amd64 clojure:temurin-11-tools-deps-1.11.1.1435-alpine as builder
 
 # TODO: Copy less stuff to invalidate the cached layer less often.
 COPY . /usr/src/etp-db
@@ -10,7 +10,7 @@ RUN unzip target/etp-db.jar -d target/etp-db && \
     rm -f target/etp-db.jar
 
 # Production image
-FROM --platform=amd64 eclipse-temurin:17.0.8_7-jre-jammy
+FROM --platform=amd64 eclipse-temurin:11.0.22_7-jre-jammy
 
 # TODO: Fix docker. Use builder
 COPY --from=builder /usr/src/etp-db/target /target
