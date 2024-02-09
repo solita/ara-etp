@@ -31,6 +31,8 @@
                          :modifiedby-name "etp, database"
                          :organisaatio    ""
                          :rooli           0
+                         :titteli-fi      nil
+                         :titteli-sv      nil
                          :valvoja         false
                          :virtu           nil})))))
     (t/testing "Laatija's change history can be fetched from the api after the user is created"
@@ -95,6 +97,8 @@
                              :modifiedby-name "etp, database"
                              :organisaatio    ""
                              :rooli           0
+                             :titteli-fi      nil
+                             :titteli-sv      nil
                              :valvoja         false
                              :virtu           nil})))
             (t/is (= (dissoc (last body) :modifytime)
@@ -106,6 +110,8 @@
                              :modifiedby-name "Tuntija, Asian"
                              :organisaatio    ""
                              :rooli           0
+                             :titteli-fi      nil
+                             :titteli-sv      nil
                              :valvoja         false
                              :virtu           nil})))))
         (t/testing "Changes in laatija data are reflected in the history"

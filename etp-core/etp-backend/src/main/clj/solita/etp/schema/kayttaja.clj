@@ -65,4 +65,4 @@
 (def KayttajaHistory
   (-> Kayttaja
       (merge audit-schema/Audit)
-      (dissoc :login :verifytime :titteli-fi :titteli-sv)))
+      (dissoc :login :verifytime)))

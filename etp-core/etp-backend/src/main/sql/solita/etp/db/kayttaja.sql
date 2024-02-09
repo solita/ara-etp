@@ -30,6 +30,8 @@ select k.id,
        k.henkilotunnus,
        k.modifytime,
        k.valvoja,
+       k.titteli_fi,
+       k.titteli_sv,
        coalesce(k.organisaatio, '') as organisaatio,
        fullname(modifier) modifiedby_name
 from
