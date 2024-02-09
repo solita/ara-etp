@@ -14,7 +14,7 @@ FROM --platform=amd64 eclipse-temurin:17.0.8_7-jre-jammy
 
 # TODO: Fix docker. Use builder
 COPY --from=builder /usr/src/etp-db/target /target
-COPY ./src /src
+# COPY ./src /src
 COPY db.sh /
 
 CMD ["./db.sh", "migrate"]
