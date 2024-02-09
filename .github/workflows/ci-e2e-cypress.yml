@@ -9,8 +9,8 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
+    # TODO: use latests?
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Docker Compose Preparations
@@ -19,19 +19,18 @@ jobs:
           docker --version
       - name: Docker Compose
         working-directory: e2e-tests/cypress
-        run: docker compose up --build
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          cache: 'npm'
-          cache-dependency-path: e2e-tests/cypress/package-lock.json
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: e2e-tests/cypress
-          start: npm run cypress:run
-          wait-on: 'https://localhost:3009'
+        run: docker compose up
+          # - name: Cypress
+          #   working-directory: e2e-tests/cypress
+          #   run: docker run -i -v $PWD:/e2e -w /e2e --network etp-e2e_default -e "CYPRESS_baseUrl=https://frontend:3009" cypress/included:13.6.4
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v6
+      #   with:
+      #     working-directory: e2e-tests/cypress
+      #     # start: docker compose up --build -d
+      #     wait-on: 'https://localhost:3009'
+      #     # 5 minutes
+      #     wait-on-timeout: 300
 
   format:
     runs-on: ubuntu-latest

@@ -4,6 +4,7 @@ name: 'etp-e2e'
 include:
   - ../../etp-core/docker/docker-compose.yml
 
+
 services:
   backend:
     build: ../../etp-core/etp-backend
@@ -30,12 +31,23 @@ services:
   frontend:
     build: ../../etp-front
     environment:
-      # solita.etp.config
       WEBPACK_PROXY_TARGET: http://backend:8080
+      WEBPACK_ALLOWED_HOSTS: all
       WEBPACK_HOST: 0.0.0.0
       WEBPACK_PORT: 3009
+
+    # TODO: This makes GHA give 127
+    #    healthcheck:
+    #  test: curl -k https://localhost:3009 || exit 1
+    #  interval: 1m30s
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 2m
     ports:
       - 127.0.0.1:3009:3009
+    depends_on:
+      backend:
+        condition: service_started
 
   migration-runner:
     build: ../../etp-core/etp-db
@@ -49,7 +61,13 @@ services:
       db:
         condition: service_started
 
-
-
-
-
+  cypress:
+    image: "cypress/included:13.6.4"
+    depends_on:
+      frontend:
+        condition: service_healthy
+    working_dir: /e2e
+    volumes:
+      - .:/e2e
+    environment:
+      CYPRESS_baseUrl: https://frontend:3009
