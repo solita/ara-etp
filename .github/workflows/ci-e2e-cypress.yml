@@ -14,7 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Docker Compose Preparations
-        run: mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
+        run: |
+          mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
+          docker --version
       - name: Docker Compose
         working-directory: e2e-tests/cypress
         run: docker compose up --build
