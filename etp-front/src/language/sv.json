@@ -31,6 +31,8 @@
     "invalid-date": "Felaktigt datum"
   },
   "navigation": {
+    "breadcrumb-bar": "Sidhierarki",
+    "navigation-tab-bar": "Kontext",
     "energiatodistukset": "En\u00ADer\u00ADgi\u00adcer\u00adti\u00ADfi\u00ADkat",
     "uusi-energiatodistus": "Nytt energicertifikat",
     "viesti": "Meddelandecentral",

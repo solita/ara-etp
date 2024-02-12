@@ -32,6 +32,8 @@
     "invalid-date": "Virheellinen päivämäärä"
   },
   "navigation": {
+    "breadcrumb-bar": "Sivuhierarkia",
+    "navigation-tab-bar": "Konteksti",
     "etusivu": "Etusivu",
     "energiatodistukset": "Energia\u00adtodis\u00adtukset",
     "uusi-energiatodistus": "Uusi energiatodistus",

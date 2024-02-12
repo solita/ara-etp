@@ -2,7 +2,6 @@
   import Router from 'svelte-spa-router';
   import { location, replace } from 'svelte-spa-router';
 
-  import { idTranslateStore } from '@/stores';
   import { _ } from '@Language/i18n';
 
   import NavigationTabBar from '@Pages/navigation/navigation-tab-bar';
@@ -34,22 +33,25 @@
 </style>
 
 <ResourceProvider let:idTranslate>
-  <div id="breadcrumbcontainer">
+  <nav id="breadcrumbcontainer" aria-label={$_('navigation.breadcrumb-bar')}>
     <div class="w-full max-w-1440 mx-auto px-2 lg:px-10">
       <Breadcrumb {whoami} {idTranslate} location={$location} />
     </div>
-  </div>
-  <section class="content px-2 lg:px-10">
-    <div id="navigationcontainer" class="w-full">
+  </nav>
+  <div class="content px-2 lg:px-10">
+    <nav
+      id="navigationcontainer"
+      class="w-full"
+      aria-label={$_('navigation.navigation-tab-bar')}>
       <NavigationTabBar
         {idTranslate}
         location={$location}
         {whoami}
         {config}
         i18n={$_} />
-    </div>
-    <div id="routecontainer">
+    </nav>
+    <main id="routecontainer">
       <Router on:conditionsFailed={_ => replace('/404')} {routes} />
-    </div>
-  </section>
+    </main>
+  </div>
 </ResourceProvider>

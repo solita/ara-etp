@@ -111,7 +111,7 @@
 </script>
 
 <Overlay {overlay}>
-  <nav slot="content" class="w-full flex flex-col">
+  <div slot="content" class="w-full flex flex-col">
     {#each sivutTree as sivu}
       <NavLink {sivu} activeSivuId={id} draggable={sortMode} {updateSivu} />
     {/each}
@@ -142,7 +142,7 @@
         </div>
       {/if}
     {/each}
-  </nav>
+  </div>
 
   <div slot="overlay-content">
     <Spinner />
