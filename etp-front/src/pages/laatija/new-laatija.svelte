@@ -15,6 +15,7 @@
 
   import LaatijaForm from './laatija-form.svelte';
 
+  import H1 from '@Component/H/H1';
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import { announcementsForModule } from '@Utility/announce';
@@ -108,6 +109,7 @@
   };
 </script>
 
+<H1 text={i18n('kayttajat.new-partner')} />
 <Overlay {overlay}>
   <div slot="content">
     {#each resources.toArray() as { whoami, luokittelut }}

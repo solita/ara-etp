@@ -186,6 +186,7 @@
     {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit, aineistot, kayttajaAineistot }}
       {#if Maybe.isSome(laatija)}
         <div class="mt-6">
+          <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
           <LastLogin {kayttaja} />
           <Verification {whoami} {kayttaja} />
           <LaatijaForm
