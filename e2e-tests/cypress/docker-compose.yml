@@ -15,10 +15,6 @@ services:
       SMTP_PORT: 25
       LASKUTUS_SFTP_HOST: sftp
       LASKUTUS_SFTP_PORT: 22
-      # TODO: What is this?
-      # SERVICE_HOST: frontend:3009
-      # TODO: Täytyy muutta envistä luettavaksi. Ehkä.
-      # S3:
     env_file: 
       - ./backend.env
     depends_on:
@@ -35,14 +31,12 @@ services:
       WEBPACK_ALLOWED_HOSTS: all
       WEBPACK_HOST: 0.0.0.0
       WEBPACK_PORT: 3009
-
-        # TODO: This makes GHA give 127
     healthcheck:
      test: curl -k https://localhost:3009 || exit 1
-     interval: 1m30s
+     interval: 10s
      timeout: 10s
-     retries: 3
-     start_period: 2m
+     retries: 20
+     start_period: 0m
     ports:
       - 127.0.0.1:3009:3009
     depends_on:
@@ -51,8 +45,6 @@ services:
 
   migration-runner:
     build: ../../etp-core/etp-db
-      #context: ../../etp-core/etp-db
-        #dockerfile: e2e.Dockerfile
     environment:
       DB_URL: jdbc:postgresql://db:5432/etp_dev
     command:
@@ -60,14 +52,3 @@ services:
     depends_on:
       db:
         condition: service_started
-
-          # cypress:
-          #   image: "cypress/included:13.6.4"
-          #   depends_on:
-          #     frontend:
-          #       condition: service_healthy
-          #   working_dir: /e2e
-          #   volumes:
-          #     - .:/e2e
-          #   environment:
-          #     CYPRESS_baseUrl: https://frontend:3009
