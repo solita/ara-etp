@@ -9,24 +9,19 @@ on:
 
 jobs:
   test:
-    # TODO: use latests?
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Docker Compose Preparations
-        run: |
-          mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
-          docker --version
       - name: Docker Compose
         working-directory: e2e-tests/cypress
-        run: docker compose up --wait frontend
-      - name: Cypress run
+        run: |
+          mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
+          docker compose up --wait frontend
+      - name: Cypress
         uses: cypress-io/github-action@v6
         with:
           working-directory: e2e-tests/cypress
           wait-on: 'https://localhost:3009'
-          # 5 minutes
-          wait-on-timeout: 300
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
 
