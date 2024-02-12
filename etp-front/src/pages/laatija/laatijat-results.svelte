@@ -9,7 +9,7 @@
 
   import { locale, _ } from '@Language/i18n';
 
-  import H1 from '@Component/H/H1';
+  import H2 from '@Component/H/H2';
   import Pagination from '@Component/Pagination/Pagination.svelte';
 
   const i18n = $_;
@@ -39,7 +39,7 @@
 </script>
 
 <div class="mt-10">
-  <H1
+  <H2
     text={i18n(i18nRoot + '.results', {
       values: { count: R.length(laatijat) }
     })} />
