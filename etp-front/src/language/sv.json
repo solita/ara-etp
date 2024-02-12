@@ -82,7 +82,7 @@
       }
     },
     "new-kayttaja": "Ny användare",
-    "new-laatija": "Ny upprättare"
+    "new-laatija": "Ny partner"
   },
   "errors": {
     "load-error": "Sökningen av uppgifterna misslyckades.",
@@ -259,6 +259,7 @@
     "title": "Användare",
     "aineistoasiakkaat": "Materialkunder",
     "new-kayttaja": "Ny användare",
+    "new-partner": "Ny partner",
     "new-aineistoasiakas": "Ny materialkund",
     "nimi": "Namn",
     "rooli": "Roll",
