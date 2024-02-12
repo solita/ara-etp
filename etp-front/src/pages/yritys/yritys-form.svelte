@@ -15,7 +15,7 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Select from '@Component/Select/Select';
   import Select2 from '@Component/Select/Select2';
-  import H1 from '@Component/H/H1';
+  import H2 from '@Component/H/H2';
   import HR from '@Component/HR/HR';
   import Input from '@Component/Input/Input';
   import Button from '@Component/Button/Button';
@@ -134,7 +134,7 @@
     }
   }}>
   <div class="w-full mt-3">
-    <H1 text={perustiedotHeader} />
+    <H2 text={perustiedotHeader} />
     <div class="flex lg:flex-row flex-col lg:py-4 lg:-mx-4">
       {#if !R.isNil(yritys.id)}
         <div class="lg:w-1/6 lg:py-0 w-full lg:px-4 py-4">
@@ -193,7 +193,7 @@
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={i18n(i18nRoot + '.laskutusosoite')} />
+    <H2 text={i18n(i18nRoot + '.laskutusosoite')} />
     <div class="flex flex-col">
       <div class="py-4">
         <Input
@@ -286,7 +286,7 @@
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={i18n('yritys.verkkolaskuosoite')} />
+    <H2 text={i18n('yritys.verkkolaskuosoite')} />
     <div class="lg:w-1/4 w-full">
       <Input
         {disabled}
