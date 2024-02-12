@@ -36,13 +36,13 @@ services:
       WEBPACK_HOST: 0.0.0.0
       WEBPACK_PORT: 3009
 
-    # TODO: This makes GHA give 127
-    #    healthcheck:
-    #  test: curl -k https://localhost:3009 || exit 1
-    #  interval: 1m30s
-    #  timeout: 10s
-    #  retries: 3
-    #  start_period: 2m
+        # TODO: This makes GHA give 127
+    healthcheck:
+     test: curl -k https://localhost:3009 || exit 1
+     interval: 1m30s
+     timeout: 10s
+     retries: 3
+     start_period: 2m
     ports:
       - 127.0.0.1:3009:3009
     depends_on:

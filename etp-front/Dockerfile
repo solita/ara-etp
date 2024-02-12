@@ -9,8 +9,8 @@ WORKDIR /usr/src/app
 # TODO: Fix using --legacy-peer-deps
 # TODO: Fix conflicts with `npm install`
 # COPY ./package.json ./
-# RUN npm install --legacy-peer-deps
 COPY ./ ./
+RUN npm install --legacy-peer-deps
 
 CMD [ "npm", "run", "dev" ]
 # ENTRYPOINT ["npx", "webpack-dev-server", "--content-base public"]
