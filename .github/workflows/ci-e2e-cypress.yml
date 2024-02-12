@@ -19,18 +19,16 @@ jobs:
           docker --version
       - name: Docker Compose
         working-directory: e2e-tests/cypress
-        run: docker compose up
-          # - name: Cypress
-          #   working-directory: e2e-tests/cypress
-          #   run: docker run -i -v $PWD:/e2e -w /e2e --network etp-e2e_default -e "CYPRESS_baseUrl=https://frontend:3009" cypress/included:13.6.4
-      # - name: Cypress run
-      #   uses: cypress-io/github-action@v6
-      #   with:
-      #     working-directory: e2e-tests/cypress
-      #     # start: docker compose up --build -d
-      #     wait-on: 'https://localhost:3009'
-      #     # 5 minutes
-      #     wait-on-timeout: 300
+        run: docker compose up --wait frontend
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: e2e-tests/cypress
+          wait-on: 'https://localhost:3009'
+          # 5 minutes
+          wait-on-timeout: 300
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
 
   format:
     runs-on: ubuntu-latest

@@ -61,13 +61,13 @@ services:
       db:
         condition: service_started
 
-  cypress:
-    image: "cypress/included:13.6.4"
-    depends_on:
-      frontend:
-        condition: service_healthy
-    working_dir: /e2e
-    volumes:
-      - .:/e2e
-    environment:
-      CYPRESS_baseUrl: https://frontend:3009
+          # cypress:
+          #   image: "cypress/included:13.6.4"
+          #   depends_on:
+          #     frontend:
+          #       condition: service_healthy
+          #   working_dir: /e2e
+          #   volumes:
+          #     - .:/e2e
+          #   environment:
+          #     CYPRESS_baseUrl: https://frontend:3009
