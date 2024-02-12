@@ -1,6 +1,8 @@
 <script>
   export let text = '';
 
+  let element = undefined;
+
   /*
    * Here we are making an assumption that there will consistently be exactly
    * one H1 on the page and we want to focus it, to get two effects:
@@ -9,7 +11,23 @@
    * 2. The tab context will be set to a consistent place, so that the user
    *    can start tabbing through the page from a known place.
    */
-  const setFocus = e => e.focus();
+  const setFocus = e => {
+    e.focus();
+    element = e;
+  };
+
+  /*
+   * If the text paramter changes, the h1 does not get re-created - only
+   * its content is updated. This makes things work at least in the ohje
+   * pages, where navigation will not cause the whole page to get reloaded.
+   */
+  const setFocusWithText = _text => {
+    if (element) {
+      element.focus();
+    }
+  };
+
+  $: setFocusWithText(text);
 </script>
 
 <style type="text/postcss">
