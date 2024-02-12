@@ -76,4 +76,9 @@
         <packageUrl regex="true">^pkg:maven/org\.opensaml/opensaml@.*$</packageUrl>
         <cve>CVE-2017-16853</cve>
     </suppress>
+
+<!-- This affects Clojure versions before 1.9 and we have a newer version in use, so whole CVE is suppressed -->
+    <suppress>
+        <cve>CVE-2017-20189</cve>
+    </suppress>
 </suppressions>
