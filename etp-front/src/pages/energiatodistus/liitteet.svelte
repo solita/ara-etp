@@ -12,6 +12,7 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import { announcementsForModule } from '@Utility/announce';
+  import H1 from '@Component/H/H1.svelte';
 
   const i18nRoot = 'energiatodistus.liitteet';
   const i18n = $_;
@@ -82,6 +83,7 @@
 {#each Maybe.toArray(resources) as { liitteet, whoami }}
   <Overlay {overlay}>
     <div slot="content" class="w-full mt-3">
+      <H1 text={i18n('energiatodistus.liitteet.title')} />
       <Liitteet
         {liiteApi}
         {liitteet}
