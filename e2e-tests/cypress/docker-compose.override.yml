@@ -6,7 +6,7 @@ services:
 
   admin:
     profiles:
-      - dev
+      - pgAdmin # Run only when this profile is used.
     ports: !reset []
 
   mpollux:
