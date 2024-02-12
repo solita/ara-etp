@@ -25,7 +25,9 @@ services:
 
 
   frontend:
-    build: ../../etp-front
+    build:
+      context: ../../etp-front
+      dockerfile: e2e.Dockerfile
     environment:
       WEBPACK_PROXY_TARGET: http://backend:8080
       WEBPACK_ALLOWED_HOSTS: all
