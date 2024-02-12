@@ -1,1 +1,0 @@
-docker run -it -v $PWD:/e2e -w /e2e --network etp-e2e_default -e "CYPRESS_baseUrl=https://frontend:3009" cypress/included:13.6.4
