@@ -13,6 +13,8 @@
            (java.util Base64)))
 
 (def toplevel-processing-actions
+  "Asha päätoimenpiteet etp is using. Not all of these are created by etp,
+   but instead they are used to check the status and then transition out of them by etp."
   ["Vireillepano"
    "Käsittely"
    "Päätöksenteko"
@@ -181,11 +183,18 @@
   (into {} (filter #(or (= "NEW" (second %))
                         (= "UNFINISHED" (second %))) processing-action-states)))
 
-(defn resolve-latest-case-processing-action-state [sender-id request-id case-number]
-  (->> (resolve-case-processing-action-state sender-id request-id case-number)
+(defn latest-processing-action
+  "Takes a map of all the processing-actions-states returned by resolve-case-processing-action-state
+   checks all the unfinished ones and returns the last one in the process"
+  [processing-action-states]
+  (->> processing-action-states
        only-unfinished-toimenpides
        keys
        last))
+
+(defn resolve-latest-case-processing-action-state [sender-id request-id case-number]
+  (->> (resolve-case-processing-action-state sender-id request-id case-number)
+       latest-processing-action))
 
 (defn move-processing-action!
   "Move the case to the next step, if the new action (wanted-processing-action parameter) is valid and
@@ -195,7 +204,7 @@
 
   Note that this is used for both käytönvalvonta and oikeellisuuden valvonta."
   [sender-id request-id case-number processing-action-states wanted-processing-action]
-  (let [previous-unfinished-toimenpide (->> processing-action-states only-unfinished-toimenpides keys last)]
+  (let [previous-unfinished-toimenpide (latest-processing-action processing-action-states)]
     (when-let [action (cond
                         ;; First time going to käsittely, there shouldn't be Käsittely in any state yet
                         ;; Transition from Vireillepano to Käsittely is Siirry käsittelyyn
