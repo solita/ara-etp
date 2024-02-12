@@ -63,7 +63,6 @@
                  {:credentials-provider (credentials/basic-credentials-provider
                                           {:access-key-id     "minio"
                                            :secret-access-key "minio123"})
-                  ;; TODO: Read this from environment?
                   :endpoint-override    {:protocol :http
                                          :hostname "localhost"
                                          :port     9002}})
