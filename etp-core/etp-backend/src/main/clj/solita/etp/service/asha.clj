@@ -228,7 +228,7 @@
                          :decision          "Siirry tiedoksiantoon"}
 
                         ;; Käsittely is already ready so we need to use "Uudelleenkäsittele asia" to open new käsittely toimenpide
-                        ;; This is only used to move from Tiedoksianto ja toimeenpano
+                        ;; from the current toimenpide (there are multiple possibilities for what it is)
                         (and (= wanted-processing-action "Käsittely")
                              (some #(= ["Käsittely" "READY"] %) processing-action-states))
                         {:processing-action previous-unfinished-toimenpide
