@@ -133,13 +133,10 @@ module.exports = {
     },
     https: true,
     ...(process.env.WEBPACK_HOST && {host: process.env.WEBPACK_HOST}),
-    /* ...(process.env.WEBPACK_ALLOWED_HOSTS && {allowedHosts: [`${process.env.WEBPAKC_ALLOWED_HOSTS}`]}), */
-    allowedHosts: ['all'],
-    disableHostCheck: true,
+    ...(process.env.WEBPACK_ALLOWED_HOSTS && {allowedHosts: [`${process.env.WEBPACK_ALLOWED_HOSTS}`]}),
     port: process.env.WEBPACK_PORT || 3000,
     proxy: {
       '/api': {
-        //TODO: Figure out how to configure this.
         target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
         changeOrigin: true,

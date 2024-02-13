@@ -30,7 +30,7 @@ services:
       dockerfile: e2e.Dockerfile
     environment:
       WEBPACK_PROXY_TARGET: http://backend:8080
-      WEBPACK_ALLOWED_HOSTS: all
+      WEBPACK_ALLOWED_HOSTS: auto
       WEBPACK_HOST: 0.0.0.0
       WEBPACK_PORT: 3009
     healthcheck:
