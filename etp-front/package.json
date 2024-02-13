@@ -81,7 +81,6 @@
     "turndown": "^7.0.0"
   },
   "optionalDependencies": {
-    "cypress": "^13.6.3",
     "docdash": "^1.2.0",
     "jsdoc": "^3.6.7",
     "nodemon": "^3.0.0",
