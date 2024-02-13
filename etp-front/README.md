@@ -113,11 +113,6 @@ General purpose pure function libraries.
 
 Static assets (images, pdfs, etc.)
 
-#### ./cypress
-
-Cypress tests
-
-
 ### Best practices
 
 #### Naming things
