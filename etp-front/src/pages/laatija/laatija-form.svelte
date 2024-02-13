@@ -11,7 +11,7 @@
 
   import { locale, _ } from '@Language/i18n';
 
-  import H1 from '@Component/H/H1';
+  import H2 from '@Component/H/H2';
   import HR from '@Component/HR/HR';
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
@@ -154,7 +154,7 @@
       </div>
     {/if}
 
-    <H1 text={i18n(i18nRoot + '.perustiedot-header')} />
+    <H2 text={i18n(i18nRoot + '.perustiedot-header')} />
     <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
         <Input
@@ -320,7 +320,7 @@
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={i18n('laatija.laatijatiedot-header')} />
+    <H2 text={i18n('laatija.laatijatiedot-header')} />
 
     {#if R.or(laatija.laatimiskielto, isPaakayttaja)}
       <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
@@ -415,7 +415,7 @@
   </div>
 
   <div class="mt-8">
-    <H1 text={i18n('laatija.api-key-header')} />
+    <H2 text={i18n('laatija.api-key-header')} />
     <div class="flex flex-col">
       <div class="lg:w-1/2 w-full">
         <Input
@@ -439,7 +439,7 @@
   </div>
   <HR />
   <div class="mt-8">
-    <H1 text={i18n('laatija.julkisettiedot-header')} />
+    <H2 text={i18n('laatija.julkisettiedot-header')} />
     <div class="flex flex-col py-4 lg:-mx-4">
       <div class="lg:w-1/3 lg:py-0 w-full px-4 mb-2">
         <Checkbox

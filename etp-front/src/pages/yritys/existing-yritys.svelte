@@ -19,6 +19,7 @@
   import * as Yritykset from '@Pages/yritys/yritys-utils';
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import H1 from '@Component/H/H1.svelte';
 
   const i18n = $_;
   const i18nRoot = 'yritys';
@@ -101,8 +102,9 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content">
+  <div slot="content" class="mt-3">
     {#each Maybe.toArray(resources) as { yritys, luokittelut, whoami }}
+      <H1 text={yritys.nimi} />
       <YritysForm
         {submit}
         setDeleted={Maybe.Some(setDeleted)}

@@ -32,6 +32,8 @@
     "invalid-date": "Virheellinen päivämäärä"
   },
   "navigation": {
+    "breadcrumb-bar": "Sivuhierarkia",
+    "navigation-tab-bar": "Konteksti",
     "etusivu": "Etusivu",
     "energiatodistukset": "Energia\u00adtodis\u00adtukset",
     "uusi-energiatodistus": "Uusi energiatodistus",
@@ -185,6 +187,8 @@
     "klo": "klo"
   },
   "kayttaja": {
+    "omattiedot": "Omat tiedot",
+    "kayttajantiedot": "Käyttäjän tiedot",
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
     "passivoitu": "Passivoi käyttäjätunnus",

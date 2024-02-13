@@ -178,6 +178,20 @@
     )(kayttaja, R.omit(['henkilotunnus'], laatija));
 
   $: load(params);
+
+  const pageTitle = (whoami, kayttaja) => {
+    if (whoami.id === kayttaja.id) {
+      return i18n('kayttaja.omattiedot');
+    } else if (kayttaja.organisaatio) {
+      return `${i18n('kayttaja.kayttajantiedot')} - ${kayttaja.etunimi} ${
+        kayttaja.sukunimi
+      } (${kayttaja.organisaatio})`;
+    } else {
+      return `${i18n('kayttaja.kayttajantiedot')} - ${kayttaja.etunimi} ${
+        kayttaja.sukunimi
+      }`;
+    }
+  };
 </script>
 
 <Overlay {overlay}>
@@ -186,6 +200,7 @@
     {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit, aineistot, kayttajaAineistot }}
       {#if Maybe.isSome(laatija)}
         <div class="mt-6">
+          <H1 text={pageTitle(whoami, kayttaja)} />
           <LastLogin {kayttaja} />
           <Verification {whoami} {kayttaja} />
           <LaatijaForm
@@ -197,13 +212,7 @@
             laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
         </div>
       {:else if Kayttajat.isAineistoasiakas(kayttaja)}
-        <H1
-          text={kayttaja.etunimi +
-            ' ' +
-            kayttaja.sukunimi +
-            ' (' +
-            kayttaja.organisaatio +
-            ')'} />
+        <H1 text={pageTitle(whoami, kayttaja)} />
         <AineistoasiakasForm
           submit={submitAineistoasiakas(whoami, params.id)}
           cancel={_ => load(params)}
@@ -213,7 +222,7 @@
           {kayttajaAineistot}
           {whoami} />
       {:else}
-        <H1 text={kayttaja.etunimi + ' ' + kayttaja.sukunimi} />
+        <H1 text={pageTitle(whoami, kayttaja)} />
         <LastLogin {kayttaja} />
         <KayttajaForm
           submit={submitKayttaja(whoami, params.id)}

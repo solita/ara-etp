@@ -31,6 +31,8 @@
     "invalid-date": "Felaktigt datum"
   },
   "navigation": {
+    "breadcrumb-bar": "Sidhierarki",
+    "navigation-tab-bar": "Kontext",
     "energiatodistukset": "En\u00ADer\u00ADgi\u00adcer\u00adti\u00ADfi\u00ADkat",
     "uusi-energiatodistus": "Nytt energicertifikat",
     "viesti": "Meddelandecentral",
@@ -82,7 +84,7 @@
       }
     },
     "new-kayttaja": "Ny användare",
-    "new-laatija": "Ny upprättare"
+    "new-laatija": "Ny partner"
   },
   "errors": {
     "load-error": "Sökningen av uppgifterna misslyckades.",
@@ -181,6 +183,8 @@
     "klo": "kl."
   },
   "kayttaja": {
+    "omattiedot": "Egna uppgifter",
+    "kayttajantiedot": "Användarens uppgifter",
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
     "passivoitu": "Passivera användarnamn",
@@ -259,6 +263,7 @@
     "title": "Användare",
     "aineistoasiakkaat": "Materialkunder",
     "new-kayttaja": "Ny användare",
+    "new-partner": "Ny partner",
     "new-aineistoasiakas": "Ny materialkund",
     "nimi": "Namn",
     "rooli": "Roll",

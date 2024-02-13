@@ -16,6 +16,7 @@
   import * as Locales from '@Language/locale-utils';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import { announcementsForModule } from '@Utility/announce';
+  import H1 from '@Component/H/H1.svelte';
 
   let overlay = false;
   let dirty = false;
@@ -71,8 +72,9 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content">
+  <div slot="content" class="mt-3">
     {#each Maybe.toArray(resources) as { luokittelut, whoami }}
+      <H1 text={$_('yritys.uusi-yritys')} />
       <YritysForm
         bind:yritys
         bind:dirty
