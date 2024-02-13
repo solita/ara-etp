@@ -21,7 +21,7 @@
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
 
-  const { announceError } = announcementsForModule('ohje');
+  const { announceError, announceSuccess } = announcementsForModule('ohje');
 
   const emptySivu = {
     published: false,
@@ -53,6 +53,7 @@
         dirty = false;
         overlay = false;
         push(`/ohje/${response.id}`);
+        announceSuccess(i18n('ohje.creator.success'));
       }
     ),
     R.tap(enableOverlay),
