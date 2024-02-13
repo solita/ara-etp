@@ -183,6 +183,10 @@
     "klo": "kl."
   },
   "kayttaja": {
+    "omattiedot": "Egna uppgifter",
+    "kayttaja": "Användare",
+    "laatija": "Upprättare",
+    "aineistoasiakas": "Materialkund",
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
     "passivoitu": "Passivera användarnamn",

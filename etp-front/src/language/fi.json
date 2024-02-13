@@ -187,6 +187,10 @@
     "klo": "klo"
   },
   "kayttaja": {
+    "omattiedot": "Omat tiedot",
+    "kayttaja": "Käyttäjä",
+    "laatija": "Laatija",
+    "aineistoasiakas": "Aineistoasiakas",
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
     "passivoitu": "Passivoi käyttäjätunnus",
