@@ -13,10 +13,14 @@
            (java.util Base64)))
 
 (def toplevel-processing-actions
+  "Asha päätoimenpiteet etp is using. Not all of these are created by etp,
+   but instead they are used to check the status and then transition out of them by etp."
   ["Vireillepano"
    "Käsittely"
    "Päätöksenteko"
-   "Tiedoksianto ja toimeenpano"])
+   "Tiedoksianto ja toimeenpano"
+   "Valitusajan umpeutuminen"
+   "Oikaisuvaatimuksen käsittely"])
 
 (defn- must-exist! [n]
   (when (< n 0)
@@ -175,10 +179,22 @@
                 (catch Exception _e))))
        (into (array-map))))
 
-(defn resolve-latest-case-processing-action-state [sender-id request-id case-number]
-  (->> (resolve-case-processing-action-state sender-id request-id case-number)
+(defn only-unfinished-toimenpides [processing-action-states]
+  (into {} (filter #(or (= "NEW" (second %))
+                        (= "UNFINISHED" (second %))) processing-action-states)))
+
+(defn latest-processing-action
+  "Takes a map of all the processing-actions-states returned by resolve-case-processing-action-state
+   checks all the unfinished ones and returns the last one in the process"
+  [processing-action-states]
+  (->> processing-action-states
+       only-unfinished-toimenpides
        keys
        last))
+
+(defn resolve-latest-case-processing-action-state [sender-id request-id case-number]
+  (->> (resolve-case-processing-action-state sender-id request-id case-number)
+       latest-processing-action))
 
 (defn move-processing-action!
   "Move the case to the next step, if the new action (wanted-processing-action parameter) is valid and
@@ -188,39 +204,37 @@
 
   Note that this is used for both käytönvalvonta and oikeellisuuden valvonta."
   [sender-id request-id case-number processing-action-states wanted-processing-action]
-  (when-let [action (cond
-                      ;; First time going to käsittely, there shouldn't be Käsittely in any state yet
-                      ;; Transition from Vireillepano to Käsittely is Siirry käsittelyyn
-                      (and (= wanted-processing-action "Käsittely")
-                           (every? #(not= "Käsittely" (first %)) processing-action-states))
-                      {:processing-action "Vireillepano"
-                       :decision          "Siirry käsittelyyn"}
+  (let [previous-unfinished-toimenpide (latest-processing-action processing-action-states)]
+    (when-let [action (cond
+                        ;; First time going to käsittely, there shouldn't be Käsittely in any state yet
+                        ;; Transition from Vireillepano to Käsittely is Siirry käsittelyyn
+                        (and (= wanted-processing-action "Käsittely")
+                             (every? #(not= "Käsittely" (first %)) processing-action-states))
+                        {:processing-action "Vireillepano"
+                         :decision          "Siirry käsittelyyn"}
 
-                      ;; Moving from Käsittely to Päätöksenteko is done by Siirry päätöksentekoon transition.
-                      ;; The transition is the same no matter if it's the first or second or
-                      ;; nth time moving to Päätöksenteko
-                      (= wanted-processing-action "Päätöksenteko")
-                      {:processing-action "Käsittely"
-                       :decision          "Siirry päätöksentekoon"}
+                        ;; Moving from Käsittely to Päätöksenteko is done by Siirry päätöksentekoon transition.
+                        ;; The transition is the same no matter if it's the first or second or
+                        ;; nth time moving to Päätöksenteko
+                        (= wanted-processing-action "Päätöksenteko")
+                        {:processing-action "Käsittely"
+                         :decision          "Siirry päätöksentekoon"}
 
-                      ;; Moving from Päätöksenteko to Tiedoksianto ja toimeenpano is done by Siirry tiedoksiantoon transition.
-                      ;; The transition is the same no matter if it's the first or second or
-                      ;; nth time moving to Tiedoksianto ja toimeenpano
-                      (= wanted-processing-action "Tiedoksianto ja toimeenpano")
-                      {:processing-action "Päätöksenteko"
-                       :decision          "Siirry tiedoksiantoon"}
+                        ;; Moving from Päätöksenteko to Tiedoksianto ja toimeenpano is done by Siirry tiedoksiantoon transition.
+                        ;; The transition is the same no matter if it's the first or second or
+                        ;; nth time moving to Tiedoksianto ja toimeenpano
+                        (= wanted-processing-action "Tiedoksianto ja toimeenpano")
+                        {:processing-action "Päätöksenteko"
+                         :decision          "Siirry tiedoksiantoon"}
 
-                      ;; Käsittely is already ready so we need to use "Uudelleenkäsittele asia" to open new käsittely toimenpide
-                      ;; This is only used to move from Tiedoksianto ja toimeenpano
-                      (and (= wanted-processing-action "Käsittely")
-                           (some #(= ["Käsittely" "READY"] %) processing-action-states))
-                      {:processing-action "Tiedoksianto ja toimeenpano"
-                       :decision          "Uudelleenkäsittele asia"}
+                        ;; Käsittely is already ready so we need to use "Uudelleenkäsittele asia" to open new käsittely toimenpide
+                        ;; from the current toimenpide (there are multiple possibilities for what it is)
+                        (and (= wanted-processing-action "Käsittely")
+                             (some #(= ["Käsittely" "READY"] %) processing-action-states))
+                        {:processing-action previous-unfinished-toimenpide
+                         :decision          "Uudelleenkäsittele asia"}
 
-                      :else nil)]
-    ;; If the action is already in the desired state, do nothing. It is allowed to move to a state that
-    ;; has already been handled previously (state is READY).
-    (when-not (contains? #{"NEW" "UNFINISHED"} (get processing-action-states wanted-processing-action))
+                        :else nil)]
       (proceed-operation! sender-id request-id case-number (:processing-action action) (:decision action)))))
 
 (defn mark-processing-action-as-ready! [sender-id request-id case-number processing-action]
