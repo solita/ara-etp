@@ -343,7 +343,11 @@ context('Laatija', () => {
       );
     });
 
-    // This works if one yritys has been added, but no yritys exists.
+    // Gives 'Puuttelliset käyttöoikeudet'
+    // This works if following steps are performed manually before running this test:
+    // - Be Liisa Specimen-Potex
+    // - Create some yritys
+    // Does not work if the manually created yritys is deleted.
     it.skip('should create new yritys', () => {
       const yritys = FIXTURES.yritys[1];
 
