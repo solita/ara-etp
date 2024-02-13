@@ -17,7 +17,7 @@ npm run cypress
 
 or just run the tests:
 
-```
+```bash
 npm run cypress:run
 ```
 
@@ -31,7 +31,7 @@ overridden by `docker-compose.override.yml` so that you can run it while also ru
 
 > **NB:** The `e2e Docker stack` might not yet use all of the components (mpollux, minio, etc.)
 > correctly. Typically you can fix this by making their location (e.g. localhost:1234) configurable
-> throught an environment variable and setting it to the conainer's name (e.g. container:1234).
+> through an environment variable and setting it to the container's name (e.g. container:1234).
 
 Best practises can be found at https://docs.cypress.io/guides/references/best-practices
 
