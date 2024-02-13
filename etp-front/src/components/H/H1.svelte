@@ -1,13 +1,15 @@
 <script>
   export let text = '';
 
-  export let focus = true;
-
-  const setFocus = e => {
-    if (focus) {
-      e.focus();
-    }
-  };
+  /*
+   * Here we are making an assumption that there will consistently be exactly
+   * one H1 on the page and we want to focus it, to get two effects:
+   *
+   * 1. The screen reader will read out the title of the page when it loads.
+   * 2. The tab context will be set to a consistent place, so that the user
+   *    can start tabbing through the page from a known place.
+   */
+  const setFocus = e => e.focus();
 </script>
 
 <style type="text/postcss">
