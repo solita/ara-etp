@@ -184,9 +184,7 @@
   },
   "kayttaja": {
     "omattiedot": "Egna uppgifter",
-    "kayttaja": "Användare",
-    "laatija": "Upprättare",
-    "aineistoasiakas": "Materialkund",
+    "kayttajantiedot": "Användarens uppgifter",
     "last-login": "Senast inloggad",
     "no-login": "Ännu inte inloggad.",
     "passivoitu": "Passivera användarnamn",

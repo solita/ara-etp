@@ -188,9 +188,7 @@
   },
   "kayttaja": {
     "omattiedot": "Omat tiedot",
-    "kayttaja": "Käyttäjä",
-    "laatija": "Laatija",
-    "aineistoasiakas": "Aineistoasiakas",
+    "kayttajantiedot": "Käyttäjän tiedot",
     "last-login": "Kirjautunut viimeksi",
     "no-login": "Ei vielä kirjautunut.",
     "passivoitu": "Passivoi käyttäjätunnus",
