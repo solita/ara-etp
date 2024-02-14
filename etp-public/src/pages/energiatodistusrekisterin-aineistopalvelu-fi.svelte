@@ -160,14 +160,11 @@
     <ol class="ml-6">
       <li>
         Täytä
-        <Link
-          href="https://energiatodistusrekisteri.fi/tietolupa-hakemuslomake.pdf"
-          >hakemus (pdf)</Link>
+        <Link href={TietolupaHakemuslomake} target="_blank">hakemus (pdf)</Link>
         sekä tutustu
-        <Link
-          href="https://energiatodistusrekisteri.fi/sopimus-tietopalvelun-kaytosta-luonnos.pdf">
-          sopimusluonnokseen (pdf)
-        </Link>.
+        <Link href={SopimusTietopalvelunKaytosta} target="_blank"
+          >sopimusluonnokseen (pdf)</Link
+        >.
       </li>
       <li>
         Lähetä hakemus sähköpostitse Aran kirjaamoon (<Link
@@ -196,7 +193,7 @@
     </ol>
     <h2>
       <ButtonLink
-        href="https://energiatodistusrekisteri.fi/tietolupa-hakemuslomake.pdf"
+        href={TietolupaHakemuslomake}
         target="_blank"
         {...buttonLinkStyles.green}>HAKEMUS</ButtonLink>
     </h2>

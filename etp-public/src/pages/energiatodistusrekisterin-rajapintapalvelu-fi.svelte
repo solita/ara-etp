@@ -4,6 +4,7 @@
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
   import { announceAssertively } from '@/utilities/announce';
+  import SopimusLuonnos from '@Asset/etp-rajapintapalvelu-sopimus-luonnos-fi.pdf';
 
   const title = 'Energiatodistusrekisterin rajapintapalvelu';
   announceAssertively(title);
@@ -106,7 +107,9 @@
         Odota tietolupapäätöstä, jonka lähetämme hakemuksessa ilmoitetulle
         yhteyshenkilölle ja hakijan viralliselle edustajalle sähköpostitse. Jos
         tietolupapäätös on myönteinen, hakijan viralliselle edustajalle
-        toimitetaan myös palveluväylää koskeva sopimus allekirjoitettavaksi.
+        toimitetaan myös palveluväylää koskeva <Link
+          href={SopimusLuonnos}
+          target="_blank">sopimus</Link> allekirjoitettavaksi.
       </li>
       <li>
         Sopimuksen allekirjoittamisen jälkeen avaamme palveluväylärajapinnan

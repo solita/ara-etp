@@ -4,6 +4,7 @@
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
   import { announceAssertively } from '@/utilities/announce';
+  import SopimusLuonnos from '@Asset/etp-rajapintapalvelu-sopimus-luonno-sv.pdf';
 
   const title = 'Energicertifikatregistrets gränssnittstjänst';
   announceAssertively(title);
@@ -113,9 +114,10 @@
       <li>
         Väntä på beslutet om datatillstånd som vi skickar till den kontaktperson
         som angetts i ansökan och till sökandens officiella företrädare per
-        e-post. Om beslutet om datatillstånd är positivt, skickas också avtalet
-        för informationsleden till sökandens officiella företrädare för
-        undertecknande.
+        e-post. Om beslutet om datatillstånd är positivt, skickas också <Link
+          href={SopimusLuonnos}
+          target="_blank">avtalet</Link>
+        för informationsleden till sökandens officiella företrädare för undertecknande.
       </li>
       <li>
         Efter att avtalet har undertecknats öppnar vi

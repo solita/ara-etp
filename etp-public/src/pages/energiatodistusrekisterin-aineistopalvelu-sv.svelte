@@ -6,8 +6,8 @@
   import Container, { styles as containerStyles } from '@Component/container';
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
-  import SopimusTietopalvelunKaytosta from '@Asset/sopimus-tietopalvelun-kaytosta-luonnos.pdf';
-  import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake.pdf';
+  import SopimusTietopalvelunKaytosta from '@Asset/sopimus-tietopalvelun-kaytosta-luonnos-sv.pdf';
+  import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake-sv.pdf';
   import { announceAssertively } from '@/utilities/announce';
 
   const title = 'Energicertifikatregistrets materialtjänst';
@@ -162,13 +162,10 @@
     <ol class="ml-6">
       <li>
         Fyll i
-        <Link
-          href="https://energiatodistusrekisteri.fi/tietolupa-hakemuslomake.pdf"
-          >änsökan (pdf)</Link>
+        <Link href={TietolupaHakemuslomake} target="_blank">änsökan (pdf)</Link>
         och bekanta dig med
-        <Link
-          href="https://energiatodistusrekisteri.fi/sopimus-tietopalvelun-kaytosta-luonnos.pdf">
-          avtalsutkastet (pdf)
+        <Link href={SopimusTietopalvelunKaytosta} target="_blank"
+          >avtalsutkastet (pdf)
         </Link>.
       </li>
       <li>
@@ -200,7 +197,7 @@
     </ol>
     <h2>
       <ButtonLink
-        href="https://energiatodistusrekisteri.fi/tietolupa-hakemuslomake.pdf"
+        href={SopimusTietopalvelunKaytosta}
         target="_blank"
         {...buttonLinkStyles.green}>ANSÖKAN</ButtonLink>
     </h2>
