@@ -122,7 +122,7 @@
       </li>
       <li>
         Energiatodistusrekisterin rajapintapalvelu on käytettävissäsi. <Link
-          href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu"
+          href="https://github.com/solita/ara-etp/wiki/Rajapintapalvelu"
           >Katso tarkemmat ohjeet rajapintaan liittymisestä GitHubissa</Link
         >.
       </li>

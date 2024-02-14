@@ -132,7 +132,7 @@
       </li>
       <li>
         Du har tillgång till energicertifikatregistrets gränssnittstjänst
-        <Link href="https://github.com/solita/ara-etp/wiki/Aineistopalvelu"
+        <Link href="https://github.com/solita/ara-etp/wiki/Rajapintapalvelu"
           >Se närmare anvisningar om anslutning till gränssnittet i Github</Link
         >.
       </li>
