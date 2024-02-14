@@ -1,5 +1,5 @@
 <script>
-  export let name;
+  export let dataCy;
   export let text = '';
 </script>
 
@@ -9,4 +9,4 @@
   }
 </style>
 
-<h2 {name} data-cy={name}>{text}</h2>
+<h2 data-cy={dataCy}>{text}</h2>
