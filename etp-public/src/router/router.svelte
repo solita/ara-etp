@@ -24,7 +24,9 @@
   import TietoaSivustosta from '@Page/tietoa-sivustosta';
   import LaatijanKirjautuminen from '@Page/laatijankirjautuminen';
   import Rekisteroitymisohjeet from '@Page/rekisteroitymisohjeet';
-  import AineistopalveluLiittyminen from '@Page/aineistopalvelu-liittyminen';
+  import TietojenLuovutusJaRajapinnat from '@Page/tietojenluovutus-ja-rajapinnat';
+  import EnergiatodistusrekisterinAineistopalvelu from '@Page/energiatodistusrekisterin-aineistopalvelu';
+  import EnergiatodistusrekisterinRajapintapalvelu from '@Page/energiatodistusrekisterin-rajapintapalvelu';
   import Tilastot from '@Page/tilastot';
   import NotFound from '@Page/not-found';
 
@@ -60,8 +62,14 @@
   router('/rekisteroitymisohjeet', () => {
     page = Rekisteroitymisohjeet;
   });
-  router('/aineistopalvelu-liittyminen', () => {
-    page = AineistopalveluLiittyminen;
+  router('/tietojenluovutus-ja-rajapinnat', () => {
+    page = TietojenLuovutusJaRajapinnat;
+  });
+  router('/energiatodistusrekisterin-aineistopalvelu', () => {
+    page = EnergiatodistusrekisterinAineistopalvelu;
+  });
+  router('/energiatodistusrekisterin-rajapintapalvelu', () => {
+    page = EnergiatodistusrekisterinRajapintapalvelu;
   });
   router('/tilastot', () => {
     page = Tilastot;

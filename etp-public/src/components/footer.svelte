@@ -88,11 +88,11 @@
         </section>
 
         <section class="mt-12">
-          <h2 class="mb-4">{$_('FOOTER_AINEISTOPALVELU')}</h2>
+          <h2 class="mb-4">{$_('FOOTER_TIETOJENLUOVUTUS')}</h2>
           <a
-            href="/aineistopalvelu-liittyminen#top"
+            href="/tietojenluovutus-ja-rajapinnat#top"
             class="block underline text-darkgreen">
-            {$_('AINEISTOPALVELU_LIITTYMINEN')}
+            {$_('FOOTER_TIETOJENLUOVUTUS')}
           </a>
         </section>
       </div>
