@@ -35,7 +35,8 @@ export const type = {
     'notice-bailiff': 18,
     'waiting-for-deadline': 19
   },
-  'penalty-list-delivery-in-progress': 21
+  'penalty-list-delivery-in-progress': 21,
+  reopen: 22
 };
 
 const types = R.invertObj(Deep.treeFlat('-', R.F, type));

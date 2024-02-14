@@ -277,4 +277,14 @@
     (t/testing "is not sakkopaatos-toimenpide?"
       (t/is (false? (toimenpide/sakkopaatos-toimenpide? {:type-id 21}))))
     (t/testing "is not asha-toimenpide?"
-      (t/is (false? (toimenpide/asha-toimenpide? {:type-id 21}))))))
+      (t/is (false? (toimenpide/asha-toimenpide? {:type-id 21})))))
+
+  (t/testing "Suljetun valvonnan uudelleenavaus"
+    (t/testing "has type-id 22 and type-key :reopen"
+      (t/is (= (toimenpide/type-key 22) :reopen)))
+    (t/testing "is not kaskypaatos-toimenpide?"
+      (t/is (false? (toimenpide/kaskypaatos-toimenpide? {:type-id 22}))))
+    (t/testing "is not sakkopaatos-toimenpide?"
+      (t/is (false? (toimenpide/sakkopaatos-toimenpide? {:type-id 22}))))
+    (t/testing "is not asha-toimenpide?"
+      (t/is (false? (toimenpide/asha-toimenpide? {:type-id 22}))))))

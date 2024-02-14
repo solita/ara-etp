@@ -1519,6 +1519,7 @@
     "self": "Jag",
     "valvoja": "Övervakare",
     "aloita-valvonta": "Inled kontroll",
+    "jatka-valvontaa": "Jatka valvontaa (sv)",
     "no-events": "Inga händelser",
     "add-muistiinpano": "Lägg till anteckning",
     "new-toimenpide": "Ny åtgärd",
@@ -2036,6 +2037,12 @@
           "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.ork (at) om.fi.sec (sv)",
           "description": "Kommentti (sv)",
           "publish-button": "Kirjaa kommentti (sv)"
+        },
+        "reopen": {
+          "title": "Jatka valvontaa (sv)",
+          "info": "Suljettu valvonta tulee avata erikseen myös asianhallinnassa, jotta käsittelyn jatkaminen onnistuu. Tämä toimenpide mahdollistaa ainoastaan käsittelyn jatkamisen ETP:n puolella. (sv)",
+          "description": "Kommentti (sv)",
+          "publish-button": "Jatka valvontaa (sv)"
         },
         "court-hearing": {
           "title": "HaO-käsittely (sv)",

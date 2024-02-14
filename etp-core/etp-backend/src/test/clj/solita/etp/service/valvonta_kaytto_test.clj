@@ -133,7 +133,13 @@
                  :label-sv             "Sakkoluettelon lähetys menossa (sv)"
                  :valid                true
                  :manually-deliverable false
-                 :allow-comments       true}])))
+                 :allow-comments       true}
+                {:allow-comments       true
+                 :id                   22
+                 :label-fi             "Suljetun valvonnan uudelleenavaus"
+                 :label-sv             "Suljetun valvonnan uudelleenavaus (sv)"
+                 :manually-deliverable false
+                 :valid                false}])))
 
     (t/testing "Toimenpidetyypit matches the schema"
       (t/is (nil? (schema/check [valvonta-kaytto-schema/Toimenpidetyypit]
@@ -536,7 +542,7 @@
     (let [valvonta-id (valvonta-kaytto/add-valvonta!
                         ts/*db*
                         {:katuosoite (str "Testikatu")})
-          query {:include-closed true
+          query {:include-closed         true
                  :only-uhkasakkoprosessi true}]
       ;; Create a toimenpide that is part of uhkasakkoprosessi
       (jdbc/insert! ts/*db*
@@ -556,15 +562,15 @@
       ;; Create valvonnan lopetus toimenpide
       (jdbc/insert! ts/*db*
                     :vk_toimenpide
-                    {:valvonta_id        valvonta-id
-                     :type_id            5
-                     :create_time        (-> (LocalDate/of 2023 8 13)
-                                             (.atStartOfDay (ZoneId/systemDefault))
-                                             .toInstant)
-                     :publish_time       (-> (LocalDate/of 2023 8 13)
-                                             (.atStartOfDay (ZoneId/systemDefault))
-                                             .toInstant)
-                     :diaarinumero       "ARA-05.03.01-2023-235"})
+                    {:valvonta_id  valvonta-id
+                     :type_id      5
+                     :create_time  (-> (LocalDate/of 2023 8 13)
+                                       (.atStartOfDay (ZoneId/systemDefault))
+                                       .toInstant)
+                     :publish_time (-> (LocalDate/of 2023 8 13)
+                                       (.atStartOfDay (ZoneId/systemDefault))
+                                       .toInstant)
+                     :diaarinumero "ARA-05.03.01-2023-235"})
 
       (t/is (= (count (valvonta-kaytto/find-valvonnat ts/*db* query))
                1))

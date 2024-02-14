@@ -28,7 +28,8 @@
    17 :penalty-decision-notice-second-mailing
    18 :penalty-decision-notice-bailiff
    19 :penalty-decision-waiting-for-deadline
-   21 :penalty-list-delivery-in-progress})
+   21 :penalty-list-delivery-in-progress
+   22 :reopen})
 
 (defn type-key [type-id]
   (if-let [type-key (type-id->type-key type-id)]
