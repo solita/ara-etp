@@ -1,4 +1,5 @@
 <script>
+  export let name;
   export let text = '';
 </script>
 
@@ -8,4 +9,4 @@
   }
 </style>
 
-<h2>{text}</h2>
+<h2 {name} data-cy={name}>{text}</h2>
