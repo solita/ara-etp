@@ -23,7 +23,7 @@
   import Navigation from '@Pages/ohje/navigation';
 
   const i18n = $_;
-  const { announceError } = announcementsForModule('ohje');
+  const { announceError, announceSuccess } = announcementsForModule('ohje');
 
   export let params;
 
@@ -81,6 +81,7 @@
         dirty = false;
         overlay = false;
         push(`/ohje/${params.id}`);
+        announceSuccess(i18n('ohje.editor.success'));
       }
     ),
     R.tap(enableOverlay),
