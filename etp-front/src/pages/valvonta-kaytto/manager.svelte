@@ -125,6 +125,9 @@
   const isAuditCase = toimenpiteet =>
     !R.isEmpty(toimenpiteet) && Toimenpiteet.isAuditCase(R.last(toimenpiteet));
 
+  const isClosed = toimenpiteet =>
+    !R.isEmpty(toimenpiteet) && Toimenpiteet.isCloseCase(R.last(toimenpiteet));
+
   const isManuallyDeliverable = R.compose(
     Toimenpiteet.isToimenpideOfGivenTypes,
     Toimenpiteet.manuallyDeliverableToimenpideTypes
@@ -194,11 +197,17 @@
     on:click={openNewNote} />
 </div>
 
-{#if !isAuditCase(toimenpiteet)}
+{#if !isAuditCase(toimenpiteet) && !isClosed(toimenpiteet)}
   <div class="mb-5">
     <Button
       text={i18n('valvonta.aloita-valvonta')}
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
+  </div>
+{:else if isClosed(toimenpiteet)}
+  <div class="mb-5">
+    <Button
+      text={i18n('valvonta.jatka-valvontaa')}
+      on:click={_ => openNewToimenpide(Toimenpiteet.type.reopen)} />
   </div>
 {:else}
   <H2 text={i18n('valvonta.new-toimenpide')} />

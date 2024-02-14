@@ -19,7 +19,11 @@ values
 (17, 'Sakkopäätös / tiedoksianto (toinen postitus)', 'Sakkopäätös / tiedoksianto (toinen postitus) (sv)', 18, true, true, true),
 (18, 'Sakkopäätös / tiedoksianto (Haastemies)', 'Sakkopäätös / tiedoksianto (Haastemies) (sv)', 19, true, true, true),
 (19, 'Sakkopäätös / valitusajan odotus ja umpeutuminen', 'Sakkopäätös / valitusajan odotus ja umpeutuminen (sv)', 20, true, false, true),
-(21, 'Sakkoluettelon lähetys menossa', 'Sakkoluettelon lähetys menossa (sv)', 22, true, false, true)
+(21, 'Sakkoluettelon lähetys menossa', 'Sakkoluettelon lähetys menossa (sv)', 22, true, false, true),
+-- Suljetun valvonnan uudelleenavaus has valid marked false so it's not selectable when creating a new toimenpide.
+-- It's still used in the special case when reopening an already closed valvonta.
+(22, 'Suljetun valvonnan uudelleenavaus', 'Suljetun valvonnan uudelleenavaus (sv)', 23, false, false, true)
+
 on conflict (id) do update set
   label_fi = excluded.label_fi,
   label_sv = excluded.label_sv,

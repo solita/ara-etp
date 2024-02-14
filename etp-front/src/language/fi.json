@@ -1468,6 +1468,7 @@
     "self": "Minä",
     "valvoja": "Valvoja",
     "aloita-valvonta": "Aloita valvonta",
+    "jatka-valvontaa": "Jatka valvontaa",
     "no-events": "Ei tapahtumia",
     "add-muistiinpano": "Lisää muistiinpano",
     "new-toimenpide": "Uusi toimenpide",
@@ -2051,6 +2052,12 @@
           "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.ork (at) om.fi.sec",
           "description": "Kommentti",
           "publish-button": "Kirjaa kommentti"
+        },
+        "reopen": {
+          "title": "Jatka valvontaa",
+          "info": "Suljettu valvonta tulee avata erikseen myös asianhallinnassa, jotta käsittelyn jatkaminen onnistuu. Tämä toimenpide mahdollistaa ainoastaan käsittelyn jatkamisen ETP:n puolella.",
+          "description": "Kommentti",
+          "publish-button": "Jatka valvontaa"
         },
         "messages": {
           "not-found": "Toimenpidettä ei ole olemassa.",
