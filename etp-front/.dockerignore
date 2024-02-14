@@ -1,0 +1,19 @@
+# Ignore all files, and then whitelist only required
+*
+
+!package.json
+!package-lock.json
+
+!src/
+!assets/
+
+!babel.config.js
+!fill-sv-localization.js
+!init-mocha.js
+!jsconfig.json
+!modheaders.json
+!postcss.config.js
+!svelte.config.js
+!tailwind.config.js
+!webpack.config.js
+

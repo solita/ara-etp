@@ -1,0 +1,56 @@
+version: '3.7'
+
+name: 'etp-e2e'
+include:
+  - ../../etp-core/docker/docker-compose.yml
+
+
+services:
+  backend:
+    build: ../../etp-core/etp-backend
+    environment:
+      # solita.etp.config
+      DB_HOST: db
+      SMTP_HOST: smtp
+      SMTP_PORT: 25
+      LASKUTUS_SFTP_HOST: sftp
+      LASKUTUS_SFTP_PORT: 22
+    env_file: 
+      - ./backend.env
+    depends_on:
+      db:
+        condition: service_started
+      migration-runner:
+        condition: service_completed_successfully
+
+
+  frontend:
+    build:
+      context: ../../etp-front
+      dockerfile: e2e.Dockerfile
+    environment:
+      WEBPACK_PROXY_TARGET: http://backend:8080
+      WEBPACK_ALLOWED_HOSTS: auto
+      WEBPACK_HOST: 0.0.0.0
+      WEBPACK_PORT: 3009
+    healthcheck:
+     test: curl -k https://localhost:3009 || exit 1
+     interval: 10s
+     timeout: 10s
+     retries: 20
+     start_period: 0m
+    ports:
+      - 127.0.0.1:3009:3009
+    depends_on:
+      backend:
+        condition: service_started
+
+  migration-runner:
+    build: ../../etp-core/etp-db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/etp_dev
+    command:
+      ./db.sh migrate test
+    depends_on:
+      db:
+        condition: service_started

@@ -251,6 +251,7 @@
 
           <div class="lg:w-1/2 w-full px-4 py-4">
             <Input
+              name="keyword-search"
               label={i18n(i18nRoot + '.keyword-search')}
               model={query}
               lens={R.lensProp('search')}

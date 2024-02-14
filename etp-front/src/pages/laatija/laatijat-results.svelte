@@ -40,6 +40,7 @@
 
 <div class="mt-10">
   <H2
+    dataCy="laatijat-results-header"
     text={i18n(i18nRoot + '.results', {
       values: { count: R.length(laatijat) }
     })} />

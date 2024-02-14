@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  db:
+    ports: !reset []
+
+  admin:
+    profiles:
+      - pgAdmin # Run only when this profile is used.
+    ports: !reset []
+
+  mpollux:
+    ports: !reset []
+
+  minio:
+    ports: !reset []
+
+  sftp:
+    ports: !reset []
+
+  smtp:
+    ports: !reset []
+
+
+

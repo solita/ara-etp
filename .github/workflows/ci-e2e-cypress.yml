@@ -1,0 +1,47 @@
+
+name: E2E Cypress CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker Compose
+        working-directory: e2e-tests/cypress
+        run: |
+          mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
+          docker compose up --wait frontend
+      - name: Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: e2e-tests/cypress
+          wait-on: 'https://localhost:3009'
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+
+  format:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: e2e-tests/cypress
+    strategy:
+      matrix:
+        node-version: [ 18.x, 20.x ]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: e2e-tests/cypress/package-lock.json
+      - run: npm ci
+      - run: npm run format:check

@@ -12,7 +12,6 @@
     "tdd": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --watch --require init-mocha.js",
     "format": "prettier --write src modheaders.json",
     "check-format": "prettier --check src",
-    "cypress": "cypress open",
     "build:docs": "jsdoc -r -c ./jsdoc/conf.json",
     "watch:docs": "nodemon --exec npm run build:docs --watch src"
   },
@@ -82,7 +81,6 @@
     "turndown": "^7.0.0"
   },
   "optionalDependencies": {
-    "cypress": "^6.8.0",
     "docdash": "^1.2.0",
     "jsdoc": "^3.6.7",
     "nodemon": "^3.0.0",

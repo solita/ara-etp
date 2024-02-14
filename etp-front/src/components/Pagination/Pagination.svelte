@@ -25,7 +25,10 @@
   $: pagesNear = PaginationUtils.nearForCurrent(pageCount, pageNum);
   $: resultValues = {
     from: R.inc(R.multiply(R.dec(pageNum), itemsPerPage)),
-    to: R.add(itemsPerPage, R.multiply(R.dec(pageNum), itemsPerPage)),
+    to: Math.min(
+      R.add(itemsPerPage, R.multiply(R.dec(pageNum), itemsPerPage)),
+      itemsCount
+    ),
     total: itemsCount
   };
 </script>
