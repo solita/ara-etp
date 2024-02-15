@@ -2,7 +2,9 @@ version: '3.7'
 
 name: 'etp-e2e'
 include:
-  - ../../etp-core/docker/docker-compose.yml
+  - path:
+    - ../../etp-core/docker/docker-compose.yml
+    - override.yaml
 
 
 services:
