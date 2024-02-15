@@ -46,7 +46,7 @@
                                                                       clj-http/clj-http
                                                                       ring/ring-jetty-adapter
                                                                       org.clojure/data.json]}
-             org.clojure/core.match                    {:mvn/version "1.0.1"}
+             org.clojure/core.match                    {:mvn/version "1.1.0"}
              com.cognitect.aws/api                     {:mvn/version "0.8.692"
                                                         :exclusions  [org.eclipse.jetty/jetty-client]} ; Replaced by a newer version
              org.eclipse.jetty/jetty-client            {:mvn/version "9.4.53.v20231009"} ; aws-api uses vulnerable jetty version. Bring in a bit newer one
