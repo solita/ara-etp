@@ -1394,7 +1394,10 @@
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
         "update-error": "Viestiketjun päivitys epäonnistui",
-        "load-error": "Viestien lataus epäonnistui."
+        "load-error": "Viestien lataus epäonnistui.",
+        "screen-reader": {
+          "search-results": "{count} hakutulosta."
+        }
       }
     },
     "ketju": {

@@ -1354,7 +1354,10 @@
       "messages": {
         "update-success": "Meddelandekedjan har uppdaterats",
         "update-error": "Uppdateringen av meddelandekedjan misslyckades",
-        "load-error": "Laddningen av meddelanden misslyckades."
+        "load-error": "Laddningen av meddelanden misslyckades.",
+        "screen-reader": {
+          "search-results": "{count} sökresultat."
+        }
       },
       "show-mine": "Jag som handläggare",
       "show-handled": "Visa även behandlade",
