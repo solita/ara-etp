@@ -41,7 +41,7 @@
   import Input from '@Component/Input/Input';
   import RakennuksenNimi from '@Pages/energiatodistus/RakennuksenNimi';
   import { announcementsForModule } from '@Utility/announce';
-  import { announcePolitely, announceAssertively } from '@Utility/aria-live';
+  import { announcePolitely } from '@Utility/aria-live';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -51,18 +51,10 @@
   const i18nRoot = 'valvonta.oikeellisuus.all';
   const { announceError } = announcementsForModule('valvonta-oikeellisuus');
 
-  const announceSearchResults = () => {
-    const count = Maybe.fold(
-      0,
-      resources => {
-        return resources.valvonnat.length;
-      },
-      resources
-    );
-
+  const announceSearchResults = valvonnat => {
     announcePolitely(
       i18n(i18nRoot + '.messages.screen-reader.search-results', {
-        values: { count }
+        values: { count: valvonnat.length }
       })
     );
   };
@@ -122,7 +114,7 @@
       },
       response => {
         resources = Maybe.Some(response);
-        announceSearchResults();
+        announceSearchResults(response.valvonnat);
         overlay = false;
       },
       Future.parallelObject(5, {
