@@ -15,7 +15,7 @@
   import Link from '@Component/Link/Link';
   import Navigation from '@Pages/ohje/navigation';
   import DOMPurify from 'dompurify';
-  import Marked from 'marked';
+  import { marked } from 'marked';
   import Style from '@Component/text-editor/style.svelte';
 
   const { announceError } = announcementsForModule('ohje');
@@ -83,7 +83,7 @@
         </div>
         <p class=" whitespace-pre-wrap">
           <Style>
-            {@html Marked(DOMPurify.sanitize(sivu.body))}
+            {@html marked(DOMPurify.sanitize(sivu.body))}
           </Style>
         </p>
       {/each}
