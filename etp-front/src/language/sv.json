@@ -1544,7 +1544,10 @@
         },
         "messages": {
           "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll",
-          "laatija-not-found": "Hittar inte upprättaren i denna tjänst."
+          "laatija-not-found": "Hittar inte upprättaren i denna tjänst.",
+          "screen-reader": {
+            "search-results": "{count} sökresultat."
+          }
         },
         "download-all": "Ladda alla kontroller"
       },

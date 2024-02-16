@@ -1495,7 +1495,10 @@
         },
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
-          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta."
+          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta.",
+          "screen-reader": {
+            "search-results": "{count} hakutulosta."
+          }
         }
       },
       "valvonta": {
