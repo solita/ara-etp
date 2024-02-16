@@ -32,6 +32,8 @@
     virtu: Maybe.None(),
     henkilotunnus: Maybe.None(),
     organisaatio: '',
+    'titteli-fi': Maybe.None(),
+    'titteli-sv': Maybe.None(),
     'api-key': Maybe.None()
   };
 
