@@ -400,10 +400,10 @@
   },
   "aineistoasiakas": {
     "new": {
-      "title": "Uusi aineistoasiakas (sv)",
+      "title": "Ny materialkund",
       "messages": {
-        "add-success": "Uusi aineistoasiakas tallennettu järjestelmään. (sv)",
-        "add-error": "Uuden aineistoasiakkaan tallennus epäonnistui. (sv)"
+        "add-success": "Ny materialkund har sparats.",
+        "add-error": "Det gick inte att spara den nya materialkunden."
       }
     }
   },
