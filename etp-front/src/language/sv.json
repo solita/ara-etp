@@ -400,6 +400,15 @@
       }
     }
   },
+  "aineistoasiakas": {
+    "new": {
+      "title": "Uusi aineistoasiakas (sv)",
+      "messages": {
+        "add-success": "Uusi aineistoasiakas tallennettu järjestelmään. (sv)",
+        "add-error": "Uuden aineistoasiakkaan tallennus epäonnistui. (sv)"
+      }
+    }
+  },
   "energiatodistus": {
     "title": "Energicertifikat",
     "et-lisays": "Du kan lägga till ett nytt energicertifikat här:",
