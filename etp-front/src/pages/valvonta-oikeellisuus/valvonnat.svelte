@@ -51,10 +51,10 @@
   const i18nRoot = 'valvonta.oikeellisuus.all';
   const { announceError } = announcementsForModule('valvonta-oikeellisuus');
 
-  const announceSearchResults = valvonnat => {
+  const announceSearchResults = valvonnatCount => {
     announcePolitely(
       i18n(i18nRoot + '.messages.screen-reader.search-results', {
-        values: { count: valvonnat.length }
+        values: { count: valvonnatCount }
       })
     );
   };
@@ -114,7 +114,7 @@
       },
       response => {
         resources = Maybe.Some(response);
-        announceSearchResults(response.valvonnat);
+        announceSearchResults(response.count);
         overlay = false;
       },
       Future.parallelObject(5, {
