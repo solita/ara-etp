@@ -1394,10 +1394,10 @@
       "messages": {
         "update-success": "Viestiketjun päivitys onnistui",
         "update-error": "Viestiketjun päivitys epäonnistui",
-        "load-error": "Viestien lataus epäonnistui.",
-        "screen-reader": {
-          "search-results": "{count} hakutulosta."
-        }
+        "load-error": "Viestien lataus epäonnistui."
+      },
+      "screen-reader": {
+        "search-results": "{count} hakutulosta."
       }
     },
     "ketju": {
@@ -1498,10 +1498,10 @@
         },
         "messages": {
           "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
-          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta.",
-          "screen-reader": {
-            "search-results": "{count} hakutulosta."
-          }
+          "laatija-not-found": "Laatijaa ei löydy tästä palvelusta."
+        },
+        "screen-reader": {
+          "search-results": "{count} hakutulosta."
         }
       },
       "valvonta": {
@@ -1752,10 +1752,10 @@
         "keyword-search": "Tekstihaku",
         "download-all": "Lataa kaikki valvonnat",
         "messages": {
-          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
-          "screen-reader": {
-            "search-results": "{count} hakutulosta."
-          }
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
+        },
+        "screen-reader": {
+          "search-results": "{count} hakutulosta."
         }
       },
       "kohde": {

@@ -41,7 +41,7 @@
 
   const announceSearchResults = ketjutCount => {
     announcePolitely(
-      i18n('viesti.all.messages.screen-reader.search-results', {
+      i18n('viesti.all.screen-reader.search-results', {
         values: { count: ketjutCount }
       })
     );
