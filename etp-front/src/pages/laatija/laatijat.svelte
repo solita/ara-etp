@@ -28,6 +28,7 @@
   import Overlay from '@Component/Overlay/Overlay.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import { announcementsForModule } from '@Utility/announce';
+  import { announcePolitely } from '@Utility/aria-live';
 
   const i18n = $_;
   const i18nRoot = 'laatijat';
@@ -35,6 +36,14 @@
     announcementsForModule('Laatija');
   let resources = Maybe.None();
   let overlay = true;
+
+  const announceSearchResults = laatijatCount => {
+    announcePolitely(
+      i18n(i18nRoot + '.messages.screen-reader.search-results', {
+        values: { count: laatijatCount }
+      })
+    );
+  };
 
   // Load all page resources
   Future.fork(
@@ -44,6 +53,7 @@
     },
     response => {
       resources = Maybe.Some(response);
+      announceSearchResults(response.laatijat.length);
       overlay = false;
     },
     Future.parallelObject(5, {
