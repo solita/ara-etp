@@ -28,6 +28,7 @@
   import Select from '@Component/Select/Select';
   import Select2 from '@Component/Select/Select2';
   import Input from '@Component/Input/Input';
+  import { announcePolitely } from '@Utility/aria-live';
 
   const i18n = $_;
   const { announceError, announceSuccess } = announcementsForModule('viesti');
@@ -37,6 +38,14 @@
 
   const pageSize = 50;
   let ketjutCount = 0;
+
+  const announceSearchResults = viestit => {
+    announcePolitely(
+      i18n('viesti.all.messages.screen-reader.search-results', {
+        values: { count: viestit.length }
+      })
+    );
+  };
 
   const defaultQuery = {
     page: Maybe.None(),
@@ -94,6 +103,7 @@
       },
       response => {
         resources = Maybe.Some(response);
+        announceSearchResults(response.ketjut);
         ketjutCount = response.ketjutCount.count;
         overlay = false;
       },
