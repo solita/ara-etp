@@ -1786,7 +1786,10 @@
       "all": {
         "title": "Användningskontroller",
         "messages": {
-          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll"
+          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll",
+          "screen-reader": {
+            "search-results": "{count} sökresultat."
+          }
         },
         "new-kohde": "Ny kontroll",
         "empty": "Inga kontrollåtgärder",
