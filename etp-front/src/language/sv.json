@@ -393,6 +393,11 @@
       "3": "Behörigheten har upphört",
       "label": "Status",
       "all": "Alla"
+    },
+    "messages": {
+      "screen-reader": {
+        "search-results": "{count} sökresultat."
+      }
     }
   },
   "energiatodistus": {
