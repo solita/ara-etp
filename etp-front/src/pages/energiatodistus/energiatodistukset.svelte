@@ -36,10 +36,19 @@
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as GeoApi from '@Utility/api/geo-api';
   import { announcementsForModule } from '@Utility/announce';
+  import { announcePolitely } from '@Utility/aria-live';
 
   const i18n = $_;
   const { announceError, announceSuccess } =
     announcementsForModule('Energiatodistus');
+
+  const announceSearchResults = etCount => {
+    announcePolitely(
+      i18n('energiatodistukset.screen-reader.search-results', {
+        values: { count: etCount }
+      })
+    );
+  };
 
   let overlay = true;
   let failure = false;
@@ -187,6 +196,7 @@
           toggleOverlay(false);
           energiatodistukset = response[0];
           energiatodistuksetCount = response[1].count;
+          announceSearchResults(energiatodistuksetCount);
         }
       ),
       R.tap(() => toggleOverlay(true)),

@@ -1368,6 +1368,9 @@
     "messages": {
       "delete-success": "Energiatodistus poistettiin onnistuneesti",
       "delete-error": "Energiatodistuksen poistaminen epäonnistui"
+    },
+    "screen-reader": {
+      "search-results": "{count} hakutulosta."
     }
   },
   "viesti": {

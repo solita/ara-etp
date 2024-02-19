@@ -1332,6 +1332,9 @@
     "messages": {
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet"
+    },
+    "screen-reader": {
+      "search-results": "{count} sökresultat."
     }
   },
   "viesti": {
