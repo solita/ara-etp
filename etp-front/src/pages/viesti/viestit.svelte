@@ -39,10 +39,10 @@
   const pageSize = 50;
   let ketjutCount = 0;
 
-  const announceSearchResults = viestit => {
+  const announceSearchResults = ketjutCount => {
     announcePolitely(
       i18n('viesti.all.messages.screen-reader.search-results', {
-        values: { count: viestit.length }
+        values: { count: ketjutCount }
       })
     );
   };
@@ -103,7 +103,7 @@
       },
       response => {
         resources = Maybe.Some(response);
-        announceSearchResults(response.ketjut);
+        announceSearchResults(response.ketjutCount.count);
         ketjutCount = response.ketjutCount.count;
         overlay = false;
       },

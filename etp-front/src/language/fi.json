@@ -1752,7 +1752,10 @@
         "keyword-search": "Tekstihaku",
         "download-all": "Lataa kaikki valvonnat",
         "messages": {
-          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui"
+          "load-error": "Valvonnan työjonon tietojen lataus epäonnistui",
+          "screen-reader": {
+            "search-results": "{count} hakutulosta."
+          }
         }
       },
       "kohde": {

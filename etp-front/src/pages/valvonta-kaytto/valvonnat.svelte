@@ -38,6 +38,7 @@
   import * as ValvontaApi from '@Pages/valvonta-kaytto/valvonta-api';
   import * as Selects from '@Component/Select/select-util';
   import { announcementsForModule } from '@Utility/announce';
+  import { announcePolitely } from '@Utility/aria-live';
 
   let resources = Maybe.None();
   let overlay = true;
@@ -46,6 +47,14 @@
   const i18n = $_;
   const i18nRoot = 'valvonta.kaytto.all';
   const { announceError } = announcementsForModule('valvonta-kaytto');
+
+  const announceSearchResults = valvonnatCount => {
+    announcePolitely(
+      i18n(i18nRoot + '.messages.screen-reader.search-results', {
+        values: { count: valvonnatCount }
+      })
+    );
+  };
 
   let textCancel = () => {};
 
@@ -133,6 +142,7 @@
       },
       response => {
         resources = Maybe.Some(response);
+        announceSearchResults(response.count);
         valvontaCount = response.count;
         overlay = false;
       },
