@@ -31,7 +31,7 @@
   }
 
   h3 {
-    @apply underline font-bold;
+    @apply font-bold;
   }
 
   p {
@@ -41,7 +41,7 @@
 
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
-    <InfoBlock {title}>
+    <InfoBlock {title} showIcon={false}>
       <p>
         Energiatodistusrekisterin rajapintapalvelun kautta voit hakea
         yksittäisen energiatodistuksen tiedot Suomi.fi-palveluväylästä joko
@@ -94,11 +94,10 @@
     <ol class="ml-6">
       <li>
         Liity palveluväylään <Link href="https://dvv.fi/palveluvayla"
-          >DVV:n ohjeiden mukaisesti</Link
-        >.
+          >DVV:n ohjeiden</Link> mukaisesti.
       </li>
       <li>
-        Täytä liityntäkatalogin testiveriosta löytyvä <Link
+        Täytä liityntäkatalogin testiversiosta löytyvä <Link
           href="https://liityntakatalogi.test.suomi.fi/dataset/energiatodistusrekisteri-ara-svc"
           >hakemus</Link
         >.
@@ -106,10 +105,10 @@
       <li>
         Odota tietolupapäätöstä, jonka lähetämme hakemuksessa ilmoitetulle
         yhteyshenkilölle ja hakijan viralliselle edustajalle sähköpostitse. Jos
-        tietolupapäätös on myönteinen, hakijan viralliselle edustajalle
-        toimitetaan myös palveluväylää koskeva <Link
+        tietolupapäätös on myönteinen, toimitamme hakijan viralliselle
+        edustajalle myös Rajapintapalvelua koskevan <Link
           href={SopimusLuonnos}
-          target="_blank">sopimus</Link> allekirjoitettavaksi.
+          target="_blank">sopimuksen</Link> allekirjoitettavaksi.
       </li>
       <li>
         Sopimuksen allekirjoittamisen jälkeen avaamme palveluväylärajapinnan

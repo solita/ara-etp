@@ -35,7 +35,7 @@
   }
 
   h3 {
-    @apply underline font-bold;
+    @apply font-bold;
   }
 
   p {
@@ -45,7 +45,7 @@
 
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
-    <InfoBlock {title}>
+    <InfoBlock {title} showIcon={false}>
       <p>
         Energicertifikatregistrets materialtjänst är avsedd för överföring av
         energicertifikatuppgifter från registret via gränssnittet till
@@ -145,7 +145,7 @@
       början av kalenderåret.
     </p>
     <p>
-      Materialtjänsten kan också öppnas för en gång, t.ex. för
+      Materialtjänsten kan också öppnas för en gång, till exempel för
       forskningsändamål, varvid vi tar ut en engångsavgift enligt vår prislista.
     </p>
     <p>
@@ -180,8 +180,8 @@
       <li>
         Vänta på beslutet om datatillstånd som vi skickar till den kontaktperson
         som angetts i ansökan och till sökandens officiella företrädare per
-        e-post. Om beslutet om datatillstånd är positivt, skickas också avtalet
-        för Materialtjänsten till sökandens officiella företrädare för
+        e-post. Om beslutet om datatillstånd är positivt, skickar vi också
+        avtalet för Materialtjänsten till sökandens officiella företrädare för
         undertecknande.
       </li>
       <li>

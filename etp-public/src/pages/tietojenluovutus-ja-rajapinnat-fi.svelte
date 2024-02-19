@@ -30,7 +30,7 @@
   }
 
   h3 {
-    @apply underline font-bold;
+    @apply font-bold;
   }
 
   p {
@@ -40,7 +40,7 @@
 
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
-    <InfoBlock {title}>
+    <InfoBlock {title} showIcon={false}>
       <p>
         Organisaatiot voivat saada Asumisen rahoitus- ja kehittämiskeskuksen
         (Ara) ylläpitämästä energiatodistusrekisteristä energiatodistustietoa
@@ -89,10 +89,9 @@
       Ara noudattaa kaikessa toiminnassaan huolellisuutta ja varmistaa, että
       tietosuoja ja tietoturvallisuus toteutuvat. Henkilötietojen käsittely
       perustuu pääsääntöisesti Aran lakisääteisten velvoitteiden noudattamiseen.
-      Lue lisää henkilötietojen käsittelystä
       <Link
         href="https://www.ara.fi/fi-FI/Tietosuoja_ja_henkilotietojen_kasittely_(48134)">
-        sivultamme.</Link>
+        Lue lisää henkilötietojen käsittelystä (ara.fi)</Link>
 
       Pidämme rekisteriä rajapintaan liitetyistä aineistoasiakkaista.
       Tietosuojaselosteet ovat sivulla
