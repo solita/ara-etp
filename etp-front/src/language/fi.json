@@ -413,6 +413,9 @@
       "1": "Ei kirjautunut",
       "2": "Pätevyys peruttu / Laatimiskiellossa",
       "3": "Pätevyys päättynyt"
+    },
+    "screen-reader": {
+      "search-results": "{count} hakutulosta."
     }
   },
   "aineistoasiakas": {

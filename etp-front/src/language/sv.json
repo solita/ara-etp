@@ -393,6 +393,18 @@
       "3": "Behörigheten har upphört",
       "label": "Status",
       "all": "Alla"
+    },
+    "screen-reader": {
+      "search-results": "{count} sökresultat."
+    }
+  },
+  "aineistoasiakas": {
+    "new": {
+      "title": "Ny materialkund",
+      "messages": {
+        "add-success": "Ny materialkund har sparats.",
+        "add-error": "Det gick inte att spara den nya materialkunden."
+      }
     }
   },
   "energiatodistus": {
