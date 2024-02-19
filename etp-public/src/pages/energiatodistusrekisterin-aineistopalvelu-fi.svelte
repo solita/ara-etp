@@ -35,7 +35,7 @@
   }
 
   h3 {
-    @apply underline font-bold;
+    @apply font-bold;
   }
 
   p {
@@ -45,7 +45,7 @@
 
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
-    <InfoBlock {title}>
+    <InfoBlock {title} showIcon={false}>
       <p>
         Energiatodistusrekisterin aineistopalvelu on tarkoitettu
         energiatodistustietojen siirtoon rajapinnan kautta rekisteristä
@@ -58,7 +58,7 @@
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
     <p>
-      Energiatodistusrekisterin aineistopalvelussa on kolme erilaita
+      Energiatodistusrekisterin aineistopalvelussa on kolme erilaista
       tietoaineistoa:
     </p>
     <ol class="ml-6">
@@ -133,7 +133,7 @@
     <p>Soveltuu esimerkiksi tutkimuskäyttöön.</p>
     <h2>KÄYTTÖEHDOT</h2>
     <p>
-      Aineistopalvelun käyttäminen edellyttää, että ARA on myöntänyt käyttäjälle
+      Aineistopalvelun käyttäminen edellyttää, että Ara on myöntänyt käyttäjälle
       tietoluvan. Lisäksi Ara ja käyttäjä solmivat erillisen sopimuksen
       Aineistopalvelun käytöstä.
     </p>
@@ -143,7 +143,7 @@
       käytöstä vuosimaksua. Vuosimaksu laskutetaan aina kalenterivuoden alussa.
     </p>
     <p>
-      Aineistopalvelu voidaan myös avata kertaluonteisesti esim.
+      Aineistopalvelu voidaan myös avata kertaluonteisesti esimerkiksi
       tutkimuskäyttöön, jolloin perimme kertamaksun hinnastomme mukaisesti.
     </p>
     <p>
@@ -169,7 +169,7 @@
       <li>
         Lähetä hakemus sähköpostitse Aran kirjaamoon (<Link
           href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
-        >). Jos hakemus sisältää salassa pidettävää tietoa, niin lähetä hakemus <Link
+        >). Jos hakemus sisältää salassa pidettävää tietoa, lähetä hakemus <Link
           href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
           >turvapostilla</Link
         >.
@@ -177,8 +177,9 @@
       <li>
         Odota tietolupapäätöstä, jonka lähetämme hakemuksessa ilmoitetulle
         yhteyshenkilölle ja hakijan viralliselle edustajalle sähköpostitse. Jos
-        tietolupapäätös on myönteinen, hakijan viralliselle edustajalle
-        toimitetaan myös Aineistopalvelua koskeva sopimus allekirjoitettavaksi.
+        tietolupapäätös on myönteinen, toimitamme hakijan viralliselle
+        edustajalle myös Aineistopalvelua koskevan sopimuksen
+        allekirjoitettavaksi.
       </li>
       <li>
         Sopimuksen allekirjoittamisen jälkeen toimitamme rajapinta-avaimen

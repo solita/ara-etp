@@ -30,7 +30,7 @@
   }
 
   h3 {
-    @apply underline font-bold;
+    @apply font-bold;
   }
 
   p {
@@ -40,7 +40,7 @@
 
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
-    <InfoBlock {title}>
+    <InfoBlock {title} showIcon={false}>
       <p>
         Organisationerna kan få uppgifter om energicertifikat på tre olika sätt
         från det energicertifikatregister som Finansierings- och
@@ -90,11 +90,9 @@
     <p>
       Ara är noggrann inom all sin verksamhet och säkerställer att dataskydd och
       informationssäkerhet uppfylls. Behandling av personuppgifter följer i
-      huvudregel Aras lagstadgade skyldigheter. Läs mer om behandlingen av
-      personuppgifter på
-      <Link
+      huvudregel Aras lagstadgade skyldigheter. <Link
         href="https://www.ara.fi/fi-FI/Tietosuoja_ja_henkilotietojen_kasittely_(48134)">
-        vår webbplats</Link
+        Läs mer om behandlingen av personuppgifter pa (ara.fi)</Link
       >. Vi för ett register över de materialkunder som anslutits till
       gränssnittet. Dataskyddsbeskrivningarna finns på sidan
       <Link href="/tietoa-sivustosta">Information om webbplatsen</Link>.

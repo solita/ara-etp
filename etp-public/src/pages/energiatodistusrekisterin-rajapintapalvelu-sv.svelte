@@ -31,7 +31,7 @@
   }
 
   h3 {
-    @apply underline font-bold;
+    @apply font-bold;
   }
 
   p {
@@ -41,7 +41,7 @@
 
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
-    <InfoBlock {title}>
+    <InfoBlock {title} showIcon={false}>
       <p>
         Via energicertifikatregistrets gränssnittstjänst kan du söka uppgifter
         om ett enskilt energicertifikat i Suomi.fi-informationsleden antingen
@@ -114,10 +114,10 @@
       <li>
         Väntä på beslutet om datatillstånd som vi skickar till den kontaktperson
         som angetts i ansökan och till sökandens officiella företrädare per
-        e-post. Om beslutet om datatillstånd är positivt, skickas också <Link
+        e-post. Om beslutet om datatillstånd är positivt, skickar vi också <Link
           href={SopimusLuonnos}
           target="_blank">avtalet</Link>
-        för informationsleden till sökandens officiella företrädare för undertecknande.
+        för Gränssnittstjänsten till sökandens officiella företrädare för undertecknande.
       </li>
       <li>
         Efter att avtalet har undertecknats öppnar vi
