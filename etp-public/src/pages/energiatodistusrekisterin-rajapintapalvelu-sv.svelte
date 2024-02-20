@@ -91,7 +91,8 @@
 
     <p>
       Vår prislista finns på
-      <Link href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+      <Link
+        href="https://www.ara.fi/sv-FI/Ara/Kontaktuppgifter/Kontaktuppgifter(735)"
         >Aras webbplats
       </Link>
       .
