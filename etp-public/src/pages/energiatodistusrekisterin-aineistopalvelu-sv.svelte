@@ -154,7 +154,8 @@
     </p>
     <p>
       Vår prislista finns på
-      <Link href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+      <Link
+        href="https://www.ara.fi/sv-FI/Ara/Kontaktuppgifter/Kontaktuppgifter(735)"
         >Aras webbplats</Link
       >.
     </p>
@@ -173,7 +174,7 @@
           href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
         >). Om ansökan innehåller sekretessbelagd information ska du skicka
         ansökan som <Link
-          href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+          href="https://www.ara.fi/sv-FI/Ara/Kontaktuppgifter/Kontaktuppgifter(735)"
           >säker e-post</Link
         >.
       </li>

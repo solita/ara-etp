@@ -60,7 +60,7 @@
           av Suomi.fi-informationsleden.
         </li>
         <li>
-          i behandlar begäran om information som genomförs utan gränssnitt från
+          Vi behandlar begäran om information som genomförs utan gränssnitt från
           fall till fall och debiterar för dem enligt vår timprislista.
           <br />
           Mer information: <Link href="mailto:energiatodistus@ara.fi"
@@ -91,8 +91,8 @@
       Ara är noggrann inom all sin verksamhet och säkerställer att dataskydd och
       informationssäkerhet uppfylls. Behandling av personuppgifter följer i
       huvudregel Aras lagstadgade skyldigheter. <Link
-        href="https://www.ara.fi/fi-FI/Tietosuoja_ja_henkilotietojen_kasittely_(48134)">
-        Läs mer om behandlingen av personuppgifter pa (ara.fi)</Link
+        href="https://www.ara.fi/sv-FI/Dataskydd_och_behandling_av_personuppgif(61206)">
+        Läs mer om behandlingen av personuppgifter på (ara.fi)</Link
       >. Vi för ett register över de materialkunder som anslutits till
       gränssnittet. Dataskyddsbeskrivningarna finns på sidan
       <Link href="/tietoa-sivustosta">Information om webbplatsen</Link>.
