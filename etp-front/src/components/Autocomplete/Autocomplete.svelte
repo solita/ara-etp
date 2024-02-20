@@ -14,6 +14,7 @@
   export let completedValue = '';
   export let size = 5;
   export let component = null;
+  export let resultsAnnouncer = Maybe.None();
 
   let active = Maybe.None();
   let input;
@@ -89,6 +90,14 @@
     R.take(size),
     R.filter(R.compose(R.includes(R.toLower(rawValue)), R.toLower))
   )(items);
+
+  $: if (active.isSome()) {
+    Maybe.fold(
+      null,
+      announcer => announcer(filteredItems.length),
+      resultsAnnouncer
+    );
+  }
 </script>
 
 <style type="text/postcss">
