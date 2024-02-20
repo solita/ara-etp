@@ -363,6 +363,9 @@
         "select-yritys": "Välj företag som ska kopplas",
         "attach-failed": "Kopplingen till företaget misslyckades",
         "detach-failed": "Det gick inte att avlägsna upprättaren från företaget"
+      },
+      "screen-reader": {
+        "search-results": "{count} sökresultat i rullgardinsmeny. Välj företag från listan."
       }
     },
     "perustiedot-header": "Basuppgifter",

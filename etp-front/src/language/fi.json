@@ -388,6 +388,9 @@
         "select-yritys": "Valitse liitettävä yritys",
         "attach-failed": "Liittäminen yritykseen epäonnistui",
         "detach-failed": "Laatijan poistaminen yrityksestä epäonnistui"
+      },
+      "screen-reader": {
+        "search-results": "{count} hakutulosta pudotusvalikossa. Valitse yritys listasta."
       }
     }
   },
