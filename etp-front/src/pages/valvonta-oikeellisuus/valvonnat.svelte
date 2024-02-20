@@ -53,7 +53,7 @@
 
   const announceSearchResults = valvonnatCount => {
     announcePolitely(
-      i18n(i18nRoot + '.messages.screen-reader.search-results', {
+      i18n(i18nRoot + '.screen-reader.search-results', {
         values: { count: valvonnatCount }
       })
     );

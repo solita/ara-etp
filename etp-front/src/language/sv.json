@@ -1344,6 +1344,9 @@
     "messages": {
       "delete-success": "Energicertifikatet avlägsnades",
       "delete-error": "Det gick inte att avlägsna energicertifikatet"
+    },
+    "screen-reader": {
+      "search-results": "{count} sökresultat."
     }
   },
   "viesti": {
@@ -1366,10 +1369,10 @@
       "messages": {
         "update-success": "Meddelandekedjan har uppdaterats",
         "update-error": "Uppdateringen av meddelandekedjan misslyckades",
-        "load-error": "Laddningen av meddelanden misslyckades.",
-        "screen-reader": {
-          "search-results": "{count} sökresultat."
-        }
+        "load-error": "Laddningen av meddelanden misslyckades."
+      },
+      "screen-reader": {
+        "search-results": "{count} sökresultat."
       },
       "show-mine": "Jag som handläggare",
       "show-handled": "Visa även behandlade",
@@ -1559,10 +1562,10 @@
         },
         "messages": {
           "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll",
-          "laatija-not-found": "Hittar inte upprättaren i denna tjänst.",
-          "screen-reader": {
-            "search-results": "{count} sökresultat."
-          }
+          "laatija-not-found": "Hittar inte upprättaren i denna tjänst."
+        },
+        "screen-reader": {
+          "search-results": "{count} sökresultat."
         },
         "download-all": "Ladda alla kontroller"
       },
@@ -1798,10 +1801,10 @@
       "all": {
         "title": "Användningskontroller",
         "messages": {
-          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll",
-          "screen-reader": {
-            "search-results": "{count} sökresultat."
-          }
+          "load-error": "Det gick inte att ladda ner uppgifterna i arbetskön för kontroll"
+        },
+        "screen-reader": {
+          "search-results": "{count} sökresultat."
         },
         "new-kohde": "Ny kontroll",
         "empty": "Inga kontrollåtgärder",
