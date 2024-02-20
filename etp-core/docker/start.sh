@@ -7,6 +7,8 @@ find sftp/ssh -iname "*_key" -exec chmod 600 {} \;
 
 docker compose up -d
 
+docker compose cp minio/files minio:/files
+
 # Wait naively for PostgreSQL to start
 sleep 2
 
