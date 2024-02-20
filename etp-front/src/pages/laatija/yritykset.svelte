@@ -24,6 +24,7 @@
   import * as Kayttajat from '@Utility/kayttajat';
   import * as laatijaApi from './laatija-api';
   import * as yritysApi from '@Pages/yritys/yritys-api';
+  import { announcePolitely } from '@Utility/aria-live';
 
   import { announcementsForModule } from '@Utility/announce';
 
@@ -38,6 +39,14 @@
   let whoami = Maybe.None();
   let overlay = true;
   let disabled = false;
+
+  const announceSearchResults = yrityksetCount => {
+    announcePolitely(
+      i18n('laatija.yritykset.screen-reader.search-results', {
+        values: { count: yrityksetCount }
+      })
+    );
+  };
 
   const detach = index => {
     Future.fork(
@@ -231,7 +240,8 @@
                   items={R.map(
                     formatYritys,
                     R.filter(R.complement(R.prop('deleted')), allYritykset)
-                  )}>
+                  )}
+                  resultsAnnouncer={Maybe.Some(announceSearchResults)}>
                   <Input
                     id={'yritys'}
                     name={'yritys'}
