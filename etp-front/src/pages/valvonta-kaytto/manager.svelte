@@ -220,9 +220,11 @@
       inputValueParse={R.prop('id')}
       format={Locales.label($locale)}
       on:change={event => openNewToimenpide(parseInt(event.target.value))}
-      items={R.filter(
-        R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]),
-        toimenpidetyypit
-      )} />
+      items={R.compose(
+        Toimenpiteet.filterAvailableToimenpidetypes(
+          R.prop('type-id', R.last(toimenpiteet))
+        ),
+        R.filter(R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]))
+      )(toimenpidetyypit)} />
   </div>
 {/if}
