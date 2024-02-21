@@ -9,6 +9,7 @@
 
   import DropdownList from '@Component/DropdownList/DropdownList';
   import Input from '@Component/Input/Input';
+  import { announceAssertively } from '@Utility/aria-live';
 
   export let items = [];
   export let completedValue = '';
@@ -37,13 +38,21 @@
     [keys.DOWN_ARROW]: (event, active) => {
       if (showDropdown) event.preventDefault();
       return R.compose(
+        R.tap(
+          R.forEach(R.compose(announceAssertively, R.nth(R.__, filteredItems)))
+        ),
         Maybe.orElse(Maybe.Some(0)),
         R.chain(AutocompleteUtils.nextItem(filteredItems))
       )(active);
     },
     [keys.UP_ARROW]: (event, active) => {
       if (showDropdown) event.preventDefault();
-      return R.chain(AutocompleteUtils.previousItem, active);
+      return R.compose(
+        R.tap(
+          R.forEach(R.compose(announceAssertively, R.nth(R.__, filteredItems)))
+        ),
+        R.chain(AutocompleteUtils.previousItem)
+      )(active);
     },
     [keys.ESCAPE]: (_, _active) => Maybe.None(),
     [keys.TAB]: (_, _active) => Maybe.None(),
@@ -91,7 +100,7 @@
     R.filter(R.compose(R.includes(R.toLower(rawValue)), R.toLower))
   )(items);
 
-  $: if (active.isSome()) {
+  $: if (showDropdown) {
     Maybe.fold(
       null,
       announcer => announcer(filteredItems.length),
