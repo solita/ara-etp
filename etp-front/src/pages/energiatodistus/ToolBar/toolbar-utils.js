@@ -26,6 +26,7 @@ export const paakayttajaFields = tila => {
     case EtUtils.tila['discarded']:
       return [module.download, module.undodiscard];
     case EtUtils.tila['replaced']:
+      return [module.save, module.download];
     case EtUtils.tila['deleted']:
       return [module.download];
     default:
