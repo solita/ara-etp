@@ -163,12 +163,14 @@
   buttons={[
     {
       text: text(toimenpide, 'publish-button'),
+      prefix: 'submit',
       showSpinner: publishPending,
       disabled,
       'on:click': _ => publish({ 'bypass-asha': false, ...toimenpide })
     },
     {
       text: i18n(i18nRoot + '.cancel-button'),
+      prefix: 'cancel',
       disabled,
       style: 'secondary',
       'on:click': reload
@@ -205,6 +207,7 @@
     <div class="w-1/2 py-4">
       <Select
         label="Valitse asiakirjapohja"
+        name="document-selector"
         bind:model={toimenpide}
         lens={R.lensProp('template-id')}
         parse={Maybe.fromNull}

@@ -49,6 +49,7 @@
 {:else}
   <a
     {href}
+    data-cy={label}
     class="px-2 lg:px-6"
     class:active={R.compose(
       R.equals($location),

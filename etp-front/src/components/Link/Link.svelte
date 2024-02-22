@@ -25,7 +25,13 @@
 
 <!-- purgecss: disabled font-bold -->
 
-<a {href} {target} class:disabled class:font-bold={bold} on:click>
+<a
+  {href}
+  {target}
+  class:disabled
+  class:font-bold={bold}
+  data-cy={text}
+  on:click>
   {#each Maybe.toArray(icon) as i}
     <span class="font-icon mr-1">{i}</span>
   {/each}

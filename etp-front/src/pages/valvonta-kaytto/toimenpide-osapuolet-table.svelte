@@ -143,7 +143,7 @@
         </tr>
       </thead>
       <tbody class="etp-table--tbody">
-        {#each osapuolet as osapuoli}
+        {#each osapuolet as osapuoli, i}
           <tr class="etp-table-tr">
             <td class="etp-table--td">
               {osapuoli.type.label(osapuoli)}
@@ -186,6 +186,7 @@
                 {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
                   <Select
                     bind:model={toimenpide}
+                    name={'administrative-court-selector-' + i}
                     lens={R.lensPath([
                       'type-specific-data',
                       'osapuoli-specific-data',
@@ -226,6 +227,7 @@
                 {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
                   <Select
                     bind:model={toimenpide}
+                    name={'karajaoikeus-selector-' + i}
                     lens={R.lensPath([
                       'type-specific-data',
                       'osapuoli-specific-data',
@@ -263,6 +265,7 @@
                 {#if Osapuolet.isOmistaja(osapuoli) && Toimenpiteet.documentExistsForOsapuoli(toimenpide, osapuoli.id, Osapuolet.getOsapuoliType(osapuoli))}
                   <Input
                     bind:model={toimenpide}
+                    name={'haastemies-email-' + i}
                     required={true}
                     type="email"
                     lens={R.lensPath([

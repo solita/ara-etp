@@ -201,12 +201,14 @@
   <div class="mb-5">
     <Button
       text={i18n('valvonta.aloita-valvonta')}
+      prefix="start"
       on:click={_ => openNewToimenpide(Toimenpiteet.type.case)} />
   </div>
 {:else if isClosed(toimenpiteet)}
   <div class="mb-5">
     <Button
       text={i18n('valvonta.jatka-valvontaa')}
+      prefix="continue"
       on:click={_ => openNewToimenpide(Toimenpiteet.type.reopen)} />
   </div>
 {:else}
@@ -215,6 +217,7 @@
   <div class="lg:w-1/2 w-full mb-5">
     <Select
       label={i18n('valvonta.select-toimenpide')}
+      name="toimenpide-type-selection"
       model={toimenpideTyyppi}
       lens={R.lens(R.identity, R.identity)}
       inputValueParse={R.prop('id')}
