@@ -9,11 +9,13 @@
 
   import DropdownList from '@Component/DropdownList/DropdownList';
   import Input from '@Component/Input/Input';
+  import { announceAssertively } from '@Utility/aria-live';
 
   export let items = [];
   export let completedValue = '';
   export let size = 5;
   export let component = null;
+  export let resultsAnnouncer = Maybe.None();
 
   let active = Maybe.None();
   let input;
@@ -36,13 +38,21 @@
     [keys.DOWN_ARROW]: (event, active) => {
       if (showDropdown) event.preventDefault();
       return R.compose(
+        R.tap(
+          R.forEach(R.compose(announceAssertively, R.nth(R.__, filteredItems)))
+        ),
         Maybe.orElse(Maybe.Some(0)),
         R.chain(AutocompleteUtils.nextItem(filteredItems))
       )(active);
     },
     [keys.UP_ARROW]: (event, active) => {
       if (showDropdown) event.preventDefault();
-      return R.chain(AutocompleteUtils.previousItem, active);
+      return R.compose(
+        R.tap(
+          R.forEach(R.compose(announceAssertively, R.nth(R.__, filteredItems)))
+        ),
+        R.chain(AutocompleteUtils.previousItem)
+      )(active);
     },
     [keys.ESCAPE]: (_, _active) => Maybe.None(),
     [keys.TAB]: (_, _active) => Maybe.None(),
@@ -89,6 +99,14 @@
     R.take(size),
     R.filter(R.compose(R.includes(R.toLower(rawValue)), R.toLower))
   )(items);
+
+  $: if (showDropdown) {
+    Maybe.fold(
+      null,
+      announcer => announcer(filteredItems.length),
+      resultsAnnouncer
+    );
+  }
 </script>
 
 <style type="text/postcss">
