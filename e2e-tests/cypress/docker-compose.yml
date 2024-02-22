@@ -17,11 +17,17 @@ services:
       SMTP_PORT: 25
       LASKUTUS_SFTP_HOST: sftp
       LASKUTUS_SFTP_PORT: 22
+      S3_HOST: minio
+      S3_PORT: 9000
     env_file: 
       - ./backend.env
     depends_on:
       db:
         condition: service_started
+      minio:
+        condition: service_started
+      minio_create_default_bucket:
+        condition: service_completed_successfully
       migration-runner:
         condition: service_completed_successfully
 
