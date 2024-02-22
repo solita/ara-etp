@@ -22,12 +22,12 @@ SET row_security = off;
 --
 
 INSERT INTO audit.kayttaja VALUES
-	(1, 877, '2024-02-22 11:32:25.290569+00', 0, 'database.etp', 0, 'database', 'etp', 'database@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, NULL, NULL, NULL),
-	(2, 966, '2024-02-22 11:32:26.958251+00', 0, 'database.etp', -1, 'conversion', 'etp', 'conversion@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(3, 966, '2024-02-22 11:32:26.958251+00', 0, 'database.etp', -2, 'laskutus', 'etp', 'laskutus@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(4, 966, '2024-02-22 11:32:26.958251+00', 0, 'database.etp', -3, 'communication', 'etp', 'communication@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(5, 966, '2024-02-22 11:32:26.958251+00', 0, 'database.etp', -4, 'presigned', 'etp', 'presigned@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(6, 966, '2024-02-22 11:32:26.958251+00', 0, 'database.etp', -5, 'aineisto', 'etp', 'aineisto@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(1, 877, '2024-02-22 11:48:07.383497+00', 0, 'database.etp', 0, 'database', 'etp', 'database@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, NULL, NULL, NULL),
+	(2, 966, '2024-02-22 11:48:09.061621+00', 0, 'database.etp', -1, 'conversion', 'etp', 'conversion@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(3, 966, '2024-02-22 11:48:09.061621+00', 0, 'database.etp', -2, 'laskutus', 'etp', 'laskutus@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(4, 966, '2024-02-22 11:48:09.061621+00', 0, 'database.etp', -3, 'communication', 'etp', 'communication@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(5, 966, '2024-02-22 11:48:09.061621+00', 0, 'database.etp', -4, 'presigned', 'etp', 'presigned@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(6, 966, '2024-02-22 11:48:09.061621+00', 0, 'database.etp', -5, 'aineisto', 'etp', 'aineisto@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(7, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 1, 'Pauli', 'Pätevyyden toteaja', 'patevyydentoteaja@solita.fi', '0451234567', false, 1, false, '010280-952L', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(8, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 2, 'Liisa', 'Specimen-Potex', 'laatija@solita.fi', '0451234567', false, 0, false, '010469-999W', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(9, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234567', false, 0, false, '141199-999N', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
@@ -48,7 +48,8 @@ INSERT INTO audit.kayttaja VALUES
 	(24, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, false, NULL, NULL, 'vvirkamies', 'testivirasto.fi', false, NULL, '', NULL, NULL),
 	(25, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 19, 'Paavo', 'Pääkäyttäjä', 'paakayttaja2@solita.fi', '0501234567', false, 2, false, NULL, NULL, 'vvirkamies3', 'testivirasto.fi', false, NULL, '', NULL, NULL),
 	(26, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 20, 'Lasse', 'Laskuttaja', 'laskuttaja@solita.fi', '0501234567', false, 3, false, NULL, NULL, 'vvirkamies2', 'testausvirasto.fi', false, NULL, '', NULL, NULL),
-	(27, 1030, '2024-02-22 11:33:06.838079+00', 18, 'core.etp/api/private/laatijat/3', 3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234568', false, 0, false, '141199-999N', NULL, NULL, NULL, false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
+	(27, 1030, '2024-02-22 11:33:06.838079+00', 18, 'core.etp/api/private/laatijat/3', 3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234568', false, 0, false, '141199-999N', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(28, 1068, '2024-02-22 11:35:08.138362+00', 18, 'core.etp/api/private/whoami', 18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, false, NULL, 'paakayttaja@solita.fi', 'vvirkamies', 'testivirasto.fi', false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
 
 
 --
@@ -79,6 +80,10 @@ INSERT INTO audit.laatija VALUES
 -- Data for Name: vk_henkilo; Type: TABLE DATA; Schema: audit; Owner: etp
 --
 
+INSERT INTO audit.vk_henkilo VALUES
+	(1, 1071, '2024-02-22 11:35:58.384822+00', 18, 'core.etp/api/private/valvonta/kaytto/2/henkilot', 1, 'Talon', 'Omistaja', NULL, 'talon@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, false, 2),
+	(2, 1073, '2024-02-22 11:36:33.466179+00', 18, 'core.etp/api/private/valvonta/kaytto/3/henkilot', 2, 'Talon', 'Omistaja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, false, 3),
+	(3, 1074, '2024-02-22 11:36:51.56738+00', 18, 'core.etp/api/private/valvonta/kaytto/3/henkilot', 3, 'Kiinteistön', 'Välittäjä', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, false, 3) ON CONFLICT DO NOTHING;
 
 
 --
@@ -91,7 +96,7 @@ INSERT INTO audit.laatija VALUES
 -- Name: kayttaja_event_id_seq; Type: SEQUENCE SET; Schema: audit; Owner: etp
 --
 
-SELECT pg_catalog.setval('audit.kayttaja_event_id_seq', 27, true);
+SELECT pg_catalog.setval('audit.kayttaja_event_id_seq', 28, true);
 
 
 --
@@ -105,7 +110,7 @@ SELECT pg_catalog.setval('audit.laatija_event_id_seq', 17, true);
 -- Name: vk_henkilo_event_id_seq; Type: SEQUENCE SET; Schema: audit; Owner: etp
 --
 
-SELECT pg_catalog.setval('audit.vk_henkilo_event_id_seq', 1, false);
+SELECT pg_catalog.setval('audit.vk_henkilo_event_id_seq', 3, true);
 
 
 --
@@ -158,10 +163,10 @@ INSERT INTO etp.kayttaja VALUES
 	(15, 'Caverion', 'Laatija', 'laatija@caverion.fi', '0451234567', false, 0, NULL, false, '010170-960F', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(16, 'Laskentapalvelut', 'Laatija', 'laatija@dof.fi', '0451234567', false, 0, NULL, false, '010170-999R', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(17, 'Laskentaohjelmat', 'Laatija', 'laatija@example.com', '0451234567', false, 0, NULL, false, '081181-9984', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, NULL, false, NULL, NULL, 'vvirkamies', 'testivirasto.fi', NULL, false, NULL, '', NULL, NULL),
 	(19, 'Paavo', 'Pääkäyttäjä', 'paakayttaja2@solita.fi', '0501234567', false, 2, NULL, false, NULL, NULL, 'vvirkamies3', 'testivirasto.fi', NULL, false, NULL, '', NULL, NULL),
 	(20, 'Lasse', 'Laskuttaja', 'laskuttaja@solita.fi', '0501234567', false, 3, NULL, false, NULL, NULL, 'vvirkamies2', 'testausvirasto.fi', NULL, false, NULL, '', NULL, NULL),
-	(3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234568', false, 0, NULL, false, '141199-999N', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
+	(3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234568', false, 0, NULL, false, '141199-999N', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, '2024-02-22 11:48:10.589316+00', false, NULL, 'paakayttaja@solita.fi', 'vvirkamies', 'testivirasto.fi', NULL, false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
 
 
 --
@@ -284,12 +289,20 @@ INSERT INTO etp.energiatodistus VALUES
 -- Data for Name: vk_valvonta; Type: TABLE DATA; Schema: etp; Owner: etp
 --
 
+INSERT INTO etp.vk_valvonta VALUES
+	(1, NULL, 'Juuri tehty valvonta', NULL, NULL, NULL, NULL, '2024-02-22', NULL, false),
+	(2, NULL, 'Aloitettu valvonta jolla omistaja', NULL, NULL, NULL, NULL, '2024-02-22', NULL, false),
+	(3, NULL, 'Valvonta jolla useita toimenpiteitä', NULL, NULL, NULL, NULL, '2024-02-22', NULL, false) ON CONFLICT DO NOTHING;
 
 
 --
 -- Data for Name: vk_henkilo; Type: TABLE DATA; Schema: etp; Owner: etp
 --
 
+INSERT INTO etp.vk_henkilo VALUES
+	(1, 'Talon', 'Omistaja', NULL, 'talon@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, false, 2),
+	(2, 'Talon', 'Omistaja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, false, 3),
+	(3, 'Kiinteistön', 'Välittäjä', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, false, 3) ON CONFLICT DO NOTHING;
 
 
 --
@@ -302,12 +315,28 @@ INSERT INTO etp.energiatodistus VALUES
 -- Data for Name: vk_toimenpide; Type: TABLE DATA; Schema: etp; Owner: etp
 --
 
+INSERT INTO etp.vk_toimenpide VALUES
+	(1, 0, 18, '2024-02-22 11:36:57.161479+00', '2024-02-22 11:36:57.239927+00', NULL, NULL, NULL, NULL, NULL, 3, NULL),
+	(2, 2, 18, '2024-02-22 11:37:04.475847+00', '2024-02-22 11:37:04.48543+00', '2024-03-22', 3, NULL, NULL, NULL, 3, NULL),
+	(3, 3, 18, '2024-02-22 11:37:11.230724+00', '2024-02-22 11:37:11.25859+00', '2024-03-22', 4, NULL, NULL, NULL, 3, NULL),
+	(4, 7, 18, '2024-02-22 11:37:27.840768+00', '2024-02-22 11:37:27.849305+00', '2024-03-07', 5, NULL, NULL, NULL, 3, '{"fine": 800}'),
+	(5, 0, 18, '2024-02-22 11:48:18.214891+00', '2024-02-22 11:48:18.267095+00', NULL, NULL, NULL, NULL, NULL, 2, NULL) ON CONFLICT DO NOTHING;
 
 
 --
 -- Data for Name: vk_toimenpide_henkilo; Type: TABLE DATA; Schema: etp; Owner: etp
 --
 
+INSERT INTO etp.vk_toimenpide_henkilo VALUES
+	(1, 2, 2),
+	(1, 3, 3),
+	(2, 2, 2),
+	(2, 3, 3),
+	(3, 2, 2),
+	(3, 3, 3),
+	(4, 2, 2),
+	(4, 3, 3),
+	(5, 1, 1) ON CONFLICT DO NOTHING;
 
 
 --
@@ -483,7 +512,7 @@ SELECT pg_catalog.setval('etp.viestiketju_id_seq', 5000, true);
 -- Name: vk_henkilo_id_seq; Type: SEQUENCE SET; Schema: etp; Owner: etp
 --
 
-SELECT pg_catalog.setval('etp.vk_henkilo_id_seq', 1, false);
+SELECT pg_catalog.setval('etp.vk_henkilo_id_seq', 3, true);
 
 
 --
@@ -497,14 +526,14 @@ SELECT pg_catalog.setval('etp.vk_note_id_seq', 1, false);
 -- Name: vk_toimenpide_id_seq; Type: SEQUENCE SET; Schema: etp; Owner: etp
 --
 
-SELECT pg_catalog.setval('etp.vk_toimenpide_id_seq', 1, false);
+SELECT pg_catalog.setval('etp.vk_toimenpide_id_seq', 5, true);
 
 
 --
 -- Name: vk_valvonta_id_seq; Type: SEQUENCE SET; Schema: etp; Owner: etp
 --
 
-SELECT pg_catalog.setval('etp.vk_valvonta_id_seq', 1, false);
+SELECT pg_catalog.setval('etp.vk_valvonta_id_seq', 3, true);
 
 
 --
