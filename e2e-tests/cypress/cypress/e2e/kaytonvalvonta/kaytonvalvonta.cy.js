@@ -12,11 +12,13 @@ const openToimenpideCreationAndCheckAllowedToimenpidetypes = (
   toimenpideToCreate,
   allowedToimenpidetypes
 ) => {
-  // TODO: How to check there aren't any others?
   cy.get('[data-cy="toimenpide-type-selection"]')
     .click()
     .parent()
     .within(() => {
+      // Number of available options should be the count of allowed toimenpidetypes and the default 'Ei valintaa' option
+      cy.get('li').should('have.length', allowedToimenpidetypes.length + 1);
+
       allowedToimenpidetypes.map(toimenpidetype => {
         cy.contains(toimenpidetype);
       });
@@ -235,6 +237,7 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
     [
       'Käskypäätös / tiedoksianto (toinen postitus)',
       'Käskypäätös / tiedoksianto (Haastemies)',
+      'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ]
   );
@@ -303,7 +306,11 @@ const createHaOKasittely = () => {
 const createSakkopaatosKuulemiskirje = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / kuulemiskirje',
-    ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus']
+    [
+      'Sakkopäätös / kuulemiskirje',
+      'Sakkoluettelon lähetys menossa',
+      'Valvonnan lopetus'
+    ]
   );
 
   // Fine should have a default value of 9000 euros as it was set previously
@@ -414,6 +421,7 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
     [
       'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
       'Sakkopäätös / tiedoksianto (toinen postitus)',
+      'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ]
   );
@@ -433,7 +441,12 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
 const createSakkopaatosTiedoksiantoHaastemies = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / tiedoksianto (Haastemies)',
-    ['Sakkopäätös / tiedoksianto (Haastemies)', 'Valvonnan lopetus']
+    [
+      'Sakkopäätös / tiedoksianto (Haastemies)',
+      'Sakkopäätös / tiedoksianto (toinen postitus)',
+      'Sakkopäätös / valitusajan odotus ja umpeutuminen',
+      'Valvonnan lopetus'
+    ]
   );
 
   cy.selectInSelect(
@@ -503,7 +516,11 @@ const createSakkopaatosHaOKasittely = () => {
 const createSakkoluettelonLahetysMenossa = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkoluettelon lähetys menossa',
-    ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus']
+    [
+      'Sakkoluettelon lähetys menossa',
+      'Sakkopäätös / kuulemiskirje',
+      'Valvonnan lopetus'
+    ]
   );
   cy.get('[data-cy="toimenpide.description"]')
     .type('Lähetimme sakkoluettelon.')
