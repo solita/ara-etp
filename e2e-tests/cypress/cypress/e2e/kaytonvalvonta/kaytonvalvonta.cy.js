@@ -8,10 +8,7 @@ const FIXTURES = {
   }
 };
 
-// TODO: Pitäisikö tämä olla Cypressin komento tai query?
-// Voisiko käyttää sitä komentoa minkä lisäsin? Ei?
-// TODO: Parempi nimi, koska ei tämä tee sitä toimenpidettä, ainoastaan avaa modalin
-const createToimenpideAndCheckAllowedToimenpidetypes = (
+const openToimenpideCreationAndCheckAllowedToimenpidetypes = (
   toimenpideToCreate,
   allowedToimenpidetypes
 ) => {
@@ -37,6 +34,445 @@ const checkToimenpideCreationSucceeded = () => {
   cy.get('.alert').should('not.exist');
 };
 
+const createKaytonvalvonta = () => {
+  // Fill in minimum information
+  cy.get('[data-cy="kohde.katuosoite"]')
+    .type('Testikatu 26')
+    .should('have.value', 'Testikatu 26');
+  cy.get('[data-cy="kohde.postinumero"]').type('90100');
+
+  // Create the valvonta
+  cy.get('[data-cy="-submit"]').click();
+
+  // Add an omistajaosapuoli to the valvonta
+  cy.get('[data-cy="Uusi henkilö"]').click();
+  cy.get('[data-cy="henkilo.etunimi"]')
+    .type('Enni')
+    .should('have.value', 'Enni');
+  cy.get('[data-cy="henkilo.sukunimi"]')
+    .type('Esimerkki')
+    .should('have.value', 'Esimerkki');
+  // TODO: data-cy ja selectInSelect?
+  cy.get('[id="henkilo.rooli-id"]').click();
+  cy.contains('Omistaja').click();
+  cy.get('[data-cy="-submit"]').click();
+};
+
+const startValvonta = () => {
+  cy.get('[data-cy="start-button"]').click();
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Aloitetaan valvonta')
+    .should('have.value', 'Aloitetaan valvonta')
+    .blur();
+  // TODO: Tarkasta kommentin näkyminen sivulla
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKehotus = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes('Kehotus', [
+    'Kehotus',
+    'Valvonnan lopetus'
+  ]);
+  cy.selectInSelect('document-selector', 'Kehotus');
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createVaroitus = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes('Varoitus', [
+    'Kehotus',
+    'Varoitus',
+    'Valvonnan lopetus'
+  ]);
+  cy.selectInSelect('document-selector', 'Varoitus');
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKaskypaatosKuulemiskirje = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Käskypäätös / kuulemiskirje',
+    ['Kehotus', 'Varoitus', 'Käskypäätös / kuulemiskirje', 'Valvonnan lopetus']
+  );
+  // Fine should have default value of 800 euros
+  cy.get('[data-cy="toimenpide.fine"]')
+    .should('have.value', 800)
+    .clear()
+    .type('9000')
+    .should('have.value', 9000)
+    .blur();
+
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKaskypaatosVarsinainenPaatos = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Käskypäätös / varsinainen päätös',
+    [
+      'Käskypäätös / kuulemiskirje',
+      'Käskypäätös / varsinainen päätös',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  // Fine should have a default value of 9000 euros as it was set in the previous toimenpide
+  cy.get('[data-cy="toimenpide.fine"]').should('have.value', 9000);
+
+  cy.get('[data-cy="toimenpide.department-head-title-fi"]')
+    .clear()
+    .type('Ylijohtaja')
+    .should('have.value', 'Ylijohtaja')
+    .blur();
+
+  cy.get('[data-cy="toimenpide.department-head-title-sv"]')
+    .clear()
+    .type('Överdirektör')
+    .should('have.value', 'Överdirektör')
+    .blur();
+
+  cy.get('[data-cy="toimenpide.department-head-name"]')
+    .clear()
+    .type('Jonna Johtaja')
+    .should('have.value', 'Jonna Johtaja')
+    .blur();
+
+  cy.selectInSelect(
+    'recipient-answered-selector-0',
+    'Asianosainen antoi vastineen kuulemiskirjeeseen'
+  );
+
+  cy.get('[data-cy="toimenpide.answer-commentary-fi-0"]')
+    .type('Tähän kirjoitetaan vastineen kommentti')
+    .should('have.value', 'Tähän kirjoitetaan vastineen kommentti');
+
+  cy.get('[data-cy="toimenpide.answer-commentary-sv-0"]')
+    .type('Tähän kirjoitetaan vastineen kommentti ruotsiksi')
+    .should('have.value', 'Tähän kirjoitetaan vastineen kommentti ruotsiksi');
+
+  cy.get('[data-cy="toimenpide.statement-fi-0"]')
+    .type('Tähän kirjoitetaan kannanotto.')
+    .should('have.value', 'Tähän kirjoitetaan kannanotto.');
+  cy.get('[data-cy="toimenpide.statement-sv-0"]')
+    .type('Tähän kirjoitetaan kannanotto ruotsiksi.')
+    .should('have.value', 'Tähän kirjoitetaan kannanotto ruotsiksi.');
+
+  cy.selectInSelect(
+    'administrative-court-selector-0',
+    'Helsingin hallinto-oikeus'
+  );
+
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
+    [
+      'Käskypäätös / varsinainen päätös',
+      'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Lähetän tämän kirjeenä nyt.')
+    .should('have.value', 'Lähetän tämän kirjeenä nyt.');
+  blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKaskypaatosTiedoksiantoToinenPostitus = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Käskypäätös / tiedoksianto (toinen postitus)',
+    [
+      'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
+      'Käskypäätös / tiedoksianto (toinen postitus)',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Lähetän tämän kirjeenä nyt uudestaan, kun se palautui lähettäjälle.')
+    .should(
+      'have.value',
+      'Lähetän tämän kirjeenä nyt uudestaan, kun se palautui lähettäjälle.'
+    )
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKaskypaatosTiedoksiantoHaastemies = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Käskypäätös / tiedoksianto (Haastemies)',
+    [
+      'Käskypäätös / tiedoksianto (toinen postitus)',
+      'Käskypäätös / tiedoksianto (Haastemies)',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  cy.selectInSelect('karajaoikeus-selector-0', 'Ahvenanmaan käräjäoikeus');
+  cy.get('[data-cy="haastemies-email-0"]')
+    .type('haastemies@poliisitaikarajaoikeus.fi')
+    .should('have.value', 'haastemies@poliisitaikarajaoikeus.fi')
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createKaskypaatosValitusajanOdotusJaUmpeutuminen = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Käskypäätös / valitusajan odotus ja umpeutuminen',
+    ['Käskypäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus']
+  );
+  cy.get('[data-cy="toimenpide.description"]')
+    .type(
+      'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
+    )
+    .should(
+      'have.value',
+      'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
+    )
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createHaOKasittely = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes('HaO-käsittely', [
+    'HaO-käsittely',
+    'Sakkopäätös / kuulemiskirje',
+    'Valvonnan lopetus'
+  ]);
+
+  cy.get('[data-cy="toimenpide.description"]')
+    .type(
+      'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
+    )
+    .should(
+      'have.value',
+      'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
+    )
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosKuulemiskirje = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkopäätös / kuulemiskirje',
+    ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus']
+  );
+
+  // Fine should have a default value of 9000 euros as it was set previously
+  // Change it now to another amount
+  cy.get('[data-cy="toimenpide.fine"]')
+    .should('have.value', 9000)
+    .clear()
+    .type('4500')
+    .should('have.value', 4500)
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosVarsinainenPaatos = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkopäätös / varsinainen päätös',
+    [
+      'Sakkopäätös / kuulemiskirje',
+      'Sakkopäätös / varsinainen päätös',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  // Fine is now 4500 after setting it in the previous toimenpide
+  cy.get('[data-cy="toimenpide.fine"]').should('have.value', 4500);
+
+  // Department head information is what was previously used
+  cy.get('[data-cy="toimenpide.department-head-title-fi"]').should(
+    'have.value',
+    'Ylijohtaja'
+  );
+
+  cy.get('[data-cy="toimenpide.department-head-title-sv"]').should(
+    'have.value',
+    'Överdirektör'
+  );
+
+  cy.get('[data-cy="toimenpide.department-head-name"]').should(
+    'have.value',
+    'Jonna Johtaja'
+  );
+
+  cy.selectInSelect(
+    'recipient-answered-selector-0',
+    'Asianosainen antoi vastineen kuulemiskirjeeseen'
+  );
+
+  // Notice about updating statement is visible after selecting the previous option
+  cy.contains('Tarkista ja muuta teksti kohdassa kannanotto vastineeseen');
+
+  cy.get('[data-cy="toimenpide.answer-commentary-fi-0"]')
+    .type('Tähän kirjoitetaan vastineen kommentti')
+    .should('have.value', 'Tähän kirjoitetaan vastineen kommentti');
+
+  cy.get('[data-cy="toimenpide.answer-commentary-sv-0"]')
+    .type('Tähän kirjoitetaan vastineen kommentti ruotsiksi')
+    .should('have.value', 'Tähän kirjoitetaan vastineen kommentti ruotsiksi');
+
+  // Statement has default text filled in
+  cy.get('[data-cy="toimenpide.statement-fi-0"]').should(
+    'have.value',
+    'ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.'
+  );
+  cy.get('[data-cy="toimenpide.statement-sv-0"]').should(
+    'have.value',
+    'Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom Esimerkki inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen.'
+  );
+
+  cy.selectInSelect(
+    'administrative-court-selector-0',
+    'Pohjois-Suomen hallinto-oikeus'
+  );
+
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosTiedoksiantoEnsimmainenPostitus = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
+    [
+      'Sakkopäätös / varsinainen päätös',
+      'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Lähetimme sakkopäätöksen ensimmäisen kerran.')
+    .should('have.value', 'Lähetimme sakkopäätöksen ensimmäisen kerran.')
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosTiedoksiantoToinenPostitus = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkopäätös / tiedoksianto (toinen postitus)',
+    [
+      'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
+      'Sakkopäätös / tiedoksianto (toinen postitus)',
+      'Valvonnan lopetus'
+    ]
+  );
+
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Lähetimme sakkopäätöksen toisen kerran.')
+    .should('have.value', 'Lähetimme sakkopäätöksen toisen kerran.')
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosTiedoksiantoHaastemies = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkopäätös / tiedoksianto (Haastemies)',
+    ['Sakkopäätös / tiedoksianto (Haastemies)', 'Valvonnan lopetus']
+  );
+
+  cy.selectInSelect(
+    'administrative-court-selector-0',
+    'Pohjois-Suomen hallinto-oikeus'
+  );
+  cy.selectInSelect('karajaoikeus-selector-0', 'Ahvenanmaan käräjäoikeus');
+  cy.get('[data-cy="haastemies-email-0"]')
+    .type('haastemies@poliisitaikarajaoikeus.fi')
+    .should('have.value', 'haastemies@poliisitaikarajaoikeus.fi')
+    .blur();
+
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosValitusajanOdotusJaUmpeutuminen = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkopäätös / valitusajan odotus ja umpeutuminen',
+    ['Sakkopäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus']
+  );
+  cy.get('[data-cy="toimenpide.description"]')
+    .type(
+      'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
+    )
+    .should(
+      'have.value',
+      'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
+    )
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkopaatosHaOKasittely = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes('HaO-käsittely', [
+    'HaO-käsittely',
+    'Valvonnan lopetus',
+    'Sakkoluettelon lähetys menossa'
+  ]);
+
+  cy.get('[data-cy="toimenpide.description"]')
+    .type(
+      'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
+    )
+    .should(
+      'have.value',
+      'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
+    )
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const createSakkoluettelonLahetysMenossa = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Sakkoluettelon lähetys menossa',
+    ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus']
+  );
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Lähetimme sakkoluettelon.')
+    .should('have.value', 'Lähetimme sakkoluettelon.')
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const closeValvonta = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes('Valvonnan lopetus', [
+    'Valvonnan lopetus'
+  ]);
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Valvonta on suoritettu loppuun.')
+    .should('have.value', 'Valvonta on suoritettu loppuun.')
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
+const reopenValvonta = () => {
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Laitoin vahingossa kiinni, avataan uudestaan.')
+    .should('have.value', 'Laitoin vahingossa kiinni, avataan uudestaan.')
+    .blur();
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+};
+
 context('Käytönvalvonta', () => {
   beforeEach(() => {
     cy.intercept(/\/api\/private/, req => {
@@ -50,406 +486,49 @@ context('Käytönvalvonta', () => {
     cy.contains('Käytön­valvon­nat').click();
     cy.get('[data-cy="Uusi valvonta"]').click();
 
-    // Fill in minimum information
-    cy.get('[data-cy="kohde.katuosoite"]')
-      .type('Testikatu 26')
-      .should('have.value', 'Testikatu 26');
-    cy.get('[data-cy="kohde.postinumero"]').type('90100');
-
-    // Create the valvonta
-    cy.get('[data-cy="-submit"]').click();
-
-    // Add an omistajaosapuoli to the valvonta
-    cy.get('[data-cy="Uusi henkilö"]').click();
-    cy.get('[data-cy="henkilo.etunimi"]')
-      .type('Enni')
-      .should('have.value', 'Enni');
-    cy.get('[data-cy="henkilo.sukunimi"]')
-      .type('Esimerkki')
-      .should('have.value', 'Esimerkki');
-    // TODO: data-cy ja selectInSelect?
-    cy.get('[id="henkilo.rooli-id"]').click();
-    cy.contains('Omistaja').click();
-    cy.get('[data-cy="-submit"]').click();
+    createKaytonvalvonta();
 
     // Navigate to the valvonta page
     cy.get('[data-cy^=KV]').click();
     cy.get('[data-cy=Valvonta]').click();
 
-    // Start the valvonta
-    cy.get('[data-cy="start-button"]').click();
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Aloitetaan valvonta')
-      .should('have.value', 'Aloitetaan valvonta')
-      .blur();
-    // TODO: Tarkasta kommentin näkyminen sivulla
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    startValvonta();
 
-    // Create kehotus
-    createToimenpideAndCheckAllowedToimenpidetypes('Kehotus', [
-      'Kehotus',
-      'Valvonnan lopetus'
-    ]);
-    cy.selectInSelect('document-selector', 'Kehotus');
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    createKehotus();
 
-    // Create varoitus
-    createToimenpideAndCheckAllowedToimenpidetypes('Varoitus', [
-      'Kehotus',
-      'Varoitus',
-      'Valvonnan lopetus'
-    ]);
-    cy.selectInSelect('document-selector', 'Varoitus');
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    createVaroitus();
 
-    // Create käskypäätös / kuulemiskirje
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Käskypäätös / kuulemiskirje',
-      [
-        'Kehotus',
-        'Varoitus',
-        'Käskypäätös / kuulemiskirje',
-        'Valvonnan lopetus'
-      ]
-    );
-    // Fine should have default value of 800 euros
-    cy.get('[data-cy="toimenpide.fine"]')
-      .should('have.value', 800)
-      .clear()
-      .type('9000')
-      .should('have.value', 9000)
-      .blur();
+    createKaskypaatosKuulemiskirje();
 
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    createKaskypaatosVarsinainenPaatos();
 
-    // Create käskypäätös / varsinainen päätös
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Käskypäätös / varsinainen päätös',
-      [
-        'Käskypäätös / kuulemiskirje',
-        'Käskypäätös / varsinainen päätös',
-        'Valvonnan lopetus'
-      ]
-    );
+    createKaskypaatosTiedoksiantoEnsimmainenPostitus();
 
-    // Fine should have a default value of 9000 euros as it was set in the previous toimenpide
-    cy.get('[data-cy="toimenpide.fine"]').should('have.value', 9000);
+    createKaskypaatosTiedoksiantoToinenPostitus();
 
-    cy.get('[data-cy="toimenpide.department-head-title-fi"]')
-      .clear()
-      .type('Ylijohtaja')
-      .should('have.value', 'Ylijohtaja')
-      .blur();
+    createKaskypaatosTiedoksiantoHaastemies();
 
-    cy.get('[data-cy="toimenpide.department-head-title-sv"]')
-      .clear()
-      .type('Överdirektör')
-      .should('have.value', 'Överdirektör')
-      .blur();
+    createKaskypaatosValitusajanOdotusJaUmpeutuminen();
 
-    cy.get('[data-cy="toimenpide.department-head-name"]')
-      .clear()
-      .type('Jonna Johtaja')
-      .should('have.value', 'Jonna Johtaja')
-      .blur();
+    createHaOKasittely();
 
-    cy.selectInSelect(
-      'recipient-answered-selector-0',
-      'Asianosainen antoi vastineen kuulemiskirjeeseen'
-    );
+    createSakkopaatosKuulemiskirje();
 
-    cy.get('[data-cy="toimenpide.answer-commentary-fi-0"]')
-      .type('Tähän kirjoitetaan vastineen kommentti')
-      .should('have.value', 'Tähän kirjoitetaan vastineen kommentti');
+    createSakkopaatosVarsinainenPaatos();
 
-    cy.get('[data-cy="toimenpide.answer-commentary-sv-0"]')
-      .type('Tähän kirjoitetaan vastineen kommentti ruotsiksi')
-      .should('have.value', 'Tähän kirjoitetaan vastineen kommentti ruotsiksi');
+    createSakkopaatosTiedoksiantoEnsimmainenPostitus();
 
-    cy.get('[data-cy="toimenpide.statement-fi-0"]')
-      .type('Tähän kirjoitetaan kannanotto.')
-      .should('have.value', 'Tähän kirjoitetaan kannanotto.');
-    cy.get('[data-cy="toimenpide.statement-sv-0"]')
-      .type('Tähän kirjoitetaan kannanotto ruotsiksi.')
-      .should('have.value', 'Tähän kirjoitetaan kannanotto ruotsiksi.');
+    createSakkopaatosTiedoksiantoToinenPostitus();
 
-    cy.selectInSelect(
-      'administrative-court-selector-0',
-      'Helsingin hallinto-oikeus'
-    );
+    createSakkopaatosTiedoksiantoHaastemies();
 
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    createSakkopaatosValitusajanOdotusJaUmpeutuminen();
 
-    // Create Käskypäätös / tiedoksianto (ensimmäinen postitus)
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
-      [
-        'Käskypäätös / varsinainen päätös',
-        'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
-        'Valvonnan lopetus'
-      ]
-    );
+    createSakkopaatosHaOKasittely();
 
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Lähetän tämän kirjeenä nyt.')
-      .should('have.value', 'Lähetän tämän kirjeenä nyt.');
-    blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    createSakkoluettelonLahetysMenossa();
 
-    // Create Käskypäätös / tiedoksianto (toinen postitus)
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Käskypäätös / tiedoksianto (toinen postitus)',
-      [
-        'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
-        'Käskypäätös / tiedoksianto (toinen postitus)',
-        'Valvonnan lopetus'
-      ]
-    );
-
-    cy.get('[data-cy="toimenpide.description"]')
-      .type(
-        'Lähetän tämän kirjeenä nyt uudestaan, kun se palautui lähettäjälle.'
-      )
-      .should(
-        'have.value',
-        'Lähetän tämän kirjeenä nyt uudestaan, kun se palautui lähettäjälle.'
-      )
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Käskypäätös / tiedoksianto (haaastemies)
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Käskypäätös / tiedoksianto (Haastemies)',
-      [
-        'Käskypäätös / tiedoksianto (toinen postitus)',
-        'Käskypäätös / tiedoksianto (Haastemies)',
-        'Valvonnan lopetus'
-      ]
-    );
-
-    cy.selectInSelect('karajaoikeus-selector-0', 'Ahvenanmaan käräjäoikeus');
-    cy.get('[data-cy="haastemies-email-0"]')
-      .type('haastemies@poliisitaikarajaoikeus.fi')
-      .should('have.value', 'haastemies@poliisitaikarajaoikeus.fi')
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Käskypäätös / valitusajan odotus ja umpeutuminen
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Käskypäätös / valitusajan odotus ja umpeutuminen',
-      ['Käskypäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus']
-    );
-    cy.get('[data-cy="toimenpide.description"]')
-      .type(
-        'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
-      )
-      .should(
-        'have.value',
-        'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
-      )
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create HaO-käsittely
-    createToimenpideAndCheckAllowedToimenpidetypes('HaO-käsittely', [
-      'HaO-käsittely',
-      'Sakkopäätös / kuulemiskirje',
-      'Valvonnan lopetus'
-    ]);
-
-    cy.get('[data-cy="toimenpide.description"]')
-      .type(
-        'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
-      )
-      .should(
-        'have.value',
-        'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
-      )
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Sakkopäätös / kuulemiskirje
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkopäätös / kuulemiskirje',
-      ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus']
-    );
-
-    // Fine should have a default value of 9000 euros as it was set previously
-    // Change it now to another amount
-    cy.get('[data-cy="toimenpide.fine"]')
-      .should('have.value', 9000)
-      .clear()
-      .type('4500')
-      .should('have.value', 4500)
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Sakkopäätös / varsinainen päätös
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkopäätös / varsinainen päätös',
-      [
-        'Sakkopäätös / kuulemiskirje',
-        'Sakkopäätös / varsinainen päätös',
-        'Valvonnan lopetus'
-      ]
-    );
-
-    // Fine is now 4500 after setting it in the previous toimenpide
-    cy.get('[data-cy="toimenpide.fine"]').should('have.value', 4500);
-
-    // Department head information is what was previously used
-    cy.get('[data-cy="toimenpide.department-head-title-fi"]').should(
-      'have.value',
-      'Ylijohtaja'
-    );
-
-    cy.get('[data-cy="toimenpide.department-head-title-sv"]').should(
-      'have.value',
-      'Överdirektör'
-    );
-
-    cy.get('[data-cy="toimenpide.department-head-name"]').should(
-      'have.value',
-      'Jonna Johtaja'
-    );
-
-    cy.selectInSelect(
-      'recipient-answered-selector-0',
-      'Asianosainen antoi vastineen kuulemiskirjeeseen'
-    );
-
-    // Notice about updating statement is visible after selecting the previous option
-    cy.contains('Tarkista ja muuta teksti kohdassa kannanotto vastineeseen');
-
-    cy.get('[data-cy="toimenpide.answer-commentary-fi-0"]')
-      .type('Tähän kirjoitetaan vastineen kommentti')
-      .should('have.value', 'Tähän kirjoitetaan vastineen kommentti');
-
-    cy.get('[data-cy="toimenpide.answer-commentary-sv-0"]')
-      .type('Tähän kirjoitetaan vastineen kommentti ruotsiksi')
-      .should('have.value', 'Tähän kirjoitetaan vastineen kommentti ruotsiksi');
-
-    // Statement has default text filled in
-    cy.get('[data-cy="toimenpide.statement-fi-0"]').should(
-      'have.value',
-      'ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.'
-    );
-    cy.get('[data-cy="toimenpide.statement-sv-0"]').should(
-      'have.value',
-      'Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom Esimerkki inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen.'
-    );
-
-    cy.selectInSelect(
-      'administrative-court-selector-0',
-      'Pohjois-Suomen hallinto-oikeus'
-    );
-
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Sakkopäätös / tiedoksianto (ensimmäinen postitus)
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
-      [
-        'Sakkopäätös / varsinainen päätös',
-        'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
-        'Valvonnan lopetus'
-      ]
-    );
-
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Lähetimme sakkopäätöksen ensimmäisen kerran.')
-      .should('have.value', 'Lähetimme sakkopäätöksen ensimmäisen kerran.')
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Sakkopäätös / tiedoksianto (toinen postitus)
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkopäätös / tiedoksianto (toinen postitus)',
-      [
-        'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
-        'Sakkopäätös / tiedoksianto (toinen postitus)',
-        'Valvonnan lopetus'
-      ]
-    );
-
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Lähetimme sakkopäätöksen toisen kerran.')
-      .should('have.value', 'Lähetimme sakkopäätöksen toisen kerran.')
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Sakkopäätös / tiedoksianto (Haastemies)
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkopäätös / tiedoksianto (Haastemies)',
-      ['Sakkopäätös / tiedoksianto (Haastemies)', 'Valvonnan lopetus']
-    );
-
-    cy.selectInSelect(
-      'administrative-court-selector-0',
-      'Pohjois-Suomen hallinto-oikeus'
-    );
-    cy.selectInSelect('karajaoikeus-selector-0', 'Ahvenanmaan käräjäoikeus');
-    cy.get('[data-cy="haastemies-email-0"]')
-      .type('haastemies@poliisitaikarajaoikeus.fi')
-      .should('have.value', 'haastemies@poliisitaikarajaoikeus.fi')
-      .blur();
-
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Create Sakkopäätös / valitusajan odotus ja umpeutuminen
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkopäätös / valitusajan odotus ja umpeutuminen',
-      ['Sakkopäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus']
-    );
-    cy.get('[data-cy="toimenpide.description"]')
-      .type(
-        'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
-      )
-      .should(
-        'have.value',
-        'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
-      )
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    createToimenpideAndCheckAllowedToimenpidetypes(
-      'Sakkoluettelon lähetys menossa',
-      ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus']
-    );
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Lähetimme sakkoluettelon.')
-      .should('have.value', 'Lähetimme sakkoluettelon.')
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
-
-    // Close the valvonta
-    // Create Sakkopäätös / valitusajan odotus ja umpeutuminen
-    createToimenpideAndCheckAllowedToimenpidetypes('Valvonnan lopetus', [
-      'Valvonnan lopetus'
-    ]);
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Valvonta on suoritettu loppuun.')
-      .should('have.value', 'Valvonta on suoritettu loppuun.')
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    closeValvonta();
 
     // Aloita valvonta button should not exist at this point
     cy.get('[data-cy="start-button"]').should('not.exist');
@@ -458,11 +537,6 @@ context('Käytönvalvonta', () => {
     cy.get('[data-cy="continue-button"]').click();
 
     //Reopen the valvonta
-    cy.get('[data-cy="toimenpide.description"]')
-      .type('Laitoin vahingossa kiinni, avataan uudestaan.')
-      .should('have.value', 'Laitoin vahingossa kiinni, avataan uudestaan.')
-      .blur();
-    submitToimenpide();
-    checkToimenpideCreationSucceeded();
+    reopenValvonta();
   });
 });
