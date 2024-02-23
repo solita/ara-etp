@@ -58,7 +58,8 @@ services:
   minio_create_default_bucket:
     image: minio/mc:latest
     depends_on:
-      - minio
+      minio:
+        condition: service_started
     networks:
       - minio  
     entrypoint: >
