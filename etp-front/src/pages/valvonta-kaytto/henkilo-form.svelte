@@ -102,6 +102,7 @@
     <div class="py-4 w-full md:w-1/3 md:pr-2">
       <Select
         id={'henkilo.rooli-id'}
+        name="henkilo.rooli-id"
         label={i18n(`${i18nRoot}.rooli-id`)}
         required={false}
         disabled={false}

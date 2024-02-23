@@ -34,6 +34,14 @@ const checkToimenpideCreationSucceeded = () => {
   cy.get('.alert').should('not.exist');
 };
 
+const toimenpideIsInCreatedToimenpideList = toimenpide => {
+  cy.contains(toimenpide);
+};
+
+const commentIsInToimenpideList = comment => {
+  cy.contains(comment);
+};
+
 const createKaytonvalvonta = () => {
   // Fill in minimum information
   cy.get('[data-cy="kohde.katuosoite"]')
@@ -52,9 +60,7 @@ const createKaytonvalvonta = () => {
   cy.get('[data-cy="henkilo.sukunimi"]')
     .type('Esimerkki')
     .should('have.value', 'Esimerkki');
-  // TODO: data-cy ja selectInSelect?
-  cy.get('[id="henkilo.rooli-id"]').click();
-  cy.contains('Omistaja').click();
+  cy.selectInSelect('henkilo.rooli-id', 'Omistaja');
   cy.get('[data-cy="-submit"]').click();
 };
 
@@ -64,9 +70,10 @@ const startValvonta = () => {
     .type('Aloitetaan valvonta')
     .should('have.value', 'Aloitetaan valvonta')
     .blur();
-  // TODO: Tarkasta kommentin näkyminen sivulla
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Valvonnan aloitus');
+  commentIsInToimenpideList('Aloitetaan valvonta');
 };
 
 const createKehotus = () => {
@@ -77,6 +84,7 @@ const createKehotus = () => {
   cy.selectInSelect('document-selector', 'Kehotus');
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Kehotus');
 };
 
 const createVaroitus = () => {
@@ -88,6 +96,7 @@ const createVaroitus = () => {
   cy.selectInSelect('document-selector', 'Varoitus');
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Varoitus');
 };
 
 const createKaskypaatosKuulemiskirje = () => {
@@ -105,6 +114,7 @@ const createKaskypaatosKuulemiskirje = () => {
 
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Käskypäätös / kuulemiskirje');
 };
 
 const createKaskypaatosVarsinainenPaatos = () => {
@@ -165,6 +175,7 @@ const createKaskypaatosVarsinainenPaatos = () => {
 
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Käskypäätös / varsinainen päätös');
 };
 
 const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
@@ -179,10 +190,15 @@ const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
 
   cy.get('[data-cy="toimenpide.description"]')
     .type('Lähetän tämän kirjeenä nyt.')
-    .should('have.value', 'Lähetän tämän kirjeenä nyt.');
-  blur();
+    .should('have.value', 'Lähetän tämän kirjeenä nyt.')
+    .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Käskypäätös / tiedoksianto (ensimmäinen postitus)'
+  );
+  commentIsInToimenpideList('Lähetän tämän kirjeenä nyt.');
 };
 
 const createKaskypaatosTiedoksiantoToinenPostitus = () => {
@@ -202,8 +218,15 @@ const createKaskypaatosTiedoksiantoToinenPostitus = () => {
       'Lähetän tämän kirjeenä nyt uudestaan, kun se palautui lähettäjälle.'
     )
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Käskypäätös / tiedoksianto (toinen postitus)'
+  );
+  commentIsInToimenpideList(
+    'Lähetän tämän kirjeenä nyt uudestaan, kun se palautui lähettäjälle.'
+  );
 };
 
 const createKaskypaatosTiedoksiantoHaastemies = () => {
@@ -223,6 +246,9 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
     .blur();
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Käskypäätös / tiedoksianto (Haastemies)'
+  );
 };
 
 const createKaskypaatosValitusajanOdotusJaUmpeutuminen = () => {
@@ -239,8 +265,15 @@ const createKaskypaatosValitusajanOdotusJaUmpeutuminen = () => {
       'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
     )
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Käskypäätös / valitusajan odotus ja umpeutuminen'
+  );
+  commentIsInToimenpideList(
+    'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
+  );
 };
 
 const createHaOKasittely = () => {
@@ -261,6 +294,10 @@ const createHaOKasittely = () => {
     .blur();
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('HaO-käsittely');
+  commentIsInToimenpideList(
+    'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
+  );
 };
 
 const createSakkopaatosKuulemiskirje = () => {
@@ -277,8 +314,10 @@ const createSakkopaatosKuulemiskirje = () => {
     .type('4500')
     .should('have.value', 4500)
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Sakkopäätös / kuulemiskirje');
 };
 
 const createSakkopaatosVarsinainenPaatos = () => {
@@ -343,6 +382,7 @@ const createSakkopaatosVarsinainenPaatos = () => {
 
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Sakkopäätös / varsinainen päätös');
 };
 
 const createSakkopaatosTiedoksiantoEnsimmainenPostitus = () => {
@@ -359,8 +399,13 @@ const createSakkopaatosTiedoksiantoEnsimmainenPostitus = () => {
     .type('Lähetimme sakkopäätöksen ensimmäisen kerran.')
     .should('have.value', 'Lähetimme sakkopäätöksen ensimmäisen kerran.')
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Sakkopäätös / tiedoksianto (ensimmäinen postitus)'
+  );
+  commentIsInToimenpideList('Lähetimme sakkopäätöksen ensimmäisen kerran.');
 };
 
 const createSakkopaatosTiedoksiantoToinenPostitus = () => {
@@ -377,8 +422,12 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
     .type('Lähetimme sakkopäätöksen toisen kerran.')
     .should('have.value', 'Lähetimme sakkopäätöksen toisen kerran.')
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Sakkopäätös / tiedoksianto (toinen postitus)'
+  );
 };
 
 const createSakkopaatosTiedoksiantoHaastemies = () => {
@@ -399,6 +448,9 @@ const createSakkopaatosTiedoksiantoHaastemies = () => {
 
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Sakkopäätös / tiedoksianto (Haastemies)'
+  );
 };
 
 const createSakkopaatosValitusajanOdotusJaUmpeutuminen = () => {
@@ -415,8 +467,12 @@ const createSakkopaatosValitusajanOdotusJaUmpeutuminen = () => {
       'Odotamme valitusajan umpeutumista, josko saisimme vaikka valituksen sen puitteissa.'
     )
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList(
+    'Sakkopäätös / valitusajan odotus ja umpeutuminen'
+  );
 };
 
 const createSakkopaatosHaOKasittely = () => {
@@ -435,8 +491,13 @@ const createSakkopaatosHaOKasittely = () => {
       'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
     )
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('HaO-käsittely');
+  commentIsInToimenpideList(
+    'Tämä tapaus meni hallinto-oikeuden käsittelyyn, joten odotamme ratkaisua.'
+  );
 };
 
 const createSakkoluettelonLahetysMenossa = () => {
@@ -448,8 +509,10 @@ const createSakkoluettelonLahetysMenossa = () => {
     .type('Lähetimme sakkoluettelon.')
     .should('have.value', 'Lähetimme sakkoluettelon.')
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Sakkoluettelon lähetys menossa');
 };
 
 const closeValvonta = () => {
@@ -460,8 +523,11 @@ const closeValvonta = () => {
     .type('Valvonta on suoritettu loppuun.')
     .should('have.value', 'Valvonta on suoritettu loppuun.')
     .blur();
+
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Valvonnan lopetus');
+  commentIsInToimenpideList('Valvonta on suoritettu loppuun.');
 };
 
 const reopenValvonta = () => {
@@ -471,6 +537,8 @@ const reopenValvonta = () => {
     .blur();
   submitToimenpide();
   checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Suljetun valvonnan uudelleenavaus');
+  commentIsInToimenpideList('Laitoin vahingossa kiinni, avataan uudestaan.');
 };
 
 context('Käytönvalvonta', () => {
