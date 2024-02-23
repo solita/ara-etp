@@ -22,12 +22,12 @@ SET row_security = off;
 --
 
 INSERT INTO audit.kayttaja VALUES
-	(1, 877, '2024-02-22 12:07:25.106475+00', 0, 'database.etp', 0, 'database', 'etp', 'database@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, NULL, NULL, NULL),
-	(2, 966, '2024-02-22 12:07:26.845508+00', 0, 'database.etp', -1, 'conversion', 'etp', 'conversion@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(3, 966, '2024-02-22 12:07:26.845508+00', 0, 'database.etp', -2, 'laskutus', 'etp', 'laskutus@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(4, 966, '2024-02-22 12:07:26.845508+00', 0, 'database.etp', -3, 'communication', 'etp', 'communication@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(5, 966, '2024-02-22 12:07:26.845508+00', 0, 'database.etp', -4, 'presigned', 'etp', 'presigned@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(6, 966, '2024-02-22 12:07:26.845508+00', 0, 'database.etp', -5, 'aineisto', 'etp', 'aineisto@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(1, 877, '2024-02-23 08:59:45.191462+00', 0, 'database.etp', 0, 'database', 'etp', 'database@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, NULL, NULL, NULL),
+	(2, 966, '2024-02-23 08:59:47.198396+00', 0, 'database.etp', -1, 'conversion', 'etp', 'conversion@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(3, 966, '2024-02-23 08:59:47.198396+00', 0, 'database.etp', -2, 'laskutus', 'etp', 'laskutus@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(4, 966, '2024-02-23 08:59:47.198396+00', 0, 'database.etp', -3, 'communication', 'etp', 'communication@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(5, 966, '2024-02-23 08:59:47.198396+00', 0, 'database.etp', -4, 'presigned', 'etp', 'presigned@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
+	(6, 966, '2024-02-23 08:59:47.198396+00', 0, 'database.etp', -5, 'aineisto', 'etp', 'aineisto@energiatodistusrekisteri.fi', '0501234567', false, -1, false, NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(7, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 1, 'Pauli', 'Pätevyyden toteaja', 'patevyydentoteaja@solita.fi', '0451234567', false, 1, false, '010280-952L', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(8, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 2, 'Liisa', 'Specimen-Potex', 'laatija@solita.fi', '0451234567', false, 0, false, '010469-999W', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(9, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234567', false, 0, false, '141199-999N', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
@@ -50,7 +50,8 @@ INSERT INTO audit.kayttaja VALUES
 	(26, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 20, 'Lasse', 'Laskuttaja', 'laskuttaja@solita.fi', '0501234567', false, 3, false, NULL, NULL, 'vvirkamies2', 'testausvirasto.fi', false, NULL, '', NULL, NULL),
 	(27, 1030, '2024-02-22 11:33:06.838079+00', 18, 'core.etp/api/private/laatijat/3', 3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234568', false, 0, false, '141199-999N', NULL, NULL, NULL, false, NULL, '', NULL, NULL),
 	(28, 1068, '2024-02-22 11:35:08.138362+00', 18, 'core.etp/api/private/whoami', 18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, false, NULL, 'paakayttaja@solita.fi', 'vvirkamies', 'testivirasto.fi', false, NULL, '', NULL, NULL),
-	(29, 1069, '2024-02-22 12:09:36.772192+00', 2, 'core.etp/api/private/whoami', 2, 'Liisa', 'Specimen-Potex', 'laatija@solita.fi', '0451234567', false, 0, false, '010469-999W', 'laatija@solita.fi', NULL, NULL, false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
+	(29, 1069, '2024-02-22 12:09:36.772192+00', 2, 'core.etp/api/private/whoami', 2, 'Liisa', 'Specimen-Potex', 'laatija@solita.fi', '0451234567', false, 0, false, '010469-999W', 'laatija@solita.fi', NULL, NULL, false, NULL, '', NULL, NULL),
+	(30, 1044, '2024-02-23 06:11:48.299734+00', 18, 'core.etp/api/private/laatijat', 21, 'Tiedot', 'Tarkastamatta', 'tiedottarkastamatta@example.com', '0123', false, 0, false, '010106A9311', NULL, NULL, NULL, false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
 
 
 --
@@ -74,7 +75,8 @@ INSERT INTO audit.laatija VALUES
 	(14, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 15, 1, '2020-10-01', 'FISE', false, NULL, '{}', NULL, false, false, false, false, 0, 'Hämeenkatu 1', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000014', false, false),
 	(15, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 16, 1, '2020-10-01', 'FISE', false, NULL, '{}', NULL, false, false, false, false, 0, 'Hämeenkatu 1', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000015', false, false),
 	(16, 1002, '2024-02-22 11:30:03.046259+00', 0, 'database.etp', 17, 1, '2020-10-01', 'FISE', false, NULL, '{}', NULL, false, false, false, false, 0, 'Hämeenkatu 1', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000016', false, false),
-	(17, 1067, '2024-02-22 11:34:22.488863+00', 18, 'core.etp/api/private/laatijat/3', 3, 2, '2020-01-01', 'KIINKO', false, 3, '{}', NULL, false, false, false, false, 0, 'Peltokatu 26', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000002', true, false) ON CONFLICT DO NOTHING;
+	(17, 1067, '2024-02-22 11:34:22.488863+00', 18, 'core.etp/api/private/laatijat/3', 3, 2, '2020-01-01', 'KIINKO', false, 3, '{}', NULL, false, false, false, false, 0, 'Peltokatu 26', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000002', true, false),
+	(18, 1044, '2024-02-23 06:11:48.299734+00', 18, 'core.etp/api/private/laatijat', 21, 1, '2024-02-23', 'ARA', false, NULL, '{}', NULL, false, false, false, false, 0, 'Tiedottarkastamattakatu', NULL, '90000', 'Oulukai', 'FI', NULL, 'L000000017', true, false) ON CONFLICT DO NOTHING;
 
 
 --
@@ -97,14 +99,14 @@ INSERT INTO audit.vk_henkilo VALUES
 -- Name: kayttaja_event_id_seq; Type: SEQUENCE SET; Schema: audit; Owner: etp
 --
 
-SELECT pg_catalog.setval('audit.kayttaja_event_id_seq', 29, true);
+SELECT pg_catalog.setval('audit.kayttaja_event_id_seq', 30, true);
 
 
 --
 -- Name: laatija_event_id_seq; Type: SEQUENCE SET; Schema: audit; Owner: etp
 --
 
-SELECT pg_catalog.setval('audit.laatija_event_id_seq', 17, true);
+SELECT pg_catalog.setval('audit.laatija_event_id_seq', 18, true);
 
 
 --
@@ -166,8 +168,9 @@ INSERT INTO etp.kayttaja VALUES
 	(19, 'Paavo', 'Pääkäyttäjä', 'paakayttaja2@solita.fi', '0501234567', false, 2, NULL, false, NULL, NULL, 'vvirkamies3', 'testivirasto.fi', NULL, false, NULL, '', NULL, NULL),
 	(20, 'Lasse', 'Laskuttaja', 'laskuttaja@solita.fi', '0501234567', false, 3, NULL, false, NULL, NULL, 'vvirkamies2', 'testausvirasto.fi', NULL, false, NULL, '', NULL, NULL),
 	(3, 'Kalevi', 'Specimen-Potex', 'kumppani@solita.fi', '0451234568', false, 0, NULL, false, '141199-999N', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL),
-	(18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, '2024-02-22 12:08:23.509376+00', false, NULL, 'paakayttaja@solita.fi', 'vvirkamies', 'testivirasto.fi', NULL, false, NULL, '', NULL, NULL),
-	(2, 'Liisa', 'Specimen-Potex', 'laatija@solita.fi', '0451234567', false, 0, '2024-02-22 12:09:41.497552+00', false, '010469-999W', 'laatija@solita.fi', NULL, NULL, '2024-02-22 12:09:39.603165+00', false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
+	(2, 'Liisa', 'Specimen-Potex', 'laatija@solita.fi', '0451234567', false, 0, '2024-02-22 12:09:41.497552+00', false, '010469-999W', 'laatija@solita.fi', NULL, NULL, '2024-02-22 12:09:39.603165+00', false, NULL, '', NULL, NULL),
+	(18, 'Päivi', 'Pääkäyttäjä', 'paakayttaja@solita.fi', '0501234567', false, 2, '2024-02-23 06:11:09.766821+00', false, NULL, 'paakayttaja@solita.fi', 'vvirkamies', 'testivirasto.fi', NULL, false, NULL, '', NULL, NULL),
+	(21, 'Tiedot', 'Tarkastamatta', 'tiedottarkastamatta@example.com', '0123', false, 0, NULL, false, '010106A9311', NULL, NULL, NULL, NULL, false, NULL, '', NULL, NULL) ON CONFLICT DO NOTHING;
 
 
 --
@@ -190,7 +193,8 @@ INSERT INTO etp.laatija VALUES
 	(16, 1, '2020-10-01', 'FISE', false, NULL, '{}', NULL, false, false, false, false, 0, 'Hämeenkatu 1', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000015', false, false),
 	(17, 1, '2020-10-01', 'FISE', false, NULL, '{}', NULL, false, false, false, false, 0, 'Hämeenkatu 1', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000016', false, false),
 	(3, 2, '2020-01-01', 'KIINKO', false, 3, '{}', NULL, false, false, false, false, 0, 'Peltokatu 26', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000002', true, false),
-	(2, 2, '2020-01-01', 'KIINKO', false, NULL, '{}', NULL, false, false, false, false, 0, 'Peltokatu 26', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000001', false, false) ON CONFLICT DO NOTHING;
+	(2, 2, '2020-01-01', 'KIINKO', false, NULL, '{}', NULL, false, false, false, false, 0, 'Peltokatu 26', NULL, '33100', 'Tampere', 'FI', NULL, 'L000000001', false, false),
+	(21, 1, '2024-02-23', 'ARA', false, NULL, '{}', NULL, false, false, false, false, 0, 'Tiedottarkastamattakatu', NULL, '90000', 'Oulukai', 'FI', NULL, 'L000000017', true, false) ON CONFLICT DO NOTHING;
 
 
 --
@@ -464,14 +468,14 @@ SELECT pg_catalog.setval('etp.energiatodistus_id_seq', 5, true);
 -- Name: kayttaja_id_seq; Type: SEQUENCE SET; Schema: etp; Owner: etp
 --
 
-SELECT pg_catalog.setval('etp.kayttaja_id_seq', 20, true);
+SELECT pg_catalog.setval('etp.kayttaja_id_seq', 21, true);
 
 
 --
 -- Name: laatija_laskutus_asiakastunnus_seq; Type: SEQUENCE SET; Schema: etp; Owner: etp
 --
 
-SELECT pg_catalog.setval('etp.laatija_laskutus_asiakastunnus_seq', 16, true);
+SELECT pg_catalog.setval('etp.laatija_laskutus_asiakastunnus_seq', 17, true);
 
 
 --

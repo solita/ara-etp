@@ -6,7 +6,7 @@ To run the tests you must first start the `e2e Docker stack`. You can do this
 by using `docker compose`, for example:
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
 
 After the e2e stack is running you can start cypress:

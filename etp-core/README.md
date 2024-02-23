@@ -144,7 +144,7 @@ For example, to generate 2000 energiatodistus you can run:
 
 The script copies all user data (i.e. data that's not from migrations or from audit tables) and select audit data that has functionality tied to it.
 
-To use the script, clean everything, create new desired state and run the script.
+To use the script, clean everything, create new desired state and run the script. To reduce amount of changes in the data, temporarily remove other test migrations before making new test data.
 
 ```shell
 # Clean database and volumes
