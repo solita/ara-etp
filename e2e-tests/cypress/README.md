@@ -2,11 +2,9 @@
 
 ### Running the tests
 
-To run the tests you must first start the `e2e Docker stack`. You can do this
-by using `docker compose`, for example:
-
+To run the tests you must first start the `e2e Docker stack`. To do so, run the `start-e2e-env.sh` script.
 ```bash
-docker compose up --build -d
+./start-e2e-env.sh
 ```
 
 After the e2e stack is running you can start cypress:

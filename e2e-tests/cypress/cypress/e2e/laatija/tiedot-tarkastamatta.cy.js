@@ -11,6 +11,9 @@ const FIXTURES = {
 const baseUrl = Cypress.config('baseUrl');
 
 context("User that hasn't verified their information is asked to do so", () => {
+  before(() => {
+    cy.resetDb();
+  });
   beforeEach(() => {
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };

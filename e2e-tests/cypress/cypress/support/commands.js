@@ -14,3 +14,9 @@ Cypress.Commands.add('selectInSelect', (selectElement, optionToSelect) => {
       cy.contains(optionToSelect).click();
     });
 });
+
+Cypress.Commands.add('resetDb', () => {
+  cy.exec(
+    'docker compose exec db dropdb -U postgres cypress_test --if-exists --force;'
+  ).exec('docker compose exec db createdb -U postgres -T etp_dev cypress_test');
+});

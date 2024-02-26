@@ -13,13 +13,14 @@ services:
     environment:
       # solita.etp.config
       DB_HOST: db
+      DB_DATABASE: cypress_test
       SMTP_HOST: smtp
       SMTP_PORT: 25
       LASKUTUS_SFTP_HOST: sftp
       LASKUTUS_SFTP_PORT: 22
       S3_HOST: minio
       S3_PORT: 9000
-    env_file: 
+    env_file:
       - ./backend.env
     depends_on:
       db:
