@@ -131,7 +131,7 @@
 
   <div class="w-full py-4">
     <H2 text={text(toimenpide, 'osapuoli-specific-data')} />
-    {#each osapuolet as osapuoli}
+    {#each osapuolet as osapuoli, i}
       <div class="py-4">
         <H3 text={osapuoli.type.label(osapuoli)} />
         <Checkbox
@@ -147,6 +147,7 @@
           <div class="w-full py-4">
             <Select2
               bind:model={toimenpide}
+              name={'recipient-answered-selector-' + i}
               lens={R.lensPath([
                 'type-specific-data',
                 'osapuoli-specific-data',
@@ -163,8 +164,8 @@
           {#if Toimenpiteet.didRecipientAnswer(toimenpide, osapuoli)}
             <div class="w-full py-4">
               <Textarea
-                id={'toimenpide.answer-commentary-fi'}
-                name={'toimenpide.answer-commentary-fi'}
+                id={'toimenpide.answer-commentary-fi-' + i}
+                name={'toimenpide.answer-commentary-fi-' + i}
                 label={text(toimenpide, 'answer-commentary-fi')}
                 bind:model={toimenpide}
                 lens={R.lensPath([
@@ -189,8 +190,8 @@
             </div>
             <div class="w-full py-4">
               <Textarea
-                id={'toimenpide.answer-commentary-sv'}
-                name={'toimenpide.answer-commentary-sv'}
+                id={'toimenpide.answer-commentary-sv-' + i}
+                name={'toimenpide.answer-commentary-sv-' + i}
                 label={text(toimenpide, 'answer-commentary-sv')}
                 bind:model={toimenpide}
                 lens={R.lensPath([
@@ -216,8 +217,8 @@
 
             <div class="w-full py-4">
               <Textarea
-                id={'toimenpide.statement-fi'}
-                name={'toimenpide.statement-fi'}
+                id={'toimenpide.statement-fi-' + i}
+                name={'toimenpide.statement-fi-' + i}
                 label={text(toimenpide, 'statement-fi')}
                 bind:model={toimenpide}
                 lens={R.lensPath([
@@ -243,8 +244,8 @@
 
             <div class="w-full py-4">
               <Textarea
-                id={'toimenpide.statement-sv'}
-                name={'toimenpide.statement-sv'}
+                id={'toimenpide.statement-sv-' + i}
+                name={'toimenpide.statement-sv-' + i}
                 label={text(toimenpide, 'statement-sv')}
                 bind:model={toimenpide}
                 lens={R.lensPath([
@@ -272,6 +273,7 @@
             <Select2
               bind:model={toimenpide}
               label={text(toimenpide, 'administrative-court')}
+              name={'administrative-court-selector-' + i}
               required
               lens={R.lensPath([
                 'type-specific-data',

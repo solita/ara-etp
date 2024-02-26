@@ -4,10 +4,9 @@ module.exports = defineConfig({
   viewportHeight: 900,
   viewportWidth: 1440,
   defaultCommandTimeout: 15000,
-  video: false,
+  video: true,
   e2e: {
     setupNodeEvents(on, config) {},
-    supportFile: false,
     baseUrl: 'https://localhost:3009'
   }
 });

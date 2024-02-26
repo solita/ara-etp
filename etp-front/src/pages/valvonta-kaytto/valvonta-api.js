@@ -78,7 +78,10 @@ export const karajaoikeudet = Fetch.cached(
   '/valvonta/kaytto/karajaoikeudet'
 );
 
-export const johtaja = Fetch.cached(fetch, '/valvonta/kaytto/johtaja');
+export const johtaja = Fetch.getJson(
+  fetch,
+  'api/private/valvonta/kaytto/johtaja'
+);
 
 export const valvojat = Fetch.getJson(fetch, 'api/private/valvonta/valvojat');
 

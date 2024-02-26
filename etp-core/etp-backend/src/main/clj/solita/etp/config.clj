@@ -64,8 +64,8 @@
                                           {:access-key-id     "minio"
                                            :secret-access-key "minio123"})
                   :endpoint-override    {:protocol :http
-                                         :hostname "localhost"
-                                         :port     9002}})
+                                         :hostname (env "S3_HOST" "localhost")
+                                         :port     (Integer/parseInt (env "S3_PORT" "9002"))}})
                client)
      :bucket (or bucket (env "FILES_BUCKET_NAME" "files"))}}))
 

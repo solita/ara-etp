@@ -14,6 +14,10 @@ services:
 
   minio:
     ports: !reset []
+    networks: !reset []
+
+  minio_create_default_bucket:
+    networks: !reset []
 
   sftp:
     ports: !reset []

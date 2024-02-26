@@ -24,6 +24,31 @@ jobs:
           wait-on: 'https://localhost:3009'
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: e2e-tests/cypress/cypress/screenshots
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos
+          path: e2e-tests/cypress/cypress/videos
+      - name: Collect docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: './logs'
+      - name: Tar logs
+        if: failure()
+        run: tar cvzf ./logs.tgz ./logs
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs.tgz
+          path: ./logs.tgz
+
 
   format:
     runs-on: ubuntu-latest

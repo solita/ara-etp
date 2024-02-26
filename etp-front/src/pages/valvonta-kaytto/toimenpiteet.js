@@ -483,3 +483,140 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
       toimenpide
     )
   );
+
+/**
+ * Filter toimenpidetypes based on what are allowed transition from
+ * the toimenpidetype of the current toimenpide
+ * @param currentToimenpide type-id of the current toimenpide
+ * @param toimenpidetypes All available toimenpidetypes
+ */
+export const filterAvailableToimenpidetypes = R.curry(
+  (currentToimenpide, toimenpidetypes) => {
+    let allowedToimenpidetypes = [];
+    switch (currentToimenpide) {
+      case type.case:
+        allowedToimenpidetypes = [type.rfi.order];
+        break;
+
+      case type.rfi.order:
+        allowedToimenpidetypes = [type.rfi.order, type.rfi.warning];
+        break;
+
+      case type.rfi.warning:
+        allowedToimenpidetypes = [
+          type.rfi.order,
+          type.rfi.warning,
+          type['decision-order']['hearing-letter']
+        ];
+        break;
+
+      case type['decision-order']['hearing-letter']:
+        allowedToimenpidetypes = [
+          type['decision-order']['hearing-letter'],
+          type['decision-order']['actual-decision']
+        ];
+        break;
+
+      case type['decision-order']['actual-decision']:
+        allowedToimenpidetypes = [
+          type['decision-order']['actual-decision'],
+          type['decision-order']['notice-first-mailing']
+        ];
+        break;
+
+      case type['decision-order']['notice-first-mailing']:
+        allowedToimenpidetypes = [
+          type['decision-order']['notice-first-mailing'],
+          type['decision-order']['notice-second-mailing']
+        ];
+        break;
+
+      case type['decision-order']['notice-second-mailing']:
+        allowedToimenpidetypes = [
+          type['decision-order']['notice-second-mailing'],
+          type['decision-order']['notice-bailiff'],
+          type['decision-order']['waiting-for-deadline']
+        ];
+        break;
+
+      case type['decision-order']['notice-bailiff']:
+        allowedToimenpidetypes = [
+          type['decision-order']['waiting-for-deadline']
+        ];
+        break;
+
+      case type['decision-order']['waiting-for-deadline']:
+        allowedToimenpidetypes = [
+          type['court-hearing'],
+          type['penalty-decision']['hearing-letter']
+        ];
+        break;
+
+      case type['court-hearing']:
+        allowedToimenpidetypes = [
+          type['penalty-decision']['hearing-letter'],
+          type['penalty-list-delivery-in-progress']
+        ];
+        break;
+
+      case type['penalty-decision']['hearing-letter']:
+        allowedToimenpidetypes = [
+          type['penalty-decision']['hearing-letter'],
+          type['penalty-decision']['actual-decision']
+        ];
+        break;
+
+      case type['penalty-decision']['actual-decision']:
+        allowedToimenpidetypes = [
+          type['penalty-decision']['actual-decision'],
+          type['penalty-decision']['notice-first-mailing']
+        ];
+        break;
+
+      case type['penalty-decision']['notice-first-mailing']:
+        allowedToimenpidetypes = [
+          type['penalty-decision']['notice-first-mailing'],
+          type['penalty-decision']['notice-second-mailing'],
+          type['penalty-decision']['waiting-for-deadline']
+        ];
+        break;
+
+      case type['penalty-decision']['notice-second-mailing']:
+        allowedToimenpidetypes = [
+          type['penalty-decision']['notice-second-mailing'],
+          type['penalty-decision']['notice-bailiff'],
+          type['penalty-decision']['waiting-for-deadline']
+        ];
+        break;
+
+      case type['penalty-decision']['notice-bailiff']:
+        allowedToimenpidetypes = [
+          type['penalty-decision']['waiting-for-deadline']
+        ];
+        break;
+
+      case type['penalty-decision']['waiting-for-deadline']:
+        allowedToimenpidetypes = [
+          type['court-hearing'],
+          type['penalty-list-delivery-in-progress']
+        ];
+        break;
+
+      case type['penalty-list-delivery-in-progress']:
+        allowedToimenpidetypes = [type.closed];
+        break;
+
+      case type.decision.order:
+        allowedToimenpidetypes = [type['court-hearing']];
+        break;
+    }
+
+    // Valvonnan lopetus is always allowed
+    allowedToimenpidetypes.push(type.closed);
+
+    return R.filter(
+      R.compose(R.includes(R.__, allowedToimenpidetypes), R.prop('id')),
+      toimenpidetypes
+    );
+  }
+);

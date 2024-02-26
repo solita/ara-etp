@@ -42,7 +42,7 @@ services:
         read_only: true
 
   minio:
-    image: minio/minio:RELEASE.2022-10-24T18-35-07Z
+    image: minio/minio:RELEASE.2024-02-17T01-15-57Z
     ports:
       - 127.0.0.1:9002:9000
       - 127.0.0.1:9001:9001
@@ -58,7 +58,8 @@ services:
   minio_create_default_bucket:
     image: minio/mc:latest
     depends_on:
-      - minio
+      minio:
+        condition: service_started
     networks:
       - minio  
     entrypoint: >
