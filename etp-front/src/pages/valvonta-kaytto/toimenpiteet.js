@@ -604,6 +604,11 @@ export const filterAvailableToimenpidetypes = R.curry(
 
       case type['penalty-list-delivery-in-progress']:
         allowedToimenpidetypes = [type.closed];
+        break;
+
+      case type.decision.order:
+        allowedToimenpidetypes = [type['court-hearing']];
+        break;
     }
 
     // Valvonnan lopetus is always allowed
