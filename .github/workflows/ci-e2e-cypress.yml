@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Docker Compose
+      - name: Setup e2e-env
         working-directory: e2e-tests/cypress
         run: |
           mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
-          docker compose up --wait frontend
+          ./start-e2e-env.sh
       - name: Cypress
         uses: cypress-io/github-action@v6
         with:

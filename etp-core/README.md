@@ -128,7 +128,7 @@ will create their own database from it.
 
 ### Generating data
 
-##### Manual performance testing
+#### Manual performance testing
 The  function `user/generate-energiatodistukset-for-performance-testing!`
 can be used to add multiple signed energiatodistus into the database. For
 performance testing purpose most strings are just randomly generated and
@@ -138,6 +138,24 @@ For example, to generate 2000 energiatodistus you can run:
 ```clojure
 (user/generate-energiatodistukset-for-performance-testing! 2000)
 ```
+
+#### Adding test data to default database
+`update-test-data.sh` script can be used to add current state of the database and minio (S3) files into test dataset that is initialised when the service is started.
+
+The script copies all user data (i.e. data that's not from migrations or from audit tables) and select audit data that has functionality tied to it.
+
+To use the script, clean everything, create new desired state and run the script. To reduce amount of changes in the data, temporarily remove other test migrations before making new test data.
+
+```shell
+# Clean database and volumes
+(cd docker && docker compose down -v && ./start.sh)
+
+# Make modifications, like use the UI to start a new käytänvalvont
+
+# Create new initial state
+./docker/update-test-data.sh
+```
+Remember to commit the changes if necessary.
 
 Third-party licenses
 --------------------

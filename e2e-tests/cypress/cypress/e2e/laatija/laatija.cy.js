@@ -131,11 +131,11 @@ context('Laatija', () => {
     });
   });
 
-  it("should redirect to laatija's personal information page", () => {
+  it('should redirect to energiatodistus', () => {
     cy.visit('/');
 
     cy.location().should(loc =>
-      assert.equal(loc.toString(), `${baseUrl}/#/kayttaja/2`)
+      assert.equal(loc.toString(), `${baseUrl}/#/energiatodistus/all`)
     );
   });
 

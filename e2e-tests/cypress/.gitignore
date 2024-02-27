@@ -17,3 +17,4 @@
 
 # Cypress results
 /cypress/screenshots
+/cypress/videos

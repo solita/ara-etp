@@ -483,6 +483,7 @@
     {#if Kayttajat.isVerificationActive(whoami, laatija)}
       <div class="px-4">
         <Button
+          prefix={'verify'}
           type={'submit'}
           text={i18n(i18nRoot + '.verify')}
           disabled={disabled || dirty} />
@@ -490,6 +491,7 @@
     {/if}
     <div class="px-4">
       <Button
+        prefix={'save'}
         type={'submit'}
         text={i18n(i18nRoot + '.save')}
         disabled={disabled || !dirty} />
