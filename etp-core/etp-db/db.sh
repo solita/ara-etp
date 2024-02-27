@@ -11,11 +11,7 @@ fi
 if [ "$2" == 'test' ]
 then
   cp="$package:target/test/sql"
-else
-  cp=$package
-fi
-
-if [ "$2" == 'dev' ]
+elif [ "$2" == 'dev' ]
 then
   cp="$package:target/test/dev-sql"
 else
