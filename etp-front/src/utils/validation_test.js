@@ -76,6 +76,32 @@ describe('Validation:', () => {
     it('valid henkilötunnus', () => {
       assertHenkilotunnusIsValid('131052-308T');
       assertHenkilotunnusIsValid('130200A892S');
+      assertHenkilotunnusIsValid('130200X892S');
+
+      // Henkilotunnukset from DVV example
+      assertHenkilotunnusIsValid('010594Y9032');
+      assertHenkilotunnusIsValid('010594Y9021');
+      assertHenkilotunnusIsValid('020594X903P');
+      assertHenkilotunnusIsValid('020594X902N');
+      assertHenkilotunnusIsValid('030594W903B');
+      assertHenkilotunnusIsValid('030694W9024');
+      assertHenkilotunnusIsValid('040594V9030');
+      assertHenkilotunnusIsValid('040594V902Y');
+      assertHenkilotunnusIsValid('050594U903M');
+      assertHenkilotunnusIsValid('050594U902L');
+      assertHenkilotunnusIsValid('010516B903X');
+      assertHenkilotunnusIsValid('010516B902W');
+      assertHenkilotunnusIsValid('020516C903K');
+      assertHenkilotunnusIsValid('020516C902J');
+      assertHenkilotunnusIsValid('030516D9037');
+      assertHenkilotunnusIsValid('030516D9026');
+      assertHenkilotunnusIsValid('010501E9032');
+      assertHenkilotunnusIsValid('020502E902X');
+      assertHenkilotunnusIsValid('020503F9037');
+      assertHenkilotunnusIsValid('020504A902E');
+      assertHenkilotunnusIsValid('020504B904H');
+      assertHenkilotunnusIsValid('100190-999P');
+      assertHenkilotunnusIsValid('100190Y999P');
     });
 
     it('invalid henkilötunnus', () => {
@@ -84,13 +110,14 @@ describe('Validation:', () => {
       assertHenkilotunnusIsInvalid('131053-308T');
       assertHenkilotunnusIsInvalid('0131053-308T');
 
-      assertHenkilotunnusIsInvalid('130200X892S');
       assertHenkilotunnusIsInvalid('130200A891S');
       assertHenkilotunnusIsInvalid('1A0200A892S');
 
       assertHenkilotunnusIsInvalid('130200A892s');
       assertHenkilotunnusIsInvalid('130200a892s');
     });
+
+
   });
 
   describe('Laatijan toteaja validation', () => {
