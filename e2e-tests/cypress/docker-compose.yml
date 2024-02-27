@@ -59,7 +59,7 @@ services:
     environment:
       DB_URL: jdbc:postgresql://db:5432/etp_dev
     command:
-      ./db.sh migrate test
+      ./db.sh migrate local
     depends_on:
       db:
         condition: service_started
