@@ -12,6 +12,45 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      # Buildx supports GH Actions cache. Build images using it, and load the images to host for docker compose to use
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.1.0
+      - name: Build backend
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: etp-core/etp-backend
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,mode=max,scope=backend
+          load: true
+      - name: Build migration runner
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: etp-core/etp-db
+          cache-from: type=gha,scope=db
+          cache-to: type=gha,mode=max,scope=db
+          load: true
+      - name: Build frontend
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: etp-front
+          file: etp-front/e2e.Dockerfile
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,mode=max,scope=frontend
+          load: true
+      - name: Build sftp
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: etp-core/docker/sftp
+          cache-from: type=gha,scope=sftp
+          cache-to: type=gha,mode=max,scope=sftp
+          load: true
+      - name: Build smtp
+        uses: docker/build-push-action@v5.1.0
+        with:
+          context: etp-core/docker/smtp
+          cache-from: type=gha,scope=smtp
+          cache-to: type=gha,mode=max,scope=smtp
+          load: true
       - name: Setup e2e-env
         working-directory: e2e-tests/cypress
         run: |
