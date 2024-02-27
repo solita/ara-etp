@@ -13,4 +13,4 @@ cd ../etp-db
 clojure -M -m solita.etp.db.flywaydb $1
 
 # Run test migrations to etp_dev
-DB_URL="jdbc:postgresql://localhost:5432/etp_dev" clojure -M:local -m solita.etp.db.flywaydb $1
+DB_URL="jdbc:postgresql://localhost:5432/etp_dev" clojure -M:dev -m solita.etp.db.flywaydb $1

@@ -15,9 +15,9 @@ else
   cp=$package
 fi
 
-if [ "$2" == 'local' ]
+if [ "$2" == 'dev' ]
 then
-  cp="$package:target/test/local-sql"
+  cp="$package:target/test/dev-sql"
 else
   cp=$package
 fi

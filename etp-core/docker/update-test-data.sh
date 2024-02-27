@@ -12,7 +12,7 @@ rm -rf minio/files
 docker compose cp -a minio:/files/files minio/files/
 
 # Need to insert in replica mode so that audit data is not generated
-echo "set session_replication_role = 'replica';" > ../etp-db/src/test/local-sql/migration/repeatable/r-x-01-test-data.sql
+echo "set session_replication_role = 'replica';" > ../etp-db/src/test/dev-sql/migration/repeatable/r-x-01-test-data.sql
 
 # Save interesting audit data
 docker compose exec db pg_dump -U etp etp_dev \
@@ -27,7 +27,7 @@ docker compose exec db pg_dump -U etp etp_dev \
   `# Käyttäjä and laatija data is shown on muutoshistoria page` \
   -t audit.kayttaja \
   -t audit.laatija \
-  >> ../etp-db/src/test/local-sql/migration/repeatable/r-x-01-test-data.sql
+  >> ../etp-db/src/test/dev-sql/migration/repeatable/r-x-01-test-data.sql
 
 # Exclude unwanted tables instead of including wanted so that when changes are made,
 # either the new data is included or this will fail
@@ -82,4 +82,4 @@ docker compose exec db pg_dump -U etp etp_dev \
   | grep -Ev \
   --regex '^\s+\(-\d' `# kayttaja entries with negative id and are added by migration` \
   --regex '^\s+\(0, '\''database' `# Added by migration` \
-  >> ../etp-db/src/test/local-sql/migration/repeatable/r-x-01-test-data.sql
+  >> ../etp-db/src/test/dev-sql/migration/repeatable/r-x-01-test-data.sql

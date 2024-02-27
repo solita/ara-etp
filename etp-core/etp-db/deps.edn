@@ -6,6 +6,6 @@
   org.postgresql/postgresql               {:mvn/version "42.7.2"}
   ch.qos.logback/logback-classic          {:mvn/version "1.5.0"}}
  :aliases {:test    {:extra-paths ["src/test/sql"]}
-           :local   {:extra-paths ["src/test/local-sql"]}
+           :dev     {:extra-paths ["src/test/dev-sql"]}
            :uberjar {:extra-deps {uberdeps/uberdeps {:mvn/version "1.3.0"}}
                      :main-opts  ["-m" "uberdeps.uberjar"]}}}
