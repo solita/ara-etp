@@ -15,4 +15,11 @@ else
   cp=$package
 fi
 
+if [ "$2" == 'dev' ]
+then
+  cp="$package:target/test/dev-sql"
+else
+  cp=$package
+fi
+
 java -cp $cp clojure.main -m solita.etp.db.flywaydb $1
