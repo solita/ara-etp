@@ -1,6 +1,8 @@
-FROM node:18.19.1@sha256:256406951729eec0e9f15266bf77ec0b07260c2087cba2f5ca98951c099c0154
+FROM node:20-alpine@sha256:f4c96a28c0b2d8981664e03f461c2677152cd9a756012ffa8e2c6727427c2bda
 
 WORKDIR /usr/src/app
+
+RUN apk --no-cache add curl
 
 COPY ./package.json package-lock.json ./
 RUN npm ci
