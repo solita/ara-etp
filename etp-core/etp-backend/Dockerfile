@@ -20,7 +20,8 @@ libdbus-glib-1-2 libcairo2 libcups2 libsm6 awscli jq && \
 curl -L -O https://etp-build-resources.s3.eu-central-1.amazonaws.com/LibreOffice/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz && \
 tar -xzvf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz && \
 dpkg -i LibreOffice_7.1.0.3_Linux_x86-64_deb/DEBS/*.deb && \
-ln -s /usr/local/bin/libreoffice7.1 /usr/local/bin/libreoffice
+ln -s /usr/local/bin/libreoffice7.1 /usr/local/bin/libreoffice && \
+rm -rf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz LibreOffice_7.1.0.3_Linux_x86-64_deb
 
 # The application
 COPY libreoffice/ /opt/etp/libreoffice/
