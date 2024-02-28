@@ -526,7 +526,8 @@ export const filterAvailableToimenpidetypes = R.curry(
 
       case type['decision-order']['notice-first-mailing']:
         allowedToimenpidetypes = [
-          type['decision-order']['notice-second-mailing']
+          type['decision-order']['notice-second-mailing'],
+          type['decision-order']['waiting-for-deadline']
         ];
         break;
 

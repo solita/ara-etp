@@ -206,7 +206,11 @@ const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
 const createKaskypaatosTiedoksiantoToinenPostitus = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / tiedoksianto (toinen postitus)',
-    ['Käskypäätös / tiedoksianto (toinen postitus)', 'Valvonnan lopetus']
+    [
+      'Käskypäätös / tiedoksianto (toinen postitus)',
+      'Käskypäätös / valitusajan odotus ja umpeutuminen',
+      'Valvonnan lopetus'
+    ]
   );
 
   cy.get('[data-cy="toimenpide.description"]')

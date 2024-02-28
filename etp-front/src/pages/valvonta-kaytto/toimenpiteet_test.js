@@ -1005,10 +1005,10 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
     );
   });
 
-  it('Käskypäätös / tiedoksianto (ensimmäinen postitus) allows Käskypäätös / tiedoksianto (toinen postitus) and Valvonnan lopetus', () => {
+  it('Käskypäätös / tiedoksianto (ensimmäinen postitus) allows Käskypäätös / tiedoksianto (toinen postitus), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(9, toimenpidetyypit),
-      [{ id: 5 }, { id: 10 }]
+      [{ id: 5 }, { id: 10 }, { id: 12 }]
     );
   });
 
