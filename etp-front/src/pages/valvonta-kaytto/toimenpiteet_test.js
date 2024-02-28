@@ -1005,17 +1005,17 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
     );
   });
 
-  it('Käskypäätös / tiedoksianto (ensimmäinen postitus) allows Käskypäätös / tiedoksianto (ensimmäinen postitus), Käskypäätös / tiedoksianto (toinen postitus) and Valvonnan lopetus', () => {
+  it('Käskypäätös / tiedoksianto (ensimmäinen postitus) allows Käskypäätös / tiedoksianto (toinen postitus) and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(9, toimenpidetyypit),
-      [{ id: 5 }, { id: 9 }, { id: 10 }]
+      [{ id: 5 }, { id: 10 }]
     );
   });
 
-  it('Käskypäätös / tiedoksianto (toinen postitus) allows Käskypäätös / tiedoksianto (toinen postitus), Käskypäätös / tiedoksianto (Haastemies), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
+  it('Käskypäätös / tiedoksianto (toinen postitus) allows Käskypäätös / tiedoksianto (Haastemies), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(10, toimenpidetyypit),
-      [{ id: 5 }, { id: 10 }, { id: 11 }, { id: 12 }]
+      [{ id: 5 }, { id: 11 }, { id: 12 }]
     );
   });
 
@@ -1054,17 +1054,17 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
     );
   });
 
-  it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) allows Sakkopäätös / tiedoksianto (ensimmäinen postitus), Sakkopäätös / tiedoksianto (toinen postitus), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
+  it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) allows Sakkopäätös / tiedoksianto (toinen postitus), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(16, toimenpidetyypit),
-      [{ id: 5 }, { id: 16 }, { id: 17 }, { id: 19 }]
+      [{ id: 5 }, { id: 17 }, { id: 19 }]
     );
   });
 
-  it('Sakkopäätös / tiedoksianto (toinen postitus) allows Sakkopäätös / tiedoksianto (toinen postitus), Sakkopäätös / tiedoksianto (Haastemies), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
+  it('Sakkopäätös / tiedoksianto (toinen postitus) allows Sakkopäätös / tiedoksianto (Haastemies), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(17, toimenpidetyypit),
-      [{ id: 5 }, { id: 17 }, { id: 18 }, { id: 19 }]
+      [{ id: 5 }, { id: 18 }, { id: 19 }]
     );
   });
 

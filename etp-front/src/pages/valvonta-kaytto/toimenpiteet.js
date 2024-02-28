@@ -526,14 +526,12 @@ export const filterAvailableToimenpidetypes = R.curry(
 
       case type['decision-order']['notice-first-mailing']:
         allowedToimenpidetypes = [
-          type['decision-order']['notice-first-mailing'],
           type['decision-order']['notice-second-mailing']
         ];
         break;
 
       case type['decision-order']['notice-second-mailing']:
         allowedToimenpidetypes = [
-          type['decision-order']['notice-second-mailing'],
           type['decision-order']['notice-bailiff'],
           type['decision-order']['waiting-for-deadline']
         ];
@@ -575,7 +573,6 @@ export const filterAvailableToimenpidetypes = R.curry(
 
       case type['penalty-decision']['notice-first-mailing']:
         allowedToimenpidetypes = [
-          type['penalty-decision']['notice-first-mailing'],
           type['penalty-decision']['notice-second-mailing'],
           type['penalty-decision']['waiting-for-deadline']
         ];
@@ -583,7 +580,6 @@ export const filterAvailableToimenpidetypes = R.curry(
 
       case type['penalty-decision']['notice-second-mailing']:
         allowedToimenpidetypes = [
-          type['penalty-decision']['notice-second-mailing'],
           type['penalty-decision']['notice-bailiff'],
           type['penalty-decision']['waiting-for-deadline']
         ];

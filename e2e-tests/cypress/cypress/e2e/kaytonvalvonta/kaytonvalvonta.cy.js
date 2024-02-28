@@ -206,11 +206,7 @@ const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
 const createKaskypaatosTiedoksiantoToinenPostitus = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / tiedoksianto (toinen postitus)',
-    [
-      'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
-      'Käskypäätös / tiedoksianto (toinen postitus)',
-      'Valvonnan lopetus'
-    ]
+    ['Käskypäätös / tiedoksianto (toinen postitus)', 'Valvonnan lopetus']
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -235,7 +231,6 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / tiedoksianto (Haastemies)',
     [
-      'Käskypäätös / tiedoksianto (toinen postitus)',
       'Käskypäätös / tiedoksianto (Haastemies)',
       'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
@@ -419,7 +414,6 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / tiedoksianto (toinen postitus)',
     [
-      'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
       'Sakkopäätös / tiedoksianto (toinen postitus)',
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
@@ -443,7 +437,6 @@ const createSakkopaatosTiedoksiantoHaastemies = () => {
     'Sakkopäätös / tiedoksianto (Haastemies)',
     [
       'Sakkopäätös / tiedoksianto (Haastemies)',
-      'Sakkopäätös / tiedoksianto (toinen postitus)',
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ]
