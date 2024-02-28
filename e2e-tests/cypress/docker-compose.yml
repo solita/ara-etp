@@ -32,7 +32,6 @@ services:
       migration-runner:
         condition: service_completed_successfully
 
-
   frontend:
     build:
       context: ../../etp-front
@@ -50,9 +49,6 @@ services:
      start_period: 0m
     ports:
       - 127.0.0.1:3009:3009
-    depends_on:
-      backend:
-        condition: service_started
 
   migration-runner:
     build: ../../etp-core/etp-db
