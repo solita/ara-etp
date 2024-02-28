@@ -604,7 +604,7 @@ export const filterAvailableToimenpidetypes = R.curry(
         break;
 
       case type.decision.order:
-        allowedToimenpidetypes = [type['court-hearing']];
+        allowedToimenpidetypes = [];
         break;
     }
 

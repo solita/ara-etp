@@ -1092,7 +1092,7 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Old käskypäätös allows Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(4, toimenpidetyypit),
-      [{ id: 5 }, { id: 6 }]
+      [{ id: 5 }]
     );
   });
 });
