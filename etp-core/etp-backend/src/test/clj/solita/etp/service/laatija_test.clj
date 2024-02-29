@@ -168,9 +168,13 @@
 
 (t/deftest validate-laatija-patevyys!-expired-test
   (let [{:keys [laatijat]} (test-data-set false false)
-        expiring-today (.minusYears (LocalDate/now) 7)
-        expired-3-years-ago (.minusYears (LocalDate/now) 10)
-        expired-yesterday (-> (LocalDate/now) (.minusYears 7) (.minusDays 1))]
+        now (LocalDate/now)
+        expiring-today (cond-> now
+                               ; Add one day on leap year day as otherwise pätevyys would have expired on 28th
+                               (and (= (.getMonthValue now) 2) (= (.getDayOfMonth now) 29)) (.plusDays 1)
+                               true (.minusYears 7))
+        expired-3-years-ago (.minusYears now 10)
+        expired-yesterday (-> now (.minusYears 7) (.minusDays 1))]
     (doseq [id (keys laatijat)]
       (service/update-laatija-by-id! ts/*db*
                                      id
