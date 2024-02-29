@@ -225,6 +225,7 @@
       on:change={event => openNewToimenpide(parseInt(event.target.value))}
       items={R.compose(
         Toimenpiteet.filterAvailableToimenpidetypes(
+          Toimenpiteet.processPhaseFromToimenpiteet(toimenpiteet),
           R.prop('type-id', R.last(toimenpiteet))
         ),
         R.filter(R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]))

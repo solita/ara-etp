@@ -339,6 +339,18 @@ export const isPenaltyDecisionActualDecision = isType(
   R.path(['penalty-decision', 'actual-decision'], type)
 );
 
+const isPenaltyDecisionNoticeFirstMailing = isType(
+  R.path(['penalty-decision', 'notice-first-mailing'], type)
+);
+
+const isPenaltyDecisionNoticeSecondMailing = isType(
+  R.path(['penalty-decision', 'notice-second-mailing'], type)
+);
+
+const isPenaltyDecisionWaitingForDeadline = isType(
+  R.path(['penalty-decision', 'waiting-for-deadline'], type)
+);
+
 export const hasCourtAttachment = R.anyPass([
   isDecisionOrderActualDecision,
   isPenaltyDecisionActualDecision,
@@ -363,6 +375,15 @@ export const showNormalOsapuoliTable = R.complement(
     isNoticeBailiff
   ])
 );
+
+const isPenaltyDecisionToimenpide = R.anyPass([
+  isPenaltyDecisionHearingLetter,
+  isPenaltyDecisionActualDecision,
+  isPenaltyDecisionNoticeFirstMailing,
+  isPenaltyDecisionNoticeSecondMailing,
+  isPenaltyDecisionNoticeBailiff,
+  isPenaltyDecisionWaitingForDeadline
+]);
 
 /**
  * Given an array of toimenpide objects, returns the fine found using the toimenpidetype predicate function parameter
@@ -487,11 +508,13 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
 /**
  * Filter toimenpidetypes based on what are allowed transition from
  * the toimenpidetype of the current toimenpide
+ * TODO: None tai joku muu niille jotka ei varsinaisesti kuulu kumpaankaan?
+ * @param {('decision-order'|'penalty-decision')} phase Which käsittelyvaihe is going on
  * @param currentToimenpide type-id of the current toimenpide
  * @param toimenpidetypes All available toimenpidetypes
  */
 export const filterAvailableToimenpidetypes = R.curry(
-  (currentToimenpide, toimenpidetypes) => {
+  (phase, currentToimenpide, toimenpidetypes) => {
     let allowedToimenpidetypes = [];
     switch (currentToimenpide) {
       case type.case:
@@ -552,10 +575,11 @@ export const filterAvailableToimenpidetypes = R.curry(
         break;
 
       case type['court-hearing']:
-        allowedToimenpidetypes = [
-          type['penalty-decision']['hearing-letter'],
-          type['penalty-list-delivery-in-progress']
-        ];
+        if (phase === 'decision-order') {
+          allowedToimenpidetypes = [type['penalty-decision']['hearing-letter']];
+        } else if (phase === 'penalty-decision') {
+          allowedToimenpidetypes = [type['penalty-list-delivery-in-progress']];
+        }
         break;
 
       case type['penalty-decision']['hearing-letter']:
@@ -617,3 +641,11 @@ export const filterAvailableToimenpidetypes = R.curry(
     );
   }
 );
+
+export const processPhaseFromToimenpiteet = toimenpiteet => {
+  if (R.any(isPenaltyDecisionToimenpide, toimenpiteet)) {
+    return 'penalty-decision';
+  } else {
+    return 'decision-order';
+  }
+};

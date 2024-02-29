@@ -305,11 +305,7 @@ const createHaOKasittely = () => {
 const createSakkopaatosKuulemiskirje = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / kuulemiskirje',
-    [
-      'Sakkopäätös / kuulemiskirje',
-      'Sakkoluettelon lähetys menossa',
-      'Valvonnan lopetus'
-    ]
+    ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus']
   );
 
   // Fine should have a default value of 9000 euros as it was set previously
@@ -513,11 +509,7 @@ const createSakkopaatosHaOKasittely = () => {
 const createSakkoluettelonLahetysMenossa = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkoluettelon lähetys menossa',
-    [
-      'Sakkoluettelon lähetys menossa',
-      'Sakkopäätös / kuulemiskirje',
-      'Valvonnan lopetus'
-    ]
+    ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus']
   );
   cy.get('[data-cy="toimenpide.description"]')
     .type('Lähetimme sakkoluettelon.')
