@@ -115,21 +115,28 @@
                      (assoc :ilmoituspaikka-id 1)
                      (assoc :valvoja-id kayttaja-id))]
     (t/testing "Uuden valvonnan luominen"
-      (let [response (ts/handler (-> (mock/request :post "/api/private/valvonta/kaytto")
-                                     (mock/json-body valvonta)
-                                     (test-kayttajat/with-virtu-user)
-                                     (mock/header "Accept" "application/json")))
-            response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
-        (t/is (= (:status response) 201))
-        (t/is (= response-body {:id 1}))))
-    (t/testing "Luotu valvonta on tallennettu ja voidaan hakea"
-      (let [fetch-response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/1"))
-                                           (test-kayttajat/with-virtu-user)
-                                           (mock/header "Accept" "application/json")))
-            fetched-valvonta (j/read-value (:body fetch-response) j/keyword-keys-object-mapper)
-            expected-valvonta (assoc valvonta :id 1)]
-        (t/is (= (:status fetch-response) 200))
-        (t/is (= fetched-valvonta expected-valvonta))))))
+      (t/testing "Onnistunut luonti"
+        (let [response (ts/handler (-> (mock/request :post "/api/private/valvonta/kaytto")
+                                       (mock/json-body valvonta)
+                                       (test-kayttajat/with-virtu-user)
+                                       (mock/header "Accept" "application/json")))
+              response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+          (t/is (= (:status response) 201))
+          (t/is (= response-body {:id 1})))
+        (t/testing "Luotu valvonta on tallennettu ja voidaan hakea"
+          (let [fetch-response (ts/handler (-> (mock/request :get (format "/api/private/valvonta/kaytto/1"))
+                                               (test-kayttajat/with-virtu-user)
+                                               (mock/header "Accept" "application/json")))
+                fetched-valvonta (j/read-value (:body fetch-response) j/keyword-keys-object-mapper)
+                expected-valvonta (assoc valvonta :id 1)]
+            (t/is (= (:status fetch-response) 200))
+            (t/is (= fetched-valvonta expected-valvonta)))))
+      (t/testing "Postinumero on pakollinen kenttä"
+        (let [{:keys [status]} (ts/handler (-> (mock/request :post "/api/private/valvonta/kaytto")
+                                               (mock/json-body (dissoc valvonta :postinumero))
+                                               (test-kayttajat/with-virtu-user)
+                                               (mock/header "Accept" "application/json")))]
+          (t/is (= status 400)))))))
 
 (t/deftest get-toimenpiteet-for-valvonta
   (let [kayttaja-id (test-kayttajat/insert-virtu-paakayttaja!)
