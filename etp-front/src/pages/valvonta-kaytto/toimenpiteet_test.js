@@ -1179,3 +1179,31 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
     );
   });
 });
+
+describe('determineProcessPhaseFromToimenpiteet', () => {
+  it('returns decision-order when no toimenpide exists', () => {
+    assert.equal(
+      Toimenpiteet.determineProcessPhaseFromToimenpiteet([]),
+      'decision-order'
+    );
+  });
+
+  it('returns decision-order when a decision-order toimenpide exists', () => {
+    assert.equal(
+      Toimenpiteet.determineProcessPhaseFromToimenpiteet([
+        Toimenpiteet.emptyToimenpide(7, [])
+      ]),
+      'decision-order'
+    );
+  });
+
+  it('returns penalty-decision when a decision-order and penalty-decision toimenpide exists', () => {
+    assert.equal(
+      Toimenpiteet.determineProcessPhaseFromToimenpiteet([
+        Toimenpiteet.emptyToimenpide(7, []),
+        Toimenpiteet.emptyToimenpide(14, [])
+      ]),
+      'penalty-decision'
+    );
+  });
+});

@@ -508,7 +508,6 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
 /**
  * Filter toimenpidetypes based on what are allowed transition from
  * the toimenpidetype of the current toimenpide
- * TODO: None tai joku muu niille jotka ei varsinaisesti kuulu kumpaankaan?
  * @param {('decision-order'|'penalty-decision')} phase Which käsittelyvaihe is going on
  * @param currentToimenpide type-id of the current toimenpide
  * @param toimenpidetypes All available toimenpidetypes
@@ -642,7 +641,16 @@ export const filterAvailableToimenpidetypes = R.curry(
   }
 );
 
-export const processPhaseFromToimenpiteet = toimenpiteet => {
+/**
+ * Determine what phase the käytönvalvonta is in
+ * based on all the existing the toimenpiteet.
+ * This function considers the valvonta to be in käskypäätös (decision-order)
+ * phase if there is no toimenpides of Sakkopäätös (penalty-decision)
+ * toimenpidetypes yet, and if such exists, then in Sakkopäätös.
+ * @param {Object[]} toimenpiteet
+ * @return {('penalty-decision'|'decision-order')}
+ */
+export const determineProcessPhaseFromToimenpiteet = toimenpiteet => {
   if (R.any(isPenaltyDecisionToimenpide, toimenpiteet)) {
     return 'penalty-decision';
   } else {
