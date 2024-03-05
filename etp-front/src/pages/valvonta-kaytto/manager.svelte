@@ -149,6 +149,12 @@
   };
 </script>
 
+<style type="text/postcss">
+  .warning-label {
+    @apply font-bold mb-5;
+  }
+</style>
+
 <!--  According to ARA's process, all osapuolet receive information for the order toimenpidetype
       and only the owners for the other toimenpidetypes -->
 {#each Maybe.toArray(newToimenpide) as toimenpide}
@@ -213,6 +219,13 @@
   </div>
 {:else}
   <H2 text={i18n('valvonta.new-toimenpide')} />
+
+  {#if Toimenpiteet.isReopen(R.last(toimenpiteet))}
+    <div class="warning-label mb-5">
+      <span class="font-icon text-warning">warning</span>
+      {i18n('valvonta.reopen-warning')}
+    </div>
+  {/if}
 
   <div class="lg:w-1/2 w-full mb-5">
     <Select

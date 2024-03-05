@@ -546,6 +546,11 @@ const reopenValvonta = () => {
   checkToimenpideCreationSucceeded();
   toimenpideIsInCreatedToimenpideList('Suljetun valvonnan uudelleenavaus');
   commentIsInToimenpideList('Laitoin vahingossa kiinni, avataan uudestaan.');
+
+  // There's a warning telling to reopen the case in asha
+  cy.contains(
+    'Uudelleenavattu valvonta tulee avata erikseen myös asianhallinnassa ennen käsittelyn jatkamista.'
+  );
 };
 
 context('Käytönvalvonta', () => {

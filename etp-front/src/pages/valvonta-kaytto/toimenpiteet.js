@@ -58,6 +58,8 @@ export const isAuditCaseToimenpideType = R.propSatisfies(
   'id'
 );
 
+export const isReopen = isType(type.reopen);
+
 const defaultDeadlineForTypeId = typeId => {
   switch (typeId) {
     case R.path(['decision-order', 'hearing-letter'], type):
