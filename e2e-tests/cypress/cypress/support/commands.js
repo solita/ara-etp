@@ -15,6 +15,11 @@ Cypress.Commands.add('selectInSelect', (selectElement, optionToSelect) => {
     });
 });
 
+/**
+ * Reset database to known state
+ * @memberof cy
+ * @method resetDb
+ */
 Cypress.Commands.add('resetDb', () => {
   cy.exec(
     'docker compose exec db dropdb -U postgres cypress_test --if-exists --force;'
