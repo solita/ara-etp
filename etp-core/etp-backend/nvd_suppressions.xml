@@ -81,4 +81,13 @@
     <suppress>
         <cve>CVE-2017-20189</cve>
     </suppress>
+
+<!-- This seems to be complete bogus -->
+    <suppress>
+        <notes><![CDATA[
+   file name: clojure-1.11.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.clojure/clojure@.*$</packageUrl>
+        <vulnerabilityName>CVE-2024-22871</vulnerabilityName>
+    </suppress>
 </suppressions>
