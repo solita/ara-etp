@@ -48,8 +48,9 @@ const createKaytonvalvonta = () => {
   // Fill in minimum information
   cy.get('[data-cy="kohde.katuosoite"]')
     .type('Testikatu 26')
-    .should('have.value', 'Testikatu 26');
-  cy.get('[data-cy="kohde.postinumero"]').type('90100');
+    .should('have.value', 'Testikatu 26')
+    .blur();
+  cy.get('[data-cy="kohde.postinumero"]').type('90100').blur();
 
   // Create the valvonta
   cy.get('[data-cy="-submit"]').click();
@@ -563,6 +564,9 @@ context('Käytönvalvonta', () => {
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
+
+    // TODO: Temporary fix?
+    cy.resetDb();
   });
 
   it('full process succeeds', () => {

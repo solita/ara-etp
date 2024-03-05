@@ -129,6 +129,9 @@ context('Laatija', () => {
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
+
+    // TODO: Temporary fix?
+    cy.resetDb();
   });
 
   it('should redirect to energiatodistus', () => {
