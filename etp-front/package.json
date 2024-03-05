@@ -81,7 +81,7 @@
     "turndown": "^7.0.0"
   },
   "optionalDependencies": {
-    "docdash": "^1.2.0",
+    "docdash": "^2.0.2",
     "jsdoc": "^4.0.0",
     "nodemon": "^3.0.0",
     "sveltedoc-parser": "^4.1.0"
