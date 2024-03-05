@@ -82,7 +82,7 @@
   },
   "optionalDependencies": {
     "docdash": "^1.2.0",
-    "jsdoc": "^3.6.7",
+    "jsdoc": "^4.0.0",
     "nodemon": "^3.0.0",
     "sveltedoc-parser": "^4.1.0"
   },
