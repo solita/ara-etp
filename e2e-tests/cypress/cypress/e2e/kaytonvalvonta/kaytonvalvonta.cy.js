@@ -208,8 +208,8 @@ const createKaskypaatosTiedoksiantoToinenPostitus = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / tiedoksianto (toinen postitus)',
     [
-      'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
       'Käskypäätös / tiedoksianto (toinen postitus)',
+      'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ]
   );
@@ -236,7 +236,6 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / tiedoksianto (Haastemies)',
     [
-      'Käskypäätös / tiedoksianto (toinen postitus)',
       'Käskypäätös / tiedoksianto (Haastemies)',
       'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
@@ -307,11 +306,7 @@ const createHaOKasittely = () => {
 const createSakkopaatosKuulemiskirje = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / kuulemiskirje',
-    [
-      'Sakkopäätös / kuulemiskirje',
-      'Sakkoluettelon lähetys menossa',
-      'Valvonnan lopetus'
-    ]
+    ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus']
   );
 
   // Fine should have a default value of 9000 euros as it was set previously
@@ -420,7 +415,6 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / tiedoksianto (toinen postitus)',
     [
-      'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
       'Sakkopäätös / tiedoksianto (toinen postitus)',
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
@@ -444,7 +438,6 @@ const createSakkopaatosTiedoksiantoHaastemies = () => {
     'Sakkopäätös / tiedoksianto (Haastemies)',
     [
       'Sakkopäätös / tiedoksianto (Haastemies)',
-      'Sakkopäätös / tiedoksianto (toinen postitus)',
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ]
@@ -517,11 +510,7 @@ const createSakkopaatosHaOKasittely = () => {
 const createSakkoluettelonLahetysMenossa = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkoluettelon lähetys menossa',
-    [
-      'Sakkoluettelon lähetys menossa',
-      'Sakkopäätös / kuulemiskirje',
-      'Valvonnan lopetus'
-    ]
+    ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus']
   );
   cy.get('[data-cy="toimenpide.description"]')
     .type('Lähetimme sakkoluettelon.')
