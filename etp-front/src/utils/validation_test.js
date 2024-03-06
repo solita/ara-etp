@@ -102,6 +102,26 @@ describe('Validation:', () => {
       assertHenkilotunnusIsValid('020504B904H');
       assertHenkilotunnusIsValid('100190-999P');
       assertHenkilotunnusIsValid('100190Y999P');
+
+      // All the century signs
+      assertHenkilotunnusIsValid('130299+892A');
+
+      assertHenkilotunnusIsValid('130299-892A');
+      assertHenkilotunnusIsValid('130299U892A');
+      assertHenkilotunnusIsValid('130299V892A');
+      assertHenkilotunnusIsValid('130299W892A');
+      assertHenkilotunnusIsValid('130299X892A');
+      assertHenkilotunnusIsValid('130299Y892A');
+
+      assertHenkilotunnusIsValid('111111A111C');
+      assertHenkilotunnusIsValid('111111B111C');
+      assertHenkilotunnusIsValid('111111C111C');
+      assertHenkilotunnusIsValid('111111D111C');
+      assertHenkilotunnusIsValid('111111E111C');
+      assertHenkilotunnusIsValid('111111F111C');
+
+      // Leap day
+      assertHenkilotunnusIsValid('290292-0002');
     });
 
     it('invalid henkilötunnus', () => {
@@ -114,7 +134,11 @@ describe('Validation:', () => {
       assertHenkilotunnusIsInvalid('1A0200A892S');
 
       assertHenkilotunnusIsInvalid('130200A892s');
-      assertHenkilotunnusIsInvalid('130200a892s');
+
+      assertHenkilotunnusIsInvalid('310292-123A');
+
+      // Leap day
+      assertHenkilotunnusIsInvalid('290201-000');
     });
 
 
@@ -177,6 +201,7 @@ describe('Validation:', () => {
     });
 
     it('invalid päivämäärä', () => {
+      assert.equal(validation.isPaivamaara('30.02.1992'), false);
       assert.equal(validation.isPaivamaara('1.20.2012'), false);
       assert.equal(validation.isPaivamaara('77.1.2012'), false);
       assert.equal(validation.isPaivamaara('77.1.20122'), false);

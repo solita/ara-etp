@@ -147,12 +147,49 @@ export const henkilotunnusChecksum = R.compose(
   R.slice(0, 10)
 );
 
+const henkilotunnusCentury = R.compose(
+  R.cond([
+    [R.includes(R.__, ['+']), R.always(Maybe.Some('18'))],
+    [R.includes(R.__, ['-', 'U', 'V', 'W', 'X', 'Y']), R.always(Maybe.Some('19'))],
+    [R.includes(R.__, ['A', 'B', 'C', 'D', 'E', 'F']), R.always(Maybe.Some('20'))],
+    [R.T, R.always(Maybe.None())]
+  ]),
+  R.nth(6)
+);
+
+const henkilotunnusYear = R.compose(
+  R.map(R.join('')),
+  R.sequence(Maybe.of),
+  R.props(['y1y2', 'y3y4']),
+  R.applySpec({
+      y1y2: henkilotunnusCentury,
+      y3y4: R.compose(Maybe.fromNull, R.slice(4, 6))
+    }
+  ));
+
+const henkilotunnusDateString = R.compose(
+  R.map(R.join('.')),
+  R.sequence(Maybe.of),
+  R.props(['dd', 'mm', 'yyyy']),
+  R.applySpec({
+    dd: R.compose(Maybe.fromNull, R.slice(0, 2)),
+    mm: R.compose(Maybe.fromNull, R.slice(2, 4)),
+    yyyy: henkilotunnusYear
+  }),
+);
+
 export const isValidHenkilotunnus = R.allPass([
   R.complement(R.isNil),
   R.test(
     /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d[-U-Y]|[01]\d[A-F])\d{3}[\dA-Z]$/
   ),
-  R.converge(R.equals, [henkilotunnusChecksum, R.takeLast(1)])
+  R.compose(
+    Maybe.orSome(false),
+    // For some reason isPaivamaara is not recognized as a function ???
+    R.map(x => isPaivamaara(x)),
+    henkilotunnusDateString
+  ),
+  R.converge(R.equals, [henkilotunnusChecksum, R.takeLast(1)]),
 ]);
 
 export const henkilotunnusValidator = {
