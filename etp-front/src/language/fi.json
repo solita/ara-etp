@@ -1484,6 +1484,7 @@
     "no-events": "Ei tapahtumia",
     "add-muistiinpano": "Lisää muistiinpano",
     "new-toimenpide": "Uusi toimenpide",
+    "reopen-warning": "Uudelleenavattu valvonta tulee avata erikseen myös asianhallinnassa ennen käsittelyn jatkamista.",
     "select-toimenpide": "Valitse toimenpide",
     "oikeellisuus": {
       "pending": "Tarkastettava",

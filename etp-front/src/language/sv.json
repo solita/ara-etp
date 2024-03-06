@@ -1544,6 +1544,7 @@
     "no-events": "Inga händelser",
     "add-muistiinpano": "Lägg till anteckning",
     "new-toimenpide": "Ny åtgärd",
+    "reopen-warning": "Uudelleenavattu valvonta tulee avata erikseen myös asianhallinnassa ennen käsittelyn jatkamista. (sv)",
     "select-toimenpide": "Välj åtgärd",
     "oikeellisuus": {
       "all": {

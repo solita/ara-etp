@@ -20,7 +20,7 @@ const openToimenpideCreationAndCheckAllowedToimenpidetypes = (
       cy.get('li').should('have.length', allowedToimenpidetypes.length + 1);
 
       allowedToimenpidetypes.map(toimenpidetype => {
-        cy.contains(toimenpidetype);
+        cy.contains(toimenpidetype).should('be.visible');
       });
       cy.contains(toimenpideToCreate).click();
     });
@@ -37,11 +37,11 @@ const checkToimenpideCreationSucceeded = () => {
 };
 
 const toimenpideIsInCreatedToimenpideList = toimenpide => {
-  cy.contains(toimenpide);
+  cy.contains(toimenpide).should('be.visible');
 };
 
 const commentIsInToimenpideList = comment => {
-  cy.contains(comment);
+  cy.contains(comment).should('be.visible');
 };
 
 const createKaytonvalvonta = () => {
@@ -358,7 +358,9 @@ const createSakkopaatosVarsinainenPaatos = () => {
   );
 
   // Notice about updating statement is visible after selecting the previous option
-  cy.contains('Tarkista ja muuta teksti kohdassa kannanotto vastineeseen');
+  cy.contains(
+    'Tarkista ja muuta teksti kohdassa kannanotto vastineeseen'
+  ).should('be.visible');
 
   cy.get('[data-cy="toimenpide.answer-commentary-fi-0"]')
     .type('Tähän kirjoitetaan vastineen kommentti')
@@ -546,6 +548,11 @@ const reopenValvonta = () => {
   checkToimenpideCreationSucceeded();
   toimenpideIsInCreatedToimenpideList('Suljetun valvonnan uudelleenavaus');
   commentIsInToimenpideList('Laitoin vahingossa kiinni, avataan uudestaan.');
+
+  // There's a warning telling to reopen the case in asha
+  cy.contains(
+    'Uudelleenavattu valvonta tulee avata erikseen myös asianhallinnassa ennen käsittelyn jatkamista.'
+  ).should('be.visible');
 };
 
 context('Käytönvalvonta', () => {
