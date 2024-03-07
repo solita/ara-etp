@@ -59,7 +59,7 @@ describe('Henkilotunnus', () => {
     });
   });
 
-  context('Given the users-to-be-added don\'t exist in the system', () => {
+  context("Given the users-to-be-added don't exist in the system", () => {
     beforeEach(() => {
       cy.intercept(/\/api\/private/, req => {
         req.headers = { ...req.headers, ...FIXTURES.paakayttajaHeaders };
@@ -74,20 +74,15 @@ describe('Henkilotunnus', () => {
       it('Then pääkäyttäjä can add user with vanha hetu', () => {
         cy.visit('/#/kayttaja/new');
 
-        cy.get('[data-cy="etunimi"]')
-          .type('Vanha');
+        cy.get('[data-cy="etunimi"]').type('Vanha');
 
-        cy.get('[data-cy="sukunimi"]')
-          .type('Hetu');
+        cy.get('[data-cy="sukunimi"]').type('Hetu');
 
-        cy.get('[data-cy="email"]')
-          .type('vanhahetu@example.com');
+        cy.get('[data-cy="email"]').type('vanhahetu@example.com');
 
-        cy.get('[data-cy="puhelin"]')
-          .type('12321');
+        cy.get('[data-cy="puhelin"]').type('12321');
 
-        cy.get('[data-cy="henkilotunnus"]')
-          .type('100190-999P');
+        cy.get('[data-cy="henkilotunnus"]').type('100190-999P');
 
         cy.get('[data-cy="rooli-select"]')
           .click()
@@ -102,20 +97,15 @@ describe('Henkilotunnus', () => {
       it('Then pääkäyttäjä can add user with uusi hetu', () => {
         cy.visit('/#/kayttaja/new');
 
-        cy.get('[data-cy="etunimi"]')
-          .type('Uusi');
+        cy.get('[data-cy="etunimi"]').type('Uusi');
 
-        cy.get('[data-cy="sukunimi"]')
-          .type('Hetu');
+        cy.get('[data-cy="sukunimi"]').type('Hetu');
 
-        cy.get('[data-cy="email"]')
-          .type('uusihetu@example.com');
+        cy.get('[data-cy="email"]').type('uusihetu@example.com');
 
-        cy.get('[data-cy="puhelin"]')
-          .type('12321');
+        cy.get('[data-cy="puhelin"]').type('12321');
 
-        cy.get('[data-cy="henkilotunnus"]')
-          .type('100190Y999P');
+        cy.get('[data-cy="henkilotunnus"]').type('100190Y999P');
 
         cy.get('[data-cy="rooli-select"]')
           .click()
@@ -129,30 +119,33 @@ describe('Henkilotunnus', () => {
     });
   });
 
-  context('Given the users with vanha and uusi hetu are added to the system', () => {
-    describe('When user with vanha hetu tries to login', () => {
-      beforeEach(() => {
-        cy.intercept(/\/api\/private/, req => {
-          req.headers = { ...req.headers, ...FIXTURES.vanhaHetuHeaders };
+  context(
+    'Given the users with vanha and uusi hetu are added to the system',
+    () => {
+      describe('When user with vanha hetu tries to login', () => {
+        beforeEach(() => {
+          cy.intercept(/\/api\/private/, req => {
+            req.headers = { ...req.headers, ...FIXTURES.vanhaHetuHeaders };
+          });
+        });
+        it('Then should be able to login', () => {
+          cy.visit('/');
+
+          cy.get('[data-cy="fullname-in-header"]').contains('Vanha Hetu');
         });
       });
-      it('Then should be able to login', () => {
-        cy.visit('/');
+      describe('When user with uusi hetu tries to login', () => {
+        beforeEach(() => {
+          cy.intercept(/\/api\/private/, req => {
+            req.headers = { ...req.headers, ...FIXTURES.uusiHetuHeaders };
+          });
+        });
+        it('Then should be able to login', () => {
+          cy.visit('/');
 
-        cy.get('[data-cy="fullname-in-header"]').contains('Vanha Hetu');
-      });
-    });
-    describe('When user with uusi hetu tries to login', () => {
-      beforeEach(() => {
-        cy.intercept(/\/api\/private/, req => {
-          req.headers = { ...req.headers, ...FIXTURES.uusiHetuHeaders };
+          cy.get('[data-cy="fullname-in-header"]').contains('Uusi Hetu');
         });
       });
-      it('Then should be able to login', () => {
-        cy.visit('/');
-
-        cy.get('[data-cy="fullname-in-header"]').contains('Uusi Hetu');
-      });
-    });
-  });
+    }
+  );
 });
