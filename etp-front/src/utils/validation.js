@@ -181,7 +181,7 @@ const henkilotunnusDateString = R.compose(
 export const isValidHenkilotunnus = R.allPass([
   R.complement(R.isNil),
   R.test(
-    /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d[-U-Y]|[01]\d[A-F])\d{3}[\dA-Z]$/
+    /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d[-U-Y]|[01]\d[A-F])\d{3}[\dA-Y]$/
   ),
   R.compose(
     Maybe.orSome(false),
