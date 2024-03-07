@@ -79,6 +79,7 @@ describe('Validation:', () => {
       assertHenkilotunnusIsValid('130200X892S');
 
       // Henkilotunnukset from DVV example
+      // Contains all the new century signs
       assertHenkilotunnusIsValid('010594Y9032');
       assertHenkilotunnusIsValid('010594Y9021');
       assertHenkilotunnusIsValid('020594X903P');
@@ -103,24 +104,10 @@ describe('Validation:', () => {
       assertHenkilotunnusIsValid('100190-999P');
       assertHenkilotunnusIsValid('100190Y999P');
 
-      // All the century signs
+      // Test for + also
       assertHenkilotunnusIsValid('130299+892A');
 
-      assertHenkilotunnusIsValid('130299-892A');
-      assertHenkilotunnusIsValid('130299U892A');
-      assertHenkilotunnusIsValid('130299V892A');
-      assertHenkilotunnusIsValid('130299W892A');
-      assertHenkilotunnusIsValid('130299X892A');
-      assertHenkilotunnusIsValid('130299Y892A');
-
-      assertHenkilotunnusIsValid('111111A111C');
-      assertHenkilotunnusIsValid('111111B111C');
-      assertHenkilotunnusIsValid('111111C111C');
-      assertHenkilotunnusIsValid('111111D111C');
-      assertHenkilotunnusIsValid('111111E111C');
-      assertHenkilotunnusIsValid('111111F111C');
-
-      // Leap day
+      // Valid leap day
       assertHenkilotunnusIsValid('290292-0002');
     });
 
@@ -130,14 +117,20 @@ describe('Validation:', () => {
       assertHenkilotunnusIsInvalid('131053-308T');
       assertHenkilotunnusIsInvalid('0131053-308T');
 
+
       assertHenkilotunnusIsInvalid('130200A891S');
       assertHenkilotunnusIsInvalid('1A0200A892S');
 
       assertHenkilotunnusIsInvalid('130200A892s');
+      assertHenkilotunnusIsInvalid('130200a892s');
 
       assertHenkilotunnusIsInvalid('310292-123A');
 
-      // Leap day
+      assertHenkilotunnusIsInvalid('100190T999P');
+      assertHenkilotunnusIsInvalid('100190Z999P');
+      assertHenkilotunnusIsInvalid('100190G999P');
+
+      // Invalid leap day
       assertHenkilotunnusIsInvalid('290201-000');
     });
 
