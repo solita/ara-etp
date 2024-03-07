@@ -117,7 +117,6 @@ describe('Validation:', () => {
       assertHenkilotunnusIsInvalid('131053-308T');
       assertHenkilotunnusIsInvalid('0131053-308T');
 
-
       assertHenkilotunnusIsInvalid('130200A891S');
       assertHenkilotunnusIsInvalid('1A0200A892S');
 
@@ -133,8 +132,6 @@ describe('Validation:', () => {
       // Invalid leap day
       assertHenkilotunnusIsInvalid('290201-000');
     });
-
-
   });
 
   describe('Laatijan toteaja validation', () => {
