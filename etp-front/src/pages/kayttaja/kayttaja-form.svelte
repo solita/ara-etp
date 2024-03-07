@@ -97,6 +97,7 @@
     <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
       <Select
         id={'rooli'}
+        name={'rooli-select'}
         label={i18n(i18nRoot + '.rooli')}
         required={true}
         validation={true}
