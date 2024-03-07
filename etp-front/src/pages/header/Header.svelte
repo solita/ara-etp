@@ -149,7 +149,10 @@
           bind:this={nameNode}
           class="relative cursor-pointer hover:underline mr-6"
           on:click={toggleNameDropdown}>
-          <span tabindex="0" on:keydown={enterHandler(toggleNameDropdown)}>
+          <span
+            data-cy="fullname-in-header"
+            tabindex="0"
+            on:keydown={enterHandler(toggleNameDropdown)}>
             {fullName(user)}
           </span>
           <span class="material-icons absolute">keyboard_arrow_down</span>
