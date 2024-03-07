@@ -297,6 +297,7 @@
   <div class="flex lg:-mx-4 mt-10">
     <div class="px-4">
       <Button
+        prefix={'kayttaja-form'}
         type={'submit'}
         text={i18n('tallenna')}
         disabled={disabled || !dirty} />
