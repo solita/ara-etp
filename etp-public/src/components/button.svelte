@@ -21,12 +21,16 @@
   button:focus:not(:disabled),
   button:active:not(:disabled),
   button:hover:not(:disabled) {
-    box-shadow: inset 0 0 0 3px #fff, 0 0 0 1px #979797;
+    box-shadow:
+      inset 0 0 0 3px #fff,
+      0 0 0 1px #979797;
   }
   button.bg-white:focus:not(:disabled),
   button.bg-white:active:not(:disabled),
   button.bg-white:hover:not(:disabled) {
-    box-shadow: inset 0 0 0 3px #2e5053, 0 0 0 1px #fff;
+    box-shadow:
+      inset 0 0 0 3px #2e5053,
+      0 0 0 1px #fff;
   }
 
   .bg-ashblue:hover,
