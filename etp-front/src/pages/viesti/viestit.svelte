@@ -287,9 +287,12 @@
               search={true}
               on:input={evt => {
                 cancelKeywordSearch();
-                cancelKeywordSearch = Future.value(keyword => {
-                  query = R.assoc('keyword', keyword, query);
-                }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
+                cancelKeywordSearch = Future.value(
+                  keyword => {
+                    query = R.assoc('keyword', keyword, query);
+                  },
+                  Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value)))
+                );
               }} />
           </div>
           <div class="md:w-1/2 w-full mr-4 my-4 md:my-8">

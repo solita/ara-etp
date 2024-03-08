@@ -109,50 +109,64 @@ export const toimenpidePublish = (templates, toimenpide) =>
       'type-specific-data': {
         fine: addRequiredValidator(Toimenpiteet.hasFine(toimenpide)),
         'osapuoli-specific-data': osapuoliSpecificSchema =>
-          R.addIndex(R.map)((item, index) => {
-            const hasDocument = R.path(
-              [
-                'type-specific-data',
-                'osapuoli-specific-data',
-                index,
-                'document'
-              ],
-              toimenpide
-            );
-
-            const recipientAnswered = R.path(
-              [
-                'type-specific-data',
-                'osapuoli-specific-data',
-                index,
-                'recipient-answered'
-              ],
-              toimenpide
-            );
-            return R.compose(
-              addRequiredValidatorToFieldsWhen(
-                (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
-                  Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
-                  recipientAnswered,
+          R.addIndex(R.map)(
+            (item, index) => {
+              const hasDocument = R.path(
                 [
-                  'answer-commentary-sv',
-                  'answer-commentary-fi',
-                  'statement-sv',
-                  'statement-fi'
-                ]
-              ),
-              addRequiredValidatorToFieldsWhen(
-                (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
-                  Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
-                  hasDocument,
-                ['hallinto-oikeus-id']
-              ),
-              addRequiredValidatorToFieldsWhen(
-                Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument,
-                ['karajaoikeus-id', 'haastemies-email']
+                  'type-specific-data',
+                  'osapuoli-specific-data',
+                  index,
+                  'document'
+                ],
+                toimenpide
+              );
+
+              const recipientAnswered = R.path(
+                [
+                  'type-specific-data',
+                  'osapuoli-specific-data',
+                  index,
+                  'recipient-answered'
+                ],
+                toimenpide
+              );
+              return R.compose(
+                addRequiredValidatorToFieldsWhen(
+                  (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
+                    Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
+                    recipientAnswered,
+                  [
+                    'answer-commentary-sv',
+                    'answer-commentary-fi',
+                    'statement-sv',
+                    'statement-fi'
+                  ]
+                ),
+                addRequiredValidatorToFieldsWhen(
+                  (Toimenpiteet.isDecisionOrderActualDecision(toimenpide) ||
+                    Toimenpiteet.isPenaltyDecisionActualDecision(toimenpide)) &&
+                    hasDocument,
+                  ['hallinto-oikeus-id']
+                ),
+                addRequiredValidatorToFieldsWhen(
+                  Toimenpiteet.isNoticeBailiff(toimenpide) && hasDocument,
+                  ['karajaoikeus-id', 'haastemies-email']
+                )
+              )(item);
+            },
+            R.map(
+              R.always(osapuoliSpecificSchema[0]),
+              R.range(
+                0,
+                R.length(
+                  R.path(
+                    ['type-specific-data', 'osapuoli-specific-data'],
+                    toimenpide
+                  )
+                )
               )
-            )(item);
-          }, R.map(R.always(osapuoliSpecificSchema[0]), R.range(0, R.length(R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide))))),
+            )
+          ),
         'department-head-title-fi': addRequiredValidator(
           Toimenpiteet.isDecisionOrderActualDecision(toimenpide)
         ),

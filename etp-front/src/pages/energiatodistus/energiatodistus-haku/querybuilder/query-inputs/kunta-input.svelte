@@ -20,10 +20,13 @@
   const updateInput = label => {
     const kunta = Maybe.find(R.compose(R.equals(label), kuntaLabel), kunnat);
 
-    R.forEach(id => {
-      input.value = id;
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    }, R.map(R.prop('id'), kunta));
+    R.forEach(
+      id => {
+        input.value = id;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      },
+      R.map(R.prop('id'), kunta)
+    );
   };
 
   $: !R.isNil(input) && updateInput(queryKuntaLabel);

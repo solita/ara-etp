@@ -53,15 +53,15 @@ export const toimitustapaErrorKey = {
     (Maybe.isNone(yritys.ytunnus) || invalidOsoite(yritys))
       ? Maybe.Some('suomifi-yritys')
       : invalidEmail(yritys)
-      ? Maybe.Some('email')
-      : Maybe.None(),
+        ? Maybe.Some('email')
+        : Maybe.None(),
   henkilo: henkilo =>
     toimitustapa.suomifi(henkilo) &&
     (Maybe.isNone(henkilo.henkilotunnus) || invalidOsoite(henkilo))
       ? Maybe.Some('suomifi-henkilo')
       : invalidEmail(henkilo)
-      ? Maybe.Some('email')
-      : Maybe.None()
+        ? Maybe.Some('email')
+        : Maybe.None()
 };
 
 /**

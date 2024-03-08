@@ -286,9 +286,12 @@
             search={true}
             on:input={evt => {
               textCancel();
-              textCancel = Future.value(keyword => {
-                query = R.assoc('keyword', keyword, query);
-              }, Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value))));
+              textCancel = Future.value(
+                keyword => {
+                  query = R.assoc('keyword', keyword, query);
+                },
+                Future.after(1000, Maybe.fromEmpty(R.trim(evt.target.value)))
+              );
             }} />
         </div>
         <div class="md:col-span-1 col-span-4">

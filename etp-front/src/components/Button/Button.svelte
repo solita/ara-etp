@@ -13,7 +13,9 @@
 <style type="text/postcss">
   button {
     @apply relative px-6 py-3 flex justify-center items-center rounded-full font-bold uppercase text-light tracking-xl min-w-10;
-    transition: padding-right 0.5s, padding-left 0.5s;
+    transition:
+      padding-right 0.5s,
+      padding-left 0.5s;
   }
 
   .primary {
