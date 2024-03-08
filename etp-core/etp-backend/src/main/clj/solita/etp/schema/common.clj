@@ -77,9 +77,12 @@
           individual-number (subs s 7 10)
           checksum (last s)]
       (and (= 11 (count s))
-           (contains? #{\+ \- \A
-                        \B \C \D \E \F
-                        \Y \X \W \V \U} century-sign)
+           (contains? #{;; 18th century
+                        \+
+                        ;; 19th century
+                        \- \Y \X \W \V \U
+                        ;; 20th century
+                        \A \B \C \D \E \F} century-sign)
            (= checksum (henkilotunnus-checksum (str date-part individual-number)))))
     (catch StringIndexOutOfBoundsException _ false)))
 
