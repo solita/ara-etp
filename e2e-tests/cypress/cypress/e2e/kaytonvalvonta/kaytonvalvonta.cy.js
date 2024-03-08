@@ -181,6 +181,26 @@ const createKaskypaatosVarsinainenPaatos = () => {
   toimenpideIsInCreatedToimenpideList('Käskypäätös / varsinainen päätös');
 };
 
+const closeValvontaMistakenly = () => {
+  openToimenpideCreationAndCheckAllowedToimenpidetypes('Valvonnan lopetus', [
+    'Käskypäätös / varsinainen päätös',
+    'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
+    'Valvonnan lopetus'
+  ]);
+  cy.get('[data-cy="toimenpide.description"]')
+    .type('Valvonta on suoritettu loppuun.')
+    .should('have.value', 'Valvonta on suoritettu loppuun.')
+    .blur();
+
+  submitToimenpide();
+  checkToimenpideCreationSucceeded();
+  toimenpideIsInCreatedToimenpideList('Valvonnan lopetus');
+  commentIsInToimenpideList('Valvonta on suoritettu loppuun.');
+
+  // Aloita valvonta button should not exist at this point
+  cy.get('[data-cy="start-button"]').should('not.exist');
+};
+
 const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
@@ -540,6 +560,9 @@ const closeValvonta = () => {
 };
 
 const reopenValvonta = () => {
+  // After valvonta has been closed, there should be a button to reopen it if it was closed mistakenly
+  cy.get('[data-cy="continue-button"]').click();
+
   cy.get('[data-cy="toimenpide.description"]')
     .type('Laitoin vahingossa kiinni, avataan uudestaan.')
     .should('have.value', 'Laitoin vahingossa kiinni, avataan uudestaan.')
@@ -587,6 +610,13 @@ context('Käytönvalvonta', () => {
 
     createKaskypaatosVarsinainenPaatos();
 
+    // Close the valvonta "mistakenly" at this point to test reopening a closed valvonta
+    closeValvontaMistakenly();
+
+    //Reopen the valvonta
+    reopenValvonta();
+
+    // Process should now continue where it was left off
     createKaskypaatosTiedoksiantoEnsimmainenPostitus();
 
     createKaskypaatosTiedoksiantoToinenPostitus();
@@ -617,11 +647,5 @@ context('Käytönvalvonta', () => {
 
     // Aloita valvonta button should not exist at this point
     cy.get('[data-cy="start-button"]').should('not.exist');
-
-    // After valvonta has been closed, there should be a button to reopen it if it was closed mistakenly
-    cy.get('[data-cy="continue-button"]').click();
-
-    //Reopen the valvonta
-    reopenValvonta();
   });
 });

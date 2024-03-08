@@ -515,10 +515,17 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
  */
 export const filterAvailableToimenpidetypes = R.curry(
   (toimenpiteet, toimenpidetypes) => {
-    const currentToimenpide = R.prop('type-id', R.last(toimenpiteet));
-    const phase = determineProcessPhaseFromToimenpiteet(toimenpiteet);
+    const lastCreatedToimenpide = R.last(toimenpiteet);
+    let toimenpideTobaseTheAllowedToimenpidetypesOn = lastCreatedToimenpide;
+
+    if (isReopen(lastCreatedToimenpide)) {
+      // Last created toimenpide is reopen, before that should be closing,
+      // so we should look for the toimenpide before that
+      toimenpideTobaseTheAllowedToimenpidetypesOn = R.nth(-3, toimenpiteet);
+    }
+
     let allowedToimenpidetypes = [];
-    switch (currentToimenpide) {
+    switch (R.prop('type-id', toimenpideTobaseTheAllowedToimenpidetypesOn)) {
       case type.case:
         allowedToimenpidetypes = [type.rfi.order];
         break;
@@ -577,6 +584,8 @@ export const filterAvailableToimenpidetypes = R.curry(
         break;
 
       case type['court-hearing']:
+        const phase = determineProcessPhaseFromToimenpiteet(toimenpiteet);
+
         if (phase === 'decision-order') {
           allowedToimenpidetypes = [type['penalty-decision']['hearing-letter']];
         } else if (phase === 'penalty-decision') {

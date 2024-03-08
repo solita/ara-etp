@@ -1159,6 +1159,18 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
       [{ id: 5 }]
     );
   });
+
+  it('Reopening valvonta allows the allowed toimenpidetypes of the toimenpide before closing the valvonta', () => {
+    // Valvonta has been closed after Sakkopäätös / tiedoksianto (toinen postitus)
+    // and then reopened
+    assert.deepEqual(
+      Toimenpiteet.filterAvailableToimenpidetypes(
+        [{ 'type-id': 17 }, { 'type-id': 5 }, { 'type-id': 22 }],
+        toimenpidetyypit
+      ),
+      [{ id: 5 }, { id: 18 }, { id: 19 }]
+    );
+  });
 });
 
 describe('determineProcessPhaseFromToimenpiteet', () => {
