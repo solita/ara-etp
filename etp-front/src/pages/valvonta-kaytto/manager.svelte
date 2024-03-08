@@ -239,7 +239,7 @@
       items={R.compose(
         Toimenpiteet.filterAvailableToimenpidetypes(
           Toimenpiteet.determineProcessPhaseFromToimenpiteet(toimenpiteet),
-          R.prop('type-id', R.last(toimenpiteet))
+          toimenpiteet
         ),
         R.filter(R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]))
       )(toimenpidetyypit)} />

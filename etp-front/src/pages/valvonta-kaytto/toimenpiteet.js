@@ -511,11 +511,13 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
  * Filter toimenpidetypes based on what are allowed transition from
  * the toimenpidetype of the current toimenpide
  * @param {('decision-order'|'penalty-decision')} phase Which käsittelyvaihe is going on
- * @param currentToimenpide type-id of the current toimenpide
+ * @param toimenpiteet All the toimenpiteet that have been created previously
  * @param toimenpidetypes All available toimenpidetypes
  */
 export const filterAvailableToimenpidetypes = R.curry(
-  (phase, currentToimenpide, toimenpidetypes) => {
+  (phase, toimenpiteet, toimenpidetypes) => {
+    const currentToimenpide = R.prop('type-id', R.last(toimenpiteet));
+
     let allowedToimenpidetypes = [];
     switch (currentToimenpide) {
       case type.case:
