@@ -249,9 +249,12 @@
             search={true}
             on:input={evt => {
               textCancel();
-              textCancel = Future.value(value => {
-                searchText = value;
-              }, Future.after(500, Maybe.fromEmpty(R.trim(evt.target.value))));
+              textCancel = Future.value(
+                value => {
+                  searchText = value;
+                },
+                Future.after(500, Maybe.fromEmpty(R.trim(evt.target.value)))
+              );
             }} />
         </div>
       {/if}

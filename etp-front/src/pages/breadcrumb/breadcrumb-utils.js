@@ -367,8 +367,8 @@ const folderForKayttajaRole = R.curry((i18n, whoami, kayttaja) =>
   R.eqProps('id', whoami, kayttaja)
     ? []
     : Kayttajat.isAccreditedLaatija(kayttaja)
-    ? laatijat(i18n)
-    : kayttajat(i18n)
+      ? laatijat(i18n)
+      : kayttajat(i18n)
 );
 
 export const kayttajaIdCrumb = R.curry((i18n, whoami, id) => [

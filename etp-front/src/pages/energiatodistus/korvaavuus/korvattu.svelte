@@ -55,10 +55,10 @@
     Korvaus.isSame(korvattava, energiatodistus)
       ? Maybe.Some('is-same')
       : !Korvaus.isValidState(korvattava, energiatodistus)
-      ? Maybe.Some('invalid-tila')
-      : Korvaus.hasOtherKorvaaja(korvattava, energiatodistus)
-      ? Maybe.Some('already-replaced')
-      : Maybe.None();
+        ? Maybe.Some('invalid-tila')
+        : Korvaus.hasOtherKorvaaja(korvattava, energiatodistus)
+          ? Maybe.Some('already-replaced')
+          : Maybe.None();
 
   const fetchKorvattavaEnergiatodistus = initialDelay => id => {
     cancel = R.compose(
@@ -107,8 +107,8 @@
       ? Maybe.isNone(R.chain(parseId, query))
         ? Maybe.Some('invalid-id')
         : korvattavaEnergiatodistus.isNone()
-        ? Maybe.Some('not-found')
-        : R.chain(korvattavaETError, korvattavaEnergiatodistus)
+          ? Maybe.Some('not-found')
+          : R.chain(korvattavaETError, korvattavaEnergiatodistus)
       : Maybe.None();
 
   const searchKorvattavaEnergiatodistus = R.compose(

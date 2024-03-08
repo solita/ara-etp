@@ -131,8 +131,8 @@
   const signAllPdf = Kielisyys.bilingual(energiatodistus)
     ? Future.and(signPdf('sv'), signPdf('fi'))
     : Kielisyys.onlySv(energiatodistus)
-    ? signPdf('sv')
-    : signPdf('fi');
+      ? signPdf('sv')
+      : signPdf('fi');
 
   const signingProcess = R.compose(
     Future.fork(response => {

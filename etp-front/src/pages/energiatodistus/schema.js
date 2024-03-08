@@ -329,8 +329,8 @@ export const assocRequired = (schema, property) => {
   const language = R.endsWith('-fi', property)
     ? 'fi'
     : R.endsWith('-sv', property)
-    ? 'sv'
-    : 'all';
+      ? 'sv'
+      : 'all';
 
   return R.unless(
     R.compose(R.isNil, R.path(path)),

@@ -18,12 +18,16 @@
   a:focus,
   a:active,
   a:hover {
-    box-shadow: inset 0 0 0 3px #fff, 0 0 0 1px #979797;
+    box-shadow:
+      inset 0 0 0 3px #fff,
+      0 0 0 1px #979797;
   }
   a.bg-white:focus:not(:disabled),
   a.bg-white:active:not(:disabled),
   a.bg-white:hover:not(:disabled) {
-    box-shadow: inset 0 0 0 3px #2e5053, 0 0 0 1px #fff;
+    box-shadow:
+      inset 0 0 0 3px #2e5053,
+      0 0 0 1px #fff;
   }
 
   .bg-ashblue:hover,
