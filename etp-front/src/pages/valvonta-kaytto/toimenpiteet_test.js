@@ -973,7 +973,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Valvonnan aloitus allows Kehotus and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 0 }],
         toimenpidetyypit
       ),
@@ -984,7 +983,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Kehotus allows Kehotus, Varoitus and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 2 }],
         toimenpidetyypit
       ),
@@ -995,7 +993,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Varoitus allows Kehotus, Varoitus, käskypäätös / kuulemiskirje  and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 3 }],
         toimenpidetyypit
       ),
@@ -1006,7 +1003,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Käskypäätös / kuulemiskirje allows Käskypäätös / kuulemiskirje, Käskypäätös / varsinainen päätös and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 7 }],
         toimenpidetyypit
       ),
@@ -1017,7 +1013,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Käskypäätös / varsinainen päätös allows Käskypäätös / varsinainen päätös, Käskypäätös / tiedoksianto (ensimmäinen postitus) and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 8 }],
         toimenpidetyypit
       ),
@@ -1028,7 +1023,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Käskypäätös / tiedoksianto (ensimmäinen postitus) allows Käskypäätös / tiedoksianto (toinen postitus), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 9 }],
         toimenpidetyypit
       ),
@@ -1039,7 +1033,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Käskypäätös / tiedoksianto (toinen postitus) allows Käskypäätös / tiedoksianto (Haastemies), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 10 }],
         toimenpidetyypit
       ),
@@ -1050,7 +1043,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Käskypäätös / tiedoksianto (Haastemies) allows Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 11 }],
         toimenpidetyypit
       ),
@@ -1061,7 +1053,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Käskypäätös / valitusajan odotus ja umpeutuminen allows HaO-käsittely, Sakkopäätös / kuulemiskirje and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 12 }],
         toimenpidetyypit
       ),
@@ -1072,7 +1063,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('HaO-käsittely allows Sakkopäätös / kuulemiskirje and Valvonnan lopetus when in käskypäätös phase of the process', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 6 }],
         toimenpidetyypit
       ),
@@ -1083,7 +1073,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkopäätös / kuulemiskirje allows Sakkopäätös / kuulemiskirje,Sakkopäätös / varsinainen päätös and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 14 }],
         toimenpidetyypit
       ),
@@ -1094,7 +1083,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkopäätös / varsinainen päätös allows Sakkopäätös / varsinainen päätös, Sakkopäätös / tiedoksianto (ensimmäinen postitus) and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 15 }],
         toimenpidetyypit
       ),
@@ -1105,7 +1093,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) allows Sakkopäätös / tiedoksianto (toinen postitus), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 16 }],
         toimenpidetyypit
       ),
@@ -1116,7 +1103,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkopäätös / tiedoksianto (toinen postitus) allows Sakkopäätös / tiedoksianto (Haastemies), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 17 }],
         toimenpidetyypit
       ),
@@ -1127,7 +1113,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkopäätös / tiedoksianto (Haastemies) allows Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 18 }],
         toimenpidetyypit
       ),
@@ -1138,7 +1123,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkopäätös / valitusajan odotus ja umpeutuminen allows HaO-käsittely, Sakkoluettelon lähetys menossa and Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 19 }],
         toimenpidetyypit
       ),
@@ -1149,8 +1133,7 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('HaO-käsittely allows Sakkoluettelon lähetys menossa and Valvonnan lopetus when in sakkopäätös phase of the process', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
-        [{ 'type-id': 6 }],
+        [{ 'type-id': 19 }, { 'type-id': 6 }],
         toimenpidetyypit
       ),
       [{ id: 5 }, { id: 21 }]
@@ -1160,7 +1143,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Sakkoluettelon lähetys menossa allows Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'penalty-decision',
         [{ 'type-id': 21 }],
         toimenpidetyypit
       ),
@@ -1171,7 +1153,6 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   it('Old käskypäätös allows Valvonnan lopetus', () => {
     assert.deepEqual(
       Toimenpiteet.filterAvailableToimenpidetypes(
-        'decision-order',
         [{ 'type-id': 4 }],
         toimenpidetyypit
       ),
