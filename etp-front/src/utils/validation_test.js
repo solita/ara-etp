@@ -130,7 +130,7 @@ describe('Validation:', () => {
       assertHenkilotunnusIsInvalid('100190G999P');
 
       // Invalid leap day
-      assertHenkilotunnusIsInvalid('290201-000');
+      assertHenkilotunnusIsInvalid('290201-000K');
     });
   });
 
