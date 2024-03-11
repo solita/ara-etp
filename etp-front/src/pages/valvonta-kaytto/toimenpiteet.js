@@ -510,7 +510,7 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
 /**
  * Filter toimenpidetypes based on what are allowed transitions
  * based on the previously created toimenpiteet
- * @param toimenpiteet All the toimenpiteet that have been created previously
+ * @param {Object[]} toimenpiteet All the toimenpiteet that have been created previously
  * @param toimenpidetypes All available toimenpidetypes
  */
 export const filterAvailableToimenpidetypes = R.curry(
