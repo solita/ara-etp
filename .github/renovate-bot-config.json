@@ -6,5 +6,23 @@
     "solita/ara-etp"
   ],
   "dependencyDashboard": true,
-  "labels": ["dependencies"]
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^@babel/"],
+      "groupName": "Babel dependencies"
+    },
+    {
+      "matchPackagePatterns": ["^@storybook/"],
+      "groupName": "Storybook dependencies"
+    },
+    {
+      "matchPackagePatterns": ["metosin/reitit-"],
+      "groupName": "Reitit dependencies"
+    },
+    {
+      "matchPackagePatterns": ["org.flywaydb/flyway-"],
+      "groupName": "Flyway dependencies"
+    }
+  ]
 }
