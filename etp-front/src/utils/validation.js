@@ -181,9 +181,8 @@ const centurysignToCentury = R.compose(
       R.always(Maybe.Some('20'))
     ],
     [R.T, R.always(Maybe.None())]
-  ]),
+  ])
 );
-
 
 /**
  * Returns the part of the henkilotunnus that is supposed to
@@ -257,11 +256,7 @@ export const isValidHenkilotunnus = R.allPass([
   R.test(
     /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d[-U-Y]|[012]\d[A-F])\d{3}[\dA-Y]$/
   ),
-  R.compose(
-    Maybe.orSome(false),
-    R.map(isPaivamaara),
-    henkilotunnusDateString
-  ),
+  R.compose(Maybe.orSome(false), R.map(isPaivamaara), henkilotunnusDateString),
   R.converge(R.equals, [henkilotunnusChecksum, R.takeLast(1)])
 ]);
 
