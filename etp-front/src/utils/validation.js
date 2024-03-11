@@ -44,6 +44,13 @@ export const ytunnusValidator = {
   label: R.applyTo('validation.invalid-ytunnus')
 };
 
+export const isPaivamaara = R.compose(
+  dfns.isValid,
+  R.unless(R.compose(R.equals('Date'), R.type), date =>
+    dfns.parse(date, DATE_FORMAT, 0)
+  )
+);
+
 export const isFilled = R.complement(R.isEmpty);
 
 export const isRequired = {
@@ -147,7 +154,22 @@ export const henkilotunnusChecksum = R.compose(
   R.slice(0, 10)
 );
 
-const henkilotunnusCentury = R.compose(
+/**
+ * Returns the century that the century sign represents.
+ *
+ * @func
+ * @sig string -> Maybe string
+ * @example
+ *
+ *      centurysignToCentury('+');        //=>  Some('18')
+ *      centurysignToCentury('-');        //=>  Some('19')
+ *      centurysignToCentury('U');        //=>  Some('19')
+ *      centurysignToCentury('A');        //=>  Some('20')
+ *      centurysignToCentury('AB');       //=>  Nothing
+ *
+ */
+
+const centurysignToCentury = R.compose(
   R.cond([
     [R.includes(R.__, ['+']), R.always(Maybe.Some('18'))],
     [
@@ -160,19 +182,59 @@ const henkilotunnusCentury = R.compose(
     ],
     [R.T, R.always(Maybe.None())]
   ]),
-  R.nth(6)
 );
 
-const henkilotunnusYear = R.compose(
+
+/**
+ * Returns the part of the henkilotunnus that is supposed to
+ * be a year by concatenating the century from the century sign
+ * and the 5th and the 6th character.
+ *
+ *  Does not check that it actually is a year.
+ *
+ *  Returns nothing if the century sign is invalid.
+ *
+ * @func
+ * @sig string -> Maybe string
+ *
+ * @example
+ *
+ *      henkilotunnusYearPart('111111-111C'); //=> Some('1911')
+ *      henkilotunnusYearPart('111111+111C'); //=> Some('1811')
+ *      henkilotunnusYearPart('111111A111C'); //=> Some('2011')
+ *      //NB: This is not a valid year.
+ *      henkilotunnusYearPart('1111AB-111C'); //=> Some('19AB')
+ *      henkilotunnusYearPart('1111ABK111C'); //=> Nothing
+ *
+ */
+const henkilotunnusYearPart = R.compose(
   R.map(R.join('')),
   R.sequence(Maybe.of),
   R.props(['y1y2', 'y3y4']),
   R.applySpec({
-    y1y2: henkilotunnusCentury,
+    y1y2: R.compose(centurysignToCentury, R.nth(6)),
     y3y4: R.compose(Maybe.fromNull, R.slice(4, 6))
   })
 );
 
+/**
+ * Returns the date of a henkilotunnus in form "dd.mm.yyyy".
+ *
+ * Does not check the validity of the date.
+ *
+ * @func
+ * @sig string -> Maybe string
+ *
+ * @example
+ *
+ *      henkilotunnusDateString('111111-111C'); //=> Some('11.11.1911')
+ *      henkilotunnusYearPart('111111+111C'); //=> Some('11.11.1811')
+ *      henkilotunnusYearPart('111111A111C'); //=> Some('11.11.2011')
+ *      //NB: This is not a valid date.
+ *      henkilotunnusYearPart('1111AB-111C'); //=> Some('11.11.19AB')
+ *      henkilotunnusYearPart('1111ABK111C'); //=> Nothing
+ *
+ */
 const henkilotunnusDateString = R.compose(
   R.map(R.join('.')),
   R.sequence(Maybe.of),
@@ -180,19 +242,24 @@ const henkilotunnusDateString = R.compose(
   R.applySpec({
     dd: R.compose(Maybe.fromNull, R.slice(0, 2)),
     mm: R.compose(Maybe.fromNull, R.slice(2, 4)),
-    yyyy: henkilotunnusYear
+    yyyy: henkilotunnusYearPart
   })
 );
 
+/**
+ * @sig string -> boolean
+ *
+ * Checks the validity of a henkilotunnus.
+ *
+ */
 export const isValidHenkilotunnus = R.allPass([
   R.complement(R.isNil),
   R.test(
-    /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d[-U-Y]|[01]\d[A-F])\d{3}[\dA-Y]$/
+    /^(0[1-9]|[12]\d|3[01])(0[1-9]|1[0-2])([5-9]\d\+|\d\d[-U-Y]|[012]\d[A-F])\d{3}[\dA-Y]$/
   ),
   R.compose(
     Maybe.orSome(false),
-    // For some reason isPaivamaara is not recognized as a function ???
-    R.map(x => isPaivamaara(x)),
+    R.map(isPaivamaara),
     henkilotunnusDateString
   ),
   R.converge(R.equals, [henkilotunnusChecksum, R.takeLast(1)])
@@ -242,13 +309,6 @@ export const ipAddress = [
 ];
 
 export const isPatevyystaso = R.test(/^(1|2)$/);
-
-export const isPaivamaara = R.compose(
-  dfns.isValid,
-  R.unless(R.compose(R.equals('Date'), R.type), date =>
-    dfns.parse(date, DATE_FORMAT, 0)
-  )
-);
 
 export const isRakennustunnus = R.allPass([
   R.compose(R.equals(10), R.length),
