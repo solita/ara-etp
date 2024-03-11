@@ -64,4 +64,4 @@ services:
       ./db.sh migrate dev
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
