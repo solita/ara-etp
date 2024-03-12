@@ -2,12 +2,14 @@
 
 ### Running the tests
 
-To run the tests you must first start the `e2e Docker stack`. To do so, run the `start-e2e-env.sh` script.
+To run the tests you must first start the `e2e Docker stack`. To do so on systems
+other than Windows, run the `start-e2e-env.sh` script. For Windows environments,
+there is a similar `start-e2e-env.ps1` script that can be used instead.
 ```bash
 ./start-e2e-env.sh
 ```
 
-After the e2e stack is running you can start cypress:
+After the e2e stack is running and you have remembered to run `npm install`, you can start cypress:
 
 ```bash
 npm run cypress
