@@ -91,7 +91,11 @@
 
   $: postinumeroNames = R.map(Postinumero.fullLabel($locale), postinumerot);
   $: PostinumeroType = Postinumero.Type(postinumerot);
-  $: schema = R.assoc('postinumero', PostinumeroType.validators, kohdeSchema);
+  $: schema = R.assoc(
+    'postinumero',
+    R.concat(kohdeSchema.postinumero, PostinumeroType.validators),
+    kohdeSchema
+  );
 
   const formatExistingValvontaEndDate = Maybe.fold(
     '',
@@ -174,6 +178,7 @@
           name={'kohde.postinumero'}
           label={i18n(`${i18nRoot}.postinumero`)}
           search={true}
+          required={true}
           bind:model={kohde}
           lens={R.lensProp('postinumero')}
           parse={PostinumeroType.parse}

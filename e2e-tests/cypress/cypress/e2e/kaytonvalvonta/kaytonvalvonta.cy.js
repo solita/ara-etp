@@ -643,4 +643,24 @@ context('Käytönvalvonta', () => {
     // Aloita valvonta button should not exist at this point
     cy.get('[data-cy="start-button"]').should('not.exist');
   });
+
+  it('postinumero is a required field', () => {
+    cy.visit('/');
+    cy.contains('Käytön­valvon­nat').click();
+    cy.get('[data-cy="Uusi valvonta"]').click();
+
+    cy.get('[data-cy="kohde.katuosoite"]')
+      .type('Testikatu 26')
+      .should('have.value', 'Testikatu 26')
+      .blur();
+
+    cy.get('[data-cy="-submit"]').click();
+
+    cy.get('.alert').contains(
+      'Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä.'
+    );
+    cy.get('[data-cy="kohde.postinumero"]').type('90100').blur();
+    cy.get('[data-cy="-submit"]').click();
+    cy.get('.alert').should('not.exist');
+  });
 });

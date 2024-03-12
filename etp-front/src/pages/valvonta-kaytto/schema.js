@@ -13,6 +13,7 @@ export const kohde = {
   rakennustunnus: [
     Validation.liftValidator(Validation.rakennustunnusValidator)
   ],
+  postinumero: [Validation.isSome],
   katuosoite: Validation.RequiredString(2, 200),
   ilmoituspaikka_description: OptionalLimitedString(2, 200),
   ilmoitustunnus: OptionalLimitedString(2, 200)

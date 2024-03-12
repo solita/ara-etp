@@ -1,4 +1,4 @@
-(ns solita.etp.api.valvonta-kaytto-test
+(ns solita.etp.valvonta-kaytto.hallinto-oikeudet-test
   (:require [clojure.test :as t]
             [jsonista.core :as j]
             [ring.mock.request :as mock]
