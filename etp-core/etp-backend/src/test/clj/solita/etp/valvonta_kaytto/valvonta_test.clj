@@ -1,4 +1,4 @@
-(ns solita.etp.valvonta-test
+(ns solita.etp.valvonta-kaytto.valvonta-test
   (:require
     [clojure.test :as t]
     [jsonista.core :as j]
