@@ -669,3 +669,102 @@ export const determineProcessPhaseFromToimenpiteet = toimenpiteet => {
     return 'decision-order';
   }
 };
+
+export const primaryTransitionForToimenpidetype = (
+  toimenpiteet,
+  toimenpidetypes
+) => {
+  let primaryToimenpidetype;
+
+  const lastCreatedToimenpide = R.last(toimenpiteet);
+  let toimenpideTobaseTheAllowedToimenpidetypesOn = lastCreatedToimenpide;
+
+  if (isReopen(lastCreatedToimenpide)) {
+    // Last created toimenpide is reopen, before that should be closing,
+    // so we should look for the toimenpide before that
+    toimenpideTobaseTheAllowedToimenpidetypesOn = R.nth(-3, toimenpiteet);
+  }
+
+  switch (R.prop('type-id', toimenpideTobaseTheAllowedToimenpidetypesOn)) {
+    case type.case:
+      primaryToimenpidetype = type.rfi.order;
+      break;
+
+    case type.rfi.order:
+      primaryToimenpidetype = type.rfi.warning;
+      break;
+
+    case type.rfi.warning:
+      primaryToimenpidetype = type['decision-order']['hearing-letter'];
+      break;
+
+    case type['decision-order']['hearing-letter']:
+      primaryToimenpidetype = type['decision-order']['actual-decision'];
+      break;
+
+    case type['decision-order']['actual-decision']:
+      primaryToimenpidetype = type['decision-order']['notice-first-mailing'];
+      break;
+
+    case type['decision-order']['notice-first-mailing']:
+      primaryToimenpidetype = type['decision-order']['notice-second-mailing'];
+      break;
+
+    case type['decision-order']['notice-second-mailing']:
+      primaryToimenpidetype = type['decision-order']['notice-bailiff'];
+      break;
+
+    case type['decision-order']['notice-bailiff']:
+      primaryToimenpidetype = type['decision-order']['waiting-for-deadline'];
+      break;
+
+    case type['decision-order']['waiting-for-deadline']:
+      primaryToimenpidetype = type['penalty-decision']['hearing-letter'];
+      break;
+
+    case type['court-hearing']:
+      const phase = determineProcessPhaseFromToimenpiteet(toimenpiteet);
+
+      if (phase === 'decision-order') {
+        primaryToimenpidetype = type['penalty-decision']['hearing-letter'];
+      } else if (phase === 'penalty-decision') {
+        primaryToimenpidetype = type['penalty-list-delivery-in-progress'];
+      }
+      break;
+
+    case type['penalty-decision']['hearing-letter']:
+      primaryToimenpidetype = type['penalty-decision']['actual-decision'];
+      break;
+
+    case type['penalty-decision']['actual-decision']:
+      primaryToimenpidetype = type['penalty-decision']['notice-first-mailing'];
+      break;
+
+    case type['penalty-decision']['notice-first-mailing']:
+      primaryToimenpidetype = type['penalty-decision']['notice-second-mailing'];
+      break;
+
+    case type['penalty-decision']['notice-second-mailing']:
+      primaryToimenpidetype = type['penalty-decision']['notice-bailiff'];
+      break;
+
+    case type['penalty-decision']['notice-bailiff']:
+      primaryToimenpidetype = type['penalty-decision']['waiting-for-deadline'];
+      break;
+
+    case type['penalty-decision']['waiting-for-deadline']:
+      primaryToimenpidetype = type['court-hearing'];
+      break;
+
+    case type['penalty-list-delivery-in-progress']:
+      primaryToimenpidetype = type.closed;
+      break;
+  }
+
+  return R.last(
+    R.filter(
+      R.compose(R.equals(R.__, primaryToimenpidetype), R.prop('id')),
+      toimenpidetypes
+    )
+  );
+};

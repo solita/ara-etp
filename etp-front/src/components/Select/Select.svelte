@@ -30,6 +30,9 @@
   export let lens = R.identity;
   export let validators = [];
 
+  // TODO: Tämä on huono nimi, korjaa myös syvemmälle tasolle
+  export let component = null;
+
   const i18n = $_;
 
   let input;
@@ -230,6 +233,7 @@
     <DropdownList
       items={selectableItems}
       {active}
+      {component}
       onclick={async (item, index) => {
         model = R.set(lens, selectedItem(items, index), model);
         active = Maybe.None();
