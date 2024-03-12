@@ -719,7 +719,7 @@ export const primaryTransitionForToimenpidetype = (
       break;
 
     case type['decision-order']['waiting-for-deadline']:
-      primaryToimenpidetype = type['penalty-decision']['hearing-letter'];
+      primaryToimenpidetype = type['court-hearing'];
       break;
 
     case type['court-hearing']:
