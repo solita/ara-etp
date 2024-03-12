@@ -649,7 +649,7 @@ context('Käytönvalvonta', () => {
     cy.get('[data-cy="start-button"]').should('not.exist');
   });
 
-  it.only('postinumero is a required field', () => {
+  it('postinumero is a required field', () => {
     cy.visit('/');
     cy.contains('Käytön­valvon­nat').click();
     cy.get('[data-cy="Uusi valvonta"]').click();
