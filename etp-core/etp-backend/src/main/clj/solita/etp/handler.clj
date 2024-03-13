@@ -169,7 +169,8 @@
                                [security/wrap-whoami-assume-verified-signature])
                              [security/wrap-access]
                              [security/wrap-db-application-name]]}
-     (concat (tag "Aineisto API" aineisto-api/signed-routes))]
+     ;; Currently there are no signed routes.
+     (concat)]
     ["/internal"
      (concat (tag "Laskutus API" laskutus-api/routes)
              (tag "Laatija Internal API" laatija-api/internal-routes)
