@@ -18,8 +18,8 @@
   import Select from '@Component/Select/Select.svelte';
   import H2 from '@Component/H/H2.svelte';
   import * as Osapuolet from '@Pages/valvonta-kaytto/osapuolet';
-  import ToimenpideSelectItem from './toimenpide-select-item';
-  import PrimaryToimenpideContextProvider from './primary-toimenpide-context-provider';
+  import ToimenpideSelectItem from './primary-toimenpide/ToimenpideSelectItem.svelte';
+  import PrimaryToimenpideContextProvider from './primary-toimenpide/PrimaryToimenpideContextProvider.svelte';
 
   export let valvojat;
   export let valvonta;
