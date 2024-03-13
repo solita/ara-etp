@@ -3,7 +3,9 @@
 
   export let state;
 
-  let isPrimaryOption = getContext('primaryOption');
+  // The object received from the context is a store which contains the value we
+  // need to check
+  let primaryOptionStore = getContext('primaryOption');
 </script>
 
 <style type="text/postcss">
@@ -12,4 +14,4 @@
   }
 </style>
 
-<div class:primary-option={$isPrimaryOption === state}>{state}</div>
+<div class:primary-option={$primaryOptionStore === state}>{state}</div>
