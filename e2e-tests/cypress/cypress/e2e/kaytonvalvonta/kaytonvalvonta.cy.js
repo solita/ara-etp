@@ -1,11 +1,19 @@
 import paakayttajaHeaders from '../../fixtures/users/paakayttaja.json';
+
 const FIXTURES = {
   headers: paakayttajaHeaders
 };
 
+/**
+ *
+ * @param {String} toimenpideToCreate Name of the toimenpidetype to be created
+ * @param {String[]} allowedToimenpidetypes Names of all the toimenpidetypes that should be allowed to be created
+ * @param {String} primaryToimenpide Name of the toimenpidetype that should be highlighted as the most probably next toimenpide
+ */
 const openToimenpideCreationAndCheckAllowedToimenpidetypes = (
   toimenpideToCreate,
-  allowedToimenpidetypes
+  allowedToimenpidetypes,
+  primaryToimenpide
 ) => {
   cy.get('[data-cy="toimenpide-type-selection"]')
     .click()
@@ -17,6 +25,9 @@ const openToimenpideCreationAndCheckAllowedToimenpidetypes = (
       allowedToimenpidetypes.map(toimenpidetype => {
         cy.contains(toimenpidetype).should('be.visible');
       });
+
+      cy.contains(primaryToimenpide).should('have.class', 'primary-option');
+
       cy.contains(toimenpideToCreate).click();
     });
 };
@@ -75,10 +86,11 @@ const startValvonta = () => {
 };
 
 const createKehotus = () => {
-  openToimenpideCreationAndCheckAllowedToimenpidetypes('Kehotus', [
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Kehotus',
-    'Valvonnan lopetus'
-  ]);
+    ['Kehotus', 'Valvonnan lopetus'],
+    'Kehotus'
+  );
   cy.selectInSelect('document-selector', 'Kehotus');
   submitToimenpide();
   checkToimenpideCreationSucceeded();
@@ -86,11 +98,11 @@ const createKehotus = () => {
 };
 
 const createVaroitus = () => {
-  openToimenpideCreationAndCheckAllowedToimenpidetypes('Varoitus', [
-    'Kehotus',
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Varoitus',
-    'Valvonnan lopetus'
-  ]);
+    ['Kehotus', 'Varoitus', 'Valvonnan lopetus'],
+    'Varoitus'
+  );
   cy.selectInSelect('document-selector', 'Varoitus');
   submitToimenpide();
   checkToimenpideCreationSucceeded();
@@ -100,7 +112,8 @@ const createVaroitus = () => {
 const createKaskypaatosKuulemiskirje = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / kuulemiskirje',
-    ['Kehotus', 'Varoitus', 'Käskypäätös / kuulemiskirje', 'Valvonnan lopetus']
+    ['Kehotus', 'Varoitus', 'Käskypäätös / kuulemiskirje', 'Valvonnan lopetus'],
+    'Käskypäätös / kuulemiskirje'
   );
   // Fine should have default value of 800 euros
   cy.get('[data-cy="toimenpide.fine"]')
@@ -122,7 +135,8 @@ const createKaskypaatosVarsinainenPaatos = () => {
       'Käskypäätös / kuulemiskirje',
       'Käskypäätös / varsinainen päätös',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Käskypäätös / varsinainen päätös'
   );
 
   // Fine should have a default value of 9000 euros as it was set in the previous toimenpide
@@ -177,11 +191,15 @@ const createKaskypaatosVarsinainenPaatos = () => {
 };
 
 const closeValvontaMistakenly = () => {
-  openToimenpideCreationAndCheckAllowedToimenpidetypes('Valvonnan lopetus', [
-    'Käskypäätös / varsinainen päätös',
-    'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
-    'Valvonnan lopetus'
-  ]);
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Valvonnan lopetus',
+    [
+      'Käskypäätös / varsinainen päätös',
+      'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
+      'Valvonnan lopetus'
+    ],
+    'Käskypäätös / tiedoksianto (ensimmäinen postitus)'
+  );
   cy.get('[data-cy="toimenpide.description"]')
     .type('Valvonta on suoritettu loppuun.')
     .should('have.value', 'Valvonta on suoritettu loppuun.')
@@ -203,7 +221,8 @@ const createKaskypaatosTiedoksiantoEnsimmainenPostitus = () => {
       'Käskypäätös / varsinainen päätös',
       'Käskypäätös / tiedoksianto (ensimmäinen postitus)',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Käskypäätös / tiedoksianto (ensimmäinen postitus)'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -226,7 +245,8 @@ const createKaskypaatosTiedoksiantoToinenPostitus = () => {
       'Käskypäätös / tiedoksianto (toinen postitus)',
       'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Käskypäätös / tiedoksianto (toinen postitus)'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -254,7 +274,8 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
       'Käskypäätös / tiedoksianto (Haastemies)',
       'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Käskypäätös / tiedoksianto (Haastemies)'
   );
 
   cy.selectInSelect('karajaoikeus-selector-0', 'Ahvenanmaan käräjäoikeus');
@@ -272,7 +293,8 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
 const createKaskypaatosValitusajanOdotusJaUmpeutuminen = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Käskypäätös / valitusajan odotus ja umpeutuminen',
-    ['Käskypäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus']
+    ['Käskypäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus'],
+    'Käskypäätös / valitusajan odotus ja umpeutuminen'
   );
   cy.get('[data-cy="toimenpide.description"]')
     .type(
@@ -295,11 +317,11 @@ const createKaskypaatosValitusajanOdotusJaUmpeutuminen = () => {
 };
 
 const createHaOKasittely = () => {
-  openToimenpideCreationAndCheckAllowedToimenpidetypes('HaO-käsittely', [
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'HaO-käsittely',
-    'Sakkopäätös / kuulemiskirje',
-    'Valvonnan lopetus'
-  ]);
+    ['HaO-käsittely', 'Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus'],
+    'HaO-käsittely'
+  );
 
   cy.get('[data-cy="toimenpide.description"]')
     .type(
@@ -321,7 +343,8 @@ const createHaOKasittely = () => {
 const createSakkopaatosKuulemiskirje = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / kuulemiskirje',
-    ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus']
+    ['Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus'],
+    'Sakkopäätös / kuulemiskirje'
   );
 
   // Fine should have a default value of 9000 euros as it was set previously
@@ -345,7 +368,8 @@ const createSakkopaatosVarsinainenPaatos = () => {
       'Sakkopäätös / kuulemiskirje',
       'Sakkopäätös / varsinainen päätös',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Sakkopäätös / varsinainen päätös'
   );
 
   // Fine is now 4500 after setting it in the previous toimenpide
@@ -412,7 +436,8 @@ const createSakkopaatosTiedoksiantoEnsimmainenPostitus = () => {
       'Sakkopäätös / varsinainen päätös',
       'Sakkopäätös / tiedoksianto (ensimmäinen postitus)',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Sakkopäätös / tiedoksianto (ensimmäinen postitus)'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -435,7 +460,8 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
       'Sakkopäätös / tiedoksianto (toinen postitus)',
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Sakkopäätös / tiedoksianto (toinen postitus)'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -457,7 +483,8 @@ const createSakkopaatosTiedoksiantoHaastemies = () => {
       'Sakkopäätös / tiedoksianto (Haastemies)',
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
-    ]
+    ],
+    'Sakkopäätös / tiedoksianto (Haastemies)'
   );
 
   cy.selectInSelect(
@@ -480,7 +507,8 @@ const createSakkopaatosTiedoksiantoHaastemies = () => {
 const createSakkopaatosValitusajanOdotusJaUmpeutuminen = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkopäätös / valitusajan odotus ja umpeutuminen',
-    ['Sakkopäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus']
+    ['Sakkopäätös / valitusajan odotus ja umpeutuminen', 'Valvonnan lopetus'],
+    'Sakkopäätös / valitusajan odotus ja umpeutuminen'
   );
   cy.get('[data-cy="toimenpide.description"]')
     .type(
@@ -500,11 +528,11 @@ const createSakkopaatosValitusajanOdotusJaUmpeutuminen = () => {
 };
 
 const createSakkopaatosHaOKasittely = () => {
-  openToimenpideCreationAndCheckAllowedToimenpidetypes('HaO-käsittely', [
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'HaO-käsittely',
-    'Valvonnan lopetus',
-    'Sakkoluettelon lähetys menossa'
-  ]);
+    ['HaO-käsittely', 'Valvonnan lopetus', 'Sakkoluettelon lähetys menossa'],
+    'HaO-käsittely'
+  );
 
   cy.get('[data-cy="toimenpide.description"]')
     .type(
@@ -527,7 +555,8 @@ const createSakkopaatosHaOKasittely = () => {
 const createSakkoluettelonLahetysMenossa = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'Sakkoluettelon lähetys menossa',
-    ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus']
+    ['Sakkoluettelon lähetys menossa', 'Valvonnan lopetus'],
+    'Sakkoluettelon lähetys menossa'
   );
   cy.get('[data-cy="toimenpide.description"]')
     .type('Lähetimme sakkoluettelon.')
@@ -540,9 +569,11 @@ const createSakkoluettelonLahetysMenossa = () => {
 };
 
 const closeValvonta = () => {
-  openToimenpideCreationAndCheckAllowedToimenpidetypes('Valvonnan lopetus', [
+  openToimenpideCreationAndCheckAllowedToimenpidetypes(
+    'Valvonnan lopetus',
+    ['Valvonnan lopetus'],
     'Valvonnan lopetus'
-  ]);
+  );
   cy.get('[data-cy="toimenpide.description"]')
     .type('Valvonta on suoritettu loppuun.')
     .should('have.value', 'Valvonta on suoritettu loppuun.')
@@ -579,7 +610,6 @@ context('Käytönvalvonta', () => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
 
-    // TODO: Temporary fix?
     cy.resetDb();
   });
 
