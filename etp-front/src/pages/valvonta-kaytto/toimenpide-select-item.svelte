@@ -2,8 +2,8 @@
   import { getContext } from 'svelte';
 
   export let state;
+
   let isPrimaryOption = getContext('primaryOption');
-  console.log('primaryOption', isPrimaryOption);
 </script>
 
 <style type="text/postcss">
@@ -12,4 +12,4 @@
   }
 </style>
 
-<div class:primary-option={isPrimaryOption === state}>{state}</div>
+<div class:primary-option={$isPrimaryOption === state}>{state}</div>

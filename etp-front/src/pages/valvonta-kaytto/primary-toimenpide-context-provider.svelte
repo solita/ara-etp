@@ -1,8 +1,13 @@
 <script>
   import { setContext } from 'svelte';
+  import { writable } from 'svelte/store';
 
   export let primaryOption = '';
-  setContext('primaryOption', primaryOption);
+
+  let primaryOptionStore = writable(primaryOption);
+  setContext('primaryOption', primaryOptionStore);
+
+  $: $primaryOptionStore = primaryOption;
 </script>
 
 <div>
