@@ -244,7 +244,7 @@
         lens={R.lens(R.identity, R.identity)}
         inputValueParse={R.prop('id')}
         format={Locales.label($locale)}
-        component={ToimenpideSelectItem}
+        itemComponent={ToimenpideSelectItem}
         on:change={event => openNewToimenpide(parseInt(event.target.value))}
         items={R.compose(
           Toimenpiteet.filterAvailableToimenpidetypes(toimenpiteet),
