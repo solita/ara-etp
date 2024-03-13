@@ -14,4 +14,10 @@
   }
 </style>
 
-<div class:primary-option={$primaryOptionStore === state}>{state}</div>
+<div>
+  {#if $primaryOptionStore === state}
+    <strong class="primary-option">{state}</strong>
+  {:else}
+    {state}
+  {/if}
+</div>
