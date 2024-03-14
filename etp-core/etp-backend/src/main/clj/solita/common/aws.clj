@@ -1,7 +1,8 @@
 (ns solita.common.aws
-  (:require [cognitect.aws.client.api :as aws]
-            [clojure.tools.logging :as log]
-            [solita.etp.exception :as exception]))
+  (:require [clojure.tools.logging :as log]
+            [cognitect.aws.client.api :as aws]
+            [solita.etp.exception :as exception])
+  (:import (java.security MessageDigest)))
 
 (def anomalies->etp-codes
   {:cognitect.anomalies/forbidden   :resource-forbidden     ;http status code: 403
@@ -62,3 +63,25 @@
            :Key             key
            :UploadId        upload-id
            :MultipartUpload {:Parts uploaded-parts}}))
+
+(defn- sha256 [data]
+  (-> (MessageDigest/getInstance "SHA-256")
+      (.digest data)))
+
+(defn sign [{:keys [client key-id]} data]
+  (invoke client
+          :Sign
+          {:KeyId            key-id
+           :SigningAlgorithm "RSASSA_PSS_SHA_256"
+           :Message          (sha256 data)
+           :MessageType      "DIGEST"
+           }))
+
+(defn verify [{:keys [client key-id]} signature data]
+  (invoke client
+          :Verify
+          {:KeyId            key-id
+           :SigningAlgorithm "RSASSA_PSS_SHA_256"
+           :Message          (sha256 data)
+           :Signature        signature
+           :MessageType      "DIGEST"}))

@@ -1,16 +1,18 @@
 (ns solita.etp.test-system
-  (:require [clojure.string :as str]
-            [clojure.java.jdbc :as jdbc]
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.string :as str]
             [integrant.core :as ig]
+            [solita.common.aws :as aws]
+            [solita.etp.aws-s3-client]
+            [solita.etp.aws-kms-client]
             [solita.etp.config :as config]
             [solita.etp.db]
-            [solita.etp.aws-s3-client]
-            [solita.common.aws :as aws]
             [solita.etp.handler :as handler]))
 
 (def ^:dynamic *db* nil)
 (def ^:dynamic *admin-db* nil)
 (def ^:dynamic *aws-s3-client* nil)
+(def ^:dynamic *aws-kms-client* nil)
 
 (defn db-user
   ([kayttaja-id] (db-user *db* kayttaja-id))
@@ -27,14 +29,15 @@
          (config/aws-s3-client {:bucket bucket})))
 
 (defn config-for-in-test-management [db-name]
-  (config/db {:username       (config/env "DB_MANAGEMENT_USER" "etp")
-              :password       (config/env "DB_MANAGEMENT_PASSWORD" "etp")
-              :database-name  db-name}))
+  (config/db {:username      (config/env "DB_MANAGEMENT_USER" "etp")
+              :password      (config/env "DB_MANAGEMENT_PASSWORD" "etp")
+              :database-name db-name}))
 
 (defn config-for-tests [db-name bucket]
   (merge (config/db {:database-name            db-name
                      :re-write-batched-inserts true})
-         (config/aws-s3-client {:bucket bucket})))
+         (config/aws-s3-client {:bucket bucket})
+         (config/aws-kms-client)))
 
 (defn create-db! [db db-name]
   (jdbc/execute! (db-user db "admin")
@@ -67,25 +70,26 @@
                               :current-schema])
          {:dbtype "postgresql"
           :dbname (:database-name config)
-          :user (:username config)}))
+          :user   (:username config)}))
 
 (defn fixture [f]
-  (let [uuid                     (-> (java.util.UUID/randomUUID)
-                                     .toString
-                                     (str/replace "-" ""))
-        db-name                  (str "etp_test_" uuid)
-        bucket-name              (str "files-" uuid)
-        management-system        (ig/init (config-for-management bucket-name))
-        management-db            (:solita.etp/db management-system)
+  (let [uuid (-> (java.util.UUID/randomUUID)
+                 .toString
+                 (str/replace "-" ""))
+        db-name (str "etp_test_" uuid)
+        bucket-name (str "files-" uuid)
+        management-system (ig/init (config-for-management bucket-name))
+        management-db (:solita.etp/db management-system)
         management-aws-s3-client (:solita.etp/aws-s3-client management-system)]
     (try
       (create-db! management-db db-name)
       (create-bucket! management-aws-s3-client)
       (let [test-system (ig/init (config-for-tests db-name bucket-name))]
         (with-bindings
-          {#'*db*            (db-user (:solita.etp/db test-system) 0)
-           #'*admin-db*      (config-plain-db (:solita.etp/db (config-for-in-test-management db-name)))
-           #'*aws-s3-client* (:solita.etp/aws-s3-client test-system)}
+          {#'*db*             (db-user (:solita.etp/db test-system) 0)
+           #'*admin-db*       (config-plain-db (:solita.etp/db (config-for-in-test-management db-name)))
+           #'*aws-s3-client*  (:solita.etp/aws-s3-client test-system)
+           #'*aws-kms-client* (:solita.etp/aws-kms-client test-system)}
           (try (f)
                (finally (ig/halt! test-system)))))
       (finally

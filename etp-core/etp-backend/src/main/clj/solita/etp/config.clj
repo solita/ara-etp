@@ -1,9 +1,9 @@
 (ns solita.etp.config
-  (:require [clojure.string :as str]
+  (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
-            [integrant.core :as ig]
+            [clojure.string :as str]
             [cognitect.aws.credentials :as credentials]
-            [clojure.edn :as edn]))
+            [integrant.core :as ig]))
 
 ; use local evn credentials in codebuild and local env
 ; only ecs use s3
@@ -68,6 +68,20 @@
                                          :port     (Integer/parseInt (env "S3_PORT" "9002"))}})
                client)
      :bucket (or bucket (env "FILES_BUCKET_NAME" "files"))}}))
+
+(defn aws-kms-client []
+  {:solita.etp/aws-kms-client
+   {:client (merge
+              {:api    :kms
+               :region "eu-central-1"}
+              (when use-local-env-credentials?
+                {:credentials-provider (credentials/basic-credentials-provider
+                                         {:access-key-id     "kms"
+                                          :secret-access-key "kms123"})
+                 :endpoint-override {:protocol :http
+                                     :hostname (env "KMS_HOST" "localhost")
+                                     :port     (Integer/parseInt (env "KMS_PORT" "8899"))}}))
+    :key-id (env "KMS_SIGNING_KEY_ID" "baf442ae-4a56-4e7e-bb48-6e0a8625fec0")}})
 
 (defn- prepare-emails [name default]
   (->> (str/split (env name default) #",")
