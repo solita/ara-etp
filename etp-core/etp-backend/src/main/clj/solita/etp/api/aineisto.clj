@@ -12,8 +12,6 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.kayttaja :as kayttaja-service]))
 
-(def search-exceptions [{:type :nil-aineisto-source :response 404}])
-
 (defn first-address [x-forwarded-for]
   (some-> x-forwarded-for (str/split #"[\s,]+") first))
 
