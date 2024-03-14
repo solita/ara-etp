@@ -10,33 +10,10 @@
             [solita.etp.schema.common :as common-schema]
             [solita.etp.service.aineisto :as aineisto-service]
             [solita.etp.service.rooli :as rooli-service]
-            [solita.etp.service.kayttaja :as kayttaja-service]
-            [solita.etp.api.response :as api-response]
-            [solita.etp.api.stream :as api-stream]))
-
-(def search-exceptions [{:type :nil-aineisto-source :response 404}])
+            [solita.etp.service.kayttaja :as kayttaja-service]))
 
 (defn first-address [x-forwarded-for]
   (some-> x-forwarded-for (str/split #"[\s,]+") first))
-
-(def signed-routes
-  [["/aineistot"
-    ["/:aineisto-id"
-     ["/energiatodistukset.csv"
-      {:get {:summary    "Hae energiatodistusaineisto CSV-tiedostona"
-             ;; Note - there is a body, but it is produced through async channel
-             :responses  {200 {:body nil}}
-             :access     rooli-service/system?
-             :parameters {:path {:aineisto-id common-schema/Key}}
-             :handler    (fn [{{{:keys [aineisto-id]} :path} :parameters :keys [db whoami] :as request}]
-                           (log/info "Producing aineisto" aineisto-id)
-                           (api-response/with-exceptions
-                             #(api-stream/result->async-channel
-                                request
-                                (merge (api-response/csv-response-headers "energiatodistukset.csv" false)
-                                       (api-response/async-cache-headers 86400))
-                                (aineisto-service/aineisto-reducible-query db whoami aineisto-id))
-                             search-exceptions))}}]]]])
 
 (def external-routes
   [["/aineistot"

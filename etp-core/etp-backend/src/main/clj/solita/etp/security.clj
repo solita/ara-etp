@@ -6,7 +6,6 @@
             [solita.etp.api.response :as response]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.whoami :as whoami-service]
-            [solita.common.cf-signed-url :as signed-url]
             [solita.common.maybe :as maybe]
             [solita.etp.exception :as exception]))
 
@@ -66,27 +65,8 @@
               (merge {:headers {"WWW-Authenticate" (format "Basic realm=\"%s\""
                                                            realm)}})))))))
 
-(defn wrap-whoami-assume-verified-signature [handler]
-  (fn [req]
-    (handler (assoc req :whoami {:id (:presigned kayttaja-service/system-kayttaja)
-                                 :rooli -1}))))
-
 (defn first-address [x-forwarded-for]
   (some-> x-forwarded-for (str/split #"[\s,]+") first))
-
-(defn wrap-whoami-from-signed [handler index-url key-map]
-  (fn [{:as req
-        :keys [uri query-string]
-        {:strs [x-forwarded-for]} :headers}]
-    (let [signed-url (str index-url uri "?" query-string)]
-      (if-let [problem (signed-url/signed-url-problem-now signed-url
-                                                          (first-address x-forwarded-for)
-                                                          key-map)]
-        (do
-          (log/warn "Failed to validate signed URL" signed-url problem)
-          (assoc response/forbidden :body (str problem)))
-        (handler (assoc req :whoami {:id (:presigned kayttaja-service/system-kayttaja)
-                                     :rooli -1}))))))
 
 (defn wrap-whoami-for-internal-aineisto-api [handler]
   (fn [req]

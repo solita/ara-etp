@@ -3,8 +3,8 @@
             [solita.etp.service.json :as json])
   (:import
    (clojure.lang ExceptionInfo)
-   (java.io FileInputStream InputStreamReader StringReader)
-   (java.lang IllegalArgumentException NumberFormatException)
+   (java.io StringReader)
+   (java.lang IllegalArgumentException)
    (java.util Base64)
    (org.bouncycastle.asn1.pkcs PrivateKeyInfo)
    (org.bouncycastle.asn1.x509 SubjectPublicKeyInfo)
@@ -129,7 +129,7 @@
     (catch IllegalArgumentException e
       (throw (ex-info "bad argument list format" {:type :bad-argument-list-format})))))
 
-(defn- signed-url->components [signed-url]
+(defn signed-url->components [signed-url]
   (let [[base-url params-text] (url->base-url+sig-params signed-url)
         params (query->map params-text)]
     (when (-> params keys set (= #{"Policy" "Signature" "Key-Pair-Id"}) not)

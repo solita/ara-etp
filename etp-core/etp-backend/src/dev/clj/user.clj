@@ -81,3 +81,10 @@
   (require 'solita.etp.energiatodistus-generator)
   ((resolve 'solita.etp.energiatodistus-generator/generate-and-insert-energiatodistukset-for-performance-testing!)
    (db 2) count))
+
+(defn generate-aineisto!
+  "Generates the aineisto with `aineisto-id` into aws-s3-client"
+  [aineisto-id]
+  (require 'solita.etp.service.aineisto)
+  ((resolve 'solita.etp.service.aineisto/update-aineisto-in-s3!)
+   (db 2) {:id -5 :rooli -1} (aws-s3-client) aineisto-id))
