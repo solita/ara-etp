@@ -16,7 +16,6 @@
             [ring.middleware.cookies :as cookies]
             [schema.core]
             [schema.core :as s]
-            [solita.common.cf-signed-url :as signed-url]
             [solita.etp.api.aineisto :as aineisto-api]
             [solita.etp.api.energiatodistus :as energiatodistus-api]
             [solita.etp.api.geo :as geo-api]
@@ -35,7 +34,6 @@
             [solita.etp.exception :as exception]
             [solita.etp.header-middleware :as header-middleware]
             [solita.etp.jwt :as jwt]
-            [solita.etp.schema.common :as schema.common]
             [solita.etp.security :as security])
   (:import (java.net URLEncoder)
            (java.nio.charset StandardCharsets)))
@@ -153,24 +151,6 @@
                                [security/wrap-db-application-name]]}
      (concat (tag "Energiatodistus API" energiatodistus-api/external-routes)
              (tag "Aineisto API" aineisto-api/external-routes))]
-    ["/signed" {:middleware [(if (every? (comp not empty?)
-                                         [config/public-index-url
-                                          config/url-signing-public-key])
-                               ;; Parameters for checking the signature are available,
-                               ;; so make use of them
-                               [security/wrap-whoami-from-signed
-                                config/public-index-url
-                                {:key-pair-id config/url-signing-key-id
-                                 :public-key  (signed-url/pem-string->public-key
-                                                config/url-signing-public-key)}]
-                               ;; Otherwise, assume that the reverse
-                               ;; proxies on front of the backend
-                               ;; service have verified the signature.
-                               [security/wrap-whoami-assume-verified-signature])
-                             [security/wrap-access]
-                             [security/wrap-db-application-name]]}
-     ;; Currently there are no signed routes.
-     (concat)]
     ["/internal"
      (concat (tag "Laskutus API" laskutus-api/routes)
              (tag "Laatija Internal API" laatija-api/internal-routes)
