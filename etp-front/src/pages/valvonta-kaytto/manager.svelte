@@ -18,6 +18,8 @@
   import Select from '@Component/Select/Select.svelte';
   import H2 from '@Component/H/H2.svelte';
   import * as Osapuolet from '@Pages/valvonta-kaytto/osapuolet';
+  import ToimenpideSelectItem from './primary-toimenpide/ToimenpideSelectItem.svelte';
+  import PrimaryToimenpideContextProvider from './primary-toimenpide/PrimaryToimenpideContextProvider.svelte';
 
   export let valvojat;
   export let valvonta;
@@ -228,17 +230,26 @@
   {/if}
 
   <div class="lg:w-1/2 w-full mb-5">
-    <Select
-      label={i18n('valvonta.select-toimenpide')}
-      name="toimenpide-type-selection"
-      model={toimenpideTyyppi}
-      lens={R.lens(R.identity, R.identity)}
-      inputValueParse={R.prop('id')}
-      format={Locales.label($locale)}
-      on:change={event => openNewToimenpide(parseInt(event.target.value))}
-      items={R.compose(
-        Toimenpiteet.filterAvailableToimenpidetypes(toimenpiteet),
-        R.filter(R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]))
-      )(toimenpidetyypit)} />
+    <PrimaryToimenpideContextProvider
+      primaryOption={Locales.label($locale)(
+        Toimenpiteet.primaryTransitionForToimenpidetype(
+          toimenpiteet,
+          toimenpidetyypit
+        )
+      )}>
+      <Select
+        label={i18n('valvonta.select-toimenpide')}
+        name="toimenpide-type-selection"
+        model={toimenpideTyyppi}
+        lens={R.lens(R.identity, R.identity)}
+        inputValueParse={R.prop('id')}
+        format={Locales.label($locale)}
+        itemComponent={ToimenpideSelectItem}
+        on:change={event => openNewToimenpide(parseInt(event.target.value))}
+        items={R.compose(
+          Toimenpiteet.filterAvailableToimenpidetypes(toimenpiteet),
+          R.filter(R.allPass([Toimenpiteet.isAuditCaseToimenpideType, isValid]))
+        )(toimenpidetyypit)} />
+    </PrimaryToimenpideContextProvider>
   </div>
 {/if}

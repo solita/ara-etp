@@ -30,6 +30,8 @@
   export let lens = R.identity;
   export let validators = [];
 
+  export let itemComponent = null;
+
   const i18n = $_;
 
   let input;
@@ -230,6 +232,7 @@
     <DropdownList
       items={selectableItems}
       {active}
+      component={itemComponent}
       onclick={async (item, index) => {
         model = R.set(lens, selectedItem(items, index), model);
         active = Maybe.None();
