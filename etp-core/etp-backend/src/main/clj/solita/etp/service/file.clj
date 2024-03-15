@@ -1,6 +1,6 @@
 (ns solita.etp.service.file
   (:require [clojure.java.io :as io]
-            [solita.common.aws :as aws])
+            [solita.common.aws.s3 :as s3])
   (:import (clojure.lang ExceptionInfo)
            (java.io File FileInputStream)))
 
@@ -8,7 +8,7 @@
   (-> file FileInputStream. .readAllBytes))
 
 (defn upsert-file-from-bytes [aws-s3-client key bytes]
-  (aws/put-object aws-s3-client key bytes))
+  (s3/put-object aws-s3-client key bytes))
 
 (defn upsert-file-from-file [aws-s3-client key file]
   (upsert-file-from-bytes aws-s3-client key (file->byte-array file)))
@@ -17,12 +17,12 @@
   (upsert-file-from-bytes aws-s3-client key (.readAllBytes is)))
 
 (defn find-file [aws-s3-client key]
-  (some-> (aws/get-object aws-s3-client key)
+  (some-> (s3/get-object aws-s3-client key)
           io/input-stream))
 
 (defn file-exists? [aws-s3-client key]
   (try
-    (aws/get-object-head aws-s3-client key)
+    (s3/get-object-head aws-s3-client key)
     true
     (catch ExceptionInfo e
       (let [{:keys [type]} (ex-data e)]
@@ -59,7 +59,7 @@
            ;; The last part can be less than 5MB.
            (upload-part (byte-array (repeatedly (* 2 1024 1024) #(rand-int 256))))))"
   [aws-s3-client key upload-parts-fn]
-  (let [{:keys [UploadId]} (aws/create-multipart-upload aws-s3-client key)
+  (let [{:keys [UploadId]} (s3/create-multipart-upload aws-s3-client key)
         uploaded-parts-vec (atom [])
         get-next-part-number (let [current-part-number (atom 0)]
                                ;The first returned value is 1
@@ -67,14 +67,14 @@
                                  @current-part-number))
         upload-part-fn (fn [content-byte-array]
                          (let [part-number (get-next-part-number)
-                               {:keys [ETag]} (aws/upload-part aws-s3-client
-                                                               {:key         key
+                               {:keys [ETag]} (s3/upload-part aws-s3-client
+                                                              {:key         key
                                                                 :part-number part-number
                                                                 :upload-id   UploadId
                                                                 :body        content-byte-array})]
                            (swap! uploaded-parts-vec conj {:ETag ETag :PartNumber (str part-number)})))]
     (upload-parts-fn upload-part-fn)
-    (aws/complete-multipart-upload aws-s3-client {:key            key
+    (s3/complete-multipart-upload aws-s3-client {:key             key
                                                   :upload-id      UploadId
                                                   :uploaded-parts @uploaded-parts-vec}))
   nil)

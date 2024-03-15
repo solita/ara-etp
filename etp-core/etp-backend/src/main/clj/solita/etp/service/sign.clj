@@ -1,8 +1,8 @@
 (ns solita.etp.service.sign
-  (:require [solita.common.aws :as aws]))
+  (:require [solita.common.aws.kms :as kms]))
 
 (defn sign [aws-kms-client data]
-  (-> (aws/sign aws-kms-client data) :Signature))
+  (-> (kms/sign aws-kms-client data) :Signature))
 
 (defn verify [aws-kms-client signature data]
-  (-> (aws/verify aws-kms-client signature data)) :SignatureValid)
+  (-> (kms/verify aws-kms-client signature data)) :SignatureValid)

@@ -2,7 +2,7 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.string :as str]
             [integrant.core :as ig]
-            [solita.common.aws :as aws]
+            [solita.common.aws.utils :as aws.utils]
             [solita.etp.aws-s3-client]
             [solita.etp.aws-kms-client]
             [solita.etp.config :as config]
@@ -50,18 +50,18 @@
                  {:transaction? false}))
 
 (defn create-bucket! [{:keys [client bucket]}]
-  (#'aws/invoke client :CreateBucket {:Bucket bucket
+  (#'aws.utils/invoke client :CreateBucket {:Bucket bucket
                                       :CreateBucketConfiguration
                                       {:LocationConstraint "eu-central-1"}}))
 
 (defn drop-bucket! [{:keys [client bucket]}]
-  (let [keys (->> (#'aws/invoke client :ListObjectsV2 {:Bucket bucket})
+  (let [keys (->> (#'aws.utils/invoke client :ListObjectsV2 {:Bucket bucket})
                   :Contents
                   (map #(select-keys % [:Key])))]
     (when (-> keys empty? not)
-      (#'aws/invoke client :DeleteObjects {:Delete {:Objects keys}
+      (#'aws.utils/invoke client :DeleteObjects {:Delete  {:Objects keys}
                                            :Bucket bucket}))
-    (#'aws/invoke client :DeleteBucket {:Bucket bucket})))
+    (#'aws.utils/invoke client :DeleteBucket {:Bucket bucket})))
 
 (defn- config-plain-db [config]
   (merge (select-keys config [:server-name
