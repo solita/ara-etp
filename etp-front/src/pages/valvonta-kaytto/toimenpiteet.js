@@ -507,6 +507,19 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
     )
   );
 
+const findPreviousToimenpideThatIsNotClosingOrReopening = toimenpiteet => {
+  const lastCreatedToimenpide = R.last(toimenpiteet);
+  let toimenpide = lastCreatedToimenpide;
+
+  if (isReopen(lastCreatedToimenpide)) {
+    // Last created toimenpide is reopen, before that should be closing,
+    // so we should look for the toimenpide before that
+    toimenpide = R.nth(-3, toimenpiteet);
+  }
+
+  return toimenpide;
+};
+
 /**
  * Filter toimenpidetypes based on what are allowed transitions
  * based on the previously created toimenpiteet
@@ -515,14 +528,8 @@ export const osapuoliHasHallintoOikeus = (toimenpide, osapuoli) =>
  */
 export const filterAvailableToimenpidetypes = R.curry(
   (toimenpiteet, toimenpidetypes) => {
-    const lastCreatedToimenpide = R.last(toimenpiteet);
-    let toimenpideTobaseTheAllowedToimenpidetypesOn = lastCreatedToimenpide;
-
-    if (isReopen(lastCreatedToimenpide)) {
-      // Last created toimenpide is reopen, before that should be closing,
-      // so we should look for the toimenpide before that
-      toimenpideTobaseTheAllowedToimenpidetypesOn = R.nth(-3, toimenpiteet);
-    }
+    const toimenpideTobaseTheAllowedToimenpidetypesOn =
+      findPreviousToimenpideThatIsNotClosingOrReopening(toimenpiteet);
 
     let allowedToimenpidetypes = [];
     switch (R.prop('type-id', toimenpideTobaseTheAllowedToimenpidetypesOn)) {
@@ -674,18 +681,12 @@ export const primaryTransitionForToimenpidetype = (
   toimenpiteet,
   toimenpidetypes
 ) => {
+  const toimenpideToTransitionFrom =
+    findPreviousToimenpideThatIsNotClosingOrReopening(toimenpiteet);
+
   let primaryToimenpidetype;
 
-  const lastCreatedToimenpide = R.last(toimenpiteet);
-  let toimenpideTobaseTheAllowedToimenpidetypesOn = lastCreatedToimenpide;
-
-  if (isReopen(lastCreatedToimenpide)) {
-    // Last created toimenpide is reopen, before that should be closing,
-    // so we should look for the toimenpide before that
-    toimenpideTobaseTheAllowedToimenpidetypesOn = R.nth(-3, toimenpiteet);
-  }
-
-  switch (R.prop('type-id', toimenpideTobaseTheAllowedToimenpidetypesOn)) {
+  switch (R.prop('type-id', toimenpideToTransitionFrom)) {
     case type.case:
       primaryToimenpidetype = type.rfi.order;
       break;
