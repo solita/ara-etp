@@ -16,8 +16,8 @@
   import * as GeoApi from '@Utility/api/geo-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
 
-  import { replace, location, querystring } from 'svelte-spa-router';
-  import { locale, _ } from '@Language/i18n';
+  import { location, querystring, replace } from 'svelte-spa-router';
+  import { _, locale } from '@Language/i18n';
 
   import Input from '@Component/Input/Input';
   import Datepicker from '@Component/Input/Datepicker.svelte';
@@ -166,7 +166,7 @@
     R.evolve({
       search: keywordSearch,
       filter: R.nth(R.__, filters),
-      'patevyystaso-id': R.propEq('patevyystaso'),
+      'patevyystaso-id': R.propEq(R.__, 'patevyystaso'),
       'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
       'voimassaolo-paattymisaika-after': R.compose(
         propSatisfies(isAfter, 'voimassaolo-paattymisaika'),

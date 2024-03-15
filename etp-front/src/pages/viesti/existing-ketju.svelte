@@ -142,7 +142,7 @@
   };
 
   const isSenderSelf = (viesti, whoami) =>
-    R.propEq('id', R.path(['from', 'id'], viesti), whoami);
+    R.propEq(R.path(['from', 'id'], 'id', viesti), whoami);
 
   let showAttachEtDialog = false;
 </script>

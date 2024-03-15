@@ -241,7 +241,7 @@
             lens={R.lensProp('valvoja-id')}
             items={R.pluck(
               'id',
-              R.filter(R.propEq('passivoitu', false), valvojat)
+              R.filter(R.propEq(false, 'passivoitu'), valvojat)
             )}
             format={Kayttajat.format(i18n('valvonta.self'), valvojat, whoami)}
             parse={Maybe.Some}
@@ -305,7 +305,7 @@
             format={id =>
               Locales.label(
                 $locale,
-                R.find(R.propEq('id', id), toimenpidetyypit)
+                R.find(R.propEq(id, 'id'), toimenpidetyypit)
               )}
             parse={Maybe.Some}
             allowNone={true} />

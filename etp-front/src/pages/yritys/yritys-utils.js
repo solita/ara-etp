@@ -58,7 +58,7 @@ export const parseVerkkolaskuosoite = R.compose(
 );
 
 const isInYritys = (laatijat, whoami) =>
-  R.any(R.propEq('id', whoami.id), R.filter(Tila.isAccepted, laatijat));
+  R.any(R.propEq(whoami.id, 'id'), R.filter(Tila.isAccepted, laatijat));
 
 export const hasModifyPermission = R.curry(
   (laatijat, whoami) =>

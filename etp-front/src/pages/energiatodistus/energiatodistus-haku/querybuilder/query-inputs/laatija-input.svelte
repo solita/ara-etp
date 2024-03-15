@@ -18,7 +18,7 @@
   let completedValue = R.compose(
     Maybe.orSome(''),
     R.map(formatLaatija),
-    Maybe.nullReturning(R.find(R.propEq('id', value)))
+    Maybe.nullReturning(R.find(R.propEq(value, 'id')))
   )(laatijat);
 
   $: value = R.compose(

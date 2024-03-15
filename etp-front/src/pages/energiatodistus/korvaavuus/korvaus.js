@@ -19,7 +19,7 @@ export const isValidState = (korvattava, energiatodistus) =>
   isKorvattavissa(korvattava) ||
   (isKorvattuInET(korvattava, energiatodistus) &&
     isKorvaaja(energiatodistus) &&
-    R.propEq('tila-id', ET.tila.replaced, korvattava));
+    R.propEq(ET.tila.replaced, 'tila-id', korvattava));
 
 export const hasOtherKorvaaja = (korvattava, energiatodistus) =>
   R.compose(

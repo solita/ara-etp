@@ -141,7 +141,7 @@
   );
 
   const findketju = (toimenpide, ketjut) =>
-    Maybe.find(R.propEq('vo-toimenpide-id', Maybe.Some(toimenpide.id)), ketjut);
+    Maybe.find(R.propEq(Maybe.Some(toimenpide.id), 'vo-toimenpide-id'), ketjut);
 
   const ketjuIcon = ketju =>
     Viestit.hasUnreadViesti(ketju.viestit)

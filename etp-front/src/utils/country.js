@@ -11,7 +11,7 @@ import * as Maybe from '@Utility/maybe-utils';
  * @description Find country by matching id
  */
 export const findCountryById = R.curry((id, countries) =>
-  Maybe.fromNull(R.find(R.propEq('id', id), countries))
+  Maybe.fromNull(R.find(R.propEq(id, 'id'), countries))
 );
 
 /**

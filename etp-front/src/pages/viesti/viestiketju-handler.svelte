@@ -20,7 +20,7 @@
       </span>
     {:else}
       <span>
-        {R.find(R.propEq('id', kasittelijaId), kasittelijat).etunimi}
+        {R.find(R.propEq(kasittelijaId, 'id'), kasittelijat).etunimi}
       </span>
     {/if}
   </div>

@@ -48,7 +48,7 @@ export const formatUser = i18n =>
   ]);
 
 export const isSelfSent = R.curry((viesti, currentUser) =>
-  R.propEq('id', R.path(['from', 'id'], viesti), currentUser)
+  R.propEq(R.path(['from', 'id'], id, viesti), currentUser)
 );
 
 const groups = ['valvojat', 'laatijat'];

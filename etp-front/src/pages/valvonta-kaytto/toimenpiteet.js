@@ -43,7 +43,7 @@ const types = R.invertObj(Deep.treeFlat('-', R.F, type));
 
 export const typeKey = id => types[id];
 
-export const isType = R.propEq('type-id');
+export const isType = R.propEq(R.__, 'type-id');
 
 const isDeadlineType = R.includes(
   R.__,
@@ -288,7 +288,7 @@ export const isToimenpideOfGivenTypes = R.curry(
  * @return {Function}
  */
 const findIdsOfObjectsWhereGivenKeyHasValueTrue = key =>
-  R.compose(R.map(R.prop('id')), R.filter(R.propEq(key, true)));
+  R.compose(R.map(R.prop('id')), R.filter(R.propEq(true, key)));
 
 /**
  * Given an array of toimenpidetype objects of form {id: Number, 'manually-deliverable: Boolean},
@@ -407,7 +407,7 @@ export const findFineFromToimenpiteet = R.compose(
  * @param {('henkilo'|'yritys')} osapuoliType
  */
 export const findOsapuoli = (osapuoliId, osapuoliType) =>
-  R.allPass([R.propEq('id', osapuoliId), R.propEq('type', osapuoliType)]);
+  R.allPass([R.propEq(osapuoliId, 'id'), R.propEq(osapuoliType, 'type')]);
 
 /**
  * Checks if käskypäätös / varsinainen päätös toimenpide has osapuoli-specific-data field

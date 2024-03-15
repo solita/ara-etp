@@ -24,7 +24,7 @@
   format={R.compose(
     labelLocale,
     R.find(R.__, selectedLuokittelu),
-    R.propEq('id')
+    R.propEq(R.__, 'id')
   )}
   items={R.pluck('id', selectedLuokittelu)}
   lens={R.identity} />

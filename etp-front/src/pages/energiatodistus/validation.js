@@ -33,7 +33,7 @@ export const isLammonjakoKuvausRequired = R.compose(
 );
 
 const if2013Else = (on2013, onFalse) =>
-  R.ifElse(R.propEq('versio', 2013), on2013, onFalse);
+  R.ifElse(R.propEq(2013, 'versio'), on2013, onFalse);
 
 const requiredCondition = {
   'perustiedot.havainnointikaynti': laatimisvaiheet.isOlemassaOlevaRakennus,

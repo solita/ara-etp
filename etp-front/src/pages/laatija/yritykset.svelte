@@ -102,7 +102,7 @@
         laatijaYritykset = R.compose(
           R.sort(R.ascend(R.prop('nimi'))),
           R.map(yritys =>
-            R.mergeLeft(yritys, R.find(R.propEq('id', yritys.id), allYritykset))
+            R.mergeLeft(yritys, R.find(R.propEq(yritys.id, 'id'), allYritykset))
           ),
           R.filter(R.complement(Tila.isDeleted))
         )(response.yritykset);

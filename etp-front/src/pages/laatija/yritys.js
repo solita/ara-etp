@@ -2,7 +2,7 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 
 export const findYritysByYtunnus = R.curry((yritykset, ytunnus) =>
-  Maybe.fromUndefined(R.find(R.propEq('ytunnus', ytunnus), yritykset))
+  Maybe.fromUndefined(R.find(R.propEq(ytunnus, 'ytunnus'), yritykset))
 );
 
 export const findYritys = R.curry((yritykset, query) =>

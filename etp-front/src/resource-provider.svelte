@@ -29,11 +29,11 @@
       () => {},
       R.cond([
         [
-          R.propEq('type', 'yritys'),
+          R.propEq('yritys', 'type'),
           R.compose(idTranslateStore.updateYritys, R.prop('payload'))
         ],
         [
-          R.propEq('type', 'kayttaja'),
+          R.propEq('kayttaja', 'type'),
           R.compose(idTranslateStore.updateKayttaja, R.prop('payload'))
         ]
       ])

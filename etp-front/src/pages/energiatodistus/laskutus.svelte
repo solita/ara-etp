@@ -37,7 +37,7 @@
     Maybe.orSome('', yritys.ytunnus);
 
   const osoiteLabel = R.ifElse(
-    R.compose(R.propEq('id', -1)),
+    R.compose(R.propEq(-1, 'id')),
     _ => i18n(i18nRoot + '.laatijalaskutus'),
     yritysLabel
   );

@@ -27,7 +27,7 @@ export const filterAlakayttotarkoitusLuokat = R.curry(
   (kayttotarkoitusluokkaId, alakayttotarkoitusluokat) =>
     R.filter(
       Maybe.map(
-        R.propEq('kayttotarkoitusluokka-id'),
+        R.propEq(R.__, 'kayttotarkoitusluokka-id'),
         kayttotarkoitusluokkaId
       ).orSome(R.T),
       alakayttotarkoitusluokat
@@ -77,7 +77,7 @@ const fieldsWithUA = [
 ];
 
 export const rakennusvaippaUA = R.compose(
-  R.converge(R.merge, [
+  R.converge(R.mergeRight, [
     R.compose(R.map(unnestValidation), R.pick(['kylmasillat-UA'])),
     R.compose(
       R.map(
@@ -111,7 +111,7 @@ const fieldsWithLampo = [
 
 export const teknistenJarjestelmienSahkot = R.compose(
   R.map(unnestValidation),
-  R.converge(R.merge, [
+  R.converge(R.mergeRight, [
     R.pick(['iv-sahko', 'kuluttajalaitteet-ja-valaistus-sahko']),
     R.compose(R.map(R.prop('sahko')), R.pick(fieldsWithSahko))
   ]),
@@ -348,8 +348,8 @@ export const tilaKey = id => tilat[id];
 export const isTilaInTilat = tilat =>
   R.compose(R.includes(R.__, tilat), R.prop('tila-id'));
 
-export const isDraft = R.propEq('tila-id', tila.draft);
-export const isSigned = R.propEq('tila-id', tila.signed);
+export const isDraft = R.propEq(tila.draft, 'tila-id');
+export const isSigned = R.propEq(tila.signed, 'tila-id');
 export const shouldSaveBeforeCopy = R.anyPass([isDraft]);
 
 const kielisyydet = ['fi', 'sv', 'bilingual'];

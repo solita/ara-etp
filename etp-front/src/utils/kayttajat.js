@@ -131,7 +131,7 @@ export const format = R.curry((selfLabel, kayttajat, whoami, id) =>
     isSelf(whoami),
     R.always(selfLabel),
     R.compose(Maybe.fold('', fullName), id =>
-      Maybe.find(R.propEq('id', id), kayttajat)
+      Maybe.find(R.propEq(id, 'id'), kayttajat)
     )
   )(id)
 );

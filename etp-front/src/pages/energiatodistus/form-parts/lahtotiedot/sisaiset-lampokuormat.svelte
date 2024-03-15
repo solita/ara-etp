@@ -18,7 +18,7 @@
   export let alakayttotarkoitusluokat = [];
 
   const findConstantKuorma = R.chain(id =>
-    Maybe.find(R.propEq('kayttotarkoitusluokka-id', id), kuormat)
+    Maybe.find(R.propEq(id, 'kayttotarkoitusluokka-id'), kuormat)
   );
 
   let constantKuorma = findConstantKuorma(

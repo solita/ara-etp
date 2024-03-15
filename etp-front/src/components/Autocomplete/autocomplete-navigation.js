@@ -57,7 +57,7 @@ const keyHandlers = {
 };
 
 export const isHandlableKey = key =>
-  R.compose(R.contains(R.toString(key)), R.keys)(keyHandlers);
+  R.compose(R.includes(R.toString(key)), R.keys)(keyHandlers);
 
 export const handleKey = R.curry((nodes, event) => {
   const handler = R.prop(event.keyCode, keyHandlers);

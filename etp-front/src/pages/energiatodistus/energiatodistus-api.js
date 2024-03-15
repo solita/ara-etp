@@ -63,8 +63,8 @@ const mergeEmpty = deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]));
 
 export const deserialize = R.compose(
   R.cond([
-    [R.propEq('versio', 2018), mergeEmpty(empty.energiatodistus2018())],
-    [R.propEq('versio', 2013), mergeEmpty(empty.energiatodistus2013())]
+    [R.propEq(2018, 'versio'), mergeEmpty(empty.energiatodistus2018())],
+    [R.propEq(2013, 'versio'), mergeEmpty(empty.energiatodistus2013())]
   ]),
   evolveForVersion('deserializer'),
   R.tap(assertVersion),
@@ -174,7 +174,7 @@ export const getEnergiatodistusById = R.curry((version, id) =>
 export const findEnergiatodistusById = R.compose(
   Future.chainRej(
     R.ifElse(
-      R.propEq('status', 404),
+      R.propEq(404, 'status'),
       R.always(Future.resolve(null)),
       Future.reject
     )
