@@ -24,7 +24,7 @@
              metosin/reitit-dev                        {:mvn/version "0.7.0-alpha7"}
              metosin/reitit-schema                     {:mvn/version "0.7.0-alpha7"}
              fi.metosin/reitit-openapi                 {:mvn/version "0.7.0-alpha7"}
-             metosin/muuntaja                          {:mvn/version "0.6.8"}
+             metosin/muuntaja                          {:mvn/version "0.6.10"}
              metosin/jsonista                          {:mvn/version "0.3.8"}
              metosin/schema-tools                      {:mvn/version "0.13.1"}
              ;; TODO Spec-tools can be removed when the issue below has been fixed:
