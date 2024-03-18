@@ -86,7 +86,7 @@
     R.filter(
       R.compose(
         R.not,
-        R.allPass([R.propEq('versio', versio), R.propEq('id', id)])
+        R.allPass([R.propEq(versio, 'versio'), R.propEq(id, 'id')])
       )
     )
   );

@@ -240,7 +240,7 @@ const deserializeToimenpide = R.evolve({
  */
 const setFieldToNoneIfNoDocument = field => data => {
   return R.when(
-    R.both(R.propEq('document', false), R.has(field)),
+    R.both(R.propEq(false, 'document'), R.has(field)),
     R.set(R.lensProp(field), Maybe.None())
   )(data);
 };
@@ -260,7 +260,7 @@ const setFieldsToNoneIfNoDocument = fields => data =>
  */
 const setFieldToNoneIfNoAnswer = field => data => {
   return R.when(
-    R.both(R.propEq('recipient-answered', false), R.has(field)),
+    R.both(R.propEq(false, 'recipient-answered'), R.has(field)),
     R.set(R.lensProp(field), Maybe.None())
   )(data);
 };
@@ -292,7 +292,7 @@ const unwrapMaybesIfExists = fields => data =>
  */
 const setFieldToNullIfNoDocument = field => data => {
   return R.when(
-    R.both(R.propEq('document', false), R.has(field)),
+    R.both(R.propEq(false, 'document'), R.has(field)),
     R.set(R.lensProp(field), null)
   )(data);
 };

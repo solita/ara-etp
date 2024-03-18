@@ -62,7 +62,7 @@
   $: op = R.compose(
     Maybe.orSome(R.head(operations)),
     Maybe.fromNull,
-    R.find(R.pathEq(['operation', 'browserCommand'], operator))
+    R.find(R.pathEq(operator, ['operation', 'browserCommand']))
   )(operations);
 
   $: if (op && values.length === 0) {

@@ -58,7 +58,7 @@
       Maybe.toEither(R.applyTo(`${i18nRoot}.messages.vastaanottaja-not-found`)),
       R.map(R.prop('id')),
       predicate => Maybe.find(predicate, kayttajat),
-      R.propEq('email'),
+      R.propEq(R.__, 'email'),
       R.compose(R.unless(R.isNil, R.trim), R.nth(1), R.split('|'))
     );
 

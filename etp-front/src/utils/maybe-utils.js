@@ -111,7 +111,7 @@ export const find = R.curry(R.compose(Maybe.fromNull, R.find));
 /**
  * @sig {string|number} -> Array b -> Maybe b
  */
-export const findById = R.useWith(find, [R.propEq('id'), R.identity]);
+export const findById = R.useWith(find, [R.propEq(R.__, 'id'), R.identity]);
 
 /**
  * @sig Array [Maybe *] -> Maybe [Array [*]]

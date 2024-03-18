@@ -1,13 +1,13 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 
-export const isOmistaja = R.propEq('rooli-id', Maybe.Some(0));
-export const otherRooli = R.propEq('rooli-id', Maybe.Some(2));
+export const isOmistaja = R.propEq(Maybe.Some(0), 'rooli-id');
+export const otherRooli = R.propEq(Maybe.Some(2), 'rooli-id');
 
 export const toimitustapa = {
-  suomifi: R.propEq('toimitustapa-id', Maybe.Some(0)),
-  email: R.propEq('toimitustapa-id', Maybe.Some(1)),
-  other: R.propEq('toimitustapa-id', Maybe.Some(2))
+  suomifi: R.propEq(Maybe.Some(0), 'toimitustapa-id'),
+  email: R.propEq(Maybe.Some(0), 'toimitustapa-id'),
+  other: R.propEq(Maybe.Some(0), 'toimitustapa-id')
 };
 
 const emptyOsapuoli = {

@@ -31,7 +31,7 @@
   $: postinumeroNames = R.map(
     Postinumero.fullLabel($locale),
     R.filter(
-      R.allPass([R.propEq('valid', true), Postinumero.isNormal]),
+      R.allPass([R.propEq(true, 'valid'), Postinumero.isNormal]),
       postinumerot
     )
   );
@@ -133,7 +133,7 @@
   <div class="lg:w-1/2 w-full py-4">
     <Input
       disabled={Kayttajat.isLaskuttaja(whoami) ||
-        R.allPass([R.propEq('versio', 2018), Laatimisvaiheet.isRakennuslupa])(
+        R.allPass([R.propEq(2018, 'versio'), Laatimisvaiheet.isRakennuslupa])(
           energiatodistus
         )}
       {schema}

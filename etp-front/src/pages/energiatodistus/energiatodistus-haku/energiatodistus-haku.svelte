@@ -57,8 +57,8 @@
       params => qs.stringify(params, { encode: false }),
       R.dissoc('offset'),
       R.when(R.has('id'), R.dissoc('where')),
-      R.when(R.propEq('keyword', ''), R.dissoc('keyword')),
-      R.when(R.propEq('id', ''), R.dissoc('id')),
+      R.when(R.propEq('', 'keyword'), R.dissoc('keyword')),
+      R.when(R.propEq('', 'id'), R.dissoc('id')),
       R.mergeRight(R.mergeRight(qs.parse($querystring), { keyword, id })),
       R.assoc('where', R.__, {})
     )(search);

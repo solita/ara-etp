@@ -30,7 +30,7 @@
 
   const enabled =
     (Kayttajat.isLaatija(whoami) &&
-      R.propEq('tila-id', ET.tila.draft, energiatodistus)) ||
+      R.propEq(ET.tila.draft, 'tila-id', energiatodistus)) ||
     (Kayttajat.isPaakayttaja(whoami) &&
       !ET.isTilaInTilat([ET.tila.draft, ET.tila.deleted])(energiatodistus));
 

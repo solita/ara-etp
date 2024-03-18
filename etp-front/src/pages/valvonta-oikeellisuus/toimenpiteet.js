@@ -41,7 +41,7 @@ const types = R.invertObj(Deep.treeFlat('-', R.F, type));
 
 export const typeKey = id => types[id];
 
-export const isType = R.propEq('type-id');
+export const isType = R.propEq(R.__, 'type-id');
 
 const isDeadlineType = R.includes(R.__, [3, 5, 6, 9, 10, 11, 13]);
 export const isDialogType = R.includes(

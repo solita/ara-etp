@@ -99,12 +99,12 @@
 
   $: disabled = !R.and(
     energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
-    R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
+    R.propEq(EtUtils.tila.draft, 'tila-id', energiatodistus)
   );
 
   $: disabledForPaakayttaja = !R.and(
     Kayttajat.isPaakayttaja(whoami),
-    R.propEq('tila-id', EtUtils.tila.draft, energiatodistus)
+    R.propEq(EtUtils.tila.draft, 'tila-id', energiatodistus)
   );
 
   const showInvalidPropertiesMessage = invalidProperties => {
@@ -258,7 +258,7 @@
 </style>
 
 {#if !R.isNil(ETForm)}
-  {#if R.propEq('tila-id', et.tila['in-signing'], energiatodistus)}
+  {#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
     <Signing {energiatodistus} reload={reset} />
   {/if}
 

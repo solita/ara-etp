@@ -11,7 +11,7 @@ import * as Either from './either-utils';
  * @sig {string|number} -> Array a -> Maybe a
  */
 export const findFromKoodistoById = R.curry((id, koodisto) =>
-  R.compose(Maybe.fromNull, R.find(R.propEq('id', id)))(koodisto)
+  R.compose(Maybe.fromNull, R.find(R.propEq(id, 'id')))(koodisto)
 );
 
 /**

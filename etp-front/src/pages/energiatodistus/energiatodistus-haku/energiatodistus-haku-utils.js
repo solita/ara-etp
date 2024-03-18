@@ -21,7 +21,7 @@ export const blockToQueryParameter = R.curry(
       ),
       R.chain(
         Maybe.nullReturning(
-          R.find(R.pathEq(['operation', 'browserCommand'], operation))
+          R.find(R.pathEq(operation, ['operation', 'browserCommand']))
         )
       ),
       Maybe.fromNull,

@@ -41,7 +41,7 @@
       Future.fork(
         response => {
           toggleOverlay(false);
-          if (R.pathEq(['body', 'type'], 'missing-value', response)) {
+          if (R.pathEq('missing-value', ['body', 'type'], response)) {
             showMissingProperties(response.body.missing);
           } else {
             announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));

@@ -23,7 +23,7 @@
       R.map(R.prop('kayttotarkoitusluokka-id')),
       R.chain(
         Maybe.nullReturning(
-          R.find(R.propEq('id', R.compose(R.head, R.split(','))(luokittelu)))
+          R.find(R.propEq(R.compose(R.head, R.split(','))(luokittelu), 'id'))
         )
       ),
       R.chain(
@@ -37,7 +37,7 @@
   const currentLuokittelut = (luokittelut, versio, luokittelu) =>
     R.compose(
       R.pluck('id'),
-      R.filter(R.propEq('kayttotarkoitusluokka-id', luokittelu)),
+      R.filter(R.propEq(luokittelu, 'kayttotarkoitusluokka-id')),
       R.path([versio, 'alakayttotarkoitusluokat'])
     )(luokittelut);
 
@@ -72,7 +72,7 @@
     const alakayttotarkoitusluokat = R.compose(
       R.map(R.prop('id')),
       R.filter(
-        R.propEq('kayttotarkoitusluokka-id', parseInt(evt.target.value))
+        R.propEq(parseInt(evt.target.value), 'kayttotarkoitusluokka-id')
       ),
       R.path([versio, 'alakayttotarkoitusluokat'])
     )(luokittelut);
