@@ -12,20 +12,22 @@
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.file :as file-service]
             [solita.common.formats :as formats])
-  (:import (java.util Date)
+  (:import (java.awt Font Color)
+           (java.awt.image BufferedImage)
+           (java.io ByteArrayOutputStream File)
+           (java.text Normalizer Normalizer$Form)
            (java.time Instant LocalDate ZoneId)
            (java.time.format DateTimeFormatter)
-           (org.apache.pdfbox.multipdf Overlay)
-           (org.apache.pdfbox.multipdf Overlay$Position)
+           (java.util Calendar Date HashMap)
+           (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
                                       PDPageContentStream$AppendMode)
+           (org.apache.pdfbox.pdmodel.common PDMetadata)
            (org.apache.pdfbox.pdmodel.graphics.image PDImageXObject)
-           (java.util HashMap)
-           (java.awt Font Color)
-           (java.awt.image BufferedImage)
-           (javax.imageio ImageIO)
-           (java.text Normalizer Normalizer$Form)))
+           (org.apache.xmpbox XMPMetadata)
+           (org.apache.xmpbox.xml XmpSerializer)
+           (javax.imageio ImageIO)))
 
 ;; TODO replace with real templates when it exists
 (def xlsx-template-paths {2013 {"fi" "energiatodistus-2013-fi.xlsx"
@@ -676,6 +678,50 @@
     (.save result pdf-path)
     pdf-path))
 
+(defn- make-xmp-metadata [author-name title create-date]
+  (let [xmp-metadata (XMPMetadata/createXMPMetadata)]
+    (doto (.createAndAddPFAIdentificationSchema xmp-metadata)
+      (.setPart (Integer/valueOf 2))
+      (.setConformance "B"))
+
+    (doto (.createAndAddDublinCoreSchema xmp-metadata)
+      (.setTitle title)
+      (.addCreator author-name))
+
+    (doto (.createAndAddXMPBasicSchema xmp-metadata)
+      (.setCreateDate create-date))
+
+    xmp-metadata))
+
+(defn- xmp-metadata->bytearray [metadata]
+  (let [xmp-serializer (XmpSerializer.)
+        buf (ByteArrayOutputStream.)]
+    (.serialize xmp-serializer metadata buf true)
+    (.toByteArray buf)))
+(defn- set-metadata [^String pdf-path ^String author ^String title]
+  (let [creation-date (Calendar/getInstance)
+        document (PDDocument/load (File. pdf-path))]
+    (try
+      (let [metadata (PDMetadata. document)
+            catalog (.getDocumentCatalog document)
+            xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
+        (.importXMPMetadata metadata xmp-metadata-bytes)
+        (.setMetadata catalog metadata))
+
+      (doto (.getDocumentInformation document)
+        (.setTitle title)
+        (.setAuthor author)
+        (.setSubject nil)
+        (.setKeywords nil)
+        (.setCreator nil)
+        (.setProducer nil)
+        (.setCreationDate creation-date)
+        (.setModificationDate creation-date))
+
+      (.save document pdf-path)
+      (finally
+        (.close document)))))
+
 (defn generate-pdf-as-file [complete-energiatodistus kieli draft?]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
         pdf-path (xlsx->pdf xlsx-path)]
@@ -686,6 +732,9 @@
                             :e-luokka)
                         (:versio complete-energiatodistus))
 
+    (set-metadata pdf-path
+                  (:laatija-fullname complete-energiatodistus)
+                  (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]))
     (if draft?
       (add-watermark pdf-path kieli)
       pdf-path)))
