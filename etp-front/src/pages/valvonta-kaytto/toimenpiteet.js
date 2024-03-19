@@ -708,11 +708,11 @@ export const primaryTransitionForToimenpidetype = (
       break;
 
     case type['decision-order']['notice-first-mailing']:
-      primaryToimenpidetype = type['decision-order']['notice-second-mailing'];
+      primaryToimenpidetype = type['decision-order']['waiting-for-deadline'];
       break;
 
     case type['decision-order']['notice-second-mailing']:
-      primaryToimenpidetype = type['decision-order']['notice-bailiff'];
+      primaryToimenpidetype = type['decision-order']['waiting-for-deadline'];
       break;
 
     case type['decision-order']['notice-bailiff']:
@@ -720,7 +720,7 @@ export const primaryTransitionForToimenpidetype = (
       break;
 
     case type['decision-order']['waiting-for-deadline']:
-      primaryToimenpidetype = type['court-hearing'];
+      primaryToimenpidetype = type['penalty-decision']['hearing-letter'];
       break;
 
     case type['court-hearing']:
@@ -742,11 +742,11 @@ export const primaryTransitionForToimenpidetype = (
       break;
 
     case type['penalty-decision']['notice-first-mailing']:
-      primaryToimenpidetype = type['penalty-decision']['notice-second-mailing'];
+      primaryToimenpidetype = type['penalty-decision']['waiting-for-deadline'];
       break;
 
     case type['penalty-decision']['notice-second-mailing']:
-      primaryToimenpidetype = type['penalty-decision']['notice-bailiff'];
+      primaryToimenpidetype = type['penalty-decision']['waiting-for-deadline'];
       break;
 
     case type['penalty-decision']['notice-bailiff']:
@@ -754,7 +754,7 @@ export const primaryTransitionForToimenpidetype = (
       break;
 
     case type['penalty-decision']['waiting-for-deadline']:
-      primaryToimenpidetype = type['court-hearing'];
+      primaryToimenpidetype = type['penalty-list-delivery-in-progress'];
       break;
 
     case type['penalty-list-delivery-in-progress']:

@@ -246,7 +246,7 @@ const createKaskypaatosTiedoksiantoToinenPostitus = () => {
       'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ],
-    'Käskypäätös / tiedoksianto (toinen postitus)'
+    'Käskypäätös / valitusajan odotus ja umpeutuminen'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -275,7 +275,7 @@ const createKaskypaatosTiedoksiantoHaastemies = () => {
       'Käskypäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ],
-    'Käskypäätös / tiedoksianto (Haastemies)'
+    'Käskypäätös / valitusajan odotus ja umpeutuminen'
   );
 
   cy.selectInSelect('karajaoikeus-selector-0', 'Ahvenanmaan käräjäoikeus');
@@ -320,7 +320,7 @@ const createHaOKasittely = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'HaO-käsittely',
     ['HaO-käsittely', 'Sakkopäätös / kuulemiskirje', 'Valvonnan lopetus'],
-    'HaO-käsittely'
+    'Sakkopäätös / kuulemiskirje'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -461,7 +461,7 @@ const createSakkopaatosTiedoksiantoToinenPostitus = () => {
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ],
-    'Sakkopäätös / tiedoksianto (toinen postitus)'
+    'Sakkopäätös / valitusajan odotus ja umpeutuminen'
   );
 
   cy.get('[data-cy="toimenpide.description"]')
@@ -484,7 +484,7 @@ const createSakkopaatosTiedoksiantoHaastemies = () => {
       'Sakkopäätös / valitusajan odotus ja umpeutuminen',
       'Valvonnan lopetus'
     ],
-    'Sakkopäätös / tiedoksianto (Haastemies)'
+    'Sakkopäätös / valitusajan odotus ja umpeutuminen'
   );
 
   cy.selectInSelect(
@@ -531,7 +531,7 @@ const createSakkopaatosHaOKasittely = () => {
   openToimenpideCreationAndCheckAllowedToimenpidetypes(
     'HaO-käsittely',
     ['HaO-käsittely', 'Valvonnan lopetus', 'Sakkoluettelon lähetys menossa'],
-    'HaO-käsittely'
+    'Sakkoluettelon lähetys menossa'
   );
 
   cy.get('[data-cy="toimenpide.description"]')

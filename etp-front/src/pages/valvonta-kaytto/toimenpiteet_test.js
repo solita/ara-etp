@@ -1254,23 +1254,23 @@ describe('Primary toimenpidetype after', () => {
     );
   });
 
-  it('Käskypäätös / tiedoksianto (ensimmäinen postitus) is Käskypäätös / tiedoksianto (toinen postitus)', () => {
+  it('Käskypäätös / tiedoksianto (ensimmäinen postitus) is Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
     assert.deepEqual(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 9 }],
         toimenpidetyypit
       ),
-      { id: 10 }
+      { id: 12 }
     );
   });
 
-  it('Käskypäätös / tiedoksianto (toinen postitus) is Käskypäätös / tiedoksianto (Haastemies)', () => {
+  it('Käskypäätös / tiedoksianto (toinen postitus) is Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
     assert.deepEqual(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 10 }],
         toimenpidetyypit
       ),
-      { id: 11 }
+      { id: 12 }
     );
   });
 
@@ -1284,13 +1284,13 @@ describe('Primary toimenpidetype after', () => {
     );
   });
 
-  it('Käskypäätös / valitusajan odotus ja umpeutuminen is HaO-käsittely', () => {
+  it('Käskypäätös / valitusajan odotus ja umpeutuminen is Sakkopäätös / kuulemiskirje', () => {
     assert.deepEqual(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 12 }],
         toimenpidetyypit
       ),
-      { id: 6 }
+      { id: 14 }
     );
   });
 
@@ -1324,23 +1324,23 @@ describe('Primary toimenpidetype after', () => {
     );
   });
 
-  it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) is Sakkopäätös / tiedoksianto (toinen postitus)', () => {
+  it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) is Sakkopäätös / valitusajan odotus ja umpeutuminen', () => {
     assert.deepEqual(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 16 }],
         toimenpidetyypit
       ),
-      { id: 17 }
+      { id: 19 }
     );
   });
 
-  it('Sakkopäätös / tiedoksianto (toinen postitus) is Sakkopäätös / tiedoksianto (Haastemies)', () => {
+  it('Sakkopäätös / tiedoksianto (toinen postitus) is Sakkopäätös / valitusajan odotus ja umpeutuminen', () => {
     assert.deepEqual(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 17 }],
         toimenpidetyypit
       ),
-      { id: 18 }
+      { id: 19 }
     );
   });
 
@@ -1354,13 +1354,13 @@ describe('Primary toimenpidetype after', () => {
     );
   });
 
-  it('Sakkopäätös / valitusajan odotus ja umpeutuminen is HaO-käsittely', () => {
+  it('Sakkopäätös / valitusajan odotus ja umpeutuminen is Sakkoluettelon lähetys menossa', () => {
     assert.deepEqual(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 19 }],
         toimenpidetyypit
       ),
-      { id: 6 }
+      { id: 21 }
     );
   });
 
