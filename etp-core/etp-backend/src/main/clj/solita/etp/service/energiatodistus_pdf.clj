@@ -19,6 +19,7 @@
            (java.time Instant LocalDate ZoneId)
            (java.time.format DateTimeFormatter)
            (java.util Calendar Date HashMap)
+           (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
@@ -26,8 +27,7 @@
            (org.apache.pdfbox.pdmodel.common PDMetadata)
            (org.apache.pdfbox.pdmodel.graphics.image PDImageXObject)
            (org.apache.xmpbox XMPMetadata)
-           (org.apache.xmpbox.xml XmpSerializer)
-           (javax.imageio ImageIO)))
+           (org.apache.xmpbox.xml XmpSerializer)))
 
 ;; TODO replace with real templates when it exists
 (def xlsx-template-paths {2013 {"fi" "energiatodistus-2013-fi.xlsx"
