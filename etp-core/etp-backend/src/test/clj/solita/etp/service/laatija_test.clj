@@ -91,7 +91,11 @@
     (t/is (every? #(contains? % :postitoimipaikka) found))))
 
 (t/deftest find-all-laatijat-as-public-test
-  (let [laatijat (->> (test-data-set true true) :laatijat (filter (fn [[_ laatija]] (-> laatija :passivoitu (= false)))) (into {}))
+  (let [laatijat (->> (test-data-set true true)
+                      :laatijat
+                      (filter (fn [[_ laatija]]
+                                (-> laatija :passivoitu (= false))))
+                      (into {}))
         found (service/find-all-laatijat ts/*db* kayttaja-test-data/public)]
     (common-find-all-assertions (vals laatijat) found)
     (t/is (every? #(-> % (contains? :henkilotunnus) not) found))
