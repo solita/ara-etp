@@ -136,7 +136,8 @@
                                                           ts/*aws-s3-client*
                                                           whoami
                                                           energiatodistus-id
-                                                          {:skip-pdf-signed-assert? true})))
+                                                          {:skip-pdf-signed-assert? true
+                                                           :allekirjoitusaika now})))
 
 (def time-when-test-cert-not-expired (Instant/parse "2022-05-20T12:00:00Z"))
 (def time-when-test-cert-expired (Instant/parse "2022-05-25T12:00:00Z"))
