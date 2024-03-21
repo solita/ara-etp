@@ -1,16 +1,16 @@
 (ns solita.etp.service.laatija-test
-  (:require [clojure.test :as t]
-            [clojure.string :as str]
-            [solita.etp.test-system :as ts]
+  (:require [clojure.string :as str]
+            [clojure.test :as t]
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.service.laatija :as service]
+            [solita.etp.service.viesti :as viesti-service]
+            [solita.etp.service.whoami :as whoami-service]
             [solita.etp.test :as etp-test]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
-            [solita.etp.service.whoami :as whoami-service]
-            [solita.etp.service.laatija :as service]
-            [solita.etp.service.viesti :as viesti-service]
-            [solita.etp.whoami :as test-whoami]
-            [solita.etp.service.kayttaja :as kayttaja-service])
-  (:import (java.time LocalDate ZoneId Instant)))
+            [solita.etp.test-system :as ts]
+            [solita.etp.whoami :as test-whoami])
+  (:import (java.time Instant LocalDate ZoneId)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -19,13 +19,13 @@
     (doseq [id (keys laatijat)]
       (when logged-in-once?
         (whoami-service/update-kayttaja-with-whoami!
-         ts/*db*
-         {:id id :cognitoid nil}))
+          ts/*db*
+          {:id id :cognitoid nil}))
       (when public-email-and-wwwosoite?
-        (service/update-laatija-by-id! ts/*db* id {:julkinenemail true
-                                                   :julkinenpuhelin false
-                                                   :julkinenwwwosoite true
-                                                   :julkinenosoite false
+        (service/update-laatija-by-id! ts/*db* id {:julkinenemail       true
+                                                   :julkinenpuhelin     false
+                                                   :julkinenwwwosoite   true
+                                                   :julkinenosoite      false
                                                    :julkinenpostinumero false})))
     {:laatijat laatijat}))
 
@@ -33,6 +33,7 @@
   (let [laatija (-> (laatija-test-data/generate-adds 1)
                     first
                     (merge {:login               (Instant/now)
+                            :passivoitu          false
                             :voimassa            true
                             :laatimiskielto      false
                             :julkinenpuhelin     false
@@ -49,7 +50,11 @@
                     service/public-laatija)))
     (t/is (nil? (-> laatija
                     (dissoc :voimassa)
+                    service/public-laatija)))
+    (t/is (nil? (-> laatija
+                    (assoc :passivoitu true)
                     service/public-laatija)))))
+
 
 (defn common-find-all-assertions [laatija-adds found]
   (t/is (every? #(not (nil? %)) found))
@@ -78,15 +83,15 @@
 (t/deftest find-all-laatijat-as-patevyyden-toteaja-test
   (let [{:keys [laatijat]} (test-data-set true true)
         found (service/find-all-laatijat
-               ts/*db*
-               kayttaja-test-data/patevyyden-toteaja)]
+                ts/*db*
+                kayttaja-test-data/patevyyden-toteaja)]
     (common-find-all-assertions (vals laatijat) found)
     (t/is (every? #(-> % :henkilotunnus count (= 6)) found))
     (t/is (every? #(-> % :henkilotunnus (str/includes? "-") not) found))
     (t/is (every? #(contains? % :postitoimipaikka) found))))
 
 (t/deftest find-all-laatijat-as-public-test
-  (let [{:keys [laatijat]} (test-data-set true true)
+  (let [laatijat (->> (test-data-set true true) :laatijat (filter (fn [[_ laatija]] (-> laatija :passivoitu (= false)))) (into {}))
         found (service/find-all-laatijat ts/*db* kayttaja-test-data/public)]
     (common-find-all-assertions (vals laatijat) found)
     (t/is (every? #(-> % (contains? :henkilotunnus) not) found))
@@ -102,12 +107,12 @@
 
 (defn find-all-laatijat-not-public-assertions [laatija-adds found]
   (t/is (= (set (map #(select-keys
-                       %
-                       [:etunimi :sukunimi :email :puhelin :jakeluosoite])
+                        %
+                        [:etunimi :sukunimi :email :puhelin :jakeluosoite])
                      laatija-adds))
            (set (map #(select-keys
-                       %
-                       [:etunimi :sukunimi :email :puhelin :jakeluosoite])
+                        %
+                        [:etunimi :sukunimi :email :puhelin :jakeluosoite])
                      found))))
   (t/is (every? #(-> % :aktiivinen false?) found))
   (t/is (every? #(-> % :login nil?) found)))
@@ -125,8 +130,8 @@
 (t/deftest find-all-laatijat-as-patevyyden-toteaja-not-public-test
   (let [{:keys [laatijat]} (test-data-set false false)
         found (service/find-all-laatijat
-               ts/*db*
-               kayttaja-test-data/patevyyden-toteaja)]
+                ts/*db*
+                kayttaja-test-data/patevyyden-toteaja)]
     (find-all-laatijat-not-public-assertions (vals laatijat) found)))
 
 (t/deftest find-all-laatijat-as-public-not-public-test
@@ -138,8 +143,8 @@
 
 (t/deftest find-patevyydet-test
   (let [patevyydet (service/find-patevyystasot ts/*db*)
-        fi-labels  (map :label-fi patevyydet)
-        se-labels  (map :label-sv patevyydet)]
+        fi-labels (map :label-fi patevyydet)
+        se-labels (map :label-sv patevyydet)]
     (t/is (= ["Perustaso" "Ylempi taso"] fi-labels))
     (t/is (= ["Basnivå" "Högre nivå"] se-labels))))
 
@@ -148,15 +153,15 @@
     (doseq [id (keys laatijat)]
       (service/update-laatija-by-id! ts/*db*
                                      id
-                                     {:laatimiskielto false
+                                     {:laatimiskielto     false
                                       :toteamispaivamaara (LocalDate/now)})
       (t/is (nil? (service/validate-laatija-patevyys! ts/*db* id)))
 
       (service/update-laatija-by-id! ts/*db*
-                                     id {:laatimiskielto true
+                                     id {:laatimiskielto     true
                                          :toteamispaivamaara (LocalDate/now)})
       (t/is (= (etp-test/catch-ex-data-no-msg
-                #(service/validate-laatija-patevyys! ts/*db* id))
+                 #(service/validate-laatija-patevyys! ts/*db* id))
                {:type :laatimiskielto})))))
 
 (defn patevyys-paattymisaika [toteamispaivamaara]
@@ -178,24 +183,24 @@
     (doseq [id (keys laatijat)]
       (service/update-laatija-by-id! ts/*db*
                                      id
-                                     {:laatimiskielto false
+                                     {:laatimiskielto     false
                                       :toteamispaivamaara expiring-today})
       (t/is (nil? (service/validate-laatija-patevyys! ts/*db* id)))
 
       (service/update-laatija-by-id! ts/*db*
                                      id
-                                     {:laatimiskielto false
+                                     {:laatimiskielto     false
                                       :toteamispaivamaara expired-3-years-ago})
       (t/is (= (etp-test/catch-ex-data-no-msg
-                #(service/validate-laatija-patevyys! ts/*db* id))
+                 #(service/validate-laatija-patevyys! ts/*db* id))
                {:type          :patevyys-expired
                 :paattymisaika (patevyys-paattymisaika expired-3-years-ago)}))
 
       (service/update-laatija-by-id!
-       ts/*db* id {:laatimiskielto false
-                   :toteamispaivamaara expired-yesterday})
+        ts/*db* id {:laatimiskielto     false
+                    :toteamispaivamaara expired-yesterday})
       (t/is (= (etp-test/catch-ex-data-no-msg
-                #(service/validate-laatija-patevyys! ts/*db* id))
+                 #(service/validate-laatija-patevyys! ts/*db* id))
                {:type          :patevyys-expired
                 :paattymisaika (patevyys-paattymisaika expired-yesterday)})))))
 
