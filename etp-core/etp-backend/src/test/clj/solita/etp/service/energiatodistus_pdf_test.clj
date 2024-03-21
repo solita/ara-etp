@@ -199,8 +199,8 @@
              :not-in-signing))
     (energiatodistus-test-data/sign-at-time! id
                                              laatija-id
-                                             energiatodistus-test-data/time-when-test-cert-not-expired
-                                             false)
+                                             false
+                                             energiatodistus-test-data/time-when-test-cert-not-expired)
     (t/is (= (service/sign-energiatodistus-pdf db
                                                ts/*aws-s3-client*
                                                whoami
