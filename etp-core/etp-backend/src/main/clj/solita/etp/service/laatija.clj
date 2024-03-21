@@ -1,34 +1,34 @@
 (ns solita.etp.service.laatija
-  (:require [clojure.set :as set]
+  (:require [clojure.java.io :as io]
             [clojure.java.jdbc :as jdbc]
+            [clojure.set :as set]
+            [clojure.tools.logging :as log]
             [solita.common.map :as map]
-            [solita.etp.exception :as exception]
             [solita.etp.db :as db]
-            [solita.etp.service.rooli :as rooli-service]
-            [solita.etp.service.yritys :as yritys-service]
-            [solita.etp.service.luokittelu :as luokittelu-service]
+            [solita.etp.exception :as exception]
             [solita.etp.schema.laatija :as laatija-schema]
             [solita.etp.service.laatija.email :as email]
-            [clojure.java.io :as io]
-            [clojure.tools.logging :as log]))
+            [solita.etp.service.luokittelu :as luokittelu-service]
+            [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.service.yritys :as yritys-service]))
 
 ;; *** Require sql functions ***
 (db/require-queries 'laatija)
 
 (defn public-laatija [{:keys [login voimassa laatimiskielto partner julkinenpuhelin
-                              julkinenemail julkinenwwwosoite julkinenosoite julkinenpostinumero]
-                       :as laatija}]
-  (when (and voimassa (not partner) (not laatimiskielto) (not (nil? login)))
+                              julkinenemail julkinenwwwosoite julkinenosoite julkinenpostinumero passivoitu]
+                       :as   laatija}]
+  (when (and voimassa (not partner) (not laatimiskielto) (not (nil? login)) (not passivoitu))
     (select-keys laatija
                  (cond-> laatija-schema/always-public-kayttaja-laatija-ks
-                   julkinenpuhelin (conj :puhelin)
-                   julkinenemail (conj :email)
-                   julkinenwwwosoite (conj :wwwosoite)
-                   julkinenpostinumero (conj :postinumero :postitoimipaikka)
-                   julkinenosoite (conj :jakeluosoite
-                                        :postinumero
-                                        :postitoimipaikka
-                                        :maa)))))
+                         julkinenpuhelin (conj :puhelin)
+                         julkinenemail (conj :email)
+                         julkinenwwwosoite (conj :wwwosoite)
+                         julkinenpostinumero (conj :postinumero :postitoimipaikka)
+                         julkinenosoite (conj :jakeluosoite
+                                              :postinumero
+                                              :postitoimipaikka
+                                              :maa)))))
 
 (defn find-all-laatijat [db whoami]
   (if (rooli-service/laatija? whoami)
@@ -69,11 +69,11 @@
        (laatija-db/select-laatija-by-henkilotunnus db)
        first))
 
-(def db-keymap {:muuttoimintaalueet :muut_toimintaalueet
-                :julkinenpuhelin :julkinen_puhelin
-                :julkinenemail :julkinen_email
-                :julkinenosoite :julkinen_osoite
-                :julkinenwwwosoite :julkinen_wwwosoite
+(def db-keymap {:muuttoimintaalueet  :muut_toimintaalueet
+                :julkinenpuhelin     :julkinen_puhelin
+                :julkinenemail       :julkinen_email
+                :julkinenosoite      :julkinen_osoite
+                :julkinenwwwosoite   :julkinen_wwwosoite
                 :julkinenpostinumero :julkinen_postinumero})
 
 (defn- laatija->db-row [laatija]
@@ -95,12 +95,12 @@
     (do
       (when-not (:voimassa laatija)
         (exception/throw-ex-info!
-          {:type :patevyys-expired
+          {:type          :patevyys-expired
            :paattymisaika (:voimassaolo-paattymisaika laatija)
-           :message (str "Laatija: " user-id " pätevyys has expired.")}))
+           :message       (str "Laatija: " user-id " pätevyys has expired.")}))
       (when (:partner laatija)
         (exception/throw-ex-info!
-         :laatimiskielto (str "Laatija: " user-id " is expected to only test services.")))
+          :laatimiskielto (str "Laatija: " user-id " is expected to only test services.")))
       (when (:laatimiskielto laatija)
         (exception/throw-ex-info!
           :laatimiskielto (str "Laatija: " user-id " has laatimiskielto."))))
@@ -109,8 +109,8 @@
 
 (defn find-laatija-yritykset
   ([db whoami id]
-    (assert-read-access! whoami id)
-    (laatija-db/select-laatija-yritykset db {:id id})))
+   (assert-read-access! whoami id)
+   (laatija-db/select-laatija-yritykset db {:id id})))
 
 (defn find-laatija-laskutusosoitteet
   ([db id]
@@ -152,7 +152,7 @@
 
 (defn send-patevyys-expiration-messages!
   [db {:keys [months-before-expiration dryrun]
-       :or {dryrun false}
+       :or   {dryrun false}
        :as   options}]
   (jdbc/with-db-transaction
     [db db]
