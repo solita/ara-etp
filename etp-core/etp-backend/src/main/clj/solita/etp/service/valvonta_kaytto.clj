@@ -380,24 +380,43 @@
   (csv-service/csv-line
     ["id" "rakennustunnus", "diaarinumero"
      "katuosoite" "postinumero" "postitoimipaikka"
-     "toimenpide-id" "toimenpidetyyppi" "aika" "valvoja"]))
+     "toimenpide-id" "toimenpidetyyppi" "aika" "valvoja" "energiatodistus hankittu"]))
+
 (defn csv [db]
   (fn [write!]
     (write! csv-header)
     (jdbc/query
       db
-      "select
-         valvonta.id, valvonta.rakennustunnus, toimenpide.diaarinumero,
-         valvonta.katuosoite, lpad(valvonta.postinumero::text, 5, '0'), postinumero.label_fi,
-         toimenpide.id, toimenpidetype.label_fi, toimenpide.publish_time,
-         fullname(kayttaja)
-       from vk_valvonta valvonta
-         left join postinumero on postinumero.id = valvonta.postinumero
-         left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
-         left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
-         left join kayttaja on kayttaja.id = valvonta.valvoja_id
-       where not deleted"
-      {:row-fn        (comp write! csv-service/csv-line)
+      "select valvonta.id,
+      valvonta.rakennustunnus,
+      toimenpide.diaarinumero,
+      valvonta.katuosoite,
+      lpad(valvonta.postinumero::text, 5, '0'),
+      postinumero.label_fi,
+      toimenpide.id,
+      toimenpidetype.label_fi,
+      toimenpide.publish_time,
+      fullname(kayttaja),
+      -- TODO: Siirrä esitysmuoto ulos tästä sql:stä itsestään?
+      CASE
+      WHEN energiatodistus.id IS NULL THEN NULL
+      ELSE 'x'
+      END AS energiatodistus
+      -- hae samalla rakennustunnuksella energiatodistus, joka on luotu tämän toimenpiteen luomisajankohdan jälkeen, mutta ennen toimenpiteen deadlinea / ennen seuraavan toimenpiteen luomista? daterange @> toiminee?
+
+      from vk_valvonta valvonta
+      left join postinumero on postinumero.id = valvonta.postinumero
+      left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
+      left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
+      left join kayttaja on kayttaja.id = valvonta.valvoja_id
+      left join lateral (select energiatodistus.id
+                                from energiatodistus
+                                where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
+                                and tstzrange(toimenpide.create_time, coalesce(toimenpide.deadline_date::timestamptz, toimenpide.create_time)) @>
+                                energiatodistus.allekirjoitusaika LIMIT 1) energiatodistus on true
+      where not valvonta.deleted"
+
+       {:row-fn        (comp write! csv-service/csv-line)
        :as-arrays?    :cols-as-is
        :result-set-fn dorun
        :result-type   :forward-only
