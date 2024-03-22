@@ -412,7 +412,10 @@
       left join lateral (select energiatodistus.id
                                 from energiatodistus
                                 where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
-                                and tstzrange(toimenpide.create_time, coalesce(toimenpide.deadline_date::timestamptz, toimenpide.create_time)) @>
+                                -- tszrange is exclusive in the end, so adding one to deadline date and converting it to
+                                -- timestamp means it's at the beginning of the day after deadline -> timestamps on the
+                                -- deadline date are included in the range
+                                and tstzrange(toimenpide.create_time, coalesce((toimenpide.deadline_date + 1)::timestamptz, toimenpide.create_time)) @>
                                 energiatodistus.allekirjoitusaika LIMIT 1) energiatodistus on true
       where not valvonta.deleted"
 
