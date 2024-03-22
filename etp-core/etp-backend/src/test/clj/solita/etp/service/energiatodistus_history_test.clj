@@ -1,12 +1,13 @@
 (ns solita.etp.service.energiatodistus-history-test
   (:require [clojure.test :as t]
-            [solita.etp.test-system :as ts]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-history :as service]
+            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
-            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-history :as service])
-  (:import (java.time Instant)
+            [solita.etp.test-system :as ts])
+  (:import (clojure.lang ExceptionInfo)
+           (java.time Instant)
            (java.time.temporal ChronoUnit)))
 
 (t/use-fixtures :each ts/fixture)
@@ -21,8 +22,6 @@
   (let [laatijat (laatija-test-data/generate-and-insert! 3)
         laatija-ids (-> laatijat keys sort)
         [laatija-id-1 laatija-id-2] laatija-ids
-        whoami-1 {:id laatija-id-1 :rooli 0}
-        whoami-2 {:id laatija-id-2 :rooli 0}
         energiatodistus-adds (energiatodistus-test-data/generate-adds 3
                                                                       2018
                                                                       true)
@@ -140,9 +139,6 @@
     (t/is (= [0 0 1 2 4] (map :tila-id audit-rows-1)))
     (t/is (= [0 0 0 1 2 2] (map :tila-id audit-rows-2)))))
 
-(defn without-modifytimes [coll]
-  (map #(dissoc % :modifytime) coll))
-
 (defn fullname [laatijat laatija-id]
   (let [{:keys [etunimi sukunimi]} (get laatijat laatija-id)]
     (str sukunimi ", " etunimi)))
@@ -150,22 +146,17 @@
 (t/deftest find-history-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-ids (-> laatijat keys sort)
-        [laatija-id-1 laatija-id-2 laatija-id-3] laatija-ids
+        [laatija-id-1 laatija-id-2] laatija-ids
         [laatija-1-fullname
-         laatija-2-fullname
-         laatija-3-fullname] (map (partial fullname laatijat) laatija-ids)
+         laatija-2-fullname] (map (partial fullname laatijat) laatija-ids)
         [energiatodistus-id-1
-         energiatodistus-id-2
-         energiatodistus-id-3] (-> energiatodistukset keys sort)
+         energiatodistus-id-2] (-> energiatodistukset keys sort)
         history-1 (service/find-history ts/*db*
                                         {:id laatija-id-1 :rooli 0}
                                         energiatodistus-id-1)
         history-2 (service/find-history ts/*db*
                                         {:id laatija-id-2 :rooli 0}
-                                        energiatodistus-id-2)
-        history-3 (service/find-history ts/*db*
-                                        {:id laatija-id-3 :rooli 0}
-                                        energiatodistus-id-3)]
+                                        energiatodistus-id-2)]
 
     ;; Energiatodistus 1 state history
     (t/is (= 7 (-> history-1 :state-history count)))
@@ -277,8 +268,8 @@
                     kayttaja-test-data/patevyyden-toteaja]]
       (t/is
        (thrown-with-msg?
-        clojure.lang.ExceptionInfo
-        #"Forbidden"
-        (service/find-history ts/*db*
+         ExceptionInfo
+         #"Forbidden"
+         (service/find-history ts/*db*
                               whoami
                               energiatodistus-id-3))))))
