@@ -25,7 +25,7 @@ module.exports = async ({ config, mode }) => {
 
   config.module.rules.push({
     test: /\.css$/,
-    loaders: [
+    use: [
       {
         loader: 'postcss-loader',
         options: {

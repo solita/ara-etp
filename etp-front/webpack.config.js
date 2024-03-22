@@ -2,8 +2,8 @@ const format = require('date-fns/format');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -29,7 +29,9 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
       svelte: path.resolve('node_modules', 'svelte')
     },
-    mainFields: ['svelte', 'browser', 'module', 'main']
+    mainFields: ['svelte', 'browser', 'module', 'main'],
+    // https://github.com/sveltejs/svelte-loader?tab=readme-ov-file#resolveconditionnames
+    conditionNames: ['svelte', 'browser', 'import'],
   },
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -38,7 +40,7 @@ module.exports = {
     hashFunction: 'sha512'
   },
   optimization: {
-    moduleIds: 'hashed',
+    moduleIds: 'deterministic',
     minimizer: [new TerserPlugin()],
     runtimeChunk: { name: 'runtime' },
     splitChunks: {
@@ -125,7 +127,11 @@ module.exports = {
   devServer: {
     before: (app, server, compiler) =>
       app.get('/config.json', (req, res) =>
-        res.json({ isDev: true, environment: 'dev', publicSiteUrl: 'https://localhost:3000' })
+        res.json({
+          isDev: true,
+          environment: 'dev',
+          publicSiteUrl: 'https://localhost:3000'
+        })
       ),
     headers: {
       'Content-Security-Policy':
@@ -134,8 +140,10 @@ module.exports = {
     https: true,
     // Using the spread syntax make property only be present in case its value is set to something.
     // If trying to spread a falsy value, no property will be created.
-    ...(process.env.WEBPACK_HOST && {host: process.env.WEBPACK_HOST}),
-    ...(process.env.WEBPACK_ALLOWED_HOSTS && {allowedHosts: [`${process.env.WEBPACK_ALLOWED_HOSTS}`]}),
+    ...(process.env.WEBPACK_HOST && { host: process.env.WEBPACK_HOST }),
+    ...(process.env.WEBPACK_ALLOWED_HOSTS && {
+      allowedHosts: [`${process.env.WEBPACK_ALLOWED_HOSTS}`]
+    }),
     port: process.env.WEBPACK_PORT || 3000,
     proxy: {
       '/api': {

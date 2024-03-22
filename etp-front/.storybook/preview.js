@@ -4,8 +4,7 @@ import { addParameters, addDecorator } from '@storybook/svelte';
 import { withA11y } from '@storybook/addon-a11y';
 import { setupI18n } from '@Language/i18n';
 
-addDecorator(withA11y);
-addParameters({ viewport: { defaultViewport: 'responsive' } });
+export const parameters = { viewport: { defaultViewport: 'responsive' } };
 
 const localizationDecorator = makeDecorator({
   wrapper: (storyFn, context) => {
@@ -14,4 +13,4 @@ const localizationDecorator = makeDecorator({
   }
 });
 
-addDecorator(localizationDecorator);
+export const decorators = [localizationDecorator];
