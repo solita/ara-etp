@@ -169,28 +169,28 @@
 
     ;; Energiatodistus 1 state history
     (t/is (= 7 (-> history-1 :state-history count)))
+    (t/is (= :allekirjoitusaika (-> history-1 :state-history first :k)))
     (t/is (= {:modifiedby-fullname laatija-1-fullname
               :k :tila-id
               :init-v nil
               :new-v 0
               :type :number
               :external-api false}
-             (-> history-1 :state-history first (dissoc :modifytime))))
+             (-> history-1 :state-history second (dissoc :modifytime))))
     (t/is (= {:modifiedby-fullname laatija-1-fullname
               :k :tila-id
               :init-v 0
               :new-v 1
               :type :number
               :external-api false}
-            (-> history-1 :state-history second (dissoc :modifytime))))
+            (-> history-1 :state-history (nth 2) (dissoc :modifytime))))
     (t/is (= {:modifiedby-fullname laatija-1-fullname
               :k :tila-id
               :init-v 0
               :new-v 2
               :type :number
               :external-api false}
-             (-> history-1 :state-history (nth 2) (dissoc :modifytime))))
-    (t/is (= :allekirjoitusaika (-> history-1 :state-history (nth 3) :k)))
+             (-> history-1 :state-history (nth 3) (dissoc :modifytime))))
     (t/is (= {:modifiedby-fullname laatija-2-fullname
               :k :tila-id
               :init-v 0
@@ -225,28 +225,28 @@
 
     ;; Energiatodistus 2 state history
     (t/is (= 5 (-> history-2 :state-history count)))
+    (t/is (= :allekirjoitusaika (-> history-2 :state-history first :k)))
     (t/is (= {:modifiedby-fullname laatija-2-fullname
               :k :tila-id
               :init-v nil
               :new-v 0
               :type :number
               :external-api false}
-             (-> history-2 :state-history first (dissoc :modifytime))))
+             (-> history-2 :state-history second (dissoc :modifytime))))
     (t/is (= {:modifiedby-fullname laatija-2-fullname
               :k :tila-id
               :init-v 0
               :new-v 1
               :type :number
               :external-api false}
-             (-> history-2 :state-history second (dissoc :modifytime))))
+             (-> history-2 :state-history (nth 2) (dissoc :modifytime))))
     (t/is (= {:modifiedby-fullname laatija-2-fullname
               :k :tila-id
               :init-v 0
               :new-v 2
               :type :number
               :external-api false}
-             (-> history-2 :state-history (nth 2) (dissoc :modifytime))))
-    (t/is (= :allekirjoitusaika (-> history-2 :state-history (nth 3) :k)))
+             (-> history-2 :state-history (nth 3) (dissoc :modifytime))))
     (t/is (= :voimassaolo-paattymisaika
              (-> history-2 :state-history last :k)))
 
