@@ -165,7 +165,7 @@
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
                 "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Valvonnan lopetus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"])))))
 
-(t/deftest energia-todistus-hankittu-test
+(t/deftest energiatodistus-hankittu-test
   (t/testing "Energiatodistus hankittu column is set for kehotus because energiatodistus was acquired during it"
     (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
                        {:etunimi    "Asian"
@@ -234,3 +234,137 @@
                 "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
                 "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-22T02:00;\"Tuntija, Asian\";\n"])
             "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus toimenpide"))))
+
+
+(t/deftest energiatodistus-hankittu-on-the-last-day-test
+  (t/testing "Energiatodistus hankittu column is set for kehotus when the todistus was acquired on the deadline day"
+    (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
+                       {:etunimi    "Asian"
+                        :sukunimi   "Tuntija"
+                        :email      "testi@ara.fi"
+                        :puhelin    "0504363675457"
+                        :titteli-fi "energia-asiantuntija"
+                        :titteli-sv "energiexpert"})
+          laatija-id (first (keys (test-data.laatija/generate-and-insert! 1)))
+          rakennustunnus "3139000812"
+          valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
+                                                               :postinumero       "90100"
+                                                               :ilmoituspaikka-id 0
+                                                               :rakennustunnus    rakennustunnus
+                                                               :valvoja-id        valvoja-id})
+          start-timestamp (-> (LocalDate/of 2024 3 18)
+                              (.atStartOfDay (ZoneId/systemDefault))
+                              .toInstant)
+          kehotus-timestamp (-> (LocalDate/of 2024 3 20)
+                                (.atStartOfDay (ZoneId/systemDefault))
+                                .toInstant)
+          output (atom [])
+          call-count (atom 0)
+          create-csv (valvonta-service/csv ts/*db*)]
+      ;; Start the valvonta
+      (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
+                                            :type_id      0
+                                            :create_time  start-timestamp
+                                            :publish_time start-timestamp
+                                            :diaarinumero "ARA-05.03.01-2024-159"})
+
+      ;; Add kehotus-toimenpide to the valvonta
+      (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id   valvonta-id
+                                            :type_id       2
+                                            :create_time   kehotus-timestamp
+                                            :publish_time  kehotus-timestamp
+                                            :deadline_date (LocalDate/of 2024 3 27)})
+
+      ;; Create energiatodistus and sign it, the signing time is on the same day as the kehotus deadline
+      (let [todistus (-> (test-data.energiatodistus/generate-add 2018 true)
+                         (assoc-in [:perustiedot :rakennustunnus] rakennustunnus))
+            todistus-id (test-data.energiatodistus/insert! [todistus] laatija-id)]
+        (test-data.energiatodistus/sign-at-time! todistus-id
+                                                 laatija-id
+                                                 true
+                                                 (-> (LocalDate/of 2024 3 27)
+                                                     (.atStartOfDay (ZoneId/systemDefault))
+                                                     .toInstant)))
+
+      ;; Close the valvonta
+      (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
+                                            :type_id      5
+                                            :create_time  (-> (LocalDate/of 2024 3 30)
+                                                              (.atStartOfDay (ZoneId/systemDefault))
+                                                              .toInstant)
+                                            :publish_time (-> (LocalDate/of 2024 3 30)
+                                                              (.atStartOfDay (ZoneId/systemDefault))
+                                                              .toInstant)})
+
+      (create-csv (partial handle-output call-count output))
+
+      (t/is (= 4 @call-count))
+      (t/is (= @output
+               [csv-header-line
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
+                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
+                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-30T02:00;\"Tuntija, Asian\";\n"])
+            "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus toimenpide"))))
+
+(t/deftest energiatodistus-hankittu-on-the-day-after-deadline-test
+  (t/testing "Energiatodistus hankkittu is not set for kehotus when the todistus was acquired the day after the deadline"
+    ;; This test exists to check that the exclusivity and the deadline date to timestamp conversion in the implementation
+    ;; work as they should
+    (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
+                       {:etunimi    "Asian"
+                        :sukunimi   "Tuntija"
+                        :email      "testi@ara.fi"
+                        :puhelin    "0504363675457"
+                        :titteli-fi "energia-asiantuntija"
+                        :titteli-sv "energiexpert"})
+          laatija-id (first (keys (test-data.laatija/generate-and-insert! 1)))
+          rakennustunnus "3139000812"
+          valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
+                                                               :postinumero       "90100"
+                                                               :ilmoituspaikka-id 0
+                                                               :rakennustunnus    rakennustunnus
+                                                               :valvoja-id        valvoja-id})
+          start-timestamp (-> (LocalDate/of 2024 3 18)
+                              (.atStartOfDay (ZoneId/systemDefault))
+                              .toInstant)
+          kehotus-timestamp (-> (LocalDate/of 2024 3 20)
+                                (.atStartOfDay (ZoneId/systemDefault))
+                                .toInstant)
+          kehotus-deadline (LocalDate/of 2024 3 27)
+          output (atom [])
+          call-count (atom 0)
+          create-csv (valvonta-service/csv ts/*db*)]
+      ;; Start the valvonta
+      (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
+                                            :type_id      0
+                                            :create_time  start-timestamp
+                                            :publish_time start-timestamp
+                                            :diaarinumero "ARA-05.03.01-2024-159"})
+
+      ;; Add kehotus-toimenpide to the valvonta
+      (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id   valvonta-id
+                                            :type_id       2
+                                            :create_time   kehotus-timestamp
+                                            :publish_time  kehotus-timestamp
+                                            :deadline_date kehotus-deadline})
+
+      ;; Create energiatodistus and sign it, the signing time is the next day from the deadline
+      (let [todistus (-> (test-data.energiatodistus/generate-add 2018 true)
+                         (assoc-in [:perustiedot :rakennustunnus] rakennustunnus))
+            todistus-id (test-data.energiatodistus/insert! [todistus] laatija-id)]
+        (test-data.energiatodistus/sign-at-time! todistus-id
+                                                 laatija-id
+                                                 true
+                                                 (-> (.plusDays kehotus-deadline 1)
+                                                     (.atStartOfDay (ZoneId/systemDefault))
+                                                     .toInstant)))
+
+      (create-csv (partial handle-output call-count output))
+
+      ;; Csv doesn't show the energiatodistus as created
+      (t/is (= 3 @call-count))
+      (t/is (= @output
+               [csv-header-line
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
+                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\n"])
+            "All toimenpiteet for the valvonta are present, energiatodistus is not marked as being created"))))
