@@ -6,8 +6,8 @@ export const otherRooli = R.propEq(Maybe.Some(2), 'rooli-id');
 
 export const toimitustapa = {
   suomifi: R.propEq(Maybe.Some(0), 'toimitustapa-id'),
-  email: R.propEq(Maybe.Some(0), 'toimitustapa-id'),
-  other: R.propEq(Maybe.Some(0), 'toimitustapa-id')
+  email: R.propEq(Maybe.Some(1), 'toimitustapa-id'),
+  other: R.propEq(Maybe.Some(2), 'toimitustapa-id')
 };
 
 const emptyOsapuoli = {
