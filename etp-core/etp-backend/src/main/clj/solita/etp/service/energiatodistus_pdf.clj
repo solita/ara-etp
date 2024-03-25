@@ -7,6 +7,7 @@
             [solita.common.xlsx :as xlsx]
             [solita.common.certificates :as certificates]
             [solita.common.libreoffice :as libreoffice]
+            [solita.common.time :as common-time]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
@@ -16,9 +17,9 @@
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File)
            (java.text Normalizer Normalizer$Form)
-           (java.time Instant LocalDate ZoneId)
+           (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar Date HashMap)
+           (java.util Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
@@ -709,9 +710,12 @@
     (.serialize xmp-serializer metadata buf true)
     (.toByteArray buf)))
 
+(defn- clock->calendar [^Clock clock]
+  (-> clock ZonedDateTime/now GregorianCalendar/from))
+
 (defn- set-metadata [^String pdf-path ^String author ^String title]
   (with-open [document (PDDocument/load (File. pdf-path))]
-    (let [creation-date (Calendar/getInstance)
+    (let [creation-date (clock->calendar common-time/clock)
           metadata (PDMetadata. document)
           catalog (.getDocumentCatalog document)
           xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
