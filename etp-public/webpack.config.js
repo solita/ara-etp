@@ -1,11 +1,11 @@
 const format = require('date-fns/format');
-
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
 
 const path = require('path');
 
@@ -26,14 +26,18 @@ module.exports = {
       '@Asset': path.resolve(__dirname, 'assets'),
       '@': path.resolve(__dirname, 'src'),
       svelte: path.resolve('node_modules', 'svelte')
-    }
+    },
+    mainFields: ['svelte', 'browser', 'module', 'main'],
+    // https://github.com/sveltejs/svelte-loader?tab=readme-ov-file#resolveconditionnames
+    conditionNames: ['svelte', 'browser', 'import'],
   },
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: '[name].[contenthash].js'
+    publicPath: '/',
+    filename: '[name].[contenthash].js',
   },
   optimization: {
-    moduleIds: 'hashed',
+    moduleIds: 'deterministic',
     runtimeChunk: { name: 'runtime' },
     splitChunks: {
       chunks: 'all',
@@ -57,21 +61,24 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /(\.m?js?$)|(\.svelte$)/,
+        test: /\.m?js$/,
         include: [path.resolve(__dirname, 'src'), /svelte/],
         use: ['babel-loader']
       },
       {
         test: /\.svelte$/,
         include: [path.resolve(__dirname, 'src'), /svelte/],
-        use: {
-          loader: 'svelte-loader',
-          options: {
-            emitCss: true,
-            immutable: true,
-            legacy: true
+        use: [
+          'babel-loader',
+          {
+            loader: 'svelte-loader',
+            options: {
+              emitCss: true,
+              immutable: true,
+              legacy: true,
+            }
           }
-        }
+        ]
       },
       {
         test: /\.css$/,
@@ -146,19 +153,19 @@ module.exports = {
       title: 'Energiatodistusrekisteri',
       template: './src/template.html',
       favicon: './assets/favicon.png'
-    })
+    }),
     // uncomment to see treeview of generated bundle after build
     // new BundleAnalyzerPlugin()
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
-    port: 5050,
+    port: process.env.WEBPACK_PORT || 5050,
     historyApiFallback: true,
     proxy: {
       '/api': {
-        target: `http://localhost:8080`,
+        target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
-        changeOrigin: true
+        changeOrigin: true,
       }
     }
   }
