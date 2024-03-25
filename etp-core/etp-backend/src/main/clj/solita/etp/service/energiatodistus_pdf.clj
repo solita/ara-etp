@@ -678,35 +678,45 @@
     (.save result pdf-path)
     pdf-path))
 
-(defn- make-xmp-metadata [author-name title create-date]
+(defn- make-xmp-metadata
+  "Create an XMPMetadata object, which can be rendered as XML into the PDF file.
+  This is the 'new' common kind of of PDF metadata"
+  [author-name title ^Calendar create-date]
+
   (let [xmp-metadata (XMPMetadata/createXMPMetadata)]
+    ;; The XMP metadata can contain multiple schemas, each with its own properties.
+    ;; We need items in three different schemas, so below we are creating
+    ;; and filling each of those separately.
     (doto (.createAndAddPFAIdentificationSchema xmp-metadata)
+      ;; Mark as PDF/A conformant
       (.setPart (Integer/valueOf 2))
       (.setConformance "B"))
 
     (doto (.createAndAddDublinCoreSchema xmp-metadata)
+      ;; Set the title and author
       (.setTitle title)
       (.addCreator author-name))
 
     (doto (.createAndAddXMPBasicSchema xmp-metadata)
+      ;; Set the creation date
       (.setCreateDate create-date))
 
     xmp-metadata))
 
-(defn- xmp-metadata->bytearray [metadata]
+(defn- xmp-metadata->bytearray [^XMPMetadata metadata]
   (let [xmp-serializer (XmpSerializer.)
         buf (ByteArrayOutputStream.)]
     (.serialize xmp-serializer metadata buf true)
     (.toByteArray buf)))
+
 (defn- set-metadata [^String pdf-path ^String author ^String title]
-  (let [creation-date (Calendar/getInstance)
-        document (PDDocument/load (File. pdf-path))]
-    (try
-      (let [metadata (PDMetadata. document)
-            catalog (.getDocumentCatalog document)
-            xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
-        (.importXMPMetadata metadata xmp-metadata-bytes)
-        (.setMetadata catalog metadata))
+  (with-open [document (PDDocument/load (File. pdf-path))]
+    (let [creation-date (Calendar/getInstance)
+          metadata (PDMetadata. document)
+          catalog (.getDocumentCatalog document)
+          xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
+      (.importXMPMetadata metadata xmp-metadata-bytes)
+      (.setMetadata catalog metadata)
 
       (doto (.getDocumentInformation document)
         (.setTitle title)
@@ -716,11 +726,9 @@
         (.setCreator nil)
         (.setProducer nil)
         (.setCreationDate creation-date)
-        (.setModificationDate creation-date))
+        (.setModificationDate creation-date)))
 
-      (.save document pdf-path)
-      (finally
-        (.close document)))))
+    (.save document pdf-path)))
 
 (defn generate-pdf-as-file [complete-energiatodistus kieli draft?]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)

@@ -99,7 +99,7 @@
           (t/testing "Test for author and title in the XMP metadata"
             (t/is (= expected-author (-> xmp-metadata .getDublinCoreSchema .getCreators first)))
             (t/is (= expected-title (-> xmp-metadata .getDublinCoreSchema .getTitle))))
-          (t/testing "Test for declaration of PDF/A compliance"
+          (t/testing "Test that the document declaries itself as PDF/A compliant"
             (t/is (= 2 (-> xmp-metadata .getPDFIdentificationSchema .getPart)))
             (t/is (= "B" (-> xmp-metadata .getPDFIdentificationSchema .getConformance))))
           (.close document)))
