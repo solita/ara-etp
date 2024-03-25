@@ -1,7 +1,6 @@
 (ns solita.etp.valvonta-kaytto.valvonta-csv-test
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.test :as t]
-            [solita.common.time :as time]
             [solita.etp.schema.valvonta-kaytto :as valvonta-schema]
             [solita.etp.service.valvonta-kaytto :as valvonta-service]
             [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
@@ -9,7 +8,7 @@
             [solita.etp.test-data.kayttaja :as test-kayttajat]
             [solita.etp.test-data.laatija :as test-data.laatija]
             [solita.etp.test-system :as ts])
-  (:import (java.time Clock LocalDate ZoneId)))
+  (:import (java.time LocalDate ZoneId)))
 
 (t/use-fixtures :each ts/fixture)
 
