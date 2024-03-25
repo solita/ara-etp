@@ -382,6 +382,17 @@
      "katuosoite" "postinumero" "postitoimipaikka"
      "toimenpide-id" "toimenpidetyyppi" "aika" "valvoja" "energiatodistus hankittu"]))
 
+(defn- boolean->cross
+  "Represent boolean as x when it's true in käytönvalvonta-csv and as empty when false"
+  [csv-row-coll]
+  (map
+    (fn [value]
+      (if (boolean? value)
+        (when value
+          "x")
+        value))
+    csv-row-coll))
+
 (defn csv [db]
   (fn [write!]
     (write! csv-header)
@@ -397,11 +408,7 @@
       toimenpidetype.label_fi,
       toimenpide.publish_time,
       fullname(kayttaja),
-      -- TODO: Siirrä esitysmuoto ulos tästä sql:stä itsestään?
-      CASE
-      WHEN energiatodistus.id IS NULL THEN NULL
-      ELSE 'x'
-      END AS energiatodistus
+      energiatodistus is not null as energiatodistus_exists
 
       from vk_valvonta valvonta
       left join postinumero on postinumero.id = valvonta.postinumero
@@ -433,7 +440,7 @@
                                 LIMIT 1) energiatodistus on true
       where not valvonta.deleted"
 
-      {:row-fn        (comp write! csv-service/csv-line)
+      {:row-fn        (comp write! csv-service/csv-line boolean->cross)
        :as-arrays?    :cols-as-is
        :result-set-fn dorun
        :result-type   :forward-only
