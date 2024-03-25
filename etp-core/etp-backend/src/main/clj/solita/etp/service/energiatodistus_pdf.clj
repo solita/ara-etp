@@ -689,7 +689,11 @@
     ;; We need items in three different schemas, so below we are creating
     ;; and filling each of those separately.
     (doto (.createAndAddPFAIdentificationSchema xmp-metadata)
-      ;; Mark as PDF/A conformant
+      ;; Mark as PDF/A-2B conformant
+      ;; 2 refers to a version of the PDF/A specification. LibreOffice
+      ;; produces files that claim to conform to part 2, so we retain
+      ;; that mark here.
+      ;; B here stands for Basic, which is the lower level of conformance
       (.setPart (Integer/valueOf 2))
       (.setConformance "B"))
 
