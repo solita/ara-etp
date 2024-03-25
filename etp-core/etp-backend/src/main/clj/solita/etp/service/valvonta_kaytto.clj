@@ -402,24 +402,38 @@
       WHEN energiatodistus.id IS NULL THEN NULL
       ELSE 'x'
       END AS energiatodistus
-      -- hae samalla rakennustunnuksella energiatodistus, joka on luotu tämän toimenpiteen luomisajankohdan jälkeen, mutta ennen toimenpiteen deadlinea / ennen seuraavan toimenpiteen luomista? daterange @> toiminee?
 
       from vk_valvonta valvonta
       left join postinumero on postinumero.id = valvonta.postinumero
       left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
       left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
       left join kayttaja on kayttaja.id = valvonta.valvoja_id
+      left join lateral (select next_toimenpide.create_time
+                                from vk_toimenpide as next_toimenpide
+                                where next_toimenpide.valvonta_id = valvonta.id
+                                and next_toimenpide.create_time > toimenpide.deadline_date
+                                order by create_time asc
+                                limit 1) as next_toimenpide on true
       left join lateral (select energiatodistus.id
                                 from energiatodistus
                                 where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
                                 -- tszrange is exclusive in the end, so adding one to deadline date and converting it to
                                 -- timestamp means it's at the beginning of the day after deadline -> timestamps on the
                                 -- deadline date are included in the range
-                                and tstzrange(toimenpide.create_time, coalesce((toimenpide.deadline_date + 1)::timestamptz, toimenpide.create_time)) @>
-                                energiatodistus.allekirjoitusaika LIMIT 1) energiatodistus on true
+                                -- coalesce selects the existing end time of the range based on priority:
+                                -- 1. If next toimenpide in valvonta exists, take its starting time as the end
+                                -- 2. End of deadline date if there is no next toimenpide
+                                -- 3. If neither of those exists, the create_time of the toimenpide is also used as the end
+                                --    to ensure that we don't get an endless range that includes everything. Range from
+                                --    create_time to create_time includes nothing.
+                                and tstzrange(toimenpide.create_time,
+                                               coalesce(next_toimenpide.create_time, (toimenpide.deadline_date + 1)::timestamptz,
+                                                                                     toimenpide.create_time)) @>
+                                energiatodistus.allekirjoitusaika
+                                LIMIT 1) energiatodistus on true
       where not valvonta.deleted"
 
-       {:row-fn        (comp write! csv-service/csv-line)
+      {:row-fn        (comp write! csv-service/csv-line)
        :as-arrays?    :cols-as-is
        :result-set-fn dorun
        :result-type   :forward-only

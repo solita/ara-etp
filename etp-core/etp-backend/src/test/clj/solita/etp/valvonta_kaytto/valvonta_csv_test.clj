@@ -367,4 +367,33 @@
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
                 "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\n"])
-            "All toimenpiteet for the valvonta are present, energiatodistus is not marked as being created"))))
+            "All toimenpiteet for the valvonta are present, energiatodistus is not marked as being created. Exclusive end of the range works correctly with the deadline.")
+
+      (t/testing "after the valvonta has been closed, the energiatodistus shows as having been acquired during kehotus"
+        ;; Close the valvonta after the energiatodistus has been acquired
+        (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
+                                              :type_id      5
+                                              :create_time  (-> (.plusDays kehotus-deadline 2)
+                                                                (.atStartOfDay (ZoneId/systemDefault))
+                                                                .toInstant)
+                                              :publish_time (-> (.plusDays kehotus-deadline 2)
+                                                                (.atStartOfDay (ZoneId/systemDefault))
+                                                                .toInstant)})
+
+        ;; Reset the test state
+        (reset! call-count 0)
+        (reset! output [])
+
+        ;; Create the csv again
+        (create-csv (partial handle-output call-count output))
+
+        ;; Csv now shows the energiatodistus as having been created during kehotus, as it was acquired after kehotus creation
+        ;; and before the next toimenpide, even if it was after kehotus deadline
+        (t/is (= 4 @call-count))
+        (t/is (= @output
+                 [csv-header-line
+                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
+                  "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
+                  "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-29T02:00;\"Tuntija, Asian\";\n"])
+              "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus as it's created before the next toimenpide"))
+      )))
