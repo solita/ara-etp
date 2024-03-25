@@ -9,7 +9,10 @@
             [solita.etp.service.energiatodistus-pdf :as service]
             [solita.common.formats :as formats]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.common.certificates-test :as certificates-test]))
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.common.certificates-test :as certificates-test])
+  (:import (org.apache.pdfbox.pdmodel PDDocument)
+           (org.apache.xmpbox.xml DomXmpParser)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -72,7 +75,8 @@
     (io/delete-file file-path)))
 
 (t/deftest generate-pdf-as-file-test
-  (let [{:keys [energiatodistukset]} (test-data-set)]
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        xmp-parser (DomXmpParser.)]
     (doseq [id (-> energiatodistukset keys sort)
             :let [energiatodistus (energiatodistus-service/find-energiatodistus
                                    ts/*db*
@@ -81,6 +85,25 @@
                                                           "sv"
                                                           true)]]
       (t/is (-> file-path io/as-file .exists))
+
+      (t/testing "Test that the expected metadata is in place"
+        (let [{:keys [etunimi sukunimi]} (kayttaja-service/find-kayttaja ts/*db* (:laatija-id energiatodistus))
+              expected-author (str sukunimi ", " etunimi)
+              expected-title (-> energiatodistus :perustiedot :nimi-sv)
+              document (-> file-path io/as-file PDDocument/load)
+              document-info (.getDocumentInformation document)
+              xmp-metadata (->> document .getDocumentCatalog .getMetadata .exportXMPMetadata (.parse xmp-parser))]
+          (t/testing "Test for author and title in the older-style metadata"
+            (t/is (= expected-author (.getAuthor document-info)))
+            (t/is (= expected-title (.getTitle document-info))))
+          (t/testing "Test for author and title in the XMP metadata"
+            (t/is (= expected-author (-> xmp-metadata .getDublinCoreSchema .getCreators first)))
+            (t/is (= expected-title (-> xmp-metadata .getDublinCoreSchema .getTitle))))
+          (t/testing "Test that the document declaries itself as PDF/A compliant"
+            (t/is (= 2 (-> xmp-metadata .getPDFIdentificationSchema .getPart)))
+            (t/is (= "B" (-> xmp-metadata .getPDFIdentificationSchema .getConformance))))
+          (.close document)))
+
       (io/delete-file file-path))))
 
 (t/deftest pdf-file-id-test

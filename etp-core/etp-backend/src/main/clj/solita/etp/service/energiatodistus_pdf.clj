@@ -7,25 +7,28 @@
             [solita.common.xlsx :as xlsx]
             [solita.common.certificates :as certificates]
             [solita.common.libreoffice :as libreoffice]
+            [solita.common.time :as common-time]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.file :as file-service]
             [solita.common.formats :as formats])
-  (:import (java.util Date)
-           (java.time Instant LocalDate ZoneId)
+  (:import (java.awt Font Color)
+           (java.awt.image BufferedImage)
+           (java.io ByteArrayOutputStream File)
+           (java.text Normalizer Normalizer$Form)
+           (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (org.apache.pdfbox.multipdf Overlay)
-           (org.apache.pdfbox.multipdf Overlay$Position)
+           (java.util Calendar Date GregorianCalendar HashMap)
+           (javax.imageio ImageIO)
+           (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
                                       PDPageContentStream$AppendMode)
+           (org.apache.pdfbox.pdmodel.common PDMetadata)
            (org.apache.pdfbox.pdmodel.graphics.image PDImageXObject)
-           (java.util HashMap)
-           (java.awt Font Color)
-           (java.awt.image BufferedImage)
-           (javax.imageio ImageIO)
-           (java.text Normalizer Normalizer$Form)))
+           (org.apache.xmpbox XMPMetadata)
+           (org.apache.xmpbox.xml XmpSerializer)))
 
 ;; TODO replace with real templates when it exists
 (def xlsx-template-paths {2013 {"fi" "energiatodistus-2013-fi.xlsx"
@@ -676,6 +679,65 @@
     (.save result pdf-path)
     pdf-path))
 
+(defn- make-xmp-metadata
+  "Create an XMPMetadata object, which can be rendered as XML into the PDF file.
+  This is the 'new' common kind of of PDF metadata"
+  [author-name title ^Calendar create-date]
+
+  (let [xmp-metadata (XMPMetadata/createXMPMetadata)]
+    ;; The XMP metadata can contain multiple schemas, each with its own properties.
+    ;; We need items in three different schemas, so below we are creating
+    ;; and filling each of those separately.
+    (doto (.createAndAddPFAIdentificationSchema xmp-metadata)
+      ;; Mark as PDF/A-2B conformant
+      ;; 2 refers to a version of the PDF/A specification. LibreOffice
+      ;; produces files that claim to conform to part 2, so we retain
+      ;; that mark here.
+      ;; B here stands for Basic, which is the lower level of conformance
+      (.setPart (Integer/valueOf 2))
+      (.setConformance "B"))
+
+    (doto (.createAndAddDublinCoreSchema xmp-metadata)
+      ;; Set the title and author
+      (.setTitle title)
+      (.addCreator author-name))
+
+    (doto (.createAndAddXMPBasicSchema xmp-metadata)
+      ;; Set the creation date
+      (.setCreateDate create-date))
+
+    xmp-metadata))
+
+(defn- xmp-metadata->bytearray [^XMPMetadata metadata]
+  (let [xmp-serializer (XmpSerializer.)
+        buf (ByteArrayOutputStream.)]
+    (.serialize xmp-serializer metadata buf true)
+    (.toByteArray buf)))
+
+(defn- clock->calendar [^Clock clock]
+  (-> clock ZonedDateTime/now GregorianCalendar/from))
+
+(defn- set-metadata [^String pdf-path ^String author ^String title]
+  (with-open [document (PDDocument/load (File. pdf-path))]
+    (let [creation-date (clock->calendar common-time/clock)
+          metadata (PDMetadata. document)
+          catalog (.getDocumentCatalog document)
+          xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
+      (.importXMPMetadata metadata xmp-metadata-bytes)
+      (.setMetadata catalog metadata)
+
+      (doto (.getDocumentInformation document)
+        (.setTitle title)
+        (.setAuthor author)
+        (.setSubject nil)
+        (.setKeywords nil)
+        (.setCreator nil)
+        (.setProducer nil)
+        (.setCreationDate creation-date)
+        (.setModificationDate creation-date)))
+
+    (.save document pdf-path)))
+
 (defn generate-pdf-as-file [complete-energiatodistus kieli draft?]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
         pdf-path (xlsx->pdf xlsx-path)]
@@ -686,6 +748,9 @@
                             :e-luokka)
                         (:versio complete-energiatodistus))
 
+    (set-metadata pdf-path
+                  (:laatija-fullname complete-energiatodistus)
+                  (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]))
     (if draft?
       (add-watermark pdf-path kieli)
       pdf-path)))
