@@ -7,6 +7,7 @@ module.exports = {
   plugins: [
     require('tailwindcss'),
     postcssPresetEnv(),
-    ...(production ? [cssnano('default', { autoprefix: true })] : [])
+    require('autoprefixer'),
+    ...(production ? [cssnano('default')] : [])
   ]
 };
