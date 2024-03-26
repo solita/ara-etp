@@ -30,10 +30,18 @@
                [csv-header-line]))))
 
   (t/testing "Creating csv when there is one open valvonta contains one content line in csv with its data"
+    (test-kayttajat/insert-virtu-paakayttaja!
+      {:etunimi    "Asian"
+       :sukunimi   "Tuntija"
+       :email      "testi@ara.fi"
+       :puhelin    "0504363675457"
+       :titteli-fi "energia-asiantuntija"
+       :titteli-sv "energiexpert"})
     (let [valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
                                                                :postinumero       "90100"
                                                                :ilmoituspaikka-id 0
-                                                               :rakennustunnus    "3139000812"})
+                                                               :rakennustunnus    "3139000812"
+                                                               :valvoja-id        1})
           start-timestamp (-> (LocalDate/of 2024 3 18)
                               (.atStartOfDay (ZoneId/systemDefault))
                               .toInstant)
@@ -52,7 +60,7 @@
       (t/is (= 2 @call-count))
       (t/is (= @output
                [csv-header-line
-                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;;\n"])))))
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"])))))
 
 (t/deftest valvonta.csv-toimenpidetype-test
   (t/testing "Every toimenpide created on valvonta results in a row in the csv"
@@ -154,7 +162,8 @@
                                             :publish_time  (-> (LocalDate/of 2024 3 18)
                                                                (.atStartOfDay (ZoneId/systemDefault))
                                                                .toInstant)
-                                            :deadline_date (LocalDate/of 2024 02 14)})
+                                            :deadline_date (LocalDate/of 2024 02 14)
+                                            :diaarinumero  "ARA-05.03.01-2024-159"})
 
       (create-csv (partial handle-output call-count output))
 
@@ -162,7 +171,7 @@
       (t/is (= @output
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Valvonnan lopetus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"])))))
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Valvonnan lopetus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"])))))
 
 (t/deftest energiatodistus-hankittu-test
   (t/testing "Energiatodistus hankittu column is set for kehotus because energiatodistus was acquired during it"
@@ -201,7 +210,8 @@
                                             :type_id       2
                                             :create_time   kehotus-timestamp
                                             :publish_time  kehotus-timestamp
-                                            :deadline_date (LocalDate/of 2024 3 27)})
+                                            :deadline_date (LocalDate/of 2024 3 27)
+                                            :diaarinumero  "ARA-05.03.01-2024-159"})
 
       ;; Create energiatodistus and sign it
       (let [todistus (-> (test-data.energiatodistus/generate-add 2018 true)
@@ -222,7 +232,8 @@
                                                               .toInstant)
                                             :publish_time (-> (LocalDate/of 2024 3 22)
                                                               (.atStartOfDay (ZoneId/systemDefault))
-                                                              .toInstant)})
+                                                              .toInstant)
+                                            :diaarinumero "ARA-05.03.01-2024-159"})
 
       (create-csv (partial handle-output call-count output))
 
@@ -230,8 +241,8 @@
       (t/is (= @output
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
-                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-22T02:00;\"Tuntija, Asian\";\n"])
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-22T02:00;\"Tuntija, Asian\";\n"])
             "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus toimenpide"))))
 
 
@@ -272,7 +283,8 @@
                                             :type_id       2
                                             :create_time   kehotus-timestamp
                                             :publish_time  kehotus-timestamp
-                                            :deadline_date (LocalDate/of 2024 3 27)})
+                                            :deadline_date (LocalDate/of 2024 3 27)
+                                            :diaarinumero  "ARA-05.03.01-2024-159"})
 
       ;; Create energiatodistus and sign it, the signing time is on the same day as the kehotus deadline
       (let [todistus (-> (test-data.energiatodistus/generate-add 2018 true)
@@ -293,7 +305,8 @@
                                                               .toInstant)
                                             :publish_time (-> (LocalDate/of 2024 3 30)
                                                               (.atStartOfDay (ZoneId/systemDefault))
-                                                              .toInstant)})
+                                                              .toInstant)
+                                            :diaarinumero "ARA-05.03.01-2024-159"})
 
       (create-csv (partial handle-output call-count output))
 
@@ -301,8 +314,8 @@
       (t/is (= @output
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
-                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-30T02:00;\"Tuntija, Asian\";\n"])
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-30T02:00;\"Tuntija, Asian\";\n"])
             "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus toimenpide"))))
 
 (t/deftest energiatodistus-hankittu-on-the-day-after-deadline-test
@@ -345,7 +358,8 @@
                                             :type_id       2
                                             :create_time   kehotus-timestamp
                                             :publish_time  kehotus-timestamp
-                                            :deadline_date kehotus-deadline})
+                                            :deadline_date kehotus-deadline
+                                            :diaarinumero  "ARA-05.03.01-2024-159"})
 
       ;; Create energiatodistus and sign it, the signing time is the next day from the deadline
       (let [todistus (-> (test-data.energiatodistus/generate-add 2018 true)
@@ -365,7 +379,7 @@
       (t/is (= @output
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\n"])
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\n"])
             "All toimenpiteet for the valvonta are present, energiatodistus is not marked as being created. Exclusive end of the range works correctly with the deadline.")
 
       (t/testing "after the valvonta has been closed, the energiatodistus shows as having been acquired during kehotus"
@@ -377,7 +391,8 @@
                                                                 .toInstant)
                                               :publish_time (-> (.plusDays kehotus-deadline 2)
                                                                 (.atStartOfDay (ZoneId/systemDefault))
-                                                                .toInstant)})
+                                                                .toInstant)
+                                              :diaarinumero "ARA-05.03.01-2024-159"})
 
         ;; Reset the test state
         (reset! call-count 0)
@@ -392,7 +407,6 @@
         (t/is (= @output
                  [csv-header-line
                   "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                  "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
-                  "1;\"3139000812\";;\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-29T02:00;\"Tuntija, Asian\";\n"])
-              "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus as it's created before the next toimenpide"))
-      )))
+                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
+                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-29T02:00;\"Tuntija, Asian\";\n"])
+              "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus as it's created before the next toimenpide")))))
