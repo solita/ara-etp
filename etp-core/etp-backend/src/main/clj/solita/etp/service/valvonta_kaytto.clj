@@ -399,46 +399,46 @@
     (jdbc/query
       db
       "select valvonta.id,
-      valvonta.rakennustunnus,
-      toimenpide.diaarinumero,
-      valvonta.katuosoite,
-      lpad(valvonta.postinumero::text, 5, '0'),
-      postinumero.label_fi,
-      toimenpide.id,
-      toimenpidetype.label_fi,
-      toimenpide.publish_time,
-      fullname(kayttaja),
-      energiatodistus is not null as energiatodistus_exists
+              valvonta.rakennustunnus,
+              toimenpide.diaarinumero,
+              valvonta.katuosoite,
+              lpad(valvonta.postinumero::text, 5, '0'),
+              postinumero.label_fi,
+              toimenpide.id,
+              toimenpidetype.label_fi,
+              toimenpide.publish_time,
+              fullname(kayttaja),
+              energiatodistus is not null as energiatodistus_exists
 
-      from vk_valvonta valvonta
-      left join postinumero on postinumero.id = valvonta.postinumero
-      left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
-      left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
-      left join kayttaja on kayttaja.id = valvonta.valvoja_id
-      left join lateral (select next_toimenpide.create_time
-                                from vk_toimenpide as next_toimenpide
-                                where next_toimenpide.valvonta_id = valvonta.id
-                                and next_toimenpide.create_time > toimenpide.deadline_date
-                                order by create_time asc
-                                limit 1) as next_toimenpide on true
-      left join lateral (select energiatodistus.id
-                                from energiatodistus
-                                where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
-                                -- tszrange is exclusive in the end, so adding one to deadline date and converting it to
-                                -- timestamp means it's at the beginning of the day after deadline -> timestamps on the
-                                -- deadline date are included in the range
-                                -- coalesce selects the existing end time of the range based on priority:
-                                -- 1. If next toimenpide in valvonta exists, take its starting time as the end
-                                -- 2. End of deadline date if there is no next toimenpide
-                                -- 3. If neither of those exists, the create_time of the toimenpide is also used as the end
-                                --    to ensure that we don't get an endless range that includes everything. Range from
-                                --    create_time to create_time includes nothing.
-                                and tstzrange(toimenpide.create_time,
-                                               coalesce(next_toimenpide.create_time, (toimenpide.deadline_date + 1)::timestamptz,
-                                                                                     toimenpide.create_time)) @>
-                                energiatodistus.allekirjoitusaika
-                                limit 1) energiatodistus on true
-      where not valvonta.deleted"
+       from vk_valvonta valvonta
+           left join postinumero on postinumero.id = valvonta.postinumero
+           left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
+           left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
+           left join kayttaja on kayttaja.id = valvonta.valvoja_id
+           left join lateral (select next_toimenpide.create_time
+                                     from vk_toimenpide as next_toimenpide
+                                     where next_toimenpide.valvonta_id = valvonta.id
+                                     and next_toimenpide.create_time > toimenpide.deadline_date
+                                     order by create_time asc
+                                     limit 1) as next_toimenpide on true
+           left join lateral (select energiatodistus.id
+                                     from energiatodistus
+                                     where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
+                                     -- tszrange is exclusive in the end, so adding one to deadline date and converting it to
+                                     -- timestamp means it's at the beginning of the day after deadline -> timestamps on the
+                                     -- deadline date are included in the range
+                                     -- coalesce selects the existing end time of the range based on priority:
+                                     -- 1. If next toimenpide in valvonta exists, take its starting time as the end
+                                     -- 2. End of deadline date if there is no next toimenpide
+                                     -- 3. If neither of those exists, the create_time of the toimenpide is also used as the end
+                                     --    to ensure that we don't get an endless range that includes everything. Range from
+                                     --    create_time to create_time includes nothing.
+                                     and tstzrange(toimenpide.create_time,
+                                                    coalesce(next_toimenpide.create_time, (toimenpide.deadline_date + 1)::timestamptz,
+                                                                                          toimenpide.create_time)) @>
+                                     energiatodistus.allekirjoitusaika
+                                     limit 1) energiatodistus on true
+           where not valvonta.deleted"
 
       {:row-fn        (comp write! csv-service/csv-line boolean->cross)
        :as-arrays?    :cols-as-is
