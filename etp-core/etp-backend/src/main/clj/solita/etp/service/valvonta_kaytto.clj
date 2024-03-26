@@ -437,7 +437,7 @@
                                                coalesce(next_toimenpide.create_time, (toimenpide.deadline_date + 1)::timestamptz,
                                                                                      toimenpide.create_time)) @>
                                 energiatodistus.allekirjoitusaika
-                                LIMIT 1) energiatodistus on true
+                                limit 1) energiatodistus on true
       where not valvonta.deleted"
 
       {:row-fn        (comp write! csv-service/csv-line boolean->cross)
