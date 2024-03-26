@@ -29,19 +29,20 @@
       (t/is (= @output
                [csv-header-line]))))
 
-  (t/testing "Creating csv when there is one open valvonta contains one content line in csv with its data"
-    (test-kayttajat/insert-virtu-paakayttaja!
-      {:etunimi    "Asian"
-       :sukunimi   "Tuntija"
-       :email      "testi@ara.fi"
-       :puhelin    "0504363675457"
-       :titteli-fi "energia-asiantuntija"
-       :titteli-sv "energiexpert"})
-    (let [valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
+  (t/testing "Creating csv when there is one open valvonta results in one content line in csv with its data"
+
+    (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
+                       {:etunimi    "Asian"
+                        :sukunimi   "Tuntija"
+                        :email      "testi@ara.fi"
+                        :puhelin    "0504363675457"
+                        :titteli-fi "energia-asiantuntija"
+                        :titteli-sv "energiexpert"})
+          valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
                                                                :postinumero       "90100"
                                                                :ilmoituspaikka-id 0
                                                                :rakennustunnus    "3139000812"
-                                                               :valvoja-id        1})
+                                                               :valvoja-id        valvoja-id})
           start-timestamp (-> (LocalDate/of 2024 3 18)
                               (.atStartOfDay (ZoneId/systemDefault))
                               .toInstant)
@@ -62,7 +63,7 @@
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"])))))
 
-(t/deftest valvonta.csv-toimenpidetype-test
+(t/deftest valvonta-csv-toimenpidetype-test
   (t/testing "Every toimenpide created on valvonta results in a row in the csv"
     (let [toimenpidetype-ids [0 1 2 3 4 5 6 7 8 9 10 11 12 14 15 16 17 18 19 21]
           valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
@@ -96,17 +97,17 @@
                  (count @output))
               "Number of rows in the output is how many toimenpidetypes there are plus the header row")))))
 
-(t/deftest valvonta.csv-generated-valvonnat-test
+(t/deftest valvonta-csv-generated-valvonnat-test
   (t/testing "Creating csv when there are 100 valvontas returns 101 unique rows with header row included"
-    (test-kayttajat/insert-virtu-paakayttaja!
-      {:etunimi    "Asian"
-       :sukunimi   "Tuntija"
-       :email      "testi@ara.fi"
-       :puhelin    "0504363675457"
-       :titteli-fi "energia-asiantuntija"
-       :titteli-sv "energiexpert"})
-    (let [valvonnat (repeatedly 100 #(generator/complete {:ilmoituspaikka-id 1
-                                                          :valvoja-id        1}
+    (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
+                       {:etunimi    "Asian"
+                        :sukunimi   "Tuntija"
+                        :email      "testi@ara.fi"
+                        :puhelin    "0504363675457"
+                        :titteli-fi "energia-asiantuntija"
+                        :titteli-sv "energiexpert"})
+          valvonnat (repeatedly 100 #(generator/complete {:ilmoituspaikka-id 1
+                                                          :valvoja-id        valvoja-id}
                                                          valvonta-schema/ValvontaSave))]
       (doseq [valvonta valvonnat]
         ;; Voiko tämän tehdä batch-insertinä, että olisi nopeampi? Onko mitään väliä?
@@ -125,7 +126,7 @@
         (t/is (= (count (set (rest @output)))
                  100))))))
 
-(t/deftest valvonta.csv-no-energiatodistus-test
+(t/deftest valvonta-csv-no-energiatodistus-test
   (t/testing "Energiatodistus hankittu column in csv is empty for all rows, when valvonta has been closed without created energiatodistus"
     (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
                        {:etunimi    "Asian"
@@ -182,7 +183,6 @@
                         :puhelin    "0504363675457"
                         :titteli-fi "energia-asiantuntija"
                         :titteli-sv "energiexpert"})
-          laatija-id (first (keys (test-data.laatija/generate-and-insert! 1)))
           rakennustunnus "3139000812"
           valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
                                                                :postinumero       "90100"
@@ -195,6 +195,9 @@
           kehotus-timestamp (-> (LocalDate/of 2024 3 20)
                                 (.atStartOfDay (ZoneId/systemDefault))
                                 .toInstant)
+          close-timestamp (-> (LocalDate/of 2024 3 22)
+                              (.atStartOfDay (ZoneId/systemDefault))
+                              .toInstant)
           output (atom [])
           call-count (atom 0)
           create-csv (valvonta-service/csv ts/*db*)]
@@ -214,7 +217,8 @@
                                             :diaarinumero  "ARA-05.03.01-2024-159"})
 
       ;; Create energiatodistus and sign it
-      (let [todistus (-> (test-data.energiatodistus/generate-add 2018 true)
+      (let [laatija-id (first (keys (test-data.laatija/generate-and-insert! 1)))
+            todistus (-> (test-data.energiatodistus/generate-add 2018 true)
                          (assoc-in [:perustiedot :rakennustunnus] rakennustunnus))
             todistus-id (test-data.energiatodistus/insert! [todistus] laatija-id)]
         (test-data.energiatodistus/sign-at-time! todistus-id
@@ -227,12 +231,8 @@
       ;; Close the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
                                             :type_id      5
-                                            :create_time  (-> (LocalDate/of 2024 3 22)
-                                                              (.atStartOfDay (ZoneId/systemDefault))
-                                                              .toInstant)
-                                            :publish_time (-> (LocalDate/of 2024 3 22)
-                                                              (.atStartOfDay (ZoneId/systemDefault))
-                                                              .toInstant)
+                                            :create_time  close-timestamp
+                                            :publish_time close-timestamp
                                             :diaarinumero "ARA-05.03.01-2024-159"})
 
       (create-csv (partial handle-output call-count output))
@@ -268,6 +268,10 @@
           kehotus-timestamp (-> (LocalDate/of 2024 3 20)
                                 (.atStartOfDay (ZoneId/systemDefault))
                                 .toInstant)
+          kehotus-deadline (LocalDate/of 2024 3 27)
+          close-timestamp (-> (LocalDate/of 2024 3 30)
+                              (.atStartOfDay (ZoneId/systemDefault))
+                              .toInstant)
           output (atom [])
           call-count (atom 0)
           create-csv (valvonta-service/csv ts/*db*)]
@@ -283,7 +287,7 @@
                                             :type_id       2
                                             :create_time   kehotus-timestamp
                                             :publish_time  kehotus-timestamp
-                                            :deadline_date (LocalDate/of 2024 3 27)
+                                            :deadline_date kehotus-deadline
                                             :diaarinumero  "ARA-05.03.01-2024-159"})
 
       ;; Create energiatodistus and sign it, the signing time is on the same day as the kehotus deadline
@@ -293,19 +297,15 @@
         (test-data.energiatodistus/sign-at-time! todistus-id
                                                  laatija-id
                                                  true
-                                                 (-> (LocalDate/of 2024 3 27)
+                                                 (-> kehotus-deadline
                                                      (.atStartOfDay (ZoneId/systemDefault))
                                                      .toInstant)))
 
       ;; Close the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
                                             :type_id      5
-                                            :create_time  (-> (LocalDate/of 2024 3 30)
-                                                              (.atStartOfDay (ZoneId/systemDefault))
-                                                              .toInstant)
-                                            :publish_time (-> (LocalDate/of 2024 3 30)
-                                                              (.atStartOfDay (ZoneId/systemDefault))
-                                                              .toInstant)
+                                            :create_time  close-timestamp
+                                            :publish_time close-timestamp
                                             :diaarinumero "ARA-05.03.01-2024-159"})
 
       (create-csv (partial handle-output call-count output))
@@ -343,6 +343,9 @@
                                 (.atStartOfDay (ZoneId/systemDefault))
                                 .toInstant)
           kehotus-deadline (LocalDate/of 2024 3 27)
+          close-timestamp (-> (.plusDays kehotus-deadline 2)
+                              (.atStartOfDay (ZoneId/systemDefault))
+                              .toInstant)
           output (atom [])
           call-count (atom 0)
           create-csv (valvonta-service/csv ts/*db*)]
@@ -386,12 +389,8 @@
         ;; Close the valvonta after the energiatodistus has been acquired
         (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
                                               :type_id      5
-                                              :create_time  (-> (.plusDays kehotus-deadline 2)
-                                                                (.atStartOfDay (ZoneId/systemDefault))
-                                                                .toInstant)
-                                              :publish_time (-> (.plusDays kehotus-deadline 2)
-                                                                (.atStartOfDay (ZoneId/systemDefault))
-                                                                .toInstant)
+                                              :create_time  close-timestamp
+                                              :publish_time close-timestamp
                                               :diaarinumero "ARA-05.03.01-2024-159"})
 
         ;; Reset the test state
