@@ -382,7 +382,7 @@
      "katuosoite" "postinumero" "postitoimipaikka"
      "toimenpide-id" "toimenpidetyyppi" "aika" "valvoja" "energiatodistus hankittu"]))
 
-(defn- boolean->cross
+(defn- boolean->checked
   "Represent boolean as x when it's true in käytönvalvonta-csv and as empty when false"
   [csv-row-coll]
   (map
@@ -440,7 +440,7 @@
                                      limit 1) energiatodistus on true
            where not valvonta.deleted"
 
-      {:row-fn        (comp write! csv-service/csv-line boolean->cross)
+      {:row-fn        (comp write! csv-service/csv-line boolean->checked)
        :as-arrays?    :cols-as-is
        :result-set-fn dorun
        :result-type   :forward-only
