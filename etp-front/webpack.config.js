@@ -8,8 +8,6 @@ const BundleAnalyzerPlugin =
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const TerserPlugin = require('terser-webpack-plugin');
-
 const path = require('path');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -41,7 +39,6 @@ module.exports = {
   },
   optimization: {
     moduleIds: 'deterministic',
-    minimizer: [new TerserPlugin()],
     runtimeChunk: { name: 'runtime' },
     splitChunks: {
       chunks: 'all',
