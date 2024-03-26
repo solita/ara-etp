@@ -110,7 +110,6 @@
                                                           :valvoja-id        valvoja-id}
                                                          valvonta-schema/ValvontaSave))]
       (doseq [valvonta valvonnat]
-        ;; Voiko tämän tehdä batch-insertinä, että olisi nopeampi? Onko mitään väliä?
         (valvonta-service/add-valvonta! ts/*db* valvonta))
 
       (let [output (atom [])
