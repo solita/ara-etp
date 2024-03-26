@@ -67,9 +67,7 @@
   <div class="flex flex-col gap-x-8 mt-2">
     {#if !overlay}
       {#each Maybe.toArray(korvaavaEnergiatodistus) as et}
-        <div
-          class="w-full py-4 relative"
-          transition:slide|local={{ duration: 200 }}>
+        <div class="w-full py-4 relative" transition:slide={{ duration: 200 }}>
           <EtTable energiatodistus={et} {whoami} {postinumerot} />
           {#if Maybe.exists(ET.isDraft, korvaavaEnergiatodistus)}
             <p class="text-sm flex mt-2">

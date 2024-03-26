@@ -23,7 +23,7 @@
     <slot name="content" />
   </div>
   {#if overlay}
-    <div transition:fade|local={{ duration: 50 }} class="overlay">
+    <div transition:fade={{ duration: 50 }} class="overlay">
       <slot name="overlay-content" />
     </div>
   {/if}

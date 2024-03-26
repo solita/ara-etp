@@ -48,7 +48,7 @@
 </style>
 
 <!-- purgecss: active -->
-<ol transition:slide|local={{ duration: 200 }}>
+<ol transition:slide={{ duration: 200 }}>
   {#each items as item}
     <HierarchicalNode {onclick} {item} {labelLens} {leafsLens} />
   {/each}

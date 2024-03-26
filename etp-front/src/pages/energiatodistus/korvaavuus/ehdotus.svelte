@@ -111,9 +111,7 @@
       {i18n(i18nRoot + '.ehdotus.info-p3-3')}
     </p>
     <div class="flex flex-col gap-x-8 mt-2">
-      <div
-        class="w-full py-4 relative"
-        transition:slide|local={{ duration: 200 }}>
+      <div class="w-full py-4 relative" transition:slide={{ duration: 200 }}>
         <div class="overflow-auto">
           <table class="etp-table">
             <thead class="etp-table--thead">
