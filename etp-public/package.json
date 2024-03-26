@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.11.6",
-    "chart.js": "^3.3.0",
+    "chart.js": "^4.0.0",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
     "object-hash": "^2.0.3",
