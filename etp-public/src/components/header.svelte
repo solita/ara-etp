@@ -113,14 +113,14 @@
             <span
               class="material-icons menu-icon w-full h-full"
               aria-hidden="true"
-              transition:scale>
+              transition:scale|global>
               close
             </span>
           {:else}
             <span
               class="material-icons menu-icon w-full h-full"
               aria-hidden="true"
-              transition:scale>
+              transition:scale|global>
               menu
             </span>
           {/if}
@@ -129,7 +129,7 @@
     </div>
   </Container>
   {#if mobileNavShown}
-    <div transition:slide class="lg:hidden">
+    <div transition:slide|global class="lg:hidden">
       <NavBar navButtonClicked={closeMobileNav} />
       <a
         class="text-ashblue items-center justify-center flex py-4 bg-white"

@@ -371,7 +371,7 @@
   {/each}
   {#if pendingExecution}
     <div
-      transition:fade|local={{ duration: 50 }}
+      transition:fade={{ duration: 50 }}
       class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0 flex flex-wrap justify-center content-center">
       <Spinner />
     </div>

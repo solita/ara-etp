@@ -88,7 +88,7 @@
 <!-- purgecss: active -->
 <ol
   bind:this={listElement}
-  transition:slide|local={{ duration: 200 }}
+  transition:slide={{ duration: 200 }}
   on:introend={() => scrollIndexToView(Maybe.orSome(0, active))}>
   {#each items as item, index}
     <li

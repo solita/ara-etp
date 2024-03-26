@@ -64,7 +64,7 @@
 
 {#if Validation.isLammitysmuoto1KuvausRequired(energiatodistus)}
   <div
-    transition:slide|local={{ duration: 200 }}
+    transition:slide={{ duration: 200 }}
     on:introend={evt => {
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
@@ -95,7 +95,7 @@
 
 {#if Validation.isLammitysmuoto2KuvausRequired(energiatodistus)}
   <div
-    transition:slide|local={{ duration: 200 }}
+    transition:slide={{ duration: 200 }}
     on:introend={evt => {
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
@@ -127,7 +127,7 @@
 
 {#if Validation.isLammonjakoKuvausRequired(energiatodistus)}
   <div
-    transition:slide|local={{ duration: 200 }}
+    transition:slide={{ duration: 200 }}
     on:introend={evt => {
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
