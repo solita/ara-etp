@@ -45,9 +45,9 @@
 
 (defn exec-libreoffice-on-windows [args]
   ;; On windows, it seems to be difficult to get the UserInstallation parameter
-  ;; to work at all. Because this is strictcly a development situation, we
+  ;; to work at all. Because this is strictly a development situation, we
   ;; ignore the usual need of having a per-process configuration. Instead, we
-  ;; expect the developer to not run multiple PDF generaion operations
+  ;; expect the developer to not run multiple PDF generation operations
   ;; concurrently
   (apply shell/sh "C:\\Program Files\\LibreOffice\\program\\soffice.bin" "--headless" args))
 
@@ -58,4 +58,4 @@
       (try
         (populate-tmpdir tmpdir)
         (exec-libreoffice tmpdir args)
-        (finally (println (str 'rm-path tmpdir)))))))
+        (finally (rm-path tmpdir))))))
