@@ -39,7 +39,7 @@ where tila_id = et_tilat.allekirjoituksessa and laatija_id = :laatija-id and id 
 -- name: update-energiatodistus-allekirjoitettu!
 update energiatodistus set
   tila_id = et_tilat.allekirjoitettu,
-  allekirjoitusaika = now(),
+  allekirjoitusaika = coalesce(:allekirjoitusaika, now()),
   voimassaolo_paattymisaika =
     timezone('Europe/Helsinki',
       timezone('Europe/Helsinki', now())::date::timestamp without time zone
