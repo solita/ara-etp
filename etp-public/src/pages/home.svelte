@@ -225,13 +225,17 @@
           <h3 class="mb-4">{$_('LISATIETOA_TUNNUSLUVUT')}</h3>
           <div class="flex flex-col space-y-2">
             {#await laatijatCount then count}
-              <div class="flex space-x-2" transition:slide={{ duration: 200 }}>
+              <div
+                class="flex space-x-2"
+                transition:slide|local={{ duration: 200 }}>
                 <span>{$_('LISATIETOA_LAATIJOITA')}</span>
                 <span>{count}</span>
               </div>
             {/await}
             {#await etCount then count}
-              <div class="flex space-x-2" transition:slide={{ duration: 200 }}>
+              <div
+                class="flex space-x-2"
+                transition:slide|local={{ duration: 200 }}>
                 <span>{$_('LISATIETOA_ENERGIATODISTUKSIA')}</span>
                 <span>{count}</span>
               </div>

@@ -41,7 +41,7 @@
 
 {#if Validation.isIlmanvaihtoKuvausRequired(energiatodistus)}
   <div
-    transition:slide={{ duration: 200 }}
+    transition:slide|local={{ duration: 200 }}
     on:introend={evt => {
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();

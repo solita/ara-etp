@@ -403,7 +403,7 @@
     {#if tarkennettuShown}
       <div
         class="tarkennettu-haku w-full lg:w-5/6 flex flex-col my-4 py-4 border-t-2 border-b-2 border-green space-y-2"
-        transition:slide={{ duration: animationDuration }}>
+        transition:slide|local={{ duration: animationDuration }}>
         <div
           class="tarkennettu-row w-full mx-auto center flex flex-col md:flex-row items-center">
           <span

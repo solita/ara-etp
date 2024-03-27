@@ -25,7 +25,7 @@ module.exports = {
       '@Utility': path.resolve(__dirname, 'src/utils'),
       '@Language': path.resolve(__dirname, 'src/language'),
       '@': path.resolve(__dirname, 'src'),
-      svelte: path.resolve('node_modules', 'svelte/src/runtime')
+      svelte: path.resolve('node_modules', 'svelte')
     },
     mainFields: ['svelte', 'browser', 'module', 'main'],
     // https://github.com/sveltejs/svelte-loader?tab=readme-ov-file#resolveconditionnames
