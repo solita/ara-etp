@@ -62,6 +62,7 @@ module.exports = {
     rules: [
       {
         test: /\.m?js$/,
+        exclude: /node_modules/,
         include: [path.resolve(__dirname, 'src'), /svelte/],
         use: ['babel-loader']
       },
