@@ -8,11 +8,7 @@
     "storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006",
     "storybook:build": "cross-env NODE_OPTIONS=--openssl-legacy-provider storybook build",
     "test": "jest",
-    "mocha": "mocha './src/**/*_test.js' --require @babel/register --reporter dot --require init-mocha.js",
-
     "coverage": "jest --coverage=true --coverageDirectory=coverage",
-    "nyc": "nyc --reporter=html --report-dir=nyc --reporter=text mocha './src/**/*_test.js' --require init-mocha.js --require @babel/register --reporter dot",
-
     "tdd": "jest --watchAll",
     "format": "prettier --write src modheaders.json",
     "check-format": "prettier --check src",
@@ -48,8 +44,6 @@
     "html-webpack-plugin": "^5.6.0",
     "jest": "^29.7.0",
     "mini-css-extract-plugin": "^2.8.1",
-    "mocha": "^10.2.0",
-    "nyc": "^15.0.1",
     "postcss": "^8.2.13",
     "postcss-import": "^16.0.0",
     "postcss-load-config": "^5.0.0",
