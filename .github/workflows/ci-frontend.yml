@@ -52,6 +52,11 @@ jobs:
           cache-dependency-path: etp-front/package-lock.json
       - run: npm ci
       - run: npm test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: '**/etp-front/test_report.xml'
 
   format:
     runs-on: ubuntu-latest
