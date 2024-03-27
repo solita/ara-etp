@@ -92,9 +92,5 @@
     "jsdoc": "^4.0.0",
     "nodemon": "^3.0.0",
     "sveltedoc-parser": "^4.1.0"
-  },
-  "nyc": {
-    "include": "src",
-    "exclude": "src/**/*_test.js"
   }
 }
