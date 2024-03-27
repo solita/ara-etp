@@ -200,7 +200,7 @@
             showPatevyydet={filterPatevyydet}
             {patevyydet} />
         </div>
-        <div slot="pagination">
+        <div slot="pagination" let:currentPageItemCount>
           <Pagination
             {page}
             {pageSize}
