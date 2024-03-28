@@ -12,7 +12,7 @@
 <style>
   .hero {
     height: 555px;
-    background-image: url('@Asset/hero.jpg?{fit:"inside",height:1000,width:1440}');
+    background-image: url('~@Asset/hero.jpg?{fit:"inside",height:1000,width:1440}');
     background-position: right 0 bottom -150px;
   }
 

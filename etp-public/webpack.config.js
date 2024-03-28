@@ -29,12 +29,12 @@ module.exports = {
     },
     mainFields: ['svelte', 'browser', 'module', 'main'],
     // https://github.com/sveltejs/svelte-loader?tab=readme-ov-file#resolveconditionnames
-    conditionNames: ['svelte', 'browser', 'import'],
+    conditionNames: ['svelte', 'browser', 'import']
   },
   output: {
     path: path.resolve(__dirname, 'public'),
     publicPath: '/',
-    filename: '[name].[contenthash].js',
+    filename: '[name].[contenthash].js'
   },
   optimization: {
     moduleIds: 'deterministic',
@@ -76,7 +76,7 @@ module.exports = {
             options: {
               emitCss: true,
               immutable: true,
-              legacy: true,
+              legacy: true
             }
           }
         ]
@@ -95,8 +95,11 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|webp|tiff?)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: '[name][ext]'
+        },
         use: [
-          "file-loader",
           {
             loader: 'webpack-image-resize-loader',
             options: {
@@ -154,7 +157,7 @@ module.exports = {
       title: 'Energiatodistusrekisteri',
       template: './src/template.html',
       favicon: './assets/favicon.png'
-    }),
+    })
     // uncomment to see treeview of generated bundle after build
     // new BundleAnalyzerPlugin()
   ],
@@ -166,7 +169,7 @@ module.exports = {
       '/api': {
         target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
-        changeOrigin: true,
+        changeOrigin: true
       }
     }
   }
