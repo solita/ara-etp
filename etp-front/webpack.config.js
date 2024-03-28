@@ -29,7 +29,7 @@ module.exports = {
     },
     mainFields: ['svelte', 'browser', 'module', 'main'],
     // https://github.com/sveltejs/svelte-loader?tab=readme-ov-file#resolveconditionnames
-    conditionNames: ['svelte', 'browser', 'import'],
+    conditionNames: ['svelte', 'browser', 'import']
   },
   output: {
     path: path.resolve(__dirname, 'public'),
@@ -123,19 +123,24 @@ module.exports = {
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
-    before: (app, server, compiler) =>
-      app.get('/config.json', (req, res) =>
+    client: {
+      overlay: false, // Hide compiler warnings on client
+    },
+    setupMiddlewares: (middlewares, devServer) => {
+      devServer.app.get('/config.json', (req, res) =>
         res.json({
           isDev: true,
           environment: 'dev',
           publicSiteUrl: 'https://localhost:3000'
         })
-      ),
+      );
+      return middlewares;
+    },
     headers: {
       'Content-Security-Policy':
         "default-src 'self';script-src 'self';connect-src 'self' localhost:53952;style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.quilljs.com;font-src 'self' fonts.gstatic.com;img-src 'self' data:"
     },
-    https: true,
+    server: 'https',
     // Using the spread syntax make property only be present in case its value is set to something.
     // If trying to spread a falsy value, no property will be created.
     ...(process.env.WEBPACK_HOST && { host: process.env.WEBPACK_HOST }),
@@ -143,13 +148,14 @@ module.exports = {
       allowedHosts: [`${process.env.WEBPACK_ALLOWED_HOSTS}`]
     }),
     port: process.env.WEBPACK_PORT || 3000,
-    proxy: {
-      '/api': {
+    proxy: [
+      {
+        context: ['/api'],
         target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
         changeOrigin: true,
         xfwd: true
       }
-    }
+    ]
   }
 };

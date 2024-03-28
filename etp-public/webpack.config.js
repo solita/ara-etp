@@ -163,14 +163,18 @@ module.exports = {
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
+    client: {
+      overlay: false // Hide compiler warnings on client
+    },
     port: process.env.WEBPACK_PORT || 5050,
     historyApiFallback: true,
-    proxy: {
-      '/api': {
+    proxy: [
+      {
+        context: ['/api'],
         target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
         changeOrigin: true
       }
-    }
+    ]
   }
 };
