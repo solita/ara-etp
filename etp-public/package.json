@@ -54,6 +54,6 @@
     "object-hash": "^3.0.0",
     "page": "^1.11.6",
     "qs": "^6.9.4",
-    "tailwindcss": "^1.7.5"
+    "tailwindcss": "^3.0.0"
   }
 }
