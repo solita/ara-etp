@@ -29,9 +29,9 @@ module.exports = async ({ config, mode }) => {
       {
         loader: 'postcss-loader',
         options: {
-          sourceMap: true,
-          config: {
-            path: './.storybook/'
+          postcssOptions: {
+            sourceMap: true,
+            config: './.storybook/'
           }
         }
       }
