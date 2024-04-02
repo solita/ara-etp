@@ -78,7 +78,7 @@
              org.apache.wss4j/wss4j-ws-security-common {:mvn/version "3.0.3"}
              com.sun.xml.messaging.saaj/saaj-impl      {:mvn/version "3.0.3"}
              org.apache.axis/axis                      {:mvn/version "1.4"}
-             commons-io/commons-io                     {:mvn/version "2.15.1"}
+             commons-io/commons-io                     {:mvn/version "2.16.0"}
              ;; commons-discovery is needed by some other library dynamically at runtime
              ;; related to suomi.fi-viestit implementation
              commons-discovery/commons-discovery       {:mvn/version "0.5"}
