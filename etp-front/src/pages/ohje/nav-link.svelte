@@ -110,7 +110,7 @@
   .font-icon:not(.icon-unpublished) {
     @apply select-none text-2xl;
   }
-  .root .text-dark {
+  .root {
     @apply text-light;
   }
   .root ~ .children {
@@ -120,7 +120,7 @@
     @apply cursor-move;
   }
   .draggable a {
-    @apply pointer-events-none font-hairline select-none;
+    @apply pointer-events-none font-thin select-none;
   }
   .isBeingDragged {
     @apply opacity-50;
@@ -164,7 +164,7 @@
       <a href={`/#/ohje/${sivu.id}`} class="flex-grow p-2 items-center">
         <span class="title"> {sivu.title} </span>
         {#if !sivu.published}
-          <span class="font-icon icon-unpublished text-dark select-none">
+          <span class="font-icon icon-unpublished select-none">
             visibility_off
           </span>
         {/if}

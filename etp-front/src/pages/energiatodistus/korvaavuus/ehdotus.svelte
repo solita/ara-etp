@@ -92,8 +92,7 @@
 {/if}
 
 {#if !R.isEmpty(korvattavat)}
-  <div
-    class="my-4 border-primary border-2 border-opacity-15 rounded-md p-4 shadow-md">
+  <div class="my-4 border-primary/15 border-2 rounded-md p-4 shadow-md">
     <h3>
       <span class="font-icon">info_outline</span>
       {i18n(i18nRoot + '.header.ehdotus')}

@@ -37,7 +37,7 @@
         {#each labels as label}
           <div class="w-full flex justify-between">
             <dt>{selectByLocaleOrAvailable('label', label)}</dt>
-            <dd class="whitespace-no-wrap">
+            <dd class="whitespace-nowrap">
               {#if items[label.id]}
                 {Formats.formatPercent(
                   Parsers.parsePercent(total, items[label.id])

@@ -97,7 +97,7 @@ input {
   }
 
   .table-container td span.m-title {
-    @apply block text-green font-bold whitespace-no-wrap;
+    @apply block text-green font-bold whitespace-nowrap;
   }
 
   /* .table-container td:before {
@@ -105,7 +105,7 @@ input {
     left: 0.5em;
     text-align: left;
 
-    @apply text-green absolute font-bold whitespace-no-wrap pr-1 w-1/2;
+    @apply text-green absolute font-bold whitespace-nowrap pr-1 w-1/2;
   }
 
   .table-container td:before {

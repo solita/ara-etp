@@ -27,7 +27,7 @@
 {:else}
   <div class="flex font-bold text-error">
     {#if icons}<span class="font-icon">error_outline</span>{/if}
-    <span class="whitespace-no-wrap">
+    <span class="whitespace-nowrap">
       {$_('viesti.ketju.existing.no-handler')}
     </span>
   </div>

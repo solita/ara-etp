@@ -95,7 +95,7 @@
 
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
-        <div class="font-bold whitespace-no-wrap">
+        <div class="font-bold whitespace-nowrap">
           <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
         </div>
         :

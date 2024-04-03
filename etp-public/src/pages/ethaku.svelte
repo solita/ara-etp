@@ -865,7 +865,7 @@
     {/if}
     <div class="flex mt-8">
       <a
-        class="flex justify-start items-center mt-12 text-darkgreen whitespace-no-wrap"
+        class="flex justify-start items-center mt-12 text-darkgreen whitespace-nowrap"
         href={'/api/public/energiatodistukset/csv/energiatodistukset.csv'}
         download="ethaku.csv">
         <span class="material-icons" aria-hidden="true"> download </span>

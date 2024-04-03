@@ -652,7 +652,7 @@
                         <dl>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_LAMMONTALTEENOTON')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {formatPercent(
                                 results?.['common-averages']?.[
                                   'lto-vuosihyotysuhde'
@@ -669,7 +669,7 @@
                                 <span>{$_('TILASTOT_SFP_LUKU')}</span>
                               </InfoTooltip>
                             </dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {format(
                                 results?.['common-averages']?.[
                                   'ivjarjestelma-sfp'
@@ -718,7 +718,7 @@
                         <dl>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_AURINKOSAHKO')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
                                 total2018,
                                 results?.[
@@ -729,7 +729,7 @@
                           </div>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_AURINKOLAMPO')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
                                 total2018,
                                 results?.[
@@ -740,7 +740,7 @@
                           </div>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_TUULISAHKO')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
                                 total2018,
                                 results?.[
@@ -751,7 +751,7 @@
                           </div>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_LAMPOPUMPPU')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
                                 total2018,
                                 results?.[
@@ -762,7 +762,7 @@
                           </div>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_MUU_SAHKO')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
                                 total2018,
                                 results?.[
@@ -773,7 +773,7 @@
                           </div>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_MUU_LAMPO')}</dt>
-                            <dd class="whitespace-no-wrap">
+                            <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
                                 total2018,
                                 results?.[
@@ -804,7 +804,7 @@
                   }}>
                   <span class="material-icons align-middle" aria-hidden="true"
                     >print</span>
-                  <span class="whitespace-no-wrap">
+                  <span class="whitespace-nowrap">
                     {$_('TILASTOT_TULOSTA')}
                   </span>
                 </Button>

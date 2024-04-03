@@ -34,7 +34,7 @@
 
 <div class="flex flex-col mb-3">
   <div class="flex overflow-hidden items-center">
-    <div class="mr-4 whitespace-no-wrap">
+    <div class="mr-4 whitespace-nowrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}

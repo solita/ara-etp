@@ -1,7 +1,7 @@
 <style>
   div.markup :global(ul),
   div.markup :global(ol) {
-    @apply whitespace-no-wrap;
+    @apply whitespace-nowrap;
   }
 
   div.markup :global(li)::before {
@@ -9,7 +9,7 @@
   }
 
   div.markup {
-    @apply flex truncate whitespace-no-wrap;
+    @apply flex truncate whitespace-nowrap;
   }
 
   div.markup :global(li) {

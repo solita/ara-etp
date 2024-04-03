@@ -23,7 +23,7 @@
 
 <address>
   {Maybe.orSome('', katuosoite)}{separator}
-  <span class="whitespace-no-wrap">
+  <span class="whitespace-nowrap">
     {Maybe.fold(
       '',
       Postinumerot.formatPostinumero(postinumerot, $locale),

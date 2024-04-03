@@ -36,19 +36,21 @@ module.exports = {
         xxl: '1440px',
         print: { raw: 'print' }
       }
+    },
+    fontSize: {
+      // Tailwind V1 theming. Feel free to change if you are a visual designer
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+      '2xl': '1.5rem',
+      '3xl': '1.875rem',
+      '4xl': '2.25rem',
+      '5xl': '3rem',
+      '6xl': '4rem'
     }
   },
-  variants: {
-    backgroundColor: ['responsive', 'hover', 'focus'],
-    boxShadow: ['responsive', 'hover', 'focus'],
-    zIndex: ['responsive', 'hover', 'focus']
-  },
   plugins: [],
-  future: {
-    removeDeprecatedGapUtilities: true
-  },
-  purge: {
-    content: ['./src/**/*.css', './src/**/*.svelte'],
-    options: { safelist: { standard: /svelte-/ } }
-  }
+  content: ['./src/**/*.svelte'],
 };

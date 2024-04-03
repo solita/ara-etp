@@ -16,7 +16,7 @@
 
 <div class="flex flex-col space-y-1">
   <div class="flex">
-    <span class="mr-2 whitespace-no-wrap">
+    <span class="mr-2 whitespace-nowrap">
       {Formats.formatTimeInstantMinutes(note['create-time'])}
     </span>
     <span class="font-icon mr-1">comment</span>
