@@ -110,19 +110,13 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        use: [
-          'file-loader',
-          {
-            loader: 'svgo-loader',
-            options: {
-              plugins: [
-                { removeTitle: true },
-                { convertColors: { shorthex: false } },
-                { convertPathData: false }
-              ]
-            }
-          }
-        ]
+        type: 'asset/resource',
+        loader: 'svgo-loader',
+        options: {
+          removeTitle: true,
+          convertColors: { shorthex: false },
+          convertPathData: false
+        }
       },
       {
         test: /\.pdf$/,
