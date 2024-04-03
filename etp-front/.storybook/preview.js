@@ -1,7 +1,5 @@
 import './tailwind.css';
-import { makeDecorator } from '@storybook/addons';
-import { addParameters, addDecorator } from '@storybook/svelte';
-import { withA11y } from '@storybook/addon-a11y';
+import { makeDecorator } from "@storybook/preview-api";
 import { setupI18n } from '@Language/i18n';
 
 export const parameters = { viewport: { defaultViewport: 'responsive' } };
