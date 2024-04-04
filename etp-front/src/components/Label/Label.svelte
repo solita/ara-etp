@@ -39,7 +39,6 @@
   }
 </style>
 
-<!-- purgecss: sr-only required error focused warning -->
 <label
   for={id}
   class:sr-only={compact}

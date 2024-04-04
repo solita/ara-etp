@@ -37,7 +37,6 @@
   }
 </style>
 
-<!-- purgecss: caret search focused error warning disabled -->
 <div
   class="inputwrapper"
   class:caret

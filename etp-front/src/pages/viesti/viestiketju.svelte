@@ -36,8 +36,6 @@
   }
 </style>
 
-<!-- purgecss: font-bold text-primary unread -->
-
 <a
   href={`#/viesti/${ketju.id}`}
   class="flex flex-col border-b-2 border-background hover:bg-althover p-2"

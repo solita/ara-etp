@@ -35,7 +35,6 @@
   }
 </style>
 
-<!-- purgecss: center error -->
 <input
   {id}
   {name}

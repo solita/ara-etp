@@ -41,8 +41,6 @@
   }
 </style>
 
-<!-- purgecss: inline-block hidden disabled font-bold -->
-
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
   <label class:disabled class:font-bold={focused}>
     <span

@@ -43,16 +43,6 @@
   }
 </style>
 
-<!-- purgecss: 
-    bg-beige
-    bg-mainnavigation
-    bg-ashbluewhite
-    bg-grey
-    bg-white
-    bg-heroblurred
-    bg-red
--->
-
 <div class="bg-{background}">
   <div class="mx-auto xxl:container">
     <slot />

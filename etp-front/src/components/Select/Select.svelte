@@ -182,7 +182,6 @@
     }
   }} />
 
-<!-- purgecss: disabled -->
 <div>
   {#if required}
     <span class="required-marker" aria-hidden="true">*</span>

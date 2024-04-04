@@ -43,7 +43,6 @@
   }
 </style>
 
-<!-- purgecss: active -->
 {#if disabled}
   <span class="disabled px-2 lg:px-6">{label}</span>
 {:else}

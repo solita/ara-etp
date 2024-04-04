@@ -127,8 +127,6 @@
   }
 </style>
 
-<!-- purgecss: active root child hasNoChildren draggable isBeingDragged isBeingTargeted setDroppedAsChild childrenShown draggable icon-unpublished hidden -->
-
 <div class="flex flex-col w-full">
   <div
     use:dragdrop={{ dragStart, dragEnd, dragEnter, dragLeave, drop }}

@@ -85,7 +85,6 @@
   }
 </style>
 
-<!-- purgecss: active -->
 <ol
   bind:this={listElement}
   transition:slide={{ duration: 200 }}

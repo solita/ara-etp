@@ -210,8 +210,6 @@
   }
 </style>
 
-<!-- purgecss: bg-primary bg-disabled -->
-
 {#if signingActive}
   <Signing {energiatodistus} reload={cancel} />
 {/if}

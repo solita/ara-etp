@@ -87,7 +87,6 @@
   }
 </style>
 
-<!-- purgecss: bg-beige -->
 {#if Maybe.isSome(laatijat)}
   <div class="flex w-full">
     <div class="w-7/12 flex flex-col justify-end">

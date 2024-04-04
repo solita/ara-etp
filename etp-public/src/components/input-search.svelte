@@ -26,8 +26,6 @@
   }
 </style>
 
-<!-- purgecss: invalid -->
-
 <label for={id} class="sr-only">{label}</label>
 <div
   class="w-full relative inline-block bg-white rounded-full border-2 px-4 py-2

@@ -46,7 +46,6 @@
   }
 </style>
 
-<!-- purgecss: primary secondary error disabled pr-12 -->
 <button
   {type}
   data-cy={`${prefix}-${type}`}

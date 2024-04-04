@@ -145,8 +145,6 @@
   }
 </style>
 
-<!-- purgecss: etp-table--tr__link -->
-
 <Overlay {overlay}>
   <div slot="content">
     <form>

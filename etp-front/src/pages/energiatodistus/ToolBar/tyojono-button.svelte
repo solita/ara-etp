@@ -3,7 +3,6 @@
   export let disabled;
 </script>
 
-<!-- purgecss: hover:text-light hover:bg-primary text-primary text-darkgrey hover:text-darkgrey cursor-not-allowed -->
 <button
   disabled={valvonta.ongoing || disabled}
   class="min-h-3em"
