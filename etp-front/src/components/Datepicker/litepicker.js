@@ -13,11 +13,13 @@ export const litepicker = (node, opts) => {
       maxYear: new Date().getFullYear() + 11,
       months: true,
       years: true
-    },
-    onSelect: opts.update
+    }
   };
 
   const picker = new Litepicker(options);
+  picker.on('selected', wrapper => {
+    opts.update(wrapper.dateInstance);
+  });
 
   return () => picker.destroy();
 };

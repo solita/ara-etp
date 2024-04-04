@@ -50,7 +50,8 @@ const commentIsInToimenpideList = comment => {
   cy.contains(comment).should('be.visible');
 };
 
-const createKaytonvalvonta = () => {
+const createNewValvonta = () => {
+  cy.get('[data-cy="Uusi valvonta"]').click();
   // Fill in minimum information
   cy.get('[data-cy="kohde.katuosoite"]')
     .type('Testikatu 26')
@@ -604,6 +605,17 @@ const reopenValvonta = () => {
   ).should('be.visible');
 };
 
+const navigateToKaytonvalvonta = () => {
+  cy.visit('/');
+  cy.contains('Käytön­valvon­nat').click();
+};
+
+const navigateToValvontaPage = () => {
+  // Navigate to the valvonta page
+  cy.get('[data-cy^=KV]').click();
+  cy.get('[data-cy=Valvonta]').click();
+};
+
 context('Käytönvalvonta', () => {
   beforeEach(() => {
     cy.intercept(/\/api\/private/, req => {
@@ -614,16 +626,11 @@ context('Käytönvalvonta', () => {
   });
 
   it('full process succeeds', () => {
-    // Navigate to creating a new käytönvalvonta
-    cy.visit('/');
-    cy.contains('Käytön­valvon­nat').click();
-    cy.get('[data-cy="Uusi valvonta"]').click();
+    navigateToKaytonvalvonta();
 
-    createKaytonvalvonta();
+    createNewValvonta();
 
-    // Navigate to the valvonta page
-    cy.get('[data-cy^=KV]').click();
-    cy.get('[data-cy=Valvonta]').click();
+    navigateToValvontaPage();
 
     startValvonta();
 
@@ -675,8 +682,7 @@ context('Käytönvalvonta', () => {
   });
 
   it('postinumero is a required field', () => {
-    cy.visit('/');
-    cy.contains('Käytön­valvon­nat').click();
+    navigateToKaytonvalvonta();
     cy.get('[data-cy="Uusi valvonta"]').click();
 
     cy.get('[data-cy="kohde.katuosoite"]')
@@ -692,5 +698,37 @@ context('Käytönvalvonta', () => {
     cy.get('[data-cy="kohde.postinumero"]').type('90100').blur();
     cy.get('[data-cy="-submit"]').click();
     cy.get('.alert').should('not.exist');
+  });
+
+  it.only('date picking works', () => {
+    navigateToKaytonvalvonta();
+    createNewValvonta();
+    navigateToValvontaPage();
+    startValvonta();
+
+    cy.get('[data-cy="toimenpide-type-selection"]')
+      .click()
+      .parent()
+      .within(() => {
+        cy.contains('Kehotus').click();
+      });
+
+    cy.selectInSelect('document-selector', 'Kehotus');
+
+    cy.get('[data-cy="datepicker"]').find('input').click();
+
+    const now = new Date();
+    const desired = now.getDate() === 1 ? 2 : 1;
+    cy.get('div.litepicker:visible').within(_ => {
+      cy.contains(new RegExp(`^${desired}$`))
+        .focus()
+        .click();
+    });
+    submitToimenpide();
+
+    now.setDate(desired);
+    cy.get('[data-cy="deadline"]').contains(
+      `${now.getDate()}.${now.getMonth() + 2}.${now.getFullYear()}`
+    );
   });
 });

@@ -43,7 +43,7 @@
         class:text-error={isPastDeadline(deadline)}
         class:hover:border-error={isPastDeadline(deadline)}>
         <span class="font-icon">schedule</span>
-        <span
+        <span data-cy="deadline"
           >{i18n(i18nRoot + '.deadline-date')}
           {Formats.formatDateInstant(deadline)}</span>
         <span class="font-icon">edit</span>
