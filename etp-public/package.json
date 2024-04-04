@@ -23,7 +23,7 @@
     "chai": "^4.2.0",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
-    "css-loader": "^6.10.0",
+    "css-loader": "^7.0.0",
     "cssnano": "^6.0.0",
     "file-loader": "^6.1.0",
     "generate-json-webpack-plugin": "^2.0.0",
