@@ -24,6 +24,7 @@ export const isValidSignatureResponse = R.compose(
   R.prop('status')
 );
 
+// TODO: Add option to get the signature from the backend.
 export const getSignature = R.curry((fetch, content) =>
   R.compose(
     R.map(R.pick(['signature', 'chain'])),

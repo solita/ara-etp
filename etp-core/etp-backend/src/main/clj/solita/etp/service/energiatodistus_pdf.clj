@@ -748,6 +748,7 @@
                             :e-luokka)
                         (:versio complete-energiatodistus))
 
+    ;; TODO: Laita tässä metadataan tiedot ennen allekirjoitusta?
     (set-metadata pdf-path
                   (:laatija-fullname complete-energiatodistus)
                   (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
@@ -806,6 +807,7 @@
              signable-pdf-path (str/replace pdf-path #".pdf" "-signable.pdf")
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              _ (signature-as-png signature-png-path laatija-fullname)
+             ;; TODO: Jossain tässä olisi ehkä parempi laittaa metadata...
              signable-pdf-path (puumerkki/add-watermarked-signature-space
                                  pdf-path
                                  signable-pdf-path

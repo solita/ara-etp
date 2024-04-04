@@ -7,6 +7,7 @@ echo Retrieve /secret/etp/suomifi/viestit/client.crt
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/client.crt" | jq .SecretString -r > public.pem
 echo Retrieve /secret/etp/suomifi/viestit/private.key
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/private.key" | jq .SecretString -r > private.pem
+# TODO: Get the certificate from secters manager and create a chain? Or just put the chain into SM?
 
 echo Pack certificate as p12 file format
 openssl pkcs12 -export -in public.pem -inkey private.pem -out viestit.p12 -name ${SUOMIFI_VIESTIT_KEYSTORE_ALIAS} -passout pass:${SUOMIFI_VIESTIT_KEYSTORE_PASSWORD}

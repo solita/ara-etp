@@ -78,4 +78,5 @@
             :handler (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]
                        (api-response/signature-response
                          (energiatodistus-service/cancel-energiatodistus-signing! db whoami id)
-                         id))}}]])
+                         id))}}]]
+;; TODO: Tee endpoint, jota kutsutaan mpolluxin sijaan.
