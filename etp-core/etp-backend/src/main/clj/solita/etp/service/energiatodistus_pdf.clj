@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [clojure.tools.logging :as log]
             [puumerkki.pdf :as puumerkki]
+            [solita.etp.config :as config]
             [solita.etp.exception :as exception]
             [solita.common.xlsx :as xlsx]
             [solita.common.certificates :as certificates]
@@ -12,10 +13,12 @@
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.file :as file-service]
+            [solita.etp.service.sign :as sign-service]
             [solita.common.formats :as formats])
   (:import (java.awt Font Color)
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File)
+           (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
@@ -617,11 +620,11 @@
         dir (.getParent file)
         result-pdf (str/replace path #".xlsx$" ".pdf")
         {:keys [exit] :as sh-result} (libreoffice/run-with-args
-                                           "--convert-to"
-                                           "pdf"
-                                           filename
-                                           :dir
-                                           dir)]
+                                       "--convert-to"
+                                       "pdf"
+                                       filename
+                                       :dir
+                                       dir)]
     (if (and (zero? exit) (.exists (io/as-file result-pdf)))
       result-pdf
       (throw (ex-info "XLSX to PDF conversion failed"
@@ -798,7 +801,9 @@
       (.dispose))
     (ImageIO/write img "PNG" (io/file path))))
 
-(defn find-energiatodistus-digest [db aws-s3-client id language]
+;;TODO: Hajota signature omaksi endpointiksi ehkä, mutta sinänsä olisi aika luontevaa
+;;      palauttaa tässä.
+(defn find-energiatodistus-digest [db aws-s3-client aws-kms-client id language]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus}
              (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
@@ -807,7 +812,6 @@
              signable-pdf-path (str/replace pdf-path #".pdf" "-signable.pdf")
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              _ (signature-as-png signature-png-path laatija-fullname)
-             ;; TODO: Jossain tässä olisi ehkä parempi laittaa metadata...
              signable-pdf-path (puumerkki/add-watermarked-signature-space
                                  pdf-path
                                  signable-pdf-path
@@ -817,6 +821,9 @@
                                  (case versio 2013 648 2018 666))
              signable-pdf-data (puumerkki/read-file signable-pdf-path)
              digest (puumerkki/compute-base64-pkcs signable-pdf-data)
+             signature (->> (.getBytes digest StandardCharsets/UTF_8)
+                            (sign-service/sign aws-kms-client)
+                            (.readAllBytes))
              key (energiatodistus-service/file-key id language)]
          (file-service/upsert-file-from-bytes aws-s3-client
                                               key
@@ -824,7 +831,9 @@
          (io/delete-file pdf-path)
          (io/delete-file signable-pdf-path)
          (io/delete-file signature-png-path)
-         {:digest digest}))))
+         {:digest    digest
+          :signature signature
+          }))))
 
 (defn comparable-name [s]
   (-> s

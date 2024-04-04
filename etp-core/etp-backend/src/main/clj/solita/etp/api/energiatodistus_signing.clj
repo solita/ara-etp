@@ -31,10 +31,10 @@
            :access rooli-service/laatija?
            :responses {200 {:body nil}
                        404 {:body schema/Str}}
-           :handler (fn [{{{:keys [id language]} :path} :parameters :keys [db aws-s3-client]}]
+           :handler (fn [{{{:keys [id language]} :path} :parameters :keys [db aws-s3-client aws-kms-client]}]
                       (api-response/signature-response
                        (energiatodistus-pdf-service/find-energiatodistus-digest
-                        db aws-s3-client id language)
+                        db aws-s3-client aws-kms-client id language)
                        (str id "/" language)))}}]
    ["/pdf/:language"
     {:put {:summary "Luo allekirjoitettu PDF"
@@ -68,7 +68,6 @@
                             (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
                             id)
                          [{:type :not-signed :response 400}]))}}]
-
    ["/cancel"
     {:post {:summary "Keskeytä allekirjoitus ja siirrä energiatodistus takaisin luonnokseksi"
             :parameters {:path {:id common-schema/Key}}
@@ -78,5 +77,5 @@
             :handler (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]
                        (api-response/signature-response
                          (energiatodistus-service/cancel-energiatodistus-signing! db whoami id)
-                         id))}}]]
+                         id))}}]])
 ;; TODO: Tee endpoint, jota kutsutaan mpolluxin sijaan.
