@@ -37,7 +37,6 @@
   }
 </style>
 
-<!-- purgecss: active header -->
 <li
   style="padding-left:{margin}em;"
   class="nodeitem dropdownitem"

@@ -15,7 +15,7 @@
 
 <address>
   {address.jakeluosoite},
-  <span class="whitespace-no-wrap">
+  <span class="whitespace-nowrap">
     {address.postinumero}
     {address.postitoimipaikka}
   </span>

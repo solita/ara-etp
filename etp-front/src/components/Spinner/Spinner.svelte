@@ -32,7 +32,6 @@
   }
 </style>
 
-<!-- purgecss: white smaller -->
 <div class="spinner" class:smaller class:white>
   <div />
 </div>

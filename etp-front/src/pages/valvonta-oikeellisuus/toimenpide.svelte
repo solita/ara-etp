@@ -39,11 +39,9 @@
   }
 </script>
 
-<!-- purgecss: text-error hover:border-error -->
-
 <div class="flex flex-col space-y-1">
   <div class="flex overflow-hidden">
-    <div class="mr-2 whitespace-no-wrap">
+    <div class="mr-2 whitespace-nowrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}

@@ -18,7 +18,6 @@
   }
 </style>
 
-<!-- purgecss: active -->
 <div class="mx-2">
   <button
     class="hover:underline"

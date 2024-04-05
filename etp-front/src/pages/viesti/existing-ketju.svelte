@@ -165,8 +165,6 @@
   }
 </style>
 
-<!-- purgecss: hidden -->
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each resources.toArray() as { ketju, whoami, ryhmat, kasittelijat }}

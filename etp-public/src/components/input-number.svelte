@@ -43,9 +43,6 @@
   }
 </style>
 
-<!-- purgecss: 
-border-red
--->
 <div class="relative w-full flex flex-col pb-8">
   <label for={id} class="sr-only">{label}</label>
   <div

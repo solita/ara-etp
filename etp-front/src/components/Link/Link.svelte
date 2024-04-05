@@ -23,8 +23,6 @@
   }
 </style>
 
-<!-- purgecss: disabled font-bold -->
-
 <a
   {href}
   {target}

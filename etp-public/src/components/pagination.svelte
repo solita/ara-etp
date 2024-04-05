@@ -43,8 +43,6 @@
   }
 </style>
 
-<!-- purgecss: text-black text-lightgrey -->
-
 <div
   class="flex w-full align-center items-center justify-center my-1 flex-col
   md:flex-row relative">

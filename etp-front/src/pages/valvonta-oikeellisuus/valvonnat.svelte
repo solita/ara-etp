@@ -191,8 +191,6 @@
   ]);
 </script>
 
-<!-- purgecss: font-bold text-primary text-error -->
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     {#each Maybe.toArray(resources) as { valvonnat, count, whoami, luokittelut, toimenpidetyypit, valvojat, laatijat, kayttotarkoitukset }}

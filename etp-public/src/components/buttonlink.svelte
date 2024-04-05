@@ -46,17 +46,6 @@
   }
 </style>
 
-<!-- purgecss: 
-  bg-lightgrey
-  bg-green
-  bg-white
-  bg-ashblue
-  bg-darkgreen
-  bg-grey
-  bg-darkashblue
-  cursor-not-allowed
-  shadow-none
--->
 <a
   {href}
   {target}

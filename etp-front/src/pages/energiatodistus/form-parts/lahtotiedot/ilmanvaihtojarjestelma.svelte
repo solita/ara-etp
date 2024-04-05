@@ -57,8 +57,6 @@
   </div>
 {/if}
 
-<!-- purgecss: pb-3 -->
-
 <div class="min-w-full overflow-x-auto">
   <table class="et-table mb-6">
     <thead class="et-table--thead">

@@ -29,8 +29,6 @@
   }
 </style>
 
-<!-- purgecss: checked -->
-
 <input bind:this={input} class="hidden" name={`${nameprefix}_value_${index}`} />
 
 <div class="flex flex-row">

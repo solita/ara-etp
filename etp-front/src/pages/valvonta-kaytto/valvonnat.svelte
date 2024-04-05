@@ -217,8 +217,6 @@
   }
 </style>
 
-<!-- purgecss: font-bold text-primary text-error -->
-
 <Overlay {overlay}>
   <div slot="content" class="w-full mt-3">
     <div class="flex justify-between">

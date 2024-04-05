@@ -362,7 +362,7 @@
           }}>
           <span class="material-icons align-middle" aria-hidden="true"
             >arrow_back</span>
-          <span class="whitespace-no-wrap">{$_('ET_BACK')}</span>
+          <span class="whitespace-nowrap">{$_('ET_BACK')}</span>
         </Button>
         <span class="flex-grow mr-2"> {$_('ET_KUVAUS')} </span>
       </div>
@@ -392,7 +392,7 @@
                 : VirallinenMalli2018}>
               <span class="material-icons" aria-hidden="true"
                 >picture_as_pdf</span>
-              <span class="whitespace-no-wrap"> {$_('ET_VIRALLINEN')}</span>
+              <span class="whitespace-nowrap"> {$_('ET_VIRALLINEN')}</span>
               <span class="sr-only">(pdf)</span>
             </ButtonLink>
           </div>
@@ -1043,7 +1043,7 @@
           <Button {...buttonStyles.green} on:click={() => window.print()}>
             <span class="material-icons align-middle" aria-hidden="true"
               >print</span>
-            <span class="whitespace-no-wrap"> {$_('TULOSTA_KOOSTE')} </span>
+            <span class="whitespace-nowrap"> {$_('TULOSTA_KOOSTE')} </span>
           </Button>
         </div>
       {:catch error}

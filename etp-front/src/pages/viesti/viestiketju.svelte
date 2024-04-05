@@ -36,8 +36,6 @@
   }
 </style>
 
-<!-- purgecss: font-bold text-primary unread -->
-
 <a
   href={`#/viesti/${ketju.id}`}
   class="flex flex-col border-b-2 border-background hover:bg-althover p-2"
@@ -95,7 +93,7 @@
 
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
-        <div class="font-bold whitespace-no-wrap">
+        <div class="font-bold whitespace-nowrap">
           <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
         </div>
         :

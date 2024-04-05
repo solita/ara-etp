@@ -109,7 +109,7 @@
               </span>
               {#each h.muuttoimintaalueet as alue}
                 <span
-                  class="flex flex-no-wrap truncate"
+                  class="flex flex-nowrap truncate"
                   title={i18n('laatija.muuttoimintaalueet')}>
                   {Locales.labelForId($locale, toimintaalueet)(alue)}
                 </span>

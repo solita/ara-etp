@@ -34,26 +34,6 @@
   }
 </style>
 
-<!-- purgecss: 
-bg-lightgreen 
-bg-green 
-bg-altgreen 
-bg-ashblue
-text-white
-text-black
-shadow-lightgreen
-shadow-green
-shadow-altgreen
-shadow-ashblue 
-shadow-none 
-border-lightgreen
-border-green
-border-darkgreen
-border-altgreen
-border-ashblue
-border-black
-border-white
--->
 <a
   class="flex box-border lg:flex-full flex-auto py-4 xl:py-6 px-2 navcontainer
   bg-{background} text-{text} border-{text} focus:z-10 hover:z-10 hover:underline

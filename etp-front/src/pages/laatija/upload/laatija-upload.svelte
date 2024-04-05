@@ -131,8 +131,6 @@
   }
 </style>
 
-<!-- purgecss: invalid -->
-
 <Overlay {overlay}>
   <div slot="content">
     <LaatijaDropArea bind:laatijat bind:files />

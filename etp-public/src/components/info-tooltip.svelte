@@ -86,7 +86,6 @@
   }
 </style>
 
-<!-- purgecss: top bottom right left -->
 <div class="flex items-center space-x-1">
   <slot />
   {#if tooltip.length}

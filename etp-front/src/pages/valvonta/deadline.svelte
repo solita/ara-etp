@@ -23,8 +23,6 @@
   const isPastDeadline = R.both(R.complement(dfns.isToday), dfns.isPast);
 </script>
 
-<!-- purgecss: text-error hover:border-error -->
-
 {#each Maybe.toArray(toimenpideToUpdate) as toimenpide}
   <DeadlineDialog
     {toimenpide}

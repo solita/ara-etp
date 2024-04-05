@@ -57,7 +57,6 @@
   }
 </style>
 
-<!-- purgecss: caret search focused error disabled warning -->
 <div
   class="inputwrapper"
   class:caret={caret && !disabled}
