@@ -194,6 +194,7 @@
           kehotus-timestamp (-> (LocalDate/of 2024 3 20)
                                 (.atStartOfDay (ZoneId/systemDefault))
                                 .toInstant)
+          kehotus-deadline-date (LocalDate/of 2024 3 27)
           close-timestamp (-> (LocalDate/of 2024 3 22)
                               (.atStartOfDay (ZoneId/systemDefault))
                               .toInstant)
@@ -212,7 +213,7 @@
                                             :type_id       2
                                             :create_time   kehotus-timestamp
                                             :publish_time  kehotus-timestamp
-                                            :deadline_date (LocalDate/of 2024 3 27)
+                                            :deadline_date kehotus-deadline-date
                                             :diaarinumero  "ARA-05.03.01-2024-159"})
 
       ;; Create energiatodistus and sign it
@@ -223,7 +224,8 @@
         (test-data.energiatodistus/sign-at-time! todistus-id
                                                  laatija-id
                                                  true
-                                                 (-> (LocalDate/of 2024 3 21)
+                                                 (-> kehotus-deadline-date
+                                                     (.minusDays 3)
                                                      (.atStartOfDay (ZoneId/systemDefault))
                                                      .toInstant)))
 
