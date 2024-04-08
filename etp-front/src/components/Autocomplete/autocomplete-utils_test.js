@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Maybe from '@Utility/maybe-utils';
 import * as AutocompleteUtils from './autocomplete-utils';
 
@@ -9,8 +9,7 @@ describe('AutocompleteUtils:', () => {
       const filteredItems = [1, 2, 3, 4, 5];
       const expected = Maybe.Some(1);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         AutocompleteUtils.selectedItem(filteredItems, active)
       );
     });
@@ -20,8 +19,7 @@ describe('AutocompleteUtils:', () => {
       const filteredItems = [];
       const expected = Maybe.None();
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         AutocompleteUtils.selectedItem(filteredItems, active)
       );
     });
@@ -32,14 +30,14 @@ describe('AutocompleteUtils:', () => {
       const active = 1;
       const expected = Maybe.Some(0);
 
-      assert.deepEqual(expected, AutocompleteUtils.previousItem(active));
+      expect(expected).toEqual(AutocompleteUtils.previousItem(active));
     });
 
     it('should return Maybe.None when given 0', () => {
       const active = 0;
       const expected = Maybe.None();
 
-      assert.deepEqual(expected, AutocompleteUtils.previousItem(active));
+      expect(expected).toEqual(AutocompleteUtils.previousItem(active));
     });
   });
 
@@ -49,8 +47,7 @@ describe('AutocompleteUtils:', () => {
       const filteredItems = [1, 2, 3, 4, 5];
       const expected = Maybe.Some(1);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         AutocompleteUtils.nextItem(filteredItems, active)
       );
     });
@@ -60,8 +57,7 @@ describe('AutocompleteUtils:', () => {
       const filteredItems = [1, 2, 3, 4, 5];
       const expected = Maybe.Some(4);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         AutocompleteUtils.nextItem(filteredItems, active)
       );
     });

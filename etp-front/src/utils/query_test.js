@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Maybe from './maybe-utils';
 import * as Query from './query';
 
@@ -12,7 +12,7 @@ describe('Query', () => {
 
     const expected = '?should-be-included=1&should-also-be-included=2';
 
-    assert.equal(Query.toQueryString(queryObject), expected);
+    expect(Query.toQueryString(queryObject)).toEqual(expected);
   });
 
   it('should return empty with all values none', () => {
@@ -21,6 +21,6 @@ describe('Query', () => {
     };
     const expected = '';
 
-    assert.equal(Query.toQueryString(queryObject), expected);
+    expect(Query.toQueryString(queryObject)).toEqual(expected);
   });
 });

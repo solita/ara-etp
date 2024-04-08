@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
 import * as dfns from 'date-fns';
 import * as Either from '@Utility/either-utils';
@@ -30,7 +30,7 @@ describe('Laatija utils', () => {
         }
       ];
 
-      assert.deepEqual(expected, LaatijaUploadUtils.deserialize(data));
+      expect(expected).toEqual(LaatijaUploadUtils.deserialize(data));
     });
 
     it('more than one row', () => {
@@ -86,7 +86,7 @@ describe('Laatija utils', () => {
         }
       ];
 
-      assert.deepEqual(expected, LaatijaUploadUtils.deserialize(data));
+      expect(expected).toEqual(LaatijaUploadUtils.deserialize(data));
     });
 
     it('a row with a whitespace', () => {
@@ -112,7 +112,7 @@ describe('Laatija utils', () => {
         }
       ];
 
-      assert.deepEqual(expected, LaatijaUploadUtils.deserialize(data));
+      expect(expected).toEqual(LaatijaUploadUtils.deserialize(data));
     });
   });
 
@@ -152,7 +152,7 @@ describe('Laatija utils', () => {
         passivoitu: false
       };
 
-      assert.deepEqual(expected, LaatijaUploadUtils.parse(data));
+      expect(expected).toEqual(LaatijaUploadUtils.parse(data));
     });
 
     it('should return left for fields with error', () => {
@@ -174,10 +174,10 @@ describe('Laatija utils', () => {
 
       const result = LaatijaUploadUtils.parse(data);
 
-      assert.isTrue(
+      expect(
         Either.isLeft(result.patevyystaso) &&
           Either.isLeft(result.toteamispaivamaara)
-      );
+      ).toBe(true);
     });
   });
 
@@ -187,7 +187,7 @@ describe('Laatija utils', () => {
         `FISE;Tarja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019`
       ];
 
-      assert.isTrue(
+      expect(
         R.compose(
           R.all(Either.isRight),
           R.flatten,
@@ -200,7 +200,7 @@ describe('Laatija utils', () => {
           ),
           LaatijaUploadUtils.deserialize
         )(data)
-      );
+      ).toBe(true);
     });
 
     it('invalid row', () => {
@@ -208,7 +208,7 @@ describe('Laatija utils', () => {
         `FISE;Tarja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150a;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019`
       ];
 
-      assert.isFalse(
+      expect(
         R.compose(
           R.all(Either.isRight),
           R.flatten,
@@ -221,7 +221,7 @@ describe('Laatija utils', () => {
           ),
           LaatijaUploadUtils.deserialize
         )(data)
-      );
+      ).toBe(false);
     });
 
     it('multiple valid rows', () => {
@@ -229,7 +229,7 @@ describe('Laatija utils', () => {
         `FISE;Tarja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019\nFISE;Arja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019\nFISE;Sari Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019`
       ];
 
-      assert.isTrue(
+      expect(
         R.compose(
           R.all(Either.isRight),
           R.flatten,
@@ -242,7 +242,7 @@ describe('Laatija utils', () => {
           ),
           LaatijaUploadUtils.deserialize
         )(data)
-      );
+      ).toBe(true);
     });
 
     it('multiple invalid valid rows', () => {
@@ -250,7 +250,7 @@ describe('Laatija utils', () => {
         `FISE;Tarja Helena;Specimen-Pirex;061154-922123;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019\nFISE;Arja Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150a;Lahti;arja.pirex@ara.fi;0400123456;2;21.3.2019\nFISE;Sari Helena;Specimen-Pirex;061154-922D;Kirsinkatu;15150;Lahti;arja.pirex@ara.fi;0400123456;a;21.3.2019`
       ];
 
-      assert.isFalse(
+      expect(
         R.compose(
           R.all(Either.isRight),
           R.flatten,
@@ -263,7 +263,7 @@ describe('Laatija utils', () => {
           ),
           LaatijaUploadUtils.deserialize
         )(data)
-      );
+      ).toBe(false);
     });
   });
 });

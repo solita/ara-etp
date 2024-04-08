@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 
@@ -27,30 +27,30 @@ const et2013 = uudisrakennus => ({
 
 describe('Laatimisvaiheet: ', () => {
   it('Olemassaoleva rakennus - 2018', () => {
-    assert.equal(
-      Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(2)),
+    expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(2))).toEqual(
       true
     );
 
-    assert.equal(
-      Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(1)),
+    expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(1))).toEqual(
       false
     );
 
-    assert.equal(
-      Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(0)),
+    expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(0))).toEqual(
       false
     );
 
-    assert.equal(
-      Laatimisvaiheet.isOlemassaOlevaRakennus(et2018UnknownVaihe),
+    expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2018UnknownVaihe)).toEqual(
       false
     );
   });
 
   it('Olemassaoleva rakennus - 2013', () => {
-    assert.equal(Laatimisvaiheet.isOlemassaOlevaRakennus(et2013(false)), true);
+    expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2013(false))).toEqual(
+      true
+    );
 
-    assert.equal(Laatimisvaiheet.isOlemassaOlevaRakennus(et2013(true)), false);
+    expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2013(true))).toEqual(
+      false
+    );
   });
 });

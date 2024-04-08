@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as dfns from 'date-fns';
@@ -9,220 +9,220 @@ describe('Toimenpiteet: ', () => {
   describe('deadline', () => {
     it('is by default in one month for types 1 - 4', () => {
       R.range(1, 5).forEach(typeId => {
-        assert.isTrue(
+        expect(
           dfns.isSameDay(
             dfns.addMonths(new Date(), 1),
             Maybe.get(Toimenpiteet.defaultDeadline(typeId))
           )
-        );
+        ).toBe(true);
       });
     });
 
     it('is by default two weeks for type 7', () => {
-      assert.isTrue(
+      expect(
         dfns.isSameDay(
           dfns.addWeeks(new Date(), 2),
           Maybe.get(Toimenpiteet.defaultDeadline(7))
         )
-      );
+      ).toBe(true);
     });
 
     it('is by default 37 days for types 8, 9, 10, 15, 16 and 17', () => {
       [8, 9, 10, 15, 16, 17].forEach(typeId => {
-        assert.isTrue(
+        expect(
           dfns.isSameDay(
             dfns.addDays(new Date(), 37),
             Maybe.get(Toimenpiteet.defaultDeadline(typeId))
           )
-        );
+        ).toBe(true);
       });
     });
 
     it('is by default 30 day for types 11, 18 and 19', () => {
       [11, 18, 19].forEach(typeId => {
-        assert.isTrue(
+        expect(
           dfns.isSameDay(
             dfns.addDays(new Date(), 30),
             Maybe.get(Toimenpiteet.defaultDeadline(typeId))
           )
-        );
+        ).toBe(true);
       });
     });
 
     it('is by default 30 day for type 12', () => {
-      assert.isTrue(
+      expect(
         dfns.isSameDay(
           dfns.addDays(new Date(), 30),
           Maybe.get(Toimenpiteet.defaultDeadline(12))
         )
-      );
+      ).toBe(true);
     });
 
     it('is by default two weeks for type 14', () => {
-      assert.isTrue(
+      expect(
         dfns.isSameDay(
           dfns.addWeeks(new Date(), 2),
           Maybe.get(Toimenpiteet.defaultDeadline(14))
         )
-      );
+      ).toBe(true);
     });
   });
 
   describe('Käskypäätös / Kuulemiskirje', () => {
     it('id is mapped correctly to the type key', () => {
-      assert.equal('decision-order-hearing-letter', Toimenpiteet.typeKey(7));
+      expect('decision-order-hearing-letter').toEqual(Toimenpiteet.typeKey(7));
     });
 
     it('is a type with a deadline', () => {
-      assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 7 }));
+      expect(Toimenpiteet.hasDeadline({ 'type-id': 7 })).toBe(true);
     });
   });
 
   describe('Käskypäätös / varsinainen päätös', () => {
     it('id is mapped correctly to the type key', () => {
-      assert.equal('decision-order-actual-decision', Toimenpiteet.typeKey(8));
+      expect('decision-order-actual-decision').toEqual(Toimenpiteet.typeKey(8));
     });
 
     it('is a type with a deadline', () => {
-      assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 8 }));
+      expect(Toimenpiteet.hasDeadline({ 'type-id': 8 })).toBe(true);
     });
 
     it('is recognized correctly with isActualDecision function', () => {
-      assert.isTrue(
-        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 8 })
+      expect(Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 8 })).toBe(
+        true
       );
-      assert.isFalse(
-        Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 7 })
+      expect(Toimenpiteet.isDecisionOrderActualDecision({ 'type-id': 7 })).toBe(
+        false
       );
     });
   });
 
   describe('Toimenpide object is recognized correctly whether it is part of the given types', () => {
-    assert.isTrue(Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 7 }));
-    assert.isFalse(
-      Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 1 })
+    expect(Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 7 })).toBe(
+      true
+    );
+    expect(Toimenpiteet.isToimenpideOfGivenTypes([7])({ 'type-id': 1 })).toBe(
+      false
     );
   });
 });
 
 describe('Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal(
-      'decision-order-waiting-for-deadline',
+    expect('decision-order-waiting-for-deadline').toEqual(
       Toimenpiteet.typeKey(12)
     );
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 12 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 12 })).toBe(true);
   });
 });
 
 describe('Sakkopäätös / Kuulemiskirje', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal('penalty-decision-hearing-letter', Toimenpiteet.typeKey(14));
+    expect('penalty-decision-hearing-letter').toEqual(Toimenpiteet.typeKey(14));
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 14 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 14 })).toBe(true);
   });
 });
 
 describe('Sakkopäätös / Varsinainen päätös', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal('penalty-decision-actual-decision', Toimenpiteet.typeKey(15));
+    expect('penalty-decision-actual-decision').toEqual(
+      Toimenpiteet.typeKey(15)
+    );
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 15 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 15 })).toBe(true);
   });
 });
 
 describe('Sakkopäätös / tiedoksianto (ensimmäinen postitus)', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal(
-      'penalty-decision-notice-first-mailing',
+    expect('penalty-decision-notice-first-mailing').toEqual(
       Toimenpiteet.typeKey(16)
     );
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 16 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 16 })).toBe(true);
   });
 });
 
 describe('Sakkopäätös / tiedoksianto (toinen postitus)', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal(
-      'penalty-decision-notice-second-mailing',
+    expect('penalty-decision-notice-second-mailing').toEqual(
       Toimenpiteet.typeKey(17)
     );
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 17 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 17 })).toBe(true);
   });
 });
 
 describe('Sakkopäätös / Valitusajan odotus ja umpeutuminen', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal(
-      'penalty-decision-waiting-for-deadline',
+    expect('penalty-decision-waiting-for-deadline').toEqual(
       Toimenpiteet.typeKey(19)
     );
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 19 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 19 })).toBe(true);
   });
 });
 
 describe('Sakkopäätös / Tiedoksianto (Haastemies)', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal('penalty-decision-notice-bailiff', Toimenpiteet.typeKey(18));
+    expect('penalty-decision-notice-bailiff').toEqual(Toimenpiteet.typeKey(18));
   });
 
   it('is a type with a deadline', () => {
-    assert.isTrue(Toimenpiteet.hasDeadline({ 'type-id': 18 }));
+    expect(Toimenpiteet.hasDeadline({ 'type-id': 18 })).toBe(true);
   });
 });
 
 describe('Sakkoluettelon lähetys menossa', () => {
   it('id is mapped correctly to the type key', () => {
-    assert.equal('penalty-list-delivery-in-progress', Toimenpiteet.typeKey(21));
+    expect('penalty-list-delivery-in-progress').toEqual(
+      Toimenpiteet.typeKey(21)
+    );
   });
 });
 
 describe('Given toimenpidetypes', () => {
   it('find the ids of manually deliverable types', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.manuallyDeliverableToimenpideTypes([
         { id: 2, 'manually-deliverable': false },
         { id: 7, 'manually-deliverable': true },
         { id: 1, 'manually-deliverable': false },
         { id: 8, 'manually-deliverable': true }
-      ]),
-      [7, 8]
-    );
+      ])
+    ).toEqual([7, 8]);
   });
 
   it('find the ids of toimenpidetypes that allow comments', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.toimenpideTypesThatAllowComments([
         { id: 2, 'allow-comments': false },
         { id: 7, 'allow-comments': true },
         { id: 1, 'allow-comments': false },
         { id: 8, 'allow-comments': true }
-      ]),
-      [7, 8]
-    );
+      ])
+    ).toEqual([7, 8]);
   });
 });
 
 describe('Empty toimenpide', () => {
   it('Contains correct keys for toimenpidetype 1', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -233,7 +233,7 @@ describe('Empty toimenpide', () => {
 
   it('Contains correct keys for toimenpidetype 7 which includes fine under type-specific-data', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -242,7 +242,7 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+    expect(Object.keys(emptyToimenpide['type-specific-data'])).toEqual([
       'fine'
     ]);
   });
@@ -258,7 +258,7 @@ describe('Empty toimenpide', () => {
         }
       ]
     });
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -267,7 +267,7 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+    expect(Object.keys(emptyToimenpide['type-specific-data'])).toEqual([
       'fine',
       'osapuoli-specific-data',
       'department-head-title-fi',
@@ -278,44 +278,43 @@ describe('Empty toimenpide', () => {
     // osapuoli-specific-data contains a list of objects with osapuoli,
     // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
     // and the answer-commentary and statement fields
-    assert.deepEqual(
-      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
-      [
-        {
-          osapuoli: {
-            id: 1,
-            type: 'yritys'
-          },
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true,
-          'recipient-answered': false,
-          'answer-commentary-fi': Maybe.None(),
-          'answer-commentary-sv': Maybe.None(),
-          'statement-fi': Maybe.None(),
-          'statement-sv': Maybe.None()
+    expect(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide)
+    ).toEqual([
+      {
+        osapuoli: {
+          id: 1,
+          type: 'yritys'
         },
-        {
-          osapuoli: {
-            id: 7,
-            type: 'henkilo'
-          },
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true,
-          'recipient-answered': false,
-          'answer-commentary-fi': Maybe.None(),
-          'answer-commentary-sv': Maybe.None(),
-          'statement-fi': Maybe.None(),
-          'statement-sv': Maybe.None()
-        }
-      ]
-    );
+        'hallinto-oikeus-id': Maybe.None(),
+        document: true,
+        'recipient-answered': false,
+        'answer-commentary-fi': Maybe.None(),
+        'answer-commentary-sv': Maybe.None(),
+        'statement-fi': Maybe.None(),
+        'statement-sv': Maybe.None()
+      },
+      {
+        osapuoli: {
+          id: 7,
+          type: 'henkilo'
+        },
+        'hallinto-oikeus-id': Maybe.None(),
+        document: true,
+        'recipient-answered': false,
+        'answer-commentary-fi': Maybe.None(),
+        'answer-commentary-sv': Maybe.None(),
+        'statement-fi': Maybe.None(),
+        'statement-sv': Maybe.None()
+      }
+    ]);
   });
 
   it('Contains correct keys for toimenpidetype 11', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(11, [{}], {
       osapuolis: [{ id: 1, nimi: 'Emme hanki Energiatodistuksia Oyj' }]
     });
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -324,34 +323,33 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+    expect(Object.keys(emptyToimenpide['type-specific-data'])).toEqual([
       'osapuoli-specific-data'
     ]);
 
     // osapuoli-specific-data contains a list of objects with osapuoli,
     // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
     // and the answer-commentary and statement fields
-    assert.deepEqual(
-      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
-      [
-        {
-          osapuoli: {
-            id: 1,
-            type: 'yritys'
-          },
-          'karajaoikeus-id': Maybe.None(),
-          document: true,
-          'haastemies-email': Maybe.None()
-        }
-      ]
-    );
+    expect(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide)
+    ).toEqual([
+      {
+        osapuoli: {
+          id: 1,
+          type: 'yritys'
+        },
+        'karajaoikeus-id': Maybe.None(),
+        document: true,
+        'haastemies-email': Maybe.None()
+      }
+    ]);
   });
 
   it('Contains correct keys for toimenpidetype 18', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(18, [{}], {
       osapuolis: [{ id: 1, nimi: 'Emme hanki Energiatodistuksia Oyj' }]
     });
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -360,28 +358,27 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+    expect(Object.keys(emptyToimenpide['type-specific-data'])).toEqual([
       'osapuoli-specific-data'
     ]);
 
     // osapuoli-specific-data contains a list of objects with osapuoli,
     // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
     // and the answer-commentary and statement fields
-    assert.deepEqual(
-      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
-      [
-        {
-          osapuoli: {
-            id: 1,
-            type: 'yritys'
-          },
-          'hallinto-oikeus-id': Maybe.None(),
-          'karajaoikeus-id': Maybe.None(),
-          document: true,
-          'haastemies-email': Maybe.None()
-        }
-      ]
-    );
+    expect(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide)
+    ).toEqual([
+      {
+        osapuoli: {
+          id: 1,
+          type: 'yritys'
+        },
+        'hallinto-oikeus-id': Maybe.None(),
+        'karajaoikeus-id': Maybe.None(),
+        document: true,
+        'haastemies-email': Maybe.None()
+      }
+    ]);
   });
 
   it('Contains correct keys for toimenpidetype 14 which includes fine under type-specific-data', () => {
@@ -394,7 +391,7 @@ describe('Empty toimenpide', () => {
         }
       ]
     });
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -403,69 +400,66 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+    expect(Object.keys(emptyToimenpide['type-specific-data'])).toEqual([
       'fine',
       'osapuoli-specific-data'
     ]);
 
-    assert.deepEqual(
-      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
-      [
-        {
-          osapuoli: {
-            id: 6,
-            type: 'henkilo'
-          },
-          document: true
-        }
-      ]
-    );
+    expect(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide)
+    ).toEqual([
+      {
+        osapuoli: {
+          id: 6,
+          type: 'henkilo'
+        },
+        document: true
+      }
+    ]);
   });
 
   it('with a fine is recognized as having a fine', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
-    assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
+    expect(Toimenpiteet.hasFine(emptyToimenpide)).toBe(true);
   });
 
   it('of type 7 has a default fine of 800', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
 
-    assert.equal(
-      800,
+    expect(800).toEqual(
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
     );
   });
 
   it('of type 8 has a default fine of 800 and no department head fields filled by default', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(8, [{}]);
-    assert.equal(
-      800,
+    expect(800).toEqual(
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
     );
 
-    assert.isTrue(
+    expect(
       Maybe.isNone(
         R.path(
           ['type-specific-data', 'department-head-title-fi'],
           emptyToimenpide
         )
       )
-    );
+    ).toBe(true);
 
-    assert.isTrue(
+    expect(
       Maybe.isNone(
         R.path(
           ['type-specific-data', 'department-head-title-sv'],
           emptyToimenpide
         )
       )
-    );
+    ).toBe(true);
 
-    assert.isTrue(
+    expect(
       Maybe.isNone(
         R.path(['type-specific-data', 'department-head-name'], emptyToimenpide)
       )
-    );
+    ).toBe(true);
   });
 
   it('of type 8 can have its default values overridden', () => {
@@ -476,13 +470,11 @@ describe('Empty toimenpide', () => {
       departmentHeadName: 'Prefilled Name'
     });
 
-    assert.equal(
-      1000,
+    expect(1000).toEqual(
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
     );
 
-    assert.equal(
-      'Prefilled title',
+    expect('Prefilled title').toEqual(
       Maybe.get(
         R.path(
           ['type-specific-data', 'department-head-title-fi'],
@@ -491,8 +483,7 @@ describe('Empty toimenpide', () => {
       )
     );
 
-    assert.equal(
-      'Prefilled title på Svenska',
+    expect('Prefilled title på Svenska').toEqual(
       Maybe.get(
         R.path(
           ['type-specific-data', 'department-head-title-sv'],
@@ -501,8 +492,7 @@ describe('Empty toimenpide', () => {
       )
     );
 
-    assert.equal(
-      'Prefilled Name',
+    expect('Prefilled Name').toEqual(
       Maybe.get(
         R.path(['type-specific-data', 'department-head-name'], emptyToimenpide)
       )
@@ -517,8 +507,7 @@ describe('Empty toimenpide', () => {
         toimenpiteet
       )
     });
-    assert.equal(
-      800,
+    expect(800).toEqual(
       Maybe.get(R.path(['type-specific-data', 'fine'], emptyToimenpide))
     );
   });
@@ -526,12 +515,12 @@ describe('Empty toimenpide', () => {
   it('with a fine key but no value is recognized as having a fine', () => {
     let emptyToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
     emptyToimenpide.fine = Maybe.fromNull(null);
-    assert.isTrue(Toimenpiteet.hasFine(emptyToimenpide));
+    expect(Toimenpiteet.hasFine(emptyToimenpide)).toBe(true);
   });
 
   it('without a fine is recognized as not having a fine', () => {
     const emptyToimenpide = Toimenpiteet.emptyToimenpide(1, [{}]);
-    assert.isFalse(Toimenpiteet.hasFine(emptyToimenpide));
+    expect(Toimenpiteet.hasFine(emptyToimenpide)).toBe(false);
   });
 
   it('Contains correct keys and default values for toimenpidetype 15', () => {
@@ -544,7 +533,7 @@ describe('Empty toimenpide', () => {
       defaultStatementSv:
         'Ruotsinkieliselle statementille voi antaa %s käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
     });
-    assert.deepEqual(Object.keys(emptyToimenpide), [
+    expect(Object.keys(emptyToimenpide)).toEqual([
       'type-id',
       'publish-time',
       'deadline-date',
@@ -553,7 +542,7 @@ describe('Empty toimenpide', () => {
       'type-specific-data'
     ]);
 
-    assert.deepEqual(Object.keys(emptyToimenpide['type-specific-data']), [
+    expect(Object.keys(emptyToimenpide['type-specific-data'])).toEqual([
       'fine',
       'osapuoli-specific-data',
       'department-head-title-fi',
@@ -564,45 +553,44 @@ describe('Empty toimenpide', () => {
     // osapuoli-specific-data contains a list of objects with osapuoli,
     // associated hallinto-oikeus-id, whether the osapuoli answered the kuulemiskirje
     // and the answer-commentary and statement fields
-    assert.deepEqual(
-      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide),
-      [
-        {
-          osapuoli: {
-            id: 1,
-            type: 'henkilo'
-          },
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true,
-          'recipient-answered': false,
-          'answer-commentary-fi': Maybe.None(),
-          'answer-commentary-sv': Maybe.None(),
-          'statement-fi': Maybe.Some(
-            'Statementin default-arvo voidaan antaa parametrina'
-          ),
-          'statement-sv': Maybe.Some(
-            'Ruotsinkieliselle statementille voi antaa Mallinen käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
-          )
+    expect(
+      R.path(['type-specific-data', 'osapuoli-specific-data'], emptyToimenpide)
+    ).toEqual([
+      {
+        osapuoli: {
+          id: 1,
+          type: 'henkilo'
         },
-        {
-          osapuoli: {
-            id: 7,
-            type: 'yritys'
-          },
-          'hallinto-oikeus-id': Maybe.None(),
-          document: true,
-          'recipient-answered': false,
-          'answer-commentary-fi': Maybe.None(),
-          'answer-commentary-sv': Maybe.None(),
-          'statement-fi': Maybe.Some(
-            'Statementin default-arvo voidaan antaa parametrina'
-          ),
-          'statement-sv': Maybe.Some(
-            'Ruotsinkieliselle statementille voi antaa Yritys käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
-          )
-        }
-      ]
-    );
+        'hallinto-oikeus-id': Maybe.None(),
+        document: true,
+        'recipient-answered': false,
+        'answer-commentary-fi': Maybe.None(),
+        'answer-commentary-sv': Maybe.None(),
+        'statement-fi': Maybe.Some(
+          'Statementin default-arvo voidaan antaa parametrina'
+        ),
+        'statement-sv': Maybe.Some(
+          'Ruotsinkieliselle statementille voi antaa Mallinen käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
+        )
+      },
+      {
+        osapuoli: {
+          id: 7,
+          type: 'yritys'
+        },
+        'hallinto-oikeus-id': Maybe.None(),
+        document: true,
+        'recipient-answered': false,
+        'answer-commentary-fi': Maybe.None(),
+        'answer-commentary-sv': Maybe.None(),
+        'statement-fi': Maybe.Some(
+          'Statementin default-arvo voidaan antaa parametrina'
+        ),
+        'statement-sv': Maybe.Some(
+          'Ruotsinkieliselle statementille voi antaa Yritys käyttäen kohdan mihin täydennetään osapuolen sukunimi tai yrityksen nimi'
+        )
+      }
+    ]);
   });
 });
 
@@ -618,13 +606,12 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(
+    expect(
       Toimenpiteet.findFineFromToimenpiteet(
         Toimenpiteet.isDecisionOrderHearingLetter,
         toimenpiteet
-      ),
-      1000
-    );
+      )
+    ).toEqual(1000);
   });
 
   it('when there are other toimenpiteet also present', () => {
@@ -641,13 +628,12 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(
+    expect(
       Toimenpiteet.findFineFromToimenpiteet(
         Toimenpiteet.isDecisionOrderHearingLetter,
         toimenpiteet
-      ),
-      2000
-    );
+      )
+    ).toEqual(2000);
   });
 
   it('when there are multiple toimenpiteet of type 7', () => {
@@ -685,13 +671,12 @@ describe('findFineFromToimenpiteet returns the fine present in the newest toimen
       }
     ]);
 
-    assert.equal(
+    expect(
       Toimenpiteet.findFineFromToimenpiteet(
         Toimenpiteet.isDecisionOrderHearingLetter,
         toimenpiteet
-      ),
-      3000
-    );
+      )
+    ).toEqual(3000);
   });
 });
 
@@ -736,18 +721,18 @@ describe('documentExistsForOsapuoli', () => {
       Toimenpiteet.emptyToimenpide(8, [])
     );
 
-    assert.isTrue(
+    expect(
       Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1, 'henkilo')
-    );
-    assert.isFalse(
+    ).toBe(true);
+    expect(
       Toimenpiteet.documentExistsForOsapuoli(toimenpide, 1, 'yritys')
-    );
-    assert.isFalse(
+    ).toBe(false);
+    expect(
       Toimenpiteet.documentExistsForOsapuoli(toimenpide, 3, 'henkilo')
-    );
-    assert.isTrue(
+    ).toBe(false);
+    expect(
       Toimenpiteet.documentExistsForOsapuoli(toimenpide, 7, 'henkilo')
-    );
+    ).toBe(true);
   });
 });
 
@@ -767,7 +752,7 @@ describe('toimenpideForOsapuoli', () => {
     });
 
     const result = Toimenpiteet.toimenpideForOsapuoli(toimenpide, 3, 'yritys');
-    assert.deepEqual(R.dissoc('deadline-date', result), {
+    expect(R.dissoc('deadline-date', result)).toEqual({
       'type-id': 8,
       'publish-time': Maybe.None(),
       'template-id': Maybe.None(),
@@ -803,48 +788,48 @@ describe('isNoticeBailiff', () => {
       11,
       [{}]
     );
-    assert.isTrue(
+    expect(
       Toimenpiteet.isNoticeBailiff(kaskypaatosNoticeBailiffToimenpide)
-    );
+    ).toBe(true);
   });
   it('returns true for typeId 18', () => {
     const sakkopaatosNoticeBailiffToimenpide = Toimenpiteet.emptyToimenpide(
       18,
       [{}]
     );
-    assert.isTrue(
+    expect(
       Toimenpiteet.isNoticeBailiff(sakkopaatosNoticeBailiffToimenpide)
-    );
+    ).toBe(true);
   });
   it('returns false for some other typeId than 11 or 18', () => {
     const someOtherToimenpide = Toimenpiteet.emptyToimenpide(7, [{}]);
-    assert.isFalse(Toimenpiteet.isNoticeBailiff(someOtherToimenpide));
+    expect(Toimenpiteet.isNoticeBailiff(someOtherToimenpide)).toBe(false);
   });
 });
 
 describe('isCorrectOsapuoli', () => {
   it('returns true when both osapuoli-id and osapuoli-type match', () => {
-    assert.isTrue(
+    expect(
       Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 1, type: 'henkilo' })
-    );
+    ).toBe(true);
   });
 
   it('returns false when neither osapuoli-id or osapuoli-type match', () => {
-    assert.isFalse(
+    expect(
       Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 2, type: 'yritys' })
-    );
+    ).toBe(false);
   });
 
   it('returns false when only osapuoli-id matches', () => {
-    assert.isFalse(
+    expect(
       Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 1, type: 'yritys' })
-    );
+    ).toBe(false);
   });
 
   it('returns false when only osapuoli-type matches', () => {
-    assert.isFalse(
+    expect(
       Toimenpiteet.findOsapuoli(1, 'henkilo')({ id: 2, type: 'henkilo' })
-    );
+    ).toBe(false);
   });
 });
 
@@ -857,32 +842,25 @@ describe('osapuoliSpecificDataIndexForOsapuoli', () => {
         { id: 7, etunimi: 'Karri', sukunimi: 'Poromäki' }
       ]
     });
-    assert.equal(
+    expect(
       Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
         toimenpide,
         1,
         'henkilo'
-      ),
-      0
-    );
+      )
+    ).toEqual(0);
 
-    assert.equal(
-      Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
-        toimenpide,
-        3,
-        'yritys'
-      ),
-      1
-    );
+    expect(
+      Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(toimenpide, 3, 'yritys')
+    ).toEqual(1);
 
-    assert.equal(
+    expect(
       Toimenpiteet.osapuoliSpecificDataIndexForOsapuoli(
         toimenpide,
         7,
         'henkilo'
-      ),
-      2
-    );
+      )
+    ).toEqual(2);
   });
 });
 
@@ -929,41 +907,41 @@ describe('osapuoliHasHallintoOikeus', () => {
   };
 
   it('returns true when henkilö-osapuoli has hallinto-oikeus-id', () => {
-    assert.isTrue(
+    expect(
       Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
         etunimi: 'Samuel',
         sukunimi: 'Laatikainen',
         id: 1
       })
-    );
+    ).toBe(true);
   });
 
   it('returns false when henkilö-osapuoli does not have hallinto-oikeus-id', () => {
-    assert.isFalse(
+    expect(
       Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
         etunimi: 'Peter',
         sukunimi: 'Mannninen',
         id: 2
       })
-    );
+    ).toBe(false);
   });
 
   it('returns true when yritys-osapuoli has hallinto-oikeus-id', () => {
-    assert.isTrue(
+    expect(
       Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
         nimi: 'Firma Oy',
         id: 1
       })
-    );
+    ).toBe(true);
   });
 
   it('returns false when yritys-osapuoli does not have hallinto-oikeus-id', () => {
-    assert.isFalse(
+    expect(
       Toimenpiteet.osapuoliHasHallintoOikeus(toimenpide, {
         nimi: 'Yhtiö Ky',
         id: 3
       })
-    );
+    ).toBe(false);
   });
 });
 
@@ -971,233 +949,210 @@ describe('Allowed toimenpiteet are filtered based on the type of the current toi
   const toimenpidetyypit = R.range(0, 23).map(id => ({ id }));
 
   it('Valvonnan aloitus allows Kehotus and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 0 }],
         toimenpidetyypit
-      ),
-      [{ id: 2 }, { id: 5 }]
-    );
+      )
+    ).toEqual([{ id: 2 }, { id: 5 }]);
   });
 
   it('Kehotus allows Kehotus, Varoitus and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 2 }],
         toimenpidetyypit
-      ),
-      [{ id: 2 }, { id: 3 }, { id: 5 }]
-    );
+      )
+    ).toEqual([{ id: 2 }, { id: 3 }, { id: 5 }]);
   });
 
   it('Varoitus allows Kehotus, Varoitus, käskypäätös / kuulemiskirje  and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 3 }],
         toimenpidetyypit
-      ),
-      [{ id: 2 }, { id: 3 }, { id: 5 }, { id: 7 }]
-    );
+      )
+    ).toEqual([{ id: 2 }, { id: 3 }, { id: 5 }, { id: 7 }]);
   });
 
   it('Käskypäätös / kuulemiskirje allows Käskypäätös / kuulemiskirje, Käskypäätös / varsinainen päätös and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 7 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 7 }, { id: 8 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 7 }, { id: 8 }]);
   });
 
   it('Käskypäätös / varsinainen päätös allows Käskypäätös / varsinainen päätös, Käskypäätös / tiedoksianto (ensimmäinen postitus) and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 8 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 8 }, { id: 9 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 8 }, { id: 9 }]);
   });
 
   it('Käskypäätös / tiedoksianto (ensimmäinen postitus) allows Käskypäätös / tiedoksianto (toinen postitus), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 9 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 10 }, { id: 12 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 10 }, { id: 12 }]);
   });
 
   it('Käskypäätös / tiedoksianto (toinen postitus) allows Käskypäätös / tiedoksianto (Haastemies), Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 10 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 11 }, { id: 12 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 11 }, { id: 12 }]);
   });
 
   it('Käskypäätös / tiedoksianto (Haastemies) allows Käskypäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 11 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 12 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 12 }]);
   });
 
   it('Käskypäätös / valitusajan odotus ja umpeutuminen allows HaO-käsittely, Sakkopäätös / kuulemiskirje and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 12 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 6 }, { id: 14 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 6 }, { id: 14 }]);
   });
 
   it('HaO-käsittely allows Sakkopäätös / kuulemiskirje and Valvonnan lopetus when in käskypäätös phase of the process', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 6 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 14 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 14 }]);
   });
 
   it('Sakkopäätös / kuulemiskirje allows Sakkopäätös / kuulemiskirje,Sakkopäätös / varsinainen päätös and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 14 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 14 }, { id: 15 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 14 }, { id: 15 }]);
   });
 
   it('Sakkopäätös / varsinainen päätös allows Sakkopäätös / varsinainen päätös, Sakkopäätös / tiedoksianto (ensimmäinen postitus) and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 15 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 15 }, { id: 16 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 15 }, { id: 16 }]);
   });
 
   it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) allows Sakkopäätös / tiedoksianto (toinen postitus), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 16 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 17 }, { id: 19 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 17 }, { id: 19 }]);
   });
 
   it('Sakkopäätös / tiedoksianto (toinen postitus) allows Sakkopäätös / tiedoksianto (Haastemies), Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 17 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 18 }, { id: 19 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 18 }, { id: 19 }]);
   });
 
   it('Sakkopäätös / tiedoksianto (Haastemies) allows Sakkopäätös / valitusajan odotus ja umpeutuminen and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 18 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 19 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 19 }]);
   });
 
   it('Sakkopäätös / valitusajan odotus ja umpeutuminen allows HaO-käsittely, Sakkoluettelon lähetys menossa and Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 19 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 6 }, { id: 21 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 6 }, { id: 21 }]);
   });
 
   it('HaO-käsittely allows Sakkoluettelon lähetys menossa and Valvonnan lopetus when in sakkopäätös phase of the process', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 19 }, { 'type-id': 6 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 21 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 21 }]);
   });
 
   it('Sakkoluettelon lähetys menossa allows Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 21 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }]
-    );
+      )
+    ).toEqual([{ id: 5 }]);
   });
 
   it('Old käskypäätös allows Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 4 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }]
-    );
+      )
+    ).toEqual([{ id: 5 }]);
   });
 
   it('Reopening valvonta allows the allowed toimenpidetypes of the toimenpide before closing the valvonta', () => {
     // Valvonta has been closed after Sakkopäätös / tiedoksianto (toinen postitus)
     // and then reopened
-    assert.deepEqual(
+    expect(
       Toimenpiteet.filterAvailableToimenpidetypes(
         [{ 'type-id': 17 }, { 'type-id': 5 }, { 'type-id': 22 }],
         toimenpidetyypit
-      ),
-      [{ id: 5 }, { id: 18 }, { id: 19 }]
-    );
+      )
+    ).toEqual([{ id: 5 }, { id: 18 }, { id: 19 }]);
   });
 });
 
 describe('determineProcessPhaseFromToimenpiteet', () => {
   it('returns decision-order when no toimenpide exists', () => {
-    assert.equal(
-      Toimenpiteet.determineProcessPhaseFromToimenpiteet([]),
+    expect(Toimenpiteet.determineProcessPhaseFromToimenpiteet([])).toEqual(
       'decision-order'
     );
   });
 
   it('returns decision-order when a decision-order toimenpide exists', () => {
-    assert.equal(
+    expect(
       Toimenpiteet.determineProcessPhaseFromToimenpiteet([
         Toimenpiteet.emptyToimenpide(7, [])
-      ]),
-      'decision-order'
-    );
+      ])
+    ).toEqual('decision-order');
   });
 
   it('returns penalty-decision when a decision-order and penalty-decision toimenpide exists', () => {
-    assert.equal(
+    expect(
       Toimenpiteet.determineProcessPhaseFromToimenpiteet([
         Toimenpiteet.emptyToimenpide(7, []),
         Toimenpiteet.emptyToimenpide(14, [])
-      ]),
-      'penalty-decision'
-    );
+      ])
+    ).toEqual('penalty-decision');
   });
 });
 
@@ -1205,182 +1160,164 @@ describe('Primary toimenpidetype after', () => {
   const toimenpidetyypit = R.range(0, 23).map(id => ({ id }));
 
   it('Valvonnan aloitus is Kehotus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 0 }],
         toimenpidetyypit
-      ),
-      { id: 2 }
-    );
+      )
+    ).toEqual({ id: 2 });
   });
 
   it('Kehotus is Varoitus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 2 }],
         toimenpidetyypit
-      ),
-      { id: 3 }
-    );
+      )
+    ).toEqual({ id: 3 });
   });
 
   it('Varoitus is käskypäätös / kuulemiskirje', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 3 }],
         toimenpidetyypit
-      ),
-      { id: 7 }
-    );
+      )
+    ).toEqual({ id: 7 });
   });
 
   it('Käskypäätös / kuulemiskirje is Käskypäätös / varsinainen päätös', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 7 }],
         toimenpidetyypit
-      ),
-      { id: 8 }
-    );
+      )
+    ).toEqual({ id: 8 });
   });
 
   it('Käskypäätös / varsinainen päätös is Käskypäätös / tiedoksianto (ensimmäinen postitus)', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 8 }],
         toimenpidetyypit
-      ),
-      { id: 9 }
-    );
+      )
+    ).toEqual({ id: 9 });
   });
 
   it('Käskypäätös / tiedoksianto (ensimmäinen postitus) is Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 9 }],
         toimenpidetyypit
-      ),
-      { id: 12 }
-    );
+      )
+    ).toEqual({ id: 12 });
   });
 
   it('Käskypäätös / tiedoksianto (toinen postitus) is Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 10 }],
         toimenpidetyypit
-      ),
-      { id: 12 }
-    );
+      )
+    ).toEqual({ id: 12 });
   });
 
   it('Käskypäätös / tiedoksianto (Haastemies) is Käskypäätös / valitusajan odotus ja umpeutuminen', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 11 }],
         toimenpidetyypit
-      ),
-      { id: 12 }
-    );
+      )
+    ).toEqual({ id: 12 });
   });
 
   it('Käskypäätös / valitusajan odotus ja umpeutuminen is Sakkopäätös / kuulemiskirje', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 12 }],
         toimenpidetyypit
-      ),
-      { id: 14 }
-    );
+      )
+    ).toEqual({ id: 14 });
   });
 
   it('HaO-käsittely is Sakkopäätös / kuulemiskirje', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 6 }],
         toimenpidetyypit
-      ),
-      { id: 14 }
-    );
+      )
+    ).toEqual({ id: 14 });
   });
 
   it('Sakkopäätös / kuulemiskirje is Sakkopäätös / varsinainen päätös', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 14 }],
         toimenpidetyypit
-      ),
-      { id: 15 }
-    );
+      )
+    ).toEqual({ id: 15 });
   });
 
   it('Sakkopäätös / varsinainen päätös is Sakkopäätös / tiedoksianto (ensimmäinen postitus)', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 15 }],
         toimenpidetyypit
-      ),
-      { id: 16 }
-    );
+      )
+    ).toEqual({ id: 16 });
   });
 
   it('Sakkopäätös / tiedoksianto (ensimmäinen postitus) is Sakkopäätös / valitusajan odotus ja umpeutuminen', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 16 }],
         toimenpidetyypit
-      ),
-      { id: 19 }
-    );
+      )
+    ).toEqual({ id: 19 });
   });
 
   it('Sakkopäätös / tiedoksianto (toinen postitus) is Sakkopäätös / valitusajan odotus ja umpeutuminen', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 17 }],
         toimenpidetyypit
-      ),
-      { id: 19 }
-    );
+      )
+    ).toEqual({ id: 19 });
   });
 
   it('Sakkopäätös / tiedoksianto (Haastemies) is Sakkopäätös / valitusajan odotus ja umpeutuminen', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 18 }],
         toimenpidetyypit
-      ),
-      { id: 19 }
-    );
+      )
+    ).toEqual({ id: 19 });
   });
 
   it('Sakkopäätös / valitusajan odotus ja umpeutuminen is Sakkoluettelon lähetys menossa', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 19 }],
         toimenpidetyypit
-      ),
-      { id: 21 }
-    );
+      )
+    ).toEqual({ id: 21 });
   });
 
   it('HaO-käsittely is Sakkoluettelon lähetys menossa when in sakkopäätös phase of the process', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 19 }, { 'type-id': 6 }],
         toimenpidetyypit
-      ),
-      { id: 21 }
-    );
+      )
+    ).toEqual({ id: 21 });
   });
 
   it('Sakkoluettelon lähetys menossa is Valvonnan lopetus', () => {
-    assert.deepEqual(
+    expect(
       Toimenpiteet.primaryTransitionForToimenpidetype(
         [{ 'type-id': 21 }],
         toimenpidetyypit
-      ),
-      { id: 5 }
-    );
+      )
+    ).toEqual({ id: 5 });
   });
 });

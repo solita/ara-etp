@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 
@@ -10,28 +10,28 @@ describe('Energiatodistus Utils: ', () => {
       const value = Either.Right(Maybe.Some(1));
       const expected = Maybe.Some(1);
 
-      assert.deepEqual(expected, EtUtils.unnestValidation(value));
+      expect(expected).toEqual(EtUtils.unnestValidation(value));
     });
 
     it('should return none on Either.Left', () => {
       const value = Either.Left(1);
       const expected = Maybe.None();
 
-      assert.deepEqual(expected, EtUtils.unnestValidation(value));
+      expect(expected).toEqual(EtUtils.unnestValidation(value));
     });
 
     it('should return none on Either.Left', () => {
       const value = Either.Left(1);
       const expected = Maybe.None();
 
-      assert.deepEqual(expected, EtUtils.unnestValidation(value));
+      expect(expected).toEqual(EtUtils.unnestValidation(value));
     });
 
     it('should return Identity with non-either value', () => {
       const value = Maybe.Some(1);
       const expected = Maybe.Some(1);
 
-      assert.deepEqual(expected, EtUtils.unnestValidation(value));
+      expect(expected).toEqual(EtUtils.unnestValidation(value));
     });
   });
 
@@ -42,7 +42,7 @@ describe('Energiatodistus Utils: ', () => {
 
       const expected = Maybe.Some(1);
 
-      assert.deepEqual(expected, EtUtils.energiatodistusPath(path, obj));
+      expect(expected).toEqual(EtUtils.energiatodistusPath(path, obj));
     });
 
     it('should return value when non-either', () => {
@@ -51,7 +51,7 @@ describe('Energiatodistus Utils: ', () => {
 
       const expected = Maybe.Some(1);
 
-      assert.deepEqual(expected, EtUtils.energiatodistusPath(path, obj));
+      expect(expected).toEqual(EtUtils.energiatodistusPath(path, obj));
     });
   });
 
@@ -67,8 +67,7 @@ describe('Energiatodistus Utils: ', () => {
       const calcFn = a => b => a + b;
       const expected = Maybe.Some(3);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         EtUtils.calculatePaths(calcFn, firstPath, secondPath, obj)
       );
     });
@@ -84,8 +83,7 @@ describe('Energiatodistus Utils: ', () => {
       const calcFn = a => b => a + b;
       const expected = Maybe.Some(3);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         EtUtils.calculatePaths(calcFn, firstPath, secondPath, obj)
       );
     });
@@ -101,8 +99,7 @@ describe('Energiatodistus Utils: ', () => {
       const calcFn = a => b => a + b;
       const expected = Maybe.Some(3);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         EtUtils.calculatePaths(calcFn, firstPath, secondPath, obj)
       );
     });
@@ -145,7 +142,7 @@ describe('Energiatodistus Utils: ', () => {
         'tuloilman-lammitys': 6
       };
 
-      assert.deepEqual(expected, EtUtils.teknistenJarjestelmienSahkot(et));
+      expect(expected).toEqual(EtUtils.teknistenJarjestelmienSahkot(et));
     });
   });
 
@@ -184,7 +181,7 @@ describe('Energiatodistus Utils: ', () => {
         'tuloilman-lammitys': 4
       };
 
-      assert.deepEqual(expected, EtUtils.teknistenJarjestelmienLammot(et));
+      expect(expected).toEqual(EtUtils.teknistenJarjestelmienLammot(et));
     });
   });
 
@@ -220,8 +217,7 @@ describe('Energiatodistus Utils: ', () => {
         jaahdytys: 1
       };
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         EtUtils.teknistenJarjestelmienKaukojaahdytys(et)
       );
     });
@@ -238,7 +234,7 @@ describe('Energiatodistus Utils: ', () => {
       };
       const expected = Maybe.Some(6);
 
-      assert.deepEqual(expected, EtUtils.sumEtValues(values));
+      expect(expected).toEqual(EtUtils.sumEtValues(values));
     });
   });
 
@@ -249,7 +245,7 @@ describe('Energiatodistus Utils: ', () => {
 
       const expected = Maybe.Some(0.5);
 
-      assert.deepEqual(expected, EtUtils.partOfSum(sum, value));
+      expect(expected).toEqual(EtUtils.partOfSum(sum, value));
     });
 
     it('should return None when input is None', () => {
@@ -258,7 +254,7 @@ describe('Energiatodistus Utils: ', () => {
 
       const expected = Maybe.None();
 
-      assert.deepEqual(expected, EtUtils.partOfSum(sum, value));
+      expect(expected).toEqual(EtUtils.partOfSum(sum, value));
     });
   });
 
@@ -286,7 +282,7 @@ describe('Energiatodistus Utils: ', () => {
         ulkoovet: Maybe.Some(4)
       };
 
-      assert.deepEqual(expected, EtUtils.rakennusvaippaUA(et));
+      expect(expected).toEqual(EtUtils.rakennusvaippaUA(et));
     });
   });
 
@@ -312,7 +308,7 @@ describe('Energiatodistus Utils: ', () => {
         kaukojaahdytys: Maybe.Some(5)
       };
 
-      assert.deepEqual(expected, EtUtils.ostoenergiat(et));
+      expect(expected).toEqual(EtUtils.ostoenergiat(et));
     });
   });
 
@@ -323,8 +319,7 @@ describe('Energiatodistus Utils: ', () => {
 
       const expected = Maybe.Some(20);
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         EtUtils.multiplyWithKerroin(kerroin, ostoenergiamaara)
       );
     });
@@ -335,8 +330,7 @@ describe('Energiatodistus Utils: ', () => {
 
       const expected = Maybe.None();
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         EtUtils.multiplyWithKerroin(kerroin, ostoenergiamaara)
       );
     });
@@ -360,7 +354,7 @@ describe('Energiatodistus Utils: ', () => {
         b: Maybe.Some(1.5)
       };
 
-      assert.deepEqual(expected, EtUtils.perLammitettyNettoala(et, values));
+      expect(expected).toEqual(EtUtils.perLammitettyNettoala(et, values));
     });
 
     it('should return none when value is none', () => {
@@ -380,7 +374,7 @@ describe('Energiatodistus Utils: ', () => {
         b: Maybe.None()
       };
 
-      assert.deepEqual(expected, EtUtils.perLammitettyNettoala(et, values));
+      expect(expected).toEqual(EtUtils.perLammitettyNettoala(et, values));
     });
 
     it('should return none when nettoala is none', () => {
@@ -400,7 +394,7 @@ describe('Energiatodistus Utils: ', () => {
         b: Maybe.None()
       };
 
-      assert.deepEqual(expected, EtUtils.perLammitettyNettoala(et, values));
+      expect(expected).toEqual(EtUtils.perLammitettyNettoala(et, values));
     });
   });
 
@@ -428,7 +422,7 @@ describe('Energiatodistus Utils: ', () => {
         lampopumppu: Maybe.Some(1)
       };
 
-      assert.deepEqual(expected, EtUtils.omavaraisenergiat(et));
+      expect(expected).toEqual(EtUtils.omavaraisenergiat(et));
     });
   });
 
@@ -452,7 +446,7 @@ describe('Energiatodistus Utils: ', () => {
         'jaahdytys-vuosikulutus': Maybe.Some(1)
       };
 
-      assert.deepEqual(expected, EtUtils.nettotarpeet(et));
+      expect(expected).toEqual(EtUtils.nettotarpeet(et));
     });
   });
 
@@ -478,7 +472,7 @@ describe('Energiatodistus Utils: ', () => {
         kvesi: Maybe.Some(1)
       };
 
-      assert.deepEqual(expected, EtUtils.kuormat(et));
+      expect(expected).toEqual(EtUtils.kuormat(et));
     });
   });
 
@@ -504,7 +498,7 @@ describe('Energiatodistus Utils: ', () => {
         'kaukojaahdytys-vuosikulutus': Maybe.Some(1)
       };
 
-      assert.deepEqual(expected, EtUtils.ostetutEnergiamuodot(et));
+      expect(expected).toEqual(EtUtils.ostetutEnergiamuodot(et));
     });
   });
 
@@ -526,7 +520,7 @@ describe('Energiatodistus Utils: ', () => {
         'kaukojaahdytys-vuosikulutus-yhteensa': Maybe.Some(1)
       };
 
-      assert.deepEqual(expected, EtUtils.toteutuneetOstoenergiat(et));
+      expect(expected).toEqual(EtUtils.toteutuneetOstoenergiat(et));
     });
   });
 
@@ -550,7 +544,7 @@ describe('Energiatodistus Utils: ', () => {
         puupelletit: Maybe.Some(1)
       };
 
-      assert.deepEqual(expected, EtUtils.polttoaineet(et));
+      expect(expected).toEqual(EtUtils.polttoaineet(et));
     });
   });
 
@@ -584,7 +578,7 @@ describe('Energiatodistus Utils: ', () => {
         Maybe.Some(4)
       ];
 
-      assert.deepEqual(expected, EtUtils.vapaatPolttoaineet(et));
+      expect(expected).toEqual(EtUtils.vapaatPolttoaineet(et));
     });
   });
 
@@ -618,7 +612,7 @@ describe('Energiatodistus Utils: ', () => {
         Maybe.Some(4)
       ];
 
-      assert.deepEqual(expected, EtUtils.vapaatKertoimet(et));
+      expect(expected).toEqual(EtUtils.vapaatKertoimet(et));
     });
   });
 });

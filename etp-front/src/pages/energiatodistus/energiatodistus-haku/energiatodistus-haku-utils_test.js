@@ -1,5 +1,5 @@
+import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
-import { assert } from 'chai';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as EtHakuUtils from './energiatodistus-haku-utils';
@@ -11,8 +11,7 @@ describe('EtHakuUtils:', () => {
       const block = ['sisaltaa', 'energiatodistus.perustiedot.nimi-fi', ''];
       const expected = Maybe.None();
 
-      assert.deepEqual(
-        EtHakuUtils.blockToQueryParameter(flatSchema, block),
+      expect(EtHakuUtils.blockToQueryParameter(flatSchema, block)).toEqual(
         expected
       );
     });
@@ -22,8 +21,7 @@ describe('EtHakuUtils:', () => {
         ['ilike', 'energiatodistus.perustiedot.nimi-fi', '%asdf%']
       ]);
 
-      assert.deepEqual(
-        EtHakuUtils.blockToQueryParameter(flatSchema, block),
+      expect(EtHakuUtils.blockToQueryParameter(flatSchema, block)).toEqual(
         expected
       );
     });
@@ -32,8 +30,7 @@ describe('EtHakuUtils:', () => {
       const block = ['no-operation-named-this', 'nimi', 'asdf'];
       const expected = Maybe.None();
 
-      assert.deepEqual(
-        EtHakuUtils.blockToQueryParameter(flatSchema, block),
+      expect(EtHakuUtils.blockToQueryParameter(flatSchema, block)).toEqual(
         expected
       );
     });
@@ -56,8 +53,7 @@ describe('EtHakuUtils:', () => {
         [['>', 'energiatodistus.id', 'value']]
       ];
 
-      assert.deepEqual(
-        EtHakuUtils.convertWhereToQuery(flatSchema, where),
+      expect(EtHakuUtils.convertWhereToQuery(flatSchema, where)).toEqual(
         expected
       );
     });
@@ -74,8 +70,7 @@ describe('EtHakuUtils:', () => {
         [['ilike', 'energiatodistus.perustiedot.nimi-fi', '%asdf%']]
       ];
 
-      assert.deepEqual(
-        EtHakuUtils.convertWhereToQuery(flatSchema, where),
+      expect(EtHakuUtils.convertWhereToQuery(flatSchema, where)).toEqual(
         expected
       );
     });
@@ -88,10 +83,7 @@ describe('EtHakuUtils:', () => {
       block: ['=', 'key', 'value']
     };
 
-    assert.deepEqual(
-      EtHakuUtils.deserializeConjuntionBlockPair(pair),
-      expected
-    );
+    expect(EtHakuUtils.deserializeConjuntionBlockPair(pair)).toEqual(expected);
   });
 
   describe('deserializeAndBlocks', () => {
@@ -107,7 +99,7 @@ describe('EtHakuUtils:', () => {
         ['and', ['<', 'key', 'value']]
       ];
 
-      assert.deepEqual(EtHakuUtils.deserializeAndBlocks(andBlocks), expected);
+      expect(EtHakuUtils.deserializeAndBlocks(andBlocks)).toEqual(expected);
     });
   });
 
@@ -137,7 +129,7 @@ describe('EtHakuUtils:', () => {
         { conjunction: 'and', block: ['>=', 'key', 'value'] }
       ];
 
-      assert.deepEqual(EtHakuUtils.deserializeWhere(schema, where), expected);
+      expect(EtHakuUtils.deserializeWhere(schema, where)).toEqual(expected);
     });
 
     it('should remove not found criteria', () => {
@@ -164,7 +156,7 @@ describe('EtHakuUtils:', () => {
         { conjunction: 'and', block: ['>=', 'key', 'value'] }
       ];
 
-      assert.deepEqual(EtHakuUtils.deserializeWhere(schema, where), expected);
+      expect(EtHakuUtils.deserializeWhere(schema, where)).toEqual(expected);
     });
   });
 
@@ -183,7 +175,7 @@ describe('EtHakuUtils:', () => {
         { conjunction: 'and', block: ['>=', 'key', 'value'] }
       ];
 
-      assert.deepEqual(EtHakuUtils.removeQueryItem(2, queryItems), expected);
+      expect(EtHakuUtils.removeQueryItem(2, queryItems)).toEqual(expected);
     });
 
     it('should set new first item conjuntion None on removal', () => {
@@ -200,7 +192,7 @@ describe('EtHakuUtils:', () => {
         { conjunction: 'and', block: ['>=', 'key', 'value'] }
       ];
 
-      assert.deepEqual(EtHakuUtils.removeQueryItem(0, queryItems), expected);
+      expect(EtHakuUtils.removeQueryItem(0, queryItems)).toEqual(expected);
     });
   });
 
@@ -220,12 +212,12 @@ describe('EtHakuUtils:', () => {
 
       const value = '1';
 
-      assert.isTrue(
+      expect(
         R.all(
           Either.isRight,
           R.map(EtHakuUtils.parseValueByType(R.__, value), types)
         )
-      );
+      ).toBe(true);
     });
     it('should return Left with invalid number', () => {
       const types = [
@@ -242,66 +234,62 @@ describe('EtHakuUtils:', () => {
 
       const value = 'a';
 
-      assert.isTrue(
+      expect(
         R.all(
           Either.isLeft,
           R.map(EtHakuUtils.parseValueByType(R.__, value), types)
         )
-      );
+      ).toBe(true);
     });
 
     it('should return Right with daycount', () => {
-      assert.isTrue(
+      expect(
         Either.isRight(
           EtHakuUtils.parseValueByType(OPERATOR_TYPES.DAYCOUNT, '1d')
         )
-      );
+      ).toBe(true);
     });
     it('should return Left with invalid daycount', () => {
-      assert.isTrue(
+      expect(
         Either.isLeft(
           EtHakuUtils.parseValueByType(OPERATOR_TYPES.DAYCOUNT, 'dd')
         )
-      );
+      ).toBe(true);
     });
 
     it('should return Right with percent', () => {
-      assert.isTrue(
+      expect(
         Either.isRight(
           EtHakuUtils.parseValueByType(OPERATOR_TYPES.PERCENT, '54%')
         )
-      );
+      ).toBe(true);
     });
 
     it('should return Left with invalid percent', () => {
-      assert.isTrue(
+      expect(
         Either.isLeft(
           EtHakuUtils.parseValueByType(OPERATOR_TYPES.PERCENT, 'a%')
         )
-      );
+      ).toBe(true);
     });
 
     it('should return Right with boolean', () => {
-      assert.deepEqual(
-        EtHakuUtils.parseValueByType(OPERATOR_TYPES.BOOLEAN, 'true'),
-        Either.Right(true)
-      );
-      assert.deepEqual(
-        EtHakuUtils.parseValueByType(OPERATOR_TYPES.BOOLEAN, 'false'),
-        Either.Right(false)
-      );
+      expect(
+        EtHakuUtils.parseValueByType(OPERATOR_TYPES.BOOLEAN, 'true')
+      ).toEqual(Either.Right(true));
+      expect(
+        EtHakuUtils.parseValueByType(OPERATOR_TYPES.BOOLEAN, 'false')
+      ).toEqual(Either.Right(false));
     });
 
     it('should return Right with e-luokka', () => {
-      assert.deepEqual(
-        EtHakuUtils.parseValueByType(OPERATOR_TYPES.ELUOKKA, '1,2,3'),
-        Either.Right(['1', '2', '3'])
-      );
+      expect(
+        EtHakuUtils.parseValueByType(OPERATOR_TYPES.ELUOKKA, '1,2,3')
+      ).toEqual(Either.Right(['1', '2', '3']));
     });
 
     it('should return Right no type', () => {
-      assert.deepEqual(
-        EtHakuUtils.parseValueByType('', '1,2,3'),
+      expect(EtHakuUtils.parseValueByType('', '1,2,3')).toEqual(
         Either.Right('1,2,3')
       );
     });
@@ -322,8 +310,7 @@ describe('EtHakuUtils:', () => {
         block: ['=', 'energiatodistus.id', 4]
       };
 
-      assert.deepEqual(
-        EtHakuUtils.hakuCriteriaFromGroupedInput(inputs),
+      expect(EtHakuUtils.hakuCriteriaFromGroupedInput(inputs)).toEqual(
         expected
       );
     });
@@ -345,8 +332,7 @@ describe('EtHakuUtils:', () => {
         block: ['between', 'some_key', 4, 3, 2, 1]
       };
 
-      assert.deepEqual(
-        EtHakuUtils.hakuCriteriaFromGroupedInput(inputs),
+      expect(EtHakuUtils.hakuCriteriaFromGroupedInput(inputs)).toEqual(
         expected
       );
     });
@@ -362,7 +348,7 @@ describe('EtHakuUtils:', () => {
 
       const expected = `[[["<","key1",4],["=","key2",3]],[["between","key3",1,4]]]`;
 
-      assert.equal(EtHakuUtils.searchString(criteria), expected);
+      expect(EtHakuUtils.searchString(criteria)).toEqual(expected);
     });
   });
 });

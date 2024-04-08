@@ -1,5 +1,5 @@
+import { expect, describe, it } from '@jest/globals';
 import * as Objects from './objects';
-import { assert } from 'chai';
 
 describe('Objects', () => {
   describe('mapKeys', () => {
@@ -16,10 +16,7 @@ describe('Objects', () => {
         c_1: 3
       };
 
-      assert.deepEqual(
-        Objects.mapKeys(key => `${key}_1`, obj),
-        expected
-      );
+      expect(Objects.mapKeys(key => `${key}_1`, obj)).toEqual(expected);
     });
   });
 
@@ -43,18 +40,18 @@ describe('Objects', () => {
         x: 3
       };
 
-      assert.deepEqual(Objects.renameKeys(keysMap, obj), expected);
+      expect(Objects.renameKeys(keysMap, obj)).toEqual(expected);
     });
   });
 
   describe('requireNotNil', () => {
     it('should return value when not nil', () => {
       const value = 1;
-      assert.equal(Objects.requireNotNil(value, 'err'), value);
+      expect(Objects.requireNotNil(value, 'err')).toEqual(value);
     });
     it('should throw when nil', () => {
       const value = null;
-      assert.throws(() => Object.requireNotNil(value, 'err'));
+      expect(() => Object.requireNotNil(value, 'err')).toThrow();
     });
   });
 });

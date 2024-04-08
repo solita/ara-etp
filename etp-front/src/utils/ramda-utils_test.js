@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
 
 import * as RamdaUtils from './ramda-utils';
@@ -12,7 +12,7 @@ describe('RamdaUtils:', () => {
       const value = 1;
 
       const expected = true;
-      assert.isTrue(RamdaUtils.inRangeInclusive(low, high, value));
+      expect(RamdaUtils.inRangeInclusive(low, high, value)).toBe(true);
     });
 
     it('should return false with value lower than low', () => {
@@ -21,7 +21,7 @@ describe('RamdaUtils:', () => {
       const value = 0;
 
       const expected = false;
-      assert.isFalse(RamdaUtils.inRangeInclusive(low, high, value));
+      expect(RamdaUtils.inRangeInclusive(low, high, value)).toBe(false);
     });
 
     it('should return false with value higher than high', () => {
@@ -30,7 +30,7 @@ describe('RamdaUtils:', () => {
       const value = 2;
 
       const expected = false;
-      assert.isFalse(RamdaUtils.inRangeInclusive(low, high, value));
+      expect(RamdaUtils.inRangeInclusive(low, high, value)).toBe(false);
     });
 
     it('should return true with high edge', () => {
@@ -39,7 +39,7 @@ describe('RamdaUtils:', () => {
       const value = 1;
 
       const expected = true;
-      assert.isTrue(RamdaUtils.inRangeInclusive(low, high, value));
+      expect(RamdaUtils.inRangeInclusive(low, high, value)).toBe(true);
     });
 
     it('should return true with low edge', () => {
@@ -48,7 +48,7 @@ describe('RamdaUtils:', () => {
       const value = 0;
 
       const expected = true;
-      assert.isTrue(RamdaUtils.inRangeInclusive(low, high, value));
+      expect(RamdaUtils.inRangeInclusive(low, high, value)).toBe(true);
     });
   });
 
@@ -57,7 +57,7 @@ describe('RamdaUtils:', () => {
       const arr = R.map(Maybe.Some, [1, 2, 3]);
       const expected = [...arr, Maybe.None(), Maybe.None(), Maybe.None()];
 
-      assert.deepEqual(RamdaUtils.fillAndTake(6, Maybe.None, arr), expected);
+      expect(RamdaUtils.fillAndTake(6, Maybe.None, arr)).toEqual(expected);
     });
   });
 });
