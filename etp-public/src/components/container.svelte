@@ -1,12 +1,12 @@
 <script context="module">
   export const styles = {
-    beige: { background: 'beige' },
-    mainnavigation: { background: 'mainnavigation' },
-    ashbluewhite: { background: 'ashbluewhite' },
-    grey: { background: 'grey' },
-    white: { background: 'white' },
-    hero: { background: 'heroblurred' },
-    red: { background: 'red' }
+    beige: { background: 'bg-beige' },
+    mainnavigation: { background: 'bg-mainnavigation' },
+    ashbluewhite: { background: 'bg-ashbluewhite' },
+    grey: { background: 'bg-grey' },
+    white: { background: 'bg-white' },
+    hero: { background: 'bg-heroblurred' },
+    red: { background: 'bg-red' }
   };
 </script>
 
@@ -43,7 +43,7 @@
   }
 </style>
 
-<div class="bg-{background}">
+<div class={background}>
   <div class="mx-auto xxl:container">
     <slot />
   </div>

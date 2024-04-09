@@ -1,8 +1,8 @@
 <script context="module">
   export const styles = {
-    green: { text: 'white', bg: 'green', focus: 'darkgreen' },
-    white: { text: 'ashblue', bg: 'white', focus: 'grey' },
-    ashblue: { text: 'white', bg: 'ashblue', focus: 'darkashblue' }
+    green: { text: 'text-white', bg: 'bg-green', focus: 'bg-darkgreen' },
+    white: { text: 'text-ashblue', bg: 'bg-white', focus: 'bg-grey' },
+    ashblue: { text: 'text-white', bg: 'bg-ashblue', focus: 'bg-darkashblue' }
   };
 </script>
 
@@ -49,6 +49,6 @@
 <a
   {href}
   {target}
-  class={`inline-flex m-1 uppercase text-sm font-bold tracking-wider rounded-full px-8 py-3 focus:outline-none text-${text} bg-${bg} hover:bg-${focus} focus:bg-${focus} space-x-3 items-center`}>
+  class={`inline-flex m-1 uppercase text-sm font-bold tracking-wider rounded-full px-8 py-3 focus:outline-none ${text} ${bg} hover:${focus} focus:${focus} space-x-3 items-center`}>
   <slot />
 </a>
