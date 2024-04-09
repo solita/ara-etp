@@ -59,6 +59,7 @@
 
 {#if !disabled}
   <div
+    data-cy="datepicker"
     bind:this={input}
     use:litepicker={{
       lang: $locale,
