@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 
 import * as ToimintaAlueUtils from './toimintaalue';
 import * as Maybe from '@Utility/maybe-utils';
@@ -11,8 +11,7 @@ describe('ToimintaAlueUtils', () => {
 
       const expected = [2, 3, 4, 5];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         ToimintaAlueUtils.toimintaalueetWithoutMain(
           mainToimintaAlue,
           toimintaAlueet
@@ -26,8 +25,7 @@ describe('ToimintaAlueUtils', () => {
 
       const expected = [1, 2, 3, 4, 5];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         ToimintaAlueUtils.toimintaalueetWithoutMain(
           mainToimintaAlue,
           toimintaAlueet
@@ -41,8 +39,7 @@ describe('ToimintaAlueUtils', () => {
 
       const expected = [1, 2, 3, 4, 5];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         ToimintaAlueUtils.toimintaalueetWithoutMain(
           mainToimintaAlue,
           toimintaAlueet
@@ -56,27 +53,27 @@ describe('ToimintaAlueUtils', () => {
       const mainToimintaAlue = Maybe.of(1);
       const toimintaAlue = 1;
 
-      assert.isTrue(
+      expect(
         ToimintaAlueUtils.isMainToimintaAlue(mainToimintaAlue, toimintaAlue)
-      );
+      ).toBe(true);
     });
 
     it('should return false with inequal toimintaAlue', () => {
       const mainToimintaAlue = Maybe.of(1);
       const toimintaAlue = 2;
 
-      assert.isFalse(
+      expect(
         ToimintaAlueUtils.isMainToimintaAlue(mainToimintaAlue, toimintaAlue)
-      );
+      ).toBe(false);
     });
 
     it('should return false with None mainToimintaAlue', () => {
       const mainToimintaAlue = Maybe.None();
       const toimintaAlue = 2;
 
-      assert.isFalse(
+      expect(
         ToimintaAlueUtils.isMainToimintaAlue(mainToimintaAlue, toimintaAlue)
-      );
+      ).toBe(false);
     });
   });
 });

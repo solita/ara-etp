@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import {
   toimitustapa,
   toimitustapaErrorKey
@@ -16,35 +16,35 @@ describe('Toimitustapa', () => {
     'toimitustapa-id': Maybe.Some(2)
   };
   it('Check suomifi', () => {
-    assert.isTrue(toimitustapa.suomifi(suomifi));
-    assert.isFalse(toimitustapa.suomifi(email));
-    assert.isFalse(toimitustapa.suomifi(other));
+    expect(toimitustapa.suomifi(suomifi)).toBe(true);
+    expect(toimitustapa.suomifi(email)).toBe(false);
+    expect(toimitustapa.suomifi(other)).toBe(false);
   });
   it('Check email', () => {
-    assert.isFalse(toimitustapa.email(suomifi));
-    assert.isTrue(toimitustapa.email(email));
-    assert.isFalse(toimitustapa.email(other));
+    expect(toimitustapa.email(suomifi)).toBe(false);
+    expect(toimitustapa.email(email)).toBe(true);
+    expect(toimitustapa.email(other)).toBe(false);
   });
   it('Check other', () => {
-    assert.isFalse(toimitustapa.other(suomifi));
-    assert.isFalse(toimitustapa.other(email));
-    assert.isTrue(toimitustapa.other(other));
+    expect(toimitustapa.other(suomifi)).toBe(false);
+    expect(toimitustapa.other(email)).toBe(false);
+    expect(toimitustapa.other(other)).toBe(true);
   });
 });
 
 describe('ToimitustapaErrorKey', () => {
   describe('Valid values return None', () => {
     it('always for muu', () => {
-      assert.isTrue(
+      expect(
         toimitustapaErrorKey
           .yritys({ 'toimitustapa-id': Maybe.Some(2) })
           .isNone()
-      );
-      assert.isTrue(
+      ).toBe(true);
+      expect(
         toimitustapaErrorKey
           .henkilo({ 'toimitustapa-id': Maybe.Some(2) })
           .isNone()
-      );
+      ).toBe(true);
     });
     describe('for yritys', () => {
       it('when using suomifi', () => {
@@ -54,14 +54,14 @@ describe('ToimitustapaErrorKey', () => {
           jakeluosoite: Maybe.Some('Katu 1'),
           maa: Maybe.Some('Suomi')
         };
-        assert.isTrue(toimitustapaErrorKey.yritys(suomifi).isNone());
+        expect(toimitustapaErrorKey.yritys(suomifi).isNone()).toBe(true);
       });
       it('when using email', () => {
         const email = {
           'toimitustapa-id': Maybe.Some(1),
           email: Maybe.Some('example@example.com')
         };
-        assert.isTrue(toimitustapaErrorKey.yritys(email).isNone());
+        expect(toimitustapaErrorKey.yritys(email).isNone()).toBe(true);
       });
     });
     describe('for henkilo', () => {
@@ -72,14 +72,14 @@ describe('ToimitustapaErrorKey', () => {
           jakeluosoite: Maybe.Some('Katu 1'),
           maa: Maybe.Some('Suomi')
         };
-        assert.isTrue(toimitustapaErrorKey.henkilo(suomifi).isNone());
+        expect(toimitustapaErrorKey.henkilo(suomifi).isNone()).toBe(true);
       });
       it('when using email', () => {
         const email = {
           'toimitustapa-id': Maybe.Some(1),
           email: Maybe.Some('example@example.com')
         };
-        assert.isTrue(toimitustapaErrorKey.henkilo(email).isNone());
+        expect(toimitustapaErrorKey.henkilo(email).isNone()).toBe(true);
       });
     });
   });
@@ -105,8 +105,7 @@ describe('ToimitustapaErrorKey', () => {
           maa: Maybe.None()
         };
         [missingYTunnus, missingJakeluosoite, missingMaa].forEach(invalid => {
-          assert.equal(
-            toimitustapaErrorKey.yritys(invalid).some(),
+          expect(toimitustapaErrorKey.yritys(invalid).some()).toEqual(
             'suomifi-yritys'
           );
         });
@@ -116,7 +115,9 @@ describe('ToimitustapaErrorKey', () => {
           'toimitustapa-id': Maybe.Some(1),
           email: Maybe.None()
         };
-        assert.equal(toimitustapaErrorKey.yritys(missingEmail).some(), 'email');
+        expect(toimitustapaErrorKey.yritys(missingEmail).some()).toEqual(
+          'email'
+        );
       });
     });
     describe('for henkilo', () => {
@@ -141,8 +142,7 @@ describe('ToimitustapaErrorKey', () => {
         };
         [missingHenkilotunnus, missingJakeluosoite, missingMaa].forEach(
           invalid => {
-            assert.equal(
-              toimitustapaErrorKey.henkilo(invalid).some(),
+            expect(toimitustapaErrorKey.henkilo(invalid).some()).toEqual(
               'suomifi-henkilo'
             );
           }
@@ -153,8 +153,7 @@ describe('ToimitustapaErrorKey', () => {
           'toimitustapa-id': Maybe.Some(1),
           email: Maybe.None()
         };
-        assert.equal(
-          toimitustapaErrorKey.henkilo(missingEmail).some(),
+        expect(toimitustapaErrorKey.henkilo(missingEmail).some()).toEqual(
           'email'
         );
       });

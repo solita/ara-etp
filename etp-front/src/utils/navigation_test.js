@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
 
 import * as Navigation from './navigation';
@@ -35,7 +35,7 @@ describe('Navigation', () => {
       const location = '/yritys/new';
       const expected = ['yritys', 'new'];
 
-      assert.deepEqual(Navigation.locationParts(location), expected);
+      expect(Navigation.locationParts(location)).toEqual(expected);
     });
   });
 
@@ -54,13 +54,12 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.pick(['label', 'href']),
           Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2018', '1'])
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return root links when outside single energiatodistus', () => {
@@ -80,22 +79,20 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return empty links when creating new energiatodistus', () => {
       const expected = [];
 
-      assert.deepEqual(
-        Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2018', 'new']),
-        expected
-      );
+      expect(
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2018', 'new'])
+      ).toEqual(expected);
     });
   });
 
@@ -118,13 +115,12 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return links for pätevyydentoteaja', () => {
@@ -137,10 +133,9 @@ describe('Navigation', () => {
         { label: 'Laatijat', href: '#/laatija/all' }
       ];
 
-      assert.deepEqual(
-        Navigation.parseEnergiatodistus(false, i18n, kayttaja, []),
-        expected
-      );
+      expect(
+        Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
+      ).toEqual(expected);
     });
 
     it('should return links for pääkäyttäjä', () => {
@@ -162,13 +157,12 @@ describe('Navigation', () => {
         { label: 'Laatijat', href: '#/laatija/all' }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseEnergiatodistus(false, i18n, kayttaja, [])
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
   });
 
@@ -179,13 +173,12 @@ describe('Navigation', () => {
       const whoami = { rooli: 0, id: 1 };
       const expected = [];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseYritys(isDev, i18n, whoami, {}, locationParts)
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
     it('should return empty for new', () => {
       const isDev = false;
@@ -193,10 +186,9 @@ describe('Navigation', () => {
       const whoami = { rooli: 0, id: 1 };
       const expected = [];
 
-      assert.deepEqual(
-        Navigation.parseYritys(isDev, i18n, whoami, {}, locationParts),
-        expected
-      );
+      expect(
+        Navigation.parseYritys(isDev, i18n, whoami, {}, locationParts)
+      ).toEqual(expected);
     });
     it('should return yritys with id-label', () => {
       const isDev = false;
@@ -213,13 +205,12 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseYritys(isDev, i18n, whoami, {}, locationParts)
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
     it('should return yritys with name-label', () => {
       const isDev = false;
@@ -236,7 +227,7 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseYritys(
@@ -246,9 +237,8 @@ describe('Navigation', () => {
             { yritys: { 1: 'Testiyritys' } },
             locationParts
           )
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
   });
 
@@ -270,16 +260,15 @@ describe('Navigation', () => {
         { label: 'Laatijat', href: '#/laatija/all' }
       ];
 
-      assert.deepEqual(
+      expect(
         Navigation.parseLaatija(
           isDev,
           patevyydentoteaja,
           i18n,
           {},
           locationParts
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return root for all for patevyydentoteaja', () => {
@@ -294,16 +283,15 @@ describe('Navigation', () => {
         { label: 'Laatijat', href: '#/laatija/all' }
       ];
 
-      assert.deepEqual(
+      expect(
         Navigation.parseLaatija(
           isDev,
           patevyydentoteaja,
           i18n,
           {},
           locationParts
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return laatija-nav for laatija', () => {
@@ -319,7 +307,7 @@ describe('Navigation', () => {
         { label: 'Muutoshistoria', href: '#/kayttaja/1/muutoshistoria' }
       ];
 
-      assert.deepEqual(
+      expect(
         Navigation.parseKayttaja(
           isDev,
           paakayttaja,
@@ -330,9 +318,8 @@ describe('Navigation', () => {
             }
           },
           locationParts
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
     it('should return empty without translate', () => {
       const isDev = false;
@@ -340,7 +327,7 @@ describe('Navigation', () => {
 
       const expected = [];
 
-      assert.deepEqual(
+      expect(
         Navigation.parseKayttaja(
           isDev,
           paakayttaja,
@@ -349,9 +336,8 @@ describe('Navigation', () => {
             kayttaja: {}
           },
           locationParts
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return empty if locationParts contains yritykset', () => {
@@ -359,7 +345,7 @@ describe('Navigation', () => {
       const locationParts = ['1', 'yritykset'];
       const expected = [];
 
-      assert.deepEqual(
+      expect(
         Navigation.parseKayttaja(
           isDev,
           paakayttaja,
@@ -368,9 +354,8 @@ describe('Navigation', () => {
             kayttaja: {}
           },
           locationParts
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
   });
 
@@ -403,7 +388,7 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseValvontaOikeellisuus(
@@ -412,9 +397,8 @@ describe('Navigation', () => {
             whoami,
             locationParts
           )
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
     it('should return empty for long locations', () => {
       const isDev = false;
@@ -423,7 +407,7 @@ describe('Navigation', () => {
 
       const expected = [];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseValvontaOikeellisuus(
@@ -432,9 +416,8 @@ describe('Navigation', () => {
             whoami,
             locationParts
           )
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
     it('should return energiatodistus for others', () => {
       const isDev = false;
@@ -452,7 +435,7 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseValvontaOikeellisuus(
@@ -461,9 +444,8 @@ describe('Navigation', () => {
             whoami,
             locationParts
           )
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
   });
 
@@ -496,13 +478,12 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badge'),
           Navigation.parseViesti(isDev, i18n, whoami, {}, locationParts)
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
     it('should return viesti links for others', () => {
       const isDev = false;
@@ -520,13 +501,12 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         R.map(
           R.dissoc('badgeValue'),
           Navigation.parseViesti(isDev, i18n, whoami, {}, locationParts)
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
   });
 
@@ -551,8 +531,7 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
-        Navigation.roleBasedHeaderMenuLinks(i18n, paakayttaja),
+      expect(Navigation.roleBasedHeaderMenuLinks(i18n, paakayttaja)).toEqual(
         expected
       );
     });
@@ -565,8 +544,7 @@ describe('Navigation', () => {
         }
       ];
 
-      assert.deepEqual(
-        Navigation.roleBasedHeaderMenuLinks(i18n, laskuttaja),
+      expect(Navigation.roleBasedHeaderMenuLinks(i18n, laskuttaja)).toEqual(
         expected
       );
     });
@@ -574,8 +552,7 @@ describe('Navigation', () => {
     it('should return empty for others', () => {
       const expected = [];
 
-      assert.deepEqual(
-        Navigation.roleBasedHeaderMenuLinks(i18n, laatija),
+      expect(Navigation.roleBasedHeaderMenuLinks(i18n, laatija)).toEqual(
         expected
       );
     });

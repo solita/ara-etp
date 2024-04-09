@@ -1,6 +1,6 @@
+import { expect, describe, it } from '@jest/globals';
 import * as BreadcrumbUtils from './breadcrumb-utils';
 import * as Maybe from '@Utility/maybe-utils';
-import { assert } from 'chai';
 
 describe('BreadcrumbUtils', () => {
   const whoami = {
@@ -52,15 +52,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/all', label: 'navigation.yritykset' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(
             i18n,
             idTranslate,
             whoami.paakayttaja,
             locations.all
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
 
       it('should return all yritykset link for laskuttaja with all', () => {
@@ -68,15 +67,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/all', label: 'navigation.yritykset' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(
             i18n,
             idTranslate,
             whoami.laskuttaja,
             locations.all
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
 
       it('should return laatijan yritykset link for laatija with all', () => {
@@ -84,15 +82,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/laatija/1/yritykset', label: 'navigation.yritykset' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(
             i18n,
             idTranslate,
             whoami.laatija,
             locations.all
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
     });
 
@@ -103,15 +100,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/new', label: 'navigation.new-yritys' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(
             i18n,
             idTranslate,
             whoami.paakayttaja,
             locations.new
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
 
       it('should return crumb for new with omat tiedot and yritykset before for laatija', () => {
@@ -121,15 +117,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/new', label: 'navigation.new-yritys' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(
             i18n,
             idTranslate,
             whoami.laatija,
             locations.new
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
     });
 
@@ -141,10 +136,9 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/1', label: 'navigation.yritys 1' }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.yritysCrumb(i18n, {}, whoami.paakayttaja, yritysId),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.yritysCrumb(i18n, {}, whoami.paakayttaja, yritysId)
+        ).toEqual(expected);
       });
 
       it('should return crumb for existing', () => {
@@ -153,15 +147,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/1', label: 'Testiyritys' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(
             i18n,
             idTranslate,
             whoami.paakayttaja,
             yritysId
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
 
       it('should return crumb with yrityksen laatijat', () => {
@@ -171,13 +164,12 @@ describe('BreadcrumbUtils', () => {
           { url: '#/yritys/1/laatijat', label: 'navigation.yritys-laatijat' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.yritysCrumb(i18n, idTranslate, whoami.paakayttaja, [
             ...yritysId,
             'laatijat'
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
     });
   });
@@ -188,15 +180,14 @@ describe('BreadcrumbUtils', () => {
         { url: '#/kayttaja/all', label: 'navigation.kayttajat' }
       ];
 
-      assert.deepEqual(
+      expect(
         BreadcrumbUtils.kayttajaCrumb(
           i18n,
           idTranslate,
           whoami.laatija,
           locations.all
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     describe('existing', () => {
@@ -208,10 +199,9 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.kayttajaCrumb(i18n, {}, whoami.paakayttaja, ['2']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.kayttajaCrumb(i18n, {}, whoami.paakayttaja, ['2'])
+        ).toEqual(expected);
       });
       it('should return kayttaja crumb with id when contained in translate and is laatija', () => {
         const expected = [
@@ -222,12 +212,11 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.kayttajaCrumb(i18n, idTranslate, whoami.paakayttaja, [
             '2'
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
       it('should return kayttaja crumb with id when contained in translate and is not laatija', () => {
         const expected = [
@@ -241,12 +230,11 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.kayttajaCrumb(i18n, idTranslate, whoami.paakayttaja, [
             '3'
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
 
       it('should return kayttaja crumb with self', () => {
@@ -254,10 +242,9 @@ describe('BreadcrumbUtils', () => {
           { url: '#/kayttaja/1', label: 'navigation.omattiedot' }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.kayttajaCrumb(i18n, {}, whoami.paakayttaja, ['1']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.kayttajaCrumb(i18n, {}, whoami.paakayttaja, ['1'])
+        ).toEqual(expected);
       });
 
       it('should return kayttaja crumb with self and user in translate', () => {
@@ -265,15 +252,14 @@ describe('BreadcrumbUtils', () => {
           { url: '#/kayttaja/1', label: 'navigation.omattiedot' }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.kayttajaCrumb(
             i18n,
             { kayttaja: { 1: whoami.paakayttaja } },
             whoami.paakayttaja,
             ['1']
-          ),
-          expected
-        );
+          )
+        ).toEqual(expected);
       });
     });
   });
@@ -289,15 +275,14 @@ describe('BreadcrumbUtils', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         BreadcrumbUtils.laatijaCrumb(
           i18n,
           idTranslate,
           whoami.patevyydentoteaja,
           location
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return all', () => {
@@ -307,15 +292,14 @@ describe('BreadcrumbUtils', () => {
           label: 'navigation.laatijat'
         }
       ];
-      assert.deepEqual(
+      expect(
         BreadcrumbUtils.laatijaCrumb(
           i18n,
           idTranslate,
           whoami.paakayttaja,
           locations.all
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     describe('existing', () => {
@@ -328,10 +312,9 @@ describe('BreadcrumbUtils', () => {
             }
           ];
 
-          assert.deepEqual(
-            BreadcrumbUtils.laatijaCrumb(i18n, {}, whoami.laatija, ['1']),
-            expected
-          );
+          expect(
+            BreadcrumbUtils.laatijaCrumb(i18n, {}, whoami.laatija, ['1'])
+          ).toEqual(expected);
         });
         it('should return laatija crumb for other than laatija', () => {
           const expected = [
@@ -341,10 +324,9 @@ describe('BreadcrumbUtils', () => {
               label: 'navigation.kayttaja 2'
             }
           ];
-          assert.deepEqual(
-            BreadcrumbUtils.laatijaCrumb(i18n, {}, whoami.paakayttaja, ['2']),
-            expected
-          );
+          expect(
+            BreadcrumbUtils.laatijaCrumb(i18n, {}, whoami.paakayttaja, ['2'])
+          ).toEqual(expected);
         });
         it('should return laatija crumb with yritykset', () => {
           const expected = [
@@ -355,13 +337,12 @@ describe('BreadcrumbUtils', () => {
             },
             { url: '#/laatija/2/yritykset', label: 'navigation.yritykset' }
           ];
-          assert.deepEqual(
+          expect(
             BreadcrumbUtils.laatijaCrumb(i18n, {}, whoami.paakayttaja, [
               '2',
               'yritykset'
-            ]),
-            expected
-          );
+            ])
+          ).toEqual(expected);
         });
       });
       describe('with translation', () => {
@@ -373,15 +354,14 @@ describe('BreadcrumbUtils', () => {
               label: 'Testi Laatija'
             }
           ];
-          assert.deepEqual(
+          expect(
             BreadcrumbUtils.laatijaCrumb(
               i18n,
               idTranslate,
               whoami.paakayttaja,
               ['2']
-            ),
-            expected
-          );
+            )
+          ).toEqual(expected);
         });
         it('should return non-laatija crumb with translation', () => {
           const expected = [
@@ -391,15 +371,14 @@ describe('BreadcrumbUtils', () => {
               label: 'Testi Pääkäyttäjä'
             }
           ];
-          assert.deepEqual(
+          expect(
             BreadcrumbUtils.laatijaCrumb(
               i18n,
               idTranslate,
               whoami.paakayttaja,
               ['3']
-            ),
-            expected
-          );
+            )
+          ).toEqual(expected);
         });
       });
     });
@@ -414,8 +393,7 @@ describe('BreadcrumbUtils', () => {
         }
       ];
 
-      assert.deepEqual(
-        BreadcrumbUtils.energiatodistusCrumb(i18n, locations.all),
+      expect(BreadcrumbUtils.energiatodistusCrumb(i18n, locations.all)).toEqual(
         expected
       );
     });
@@ -431,10 +409,9 @@ describe('BreadcrumbUtils', () => {
         }
       ];
 
-      assert.deepEqual(
-        BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', ...locations.new]),
-        expected
-      );
+      expect(
+        BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', ...locations.new])
+      ).toEqual(expected);
     });
     describe('existing', () => {
       it('should return crumb for energiatodistus', () => {
@@ -449,10 +426,9 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', '1']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', '1'])
+        ).toEqual(expected);
       });
 
       it('should return crumb for energiatodistus liitteet', () => {
@@ -471,10 +447,9 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', '1', 'liitteet']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', '1', 'liitteet'])
+        ).toEqual(expected);
       });
 
       it('should return crumb for energiatodistus viestit', () => {
@@ -493,10 +468,9 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', '1', 'viestit']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.energiatodistusCrumb(i18n, ['2018', '1', 'viestit'])
+        ).toEqual(expected);
       });
 
       it('should return crumb for energiatodistus new viesti', () => {
@@ -519,15 +493,14 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.energiatodistusCrumb(i18n, [
             '2018',
             '1',
             'viestit',
             'new'
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
 
       it('should return crumb for energiatodistus muutoshistoria', () => {
@@ -546,14 +519,13 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.energiatodistusCrumb(i18n, [
             '2018',
             '1',
             'muutoshistoria'
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
     });
   });
@@ -565,10 +537,9 @@ describe('BreadcrumbUtils', () => {
     it('should return all for laatija', () => {
       const expected = [{ url: '#/viesti/all', label: 'navigation.viesti' }];
 
-      assert.deepEqual(
-        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, locations.all),
-        expected
-      );
+      expect(
+        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, locations.all)
+      ).toEqual(expected);
     });
 
     it('should return all for paakayttaja', () => {
@@ -579,15 +550,14 @@ describe('BreadcrumbUtils', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         BreadcrumbUtils.viestiCrumb(
           i18n,
           idTranslate,
           paakayttaja,
           locations.all
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     it('should return new for laatija', () => {
@@ -596,10 +566,9 @@ describe('BreadcrumbUtils', () => {
         { url: '#/viesti/new', label: 'navigation.uusi-viesti' }
       ];
 
-      assert.deepEqual(
-        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, locations.new),
-        expected
-      );
+      expect(
+        BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, locations.new)
+      ).toEqual(expected);
     });
 
     it('should return new for paakayttaja', () => {
@@ -611,15 +580,14 @@ describe('BreadcrumbUtils', () => {
         { url: '#/viesti/new', label: 'navigation.uusi-viesti' }
       ];
 
-      assert.deepEqual(
+      expect(
         BreadcrumbUtils.viestiCrumb(
           i18n,
           idTranslate,
           paakayttaja,
           locations.new
-        ),
-        expected
-      );
+        )
+      ).toEqual(expected);
     });
 
     describe('existing', () => {
@@ -629,8 +597,7 @@ describe('BreadcrumbUtils', () => {
           { url: '#/viesti/1', label: 'navigation.viestiketju 1' }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.viestiCrumb(i18n, {}, laatija, ['1']),
+        expect(BreadcrumbUtils.viestiCrumb(i18n, {}, laatija, ['1'])).toEqual(
           expected
         );
       });
@@ -641,10 +608,9 @@ describe('BreadcrumbUtils', () => {
           { url: '#/viesti/1', label: 'Testiotsikko 1' }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, ['1']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, ['1'])
+        ).toEqual(expected);
       });
 
       it('should return crumb for translated and attached', () => {
@@ -658,10 +624,9 @@ describe('BreadcrumbUtils', () => {
           { url: '#/viesti/2', label: 'Testiotsikko 2' }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, ['2']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.viestiCrumb(i18n, idTranslate, laatija, ['2'])
+        ).toEqual(expected);
       });
     });
   });
@@ -677,13 +642,12 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.valvontaCrumb(i18n, whoami, [
             'oikeellisuus',
             ...locations.all
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
 
       it('should return existing', () => {
@@ -702,14 +666,13 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.valvontaCrumb(i18n, whoami, [
             'oikeellisuus',
             '2018',
             '1'
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
     });
     describe('kaytto', () => {
@@ -721,13 +684,12 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
+        expect(
           BreadcrumbUtils.valvontaCrumb(i18n, whoami, [
             'kaytto',
             ...locations.all
-          ]),
-          expected
-        );
+          ])
+        ).toEqual(expected);
       });
 
       it('should return existing', () => {
@@ -742,10 +704,9 @@ describe('BreadcrumbUtils', () => {
           }
         ];
 
-        assert.deepEqual(
-          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['kaytto', '1']),
-          expected
-        );
+        expect(
+          BreadcrumbUtils.valvontaCrumb(i18n, whoami, ['kaytto', '1'])
+        ).toEqual(expected);
       });
     });
   });

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Fetch from './fetch-utils';
 import * as Future from './future-utils';
 
@@ -16,7 +16,7 @@ describe('FetchUtils', () => {
       Future.fork(
         () => {},
         value => {
-          expect(value).to.eql(expected);
+          expect(value).toEqual(expected);
           done();
         },
         Fetch.toJson(response)
@@ -34,7 +34,7 @@ describe('FetchUtils', () => {
 
       Future.fork(
         value => {
-          expect(value).to.eql(expected);
+          expect(value).toEqual(expected);
           done();
         },
         () => {},
@@ -56,7 +56,7 @@ describe('FetchUtils', () => {
 
       Future.fork(
         value => {
-          expect(value).to.eql(expected);
+          expect(value).toEqual(expected);
           done();
         },
         () => {},
@@ -76,7 +76,7 @@ describe('FetchUtils', () => {
       Future.fork(
         () => {},
         response => {
-          expect(response).to.eql(expected);
+          expect(response).toEqual(expected);
           done();
         },
         Fetch.rejectWithInvalidResponse(response)

@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as PaginationUtils from './pagination-utils';
 
 describe('PaginationUtils:', () => {
@@ -8,8 +8,7 @@ describe('PaginationUtils:', () => {
       const current = 5;
       const expected = [4, 5, 6];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.nearForCurrent(pageCount, current)
       );
     });
@@ -19,8 +18,7 @@ describe('PaginationUtils:', () => {
       const current = 1;
       const expected = [2];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.nearForCurrent(pageCount, current)
       );
     });
@@ -30,8 +28,7 @@ describe('PaginationUtils:', () => {
       const current = 10;
       const expected = [9];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.nearForCurrent(pageCount, current)
       );
     });
@@ -42,20 +39,26 @@ describe('PaginationUtils:', () => {
       const current = 2;
       const pair = [2, 3];
 
-      assert.equal(true, PaginationUtils.isPairWithCurrentPage(current, pair));
+      expect(true).toEqual(
+        PaginationUtils.isPairWithCurrentPage(current, pair)
+      );
     });
     it('should return true with current page as last element', () => {
       const current = 3;
       const pair = [2, 3];
 
-      assert.equal(true, PaginationUtils.isPairWithCurrentPage(current, pair));
+      expect(true).toEqual(
+        PaginationUtils.isPairWithCurrentPage(current, pair)
+      );
     });
 
     it('should return false without current page in given pair', () => {
       const current = 4;
       const pair = [2, 3];
 
-      assert.equal(false, PaginationUtils.isPairWithCurrentPage(current, pair));
+      expect(false).toEqual(
+        PaginationUtils.isPairWithCurrentPage(current, pair)
+      );
     });
   });
 
@@ -67,14 +70,14 @@ describe('PaginationUtils:', () => {
       ];
       const expected = [1, 2, 3];
 
-      assert.deepEqual(expected, PaginationUtils.combinePairs(pairs));
+      expect(expected).toEqual(PaginationUtils.combinePairs(pairs));
     });
 
     it('should return empty with empty input', () => {
       const pairs = [];
       const expected = [];
 
-      assert.deepEqual(expected, PaginationUtils.combinePairs(pairs));
+      expect(expected).toEqual(PaginationUtils.combinePairs(pairs));
     });
   });
 
@@ -88,8 +91,7 @@ describe('PaginationUtils:', () => {
         [4, 5]
       ];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.consecutivePairsForPageCount(pageCount)
       );
     });
@@ -98,8 +100,7 @@ describe('PaginationUtils:', () => {
       const pageCount = 1;
       const expected = [];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.consecutivePairsForPageCount(pageCount)
       );
     });
@@ -111,8 +112,7 @@ describe('PaginationUtils:', () => {
       const pageCount = 10;
       const expected = [5, 6, 7];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.dropFirstAndLastPages(pageCount, pages)
       );
     });
@@ -121,8 +121,7 @@ describe('PaginationUtils:', () => {
       const pageCount = 10;
       const expected = [2, 3];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.dropFirstAndLastPages(pageCount, pages)
       );
     });
@@ -131,8 +130,7 @@ describe('PaginationUtils:', () => {
       const pageCount = 10;
       const expected = [8, 9];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.dropFirstAndLastPages(pageCount, pages)
       );
     });
@@ -142,8 +140,7 @@ describe('PaginationUtils:', () => {
       const pageCount = 3;
       const expected = [2];
 
-      assert.deepEqual(
-        expected,
+      expect(expected).toEqual(
         PaginationUtils.dropFirstAndLastPages(pageCount, pages)
       );
     });
@@ -156,7 +153,7 @@ describe('PaginationUtils:', () => {
 
       const expected = [0, 1, 2];
 
-      assert.deepEqual(PaginationUtils.truncate(numberOfPages, page), expected);
+      expect(PaginationUtils.truncate(numberOfPages, page)).toEqual(expected);
     });
 
     it('should truncate with enough pages', () => {
@@ -164,7 +161,7 @@ describe('PaginationUtils:', () => {
       const page = 0;
 
       const expected = [0, 1, 19, 20];
-      assert.deepEqual(PaginationUtils.truncate(numberOfPages, page), expected);
+      expect(PaginationUtils.truncate(numberOfPages, page)).toEqual(expected);
     });
 
     it('should return near pages for current with enough pages', () => {
@@ -172,7 +169,7 @@ describe('PaginationUtils:', () => {
       const page = 10;
 
       const expected = [0, 1, 9, 10, 11, 19, 20];
-      assert.deepEqual(PaginationUtils.truncate(numberOfPages, page), expected);
+      expect(PaginationUtils.truncate(numberOfPages, page)).toEqual(expected);
     });
   });
 });

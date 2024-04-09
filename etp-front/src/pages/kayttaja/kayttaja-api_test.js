@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Future from '@Utility/future-utils';
 import * as api from './kayttaja-api';
 import * as R from 'ramda';
@@ -32,7 +32,7 @@ describe('Kayttaja-api-suite: ', () => {
       const id = 1234;
       const expected = 'api/private/kayttajat/1234';
 
-      assert.equal(api.url.id(id), expected);
+      expect(api.url.id(id)).toEqual(expected);
     });
   });
 
@@ -41,7 +41,7 @@ describe('Kayttaja-api-suite: ', () => {
       const id = 1234;
       const expected = 'api/private/kayttajat/1234/laatija';
 
-      assert.equal(api.url.laatija(id), expected);
+      expect(api.url.laatija(id)).toEqual(expected);
     });
   });
 
@@ -63,7 +63,7 @@ describe('Kayttaja-api-suite: ', () => {
       Future.fork(
         _ => {},
         laatija => {
-          assert.deepEqual(R.pick(['id', 'nimi'], laatija), expected);
+          expect(R.pick(['id', 'nimi'], laatija)).toEqual(expected);
           done();
         },
         api.getLaatijaById(fetch, 1234)
@@ -80,7 +80,7 @@ describe('Kayttaja-api-suite: ', () => {
 
       Future.fork(
         reject => {
-          assert.equal(400, reject.status);
+          expect(400).toEqual(reject.status);
           done();
         },
         _ => {},
@@ -128,7 +128,7 @@ describe('Kayttaja-api-suite: ', () => {
         }
       ];
 
-      assert.deepEqual(apiModel, expected);
+      expect(apiModel).toEqual(expected);
 
       done();
     });

@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Maybe from './maybe-utils';
 import * as Either from './either-utils';
 import * as Koodisto from './koodisto';
@@ -12,7 +12,7 @@ describe('Koodisto', () => {
 
       const expected = Maybe.of({ id: 1 });
 
-      assert.deepEqual(expected, Koodisto.findFromKoodistoById(id, koodisto));
+      expect(expected).toEqual(Koodisto.findFromKoodistoById(id, koodisto));
     });
 
     it('should return None when koodi is not found', () => {
@@ -21,7 +21,7 @@ describe('Koodisto', () => {
 
       const expected = Maybe.None();
 
-      assert.deepEqual(expected, Koodisto.findFromKoodistoById(id, koodisto));
+      expect(expected).toEqual(Koodisto.findFromKoodistoById(id, koodisto));
     });
   });
 
@@ -32,7 +32,7 @@ describe('Koodisto', () => {
         Maybe.of({ id: 1, 'label-fi': 'fi', 'label-sv': 'sv' })
       );
 
-      assert.equal('sv', Koodisto.koodiLocale(labelLocale, koodi));
+      expect('sv').toEqual(Koodisto.koodiLocale(labelLocale, koodi));
     });
 
     it('should format with fi as default when locale is not fi or sv', () => {
@@ -41,7 +41,7 @@ describe('Koodisto', () => {
         Maybe.of({ id: 1, 'label-fi': 'fi', 'label-sv': 'sv' })
       );
 
-      assert.equal('fi', Koodisto.koodiLocale(labelLocale, koodi));
+      expect('fi').toEqual(Koodisto.koodiLocale(labelLocale, koodi));
     });
   });
 });

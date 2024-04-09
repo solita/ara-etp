@@ -1,13 +1,13 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as country from './country';
 import * as Maybe from '@Utility/maybe-utils';
 
 const testFindCountry = (keyword, countries, expectedCountry) => {
-  assert.isTrue(
+  expect(
     Maybe.Some(countries[expectedCountry]).equals(
       country.findCountry(keyword, countries)
     )
-  );
+  ).toBe(true);
 };
 
 describe('Country related functions:', () => {

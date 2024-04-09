@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import {
   serializeOsapuoliSpecificData,
   serializePenaltyDecisionActualDecisionOsapuoliSpecificData
@@ -13,14 +13,14 @@ describe('Valvonta API test', () => {
       const input = [];
       const expected = [];
       const result = serializeOsapuoliSpecificData(input);
-      assert.deepEqual(result, expected);
+      expect(result).toEqual(expected);
     });
 
     it('Empty object is returned as is', () => {
       const input = [{}];
       const expected = [{}];
       const result = serializeOsapuoliSpecificData(input);
-      assert.deepEqual(result, expected);
+      expect(result).toEqual(expected);
     });
 
     describe('When modified fields do not exist, the original object is returned', () => {
@@ -29,7 +29,7 @@ describe('Valvonta API test', () => {
           const input = [{ document: document }];
           const expected = [{ document: document }];
           const result = serializeOsapuoliSpecificData(input);
-          assert.deepEqual(result, expected);
+          expect(result).toEqual(expected);
         });
       });
     });
@@ -47,7 +47,7 @@ describe('Valvonta API test', () => {
         }
       ];
       const result = serializeOsapuoliSpecificData(input);
-      assert.deepEqual(result, expected);
+      expect(result).toEqual(expected);
     });
 
     it('When document is set to true, hallinto-oikeus-id is unwrapped from Maybe', () => {
@@ -64,7 +64,7 @@ describe('Valvonta API test', () => {
         }
       ];
       const result = serializeOsapuoliSpecificData(data);
-      assert.deepEqual(result, expected);
+      expect(result).toEqual(expected);
     });
 
     it('When document is set to false, karajaoikeus-id is removed', () => {
@@ -80,7 +80,7 @@ describe('Valvonta API test', () => {
         }
       ];
       const result = serializeOsapuoliSpecificData(input);
-      assert.deepEqual(result, expected);
+      expect(result).toEqual(expected);
     });
 
     it('When document is set to true, karajaoikeus-id is unwrapped from Maybe', () => {
@@ -97,7 +97,7 @@ describe('Valvonta API test', () => {
         }
       ];
       const result = serializeOsapuoliSpecificData(data);
-      assert.deepEqual(result, expected);
+      expect(result).toEqual(expected);
     });
 
     it('for käskypäätös / varsinainen päätös', () => {
@@ -105,21 +105,20 @@ describe('Valvonta API test', () => {
         osapuolis: [{ id: 1, etunimi: 'Jarmo', sukunimi: 'Martikainen' }]
       });
 
-      assert.deepEqual(
+      expect(
         serializeOsapuoliSpecificData(
           R.path(['type-specific-data', 'osapuoli-specific-data'], toimenpide)
-        ),
-        [
-          {
-            osapuoli: {
-              id: 1,
-              type: 'henkilo'
-            },
-            'recipient-answered': false,
-            document: true
-          }
-        ]
-      );
+        )
+      ).toEqual([
+        {
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
+          'recipient-answered': false,
+          document: true
+        }
+      ]);
     });
 
     it('for käskypäätös / varsinainen päätös when recipient-answered is false but fields depending on it have data in them', () => {
@@ -140,7 +139,7 @@ describe('Valvonta API test', () => {
       ];
 
       // answer-commentary-fi, answer-commentary-sv, statement-fi and statement-sv have been removed
-      assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
+      expect(serializeOsapuoliSpecificData(osapuoliSpecificData)).toEqual([
         {
           osapuoli: {
             id: 1,
@@ -170,7 +169,7 @@ describe('Valvonta API test', () => {
         }
       ];
 
-      assert.deepEqual(serializeOsapuoliSpecificData(osapuoliSpecificData), [
+      expect(serializeOsapuoliSpecificData(osapuoliSpecificData)).toEqual([
         {
           osapuoli: {
             id: 1,
@@ -188,7 +187,7 @@ describe('Valvonta API test', () => {
     });
 
     it('if document is set to false, recipient-answered is removed', () => {
-      assert.deepEqual(
+      expect(
         serializeOsapuoliSpecificData([
           {
             osapuoli: {
@@ -198,17 +197,16 @@ describe('Valvonta API test', () => {
             document: false,
             'recipient-answered': false
           }
-        ]),
-        [
-          {
-            osapuoli: {
-              id: 1,
-              type: 'yritys'
-            },
-            document: false
-          }
-        ]
-      );
+        ])
+      ).toEqual([
+        {
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
+          document: false
+        }
+      ]);
     });
 
     it('for sakkopäätös / varsinainen päätös when recipient-answered is false, all fields are included', () => {
@@ -228,26 +226,25 @@ describe('Valvonta API test', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         serializePenaltyDecisionActualDecisionOsapuoliSpecificData(
           osapuoliSpecificData
-        ),
-        [
-          {
-            osapuoli: {
-              id: 1,
-              type: 'yritys'
-            },
-            'hallinto-oikeus-id': 1,
-            'recipient-answered': false,
-            'answer-commentary-fi': 'answer-commentary-fi',
-            'answer-commentary-sv': 'answer-commentary-sv',
-            'statement-fi': 'statement-fi',
-            'statement-sv': 'statement-sv',
-            document: true
-          }
-        ]
-      );
+        )
+      ).toEqual([
+        {
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
+          'hallinto-oikeus-id': 1,
+          'recipient-answered': false,
+          'answer-commentary-fi': 'answer-commentary-fi',
+          'answer-commentary-sv': 'answer-commentary-sv',
+          'statement-fi': 'statement-fi',
+          'statement-sv': 'statement-sv',
+          document: true
+        }
+      ]);
     });
 
     it('for sakkopäätös / varsinainen päätös when answer-commentary is None the fields are removed', () => {
@@ -267,28 +264,27 @@ describe('Valvonta API test', () => {
         }
       ];
 
-      assert.deepEqual(
+      expect(
         serializePenaltyDecisionActualDecisionOsapuoliSpecificData(
           osapuoliSpecificData
-        ),
-        [
-          {
-            osapuoli: {
-              id: 1,
-              type: 'yritys'
-            },
-            'hallinto-oikeus-id': 1,
-            'recipient-answered': false,
-            'statement-fi': 'statement-fi',
-            'statement-sv': 'statement-sv',
-            document: true
-          }
-        ]
-      );
+        )
+      ).toEqual([
+        {
+          osapuoli: {
+            id: 1,
+            type: 'yritys'
+          },
+          'hallinto-oikeus-id': 1,
+          'recipient-answered': false,
+          'statement-fi': 'statement-fi',
+          'statement-sv': 'statement-sv',
+          document: true
+        }
+      ]);
     });
 
     it('for sakkopäätös / varsinainen päätös if document is set to false, all other fields are removed', () => {
-      assert.deepEqual(
+      expect(
         serializePenaltyDecisionActualDecisionOsapuoliSpecificData([
           {
             osapuoli: {
@@ -303,17 +299,16 @@ describe('Valvonta API test', () => {
             'statement-fi': Maybe.Some('statement-fi'),
             'statement-sv': Maybe.Some('statement-sv')
           }
-        ]),
-        [
-          {
-            osapuoli: {
-              id: 1,
-              type: 'henkilo'
-            },
-            document: false
-          }
-        ]
-      );
+        ])
+      ).toEqual([
+        {
+          osapuoli: {
+            id: 1,
+            type: 'henkilo'
+          },
+          document: false
+        }
+      ]);
     });
   });
 });

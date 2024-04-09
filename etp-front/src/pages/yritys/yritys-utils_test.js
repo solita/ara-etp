@@ -1,4 +1,4 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
 import * as YritysUtils from './yritys-utils';
 import * as api from './yritys-api';
@@ -10,7 +10,7 @@ import * as validation from '@Utility/validation';
 describe('Yritys api and utils tests:', () => {
   describe('urlForYritysId', () => {
     it('should return proper url for given id', () => {
-      assert.equal('/api/private/yritykset/1', api.url.yritys(1));
+      expect('/api/private/yritykset/1').toEqual(api.url.yritys(1));
     });
   });
 
@@ -19,8 +19,7 @@ describe('Yritys api and utils tests:', () => {
       const yritys = { verkkolaskuosoite: '003712345671' };
       const deserializedYritys = api.deserialize(yritys);
 
-      assert.equal(
-        '003712345671',
+      expect('003712345671').toEqual(
         Maybe.getOrElse('', deserializedYritys.verkkolaskuosoite)
       );
     });
@@ -29,8 +28,7 @@ describe('Yritys api and utils tests:', () => {
       const yritys = { verkkolaskuosoite: null };
       const deserializedYritys = api.deserialize(yritys);
 
-      assert.equal(
-        '',
+      expect('').toEqual(
         Maybe.getOrElse('', deserializedYritys.verkkolaskuosoite)
       );
     });
@@ -43,7 +41,7 @@ describe('Yritys api and utils tests:', () => {
       };
       const serializedYritys = api.serialize(yritys);
 
-      assert.equal('003712345671', serializedYritys.verkkolaskuosoite);
+      expect('003712345671').toEqual(serializedYritys.verkkolaskuosoite);
     });
 
     it('should unwrap None verkkolaskuosoite into null', () => {
@@ -52,14 +50,14 @@ describe('Yritys api and utils tests:', () => {
       };
       const serializedYritys = api.serialize(yritys);
 
-      assert.equal(null, serializedYritys.verkkolaskuosoite);
+      expect(null).toEqual(serializedYritys.verkkolaskuosoite);
     });
 
     it('should remove id-property', () => {
       const yritys = { id: 1 };
       const serializedYritys = api.serialize(yritys);
 
-      assert.notProperty(serializedYritys, 'id');
+      expect('id' in serializedYritys).toBeFalsy();
     });
   });
 
@@ -77,10 +75,9 @@ describe('Yritys api and utils tests:', () => {
         verkkolaskuosoite: true
       };
 
-      assert.deepEqual(
-        R.map(Either.isRight, validation.validateModelObject(schema, yritys)),
-        expected
-      );
+      expect(
+        R.map(Either.isRight, validation.validateModelObject(schema, yritys))
+      ).toEqual(expected);
     });
     it('should run validate true for Nones', () => {
       const schema = YritysUtils.schema(Either.Right('FI'));
@@ -95,10 +92,9 @@ describe('Yritys api and utils tests:', () => {
         verkkolaskuosoite: true
       };
 
-      assert.deepEqual(
-        R.map(Either.isRight, validation.validateModelObject(schema, yritys)),
-        expected
-      );
+      expect(
+        R.map(Either.isRight, validation.validateModelObject(schema, yritys))
+      ).toEqual(expected);
     });
   });
 
@@ -115,7 +111,7 @@ describe('Yritys api and utils tests:', () => {
       Future.fork(
         _ => {},
         response => {
-          assert.deepEqual(expected, response);
+          expect(expected).toEqual(response);
           done();
         },
         api.putYritysById(fetch, 1, {})
@@ -133,7 +129,7 @@ describe('Yritys api and utils tests:', () => {
 
       Future.fork(
         response => {
-          assert.equal(404, response.status);
+          expect(404).toEqual(response.status);
           done();
         },
         _ => {},
@@ -160,7 +156,7 @@ describe('Yritys api and utils tests:', () => {
       Future.fork(
         _ => {},
         value => {
-          assert.deepEqual(expected, value);
+          expect(expected).toEqual(value);
           done();
         },
         api.postYritys(fetch, {})
@@ -179,7 +175,7 @@ describe('Yritys api and utils tests:', () => {
 
       Future.fork(
         reject => {
-          assert.equal(404, reject.status);
+          expect(404).toEqual(reject.status);
           done();
         },
         _ => {},
