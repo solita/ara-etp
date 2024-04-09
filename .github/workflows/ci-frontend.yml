@@ -57,6 +57,7 @@ jobs:
         if: success() || failure()
         with:
           report_paths: '**/etp-front/test_report.xml'
+          check_name: 'etp-front test report'
 
   format:
     runs-on: ubuntu-latest

@@ -24,3 +24,4 @@ jobs:
         if: success() || failure()
         with:
           report_paths: '**/etp-core/etp-backend/target/nvd/dependency-check-junit.xml'
+          check_name: 'Vulnerability report'

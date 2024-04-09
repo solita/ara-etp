@@ -74,3 +74,4 @@ jobs:
         if: success() || failure()
         with:
          report_paths: '**/etp-core/etp-backend/target/test.xml'
+         check_name: 'Backend test report'
