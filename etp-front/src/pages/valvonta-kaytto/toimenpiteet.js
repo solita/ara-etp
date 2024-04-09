@@ -93,7 +93,11 @@ export const i18nKey = (toimenpide, key) =>
   ]);
 
 const defaultTemplateId = (typeId, templatesByType) => {
-  const templates = R.defaultTo([], templatesByType[typeId]);
+  const templates = R.filter(
+    R.propEq(true, 'valid'),
+    R.defaultTo([], templatesByType[typeId])
+  );
+
   return R.length(templates) === 1
     ? Maybe.Some(R.head(templates).id)
     : Maybe.None();
