@@ -320,9 +320,7 @@
             "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus toimenpide"))))
 
 (t/deftest energiatodistus-hankittu-on-the-day-after-deadline-test
-  (t/testing "Energiatodistus hankkittu is not set for kehotus when the todistus was acquired the day after the deadline"
-    ;; This test exists to check that the exclusivity and the deadline date to timestamp conversion in the implementation
-    ;; work as they should
+  (t/testing "Energiatodistus hankittu is set for kehotus when the todistus was acquired the day after the deadline when there's no following toimenpide"
     (let [valvoja-id (test-kayttajat/insert-virtu-paakayttaja!
                        {:etunimi    "Asian"
                         :sukunimi   "Tuntija"
@@ -344,9 +342,6 @@
                                 (.atStartOfDay (ZoneId/systemDefault))
                                 .toInstant)
           kehotus-deadline (LocalDate/of 2024 3 27)
-          close-timestamp (-> (.plusDays kehotus-deadline 2)
-                              (.atStartOfDay (ZoneId/systemDefault))
-                              .toInstant)
           output (atom [])
           call-count (atom 0)
           create-csv (valvonta-service/csv ts/*db*)]
@@ -372,27 +367,40 @@
         (test-data.energiatodistus/sign-at-time! todistus-id
                                                  laatija-id
                                                  true
-                                                 (-> (.plusDays kehotus-deadline 1)
+                                                 (-> kehotus-deadline
+                                                     (.plusDays 1)
                                                      (.atStartOfDay (ZoneId/systemDefault))
+                                                     (.plusHours 1)
                                                      .toInstant)))
-
       (create-csv (partial handle-output call-count output))
 
-      ;; Csv doesn't show the energiatodistus as created
+      ;; Csv shows the energiatodistus as created during kehotus
       (t/is (= 3 @call-count))
       (t/is (= @output
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\n"])
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"])
             "All toimenpiteet for the valvonta are present, energiatodistus is not marked as being created. Exclusive end of the range works correctly with the deadline.")
 
-      (t/testing "after the valvonta has been closed, the energiatodistus shows as having been acquired during kehotus"
-        ;; Close the valvonta after the energiatodistus has been acquired
-        (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
-                                              :type_id      5
-                                              :create_time  close-timestamp
-                                              :publish_time close-timestamp
-                                              :diaarinumero "ARA-05.03.01-2024-159"})
+      (t/testing "after next toimenpide is created after the deadline but before the energiatodistus was signed, energiatodistus now shows up as acquired during the next toimenpide"
+        ;; This test case isn't realistic in the sense that this could ever happen in real use due to chronological time.
+        ;; This test case exists just to check that the exclusive end of the time range during which
+        ;; the energiatodistus was acquired works correctly
+        ;; i.e. the energiatodistus was created on the day after the kehotus deadline so in the previous
+        ;; test case it only falls under kehotus because it's the last existing toimenpide for the valvonta.
+
+        ;; Create varoitus day after the deadline but before the signing time of the energiatodistus
+        (let [varoitus-creation-date (-> kehotus-deadline
+                                         (.plusDays 1))
+              varoitus-timestamp (-> varoitus-creation-date
+                                     (.atStartOfDay (ZoneId/systemDefault))
+                                     .toInstant)]
+          (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id  valvonta-id
+                                                :type_id      3
+                                                :create_time  varoitus-timestamp
+                                                :publish_time varoitus-timestamp
+                                                :deadline_date (.plusDays varoitus-creation-date 14)
+                                                :diaarinumero "ARA-05.03.01-2024-159"}))
 
         ;; Reset the test state
         (reset! call-count 0)
@@ -407,6 +415,6 @@
         (t/is (= @output
                  [csv-header-line
                   "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
-                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
-                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-29T02:00;\"Tuntija, Asian\";\n"])
-              "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus as it's created before the next toimenpide")))))
+                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\n"
+                  "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Varoitus\";2024-03-28T02:00;\"Tuntija, Asian\";\"x\"\n"])
+              "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during varoitus as it's created after varoitus toimenpide")))))

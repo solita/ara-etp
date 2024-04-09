@@ -424,19 +424,24 @@
            left join lateral (select energiatodistus.id
                                      from energiatodistus
                                      where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
-                                     -- tszrange is exclusive in the end, so adding one to deadline date and converting it to
-                                     -- timestamp means it's at the beginning of the day after deadline -> timestamps on the
-                                     -- deadline date are included in the range
-                                     -- coalesce selects the existing end time of the range based on priority:
-                                     -- 1. If next toimenpide in valvonta exists, take its starting time as the end
-                                     -- 2. End of deadline date if there is no next toimenpide
-                                     -- 3. If neither of those exists, the create_time of the toimenpide is also used as the end
-                                     --    to ensure that we don't get an endless range that includes everything. Range from
-                                     --    create_time to create_time includes nothing.
+                                     -- Energiatodistus cannot be acquired during valvonnan aloitus or lopetus, so the end
+                                     -- of tszrange in those cases is the toimenpide create_time - range from
+                                     -- create_time to create_time includes nothing.
+                                     -- For other toimenpidetypes, coalesce selects either the create_time of the next toimenpide
+                                     -- as the end of the range. As tstzrange is exclusive in the end, if the energiatodistus
+                                     -- is acquired before that it gets attributed to the current toimenpide.
+                                     -- If there is no next toimenpide yet, the end of the range is infinity to catch
+                                     -- that the energiatodistus was acquired during the current toimenpide.
+                                     -- With this implementation we don't need to check the toimenpide deadline,
+                                     -- as the next toimenpide create_time is the cut-off point for the current toimenpide
+                                     -- instead of the deadline.
                                      and tstzrange(toimenpide.create_time,
-                                                    coalesce(next_toimenpide.create_time, (toimenpide.deadline_date + 1)::timestamptz,
-                                                                                          toimenpide.create_time)) @>
-                                     energiatodistus.allekirjoitusaika
+                                                   CASE
+                                                       WHEN toimenpide.type_id in (0, 5) THEN toimenpide.create_time
+                                                       ELSE coalesce(next_toimenpide.create_time, 'infinity')
+                                                       END
+                                         ) @>
+                                         energiatodistus.allekirjoitusaika
                                      limit 1) energiatodistus on true
            where not valvonta.deleted"
 
