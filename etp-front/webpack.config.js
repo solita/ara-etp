@@ -1,4 +1,4 @@
-const format = require('date-fns/format');
+const { format } = require('date-fns/format');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -124,7 +124,7 @@ module.exports = {
   devtool: prod ? false : 'source-map',
   devServer: {
     client: {
-      overlay: false, // Hide compiler warnings on client
+      overlay: false // Hide compiler warnings on client
     },
     setupMiddlewares: (middlewares, devServer) => {
       devServer.app.get('/config.json', (req, res) =>

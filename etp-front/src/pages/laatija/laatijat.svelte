@@ -170,11 +170,11 @@
       'toimintaalue-id': R.compose(R.propEq('toimintaalue'), Maybe.Some),
       'voimassaolo-paattymisaika-after': R.compose(
         propSatisfies(isAfter, 'voimassaolo-paattymisaika'),
-        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki')
+        d => dfnstz.fromZonedTime(d, 'Europe/Helsinki')
       ),
       'voimassaolo-paattymisaika-before': R.compose(
         propSatisfies(isBefore, 'voimassaolo-paattymisaika'),
-        d => dfnstz.zonedTimeToUtc(d, 'Europe/Helsinki'),
+        d => dfnstz.fromZonedTime(d, 'Europe/Helsinki'),
         // this is for inclusive end date range
         d => dfns.add(d, { days: 1, hours: 1 })
       )

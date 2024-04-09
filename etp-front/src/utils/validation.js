@@ -46,7 +46,7 @@ export const ytunnusValidator = {
 
 export const isPaivamaara = R.compose(
   dfns.isValid,
-  R.unless(R.compose(R.equals('Date'), R.type), date =>
+  R.unless(R.anyPass([R.compose(R.equals('Date'), R.type), R.isNil]), date =>
     dfns.parse(date, DATE_FORMAT, 0)
   )
 );
