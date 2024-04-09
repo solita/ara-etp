@@ -22,7 +22,7 @@
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar Date GregorianCalendar HashMap)
+           (java.util Calendar Date GregorianCalendar HashMap Base64)
            (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
@@ -801,9 +801,7 @@
       (.dispose))
     (ImageIO/write img "PNG" (io/file path))))
 
-;;TODO: Hajota signature omaksi endpointiksi ehkä, mutta sinänsä olisi aika luontevaa
-;;      palauttaa tässä.
-(defn find-energiatodistus-digest [db aws-s3-client aws-kms-client id language]
+(defn find-energiatodistus-digest [db aws-s3-client id language]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus}
              (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
@@ -821,9 +819,6 @@
                                  (case versio 2013 648 2018 666))
              signable-pdf-data (puumerkki/read-file signable-pdf-path)
              digest (puumerkki/compute-base64-pkcs signable-pdf-data)
-             signature (->> (.getBytes digest StandardCharsets/UTF_8)
-                            (sign-service/sign aws-kms-client)
-                            (.readAllBytes))
              key (energiatodistus-service/file-key id language)]
          (file-service/upsert-file-from-bytes aws-s3-client
                                               key
@@ -831,8 +826,7 @@
          (io/delete-file pdf-path)
          (io/delete-file signable-pdf-path)
          (io/delete-file signature-png-path)
-         {:digest    digest
-          :signature signature
+         {:digest digest
           }))))
 
 (defn comparable-name [s]
@@ -865,7 +859,7 @@
 
 (defn validate-certificate! [last-name now certificate-str]
   (let [certificate (certificates/pem-str->certificate certificate-str)]
-    (validate-surname! last-name certificate)
+    ;;(validate-surname! last-name certificate) ;TODO: Commented out for now
     (validate-not-after! (-> now Instant/from Date/from) certificate)))
 
 (defn write-signature! [id language pdf pkcs7]
@@ -890,9 +884,60 @@
          (let [key (energiatodistus-service/file-key id language)
                content (file-service/find-file aws-s3-client key)
                content-bytes (.readAllBytes content)
+               _ (println "Ehdittiin tänne")
                pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-               filename (str key ".pdf")]
+               _ (println "Mutta ei tänne")
+               filename (str key ".pdf")
+               ]
            (->> (write-signature! id language content-bytes pkcs7)
                 (file-service/upsert-file-from-bytes aws-s3-client
                                                      key))
            filename)))))
+
+(defn- cert-pem->one-liner-without-headers [cert-pem]
+  "Given a certificate in PEM format `cert-pem` removes
+  headers and linebreaks from it."
+  (-> cert-pem
+      (str/replace #"-----BEGIN CERTIFICATE-----" "")
+      (str/replace #"-----END CERTIFICATE-----" "")
+      (str/replace #"\n" "")))
+
+(def cert-chain-three-long-leaf-first
+  (let [leaf config/system-signature-certificate-leaf
+        intermediate config/system-signature-certificate-intermediate
+        root config/system-signature-certificate-root]
+    (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
+
+#_(defn input-stream-to-base64 [input-stream]
+  (let [encoder (Base64/getEncoder)
+        bytes (byte-array (.available input-stream))]
+    (.readAllBytes input-stream bytes)
+    (.encodeToString encoder bytes)))
+
+(defn- digest->signature [digest aws-kms-client]
+  (->> (.getBytes digest StandardCharsets/UTF_8)
+       (sign-service/sign aws-kms-client)
+       (.readAllBytes)
+       (.encodeToString (Base64/getEncoder))))
+
+;; TODO: Tarviikohan tässä nyt oikeasi välittää noista tiloista
+;;       koska sehän on vain oleellista siinä tapauksessa, että ollaankn
+;;       järjestelmän ulkopuolella tekemässsä jotain...
+(defn sign-with-system [{:keys [db whoami now id language aws-s3-client aws-kms-client]}]
+  (let [wut (energiatodistus-service/start-energiatodistus-signing! db whoami id)
+        _ (println "start: " wut)
+        digest (-> (find-energiatodistus-digest db aws-s3-client id language) :digest)
+        _ (println "digest: " digest)
+        signature (digest->signature digest aws-kms-client)
+        _ (println "signature: " signature)
+       chain cert-chain-three-long-leaf-first
+        _ (println "chain: " signature)
+        signature-and-chain { :chain chain :signature signature}
+        _ (println "signature-and-chain: " signature-and-chain)
+        hmm (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
+        _ (println "sign: " hmm)
+        asd (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
+        _ (println "asd: " asd)
+        ]
+    ))
+

@@ -232,3 +232,19 @@
                                                "fi"
                                                nil)
              :already-signed))))
+
+(t/deftest sign-with-system-energiatodistus-test
+  (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        db (ts/db-user laatija-id)
+        id (-> energiatodistukset keys sort first)
+        whoami {:id laatija-id}]
+    (t/is (= (service/sign-with-system {:db             db
+                                        :aws-s3-client  ts/*aws-s3-client*
+                                        :whoami         whoami
+                                        :aws-kms-client ts/*aws-kms-client*
+                                        :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                        :id             id
+                                        :language       "fi"})
+             :not-in-signing))))
+

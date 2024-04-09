@@ -160,6 +160,11 @@
 (def suomifi-viestit-keystore-password (env "SUOMIFI_VIESTIT_KEYSTORE_PASSWORD" nil))
 (def suomifi-viestit-keystore-alias (env "SUOMIFI_VIESTIT_KEYSTORE_ALIAS" nil))
 
+;; DVV / Järjestelmäallekirjoitus
+(def system-signature-certificate-leaf (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_LEAF" "dvv-system-signature/local-signing.pem.crt"))
+(def system-signature-certificate-intermediate (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE" "dvv-system-signature/local-signing.pem.crt"))
+(def system-signature-certificate-root (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_ROOT" "dvv-system-signature/local-signing.pem.crt"))
+
 ;; Url signing
 (def url-signing-key-id (env "URL_SIGNING_KEY_ID" "DEVENV_KEY_ID"))
 (def url-signing-public-key (env-or-resource "URL_SIGNING_PUBLIC_KEY" "cf-signed-url/example.pub.pem"))
