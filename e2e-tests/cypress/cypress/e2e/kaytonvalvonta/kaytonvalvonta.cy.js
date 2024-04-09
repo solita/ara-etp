@@ -700,19 +700,13 @@ context('Käytönvalvonta', () => {
     cy.get('.alert').should('not.exist');
   });
 
-  it.only('date picking works', () => {
+  it('date picking works', () => {
     navigateToKaytonvalvonta();
     createNewValvonta();
     navigateToValvontaPage();
     startValvonta();
 
-    cy.get('[data-cy="toimenpide-type-selection"]')
-      .click()
-      .parent()
-      .within(() => {
-        cy.contains('Kehotus').click();
-      });
-
+    cy.selectInSelect('toimenpide-type-selection', 'Kehotus');
     cy.selectInSelect('document-selector', 'Kehotus');
 
     cy.get('[data-cy="datepicker"]').find('input').click();
