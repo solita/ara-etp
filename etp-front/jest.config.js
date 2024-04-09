@@ -18,7 +18,12 @@ const config = {
     '\\.[jt]s?$': 'babel-jest',
     '^.+\\.svelte$': ['svelte-jester', { preprocess: true }]
   },
-  extensionsToTreatAsEsm: ['.svelte']
+  extensionsToTreatAsEsm: ['.svelte'],
+  collectCoverageFrom: [
+    'src/**/*.{js,svelte}',
+    '!**/node_modules/**',
+    '!**/*.stories.js'
+  ]
 };
 
 module.exports = config;
