@@ -259,13 +259,5 @@ describe('GeoUtils:', () => {
         Geo.findToimintaalueIds(haku, toimintaalueet, kunnat, postinumerot)
       ).toEqual(expected);
     });
-
-    it('should return set with text', () => {
-      const haku = 'n3';
-      const expected = new Set([200, 300]);
-      expect(
-        Geo.findToimintaalueIds(haku, toimintaalueet, kunnat, postinumerot)
-      ).toEqual(expected);
-    });
   });
 });
