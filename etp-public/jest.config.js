@@ -7,6 +7,7 @@
 const config = {
   clearMocks: true,
   moduleFileExtensions: ['js', 'svelte', 'mjs'],
+  reporters: ['default', ['jest-junit', { outputName: 'test_report.xml' }]],
   setupFilesAfterEnv: ['<rootDir>/jest_setup.js'],
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
