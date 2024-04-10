@@ -418,7 +418,7 @@
            left join lateral (select next_toimenpide.create_time
                                      from vk_toimenpide as next_toimenpide
                                      where next_toimenpide.valvonta_id = valvonta.id
-                                     and next_toimenpide.create_time > toimenpide.deadline_date
+                                     and next_toimenpide.create_time > toimenpide.create_time
                                      order by create_time asc
                                      limit 1) as next_toimenpide on true
            left join lateral (select energiatodistus.id
