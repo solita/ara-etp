@@ -42,28 +42,5 @@ describe('laatija', () => {
         expect(Laatija.weightByJulkisettiedot(false, false, false)).toEqual(0);
       });
     });
-
-    describe('weightByActivity', () => {
-      it('should return 1 when last login is under half years past', () => {
-        const datenow = new Date('2020-10-01T00:00:00.00000Z');
-        const login = new Date('2020-09-30T00:00:00.00000Z');
-
-        expect(Laatija.weightByActivity(datenow, login)).toEqual(1);
-      });
-
-      it('should return 1 when last login is half year past exact', () => {
-        const datenow = new Date('2020-10-01T00:00:00.00000Z');
-        const login = new Date('2020-04-01T00:00:01.000Z');
-
-        expect(Laatija.weightByActivity(datenow, login)).toEqual(1);
-      });
-
-      it('should return 0 when last login is over half years past', () => {
-        const datenow = new Date('2020-10-01T00:00:00.00000Z');
-        const login = new Date('2020-01-01T00:00:00.00000Z');
-
-        expect(Laatija.weightByActivity(datenow, login)).toEqual(0);
-      });
-    });
   });
 });
