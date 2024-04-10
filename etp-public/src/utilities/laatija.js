@@ -1,5 +1,5 @@
 import * as GeoUtils from '@/utilities/geo';
-import { labelLocale } from '@Localization/localization';
+import { labelLocale } from '@Localization/localization_utils';
 
 export const calculateLaatijaWeight = (toimintaalueet, laatija) =>
   weightByToimintaalueet(toimintaalueet, laatija.toimintaalue) +

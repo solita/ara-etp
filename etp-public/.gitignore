@@ -1,5 +1,8 @@
 /node_modules/
 /public/
+/coverage/
 /.vscode/
 /.projectile
 .DS_Store
+
+/test_report.xml
