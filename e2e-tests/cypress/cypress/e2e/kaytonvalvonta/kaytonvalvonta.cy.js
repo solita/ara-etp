@@ -605,6 +605,11 @@ const reopenValvonta = () => {
   ).should('be.visible');
 };
 
+const downloadValvonnatCsv = () => {
+  cy.contains('Käytön­valvon­nat').click();
+  cy.get('[data-cy="Lataa kaikki valvonnat"]').click();
+};
+
 const navigateToKaytonvalvonta = () => {
   cy.visit('/');
   cy.contains('Käytön­valvon­nat').click();
@@ -679,6 +684,8 @@ context('Käytönvalvonta', () => {
 
     // Aloita valvonta button should not exist at this point
     cy.get('[data-cy="start-button"]').should('not.exist');
+
+    downloadValvonnatCsv();
   });
 
   it('postinumero is a required field', () => {

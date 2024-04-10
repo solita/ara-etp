@@ -570,10 +570,13 @@
         (exception/throw-ex-info!
           :not-signed (str "Energiatodistus " id " pdf for language " language " is not signed"))))))
 
-(defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert?]}]]
+(defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert? allekirjoitusaika]}]]
   (jdbc/with-db-transaction [db db]
     (let [result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
-                   db {:id id :laatija-id (:id whoami)})]
+                   db
+                   {:id id
+                    :laatija-id (:id whoami)
+                    :allekirjoitusaika allekirjoitusaika})]
       (if (= result 1)
         (let [energiatodistus (find-energiatodistus db id)]
           (when-not skip-pdf-signed-assert?

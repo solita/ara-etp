@@ -380,24 +380,72 @@
   (csv-service/csv-line
     ["id" "rakennustunnus", "diaarinumero"
      "katuosoite" "postinumero" "postitoimipaikka"
-     "toimenpide-id" "toimenpidetyyppi" "aika" "valvoja"]))
+     "toimenpide-id" "toimenpidetyyppi" "aika" "valvoja" "energiatodistus hankittu"]))
+
+(defn- boolean->checked
+  "Represent boolean as x when it's true in käytönvalvonta-csv and as empty when false"
+  [csv-row-coll]
+  (map
+    (fn [value]
+      (if (boolean? value)
+        (when value
+          "x")
+        value))
+    csv-row-coll))
+
 (defn csv [db]
   (fn [write!]
     (write! csv-header)
     (jdbc/query
       db
-      "select
-         valvonta.id, valvonta.rakennustunnus, toimenpide.diaarinumero,
-         valvonta.katuosoite, lpad(valvonta.postinumero::text, 5, '0'), postinumero.label_fi,
-         toimenpide.id, toimenpidetype.label_fi, toimenpide.publish_time,
-         fullname(kayttaja)
+      "select valvonta.id,
+              valvonta.rakennustunnus,
+              toimenpide.diaarinumero,
+              valvonta.katuosoite,
+              lpad(valvonta.postinumero::text, 5, '0'),
+              postinumero.label_fi,
+              toimenpide.id,
+              toimenpidetype.label_fi,
+              toimenpide.publish_time,
+              fullname(kayttaja),
+              energiatodistus is not null as energiatodistus_exists
+
        from vk_valvonta valvonta
-         left join postinumero on postinumero.id = valvonta.postinumero
-         left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
-         left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
-         left join kayttaja on kayttaja.id = valvonta.valvoja_id
-       where not deleted"
-      {:row-fn        (comp write! csv-service/csv-line)
+           left join postinumero on postinumero.id = valvonta.postinumero
+           left join vk_toimenpide toimenpide on toimenpide.valvonta_id = valvonta.id
+           left join vk_toimenpidetype toimenpidetype on toimenpidetype.id = toimenpide.type_id
+           left join kayttaja on kayttaja.id = valvonta.valvoja_id
+           left join lateral (select next_toimenpide.create_time
+                                     from vk_toimenpide as next_toimenpide
+                                     where next_toimenpide.valvonta_id = valvonta.id
+                                     and next_toimenpide.create_time > toimenpide.deadline_date
+                                     order by create_time asc
+                                     limit 1) as next_toimenpide on true
+           left join lateral (select energiatodistus.id
+                                     from energiatodistus
+                                     where energiatodistus.pt$rakennustunnus = valvonta.rakennustunnus
+                                     -- Energiatodistus cannot be acquired during valvonnan aloitus or lopetus, so the end
+                                     -- of tszrange in those cases is the toimenpide create_time - range from
+                                     -- create_time to create_time includes nothing.
+                                     -- For other toimenpidetypes, coalesce selects either the create_time of the next toimenpide
+                                     -- as the end of the range. As tstzrange is exclusive in the end, if the energiatodistus
+                                     -- is acquired before that it gets attributed to the current toimenpide.
+                                     -- If there is no next toimenpide yet, the end of the range is infinity to catch
+                                     -- that the energiatodistus was acquired during the current toimenpide.
+                                     -- With this implementation we don't need to check the toimenpide deadline,
+                                     -- as the next toimenpide create_time is the cut-off point for the current toimenpide
+                                     -- instead of the deadline.
+                                     and tstzrange(toimenpide.create_time,
+                                                   CASE
+                                                       WHEN toimenpide.type_id in (0, 5) THEN toimenpide.create_time
+                                                       ELSE coalesce(next_toimenpide.create_time, 'infinity')
+                                                       END
+                                         ) @>
+                                         energiatodistus.allekirjoitusaika
+                                     limit 1) energiatodistus on true
+           where not valvonta.deleted"
+
+      {:row-fn        (comp write! csv-service/csv-line boolean->checked)
        :as-arrays?    :cols-as-is
        :result-set-fn dorun
        :result-type   :forward-only

@@ -6,7 +6,9 @@
             [solita.etp.schema.geo :as geo]
             [solita.etp.schema.laatija :as laatija]
             [solita.etp.schema.energiatodistus :as energiatodistus]
-            [solita.etp.schema.kayttaja]))
+            [solita.etp.schema.kayttaja])
+  (:import (java.time Instant LocalDate)
+           (java.util UUID)))
 
 (defn unique-henkilotunnukset-f []
   (let [state (atom 0)]
@@ -20,7 +22,7 @@
 (def unique-henkilotunnukset (unique-henkilotunnukset-f))
 
 (defn unique-emails [n]
-  (take n (repeatedly #(str (java.util.UUID/randomUUID) "@example.com"))))
+  (take n (repeatedly #(str (UUID/randomUUID) "@example.com"))))
 
 (def unique-ytunnukset
   (->> (range)
@@ -59,8 +61,8 @@
    common/Henkilotunnus                     (g/always "130200A892S")
    common/Ytunnus                           (g/always "0000000-0")
    common/Verkkolaskuosoite                 (g/always "003712345671")
-   common/Date                              (g/always (java.time.LocalDate/now))
-   common/Instant                           (g/always (java.time.Instant/now))
+   common/Date                              (g/always (LocalDate/now))
+   common/Instant                           (g/always (Instant/now))
    common/Url                               (g/always "https://example.com")
 
    geo/Maa                                  (test-generators/elements ["FI" "SV"])
