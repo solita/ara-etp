@@ -6,36 +6,52 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 KEY_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.key"
 CSR_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.csr"
 CRT_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.crt"
+EXT_FILE_ROOT="${SCRIPT_DIR}/v3-root.ext"
+#TODO: Remove unused root ext file? Seems that this is not needed (or can't be used).
+echo "basicConstraints = CA:TRUE
+keyUsage = keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer" > ${EXT_FILE_ROOT}
 
 KEY_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.key"
 CSR_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.csr"
 CRT_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.crt"
+EXT_FILE_INT="${SCRIPT_DIR}/v3-int.ext"
+echo "basicConstraints = CA:TRUE, pathlen:0
+keyUsage = keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer" > "${EXT_FILE_INT}"
 
 KEY_FILE_LEAF="${SCRIPT_DIR}/signing-key-leaf.key"
 CSR_FILE_LEAF="${SCRIPT_DIR}/signing-key-leaf.csr"
 CRT_FILE_LEAF="${SCRIPT_DIR}/signing-key-leaf.crt"
+EXT_FILE_LEAF="${SCRIPT_DIR}/v3-leaf.ext"
+echo "basicConstraints = CA:FALSE
+keyUsage = digitalSignature, nonRepudiation
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer" > "${EXT_FILE_LEAF}"
+
 
 # Create directories
 # mkdir -p ca/root ca/intermediate
 
 # Create Root CA
 openssl genrsa -out "${KEY_FILE_ROOT}" 4096
-openssl req -x509 -new -nodes -key "${KEY_FILE_ROOT}" -sha256 -days 1024 -out "${CRT_FILE_ROOT}" -subj "/CN=ROOT CA"
+openssl req -x509 -new -nodes -key "${KEY_FILE_ROOT}" -sha256 -days 1024 -out "${CRT_FILE_ROOT}" -subj "/C=US/ST=California/L=San Francisco/O=My Company/CN=ETP LOCAL DEV ROOT"
 
 # Create Intermediate CA
 openssl genrsa -out "${KEY_FILE_INT}" 4096
-openssl req -new -key "${KEY_FILE_INT}" -out "${CSR_FILE_INT}" -subj "/CN=INT CA"
+openssl req -new -key "${KEY_FILE_INT}" -out "${CSR_FILE_INT}" -subj "/C=US/ST=California/L=San Francisco/O=My Company/CN=ETP LOCAL DEV INT"
 
 # Sign Intermediate CA with Root CA
-openssl x509 -req -in "${CSR_FILE_INT}" -CA "${CRT_FILE_ROOT}" -CAkey "${KEY_FILE_ROOT}" -CAcreateserial -out "${CRT_FILE_INT}" -days 500 -sha256
+openssl x509 -req -in "${CSR_FILE_INT}" -CA "${CRT_FILE_ROOT}" -CAkey "${KEY_FILE_ROOT}" -CAcreateserial -out "${CRT_FILE_INT}" -days 500 -sha256 -extfile "${EXT_FILE_INT}"
 
-# Create a Certificate
+# Create a Certificate Signing Request
 openssl genrsa -out "${KEY_FILE_LEAF}" 2048
-openssl req -new -key "${KEY_FILE_LEAF}" -out "${CSR_FILE_LEAF}" -subj "/CN=LEAF CA"
+openssl req -new -key "${KEY_FILE_LEAF}" -out "${CSR_FILE_LEAF}" -subj "/C=US/ST=California/L=San Francisco/O=My Company/CN=ETP LOCAL DEV LEAF"
 
-# TODO: Add some attributes?
 # Sign the Certificate with Intermediate CA
-openssl x509 -req -in "${CSR_FILE_LEAF}" -CA "${CRT_FILE_INT}" -CAkey "${KEY_FILE_INT}" -CAcreateserial -out "${CRT_FILE_LEAF}" -days 375 -sha256
+openssl x509 -req -in "${CSR_FILE_LEAF}" -CA "${CRT_FILE_INT}" -CAkey "${KEY_FILE_INT}" -CAcreateserial -out "${CRT_FILE_LEAF}" -days 375 -sha256 -extfile "${EXT_FILE_LEAF}"
 
 echo "\
 Keys:
@@ -54,6 +70,10 @@ rm "${CSR_FILE_LEAF}"
 rm "${KEY_FILE_INT}"
 rm "${CSR_FILE_INT}"
 rm "${KEY_FILE_ROOT}"
+
+rm "${EXT_FILE_LEAF}"
+rm "${EXT_FILE_INT}"
+rm "${EXT_FILE_ROOT}"
 
 # Move the certificate to resources
 mkdir -p "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature"
