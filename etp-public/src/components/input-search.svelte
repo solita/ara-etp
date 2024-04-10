@@ -22,7 +22,7 @@
   }
 
   input::placeholder {
-    @apply text-black;
+    @apply text-black/70;
   }
 </style>
 
