@@ -3,6 +3,8 @@
   import sv from '@Asset/sv.json';
   import fi from '@Asset/fi.json';
 
+  export { labelLocale } from './localization_utils';
+
   const translations = { fi, sv };
 
   const navigatorLanguage = navigator.language.split('-')[0];
@@ -16,8 +18,6 @@
     locale,
     $locale => str => translations[$locale][str] || str
   );
-
-  export const labelLocale = (locale, obj) => obj?.[`label-${locale}`];
 
   export const setLocale = l => {
     localStorage.setItem('locale', l);
