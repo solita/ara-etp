@@ -15,7 +15,6 @@
     "defaults"
   ],
   "devDependencies": {
-    "autoprefixer": "10.4.19",
     "@babel/core": "^7.11.6",
     "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
@@ -23,7 +22,9 @@
     "@jest/globals": "^29.7.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/svelte": "^4.1.0",
+    "autoprefixer": "10.4.19",
     "babel-loader": "^9.0.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
     "css-loader": "^7.0.0",
