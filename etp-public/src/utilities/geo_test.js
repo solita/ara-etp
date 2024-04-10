@@ -1,33 +1,33 @@
-import { assert } from 'chai';
+import { expect, describe, it } from '@jest/globals';
 import * as Geo from './geo';
 
 describe('GeoUtils:', () => {
   describe('isLabelMatch', () => {
     it('should return true when -fi label matches', () => {
       const item = { 'label-fi': 'A', 'label-sv': 'B' };
-      assert.isTrue(Geo.isLabelMatch('A')(item));
+      expect(Geo.isLabelMatch('A')(item)).toBe(true);
     });
 
     it('should return true when -fi label matches', () => {
       const item = { 'label-fi': 'A', 'label-sv': 'B' };
-      assert.isTrue(Geo.isLabelMatch('B')(item));
+      expect(Geo.isLabelMatch('B')(item)).toBe(true);
     });
 
     it('should return false when neither label matches', () => {
       const item = { 'label-fi': 'A', 'label-sv': 'B' };
-      assert.isFalse(Geo.isLabelMatch('C')(item));
+      expect(Geo.isLabelMatch('C')(item)).toBe(false);
     });
   });
 
   describe('finToimintaalue', () => {
     it('should return found toiminta-alue with given id', () => {
       const toimintaalueet = [{ id: 1 }, { id: 2 }, { id: 3 }];
-      assert.deepEqual(Geo.findToimintaalue(toimintaalueet, 3), { id: 3 });
+      expect(Geo.findToimintaalue(toimintaalueet, 3)).toEqual({ id: 3 });
     });
 
     it('should return undefined toiminta-alue with not found id', () => {
       const toimintaalueet = [{ id: 1 }, { id: 2 }, { id: 3 }];
-      assert.deepEqual(Geo.findToimintaalue(toimintaalueet, 4), undefined);
+      expect(Geo.findToimintaalue(toimintaalueet, 4)).toEqual(undefined);
     });
   });
 
@@ -35,8 +35,7 @@ describe('GeoUtils:', () => {
     it('should return set with matching id', () => {
       const expected = new Set([1]);
       const toimintaalueet = [{ id: 1, 'label-fi': 'a', 'label-sv': 'b' }];
-      assert.deepEqual(
-        Geo.findToimintaalueetByMaakunta('a', toimintaalueet),
+      expect(Geo.findToimintaalueetByMaakunta('a', toimintaalueet)).toEqual(
         expected
       );
     });
@@ -47,8 +46,7 @@ describe('GeoUtils:', () => {
         { id: 1, 'label-fi': 'a', 'label-sv': 'b' },
         { id: 2, 'label-fi': 'b', 'label-sv': 'a' }
       ];
-      assert.deepEqual(
-        Geo.findToimintaalueetByMaakunta('b', toimintaalueet),
+      expect(Geo.findToimintaalueetByMaakunta('b', toimintaalueet)).toEqual(
         expected
       );
     });
@@ -59,8 +57,7 @@ describe('GeoUtils:', () => {
         { id: 1, 'label-fi': 'a', 'label-sv': 'b' },
         { id: 2, 'label-fi': 'b', 'label-sv': 'a' }
       ];
-      assert.deepEqual(
-        Geo.findToimintaalueetByMaakunta('c', toimintaalueet),
+      expect(Geo.findToimintaalueetByMaakunta('c', toimintaalueet)).toEqual(
         expected
       );
     });
@@ -78,8 +75,7 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([1, 2, 3]);
 
-      assert.deepEqual(
-        Geo.findToimintaalueIdsByKuntaIds(kuntaIds, kunnat),
+      expect(Geo.findToimintaalueIdsByKuntaIds(kuntaIds, kunnat)).toEqual(
         expected
       );
     });
@@ -95,8 +91,7 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([]);
 
-      assert.deepEqual(
-        Geo.findToimintaalueIdsByKuntaIds(kuntaIds, kunnat),
+      expect(Geo.findToimintaalueIdsByKuntaIds(kuntaIds, kunnat)).toEqual(
         expected
       );
     });
@@ -114,7 +109,7 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([1, 2]);
 
-      assert.deepEqual(Geo.findToimintaalueIdsByKunta(kunta, kunnat), expected);
+      expect(Geo.findToimintaalueIdsByKunta(kunta, kunnat)).toEqual(expected);
     });
 
     it('should return empty set with no matching kunta', () => {
@@ -128,7 +123,7 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([]);
 
-      assert.deepEqual(Geo.findToimintaalueIdsByKunta(kunta, kunnat), expected);
+      expect(Geo.findToimintaalueIdsByKunta(kunta, kunnat)).toEqual(expected);
     });
   });
 
@@ -144,10 +139,9 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([1, 2]);
 
-      assert.deepEqual(
-        Geo.findKuntaIdsByPostitoimipaikka(postitoimipaikka, postinumerot),
-        expected
-      );
+      expect(
+        Geo.findKuntaIdsByPostitoimipaikka(postitoimipaikka, postinumerot)
+      ).toEqual(expected);
     });
     it('should return empty set with no matching postitoimipaikka', () => {
       const postitoimipaikka = 'x';
@@ -160,10 +154,9 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([]);
 
-      assert.deepEqual(
-        Geo.findKuntaIdsByPostitoimipaikka(postitoimipaikka, postinumerot),
-        expected
-      );
+      expect(
+        Geo.findKuntaIdsByPostitoimipaikka(postitoimipaikka, postinumerot)
+      ).toEqual(expected);
     });
   });
 
@@ -179,8 +172,7 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([2]);
 
-      assert.deepEqual(
-        Geo.findKuntaIdsByPostinumero(postinumero, postinumerot),
+      expect(Geo.findKuntaIdsByPostinumero(postinumero, postinumerot)).toEqual(
         expected
       );
     });
@@ -195,8 +187,7 @@ describe('GeoUtils:', () => {
 
       const expected = new Set([]);
 
-      assert.deepEqual(
-        Geo.findKuntaIdsByPostinumero(postinumero, postinumerot),
+      expect(Geo.findKuntaIdsByPostinumero(postinumero, postinumerot)).toEqual(
         expected
       );
     });
@@ -264,19 +255,17 @@ describe('GeoUtils:', () => {
       const haku = 3;
       const expected = new Set([200]);
 
-      assert.deepEqual(
-        Geo.findToimintaalueIds(haku, toimintaalueet, kunnat, postinumerot),
-        expected
-      );
+      expect(
+        Geo.findToimintaalueIds(haku, toimintaalueet, kunnat, postinumerot)
+      ).toEqual(expected);
     });
 
     it('should return set with text', () => {
       const haku = 'n3';
       const expected = new Set([200, 300]);
-      assert.deepEqual(
-        Geo.findToimintaalueIds(haku, toimintaalueet, kunnat, postinumerot),
-        expected
-      );
+      expect(
+        Geo.findToimintaalueIds(haku, toimintaalueet, kunnat, postinumerot)
+      ).toEqual(expected);
     });
   });
 });
