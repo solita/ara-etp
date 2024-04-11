@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-
+import { expect, test } from '@jest/globals';
 import { render, screen } from '@testing-library/svelte';
 
 import H1 from './H1.svelte';
