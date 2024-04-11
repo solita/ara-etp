@@ -4,5 +4,5 @@ export default { title: 'Footer' };
 
 export const withText = () => ({
   Component: Footer,
-  props: { version: '27' }
+  props: { version: { version: 27 } }
 });
