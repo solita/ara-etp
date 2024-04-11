@@ -1,16 +1,16 @@
 (ns solita.etp.service.energiatodistus-pdf-test
-  (:require [clojure.string :as str]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.test :as t]
-            [solita.etp.test-system :as ts]
-            [solita.etp.test-data.laatija :as laatija-test-data]
-            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
-            [solita.common.xlsx :as xlsx]
-            [solita.etp.service.energiatodistus-pdf :as service]
+            [solita.common.certificates-test :as certificates-test]
             [solita.common.formats :as formats]
+            [solita.common.xlsx :as xlsx]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-pdf :as service]
             [solita.etp.service.kayttaja :as kayttaja-service]
-            [solita.common.certificates-test :as certificates-test])
+            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
+            [solita.etp.test-data.laatija :as laatija-test-data]
+            [solita.etp.test-system :as ts])
   (:import (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.xmpbox.xml DomXmpParser)))
 
@@ -20,21 +20,21 @@
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
         energiatodistukset (merge (energiatodistus-test-data/generate-and-insert!
-                                   1
-                                   2013
-                                   true
-                                   laatija-id)
+                                    1
+                                    2013
+                                    true
+                                    laatija-id)
                                   (energiatodistus-test-data/generate-and-insert!
-                                   1
-                                   2018
-                                   true
-                                   laatija-id))]
-    {:laatijat laatijat
+                                    1
+                                    2018
+                                    true
+                                    laatija-id))]
+    {:laatijat           laatijat
      :energiatodistukset energiatodistukset}))
 
-(def sis-kuorma-data {:henkilot {:kayttoaste 0.2 :lampokuorma 1}
+(def sis-kuorma-data {:henkilot          {:kayttoaste 0.2 :lampokuorma 1}
                       :kuluttajalaitteet {:kayttoaste 0.3 :lampokuorma 1}
-                      :valaistus {:kayttoaste 0.3 :lampokuorma 2}})
+                      :valaistus         {:kayttoaste 0.3 :lampokuorma 2}})
 
 (t/deftest sis-kuorma-test
   (let [sis-kuorma (service/sis-kuorma {:lahtotiedot {:sis-kuorma
@@ -53,8 +53,8 @@
         energiatodistus-ids (-> energiatodistukset keys sort)]
     (doseq [id (-> energiatodistukset keys sort)
             :let [energiatodistus (energiatodistus-service/find-energiatodistus
-                                   ts/*db*
-                                   id)
+                                    ts/*db*
+                                    id)
                   path (service/fill-xlsx-template energiatodistus "fi" false)
                   file (-> path io/input-stream)
                   loaded-xlsx (xlsx/load-xlsx file)
@@ -79,8 +79,8 @@
         xmp-parser (DomXmpParser.)]
     (doseq [id (-> energiatodistukset keys sort)
             :let [energiatodistus (energiatodistus-service/find-energiatodistus
-                                   ts/*db*
-                                   id)
+                                    ts/*db*
+                                    id)
                   file-path (service/generate-pdf-as-file energiatodistus
                                                           "sv"
                                                           true)]]
@@ -105,6 +105,29 @@
           (.close document)))
 
       (io/delete-file file-path))))
+(t/deftest generate-pdf-without-building-name
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        xmp-parser (DomXmpParser.)]
+    (doseq [id (-> energiatodistukset keys sort)
+            :let [energiatodistus (-> (energiatodistus-service/find-energiatodistus
+                                        ts/*db*
+                                        id)
+                                      (assoc-in [:perustiedot :nimi-sv] nil))
+                  file-path (service/generate-pdf-as-file energiatodistus
+                                                          "sv"
+                                                          true)]]
+      (t/testing "Test that the generation works even when building name is not set"
+        (let [expected-title "Energiatodistus"
+              document (-> file-path io/as-file PDDocument/load)
+              document-info (.getDocumentInformation document)
+              xmp-metadata (->> document .getDocumentCatalog .getMetadata .exportXMPMetadata (.parse xmp-parser))]
+          (t/testing "Test for title in the older-style metadata"
+            (t/is (= expected-title (.getTitle document-info))))
+          (t/testing "Test for title in the XMP metadata"
+            (t/is (= expected-title (-> xmp-metadata .getDublinCoreSchema .getTitle))))
+          (.close document)))
+
+      (io/delete-file file-path))))
 
 (t/deftest pdf-file-id-test
   (t/is (nil? (energiatodistus-service/file-key nil "fi")))
@@ -113,7 +136,7 @@
 
 (t/deftest do-when-signing-test
   (let [f (constantly true)]
-    (t/is (= (service/do-when-signing {:tila-id 0 } f)
+    (t/is (= (service/do-when-signing {:tila-id 0} f)
              :not-in-signing))
     (t/is (true? (service/do-when-signing {:tila-id 1} f)))
     (t/is (= (service/do-when-signing {:tila-id 2} f)
@@ -134,11 +157,11 @@
                                                           "fi")
                      :digest))
     (energiatodistus-service/end-energiatodistus-signing!
-     db
-     ts/*aws-s3-client*
-     whoami
-     id
-     {:skip-pdf-signed-assert? true})
+      db
+      ts/*aws-s3-client*
+      whoami
+      id
+      {:skip-pdf-signed-assert? true})
     (t/is (= (service/find-energiatodistus-digest db
                                                   ts/*aws-s3-client*
                                                   id
@@ -179,9 +202,9 @@
       (t/is (= :expired-signing-certificate type))))
 
   (t/testing "With the expected name and within the validity period of the certificate, signing succeeds"
-   (service/validate-certificate! "Specimen-POtex"
-                                  energiatodistus-test-data/time-when-test-cert-not-expired
-                                  certificates-test/test-cert-str)))
+    (service/validate-certificate! "Specimen-POtex"
+                                   energiatodistus-test-data/time-when-test-cert-not-expired
+                                   certificates-test/test-cert-str)))
 
 (t/deftest sign-energiatodistus-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
