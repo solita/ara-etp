@@ -4,9 +4,6 @@ import { toMatchImageSnapshot } from 'jest-image-snapshot';
 const customSnapshotsDir = `${process.cwd()}/__snapshots__`;
 
 const config = {
-  tags: {
-    exclude: ['no-tests']
-  },
   setup() {
     expect.extend({ toMatchImageSnapshot });
   },
