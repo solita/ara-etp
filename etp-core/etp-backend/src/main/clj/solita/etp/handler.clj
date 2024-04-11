@@ -1,5 +1,7 @@
 (ns solita.etp.handler
-  (:require [clojure.string :as str]
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.string :as str]
+            [clojure.tools.logging :as log]
             [clojure.walk :as w]
             [muuntaja.core :as m]
             [reitit.coercion.schema]
@@ -11,9 +13,9 @@
             [reitit.ring.middleware.muuntaja :as muuntaja]
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.spec :as rs]
-            [schema.coerce]
             [reitit.swagger-ui :as swagger-ui]
             [ring.middleware.cookies :as cookies]
+            [schema.coerce]
             [schema.core]
             [schema.core :as s]
             [solita.etp.api.aineisto :as aineisto-api]
@@ -85,9 +87,16 @@
                             :description ""}}
            :handler (openapi/create-openapi-handler)}}]
    ["/health"
-    {:get {:summary "Health check"
-           :tags    #{"System"}
-           :handler (constantly {:status 200})}}]
+    {:middleware [[security/wrap-db-application-name]]
+     :get        {:summary "Health check"
+                  :tags    #{"System"}
+                  :handler (fn [{:keys [db]}]
+                             (try
+                               (jdbc/query db ["SELECT 1 from etp.energiatodistus LIMIT 1"])
+                               {:status 200}
+                               (catch Throwable t
+                                 (log/warn "Service not healthy" t)
+                                 {:status 503 :body "Service not healthy. Check logs for details."})))}}]
    ["/login"
     {:get {:summary    "Callback used to redirect user back to where they were"
            :tags       #{"System"}
@@ -119,7 +128,7 @@
 
 (def routes
   ["" {:middleware [[header-middleware/wrap-default-cache]
-                 [header-middleware/wrap-default-content-type]]}
+                    [header-middleware/wrap-default-content-type]]}
    ["/api"
     system-routes
     ["/public" {:middleware [[security/wrap-db-application-name]]}

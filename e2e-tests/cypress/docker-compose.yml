@@ -23,7 +23,7 @@ services:
     env_file:
       - ./backend.env
     healthcheck:
-      test: curl -k http://localhost:8080/api/public/statistics/count || exit 1
+      test: curl -k http://localhost:8080/api/health || exit 1
       interval: 10s
       timeout: 10s
       retries: 20
