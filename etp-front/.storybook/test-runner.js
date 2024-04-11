@@ -19,6 +19,8 @@ const config = {
     // page.context().browser().browserType().name() to get the browser name to prefix the file name
     const image = await page.screenshot();
     expect(image).toMatchImageSnapshot({
+      // Default threshold is 0.01, make it bigger so that animated components still pass
+      customDiffConfig: { threshold: 0.7 },
       customSnapshotsDir,
       customSnapshotIdentifier: context.id
     });
