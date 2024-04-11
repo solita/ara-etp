@@ -1,4 +1,6 @@
 import ToimintaalueetChecklist from './toimintaalueet-checklist';
+import * as R from 'ramda';
+import * as Laatija from '@Pages/laatija/laatija';
 
 const toimintaalueet = [
   {
@@ -97,10 +99,10 @@ export default { title: 'ToimintaalueetChecklist' };
 
 export const withToimintaalueet = () => ({
   Component: ToimintaalueetChecklist,
-  props: { toimintaalueet }
-});
-
-export const withSelected = () => ({
-  Component: ToimintaalueetChecklist,
-  props: { toimintaalueet, selected: [1, 2, 3] }
+  props: {
+    toimintaalueet: toimintaalueet,
+    model: Laatija.emptyLaatija,
+    lens: R.lensProp('muuttoimintaalueet'),
+    format: R.prop('label-fi')
+  }
 });

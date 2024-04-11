@@ -5,6 +5,7 @@ export default { title: 'NavigationTab' };
 export const withText = () => ({
   Component: NavigationTab,
   props: {
-    text: 'Link'
+    label: 'Link',
+    href: '/'
   }
 });
