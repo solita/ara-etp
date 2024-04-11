@@ -750,7 +750,7 @@
 
     (set-metadata pdf-path
                   (:laatija-fullname complete-energiatodistus)
-                  (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]))
+                  (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
     (if draft?
       (add-watermark pdf-path kieli)
       pdf-path)))
