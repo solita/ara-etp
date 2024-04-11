@@ -31,7 +31,7 @@
              ;; https://github.com/metosin/reitit/issues/355
              metosin/spec-tools                        {:mvn/version "0.10.6"}
              webjure/jeesql                            {:mvn/version "0.4.7"}
-             clj-http/clj-http                         {:mvn/version "3.12.3"}
+             clj-http/clj-http                         {:mvn/version "3.13.0"}
              buddy/buddy-core                          {:mvn/version "1.11.423"}
              buddy/buddy-sign                          {:mvn/version "3.5.351"}
              buddy/buddy-hashers                       {:mvn/version "2.0.167"}
