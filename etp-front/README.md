@@ -56,6 +56,9 @@ Navigate to [https://localhost:3000](https://localhost:3000). You should see you
   as [H1.test.mjs](src/components/H/H1.test.mjs) provide the additional safety compared to Storybook story that it
   checks and warns against improper props passed to the component. These should be located next to the component in a
   file <Component name>.test.mjs.
+* Write E2E tests to test the whole system through the user interface using Cypress. Use E2E tests when the integration
+  of the user interface and backend need to be tested, or when a longer UI workflow needs to be tested. Cypress tests
+  and their setup are located [in their own directory](../e2e-tests/cypress).
 
 ### Jest
 
