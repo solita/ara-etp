@@ -16,3 +16,4 @@
 .projectile
 
 /test_report.xml
+/__snapshots__/__diff_output__
