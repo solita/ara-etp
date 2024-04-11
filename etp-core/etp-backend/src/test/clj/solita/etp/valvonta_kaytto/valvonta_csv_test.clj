@@ -195,7 +195,8 @@
                                 (.atStartOfDay (ZoneId/systemDefault))
                                 .toInstant)
           kehotus-deadline-date (LocalDate/of 2024 3 27)
-          close-timestamp (-> (LocalDate/of 2024 3 22)
+          close-timestamp (-> kehotus-deadline-date
+                              (.plusDays 1)
                               (.atStartOfDay (ZoneId/systemDefault))
                               .toInstant)
           output (atom [])
@@ -243,7 +244,7 @@
                [csv-header-line
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";1;\"Valvonnan aloitus\";2024-03-18T02:00;\"Tuntija, Asian\";\n"
                 "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";2;\"Kehotus\";2024-03-20T02:00;\"Tuntija, Asian\";\"x\"\n"
-                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-22T02:00;\"Tuntija, Asian\";\n"])
+                "1;\"3139000812\";\"ARA-05.03.01-2024-159\";\"Testitie 5\";\"90100\";\"OULU\";3;\"Valvonnan lopetus\";2024-03-28T02:00;\"Tuntija, Asian\";\n"])
             "All toimenpiteet for the valvonta are present, energiatodistus is marked being created during kehotus toimenpide"))))
 
 
