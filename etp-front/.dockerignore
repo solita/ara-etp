@@ -6,6 +6,8 @@
 
 !src/
 !assets/
+!.storybook/
+!__snapshots__/
 
 !babel.config.js
 !fill-sv-localization.js
@@ -17,3 +19,4 @@
 !tailwind.config.js
 !webpack.config.js
 
+!run-visual-tests.sh
