@@ -1,12 +1,12 @@
 # ARA - Energiatodistuspalvelu frontend
 
-Tämä on web sovellus energiatodistusten laadintaan 
+Tämä on web sovellus energiatodistusten laadintaan
 ja todistuksiin liittyvään viranomaistoimintaan.
 
-This is a web application for managing energy performance certificates and related activities. 
+This is a web application for managing energy performance certificates and related activities.
 This application is for accredited certificate experts and public authorities.
 
-[Node.js](https://nodejs.org) has to be installed and preferred node version manager tool is 
+[Node.js](https://nodejs.org) has to be installed and preferred node version manager tool is
 [node version manager](https://github.com/nvm-sh/nvm).
 
 ## Node version manager
@@ -34,7 +34,8 @@ You also need to start [backend](../etp-core) services.
 npm run dev
 ```
 
-Navigate to [https://localhost:3000](https://localhost:3000). You should see your app running. Edit a component file in `src`, save it, the page should reload automatically.
+Navigate to [https://localhost:3000](https://localhost:3000). You should see your app running. Edit a component file
+in `src`, save it, the page should reload automatically.
 
 ## Testing
 
@@ -87,6 +88,11 @@ Run in Docker container with
 If you run these locally outside Docker container, the snapshots will be different as browsers in different operating
 systems render things slightly differently.
 
+When there are intentional changes, update the image snapshots by running 
+```bash
+./run-visual-tests-in-docker.sh update
+```
+
 ### Cypress
 
 See [e2e test readme](../e2e-tests/cypress/README.md)
@@ -99,24 +105,25 @@ To create a production optimised version of the app:
 npm run build
 ```
 
-
 ## About the application
 
 ### Directory structure
 
 #### ./src
 
-Contains all the application code divided into subfolders for different purposes. The root contains internal riggin required for scaffolding the application.
+Contains all the application code divided into subfolders for different purposes. The root contains internal riggin
+required for scaffolding the application.
 
 ##### ./src/components
 
-General components to be used in UI building e.g. inputs, buttons etc. 
+General components to be used in UI building e.g. inputs, buttons etc.
 These components can be used in any page.
 
 ##### ./src/pages
 
 All pages and their components. Pages are grouped by feature-basis.
 Each feature contains:
+
 * index (`index.svelte`)
 * page components and specialized components used from these pages (`*.svelte`)
 * api modules (`*-api.js`) to create backend futures
@@ -124,6 +131,7 @@ Each feature contains:
 * other functional utility modules (`*.js`)
 
 Specialized components (used only from a specific place) are:
+
 * header
 * breadcrumb
 * navigation
@@ -147,15 +155,17 @@ Static assets (images, pdfs, etc.)
 #### Naming things
 
 - Directories/files should be kebab-case
-- Imported namespaces should be pascal-case 
+- Imported namespaces should be pascal-case
 - Data models used with backend are kebab-case
 - Otherwise use camel-case.
 
 #### Monadic types
 
 Always use proper monadic type for special cases.
+
 - Instead of null, use Maybe.
-- Everything that could fail (f.ex. parsing/validation) synchronously should be wrapped in Either where Left is error and Right is value.
+- Everything that could fail (f.ex. parsing/validation) synchronously should be wrapped in Either where Left is error
+  and Right is value.
 - Asynchronous operations should be wrapped in futures.
 
 #### Programming style
@@ -168,4 +178,5 @@ Always use proper monadic type for special cases.
 - Write pointfree/tacit code
 - Only pure functions in utilities, side effects allowed inside svelte components
 - Try to achieve good test coverage with unit tests.
-- If you find 2 different ways to achieve the same result within codebase; default to the newer version for examples when writing new code.
+- If you find 2 different ways to achieve the same result within codebase; default to the newer version for examples
+  when writing new code.
