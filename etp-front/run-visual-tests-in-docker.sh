@@ -9,6 +9,7 @@ fi
 docker build -t etp-front-visual-tests -f visual-tests.Dockerfile .
 
 docker run --name etp-front-visual-tests-container etp-front-visual-tests ./run-visual-tests.sh "$update"
+status=$?
 
 if [ "$update" == true ]
 then
@@ -16,3 +17,5 @@ then
 fi
 
 docker rm etp-front-visual-tests-container
+
+exit $status

@@ -100,3 +100,33 @@ jobs:
           cache-dependency-path: etp-front/package-lock.json
       - run: npm ci
       - run: npm run storybook:build
+
+  storybook-visual-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: etp-front
+    strategy:
+      matrix:
+        node-version: [ 20.x ]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.3.0
+      - name: Build storybook-test-image
+        uses: docker/build-push-action@v5.3.0
+        with:
+          context: etp-front
+          file: etp-front/visual-tests.Dockerfile
+          cache-from: type=gha,scope=visual-tests
+          cache-to: type=gha,mode=max,scope=visual-tests
+          load: true
+      - name: Serve Storybook and run tests in Docker
+        run: ./run-visual-tests-in-docker.sh
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: snapshots-diff
+          path: etp-front/__snapshots__/__diff_output__

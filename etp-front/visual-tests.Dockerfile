@@ -6,7 +6,7 @@ WORKDIR /visual-tests
 RUN npm install -g concurrently http-server wait-on
 COPY package-lock.json ./
 COPY package.json ./
-COPY __snapshots__ .
+
 RUN npm ci
 
 COPY ./ ./
