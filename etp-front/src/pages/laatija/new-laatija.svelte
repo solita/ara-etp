@@ -1,6 +1,5 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Router from '@Component/Router/router';
   import * as Locales from '@Language/locale-utils';
@@ -11,7 +10,6 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
-  import * as Kayttajat from '@Utility/kayttajat';
 
   import LaatijaForm from './laatija-form.svelte';
 
@@ -30,40 +28,9 @@
 
   let resources = Maybe.None();
 
-  const emptyLaatija = {
-    login: Maybe.None(),
-    passivoitu: false,
-    rooli: Maybe.Some(Kayttajat.role.laatija),
-    etunimi: '',
-    sukunimi: '',
-    email: '',
-    puhelin: '',
-    partner: true,
-    henkilotunnus: Maybe.None(),
-    toimintaalue: Maybe.None(),
-    muuttoimintaalueet: [],
-    wwwosoite: Maybe.None(),
-    maa: Either.Right('FI'),
-    patevyystaso: 1,
-    verifytime: Maybe.None(),
-    'vastaanottajan-tarkenne': Maybe.None(),
-    jakeluosoite: '',
-    postinumero: '',
-    postitoimipaikka: '',
-    laskutuskieli: 0,
-    toteamispaivamaara: Either.Right(new Date()),
-    'voimassaolo-paattymisaika': new Date(),
-    'api-key': Maybe.None(),
-    julkinenwwwosoite: false,
-    julkinenemail: false,
-    julkinenosoite: false,
-    julkinenpuhelin: false,
-    julkinenpostinumero: false
-  };
-
-  let laatija = emptyLaatija;
+  let laatija = Laatija.emptyLaatija();
   const clean = _ => {
-    laatija = emptyLaatija;
+    laatija = Laatija.emptyLaatija();
   };
 
   $: Future.fork(

@@ -1,4 +1,5 @@
 import Link from './Link';
+import * as Maybe from '@Utility/maybe-utils';
 
 export default { title: 'Link' };
 
@@ -14,7 +15,7 @@ export const withIcon = () => ({
   Component: Link,
   props: {
     href: 'http://example.com',
-    icon: 'home'
+    icon: Maybe.Some('home')
   }
 });
 
@@ -22,7 +23,7 @@ export const withTextAndIcon = () => ({
   Component: Link,
   props: {
     href: 'http://example.com',
-    icon: 'home',
+    icon: Maybe.Some('home'),
     text: 'To example.com'
   }
 });
