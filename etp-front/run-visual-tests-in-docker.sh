@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+set -u
 
-if [ "$1" == 'update' ]
+if [ "${1:-}" == 'update' ]
 then
   update=true
 else
