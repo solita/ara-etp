@@ -101,7 +101,7 @@ export const withToimintaalueet = () => ({
   Component: ToimintaalueetChecklist,
   props: {
     toimintaalueet: toimintaalueet,
-    model: Laatija.emptyLaatija,
+    model: Laatija.emptyLaatija(),
     lens: R.lensProp('muuttoimintaalueet'),
     format: R.prop('label-fi')
   }

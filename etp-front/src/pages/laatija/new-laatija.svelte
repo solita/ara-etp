@@ -1,6 +1,5 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as Future from '@Utility/future-utils';
   import * as Router from '@Component/Router/router';
   import * as Locales from '@Language/locale-utils';
@@ -11,7 +10,6 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
-  import * as Kayttajat from '@Utility/kayttajat';
 
   import LaatijaForm from './laatija-form.svelte';
 
@@ -30,9 +28,9 @@
 
   let resources = Maybe.None();
 
-  let laatija = Laatija.emptyLaatija;
+  let laatija = Laatija.emptyLaatija();
   const clean = _ => {
-    laatija = emptyLaatija;
+    laatija = Laatija.emptyLaatija();
   };
 
   $: Future.fork(
