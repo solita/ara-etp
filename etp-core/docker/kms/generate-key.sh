@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Used to generate a new key for local KMS. No need to run this, but kept in place to have the process documented.
-set -euo pipefail
-set -x
+set -euxo pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 KEY_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.key"
 CSR_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.csr"
