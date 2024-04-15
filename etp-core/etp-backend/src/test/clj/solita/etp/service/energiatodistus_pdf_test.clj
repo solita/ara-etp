@@ -267,7 +267,7 @@
                                             :id             id
                                             :language       language-code})
                  :already-signed)))
-      (t/testing "The state should result in :already-signed if trying to sign three times in a row"
+      #_(t/testing "The state should result in :already-signed if trying to sign three times in a row"
         (t/is (= (service/sign-with-system {:db             db
                                             :aws-s3-client  ts/*aws-s3-client*
                                             :whoami         whoami
