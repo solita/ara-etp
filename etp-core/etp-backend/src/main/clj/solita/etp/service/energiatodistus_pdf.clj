@@ -9,6 +9,7 @@
             [solita.common.certificates :as certificates]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
+            [solita.etp.service.energiatodistus :as service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
@@ -884,11 +885,8 @@
          (let [key (energiatodistus-service/file-key id language)
                content (file-service/find-file aws-s3-client key)
                content-bytes (.readAllBytes content)
-               _ (println "Ehdittiin tänne")
                pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-               _ (println "Mutta ei tänne")
-               filename (str key ".pdf")
-               ]
+               filename (str key ".pdf")]
            (->> (write-signature! id language content-bytes pkcs7)
                 (file-service/upsert-file-from-bytes aws-s3-client
                                                      key))
@@ -908,36 +906,44 @@
         root config/system-signature-certificate-root]
     (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
 
-#_(defn input-stream-to-base64 [input-stream]
-  (let [encoder (Base64/getEncoder)
-        bytes (byte-array (.available input-stream))]
-    (.readAllBytes input-stream bytes)
-    (.encodeToString encoder bytes)))
-
 (defn- digest->signature [digest aws-kms-client]
   (->> (.getBytes digest StandardCharsets/UTF_8)
        (sign-service/sign aws-kms-client)
        (.readAllBytes)
        (.encodeToString (Base64/getEncoder))))
 
-;; TODO: Tarviikohan tässä nyt oikeasi välittää noista tiloista
-;;       koska sehän on vain oleellista siinä tapauksessa, että ollaankn
-;;       järjestelmän ulkopuolella tekemässsä jotain...
-(defn sign-with-system [{:keys [db whoami now id language aws-s3-client aws-kms-client]}]
-  (let [wut (energiatodistus-service/start-energiatodistus-signing! db whoami id)
-        _ (println "start: " wut)
-        digest (-> (find-energiatodistus-digest db aws-s3-client id language) :digest)
-        _ (println "digest: " digest)
-        signature (digest->signature digest aws-kms-client)
-        _ (println "signature: " signature)
-       chain cert-chain-three-long-leaf-first
-        _ (println "chain: " signature)
-        signature-and-chain { :chain chain :signature signature}
-        _ (println "signature-and-chain: " signature-and-chain)
-        hmm (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
-        _ (println "sign: " hmm)
-        asd (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
-        _ (println "asd: " asd)
-        ]
-    ))
+(defn- cancel-sign-with-system
+  [db whoami id]
+  (println "Cancelling the signing!")
+  (energiatodistus-service/cancel-energiatodistus-signing! db whoami id))
 
+(defn sign-with-system
+  "Does the whole process of sig"
+  [{:keys [db whoami now id language aws-s3-client aws-kms-client]}]
+  (println "Starting signing with system")
+  (let [start-response (energiatodistus-service/start-energiatodistus-signing! db whoami id)]
+    (if (not (= :ok start-response))
+      (do (println "Could not start the signing ( " start-response ")")
+          (cancel-sign-with-system db whoami id)
+          start-response)
+      (let [digest-response (find-energiatodistus-digest db aws-s3-client id language)]
+        (if (or (= :already-signed digest-response) (= :not-in-signing digest-response) (nil? digest-response))
+          (do (println "Could not create the digest! ( " digest-response ")")
+              (cancel-sign-with-system db whoami id)
+              digest-response))
+        (let [digest (:digest digest-response)
+              signature (digest->signature digest aws-kms-client)
+              chain cert-chain-three-long-leaf-first
+              signature-and-chain {:chain chain :signature signature}
+              sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)]
+          (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
+            (do (println "Could not sign the energiatodistus! (" sign-response ")")
+                (cancel-sign-with-system db whoami id)
+                sign-response)
+            (let [end-response (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)]
+              (if (not (= :ok end-response))
+                (do (println "Could not end the energiatodistus signing! (" end-response ")")
+                    (cancel-sign-with-system db whoami id))
+                (do
+                  (println "Successfully signed the pdf!")
+                  end-response)))))))))
