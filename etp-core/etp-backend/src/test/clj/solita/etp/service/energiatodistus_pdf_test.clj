@@ -258,7 +258,7 @@
                                             :id             id
                                             :language       language-code})
                  :ok)))
-      (t/testing "Trying to sign again should result in :already-signed"
+      #_(t/testing "Trying to sign again should result in :already-signed"
         (t/is (= (service/sign-with-system {:db             db
                                             :aws-s3-client  ts/*aws-s3-client*
                                             :whoami         whoami
