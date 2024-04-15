@@ -6,11 +6,6 @@ KEY_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.key"
 CSR_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.csr"
 CRT_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.crt"
 EXT_FILE_ROOT="${SCRIPT_DIR}/v3-root.ext"
-#TODO: Remove unused root ext file? Seems that this is not needed (or can't be used).
-echo "basicConstraints = CA:TRUE
-keyUsage = keyCertSign, cRLSign
-subjectKeyIdentifier = hash
-authorityKeyIdentifier = keyid,issuer" > ${EXT_FILE_ROOT}
 
 KEY_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.key"
 CSR_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.csr"
