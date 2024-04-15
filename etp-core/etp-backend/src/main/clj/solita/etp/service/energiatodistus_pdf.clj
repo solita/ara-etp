@@ -752,7 +752,6 @@
                             :e-luokka)
                         (:versio complete-energiatodistus))
 
-    ;; TODO: Laita tässä metadataan tiedot ennen allekirjoitusta?
     (set-metadata pdf-path
                   (:laatija-fullname complete-energiatodistus)
                   (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
@@ -827,8 +826,7 @@
          (io/delete-file pdf-path)
          (io/delete-file signable-pdf-path)
          (io/delete-file signature-png-path)
-         {:digest digest
-          }))))
+         {:digest digest}))))
 
 (defn comparable-name [s]
   (-> s
