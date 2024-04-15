@@ -9,7 +9,6 @@
             [solita.common.certificates :as certificates]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
-            [solita.etp.service.energiatodistus :as service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
