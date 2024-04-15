@@ -235,7 +235,7 @@
              :already-signed))))
 
 (t/deftest sign-with-system-energiatodistus-test
-  (t/testing "Signing a pdf an"
+  (t/testing "Signing a pdf using the system instead of mpollux"
     (let [{:keys [laatijat energiatodistukset]} (test-data-set)
           laatija-id (-> laatijat keys sort first)
           db (ts/db-user laatija-id)

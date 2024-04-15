@@ -856,10 +856,14 @@
                           not-after
                           now)}))))
 
-(defn validate-certificate! [last-name now certificate-str]
-  (let [certificate (certificates/pem-str->certificate certificate-str)]
-    ;;(validate-surname! last-name certificate) ;TODO: Commented out for now
-    (validate-not-after! (-> now Instant/from Date/from) certificate)))
+(defn validate-certificate!
+  ([last-name now certificate-str]
+   (validate-certificate! last-name now certificate-str :mpollux))
+  ([last-name now certificate-str signing-method]
+   (let [certificate (certificates/pem-str->certificate certificate-str)]
+     (when (= signing-method :mpollux)
+       (validate-surname! last-name certificate))
+     (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
 (defn write-signature! [id language pdf pkcs7]
   (try
@@ -870,25 +874,30 @@
         (str "Signed PDF already exists for energiatodistus "
              id "/" language ". Get digest to sign again.")))))
 
-(defn sign-energiatodistus-pdf [db aws-s3-client whoami now id language
-                                {:keys [chain] :as signature-and-chain}]
-  (when-let [energiatodistus
-             (energiatodistus-service/find-energiatodistus db id)]
-    (do-when-signing
-      energiatodistus
-      #(do
-         (validate-certificate! (:sukunimi whoami)
-                                now
-                                (first chain))
-         (let [key (energiatodistus-service/file-key id language)
-               content (file-service/find-file aws-s3-client key)
-               content-bytes (.readAllBytes content)
-               pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-               filename (str key ".pdf")]
-           (->> (write-signature! id language content-bytes pkcs7)
-                (file-service/upsert-file-from-bytes aws-s3-client
-                                                     key))
-           filename)))))
+
+(defn sign-energiatodistus-pdf
+  ([db aws-s3-client whoami now id language signature-and-chain]
+   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
+  ([db aws-s3-client whoami now id language
+    {:keys [chain] :as signature-and-chain} signing-method]
+   (when-let [energiatodistus
+              (energiatodistus-service/find-energiatodistus db id)]
+     (do-when-signing
+       energiatodistus
+       #(do
+          (validate-certificate! (:sukunimi whoami)
+                                 now
+                                 (first chain)
+                                 signing-method)
+          (let [key (energiatodistus-service/file-key id language)
+                content (file-service/find-file aws-s3-client key)
+                content-bytes (.readAllBytes content)
+                pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
+                filename (str key ".pdf")]
+            (->> (write-signature! id language content-bytes pkcs7)
+                 (file-service/upsert-file-from-bytes aws-s3-client
+                                                      key))
+            filename))))))
 
 (defn- cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
@@ -933,7 +942,7 @@
               signature (digest->signature digest aws-kms-client)
               chain cert-chain-three-long-leaf-first
               signature-and-chain {:chain chain :signature signature}
-              sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)]
+              sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
           (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
             (do (println "Could not sign the energiatodistus! (" sign-response ")")
                 (cancel-sign-with-system db whoami id)
