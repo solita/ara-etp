@@ -519,9 +519,6 @@
 ;; Signing process
 ;;
 
-;;TODO: Tee funktio, joka osaa tehdä pdf:lle signaturen, jossa on haluttu metadata. Pitäisi vastata
-;;      mpolluxin luomaa signaturea?
-
 (defn start-energiatodistus-signing! [db whoami id]
   (jdbc/with-db-transaction [db db]
     (let [result (energiatodistus-db/update-energiatodistus-allekirjoituksessa!

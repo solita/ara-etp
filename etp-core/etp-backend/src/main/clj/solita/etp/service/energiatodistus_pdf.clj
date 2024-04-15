@@ -924,7 +924,7 @@
   (let [start-response (energiatodistus-service/start-energiatodistus-signing! db whoami id)]
     (if (not (= :ok start-response))
       (do (println "Could not start the signing ( " start-response ")")
-          (cancel-sign-with-system db whoami id)
+          ;; If failed to start the signing it should not be cancelled either.
           start-response)
       (let [digest-response (find-energiatodistus-digest db aws-s3-client id language)]
         (if (or (= :already-signed digest-response) (= :not-in-signing digest-response) (nil? digest-response))

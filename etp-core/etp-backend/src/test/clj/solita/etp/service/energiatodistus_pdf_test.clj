@@ -7,6 +7,7 @@
             [solita.common.xlsx :as xlsx]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as service]
+            [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
@@ -234,17 +235,67 @@
              :already-signed))))
 
 (t/deftest sign-with-system-energiatodistus-test
-  (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-        laatija-id (-> laatijat keys sort first)
-        db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
-        whoami {:id laatija-id}]
-    (t/is (= (service/sign-with-system {:db             db
-                                        :aws-s3-client  ts/*aws-s3-client*
-                                        :whoami         whoami
-                                        :aws-kms-client ts/*aws-kms-client*
-                                        :now            energiatodistus-test-data/time-when-test-cert-not-expired
-                                        :id             id
-                                        :language       "fi"})
-             :not-in-signing))))
-
+  (t/testing "Signing a pdf an"
+    (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          ;; The second ET is 2018 version
+          id (-> energiatodistukset keys sort second)
+          whoami {:id laatija-id}
+          {:keys [versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)
+          language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
+      (t/testing "Testing assumptions about the energiatodistus in test"
+        (t/is (= versio 2018))
+        (t/is (or (= language-code "sv") (= language-code "fi")))
+        (t/is (= id 2))
+        (t/is (= versio 2018)))
+      (t/testing "Signing a pdf should succeed"
+        (t/is (= (service/sign-with-system {:db             db
+                                            :aws-s3-client  ts/*aws-s3-client*
+                                            :whoami         whoami
+                                            :aws-kms-client ts/*aws-kms-client*
+                                            :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                            :id             id
+                                            :language       language-code})
+                 :ok)))
+      (t/testing "Trying to sign again should result in :already-signed"
+        (t/is (= (service/sign-with-system {:db             db
+                                            :aws-s3-client  ts/*aws-s3-client*
+                                            :whoami         whoami
+                                            :aws-kms-client ts/*aws-kms-client*
+                                            :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                            :id             id
+                                            :language       language-code})
+                 :already-signed)))
+      (t/testing "The state should result in :already-signed if trying to sign three times in a row"
+        (t/is (= (service/sign-with-system {:db             db
+                                            :aws-s3-client  ts/*aws-s3-client*
+                                            :whoami         whoami
+                                            :aws-kms-client ts/*aws-kms-client*
+                                            :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                            :id             id
+                                            :language       language-code})
+                 :already-signed)))))
+  (t/testing "Trying to sign a pdf that is already in signing should fail and not change the state"
+    (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          id (-> energiatodistukset keys sort first)
+          {:keys [kieli ]} (complete-energiatodistus-service/find-complete-energiatodistus db id)
+          language-code (energiatodistus-service/language-id->codes kieli)
+          whoami {:id laatija-id}]
+      ;; Put the energiatodistus into signing.
+      (energiatodistus-service/start-energiatodistus-signing! db whoami id)
+      (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+        (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                              :id             id
+                                              :language       language-code})
+                   :already-in-signing)))
+        (t/testing "Trying to sign a pdf that is already in signing should not change the state"
+          (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)
+                   tila-id)))))))
