@@ -25,10 +25,6 @@ keyUsage = digitalSignature, nonRepudiation
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer" > "${EXT_FILE_LEAF}"
 
-
-# Create directories
-# mkdir -p ca/root ca/intermediate
-
 # Create Root CA
 openssl genrsa -out "${KEY_FILE_ROOT}" 4096
 openssl req -x509 -new -nodes -key "${KEY_FILE_ROOT}" -sha256 -days 1024 -out "${CRT_FILE_ROOT}" -subj "/C=US/ST=California/L=San Francisco/O=My Company/CN=ETP LOCAL DEV ROOT"
@@ -67,12 +63,9 @@ rm "${KEY_FILE_ROOT}"
 
 rm "${EXT_FILE_LEAF}"
 rm "${EXT_FILE_INT}"
-rm "${EXT_FILE_ROOT}"
 
 # Move the certificate to resources
 mkdir -p "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature"
 mv "${CRT_FILE_LEAF}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-leaf.pem.crt"
 mv "${CRT_FILE_INT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-int.pem.crt"
 mv "${CRT_FILE_ROOT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-root.pem.crt"
-
-# TODO: Move also to somewhere where the test system can use it?
