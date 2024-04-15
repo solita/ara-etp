@@ -7,7 +7,19 @@ echo Retrieve /secret/etp/suomifi/viestit/client.crt
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/client.crt" | jq .SecretString -r > public.pem
 echo Retrieve /secret/etp/suomifi/viestit/private.key
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/private.key" | jq .SecretString -r > private.pem
-# TODO: Get the system signature certificates from secret manager. Save certs to env variables.
+
+SECRET="/secret/etp/dvv/system-signature-root.crt"
+echo "Retrieve ${SECRET}"
+export SYSTEM_SIGNATURE_CERTIFICATE_ROOT="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+SECRET="/secret/etp/dvv/system-signature-intermediate.crt"
+echo "Retrieve ${SECRET}"
+export SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+SECRET="/secret/etp/dvv/system-signature-leaf.crt"
+echo "Retrieve ${SECRET}"
+export SYSTEM_SIGNATURE_CERTIFICATE_LEAF="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+
+echo "Set KMS_SIGNING_KEY"
+export KMS_SIGNING_KEY="alias/SigningKey"
 
 echo Pack certificate as p12 file format
 openssl pkcs12 -export -in public.pem -inkey private.pem -out viestit.p12 -name ${SUOMIFI_VIESTIT_KEYSTORE_ALIAS} -passout pass:${SUOMIFI_VIESTIT_KEYSTORE_PASSWORD}
