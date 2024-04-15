@@ -899,7 +899,7 @@
                                                       key))
             filename))))))
 
-(defn- cert-pem->one-liner-without-headers [cert-pem]
+(defn cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
   headers and linebreaks from it."
   (-> cert-pem
