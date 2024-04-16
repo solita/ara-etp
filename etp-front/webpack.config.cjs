@@ -63,12 +63,18 @@ module.exports = {
     rules: [
       {
         test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false
+        },
         exclude: /node_modules/,
         include: [path.resolve(__dirname, 'src'), /svelte/],
         use: ['babel-loader']
       },
       {
         test: /\.svelte$/,
+        resolve: {
+          fullySpecified: false
+        },
         include: [path.resolve(__dirname, 'src'), /svelte/],
         use: [
           'babel-loader',

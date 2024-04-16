@@ -17,6 +17,7 @@
     "build:docs": "jsdoc -r -c ./jsdoc/conf.json",
     "watch:docs": "nodemon --exec npm run build:docs --watch src"
   },
+  "type": "module",
   "browserslist": [
     "defaults"
   ],
