@@ -4,15 +4,15 @@
   import * as Future from '@Utility/future-utils';
   import * as Objects from '@Utility/objects';
 
-  import * as Kielisyys from './kielisyys';
-  import * as ET from './energiatodistus-utils';
-  import * as etApi from './energiatodistus-api';
-  import * as signatureApi from './signature-api';
+  import * as Kielisyys from '../kielisyys';
+  import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
+  import * as signatureApi from '@Pages/energiatodistus//signature-api';
   import { _ } from '@Language/i18n';
 
-  import Button from '@Component/Button/Button';
-  import Spinner from '@Component/Spinner/Spinner';
-  import Link from '@Component/Link/Link';
+  import Button from '@Component/Button/Button.svelte';
+  import Spinner from '@Component/Spinner/Spinner.svelte';
+  import Link from '@Component/Link/Link.svelte';
 
   export let energiatodistus;
   export let reload;

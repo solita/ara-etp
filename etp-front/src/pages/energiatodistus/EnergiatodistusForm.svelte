@@ -21,7 +21,7 @@
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
-  import Signing from './signing';
+  import Signing from './signing/SigningDialog.svelte';
   import Input from './Input';
 
   import * as EtUtils from './energiatodistus-utils';
