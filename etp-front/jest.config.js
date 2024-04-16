@@ -18,6 +18,13 @@ const config = {
     '\\.[jt]s?$': 'babel-jest',
     '^.+\\.svelte$': ['svelte-jester', { preprocess: true }]
   },
+  moduleNameMapper: {
+    '^@Pages/(.*)$': '<rootDir>/src/pages/$1',
+    '^@Component/(.*)$': '<rootDir>/src/components/$1',
+    '^@Utility/(.*)$': '<rootDir>/src/utils/$1',
+    '^@Language/(.*)$': '<rootDir>/src/language/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
   extensionsToTreatAsEsm: ['.svelte'],
   collectCoverageFrom: [
     'src/**/*.{js,svelte}',
