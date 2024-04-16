@@ -17,6 +17,6 @@
 !postcss.config.cjs
 !svelte.config.cjs
 !tailwind.config.js
-!webpack.config.cjs
+!webpack.config.js
 
 !run-visual-tests.sh
