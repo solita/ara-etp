@@ -119,7 +119,7 @@
         uppgifter raderas ur registret.
       </p>
 
-      <p>Den registrerades rättigheter</p>
+      <H3>Den registrerades rättigheter</H3>
 
       <p>
         Den registrerade har rätt att få den personuppgiftsansvariges

@@ -116,7 +116,7 @@
         poistetaan rekisteristä.
       </p>
 
-      <p>Rekisteröidyn oikeudet</p>
+      <H3>Rekisteröidyn oikeudet</H3>
 
       <p>
         Rekisteröidyllä on oikeus saada rekisterinpitäjältä vahvistus siitä,
