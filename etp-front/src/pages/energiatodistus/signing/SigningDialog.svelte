@@ -2,6 +2,8 @@
   import { _ } from '@Language/i18n';
 
   import CardSigning from './CardSigning.svelte';
+  import Radio from '@Component/Radio/Radio.svelte';
+  import SystemSigning from './SystemSigning.svelte';
 
   export let energiatodistus;
   export let reload;
@@ -18,6 +20,10 @@
     @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
   }
 
+  .selection {
+    @apply flex mt-4;
+  }
+
   .content {
     @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
   }
@@ -30,10 +36,28 @@
 <dialog on:click|stopPropagation>
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
+    <div class="selection">
+      <div class="mr-3">
+        <Radio
+          label="Käytä korttia"
+          bind:group={selection}
+          value="card"
+          name="Card" />
+      </div>
+      <div class="mr-3">
+        <Radio
+          label="Älä käytä korttia"
+          bind:group={selection}
+          value="system"
+          name="System" />
+      </div>
+    </div>
 
-    <div>
+    <div class="mt-4">
       {#if isSigningMethodCard(selection)}
         <CardSigning {energiatodistus} {reload} />
+      {:else}
+        <SystemSigning />
       {/if}
     </div>
   </div>

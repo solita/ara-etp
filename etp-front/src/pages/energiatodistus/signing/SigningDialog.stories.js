@@ -10,3 +10,11 @@ export const signingWithCardNoConnection = () => ({
     selection: 'card'
   }
 });
+
+export const signingWithoutCard = () => ({
+  Component: SigningDialog,
+  props: {
+    energiatodistus: energiatodistus2018(),
+    selection: 'system'
+  }
+});

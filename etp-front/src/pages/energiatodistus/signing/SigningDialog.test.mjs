@@ -98,3 +98,37 @@ test('SigningDialog renders correctly when default selection is card and there i
   expect(signButton).toBeInTheDocument();
   expect(signButton).toBeEnabled();
 });
+
+test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
+  fetchMock.mockIf('https://localhost:53952/version', async req => {
+    return {
+      status: 200,
+      body: JSON.stringify({
+        version: 'dummy',
+        httpMethods: 'GET, POST',
+        contentTypes: 'data, digest',
+        signatureTypes: 'signature',
+        selectorAvailable: true,
+        hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
+      })
+    };
+  });
+
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  // Mpollux state was not checked as card signing is not selected
+  expect(fetchMock.mock.calls).toHaveLength(0);
+
+  const heading = screen.queryByText(/Allekirjoittaminen/u);
+  expect(heading).toBeInTheDocument();
+  expect(heading.tagName).toBe('H1');
+
+  const errorText = await screen.findByText(
+    /Allekirjoitamme ilman korttia kiitos/u
+  );
+  expect(errorText).toBeInTheDocument();
+});
