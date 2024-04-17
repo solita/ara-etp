@@ -5,5 +5,8 @@ export default { title: 'SigningDialog' };
 
 export const signingWithCardNoConnection = () => ({
   Component: SigningDialog,
-  props: { energiatodistus: energiatodistus2018() }
+  props: {
+    energiatodistus: energiatodistus2018(),
+    selection: 'card'
+  }
 });

@@ -31,7 +31,7 @@ afterEach(() => {
   fetchMock.disableMocks();
 });
 
-test('SigningDialog displays error message when no connection Mpollux', async () => {
+test('SigningDialog displays error message when default selection is card and there is no connection Mpollux', async () => {
   fetchMock.mockIf('https://localhost:53952/version', async req => {
     return {
       status: 500
@@ -39,7 +39,8 @@ test('SigningDialog displays error message when no connection Mpollux', async ()
   });
   render(SigningDialog, {
     energiatodistus: energiatodistus2018(),
-    reload: R.identity
+    reload: R.identity,
+    selection: 'card'
   });
 
   // Mpollux state was checked
@@ -59,7 +60,7 @@ test('SigningDialog displays error message when no connection Mpollux', async ()
   expect(signButton).not.toBeInTheDocument();
 });
 
-test('SigningDialog renders correctly when there is connection to Mpollux', async () => {
+test('SigningDialog renders correctly when default selection is card and there is connection to Mpollux', async () => {
   fetchMock.mockIf('https://localhost:53952/version', async req => {
     return {
       status: 200,
@@ -76,7 +77,8 @@ test('SigningDialog renders correctly when there is connection to Mpollux', asyn
 
   render(SigningDialog, {
     energiatodistus: energiatodistus2018(),
-    reload: R.identity
+    reload: R.identity,
+    selection: 'card'
   });
 
   // Mpollux state was checked

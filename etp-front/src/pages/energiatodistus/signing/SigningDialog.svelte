@@ -6,7 +6,11 @@
   export let energiatodistus;
   export let reload;
 
+  export let selection = 'card';
+
   const i18n = $_;
+
+  const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 </script>
 
 <style type="text/postcss">
@@ -26,6 +30,11 @@
 <dialog on:click|stopPropagation>
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
-    <CardSigning {energiatodistus} {reload} />
+
+    <div>
+      {#if isSigningMethodCard(selection)}
+        <CardSigning {energiatodistus} {reload} />
+      {/if}
+    </div>
   </div>
 </dialog>
