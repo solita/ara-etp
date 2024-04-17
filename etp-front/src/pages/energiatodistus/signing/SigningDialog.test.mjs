@@ -37,9 +37,12 @@ test('SigningDialog displays error message when default selection is card and th
       status: 500
     };
   });
+
+  const closeDialogFn = jest.fn();
+
   render(SigningDialog, {
     energiatodistus: energiatodistus2018(),
-    reload: R.identity,
+    reload: closeDialogFn,
     selection: 'card'
   });
 
@@ -58,6 +61,13 @@ test('SigningDialog displays error message when default selection is card and th
 
   const signButton = screen.queryByText('Allekirjoita');
   expect(signButton).not.toBeInTheDocument();
+
+  // Test that sulje buttton exists and clicking it calls the reload function
+  // passed to the component
+  const cancelButton = screen.getByText('Sulje');
+  expect(cancelButton).toBeInTheDocument();
+  await fireEvent.click(cancelButton);
+  expect(closeDialogFn.mock.calls).toHaveLength(1);
 });
 
 test('SigningDialog renders correctly when default selection is card and there is connection to Mpollux', async () => {
@@ -75,9 +85,11 @@ test('SigningDialog renders correctly when default selection is card and there i
     };
   });
 
+  const closeDialogFn = jest.fn();
+
   render(SigningDialog, {
     energiatodistus: energiatodistus2018(),
-    reload: R.identity,
+    reload: closeDialogFn,
     selection: 'card'
   });
 
@@ -97,6 +109,13 @@ test('SigningDialog renders correctly when default selection is card and there i
   const signButton = screen.getByText('Allekirjoita');
   expect(signButton).toBeInTheDocument();
   expect(signButton).toBeEnabled();
+
+  // Test that sulje buttton exists and clicking it calls the reload function
+  // passed to the component
+  const cancelButton = screen.getByText('Sulje');
+  expect(cancelButton).toBeInTheDocument();
+  await fireEvent.click(cancelButton);
+  expect(closeDialogFn.mock.calls).toHaveLength(1);
 });
 
 test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
