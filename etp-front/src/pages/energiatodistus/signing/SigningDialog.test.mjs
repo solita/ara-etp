@@ -42,6 +42,9 @@ test('SigningDialog displays error message when no connection Mpollux', async ()
     reload: R.identity
   });
 
+  // Mpollux state was checked
+  expect(fetchMock.mock.calls).toHaveLength(1);
+
   const heading = screen.queryByText(/Allekirjoittaminen/u);
 
   expect(heading).toBeInTheDocument();
@@ -75,6 +78,9 @@ test('SigningDialog renders correctly when there is connection to Mpollux', asyn
     energiatodistus: energiatodistus2018(),
     reload: R.identity
   });
+
+  // Mpollux state was checked
+  expect(fetchMock.mock.calls).toHaveLength(1);
 
   const heading = screen.queryByText(/Allekirjoittaminen/u);
   expect(heading).toBeInTheDocument();
