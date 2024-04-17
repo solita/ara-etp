@@ -31,7 +31,7 @@ afterEach(() => {
   fetchMock.disableMocks();
 });
 
-test('SigningDialog renders correctly when no connection Mpollux', async () => {
+test('SigningDialog displays error message when no connection Mpollux', async () => {
   fetchMock.mockIf('https://localhost:53952/version', async req => {
     return {
       status: 500
@@ -51,6 +51,9 @@ test('SigningDialog renders correctly when no connection Mpollux', async () => {
     /Yhteyden avaus mPolluxiin epäonnistui./u
   );
   expect(errorText).toBeInTheDocument();
+
+  const signButton = screen.queryByText('Allekirjoita');
+  expect(signButton).not.toBeInTheDocument();
 });
 
 test('SigningDialog renders correctly when there is connection to Mpollux', async () => {
