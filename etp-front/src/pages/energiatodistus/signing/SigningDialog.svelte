@@ -4,6 +4,7 @@
   import CardSigning from './CardSigning.svelte';
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
+  import SigningInstructions from './SigningInstructions.svelte';
 
   export let energiatodistus;
   export let reload;
@@ -36,20 +37,27 @@
 <dialog on:click|stopPropagation>
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
-    <div class="selection">
-      <div class="mr-3">
-        <Radio
-          label="Käytä korttia"
-          bind:group={selection}
-          value="card"
-          name="Card" />
-      </div>
-      <div class="mr-3">
-        <Radio
-          label="Älä käytä korttia"
-          bind:group={selection}
-          value="system"
-          name="System" />
+
+    <div class="mt-2">
+      <SigningInstructions />
+    </div>
+
+    <div class="mt-2">
+      <div class="selection">
+        <div class="mr-3">
+          <Radio
+            label="Käytä korttia"
+            bind:group={selection}
+            value="card"
+            name="Card" />
+        </div>
+        <div class="mr-3">
+          <Radio
+            label="Älä käytä korttia"
+            bind:group={selection}
+            value="system"
+            name="System" />
+        </div>
       </div>
     </div>
 
