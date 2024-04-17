@@ -10,7 +10,7 @@ import {
   jest,
   test
 } from '@jest/globals';
-import { render, screen } from '@testing-library/svelte';
+import { fireEvent, render, screen } from '@testing-library/svelte';
 import fetchMock from 'jest-fetch-mock';
 
 import * as R from 'ramda';
@@ -88,10 +88,10 @@ test('SigningDialog renders correctly when default selection is card and there i
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
-  const errorText = await screen.findByText(
+  const statusText = await screen.findByText(
     /Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu./u
   );
-  expect(errorText).toBeInTheDocument();
+  expect(statusText).toBeInTheDocument();
 
   // TODO: Check that this is a button
   const signButton = screen.getByText('Allekirjoita');
@@ -127,8 +127,55 @@ test('SigningDialog renders correctly when default selection is system and there
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
-  const errorText = await screen.findByText(
+  const systemSigningContent = await screen.findByText(
     /Allekirjoitamme ilman korttia kiitos/u
   );
-  expect(errorText).toBeInTheDocument();
+  expect(systemSigningContent).toBeInTheDocument();
+});
+
+test('Signing method can be selected in SigningDialog', async () => {
+  fetchMock.mockIf('https://localhost:53952/version', async req => {
+    return {
+      status: 200,
+      body: JSON.stringify({
+        version: 'dummy',
+        httpMethods: 'GET, POST',
+        contentTypes: 'data, digest',
+        signatureTypes: 'signature',
+        selectorAvailable: true,
+        hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
+      })
+    };
+  });
+
+  // Render the dialog with card as the default selection
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: R.identity,
+    selection: 'card'
+  });
+
+  // Mpollux state was checked
+  expect(fetchMock.mock.calls).toHaveLength(1);
+
+  // Initial state of the view is as expected for card signing method
+  // TODO: Tarvitaanko tätä ollenkaan tai pitäisikö tehdä uudelleenkäytettävä tarkastus?
+  const heading = screen.queryByText(/Allekirjoittaminen/u);
+  expect(heading).toBeInTheDocument();
+  expect(heading.tagName).toBe('H1');
+
+  const statusText = await screen.findByText(
+    /Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu./u
+  );
+  expect(statusText).toBeInTheDocument();
+
+  // Select system signing
+  const selection = screen.getByText('Älä käytä korttia');
+  expect(selection).toBeInTheDocument();
+  await fireEvent.click(selection);
+
+  const systemSigningContent = await screen.findByText(
+    /Allekirjoitamme ilman korttia kiitos/u
+  );
+  expect(systemSigningContent).toBeInTheDocument();
 });
