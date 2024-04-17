@@ -30,7 +30,10 @@ authorityKeyIdentifier = keyid,issuer" > "${EXT_FILE_LEAF}"
 
 # Create Root CA
 openssl genrsa -out "${KEY_FILE_ROOT}" 4096
-openssl req -x509 -new -nodes -key "${KEY_FILE_ROOT}" -sha256 -days 1024 -out "${CRT_FILE_ROOT}" -subj "/C=US/ST=California/L=San Francisco/O=My Company/CN=ETP LOCAL DEV ROOT"
+openssl req -x509 -new -nodes -key "${KEY_FILE_ROOT}" -sha256 -days 1024 -out "${CRT_FILE_ROOT}" \
+    -subj "/C=US/ST=California/L=San Francisco/O=My Company/CN=ETP LOCAL DEV ROOT" \
+    -addext "basicConstraints = CA:TRUE" \
+    -addext "keyUsage = keyCertSign, cRLSign"
 
 # Create Intermediate CA
 openssl genrsa -out "${KEY_FILE_INT}" 4096
