@@ -7,7 +7,7 @@
   import * as Kielisyys from '../kielisyys';
   import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
-  import * as signatureApi from '@Pages/energiatodistus//signature-api';
+  import * as signatureApi from './signature-api';
   import { _ } from '@Language/i18n';
 
   import Button from '@Component/Button/Button.svelte';
