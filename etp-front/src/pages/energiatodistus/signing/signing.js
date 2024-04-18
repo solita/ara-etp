@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import * as etApi from '@Pages/energiatodistus/energiatodistus-api.js';
 
 const capitalize = R.compose(
   R.join(''),
@@ -36,3 +37,6 @@ export const statusText = R.curry((i18n, state) => {
     statusKey
   )(state.status);
 });
+
+export const pdfUrl = (energiatodistus, language) =>
+  etApi.url.pdf(energiatodistus.versio, energiatodistus.id, language);

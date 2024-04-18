@@ -8,6 +8,8 @@
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
   import Error from '@Component/Error/Error.svelte';
   import * as Signing from './signing';
+  import * as Kielisyys from '@Pages/energiatodistus/kielisyys.js';
+  import Link from '@Component/Link/Link.svelte';
 
   export let energiatodistus;
   export let reload;
@@ -69,6 +71,21 @@
   {#if signingSucceeded}
     <!-- TODO: Fix language and status id to come from correct source -->
     <p>{statusText({ status: 7, language: 'fi' })}</p>
+
+    <div class="flex flex-col items-start mt-2">
+      {#if Kielisyys.fi(energiatodistus)}
+        <Link
+          href={Signing.pdfUrl('fi')}
+          target={'_blank'}
+          text={`energiatodistus-${energiatodistus.id}-fi.pdf`} />
+      {/if}
+      {#if Kielisyys.sv(energiatodistus)}
+        <Link
+          href={Signing.pdfUrl('sv')}
+          target={'_blank'}
+          text={`energiatodistus-${energiatodistus.id}-sv.pdf`} />
+      {/if}
+    </div>
   {/if}
 
   {#if inProgress}

@@ -15,6 +15,7 @@
   import Link from '@Component/Link/Link.svelte';
   import Error from '@Component/Error/Error.svelte';
   import * as Signing from './signing';
+  import { pdfUrl } from './signing';
 
   export let energiatodistus;
   export let reload;
@@ -137,9 +138,7 @@
     );
   };
 
-  const pdfUrl = language =>
-    etApi.url.pdf(energiatodistus.versio, energiatodistus.id, language);
-</script>
+  </script>
 
 <style type="text/postcss">
   p {
@@ -184,13 +183,13 @@
       <div class="flex flex-col items-start mt-2">
         {#if Kielisyys.fi(energiatodistus)}
           <Link
-            href={pdfUrl('fi')}
+            href={Signing.pdfUrl('fi')}
             target={'_blank'}
             text={`energiatodistus-${energiatodistus.id}-fi.pdf`} />
         {/if}
         {#if Kielisyys.sv(energiatodistus)}
           <Link
-            href={pdfUrl('sv')}
+            href={Signing.pdfUrl('sv')}
             target={'_blank'}
             text={`energiatodistus-${energiatodistus.id}-sv.pdf`} />
         {/if}

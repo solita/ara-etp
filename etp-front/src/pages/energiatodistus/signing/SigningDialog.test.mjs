@@ -2,18 +2,13 @@
  * @jest-environment jsdom
  */
 
-import {
-  afterEach,
-  beforeAll,
-  beforeEach,
-  expect,
-  jest,
-  test
-} from '@jest/globals';
+import { afterEach, beforeAll, beforeEach, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import fetchMock from 'jest-fetch-mock';
 
 import * as R from 'ramda';
+import * as Maybe from '@Utility/maybe-utils';
+
 import SigningDialog from './SigningDialog.svelte';
 import { energiatodistus2018 } from '@Pages/energiatodistus/empty';
 import { setupI18n } from '@Language/i18n';
@@ -250,13 +245,16 @@ test('When system sign succeeds, success message and link to the pdf is shown', 
     '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
     async req => {
       return {
-        status: 200
+        status: 200,
+        body: JSON.stringify('energiatodistukset/energiatodistus-1-fi.pdf')
       };
     }
   );
 
+  const todistus = R.compose(R.assoc('id', 1), R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0)))(energiatodistus2018());
+
   render(SigningDialog, {
-    energiatodistus: R.assoc('id', 1, energiatodistus2018()),
+    energiatodistus: todistus,
     reload: R.identity,
     selection: 'system'
   });
@@ -278,5 +276,7 @@ test('When system sign succeeds, success message and link to the pdf is shown', 
   // Spinner has disappeared when request finished
   expect(spinner).not.toBeInTheDocument();
 
-  // TODO: Check that link exists
+  // Download link for signed pdf exists
+  const todistusLink = screen.getByText('energiatodistus-1-fi.pdf');
+  expect(todistusLink).toBeInTheDocument();
 });
