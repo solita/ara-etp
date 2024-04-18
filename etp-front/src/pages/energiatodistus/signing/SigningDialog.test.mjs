@@ -31,46 +31,7 @@ afterEach(() => {
   fetchMock.disableMocks();
 });
 
-test('SigningDialog displays error message when default selection is card and there is no connection Mpollux', async () => {
-  fetchMock.mockIf('https://localhost:53952/version', async req => {
-    return {
-      status: 500
-    };
-  });
-
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
-    reload: closeDialogFn,
-    selection: 'card'
-  });
-
-  // Mpollux state was checked
-  expect(fetchMock.mock.calls).toHaveLength(1);
-
-  const heading = screen.queryByText(/Allekirjoittaminen/u);
-
-  expect(heading).toBeInTheDocument();
-  expect(heading.tagName).toBe('H1');
-
-  const errorText = await screen.findByText(
-    /Yhteyden avaus mPolluxiin epäonnistui./u
-  );
-  expect(errorText).toBeInTheDocument();
-
-  const signButton = screen.queryByText('Allekirjoita');
-  expect(signButton).not.toBeInTheDocument();
-
-  // Test that sulje buttton exists and clicking it calls the reload function
-  // passed to the component
-  const cancelButton = screen.getByText('Sulje');
-  expect(cancelButton).toBeInTheDocument();
-  await fireEvent.click(cancelButton);
-  expect(closeDialogFn.mock.calls).toHaveLength(1);
-});
-
-test('SigningDialog renders correctly when default selection is card and there is connection to Mpollux', async () => {
+const mockMpolluxConnectionExists = () => {
   fetchMock.mockIf('https://localhost:53952/version', async req => {
     return {
       status: 200,
@@ -84,28 +45,19 @@ test('SigningDialog renders correctly when default selection is card and there i
       })
     };
   });
+};
 
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
-    reload: closeDialogFn,
-    selection: 'card'
+const mockMpolluxConnectionDoesNotExist = () => {
+  fetchMock.mockIf('https://localhost:53952/version', async req => {
+    return {
+      status: 500
+    };
   });
+};
 
-  // Mpollux state was checked
-  expect(fetchMock.mock.calls).toHaveLength(1);
-
-  const heading = screen.queryByText(/Allekirjoittaminen/u);
-  expect(heading).toBeInTheDocument();
-  expect(heading.tagName).toBe('H1');
-
-  const statusText = await screen.findByText(
-    /Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu./u
-  );
-  expect(statusText).toBeInTheDocument();
-
+const assertButtons = async closeDialogFn => {
   // TODO: Check that this is a button
+  // Test that signing button exists
   const signButton = screen.getByText('Allekirjoita');
   expect(signButton).toBeInTheDocument();
   expect(signButton).toBeEnabled();
@@ -116,31 +68,9 @@ test('SigningDialog renders correctly when default selection is card and there i
   expect(cancelButton).toBeInTheDocument();
   await fireEvent.click(cancelButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
-});
+};
 
-test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
-  fetchMock.mockIf('https://localhost:53952/version', async req => {
-    return {
-      status: 200,
-      body: JSON.stringify({
-        version: 'dummy',
-        httpMethods: 'GET, POST',
-        contentTypes: 'data, digest',
-        signatureTypes: 'signature',
-        selectorAvailable: true,
-        hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
-      })
-    };
-  });
-
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
-    reload: closeDialogFn,
-    selection: 'system'
-  });
-
+const assertSystemSigninDialogContents = async closeDialogFn => {
   // Mpollux state was not checked as card signing is not selected
   expect(fetchMock.mock.calls).toHaveLength(0);
 
@@ -153,46 +83,10 @@ test('SigningDialog renders correctly when default selection is system and there
   );
   expect(systemSigningContent).toBeInTheDocument();
 
-  // Test that signing button exists
-  const signButton = screen.queryByText('Allekirjoita');
-  expect(signButton).toBeInTheDocument();
-  expect(signButton).toBeEnabled();
+  await assertButtons(closeDialogFn);
+};
 
-  // Test that cancel buttton exists and clicking it calls the reload function
-  // passed to the component
-  const cancelButton = screen.getByText('Sulje');
-  expect(cancelButton).toBeInTheDocument();
-  await fireEvent.click(cancelButton);
-  expect(closeDialogFn.mock.calls).toHaveLength(1);
-});
-
-test('Signing method can be selected in SigningDialog', async () => {
-  fetchMock.mockIf('https://localhost:53952/version', async req => {
-    return {
-      status: 200,
-      body: JSON.stringify({
-        version: 'dummy',
-        httpMethods: 'GET, POST',
-        contentTypes: 'data, digest',
-        signatureTypes: 'signature',
-        selectorAvailable: true,
-        hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
-      })
-    };
-  });
-
-  // Render the dialog with card as the default selection
-  render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
-    reload: R.identity,
-    selection: 'card'
-  });
-
-  // Mpollux state was checked
-  expect(fetchMock.mock.calls).toHaveLength(1);
-
-  // Initial state of the view is as expected for card signing method
-  // TODO: Tarvitaanko tätä ollenkaan tai pitäisikö tehdä uudelleenkäytettävä tarkastus?
+const assertCardSigningDialogContents = async closeDialogFn => {
   const heading = screen.queryByText(/Allekirjoittaminen/u);
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
@@ -202,13 +96,100 @@ test('Signing method can be selected in SigningDialog', async () => {
   );
   expect(statusText).toBeInTheDocument();
 
+  await assertButtons(closeDialogFn);
+};
+
+test('SigningDialog displays error message when default selection is card and there is no connection Mpollux', async () => {
+  mockMpolluxConnectionDoesNotExist();
+
+  const closeDialogFn = jest.fn();
+
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: closeDialogFn,
+    selection: 'card'
+  });
+
+  // Mpollux state was checked
+  expect(fetchMock.mock.calls).toHaveLength(1);
+
+  const heading = screen.queryByText(/Allekirjoittaminen/u);
+  expect(heading).toBeInTheDocument();
+  expect(heading.tagName).toBe('H1');
+
+  const errorText = await screen.findByText(
+    /Yhteyden avaus mPolluxiin epäonnistui./u
+  );
+  expect(errorText).toBeInTheDocument();
+
+  // Signing button should not exist when Mpollux connection failed
+  const signButton = screen.queryByText('Allekirjoita');
+  expect(signButton).not.toBeInTheDocument();
+
+  // Test that sulje buttton exists and clicking it calls the reload function
+  // passed to the component
+  const cancelButton = screen.getByText('Sulje');
+  expect(cancelButton).toBeInTheDocument();
+  await fireEvent.click(cancelButton);
+  expect(closeDialogFn.mock.calls).toHaveLength(1);
+});
+
+test('SigningDialog renders correctly when default selection is card and there is connection to Mpollux', async () => {
+  mockMpolluxConnectionExists();
+  const closeDialogFn = jest.fn();
+
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: closeDialogFn,
+    selection: 'card'
+  });
+
+  // Mpollux state was checked
+  expect(fetchMock.mock.calls).toHaveLength(1);
+
+  await assertCardSigningDialogContents(closeDialogFn);
+});
+
+test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
+  mockMpolluxConnectionExists();
+
+  const closeDialogFn = jest.fn();
+
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: closeDialogFn,
+    selection: 'system'
+  });
+
+  await assertSystemSigninDialogContents(closeDialogFn);
+});
+
+test('Signing method can be selected in SigningDialog', async () => {
+  mockMpolluxConnectionExists();
+
+  const closeDialogFn = jest.fn();
+
+  // Render the dialog with card as the default selection
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: closeDialogFn,
+    selection: 'card'
+  });
+
+  // Mpollux state was checked
+  expect(fetchMock.mock.calls).toHaveLength(1);
+
+  // Initial state of the view is as expected for card signing method
+  await assertCardSigningDialogContents(closeDialogFn);
+
+  // Reset mock calls so that they don't affect checks after switching the signing method
+  fetchMock.resetMocks();
+  closeDialogFn.mockReset();
+
   // Select system signing
   const selection = screen.getByText('Älä käytä korttia');
   expect(selection).toBeInTheDocument();
   await fireEvent.click(selection);
 
-  const systemSigningContent = await screen.findByText(
-    /Allekirjoitamme ilman korttia kiitos/u
-  );
-  expect(systemSigningContent).toBeInTheDocument();
+  await assertSystemSigninDialogContents(closeDialogFn);
 });
