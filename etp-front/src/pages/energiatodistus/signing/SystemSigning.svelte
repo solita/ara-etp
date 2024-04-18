@@ -7,6 +7,7 @@
   import * as R from 'ramda';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
   import Error from '@Component/Error/Error.svelte';
+  import * as Signing from './signing';
 
   export let energiatodistus;
   export let reload;
@@ -17,6 +18,8 @@
   let inProgress = false;
 
   let signingSucceeded = false;
+
+  const statusText = Signing.statusText(i18n);
 
   const signingProcess = () => {
     Future.fork(
@@ -32,6 +35,7 @@
       },
       response => {
         signingSucceeded = true;
+        inProgress = false;
       },
       etApi.signPdfUsingSystemSignature(
         fetch,
@@ -62,7 +66,10 @@
     <Error {text} />
   {/each}
 
-  <!--  <p>{statusText(currentState)}</p>-->
+  {#if signingSucceeded}
+    <!-- TODO: Fix language and status id to come from correct source -->
+    <p>{statusText({ status: 7, language: 'fi' })}</p>
+  {/if}
 
   {#if inProgress}
     <div class="mt-2">

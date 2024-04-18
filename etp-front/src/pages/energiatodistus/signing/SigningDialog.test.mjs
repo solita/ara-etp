@@ -235,13 +235,48 @@ test('When system sign fails, error is shown', async () => {
 
   expect(spinner).toBeInTheDocument();
 
-  //   Tarkasta virheen näkyminen
   const errorText = await screen.findByText(
     /Allekirjoittaminen keskeytyi tuntemattomasta syystä./u
   );
-
   expect(errorText).toBeInTheDocument();
 
   // Spinner has disappeared when request finished
   expect(spinner).not.toBeInTheDocument();
+});
+
+test('When system sign succeeds, success message and link to the pdf is shown', async () => {
+  // Mock the signing api call to return an error
+  fetchMock.mockIf(
+    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
+    async req => {
+      return {
+        status: 200
+      };
+    }
+  );
+
+  render(SigningDialog, {
+    energiatodistus: R.assoc('id', 1, energiatodistus2018()),
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.getByText('Allekirjoita');
+
+  await fireEvent.click(signButton);
+
+  const spinner = screen.getByTestId('spinner');
+
+  expect(spinner).toBeInTheDocument();
+
+  const statusText = await screen.findByText(
+    /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
+  );
+
+  expect(statusText).toBeInTheDocument();
+
+  // Spinner has disappeared when request finished
+  expect(spinner).not.toBeInTheDocument();
+
+  // TODO: Check that link exists
 });
