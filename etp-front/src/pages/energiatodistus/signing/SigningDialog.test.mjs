@@ -193,3 +193,19 @@ test('Signing method can be selected in SigningDialog', async () => {
 
   await assertSystemSigninDialogContents(closeDialogFn);
 });
+
+test('Pressing sign button with system as signing method shows loading indicator', async () => {
+  render(SigningDialog, {
+    energiatodistus: energiatodistus2018(),
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.queryByText('Allekirjoita');
+
+  await fireEvent.click(signButton);
+
+  const spinner = screen.getByTestId('spinner');
+
+  expect(spinner).toBeInTheDocument();
+});
