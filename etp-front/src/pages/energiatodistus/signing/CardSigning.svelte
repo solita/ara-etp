@@ -14,6 +14,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Link from '@Component/Link/Link.svelte';
   import Error from '@Component/Error/Error.svelte';
+  import * as Signing from './signing';
 
   export let energiatodistus;
   export let reload;
@@ -36,25 +37,11 @@
     signatureApi.versionInfo(fetch)
   );
 
-  const statuses = [
-    'not_started',
-    'already_started',
-    'start',
-    'digest',
-    'signature',
-    'pdf',
-    'finish',
-    'signed',
-    'aborted'
-  ];
-
-  const status = R.compose(R.map(parseInt), R.invertObj)(statuses);
+  const status = R.compose(R.map(parseInt), R.invertObj)(Signing.statuses);
 
   /* system tasks wait response from backend - users tasks wait input from user */
   const systemTasks = [status.start, status.digest, status.pdf, status.finish];
   const closeTasks = [status.not_started, status.signed, status.aborted];
-
-  const statusKey = id => statuses[id];
 
   let currentState = {};
   const setState = (status, language) => _ => {
@@ -86,28 +73,7 @@
     )
   )();
 
-  const capitalize = R.compose(
-    R.join(''),
-    R.juxt([R.compose(R.toUpper, R.head), R.tail])
-  );
-
-  const statusText = state => {
-    const languageAdjectiveName = i18n(
-      'energiatodistus.signing.language-adjective.' + state.language
-    );
-    const languageAdjectiveGenetiveName = i18n(
-      'energiatodistus.signing.language-genitive.' + state.language
-    );
-
-    return R.compose(
-      capitalize,
-      R.replace('{language}', languageAdjectiveName),
-      R.replace('{language-genitive}', languageAdjectiveGenetiveName),
-      key => i18n('energiatodistus.signing.status.' + key),
-      R.replace('_', '-'),
-      statusKey
-    )(state.status);
-  };
+  const statusText = Signing.statusText(i18n);
 
   const run = R.compose(R.map, R.tap);
 

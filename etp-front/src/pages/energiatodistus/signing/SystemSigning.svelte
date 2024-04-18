@@ -16,6 +16,8 @@
   let error = Maybe.None();
   let inProgress = false;
 
+  let signingSucceeded = false;
+
   const signingProcess = () => {
     Future.fork(
       response => {
@@ -26,9 +28,10 @@
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
         inProgress = false;
+        signingSucceeded = false;
       },
       response => {
-        console.log('jee');
+        signingSucceeded = true;
       },
       etApi.signPdfUsingSystemSignature(
         fetch,
@@ -58,6 +61,8 @@
   {#each error.toArray() as text}
     <Error {text} />
   {/each}
+
+  <!--  <p>{statusText(currentState)}</p>-->
 
   {#if inProgress}
     <div class="mt-2">
