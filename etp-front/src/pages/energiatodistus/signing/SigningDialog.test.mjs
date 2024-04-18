@@ -2,7 +2,14 @@
  * @jest-environment jsdom
  */
 
-import { afterEach, beforeAll, beforeEach, expect, jest, test } from '@jest/globals';
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  expect,
+  jest,
+  test
+} from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import fetchMock from 'jest-fetch-mock';
 
@@ -251,7 +258,10 @@ test('When system sign succeeds, success message and link to the pdf is shown', 
     }
   );
 
-  const todistus = R.compose(R.assoc('id', 1), R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0)))(energiatodistus2018());
+  const todistus = R.compose(
+    R.assoc('id', 1),
+    R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
+  )(energiatodistus2018());
 
   render(SigningDialog, {
     energiatodistus: todistus,

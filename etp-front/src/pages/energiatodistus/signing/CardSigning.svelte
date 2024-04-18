@@ -137,8 +137,7 @@
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
     );
   };
-
-  </script>
+</script>
 
 <style type="text/postcss">
   p {
