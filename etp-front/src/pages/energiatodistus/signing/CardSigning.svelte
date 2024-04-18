@@ -13,6 +13,7 @@
   import Button from '@Component/Button/Button.svelte';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Link from '@Component/Link/Link.svelte';
+  import Error from '@Component/Error/Error.svelte';
 
   export let energiatodistus;
   export let reload;
@@ -182,10 +183,6 @@
   .buttons {
     @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
   }
-
-  .error {
-    @apply flex py-2 px-2 bg-error text-light;
-  }
 </style>
 
 <div>
@@ -206,11 +203,8 @@
       </p>
     {/if}
 
-    {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
-        <div>{txt}</div>
-      </div>
+    {#each error.toArray() as text}
+      <Error {text} />
     {/each}
 
     <p>{statusText(currentState)}</p>

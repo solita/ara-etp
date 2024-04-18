@@ -6,6 +6,7 @@
   import * as Future from '@Utility/future-utils';
   import * as R from 'ramda';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
+  import Error from '@Component/Error/Error.svelte';
 
   export let energiatodistus;
   export let reload;
@@ -53,11 +54,8 @@
 <div>
   <div>Allekirjoitamme ilman korttia kiitos</div>
 
-  {#each error.toArray() as txt}
-    <div class="my-2 error">
-      <span class="font-icon mr-2">error_outline</span>
-      <div>{txt}</div>
-    </div>
+  {#each error.toArray() as text}
+    <Error {text} />
   {/each}
 
   {#if inProgress}
