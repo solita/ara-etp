@@ -43,7 +43,7 @@
         fetch,
         energiatodistus.versio,
         energiatodistus.id,
-        'fi'
+        Kielisyys.fi(energiatodistus) ? 'fi' : 'sv'
       )
     );
   };
@@ -69,8 +69,13 @@
   {/each}
 
   {#if signingSucceeded}
-    <!-- TODO: Fix language and status id to come from correct source -->
-    <p>{statusText({ status: 7, language: 'fi' })}</p>
+    <!-- TODO: status id to come from correct source -->
+    <p>
+      {statusText({
+        status: 7,
+        language: Kielisyys.fi(energiatodistus) ? 'fi' : 'sv'
+      })}
+    </p>
 
     <div class="flex flex-col items-start mt-2">
       {#if Kielisyys.fi(energiatodistus)}

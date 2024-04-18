@@ -101,13 +101,18 @@ const assertCardSigningDialogContents = async closeDialogFn => {
   await assertButtons(closeDialogFn);
 };
 
+const finnishTodistus = R.compose(
+  R.assoc('id', 1),
+  R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
+)(energiatodistus2018());
+
 test('SigningDialog displays error message when default selection is card and there is no connection Mpollux', async () => {
   mockMpolluxConnectionDoesNotExist();
 
   const closeDialogFn = jest.fn();
 
   render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
+    energiatodistus: finnishTodistus,
     reload: closeDialogFn,
     selection: 'card'
   });
@@ -141,7 +146,7 @@ test('SigningDialog renders correctly when default selection is card and there i
   const closeDialogFn = jest.fn();
 
   render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
+    energiatodistus: finnishTodistus,
     reload: closeDialogFn,
     selection: 'card'
   });
@@ -158,7 +163,7 @@ test('SigningDialog renders correctly when default selection is system and there
   const closeDialogFn = jest.fn();
 
   render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
+    energiatodistus: finnishTodistus,
     reload: closeDialogFn,
     selection: 'system'
   });
@@ -173,7 +178,7 @@ test('Signing method can be selected in SigningDialog', async () => {
 
   // Render the dialog with card as the default selection
   render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
+    energiatodistus: finnishTodistus,
     reload: closeDialogFn,
     selection: 'card'
   });
@@ -198,7 +203,7 @@ test('Signing method can be selected in SigningDialog', async () => {
 
 test('Pressing sign button with system as signing method shows loading indicator', async () => {
   render(SigningDialog, {
-    energiatodistus: energiatodistus2018(),
+    energiatodistus: finnishTodistus,
     reload: R.identity,
     selection: 'system'
   });
@@ -224,7 +229,7 @@ test('When system sign fails, error is shown', async () => {
   );
 
   render(SigningDialog, {
-    energiatodistus: R.assoc('id', 1, energiatodistus2018()),
+    energiatodistus: finnishTodistus,
     reload: R.identity,
     selection: 'system'
   });
@@ -246,7 +251,7 @@ test('When system sign fails, error is shown', async () => {
   expect(spinner).not.toBeInTheDocument();
 });
 
-test('When system sign succeeds, success message and link to the pdf is shown', async () => {
+test('When system sign of energiatodistus in Finnish succeeds, success message and link to the pdf is shown', async () => {
   // Mock the signing api call to return an error
   fetchMock.mockIf(
     '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
@@ -258,13 +263,8 @@ test('When system sign succeeds, success message and link to the pdf is shown', 
     }
   );
 
-  const todistus = R.compose(
-    R.assoc('id', 1),
-    R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
-  )(energiatodistus2018());
-
   render(SigningDialog, {
-    energiatodistus: todistus,
+    energiatodistus: finnishTodistus,
     reload: R.identity,
     selection: 'system'
   });
@@ -288,5 +288,50 @@ test('When system sign succeeds, success message and link to the pdf is shown', 
 
   // Download link for signed pdf exists
   const todistusLink = screen.getByText('energiatodistus-1-fi.pdf');
+  expect(todistusLink).toBeInTheDocument();
+});
+
+test('When system sign of energiatodistus in Swedish succeeds, success message and link to the pdf is shown', async () => {
+  // Mock the signing api call to return an error
+  fetchMock.mockIf(
+    '/api/private/energiatodistukset/2018/1/signature/system/pdf/sv',
+    async req => {
+      return {
+        status: 200,
+        body: JSON.stringify('energiatodistukset/energiatodistus-1-sv.pdf')
+      };
+    }
+  );
+
+  const todistus = R.compose(
+    R.assoc('id', 1),
+    R.assocPath(['perustiedot', 'kieli'], Maybe.Some(1))
+  )(energiatodistus2018());
+
+  render(SigningDialog, {
+    energiatodistus: todistus,
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.getByText('Allekirjoita');
+
+  await fireEvent.click(signButton);
+
+  const spinner = screen.getByTestId('spinner');
+
+  expect(spinner).toBeInTheDocument();
+
+  const statusText = await screen.findByText(
+    /Ruotsinkielinen energiatodistus on allekirjoitettu onnistuneesti./u
+  );
+
+  expect(statusText).toBeInTheDocument();
+
+  // Spinner has disappeared when request finished
+  expect(spinner).not.toBeInTheDocument();
+
+  // Download link for signed pdf exists
+  const todistusLink = screen.getByText('energiatodistus-1-sv.pdf');
   expect(todistusLink).toBeInTheDocument();
 });
