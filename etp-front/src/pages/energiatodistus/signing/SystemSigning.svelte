@@ -25,6 +25,7 @@
         error = R.equals(message, errorKey)
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
+        inProgress = false;
       },
       response => {
         console.log('jee');

@@ -241,4 +241,7 @@ test('When system sign fails, error is shown', async () => {
   );
 
   expect(errorText).toBeInTheDocument();
+
+  // Spinner has disappeared when request finished
+  expect(spinner).not.toBeInTheDocument();
 });
