@@ -201,11 +201,44 @@ test('Pressing sign button with system as signing method shows loading indicator
     selection: 'system'
   });
 
-  const signButton = screen.queryByText('Allekirjoita');
+  const signButton = screen.getByText('Allekirjoita');
 
   await fireEvent.click(signButton);
 
   const spinner = screen.getByTestId('spinner');
 
   expect(spinner).toBeInTheDocument();
+});
+
+test('When system sign fails, error is shown', async () => {
+  // Mock the signing api call to return an error
+  fetchMock.mockIf(
+    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
+    async req => {
+      return {
+        status: 500
+      };
+    }
+  );
+
+  render(SigningDialog, {
+    energiatodistus: R.assoc('id', 1, energiatodistus2018()),
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.getByText('Allekirjoita');
+
+  await fireEvent.click(signButton);
+
+  const spinner = screen.getByTestId('spinner');
+
+  expect(spinner).toBeInTheDocument();
+
+  //   Tarkasta virheen näkyminen
+  const errorText = await screen.findByText(
+    /Allekirjoittaminen keskeytyi tuntemattomasta syystä./u
+  );
+
+  expect(errorText).toBeInTheDocument();
 });

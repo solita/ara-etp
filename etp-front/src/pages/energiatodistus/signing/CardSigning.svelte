@@ -270,7 +270,7 @@
     {#if R.includes(currentState.status, closeTasks)}
       <div class="mt-5">
         <Button
-          prefix="signing-cancel"
+          prefix="signing-close"
           text={i18n('energiatodistus.signing.button.close')}
           style={'secondary'}
           on:click={reload} />
