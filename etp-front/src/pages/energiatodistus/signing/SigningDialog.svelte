@@ -34,7 +34,8 @@
   }
 </style>
 
-<dialog on:click|stopPropagation>
+<!--TODO Älä commitoi vielä tuota stopPropagationin poisto-->
+<dialog>
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 

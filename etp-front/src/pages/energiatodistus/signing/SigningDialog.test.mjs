@@ -153,7 +153,12 @@ test('SigningDialog renders correctly when default selection is system and there
   );
   expect(systemSigningContent).toBeInTheDocument();
 
-  // Test that sulje buttton exists and clicking it calls the reload function
+  // Test that signing button exists
+  const signButton = screen.queryByText('Allekirjoita');
+  expect(signButton).toBeInTheDocument();
+  expect(signButton).toBeEnabled();
+
+  // Test that cancel buttton exists and clicking it calls the reload function
   // passed to the component
   const cancelButton = screen.getByText('Sulje');
   expect(cancelButton).toBeInTheDocument();
