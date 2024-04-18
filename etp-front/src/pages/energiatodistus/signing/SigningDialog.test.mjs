@@ -133,9 +133,11 @@ test('SigningDialog renders correctly when default selection is system and there
     };
   });
 
+  const closeDialogFn = jest.fn();
+
   render(SigningDialog, {
     energiatodistus: energiatodistus2018(),
-    reload: R.identity,
+    reload: closeDialogFn,
     selection: 'system'
   });
 
@@ -150,6 +152,13 @@ test('SigningDialog renders correctly when default selection is system and there
     /Allekirjoitamme ilman korttia kiitos/u
   );
   expect(systemSigningContent).toBeInTheDocument();
+
+  // Test that sulje buttton exists and clicking it calls the reload function
+  // passed to the component
+  const cancelButton = screen.getByText('Sulje');
+  expect(cancelButton).toBeInTheDocument();
+  await fireEvent.click(cancelButton);
+  expect(closeDialogFn.mock.calls).toHaveLength(1);
 });
 
 test('Signing method can be selected in SigningDialog', async () => {

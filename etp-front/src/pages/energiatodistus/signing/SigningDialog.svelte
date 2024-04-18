@@ -65,7 +65,7 @@
       {#if isSigningMethodCard(selection)}
         <CardSigning {energiatodistus} {reload} />
       {:else}
-        <SystemSigning />
+        <SystemSigning {reload} />
       {/if}
     </div>
   </div>
