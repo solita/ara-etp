@@ -58,11 +58,11 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    <div class="mt-2">
-      <SigningInstructions />
-    </div>
-
     {#if allowSelection}
+      <div class="mt-2">
+        <SigningInstructions />
+      </div>
+
       <div class="mt-2">
         <div class="selection">
           <div class="mr-3">
