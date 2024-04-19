@@ -57,6 +57,30 @@ const mockMpolluxConnectionDoesNotExist = () => {
   });
 };
 
+const mockSystemSignApiCallSuccess = () => {
+  fetchMock.mockIf(
+    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
+    async req => {
+      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
+      return {
+        status: 200,
+        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
+      };
+    }
+  );
+};
+
+const mockSystemSignApiCallFailure = () => {
+  fetchMock.mockIf(
+    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
+    async req => {
+      return {
+        status: 500
+      };
+    }
+  );
+};
+
 const assertButtons = async closeDialogFn => {
   // TODO: Check that this is a button
   // Test that signing button exists
@@ -219,14 +243,7 @@ test('Pressing sign button with system as signing method shows loading indicator
 
 test('When system sign fails, error is shown', async () => {
   // Mock the signing api call to return an error
-  fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
-    async req => {
-      return {
-        status: 500
-      };
-    }
-  );
+  mockSystemSignApiCallFailure();
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
@@ -252,15 +269,7 @@ test('When system sign fails, error is shown', async () => {
 });
 
 test('When system sign of energiatodistus in Finnish succeeds, success message and link to the pdf is shown', async () => {
-  fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
-    async req => {
-      return {
-        status: 200,
-        body: JSON.stringify('energiatodistukset/energiatodistus-1-fi.pdf')
-      };
-    }
-  );
+  mockSystemSignApiCallSuccess();
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
@@ -294,16 +303,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 });
 
 test('When system sign of energiatodistus in Swedish succeeds, success message and link to the pdf is shown', async () => {
-  // Mock the signing api call to return an error
-  fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system/pdf/sv',
-    async req => {
-      return {
-        status: 200,
-        body: JSON.stringify('energiatodistukset/energiatodistus-1-sv.pdf')
-      };
-    }
-  );
+  mockSystemSignApiCallSuccess();
 
   const todistus = R.compose(
     R.assoc('id', 1),
@@ -341,17 +341,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
 });
 
 test('When system signing of bilingual energiatodistus succeeds, success message and links to both pdfs are shown', async () => {
-  // Mock both fi and sv signing calls
-  fetchMock.mockIf(
-    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
-    async req => {
-      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
-      return {
-        status: 200,
-        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
-      };
-    }
-  );
+  mockSystemSignApiCallSuccess();
 
   const todistus = R.compose(
     R.assoc('id', 1),
@@ -398,16 +388,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
 });
 
 test('Signing button is not visible after signing using system signing', async () => {
-  fetchMock.mockIf(
-    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
-    async req => {
-      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
-      return {
-        status: 200,
-        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
-      };
-    }
-  );
+  mockSystemSignApiCallSuccess();
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
