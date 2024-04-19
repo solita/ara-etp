@@ -77,7 +77,7 @@
 </style>
 
 <div>
-  <div>Allekirjoitamme ilman korttia kiitos</div>
+  <div>{i18n('energiatodistus.signing.system-signing-info-text')}</div>
 
   {#each error.toArray() as text}
     <Error {text} />

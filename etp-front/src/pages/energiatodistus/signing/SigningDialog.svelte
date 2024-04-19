@@ -67,14 +67,14 @@
         <div class="selection">
           <div class="mr-3">
             <Radio
-              label="Käytä korttia"
+              label={i18n('energiatodistus.signing.options.card')}
               bind:group={selection}
               value="card"
               name="Card" />
           </div>
           <div class="mr-3">
             <Radio
-              label="Älä käytä korttia"
+              label={i18n('energiatodistus.signing.options.system')}
               bind:group={selection}
               value="system"
               name="System" />

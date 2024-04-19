@@ -105,7 +105,7 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
   expect(heading.tagName).toBe('H1');
 
   const systemSigningContent = await screen.findByText(
-    /Allekirjoitamme ilman korttia kiitos/u
+    /Allekirjoita ilman henkilökorttia/u
   );
   expect(systemSigningContent).toBeInTheDocument();
 
@@ -218,7 +218,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
   closeDialogFn.mockReset();
 
   // Select system signing
-  const selection = screen.getByText('Älä käytä korttia');
+  const selection = screen.getByText('Älä käytä henkilökorttia');
   expect(selection).toBeInTheDocument();
   await fireEvent.click(selection);
 
