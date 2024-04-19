@@ -5,6 +5,9 @@
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
   import SigningInstructions from './SigningInstructions.svelte';
+  import * as Future from '@Utility/future-utils';
+  import * as versionApi from '@Component/Version/version-api';
+  import { isProduction } from '@Utility/config_utils';
 
   export let energiatodistus;
   export let reload;
@@ -14,6 +17,23 @@
   const i18n = $_;
 
   const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
+
+  export let allowSelection = false;
+  export let checkIfSelectionIsAllowed = false;
+
+  if (checkIfSelectionIsAllowed) {
+    Future.fork(
+      _ => {
+        allowSelection = false;
+      },
+      config => {
+        if (!isProduction(config.environment)) {
+          allowSelection = true;
+        }
+      },
+      versionApi.getConfig
+    );
+  }
 </script>
 
 <style type="text/postcss">
@@ -42,24 +62,26 @@
       <SigningInstructions />
     </div>
 
-    <div class="mt-2">
-      <div class="selection">
-        <div class="mr-3">
-          <Radio
-            label="Käytä korttia"
-            bind:group={selection}
-            value="card"
-            name="Card" />
-        </div>
-        <div class="mr-3">
-          <Radio
-            label="Älä käytä korttia"
-            bind:group={selection}
-            value="system"
-            name="System" />
+    {#if allowSelection}
+      <div class="mt-2">
+        <div class="selection">
+          <div class="mr-3">
+            <Radio
+              label="Käytä korttia"
+              bind:group={selection}
+              value="card"
+              name="Card" />
+          </div>
+          <div class="mr-3">
+            <Radio
+              label="Älä käytä korttia"
+              bind:group={selection}
+              value="system"
+              name="System" />
+          </div>
         </div>
       </div>
-    </div>
+    {/if}
 
     <div class="mt-4">
       {#if isSigningMethodCard(selection)}

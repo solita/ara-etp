@@ -195,16 +195,16 @@ test('SigningDialog renders correctly when default selection is system and there
   await assertSystemSigninDialogContents(closeDialogFn);
 });
 
-test('Signing method can be selected in SigningDialog', async () => {
+test('Signing method can be selected in SigningDialog when allowSelection is true', async () => {
   mockMpolluxConnectionExists();
-
   const closeDialogFn = jest.fn();
 
   // Render the dialog with card as the default selection
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
     reload: closeDialogFn,
-    selection: 'card'
+    selection: 'card',
+    allowSelection: true
   });
 
   // Mpollux state was checked
@@ -223,6 +223,22 @@ test('Signing method can be selected in SigningDialog', async () => {
   await fireEvent.click(selection);
 
   await assertSystemSigninDialogContents(closeDialogFn);
+});
+
+test('Signing method can not be selected when allowSelection is false', async () => {
+  const closeDialogFn = jest.fn();
+
+  // Render the dialog with card as the default selection
+  render(SigningDialog, {
+    energiatodistus: finnishTodistus,
+    reload: closeDialogFn,
+    selection: 'card',
+    allowSelection: false
+  });
+
+  // Options should not be available
+  const selection = screen.queryByText('Älä käytä korttia');
+  expect(selection).not.toBeInTheDocument();
 });
 
 test('Pressing sign button with system as signing method shows loading indicator', async () => {
