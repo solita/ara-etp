@@ -339,3 +339,60 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
     '/api/private/energiatodistukset/2018/1/pdf/sv/energiatodistus-1-sv.pdf'
   );
 });
+
+test('When system signing of bilingual energiatodistus succeeds, success message and links to both pdfs are shown', async () => {
+  // Mock both fi and sv signing calls
+  fetchMock.mockIf(
+    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
+    async req => {
+      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
+      return {
+        status: 200,
+        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
+      };
+    }
+  );
+
+  const todistus = R.compose(
+    R.assoc('id', 1),
+    R.assocPath(['perustiedot', 'kieli'], Maybe.Some(2))
+  )(energiatodistus2018());
+
+  render(SigningDialog, {
+    energiatodistus: todistus,
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.getByText('Allekirjoita');
+
+  await fireEvent.click(signButton);
+
+  const spinner = screen.getByTestId('spinner');
+
+  expect(spinner).toBeInTheDocument();
+
+  const statusText = await screen.findByText(
+    /Kaksikielinen energiatodistus on allekirjoitettu onnistuneesti./u
+  );
+  expect(statusText).toBeInTheDocument();
+
+  expect(fetchMock.mock.calls.length).toBe(2);
+
+  // Spinner has disappeared when request finished
+  expect(spinner).not.toBeInTheDocument();
+
+  // Download link for signed Finnish pdf exists
+  const todistusLinkFi = screen.getByTestId('energiatodistus-1-fi.pdf');
+  expect(todistusLinkFi).toBeInTheDocument();
+  expect(todistusLinkFi.getAttribute('href')).toBe(
+    '/api/private/energiatodistukset/2018/1/pdf/fi/energiatodistus-1-fi.pdf'
+  );
+
+  // Download link for signed Swedish pdf exists
+  const todistusLinkSv = screen.getByTestId('energiatodistus-1-sv.pdf');
+  expect(todistusLinkSv).toBeInTheDocument();
+  expect(todistusLinkSv.getAttribute('href')).toBe(
+    '/api/private/energiatodistukset/2018/1/pdf/sv/energiatodistus-1-sv.pdf'
+  );
+});

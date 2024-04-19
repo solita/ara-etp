@@ -23,6 +23,26 @@
 
   const statusText = Signing.statusText(i18n);
 
+  const signPdf = (energiatodistus, language) => {
+    return etApi.signPdfUsingSystemSignature(
+      fetch,
+      energiatodistus.versio,
+      energiatodistus.id,
+      language
+    );
+  };
+
+  const signAllPdfs = energiatodistus => {
+    return Kielisyys.bilingual(energiatodistus)
+      ? Future.and(
+          signPdf(energiatodistus, 'sv'),
+          signPdf(energiatodistus, 'fi')
+        )
+      : Kielisyys.onlySv(energiatodistus)
+        ? signPdf(energiatodistus, 'sv')
+        : signPdf(energiatodistus, 'fi');
+  };
+
   const signingProcess = () => {
     Future.fork(
       response => {
@@ -39,12 +59,7 @@
         signingSucceeded = true;
         inProgress = false;
       },
-      etApi.signPdfUsingSystemSignature(
-        fetch,
-        energiatodistus.versio,
-        energiatodistus.id,
-        Kielisyys.fi(energiatodistus) ? 'fi' : 'sv'
-      )
+      signAllPdfs(energiatodistus)
     );
   };
 
@@ -72,7 +87,7 @@
     <p>
       {statusText({
         status: Signing.status.signed,
-        language: Kielisyys.fi(energiatodistus) ? 'fi' : 'sv'
+        language: Kielisyys.getEnergiatodistusLanguageCode(energiatodistus)
       })}
     </p>
 
