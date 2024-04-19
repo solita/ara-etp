@@ -79,13 +79,13 @@
     <div class="flex flex-col items-start mt-2">
       {#if Kielisyys.fi(energiatodistus)}
         <Link
-          href={Signing.pdfUrl('fi')}
+          href={Signing.pdfUrl(energiatodistus, 'fi')}
           target={'_blank'}
           text={`energiatodistus-${energiatodistus.id}-fi.pdf`} />
       {/if}
       {#if Kielisyys.sv(energiatodistus)}
         <Link
-          href={Signing.pdfUrl('sv')}
+          href={Signing.pdfUrl(energiatodistus, 'sv')}
           target={'_blank'}
           text={`energiatodistus-${energiatodistus.id}-sv.pdf`} />
       {/if}

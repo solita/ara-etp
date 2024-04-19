@@ -252,7 +252,6 @@ test('When system sign fails, error is shown', async () => {
 });
 
 test('When system sign of energiatodistus in Finnish succeeds, success message and link to the pdf is shown', async () => {
-  // Mock the signing api call to return an error
   fetchMock.mockIf(
     '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
     async req => {
@@ -287,8 +286,11 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   expect(spinner).not.toBeInTheDocument();
 
   // Download link for signed pdf exists
-  const todistusLink = screen.getByText('energiatodistus-1-fi.pdf');
+  const todistusLink = screen.getByTestId('energiatodistus-1-fi.pdf');
   expect(todistusLink).toBeInTheDocument();
+  expect(todistusLink.getAttribute('href')).toBe(
+    '/api/private/energiatodistukset/2018/1/pdf/fi/energiatodistus-1-fi.pdf'
+  );
 });
 
 test('When system sign of energiatodistus in Swedish succeeds, success message and link to the pdf is shown', async () => {
@@ -325,13 +327,15 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   const statusText = await screen.findByText(
     /Ruotsinkielinen energiatodistus on allekirjoitettu onnistuneesti./u
   );
-
   expect(statusText).toBeInTheDocument();
 
   // Spinner has disappeared when request finished
   expect(spinner).not.toBeInTheDocument();
 
   // Download link for signed pdf exists
-  const todistusLink = screen.getByText('energiatodistus-1-sv.pdf');
+  const todistusLink = screen.getByTestId('energiatodistus-1-sv.pdf');
   expect(todistusLink).toBeInTheDocument();
+  expect(todistusLink.getAttribute('href')).toBe(
+    '/api/private/energiatodistukset/2018/1/pdf/sv/energiatodistus-1-sv.pdf'
+  );
 });
