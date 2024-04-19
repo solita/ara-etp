@@ -69,10 +69,9 @@
   {/each}
 
   {#if signingSucceeded}
-    <!-- TODO: status id to come from correct source -->
     <p>
       {statusText({
-        status: 7,
+        status: Signing.status.signed,
         language: Kielisyys.fi(energiatodistus) ? 'fi' : 'sv'
       })}
     </p>

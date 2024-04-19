@@ -6,7 +6,7 @@ const capitalize = R.compose(
   R.juxt([R.compose(R.toUpper, R.head), R.tail])
 );
 
-export const statuses = [
+const statuses = [
   'not_started',
   'already_started',
   'start',
@@ -17,6 +17,8 @@ export const statuses = [
   'signed',
   'aborted'
 ];
+
+export const status = R.compose(R.map(parseInt), R.invertObj)(statuses);
 
 const statusKey = id => statuses[id];
 

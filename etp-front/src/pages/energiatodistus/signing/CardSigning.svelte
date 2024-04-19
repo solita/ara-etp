@@ -15,7 +15,6 @@
   import Link from '@Component/Link/Link.svelte';
   import Error from '@Component/Error/Error.svelte';
   import * as Signing from './signing';
-  import { pdfUrl } from './signing';
 
   export let energiatodistus;
   export let reload;
@@ -38,11 +37,18 @@
     signatureApi.versionInfo(fetch)
   );
 
-  const status = R.compose(R.map(parseInt), R.invertObj)(Signing.statuses);
-
   /* system tasks wait response from backend - users tasks wait input from user */
-  const systemTasks = [status.start, status.digest, status.pdf, status.finish];
-  const closeTasks = [status.not_started, status.signed, status.aborted];
+  const systemTasks = [
+    Signing.status.start,
+    Signing.status.digest,
+    Signing.status.pdf,
+    Signing.status.finish
+  ];
+  const closeTasks = [
+    Signing.status.not_started,
+    Signing.status.signed,
+    Signing.status.aborted
+  ];
 
   let currentState = {};
   const setState = (status, language) => _ => {
@@ -58,9 +64,9 @@
     );
 
   const initialStatus = R.fromPairs([
-    [ET.tila.draft, status.not_started],
-    [ET.tila['in-signing'], status.already_started],
-    [ET.tila.signed, status.signed]
+    [ET.tila.draft, Signing.status.not_started],
+    [ET.tila['in-signing'], Signing.status.already_started],
+    [ET.tila.signed, Signing.status.signed]
   ]);
 
   // set initial status based on et tila
@@ -88,11 +94,11 @@
           language
         )
       ),
-      run(setState(status.pdf, language)),
+      run(setState(Signing.status.pdf, language)),
       R.chain(signatureApi.getSignature(fetch)),
-      run(setState(status.signature, language)),
+      run(setState(Signing.status.signature, language)),
       R.chain(etApi.digest(fetch, energiatodistus.versio, energiatodistus.id)),
-      run(setState(status.digest, language)),
+      run(setState(Signing.status.digest, language)),
       Future.resolve
     )(language);
 
@@ -110,14 +116,14 @@
       error = R.equals(message, errorKey)
         ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
         : Maybe.Some(message);
-    }, setStateStatus(status.signed)),
+    }, setStateStatus(Signing.status.signed)),
     Future.and(
       etApi.finishSign(fetch, energiatodistus.versio, energiatodistus.id)
     ),
-    run(setStateStatus(status.finish)),
+    run(setStateStatus(Signing.status.finish)),
     Future.and(signAllPdf),
     _ => etApi.startSign(fetch, energiatodistus.versio, energiatodistus.id),
-    setStateStatus(status.start)
+    setStateStatus(Signing.status.start)
   );
 
   let cancel = _ => {};
@@ -133,7 +139,7 @@
       _ => {
         error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
       },
-      setStateStatus(status.aborted),
+      setStateStatus(Signing.status.aborted),
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
     );
   };
@@ -155,13 +161,13 @@
       {i18n('energiatodistus.signing.messages.connection-failed')}
     </p>
   {:else if mPollux.version.isSome()}
-    {#if R.equals(currentState.status, status.already_started)}
+    {#if R.equals(currentState.status, Signing.status.already_started)}
       <p>
         {i18n('energiatodistus.signing.messages.already-started')}
       </p>
     {/if}
 
-    {#if R.includes( currentState.status, [status.not_started, status.already_started] )}
+    {#if R.includes( currentState.status, [Signing.status.not_started, Signing.status.already_started] )}
       <p>
         {i18n('energiatodistus.signing.messages.connection-success')}
       </p>
@@ -178,7 +184,7 @@
       </div>
     {/if}
 
-    {#if R.equals(currentState.status, status.signed)}
+    {#if R.equals(currentState.status, Signing.status.signed)}
       <div class="flex flex-col items-start mt-2">
         {#if Kielisyys.fi(energiatodistus)}
           <Link
@@ -208,7 +214,7 @@
   {/each}
 
   <div class="buttons">
-    {#if (R.includes( currentState.status, [status.not_started, status.already_started] ) && mPollux.version.isSome()) || error.isSome()}
+    {#if (R.includes( currentState.status, [Signing.status.not_started, Signing.status.already_started] ) && mPollux.version.isSome()) || error.isSome()}
       <div class="mr-10 mt-5">
         <Button
           prefix="signing-submit"
