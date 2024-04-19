@@ -114,13 +114,15 @@
   {/if}
 
   <div class="buttons">
-    <div class="mr-10 mt-5">
-      <Button
-        prefix="signing-submit"
-        disabled={inProgress}
-        text={i18n('energiatodistus.signing.button.start')}
-        on:click={sign} />
-    </div>
+    {#if !signingSucceeded}
+      <div class="mr-10 mt-5">
+        <Button
+          prefix="signing-submit"
+          disabled={inProgress}
+          text={i18n('energiatodistus.signing.button.start')}
+          on:click={sign} />
+      </div>
+    {/if}
     <div class="mt-5">
       <Button
         prefix="signing-close"

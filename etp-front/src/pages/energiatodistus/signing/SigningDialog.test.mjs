@@ -396,3 +396,33 @@ test('When system signing of bilingual energiatodistus succeeds, success message
     '/api/private/energiatodistukset/2018/1/pdf/sv/energiatodistus-1-sv.pdf'
   );
 });
+
+test('Signing button is not visible after signing using system signing', async () => {
+  fetchMock.mockIf(
+    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
+    async req => {
+      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
+      return {
+        status: 200,
+        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
+      };
+    }
+  );
+
+  render(SigningDialog, {
+    energiatodistus: finnishTodistus,
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.getByText('Allekirjoita');
+
+  await fireEvent.click(signButton);
+
+  const statusText = await screen.findByText(
+    /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
+  );
+  expect(statusText).toBeInTheDocument();
+
+  expect(signButton).not.toBeInTheDocument();
+});
