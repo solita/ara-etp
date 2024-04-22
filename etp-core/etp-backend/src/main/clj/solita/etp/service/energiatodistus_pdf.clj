@@ -1,28 +1,28 @@
 (ns solita.etp.service.energiatodistus-pdf
-  (:require [clojure.string :as str]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [puumerkki.pdf :as puumerkki]
-            [solita.etp.config :as config]
-            [solita.etp.exception :as exception]
-            [solita.common.xlsx :as xlsx]
             [solita.common.certificates :as certificates]
+            [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.common.xlsx :as xlsx]
+            [solita.etp.config :as config]
+            [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
-            [solita.etp.service.sign :as sign-service]
-            [solita.common.formats :as formats])
-  (:import (java.awt Font Color)
+            [solita.etp.service.sign :as sign-service])
+  (:import (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File)
            (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar Date GregorianCalendar HashMap Base64)
+           (java.util Base64 Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
@@ -892,7 +892,8 @@
                 content (file-service/find-file aws-s3-client key)
                 content-bytes (.readAllBytes content)
                 pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-                filename (str key ".pdf")]
+                filename (str key ".pdf")
+                ]
             (->> (write-signature! id language content-bytes pkcs7)
                  (file-service/upsert-file-from-bytes aws-s3-client
                                                       key))
@@ -912,11 +913,10 @@
         root config/system-signature-certificate-root]
     (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
 
-(defn- digest->signature [digest aws-kms-client]
-  (->> (.getBytes digest StandardCharsets/UTF_8)
+(defn- data->signed-digest [data aws-kms-client]
+  (->> data
        (sign-service/sign aws-kms-client)
-       (.readAllBytes)
-       (.encodeToString (Base64/getEncoder))))
+       (.readAllBytes)))
 
 (defn- cancel-sign-with-system
   [db whoami id]
@@ -937,10 +937,13 @@
           (do (println "Could not create the digest! ( " digest-response ")")
               (cancel-sign-with-system db whoami id)
               digest-response))
-        (let [digest (:digest digest-response)
-              signature (digest->signature digest aws-kms-client)
+        (let [data-to-sign (-> digest-response
+                               :digest
+                               (.getBytes StandardCharsets/UTF_8)
+                               (#(.decode (Base64/getDecoder) %)))
+              signed-digest (data->signed-digest data-to-sign aws-kms-client)
               chain cert-chain-three-long-leaf-first
-              signature-and-chain {:chain chain :signature signature}
+              signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
               sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
           (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
             (do (println "Could not sign the energiatodistus! (" sign-response ")")
