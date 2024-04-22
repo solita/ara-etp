@@ -10,6 +10,7 @@
   section {
     min-height: 12rem;
   }
+
   .icon {
     width: 4em;
     height: 4em;
@@ -39,7 +40,7 @@
         src={IconInfo}
         alt={$_('INFO_ICON_ALT')} />
     {/if}
-    <p class="font-medium">
+    <p class="font-medium whitespace-pre-line">
       <slot />
     </p>
   </div>
