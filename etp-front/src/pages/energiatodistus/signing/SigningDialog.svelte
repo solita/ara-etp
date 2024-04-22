@@ -54,7 +54,7 @@
   }
 </style>
 
-<dialog on:click|stopPropagation>
+<dialog on:click|stopPropagation open>
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 

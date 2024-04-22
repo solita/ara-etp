@@ -82,15 +82,16 @@ const mockSystemSignApiCallFailure = () => {
 };
 
 const assertButtons = async closeDialogFn => {
-  // TODO: Check that this is a button
   // Test that signing button exists
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', {
+    name: /allekirjoita/i
+  });
   expect(signButton).toBeInTheDocument();
   expect(signButton).toBeEnabled();
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const cancelButton = screen.getByText('Sulje');
+  const cancelButton = screen.getByRole('button', { name: /Sulje/i });
   expect(cancelButton).toBeInTheDocument();
   await fireEvent.click(cancelButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
@@ -154,12 +155,12 @@ test('SigningDialog displays error message when default selection is card and th
   expect(errorText).toBeInTheDocument();
 
   // Signing button should not exist when Mpollux connection failed
-  const signButton = screen.queryByText('Allekirjoita');
+  const signButton = screen.queryByRole('button', { name: /Allekirjoita/i });
   expect(signButton).not.toBeInTheDocument();
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const cancelButton = screen.getByText('Sulje');
+  const cancelButton = screen.getByRole('button', { name: /Sulje/i });
   expect(cancelButton).toBeInTheDocument();
   await fireEvent.click(cancelButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
@@ -248,7 +249,7 @@ test('Pressing sign button with system as signing method shows loading indicator
     selection: 'system'
   });
 
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
@@ -267,7 +268,7 @@ test('When system sign fails, error is shown', async () => {
     selection: 'system'
   });
 
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
@@ -293,7 +294,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
     selection: 'system'
   });
 
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
@@ -332,7 +333,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
     selection: 'system'
   });
 
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
@@ -370,7 +371,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
     selection: 'system'
   });
 
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
@@ -412,7 +413,7 @@ test('Signing button is not visible after signing using system signing', async (
     selection: 'system'
   });
 
-  const signButton = screen.getByText('Allekirjoita');
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
