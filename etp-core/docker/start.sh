@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 mkdir -p smtp/received-emails
 find sftp/ssh -iname "*_key" -exec chmod 600 {} \;
 
-./kms/generate-key.sh
+#./kms/generate-key.sh
 # TODO: Put the certificates from ./kms ???
 # How to set this so that it can
 

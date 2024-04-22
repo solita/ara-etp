@@ -1,28 +1,28 @@
 (ns solita.etp.service.energiatodistus-pdf
-  (:require [clojure.string :as str]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [puumerkki.pdf :as puumerkki]
-            [solita.etp.config :as config]
-            [solita.etp.exception :as exception]
-            [solita.common.xlsx :as xlsx]
+            [solita.common.aws.kms :as kms]
             [solita.common.certificates :as certificates]
+            [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.common.xlsx :as xlsx]
+            [solita.etp.config :as config]
+            [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
-            [solita.etp.service.sign :as sign-service]
-            [solita.common.formats :as formats])
-  (:import (java.awt Font Color)
+            [solita.etp.service.sign :as sign-service])
+  (:import (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File)
-           (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar Date GregorianCalendar HashMap Base64)
+           (java.util Base64 Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
@@ -825,7 +825,13 @@
          (io/delete-file pdf-path)
          (io/delete-file signable-pdf-path)
          (io/delete-file signature-png-path)
-         {:digest digest}))))
+         ;{:digest (kms/sha256 (puumerkki/signable-data signable-pdf-data))}
+         ;{:digest (kms/sha256
+         ;           (puumerkki/make-pkcs
+         ;             (kms/sha256
+         ;               (puumerkki/signable-data signable-pdf-data))))}
+         {:digest digest}
+         ))))
 
 (defn comparable-name [s]
   (-> s
@@ -892,7 +898,9 @@
                 content (file-service/find-file aws-s3-client key)
                 content-bytes (.readAllBytes content)
                 pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-                filename (str key ".pdf")]
+                filename (str key ".pdf")
+                ;_ (println (map (fn [it] it) (kms/sha256 (puumerkki/signable-data content-bytes))))
+                ]
             (->> (write-signature! id language content-bytes pkcs7)
                  (file-service/upsert-file-from-bytes aws-s3-client
                                                       key))
@@ -913,9 +921,11 @@
     (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
 
 (defn- digest->signature [digest aws-kms-client]
-  (->> (.getBytes digest StandardCharsets/UTF_8)
+  (->> digest                                               ;(.getBytes digest StandardCharsets/UTF_8)
        (sign-service/sign aws-kms-client)
        (.readAllBytes)
+       ((fn [bytes] (println "Signature is " (map (fn [it] it) bytes))
+          bytes))
        (.encodeToString (Base64/getEncoder))))
 
 (defn- cancel-sign-with-system
