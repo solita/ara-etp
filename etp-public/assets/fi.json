@@ -81,7 +81,7 @@
   "PAGI_SEURAAVA": "Seuraava",
   "PAGI_EDELLINEN": "Edellinen",
   "LHAKU_INFO_TITLE": "Laatijalla pitää olla pätevyys",
-  "LHAKU_INFO_TEXT": "Energiatodistuksen voi laatia vain siihen pätevöitynyt tekniikan alan ammattilainen. He ovat suorittaneet virallisen pätevyystentin. Jos laatijaa ei löydy haustamme, hänellä ei ole pätevyyttä todistuksen tekoon.",
+  "LHAKU_INFO_TEXT": "Energiatodistuksen voi laatia vain siihen pätevöitynyt tekniikan alan ammattilainen. He ovat suorittaneet virallisen pätevyystentin. Jos laatijaa ei löydy haustamme, hänellä ei ole pätevyyttä todistuksen tekoon. \nJos todistusta tehdään olemassa olevaan rakennukseen, laatijan tulee käydä paikan päällä. Tämä kannattaa ottaa huomioon laatijaa etsiessä.",
   "LHAKU_TH_NIMI": "Nimi",
   "LHAKU_TH_PATEVYYS": "Pätevyys",
   "LHAKU_TH_PAATOIMINTAALUE": "Päätoiminta-alue",

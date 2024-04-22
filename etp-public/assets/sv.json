@@ -80,7 +80,7 @@
   "PAGI_SEURAAVA": "Nästa",
   "PAGI_EDELLINEN": "Föregående",
   "LHAKU_INFO_TITLE": "Upprättaren ska ha behörighet",
-  "LHAKU_INFO_TEXT": "Energicertifikatet kan endast upprättas av en behörig yrkesperson inom det tekniska området. De har genomfört ett officiellt behörighetsprov. Om upprättaren inte hittas i vår sökning har personen inte behörighet att upprätta energicertifikat.",
+  "LHAKU_INFO_TEXT": "Energicertifikatet kan endast upprättas av en behörig yrkesperson inom det tekniska området. De har genomfört ett officiellt behörighetsprov. Om upprättaren inte hittas i vår sökning har personen inte behörighet att upprätta energicertifikat. \nOm certifikat utfärdas för en befintlig byggnad, ska upprättaren besöka platsen. Detta är bra att beakta, när du söker en upprättare.",
   "LHAKU_TH_NIMI": "Namn",
   "LHAKU_TH_PATEVYYS": "Kompetens",
   "LHAKU_TH_PAATOIMINTAALUE": "Huvudverksamhetsområde",
