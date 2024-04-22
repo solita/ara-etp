@@ -3,7 +3,6 @@
             [clojure.string :as str]
             [clojure.tools.logging :as log]
             [puumerkki.pdf :as puumerkki]
-            [solita.common.aws.kms :as kms]
             [solita.common.certificates :as certificates]
             [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
@@ -19,6 +18,7 @@
   (:import (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File)
+           (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
@@ -825,13 +825,7 @@
          (io/delete-file pdf-path)
          (io/delete-file signable-pdf-path)
          (io/delete-file signature-png-path)
-         ;{:digest (kms/sha256 (puumerkki/signable-data signable-pdf-data))}
-         ;{:digest (kms/sha256
-         ;           (puumerkki/make-pkcs
-         ;             (kms/sha256
-         ;               (puumerkki/signable-data signable-pdf-data))))}
-         {:digest digest}
-         ))))
+         {:digest digest}))))
 
 (defn comparable-name [s]
   (-> s
@@ -899,7 +893,6 @@
                 content-bytes (.readAllBytes content)
                 pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
                 filename (str key ".pdf")
-                ;_ (println (map (fn [it] it) (kms/sha256 (puumerkki/signable-data content-bytes))))
                 ]
             (->> (write-signature! id language content-bytes pkcs7)
                  (file-service/upsert-file-from-bytes aws-s3-client
@@ -920,12 +913,10 @@
         root config/system-signature-certificate-root]
     (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
 
-(defn- digest->signature [digest aws-kms-client]
-  (->> digest                                               ;(.getBytes digest StandardCharsets/UTF_8)
+(defn- data->signed-base64 [data aws-kms-client]
+  (->> data
        (sign-service/sign aws-kms-client)
        (.readAllBytes)
-       ((fn [bytes] (println "Signature is " (map (fn [it] it) bytes))
-          bytes))
        (.encodeToString (Base64/getEncoder))))
 
 (defn- cancel-sign-with-system
@@ -947,8 +938,11 @@
           (do (println "Could not create the digest! ( " digest-response ")")
               (cancel-sign-with-system db whoami id)
               digest-response))
-        (let [digest (:digest digest-response)
-              signature (digest->signature digest aws-kms-client)
+        (let [signed-attributes (-> digest-response
+                                    :digest
+                                    (.getBytes StandardCharsets/UTF_8)
+                                    (#(.decode (Base64/getDecoder) %)))
+              signature (data->signed-base64 signed-attributes aws-kms-client)
               chain cert-chain-three-long-leaf-first
               signature-and-chain {:chain chain :signature signature}
               sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
