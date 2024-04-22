@@ -12,8 +12,19 @@
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
-  (:import (org.apache.pdfbox.pdmodel PDDocument)
-           (org.apache.xmpbox.xml DomXmpParser)))
+  (:import (java.io InputStream)
+           (java.security.spec X509EncodedKeySpec)
+           (java.security KeyFactory MessageDigest PublicKey Signature)
+           (java.util Base64)
+           (org.apache.pdfbox.pdmodel PDDocument)
+           (org.apache.pdfbox.pdmodel.interactive.digitalsignature PDSignature)
+           (org.apache.xmpbox.xml DomXmpParser)
+           (org.bouncycastle.asn1.cms Attribute)
+           (org.bouncycastle.asn1.pkcs PKCSObjectIdentifiers)
+           (org.bouncycastle.asn1.x509 SubjectPublicKeyInfo)
+           (org.bouncycastle.cert X509CertificateHolder)
+           (org.bouncycastle.cms CMSSignedData SignerInformation)
+           (org.bouncycastle.util.encoders Hex)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -235,6 +246,47 @@
              :already-signed))))
 
 (t/deftest sign-with-system-energiatodistus-test
+  #_(t/testing "Signing a pdf using the system instead of mpollux"
+      (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+            laatija-id (-> laatijat keys sort first)
+            db (ts/db-user laatija-id)
+            ;; The second ET is 2018 version
+            id (-> energiatodistukset keys sort second)
+            whoami {:id laatija-id}
+            {:keys [versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)
+            language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
+        (t/testing "Testing assumptions about the energiatodistus in test"
+          (t/is (= versio 2018))
+          (t/is (or (= language-code "sv") (= language-code "fi")))
+          (t/is (= id 2))
+          (t/is (= versio 2018)))
+        (t/testing "Signing a pdf should succeed"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                              :id             id
+                                              :language       language-code})
+                   :ok)))
+        (t/testing "Trying to sign again should result in :already-signed"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                              :id             id
+                                              :language       language-code})
+                   :already-signed)))
+        (t/testing "The state should result in :already-signed if trying to sign three times in a row"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                              :id             id
+                                              :language       language-code})
+                   :already-signed)))))
   (t/testing "Signing a pdf using the system instead of mpollux"
     (let [{:keys [laatijat energiatodistukset]} (test-data-set)
           laatija-id (-> laatijat keys sort first)
@@ -242,40 +294,69 @@
           ;; The second ET is 2018 version
           id (-> energiatodistukset keys sort second)
           whoami {:id laatija-id}
-          {:keys [versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)
+          {:keys [kieli] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)
           language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
-      (t/testing "Testing assumptions about the energiatodistus in test"
-        (t/is (= versio 2018))
-        (t/is (or (= language-code "sv") (= language-code "fi")))
-        (t/is (= id 2))
-        (t/is (= versio 2018)))
       (t/testing "Signing a pdf should succeed"
-        (t/is (= (service/sign-with-system {:db             db
-                                            :aws-s3-client  ts/*aws-s3-client*
-                                            :whoami         whoami
-                                            :aws-kms-client ts/*aws-kms-client*
-                                            :now            energiatodistus-test-data/time-when-test-cert-not-expired
-                                            :id             id
-                                            :language       language-code})
-                 :ok)))
-      (t/testing "Trying to sign again should result in :already-signed"
-        (t/is (= (service/sign-with-system {:db             db
-                                            :aws-s3-client  ts/*aws-s3-client*
-                                            :whoami         whoami
-                                            :aws-kms-client ts/*aws-kms-client*
-                                            :now            energiatodistus-test-data/time-when-test-cert-not-expired
-                                            :id             id
-                                            :language       language-code})
-                 :already-signed)))
-      (t/testing "The state should result in :already-signed if trying to sign three times in a row"
-        (t/is (= (service/sign-with-system {:db             db
-                                            :aws-s3-client  ts/*aws-s3-client*
-                                            :whoami         whoami
-                                            :aws-kms-client ts/*aws-kms-client*
-                                            :now            energiatodistus-test-data/time-when-test-cert-not-expired
-                                            :id             id
-                                            :language       language-code})
-                 :already-signed)))))
+        )
+      (t/testing "The signed document's signature should be valid."
+        (service/sign-with-system {:db             db
+                                   :aws-s3-client  ts/*aws-s3-client*
+                                   :whoami         whoami
+                                   :aws-kms-client ts/*aws-kms-client*
+                                   :now            energiatodistus-test-data/time-when-test-cert-not-expired
+                                   :id             id
+                                   :language       language-code})
+        ;; TODO: Is whaomi missing rooli a problem?
+        ;; TODO: kebab-case
+        (let [^InputStream pdf-bytes (service/find-energiatodistus-pdf db ts/*aws-s3-client* (assoc whoami :rooli 0) id language-code)
+              _ (println "ISIT NIL: " (nil? pdf-bytes))
+              pdf (PDDocument/load pdf-bytes)
+              signatureDirectories (.getSignatureDictionaries pdf)
+              ;; If we end up putting more than one signature this will probably fail.
+              ^PDSignature naiveSignature (first signatureDirectories) ;TODO: ?
+              ^CMSSignedData signedData (new CMSSignedData (.getContents naiveSignature))
+              ^SignerInformation signerInfo (.next (.iterator (.getSignerInfos signedData)))
+              ^X509CertificateHolder match (-> (.getCertificates signedData)
+                                               (.getMatches (.getSID signerInfo))
+                                               (.iterator)
+                                               (.next))
+              ^SubjectPublicKeyInfo pubKeyInfo (.getSubjectPublicKeyInfo match)
+              pubByte (.getEncoded pubKeyInfo)
+              ^X509EncodedKeySpec keySpec (new X509EncodedKeySpec pubByte)
+              ^KeyFactory kf (KeyFactory/getInstance "RSA")
+              ^PublicKey pubKey (.generatePublic kf keySpec)
+              _ (println "pubKey " pubKey)
+              ;; Just know the algorithm. It could be obtained from the information.
+              naiveEncAlgo "SHA256withRSA"
+              ^Signature rsaSign (Signature/getInstance naiveEncAlgo)
+              _ (.initVerify rsaSign pubKey)
+              _ (.update rsaSign (.getEncodedSignedAttributes signerInfo))
+              cmsSignatureValid (.verify rsaSign (.getSignature signerInfo))
+              _ (println "???: " cmsSignatureValid)
+
+              ^MessageDigest digest (MessageDigest/getInstance (.getDigestAlgOID signerInfo))
+
+              ^Attribute attribute1 (-> signerInfo .getSignedAttributes (.get PKCSObjectIdentifiers/pkcs_9_at_messageDigest))
+              ^Attribute attribute2 (when (not (nil? (.getUnsignedAttributes signerInfo)))
+                                      (-> signerInfo .getUnsignedAttributes (.get PKCSObjectIdentifiers/id_aa_signatureTimeStampToken)))
+              messageDigest (-> (Base64/getEncoder)
+                                    (.encodeToString (Hex/decode (-> attribute1 .getAttributeValues (nth 0) .toString (.substring 1)))))
+              getByteRangeData (fn [bis byteRange]
+                                 (let [length1 (+ (nth byteRange 1) (nth byteRange 3))
+                                       contentSigned (byte-array length1)
+                                       _ (.skip bis (nth byteRange 0))
+                                       _ (.read bis contentSigned  0 (nth byteRange 1))
+                                       _ (.skip bis (- (nth byteRange 2) (nth byteRange 1) (nth byteRange 0)))
+                                       _ (.read bis contentSigned  (nth byteRange 1) (nth byteRange 3))
+                                       ;;_ (.reset bis)
+                                       ] contentSigned))
+              contentToSigned (getByteRangeData pdf-bytes (.getByteRange naiveSignature))
+
+              md-pdf (-> (Base64/getEncoder) (.encodeToString (.digest digest contentToSigned)) )
+              _ (println "MD1: " md-pdf)
+              _ (println "MD0: " messageDigest)
+              ]
+          (t/is (= md-pdf messageDigest))))))
   (t/testing "Trying to sign a pdf that is already in signing should fail and not change the state"
     (let [{:keys [laatijat energiatodistukset]} (test-data-set)
           laatija-id (-> laatijat keys sort first)
@@ -326,4 +407,3 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
         expected "MIIDqjCCAZICFDasnTgEcpPh0nwI7KDvEkoIrRCgMA0GCSqGSIb3DQEBCwUAMBExDzANBgNVBAMMBklOVCBDQTAeFw0yNDA0MTAxMDEyMDNaFw0yNTA0MjAxMDEyMDNaMBIxEDAOBgNVBAMMB0xFQUYgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDZ7LojEvUzN4GuvLwlDH/Ex6rV5mcopSbJ8eHMfTEs2bq8Czll82mUmy08agj2g6zsll7sMpOQLDjI0Im8HuWGuBcq8q7ArkbDjj9582ul21kWcEERMCWZWwFCjlqF5xWT/iz8d62hvP++hmFJulG3U/grCKyBu/PpoQRYBUgkbqmyz8dMLMCF4y7VojcKdFe7tQEIw0fvdoT8dTXURXemhk5bzmejHYSU2+h727ALG3WoNkgwaBWW10nQSCQhP/mmrq5Z3QhIrpAboPddpSpAukpUM7Bss7q153oC+QIvZaMMFlXVdBisS6lStiX+upnlEIx9BtBxvTxUgm9rQFZdAgMBAAEwDQYJKoZIhvcNAQELBQADggIBAMR/nFJAI58MtpAa9Yr6vTI0RSWv30/Tlv/DGrg0ujXx/3lmPygdA2LW5KTt9MLB3kZ/wMl2RMGv66AssdHFlnUHUAkvm28UTzaJ4pKatiRuHODyvn9cbjodD+MHJjksdWO/JLJ4yk3tsvhK0zUC6nnJGvwyodQvhBgPLfB9NRWbOWvDzsAIRYEWfAJUz0nqnN9qMkQLibMRkEmt8JrtlUk+o8DUxZi7lpEJ6s1DilDDacQmOW+2bOoXdn8LFz2qVq6+hoIpHiFEvge0wWYID6XcGUlV5X3Su+LnXFYMdqEwRYcpNWwWrAPNleMV9QLIHsBBj7131sa4axikbvnEOrCEmeLL2KOLkbWONh6HayYXmonQGeYapIaA9CB59MoxgeeoF9+dWH9dK9lfItKyPJzQYO2ZJXa1EbE21yY4JoRluh89dnPvvXcwF7MS0JN9+Re5Q9zyOEVkZ4YEc8aTYeEua4byUOJ43USk4+A82Y0gLTsDN/exo09c1pR8dFHy9l9Dwpvr3ZEb1iocWqBjzWN+GsW7+pf42qS0xKvf1gdFxW1wq+M+lO5LYnA6n9da1azDZtIhpinH/MfQG6HI6EfgQU9zxTHEwEaJog95wBV1HV0g7eXo3quTqltN/nzERzLAqv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX"]
     (t/testing "Certificate should be on one line without headers"
       (t/is (= (service/cert-pem->one-liner-without-headers given) expected)))))
-
