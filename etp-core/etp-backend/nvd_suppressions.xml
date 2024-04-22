@@ -68,7 +68,7 @@
         <cve>CVE-2022-0869</cve>
     </suppress>
 
-<!-- OpenSAML C++, not Java -->
+    <!-- OpenSAML C++, not Java -->
     <suppress>
         <notes><![CDATA[
    file name: opensaml-2.5.1-1.jar
@@ -77,8 +77,47 @@
         <cve>CVE-2017-16853</cve>
     </suppress>
 
-<!-- This affects Clojure versions before 1.9 and we have a newer version in use, so whole CVE is suppressed -->
+    <!-- This affects Clojure versions before 1.9 and we have a newer version in use, so whole CVE is suppressed -->
     <suppress>
         <cve>CVE-2017-20189</cve>
+    </suppress>
+
+    <!-- Suppressed temporarily, check if buddy has been updated to use the fixed version   -->
+    <suppress until="2024-05-06">
+        <notes><![CDATA[
+   file name: bcprov-jdk18on-1.76.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov\-jdk18on@.*$</packageUrl>
+        <vulnerabilityName>CVE-2024-29857</vulnerabilityName>
+    </suppress>
+    <suppress until="2024-05-06">
+        <notes><![CDATA[
+   file name: bcprov-jdk18on-1.76.jar
+   ]]></notes>
+        <sha1>3a785d0b41806865ad7e311162bfa3fa60b3965b</sha1>
+        <vulnerabilityName>CVE-2024-30171</vulnerabilityName>
+    </suppress>
+    <suppress until="2024-05-06">
+        <notes><![CDATA[
+   file name: bcprov-jdk18on-1.76.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov\-jdk18on@.*$</packageUrl>
+        <vulnerabilityName>CVE-2024-30172</vulnerabilityName>
+    </suppress>
+
+    <!-- Transitive dependency from org.apache.poi/poi-ooxml, check if it has been updated to use the fixed version  -->
+    <suppress until="2024-05-06">
+        <notes><![CDATA[
+   file name: commons-compress-1.25.0.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons\-compress@.*$</packageUrl>
+        <cve>CVE-2024-25710</cve>
+    </suppress>
+    <suppress until="2024-05-06">
+        <notes><![CDATA[
+   file name: commons-compress-1.25.0.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons\-compress@.*$</packageUrl>
+        <cve>CVE-2024-26308</cve>
     </suppress>
 </suppressions>
