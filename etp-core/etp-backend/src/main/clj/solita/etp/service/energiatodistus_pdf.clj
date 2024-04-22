@@ -913,11 +913,10 @@
         root config/system-signature-certificate-root]
     (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
 
-(defn- data->signed-base64 [data aws-kms-client]
+(defn- data->signed-digest [data aws-kms-client]
   (->> data
        (sign-service/sign aws-kms-client)
-       (.readAllBytes)
-       (.encodeToString (Base64/getEncoder))))
+       (.readAllBytes)))
 
 (defn- cancel-sign-with-system
   [db whoami id]
@@ -938,13 +937,13 @@
           (do (println "Could not create the digest! ( " digest-response ")")
               (cancel-sign-with-system db whoami id)
               digest-response))
-        (let [signed-attributes (-> digest-response
-                                    :digest
-                                    (.getBytes StandardCharsets/UTF_8)
-                                    (#(.decode (Base64/getDecoder) %)))
-              signature (data->signed-base64 signed-attributes aws-kms-client)
+        (let [data-to-sign (-> digest-response
+                               :digest
+                               (.getBytes StandardCharsets/UTF_8)
+                               (#(.decode (Base64/getDecoder) %)))
+              signed-digest (data->signed-digest data-to-sign aws-kms-client)
               chain cert-chain-three-long-leaf-first
-              signature-and-chain {:chain chain :signature signature}
+              signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
               sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
           (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
             (do (println "Could not sign the energiatodistus! (" sign-response ")")
