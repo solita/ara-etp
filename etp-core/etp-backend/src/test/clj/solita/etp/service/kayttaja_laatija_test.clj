@@ -68,7 +68,7 @@
       (t/is (not= found-original found-updated))
       (schema/validate
        (dissoc laatija-schema/Laatija :voimassa :voimassaolo-paattymisaika)
-       (dissoc found-updated :henkilotunnus))
+       (dissoc found-updated :henkilotunnus :allekirjoitus-id))
       (t/is (xmap/submap? (st/select-schema update
                                             laatija-schema/LaatijaAdd)
                           found-updated))

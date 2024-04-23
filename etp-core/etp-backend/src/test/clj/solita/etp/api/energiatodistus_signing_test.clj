@@ -13,7 +13,7 @@
 
 (t/use-fixtures :each ts/fixture)
 
-(defn generate-pdf-as-file-mock [_ _ _]
+(defn generate-pdf-as-file-mock [_ _ _ _]
   (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
         out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
     (io/copy (io/file in) (io/file out))
