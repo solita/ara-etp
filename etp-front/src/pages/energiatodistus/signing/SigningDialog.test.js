@@ -218,8 +218,14 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
   fetchMock.resetMocks();
   closeDialogFn.mockReset();
 
+  // Options should be available
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(2);
+
   // Select system signing
-  const selection = screen.getByText('Älä käytä henkilökorttia');
+  const selection = screen.getByRole('radio', {
+    name: 'Älä käytä henkilökorttia'
+  });
   expect(selection).toBeInTheDocument();
   await fireEvent.click(selection);
 
@@ -238,8 +244,8 @@ test('Signing method can not be selected when allowSelection is false', async ()
   });
 
   // Options should not be available
-  const selection = screen.queryByText('Älä käytä korttia');
-  expect(selection).not.toBeInTheDocument();
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(0);
 });
 
 test('Pressing sign button with system as signing method shows loading indicator', async () => {
