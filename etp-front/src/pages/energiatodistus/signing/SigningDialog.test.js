@@ -101,7 +101,7 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
   // Mpollux state was not checked as card signing is not selected
   expect(fetchMock.mock.calls).toHaveLength(0);
 
-  const heading = screen.queryByText(/Allekirjoittaminen/u);
+  const heading = screen.getByRole('heading', { name: /Allekirjoittaminen/u });
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
@@ -114,7 +114,7 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
 };
 
 const assertCardSigningDialogContents = async closeDialogFn => {
-  const heading = screen.queryByText(/Allekirjoittaminen/u);
+  const heading = screen.getByRole('heading', { name: /Allekirjoittaminen/u });
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
@@ -145,7 +145,7 @@ test('SigningDialog displays error message when default selection is card and th
   // Mpollux state was checked
   expect(fetchMock.mock.calls).toHaveLength(1);
 
-  const heading = screen.queryByText(/Allekirjoittaminen/u);
+  const heading = screen.getByRole('heading', { name: /Allekirjoittaminen/u });
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
