@@ -57,7 +57,8 @@ SELECT l.id, k.henkilotunnus, l.patevyystaso,
        l.julkinen_postinumero as julkinenpostinumero,
        l.partner,
        l.laskutuskieli, l.vastaanottajan_tarkenne,
-       l.jakeluosoite, l.postinumero, l.postitoimipaikka, l.wwwosoite, l.maa
+       l.jakeluosoite, l.postinumero, l.postitoimipaikka, l.wwwosoite, l.maa,
+       l.allekirjoitus_id
 FROM laatija l INNER JOIN kayttaja k ON l.id = k.id WHERE k.henkilotunnus = :henkilotunnus
 
 -- name: select-laatija-yritykset

@@ -721,7 +721,7 @@
 (defn- clock->calendar [^Clock clock]
   (-> clock ZonedDateTime/now GregorianCalendar/from))
 
-(defn- set-metadata [^String pdf-path ^String author ^String title]
+(defn- set-metadata [^String pdf-path ^String author laatija-allekirjoitus-id ^String title]
   (with-open [document (PDDocument/load (File. pdf-path))]
     (let [creation-date (clock->calendar common-time/clock)
           metadata (PDMetadata. document)
@@ -733,6 +733,7 @@
       (doto (.getDocumentInformation document)
         (.setTitle title)
         (.setAuthor author)
+        (.setCustomMetadataValue "laatija-allekirjoitus-id", laatija-allekirjoitus-id)
         (.setSubject nil)
         (.setKeywords nil)
         (.setCreator nil)
@@ -743,7 +744,7 @@
     (.save document pdf-path)))
 
 ;; Set as dynamic so that it can be mocked in tests.
-(defn ^:dynamic generate-pdf-as-file [complete-energiatodistus kieli draft?]
+(defn ^:dynamic generate-pdf-as-file [complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
         pdf-path (xlsx->pdf xlsx-path)]
     (io/delete-file xlsx-path)
@@ -755,13 +756,14 @@
 
     (set-metadata pdf-path
                   (:laatija-fullname complete-energiatodistus)
+                  laatija-allekirjoitus-id
                   (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
     (if draft?
       (add-watermark pdf-path kieli)
       pdf-path)))
 
-(defn generate-pdf-as-input-stream [energiatodistus kieli draft?]
-  (let [pdf-path (generate-pdf-as-file energiatodistus kieli draft?)
+(defn generate-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
+  (let [pdf-path (generate-pdf-as-file energiatodistus kieli draft? laatija-allekirjoitus-id)
         is (io/input-stream pdf-path)]
     (io/delete-file pdf-path)
     is))
@@ -780,7 +782,7 @@
                              (= (-> % :perustiedot :kieli) nil)) %)))] ; Old todistus entries have language set as nil. We'll just have to give it a try
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
-      (generate-pdf-as-input-stream complete-energiatodistus kieli true))))
+      (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
 (defn do-when-signing [{:keys [tila-id]} f]
   (case (energiatodistus-tila/tila-key tila-id)
@@ -802,12 +804,17 @@
       (.dispose))
     (ImageIO/write img "PNG" (io/file path))))
 
-(defn find-energiatodistus-digest [db aws-s3-client id language]
+(defn find-energiatodistus-digest
+  "Generate the pdf.
+  Add space for signature.
+  Upload to S3.
+  Return the data that needs to be signed in base64"
+  [db aws-s3-client id language laatija-allekirjoitus-id]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus}
              (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
-      #(let [pdf-path (generate-pdf-as-file complete-energiatodistus language false)
+      #(let [pdf-path (generate-pdf-as-file complete-energiatodistus language false laatija-allekirjoitus-id)
              signable-pdf-path (str/replace pdf-path #".pdf" "-signable.pdf")
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              _ (signature-as-png signature-png-path laatija-fullname)
@@ -946,10 +953,10 @@
     (sign-with-system-log-message whoami id "Starting failed!")))
 
 (defn- sign-with-system-digest
-  [{:keys [db whoami id aws-s3-client]} language]
+  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]} language]
   (log/info (sign-with-system-log-message whoami id "Getting the digest"))
   (do-sign-with-system
-    #(find-energiatodistus-digest db aws-s3-client id language)
+    #(find-energiatodistus-digest db aws-s3-client id language laatija-allekirjoitus-id)
     (sign-with-system-log-message whoami id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign

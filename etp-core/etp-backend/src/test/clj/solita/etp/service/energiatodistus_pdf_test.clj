@@ -6,9 +6,9 @@
             [solita.common.certificates-test :as certificates-test]
             [solita.common.formats :as formats]
             [solita.common.xlsx :as xlsx]
+            [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as service]
-            [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
@@ -87,7 +87,8 @@
                                     id)
                   file-path (service/generate-pdf-as-file energiatodistus
                                                           "sv"
-                                                          true)]]
+                                                          true
+                                                          "allekirjoitus-id")]]
       (t/is (-> file-path io/as-file .exists))
 
       (t/testing "Test that the expected metadata is in place"
@@ -103,6 +104,8 @@
           (t/testing "Test for author and title in the XMP metadata"
             (t/is (= expected-author (-> xmp-metadata .getDublinCoreSchema .getCreators first)))
             (t/is (= expected-title (-> xmp-metadata .getDublinCoreSchema .getTitle))))
+          (t/testing "Test for laatija-allekirjoitus-id in the XMP metadata"
+            (t/is (= "allekirjoitus-id" (.getCustomMetadataValue document-info "laatija-allekirjoitus-id"))))
           (t/testing "Test that the document declaries itself as PDF/A compliant"
             (t/is (= 2 (-> xmp-metadata .getPDFIdentificationSchema .getPart)))
             (t/is (= "B" (-> xmp-metadata .getPDFIdentificationSchema .getConformance))))
@@ -119,7 +122,8 @@
                                       (assoc-in [:perustiedot :nimi-sv] nil))
                   file-path (service/generate-pdf-as-file energiatodistus
                                                           "sv"
-                                                          true)]]
+                                                          true
+                                                          "allekirjoitus-id")]]
       (t/testing "Test that the generation works even when building name is not set"
         (let [expected-title "Energiatodistus"
               document (-> file-path io/as-file PDDocument/load)
@@ -152,13 +156,14 @@
         db (ts/db-user laatija-id)
         id (-> energiatodistukset keys sort first)
         whoami {:id laatija-id}]
-    (t/is (= (service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi")
+    (t/is (= (service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi" "allekirjoitus-id")
              :not-in-signing))
     (energiatodistus-service/start-energiatodistus-signing! db whoami id)
     (t/is (contains? (service/find-energiatodistus-digest db
                                                           ts/*aws-s3-client*
                                                           id
-                                                          "fi")
+                                                          "fi"
+                                                          "allekirjoitus-id")
                      :digest))
     (energiatodistus-service/end-energiatodistus-signing!
       db
@@ -169,7 +174,8 @@
     (t/is (= (service/find-energiatodistus-digest db
                                                   ts/*aws-s3-client*
                                                   id
-                                                  "fi")
+                                                  "fi"
+                                                  "allekirjoitus-id")
              :already-signed))))
 
 (t/deftest comparable-name-test
@@ -240,39 +246,39 @@
 
 (t/deftest sign-with-system-states-test
   (t/testing "Signing a pdf using the system instead of mpollux"
-      (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-            laatija-id (-> laatijat keys sort first)
-            db (ts/db-user laatija-id)
-            ;; The second ET is 2018 version
-            id (-> energiatodistukset keys sort second)
-            whoami {:id laatija-id}]
-        (t/testing "Signing a pdf should succeed"
-          (t/is (= (service/sign-with-system {:db             db
-                                              :aws-s3-client  ts/*aws-s3-client*
-                                              :whoami         whoami
-                                              :aws-kms-client ts/*aws-kms-client*
-                                              :now            (Instant/now)
-                                              :id             id})
-                   :ok)))
-        (t/testing "Trying to sign again should result in :already-signed"
-          (t/is (= (service/sign-with-system {:db             db
-                                              :aws-s3-client  ts/*aws-s3-client*
-                                              :whoami         whoami
-                                              :aws-kms-client ts/*aws-kms-client*
-                                              :now            (Instant/now)
-                                              :id             id})
-                   :already-signed)))
-        (t/testing "The state should result in :already-signed if trying to sign three times in a row"
-          (t/is (= (service/sign-with-system {:db             db
-                                              :aws-s3-client  ts/*aws-s3-client*
-                                              :whoami         whoami
-                                              :aws-kms-client ts/*aws-kms-client*
-                                              :now            (Instant/now)
-                                              :id             id})
-                   :already-signed))))))
+    (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          ;; The second ET is 2018 version
+          id (-> energiatodistukset keys sort second)
+          whoami {:id laatija-id}]
+      (t/testing "Signing a pdf should succeed"
+        (t/is (= (service/sign-with-system {:db             db
+                                            :aws-s3-client  ts/*aws-s3-client*
+                                            :whoami         whoami
+                                            :aws-kms-client ts/*aws-kms-client*
+                                            :now            (Instant/now)
+                                            :id             id})
+                 :ok)))
+      (t/testing "Trying to sign again should result in :already-signed"
+        (t/is (= (service/sign-with-system {:db             db
+                                            :aws-s3-client  ts/*aws-s3-client*
+                                            :whoami         whoami
+                                            :aws-kms-client ts/*aws-kms-client*
+                                            :now            (Instant/now)
+                                            :id             id})
+                 :already-signed)))
+      (t/testing "The state should result in :already-signed if trying to sign three times in a row"
+        (t/is (= (service/sign-with-system {:db             db
+                                            :aws-s3-client  ts/*aws-s3-client*
+                                            :whoami         whoami
+                                            :aws-kms-client ts/*aws-kms-client*
+                                            :now            (Instant/now)
+                                            :id             id})
+                 :already-signed))))))
 
 (t/deftest sign-with-system-signature-test
-    (t/testing "Signing a pdf using the system instead of mpollux"
+  (t/testing "Signing a pdf using the system instead of mpollux"
     (let [{:keys [laatijat energiatodistukset]} (test-data-set)
           laatija-id (-> laatijat keys sort first)
           db (ts/db-user laatija-id)
