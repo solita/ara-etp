@@ -1,25 +1,28 @@
 (ns solita.etp.service.energiatodistus-pdf
-  (:require [clojure.string :as str]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [puumerkki.pdf :as puumerkki]
-            [solita.etp.exception :as exception]
-            [solita.common.xlsx :as xlsx]
             [solita.common.certificates :as certificates]
+            [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.common.xlsx :as xlsx]
+            [solita.etp.config :as config]
+            [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
-            [solita.common.formats :as formats])
-  (:import (java.awt Font Color)
+            [solita.etp.service.sign :as sign-service])
+  (:import (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File)
+           (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar Date GregorianCalendar HashMap)
+           (java.util Base64 Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
@@ -852,10 +855,14 @@
                           not-after
                           now)}))))
 
-(defn validate-certificate! [last-name now certificate-str]
-  (let [certificate (certificates/pem-str->certificate certificate-str)]
-    (validate-surname! last-name certificate)
-    (validate-not-after! (-> now Instant/from Date/from) certificate)))
+(defn validate-certificate!
+  ([last-name now certificate-str]
+   (validate-certificate! last-name now certificate-str :mpollux))
+  ([last-name now certificate-str signing-method]
+   (let [certificate (certificates/pem-str->certificate certificate-str)]
+     (when (= signing-method :mpollux)
+       (validate-surname! last-name certificate))
+     (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
 (defn write-signature! [id language pdf pkcs7]
   (try
@@ -866,22 +873,29 @@
         (str "Signed PDF already exists for energiatodistus "
              id "/" language ". Get digest to sign again.")))))
 
-(defn sign-energiatodistus-pdf [db aws-s3-client whoami now id language
-                                {:keys [chain] :as signature-and-chain}]
-  (when-let [energiatodistus
-             (energiatodistus-service/find-energiatodistus db id)]
-    (do-when-signing
-      energiatodistus
-      #(do
-         (validate-certificate! (:sukunimi whoami)
-                                now
-                                (first chain))
-         (let [key (energiatodistus-service/file-key id language)
-               content (file-service/find-file aws-s3-client key)
-               content-bytes (.readAllBytes content)
-               pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-               filename (str key ".pdf")]
-           (->> (write-signature! id language content-bytes pkcs7)
-                (file-service/upsert-file-from-bytes aws-s3-client
-                                                     key))
-           filename)))))
+
+(defn sign-energiatodistus-pdf
+  ([db aws-s3-client whoami now id language signature-and-chain]
+   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
+  ([db aws-s3-client whoami now id language
+    {:keys [chain] :as signature-and-chain} signing-method]
+   (when-let [energiatodistus
+              (energiatodistus-service/find-energiatodistus db id)]
+     (do-when-signing
+       energiatodistus
+       #(do
+          (validate-certificate! (:sukunimi whoami)
+                                 now
+                                 (first chain)
+                                 signing-method)
+          (let [key (energiatodistus-service/file-key id language)
+                content (file-service/find-file aws-s3-client key)
+                content-bytes (.readAllBytes content)
+                pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
+                filename (str key ".pdf")
+                ]
+            (->> (write-signature! id language content-bytes pkcs7)
+                 (file-service/upsert-file-from-bytes aws-s3-client
+                                                      key))
+            filename))))))
+
