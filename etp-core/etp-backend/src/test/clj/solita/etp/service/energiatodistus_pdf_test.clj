@@ -14,6 +14,7 @@
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
+           (java.time Instant)
            (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.xmpbox.xml DomXmpParser)))
 
@@ -235,6 +236,99 @@
                                                "fi"
                                                nil)
              :already-signed))))
+
+(t/deftest sign-with-system-states-test
+  (t/testing "Signing a pdf using the system instead of mpollux"
+      (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+            laatija-id (-> laatijat keys sort first)
+            db (ts/db-user laatija-id)
+            ;; The second ET is 2018 version
+            id (-> energiatodistukset keys sort second)
+            whoami {:id laatija-id}
+            {:keys [versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)
+            language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
+        (t/testing "Testing assumptions about the energiatodistus in test"
+          (t/is (or (= language-code "sv") (= language-code "fi")))
+          (t/is (= id 2))
+          (t/is (= versio 2018)))
+        (t/testing "Signing a pdf should succeed"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            (Instant/now)
+                                              :id             id
+                                              :language       language-code})
+                   :ok)))
+        (t/testing "Trying to sign again should result in :already-signed"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            (Instant/now)
+                                              :id             id
+                                              :language       language-code})
+                   :already-signed)))
+        (t/testing "The state should result in :already-signed if trying to sign three times in a row"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            (Instant/now)
+                                              :id             id
+                                              :language       language-code})
+                   :already-signed))))))
+
+(t/deftest sign-with-system-signature-test
+    (t/testing "Signing a pdf using the system instead of mpollux"
+    (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          ;; The second ET is 2018 version
+          id (-> energiatodistukset keys sort second)
+          whoami {:id laatija-id :rooli 0}
+          complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
+          language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
+
+      ;; TODO: Use puumerkki/verify-signatures instead of puumerkki/cursory-verify-signature once it's available.
+      (t/testing "The signed document's signature should be valid."
+        (service/sign-with-system {:db             db
+                                   :aws-s3-client  ts/*aws-s3-client*
+                                   :whoami         whoami
+                                   :aws-kms-client ts/*aws-kms-client*
+                                   :now            (Instant/now)
+                                   :id             id
+                                   :language       language-code})
+        (with-open [^InputStream pdf-bytes (service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
+                    xout (java.io.ByteArrayOutputStream.)]
+          (io/copy pdf-bytes xout)
+          (let [maybe-validish-ast (puumerkki/cursory-verify-signature (.toByteArray xout))]
+            (t/is (not (nil? maybe-validish-ast)))))))))
+
+(t/deftest sign-with-system-already-in-signing-test
+  (t/testing "Trying to sign a pdf that is already in signing should fail and not change the state"
+    (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          id (-> energiatodistukset keys sort first)
+          {:keys [kieli]} (complete-energiatodistus-service/find-complete-energiatodistus db id)
+          language-code (energiatodistus-service/language-id->codes kieli)
+          whoami {:id laatija-id}]
+      ;; Put the energiatodistus into signing.
+      (energiatodistus-service/start-energiatodistus-signing! db whoami id)
+      (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+        (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
+          (t/is (= (service/sign-with-system {:db             db
+                                              :aws-s3-client  ts/*aws-s3-client*
+                                              :whoami         whoami
+                                              :aws-kms-client ts/*aws-kms-client*
+                                              :now            (Instant/now)
+                                              :id             id
+                                              :language       language-code})
+                   :already-in-signing)))
+        (t/testing "Trying to sign a pdf that is already in signing should not change the state"
+          (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)
+                   tila-id)))))))
 
 (t/deftest cert-pem->one-liner-without-headers-test
   (let [given "-----BEGIN CERTIFICATE-----
