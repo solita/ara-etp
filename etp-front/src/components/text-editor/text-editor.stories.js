@@ -4,11 +4,11 @@ export default { title: 'TextEditor' };
 
 export const withText = () => ({
   Component: TextEditor,
-  props: {id: 'test',
+  props: {
+    id: 'test',
     name: 'test',
     label: 'test',
     required: true,
-    model: 'test content',
-
+    model: 'test content'
   }
 });
