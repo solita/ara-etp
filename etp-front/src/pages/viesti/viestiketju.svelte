@@ -83,7 +83,7 @@
     <div class="flex flex-col w-2/12">
       <span class="block">
         <span
-          class="font-icon outline mr-1"
+          class="font-icon mr-1"
           class:text-primary={!unread}
           class:text-error={unread}>
           chat
