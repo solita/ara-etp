@@ -10,7 +10,7 @@
   (aws.utils/invoke client
                     :Sign
                     {:KeyId            key-id
-                     :SigningAlgorithm "RSASSA_PSS_SHA_256"
+                     :SigningAlgorithm "RSASSA_PKCS1_V1_5_SHA_256"
                      :Message          (sha256 data)
                      :MessageType      "DIGEST"
                      }))
@@ -19,7 +19,7 @@
   (aws.utils/invoke client
                     :Verify
                     {:KeyId            key-id
-                     :SigningAlgorithm "RSASSA_PSS_SHA_256"
+                     :SigningAlgorithm "RSASSA_PKCS1_V1_5_SHA_256"
                      :Message          (sha256 data)
                      :Signature        signature
                      :MessageType      "DIGEST"}))
