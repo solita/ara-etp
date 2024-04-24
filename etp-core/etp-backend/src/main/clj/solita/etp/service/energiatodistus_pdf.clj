@@ -899,3 +899,60 @@
                                                       key))
             filename))))))
 
+(defn cert-pem->one-liner-without-headers [cert-pem]
+  "Given a certificate in PEM format `cert-pem` removes
+  headers and linebreaks from it."
+  (-> cert-pem
+      (str/replace #"-----BEGIN CERTIFICATE-----" "")
+      (str/replace #"-----END CERTIFICATE-----" "")
+      (str/replace #"\n" "")))
+
+(def cert-chain-three-long-leaf-first
+  (let [leaf config/system-signature-certificate-leaf
+        intermediate config/system-signature-certificate-intermediate
+        root config/system-signature-certificate-root]
+    (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
+
+(defn- data->signed-digest [data aws-kms-client]
+  (->> data
+       (sign-service/sign aws-kms-client)
+       (.readAllBytes)))
+
+(defn- cancel-sign-with-system
+  [db whoami id]
+  (println "Cancelling the signing!")
+  (energiatodistus-service/cancel-energiatodistus-signing! db whoami id))
+
+(defn sign-with-system
+  "Does the whole process of sig"
+  [{:keys [db whoami now id language aws-s3-client aws-kms-client]}]
+  (println "Starting signing with system")
+  (let [start-response (energiatodistus-service/start-energiatodistus-signing! db whoami id)]
+    (if (not (= :ok start-response))
+      (do (println "Could not start the signing ( " start-response ")")
+          ;; If failed to start the signing it should not be cancelled either.
+          start-response)
+      (let [digest-response (find-energiatodistus-digest db aws-s3-client id language)]
+        (if (or (= :already-signed digest-response) (= :not-in-signing digest-response) (nil? digest-response))
+          (do (println "Could not create the digest! ( " digest-response ")")
+              (cancel-sign-with-system db whoami id)
+              digest-response))
+        (let [data-to-sign (-> digest-response
+                               :digest
+                               (.getBytes StandardCharsets/UTF_8)
+                               (#(.decode (Base64/getDecoder) %)))
+              signed-digest (data->signed-digest data-to-sign aws-kms-client)
+              chain cert-chain-three-long-leaf-first
+              signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
+              sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
+          (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
+            (do (println "Could not sign the energiatodistus! (" sign-response ")")
+                (cancel-sign-with-system db whoami id)
+                sign-response)
+            (let [end-response (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)]
+              (if (not (= :ok end-response))
+                (do (println "Could not end the energiatodistus signing! (" end-response ")")
+                    (cancel-sign-with-system db whoami id))
+                (do
+                  (println "Successfully signed the pdf!")
+                  end-response)))))))))
