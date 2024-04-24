@@ -2,6 +2,8 @@ import './tailwind.css';
 import { makeDecorator } from "@storybook/preview-api";
 import { setupI18n } from '@Language/i18n';
 
+import '../src/main.css';
+
 export const parameters = { viewport: { defaultViewport: 'responsive' } };
 
 const localizationDecorator = makeDecorator({
