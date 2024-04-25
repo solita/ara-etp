@@ -17,7 +17,7 @@
             [solita.etp.service.sign :as sign-service])
   (:import (java.awt Color Font)
            (java.awt.image BufferedImage)
-           (java.io ByteArrayOutputStream File)
+           (java.io ByteArrayOutputStream File InputStream)
            (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
@@ -620,11 +620,11 @@
         dir (.getParent file)
         result-pdf (str/replace path #".xlsx$" ".pdf")
         {:keys [exit] :as sh-result} (libreoffice/run-with-args
-                                           "--convert-to"
-                                           "pdf"
-                                           filename
-                                           :dir
-                                           dir)]
+                                       "--convert-to"
+                                       "pdf"
+                                       filename
+                                       :dir
+                                       dir)]
     (if (and (zero? exit) (.exists (io/as-file result-pdf)))
       result-pdf
       (throw (ex-info "XLSX to PDF conversion failed"
@@ -915,44 +915,84 @@
 
 (defn- data->signed-digest [data aws-kms-client]
   (->> data
-       (sign-service/sign aws-kms-client)
+       ^InputStream (sign-service/sign aws-kms-client)
        (.readAllBytes)))
 
+(defn- sign-with-system-log [whoami id message]
+  (log/info message " (whoami: " whoami ") (id: " id ")"))
+
 (defn- cancel-sign-with-system
-  [db whoami id]
-  (println "Cancelling the signing!")
+  "Cancel the signing"
+  [{:keys [db whoami id]} logger]
+  (logger "Cancelling the digital signature process!")
   (energiatodistus-service/cancel-energiatodistus-signing! db whoami id))
 
-(defn sign-with-system
-  "Does the whole process of sig"
-  [{:keys [db whoami now id language aws-s3-client aws-kms-client]}]
-  (println "Starting signing with system")
+(defn- either-error-or-start-response
+  [{:keys [db whoami id]} logger _]
+  (logger "Starting signing with system")
   (let [start-response (energiatodistus-service/start-energiatodistus-signing! db whoami id)]
     (if (not (= :ok start-response))
-      (do (println "Could not start the signing ( " start-response ")")
+      (do (logger (str "Could not start the signing ( " start-response ")"))
           ;; If failed to start the signing it should not be cancelled either.
-          start-response)
-      (let [digest-response (find-energiatodistus-digest db aws-s3-client id language)]
-        (if (or (= :already-signed digest-response) (= :not-in-signing digest-response) (nil? digest-response))
-          (do (println "Could not create the digest! ( " digest-response ")")
-              (cancel-sign-with-system db whoami id)
-              digest-response))
-        (let [data-to-sign (-> digest-response
-                               :digest
-                               (.getBytes StandardCharsets/UTF_8)
-                               (#(.decode (Base64/getDecoder) %)))
-              signed-digest (data->signed-digest data-to-sign aws-kms-client)
-              chain cert-chain-three-long-leaf-first
-              signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
-              sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
-          (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
-            (do (println "Could not sign the energiatodistus! (" sign-response ")")
-                (cancel-sign-with-system db whoami id)
-                sign-response)
-            (let [end-response (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)]
-              (if (not (= :ok end-response))
-                (do (println "Could not end the energiatodistus signing! (" end-response ")")
-                    (cancel-sign-with-system db whoami id))
-                (do
-                  (println "Successfully signed the pdf!")
-                  end-response)))))))))
+          {:left start-response})
+      {:right start-response})))
+
+(defn- either-error-or-digest-response
+  [{:keys [db id language aws-s3-client] :as params} logger _]
+  (let [digest-response (find-energiatodistus-digest db aws-s3-client id language)]
+    (if (or (= :already-signed digest-response) (= :not-in-signing digest-response) (nil? digest-response))
+      (do (logger (str "Could not create the digest! ( " digest-response ")"))
+          (cancel-sign-with-system params logger)
+          {:left digest-response})
+      {:right digest-response})))
+
+(defn- either-error-or-sign-response
+  [{:keys [db whoami now id language aws-s3-client aws-kms-client] :as params} logger digest-response]
+  (let [data-to-sign (-> digest-response
+                         :digest
+                         (.getBytes StandardCharsets/UTF_8)
+                         (#(.decode (Base64/getDecoder) %)))
+        signed-digest (data->signed-digest data-to-sign aws-kms-client)
+        chain cert-chain-three-long-leaf-first
+        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
+        sign-response (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
+    (if (or (= :already-signed sign-response) (= :not-in-signing sign-response) (nil? sign-response))
+      (do (logger (str "Could not sign the energiatodistus! (" sign-response ")"))
+          (cancel-sign-with-system params logger)
+          {:left sign-response})
+      {:right sign-response})))
+
+(defn- either-error-or-end-response
+  [{:keys [db whoami id aws-s3-client] :as params} logger _]
+  (let [end-response (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)]
+    (if (not (= :ok end-response))
+      (do (logger (str "Could not end the energiatodistus signing! (" end-response ")"))
+          (cancel-sign-with-system params logger)
+          {:left end-response})
+      (do
+        (logger "Successfully signed the pdf!")
+        {:right end-response}))))
+
+(defn- bind-either [f val]
+  (cond
+    (contains? val :left) val
+    (contains? val :right) (f (:right val))
+    ;; If this happens it is incorrect usage.
+    :else {:left nil}))
+
+(defn- unwrap-either [val]
+  (cond
+    (contains? val :left) (:left val)
+    (contains? val :right) (:right val)
+    ;; If this happens it is incorrect usage.
+    :else nil))
+
+(defn sign-with-system
+  "Does the whole process of signing with the system"
+  [params]
+  (let [logger (partial sign-with-system-log (:whoami params) (:id params))]
+    (->> (either-error-or-start-response params logger nil)
+         (bind-either (partial either-error-or-digest-response params logger))
+         (bind-either (partial either-error-or-sign-response params logger))
+         (bind-either (partial either-error-or-end-response params logger))
+         (unwrap-either))))
