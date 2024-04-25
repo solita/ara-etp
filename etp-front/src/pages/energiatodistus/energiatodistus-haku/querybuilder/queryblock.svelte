@@ -52,8 +52,10 @@
 
   $: if (Maybe.isSome(maybeKey)) {
     tick().then(() => {
-      input.value = Maybe.get(maybeKey);
-      input.dispatchEvent(new Event('change', { bubbles: true }));
+      if (input.value !== Maybe.get(maybeKey)) {
+        input.value = Maybe.get(maybeKey);
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
     });
   }
 
