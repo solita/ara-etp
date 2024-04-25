@@ -82,7 +82,7 @@
     }
   };
 
-  $: op = R.compose(
+  let op = R.compose(
     Maybe.orSome(R.head(operations)),
     Maybe.fromNull,
     R.find(R.pathEq(operation, ['operation', 'browserCommand']))
