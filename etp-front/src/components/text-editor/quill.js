@@ -1,6 +1,6 @@
 import Quill from 'quill';
 import { ImageDrop } from 'quill-image-drop-module';
-import MagicUrl from 'quill-magic-url';
+import MagicUrl from './magic-url.cjs';
 import * as Objects from '@Utility/objects';
 
 Quill.register('modules/imageDrop', ImageDrop);
