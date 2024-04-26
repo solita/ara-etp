@@ -111,6 +111,7 @@ where
   not partner and
   kayttaja.login is not null and
   patevyys_voimassa(laatija) and
+  passivoitu is not true and
   not laatija.laatimiskielto;
 
 -- name: select-laatija-history
