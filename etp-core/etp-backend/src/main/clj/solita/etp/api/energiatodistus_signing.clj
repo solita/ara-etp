@@ -57,6 +57,7 @@
                            [{:type :name-does-not-match :response 403}
                             {:type :signed-pdf-exists :response 409}
                             {:type :expired-signing-certificate :response 400}]))}}]
+
    (if config/allow-new-signature-implementation
      ["/system-sign/:language"
       {:put {:summary    "Luo järjestelmällä allekirjoitettu PDF"
@@ -79,7 +80,11 @@
                                 (str id "/" language))
                              [{:type :name-does-not-match :response 403}
                               {:type :signed-pdf-exists :response 409}
-                              {:type :expired-signing-certificate :response 400}]))}}])
+                              {:type :expired-signing-certificate :response 400}
+                              {:type :missing-value :response 400}
+                              {:type :patevyys-expired :response 400}
+                              {:type :laatimiskielto :response 400}
+                              {:type :not-signed :response 400}]))}}])
    ["/finish"
     {:post {:summary    "Siirrä energiatodistus allekirjoitettu-tilaan"
             :parameters {:path {:id common-schema/Key}}
