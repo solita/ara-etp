@@ -237,6 +237,7 @@
                                                nil)
              :already-signed))))
 
+
 (t/deftest sign-with-system-states-test
   (t/testing "Signing a pdf using the system instead of mpollux"
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
