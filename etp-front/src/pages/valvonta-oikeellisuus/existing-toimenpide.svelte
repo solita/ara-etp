@@ -68,7 +68,7 @@
     );
   };
 
-  $: load(params);
+  load(params);
 
   const fork = (key, successCallback) => future => {
     overlay = true;
