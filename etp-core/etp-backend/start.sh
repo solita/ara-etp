@@ -18,8 +18,8 @@ SECRET="/secret/etp/dvv/system-signature-leaf.crt"
 echo "Retrieve ${SECRET}"
 export SYSTEM_SIGNATURE_CERTIFICATE_LEAF="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
 
-echo "Set KMS_SIGNING_KEY"
-export KMS_SIGNING_KEY="alias/SigningKey"
+echo "Set KMS_SIGNING_KEY_ID"
+export KMS_SIGNING_KEY_ID="alias/SigningKey"
 
 echo Pack certificate as p12 file format
 openssl pkcs12 -export -in public.pem -inkey private.pem -out viestit.p12 -name ${SUOMIFI_VIESTIT_KEYSTORE_ALIAS} -passout pass:${SUOMIFI_VIESTIT_KEYSTORE_PASSWORD}
