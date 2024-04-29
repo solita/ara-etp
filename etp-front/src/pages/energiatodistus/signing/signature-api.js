@@ -1,6 +1,6 @@
 import * as R from 'ramda';
-import * as Future from '@Utility/future-utils';
-import * as Fetch from '@Utility/fetch-utils';
+import * as Future from '@Utility/future-utils.js';
+import * as Fetch from '@Utility/fetch-utils.js';
 
 const mpolluxUrl = 'https://localhost:53952';
 const mpolluxVersionUrl = `${mpolluxUrl}/version`;

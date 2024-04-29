@@ -1,19 +1,22 @@
-const { format } = require('date-fns/format');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+import { format } from 'date-fns/format';
 
-const GenerateJsonPlugin = require('generate-json-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import GenerateJsonPlugin from 'generate-json-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-const path = require('path');
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const mode = process.env.NODE_ENV || 'development';
 const prod = mode === 'production';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default {
   entry: {
     bundle: ['./src/main.js']
   },
@@ -63,12 +66,18 @@ module.exports = {
     rules: [
       {
         test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false
+        },
         exclude: /node_modules/,
         include: [path.resolve(__dirname, 'src'), /svelte/],
         use: ['babel-loader']
       },
       {
         test: /\.svelte$/,
+        resolve: {
+          fullySpecified: false
+        },
         include: [path.resolve(__dirname, 'src'), /svelte/],
         use: [
           'babel-loader',

@@ -54,9 +54,9 @@ in `src`, save it, the page should reload automatically.
   and [testing-library](https://testing-library.com/docs/), [Svelte testing library docs](https://testing-library.com/docs/svelte-testing-library/intro)
   to write component tests. These can either just render the component with the given props and then check what was
   rendered or also contain interactions. The most minimal rendering test, such
-  as [H1.test.mjs](src/components/H/H1.test.mjs) provide the additional safety compared to Storybook story that it
+  as [H1.test.js](src/components/H/H1.test.js) provide the additional safety compared to Storybook story that it
   checks and warns against improper props passed to the component. These should be located next to the component in a
-  file <Component name>.test.mjs.
+  file <Component name>.test.js.
 * Write E2E tests to test the whole system through the user interface using Cypress. Use E2E tests when the integration
   of the user interface and backend need to be tested, or when a longer UI workflow needs to be tested. Cypress tests
   and their setup are located [in their own directory](../e2e-tests/cypress).

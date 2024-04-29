@@ -7,6 +7,7 @@
   .spinner {
     @apply inline-block relative w-12 h-12;
   }
+
   .spinner div {
     @apply block absolute w-12 h-12 rounded-full border-solid border-8;
     box-sizing: border-box;
@@ -32,6 +33,6 @@
   }
 </style>
 
-<div class="spinner" class:smaller class:white>
+<div class="spinner" data-cy="spinner" class:smaller class:white>
   <div />
 </div>
