@@ -957,7 +957,7 @@
     (f)))
 
 (defn sign-with-system
-  "Does the whole process of signing with the system"
+  "Does the whole process of signing with the system."
   [params]
   (as-> (sign-with-system-start params) val
         (do-sign-with-system val #(sign-with-system-digest params))
