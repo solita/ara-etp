@@ -5,7 +5,7 @@
   import Seo from '@Component/seo';
   import { announceAssertively } from '@/utilities/announce';
   import Link from '@Component/link';
-
+  import H2 from '@Component/H2';
   let component;
   announceAssertively($_('SAAVUTETTAVUUSSELOSTE'));
 
@@ -15,10 +15,6 @@
 </script>
 
 <style>
-  h2 {
-    @apply mb-2 mt-8;
-  }
-
   ul {
     list-style: disc;
     @apply my-4;
@@ -45,7 +41,7 @@
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto" bind:this={component}>
     <div>
-      <h2 class="mb-4">{$_('SAAVUTETTAVUUSSELOSTE')}</h2>
+      <H2>{$_('SAAVUTETTAVUUSSELOSTE')}</H2>
       <p>
         ARA strävar efter att garantera tillgängligheten till tjänsten
         energiatodistusrekisteri.fi i enlighet med lagen om tillhandahållande av

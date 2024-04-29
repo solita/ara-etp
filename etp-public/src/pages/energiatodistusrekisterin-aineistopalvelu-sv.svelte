@@ -9,6 +9,7 @@
   import SopimusTietopalvelunKaytosta from '@Asset/sopimus-tietopalvelun-kaytosta-luonnos-sv.pdf';
   import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake-sv.pdf';
   import { announceAssertively } from '@/utilities/announce';
+  import H2 from '@Component/H2';
 
   const title = 'Energicertifikatregistrets materialtjänst';
   announceAssertively(title);
@@ -28,10 +29,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h2 {
-    @apply mb-2 mt-8;
   }
 
   h3 {
@@ -66,7 +63,7 @@
       <li>omfattande material som innehåller personuppgifter</li>
       <li>omfattande material som inte innehåller personuppgifter</li>
     </ol>
-    <h2>MATERIALBESKRIVNINGAR</h2>
+    <H2>MATERIALBESKRIVNINGAR</H2>
     <p>
       Informationsmaterialet beskrivs kort nedan. Närmare fältspecifika
       materialbeskrivningar finns
@@ -132,7 +129,7 @@
       från adressuppgifterna.
     </p>
     <p>Lämpar sig till exempel för forskningsändamål.</p>
-    <h2>ANVÄNDNINGSVILLKOR</h2>
+    <H2>ANVÄNDNINGSVILLKOR</H2>
     <p>
       Användningen av datatjänsten förutsätter att ARA har beviljat användaren
       datatillstånd. Dessutom ingår Ara och användaren ett separat avtal om
@@ -159,7 +156,7 @@
         >Aras webbplats</Link
       >.
     </p>
-    <h2>ANSLUTNING TILL MATERIALTJÄNSTEN</h2>
+    <H2>ANSLUTNING TILL MATERIALTJÄNSTEN</H2>
     <ol class="ml-6">
       <li>
         Fyll i
@@ -196,13 +193,11 @@
           >Se närmare anvisningar om anslutning till gränssnittet i Github.</Link>
       </li>
     </ol>
-    <h2>
-      <ButtonLink
-        href={SopimusTietopalvelunKaytosta}
-        target="_blank"
-        {...buttonLinkStyles.green}>ANSÖKAN</ButtonLink>
-    </h2>
-    <h2>ÅTGÄRDER VID STÖRNINGAR</h2>
+    <ButtonLink
+      href={SopimusTietopalvelunKaytosta}
+      target="_blank"
+      {...buttonLinkStyles.green}>ANSÖKAN</ButtonLink>
+    <H2>ÅTGÄRDER VID STÖRNINGAR</H2>
     <p>
       Vid störningar i materialtjänsten ska du kontakta oss per e-post på
       adressen

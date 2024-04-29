@@ -9,6 +9,7 @@
   import SopimusTietopalvelunKaytosta from '@Asset/sopimus-tietopalvelun-kaytosta-luonnos.pdf';
   import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake.pdf';
   import { announceAssertively } from '@/utilities/announce';
+  import H2 from '@Component/H2';
 
   const title = 'Energiatodistusrekisterin aineistopalvelu';
   announceAssertively(title);
@@ -28,10 +29,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h2 {
-    @apply mb-2 mt-8;
   }
 
   h3 {
@@ -66,7 +63,7 @@
       <li>laaja henkilötietoja sisältävä aineisto</li>
       <li>laaja ei henkilötietoja sisältävä aineisto</li>
     </ol>
-    <h2>AINEISTOKUVAUKSET</h2>
+    <H2>AINEISTOKUVAUKSET</H2>
     <p>
       Tietoaineistot on kuvattu lyhyesti alla. Tarkemmat kenttäkohtaiset
       aineistokuvaukset löytyvät <Link
@@ -131,7 +128,7 @@
       on kyseiseltä postinumeroalueelta vähemmän kuin 4 rakennusta.
     </p>
     <p>Soveltuu esimerkiksi tutkimuskäyttöön.</p>
-    <h2>KÄYTTÖEHDOT</h2>
+    <H2>KÄYTTÖEHDOT</H2>
     <p>
       Aineistopalvelun käyttäminen edellyttää, että Ara on myöntänyt käyttäjälle
       tietoluvan. Lisäksi Ara ja käyttäjä solmivat erillisen sopimuksen
@@ -156,7 +153,7 @@
         >Aran sivuilta</Link>
       .
     </p>
-    <h2>AINEISTOPALVELUUN LIITTYMINEN</h2>
+    <H2>AINEISTOPALVELUUN LIITTYMINEN</H2>
     <ol class="ml-6">
       <li>
         Täytä
@@ -192,13 +189,11 @@
           >Katso tarkemmat ohjeet rajapintaan liittymisestä GitHubissa.</Link>
       </li>
     </ol>
-    <h2>
-      <ButtonLink
-        href={TietolupaHakemuslomake}
-        target="_blank"
-        {...buttonLinkStyles.green}>HAKEMUS</ButtonLink>
-    </h2>
-    <h2>TOIMINTA HÄIRIÖTILANTEISSA</h2>
+    <ButtonLink
+      href={TietolupaHakemuslomake}
+      target="_blank"
+      {...buttonLinkStyles.green}>HAKEMUS</ButtonLink>
+    <H2>TOIMINTA HÄIRIÖTILANTEISSA</H2>
     <p>
       Aineistopalveluun liittyvissä häiriötilanteissa ota yhteyttä sähköpostitse
       <Link href="mailto:energiatodistus@ara.fi">energiatodistus@ara.fi</Link>.

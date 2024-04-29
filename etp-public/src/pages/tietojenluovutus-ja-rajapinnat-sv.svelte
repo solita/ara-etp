@@ -4,6 +4,7 @@
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
   import { announceAssertively } from '@/utilities/announce';
+  import H2 from '@Component/H2';
 
   const title = 'Utlämnande av uppgifter och gränssnitt';
   announceAssertively(title);
@@ -23,14 +24,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h2 {
-    @apply mb-2 mt-8;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -73,7 +66,7 @@
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
-    <h2>Anslutning till gränssnitt och dataskydd</h2>
+    <H2>Anslutning till gränssnitt och dataskydd</H2>
     <p>
       Det är avgiftsbelagt att ansluta sig till tjänsterna och användningen av
       dem förutsätter ett datatillstånd beviljat av Ara. Dessutom ingår Ara och
