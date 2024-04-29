@@ -1216,11 +1216,6 @@
     },
     "signing": {
       "header": "Undertecknande",
-      "options": {
-        "card": "Käytä henkilökorttia (sv)",
-        "system": "Älä käytä henkilökorttia (sv)"
-      },
-      "system-signing-info-text": "Allekirjoita ilman henkilökorttia (sv)",
       "language-adjective": {
         "fi": "på finska",
         "sv": "på svenska",

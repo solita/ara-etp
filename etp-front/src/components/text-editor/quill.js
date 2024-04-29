@@ -1,7 +1,9 @@
 import Quill from 'quill';
-import MagicUrl from './magic-url.cjs';
+import { ImageDrop } from 'quill-image-drop-module';
+import MagicUrl from 'quill-magic-url';
 import * as Objects from '@Utility/objects';
 
+Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/magicUrl', MagicUrl);
 
 const dispatchEvent = (name, node, editor) =>
@@ -33,6 +35,7 @@ export const quill = (
 ) => {
   const q = new Quill(node, {
     modules: {
+      imageDrop: false,
       magicUrl: true,
       toolbar,
       keyboard

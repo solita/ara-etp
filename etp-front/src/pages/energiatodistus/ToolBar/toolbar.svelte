@@ -9,7 +9,7 @@
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
 
   import Confirm from '@Component/Confirm/Confirm';
-  import Signing from '@Pages/energiatodistus/signing/SigningDialog.svelte';
+  import Signing from '@Pages/energiatodistus/signing';
   import TyojonoButton from './tyojono-button';
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
@@ -211,10 +211,7 @@
 </style>
 
 {#if signingActive}
-  <Signing
-    {energiatodistus}
-    reload={cancel}
-    checkIfSelectionIsAllowed={false} />
+  <Signing {energiatodistus} reload={cancel} />
 {/if}
 
 <div
