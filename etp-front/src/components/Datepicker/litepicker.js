@@ -1,4 +1,4 @@
-import { Litepicker } from 'litepicker';
+import Litepicker from 'litepicker';
 
 export const litepicker = (node, opts) => {
   const input = node.querySelector('input');

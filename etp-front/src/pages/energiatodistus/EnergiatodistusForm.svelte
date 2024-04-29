@@ -21,7 +21,7 @@
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
-  import Signing from './signing/SigningDialog.svelte';
+  import Signing from './signing';
   import Input from './Input';
 
   import * as EtUtils from './energiatodistus-utils';
@@ -259,10 +259,7 @@
 
 {#if !R.isNil(ETForm)}
   {#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
-    <Signing
-      {energiatodistus}
-      checkIfSelectionIsAllowed={false}
-      reload={reset} />
+    <Signing {energiatodistus} reload={reset} />
   {/if}
 
   <DirtyConfirmation {dirty} />
