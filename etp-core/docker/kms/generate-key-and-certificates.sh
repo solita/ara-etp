@@ -1,28 +1,37 @@
 #!/usr/bin/env bash
-# Used to generate a new key for local KMS. No need to run this, but kept in place to have the process documented.
+# Can be used to generate a new key for local KMS. No need to run this, but kept in place to have the process documented.
+
 set -euxo pipefail
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 KEY_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.key"
 CSR_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.csr"
 CRT_FILE_ROOT="${SCRIPT_DIR}/signing-key-root.crt"
 SER_FILE_ROOT="${SCRIPT_DIR}/root-serial"
-echo "01" > "${SER_FILE_ROOT}"
 
 KEY_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.key"
 CSR_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.csr"
 CRT_FILE_INT="${SCRIPT_DIR}/signing-key-intermediate.crt"
 SER_FILE_INT="${SCRIPT_DIR}/int-serial"
-echo "01" > "${SER_FILE_INT}"
 EXT_FILE_INT="${SCRIPT_DIR}/v3-int.ext"
-echo "basicConstraints = CA:TRUE, pathlen:0
-keyUsage = keyCertSign, cRLSign
-subjectKeyIdentifier = hash
-authorityKeyIdentifier = keyid,issuer" > "${EXT_FILE_INT}"
 
 KEY_FILE_LEAF="${SCRIPT_DIR}/signing-key-leaf.key"
 CSR_FILE_LEAF="${SCRIPT_DIR}/signing-key-leaf.csr"
 CRT_FILE_LEAF="${SCRIPT_DIR}/signing-key-leaf.crt"
 EXT_FILE_LEAF="${SCRIPT_DIR}/v3-leaf.ext"
+
+# Create serial files for CAs (puumerkki didn't like the default serial).
+echo "01" > "${SER_FILE_ROOT}"
+echo "01" > "${SER_FILE_INT}"
+
+
+# Create extensions files.
+echo "basicConstraints = CA:TRUE, pathlen:0
+keyUsage = keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer" > "${EXT_FILE_INT}"
+
 echo "basicConstraints = CA:FALSE
 keyUsage = digitalSignature, nonRepudiation
 subjectKeyIdentifier = hash
