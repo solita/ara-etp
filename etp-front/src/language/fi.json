@@ -1268,6 +1268,11 @@
     },
     "signing": {
       "header": "Allekirjoittaminen",
+      "options": {
+        "card": "Käytä henkilökorttia",
+        "system": "Älä käytä henkilökorttia"
+      },
+      "system-signing-info-text": "Allekirjoita ilman henkilökorttia",
       "language-adjective": {
         "fi": "suomenkielinen",
         "sv": "ruotsinkielinen",

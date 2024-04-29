@@ -9,13 +9,13 @@
 !.storybook/
 !__snapshots__/
 
-!babel.config.js
+!babel.config.cjs
 !fill-sv-localization.js
 !init-mocha.js
 !jsconfig.json
 !modheaders.json
-!postcss.config.js
-!svelte.config.js
+!postcss.config.cjs
+!svelte.config.cjs
 !tailwind.config.js
 !webpack.config.js
 

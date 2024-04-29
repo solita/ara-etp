@@ -19,3 +19,14 @@ export const bilingual = isKielisyys(2);
 
 export const fi = R.anyPass([onlyFi, bilingual]);
 export const sv = R.anyPass([onlySv, bilingual]);
+
+/**
+ *
+ * @type energiatodistus {Object}
+ * @return {('fi'|'sv'|'bilingual')}
+ */
+export const getEnergiatodistusLanguageCode = R.compose(
+  kieliKey,
+  Maybe.get,
+  R.path(['perustiedot', 'kieli'])
+);
