@@ -97,15 +97,15 @@
 
       <ol>
         <li>
-          Manuaalinen aineisto Manuaalista aineistoa käsittelevät
-          tietoturvakoulutetut henkilöt. Rekisterin tiedot on suojattu
-          asiattomalta katselulta, muuttamiselta ja hävittämiseltä.
+          Manuaalinen aineisto<br />
+          Manuaalista aineistoa käsittelevät tietoturvakoulutetut henkilöt. Rekisterin
+          tiedot on suojattu asiattomalta katselulta, muuttamiselta ja hävittämiseltä.
         </li>
         <li>
-          Digitaalisesti käsiteltävät aineistot Rekisterin tiedot on suojattu
-          asiattomalta katselulta, muuttamiselta ja hävittämiseltä. Suojaus
-          perustuu käyttövaltuushallintaan, tietokantojen ja palvelinten
-          tekniseen suojaukseen, tilojen fyysiseen suojaukseen, kulunvalvontaan,
+          Digitaalisesti käsiteltävät aineistot<br />
+          Rekisterin tiedot on suojattu asiattomalta katselulta, muuttamiselta ja
+          hävittämiseltä. Suojaus perustuu käyttövaltuushallintaan, tietokantojen
+          ja palvelinten tekniseen suojaukseen, tilojen fyysiseen suojaukseen, kulunvalvontaan,
           tietoliikenteen suojaukseen sekä tietojen varmuuskopiointiin.
         </li>
       </ol>
