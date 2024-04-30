@@ -59,6 +59,13 @@
           </a>
         </li>
         <li>
+          <a
+            href="/tietosuojaseloste-aineistopalvelun-kayttajarekisteri"
+            class="text-darkgreen">
+            {$_('TIETOSUOJASELOSTE_AINEISTOPALVELUN_KAYTTAJAREKISTERI')}
+          </a>
+        </li>
+        <li>
           <a href="/tietojenluovutus-ja-rajapinnat" class="text-darkgreen"
             >{$_('TIETOJENLUOVUTUS_JA_RAJAPINNAT')}</a>
         </li>

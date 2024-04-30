@@ -28,6 +28,8 @@
   import TietosuojaselosteEnergiatodistusrekisteri from '@Page/tietosuojaseloste-energiatodistusrekisteri';
   import TietosuojaselosteLaatijarekisteri from '@Page/tietosuojaseloste-laatijarekisteri';
   import TietosuojaselosteValvontatietorekisteri from '@Page/tietosuojaseloste-valvontatietorekisteri';
+  import TietosuojaselosteAineistoPalvelunKayttajarekisteri from '@Page/tietosuojaseloste-aineistopalvelun-kayttajarekisteri';
+
   import EnergiatodistusrekisterinAineistopalvelu from '@Page/energiatodistusrekisterin-aineistopalvelu';
   import EnergiatodistusrekisterinRajapintapalvelu from '@Page/energiatodistusrekisterin-rajapintapalvelu';
   import Tilastot from '@Page/tilastot';
@@ -67,6 +69,9 @@
   });
   router('/tietosuojaseloste-valvontatietorekisteri', () => {
     page = TietosuojaselosteValvontatietorekisteri;
+  });
+  router('/tietosuojaseloste-aineistopalvelun-kayttajarekisteri', () => {
+    page = TietosuojaselosteAineistoPalvelunKayttajarekisteri;
   });
   router('/laatijankirjautuminen', () => {
     page = LaatijanKirjautuminen;

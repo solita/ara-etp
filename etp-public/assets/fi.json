@@ -204,6 +204,7 @@
   "TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI": "Tietosuojaseloste Energiatodistusrekisteri",
   "TIETOSUOJASELOSTE_LAATIJAREKISTERI": "Tietosuojaseloste Energiatodistusten laatijarekisteri",
   "TIETOSUOJASELOSTE_VALVONTATIETOREKISTERI": "Tietosuojaseloste Energiatodistusten valvontatietorekisteri",
+  "TIETOSUOJASELOSTE_AINEISTOPALVELUN_KAYTTAJAREKISTERI": "Tietosuojaseloste Aineistopalvelun käyttäjärekisteri",
   "REKISTEROITYMISOHJEET": "Rekisteröitymisohjeet",
   "REOHJ_INFO_TITLE": "Ohjeet energiatodistusten laatijoiden palvelun käyttöön",
   "REOHJ_INFO_TEXT": "Vain laatijarekisteriin rekisteröity käyttäjä voi kirjautua palveluun ja laatia energiatodistuksia.",
