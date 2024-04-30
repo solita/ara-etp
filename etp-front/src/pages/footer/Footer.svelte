@@ -42,6 +42,13 @@
       <span class="uppercase font-bold text-secondary">
         {$_('footer.about')}
       </span>
+      <div>
+        <Link
+          bold={true}
+          additionalClasses="text-ara-2021-green-small-text"
+          href={'#/saavutettavuusseloste'}
+          text={$_('footer.accessibility-report')} />
+      </div>
       {#if $locale.startsWith('sv')}
         <div>
           <Link
@@ -68,13 +75,6 @@
             text={'Dataskyddsbeskrivning Register för upprättare av energiferticikat (pdf)'} />
         </div>
       {:else}
-        <div>
-          <Link
-            bold={true}
-            additionalClasses="text-ara-2021-green-small-text"
-            href={'#/saavutettavuusseloste'}
-            text={$_('footer.accessibility-report')} />
-        </div>
         <div>
           <Link
             bold={true}

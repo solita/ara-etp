@@ -1534,7 +1534,8 @@
     "post-num": "15140 LAHTIS",
     "contact-info": "Kontaktuppgifter",
     "phone": "Telefon",
-    "email": "E-post"
+    "email": "E-post",
+    "accessibility-report": "Tillgänglighetsbeskrivning"
   },
   "valvonta": {
     "self": "Jag",
