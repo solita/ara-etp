@@ -200,6 +200,7 @@
   "TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI": "Dataskyddsbeskrivning Energicertifikatregistret",
   "TIETOSUOJASELOSTE_LAATIJAREKISTERI": "Dataskyddsbeskrivning Register för upprättare av energiferticikat",
   "TIETOSUOJASELOSTE_VALVONTATIETOREKISTERI": "Dataskyddsbeskrivning Register för övervakningsuppgifter om energicertifikat",
+  "TIETOSUOJASELOSTE_AINEISTOPALVELUN_KAYTTAJAREKISTERI": "Dataskyddsbeskrivning Materialtjänstens användarregister",
   "REKISTEROITYMISOHJEET": "Registreringsanvisningar",
   "REOHJ_INFO_TITLE": "Anvisningar för användningen av tjänsten för dem som upprättar energicertifikat",
   "REOHJ_INFO_TEXT": "Endast användare som registrerats i registret över upprättare kan logga in i tjänsten och upprätta energicertifikat.",
