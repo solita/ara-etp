@@ -8,7 +8,7 @@
   import H3 from '@Component/H3';
 
   let component;
-  announceAssertively($_('TIETOSUOJASELOSTE'));
+  announceAssertively($_('TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI'));
 
   onMount(() => {
     component?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -36,14 +36,20 @@
 </style>
 
 <Seo
-  title="{$_('ENERGIATODISTUSREKISTERI')} - {$_('TIETOSUOJASELOSTE')}"
-  descriptionFi={$locale === 'fi' ? $_('TIETOSUOJASELOSTE') : undefined}
-  descriptionSv={$locale === 'sv' ? $_('TIETOSUOJASELOSTE') : undefined} />
+  title="{$_('ENERGIATODISTUSREKISTERI')} - {$_(
+    'TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI'
+  )}"
+  descriptionFi={$locale === 'fi'
+    ? $_('TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI')
+    : undefined}
+  descriptionSv={$locale === 'sv'
+    ? $_('TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI')
+    : undefined} />
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto" bind:this={component}>
     <div>
-      <H2>{$_('TIETOSUOJASELOSTE')}</H2>
+      <H2>{$_('TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI')}</H2>
 
       <H3>Henkilötietojen käyttötarkoitus ja käsittelyperuste</H3>
 

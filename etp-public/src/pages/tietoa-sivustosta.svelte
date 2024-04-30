@@ -39,8 +39,10 @@
           </a>
         </li>
         <li>
-          <a href="/tietosuojaseloste" class="text-darkgreen">
-            {$_('TIETOSUOJASELOSTE')}
+          <a
+            href="/tietosuojaseloste-energiatodistusrekisteri"
+            class="text-darkgreen">
+            {$_('TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI')}
           </a>
         </li>
         <li>
