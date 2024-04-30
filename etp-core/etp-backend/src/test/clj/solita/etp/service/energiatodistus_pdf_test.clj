@@ -245,21 +245,14 @@
             db (ts/db-user laatija-id)
             ;; The second ET is 2018 version
             id (-> energiatodistukset keys sort second)
-            whoami {:id laatija-id}
-            {:keys [versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)
-            language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
-        (t/testing "Testing assumptions about the energiatodistus in test"
-          (t/is (or (= language-code "sv") (= language-code "fi")))
-          (t/is (= id 2))
-          (t/is (= versio 2018)))
+            whoami {:id laatija-id}]
         (t/testing "Signing a pdf should succeed"
           (t/is (= (service/sign-with-system {:db             db
                                               :aws-s3-client  ts/*aws-s3-client*
                                               :whoami         whoami
                                               :aws-kms-client ts/*aws-kms-client*
                                               :now            (Instant/now)
-                                              :id             id
-                                              :language       language-code})
+                                              :id             id})
                    :ok)))
         (t/testing "Trying to sign again should result in :already-signed"
           (t/is (= (service/sign-with-system {:db             db
@@ -267,8 +260,7 @@
                                               :whoami         whoami
                                               :aws-kms-client ts/*aws-kms-client*
                                               :now            (Instant/now)
-                                              :id             id
-                                              :language       language-code})
+                                              :id             id})
                    :already-signed)))
         (t/testing "The state should result in :already-signed if trying to sign three times in a row"
           (t/is (= (service/sign-with-system {:db             db
@@ -276,8 +268,7 @@
                                               :whoami         whoami
                                               :aws-kms-client ts/*aws-kms-client*
                                               :now            (Instant/now)
-                                              :id             id
-                                              :language       language-code})
+                                              :id             id})
                    :already-signed))))))
 
 (t/deftest sign-with-system-signature-test
@@ -292,14 +283,14 @@
           language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
 
       ;; TODO: Use puumerkki/verify-signatures instead of puumerkki/cursory-verify-signature once it's available.
-      (t/testing "The signed document's signature should be valid."
+      ;;       This only checks that the signagure exists
+      (t/testing "The signed document's signature should be exist."
         (service/sign-with-system {:db             db
                                    :aws-s3-client  ts/*aws-s3-client*
                                    :whoami         whoami
                                    :aws-kms-client ts/*aws-kms-client*
                                    :now            (Instant/now)
-                                   :id             id
-                                   :language       language-code})
+                                   :id             id})
         (with-open [^InputStream pdf-bytes (service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
                     xout (java.io.ByteArrayOutputStream.)]
           (io/copy pdf-bytes xout)
@@ -312,8 +303,6 @@
           laatija-id (-> laatijat keys sort first)
           db (ts/db-user laatija-id)
           id (-> energiatodistukset keys sort first)
-          {:keys [kieli]} (complete-energiatodistus-service/find-complete-energiatodistus db id)
-          language-code (energiatodistus-service/language-id->codes kieli)
           whoami {:id laatija-id}]
       ;; Put the energiatodistus into signing.
       (energiatodistus-service/start-energiatodistus-signing! db whoami id)
@@ -324,8 +313,7 @@
                                               :whoami         whoami
                                               :aws-kms-client ts/*aws-kms-client*
                                               :now            (Instant/now)
-                                              :id             id
-                                              :language       language-code})
+                                              :id             id})
                    :already-in-signing)))
         (t/testing "Trying to sign a pdf that is already in signing should not change the state"
           (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)

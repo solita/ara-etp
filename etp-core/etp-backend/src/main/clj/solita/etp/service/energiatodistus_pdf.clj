@@ -919,7 +919,7 @@
        (.readAllBytes)))
 
 (defn- sign-with-system-log-message [whoami id message]
-  (str "Sign with system (laatija-id: " (:id whoami)") (energiatodistus-id: " id "): " message))
+  (str "Sign with system (laatija-id: " (:id whoami) ") (energiatodistus-id: " id "): " message))
 
 (defn- sign-with-system-start
   [{:keys [db whoami id]}]
@@ -927,12 +927,12 @@
   (energiatodistus-service/start-energiatodistus-signing! db whoami id))
 
 (defn- sign-with-system-digest
-  [{:keys [db whoami id language aws-s3-client]}]
+  [{:keys [db whoami id aws-s3-client]} language]
   (log/info (sign-with-system-log-message whoami id "Getting the message digest"))
   (find-energiatodistus-digest db aws-s3-client id language))
 
 (defn- sign-with-system-sign
-  [{:keys [db whoami now id language aws-s3-client aws-kms-client]} digest-response]
+  [{:keys [db whoami now id aws-s3-client aws-kms-client]} language digest-response]
   (let [data-to-sign (-> digest-response
                          :digest
                          (.getBytes StandardCharsets/UTF_8)
@@ -948,6 +948,8 @@
   (log/info (sign-with-system-log-message whoami id "End signing"))
   (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id))
 
+
+
 (defn- do-sign-with-system
   "Short-circuits the signing in case there was a problem.
   Note that the execution might be short-circuited by a thrown exception."
@@ -956,10 +958,23 @@
     val
     (f)))
 
+(defn- sign-single-pdf-with-system [params language]
+  (as-> (sign-with-system-digest language params) val
+        (do-sign-with-system val #(sign-with-system-sign language params val))))
+
 (defn sign-with-system
   "Does the whole process of signing with the system."
-  [params]
-  (as-> (sign-with-system-start params) val
-        (do-sign-with-system val #(sign-with-system-digest params))
-        (do-sign-with-system val #(sign-with-system-sign params val))
-        (do-sign-with-system val #(sign-with-system-end params))))
+  [{:keys [db id] :as params}]
+  (let [language-id (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :perustiedot :kieli)]
+    (case language-id
+      0 (-> (sign-with-system-start params)
+              (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
+              (do-sign-with-system #(sign-with-system-end params)))
+      1 (-> (sign-with-system-start params)
+              (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
+              (do-sign-with-system #(sign-with-system-end params)))
+      2 (-> (sign-with-system-start params)
+              (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
+              (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
+              (do-sign-with-system #(sign-with-system-end params)))
+      nil)))
