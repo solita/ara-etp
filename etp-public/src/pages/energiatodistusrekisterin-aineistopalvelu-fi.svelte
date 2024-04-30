@@ -10,6 +10,7 @@
   import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake.pdf';
   import { announceAssertively } from '@/utilities/announce';
   import H2 from '@Component/H2';
+  import H3 from '@Component/H3';
 
   const title = 'Energiatodistusrekisterin aineistopalvelu';
   announceAssertively(title);
@@ -29,10 +30,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -72,7 +69,7 @@
       >.
     </p>
 
-    <h3>Suppea henkilötietoja sisältävä aineisto</h3>
+    <H3>Suppea henkilötietoja sisältävä aineisto</H3>
     <ul class="ml-6">
       <li>
         voimassa olevien energiatodistusten tietoja energiatodistusrekisteristä
@@ -89,7 +86,7 @@
       Soveltuu esimerkiksi lainoja ja vakuuksia antavien tahojen käyttöön,
       joilla on oikeus käsitellä henkilötietoja.
     </p>
-    <h3>Laaja, henkilötietoja sisältävä aineisto</h3>
+    <H3>Laaja, henkilötietoja sisältävä aineisto</H3>
     <ul class="ml-6">
       <li>
         energiatodistusten tietoja energiatodistusrekisteristä toukokuusta 2015
@@ -109,7 +106,7 @@
       Soveltuu esimerkiksi tutkimuskäyttöön tahoille, joilla on oikeus käsitellä
       henkilötietoja.
     </p>
-    <h3>Laaja, ei henkilötietoja sisältävä aineisto</h3>
+    <H3>Laaja, ei henkilötietoja sisältävä aineisto</H3>
     <ul class="ml-6">
       <li>
         energiatodistusten tietoja energiatodistusrekisteristä toukokuusta 2015

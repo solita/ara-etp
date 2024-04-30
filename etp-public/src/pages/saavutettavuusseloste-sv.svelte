@@ -6,6 +6,8 @@
   import { announceAssertively } from '@/utilities/announce';
   import Link from '@Component/link';
   import H2 from '@Component/H2';
+  import H3 from '@Component/H3';
+
   let component;
   announceAssertively($_('SAAVUTETTAVUUSSELOSTE'));
 
@@ -22,10 +24,6 @@
 
   .contact-info {
     @apply list-none;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -51,12 +49,12 @@
         Denna tillgänglighetsbeskrivning gäller webbplatsen
         energiatodistusrekisteri.fi.
       </p>
-      <h3>Status för tillgängligheten</h3>
+      <H3>Status för tillgängligheten</H3>
       <p>
         energiatodistusrekisteri.fi uppfyller delvis kraven på nivå AA i
         tillgänglighetsanvisningarna för webbinnehåll (WCAG 2.1).
       </p>
-      <h3>Icke-tillgängligt innehåll</h3>
+      <H3>Icke-tillgängligt innehåll</H3>
       <p>Innehållet nedan är inte tillgängligt av följande skäl:</p>
       <p>
         Underlåtelse att iaktta lagen om tillhandahållande av digitala tjänster
@@ -125,7 +123,7 @@
           lagen om tillhandahållande av digitala tjänster 306/2019
         </Link>.
       </p>
-      <h3>Respons och kontaktuppgifter</h3>
+      <H3>Respons och kontaktuppgifter</H3>
       <p>
         Om du upptäckte en tillgänglighetsbrist som inte beskrivs på denna sida,
         vänligen berätta det för oss. Kontakta oss genom att skicka e-post till
@@ -136,7 +134,7 @@
         ta upp till 14 dagar innan du får vårt svar.
       </p>
 
-      <h3>Verkställighetsförfarande</h3>
+      <H3>Verkställighetsförfarande</H3>
       <p>
         Om du upptäcker tillgänglighetsproblem på webbplatsen ska du först ge
         respons till webbplatsens administratör. Svaret kan ta upp till 14
@@ -145,7 +143,7 @@
         Regionförvaltningsverket i Södra Finland.
       </p>
 
-      <h3>Tillsynsmyndighetens kontaktuppgifter</h3>
+      <H3>Tillsynsmyndighetens kontaktuppgifter</H3>
       <ul class="contact-info">
         <li>Enheten för tillsyn av tillgänglighet</li>
         <li>

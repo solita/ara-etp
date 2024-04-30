@@ -26,10 +26,6 @@
     @apply my-4;
   }
 
-  h3 {
-    @apply font-bold;
-  }
-
   p {
     @apply mb-4;
   }

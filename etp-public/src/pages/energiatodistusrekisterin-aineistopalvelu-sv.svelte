@@ -10,6 +10,7 @@
   import TietolupaHakemuslomake from '@Asset/tietolupa-hakemuslomake-sv.pdf';
   import { announceAssertively } from '@/utilities/announce';
   import H2 from '@Component/H2';
+  import H3 from '@Component/H3';
 
   const title = 'Energicertifikatregistrets materialtjänst';
   announceAssertively(title);
@@ -29,10 +30,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -72,7 +69,7 @@
       >.
     </p>
 
-    <h3>Begränsat material som innehåller personuppgifter</h3>
+    <H3>Begränsat material som innehåller personuppgifter</H3>
     <ul class="ml-6">
       <li>
         uppgifter om gällande energicertifikat i energicertifikatregistret från
@@ -89,7 +86,7 @@
       Lämpar sig till exempel för aktörer som beviljar lån och säkerheter och
       som har rätt att behandla personuppgifter.
     </p>
-    <h3>Omfattande material som innehåller personuppgifter</h3>
+    <H3>Omfattande material som innehåller personuppgifter</H3>
     <ul class="ml-6">
       <li>
         uppgifter om energicertifikat i energicertifikatregistret från och med
@@ -109,7 +106,7 @@
       Lämpar sig till exempel för forskningsändamål för aktörer som har rätt att
       behandla personuppgifter.
     </p>
-    <h3>Omfattande material som inte innehåller personuppgifter</h3>
+    <H3>Omfattande material som inte innehåller personuppgifter</H3>
     <ul class="ml-6">
       <li>
         uppgifter om energicertifikat i energicertifikatregistret från och med

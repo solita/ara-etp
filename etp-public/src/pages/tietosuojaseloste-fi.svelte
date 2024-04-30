@@ -5,6 +5,7 @@
   import Seo from '@Component/seo';
   import { announceAssertively } from '@/utilities/announce';
   import H2 from '@Component/H2';
+  import H3 from '@Component/H3';
 
   let component;
   announceAssertively($_('TIETOSUOJASELOSTE'));
@@ -29,10 +30,6 @@
     @apply list-none;
   }
 
-  h3 {
-    @apply font-bold;
-  }
-
   p {
     @apply mb-4;
   }
@@ -48,7 +45,7 @@
     <div>
       <H2>{$_('TIETOSUOJASELOSTE')}</H2>
 
-      <h3>Henkilötietojen käyttötarkoitus ja käsittelyperuste</h3>
+      <H3>Henkilötietojen käyttötarkoitus ja käsittelyperuste</H3>
 
       <p>
         Rekisterissä käsitellään henkilötietoja rakennuksen energiatodistuksesta
@@ -63,7 +60,7 @@
         energiatodistusrekisterin ylläpitämiseksi.
       </p>
 
-      <h3>Mitä henkilötietoja käsitellään?</h3>
+      <H3>Mitä henkilötietoja käsitellään?</H3>
 
       <p>
         Käsittelemme Energiatodistusrekisterissä energiatodistusten laatijoiden
@@ -96,7 +93,7 @@
         pysyviä rakennustunnuksia.
       </p>
 
-      <h3>Henkilötietojen käsittely, siirto ja luovuttaminen</h3>
+      <H3>Henkilötietojen käsittely, siirto ja luovuttaminen</H3>
 
       <ol>
         <li>
@@ -137,14 +134,14 @@
         järjestöille.
       </p>
 
-      <h3>Tietojen säilytysaika</h3>
+      <H3>Tietojen säilytysaika</H3>
 
       <p>
         Energiatodistusrekisterin sisältämien henkilötietojen säilytysajat
         pohjautuvat Aran tiedonohjaussuunnitelmaan.
       </p>
 
-      <h3>Rekisteröidyn oikeudet</h3>
+      <H3>Rekisteröidyn oikeudet</H3>
 
       <p>
         Rekisteröidyllä on oikeus saada rekisterinpitäjältä vahvistus siitä,
@@ -186,7 +183,7 @@
         <li>Kirjaamo: 029 566 6768</li>
       </ul>
 
-      <h3>Rekisterinpitäjä</h3>
+      <H3>Rekisterinpitäjä</H3>
       <ul class="contact-info">
         <li>Asumisen rahoitus- ja kehittämiskeskus (Ara)</li>
         <li>PL 30, 15141 Lahti</li>
@@ -194,7 +191,7 @@
         <li>Sähköposti: kirjaamo.ara(at)ara.fi</li>
       </ul>
 
-      <h3>Yhteyshenkilö</h3>
+      <H3>Yhteyshenkilö</H3>
       <ul class="contact-info">
         <li>Kirsi Unhonen, energia-asiantuntija</li>
         <li>Asumisen rahoitus- ja kehittämiskeskus</li>

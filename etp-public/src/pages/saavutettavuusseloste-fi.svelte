@@ -6,6 +6,7 @@
   import { announceAssertively } from '@/utilities/announce';
   import Link from '@Component/link';
   import H2 from '@Component/H2';
+  import H3 from '@Component/H3';
 
   let component;
   announceAssertively($_('SAAVUTETTAVUUSSELOSTE'));
@@ -23,10 +24,6 @@
 
   .contact-info {
     @apply list-none;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -51,12 +48,12 @@
       <p>
         Tämä saavutettavuusseloste koskee energiatodistusrekisteri.fi-sivustoa.
       </p>
-      <h3>Saavutettavuuden tila</h3>
+      <H3>Saavutettavuuden tila</H3>
       <p>
         energiatodistusrekisteri.fi täyttää Verkkosisällön
         saavutettavuusohjeiden (WCAG) 2.1 tason AA vaatimukset osittain.
       </p>
-      <h3>Ei-saavutettava sisältö</h3>
+      <H3>Ei-saavutettava sisältö</H3>
       <p>
         Jäljempänä mainittu sisältö ei ole saavutettavissa seuraavista syistä:
       </p>
@@ -130,7 +127,7 @@
         </Link>
         vaatimukset.
       </p>
-      <h3>Palaute ja yhteystiedot</h3>
+      <H3>Palaute ja yhteystiedot</H3>
       <p>
         Jos huomasit saavutettavuuspuutteen, jota ei tällä sivulla ole kuvattu,
         kerrothan sen meille. Ota yhteyttä lähettämällä sähköpostia
@@ -141,7 +138,7 @@
         vastauksessamme voi kuitenkin kulua jopa 14 päivää.
       </p>
 
-      <h3>Täytäntöönpanomenettely</h3>
+      <H3>Täytäntöönpanomenettely</H3>
       <p>
         Jos huomaat sivustolla saavutettavuusongelmia, anna ensin palautetta
         sivuston ylläpitäjälle. Vastauksessa voi mennä 14 päivää. Jos et ole
@@ -149,7 +146,7 @@
         viikon aikana, voit antaa palautteen Etelä-Suomen aluehallintovirastoon.
       </p>
 
-      <h3>Valvontaviranomaisen yhteystiedot</h3>
+      <H3>Valvontaviranomaisen yhteystiedot</H3>
       <ul class="contact-info">
         <li>Saavutettavuuden valvonnan yksikkö</li>
         <li>
