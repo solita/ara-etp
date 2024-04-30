@@ -23,6 +23,7 @@
   }
 </style>
 
+<!--TODO: Korjaa descriptionit-->
 <Seo
   title="{$_('ENERGIATODISTUSREKISTERI')} - {$_('TIETOA_SIVUSTOSTA')}"
   descriptionFi={$locale == 'fi' ? $_('SAAVUTETTAVUUSSELOSTE') : undefined}
@@ -43,6 +44,11 @@
             href="/tietosuojaseloste-energiatodistusrekisteri"
             class="text-darkgreen">
             {$_('TIETOSUOJASELOSTE_ENERGIATODISTUSREKISTERI')}
+          </a>
+        </li>
+        <li>
+          <a href="/tietosuojaseloste-laatijarekisteri" class="text-darkgreen">
+            {$_('TIETOSUOJASELOSTE_LAATIJAREKISTERI')}
           </a>
         </li>
         <li>

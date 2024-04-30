@@ -26,6 +26,7 @@
   import Rekisteroitymisohjeet from '@Page/rekisteroitymisohjeet';
   import TietojenLuovutusJaRajapinnat from '@Page/tietojenluovutus-ja-rajapinnat';
   import TietosuojaselosteEnergiatodistusrekisteri from '@Page/tietosuojaseloste-energiatodistusrekisteri';
+  import TietosuojaselosteLaatijarekisteri from '@Page/tietosuojaseloste-laatijarekisteri';
   import EnergiatodistusrekisterinAineistopalvelu from '@Page/energiatodistusrekisterin-aineistopalvelu';
   import EnergiatodistusrekisterinRajapintapalvelu from '@Page/energiatodistusrekisterin-rajapintapalvelu';
   import Tilastot from '@Page/tilastot';
@@ -59,6 +60,9 @@
   });
   router('/tietosuojaseloste-energiatodistusrekisteri', () => {
     page = TietosuojaselosteEnergiatodistusrekisteri;
+  });
+  router('/tietosuojaseloste-laatijarekisteri', () => {
+    page = TietosuojaselosteLaatijarekisteri;
   });
   router('/laatijankirjautuminen', () => {
     page = LaatijanKirjautuminen;
