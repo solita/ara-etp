@@ -52,6 +52,13 @@
           </a>
         </li>
         <li>
+          <a
+            href="/tietosuojaseloste-valvontatietorekisteri"
+            class="text-darkgreen">
+            {$_('TIETOSUOJASELOSTE_VALVONTATIETOREKISTERI')}
+          </a>
+        </li>
+        <li>
           <a href="/tietojenluovutus-ja-rajapinnat" class="text-darkgreen"
             >{$_('TIETOJENLUOVUTUS_JA_RAJAPINNAT')}</a>
         </li>
