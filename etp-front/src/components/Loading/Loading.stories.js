@@ -3,5 +3,6 @@ import Loading from './Loading';
 export default { title: 'Loading' };
 
 export const withDefault = () => ({
-  Component: Loading
+  Component: Loading,
+  props: { disableAnimation: true }
 });
