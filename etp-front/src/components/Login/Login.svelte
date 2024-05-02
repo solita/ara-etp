@@ -5,6 +5,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
 
   export let redirectTimeout = 0;
+  export let disableAnimation = false;
 
   /* Remove path /api/logout from redirect url */
   export const currentUrlEncoded = encodeURIComponent(
@@ -26,7 +27,7 @@
 <section class="content">
   <div
     class="bg-success flex items-center py-4 px-4 mx-4 bg-primary text-light rounded-lg">
-    <Spinner white={true} />
+    <Spinner white={true} {disableAnimation} />
     <div class="mx-4">{$_('login_redirect')}</div>
   </div>
 </section>

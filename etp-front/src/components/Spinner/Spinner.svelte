@@ -1,12 +1,14 @@
 <script>
   export let white = false;
   export let smaller = false;
+  export let disableAnimation = false;
 </script>
 
 <style type="text/postcss">
   .spinner {
     @apply inline-block relative w-12 h-12;
   }
+
   .spinner div {
     @apply block absolute w-12 h-12 rounded-full border-solid border-8;
     box-sizing: border-box;
@@ -30,8 +32,18 @@
       transform: rotate(360deg);
     }
   }
+
+  .disable-animation > * {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
 </style>
 
-<div class="spinner" class:smaller class:white>
+<div
+  class="spinner"
+  class:smaller
+  class:white
+  class:disable-animation={disableAnimation}>
   <div />
 </div>
