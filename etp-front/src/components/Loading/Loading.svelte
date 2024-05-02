@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
 
   export let error = Maybe.None();
+  export let disableAnimation = false;
 </script>
 
 <style type="text/postcss">
@@ -11,7 +12,7 @@
 
 {#if error.isNone()}
   <div class="flex flex-row items-center">
-    <Spinner />
+    <Spinner {disableAnimation} />
     <p class="ml-6">{$_('loading')}</p>
   </div>
 {:else}
