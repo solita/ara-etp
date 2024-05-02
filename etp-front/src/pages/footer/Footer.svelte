@@ -63,25 +63,13 @@
           href={'#/tietosuojaseloste-laatijarekisteri'}
           text={$_('footer.tietosuojaseloste-laatijarekisteri')} />
       </div>
-      {#if $locale.startsWith('sv')}
-        <div>
-          <Link
-            bold={true}
-            additionalClasses="text-ara-2021-green-small-text"
-            href={'pdf/Dataskyddsbeskrivning_Register_for_upprattare_av_energiferticikat.pdf'}
-            target={'_blank'}
-            text={'Dataskyddsbeskrivning Register för upprättare av energiferticikat (pdf)'} />
-        </div>
-      {:else}
-        <div>
-          <Link
-            bold={true}
-            additionalClasses="text-ara-2021-green-small-text"
-            href={'pdf/Tietosuojaseloste_Energiatodistusten_valvontatietorekisteri.pdf'}
-            target={'_blank'}
-            text={'Tietosuojaseloste Energiatodistusten valvontatietorekisteri (pdf)'} />
-        </div>
-      {/if}
+      <div>
+        <Link
+          bold={true}
+          additionalClasses="text-ara-2021-green-small-text"
+          href={'#/tietosuojaseloste-valvontatietorekisteri'}
+          text={$_('footer.tietosuojaseloste-valvontatietorekisteri')} />
+      </div>
     </div>
   </div>
   <div

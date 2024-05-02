@@ -2192,6 +2192,7 @@
     "email": "Sähköposti",
     "accessibility-report": "Saavutettavuusseloste",
     "tietosuojaseloste-energiatodistusrekisteri": "Tietosuojaseloste Energiatodistusrekisteri",
-    "tietosuojaseloste-laatijarekisteri": "Tietosuojaseloste Energiatodistusten laatijarekisteri"
+    "tietosuojaseloste-laatijarekisteri": "Tietosuojaseloste Energiatodistusten laatijarekisteri",
+    "tietosuojaseloste-valvontatietorekisteri": "Tietosuojaseloste Energiatodistusten valvontatietorekisteri"
   }
 }
