@@ -1,12 +1,13 @@
 <script>
   import { locale } from '@Language/i18n';
-  import Tietosuojaseloste from './fi';
+  import TietosuojaselosteFi from './fi';
+  import TietosuojaselosteSv from './sv';
 </script>
 
 <div>
   {#if $locale.startsWith('sv')}
-    <p>TBD</p>
+    <TietosuojaselosteSv />
   {:else}
-    <Tietosuojaseloste />
+    <TietosuojaselosteFi />
   {/if}
 </div>
