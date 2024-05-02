@@ -23,11 +23,10 @@
   }
 </style>
 
-<!--TODO: Korjaa descriptionit-->
 <Seo
   title="{$_('ENERGIATODISTUSREKISTERI')} - {$_('TIETOA_SIVUSTOSTA')}"
-  descriptionFi={$locale == 'fi' ? $_('SAAVUTETTAVUUSSELOSTE') : undefined}
-  descriptionSv={$locale == 'sv' ? $_('SAAVUTETTAVUUSSELOSTE') : undefined} />
+  descriptionFi={$locale == 'fi' ? $_('TIETOA_SIVUSTOSTA') : undefined}
+  descriptionSv={$locale == 'sv' ? $_('TIETOA_SIVUSTOSTA') : undefined} />
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto" bind:this={component}>
