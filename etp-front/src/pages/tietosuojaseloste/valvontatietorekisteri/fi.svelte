@@ -15,6 +15,14 @@
     @apply my-4 ml-6 list-disc;
   }
 
+  ol {
+    @apply my-4 ml-6;
+  }
+
+  .alphabet-list {
+    list-style: upper-latin;
+  }
+
   .contact-info {
     @apply list-none;
   }

@@ -15,6 +15,14 @@
     @apply my-4 ml-6 list-disc;
   }
 
+  ol {
+    @apply my-4 ml-6;
+  }
+
+  .alphabet-list {
+    list-style: upper-latin;
+  }
+
   .contact-info {
     @apply list-none;
   }
@@ -76,7 +84,7 @@
 
   <H2 text="Behandling, överföring och utlämnande av personuppgifter" />
 
-  <ol>
+  <ol class="alphabet-list">
     <li>
       Manuellt material<br />
       Manuellt material behandlas av personer som utbildats i informationssäkerhet.

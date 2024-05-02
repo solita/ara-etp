@@ -15,6 +15,14 @@
     @apply my-4 ml-6 list-disc;
   }
 
+  ol {
+    @apply my-4 ml-6;
+  }
+
+  .alphabet-list {
+    list-style: upper-latin;
+  }
+
   .contact-info {
     @apply list-none;
   }
@@ -76,7 +84,7 @@
 
   <H2 text="Henkilötietojen käsittely, siirto ja luovuttaminen" />
 
-  <ol>
+  <ol class="alphabet-list">
     <li>
       Manuaalinen aineisto<br />
       Manuaalista aineistoa käsittelevät tietoturvakoulutetut henkilöt. Rekisterin
