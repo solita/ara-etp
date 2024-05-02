@@ -1536,7 +1536,8 @@
     "phone": "Telefon",
     "email": "E-post",
     "accessibility-report": "Tillgänglighetsbeskrivning",
-    "tietosuojaseloste-energiatodistusrekisteri": "Dataskyddsbeskrivning Energicertifikatregistret"
+    "tietosuojaseloste-energiatodistusrekisteri": "Dataskyddsbeskrivning Energicertifikatregistret",
+    "tietosuojaseloste-laatijarekisteri": "Dataskyddsbeskrivning Register för upprättare av energiferticikat"
   },
   "valvonta": {
     "self": "Jag",
