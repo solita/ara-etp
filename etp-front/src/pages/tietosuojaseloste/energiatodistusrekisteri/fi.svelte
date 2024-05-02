@@ -123,7 +123,7 @@
     järjestöille.
   </p>
 
-  <H2>Tietojen säilytysaika</H2>
+  <H2 text="Tietojen säilytysaika" />
 
   <p>
     Energiatodistusrekisterin sisältämien henkilötietojen säilytysajat
