@@ -1534,7 +1534,11 @@
     "post-num": "15140 LAHTIS",
     "contact-info": "Kontaktuppgifter",
     "phone": "Telefon",
-    "email": "E-post"
+    "email": "E-post",
+    "accessibility-report": "Tillgänglighetsbeskrivning",
+    "tietosuojaseloste-energiatodistusrekisteri": "Dataskyddsbeskrivning Energicertifikatregistret",
+    "tietosuojaseloste-laatijarekisteri": "Dataskyddsbeskrivning Register för upprättare av energiferticikat",
+    "tietosuojaseloste-valvontatietorekisteri": "Dataskyddsbeskrivning Register för övervakningsuppgifter om energicertifikat"
   },
   "valvonta": {
     "self": "Jag",

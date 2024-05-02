@@ -4,6 +4,7 @@
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
   import { announceAssertively } from '@/utilities/announce';
+  import H2 from '@Component/H2';
 
   const title = 'Tietojenluovutus ja rajapinnat';
   announceAssertively(title);
@@ -23,14 +24,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h2 {
-    @apply mb-2 mt-8;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -72,7 +65,7 @@
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
-    <h2>Rajapintoihin liittyminen ja tietosuoja</h2>
+    <H2>Rajapintoihin liittyminen ja tietosuoja</H2>
     <p>
       Palveluihin liittyminen on maksullista ja niiden käyttäminen edellyttää
       Aran myöntämää tietolupaa. Lisäksi Ara ja käyttäjä solmivat erillisen

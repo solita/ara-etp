@@ -2190,6 +2190,9 @@
     "contact-info": "Yhteystiedot",
     "phone": "Puhelin",
     "email": "Sähköposti",
-    "accessibility-report": "Saavutettavuusseloste"
+    "accessibility-report": "Saavutettavuusseloste",
+    "tietosuojaseloste-energiatodistusrekisteri": "Tietosuojaseloste Energiatodistusrekisteri",
+    "tietosuojaseloste-laatijarekisteri": "Tietosuojaseloste Energiatodistusten laatijarekisteri",
+    "tietosuojaseloste-valvontatietorekisteri": "Tietosuojaseloste Energiatodistusten valvontatietorekisteri"
   }
 }

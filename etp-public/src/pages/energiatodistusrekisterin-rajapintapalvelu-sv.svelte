@@ -5,6 +5,7 @@
   import Link from '@Component/link';
   import { announceAssertively } from '@/utilities/announce';
   import SopimusLuonnos from '@Asset/etp-rajapintapalvelu-sopimus-luonno-sv.pdf';
+  import H2 from '@Component/H2';
 
   const title = 'Energicertifikatregistrets gränssnittstjänst';
   announceAssertively(title);
@@ -24,14 +25,6 @@
   ul {
     list-style: disc;
     @apply my-4;
-  }
-
-  h2 {
-    @apply mb-2 mt-8;
-  }
-
-  h3 {
-    @apply font-bold;
   }
 
   p {
@@ -68,7 +61,7 @@
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
-    <h2>ANVÄNDNINGSVILLKOR</h2>
+    <H2>ANVÄNDNINGSVILLKOR</H2>
     <p>
       Användningen av energicertifikatregistrets gränssnittstjänst förutsätter
       ett datatillstånd beviljat av Ara. Dessutom ingår Ara och tjänstens
@@ -98,7 +91,7 @@
       .
     </p>
 
-    <h2>ANSLUTNING TILL TJÄNSTEN</h2>
+    <H2>ANSLUTNING TILL TJÄNSTEN</H2>
     <ol class="ml-6">
       <li>
         Anslut dig till informationsleden enligt
