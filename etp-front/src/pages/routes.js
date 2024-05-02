@@ -14,6 +14,7 @@ import MyInfo from '@Pages/kayttaja/my-info';
 import LandingPage from '@Pages/kayttaja/landing-page';
 import Saavutettavuusseloste from '@Pages/saavutettavuusseloste';
 import EnergiatodistusrekisteriTietosuojaseloste from '@Pages/tietosuojaseloste/energiatodistusrekisteri';
+import LaatijarekisteriTietosuojaseloste from '@Pages/tietosuojaseloste/laatijarekisteri';
 
 export const buildRoutes = currentUser => ({
   '/': LandingPage,
@@ -35,5 +36,6 @@ export const buildRoutes = currentUser => ({
   '/saavutettavuusseloste': Saavutettavuusseloste,
   '/tietosuojaseloste-energiatodistusrekisteri':
     EnergiatodistusrekisteriTietosuojaseloste,
+  '/tietosuojaseloste-laatijarekisteri': LaatijarekisteriTietosuojaseloste,
   '*': NotFound
 });

@@ -56,15 +56,14 @@
           href={'#/tietosuojaseloste-energiatodistusrekisteri'}
           text={$_('footer.tietosuojaseloste-energiatodistusrekisteri')} />
       </div>
+      <div>
+        <Link
+          bold={true}
+          additionalClasses="text-ara-2021-green-small-text"
+          href={'#/tietosuojaseloste-laatijarekisteri'}
+          text={$_('footer.tietosuojaseloste-laatijarekisteri')} />
+      </div>
       {#if $locale.startsWith('sv')}
-        <div>
-          <Link
-            bold={true}
-            additionalClasses="text-ara-2021-green-small-text"
-            href={'pdf/Dataskyddsbeskrivning_Register_for_overvakningsuppgifter_om_energicertifikat.pdf'}
-            target={'_blank'}
-            text={'Dataskyddsbeskrivning Register för övervakningsuppgifter om energicertifikat (pdf)'} />
-        </div>
         <div>
           <Link
             bold={true}
@@ -74,14 +73,6 @@
             text={'Dataskyddsbeskrivning Register för upprättare av energiferticikat (pdf)'} />
         </div>
       {:else}
-        <div>
-          <Link
-            bold={true}
-            additionalClasses="text-ara-2021-green-small-text"
-            href={'pdf/Tietosuojaseloste_Energiatodistusten_laatijarekisteri.pdf'}
-            target={'_blank'}
-            text={'Tietosuojaseloste Energiatodistusten laatijarekisteri (pdf)'} />
-        </div>
         <div>
           <Link
             bold={true}

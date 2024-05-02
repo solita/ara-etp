@@ -2191,6 +2191,7 @@
     "phone": "Puhelin",
     "email": "Sähköposti",
     "accessibility-report": "Saavutettavuusseloste",
-    "tietosuojaseloste-energiatodistusrekisteri": "Tietosuojaseloste Energiatodistusrekisteri"
+    "tietosuojaseloste-energiatodistusrekisteri": "Tietosuojaseloste Energiatodistusrekisteri",
+    "tietosuojaseloste-laatijarekisteri": "Tietosuojaseloste Energiatodistusten laatijarekisteri"
   }
 }
