@@ -741,7 +741,8 @@
 
     (.save document pdf-path)))
 
-(defn generate-pdf-as-file [complete-energiatodistus kieli draft?]
+;; Set as dynamic so that it can be mocked in tests.
+(defn ^:dynamic generate-pdf-as-file [complete-energiatodistus kieli draft?]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
         pdf-path (xlsx->pdf xlsx-path)]
     (io/delete-file xlsx-path)
