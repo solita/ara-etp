@@ -50,7 +50,7 @@
   ([user-data]
    (-> user-data
        (merge {:henkilotunnus "010469-999W"
-               :patevyystaso 2
+               :passivoitu false
                :virtu {:localid      "vlaatija"
                        :organisaatio "testivirasto.fi"}
                :rooli 0})
