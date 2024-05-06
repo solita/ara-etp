@@ -874,7 +874,6 @@
         (str "Signed PDF already exists for energiatodistus "
              id "/" language ". Get digest to sign again.")))))
 
-
 (defn sign-energiatodistus-pdf
   ([db aws-s3-client whoami now id language signature-and-chain]
    (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
@@ -893,8 +892,7 @@
                 content (file-service/find-file aws-s3-client key)
                 content-bytes (.readAllBytes content)
                 pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-                filename (str key ".pdf")
-                ]
+                filename (str key ".pdf")]
             (->> (write-signature! id language content-bytes pkcs7)
                  (file-service/upsert-file-from-bytes aws-s3-client
                                                       key))
@@ -948,8 +946,6 @@
   [{:keys [db whoami id aws-s3-client]}]
   (log/info (sign-with-system-log-message whoami id "End signing"))
   (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id))
-
-
 
 (defn- do-sign-with-system
   "Short-circuits the signing in case there was a problem.

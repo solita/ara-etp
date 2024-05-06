@@ -50,8 +50,7 @@
                                     :thread   20
                                     :ctx      {:db             (ig/ref :solita.etp/db)
                                                :aws-s3-client  (ig/ref :solita.etp/aws-s3-client)
-                                               :aws-kms-client (ig/ref :solita.etp/aws-kms-client)
-                                               }}
+                                               :aws-kms-client (ig/ref :solita.etp/aws-kms-client)}}
                                    opts)}))
 
 (defn aws-s3-client

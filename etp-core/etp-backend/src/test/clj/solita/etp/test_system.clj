@@ -72,7 +72,6 @@
           :dbname (:database-name config)
           :user   (:username config)}))
 
-
 (defn fixture [f]
   (let [uuid (-> (java.util.UUID/randomUUID)
                  .toString

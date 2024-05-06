@@ -43,7 +43,7 @@
            todistus-2018-sv-id
            todistus-2018-multilingual-id
            todistus-2018-future-id
-          todistus-2018-future-2-id]
+           todistus-2018-future-2-id]
           (test-data.energiatodistus/insert! [todistus-2013-fi
                                               todistus-2013-sv
                                               todistus-2013-multilingual
@@ -59,109 +59,108 @@
 
           [other-laatija-todistus-2018-sv-id]
           (test-data.energiatodistus/insert! [other-laatija-todistus-2018-sv] other-laatija-id)]
-       (t/testing "Can not sign other laatija's todistus"
-         (let [url (energiatodistus-sign-url other-laatija-todistus-2018-sv-id 2018)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:body response) "Forbidden"))
-           (t/is (= (:status response) 403))))
-       (t/testing "Can sign 2013 fi version"
-         (let [url (energiatodistus-sign-url todistus-2013-fi-id 2013)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response) 200))))
-       (t/testing "Can sign 2013 sv version"
-         (let [url (energiatodistus-sign-url todistus-2013-sv-id 2013)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response) 200))))
-       (t/testing "Can sign 2013 multilingual version"
-         (let [url (energiatodistus-sign-url todistus-2013-multilingual-id 2013)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response) 200))))
-       (t/testing "Can sign 2018 fi version"
-         (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response) 200))))
-       (t/testing "Can sign 2018 sv version"
-         (let [url (energiatodistus-sign-url todistus-2018-sv-id 2018)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response) 200))))
-       (t/testing "Can sign 2018 multilingual version"
-         (let [url (energiatodistus-sign-url todistus-2018-multilingual-id 2018)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response) 200))))
-       (t/testing "Trying to sign 2018 fi version again should fail"
-         (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))
-               ]
-           (t/is (= (:body response) (format "Energiatodistus %s is already signed" todistus-2018-fi-id)))
-           (t/is (= (:status response) 409))))
-       (t/testing "Trying to sing a pdf already in the signing process should fail"
-         (let [url (energiatodistus-sign-url todistus-2018-future-id 2018)
-               ;; Start a signing process in another thread.
-               signing-process (future
-                                 (with-bindings
-                                   ;; Use an already existing pdf.
-                                   {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
-                                    (fn [_ _ _]
-                                      (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
-                                            out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-                                        (io/copy (io/file in) (io/file out))
-                                        out))}
-                                   (ts/handler (-> (mock/request :post url)
-                                                   (test-data.laatija/with-virtu-laatija)
-                                                   (mock/header "Accept" "application/json")))))
-               ;; Wait naively so that the signing process starts in the other thread.
-               _ (Thread/sleep 100)
-               response (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))
-               ;; Wait for the signing process to finish. Otherwise the test-system fails.
-               _ @signing-process]
-           (t/is (= (:status response) 409))
-           (t/is (= (:body response) (format "Energiatodistus %s is already in signing process" todistus-2018-future-id)))))
-       (t/testing "Trying to cancel the signing and then sign again should work"
-         (let [url (energiatodistus-sign-url todistus-2018-future-2-id 2018)
-               cancel-url (str "/api/private/energiatodistukset/" 2018 "/" todistus-2018-future-2-id "/signature/cancel")
-               ;; Start a signing process in another thread.
-               signing-process (future
-                                 (with-bindings
-                                   ;; Use an already existing pdf.
-                                   {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
-                                    (fn [_ _ _]
-                                      (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
-                                            out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-                                        (io/copy (io/file in) (io/file out))
-                                        out))}
-                                   (ts/handler (-> (mock/request :post url)
-                                                   (test-data.laatija/with-virtu-laatija)
-                                                   (mock/header "Accept" "application/json")))))
-               ;; Wait naively so that the signing process starts in the other thread.
-               _ (Thread/sleep 100)
-               ;; Cancel the signing
-               response-cancel (ts/handler (-> (mock/request :post cancel-url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))
-               ;; Wait for the signing process to finish. Otherwise the test-system fails.
-               _ @signing-process
-               response-sign (ts/handler (-> (mock/request :post url)
-                                        (test-data.laatija/with-virtu-laatija)
-                                        (mock/header "Accept" "application/json")))]
-           (t/is (= (:status response-cancel) 200))
-           (t/is (= (:body response-cancel) "Ok"))
-           (t/is (= (:status response-sign) 200))
-           (t/is (= (:body response-sign) "Ok")))))))
+      (t/testing "Can not sign other laatija's todistus"
+        (let [url (energiatodistus-sign-url other-laatija-todistus-2018-sv-id 2018)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:body response) "Forbidden"))
+          (t/is (= (:status response) 403))))
+      (t/testing "Can sign 2013 fi version"
+        (let [url (energiatodistus-sign-url todistus-2013-fi-id 2013)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2013 sv version"
+        (let [url (energiatodistus-sign-url todistus-2013-sv-id 2013)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2013 multilingual version"
+        (let [url (energiatodistus-sign-url todistus-2013-multilingual-id 2013)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2018 fi version"
+        (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2018 sv version"
+        (let [url (energiatodistus-sign-url todistus-2018-sv-id 2018)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2018 multilingual version"
+        (let [url (energiatodistus-sign-url todistus-2018-multilingual-id 2018)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Trying to sign 2018 fi version again should fail"
+        (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:body response) (format "Energiatodistus %s is already signed" todistus-2018-fi-id)))
+          (t/is (= (:status response) 409))))
+      (t/testing "Trying to sing a pdf already in the signing process should fail"
+        (let [url (energiatodistus-sign-url todistus-2018-future-id 2018)
+              ;; Start a signing process in another thread.
+              signing-process (future
+                                (with-bindings
+                                  ;; Use an already existing pdf.
+                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
+                                   (fn [_ _ _]
+                                     (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
+                                           out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+                                       (io/copy (io/file in) (io/file out))
+                                       out))}
+                                  (ts/handler (-> (mock/request :post url)
+                                                  (test-data.laatija/with-virtu-laatija)
+                                                  (mock/header "Accept" "application/json")))))
+              ;; Wait naively so that the signing process starts in the other thread.
+              _ (Thread/sleep 100)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))
+              ;; Wait for the signing process to finish. Otherwise the test-system fails.
+              _ @signing-process]
+          (t/is (= (:status response) 409))
+          (t/is (= (:body response) (format "Energiatodistus %s is already in signing process" todistus-2018-future-id)))))
+      (t/testing "Trying to cancel the signing and then sign again should work"
+        (let [url (energiatodistus-sign-url todistus-2018-future-2-id 2018)
+              cancel-url (str "/api/private/energiatodistukset/" 2018 "/" todistus-2018-future-2-id "/signature/cancel")
+              ;; Start a signing process in another thread.
+              signing-process (future
+                                (with-bindings
+                                  ;; Use an already existing pdf.
+                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
+                                   (fn [_ _ _]
+                                     (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
+                                           out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+                                       (io/copy (io/file in) (io/file out))
+                                       out))}
+                                  (ts/handler (-> (mock/request :post url)
+                                                  (test-data.laatija/with-virtu-laatija)
+                                                  (mock/header "Accept" "application/json")))))
+              ;; Wait naively so that the signing process starts in the other thread.
+              _ (Thread/sleep 100)
+              ;; Cancel the signing
+              response-cancel (ts/handler (-> (mock/request :post cancel-url)
+                                              (test-data.laatija/with-virtu-laatija)
+                                              (mock/header "Accept" "application/json")))
+              ;; Wait for the signing process to finish. Otherwise the test-system fails.
+              _ @signing-process
+              response-sign (ts/handler (-> (mock/request :post url)
+                                            (test-data.laatija/with-virtu-laatija)
+                                            (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response-cancel) 200))
+          (t/is (= (:body response-cancel) "Ok"))
+          (t/is (= (:status response-sign) 200))
+          (t/is (= (:body response-sign) "Ok")))))))
