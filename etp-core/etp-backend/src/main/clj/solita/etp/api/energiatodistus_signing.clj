@@ -81,7 +81,7 @@
                             id))}}]
    (when config/allow-new-signature-implementation
      ["/system-sign"
-      {:post {:summary    "Luo järjestelmällä allekirjoitettu PDF"
+      {:post {:summary    "Allekirjoita energiatodistus järjestelmällä"
              :parameters {:path {:id common-schema/Key}}
              :access     rooli-service/laatija?
              :responses  {200 {:body nil}
