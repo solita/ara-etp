@@ -41,7 +41,7 @@
   let updated = true;
   $: query = R.view(lens, energiatodistus);
   let korvattavaEnergiatodistus = Maybe.None();
-  $: checked = Maybe.isSome(R.view(lens, energiatodistus));
+  let checked = Maybe.isSome(R.view(lens, energiatodistus));
 
   const parseId = R.compose(Maybe.fromFalsy, value => parseInt(value, 10));
 
