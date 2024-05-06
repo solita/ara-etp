@@ -14,7 +14,7 @@ export SYSTEM_SIGNATURE_CERTIFICATE_ROOT="$(aws secretsmanager get-secret-value 
 SECRET="/secret/etp/dvv/system-signature-intermediate.crt"
 echo "Retrieve ${SECRET}"
 export SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
-SECRET="/secret/etp/dvv/system-signature-leaf.crt"
+SECRET="/secret/etp/dvv/system-signature.crt"
 echo "Retrieve ${SECRET}"
 export SYSTEM_SIGNATURE_CERTIFICATE_LEAF="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
 
