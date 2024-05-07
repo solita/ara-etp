@@ -32,8 +32,8 @@
 
 (defn find-protected-postinumerot [db min-count]
   (-> (energiatodistus-db/select-protected-postinumero-versio-kayttotarkoitus
-       db
-       {:min-count min-count})
+        db
+        {:min-count min-count})
       (->> (map #(select-keys % [:postinumero :versio :kayttotarkoitus])))
       set))
 
@@ -41,17 +41,17 @@
 (defn coerce-energiatodistus [energiatodistus-schema]
   (coerce/coercer! energiatodistus-schema
                    (stc/or-matcher
-                    stc/map-filter-matcher
-                    (assoc json/json-coercions
-                           geo-schema/PostinumeroFI
-                           (logic/unless* nil? #(format "%05d" %))
-                           schema/Num
-                           xschema/parse-big-decimal))))
+                     stc/map-filter-matcher
+                     (assoc json/json-coercions
+                       geo-schema/PostinumeroFI
+                       (logic/unless* nil? #(format "%05d" %))
+                       schema/Num
+                       xschema/parse-big-decimal))))
 
 (def db-abbreviations
-  {:perustiedot :pt
-   :lahtotiedot :lt
-   :tulokset :t
+  {:perustiedot                    :pt
+   :lahtotiedot                    :lt
+   :tulokset                       :t
    :toteutunut-ostoenergiankulutus :to
    :huomiot                        :h})
 
@@ -150,7 +150,7 @@
        alakayttotarkoitus-id (-> energiatodistus :perustiedot :kayttotarkoitus)
        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)]
       (:e-luokka (e-luokka-service/find-e-luokka
-          db versio alakayttotarkoitus-id nettoala e-luku)))))
+                   db versio alakayttotarkoitus-id nettoala e-luku)))))
 
 (defn assoc-e-tehokkuus [energiatodistus db versio]
   (-> energiatodistus
@@ -163,9 +163,9 @@
 (defn- check-value [column-name value {:keys [min max]}]
   (when (and value (or (< value min) (> value max)))
     {:property (to-property-name column-name)
-     :value value
-     :min min
-     :max max}))
+     :value    value
+     :min      min
+     :max      max}))
 
 (defn check-error! [column-name value interval]
   (if-let [error (check-value column-name value interval)]
@@ -187,9 +187,9 @@
 
 (defn flat->tree [energiatodistus]
   (as-> energiatodistus %
-       (map/map-values (logic/when* vector? (partial mapv flat->tree)) %)
-       (dissoc % :valvonta)
-       (flat/flat->tree #"\$" %)))
+        (map/map-values (logic/when* vector? (partial mapv flat->tree)) %)
+        (dissoc % :valvonta)
+        (flat/flat->tree #"\$" %)))
 
 (defn find-sisaiset-kuormat [db versio]
   (map (comp flat->tree db/kebab-case-keys)
@@ -197,15 +197,15 @@
 
 (defn- assoc-laskutusosoite-id [row]
   (-> row
-    (assoc :laskutusosoite-id
-      (when (:laskutettava-yritys-defined row)
-        (or (:laskutettava-yritys-id row) -1)))
-    (dissoc :laskutettava-yritys-defined)))
+      (assoc :laskutusosoite-id
+             (when (:laskutettava-yritys-defined row)
+               (or (:laskutettava-yritys-id row) -1)))
+      (dissoc :laskutettava-yritys-defined)))
 
 (defn- assoc-laskutettava-yritys-defined [energiatodistus]
   (assoc energiatodistus :laskutettava-yritys-defined
-         (or (some? (:laskutettava-yritys-id energiatodistus))
-             (some? (:laskutusosoite-id energiatodistus)))))
+                         (or (some? (:laskutettava-yritys-id energiatodistus))
+                             (some? (:laskutusosoite-id energiatodistus)))))
 
 (defn- update-laskutettava-yritys-id [energiatodistus]
   (if-let [laskutusosoite-id (:laskutusosoite-id energiatodistus)]
@@ -234,8 +234,8 @@
   (comp (coerce-energiatodistus schema)
         assoc-laskutusosoite-id
         (logic/when*
-         #(= (:versio %) 2013)
-         #(update-in % [:tulokset :uusiutuvat-omavaraisenergiat] :muu))
+          #(= (:versio %) 2013)
+          #(update-in % [:tulokset :uusiutuvat-omavaraisenergiat] :muu))
         #(set/rename-keys % (set/map-invert db-abbreviations))
         flat->tree
         (partial pg-composite/parse-composite-type-literals db-composite-types)
@@ -254,27 +254,27 @@
 
 (def energiatodistus->db-row
   (comp
-   (partial pg-composite/write-composite-type-literals db-composite-types)
-   #(map/map-keys (fn [k] (-> k name str/lower-case keyword)) %)
-   tree->flat
-   #(set/rename-keys % db-abbreviations)
-   #(update-in % [:perustiedot :postinumero] (logic/unless* nil? parseInt))
-   save-laskutusosoite-id
-   (logic/when*
-    #(= (:versio %) 2013)
-    #(update-in % [:tulokset :uusiutuvat-omavaraisenergiat] (partial assoc {} :muu)))))
+    (partial pg-composite/write-composite-type-literals db-composite-types)
+    #(map/map-keys (fn [k] (-> k name str/lower-case keyword)) %)
+    tree->flat
+    #(set/rename-keys % db-abbreviations)
+    #(update-in % [:perustiedot :postinumero] (logic/unless* nil? parseInt))
+    save-laskutusosoite-id
+    (logic/when*
+      #(= (:versio %) 2013)
+      #(update-in % [:tulokset :uusiutuvat-omavaraisenergiat] (partial assoc {} :muu)))))
 
 (defn- select-energiatodistus-for-find
   [{:keys [tila-id laatija-id draft-visible-to-paakayttaja] :as energiatodistus} whoami]
   (match/match
-   [(energiatodistus-tila/tila-key tila-id)
-    (-> whoami :rooli rooli-service/rooli-key)
-    (= laatija-id (:id whoami))
-    draft-visible-to-paakayttaja]
-   [_ :laatija true _] (assoc energiatodistus :kommentti nil)
-   [(:or :signed :discarded :replaced) (:or :paakayttaja :laskuttaja) _ _] energiatodistus
-   [_ (:or :paakayttaja :laskuttaja) _ true] energiatodistus
-   :else (exception/throw-forbidden!)))
+    [(energiatodistus-tila/tila-key tila-id)
+     (-> whoami :rooli rooli-service/rooli-key)
+     (= laatija-id (:id whoami))
+     draft-visible-to-paakayttaja]
+    [_ :laatija true _] (assoc energiatodistus :kommentti nil)
+    [(:or :signed :discarded :replaced) (:or :paakayttaja :laskuttaja) _ _] energiatodistus
+    [_ (:or :paakayttaja :laskuttaja) _ true] energiatodistus
+    :else (exception/throw-forbidden!)))
 
 (defn find-energiatodistus
   ([db id]
@@ -350,13 +350,13 @@
                                    energiatodistus->db-row)
         warnings (validate-db-row! db energiatodistus-db-row versio)]
     (validate-laskutettava-yritys-id! db (:id whoami) energiatodistus-db-row)
-    {:id (-> (db/with-db-exception-translation jdbc/insert!
-               db
-               :energiatodistus
-               energiatodistus-db-row
-               db/default-opts)
-             first
-             :id)
+    {:id       (-> (db/with-db-exception-translation jdbc/insert!
+                                                     db
+                                                     :energiatodistus
+                                                     energiatodistus-db-row
+                                                     db/default-opts)
+                   first
+                   :id)
      :warnings warnings}))
 
 (defn assert-laatija! [whoami energiatodistus]
@@ -425,35 +425,35 @@
 
 (defn- db-update-energiatodistus! [db id current-energiatodistus energiatodistus rooli]
   (jdbc/with-db-transaction [db db]
-    (let [versio (:versio current-energiatodistus)
-          tila-id (:tila-id current-energiatodistus)
-          laskutettu? (-> current-energiatodistus :laskutusaika ((complement nil?)))
-          current-korvattu-energiatodistus-id (:korvattu-energiatodistus-id current-energiatodistus)
-          energiatodistus-db-row (-> energiatodistus
-                                     (assoc-e-tehokkuus db versio)
-                                     (assoc :versio versio)
-                                     energiatodistus->db-row
-                                     (dissoc :versio)
-                                     (select-energiatodistus-for-update id
+                            (let [versio (:versio current-energiatodistus)
+                                  tila-id (:tila-id current-energiatodistus)
+                                  laskutettu? (-> current-energiatodistus :laskutusaika ((complement nil?)))
+                                  current-korvattu-energiatodistus-id (:korvattu-energiatodistus-id current-energiatodistus)
+                                  energiatodistus-db-row (-> energiatodistus
+                                                             (assoc-e-tehokkuus db versio)
+                                                             (assoc :versio versio)
+                                                             energiatodistus->db-row
+                                                             (dissoc :versio)
+                                                             (select-energiatodistus-for-update id
+                                                                                                tila-id
+                                                                                                rooli
+                                                                                                laskutettu?)
+                                                             (update-korvattu! db
+                                                                               tila-id
+                                                                               current-korvattu-energiatodistus-id))]
+                              (when-not (or (:bypass-validation-limits energiatodistus-db-row)
+                                            (:bypass-validation-limits current-energiatodistus))
+                                (validate-db-row! db energiatodistus-db-row versio))
+                              (validate-laskutettava-yritys-id! db (:laatija-id current-energiatodistus) energiatodistus-db-row)
+                              (first (db/with-db-exception-translation jdbc/update!
+                                                                       db
+                                                                       :energiatodistus
+                                                                       energiatodistus-db-row
+                                                                       ["id = ? and tila_id = ? and (laskutusaika is not null) = ?"
+                                                                        id
                                                                         tila-id
-                                                                        rooli
-                                                                        laskutettu?)
-                                     (update-korvattu! db
-                                                       tila-id
-                                                       current-korvattu-energiatodistus-id))]
-      (when-not (or (:bypass-validation-limits energiatodistus-db-row)
-                    (:bypass-validation-limits current-energiatodistus))
-        (validate-db-row! db energiatodistus-db-row versio))
-      (validate-laskutettava-yritys-id! db (:laatija-id current-energiatodistus) energiatodistus-db-row)
-      (first (db/with-db-exception-translation jdbc/update!
-               db
-               :energiatodistus
-               energiatodistus-db-row
-               ["id = ? and tila_id = ? and (laskutusaika is not null) = ?"
-                id
-                tila-id
-                laskutettu?]
-               db/default-opts)))))
+                                                                        laskutettu?]
+                                                                       db/default-opts)))))
 
 (defn- assert-update! [id result]
   (if (== result 0)
@@ -496,11 +496,11 @@
                             current-energiatodistus
                             energiatodistus))
       (assert-update!
-       id
-       (db-update-energiatodistus! db id
-                                   current-energiatodistus
-                                   energiatodistus
-                                   (-> whoami :rooli rooli-service/rooli-key)))
+        id
+        (db-update-energiatodistus! db id
+                                    current-energiatodistus
+                                    energiatodistus
+                                    (-> whoami :rooli rooli-service/rooli-key)))
       nil)
     (exception/throw-ex-info!
       :not-found
@@ -521,20 +521,20 @@
 
 (defn start-energiatodistus-signing! [db whoami id]
   (jdbc/with-db-transaction [db db]
-    (let [result (energiatodistus-db/update-energiatodistus-allekirjoituksessa!
-                   db {:id id :laatija-id (:id whoami)})
-          energiatodistus (find-energiatodistus db id)]
-      (if (= result 1)
-        (do
-          (validate-required! db energiatodistus)
-          (laatija-service/validate-laatija-patevyys! db (:id whoami))
-          :ok)
-        (when-let [{:keys [tila-id]} energiatodistus]
-          (assert-laatija! whoami energiatodistus)
-          (case (energiatodistus-tila/tila-key tila-id)
-            :in-signing :already-in-signing
-            :deleted nil
-            :already-signed))))))
+                            (let [result (energiatodistus-db/update-energiatodistus-allekirjoituksessa!
+                                           db {:id id :laatija-id (:id whoami)})
+                                  energiatodistus (find-energiatodistus db id)]
+                              (if (= result 1)
+                                (do
+                                  (validate-required! db energiatodistus)
+                                  (laatija-service/validate-laatija-patevyys! db (:id whoami))
+                                  :ok)
+                                (when-let [{:keys [tila-id]} energiatodistus]
+                                  (assert-laatija! whoami energiatodistus)
+                                  (case (energiatodistus-tila/tila-key tila-id)
+                                    :in-signing :already-in-signing
+                                    :deleted nil
+                                    :already-signed))))))
 
 (defn- failure-code [db whoami id]
   (when-let [{:keys [tila-id] :as et} (find-energiatodistus db id)]
@@ -557,10 +557,14 @@
     (catch Exception _e
       false)))
 
+(def finnish-language-id 0)
+(def swedish-language-id 1)
+(def multilingual-language-id 2)
+
 (defn language-id->codes [language]
-  (get {0 ["fi"]
-        1 ["sv"]
-        2 ["fi" "sv"]} language))
+  (get {finnish-language-id      ["fi"]
+        swedish-language-id      ["sv"]
+        multilingual-language-id ["fi" "sv"]} language))
 
 (defn- assert-energiatodistus-pdf-signed! [aws-s3-client energiatodistus]
   (let [id (:id energiatodistus)
@@ -572,18 +576,18 @@
 
 (defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert? allekirjoitusaika]}]]
   (jdbc/with-db-transaction [db db]
-    (let [result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
-                   db
-                   {:id id
-                    :laatija-id (:id whoami)
-                    :allekirjoitusaika allekirjoitusaika})]
-      (if (= result 1)
-        (let [energiatodistus (find-energiatodistus db id)]
-          (when-not skip-pdf-signed-assert?
-            (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))
-          (mark-energiatodistus-korvattu! db (:korvattu-energiatodistus-id energiatodistus))
-          :ok)
-        (failure-code db whoami id)))))
+                            (let [result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
+                                           db
+                                           {:id                id
+                                            :laatija-id        (:id whoami)
+                                            :allekirjoitusaika allekirjoitusaika})]
+                              (if (= result 1)
+                                (let [energiatodistus (find-energiatodistus db id)]
+                                  (when-not skip-pdf-signed-assert?
+                                    (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))
+                                  (mark-energiatodistus-korvattu! db (:korvattu-energiatodistus-id energiatodistus))
+                                  :ok)
+                                (failure-code db whoami id)))))
 
 (defn cancel-energiatodistus-signing! [db whoami id]
   (let [result (energiatodistus-db/update-energiatodistus-luonnos!

@@ -963,15 +963,21 @@
   "Does the whole process of signing with the system."
   [{:keys [db id] :as params}]
   (let [language-id (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :perustiedot :kieli)]
-    (case language-id
-      0 (-> (sign-with-system-start params)
-              (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
-              (do-sign-with-system #(sign-with-system-end params)))
-      1 (-> (sign-with-system-start params)
-              (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
-              (do-sign-with-system #(sign-with-system-end params)))
-      2 (-> (sign-with-system-start params)
-              (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
-              (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
-              (do-sign-with-system #(sign-with-system-end params)))
-      nil)))
+    (condp = language-id
+      energiatodistus-service/finnish-language-id
+      (-> (sign-with-system-start params)
+          (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
+          (do-sign-with-system #(sign-with-system-end params)))
+
+      energiatodistus-service/swedish-language-id
+      (-> (sign-with-system-start params)
+          (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
+          (do-sign-with-system #(sign-with-system-end params)))
+
+      energiatodistus-service/multilingual-language-id
+      (-> (sign-with-system-start params)
+          (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
+          (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
+          (do-sign-with-system #(sign-with-system-end params)))
+
+      (exception/throw-ex-info! {:message (format "Invalid language-id %s in energiatodistus %s" language-id id)}))))
