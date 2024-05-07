@@ -857,12 +857,16 @@
                           now)}))))
 
 (defn validate-certificate!
-  ([last-name now certificate-str]
-   (validate-certificate! last-name now certificate-str :mpollux))
-  ([last-name now certificate-str signing-method]
+  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate.
+
+  When using system signing the surname does not match the name in the certificate as it's issued for the whole
+  system and not a specific person."
+  ([surname now certificate-str]
+   (validate-certificate! surname now certificate-str true))
+  ([surname now certificate-str validate-surname?]
    (let [certificate (certificates/pem-str->certificate certificate-str)]
-     (when (= signing-method :mpollux)
-       (validate-surname! last-name certificate))
+     (when validate-surname?
+       (validate-surname! surname certificate))
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
 (defn write-signature! [id language pdf pkcs7]
@@ -887,7 +891,9 @@
           (validate-certificate! (:sukunimi whoami)
                                  now
                                  (first chain)
-                                 signing-method)
+                                 (if (= signing-method :mpollux)
+                                   true
+                                   false))
           (let [key (energiatodistus-service/file-key id language)
                 content (file-service/find-file aws-s3-client key)
                 content-bytes (.readAllBytes content)
