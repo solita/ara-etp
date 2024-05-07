@@ -84,7 +84,7 @@
       {:post {:summary    "Allekirjoita energiatodistus järjestelmällä"
              :parameters {:path {:id common-schema/Key}}
              :access     rooli-service/laatija?
-             :responses  {200 {:body nil}
+             :responses  {200 {:body schema/Str}
                           404 {:body schema/Str}}
              :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db aws-s3-client aws-kms-client whoami]}]
                            (api-response/with-exceptions
