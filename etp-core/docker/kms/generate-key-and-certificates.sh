@@ -83,7 +83,7 @@ rm "${SER_FILE_INT}"
 rm "${SER_FILE_ROOT}"
 
 # Move the certificate to resources
-mkdir -p "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature"
-mv "${CRT_FILE_LEAF}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-leaf.pem.crt"
-mv "${CRT_FILE_INT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-int.pem.crt"
-mv "${CRT_FILE_ROOT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-root.pem.crt"
+mkdir -p "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature"
+mv "${CRT_FILE_LEAF}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature/local-signing-leaf.pem.crt"
+mv "${CRT_FILE_INT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature/local-signing-int.pem.crt"
+mv "${CRT_FILE_ROOT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature/local-signing-root.pem.crt"

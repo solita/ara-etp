@@ -14,8 +14,8 @@ DEFAULT_CRT_FILE_INT="${DEFAULTS_DIR}/default-int.pem.crt"
 DEFAULT_CRT_FILE_LEAF="${DEFAULTS_DIR}/default-leaf.pem.crt"
 
 # Put the files in place
-mkdir -p "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature"
-cp "${DEFAULT_CRT_FILE_LEAF}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-leaf.pem.crt"
-cp "${DEFAULT_CRT_FILE_INT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-int.pem.crt"
-cp "${DEFAULT_CRT_FILE_ROOT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/dvv-system-signature/local-signing-root.pem.crt"
+mkdir -p "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature"
+cp "${DEFAULT_CRT_FILE_LEAF}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature/local-signing-leaf.pem.crt"
+cp "${DEFAULT_CRT_FILE_INT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature/local-signing-int.pem.crt"
+cp "${DEFAULT_CRT_FILE_ROOT}" "${SCRIPT_DIR}/../../etp-backend/src/test/resources/system-signature/local-signing-root.pem.crt"
 cp "${DEFAULT_FILE_SEED}" "${SCRIPT_DIR}/seed.yaml"
