@@ -13,15 +13,16 @@
 
 (t/use-fixtures :each ts/fixture)
 
+(defn generate-pdf-as-file-mock [_ _ _]
+  (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
+        out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+    (io/copy (io/file in) (io/file out))
+    out))
+
 (t/deftest sign-with-system-test
   (with-bindings
     ;; Use an already existing pdf.
-    {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
-     (fn [_ _ _]
-       (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
-             out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-         (io/copy (io/file in) (io/file out))
-         out))}
+    {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
     (let [; Add laatija
           laatija-id (test-data.laatija/insert-virtu-laatija!)
 
@@ -115,12 +116,7 @@
               signing-process (future
                                 (with-bindings
                                   ;; Use an already existing pdf.
-                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
-                                   (fn [_ _ _]
-                                     (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
-                                           out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-                                       (io/copy (io/file in) (io/file out))
-                                       out))}
+                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
                                   (ts/handler (-> (mock/request :post url)
                                                   (test-data.laatija/with-virtu-laatija)
                                                   (mock/header "Accept" "application/json")))))
@@ -140,12 +136,7 @@
               signing-process (future
                                 (with-bindings
                                   ;; Use an already existing pdf.
-                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file
-                                   (fn [_ _ _]
-                                     (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
-                                           out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-                                       (io/copy (io/file in) (io/file out))
-                                       out))}
+                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
                                   (ts/handler (-> (mock/request :post url)
                                                   (test-data.laatija/with-virtu-laatija)
                                                   (mock/header "Accept" "application/json")))))
