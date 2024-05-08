@@ -15,7 +15,8 @@
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.sign :as sign-service])
-  (:import (java.awt Color Font)
+  (:import (clojure.lang ExceptionInfo)
+           (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File InputStream)
            (java.nio.charset StandardCharsets)
@@ -926,15 +927,27 @@
 (defn- sign-with-system-log-message [whoami id message]
   (str "Sign with system (laatija-id: " (:id whoami) ") (energiatodistus-id: " id "): " message))
 
+(defn is-sign-with-system-error? [result]
+  (contains? #{:already-signed :already-in-signing :not-in-signing nil} result))
+
+
 (defn- sign-with-system-start
   [{:keys [db whoami id]}]
   (log/info (sign-with-system-log-message whoami id "Starting"))
-  (energiatodistus-service/start-energiatodistus-signing! db whoami id))
+  (let [result (energiatodistus-service/start-energiatodistus-signing! db whoami id)]
+    (when (is-sign-with-system-error? result)
+      (log/error (sign-with-system-log-message whoami id "Starting failed!"))
+      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
+    result))
 
 (defn- sign-with-system-digest
   [{:keys [db whoami id aws-s3-client]} language]
-  (log/info (sign-with-system-log-message whoami id "Getting the message digest"))
-  (find-energiatodistus-digest db aws-s3-client id language))
+  (log/info (sign-with-system-log-message whoami id "Getting the digest"))
+  (let [result (find-energiatodistus-digest db aws-s3-client id language)]
+    (when (is-sign-with-system-error? result)
+      (log/error (sign-with-system-log-message whoami id "Getting the digest failed!"))
+      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
+    result))
 
 (defn- sign-with-system-sign
   [{:keys [db whoami now id aws-s3-client aws-kms-client]} language digest-response]
@@ -946,44 +959,53 @@
         chain cert-chain-three-long-leaf-first
         signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}]
     (log/info (sign-with-system-log-message whoami id "Signing via KMS"))
-    (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)))
+    (let [result (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
+      (when (is-sign-with-system-error? result)
+        (log/error (sign-with-system-log-message whoami id "Signing via KMS failed!"))
+        (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
+      result)))
 
 (defn- sign-with-system-end
   [{:keys [db whoami id aws-s3-client]}]
   (log/info (sign-with-system-log-message whoami id "End signing"))
-  (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id))
-
-(defn- do-sign-with-system
-  "Short-circuits the signing in case there was a problem.
-  Note that the execution might be short-circuited by a thrown exception."
-  [val f]
-  (if (contains? #{:already-signed :already-in-signing :not-in-signing nil} val)
-    val
-    (f)))
+  (let [result (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)]
+    (when (is-sign-with-system-error? result)
+      (log/error (sign-with-system-log-message whoami id "End signing failed!"))
+      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
+    result))
 
 (defn- sign-single-pdf-with-system [params language]
-  (as-> (sign-with-system-digest language params) val
-        (do-sign-with-system val #(sign-with-system-sign language params val))))
+  (->> (sign-with-system-digest language params)
+       (sign-with-system-sign language params)))
 
 (defn sign-with-system
   "Does the whole process of signing with the system."
   [{:keys [db id] :as params}]
   (let [language-id (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :perustiedot :kieli)]
-    (condp = language-id
-      energiatodistus-service/finnish-language-id
-      (-> (sign-with-system-start params)
-          (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
-          (do-sign-with-system #(sign-with-system-end params)))
+    (try
+      (condp = language-id
+        energiatodistus-service/finnish-language-id
+        (do
+          (sign-with-system-start params)
+          (sign-single-pdf-with-system "fi" params)
+          (sign-with-system-end params))
 
-      energiatodistus-service/swedish-language-id
-      (-> (sign-with-system-start params)
-          (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
-          (do-sign-with-system #(sign-with-system-end params)))
+        energiatodistus-service/swedish-language-id
+        (do
+          (sign-with-system-start params)
+          (sign-single-pdf-with-system "sv" params)
+          (sign-with-system-end params))
 
-      energiatodistus-service/multilingual-language-id
-      (-> (sign-with-system-start params)
-          (do-sign-with-system #(sign-single-pdf-with-system "fi" params))
-          (do-sign-with-system #(sign-single-pdf-with-system "sv" params))
-          (do-sign-with-system #(sign-with-system-end params)))
+        energiatodistus-service/multilingual-language-id
+        (do
+          (sign-with-system-start params)
+          (sign-single-pdf-with-system "fi" params)
+          (sign-single-pdf-with-system "sv" params)
+          (sign-with-system-end params))
 
-      (exception/throw-ex-info! {:message (format "Invalid language-id %s in energiatodistus %s" language-id id)}))))
+        (exception/throw-ex-info! {:message (format "Invalid language-id %s in energiatodistus %s" language-id id)}))
+      (catch ExceptionInfo e
+        (if (= (-> e ex-data :type) :sign-with-system-error)
+          (-> e ex-data :result)
+          (throw e))))))
+
