@@ -75,7 +75,7 @@ User <- Frontend--: Done
 else with kms
 
 User -> Frontend++: Sign
-Frontend -> Backend++: POST https://localhost:3000/api/private/energiatodistukset/2018/2/signature/system-sign/fi
+Frontend -> Backend++: POST https://localhost:3000/api/private/energiatodistukset/2018/2/signature/system-sign
 Backend -> KMS++: solita.etp.service.sign/sign
 note left of KMS
 Sign the digest
