@@ -927,27 +927,30 @@
 (defn- sign-with-system-log-message [whoami id message]
   (str "Sign with system (laatija-id: " (:id whoami) ") (energiatodistus-id: " id "): " message))
 
-(defn is-sign-with-system-error? [result]
+(defn- is-sign-with-system-error? [result]
   (contains? #{:already-signed :already-in-signing :not-in-signing nil} result))
+
+(defn- do-sign-with-system [f error-msg]
+  (let [result (f)]
+    (when (is-sign-with-system-error? result)
+      (log/error error-msg)
+      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
+    result))
 
 
 (defn- sign-with-system-start
   [{:keys [db whoami id]}]
   (log/info (sign-with-system-log-message whoami id "Starting"))
-  (let [result (energiatodistus-service/start-energiatodistus-signing! db whoami id)]
-    (when (is-sign-with-system-error? result)
-      (log/error (sign-with-system-log-message whoami id "Starting failed!"))
-      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
-    result))
+  (do-sign-with-system
+    #(energiatodistus-service/start-energiatodistus-signing! db whoami id)
+    (sign-with-system-log-message whoami id "Starting failed!")))
 
 (defn- sign-with-system-digest
   [{:keys [db whoami id aws-s3-client]} language]
   (log/info (sign-with-system-log-message whoami id "Getting the digest"))
-  (let [result (find-energiatodistus-digest db aws-s3-client id language)]
-    (when (is-sign-with-system-error? result)
-      (log/error (sign-with-system-log-message whoami id "Getting the digest failed!"))
-      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
-    result))
+  (do-sign-with-system
+    #(find-energiatodistus-digest db aws-s3-client id language)
+    (sign-with-system-log-message whoami id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign
   [{:keys [db whoami now id aws-s3-client aws-kms-client]} language digest-response]
@@ -959,20 +962,16 @@
         chain cert-chain-three-long-leaf-first
         signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}]
     (log/info (sign-with-system-log-message whoami id "Signing via KMS"))
-    (let [result (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)]
-      (when (is-sign-with-system-error? result)
-        (log/error (sign-with-system-log-message whoami id "Signing via KMS failed!"))
-        (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
-      result)))
+    (do-sign-with-system
+      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)
+      (sign-with-system-log-message whoami id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end
   [{:keys [db whoami id aws-s3-client]}]
   (log/info (sign-with-system-log-message whoami id "End signing"))
-  (let [result (energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)]
-    (when (is-sign-with-system-error? result)
-      (log/error (sign-with-system-log-message whoami id "End signing failed!"))
-      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
-    result))
+  (do-sign-with-system
+    #(energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
+    (sign-with-system-log-message whoami id "End signing failed!")))
 
 (defn- sign-single-pdf-with-system [params language]
   (->> (sign-with-system-digest language params)
@@ -1008,4 +1007,3 @@
         (if (= (-> e ex-data :type) :sign-with-system-error)
           (-> e ex-data :result)
           (throw e))))))
-
