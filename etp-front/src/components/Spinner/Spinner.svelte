@@ -44,6 +44,7 @@
   class="spinner"
   class:smaller
   class:white
-  class:disable-animation={disableAnimation}>
+  class:disable-animation={disableAnimation}
+  data-cy="spinner">
   <div />
 </div>
