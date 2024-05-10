@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# NB: Sometimes generates certificates that do not work with the system, but it is not clear why.
 # Can be used to generate a new key for local KMS. No need to run this, but kept in place to have the process documented.
 
 set -euxo pipefail
