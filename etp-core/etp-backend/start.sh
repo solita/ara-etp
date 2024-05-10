@@ -8,6 +8,19 @@ aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/cli
 echo Retrieve /secret/etp/suomifi/viestit/private.key
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/private.key" | jq .SecretString -r > private.pem
 
+SECRET="/secret/etp/dvv/system-signature-root.crt"
+echo "Retrieve ${SECRET}"
+export SYSTEM_SIGNATURE_CERTIFICATE_ROOT="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+SECRET="/secret/etp/dvv/system-signature-intermediate.crt"
+echo "Retrieve ${SECRET}"
+export SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+SECRET="/secret/etp/dvv/system-signature.crt"
+echo "Retrieve ${SECRET}"
+export SYSTEM_SIGNATURE_CERTIFICATE_LEAF="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+
+echo "Set KMS_SIGNING_KEY_ID"
+export KMS_SIGNING_KEY_ID="alias/SigningKey"
+
 echo Pack certificate as p12 file format
 openssl pkcs12 -export -in public.pem -inkey private.pem -out viestit.p12 -name ${SUOMIFI_VIESTIT_KEYSTORE_ALIAS} -passout pass:${SUOMIFI_VIESTIT_KEYSTORE_PASSWORD}
 

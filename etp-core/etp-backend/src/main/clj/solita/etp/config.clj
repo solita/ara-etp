@@ -48,8 +48,9 @@
    {:solita.etp/http-server (merge {:port     (env "HTTP_SERVER_PORT" 8080)
                                     :max-body (* 1024 1024 50)
                                     :thread   20
-                                    :ctx      {:db            (ig/ref :solita.etp/db)
-                                               :aws-s3-client (ig/ref :solita.etp/aws-s3-client)}}
+                                    :ctx      {:db             (ig/ref :solita.etp/db)
+                                               :aws-s3-client  (ig/ref :solita.etp/aws-s3-client)
+                                               :aws-kms-client (ig/ref :solita.etp/aws-kms-client)}}
                                    opts)}))
 
 (defn aws-s3-client
@@ -78,9 +79,9 @@
                 {:credentials-provider (credentials/basic-credentials-provider
                                          {:access-key-id     "kms"
                                           :secret-access-key "kms123"})
-                 :endpoint-override {:protocol :http
-                                     :hostname (env "KMS_HOST" "localhost")
-                                     :port     (Integer/parseInt (env "KMS_PORT" "8899"))}}))
+                 :endpoint-override    {:protocol :http
+                                        :hostname (env "KMS_HOST" "localhost")
+                                        :port     (Integer/parseInt (env "KMS_PORT" "8899"))}}))
     :key-id (env "KMS_SIGNING_KEY_ID" "baf442ae-4a56-4e7e-bb48-6e0a8625fec0")}})
 
 (defn- prepare-emails [name default]
@@ -157,6 +158,11 @@
 (def suomifi-viestit-keystore-file (env "SUOMIFI_VIESTIT_KEYSTORE_FILE" nil))
 (def suomifi-viestit-keystore-password (env "SUOMIFI_VIESTIT_KEYSTORE_PASSWORD" nil))
 (def suomifi-viestit-keystore-alias (env "SUOMIFI_VIESTIT_KEYSTORE_ALIAS" nil))
+
+;; DVV / Järjestelmäallekirjoitus
+(def system-signature-certificate-leaf (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_LEAF" "system-signature/local-signing-leaf.pem.crt"))
+(def system-signature-certificate-intermediate (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE" "system-signature/local-signing-int.pem.crt"))
+(def system-signature-certificate-root (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_ROOT" "system-signature/local-signing-root.pem.crt"))
 
 ;; Url signing
 (def url-signing-key-id (env "URL_SIGNING_KEY_ID" "DEVENV_KEY_ID"))

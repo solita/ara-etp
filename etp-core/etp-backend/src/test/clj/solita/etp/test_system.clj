@@ -101,4 +101,4 @@
   "Get a handler to use with ring-mock requests to test the api"
   [req]
   ; Mimics real handler usage with test assets
-  (handler/handler (merge req {:db *db* :aws-s3-client *aws-s3-client*})))
+  (handler/handler (merge req {:db *db* :aws-s3-client *aws-s3-client* :aws-kms-client *aws-kms-client*})))

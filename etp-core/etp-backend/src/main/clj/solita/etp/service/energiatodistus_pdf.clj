@@ -1,25 +1,29 @@
 (ns solita.etp.service.energiatodistus-pdf
-  (:require [clojure.string :as str]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [puumerkki.pdf :as puumerkki]
-            [solita.etp.exception :as exception]
-            [solita.common.xlsx :as xlsx]
             [solita.common.certificates :as certificates]
+            [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.common.xlsx :as xlsx]
+            [solita.etp.config :as config]
+            [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
-            [solita.common.formats :as formats])
-  (:import (java.awt Font Color)
+            [solita.etp.service.sign :as sign-service])
+  (:import (clojure.lang ExceptionInfo)
+           (java.awt Color Font)
            (java.awt.image BufferedImage)
-           (java.io ByteArrayOutputStream File)
+           (java.io ByteArrayOutputStream File InputStream)
+           (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar Date GregorianCalendar HashMap)
+           (java.util Base64 Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
@@ -617,11 +621,11 @@
         dir (.getParent file)
         result-pdf (str/replace path #".xlsx$" ".pdf")
         {:keys [exit] :as sh-result} (libreoffice/run-with-args
-                                           "--convert-to"
-                                           "pdf"
-                                           filename
-                                           :dir
-                                           dir)]
+                                       "--convert-to"
+                                       "pdf"
+                                       filename
+                                       :dir
+                                       dir)]
     (if (and (zero? exit) (.exists (io/as-file result-pdf)))
       result-pdf
       (throw (ex-info "XLSX to PDF conversion failed"
@@ -738,7 +742,8 @@
 
     (.save document pdf-path)))
 
-(defn generate-pdf-as-file [complete-energiatodistus kieli draft?]
+;; Set as dynamic so that it can be mocked in tests.
+(defn ^:dynamic generate-pdf-as-file [complete-energiatodistus kieli draft?]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
         pdf-path (xlsx->pdf xlsx-path)]
     (io/delete-file xlsx-path)
@@ -852,10 +857,18 @@
                           not-after
                           now)}))))
 
-(defn validate-certificate! [last-name now certificate-str]
-  (let [certificate (certificates/pem-str->certificate certificate-str)]
-    (validate-surname! last-name certificate)
-    (validate-not-after! (-> now Instant/from Date/from) certificate)))
+(defn validate-certificate!
+  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate.
+
+  When using system signing the surname does not match the name in the certificate as it's issued for the whole
+  system and not a specific person."
+  ([surname now certificate-str]
+   (validate-certificate! surname now certificate-str true))
+  ([surname now certificate-str validate-surname?]
+   (let [certificate (certificates/pem-str->certificate certificate-str)]
+     (when validate-surname?
+       (validate-surname! surname certificate))
+     (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
 (defn write-signature! [id language pdf pkcs7]
   (try
@@ -866,22 +879,131 @@
         (str "Signed PDF already exists for energiatodistus "
              id "/" language ". Get digest to sign again.")))))
 
-(defn sign-energiatodistus-pdf [db aws-s3-client whoami now id language
-                                {:keys [chain] :as signature-and-chain}]
-  (when-let [energiatodistus
-             (energiatodistus-service/find-energiatodistus db id)]
-    (do-when-signing
-      energiatodistus
-      #(do
-         (validate-certificate! (:sukunimi whoami)
-                                now
-                                (first chain))
-         (let [key (energiatodistus-service/file-key id language)
-               content (file-service/find-file aws-s3-client key)
-               content-bytes (.readAllBytes content)
-               pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-               filename (str key ".pdf")]
-           (->> (write-signature! id language content-bytes pkcs7)
-                (file-service/upsert-file-from-bytes aws-s3-client
-                                                     key))
-           filename)))))
+(defn sign-energiatodistus-pdf
+  ([db aws-s3-client whoami now id language signature-and-chain]
+   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
+  ([db aws-s3-client whoami now id language
+    {:keys [chain] :as signature-and-chain} signing-method]
+   (when-let [energiatodistus
+              (energiatodistus-service/find-energiatodistus db id)]
+     (do-when-signing
+       energiatodistus
+       #(do
+          (validate-certificate! (:sukunimi whoami)
+                                 now
+                                 (first chain)
+                                 (if (= signing-method :mpollux)
+                                   true
+                                   false))
+          (let [key (energiatodistus-service/file-key id language)
+                content (file-service/find-file aws-s3-client key)
+                content-bytes (.readAllBytes content)
+                pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
+                filename (str key ".pdf")]
+            (->> (write-signature! id language content-bytes pkcs7)
+                 (file-service/upsert-file-from-bytes aws-s3-client
+                                                      key))
+            filename))))))
+
+(defn cert-pem->one-liner-without-headers [cert-pem]
+  "Given a certificate in PEM format `cert-pem` removes
+  headers and linebreaks from it."
+  (-> cert-pem
+      (str/replace #"-----BEGIN CERTIFICATE-----" "")
+      (str/replace #"-----END CERTIFICATE-----" "")
+      (str/replace #"\n" "")))
+
+(def cert-chain-three-long-leaf-first
+  (let [leaf config/system-signature-certificate-leaf
+        intermediate config/system-signature-certificate-intermediate
+        root config/system-signature-certificate-root]
+    (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
+
+(defn- data->signed-digest [data aws-kms-client]
+  (->> data
+       ^InputStream (sign-service/sign aws-kms-client)
+       (.readAllBytes)))
+
+(defn- sign-with-system-log-message [whoami id message]
+  (str "Sign with system (laatija-id: " (:id whoami) ") (energiatodistus-id: " id "): " message))
+
+(defn- is-sign-with-system-error? [result]
+  (contains? #{:already-signed :already-in-signing :not-in-signing nil} result))
+
+(defn- do-sign-with-system [f error-msg]
+  (let [result (f)]
+    (when (is-sign-with-system-error? result)
+      (log/error error-msg)
+      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
+    result))
+
+
+(defn- sign-with-system-start
+  [{:keys [db whoami id]}]
+  (log/info (sign-with-system-log-message whoami id "Starting"))
+  (do-sign-with-system
+    #(energiatodistus-service/start-energiatodistus-signing! db whoami id)
+    (sign-with-system-log-message whoami id "Starting failed!")))
+
+(defn- sign-with-system-digest
+  [{:keys [db whoami id aws-s3-client]} language]
+  (log/info (sign-with-system-log-message whoami id "Getting the digest"))
+  (do-sign-with-system
+    #(find-energiatodistus-digest db aws-s3-client id language)
+    (sign-with-system-log-message whoami id "Getting the digest failed!")))
+
+(defn- sign-with-system-sign
+  [{:keys [db whoami now id aws-s3-client aws-kms-client]} language digest-response]
+  (let [data-to-sign (-> digest-response
+                         :digest
+                         (.getBytes StandardCharsets/UTF_8)
+                         (#(.decode (Base64/getDecoder) %)))
+        signed-digest (data->signed-digest data-to-sign aws-kms-client)
+        chain cert-chain-three-long-leaf-first
+        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}]
+    (log/info (sign-with-system-log-message whoami id "Signing via KMS"))
+    (do-sign-with-system
+      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)
+      (sign-with-system-log-message whoami id "Signing via KMS failed!"))))
+
+(defn- sign-with-system-end
+  [{:keys [db whoami id aws-s3-client]}]
+  (log/info (sign-with-system-log-message whoami id "End signing"))
+  (do-sign-with-system
+    #(energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
+    (sign-with-system-log-message whoami id "End signing failed!")))
+
+(defn- sign-single-pdf-with-system [params language]
+  (->> (sign-with-system-digest language params)
+       (sign-with-system-sign language params)))
+
+(defn sign-with-system
+  "Does the whole process of signing with the system."
+  [{:keys [db id] :as params}]
+  (let [language-id (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :perustiedot :kieli)]
+    (try
+      (condp = language-id
+        energiatodistus-service/finnish-language-id
+        (do
+          (sign-with-system-start params)
+          (sign-single-pdf-with-system "fi" params)
+          (sign-with-system-end params))
+
+        energiatodistus-service/swedish-language-id
+        (do
+          (sign-with-system-start params)
+          (sign-single-pdf-with-system "sv" params)
+          (sign-with-system-end params))
+
+        energiatodistus-service/multilingual-language-id
+        (do
+          (sign-with-system-start params)
+          (sign-single-pdf-with-system "fi" params)
+          (sign-single-pdf-with-system "sv" params)
+          (sign-with-system-end params))
+
+        (exception/throw-ex-info! {:message (format "Invalid language-id %s in energiatodistus %s" language-id id)}))
+      (catch ExceptionInfo e
+        (if (= (-> e ex-data :type) :sign-with-system-error)
+          (-> e ex-data :result)
+          (throw e))))))
