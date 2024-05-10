@@ -43,7 +43,7 @@
         inProgress = false;
         signingSucceeded = false;
       },
-      response => {
+      _ => {
         signingSucceeded = true;
         inProgress = false;
       },
