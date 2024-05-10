@@ -59,12 +59,11 @@ const mockMpolluxConnectionDoesNotExist = () => {
 
 const mockSystemSignApiCallSuccess = () => {
   fetchMock.mockIf(
-    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
+    '/api/private/energiatodistukset/2018/1/signature/system-sign',
     async req => {
-      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
       return {
         status: 200,
-        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
+        body: JSON.stringify(`Ok`)
       };
     }
   );
@@ -72,7 +71,7 @@ const mockSystemSignApiCallSuccess = () => {
 
 const mockSystemSignApiCallFailure = () => {
   fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
+    '/api/private/energiatodistukset/2018/1/signature/system-sign',
     async req => {
       return {
         status: 500
@@ -378,7 +377,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   );
   expect(statusText).toBeInTheDocument();
 
-  expect(fetchMock.mock.calls.length).toBe(2);
+  expect(fetchMock.mock.calls.length).toBe(1);
 
   // Spinner has disappeared when request finished
   expect(spinner).not.toBeInTheDocument();
