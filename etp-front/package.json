@@ -92,7 +92,7 @@
     "qs": "^6.9.7",
     "quill": "^1.3.7",
     "quill-magic-url": "^4.0.0",
-    "ramda": "^0.29.0",
+    "ramda": "^0.30.0",
     "svelte-i18n": "^4.0.0",
     "svelte-spa-router": "https://github.com/hkorpi/svelte-spa-router.git#v3.1.0+locking",
     "turndown": "^7.0.0"
