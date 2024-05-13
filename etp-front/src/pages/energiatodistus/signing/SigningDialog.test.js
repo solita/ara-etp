@@ -279,6 +279,7 @@ test('When system sign fails, error is shown', async () => {
 });
 
 test('When system sign of energiatodistus in Finnish succeeds, success message and link to the pdf is shown', async () => {
+
   mockSystemSignApiCallSuccess();
 
   render(SigningDialog, {
@@ -289,11 +290,19 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
+  const nonexistingCancelButton = screen.queryByRole('button', { name: /Keskeytä/i });
+
+  expect(nonexistingCancelButton).not.toBeInTheDocument();
+
   await fireEvent.click(signButton);
 
   const spinner = screen.getByTestId('spinner');
 
   expect(spinner).toBeInTheDocument();
+
+  const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
+
+  expect(cancelButton).toBeInTheDocument();
 
   const statusText = await screen.findByText(
     /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
@@ -303,6 +312,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   // Spinner has disappeared when request finished
   expect(spinner).not.toBeInTheDocument();
+  expect(nonexistingCancelButton).not.toBeInTheDocument();
 
   // Download link for signed pdf exists
   const todistusLink = screen.getByTestId('energiatodistus-1-fi.pdf');
