@@ -211,10 +211,7 @@
 </style>
 
 {#if signingActive}
-  <Signing
-    {energiatodistus}
-    reload={cancel}
-    checkIfSelectionIsAllowed={true} />
+  <Signing {energiatodistus} reload={cancel} checkIfSelectionIsAllowed={true} />
 {/if}
 
 <div
