@@ -70,28 +70,32 @@ const mockSystemSignApiCallSuccess = () => {
 };
 
 const mockCancelSigning = () => {
-  fetchMock.mockIf(/^\/api\/private\/energiatodistukset\/2018\/1\/signature\//, async (req) => {
-    if (req.url.endsWith('/cancel')) {
-      return {
-        status: 200,
-        body: JSON.stringify(`Ok`)
-      };
-    } else if (req.url.endsWith('/system-sign')) {
-      // Wait some time so that it is possible to press "Keskeytä".
-      await new Promise(resolve => setTimeout(resolve, 10));
+  fetchMock.mockIf(
+    /^\/api\/private\/energiatodistukset\/2018\/1\/signature\//,
+    async req => {
+      if (req.url.endsWith('/cancel')) {
+        return {
+          status: 200,
+          body: JSON.stringify(`Ok`)
+        };
+      } else if (req.url.endsWith('/system-sign')) {
+        // Wait some time so that it is possible to press "Keskeytä".
+        await new Promise(resolve => setTimeout(resolve, 10));
 
-      return {
-        status: 409,
-        body: JSON.stringify(`Signing process for energiatodistus 1 has not been started`)
-      };
-    } else {
-      return {
-        status: 404,
-        body: 'Not Found'
-
-      };
+        return {
+          status: 409,
+          body: JSON.stringify(
+            `Signing process for energiatodistus 1 has not been started`
+          )
+        };
+      } else {
+        return {
+          status: 404,
+          body: 'Not Found'
+        };
+      }
     }
-  });
+  );
 };
 
 const mockSystemSignApiCallFailure = () => {
@@ -115,9 +119,9 @@ const assertButtons = async closeDialogFn => {
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const cancelButton = screen.getByRole('button', { name: /Sulje/i });
-  expect(cancelButton).toBeInTheDocument();
-  await fireEvent.click(cancelButton);
+  const closeButton = screen.getByRole('button', { name: /Sulje/i });
+  expect(closeButton).toBeInTheDocument();
+  await fireEvent.click(closeButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
 };
 
@@ -178,9 +182,9 @@ test('SigningDialog displays error message when default selection is card and th
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const cancelButton = screen.getByRole('button', { name: /Sulje/i });
-  expect(cancelButton).toBeInTheDocument();
-  await fireEvent.click(cancelButton);
+  const closeButton = screen.getByRole('button', { name: /Sulje/i });
+  expect(closeButton).toBeInTheDocument();
+  await fireEvent.click(closeButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
 });
 
@@ -304,7 +308,6 @@ test('When system sign fails, error is shown', async () => {
 });
 
 test('When system sign of energiatodistus in Finnish succeeds, success message and link to the pdf is shown', async () => {
-
   mockSystemSignApiCallSuccess();
 
   render(SigningDialog, {
@@ -315,7 +318,9 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
-  const nonexistingCancelButton = screen.queryByRole('button', { name: /Keskeytä/i });
+  const nonexistingCancelButton = screen.queryByRole('button', {
+    name: /Keskeytä/i
+  });
 
   expect(nonexistingCancelButton).not.toBeInTheDocument();
 
@@ -477,6 +482,8 @@ test('Cancelling the signing process while signing with system cancels the signi
   );
   expect(statusText).toBeInTheDocument();
 
-  const signButtonAfterCancel = screen.getByRole('button', { name: /Allekirjoita/i });
+  const signButtonAfterCancel = screen.getByRole('button', {
+    name: /Allekirjoita/i
+  });
   expect(signButtonAfterCancel).toBeInTheDocument();
 });
