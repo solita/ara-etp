@@ -40,7 +40,7 @@
 
              ;; Remove direct dependency to these once buddy is updated to use nonvulnerable versions
              org.bouncycastle/bcprov-jdk18on {:mvn/version "1.78.1"}
-             org.bouncycastle/bcpkix-jdk18on {:mvn/version "1.78"}
+             org.bouncycastle/bcpkix-jdk18on {:mvn/version "1.78.1"}
 
              org.apache.poi/poi                        {:mvn/version "5.2.5"}
              org.apache.poi/poi-ooxml                  {:mvn/version "5.2.5"
