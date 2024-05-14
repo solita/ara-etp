@@ -20,3 +20,8 @@
   {:arglists '([message & more] [throwable message & more])}
   [& args]
   `(audit-log :info ~@args))
+
+(defmacro error
+  {:arglists '([message & more] [throwable message & more])}
+  [& args]
+  `(audit-log :error ~@args))
