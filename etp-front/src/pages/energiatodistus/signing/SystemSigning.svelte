@@ -170,7 +170,7 @@
       <Spinner />
     </div>
     <div class="buttons">
-      <div class="mt-5">
+      <div class="mr-10 mt-5">
         <Button
           prefix="signing-reject"
           text={i18n('energiatodistus.signing.button.abort')}
