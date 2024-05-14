@@ -17,6 +17,15 @@
   const i18n = $_;
 
   let error = Maybe.None();
+
+  const possibleStates = [
+    'ready_to_sign',
+    'in_progress',
+    'aborted',
+  ];
+
+  let state = 'ready_to_sign';
+
   let inProgress = false;
 
   let signingSucceeded = false;
@@ -32,7 +41,7 @@
   };
 
   const signingProcess = () => {
-    Future.fork(
+    return Future.fork(
       response => {
         const errorKey =
           'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
@@ -51,10 +60,27 @@
     );
   };
 
+  let cancel = _ => {};
+
   const sign = () => {
     inProgress = true;
     error = Maybe.None();
-    signingProcess();
+    cancel = signingProcess();
+  };
+
+  const abort = () => {
+    cancel();
+    Future.fork(
+      _ => {
+        error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
+      },
+      () => {
+        state = 'aborted';
+        signingSucceeded = false;
+        inProgress = false;
+      },
+      etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
+    );
   };
 </script>
 
@@ -71,6 +97,14 @@
     <Error {text} />
   {/each}
 
+  {#if state == 'aborted'}
+    <p>
+      {statusText({
+        status: Signing.status.aborted,
+        language: Kielisyys.getEnergiatodistusLanguageCode(energiatodistus)
+      })}
+    </p>
+  {/if}
   {#if signingSucceeded}
     <p>
       {statusText({
@@ -108,7 +142,7 @@
           prefix="signing-reject"
           text={i18n('energiatodistus.signing.button.abort')}
           style={'secondary'}
-          on:click={R.identity} />
+          on:click={abort} />
       </div>
     {:else}
       {#if !signingSucceeded}

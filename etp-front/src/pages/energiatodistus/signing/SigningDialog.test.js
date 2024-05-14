@@ -69,6 +69,31 @@ const mockSystemSignApiCallSuccess = () => {
   );
 };
 
+const mockCancelSigning = () => {
+  fetchMock.mockIf(/^\/api\/private\/energiatodistukset\/2018\/1\/signature\//, async (req) => {
+    if (req.url.endsWith('/cancel')) {
+      return {
+        status: 200,
+        body: JSON.stringify(`Ok`)
+      };
+    } else if (req.url.endsWith('/system-sign')) {
+      // Wait some time so that it is possible to press "Keskeytä".
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      return {
+        status: 409,
+        body: JSON.stringify(`Signing process for energiatodistus 1 has not been started`)
+      };
+    } else {
+      return {
+        status: 404,
+        body: 'Not Found'
+
+      };
+    }
+  });
+};
+
 const mockSystemSignApiCallFailure = () => {
   fetchMock.mockIf(
     '/api/private/energiatodistukset/2018/1/signature/system-sign',
@@ -426,4 +451,32 @@ test('Signing button is not visible after signing using system signing', async (
   expect(statusText).toBeInTheDocument();
 
   expect(signButton).not.toBeInTheDocument();
+});
+
+test('Cancelling the signing process while signing with system cancels the signing', async () => {
+  mockCancelSigning();
+
+  render(SigningDialog, {
+    energiatodistus: finnishTodistus,
+    reload: R.identity,
+    selection: 'system'
+  });
+
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+
+  await fireEvent.click(signButton);
+
+  const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
+
+  await fireEvent.click(cancelButton);
+
+  expect(signButton).not.toBeInTheDocument();
+
+  const statusText = await screen.findByText(
+    /Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan./u
+  );
+  expect(statusText).toBeInTheDocument();
+
+  const signButtonAfterCancel = screen.getByRole('button', { name: /Allekirjoita/i });
+  expect(signButtonAfterCancel).toBeInTheDocument();
 });
