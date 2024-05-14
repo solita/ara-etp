@@ -19,16 +19,15 @@
   let error = Maybe.None();
 
   const possibleStates = [
-    'ready_to_sign',
+    'not_started',
     'in_progress',
     'signing_succeeded',
     'aborted'
   ];
 
   //TODO: Intial state depends on the state in the backend.
-  let state = 'ready_to_sign';
-
-  const setState = newState => (state = newState);
+  export let currentState;
+  const setState = newState => (currentState = newState);
 
   const statusText = Signing.statusText(i18n);
 
@@ -49,7 +48,7 @@
         error = R.equals(message, errorKey)
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
-        setState('ready_to_sign');
+        setState('not_started');
       },
       _ => {
         setState('signing_succeeded');
@@ -93,7 +92,7 @@
     <Error {text} />
   {/each}
 
-  {#if state === 'aborted'}
+  {#if currentState === 'aborted'}
     <p>
       {statusText({
         status: Signing.status.aborted,
@@ -115,7 +114,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if state === 'ready_to_sign'}
+  {:else if currentState === 'not_started'}
     <div class="buttons">
       <div class="mr-10 mt-5">
         <Button
@@ -131,7 +130,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if state === 'signing_succeeded'}
+  {:else if currentState === 'signing_succeeded'}
     <p>
       {statusText({
         status: Signing.status.signed,
@@ -162,7 +161,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if state === 'in_progress'}
+  {:else if currentState === 'in_progress'}
     <div class="mt-2">
       <Spinner />
     </div>

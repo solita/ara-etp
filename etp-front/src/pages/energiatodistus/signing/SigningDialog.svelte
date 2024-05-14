@@ -1,6 +1,7 @@
 <script>
   import { _ } from '@Language/i18n';
 
+  import * as R from 'ramda';
   import CardSigning from './CardSigning.svelte';
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
@@ -18,8 +19,10 @@
 
   const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 
-  export let allowSelection = false;
+  export let allowSelection = true;
   export let checkIfSelectionIsAllowed = false;
+
+  let currentState = 'not_started';
 
   if (checkIfSelectionIsAllowed) {
     Future.fork(
@@ -34,6 +37,9 @@
       versionApi.getConfig
     );
   }
+
+  const isSigningMethodSelectionAllowed = state =>
+    R.includes(state, ['not_started', 'aborted']);
 </script>
 
 <style type="text/postcss">
@@ -58,7 +64,7 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if allowSelection}
+    {#if allowSelection && isSigningMethodSelectionAllowed(currentState)}
       <div class="mt-2">
         <SigningInstructions />
       </div>
@@ -87,7 +93,7 @@
       {#if isSigningMethodCard(selection)}
         <CardSigning {energiatodistus} {reload} />
       {:else}
-        <SystemSigning {energiatodistus} {reload} />
+        <SystemSigning {energiatodistus} {reload} bind:currentState />
       {/if}
     </div>
   </div>

@@ -363,6 +363,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   render(SigningDialog, {
     energiatodistus: todistus,
     reload: R.identity,
+    allowSelection: true,
     selection: 'system'
   });
 
@@ -373,6 +374,10 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   const spinner = screen.getByTestId('spinner');
 
   expect(spinner).toBeInTheDocument();
+
+  //During signing the signing method selection should not be visible
+  const optionsWhileSigning = screen.queryAllByRole('radio');
+  expect(optionsWhileSigning).toHaveLength(0);
 
   const statusText = await screen.findByText(
     /Ruotsinkielinen energiatodistus on allekirjoitettu onnistuneesti./u
@@ -388,6 +393,10 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   expect(todistusLink.getAttribute('href')).toBe(
     '/api/private/energiatodistukset/2018/1/pdf/sv/energiatodistus-1-sv.pdf'
   );
+
+  //After a successful signing the signing method selection should not be visible
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(0);
 });
 
 test('When system signing of bilingual energiatodistus succeeds, success message and links to both pdfs are shown', async () => {
