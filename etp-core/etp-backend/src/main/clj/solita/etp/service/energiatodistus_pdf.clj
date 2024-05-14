@@ -8,6 +8,7 @@
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
+            [solita.etp.common.audit-log :as audit-log]
             [solita.etp.config :as config]
             [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
@@ -931,8 +932,8 @@
        ^InputStream (sign-service/sign aws-kms-client)
        (.readAllBytes)))
 
-(defn- sign-with-system-log-message [whoami id message]
-  (str "Sign with system (laatija-id: " (:id whoami) ") (energiatodistus-id: " id "): " message))
+(defn- audit-log-message [laatija-allekirjoitus-id energiatodistus-id message]
+  (str "Sign with system (laatija-allekirjoitus-id: " laatija-allekirjoitus-id ") (energiatodistus-id: " energiatodistus-id "): " message))
 
 (defn- is-sign-with-system-error? [result]
   (contains? #{:already-signed :already-in-signing :not-in-signing nil} result))
@@ -940,27 +941,27 @@
 (defn- do-sign-with-system [f error-msg]
   (let [result (f)]
     (when (is-sign-with-system-error? result)
-      (log/error error-msg)
+      (audit-log/error error-msg)
       (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
     result))
 
 
 (defn- sign-with-system-start
-  [{:keys [db whoami id]}]
-  (log/info (sign-with-system-log-message whoami id "Starting"))
+  [{:keys [db whoami id laatija-allekirjoitus-id]}]
+  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Starting"))
   (do-sign-with-system
     #(energiatodistus-service/start-energiatodistus-signing! db whoami id)
-    (sign-with-system-log-message whoami id "Starting failed!")))
+    (audit-log-message laatija-allekirjoitus-id id "Starting failed!")))
 
 (defn- sign-with-system-digest
-  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]} language]
-  (log/info (sign-with-system-log-message whoami id "Getting the digest"))
+  [{:keys [db laatija-allekirjoitus-id id aws-s3-client]} language]
+  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Getting the digest"))
   (do-sign-with-system
     #(find-energiatodistus-digest db aws-s3-client id language laatija-allekirjoitus-id)
-    (sign-with-system-log-message whoami id "Getting the digest failed!")))
+    (audit-log-message laatija-allekirjoitus-id id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign
-  [{:keys [db whoami now id aws-s3-client aws-kms-client]} language digest-response]
+  [{:keys [db whoami now id laatija-allekirjoitus-id aws-s3-client aws-kms-client]} language digest-response]
   (let [data-to-sign (-> digest-response
                          :digest
                          (.getBytes StandardCharsets/UTF_8)
@@ -968,17 +969,17 @@
         signed-digest (data->signed-digest data-to-sign aws-kms-client)
         chain cert-chain-three-long-leaf-first
         signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}]
-    (log/info (sign-with-system-log-message whoami id "Signing via KMS"))
+    (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
       #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)
-      (sign-with-system-log-message whoami id "Signing via KMS failed!"))))
+      (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end
-  [{:keys [db whoami id aws-s3-client]}]
-  (log/info (sign-with-system-log-message whoami id "End signing"))
+  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]}]
+  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "End signing"))
   (do-sign-with-system
     #(energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
-    (sign-with-system-log-message whoami id "End signing failed!")))
+    (audit-log-message laatija-allekirjoitus-id id "End signing failed!")))
 
 (defn- sign-single-pdf-with-system [params language]
   (->> (sign-with-system-digest language params)
