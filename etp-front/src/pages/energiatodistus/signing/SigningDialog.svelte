@@ -22,7 +22,7 @@
   export let allowSelection = true;
   export let checkIfSelectionIsAllowed = false;
 
-  let currentState = 'not_started';
+  let currentState = { status: 'not_started' };
 
   if (checkIfSelectionIsAllowed) {
     Future.fork(
@@ -39,7 +39,7 @@
   }
 
   const isSigningMethodSelectionAllowed = state =>
-    R.includes(state, ['not_started', 'aborted']);
+    R.includes(R.prop('status', state), ['not_started', 'aborted']);
 </script>
 
 <style type="text/postcss">

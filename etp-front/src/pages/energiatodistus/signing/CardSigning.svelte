@@ -50,7 +50,8 @@
     Signing.status.aborted
   ];
 
-  let currentState = {};
+  export let currentState = {};
+
   const setState = (status, language) => _ => {
     currentState = {
       status: status,

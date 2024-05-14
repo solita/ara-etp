@@ -27,7 +27,9 @@
 
   //TODO: Intial state depends on the state in the backend.
   export let currentState;
-  const setState = newState => (currentState = newState);
+  const setStatus = newStatus =>
+    (currentState = R.assoc('status', newStatus, currentState));
+  const getStatus = state => R.prop('status', state);
 
   const statusText = Signing.statusText(i18n);
 
@@ -48,10 +50,10 @@
         error = R.equals(message, errorKey)
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
-        setState('not_started');
+        setStatus('not_started');
       },
       _ => {
-        setState('signing_succeeded');
+        setStatus('signing_succeeded');
       },
       signAllPdfs(energiatodistus)
     );
@@ -60,7 +62,7 @@
   let cancel = _ => {};
 
   const sign = () => {
-    setState('in_progress');
+    setStatus('in_progress');
     error = Maybe.None();
     cancel = signingProcess();
   };
@@ -72,7 +74,7 @@
         error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
       },
       () => {
-        setState('aborted');
+        setStatus('aborted');
       },
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
     );
@@ -92,7 +94,7 @@
     <Error {text} />
   {/each}
 
-  {#if currentState === 'aborted'}
+  {#if getStatus(currentState) === 'aborted'}
     <p>
       {statusText({
         status: Signing.status.aborted,
@@ -114,7 +116,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if currentState === 'not_started'}
+  {:else if getStatus(currentState) === 'not_started'}
     <div class="buttons">
       <div class="mr-10 mt-5">
         <Button
@@ -130,7 +132,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if currentState === 'signing_succeeded'}
+  {:else if getStatus(currentState) === 'signing_succeeded'}
     <p>
       {statusText({
         status: Signing.status.signed,
@@ -161,7 +163,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if currentState === 'in_progress'}
+  {:else if getStatus(currentState) === 'in_progress'}
     <div class="mt-2">
       <Spinner />
     </div>
