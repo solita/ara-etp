@@ -39,7 +39,7 @@
              buddy/buddy-hashers                       {:mvn/version "2.0.167"}
 
              ;; Remove direct dependency to these once buddy is updated to use nonvulnerable versions
-             org.bouncycastle/bcprov-jdk18on {:mvn/version "1.78"}
+             org.bouncycastle/bcprov-jdk18on {:mvn/version "1.78.1"}
              org.bouncycastle/bcpkix-jdk18on {:mvn/version "1.78"}
 
              org.apache.poi/poi                        {:mvn/version "5.2.5"}
