@@ -28,7 +28,7 @@
   //TODO: Intial state depends on the state in the backend.
   let state = 'ready_to_sign';
 
-  const setState = newState => state = newState;
+  const setState = newState => (state = newState);
 
   const statusText = Signing.statusText(i18n);
 
@@ -58,8 +58,7 @@
     );
   };
 
-  let cancel = _ => {
-  };
+  let cancel = _ => {};
 
   const sign = () => {
     setState('in_progress');
@@ -82,9 +81,9 @@
 </script>
 
 <style type="text/postcss">
-    .buttons {
-        @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-    }
+  .buttons {
+    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+  }
 </style>
 
 <div>
@@ -116,7 +115,6 @@
           on:click={reload} />
       </div>
     </div>
-
   {:else if state === 'ready_to_sign'}
     <div class="buttons">
       <div class="mr-10 mt-5">
@@ -133,7 +131,6 @@
           on:click={reload} />
       </div>
     </div>
-
   {:else if state === 'signing_succeeded'}
     <p>
       {statusText({
@@ -176,13 +173,6 @@
           text={i18n('energiatodistus.signing.button.abort')}
           style={'secondary'}
           on:click={abort} />
-      </div>
-      <div class="mt-5">
-        <Button
-          prefix="signing-close"
-          text={i18n('energiatodistus.signing.button.close')}
-          style={'secondary'}
-          on:click={reload} />
       </div>
     </div>
   {/if}
