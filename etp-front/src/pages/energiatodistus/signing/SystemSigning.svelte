@@ -21,14 +21,14 @@
   const possibleStates = [
     'ready_to_sign',
     'in_progress',
-    'aborted',
+    'signing_succeeded',
+    'aborted'
   ];
 
+  //TODO: Intial state depends on the state in the backend.
   let state = 'ready_to_sign';
 
-  let inProgress = false;
-
-  let signingSucceeded = false;
+  const setState = newState => state = newState;
 
   const statusText = Signing.statusText(i18n);
 
@@ -49,21 +49,20 @@
         error = R.equals(message, errorKey)
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
-        inProgress = false;
-        signingSucceeded = false;
+        setState('ready_to_sign');
       },
       _ => {
-        signingSucceeded = true;
-        inProgress = false;
+        setState('signing_succeeded');
       },
       signAllPdfs(energiatodistus)
     );
   };
 
-  let cancel = _ => {};
+  let cancel = _ => {
+  };
 
   const sign = () => {
-    inProgress = true;
+    setState('in_progress');
     error = Maybe.None();
     cancel = signingProcess();
   };
@@ -75,9 +74,7 @@
         error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
       },
       () => {
-        state = 'aborted';
-        signingSucceeded = false;
-        inProgress = false;
+        setState('aborted');
       },
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
     );
@@ -85,9 +82,9 @@
 </script>
 
 <style type="text/postcss">
-  .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-  }
+    .buttons {
+        @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+    }
 </style>
 
 <div>
@@ -97,15 +94,47 @@
     <Error {text} />
   {/each}
 
-  {#if state == 'aborted'}
+  {#if state === 'aborted'}
     <p>
       {statusText({
         status: Signing.status.aborted,
         language: Kielisyys.getEnergiatodistusLanguageCode(energiatodistus)
       })}
     </p>
-  {/if}
-  {#if signingSucceeded}
+    <div class="buttons">
+      <div class="mr-10 mt-5">
+        <Button
+          prefix="signing-submit"
+          text={i18n('energiatodistus.signing.button.start')}
+          on:click={sign} />
+      </div>
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
+    </div>
+
+  {:else if state === 'ready_to_sign'}
+    <div class="buttons">
+      <div class="mr-10 mt-5">
+        <Button
+          prefix="signing-submit"
+          text={i18n('energiatodistus.signing.button.start')}
+          on:click={sign} />
+      </div>
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
+    </div>
+
+  {:else if state === 'signing_succeeded'}
     <p>
       {statusText({
         status: Signing.status.signed,
@@ -127,16 +156,20 @@
           text={`energiatodistus-${energiatodistus.id}-sv.pdf`} />
       {/if}
     </div>
-  {/if}
-
-  {#if inProgress}
+    <div class="buttons">
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
+    </div>
+  {:else if state === 'in_progress'}
     <div class="mt-2">
       <Spinner />
     </div>
-  {/if}
-
-  <div class="buttons">
-    {#if inProgress}
+    <div class="buttons">
       <div class="mt-5">
         <Button
           prefix="signing-reject"
@@ -144,24 +177,13 @@
           style={'secondary'}
           on:click={abort} />
       </div>
-    {:else}
-      {#if !signingSucceeded}
-        <div class="mr-10 mt-5">
-          <Button
-            prefix="signing-submit"
-            disabled={inProgress}
-            text={i18n('energiatodistus.signing.button.start')}
-            on:click={sign} />
-        </div>
-      {/if}
       <div class="mt-5">
         <Button
           prefix="signing-close"
-          disabled={inProgress}
           text={i18n('energiatodistus.signing.button.close')}
           style={'secondary'}
           on:click={reload} />
       </div>
-    {/if}
-  </div>
+    </div>
+  {/if}
 </div>
