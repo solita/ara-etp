@@ -95,7 +95,7 @@
 
     <div class="mt-4">
       {#if isSigningMethodCard(selection)}
-        <CardSigning {energiatodistus} {reload} />
+        <CardSigning {energiatodistus} {reload} bind:currentState />
       {:else}
         <SystemSigning {energiatodistus} {reload} bind:currentState />
       {/if}

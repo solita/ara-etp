@@ -153,7 +153,7 @@ context('Laatija', () => {
       );
     });
 
-    it('should sign energiatodistus', () => {
+    it('should sign energiatodistus via mpollux', () => {
       cy.intercept(
         'https://localhost:53952/version',
         FIXTURES.mpollux.version
@@ -217,7 +217,15 @@ context('Laatija', () => {
         { statusCode: 200, body: 'Ok' }
       ).as('finish');
 
+      // Signing method selection should exist before starting the signing.
+      cy.get('[name="Card"]').should('exist');
+      cy.get('[name="System"]').should('exist');
+
       cy.get('[data-cy="signing-submit-button"]').click();
+
+      // Signing method selection should not exist when the signing is in progress.
+      cy.get('[name="Card"]').should('not.exist');
+      cy.get('[name="System"]').should('not.exist');
 
       cy.wait('@start');
       cy.wait('@digest');
@@ -228,6 +236,10 @@ context('Laatija', () => {
       cy.contains(
         'Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti.'
       ).should('exist');
+
+      // Signing method selection should not exist after the signing has finished.
+      cy.get('[name="Card"]').should('not.exist');
+      cy.get('[name="System"]').should('not.exist');
     });
 
     it.skip('should change laskutettava yritys', () => {
