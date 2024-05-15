@@ -167,6 +167,9 @@
       </div>
     </div>
   {:else if getStatus(currentState) === inProgressStatus}
+    <div data-cy="signing-status">
+      {i18n('energiatodistus.signing.system-signing-status-text')}
+    </div>
     <div class="mt-2">
       <Spinner />
     </div>

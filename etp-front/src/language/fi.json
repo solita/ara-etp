@@ -1273,6 +1273,7 @@
         "system": "Älä käytä henkilökorttia"
       },
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia",
+      "system-signing-status-text": "Allekirjoitetaan energiatodistusta",
       "language-adjective": {
         "fi": "suomenkielinen",
         "sv": "ruotsinkielinen",

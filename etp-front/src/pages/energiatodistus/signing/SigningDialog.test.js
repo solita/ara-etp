@@ -161,6 +161,20 @@ const assertSigningInfoIsNotVisible = () => {
   expect(infoText).not.toBeInTheDocument();
 };
 
+const assertInProgressStatusTextIsVisible = async () => {
+  const statusText = await screen.queryByText(
+    'Allekirjoitetaan energiatodistusta'
+  );
+  expect(statusText).toBeInTheDocument();
+};
+
+const assertInProgressStatusTextIsNotVisible = async () => {
+  const statusText = await screen.queryByText(
+    'Allekirjoitetaan energiatodistusta'
+  );
+  expect(statusText).not.toBeInTheDocument();
+};
+
 const finnishTodistus = R.compose(
   R.assoc('id', 1),
   R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
@@ -328,6 +342,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
   assertSigningInfoIsVisible();
+  await assertInProgressStatusTextIsNotVisible();
 
   const nonexistingCancelButton = screen.queryByRole('button', {
     name: /Keskeytä/i
@@ -341,6 +356,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   expect(spinner).toBeInTheDocument();
 
   assertSigningInfoIsNotVisible();
+  await assertInProgressStatusTextIsVisible();
 
   const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
   expect(cancelButton).toBeInTheDocument();
@@ -362,6 +378,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   );
 
   assertSigningInfoIsNotVisible();
+  await assertInProgressStatusTextIsNotVisible();
 });
 
 test('When system sign of energiatodistus in Swedish succeeds, success message and link to the pdf is shown', async () => {
@@ -379,6 +396,8 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
     selection: 'system'
   });
 
+  await assertInProgressStatusTextIsNotVisible();
+
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
@@ -386,6 +405,8 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   const spinner = screen.getByTestId('spinner');
 
   expect(spinner).toBeInTheDocument();
+
+  await assertInProgressStatusTextIsVisible();
 
   //During signing the signing method selection should not be visible
   const optionsWhileSigning = screen.queryAllByRole('radio');
@@ -411,6 +432,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   expect(options).toHaveLength(0);
 
   assertSigningInfoIsNotVisible();
+  await assertInProgressStatusTextIsNotVisible();
 });
 
 test('When system signing of bilingual energiatodistus succeeds, success message and links to both pdfs are shown', async () => {
@@ -428,6 +450,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   });
 
   assertSigningInfoIsVisible();
+  await assertInProgressStatusTextIsNotVisible();
 
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
   await fireEvent.click(signButton);
@@ -436,6 +459,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   expect(spinner).toBeInTheDocument();
 
   assertSigningInfoIsNotVisible();
+  await assertInProgressStatusTextIsVisible();
 
   const statusText = await screen.findByText(
     /Kaksikielinen energiatodistus on allekirjoitettu onnistuneesti./u
@@ -446,6 +470,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
 
   // Spinner has disappeared and signing info is not visible when request finished
   expect(spinner).not.toBeInTheDocument();
+  await assertInProgressStatusTextIsNotVisible();
   assertSigningInfoIsNotVisible();
 
   // Download link for signed Finnish pdf exists
@@ -496,12 +521,14 @@ test('Aborting the signing process while signing with system aborts the signing'
   });
 
   assertSigningInfoIsVisible();
+  await assertInProgressStatusTextIsNotVisible();
 
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
 
   assertSigningInfoIsNotVisible();
+  await assertInProgressStatusTextIsVisible();
 
   const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
 
@@ -515,6 +542,7 @@ test('Aborting the signing process while signing with system aborts the signing'
   expect(statusText).toBeInTheDocument();
 
   assertSigningInfoIsVisible();
+  await assertInProgressStatusTextIsNotVisible();
 
   const signButtonAfterCancel = screen.getByRole('button', {
     name: /Allekirjoita/i
