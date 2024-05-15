@@ -6,6 +6,7 @@
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
   import SigningInstructions from './SigningInstructions.svelte';
+  import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
   import * as versionApi from '@Component/Version/version-api';
   import { isProduction } from '@Utility/config_utils';
@@ -22,7 +23,7 @@
   export let allowSelection = true;
   export let checkIfSelectionIsAllowed = false;
 
-  let currentState = { status: 'not_started' };
+  let currentState = { status: Signing.status.not_started };
 
   if (checkIfSelectionIsAllowed) {
     Future.fork(
@@ -39,7 +40,10 @@
   }
 
   const isSigningMethodSelectionAllowed = state =>
-    R.includes(R.prop('status', state), ['not_started', 'aborted']);
+    R.includes(R.prop('status', state), [
+      Signing.status.not_started,
+      Signing.status.aborted
+    ]);
 </script>
 
 <style type="text/postcss">

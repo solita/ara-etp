@@ -18,12 +18,11 @@
 
   let error = Maybe.None();
 
-  const possibleStates = [
-    'not_started',
-    'in_progress',
-    'signing_succeeded',
-    'aborted'
-  ];
+  // Subset of signing statuses used in signing with system.
+  const notStartedStatus = Signing.status.not_started;
+  const inProgressStatus = Signing.status.already_started;
+  const signedStatus = Signing.status.signed;
+  const abortedStatus = Signing.status.aborted;
 
   //TODO: Intial state depends on the state in the backend.
   export let currentState;
@@ -50,10 +49,10 @@
         error = R.equals(message, errorKey)
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
-        setStatus('not_started');
+        setStatus(notStartedStatus);
       },
       _ => {
-        setStatus('signing_succeeded');
+        setStatus(signedStatus);
       },
       signAllPdfs(energiatodistus)
     );
@@ -62,7 +61,7 @@
   let cancel = _ => {};
 
   const sign = () => {
-    setStatus('in_progress');
+    setStatus(inProgressStatus);
     error = Maybe.None();
     cancel = signingProcess();
   };
@@ -74,7 +73,7 @@
         error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
       },
       () => {
-        setStatus('aborted');
+        setStatus(abortedStatus);
       },
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
     );
@@ -94,7 +93,7 @@
     <Error {text} />
   {/each}
 
-  {#if getStatus(currentState) === 'aborted'}
+  {#if getStatus(currentState) === abortedStatus}
     <p>
       {statusText({
         status: Signing.status.aborted,
@@ -116,7 +115,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if getStatus(currentState) === 'not_started'}
+  {:else if getStatus(currentState) === notStartedStatus}
     <div class="buttons">
       <div class="mr-10 mt-5">
         <Button
@@ -132,7 +131,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if getStatus(currentState) === 'signing_succeeded'}
+  {:else if getStatus(currentState) === signedStatus}
     <p>
       {statusText({
         status: Signing.status.signed,
@@ -163,7 +162,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if getStatus(currentState) === 'in_progress'}
+  {:else if getStatus(currentState) === inProgressStatus}
     <div class="mt-2">
       <Spinner />
     </div>

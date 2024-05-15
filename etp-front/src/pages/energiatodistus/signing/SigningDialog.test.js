@@ -467,12 +467,14 @@ test('Signing button is not visible after signing using system signing', async (
   expect(signButton).not.toBeInTheDocument();
 });
 
-test('Cancelling the signing process while signing with system cancels the signing', async () => {
+test('Aborting the signing process while signing with system aborts the signing', async () => {
   mockCancelSigning();
+
+  const closeDialogFn = jest.fn();
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
-    reload: R.identity,
+    reload: closeDialogFn,
     selection: 'system'
   });
 
@@ -494,5 +496,10 @@ test('Cancelling the signing process while signing with system cancels the signi
   const signButtonAfterCancel = screen.getByRole('button', {
     name: /Allekirjoita/i
   });
-  expect(signButtonAfterCancel).toBeInTheDocument();
+
+  // After cancelling the signing choosing the method should be available.
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(2);
+
+  await assertButtons(closeDialogFn);
 });
