@@ -8,15 +8,22 @@ aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/cli
 echo Retrieve /secret/etp/suomifi/viestit/private.key
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/private.key" | jq .SecretString -r > private.pem
 
-SECRET="/secret/etp/dvv/system-signature-root.crt"
-echo "Retrieve ${SECRET}"
-export SYSTEM_SIGNATURE_CERTIFICATE_ROOT="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
-SECRET="/secret/etp/dvv/system-signature-intermediate.crt"
-echo "Retrieve ${SECRET}"
-export SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
-SECRET="/secret/etp/dvv/system-signature.crt"
-echo "Retrieve ${SECRET}"
-export SYSTEM_SIGNATURE_CERTIFICATE_LEAF="$(aws secretsmanager get-secret-value --secret-id "${SECRET}" | jq .SecretString -r)"
+function retrieve_secret {
+  local secret=$1
+  local env_var=$2
+  local response
+  echo "Retrieving ${secret}"
+  response="$(set -o pipefail; aws secretsmanager get-secret-value --secret-id "${secret}" | jq .SecretString -r)"
+  if [ $? -eq 0 ]; then
+    export "${env_var}"="${response}"
+  else
+    echo "Retrieving ${secret} failed"
+  fi
+}
+
+retrieve_secret "/secret/etp/dvv/system-signature-root.crt"         "SYSTEM_SIGNATURE_CERTIFICATE_ROOT"
+retrieve_secret "/secret/etp/dvv/system-signature-intermediate.crt" "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE"
+retrieve_secret "/secret/etp/dvv/system-signature-leaf.crt"         "SYSTEM_SIGNATURE_CERTIFICATE_LEAF"
 
 echo "Set KMS_SIGNING_KEY_ID"
 export KMS_SIGNING_KEY_ID="alias/SigningKey"

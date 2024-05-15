@@ -20,6 +20,9 @@ services:
       LASKUTUS_SFTP_PORT: 22
       S3_HOST: minio
       S3_PORT: 9000
+      ALLOW_NEW_SIGNATURE: true
+      KMS_PORT: 8080
+      KMS_HOST: kms
     env_file:
       - ./backend.env
     healthcheck:
@@ -30,6 +33,8 @@ services:
       start_period: 0m
     depends_on:
       db:
+        condition: service_started
+      kms:
         condition: service_started
       minio:
         condition: service_started

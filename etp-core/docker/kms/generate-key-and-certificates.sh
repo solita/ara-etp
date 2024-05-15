@@ -67,7 +67,11 @@ Keys:
           KeyId: baf442ae-4a56-4e7e-bb48-6e0a8625fec0
           KeyUsage: SIGN_VERIFY
         PrivateKeyPem: |
-$(cat "${KEY_FILE_LEAF}" | sed 's/^/          /')"\
+$(cat "${KEY_FILE_LEAF}" | sed 's/^/          /')
+
+Aliases:
+  - AliasName: alias/SigningKey
+    TargetKeyId: baf442ae-4a56-4e7e-bb48-6e0a8625fec0"\
 > "$SCRIPT_DIR/seed.yaml"
 
 # Clean unnecessary files

@@ -25,5 +25,7 @@ services:
   smtp:
     ports: !reset []
 
+  kms:
+    ports: !reset []
 
 
