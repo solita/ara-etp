@@ -185,6 +185,16 @@ const assertInstructionsTextIsNotVisible = () => {
   expect(infoText).not.toBeInTheDocument();
 };
 
+const assertSigningMethodSelectionIsVisible = () => {
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(2);
+};
+
+const assertSigningMethodSelectionIsNotVisible = () => {
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(0);
+};
+
 const finnishTodistus = R.compose(
   R.assoc('id', 1),
   R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
@@ -269,8 +279,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
   closeDialogFn.mockReset();
 
   // Options should be available
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(2);
+  assertSigningMethodSelectionIsVisible();
 
   // Select system signing
   const selection = screen.getByRole('radio', {
@@ -293,9 +302,7 @@ test('Signing method can not be selected when allowSelection is false', async ()
     allowSelection: false
   });
 
-  // Options should not be available
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(0);
+  assertSigningMethodSelectionIsNotVisible();
 });
 
 test('Pressing sign button with system as signing method shows loading indicator', async () => {
@@ -426,8 +433,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   await assertInProgressStatusTextIsVisible();
 
   //During signing the signing method selection should not be visible
-  const optionsWhileSigning = screen.queryAllByRole('radio');
-  expect(optionsWhileSigning).toHaveLength(0);
+  assertSigningMethodSelectionIsNotVisible();
 
   const statusText = await screen.findByText(
     /Ruotsinkielinen energiatodistus on allekirjoitettu onnistuneesti./u
@@ -445,8 +451,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   );
 
   //After a successful signing the signing method selection and info text should not be visible
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(0);
+  assertSigningMethodSelectionIsNotVisible();
 
   assertInstructionsTextIsNotVisible();
   await assertInProgressStatusTextIsNotVisible();
@@ -569,8 +574,7 @@ test('Aborting the signing process while signing with system aborts the signing'
   await assertInProgressStatusTextIsNotVisible();
 
   // After cancelling the signing choosing the method should be available.
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(2);
+  assertSigningMethodSelectionIsVisible();
 
   await assertButtons(closeDialogFn);
 });
