@@ -242,6 +242,31 @@ context('Laatija', () => {
       cy.get('[name="System"]').should('not.exist');
     });
 
+    it.only('should sign energiatodistus via system', () => {
+      cy.visit('/#/energiatodistus/2018/2');
+
+      // Laskututiedot needs to be set.
+      cy.get('[data-cy="laskutusosoite-id"]').click();
+      cy.contains('Henkilökohtaiset tiedot').click();
+
+      cy.get('[data-cy="allekirjoita-button"]').click();
+
+      cy.get('[data-cy="System"]').click();
+
+      cy.intercept({
+        method: 'POST',
+        pathname:
+          /\/api\/private\/energiatodistukset\/2018\/2\/signature\/system-sign/
+      }).as('system-sign');
+
+      cy.get('[data-cy="signing-submit-button"]').click();
+
+      cy.wait('@system-sign');
+
+      // After signing energiatodistus a link to the signed energiatodistus is visible
+      cy.get('[data-cy="energiatodistus-2-fi.pdf"]').should('be.visible');
+    });
+
     it.skip('should change laskutettava yritys', () => {
       cy.intercept(
         /\/api\/private\/laatijat\/2\/yritykset$/,
