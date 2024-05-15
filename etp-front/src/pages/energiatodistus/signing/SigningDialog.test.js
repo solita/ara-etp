@@ -151,6 +151,16 @@ const assertCardSigningDialogContents = async closeDialogFn => {
   await assertButtons(closeDialogFn);
 };
 
+const assertSigningInfoIsVisible = () => {
+  const infoText = screen.getByTestId('signing-info');
+  expect(infoText).toBeInTheDocument();
+};
+
+const assertSigningInfoIsNotVisible = () => {
+  const infoText = screen.queryByTestId('signing-info');
+  expect(infoText).not.toBeInTheDocument();
+};
+
 const finnishTodistus = R.compose(
   R.assoc('id', 1),
   R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
@@ -317,6 +327,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   });
 
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  assertSigningInfoIsVisible();
 
   const nonexistingCancelButton = screen.queryByRole('button', {
     name: /Keskeytä/i
@@ -327,17 +338,16 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   await fireEvent.click(signButton);
 
   const spinner = screen.getByTestId('spinner');
-
   expect(spinner).toBeInTheDocument();
 
-  const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
+  assertSigningInfoIsNotVisible();
 
+  const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
   expect(cancelButton).toBeInTheDocument();
 
   const statusText = await screen.findByText(
     /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
   );
-
   expect(statusText).toBeInTheDocument();
 
   // Spinner has disappeared when request finished
@@ -350,6 +360,8 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   expect(todistusLink.getAttribute('href')).toBe(
     '/api/private/energiatodistukset/2018/1/pdf/fi/energiatodistus-1-fi.pdf'
   );
+
+  assertSigningInfoIsNotVisible();
 });
 
 test('When system sign of energiatodistus in Swedish succeeds, success message and link to the pdf is shown', async () => {
@@ -394,9 +406,11 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
     '/api/private/energiatodistukset/2018/1/pdf/sv/energiatodistus-1-sv.pdf'
   );
 
-  //After a successful signing the signing method selection should not be visible
+  //After a successful signing the signing method selection and info text should not be visible
   const options = screen.queryAllByRole('radio');
   expect(options).toHaveLength(0);
+
+  assertSigningInfoIsNotVisible();
 });
 
 test('When system signing of bilingual energiatodistus succeeds, success message and links to both pdfs are shown', async () => {
@@ -413,13 +427,15 @@ test('When system signing of bilingual energiatodistus succeeds, success message
     selection: 'system'
   });
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  assertSigningInfoIsVisible();
 
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
   await fireEvent.click(signButton);
 
   const spinner = screen.getByTestId('spinner');
-
   expect(spinner).toBeInTheDocument();
+
+  assertSigningInfoIsNotVisible();
 
   const statusText = await screen.findByText(
     /Kaksikielinen energiatodistus on allekirjoitettu onnistuneesti./u
@@ -428,8 +444,9 @@ test('When system signing of bilingual energiatodistus succeeds, success message
 
   expect(fetchMock.mock.calls.length).toBe(1);
 
-  // Spinner has disappeared when request finished
+  // Spinner has disappeared and signing info is not visible when request finished
   expect(spinner).not.toBeInTheDocument();
+  assertSigningInfoIsNotVisible();
 
   // Download link for signed Finnish pdf exists
   const todistusLinkFi = screen.getByTestId('energiatodistus-1-fi.pdf');
@@ -478,9 +495,13 @@ test('Aborting the signing process while signing with system aborts the signing'
     selection: 'system'
   });
 
+  assertSigningInfoIsVisible();
+
   const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
 
   await fireEvent.click(signButton);
+
+  assertSigningInfoIsNotVisible();
 
   const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
 
@@ -492,6 +513,8 @@ test('Aborting the signing process while signing with system aborts the signing'
     /Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan./u
   );
   expect(statusText).toBeInTheDocument();
+
+  assertSigningInfoIsVisible();
 
   const signButtonAfterCancel = screen.getByRole('button', {
     name: /Allekirjoita/i

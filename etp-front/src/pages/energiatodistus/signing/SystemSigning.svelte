@@ -87,13 +87,14 @@
 </style>
 
 <div>
-  <div>{i18n('energiatodistus.signing.system-signing-info-text')}</div>
-
   {#each error.toArray() as text}
     <Error {text} />
   {/each}
 
   {#if getStatus(currentState) === abortedStatus}
+    <div data-cy="signing-info">
+      {i18n('energiatodistus.signing.system-signing-info-text')}
+    </div>
     <p>
       {statusText({
         status: Signing.status.aborted,
@@ -116,6 +117,9 @@
       </div>
     </div>
   {:else if getStatus(currentState) === notStartedStatus}
+    <div data-cy="signing-info">
+      {i18n('energiatodistus.signing.system-signing-info-text')}
+    </div>
     <div class="buttons">
       <div class="mr-10 mt-5">
         <Button
