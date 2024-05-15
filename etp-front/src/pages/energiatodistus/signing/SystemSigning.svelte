@@ -92,9 +92,9 @@
   {/each}
 
   {#if getStatus(currentState) === abortedStatus}
-    <div data-cy="signing-info">
+    <p data-cy="signing-info">
       {i18n('energiatodistus.signing.system-signing-info-text')}
-    </div>
+    </p>
     <p>
       {statusText({
         status: Signing.status.aborted,
@@ -117,9 +117,9 @@
       </div>
     </div>
   {:else if getStatus(currentState) === notStartedStatus}
-    <div data-cy="signing-info">
+    <p data-cy="signing-info">
       {i18n('energiatodistus.signing.system-signing-info-text')}
-    </div>
+    </p>
     <div class="buttons">
       <div class="mr-10 mt-5">
         <Button
@@ -167,9 +167,9 @@
       </div>
     </div>
   {:else if getStatus(currentState) === inProgressStatus}
-    <div data-cy="signing-status">
+    <p data-cy="signing-status">
       {i18n('energiatodistus.signing.system-signing-status-text')}
-    </div>
+    </p>
     <div class="mt-2">
       <Spinner />
     </div>
