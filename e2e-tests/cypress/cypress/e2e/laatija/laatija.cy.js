@@ -245,8 +245,7 @@ context('Laatija', () => {
       cy.visit('/#/energiatodistus/2018/2');
 
       // Laskututiedot needs to be set.
-      cy.get('[data-cy="laskutusosoite-id"]').click();
-      cy.contains('Henkilökohtaiset tiedot').click();
+      cy.selectInSelect('laskutusosoite-id', 'Henkilökohtaiset tiedot');
 
       cy.get('[data-cy="allekirjoita-button"]').click();
 
