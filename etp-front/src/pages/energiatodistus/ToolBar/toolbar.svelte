@@ -221,6 +221,7 @@
       <div class="flex flex-row w-full">
         {#each ['fi', 'sv'] as language}
           <div
+            data-cy={`languageselect-${language}`}
             class="languageselect"
             class:bg-primary={R.equals(selectedLanguage, language)}
             class:bg-ara-2021-basic-gray={!R.equals(
