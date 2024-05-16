@@ -177,4 +177,47 @@ describe('Signing energiatodistus', () => {
         expect(res.status).to.eq(200);
       });
   });
+
+  it.skip('can be aborted and starting signing afterwards again succeeds when using system signing', () => {
+    cy.visit('/#/energiatodistus/2018/2');
+
+    // Laskututiedot needs to be set.
+    cy.selectInSelect('laskutusosoite-id', 'Henkilökohtaiset tiedot');
+
+    cy.get('[data-cy="allekirjoita-button"]').click();
+
+    cy.get('[data-cy="System"]').click();
+
+    cy.intercept({
+      method: 'POST',
+      pathname:
+        /\/api\/private\/energiatodistukset\/2018\/2\/signature\/system-sign/
+    }).as('system-sign');
+
+    cy.intercept({
+      method: 'POST',
+      pathname: /\/api\/private\/energiatodistukset\/2018\/2\/signature\/cancel/
+    }).as('sign-cancel');
+
+    cy.get('[data-cy="signing-submit-button"]').click();
+
+    // Abort the signing process after one second
+    cy.wait(1000);
+    cy.get('[data-cy="signing-reject-button"]').click();
+    cy.wait('@sign-cancel');
+
+    // Start signing again
+    cy.get('[data-cy="signing-submit-button"]').click();
+    cy.wait('@system-sign');
+
+    // After signing energiatodistus a link to the signed energiatodistus is visible
+    // and the signed pdf can be downloaded.
+    cy.get('[data-cy="energiatodistus-2-fi.pdf"]')
+      .should('be.visible')
+      .should('have.attr', 'href')
+      .then(href => cy.request({ url: href, headers: FIXTURES.headers }))
+      .then(res => {
+        expect(res.status).to.eq(200);
+      });
+  });
 });

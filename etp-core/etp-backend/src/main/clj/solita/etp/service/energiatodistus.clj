@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus
-  (:require [solita.etp.db :as db]
+  (:require [clojure.tools.logging :as log]
+            [solita.etp.db :as db]
             [solita.etp.exception :as exception]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.schema.geo :as geo-schema]
@@ -590,6 +591,13 @@
                                 (failure-code db whoami id)))))
 
 (defn cancel-energiatodistus-signing! [db whoami id]
+  (log/info (format "Cancelling energiatodistus %s signing" id))
   (let [result (energiatodistus-db/update-energiatodistus-luonnos!
                  db {:id id :laatija-id (:id whoami)})]
-    (if (= result 1) :ok (failure-code db whoami id))))
+    (if (= result 1)
+      (do
+        (log/info (format "Cancelling energiatodistus %s signing succeeded" id))
+        :ok)
+      (do
+        (log/info (format "Cancelling energiatodistus %s signing failed" id))
+        (failure-code db whoami id)))))
