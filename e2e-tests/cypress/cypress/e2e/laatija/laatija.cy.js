@@ -129,7 +129,6 @@ context('Laatija', () => {
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
-
     // TODO: Temporary fix?
     cy.resetDb();
   });
@@ -242,7 +241,7 @@ context('Laatija', () => {
       cy.get('[name="System"]').should('not.exist');
     });
 
-    it.only('should sign energiatodistus via system', () => {
+    it('should sign energiatodistus via system', () => {
       cy.visit('/#/energiatodistus/2018/2');
 
       // Laskututiedot needs to be set.
@@ -264,7 +263,14 @@ context('Laatija', () => {
       cy.wait('@system-sign');
 
       // After signing energiatodistus a link to the signed energiatodistus is visible
-      cy.get('[data-cy="energiatodistus-2-fi.pdf"]').should('be.visible');
+      // and the signed pdf can be downloaded.
+      cy.get('[data-cy="energiatodistus-2-fi.pdf"]')
+        .should('be.visible')
+        .should('have.attr', 'href')
+        .then(href => cy.request({ url: href, headers: FIXTURES.headers }))
+        .then(res => {
+          expect(res.status).to.eq(200);
+        });
     });
 
     it.skip('should change laskutettava yritys', () => {
