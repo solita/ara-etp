@@ -8,7 +8,7 @@ describe('Signing energiatodistus', () => {
     cy.resetDb();
   });
 
-  it('should sign energiatodistus via mpollux', () => {
+  it('succeeds when signing using mpollux', () => {
     cy.intercept(
       'https://localhost:53952/version',
       FIXTURES.mpollux.version
@@ -97,7 +97,7 @@ describe('Signing energiatodistus', () => {
     cy.get('[name="System"]').should('not.exist');
   });
 
-  it('should sign energiatodistus via system', () => {
+  it('succeeds when using system signing', () => {
     cy.visit('/#/energiatodistus/2018/2');
 
     // Laskututiedot needs to be set.
@@ -128,7 +128,7 @@ describe('Signing energiatodistus', () => {
       });
   });
 
-  it('Switch existing energiatodistus draft to be bilingual and sign the bilingual energiatodistus via system', () => {
+  it('succeeds after switching energiatodistus draft to be bilingual and signing it using system signing', () => {
     cy.visit('/#/energiatodistus/2018/2');
 
     // Laskututiedot needs to be set.
