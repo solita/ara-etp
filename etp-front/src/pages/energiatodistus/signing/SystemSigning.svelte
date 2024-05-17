@@ -22,7 +22,6 @@
   const notStartedStatus = Signing.status.not_started;
   const inProgressStatus = Signing.status.already_started;
   const signedStatus = Signing.status.signed;
-  const abortedStatus = Signing.status.aborted;
 
   export let currentState;
   const setStatus = newStatus =>
@@ -75,32 +74,7 @@
     <Error {text} />
   {/each}
 
-  {#if getStatus(currentState) === abortedStatus}
-    <p data-cy="signing-info">
-      {i18n('energiatodistus.signing.system-signing-info-text')}
-    </p>
-    <p>
-      {statusText({
-        status: Signing.status.aborted,
-        language: Kielisyys.getEnergiatodistusLanguageCode(energiatodistus)
-      })}
-    </p>
-    <div class="buttons">
-      <div class="mr-10 mt-5">
-        <Button
-          prefix="signing-submit"
-          text={i18n('energiatodistus.signing.button.start')}
-          on:click={sign} />
-      </div>
-      <div class="mt-5">
-        <Button
-          prefix="signing-close"
-          text={i18n('energiatodistus.signing.button.close')}
-          style={'secondary'}
-          on:click={reload} />
-      </div>
-    </div>
-  {:else if getStatus(currentState) === notStartedStatus}
+  {#if getStatus(currentState) === notStartedStatus}
     <p data-cy="signing-info">
       {i18n('energiatodistus.signing.system-signing-info-text')}
     </p>
