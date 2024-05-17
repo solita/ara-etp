@@ -118,7 +118,6 @@ export const FIXTURES = {
       }
     };
   },
-  // prettier-ignore
   energiatodistukset: [{
     'laatija-fullname': 'Specimen-Potex, Liisa',
     'laatija-id': 2,
