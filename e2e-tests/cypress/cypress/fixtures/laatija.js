@@ -118,249 +118,296 @@ export const FIXTURES = {
       }
     };
   },
-  energiatodistukset: [{
-    'laatija-fullname': 'Specimen-Potex, Liisa',
-    'laatija-id': 2,
-    'voimassaolo-paattymisaika': null,
-    'tulokset': {
-      'e-luku': 190,
-      'e-luokka': 'D',
-      'kaytettavat-energiamuodot': {
-        'fossiilinen-polttoaine': 0,
-        'sahko': 20000,
-        'kaukojaahdytys': 0,
-        'kaukolampo': 0,
-        'uusiutuva-polttoaine': 5000
-      }
-    },
-    'tila-id': 0,
-    'perustiedot': {
-      'havainnointikaynti': '2020-04-15',
-      'rakennustunnus': '101089527F',
-      'katuosoite-sv': 'katuosoite-sv',
-      'keskeiset-suositukset-fi': 'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                       * Toimenpide 2',
-      'laatimisvaihe': 0,
-      'kieli': 0,
-      'nimi': 'Rakennuksen nimi',
-      'postinumero': '33100',
-      'yritys': {
-        'nimi': 'Yritys Oy',
-        'katuosoite': 'yrityksen katuosoite',
-        'postinumero': '33100',
-        'postitoimipaikka': 'tampere'
+  energiatodistukset: [
+    {
+      'laatija-fullname': 'Specimen-Potex, Liisa',
+      'laatija-id': 2,
+      'voimassaolo-paattymisaika': null,
+      tulokset: {
+        'e-luku': 190,
+        'e-luokka': 'D',
+        'kaytettavat-energiamuodot': {
+          'fossiilinen-polttoaine': 0,
+          sahko: 20000,
+          kaukojaahdytys: 0,
+          kaukolampo: 0,
+          'uusiutuva-polttoaine': 5000
+        }
       },
-      'kayttotarkoitus': 'YAT',
-      'katuosoite-fi': 'Katuosoite',
-      'keskeiset-suositukset-sv': null,
-      'valmistumisvuosi': 2020
-    },
-    'lahtotiedot': {
-      'lammitetty-nettoala': 140,
-      'ilmanvaihto': { 'tyyppi-id': 1, 'kuvaus-fi': 'ilmanvaihdon kuvaus fi', 'kuvaus-sv': null },
-      'lammitys': {
-        'lammitysmuoto-1': { 'id': 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
-        'lammitysmuoto-2': { 'id': 9, 'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus', 'kuvaus-sv': null },
-        'lammonjako': { 'id': 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
-      }
-    },
-    'korvaava-energiatodistus-id': null,
-    'id': 5,
-    'versio': 2018,
-    'allekirjoitusaika': null
-  }, {
-    'laatija-fullname': 'Specimen-Potex, Liisa',
-    'laatija-id': 2,
-    'voimassaolo-paattymisaika': null,
-    'tulokset': {
-      'e-luku': 101,
-      'e-luokka': 'C',
-      'kaytettavat-energiamuodot': {
-        'fossiilinen-polttoaine': 0,
-        'sahko': 5000,
-        'kaukojaahdytys': 0,
-        'kaukolampo': 3000000,
-        'uusiutuva-polttoaine': 7000
-      }
-    },
-    'tila-id': 0,
-    'perustiedot': {
-      'havainnointikaynti': '2020-04-15',
-      'rakennustunnus': '101089527F',
-      'katuosoite-sv': 'katuosoite-sv',
-      'keskeiset-suositukset-fi': 'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                       * Toimenpide 2',
-      'laatimisvaihe': 0,
-      'kieli': 0,
-      'nimi': 'Rakennuksen nimi',
-      'postinumero': '33100',
-      'yritys': {
-        'nimi': 'Yritys Oy',
-        'katuosoite': 'yrityksen katuosoite',
-        'postinumero': '33100',
-        'postitoimipaikka': 'tampere'
+      'tila-id': 0,
+      perustiedot: {
+        havainnointikaynti: '2020-04-15',
+        rakennustunnus: '101089527F',
+        'katuosoite-sv': 'katuosoite-sv',
+        'keskeiset-suositukset-fi':
+          'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                       * Toimenpide 2',
+        laatimisvaihe: 0,
+        kieli: 0,
+        nimi: 'Rakennuksen nimi',
+        postinumero: '33100',
+        yritys: {
+          nimi: 'Yritys Oy',
+          katuosoite: 'yrityksen katuosoite',
+          postinumero: '33100',
+          postitoimipaikka: 'tampere'
+        },
+        kayttotarkoitus: 'YAT',
+        'katuosoite-fi': 'Katuosoite',
+        'keskeiset-suositukset-sv': null,
+        valmistumisvuosi: 2020
       },
-      'kayttotarkoitus': 'AK3',
-      'katuosoite-fi': 'Katuosoite',
-      'keskeiset-suositukset-sv': null,
-      'valmistumisvuosi': 2017
-    },
-    'lahtotiedot': {
-      'lammitetty-nettoala': 15000,
-      'ilmanvaihto': { 'tyyppi-id': 1, 'kuvaus-fi': 'ilmanvaihdon kuvaus fi', 'kuvaus-sv': null },
-      'lammitys': {
-        'lammitysmuoto-1': { 'id': 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
-        'lammitysmuoto-2': { 'id': 9, 'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus', 'kuvaus-sv': null },
-        'lammonjako': { 'id': 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
-      }
-    },
-    'korvaava-energiatodistus-id': null,
-    'id': 4,
-    'versio': 2018,
-    'allekirjoitusaika': null
-  }, {
-    'laatija-fullname': 'Specimen-Potex, Liisa',
-    'laatija-id': 2,
-    'voimassaolo-paattymisaika': null,
-    'tulokset': {
-      'e-luku': 104,
-      'e-luokka': 'B',
-      'kaytettavat-energiamuodot': {
-        'fossiilinen-polttoaine': 0,
-        'sahko': 10000000,
-        'kaukojaahdytys': 0,
-        'kaukolampo': 7000000,
-        'uusiutuva-polttoaine': 7000
-      }
-    },
-    'tila-id': 0,
-    'perustiedot': {
-      'havainnointikaynti': '2020-04-15',
-      'rakennustunnus': '101089527F',
-      'katuosoite-sv': 'katuosoite-sv',
-      'keskeiset-suositukset-fi': 'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                         * Toimenpide 2',
-      'laatimisvaihe': 0,
-      'kieli': 0,
-      'nimi': 'Rakennuksen nimi',
-      'postinumero': '33100',
-      'yritys': {
-        'nimi': 'Yritys Oy',
-        'katuosoite': 'yrityksen katuosoite',
-        'postinumero': '33100',
-        'postitoimipaikka': 'tampere'
+      lahtotiedot: {
+        'lammitetty-nettoala': 140,
+        ilmanvaihto: {
+          'tyyppi-id': 1,
+          'kuvaus-fi': 'ilmanvaihdon kuvaus fi',
+          'kuvaus-sv': null
+        },
+        lammitys: {
+          'lammitysmuoto-1': { id: 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
+          'lammitysmuoto-2': {
+            id: 9,
+            'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus',
+            'kuvaus-sv': null
+          },
+          lammonjako: { id: 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
+        }
       },
-      'kayttotarkoitus': 'TT',
-      'katuosoite-fi': 'Katuosoite',
-      'keskeiset-suositukset-sv': null,
-      'valmistumisvuosi': 2018
+      'korvaava-energiatodistus-id': null,
+      id: 5,
+      versio: 2018,
+      allekirjoitusaika: null
     },
-    'lahtotiedot': {
-      'lammitetty-nettoala': 150000,
-      'ilmanvaihto': { 'tyyppi-id': 1, 'kuvaus-fi': 'ilmanvaihdon kuvaus fi', 'kuvaus-sv': null },
-      'lammitys': {
-        'lammitysmuoto-1': { 'id': 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
-        'lammitysmuoto-2': { 'id': 9, 'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus', 'kuvaus-sv': null },
-        'lammonjako': { 'id': 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
-      }
-    },
-    'korvaava-energiatodistus-id': null,
-    'id': 3,
-    'versio': 2018,
-    'allekirjoitusaika': null
-  }, {
-    'laatija-fullname': 'Specimen-Potex, Liisa',
-    'laatija-id': 2,
-    'voimassaolo-paattymisaika': null,
-    'tulokset': {
-      'e-luku': 50,
-      'e-luokka': 'A',
-      'kaytettavat-energiamuodot': {
-        'fossiilinen-polttoaine': 0,
-        'sahko': 0,
-        'kaukojaahdytys': 0,
-        'kaukolampo': 0,
-        'uusiutuva-polttoaine': 50000
-      }
-    },
-    'tila-id': 0,
-    'perustiedot': {
-      'havainnointikaynti': '2020-04-15',
-      'rakennustunnus': '101089527F',
-      'katuosoite-sv': 'katuosoite-sv',
-      'keskeiset-suositukset-fi': 'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                         * Toimenpide 2',
-      'laatimisvaihe': 0,
-      'kieli': 0,
-      'nimi': 'Rakennuksen nimi',
-      'postinumero': '33100',
-      'yritys': {
-        'nimi': 'Yritys Oy',
-        'katuosoite': 'yrityksen katuosoite',
-        'postinumero': '33100',
-        'postitoimipaikka': 'tampere'
+    {
+      'laatija-fullname': 'Specimen-Potex, Liisa',
+      'laatija-id': 2,
+      'voimassaolo-paattymisaika': null,
+      tulokset: {
+        'e-luku': 101,
+        'e-luokka': 'C',
+        'kaytettavat-energiamuodot': {
+          'fossiilinen-polttoaine': 0,
+          sahko: 5000,
+          kaukojaahdytys: 0,
+          kaukolampo: 3000000,
+          'uusiutuva-polttoaine': 7000
+        }
       },
-      'kayttotarkoitus': 'PK',
-      'katuosoite-fi': 'Katuosoite',
-      'keskeiset-suositukset-sv': null,
-      'valmistumisvuosi': 2019
-    },
-    'lahtotiedot': {
-      'lammitetty-nettoala': 500,
-      'ilmanvaihto': { 'tyyppi-id': 1, 'kuvaus-fi': 'ilmanvaihdon kuvaus fi', 'kuvaus-sv': null },
-      'lammitys': {
-        'lammitysmuoto-1': { 'id': 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
-        'lammitysmuoto-2': { 'id': 9, 'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus', 'kuvaus-sv': null },
-        'lammonjako': { 'id': 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
-      }
-    },
-    'korvaava-energiatodistus-id': null,
-    'id': 2,
-    'versio': 2018,
-    'allekirjoitusaika': null
-  }, {
-    'laatija-fullname': 'Specimen-Potex, Liisa',
-    'laatija-id': 2,
-    'voimassaolo-paattymisaika': null,
-    'tulokset': {
-      'e-luku': 322,
-      'e-luokka': 'E',
-      'kaytettavat-energiamuodot': {
-        'fossiilinen-polttoaine': 550000,
-        'sahko': 5000,
-        'kaukojaahdytys': 0,
-        'kaukolampo': 0,
-        'uusiutuva-polttoaine': 0
-      }
-    },
-    'tila-id': 0,
-    'perustiedot': {
-      'havainnointikaynti': '2020-04-15',
-      'rakennustunnus': '101089527F',
-      'katuosoite-sv': 'Katuosoite SV',
-      'keskeiset-suositukset-fi': 'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                      * Toimenpide 2',
-      'kieli': 2,
-      'nimi': 'Rakennuksen nimi',
-      'postinumero': '33100',
-      'yritys': {
-        'nimi': 'Yritys Oy',
-        'katuosoite': 'yrityksen katuosoite',
-        'postinumero': '33100',
-        'postitoimipaikka': 'tampere'
+      'tila-id': 0,
+      perustiedot: {
+        havainnointikaynti: '2020-04-15',
+        rakennustunnus: '101089527F',
+        'katuosoite-sv': 'katuosoite-sv',
+        'keskeiset-suositukset-fi':
+          'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                       * Toimenpide 2',
+        laatimisvaihe: 0,
+        kieli: 0,
+        nimi: 'Rakennuksen nimi',
+        postinumero: '33100',
+        yritys: {
+          nimi: 'Yritys Oy',
+          katuosoite: 'yrityksen katuosoite',
+          postinumero: '33100',
+          postitoimipaikka: 'tampere'
+        },
+        kayttotarkoitus: 'AK3',
+        'katuosoite-fi': 'Katuosoite',
+        'keskeiset-suositukset-sv': null,
+        valmistumisvuosi: 2017
       },
-      'kayttotarkoitus': 'RK',
-      'katuosoite-fi': 'Katuosoite',
-      'keskeiset-suositukset-sv': 'Keskeiset suositukset SV',
-      'valmistumisvuosi': 2016
+      lahtotiedot: {
+        'lammitetty-nettoala': 15000,
+        ilmanvaihto: {
+          'tyyppi-id': 1,
+          'kuvaus-fi': 'ilmanvaihdon kuvaus fi',
+          'kuvaus-sv': null
+        },
+        lammitys: {
+          'lammitysmuoto-1': { id: 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
+          'lammitysmuoto-2': {
+            id: 9,
+            'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus',
+            'kuvaus-sv': null
+          },
+          lammonjako: { id: 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
+        }
+      },
+      'korvaava-energiatodistus-id': null,
+      id: 4,
+      versio: 2018,
+      allekirjoitusaika: null
     },
-    'lahtotiedot': {
-      'lammitetty-nettoala': 5000,
-      'ilmanvaihto': { 'tyyppi-id': 0, 'kuvaus-fi': 'ilmanvaihdon kuvaus fi', 'kuvaus-sv': 'ilmanvaihdon kuvaus sv' },
-      'lammitys': {
-        'lammitysmuoto-1': { 'id': 2, 'kuvaus-fi': null, 'kuvaus-sv': null },
-        'lammitysmuoto-2': { 'id': 5, 'kuvaus-fi': null, 'kuvaus-sv': null },
-        'lammonjako': { 'id': 7, 'kuvaus-fi': null, 'kuvaus-sv': null }
-      }
+    {
+      'laatija-fullname': 'Specimen-Potex, Liisa',
+      'laatija-id': 2,
+      'voimassaolo-paattymisaika': null,
+      tulokset: {
+        'e-luku': 104,
+        'e-luokka': 'B',
+        'kaytettavat-energiamuodot': {
+          'fossiilinen-polttoaine': 0,
+          sahko: 10000000,
+          kaukojaahdytys: 0,
+          kaukolampo: 7000000,
+          'uusiutuva-polttoaine': 7000
+        }
+      },
+      'tila-id': 0,
+      perustiedot: {
+        havainnointikaynti: '2020-04-15',
+        rakennustunnus: '101089527F',
+        'katuosoite-sv': 'katuosoite-sv',
+        'keskeiset-suositukset-fi':
+          'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                         * Toimenpide 2',
+        laatimisvaihe: 0,
+        kieli: 0,
+        nimi: 'Rakennuksen nimi',
+        postinumero: '33100',
+        yritys: {
+          nimi: 'Yritys Oy',
+          katuosoite: 'yrityksen katuosoite',
+          postinumero: '33100',
+          postitoimipaikka: 'tampere'
+        },
+        kayttotarkoitus: 'TT',
+        'katuosoite-fi': 'Katuosoite',
+        'keskeiset-suositukset-sv': null,
+        valmistumisvuosi: 2018
+      },
+      lahtotiedot: {
+        'lammitetty-nettoala': 150000,
+        ilmanvaihto: {
+          'tyyppi-id': 1,
+          'kuvaus-fi': 'ilmanvaihdon kuvaus fi',
+          'kuvaus-sv': null
+        },
+        lammitys: {
+          'lammitysmuoto-1': { id: 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
+          'lammitysmuoto-2': {
+            id: 9,
+            'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus',
+            'kuvaus-sv': null
+          },
+          lammonjako: { id: 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
+        }
+      },
+      'korvaava-energiatodistus-id': null,
+      id: 3,
+      versio: 2018,
+      allekirjoitusaika: null
     },
-    'korvaava-energiatodistus-id': null,
-    'id': 1,
-    'versio': 2013,
-    'allekirjoitusaika': null
-  }]
+    {
+      'laatija-fullname': 'Specimen-Potex, Liisa',
+      'laatija-id': 2,
+      'voimassaolo-paattymisaika': null,
+      tulokset: {
+        'e-luku': 50,
+        'e-luokka': 'A',
+        'kaytettavat-energiamuodot': {
+          'fossiilinen-polttoaine': 0,
+          sahko: 0,
+          kaukojaahdytys: 0,
+          kaukolampo: 0,
+          'uusiutuva-polttoaine': 50000
+        }
+      },
+      'tila-id': 0,
+      perustiedot: {
+        havainnointikaynti: '2020-04-15',
+        rakennustunnus: '101089527F',
+        'katuosoite-sv': 'katuosoite-sv',
+        'keskeiset-suositukset-fi':
+          'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                         * Toimenpide 2',
+        laatimisvaihe: 0,
+        kieli: 0,
+        nimi: 'Rakennuksen nimi',
+        postinumero: '33100',
+        yritys: {
+          nimi: 'Yritys Oy',
+          katuosoite: 'yrityksen katuosoite',
+          postinumero: '33100',
+          postitoimipaikka: 'tampere'
+        },
+        kayttotarkoitus: 'PK',
+        'katuosoite-fi': 'Katuosoite',
+        'keskeiset-suositukset-sv': null,
+        valmistumisvuosi: 2019
+      },
+      lahtotiedot: {
+        'lammitetty-nettoala': 500,
+        ilmanvaihto: {
+          'tyyppi-id': 1,
+          'kuvaus-fi': 'ilmanvaihdon kuvaus fi',
+          'kuvaus-sv': null
+        },
+        lammitys: {
+          'lammitysmuoto-1': { id: 0, 'kuvaus-fi': null, 'kuvaus-sv': null },
+          'lammitysmuoto-2': {
+            id: 9,
+            'kuvaus-fi': 'Toissijaisen lämmitysjärjestelmän kuvaus',
+            'kuvaus-sv': null
+          },
+          lammonjako: { id: 1, 'kuvaus-fi': null, 'kuvaus-sv': null }
+        }
+      },
+      'korvaava-energiatodistus-id': null,
+      id: 2,
+      versio: 2018,
+      allekirjoitusaika: null
+    },
+    {
+      'laatija-fullname': 'Specimen-Potex, Liisa',
+      'laatija-id': 2,
+      'voimassaolo-paattymisaika': null,
+      tulokset: {
+        'e-luku': 322,
+        'e-luokka': 'E',
+        'kaytettavat-energiamuodot': {
+          'fossiilinen-polttoaine': 550000,
+          sahko: 5000,
+          kaukojaahdytys: 0,
+          kaukolampo: 0,
+          'uusiutuva-polttoaine': 0
+        }
+      },
+      'tila-id': 0,
+      perustiedot: {
+        havainnointikaynti: '2020-04-15',
+        rakennustunnus: '101089527F',
+        'katuosoite-sv': 'Katuosoite SV',
+        'keskeiset-suositukset-fi':
+          'Seuraavia toimenpiteitä voisi tehdä:\n\n * Toimenpide 1\n                                                                                                                      * Toimenpide 2',
+        kieli: 2,
+        nimi: 'Rakennuksen nimi',
+        postinumero: '33100',
+        yritys: {
+          nimi: 'Yritys Oy',
+          katuosoite: 'yrityksen katuosoite',
+          postinumero: '33100',
+          postitoimipaikka: 'tampere'
+        },
+        kayttotarkoitus: 'RK',
+        'katuosoite-fi': 'Katuosoite',
+        'keskeiset-suositukset-sv': 'Keskeiset suositukset SV',
+        valmistumisvuosi: 2016
+      },
+      lahtotiedot: {
+        'lammitetty-nettoala': 5000,
+        ilmanvaihto: {
+          'tyyppi-id': 0,
+          'kuvaus-fi': 'ilmanvaihdon kuvaus fi',
+          'kuvaus-sv': 'ilmanvaihdon kuvaus sv'
+        },
+        lammitys: {
+          'lammitysmuoto-1': { id: 2, 'kuvaus-fi': null, 'kuvaus-sv': null },
+          'lammitysmuoto-2': { id: 5, 'kuvaus-fi': null, 'kuvaus-sv': null },
+          lammonjako: { id: 7, 'kuvaus-fi': null, 'kuvaus-sv': null }
+        }
+      },
+      'korvaava-energiatodistus-id': null,
+      id: 1,
+      versio: 2013,
+      allekirjoitusaika: null
+    }
+  ]
 };
