@@ -24,7 +24,6 @@
   const signedStatus = Signing.status.signed;
   const abortedStatus = Signing.status.aborted;
 
-  //TODO: Intial state depends on the state in the backend.
   export let currentState;
   const setStatus = newStatus =>
     (currentState = R.assoc('status', newStatus, currentState));
