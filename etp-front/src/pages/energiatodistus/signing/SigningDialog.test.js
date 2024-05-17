@@ -69,35 +69,6 @@ const mockSystemSignApiCallSuccess = () => {
   );
 };
 
-const mockCancelSigning = () => {
-  fetchMock.mockIf(
-    /^\/api\/private\/energiatodistukset\/2018\/1\/signature\//,
-    async req => {
-      if (req.url.endsWith('/cancel')) {
-        return {
-          status: 200,
-          body: JSON.stringify(`Ok`)
-        };
-      } else if (req.url.endsWith('/system-sign')) {
-        // Wait some time so that it is possible to press "Keskeytä".
-        await new Promise(resolve => setTimeout(resolve, 10));
-
-        return {
-          status: 409,
-          body: JSON.stringify(
-            `Signing process for energiatodistus 1 has not been started`
-          )
-        };
-      } else {
-        return {
-          status: 404,
-          body: 'Not Found'
-        };
-      }
-    }
-  );
-};
-
 const mockSystemSignApiCallFailure = () => {
   fetchMock.mockIf(
     '/api/private/energiatodistukset/2018/1/signature/system-sign',
@@ -362,12 +333,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   await assertInProgressStatusTextIsNotVisible();
   assertInstructionsTextIsVisible();
 
-  const nonexistingCancelButton = screen.queryByRole('button', {
-    name: /Keskeytä/i
-  });
-
-  expect(nonexistingCancelButton).not.toBeInTheDocument();
-
   await fireEvent.click(signButton);
 
   const spinner = screen.getByTestId('spinner');
@@ -377,9 +342,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   await assertInProgressStatusTextIsVisible();
   assertInstructionsTextIsNotVisible();
 
-  const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
-  expect(cancelButton).toBeInTheDocument();
-
   const statusText = await screen.findByText(
     /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
   );
@@ -387,7 +349,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   // Spinner has disappeared when request finished
   expect(spinner).not.toBeInTheDocument();
-  expect(nonexistingCancelButton).not.toBeInTheDocument();
 
   // Download link for signed pdf exists
   const todistusLink = screen.getByTestId('energiatodistus-1-fi.pdf');
@@ -533,48 +494,4 @@ test('Signing button is not visible after signing using system signing', async (
   expect(statusText).toBeInTheDocument();
 
   expect(signButton).not.toBeInTheDocument();
-});
-
-test('Aborting the signing process while signing with system aborts the signing', async () => {
-  mockCancelSigning();
-
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: closeDialogFn,
-    selection: 'system'
-  });
-
-  assertInstructionsTextIsVisible();
-  assertSigningInfoIsVisible();
-  await assertInProgressStatusTextIsNotVisible();
-
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
-
-  await fireEvent.click(signButton);
-
-  assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
-  await assertInProgressStatusTextIsVisible();
-
-  const cancelButton = screen.getByRole('button', { name: /Keskeytä/i });
-
-  await fireEvent.click(cancelButton);
-
-  expect(signButton).not.toBeInTheDocument();
-
-  const statusText = await screen.findByText(
-    /Keskeytit allekirjoittamisen. Energiatodistus on palautettu luonnostilaan./u
-  );
-  expect(statusText).toBeInTheDocument();
-
-  assertInstructionsTextIsVisible();
-  assertSigningInfoIsVisible();
-  await assertInProgressStatusTextIsNotVisible();
-
-  // After cancelling the signing choosing the method should be available.
-  assertSigningMethodSelectionIsVisible();
-
-  await assertButtons(closeDialogFn);
 });

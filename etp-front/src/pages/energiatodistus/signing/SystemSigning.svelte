@@ -41,7 +41,7 @@
   };
 
   const signingProcess = () => {
-    return Future.fork(
+    Future.fork(
       response => {
         const errorKey =
           'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
@@ -58,25 +58,10 @@
     );
   };
 
-  let cancel = _ => {};
-
   const sign = () => {
     setStatus(inProgressStatus);
     error = Maybe.None();
-    cancel = signingProcess();
-  };
-
-  const abort = () => {
-    cancel();
-    Future.fork(
-      _ => {
-        error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
-      },
-      () => {
-        setStatus(abortedStatus);
-      },
-      etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
-    );
+    signingProcess();
   };
 </script>
 
@@ -172,15 +157,6 @@
     </p>
     <div class="mt-2">
       <Spinner />
-    </div>
-    <div class="buttons">
-      <div class="mr-10 mt-5">
-        <Button
-          prefix="signing-reject"
-          text={i18n('energiatodistus.signing.button.abort')}
-          style={'secondary'}
-          on:click={abort} />
-      </div>
     </div>
   {/if}
 </div>
