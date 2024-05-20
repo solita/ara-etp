@@ -56,7 +56,7 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
     säädetään uhkasakkolaissa (1113/1990).</p>
 
 {{#kohde}}
-<p>Omistamaanne omakotitaloa osoitteessa {{katuosoite}} {{postinumero}} {{postitoimipaikka}} on markkinoitu julkisesti
+<p>Omistamaanne rakennusta osoitteessa {{katuosoite}} {{postinumero}} {{postitoimipaikka}} on markkinoitu julkisesti
     {{ilmoituspaikka}} -sivustolla ilman energiatodistusta.
     {{/kohde}}
     {{#aiemmat-toimenpiteet}}Tästä syystä ARA ryhtyi energiatodistuslain 24 §:n
@@ -142,7 +142,7 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
     vilka det bestäms i viteslagen (1113/1990).</p>
 
 {{#kohde}}
-<p>Ert egnahemshus på {{katuosoite}} {{postinumero}} {{postitoimipaikka}} har marknadsförts offentligt på webbplatsen
+<p>Er byggnad på {{katuosoite}} {{postinumero}} {{postitoimipaikka}} har marknadsförts offentligt på webbplatsen
     {{ilmoituspaikka}} utan energicertifikat.
     {{/kohde}}
     {{#aiemmat-toimenpiteet}}Därför vidtog ARA åtgärder enligt 24 § i lagen om energicertifikat och har skickat en
