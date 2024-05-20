@@ -102,30 +102,34 @@ $$
 </p>
 
 <table class="sarake max-width">
-    <tr>
-        <td><b>Sovelletut säännökset:</b></td>
-        <td>Laki rakennuksen energiatodistuksesta (50/2013)</td>
-    </tr>
-    <tr>
-        <td><b>Tillämpade förordningar: </b></td>
-        <td>Lagen om energicertifikat för byggnader (50/2013)</td>
-    </tr>
-    <tr>
-        <td colspan="2"><b>Tiedoksi/För kännedom:</b></td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <ul class="mt-0">
-          {{#tiedoksi}}
-            <li class="mt-0 slim">
-            {{#rooli}}<span class="list-item">{{.}}</span>{{/rooli}}
-            <span class="list-item nowrap">{{nimi}}</span>
-            {{#email}}<span class="list-item nowrap">{{.}}</span>{{/email}}
-            </li>
-          {{/tiedoksi}}
-        </ul>
-      </td>
-    </tr>
+    <tbody>
+        <tr>
+            <td><b>Sovelletut säännökset:</b></td>
+            <td>Laki rakennuksen energiatodistuksesta (50/2013)</td>
+        </tr>
+        <tr>
+            <td><b>Tillämpade förordningar: </b></td>
+            <td>Lagen om energicertifikat för byggnader (50/2013)</td>
+        </tr>
+    </tbody>
+    <tbody class="page-break-avoid">
+        <tr>
+            <td colspan="2"><b>Tiedoksi/För kännedom:</b></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <ul class="mt-0">
+              {{#tiedoksi}}
+                <li class="mt-0 slim">
+                {{#rooli}}<span class="list-item">{{.}}</span>{{/rooli}}
+                <span class="list-item nowrap">{{nimi}}</span>
+                {{#email}}<span class="list-item nowrap">{{.}}</span>{{/email}}
+                </li>
+              {{/tiedoksi}}
+            </ul>
+          </td>
+        </tr>
+    </tbody>
 </table>
 $$)
 on conflict (id) do update set
