@@ -82,7 +82,7 @@
                  :endpoint-override    {:protocol :http
                                         :hostname (env "KMS_HOST" "localhost")
                                         :port     (Integer/parseInt (env "KMS_PORT" "8899"))}}))
-    :key-id (env "KMS_SIGNING_KEY_ID" "baf442ae-4a56-4e7e-bb48-6e0a8625fec0")}})
+    :key-id (env "KMS_SIGNING_KEY_ID" "alias/SigningKey")}})
 
 (defn- prepare-emails [name default]
   (->> (str/split (env name default) #",")
