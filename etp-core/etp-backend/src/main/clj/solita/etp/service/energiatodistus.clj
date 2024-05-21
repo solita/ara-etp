@@ -1,31 +1,32 @@
 (ns solita.etp.service.energiatodistus
-  (:require [clojure.tools.logging :as log]
+  (:require [clojure.core.match :as match]
+            [clojure.java.jdbc :as jdbc]
+            [clojure.set :as set]
+            [clojure.string :as str]
+            [clojure.tools.logging :as log]
+            [flathead.flatten :as flat]
+            [schema-tools.coerce :as stc]
+            [schema.coerce :as coerce]
+            [schema.core :as schema]
+            [solita.common.logic :as logic]
+            [solita.common.map :as map]
+            [solita.common.maybe :as maybe]
+            [solita.common.schema :as xschema]
+            [solita.etp.common.audit-log :as audit-log]
             [solita.etp.db :as db]
             [solita.etp.exception :as exception]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.schema.geo :as geo-schema]
-            [solita.etp.service.json :as json]
-            [solita.etp.service.kielisyys :as kielisyys]
+            [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.energiatodistus-validation :as validation]
-            [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
-            [solita.etp.service.laatija :as laatija-service]
-            [solita.etp.service.e-luokka :as e-luokka-service]
-            [solita.etp.service.rooli :as rooli-service]
-            [solita.postgresql.composite :as pg-composite]
-            [solita.common.schema :as xschema]
-            [schema.coerce :as coerce]
-            [clojure.java.jdbc :as jdbc]
-            [clojure.set :as set]
-            [flathead.flatten :as flat]
-            [clojure.string :as str]
-            [clojure.core.match :as match]
-            [schema.core :as schema]
-            [solita.common.map :as map]
-            [solita.common.logic :as logic]
-            [schema-tools.coerce :as stc]
             [solita.etp.service.file :as file-service]
-            [solita.common.maybe :as maybe])
+            [solita.etp.service.json :as json]
+            [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
+            [solita.etp.service.kielisyys :as kielisyys]
+            [solita.etp.service.laatija :as laatija-service]
+            [solita.etp.service.rooli :as rooli-service]
+            [solita.postgresql.composite :as pg-composite])
   (:import (org.apache.pdfbox.pdmodel PDDocument)))
 
 ; *** Require sql functions ***
@@ -591,13 +592,13 @@
                                 (failure-code db whoami id)))))
 
 (defn cancel-energiatodistus-signing! [db whoami id]
-  (log/info (format "Cancelling energiatodistus %s signing" id))
+  (audit-log/info (format "User %s is cancelling energiatodistus %s signing" (:id whoami) id))
   (let [result (energiatodistus-db/update-energiatodistus-luonnos!
                  db {:id id :laatija-id (:id whoami)})]
     (if (= result 1)
       (do
-        (log/info (format "Cancelling energiatodistus %s signing succeeded" id))
+        (audit-log/info (format "Cancelling energiatodistus %s signing succeeded" id))
         :ok)
       (do
-        (log/info (format "Cancelling energiatodistus %s signing failed" id))
+        (audit-log/info (format "Cancelling energiatodistus %s signing failed" id))
         (failure-code db whoami id)))))
