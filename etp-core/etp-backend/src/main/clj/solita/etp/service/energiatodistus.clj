@@ -600,5 +600,5 @@
         (audit-log/info (format "Cancelling energiatodistus %s signing succeeded" id))
         :ok)
       (do
-        (audit-log/info (format "Cancelling energiatodistus %s signing failed" id))
+        (audit-log/error (format "Cancelling energiatodistus %s signing failed" id))
         (failure-code db whoami id)))))
