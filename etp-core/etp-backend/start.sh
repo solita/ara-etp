@@ -8,30 +8,6 @@ aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/cli
 echo Retrieve /secret/etp/suomifi/viestit/private.key
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/private.key" | jq .SecretString -r > private.pem
 
-# Retrieves a secret and puts it into an environment variable
-#
-# Given the secret id in AWS Secrets Manager and the name of the environment variable
-# put the found secret into the environment variable.
-#
-# Does not fail if the secret cannot be retrieved. This is important for example
-# for e2e tests as the secrets don't come from Secrets Manager and are set by docker
-# beforehand.
-function retrieve_secret {
-  local secret=$1
-  local env_var=$2
-  local response
-  echo "Retrieving ${secret}"
-  response="$(set -o pipefail; aws secretsmanager get-secret-value --secret-id "${secret}" | jq .SecretString -r)"
-  if [ $? -eq 0 ]; then
-    export "${env_var}"="${response}"
-  else
-    echo "Retrieving ${secret} failed"
-  fi
-}
-
-retrieve_secret "/secret/etp/dvv/system-signature-root.crt"         "SYSTEM_SIGNATURE_CERTIFICATE_ROOT"
-retrieve_secret "/secret/etp/dvv/system-signature-intermediate.crt" "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE"
-retrieve_secret "/secret/etp/dvv/system-signature-leaf.crt"         "SYSTEM_SIGNATURE_CERTIFICATE_LEAF"
 
 echo "Set KMS_SIGNING_KEY_ID"
 export KMS_SIGNING_KEY_ID="alias/SigningKey"
