@@ -8,10 +8,6 @@ aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/cli
 echo Retrieve /secret/etp/suomifi/viestit/private.key
 aws secretsmanager get-secret-value --secret-id "/secret/etp/suomifi/viestit/private.key" | jq .SecretString -r > private.pem
 
-
-echo "Set KMS_SIGNING_KEY_ID"
-export KMS_SIGNING_KEY_ID="alias/SigningKey"
-
 echo Pack certificate as p12 file format
 openssl pkcs12 -export -in public.pem -inkey private.pem -out viestit.p12 -name ${SUOMIFI_VIESTIT_KEYSTORE_ALIAS} -passout pass:${SUOMIFI_VIESTIT_KEYSTORE_PASSWORD}
 
