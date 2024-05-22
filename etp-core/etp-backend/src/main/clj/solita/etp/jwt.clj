@@ -91,7 +91,10 @@
         access-public-key (get-public-key-for-access-token
                             config/trusted-jwt-iss
                             (decode-kid access :access))
-        access-payload (decode-jwt-payload access access-public-key :access)]
+        access-payload (decode-jwt-payload access access-public-key :access)
+        _ (println "DATA-PAYLOAD: " data-payload)
+        _ (println "ACCESS-PAYLOAD: " access-payload)
+        ]
 
     (when-not (= id (:sub data-payload) (:sub access-payload))
       (exception/illegal-argument!
