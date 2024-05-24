@@ -1,9 +1,8 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
   import * as R from 'ramda';
-  import { _, locale } from '@Language/i18n';
+  import { locale } from '@Language/i18n';
 
-  import VersioInput from './versio-input';
   import Select from '@Component/Select/Select';
 
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
@@ -47,12 +46,7 @@
     <div class="flex-grow ml-2">
       <Select
         allowNone={false}
-        model={luokittelu ||
-          R.compose(
-            Maybe.orSome(1),
-            R.map(R.prop('id')),
-            R.head
-          )(currentluokittelut)}
+        bind:model={luokittelu}
         items={R.compose(
           Maybe.orSome([]),
           R.map(R.pluck('id'))
@@ -61,8 +55,7 @@
           labelLocale,
           Maybe.orSome([], currentluokittelut)
         )}
-        lens={R.identity}
-        on:change />
+        lens={R.identity} />
     </div>
   {/if}
 </div>
