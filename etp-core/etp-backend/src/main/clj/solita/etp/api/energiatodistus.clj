@@ -25,7 +25,7 @@
             [solita.etp.service.viesti :as viesti-service]
             [solita.etp.schema.geo :as geo-schema])
   (:import (com.fasterxml.jackson.core JsonParseException)
-           (java.time LocalDateTime ZoneOffset)))
+           (java.time Instant)))
 
 (defn valid-pdf-filename? [filename id kieli]
   (= filename (format "energiatodistus-%s-%s.pdf" id kieli)))
@@ -127,8 +127,7 @@
               :access    rooli-service/laatija?
               :responses {200 {:body nil}}
               :handler   (fn [{:keys [jwt-payloads whoami] :as req}]
-                           (let [auth-time (-> jwt-payloads :access :auth_time (LocalDateTime/ofEpochSecond 0 (ZoneOffset/ofHours 3)))
-                                 ]
+                           (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
                              (r/response (energiatodistus-pdf-service/validate-session auth-time))))}}]
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route

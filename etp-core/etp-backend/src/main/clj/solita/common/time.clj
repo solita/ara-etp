@@ -1,5 +1,5 @@
 (ns solita.common.time
-  (:import (java.time Clock LocalDateTime ZoneId LocalDate)
+  (:import (java.time Clock Instant LocalDate ZoneId)
            (java.time.format DateTimeFormatter)))
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
@@ -15,4 +15,4 @@
   (format-date (LocalDate/now clock)))
 
 (defn now []
-  (LocalDateTime/now clock))
+  (Instant/now clock))

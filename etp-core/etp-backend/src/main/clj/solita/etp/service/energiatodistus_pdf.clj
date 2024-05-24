@@ -22,7 +22,7 @@
            (java.io ByteArrayOutputStream File InputStream)
            (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
-           (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
+           (java.time Clock Instant LocalDate LocalDateTime ZoneId ZonedDateTime Duration)
            (java.time.format DateTimeFormatter)
            (java.util Base64 Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
@@ -1017,12 +1017,14 @@
           (throw e))))))
 
 (defn validate-session [auth-time]
-  (let [auth-duration-minutes 180
-        auth-time-expiration (.plusMinutes auth-time auth-duration-minutes)
+  (let [auth-duration (Duration/ofMinutes 30)
+        auth-time-expiration (.plus auth-time auth-duration)
         now (common-time/now)]
     (if (and (.isAfter now auth-time)
              (.isBefore now auth-time-expiration))
-      (println "Allowed")
+      (do
+        (println "Allowed")
+        {:signing-allowed true})
       (do
         (println "Not allowed")
         {:signing-allowed false}))))

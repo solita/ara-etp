@@ -2,11 +2,13 @@
   (:require
     [clojure.java.io :as io]
     [clojure.test :as t]
-    [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
-    [solita.etp.test-data.laatija :as test-data.laatija]
     [jsonista.core :as j]
     [ring.mock.request :as mock]
-    [solita.etp.test-system :as ts]))
+    [solita.common.time :as time]
+    [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
+    [solita.etp.test-data.laatija :as test-data.laatija]
+    [solita.etp.test-system :as ts])
+  (:import (java.time Clock Duration LocalDate ZoneId)))
 
 (defn energiatodistus-sign-url
   [et-id version]
@@ -158,14 +160,47 @@
           (t/is (= (:body response-sign) "Ok")))))))
 
 (t/deftest session-timeout-test
-  (with-bindings
-    {}
-    (let [
-          laatija-id (test-data.laatija/insert-virtu-laatija!)
-          check-session-url (str "/api/private/energiatodistukset/validate-session")
-          response (ts/handler (-> (mock/request :get check-session-url)
-                                   (test-data.laatija/with-virtu-laatija)
-                                   (mock/header "Accept" "application/json")))
-          response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
-      (t/is (= (:status response) 200))
-      (t/is (= response-body {:signing-allowed false})))))
+  (let [_ (test-data.laatija/insert-virtu-laatija!)
+        check-session-url (str "/api/private/energiatodistukset/validate-session")
+        ;; The auth_time in the JWT that is used in `insert-virtu-laatija!` is:
+        ;;   Your time zone: Tuesday, March 3, 2020 12:22:49 PM GMT+02:00
+        laatija-auth-time (-> (LocalDate/of 2020 3 3)
+                              (.atTime 12 22 50)
+                              (.atZone (ZoneId/of "GMT+2"))
+                              (.toInstant))]
+    (t/testing "Signing is allowed one second after auth_time"
+      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
+                                                (ZoneId/systemDefault))}
+        (let [response (ts/handler (-> (mock/request :get check-session-url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))
+              response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+          (t/is (= (:status response) 200))
+          (t/is (= response-body {:signing-allowed true})))))
+    (t/testing "Signing is allowed 29 minutes after auth_time"
+      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 29))
+                                                (ZoneId/systemDefault))}
+        (let [response (ts/handler (-> (mock/request :get check-session-url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))
+              response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+          (t/is (= (:status response) 200))
+          (t/is (= response-body {:signing-allowed true})))))
+    (t/testing "Signing is not allowed 1 min before auth_time"
+      (with-bindings {#'time/clock (Clock/fixed (.minus laatija-auth-time (Duration/ofMinutes 1))
+                                                (ZoneId/systemDefault))}
+        (let [response (ts/handler (-> (mock/request :get check-session-url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))
+              response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+          (t/is (= (:status response) 200))
+          (t/is (= response-body {:signing-allowed false})))))
+    (t/testing "Signing is not allowed 31 min after auth_time"
+      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 31))
+                                                (ZoneId/systemDefault))}
+        (let [response (ts/handler (-> (mock/request :get check-session-url)
+                                       (test-data.laatija/with-virtu-laatija)
+                                       (mock/header "Accept" "application/json")))
+              response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+          (t/is (= (:status response) 200))
+          (t/is (= response-body {:signing-allowed false})))))))
