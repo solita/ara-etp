@@ -128,7 +128,7 @@
               :responses {200 {:body nil}}
               :handler   (fn [{:keys [jwt-payloads whoami] :as req}]
                            (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
-                             (r/response (energiatodistus-pdf-service/validate-session auth-time))))}}]
+                             (r/response {:signing-allowed (energiatodistus-pdf-service/check-session-duration auth-time)})))}}]
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)
