@@ -24,7 +24,8 @@
             [solita.etp.schema.viesti :as viesti-schema]
             [solita.etp.service.viesti :as viesti-service]
             [solita.etp.schema.geo :as geo-schema])
-  (:import (com.fasterxml.jackson.core JsonParseException)))
+  (:import (com.fasterxml.jackson.core JsonParseException)
+           (java.time LocalDateTime ZoneOffset)))
 
 (defn valid-pdf-filename? [filename id kieli]
   (= filename (format "energiatodistus-%s-%s.pdf" id kieli)))
@@ -121,6 +122,14 @@
 (def private-routes
   (concat
     [["/energiatodistukset"
+      ["/validate-session"
+       {:get {:summary   "Tarkista, että allekirjoittaminen on sallittua"
+              :access    rooli-service/laatija?
+              :responses {200 {:body nil}}
+              :handler   (fn [{:keys [jwt-payloads whoami] :as req}]
+                           (let [auth-time (-> jwt-payloads :access :auth_time (LocalDateTime/ofEpochSecond 0 (ZoneOffset/ofHours 3)))
+                                 ]
+                             (r/response (energiatodistus-pdf-service/validate-session auth-time))))}}]
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)
@@ -133,10 +142,10 @@
               :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
                             (api-response/with-exceptions
                               #(api-response/xlsx-response
-                                (energiatodistus-xlsx-service/find-energiatodistukset-xlsx
-                                 db
-                                 whoami
-                                 (update query :where json/read-value))
+                                 (energiatodistus-xlsx-service/find-energiatodistukset-xlsx
+                                   db
+                                   whoami
+                                   (update query :where json/read-value))
                                 "energiatodistukset.xlsx"
                                 "Not found.")
                               search-exceptions))}}]
