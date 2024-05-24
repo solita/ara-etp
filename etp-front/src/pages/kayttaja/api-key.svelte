@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { Buffer } from 'buffer';
   import * as Maybe from '@Utility/maybe-utils';
   import { generatePassword } from '@Utility/password';
   import * as Schema from '@Pages/kayttaja/schema';
@@ -16,7 +17,7 @@
   const i18nRoot = 'kayttaja';
   const schema = Schema.Kayttaja;
 
-  const btoa = str => new Buffer.from(str, 'binary').toString('base64');
+  const btoa = str => Buffer.from(str, 'binary').toString('base64');
 </script>
 
 <div class="flex">
