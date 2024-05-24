@@ -44,14 +44,8 @@
 
 <VersioLuokkaInput
   bind:versio
-  {luokittelu}
+  bind:luokittelu
   {values}
   {luokittelut}
   {nameprefix}
-  {key}
-  on:change={evt => {
-    evt.stopPropagation();
-
-    input.value = evt.target.value;
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  }} />
+  {key} />
