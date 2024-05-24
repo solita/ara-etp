@@ -1015,3 +1015,14 @@
         (if (= (-> e ex-data :type) :sign-with-system-error)
           (-> e ex-data :result)
           (throw e))))))
+
+(defn validate-session [auth-time]
+  (let [auth-duration-minutes 180
+        auth-time-expiration (.plusMinutes auth-time auth-duration-minutes)
+        now (common-time/now)]
+    (if (and (.isAfter now auth-time)
+             (.isBefore now auth-time-expiration))
+      (println "Allowed")
+      (do
+        (println "Not allowed")
+        {:signing-allowed false}))))
