@@ -1,21 +1,24 @@
 (ns solita.etp.security
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log]
-            [solita.etp.jwt :as jwt]
-            [solita.etp.basic-auth :as basic-auth]
-            [solita.etp.api.response :as response]
-            [solita.etp.service.kayttaja :as kayttaja-service]
-            [solita.etp.service.whoami :as whoami-service]
+            [ring.util.response :as r]
             [solita.common.maybe :as maybe]
-            [solita.etp.exception :as exception]))
+            [solita.common.time :as common-time]
+            [solita.etp.api.response :as response]
+            [solita.etp.basic-auth :as basic-auth]
+            [solita.etp.exception :as exception]
+            [solita.etp.jwt :as jwt]
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.service.whoami :as whoami-service])
+  (:import (java.time Duration Instant)))
 
 (defn- req->jwt [request]
   (try
     (jwt/req->verified-jwt-payloads request)
     (catch Throwable t
       (log/error t
-        (str "Invalid JWT in service request: " (exception/service-name request) ".")
-        (maybe/fold "" #(format "Exception: %s." %) (dissoc (ex-data t) :message))))))
+                 (str "Invalid JWT in service request: " (exception/service-name request) ".")
+                 (maybe/fold "" #(format "Exception: %s." %) (dissoc (ex-data t) :message))))))
 
 (defn wrap-jwt-payloads [handler]
   (fn [req]
@@ -36,7 +39,7 @@
     (let [{:keys [data]} jwt-payloads
           cognitoid (:sub data)
           whoami-opts {:henkilotunnus (:custom:FI_nationalIN data)
-                       :virtu         {:localid     (:custom:VIRTU_localID data)
+                       :virtu         {:localid      (:custom:VIRTU_localID data)
                                        :organisaatio (:custom:VIRTU_localOrg data)}}
           whoami (whoami-service/find-whoami db whoami-opts)]
       (if whoami
@@ -82,7 +85,7 @@
         (do
           (log/warn "Current käyttäjä did not satisfy the access predicate for route:"
                     {:method request-method
-                     :url (-> req :reitit.core/match :template)
+                     :url    (-> req :reitit.core/match :template)
                      :whoami whoami})
           response/forbidden)))))
 
@@ -92,8 +95,25 @@
   ([handler default-id-or-name]
    (fn [{:keys [whoami] :as req}]
      (handler (assoc-in
-               req
-               [:db :application-name]
-               (format "%s@core.etp%s"
-                       (or (:id whoami) default-id-or-name)
-                       (:uri req)))))))
+                req
+                [:db :application-name]
+                (format "%s@core.etp%s"
+                        (or (:id whoami) default-id-or-name)
+                        (:uri req)))))))
+
+(defn check-session-duration
+  "Given the user's `auth_time` from JWT and returns a boolean telling
+   has the user has signed in during the last 30 minutes."
+  [auth-time]
+  (let [auth-duration (Duration/ofMinutes 30)
+        auth-time-expiration (.plus auth-time auth-duration)
+        now (common-time/now)]
+    (and (.isAfter now auth-time)
+         (.isBefore now auth-time-expiration))))
+
+(defn wrap-session-time-limit [handler]
+  (fn [{:keys [jwt-payloads] :as req}]
+    (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
+      (if (check-session-duration auth-time)
+        (handler req)
+        response/unauthorized))))
