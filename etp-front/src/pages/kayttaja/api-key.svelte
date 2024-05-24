@@ -5,7 +5,7 @@
   import { generatePassword } from '@Utility/password';
   import * as Schema from '@Pages/kayttaja/schema';
 
-  import { locale, _ } from '@Language/i18n';
+  import { _ } from '@Language/i18n';
 
   import Button from '@Component/Button/Button';
   import Input from '@Component/Input/Input';
@@ -14,7 +14,6 @@
   export let kayttaja;
 
   const i18n = $_;
-  const i18nRoot = 'kayttaja';
   const schema = Schema.Kayttaja;
 
   const btoa = str => Buffer.from(str, 'binary').toString('base64');
