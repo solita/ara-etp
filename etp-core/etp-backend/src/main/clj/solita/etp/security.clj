@@ -104,16 +104,16 @@
 (defn check-session-duration
   "Given the user's `auth_time` from JWT and returns a boolean telling
    has the user has signed in during the last 30 minutes."
-  [auth-time]
-  (let [auth-duration (Duration/ofMinutes 30)
+  [auth-time time-limit]
+  (let [auth-duration (Duration/ofMinutes time-limit)
         auth-time-expiration (.plus auth-time auth-duration)
         now (common-time/now)]
     (and (.isAfter now auth-time)
          (.isBefore now auth-time-expiration))))
 
-(defn wrap-session-time-limit [handler]
+(defn wrap-session-time-limit [handler time-limit]
   (fn [{:keys [jwt-payloads] :as req}]
     (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
-      (if (check-session-duration auth-time)
+      (if (check-session-duration auth-time time-limit)
         (handler req)
         response/unauthorized))))
