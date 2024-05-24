@@ -9,6 +9,7 @@
             [solita.etp.api.energiatodistus-xml :as xml-api]
             [solita.etp.api.response :as api-response]
             [solita.etp.api.stream :as api-stream]
+            [solita.etp.config :as config]
             [solita.etp.exception :as exception]
             [solita.etp.schema.common :as common-schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
@@ -128,8 +129,9 @@
               :access    rooli-service/laatija?
               :responses {200 {:body nil}}
               :handler   (fn [{:keys [jwt-payloads whoami] :as req}]
-                           (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
-                             (r/response {:signing-allowed (security/check-session-duration auth-time)})))}}]
+                           (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))
+                                 signing-allowed (security/check-session-duration auth-time config/system-signature-session-timeout-minutes)]
+                             (r/response {:signing-allowed signing-allowed})))}}]
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)

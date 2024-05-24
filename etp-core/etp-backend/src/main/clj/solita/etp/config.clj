@@ -163,6 +163,7 @@
 (def system-signature-certificate-leaf (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_LEAF" "system-signature/local-signing-leaf.pem.crt"))
 (def system-signature-certificate-intermediate (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE" "system-signature/local-signing-int.pem.crt"))
 (def system-signature-certificate-root (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_ROOT" "system-signature/local-signing-root.pem.crt"))
+(def system-signature-session-timeout-minutes (Integer/parseInt (env "SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES" "30")))
 
 ;; Url signing
 (def url-signing-key-id (env "URL_SIGNING_KEY_ID" "DEVENV_KEY_ID"))

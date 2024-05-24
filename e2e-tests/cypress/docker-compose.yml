@@ -21,6 +21,7 @@ services:
       S3_HOST: minio
       S3_PORT: 9000
       ALLOW_NEW_SIGNATURE: true
+      SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES: 52560000
       KMS_PORT: 8080
       KMS_HOST: kms
     env_file:
