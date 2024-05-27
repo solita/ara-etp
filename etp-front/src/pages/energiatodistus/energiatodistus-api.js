@@ -140,8 +140,8 @@ export const url = {
     `${url.signature(version, id)}/digest/${language}`,
   signPdf: (version, id, language) =>
     `${url.signature(version, id)}/pdf/${language}`,
-  signPdfUsingSystemSignature: (version, id, language) =>
-    `${url.signature(version, id)}/system/pdf/${language}`,
+  signPdfsUsingSystemSignature: (version, id) =>
+    `${url.signature(version, id)}/system-sign`,
   finish: (version, id) => `${url.signature(version, id)}/finish`,
   cancel: (version, id) => `${url.signature(version, id)}/cancel`,
   discarded: (version, id) => `${url.id(version, id)}/discarded`
@@ -395,14 +395,14 @@ export const korvattavat = R.compose(
   Query.toQueryString
 );
 
-export const signPdfUsingSystemSignature = (fetch, version, id, language) =>
+export const signPdfsUsingSystemSignature = (fetch, version, id) =>
   R.compose(
     Fetch.responseAsText,
     Future.encaseP(
       Fetch.fetchWithMethod(
         fetch,
-        'put',
-        url.signPdfUsingSystemSignature(version, id, language)
+        'post',
+        url.signPdfsUsingSystemSignature(version, id)
       )
     )
   )();

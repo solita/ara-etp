@@ -96,7 +96,7 @@
 </style>
 
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
-  <label class:disabled>
+  <label data-cy={name} class:disabled>
     {label}
     <input {disabled} type="radio" {name} bind:group {value} />
   </label>

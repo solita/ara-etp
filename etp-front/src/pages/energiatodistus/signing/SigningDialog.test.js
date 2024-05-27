@@ -59,12 +59,11 @@ const mockMpolluxConnectionDoesNotExist = () => {
 
 const mockSystemSignApiCallSuccess = () => {
   fetchMock.mockIf(
-    /\/api\/private\/energiatodistukset\/2018\/1\/signature\/system\/pdf\/.*$/,
+    '/api/private/energiatodistukset/2018/1/signature/system-sign',
     async req => {
-      const lang = req.url.endsWith('/fi') ? 'fi' : 'sv';
       return {
         status: 200,
-        body: JSON.stringify(`energiatodistukset/energiatodistus-1-${lang}.pdf`)
+        body: JSON.stringify(`Ok`)
       };
     }
   );
@@ -72,7 +71,7 @@ const mockSystemSignApiCallSuccess = () => {
 
 const mockSystemSignApiCallFailure = () => {
   fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system/pdf/fi',
+    '/api/private/energiatodistukset/2018/1/signature/system-sign',
     async req => {
       return {
         status: 500
@@ -91,9 +90,9 @@ const assertButtons = async closeDialogFn => {
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const cancelButton = screen.getByRole('button', { name: /Sulje/i });
-  expect(cancelButton).toBeInTheDocument();
-  await fireEvent.click(cancelButton);
+  const closeButton = screen.getByRole('button', { name: /Sulje/i });
+  expect(closeButton).toBeInTheDocument();
+  await fireEvent.click(closeButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
 };
 
@@ -121,6 +120,54 @@ const assertCardSigningDialogContents = async closeDialogFn => {
   expect(statusText).toBeInTheDocument();
 
   await assertButtons(closeDialogFn);
+};
+
+const assertSigningInfoIsVisible = () => {
+  const infoText = screen.getByTestId('signing-info');
+  expect(infoText).toBeInTheDocument();
+};
+
+const assertSigningInfoIsNotVisible = () => {
+  const infoText = screen.queryByTestId('signing-info');
+  expect(infoText).not.toBeInTheDocument();
+};
+
+const assertInProgress = async () => {
+  const spinner = screen.getByTestId('spinner');
+  expect(spinner).toBeInTheDocument();
+  const statusText = await screen.queryByText(
+    'Allekirjoitetaan energiatodistusta'
+  );
+  expect(statusText).toBeInTheDocument();
+};
+
+const assertNotInProgress = async () => {
+  const spinner = screen.queryByTestId('spinner');
+  expect(spinner).not.toBeInTheDocument();
+  const statusText = await screen.queryByText(
+    'Allekirjoitetaan energiatodistusta'
+  );
+  expect(statusText).not.toBeInTheDocument();
+};
+
+const assertInstructionsTextIsVisible = () => {
+  const infoText = screen.getByTestId('signing-instructions');
+  expect(infoText).toBeInTheDocument();
+};
+
+const assertInstructionsTextIsNotVisible = () => {
+  const infoText = screen.queryByTestId('signing-instructions');
+  expect(infoText).not.toBeInTheDocument();
+};
+
+const assertSigningMethodSelectionIsVisible = () => {
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(2);
+};
+
+const assertSigningMethodSelectionIsNotVisible = () => {
+  const options = screen.queryAllByRole('radio');
+  expect(options).toHaveLength(0);
 };
 
 const finnishTodistus = R.compose(
@@ -154,9 +201,9 @@ test('SigningDialog displays error message when default selection is card and th
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const cancelButton = screen.getByRole('button', { name: /Sulje/i });
-  expect(cancelButton).toBeInTheDocument();
-  await fireEvent.click(cancelButton);
+  const closeButton = screen.getByRole('button', { name: /Sulje/i });
+  expect(closeButton).toBeInTheDocument();
+  await fireEvent.click(closeButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
 });
 
@@ -207,8 +254,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
   closeDialogFn.mockReset();
 
   // Options should be available
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(2);
+  assertSigningMethodSelectionIsVisible();
 
   // Select system signing
   const selection = screen.getByRole('radio', {
@@ -231,9 +277,7 @@ test('Signing method can not be selected when allowSelection is false', async ()
     allowSelection: false
   });
 
-  // Options should not be available
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(0);
+  assertSigningMethodSelectionIsNotVisible();
 });
 
 test('Pressing sign button with system as signing method shows loading indicator', async () => {
@@ -288,22 +332,33 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
     selection: 'system'
   });
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  // Before signing
+  assertSigningMethodSelectionIsVisible();
+  assertInstructionsTextIsVisible();
+  assertSigningInfoIsVisible();
+  await assertNotInProgress();
 
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
   await fireEvent.click(signButton);
 
-  const spinner = screen.getByTestId('spinner');
+  // During signing
+  assertSigningMethodSelectionIsNotVisible();
+  assertInstructionsTextIsNotVisible();
+  assertSigningInfoIsNotVisible();
+  await assertInProgress();
 
-  expect(spinner).toBeInTheDocument();
-
+  // After signing
   const statusText = await screen.findByText(
     /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
   );
-
   expect(statusText).toBeInTheDocument();
 
-  // Spinner has disappeared when request finished
-  expect(spinner).not.toBeInTheDocument();
+  expect(fetchMock.mock.calls.length).toBe(1);
+
+  assertSigningMethodSelectionIsNotVisible();
+  assertInstructionsTextIsNotVisible();
+  assertSigningInfoIsNotVisible();
+  await assertNotInProgress();
 
   // Download link for signed pdf exists
   const todistusLink = screen.getByTestId('energiatodistus-1-fi.pdf');
@@ -324,24 +379,37 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   render(SigningDialog, {
     energiatodistus: todistus,
     reload: R.identity,
+    allowSelection: true,
     selection: 'system'
   });
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  // Before signing
+  assertSigningMethodSelectionIsVisible();
+  assertInstructionsTextIsVisible();
+  assertSigningInfoIsVisible();
+  await assertNotInProgress();
 
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
   await fireEvent.click(signButton);
 
-  const spinner = screen.getByTestId('spinner');
+  // During signing
+  assertSigningMethodSelectionIsNotVisible();
+  assertInstructionsTextIsNotVisible();
+  assertSigningInfoIsNotVisible();
+  await assertInProgress();
 
-  expect(spinner).toBeInTheDocument();
-
+  // After signing
   const statusText = await screen.findByText(
     /Ruotsinkielinen energiatodistus on allekirjoitettu onnistuneesti./u
   );
   expect(statusText).toBeInTheDocument();
 
-  // Spinner has disappeared when request finished
-  expect(spinner).not.toBeInTheDocument();
+  expect(fetchMock.mock.calls.length).toBe(1);
+
+  assertSigningMethodSelectionIsNotVisible();
+  assertInstructionsTextIsNotVisible();
+  assertSigningInfoIsNotVisible();
+  await assertNotInProgress();
 
   // Download link for signed pdf exists
   const todistusLink = screen.getByTestId('energiatodistus-1-sv.pdf');
@@ -365,23 +433,33 @@ test('When system signing of bilingual energiatodistus succeeds, success message
     selection: 'system'
   });
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  // Before signing
+  assertSigningMethodSelectionIsVisible();
+  assertInstructionsTextIsVisible();
+  assertSigningInfoIsVisible();
+  await assertNotInProgress();
 
+  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
   await fireEvent.click(signButton);
 
-  const spinner = screen.getByTestId('spinner');
+  // During signing
+  assertSigningMethodSelectionIsNotVisible();
+  assertInstructionsTextIsNotVisible();
+  assertSigningInfoIsNotVisible();
+  await assertInProgress();
 
-  expect(spinner).toBeInTheDocument();
-
+  // After signing
   const statusText = await screen.findByText(
     /Kaksikielinen energiatodistus on allekirjoitettu onnistuneesti./u
   );
   expect(statusText).toBeInTheDocument();
 
-  expect(fetchMock.mock.calls.length).toBe(2);
+  expect(fetchMock.mock.calls.length).toBe(1);
 
-  // Spinner has disappeared when request finished
-  expect(spinner).not.toBeInTheDocument();
+  assertSigningMethodSelectionIsNotVisible();
+  assertInstructionsTextIsNotVisible();
+  assertSigningInfoIsNotVisible();
+  await assertNotInProgress();
 
   // Download link for signed Finnish pdf exists
   const todistusLinkFi = screen.getByTestId('energiatodistus-1-fi.pdf');

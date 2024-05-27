@@ -261,7 +261,7 @@
   {#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
     <Signing
       {energiatodistus}
-      checkIfSelectionIsAllowed={false}
+      checkIfSelectionIsAllowed={true}
       reload={reset} />
   {/if}
 

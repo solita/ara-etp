@@ -17,30 +17,25 @@
   const i18n = $_;
 
   let error = Maybe.None();
-  let inProgress = false;
 
-  let signingSucceeded = false;
+  // Subset of signing statuses used in signing with system.
+  const notStartedStatus = Signing.status.not_started;
+  const inProgressStatus = Signing.status.already_started;
+  const signedStatus = Signing.status.signed;
+
+  export let currentState;
+  const setStatus = newStatus =>
+    (currentState = R.assoc('status', newStatus, currentState));
+  const getStatus = state => R.prop('status', state);
 
   const statusText = Signing.statusText(i18n);
 
-  const signPdf = (energiatodistus, language) => {
-    return etApi.signPdfUsingSystemSignature(
+  const signAllPdfs = energiatodistus => {
+    return etApi.signPdfsUsingSystemSignature(
       fetch,
       energiatodistus.versio,
-      energiatodistus.id,
-      language
+      energiatodistus.id
     );
-  };
-
-  const signAllPdfs = energiatodistus => {
-    return Kielisyys.bilingual(energiatodistus)
-      ? Future.and(
-          signPdf(energiatodistus, 'sv'),
-          signPdf(energiatodistus, 'fi')
-        )
-      : Kielisyys.onlySv(energiatodistus)
-        ? signPdf(energiatodistus, 'sv')
-        : signPdf(energiatodistus, 'fi');
   };
 
   const signingProcess = () => {
@@ -52,19 +47,17 @@
         error = R.equals(message, errorKey)
           ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
           : Maybe.Some(message);
-        inProgress = false;
-        signingSucceeded = false;
+        setStatus(notStartedStatus);
       },
-      response => {
-        signingSucceeded = true;
-        inProgress = false;
+      _ => {
+        setStatus(signedStatus);
       },
       signAllPdfs(energiatodistus)
     );
   };
 
   const sign = () => {
-    inProgress = true;
+    setStatus(inProgressStatus);
     error = Maybe.None();
     signingProcess();
   };
@@ -77,13 +70,30 @@
 </style>
 
 <div>
-  <div>{i18n('energiatodistus.signing.system-signing-info-text')}</div>
-
   {#each error.toArray() as text}
     <Error {text} />
   {/each}
 
-  {#if signingSucceeded}
+  {#if getStatus(currentState) === notStartedStatus}
+    <p data-cy="signing-info">
+      {i18n('energiatodistus.signing.system-signing-info-text')}
+    </p>
+    <div class="buttons">
+      <div class="mr-10 mt-5">
+        <Button
+          prefix="signing-submit"
+          text={i18n('energiatodistus.signing.button.start')}
+          on:click={sign} />
+      </div>
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
+    </div>
+  {:else if getStatus(currentState) === signedStatus}
     <p>
       {statusText({
         status: Signing.status.signed,
@@ -105,31 +115,21 @@
           text={`energiatodistus-${energiatodistus.id}-sv.pdf`} />
       {/if}
     </div>
-  {/if}
-
-  {#if inProgress}
+    <div class="buttons">
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
+    </div>
+  {:else if getStatus(currentState) === inProgressStatus}
+    <p data-cy="signing-status">
+      {i18n('energiatodistus.signing.system-signing-status-text')}
+    </p>
     <div class="mt-2">
       <Spinner />
     </div>
   {/if}
-
-  <div class="buttons">
-    {#if !signingSucceeded}
-      <div class="mr-10 mt-5">
-        <Button
-          prefix="signing-submit"
-          disabled={inProgress}
-          text={i18n('energiatodistus.signing.button.start')}
-          on:click={sign} />
-      </div>
-    {/if}
-    <div class="mt-5">
-      <Button
-        prefix="signing-close"
-        disabled={inProgress}
-        text={i18n('energiatodistus.signing.button.close')}
-        style={'secondary'}
-        on:click={reload} />
-    </div>
-  </div>
 </div>

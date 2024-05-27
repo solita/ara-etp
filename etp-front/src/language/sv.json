@@ -1221,6 +1221,7 @@
         "system": "Älä käytä henkilökorttia (sv)"
       },
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia (sv)",
+      "system-signing-status-text": "Allekirjoitetaan energiatodistusta (sv)",
       "language-adjective": {
         "fi": "på finska",
         "sv": "på svenska",

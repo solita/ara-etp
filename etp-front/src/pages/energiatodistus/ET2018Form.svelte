@@ -100,6 +100,7 @@
   <div class="lg:w-1/2 w-full py-4">
     <Select
       id={'perustiedot.kieli'}
+      name={'perustiedot.kieli'}
       label={$_('energiatodistus.perustiedot.kieli')}
       required={true}
       validation={schema.$signature}

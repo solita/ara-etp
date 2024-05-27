@@ -1,10 +1,12 @@
 <script>
   import { _ } from '@Language/i18n';
 
+  import * as R from 'ramda';
   import CardSigning from './CardSigning.svelte';
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
   import SigningInstructions from './SigningInstructions.svelte';
+  import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
   import * as versionApi from '@Component/Version/version-api';
   import { isProduction } from '@Utility/config_utils';
@@ -18,8 +20,10 @@
 
   const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 
-  export let allowSelection = false;
+  export let allowSelection = true;
   export let checkIfSelectionIsAllowed = false;
+
+  let currentState = { status: Signing.status.not_started };
 
   if (checkIfSelectionIsAllowed) {
     Future.fork(
@@ -34,6 +38,12 @@
       versionApi.getConfig
     );
   }
+
+  const isSigningMethodSelectionAllowed = state =>
+    R.includes(R.prop('status', state), [
+      Signing.status.not_started,
+      Signing.status.aborted
+    ]);
 </script>
 
 <style type="text/postcss">
@@ -58,7 +68,7 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if allowSelection}
+    {#if allowSelection && isSigningMethodSelectionAllowed(currentState)}
       <div class="mt-2">
         <SigningInstructions />
       </div>
@@ -85,9 +95,9 @@
 
     <div class="mt-4">
       {#if isSigningMethodCard(selection)}
-        <CardSigning {energiatodistus} {reload} />
+        <CardSigning {energiatodistus} {reload} bind:currentState />
       {:else}
-        <SystemSigning {energiatodistus} {reload} />
+        <SystemSigning {energiatodistus} {reload} bind:currentState />
       {/if}
     </div>
   </div>

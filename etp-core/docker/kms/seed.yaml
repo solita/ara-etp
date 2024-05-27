@@ -33,3 +33,7 @@ Keys:
           XZwezEMslKalTS8RGjar3Clg/pZf/yQhLCXGhPf0HNZXmdmAPM1CV+U9i+TFUqkQ
           pKm6V9LU/aRLwawffJ3KGUCj
           -----END PRIVATE KEY-----
+
+Aliases:
+  - AliasName: alias/SigningKey
+    TargetKeyId: baf442ae-4a56-4e7e-bb48-6e0a8625fec0
