@@ -17,6 +17,7 @@ export const signingWithoutCard = () => ({
   props: {
     energiatodistus: energiatodistus2018(),
     selection: 'system',
-    allowSelection: true
+    allowSelection: true,
+    freshSession: true
   }
 });

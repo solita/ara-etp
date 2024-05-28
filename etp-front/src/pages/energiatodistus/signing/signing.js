@@ -1,5 +1,8 @@
 import * as R from 'ramda';
 import * as etApi from '@Pages/energiatodistus/energiatodistus-api.js';
+import * as Fetch from '@Utility/fetch-utils.js';
+import { deserialize, url } from '@Pages/viesti/viesti-api.js';
+import * as Future from '@Utility/future-utils';
 
 const capitalize = R.compose(
   R.join(''),
@@ -42,3 +45,11 @@ export const statusText = R.curry((i18n, state) => {
 
 export const pdfUrl = (energiatodistus, language) =>
   etApi.url.pdf(energiatodistus.versio, energiatodistus.id, language);
+
+export const signingAllowed = fetch =>
+  R.compose(
+    R.map(R.prop('signing-allowed')),
+    Fetch.responseAsJson,
+    Future.encaseP(Fetch.getFetch(fetch)),
+    R.always('/api/private/energiatodistukset/validate-session')
+  )();

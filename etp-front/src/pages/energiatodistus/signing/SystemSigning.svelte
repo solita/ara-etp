@@ -13,6 +13,7 @@
 
   export let energiatodistus;
   export let reload;
+  export let freshSession;
 
   const i18n = $_;
 
@@ -61,6 +62,10 @@
     error = Maybe.None();
     signingProcess();
   };
+
+  const relogin = () => {
+    location.href = `/api/logout?redirect-location=/${location.hash}`;
+  };
 </script>
 
 <style type="text/postcss">
@@ -80,10 +85,18 @@
     </p>
     <div class="buttons">
       <div class="mr-10 mt-5">
-        <Button
-          prefix="signing-submit"
-          text={i18n('energiatodistus.signing.button.start')}
-          on:click={sign} />
+        {#if freshSession}
+          <Button
+            prefix="signing-submit"
+            text={i18n('energiatodistus.signing.button.start')}
+            on:click={sign} />
+        {:else}
+          <Button
+            prefix="relogin"
+            text={i18n('energiatodistus.signing.button.relogin')}
+            style={'secondary'}
+            on:click={relogin} />
+        {/if}
       </div>
       <div class="mt-5">
         <Button
