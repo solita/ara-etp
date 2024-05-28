@@ -31,9 +31,7 @@
         allowSelection = false;
       },
       config => {
-        if (!isProduction(config.environment)) {
-          allowSelection = true;
-        }
+        allowSelection = !isProduction(config.environment);
       },
       versionApi.getConfig
     );
