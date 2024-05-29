@@ -185,8 +185,8 @@
               response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
           (t/is (= (:status response) 200))
           (t/is (= response-body {:signing-allowed true})))))
-    (t/testing "Signing is allowed 29 minutes after auth_time"
-      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 29))
+    (t/testing "Signing is allowed 89 minutes after auth_time"
+      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 89))
                                                 (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
@@ -203,8 +203,8 @@
               response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
           (t/is (= (:status response) 200))
           (t/is (= response-body {:signing-allowed false})))))
-    (t/testing "Signing is not allowed 31 min after auth_time"
-      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 31))
+    (t/testing "Signing is not allowed 91 min after auth_time"
+      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 91))
                                                 (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
