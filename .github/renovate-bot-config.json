@@ -5,17 +5,10 @@
   "repositories": [
     "solita/ara-etp"
   ],
+  "extends": ["config:recommended"],
   "dependencyDashboard": true,
   "labels": ["dependencies"],
   "packageRules": [
-    {
-      "matchPackagePatterns": ["^@babel/"],
-      "groupName": "Babel dependencies"
-    },
-    {
-      "matchPackagePatterns": ["^@storybook/"],
-      "groupName": "Storybook dependencies"
-    },
     {
       "matchPackagePatterns": ["metosin/reitit-"],
       "groupName": "Reitit dependencies"
