@@ -101,7 +101,7 @@
                         (or (:id whoami) default-id-or-name)
                         (:uri req)))))))
 
-(defn check-session-duration
+(defn session-fresh?
   "Given the user's `auth_time` from JWT and returns a boolean telling
    has the user has signed in during the last 30 minutes."
   [auth-time time-limit]
@@ -114,6 +114,6 @@
 (defn wrap-session-time-limit [handler time-limit]
   (fn [{:keys [jwt-payloads] :as req}]
     (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
-      (if (check-session-duration auth-time time-limit)
+      (if (session-fresh? auth-time time-limit)
         (handler req)
         response/unauthorized))))

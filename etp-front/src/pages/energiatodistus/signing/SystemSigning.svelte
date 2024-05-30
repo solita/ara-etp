@@ -10,6 +10,7 @@
   import * as Signing from './signing';
   import * as Kielisyys from '@Pages/energiatodistus/kielisyys.js';
   import Link from '@Component/Link/Link.svelte';
+  import { redirect } from '@Utility/redirect-utils.js';
 
   export let energiatodistus;
   export let reload;
@@ -64,7 +65,7 @@
   };
 
   const relogin = () => {
-    location.href = `/api/logout?redirect-location=/${location.hash}`;
+    redirect(`/api/logout?redirect-location=/${location.hash}`);
   };
 </script>
 

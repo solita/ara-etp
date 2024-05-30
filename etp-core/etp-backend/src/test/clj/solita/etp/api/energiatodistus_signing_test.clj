@@ -26,7 +26,7 @@
 (t/deftest sign-with-system-test
   (let [;;Taken from the test-laatija's JWT
         laatija-auth-time (-> (LocalDate/of 2020 3 3)
-                              (.atTime 12 22 50)
+                              (.atTime 12 22 49)
                               (.atZone (ZoneId/of "GMT+2"))
                               (.toInstant))]
     (with-bindings
@@ -174,7 +174,7 @@
         ;; The auth_time in the JWT that is used in `insert-virtu-laatija!` is:
         ;;   Your time zone: Tuesday, March 3, 2020 12:22:49 PM GMT+02:00
         laatija-auth-time (-> (LocalDate/of 2020 3 3)
-                              (.atTime 12 22 50)
+                              (.atTime 12 22 49)
                               (.atZone (ZoneId/of "GMT+2"))
                               (.toInstant))]
     (t/testing "Signing is allowed one second after auth_time"
@@ -228,7 +228,9 @@
           [todistus-2018-fi-id]
           (test-data.energiatodistus/insert! [todistus-2018-fi] laatija-id)]
 
-      (t/testing "Test that laatija can not sign a pdf when authenticated more than 30min ago"
+      (t/testing "Test that laatija can not sign a pdf when authenticated more than 90 min ago"
+        ;; The auth_time in the JWT that is used in `insert-virtu-laatija!` is:
+        ;;   Your time zone: Tuesday, March 3, 2020 12:22:49 PM GMT+02:00
         (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
               response (ts/handler (-> (mock/request :post url)
                                        (test-data.laatija/with-virtu-laatija)

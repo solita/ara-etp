@@ -21,3 +21,13 @@ export const signingWithoutCard = () => ({
     freshSession: true
   }
 });
+
+export const signingWithoutCardStaleSession = () => ({
+  Component: SigningDialog,
+  props: {
+    energiatodistus: energiatodistus2018(),
+    selection: 'system',
+    allowSelection: true,
+    freshSession: false
+  }
+});

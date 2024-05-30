@@ -22,7 +22,7 @@
            (java.io ByteArrayOutputStream File InputStream)
            (java.nio.charset StandardCharsets)
            (java.text Normalizer Normalizer$Form)
-           (java.time Clock Instant LocalDate LocalDateTime ZoneId ZonedDateTime Duration)
+           (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
            (java.util Base64 Calendar Date GregorianCalendar HashMap)
            (javax.imageio ImageIO)
@@ -1015,4 +1015,3 @@
         (if (= (-> e ex-data :type) :sign-with-system-error)
           (-> e ex-data :result)
           (throw e))))))
-

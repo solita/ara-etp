@@ -130,7 +130,7 @@
               :responses {200 {:body nil}}
               :handler   (fn [{:keys [jwt-payloads whoami] :as req}]
                            (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))
-                                 signing-allowed (security/check-session-duration auth-time config/system-signature-session-timeout-minutes)]
+                                 signing-allowed (security/session-fresh? auth-time config/system-signature-session-timeout-minutes)]
                              (r/response {:signing-allowed signing-allowed})))}}]
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route

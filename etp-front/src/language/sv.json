@@ -1242,6 +1242,7 @@
       "error": {
         "abort-failed": "Avbrytandet misslyckades",
         "signing-failed": "Undertecknandet avbröts av okänd anledning. Du kan börja underteckna på nytt eller avbryta undertecknandet.",
+        "session-validity-check-failed": "Session tarkistaminen epäonnistui. Uudelleenkirjautuminen voi korjata ongelman. (sv)",
         "name-does-not-match": "Undertecknarens namn på personcertifikatet motsvarar inte användarens namn i systemet.",
         "laatimiskielto": "Ingen underteckningsprocess är möjlig eftersom upprättaren har förbjudits att upprätta dokument.",
         "patevyys-expired": "Ingen underteckningsprocess är möjlig eftersom upprättarens behörighet har upphört.",
@@ -1261,7 +1262,8 @@
       "button": {
         "start": "Underteckna",
         "abort": "Avbryt",
-        "close": "Stäng"
+        "close": "Stäng",
+        "relogin": "Kirjaudu uudelleen (sv)"
       }
     },
     "allekirjoitus": {

@@ -102,10 +102,7 @@ const setSessionValid = () => {
 
 const setupFetchMocks = mocks => {
   fetchMock.mockIf(/.*/, async req => {
-    if (mocks[req.url] !== undefined) {
-      return mocks[req.url];
-    } else {
-    }
+    return mocks[req.url];
   });
 };
 
@@ -295,7 +292,6 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
 
   // Reset mock calls so that they don't affect checks after switching the signing method
   fetchMock.resetMocks();
-  setSessionValid();
   closeDialogFn.mockReset();
 
   // Options should be available
