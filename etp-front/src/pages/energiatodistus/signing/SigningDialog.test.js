@@ -308,6 +308,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
 });
 
 test('Signing method can not be selected when allowSelection is false', async () => {
+  setSessionValid();
   const closeDialogFn = jest.fn();
 
   // Render the dialog with card as the default selection
