@@ -106,7 +106,7 @@
                                       ring/ring-mock                 {:mvn/version "0.4.0"}
                                       org.xmlunit/xmlunit-core       {:mvn/version "2.10.0"}
                                       org.apache.pdfbox/pdfbox-tools {:mvn/version "2.0.31"}}
-                        :jvm-opts    ["-Djava.awt.headless=true" "-DALLOW_PALVELUVAYLA_API=true" "-DALLOW_NEW_SIGNATURE=true"]}
+                        :jvm-opts    ["-Djava.awt.headless=true" "-DALLOW_PALVELUVAYLA_API=true" "-DALLOW_NEW_SIGNATURE=true" "-DSYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES=52560000"]}
              :test     {:main-opts ["-e" "(run-tests-and-exit!)" "-A:dev"]}
              :test-ci  {:main-opts ["-e" "(run-tests-with-junit-reporter-and-exit!)" "-A:dev"]}
              :coverage {:extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}

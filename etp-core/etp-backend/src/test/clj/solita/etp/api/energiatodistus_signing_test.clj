@@ -5,6 +5,7 @@
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
+    [solita.etp.config :as config]
     [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
     [solita.etp.test-data.laatija :as test-data.laatija]
     [solita.etp.test-system :as ts])
@@ -177,8 +178,9 @@
                               (.atZone (ZoneId/of "GMT+2"))
                               (.toInstant))]
     (t/testing "Signing is allowed one second after auth_time"
-      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
-                                                (ZoneId/systemDefault))}
+      (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
+                      #'time/clock                                      (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
+                                                                                     (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
                                        (mock/header "Accept" "application/json")))
@@ -186,7 +188,8 @@
           (t/is (= (:status response) 200))
           (t/is (= response-body {:signing-allowed true})))))
     (t/testing "Signing is allowed 89 minutes after auth_time"
-      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 89))
+      (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
+                      #'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 89))
                                                 (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
@@ -195,7 +198,8 @@
           (t/is (= (:status response) 200))
           (t/is (= response-body {:signing-allowed true})))))
     (t/testing "Signing is not allowed 1 min before auth_time"
-      (with-bindings {#'time/clock (Clock/fixed (.minus laatija-auth-time (Duration/ofMinutes 1))
+      (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
+                      #'time/clock (Clock/fixed (.minus laatija-auth-time (Duration/ofMinutes 1))
                                                 (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
@@ -204,7 +208,8 @@
           (t/is (= (:status response) 200))
           (t/is (= response-body {:signing-allowed false})))))
     (t/testing "Signing is not allowed 91 min after auth_time"
-      (with-bindings {#'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 91))
+      (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
+                      #'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 91))
                                                 (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
