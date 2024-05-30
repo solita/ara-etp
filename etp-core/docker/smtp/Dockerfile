@@ -1,4 +1,4 @@
-FROM --platform=amd64 eclipse-temurin:17.0.8_7-jre-alpine
+FROM --platform=amd64 eclipse-temurin:21.0.3_9-jre-alpine
 
 RUN apk add --upgrade curl \
     && curl -L -O https://github.com/Nilhcem/FakeSMTP/raw/gh-pages/downloads/fakeSMTP-latest.zip \

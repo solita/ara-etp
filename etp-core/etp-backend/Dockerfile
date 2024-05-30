@@ -11,7 +11,7 @@ RUN clojure -M:uberjar
 
 
 # Production image
-FROM --platform=amd64 eclipse-temurin:17.0.8_7-jre-jammy
+FROM --platform=amd64 eclipse-temurin:21.0.3_9-jre-jammy
 
 # LibreOffice installation
 RUN apt-get update && \
