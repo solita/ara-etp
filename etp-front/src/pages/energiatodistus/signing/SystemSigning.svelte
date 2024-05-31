@@ -10,9 +10,11 @@
   import * as Signing from './signing';
   import * as Kielisyys from '@Pages/energiatodistus/kielisyys.js';
   import Link from '@Component/Link/Link.svelte';
+  import { redirect } from '@Utility/redirect-utils.js';
 
   export let energiatodistus;
   export let reload;
+  export let freshSession;
 
   const i18n = $_;
 
@@ -61,6 +63,10 @@
     error = Maybe.None();
     signingProcess();
   };
+
+  const relogin = () => {
+    redirect(`/api/logout?redirect-location=/${location.hash}`);
+  };
 </script>
 
 <style type="text/postcss">
@@ -78,12 +84,25 @@
     <p data-cy="signing-info">
       {i18n('energiatodistus.signing.system-signing-info-text')}
     </p>
+    {#if !freshSession}
+      <p data-cy="signing-info-relogin">
+        {i18n('energiatodistus.signing.system-signing-info-text-relogin')}
+      </p>
+    {/if}
     <div class="buttons">
       <div class="mr-10 mt-5">
-        <Button
-          prefix="signing-submit"
-          text={i18n('energiatodistus.signing.button.start')}
-          on:click={sign} />
+        {#if freshSession}
+          <Button
+            prefix="signing-submit"
+            text={i18n('energiatodistus.signing.button.start')}
+            on:click={sign} />
+        {:else}
+          <Button
+            prefix="relogin"
+            text={i18n('energiatodistus.signing.button.relogin')}
+            style={'secondary'}
+            on:click={relogin} />
+        {/if}
       </div>
       <div class="mt-5">
         <Button

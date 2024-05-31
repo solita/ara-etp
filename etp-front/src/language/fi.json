@@ -1273,6 +1273,7 @@
         "system": "Älä käytä henkilökorttia"
       },
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia",
+      "system-signing-info-text-relogin": "Uudelleenkirjautuminen vaaditaan allekirjoittamiseen",
       "system-signing-status-text": "Allekirjoitetaan energiatodistusta",
       "language-adjective": {
         "fi": "suomenkielinen",
@@ -1293,6 +1294,7 @@
       "error": {
         "abort-failed": "Keskeyttäminen epäonnistui",
         "signing-failed": "Allekirjoittaminen keskeytyi tuntemattomasta syystä. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
+        "session-validity-check-failed": "Session tarkistaminen epäonnistui. Uudelleenkirjautuminen voi korjata ongelman.",
         "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä.",
         "laatimiskielto": "Allekirjoittaminen ei ole mahdollista koska laatija on laatimiskiellossa.",
         "patevyys-expired": "Allekirjoittaminen ei ole mahdollista, koska laatijan pätevyys on päättynyt.",
@@ -1312,7 +1314,8 @@
       "button": {
         "start": "Allekirjoita",
         "abort": "Keskeytä",
-        "close": "Sulje"
+        "close": "Sulje",
+        "relogin": "Kirjaudu uudelleen"
       }
     },
     "allekirjoitus": {

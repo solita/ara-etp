@@ -1,30 +1,33 @@
 (ns solita.etp.api.energiatodistus
   (:require [ring.util.response :as r]
             [schema.core :as schema]
-            [solita.etp.schema.common :as common-schema]
-            [solita.etp.schema.energiatodistus :as energiatodistus-schema]
-            [solita.etp.schema.public-energiatodistus :as public-energiatodistus-schema]
-            [solita.etp.schema.valvonta-oikeellisuus :as valvonta-schema]
             [solita.etp.api.energiatodistus-crud :as crud-api]
-            [solita.etp.api.energiatodistus-xml :as xml-api]
-            [solita.etp.api.energiatodistus-liite :as liite-api]
-            [solita.etp.api.energiatodistus-signing :as signing-api]
             [solita.etp.api.energiatodistus-history :as history-api]
+            [solita.etp.api.energiatodistus-liite :as liite-api]
             [solita.etp.api.energiatodistus-luokittelut :as luokittelut-api]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-search :as energiatodistus-search-service]
-            [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
-            [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
-            [solita.etp.service.energiatodistus-xlsx :as energiatodistus-xlsx-service]
-            [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.api.energiatodistus-signing :as signing-api]
+            [solita.etp.api.energiatodistus-xml :as xml-api]
             [solita.etp.api.response :as api-response]
             [solita.etp.api.stream :as api-stream]
-            [solita.etp.service.json :as json]
+            [solita.etp.config :as config]
             [solita.etp.exception :as exception]
+            [solita.etp.schema.common :as common-schema]
+            [solita.etp.schema.energiatodistus :as energiatodistus-schema]
+            [solita.etp.schema.geo :as geo-schema]
+            [solita.etp.schema.public-energiatodistus :as public-energiatodistus-schema]
+            [solita.etp.schema.valvonta-oikeellisuus :as valvonta-schema]
             [solita.etp.schema.viesti :as viesti-schema]
-            [solita.etp.service.viesti :as viesti-service]
-            [solita.etp.schema.geo :as geo-schema])
-  (:import (com.fasterxml.jackson.core JsonParseException)))
+            [solita.etp.security :as security]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
+            [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
+            [solita.etp.service.energiatodistus-search :as energiatodistus-search-service]
+            [solita.etp.service.energiatodistus-xlsx :as energiatodistus-xlsx-service]
+            [solita.etp.service.json :as json]
+            [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.service.viesti :as viesti-service])
+  (:import (com.fasterxml.jackson.core JsonParseException)
+           (java.time Instant)))
 
 (defn valid-pdf-filename? [filename id kieli]
   (= filename (format "energiatodistus-%s-%s.pdf" id kieli)))
@@ -121,6 +124,14 @@
 (def private-routes
   (concat
     [["/energiatodistukset"
+      ["/validate-session"
+       {:get {:summary   "Tarkista, että allekirjoittaminen on sallittua"
+              :access    rooli-service/laatija?
+              :responses {200 {:body nil}}
+              :handler   (fn [{:keys [jwt-payloads whoami] :as req}]
+                           (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))
+                                 signing-allowed (security/session-fresh? auth-time config/system-signature-session-timeout-minutes)]
+                             (r/response {:signing-allowed signing-allowed})))}}]
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)
@@ -133,10 +144,10 @@
               :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
                             (api-response/with-exceptions
                               #(api-response/xlsx-response
-                                (energiatodistus-xlsx-service/find-energiatodistukset-xlsx
-                                 db
-                                 whoami
-                                 (update query :where json/read-value))
+                                 (energiatodistus-xlsx-service/find-energiatodistukset-xlsx
+                                   db
+                                   whoami
+                                   (update query :where json/read-value))
                                 "energiatodistukset.xlsx"
                                 "Not found.")
                               search-exceptions))}}]

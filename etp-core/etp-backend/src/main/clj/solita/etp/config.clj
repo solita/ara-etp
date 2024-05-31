@@ -164,6 +164,9 @@
 (def system-signature-certificate-intermediate (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE" "system-signature/local-signing-int.pem.crt"))
 (def system-signature-certificate-root (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_ROOT" "system-signature/local-signing-root.pem.crt"))
 
+(def system-signature-session-timeout-default-value 90)
+(def ^:dynamic system-signature-session-timeout-minutes (Integer/parseInt (env "SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES" (str system-signature-session-timeout-default-value))))
+
 ;; Url signing
 (def url-signing-key-id (env "URL_SIGNING_KEY_ID" "DEVENV_KEY_ID"))
 (def url-signing-public-key (env-or-resource "URL_SIGNING_PUBLIC_KEY" "cf-signed-url/example.pub.pem"))

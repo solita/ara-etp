@@ -33,56 +33,82 @@ afterEach(() => {
   fetchMock.disableMocks();
 });
 
+const mpolluxVersionUrl = 'https://localhost:53952/version';
+const mpollxVersionResponse = {
+  status: 200,
+  body: JSON.stringify({
+    version: 'dummy',
+    httpMethods: 'GET, POST',
+    contentTypes: 'data, digest',
+    signatureTypes: 'signature',
+    selectorAvailable: true,
+    hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
+  })
+};
+
+const mpolluxErrorResponse = {
+  status: 500
+};
+
 const mockMpolluxConnectionExists = () => {
-  fetchMock.mockIf('https://localhost:53952/version', async req => {
-    return {
-      status: 200,
-      body: JSON.stringify({
-        version: 'dummy',
-        httpMethods: 'GET, POST',
-        contentTypes: 'data, digest',
-        signatureTypes: 'signature',
-        selectorAvailable: true,
-        hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
-      })
-    };
+  fetchMock.mockIf(mpolluxVersionUrl, async req => {
+    return mpollxVersionResponse;
   });
 };
 
 const mockMpolluxConnectionDoesNotExist = () => {
-  fetchMock.mockIf('https://localhost:53952/version', async req => {
-    return {
-      status: 500
-    };
+  fetchMock.mockIf(mpolluxVersionUrl, async req => {
+    return mpolluxErrorResponse;
   });
 };
 
+const systemSignSuccessResponse = {
+  status: 200,
+  body: JSON.stringify(`Ok`)
+};
+
+const systemSignFailureResponse = {
+  status: 500
+};
+
+const systemSignUrl =
+  '/api/private/energiatodistukset/2018/1/signature/system-sign';
 const mockSystemSignApiCallSuccess = () => {
-  fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system-sign',
-    async req => {
-      return {
-        status: 200,
-        body: JSON.stringify(`Ok`)
-      };
-    }
-  );
+  fetchMock.mockIf(systemSignUrl, async req => {
+    return systemSignSuccessResponse;
+  });
 };
 
 const mockSystemSignApiCallFailure = () => {
-  fetchMock.mockIf(
-    '/api/private/energiatodistukset/2018/1/signature/system-sign',
-    async req => {
-      return {
-        status: 500
-      };
-    }
-  );
+  fetchMock.mockIf(systemSignUrl, async req => {
+    return systemSignFailureResponse;
+  });
+};
+
+const validateSessionUrl = '/api/private/energiatodistukset/validate-session';
+const signingAllowedResponse = allowed => {
+  return {
+    status: 200,
+    body: JSON.stringify({
+      'signing-allowed': allowed
+    })
+  };
+};
+const setSessionValid = () => {
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true)
+  });
+};
+
+const setupFetchMocks = mocks => {
+  fetchMock.mockIf(/.*/, async req => {
+    return mocks[req.url];
+  });
 };
 
 const assertButtons = async closeDialogFn => {
   // Test that signing button exists
-  const signButton = screen.getByRole('button', {
+  const signButton = await screen.findByRole('button', {
     name: /allekirjoita/i
   });
   expect(signButton).toBeInTheDocument();
@@ -90,7 +116,7 @@ const assertButtons = async closeDialogFn => {
 
   // Test that sulje buttton exists and clicking it calls the reload function
   // passed to the component
-  const closeButton = screen.getByRole('button', { name: /Sulje/i });
+  const closeButton = await screen.findByRole('button', { name: /Sulje/i });
   expect(closeButton).toBeInTheDocument();
   await fireEvent.click(closeButton);
   expect(closeDialogFn.mock.calls).toHaveLength(1);
@@ -110,7 +136,9 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
 };
 
 const assertCardSigningDialogContents = async closeDialogFn => {
-  const heading = screen.getByRole('heading', { name: /Allekirjoittaminen/u });
+  const heading = await screen.findByRole('heading', {
+    name: /Allekirjoittaminen/u
+  });
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
@@ -176,7 +204,10 @@ const finnishTodistus = R.compose(
 )(energiatodistus2018());
 
 test('SigningDialog displays error message when default selection is card and there is no connection Mpollux', async () => {
-  mockMpolluxConnectionDoesNotExist();
+  setupFetchMocks({
+    [mpolluxVersionUrl]: mpolluxErrorResponse,
+    [validateSessionUrl]: signingAllowedResponse(true)
+  });
 
   const closeDialogFn = jest.fn();
 
@@ -208,7 +239,10 @@ test('SigningDialog displays error message when default selection is card and th
 });
 
 test('SigningDialog renders correctly when default selection is card and there is connection to Mpollux', async () => {
-  mockMpolluxConnectionExists();
+  setupFetchMocks({
+    [mpolluxVersionUrl]: mpollxVersionResponse,
+    [validateSessionUrl]: signingAllowedResponse(true)
+  });
   const closeDialogFn = jest.fn();
 
   render(SigningDialog, {
@@ -221,7 +255,10 @@ test('SigningDialog renders correctly when default selection is card and there i
 });
 
 test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
-  mockMpolluxConnectionExists();
+  setupFetchMocks({
+    [mpolluxVersionUrl]: mpollxVersionResponse,
+    [validateSessionUrl]: signingAllowedResponse(true)
+  });
 
   const closeDialogFn = jest.fn();
 
@@ -235,7 +272,11 @@ test('SigningDialog renders correctly when default selection is system and there
 });
 
 test('Signing method can be selected in SigningDialog when allowSelection is true', async () => {
-  mockMpolluxConnectionExists();
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true),
+    [mpolluxVersionUrl]: mpollxVersionResponse
+  });
+
   const closeDialogFn = jest.fn();
 
   // Render the dialog with card as the default selection
@@ -267,6 +308,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
 });
 
 test('Signing method can not be selected when allowSelection is false', async () => {
+  setSessionValid();
   const closeDialogFn = jest.fn();
 
   // Render the dialog with card as the default selection
@@ -280,25 +322,12 @@ test('Signing method can not be selected when allowSelection is false', async ()
   assertSigningMethodSelectionIsNotVisible();
 });
 
-test('Pressing sign button with system as signing method shows loading indicator', async () => {
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: R.identity,
-    selection: 'system'
-  });
-
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
-
-  await fireEvent.click(signButton);
-
-  const spinner = screen.getByTestId('spinner');
-
-  expect(spinner).toBeInTheDocument();
-});
-
 test('When system sign fails, error is shown', async () => {
   // Mock the signing api call to return an error
-  mockSystemSignApiCallFailure();
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true),
+    [systemSignUrl]: systemSignFailureResponse
+  });
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
@@ -306,7 +335,9 @@ test('When system sign fails, error is shown', async () => {
     selection: 'system'
   });
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  const signButton = await screen.findByRole('button', {
+    name: /Allekirjoita/i
+  });
 
   await fireEvent.click(signButton);
 
@@ -324,7 +355,10 @@ test('When system sign fails, error is shown', async () => {
 });
 
 test('When system sign of energiatodistus in Finnish succeeds, success message and link to the pdf is shown', async () => {
-  mockSystemSignApiCallSuccess();
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true),
+    [systemSignUrl]: systemSignSuccessResponse
+  });
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
@@ -338,7 +372,9 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   assertSigningInfoIsVisible();
   await assertNotInProgress();
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  const signButton = await screen.findByRole('button', {
+    name: /Allekirjoita/i
+  });
   await fireEvent.click(signButton);
 
   // During signing
@@ -353,7 +389,7 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   );
   expect(statusText).toBeInTheDocument();
 
-  expect(fetchMock.mock.calls.length).toBe(1);
+  expect(fetchMock.mock.calls.length).toBe(2);
 
   assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
@@ -369,7 +405,10 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 });
 
 test('When system sign of energiatodistus in Swedish succeeds, success message and link to the pdf is shown', async () => {
-  mockSystemSignApiCallSuccess();
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true),
+    [systemSignUrl]: systemSignSuccessResponse
+  });
 
   const todistus = R.compose(
     R.assoc('id', 1),
@@ -389,7 +428,9 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   assertSigningInfoIsVisible();
   await assertNotInProgress();
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  const signButton = await screen.findByRole('button', {
+    name: /Allekirjoita/i
+  });
   await fireEvent.click(signButton);
 
   // During signing
@@ -404,7 +445,7 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   );
   expect(statusText).toBeInTheDocument();
 
-  expect(fetchMock.mock.calls.length).toBe(1);
+  expect(fetchMock.mock.calls.length).toBe(2);
 
   assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
@@ -420,7 +461,10 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
 });
 
 test('When system signing of bilingual energiatodistus succeeds, success message and links to both pdfs are shown', async () => {
-  mockSystemSignApiCallSuccess();
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true),
+    [systemSignUrl]: systemSignSuccessResponse
+  });
 
   const todistus = R.compose(
     R.assoc('id', 1),
@@ -439,7 +483,9 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   assertSigningInfoIsVisible();
   await assertNotInProgress();
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  const signButton = await screen.findByRole('button', {
+    name: /Allekirjoita/i
+  });
   await fireEvent.click(signButton);
 
   // During signing
@@ -454,7 +500,7 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   );
   expect(statusText).toBeInTheDocument();
 
-  expect(fetchMock.mock.calls.length).toBe(1);
+  expect(fetchMock.mock.calls.length).toBe(2);
 
   assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
@@ -477,7 +523,10 @@ test('When system signing of bilingual energiatodistus succeeds, success message
 });
 
 test('Signing button is not visible after signing using system signing', async () => {
-  mockSystemSignApiCallSuccess();
+  setupFetchMocks({
+    [validateSessionUrl]: signingAllowedResponse(true),
+    [systemSignUrl]: systemSignSuccessResponse
+  });
 
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
@@ -485,7 +534,9 @@ test('Signing button is not visible after signing using system signing', async (
     selection: 'system'
   });
 
-  const signButton = screen.getByRole('button', { name: /Allekirjoita/i });
+  const signButton = await screen.findByRole('button', {
+    name: /Allekirjoita/i
+  });
 
   await fireEvent.click(signButton);
 

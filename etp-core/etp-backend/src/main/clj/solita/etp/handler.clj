@@ -63,16 +63,19 @@
     (catch Throwable _)))
 
 (defn logout-location [req]
-  (let [{:keys [data]} (req->jwt req)]
-    (if-let [id-token (:custom:id_token data)]
-      (if (:custom:VIRTU_localID data)
-        (str config/keycloak-virtu-logout-url
-             "?id_token_hint=" id-token
-             "&post_logout_redirect_uri=" (URLEncoder/encode config/cognito-logout-url StandardCharsets/UTF_8))
-        (str config/keycloak-suomifi-logout-url
-             "?id_token_hint=" id-token
-             "&post_logout_redirect_uri=" (URLEncoder/encode config/cognito-logout-url StandardCharsets/UTF_8)))
-      (str config/index-url "/uloskirjauduttu"))))
+  (let [{:keys [data]} (req->jwt req)
+        {:keys [redirect-location]} (-> req :parameters :query)]
+    (if (and redirect-location (str/starts-with? redirect-location "/"))
+      redirect-location
+      (if-let [id-token (:custom:id_token data)]
+        (if (:custom:VIRTU_localID data)
+          (str config/keycloak-virtu-logout-url
+               "?id_token_hint=" id-token
+               "&post_logout_redirect_uri=" (URLEncoder/encode config/cognito-logout-url StandardCharsets/UTF_8))
+          (str config/keycloak-suomifi-logout-url
+               "?id_token_hint=" id-token
+               "&post_logout_redirect_uri=" (URLEncoder/encode config/cognito-logout-url StandardCharsets/UTF_8)))
+        (str config/index-url "/uloskirjauduttu")))))
 
 (def empty-cookie {:value     ""
                    :path      "/"
@@ -111,6 +114,8 @@
                                                    config/index-url)}}))}}]
    ["/logout"
     {:get {:summary    "Callback used to redirect user to cognito logout"
+           :parameters {:query
+                        {(s/optional-key :redirect-location) String}}
            :tags       #{"System"}
            :middleware [[cookies/wrap-cookies]]
            :handler    (fn [req]

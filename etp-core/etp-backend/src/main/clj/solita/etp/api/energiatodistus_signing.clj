@@ -1,6 +1,7 @@
 (ns solita.etp.api.energiatodistus-signing
   (:require [schema.core :as schema]
             [solita.etp.api.response :as api-response]
+            [solita.etp.security :as security]
             [solita.etp.config :as config]
             [solita.etp.schema.common :as common-schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
@@ -93,6 +94,7 @@
       {:post {:summary    "Allekirjoita energiatodistus järjestelmällä"
               :parameters {:path {:id common-schema/Key}}
               :access     rooli-service/laatija?
+              :middleware [[security/wrap-session-time-limit config/system-signature-session-timeout-minutes]]
               :responses  {200 {:body schema/Str}
                            404 {:body schema/Str}}
               :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db aws-s3-client aws-kms-client whoami]}]

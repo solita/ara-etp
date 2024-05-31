@@ -10,6 +10,7 @@
   import * as Future from '@Utility/future-utils';
   import * as versionApi from '@Component/Version/version-api';
   import { isProduction } from '@Utility/config_utils';
+  import { announcementsForModule } from '@Utility/announce.js';
 
   export let energiatodistus;
   export let reload;
@@ -22,6 +23,7 @@
 
   export let allowSelection = true;
   export let checkIfSelectionIsAllowed = false;
+  export let freshSession = false;
 
   let currentState = { status: Signing.status.not_started };
 
@@ -42,6 +44,19 @@
       Signing.status.not_started,
       Signing.status.aborted
     ]);
+
+  Future.fork(
+    _ => {
+      announcementsForModule('Energiatodistus').announceError(
+        i18n('energiatodistus.signing.error.session-validity-check-failed')
+      );
+      freshSession = false;
+    },
+    res => {
+      freshSession = res;
+    },
+    Signing.signingAllowed(fetch)
+  );
 </script>
 
 <style type="text/postcss">
@@ -95,7 +110,11 @@
       {#if isSigningMethodCard(selection)}
         <CardSigning {energiatodistus} {reload} bind:currentState />
       {:else}
-        <SystemSigning {energiatodistus} {reload} bind:currentState />
+        <SystemSigning
+          {energiatodistus}
+          {reload}
+          bind:currentState
+          bind:freshSession />
       {/if}
     </div>
   </div>
