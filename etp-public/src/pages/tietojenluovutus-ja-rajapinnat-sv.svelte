@@ -84,7 +84,7 @@
       Ara är noggrann inom all sin verksamhet och säkerställer att dataskydd och
       informationssäkerhet uppfylls. Behandling av personuppgifter följer i
       huvudregel Aras lagstadgade skyldigheter. <Link
-        href="https://www.ara.fi/sv-FI/Dataskydd_och_behandling_av_personuppgif(61206)">
+        href="https://www.ara.fi/sv/om-oss/dataskydd-och-behandling-av-uppgifter">
         Läs mer om behandlingen av personuppgifter på (ara.fi)</Link
       >. Vi för ett register över de materialkunder som anslutits till
       gränssnittet. Dataskyddsbeskrivningarna finns på sidan

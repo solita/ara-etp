@@ -83,7 +83,7 @@
       tietosuoja ja tietoturvallisuus toteutuvat. Henkilötietojen käsittely
       perustuu pääsääntöisesti Aran lakisääteisten velvoitteiden noudattamiseen.
       <Link
-        href="https://www.ara.fi/fi-FI/Tietosuoja_ja_henkilotietojen_kasittely_(48134)">
+        href="https://www.ara.fi/fi/tietoa-meista/tietosuoja-ja-tietojen-kasittely">
         Lue lisää henkilötietojen käsittelystä (ara.fi)</Link>
 
       Pidämme rekisteriä rajapintaan liitetyistä aineistoasiakkaista.
