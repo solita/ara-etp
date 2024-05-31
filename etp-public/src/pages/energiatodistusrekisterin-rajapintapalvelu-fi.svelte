@@ -78,7 +78,8 @@
 
     <p>
       Hinnastomme löydät
-      <Link href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+      <Link
+        href="https://www.ara.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
         >Aran sivuilta</Link
       >.
     </p>
