@@ -85,7 +85,7 @@
     <p>
       Vår prislista finns på
       <Link
-        href="https://www.ara.fi/sv-FI/Ara/Kontaktuppgifter/Kontaktuppgifter(735)"
+        href="https://www.ara.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
         >Aras webbplats
       </Link>
       .

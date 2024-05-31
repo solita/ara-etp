@@ -149,7 +149,7 @@
     <p>
       Vår prislista finns på
       <Link
-        href="https://www.ara.fi/sv-FI/Ara/Kontaktuppgifter/Kontaktuppgifter(735)"
+        href="https://www.ara.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
         >Aras webbplats</Link
       >.
     </p>
@@ -167,9 +167,7 @@
         Skicka ansökan per e-post till Aras registratorskontor (<Link
           href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
         >). Om ansökan innehåller sekretessbelagd information ska du skicka
-        ansökan som <Link
-          href="https://www.ara.fi/sv-FI/Ara/Kontaktuppgifter/Kontaktuppgifter(735)"
-          >säker e-post</Link
+        ansökan som <Link href="https://turvaviesti.ara.fi/">säker e-post</Link
         >.
       </li>
       <li>

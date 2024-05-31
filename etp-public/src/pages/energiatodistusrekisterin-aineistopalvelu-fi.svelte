@@ -146,7 +146,8 @@
     </p>
     <p>
       Hinnastomme löydät
-      <Link href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
+      <Link
+        href="https://www.ara.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
         >Aran sivuilta</Link>
       .
     </p>
@@ -164,8 +165,7 @@
         Lähetä hakemus sähköpostitse Aran kirjaamoon (<Link
           href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
         >). Jos hakemus sisältää salassa pidettävää tietoa, lähetä hakemus <Link
-          href="https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Yhteystiedot(477)"
-          >turvapostilla</Link
+          href="https://turvaviesti.ara.fi/">turvapostilla</Link
         >.
       </li>
       <li>

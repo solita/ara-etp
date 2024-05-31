@@ -77,7 +77,7 @@
         <section class="py-4">
           <h2 class="mb-4">{$_('FOOTER_PALAUTE')}</h2>
           <ButtonLink
-            href={'https://www.ara.fi/fi-FI/ARA/Yhteystiedot/Anna_palautetta(1280)?r=31603'}
+            href={$_('FOOTER_LAHETA_PALAUTETTA_LINK')}
             {...buttonStyles.green}>
             <img
               src={IconChat}
