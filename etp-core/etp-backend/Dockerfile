@@ -2,6 +2,7 @@
 FROM --platform=amd64 clojure:temurin-17-tools-deps-alpine@sha256:b3538348cb05560cd4234fedd50c90f6371fefc62c87f005c8a6217a9e4311d0 as builder
 
 # Preload dependencies for better caching
+COPY ./lib /usr/src/etp-backend/lib
 COPY deps.edn /usr/src/etp-backend/
 WORKDIR /usr/src/etp-backend
 RUN clojure -P -M:uberjar
