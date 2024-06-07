@@ -76,6 +76,7 @@
       <ul>
         <li>nimi</li>
         <li>henkilötunnus</li>
+        <li>puhelinnumero</li>
         <li>sähköpostiosoite</li>
         <li>osoite</li>
         <li>maa</li>
@@ -97,6 +98,17 @@
         Lisäksi käsittelemme henkilötiedoiksi katsottavia rakennuksen tarkkoja
         katuosoitteita (alle 2 asunnon pientalot) ja rakennukseen liittyviä
         pysyviä rakennustunnuksia.
+      </p>
+
+      <p>
+        Energiatodistusten laatijoiden henkilötiedot saadaan lähtökohtaisesti
+        pätevyydentoteajilta (FISE Oy ja Kiinteistöalan koulutuskeskus Kiinko).
+        Jos energiatodistuksen laatija käyttää sähköistä allekirjoitusta,
+        energiatodistuksen laatijan lokitiedot (henkilötunnus ja
+        allekirjoitustoimintojen kellonajat) saadaan Suomi.fi-tunnistautumisen
+        kautta. Yritysten tiedot ja alle 2 asunnon pientalojen tarkat
+        katuosoitteet ja niiden pysyvät rakennustunnukset saadaan
+        energiatodistusten laatijoilta.
       </p>
 
       <H3>Henkilötietojen käsittely, siirto ja luovuttaminen</H3>
@@ -136,6 +148,11 @@
       </p>
 
       <p>
+        Rekisterin sisältämiä tietoja ei käytetä profilointiin eikä tietoihin
+        kohdisteta automaattista päätöksentekoa.
+      </p>
+
+      <p>
         Tietoja ei siirretä EU:n tai ETA:n ulkopuolelle eikä kansainvälisille
         järjestöille.
       </p>
@@ -153,11 +170,9 @@
         Rekisteröidyllä on oikeus saada rekisterinpitäjältä vahvistus siitä,
         että häntä koskevia henkilötietoja käsitellään tai että niitä ei
         käsitellä, ja jos näitä henkilötietoja käsitellään, oikeus saada pääsy
-        henkilötietoihin. Rekisterien sisältämiä tietoja ei käytetä
-        profilointiin eikä tietoihin kohdisteta automaattista päätöksentekoa.
-        Jos rekisteröidyn käyttämästä tarkastusoikeudesta on kulunut vähemmän
-        kuin yksi vuosi, voi rekisterinpitäjä periä tietojen antamisesta
-        aiheutuvat hallinnollisiin kustannuksiin perustuvan maksun.
+        henkilötietoihin. Jos rekisteröidyn käyttämästä tarkastusoikeudesta on
+        kulunut vähemmän kuin yksi vuosi, voi rekisterinpitäjä periä tietojen
+        antamisesta aiheutuvat hallinnollisiin kustannuksiin perustuvan maksun.
       </p>
 
       <p>
