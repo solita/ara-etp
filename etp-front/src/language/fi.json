@@ -1289,7 +1289,7 @@
       "messages": {
         "connection-check": "Tarkistetaan yhteyttä mPolluxiin.",
         "already-started": "Allekirjoitus on keskeytynyt tuntemattomasta syystä.",
-        "connection-success": "Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu.",
+        "connection-success": "Energiatodistuksen tiedot ja yhteys kortinlukuohjelmaan on tarkastettu.",
         "connection-failed": "Yhteyden avaus mPolluxiin epäonnistui. Allekirjoittaminen edellyttää että allekirjoitusohjelma mPollux on asennettu ja selaimesta on yhteys allekirjoitusohjelmaan."
       },
       "error": {

@@ -1237,7 +1237,7 @@
       "messages": {
         "connection-check": "Kontakten till mPollux kontrolleras.",
         "already-started": "Undertecknandet har avbrutits av okänd orsak.",
-        "connection-success": "Energicertifikatets uppgifter och koppling till mPollux har kontrollerats.",
+        "connection-success": "Uppgifterna i energicertifikatet och uppkopplingen till kortläserprogrammet har kontrollerats. ",
         "connection-failed": "Anslutning till mPollux misslyckades. Undertecknandet förutsätter att signaturprogrammet mPollux är installerat och att webbläsaren är ansluten till signaturprogrammet."
       },
       "error": {
@@ -1250,7 +1250,7 @@
         "expired-signing-certificate": "Ingen underteckningsprocess är möjlig eftersom identitetskortet har föråldrats."
       },
       "status": {
-        "not-started": "Du kan nu underteckna energicertifikatet {language-genitive}.",
+        "not-started": "Du kan nu underteckna det {language-genitive} energicertifikatet.",
         "already-started": "Du kan börja underteckna energicertifikatet på nytt eller avbryta det och återgå till skissläget.",
         "start": "Underteckningsprocessen {language} startas.",
         "digest": "Energicertifikatet {language} skapas.",

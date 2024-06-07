@@ -143,7 +143,7 @@ const assertCardSigningDialogContents = async closeDialogFn => {
   expect(heading.tagName).toBe('H1');
 
   const statusText = await screen.findByText(
-    /Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu./u
+    /Energiatodistuksen tiedot ja yhteys kortinlukuohjelmaan on tarkastettu./u
   );
   expect(statusText).toBeInTheDocument();
 
