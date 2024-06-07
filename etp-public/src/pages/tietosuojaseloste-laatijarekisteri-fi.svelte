@@ -85,6 +85,7 @@
       <ul>
         <li>nimi</li>
         <li>henkilötunnus</li>
+        <li>puhelinnumero</li>
         <li>sähköpostiosoite</li>
         <li>osoite</li>
         <li>maa</li>
@@ -106,8 +107,16 @@
 
       <p>
         Rekisteri sisältää tiedot myös laatijan laatimista energiatodistuksista.
-        Laatijoiden henkilötiedot saadaan pätevyydentoteajilta (FISE Oy ja
-        Kiinteistöalan koulutuskeskus Kiinko).
+      </p>
+
+      <p>
+        Energiatodistusten laatijoiden henkilötiedot saadaan lähtökohtaisesti
+        pätevyydentoteajilta (FISE Oy ja Kiinteistöalan koulutuskeskus Kiinko).
+        Jos energiatodistuksen laatija käyttää sähköistä allekirjoitusta,
+        energiatodistuksen laatijan lokitiedot (henkilötunnus ja
+        allekirjoitustoimintojen kellonajat) saadaan Suomi.fi-tunnistautumisen
+        kautta. Yritysten tiedot ja tiedot laatijan laatimista
+        energiatodistuksista saadaan energiatodistusten laatijoilta.
       </p>
 
       <H3>Henkilötietojen käsittely, siirto ja luovuttaminen</H3>
