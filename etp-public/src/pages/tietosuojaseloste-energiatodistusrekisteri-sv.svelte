@@ -75,6 +75,7 @@
       <ul>
         <li>namn</li>
         <li>personbeteckning</li>
+        <li>telefonnummer</li>
         <li>e-postadress</li>
         <li>adress</li>
         <li>land</li>
@@ -96,6 +97,17 @@
         Vi behandlar även uppgifter som betraktas som personuppgifter såsom
         byggnadens exakta gatuadress (under 2 bostads småhus) och dess
         tillhörande permanenta byggnadsbeteckning.
+      </p>
+
+      <p>
+        Utgångspunkten är att personuppgifter om upprättare av energicertifikat
+        fås från behörighetsverifierare (FISE Oy och Kiinteistöalan
+        koulutuskeskus Kiinko). Om upprättare av energicertifikat använder
+        elektronisk signatur, fås hens logguppgifterna (personbeteckning och
+        klockslag för signaturfunktionerna) via Suomi.fi-autentisering.
+        Företagsuppgifter och exakta gatuadresser till småhus med färre än 2
+        bostäder och deras permanenta byggnadsbeteckningar fås av upprättare av
+        energicertifikat.
       </p>
 
       <H3>Behandling, överföring och utlämnande av personuppgifter</H3>
