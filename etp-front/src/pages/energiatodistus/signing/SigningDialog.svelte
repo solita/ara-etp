@@ -5,7 +5,6 @@
   import CardSigning from './CardSigning.svelte';
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
-  import SigningInstructions from './SigningInstructions.svelte';
   import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
   import * as versionApi from '@Component/Version/version-api';
