@@ -1220,6 +1220,7 @@
         "card": "Käytä henkilökorttia (sv)",
         "system": "Älä käytä henkilökorttia (sv)"
       },
+      "instructions": "Du kan underteckna energicertifikat med ditt identitetskort och kortläsarprogram. Alternativt kan du underteckna certifikatet med hjälp av stark autentisering och energicertifikattjänstens signaturcertifikat, vilket innebär att du inte behöver identitetskort.",
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia (sv)",
       "system-signing-info-text-relogin": "Uudelleenkirjautuminen vaaditaan allekirjoittamiseen (sv)",
       "system-signing-status-text": "Allekirjoitetaan energiatodistusta (sv)",

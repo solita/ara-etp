@@ -85,8 +85,8 @@
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
     {#if allowSelection && isSigningMethodSelectionAllowed(currentState)}
-      <div class="mt-2">
-        <SigningInstructions />
+      <div class="mt-2" data-cy="signing-instructions">
+        <p>{i18n('energiatodistus.signing.instructions')}</p>
       </div>
 
       <div class="mt-2">
