@@ -1217,8 +1217,8 @@
     "signing": {
       "header": "Undertecknande",
       "options": {
-        "card": "Käytä henkilökorttia (sv)",
-        "system": "Älä käytä henkilökorttia (sv)"
+        "card": "Använd identitetskort",
+        "system": "Underteckna utan identitetskort"
       },
       "instructions": "Du kan underteckna energicertifikat med ditt identitetskort och kortläsarprogram. Alternativt kan du underteckna certifikatet med hjälp av stark autentisering och energicertifikattjänstens signaturcertifikat, vilket innebär att du inte behöver identitetskort.",
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia (sv)",
