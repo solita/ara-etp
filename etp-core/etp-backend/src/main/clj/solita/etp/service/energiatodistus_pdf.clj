@@ -900,9 +900,7 @@
           (validate-certificate! (:sukunimi whoami)
                                  now
                                  (first chain)
-                                 (if (= signing-method :mpollux)
-                                   true
-                                   false))
+                                 (= signing-method :mpollux))
           (let [key (energiatodistus-service/file-key id language)
                 content (file-service/find-file aws-s3-client key)
                 content-bytes (.readAllBytes content)
