@@ -5,7 +5,6 @@
   import CardSigning from './CardSigning.svelte';
   import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
-  import SigningInstructions from './SigningInstructions.svelte';
   import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
   import * as versionApi from '@Component/Version/version-api';
@@ -85,8 +84,8 @@
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
     {#if allowSelection && isSigningMethodSelectionAllowed(currentState)}
-      <div class="mt-2">
-        <SigningInstructions />
+      <div class="mt-2" data-cy="signing-instructions">
+        <p>{i18n('energiatodistus.signing.instructions')}</p>
       </div>
 
       <div class="mt-2">

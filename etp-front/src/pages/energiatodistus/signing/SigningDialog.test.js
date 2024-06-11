@@ -127,10 +127,10 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
-  const systemSigningContent = await screen.findByText(
-    /Allekirjoita ilman henkilökorttia/u
+  const systemSigningContent = screen.getByTestId('signing-info');
+  expect(systemSigningContent).toHaveTextContent(
+    'Allekirjoita ilman henkilökorttia'
   );
-  expect(systemSigningContent).toBeInTheDocument();
 
   await assertButtons(closeDialogFn);
 };
@@ -143,7 +143,7 @@ const assertCardSigningDialogContents = async closeDialogFn => {
   expect(heading.tagName).toBe('H1');
 
   const statusText = await screen.findByText(
-    /Energiatodistuksen tiedot ja yhteys mPolluxiin on tarkastettu./u
+    /Energiatodistuksen tiedot ja yhteys kortinlukuohjelmaan on tarkastettu./u
   );
   expect(statusText).toBeInTheDocument();
 
@@ -299,7 +299,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
 
   // Select system signing
   const selection = screen.getByRole('radio', {
-    name: 'Älä käytä henkilökorttia'
+    name: 'Allekirjoita ilman henkilökorttia'
   });
   expect(selection).toBeInTheDocument();
   await fireEvent.click(selection);

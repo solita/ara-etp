@@ -1217,9 +1217,10 @@
     "signing": {
       "header": "Undertecknande",
       "options": {
-        "card": "Käytä henkilökorttia (sv)",
-        "system": "Älä käytä henkilökorttia (sv)"
+        "card": "Använd identitetskort",
+        "system": "Underteckna utan identitetskort"
       },
+      "instructions": "Du kan underteckna energicertifikat med ditt identitetskort och kortläsarprogram. Alternativt kan du underteckna certifikatet med hjälp av stark autentisering och energicertifikattjänstens signaturcertifikat, vilket innebär att du inte behöver identitetskort.",
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia (sv)",
       "system-signing-info-text-relogin": "Uudelleenkirjautuminen vaaditaan allekirjoittamiseen (sv)",
       "system-signing-status-text": "Allekirjoitetaan energiatodistusta (sv)",
@@ -1236,7 +1237,7 @@
       "messages": {
         "connection-check": "Kontakten till mPollux kontrolleras.",
         "already-started": "Undertecknandet har avbrutits av okänd orsak.",
-        "connection-success": "Energicertifikatets uppgifter och koppling till mPollux har kontrollerats.",
+        "connection-success": "Uppgifterna i energicertifikatet och uppkopplingen till kortläserprogrammet har kontrollerats. ",
         "connection-failed": "Anslutning till mPollux misslyckades. Undertecknandet förutsätter att signaturprogrammet mPollux är installerat och att webbläsaren är ansluten till signaturprogrammet."
       },
       "error": {
@@ -1249,7 +1250,7 @@
         "expired-signing-certificate": "Ingen underteckningsprocess är möjlig eftersom identitetskortet har föråldrats."
       },
       "status": {
-        "not-started": "Du kan nu underteckna energicertifikatet {language-genitive}.",
+        "not-started": "Du kan nu underteckna det {language-genitive} energicertifikatet.",
         "already-started": "Du kan börja underteckna energicertifikatet på nytt eller avbryta det och återgå till skissläget.",
         "start": "Underteckningsprocessen {language} startas.",
         "digest": "Energicertifikatet {language} skapas.",
