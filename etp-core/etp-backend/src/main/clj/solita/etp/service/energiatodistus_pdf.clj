@@ -905,6 +905,10 @@
                 content (file-service/find-file aws-s3-client key)
                 content-bytes (.readAllBytes content)
                 pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
+                ;; TODO: Do something more robust here or remove this.
+                ;; Decode the pkcs7 to get more confidence in that
+                ;; puumerkki works.
+                _ (puumerkki.codec/asn1-decode pkcs7)
                 filename (str key ".pdf")]
             (->> (write-signature! id language content-bytes pkcs7)
                  (file-service/upsert-file-from-bytes aws-s3-client
