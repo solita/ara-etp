@@ -84,6 +84,7 @@
       <ul>
         <li>namn</li>
         <li>personbeteckning</li>
+        <li>telefonnummer</li>
         <li>e-postadress</li>
         <li>adress</li>
         <li>land</li>
@@ -104,9 +105,18 @@
       </ul>
 
       <p>
-        Registret innehåller också uppgifter om upprättade energicertifikaten.
-        Upprättarnas personuppgifter fås från behörighetsverifierare (FISE Oy
-        och Kiinteistöalan koulutuskeskus Kiinko).
+        Registret innehåller också uppgifter om de energicertifikaten som
+        upprättaren upprättat.
+      </p>
+
+      <p>
+        Utgångspunkten är att personuppgifter om upprättare av energicertifikat
+        fås från behörighetsverifierare (FISE Oy och Kiinteistöalan
+        koulutuskeskus Kiinko). Om upprättaren av energicertifikat använder
+        elektronisk signatur, fås hens logguppgifterna (personbeteckning och
+        klockslag för signaturfunktionerna) via Suomi.fi-autentisering.
+        Företagsuppgifter och uppgifter om upprättade energicertifikaten fås av
+        upprättare av energicertifikat.
       </p>
 
       <H3>Behandling, överföring och utlämnande av personuppgifter</H3>
