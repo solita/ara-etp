@@ -1223,7 +1223,7 @@
       "instructions": "Du kan underteckna energicertifikat med ditt identitetskort och kortläsarprogram. Alternativt kan du underteckna certifikatet med hjälp av stark autentisering och energicertifikattjänstens signaturcertifikat, vilket innebär att du inte behöver identitetskort.",
       "system-signing-info-text": "Underteckna utan identitetskort ",
       "system-signing-info-text-relogin": "Logga in på nytt för att underteckna",
-      "system-signing-status-text": "Undertecknandet pågår",
+      "system-signing-status-text": "Undertecknande av energicertifikat pågår",
       "language-adjective": {
         "fi": "på finska",
         "sv": "på svenska",
