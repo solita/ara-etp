@@ -13,7 +13,6 @@
 
   export let energiatodistus;
   export let reload;
-  export let whoami;
 
   export let selection = 'card';
 
@@ -33,9 +32,7 @@
         allowSelection = false;
       },
       config => {
-        // Allow signing temporarily for laatija id 79 to check that the signing
-        // works as intended.
-        allowSelection = !isProduction(config.environment) || whoami.id === 79;
+        allowSelection = !isProduction(config.environment);
       },
       versionApi.getConfig
     );
