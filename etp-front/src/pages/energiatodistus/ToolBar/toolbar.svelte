@@ -211,7 +211,11 @@
 </style>
 
 {#if signingActive}
-  <Signing {energiatodistus} reload={cancel} checkIfSelectionIsAllowed={true} />
+  <Signing
+    {energiatodistus}
+    reload={cancel}
+    allowSelection={true}
+    checkIfSelectionIsAllowed={false} />
 {/if}
 
 <div
