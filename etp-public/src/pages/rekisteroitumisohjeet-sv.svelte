@@ -1,22 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
   import Container, { styles as containerStyles } from '@Component/container';
-  import { _, locale } from '@Localization/localization';
-  import Seo from '@Component/seo';
-  import { announceAssertively } from '@/utilities/announce';
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
   import H2 from '@Component/H2';
-
-  onMount(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
-  });
-
-  announceAssertively($_('REKISTEROITYMISOHJEET'));
 </script>
 
 <style>
@@ -38,29 +24,42 @@
   }
 </style>
 
-<Seo
-  title="{$_('ENERGIATODISTUSREKISTERI')} - {$_('REKISTEROITYMISOHJEET')}"
-  descriptionFi={$locale == 'fi' ? $_('REOHJ_INFO_TITLE') : undefined}
-  descriptionSv={$locale == 'sv' ? $_('REOHJ_INFO_TITLE') : undefined} />
-
 <Container {...containerStyles.beige}>
-  <InfoBlock title={$_('REOHJ_INFO_TITLE')}>{$_('REOHJ_INFO_TEXT')}</InfoBlock>
+  <InfoBlock
+    title="Anvisningar för användningen av tjänsten för dem som upprättar energicertifikat">
+    Endast användare som registrerats i registret över upprättare kan logga in i
+    tjänsten och upprätta energicertifikat.
+  </InfoBlock>
 </Container>
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
     <div class="border-b border-grey pb-8 mb-8">
-      <H2>{$_('REOHJ_KUINKA_LISATAAN')}</H2>
-      <p>{$_('REOHJ_PATEVYYSKOKEEN_SUORITTANEET')}</p>
+      <H2>Hur införs jag i registret över upprättare?</H2>
+      <p>
+        Personer som har avlagt behörighetsprovet med godkänt resultat läggs
+        till i registret efter att proven har bedömts. Registreringen i
+        registret görs av dem som konstaterar behörigheten (FISE eller Kinko).
+      </p>
     </div>
     <div class="border-b border-grey pb-8 mb-8">
-      <H2>{$_('REOHJ_KUINKA_KAYTTAMAAN')}</H2>
+      <H2>Hur får jag tillgång till tjänsten?</H2>
       <ol class="numbered-list">
-        <li>{$_('REOHJ_JALKEEN_1')}</li>
-        <li>{$_('REOHJ_JALKEEN_2')}</li>
+        <li>
+          <p>Logga in med Suomi.fi-koder.</p>
+        </li>
+        <li>
+          <p>Kontrollera att dina uppgifter är korrekta i tjänsten.</p>
+        </li>
       </ol>
 
-      <p class="my-4">{$_('REOHJ_KIRJAUTUMINEN_EI_ONNISTU')}</p>
+      <p class="my-4">
+        Om inloggningen inte lyckas är det möjligt att den som konstaterar
+        behörigheten ännu inte har registrerat dig i registret över upprättare.
+        Vänta tills du får en faktura från den som konstaterar behörigheten.
+        Efter fakturans förfallodatum lägger den som konstaterar behörigheten
+        till dig i registret över upprättare, om du har erlagt betalningen.
+      </p>
     </div>
     <div class="mb-8">
       <H2>UNDERTECKNING AV ENERGICERTIFIKAT</H2>
@@ -112,7 +111,8 @@
         Mer information om elektronisk underteckning och certifikatkort finns på
         Myndigheten för digitalisering och befolkningsdatas webbplats:
         <Link href="https://dvv.fi/varmenteet"
-          >certifikat och kort (dvv.fi)</Link>
+          >certifikat och kort (dvv.fi)
+        </Link>
       </p>
     </div>
   </div>

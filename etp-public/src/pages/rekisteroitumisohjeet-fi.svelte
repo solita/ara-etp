@@ -1,22 +1,8 @@
 <script>
-  import { onMount } from 'svelte';
   import Container, { styles as containerStyles } from '@Component/container';
-  import { _, locale } from '@Localization/localization';
-  import Seo from '@Component/seo';
-  import { announceAssertively } from '@/utilities/announce';
   import InfoBlock from '@Component/info-block';
   import Link from '@Component/link';
   import H2 from '@Component/H2';
-
-  onMount(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
-  });
-
-  announceAssertively($_('REKISTEROITYMISOHJEET'));
 </script>
 
 <style>
@@ -38,29 +24,40 @@
   }
 </style>
 
-<Seo
-  title="{$_('ENERGIATODISTUSREKISTERI')} - {$_('REKISTEROITYMISOHJEET')}"
-  descriptionFi={$locale == 'fi' ? $_('REOHJ_INFO_TITLE') : undefined}
-  descriptionSv={$locale == 'sv' ? $_('REOHJ_INFO_TITLE') : undefined} />
-
 <Container {...containerStyles.beige}>
-  <InfoBlock title={$_('REOHJ_INFO_TITLE')}>{$_('REOHJ_INFO_TEXT')}</InfoBlock>
+  <InfoBlock title="Ohjeet energiatodistusten laatijoiden palvelun käyttöön">
+    Vain laatijarekisteriin rekisteröity käyttäjä voi kirjautua palveluun ja
+    laatia energiatodistuksia.
+  </InfoBlock>
 </Container>
 
 <Container {...containerStyles.white}>
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
     <div class="border-b border-grey pb-8 mb-8">
-      <H2>{$_('REOHJ_KUINKA_LISATAAN')}</H2>
-      <p>{$_('REOHJ_PATEVYYSKOKEEN_SUORITTANEET')}</p>
+      <H2>Kuinka minut lisätään laatijarekisteriin?</H2>
+      <p>
+        Pätevyyskokeen hyväksytysti suorittaneet laatijat lisätään
+        laatijarekisteriin kokeiden arvioinnin jälkeen. Rekisteriin lisäyksen
+        tekevät pätevyyden toteajat (FISE tai Kiinko).
+      </p>
     </div>
     <div class="border-b border-grey pb-8 mb-8">
-      <H2>{$_('REOHJ_KUINKA_KAYTTAMAAN')}</H2>
+      <H2>Kuinka pääsen käyttämään palvelua?</H2>
       <ol class="numbered-list">
-        <li>{$_('REOHJ_JALKEEN_1')}</li>
-        <li>{$_('REOHJ_JALKEEN_2')}</li>
+        <li>
+          <p>Kirjaudu Suomi.fi-tunnuksilla sisään.</p>
+        </li>
+        <li>
+          <p>Tarkasta, että omat tietosi ovat palvelussa oikein.</p>
+        </li>
       </ol>
 
-      <p class="my-4">{$_('REOHJ_KIRJAUTUMINEN_EI_ONNISTU')}</p>
+      <p class="my-4">
+        Jos kirjautuminen ei onnistu, on mahdollista, että pätevyyden toteaja ei
+        ole vielä rekisteröinyt sinua laatijarekisteriin. Odota, että saat
+        pätevyyden toteajalta laskun. Laskun eräpäivän jälkeen pätevyyden
+        toteaja lisää sinut laatijarekisteriin, jos olet suorittanut maksun.
+      </p>
     </div>
     <div class="mb-8">
       <H2>ENERGIATODISTUKSEN ALLEKIRJOITUS</H2>
