@@ -1505,6 +1505,7 @@
         "include-closed": "Näytä myös päättyneet",
         "ei-valvojaa": "Ei valvojaa",
         "download-all": "Lataa kaikki valvonnat",
+        "download-error-stats": "Lataa oikeellisuuden valvonnan virhetilastot",
         "last-toimenpide": "Edellinen tapahtuma",
         "keyword-search": "Tekstihaku",
         "kayttotarkoitusluokka": "Käyttötarkoitusluokka",

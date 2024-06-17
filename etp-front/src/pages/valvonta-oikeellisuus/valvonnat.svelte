@@ -445,10 +445,21 @@
       {/if}
 
       {#if Kayttajat.isPaakayttaja(whoami)}
-        <Link
-          icon={Maybe.Some('download_for_offline')}
-          href="api/private/valvonta/oikeellisuus/csv/valvonta.csv"
-          text={i18n(i18nRoot + '.download-all')} />
+        <ul>
+          <li>
+            <Link
+              icon={Maybe.Some('download_for_offline')}
+              href="api/private/valvonta/oikeellisuus/csv/valvonta.csv"
+              text={i18n(i18nRoot + '.download-all')} />
+          </li>
+
+          <li>
+            <Link
+              icon={Maybe.Some('download_for_offline')}
+              href="api/private/valvonta/oikeellisuus/virhetypes/statistics/virhetilastot.csv"
+              text={i18n(i18nRoot + '.download-error-stats')} />
+          </li>
+        </ul>
       {/if}
     {/each}
   </div>

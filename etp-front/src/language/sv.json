@@ -1585,7 +1585,8 @@
         "screen-reader": {
           "search-results": "{count} sökresultat."
         },
-        "download-all": "Ladda alla kontroller"
+        "download-all": "Ladda alla kontroller",
+        "download-error-stats": "Ladda felstatistik för kontroll av riktigheten"
       },
       "valvonta": {
         "title": "Kontroll av riktigheten",
