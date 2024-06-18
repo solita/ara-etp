@@ -153,7 +153,7 @@
                                                     (test-data.laatija/with-virtu-laatija)
                                                     (mock/header "Accept" "application/json")))))
                 ;; Wait naively so that the signing process starts in the other thread.
-                _ (Thread/sleep 100)
+                _ (Thread/sleep 70)
                 ;; Cancel the signing
                 response-cancel (ts/handler (-> (mock/request :post cancel-url)
                                                 (test-data.laatija/with-virtu-laatija)
