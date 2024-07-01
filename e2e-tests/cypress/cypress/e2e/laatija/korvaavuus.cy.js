@@ -8,6 +8,7 @@ describe('Handling of korvaavuusehdotus', () => {
     cy.resetDb();
   });
 
+  // A quick check for the regression reported as AE-2257
   it ('Check that selecting an ET to be replaced causes the replacement checkbox to be checked',
     () => {
     cy.visit('/#/energiatodistus/2018/5');
