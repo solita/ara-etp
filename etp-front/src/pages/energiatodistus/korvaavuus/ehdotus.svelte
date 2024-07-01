@@ -146,6 +146,7 @@
                       energiatodistus
                     );
                     dirty = true;
+                    checked = true;
                   }}>
                   <td class="etp-table--td" data-cy={`energiatodistus-${korvattava.id}-id-cell`}>
                     {korvattava.id}
