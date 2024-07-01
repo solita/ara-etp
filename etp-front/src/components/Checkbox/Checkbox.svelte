@@ -9,6 +9,7 @@
 
   export let format = R.identity;
   export let parse = R.identity;
+  export let dataCy = undefined;
 
   let focused = false;
 
@@ -55,6 +56,7 @@
     <input
       {disabled}
       type="checkbox"
+      data-cy={dataCy}
       {checked}
       on:change={() =>
         !disabled && (model = R.set(lens, parse(!checked), model))} />

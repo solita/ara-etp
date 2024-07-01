@@ -147,7 +147,7 @@
                     );
                     dirty = true;
                   }}>
-                  <td class="etp-table--td">
+                  <td class="etp-table--td" data-cy={`energiatodistus-${korvattava.id}-id-cell`}>
                     {korvattava.id}
                   </td>
                   <td class="etp-table--td">

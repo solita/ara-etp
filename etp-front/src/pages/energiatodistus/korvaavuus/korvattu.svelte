@@ -150,6 +150,7 @@
   {#if enabled}
     <Checkbox
       label={i18n('energiatodistus.korvaavuus.checkbox')}
+      dataCy="korvaavuus-checkbox"
       bind:model={checked}
       disabled={!enabled} />
   {/if}
