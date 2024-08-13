@@ -1,9 +1,11 @@
 name: nvd-clojure
 
 on:
-  schedule:
-    - cron: '0 2 * * 1'
-
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
 jobs:
   nvd:
     runs-on: ubuntu-latest
