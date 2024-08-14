@@ -38,7 +38,7 @@
     "@storybook/test-runner": "^0.18.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/svelte": "^5.0.0",
-    "autoprefixer": "10.4.19",
+    "autoprefixer": "10.4.20",
     "babel-loader": "^9.0.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "clean-webpack-plugin": "^4.0.0",
