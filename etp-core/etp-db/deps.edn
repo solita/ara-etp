@@ -1,6 +1,6 @@
 {:paths   ["src/main/clj" "src/main/sql" "src/main/resources"]
  :deps
- {org.clojure/clojure                     {:mvn/version "1.11.3"}
+ {org.clojure/clojure                     {:mvn/version "1.11.4"}
   org.flywaydb/flyway-core                {:mvn/version "10.13.0"}
   org.flywaydb/flyway-database-postgresql {:mvn/version "10.13.0"}
   org.postgresql/postgresql               {:mvn/version "42.7.3"}
