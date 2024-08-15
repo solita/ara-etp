@@ -35,7 +35,7 @@
              buddy/buddy-core                          {:mvn/version "1.11.423"
                                                         :exclusions  [org.bouncycastle/bcprov-jdk18on
                                                                       org.bouncycastle/bcpkix-jdk18on]}
-             buddy/buddy-sign                          {:mvn/version "3.5.351"}
+             buddy/buddy-sign                          {:mvn/version "3.6.1-359"}
              buddy/buddy-hashers                       {:mvn/version "2.0.167"}
 
              ;; Remove direct dependency to these once buddy is updated to use nonvulnerable versions
