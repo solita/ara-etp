@@ -35,7 +35,7 @@
     "@storybook/preview-api": "^8.0.5",
     "@storybook/svelte": "^8.0.5",
     "@storybook/svelte-webpack5": "^8.0.5",
-    "@storybook/test-runner": "^0.18.0",
+    "@storybook/test-runner": "^0.19.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/svelte": "^5.0.0",
     "autoprefixer": "10.4.20",
