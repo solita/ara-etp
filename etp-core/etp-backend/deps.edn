@@ -32,7 +32,7 @@
              metosin/spec-tools                        {:mvn/version "0.10.7"}
              webjure/jeesql                            {:mvn/version "0.4.7"}
              clj-http/clj-http                         {:mvn/version "3.13.0"}
-             buddy/buddy-core                          {:mvn/version "1.11.423"
+             buddy/buddy-core                          {:mvn/version "1.12.0-430"
                                                         :exclusions  [org.bouncycastle/bcprov-jdk18on
                                                                       org.bouncycastle/bcpkix-jdk18on]}
              buddy/buddy-sign                          {:mvn/version "3.6.1-359"}
