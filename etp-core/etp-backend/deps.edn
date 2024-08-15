@@ -49,7 +49,7 @@
              ;; Remove direct dependency to this once poi-ooxml is updated to use nonvulnerable version
              org.apache.commons/commons-compress       {:mvn/version "1.26.2"}
 
-             org.apache.pdfbox/pdfbox                  {:mvn/version "2.0.31"}
+             org.apache.pdfbox/pdfbox                  {:mvn/version "2.0.32"}
              puumerkki/puumerkki                       {:local/root "lib/puumerkki-0.9.3-SNAPSHOT.jar"}
              org.clojure/core.match                    {:mvn/version "1.1.0"}
              com.cognitect.aws/api                     {:mvn/version "0.8.692"}
