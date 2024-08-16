@@ -116,7 +116,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.3.0
       - name: Build storybook-test-image
-        uses: docker/build-push-action@v5.3.0
+        uses: docker/build-push-action@v5.4.0
         with:
           context: etp-front
           file: etp-front/visual-tests.Dockerfile
