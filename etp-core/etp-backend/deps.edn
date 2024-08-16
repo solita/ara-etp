@@ -47,7 +47,7 @@
                                                         :exclusions  [org.apache.commons/commons-compress]}
 
              ;; Remove direct dependency to this once poi-ooxml is updated to use nonvulnerable version
-             org.apache.commons/commons-compress       {:mvn/version "1.26.2"}
+             org.apache.commons/commons-compress       {:mvn/version "1.27.0"}
 
              org.apache.pdfbox/pdfbox                  {:mvn/version "2.0.32"}
              puumerkki/puumerkki                       {:local/root "lib/puumerkki-0.9.3-SNAPSHOT.jar"}
