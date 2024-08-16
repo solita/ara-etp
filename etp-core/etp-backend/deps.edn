@@ -108,5 +108,5 @@
                         :main-opts  ["-m" "uberdeps.uberjar"]}
              :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.8.1206"}}
                         :main-opts  ["-m" "antq.core"]}
-             :lint     {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2024.05.24"}}
+             :lint     {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2024.08.01"}}
                         :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}}}
