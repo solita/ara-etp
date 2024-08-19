@@ -137,13 +137,14 @@
                 response (ts/handler (-> (mock/request :post url)
                                          (test-data.laatija/with-virtu-laatija)
                                          (mock/header "Accept" "application/json")))
-                ;; Wait for the signing process to finish. Otherwise the test-system fails.
+                ;; Wait for the signing process to finish. Otherwise, the test-system fails.
                 _ @signing-process]
             (t/is (= (:status response) 409))
             (t/is (= (:body response) (format "Energiatodistus %s is already in signing process" todistus-2018-future-id)))))
         (t/testing "Trying to cancel the signing and then sign again should work"
           (let [url (energiatodistus-sign-url todistus-2018-future-2-id 2018)
                 cancel-url (str "/api/private/energiatodistukset/" 2018 "/" todistus-2018-future-2-id "/signature/cancel")
+                response-cancel (atom nil)
                 ;; Start a signing process in another thread.
                 signing-process (future
                                   (with-bindings
@@ -152,19 +153,24 @@
                                     (ts/handler (-> (mock/request :post url)
                                                     (test-data.laatija/with-virtu-laatija)
                                                     (mock/header "Accept" "application/json")))))
-                ;; Wait naively so that the signing process starts in the other thread.
-                _ (Thread/sleep 100)
-                ;; Cancel the signing
-                response-cancel (ts/handler (-> (mock/request :post cancel-url)
-                                                (test-data.laatija/with-virtu-laatija)
-                                                (mock/header "Accept" "application/json")))
-                ;; Wait for the signing process to finish. Otherwise the test-system fails.
+                ;; Try to cancel in a loop for two seconds
+                _ (let [time-before (time/now)
+                        timeout-seconds (Duration/ofSeconds 2)]
+                    (loop [elapsed-time-seconds (Duration/ofSeconds 0)]
+                        (when (every? true? [(not= (:body @response-cancel) "Ok")
+                                             (> 0 (.compareTo elapsed-time-seconds timeout-seconds))])
+                          (do
+                            (reset! response-cancel (ts/handler (-> (mock/request :post cancel-url)
+                                                                    (test-data.laatija/with-virtu-laatija)
+                                                                    (mock/header "Accept" "application/json"))))
+                            (recur (Duration/between (time/now) time-before))))))
+                ;; Wait for the signing process to finish. Otherwise, the test-system fails.
                 _ @signing-process
                 response-sign (ts/handler (-> (mock/request :post url)
                                               (test-data.laatija/with-virtu-laatija)
                                               (mock/header "Accept" "application/json")))]
-            (t/is (= (:status response-cancel) 200))
-            (t/is (= (:body response-cancel) "Ok"))
+            (t/is (= (:status @response-cancel) 200))
+            (t/is (= (:body @response-cancel) "Ok"))
             (t/is (= (:status response-sign) 200))
             (t/is (= (:body response-sign) "Ok"))))))))
 
@@ -189,8 +195,8 @@
           (t/is (= response-body {:signing-allowed true})))))
     (t/testing "Signing is allowed 89 minutes after auth_time"
       (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
-                      #'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 89))
-                                                (ZoneId/systemDefault))}
+                      #'time/clock                                      (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 89))
+                                                                                     (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
                                        (mock/header "Accept" "application/json")))
@@ -199,8 +205,8 @@
           (t/is (= response-body {:signing-allowed true})))))
     (t/testing "Signing is not allowed 1 min before auth_time"
       (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
-                      #'time/clock (Clock/fixed (.minus laatija-auth-time (Duration/ofMinutes 1))
-                                                (ZoneId/systemDefault))}
+                      #'time/clock                                      (Clock/fixed (.minus laatija-auth-time (Duration/ofMinutes 1))
+                                                                                     (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
                                        (mock/header "Accept" "application/json")))
@@ -209,8 +215,8 @@
           (t/is (= response-body {:signing-allowed false})))))
     (t/testing "Signing is not allowed 91 min after auth_time"
       (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
-                      #'time/clock (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 91))
-                                                (ZoneId/systemDefault))}
+                      #'time/clock                                      (Clock/fixed (.plus laatija-auth-time (Duration/ofMinutes 91))
+                                                                                     (ZoneId/systemDefault))}
         (let [response (ts/handler (-> (mock/request :get check-session-url)
                                        (test-data.laatija/with-virtu-laatija)
                                        (mock/header "Accept" "application/json")))
