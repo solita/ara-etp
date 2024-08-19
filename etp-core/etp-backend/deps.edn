@@ -37,11 +37,7 @@
              buddy/buddy-hashers                       {:mvn/version "2.0.167"}
 
              org.apache.poi/poi                        {:mvn/version "5.3.0"}
-             org.apache.poi/poi-ooxml                  {:mvn/version "5.3.0"
-                                                        :exclusions  [org.apache.commons/commons-compress]}
-
-             ;; Remove direct dependency to this once poi-ooxml is updated to use nonvulnerable version
-             org.apache.commons/commons-compress       {:mvn/version "1.27.0"}
+             org.apache.poi/poi-ooxml                  {:mvn/version "5.3.0"}
 
              org.apache.pdfbox/pdfbox                  {:mvn/version "2.0.32"}
              io.github.solita/puumerkki                {:mvn/version "0.12.0"}
