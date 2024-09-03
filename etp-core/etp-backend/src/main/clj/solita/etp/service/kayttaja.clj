@@ -95,4 +95,5 @@
   {:communication -3
    :laskutus -2
    :presigned -4
-   :aineisto -5})
+   :aineisto -5
+   :expiration -6})
