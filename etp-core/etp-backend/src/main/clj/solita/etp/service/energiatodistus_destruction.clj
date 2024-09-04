@@ -9,6 +9,16 @@
 
 (db/require-queries 'energiatodistus-destruction)
 
+(defn- get-currently-expired-todistus-ids [db]
+  (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
+       (map :id)))
+
+
+(defn- hard-delete-energiatodistus!
+  "Hard deletes energiatodistus."
+  [db id]
+  (energiatodistus-destruction-db/hard-delete-energiatodistus! db {:id id}))
+
 (defn- linked-data-exist?
   "Returns whether there are linked resources left."
   [db id]

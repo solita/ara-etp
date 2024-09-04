@@ -4,7 +4,8 @@
             [solita.etp.service.energiatodistus-destruction :as service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
-            [solita.etp.test-system :as ts]))
+            [solita.etp.test-system :as ts])
+  (:import (java.time Instant LocalDate ZoneId)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -27,16 +28,19 @@
                                     energiatodistus-adds
                                     laatija-ids)
         [energiatodistus-id-1 energiatodistus-id-2] energiatodistus-ids
-        [_ energiatodistus-add-2] energiatodistus-adds]
+        [energiatodistus-add-1 energiatodistus-add-2] energiatodistus-adds]
 
     ;; Sign energiatodistus 1
     (energiatodistus-test-data/sign! energiatodistus-id-1 laatija-id-1 true)
 
-    ;; Korvaa energiatodistus 1 with energiatodistus 2
     (update-energiatodistus! energiatodistus-id-2
                              (assoc energiatodistus-add-2
+                               ;; Korvaa energiatodistus 1 with energiatodistus 2
                                :korvattu-energiatodistus-id
-                               energiatodistus-id-1)
+                               energiatodistus-id-1
+                               ;; Expire energiatodistus 2
+                               :voimassaolo-paattymisaika
+                               (LocalDate/ofInstant (Instant/ofEpochSecond 0) (ZoneId/of "Europe/Helsinki")))
                              laatija-id-2)
 
     {:laatijat           laatijat
@@ -46,6 +50,14 @@
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
         [id-1 id-2] ids]
-    (t/is (false? (service/linked-data-exist? ts/*db* id-1)))
-    (t/is (true? (service/linked-data-exist? ts/*db* id-2)))
-    (t/is (true? (service/linked-data-exist? ts/*db* id-2)))))
+    (t/is (false? (#'service/linked-data-exist? ts/*db* id-1)))
+    (t/is (true? (#'service/linked-data-exist? ts/*db* id-2)))
+    (t/is (true? (#'service/linked-data-exist? ts/*db* id-2)))))
+
+(t/deftest get-currently-expired-todistus-ids-test
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        ids (-> energiatodistukset keys sort)
+        [id-1 id-2] ids
+        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+    (t/is (some #{id-2} expired-ids))
+    (t/is (nil? (some #{id-1} expired-ids)))))
