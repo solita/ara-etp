@@ -19,10 +19,12 @@
             [solita.etp.schema.viesti :as viesti-schema]
             [solita.etp.security :as security]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-destruction :as energiatodistus-destruction-service]
             [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
             [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
             [solita.etp.service.energiatodistus-search :as energiatodistus-search-service]
             [solita.etp.service.energiatodistus-xlsx :as energiatodistus-xlsx-service]
+            [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.json :as json]
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.viesti :as viesti-service])
@@ -257,3 +259,15 @@
     ["/legacy"
      ["/2013" (xml-api/post 2013)]
      ["/2018" (xml-api/post 2018)]]]])
+
+(def internal-routes
+  [["/energiatodistukset"
+    ["/anonymize-and-delete-expired"
+     {:post {:summary    "Anonymisoi vanhentuneet energiatodistukset ja poistaa niihin linkittyvät dokumentit."
+             :middleware [[security/wrap-db-application-name
+                           (kayttaja-service/system-kayttaja :expiration)]
+                          [security/wrap-whoami-for-internal-expiration-api]]
+             :responses  {200 {:body nil}}
+             :handler    (fn [{:keys [db aws-s3-client]}]
+                           (r/response (energiatodistus-destruction-service/destroy-expired-energiatodistukset!
+                                         db aws-s3-client)))}}]]])

@@ -13,6 +13,11 @@
   (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
        (map :id)))
 
+(defn destroy-expired-energiatodistukset! [db aws-s3-client]
+  (log/info (str "Destruction of expired energiatodistukset initiated."))
+  (let [expired-todistukset (get-currently-expired-todistus-ids db)]
+    ;; TODO:
+    nil))
 
 (defn- hard-delete-energiatodistus!
   "Hard deletes energiatodistus."
