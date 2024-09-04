@@ -25,7 +25,7 @@
   (energiatodistus-destruction-db/hard-delete-energiatodistus! db {:id id}))
 
 (defn- linked-data-exist?
-  "Returns whether there are linked resources left."
+  "Returns whether there are linked database resources left to an energiatodistus or not."
   [db id]
   (try
     (jdbc/with-db-transaction [db db]

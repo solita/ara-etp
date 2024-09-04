@@ -46,7 +46,7 @@
 
     (update-energiatodistus! energiatodistus-id-3
                              (assoc energiatodistus-add-3
-                               ;; Set expiration energiatodistus 3 to today
+                               ;; Set expiration of energiatodistus 3 to today
                                :voimassaolo-paattymisaika
                                (time/now))
                              laatija-id-3)
@@ -57,10 +57,13 @@
 (t/deftest linked-data-exist?-test
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
-        [id-1 id-2] ids]
-    (t/is (false? (#'service/linked-data-exist? ts/*db* id-1)))
-    (t/is (true? (#'service/linked-data-exist? ts/*db* id-2)))
-    (t/is (true? (#'service/linked-data-exist? ts/*db* id-2)))))
+        [id-1 id-2 id-3] ids]
+    (t/testing "Todistus that is korvattu, but does not korvaa any other todistus, should not have linked data."
+      (t/is (false? (#'service/linked-data-exist? ts/*db* id-1))))
+    (t/testing "Todistus that korvaa other todistus, should have linked data."
+      (t/is (true? (#'service/linked-data-exist? ts/*db* id-2))))
+    (t/testing "Todistus that does not korvaa or be korvattu should not have linked data."
+      (t/is (true? (#'service/linked-data-exist? ts/*db* id-3))))))
 
 (t/deftest get-currently-expired-todistus-ids-test
   (let [{:keys [energiatodistukset]} (test-data-set)
@@ -69,7 +72,7 @@
         expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
     (t/testing "Todistus with expiration time at year 1970 should be expired."
       (t/is (some #{id-2} expired-ids)))
-    (t/testing "Todistus without expiration date set by signing it today should not be expired."
+    (t/testing "Todistus with expiration date set by signing it today should not be expired."
       (t/is (nil? (some #{id-1} expired-ids))))
     (t/testing "Todistus whose expiration is today should not be expired yet."
       (t/is (nil? (some #{id-3} expired-ids))))))
