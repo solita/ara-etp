@@ -21,6 +21,12 @@
                     {:Bucket bucket
                      :Key    key}))
 
+(defn delete-object [{:keys [client bucket]} key]
+  (aws.utils/invoke client
+                    :DeleteObject
+                    {:Bucket          bucket
+                     :Key             key}))
+
 (defn create-multipart-upload [{:keys [client bucket]} key]
   (aws.utils/invoke client
                     :CreateMultipartUpload
