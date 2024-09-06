@@ -2,7 +2,9 @@
   (:require [clojure.test :as t]
             [solita.common.time :as time]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-pdf :as pdf-service]
             [solita.etp.service.energiatodistus-destruction :as service]
+            [solita.etp.service.file :as file-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
@@ -76,3 +78,113 @@
       (t/is (nil? (some #{id-1} expired-ids))))
     (t/testing "Todistus whose expiration is today should not be expired yet."
       (t/is (nil? (some #{id-3} expired-ids))))))
+
+(t/deftest destroy-energiatodistus-pdf
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-ids (-> laatijat keys sort)
+        [laatija-id] laatija-ids
+        energiatodistus-add-fi (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))
+        energiatodistus-add-sv (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 1))
+        energiatodistus-add-multilingual (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
+        energiatodistus-add-control (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
+        energiatodistus-ids (energiatodistus-test-data/insert!
+                              [energiatodistus-add-fi energiatodistus-add-sv energiatodistus-add-multilingual energiatodistus-add-control]
+                              laatija-id)
+        [energiatodistus-id-fi energiatodistus-id-sv energiatodistus-id-mu energiatodistus-id-control] energiatodistus-ids
+        lang-fi-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-fi "fi")
+        lang-fi-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-fi "sv")
+        lang-sv-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-sv "fi")
+        lang-sv-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-sv "sv")
+        lang-mu-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-mu "fi")
+        lang-mu-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-mu "sv")
+        control-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-control "fi")
+        control-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-control "sv")]
+
+    ;; Sign the control pdf (it should then always exist)
+    (energiatodistus-test-data/sign! energiatodistus-id-control laatija-id false)
+
+    (t/testing "PDFs should not exist in the bucket before signing."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+
+    ;; Sign Finnish
+    (energiatodistus-test-data/sign! energiatodistus-id-fi laatija-id false)
+
+    (t/testing "Finnish version PDF should exist after signing it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+
+    (#'service/delete-energiatodistus-pdfs! ts/*db* ts/*aws-s3-client* energiatodistus-id-fi)
+
+    (t/testing "Finnish version PDF should not exist after deleting it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+
+    ;; Sign Swedish
+    (energiatodistus-test-data/sign! energiatodistus-id-sv laatija-id false)
+
+    (t/testing "Swedish version PDF should exist after signing it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+
+    (#'service/delete-energiatodistus-pdfs! ts/*db* ts/*aws-s3-client* energiatodistus-id-sv)
+
+    (t/testing "Swedish version PDF should not exist after deleting it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+
+    ;; Sign Multilingual
+    (energiatodistus-test-data/sign! energiatodistus-id-mu laatija-id false)
+
+    (t/testing "Multilingual version PDFs should exist after signing it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+
+    (#'service/delete-energiatodistus-pdfs! ts/*db* ts/*aws-s3-client* energiatodistus-id-mu)
+
+    (t/testing "Multilingual version PDFs should not exist after deleting it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))))
+
