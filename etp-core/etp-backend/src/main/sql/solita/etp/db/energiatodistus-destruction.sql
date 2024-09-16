@@ -8,6 +8,11 @@ select id
 from energiatodistus
 where voimassaolo_paattymisaika < current_date;
 
+--name: destroy-energiatodistus-audit-information!
+delete
+from audit.energiatodistus
+where id = :id;
+
 -- name: anonymize-energiatodistus!
 update energiatodistus
 set

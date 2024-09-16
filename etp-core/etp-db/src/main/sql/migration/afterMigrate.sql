@@ -35,3 +35,4 @@ grant insert, update on table vk_note to etp_app;
 
 --TODO: Create a different db user for these grants?
 grant delete on table energiatodistus to etp_app;
+grant delete on table audit.energiatodistus to etp_app;
