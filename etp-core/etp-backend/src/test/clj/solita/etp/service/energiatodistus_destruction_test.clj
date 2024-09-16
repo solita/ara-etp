@@ -80,7 +80,7 @@
     (t/testing "Todistus whose expiration is today should not be expired yet."
       (t/is (nil? (some #{id-3} expired-ids))))))
 
-(t/deftest destroy-energiatodistus-pdf
+(t/deftest destroy-energiatodistus-pdf-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-ids (-> laatijat keys sort)
         [laatija-id] laatija-ids
@@ -212,9 +212,10 @@
                                          (nil? value))})
        energiatodistus-map))
 
-(t/deftest anonymize-energiatodistus
+(t/deftest anonymize-energiatodistus-test
   (let [{:keys [energiatodistukset]} (test-data-set)
-        select-energiatodistus #(jdbc/query ts/*db* ["select * from energiatodistus where id = ?" %])
+        select-energiatodistus #(jdbc/query ts/*db*
+                                            ["select * from energiatodistus where id = ?" %])
         ids (-> energiatodistukset keys sort)
         [id-1] ids
         get-et-1 #(first (select-energiatodistus id-1))]
