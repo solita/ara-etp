@@ -16,13 +16,14 @@
   (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
        (map :id)))
 
-(defn- hard-delete-energiatodistus!
-  "Hard deletes energiatodistus."
-  [db id]
+(defn- hard-delete-energiatodistus! [db id]
   (energiatodistus-destruction-db/hard-delete-energiatodistus! db {:id id}))
 
 (defn- anonymize-energiatodistus! [db id]
   (energiatodistus-destruction-db/anonymize-energiatodistus! db {:id id}))
+
+(defn- destroy-energiatodistus-audit-data! [db id]
+  (energiatodistus-destruction-db/destroy-energiatodistus-audit-information! db {:id id}))
 
 (defn- linked-data-exist?
   "Returns whether there are linked database resources left to an energiatodistus or not."
