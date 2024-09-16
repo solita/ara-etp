@@ -228,7 +228,7 @@
                                       (false?)))
                          (map #(select-keys % [:key :value]))))))))
 
-(t/deftest destoy-energiatodistus-audit-information-test
+(t/deftest destroy-energiatodistus-audit-information-test
   (let [{:keys [energiatodistukset]} (test-data-set)
         select-audit-information #(jdbc/query ts/*db*
                                             ["select * from audit.energiatodistus where id = ?" %])
@@ -243,3 +243,6 @@
       (t/is (empty? (get-et-1-audit-information))))
     (t/testing "The audit data for et-2 still exists."
       (t/is (not (empty? (get-et-2-audit-information)))))))
+
+;;TODO: How to test? It is now easy to forget to call a specific step.
+#_(t/deftest destroy-expired-energiatodistukset!-test)
