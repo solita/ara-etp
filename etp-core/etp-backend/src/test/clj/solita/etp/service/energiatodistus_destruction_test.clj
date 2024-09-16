@@ -220,10 +220,26 @@
         [id-1] ids
         get-et-1 #(first (select-energiatodistus id-1))]
     (#'service/anonymize-energiatodistus! ts/*db* id-1)
-    (t/testing "The values are anonymized"
+    (t/testing "The values are anonymized."
       (t/is (empty? (->> (get-et-1)
                          (collect-invalid-keys-for-destroyed-energiatodistus)
                          (filter #(-> %
                                       :valid
                                       (false?)))
                          (map #(select-keys % [:key :value]))))))))
+
+(t/deftest destoy-energiatodistus-audit-information-test
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        select-audit-information #(jdbc/query ts/*db*
+                                            ["select * from audit.energiatodistus where id = ?" %])
+        ids (-> energiatodistukset keys sort)
+        [id-1 id-2] ids
+        get-et-1-audit-information #(select-audit-information id-1)
+        get-et-2-audit-information #(select-audit-information id-2)]
+    (t/testing "There was some audit information before deletion."
+      (t/is (not (empty? (get-et-1-audit-information)))))
+    (#'service/destroy-energiatodistus-audit-data! ts/*db* id-1)
+    (t/testing "The audit data is destroyed."
+      (t/is (empty? (get-et-1-audit-information))))
+    (t/testing "The audit data for et-2 still exists."
+      (t/is (not (empty? (get-et-2-audit-information)))))))
