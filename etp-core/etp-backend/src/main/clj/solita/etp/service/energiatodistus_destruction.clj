@@ -57,9 +57,15 @@
     (doseq [language-code language-codes]
       (delete-energiatodistus-pdf! aws-s3-client id language-code))))
 
+(defn- destroy-expired-energiatodistus! [db aws-s3-client id]
+  (jdbc/with-db-transaction [db db]
+                            (anonymize-energiatodistus! db id)
+                            (destroy-energiatodistus-audit-data! db id))
+  (delete-energiatodistus-pdfs! db aws-s3-client id))
+
 (defn destroy-expired-energiatodistukset! [db aws-s3-client]
   (log/info (str "Destruction of expired energiatodistukset initiated."))
   (let [expired-todistukset (get-currently-expired-todistus-ids db)]
-    (map #(delete-energiatodistus-pdfs! db aws-s3-client %) expired-todistukset)
+    (map #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset)
     nil))
 
