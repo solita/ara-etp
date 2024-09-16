@@ -21,6 +21,9 @@
   [db id]
   (energiatodistus-destruction-db/hard-delete-energiatodistus! db {:id id}))
 
+(defn- anonymize-energiatodistus! [db id]
+  (energiatodistus-destruction-db/anonymize-energiatodistus! db {:id id}))
+
 (defn- linked-data-exist?
   "Returns whether there are linked database resources left to an energiatodistus or not."
   [db id]

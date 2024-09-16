@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-destruction-test
   (:require [clojure.test :as t]
             [solita.common.time :as time]
+            [clojure.java.jdbc :as jdbc]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as pdf-service]
             [solita.etp.service.energiatodistus-destruction :as service]
@@ -188,3 +189,40 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))))
 
+(defn- collect-invalid-keys-for-destroyed-energiatodistus
+  "Helper function for deducing which keys have an incorrect value. Also
+  contains the infromation on what the correct value should be."
+  [energiatodistus-map]
+  (map (fn [[key value]]
+         {:key key :value value :valid (case key
+                                         ;; Here are what anonymized values should be.
+                                         :id (number? value)
+                                         :versio (= 2013 value)
+                                         :tila_id (= 6 value)
+                                         :laatija_id (number? value)
+                                         :korvattu_energiatodistus_id (or (nil? value) (number? value))
+                                         :bypass_validation_limits (false? value)
+                                         :pt$julkinen_rakennus (false? value)
+                                         :pt$uudisrakennus (false? value)
+                                         :laskutettava_yritys_defined (false? value)
+                                         :valvonta$pending (false? value)
+                                         :valvonta (false? value)
+                                         :draft_visible_to_paakayttaja (false? value)
+                                         ;; Other values are null
+                                         (nil? value))})
+       energiatodistus-map))
+
+(t/deftest anonymize-energiatodistus
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        select-energiatodistus #(jdbc/query ts/*db* ["select * from energiatodistus where id = ?" %])
+        ids (-> energiatodistukset keys sort)
+        [id-1] ids
+        get-et-1 #(first (select-energiatodistus id-1))]
+    (#'service/anonymize-energiatodistus! ts/*db* id-1)
+    (t/testing "The values are anonymized"
+      (t/is (empty? (->> (get-et-1)
+                         (collect-invalid-keys-for-destroyed-energiatodistus)
+                         (filter #(-> %
+                                      :valid
+                                      (false?)))
+                         (map #(select-keys % [:key :value]))))))))
