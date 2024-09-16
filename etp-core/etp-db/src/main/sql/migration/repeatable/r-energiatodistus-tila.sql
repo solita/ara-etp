@@ -5,13 +5,14 @@ values
 (2, 'allekirjoitettu'),
 (3, 'hylatty'),
 (4, 'korvattu'),
-(5, 'poistettu')
+(5, 'poistettu'),
+(6, 'tuhottu')
 on conflict (id) do update
   set name = excluded.name;
 
 create or replace view et_tilat as
   select 0 luonnos, 1 allekirjoituksessa, 2 allekirjoitettu,
-         3 hylatty, 4 korvattu, 5 poistettu;
+         3 hylatty, 4 korvattu, 5 poistettu, 6 tuhottu;
 
 create or replace function energiatodistus_tila_audit() returns trigger as
 $$
