@@ -1047,7 +1047,7 @@
           </Button>
         </div>
       {:catch error}
-        <div class="px-3 pb-8 md:p-8 xl:p-16 w-full">{$_('SERVER_ERROR')}</div>
+        <div class="px-3 pb-8 md:p-8 xl:p-16 w-full">{$_('ET_NOT_FOUND')}</div>
       {/await}
     </div>
   </Container>

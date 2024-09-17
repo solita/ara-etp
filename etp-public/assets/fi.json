@@ -160,6 +160,7 @@
   "ET_RAJA_TOP": "Uudisrakennusten",
   "ET_RAJA_BOTTOM": "määräystaso 2012",
   "ET_EI_RAJA_ARVOA": "Ei raja-arvoa",
+  "ET_NOT_FOUND": "Energiatodistusta ei löytynyt. Se on voitu poistaa vanhentumisen vuoksi.",
   "INFO_ICON_ALT": "Info ikoni",
   "INFO_TITLE": "Käytä vain virallista energiatodistusta",
   "INFO_KUVAUS": "Mistä tunnistaa virallisen energiatodistuksen? Kaikista 1.5.2015 jälkeen laadituissa virallisissa energiatodistuksissa on todistustunnus, jolla löydät todistuksen tästä palvelusta. Sen lisäksi todistus on värisävyltään sininen, sähköisesti allekirjoitettu ja pituudeltaan 8 sivua sekä voimassa 10 vuotta. Myös aiempi ”vihreä energiatodistus” voi olla virallinen. Todistuksessa mainitaan aina sen viimeinen voimassaolopäivä.",
