@@ -39,7 +39,8 @@
   (jdbc/with-db-transaction [db db]
                             (anonymize-energiatodistus! db id)
                             (destroy-energiatodistus-audit-data! db id))
-  (delete-energiatodistus-pdfs! db aws-s3-client id))
+  (delete-energiatodistus-pdfs! db aws-s3-client id)
+  (log/info (str "Destroyed energiatodistus (id: " id ")")))
 
 (defn destroy-expired-energiatodistukset! [db aws-s3-client]
   (log/info (str "Destruction of expired energiatodistukset initiated."))
