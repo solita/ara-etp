@@ -3,7 +3,6 @@
             [solita.common.time :as time]
             [clojure.java.jdbc :as jdbc]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-pdf :as pdf-service]
             [solita.etp.service.energiatodistus-destruction :as service]
             [solita.etp.service.file :as file-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
@@ -244,5 +243,3 @@
     (t/testing "The audit data for et-2 still exists."
       (t/is (not (empty? (get-et-2-audit-information)))))))
 
-;;TODO: How to test? It is now easy to forget to call a specific step.
-#_(t/deftest destroy-expired-energiatodistukset!-test)
