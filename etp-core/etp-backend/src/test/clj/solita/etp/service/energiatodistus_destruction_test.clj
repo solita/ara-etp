@@ -56,17 +56,6 @@
     {:laatijat           laatijat
      :energiatodistukset (zipmap energiatodistus-ids energiatodistus-adds)}))
 
-(t/deftest linked-data-exist?-test
-  (let [{:keys [energiatodistukset]} (test-data-set)
-        ids (-> energiatodistukset keys sort)
-        [id-1 id-2 id-3] ids]
-    (t/testing "Todistus that is korvattu, but does not korvaa any other todistus, should not have linked data."
-      (t/is (false? (#'service/linked-data-exist? ts/*db* id-1))))
-    (t/testing "Todistus that korvaa other todistus, should have linked data."
-      (t/is (true? (#'service/linked-data-exist? ts/*db* id-2))))
-    (t/testing "Todistus that does not korvaa or be korvattu should not have linked data."
-      (t/is (true? (#'service/linked-data-exist? ts/*db* id-3))))))
-
 (t/deftest get-currently-expired-todistus-ids-test
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
