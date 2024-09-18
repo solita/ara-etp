@@ -8,6 +8,36 @@ delete
 from audit.energiatodistus
 where id = :id;
 
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta!
+delete
+from vo_toimenpide
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-audit!
+delete
+from audit.vo_toimenpide
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-note!
+delete
+from vo_note
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-note-audit!
+delete
+from audit.vo_note
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-virhe!
+delete
+from vo_virhe
+where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus_id);
+
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi!
+delete
+from vo_tiedoksi
+where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus_id);
+
 -- name: anonymize-energiatodistus!
 update energiatodistus
 set
