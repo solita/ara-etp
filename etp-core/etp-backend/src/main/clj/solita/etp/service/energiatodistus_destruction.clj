@@ -22,6 +22,15 @@
 
 (defn- delete-energiatodistus-pdf! [aws-s3-client id language]
   (let [file-key (energiatodistus-service/file-key id language)]
+(defn- destroy-energiatodistus-oikeellisuuden-valvonta! [db energiatodistus-id]
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus_id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus_id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus_id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta! db {:energiatodistus_id energiatodistus-id}))
+
+(defn- destroy-energiatodistus-oikeellisuuden-valvonta-audit! [db energiatodistus-id]
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-audit! db {:energiatodistus_id energiatodistus-id}))
+
     (file/delete-file aws-s3-client file-key)
     (log/info (str "Deleted " file-key " from S3"))))
 
