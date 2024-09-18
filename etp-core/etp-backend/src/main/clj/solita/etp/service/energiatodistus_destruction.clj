@@ -6,9 +6,7 @@
             [solita.etp.db :as db]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.file :as file])
-  (:import (clojure.lang ExceptionInfo)
-           (org.postgresql.util PSQLException)))
+            [solita.etp.service.file :as file]))
 
 (db/require-queries 'energiatodistus-destruction)
 
