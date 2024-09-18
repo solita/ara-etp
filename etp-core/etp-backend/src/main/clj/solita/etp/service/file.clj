@@ -16,6 +16,9 @@
 (defn upsert-file-from-input-stream [aws-s3-client key is]
   (upsert-file-from-bytes aws-s3-client key (.readAllBytes is)))
 
+(defn delete-file [aws-s3-client key]
+  (s3/delete-object aws-s3-client key))
+
 (defn find-file [aws-s3-client key]
   (some-> (s3/get-object aws-s3-client key)
           io/input-stream))

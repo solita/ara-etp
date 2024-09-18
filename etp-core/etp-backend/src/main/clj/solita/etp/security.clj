@@ -76,6 +76,11 @@
     (handler (assoc req :whoami {:id    (:aineisto kayttaja-service/system-kayttaja)
                                  :rooli -1}))))
 
+(defn wrap-whoami-for-internal-expiration-api [handler]
+  (fn [req]
+    (handler (assoc req :whoami {:id    (:expiration kayttaja-service/system-kayttaja)
+                                 :rooli -1}))))
+
 (defn wrap-access [handler]
   (fn [{:keys [request-method whoami] :as req}]
     (let [access (-> req :reitit.core/match :data (get request-method) :access)]

@@ -159,6 +159,7 @@
   "ET_RAJA_TOP": "Normnivån för",
   "ET_RAJA_BOTTOM": "nybyggnader 2012",
   "ET_EI_RAJA_ARVOA": "Inga gränsvärden",
+  "ET_NOT_FOUND": "Energicertifikatet hittades inte. Det kan ha tagits bort på grund av utgången giltighetstid.",
   "INFO_ICON_ALT": "Info icon",
   "INFO_TITLE": "Använd endast ett officiellt energicertifikat",
   "INFO_KUVAUS": "Hur känner man igen ett officiellt energicertifikat? Alla officiella energicertifikat som upprättats efter den 1 maj 2015 har en certifikatkod med vilken du hittar certifikatet i tjänsten. Dessutom är certifikatet blått, elektroniskt signerat och 8 sidor långt samt giltigt i 10 år. Även det tidigare \"gröna energicertifikatet\" kan vara officiellt. På ett energicertifikat anges alltid dess sista giltighetsdag.",
