@@ -1,12 +1,12 @@
 -- name: select-expired-energiatodistus-ids
-select id
+select id as energiatodistus_id
 from energiatodistus
 where voimassaolo_paattymisaika < current_date;
 
---name: destroy-energiatodistus-audit-information!
+-- name: destroy-energiatodistus-audit!
 delete
 from audit.energiatodistus
-where id = :id;
+where id = :energiatodistus_id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta!
 delete
@@ -262,5 +262,5 @@ set
     laskutettava_yritys_defined                                     = false,
     valvonta$pending                                                = false,
     valvonta$valvoja_id                                             = null
-where id = :id;
+where id = :energiatodistus_id;
 
