@@ -182,7 +182,7 @@
 
 (defn- collect-invalid-keys-for-destroyed-energiatodistus
   "Helper function for deducing which keys have an incorrect value. Also
-  contains the infromation on what the correct value should be."
+  contains the information on what the correct value should be."
   [energiatodistus-map]
   (map (fn [[key value]]
          {:key key :value value :valid (case key
