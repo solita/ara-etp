@@ -245,6 +245,11 @@
         select-notes #(jdbc/query ts/*db* ["select * from vo_note where energiatodistus_id = ?" %])
         select-tiedoksi #(jdbc/query ts/*db* ["select * from vo_tiedoksi where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = ?)" %])
         select-virheet #(jdbc/query ts/*db* ["select * from vo_virhe where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = ?)" %])
+
+        select-toimenpiteet-audit #(jdbc/query ts/*db* ["select * from audit.vo_toimenpide where energiatodistus_id = ?" %])
+        select-notes-audit #(jdbc/query ts/*db* ["select * from audit.vo_note where energiatodistus_id = ?" %])
+        ;; tiedoksi and virheet do not have audit tables.
+
         get-vo-toimenpiteet #(select-toimenpiteet %)
         get-vo-notes #(select-notes %)
         get-vo-tiedoksi #(select-tiedoksi %)
@@ -298,4 +303,23 @@
       (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-2))))
       (t/is (not (empty? (get-vo-notes energiatodistus-id-2))))
       (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-2))))
-      (t/is (not (empty? (get-vo-virheet energiatodistus-id-2)))))))
+      (t/is (not (empty? (get-vo-virheet energiatodistus-id-2)))))
+
+    ;; Audit data destruction
+    (t/testing "There was some audit data on toimenpiteet before deletion."
+      (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-1)))))
+    (#'service/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! ts/*db* energiatodistus-id-1)
+    (t/testing "The audit data on toimenpiteet is destroyed."
+      (t/is (empty? (select-toimenpiteet-audit energiatodistus-id-1))))
+    (t/testing "The audit data for et-2 toimenpiteet still exists."
+      (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-2)))))
+
+    (t/testing "There was some audit data on notes before deletion."
+      (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
+    (#'service/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! ts/*db* energiatodistus-id-1)
+    (t/testing "The audit data on notes is destroyed."
+      (t/is (empty? (select-notes-audit energiatodistus-id-1))))
+    (t/testing "The audit data for et-2 notes still exists."
+      (t/is (not (empty? (select-notes-audit energiatodistus-id-2)))))))
+
+

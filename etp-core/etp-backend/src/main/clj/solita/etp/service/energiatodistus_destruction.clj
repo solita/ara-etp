@@ -24,10 +24,13 @@
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus_id energiatodistus-id})
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus_id energiatodistus-id})
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus_id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta! db {:energiatodistus_id energiatodistus-id}))
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus_id energiatodistus-id}))
 
-(defn- destroy-energiatodistus-oikeellisuuden-valvonta-audit! [db energiatodistus-id]
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-audit! db {:energiatodistus_id energiatodistus-id}))
+(defn- destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! [db energiatodistus-id]
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus_id energiatodistus-id}))
+
+(defn- destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! [db energiatodistus-id]
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db {:energiatodistus_id energiatodistus-id}))
 
 (defn- delete-energiatodistus-pdf! [aws-s3-client energiatodistus-id language]
   (let [file-key (energiatodistus-service/file-key energiatodistus-id language)]
@@ -44,6 +47,9 @@
 
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
   (jdbc/with-db-transaction [db db]
+                            (destroy-energiatodistus-oikeellisuuden-valvonta! db energiatodistus-id)
+                            (destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db energiatodistus-id)
+                            (destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db energiatodistus-id)
                             (anonymize-energiatodistus! db energiatodistus-id)
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
   (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
@@ -54,4 +60,5 @@
   (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
     (map #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids)
     nil))
+
 

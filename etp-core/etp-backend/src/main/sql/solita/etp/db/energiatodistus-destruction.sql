@@ -8,12 +8,12 @@ delete
 from audit.energiatodistus
 where id = :energiatodistus_id;
 
--- name: destroy-energiatodistus-oikeellisuuden-valvonta!
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide!
 delete
 from vo_toimenpide
 where energiatodistus_id = :energiatodistus_id;
 
--- name: destroy-energiatodistus-oikeellisuuden-valvonta-audit!
+-- name: destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit!
 delete
 from audit.vo_toimenpide
 where energiatodistus_id = :energiatodistus_id;
