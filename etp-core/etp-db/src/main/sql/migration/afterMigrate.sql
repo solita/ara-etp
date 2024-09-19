@@ -35,6 +35,10 @@ grant insert, update on table vk_note to etp_app;
 
 grant delete on table audit.energiatodistus to etp_app;
 grant delete on table vo_toimenpide to etp_app;
+grant delete on table audit.vo_toimenpide to etp_app;
 grant delete on table vo_note to etp_app;
+grant delete on table audit.vo_note to etp_app;
 grant delete on table vo_virhe to etp_app;
+-- no audit for vo_virhe
 grant delete on table vo_tiedoksi to etp_app;
+-- no audit for vo_tiedoksi
