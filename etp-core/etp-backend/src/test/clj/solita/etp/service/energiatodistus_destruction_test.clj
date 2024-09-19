@@ -3,10 +3,13 @@
             [solita.common.time :as time]
             [clojure.java.jdbc :as jdbc]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
             [solita.etp.service.energiatodistus-destruction :as service]
             [solita.etp.service.file :as file-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
+            [solita.etp.test-data.kayttaja :as kayttaja-test-data]
+            [solita.etp.whoami :as test-whoami]
             [solita.etp.test-system :as ts])
   (:import (java.time Instant LocalDate ZoneId)))
 
@@ -219,7 +222,7 @@
 (t/deftest destroy-energiatodistus-audit-information-test
   (let [{:keys [energiatodistukset]} (test-data-set)
         select-audit-information #(jdbc/query ts/*db*
-                                            ["select * from audit.energiatodistus where id = ?" %])
+                                              ["select * from audit.energiatodistus where id = ?" %])
         ids (-> energiatodistukset keys sort)
         [id-1 id-2] ids
         get-et-1-audit-information #(select-audit-information id-1)
@@ -232,3 +235,67 @@
     (t/testing "The audit data for et-2 still exists."
       (t/is (not (empty? (get-et-2-audit-information)))))))
 
+(t/deftest destroy-energiatodistus-oikeellisuuden-valvonta-test
+  (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2018 true)
+        [energiatodistus-id-1
+         energiatodistus-id-2] (energiatodistus-test-data/insert! [energiatodistus-add energiatodistus-add] laatija-id)
+        select-toimenpiteet #(jdbc/query ts/*db* ["select * from vo_toimenpide where energiatodistus_id = ?" %])
+        select-notes #(jdbc/query ts/*db* ["select * from vo_note where energiatodistus_id = ?" %])
+        select-tiedoksi #(jdbc/query ts/*db* ["select * from vo_tiedoksi where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = ?)" %])
+        select-virheet #(jdbc/query ts/*db* ["select * from vo_virhe where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = ?)" %])
+        get-vo-toimenpiteet #(select-toimenpiteet %)
+        get-vo-notes #(select-notes %)
+        get-vo-tiedoksi #(select-tiedoksi %)
+        get-vo-virheet #(select-virheet %)
+
+        vo_note {:description "Tämä on testi"}
+        vo_tiedoksi {:name "Testihenkilö" :email "test@etp.fi"}
+        {virhetype-id :id} (valvonta-oikeellisuus-service/add-virhetype! (ts/db-user paakayttaja-id)
+                                                                         {:label-fi       "test"
+                                                                          :label-sv       "test"
+                                                                          :ordinal        0 :valid true
+                                                                          :description-fi "test"
+                                                                          :description-sv "test"})
+        vo_virhe {:description "Test"
+                  :type-id     virhetype-id}
+        rfi-reply {:type-id       4
+                   :deadline-date nil
+                   :template-id   nil
+                   :description   "Test"
+                   :virheet       [vo_virhe]
+                   :severity-id   nil
+                   :tiedoksi      [vo_tiedoksi vo_tiedoksi]}
+        _ (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user laatija-id)
+                                                         ts/*aws-s3-client*
+                                                         (test-whoami/laatija laatija-id)
+                                                         energiatodistus-id-1 rfi-reply)
+        _ (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user laatija-id)
+                                                         ts/*aws-s3-client*
+                                                         (test-whoami/laatija laatija-id)
+                                                         energiatodistus-id-2 rfi-reply)
+        _ (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-1 (:description vo_note))
+        _ (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-2 (:description vo_note))]
+    (t/testing "There is some toimenpide before deletion."
+      (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-1)))))
+    (t/testing "There is some note before deletion."
+      (t/is (not (empty? (get-vo-notes energiatodistus-id-1)))))
+    (t/testing "There is some tiedoksi before deletion."
+      (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-1)))))
+    (t/testing "There is some virheet before deletion."
+      (t/is (not (empty? (get-vo-virheet energiatodistus-id-1)))))
+    (#'service/destroy-energiatodistus-oikeellisuuden-valvonta! ts/*db* energiatodistus-id-1)
+    (t/testing "There are no more toimenpiteet after deletion."
+      (t/is (empty? (get-vo-toimenpiteet energiatodistus-id-1))))
+    (t/testing "There are no more notes after deletion."
+      (t/is (empty? (get-vo-notes energiatodistus-id-1))))
+    (t/testing "There are no more tiedoksi after deletion."
+      (t/is (empty? (get-vo-tiedoksi energiatodistus-id-1))))
+    (t/testing "There are no more virheet after deletion."
+      (t/is (empty? (get-vo-virheet energiatodistus-id-1))))
+    (t/testing "Didn't affect the other energiatodistus"
+      (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-2))))
+      (t/is (not (empty? (get-vo-notes energiatodistus-id-2))))
+      (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-2))))
+      (t/is (not (empty? (get-vo-virheet energiatodistus-id-2)))))))
