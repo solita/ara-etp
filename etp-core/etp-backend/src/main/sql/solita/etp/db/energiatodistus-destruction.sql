@@ -1,7 +1,13 @@
 -- name: select-expired-energiatodistus-ids
 select id as energiatodistus_id
 from energiatodistus
-where voimassaolo_paattymisaika < current_date;
+         left join (select max(create_time) as latest_toimenpide_create_time, energiatodistus_id
+                    from vo_toimenpide
+                    group by energiatodistus_id) latest_toimenpide
+                   on energiatodistus.id = latest_toimenpide.energiatodistus_id
+where voimassaolo_paattymisaika < current_date
+  and (latest_toimenpide_create_time < current_date - interval '2 years'
+    or latest_toimenpide_create_time is null);
 
 -- name: destroy-energiatodistus-audit!
 delete

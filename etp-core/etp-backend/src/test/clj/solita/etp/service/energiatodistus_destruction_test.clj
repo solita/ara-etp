@@ -11,7 +11,7 @@
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.whoami :as test-whoami]
             [solita.etp.test-system :as ts])
-  (:import (java.time Instant LocalDate ZoneId)))
+  (:import (java.time Instant LocalDate ZoneId Duration)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -22,10 +22,10 @@
                                                    energiatodistus))
 
 (defn test-data-set []
-  (let [laatijat (laatija-test-data/generate-and-insert! 3)
+  (let [laatijat (laatija-test-data/generate-and-insert! 4)
         laatija-ids (-> laatijat keys sort)
-        [laatija-id-1 laatija-id-2 laatija-id-3] laatija-ids
-        energiatodistus-adds (energiatodistus-test-data/generate-adds 3
+        [laatija-id-1 laatija-id-2 laatija-id-3 laatija-id-4] laatija-ids
+        energiatodistus-adds (energiatodistus-test-data/generate-adds 4
                                                                       2018
                                                                       true)
         energiatodistus-ids (mapcat #(energiatodistus-test-data/insert!
@@ -33,8 +33,8 @@
                                        %2)
                                     energiatodistus-adds
                                     laatija-ids)
-        [energiatodistus-id-1 energiatodistus-id-2 energiatodistus-id-3] energiatodistus-ids
-        [energiatodistus-add-1 energiatodistus-add-2 energiatodistus-add-3] energiatodistus-adds]
+        [energiatodistus-id-1 energiatodistus-id-2 energiatodistus-id-3 energiatodistus-id-4] energiatodistus-ids
+        [energiatodistus-add-1 energiatodistus-add-2 energiatodistus-add-3 energiatodistus-add-4] energiatodistus-adds]
 
     ;; Sign energiatodistus 1
     (energiatodistus-test-data/sign! energiatodistus-id-1 laatija-id-1 true)
@@ -56,20 +56,83 @@
                                (time/now))
                              laatija-id-3)
 
+    (update-energiatodistus! energiatodistus-id-4
+                             (assoc energiatodistus-add-4
+                               ;; Set expiration of energiatodistus 3 to today
+                               :voimassaolo-paattymisaika
+                               (.minus (time/now) (Duration/ofDays 1)))
+                             laatija-id-4)
+
     {:laatijat           laatijat
      :energiatodistukset (zipmap energiatodistus-ids energiatodistus-adds)}))
 
-(t/deftest get-currently-expired-todistus-ids-test
+(t/deftest get-currently-expired-todistus-ids-without-valvonta-test
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
-        [id-1 id-2 id-3] ids
+        [id-1 id-2 id-3 id-4] ids
         expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
-    (t/testing "Todistus with expiration time at year 1970 should be expired."
-      (t/is (some #{id-2} expired-ids)))
     (t/testing "Todistus with expiration date set by signing it today should not be expired."
       (t/is (nil? (some #{id-1} expired-ids))))
+    (t/testing "Todistus with expiration time at year 1970 should be expired."
+      (t/is (some #{id-2} expired-ids)))
     (t/testing "Todistus whose expiration is today should not be expired yet."
-      (t/is (nil? (some #{id-3} expired-ids))))))
+      (t/is (nil? (some #{id-3} expired-ids))))
+    (t/testing "Todistus with expiration date at yesterday should be expired."
+      (t/is (some #{id-4} expired-ids)))))
+
+
+(defn- add-valvonta-and-modify-create-time [paakayttaja-id energiatodistus-id create-time]
+  (let [rfi-reply {:type-id       4
+                   :deadline-date nil
+                   :template-id   nil
+                   :description   "Test"
+                   :virheet       []
+                   :severity-id   nil
+                   :tiedoksi      []}
+        {valvonta-id :id} (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user paakayttaja-id)
+                                                                         ts/*aws-s3-client*
+                                                                         (test-whoami/paakayttaja paakayttaja-id)
+                                                                         energiatodistus-id rfi-reply)]
+    ;; Set the create-time
+    (valvonta-oikeellisuus-service/update-toimenpide! ts/*db*
+                                                      (test-whoami/paakayttaja paakayttaja-id)
+                                                      energiatodistus-id
+                                                      valvonta-id
+                                                      {:create-time create-time})))
+
+(t/deftest get-currently-expired-todistus-ids-with-recent-valvonta-test
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        ids (-> energiatodistukset keys sort)
+        paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (time/now))
+        _ (doall (map #(%) (map add-valvonta ids)))
+        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+    (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
+      (t/is (empty? expired-ids)))))
+
+(t/deftest get-currently-expired-todistus-ids-with-old-valvonta-test
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        ids (-> energiatodistukset keys sort)
+        paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        [id-1 id-2 id-3 id-4] ids
+        add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (.minus (time/now) (Duration/ofDays 735)))
+        _ (doall (map #(%) (map add-valvonta ids)))
+        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+    (t/testing "Valvonta should not affect the expiration as it is older than two years"
+      (t/is (nil? (some #{id-1} expired-ids)))
+      (t/is (some #{id-2} expired-ids))
+      (t/is (nil? (some #{id-3} expired-ids)))
+      (t/is (some #{id-4} expired-ids)))))
+
+(t/deftest get-currently-expired-todistus-ids-with-almost-old-valvonta-test
+  (let [{:keys [energiatodistukset]} (test-data-set)
+        ids (-> energiatodistukset keys sort)
+        paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (.minus (time/now) (Duration/ofDays 720)))
+        _ (doall (map #(%) (map add-valvonta ids)))
+        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+    (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
+      (t/is (empty? expired-ids)))))
 
 (t/deftest destroy-energiatodistus-pdf-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
