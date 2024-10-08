@@ -42,3 +42,5 @@ grant delete on table vo_virhe to etp_app;
 -- no audit for vo_virhe
 grant delete on table vo_tiedoksi to etp_app;
 -- no audit for vo_tiedoksi
+grant delete on table liite to etp_app;
+grant delete on table audit.liite to etp_app;
