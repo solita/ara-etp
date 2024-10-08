@@ -15,17 +15,21 @@
                                        :Key    key})]
     (:Body result)))
 
-(defn get-object-head [{:keys [client bucket]} key]
-  (aws.utils/invoke client
-                    :HeadObject
-                    {:Bucket bucket
-                     :Key    key}))
+(defn get-object-head
+  ([aws-s3-client key]
+   (get-object-head aws-s3-client key false))
+  ([{:keys [client bucket]} key checking-for-existence?]
+   (aws.utils/invoke client
+                     :HeadObject
+                     {:Bucket bucket
+                      :Key    key}
+                     checking-for-existence?)))
 
 (defn delete-object [{:keys [client bucket]} key]
   (aws.utils/invoke client
                     :DeleteObject
-                    {:Bucket          bucket
-                     :Key             key}))
+                    {:Bucket bucket
+                     :Key    key}))
 
 (defn create-multipart-upload [{:keys [client bucket]} key]
   (aws.utils/invoke client
