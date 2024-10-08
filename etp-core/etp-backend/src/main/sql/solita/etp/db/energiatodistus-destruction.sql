@@ -44,6 +44,21 @@ delete
 from vo_tiedoksi
 where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus_id);
 
+-- name: select-to-be-destroyed-liitteet-by-energiatodistus-id
+select id
+from liite
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: destroy-liite!
+delete
+from liite
+where id = :liite_id;
+
+-- name: destroy-liite-audit!
+delete
+from audit.liite
+where id = :liite_id;
+
 -- name: anonymize-energiatodistus!
 update energiatodistus
 set
