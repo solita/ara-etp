@@ -67,10 +67,10 @@
 
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
   (jdbc/with-db-transaction [db db]
+                            (destroy-energiatodistus-liitteet db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta! db energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db energiatodistus-id)
-                            (destroy-energiatodistus-liitteet db aws-s3-client energiatodistus-id)
                             (anonymize-energiatodistus! db energiatodistus-id)
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
   (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
