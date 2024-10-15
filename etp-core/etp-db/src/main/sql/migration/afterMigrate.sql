@@ -44,3 +44,14 @@ grant delete on table vo_tiedoksi to etp_app;
 -- no audit for vo_tiedoksi
 grant delete on table liite to etp_app;
 grant delete on table audit.liite to etp_app;
+
+grant delete on table viestiketju to etp_app;
+grant delete on table audit.viestiketju to etp_app;
+grant delete on table viesti_liite to etp_app;
+grant delete on table audit.viesti_liite to etp_app;
+grant delete on table viesti to etp_app;
+-- no audit for viesti;
+grant delete on table vastaanottaja to etp_app;
+-- no audit for vastaanottaja;
+grant delete on table viesti_reader to etp_app;
+-- no audit for viesti_reader;
