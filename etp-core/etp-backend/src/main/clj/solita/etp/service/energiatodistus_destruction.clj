@@ -7,7 +7,8 @@
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.liite :as liite-service]
-            [solita.etp.service.file :as file]))
+            [solita.etp.service.file :as file]
+            [solita.etp.service.viesti :as viesti-service]))
 
 (db/require-queries 'energiatodistus-destruction)
 
@@ -65,8 +66,50 @@
   (let [liitteet (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id})]
     (mapv #(delete-energiatodistus-liite db aws-s3-client %) liitteet)))
 
+(defn- destroy-viesti! [db viesti-id]
+  (energiatodistus-destruction-db/destroy-viesti-reader! db {:viesti_id viesti-id})
+  (energiatodistus-destruction-db/destroy-viesti! db {:viesti_id viesti-id}))
+
+(defn- delete-viestiketju-liite-s3 [aws-s3-client viestiketju-id liite-id]
+  (let [file-key (viesti-service/file-path viestiketju-id liite-id)]
+    ;; Some liitteet are only links and do not have files.
+    (when (file/file-exists? aws-s3-client file-key)
+      (delete-from-s3 aws-s3-client file-key))))
+
+(defn- destroy-viestiketju-liitteet [db aws-s3-client viestiketju-id]
+  (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju db {:viestiketju_id viestiketju-id})]
+    (mapv #(delete-viestiketju-liite-s3 aws-s3-client viestiketju-id (:viesti-liite-id %)) viestiketju-liite-ids)
+    (energiatodistus-destruction-db/destroy-viestiketju-liite! db {:viestiketju_id viestiketju-id})
+    (energiatodistus-destruction-db/destroy-viestiketju-liite-audit! db {:viestiketju_id viestiketju-id})))
+
+(defn- destroy-viestiketju [db aws-s3-client viestiketju-id]
+  (let [viestit (energiatodistus-destruction-db/select-viestit-by-viestiketju db {:viestiketju_id viestiketju-id})]
+    (energiatodistus-destruction-db/destroy-vastaanottaja! db {:viestiketju_id viestiketju-id})
+    (destroy-viestiketju-liitteet db aws-s3-client viestiketju-id)
+    (mapv #(destroy-viesti! db (:viesti-id %)) viestit)
+    (energiatodistus-destruction-db/destroy-viestiketju! db {:viestiketju_id viestiketju-id})
+    (energiatodistus-destruction-db/destroy-viestiketju-audit! db {:viestiketju_id viestiketju-id})))
+
+(defn- check-oikeellisuuden-valvonta-viestiketjut [db vo-toimenpide-id]
+  (let [viestiketjut (energiatodistus-destruction-db/select-viestiketjut-by-oikeellisuuden-valvonta db {:vo_toimenpide_id vo-toimenpide-id})]
+    ;; These should be empty as they are destroyed via energiatodistus? Do something if they are not?
+    ;; Maybe unlink the valvonta from viestiketju or just delete them?
+    ;; For now just log an error if this happens as this should not happen.
+    (when-not (empty? viestiketjut)
+      (log/error "There exists one or many viestiketju for oikeellisuuden valvonta (id: " vo-toimenpide-id ")"))))
+
+(defn- check-oikeellisuuden-valvontojen-viestiketjut [db energiatodistus-id]
+  (let [vo-toimenpide-ids (map :id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
+    (mapv (partial check-oikeellisuuden-valvonta-viestiketjut db) vo-toimenpide-ids)))
+
+(defn- destroy-energiatodistus-viestiketjut [db aws-s3-client energiatodistus-id]
+  (let [viestiketjut (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id})]
+    (mapv #(destroy-viestiketju db aws-s3-client %) viestiketjut)
+    (check-oikeellisuuden-valvontojen-viestiketjut db energiatodistus-id)))
+
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
   (jdbc/with-db-transaction [db db]
+                            (destroy-energiatodistus-viestiketjut db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-liitteet db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta! db energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db energiatodistus-id)

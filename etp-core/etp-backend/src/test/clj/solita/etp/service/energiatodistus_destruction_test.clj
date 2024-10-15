@@ -5,8 +5,10 @@
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
             [solita.etp.service.energiatodistus-destruction :as service]
+            [solita.etp.service.viesti-test :as viesti-test]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.liite :as liite-service]
+            [solita.etp.service.viesti :as viesti-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.liite :as liite-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
@@ -16,6 +18,8 @@
   (:import (java.time Instant LocalDate ZoneId Duration)))
 
 (t/use-fixtures :each ts/fixture)
+
+(defn file-exists? [file-key] (file-service/file-exists? ts/*aws-s3-client* file-key))
 
 (defn update-energiatodistus! [energiatodistus-id energiatodistus laatija-id]
   (energiatodistus-service/update-energiatodistus! (ts/db-user laatija-id)
@@ -421,8 +425,7 @@
                                   (map #(liite-service/file-key %)))
         link-liitteet-keys-2 (->> link-liitteet-2
                                   keys
-                                  (map #(liite-service/file-key %)))
-        file-exists? #(file-service/file-exists? ts/*aws-s3-client* %)]
+                                  (map #(liite-service/file-key %)))]
 
     (t/testing "The liitteet exist before deletion"
       (let [liitteet-1-in-db (select-liitteet energiatodistus-id-1)
@@ -459,3 +462,124 @@
     (t/testing "Audit for energiatodistus-1's liitteet do not exist after deletion"
       (t/is (empty? (select-liitteet-audit energiatodistus-id-1)))
       (t/is (not-empty (select-liitteet-audit energiatodistus-id-2))))))
+
+(t/deftest destroy-viestiketju-test
+  (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+
+        select-vastaanottajat #(jdbc/query ts/*db* ["select * from vastaanottaja where viestiketju_id = ?" %])
+        select-viestit #(jdbc/query ts/*db* ["select * from viesti where viestiketju_id = ?" %])
+        select-viesti-readers #(jdbc/query ts/*db* ["select * from viesti v right outer join viesti_reader vr on v.id = vr.viesti_id where v.viestiketju_id = ?" %])
+        select-viesti-liitteet #(jdbc/query ts/*db* ["select * from viesti_liite where viestiketju_id = ?" %])
+        select-viestiketju #(jdbc/query ts/*db* ["select id from viestiketju where id = ?" %])
+
+
+        select-viestiketju-audit #(jdbc/query ts/*db* ["select id from audit.viestiketju where id = ?" %])
+        select-viesti-liite-audit #(jdbc/query ts/*db* ["select * from audit.viesti_liite where viestiketju_id = ?" %])
+
+        viestiketju-1-id (viesti-service/add-ketju! (ts/db-user paakayttaja-id)
+                                                    (test-whoami/paakayttaja paakayttaja-id)
+                                                    (viesti-test/complete-ketju-add
+                                                      {:vastaanottajat        [laatija-id]
+                                                       :vastaanottajaryhma-id nil
+                                                       :energiatodistus-id    nil}))
+        viestiketju-2-id (viesti-service/add-ketju! (ts/db-user paakayttaja-id)
+                                                    (test-whoami/paakayttaja paakayttaja-id)
+                                                    (viesti-test/complete-ketju-add
+                                                      {:vastaanottajat        [laatija-id]
+                                                       :vastaanottajaryhma-id nil
+                                                       :energiatodistus-id    nil}))
+        _ (liite-test-data/generate-and-insert-files-to-viestiketju! 2
+                                                                     laatija-id
+                                                                     viestiketju-1-id)
+        file-liitteet-1 (mapv :id (viesti-service/find-liitteet ts/*db*
+                                                               (test-whoami/paakayttaja paakayttaja-id)
+                                                               viestiketju-1-id))
+        link-liitteet-1 (liite-test-data/generate-and-insert-links-to-viestiketju! 2
+                                                                                   laatija-id
+                                                                                   viestiketju-1-id)
+        _ (liite-test-data/generate-and-insert-files-to-viestiketju! 2
+                                                                     laatija-id
+                                                                     viestiketju-2-id)
+        file-liitteet-2 (mapv :id (viesti-service/find-liitteet ts/*db*
+                                                                (test-whoami/paakayttaja paakayttaja-id)
+                                                                viestiketju-2-id))
+        link-liitteet-2 (liite-test-data/generate-and-insert-links-to-viestiketju! 2
+                                                                                   laatija-id
+                                                                                   viestiketju-2-id)
+        file-liitteet-keys-1 (->> file-liitteet-1
+                                  (map #(viesti-service/file-path viestiketju-1-id %)))
+        link-liitteet-keys-1 (->> link-liitteet-1
+                                  keys
+                                  (map #(viesti-service/file-path viestiketju-1-id %)))
+        file-liitteet-keys-2 (->> file-liitteet-2
+                                  (map #(viesti-service/file-path viestiketju-2-id %)))
+        link-liitteet-keys-2 (->> link-liitteet-2
+                                  keys
+                                  (map #(viesti-service/file-path viestiketju-2-id %)))]
+    (t/testing "Viestiketjut exists before deletion"
+      (t/is (not (empty? (select-viestiketju viestiketju-1-id))))
+      (t/is (not (empty? (select-viestiketju viestiketju-2-id)))))
+    (t/testing "The liitteet exist before deletion"
+      (let [liitteet-1-in-db (select-viesti-liitteet viestiketju-1-id)
+            liitteet-2-in-db (select-viesti-liitteet viestiketju-2-id)]
+        (t/is (every? file-exists? file-liitteet-keys-1))
+        (t/is (every? file-exists? file-liitteet-keys-2))
+
+        (t/is (not-any? file-exists? link-liitteet-keys-1))
+        (t/is (not-any? file-exists? link-liitteet-keys-2))
+
+        (t/is (= 4 (count liitteet-1-in-db)))
+        (t/is (= 4 (count liitteet-2-in-db)))))
+    (t/testing "Vastaanottaja for both ketjus exists before deletion"
+      (t/is (not (empty? (select-vastaanottajat viestiketju-1-id))))
+      (t/is (not (empty? (select-vastaanottajat viestiketju-2-id)))))
+    (t/testing "Viesti for both ketjus exists before deletion"
+      (t/is (not (empty? (select-viestit viestiketju-1-id))))
+      (t/is (not (empty? (select-viestit viestiketju-2-id)))))
+    (t/testing "Viesti readers for both ketjus exists before deletion"
+      (t/is (not (empty? (select-viesti-readers viestiketju-1-id))))
+      (t/is (not (empty? (select-viesti-readers viestiketju-2-id)))))
+    (t/testing "Viesti liite for both ketjus exists before deletion"
+      (t/is (not (empty? (select-viesti-liitteet viestiketju-1-id))))
+      (t/is (not (empty? (select-viesti-liitteet viestiketju-2-id)))))
+
+    (t/testing "Viestiketju audit for both ketjus exists before deletion"
+      (t/is (not (empty? (select-viestiketju-audit viestiketju-1-id))))
+      (t/is (not (empty? (select-viestiketju-audit viestiketju-2-id)))))
+    (t/testing "Viesti liite audit for both ketjus exists before deletion"
+      (t/is (not (empty? (select-viesti-liite-audit viestiketju-1-id))))
+      (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))
+
+    (#'service/destroy-viestiketju ts/*db* ts/*aws-s3-client* viestiketju-1-id)
+
+    (t/testing "Only viestiketju 2 exists after deletion"
+      (t/is (empty? (select-viestiketju viestiketju-1-id)))
+      (t/is (not (empty? (select-viestiketju viestiketju-2-id)))))
+    (t/testing "Liitteet is removed only from viestiketju-1 after deletion"
+      (let [liitteet-1-in-db (select-viesti-liitteet viestiketju-1-id)
+            liitteet-2-in-db (select-viesti-liitteet viestiketju-2-id)]
+        (t/is (not-any? file-exists? file-liitteet-keys-1))
+        (t/is (every? file-exists? file-liitteet-keys-2))
+
+        (t/is (not-any? file-exists? link-liitteet-keys-1))
+        (t/is (not-any? file-exists? link-liitteet-keys-2))
+
+        (t/is (= 0 (count liitteet-1-in-db)))
+        (t/is (= 4 (count liitteet-2-in-db)))))
+    (t/testing "Vastaanottaja is removed only from viestiketju-1 after deletion"
+      (t/is (empty? (select-vastaanottajat viestiketju-1-id)))
+      (t/is (not (empty? (select-vastaanottajat viestiketju-2-id)))))
+    (t/testing "Viesti is removed only for viestiketju-1-id afted deletion"
+      (t/is (empty? (select-viestit viestiketju-1-id)))
+      (t/is (not (empty? (select-viestit viestiketju-2-id)))))
+    (t/testing "Viesti readers is removed only for viestiketju-1-id after deletion"
+      (t/is (empty? (select-viesti-readers viestiketju-1-id)))
+      (t/is (not (empty? (select-viesti-readers viestiketju-2-id)))))
+
+    (t/testing "Viestiketju audit for viestiketju-1-id does not exist after deletion"
+      (t/is (empty? (select-viestiketju-audit viestiketju-1-id)))
+      (t/is (not (empty? (select-viestiketju-audit viestiketju-2-id)))))
+    (t/testing "Viesti liite audit for viestiketju-1-id does not exist after deletion"
+      (t/is (empty? (select-viesti-liite-audit viestiketju-1-id)))
+      (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))))

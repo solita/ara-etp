@@ -14,6 +14,11 @@ delete
 from audit.energiatodistus
 where id = :energiatodistus_id;
 
+-- name: select-vo-toimenpiteet-by-energiatodistus-id
+select id as vo_toimenpide_id
+from vo_toimenpide
+where energiatodistus_id = :energiatodistus_id;
+
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide!
 delete
 from vo_toimenpide
@@ -58,6 +63,61 @@ where id = :liite_id;
 delete
 from audit.liite
 where id = :liite_id;
+
+-- name: destroy-viesti-reader!
+delete
+from viesti_reader
+where viesti_id = :viesti_id;
+
+-- name: select-liitteet-by-viestiketju
+select id as viesti_liite_id
+from viesti_liite
+where viestiketju_id = :viestiketju_id;
+
+-- name: destroy-viestiketju-liite!
+delete
+from viesti_liite
+where viestiketju_id = :viestiketju_id;
+
+-- name: destroy-viestiketju-liite-audit!
+delete
+from audit.viesti_liite
+where viestiketju_id = :viestiketju_id;
+
+-- name: destroy-viesti!
+delete
+from viesti
+where id = :viesti_id;
+
+-- name: select-viestiketjut-by-energiatodistus
+select id as viestiketju_id
+from viestiketju
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: select-viestiketjut-by-oikeellisuuden-valvonta
+select id as viestiketju_id
+from viestiketju
+where vo_toimenpide_id = :vo_toimenpide_id;
+
+-- name: select-viestit-by-viestiketju
+select id as viesti_id
+from viesti
+where viestiketju_id = :viestiketju_id;
+
+-- name: destroy-viestiketju!
+delete
+from viestiketju
+where id = :viestiketju_id;
+
+-- name: destroy-viestiketju-audit!
+delete
+from audit.viestiketju
+where id = :viestiketju_id;
+
+-- name: destroy-vastaanottaja!
+delete
+from vastaanottaja
+where viestiketju_id = :viestiketju_id;
 
 -- name: anonymize-energiatodistus!
 update energiatodistus
