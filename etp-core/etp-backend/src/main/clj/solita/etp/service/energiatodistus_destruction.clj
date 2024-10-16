@@ -53,14 +53,13 @@
     (when (file/file-exists? aws-s3-client file-key)
       (delete-from-s3 aws-s3-client file-key))))
 
-(defn- delete-energiatodistus-liite [db aws-s3-client liite]
-  (let [liite-id (:id liite)]
+(defn- delete-energiatodistus-liite [db aws-s3-client liite-id]
     (energiatodistus-destruction-db/destroy-liite! db {:liite_id liite-id})
     (delete-energiatodistus-liite-s3 aws-s3-client liite-id)
-    (energiatodistus-destruction-db/destroy-liite-audit! db {:liite_id liite-id})))
+    (energiatodistus-destruction-db/destroy-liite-audit! db {:liite_id liite-id}))
 
 (defn- destroy-energiatodistus-liitteet [db aws-s3-client energiatodistus-id]
-  (let [liitteet (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id})]
+  (let [liitteet (map :liite-id (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
     (mapv #(delete-energiatodistus-liite db aws-s3-client %) liitteet)))
 
 (defn- destroy-viesti! [db viesti-id]

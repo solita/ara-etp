@@ -15,7 +15,7 @@ from vo_toimenpide
 where energiatodistus_id = :energiatodistus_id;
 
 -- name: select-to-be-destroyed-liitteet-by-energiatodistus-id
-select id
+select id as liite_id
 from liite
 where energiatodistus_id = :energiatodistus_id;
 
