@@ -60,7 +60,7 @@
 
 (defn- destroy-energiatodistus-liitteet [db aws-s3-client energiatodistus-id]
   (let [liitteet (map :liite-id (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
-    (mapv #(delete-energiatodistus-liite db aws-s3-client %) liitteet)))
+    (run! #(delete-energiatodistus-liite db aws-s3-client %) liitteet)))
 
 (defn- destroy-viesti! [db viesti-id]
   (energiatodistus-destruction-db/destroy-viesti-reader! db {:viesti_id viesti-id})
@@ -74,7 +74,7 @@
 
 (defn- destroy-viestiketju-liitteet [db aws-s3-client viestiketju-id]
   (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju-id db {:viestiketju_id viestiketju-id})]
-    (mapv #(delete-viestiketju-liite-s3 aws-s3-client viestiketju-id (:viesti-liite-id %)) viestiketju-liite-ids)
+    (run! #(delete-viestiketju-liite-s3 aws-s3-client viestiketju-id (:viesti-liite-id %)) viestiketju-liite-ids)
     (energiatodistus-destruction-db/destroy-viestiketju-liite! db {:viestiketju_id viestiketju-id})
     (energiatodistus-destruction-db/destroy-viestiketju-liite-audit! db {:viestiketju_id viestiketju-id})))
 
@@ -82,7 +82,7 @@
   (let [viestit (energiatodistus-destruction-db/select-viestit-by-viestiketju-id db {:viestiketju_id viestiketju-id})]
     (energiatodistus-destruction-db/destroy-vastaanottaja! db {:viestiketju_id viestiketju-id})
     (destroy-viestiketju-liitteet db aws-s3-client viestiketju-id)
-    (mapv #(destroy-viesti! db (:viesti-id %)) viestit)
+    (run! #(destroy-viesti! db (:viesti-id %)) viestit)
     (energiatodistus-destruction-db/destroy-viestiketju! db {:viestiketju_id viestiketju-id})
     (energiatodistus-destruction-db/destroy-viestiketju-audit! db {:viestiketju_id viestiketju-id})))
 
@@ -96,11 +96,11 @@
 
 (defn- check-oikeellisuuden-valvontojen-viestiketjut [db energiatodistus-id]
   (let [vo-toimenpide-ids (map :id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
-    (mapv (partial check-oikeellisuuden-valvonta-viestiketjut db) vo-toimenpide-ids)))
+    (run! (partial check-oikeellisuuden-valvonta-viestiketjut db) vo-toimenpide-ids)))
 
 (defn- destroy-energiatodistus-viestiketjut [db aws-s3-client energiatodistus-id]
   (let [viestiketjut-ids (map :viestiketju-id (energiatodistus-destruction-db/select-viestiketjut-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
-     (mapv #(destroy-viestiketju db aws-s3-client %) viestiketjut-ids)
+     (run! #(destroy-viestiketju db aws-s3-client %) viestiketjut-ids)
     (check-oikeellisuuden-valvontojen-viestiketjut db energiatodistus-id)))
 
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
@@ -120,6 +120,5 @@
 (defn destroy-expired-energiatodistukset! [db aws-s3-client]
   (log/info (str "Destruction of expired energiatodistukset initiated."))
   (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
-    (doall (mapv #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids))
-    nil))
+    (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids)))
 
