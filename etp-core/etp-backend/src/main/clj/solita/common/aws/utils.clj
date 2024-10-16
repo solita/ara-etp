@@ -11,8 +11,8 @@
 
 (defn invoke
   ([client op request]
-   (invoke client op request false))
-  ([client op request checking-for-existence?]
+   (invoke client op request {:checking-for-existence? false}))
+  ([client op request {:keys [checking-for-existence?]}]
    (let [result (aws/invoke client {:op      op
                                     :request request})]
      (if (contains? result :cognitect.anomalies/category)

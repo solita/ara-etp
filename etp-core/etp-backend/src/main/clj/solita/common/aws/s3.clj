@@ -17,13 +17,13 @@
 
 (defn get-object-head
   ([aws-s3-client key]
-   (get-object-head aws-s3-client key false))
-  ([{:keys [client bucket]} key checking-for-existence?]
+   (get-object-head aws-s3-client key {:checking-for-existence? false}))
+  ([{:keys [client bucket]} key options]
    (aws.utils/invoke client
                      :HeadObject
                      {:Bucket bucket
                       :Key    key}
-                     checking-for-existence?)))
+                     options)))
 
 (defn delete-object [{:keys [client bucket]} key]
   (aws.utils/invoke client
