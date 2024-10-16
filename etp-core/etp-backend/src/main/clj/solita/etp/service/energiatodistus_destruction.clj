@@ -100,8 +100,8 @@
     (mapv (partial check-oikeellisuuden-valvonta-viestiketjut db) vo-toimenpide-ids)))
 
 (defn- destroy-energiatodistus-viestiketjut [db aws-s3-client energiatodistus-id]
-  (let [viestiketjut (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id})]
-    (mapv #(destroy-viestiketju db aws-s3-client %) viestiketjut)
+  (let [viestiketjut-ids (map :id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
+    (mapv #(destroy-viestiketju db aws-s3-client %) viestiketjut-ids)
     (check-oikeellisuuden-valvontojen-viestiketjut db energiatodistus-id)))
 
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
