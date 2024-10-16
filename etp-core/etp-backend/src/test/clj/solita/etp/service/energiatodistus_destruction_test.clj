@@ -359,6 +359,12 @@
       (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-1)))))
     (t/testing "There is some virheet before deletion."
       (t/is (not (empty? (get-vo-virheet energiatodistus-id-1)))))
+
+
+    (t/testing "There was some audit data on toimenpiteet before deletion."
+      (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-1)))))
+    (t/testing "There was some audit data on notes before deletion."
+      (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
     (#'service/destroy-energiatodistus-oikeellisuuden-valvonta! ts/*db* energiatodistus-id-1)
     (t/testing "There are no more toimenpiteet after deletion."
       (t/is (empty? (get-vo-toimenpiteet energiatodistus-id-1))))
@@ -374,18 +380,10 @@
       (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-2))))
       (t/is (not (empty? (get-vo-virheet energiatodistus-id-2)))))
 
-    ;; Audit data destruction
-    (t/testing "There was some audit data on toimenpiteet before deletion."
-      (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-1)))))
-    (#'service/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! ts/*db* energiatodistus-id-1)
     (t/testing "The audit data on toimenpiteet is destroyed."
       (t/is (empty? (select-toimenpiteet-audit energiatodistus-id-1))))
     (t/testing "The audit data for et-2 toimenpiteet still exists."
       (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-2)))))
-
-    (t/testing "There was some audit data on notes before deletion."
-      (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
-    (#'service/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! ts/*db* energiatodistus-id-1)
     (t/testing "The audit data on notes is destroyed."
       (t/is (empty? (select-notes-audit energiatodistus-id-1))))
     (t/testing "The audit data for et-2 notes still exists."

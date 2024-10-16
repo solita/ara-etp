@@ -26,12 +26,9 @@
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus_id energiatodistus-id})
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus_id energiatodistus-id})
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus_id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus_id energiatodistus-id}))
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus_id energiatodistus-id})
 
-(defn- destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! [db energiatodistus-id]
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus_id energiatodistus-id}))
-
-(defn- destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! [db energiatodistus-id]
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus_id energiatodistus-id})
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db {:energiatodistus_id energiatodistus-id}))
 
 (defn- delete-from-s3 [aws-s3-client file-key]
@@ -112,8 +109,6 @@
                             (destroy-energiatodistus-viestiketjut db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-liitteet db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta! db energiatodistus-id)
-                            (destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db energiatodistus-id)
-                            (destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db energiatodistus-id)
                             (anonymize-energiatodistus! db energiatodistus-id)
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
   (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
