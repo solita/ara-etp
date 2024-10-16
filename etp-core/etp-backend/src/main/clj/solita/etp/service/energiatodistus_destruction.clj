@@ -33,7 +33,7 @@
       (file/delete-file aws-s3-client file-key)
       (log/info (str "Deleted " file-key " from S3")))
     (do
-      (log/info (str "Tried to delete " file-key " but it does not exist!")))))
+      (log/warn (str "Tried to delete " file-key " but it does not exist!")))))
 
 (defn- delete-energiatodistus-pdf! [aws-s3-client energiatodistus-id language]
   (let [file-key (energiatodistus-service/file-key energiatodistus-id language)]
