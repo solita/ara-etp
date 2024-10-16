@@ -79,7 +79,7 @@
     (energiatodistus-destruction-db/destroy-viestiketju-liite-audit! db {:viestiketju_id viestiketju-id})))
 
 (defn- destroy-viestiketju [db aws-s3-client viestiketju-id]
-  (let [viestit (energiatodistus-destruction-db/select-viestit-by-viestiketju db {:viestiketju_id viestiketju-id})]
+  (let [viestit (energiatodistus-destruction-db/select-viestit-by-viestiketju-id db {:viestiketju_id viestiketju-id})]
     (energiatodistus-destruction-db/destroy-vastaanottaja! db {:viestiketju_id viestiketju-id})
     (destroy-viestiketju-liitteet db aws-s3-client viestiketju-id)
     (mapv #(destroy-viesti! db (:viesti-id %)) viestit)

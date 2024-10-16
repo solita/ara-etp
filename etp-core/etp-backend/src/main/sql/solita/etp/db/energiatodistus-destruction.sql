@@ -34,7 +34,7 @@ select id as viestiketju_id
 from viestiketju
 where vo_toimenpide_id = :vo_toimenpide_id;
 
--- name: select-viestit-by-viestiketju
+-- name: select-viestit-by-viestiketju-id
 select id as viesti_id
 from viesti
 where viestiketju_id = :viestiketju_id;
