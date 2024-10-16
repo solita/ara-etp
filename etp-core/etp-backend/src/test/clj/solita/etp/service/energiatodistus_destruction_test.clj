@@ -281,7 +281,8 @@
         ids (-> energiatodistukset keys sort)
         [id-1] ids
         get-et-1 #(first (select-energiatodistus id-1))]
-    (#'service/anonymize-energiatodistus! ts/*db* id-1)
+    (expire-energiatodistus! id-1)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
     (t/testing "The values are anonymized."
       (t/is (empty? (->> (get-et-1)
                          (collect-invalid-keys-for-destroyed-energiatodistus)
