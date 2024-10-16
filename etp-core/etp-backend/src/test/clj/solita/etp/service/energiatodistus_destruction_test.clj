@@ -483,18 +483,22 @@
         select-viestiketju-audit #(jdbc/query ts/*db* ["select id from audit.viestiketju where id = ?" %])
         select-viesti-liite-audit #(jdbc/query ts/*db* ["select * from audit.viesti_liite where viestiketju_id = ?" %])
 
+        energiatodistus-add (energiatodistus-test-data/generate-add 2018 true)
+        [energiatodistus-id-1
+         energiatodistus-id-2] (energiatodistus-test-data/insert! [energiatodistus-add energiatodistus-add] laatija-id)
+
         viestiketju-1-id (viesti-service/add-ketju! (ts/db-user paakayttaja-id)
                                                     (test-whoami/paakayttaja paakayttaja-id)
                                                     (viesti-test/complete-ketju-add
                                                       {:vastaanottajat        [laatija-id]
                                                        :vastaanottajaryhma-id nil
-                                                       :energiatodistus-id    nil}))
+                                                       :energiatodistus-id    energiatodistus-id-1}))
         viestiketju-2-id (viesti-service/add-ketju! (ts/db-user paakayttaja-id)
                                                     (test-whoami/paakayttaja paakayttaja-id)
                                                     (viesti-test/complete-ketju-add
                                                       {:vastaanottajat        [laatija-id]
                                                        :vastaanottajaryhma-id nil
-                                                       :energiatodistus-id    nil}))
+                                                       :energiatodistus-id    energiatodistus-id-2}))
         _ (liite-test-data/generate-and-insert-files-to-viestiketju! 2
                                                                      laatija-id
                                                                      viestiketju-1-id)
@@ -557,7 +561,8 @@
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-1-id))))
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))
 
-    (#'service/destroy-viestiketju ts/*db* ts/*aws-s3-client* viestiketju-1-id)
+    (expire-energiatodistus! energiatodistus-id-1)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
 
     (t/testing "Only viestiketju 2 exists after deletion"
       (t/is (empty? (select-viestiketju viestiketju-1-id)))
