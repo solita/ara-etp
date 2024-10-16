@@ -19,7 +19,7 @@ select id
 from liite
 where energiatodistus_id = :energiatodistus_id;
 
--- name: select-liitteet-by-viestiketju
+-- name: select-liitteet-by-viestiketju-id
 select id as viesti_liite_id
 from viesti_liite
 where viestiketju_id = :viestiketju_id;

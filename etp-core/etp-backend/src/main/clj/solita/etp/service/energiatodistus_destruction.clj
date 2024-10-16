@@ -74,7 +74,7 @@
       (delete-from-s3 aws-s3-client file-key))))
 
 (defn- destroy-viestiketju-liitteet [db aws-s3-client viestiketju-id]
-  (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju db {:viestiketju_id viestiketju-id})]
+  (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju-id db {:viestiketju_id viestiketju-id})]
     (mapv #(delete-viestiketju-liite-s3 aws-s3-client viestiketju-id (:viesti-liite-id %)) viestiketju-liite-ids)
     (energiatodistus-destruction-db/destroy-viestiketju-liite! db {:viestiketju_id viestiketju-id})
     (energiatodistus-destruction-db/destroy-viestiketju-liite-audit! db {:viestiketju_id viestiketju-id})))
