@@ -64,7 +64,7 @@
 
     (update-energiatodistus! energiatodistus-id-4
                              (assoc energiatodistus-add-4
-                               ;; Set expiration of energiatodistus 3 to today
+                               ;; Set expiration of energiatodistus 4 to yesterday
                                :voimassaolo-paattymisaika
                                (.minus (time/now) (Duration/ofDays 1)))
                              laatija-id-4)
