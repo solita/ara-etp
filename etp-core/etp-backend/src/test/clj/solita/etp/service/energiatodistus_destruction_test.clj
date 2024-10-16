@@ -500,23 +500,17 @@
                                                        :vastaanottajaryhma-id nil
                                                        :energiatodistus-id    energiatodistus-id-2}))
         _ (liite-test-data/generate-and-insert-files-to-viestiketju! 2
-                                                                     laatija-id
+
                                                                      viestiketju-1-id)
         file-liitteet-1 (mapv :id (viesti-service/find-liitteet ts/*db*
                                                                 (test-whoami/paakayttaja paakayttaja-id)
                                                                 viestiketju-1-id))
-        link-liitteet-1 (liite-test-data/generate-and-insert-links-to-viestiketju! 2
-                                                                                   laatija-id
-                                                                                   viestiketju-1-id)
-        _ (liite-test-data/generate-and-insert-files-to-viestiketju! 2
-                                                                     laatija-id
-                                                                     viestiketju-2-id)
+        link-liitteet-1 (liite-test-data/generate-and-insert-links-to-viestiketju! 2 viestiketju-1-id)
+        _ (liite-test-data/generate-and-insert-files-to-viestiketju! 2 viestiketju-2-id)
         file-liitteet-2 (mapv :id (viesti-service/find-liitteet ts/*db*
                                                                 (test-whoami/paakayttaja paakayttaja-id)
                                                                 viestiketju-2-id))
-        link-liitteet-2 (liite-test-data/generate-and-insert-links-to-viestiketju! 2
-                                                                                   laatija-id
-                                                                                   viestiketju-2-id)
+        link-liitteet-2 (liite-test-data/generate-and-insert-links-to-viestiketju! 2 viestiketju-2-id)
         file-liitteet-keys-1 (->> file-liitteet-1
                                   (map #(viesti-service/file-path viestiketju-1-id %)))
         link-liitteet-keys-1 (->> link-liitteet-1

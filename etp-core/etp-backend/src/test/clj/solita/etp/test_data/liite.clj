@@ -44,22 +44,22 @@
   (let [link-adds (generate-link-adds n)]
     (zipmap (insert-links! link-adds laatija-id energiatodistus-id) link-adds)))
 
-(defn insert-files-to-viestiketju! [file-adds laatija-id viestiketju-id]
+(defn insert-files-to-viestiketju! [file-adds viestiketju-id]
   (viesti-service/add-liitteet-from-files! ts/*db*
                                            ts/*aws-s3-client*
                                            viestiketju-id
                                            file-adds))
 
-(defn insert-links-to-viestiketju! [link-adds laatija-id viestiketju-id]
+(defn insert-links-to-viestiketju! [link-adds viestiketju-id]
   (mapv #(viesti-service/add-liite-from-link! ts/*db*
                                               viestiketju-id
                                               %)
         link-adds))
 
-(defn generate-and-insert-files-to-viestiketju! [n laatija-id viestiketju-id]
+(defn generate-and-insert-files-to-viestiketju! [n viestiketju-id]
   (let [file-adds (generate-file-adds n)]
-    (zipmap (insert-files-to-viestiketju! file-adds laatija-id viestiketju-id) file-adds)))
+    (zipmap (insert-files-to-viestiketju! file-adds viestiketju-id) file-adds)))
 
-(defn generate-and-insert-links-to-viestiketju! [n laatija-id viestiketju-id]
+(defn generate-and-insert-links-to-viestiketju! [n viestiketju-id]
   (let [link-adds (generate-link-adds n)]
-    (zipmap (insert-links-to-viestiketju! link-adds laatija-id viestiketju-id) link-adds)))
+    (zipmap (insert-links-to-viestiketju! link-adds viestiketju-id) link-adds)))
