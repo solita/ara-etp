@@ -12,10 +12,6 @@
 
 (db/require-queries 'energiatodistus-destruction)
 
-(defn- get-currently-expired-todistus-ids [db]
-  (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
-       (map :energiatodistus-id)))
-
 (defn- anonymize-energiatodistus! [db energiatodistus-id]
   (energiatodistus-destruction-db/anonymize-energiatodistus! db {:energiatodistus_id energiatodistus-id}))
 
@@ -113,6 +109,10 @@
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
   (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
   (log/info (str "Destroyed energiatodistus (id: " energiatodistus-id ")")))
+
+(defn get-currently-expired-todistus-ids [db]
+  (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
+       (map :energiatodistus-id)))
 
 (defn destroy-expired-energiatodistukset! [db aws-s3-client]
   (log/info (str "Destruction of expired energiatodistukset initiated."))

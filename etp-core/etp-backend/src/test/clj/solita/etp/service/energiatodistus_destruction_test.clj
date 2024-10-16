@@ -76,7 +76,7 @@
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
         [id-1 id-2 id-3 id-4] ids
-        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
     (t/testing "Todistus with expiration date set by signing it today should not be expired."
       (t/is (nil? (some #{id-1} expired-ids))))
     (t/testing "Todistus with expiration time at year 1970 should be expired."
@@ -112,7 +112,7 @@
         paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
         add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (time/now))
         _ (doall (map #(%) (map add-valvonta ids)))
-        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
     (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
       (t/is (empty? expired-ids)))))
 
@@ -123,7 +123,7 @@
         [id-1 id-2 id-3 id-4] ids
         add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (.minus (time/now) (Duration/ofDays 735)))
         _ (doall (map #(%) (map add-valvonta ids)))
-        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
     (t/testing "Valvonta should not affect the expiration as it is older than two years"
       (t/is (nil? (some #{id-1} expired-ids)))
       (t/is (some #{id-2} expired-ids))
@@ -136,7 +136,7 @@
         paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
         add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (.minus (time/now) (Duration/ofDays 720)))
         _ (doall (map #(%) (map add-valvonta ids)))
-        expired-ids (#'service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
     (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
       (t/is (empty? expired-ids)))))
 
