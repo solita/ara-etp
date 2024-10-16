@@ -89,7 +89,7 @@ delete
 from viesti
 where id = :viesti_id;
 
--- name: select-viestiketjut-by-energiatodistus
+-- name: select-viestiketjut-by-energiatodistus-id
 select id as viestiketju_id
 from viestiketju
 where energiatodistus_id = :energiatodistus_id;
