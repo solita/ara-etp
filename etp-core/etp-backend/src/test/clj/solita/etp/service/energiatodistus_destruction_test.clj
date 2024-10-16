@@ -142,9 +142,7 @@
       (t/is (empty? expired-ids)))))
 
 (t/deftest destroy-energiatodistus-pdf-test
-  (let [laatijat (laatija-test-data/generate-and-insert! 1)
-        laatija-ids (-> laatijat keys sort)
-        [laatija-id] laatija-ids
+  (let [laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
         energiatodistus-add-fi (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))
         energiatodistus-add-sv (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 1))
         energiatodistus-add-multilingual (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
@@ -188,7 +186,8 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
-    (#'service/delete-energiatodistus-pdfs! ts/*db* ts/*aws-s3-client* energiatodistus-id-fi)
+    (expire-energiatodistus! energiatodistus-id-fi)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
 
     (t/testing "Finnish version PDF should not exist after deleting it."
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
@@ -213,7 +212,8 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
-    (#'service/delete-energiatodistus-pdfs! ts/*db* ts/*aws-s3-client* energiatodistus-id-sv)
+    (expire-energiatodistus! energiatodistus-id-sv)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
 
     (t/testing "Swedish version PDF should not exist after deleting it."
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
@@ -238,7 +238,8 @@
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
-    (#'service/delete-energiatodistus-pdfs! ts/*db* ts/*aws-s3-client* energiatodistus-id-mu)
+    (expire-energiatodistus! energiatodistus-id-mu)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
 
     (t/testing "Multilingual version PDFs should not exist after deleting it."
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
@@ -492,8 +493,8 @@
                                                                      laatija-id
                                                                      viestiketju-1-id)
         file-liitteet-1 (mapv :id (viesti-service/find-liitteet ts/*db*
-                                                               (test-whoami/paakayttaja paakayttaja-id)
-                                                               viestiketju-1-id))
+                                                                (test-whoami/paakayttaja paakayttaja-id)
+                                                                viestiketju-1-id))
         link-liitteet-1 (liite-test-data/generate-and-insert-links-to-viestiketju! 2
                                                                                    laatija-id
                                                                                    viestiketju-1-id)

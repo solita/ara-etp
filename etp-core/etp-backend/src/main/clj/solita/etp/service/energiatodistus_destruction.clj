@@ -101,13 +101,13 @@
     (check-oikeellisuuden-valvontojen-viestiketjut db energiatodistus-id)))
 
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
+  (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
   (jdbc/with-db-transaction [db db]
                             (destroy-energiatodistus-viestiketjut db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-liitteet db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-oikeellisuuden-valvonta! db energiatodistus-id)
                             (anonymize-energiatodistus! db energiatodistus-id)
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
-  (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
   (log/info (str "Destroyed energiatodistus (id: " energiatodistus-id ")")))
 
 (defn get-currently-expired-todistus-ids [db]
@@ -117,7 +117,6 @@
 (defn destroy-expired-energiatodistukset! [db aws-s3-client]
   (log/info (str "Destruction of expired energiatodistukset initiated."))
   (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
-    (map #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids)
+    (doall (mapv #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids))
     nil))
-
 
