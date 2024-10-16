@@ -29,7 +29,7 @@ select id as viestiketju_id
 from viestiketju
 where energiatodistus_id = :energiatodistus_id;
 
--- name: select-viestiketjut-by-oikeellisuuden-valvonta
+-- name: select-viestiketjut-by-vo-toimenpide-id
 select id as viestiketju_id
 from viestiketju
 where vo_toimenpide_id = :vo_toimenpide_id;

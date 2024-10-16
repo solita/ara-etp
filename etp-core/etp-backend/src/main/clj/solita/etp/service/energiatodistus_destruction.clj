@@ -87,7 +87,7 @@
     (energiatodistus-destruction-db/destroy-viestiketju-audit! db {:viestiketju_id viestiketju-id})))
 
 (defn- check-oikeellisuuden-valvonta-viestiketjut [db vo-toimenpide-id]
-  (let [viestiketjut (energiatodistus-destruction-db/select-viestiketjut-by-oikeellisuuden-valvonta db {:vo_toimenpide_id vo-toimenpide-id})]
+  (let [viestiketjut (energiatodistus-destruction-db/select-viestiketjut-by-vo-toimenpide-id db {:vo_toimenpide_id vo-toimenpide-id})]
     ;; These should be empty as they are destroyed via energiatodistus? Do something if they are not?
     ;; Maybe unlink the valvonta from viestiketju or just delete them?
     ;; For now just log an error if this happens as this should not happen.
