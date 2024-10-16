@@ -30,7 +30,8 @@
 (defn expire-energiatodistus!
   "Sets voimassaolo-paattymisaika to two days ago"
   [energiatodistus-id]
-  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE - INTERVAL '2 days' where id = ?" energiatodistus-id]))
+  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE - INTERVAL '2 days' where id = ?" energiatodistus-id])
+  (jdbc/execute! ts/*db* ["update vo_toimenpide set create_time = CURRENT_DATE - INTERVAL '3 years' where energiatodistus_id = ?" energiatodistus-id]))
 
 (defn test-data-set []
   (let [laatijat (laatija-test-data/generate-and-insert! 4)
@@ -368,7 +369,10 @@
       (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-1)))))
     (t/testing "There was some audit data on notes before deletion."
       (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
-    (#'service/destroy-energiatodistus-oikeellisuuden-valvonta! ts/*db* energiatodistus-id-1)
+
+    (expire-energiatodistus! energiatodistus-id-1)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+
     (t/testing "There are no more toimenpiteet after deletion."
       (t/is (empty? (get-vo-toimenpiteet energiatodistus-id-1))))
     (t/testing "There are no more notes after deletion."
