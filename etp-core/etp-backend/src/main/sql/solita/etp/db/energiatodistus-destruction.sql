@@ -9,15 +9,35 @@ where voimassaolo_paattymisaika < current_date
   and (latest_toimenpide_create_time < current_date - interval '2 years'
     or latest_toimenpide_create_time is null);
 
--- name: destroy-energiatodistus-audit!
-delete
-from audit.energiatodistus
-where id = :energiatodistus_id;
-
 -- name: select-vo-toimenpiteet-by-energiatodistus-id
 select id as vo_toimenpide_id
 from vo_toimenpide
 where energiatodistus_id = :energiatodistus_id;
+
+-- name: select-to-be-destroyed-liitteet-by-energiatodistus-id
+select id
+from liite
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: select-liitteet-by-viestiketju
+select id as viesti_liite_id
+from viesti_liite
+where viestiketju_id = :viestiketju_id;
+
+-- name: select-viestiketjut-by-energiatodistus-id
+select id as viestiketju_id
+from viestiketju
+where energiatodistus_id = :energiatodistus_id;
+
+-- name: select-viestiketjut-by-oikeellisuuden-valvonta
+select id as viestiketju_id
+from viestiketju
+where vo_toimenpide_id = :vo_toimenpide_id;
+
+-- name: select-viestit-by-viestiketju
+select id as viesti_id
+from viesti
+where viestiketju_id = :viestiketju_id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide!
 delete
@@ -49,11 +69,6 @@ delete
 from vo_tiedoksi
 where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus_id);
 
--- name: select-to-be-destroyed-liitteet-by-energiatodistus-id
-select id
-from liite
-where energiatodistus_id = :energiatodistus_id;
-
 -- name: destroy-liite!
 delete
 from liite
@@ -68,11 +83,6 @@ where id = :liite_id;
 delete
 from viesti_reader
 where viesti_id = :viesti_id;
-
--- name: select-liitteet-by-viestiketju
-select id as viesti_liite_id
-from viesti_liite
-where viestiketju_id = :viestiketju_id;
 
 -- name: destroy-viestiketju-liite!
 delete
@@ -89,21 +99,6 @@ delete
 from viesti
 where id = :viesti_id;
 
--- name: select-viestiketjut-by-energiatodistus-id
-select id as viestiketju_id
-from viestiketju
-where energiatodistus_id = :energiatodistus_id;
-
--- name: select-viestiketjut-by-oikeellisuuden-valvonta
-select id as viestiketju_id
-from viestiketju
-where vo_toimenpide_id = :vo_toimenpide_id;
-
--- name: select-viestit-by-viestiketju
-select id as viesti_id
-from viesti
-where viestiketju_id = :viestiketju_id;
-
 -- name: destroy-viestiketju!
 delete
 from viestiketju
@@ -118,6 +113,11 @@ where id = :viestiketju_id;
 delete
 from vastaanottaja
 where viestiketju_id = :viestiketju_id;
+
+-- name: destroy-energiatodistus-audit!
+delete
+from audit.energiatodistus
+where id = :energiatodistus_id;
 
 -- name: anonymize-energiatodistus!
 update energiatodistus
