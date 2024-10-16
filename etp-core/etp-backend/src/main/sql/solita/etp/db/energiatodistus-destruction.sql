@@ -5,8 +5,8 @@ from energiatodistus
                     from vo_toimenpide
                     group by energiatodistus_id) latest_toimenpide
                    on energiatodistus.id = latest_toimenpide.energiatodistus_id
-where voimassaolo_paattymisaika < current_date
-  and (latest_toimenpide_create_time < current_date - interval '2 years'
+where voimassaolo_paattymisaika < (now() at time zone 'Europe/Helsinki')::date - interval '1 days'
+  and (latest_toimenpide_create_time < (now() at time zone 'Europe/Helsinki')::date - interval '2 years'
     or latest_toimenpide_create_time is null);
 
 -- name: select-vo-toimenpiteet-by-energiatodistus-id
