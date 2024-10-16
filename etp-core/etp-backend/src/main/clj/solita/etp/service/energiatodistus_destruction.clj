@@ -13,19 +13,19 @@
 (db/require-queries 'energiatodistus-destruction)
 
 (defn- anonymize-energiatodistus! [db energiatodistus-id]
-  (energiatodistus-destruction-db/anonymize-energiatodistus! db {:energiatodistus_id energiatodistus-id}))
+  (energiatodistus-destruction-db/anonymize-energiatodistus! db {:energiatodistus-id energiatodistus-id}))
 
 (defn- destroy-energiatodistus-audit-data! [db energiatodistus-id]
-  (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus_id energiatodistus-id}))
+  (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus-id energiatodistus-id}))
 
 (defn- destroy-energiatodistus-oikeellisuuden-valvonta! [db energiatodistus-id]
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus_id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus_id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus_id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus_id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus-id energiatodistus-id})
 
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus_id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db {:energiatodistus_id energiatodistus-id}))
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db {:energiatodistus-id energiatodistus-id}))
 
 (defn- delete-from-s3 [aws-s3-client file-key]
   (if (file/file-exists? aws-s3-client file-key)
@@ -54,17 +54,17 @@
       (delete-from-s3 aws-s3-client file-key))))
 
 (defn- delete-energiatodistus-liite [db aws-s3-client liite-id]
-    (energiatodistus-destruction-db/destroy-liite! db {:liite_id liite-id})
-    (delete-energiatodistus-liite-s3 aws-s3-client liite-id)
-    (energiatodistus-destruction-db/destroy-liite-audit! db {:liite_id liite-id}))
+  (energiatodistus-destruction-db/destroy-liite! db {:liite-id liite-id})
+  (delete-energiatodistus-liite-s3 aws-s3-client liite-id)
+  (energiatodistus-destruction-db/destroy-liite-audit! db {:liite-id liite-id}))
 
 (defn- destroy-energiatodistus-liitteet [db aws-s3-client energiatodistus-id]
-  (let [liitteet (map :liite-id (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
+  (let [liitteet (map :liite-id (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
     (run! #(delete-energiatodistus-liite db aws-s3-client %) liitteet)))
 
 (defn- destroy-viesti! [db viesti-id]
-  (energiatodistus-destruction-db/destroy-viesti-reader! db {:viesti_id viesti-id})
-  (energiatodistus-destruction-db/destroy-viesti! db {:viesti_id viesti-id}))
+  (energiatodistus-destruction-db/destroy-viesti-reader! db {:viesti-id viesti-id})
+  (energiatodistus-destruction-db/destroy-viesti! db {:viesti-id viesti-id}))
 
 (defn- delete-viestiketju-liite-s3 [aws-s3-client viestiketju-id liite-id]
   (let [file-key (viesti-service/file-path viestiketju-id liite-id)]
@@ -73,21 +73,21 @@
       (delete-from-s3 aws-s3-client file-key))))
 
 (defn- destroy-viestiketju-liitteet [db aws-s3-client viestiketju-id]
-  (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju-id db {:viestiketju_id viestiketju-id})]
+  (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju-id db {:viestiketju-id viestiketju-id})]
     (run! #(delete-viestiketju-liite-s3 aws-s3-client viestiketju-id (:viesti-liite-id %)) viestiketju-liite-ids)
-    (energiatodistus-destruction-db/destroy-viestiketju-liite! db {:viestiketju_id viestiketju-id})
-    (energiatodistus-destruction-db/destroy-viestiketju-liite-audit! db {:viestiketju_id viestiketju-id})))
+    (energiatodistus-destruction-db/destroy-viestiketju-liite! db {:viestiketju-id viestiketju-id})
+    (energiatodistus-destruction-db/destroy-viestiketju-liite-audit! db {:viestiketju-id viestiketju-id})))
 
 (defn- destroy-viestiketju [db aws-s3-client viestiketju-id]
-  (let [viestit (energiatodistus-destruction-db/select-viestit-by-viestiketju-id db {:viestiketju_id viestiketju-id})]
-    (energiatodistus-destruction-db/destroy-vastaanottaja! db {:viestiketju_id viestiketju-id})
+  (let [viestit (energiatodistus-destruction-db/select-viestit-by-viestiketju-id db {:viestiketju-id viestiketju-id})]
+    (energiatodistus-destruction-db/destroy-vastaanottaja! db {:viestiketju-id viestiketju-id})
     (destroy-viestiketju-liitteet db aws-s3-client viestiketju-id)
     (run! #(destroy-viesti! db (:viesti-id %)) viestit)
-    (energiatodistus-destruction-db/destroy-viestiketju! db {:viestiketju_id viestiketju-id})
-    (energiatodistus-destruction-db/destroy-viestiketju-audit! db {:viestiketju_id viestiketju-id})))
+    (energiatodistus-destruction-db/destroy-viestiketju! db {:viestiketju-id viestiketju-id})
+    (energiatodistus-destruction-db/destroy-viestiketju-audit! db {:viestiketju-id viestiketju-id})))
 
 (defn- check-oikeellisuuden-valvonta-viestiketjut [db vo-toimenpide-id]
-  (let [viestiketjut (energiatodistus-destruction-db/select-viestiketjut-by-vo-toimenpide-id db {:vo_toimenpide_id vo-toimenpide-id})]
+  (let [viestiketjut (energiatodistus-destruction-db/select-viestiketjut-by-vo-toimenpide-id db {:vo-toimenpide-id vo-toimenpide-id})]
     ;; These should be empty as they are destroyed via energiatodistus? Do something if they are not?
     ;; Maybe unlink the valvonta from viestiketju or just delete them?
     ;; For now just log an error if this happens as this should not happen.
@@ -95,12 +95,12 @@
       (log/error "There exists one or many viestiketju for oikeellisuuden valvonta (id: " vo-toimenpide-id ")"))))
 
 (defn- check-oikeellisuuden-valvontojen-viestiketjut [db energiatodistus-id]
-  (let [vo-toimenpide-ids (map :id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
+  (let [vo-toimenpide-ids (map :id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
     (run! (partial check-oikeellisuuden-valvonta-viestiketjut db) vo-toimenpide-ids)))
 
 (defn- destroy-energiatodistus-viestiketjut [db aws-s3-client energiatodistus-id]
-  (let [viestiketjut-ids (map :viestiketju-id (energiatodistus-destruction-db/select-viestiketjut-by-energiatodistus-id db {:energiatodistus_id energiatodistus-id}))]
-     (run! #(destroy-viestiketju db aws-s3-client %) viestiketjut-ids)
+  (let [viestiketjut-ids (map :viestiketju-id (energiatodistus-destruction-db/select-viestiketjut-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
+    (run! #(destroy-viestiketju db aws-s3-client %) viestiketjut-ids)
     (check-oikeellisuuden-valvontojen-viestiketjut db energiatodistus-id)))
 
 (defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
@@ -121,4 +121,3 @@
   (log/info (str "Destruction of expired energiatodistukset initiated."))
   (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
     (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids)))
-

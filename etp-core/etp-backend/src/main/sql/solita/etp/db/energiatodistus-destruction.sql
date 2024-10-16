@@ -12,112 +12,112 @@ where voimassaolo_paattymisaika < current_date
 -- name: select-vo-toimenpiteet-by-energiatodistus-id
 select id as vo_toimenpide_id
 from vo_toimenpide
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: select-to-be-destroyed-liitteet-by-energiatodistus-id
 select id as liite_id
 from liite
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: select-liitteet-by-viestiketju-id
 select id as viesti_liite_id
 from viesti_liite
-where viestiketju_id = :viestiketju_id;
+where viestiketju_id = :viestiketju-id;
 
 -- name: select-viestiketjut-by-energiatodistus-id
 select id as viestiketju_id
 from viestiketju
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: select-viestiketjut-by-vo-toimenpide-id
 select id as viestiketju_id
 from viestiketju
-where vo_toimenpide_id = :vo_toimenpide_id;
+where vo_toimenpide_id = :vo-toimenpide-id;
 
 -- name: select-viestit-by-viestiketju-id
 select id as viesti_id
 from viesti
-where viestiketju_id = :viestiketju_id;
+where viestiketju_id = :viestiketju-id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide!
 delete
 from vo_toimenpide
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit!
 delete
 from audit.vo_toimenpide
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-note!
 delete
 from vo_note
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-note-audit!
 delete
 from audit.vo_note
-where energiatodistus_id = :energiatodistus_id;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-virhe!
 delete
 from vo_virhe
-where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus_id);
+where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus-id);
 
 -- name: destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi!
 delete
 from vo_tiedoksi
-where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus_id);
+where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = :energiatodistus-id);
 
 -- name: destroy-liite!
 delete
 from liite
-where id = :liite_id;
+where id = :liite-id;
 
 -- name: destroy-liite-audit!
 delete
 from audit.liite
-where id = :liite_id;
+where id = :liite-id;
 
 -- name: destroy-viesti-reader!
 delete
 from viesti_reader
-where viesti_id = :viesti_id;
+where viesti_id = :viesti-id;
 
 -- name: destroy-viestiketju-liite!
 delete
 from viesti_liite
-where viestiketju_id = :viestiketju_id;
+where viestiketju_id = :viestiketju-id;
 
 -- name: destroy-viestiketju-liite-audit!
 delete
 from audit.viesti_liite
-where viestiketju_id = :viestiketju_id;
+where viestiketju_id = :viestiketju-id;
 
 -- name: destroy-viesti!
 delete
 from viesti
-where id = :viesti_id;
+where id = :viesti-id;
 
 -- name: destroy-viestiketju!
 delete
 from viestiketju
-where id = :viestiketju_id;
+where id = :viestiketju-id;
 
 -- name: destroy-viestiketju-audit!
 delete
 from audit.viestiketju
-where id = :viestiketju_id;
+where id = :viestiketju-id;
 
 -- name: destroy-vastaanottaja!
 delete
 from vastaanottaja
-where viestiketju_id = :viestiketju_id;
+where viestiketju_id = :viestiketju-id;
 
 -- name: destroy-energiatodistus-audit!
 delete
 from audit.energiatodistus
-where id = :energiatodistus_id;
+where id = :energiatodistus-id;
 
 -- name: anonymize-energiatodistus!
 update energiatodistus
@@ -343,5 +343,5 @@ set
     laskutettava_yritys_defined                                     = false,
     valvonta$pending                                                = false,
     valvonta$valvoja_id                                             = null
-where id = :energiatodistus_id;
+where id = :energiatodistus-id;
 
