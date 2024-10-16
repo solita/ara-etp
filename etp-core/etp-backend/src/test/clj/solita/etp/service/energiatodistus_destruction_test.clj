@@ -449,7 +449,8 @@
       (t/is (not-empty (select-liitteet-audit energiatodistus-id-2))))
 
     ;; Destroy et-1 liiteet
-    (#'service/destroy-energiatodistus-liitteet ts/*db* ts/*aws-s3-client* energiatodistus-id-1)
+    (expire-energiatodistus! energiatodistus-id-1)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
 
     (t/testing "The liitteet for energiatodistus-1 are deleted but exist for energiatodistus-2"
       (let [liitteet-1-in-db (select-liitteet energiatodistus-id-1)
