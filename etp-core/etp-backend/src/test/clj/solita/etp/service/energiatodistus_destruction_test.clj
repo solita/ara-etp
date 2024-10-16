@@ -27,6 +27,11 @@
                                                    energiatodistus-id
                                                    energiatodistus))
 
+(defn expire-energiatodistus!
+  "Sets voimassaolo-paattymisaika to two days ago"
+  [energiatodistus-id]
+  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE - INTERVAL '2 days' where id = ?" energiatodistus-id]))
+
 (defn test-data-set []
   (let [laatijat (laatija-test-data/generate-and-insert! 4)
         laatija-ids (-> laatijat keys sort)
@@ -62,12 +67,8 @@
                                (time/now))
                              laatija-id-3)
 
-    (update-energiatodistus! energiatodistus-id-4
-                             (assoc energiatodistus-add-4
-                               ;; Set expiration of energiatodistus 4 to yesterday
-                               :voimassaolo-paattymisaika
-                               (.minus (time/now) (Duration/ofDays 1)))
-                             laatija-id-4)
+    (expire-energiatodistus! energiatodistus-id-4)
+
 
     {:laatijat           laatijat
      :energiatodistukset (zipmap energiatodistus-ids energiatodistus-adds)}))
