@@ -20,7 +20,7 @@
       first
       :id))
 
-(defn- file-key [liite-id]
+(defn file-key [liite-id]
   (str "liitteet/" liite-id))
 
 (defn- insert-file! [key aws-s3-client file]

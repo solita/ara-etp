@@ -25,7 +25,7 @@
 
 (defn file-exists? [aws-s3-client key]
   (try
-    (s3/get-object-head aws-s3-client key)
+    (s3/get-object-head aws-s3-client key {:checking-for-existence? true})
     true
     (catch ExceptionInfo e
       (let [{:keys [type]} (ex-data e)]

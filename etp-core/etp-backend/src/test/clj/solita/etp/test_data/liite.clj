@@ -1,7 +1,7 @@
 (ns solita.etp.test-data.liite
   (:require [clojure.java.io :as io]
             [solita.etp.test-system :as ts]
-            [solita.etp.service.valvonta :as valvonta-service]
+            [solita.etp.service.viesti :as viesti-service]
             [solita.etp.service.liite :as liite-service]))
 
 (def files ["deps.edn" "Dockerfile"])
@@ -10,16 +10,16 @@
   (->> files
        cycle
        (map (fn [filename]
-              {:size (rand-int 3000)
-               :tempfile (io/file filename)
+              {:size        (rand-int 3000)
+               :tempfile    (io/file filename)
                :contenttype "application/octet-stream"
-               :nimi filename}))
+               :nimi        filename}))
        (take n)))
 
 (defn generate-link-adds [n]
   (map (fn [i]
          {:nimi (str "Link " i)
-          :url (str "https://example.com/" i)})
+          :url  (str "https://example.com/" i)})
        (range n)))
 
 (defn insert-files! [file-adds laatija-id energiatodistus-id]
@@ -43,3 +43,23 @@
 (defn generate-and-insert-links! [n laatija-id energiatodistus-id]
   (let [link-adds (generate-link-adds n)]
     (zipmap (insert-links! link-adds laatija-id energiatodistus-id) link-adds)))
+
+(defn insert-files-to-viestiketju! [file-adds viestiketju-id]
+  (viesti-service/add-liitteet-from-files! ts/*db*
+                                           ts/*aws-s3-client*
+                                           viestiketju-id
+                                           file-adds))
+
+(defn insert-links-to-viestiketju! [link-adds viestiketju-id]
+  (mapv #(viesti-service/add-liite-from-link! ts/*db*
+                                              viestiketju-id
+                                              %)
+        link-adds))
+
+(defn generate-and-insert-files-to-viestiketju! [n viestiketju-id]
+  (let [file-adds (generate-file-adds n)]
+    (zipmap (insert-files-to-viestiketju! file-adds viestiketju-id) file-adds)))
+
+(defn generate-and-insert-links-to-viestiketju! [n viestiketju-id]
+  (let [link-adds (generate-link-adds n)]
+    (zipmap (insert-links-to-viestiketju! link-adds viestiketju-id) link-adds)))

@@ -34,3 +34,24 @@ grant insert on table vk_toimenpide_yritys to etp_app;
 grant insert, update on table vk_note to etp_app;
 
 grant delete on table audit.energiatodistus to etp_app;
+grant delete on table vo_toimenpide to etp_app;
+grant delete on table audit.vo_toimenpide to etp_app;
+grant delete on table vo_note to etp_app;
+grant delete on table audit.vo_note to etp_app;
+grant delete on table vo_virhe to etp_app;
+-- no audit for vo_virhe
+grant delete on table vo_tiedoksi to etp_app;
+-- no audit for vo_tiedoksi
+grant delete on table liite to etp_app;
+grant delete on table audit.liite to etp_app;
+
+grant delete on table viestiketju to etp_app;
+grant delete on table audit.viestiketju to etp_app;
+grant delete on table viesti_liite to etp_app;
+grant delete on table audit.viesti_liite to etp_app;
+grant delete on table viesti to etp_app;
+-- no audit for viesti;
+grant delete on table vastaanottaja to etp_app;
+-- no audit for vastaanottaja;
+grant delete on table viesti_reader to etp_app;
+-- no audit for viesti_reader;
