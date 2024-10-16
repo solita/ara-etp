@@ -301,11 +301,11 @@
         get-et-2-audit-information #(select-audit-information id-2)]
     (t/testing "There was some audit information before deletion."
       (t/is (not (empty? (get-et-1-audit-information)))))
-    (#'service/destroy-energiatodistus-audit-data! ts/*db* id-1)
-    (t/testing "The audit data is destroyed."
-      (t/is (empty? (get-et-1-audit-information))))
-    (t/testing "The audit data for et-2 still exists."
-      (t/is (not (empty? (get-et-2-audit-information)))))))
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (t/testing "The audit data for et-1 still exists as it is not expired."
+      (t/is (not (empty? (get-et-1-audit-information)))))
+    (t/testing "The audit data for et-2 is destroyed as it is expired."
+      (t/is (empty? (get-et-2-audit-information))))))
 
 (t/deftest destroy-energiatodistus-oikeellisuuden-valvonta-test
   (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
