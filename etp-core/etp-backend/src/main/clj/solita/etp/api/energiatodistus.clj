@@ -264,15 +264,16 @@
 (def internal-routes
   [["/energiatodistukset"
     ["/anonymize-and-delete-expired"
-     {:post {:summary    "Anonymisoi vanhentuneet energiatodistukset ja poistaa niihin linkittyvät dokumentit."
+     {:post {:summary    "Anonymisoi vanhentuneet energiatodistukset ja poistaa niihin linkittyvät tiedot ja dokumentit."
              :middleware [[security/wrap-db-application-name
                            (kayttaja-service/system-kayttaja :expiration)]
                           [security/wrap-whoami-for-internal-expiration-api]]
              :responses  {200 {:body nil}}
-             :handler    (fn [{:keys [db aws-s3-client]}]
+             :handler    (fn [{:keys [db aws-s3-client whoami]}]
                            (r/response
                              (concurrent/run-background
-                               (energiatodistus-destruction-service/destroy-expired-energiatodistukset!
+                               #(energiatodistus-destruction-service/destroy-expired-energiatodistukset!
                                  db
-                                 aws-s3-client)
+                                 aws-s3-client
+                                 whoami)
                                "Expired energiatodistukset destruction failed")))}}]]])

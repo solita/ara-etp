@@ -4,8 +4,11 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]
             [solita.etp.db :as db]
+            [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.file :as file]
             [solita.etp.service.viesti :as viesti-service]))
@@ -117,7 +120,10 @@
   (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
        (map :energiatodistus-id)))
 
-(defn destroy-expired-energiatodistukset! [db aws-s3-client]
+(defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
+  (when-not (and (rooli-service/system? whoami)
+                 (= (:id whoami) (kayttaja-service/system-kayttaja :expiration)))
+    (exception/throw-forbidden! (str "Can not run destruction of expired todistukset as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")")))
   (log/info (str "Destruction of expired energiatodistukset initiated."))
   (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
     (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids)))
