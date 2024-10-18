@@ -6,6 +6,7 @@
             [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
             [solita.etp.service.energiatodistus-destruction :as service]
             [solita.etp.service.viesti-test :as viesti-test]
+            [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.viesti :as viesti-service]
@@ -18,6 +19,8 @@
   (:import (java.time Instant LocalDate ZoneId Duration)))
 
 (t/use-fixtures :each ts/fixture)
+
+(def system-expiration-user {:id (kayttaja-service/system-kayttaja :expiration) :rooli -1})
 
 (defn file-exists? [file-key] (file-service/file-exists? ts/*aws-s3-client* file-key))
 
@@ -188,7 +191,7 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
     (expire-energiatodistus! energiatodistus-id-fi)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Finnish version PDF should not exist after deleting it."
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
@@ -214,7 +217,7 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
     (expire-energiatodistus! energiatodistus-id-sv)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Swedish version PDF should not exist after deleting it."
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
@@ -240,7 +243,7 @@
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
     (expire-energiatodistus! energiatodistus-id-mu)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Multilingual version PDFs should not exist after deleting it."
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
@@ -283,7 +286,7 @@
         [id-1] ids
         get-et-1 #(first (select-energiatodistus id-1))]
     (expire-energiatodistus! id-1)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
     (t/testing "The values are anonymized."
       (t/is (empty? (->> (get-et-1)
                          (collect-invalid-keys-for-destroyed-energiatodistus)
@@ -302,7 +305,7 @@
         get-et-2-audit-information #(select-audit-information id-2)]
     (t/testing "There was some audit information before deletion."
       (t/is (not (empty? (get-et-1-audit-information)))))
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
     (t/testing "The audit data for et-1 still exists as it is not expired."
       (t/is (not (empty? (get-et-1-audit-information)))))
     (t/testing "The audit data for et-2 is destroyed as it is expired."
@@ -371,7 +374,7 @@
       (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
 
     (expire-energiatodistus! energiatodistus-id-1)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "There are no more toimenpiteet after deletion."
       (t/is (empty? (get-vo-toimenpiteet energiatodistus-id-1))))
@@ -450,7 +453,7 @@
 
     ;; Destroy et-1 liiteet
     (expire-energiatodistus! energiatodistus-id-1)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "The liitteet for energiatodistus-1 are deleted but exist for energiatodistus-2"
       (let [liitteet-1-in-db (select-liitteet energiatodistus-id-1)
@@ -556,7 +559,7 @@
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))
 
     (expire-energiatodistus! energiatodistus-id-1)
-    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client*)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Only viestiketju 2 exists after deletion"
       (t/is (empty? (select-viestiketju viestiketju-1-id)))
