@@ -124,6 +124,7 @@
   (when-not (and (rooli-service/system? whoami)
                  (= (:id whoami) (kayttaja-service/system-kayttaja :expiration)))
     (exception/throw-forbidden! (str "Can not run destruction of expired todistukset as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")")))
-  (log/info (str "Destruction of expired energiatodistukset initiated."))
+  (log/info (str "Starting destruction of expired energiatodistukset."))
   (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
-    (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids)))
+    (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids))
+  (log/info (str "Destruction of expired energiatodistukset finished.")))
