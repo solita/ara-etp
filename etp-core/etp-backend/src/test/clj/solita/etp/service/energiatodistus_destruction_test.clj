@@ -369,7 +369,8 @@
                                                        ts/*aws-s3-client*
                                                        (test-whoami/paakayttaja paakayttaja-id)
                                                        energiatodistus-id-1
-                                                       vo-toimenpide-1-id)
+                                                       vo-toimenpide-1-id
+                                                       {:inhibit-email? true})
     (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-2 (:description vo_note))
     (valvonta-oikeellisuus-service/update-toimenpide! (ts/db-user paakayttaja-id)
                                                       (test-whoami/paakayttaja paakayttaja-id)
@@ -378,7 +379,8 @@
                                                        ts/*aws-s3-client*
                                                        (test-whoami/paakayttaja paakayttaja-id)
                                                        energiatodistus-id-2
-                                                       vo-toimenpide-2-id)
+                                                       vo-toimenpide-2-id
+                                                       {:inhibit-email? true})
 
     (t/testing "There is some toimenpide before deletion."
       (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-1)))))
@@ -400,9 +402,6 @@
             file-key-et-2 (vo-asha-service/file-path energiatodistus-id-2 vo-toimenpide-2-id)]
         (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-1)))
         (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-2)))))
-
-    ;; wait for emails to finish
-    (Thread/sleep 5000)
 
     (expire-energiatodistus! energiatodistus-id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)

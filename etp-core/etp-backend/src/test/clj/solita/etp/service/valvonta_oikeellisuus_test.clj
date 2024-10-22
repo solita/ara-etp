@@ -108,7 +108,8 @@
     (service/publish-toimenpide! (ts/db-user paakayttaja-id)
                                  ts/*aws-s3-client*
                                  (test-whoami/paakayttaja paakayttaja-id)
-                                 id toimenpide-id)
+                                 id toimenpide-id
+                                 {})
 
     (service/update-toimenpide! (ts/db-user paakayttaja-id)
                                 (test-whoami/paakayttaja paakayttaja-id)

@@ -298,7 +298,7 @@
                              404 {:body schema/Str}}
                 :handler    (fn [{{{:keys [id toimenpide-id]} :path} :parameters :keys [db whoami aws-s3-client]}]
                               (api-response/ok|not-found
-                                (valvonta-service/publish-toimenpide! db aws-s3-client whoami id toimenpide-id)
+                                (valvonta-service/publish-toimenpide! db aws-s3-client whoami id toimenpide-id {})
                                 (toimenpide-404-msg id toimenpide-id)))}}]
        ["/document/:filename"
         {:get {:summary    "Esikatsele tai lataa toimenpiteen dokumentti"
