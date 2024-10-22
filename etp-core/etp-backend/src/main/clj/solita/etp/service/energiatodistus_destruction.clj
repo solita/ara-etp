@@ -69,6 +69,7 @@
 
 (defn- destroy-energiatodistus-oikeellisuuden-valvonta! [db aws-s3-client energiatodistus-id]
   (destroy-oikeellisuuden-valvonta-s3! db aws-s3-client energiatodistus-id)
+  ;; Valvonta liitteet are destroyed via energiatodistus_id in destruction of liitteet.
 
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus-id energiatodistus-id})
   (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus-id energiatodistus-id})
