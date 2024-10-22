@@ -24,7 +24,7 @@
 
 (def file-key-prefix "valvonta/oikeellisuus")
 
-(defn- file-path [energiatodistus-id toimenpide-id]
+(defn file-path [energiatodistus-id toimenpide-id]
   (str file-key-prefix "/" energiatodistus-id "/" toimenpide-id))
 
 (defn toimenpide-type->document [type-id]

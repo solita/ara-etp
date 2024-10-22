@@ -7,6 +7,7 @@
             [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.liite :as liite-service]
@@ -20,15 +21,6 @@
 
 (defn- destroy-energiatodistus-audit-data! [db energiatodistus-id]
   (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus-id energiatodistus-id}))
-
-(defn- destroy-energiatodistus-oikeellisuuden-valvonta! [db energiatodistus-id]
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus-id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus-id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus-id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus-id energiatodistus-id})
-
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus-id energiatodistus-id})
-  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db {:energiatodistus-id energiatodistus-id}))
 
 (defn- delete-from-s3 [aws-s3-client file-key]
   (if (file/file-exists? aws-s3-client file-key)
@@ -65,6 +57,27 @@
   (let [liitteet (map :liite-id (energiatodistus-destruction-db/select-to-be-destroyed-liitteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
     (run! #(delete-energiatodistus-liite db aws-s3-client %) liitteet)))
 
+(defn- destroy-toimenpide-s3! [aws-s3-client energiatodistus-id toimenpide-id]
+  (let [file-key (vo-asha-service/file-path energiatodistus-id toimenpide-id)]
+    ;; All the toimenpiteet do not create documents
+    (when (file/file-exists? aws-s3-client file-key)
+      (delete-from-s3 aws-s3-client file-key))))
+
+(defn- destroy-oikeellisuuden-valvonta-s3! [db aws-s3-client energiatodistus-id]
+  (let [vo-toimenpide-ids (map :vo-toimenpide-id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
+    (run! #(destroy-toimenpide-s3! aws-s3-client energiatodistus-id %) vo-toimenpide-ids)))
+
+(defn- destroy-energiatodistus-oikeellisuuden-valvonta! [db aws-s3-client energiatodistus-id]
+  (destroy-oikeellisuuden-valvonta-s3! db aws-s3-client energiatodistus-id)
+
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-virhe! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-tiedoksi! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide! db {:energiatodistus-id energiatodistus-id})
+
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-toimenpide-audit! db {:energiatodistus-id energiatodistus-id})
+  (energiatodistus-destruction-db/destroy-energiatodistus-oikeellisuuden-valvonta-note-audit! db {:energiatodistus-id energiatodistus-id}))
+
 (defn- destroy-viesti! [db viesti-id]
   (energiatodistus-destruction-db/destroy-viesti-reader! db {:viesti-id viesti-id})
   (energiatodistus-destruction-db/destroy-viesti! db {:viesti-id viesti-id}))
@@ -98,7 +111,7 @@
       (log/error "There exists one or many viestiketju for oikeellisuuden valvonta (id: " vo-toimenpide-id ")"))))
 
 (defn- check-oikeellisuuden-valvontojen-viestiketjut [db energiatodistus-id]
-  (let [vo-toimenpide-ids (map :id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
+  (let [vo-toimenpide-ids (map :vo-toimenpide-id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
     (run! (partial check-oikeellisuuden-valvonta-viestiketjut db) vo-toimenpide-ids)))
 
 (defn- destroy-energiatodistus-viestiketjut [db aws-s3-client energiatodistus-id]
@@ -111,7 +124,7 @@
   (jdbc/with-db-transaction [db db]
                             (destroy-energiatodistus-viestiketjut db aws-s3-client energiatodistus-id)
                             (destroy-energiatodistus-liitteet db aws-s3-client energiatodistus-id)
-                            (destroy-energiatodistus-oikeellisuuden-valvonta! db energiatodistus-id)
+                            (destroy-energiatodistus-oikeellisuuden-valvonta! db aws-s3-client energiatodistus-id)
                             (anonymize-energiatodistus! db energiatodistus-id)
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
   (log/info (str "Destroyed energiatodistus (id: " energiatodistus-id ")")))
