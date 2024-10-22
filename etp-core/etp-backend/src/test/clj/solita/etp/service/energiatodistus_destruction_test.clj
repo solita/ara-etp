@@ -6,6 +6,7 @@
             [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
             [solita.etp.service.energiatodistus-destruction :as service]
             [solita.etp.service.viesti-test :as viesti-test]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.liite :as liite-service]
@@ -341,23 +342,43 @@
                                                                           :description-sv "test"})
         vo_virhe {:description "Test"
                   :type-id     virhetype-id}
-        rfi-reply {:type-id       4
-                   :deadline-date nil
-                   :template-id   nil
-                   :description   "Test"
-                   :virheet       [vo_virhe]
-                   :severity-id   nil
-                   :tiedoksi      [vo_tiedoksi vo_tiedoksi]}
-        _ (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user laatija-id)
-                                                         ts/*aws-s3-client*
-                                                         (test-whoami/laatija laatija-id)
-                                                         energiatodistus-id-1 rfi-reply)
-        _ (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user laatija-id)
-                                                         ts/*aws-s3-client*
-                                                         (test-whoami/laatija laatija-id)
-                                                         energiatodistus-id-2 rfi-reply)
-        _ (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-1 (:description vo_note))
-        _ (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-2 (:description vo_note))]
+
+        audit-report {:type-id       7
+                      :deadline-date nil
+                      :template-id   nil
+                      :description   "Test"
+                      :virheet       [vo_virhe]
+                      :severity-id   nil
+                      :tiedoksi      [vo_tiedoksi vo_tiedoksi]}
+        vo-toimenpide-1-id (:id (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user paakayttaja-id)
+                                                                               ts/*aws-s3-client*
+                                                                               (test-whoami/paakayttaja paakayttaja-id)
+                                                                               energiatodistus-id-1 audit-report))
+        vo-toimenpide-2-id (:id (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user paakayttaja-id)
+                                                                               ts/*aws-s3-client*
+                                                                               (test-whoami/paakayttaja paakayttaja-id)
+                                                                               energiatodistus-id-2 audit-report))]
+
+    (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-1 (:description vo_note))
+
+    (valvonta-oikeellisuus-service/update-toimenpide! (ts/db-user paakayttaja-id)
+                                                      (test-whoami/paakayttaja paakayttaja-id)
+                                                      energiatodistus-id-1 vo-toimenpide-1-id {:template-id 1})
+    (valvonta-oikeellisuus-service/publish-toimenpide! ts/*db*
+                                                       ts/*aws-s3-client*
+                                                       (test-whoami/paakayttaja paakayttaja-id)
+                                                       energiatodistus-id-1
+                                                       vo-toimenpide-1-id)
+    (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-2 (:description vo_note))
+    (valvonta-oikeellisuus-service/update-toimenpide! (ts/db-user paakayttaja-id)
+                                                      (test-whoami/paakayttaja paakayttaja-id)
+                                                      energiatodistus-id-2 vo-toimenpide-2-id {:template-id 1})
+    (valvonta-oikeellisuus-service/publish-toimenpide! ts/*db*
+                                                       ts/*aws-s3-client*
+                                                       (test-whoami/paakayttaja paakayttaja-id)
+                                                       energiatodistus-id-2
+                                                       vo-toimenpide-2-id)
+
     (t/testing "There is some toimenpide before deletion."
       (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-1)))))
     (t/testing "There is some note before deletion."
@@ -373,8 +394,23 @@
     (t/testing "There was some audit data on notes before deletion."
       (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
 
+    (t/testing "There are valvonta liite documents"
+      (let [file-key-et-1 (vo-asha-service/file-path energiatodistus-id-1 vo-toimenpide-1-id)
+            file-key-et-2 (vo-asha-service/file-path energiatodistus-id-2 vo-toimenpide-2-id)]
+        (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-1)))
+        (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-2)))))
+
+    ;; wait for emails to finish
+    (Thread/sleep 5000)
+
     (expire-energiatodistus! energiatodistus-id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
+
+    (t/testing "Energiatodistus 1 valvonta documents are destroyed and energiatodistus 2 are not"
+      (let [file-key-et-1 (vo-asha-service/file-path energiatodistus-id-1 vo-toimenpide-1-id)
+            file-key-et-2 (vo-asha-service/file-path energiatodistus-id-2 vo-toimenpide-2-id)]
+        (t/is (false? (file-service/file-exists? ts/*aws-s3-client* file-key-et-1)))
+        (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-2)))))
 
     (t/testing "There are no more toimenpiteet after deletion."
       (t/is (empty? (get-vo-toimenpiteet energiatodistus-id-1))))
