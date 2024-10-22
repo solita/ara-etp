@@ -264,7 +264,8 @@
          {:key key :value value :valid (case key
                                          ;; Here are what anonymized values should be.
                                          :id (number? value)
-                                         :versio (= 2013 value)
+                                         ;; Versio is kept
+                                         :versio (number? value)
                                          :tila_id (= 6 value)
                                          :laatija_id (number? value)
                                          :korvattu_energiatodistus_id (or (nil? value) (number? value))
