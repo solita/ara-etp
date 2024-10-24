@@ -87,7 +87,7 @@
     "dompurify": "^3.0.0",
     "fluture": "^14.0.0",
     "litepicker": "^2.0.0",
-    "marked": "^12.0.0",
+    "marked": "^14.0.0",
     "monet": "^0.9.1",
     "qs": "^6.9.7",
     "quill": "^1.3.7",
