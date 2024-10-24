@@ -6,7 +6,8 @@ values
 (3, 'hylatty'),
 (4, 'korvattu'),
 (5, 'poistettu'),
-(6, 'tuhottu')
+(6, 'tuhottu'),
+(7, 'vanhentunut')
 on conflict (id) do update
   set name = excluded.name;
 
