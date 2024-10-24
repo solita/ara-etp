@@ -3,6 +3,7 @@
   data linked to it."
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]
+            [clojure.set :as set]
             [solita.etp.db :as db]
             [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
@@ -130,15 +131,26 @@
                             (destroy-energiatodistus-audit-data! db energiatodistus-id))
   (log/info (str "Destroyed energiatodistus (id: " energiatodistus-id ")")))
 
-(defn get-currently-expired-todistus-ids [db]
-  (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db)
+(defn get-currently-expired-todistus-ids [db {:keys [check-valvonta?]}]
+  (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db {:check-valvonta check-valvonta?})
        (map :energiatodistus-id)))
+
+(defn- make-energiatodistus-vahnentunut
+  "There is an edge case where todistus might be expired but can not be
+   destroyed as there is still active valvonta on it. This function can be
+   used to make it 'vanhentunut' so that it can be handeled differently from"
+  [db energiatodistus-id]
+  (energiatodistus-destruction-db/make-energiatodistus-vanhentunut! db {:energiatodistus-id energiatodistus-id})
+  (log/info (str "Set energiatodistus (id: " energiatodistus-id ") tila to vanhentunut.")))
 
 (defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
   (when-not (and (rooli-service/system? whoami)
                  (= (:id whoami) (kayttaja-service/system-kayttaja :expiration)))
     (exception/throw-forbidden! (str "Can not run destruction of expired todistukset as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")")))
   (log/info (str "Starting destruction of expired energiatodistukset."))
-  (let [expired-todistukset-ids (get-currently-expired-todistus-ids db)]
-    (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-ids))
+  (let [expired-todistukset-without-valvonta-ids (set (get-currently-expired-todistus-ids db {:check-vavonta? true}))
+        all-expired-todistukset-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? false}))
+        expired-todistukset-with-valvonta-ids (set/difference all-expired-todistukset-ids expired-todistukset-without-valvonta-ids)]
+    (run! #(make-energiatodistus-vahnentunut db %) expired-todistukset-with-valvonta-ids)
+    (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-without-valvonta-ids))
   (log/info (str "Destruction of expired energiatodistukset finished.")))
