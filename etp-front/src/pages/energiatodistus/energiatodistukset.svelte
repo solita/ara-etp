@@ -339,13 +339,15 @@
                     data-cy="energiatodistus-row"
                     class="etp-table--tr etp-table--tr__link"
                     on:click={ETViews.toETView(energiatodistus)}>
-                    <td class="etp-table--td">
+                    <td data-cy="energiatodistus-tila" class="etp-table--td">
                       {i18n(
                         'energiatodistus.tila.' +
                           et.tilaKey(energiatodistus['tila-id'])
                       )}
                     </td>
-                    <td class="etp-table--td">{energiatodistus.id}</td>
+                    <td data-cy="energiatodistus-id" class="etp-table--td">
+                      {energiatodistus.id}
+                    </td>
                     <td class="etp-table--td">
                       {orEmpty(energiatodistus.tulokset['e-luokka'])}
                     </td>
