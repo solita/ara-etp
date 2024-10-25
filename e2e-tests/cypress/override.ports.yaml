@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  db:
+    ports:
+      - 127.0.0.1:5444:5432
+

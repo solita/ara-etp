@@ -5,7 +5,7 @@ include:
   - path:
     - ../../etp-core/docker/docker-compose.yml
     - override.yaml
-
+    - override.ports.yaml
 
 services:
   backend:
