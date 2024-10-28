@@ -56,40 +56,32 @@ context('Laatija', () => {
         "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
 
       cy.task('executeQuery', { query, applicationName });
-      // There is no way to know when running the expiration is finished but this seems to be fast enough.
       cy.request(
         'POST',
         `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
       ).then(response => {
         expect(response.status).to.eq(200);
       });
+      // There is no way to know when running the expiration is finished.
+      cy.wait(1000);
     });
 
-    it('energiatodistus that was not expired shows up still correctly', () => {
+    it('Should only see non-expired and expired with ongoing valvonta energiatodistukset', () => {
       cy.visit('/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(signedEtThatWillNotBeTouchedId)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
-    });
 
-    it('energiatodistus that was made expired is not shown', () => {
-      cy.visit('/#/energiatodistus/all');
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(etToBeMadeExpiredId)
         .should('not.exist');
-    });
 
-    it('energiatodistus without valvonta is not shown', () => {
-      cy.visit('/#/energiatodistus/all');
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(expiredEtWithoutValvontaId)
         .should('not.exist');
-    });
 
-    it('energiatodistus with valvonta is still shown', () => {
-      cy.visit('/#/energiatodistus/all');
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(expiredEtWithValvontaId)
         .siblings('[data-cy="energiatodistus-tila"]')
@@ -147,13 +139,14 @@ context('Paakayttaja', () => {
       const query =
         "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
       cy.task('executeQuery', { query, applicationName });
-      // There is no way to know when running the expiration is finished but this seems to be fast enough.
       cy.request(
         'POST',
         `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
       ).then(response => {
         expect(response.status).to.eq(200);
       });
+      // There is no way to know when running the expiration is finished.
+      cy.wait(1000);
     });
     it('should see 1 and 6 as tuhottu, 4 as voimassa and 7 as vahentunut', () => {
       cy.visit('/#/energiatodistus/all');
