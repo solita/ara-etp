@@ -1,6 +1,7 @@
 import { FIXTURES } from '../../fixtures/laatija';
 
 const baseUrl = Cypress.config('baseUrl');
+const backendUrl = Cypress.config('backendUrl');
 
 context('Laatija', () => {
   beforeEach(() => {
@@ -29,7 +30,7 @@ context('Laatija', () => {
       cy.task('executeQuery', { query, applicationName });
       cy.request(
         'POST',
-        'http://localhost:3444/api/internal/energiatodistukset/anonymize-and-delete-expired'
+        `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
       ).then(response => {
         expect(response.status).to.eq(200);
       });

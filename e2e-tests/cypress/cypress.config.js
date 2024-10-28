@@ -7,6 +7,7 @@ module.exports = defineConfig({
   defaultCommandTimeout: 15000,
   video: true,
   e2e: {
+    backendUrl: 'http://localhost:3444',
     baseUrl: 'https://localhost:3009',
     setupNodeEvents(on, config) {
       on('task', {
