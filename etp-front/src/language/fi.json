@@ -546,7 +546,8 @@
       "replaced": "Korvattu",
       "deleted": "Poistettu",
       "expired": "Vanhentunut",
-      "loading": "Ladataan"
+      "loading": "Ladataan",
+      "destroyed": "Tuhottu"
     },
     "toolbar": {
       "new": "Tallenna",

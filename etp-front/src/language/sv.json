@@ -525,7 +525,8 @@
       "replaced": "Ersatt",
       "deleted": "Avlägsnad",
       "expired": "Föråldrad",
-      "loading": "Laddar"
+      "loading": "Laddar",
+      "destroyed": "Raderad"
     },
     "toolbar": {
       "new": "Spara",

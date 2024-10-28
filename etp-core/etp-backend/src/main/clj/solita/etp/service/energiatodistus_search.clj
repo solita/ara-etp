@@ -256,7 +256,7 @@
         energiatodistus.tila_id <> 5))"]
 
     (rooli-service/laatija? whoami)
-    ["energiatodistus.laatija_id = ? AND energiatodistus.tila_id <> 5" id]
+    ["energiatodistus.laatija_id = ? AND energiatodistus.tila_id IN (0, 1, 2, 3, 4, 7)" id]
 
     (rooli-service/public? whoami)
     ["energiatodistus.tila_id = 2 AND

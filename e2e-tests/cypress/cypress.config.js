@@ -11,6 +11,7 @@ module.exports = defineConfig({
     baseUrl: 'https://localhost:3009',
     setupNodeEvents(on, config) {
       on('task', {
+        // applicationName needs to be parsable by our database audit system. For example -6@something.
         executeQuery({ query, applicationName }) {
           const client = new pg.Client({
             connectionString: `postgresql://etp_app:etp@localhost:5444/etp_dev?search_path=etp&application_name=${applicationName}`

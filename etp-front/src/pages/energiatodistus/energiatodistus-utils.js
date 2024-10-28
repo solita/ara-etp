@@ -338,7 +338,9 @@ export const tilat = [
   'signed',
   'discarded',
   'replaced',
-  'deleted'
+  'deleted',
+  'destroyed',
+  'expired'
 ];
 
 export const tila = R.compose(R.map(parseInt), R.invertObj)(tilat);
