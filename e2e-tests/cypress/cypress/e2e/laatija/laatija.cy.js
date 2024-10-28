@@ -61,7 +61,9 @@ context('Laatija', () => {
 
       cy.get('[data-cy="confirm-submit-button"]').click();
 
-      cy.get('[data-cy="energiatodistus-id"]').contains('5').should('not.exist');
+      cy.get('[data-cy="energiatodistus-id"]')
+        .contains('5')
+        .should('not.exist');
     });
 
     it('should delete energiatodistus from energiatodistukset page', () => {
@@ -74,7 +76,9 @@ context('Laatija', () => {
 
       cy.get('[data-cy="confirm-submit-button"]').click();
 
-      cy.get('[data-cy="energiatodistus-id"]').contains('5').should('not.exist');
+      cy.get('[data-cy="energiatodistus-id"]')
+        .contains('5')
+        .should('not.exist');
     });
   });
 
