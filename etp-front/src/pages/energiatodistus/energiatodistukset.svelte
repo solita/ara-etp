@@ -379,7 +379,9 @@
                       {orEmpty(energiatodistus['laatija-fullname'])}
                     </td>
                     {#if Kayttajat.isLaatija(whoami)}
-                      <td class="etp-table--td etp-table--td__center">
+                      <td
+                        class="etp-table--td etp-table--td__center"
+                        data-cy="energiatodistus-delete">
                         <Confirm
                           let:confirm
                           confirmButtonLabel={i18n('confirm.button.delete')}
