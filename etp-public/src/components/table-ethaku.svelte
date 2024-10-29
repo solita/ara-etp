@@ -2,6 +2,7 @@
   import { _, locale } from '@Localization/localization';
   import { parseDate } from '@/utilities/parsers';
   import * as formats from '@/utilities/formats';
+
   export let etCount;
   export let eTodistukset;
   export let postinumerot;
@@ -50,6 +51,7 @@
   td {
     @apply p-0;
   }
+
   td a {
     @apply px-4 py-2;
   }
@@ -75,7 +77,7 @@
           <tbody>
             {#each eTodistukset as todistus}
               <tr>
-                <td>
+                <td data-cy="ethaku-tunnus">
                   <a
                     class="block"
                     href={`/energiatodistus?id=${todistus.id}&versio=${todistus.versio}${ref}`}

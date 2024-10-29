@@ -1,7 +1,7 @@
 import { FIXTURES } from '../../fixtures/laatija';
 import paakayttajaHeaders from '../../fixtures/users/paakayttaja.json';
 
-const baseUrl = Cypress.config('baseUrl');
+const publicUrl = Cypress.config('publicUrl');
 const backendUrl = Cypress.config('backendUrl');
 
 const expiredEtWithValvontaId = 7;
@@ -187,6 +187,94 @@ context('Paakayttaja', () => {
         .contains(expiredEtWithValvontaId)
         .click();
       cy.contains('Energiatodistus 2018/7 - Vanhentunut').should('exist');
+    });
+  });
+});
+
+context('Public', () => {
+  before(() => {
+    cy.resetDb();
+  });
+
+  beforeEach(() => {
+    cy.intercept(/\/api\/private/, req => {
+      req.headers = { ...req.headers, ...paakayttajaHeaders };
+    });
+  });
+
+  describe.only('when destroying expired energiatodistukset', () => {
+    it('should see all the Voimassa energiatodistukset before running the expiration', () => {
+      cy.visit(`${publicUrl}/ethaku`);
+
+      cy.get('[data-cy="ethaku-hae"]').click();
+
+      // Notice that these are the type that are seen by the public
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(expiredEtWithValvontaId)
+        .should('exist');
+
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(expiredEtWithoutValvontaId)
+        .should('exist');
+
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(signedEtThatWillNotBeTouchedId)
+        .should('exist');
+
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(etToBeMadeExpiredId)
+        .should('exist');
+    });
+    it('running the expiration should succeed', () => {
+      const query =
+        "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
+      cy.task('executeQuery', { query, applicationName }).then(() => {
+        cy.request(
+          'POST',
+          `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
+        ).then(response => {
+          expect(response.status).to.eq(200);
+        });
+      });
+      // There is no way to know when running the expiration is finished.
+      cy.wait(1000);
+    });
+    it('should only see the not expired todistus.', () => {
+      cy.visit(`${publicUrl}/ethaku`);
+
+      cy.get('[data-cy="ethaku-hae"]').click();
+
+      // Notice that these are the type that are seen by the public
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(expiredEtWithValvontaId)
+        .should('not.exist');
+
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(expiredEtWithoutValvontaId)
+        .should('not.exist');
+
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(signedEtThatWillNotBeTouchedId)
+        .should('exist');
+
+      cy.get('[data-cy="ethaku-tunnus"]')
+        .contains(etToBeMadeExpiredId)
+        .should('not.exist');
+
+      cy.visit(
+        `${publicUrl}/energiatodistus?id=${expiredEtWithValvontaId}&versio=2018`
+      );
+      cy.contains('Energiatodistusta ei löytynyt').should('exist');
+
+      cy.visit(
+        `${publicUrl}/energiatodistus?id=${expiredEtWithoutValvontaId}&versio=2018`
+      );
+      cy.contains('Energiatodistusta ei löytynyt').should('exist');
+
+      cy.visit(
+        `${publicUrl}/energiatodistus?id=${etToBeMadeExpiredId}&versio=2013`
+      );
+      cy.contains('Energiatodistusta ei löytynyt').should('exist');
     });
   });
 });

@@ -64,6 +64,24 @@ services:
     ports:
       - 127.0.0.1:3009:3009
 
+  frontend-public:
+    build:
+      context: ../../etp-public
+      dockerfile: e2e.Dockerfile
+    environment:
+      WEBPACK_PROXY_TARGET: http://backend:8080
+      WEBPACK_ALLOWED_HOSTS: auto
+      WEBPACK_HOST: 0.0.0.0
+      WEBPACK_PORT: 5059
+    healthcheck:
+      test: curl -k http://localhost:5059 || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 0m
+    ports:
+      - 127.0.0.1:5059:5059
+
   migration-runner:
     build: ../../etp-core/etp-db
     environment:

@@ -15,6 +15,8 @@
   export let type = 'submit';
 
   export let disabled = false;
+
+  export let dataCy;
 </script>
 
 <style>
@@ -56,6 +58,7 @@
   on:click
   {disabled}
   {type}
+  data-cy={dataCy}
   class:bg-lightgrey={disabled}
   class:cursor-not-allowed={disabled}
   class:shadow-none={disabled}

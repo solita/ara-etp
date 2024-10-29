@@ -8,6 +8,7 @@ module.exports = defineConfig({
   video: true,
   e2e: {
     backendUrl: 'http://localhost:3444',
+    publicUrl: 'http://localhost:5059',
     baseUrl: 'https://localhost:3009',
     setupNodeEvents(on, config) {
       on('task', {
