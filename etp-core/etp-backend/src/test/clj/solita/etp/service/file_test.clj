@@ -80,3 +80,22 @@
       (t/is (nil? (some #(= % tag-1) tags)))
       (t/is (some #(= % tag-2) tags))
       (t/is (some #(= % tag-1-updated) tags)))))
+
+(t/deftest get-file-tag-test
+  (let [id (str (:id file-info-1) "-get-file-tag-test")
+        tag-1 {:Key "key-1" :Value "key-1-value"}
+        tag-2 {:Key "key-2" :Value "key-2-value"}]
+    (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                    id
+                                    (:bytes file-info-1))
+    (t/is (nil? (service/get-file-tag ts/*aws-s3-client*
+                                      id
+                                      (:Key tag-1))))
+    (service/put-file-tag ts/*aws-s3-client* id tag-1)
+    (t/is (= tag-1 (service/get-file-tag ts/*aws-s3-client*
+                                      id
+                                      (:Key tag-1))))
+    (service/put-file-tag ts/*aws-s3-client* id tag-2)
+    (t/is (= tag-2 (service/get-file-tag ts/*aws-s3-client*
+                                         id
+                                         (:Key tag-2))))))

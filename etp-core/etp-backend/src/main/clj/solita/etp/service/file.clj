@@ -19,8 +19,16 @@
 (defn delete-file [aws-s3-client key]
   (s3/delete-object aws-s3-client key))
 
+
 (defn get-file-tags [aws-s3-client key]
   (:TagSet (s3/get-object-tagging aws-s3-client key)))
+
+(defn get-file-tag [aws-s3-client file-key tag-key]
+  (let [tag-set (get-file-tags aws-s3-client file-key)]
+    (->> tag-set
+        (filter #(= tag-key (:Key %)))
+         ;; Keys returned by S3 can't be the same
+         first)))
 
 (defn put-file-tag [aws-s3-client key {:keys [Key Value]}]
   (let [current-tag-set (get-file-tags aws-s3-client key)
