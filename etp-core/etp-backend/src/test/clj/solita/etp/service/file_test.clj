@@ -57,3 +57,26 @@
       (t/is (true? (instance? InputStream content)))
       (t/is (= (into [] (:bytes file-info-2))
                (into [] (.readAllBytes content)))))))
+
+(t/deftest tag-file-test
+  (let [id (str (:id file-info-1) "-tag-file-test")
+        tag-1 {:Key "key-1" :Value "key-1-value"}
+        tag-2 {:Key "key-2" :Value "key-1-value"}
+        tag-1-updated {:Key "key-1" :Value "key-1-new-value"}]
+    (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                    id
+                                    (:bytes file-info-1))
+    (let [tags (service/get-file-tags ts/*aws-s3-client* id)]
+      (t/is (empty? tags)))
+    (service/put-file-tag ts/*aws-s3-client* id tag-1)
+    (let [tags (service/get-file-tags ts/*aws-s3-client* id)]
+      (t/is (some #(= % tag-1) tags)))
+    (service/put-file-tag ts/*aws-s3-client* id tag-2)
+    (let [tags (service/get-file-tags ts/*aws-s3-client* id)]
+      (t/is (some #(= % tag-1) tags))
+      (t/is (some #(= % tag-2) tags)))
+    (service/put-file-tag ts/*aws-s3-client* id tag-1-updated)
+    (let [tags (service/get-file-tags ts/*aws-s3-client* id)]
+      (t/is (nil? (some #(= % tag-1) tags)))
+      (t/is (some #(= % tag-2) tags))
+      (t/is (some #(= % tag-1-updated) tags)))))
