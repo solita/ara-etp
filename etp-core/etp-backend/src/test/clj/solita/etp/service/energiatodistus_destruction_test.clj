@@ -8,6 +8,7 @@
             [solita.etp.service.viesti-test :as viesti-test]
             [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.service.energiatodistus-tila :as tila-service]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.viesti :as viesti-service]
@@ -31,11 +32,18 @@
                                                    energiatodistus-id
                                                    energiatodistus))
 
-(defn expire-energiatodistus!
+(defn expire-energiatodistus [energiatodistus-id]
+  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE - INTERVAL '2 days' where id = ?" energiatodistus-id]))
+
+(defn expire-valvonta [energiatodistus-id]
+  (jdbc/execute! ts/*db* ["update vo_toimenpide set create_time = CURRENT_DATE - INTERVAL '3 years' where energiatodistus_id = ?" energiatodistus-id])
+  (jdbc/execute! ts/*db* ["update vo_toimenpide set publish_time = CURRENT_DATE - INTERVAL '3 years' where energiatodistus_id = ?" energiatodistus-id]))
+
+(defn expire-energiatodistus-and-its-valvonta
   "Sets voimassaolo-paattymisaika to two days ago"
   [energiatodistus-id]
-  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE - INTERVAL '2 days' where id = ?" energiatodistus-id])
-  (jdbc/execute! ts/*db* ["update vo_toimenpide set create_time = CURRENT_DATE - INTERVAL '3 years' where energiatodistus_id = ?" energiatodistus-id]))
+  (expire-energiatodistus energiatodistus-id)
+  (expire-valvonta energiatodistus-id))
 
 (defn test-data-set []
   (let [laatijat (laatija-test-data/generate-and-insert! 4)
@@ -72,7 +80,7 @@
                                (time/now))
                              laatija-id-3)
 
-    (expire-energiatodistus! energiatodistus-id-4)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-4)
 
 
     {:laatijat           laatijat
@@ -82,7 +90,7 @@
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
         [id-1 id-2 id-3 id-4] ids
-        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db* {:check-valvonta? true})]
     (t/testing "Todistus with expiration date set by signing it today should not be expired."
       (t/is (nil? (some #{id-1} expired-ids))))
     (t/testing "Todistus with expiration time at year 1970 should be expired."
@@ -116,11 +124,18 @@
   (let [{:keys [energiatodistukset]} (test-data-set)
         ids (-> energiatodistukset keys sort)
         paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        [id-1 id-2 id-3 id-4] ids
         add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (time/now))
         _ (doall (map #(%) (map add-valvonta ids)))
-        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db* {:check-valvonta? true})
+        expired-ids-without-checking-valvonta (service/get-currently-expired-todistus-ids ts/*db* {:check-valvonta? false})]
     (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
-      (t/is (empty? expired-ids)))))
+      (t/is (empty? expired-ids)))
+    (t/testing "Valvonta should not affect the expiration as its checking is skipped"
+      (t/is (nil? (some #{id-1} expired-ids-without-checking-valvonta)))
+      (t/is (some #{id-2} expired-ids-without-checking-valvonta))
+      (t/is (nil? (some #{id-3} expired-ids-without-checking-valvonta)))
+      (t/is (some #{id-4} expired-ids-without-checking-valvonta)))))
 
 (t/deftest get-currently-expired-todistus-ids-with-old-valvonta-test
   (let [{:keys [energiatodistukset]} (test-data-set)
@@ -129,7 +144,7 @@
         [id-1 id-2 id-3 id-4] ids
         add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (.minus (time/now) (Duration/ofDays 735)))
         _ (doall (map #(%) (map add-valvonta ids)))
-        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db* {:check-valvonta? true})]
     (t/testing "Valvonta should not affect the expiration as it is older than two years"
       (t/is (nil? (some #{id-1} expired-ids)))
       (t/is (some #{id-2} expired-ids))
@@ -142,7 +157,7 @@
         paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
         add-valvonta #(partial add-valvonta-and-modify-create-time paakayttaja-id % (.minus (time/now) (Duration/ofDays 720)))
         _ (doall (map #(%) (map add-valvonta ids)))
-        expired-ids (service/get-currently-expired-todistus-ids ts/*db*)]
+        expired-ids (service/get-currently-expired-todistus-ids ts/*db* {:check-valvonta? true})]
     (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
       (t/is (empty? expired-ids)))))
 
@@ -191,7 +206,7 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
-    (expire-energiatodistus! energiatodistus-id-fi)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-fi)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Finnish version PDF should not exist after deleting it."
@@ -217,7 +232,7 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
-    (expire-energiatodistus! energiatodistus-id-sv)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-sv)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Swedish version PDF should not exist after deleting it."
@@ -243,7 +258,7 @@
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
 
-    (expire-energiatodistus! energiatodistus-id-mu)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-mu)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Multilingual version PDFs should not exist after deleting it."
@@ -264,7 +279,8 @@
          {:key key :value value :valid (case key
                                          ;; Here are what anonymized values should be.
                                          :id (number? value)
-                                         :versio (= 2013 value)
+                                         ;; Versio is kept
+                                         :versio (number? value)
                                          :tila_id (= 6 value)
                                          :laatija_id (number? value)
                                          :korvattu_energiatodistus_id (or (nil? value) (number? value))
@@ -286,7 +302,7 @@
         ids (-> energiatodistukset keys sort)
         [id-1] ids
         get-et-1 #(first (select-energiatodistus id-1))]
-    (expire-energiatodistus! id-1)
+    (expire-energiatodistus-and-its-valvonta id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
     (t/testing "The values are anonymized."
       (t/is (empty? (->> (get-et-1)
@@ -317,7 +333,8 @@
         laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
         energiatodistus-add (energiatodistus-test-data/generate-add 2018 true)
         [energiatodistus-id-1
-         energiatodistus-id-2] (energiatodistus-test-data/insert! [energiatodistus-add energiatodistus-add] laatija-id)
+         energiatodistus-id-2
+         energiatodistus-id-3] (energiatodistus-test-data/insert! (vec (repeat 3 energiatodistus-add)) laatija-id)
         select-toimenpiteet #(jdbc/query ts/*db* ["select * from vo_toimenpide where energiatodistus_id = ?" %])
         select-notes #(jdbc/query ts/*db* ["select * from vo_note where energiatodistus_id = ?" %])
         select-tiedoksi #(jdbc/query ts/*db* ["select * from vo_tiedoksi where toimenpide_id in (select id from vo_toimenpide where energiatodistus_id = ?)" %])
@@ -326,6 +343,8 @@
         select-toimenpiteet-audit #(jdbc/query ts/*db* ["select * from audit.vo_toimenpide where energiatodistus_id = ?" %])
         select-notes-audit #(jdbc/query ts/*db* ["select * from audit.vo_note where energiatodistus_id = ?" %])
         ;; tiedoksi and virheet do not have audit tables.
+
+        select-tila-id #(jdbc/query ts/*db* ["select tila_id from energiatodistus where id = ?" %])
 
         get-vo-toimenpiteet #(select-toimenpiteet %)
         get-vo-notes #(select-notes %)
@@ -357,7 +376,11 @@
         vo-toimenpide-2-id (:id (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user paakayttaja-id)
                                                                                ts/*aws-s3-client*
                                                                                (test-whoami/paakayttaja paakayttaja-id)
-                                                                               energiatodistus-id-2 audit-report))]
+                                                                               energiatodistus-id-2 audit-report))
+        vo-toimenpide-3-id (:id (valvonta-oikeellisuus-service/add-toimenpide! (ts/db-user paakayttaja-id)
+                                                                               ts/*aws-s3-client*
+                                                                               (test-whoami/paakayttaja paakayttaja-id)
+                                                                               energiatodistus-id-3 audit-report))]
 
     (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-1 (:description vo_note))
 
@@ -368,7 +391,8 @@
                                                        ts/*aws-s3-client*
                                                        (test-whoami/paakayttaja paakayttaja-id)
                                                        energiatodistus-id-1
-                                                       vo-toimenpide-1-id)
+                                                       vo-toimenpide-1-id
+                                                       {:inhibit-email? true})
     (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-2 (:description vo_note))
     (valvonta-oikeellisuus-service/update-toimenpide! (ts/db-user paakayttaja-id)
                                                       (test-whoami/paakayttaja paakayttaja-id)
@@ -377,7 +401,18 @@
                                                        ts/*aws-s3-client*
                                                        (test-whoami/paakayttaja paakayttaja-id)
                                                        energiatodistus-id-2
-                                                       vo-toimenpide-2-id)
+                                                       vo-toimenpide-2-id
+                                                       {:inhibit-email? true})
+    (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id-3 (:description vo_note))
+    (valvonta-oikeellisuus-service/update-toimenpide! (ts/db-user paakayttaja-id)
+                                                      (test-whoami/paakayttaja paakayttaja-id)
+                                                      energiatodistus-id-3 vo-toimenpide-3-id {:template-id 1})
+    (valvonta-oikeellisuus-service/publish-toimenpide! ts/*db*
+                                                       ts/*aws-s3-client*
+                                                       (test-whoami/paakayttaja paakayttaja-id)
+                                                       energiatodistus-id-3
+                                                       vo-toimenpide-3-id
+                                                       {:inhibit-email? true})
 
     (t/testing "There is some toimenpide before deletion."
       (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-1)))))
@@ -400,11 +435,14 @@
         (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-1)))
         (t/is (true? (file-service/file-exists? ts/*aws-s3-client* file-key-et-2)))))
 
-    ;; wait for emails to finish
-    (Thread/sleep 5000)
-
-    (expire-energiatodistus! energiatodistus-id-1)
+    ;; Keep the valvonta in energiatodistus 3
+    (expire-energiatodistus energiatodistus-id-3)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
+
+    (t/testing "Energiatodistus 3 is 'vanhentunut' after running the expiration as it has an ongoing valvonta"
+      (let [tila-id (:tila_id (first (select-tila-id energiatodistus-id-3)))]
+        (t/is (tila-service/expired? {:tila-id tila-id}))))
 
     (t/testing "Energiatodistus 1 valvonta documents are destroyed and energiatodistus 2 are not"
       (let [file-key-et-1 (vo-asha-service/file-path energiatodistus-id-1 vo-toimenpide-1-id)
@@ -488,7 +526,7 @@
       (t/is (not-empty (select-liitteet-audit energiatodistus-id-2))))
 
     ;; Destroy et-1 liiteet
-    (expire-energiatodistus! energiatodistus-id-1)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "The liitteet for energiatodistus-1 are deleted but exist for energiatodistus-2"
@@ -594,7 +632,7 @@
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-1-id))))
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))
 
-    (expire-energiatodistus! energiatodistus-id-1)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Only viestiketju 2 exists after deletion"

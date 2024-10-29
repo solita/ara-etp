@@ -1,6 +1,6 @@
 (ns solita.etp.service.energiatodistus-tila)
 
-(def ^:private tilat [:draft :in-signing :signed :discarded :replaced :deleted])
+(def ^:private tilat [:draft :in-signing :signed :discarded :replaced :deleted :destroyed :expired])
 
 (defn tila-key [tila-id] (nth tilat tila-id))
 
@@ -13,3 +13,5 @@
 (def discarded? (partial in-tila? 3))
 (def replaced? (partial in-tila? 4))
 (def deleted? (partial in-tila? 5))
+(def destroyed? (partial in-tila? 6))
+(def expired? (partial in-tila? 7))

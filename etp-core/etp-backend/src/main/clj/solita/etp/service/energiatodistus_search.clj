@@ -53,8 +53,8 @@
       {:nimi        schema/Str
        :postinumero schema/Int}}}
     {:laatija
-     {:patevyystaso common-schema/Key
-      :toteamispaivamaara common-schema/Date
+     {:patevyystaso              common-schema/Key
+      :toteamispaivamaara        common-schema/Date
       :voimassaolo-paattymisaika common-schema/Instant}}
     {:postinumero {:label common-schema/String50}}
     (deep/map-values second search-fields/computed-fields)
@@ -71,7 +71,7 @@
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2018}
     {:energiatodistus
      {:perustiedot
-      {:nimi schema/Str
+      {:nimi        schema/Str
        :postinumero schema/Int}}}
     geo-schema/Search))
 
@@ -111,7 +111,7 @@
 (defn- coercer! [field search-schema]
   (if-let [coercer (some-> field keyword search-schema)]
     coercer
-    (throw-ex-info {:type :unknown-field :field field
+    (throw-ex-info {:type    :unknown-field :field field
                     :message (str "Unknown field: " field)})))
 
 (defn validate-field! [field search-schema]
@@ -161,7 +161,7 @@
 
 (defn- validate-match! [pattern fields]
   (when (empty? fields)
-    (throw-ex-info {:type :unknown-field :field pattern
+    (throw-ex-info {:type    :unknown-field :field pattern
                     :message (str "Field glob pattern: " pattern " does not match any fields.")})))
 
 (defn- globbing [predicate]
@@ -175,23 +175,23 @@
       (apply predicate search-schema operator field values))))
 
 (def predicates
-  {"="  infix-notation
-   ">=" infix-notation
-   "<=" infix-notation
-   ">"  infix-notation
-   "<"  infix-notation
+  {"="         infix-notation
+   ">="        infix-notation
+   "<="        infix-notation
+   ">"         infix-notation
+   "<"         infix-notation
    "icontains" icontains-expression
-   "like"  (globbing infix-notation)
-   "ilike"  (globbing infix-notation)
+   "like"      (globbing infix-notation)
+   "ilike"     (globbing infix-notation)
    "not ilike" infix-notation
-   "between" between-expression
-   "nil?" is-null-expression
-   "in" in-expression})
+   "between"   between-expression
+   "nil?"      is-null-expression
+   "in"        in-expression})
 
 (defn- sql-formatter! [predicate-name]
   (if-let [formatter (predicates predicate-name)]
     formatter
-    (throw-ex-info {:type :unknown-predicate :predicate predicate-name
+    (throw-ex-info {:type    :unknown-predicate :predicate predicate-name
                     :message (str "Unknown predicate: " predicate-name)})))
 
 (defn- expand-bilingual-expression [formatter search-schema predicate field & values]
@@ -225,7 +225,7 @@
         (some? multiplexed-field) (apply expand-multiplexed-expression formatter search-schema predicate field multiplexed-field values)
         :else (apply formatter search-schema predicate field values))
       (catch ArityException _
-        (throw-ex-info {:type :invalid-arguments :predicate predicate
+        (throw-ex-info {:type    :invalid-arguments :predicate predicate
                         :message (str "Wrong number of arguments: " (rest expression)
                                       " for predicate: " predicate)})))))
 
@@ -249,14 +249,18 @@
 
 (defn whoami->sql [{:keys [id] :as whoami}]
   (cond
-    (or (rooli-service/paakayttaja? whoami)
-        (rooli-service/laskuttaja? whoami))
+    (rooli-service/laskuttaja? whoami)
     ["(energiatodistus.tila_id IN (2, 3, 4) OR
        (energiatodistus.draft_visible_to_paakayttaja AND
         energiatodistus.tila_id <> 5))"]
 
+    (rooli-service/paakayttaja? whoami)
+    ["(energiatodistus.tila_id IN (2, 3, 4, 6, 7) OR
+       (energiatodistus.draft_visible_to_paakayttaja AND
+        energiatodistus.tila_id <> 5))"]
+
     (rooli-service/laatija? whoami)
-    ["energiatodistus.laatija_id = ? AND energiatodistus.tila_id <> 5" id]
+    ["energiatodistus.laatija_id = ? AND energiatodistus.tila_id IN (0, 1, 2, 3, 4, 7)" id]
 
     (rooli-service/public? whoami)
     ["energiatodistus.tila_id = 2 AND

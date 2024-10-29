@@ -250,6 +250,7 @@
   .tarkennettu-label {
     @apply text-lg;
   }
+
   .tarkennettu-row:focus-within .tarkennettu-label {
     @apply font-bold;
   }
@@ -802,7 +803,11 @@
     {/if}
 
     <div class="w-full md:w-11/12 mt-4 flex flex-col sm:flex-row">
-      <Button {...buttonStyles.green} disabled={!isValid} type="submit">
+      <Button
+        {...buttonStyles.green}
+        disabled={!isValid}
+        type="submit"
+        dataCy="ethaku-hae">
         {$_('HAE')}
       </Button>
       <Button {...buttonStyles.ashblue} type="reset">

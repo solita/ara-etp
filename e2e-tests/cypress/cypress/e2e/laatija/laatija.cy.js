@@ -22,7 +22,7 @@ context('Laatija', () => {
     it('should navigate to energiatodistus', () => {
       cy.visit('/#/energiatodistus/all');
 
-      cy.get('[data-cy="energiatodistus-row"]').first().click();
+      cy.get('[data-cy="energiatodistus-id"]').contains('5').click();
 
       cy.location().should(loc =>
         assert.equal(loc.toString(), `${baseUrl}/#/energiatodistus/2018/5`)
@@ -55,82 +55,30 @@ context('Laatija', () => {
     it('should delete energiatodistus from energiatodistus page', () => {
       cy.visit('/#/energiatodistus/all');
 
-      cy.get('[data-cy="energiatodistus-row"]').first().click();
-
-      cy.intercept(
-        {
-          method: 'DELETE',
-          pathname: /\/api\/private\/energiatodistukset\/2018\/5$/
-        },
-        { statusCode: 200 }
-      ).as('deleteEnergiatodistus');
-
-      cy.intercept(
-        {
-          method: 'GET',
-          pathname: /\/api\/private\/energiatodistukset$/
-        },
-        req =>
-          req.reply(FIXTURES.energiatodistukset.filter(item => item.id !== 5))
-      ).as('energiatodistukset');
-
-      cy.intercept(
-        {
-          method: 'GET',
-          pathname: /\/api\/private\/energiatodistukset\/count$/
-        },
-        { statusCode: 200, body: { count: 4 } }
-      ).as('count');
+      cy.get('[data-cy="energiatodistus-id"]').contains('5').click();
 
       cy.contains('Poista').click();
+
       cy.get('[data-cy="confirm-submit-button"]').click();
 
-      cy.wait('@deleteEnergiatodistus');
-      cy.wait('@energiatodistukset');
-      cy.wait('@count');
-
-      cy.get('[data-cy="energiatodistus-row"]').should('have.length', 4);
+      cy.get('[data-cy="energiatodistus-id"]')
+        .contains('5')
+        .should('not.exist');
     });
 
     it('should delete energiatodistus from energiatodistukset page', () => {
       cy.visit('/#/energiatodistus/all');
 
-      cy.intercept(
-        {
-          method: 'DELETE',
-          pathname: /\/api\/private\/energiatodistukset\/2018\/5$/
-        },
-        { statusCode: 200 }
-      ).as('deleteEnergiatodistus');
-
-      cy.get(
-        '[data-cy="energiatodistus-row"]:first-child td:last-child span'
-      ).click();
-
-      cy.intercept(
-        {
-          method: 'GET',
-          pathname: /\/api\/private\/energiatodistukset$/
-        },
-        req =>
-          req.reply(FIXTURES.energiatodistukset.filter(item => item.id !== 5))
-      ).as('energiatodistukset');
-
-      cy.intercept(
-        {
-          method: 'GET',
-          pathname: /\/api\/private\/energiatodistukset\/count$/
-        },
-        { statusCode: 200, body: { count: 4 } }
-      ).as('count');
+      cy.get('[data-cy="energiatodistus-id"]')
+        .contains('5')
+        .siblings('[data-cy="energiatodistus-delete"]')
+        .click();
 
       cy.get('[data-cy="confirm-submit-button"]').click();
 
-      cy.wait('@deleteEnergiatodistus');
-      cy.wait('@energiatodistukset');
-      cy.wait('@count');
-
-      cy.get('[data-cy="energiatodistus-row"]').should('have.length', 4);
+      cy.get('[data-cy="energiatodistus-id"]')
+        .contains('5')
+        .should('not.exist');
     });
   });
 

@@ -1,0 +1,15 @@
+# Ignore all files, and then whitelist only required
+*
+
+!package.json
+!package-lock.json
+
+!src/
+!assets/
+
+!babel.config.cjs
+!jest.config.js
+!jest_setup.js
+!postcss.config.cjs
+!tailwind.config.js
+!webpack.config.js

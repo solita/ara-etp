@@ -273,8 +273,9 @@
      (-> whoami :rooli rooli-service/rooli-key)
      (= laatija-id (:id whoami))
      draft-visible-to-paakayttaja]
-    [_ :laatija true _] (assoc energiatodistus :kommentti nil)
-    [(:or :signed :discarded :replaced) (:or :paakayttaja :laskuttaja) _ _] energiatodistus
+    [(:or :draft :in-signing :signed :discarded :replaced :deleted :expired) :laatija true _] (assoc energiatodistus :kommentti nil)
+    [(:or :signed :discarded :replaced) :laskuttaja _ _] energiatodistus
+    [(:or :signed :discarded :replaced :expired) :paakayttaja _ _] energiatodistus
     [_ (:or :paakayttaja :laskuttaja) _ true] energiatodistus
     :else (exception/throw-forbidden!)))
 

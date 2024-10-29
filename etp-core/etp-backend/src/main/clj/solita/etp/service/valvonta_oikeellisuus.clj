@@ -343,7 +343,7 @@
 (defn delete-draft-toimenpide! [db toimenpide-id]
   (valvonta-oikeellisuus-db/delete-draft-toimenpide! db {:toimenpide-id toimenpide-id}))
 
-(defn publish-toimenpide! [db aws-s3-client whoami id toimenpide-id]
+(defn publish-toimenpide! [db aws-s3-client whoami id toimenpide-id {:keys [inhibit-email?]}]
   (jdbc/with-db-transaction
     [tx db]
     (logic/if-let*
@@ -354,7 +354,8 @@
           (asha-valvonta-oikeellisuus/log-toimenpide! tx aws-s3-client whoami id toimenpide))
         (when (toimenpide/audit-reply? toimenpide)
           (add-audit-reply-viestiketju! tx whoami valvonta toimenpide))
-        (send-toimenpide-email! db aws-s3-client id toimenpide)
+        (when-not inhibit-email?
+          (send-toimenpide-email! db aws-s3-client id toimenpide))
         (valvonta-oikeellisuus-db/update-toimenpide-published! tx {:id toimenpide-id})))))
 
 (defn find-toimenpidetyypit [db] (luokittelu/find-toimenpidetypes db))

@@ -6,7 +6,9 @@ module.exports = defineConfig({
   defaultCommandTimeout: 15000,
   video: true,
   e2e: {
-    setupNodeEvents(on, config) {},
-    baseUrl: 'https://localhost:3009'
+    backendUrl: 'http://localhost:3444',
+    publicUrl: 'http://localhost:5059',
+    baseUrl: 'https://localhost:3009',
+    setupNodeEvents(on, config) {}
   }
 });
