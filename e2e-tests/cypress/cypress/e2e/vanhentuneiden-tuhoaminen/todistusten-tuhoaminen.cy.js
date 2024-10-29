@@ -55,12 +55,13 @@ context('Laatija', () => {
       const query =
         "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
 
-      cy.task('executeQuery', { query, applicationName });
-      cy.request(
-        'POST',
-        `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
-      ).then(response => {
-        expect(response.status).to.eq(200);
+      cy.task('executeQuery', { query, applicationName }).then(() => {
+        cy.request(
+          'POST',
+          `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
+        ).then(response => {
+          expect(response.status).to.eq(200);
+        });
       });
       // There is no way to know when running the expiration is finished.
       cy.wait(1000);
@@ -138,12 +139,13 @@ context('Paakayttaja', () => {
     it('running the expiration should succeed', () => {
       const query =
         "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
-      cy.task('executeQuery', { query, applicationName });
-      cy.request(
-        'POST',
-        `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
-      ).then(response => {
-        expect(response.status).to.eq(200);
+      cy.task('executeQuery', { query, applicationName }).then(() => {
+        cy.request(
+          'POST',
+          `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
+        ).then(response => {
+          expect(response.status).to.eq(200);
+        });
       });
       // There is no way to know when running the expiration is finished.
       cy.wait(1000);
