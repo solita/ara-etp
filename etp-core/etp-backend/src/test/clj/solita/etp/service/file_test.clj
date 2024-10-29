@@ -61,7 +61,7 @@
 (t/deftest tag-file-test
   (let [id (str (:id file-info-1) "-tag-file-test")
         tag-1 {:Key "key-1" :Value "key-1-value"}
-        tag-2 {:Key "key-2" :Value "key-1-value"}
+        tag-2 {:Key "key-2" :Value "key-2-value"}
         tag-1-updated {:Key "key-1" :Value "key-1-new-value"}]
     (service/upsert-file-from-bytes ts/*aws-s3-client*
                                     id

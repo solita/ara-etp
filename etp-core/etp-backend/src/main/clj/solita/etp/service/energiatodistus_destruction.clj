@@ -22,10 +22,15 @@
 (defn- destroy-energiatodistus-audit-data! [db energiatodistus-id]
   (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus-id energiatodistus-id}))
 
+(defn- handle-deletion-from-s3 [aws-s3-client file-key ]
+  (let [destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}]
+    (file/put-file-tag aws-s3-client file-key destruction-tag)
+    (file/delete-file aws-s3-client file-key)))
+
 (defn- delete-from-s3 [aws-s3-client file-key]
   (if (file/file-exists? aws-s3-client file-key)
     (do
-      (file/delete-file aws-s3-client file-key)
+      (handle-deletion-from-s3 aws-s3-client file-key)
       (log/info (str "Deleted " file-key " from S3")))
     (do
       (log/warn (str "Tried to delete " file-key " but it does not exist!")))))
