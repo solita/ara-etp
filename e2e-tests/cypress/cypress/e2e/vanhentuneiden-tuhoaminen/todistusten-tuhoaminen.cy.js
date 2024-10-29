@@ -6,21 +6,23 @@ const backendUrl = Cypress.config('backendUrl');
 
 const expiredEtWithValvontaId = 7;
 const expiredEtWithoutValvontaId = 6;
-const etToBeMadeExpiredId = 1;
-const signedEtThatWillNotBeTouchedId = 4;
+const signedEtThatWillNotBeTouched1 = 1;
+const signedEtThatWillNotBeTouchedId2 = 4;
 
-// Only thing about applicationName that matters in this case is that it is parseable by the audit system.
-// Now just put as <expiration-system-user-id>@cypress.
-const applicationName = '-6@cypress';
+const runExpirationOfTodistukset = () => {
+  cy.request(
+    'POST',
+    `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
+  ).then(response => {
+    expect(response.status).to.eq(200);
+  });
+  // There is no way to know when running the expiration is finished.
+  cy.wait(1000);
+};
 
 context('Laatija', () => {
-  // Using just `before` here as we do not want to reset the database in
-  // between tests.
-  before(() => {
-    cy.resetDb();
-  });
-
   beforeEach(() => {
+    cy.resetDb();
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
@@ -31,12 +33,12 @@ context('Laatija', () => {
       cy.visit('/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(etToBeMadeExpiredId)
+        .contains(signedEtThatWillNotBeTouched1)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(signedEtThatWillNotBeTouchedId)
+        .contains(signedEtThatWillNotBeTouchedId2)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
 
@@ -51,33 +53,27 @@ context('Laatija', () => {
         .should('have.text', 'Voimassa');
     });
 
-    it('set the et 1 as expired and run expiration', () => {
-      const query =
-        "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
-
-      cy.task('executeQuery', { query, applicationName }).then(() => {
-        cy.request(
-          'POST',
-          `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
-        ).then(response => {
-          expect(response.status).to.eq(200);
-        });
+    it('Should only see non-expired and expired with ongoing valvonta energiatodistukset after running expiration', () => {
+      cy.request(
+        'POST',
+        `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
+      ).then(response => {
+        expect(response.status).to.eq(200);
       });
+
       // There is no way to know when running the expiration is finished.
       cy.wait(1000);
-    });
 
-    it('Should only see non-expired and expired with ongoing valvonta energiatodistukset', () => {
       cy.visit('/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(signedEtThatWillNotBeTouchedId)
+        .contains(signedEtThatWillNotBeTouchedId2)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(etToBeMadeExpiredId)
-        .should('not.exist');
+        .contains(signedEtThatWillNotBeTouched1)
+        .should('exist');
 
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(expiredEtWithoutValvontaId)
@@ -87,14 +83,10 @@ context('Laatija', () => {
         .contains(expiredEtWithValvontaId)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Vanhentunut');
-    });
 
-    it('energiatodistus with valvonta can be still accessed', () => {
       cy.visit(`/#/energiatodistus/2018/${expiredEtWithValvontaId}`);
       cy.contains('Energiatodistus 2018/7 - Vanhentunut').should('exist');
-    });
 
-    it('energiatodistus without valvonta can not be accessed', () => {
       cy.visit(`/#/energiatodistus/2018/${expiredEtWithoutValvontaId}`);
       cy.contains('Puutteelliset käyttöoikeudet').should('exist');
     });
@@ -102,11 +94,8 @@ context('Laatija', () => {
 });
 
 context('Paakayttaja', () => {
-  before(() => {
-    cy.resetDb();
-  });
-
   beforeEach(() => {
+    cy.resetDb();
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...paakayttajaHeaders };
     });
@@ -117,7 +106,7 @@ context('Paakayttaja', () => {
       cy.visit('/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(etToBeMadeExpiredId)
+        .contains(signedEtThatWillNotBeTouched1)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
 
@@ -136,30 +125,17 @@ context('Paakayttaja', () => {
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
     });
-    it('running the expiration should succeed', () => {
-      const query =
-        "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
-      cy.task('executeQuery', { query, applicationName }).then(() => {
-        cy.request(
-          'POST',
-          `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
-        ).then(response => {
-          expect(response.status).to.eq(200);
-        });
-      });
-      // There is no way to know when running the expiration is finished.
-      cy.wait(1000);
-    });
-    it('should see 1 and 6 as tuhottu, 4 as voimassa and 7 as vahentunut', () => {
+    it('should see 1 and 6 as tuhottu, 4 as voimassa and 7 as vahentunut after running the expiration', () => {
+      runExpirationOfTodistukset();
       cy.visit('/#/energiatodistus/all');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(etToBeMadeExpiredId)
+        .contains(signedEtThatWillNotBeTouched1)
         .siblings('[data-cy="energiatodistus-tila"]')
-        .should('have.text', 'Tuhottu');
+        .should('have.text', 'Voimassa');
 
       cy.get('[data-cy="energiatodistus-id"]')
-        .contains(signedEtThatWillNotBeTouchedId)
+        .contains(signedEtThatWillNotBeTouchedId2)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Voimassa');
 
@@ -172,16 +148,12 @@ context('Paakayttaja', () => {
         .contains(expiredEtWithValvontaId)
         .siblings('[data-cy="energiatodistus-tila"]')
         .should('have.text', 'Vanhentunut');
-    });
-    it('energiatodistus without valvonta can not be accessed', () => {
-      cy.visit('/#/energiatodistus/all');
+
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(expiredEtWithoutValvontaId)
         .click();
       cy.contains('Puutteelliset käyttöoikeudet').should('exist');
-    });
 
-    it('energiatodistus with valvonta can still be accessed', () => {
       cy.visit('/#/energiatodistus/all');
       cy.get('[data-cy="energiatodistus-id"]')
         .contains(expiredEtWithValvontaId)
@@ -192,7 +164,7 @@ context('Paakayttaja', () => {
 });
 
 context('Public', () => {
-  before(() => {
+  beforeEach(() => {
     cy.resetDb();
   });
 
@@ -212,28 +184,15 @@ context('Public', () => {
         .should('exist');
 
       cy.get('[data-cy="ethaku-tunnus"]')
-        .contains(signedEtThatWillNotBeTouchedId)
+        .contains(signedEtThatWillNotBeTouchedId2)
         .should('exist');
 
       cy.get('[data-cy="ethaku-tunnus"]')
-        .contains(etToBeMadeExpiredId)
+        .contains(signedEtThatWillNotBeTouched1)
         .should('exist');
     });
-    it('running the expiration should succeed', () => {
-      const query =
-        "update etp.energiatodistus set voimassaolo_paattymisaika = now() - interval '2 days' where id = 1;";
-      cy.task('executeQuery', { query, applicationName }).then(() => {
-        cy.request(
-          'POST',
-          `${backendUrl}/api/internal/energiatodistukset/anonymize-and-delete-expired`
-        ).then(response => {
-          expect(response.status).to.eq(200);
-        });
-      });
-      // There is no way to know when running the expiration is finished.
-      cy.wait(1000);
-    });
-    it('should only see the not expired todistus.', () => {
+    it('should only see the non-expired todistukset after running the expiration.', () => {
+      runExpirationOfTodistukset();
       cy.visit(`${publicUrl}/ethaku`);
 
       cy.get('[data-cy="ethaku-hae"]').click();
@@ -248,12 +207,12 @@ context('Public', () => {
         .should('not.exist');
 
       cy.get('[data-cy="ethaku-tunnus"]')
-        .contains(signedEtThatWillNotBeTouchedId)
+        .contains(signedEtThatWillNotBeTouchedId2)
         .should('exist');
 
       cy.get('[data-cy="ethaku-tunnus"]')
-        .contains(etToBeMadeExpiredId)
-        .should('not.exist');
+        .contains(signedEtThatWillNotBeTouched1)
+        .should('exist');
 
       cy.visit(
         `${publicUrl}/energiatodistus?id=${expiredEtWithValvontaId}&versio=2018`
@@ -266,9 +225,10 @@ context('Public', () => {
       cy.contains('Energiatodistusta ei löytynyt').should('exist');
 
       cy.visit(
-        `${publicUrl}/energiatodistus?id=${etToBeMadeExpiredId}&versio=2013`
+        `${publicUrl}/energiatodistus?id=${signedEtThatWillNotBeTouched1}&versio=2013`
       );
-      cy.contains('Energiatodistusta ei löytynyt').should('exist');
+      // This is a piece of the todistus' notes.
+      cy.contains('Seuraavia toimenpiteitä voisi tehdä:').should('exist');
     });
   });
 });

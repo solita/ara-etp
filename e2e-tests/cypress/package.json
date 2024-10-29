@@ -11,8 +11,5 @@
   "devDependencies": {
     "cypress": "^13.6.4",
     "prettier": "3.3.3"
-  },
-  "dependencies": {
-    "pg": "^8.13.1"
   }
 }
