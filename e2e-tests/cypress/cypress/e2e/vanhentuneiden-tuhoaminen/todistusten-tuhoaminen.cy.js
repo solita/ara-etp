@@ -196,13 +196,7 @@ context('Public', () => {
     cy.resetDb();
   });
 
-  beforeEach(() => {
-    cy.intercept(/\/api\/private/, req => {
-      req.headers = { ...req.headers, ...paakayttajaHeaders };
-    });
-  });
-
-  describe.only('when destroying expired energiatodistukset', () => {
+  describe('when destroying expired energiatodistukset', () => {
     it('should see all the Voimassa energiatodistukset before running the expiration', () => {
       cy.visit(`${publicUrl}/ethaku`);
 
