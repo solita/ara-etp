@@ -135,10 +135,10 @@
   (->> (energiatodistus-destruction-db/select-expired-energiatodistus-ids db {:check-valvonta check-valvonta?})
        (map :energiatodistus-id)))
 
-(defn- make-energiatodistus-vahnentunut
+(defn- make-energiatodistus-vanhentunut
   "There is an edge case where todistus might be expired but can not be
    destroyed as there is still active valvonta on it. This function can be
-   used to make it 'vanhentunut' so that it can be handeled differently from"
+   used to make it 'vanhentunut' so that it can be handled differently from"
   [db energiatodistus-id]
   (energiatodistus-destruction-db/make-energiatodistus-vanhentunut! db {:energiatodistus-id energiatodistus-id})
   (log/info (str "Set energiatodistus (id: " energiatodistus-id ") tila to vanhentunut.")))
@@ -151,6 +151,6 @@
   (let [expired-todistukset-without-valvonta-ids (set (get-currently-expired-todistus-ids db {:check-vavonta? true}))
         all-expired-todistukset-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? false}))
         expired-todistukset-with-valvonta-ids (set/difference all-expired-todistukset-ids expired-todistukset-without-valvonta-ids)]
-    (run! #(make-energiatodistus-vahnentunut db %) expired-todistukset-with-valvonta-ids)
+    (run! #(make-energiatodistus-vanhentunut db %) expired-todistukset-with-valvonta-ids)
     (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-without-valvonta-ids))
   (log/info (str "Destruction of expired energiatodistukset finished.")))
