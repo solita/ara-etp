@@ -13,7 +13,8 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.file :as file]
-            [solita.etp.service.viesti :as viesti-service]))
+            [solita.etp.service.viesti :as viesti-service])
+  (:import (clojure.lang ExceptionInfo)))
 
 (db/require-queries 'energiatodistus-destruction)
 
@@ -29,12 +30,19 @@
         max-tries 8]
     (file/put-file-tag aws-s3-client file-key destruction-tag)
     (loop [attempt 0]
-      (let [found-tag (file/get-file-tag aws-s3-client file-key (:Key destruction-tag))]
-        (if (= found-tag destruction-tag)
+      (if
+        (try
           (file/delete-file aws-s3-client file-key)
+          true
+          (catch ExceptionInfo e
+            (let [{:keys [type]} (ex-data e)]
+              (if (= type :resource-forbidden)
+                false
+                (throw e)))))
+        nil
+        (if (>= attempt max-tries)
+          (exception/throw-ex-info! :tag-not-applied (str "Exceeded max-tries. The file does not have the tag " destruction-tag))
           (do
-            (when (>= attempt max-tries)
-              (exception/throw-ex-info! :tag-not-applied (str "Exceeded max-tries. The file does not have the tag " destruction-tag)))
             (Thread/sleep wait-ms)
             (recur (inc attempt))))))))
 
