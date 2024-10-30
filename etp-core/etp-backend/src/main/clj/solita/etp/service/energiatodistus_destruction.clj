@@ -25,26 +25,10 @@
   (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus-id energiatodistus-id}))
 
 (defn- handle-deletion-from-s3 [aws-s3-client file-key]
-  (let [destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
-        wait-ms 1000
-        max-tries 8]
+  (let [;; This is needed so that the noncurrent version is destroyed.
+        destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}]
     (file/put-file-tag aws-s3-client file-key destruction-tag)
-    (loop [attempt 0]
-      (if
-        (try
-          (file/delete-file aws-s3-client file-key)
-          true
-          (catch ExceptionInfo e
-            (let [{:keys [type]} (ex-data e)]
-              (if (= type :resource-forbidden)
-                false
-                (throw e)))))
-        nil
-        (if (>= attempt max-tries)
-          (exception/throw-ex-info! :tag-not-applied (str "Exceeded max-tries. The file does not have the tag " destruction-tag))
-          (do
-            (Thread/sleep wait-ms)
-            (recur (inc attempt))))))))
+    (file/delete-file aws-s3-client file-key)))
 
 (defn- delete-from-s3 [aws-s3-client file-key]
   (if (file/file-exists? aws-s3-client file-key)
