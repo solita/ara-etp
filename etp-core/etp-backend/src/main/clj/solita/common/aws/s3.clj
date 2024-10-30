@@ -31,6 +31,19 @@
                     {:Bucket bucket
                      :Key    key}))
 
+(defn get-object-tagging [{:keys [client bucket]} key]
+  (aws.utils/invoke client
+                    :GetObjectTagging
+                    {:Bucket bucket
+                     :Key    key}))
+
+(defn put-object-tagging [{:keys [client bucket]} key tag-set]
+  (aws.utils/invoke client
+                    :PutObjectTagging
+                    {:Bucket bucket
+                     :Key    key
+                     :Tagging {:TagSet tag-set}}))
+
 (defn create-multipart-upload [{:keys [client bucket]} key]
   (aws.utils/invoke client
                     :CreateMultipartUpload

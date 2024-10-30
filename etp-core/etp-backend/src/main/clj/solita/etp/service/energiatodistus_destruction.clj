@@ -23,10 +23,25 @@
 (defn- destroy-energiatodistus-audit-data! [db energiatodistus-id]
   (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus-id energiatodistus-id}))
 
+(defn- handle-deletion-from-s3 [aws-s3-client file-key]
+  (let [destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
+        wait-ms 1000
+        max-tries 8]
+    (file/put-file-tag aws-s3-client file-key destruction-tag)
+    (loop [attempt 0]
+      (let [found-tag (file/get-file-tag aws-s3-client file-key (:Key destruction-tag))]
+        (if (= found-tag destruction-tag)
+          (file/delete-file aws-s3-client file-key)
+          (do
+            (when (>= attempt max-tries)
+              (exception/throw-ex-info! :tag-not-applied (str "Exceeded max-tries. The file does not have the tag " destruction-tag)))
+            (Thread/sleep wait-ms)
+            (recur (inc attempt))))))))
+
 (defn- delete-from-s3 [aws-s3-client file-key]
   (if (file/file-exists? aws-s3-client file-key)
     (do
-      (file/delete-file aws-s3-client file-key)
+      (handle-deletion-from-s3 aws-s3-client file-key)
       (log/info (str "Deleted " file-key " from S3")))
     (do
       (log/warn (str "Tried to delete " file-key " but it does not exist!")))))
