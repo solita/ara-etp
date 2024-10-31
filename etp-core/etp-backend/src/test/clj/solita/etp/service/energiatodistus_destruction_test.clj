@@ -33,7 +33,7 @@
                                                    energiatodistus))
 
 (defn expire-energiatodistus [energiatodistus-id]
-  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE - INTERVAL '2 days' where id = ?" energiatodistus-id]))
+  (jdbc/execute! ts/*db* ["update energiatodistus set voimassaolo_paattymisaika = CURRENT_DATE::timestamp at time zone ('Europe/Helsinki') - INTERVAL '1 days' where id = ?" energiatodistus-id]))
 
 (defn expire-valvonta [energiatodistus-id]
   (jdbc/execute! ts/*db* ["update vo_toimenpide set create_time = CURRENT_DATE - INTERVAL '3 years' where energiatodistus_id = ?" energiatodistus-id])
@@ -95,8 +95,8 @@
       (t/is (nil? (some #{id-1} expired-ids))))
     (t/testing "Todistus with expiration time at year 1970 should be expired."
       (t/is (some #{id-2} expired-ids)))
-    (t/testing "Todistus whose expiration is today should not be expired yet."
-      (t/is (nil? (some #{id-3} expired-ids))))
+    (t/testing "Todistus with expiration in the past should be expired"
+      (t/is (some #{id-3} expired-ids)))
     (t/testing "Todistus with expiration date at yesterday should be expired."
       (t/is (some #{id-4} expired-ids)))))
 
@@ -134,7 +134,7 @@
     (t/testing "Valvonta should not affect the expiration as its checking is skipped"
       (t/is (nil? (some #{id-1} expired-ids-without-checking-valvonta)))
       (t/is (some #{id-2} expired-ids-without-checking-valvonta))
-      (t/is (nil? (some #{id-3} expired-ids-without-checking-valvonta)))
+      (t/is (some #{id-3} expired-ids-without-checking-valvonta))
       (t/is (some #{id-4} expired-ids-without-checking-valvonta)))))
 
 (t/deftest get-currently-expired-todistus-ids-with-old-valvonta-test
@@ -148,7 +148,7 @@
     (t/testing "Valvonta should not affect the expiration as it is older than two years"
       (t/is (nil? (some #{id-1} expired-ids)))
       (t/is (some #{id-2} expired-ids))
-      (t/is (nil? (some #{id-3} expired-ids)))
+      (t/is (some #{id-3} expired-ids))
       (t/is (some #{id-4} expired-ids)))))
 
 (t/deftest get-currently-expired-todistus-ids-with-almost-old-valvonta-test
