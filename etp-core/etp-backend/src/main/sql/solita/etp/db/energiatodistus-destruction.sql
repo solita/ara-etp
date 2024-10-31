@@ -7,7 +7,7 @@ from energiatodistus
                     from vo_toimenpide
                     group by energiatodistus_id) latest_toimenpide
                    on energiatodistus.id = latest_toimenpide.energiatodistus_id
-where voimassaolo_paattymisaika::date < (now() at time zone 'Europe/Helsinki')::date
+where voimassaolo_paattymisaika < now()
   and ((latest_toimenpide_create_time < (now() at time zone 'Europe/Helsinki')::date - interval '2 years'
         or latest_toimenpide_create_time is null)
       and (latest_toimenpide_publish_time < (now() at time zone 'Europe/Helsinki')::date - interval '2 years'
