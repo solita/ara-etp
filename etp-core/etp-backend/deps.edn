@@ -2,7 +2,7 @@
              "src/main/sql"
              "src/main/resources"]
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
- :deps      {org.clojure/clojure                       {:mvn/version "1.11.4"}
+ :deps      {org.clojure/clojure                       {:mvn/version "1.12.0"}
              ch.qos.logback/logback-classic            {:mvn/version "1.5.7"}
              org.slf4j/log4j-over-slf4j                {:mvn/version "2.0.16"}
              flathead/flathead                         {:mvn/version "0.0.6"}
