@@ -80,7 +80,7 @@
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
-                        :extra-deps  {integrant/repl                 {:mvn/version "0.3.3"}
+                        :extra-deps  {integrant/repl                 {:mvn/version "0.4.0"}
                                       eftest/eftest                  {:mvn/version "0.6.0"}
                                       prismatic/schema-generators    {:mvn/version "0.1.5"}
                                       ring/ring-mock                 {:mvn/version "0.4.0"}
