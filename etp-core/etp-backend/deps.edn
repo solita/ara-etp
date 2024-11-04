@@ -22,7 +22,7 @@
              metosin/ring-swagger-ui                   {:mvn/version "5.9.0"}
              metosin/reitit-middleware                 {:mvn/version "0.7.1"}
              metosin/reitit-dev                        {:mvn/version "0.7.1"}
-             metosin/reitit-schema                     {:mvn/version "0.7.1"}
+             metosin/reitit-schema                     {:mvn/version "0.7.2"}
              fi.metosin/reitit-openapi                 {:mvn/version "0.7.1"}
              metosin/muuntaja                          {:mvn/version "0.6.10"}
              metosin/jsonista                          {:mvn/version "0.3.10"}
