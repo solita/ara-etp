@@ -75,7 +75,7 @@
              ;; related to suomi.fi-viestit implementation
              commons-discovery/commons-discovery       {:mvn/version "0.5"}
              com.sun.xml.ws/webservices-rt             {:mvn/version "2.0.1"}
-             kovacnica/clojure.network.ip              {:mvn/version "0.1.3"
+             kovacnica/clojure.network.ip              {:mvn/version "0.1.5"
                                                         :exclusions  [org.clojure/clojurescript]}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
