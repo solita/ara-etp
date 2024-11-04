@@ -19,7 +19,7 @@
              metosin/reitit-ring                       {:mvn/version "0.7.2"}
              metosin/reitit-swagger                    {:mvn/version "0.7.1"}
              metosin/reitit-swagger-ui                 {:mvn/version "0.7.2"}
-             metosin/ring-swagger-ui                   {:mvn/version "5.9.0"}
+             metosin/ring-swagger-ui                   {:mvn/version "5.17.14"}
              metosin/reitit-middleware                 {:mvn/version "0.7.2"}
              metosin/reitit-dev                        {:mvn/version "0.7.1"}
              metosin/reitit-schema                     {:mvn/version "0.7.2"}
