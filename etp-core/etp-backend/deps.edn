@@ -56,7 +56,7 @@
               :exclusions  [org.apache.xmlgraphics/batik-transcoder
                             org.apache.xmlgraphics/batik-codec
                             org.apache.xmlgraphics/batik-ext]}
-             org.apache.xmlgraphics/batik-transcoder   {:mvn/version "1.17"}
+             org.apache.xmlgraphics/batik-transcoder   {:mvn/version "1.18"}
              org.apache.xmlgraphics/batik-codec        {:mvn/version "1.18"}
              org.apache.xmlgraphics/batik-ext          {:mvn/version "1.18"}
 
@@ -80,7 +80,7 @@
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
-                        :extra-deps  {integrant/repl                 {:mvn/version "0.3.3"}
+                        :extra-deps  {integrant/repl                 {:mvn/version "0.4.0"}
                                       eftest/eftest                  {:mvn/version "0.6.0"}
                                       prismatic/schema-generators    {:mvn/version "0.1.5"}
                                       ring/ring-mock                 {:mvn/version "0.4.0"}
