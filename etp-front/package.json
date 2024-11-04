@@ -65,7 +65,7 @@
     "prettier": "^3.0.0",
     "prettier-plugin-svelte": "^3.2.2",
     "storybook": "^8.0.5",
-    "svelte": "^4.0.0",
+    "svelte": "^5.0.0",
     "svelte-jester": "^5.0.0",
     "svelte-loader": "^3.2.0",
     "svelte-preprocess": "^5.0.3",
