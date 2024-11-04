@@ -58,7 +58,7 @@
                             org.apache.xmlgraphics/batik-ext]}
              org.apache.xmlgraphics/batik-transcoder   {:mvn/version "1.17"}
              org.apache.xmlgraphics/batik-codec        {:mvn/version "1.17"}
-             org.apache.xmlgraphics/batik-ext          {:mvn/version "1.17"}
+             org.apache.xmlgraphics/batik-ext          {:mvn/version "1.18"}
 
              ;; Non-alpha version does not support xml namespaces
              org.clojure/data.xml                      {:mvn/version "0.2.0-alpha9"}
