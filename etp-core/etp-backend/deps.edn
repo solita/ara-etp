@@ -23,7 +23,7 @@
              metosin/reitit-middleware                 {:mvn/version "0.7.2"}
              metosin/reitit-dev                        {:mvn/version "0.7.1"}
              metosin/reitit-schema                     {:mvn/version "0.7.2"}
-             fi.metosin/reitit-openapi                 {:mvn/version "0.7.1"}
+             fi.metosin/reitit-openapi                 {:mvn/version "0.7.2"}
              metosin/muuntaja                          {:mvn/version "0.6.10"}
              metosin/jsonista                          {:mvn/version "0.3.12"}
              metosin/schema-tools                      {:mvn/version "0.13.1"}
