@@ -6,7 +6,7 @@
              ch.qos.logback/logback-classic            {:mvn/version "1.5.12"}
              org.slf4j/log4j-over-slf4j                {:mvn/version "2.0.16"}
              flathead/flathead                         {:mvn/version "0.0.6"}
-             integrant/integrant                       {:mvn/version "0.10.0"}
+             integrant/integrant                       {:mvn/version "0.13.1"}
              hikari-cp/hikari-cp                       {:mvn/version "3.1.0"}
              org.postgresql/postgresql                 {:mvn/version "42.7.4"}
              org.clojure/java.jdbc                     {:mvn/version "0.7.12"}
