@@ -58,7 +58,7 @@
     "@babel/runtime-corejs3": "^7.11.6",
     "chart.js": "^4.0.0",
     "core-js": "^3.6.5",
-    "date-fns": "^3.0.0",
+    "date-fns": "^4.0.0",
     "object-hash": "^3.0.0",
     "page": "^1.11.6",
     "qs": "^6.9.4",
