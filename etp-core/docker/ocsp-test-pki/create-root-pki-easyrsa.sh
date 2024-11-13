@@ -3,31 +3,21 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# EASYRSA="${SCRIPT_DIR}"
-# EASYRSA_SSL_CONF="${SCRIPT_DIR}/openssl-easyrsa.cnf"
-# EASYRSA_EXT_DIR="${SCRIPT_DIR}/x509-types/"
-
-OCSP_KEY="${SCRIPT_DIR}/ocsp/ocsp.key"
-OCSP_CSR="${SCRIPT_DIR}/ocsp/ocsp.csr" 
-OCSP_REQ_NAME="ocsp_responder"
-
-SOME_KEY="${SCRIPT_DIR}/requester/requester.key"
-SOME_CSR="${SCRIPT_DIR}/requester/requester.csr" 
-
 PKI_ROOT_DIR="${SCRIPT_DIR}/pki-root"
 PKI_INT_DIR="${SCRIPT_DIR}/pki-int"
 
 SOME_REQ_NAME="some_certificate"
 
-OCSP_LOG="${SCRIPT_DIR}/ocsp.log"
+OCSP_REQ_NAME="ocsp_responder"
+OCSP_LOGS_DIR="${SCRIPT_DIR}/logs/"
+OCSP_ROOT_LOG="${OCSP_LOGS_DIR}/ocsp-root.log"
+OCSP_ROOT_LOG="${OCSP_LOGS_DIR}/ocsp-int.log"
 
 clean() {
   echo "Cleaning"
   rm -r "${PKI_ROOT_DIR}"
-  rm -r "${PKI_INT_DIR}/pki-root"
-  rm -r "${SCRIPT_DIR}/pki-int"
-  rm -r "${SCRIPT_DIR}/ocsp"
-  rm -r "${SCRIPT_DIR}/requester"
+  rm -r "${PKI_INT_DIR}"
+  rm -r "${OCSP_LOGS_DIR}"
 }
 clean
 
@@ -43,13 +33,23 @@ easyrsa_int() {
 
 create_root_ca() {
   easyrsa_root init-pki
+
+  cp -r "${SCRIPT_DIR}/x509-types" "${PKI_ROOT_DIR}/x509-types"
+
   easyrsa_root build-ca nopass
+
+  echo "authorityInfoAccess = OCSP;URI:http://localhost:2060/" >> "${PKI_ROOT_DIR}"/x509-types/COMMON
 }
 create_root_ca
 
 create_int_ca() {
   easyrsa_int init-pki
+
+  cp -r "${SCRIPT_DIR}/x509-types" "${PKI_INT_DIR}/x509-types"
+
   easyrsa_int build-ca subca nopass
+
+  echo "authorityInfoAccess = OCSP;URI:http://localhost:2061/" >> "${PKI_INT_DIR}"/x509-types/COMMON
 }
 create_int_ca
 
@@ -66,16 +66,19 @@ create_root_ocsp_cert() {
 }
 create_root_ocsp_cert
 
-create_requester_cert() {
-  easyrsa_root gen-req "${RES}" nopass
-  openssl genpkey -algorithm RSA -out "${SOME_KEY}"
-  openssl req -new -key "${OCSP_KEY}" -out "${SOME_CSR}" -subj "/CN=INT CA"
-  ./easyrsa import-req "${SOME_CSR}" "${SOME_REQ_NAME}"
-  ./easyrsa sign-req client "${SOME_REQ_NAME}"
+create_int_ocsp_cert() {
+  easyrsa_int gen-req "${OCSP_REQ_NAME}" nopass
+  easyrsa_int sign-req ocsp "${OCSP_REQ_NAME}"
 }
-#create_requester_cert
+create_int_ocsp_cert
 
-start_ocsp_responder() {
+create_leaf_cert() {
+  easyrsa_int gen-req "${SOME_REQ_NAME}" nopass
+  easyrsa_int sign-req dsign "${SOME_REQ_NAME}"
+}
+create_leaf_cert
+
+start_root_ocsp_responder() {
   openssl ocsp \
       -index "${PKI_ROOT_DIR}/index.txt" \
       -port 2560 \
@@ -83,7 +86,18 @@ start_ocsp_responder() {
       -rkey "${PKI_ROOT_DIR}/private/${OCSP_REQ_NAME}.key" \
       -CA "${PKI_ROOT_DIR}/ca.crt" \
       -text \
-      -out "${OCSP_LOG}"
+      -out "${OCSP_ROOT_LOG}"
 }
-start_ocsp_responder
+start_root_ocsp_responder
 
+start_int_ocsp_responder() {
+  openssl ocsp \
+      -index "${PKI_INT_DIR}/index.txt" \
+      -port 2561 \
+      -rsigner "${PKI_INT_DIR}/issued/${OCSP_REQ_NAME}.crt" \
+      -rkey "${PKI_INT_DIR}/private/${OCSP_REQ_NAME}.key" \
+      -CA "${PKI_INT_DIR}/ca.crt" \
+      -text \
+      -out "${OCSP_INT_LOG}"
+}
+start_int_ocsp_responder
