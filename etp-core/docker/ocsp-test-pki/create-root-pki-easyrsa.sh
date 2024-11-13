@@ -11,7 +11,7 @@ SOME_REQ_NAME="some_certificate"
 OCSP_REQ_NAME="ocsp_responder"
 OCSP_LOGS_DIR="${SCRIPT_DIR}/logs/"
 OCSP_ROOT_LOG="${OCSP_LOGS_DIR}/ocsp-root.log"
-OCSP_ROOT_LOG="${OCSP_LOGS_DIR}/ocsp-int.log"
+OCSP_INT_LOG="${OCSP_LOGS_DIR}/ocsp-int.log"
 
 clean() {
   echo "Cleaning"
@@ -19,9 +19,6 @@ clean() {
   rm -r "${PKI_INT_DIR}"
   rm -r "${OCSP_LOGS_DIR}"
 }
-clean
-
-exit 0
 
 easyrsa_root() {
   ./easyrsa --pki-dir="${PKI_ROOT_DIR}" "$@"
@@ -40,7 +37,6 @@ create_root_ca() {
 
   echo "authorityInfoAccess = OCSP;URI:http://localhost:2060/" >> "${PKI_ROOT_DIR}"/x509-types/COMMON
 }
-create_root_ca
 
 create_int_ca() {
   easyrsa_int init-pki
@@ -51,32 +47,27 @@ create_int_ca() {
 
   echo "authorityInfoAccess = OCSP;URI:http://localhost:2061/" >> "${PKI_INT_DIR}"/x509-types/COMMON
 }
-create_int_ca
 
 create_int_ca_cert() {
   easyrsa_root import-req "${PKI_INT_DIR}/reqs/ca.req" "int_ca"
   easyrsa_root sign-req ca "int_ca"
   cp "${PKI_ROOT_DIR}/issued/int_ca.crt" "${PKI_INT_DIR}/ca.crt"
 }
-create_int_ca_cert
 
 create_root_ocsp_cert() {
   easyrsa_root gen-req "${OCSP_REQ_NAME}" nopass
   easyrsa_root sign-req ocsp "${OCSP_REQ_NAME}"
 }
-create_root_ocsp_cert
 
 create_int_ocsp_cert() {
   easyrsa_int gen-req "${OCSP_REQ_NAME}" nopass
   easyrsa_int sign-req ocsp "${OCSP_REQ_NAME}"
 }
-create_int_ocsp_cert
 
 create_leaf_cert() {
   easyrsa_int gen-req "${SOME_REQ_NAME}" nopass
   easyrsa_int sign-req dsign "${SOME_REQ_NAME}"
 }
-create_leaf_cert
 
 start_root_ocsp_responder() {
   openssl ocsp \
@@ -88,7 +79,6 @@ start_root_ocsp_responder() {
       -text \
       -out "${OCSP_ROOT_LOG}"
 }
-start_root_ocsp_responder
 
 start_int_ocsp_responder() {
   openssl ocsp \
@@ -100,4 +90,29 @@ start_int_ocsp_responder() {
       -text \
       -out "${OCSP_INT_LOG}"
 }
-start_int_ocsp_responder
+
+case "$1" in
+    clean)
+        clean
+        ;;
+    start_root_ocsp)
+        mkdir -p "${OCSP_LOGS_DIR}"
+        start_root_ocsp_responder
+        ;;
+    start_int_ocsp)
+        mkdir -p "${OCSP_LOGS_DIR}"
+        start_int_ocsp_responder
+        ;;
+    build)
+        create_root_ca
+        create_int_ca
+        create_int_ca_cert
+        create_root_ocsp_cert
+        create_int_ocsp_cert
+        create_leaf_cert
+        ;;
+    *)
+        echo "Error: Invalid option. Valid options: clean, start_root_ocsp, start_int_ocsp, build"
+        exit 1
+        ;;
+esac
