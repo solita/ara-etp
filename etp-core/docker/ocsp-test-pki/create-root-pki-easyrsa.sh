@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I channel:nixos-24.05-small --pure -i bash -p openssl
+#! nix-shell -I channel:nixos-24.05-small --pure -i bash -p openssl git
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -91,6 +91,23 @@ start_int_ocsp_responder() {
       -out "${OCSP_INT_LOG}"
 }
 
+get_cert_pem() {
+  sed -n '/BEGIN CERTIFICATE/,/END CERTIFICATE/p' "$1"
+}
+
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+CERTS_DIR="${PROJECT_ROOT}/etp-core/etp-backend/src/test/resources/system-signature"
+ROOT_CERT_FILE=${CERTS_DIR}/local-signing-root.pem.crt
+INT_CERT_FILE=${CERTS_DIR}/local-signing-int.pem.crt
+LEAF_CERT_FILE=${CERTS_DIR}/local-signing-leaf.pem.crt
+
+install_certs_to_dev() {
+  get_cert_pem "${PKI_ROOT_DIR}/ca.crt" > "${ROOT_CERT_FILE}"
+  get_cert_pem "${PKI_INT_DIR}/ca.crt" > "${INT_CERT_FILE}"
+  get_cert_pem "${PKI_INT_DIR}/issued/${SOME_REQ_NAME}.crt" > "${LEAF_CERT_FILE}"
+  echo "hmm"
+}
+
 case "$1" in
     clean)
         clean
@@ -103,6 +120,9 @@ case "$1" in
         mkdir -p "${OCSP_LOGS_DIR}"
         start_int_ocsp_responder
         ;;
+    install_certs)
+        install_certs_to_dev
+        ;;
     build)
         create_root_ca
         create_int_ca
@@ -112,7 +132,7 @@ case "$1" in
         create_leaf_cert
         ;;
     *)
-        echo "Error: Invalid option. Valid options: clean, start_root_ocsp, start_int_ocsp, build"
+        echo "See the script for targets."
         exit 1
         ;;
 esac
