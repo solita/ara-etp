@@ -1,10 +1,15 @@
 (ns solita.etp.service.signing.ocsp
   "Online Certificate Status Protocol"
-  (:import (java.io ByteArrayInputStream)
-           (java.nio.charset StandardCharsets)
-           (java.security.cert X509Certificate CertificateFactory)
-           (org.bouncycastle.asn1.x509 AccessDescription AuthorityInformationAccess Extension)
-           (org.bouncycastle.cert.jcajce JcaX509CertificateHolder)))
+  (:require [clj-http.client :as http])
+  (:import
+    (java.io ByteArrayInputStream InputStream)
+    (java.nio.charset StandardCharsets)
+    (java.security.cert X509Certificate CertificateFactory)
+    (org.bouncycastle.asn1.x509 AccessDescription AuthorityInformationAccess Extension Extensions)
+    (org.bouncycastle.cert.jcajce JcaX509CertificateHolder JcaX509ExtensionUtils$SHA1DigestCalculator)
+    (org.bouncycastle.cert.ocsp CertificateID OCSPReq OCSPReqBuilder OCSPResp)
+    (org.bouncycastle.operator DefaultDigestAlgorithmIdentifierFinder)
+    (org.bouncycastle.operator.jcajce JcaDigestCalculatorProviderBuilder)))
 
 (defn string->input-stream [s]
   (ByteArrayInputStream. (.getBytes s StandardCharsets/UTF_8)))
@@ -58,15 +63,13 @@
   ZDJHWHX3bNXJXshO2gF1oHWyGTpDsZhwhVePOW1r0R5FqH/Kt57bisSJPWLlCsQo
   DYXkSw9kHMMPJ688tE7Tt66vQT+YqNF+xiUd2gixbiLK4ywQJWGrbms8YeIJn1bX
   FNgIAmCQa6O8MM/6eGBsirivrMJTY2fB/CCrhZyFsvaXxI0HA6M4ontwbFR0LhO5
-  -----END CERTIFICATE-----"
-  )
+  -----END CERTIFICATE-----")
 
 (def cert-with-ocsp (some-> (CertificateFactory/getInstance "X.509")
                             (.generateCertificate (string->input-stream cert-with-ocsp-pem))))
 
 (def cert-without-ocsp (some-> (CertificateFactory/getInstance "X.509")
                                (.generateCertificate (string->input-stream cert-without-ocsp-pem))))
-
 
 (defn get-ocsp-uri
   "Gets the OCSP URI from the certificate's Authority Information Access"
@@ -82,10 +85,31 @@
                       (some-> access-desc .getAccessLocation .getName str)))
                   %))))
 
-#_(defn make-ocsp-request [^X509Certificate certificate]
-    (let [ocspUrl ""
-          issuerUrl ""
-          ]
-      )
-    CertificateSigna
-    )
+(defn create-ocsp-request
+  "Creates an OCSP request for a given certificate and issuer certificate."
+  [cert issuer-cert]
+  (let [cert-id (CertificateID.
+                  (some-> (JcaDigestCalculatorProviderBuilder.)
+                          .build
+                          (.get (.find (DefaultDigestAlgorithmIdentifierFinder.) "SHA-1")))
+                  (JcaX509CertificateHolder. issuer-cert)
+                  (.getSerialNumber cert))
+        ]
+    ;;TODO: Nonce and exts
+    (some-> (OCSPReqBuilder.)
+            ;;(.setRequestExtensions (Extensions. (Extension[]. )))
+            (.addRequest cert-id)
+            .build)))
+
+;;TODO: Should the issuing certificate be also retrieved from the certificate
+(defn make-ocsp-request [^X509Certificate certificate ^X509Certificate issuing-cert]
+  (let [ocspUrl (get-ocsp-uri certificate)
+        ^OCSPReq request (create-ocsp-request certificate issuing-cert)
+        response (http/post ocspUrl {:content-type     :ocsp-request
+                                     :as               :stream
+                                     :accept           :ocsp-response
+                                     :throw-exceptions false
+                                     :body             (.getEncoded request)})
+        ;; TODO: Is the body enough, how to make the whole response into a stream?
+        ^InputStream body (:body response)]
+    (OCSPResp. body)))
