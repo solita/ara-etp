@@ -72,7 +72,7 @@ create_leaf_cert() {
 start_root_ocsp_responder() {
   openssl ocsp \
       -index "${PKI_ROOT_DIR}/index.txt" \
-      -port 2560 \
+      -port 2060 \
       -rsigner "${PKI_ROOT_DIR}/issued/${OCSP_REQ_NAME}.crt" \
       -rkey "${PKI_ROOT_DIR}/private/${OCSP_REQ_NAME}.key" \
       -CA "${PKI_ROOT_DIR}/ca.crt" \
@@ -83,7 +83,7 @@ start_root_ocsp_responder() {
 start_int_ocsp_responder() {
   openssl ocsp \
       -index "${PKI_INT_DIR}/index.txt" \
-      -port 2561 \
+      -port 2061 \
       -rsigner "${PKI_INT_DIR}/issued/${OCSP_REQ_NAME}.crt" \
       -rkey "${PKI_INT_DIR}/private/${OCSP_REQ_NAME}.key" \
       -CA "${PKI_INT_DIR}/ca.crt" \
