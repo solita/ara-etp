@@ -5,7 +5,8 @@
     )
   (:import (java.io ByteArrayInputStream)
            (java.nio.charset StandardCharsets)
-           (java.security.cert CertificateFactory)))
+           (java.security.cert CertificateFactory)
+           (org.bouncycastle.cert.ocsp OCSPResp)))
 
 (defn string->input-stream [s]
   (ByteArrayInputStream. (.getBytes s StandardCharsets/UTF_8)))
@@ -111,8 +112,8 @@
 
 (t/deftest hmm200
   (t/testing "hmm"
-    (let [hmm1 (ocsp-service/make-ocsp-request cert-with-ocsp-leaf cert-with-ocsp-int)]
-      (println hmm1))))
+    (let [^OCSPResp hmm1 (ocsp-service/make-ocsp-request cert-with-ocsp-leaf cert-with-ocsp-int)]
+      (println (.getIntValue (.getResponseStatus (.toASN1Structure hmm1)))))))
 
 
 #_(t/deftest make-ocsp-request

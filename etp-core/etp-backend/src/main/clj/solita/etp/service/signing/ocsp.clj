@@ -4,7 +4,11 @@
   (:import
     (java.io ByteArrayInputStream InputStream)
     (java.nio.charset StandardCharsets)
+    (java.util Comparator Optional)
     (java.security.cert X509Certificate CertificateFactory)
+    (org.apache.pdfbox.cos COSBase COSName)
+    (org.apache.pdfbox.pdmodel PDDocument)
+    (org.apache.pdfbox.pdmodel.interactive.digitalsignature PDSignature)
     (org.bouncycastle.asn1.x509 AccessDescription AuthorityInformationAccess Extension Extensions)
     (org.bouncycastle.cert.jcajce JcaX509CertificateHolder JcaX509ExtensionUtils$SHA1DigestCalculator)
     (org.bouncycastle.cert.ocsp CertificateID OCSPReq OCSPReqBuilder OCSPResp)
@@ -93,8 +97,7 @@
                           .build
                           (.get (.find (DefaultDigestAlgorithmIdentifierFinder.) "SHA-1")))
                   (JcaX509CertificateHolder. issuer-cert)
-                  (.getSerialNumber cert))
-        ]
+                  (.getSerialNumber cert))]
     ;;TODO: Nonce and exts
     (some-> (OCSPReqBuilder.)
             ;;(.setRequestExtensions (Extensions. (Extension[]. )))
@@ -113,3 +116,22 @@
         ;; TODO: Is the body enough, how to make the whole response into a stream?
         ^InputStream body (:body response)]
     (OCSPResp. body)))
+
+(defn getLastRelevantSignature [^PDDocument document]
+  (let [comparatorByOffset (Comparator/comparing (fn [^PDSignature sig] (-> sig .getByteRange (aget 1))))
+        ^Optional optLastSignature (some-> document .getSignatureDictionaries .stream (.max comparatorByOffset))]
+    (when (.isPresent optLastSignature)
+      (let [^PDSignature lastSignature (.get optLastSignature)
+            ^COSBase type (some-> lastSignature .getCOSObject (.getItem COSName/TYPE))]
+        (when (or (= type nil) (.equals COSName/SIG type) (.equals COSName/DOC_TIME_STAMP type))
+          lastSignature)))))
+
+(defn add-ocsp-information [pdf]
+  (let [leaf "how to?"
+        int "how to?"
+        root "how to?"
+        outfile "todo ?"
+
+        ^OCSPResp ocsp-response (make-ocsp-request leaf int)]
+    ;; Add response to?
+    ocsp-response))
