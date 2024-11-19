@@ -3,9 +3,10 @@
     [clojure.test :as t]
     [solita.etp.service.signing.ocsp :as ocsp-service]
     )
-  (:import (java.io ByteArrayInputStream)
+  (:import (java.io ByteArrayInputStream File)
            (java.nio.charset StandardCharsets)
            (java.security.cert CertificateFactory)
+           (org.apache.pdfbox.pdmodel PDDocument)
            (org.bouncycastle.cert.ocsp OCSPResp)))
 
 (defn string->input-stream [s]
@@ -115,6 +116,13 @@
     (let [^OCSPResp hmm1 (ocsp-service/make-ocsp-request cert-with-ocsp-leaf cert-with-ocsp-int)]
       (println (.getIntValue (.getResponseStatus (.toASN1Structure hmm1)))))))
 
+(t/deftest hmm300
+  (t/testing "hmm"
+    (let [filePath "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf"
+          file (File. filePath)
+          document (PDDocument/load file)
+          hmm1 (ocsp-service/getLastRelevantSignature document)]
+      (println (type hmm1)))))
 
 #_(t/deftest make-ocsp-request
   (t/testing ""
