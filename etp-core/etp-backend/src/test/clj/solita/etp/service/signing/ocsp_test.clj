@@ -121,8 +121,9 @@
     (let [filePath "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf"
           file (File. filePath)
           document (PDDocument/load file)
-          hmm1 (ocsp-service/getLastRelevantSignature document)]
+          hmm1 (ocsp-service/get-last-relevant-signature document)]
       (println (type hmm1)))))
+
 
 #_(t/deftest make-ocsp-request
   (t/testing ""

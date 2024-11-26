@@ -1,21 +1,21 @@
 (ns solita.etp.service.signing.ocsp
   "Online Certificate Status Protocol"
   (:require [clj-http.client :as http]
-            [solita.etp.exception :as exception]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [solita.etp.exception :as exception])
   (:import
-    (java.io ByteArrayInputStream File FileInputStream FileOutputStream IOException InputStream)
-    (java.nio.charset StandardCharsets)
+    (java.io File FileInputStream FileOutputStream IOException InputStream)
+    (java.lang.reflect InvocationTargetException)
+    (java.security GeneralSecurityException InvalidKeyException MessageDigest NoSuchAlgorithmException PublicKey Security SignatureException)
+    (java.security.cert CertificateException X509Certificate)
     (java.util Collection Comparator HashSet Optional)
-    (java.security GeneralSecurityException InvalidKeyException MessageDigest NoSuchAlgorithmException Provider PublicKey Security SignatureException)
-    (java.security.cert CertificateException X509Certificate CertificateFactory)
-    (org.apache.pdfbox.cos COSBase COSName)
-    (org.apache.pdfbox.pdmodel PDDocument)
+    (org.apache.pdfbox.cos COSArray COSBase COSDictionary COSName COSUpdateInfo)
+    (org.apache.pdfbox.pdmodel PDDocument PDDocumentCatalog)
     (org.apache.pdfbox.pdmodel.encryption SecurityProvider)
     (org.apache.pdfbox.pdmodel.interactive.digitalsignature PDSignature)
     (org.apache.pdfbox.util Hex)
-    (org.bouncycastle.asn1.x509 AccessDescription AuthorityInformationAccess Extension Extensions)
-    (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509CertificateHolder JcaX509ExtensionUtils$SHA1DigestCalculator)
+    (org.bouncycastle.asn1.x509 AccessDescription AuthorityInformationAccess Extension)
+    (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509CertificateHolder)
     (org.bouncycastle.cert.ocsp CertificateID OCSPReq OCSPReqBuilder OCSPResp)
     (org.bouncycastle.cms CMSException CMSSignedData SignerInformation)
     (org.bouncycastle.operator DefaultDigestAlgorithmIdentifierFinder)
@@ -161,33 +161,33 @@
       (get-cert-info signature-content))))
 
 
-(defn do-validation [filename output {:keys [document]}]
-  (let [^PDSignature signature (get-last-relevant-signature document)
-        cert-info (get-last-cert-info signature filename)
+#_(defn do-validation [filename output {:keys [document]}]
+    (let [^PDSignature signature (get-last-relevant-signature document)
+          cert-info (get-last-cert-info signature filename)
 
-        ]
-    (.saveIncremental document output)
+          ]
+      (.saveIncremental document output)
 
-    ))
+      ))
 
-(defn validate-signature [^File in-file ^File out-file]
-  ;; TODO: Handle file errors? Will change to S3 eventually anyway...
-  (with-open [^PDDocument document (PDDocument/load in-file)
-              ^FileOutputStream fos (FileOutputStream. out-file)]
-    ;; TODO: Handle access-permissions?
-    (do-validation (.getAbsolutePath in-file) fos {:document document})))
+#_(defn validate-signature [^File in-file ^File out-file]
+    ;; TODO: Handle file errors? Will change to S3 eventually anyway...
+    (with-open [^PDDocument document (PDDocument/load in-file)
+                ^FileOutputStream fos (FileOutputStream. out-file)]
+      ;; TODO: Handle access-permissions?
+      (do-validation (.getAbsolutePath in-file) fos {:document document})))
 
-(defn add-ocsp-information [^String in-filepath ^String out-filepath]
-  (with-open [in-file (File. in-filepath)
-              ;; We probably want just to store this in memory and send to S3.
-              ;; But for now just implement the example.
-              out-file (File. out-filepath)]
+#_(defn add-ocsp-information [^String in-filepath ^String out-filepath]
+    (with-open [in-file (File. in-filepath)
+                ;; We probably want just to store this in memory and send to S3.
+                ;; But for now just implement the example.
+                out-file (File. out-filepath)]
 
-    ;; TODO: Do we need this? This is for some "exotic" algorithms.
-    ;; And how does this even work? Is this some static class? Singleton?
-    (Security/addProvider (SecurityProvider/getProvider))
+      ;; TODO: Do we need this? This is for some "exotic" algorithms.
+      ;; And how does this even work? Is this some static class? Singleton?
+      (Security/addProvider (SecurityProvider/getProvider))
 
-    (validate-signature in-file out-file)))
+      (validate-signature in-file out-file)))
 
 
 (defn- self-signed? [^X509Certificate certificate]
@@ -236,10 +236,74 @@
         all-certs (map #(-> cert-converter (.getCertificate %)) all-cert-holders)
 
         intermediate-cert (:issuer (find-issuer leaf-cert all-certs))
-        root-cert (:issuer (find-issuer intermediate-cert all-certs))]
+        root-cert (:issuer (find-issuer intermediate-cert all-certs))
+        ]
     {:root-certificate         root-cert
      :intermediate-certificate intermediate-cert
      :leaf-certificate         leaf-cert}))
 
-(def pdf-file (PDDocument/load (File. "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf")))
-(get-certificates pdf-file)
+(defn get-or-create-cos-dictionary [^COSDictionary parent ^String name]
+  (let [^COSDictionary existing-dict (-> parent (.getDictionaryObject name))]
+    (if (nil? existing-dict)
+      (let [new-dict (COSDictionary.)]
+        (-> new-dict (.setDirect false))
+        (-> parent (.setItem (COSName/getPDFName name) new-dict))
+        new-dict)
+      (doto existing-dict
+        (.setNeedToBeUpdated true)))))
+
+(defn get-or-create-cos-array [^COSDictionary parent ^String name]
+  (let [^COSArray existing-array (-> parent (.getDictionaryObject name))]
+    (if (nil? existing-array)
+      (let [new-array (COSArray.)]
+        (-> new-array (.setDirect false))
+        (-> parent (.setItem (COSName/getPDFName name) new-array))
+        new-array)
+      (doto existing-array
+        (.setNeedToBeUpdated true)))))
+
+(defn- add-extensions [^PDDocumentCatalog catalog]
+  (let [^COSDictionary dssExtensions (COSDictionary.)
+        _ (-> dssExtensions (.setDirect true))
+        _ (-> catalog .getCOSObject (.setItem COSName/EXTENSIONS dssExtensions))
+        ^COSDictionary adbeExtension (COSDictionary.)
+        _ (-> adbeExtension (.setDirect true))
+        _ (-> dssExtensions (.setItem COSName/ADBE adbeExtension))
+
+        _ (-> adbeExtension (.setName COSName/BASE_VERSION "1.7"))
+        _ (-> adbeExtension (.setInt COSName/EXTENSION_LEVEL 5))
+
+        _ (-> catalog (.setVersion "1.7"))
+        ]))
+
+#_(defn update-vri [cert-info ^COSDictionary vri]
+  (if )
+
+  )
+
+
+(defn do-validation [^PDDocument document]
+  (let [certs (get-certificates document)
+
+        ^PDDocumentCatalog doc-catalog (-> document .getDocumentCatalog)
+        ^COSDictionary catalog (-> doc-catalog .getCOSObject)
+        _ (-> catalog (.setNeedToBeUpdated true))
+        ^COSDictionary dss (get-or-create-cos-dictionary catalog "DSS")
+        _ (add-extensions doc-catalog)
+        vriBase (get-or-create-cos-dictionary dss "VRI")
+        ocsps (get-or-create-cos-array dss "OCSPs")
+        crls (get-or-create-cos-array dss "CRLs")
+        certs (get-or-create-cos-array dss "Certs")
+
+        ^COSDictionary vri (COSDictionary.)
+        signature-hash (get-sha1-hash (-> document ^PDSignature get-last-relevant-signature .getContents) )
+        _ (-> vriBase (.setItem signature-hash vri))
+
+        ;;hmm ()
+        ]
+    ocsps
+
+    ))
+
+#_(def pdf-file (PDDocument/load (File. "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf")))
+#_(do-validation pdf-file)
