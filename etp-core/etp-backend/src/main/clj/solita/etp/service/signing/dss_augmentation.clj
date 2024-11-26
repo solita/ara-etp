@@ -12,6 +12,7 @@
            (java.security.cert X509Certificate)
            (java.util ArrayList Date List)
            (org.bouncycastle.asn1.x500 X500Name)
+           (org.bouncycastle.asn1.x509 ExtendedKeyUsage Extension KeyPurposeId)
            (org.bouncycastle.cert X509v3CertificateBuilder)
            (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509v3CertificateBuilder)
            (org.bouncycastle.jce.provider BouncyCastleProvider)
@@ -30,21 +31,25 @@
         ^Date notBefore (Date.)
         ^Date notAfter (Date. ^long (+ (System/currentTimeMillis) (* 365 24 60 60 1000)))
 
-        ^X509v3CertificateBuilder certBuilder (JcaX509v3CertificateBuilder.
-                                                (X500Name. issuerDN)
-                                                serialNumber
-                                                notBefore
-                                                notAfter
-                                                (X500Name. subjectDN)
-                                                (-> keyPair .getPublic))
+        ^X509v3CertificateBuilder certBuilder (doto (JcaX509v3CertificateBuilder.
+                                                      (X500Name. issuerDN)
+                                                      serialNumber
+                                                      notBefore
+                                                      notAfter
+                                                      (X500Name. subjectDN)
+                                                      (-> keyPair .getPublic))
+                                                (.addExtension Extension/extendedKeyUsage
+                                                               true
+                                                               (ExtendedKeyUsage. KeyPurposeId/id_kp_timeStamping)))
 
         ^ContentSigner signer (-> (JcaContentSignerBuilder. "SHA256withRSA") (.build (-> keyPair .getPrivate)))
-        ^X509Certificate certificate (-> (doto (JcaX509CertificateConverter.) (.setProvider "BC")) (.getCertificate (-> certBuilder (.build signer))))]
+        ^X509Certificate certificate (-> (doto (JcaX509CertificateConverter.) (.setProvider "BC"))
+                                         (.getCertificate (-> certBuilder (.build signer))))]
     {:private-key (-> keyPair .getPrivate)
      :public-key  (-> keyPair .getPublic)
      :certificate certificate}))
 
-(defn create-longer-validation-document [pdf-file]
+(defn create-workaround-t-level [pdf-file]
   (let [parameters (PAdESSignatureParameters.)
         _ (-> parameters (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T))
 
@@ -52,23 +57,20 @@
                                (.setOcspSource (OnlineOCSPSource.))
                                (.setAlertOnInvalidTimestamp (LogOnStatusAlert.)))
 
-        #_(-> certificate-verifier (.setTrustedCertSources ""))
-        key-store-file (File. "/tmp/test-key-store")
-        key-store-pw (char-array "kissa")
-        ^KeyStore key-store (doto (KeyStore/getInstance "PKCS12")
-                              (.load nil key-store-pw))
-        ;;key-entity-tsp-source (KeyEntityTSPSource. key-store "self-signed-tsa" key-store-pw)
         key-entity-tsp-source (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
                                                    ^X509Certificate (:certificate tsp-key-and-cert)
                                                    ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
         _ (-> key-entity-tsp-source (.setTsaPolicy "1.2.3.4"))
 
         pades-service (doto (PAdESService. certificate-verifier)
-                        (.setTspSource key-entity-tsp-source))
+                        (.setTspSource key-entity-tsp-source))]
+    (-> pades-service (.extendDocument pdf-file parameters))))
 
-        ;;hopefully-document-with-ocsp (-> pades-service (.extendDocument pdf-file parameters))
-        ]))
+(defn create-workaround-lt-level [pdf-document]
+  (let [t-level (create-workaround-t-level pdf-document)]
+    )
+  )
 
-;;TODO: Continue "Certificate must have an ExtendedKeyUsage extension."
+;;TODO: Continue
 (def pdf-file (FileDocument. "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf"))
-;;(create-longer-validation-document pdf-file)
+#_(create-workaround-t-level pdf-file)
