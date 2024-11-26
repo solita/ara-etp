@@ -2,13 +2,18 @@
   (:import (eu.europa.esig.dss.alert LogOnStatusAlert)
            (eu.europa.esig.dss.enumerations SignatureLevel)
            (eu.europa.esig.dss.model DSSDocument FileDocument)
+           (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters)
            (eu.europa.esig.dss.pades.signature PAdESService)
+           (eu.europa.esig.dss.pades.validation PAdESCertificateSource)
            (eu.europa.esig.dss.pdf PdfDocumentReader)
            (eu.europa.esig.dss.pdf.pdfbox PdfBoxDocumentReader)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
+           (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.x509 CommonCertificateSource CommonTrustedCertificateSource ListCertificateSource)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
+           (eu.europa.esig.dss.validation SignedDocumentValidator)
            (java.io File)
            (java.security KeyPair KeyPairGenerator KeyStore PrivateKey SecureRandom Security)
            (java.security.cert X509Certificate)
@@ -74,8 +79,10 @@
         ^Map sigDirs (.extractSigDictionaries pdf-reader)
 
 
-
+        vri-dir-name "VRI"
+        signer-information ""
         ]
+    #_(PAdESCertificateSource. pdf-sig-revision vri-dir-name signer-information)
     )
   )
 
@@ -83,11 +90,16 @@
   (let [^DSSDocument t-level (create-workaround-t-level pdf-document)
         parameters (doto (PAdESSignatureParameters.) (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT))
 
+        ;; TODO: Should use some envvar here to specify which certs to trust in each environment?
+        ;; Trusting DVV's certs should be sufficient?
+        ;; Getting the cert from the document would be not wise?
+        ^CertificateToken trusted-cert (DSSUtils/loadCertificate (File. "src/test/resources/system-signature/local-signing-root.pem.crt"))
 
-
+        ;; TODO: Should use a trust list here?
         certificate-verifier (doto (CommonCertificateVerifier.)
                                (.setOcspSource (OnlineOCSPSource.))
-                               #_(.setTrustedCertSources <PAdESCertificateSource>))
+                               (.setTrustedCertSources (doto (ListCertificateSource.) (.add (doto (CommonTrustedCertificateSource.) (.addCertificate trusted-cert)))))
+                               (.setAlertOnMissingRevocationData (LogOnStatusAlert.)))
 
         key-entity-tsp-source (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
                                                    ^X509Certificate (:certificate tsp-key-and-cert)
@@ -95,8 +107,9 @@
         _ (-> key-entity-tsp-source (.setTsaPolicy "1.2.3.4"))
 
         pades-service (doto (PAdESService. certificate-verifier)
-                        (.setTspSource key-entity-tsp-source))]
-        (-> pades-service (.extendDocument t-level parameters))))
+                        (.setTspSource key-entity-tsp-source))
+        profit? (-> pades-service (.extendDocument t-level parameters))]
+        #_(-> profit? (.save "ocsp.pdf"))))
 
 (def pdf-file (FileDocument. "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf"))
 #_(get-pades-signature-source pdf-file)
