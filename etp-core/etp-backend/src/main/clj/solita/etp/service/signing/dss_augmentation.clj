@@ -1,16 +1,18 @@
 (ns solita.etp.service.signing.dss-augmentation
   (:import (eu.europa.esig.dss.alert LogOnStatusAlert)
            (eu.europa.esig.dss.enumerations SignatureLevel)
-           (eu.europa.esig.dss.model FileDocument)
+           (eu.europa.esig.dss.model DSSDocument FileDocument)
            (eu.europa.esig.dss.pades PAdESSignatureParameters)
            (eu.europa.esig.dss.pades.signature PAdESService)
+           (eu.europa.esig.dss.pdf PdfDocumentReader)
+           (eu.europa.esig.dss.pdf.pdfbox PdfBoxDocumentReader)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io File)
            (java.security KeyPair KeyPairGenerator KeyStore PrivateKey SecureRandom Security)
            (java.security.cert X509Certificate)
-           (java.util ArrayList Date List)
+           (java.util ArrayList Date List Map)
            (org.bouncycastle.asn1.x500 X500Name)
            (org.bouncycastle.asn1.x509 ExtendedKeyUsage Extension KeyPurposeId)
            (org.bouncycastle.cert X509v3CertificateBuilder)
@@ -66,11 +68,36 @@
                         (.setTspSource key-entity-tsp-source))]
     (-> pades-service (.extendDocument pdf-file parameters))))
 
-(defn create-workaround-lt-level [pdf-document]
-  (let [t-level (create-workaround-t-level pdf-document)]
+;; TODO: continue
+(defn get-pades-signature-source [^DSSDocument dss-doc]
+  (let [pdf-reader (PdfBoxDocumentReader. dss-doc)
+        ^Map sigDirs (.extractSigDictionaries pdf-reader)
+
+
+
+        ]
     )
   )
 
-;;TODO: Continue
+(defn create-workaround-lt-level [pdf-document]
+  (let [^DSSDocument t-level (create-workaround-t-level pdf-document)
+        parameters (doto (PAdESSignatureParameters.) (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT))
+
+
+
+        certificate-verifier (doto (CommonCertificateVerifier.)
+                               (.setOcspSource (OnlineOCSPSource.))
+                               #_(.setTrustedCertSources <PAdESCertificateSource>))
+
+        key-entity-tsp-source (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
+                                                   ^X509Certificate (:certificate tsp-key-and-cert)
+                                                   ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
+        _ (-> key-entity-tsp-source (.setTsaPolicy "1.2.3.4"))
+
+        pades-service (doto (PAdESService. certificate-verifier)
+                        (.setTspSource key-entity-tsp-source))]
+        (-> pades-service (.extendDocument t-level parameters))))
+
 (def pdf-file (FileDocument. "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf"))
-#_(create-workaround-t-level pdf-file)
+#_(get-pades-signature-source pdf-file)
+#_(create-workaround-lt-level pdf-file)
