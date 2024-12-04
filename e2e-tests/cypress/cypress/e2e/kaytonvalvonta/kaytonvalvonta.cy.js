@@ -728,8 +728,10 @@ context('Käytönvalvonta', () => {
     submitToimenpide();
 
     now.setDate(desired);
+    // This works for december, setting month to January and incrementing year
+    now.setMonth(now.getMonth() + 1);
     cy.get('[data-cy="deadline"]').contains(
-      `${now.getDate()}.${now.getMonth() + 2}.${now.getFullYear()}`
+      `${now.getDate()}.${now.getMonth() + 1}.${now.getFullYear()}`
     );
   });
 });

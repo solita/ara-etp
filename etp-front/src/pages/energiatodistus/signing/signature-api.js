@@ -6,8 +6,8 @@ const mpolluxUrl = 'https://localhost:53952';
 const mpolluxVersionUrl = `${mpolluxUrl}/version`;
 const mpolluxSignUrl = `${mpolluxUrl}/sign`;
 
-const signatureOptions = {
-  version: '1.1',
+const signatureOptions = version => ({
+  version: version,
   selector: {
     keyusages: ['nonrepudiation'],
     keyalgorithms: ['rsa']
@@ -15,9 +15,13 @@ const signatureOptions = {
   contentType: 'data',
   hashAlgorithm: 'SHA256',
   signatureType: 'signature'
-};
+});
 
+// Example of mPollux response can be found in etp-core/docker/mpollux/api/version
 export const versionInfo = fetch => Fetch.getJson(fetch, mpolluxVersionUrl);
+
+const getSignatureOptions = fetch =>
+  R.map(R.compose(signatureOptions, R.prop('version')), versionInfo(fetch));
 
 export const isValidSignatureResponse = R.compose(
   R.equals('ok'),
@@ -25,12 +29,14 @@ export const isValidSignatureResponse = R.compose(
 );
 
 export const getSignature = R.curry((fetch, content) =>
-  R.compose(
-    R.map(R.pick(['signature', 'chain'])),
-    Future.filter(isValidSignatureResponse, 'error'),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', mpolluxSignUrl)),
-    R.assoc('content', R.__, signatureOptions),
-    R.prop('digest')
-  )(content)
+  R.chain(
+    R.compose(
+      R.map(R.pick(['signature', 'chain'])),
+      Future.filter(isValidSignatureResponse, 'error'),
+      Fetch.responseAsJson,
+      Future.encaseP(Fetch.fetchWithMethod(fetch, 'post', mpolluxSignUrl)),
+      R.assoc('content', R.prop('digest', content))
+    ),
+    getSignatureOptions(fetch)
+  )
 );
