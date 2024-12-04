@@ -13,9 +13,10 @@
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
-  (:import (java.io InputStream)
+  (:import (java.io BufferedInputStream ByteArrayOutputStream InputStream)
            (java.time Instant)
            (org.apache.pdfbox.pdmodel PDDocument)
+           (org.apache.pdfbox.pdmodel.interactive.digitalsignature PDSignature)
            (org.apache.xmpbox.xml DomXmpParser)))
 
 (t/use-fixtures :each ts/fixture)
@@ -351,3 +352,53 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
         expected "MIIDqjCCAZICFDasnTgEcpPh0nwI7KDvEkoIrRCgMA0GCSqGSIb3DQEBCwUAMBExDzANBgNVBAMMBklOVCBDQTAeFw0yNDA0MTAxMDEyMDNaFw0yNTA0MjAxMDEyMDNaMBIxEDAOBgNVBAMMB0xFQUYgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDZ7LojEvUzN4GuvLwlDH/Ex6rV5mcopSbJ8eHMfTEs2bq8Czll82mUmy08agj2g6zsll7sMpOQLDjI0Im8HuWGuBcq8q7ArkbDjj9582ul21kWcEERMCWZWwFCjlqF5xWT/iz8d62hvP++hmFJulG3U/grCKyBu/PpoQRYBUgkbqmyz8dMLMCF4y7VojcKdFe7tQEIw0fvdoT8dTXURXemhk5bzmejHYSU2+h727ALG3WoNkgwaBWW10nQSCQhP/mmrq5Z3QhIrpAboPddpSpAukpUM7Bss7q153oC+QIvZaMMFlXVdBisS6lStiX+upnlEIx9BtBxvTxUgm9rQFZdAgMBAAEwDQYJKoZIhvcNAQELBQADggIBAMR/nFJAI58MtpAa9Yr6vTI0RSWv30/Tlv/DGrg0ujXx/3lmPygdA2LW5KTt9MLB3kZ/wMl2RMGv66AssdHFlnUHUAkvm28UTzaJ4pKatiRuHODyvn9cbjodD+MHJjksdWO/JLJ4yk3tsvhK0zUC6nnJGvwyodQvhBgPLfB9NRWbOWvDzsAIRYEWfAJUz0nqnN9qMkQLibMRkEmt8JrtlUk+o8DUxZi7lpEJ6s1DilDDacQmOW+2bOoXdn8LFz2qVq6+hoIpHiFEvge0wWYID6XcGUlV5X3Su+LnXFYMdqEwRYcpNWwWrAPNleMV9QLIHsBBj7131sa4axikbvnEOrCEmeLL2KOLkbWONh6HayYXmonQGeYapIaA9CB59MoxgeeoF9+dWH9dK9lfItKyPJzQYO2ZJXa1EbE21yY4JoRluh89dnPvvXcwF7MS0JN9+Re5Q9zyOEVkZ4YEc8aTYeEua4byUOJ43USk4+A82Y0gLTsDN/exo09c1pR8dFHy9l9Dwpvr3ZEb1iocWqBjzWN+GsW7+pf42qS0xKvf1gdFxW1wq+M+lO5LYnA6n9da1azDZtIhpinH/MfQG6HI6EfgQU9zxTHEwEaJog95wBV1HV0g7eXo3quTqltN/nzERzLAqv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX"]
     (t/testing "Certificate should be on one line without headers"
       (t/is (= (service/cert-pem->one-liner-without-headers given) expected)))))
+
+
+;; TODO: Refactor into some utils ns
+(defn generate-pdf-as-file-mock [_ _ _ _]
+  (let [in "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
+        out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+    (io/copy (io/file in) (io/file out))
+    out))
+
+(defn buffered-input-stream->byte-array [^BufferedInputStream input-stream]
+  (with-open [out-stream (ByteArrayOutputStream.)]
+    (let [buffer (byte-array 1024)] ;; 1024 is the buffer size for reading chunks
+      (loop []
+        (let [read (.read input-stream buffer)]
+          (when (pos? read)
+            (.write out-stream buffer 0 read)
+            (recur))))
+      (.toByteArray out-stream))))
+
+(t/deftest pades-pades
+  (t/testing "Signing a pdf using the system instead of mpollux"
+    (with-bindings
+      ;; Use an already existing pdf.
+      {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
+       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+             laatija-id (-> laatijat keys sort first)
+             db (ts/db-user laatija-id)
+             ;; The second ET is 2018 version
+             id (-> energiatodistukset keys sort second)
+             whoami {:id laatija-id :rooli 0}
+             complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
+             language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
+
+         (service/sign-with-system {:db             db
+                                    :aws-s3-client  ts/*aws-s3-client*
+                                    :whoami         whoami
+                                    :aws-kms-client ts/*aws-kms-client*
+                                    :now            (Instant/now)
+                                    :id             id})
+         (with-open [^InputStream pdf-bytes (service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)]
+           (let [data (buffered-input-stream->byte-array pdf-bytes)]
+             (with-open [^PDDocument document (PDDocument/load data)]
+               (doseq [^PDSignature signature (.getSignatureDictionaries document)]
+                 (println "HELLO")
+                 (let [signed-content (.getContents signature data)
+                       ;;cms-signed-data (CM)
+
+                       ]
+                   (println "WHAT: " signed-content))))))))))
+
