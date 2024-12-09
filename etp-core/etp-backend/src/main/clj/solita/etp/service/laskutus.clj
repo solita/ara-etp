@@ -110,7 +110,7 @@
                                         "01000000")]
           ;; TODO YritysmuotoKoodi if yritys is toiminimi.
           ["AsiakasYritystasoinenTietoTyyppi"
-           ["YritysTunnus" "7000"]
+           ["YritysTunnus" "7010"]
            ["LajittelutAvainKoodi" "001"]
            ["MaksuehtoavainKoodi" "ZM21"]
            ["KoronlaskentaKoodi" "Z1"]
@@ -129,7 +129,7 @@
            (when-not yritys-id
              ["AsiakasHenkiloTunnus" henkilotunnus])]
           ["AsiakasMyyntiJakelutietoTyyppi"
-           ["MyyntiOrganisaatioKoodi" "7000"]
+           ["MyyntiOrganisaatioKoodi" "7010"]
            ["JakelutieKoodi" "01"]
            ["SektoriKoodi" "01"]
            ["ValuuttaKoodi" "EUR"]
@@ -213,7 +213,7 @@
         formatted-last-day-of-last-month (->> (.lengthOfMonth last-month)
                                               (.withDayOfMonth last-month)
                                               (.format date-formatter-xml))]
-    (->> [["MyyntiOrganisaatioKoodi" "7000"]
+    (->> [["MyyntiOrganisaatioKoodi" "7010"]
           ["JakelutieKoodi" "13"]
           ["SektoriKoodi" "01"]
           ["TilausLajiKoodi" "Z001"]
@@ -223,7 +223,7 @@
           ["TilausAsiakasTyyppi"
            ["AsiakasNro" laskutus-asiakastunnus]]
           ["LaskuttajaAsiakasTyyppi"
-           ["AsiakasNro" "700013A000"]]
+           ["AsiakasNro" "701013A000"]]
           ["MyyntitilausSanomaPerustietoTyyppi"
            ["YleinenLahettajaInformaatioTyyppi"
             ["PorttiNro" (if (= config/environment-alias "prod")
