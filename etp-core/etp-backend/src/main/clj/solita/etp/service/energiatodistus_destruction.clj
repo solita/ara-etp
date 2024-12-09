@@ -30,17 +30,17 @@
     (file/put-file-tag aws-s3-client file-key destruction-tag)
     (file/delete-file aws-s3-client file-key)))
 
-(defn- delete-from-s3 [aws-s3-client file-key]
+(defn- delete-from-s3 [aws-s3-client file-key {:keys [log-when-file-missing?]}]
   (if (file/file-exists? aws-s3-client file-key)
     (do
       (handle-deletion-from-s3 aws-s3-client file-key)
       (log/info (str "Deleted " file-key " from S3")))
-    (do
+    (when log-when-file-missing??
       (log/warn (str "Tried to delete " file-key " but it does not exist!")))))
 
 (defn- delete-energiatodistus-pdf! [aws-s3-client energiatodistus-id language]
   (let [file-key (energiatodistus-service/file-key energiatodistus-id language)]
-    (delete-from-s3 aws-s3-client file-key)))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? true})))
 
 (defn- delete-energiatodistus-pdfs! [db aws-s3-client energiatodistus-id]
   (let [language-codes (-> (complete-energiatodistus-service/find-complete-energiatodistus db energiatodistus-id)
@@ -53,8 +53,7 @@
 (defn- delete-energiatodistus-liite-s3 [aws-s3-client liite-id]
   (let [file-key (liite-service/file-key liite-id)]
     ;; Some liitteet are only links and do not have files.
-    (when (file/file-exists? aws-s3-client file-key)
-      (delete-from-s3 aws-s3-client file-key))))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
 (defn- delete-energiatodistus-liite [db aws-s3-client liite-id]
   (energiatodistus-destruction-db/destroy-liite! db {:liite-id liite-id})
@@ -68,8 +67,7 @@
 (defn- destroy-toimenpide-s3! [aws-s3-client energiatodistus-id toimenpide-id]
   (let [file-key (vo-asha-service/file-path energiatodistus-id toimenpide-id)]
     ;; All the toimenpiteet do not create documents
-    (when (file/file-exists? aws-s3-client file-key)
-      (delete-from-s3 aws-s3-client file-key))))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
 (defn- destroy-oikeellisuuden-valvonta-s3! [db aws-s3-client energiatodistus-id]
   (let [vo-toimenpide-ids (map :vo-toimenpide-id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
@@ -94,8 +92,7 @@
 (defn- delete-viestiketju-liite-s3 [aws-s3-client viestiketju-id liite-id]
   (let [file-key (viesti-service/file-path viestiketju-id liite-id)]
     ;; Some liitteet are only links and do not have files.
-    (when (file/file-exists? aws-s3-client file-key)
-      (delete-from-s3 aws-s3-client file-key))))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
 (defn- destroy-viestiketju-liitteet [db aws-s3-client viestiketju-id]
   (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju-id db {:viestiketju-id viestiketju-id})]
