@@ -99,3 +99,39 @@
     (t/is (= tag-2 (service/get-file-tag ts/*aws-s3-client*
                                          id
                                          (:Key tag-2))))))
+(t/deftest file->versions-test
+  (t/testing "Only versions of the exact key are returned"
+    (let [key-1 (str (:id file-info-1) "-versions-test")
+          ;; Key with the key-1 as prefix
+          key-2 (str (:id file-info-1) "-versions-test-2")]
+      (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                      key-1
+                                      (:bytes file-info-1))
+      (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                      key-2
+                                      (:bytes file-info-2))
+      (t/is (= 1 (count (service/key->version-ids ts/*aws-s3-client*
+                                                  key-1)))))))
+
+(t/deftest bucket-versioning-test
+  (t/testing "The test system's bucket is versioned."
+    (let [id (str (:id file-info-1) "-bucket-versioning-test")]
+      (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                      id
+                                      (:bytes file-info-1))
+      (t/is (= 1 (count (service/key->version-ids ts/*aws-s3-client*
+                                                  id))))
+
+      (service/delete-file ts/*aws-s3-client* id)
+      (t/is (= 1 (count (service/key->version-ids ts/*aws-s3-client*
+                                                  id))))
+      (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                      id
+                                      (:bytes file-info-1))
+      (t/is (= 2 (count (service/key->version-ids ts/*aws-s3-client*
+                                                  id))))
+      (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                      id
+                                      (:bytes file-info-1))
+      (t/is (= 3 (count (service/key->version-ids ts/*aws-s3-client*
+                                                  id)))))))

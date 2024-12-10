@@ -25,6 +25,13 @@
                       :Key    key}
                      options)))
 
+(defn list-object-versions
+  [{:keys [client bucket]} prefix]
+   (aws.utils/invoke client
+                     :ListObjectVersions
+                     {:Bucket bucket
+                      :Prefix prefix}))
+
 (defn delete-object [{:keys [client bucket]} key]
   (aws.utils/invoke client
                     :DeleteObject
