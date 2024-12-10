@@ -99,6 +99,31 @@
     (t/is (= tag-2 (service/get-file-tag ts/*aws-s3-client*
                                          id
                                          (:Key tag-2))))))
+
+(t/deftest file-version-tag-test
+  (let [key (str (:id file-info-1) "-file-version-tag-test")
+        tag {:Key "key" :Value "value"}]
+    ;;Upsert file twice to get two versions
+    (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                    key
+                                    (:bytes file-info-1))
+    (service/upsert-file-from-bytes ts/*aws-s3-client*
+                                    key
+                                    (:bytes file-info-1))
+    (let [[version-1 version-2] (service/key->version-ids ts/*aws-s3-client* key)]
+      (service/put-file-tag ts/*aws-s3-client* key tag version-2)
+      (t/is (nil? (service/get-file-tag ts/*aws-s3-client*
+                                           key
+                                           (:Key tag))))
+      (t/is (nil? (service/get-file-tag ts/*aws-s3-client*
+                                         key
+                                         (:Key tag)
+                                         version-1)))
+      (t/is (= tag (service/get-file-tag ts/*aws-s3-client*
+                                         key
+                                         (:Key tag)
+                                         version-2))))))
+
 (t/deftest file->versions-test
   (t/testing "Only versions of the exact key are returned"
     (let [key-1 (str (:id file-info-1) "-versions-test")

@@ -27,10 +27,10 @@
 
 (defn list-object-versions
   [{:keys [client bucket]} prefix]
-   (aws.utils/invoke client
-                     :ListObjectVersions
-                     {:Bucket bucket
-                      :Prefix prefix}))
+  (aws.utils/invoke client
+                    :ListObjectVersions
+                    {:Bucket bucket
+                     :Prefix prefix}))
 
 (defn delete-object [{:keys [client bucket]} key]
   (aws.utils/invoke client
@@ -38,18 +38,32 @@
                     {:Bucket bucket
                      :Key    key}))
 
-(defn get-object-tagging [{:keys [client bucket]} key]
-  (aws.utils/invoke client
-                    :GetObjectTagging
-                    {:Bucket bucket
-                     :Key    key}))
+(defn get-object-tagging
+  ([aws-s3-client key]
+   (get-object-tagging aws-s3-client key nil))
+  ([{:keys [client bucket]} key version-id]
+   (let [base-params {:Bucket bucket
+                      :Key    key}
+         params (if version-id
+                  (merge {:VersionId version-id} base-params)
+                  base-params)]
+     (aws.utils/invoke client
+                       :GetObjectTagging
+                       params))))
 
-(defn put-object-tagging [{:keys [client bucket]} key tag-set]
-  (aws.utils/invoke client
-                    :PutObjectTagging
-                    {:Bucket bucket
-                     :Key    key
-                     :Tagging {:TagSet tag-set}}))
+(defn put-object-tagging
+  ([aws-s3-client key tag-set]
+   (put-object-tagging aws-s3-client key tag-set nil))
+  ([{:keys [client bucket]} key tag-set version-id]
+   (let [base-params {:Bucket  bucket
+                      :Key     key
+                      :Tagging {:TagSet tag-set}}
+         params (if version-id
+                  (merge {:VersionId version-id} base-params)
+                  base-params)]
+     (aws.utils/invoke client
+                       :PutObjectTagging
+                       params))))
 
 (defn create-multipart-upload [{:keys [client bucket]} key]
   (aws.utils/invoke client
