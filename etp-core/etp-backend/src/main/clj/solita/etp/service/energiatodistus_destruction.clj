@@ -13,8 +13,7 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.file :as file]
-            [solita.etp.service.viesti :as viesti-service])
-  (:import (clojure.lang ExceptionInfo)))
+            [solita.etp.service.viesti :as viesti-service]))
 
 (db/require-queries 'energiatodistus-destruction)
 
@@ -26,8 +25,9 @@
 
 (defn- handle-deletion-from-s3 [aws-s3-client file-key]
   (let [;; This is needed so that the noncurrent version is destroyed.
-        destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}]
-    (file/put-file-tag aws-s3-client file-key destruction-tag)
+        destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
+        version-ids (file/key->version-ids aws-s3-client file-key)]
+    (run! #(file/put-file-tag aws-s3-client file-key destruction-tag %) version-ids)
     (file/delete-file aws-s3-client file-key)))
 
 (defn- delete-from-s3 [aws-s3-client file-key {:keys [log-when-file-missing?]}]

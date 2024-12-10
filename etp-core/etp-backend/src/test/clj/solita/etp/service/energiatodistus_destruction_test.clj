@@ -322,7 +322,50 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
+
+    (t/testing "Control does not have the tags"
+      (let [[[control-pdf-fi-real-version-id control-pdf-fi-temp-version-id]
+             [control-pdf-sv-real-version-id control-pdf-sv-temp-version-id]]
+            (map #(file-service/key->version-ids ts/*aws-s3-client* %) [control-pdf-fi-key control-pdf-sv-key])]
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-fi-key "EnergiatodistusDestruction" control-pdf-fi-real-version-id)))
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-fi-key "EnergiatodistusDestruction" control-pdf-fi-temp-version-id)))
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-sv-key "EnergiatodistusDestruction" control-pdf-sv-real-version-id)))
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-sv-key "EnergiatodistusDestruction" control-pdf-sv-temp-version-id)))))
+
+    (t/testing "All the version of the files have the destruction tag"
+      (let [destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
+            all-the-deleted-keys [lang-fi-pdf-fi-key
+                                  lang-sv-pdf-sv-key
+                                  lang-mu-pdf-fi-key
+                                  lang-mu-pdf-sv-key
+                                  kieli-nil-pdf-fi-key
+                                  kieli-nil-pdf-sv-key]
+            [[lang-fi-pdf-fi-real-version-id
+              lang-fi-pdf-fi-temp-version-id]
+             [lang-sv-pdf-sv-real-version-id
+              lang-sv-pdf-sv-temp-version-id]
+             [lang-mu-pdf-fi-real-version-id
+              lang-mu-pdf-fi-temp-version-id]
+             [lang-mu-pdf-sv-real-version-id
+              lang-mu-pdf-sv-temp-version-id]
+             [kieli-nil-pdf-fi-real-version-id
+              kieli-nil-pdf-fi-temp-version-id]
+             [kieli-nil-pdf-sv-real-version-id
+              kieli-nil-pdf-sv-temp-version-id]]
+            (map #(file-service/key->version-ids ts/*aws-s3-client* %) all-the-deleted-keys)]
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-fi-pdf-fi-key "EnergiatodistusDestruction" lang-fi-pdf-fi-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-fi-pdf-fi-key "EnergiatodistusDestruction" lang-fi-pdf-fi-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-sv-pdf-sv-key "EnergiatodistusDestruction" lang-sv-pdf-sv-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-sv-pdf-sv-key "EnergiatodistusDestruction" lang-sv-pdf-sv-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-fi-key "EnergiatodistusDestruction" lang-mu-pdf-fi-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-fi-key "EnergiatodistusDestruction" lang-mu-pdf-fi-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-sv-key "EnergiatodistusDestruction" lang-mu-pdf-sv-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-sv-key "EnergiatodistusDestruction" lang-mu-pdf-sv-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-fi-key "EnergiatodistusDestruction" kieli-nil-pdf-fi-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-fi-key "EnergiatodistusDestruction" kieli-nil-pdf-fi-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-sv-key "EnergiatodistusDestruction" kieli-nil-pdf-sv-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-sv-key "EnergiatodistusDestruction" kieli-nil-pdf-sv-temp-version-id)))))))
 
 (defn- collect-invalid-keys-for-destroyed-energiatodistus
   "Helper function for deducing which keys have an incorrect value. Also
