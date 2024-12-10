@@ -51,16 +51,23 @@
 
 (defn create-bucket! [{:keys [client bucket]}]
   (#'aws.utils/invoke client :CreateBucket {:Bucket bucket
-                                      :CreateBucketConfiguration
-                                      {:LocationConstraint "eu-central-1"}}))
+                                            :CreateBucketConfiguration
+                                            {:LocationConstraint "eu-central-1"}})
+  (#'aws.utils/invoke client :PutBucketVersioning {:Bucket bucket
+                                                   :VersioningConfiguration
+                                                   {:Status "Enabled"}}))
 
 (defn drop-bucket! [{:keys [client bucket]}]
-  (let [keys (->> (#'aws.utils/invoke client :ListObjectsV2 {:Bucket bucket})
-                  :Contents
-                  (map #(select-keys % [:Key])))]
-    (when (-> keys empty? not)
-      (#'aws.utils/invoke client :DeleteObjects {:Delete  {:Objects keys}
-                                           :Bucket bucket}))
+  (let [versions (->> (#'aws.utils/invoke client :ListObjectVersions {:Bucket bucket})
+                  :Versions
+                  (map #(select-keys % [:Key :VersionId])))
+        delete-markers (->> (#'aws.utils/invoke client :ListObjectVersions {:Bucket bucket})
+                            :DeleteMarkers
+                            (map #(select-keys % [:Key :VersionId])))
+        objects (concat versions delete-markers)]
+    (when (-> objects empty? not)
+      (#'aws.utils/invoke client :DeleteObjects {:Delete {:Objects objects}
+                                                 :Bucket bucket}))
     (#'aws.utils/invoke client :DeleteBucket {:Bucket bucket})))
 
 (defn- config-plain-db [config]
