@@ -53,7 +53,7 @@
         ;; Energiatodistus' "pt$kieli" might be null for historical reasons and then we must just try to delete
         ;; both of the existing todistukset.
         lang-info-found? (not (nil? language-codes))]
-    (if-not (nil? language-codes)
+    (if lang-info-found?
       (run! #(delete-energiatodistus-pdf! aws-s3-client energiatodistus-id % lang-info-found?) language-codes)
       (do
         (delete-energiatodistus-pdf! aws-s3-client energiatodistus-id "fi" lang-info-found?)
