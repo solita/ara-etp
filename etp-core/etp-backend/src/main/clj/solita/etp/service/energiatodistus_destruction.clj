@@ -166,10 +166,7 @@
        (map :energiatodistus-id)))
 
 (defn- redestroy-energiatodistus-pdf! [aws-s3-client key]
-  (when-not (empty? (file/key->version-ids aws-s3-client key))
-    (tag-versions-for-destruction aws-s3-client key))
-  (when (file/file-exists? aws-s3-client key)
-    (file/delete-file aws-s3-client key))
+  (handle-deletion-from-s3 aws-s3-client key)
   (log/info (str "Ran redestruction on " key)))
 
 (defn- redestroy-energiatodistus-pdfs! [aws-s3-client energiatodistus-id]
