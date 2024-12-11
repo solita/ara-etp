@@ -17,6 +17,7 @@
             [ring.middleware.cookies :as cookies]
             [schema.coerce]
             [schema.core]
+            [solita.etp.api.public-csv :as public-csv-api]
             [schema.core :as s]
             [solita.etp.api.aineisto :as aineisto-api]
             [solita.etp.api.energiatodistus :as energiatodistus-api]
@@ -169,7 +170,8 @@
      (concat (tag "Laskutus API" laskutus-api/routes)
              (tag "Laatija Internal API" laatija-api/internal-routes)
              (tag "Energiatodistus Internal API" energiatodistus-api/internal-routes)
-             (tag "Aineisto Internal API" aineisto-api/internal-routes))]]
+             (tag "Aineisto Internal API" aineisto-api/internal-routes)
+             (tag "Public csv Internal API" public-csv-api/internal-routes))]]
    (when config/allow-palveluvayla-api
      ["/palveluvayla" ["/openapi.json" {:get {:no-doc  true :openapi {:info {:title "Energiatodistuspalvelu API" :description "Hae energiatodistuksia pdf tai json muodoissa"}
                                                                       :id   "Palveluväylä"}
