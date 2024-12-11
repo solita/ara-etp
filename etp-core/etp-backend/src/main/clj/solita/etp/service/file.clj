@@ -40,7 +40,7 @@
   ([aws-s3-client key tag]
    (put-file-tag aws-s3-client key tag nil))
   ([aws-s3-client key {:keys [Key Value]} version-id]
-   (let [current-tag-set (get-file-tags aws-s3-client key)
+   (let [current-tag-set (get-file-tags aws-s3-client key version-id)
          updated-tag-set (as-> current-tag-set $
                                (remove #(= Key (:Key %)) $)
                                (conj $ {:Key Key :Value Value}))]
