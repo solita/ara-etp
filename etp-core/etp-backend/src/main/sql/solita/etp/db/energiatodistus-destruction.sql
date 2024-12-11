@@ -14,6 +14,11 @@ where voimassaolo_paattymisaika < now()
         or latest_toimenpide_publish_time is null)
   or :check-valvonta is false);
 
+-- name: select-destroyed-energiatodistus-ids
+select id as energiatodistus_id
+from energiatodistus
+where tila_id = 6;
+
 -- name: select-vo-toimenpiteet-by-energiatodistus-id
 select id as vo_toimenpide_id
 from vo_toimenpide
