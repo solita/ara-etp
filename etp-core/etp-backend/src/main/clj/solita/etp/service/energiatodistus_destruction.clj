@@ -13,8 +13,7 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.file :as file]
-            [solita.etp.service.viesti :as viesti-service])
-  (:import (clojure.lang ExceptionInfo)))
+            [solita.etp.service.viesti :as viesti-service]))
 
 (db/require-queries 'energiatodistus-destruction)
 
@@ -24,37 +23,46 @@
 (defn- destroy-energiatodistus-audit-data! [db energiatodistus-id]
   (energiatodistus-destruction-db/destroy-energiatodistus-audit! db {:energiatodistus-id energiatodistus-id}))
 
-(defn- handle-deletion-from-s3 [aws-s3-client file-key]
-  (let [;; This is needed so that the noncurrent version is destroyed.
-        destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}]
-    (file/put-file-tag aws-s3-client file-key destruction-tag)
-    (file/delete-file aws-s3-client file-key)))
+(defn- tag-versions-for-destruction [aws-s3-client file-key]
+  (let [;; This is needed so that the noncurrent versions are destroyed by a lifecycle rule.
+        destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
+        version-ids (file/key->version-ids aws-s3-client file-key)]
+    (run! #(file/put-file-tag aws-s3-client file-key destruction-tag %) version-ids)))
 
-(defn- delete-from-s3 [aws-s3-client file-key]
+(defn- handle-deletion-from-s3 [aws-s3-client file-key]
+  (tag-versions-for-destruction aws-s3-client file-key)
+  (file/delete-file aws-s3-client file-key))
+
+(defn- delete-from-s3 [aws-s3-client file-key {:keys [log-when-file-missing?]}]
   (if (file/file-exists? aws-s3-client file-key)
     (do
       (handle-deletion-from-s3 aws-s3-client file-key)
       (log/info (str "Deleted " file-key " from S3")))
-    (do
+    (when log-when-file-missing?
       (log/warn (str "Tried to delete " file-key " but it does not exist!")))))
 
-(defn- delete-energiatodistus-pdf! [aws-s3-client energiatodistus-id language]
+(defn- delete-energiatodistus-pdf! [aws-s3-client energiatodistus-id language lang-info-found?]
   (let [file-key (energiatodistus-service/file-key energiatodistus-id language)]
-    (delete-from-s3 aws-s3-client file-key)))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? lang-info-found?})))
 
 (defn- delete-energiatodistus-pdfs! [db aws-s3-client energiatodistus-id]
   (let [language-codes (-> (complete-energiatodistus-service/find-complete-energiatodistus db energiatodistus-id)
                            :perustiedot
                            :kieli
-                           energiatodistus-service/language-id->codes)]
-    (doseq [language-code language-codes]
-      (delete-energiatodistus-pdf! aws-s3-client energiatodistus-id language-code))))
+                           energiatodistus-service/language-id->codes)
+        ;; Energiatodistus' "pt$kieli" might be null for historical reasons and then we must just try to delete
+        ;; both of the existing todistukset.
+        lang-info-found? (not (nil? language-codes))]
+    (if lang-info-found?
+      (run! #(delete-energiatodistus-pdf! aws-s3-client energiatodistus-id % lang-info-found?) language-codes)
+      (do
+        (delete-energiatodistus-pdf! aws-s3-client energiatodistus-id "fi" lang-info-found?)
+        (delete-energiatodistus-pdf! aws-s3-client energiatodistus-id "sv" lang-info-found?)))))
 
 (defn- delete-energiatodistus-liite-s3 [aws-s3-client liite-id]
   (let [file-key (liite-service/file-key liite-id)]
     ;; Some liitteet are only links and do not have files.
-    (when (file/file-exists? aws-s3-client file-key)
-      (delete-from-s3 aws-s3-client file-key))))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
 (defn- delete-energiatodistus-liite [db aws-s3-client liite-id]
   (energiatodistus-destruction-db/destroy-liite! db {:liite-id liite-id})
@@ -68,8 +76,7 @@
 (defn- destroy-toimenpide-s3! [aws-s3-client energiatodistus-id toimenpide-id]
   (let [file-key (vo-asha-service/file-path energiatodistus-id toimenpide-id)]
     ;; All the toimenpiteet do not create documents
-    (when (file/file-exists? aws-s3-client file-key)
-      (delete-from-s3 aws-s3-client file-key))))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
 (defn- destroy-oikeellisuuden-valvonta-s3! [db aws-s3-client energiatodistus-id]
   (let [vo-toimenpide-ids (map :vo-toimenpide-id (energiatodistus-destruction-db/select-vo-toimenpiteet-by-energiatodistus-id db {:energiatodistus-id energiatodistus-id}))]
@@ -94,8 +101,7 @@
 (defn- delete-viestiketju-liite-s3 [aws-s3-client viestiketju-id liite-id]
   (let [file-key (viesti-service/file-path viestiketju-id liite-id)]
     ;; Some liitteet are only links and do not have files.
-    (when (file/file-exists? aws-s3-client file-key)
-      (delete-from-s3 aws-s3-client file-key))))
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
 (defn- destroy-viestiketju-liitteet [db aws-s3-client viestiketju-id]
   (let [viestiketju-liite-ids (energiatodistus-destruction-db/select-liitteet-by-viestiketju-id db {:viestiketju-id viestiketju-id})]
@@ -150,14 +156,40 @@
   (energiatodistus-destruction-db/make-energiatodistus-vanhentunut! db {:energiatodistus-id energiatodistus-id})
   (log/info (str "Set energiatodistus (id: " energiatodistus-id ") tila to vanhentunut.")))
 
-(defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
+(defn- check-whoami [whoami]
   (when-not (and (rooli-service/system? whoami)
                  (= (:id whoami) (kayttaja-service/system-kayttaja :expiration)))
-    (exception/throw-forbidden! (str "Can not run destruction of expired todistukset as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")")))
+    (exception/throw-forbidden! (str "Can not run destruction of expired todistukset as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")"))))
+
+(defn get-destroyed-todistus-ids [db]
+  (->> (energiatodistus-destruction-db/select-destroyed-energiatodistus-ids db)
+       (map :energiatodistus-id)))
+
+(defn- redestroy-energiatodistus-pdf! [aws-s3-client key]
+  (handle-deletion-from-s3 aws-s3-client key)
+  (log/info (str "Ran redestruction on " key)))
+
+(defn- redestroy-energiatodistus-pdfs! [aws-s3-client energiatodistus-id]
+  (let [key-fi (energiatodistus-service/file-key energiatodistus-id "fi")
+        key-sv (energiatodistus-service/file-key energiatodistus-id "sv")]
+    (redestroy-energiatodistus-pdf! aws-s3-client key-fi)
+    (redestroy-energiatodistus-pdf! aws-s3-client key-sv)))
+
+(defn redestroy-destroyed-energiatodistukset! [db aws-s3-client whoami]
+  (check-whoami whoami)
+  (log/info (str "Starting redestruction of already destroyed energiatodistukset."))
+  (->> (get-destroyed-todistus-ids db)
+      (run! #(redestroy-energiatodistus-pdfs! aws-s3-client %)))
+  (log/info (str "Redestruction of already destroyed energiatodistukset finished.")))
+
+(defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
+  (check-whoami whoami)
   (log/info (str "Starting destruction of expired energiatodistukset."))
   (let [expired-todistukset-without-valvonta-ids (set (get-currently-expired-todistus-ids db {:check-vavonta? true}))
         all-expired-todistukset-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? false}))
         expired-todistukset-with-valvonta-ids (set/difference all-expired-todistukset-ids expired-todistukset-without-valvonta-ids)]
     (run! #(make-energiatodistus-vanhentunut db %) expired-todistukset-with-valvonta-ids)
     (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-without-valvonta-ids))
-  (log/info (str "Destruction of expired energiatodistukset finished.")))
+  (log/info (str "Destruction of expired energiatodistukset finished."))
+  (redestroy-destroyed-energiatodistukset! db aws-s3-client whoami))
+

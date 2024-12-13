@@ -167,10 +167,14 @@
         energiatodistus-add-sv (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 1))
         energiatodistus-add-multilingual (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
         energiatodistus-add-control (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
+        ;; There also exists energiatodistuksia with :perustiedot :kieli nil that might be any kieli (0,1,2)
+        ;; These exists probably because of the importation from the old system.
+        ;; We'll make one and set its kieli to nil later.
+        energiatodistus-add-kieli-nil (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
         energiatodistus-ids (energiatodistus-test-data/insert!
-                              [energiatodistus-add-fi energiatodistus-add-sv energiatodistus-add-multilingual energiatodistus-add-control]
+                              [energiatodistus-add-fi energiatodistus-add-sv energiatodistus-add-multilingual energiatodistus-add-control energiatodistus-add-kieli-nil]
                               laatija-id)
-        [energiatodistus-id-fi energiatodistus-id-sv energiatodistus-id-mu energiatodistus-id-control] energiatodistus-ids
+        [energiatodistus-id-fi energiatodistus-id-sv energiatodistus-id-mu energiatodistus-id-control energiatodistus-id-kieli-nil] energiatodistus-ids
         lang-fi-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-fi "fi")
         lang-fi-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-fi "sv")
         lang-sv-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-sv "fi")
@@ -178,7 +182,9 @@
         lang-mu-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-mu "fi")
         lang-mu-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-mu "sv")
         control-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-control "fi")
-        control-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-control "sv")]
+        control-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-control "sv")
+        kieli-nil-pdf-fi-key (energiatodistus-service/file-key energiatodistus-id-kieli-nil "fi")
+        kieli-nil-pdf-sv-key (energiatodistus-service/file-key energiatodistus-id-kieli-nil "sv")]
 
     ;; Sign the control pdf (it should then always exist)
     (energiatodistus-test-data/sign! energiatodistus-id-control laatija-id false)
@@ -191,7 +197,9 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
 
     ;; Sign Finnish
     (energiatodistus-test-data/sign! energiatodistus-id-fi laatija-id false)
@@ -204,7 +212,9 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
 
     (expire-energiatodistus-and-its-valvonta energiatodistus-id-fi)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
@@ -217,7 +227,9 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
 
     ;; Sign Swedish
     (energiatodistus-test-data/sign! energiatodistus-id-sv laatija-id false)
@@ -230,7 +242,9 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
 
     (expire-energiatodistus-and-its-valvonta energiatodistus-id-sv)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
@@ -243,7 +257,9 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
 
     ;; Sign Multilingual
     (energiatodistus-test-data/sign! energiatodistus-id-mu laatija-id false)
@@ -256,7 +272,9 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
 
     (expire-energiatodistus-and-its-valvonta energiatodistus-id-mu)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
@@ -269,7 +287,85 @@
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
       (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
-      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key))))))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
+
+    ;; Sign "pt$kieli" = nil version
+    (energiatodistus-test-data/sign! energiatodistus-id-kieli-nil laatija-id false)
+
+    ;; Make the energiatodistus' kieli nil
+    (jdbc/execute! ts/*db* ["update energiatodistus set \"pt$kieli\" = null where id = ?" energiatodistus-id-kieli-nil])
+
+    (t/testing "pt$kieli = nil version PDFs should exist after signing it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
+
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-kieli-nil)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
+
+    (t/testing "Multilingual version PDFs should not exist after deleting it."
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-fi-key)))
+      (t/is (true? (file-service/file-exists? ts/*aws-s3-client* control-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-fi-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-sv-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* lang-mu-pdf-sv-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-fi-key)))
+      (t/is (false? (file-service/file-exists? ts/*aws-s3-client* kieli-nil-pdf-sv-key))))
+
+    (t/testing "Control does not have the tags"
+      (let [[[control-pdf-fi-real-version-id control-pdf-fi-temp-version-id]
+             [control-pdf-sv-real-version-id control-pdf-sv-temp-version-id]]
+            (map #(file-service/key->version-ids ts/*aws-s3-client* %) [control-pdf-fi-key control-pdf-sv-key])]
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-fi-key "EnergiatodistusDestruction" control-pdf-fi-real-version-id)))
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-fi-key "EnergiatodistusDestruction" control-pdf-fi-temp-version-id)))
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-sv-key "EnergiatodistusDestruction" control-pdf-sv-real-version-id)))
+        (t/is (nil? (file-service/get-file-tag ts/*aws-s3-client* control-pdf-sv-key "EnergiatodistusDestruction" control-pdf-sv-temp-version-id)))))
+
+    (t/testing "All the version of the files have the destruction tag"
+      (let [destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
+            all-the-deleted-keys [lang-fi-pdf-fi-key
+                                  lang-sv-pdf-sv-key
+                                  lang-mu-pdf-fi-key
+                                  lang-mu-pdf-sv-key
+                                  kieli-nil-pdf-fi-key
+                                  kieli-nil-pdf-sv-key]
+            [[lang-fi-pdf-fi-real-version-id
+              lang-fi-pdf-fi-temp-version-id]
+             [lang-sv-pdf-sv-real-version-id
+              lang-sv-pdf-sv-temp-version-id]
+             [lang-mu-pdf-fi-real-version-id
+              lang-mu-pdf-fi-temp-version-id]
+             [lang-mu-pdf-sv-real-version-id
+              lang-mu-pdf-sv-temp-version-id]
+             [kieli-nil-pdf-fi-real-version-id
+              kieli-nil-pdf-fi-temp-version-id]
+             [kieli-nil-pdf-sv-real-version-id
+              kieli-nil-pdf-sv-temp-version-id]]
+            (map #(file-service/key->version-ids ts/*aws-s3-client* %) all-the-deleted-keys)]
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-fi-pdf-fi-key "EnergiatodistusDestruction" lang-fi-pdf-fi-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-fi-pdf-fi-key "EnergiatodistusDestruction" lang-fi-pdf-fi-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-sv-pdf-sv-key "EnergiatodistusDestruction" lang-sv-pdf-sv-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-sv-pdf-sv-key "EnergiatodistusDestruction" lang-sv-pdf-sv-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-fi-key "EnergiatodistusDestruction" lang-mu-pdf-fi-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-fi-key "EnergiatodistusDestruction" lang-mu-pdf-fi-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-sv-key "EnergiatodistusDestruction" lang-mu-pdf-sv-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* lang-mu-pdf-sv-key "EnergiatodistusDestruction" lang-mu-pdf-sv-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-fi-key "EnergiatodistusDestruction" kieli-nil-pdf-fi-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-fi-key "EnergiatodistusDestruction" kieli-nil-pdf-fi-temp-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-sv-key "EnergiatodistusDestruction" kieli-nil-pdf-sv-real-version-id)))
+        (t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* kieli-nil-pdf-sv-key "EnergiatodistusDestruction" kieli-nil-pdf-sv-temp-version-id)))))))
 
 (defn- collect-invalid-keys-for-destroyed-energiatodistus
   "Helper function for deducing which keys have an incorrect value. Also

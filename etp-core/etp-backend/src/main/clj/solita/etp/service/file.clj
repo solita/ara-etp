@@ -1,5 +1,6 @@
 (ns solita.etp.service.file
   (:require [clojure.java.io :as io]
+            [solita.etp.exception :as exception]
             [solita.common.aws.s3 :as s3])
   (:import (clojure.lang ExceptionInfo)
            (java.io File FileInputStream)))
@@ -19,27 +20,46 @@
 (defn delete-file [aws-s3-client key]
   (s3/delete-object aws-s3-client key))
 
+(defn get-file-tags
+  ([aws-s3-client key]
+   (get-file-tags aws-s3-client key nil))
+  ([aws-s3-client key version-id]
+   (:TagSet (s3/get-object-tagging aws-s3-client key version-id))))
 
-(defn get-file-tags [aws-s3-client key]
-  (:TagSet (s3/get-object-tagging aws-s3-client key)))
+(defn get-file-tag
+  ([aws-s3-client file-key tag-key]
+   (get-file-tag aws-s3-client file-key tag-key nil))
+  ([aws-s3-client file-key tag-key version-id]
+   (let [tag-set (get-file-tags aws-s3-client file-key version-id)]
+     (->> tag-set
+          (filter #(= tag-key (:Key %)))
+          ;; Keys returned by S3 can't be the same
+          first))))
 
-(defn get-file-tag [aws-s3-client file-key tag-key]
-  (let [tag-set (get-file-tags aws-s3-client file-key)]
-    (->> tag-set
-        (filter #(= tag-key (:Key %)))
-         ;; Keys returned by S3 can't be the same
-         first)))
-
-(defn put-file-tag [aws-s3-client key {:keys [Key Value]}]
-  (let [current-tag-set (get-file-tags aws-s3-client key)
-        updated-tag-set (as-> current-tag-set $
-                             (remove #(= Key (:Key %)) $)
-                             (conj $ {:Key Key :Value Value}))]
-    (s3/put-object-tagging aws-s3-client key updated-tag-set)))
+(defn put-file-tag
+  ([aws-s3-client key tag]
+   (put-file-tag aws-s3-client key tag nil))
+  ([aws-s3-client key {:keys [Key Value]} version-id]
+   (let [current-tag-set (get-file-tags aws-s3-client key version-id)
+         updated-tag-set (as-> current-tag-set $
+                               (remove #(= Key (:Key %)) $)
+                               (conj $ {:Key Key :Value Value}))]
+     (s3/put-object-tagging aws-s3-client key updated-tag-set version-id))))
 
 (defn find-file [aws-s3-client key]
   (some-> (s3/get-object aws-s3-client key)
           io/input-stream))
+
+(defn key->version-ids [aws-s3-client key]
+  "Given a key returns the ids of its versions"
+  (let [all-versions-with-key-prefix (s3/list-object-versions aws-s3-client key)]
+    ;; Only max 1000 results are returned.
+    (when (:IsTruncated all-versions-with-key-prefix)
+      (exception/throw-ex-info! :unimplemented-exception "Implement pagination for ListObjectVersions!"))
+    ;; Take only the version-ids where key is an exact match.
+    (->> (:Versions all-versions-with-key-prefix)
+         (filter #(= key (:Key %)))
+         (map :VersionId))))
 
 (defn file-exists? [aws-s3-client key]
   (try
@@ -90,12 +110,12 @@
                          (let [part-number (get-next-part-number)
                                {:keys [ETag]} (s3/upload-part aws-s3-client
                                                               {:key         key
-                                                                :part-number part-number
-                                                                :upload-id   UploadId
-                                                                :body        content-byte-array})]
+                                                               :part-number part-number
+                                                               :upload-id   UploadId
+                                                               :body        content-byte-array})]
                            (swap! uploaded-parts-vec conj {:ETag ETag :PartNumber (str part-number)})))]
     (upload-parts-fn upload-part-fn)
-    (s3/complete-multipart-upload aws-s3-client {:key             key
-                                                  :upload-id      UploadId
-                                                  :uploaded-parts @uploaded-parts-vec}))
+    (s3/complete-multipart-upload aws-s3-client {:key            key
+                                                 :upload-id      UploadId
+                                                 :uploaded-parts @uploaded-parts-vec}))
   nil)
