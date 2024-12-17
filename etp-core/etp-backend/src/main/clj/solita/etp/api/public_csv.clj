@@ -2,7 +2,7 @@
   (:require    [ring.util.response :as r]
                [solita.etp.security :as security]
                [solita.etp.service.concurrent :as concurrent]
-               [solita.etp.service.aineisto :as aineisto-service]
+               [solita.etp.service.csv-to-s3 :as csv-to-s3]
                [solita.etp.service.kayttaja :as kayttaja-service]))
 
 
@@ -17,7 +17,7 @@
              :handler    (fn [{:keys [db whoami aws-s3-client]}]
                            (r/response
                             (concurrent/run-background
-                             #(aineisto-service/update-public-csv-in-s3!
+                             #(csv-to-s3/update-public-csv-in-s3!
                                db
                                whoami
                                aws-s3-client
