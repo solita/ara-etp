@@ -7,7 +7,7 @@
 
 
 (def internal-routes
-  [["public-csv"
+  [["/public-csv"
     ["/update"
      {:post {:summary    "Päivitä julkiset CSV-tiedostot S3:ssa."
              :middleware [[security/wrap-db-application-name
