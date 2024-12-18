@@ -85,6 +85,6 @@
 (defn generate-aineisto!
   "Generates the aineisto with `aineisto-id` into aws-s3-client"
   [aineisto-id]
-  (require 'solita.etp.service.aineisto)
-  ((resolve 'solita.etp.service.aineisto/update-aineisto-in-s3!)
+  (require 'solita.etp.service.csv-to-s3)
+  ((resolve 'solita.etp.service.csv-to-s3/update-aineisto-in-s3!)
    (db 2) {:id -5 :rooli -1} (aws-s3-client) aineisto-id))
