@@ -10,9 +10,7 @@
   [["/public-csv"
     ["/update"
      {:post {:summary    "Päivitä julkiset CSV-tiedostot S3:ssa."
-             :middleware [[security/wrap-db-application-name
-                           (kayttaja-service/system-kayttaja :aineisto)]
-                          [security/wrap-whoami-for-internal-aineisto-api]]
+             :middleware [[security/wrap-db-application-name]]
              :responses  {200 {:body nil}}
              :handler    (fn [{:keys [db whoami aws-s3-client]}]
                            (r/response
