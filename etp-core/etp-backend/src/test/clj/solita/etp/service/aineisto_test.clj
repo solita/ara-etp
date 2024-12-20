@@ -100,15 +100,15 @@
 
 (t/deftest update-aineistot-test
   (t/testing "Aineistot don't exist before generating"
-    (t/is (false? (file/file-exists? ts/*aws-s3-client* "/api/signed/aineistot/1/energiatodistukset.csv")))
-    (t/is (false? (file/file-exists? ts/*aws-s3-client* "/api/signed/aineistot/2/energiatodistukset.csv")))
-    (t/is (false? (file/file-exists? ts/*aws-s3-client* "/api/signed/aineistot/3/energiatodistukset.csv"))))
+    (t/is (false? (file/file-exists? ts/*aws-s3-client* (csv-to-s3/aineisto-key 1))))
+    (t/is (false? (file/file-exists? ts/*aws-s3-client* (csv-to-s3/aineisto-key 2))))
+    (t/is (false? (file/file-exists? ts/*aws-s3-client* (csv-to-s3/aineisto-key 3)))))
 
   (t/testing "Aineistot exist after generating"
     (csv-to-s3/update-aineistot-in-s3! ts/*db* {:id -5 :rooli 2} ts/*aws-s3-client*)
-    (t/is (true? (file/file-exists? ts/*aws-s3-client* "/api/signed/aineistot/1/energiatodistukset.csv")))
-    (t/is (true? (file/file-exists? ts/*aws-s3-client* "/api/signed/aineistot/2/energiatodistukset.csv")))
-    (t/is (true? (file/file-exists? ts/*aws-s3-client* "/api/signed/aineistot/3/energiatodistukset.csv"))))
+    (t/is (true? (file/file-exists? ts/*aws-s3-client* (csv-to-s3/aineisto-key 1))))
+    (t/is (true? (file/file-exists? ts/*aws-s3-client* (csv-to-s3/aineisto-key 2))))
+    (t/is (true? (file/file-exists? ts/*aws-s3-client* (csv-to-s3/aineisto-key 3)))))
 
   (t/testing "New energiatodistus shows up correctly when updating aineistot"
     (let [;; Add laatija
@@ -140,18 +140,18 @@
       (csv-to-s3/update-aineistot-in-s3! ts/*db* whoami ts/*aws-s3-client*)
 
       ;; Aineisto 1 - Test that rakennustunnus-1 exists, but that there is only one row of energiatodistukset.
-      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto "/api/signed/aineistot/1/energiatodistukset.csv")]
+      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto (csv-to-s3/aineisto-key 1))]
         (t/is (true? (str/includes? first rakennustunnus-1)))
         (t/is (nil? second)))
 
       ;; Aineisto 2 - Test that rakennustunnus-1 exists, but that there is only one row of energiatodistukset.
-      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto "/api/signed/aineistot/2/energiatodistukset.csv")]
+      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto (csv-to-s3/aineisto-key 2))]
         (t/is (true? (str/includes? first rakennustunnus-1)))
         (t/is (nil? second)))
 
       ;; Aineisto 3 - Test that one row exists and that the rakennustunnus can't be found as this set should be
       ;; anonymized.
-      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto "/api/signed/aineistot/3/energiatodistukset.csv")]
+      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto (csv-to-s3/aineisto-key 3))]
         (t/is (false? (str/includes? first rakennustunnus-1)))
         (t/is (false? (nil? first)))
         (t/is (nil? second)))
@@ -164,19 +164,19 @@
 
       ;; Aineisto 1 - Test that both rakennustunnus exist. It does not matter which one is which
       ;; as the order of them is not guaranteed.
-      (let [csv-et-lines (get-first-two-energiatodistus-lines-from-aineisto "/api/signed/aineistot/1/energiatodistukset.csv")]
+      (let [csv-et-lines (get-first-two-energiatodistus-lines-from-aineisto (csv-to-s3/aineisto-key 1))]
         (t/is (true? (is-included-in-exactly-one? rakennustunnus-1 csv-et-lines)))
         (t/is (true? (is-included-in-exactly-one? rakennustunnus-2 csv-et-lines))))
 
       ;; Aineisto 2 - Test that both rakennustunnus exist. It does not matter which one is which
       ;; as the order of them is not guaranteed.
-      (let [csv-et-lines (get-first-two-energiatodistus-lines-from-aineisto "/api/signed/aineistot/2/energiatodistukset.csv")]
+      (let [csv-et-lines (get-first-two-energiatodistus-lines-from-aineisto (csv-to-s3/aineisto-key 2))]
         (t/is (true? (is-included-in-exactly-one? rakennustunnus-1 csv-et-lines)))
         (t/is (true? (is-included-in-exactly-one? rakennustunnus-2 csv-et-lines))))
 
       ;; Aineisto 3 - Test that two rows exists and that either of the rakennustunnukset can't be found
       ;; as this set is be anonymized.
-      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto "/api/signed/aineistot/3/energiatodistukset.csv")]
+      (let [[first second] (get-first-two-energiatodistus-lines-from-aineisto (csv-to-s3/aineisto-key 3))]
         ;; Rakennustunnus-1 can't be found
         (t/is (false? (str/includes? first rakennustunnus-1)))
         (t/is (false? (str/includes? second rakennustunnus-1)))

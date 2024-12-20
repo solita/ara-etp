@@ -8,8 +8,8 @@
 
 (t/deftest test-public-csv-to-s3
   (t/testing "Public csv doesn't exist before generating"
-    (t/is (false? (file/file-exists? ts/*aws-s3-client* "/api/csv/public/energiatodistukset.csv"))))
+    (t/is (false? (file/file-exists? ts/*aws-s3-client* csv-to-s3/public-csv-key))))
 
   (t/testing "Public csv exists after generating"
     (csv-to-s3/update-public-csv-in-s3! ts/*db* {:id -5 :rooli 2} ts/*aws-s3-client* {:where nil})
-    (t/is (true? (file/file-exists? ts/*aws-s3-client* "/api/csv/public/energiatodistukset.csv")))))
+    (t/is (true? (file/file-exists? ts/*aws-s3-client* csv-to-s3/public-csv-key)))))

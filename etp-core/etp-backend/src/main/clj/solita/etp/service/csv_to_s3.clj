@@ -4,13 +4,19 @@
             [solita.etp.service.file :as file]
             [solita.etp.service.aineisto :as aineisto-service])
   (:import [java.nio ByteBuffer]
-            [java.nio.charset StandardCharsets]))
+           [java.nio.charset StandardCharsets]))
 
 (def ^:private buffer-size (* 8 1024 1024))  ; 8MB
 (def ^:private upload-threshold (* 5 1024 1024))  ; 5MB
 
 (defn- create-buffer []
   (ByteBuffer/allocate buffer-size))
+
+(def public-csv-key
+  "/api/csv/public/energiatodistukset.csv")
+
+(defn aineisto-key [aineisto-id]
+  (str "/api/signed/aineistot/" aineisto-id "/energiatodistukset.csv"))
 
 (defn- create-upload-parts-fn [csv-reducible-query]
   (let [current-part (create-buffer)]
@@ -33,17 +39,16 @@
 
 (defn update-aineisto-in-s3! [db whoami aws-s3-client aineisto-id]
   (let [csv-query (aineisto-service/aineisto-reducible-query db whoami aineisto-id)
-        key (str "/api/signed/aineistot/" aineisto-id "/energiatodistukset.csv")
+        key (aineisto-key aineisto-id)
         start-msg (str "Starting updating of aineisto (id: " aineisto-id ").")
         end-msg (str "Updating of aineisto (id: " aineisto-id ") finished.")]
     (process-csv-to-s3! aws-s3-client key csv-query start-msg end-msg)))
 
 (defn update-public-csv-in-s3! [db whoami aws-s3-client query]
-  (let [csv-query (energiatodistus-csv/energiatodistukset-public-csv db whoami query)
-        key "/api/csv/public/energiatodistukset.csv"]
+  (let [csv-query (energiatodistus-csv/energiatodistukset-public-csv db whoami query)]
     (process-csv-to-s3!
      aws-s3-client
-     key
+     public-csv-key
      csv-query
      "Starting updating of public energiatodistus."
      "Updating of public energiatodistus finished.")))
