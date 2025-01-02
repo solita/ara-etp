@@ -1,12 +1,12 @@
 (ns solita.etp.service.aineisto
   (:require
-    [clojure.java.jdbc :as jdbc]
-    [clojure.network.ip :as ip]
-    [clojure.tools.logging :as log]
-    [solita.etp.service.file :as file]
-    [solita.etp.service.energiatodistus-csv :as energiatodistus-csv]
-    [solita.etp.db :as db]
-    [solita.etp.service.luokittelu :as luokittelu-service])
+   [clojure.java.jdbc :as jdbc]
+   [clojure.network.ip :as ip]
+   [clojure.tools.logging :as log]
+   [solita.etp.service.file :as file]
+   [solita.etp.service.energiatodistus-csv :as energiatodistus-csv]
+   [solita.etp.db :as db]
+   [solita.etp.service.luokittelu :as luokittelu-service])
   (:import (java.time Instant)
            (java.nio.charset StandardCharsets)
            (java.nio ByteBuffer)))
@@ -89,31 +89,9 @@
 
 (defn aineisto-reducible-query [db whoami aineisto-id]
   (as-> aineisto-id val
-        (aineisto-key val)
-        (aineisto-sources val)
-        (not-nil-aineisto-source val)
-        (val db whoami)))
+    (aineisto-key val)
+    (aineisto-sources val)
+    (not-nil-aineisto-source val)
+    (val db whoami)))
 
-(defn update-aineisto-in-s3! [db whoami aws-s3-client aineisto-id]
-  (log/info (str "Starting updating of aineisto (id: " aineisto-id ")."))
-  (let [csv-reducible-query (aineisto-reducible-query db whoami aineisto-id)
-        key (str "/api/signed/aineistot/" aineisto-id "/energiatodistukset.csv")
-        ;; This part is used to store rows until it reaches 5MB which
-        ;; is the minimum requirement by `upload-part-fn`.
-        current-part (ByteBuffer/allocate (* 8 1024 1024))
-        upload-parts-fn (fn [upload-part-fn]
-                          (csv-reducible-query (fn [^String row]
-                                                 (let [row-bytes (.getBytes row StandardCharsets/UTF_8)]
-                                                   (.put current-part row-bytes)
-                                                   (when (< (* 5 1024 1024) (.position current-part))
-                                                     (upload-part-fn (extract-byte-array-and-reset! current-part))))))
-                          ;;The last part needs to be uploaded separately (unless the size was a multiple of 5MB)
-                          (when (not= 0 (.position current-part))
-                            (upload-part-fn (extract-byte-array-and-reset! current-part))))]
-    (file/upsert-file-in-parts aws-s3-client key upload-parts-fn)
-    (log/info (str "Updating of aineisto (id: " aineisto-id ") finished."))))
 
-(defn update-aineistot-in-s3! [db whoami aws-s3-client]
-  (update-aineisto-in-s3! db whoami aws-s3-client 1)
-  (update-aineisto-in-s3! db whoami aws-s3-client 2)
-  (update-aineisto-in-s3! db whoami aws-s3-client 3))

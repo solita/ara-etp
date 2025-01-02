@@ -10,6 +10,7 @@
             [solita.etp.schema.common :as common-schema]
             [solita.etp.service.aineisto :as aineisto-service]
             [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.service.csv-to-s3 :as csv-to-s3-service]
             [solita.etp.service.kayttaja :as kayttaja-service]))
 
 (defn first-address [x-forwarded-for]
@@ -65,7 +66,7 @@
              :handler    (fn [{:keys [db whoami aws-s3-client]}]
                            (r/response
                              (concurrent/run-background
-                               #(aineisto-service/update-aineistot-in-s3!
+                               #(csv-to-s3-service/update-aineistot-in-s3!
                                   db
                                   whoami
                                   aws-s3-client)
