@@ -13,7 +13,7 @@
   (ByteBuffer/allocate buffer-size))
 
 (def public-csv-key
-  "/api/csv/public/energiatodistukset.csv")
+  "/api/public/energiatodistukset/csv/energiatodistukset.csv")
 
 (defn aineisto-key [aineisto-id]
   (str "/api/signed/aineistot/" aineisto-id "/energiatodistukset.csv"))
