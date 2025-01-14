@@ -2,8 +2,7 @@
   (:require    [ring.util.response :as r]
                [solita.etp.security :as security]
                [solita.etp.service.concurrent :as concurrent]
-               [solita.etp.service.csv-to-s3 :as csv-to-s3]
-               [solita.etp.service.kayttaja :as kayttaja-service]))
+               [solita.etp.service.csv-to-s3 :as csv-to-s3]))
 
 
 (def internal-routes
@@ -20,4 +19,4 @@
                                whoami
                                aws-s3-client
                                {:where nil})
-                             "Aineistot update failed")))}}]]])
+                             "Public csv update failed")))}}]]])
