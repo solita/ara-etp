@@ -26,6 +26,7 @@
            (org.bouncycastle.operator ContentSigner)
            (org.bouncycastle.operator.jcajce JcaContentSignerBuilder)))
 
+;; TODO: Something to used locally only. Is this the right place?
 (def tsp-key-and-cert
   (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
         ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
@@ -56,7 +57,7 @@
      :public-key  (-> keyPair .getPublic)
      :certificate certificate}))
 
-(defn create-workaround-t-level [pdf-file]
+(defn augment-to-t-level [pdf-file]
   (let [parameters (PAdESSignatureParameters.)
         _ (-> parameters (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T))
 
@@ -73,32 +74,30 @@
                         (.setTspSource key-entity-tsp-source))]
     (-> pades-service (.extendDocument pdf-file parameters))))
 
-;; TODO: continue
+;; TODO: continue. Why?
 (defn get-pades-signature-source [^DSSDocument dss-doc]
   (let [pdf-reader (PdfBoxDocumentReader. dss-doc)
         ^Map sigDirs (.extractSigDictionaries pdf-reader)
-
-
         vri-dir-name "VRI"
         signer-information ""
         ]
     #_(PAdESCertificateSource. pdf-sig-revision vri-dir-name signer-information)
-    )
-  )
+    ))
 
-(defn create-workaround-lt-level [pdf-document]
-  (let [^DSSDocument t-level (create-workaround-t-level pdf-document)
+(defn augment-to-lt [pdf-document]
+  (let [^DSSDocument t-level (augment-to-t-level pdf-document)
         parameters (doto (PAdESSignatureParameters.) (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT))
 
-        ;; TODO: Should use some envvar here to specify which certs to trust in each environment?
-        ;; Trusting DVV's certs should be sufficient?
-        ;; Getting the cert from the document would be not wise?
+        ;; TODO: config/leaf or cert provided by card reader
         ^CertificateToken trusted-cert (DSSUtils/loadCertificate (File. "src/test/resources/system-signature/local-signing-root.pem.crt"))
 
         ;; TODO: Should use a trust list here?
         certificate-verifier (doto (CommonCertificateVerifier.)
                                (.setOcspSource (OnlineOCSPSource.))
-                               (.setTrustedCertSources (doto (ListCertificateSource.) (.add (doto (CommonTrustedCertificateSource.) (.addCertificate trusted-cert)))))
+                               (.setTrustedCertSources (doto (ListCertificateSource.)
+                                                         (.add (doto
+                                                                 (CommonTrustedCertificateSource.)
+                                                                 (.addCertificate trusted-cert)))))
                                (.setAlertOnMissingRevocationData (LogOnStatusAlert.)))
 
         key-entity-tsp-source (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
@@ -107,10 +106,10 @@
         _ (-> key-entity-tsp-source (.setTsaPolicy "1.2.3.4"))
 
         pades-service (doto (PAdESService. certificate-verifier)
-                        (.setTspSource key-entity-tsp-source))
-        profit? (-> pades-service (.extendDocument t-level parameters))]
-        #_(-> profit? (.save "ocsp.pdf"))))
+                        (.setTspSource key-entity-tsp-source))]
+    (-> pades-service (.extendDocument t-level parameters))
+    #_(-> profit? (.save "ocsp.pdf"))))
 
 (def pdf-file (FileDocument. "src/test/resources/energiatodistukset/signed-with-ocsp-information.pdf"))
 #_(get-pades-signature-source pdf-file)
-#_(create-workaround-lt-level pdf-file)
+#_(augment-to-lt pdf-file)

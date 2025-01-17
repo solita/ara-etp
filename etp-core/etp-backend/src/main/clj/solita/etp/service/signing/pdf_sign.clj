@@ -1,8 +1,9 @@
 (ns solita.etp.service.signing.pdf-sign
   (:require
+    [clojure.java.io :as io]
     [solita.etp.service.sign :as sign-service]
     [solita.etp.config :as config])
-  (:import (eu.europa.esig.dss.enumerations CommitmentType SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
+  (:import (eu.europa.esig.dss.enumerations CommitmentType ImageScaling SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
            (eu.europa.esig.dss.model BLevelParameters DSSDocument DSSMessageDigest Digest FileDocument ToBeSigned SignatureValue)
            (eu.europa.esig.dss.cades.signature CMSSignedDocument)
            (eu.europa.esig.dss.model.x509 CertificateToken)
@@ -12,7 +13,30 @@
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.spi DSSMessageDigestCalculator DSSUtils)
            (eu.europa.esig.dss.spi.validation CertificateVerifier CommonCertificateVerifier)
-           (java.util ArrayList Collection Date List)))
+           (java.awt Color Font)
+           (java.awt.image BufferedImage)
+           (java.time Instant ZoneId)
+           (java.time.format DateTimeFormatter)
+           (java.util ArrayList Collection Date List)
+           (javax.imageio ImageIO)))
+
+(def timezone (ZoneId/of "Europe/Helsinki"))
+(def date-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy") timezone))
+(def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
+                               timezone))
+
+(defn signature-as-png [path ^String laatija-fullname]
+  (let [now (Instant/now)
+        width (max 125 (* (count laatija-fullname) 6))
+        img (BufferedImage. width 30 BufferedImage/TYPE_INT_ARGB)
+        g (.getGraphics img)]
+    (doto (.getGraphics img)
+      (.setFont (Font. Font/SANS_SERIF Font/TRUETYPE_FONT 10))
+      (.setColor Color/BLACK)
+      (.drawString laatija-fullname 2 10)
+      (.drawString (.format time-formatter now) 2 25)
+      (.dispose))
+    (ImageIO/write img "PNG" (io/file path))))
 
 (defn sign-pdf [aws-kms-client unsigned-document]
   (let [^PAdESWithExternalCMSService service (PAdESWithExternalCMSService.)
@@ -73,7 +97,7 @@
     (assert (.isValidPAdESBaselineCMSSignedData service message-digest cms-signature))
     signedDocument))
 
-(defn wtf [aws-kms-client pdf-document]
+(defn wtf [aws-kms-client pdf-document ^FileDocument signature-png versio]
   (let [^PAdESService service (doto (PAdESService. (CommonCertificateVerifier.))
                                 (.setPdfObjFactory (PdfBoxNativeObjectFactory.)))
 
@@ -94,24 +118,24 @@
                                            )
 
         ^SignatureImageTextParameters txt-params (doto (SignatureImageTextParameters.)
-                                            (.setText "TTTT LAAAA \n 12:12:12 12.12.12")
-
-                                            )
+                                                   )
 
         ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
                                                      (.setPage 1)
-                                                     (.setOriginX 10)
-                                                     (.setOriginY 10)
-                                                     (.setWidth 100)
-                                                     (.setHeight 125)
+                                                     (.setOriginX 75)
+                                                     (.setOriginY (case versio 2013 648 2018 666))
+                                                     #_(.setWidth 100)
+                                                     #_(.setHeight 125)
 
 
                                                      )
 
         ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
                                             (.setFieldParameters sig-field-params)
-                                            (.setTextParameters txt-params)
-
+                                            #_(.setTextParameters txt-params)
+                                            (.setImage signature-png)
+                                            (.setZoom 133)
+                                            #_(.setImageScaling (ImageScaling.))
                                             )
 
         ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
