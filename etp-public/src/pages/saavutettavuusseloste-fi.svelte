@@ -139,22 +139,41 @@
       </p>
 
       <H3>Täytäntöönpanomenettely</H3>
+
       <p>
-        Jos huomaat sivustolla saavutettavuusongelmia, anna ensin palautetta
-        sivuston ylläpitäjälle. Vastauksessa voi mennä 14 päivää. Jos et ole
-        tyytyväinen saamaasi vastaukseen tai et saa vastausta lainkaan kahden
-        viikon aikana, voit antaa palautteen Etelä-Suomen aluehallintovirastoon.
+        Liikenne- ja viestintävirasto valvoo lain edellyttämien
+        saavutettavuusvaatimusten toteutumista. Jos huomaat sivustolla
+        saavutettavuusongelmia, anna ensin palautetta meille eli sivuston
+        ylläpitäjälle.
+      </p>
+
+      <p>
+        Jos et ole tyytyväinen meiltä saamaasi vastaukseen tai et saa vastausta
+        lainkaan kahden viikon kuluessa, voit tehdä ilmoituksen Liikenne- ja
+        viestintäviraston digitaalisen esteettömyyden ja saavutettavuuden
+        valvontaan. Liikenne- ja viestintäviraston sivulla kerrotaan, miten
+        ilmoituksen voi tehdä ja miten asia käsitellään.
+      </p>
+
+      <p>
+        <Link href="https://www.saavutettavuusvaatimukset.fi/oikeutesi/"
+          >Palvelun käyttäjän oikeudet (saavutettavuusvaatimukset.fi)</Link>
       </p>
 
       <H3>Valvontaviranomaisen yhteystiedot</H3>
       <ul class="contact-info">
-        <li>Saavutettavuuden valvonnan yksikkö</li>
+        <li>Liikenne- ja viestintävirasto Traficom</li>
+        <li>Digitaalisen esteettömyyden ja saavutettavuuden valvontayksikkö</li>
         <li>
-          <Link href="https://www.saavutettavuusvaatimukset.fi/" target="_blank"
-            >Saavutettavuusvaatimukset.fi</Link>
+          Verkkosivut: <Link
+            href="https://www.saavutettavuusvaatimukset.fi/"
+            target="_blank">Saavutettavuusvaatimukset.fi</Link>
         </li>
-        <li>saavutettavuus(at)avi.fi</li>
-        <li>vaihde 0295 016 000</li>
+        <li>
+          Sähköposti: <Link href="mailto:saavutettavuus@traficom.fi"
+            >saavutettavuus@traficom.fi</Link>
+        </li>
+        <li>Puhelin: 029 534 5000 (vaihde)</li>
       </ul>
     </div>
   </div>
