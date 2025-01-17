@@ -8,8 +8,6 @@
             [clojure.set :as set]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.test-system :as ts]
-            [solita.etp.service.energiatodistus-csv :refer [public-columns]]
-            [solita.etp.service.aineisto-test :as aineistot-test]
             [solita.etp.test-data.laatija :as test-data.laatija]
             [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]))
 
@@ -25,13 +23,6 @@
   (->> columns
        (map column-ks->str)
        set))
-
-(def hidden-columns
-  #{[:tila-id]
-    [:korvaava-energiatodistus-id]
-    [:laatija-id]
-    [:laatija-fullname]
-    [:perustiedot :yritys :nimi]})
 
 (t/deftest test-public-csv-to-s3
   (t/testing "Public csv doesn't exist before generating"
@@ -55,9 +46,22 @@
     (t/is (true? (file/file-exists? ts/*aws-s3-client* csv-to-s3/public-csv-key))
           "CSV should exist after generation.")
 
-    (let [[header & _] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)
-          expected-headers (columns->header-strings public-columns)
-          header-set (set header)]
+    (let [[headers & _] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)
+          extra-columns #{[:perustiedot :alakayttotarkoitus-fi]
+                          [:tulokset :e-luokka-rajat :kayttotarkoitus :label-fi]
+                          [:tulokset :e-luokka-rajat :raja-uusi-2018]
+                          [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
+                          [:tulokset :kaytettavat-energiamuodot :sahko-kerroin]
+                          [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin]
+                          [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin]
+                          [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin]}
+          hidden-columns #{[:laatija-fullname]
+                           [:tila-id]
+                           [:korvaava-energiatodistus-id]
+                           [:laatija-id]
+                           [:perustiedot :yritys :nimi]}
+          expected-headers (columns->header-strings extra-columns)
+          header-set (set headers)]
 
       ;; Verify that all expected headers from public-columns are present in the CSV
       (t/is (set/subset? expected-headers header-set)
