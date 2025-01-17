@@ -5,14 +5,33 @@
             [clojure.string :as str]
             [clojure.data.csv :as csv]
             [clojure.java.io :as io]
-            [clojure.set :as clojure.set]
+            [clojure.set :as set]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.test-system :as ts]
+            [solita.etp.service.energiatodistus-csv :refer [public-columns]]
             [solita.etp.service.aineisto-test :as aineistot-test]
             [solita.etp.test-data.laatija :as test-data.laatija]
             [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]))
 
 (t/use-fixtures :each ts/fixture)
+
+(defn column-ks->str [ks]
+  (->> ks
+       (map #(if (keyword? %) (name %) %))
+       (map str/capitalize)
+       (str/join " / ")))
+
+(defn columns->header-strings [columns]
+  (->> columns
+       (map column-ks->str)
+       set))
+
+(def hidden-columns
+  #{[:tila-id]
+    [:korvaava-energiatodistus-id]
+    [:laatija-id]
+    [:laatija-fullname]
+    [:perustiedot :yritys :nimi]})
 
 (t/deftest test-public-csv-to-s3
   (t/testing "Public csv doesn't exist before generating"
@@ -29,30 +48,27 @@
           [header first-line second-line third-line] (take 4 csv-data)]
       [header first-line second-line third-line])))
 
-(defn get-full-csv-content [key]
-  (with-open [csv-file (file/find-file ts/*aws-s3-client* key)
-              reader (io/reader csv-file)]
-    (let [csv-data (doall (csv/read-csv reader :separator \;))]
-      (prn "Debug - Raw CSV data:" csv-data)
-      csv-data)))
-
 (t/deftest test-update-public-csv-in-s3!-handles-empty-query
   (t/testing "CSV contains expected columns when energiatodistus exists"
+    ;; Generate and insert test data as required
     (csv-to-s3/update-public-csv-in-s3! ts/*db* nil ts/*aws-s3-client* {:where nil})
-    (t/is (true? (file/file-exists? ts/*aws-s3-client* csv-to-s3/public-csv-key)))
+    (t/is (true? (file/file-exists? ts/*aws-s3-client* csv-to-s3/public-csv-key))
+          "CSV should exist after generation.")
 
     (let [[header & _] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)
-          header-set (set header)
-          expected-headers #{"Perustiedot / Alakayttotarkoitus-fi"
-                             "Tulokset / E-luokka-rajat"
-                             "Tulokset / Kaytettavat-energiamuodot / Kaukolampo-kerroin"}]
-      ;; Verify required columns exist in header
-      (t/is (clojure.set/subset? expected-headers header-set))
+          expected-headers (columns->header-strings public-columns)
+          header-set (set header)]
 
-      ;; Define hidden headers
-      (let [hidden-headers #{"tila-id" "laatija-id" "yritys"}]
-        ;; Verify hidden columns don't exist
-        (t/is (empty? (clojure.set/intersection hidden-headers header-set)))))))
+      ;; Verify that all expected headers from public-columns are present in the CSV
+      (t/is (set/subset? expected-headers header-set)
+            "CSV headers should include all public-columns definitions")
+
+      ;; Transform hidden-columns to header strings
+      (let [hidden-header-strings (columns->header-strings hidden-columns)]
+
+        ;; Verify that no hidden columns are present in the CSV headers
+        (t/is (empty? (set/intersection hidden-header-strings header-set))
+              "CSV should not contain any hidden columns")))))
 
 (t/deftest test-update-public-csv-in-s3!-with-multiple-data
   (let [;; Generate three different rakennustunnus
