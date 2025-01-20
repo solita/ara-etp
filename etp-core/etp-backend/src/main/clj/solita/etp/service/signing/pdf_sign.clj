@@ -3,8 +3,8 @@
     [clojure.java.io :as io]
     [solita.etp.service.sign :as sign-service]
     [solita.etp.config :as config])
-  (:import (eu.europa.esig.dss.enumerations CommitmentType ImageScaling SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
-           (eu.europa.esig.dss.model BLevelParameters DSSDocument DSSMessageDigest Digest FileDocument ToBeSigned SignatureValue)
+  (:import (eu.europa.esig.dss.enumerations SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
+           (eu.europa.esig.dss.model BLevelParameters DSSDocument DSSMessageDigest FileDocument ToBeSigned SignatureValue)
            (eu.europa.esig.dss.cades.signature CMSSignedDocument)
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters PAdESUtils SignatureFieldParameters SignatureImageParameters SignatureImageTextParameters)
@@ -12,7 +12,7 @@
            (eu.europa.esig.dss.pdf.pdfbox PdfBoxNativeObjectFactory)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.spi DSSMessageDigestCalculator DSSUtils)
-           (eu.europa.esig.dss.spi.validation CertificateVerifier CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.time Instant ZoneId)
@@ -21,7 +21,6 @@
            (javax.imageio ImageIO)))
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
-(def date-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy") timezone))
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
 
@@ -124,19 +123,14 @@
                                                      (.setPage 1)
                                                      (.setOriginX 75)
                                                      (.setOriginY (case versio 2013 648 2018 666))
-                                                     #_(.setWidth 100)
-                                                     #_(.setHeight 125)
 
 
                                                      )
 
         ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
                                             (.setFieldParameters sig-field-params)
-                                            #_(.setTextParameters txt-params)
                                             (.setImage signature-png)
-                                            (.setZoom 133)
-                                            #_(.setImageScaling (ImageScaling.))
-                                            )
+                                            (.setZoom 133))
 
         ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
                                                          (.setBLevelParams b-level-params)
@@ -150,17 +144,11 @@
                                                          (.setIncludeVRIDictionary true)
                                                          (.setImageParameters sig-img))
 
-        _ (println (.toString signature-parameters))
-
         ^ToBeSigned data-to-sign (-> service (.getDataToSign pdf-document signature-parameters))
-        ^Digest digest (Digest.
-                         (-> signature-parameters .getDigestAlgorithm)
-                         (DSSUtils/digest (-> signature-parameters .getDigestAlgorithm)
-                                          (-> data-to-sign .getBytes)))
 
         ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 (.readAllBytes (sign-service/sign aws-kms-client (-> data-to-sign .getBytes))))
 
-        ;_ (assert (-> service (.isValidSignatureValue data-to-sign signature-value signing-cert-token)))
+        _ (assert (-> service (.isValidSignatureValue data-to-sign signature-value signing-cert-token)))
 
         ^DSSDocument signed-document (-> service (.signDocument pdf-document signature-parameters signature-value))
 
