@@ -153,8 +153,8 @@
       </p>
 
       <p>
-        <Link href="https://tillganglighetskrav.fi"
-          >Användarens rättigheter (tillganglighetskrav.fi)</Link>
+        <Link href="https://saavutettavuusvaatimukset.fi/sv/dina-rattigheter-0"
+          >Användarens rättigheter (saavutettavuusvaatimukset.fi)</Link>
       </p>
 
       <H3>Tillsynsmyndighetens kontaktuppgifter</H3>

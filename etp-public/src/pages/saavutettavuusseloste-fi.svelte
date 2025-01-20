@@ -156,7 +156,7 @@
       </p>
 
       <p>
-        <Link href="https://www.saavutettavuusvaatimukset.fi/oikeutesi/"
+        <Link href="https://www.saavutettavuusvaatimukset.fi/fi/kayttajan-oikeudet"
           >Palvelun käyttäjän oikeudet (saavutettavuusvaatimukset.fi)</Link>
       </p>
 

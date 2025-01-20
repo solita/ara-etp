@@ -155,8 +155,8 @@
 
   <p>
     <Link
-      href="https://tillganglighetskrav.fi"
-      text="Användarens rättigheter (tillganglighetskrav.fi)" />
+      href="https://saavutettavuusvaatimukset.fi/sv/dina-rattigheter-0"
+      text="Användarens rättigheter (saavutettavuusvaatimukset.fi)" />
   </p>
 
   <H2 text="Tillsynsmyndighetens kontaktuppgifter" />
