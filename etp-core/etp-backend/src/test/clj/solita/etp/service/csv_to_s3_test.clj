@@ -13,6 +13,61 @@
 
 (t/use-fixtures :each ts/fixture)
 
+(def public-columns #{[:id]
+                      [:versio]
+                      [:allekirjoitusaika]
+                      [:voimassaolo-paattymisaika]
+                      [:perustiedot :kieli]
+                      [:perustiedot :laatimisvaihe]
+                      [:perustiedot :havainnointikaynti]
+                      [:perustiedot :nimi-fi]
+                      [:perustiedot :nimi-sv]
+                      [:perustiedot :valmistumisvuosi]
+                      [:perustiedot :katuosoite-fi]
+                      [:perustiedot :katuosoite-sv]
+                      [:perustiedot :postinumero]
+                      [:perustiedot :rakennustunnus]
+                      [:perustiedot :kayttotarkoitus]
+                      [:perustiedot :alakayttotarkoitus-fi]
+                      [:tulokset :e-luku]
+                      [:tulokset :e-luokka]
+                      [:tulokset :e-luokka-rajat :raja-uusi-2018]
+                      [:tulokset :e-luokka-rajat :kayttotarkoitus :label-fi]
+                      [:perustiedot :keskeiset-suositukset-fi]
+                      [:perustiedot :keskeiset-suositukset-sv]
+                      [:lahtotiedot :lammitetty-nettoala]
+                      [:lahtotiedot :ilmanvaihto :tyyppi-id]
+                      [:lahtotiedot :ilmanvaihto :kuvaus-fi]
+                      [:lahtotiedot :ilmanvaihto :kuvaus-sv]
+                      [:lahtotiedot :lammitys :lammitysmuoto-1 :id]
+                      [:lahtotiedot :lammitys :lammitysmuoto-2 :id]
+                      [:lahtotiedot :lammitys :lammitysmuoto-1 :kuvaus-fi]
+                      [:lahtotiedot :lammitys :lammitysmuoto-1 :kuvaus-sv]
+                      [:lahtotiedot :lammitys :lammitysmuoto-2 :kuvaus-fi]
+                      [:lahtotiedot :lammitys :lammitysmuoto-2 :kuvaus-sv]
+                      [:lahtotiedot :lammitys :lammonjako :id]
+                      [:lahtotiedot :lammitys :lammonjako :kuvaus-fi]
+                      [:lahtotiedot :lammitys :lammonjako :kuvaus-sv]
+                      [:tulokset :kaytettavat-energiamuodot :kaukolampo]
+                      [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
+                      [:tulokset :kaytettavat-energiamuodot :sahko]
+                      [:tulokset :kaytettavat-energiamuodot :sahko-kerroin]
+                      [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine]
+                      [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin]
+                      [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine]
+                      [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin]
+                      [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys]
+                      [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin]
+                      [:tulokset :kaytettavat-energiamuodot :muu 0 :nimi]
+                      [:tulokset :kaytettavat-energiamuodot :muu 0 :ostoenergia]
+                      [:tulokset :kaytettavat-energiamuodot :muu 0 :muotokerroin]
+                      [:tulokset :kaytettavat-energiamuodot :muu 1 :nimi]
+                      [:tulokset :kaytettavat-energiamuodot :muu 1 :ostoenergia]
+                      [:tulokset :kaytettavat-energiamuodot :muu 1 :muotokerroin]
+                      [:tulokset :kaytettavat-energiamuodot :muu 2 :nimi]
+                      [:tulokset :kaytettavat-energiamuodot :muu 2 :ostoenergia]
+                      [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]})
+
 (defn column-ks->str [ks]
   (->> ks
        (map #(if (keyword? %) (name %) %))
@@ -47,24 +102,15 @@
           "CSV should exist after generation.")
 
     (let [[headers & _] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)
-          extra-columns #{[:perustiedot :alakayttotarkoitus-fi]
-                          [:tulokset :e-luokka-rajat :kayttotarkoitus :label-fi]
-                          [:tulokset :e-luokka-rajat :raja-uusi-2018]
-                          [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
-                          [:tulokset :kaytettavat-energiamuodot :sahko-kerroin]
-                          [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin]
-                          [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin]
-                          [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin]}
           hidden-columns #{[:laatija-fullname]
                            [:tila-id]
                            [:korvaava-energiatodistus-id]
                            [:laatija-id]
                            [:perustiedot :yritys :nimi]}
-          expected-headers (columns->header-strings extra-columns)
           header-set (set headers)]
 
       ;; Verify that all expected headers from public-columns are present in the CSV
-      (t/is (set/subset? expected-headers header-set)
+      (t/is (set/subset? (columns->header-strings public-columns) header-set)
             "CSV headers should include all public-columns definitions")
 
       ;; Transform hidden-columns to header strings
