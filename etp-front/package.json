@@ -12,7 +12,7 @@
     "test": "npx --node-options=\"--experimental-vm-modules\" jest",
     "coverage": "npx --node-options=\"--experimental-vm-modules\" jest --coverage=true --coverageDirectory=coverage",
     "tdd": "npx --node-options=\"--experimental-vm-modules\" jest --watchAll",
-    "format": "prettier --write src modheaders.json",
+    "format": "prettier --write src modheaders.json webpack.config.js",
     "check-format": "prettier --check src",
     "build:docs": "jsdoc -r -c ./jsdoc/conf.json",
     "watch:docs": "nodemon --exec npm run build:docs --watch src"
