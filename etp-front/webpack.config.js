@@ -6,6 +6,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import GenerateJsonPlugin from 'generate-json-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import mockHeaders from './modheaders.json' assert { type: 'json' };
 
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,6 +16,15 @@ const prod = mode === 'production';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const headersForUser = username => {
+  if (!username) {
+    return [];
+  }
+
+  const conf = mockHeaders.find(header => header.title === username);
+  return conf ? conf.headers.filter(h => h.enabled) : [];
+};
 
 export default {
   entry: {
@@ -160,7 +170,14 @@ export default {
         target: process.env.WEBPACK_PROXY_TARGET || `http://localhost:8080`,
         secure: false,
         changeOrigin: true,
-        xfwd: true
+        xfwd: true,
+        onProxyReq: proxyReq => {
+          const headers = headersForUser(process.env.ETP_DEV_FRONT_USER);
+
+          for (const { name, value } of headers) {
+            proxyReq.setHeader(name, value);
+          }
+        }
       }
     ]
   }
