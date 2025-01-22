@@ -52,6 +52,27 @@
    :password (env "DB_PASSWORD" "etp")
    :url      (-> (env "DB_URL" "jdbc:postgresql://localhost:5432/postgres") add-application-name)})
 
+(def dev-configs
+  [{:user     "etp"
+    :password "etp"
+    :url      (add-application-name "jdbc:postgresql://localhost:5432/postgres")}
+   {:user "etp"
+    :password "etp"
+    :url (add-application-name "jdbc:postgresql://localhost:5432/etp_dev")}])
+
+(defn runboth [command]
+  (run!
+    (fn [db]
+      (let [flyway (configure-flyway db)]
+        (case command
+          "clean" (.clean flyway)
+          "migrate" (.migrate flyway)
+          "repair" (.repair flyway)
+          (do
+            (println "Unsupported command:" command)
+            (println guide)))))
+    dev-configs))
+
 (defn run [args]
   (let [command (str/trim (or (first args) "<empty string>"))
         db (read-configuration)
