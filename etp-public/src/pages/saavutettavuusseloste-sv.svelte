@@ -153,7 +153,7 @@
       </p>
 
       <p>
-        <Link href="https://saavutettavuusvaatimukset.fi/sv/dina-rattigheter-0"
+        <Link href="https://www.saavutettavuusvaatimukset.fi/sv/dina-rattigheter/anvandares-rattigheter"
           >Användarens rättigheter (saavutettavuusvaatimukset.fi)</Link>
       </p>
 
