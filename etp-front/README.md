@@ -6,12 +6,15 @@ ja todistuksiin liittyvään viranomaistoimintaan.
 This is a web application for managing energy performance certificates and related activities.
 This application is for accredited certificate experts and public authorities.
 
-[Node.js](https://nodejs.org) has to be installed and preferred node version manager tool is
-[node version manager](https://github.com/nvm-sh/nvm).
+## Dependencies
 
-## Node version manager
+[Node.js](https://nodejs.org) has to be installed. At the moment of writing the required version is Node 20, but there
+is a `.nvmrc` file that can be used with [node version manager](https://github.com/nvm-sh/nvm) to automatically
+get the currently-required version.
 
-https://github.com/nvm-sh/nvm#git-install
+[Modheader](https://modheader.com/) extension for the browser is not absolutely required, but it is
+useful for quickly switching between various user accounts.
+
 
 ```bash
 source ~/.nvm/nvm.sh
@@ -20,15 +23,24 @@ nvm use
 
 ## Get started
 
-Install the dependencies...
+Install the NPM dependencies.
 
 ```bash
 npm install
 ```
 
-You also need to start [backend](../etp-core) services.
+Naturally, the [backend](../etp-core) services need to be running locally.
 
-...then start [webpack](https://webpack.js.org)
+In case of the private frontend in this directory, the backend also expects to receive requests
+with JWT headers that associate the request with a known user. The useful header sets are specified
+in the `modheaders.json` file, and there are two ways to use them:
+
+1) Use the Modheader extension in the browser to set the headers. The extension can import the
+   `modheaders.json` file and then lets you choose which set of headers to use.
+2) Set the `ETP_DEV_FRONT_USER` environment variable to the email address of the user
+   whose JWT headers will be injected in the development server's proxy.
+
+Set the environment variable or the correct Modheader profile as needed, then start  [webpack](https://webpack.js.org):
 
 ```bash
 npm run dev
