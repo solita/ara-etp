@@ -1,4 +1,5 @@
 (ns solita.etp.service.energiatodistus-pdf
+  "Contains functionality to specifically create an energiatodistus as pdf."
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.tools.logging :as log]

@@ -3,26 +3,77 @@
     [clojure.java.io :as io]
     [solita.etp.service.sign :as sign-service]
     [solita.etp.config :as config])
-  (:import (eu.europa.esig.dss.enumerations SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
-           (eu.europa.esig.dss.model BLevelParameters DSSDocument DSSMessageDigest FileDocument ToBeSigned SignatureValue)
+  (:import (eu.europa.esig.dss.alert LogOnStatusAlert)
+           (eu.europa.esig.dss.enumerations SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
+           (eu.europa.esig.dss.model BLevelParameters DSSDocument DSSMessageDigest Digest FileDocument InMemoryDocument ToBeSigned SignatureValue)
            (eu.europa.esig.dss.cades.signature CMSSignedDocument)
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters PAdESUtils SignatureFieldParameters SignatureImageParameters SignatureImageTextParameters)
            (eu.europa.esig.dss.pades.signature ExternalCMSService PAdESService PAdESWithExternalCMSService)
            (eu.europa.esig.dss.pdf.pdfbox PdfBoxNativeObjectFactory)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
+           (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSMessageDigestCalculator DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.x509 CommonTrustedCertificateSource ListCertificateSource)
+           (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.awt Color Font)
            (java.awt.image BufferedImage)
+           (java.io File InputStream)
+           (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
+           (java.security.cert X509Certificate)
            (java.time Instant ZoneId)
            (java.time.format DateTimeFormatter)
            (java.util ArrayList Collection Date List)
-           (javax.imageio ImageIO)))
+           (javax.imageio ImageIO)
+           (org.bouncycastle.asn1.x500 X500Name)
+           (org.bouncycastle.asn1.x509 ExtendedKeyUsage KeyPurposeId Extension)
+           (org.bouncycastle.cert X509v3CertificateBuilder)
+           (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509v3CertificateBuilder)
+           (org.bouncycastle.jce.provider BouncyCastleProvider)
+           (org.bouncycastle.operator ContentSigner)
+           (org.bouncycastle.operator.jcajce JcaContentSignerBuilder)))
+
+
+;; Used to create and find the signature field since the pdf needs to be cached in between of
+;; getting the digest and the signature.
+(def signature-field-id "Signature Field")
+
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
+
+;; TODO: Something to used locally only. Is this the right place?
+(def tsp-key-and-cert
+  (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
+        ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
+                                             (.initialize 2048))
+        ^KeyPair keyPair (-> keyPairGenerator .generateKeyPair)
+
+        subjectDN "CN=Self-Signed, O=Example, C=FI"
+        issuerDN subjectDN
+        serialNumber (BigInteger. 64 (SecureRandom.))
+        ^Date notBefore (Date.)
+        ^Date notAfter (Date. ^long (+ (System/currentTimeMillis) (* 365 24 60 60 1000)))
+
+        ^X509v3CertificateBuilder certBuilder (doto (JcaX509v3CertificateBuilder.
+                                                      (X500Name. issuerDN)
+                                                      serialNumber
+                                                      notBefore
+                                                      notAfter
+                                                      (X500Name. subjectDN)
+                                                      (-> keyPair .getPublic))
+                                                (.addExtension Extension/extendedKeyUsage
+                                                               true
+                                                               (ExtendedKeyUsage. KeyPurposeId/id_kp_timeStamping)))
+
+        ^ContentSigner signer (-> (JcaContentSignerBuilder. "SHA256withRSA") (.build (-> keyPair .getPrivate)))
+        ^X509Certificate certificate (-> (doto (JcaX509CertificateConverter.) (.setProvider "BC"))
+                                         (.getCertificate (-> certBuilder (.build signer))))]
+    {:private-key (-> keyPair .getPrivate)
+     :public-key  (-> keyPair .getPublic)
+     :certificate certificate}))
 
 (defn signature-as-png [path ^String laatija-fullname]
   (let [now (Instant/now)
@@ -37,68 +88,26 @@
       (.dispose))
     (ImageIO/write img "PNG" (io/file path))))
 
-(defn sign-pdf [aws-kms-client unsigned-document]
-  (let [^PAdESWithExternalCMSService service (PAdESWithExternalCMSService.)
-        ;;TODO: Card vs system
-        _ (println "isPDF: " (PAdESUtils/isPDFDocument unsigned-document))
-        ^CertificateToken signing-cert-token (-> config/system-signature-certificate-leaf
-                                                 (DSSUtils/convertToDER)
-                                                 (DSSUtils/loadCertificate))
-        ^List cert-chain (ArrayList. ^Collection (->> [config/system-signature-certificate-leaf
-                                                       config/system-signature-certificate-intermediate
-                                                       config/system-signature-certificate-root]
-                                                      (mapv #(-> %
-                                                                 (DSSUtils/convertToDER)
-                                                                 (DSSUtils/loadCertificate)))))
-        ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
-                                                         #_(-> % (.bLevel) (.setSigningDate (Date.)))
-                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
-                                                         (.setCertificateChain cert-chain)
-                                                         #_(.setReason "DSS testing") ;; This is seen in the signature.
-                                                         (.setSigningCertificate signing-cert-token)
-                                                         #_(.setSignaturePackaging SignaturePackaging/ENVELOPING)
-                                                         (.setDigestAlgorithm DigestAlgorithm/SHA256))
+(defn sign-a-pdf-with-mocks [aws-kms-client pdf-document ^FileDocument signature-png versio]
+  (let [key-entity-tsp-source (doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
+                                                         ^X509Certificate (:certificate tsp-key-and-cert)
+                                                         ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
+                                (.setTsaPolicy "1.2.3.4"))
 
-        ^DSSMessageDigest message-digest (.getMessageDigest service unsigned-document signature-parameters)
-        ;;certificate-verifier
-        #_(doto (CommonCertificateVerifier.)
-            (.setOcspSource (OnlineOCSPSource.)))
+        ;; TODO: config/leaf or cert provided by card reader
+        ^CertificateToken trusted-cert (DSSUtils/loadCertificate (File. "src/test/resources/system-signature/local-signing-root.pem.crt"))
 
-        _ (println "DIGEST: " (.toString message-digest))
+        ^CommonCertificateVerifier cert-verifier (doto (CommonCertificateVerifier.)
+                                                   (.setOcspSource (OnlineOCSPSource.))
+                                                   (.setTrustedCertSources (doto (ListCertificateSource.)
+                                                                             (.add (doto
+                                                                                     (CommonTrustedCertificateSource.)
+                                                                                     (.addCertificate trusted-cert)))))
+                                                   (.setAlertOnInvalidTimestamp (LogOnStatusAlert.)))
 
-        ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        certificate-verifier (CommonCertificateVerifier.)
-
-        ^ExternalCMSService padesCMSGeneratorService (ExternalCMSService. certificate-verifier)
-
-        ^ToBeSigned data-to-sign (-> padesCMSGeneratorService (.getDataToSign message-digest signature-parameters))
-
-
-        _ (doto signature-parameters
-            (.setSignedData (.getBytes data-to-sign)))
-
-        ^DSSMessageDigestCalculator dig-calc (doto (DSSMessageDigestCalculator. DigestAlgorithm/SHA256)
-                                               (.update (.getBytes data-to-sign))
-                                               )
-
-        ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 (.readAllBytes (sign-service/sign aws-kms-client (.getValue (.getMessageDigest dig-calc)))))
-
-
-        ^CMSSignedDocument cms-signature (-> padesCMSGeneratorService (.signMessageDigest message-digest signature-parameters signature-value))
-        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-        ^DSSDocument signedDocument (.signDocument service unsigned-document signature-parameters cms-signature)]
-
-
-    (assert (not (nil? message-digest)))
-    (assert (not (nil? cms-signature)))
-    (assert (.isValidCMSSignedData service message-digest cms-signature))
-    (assert (.isValidPAdESBaselineCMSSignedData service message-digest cms-signature))
-    signedDocument))
-
-(defn wtf [aws-kms-client pdf-document ^FileDocument signature-png versio]
-  (let [^PAdESService service (doto (PAdESService. (CommonCertificateVerifier.))
-                                (.setPdfObjFactory (PdfBoxNativeObjectFactory.)))
+        ^PAdESService service (doto (PAdESService. cert-verifier)
+                                (.setPdfObjFactory (PdfBoxNativeObjectFactory.))
+                                (.setTspSource key-entity-tsp-source))
 
         ^CertificateToken signing-cert-token (-> config/system-signature-certificate-leaf
                                                  (DSSUtils/convertToDER)
@@ -113,7 +122,7 @@
                                            (.setSigningDate (Date.))
                                            (.setClaimedSignerRoles (ArrayList. ["Laatija"]))
                                            (.setSignedAssertions (ArrayList. ["SignedAssertion?"]))
-                                           #_(.setCommitmentTypeIndications (ArrayList. ))
+                                           #_(.setCommitmentTypeIndications (ArrayList.))
                                            )
 
         ^SignatureImageTextParameters txt-params (doto (SignatureImageTextParameters.)
@@ -124,7 +133,6 @@
                                                      (.setOriginX 75)
                                                      (.setOriginY (case versio 2013 648 2018 666))
 
-
                                                      )
 
         ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
@@ -134,7 +142,7 @@
 
         ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
                                                          (.setBLevelParams b-level-params)
-                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
+                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT)
                                                          (.setCertificateChain cert-chain)
                                                          (.setReason "DSS testing") ;; This is seen in the signature.
                                                          (.setSigningCertificate signing-cert-token)
@@ -144,6 +152,7 @@
                                                          (.setIncludeVRIDictionary true)
                                                          (.setImageParameters sig-img))
 
+        ;; Is this the document I could save temporarily? No this is the digest :(
         ^ToBeSigned data-to-sign (-> service (.getDataToSign pdf-document signature-parameters))
 
         ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 (.readAllBytes (sign-service/sign aws-kms-client (-> data-to-sign .getBytes))))
@@ -153,7 +162,152 @@
         ^DSSDocument signed-document (-> service (.signDocument pdf-document signature-parameters signature-value))
 
         ]
+    ;;signed-document
+    signed-document))
+
+;; TODO: Make dynamic?
+(defn- get-tsp-source []
+  #_(let [tsa-url (config/tsa-endpoint-url)]
+      (OnlineTSPSource. tsa-url))
+  (doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
+                             ^X509Certificate (:certificate tsp-key-and-cert)
+                             ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
+    (.setTsaPolicy "1.2.3.4")))
+
+(defn get-unsigned-document-with-signature-field
+  [document-to-sing signature-options]
+
+  #_(let [^PAdESService service (doto (PAdESService. cert-verifier)
+                                  #_(.setPdfObjFactory (PdfBoxNativeObjectFactory.))
+                                  (.setTspSource key-entity-tsp-source))
+
+          ]
+      )
+
+  {:document-with-signature-field nil})
+
+(defn get-digest
+  [^File file {:keys [signature-png versio laatija-fullname] :as signature-options} {:keys [root-cert int-cert leaf-cert] :as certs}]
+  (let [document (FileDocument. file)
+        tsp-source (get-tsp-source)
+
+        cert-verifier (CommonCertificateVerifier.)
+
+        ^CertificateToken signing-cert-token (-> leaf-cert
+                                                 (DSSUtils/convertToDER)
+                                                 (DSSUtils/loadCertificate))
+        ^List cert-chain (ArrayList. ^Collection (->> [leaf-cert
+                                                       int-cert
+                                                       root-cert]
+                                                      (mapv #(-> %
+                                                                 (DSSUtils/convertToDER)
+                                                                 (DSSUtils/loadCertificate)))))
+
+        ^BLevelParameters b-level-params (doto (BLevelParameters.)
+                                           (.setSigningDate (Date.))
+                                           (.setClaimedSignerRoles (ArrayList. ["Laatija"]))
+                                           (.setSignedAssertions (ArrayList. ["SignedAssertion?"]))
+                                           #_(.setCommitmentTypeIndications (ArrayList.))
+                                           )
+
+        ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
+                                                     (.setPage 1)
+                                                     (.setOriginX 75)
+                                                     (.setOriginY (case versio 2013 648 2018 666)))
+
+        ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
+                                            (.setFieldParameters sig-field-params)
+                                            (.setImage signature-png)
+                                            (.setZoom 133))
+
+        ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
+                                                         (.setBLevelParams b-level-params)
+                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT)
+                                                         (.setCertificateChain cert-chain)
+                                                         (.setReason "DSS testing") ;; This is seen in the signature.
+                                                         (.setSigningCertificate signing-cert-token)
+                                                         (.setSignaturePackaging SignaturePackaging/ENVELOPED)
+                                                         (.setDigestAlgorithm DigestAlgorithm/SHA256)
+                                                         (.setSignerName laatija-fullname)
+                                                         (.setIncludeVRIDictionary true)
+                                                         (.setImageParameters sig-img))
+
+        ^PAdESService service (doto (PAdESService. cert-verifier)
+                                (.setPdfObjFactory (PdfBoxNativeObjectFactory.))
+                                (.setTspSource tsp-source))
+
+        ;; Is this the document I could save temporarily? No this is the digest :(
+        ^ToBeSigned data-to-sign (-> service (.getDataToSign document signature-parameters))
+
+        ^Digest digest (Digest. DigestAlgorithm/SHA256 (.getBytes data-to-sign))]
+    (.getBase64Value digest)))
+
+(defn sign-document-as-pades-t-level
+  [unsigned-document-is {:keys [signature-png versio laatija-fullname] :as signature-options} {:keys [root-cert int-cert leaf-cert] :as certs} signature]
+  (let [document (InMemoryDocument. ^InputStream unsigned-document-is)
+        tsp-source (get-tsp-source)
+
+        cert-verifier (CommonCertificateVerifier.)
+
+        ^CertificateToken signing-cert-token (-> leaf-cert
+                                                 (DSSUtils/convertToDER)
+                                                 (DSSUtils/loadCertificate))
+        ^List cert-chain (ArrayList. ^Collection (->> [leaf-cert
+                                                       int-cert
+                                                       root-cert]
+                                                      (mapv #(-> %
+                                                                 (DSSUtils/convertToDER)
+                                                                 (DSSUtils/loadCertificate)))))
+
+        ^BLevelParameters b-level-params (doto (BLevelParameters.)
+                                           (.setSigningDate (Date.))
+                                           (.setClaimedSignerRoles (ArrayList. ["Laatija"]))
+                                           (.setSignedAssertions (ArrayList. ["SignedAssertion?"]))
+                                           #_(.setCommitmentTypeIndications (ArrayList.))
+                                           )
+
+        ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
+                                                     (.setPage 1)
+                                                     (.setOriginX 75)
+                                                     (.setOriginY (case versio 2013 648 2018 666)))
+
+        ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
+                                            (.setFieldParameters sig-field-params)
+                                            (.setImage signature-png)
+                                            (.setZoom 133))
+
+        ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
+                                                         (.setBLevelParams b-level-params)
+                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT)
+                                                         (.setCertificateChain cert-chain)
+                                                         (.setReason "DSS testing") ;; This is seen in the signature.
+                                                         (.setSigningCertificate signing-cert-token)
+                                                         (.setSignaturePackaging SignaturePackaging/ENVELOPED)
+                                                         (.setDigestAlgorithm DigestAlgorithm/SHA256)
+                                                         (.setSignerName laatija-fullname)
+                                                         (.setIncludeVRIDictionary true)
+                                                         (.setImageParameters sig-img))
+
+        ^PAdESService service (doto (PAdESService. cert-verifier)
+                                (.setPdfObjFactory (PdfBoxNativeObjectFactory.))
+                                (.setTspSource tsp-source))
+
+        ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 signature)
+
+        ^DSSDocument signed-document (-> service (.signDocument document signature-parameters signature-value))
+
+        ]
     signed-document
     )
+  )
+
+(defn get-seocnds-until-next-ocsp-update []
+
+  {:ocsp-next-update 10}
+  )
+
+(defn augment-pdf-to-pades-lt-level []
 
   )
+
+
