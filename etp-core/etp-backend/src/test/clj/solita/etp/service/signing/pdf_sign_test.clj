@@ -53,10 +53,7 @@
             signature (.readAllBytes (sign-service/sign ts/*aws-kms-client* data))
             t-level-doc (et-signing/sign-energiatodistus-pdf ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
             _ (.save t-level-doc "WASD.pdf")
-
-            ]
-
-        ))))
+            ]))))
 
 (t/deftest signed-pdf-has-laatija-id
 

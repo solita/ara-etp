@@ -83,67 +83,6 @@
     #(energiatodistus-service/start-energiatodistus-signing! db whoami id)
     (audit-log-message laatija-allekirjoitus-id id "Starting failed!")))
 
-#_(defn signature-as-png [path laatija-fullname]
-    (let [now (Instant/now)
-          width (max 125 (* (count laatija-fullname) 6))
-          img (BufferedImage. width 30 BufferedImage/TYPE_INT_ARGB)
-          g (.getGraphics img)]
-      (doto (.getGraphics img)
-        (.setFont (Font. Font/SANS_SERIF Font/TRUETYPE_FONT 10))
-        (.setColor Color/BLACK)
-        (.drawString laatija-fullname 2 10)
-        (.drawString (.format time-formatter now) 2 25)
-        (.dispose))
-      (ImageIO/write img "PNG" (io/file path))))
-
-#_(defn get-digest [db aws-s3-client laatija]
-    (let [energiatodistus-pdf nil
-          cache-document (pdf-sign/get-unsigned-document-with-signature-field)
-          digest (pdf-sign/get-digest cache-document)]
-      (-> energiatodistus-pdf
-          println
-          )))
-
-#_(defn sign-energiatodistus [db aws-s3-client whoami now id language signature-and-chain signing-method]
-    (when-let [energiatodistus (energiatodistus-service/find-energiatodistus db id)]
-      (do-when-signing
-
-        ))
-    ;; Find the cached todistus
-    ;; Create T-level
-    ;; Find the OCSP next update
-    ;; Create LT-level
-    ;; Finish?
-
-    )
-
-#_(defn sign-energiatodistus-pdf
-    ([db aws-s3-client whoami now id language signature-and-chain]
-     (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
-    ([db aws-s3-client whoami now id language
-      {:keys [chain] :as signature-and-chain} signing-method]
-     (when-let [energiatodistus
-                (energiatodistus-service/find-energiatodistus db id)]
-       (do-when-signing
-         energiatodistus
-         #(do
-            (energiatodistus-pdf-service/validate-certificate! (:sukunimi whoami)
-                                                               now
-                                                               (first chain)
-                                                               (= signing-method :mpollux))
-            (let [key (energiatodistus-service/file-key id language)
-                  content (file-service/find-file aws-s3-client key)
-                  content-bytes (.readAllBytes content)
-                  pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-                  filename (str key ".pdf")]
-              (->> (pdf-sign/sign-document-as-pades-t-level content-bytes pkcs7)
-                   (pdf-sign/get-seocnds-until-next-ocsp-update)
-                   (pdf-sign/augment-pdf-to-pades-lt-level)
-                   )
-
-
-              filename))))))
-
 (def test-sig-params-key "test-sig-params-key")
 (def test-service-key "test-service-key")
 

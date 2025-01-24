@@ -175,22 +175,10 @@
                              ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
     (.setTsaPolicy "1.2.3.4")))
 
-(defn get-unsigned-document-with-signature-field
-  [document-to-sing signature-options]
-
-  #_(let [^PAdESService service (doto (PAdESService. cert-verifier)
-                                  #_(.setPdfObjFactory (PdfBoxNativeObjectFactory.))
-                                  (.setTspSource key-entity-tsp-source))
-
-          ]
-      )
-
-  {:document-with-signature-field nil})
-
 (defn object->input-stream [^Object object]
   (let [baos (ByteArrayOutputStream.)
-        oos (ObjectOutputStream. baos)
-        _ (-> oos (.writeObject object))
+        _ (doto (ObjectOutputStream. baos)
+              (.writeObject object))
         bais (ByteArrayInputStream. (.toByteArray baos))
         ]
     bais
