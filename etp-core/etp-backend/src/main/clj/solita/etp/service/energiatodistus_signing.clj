@@ -124,7 +124,7 @@
                 unsigned-pdf-is (file-service/find-file aws-s3-client key)
                 sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
                 filename (str key ".pdf")
-                signed-pdf-t-level (pdf-sign/sign-document-as-pades-t-level sig-params-is unsigned-pdf-is signature)
+                signed-pdf-t-level (pdf-sign/sign-document-as-pades-t-level sig-params-is unsigned-pdf-is certs signature)
                 ;;TODO: presist
                 ]
             signed-pdf-t-level)))))

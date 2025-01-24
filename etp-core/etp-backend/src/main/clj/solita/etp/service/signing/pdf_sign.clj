@@ -2,6 +2,7 @@
   (:require
     [clojure.java.io :as io]
     [solita.etp.service.sign :as sign-service]
+    [solita.common.time :as time]
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert LogOnStatusAlert)
            (eu.europa.esig.dss.enumerations SignatureLevel DigestAlgorithm SignatureAlgorithm SignaturePackaging)
@@ -13,9 +14,10 @@
            (eu.europa.esig.dss.pdf.pdfbox PdfBoxNativeObjectFactory)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
-           (eu.europa.esig.dss.spi DSSMessageDigestCalculator DSSUtils)
+           (eu.europa.esig.dss.spi DSSMessageDigestCalculator DSSRevocationUtils DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (eu.europa.esig.dss.spi.x509 CommonTrustedCertificateSource ListCertificateSource)
+           (eu.europa.esig.dss.spi.x509.revocation.ocsp OCSPToken)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.awt Color Font)
            (java.awt.image BufferedImage)
@@ -178,7 +180,7 @@
 (defn object->input-stream [^Object object]
   (let [baos (ByteArrayOutputStream.)
         _ (doto (ObjectOutputStream. baos)
-              (.writeObject object))
+            (.writeObject object))
         bais (ByteArrayInputStream. (.toByteArray baos))
         ]
     bais
@@ -244,27 +246,65 @@
         ^ToBeSigned data-to-sign (-> service (.getDataToSign document signature-parameters))
 
         ^Digest digest (Digest. DigestAlgorithm/SHA256 (.getBytes data-to-sign))]
-    {:digest (.getBase64Value digest)
+    {:digest        (.getBase64Value digest)
      :sig-params-is (object->input-stream signature-parameters)}))
 
 (defn sign-document-as-pades-t-level
-  [sig-params-is unsigned-document-is signature]
+  [sig-params-is unsigned-document-is {:keys [root-cert int-cert leaf-cert] :as certs} signature]
   (let [document (InMemoryDocument. ^InputStream unsigned-document-is)
         ^PAdESSignatureParameters signature-parameters (input-stream->object sig-params-is)
         ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 signature)
 
         tsp-source (get-tsp-source)
 
-        cert-verifier (CommonCertificateVerifier.)
+        ^CertificateToken trusted-cert (-> root-cert
+                                           (DSSUtils/convertToDER)
+                                           (DSSUtils/loadCertificate))
+
+        certs (into {} (map (fn [[k v]] [k (-> v (DSSUtils/convertToDER) (DSSUtils/loadCertificate)
+                                               )]) certs))
+        _ (println certs)
+
+        ocsp-source (OnlineOCSPSource.)
+
+        cert-verifier (doto (CommonCertificateVerifier.)
+                        (.setOcspSource ocsp-source)
+                        (.setTrustedCertSources (doto (ListCertificateSource.)
+                                                  (.add (doto
+                                                          (CommonTrustedCertificateSource.)
+                                                          (.addCertificate trusted-cert)))))
+                        (.setAlertOnInvalidTimestamp (LogOnStatusAlert.)))
 
         ^PAdESService service (doto (PAdESService. cert-verifier)
                                 (.setPdfObjFactory (PdfBoxNativeObjectFactory.))
                                 (.setTspSource tsp-source))
 
         ^DSSDocument signed-document (-> service (.signDocument document signature-parameters signature-value))
+
+        ;; Get the nex ocsp-update
+
+        ^OCSPToken ocsp-resp (-> cert-verifier .getOcspSource (.getRevocationToken (:leaf-cert certs) (:int-cert certs)))
+        _ (println "AAA::" (.toString ocsp-resp))
+
+        wait1 (- (.getEpochSecond (.toInstant ^Date (.getNextUpdate ocsp-resp)))
+                 (.getEpochSecond ^Instant (time/now)))
+
+        ^OCSPToken ocsp-resp (-> ocsp-source (.getRevocationToken (:int-cert certs) (:root-cert certs)))
+        _ (println "BBB::" (.toString ocsp-resp))
+
+        wait2 (- (.getEpochSecond (.toInstant ^Date (.getNextUpdate ocsp-resp)))
+                 (.getEpochSecond ^Instant (time/now)))
+
+        _ (when (>= (max wait1 wait2) 0)
+            (Thread/sleep (+ 1 (max wait1 wait2))))
+
+        updated-parameters (doto signature-parameters (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT))
+
+        extended-document (-> service (.extendDocument signed-document updated-parameters))
+
         ]
     ;;TODO: Hide
-    signed-document
+    extended-document
     )
   )
 

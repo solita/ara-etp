@@ -31,7 +31,7 @@
         laatija-add (->> (test-data.laatija/generate-adds 1) (first))
         laatija-id (first (test-data.laatija/insert! [laatija-add]))
         laatija (laatija-service/find-laatija-by-id
-                  ts/*db* {:id laatija-id :rooli -1} laatija-id)
+                  ts/*db* {:id laatija-id :rooli 0} laatija-id)
         laatija-allekirjoitus-id (get-allekirjoitus-id laatija)
         certs {:root-cert config/system-signature-certificate-root
                :int-cert  config/system-signature-certificate-intermediate
