@@ -13,6 +13,8 @@
             [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
             [solita.etp.test-system :as ts])
   (:import (eu.europa.esig.dss.model FileDocument)
+           (java.io File)
+           (java.nio.file Files Paths StandardCopyOption)
            (java.nio.charset StandardCharsets)
            (java.util Base64)))
 
@@ -50,6 +52,7 @@
                     (#(.decode (Base64/getDecoder) %)))
             signature (.readAllBytes (sign-service/sign ts/*aws-kms-client* data))
             t-level-doc (et-signing/sign-energiatodistus-pdf ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
+            _ (.save t-level-doc "WASD.pdf")
 
             ]
 

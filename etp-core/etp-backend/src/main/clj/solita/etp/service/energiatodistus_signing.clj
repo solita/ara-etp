@@ -173,6 +173,6 @@
                 unsigned-pdf-is (file-service/find-file aws-s3-client key)
                 filename (str key ".pdf")
                 signed-pdf-t-level (pdf-sign/sign-document-as-pades-t-level unsigned-pdf-is {:versio versio :laatija-fullname laatija-fullname} certs signature)
+                ;;TODO: presist
                 ]
-
-            filename)))))
+            signed-pdf-t-level)))))

@@ -222,7 +222,7 @@
 
         ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
                                                          (.setBLevelParams b-level-params)
-                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT)
+                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T)
                                                          (.setCertificateChain cert-chain)
                                                          (.setReason "DSS testing") ;; This is seen in the signature.
                                                          (.setSigningCertificate signing-cert-token)
@@ -278,7 +278,7 @@
 
         ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
                                                          (.setBLevelParams b-level-params)
-                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT)
+                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T)
                                                          (.setCertificateChain cert-chain)
                                                          (.setReason "DSS testing") ;; This is seen in the signature.
                                                          (.setSigningCertificate signing-cert-token)
@@ -297,6 +297,7 @@
         ^DSSDocument signed-document (-> service (.signDocument document signature-parameters signature-value))
 
         ]
+    ;;TODO: Hide
     signed-document
     )
   )
