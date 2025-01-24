@@ -144,6 +144,9 @@
 
               filename))))))
 
+(def test-sig-params-key "test-sig-params-key")
+(def test-service-key "test-service-key")
+
 (defn find-energiatodistus-digest
   "Generate the pdf.
   Upload to S3.
@@ -154,14 +157,23 @@
       complete-energiatodistus
       #(let [draft? false
              ^String pdf-path (energiatodistus-pdf-service/generate-pdf-as-file complete-energiatodistus language draft? laatija-allekirjoitus-id)
+             signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
-             digest (pdf-sign/get-digest energiatodistus-pdf {:versio versio :laatija-fullname laatija-fullname} certs)]
+             _ (signature-as-png signature-png-path laatija-fullname)
+             digest-and-stuff (pdf-sign/get-digest energiatodistus-pdf {:versio versio :signature-png-path signature-png-path :laatija-fullname laatija-fullname} certs)]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
+         (file-service/upsert-file-from-input-stream aws-s3-client
+                                             test-sig-params-key
+                                             (:sig-params-is digest-and-stuff))
+         #_(file-service/upsert-file-from-file aws-s3-client
+                                             test-service-key
+                                             (:service-is digest-and-stuff))
          (io/delete-file pdf-path)
-         {:digest digest}))))
+         (io/delete-file signature-png-path)
+         {:digest (:digest digest-and-stuff)}))))
 
 (defn sign-energiatodistus-pdf
   [db aws-s3-client id language laatija-allekirjoitus-id certs signature]
@@ -171,8 +183,9 @@
        #(do
           (let [key (energiatodistus-service/file-key id language)
                 unsigned-pdf-is (file-service/find-file aws-s3-client key)
+                sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
                 filename (str key ".pdf")
-                signed-pdf-t-level (pdf-sign/sign-document-as-pades-t-level unsigned-pdf-is {:versio versio :laatija-fullname laatija-fullname} certs signature)
+                signed-pdf-t-level (pdf-sign/sign-document-as-pades-t-level sig-params-is unsigned-pdf-is signature)
                 ;;TODO: presist
                 ]
             signed-pdf-t-level)))))

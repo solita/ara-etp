@@ -19,13 +19,14 @@
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.awt Color Font)
            (java.awt.image BufferedImage)
-           (java.io File InputStream)
+           (java.io ByteArrayInputStream File InputStream ObjectInputStream ObjectOutputStream Serializable)
            (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
            (java.security.cert X509Certificate)
            (java.time Instant ZoneId)
            (java.time.format DateTimeFormatter)
            (java.util ArrayList Collection Date List)
            (javax.imageio ImageIO)
+           (org.apache.axis.utils ByteArrayOutputStream)
            (org.bouncycastle.asn1.x500 X500Name)
            (org.bouncycastle.asn1.x509 ExtendedKeyUsage KeyPurposeId Extension)
            (org.bouncycastle.cert X509v3CertificateBuilder)
@@ -186,12 +187,27 @@
 
   {:document-with-signature-field nil})
 
+(defn object->input-stream [^Object object]
+  (let [baos (ByteArrayOutputStream.)
+        oos (ObjectOutputStream. baos)
+        _ (-> oos (.writeObject object))
+        bais (ByteArrayInputStream. (.toByteArray baos))
+        ]
+    bais
+    ))
+
+(defn input-stream->object [^InputStream input-stream]
+  (-> (ObjectInputStream. input-stream)
+      .readObject))
+
+
 (defn get-digest
-  [^File file {:keys [signature-png versio laatija-fullname] :as signature-options} {:keys [root-cert int-cert leaf-cert] :as certs}]
+  [^File file {:keys [signature-png-path versio laatija-fullname] :as signature-options} {:keys [root-cert int-cert leaf-cert] :as certs}]
   (let [document (FileDocument. file)
         tsp-source (get-tsp-source)
 
         cert-verifier (CommonCertificateVerifier.)
+        signature-png (FileDocument. ^String signature-png-path)
 
         ^CertificateToken signing-cert-token (-> leaf-cert
                                                  (DSSUtils/convertToDER)
@@ -240,62 +256,24 @@
         ^ToBeSigned data-to-sign (-> service (.getDataToSign document signature-parameters))
 
         ^Digest digest (Digest. DigestAlgorithm/SHA256 (.getBytes data-to-sign))]
-    (.getBase64Value digest)))
+    {:digest (.getBase64Value digest)
+     :sig-params-is (object->input-stream signature-parameters)}))
 
 (defn sign-document-as-pades-t-level
-  [unsigned-document-is {:keys [signature-png versio laatija-fullname] :as signature-options} {:keys [root-cert int-cert leaf-cert] :as certs} signature]
+  [sig-params-is unsigned-document-is signature]
   (let [document (InMemoryDocument. ^InputStream unsigned-document-is)
+        ^PAdESSignatureParameters signature-parameters (input-stream->object sig-params-is)
+        ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 signature)
+
         tsp-source (get-tsp-source)
 
         cert-verifier (CommonCertificateVerifier.)
-
-        ^CertificateToken signing-cert-token (-> leaf-cert
-                                                 (DSSUtils/convertToDER)
-                                                 (DSSUtils/loadCertificate))
-        ^List cert-chain (ArrayList. ^Collection (->> [leaf-cert
-                                                       int-cert
-                                                       root-cert]
-                                                      (mapv #(-> %
-                                                                 (DSSUtils/convertToDER)
-                                                                 (DSSUtils/loadCertificate)))))
-
-        ^BLevelParameters b-level-params (doto (BLevelParameters.)
-                                           (.setSigningDate (Date.))
-                                           (.setClaimedSignerRoles (ArrayList. ["Laatija"]))
-                                           (.setSignedAssertions (ArrayList. ["SignedAssertion?"]))
-                                           #_(.setCommitmentTypeIndications (ArrayList.))
-                                           )
-
-        ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
-                                                     (.setPage 1)
-                                                     (.setOriginX 75)
-                                                     (.setOriginY (case versio 2013 648 2018 666)))
-
-        ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
-                                            (.setFieldParameters sig-field-params)
-                                            (.setImage signature-png)
-                                            (.setZoom 133))
-
-        ^PAdESSignatureParameters signature-parameters (doto (PAdESSignatureParameters.)
-                                                         (.setBLevelParams b-level-params)
-                                                         (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T)
-                                                         (.setCertificateChain cert-chain)
-                                                         (.setReason "DSS testing") ;; This is seen in the signature.
-                                                         (.setSigningCertificate signing-cert-token)
-                                                         (.setSignaturePackaging SignaturePackaging/ENVELOPED)
-                                                         (.setDigestAlgorithm DigestAlgorithm/SHA256)
-                                                         (.setSignerName laatija-fullname)
-                                                         (.setIncludeVRIDictionary true)
-                                                         (.setImageParameters sig-img))
 
         ^PAdESService service (doto (PAdESService. cert-verifier)
                                 (.setPdfObjFactory (PdfBoxNativeObjectFactory.))
                                 (.setTspSource tsp-source))
 
-        ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 signature)
-
         ^DSSDocument signed-document (-> service (.signDocument document signature-parameters signature-value))
-
         ]
     ;;TODO: Hide
     signed-document
