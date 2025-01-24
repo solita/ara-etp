@@ -77,6 +77,7 @@ start_root_ocsp_responder() {
       -rkey "${PKI_ROOT_DIR}/private/${OCSP_REQ_NAME}.key" \
       -CA "${PKI_ROOT_DIR}/ca.crt" \
       -text \
+      -nmin 1 \
       -out "${OCSP_ROOT_LOG}"
 }
 
@@ -88,6 +89,7 @@ start_int_ocsp_responder() {
       -rkey "${PKI_INT_DIR}/private/${OCSP_REQ_NAME}.key" \
       -CA "${PKI_INT_DIR}/ca.crt" \
       -text \
+      -nmin 1 \
       -out "${OCSP_INT_LOG}"
 }
 
