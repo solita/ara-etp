@@ -1,0 +1,16 @@
+# default recipe to display help information
+_default:
+  @just --list
+
+test:
+  cd ./etp-backend && \
+  clojure -M:dev:test
+
+clean:
+  cd ./docker && \
+  ./flyway.sh clean
+
+clean-migrate:
+  cd ./docker && \
+  ./flyway.sh clean && \
+  ./flyway.sh migrate
