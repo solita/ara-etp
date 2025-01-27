@@ -960,9 +960,9 @@
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
         "label-context": "Tekniset järjestelmät",
-        "sahko": "Sähkö",
-        "lampo": "Lämpö",
-        "kaukojaahdytys": "Kauko\u00ADjäähdytys",
+        "sahko": "Sähkö yhteensä",
+        "lampo": "Lämpö yhteensä",
+        "kaukojaahdytys": "Kauko\u00ADjäähdytys yhteensä",
         "lammitysjarjestelma": "Lämmitys\u00ADjärjestelmä",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
