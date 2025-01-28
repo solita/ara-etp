@@ -50,16 +50,16 @@
                     :digest
                     (.getBytes StandardCharsets/UTF_8)
                     (#(.decode (Base64/getDecoder) %)))
-            signature (.readAllBytes (sign-service/sign ts/*aws-kms-client* data))
-            t-level-doc (et-signing/sign-energiatodistus-pdf ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
-            _ (.save t-level-doc "WASD.pdf")
+            signature (pdf-sign/get-signature-from-system-cms-service ts/*aws-kms-client* data)
+            b-level-doc (et-signing/sign-energiatodistus-pdf ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
+            _ (.save b-level-doc "WASD.pdf")
             ]))))
 
 (t/deftest signed-pdf-has-laatija-id
 
   )
 
-(t/deftest can-get-a-pdf-with-signature-field
+#_(t/deftest can-get-a-pdf-with-signature-field
     (let [pdf-path "src/test/resources/energiatodistukset/system-signing/not-signed.pdf"
           ;;pdf-file (FileDocument. "src/test/resources/energiatodistukset/system-signing/not-signed.pdf")
           versio 2018

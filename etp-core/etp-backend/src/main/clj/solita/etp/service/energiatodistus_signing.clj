@@ -87,7 +87,9 @@
 (def test-service-key "test-service-key")
 
 (defn find-energiatodistus-digest
-  "Generate the pdf.
+  "This is the function that does first real processing of the signature.
+
+  Generate the pdf.
   Upload to S3.
   Return the data that needs to be signed in base64"
   [db aws-s3-client id language laatija-allekirjoitus-id certs]
@@ -100,21 +102,24 @@
              key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
-             digest-and-stuff (pdf-sign/get-digest energiatodistus-pdf {:versio versio :signature-png-path signature-png-path :laatija-fullname laatija-fullname} certs)]
+             signature-png (File. signature-png-path)
+             ;;digest-and-stuff (pdf-sign/get-digest energiatodistus-pdf {:versio versio :signature-png-path signature-png-path :laatija-fullname laatija-fullname} certs)
+             digest-and-stuff (pdf-sign/get-digest-for-external-cms-service energiatodistus-pdf {:signature-png signature-png})]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
          (file-service/upsert-file-from-input-stream aws-s3-client
                                              test-sig-params-key
-                                             (:sig-params-is digest-and-stuff))
+                                             (:stateful-parameters digest-and-stuff))
          #_(file-service/upsert-file-from-file aws-s3-client
                                              test-service-key
                                              (:service-is digest-and-stuff))
          (io/delete-file pdf-path)
          (io/delete-file signature-png-path)
-         {:digest (:digest digest-and-stuff)}))))
+         (select-keys digest-and-stuff [:digest])))))
 
 (defn sign-energiatodistus-pdf
+  "This is the function that receives the signature and continues the signing process."
   [db aws-s3-client id language laatija-allekirjoitus-id certs signature]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
      (do-when-signing
@@ -124,7 +129,7 @@
                 unsigned-pdf-is (file-service/find-file aws-s3-client key)
                 sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
                 filename (str key ".pdf")
-                signed-pdf-t-level (pdf-sign/sign-document-as-pades-t-level sig-params-is unsigned-pdf-is certs signature)
+                signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is signature)
                 ;;TODO: presist
                 ]
             signed-pdf-t-level)))))
