@@ -2,15 +2,16 @@
 _default:
   @just --list
 
-test:
-  cd ./etp-backend && \
+test:  
+  # every line is run in its own shell, so cwd-dependent stuff has to be made a one line with \ continuations
+  cd ./etp-backend; \
   clojure -M:dev:test
 
 clean:
-  cd ./docker && \
+  cd ./docker; \
   ./flyway.sh clean
 
 clean-migrate:
-  cd ./docker && \
-  ./flyway.sh clean && \
+  cd ./docker; \
+  ./flyway.sh clean; \
   ./flyway.sh migrate
