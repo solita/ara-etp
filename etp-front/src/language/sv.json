@@ -935,9 +935,9 @@
         "header": "Energi som förbrukas av husets tekniska system",
         "label-context": "Tekniska system",
         "sahko": "El",
-        "lampo": "Värme",
-        "kaukojaahdytys": "Fjärrkyla",
-        "lammitysjarjestelma": "Uppvärmnings\u00ADsystemet",
+        "lampo": "Värme sammanlagt",
+        "kaukojaahdytys": "Fjärrkyla sammanlagt",
+        "lammitysjarjestelma": "Uppvärmnings\u00ADsystemet sammanlagt",
         "labels": {
           "tilojen-lammitys": "Uppvärm\u00ADning av utrymmen",
           "tuloilman-lammitys": "Uppvärm\u00ADning av tilluft",

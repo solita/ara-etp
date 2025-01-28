@@ -117,7 +117,12 @@
      (per-nettoala-for-schema
        [:tulokset :lampokuormat]
        #(str % "-neliovuosikuorma")
-       energiatodistus-schema/Energiatodistus2018)}
+       energiatodistus-schema/Energiatodistus2018)
+
+     :tekniset-jarjestelmat
+     {:kaukojaahdytys ["energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$kaukojaahdytys" common-schema/NonNegative]
+      :lampo ["( energiatodistus.lt$ilmanvaihto$tuloilma_lampotila + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$lampo + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$lampo + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$lampo + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$lampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$aurinkolampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$lampopumppu + energiatodistus. t$uusiutuvat_omavaraisenergiat$muulampo )" common-schema/NonNegative]
+      :sahko ["( energiatodistus.t$kaytettavat_energiamuodot$sahko + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$sahko + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$sahko + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$sahko + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$sahko)" common-schema/NonNegative]}}
     :toteutunut-ostoenergiankulutus
     {:ostettu-energia
      (per-nettoala-for-schema

@@ -1,0 +1,17 @@
+# default recipe to display help information
+_default:
+  @just --list
+
+test:  
+  # every line is run in its own shell, so cwd-dependent stuff has to be made a one line with \ continuations
+  cd ./etp-backend; \
+  clojure -M:dev:test
+
+clean:
+  cd ./docker; \
+  ./flyway.sh clean
+
+clean-migrate:
+  cd ./docker; \
+  ./flyway.sh clean; \
+  ./flyway.sh migrate
