@@ -165,23 +165,6 @@
   (->> (energiatodistus-destruction-db/select-destroyed-energiatodistus-ids db)
        (map :energiatodistus-id)))
 
-(defn- redestroy-energiatodistus-pdf! [aws-s3-client key]
-  (handle-deletion-from-s3 aws-s3-client key)
-  (log/info (str "Ran redestruction on " key)))
-
-(defn- redestroy-energiatodistus-pdfs! [aws-s3-client energiatodistus-id]
-  (let [key-fi (energiatodistus-service/file-key energiatodistus-id "fi")
-        key-sv (energiatodistus-service/file-key energiatodistus-id "sv")]
-    (redestroy-energiatodistus-pdf! aws-s3-client key-fi)
-    (redestroy-energiatodistus-pdf! aws-s3-client key-sv)))
-
-(defn redestroy-destroyed-energiatodistukset! [db aws-s3-client whoami]
-  (check-whoami whoami)
-  (log/info (str "Starting redestruction of already destroyed energiatodistukset."))
-  (->> (get-destroyed-todistus-ids db)
-      (run! #(redestroy-energiatodistus-pdfs! aws-s3-client %)))
-  (log/info (str "Redestruction of already destroyed energiatodistukset finished.")))
-
 (defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
   (check-whoami whoami)
   (log/info (str "Starting destruction of expired energiatodistukset."))
@@ -190,6 +173,4 @@
         expired-todistukset-with-valvonta-ids (set/difference all-expired-todistukset-ids expired-todistukset-without-valvonta-ids)]
     (run! #(make-energiatodistus-vanhentunut db %) expired-todistukset-with-valvonta-ids)
     (run! #(destroy-expired-energiatodistus! db aws-s3-client %) expired-todistukset-without-valvonta-ids))
-  (log/info (str "Destruction of expired energiatodistukset finished."))
-  (redestroy-destroyed-energiatodistukset! db aws-s3-client whoami))
-
+  (log/info (str "Destruction of expired energiatodistukset finished.")))
