@@ -81,6 +81,7 @@
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
+             ;; TODO: Check 2013 version positioning or is it even relevant?
              origin-y (case versio 2013 648 2018 666)
              digest-and-stuff (pdf-sign/get-digest-for-external-cms-service energiatodistus-pdf {:signature-png signature-png :page 1 :origin-x 75 :origin-y origin-y})]
          (file-service/upsert-file-from-file aws-s3-client
