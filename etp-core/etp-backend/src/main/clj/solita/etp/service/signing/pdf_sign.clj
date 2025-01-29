@@ -79,38 +79,6 @@
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
 
-;; TODO: Something to used locally only. Is this the right place?
-;;       Put into tests and use with-rebinds?
-(def tsp-key-and-cert
-  (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
-        ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
-                                             (.initialize 2048))
-        ^KeyPair keyPair (-> keyPairGenerator .generateKeyPair)
-
-        subjectDN "CN=Self-Signed, O=Example, C=FI"
-        issuerDN subjectDN
-        serialNumber (BigInteger. 64 (SecureRandom.))
-        ^Date notBefore (Date.)
-        ^Date notAfter (Date. ^long (+ (System/currentTimeMillis) (* 365 24 60 60 1000)))
-
-        ^X509v3CertificateBuilder certBuilder (doto (JcaX509v3CertificateBuilder.
-                                                      (X500Name. issuerDN)
-                                                      serialNumber
-                                                      notBefore
-                                                      notAfter
-                                                      (X500Name. subjectDN)
-                                                      (-> keyPair .getPublic))
-                                                (.addExtension Extension/extendedKeyUsage
-                                                               true
-                                                               (ExtendedKeyUsage. KeyPurposeId/id_kp_timeStamping)))
-
-        ^ContentSigner signer (-> (JcaContentSignerBuilder. "SHA256withRSA") (.build (-> keyPair .getPrivate)))
-        ^X509Certificate certificate (-> (doto (JcaX509CertificateConverter.) (.setProvider "BC"))
-                                         (.getCertificate (-> certBuilder (.build signer))))]
-    {:private-key (-> keyPair .getPrivate)
-     :public-key  (-> keyPair .getPublic)
-     :certificate certificate}))
-
 (defn signature-as-png [path ^String laatija-fullname]
   (let [now (Instant/now)
         width (max 125 (* (count laatija-fullname) 6))
@@ -125,10 +93,10 @@
     (ImageIO/write img "PNG" (io/file path))))
 
 ;; TODO: Make dynamic?
-(defn- get-tsp-source []
-  #_(let [tsa-url (config/tsa-endpoint-url)]
+(defn- ^:dynamic get-tsp-source []
+  (let [tsa-url (config/tsa-endpoint-url)]
       (OnlineTSPSource. tsa-url))
-  (doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
+  #_(doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
                              ^X509Certificate (:certificate tsp-key-and-cert)
                              ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
     (.setTsaPolicy "1.2.3.4")))
