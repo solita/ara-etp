@@ -11,10 +11,12 @@
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters PAdESUtils SignatureFieldParameters SignatureImageParameters SignatureImageTextParameters)
            (eu.europa.esig.dss.pades.signature ExternalCMSService PAdESService PAdESWithExternalCMSService)
+           (eu.europa.esig.dss.pades.validation PDFDocumentValidator)
            (eu.europa.esig.dss.pdf.pdfbox PdfBoxNativeObjectFactory)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSMessageDigestCalculator DSSRevocationUtils DSSUtils)
+           (eu.europa.esig.dss.spi.signature AdvancedSignature)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (eu.europa.esig.dss.spi.x509 CommonTrustedCertificateSource ListCertificateSource)
            (eu.europa.esig.dss.spi.x509.revocation.ocsp OCSPToken)
@@ -217,14 +219,16 @@
                              ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
     (.setTsaPolicy "1.2.3.4")))
 
+;; TODO: Make dynamic?
+(defn- get-ocsp-source []
+  (OnlineOCSPSource.))
+
 (defn object->input-stream [^Object object]
   (let [baos (ByteArrayOutputStream.)
         _ (doto (ObjectOutputStream. baos)
             (.writeObject object))
-        bais (ByteArrayInputStream. (.toByteArray baos))
-        ]
-    bais
-    ))
+        bais (ByteArrayInputStream. (.toByteArray baos))]
+    bais))
 
 (defn input-stream->object [^InputStream input-stream]
   (-> (ObjectInputStream. input-stream)
@@ -257,23 +261,58 @@
 
         ]
     {:digest              (.getBase64Value message-digest)
+     ;; At least the signature-png needs to be saved for use after getting the signature.
+     ;; Parameters seem to also have some other state and differ somehow if recreated so
+     ;; might as well save the whole SignatureParameters object.
      :stateful-parameters (object->input-stream signature-parameters)}))
 
 (defn sign-with-external-cms-service-signature
-  ""
+  "Given an unsigned pdf `pdf-file` as InputStream and `stateful-parameters`"
   [^InputStream pdf-file stateful-parameters ^bytes cms-signature]
   (let [^PAdESSignatureParameters signature-parameters (input-stream->object stateful-parameters)
         unsigned-pdf (InMemoryDocument. pdf-file)
+        tsp-source (get-tsp-source)
+        service-external-cms (doto (PAdESWithExternalCMSService.))
+        signed-pdf-b-level (-> service-external-cms (.signDocument unsigned-pdf signature-parameters cms-signature))
 
-        service (PAdESWithExternalCMSService.)
 
-        signed-pdf-b-level (-> service (.signDocument unsigned-pdf signature-parameters cms-signature))
+        service (doto (PAdESService. (CommonCertificateVerifier.))
+                               (.setTspSource tsp-source))
+        extend-parameters (doto (PAdESSignatureParameters.)
+                            (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T)
+                            )
+        signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))
         ]
-    signed-pdf-b-level))
+    (.openStream signed-pdf-t-level)))
 
-(defn b-level->lt-level []
-
+(defn cert-chain->slowest-next-update [^List cert-chain]
   )
+
+(defn b-level->lt-level [^InputStream signed-b-level-pdf]
+  (let [signed-pdf (InMemoryDocument. signed-b-level-pdf)
+        cert-verifier (CommonCertificateVerifier.)
+        service (PAdESService. cert-verifier)
+        validator (PDFDocumentValidator/fromDocument signed-pdf)
+        ^AdvancedSignature signature (first (-> validator .getSignatures))
+        cert-chain (-> signature .getCertificates)
+        ;signing-time (-> signature .getSigningDate)
+        tsp-source (get-tsp-source)
+        ocsp-source (get-ocsp-source)
+
+        parameters (doto (PAdESSignatureParameters.)
+                     (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT))
+
+        service (doto (PAdESService. (doto (CommonCertificateVerifier.)
+                                       (.setOcspSource ocsp-source)
+                                       ;; TODO: Trust KMS root and DVV's certs?
+                                       ;;       Like this this is the same behaviour as before.
+                                       (.setCheckRevocationForUntrustedChains true)))
+                  (.setTspSource tsp-source))
+
+        lt-level-document (-> service (.extendDocument signed-pdf parameters))
+
+        ]
+    lt-level-document))
 
 #_(defn get-digest
     [^File file {:keys [signature-png-path versio laatija-fullname] :as signature-options} {:keys [root-cert int-cert leaf-cert] :as certs}]
