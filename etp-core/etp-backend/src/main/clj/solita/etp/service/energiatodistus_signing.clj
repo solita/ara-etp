@@ -18,7 +18,6 @@
            (javax.imageio ImageIO)))
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
-(def date-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy") timezone))
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
 
@@ -82,17 +81,14 @@
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
-             ;;digest-and-stuff (pdf-sign/get-digest energiatodistus-pdf {:versio versio :signature-png-path signature-png-path :laatija-fullname laatija-fullname} certs)
-             digest-and-stuff (pdf-sign/get-digest-for-external-cms-service energiatodistus-pdf {:signature-png signature-png})]
+             origin-y (case versio 2013 648 2018 666)
+             digest-and-stuff (pdf-sign/get-digest-for-external-cms-service energiatodistus-pdf {:signature-png signature-png :page 1 :origin-x 75 :origin-y origin-y})]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
          (file-service/upsert-file-from-input-stream aws-s3-client
                                              test-sig-params-key
                                              (:stateful-parameters digest-and-stuff))
-         #_(file-service/upsert-file-from-file aws-s3-client
-                                             test-service-key
-                                             (:service-is digest-and-stuff))
          (io/delete-file pdf-path)
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))

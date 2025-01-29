@@ -85,12 +85,10 @@
   (let [service (PAdESWithExternalCMSService.)
         signature-png (FileDocument. signature-png)
 
-        ;; TODO: versio and siganture-params are energiatodistus specific
-        versio 2018
         ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
-                                                     (.setPage 1)
-                                                     (.setOriginX 75)
-                                                     (.setOriginY (case versio 2013 648 2018 666)))
+                                                     (.setPage page)
+                                                     (.setOriginX origin-x)
+                                                     (.setOriginY origin-y))
 
         ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
                                             (.setFieldParameters sig-field-params)
