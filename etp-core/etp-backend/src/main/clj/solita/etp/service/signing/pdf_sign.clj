@@ -1,6 +1,5 @@
 (ns solita.etp.service.signing.pdf-sign
   (:require
-    [clojure.java.io :as io]
     [solita.etp.service.sign :as sign-service]
     [solita.common.time :as time]
     [solita.etp.config :as config])
@@ -17,24 +16,10 @@
            (eu.europa.esig.dss.spi.signature AdvancedSignature)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (eu.europa.esig.dss.spi.x509.revocation.ocsp OCSPToken)
-           (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
-           (java.awt Color Font)
-           (java.awt.image BufferedImage)
            (java.io ByteArrayInputStream File InputStream ObjectInputStream ObjectOutputStream)
-           (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
-           (java.security.cert X509Certificate)
-           (java.time Instant ZoneId)
-           (java.time.format DateTimeFormatter)
+           (java.time Instant)
            (java.util ArrayList Collection Date List)
-           (javax.imageio ImageIO)
-           (org.apache.axis.utils ByteArrayOutputStream)
-           (org.bouncycastle.asn1.x500 X500Name)
-           (org.bouncycastle.asn1.x509 ExtendedKeyUsage KeyPurposeId Extension)
-           (org.bouncycastle.cert X509v3CertificateBuilder)
-           (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509v3CertificateBuilder)
-           (org.bouncycastle.jce.provider BouncyCastleProvider)
-           (org.bouncycastle.operator ContentSigner)
-           (org.bouncycastle.operator.jcajce JcaContentSignerBuilder)))
+           (org.apache.axis.utils ByteArrayOutputStream)))
 
 (defn pem->CertificateToken [cert-pem]
   ^CertificateToken (-> cert-pem
@@ -75,33 +60,11 @@
         cms-signature (-> system-signature-cms-service (.signMessageDigest dss-digest signature-parameters signature-value))]
     cms-signature))
 
-(def timezone (ZoneId/of "Europe/Helsinki"))
-(def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
-                               timezone))
-
-(defn signature-as-png [path ^String laatija-fullname]
-  (let [now (Instant/now)
-        width (max 125 (* (count laatija-fullname) 6))
-        img (BufferedImage. width 30 BufferedImage/TYPE_INT_ARGB)
-        g (.getGraphics img)]
-    (doto (.getGraphics img)
-      (.setFont (Font. Font/SANS_SERIF Font/TRUETYPE_FONT 10))
-      (.setColor Color/BLACK)
-      (.drawString laatija-fullname 2 10)
-      (.drawString (.format time-formatter now) 2 25)
-      (.dispose))
-    (ImageIO/write img "PNG" (io/file path))))
-
-;; TODO: Make dynamic?
 (defn- ^:dynamic get-tsp-source []
   (let [tsa-url (config/tsa-endpoint-url)]
-      (OnlineTSPSource. tsa-url))
-  #_(doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
-                             ^X509Certificate (:certificate tsp-key-and-cert)
-                             ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
-    (.setTsaPolicy "1.2.3.4")))
+    (OnlineTSPSource. tsa-url)))
 
-;; TODO: Make dynamic?
+;; TODO: Make dynamic? Needs DSS PKI?
 (defn- get-ocsp-source []
   (doto (OnlineOCSPSource.)
     (.setAlertOnInvalidUpdateTime (ExceptionOnStatusAlert.))))
@@ -140,9 +103,7 @@
                                (.setDigestAlgorithm DigestAlgorithm/SHA256))
 
         ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))
-        _ (println (-> message-digest .toString))
-
-        ]
+        _ (println (-> message-digest .toString))]
     {:digest              (.getBase64Value message-digest)
      ;; At least the signature-png needs to be saved for use after getting the signature.
      ;; Parameters seem to also have some other state and differ somehow if recreated so
@@ -160,7 +121,7 @@
 
 
         service (doto (PAdESService. (CommonCertificateVerifier.))
-                               (.setTspSource tsp-source))
+                  (.setTspSource tsp-source))
         extend-parameters (doto (PAdESSignatureParameters.)
                             (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T)
                             )
@@ -172,7 +133,7 @@
 (defn cert-chain->slowest-next-update [^List certs-list ^CommonCertificateVerifier cert-verifier]
   (let [certs (into [] certs-list)
         next-updates (->> certs-list
-                         (mapv #(.getOcspSource cert-verifier)))
+                          (mapv #(.getOcspSource cert-verifier)))
 
         ^OCSPToken ocsp-resp (-> cert-verifier .getOcspSource (.getRevocationToken (:leaf-cert certs) (:int-cert certs)))
         _ (println "AAA::" (.toString ocsp-resp))
@@ -186,7 +147,7 @@
         service (PAdESService. cert-verifier)
         validator (PDFDocumentValidator/fromDocument signed-pdf)
         ^AdvancedSignature signature (first (-> validator .getSignatures))
-        a (-> signature (.getCompleteOCSPSource) )
+        a (-> signature (.getCompleteOCSPSource))
         tsp-source (get-tsp-source)
         ocsp-source (get-ocsp-source)
 
