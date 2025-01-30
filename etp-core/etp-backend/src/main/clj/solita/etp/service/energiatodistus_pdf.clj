@@ -785,19 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn signature-as-png [path laatija-fullname]
-  (let [now (Instant/now)
-        width (max 125 (* (count laatija-fullname) 6))
-        img (BufferedImage. width 30 BufferedImage/TYPE_INT_ARGB)
-        g (.getGraphics img)]
-    (doto (.getGraphics img)
-      (.setFont (Font. Font/SANS_SERIF Font/TRUETYPE_FONT 10))
-      (.setColor Color/BLACK)
-      (.drawString laatija-fullname 2 10)
-      (.drawString (.format time-formatter now) 2 25)
-      (.dispose))
-    (ImageIO/write img "PNG" (io/file path))))
-
 (defn validate-surname! [last-name certificate]
   (let [surname (-> certificate
                     certificates/subject
