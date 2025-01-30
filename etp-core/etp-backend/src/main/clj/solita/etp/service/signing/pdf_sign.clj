@@ -168,14 +168,14 @@
         unsigned-pdf (InMemoryDocument. pdf-file)
         tsp-source (get-tsp-source)
         service-external-cms (doto (PAdESWithExternalCMSService.))
+        ;; TODO: What does the card reader return?
         signed-pdf-b-level (-> service-external-cms (.signDocument unsigned-pdf signature-parameters cms-signature))
 
 
         service (doto (PAdESService. (CommonCertificateVerifier.))
                   (.setTspSource tsp-source))
         extend-parameters (doto (PAdESSignatureParameters.)
-                            (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T)
-                            )
+                            (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T))
         signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))
         ]
     (.openStream signed-pdf-t-level)))
