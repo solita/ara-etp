@@ -785,65 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn- data->signed-digest [data aws-kms-client]
-  (->> data
-       ^InputStream (sign-service/sign aws-kms-client)
-       (.readAllBytes)))
-
-(defn- audit-log-message [laatija-allekirjoitus-id energiatodistus-id message]
-  (str "Sign with system (laatija-allekirjoitus-id: " laatija-allekirjoitus-id ") (energiatodistus-id: " energiatodistus-id "): " message))
-
-(defn- is-sign-with-system-error? [result]
-  (contains? #{:already-signed :already-in-signing :not-in-signing nil} result))
-
-(defn- do-sign-with-system [f error-msg]
-  (let [result (f)]
-    (when (is-sign-with-system-error? result)
-      (audit-log/error error-msg)
-      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
-    result))
-
-
-(defn- sign-with-system-start
-  [{:keys [db whoami id laatija-allekirjoitus-id]}]
-  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Starting"))
-  (do-sign-with-system
-    #(energiatodistus-service/start-energiatodistus-signing! db whoami id)
-    (audit-log-message laatija-allekirjoitus-id id "Starting failed!")))
-
-(defn- sign-with-system-digest
-  [{:keys [db laatija-allekirjoitus-id id aws-s3-client]} language]
-  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Getting the digest"))
-  (do-sign-with-system
-    #(find-energiatodistus-digest db aws-s3-client id language laatija-allekirjoitus-id)
-    (audit-log-message laatija-allekirjoitus-id id "Getting the digest failed!")))
-
-(defn- sign-with-system-sign
-  [{:keys [db whoami now id laatija-allekirjoitus-id aws-s3-client aws-kms-client]} language digest-response]
-  (let [data-to-sign (-> digest-response
-                         :digest
-                         (.getBytes StandardCharsets/UTF_8)
-                         (#(.decode (Base64/getDecoder) %)))
-        signed-digest (data->signed-digest data-to-sign aws-kms-client)
-        chain cert-chain-three-long-leaf-first
-        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}]
-    (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
-    (do-sign-with-system
-      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)
-      (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
-
-(defn- sign-with-system-end
-  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]}]
-  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "End signing"))
-  (do-sign-with-system
-    #(energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
-    (audit-log-message laatija-allekirjoitus-id id "End signing failed!")))
-
-(defn- sign-single-pdf-with-system [params language]
-  (->> (sign-with-system-digest language params)
-       (#(do (println %) %))
-       (sign-with-system-sign language params)))
-
 (defn sign-with-system
   "Does the whole process of signing with the system."
   [{:keys [db id] :as params}]
