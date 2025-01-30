@@ -172,3 +172,16 @@
                           not-after
                           now)}))))
 
+(defn validate-certificate!
+  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate.
+
+  When using system signing the surname does not match the name in the certificate as it's issued for the whole
+  system and not a specific person."
+  ([surname now certificate-str]
+   (validate-certificate! surname now certificate-str true))
+  ([surname now certificate-str validate-surname?]
+   (let [certificate (certificates/pem-str->certificate certificate-str)]
+     (when validate-surname?
+       (validate-surname! surname certificate))
+     (validate-not-after! (-> now Instant/from Date/from) certificate))))
+

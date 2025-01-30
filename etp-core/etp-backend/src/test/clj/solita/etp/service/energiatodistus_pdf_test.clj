@@ -194,7 +194,7 @@
 (t/deftest validate-certificate!-test
   (t/testing "Last name of laatija has to match the signing certificate"
     (let [ex (try
-               (service/validate-certificate! "Meikäläinen"
+               (signing-service/validate-certificate! "Meikäläinen"
                                               energiatodistus-test-data/time-when-test-cert-not-expired
                                               certificates-test/test-cert-str)
                (catch clojure.lang.ExceptionInfo ex ex))
@@ -204,7 +204,7 @@
 
   (t/testing "Signing certificate must not have expired"
     (let [ex (try
-               (service/validate-certificate! "Specimen-POtex"
+               (signing-service/validate-certificate! "Specimen-POtex"
                                               energiatodistus-test-data/time-when-test-cert-expired
                                               certificates-test/test-cert-str)
                (catch clojure.lang.ExceptionInfo ex ex))
@@ -213,7 +213,7 @@
       (t/is (= :expired-signing-certificate type))))
 
   (t/testing "With the expected name and within the validity period of the certificate, signing succeeds"
-    (service/validate-certificate! "Specimen-POtex"
+    (signing-service/validate-certificate! "Specimen-POtex"
                                    energiatodistus-test-data/time-when-test-cert-not-expired
                                    certificates-test/test-cert-str)))
 
