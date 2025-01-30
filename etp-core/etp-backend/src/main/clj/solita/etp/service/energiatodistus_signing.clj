@@ -67,7 +67,7 @@
   Generate the pdf.
   Upload to S3.
   Return the data that needs to be signed in base64"
-  [db aws-s3-client id language laatija-allekirjoitus-id certs]
+  [db aws-s3-client id language laatija-allekirjoitus-id]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
@@ -91,6 +91,14 @@
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))
 
+(defn find-energiatodistus-digest
+  "Generate the pdf.
+  Add space for signature.
+  Upload to S3.
+  Return the data that needs to be signed in base64"
+  [db aws-s3-client id language laatija-allekirjoitus-id]
+  (find-energiatodistus-digest-new db aws-s3-client id language laatija-allekirjoitus-id))
+
 (defn sign-energiatodistus-pdf-new
   "This is the function that receives the signature and continues the signing process."
   [db aws-s3-client id language laatija-allekirjoitus-id certs signature]
@@ -108,38 +116,6 @@
                                                            key
                                                            signed-pdf-lt-level)
            filename)))))
-
-(defn find-energiatodistus-digest
-  "Generate the pdf.
-  Add space for signature.
-  Upload to S3.
-  Return the data that needs to be signed in base64"
-  [db aws-s3-client id language laatija-allekirjoitus-id]
-  (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus}
-             (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-    (do-when-signing
-      complete-energiatodistus
-      #(let [pdf-path (energiatodistus-pdf-service/generate-pdf-as-file complete-energiatodistus language false laatija-allekirjoitus-id)
-             signable-pdf-path (str/replace pdf-path #".pdf" "-signable.pdf")
-             signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
-             _ (signature-as-png signature-png-path laatija-fullname)
-             signable-pdf-path (puumerkki/add-watermarked-signature-space
-                                 pdf-path
-                                 signable-pdf-path
-                                 laatija-fullname
-                                 signature-png-path
-                                 75
-                                 (case versio 2013 648 2018 666))
-             signable-pdf-data (puumerkki/read-file signable-pdf-path)
-             digest (puumerkki/compute-base64-pkcs signable-pdf-data)
-             key (energiatodistus-service/file-key id language)]
-         (file-service/upsert-file-from-bytes aws-s3-client
-                                              key
-                                              signable-pdf-data)
-         (io/delete-file pdf-path)
-         (io/delete-file signable-pdf-path)
-         (io/delete-file signature-png-path)
-         {:digest digest}))))
 
 (defn comparable-name [s]
   (-> s
@@ -322,3 +298,5 @@
         (if (= (-> e ex-data :type) :sign-with-system-error)
           (-> e ex-data :result)
           (throw e))))))
+
+
