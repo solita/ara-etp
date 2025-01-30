@@ -785,15 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn write-signature! [id language pdf pkcs7]
-  (try
-    (puumerkki/write-signature! pdf pkcs7)
-    (catch ArrayIndexOutOfBoundsException _
-      (exception/throw-ex-info!
-        :signed-pdf-exists
-        (str "Signed PDF already exists for energiatodistus "
-             id "/" language ". Get digest to sign again.")))))
-
 (defn sign-energiatodistus-pdf
   ([db aws-s3-client whoami now id language signature-and-chain]
    (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))

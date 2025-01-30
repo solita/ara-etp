@@ -185,3 +185,12 @@
        (validate-surname! surname certificate))
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
+(defn write-signature! [id language pdf pkcs7]
+  (try
+    (puumerkki/write-signature! pdf pkcs7)
+    (catch ArrayIndexOutOfBoundsException _
+      (exception/throw-ex-info!
+        :signed-pdf-exists
+        (str "Signed PDF already exists for energiatodistus "
+             id "/" language ". Get digest to sign again.")))))
+
