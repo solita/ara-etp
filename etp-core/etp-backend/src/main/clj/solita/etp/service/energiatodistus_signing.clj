@@ -59,28 +59,7 @@
     :deleted :not-in-signing
     :already-signed))
 
-(defn- audit-log-message [laatija-allekirjoitus-id energiatodistus-id message]
-  (str "Sign with system (laatija-allekirjoitus-id: " laatija-allekirjoitus-id ") (energiatodistus-id: " energiatodistus-id "): " message))
-
-(defn- is-sign-with-system-error? [result]
-  (contains? #{:already-signed :already-in-signing :not-in-signing nil} result))
-
-(defn- do-sign-with-system [f error-msg]
-  (let [result (f)]
-    (when (is-sign-with-system-error? result)
-      (audit-log/error error-msg)
-      (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
-    result))
-
-(defn- sign-with-system-start
-  [{:keys [db whoami id laatija-allekirjoitus-id]}]
-  (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Starting"))
-  (do-sign-with-system
-    #(energiatodistus-service/start-energiatodistus-signing! db whoami id)
-    (audit-log-message laatija-allekirjoitus-id id "Starting failed!")))
-
 (def test-sig-params-key "test-sig-params-key")
-(def test-service-key "test-service-key")
 
 (defn find-energiatodistus-digest-new
   "This is the function that does first real processing of the signature.
