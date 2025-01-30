@@ -103,10 +103,11 @@
                sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
                filename (str key ".pdf")
                signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is signature)
-               docdoc (pdf-sign/t-level->lt-level signed-pdf-t-level)
-               ;;TODO: presist
-               ]
-           docdoc)))))
+               signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
+               (file-service/upsert-file-from-input-stream aws-s3-client
+                                                           key
+                                                           signed-pdf-lt-level)
+           filename)))))
 
 (defn find-energiatodistus-digest
   "Generate the pdf.

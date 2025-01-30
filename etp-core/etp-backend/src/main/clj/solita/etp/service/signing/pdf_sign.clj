@@ -159,4 +159,4 @@
                                        (.setCheckRevocationForUntrustedChains true)))
                   (.setTspSource tsp-source))
         lt-level-document (-> service (.extendDocument signed-pdf parameters))]
-    lt-level-document))
+    (.openStream lt-level-document)))
