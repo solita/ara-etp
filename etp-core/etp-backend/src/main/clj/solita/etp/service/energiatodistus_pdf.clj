@@ -785,33 +785,3 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn sign-with-system
-  "Does the whole process of signing with the system."
-  [{:keys [db id] :as params}]
-  (let [language-id (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :perustiedot :kieli)]
-    (try
-      (condp = language-id
-        energiatodistus-service/finnish-language-id
-        (do
-          (sign-with-system-start params)
-          (sign-single-pdf-with-system "fi" params)
-          (sign-with-system-end params))
-
-        energiatodistus-service/swedish-language-id
-        (do
-          (sign-with-system-start params)
-          (sign-single-pdf-with-system "sv" params)
-          (sign-with-system-end params))
-
-        energiatodistus-service/multilingual-language-id
-        (do
-          (sign-with-system-start params)
-          (sign-single-pdf-with-system "fi" params)
-          (sign-single-pdf-with-system "sv" params)
-          (sign-with-system-end params))
-
-        (exception/throw-ex-info! {:message (format "Invalid language-id %s in energiatodistus %s" language-id id)}))
-      (catch ExceptionInfo e
-        (if (= (-> e ex-data :type) :sign-with-system-error)
-          (-> e ex-data :result)
-          (throw e))))))

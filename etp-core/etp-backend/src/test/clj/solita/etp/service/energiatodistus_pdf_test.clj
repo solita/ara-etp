@@ -254,7 +254,7 @@
           id (-> energiatodistukset keys sort second)
           whoami {:id laatija-id}]
       (t/testing "Signing a pdf should succeed"
-        (t/is (= (service/sign-with-system {:db             db
+        (t/is (= (signing-service/sign-with-system {:db             db
                                             :aws-s3-client  ts/*aws-s3-client*
                                             :whoami         whoami
                                             :aws-kms-client ts/*aws-kms-client*
@@ -262,7 +262,7 @@
                                             :id             id})
                  :ok)))
       (t/testing "Trying to sign again should result in :already-signed"
-        (t/is (= (service/sign-with-system {:db             db
+        (t/is (= (signing-service/sign-with-system {:db             db
                                             :aws-s3-client  ts/*aws-s3-client*
                                             :whoami         whoami
                                             :aws-kms-client ts/*aws-kms-client*
@@ -270,7 +270,7 @@
                                             :id             id})
                  :already-signed)))
       (t/testing "The state should result in :already-signed if trying to sign three times in a row"
-        (t/is (= (service/sign-with-system {:db             db
+        (t/is (= (signing-service/sign-with-system {:db             db
                                             :aws-s3-client  ts/*aws-s3-client*
                                             :whoami         whoami
                                             :aws-kms-client ts/*aws-kms-client*
@@ -292,7 +292,7 @@
       ;; TODO: Use puumerkki/verify-signatures instead of puumerkki/cursory-verify-signature once it's available.
       ;;       This only checks that the signagure exists
       (t/testing "The signed document's signature should be exist."
-        (service/sign-with-system {:db             db
+        (service/signing-sign-with-system {:db             db
                                    :aws-s3-client  ts/*aws-s3-client*
                                    :whoami         whoami
                                    :aws-kms-client ts/*aws-kms-client*
@@ -315,7 +315,7 @@
       (energiatodistus-service/start-energiatodistus-signing! db whoami id)
       (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
         (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
-          (t/is (= (service/sign-with-system {:db             db
+          (t/is (= (service/signing-sign-with-system {:db             db
                                               :aws-s3-client  ts/*aws-s3-client*
                                               :whoami         whoami
                                               :aws-kms-client ts/*aws-kms-client*

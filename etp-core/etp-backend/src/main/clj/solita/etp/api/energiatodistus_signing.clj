@@ -101,7 +101,7 @@
               :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db aws-s3-client aws-kms-client whoami]}]
                             (api-response/with-exceptions
                               #(api-response/signature-response
-                                 (energiatodistus-pdf-service/sign-with-system
+                                 (energiatodistus-signing-service/sign-with-system
                                    {:db                       db
                                     :aws-s3-client            aws-s3-client
                                     :aws-kms-client           aws-kms-client
