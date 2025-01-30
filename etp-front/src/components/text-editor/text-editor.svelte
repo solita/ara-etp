@@ -19,6 +19,7 @@
 
   export let model = '';
   export let lens = R.identity;
+  export let clearContent = false;
 
   export let parse = R.identity;
   export let format = R.identity;
@@ -84,11 +85,27 @@
     const markdown = toMarkdown(html);
     previousContent = markdown;
 
-    // Only update if we have actual content
     if (markdown && markdown !== viewValue) {
       api.blur(markdown);
     }
   };
+
+  // Watch for clearContent prop changes specifically
+  $: if (clearContent) {
+    const editor = document.querySelector('.ql-editor');
+    if (editor && editor.innerHTML !== '') {
+      editor.innerHTML = '';
+      previousContent = '';
+      clearContent = false;
+    }
+  }
+
+  // Separate model changes from clearing functionality
+  $: if (model && model.body !== previousContent && !clearContent) {
+    previousContent = model.body || '';
+  }
+
+  $: console.log('model:', model);
 </script>
 
 <Input

@@ -42,6 +42,7 @@
   let resources = Maybe.None();
   let dirty = false;
   let overlay = true;
+  let clearContent = false;
   let enableOverlay = _ => {
     overlay = true;
   };
@@ -135,8 +136,13 @@
   };
 
   const cancel = _ => {
-    ketju = defaultKetju;
-    dirty = false;
+    clearContent = true; // Set flag to trigger clearing
+    // Wait for the content to be cleared before resetting ketju
+    setTimeout(() => {
+      ketju = defaultKetju;
+      clearContent = false;
+      dirty = false;
+    }, 0);
   };
 
   $: {
@@ -228,6 +234,7 @@
             name={'ketju.body'}
             label={i18n('viesti.ketju.body')}
             bind:model={ketju}
+            {clearContent}
             lens={R.lensProp('body')}
             required={true}
             parse={R.trim}
