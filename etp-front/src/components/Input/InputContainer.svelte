@@ -36,6 +36,7 @@
   );
 
   $: validate = value => {
+    console.log('validate called with:', value);
     valid = true;
     validationResult = {
       type: '',
@@ -74,6 +75,7 @@
   }, formatModelValue(model));
 
   $: updateModel = value => {
+    console.log('updateModel called with:', value);
     viewValue = value;
     const parsedValue = parse(value);
     currentValue = parsedValue;
@@ -108,7 +110,7 @@
       }
     },
     update: updateModel
-  };
+  }; 
 </script>
 
 <div

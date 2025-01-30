@@ -53,7 +53,12 @@
     }
   };
 
-  const toMarkdown = R.bind(turndownService.turndown, turndownService);
+  const toMarkdown = html => {
+    console.log('To markdown html:', html);
+    const markdown = turndownService.turndown(html);
+    console.log('Converted to markdown:', markdown);
+    return markdown;
+  };
 
   let editorElement = null;
 
@@ -67,6 +72,23 @@
 
   let valid = true;
   $: setValid(editorElement, valid);
+
+  let isInitialSetup = true;
+  let previousContent = '';
+
+  const handleFocusOut = (event, viewValue, api) => {
+    console.log('focus out event', event);
+    const html = event.detail.html;
+    console.log('Focus out with HTML:', html);
+
+    const markdown = toMarkdown(html);
+    previousContent = markdown;
+
+    // Only update if we have actual content
+    if (markdown && markdown !== viewValue) {
+      api.blur(markdown);
+    }
+  };
 </script>
 
 <Input
@@ -90,8 +112,18 @@
     {#if !disabled}
       <div
         on:focusin={api.focus}
-        on:editor-focus-out={event => api.blur(toMarkdown(event.detail.html))}
-        on:text-change={event => api.input(toMarkdown(event.detail.html))}
+        on:text-change={event => {
+          if (isInitialSetup) {
+            isInitialSetup = false;
+            return;
+          }
+          const markdown = toMarkdown(event.detail.html);
+          if (markdown !== previousContent) {
+            api.input(markdown);
+            previousContent = markdown;
+          }
+        }}
+        on:editor-focus-out={event => handleFocusOut(event, viewValue, api)}
         use:quill={{
           html: MD.toHtml(viewValue),
           toolbar,

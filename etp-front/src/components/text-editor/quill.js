@@ -4,7 +4,7 @@ import * as Objects from '@Utility/objects';
 
 Quill.register('modules/magicUrl', MagicUrl);
 
-const dispatchEvent = (name, node, editor) =>
+const dispatchEvent = (name, node, editor) => {
   node.dispatchEvent(
     new CustomEvent(name, {
       bubbles: true,
@@ -13,6 +13,7 @@ const dispatchEvent = (name, node, editor) =>
       }
     })
   );
+}
 
 /**
  * Quill editor wrapper
@@ -31,6 +32,7 @@ export const quill = (
   node,
   { html, toolbar, keyboard, id, required, onEditorSetup }
 ) => {
+  let isInitialized = false;
   const q = new Quill(node, {
     modules: {
       magicUrl: true,
@@ -47,6 +49,8 @@ export const quill = (
   const editor = node.getElementsByClassName('ql-editor')[0];
 
   const textChange = (delta, oldDelta, source) =>
+    console.log('text changed')
+    console.log('editor', editor);
     dispatchEvent('text-change', node, editor);
 
   q.on('text-change', textChange);
@@ -66,6 +70,7 @@ export const quill = (
 
   const focusout = event => {
     if (!root.contains(event.relatedTarget) && event.target !== action) {
+      console.log('Focusout event triggered with HTML:', editor.innerHTML);
       dispatchEvent('editor-focus-out', node, editor);
     }
   };
@@ -87,8 +92,17 @@ export const quill = (
   }
 
   return {
-    update: ({ html, _ }) => q.setContents(q.clipboard.convert(html), 'silent'),
-    destroy: _ => {
+    update: ({ html }) => {
+      if (!isInitialized) return;
+
+      const currentContent = editor.innerHTML;
+      const newContent = q.clipboard.convert(html);
+      // Only update if content is actually different
+      if (currentContent !== newContent) {
+        q.setContents(q.clipboard.convert(html), 'api');
+      }
+    },
+    destroy: () => {
       q.off('text-change', textChange);
       root.removeEventListener('focusout', focusout);
     }
