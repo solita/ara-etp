@@ -785,20 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn cert-pem->one-liner-without-headers [cert-pem]
-  "Given a certificate in PEM format `cert-pem` removes
-  headers and linebreaks from it."
-  (-> cert-pem
-      (str/replace #"-----BEGIN CERTIFICATE-----" "")
-      (str/replace #"-----END CERTIFICATE-----" "")
-      (str/replace #"\n" "")))
-
-(def cert-chain-three-long-leaf-first
-  (let [leaf config/system-signature-certificate-leaf
-        intermediate config/system-signature-certificate-intermediate
-        root config/system-signature-certificate-root]
-    (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
-
 (defn- data->signed-digest [data aws-kms-client]
   (->> data
        ^InputStream (sign-service/sign aws-kms-client)
