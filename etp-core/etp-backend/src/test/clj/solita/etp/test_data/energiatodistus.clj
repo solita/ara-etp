@@ -116,7 +116,7 @@
         energiatodistus-id
         language-code
         laatija-allekirjoitus-id)
-      (energiatodistus-pdf-service/sign-energiatodistus-pdf
+      (energiatodistus-signing-service/sign-energiatodistus-pdf
         ts/*db*
         ts/*aws-s3-client*
         {:id laatija-id :sukunimi "Specimen-Potex"}

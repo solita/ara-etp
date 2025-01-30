@@ -59,7 +59,7 @@
            :handler    (fn [{{{:keys [id language]} :path} :parameters :keys [db aws-s3-client whoami parameters]}]
                          (api-response/with-exceptions
                            #(api-response/signature-response
-                              (energiatodistus-pdf-service/sign-energiatodistus-pdf
+                              (energiatodistus-signing-service/sign-energiatodistus-pdf
                                 db aws-s3-client whoami
                                 (Instant/now)
                                 id language

@@ -785,34 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn sign-energiatodistus-pdf
-  ([db aws-s3-client whoami now id language signature-and-chain]
-   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
-  ([db aws-s3-client whoami now id language
-    {:keys [chain] :as signature-and-chain} signing-method]
-   (when-let [energiatodistus
-              (energiatodistus-service/find-energiatodistus db id)]
-     (do-when-signing
-       energiatodistus
-       #(do
-          (validate-certificate! (:sukunimi whoami)
-                                 now
-                                 (first chain)
-                                 (= signing-method :mpollux))
-          (let [key (energiatodistus-service/file-key id language)
-                content (file-service/find-file aws-s3-client key)
-                content-bytes (.readAllBytes content)
-                pkcs7 (puumerkki/make-pkcs7 signature-and-chain content-bytes)
-                ;; TODO: Do something more robust here or remove this.
-                ;; Decode the pkcs7 to get more confidence in that
-                ;; puumerkki works.
-                _ (puumerkki.codec/asn1-decode pkcs7)
-                filename (str key ".pdf")]
-            (->> (write-signature! id language content-bytes pkcs7)
-                 (file-service/upsert-file-from-bytes aws-s3-client
-                                                      key))
-            filename))))))
-
 (defn cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
   headers and linebreaks from it."

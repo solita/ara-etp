@@ -223,7 +223,7 @@
         db (ts/db-user laatija-id)
         id (-> energiatodistukset keys sort first)
         whoami {:id laatija-id}]
-    (t/is (= (service/sign-energiatodistus-pdf db
+    (t/is (= (signing-service/sign-energiatodistus-pdf db
                                                ts/*aws-s3-client*
                                                whoami
                                                energiatodistus-test-data/time-when-test-cert-not-expired
@@ -235,7 +235,7 @@
                                              laatija-id
                                              false
                                              energiatodistus-test-data/time-when-test-cert-not-expired)
-    (t/is (= (service/sign-energiatodistus-pdf db
+    (t/is (= (signing-service/sign-energiatodistus-pdf db
                                                ts/*aws-s3-client*
                                                whoami
                                                energiatodistus-test-data/time-when-test-cert-not-expired
