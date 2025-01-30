@@ -10,6 +10,7 @@
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
+            [solita.etp.service.energiatodistus-signing :as energiatodistus-signing-service]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.test-system :as ts])
@@ -109,7 +110,7 @@
                      :kieli)
         laatija-allekirjoitus-id (-> (laatija-service/find-laatija-by-id ts/*db* laatija-id) :allekirjoitus-id)]
     (doseq [language-code (energiatodistus-service/language-id->codes language)]
-      (energiatodistus-pdf-service/find-energiatodistus-digest
+      (energiatodistus-signing-service/find-energiatodistus-digest
         ts/*db*
         ts/*aws-s3-client*
         energiatodistus-id

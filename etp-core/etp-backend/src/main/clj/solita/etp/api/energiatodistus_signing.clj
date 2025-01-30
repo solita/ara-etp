@@ -7,6 +7,7 @@
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
+            [solita.etp.service.energiatodistus-signing :as energiatodistus-signing-service]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.service.rooli :as rooli-service])
   (:import (java.time Instant)))
@@ -44,7 +45,7 @@
            :handler    (fn [{{{:keys [id language]} :path} :parameters :keys [db aws-s3-client whoami]}]
                          (api-response/signature-response
                            (let [laatija-allekirjoitus-id (find-laatija-allekirjoitus-id db whoami)]
-                             (energiatodistus-pdf-service/find-energiatodistus-digest
+                             (energiatodistus-signing-service/find-energiatodistus-digest
                                db aws-s3-client id language laatija-allekirjoitus-id))
                            (str id "/" language)))}}]
    ["/pdf/:language"

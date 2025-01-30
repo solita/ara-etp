@@ -9,6 +9,7 @@
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as service]
+            [solita.etp.service.energiatodistus-signing :as signing-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
@@ -156,10 +157,10 @@
         db (ts/db-user laatija-id)
         id (-> energiatodistukset keys sort first)
         whoami {:id laatija-id}]
-    (t/is (= (service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi" "allekirjoitus-id")
+    (t/is (= (signing-service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi" "allekirjoitus-id")
              :not-in-signing))
     (energiatodistus-service/start-energiatodistus-signing! db whoami id)
-    (t/is (contains? (service/find-energiatodistus-digest db
+    (t/is (contains? (signing-service/find-energiatodistus-digest db
                                                           ts/*aws-s3-client*
                                                           id
                                                           "fi"
@@ -171,7 +172,7 @@
       whoami
       id
       {:skip-pdf-signed-assert? true})
-    (t/is (= (service/find-energiatodistus-digest db
+    (t/is (= (signing-service/find-energiatodistus-digest db
                                                   ts/*aws-s3-client*
                                                   id
                                                   "fi"

@@ -95,14 +95,14 @@
 
     (t/testing "aaa"
       (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:rooli 0 :id laatija-id} todistus-2018-fi-id)
-      (let [digest (et-signing/find-energiatodistus-digest ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs)
+      (let [digest (et-signing/find-energiatodistus-digest-new ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs)
             _ (println "D:" digest)
             data (-> digest
                      :digest
                      (.getBytes StandardCharsets/UTF_8)
                      (#(.decode (Base64/getDecoder) %)))
             signature (pdf-sign/get-signature-from-system-cms-service ts/*aws-kms-client* data)
-            b-level-doc (et-signing/sign-energiatodistus-pdf ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
+            b-level-doc (et-signing/sign-energiatodistus-pdf-new ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
             _ (.save b-level-doc "WASD.pdf")
             ])))))
 
