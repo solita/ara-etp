@@ -106,7 +106,7 @@
                unsigned-pdf-is (file-service/find-file aws-s3-client key)
                sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
                filename (str key ".pdf")
-               signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is signature)
+               signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is (.decode (Base64/getDecoder) signature))
                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
                (file-service/upsert-file-from-input-stream aws-s3-client
                                                            key
@@ -248,10 +248,8 @@
                          :digest
                          (.getBytes StandardCharsets/UTF_8)
                          (#(.decode (Base64/getDecoder) %)))
-        signed-digest (data->signed-digest data-to-sign aws-kms-client)
         chain cert-chain-three-long-leaf-first
-        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
-        signature-and-chain {:chain chain :signature (pdf-sign/get-signature-from-system-cms-service aws-kms-client data-to-sign)}]
+        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) (pdf-sign/get-signature-from-system-cms-service aws-kms-client data-to-sign))}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
       #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
