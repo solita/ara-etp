@@ -292,7 +292,7 @@
       ;; TODO: Use puumerkki/verify-signatures instead of puumerkki/cursory-verify-signature once it's available.
       ;;       This only checks that the signagure exists
       (t/testing "The signed document's signature should be exist."
-        (service/signing-sign-with-system {:db             db
+        (signing-service/sign-with-system {:db             db
                                    :aws-s3-client  ts/*aws-s3-client*
                                    :whoami         whoami
                                    :aws-kms-client ts/*aws-kms-client*
@@ -315,7 +315,7 @@
       (energiatodistus-service/start-energiatodistus-signing! db whoami id)
       (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
         (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
-          (t/is (= (service/signing-sign-with-system {:db             db
+          (t/is (= (signing-service/sign-with-system {:db             db
                                               :aws-s3-client  ts/*aws-s3-client*
                                               :whoami         whoami
                                               :aws-kms-client ts/*aws-kms-client*

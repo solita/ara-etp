@@ -1,22 +1,39 @@
 (ns solita.etp.service.energiatodistus-signing
   "Contains functionality to sign specifically an energiatodistus."
-  (:require [clojure.java.io :as io]
-            [clojure.string :as str]
-            [solita.etp.common.audit-log :as audit-log]
-            [solita.etp.exception :as exception]
-            [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
-            [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.file :as file-service]
-            [solita.etp.service.signing.pdf-sign :as pdf-sign])
-  (:import (java.awt Color Font)
-           (java.awt.image BufferedImage)
-           (java.io File)
-           (java.text Normalizer Normalizer$Form)
-           (java.time Instant ZoneId)
-           (java.time.format DateTimeFormatter)
-           (javax.imageio ImageIO)))
+  (:require
+    [clojure.java.io :as io]
+    [clojure.string :as str]
+    [clojure.tools.logging :as log]
+    [puumerkki.pdf :as puumerkki]
+    [solita.common.certificates :as certificates]
+    [solita.etp.common.audit-log :as audit-log]
+    [solita.etp.config :as config]
+    [solita.etp.exception :as exception]
+    [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
+    [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
+    [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
+    [solita.etp.service.file :as file-service]
+    [solita.etp.service.sign :as sign-service]
+    [solita.etp.service.signing.pdf-sign :as pdf-sign]
+    [clojure.java.io :as io])
+  (:import
+    (java.text Normalizer Normalizer$Form)
+    (java.time Instant ZoneId)
+    (java.time.format DateTimeFormatter)
+    (clojure.lang ExceptionInfo)
+    (java.awt Color Font)
+    (java.awt Color Font)
+    (java.awt.image BufferedImage)
+    (java.awt.image BufferedImage)
+    (java.io File InputStream)
+    (java.io File)
+    (java.nio.charset StandardCharsets)
+    (java.time Instant ZoneId)
+    (java.time.format DateTimeFormatter)
+    (java.util Base64 Date)
+    (javax.imageio ImageIO)
+    (javax.imageio ImageIO)))
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
@@ -89,8 +106,8 @@
                                              key
                                              energiatodistus-pdf)
          (file-service/upsert-file-from-input-stream aws-s3-client
-                                             test-sig-params-key
-                                             (:stateful-parameters digest-and-stuff))
+                                                     test-sig-params-key
+                                                     (:stateful-parameters digest-and-stuff))
          (io/delete-file pdf-path)
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))
@@ -99,18 +116,18 @@
   "This is the function that receives the signature and continues the signing process."
   [db aws-s3-client id language laatija-allekirjoitus-id certs signature]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-     (do-when-signing
-       complete-energiatodistus
-       #(do
-          (let [key (energiatodistus-service/file-key id language)
-                unsigned-pdf-is (file-service/find-file aws-s3-client key)
-                sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
-                filename (str key ".pdf")
-                signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is signature)
-                docdoc (pdf-sign/t-level->lt-level signed-pdf-t-level)
-                ;;TODO: presist
-                ]
-            docdoc)))))
+    (do-when-signing
+      complete-energiatodistus
+      #(do
+         (let [key (energiatodistus-service/file-key id language)
+               unsigned-pdf-is (file-service/find-file aws-s3-client key)
+               sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
+               filename (str key ".pdf")
+               signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is signature)
+               docdoc (pdf-sign/t-level->lt-level signed-pdf-t-level)
+               ;;TODO: presist
+               ]
+           docdoc)))))
 
 (defn find-energiatodistus-digest
   "Generate the pdf.
@@ -122,7 +139,7 @@
              (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
-      #(let [pdf-path (generate-pdf-as-file complete-energiatodistus language false laatija-allekirjoitus-id)
+      #(let [pdf-path (energiatodistus-pdf-service/generate-pdf-as-file complete-energiatodistus language false laatija-allekirjoitus-id)
              signable-pdf-path (str/replace pdf-path #".pdf" "-signable.pdf")
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              _ (signature-as-png signature-png-path laatija-fullname)
