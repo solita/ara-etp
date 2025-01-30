@@ -13,6 +13,7 @@
   (:import (java.awt Color Font)
            (java.awt.image BufferedImage)
            (java.io File)
+           (java.text Normalizer Normalizer$Form)
            (java.time Instant ZoneId)
            (java.time.format DateTimeFormatter)
            (javax.imageio ImageIO)))
@@ -142,4 +143,10 @@
          (io/delete-file signable-pdf-path)
          (io/delete-file signature-png-path)
          {:digest digest}))))
+
+(defn comparable-name [s]
+  (-> s
+      (Normalizer/normalize Normalizer$Form/NFD)
+      str/lower-case
+      (str/replace #"[^a-z]" "")))
 

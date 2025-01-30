@@ -22,7 +22,6 @@
            (java.awt.image BufferedImage)
            (java.io ByteArrayOutputStream File InputStream)
            (java.nio.charset StandardCharsets)
-           (java.text Normalizer Normalizer$Form)
            (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
            (java.util Base64 Calendar Date GregorianCalendar HashMap)
@@ -805,12 +804,6 @@
       (.drawString (.format time-formatter now) 2 25)
       (.dispose))
     (ImageIO/write img "PNG" (io/file path))))
-
-(defn comparable-name [s]
-  (-> s
-      (Normalizer/normalize Normalizer$Form/NFD)
-      str/lower-case
-      (str/replace #"[^a-z]" "")))
 
 (defn validate-surname! [last-name certificate]
   (let [surname (-> certificate

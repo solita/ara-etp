@@ -180,8 +180,8 @@
              :already-signed))))
 
 (t/deftest comparable-name-test
-  (t/is (= "abc" (service/comparable-name "abc")))
-  (t/is (= "aeiouao" (service/comparable-name "á, é, í, ó, ú. ä ö"))))
+  (t/is (= "abc" (signing-service/comparable-name "abc")))
+  (t/is (= "aeiouao" (signing-service/comparable-name "á, é, í, ó, ú. ä ö"))))
 
 (t/deftest validate-surname!-test
   (t/is (thrown? clojure.lang.ExceptionInfo
