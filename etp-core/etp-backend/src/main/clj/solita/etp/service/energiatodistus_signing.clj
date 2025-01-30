@@ -150,3 +150,15 @@
       str/lower-case
       (str/replace #"[^a-z]" "")))
 
+(defn validate-surname! [last-name certificate]
+  (let [surname (-> certificate
+                    certificates/subject
+                    :surname)]
+    (when-not (= (comparable-name last-name) (comparable-name surname))
+      (log/warn "Last name from certificate did not match with whoami info when signing energiatodistus PDF.")
+      (exception/throw-ex-info!
+        {:type    :name-does-not-match
+         :message (format "Last names did not match. Whoami has '%s' and certificate has '%s'"
+                          last-name
+                          surname)}))))
+

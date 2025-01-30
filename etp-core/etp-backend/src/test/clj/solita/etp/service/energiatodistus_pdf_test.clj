@@ -185,9 +185,9 @@
 
 (t/deftest validate-surname!-test
   (t/is (thrown? clojure.lang.ExceptionInfo
-                 (service/validate-surname! "Meikäläinen"
+                 (signing-service/validate-surname! "Meikäläinen"
                                             certificates-test/test-cert)))
-  (t/is (nil? (service/validate-surname! "Specimen-POtex"
+  (t/is (nil? (signing-service/validate-surname! "Specimen-POtex"
                                          certificates-test/test-cert))))
 
 
