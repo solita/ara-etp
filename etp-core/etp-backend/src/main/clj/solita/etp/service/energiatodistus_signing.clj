@@ -101,7 +101,7 @@
 
 (defn sign-energiatodistus-pdf-new
   "This is the function that receives the signature and continues the signing process."
-  [db aws-s3-client id language laatija-allekirjoitus-id certs signature]
+  [db aws-s3-client id language signature]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
@@ -167,7 +167,7 @@
         (str "Signed PDF already exists for energiatodistus "
              id "/" language ". Get digest to sign again.")))))
 
-(defn sign-energiatodistus-pdf
+#_(defn sign-energiatodistus-pdf
   ([db aws-s3-client whoami now id language signature-and-chain]
    (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :mpollux))
   ([db aws-s3-client whoami now id language
@@ -194,6 +194,10 @@
                  (file-service/upsert-file-from-bytes aws-s3-client
                                                       key))
             filename))))))
+
+(defn sign-energiatodistus-pdf
+    [db aws-s3-client whoami now id language signature-and-chain]
+     (sign-energiatodistus-pdf-new db aws-s3-client id language (:signature signature-and-chain)))
 
 (defn cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
