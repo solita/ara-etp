@@ -110,7 +110,7 @@
       }
     },
     update: updateModel
-  }; 
+  };
 </script>
 
 <div

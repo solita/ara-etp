@@ -13,7 +13,7 @@ const dispatchEvent = (name, node, editor) => {
       }
     })
   );
-}
+};
 
 /**
  * Quill editor wrapper
@@ -49,8 +49,6 @@ export const quill = (
   const editor = node.getElementsByClassName('ql-editor')[0];
 
   const textChange = (delta, oldDelta, source) =>
-    console.log('text changed')
-    console.log('editor', editor);
     dispatchEvent('text-change', node, editor);
 
   q.on('text-change', textChange);
@@ -99,7 +97,7 @@ export const quill = (
       const newContent = q.clipboard.convert(html);
       // Only update if content is actually different
       if (currentContent !== newContent) {
-        q.setContents(q.clipboard.convert(html), 'api');
+        q.setContents(q.clipboard.convert(html), 'silent');
       }
     },
     destroy: () => {
