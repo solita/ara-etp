@@ -785,13 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn do-when-signing [{:keys [tila-id]} f]
-  (case (energiatodistus-tila/tila-key tila-id)
-    :in-signing (f)
-    :draft :not-in-signing
-    :deleted :not-in-signing
-    :already-signed))
-
 (defn signature-as-png [path laatija-fullname]
   (let [now (Instant/now)
         width (max 125 (* (count laatija-fullname) 6))
