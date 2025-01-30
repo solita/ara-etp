@@ -4,6 +4,7 @@
     [solita.common.time :as time]
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert ExceptionOnStatusAlert)
+           (eu.europa.esig.dss.cades.signature CMSSignedDocument)
            (eu.europa.esig.dss.enumerations SignatureLevel DigestAlgorithm SignatureAlgorithm)
            (eu.europa.esig.dss.model DSSMessageDigest FileDocument InMemoryDocument SignatureValue)
            (eu.europa.esig.dss.model.x509 CertificateToken)
@@ -29,6 +30,7 @@
            (org.bouncycastle.asn1.x509 ExtendedKeyUsage KeyPurposeId Extension)
            (org.bouncycastle.cert X509v3CertificateBuilder)
            (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509v3CertificateBuilder)
+           (org.bouncycastle.cms CMSSignedData)
            (org.bouncycastle.jce.provider BouncyCastleProvider)
            (org.bouncycastle.operator ContentSigner)
            (org.bouncycastle.operator.jcajce JcaContentSignerBuilder)
@@ -109,7 +111,7 @@
         ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 (.readAllBytes (sign-service/sign aws-kms-client (-> data-to-sign .getBytes))))
 
         cms-signature (-> system-signature-cms-service (.signMessageDigest dss-digest signature-parameters signature-value))]
-    cms-signature))
+    (.getBytes cms-signature)))
 
 (defn- ^:dynamic get-tsp-source []
   ;; TODO: Need to use DSS's PKI to mock things?
@@ -169,15 +171,14 @@
         tsp-source (get-tsp-source)
         service-external-cms (doto (PAdESWithExternalCMSService.))
         ;; TODO: What does the card reader return?
-        signed-pdf-b-level (-> service-external-cms (.signDocument unsigned-pdf signature-parameters cms-signature))
-
-
+        signed-pdf-b-level (-> service-external-cms (.signDocument unsigned-pdf
+                                                                   signature-parameters
+                                                                   (CMSSignedDocument. (CMSSignedData. cms-signature))))
         service (doto (PAdESService. (CommonCertificateVerifier.))
                   (.setTspSource tsp-source))
         extend-parameters (doto (PAdESSignatureParameters.)
                             (.setSignatureLevel SignatureLevel/PAdES_BASELINE_T))
-        signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))
-        ]
+        signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))]
     (.openStream signed-pdf-t-level)))
 
 ;; TODO: Or how to do this? It is hard to determine who is whose issuer.

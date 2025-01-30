@@ -250,10 +250,11 @@
                          (#(.decode (Base64/getDecoder) %)))
         signed-digest (data->signed-digest data-to-sign aws-kms-client)
         chain cert-chain-three-long-leaf-first
-        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}]
+        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) signed-digest)}
+        signature-and-chain {:chain chain :signature (pdf-sign/get-signature-from-system-cms-service aws-kms-client data-to-sign)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
-      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :kms)
+      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
       (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end
