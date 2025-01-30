@@ -785,16 +785,6 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
 
-(defn validate-not-after! [^Date now certificate]
-  (let [not-after (-> certificate certificates/not-after)]
-    (when (.after now not-after)
-      (log/warn "Signing certificate validity ended at" not-after)
-      (exception/throw-ex-info!
-        {:type    :expired-signing-certificate
-         :message (format "ET Signing certificate expired at %s, would have needed to be valid at least until %s"
-                          not-after
-                          now)}))))
-
 (defn validate-certificate!
   "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate.
 
