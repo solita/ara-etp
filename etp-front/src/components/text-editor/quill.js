@@ -30,7 +30,7 @@ const dispatchEvent = (name, node, editor) => {
  */
 export const quill = (
   node,
-  { html, toolbar, keyboard, id, required, onEditorSetup }
+  { html = '', toolbar, keyboard, id, required, onEditorSetup, onChange = () => {} }
 ) => {
   let isInitialized = false;
   const q = new Quill(node, {
@@ -45,7 +45,7 @@ export const quill = (
 
   q.setContents(q.clipboard.convert(html), 'silent');
 
-  const root = node.parentElement;
+  const root = node.getRootNode();
   const editor = node.getElementsByClassName('ql-editor')[0];
 
   const textChange = (delta, oldDelta, source) =>
@@ -66,10 +66,9 @@ export const quill = (
   );
   remove.href = '';
 
-  const focusout = event => {
-    if (!root.contains(event.relatedTarget) && event.target !== action) {
-      console.log('Focusout event triggered with HTML:', editor.innerHTML);
-      dispatchEvent('editor-focus-out', node, editor);
+  const focusout = () => {
+    if (isInitialized) {  // Only handle focusout after initialization
+      onChange(editor.innerHTML);
     }
   };
   root.addEventListener('focusout', focusout);
@@ -98,6 +97,7 @@ export const quill = (
       // Only update if content is actually different
       if (currentContent !== newContent) {
         q.setContents(q.clipboard.convert(html), 'silent');
+        isInitialized = true;  // Mark as initialized after first content set
       }
     },
     destroy: () => {
