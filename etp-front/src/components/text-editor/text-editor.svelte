@@ -74,7 +74,6 @@
   let valid = true;
   $: setValid(editorElement, valid);
 
-  let isInitialSetup = true;
   let previousContent = '';
 
   const handleFocusOut = (event, viewValue, api) => {
@@ -99,13 +98,6 @@
       clearContent = false;
     }
   }
-
-  // Separate model changes from clearing functionality
-  $: if (model && model.body !== previousContent && !clearContent) {
-    previousContent = model.body || '';
-  }
-
-  $: console.log('model:', model);
 </script>
 
 <Input
@@ -130,10 +122,6 @@
       <div
         on:focusin={api.focus}
         on:text-change={event => {
-          if (isInitialSetup) {
-            isInitialSetup = false;
-            return;
-          }
           const markdown = toMarkdown(event.detail.html);
           if (markdown !== previousContent) {
             api.input(markdown);
