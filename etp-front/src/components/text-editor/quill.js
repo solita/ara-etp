@@ -68,7 +68,6 @@ export const quill = (
 
   const focusout = () => {
     if (!root.contains(event.relatedTarget) && event.target !== action) {
-      console.log('Focusout event triggered with HTML:', editor.innerHTML);
       dispatchEvent('editor-focus-out', node, editor);
     }
   };
@@ -94,7 +93,6 @@ export const quill = (
       if (!isInitialized) return;
 
       const currentContent = editor.innerHTML;
-      console.log('current content', currentContent);
       const newContent = q.clipboard.convert(html);
       // Only update if content is actually different
       if (currentContent !== newContent) {

@@ -55,9 +55,7 @@
   };
 
   const toMarkdown = html => {
-    console.log('To markdown html:', html);
     const markdown = turndownService.turndown(html);
-    console.log('Converted to markdown:', markdown);
     return markdown;
   };
 
@@ -77,9 +75,7 @@
   let previousContent = '';
 
   const handleFocusOut = (event, viewValue, api) => {
-    console.log('focus out event', event);
     const html = event.detail.html;
-    console.log('Focus out with HTML:', html);
 
     const markdown = toMarkdown(html);
     previousContent = markdown;
