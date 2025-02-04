@@ -30,7 +30,15 @@ const dispatchEvent = (name, node, editor) => {
  */
 export const quill = (
   node,
-  { html = '', toolbar, keyboard, id, required, onEditorSetup, onChange = () => {} }
+  {
+    html = '',
+    toolbar,
+    keyboard,
+    id,
+    required,
+    onEditorSetup,
+    onChange = () => {}
+  }
 ) => {
   let isInitialized = false;
   const q = new Quill(node, {
@@ -97,7 +105,7 @@ export const quill = (
       // Only update if content is actually different
       if (currentContent !== newContent) {
         q.setContents(q.clipboard.convert(html), 'silent');
-        isInitialized = true;  // Mark as initialized after first content set
+        isInitialized = true; // Mark as initialized after first content set
       }
     },
     destroy: () => {
