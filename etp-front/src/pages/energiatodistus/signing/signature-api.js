@@ -12,7 +12,7 @@ const signatureOptions = version => ({
     keyusages: ['nonrepudiation'],
     keyalgorithms: ['rsa']
   },
-  contentType: 'data',
+  contentType: 'digest',
   hashAlgorithm: 'SHA256',
   signatureType: 'cms-pades'
 });
