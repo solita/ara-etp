@@ -8,6 +8,6 @@ export const withDefaults = () => ({
     id: 'test',
     name: 'test',
     label: 'test',
-    required: true,
+    required: true
   }
 });
