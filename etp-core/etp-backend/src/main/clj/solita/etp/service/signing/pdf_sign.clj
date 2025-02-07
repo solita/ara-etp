@@ -22,44 +22,6 @@
            (org.bouncycastle.cms CMSSignedData)
            (org.apache.axis.utils ByteArrayOutputStream)))
 
-;; TODO: Remove
-(def tsp-key-and-cert
-  (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
-        ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
-                                             (.initialize 2048))
-        ^KeyPair keyPair (-> keyPairGenerator .generateKeyPair)
-
-        subjectDN "CN=Self-Signed, O=Example, C=FI"
-        issuerDN subjectDN
-        serialNumber (BigInteger. 64 (SecureRandom.))
-        ^Date notBefore (Date.)
-        ^Date notAfter (Date. ^long (+ (System/currentTimeMillis) (* 365 24 60 60 1000)))
-
-        ^X509v3CertificateBuilder certBuilder (doto (JcaX509v3CertificateBuilder.
-                                                      (X500Name. issuerDN)
-                                                      serialNumber
-                                                      notBefore
-                                                      notAfter
-                                                      (X500Name. subjectDN)
-                                                      (-> keyPair .getPublic))
-                                                (.addExtension Extension/extendedKeyUsage
-                                                               true
-                                                               (ExtendedKeyUsage. KeyPurposeId/id_kp_timeStamping)))
-
-        ^ContentSigner signer (-> (JcaContentSignerBuilder. "SHA256withRSA") (.build (-> keyPair .getPrivate)))
-        ^X509Certificate certificate (-> (doto (JcaX509CertificateConverter.) (.setProvider "BC"))
-                                         (.getCertificate (-> certBuilder (.build signer))))]
-    {:private-key (-> keyPair .getPrivate)
-     :public-key  (-> keyPair .getPublic)
-     :certificate certificate}))
-
-;;TODO: Remove
-(defn tsp-source-in-test []
-  (doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
-                             ^X509Certificate (:certificate tsp-key-and-cert)
-                             ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
-    (.setTsaPolicy "1.2.3.4")))
-
 (defn pem->CertificateToken [cert-pem]
   ^CertificateToken (-> cert-pem
                         (DSSUtils/convertToDER)
@@ -100,9 +62,8 @@
 
 (defn- ^:dynamic get-tsp-source []
   ;; TODO: Need to use DSS's PKI to mock things?
-  (tsp-source-in-test)
-  #_(let [tsa-url (config/tsa-endpoint-url)]
-      (OnlineTSPSource. tsa-url)))
+  (let [tsa-url (config/tsa-endpoint-url)]
+    (OnlineTSPSource. tsa-url)))
 
 ;; TODO: Make dynamic? Needs DSS PKI in tests?
 (defn- ^:dynamic get-ocsp-source []
