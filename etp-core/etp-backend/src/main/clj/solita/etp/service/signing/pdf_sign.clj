@@ -148,7 +148,7 @@
         ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
                                             (.setFieldParameters sig-field-params)
                                             (.setImage signature-png)
-                                            (.setZoom 133))
+                                            (.setZoom zoom))
 
         signature-parameters (doto (PAdESSignatureParameters.)
                                (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
