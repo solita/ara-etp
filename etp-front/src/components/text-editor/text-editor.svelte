@@ -54,10 +54,7 @@
     }
   };
 
-  const toMarkdown = html => {
-    const markdown = turndownService.turndown(html);
-    return markdown;
-  };
+  const toMarkdown = R.bind(turndownService.turndown, turndownService);
 
   let editorElement = null;
 
