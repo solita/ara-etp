@@ -166,31 +166,12 @@
         signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))]
     (.openStream signed-pdf-t-level)))
 
-;; TODO: Or how to do this? It is hard to determine who is whose issuer.
-(defn cert-chain->slowest-next-update [^List certs-list ^CommonCertificateVerifier cert-verifier]
-  (let [certs (into [] certs-list)
-        next-updates (->> certs-list
-                          (mapv #(.getOcspSource cert-verifier)))
-
-        ^OCSPToken ocsp-resp (-> cert-verifier .getOcspSource (.getRevocationToken (:leaf-cert certs) (:int-cert certs)))
-        _ (println "AAA::" (.toString ocsp-resp))
-
-        wait1 (- (.getEpochSecond (.toInstant ^Date (.getNextUpdate ocsp-resp)))
-                 (.getEpochSecond ^Instant (time/now)))]))
-
 (defn t-level->lt-level [^InputStream signed-b-level-pdf]
   (let [signed-pdf (InMemoryDocument. signed-b-level-pdf)
-        cert-verifier (CommonCertificateVerifier.)
-        service (PAdESService. cert-verifier)
-        validator (PDFDocumentValidator/fromDocument signed-pdf)
-        ^AdvancedSignature signature (first (-> validator .getSignatures))
-        a (-> signature (.getCompleteOCSPSource))
         tsp-source (get-tsp-source)
         ocsp-source (get-ocsp-source)
-
         parameters (doto (PAdESSignatureParameters.)
                      (.setSignatureLevel SignatureLevel/PAdES_BASELINE_LT))
-
         service (doto (PAdESService. (doto (CommonCertificateVerifier.)
                                        (.setOcspSource ocsp-source)
                                        ;; TODO: Trust KMS root and DVV's certs?
