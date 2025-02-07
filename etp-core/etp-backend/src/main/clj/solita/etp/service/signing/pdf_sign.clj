@@ -106,8 +106,8 @@
   #_(let [tsa-url (config/tsa-endpoint-url)]
       (OnlineTSPSource. tsa-url)))
 
-;; TODO: Make dynamic? Needs DSS PKI?
-(defn- get-ocsp-source []
+;; TODO: Make dynamic? Needs DSS PKI in tests?
+(defn- ^:dynamic get-ocsp-source []
   (doto (OnlineOCSPSource.)
     (.setAlertOnInvalidUpdateTime (ExceptionOnStatusAlert.))))
 
