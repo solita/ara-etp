@@ -1,6 +1,5 @@
 (ns solita.etp.service.signing.pdf-sign
   (:require
-    [solita.etp.service.sign :as sign-service]
     [solita.common.time :as time]
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert ExceptionOnStatusAlert)
@@ -10,30 +9,16 @@
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters SignatureFieldParameters SignatureImageParameters)
            (eu.europa.esig.dss.pades.signature ExternalCMSService PAdESService PAdESWithExternalCMSService)
-           (eu.europa.esig.dss.pades.validation PDFDocumentValidator)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
-           (eu.europa.esig.dss.spi.signature AdvancedSignature)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
-           (eu.europa.esig.dss.spi.x509.revocation.ocsp OCSPToken)
-           (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io ByteArrayInputStream File InputStream ObjectInputStream ObjectOutputStream)
-           (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
-           (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
-           (java.security.cert X509Certificate)
            (java.time Instant)
            (java.util ArrayList Collection Date List)
            (java.util ArrayList Date List)
            (java.util Date)
-           (org.bouncycastle.asn1.x500 X500Name)
-           (org.bouncycastle.asn1.x509 ExtendedKeyUsage KeyPurposeId Extension)
-           (org.bouncycastle.cert X509v3CertificateBuilder)
-           (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509v3CertificateBuilder)
            (org.bouncycastle.cms CMSSignedData)
-           (org.bouncycastle.jce.provider BouncyCastleProvider)
-           (org.bouncycastle.operator ContentSigner)
-           (org.bouncycastle.operator.jcajce JcaContentSignerBuilder)
            (org.apache.axis.utils ByteArrayOutputStream)))
 
 ;; TODO: Remove
