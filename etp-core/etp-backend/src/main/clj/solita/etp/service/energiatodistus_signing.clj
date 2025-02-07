@@ -226,7 +226,11 @@
                          (.getBytes StandardCharsets/UTF_8)
                          (#(.decode (Base64/getDecoder) %)))
         chain cert-chain-three-long-leaf-first
-        signature-and-chain {:chain chain :signature (.encode (Base64/getEncoder) (pdf-sign/get-signature-from-system-cms-service aws-kms-client data-to-sign))}]
+        system-signature-cms-info {:cert-chain chain
+                                         :signing-cert config/system-signature-certificate-leaf
+                                         :digest->signature #(sign-service/sign aws-kms-client %)}
+        signature (.encode (Base64/getEncoder) (pdf-sign/get-signature-from-external-cms-service data-to-sign system-signature-cms-info))
+        signature-and-chain {:chain chain :signature signature}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
       #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)

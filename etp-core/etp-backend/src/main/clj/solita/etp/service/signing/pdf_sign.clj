@@ -79,38 +79,39 @@
                         (DSSUtils/convertToDER)
                         (DSSUtils/loadCertificate)))
 
-(defn get-system-signature-parameters
+(defn get-parameters-for-external-cms-service
   "This should produce the same level of a signature as the card reader."
-  []
-  (let [leaf-cert config/system-signature-certificate-leaf
-        int-cert config/system-signature-certificate-intermediate
-        root-cert config/system-signature-certificate-root
-        ^List cert-chain (ArrayList. ^Collection (->> [leaf-cert
-                                                       int-cert
-                                                       root-cert]
+  [{:keys [signing-cert cert-chain] :as external-cms-info}]
+  (let [^List cert-chain (ArrayList. ^Collection (->> cert-chain
                                                       (mapv #(-> %
                                                                  (DSSUtils/convertToDER)
                                                                  (DSSUtils/loadCertificate)))))]
     (doto (PAdESSignatureParameters.)
       (#(doto (.bLevel %)
           (.setSigningDate (-> (^Instant time/now) Date/from))))
-      (.setSigningCertificate (pem->CertificateToken leaf-cert))
+      (.setSigningCertificate (pem->CertificateToken signing-cert))
       (.setDigestAlgorithm DigestAlgorithm/SHA256)
       (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
       (.setCertificateChain cert-chain))))
 
 ;; TODO: This belongs to sign service?
-(defn get-signature-from-system-cms-service [aws-kms-client ^bytes digest]
+(defn get-signature-from-external-cms-service [^bytes digest
+                                             {:keys [cert-chain
+                                                     signing-cert
+                                                     digest->signature] :as external-cms-info}]
   (let [certificate-verifier (CommonCertificateVerifier.)
-        signature-parameters (get-system-signature-parameters)
+        signature-parameters (get-parameters-for-external-cms-service external-cms-info)
         ^DSSMessageDigest dss-digest (DSSMessageDigest. DigestAlgorithm/SHA256 digest)
-        _ (println (-> dss-digest (.toString)))
         ^ExternalCMSService system-signature-cms-service (ExternalCMSService. certificate-verifier)
         data-to-sign (.getDataToSign system-signature-cms-service dss-digest signature-parameters)
 
-        ^SignatureValue signature-value (SignatureValue. SignatureAlgorithm/RSA_SHA256 (.readAllBytes (sign-service/sign aws-kms-client (-> data-to-sign .getBytes))))
-
-        cms-signature (-> system-signature-cms-service (.signMessageDigest dss-digest signature-parameters signature-value))]
+        ^SignatureValue signature-value (SignatureValue.
+                                          SignatureAlgorithm/RSA_SHA256
+                                          (.readAllBytes
+                                            (digest->signature
+                                              (-> data-to-sign .getBytes))))
+        cms-signature (-> system-signature-cms-service
+                          (.signMessageDigest dss-digest signature-parameters signature-value))]
     (.getBytes cms-signature)))
 
 (defn- ^:dynamic get-tsp-source []
@@ -164,13 +165,11 @@
      :stateful-parameters (object->input-stream signature-parameters)}))
 
 (defn sign-with-external-cms-service-signature
-  "Given an unsigned pdf `pdf-file` as InputStream and `stateful-parameters`"
-  [^InputStream pdf-file stateful-parameters ^bytes cms-signature]
+  [^InputStream pdf-file stateful-parameters ^bytes cms-signature cert-chain]
   (let [^PAdESSignatureParameters signature-parameters (input-stream->object stateful-parameters)
         unsigned-pdf (InMemoryDocument. pdf-file)
         tsp-source (get-tsp-source)
         service-external-cms (doto (PAdESWithExternalCMSService.))
-        ;; TODO: What does the card reader return?
         signed-pdf-b-level (-> service-external-cms (.signDocument unsigned-pdf
                                                                    signature-parameters
                                                                    (CMSSignedDocument. (CMSSignedData. cms-signature))))

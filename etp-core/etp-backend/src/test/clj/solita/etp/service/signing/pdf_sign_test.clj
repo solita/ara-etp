@@ -35,6 +35,7 @@
 
 (t/use-fixtures :each ts/fixture)
 
+
 (def tsp-key-and-cert
   (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
         ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
