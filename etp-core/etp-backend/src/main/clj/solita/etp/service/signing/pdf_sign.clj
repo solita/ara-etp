@@ -1,4 +1,5 @@
 (ns solita.etp.service.signing.pdf-sign
+  "Currently encapsulates the usage of ESIG/DSS library"
   (:require
     [solita.common.time :as time]
     [solita.etp.config :as config])
