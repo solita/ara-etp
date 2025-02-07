@@ -30,15 +30,7 @@ const dispatchEvent = (name, node, editor) => {
  */
 export const quill = (
   node,
-  {
-    html = '',
-    toolbar,
-    keyboard,
-    id,
-    required,
-    onEditorSetup,
-    onChange = () => {}
-  }
+  { html = '', toolbar, keyboard, id, required, onEditorSetup }
 ) => {
   let isInitialized = false;
   const q = new Quill(node, {
@@ -74,7 +66,7 @@ export const quill = (
   );
   remove.href = '';
 
-  const focusout = () => {
+  const focusout = event => {
     if (!root.contains(event.relatedTarget) && event.target !== action) {
       dispatchEvent('editor-focus-out', node, editor);
     }
