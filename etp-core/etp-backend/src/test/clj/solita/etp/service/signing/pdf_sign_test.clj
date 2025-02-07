@@ -29,6 +29,7 @@
 
 (t/use-fixtures :each ts/fixture)
 
+
 (def tsp-key-and-cert
   (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
         ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
@@ -99,7 +100,7 @@
                      :digest
                      (.getBytes StandardCharsets/UTF_8)
                      (#(.decode (Base64/getDecoder) %)))
-            signature (pdf-sign/get-signature-from-system-cms-service ts/*aws-kms-client* data)
+            signature (pdf-sign/get-signature-from-external-cms-service ts/*aws-kms-client* data)
             b-level-doc (et-signing/sign-energiatodistus-pdf-new ts/*db* ts/*aws-s3-client* todistus-2018-fi-id "fi" laatija-allekirjoitus-id certs signature)
             _ (.save b-level-doc "WASD.pdf")
             ])))))
