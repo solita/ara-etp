@@ -741,9 +741,9 @@
         "header": "Ilmanvaihtojärjestelmä",
         "label-context": "Ilmanvaihtojärjestelmä",
         "tyyppi-id": "Ilmanvaihtojärjestelmän tyyppi",
-        "sfp-luku": "Järjes­telmän SFP-luku kW/(m³/s)",
-        "lampotilasuhde": "LTO:n lämpö­tila­suhde",
-        "jaatymisenesto": "Jäätymi­senesto",
+        "sfp-luku": "Järjes\u00ADtelmän SFP-luku kW/(m³/s)",
+        "lampotilasuhde": "LTO:n lämpö\u00ADtila\u00ADsuhde",
+        "jaatymisenesto": "Jäätymi\u00ADsenesto",
         "kuvaus": "Ilmanvaihtojärjestelmän kuvaus",
         "lto-vuosihyotysuhde": "Rakennuksen ilmanvaihtojärjestelmän LTO:n vuosihyötysuhde",
         "tuloilma-lampotila": "Tuloilman sisäänpuhalluslämpötila °C",
@@ -751,16 +751,16 @@
         "tulo": "tulo",
         "poisto": "poisto",
         "labels": {
-          "paaiv": "Pääil­man­vaihto­koneet",
-          "erillispoistot": "Erillis­poistot",
-          "ivjarjestelma": "Ilman­vaihto­järjes­telmä"
+          "paaiv": "Pääil\u00ADman\u00ADvaihto\u00ADkoneet",
+          "erillispoistot": "Erillis\u00ADpoistot",
+          "ivjarjestelma": "Ilman\u00ADvaihto\u00ADjärjes\u00ADtelmä"
         },
         "paaiv": {
           "label-context": "Pääilmanvaihtokoneet",
           "tulo": "Tulo",
           "poisto": "Poisto",
           "sfp": "SFP-luku",
-          "lampotilasuhde": "LTO:n lämpö­tilasuhde",
+          "lampotilasuhde": "LTO:n lämpö\u00ADtilasuhde",
           "jaatymisenesto": "Jäätymisenesto"
         },
         "erillispoistot": {
