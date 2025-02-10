@@ -4,7 +4,6 @@
     [clojure.java.io :as io]
     [clojure.string :as str]
     [clojure.tools.logging :as log]
-    [puumerkki.pdf :as puumerkki]
     [solita.common.certificates :as certificates]
     [solita.etp.common.audit-log :as audit-log]
     [solita.etp.config :as config]
@@ -158,15 +157,6 @@
      (when validate-surname?
        (validate-surname! surname certificate))
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
-
-(defn write-signature! [id language pdf pkcs7]
-  (try
-    (puumerkki/write-signature! pdf pkcs7)
-    (catch ArrayIndexOutOfBoundsException _
-      (exception/throw-ex-info!
-        :signed-pdf-exists
-        (str "Signed PDF already exists for energiatodistus "
-             id "/" language ". Get digest to sign again.")))))
 
 (defn sign-energiatodistus-pdf
     [db aws-s3-client whoami now id language signature-and-chain]

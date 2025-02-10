@@ -2,30 +2,18 @@
   "Contains functionality to specifically create an energiatodistus as pdf."
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [clojure.tools.logging :as log]
-            [puumerkki.pdf :as puumerkki]
-            [solita.common.certificates :as certificates]
             [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
-            [solita.etp.common.audit-log :as audit-log]
-            [solita.etp.config :as config]
-            [solita.etp.exception :as exception]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.file :as file-service]
-            [solita.etp.service.sign :as sign-service])
-  (:import (clojure.lang ExceptionInfo)
-           (java.awt Color Font)
-           (java.awt.image BufferedImage)
-           (java.io ByteArrayOutputStream File InputStream)
-           (java.nio.charset StandardCharsets)
-           (java.time Clock Instant LocalDate ZoneId ZonedDateTime)
+            [solita.etp.service.file :as file-service])
+  (:import (java.io ByteArrayOutputStream File)
+           (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Base64 Calendar Date GregorianCalendar HashMap)
-           (javax.imageio ImageIO)
+           (java.util Calendar GregorianCalendar HashMap)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
@@ -48,8 +36,6 @@
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
 (def date-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy") timezone))
-(def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
-                               timezone))
 
 (defn sis-kuorma [energiatodistus]
   (->> energiatodistus
