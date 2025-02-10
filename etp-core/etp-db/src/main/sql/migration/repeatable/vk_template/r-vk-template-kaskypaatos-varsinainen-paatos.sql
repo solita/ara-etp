@@ -39,7 +39,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
 
 <h2>Päätös</h2>
 
-<p>Asumisen rahoitus- ja kehittämiskeskus (ARA) katsoo, että
+<p>Valtion tukeman asuntorakentamisen keskus (Varke) katsoo, että
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -52,20 +52,20 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     rakennuksen omistaja vastaa siitä, että rakennuksen energiatodistus hankitaan ja että sitä tai siinä olevia tietoja
     käytetään laissa säädetyissä tilanteissa.</p>
 
-<p>ARA käskee energiatodistuslain 24 §:n nojalla Asianosaisen hankkimaan osoitteessa {{#kohde}}{{katuosoite}}
+<p>Varke käskee energiatodistuslain 24 §:n nojalla Asianosaisen hankkimaan osoitteessa {{#kohde}}{{katuosoite}}
     {{postinumero}} {{postitoimipaikka}}{{/kohde}} sijaitsevalle rakennukselle energiatodistuksen viimeistään
     {{määräpäivä}} ja
-    esittämään energiatodistuksen ARAlle. ARA asettaa käskyn tehosteeksi uhkasakkolain (1113/1990) 6 §:ssä tarkoitetun
-    kiinteän uhkasakon. Uhkasakon suuruus on {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euroa. Uhkasakko tuomitaan maksettavaksi, mikäli ARAn käskyä ei
+    esittämään energiatodistuksen Varkelle. Varke asettaa käskyn tehosteeksi uhkasakkolain (1113/1990) 6 §:ssä tarkoitetun
+    kiinteän uhkasakon. Uhkasakon suuruus on {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euroa. Uhkasakko tuomitaan maksettavaksi, mikäli Varken käskyä ei
     ole annetussa määräajassa noudatettu.</p>
 
 <h2>Kuuleminen</h2>
 
-<p>ARA varasi {{#aiemmat-toimenpiteet}}{{kuulemiskirje-pvm}}{{/aiemmat-toimenpiteet}} päivätyllä kirjeellään (dnro
+<p>Varke varasi {{#aiemmat-toimenpiteet}}{{kuulemiskirje-pvm}}{{/aiemmat-toimenpiteet}} päivätyllä kirjeellään (dnro
     {{#aiemmat-toimenpiteet}}{{kuulemiskirje-diaarinumero}}{{/aiemmat-toimenpiteet}}) Asianosaiselle uhkasakkolain 22 §:n ja
     siinä viitatun hallintolain (434/2003) 34 §:n mukaisesti ennen asian ratkaisemista tilaisuuden lausua
     mielipiteensä asiasta sekä antaa selityksensä sellaisista vaatimuksista ja selvityksistä, jotka saattavat
-    vaikuttaa asian ratkaisuun. Kuulemiskirjeessä ARA kertoi, että uhkasakon määrä on arviolta {{#aiemmat-toimenpiteet}}{{kuulemiskirje-fine}}{{/aiemmat-toimenpiteet}} euroa.</p>
+    vaikuttaa asian ratkaisuun. Kuulemiskirjeessä Varke kertoi, että uhkasakon määrä on arviolta {{#aiemmat-toimenpiteet}}{{kuulemiskirje-fine}}{{/aiemmat-toimenpiteet}} euroa.</p>
 
 <p class="respect-new-lines">{{#tyyppikohtaiset-tiedot}}{{vastaus-fi}}{{/tyyppikohtaiset-tiedot}}</p>
 
@@ -79,29 +79,29 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
 
 <p>Seuraamuksista säädetään energiatodistuslain 24 §:ssä. Jos rakennuksen omistaja ei täytä energiatodistuslaissa
     säädettyjä velvollisuuksia tai toimii muutoin energiatodistuslain tai sen nojalla annettujen säännösten
-    vastaisesti, ARAn on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa
-    ei korjata määräajassa, ARAn on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
-    määräajassa korjata, ARAn tulee antaa tilanteen mukainen käsky- tai kieltopäätös. ARA voi tehostaa käskyä tai
+    vastaisesti, Varken on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa
+    ei korjata määräajassa, Varken on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
+    määräajassa korjata, Varken tulee antaa tilanteen mukainen käsky- tai kieltopäätös. Varke voi tehostaa käskyä tai
     kieltoa vakavissa tai olennaisissa rikkomuksissa uhkasakolla tai teettämis- tai keskeyttämisuhalla, joista
     säädetään uhkasakkolaissa (1113/1990).</p>
 
-<p>ARA on lähettänyt Asianosaiselle kehotuksen, sillä Asianosaisen omistamaa rakennusta osoitteessa
+<p>Varke on lähettänyt Asianosaiselle kehotuksen, sillä Asianosaisen omistamaa rakennusta osoitteessa
     {{#kohde}}{{katuosoite}} {{postinumero}} {{postitoimipaikka}} on
     markkinoitu {{ilmoituspaikka}} -sivustolla ilman energiatodistusta.{{/kohde}}
     Kehotuksessa Asianosaista on pyydetty {{#aiemmat-toimenpiteet}}{{kehotus-maarapaiva}}{{/aiemmat-toimenpiteet}}
-    mennessä antamaan ARAlle tietoa mahdollisesta energiatodistuksesta tai jos todistusta ei ole, sen
+    mennessä antamaan Varkelle tietoa mahdollisesta energiatodistuksesta tai jos todistusta ei ole, sen
     laadinta-aikataulusta.</p>
 
 {{#aiemmat-toimenpiteet}}
 <p>Kohteen markkinointia kuitenkin jatkettiin kehotuksesta huolimatta, eikä Asianosainen esittänyt energiatodistusta
-    ARAlle. Tästä syystä ARA ryhtyi energiatodistuslain 24 §:n mukaisiin toimenpiteisiin ja antoi Asianosaiselle
+    Varkelle. Tästä syystä Varke ryhtyi energiatodistuslain 24 §:n mukaisiin toimenpiteisiin ja antoi Asianosaiselle
     varoituksen esittää energiatodistus {{varoitus-maarapaiva}} mennessä. Asiantilaa ei kehotuksesta ja varoituksesta
     huolimatta
-    korjattu, ja ARAn energiatodistusrekisteristä ilmenee, ettei kohteelle ole edelleenkään laadittu energiatodistusta
+    korjattu, ja Varken energiatodistusrekisteristä ilmenee, ettei kohteelle ole edelleenkään laadittu energiatodistusta
     <sup>1</sup>.</p>
 {{/aiemmat-toimenpiteet}}
 
-<p>ARA on siis antanut Asianosaiselle monta mahdollisuutta korjata toimintansa. ARA voi energiatodistuslain 24 §:n
+<p>Varke on siis antanut Asianosaiselle monta mahdollisuutta korjata toimintansa. Varke voi energiatodistuslain 24 §:n
     mukaisena viimesijaisena keinona antaa käskypäätöksen, jolla rakennuksen omistaja velvoitetaan hankkimaan
     energiatodistus. Käskyä voidaan tehostaa uhkasakolla, josta säädetään uhkasakkolaissa.</p>
 
@@ -127,7 +127,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     toimitettava edellä mainittuun hallinto-oikeuteen 30 päivän kuluessa tämän päätöksen tiedoksisaannista.</p>
 
 <div class="footnote">
-    <p class="mb-0"><sup>1</sup> ARAn energiatodistusrekisterissä ovat 1.5.2015 jälkeen laaditut
+    <p class="mb-0"><sup>1</sup> Varken energiatodistusrekisterissä ovat 1.5.2015 jälkeen laaditut
         energiatodistukset.</p>
 </div>
 
@@ -194,7 +194,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
 
 <h2>Beslut</h2>
 
-<p>Finansierings- och utvecklingscentralen för boendet (ARA) anser att
+<p>Centralen för statligt stött bostadsbyggande (Varke) anser att
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -206,21 +206,21 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     byggnadens ägare för att byggnadens energicertifikat skaffas och att certifikatet eller uppgifterna i det används i
     lagstadgade situationer.</p>
 
-<p>Med stöd av 24 § i lagen om energicertifikat beordrar ARA {{#omistaja-henkilo}}
+<p>Med stöd av 24 § i lagen om energicertifikat beordrar Varke {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
     {{nimi}}
     {{/omistaja-yritys}} att skaffa ett energicertifikat för byggnaden på adressen {{#kohde}}{{katuosoite}}
     {{postinumero}} {{postitoimipaikka}}{{/kohde}} senast
-    {{määräpäivä}} och visa upp energicertifikatet för ARA. ARA förenar förordnandet med ett sådant fast vite som avses
+    {{määräpäivä}} och visa upp energicertifikatet för Varke. Varke förenar förordnandet med ett sådant fast vite som avses
     i 6 § i viteslagen (1113/1990). Vitesbeloppet är {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}}
     euro.
-    Vitet döms ut om ARAs order inte har iakttagits inom utsatt tid.</p>
+    Vitet döms ut om Varkes order inte har iakttagits inom utsatt tid.</p>
 
 <h2>Hörande</h2>
 
-<p>ARA gav i sitt brev (dnr
+<p>Varke gav i sitt brev (dnr
     {{#aiemmat-toimenpiteet}}{{kuulemiskirje-diaarinumero}}) daterat {{kuulemiskirje-pvm}}{{/aiemmat-toimenpiteet}}
 
     {{#omistaja-henkilo}}
@@ -231,7 +231,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     {{/omistaja-yritys}}
     i enlighet med 22 § i viteslagen och den hänvisade 34 § i förvaltningslagen (434/2003) möjlighet
     att yttra sig i ärendet samt ge sin förklaring till sådana yrkanden och utredningar som kan påverka avgörandet av
-    ärendet. I brevet om hörande berättade ARA att vitesbeloppet är uppskattningsvis
+    ärendet. I brevet om hörande berättade Varke att vitesbeloppet är uppskattningsvis
     {{#aiemmat-toimenpiteet}}{{kuulemiskirje-fine}}{{/aiemmat-toimenpiteet}} euro.</p>
 
 <p>{{#omistaja-henkilo}}
@@ -253,14 +253,14 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
 
 <p>Bestämmelser om påföljderna finns i 24 § i lagen om energicertifikat. Om byggnadens ägare inte fullgör sina
     skyldigheter enligt lagen om energicertifikat eller i övrigt handlar i strid med lagen om energicertifikat eller
-    bestämmelserna som utfärdats med stöd av den, ska ARA uppmana ägaren att rätta till situationen och ange en
-    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska ARA ge den som
-    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska ARA enligt
+    bestämmelserna som utfärdats med stöd av den, ska Varke uppmana ägaren att rätta till situationen och ange en
+    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska Varke ge den som
+    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska Varke enligt
     vad situationen kräver meddela beslut om föreläggande eller förbud. Vid allvarliga eller väsentliga överträdelser
-    kan ARA förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
+    kan Varke förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
     vilka det bestäms i viteslagen (1113/1990).</p>
 
-<p>ARA har skickat en uppmaning till {{#omistaja-henkilo}}{{sukunimi}}{{/omistaja-henkilo}}{{#omistaja-yritys}}{{nimi}}{{/omistaja-yritys}}, eftersom den byggnaden som ägs av {{#omistaja-henkilo}}
+<p>Varke har skickat en uppmaning till {{#omistaja-henkilo}}{{sukunimi}}{{/omistaja-henkilo}}{{#omistaja-yritys}}{{nimi}}{{/omistaja-yritys}}, eftersom den byggnaden som ägs av {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
@@ -272,7 +272,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     {{#omistaja-yritys}}
     {{nimi}}
     {{/omistaja-yritys} ombetts att senast {{#aiemmat-toimenpiteet}}{{kehotus-maarapaiva}}{{/aiemmat-toimenpiteet}} ge
-    ARA information om ett eventuellt energicertifikat eller, om ett sådant inte finns, tidtabellen för upprättandet av
+    Varke information om ett eventuellt energicertifikat eller, om ett sådant inte finns, tidtabellen för upprättandet av
     certifikatet.</p>
 
 {{#aiemmat-toimenpiteet}}
@@ -281,24 +281,24 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
     {{nimi}}
-    {{/omistaja-yritys}} uppvisade inget energicertifikat för ARA. Därför vidtog ARA åtgärder enligt 24 § i lagen om
+    {{/omistaja-yritys}} uppvisade inget energicertifikat för Varke. Därför vidtog Varke åtgärder enligt 24 § i lagen om
     energicertifikat och varnade {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
     {{nimi}}
     {{/omistaja-yritys}} att visa upp energicertifikatet senast {{varoitus-maarapaiva}}.
-    Situationen korrigerades inte trots uppmaning och varning, och av ARAs energicertifikatregister framgår att det
+    Situationen korrigerades inte trots uppmaning och varning, och av Varkes energicertifikatregister framgår att det
     fortfarande inte har upprättats något energicertifikat för adressen
     <sup>2</sup>.</p>
 {{/aiemmat-toimenpiteet}}
 
-<p>ARA har alltså gett {{#omistaja-henkilo}}
+<p>Varke har alltså gett {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
     {{nimi}}
-    {{/omistaja-yritys}} många möjligheter att korrigera sin verksamhet. ARA kan som sista utväg i enlighet
+    {{/omistaja-yritys}} många möjligheter att korrigera sin verksamhet. Varke kan som sista utväg i enlighet
     med 24 § i lagen om energicertifikat meddela ett beslut genom vilket byggnadens ägare åläggs att skaffa ett
     energicertifikat. Ordern kan förenas med vite enligt viteslagen. </p>
 
@@ -325,7 +325,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     förvaltningsdomstol inom 30 dagar från delgivningen av det här beslutet.</p>
 
 <div class="footnote">
-    <p class="mb-0"><sup>2</sup> I ARAs energicertifikatregister finns i regel alla energicertifikat som upprättats
+    <p class="mb-0"><sup>2</sup> I Varkess energicertifikatregister finns i regel alla energicertifikat som upprättats
         efter 1 maj 2015.</p>
 </div>
 
