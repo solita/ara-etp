@@ -64,7 +64,7 @@
     <H2>ANVÄNDNINGSVILLKOR</H2>
     <p>
       Användningen av energicertifikatregistrets gränssnittstjänst förutsätter
-      ett datatillstånd beviljat av Ara. Dessutom ingår Ara och tjänstens
+      ett datatillstånd beviljat av Varke. Dessutom ingår Varke och tjänstens
       användare ett separat avtal. Uppgifterna om energicertifikat innehåller
       personuppgifter, så endast de användare som har rätt att behandla
       personuppgifter kan ansluta sig till tjänsten.
@@ -86,7 +86,7 @@
       Vår prislista finns på
       <Link
         href="https://www.ara.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
-        >Aras webbplats
+        >Varkes webbplats
       </Link>
       .
     </p>
@@ -122,7 +122,7 @@
         <Link
           href="https://liityntakatalogi.suomi.fi/dataset/energiatodistusrekisteri-ara-svc"
           >ansökan</Link>
-        som finns i API-katalogen och vänta på Aras godkännande.
+        som finns i API-katalogen och vänta på Varkes godkännande.
       </li>
       <li>
         Du har tillgång till energicertifikatregistrets gränssnittstjänst
