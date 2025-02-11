@@ -127,8 +127,8 @@
     <p>Soveltuu esimerkiksi tutkimuskäyttöön.</p>
     <H2>KÄYTTÖEHDOT</H2>
     <p>
-      Aineistopalvelun käyttäminen edellyttää, että Ara on myöntänyt käyttäjälle
-      tietoluvan. Lisäksi Ara ja käyttäjä solmivat erillisen sopimuksen
+      Aineistopalvelun käyttäminen edellyttää, että Varke on myöntänyt käyttäjälle
+      tietoluvan. Lisäksi Varke ja käyttäjä solmivat erillisen sopimuksen
       Aineistopalvelun käytöstä.
     </p>
     <p>
@@ -148,7 +148,7 @@
       Hinnastomme löydät
       <Link
         href="https://www.ara.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
-        >Aran sivuilta</Link>
+        >Varken sivuilta</Link>
       .
     </p>
     <H2>AINEISTOPALVELUUN LIITTYMINEN</H2>
@@ -162,8 +162,8 @@
         >.
       </li>
       <li>
-        Lähetä hakemus sähköpostitse Aran kirjaamoon (<Link
-          href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
+        Lähetä hakemus sähköpostitse Varken kirjaamoon (<Link
+          href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link
         >). Jos hakemus sisältää salassa pidettävää tietoa, lähetä hakemus <Link
           href="https://turvaviesti.ara.fi/">turvapostilla</Link
         >.
@@ -193,7 +193,7 @@
     <H2>TOIMINTA HÄIRIÖTILANTEISSA</H2>
     <p>
       Aineistopalveluun liittyvissä häiriötilanteissa ota yhteyttä sähköpostitse
-      <Link href="mailto:energiatodistus@ara.fi">energiatodistus@ara.fi</Link>.
+      <Link href="mailto:energiatodistus.varke@gov.fi">energiatodistus.varke@gov.fi</Link>.
     </p>
   </div>
 </Container>
