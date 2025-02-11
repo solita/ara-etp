@@ -55,7 +55,7 @@
       <H3>Henkilötietojen käyttötarkoitus ja käsittelyperuste</H3>
 
       <p>
-        Henkilötietojen käsittely perustuu Aran ja tietoluvan saajan (asiakkaan)
+        Henkilötietojen käsittely perustuu Varken ja tietoluvan saajan (asiakkaan)
         väliseen sopimukseen Aineistopalvelun käytöstä. Rekisterissä käsitellään
         asiakkaan teknisen yhteyshenkilön henkilötietoja rajapintayhteyden
         muodostamiseksi asiakkaan tietoverkkoon, ja ongelmatilanteiden
@@ -96,7 +96,7 @@
       </p>
 
       <p>
-        Ara on ulkoistanut energiatodistusrekisterin ja siihen liittyvän
+        Varke on ulkoistanut energiatodistusrekisterin ja siihen liittyvän
         Aineistopalvelun teknisen ylläpidon ja kehittämisen
         IT-palveluntarjoajalle, jonka kanssa on solmittu tietosuoja-asetuksen
         mukainen sopimus henkilötietojen käsittelystä.
@@ -110,7 +110,7 @@
       <H3>Tietojen säilytysaika</H3>
 
       <p>
-        Henkilötietoja säilytetään Aran ja asiakkaan sopimuksen voimassaolon
+        Henkilötietoja säilytetään Varken ja asiakkaan sopimuksen voimassaolon
         ajan. Teknisen yhteyshenkilön vaihtuessa kesken sopimuskauden uusi
         tekninen yhteyshenkilö lisätään rekisteriin ja edeltäjän tiedot
         poistetaan rekisteristä.
@@ -165,17 +165,17 @@
       <H3>Rekisterinpitäjä</H3>
 
       <ul class="contact-info">
-        <li>Asumisen rahoitus- ja kehittämiskeskus (Ara)</li>
-        <li>PL 30, 15141 Lahti</li>
-        <li>Puhelin: 029 525 0800 (vaihde)</li>
-        <li>Sähköposti: kirjaamo.ara(at)ara.fi</li>
+        <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
+        <li>PL 35, 00023 Valtioneuvosto</li>
+        <li>Puhelin: 0295 16001 (vaihde)</li>
+        <li>Sähköposti: varke.ym(at)gov.fi</li>
       </ul>
 
       <H3>Yhteyshenkilö</H3>
       <ul class="contact-info">
-        <li>Kirsi Unhonen, energia-asiantuntija</li>
-        <li>Asumisen rahoitus- ja kehittämiskeskus</li>
-        <li>etunimi.sukunimi(at)ara.fi</li>
+        <li>Kimmo Huovinen, apulaisjohtaja</li>
+        <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
+        <li>etunimi.sukunimi(at)gov.fi</li>
       </ul>
     </div>
   </div>

@@ -55,7 +55,7 @@
       <H3>Syftet med och grunden för behandlingen av personuppgifter</H3>
 
       <p>
-        Behandlingen av personuppgifter grundar sig på ett avtal mellan Ara och
+        Behandlingen av personuppgifter grundar sig på ett avtal mellan Varke och
         datatillståndshavaren (kunden) om användningen av Materialtjänsten. I
         registret behandlas personuppgifterna för kundens tekniska
         kontaktperson. Uppgifterna används för att skapa en
@@ -99,7 +99,7 @@
       </p>
 
       <p>
-        Ara har lagt ut energicertifikatregistret och det tillhörande tekniska
+        Varke har lagt ut energicertifikatregistret och det tillhörande tekniska
         underhållet och utvecklingen av Materialtjänsten åt en extern
         IT-tjänsteleverantör genom ett avtal enligt dataskyddsförordningen
         angående behandlingen av personuppgifter.
@@ -113,7 +113,7 @@
       <H3>Förvaringstid för personuppgifter</H3>
 
       <p>
-        Personuppgifterna förvaras under giltighetstiden för Aras och kundens
+        Personuppgifterna förvaras under giltighetstiden för Varkes och kundens
         avtal. Om den tekniska kontaktpersonen ändrar under avtalsperioden läggs
         den nya tekniska kontaktpersonen till i registret och föregångarens
         uppgifter raderas ur registret.
@@ -168,17 +168,17 @@
       <H3>Personuppgiftsansvarig</H3>
 
       <ul class="contact-info">
-        <li>Finansierings- och utvecklingscentralen för boendet (Ara)</li>
-        <li>PB 30, 15141 Lahtis</li>
-        <li>Telefon: 029 525 0800 (växel)</li>
-        <li>E-post: kirjaamo.ara(at)ara.fi</li>
+        <li>Centralen för statligt stött bostadsbyggande (Varke)</li>
+        <li>PB 35, 00023 Statsrådet</li>
+        <li>Telefon: 0295 16001 (växel)</li>
+        <li>E-post: varke.ym(at)gov.fi</li>
       </ul>
 
       <H3>Kontaktperson i ärenden som gäller registret</H3>
       <ul class="contact-info">
-        <li>Kirsi Unhonen, energiexpert</li>
-        <li>Finansierings- och utvecklingscentralen för boendet (Ara)</li>
-        <li>förnamn.efternamn(at)ara.fi</li>
+        <li>Kimmo Huovinen, biträdande direktör</li>
+        <li>Centralen för statligt stött bostadsbyggande (Varke)</li>
+        <li>förnamn.efternamn(at)varke.fi</li>
       </ul>
     </div>
   </div>
