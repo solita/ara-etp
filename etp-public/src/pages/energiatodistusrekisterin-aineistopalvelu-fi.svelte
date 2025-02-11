@@ -147,7 +147,7 @@
     <p>
       Hinnastomme löydät
       <Link
-        href="https://www.ara.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
+        href="https://www.varke.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
         >Varken sivuilta</Link>
       .
     </p>
@@ -165,7 +165,7 @@
         Lähetä hakemus sähköpostitse Varken kirjaamoon (<Link
           href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link
         >). Jos hakemus sisältää salassa pidettävää tietoa, lähetä hakemus <Link
-          href="https://turvaviesti.ara.fi/">turvapostilla</Link
+          href="https://turvaviesti.varke.fi/">turvapostilla</Link
         >.
       </li>
       <li>

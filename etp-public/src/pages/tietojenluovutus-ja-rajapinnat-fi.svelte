@@ -83,7 +83,7 @@
       tietosuoja ja tietoturvallisuus toteutuvat. Henkilötietojen käsittely
       perustuu pääsääntöisesti Varken lakisääteisten velvoitteiden noudattamiseen.
       <Link
-        href="https://www.ara.fi/fi/tietoa-meista/tietosuoja-ja-tietojen-kasittely">
+        href="https://www.varke.fi/fi/tietoa-meista/tietosuoja-ja-tietojen-kasittely">
         Lue lisää henkilötietojen käsittelystä (varke.fi)</Link>
 
       Pidämme rekisteriä rajapintaan liitetyistä aineistoasiakkaista.

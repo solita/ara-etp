@@ -84,7 +84,7 @@
       Varke är noggrann inom all sin verksamhet och säkerställer att dataskydd och
       informationssäkerhet uppfylls. Behandling av personuppgifter följer i
       huvudregel Varkes lagstadgade skyldigheter. <Link
-        href="https://www.ara.fi/sv/om-oss/dataskydd-och-behandling-av-uppgifter">
+        href="https://www.varke.fi/sv/om-oss/dataskydd-och-behandling-av-uppgifter">
         Läs mer om behandlingen av personuppgifter på (varke.fi)</Link
       >. Vi för ett register över de materialkunder som anslutits till
       gränssnittet. Dataskyddsbeskrivningarna finns på sidan

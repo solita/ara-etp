@@ -149,7 +149,7 @@
     <p>
       Vår prislista finns på
       <Link
-        href="https://www.ara.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
+        href="https://www.varke.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
         >Varkes webbplats</Link
       >.
     </p>
@@ -167,7 +167,7 @@
         Skicka ansökan per e-post till Varkes registratorskontor (<Link
           href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link
         >). Om ansökan innehåller sekretessbelagd information ska du skicka
-        ansökan som <Link href="https://turvaviesti.ara.fi/">säker e-post</Link
+        ansökan som <Link href="https://turvaviesti.varke.fi/">säker e-post</Link
         >.
       </li>
       <li>

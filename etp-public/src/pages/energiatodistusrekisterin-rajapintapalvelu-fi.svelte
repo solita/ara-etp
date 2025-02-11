@@ -79,7 +79,7 @@
     <p>
       Hinnastomme löydät
       <Link
-        href="https://www.ara.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
+        href="https://www.varke.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
         >Varken sivuilta</Link
       >.
     </p>

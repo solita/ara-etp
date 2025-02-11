@@ -85,7 +85,7 @@
     <p>
       Vår prislista finns på
       <Link
-        href="https://www.ara.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
+        href="https://www.varke.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
         >Varkes webbplats
       </Link>
       .
