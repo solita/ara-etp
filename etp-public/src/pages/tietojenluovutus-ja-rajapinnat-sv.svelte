@@ -36,8 +36,8 @@
     <InfoBlock {title} showIcon={false}>
       <p>
         Organisationerna kan få uppgifter om energicertifikat på tre olika sätt
-        från det energicertifikatregister som Finansierings- och
-        utvecklingscentralen för boendet (Ara) upprätthåller.
+        från det energicertifikatregister som Centralen för statligt stött bostadsbyggande
+        (Varke) upprätthåller.
       </p>
       <ol class="ml-6">
         <li>
@@ -56,8 +56,8 @@
           Vi behandlar begäran om information som genomförs utan gränssnitt från
           fall till fall och debiterar för dem enligt vår timprislista.
           <br />
-          Mer information: <Link href="mailto:energiatodistus@ara.fi"
-            >energiatodistus@ara.fi</Link>
+          Mer information: <Link href="mailto:energiatodistus.varke@gov.fi"
+            >energiatodistus.varke@gov.fi</Link>
         </li>
       </ol>
     </InfoBlock>
@@ -69,7 +69,7 @@
     <H2>Anslutning till gränssnitt och dataskydd</H2>
     <p>
       Det är avgiftsbelagt att ansluta sig till tjänsterna och användningen av
-      dem förutsätter ett datatillstånd beviljat av Ara. Dessutom ingår Ara och
+      dem förutsätter ett datatillstånd beviljat av Varke. Dessutom ingår Varke och
       användaren ett separat avtal om användningen av tjänsten.
     </p>
     <p>
@@ -81,11 +81,11 @@
       har raderats.
     </p>
     <p>
-      Ara är noggrann inom all sin verksamhet och säkerställer att dataskydd och
+      Varke är noggrann inom all sin verksamhet och säkerställer att dataskydd och
       informationssäkerhet uppfylls. Behandling av personuppgifter följer i
-      huvudregel Aras lagstadgade skyldigheter. <Link
+      huvudregel Varkes lagstadgade skyldigheter. <Link
         href="https://www.ara.fi/sv/om-oss/dataskydd-och-behandling-av-uppgifter">
-        Läs mer om behandlingen av personuppgifter på (ara.fi)</Link
+        Läs mer om behandlingen av personuppgifter på (varke.fi)</Link
       >. Vi för ett register över de materialkunder som anslutits till
       gränssnittet. Dataskyddsbeskrivningarna finns på sidan
       <Link href="/tietoa-sivustosta">Information om webbplatsen</Link>.
