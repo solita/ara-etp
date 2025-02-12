@@ -37,7 +37,7 @@
    (let [kayttaja-laatija-adds (generate-adds n)]
      (zipmap (insert! kayttaja-laatija-adds) kayttaja-laatija-adds))))
 
-(defn insert-virtu-laatija!
+(defn insert-suomifi-laatija!
   "Inserts a new laatija that can be used with headers below and returns its id.
   Takes optional parameter of user-data, otherwise generated data will be used.
 
@@ -46,7 +46,7 @@
   x-amzn-oidc-identity laatija@solita.fi
   x-amzn-oidc-data eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsImN1c3RvbTpWSVJUVV9sb2NhbElEIjoidmxhYXRpamEiLCJjdXN0b206VklSVFVfbG9jYWxPcmciOiJ0ZXN0aXZpcmFzdG8uZmkiLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUiLCJleHAiOjE4OTM0NTYwMDAsImlzcyI6InRlc3QtaXNzIn0.XQlLcxsQ1HZzkT6F0bziE_q9tzU0oOUq8qKu7ZImHRg_lknQC4KajonCD4kw9j3adl17pmNytTS4aPzPbos21jyUZr7v1dVw2Ah7XtS73x__WAXc485sr5pee6FJiAgYA6Mhm0dw9kn35lG57YCWVmKmb81MHLX7MwXCYISmfBWm2MsWqi9aB2Mwoe9HIgnHmXU7spHma0f5At5VKCtJ-_8YOxo2n8AKHjzGlEjdlOO-X9Zf-s2VhtD6NCCIU686jm9U4Qse0iO4r1yGyr92n_MABaICbwwwpYKh7dPUqt8rbCY8BWVBAxEzEIScBZSHPMl_L8RMFyaSAYHD2nD3Hg"
   ([]
-   (insert-virtu-laatija! (first (generate-adds 1))))
+   (insert-suomifi-laatija! (first (generate-adds 1))))
   ([user-data]
    (-> user-data
        (merge {:henkilotunnus "010469-999W"
@@ -65,7 +65,7 @@
 
 
 ;; Note: We don't actually have Virtu laatijas. Preferrably check other methods for generating laatijas.
-(defn with-virtu-laatija
+(defn with-suomifi-laatija
   "Add virtu laatija user to ring-mock request"
   [request]
   (-> request
