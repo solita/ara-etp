@@ -69,9 +69,7 @@
   "This should produce the same level of a signature as the card reader."
   [{:keys [signing-cert cert-chain] :as external-cms-info}]
   (let [^List cert-chain (ArrayList. ^Collection (->> cert-chain
-                                                      (mapv #(-> %
-                                                                 (DSSUtils/convertToDER)
-                                                                 (DSSUtils/loadCertificate)))))]
+                                                      (mapv pem->CertificateToken)))]
     (doto (PAdESSignatureParameters.)
       (#(doto (.bLevel %)
           (.setSigningDate (-> (^Instant time/now) Date/from))))
