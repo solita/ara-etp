@@ -26,7 +26,7 @@ $$
 </p>
 
 
-<p>Finansierings- och utvecklingscentralen för boendet (ARA) har med stöd av 18 § i lagen om energicertifikat (50/2013)
+<p>Centralen för statligt stött bostadsbyggande (Varke) har med stöd av 18 § i lagen om energicertifikat (50/2013)
     kontrollerat det energicertifikat som ni har upprättat. Riktighetskontrollen rörde energicertifikatens
     utgångsuppgifter, beräkningen av energieffektivitetstal och riktigheten hos besparingsrekommendationer. På basis av
     kontrollen fäste man uppmärksamhet vid följande saker:</p>
@@ -42,29 +42,29 @@ $$
 {{#valvontamuistio}}
     {{#vakavuus}}
         {{#ei-huomioitavaa}}
-            <p><b>ARA konstaterar att det inte observerats några anmärkningar.</b></p>
+            <p><b>Varke konstaterar att det inte observerats några anmärkningar.</b></p>
         {{/ei-huomioitavaa}}
         {{#ei-toimenpiteitä}}
-            <p><b>ARA konstaterar att det inte observerats några andra anmärkningar än de som nämns. Observationerna kräver inga
+            <p><b>Varke konstaterar att det inte observerats några andra anmärkningar än de som nämns. Observationerna kräver inga
                     åtgärder av den som upprättat certifikatet.</b></p>
         {{/ei-toimenpiteitä}}
         {{#virheellinen}}
-            <p><b>ARA konstaterar att certifikatet på basis av följande uppräknade grunder kan ha betydande felaktigheter, och
-                    certifikatets innehåll har inte blivit genomgått i övrigt.</b> ARA ber er att presentera era egna grunder för de
-                observationer som gjorts i kontrollen och skicka dem till ARA:s energicertifikatsregister senast {{määräpäivä}}.</p>
+            <p><b>Varke konstaterar att certifikatet på basis av följande uppräknade grunder kan ha betydande felaktigheter, och
+                    certifikatets innehåll har inte blivit genomgått i övrigt.</b> Varke ber er att presentera era egna grunder för de
+                observationer som gjorts i kontrollen och skicka dem till Varkes energicertifikatsregister senast {{määräpäivä}}.</p>
         {{/virheellinen}}
     {{/vakavuus}}
 {{/valvontamuistio}}
 
 
-<p>Om upprättaren av energicertifikatet inte uppfyller de reglerade skyldigheterna uppmanar ARA upprättaren att
+<p>Om upprättaren av energicertifikatet inte uppfyller de reglerade skyldigheterna uppmanar Varke upprättaren att
     korrigera saken och ställer upp en tidsfrist för korrigeringen. Om saken inte korrigeras inom tidsfristen tilldelar
-    ARA upprättaren en varning och en ny tidsfrist. Om saken alltjämt inte korrigeras utfärdar ARA ett förbud att
+    Varke upprättaren en varning och en ny tidsfrist. Om saken alltjämt inte korrigeras utfärdar Varke ett förbud att
     använda certifikatet och förpliktar upprättaren av energicertifikatet att ersätta det felaktiga certifikatet med ett
     nytt. Energicertifikatet kan vid behov också låta upprättas av en annan upprättare av energicertifikat. Den som
     upprättat det felaktiga certifikatet svarar för kostnaderna för det nya certifikatet. </p>
 
-<p>ARA kan också ge upprättaren ett förbud om upprättande, om upprättaren har agerat i strid med bestämmelserna på ett
+<p>Varke kan också ge upprättaren ett förbud om upprättande, om upprättaren har agerat i strid med bestämmelserna på ett
     väsentligt eller betydande sätt.</p>
 
 <p>

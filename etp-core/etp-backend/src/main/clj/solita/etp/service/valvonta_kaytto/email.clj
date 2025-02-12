@@ -92,15 +92,15 @@
     (html
       (heading "Vastaa tietopyyntöön")
       (paragraph
-        "ARA on lähettänyt teille kehotuksen."
-        "ARA antaa varoituksen ja vaatii vastaamaan kehotukseen {toimenpide.deadline-date} mennessä.")
+        "Varke on lähettänyt teille kehotuksen."
+        "Varke antaa varoituksen ja vaatii vastaamaan kehotukseen {toimenpide.deadline-date} mennessä.")
       rfi-order-description-fi
       signature-reply-fi
 
       (heading "Svara på uppmaningen")
       (paragraph
-        "ARA har skickat dig en uppmaning."
-        "ARA ger dig en varning och kräver att du svarar på uppmaningen senast den {toimenpite.deadline-date}.")
+        "Varke har skickat dig en uppmaning."
+        "Varke ger dig en varning och kräver att du svarar på uppmaningen senast den {toimenpite.deadline-date}.")
       rfi-order-description-sv
       signature-reply-sv)}})
 
