@@ -61,8 +61,8 @@
   <div class="px-4 lg:px-8 xl:px-16 pt-8 pb-4 mx-auto">
     <H2>KÄYTTÖEHDOT</H2>
     <p>
-      Energiatodistusrekisterin rajapintapalvelun käyttö edellyttää Aran
-      myöntämää tietolupaa. Sen lisäksi Ara ja palvelun käyttäjä solmivat
+      Energiatodistusrekisterin rajapintapalvelun käyttö edellyttää Varken
+      myöntämää tietolupaa. Sen lisäksi Varke ja palvelun käyttäjä solmivat
       erillisen sopimuksen. Energiatodistustiedot sisältävät henkilötietoa,
       joten palveluun voivat liittyä vain ne käyttäjät, joilla on oikeus
       käsitellä henkilötietoa.
@@ -79,8 +79,8 @@
     <p>
       Hinnastomme löydät
       <Link
-        href="https://www.ara.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
-        >Aran sivuilta</Link
+        href="https://www.varke.fi/fi/tietoa-meista/yhteystiedot/maksullisten-palvelujen-hinnat"
+        >Varken sivuilta</Link
       >.
     </p>
 
@@ -111,7 +111,7 @@
       <li>
         Täytä liityntäkatalogista löytyvä <Link
           href="https://liityntakatalogi.suomi.fi/dataset/energiatodistusrekisteri-ara-svc"
-          >hakemus</Link> ja odota Aran hyväksyntää.
+          >hakemus</Link> ja odota Varken hyväksyntää.
       </li>
       <li>
         Energiatodistusrekisterin rajapintapalvelu on käytettävissäsi. <Link

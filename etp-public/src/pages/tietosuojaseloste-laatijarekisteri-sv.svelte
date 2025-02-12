@@ -67,7 +67,7 @@
       </p>
 
       <p>
-        Aras lagstadgade uppgift är att övervaka energicertifikat och deras
+        Varkes lagstadgade uppgift är att övervaka energicertifikat och deras
         upprättare. I registret behandlas personuppgifter som behövs för att
         underhålla registret över upprättare av energicertifikat. En del av
         uppgifterna ska vara tillgängliga genom den offentliga
@@ -152,7 +152,7 @@
       </p>
 
       <p>
-        På Aras webbplats kan man offentligt söka alla registrerades namn,
+        På Varkes webbplats kan man offentligt söka alla registrerades namn,
         verksamhetsområden och giltighet för upprättarbehörighet. Registrerade
         kan även själv göra adress, telefonnummer, e-postadress och webbplats
         offentligt tillgängliga.
@@ -165,7 +165,7 @@
       </p>
 
       <p>
-        Ara har lagt ut energicertifikatregistrets tekniska underhåll och
+        Varke har lagt ut energicertifikatregistrets tekniska underhåll och
         utveckling åt en extern IT-tjänsteleverantör genom ett avtal enligt
         dataskyddsförordningen angående behandlingen av personuppgifter.
       </p>
@@ -179,7 +179,7 @@
 
       <p>
         Lagringsperioderna för personuppgifter i register för upprättare av
-        energicertifikat grundar sig i lagstiftning och Aras
+        energicertifikat grundar sig i lagstiftning och Varkes
         informationsstyrningsplan.
       </p>
 
@@ -223,9 +223,8 @@
         </li>
         <li>
           när giltighetstiden för behörigheten att upprätta energicertifikat
-          löper ut och den som konstaterar behörigheten inte har meddelat
-          Finansierings- och utvecklingscentralen för boendet att behörigheten
-          förnyas,
+          löper ut och den som konstaterar behörigheten inte har meddelat Varke
+          att behörigheten förnyas,
         </li>
         <li>
           om upprättaren av energicertifikat meddelas ett förbud att upprätta
@@ -236,8 +235,7 @@
           bedriva verksamhet,
         </li>
         <li>
-          när Finansierings- och utvecklingscentralen för boendet har erhållit
-          information om att upprättaren har avlidit.
+          när Varke har erhållit information om att upprättaren har avlidit.
         </li>
       </ol>
 
@@ -275,18 +273,18 @@
       <H3>Personuppgiftsansvarig</H3>
 
       <ul class="contact-info">
-        <li>Finansierings- och utvecklingscentralen för boendet (Ara)</li>
-        <li>PB 30, 15141 Lahtis</li>
-        <li>Telefon: 029 525 0800 (växel)</li>
-        <li>E-post: kirjaamo.ara(at)ara.fi</li>
+        <li>Centralen för statligt stött bostadsbyggande (Varke)</li>
+        <li>PB 35, 00023 Statsrådet</li>
+        <li>Telefon: 0295 16001 (växel)</li>
+        <li>E-post: varke.ym(at)gov.fi</li>
       </ul>
 
       <H3>Kontaktperson i ärenden som gäller registret</H3>
 
       <ul class="contact-info">
-        <li>Kirsi Unhonen, energiexpert</li>
-        <li>Finansierings- och utvecklingscentralen för boendet (Ara)</li>
-        <li>förnamn.efternamn(at)ara.fi</li>
+        <li>Kimmo Huovinen, biträdande direktör</li>
+        <li>Centralen för statligt stött bostadsbyggande (Varke)</li>
+        <li>förnamn.efternamn(at)gov.fi</li>
       </ul>
     </div>
   </div>

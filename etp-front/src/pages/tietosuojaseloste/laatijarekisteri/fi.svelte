@@ -43,7 +43,7 @@
   </p>
 
   <p>
-    Aran lakisääteisenä tehtävänä on valvoa energiatodistuksia ja niiden
+    Varken lakisääteisenä tehtävänä on valvoa energiatodistuksia ja niiden
     laatijoita. Rekisterissä käsitellään henkilötietoja, jotka tarvitaan
     energiatodistusten laatijarekisterin ylläpitämiseksi. Osaa rekisterin
     tiedoista pidetään esillä julkisessa tietopalvelussa. Henkilötietoja
@@ -119,7 +119,7 @@
   </p>
 
   <p>
-    Aran verkkosivujen kautta on julkisesti haettavissa kaikkien
+    Varken verkkosivujen kautta on julkisesti haettavissa kaikkien
     rekisteröityneiden nimi, toiminta-alue ja laatijapätevyyden voimassaolo.
     Rekisteröidyt voivat itse määritellä myös osoitteen, puhelinnumeron,
     sähköpostiosoitteen ja verkkosivun julkisesti saataville.
@@ -132,7 +132,7 @@
   </p>
 
   <p>
-    Ara on ulkoistanut laatijarekisterin teknisen ylläpidon ja kehittämisen
+    Varke on ulkoistanut laatijarekisterin teknisen ylläpidon ja kehittämisen
     IT-palveluntarjoajalle, jonka kanssa on laadittu tietosuoja-asetuksen
     mukainen sopimus henkilötietojen käsittelystä.
   </p>
@@ -146,7 +146,7 @@
 
   <p>
     Energiatodistusten laatijarekisterin sisältämien henkilötietojen
-    säilytysajat pohjautuvat Aran tiedonohjaussuunnitelmaan.
+    säilytysajat pohjautuvat Varken tiedonohjaussuunnitelmaan.
   </p>
 
   <H2 text="Rekisteröidyn oikeudet" />
@@ -185,14 +185,14 @@
     </li>
     <li>
       laatijapätevyyden voimassaoloaika päättyy eikä pätevyyden toteaja ole
-      ilmoittanut pätevyyden uusimisesta Aralle;
+      ilmoittanut pätevyyden uusimisesta Varkelle;
     </li>
     <li>laatijalle on annettu todistusten laatimiskielto;</li>
     <li>
       laatijan osalta toiminnan harjoittamisen yleiset edellytykset eivät enää
       täyty;
     </li>
-    <li>Ara on saanut tiedon laatijan kuolemasta.</li>
+    <li>Varke on saanut tiedon laatijan kuolemasta.</li>
   </ol>
 
   <p>
@@ -226,17 +226,17 @@
   <H2 text="Rekisterinpitäjä" />
 
   <ul class="contact-info">
-    <li>Asumisen rahoitus- ja kehittämiskeskus (Ara)</li>
-    <li>PL 30, 15141 Lahti</li>
-    <li>Puhelin: 029 525 0800 (vaihde)</li>
-    <li>Sähköposti: kirjaamo.ara(at)ara.fi</li>
+    <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
+    <li>PL 35, 0023 Valtioneuvosto</li>
+    <li>Puhelin: 0295 16001 (vaihde)</li>
+    <li>Sähköposti: varke.ym(at)gov.fi</li>
   </ul>
 
   <H2 text="Yhteyshenkilö" />
 
   <ul class="contact-info">
-    <li>Kirsi Unhonen, energia-asiantuntija</li>
-    <li>Asumisen rahoitus- ja kehittämiskeskus</li>
-    <li>etunimi.sukunimi(at)ara.fi</li>
+    <li>Kimmo Huovinen, apulaisjohtaja</li>
+    <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
+    <li>etunimi.sukunimi(at)gov.fi</li>
   </ul>
 </div>

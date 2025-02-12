@@ -63,13 +63,13 @@
       </p>
 
       <p>
-        Aras lagstadgade uppgift är övervaka energicertifikat och deras
+        Varkes lagstadgade uppgift är övervaka energicertifikat och deras
         upprättare. I registret behandlas personuppgifter som behövs för att
         underhålla registret för övervakningsuppgifter om energicertifikat.
       </p>
 
       <p>
-        Ara övervakar användningen och riktigheten av energicertifikaten samt
+        Varke övervakar användningen och riktigheten av energicertifikaten samt
         deras upprättarens verksamhet.
       </p>
 
@@ -139,7 +139,7 @@
       </p>
 
       <p>
-        Ara har lagt ut registrets tekniska underhåll och utveckling åt en
+        Varke har lagt ut registrets tekniska underhåll och utveckling åt en
         extern IT-tjänsteleverantör genom ett avtal enligt
         dataskyddsförordningen angående behandlingen av personuppgifter.
       </p>
@@ -162,7 +162,7 @@
 
       <p>
         Lagringsperioderna för personuppgifter i registret för
-        övervakningsuppgifter om energicertifikat grundar sig i Aras
+        övervakningsuppgifter om energicertifikat grundar sig i Varkes
         informationsstyrningsplan.
       </p>
 
@@ -222,18 +222,18 @@
       <H3>Personuppgiftsansvarig</H3>
 
       <ul class="contact-info">
-        <li>Finansierings- och utvecklingscentralen för boendet (Ara)</li>
-        <li>PB 30, 15141 Lahtis</li>
-        <li>Tfn (växel): 029 525 0800</li>
-        <li>E-post: E-post adress: kirjaamo.ara(at)ara.fi</li>
+        <li>Centralen för statligt stött bostadsbyggande (Varke)</li>
+        <li>PB 35, 00023 Statsrådet</li>
+        <li>Tfn (växel): 0295 16001</li>
+        <li>E-post: E-post adress: varke.ym(at)gov.fi</li>
       </ul>
 
       <H3>Kontaktperson i ärenden som gäller registret</H3>
 
       <ul class="contact-info">
-        <li>Kirsi Unhonen, energiexpert</li>
-        <li>Finansierings- och utvecklingscentralen för boendet (Ara)</li>
-        <li>fornamn.efternamn(at)ara.fi</li>
+        <li>Kimmo Huovinen, biträdande direktör</li>
+        <li>Centralen för statligt stött bostadsbyggande (Varke)</li>
+        <li>fornamn.efternamn(at)gov.fi</li>
       </ul>
     </div>
   </div>
