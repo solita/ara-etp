@@ -206,7 +206,6 @@
       (exception/throw-ex-info! {:message "Signing with system failed." :type :sign-with-system-error :result result}))
     result))
 
-
 (defn- sign-with-system-start
   [{:keys [db whoami id laatija-allekirjoitus-id]}]
   (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Starting"))
@@ -249,9 +248,9 @@
     (audit-log-message laatija-allekirjoitus-id id "End signing failed!")))
 
 (defn- sign-single-pdf-with-system [params language]
-  (->> (sign-with-system-digest language params)
+  (->> (sign-with-system-digest params language)
        (#(do (println %) %))
-       (sign-with-system-sign language params)))
+       (sign-with-system-sign params language)))
 
 (defn sign-with-system
   "Does the whole process of signing with the system."
@@ -262,20 +261,20 @@
         energiatodistus-service/finnish-language-id
         (do
           (sign-with-system-start params)
-          (sign-single-pdf-with-system "fi" params)
+          (sign-single-pdf-with-system params "fi")
           (sign-with-system-end params))
 
         energiatodistus-service/swedish-language-id
         (do
           (sign-with-system-start params)
-          (sign-single-pdf-with-system "sv" params)
+          (sign-single-pdf-with-system params "sv")
           (sign-with-system-end params))
 
         energiatodistus-service/multilingual-language-id
         (do
           (sign-with-system-start params)
-          (sign-single-pdf-with-system "fi" params)
-          (sign-single-pdf-with-system "sv" params)
+          (sign-single-pdf-with-system params "fi")
+          (sign-single-pdf-with-system params "sv")
           (sign-with-system-end params))
 
         (exception/throw-ex-info! {:message (format "Invalid language-id %s in energiatodistus %s" language-id id)}))
