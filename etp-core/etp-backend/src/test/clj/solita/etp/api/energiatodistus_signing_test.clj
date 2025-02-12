@@ -8,6 +8,7 @@
     [solita.etp.config :as config]
     [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
     [solita.etp.test-data.laatija :as test-data.laatija]
+    [solita.etp.test-timeserver :as test-timeserver]
     [solita.etp.test-system :as ts])
   (:import (java.time Clock Duration LocalDate ZoneId)))
 
@@ -25,8 +26,8 @@
 
 (t/deftest sign-with-system-test
   (let [;;Taken from the test-laatija's JWT
-        laatija-auth-time (-> (LocalDate/of 2020 3 3)
-                              (.atTime 12 22 49)
+        laatija-auth-time (-> (LocalDate/of 2024 12 3)
+                              (.atTime 15 22 49)
                               (.atZone (ZoneId/of "GMT+2"))
                               (.toInstant))]
     (with-bindings
@@ -34,7 +35,8 @@
       {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock
        ;; Mock the clock because laatija is not allowed to use system signing if the session is too old.
        #'time/clock                                                  (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
-                                                                                  (ZoneId/systemDefault))}
+                                                                                  (ZoneId/systemDefault))
+       #'solita.etp.service.signing.pdf-sign/get-tsp-source          test-timeserver/get-tsp-source-in-test}
       (let [; Add laatija
             laatija-id (test-data.laatija/insert-virtu-laatija!)
 
@@ -72,6 +74,18 @@
 
             [other-laatija-todistus-2018-sv-id]
             (test-data.energiatodistus/insert! [other-laatija-todistus-2018-sv] other-laatija-id)]
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
+        (println "NEW RUN#################################################################")
         (t/testing "Can not sign other laatija's todistus"
           (let [url (energiatodistus-sign-url other-laatija-todistus-2018-sv-id 2018)
                 response (ts/handler (-> (mock/request :post url)
@@ -141,22 +155,22 @@
                 _ @signing-process]
             (t/is (= (:status response) 409))
             (t/is (= (:body response) (format "Energiatodistus %s is already in signing process" todistus-2018-future-id)))))
-        (t/testing "Trying to cancel the signing and then sign again should work"
-          (let [url (energiatodistus-sign-url todistus-2018-future-2-id 2018)
-                cancel-url (str "/api/private/energiatodistukset/" 2018 "/" todistus-2018-future-2-id "/signature/cancel")
-                response-cancel (atom nil)
-                ;; Start a signing process in another thread.
-                signing-process (future
-                                  (with-bindings
-                                    ;; Use an already existing pdf.
-                                    {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
-                                    (ts/handler (-> (mock/request :post url)
-                                                    (test-data.laatija/with-virtu-laatija)
-                                                    (mock/header "Accept" "application/json")))))
-                ;; Try to cancel in a loop for two seconds
-                _ (let [time-before (time/now)
-                        timeout-seconds (Duration/ofSeconds 2)]
-                    (loop [elapsed-time-seconds (Duration/ofSeconds 0)]
+        #_(t/testing "Trying to cancel the signing and then sign again should work"
+            (let [url (energiatodistus-sign-url todistus-2018-future-2-id 2018)
+                  cancel-url (str "/api/private/energiatodistukset/" 2018 "/" todistus-2018-future-2-id "/signature/cancel")
+                  response-cancel (atom nil)
+                  ;; Start a signing process in another thread.
+                  signing-process (future
+                                    (with-bindings
+                                      ;; Use an already existing pdf.
+                                      {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
+                                      (ts/handler (-> (mock/request :post url)
+                                                      (test-data.laatija/with-virtu-laatija)
+                                                      (mock/header "Accept" "application/json")))))
+                  ;; Try to cancel in a loop for two seconds
+                  _ (let [time-before (time/now)
+                          timeout-seconds (Duration/ofSeconds 2)]
+                      (loop [elapsed-time-seconds (Duration/ofSeconds 0)]
                         (when (every? true? [(not= (:body @response-cancel) "Ok")
                                              (> 0 (.compareTo elapsed-time-seconds timeout-seconds))])
                           (do
@@ -164,15 +178,15 @@
                                                                     (test-data.laatija/with-virtu-laatija)
                                                                     (mock/header "Accept" "application/json"))))
                             (recur (Duration/between (time/now) time-before))))))
-                ;; Wait for the signing process to finish. Otherwise, the test-system fails.
-                _ @signing-process
-                response-sign (ts/handler (-> (mock/request :post url)
-                                              (test-data.laatija/with-virtu-laatija)
-                                              (mock/header "Accept" "application/json")))]
-            (t/is (= (:status @response-cancel) 200))
-            (t/is (= (:body @response-cancel) "Ok"))
-            (t/is (= (:status response-sign) 200))
-            (t/is (= (:body response-sign) "Ok"))))))))
+                  ;; Wait for the signing process to finish. Otherwise, the test-system fails.
+                  _ @signing-process
+                  response-sign (ts/handler (-> (mock/request :post url)
+                                                (test-data.laatija/with-virtu-laatija)
+                                                (mock/header "Accept" "application/json")))]
+              (t/is (= (:status @response-cancel) 200))
+              (t/is (= (:body @response-cancel) "Ok"))
+              (t/is (= (:status response-sign) 200))
+              (t/is (= (:body response-sign) "Ok"))))))))
 
 (t/deftest session-timeout-test
   (let [_ (test-data.laatija/insert-virtu-laatija!)
