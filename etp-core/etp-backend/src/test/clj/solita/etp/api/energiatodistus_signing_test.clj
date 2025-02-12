@@ -156,7 +156,7 @@
               _ @signing-process]
           (t/is (= (:status response) 409))
           (t/is (= (:body response) (format "Energiatodistus %s is already in signing process" todistus-2018-future-id)))))
-      #_(t/testing "Trying to cancel the signing and then sign again should work"
+      (t/testing "Trying to cancel the signing and then sign again should work"
           (let [url (energiatodistus-sign-url todistus-2018-future-2-id 2018)
                 cancel-url (str "/api/private/energiatodistukset/" 2018 "/" todistus-2018-future-2-id "/signature/cancel")
                 response-cancel (atom nil)
