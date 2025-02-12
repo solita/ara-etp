@@ -80,9 +80,9 @@
 
 ;; TODO: This belongs to sign service?
 (defn get-signature-from-external-cms-service [^bytes digest
-                                             {:keys [cert-chain
-                                                     signing-cert
-                                                     digest->signature] :as external-cms-info}]
+                                               {:keys [cert-chain
+                                                       signing-cert
+                                                       digest->signature] :as external-cms-info}]
   (let [certificate-verifier (CommonCertificateVerifier.)
         signature-parameters (get-parameters-for-external-cms-service external-cms-info)
         ^DSSMessageDigest dss-digest (DSSMessageDigest. DigestAlgorithm/SHA256 digest)
