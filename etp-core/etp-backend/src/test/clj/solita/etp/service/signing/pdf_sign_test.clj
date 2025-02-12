@@ -15,6 +15,7 @@
   (:import (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io File InputStream)
            (java.nio.charset StandardCharsets)
+           (java.time Duration Instant)
            (org.apache.pdfbox.pdmodel PDDocument)
            (org.bouncycastle.cert.jcajce JcaX509v3CertificateBuilder)
            (org.bouncycastle.jce.provider BouncyCastleProvider)
@@ -37,7 +38,7 @@
 
 
 (def tsp-key-and-cert
-  (let [_ (Security/addProvider (BouncyCastleProvider.))    ;; TODO: Should this be done elsewhere?
+  (let [_ (Security/addProvider (BouncyCastleProvider.))
         ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
                                              (.initialize 2048))
         ^KeyPair keyPair (-> keyPairGenerator .generateKeyPair)
@@ -45,8 +46,8 @@
         subjectDN "CN=Self-Signed, O=Example, C=FI"
         issuerDN subjectDN
         serialNumber (BigInteger. 64 (SecureRandom.))
-        ^Date notBefore (Date.)
-        ^Date notAfter (Date. ^long (+ (System/currentTimeMillis) (* 365 24 60 60 1000)))
+        ^Date notBefore (Date/from (-> (time/now) (.minus (Duration/ofDays 1))))
+        ^Date notAfter (Date/from (-> (time/now) (.plus (Duration/ofDays 1))))
 
         ^X509v3CertificateBuilder certBuilder (doto (JcaX509v3CertificateBuilder.
                                                       (X500Name. issuerDN)
