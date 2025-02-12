@@ -45,14 +45,14 @@
   </p>
 
   <p>
-    Varkes lagstadgade uppgift är övervaka energicertifikat och deras upprättare.
-    I registret behandlas personuppgifter som behövs för att underhålla
-    registret för övervakningsuppgifter om energicertifikat.
+    Varkes lagstadgade uppgift är övervaka energicertifikat och deras
+    upprättare. I registret behandlas personuppgifter som behövs för att
+    underhålla registret för övervakningsuppgifter om energicertifikat.
   </p>
 
   <p>
-    Varke övervakar användningen och riktigheten av energicertifikaten samt deras
-    upprättarens verksamhet.
+    Varke övervakar användningen och riktigheten av energicertifikaten samt
+    deras upprättarens verksamhet.
   </p>
 
   <H2 text="Vilka personuppgifter behandlas?" />

@@ -133,8 +133,8 @@
   </p>
 
   <p>
-    Varke har lagt ut energicertifikatregistrets tekniska underhåll och utveckling
-    åt en extern IT-tjänsteleverantör genom ett avtal enligt
+    Varke har lagt ut energicertifikatregistrets tekniska underhåll och
+    utveckling åt en extern IT-tjänsteleverantör genom ett avtal enligt
     dataskyddsförordningen angående behandlingen av personuppgifter.
   </p>
 
@@ -201,10 +201,7 @@
       om upprättaren inte längre har allmänna förutsättningar för att bedriva
       verksamhet,
     </li>
-    <li>
-      när Varke har erhållit
-      information om att upprättaren har avlidit.
-    </li>
+    <li>när Varke har erhållit information om att upprättaren har avlidit.</li>
   </ol>
 
   <p>
