@@ -127,9 +127,9 @@
     <p>Soveltuu esimerkiksi tutkimuskäyttöön.</p>
     <H2>KÄYTTÖEHDOT</H2>
     <p>
-      Aineistopalvelun käyttäminen edellyttää, että Varke on myöntänyt käyttäjälle
-      tietoluvan. Lisäksi Varke ja käyttäjä solmivat erillisen sopimuksen
-      Aineistopalvelun käytöstä.
+      Aineistopalvelun käyttäminen edellyttää, että Varke on myöntänyt
+      käyttäjälle tietoluvan. Lisäksi Varke ja käyttäjä solmivat erillisen
+      sopimuksen Aineistopalvelun käytöstä.
     </p>
     <p>
       Aineistopalveluun liittymisestä perimme hinnastomme mukaisen
@@ -193,7 +193,9 @@
     <H2>TOIMINTA HÄIRIÖTILANTEISSA</H2>
     <p>
       Aineistopalveluun liittyvissä häiriötilanteissa ota yhteyttä sähköpostitse
-      <Link href="mailto:energiatodistus.varke@gov.fi">energiatodistus.varke@gov.fi</Link>.
+      <Link href="mailto:energiatodistus.varke@gov.fi"
+        >energiatodistus.varke@gov.fi</Link
+      >.
     </p>
   </div>
 </Container>

@@ -35,8 +35,8 @@
   <div bind:this={component}>
     <InfoBlock {title} showIcon={false}>
       <p>
-        Organisaatiot voivat saada Valtion tukeman asuntorakentamisen keskuksen (Varke)
-        ylläpitämästä energiatodistusrekisteristä energiatodistustietoa
+        Organisaatiot voivat saada Valtion tukeman asuntorakentamisen keskuksen
+        (Varke) ylläpitämästä energiatodistusrekisteristä energiatodistustietoa
         kolmella eri tavalla.
       </p>
       <ol class="ml-6">
@@ -81,7 +81,8 @@
     <p>
       Varke noudattaa kaikessa toiminnassaan huolellisuutta ja varmistaa, että
       tietosuoja ja tietoturvallisuus toteutuvat. Henkilötietojen käsittely
-      perustuu pääsääntöisesti Varken lakisääteisten velvoitteiden noudattamiseen.
+      perustuu pääsääntöisesti Varken lakisääteisten velvoitteiden
+      noudattamiseen.
       <Link
         href="https://www.varke.fi/fi/tietoa-meista/tietosuoja-ja-tietojen-kasittely">
         Lue lisää henkilötietojen käsittelystä (varke.fi)</Link>

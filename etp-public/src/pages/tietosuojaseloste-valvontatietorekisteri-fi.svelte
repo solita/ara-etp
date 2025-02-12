@@ -217,7 +217,8 @@
       <ul class="contact-info">
         <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
         <li>PL 35, 00023 Valtioneuvosto</li>
-        <li>Puhelin: 0295 16001 (vaihde)<li>
+        <li>Puhelin: 0295 16001 (vaihde)</li>
+        <li></li>
         <li>Sähköposti: varke.ym(at)gov.fi</li>
       </ul>
 

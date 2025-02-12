@@ -167,7 +167,8 @@
         Skicka ansökan per e-post till Varkes registratorskontor (<Link
           href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link
         >). Om ansökan innehåller sekretessbelagd information ska du skicka
-        ansökan som <Link href="https://turvaviesti.varke.fi/">säker e-post</Link
+        ansökan som <Link href="https://turvaviesti.varke.fi/"
+          >säker e-post</Link
         >.
       </li>
       <li>
@@ -196,7 +197,9 @@
     <p>
       Vid störningar i materialtjänsten ska du kontakta oss per e-post på
       adressen
-      <Link href="mailto:energiatodistus.varke@gov.fi">energiatodistus.varke@gov.fi</Link>.
+      <Link href="mailto:energiatodistus.varke@gov.fi"
+        >energiatodistus.varke@gov.fi</Link
+      >.
     </p>
   </div>
 </Container>

@@ -36,8 +36,8 @@
     <InfoBlock {title} showIcon={false}>
       <p>
         Organisationerna kan få uppgifter om energicertifikat på tre olika sätt
-        från det energicertifikatregister som Centralen för statligt stött bostadsbyggande
-        (Varke) upprätthåller.
+        från det energicertifikatregister som Centralen för statligt stött
+        bostadsbyggande (Varke) upprätthåller.
       </p>
       <ol class="ml-6">
         <li>
@@ -69,8 +69,8 @@
     <H2>Anslutning till gränssnitt och dataskydd</H2>
     <p>
       Det är avgiftsbelagt att ansluta sig till tjänsterna och användningen av
-      dem förutsätter ett datatillstånd beviljat av Varke. Dessutom ingår Varke och
-      användaren ett separat avtal om användningen av tjänsten.
+      dem förutsätter ett datatillstånd beviljat av Varke. Dessutom ingår Varke
+      och användaren ett separat avtal om användningen av tjänsten.
     </p>
     <p>
       Adressuppgifter och permanenta byggnadsbeteckningar för energicertifikat
@@ -81,8 +81,8 @@
       har raderats.
     </p>
     <p>
-      Varke är noggrann inom all sin verksamhet och säkerställer att dataskydd och
-      informationssäkerhet uppfylls. Behandling av personuppgifter följer i
+      Varke är noggrann inom all sin verksamhet och säkerställer att dataskydd
+      och informationssäkerhet uppfylls. Behandling av personuppgifter följer i
       huvudregel Varkes lagstadgade skyldigheter. <Link
         href="https://www.varke.fi/sv/om-oss/dataskydd-och-behandling-av-uppgifter">
         Läs mer om behandlingen av personuppgifter på (varke.fi)</Link

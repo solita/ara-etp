@@ -223,9 +223,8 @@
         </li>
         <li>
           när giltighetstiden för behörigheten att upprätta energicertifikat
-          löper ut och den som konstaterar behörigheten inte har meddelat
-          Varke att behörigheten
-          förnyas,
+          löper ut och den som konstaterar behörigheten inte har meddelat Varke
+          att behörigheten förnyas,
         </li>
         <li>
           om upprättaren av energicertifikat meddelas ett förbud att upprätta
@@ -236,8 +235,7 @@
           bedriva verksamhet,
         </li>
         <li>
-          när Varke har erhållit
-          information om att upprättaren har avlidit.
+          när Varke har erhållit information om att upprättaren har avlidit.
         </li>
       </ol>
 

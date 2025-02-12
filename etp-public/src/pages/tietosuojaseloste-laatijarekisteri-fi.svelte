@@ -166,9 +166,9 @@
       </p>
 
       <p>
-        Varke on ulkoistanut laatijarekisterin teknisen ylläpidon ja kehittämisen
-        IT-palveluntarjoajalle, jonka kanssa on laadittu tietosuoja-asetuksen
-        mukainen sopimus henkilötietojen käsittelystä.
+        Varke on ulkoistanut laatijarekisterin teknisen ylläpidon ja
+        kehittämisen IT-palveluntarjoajalle, jonka kanssa on laadittu
+        tietosuoja-asetuksen mukainen sopimus henkilötietojen käsittelystä.
       </p>
 
       <p>

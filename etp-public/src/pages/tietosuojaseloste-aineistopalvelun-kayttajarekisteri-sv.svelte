@@ -55,9 +55,9 @@
       <H3>Syftet med och grunden för behandlingen av personuppgifter</H3>
 
       <p>
-        Behandlingen av personuppgifter grundar sig på ett avtal mellan Varke och
-        datatillståndshavaren (kunden) om användningen av Materialtjänsten. I
-        registret behandlas personuppgifterna för kundens tekniska
+        Behandlingen av personuppgifter grundar sig på ett avtal mellan Varke
+        och datatillståndshavaren (kunden) om användningen av Materialtjänsten.
+        I registret behandlas personuppgifterna för kundens tekniska
         kontaktperson. Uppgifterna används för att skapa en
         gränssnittsförbindelse till kundens datanät samt för att lösa
         problemsituationer. Dessutom används uppgifterna för att administrera

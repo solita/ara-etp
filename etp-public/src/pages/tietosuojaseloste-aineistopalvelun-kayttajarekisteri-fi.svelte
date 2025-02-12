@@ -55,12 +55,13 @@
       <H3>Henkilötietojen käyttötarkoitus ja käsittelyperuste</H3>
 
       <p>
-        Henkilötietojen käsittely perustuu Varken ja tietoluvan saajan (asiakkaan)
-        väliseen sopimukseen Aineistopalvelun käytöstä. Rekisterissä käsitellään
-        asiakkaan teknisen yhteyshenkilön henkilötietoja rajapintayhteyden
-        muodostamiseksi asiakkaan tietoverkkoon, ja ongelmatilanteiden
-        ratkaisemiseen. Lisäksi tietoja käytetään käyttövaltuuksien
-        hallinnointiin ja seurantaan sekä lokitietojen keräämiseen.
+        Henkilötietojen käsittely perustuu Varken ja tietoluvan saajan
+        (asiakkaan) väliseen sopimukseen Aineistopalvelun käytöstä. Rekisterissä
+        käsitellään asiakkaan teknisen yhteyshenkilön henkilötietoja
+        rajapintayhteyden muodostamiseksi asiakkaan tietoverkkoon, ja
+        ongelmatilanteiden ratkaisemiseen. Lisäksi tietoja käytetään
+        käyttövaltuuksien hallinnointiin ja seurantaan sekä lokitietojen
+        keräämiseen.
       </p>
 
       <H3>Mitä henkilötietoja käsitellään?</H3>
