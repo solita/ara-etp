@@ -27,7 +27,7 @@
     (java.nio.charset StandardCharsets)
     (java.time Instant ZoneId)
     (java.time.format DateTimeFormatter)
-    (java.util Base64 Date)
+    (java.util Base64 Base64$Decoder Date)
     (javax.imageio ImageIO)))
 
 (def timezone (ZoneId/of "Europe/Helsinki"))
@@ -54,7 +54,22 @@
     :deleted :not-in-signing
     :already-signed))
 
-(def test-sig-params-key "test-sig-params-key")
+(def deletable-signature-process-object-tag
+  {:Key "TemporarySignatureProcessFile" :Value "True"})
+
+;; We store the stateful signing paramters into a path that can easily touched by a lifecycle rule so that the rule
+;; does not touch anything else.
+(defn stateful-signature-parameters-file-key [energiatodistus-id language]
+  (when energiatodistus-id (format "energiatodistus-signing/stateful-signature-parameters-%s-%s" energiatodistus-id language)))
+
+(defn create-stateful-signature-parameters [aws-s3-client energiatodistus-id language ^InputStream stateful-parameters-object]
+  (let [stateful-parameters-key (stateful-signature-parameters-file-key energiatodistus-id language)]
+    (file-service/upsert-file-from-input-stream aws-s3-client
+                                                stateful-parameters-key
+                                                stateful-parameters-object)
+    (file-service/put-file-tag aws-s3-client
+                               stateful-parameters-key
+                               deletable-signature-process-object-tag)))
 
 (defn find-energiatodistus-digest-new
   "This is the function that does first real processing of the signature.
@@ -77,16 +92,17 @@
              origin-y (case versio 2013 648 2018 666)
              digest-and-stuff (pdf-sign/get-digest-for-external-cms-service energiatodistus-pdf
                                                                             {:signature-png signature-png
-                                                                             :page 1
-                                                                             :origin-x 75
-                                                                             :origin-y origin-y
-                                                                             :zoom 133})]
+                                                                             :page          1
+                                                                             :origin-x      75
+                                                                             :origin-y      origin-y
+                                                                             :zoom          133})]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
-         (file-service/upsert-file-from-input-stream aws-s3-client
-                                                     test-sig-params-key
-                                                     (:stateful-parameters digest-and-stuff))
+         (create-stateful-signature-parameters aws-s3-client
+                                               id
+                                               language
+                                               (:stateful-parameters digest-and-stuff))
          (io/delete-file pdf-path)
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))
@@ -101,20 +117,21 @@
 
 (defn sign-energiatodistus-pdf-new
   "This is the function that receives the signature and continues the signing process."
-  [db aws-s3-client id language signature]
+  [db aws-s3-client id language ^bytes signature cert-chain]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
       #(do
          (let [key (energiatodistus-service/file-key id language)
                unsigned-pdf-is (file-service/find-file aws-s3-client key)
-               sig-params-is (file-service/find-file aws-s3-client test-sig-params-key)
+               sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                filename (str key ".pdf")
-               signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is (.decode (Base64/getDecoder) signature))
+               ^Base64$Decoder decoder (Base64/getDecoder)
+               signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is (.decode decoder signature) cert-chain)
                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
-               (file-service/upsert-file-from-input-stream aws-s3-client
-                                                           key
-                                                           signed-pdf-lt-level)
+           (file-service/upsert-file-from-input-stream aws-s3-client
+                                                       key
+                                                       signed-pdf-lt-level)
            filename)))))
 
 (defn comparable-name [s]
@@ -159,8 +176,8 @@
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
 (defn sign-energiatodistus-pdf
-    [db aws-s3-client whoami now id language signature-and-chain]
-     (sign-energiatodistus-pdf-new db aws-s3-client id language (:signature signature-and-chain)))
+  [db aws-s3-client whoami now id language signature-and-chain]
+  (sign-energiatodistus-pdf-new db aws-s3-client id language (:signature signature-and-chain) (:chain signature-and-chain)))
 
 (defn cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
@@ -174,12 +191,7 @@
   (let [leaf config/system-signature-certificate-leaf
         intermediate config/system-signature-certificate-intermediate
         root config/system-signature-certificate-root]
-    (mapv cert-pem->one-liner-without-headers [leaf intermediate root])))
-
-(defn- data->signed-digest [data aws-kms-client]
-  (->> data
-       ^InputStream (sign-service/sign aws-kms-client)
-       (.readAllBytes)))
+    [leaf intermediate root]))
 
 (defn- audit-log-message [laatija-allekirjoitus-id energiatodistus-id message]
   (str "Sign with system (laatija-allekirjoitus-id: " laatija-allekirjoitus-id ") (energiatodistus-id: " energiatodistus-id "): " message))
@@ -216,10 +228,13 @@
                          (.getBytes StandardCharsets/UTF_8)
                          (#(.decode (Base64/getDecoder) %)))
         chain cert-chain-three-long-leaf-first
-        system-signature-cms-info {:cert-chain chain
-                                         :signing-cert config/system-signature-certificate-leaf
-                                         :digest->signature #(sign-service/sign aws-kms-client %)}
-        signature (.encode (Base64/getEncoder) (pdf-sign/get-signature-from-external-cms-service data-to-sign system-signature-cms-info))
+        system-signature-cms-info {:cert-chain        chain
+                                   :signing-cert      config/system-signature-certificate-leaf
+                                   :digest->signature #(sign-service/sign aws-kms-client %)}
+        signature (.encode (Base64/getEncoder)
+                           (pdf-sign/get-signature-from-external-cms-service
+                             data-to-sign
+                             system-signature-cms-info))
         signature-and-chain {:chain chain :signature signature}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
