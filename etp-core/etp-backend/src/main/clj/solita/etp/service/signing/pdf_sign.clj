@@ -22,44 +22,6 @@
            (org.bouncycastle.cms CMSSignedData)
            (org.apache.axis.utils ByteArrayOutputStream)))
 
-(defn pem->CertificateToken [cert-pem]
-  ^CertificateToken (-> cert-pem
-                        (DSSUtils/convertToDER)
-                        (DSSUtils/loadCertificate)))
-
-(defn get-parameters-for-external-cms-service
-  "This should produce the same level of a signature as the card reader."
-  [{:keys [signing-cert cert-chain] :as external-cms-info}]
-  (let [^List cert-chain (ArrayList. ^Collection (->> cert-chain
-                                                      (mapv pem->CertificateToken)))]
-    (doto (PAdESSignatureParameters.)
-      (#(doto (.bLevel %)
-          (.setSigningDate (-> (^Instant time/now) Date/from))))
-      (.setSigningCertificate (pem->CertificateToken signing-cert))
-      (.setDigestAlgorithm DigestAlgorithm/SHA256)
-      (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
-      (.setCertificateChain cert-chain))))
-
-;; TODO: This belongs to sign service?
-(defn get-signature-from-external-cms-service [^bytes digest
-                                               {:keys [cert-chain
-                                                       signing-cert
-                                                       digest->signature] :as external-cms-info}]
-  (let [certificate-verifier (CommonCertificateVerifier.)
-        signature-parameters (get-parameters-for-external-cms-service external-cms-info)
-        ^DSSMessageDigest dss-digest (DSSMessageDigest. DigestAlgorithm/SHA256 digest)
-        ^ExternalCMSService system-signature-cms-service (ExternalCMSService. certificate-verifier)
-        data-to-sign (.getDataToSign system-signature-cms-service dss-digest signature-parameters)
-
-        ^SignatureValue signature-value (SignatureValue.
-                                          SignatureAlgorithm/RSA_SHA256
-                                          (.readAllBytes
-                                            (digest->signature
-                                              (-> data-to-sign .getBytes))))
-        cms-signature (-> system-signature-cms-service
-                          (.signMessageDigest dss-digest signature-parameters signature-value))]
-    (.getBytes cms-signature)))
-
 (defn- ^:dynamic get-tsp-source []
   ;; TODO: Need to use DSS's PKI to mock things?
   (let [tsa-url (config/tsa-endpoint-url)]
@@ -81,7 +43,7 @@
   (-> (ObjectInputStream. input-stream)
       .readObject))
 
-(defn get-digest-for-external-cms-service
+(defn unsigned-document->digest-and-params
   [^File unsigned-pdf {:keys [^File signature-png page origin-x origin-y zoom]}]
   (let [service (PAdESWithExternalCMSService.)
         signature-png (FileDocument. signature-png)
@@ -109,7 +71,7 @@
      ;; might as well save the whole SignatureParameters object.
      :stateful-parameters (object->input-stream signature-parameters)}))
 
-(defn sign-with-external-cms-service-signature
+(defn unsigned-document-info-and-signature->t-level-signed-document
   [^InputStream pdf-file stateful-parameters ^bytes cms-signature cert-chain]
   (let [^PAdESSignatureParameters signature-parameters (input-stream->object stateful-parameters)
         unsigned-pdf (InMemoryDocument. pdf-file)
@@ -125,8 +87,8 @@
         signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))]
     (.openStream signed-pdf-t-level)))
 
-(defn t-level->lt-level [^InputStream signed-b-level-pdf]
-  (let [signed-pdf (InMemoryDocument. signed-b-level-pdf)
+(defn t-level->lt-level [^InputStream signed-t-level-pdf]
+  (let [signed-pdf (InMemoryDocument. signed-t-level-pdf)
         tsp-source (get-tsp-source)
         ocsp-source (get-ocsp-source)
         parameters (doto (PAdESSignatureParameters.)
@@ -139,3 +101,44 @@
                   (.setTspSource tsp-source))
         lt-level-document (-> service (.extendDocument signed-pdf parameters))]
     (.openStream lt-level-document)))
+
+;; External cms with system (same what the card reader does)
+
+(defn pem->CertificateToken [cert-pem]
+  ^CertificateToken (-> cert-pem
+                        (DSSUtils/convertToDER)
+                        (DSSUtils/loadCertificate)))
+
+(defn get-parameters-for-external-cms-service
+  "This should produce the same level of a signature as the card reader."
+  [{:keys [signing-cert cert-chain] :as external-cms-info}]
+  (let [^List cert-chain (ArrayList. ^Collection (->> cert-chain
+                                                      (mapv pem->CertificateToken)))]
+    (doto (PAdESSignatureParameters.)
+      (#(doto (.bLevel %)
+          (.setSigningDate (-> (^Instant time/now) Date/from))))
+      (.setSigningCertificate (pem->CertificateToken signing-cert))
+      (.setDigestAlgorithm DigestAlgorithm/SHA256)
+      (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
+      (.setCertificateChain cert-chain))))
+
+;; TODO: This belongs to sign service?
+(defn digest->cms-signature-with-system [^bytes digest
+                                               {:keys [cert-chain
+                                                       signing-cert
+                                                       digest->signature] :as external-cms-info}]
+  (let [certificate-verifier (CommonCertificateVerifier.)
+        signature-parameters (get-parameters-for-external-cms-service external-cms-info)
+        ^DSSMessageDigest dss-digest (DSSMessageDigest. DigestAlgorithm/SHA256 digest)
+        ^ExternalCMSService system-signature-cms-service (ExternalCMSService. certificate-verifier)
+        data-to-sign (.getDataToSign system-signature-cms-service dss-digest signature-parameters)
+
+        ^SignatureValue signature-value (SignatureValue.
+                                          SignatureAlgorithm/RSA_SHA256
+                                          (.readAllBytes
+                                            (digest->signature
+                                              (-> data-to-sign .getBytes))))
+        cms-signature (-> system-signature-cms-service
+                          (.signMessageDigest dss-digest signature-parameters signature-value))]
+    (.getBytes cms-signature)))
+

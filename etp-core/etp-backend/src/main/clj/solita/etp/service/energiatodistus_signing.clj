@@ -5,6 +5,7 @@
     [clojure.string :as str]
     [clojure.tools.logging :as log]
     [solita.common.certificates :as certificates]
+    [solita.common.time :as time]
     [solita.etp.common.audit-log :as audit-log]
     [solita.etp.config :as config]
     [solita.etp.exception :as exception]
@@ -35,7 +36,7 @@
                                timezone))
 
 (defn signature-as-png [path ^String laatija-fullname]
-  (let [now (Instant/now)
+  (let [now (time/now)
         width (max 125 (* (count laatija-fullname) 6))
         img (BufferedImage. width 30 BufferedImage/TYPE_INT_ARGB)
         g (.getGraphics img)]
@@ -90,8 +91,8 @@
              signature-png (File. signature-png-path)
              ;; TODO: Check 2013 version positioning or is it even relevant?
              origin-y (case versio 2013 648 2018 666)
-             digest-and-stuff (pdf-sign/get-digest-for-external-cms-service energiatodistus-pdf
-                                                                            {:signature-png signature-png
+             digest-and-stuff (pdf-sign/unsigned-document->digest-and-params energiatodistus-pdf
+                                                                             {:signature-png signature-png
                                                                              :page          1
                                                                              :origin-x      75
                                                                              :origin-y      origin-y
@@ -127,7 +128,7 @@
                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                filename (str key ".pdf")
                ^Base64$Decoder decoder (Base64/getDecoder)
-               signed-pdf-t-level (pdf-sign/sign-with-external-cms-service-signature unsigned-pdf-is sig-params-is (.decode decoder signature) cert-chain)
+               signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature) cert-chain)
                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
            (file-service/upsert-file-from-input-stream aws-s3-client
                                                        key
@@ -231,7 +232,7 @@
                                    :signing-cert      config/system-signature-certificate-leaf
                                    :digest->signature #(sign-service/sign aws-kms-client %)}
         signature (.encode (Base64/getEncoder)
-                           (pdf-sign/get-signature-from-external-cms-service
+                           (pdf-sign/digest->cms-signature-with-system
                              data-to-sign
                              system-signature-cms-info))
         signature-and-chain {:chain chain :signature signature}]
