@@ -43,10 +43,8 @@
   (-> (ObjectInputStream. input-stream)
       .readObject))
 
-(defn unsigned-document->digest-and-params
-  [^File unsigned-pdf {:keys [^File signature-png page origin-x origin-y zoom]}]
-  (let [service (PAdESWithExternalCMSService.)
-        signature-png (FileDocument. signature-png)
+(defn ^:dynamic get-signature-parameters [{:keys [^File signature-png page origin-x origin-y zoom]}]
+  (let [signature-png (FileDocument. signature-png)
 
         ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
                                                      (.setPage page)
@@ -61,8 +59,13 @@
         signature-parameters (doto (PAdESSignatureParameters.)
                                (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
                                (.setImageParameters sig-img)
-                               (.setDigestAlgorithm DigestAlgorithm/SHA256))
+                               (.setDigestAlgorithm DigestAlgorithm/SHA256))]
+    signature-parameters))
 
+(defn unsigned-document->digest-and-params
+  [^File unsigned-pdf signature-options]
+  (let [service (PAdESWithExternalCMSService.)
+        signature-parameters (get-signature-parameters signature-options)
         ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))
         _ (println (-> message-digest .toString))]
     {:digest              (.getBase64Value message-digest)
