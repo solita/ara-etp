@@ -4,7 +4,8 @@
             [solita.etp.test-system :as ts]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.schema.laatija :as laatija-schema]
-            [solita.etp.service.kayttaja-laatija :as kayttaja-laatija-service]))
+            [solita.etp.service.kayttaja-laatija :as kayttaja-laatija-service])
+  (:import (java.time LocalDate ZoneId)))
 
 (defn generate-adds [n]
   (map #(generators/complete {:henkilotunnus %1
@@ -59,6 +60,12 @@
 
 (def laatija-access-token
   "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoib3BlbmlkIiwiYXV0aF90aW1lIjoxNzMzMjMwOTY5LCJpc3MiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc29saXRhL2V0cC1jb3JlL2ZlYXR1cmUvQUUtNDMtYXV0aC1oZWFkZXJzLWhhbmRsaW5nL2V0cC1iYWNrZW5kL3NyYy9tYWluL3Jlc291cmNlcyIsImV4cCI6MTg5MzQ1NjAwMCwiaWF0IjoxNzMzNDEzNDI0LCJ2ZXJzaW9uIjoyLCJqdGkiOiI1ZmRkN2EyOS03ZWVhLTRmM2QtYTdhNi1jMjI4NDI2ZjYxMmIiLCJjbGllbnRfaWQiOiJ0ZXN0LWNsaWVudF9pZCIsInVzZXJuYW1lIjoidGVzdC11c2VybmFtZSJ9.XlIKLrNyLlJAnVmBVI3SxGSdTb4CUAKvhaCnDQT44XPG4Ilu1cD6X5sCY6DyOrN6muaEAY6OSag_qmEU51o6Dl6qMaP5egHNYLnXF-HAHBUg2muZ7AI5sM2iZMYrRlimOQcdaWm_pHXExLIFmhcXuA5Lzsq4VinesuCBxSqyIjGXgCj-lwgMlwq4Nb9D2mAnQ_fw6R8iOf-bLwvJ4LHNRFNEGRzOF_CVsbRlifx0InaJjUDBYEHWzIiC8Wf7Yn60fG90nxjMybQ2Es_sx3c8Zy3NQSnFj6Kg-eI0onES0jatTbH4dFeXyf5vJ44FgFo2mgPiu5a4CQGxsdfX8y6BYQ")
+
+;; From laatija-access-token
+(def laatija-auth-time (-> (LocalDate/of 2024 12 3)
+                           (.atTime 15 02 49)
+                           (.atZone (ZoneId/of "GMT+2"))
+                           (.toInstant)))
 
 (def laatija-oidc-data
   "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsImN1c3RvbTpGSV9uYXRpb25hbElOIjoiMDEwNDY5LTk5OVciLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUiLCJleHAiOjE4OTM0NTYwMDAsImlzcyI6InRlc3QtaXNzIn0.Uk3DCz8fVTqgE_ge0ywVYpeFXnt5x6orlE3cC1e3lgs_2tzv7WHKCtLSbMWXYrcwOgZ-eOOuF_StNovq-IyMVjKAGxu1qaAR20Q2AYYg3JnOUNj1YPBpyA1nF5FYeNDolhlQKxrCj07hXmSBxBeIqNgOnepRJ0Rx9QEBoGbLvzT9mBf_m7CZncTcg2PCdtXiNeww5fx0R2ip53BcdI5nYcKz_LOae6Y707vfbmgfV_zDTFATDAqquwNuhtsqXbmc6D9smkJOl7CNPXY4riDuqyCbi62JMme90HlcHBRnMDLJXEIkTCaox3vdztxBlYVQYUwsaV3eOdQ7_v3wOal18w")

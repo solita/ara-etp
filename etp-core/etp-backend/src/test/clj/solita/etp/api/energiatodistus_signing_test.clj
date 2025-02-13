@@ -24,11 +24,7 @@
     (io/copy (io/file in) (io/file out))
     out))
 
-;;Taken from the test-laatija's JWT from `insert-suomifi-laatija!`
-(def laatija-auth-time (-> (LocalDate/of 2024 12 3)
-                           (.atTime 15 02 49)
-                           (.atZone (ZoneId/of "GMT+2"))
-                           (.toInstant)))
+(def laatija-auth-time test-data.laatija/laatija-auth-time)
 
 (t/deftest sign-with-system-test
   (with-bindings
