@@ -40,7 +40,7 @@
       class="w-full xl:w-1/3 lg:w-5/12 sm:w-7/12 bg-white text-ashblue sm:mx-16 py-8
       px-2 sm:px-12">
       <div class="items-center mb-8 hidden sm:flex">
-        <img src={Logo} alt={$_('HEADER_ARA_LOGO_ALT')} class="h-14" />
+        <img src={Logo} alt={$_('HEADER_VARKE_LOGO_ALT')} class="h-14" />
         <h2 class="pl-2 font-bold title-text">
           {$_('ENERGIATODISTUSREKISTERI')}
         </h2>
