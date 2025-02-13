@@ -175,10 +175,7 @@
 
 (t/deftest session-timeout-test
   (let [_ (test-data.laatija/insert-suomifi-laatija!)
-        check-session-url (str "/api/private/energiatodistukset/validate-session")
-        ;; The auth_time in the JWT that is used in `insert-virtu-laatija!` is:
-        ;;   Your time zone: Tuesday, March 3, 2020 12:22:49 PM GMT+02:00
-        ]
+        check-session-url (str "/api/private/energiatodistukset/validate-session")]
     (t/testing "Signing is allowed one second after auth_time"
       (with-bindings {#'config/system-signature-session-timeout-minutes config/system-signature-session-timeout-default-value
                       #'time/clock                                      (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
