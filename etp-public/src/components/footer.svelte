@@ -43,8 +43,7 @@
         <h2 class="mb-4">{$_('FOOTER_YHTEYSTIEDOT')}</h2>
         <address class="not-italic">
           <span>{$_('EMAIL')}:</span>
-          <Link href="mailto:varke.ym@gov.fi"
-            >varke.ym@gov.fi</Link>
+          <Link href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link>
         </address>
         <address class="not-italic flex flex-col">
           <span>{$_('FOOTER_OSOITE_1')}</span>
