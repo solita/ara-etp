@@ -133,7 +133,7 @@ PL 35, 00023 Valtioneuvosto</p>
     ges senast {{määräpäivä}}. Avsaknaden av svar hindrar inte att ärendet avgörs.</p>
 
 <div class="page-break-avoid">
-<p>Vi ber Er skicka svaret till Varkes registratorskontor antingen per e-post till <br/>kirjaamo.ara@ara.fi eller per post till
+<p>Vi ber Er skicka svaret till Varkes registratorskontor antingen per e-post till <br/>varke.ym@gov.fi eller per post till
     Finansierings- och ut-vecklingscentralen för boendet, PB 30, 15141 Lahtis.</p>
 
 {{#valvoja}}
