@@ -33,61 +33,6 @@
               object-input-stream (ObjectInputStream. in)]
     ^PAdESSignatureParameters (.readObject object-input-stream)))
 
-(t/deftest test-that-generates-test-data
-  (with-bindings
-    ;; Use an already existing pdf.
-    {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file  generate-pdf-as-file-mock
-     ;; Mock the clock because laatija is not allowed to use system signing if the session is too old.
-     #'time/clock                                                   (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
-                                                                                 (ZoneId/systemDefault))
-     #'solita.etp.service.signing.pdf-sign/get-tsp-source           test-timeserver/get-tsp-source-in-test
-     #'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test
-
-     }
-    (let [; Add laatija
-          laatija-id (test-data.laatija/insert-suomifi-laatija!)
-
-          todistus-2013-fi (-> (test-data.energiatodistus/generate-add 2013 true) (assoc-in [:perustiedot :kieli] 0))
-          todistus-2013-sv (-> (test-data.energiatodistus/generate-add 2013 true) (assoc-in [:perustiedot :kieli] 1))
-          todistus-2013-multilingual (-> (test-data.energiatodistus/generate-add 2013 true) (assoc-in [:perustiedot :kieli] 2))
-          todistus-2018-fi (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))
-          todistus-2018-sv (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 1))
-          todistus-2018-multilingual (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
-
-          todistus-2018-future (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
-          todistus-2018-future-2 (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
-
-          ; Insert all energiatodistus
-          [todistus-2013-fi-id
-           todistus-2013-sv-id
-           todistus-2013-multilingual-id
-           todistus-2018-fi-id
-           todistus-2018-sv-id
-           todistus-2018-multilingual-id
-           todistus-2018-future-id
-           todistus-2018-future-2-id]
-          (test-data.energiatodistus/insert! [todistus-2013-fi
-                                              todistus-2013-sv
-                                              todistus-2013-multilingual
-                                              todistus-2018-fi
-                                              todistus-2018-sv
-                                              todistus-2018-multilingual
-                                              todistus-2018-future
-                                              todistus-2018-future-2] laatija-id)
-
-          ; Add another laatija
-          [other-laatija-id _] (test-data.laatija/generate-and-insert!)
-          other-laatija-todistus-2018-sv (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))
-
-          [other-laatija-todistus-2018-sv-id]
-          (test-data.energiatodistus/insert! [other-laatija-todistus-2018-sv] other-laatija-id)]
-      (t/testing "Can sign 2018 fi version"
-        (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
-              response (ts/handler (-> (mock/request :post url)
-                                       (test-data.laatija/with-suomifi-laatija)
-                                       (mock/header "Accept" "application/json")))]
-          (t/is (= (:status response) 200)))))))
-
 (t/deftest sign-with-system-test
   (with-bindings
     ;; Use an already existing pdf.
