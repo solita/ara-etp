@@ -15,18 +15,66 @@
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io ByteArrayInputStream File FileOutputStream InputStream ObjectInputStream ObjectOutputStream)
-           (java.time Instant)
+           (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
+           (java.security.cert X509Certificate)
+           (java.time Duration Instant)
            (java.util ArrayList Collection Date List)
            (java.util ArrayList Date List)
            (java.util Date)
+           (org.bouncycastle.asn1.x500 X500Name)
+           (org.bouncycastle.asn1.x509 ExtendedKeyUsage Extension KeyPurposeId)
+           (org.bouncycastle.cert X509v3CertificateBuilder)
+           (org.bouncycastle.cert.jcajce JcaX509CertificateConverter JcaX509v3CertificateBuilder)
            (org.bouncycastle.cms CMSSignedData)
-           (org.apache.axis.utils ByteArrayOutputStream)))
+           (org.apache.axis.utils ByteArrayOutputStream)
+           (org.bouncycastle.jce.provider BouncyCastleProvider)
+           (org.bouncycastle.operator ContentSigner)
+           (org.bouncycastle.operator.jcajce JcaContentSignerBuilder)))
+
+(def tsp-key-and-cert
+  (let [_ (Security/addProvider (BouncyCastleProvider.))
+        ^KeyPairGenerator keyPairGenerator (doto (KeyPairGenerator/getInstance "RSA")
+                                             (.initialize 2048))
+        ^KeyPair keyPair (-> keyPairGenerator .generateKeyPair)
+
+        subjectDN "CN=Self-Signed, O=Example, C=FI"
+        issuerDN subjectDN
+        serialNumber (BigInteger. 64 (SecureRandom.))
+        ^Date notBefore (Date/from (-> (time/now) (.minus (Duration/ofDays 1))))
+        ^Date notAfter (Date/from (-> (time/now) (.plus (Duration/ofDays 1))))
+
+        ^X509v3CertificateBuilder certBuilder (doto (JcaX509v3CertificateBuilder.
+                                                      (X500Name. issuerDN)
+                                                      serialNumber
+                                                      notBefore
+                                                      notAfter
+                                                      (X500Name. subjectDN)
+                                                      (-> keyPair .getPublic))
+                                                (.addExtension Extension/extendedKeyUsage
+                                                               true
+                                                               (ExtendedKeyUsage. KeyPurposeId/id_kp_timeStamping)))
+
+        ^ContentSigner signer (-> (JcaContentSignerBuilder. "SHA256withRSA") (.build (-> keyPair .getPrivate)))
+        ^X509Certificate certificate (-> (doto (JcaX509CertificateConverter.) (.setProvider "BC"))
+                                         (.getCertificate (-> certBuilder (.build signer))))]
+    {:private-key (-> keyPair .getPrivate)
+     :public-key  (-> keyPair .getPublic)
+     :certificate certificate}))
+
+(defn default-tsp []
+  (doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
+                             ^X509Certificate (:certificate tsp-key-and-cert)
+                             ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
+    (.setTsaPolicy "1.2.3.4")))
 
 (defn- ^:dynamic get-tsp-source []
   ;; TODO: Need to use DSS's PKI to mock things?
-  (let [tsa-url (config/tsa-endpoint-url)]
-    (OnlineTSPSource. tsa-url)))
+  (if-let [tsa-url config/tsa-endpoint-url]
+    (OnlineTSPSource. tsa-url)
+    ;; TODO: This is what we need to use locally but need to do some renaming.
+    (default-tsp)))
 
 ;; TODO: Make dynamic? Needs DSS PKI in tests?
 (defn- ^:dynamic get-ocsp-source []
