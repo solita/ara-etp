@@ -206,7 +206,8 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     byggnadens ägare för att byggnadens energicertifikat skaffas och att certifikatet eller uppgifterna i det används i
     lagstadgade situationer.</p>
 
-<p>Med stöd av 24 § i lagen om energicertifikat beordrar Varke {{#omistaja-henkilo}}
+<p>Med stöd av 24 § i lagen om energicertifikat beordrar Varke
+    {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
@@ -260,7 +261,8 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     kan Varke förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
     vilka det bestäms i viteslagen (1113/1990).</p>
 
-<p>Varke har skickat en uppmaning till {{#omistaja-henkilo}}{{sukunimi}}{{/omistaja-henkilo}}{{#omistaja-yritys}}{{nimi}}{{/omistaja-yritys}}, eftersom den byggnaden som ägs av {{#omistaja-henkilo}}
+<p>Varke har skickat en uppmaning till {{#omistaja-henkilo}}{{sukunimi}}{{/omistaja-henkilo}}{{#omistaja-yritys}}{{nimi}}{{/omistaja-yritys}}, eftersom den byggnaden som ägs av
+    {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
@@ -276,13 +278,15 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     certifikatet.</p>
 
 {{#aiemmat-toimenpiteet}}
-<p>Marknadsföringen av objektet fortsatte dock trots uppmaning och {{#omistaja-henkilo}}
+<p>Marknadsföringen av objektet fortsatte dock trots uppmaning och
+    {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
     {{nimi}}
     {{/omistaja-yritys}} uppvisade inget energicertifikat för Varke. Därför vidtog Varke åtgärder enligt 24 § i lagen om
-    energicertifikat och varnade {{#omistaja-henkilo}}
+    energicertifikat och varnade
+    {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
@@ -293,7 +297,8 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     <sup>2</sup>.</p>
 {{/aiemmat-toimenpiteet}}
 
-<p>Varke har alltså gett {{#omistaja-henkilo}}
+<p>Varke har alltså gett
+    {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
@@ -325,7 +330,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     förvaltningsdomstol inom 30 dagar från delgivningen av det här beslutet.</p>
 
 <div class="footnote">
-    <p class="mb-0"><sup>2</sup> I Varkess energicertifikatregister finns i regel alla energicertifikat som upprättats
+    <p class="mb-0"><sup>2</sup> I Varkes energicertifikatregister finns i regel alla energicertifikat som upprättats
         efter 1 maj 2015.</p>
 </div>
 
