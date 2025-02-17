@@ -49,9 +49,9 @@ services:
         condition: service_completed_successfully
       migration-runner:
         condition: service_completed_successfully
-    command: >
+    entrypoint: >
       sh -c "
-        apt-get update && apt-get install -y socat &&
+        apt-get update && apt-get install -y socat
         socat TCP-LISTEN:2060,fork,reuseaddr TCP:ocsp-responder-root:2060 &
         socat TCP-LISTEN:2061,fork,reuseaddr TCP:ocsp-responder-int:2060 &
         exec ./start.sh
