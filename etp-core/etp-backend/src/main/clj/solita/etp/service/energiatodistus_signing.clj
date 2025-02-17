@@ -87,6 +87,8 @@
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
+             ;; TODO: How to document this?
+             ;;_ (io/copy energiatodistus-pdf (io/file "./src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"))
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
              ;; TODO: Check 2013 version positioning or is it even relevant?
@@ -96,7 +98,8 @@
                                                                              :page          1
                                                                              :origin-x      75
                                                                              :origin-y      origin-y
-                                                                             :zoom          133})]
+                                                                             :zoom          133})
+             ]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
@@ -118,13 +121,14 @@
 
 (defn sign-energiatodistus-pdf-new
   "This is the function that receives the signature and continues the signing process."
-  [db aws-s3-client id language ^bytes signature cert-chain]
+  [db aws-s3-client id language signature cert-chain]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
       #(do
          (let [key (energiatodistus-service/file-key id language)
                unsigned-pdf-is (file-service/find-file aws-s3-client key)
+               sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                filename (str key ".pdf")
                ^Base64$Decoder decoder (Base64/getDecoder)
@@ -231,11 +235,14 @@
         system-signature-cms-info {:cert-chain        chain
                                    :signing-cert      config/system-signature-certificate-leaf
                                    :digest->signature #(sign-service/sign aws-kms-client %)}
-        signature (.encode (Base64/getEncoder)
+        ^bytes signature (.encode (Base64/getEncoder)
                            (pdf-sign/digest->cms-signature-with-system
                              data-to-sign
                              system-signature-cms-info))
-        signature-and-chain {:chain chain :signature signature}]
+        _ (println "SIG: " (-> ^bytes signature (String.)))
+        chain-like-from-card-reader (mapv cert-pem->one-liner-without-headers chain)
+        _ (mapv println chain-like-from-card-reader)
+        signature-and-chain {:chain chain-like-from-card-reader :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
       #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)

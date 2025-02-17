@@ -1,6 +1,7 @@
 (ns solita.etp.service.signing.pdf-sign
   "Currently encapsulates the usage of ESIG/DSS library"
   (:require
+    [clojure.java.io :as io]
     [solita.common.time :as time]
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert ExceptionOnStatusAlert)
@@ -14,7 +15,7 @@
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
-           (java.io ByteArrayInputStream File InputStream ObjectInputStream ObjectOutputStream)
+           (java.io ByteArrayInputStream File FileOutputStream InputStream ObjectInputStream ObjectOutputStream)
            (java.time Instant)
            (java.util ArrayList Collection Date List)
            (java.util ArrayList Date List)
@@ -44,7 +45,7 @@
       .readObject))
 
 (defn ^:dynamic get-signature-parameters [{:keys [^File signature-png page origin-x origin-y zoom]}]
-  (let [signature-png (FileDocument. signature-png)
+  (let [signature-png (InMemoryDocument. (io/input-stream signature-png))
 
         ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
                                                      (.setPage page)
@@ -66,6 +67,10 @@
   [^File unsigned-pdf signature-options]
   (let [service (PAdESWithExternalCMSService.)
         signature-parameters (get-signature-parameters signature-options)
+        ;;_
+        #_(with-open [fos (FileOutputStream. "src/test/resources/energiatodistukset/signing-process/stateful-parameters")
+                    oos (ObjectOutputStream. fos)]
+          (.writeObject oos signature-parameters))
         ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))
         _ (println (-> message-digest .toString))]
     {:digest              (.getBase64Value message-digest)
@@ -77,6 +82,7 @@
 (defn unsigned-document-info-and-signature->t-level-signed-document
   [^InputStream pdf-file stateful-parameters ^bytes cms-signature cert-chain]
   (let [^PAdESSignatureParameters signature-parameters (input-stream->object stateful-parameters)
+        _ (println (-> signature-parameters .getDigestAlgorithm))
         unsigned-pdf (InMemoryDocument. pdf-file)
         tsp-source (get-tsp-source)
         service-external-cms (doto (PAdESWithExternalCMSService.))
