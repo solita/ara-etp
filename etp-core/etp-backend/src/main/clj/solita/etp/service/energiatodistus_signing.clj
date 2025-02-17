@@ -15,8 +15,7 @@
     [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
     [solita.etp.service.file :as file-service]
     [solita.etp.service.sign :as sign-service]
-    [solita.etp.service.signing.pdf-sign :as pdf-sign]
-    [clojure.java.io :as io])
+    [solita.etp.service.signing.pdf-sign :as pdf-sign])
   (:import
     (java.text Normalizer Normalizer$Form)
     (java.time Instant ZoneId)
