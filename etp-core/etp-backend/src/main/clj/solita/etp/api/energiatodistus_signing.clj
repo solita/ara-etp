@@ -6,7 +6,6 @@
             [solita.etp.schema.common :as common-schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
             [solita.etp.service.energiatodistus-signing :as energiatodistus-signing-service]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.service.rooli :as rooli-service])
