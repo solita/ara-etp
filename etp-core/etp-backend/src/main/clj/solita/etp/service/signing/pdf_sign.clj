@@ -110,6 +110,23 @@
     signature-parameters))
 
 (defn unsigned-document->digest-and-params
+  "Given an unsigned pdf and signature options produces the digest and the stateful parameters.
+  The digest should then be used to create a signature using an external cms service.
+  Example of a cms service is a FINEID card reader producing \"cms-pades\" signature.
+
+  Arguments:
+  - `unsigned-pdf`: A `java.io.File` instance representing the file to be signed.
+  - `signature-options`: A map with the following required key-value pairs:
+      - `:signature-png` - A file containing the image used for signature.
+      - `:page` - An integer representing what page to put the signature on.
+      - `:origin-x` - Where to position the signature-png respective to the x-axis.
+      - `:origin-y` - Where to position the signature-png respective to the y-axis.
+      - `:zoom` - Used for scaling the signature-png
+
+  Returns:
+  A map containing:
+  - `:digest` - The digest that should be used to retrieve the pades-cms signature.
+  - `:stateful-parameters` - Parameters needed to continue the process once the signature is retrieved"
   [^File unsigned-pdf signature-options]
   (let [service (PAdESWithExternalCMSService.)
         signature-parameters (get-signature-parameters signature-options)
