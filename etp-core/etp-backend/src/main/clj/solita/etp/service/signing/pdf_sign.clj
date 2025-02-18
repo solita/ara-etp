@@ -130,10 +130,6 @@
   [^File unsigned-pdf signature-options]
   (let [service (PAdESWithExternalCMSService.)
         signature-parameters (get-signature-parameters signature-options)
-        ;;_
-        #_(with-open [fos (FileOutputStream. "src/test/resources/energiatodistukset/signing-process/stateful-parameters")
-                    oos (ObjectOutputStream. fos)]
-          (.writeObject oos signature-parameters))
         ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))]
     {:digest              (.getBase64Value message-digest)
      ;; At least the signature-png needs to be saved for use after getting the signature.
