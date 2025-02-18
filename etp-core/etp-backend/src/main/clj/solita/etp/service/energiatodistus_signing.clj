@@ -110,27 +110,6 @@
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))
 
-(defn sign-energiatodistus-pdf
-  "This is the function that receives the signature and continues the signing process."
-  [db aws-s3-client whoami now id language signature-and-chain]
-  (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-    (do-when-signing
-      complete-energiatodistus
-      #(do
-         (let [signature (:signature signature-and-chain)
-               cert-chain (:chain signature-and-chain)
-               key (energiatodistus-service/file-key id language)
-               unsigned-pdf-is (file-service/find-file aws-s3-client key)
-               sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
-               filename (str key ".pdf")
-               ^Base64$Decoder decoder (Base64/getDecoder)
-               signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
-               signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
-           (file-service/upsert-file-from-input-stream aws-s3-client
-                                                       key
-                                                       signed-pdf-lt-level)
-           filename)))))
-
 (defn comparable-name [s]
   (-> s
       (Normalizer/normalize Normalizer$Form/NFD)
@@ -171,6 +150,32 @@
      (when validate-surname?
        (validate-surname! surname certificate))
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
+
+(defn sign-energiatodistus-pdf
+  ([db aws-s3-client whoami now id language signature-and-chain]
+   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :card-reader))
+  ([db aws-s3-client whoami now id language {:keys [chain signature]} signing-method]
+   (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+     (do-when-signing
+       complete-energiatodistus
+       #(do
+          (validate-certificate! (:sukunimi whoami)
+                                 now
+                                 (first chain)
+                                 ;; Validate the surname in the certificate only when signing with card-reader.
+                                 (= signing-method :card-reader))
+          (let [key (energiatodistus-service/file-key id language)
+                unsigned-pdf-is (file-service/find-file aws-s3-client key)
+                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
+                filename (str key ".pdf")
+                ^Base64$Decoder decoder (Base64/getDecoder)
+                signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
+                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
+            (file-service/upsert-file-from-input-stream aws-s3-client
+                                                        key
+                                                        signed-pdf-lt-level)
+            filename))))))
+
 
 (defn cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
@@ -233,7 +238,7 @@
         signature-and-chain {:chain chain-like-from-card-reader :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
-      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
+      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :system)
       (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end
