@@ -39,7 +39,6 @@
              org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
              org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
              org.apache.pdfbox/pdfbox                            {:mvn/version "2.0.32"}
-             io.github.solita/puumerkki                          {:mvn/version "0.12.0"}
              org.clojure/core.match                              {:mvn/version "1.1.0"}
              com.cognitect.aws/api                               {:mvn/version "0.8.692"}
              com.cognitect.aws/endpoints                         {:mvn/version "1.1.12.772"}

@@ -291,8 +291,6 @@
             complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
             language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
 
-        ;; TODO: Use puumerkki/verify-signatures instead of puumerkki/cursory-verify-signature once it's available.
-        ;;       This only checks that the signagure exists
         (t/testing "The signed document's signature should be exist."
           (signing-service/sign-with-system {:db             db
                                              :aws-s3-client  ts/*aws-s3-client*
