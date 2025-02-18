@@ -18,11 +18,11 @@
         wanted-tag {:Key "TemporarySignatureProcessFile" :Value "True"}]
     (t/testing "The key is in a place that is safe to allow for deletion via a lifecycle rule."
       (t/is (= "energiatodistus-signing/stateful-signature-parameters-123-fi" params-key)))
-    (service/create-stateful-signature-parameters ts/*aws-s3-client* energiatodistus-id language some-data-is)
+    (service/save-stateful-signature-parameters ts/*aws-s3-client* energiatodistus-id language some-data-is)
     (t/testing "The created file has a the correct tag."
       (t/is (= wanted-tag (file-service/get-file-tag ts/*aws-s3-client*
                                                      params-key
                                                      (:Key wanted-tag)))))
     (t/testing "Deserialization of the stored object works."
-      (t/is (= some-data (-> (file-service/find-file ts/*aws-s3-client* params-key)
+      (t/is (= some-data (-> (service/load-stateful-signature-parameters ts/*aws-s3-client* energiatodistus-id language)
                              (pdf-sign-service/input-stream->object)))))))

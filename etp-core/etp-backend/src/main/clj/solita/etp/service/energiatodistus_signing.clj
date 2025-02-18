@@ -62,7 +62,7 @@
 (defn stateful-signature-parameters-file-key [energiatodistus-id language]
   (when energiatodistus-id (format "energiatodistus-signing/stateful-signature-parameters-%s-%s" energiatodistus-id language)))
 
-(defn create-stateful-signature-parameters [aws-s3-client energiatodistus-id language ^InputStream stateful-parameters-object]
+(defn save-stateful-signature-parameters [aws-s3-client energiatodistus-id language ^InputStream stateful-parameters-object]
   (let [stateful-parameters-key (stateful-signature-parameters-file-key energiatodistus-id language)]
     (file-service/upsert-file-from-input-stream aws-s3-client
                                                 stateful-parameters-key
@@ -70,6 +70,9 @@
     (file-service/put-file-tag aws-s3-client
                                stateful-parameters-key
                                deletable-signature-process-object-tag)))
+
+(defn load-stateful-signature-parameters [aws-s3-client id language]
+  (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language)))
 
 (defn find-energiatodistus-digest
   "This is the function that does first real processing of the signature.
@@ -102,10 +105,10 @@
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
-         (create-stateful-signature-parameters aws-s3-client
-                                               id
-                                               language
-                                               (:stateful-parameters digest-and-stuff))
+         (save-stateful-signature-parameters aws-s3-client
+                                             id
+                                             language
+                                             (:stateful-parameters digest-and-stuff))
          (io/delete-file pdf-path)
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))
@@ -166,7 +169,7 @@
                                  (= signing-method :card-reader))
           (let [key (energiatodistus-service/file-key id language)
                 unsigned-pdf-is (file-service/find-file aws-s3-client key)
-                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
+                sig-params-is (load-stateful-signature-parameters aws-s3-client id language)
                 filename (str key ".pdf")
                 ^Base64$Decoder decoder (Base64/getDecoder)
                 signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
