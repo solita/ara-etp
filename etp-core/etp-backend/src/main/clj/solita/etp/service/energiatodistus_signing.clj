@@ -122,7 +122,6 @@
                key (energiatodistus-service/file-key id language)
                unsigned-pdf-is (file-service/find-file aws-s3-client key)
                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
-               sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                filename (str key ".pdf")
                ^Base64$Decoder decoder (Base64/getDecoder)
                signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
