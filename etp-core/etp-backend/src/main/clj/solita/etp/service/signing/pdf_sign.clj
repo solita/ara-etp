@@ -11,6 +11,7 @@
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters SignatureFieldParameters SignatureImageParameters)
            (eu.europa.esig.dss.pades.signature ExternalCMSService PAdESService PAdESWithExternalCMSService)
+           (eu.europa.esig.dss.service SecureRandomNonceSource)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
@@ -75,8 +76,9 @@
     (OnlineTSPSource. tsa-url)
     (default-tsp)))
 
-(defn- ^:dynamic get-ocsp-source []
+(defn- get-ocsp-source []
   (doto (OnlineOCSPSource.)
+    (.setNonceSource (SecureRandomNonceSource.))
     (.setAlertOnInvalidUpdateTime (ExceptionOnStatusAlert.))))
 
 (defn object->input-stream [^Object object]
