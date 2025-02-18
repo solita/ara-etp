@@ -1,5 +1,5 @@
 (ns solita.etp.service.signing.pdf-sign
-  "Currently encapsulates the usage of ESIG/DSS library"
+  "Encapsulates the usage of ESIG/DSS library"
   (:require
     [clojure.java.io :as io]
     [solita.common.time :as time]
@@ -63,6 +63,7 @@
      :public-key  (-> keyPair .getPublic)
      :certificate certificate}))
 
+;; TODO: We could just usa a TSA with openssl instead
 (defn default-tsp []
   (doto (KeyEntityTSPSource. ^PrivateKey (:private-key tsp-key-and-cert)
                              ^X509Certificate (:certificate tsp-key-and-cert)
@@ -70,13 +71,10 @@
     (.setTsaPolicy "1.2.3.4")))
 
 (defn- ^:dynamic get-tsp-source []
-  ;; TODO: Need to use DSS's PKI to mock things?
   (if-let [tsa-url config/tsa-endpoint-url]
     (OnlineTSPSource. tsa-url)
-    ;; TODO: This is what we need to use locally but need to do some renaming.
     (default-tsp)))
 
-;; TODO: Make dynamic? Needs DSS PKI in tests?
 (defn- ^:dynamic get-ocsp-source []
   (doto (OnlineOCSPSource.)
     (.setAlertOnInvalidUpdateTime (ExceptionOnStatusAlert.))))
@@ -119,8 +117,7 @@
         #_(with-open [fos (FileOutputStream. "src/test/resources/energiatodistukset/signing-process/stateful-parameters")
                     oos (ObjectOutputStream. fos)]
           (.writeObject oos signature-parameters))
-        ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))
-        _ (println (-> message-digest .toString))]
+        ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))]
     {:digest              (.getBase64Value message-digest)
      ;; At least the signature-png needs to be saved for use after getting the signature.
      ;; Parameters seem to also have some other state and differ somehow if recreated so
@@ -130,7 +127,6 @@
 (defn unsigned-document-info-and-signature->t-level-signed-document
   [^InputStream pdf-file stateful-parameters ^bytes cms-signature cert-chain]
   (let [^PAdESSignatureParameters signature-parameters (input-stream->object stateful-parameters)
-        _ (println (-> signature-parameters .getDigestAlgorithm))
         unsigned-pdf (InMemoryDocument. pdf-file)
         tsp-source (get-tsp-source)
         service-external-cms (doto (PAdESWithExternalCMSService.))
@@ -160,7 +156,6 @@
     (.openStream lt-level-document)))
 
 ;; External cms with system (same what the card reader does)
-
 (defn pem->CertificateToken [cert-pem]
   ^CertificateToken (-> cert-pem
                         (DSSUtils/convertToDER)
@@ -179,7 +174,6 @@
       (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
       (.setCertificateChain cert-chain))))
 
-;; TODO: This belongs to sign service?
 (defn digest->cms-signature-with-system [^bytes digest
                                                {:keys [cert-chain
                                                        signing-cert
