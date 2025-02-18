@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus-signing
-  "Contains functionality to sign specifically an energiatodistus."
+  "Contains functions that are used on a energiatodistus when :in-signing state.
+  The part that changes the state is currently in solita.etp.service.energiatodistus."
   (:require
     [clojure.java.io :as io]
     [clojure.string :as str]
