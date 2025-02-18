@@ -236,9 +236,7 @@
                            (pdf-sign/digest->cms-signature-with-system
                              data-to-sign
                              system-signature-cms-info))
-        _ (println "SIG: " (-> ^bytes signature (String.)))
         chain-like-from-card-reader (mapv cert-pem->one-liner-without-headers chain)
-        _ (mapv println chain-like-from-card-reader)
         signature-and-chain {:chain chain-like-from-card-reader :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
