@@ -71,7 +71,7 @@
                                stateful-parameters-key
                                deletable-signature-process-object-tag)))
 
-(defn find-energiatodistus-digest-new
+(defn find-energiatodistus-digest
   "This is the function that does first real processing of the signature.
 
   Generate the pdf.
@@ -94,10 +94,10 @@
              origin-y (case versio 2013 648 2018 666)
              digest-and-stuff (pdf-sign/unsigned-document->digest-and-params energiatodistus-pdf
                                                                              {:signature-png signature-png
-                                                                             :page          1
-                                                                             :origin-x      75
-                                                                             :origin-y      origin-y
-                                                                             :zoom          133})
+                                                                              :page          1
+                                                                              :origin-x      75
+                                                                              :origin-y      origin-y
+                                                                              :zoom          133})
              ]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
@@ -110,28 +110,22 @@
          (io/delete-file signature-png-path)
          (select-keys digest-and-stuff [:digest])))))
 
-(defn find-energiatodistus-digest
-  "Generate the pdf.
-  Add space for signature.
-  Upload to S3.
-  Return the data that needs to be signed in base64"
-  [db aws-s3-client id language laatija-allekirjoitus-id]
-  (find-energiatodistus-digest-new db aws-s3-client id language laatija-allekirjoitus-id))
-
-(defn sign-energiatodistus-pdf-new
+(defn sign-energiatodistus-pdf
   "This is the function that receives the signature and continues the signing process."
-  [db aws-s3-client id language signature cert-chain]
+  [db aws-s3-client whoami now id language signature-and-chain]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
       #(do
-         (let [key (energiatodistus-service/file-key id language)
+         (let [signature (:signature signature-and-chain)
+               cert-chain (:chain signature-and-chain)
+               key (energiatodistus-service/file-key id language)
                unsigned-pdf-is (file-service/find-file aws-s3-client key)
                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                sig-params-is (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language))
                filename (str key ".pdf")
                ^Base64$Decoder decoder (Base64/getDecoder)
-               signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature) cert-chain)
+               signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
            (file-service/upsert-file-from-input-stream aws-s3-client
                                                        key
@@ -178,10 +172,6 @@
      (when validate-surname?
        (validate-surname! surname certificate))
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
-
-(defn sign-energiatodistus-pdf
-  [db aws-s3-client whoami now id language signature-and-chain]
-  (sign-energiatodistus-pdf-new db aws-s3-client id language (:signature signature-and-chain) (:chain signature-and-chain)))
 
 (defn cert-pem->one-liner-without-headers [cert-pem]
   "Given a certificate in PEM format `cert-pem` removes
