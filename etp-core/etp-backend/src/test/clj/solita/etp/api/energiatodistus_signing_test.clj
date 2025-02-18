@@ -11,8 +11,8 @@
     [solita.etp.test-timeserver :as test-timeserver]
     [solita.etp.test-system :as ts])
   (:import (eu.europa.esig.dss.pades PAdESSignatureParameters)
-           (java.io File FileInputStream ObjectInputStream)
-           (java.time Clock Duration LocalDate ZoneId)))
+           (java.io FileInputStream ObjectInputStream)
+           (java.time Clock Duration ZoneId)))
 
 (defn energiatodistus-sign-url
   [et-id version]
