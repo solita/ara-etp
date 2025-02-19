@@ -99,7 +99,7 @@
                                                                               :page          1
                                                                               :origin-x      75
                                                                               :origin-y      origin-y
-                                                                              :zoom          133})]
+                                                                              :zoom          417})]
          (file-service/upsert-file-from-file aws-s3-client
                                              key
                                              energiatodistus-pdf)
