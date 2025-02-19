@@ -107,7 +107,6 @@ install_certs_to_dev() {
   get_cert_pem "${PKI_ROOT_DIR}/ca.crt" > "${ROOT_CERT_FILE}"
   get_cert_pem "${PKI_INT_DIR}/ca.crt" > "${INT_CERT_FILE}"
   get_cert_pem "${PKI_INT_DIR}/issued/${SOME_REQ_NAME}.crt" > "${LEAF_CERT_FILE}"
-  echo "hmm"
 }
 
 case "$1" in
