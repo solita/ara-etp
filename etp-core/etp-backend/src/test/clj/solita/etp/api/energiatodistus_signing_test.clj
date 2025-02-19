@@ -10,8 +10,13 @@
     [solita.etp.test-data.laatija :as test-data.laatija]
     [solita.etp.test-timeserver :as test-timeserver]
     [solita.etp.test-system :as ts])
-  (:import (eu.europa.esig.dss.pades PAdESSignatureParameters)
-           (java.io FileInputStream ObjectInputStream)
+  (:import (eu.europa.esig.dss.enumerations SignatureLevel ValidationLevel)
+           (eu.europa.esig.dss.model InMemoryDocument)
+           (eu.europa.esig.dss.pades PAdESSignatureParameters)
+           (eu.europa.esig.dss.pades.validation PDFDocumentValidator)
+           (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.validation SignedDocumentValidator)
+           (java.io BufferedInputStream File FileInputStream ObjectInputStream)
            (java.time Clock Duration ZoneId)))
 
 (defn energiatodistus-sign-url
@@ -41,9 +46,7 @@
      #'time/clock                                                   (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
                                                                                  (ZoneId/systemDefault))
      #'solita.etp.service.signing.pdf-sign/get-tsp-source           test-timeserver/get-tsp-source-in-test
-     #'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test
-
-     }
+     #'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test}
     (let [; Add laatija
           laatija-id (test-data.laatija/insert-suomifi-laatija!)
 
@@ -245,3 +248,44 @@
                                        (test-data.laatija/with-suomifi-laatija)
                                        (mock/header "Accept" "application/json")))]
           (t/is (= (:status response) 401)))))))
+
+(defn energiatodistus-get-url
+  [et-id version language]
+  (str "/api/private/energiatodistukset/" version "/" et-id "/pdf/" language "/energiatodistus-" et-id "-" language ".pdf"))
+
+(defn lt-level? [^BufferedInputStream document-stream]
+  (let [document (InMemoryDocument. document-stream)
+        cert-verifier (CommonCertificateVerifier.)
+        document-validator (doto (PDFDocumentValidator/fromDocument document)
+                             (.setCertificateVerifier cert-verifier))
+        reports (-> document-validator .validateDocument)
+        simple-report (.getSimpleReport reports)
+        signature-id (first (.getSignatureIdList simple-report))
+        signature-level (.getSignatureFormat simple-report signature-id)]
+    (= signature-level SignatureLevel/PAdES_BASELINE_LT)))
+
+(t/deftest sign-with-system-lt-level-test
+  (with-bindings
+    ;; Here we don't mock the pdf generation or paramters as we want to see the real behaviour.
+    {;; Mock the clock because laatija is not allowed to use system signing if the session is too old.
+     #'time/clock                                         (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
+                                                                       (ZoneId/systemDefault))
+     #'solita.etp.service.signing.pdf-sign/get-tsp-source test-timeserver/get-tsp-source-in-test}
+    (let [laatija-id (test-data.laatija/insert-suomifi-laatija!)
+          todistus-2018-multilingual (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
+
+          [todistus-2018-multilingual-id]
+          (test-data.energiatodistus/insert! [todistus-2018-multilingual] laatija-id)]
+      (t/testing "Both signed pdfs are PAdES_BASELINE_LT level"
+        (let [url (energiatodistus-sign-url todistus-2018-multilingual-id 2018)
+              _ (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-suomifi-laatija)
+                                       (mock/header "Accept" "application/json")))
+              fi-response (ts/handler (-> (mock/request :get (energiatodistus-get-url todistus-2018-multilingual-id "2018" "fi"))
+                                          (test-data.laatija/with-suomifi-laatija)
+                                          (mock/header "Accept" "application/pdf")))
+              sv-response (ts/handler (-> (mock/request :get (energiatodistus-get-url todistus-2018-multilingual-id "2018" "sv"))
+                                          (test-data.laatija/with-suomifi-laatija)
+                                          (mock/header "Accept" "application/pdf")))]
+          (t/is (lt-level? (:body fi-response)))
+          (t/is (lt-level? (:body sv-response))))))))
