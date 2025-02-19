@@ -88,6 +88,26 @@ services:
         source: ./smtp/received-emails
         target: /received-emails
 
+  ocsp-responder-int:
+    build: ./ocsp-test-pki
+    ports:
+      - 127.0.0.1:2061:2060
+    volumes:
+      - type: bind
+        source: ./ocsp-test-pki/pki-int
+        target: /etc/pki
+        read_only: true
+
+  ocsp-responder-root:
+    build: ./ocsp-test-pki
+    ports:
+      - 127.0.0.1:2060:2060
+    volumes:
+      - type: bind
+        source: ./ocsp-test-pki/pki-root
+        target: /etc/pki
+        read_only: true
+
   kms:
     image: nsmithuk/local-kms:3.12.0
     ports:

@@ -6,7 +6,8 @@
            (java.io File FileInputStream)))
 
 (defn file->byte-array [^File file]
-  (-> file FileInputStream. .readAllBytes))
+  (with-open [input-stream (FileInputStream. file)]
+    (.readAllBytes input-stream)))
 
 (defn upsert-file-from-bytes [aws-s3-client key bytes]
   (s3/put-object aws-s3-client key bytes))

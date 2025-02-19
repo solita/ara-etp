@@ -28,4 +28,9 @@ services:
   kms:
     ports: !reset []
 
+  ocsp-responder-int:
+    ports: !reset []
+
+  ocsp-responder-root:
+    ports: !reset []
 
