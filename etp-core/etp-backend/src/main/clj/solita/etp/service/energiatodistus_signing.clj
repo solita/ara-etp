@@ -249,7 +249,6 @@
 
 (defn- sign-single-pdf-with-system [params language]
   (->> (sign-with-system-digest params language)
-       (#(do (println %) %))
        (sign-with-system-sign params language)))
 
 (defn sign-with-system
