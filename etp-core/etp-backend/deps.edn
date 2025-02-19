@@ -33,23 +33,22 @@
              buddy/buddy-sign                          {:mvn/version "3.6.1-359"}
              buddy/buddy-hashers                       {:mvn/version "2.0.167"}
 
-             org.apache.poi/poi                        {:mvn/version "5.3.0"}
-             org.apache.poi/poi-ooxml                  {:mvn/version "5.3.0"}
+             org.apache.poi/poi                                  {:mvn/version "5.3.0"}
+             org.apache.poi/poi-ooxml                            {:mvn/version "5.3.0"}
 
-             org.apache.pdfbox/pdfbox                  {:mvn/version "2.0.32"}
-             io.github.solita/puumerkki                {:mvn/version "0.12.0"}
-             org.clojure/core.match                    {:mvn/version "1.1.0"}
-             com.cognitect.aws/api                     {:mvn/version "0.8.692"}
-             com.cognitect.aws/endpoints               {:mvn/version "1.1.12.772"}
-             com.cognitect.aws/s3                      {:mvn/version "869.2.1687.0"}
-             com.cognitect.aws/kms                     {:mvn/version "869.2.1687.0"}
-             de.ubercode.clostache/clostache           {:mvn/version "1.4.0"}
-             commonmark-hiccup/commonmark-hiccup       {:mvn/version "0.3.0"}
              org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
              org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
+             org.apache.pdfbox/pdfbox                            {:mvn/version "2.0.32"}
+             org.clojure/core.match                              {:mvn/version "1.1.0"}
+             com.cognitect.aws/api                               {:mvn/version "0.8.692"}
+             com.cognitect.aws/endpoints                         {:mvn/version "1.1.12.772"}
+             com.cognitect.aws/s3                                {:mvn/version "869.2.1687.0"}
+             com.cognitect.aws/kms                               {:mvn/version "869.2.1687.0"}
+             de.ubercode.clostache/clostache                     {:mvn/version "1.4.0"}
+             commonmark-hiccup/commonmark-hiccup                 {:mvn/version "0.3.0"}
 
-             com.openhtmltopdf/openhtmltopdf-pdfbox    {:mvn/version "1.0.10"}
-             com.openhtmltopdf/openhtmltopdf-slf4j     {:mvn/version "1.0.10"}
+             com.openhtmltopdf/openhtmltopdf-pdfbox              {:mvn/version "1.0.10"}
+             com.openhtmltopdf/openhtmltopdf-slf4j               {:mvn/version "1.0.10"}
 
              ;; Contains vulnerable version of batik-* libraries, exclude those
              ;; and add direct dependency to newer versions
@@ -58,15 +57,15 @@
               :exclusions  [org.apache.xmlgraphics/batik-transcoder
                             org.apache.xmlgraphics/batik-codec
                             org.apache.xmlgraphics/batik-ext]}
-             org.apache.xmlgraphics/batik-transcoder   {:mvn/version "1.18"}
-             org.apache.xmlgraphics/batik-codec        {:mvn/version "1.18"}
-             org.apache.xmlgraphics/batik-ext          {:mvn/version "1.18"}
+             org.apache.xmlgraphics/batik-transcoder             {:mvn/version "1.18"}
+             org.apache.xmlgraphics/batik-codec                  {:mvn/version "1.18"}
+             org.apache.xmlgraphics/batik-ext                    {:mvn/version "1.18"}
 
              ;; Non-alpha version does not support xml namespaces
-             org.clojure/data.xml                      {:mvn/version "0.2.0-alpha9"}
-             camel-snake-kebab/camel-snake-kebab       {:mvn/version "0.4.3"}
-             com.jcraft/jsch                           {:mvn/version "0.1.55"}
-             com.sun.mail/javax.mail                   {:mvn/version "1.6.2"}
+             org.clojure/data.xml                                {:mvn/version "0.2.0-alpha9"}
+             camel-snake-kebab/camel-snake-kebab                 {:mvn/version "0.4.3"}
+             com.jcraft/jsch                                     {:mvn/version "0.1.55"}
+             com.sun.mail/javax.mail                             {:mvn/version "1.6.2"}
 
              org.apache.wss4j/wss4j-ws-security-dom    {:mvn/version "3.0.4"}
              org.apache.wss4j/wss4j-ws-security-common {:mvn/version "3.0.4"}
@@ -89,6 +88,8 @@
              eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}
+
+             }
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
