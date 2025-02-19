@@ -45,6 +45,8 @@
              com.cognitect.aws/kms                     {:mvn/version "869.2.1687.0"}
              de.ubercode.clostache/clostache           {:mvn/version "1.4.0"}
              commonmark-hiccup/commonmark-hiccup       {:mvn/version "0.3.0"}
+             org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
+             org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
 
              com.openhtmltopdf/openhtmltopdf-pdfbox    {:mvn/version "1.0.10"}
              com.openhtmltopdf/openhtmltopdf-slf4j     {:mvn/version "1.0.10"}
@@ -77,6 +79,15 @@
              com.sun.xml.ws/webservices-rt             {:mvn/version "2.0.1"}
              kovacnica/clojure.network.ip              {:mvn/version "0.1.5"
                                                         :exclusions  [org.clojure/clojurescript]}}
+             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
