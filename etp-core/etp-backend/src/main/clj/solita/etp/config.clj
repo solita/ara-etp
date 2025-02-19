@@ -141,6 +141,9 @@
 (def asha-endpoint-url (env "ASHA_ENDPOINT_URL" nil))
 (def asha-proxy? (edn/read-string (env "ASHA_PROXY" "false")))
 
+;; TSA (Time Stamping Authority)
+(def tsa-endpoint-url (env "TSA_DVV_ENDPOINT_URL" nil))
+
 ;; Suomifi / viestit
 
 (def suomifi-viestit-proxy? (edn/read-string (env "SUOMIFI_VIESTIT_PROXY" "false")))
