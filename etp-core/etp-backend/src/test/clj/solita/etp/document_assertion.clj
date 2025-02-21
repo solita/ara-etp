@@ -21,8 +21,8 @@
   ;; Compare the created document to the snapshot
   (t/is (= html-doc
            (str
-             (slurp (io/resource html-base-template-path))
-             (slurp (io/resource doc-path-to-compare-to)))))
+            (slurp (io/resource html-base-template-path))
+            (slurp (io/resource doc-path-to-compare-to)))))
   (reset! html->pdf-called? true)
   ;;Calling original implementation to ensure the functionality doesn't change
   (original-html->pdf html-doc output-stream))
@@ -42,6 +42,11 @@
     (with-open [output (ByteArrayOutputStream.)]
       (ImageIOUtil/writeImage image "png" output)
       (.toByteArray output))))
+
+(defn save-new-snapshot [^PDDocument pdf-doc snapshot-path-in-resources]
+  (let [target-path (str "./src/test/resources/" snapshot-path-in-resources)]
+    (io/make-parents target-path)
+    (.save pdf-doc target-path)))
 
 (defn assert-pdf-matches-visually
   "Checks that the given pdf document object matches visually to the baseline-pdf at the given resource path"
@@ -71,6 +76,7 @@
     (doseq [page-number (range 0 (.getNumberOfPages pdf-under-testing))
             :let [rendered-image (pdf-page->image-byte-array pdf-under-testing page-number)]]
       (t/testing (str "page " (inc page-number))
+        (save-new-snapshot pdf-under-testing baseline-pdf-resource-path)
         (t/is (Arrays/equals (pdf-page->image-byte-array pdf-under-testing page-number)
                              (pdf-page->image-byte-array baseline-pdf page-number))
               "If change is intended, save new document snapshot in the test with save-new-snapshot function"))
@@ -79,5 +85,3 @@
       (with-open [output (FileOutputStream. (str "./target/" filename "-page-" (inc page-number) ".png"))]
         (.write output rendered-image)))))
 
-(defn save-new-snapshot [new-snapshot snapshot-path-in-resources]
-  (io/copy new-snapshot (io/file (str "./src/test/resources/" snapshot-path-in-resources))))

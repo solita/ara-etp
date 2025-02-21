@@ -29,10 +29,10 @@ $$
     {{#kohde}}
         <table class="sarake">
             <tr>
-                <td>Kohde/Objekt: </td> 
+                <td>Kohde/Objekt: </td>
                 <td>
-                    <div class="nowrap">{{katuosoite}}</div>  
-                    <div class="nowrap">{{postinumero}} {{postitoimipaikka}}</div>  
+                    <div class="nowrap">{{katuosoite}}</div>
+                    <div class="nowrap">{{postinumero}} {{postitoimipaikka}}</div>
                 </td>
             </tr>
         </table>
@@ -46,11 +46,11 @@ $$
 <h1>Energiatodistusvalvonnan varoitus</h1>
 
 <p>
-  Asumisen rahoitus- ja kehittämiskeskuksen (ARA) tehtävänä on valvoa energiatodistusten käyttämistä myynti-
-  ja vuokraustilanteissa. ARA on lähettänyt teille kehotuksen liittyen rakennuksen/asunnon markkinointiin
-  ilman energiatodistusta. <b>ARA antaa Teille varoituksen.</b> Mikäli kohteen julkista markkinointia
-  jatketaan tai se myydään, <b>ARA pyytää esittämään energiatodistuksen {{määräpäivä}} mennessä sähköpostitse
-  energiatodistus@ara.fi tai postitse.</b>
+  Valtion tukeman asuntorakentamisen keskuksen (Varke) tehtävänä on valvoa energiatodistusten käyttämistä myynti-
+  ja vuokraustilanteissa. Varke on lähettänyt teille kehotuksen liittyen rakennuksen/asunnon markkinointiin
+  ilman energiatodistusta. <b>Varke antaa Teille varoituksen.</b> Mikäli kohteen julkista markkinointia
+  jatketaan tai se myydään, <b>Varke pyytää esittämään energiatodistuksen {{määräpäivä}} mennessä sähköpostitse
+  varke.ym@gov.fi tai postitse.</b>
 </p>
 
 <p>
@@ -62,7 +62,7 @@ $$
 </p>
 
 <p>
-  Jos energiatodistusta ei hankita ja esitetä ARAlle tässä varoituksessa asetetussa määräajassa, ARA antaa
+  Jos energiatodistusta ei hankita ja esitetä Varkelle tässä varoituksessa asetetussa määräajassa, Varke antaa
   tilanteen mukaisen käskypäätöksen. Käskypäätöstä tehostetaan uhkasakolla.
 </p>
 
@@ -71,11 +71,11 @@ $$
 <h1>Varning från tillsyn av energicertifikat</h1>
 
 <p>
-  Finansierings- och utvecklingscentralen för boendet (ARA) har till uppgift att övervaka användningen av
-  energicertifikat vid försäljning och uthyrning. ARA har skickat er uppmaning angående marknadsföring av en
-  byggnad/bostad utan energicertifikat. <b>ARA tilldelar er en varning.</b> Om den offentliga marknadsföringen
-  av objektet fortsätter eller om det säljs <b>ber ARA er att skicka in ett energicertifikat senast
-  {{määräpäivä}} per e-post till energiatodistus@ara.fi eller per post.</b>
+  Centralen för statligt stött bostadsbyggande (Varke) har till uppgift att övervaka användningen av
+  energicertifikat vid försäljning och uthyrning. Varke har skickat er uppmaning angående marknadsföring av en
+  byggnad/bostad utan energicertifikat. <b>Varke tilldelar er en varning.</b> Om den offentliga marknadsföringen
+  av objektet fortsätter eller om det säljs <b>ber Varke er att skicka in ett energicertifikat senast
+  {{määräpäivä}} per e-post till varke.ym@gov.fi eller per post.</b>
 </p>
 
 <p>
@@ -87,7 +87,7 @@ $$
 </p>
 
 <p>
-  Om energicertifikat inte skaffas och framvisas till ARA inom tidsfristen i denna varning tilldelar ARA ett
+  Om energicertifikat inte skaffas och framvisas till Varke inom tidsfristen i denna varning tilldelar Varke ett
   lämpligt beslut om föreläggande. Beslutet om föreläggande kan förenas med ett vite.
 </p>
 
@@ -95,7 +95,7 @@ $$
     {{#valvoja}}
     {{etunimi}} {{sukunimi}}
     <br/>
-    {{titteli-fi}}/{{titteli-sv}}{{/valvoja}}, ARA
+    {{titteli-fi}}/{{titteli-sv}}{{/valvoja}}, Varke
 </p>
 
 <table class="sarake max-width">

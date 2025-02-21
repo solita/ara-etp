@@ -19,7 +19,7 @@
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi    "Asian"
      :sukunimi   "Tuntija"
-     :email      "testi@ara.fi"
+     :email      "testi@varke.fi"
      :puhelin    "0504363675457"
      :titteli-fi "energia-asiantuntija"
      :titteli-sv "energiexpert"})

@@ -238,7 +238,7 @@
             {/await}
           </div>
           <div class="flex flex-col">
-            <p class="block py-2">{$_('LISATIETOA_ARAN_JULKAISUT')}</p>
+            <p class="block py-2">{$_('LISATIETOA_VARKEN_JULKAISUT')}</p>
             <a href="/tilastot" class="block py-2 underline text-darkgreen">
               {$_('LISATIETOA_TILASTOT_LINKKI')}
             </a>

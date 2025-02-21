@@ -25,7 +25,7 @@
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
-     :email    "testi@ara.fi"
+     :email    "testi@varke.fi"
      :puhelin  "0504363675457"
      :titteli-fi "energia-asiantuntija"
      :titteli-sv "energiexpert"})
@@ -84,7 +84,7 @@
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
                                             :type_specific_data {:fine 9000}
-                                            :diaarinumero       "ARA-05.03.01-2023-159"})
+                                            :diaarinumero       "Varke-05.03.01-2023-159"})
       ;; Mock the current time to ensure that the document has a fixed date
       (with-bindings {#'time/clock    (Clock/fixed (-> (LocalDate/of 2023 8 28)
                                                        (.atStartOfDay time/timezone)
@@ -212,7 +212,7 @@
                                             :create_time        kuulemiskirje-timestamp
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
-                                            :diaarinumero       "ARA-05.03.01-2023-132"
+                                            :diaarinumero       "Varke-05.03.01-2023-132"
                                             :type_specific_data {:fine 9000}})
       ;; Mock the current time to ensure that the document has a fixed date
       (with-bindings {#'time/clock    (Clock/fixed (-> (LocalDate/of 2023 8 28)
@@ -280,7 +280,7 @@
                                 :valvonta-id   2,
                                 :author        {:rooli-id 2, :sukunimi "Tuntija", :id 1, :etunimi "Asian"},
                                 :filename      "kaskypaatos.pdf",
-                                :diaarinumero  "ARA-05.03.01-2023-132",
+                                :diaarinumero  "Varke-05.03.01-2023-132",
                                 :id            8,
                                 :deadline-date "2023-10-04",
                                 :type-specific-data
@@ -405,7 +405,7 @@
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
                                             :type_specific_data {:fine 9000}
-                                            :diaarinumero       "ARA-05.03.01-2023-159"})
+                                            :diaarinumero       "Varke-05.03.01-2023-159"})
       ;; Mock the current time to ensure that the document has a fixed date
       (with-bindings {#'time/clock    (Clock/fixed (-> (LocalDate/of 2023 8 28)
                                                        (.atStartOfDay time/timezone)
@@ -566,7 +566,7 @@
                                                (.atStartOfDay (ZoneId/systemDefault))
                                                .toInstant)
                        :deadline_date      (LocalDate/of 2023 8 28)
-                       :diaarinumero       "ARA-05.03.01-2023-235"
+                       :diaarinumero       "Varke-05.03.01-2023-235"
                        :type_specific_data {:fine                     6100
                                             :department-head-name     "Testi Testinen"
                                             :department-head-title-fi "Ylitarkastaja"
@@ -585,7 +585,7 @@
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
-     :email    "testi@ara.fi"
+     :email    "testi@varke.fi"
      :puhelin  "0504363675457"
      :titteli-fi "energia-asiantuntija"
      :titteli-sv "energiexpert"})
@@ -664,7 +664,7 @@
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
                                             :type_specific_data {:fine 9000}
-                                            :diaarinumero       "ARA-05.03.01-2023-159"})
+                                            :diaarinumero       "Varke-05.03.01-2023-159"})
       ;; Mock the current time to ensure that the document has a fixed date
       (with-bindings {#'time/clock    (Clock/fixed (-> (LocalDate/of 2023 8 28)
                                                        (.atStartOfDay time/timezone)

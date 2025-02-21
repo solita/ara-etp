@@ -41,7 +41,7 @@ values (7, 'Sakkopäätös / kuulemiskirje', 'Sakkopäätös / kuulemiskirje (sv
 
 <h2>Asian tausta</h2>
 
-<p>ARA on {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} tekemällään päätöksellä velvoittanut
+<p>Varke on {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} tekemällään päätöksellä velvoittanut
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -50,24 +50,24 @@ values (7, 'Sakkopäätös / kuulemiskirje', 'Sakkopäätös / kuulemiskirje (sv
     {{/omistaja-yritys}}
     hankkimaan osoitteessa {{#kohde}}{{katuosoite}} {{postinumero}} {{postitoimipaikka}}{{/kohde}} sijaitsevalle
     rakennukselle energiatodistuksen viimeistään {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-maarapaiva}}{{/aiemmat-toimenpiteet}} ja esittämään
-    energiatodistuksen ARAlle. Päätöksen tehosteeksi ARA on asettanut
+    energiatodistuksen Varkelle. Päätöksen tehosteeksi Varke on asettanut
     {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euron suuruisen kiinteän uhkasakon.
-    Päätöksen mukaan uhkasakko tuomitaan maksettavaksi, mikäli ARAn käskyä ei ole annetussa määräajassa noudatettu.</p>
+    Päätöksen mukaan uhkasakko tuomitaan maksettavaksi, mikäli Varken käskyä ei ole annetussa määräajassa noudatettu.</p>
 
-<p>ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Energiatodistusta ei ole hankittu eikä esitetty
-    ARAlle määräajassa. Näin ollen ARA aikoo tehdä päätöksen
+<p>Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Energiatodistusta ei ole hankittu eikä esitetty
+    Varkelle määräajassa. Näin ollen Varke aikoo tehdä päätöksen
     {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euron uhkasakon tuomitsemisesta maksuun.</p>
 
 <h2>Asianosaisen kuuleminen</h2>
 
-<p>Ennen asian ratkaisemista ARA varaa Teille hallintolain (434/2003) 34 §:n mukaisen tilaisuuden lausua mielipiteenne
+<p>Ennen asian ratkaisemista Varke varaa Teille hallintolain (434/2003) 34 §:n mukaisen tilaisuuden lausua mielipiteenne
     asiasta sekä antaa selitys sellaisista vaatimuksista ja selvityksistä, jotka voivat vaikuttaa asian ratkaisuun.
     Vastaus on annettava viimeistään {{määräpäivä}}. Vastauksen antamatta jättäminen ei
     estä asian ratkaisemista.</p>
 
 <div class="page-break-avoid">
-<p>Vastaus pyydetään toimittamaan ARAn kirjaamoon joko sähköpostitse <br/>kirjaamo.ara@ara.fi tai postitse Asumisen
-    rahoitus- ja kehittämiskeskus, PL 30, 15141 Lahti.</p>
+<p>Vastaus pyydetään toimittamaan Varken kirjaamoon joko sähköpostitse <br/>varke.ym@gov.fi tai postitse Valtion tukeman asuntorakentamisen keskus,
+PL 35, 00023 Valtioneuvosto</p>
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
@@ -110,7 +110,7 @@ values (7, 'Sakkopäätös / kuulemiskirje', 'Sakkopäätös / kuulemiskirje (sv
 
 <h2>Ärendets bakgrund</h2>
 
-<p>ARA har genom sitt beslut {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} ålagt
+<p>Varke har genom sitt beslut {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} ålagt
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -118,22 +118,22 @@ values (7, 'Sakkopäätös / kuulemiskirje', 'Sakkopäätös / kuulemiskirje (sv
     {{nimi}}
     {{/omistaja-yritys}}
     att senast {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-maarapaiva}}{{/aiemmat-toimenpiteet}} skaffa ett energicertifikat till byggnaden på adressen
-    {{#kohde}}{{katuosoite}} {{postinumero}} {{postitoimipaikka}}{{/kohde}} och visa upp energicertifikatet för ARA. ARA
+    {{#kohde}}{{katuosoite}} {{postinumero}} {{postitoimipaikka}}{{/kohde}} och visa upp energicertifikatet för Varke. Varke
     har förenat beslutet med ett fast vite på {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euro.
-    Enligt beslutet döms vitet ut om ARAs order inte har iakttagits inom utsatt tid.</p>
+    Enligt beslutet döms vitet ut om Varkes order inte har iakttagits inom utsatt tid.</p>
 
-<p>Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Energicertifikatet har inte skaffats eller
-    visats upp för ARA inom utsatt tid. Således har ARA för avsikt att fatta beslut om att döma ut vitet på
+<p>Ändring i Varkes beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Energicertifikatet har inte skaffats eller
+    visats upp för Varke inom utsatt tid. Således har Varke för avsikt att fatta beslut om att döma ut vitet på
     {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euro.</p>
 
 <h2>Hörande av parter</h2>
 
-<p>Innan ärendet avgörs ger ARA Er tillfälle enligt 34 § i förvaltningslagen (434/2003) att uttala Er åsikt i ärendet
+<p>Innan ärendet avgörs ger Varke Er tillfälle enligt 34 § i förvaltningslagen (434/2003) att uttala Er åsikt i ärendet
     samt att ge en förklaring till sådana yrkanden och utredningar som kan inverka på avgörandet av ärendet. Svaret ska
     ges senast {{määräpäivä}}. Avsaknaden av svar hindrar inte att ärendet avgörs.</p>
 
 <div class="page-break-avoid">
-<p>Vi ber Er skicka svaret till ARAs registratorskontor antingen per e-post till <br/>kirjaamo.ara@ara.fi eller per post till
+<p>Vi ber Er skicka svaret till Varkes registratorskontor antingen per e-post till <br/>varke.ym@gov.fi eller per post till
     Finansierings- och ut-vecklingscentralen för boendet, PB 30, 15141 Lahtis.</p>
 
 {{#valvoja}}

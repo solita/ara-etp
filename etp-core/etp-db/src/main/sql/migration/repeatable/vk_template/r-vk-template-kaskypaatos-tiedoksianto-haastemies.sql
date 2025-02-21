@@ -54,13 +54,13 @@ values (8, 'Käskypäätös / tiedoksianto (Haastemies)', 'Käskypäätös / tie
 
 <h2>Laskutustiedot</h2>
 <div>
-    Asumisen rahoitus- ja kehittämiskeskus<br/>
-    Verkkolaskuosoite/OVT-tunnus: 003709483205<br/>
-    Välittäjätunnus (OpusCapita Solutions Oy): E204503<br/>
-    Y-tunnus: 0948320-5<br/>
-    ALV-tunnus (VAT-number): FI09483205<br/>
+    Ympäristöministeriö Valtion tukeman asuntorakentamisen keskus<br/>
+    Verkkolaskuosoite/OVT-tunnus: 003705194561<br/>
+    Välittäjätunnus (Posti Messaging Oy): 0216:003705194561<br/>
+    Y-tunnus: 0519456-1<br/>
+    ALV-tunnus (VAT-number): FI28768767<br/>
     Laskussa mainittava (Viite tms):ET/{{diaarinumero}}<br/>
-    <p>ARA pyytää lähettämään tiedot (PÄÄTÖS ja Dnro) asiakirjan toimittamisesta sähköpostina kirjaamoon (kirjaamo.ara@ara.fi)</p>
+    <p>Varke/ET pyytää lähettämään tiedot (PÄÄTÖS ja Dnro) asiakirjan toimittamisesta sähköpostina (varke.ym@gov.fi)</p>
 </div>
 
 <h2>Liitteet</h2>

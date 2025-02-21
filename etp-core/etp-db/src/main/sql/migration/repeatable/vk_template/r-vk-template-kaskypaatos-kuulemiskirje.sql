@@ -49,9 +49,9 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 
 <p>Seuraamuksista säädetään energiatodistuslain 24 §:ssä. Jos rakennuksen omistaja ei täytä energiatodistuslaissa
     säädettyjä velvollisuuksiaan tai toimii muutoin energiatodistuslain tai sen nojalla annettujen säännösten
-    vastaisesti, ARAn on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa ei
-    korjata määräajassa, ARAn on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
-    määräajassa korjata, ARAn tulee antaa tilanteen mukainen käsky- tai kieltopäätös. ARA voi tehostaa käskyä tai
+    vastaisesti, Varken on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa ei
+    korjata määräajassa, Varken on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
+    määräajassa korjata, Varken tulee antaa tilanteen mukainen käsky- tai kieltopäätös. Varke voi tehostaa käskyä tai
     kieltoa vakavissa tai olennaisissa rikkomuksissa uhkasakolla tai teettämis- tai keskeyttämisuhalla, joista
     säädetään uhkasakkolaissa (1113/1990).</p>
 
@@ -59,29 +59,29 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 <p>Omistamaanne rakennusta osoitteessa {{katuosoite}} {{postinumero}} {{postitoimipaikka}} on markkinoitu julkisesti
     {{ilmoituspaikka}} -sivustolla ilman energiatodistusta.
     {{/kohde}}
-    {{#aiemmat-toimenpiteet}}Tästä syystä ARA ryhtyi energiatodistuslain 24 §:n
+    {{#aiemmat-toimenpiteet}}Tästä syystä Varke ryhtyi energiatodistuslain 24 §:n
     mukaisiin toimenpiteisiin ja on lähettänyt Teille {{kehotus-pvm}} kehotuksen.</p>
 
-<p>Kehotuksessa Teitä on pyydetty {{kehotus-maarapaiva}} mennessä antamaan ARAlle tietoa mahdollisesta
+<p>Kehotuksessa Teitä on pyydetty {{kehotus-maarapaiva}} mennessä antamaan Varkelle tietoa mahdollisesta
     energiatodistuksesta tai
-    jos todistusta ei ole, sen laadinta-aikataulusta. Kun kehotusta ei noudatettu, ARA antoi Teille varoituksen, jonka
-    määräaika oli {{varoitus-maarapaiva}}. Asiantilaa ei kehotuksesta ja varoituksesta huolimatta korjattu, ja ARAn
+    jos todistusta ei ole, sen laadinta-aikataulusta. Kun kehotusta ei noudatettu, Varke antoi Teille varoituksen, jonka
+    määräaika oli {{varoitus-maarapaiva}}. Asiantilaa ei kehotuksesta ja varoituksesta huolimatta korjattu, ja Varken
     energiatodistusrekisteristä ilmenee, ettei kohteelle ole edelleenkään laadittu energiatodistusta<sup>1</sup>.</p>
 {{/aiemmat-toimenpiteet}}
 
-<p>ARA voi energiatodistuslain 24 §:n mukaisena viimesijaisena keinona antaa käskypäätöksen, jolla Teidät velvoitetaan
+<p>Varke voi energiatodistuslain 24 §:n mukaisena viimesijaisena keinona antaa käskypäätöksen, jolla Teidät velvoitetaan
     hankkimaan energiatodistus. Käskyä voidaan tehostaa uhkasakolla, jonka määrä on arviolta {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euroa.</p>
 
 <h2>Asianosaisen kuuleminen</h2>
 
-<p>Ennen asian ratkaisemista ARA varaa Teille hallintolain (434/2003) 34 §:n mukaisen tilaisuuden lausua mielipiteenne
+<p>Ennen asian ratkaisemista Varke varaa Teille hallintolain (434/2003) 34 §:n mukaisen tilaisuuden lausua mielipiteenne
     asiasta sekä antaa selitys sellaisista vaatimuksista ja selvityksistä, jotka voivat vaikuttaa asian ratkaisuun.
     Vastaus on annettava viimeistään {{määräpäivä}}. Vastauksen antamatta jättäminen ei estä
     asian ratkaisemista.</p>
 
 <div class="page-break-avoid">
-<p>Vastaus pyydetään toimittamaan ARAn kirjaamoon joko sähköpostitse <br/>kirjaamo.ara@ara.fi tai postitse Asumisen rahoitus-
-    ja kehittämiskeskus, PL 30, 15141 Lahti.</p>
+<p>Vastaus pyydetään toimittamaan Varken kirjaamoon joko sähköpostitse <br/>varke.ym@gov.fi tai
+postitse Valtion tukeman asuntorakentamisen keskus, PL 35, 00023 Valtioneuvosto.</p>
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
@@ -90,7 +90,7 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 {{/valvoja}}
 </div>
 
-<p class="footnote mb-0"><sup>1</sup> ARAn energiatodistusrekisterissä ovat 1.5.2015 jälkeen laaditut energiatodistukset.</p>
+<p class="footnote mb-0"><sup>1</sup> Varken energiatodistusrekisterissä ovat 1.5.2015 jälkeen laaditut energiatodistukset.</p>
 
 <div class="sivunvaihto"></div>
 
@@ -134,39 +134,39 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 
 <p>Bestämmelser om påföljderna finns i 24 § i lagen om energicertifikat. Om byggnadens ägare inte fullgör sina
     skyldigheter enligt lagen om energicertifikat eller i övrigt handlar i strid med lagen om energicertifikat eller
-    bestämmelserna som utfärdats med stöd av den, ska ARA uppmana ägaren att rätta till situationen och ange en
-    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska ARA ge den som
-    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska ARA enligt
+    bestämmelserna som utfärdats med stöd av den, ska Varke uppmana ägaren att rätta till situationen och ange en
+    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska Varke ge den som
+    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska Varke enligt
     vad situationen kräver meddela beslut om föreläggande eller förbud. Vid allvarliga eller väsentliga överträdelser
-    kan ARA förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
+    kan Varke förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
     vilka det bestäms i viteslagen (1113/1990).</p>
 
 {{#kohde}}
 <p>Er byggnad på {{katuosoite}} {{postinumero}} {{postitoimipaikka}} har marknadsförts offentligt på webbplatsen
     {{ilmoituspaikka}} utan energicertifikat.
     {{/kohde}}
-    {{#aiemmat-toimenpiteet}}Därför vidtog ARA åtgärder enligt 24 § i lagen om energicertifikat och har skickat en
+    {{#aiemmat-toimenpiteet}}Därför vidtog Varke åtgärder enligt 24 § i lagen om energicertifikat och har skickat en
     uppmaning till Er den {{kehotus-pvm}}.</p>
 
-<p>I uppmaningen har Ni ombetts att senast {{kehotus-maarapaiva}} ge ARA information om ett eventuellt energicertifikat
-    eller, om ett sådant inte finns, tidtabellen för upprättandet av certifikatet. När uppmaningen inte följdes gav ARA
+<p>I uppmaningen har Ni ombetts att senast {{kehotus-maarapaiva}} ge Varke information om ett eventuellt energicertifikat
+    eller, om ett sådant inte finns, tidtabellen för upprättandet av certifikatet. När uppmaningen inte följdes gav Varke
     Er en varning vars tidsfrist var {{varoitus-maarapaiva}}. Situationen korrigerades inte trots uppmaning och varning,
-    och av ARAs energicertifikatregister framgår att det fortfarande inte har upprättats något energicertifikat för
+    och av Varkes energicertifikatregister framgår att det fortfarande inte har upprättats något energicertifikat för
     adressen<sup>2</sup>.</p>
 {{/aiemmat-toimenpiteet}}
 
-<p>ARA kan som sista utväg i enlighet med 24 § i lagen om energicertifikat meddela ett beslut genom vilket Ni åläggs
+<p>Varke kan som sista utväg i enlighet med 24 § i lagen om energicertifikat meddela ett beslut genom vilket Ni åläggs
     att skaffa ett energicertifikat. Ordern kan förenas med vite som uppgår till uppskattningsvis {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euro.</p>
 
 <h2>Hörande av parter</h2>
 
-<p>Innan ärendet avgörs ger ARA Er tillfälle enligt 34 § i förvaltningslagen (434/2003) att uttala Er åsikt i ärendet
+<p>Innan ärendet avgörs ger Varke Er tillfälle enligt 34 § i förvaltningslagen (434/2003) att uttala Er åsikt i ärendet
     samt att ge en förklaring till sådana yrkanden och utredningar som kan inverka på avgörandet av ärendet. Svaret ska
     ges senast {{määräpäivä}}. Avsaknaden av svar hindrar inte att ärendet avgörs. </p>
 
 <div class="page-break-avoid">
-<p>Vi ber Er skicka svaret till ARAs registratorskontor antingen per e-post till <br/>kirjaamo.ara@ara.fi eller per post till
-    Finansierings- och ut-vecklingscentralen för boendet, PB 30, 15141 Lahtis.</p>
+<p>Vi ber Er skicka svaret till Varkes registratorskontor antingen per e-post till <br/>varke.ym@gov.fi eller per post till Centralen för statligt stött
+bostadsbyggande, PB 35, 00023 Statsrådet.</p>
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}
@@ -175,7 +175,7 @@ values (5, 'Käskypäätös / kuulemiskirje', 'Käskypäätös / kuulemiskirje (
 {{/valvoja}}
 </div>
 
-<p class="footnote mb-0"><sup>2</sup> I ARAs energicertifikatregister finns energicertifikat som upprättats efter 1 maj 2015.</p>
+<p class="footnote mb-0"><sup>2</sup> I Varkes energicertifikatregister finns energicertifikat som upprättats efter 1 maj 2015.</p>
 $$)
 on conflict (id) do update set label_fi          = excluded.label_fi,
                                label_sv          = excluded.label_sv,
