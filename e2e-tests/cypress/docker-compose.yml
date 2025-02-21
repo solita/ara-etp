@@ -41,21 +41,10 @@ services:
         condition: service_started
       minio:
         condition: service_started
-      ocsp-responder-int:
-        condition: service_started
-      ocsp-responder-root:
-        condition: service_started
       minio_create_default_bucket:
         condition: service_completed_successfully
       migration-runner:
         condition: service_completed_successfully
-    entrypoint: >
-      sh -c "
-        apt-get update && apt-get install -y socat
-        socat TCP-LISTEN:2060,fork,reuseaddr TCP:ocsp-responder-root:2060 &
-        socat TCP-LISTEN:2061,fork,reuseaddr TCP:ocsp-responder-int:2060 &
-        exec ./start.sh
-      "
 
   frontend:
     build:
@@ -102,4 +91,3 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
