@@ -44,9 +44,9 @@
   </p>
 
   <p>
-    Aran lakisääteisenä tehtävänä on valvoa energiatodistuksia ja niiden
+    Varken lakisääteisenä tehtävänä on valvoa energiatodistuksia ja niiden
     laatijoita. Rekisterissä käsitellään henkilötietoja, jotka tarvitaan
-    energiatodistusten valvontatietorekisterin ylläpitämiseksi. Ara valvoo
+    energiatodistusten valvontatietorekisterin ylläpitämiseksi. Varke valvoo
     energiatodistusten käyttöä ja oikeellisuutta sekä laatijoiden toimintaa.
   </p>
 
@@ -115,7 +115,7 @@
 
   <p>
     Tietojärjestelmän tekninen ylläpito ja kehittäminen on ulkoistettu
-    IT-palveluntarjoajalle. Ara on tehnyt palveluntarjoajan kanssa
+    IT-palveluntarjoajalle. Varke on tehnyt palveluntarjoajan kanssa
     tietosuoja-asetuksen mukaisen sopimuksen henkilötietojen käsittelystä.
   </p>
 
@@ -136,7 +136,7 @@
 
   <p>
     Energiatodistusten valvontatietorekisterin sisältämien henkilötietojen
-    säilytysajat pohjautuvat Aran tiedonohjaussuunnitelmaan.
+    säilytysajat pohjautuvat Varken tiedonohjaussuunnitelmaan.
   </p>
 
   <H2 text="Rekisteröidyn oikeudet" />
@@ -192,17 +192,17 @@
   <H2 text="Rekisterinpitäjä" />
 
   <ul class="contact-info">
-    <li>Asumisen rahoitus- ja kehittämiskeskus (Ara)</li>
-    <li>PL 30, 15141 Lahti</li>
-    <li>Puhelin: 029 525 0800 (vaihde)</li>
-    <li>Sähköposti: kirjaamo.ara(at)ara.fi</li>
+    <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
+    <li>PL 35, 00023 Valtioneuvosto</li>
+    <li>Puhelin: 0295 16001 (vaihde)</li>
+    <li>Sähköposti: varke.ym(at)gov.fi</li>
   </ul>
 
   <H2 text="Yhteyshenkilö" />
 
   <ul class="contact-info">
-    <li>Kirsi Unhonen, energia-asiantuntija</li>
-    <li>Asumisen rahoitus- ja kehittämiskeskus</li>
-    <li>etunimi.sukunimi(at)ara.fi</li>
+    <li>Kimmo Huovinen, apulaisjohtaja</li>
+    <li>Valtion tukeman asuntorakentamisen keskus (Varke)</li>
+    <li>etunimi.sukunimi(at)gov.fi</li>
   </ul>
 </div>
