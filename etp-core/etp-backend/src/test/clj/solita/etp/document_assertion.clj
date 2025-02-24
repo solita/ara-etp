@@ -43,7 +43,10 @@
       (ImageIOUtil/writeImage image "png" output)
       (.toByteArray output))))
 
-(defn save-new-snapshot [^PDDocument pdf-doc snapshot-path-in-resources]
+(defn save-new-snapshot
+  "If you want to update the snapshot of the document, call this function with the document and the path to the snapshot.
+   Example usage inside assert-pdf-matches-visually function: (save-new-snapshot pdf-under-testing baseline-pdf-resource-path)"
+  [^PDDocument pdf-doc snapshot-path-in-resources]
   (let [target-path (str "./src/test/resources/" snapshot-path-in-resources)]
     (io/make-parents target-path)
     (.save pdf-doc target-path)))
@@ -76,7 +79,6 @@
     (doseq [page-number (range 0 (.getNumberOfPages pdf-under-testing))
             :let [rendered-image (pdf-page->image-byte-array pdf-under-testing page-number)]]
       (t/testing (str "page " (inc page-number))
-        (save-new-snapshot pdf-under-testing baseline-pdf-resource-path)
         (t/is (Arrays/equals (pdf-page->image-byte-array pdf-under-testing page-number)
                              (pdf-page->image-byte-array baseline-pdf page-number))
               "If change is intended, save new document snapshot in the test with save-new-snapshot function"))
