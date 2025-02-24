@@ -5,12 +5,15 @@
   import * as Navigation from '@Utility/navigation';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as keys from '@Utility/keys';
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
+  import * as Locales from '@Language/locale-utils';
 
   import LanguageSelect from './language-select';
 
   export let whoami = Maybe.None();
   export let ohjeSivut = Maybe.None();
+
+  $: headerLogoPath = Locales.isSV($locale) ? 'images/YM_Varke_vaaka_valk_SV_RGB.png' : 'images/YM_Varke_vaaka_valk_FI_RGB.png';
 
   let showNameDropdown = false;
   let showOhjeDropdown = false;
@@ -45,38 +48,38 @@
 </script>
 
 <style type="text/postcss">
-  header {
+header {
     @apply flex h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
-  }
+}
 
-  .logo-link {
+.logo-link {
     flex-shrink: 0;
-  }
+}
 
-  .listlink {
+.listlink {
     @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
-  }
-  .ohjelistlink {
+}
+.ohjelistlink {
     @apply w-full p-2 text-dark text-left font-normal normal-case tracking-normal cursor-pointer;
-  }
+}
 
-  .listlink:not(:last-child),
-  .ohjelistlink:not(:last-child) {
+.listlink:not(:last-child),
+.ohjelistlink:not(:last-child) {
     @apply border-b-1 border-disabled;
-  }
+}
 
-  .listlink:hover,
-  .ohjelistlink:hover {
+.listlink:hover,
+.ohjelistlink:hover {
     @apply bg-background;
-  }
+}
 
-  .logout {
+.logout {
     @apply normal-case text-sm font-normal tracking-normal;
-  }
+}
 
-  .logout:hover {
+.logout:hover {
     @apply cursor-pointer underline;
-  }
+}
 </style>
 
 <svelte:window
@@ -101,12 +104,9 @@
 
 <header class="flex justify-between px-2 lg:px-10">
   <div class="flex grow items-center">
-    <a class="logo-link" href="/">
-      <img
-        class="mr-2 lg:mr-6"
-        src="images/ara_logo_simple_nega.svg"
-        alt="Ara" />
-    </a>
+    <img class="mr-2 lg:mr-6 h-20"
+         src={headerLogoPath}
+         alt="Varke" />
     <LanguageSelect />
   </div>
 
