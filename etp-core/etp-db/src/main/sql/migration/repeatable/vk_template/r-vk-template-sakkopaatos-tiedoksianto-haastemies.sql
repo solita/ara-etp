@@ -66,7 +66,7 @@ values (10, 'Sakkopäätös / tiedoksianto (Haastemies)', 'Sakkopäätös / tied
 
 <h2>Laskutustiedot</h2>
 <div>
-    Ympäristöministeriö Valtion tukeman asuntorakentamisen keskus<br/>
+    Valtion tukeman asuntorakentamisen keskus<br/>
     Verkkolaskuosoite/OVT-tunnus: 003705194561<br/>
     Välittäjätunnus (Posti Messaging Oy): 0216:003705194561<br/>
     Y-tunnus: 0519456-1<br/>
