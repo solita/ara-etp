@@ -35,16 +35,15 @@
     <article class="flex flex-col md:flex-row md:my-0 md:space-x-10">
       <section class="md:w-1/3 py-4 md:py-0">
         <h2 class="mb-4">{$_('FOOTER_LAKI')}</h2>
-        <p>{$_('FOOTER_ARA_VIRANOMAINEN')}</p>
+        <p>{$_('FOOTER_VARKE_VIRANOMAINEN')}</p>
         <br />
-        <Link href="https://www.ara.fi">{$_('FOOTER_ARA_LINKKI')}</Link>
+        <Link href="https://www.ara.fi">{$_('FOOTER_VARKE_LINKKI')}</Link>
       </section>
       <section class="md:w-1/3 flex flex-col justify-between py-4 md:py-0">
         <h2 class="mb-4">{$_('FOOTER_YHTEYSTIEDOT')}</h2>
         <address class="not-italic">
           <span>{$_('EMAIL')}:</span>
-          <Link href="mailto:energiatodistus@ara.fi"
-            >energiatodistus@ara.fi</Link>
+          <Link href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link>
         </address>
         <address class="not-italic flex flex-col">
           <span>{$_('FOOTER_OSOITE_1')}</span>
@@ -99,8 +98,8 @@
     </article>
 
     <div class="my-16 border-t-2 border-gray-400 pt-3">
-      <a href="https://www.ara.fi">
-        <img class="logo pt-8" src={logo} alt={$_('FOOTER_ARA_LOGO_ALT')} />
+      <a href="https://www.varke.fi">
+        <img class="logo pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
       </a>
     </div>
   </footer>

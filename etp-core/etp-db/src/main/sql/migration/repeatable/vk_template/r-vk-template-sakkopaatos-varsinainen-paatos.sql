@@ -39,7 +39,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 
 <h2>Päätös</h2>
 
-<p>Asumisen rahoitus- ja kehittämiskeskus (ARA) tuomitsee
+<p>Valtion tukeman asuntorakentamisen keskus (Varke) tuomitsee
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -47,7 +47,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
     {{nimi}}
     {{/omistaja-yritys}}
     (jäljempänä Asianosainen) maksettavaksi
-    hänelle ARAn päätöksessä {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}} (dnro {{varsinainen-paatos-diaarinumero}}, jäljempänä ARAn päätös){{/aiemmat-toimenpiteet}} asetetun {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euron
+    hänelle Varken päätöksessä {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}} (dnro {{varsinainen-paatos-diaarinumero}}, jäljempänä Varken päätös){{/aiemmat-toimenpiteet}} asetetun {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euron
     kiinteän uhkasakon, koska päävelvoitetta ei ole noudatettu, eikä noudattamatta jättämiseen ole pätevää syytä.
     Uhkasakko tuomitaan maksettavaksi kerralla.
     Tilisiirtolomake uhkasakon maksamiseksi on tämän päätöksen liitteenä. Uhkasakko maksetaan valtiolle ja sen
@@ -57,7 +57,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 <h2>Kuuleminen</h2>
 
 {{#aiemmat-toimenpiteet}}
-<p>ARA varasi {{sakkopaatos-kuulemiskirje-pvm}} päivätyllä kirjeellään (dnro {{sakkopaatos-kuulemiskirje-diaarinumero}}) Asianosaiselle uhkasakkolain 22 §:n ja
+<p>Varke varasi {{sakkopaatos-kuulemiskirje-pvm}} päivätyllä kirjeellään (dnro {{sakkopaatos-kuulemiskirje-diaarinumero}}) Asianosaiselle uhkasakkolain 22 §:n ja
     siinä viitatun hallintolain (434/2003) 34 §:n mukaisesti ennen asian ratkaisemista tilaisuuden lausua
     mielipiteensä asiasta sekä antaa selityksensä sellaisista vaatimuksista ja selvityksistä, jotka saattavat
     vaikuttaa asian ratkaisuun.</p>
@@ -82,9 +82,9 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 
 <p>Seuraamuksista säädetään energiatodistuslain 24 §:ssä. Jos rakennuksen omistaja ei täytä energiatodistuslaissa
     säädettyjä velvollisuuksia tai toimii muutoin energiatodistuslain tai sen nojalla annettujen säännösten
-    vastaisesti, ARAn on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa
-    ei korjata määräajassa, ARAn on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
-    määräajassa korjata, ARAn tulee antaa tilanteen mukainen käsky- tai kieltopäätös. ARA voi tehostaa käskyä tai
+    vastaisesti, Varken on kehotettava korjaamaan asiantila ja asetettava määräaika asiantilan korjaamiselle. Jos asiaa
+    ei korjata määräajassa, Varken on annettava asianomaiselle taholle varoitus ja uusi määräaika. Jos asiantilaa ei
+    määräajassa korjata, Varken tulee antaa tilanteen mukainen käsky- tai kieltopäätös. Varke voi tehostaa käskyä tai
     kieltoa vakavissa tai olennaisissa rikkomuksissa uhkasakolla tai teettämis- tai keskeyttämisuhalla, joista
     säädetään uhkasakkolaissa (1113/1990).</p>
 
@@ -95,12 +95,12 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
     asetettava eri uhkasakko, jos uhkasakko kohdistetaan useisiin asianosaisiin.</p>
 
 <p>Asianosainen on laiminlyönyt noudattaa energiatodistuslain 6 §:ssä säädettyä velvollisuutta käyttää energiatodistusta
-    rakennuksen myyntitilanteessa. ARA antoi laiminlyönnin johdosta Asianosaiselle energiatodistuslain 24 §:n mukaisen
-    kehotuksen ja varoituksen energiatodistuksen hankkimiseen, mutta niitä ei noudatettu. Näin ollen ARA teki
+    rakennuksen myyntitilanteessa. Varke antoi laiminlyönnin johdosta Asianosaiselle energiatodistuslain 24 §:n mukaisen
+    kehotuksen ja varoituksen energiatodistuksen hankkimiseen, mutta niitä ei noudatettu. Näin ollen Varke teki
     {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} päätöksen, jolla se käski Asianosaisen hankkimaan osoitteessa {{#kohde}}{{katuosoite}} {{postinumero}} {{postitoimipaikka}}{{/kohde}}
-    sijaitsevalle rakennukselle energiatodistuksen viimeistään {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-maarapaiva}}{{/aiemmat-toimenpiteet}} ja esittämään energiatodistuksen ARAlle.
-    Päätöksen tehosteeksi ARA asetti {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-fine}}{{/aiemmat-toimenpiteet}} euron suuruisen kiinteän uhkasakon. Päätöksen mukaan uhkasakko tuomitaan
-    maksettavaksi, mikäli ARAn käskyä ei noudateta annetussa määräajassa.</p>
+    sijaitsevalle rakennukselle energiatodistuksen viimeistään {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-maarapaiva}}{{/aiemmat-toimenpiteet}} ja esittämään energiatodistuksen Varkelle.
+    Päätöksen tehosteeksi Varke asetti {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-fine}}{{/aiemmat-toimenpiteet}} euron suuruisen kiinteän uhkasakon. Päätöksen mukaan uhkasakko tuomitaan
+    maksettavaksi, mikäli Varken käskyä ei noudateta annetussa määräajassa.</p>
 
 {{#tyyppikohtaiset-tiedot}}
 <p class="respect-new-lines">{{statement-fi}}</p>
@@ -184,7 +184,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 
 <h2>Beslut</h2>
 
-<p>Finansierings- och utvecklingscentralen för boendet (ARA) dömer
+<p>Centralen för statligt stött bostadsbyggande (Varke) dömer
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -192,7 +192,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
     {{nimi}}
     {{/omistaja-yritys}}
     att betala det fasta vite på {{#tyyppikohtaiset-tiedot}}{{fine}}{{/tyyppikohtaiset-tiedot}} euro som fastställts i
-    ARAs beslut {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}} (dnr {{varsinainen-paatos-diaarinumero}}, nedan ARAs
+    Varkes beslut {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}} (dnr {{varsinainen-paatos-diaarinumero}}, nedan Varkes
     beslut){{/aiemmat-toimenpiteet}}, eftersom huvudförpliktelsen inte har iakttagits och det inte finns någon giltig
     orsak för varför den inte har iakttagits. Vitet döms ut på en gång.
 </p>
@@ -202,7 +202,7 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 <h2>Hörande</h2>
 
 {{#aiemmat-toimenpiteet}}
-<p>AARA gav i sitt brev (dnr {{sakkopaatos-kuulemiskirje-diaarinumero}}) daterat {{sakkopaatos-kuulemiskirje-pvm}}
+<p>Varke gav i sitt brev (dnr {{sakkopaatos-kuulemiskirje-diaarinumero}}) daterat {{sakkopaatos-kuulemiskirje-pvm}}
     {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -232,11 +232,11 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
 
 <p>Bestämmelser om påföljderna finns i 24 § i lagen om energicertifikat. Om byggnadens ägare inte fullgör sina
     skyldigheter enligt lagen om energicertifikat eller i övrigt handlar i strid med lagen om energicertifikat eller
-    bestämmelserna som utfärdats med stöd av den, ska ARA uppmana ägaren att rätta till situationen och ange en
-    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska ARA ge den som
-    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska ARA enligt
+    bestämmelserna som utfärdats med stöd av den, ska Varke uppmana ägaren att rätta till situationen och ange en
+    tidsfrist inom vilken situationen ska rättas till. Om saken inte rättas till inom tidsfristen ska Varke ge den som
+    saken gäller en varning och ange en ny tidsfrist. Om situationen inte rättas till inom tidsfristen ska Varke enligt
     vad situationen kräver meddela beslut om föreläggande eller förbud. Vid allvarliga eller väsentliga överträdelser
-    kan ARA förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
+    kan Varke förena föreläggandet eller förbudet med vite eller med hot om tvångsutförande eller hot om avbrytande, om
     vilka det bestäms i viteslagen (1113/1990).</p>
 
 <p>Enligt 10 § i viteslagen (1113/1990) kan den myndighet som har förelagt vitet döma ut vitet, om huvudförpliktelsen
@@ -252,15 +252,15 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
     {{#omistaja-yritys}}
     {{nimi}}
     {{/omistaja-yritys}} har försummat skyldigheten enligt 6 § i lagen om energicertifikat att använda energicertifikat
-    vid försäljning av en byggnad. På grund av försummelsen gav ARA
+    vid försäljning av en byggnad. På grund av försummelsen gav Varke
     {{#omistaja-henkilo}}
     {{sukunimi}}
     {{/omistaja-henkilo}}
     {{#omistaja-yritys}}
     {{nimi}}
     {{/omistaja-yritys}} en uppmaning och varning enligt 24 § i
-    lagen om energicertifikat om att skaffa energicertifikat, men dessa efterlevdes inte. Således fattade ARA ett beslut
-    {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} päätöksen, genom vilket ARA beordrade
+    lagen om energicertifikat om att skaffa energicertifikat, men dessa efterlevdes inte. Således fattade Varke ett beslut
+    {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-pvm}}{{/aiemmat-toimenpiteet}} päätöksen, genom vilket Varke beordrade
     {{#omistaja-henkilo}}
     {{etunimi}} {{sukunimi}}
     {{/omistaja-henkilo}}
@@ -269,9 +269,9 @@ values (9, 'Sakkopäätös / varsinainen päätös', 'Sakkopäätös / varsinain
     {{/omistaja-yritys}} att skaffa ett energicertifikat för byggnaden på adressen {{#kohde}}{{katuosoite}}
     {{postinumero}} {{postitoimipaikka}}{{/kohde}}
     senast {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-maarapaiva}}{{/aiemmat-toimenpiteet}} och visa upp
-    energicertifikatet för ARA. ARA förenade beslutet med ett fast vite på
+    energicertifikatet för Varke. Varke förenade beslutet med ett fast vite på
     {{#aiemmat-toimenpiteet}}{{varsinainen-paatos-fine}}{{/aiemmat-toimenpiteet}} euro. Enligt beslutet döms vitet ut om
-    ARAs order inte iakttas inom utsatt tid.</p>
+    Varkes order inte iakttas inom utsatt tid.</p>
 
 {{#tyyppikohtaiset-tiedot}}
 <p class="respect-new-lines">{{statement-sv}}</p>

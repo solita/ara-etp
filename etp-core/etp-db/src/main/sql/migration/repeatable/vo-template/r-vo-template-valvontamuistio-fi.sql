@@ -1,5 +1,5 @@
 insert into vo_template (id, label_fi, label_sv, ordinal, toimenpidetype_id, language, content)
-values (4, 'Valvontamuistio (fi)', 'Övervaknings-pm (fi)', 1, 7, 'fi', 
+values (4, 'Valvontamuistio (fi)', 'Övervaknings-pm (fi)', 1, 7, 'fi',
 $$
 <div class="otsikko">
     <b>VALVONTAMUISTIO</b> <br/>
@@ -13,11 +13,11 @@ $$
     {{#energiatodistus}}
     <table class="sarake">
         <tr>
-            <td>Kohde:</td> 
+            <td>Kohde:</td>
             <td>
                 <div class="nowrap">{{nimi}}</div>
-                <div class="nowrap">{{katuosoite}}</div>  
-                <div class="nowrap">{{postinumero}} {{postitoimipaikka}}</div>  
+                <div class="nowrap">{{katuosoite}}</div>
+                <div class="nowrap">{{postinumero}} {{postitoimipaikka}}</div>
             </td>
         </tr>
     </table>
@@ -25,7 +25,7 @@ $$
     {{/energiatodistus}}
 </p>
 
-<p>Asumisen rahoitus- ja kehittämiskeskus (ARA) on energiatodistuslain (50/2013) <span class="nowrap">18 §:n</span>
+<p>Valtion tukeman asuntorakentamisen keskuksen (Varke) on energiatodistuslain (50/2013) <span class="nowrap">18 §:n</span>
     nojalla tarkastanut laatimanne energiatodistuksen. Oikeellisuustarkastus on kohdistunut energiatodistuksen
     lähtötietoihin, energiatehokkuusluvun laskentaan sekä säästösuositusten oikeellisuuteen. Tarkastuksen perusteella
     kiinnitettiin huomiota seuraaviin asioihin:</p>
@@ -41,29 +41,29 @@ $$
 {{#valvontamuistio}}
     {{#vakavuus}}
         {{#ei-huomioitavaa}}
-            <p><b>ARA toteaa, että energiatodistuksessa ei ole havaittu huomautettavaa.</b></p>
+            <p><b>Varke toteaa, että energiatodistuksessa ei ole havaittu huomautettavaa.</b></p>
         {{/ei-huomioitavaa}}
         {{#ei-toimenpiteitä}}
-            <p><b>ARA toteaa, että energiatodistuksessa ei ole havaittu muuta huomautettavaa kuin edellä mainitut. Havainnot eivät
+            <p><b>Varke toteaa, että energiatodistuksessa ei ole havaittu muuta huomautettavaa kuin edellä mainitut. Havainnot eivät
                edellytä laatijalta toimenpiteitä.</b></p>
         {{/ei-toimenpiteitä}}
         {{#virheellinen}}
-          <p><b>ARA toteaa, että energiatodistus voi edellä luetelluin perustein olla olennaisesti virheellinen eikä todistuksen
-             sisältöä käyty muilta osin lävitse.</b> ARA pyytää esittämään omat perustelunne tarkastuksessa tehdyistä havainnoista ja
-             toimittamaan ne ARAn energiatodistusrekisteriin {{määräpäivä}} mennessä.</p>
+          <p><b>Varke toteaa, että energiatodistus voi edellä luetelluin perustein olla olennaisesti virheellinen eikä todistuksen
+             sisältöä käyty muilta osin lävitse.</b> Varke pyytää esittämään omat perustelunne tarkastuksessa tehdyistä havainnoista ja
+             toimittamaan ne Varken energiatodistusrekisteriin {{määräpäivä}} mennessä.</p>
         {{/virheellinen}}
     {{/vakavuus}}
 {{/valvontamuistio}}
 
 
-<p>Jos energiatodistuksen laatija ei täytä säädettyjä velvollisuuksia, ARA kehottaa korjaamaan asian ja antaa määräajan
-    korjaukselle. Jos asiaa ei korjata määräajassa, ARA antaa laatijalle varoituksen ja uuden määräajan. Jos asiaa ei
-    edelleenkään korjata, ARA laittaa todistuksen käyttökieltoon ja velvoittaa energiatodistuksen laatijan korvaamaan
+<p>Jos energiatodistuksen laatija ei täytä säädettyjä velvollisuuksia, Varke kehottaa korjaamaan asian ja antaa määräajan
+    korjaukselle. Jos asiaa ei korjata määräajassa, Varke antaa laatijalle varoituksen ja uuden määräajan. Jos asiaa ei
+    edelleenkään korjata, Varke laittaa todistuksen käyttökieltoon ja velvoittaa energiatodistuksen laatijan korvaamaan
     virheellisen todistuksen uudella todistuksella. Energiatodistus voidaan tarvittaessa teettää myös toisella
     energiatodistuksen laatijalla. Uuden todistuksen kustannuksista vastaa virheellisen todistuksen laatinut
     energiatodistuksen laatija. </p>
 
-<p>ARAlla on myös mahdollisuus antaa laatijalle laatimiskielto, jos laatija on toiminut olennaisella tai merkittävällä
+<p>Varkella on myös mahdollisuus antaa laatijalle laatimiskielto, jos laatija on toiminut olennaisella tai merkittävällä
     tavalla säännösten vastaisesti.</p>
 
 <p>

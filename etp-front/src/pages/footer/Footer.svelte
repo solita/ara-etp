@@ -32,8 +32,8 @@
             <Link
               bold={true}
               additionalClasses="text-ara-2021-green-small-text"
-              href={'mailto:energiatodistus@ara.fi'}
-              text={'energiatodistus@ara.fi'} />
+              href={'mailto:varke.ym@gov.fi'}
+              text={'varke.ym@gov.fi'} />
           </div>
         </div>
       </div>
