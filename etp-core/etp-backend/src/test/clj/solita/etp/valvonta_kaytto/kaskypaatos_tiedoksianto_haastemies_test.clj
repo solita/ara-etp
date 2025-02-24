@@ -18,7 +18,7 @@
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
-     :email    "testi@ara.fi"
+     :email    "testi@varke.fi"
      :puhelin  "0504363675457"})
   (t/testing "Käskypäätös / Haastemies toimenpide is created successfully for yksityishenkilö and document is generated with correct information"
     (let [valvonta-id (valvonta-service/add-valvonta! ts/*db* {:katuosoite        "Testitie 5"
