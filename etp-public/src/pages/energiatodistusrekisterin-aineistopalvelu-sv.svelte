@@ -128,8 +128,8 @@
     <p>Lämpar sig till exempel för forskningsändamål.</p>
     <H2>ANVÄNDNINGSVILLKOR</H2>
     <p>
-      Användningen av datatjänsten förutsätter att ARA har beviljat användaren
-      datatillstånd. Dessutom ingår Ara och användaren ett separat avtal om
+      Användningen av datatjänsten förutsätter att Varke har beviljat användaren
+      datatillstånd. Dessutom ingår Varke och användaren ett separat avtal om
       användningen av Materialtjänsten.
     </p>
     <p>
@@ -149,8 +149,8 @@
     <p>
       Vår prislista finns på
       <Link
-        href="https://www.ara.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
-        >Aras webbplats</Link
+        href="https://www.varke.fi/sv/om-oss/kontaktuppgifter/priser-avgiftsbelagda-tjanster"
+        >Varkes webbplats</Link
       >.
     </p>
     <H2>ANSLUTNING TILL MATERIALTJÄNSTEN</H2>
@@ -164,10 +164,11 @@
         </Link>.
       </li>
       <li>
-        Skicka ansökan per e-post till Aras registratorskontor (<Link
-          href="mailto:kirjaamo.ara@ara.fi">kirjaamo.ara@ara.fi</Link
+        Skicka ansökan per e-post till Varkes registratorskontor (<Link
+          href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link
         >). Om ansökan innehåller sekretessbelagd information ska du skicka
-        ansökan som <Link href="https://turvaviesti.ara.fi/">säker e-post</Link
+        ansökan som <Link href="https://turvaviesti.varke.fi/"
+          >säker e-post</Link
         >.
       </li>
       <li>
@@ -196,7 +197,9 @@
     <p>
       Vid störningar i materialtjänsten ska du kontakta oss per e-post på
       adressen
-      <Link href="mailto:energiatodistus@ara.fi">energiatodistus@ara.fi</Link>.
+      <Link href="mailto:energiatodistus.varke@gov.fi"
+        >energiatodistus.varke@gov.fi</Link
+      >.
     </p>
   </div>
 </Container>

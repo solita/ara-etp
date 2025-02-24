@@ -35,8 +35,8 @@
   <div bind:this={component}>
     <InfoBlock {title} showIcon={false}>
       <p>
-        Organisaatiot voivat saada Asumisen rahoitus- ja kehittämiskeskuksen
-        (Ara) ylläpitämästä energiatodistusrekisteristä energiatodistustietoa
+        Organisaatiot voivat saada Valtion tukeman asuntorakentamisen keskuksen
+        (Varke) ylläpitämästä energiatodistusrekisteristä energiatodistustietoa
         kolmella eri tavalla.
       </p>
       <ol class="ml-6">
@@ -55,8 +55,8 @@
           Käsittelemme ilman rajapintaa toteutettavat tietopyynnöt
           tapauskohtaisesti ja veloitamme niistä tuntihinnastomme mukaisesti. <br />
           Lisätietoja:
-          <Link href="mailto:energiatodistus@ara.fi"
-            >energiatodistus@ara.fi</Link>
+          <Link href="mailto:energiatodistus.varke@gov.fi"
+            >energiatodistus.varke@gov.fi</Link>
         </li>
       </ol>
     </InfoBlock>
@@ -68,7 +68,7 @@
     <H2>Rajapintoihin liittyminen ja tietosuoja</H2>
     <p>
       Palveluihin liittyminen on maksullista ja niiden käyttäminen edellyttää
-      Aran myöntämää tietolupaa. Lisäksi Ara ja käyttäjä solmivat erillisen
+      Varken myöntämää tietolupaa. Lisäksi Varke ja käyttäjä solmivat erillisen
       sopimuksen palvelun käytöstä.
     </p>
     <p>
@@ -79,12 +79,13 @@
       saada käyttöön myös niin, että henkilötiedot on poistettu.
     </p>
     <p>
-      Ara noudattaa kaikessa toiminnassaan huolellisuutta ja varmistaa, että
+      Varke noudattaa kaikessa toiminnassaan huolellisuutta ja varmistaa, että
       tietosuoja ja tietoturvallisuus toteutuvat. Henkilötietojen käsittely
-      perustuu pääsääntöisesti Aran lakisääteisten velvoitteiden noudattamiseen.
+      perustuu pääsääntöisesti Varken lakisääteisten velvoitteiden
+      noudattamiseen.
       <Link
-        href="https://www.ara.fi/fi/tietoa-meista/tietosuoja-ja-tietojen-kasittely">
-        Lue lisää henkilötietojen käsittelystä (ara.fi)</Link>
+        href="https://www.varke.fi/fi/tietoa-meista/tietosuoja-ja-tietojen-kasittely">
+        Lue lisää henkilötietojen käsittelystä (varke.fi)</Link>
 
       Pidämme rekisteriä rajapintaan liitetyistä aineistoasiakkaista.
       Tietosuojaselosteet ovat sivulla
