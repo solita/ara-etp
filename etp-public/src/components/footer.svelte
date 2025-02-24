@@ -7,14 +7,17 @@
   import Link from '@Component/link';
   import IconLogin from '@Asset/icons/login-light.svg';
   import IconChat from '@Asset/icons/chat.svg';
-  import ImgLogoBlack from '@Asset/ara_logo_black.png';
-  import ImgLogoBlackSwe from '@Asset/ara_swe_logo_black.png';
+  import ImgFooterLogoFi from '@Asset/YM_Varke_vaaka_sin_FI_RGB.png?width=1471&height=257';
+  import ImgFooterLogoSv from '@Asset/YM_Varke_vaaka_sin_SV_RGB.png?width=1471&height=257';
+  import ImgFooterLogoSmallFi from '@Asset/YM_Varke_kapea_sin_FI_RGB.png?width=659&height=302';
+  import ImgFooterLogoSmallSv from '@Asset/YM_Varke_kapea_sin_SV_RGB.png?width=659&height=302';
 
   import { _, locale } from '@Localization/localization';
 
   export let config;
 
-  $: logo = $locale === 'fi' ? ImgLogoBlack : ImgLogoBlackSwe;
+  $: logo = $locale === 'fi' ? ImgFooterLogoFi : ImgFooterLogoSv;
+  $: logoSmall = $locale === 'fi' ? ImgFooterLogoSmallFi : ImgFooterLogoSmallSv;
 </script>
 
 <style>
@@ -22,11 +25,6 @@
     footer {
       display: none;
     }
-  }
-
-  .logo {
-    height: 140px;
-    width: auto;
   }
 </style>
 
@@ -99,7 +97,11 @@
 
     <div class="my-16 border-t-2 border-gray-400 pt-3">
       <a href="https://www.varke.fi">
-        <img class="logo pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
+        <picture>
+          <source media="(max-width: 767px)" srcset="{logoSmall}" />
+          <source media="(min-width: 768px)" srcset="{logo}" />
+          <img class="logo pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
+        </picture>
       </a>
     </div>
   </footer>
