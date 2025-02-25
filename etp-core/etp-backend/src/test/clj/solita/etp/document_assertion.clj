@@ -84,6 +84,8 @@
               "If change is intended, save new document snapshot in the test with save-new-snapshot function"))
 
       ;; Write the image in build directory so it can be compared manually
-      (with-open [output (FileOutputStream. (str "./target/" filename "-page-" (inc page-number) ".png"))]
-        (.write output rendered-image)))))
+      (let [debug-image-path (str "./target/" filename "-page-" (inc page-number) ".png")]
+        (io/make-parents debug-image-path)
+        (with-open [output (FileOutputStream. debug-image-path)]
+          (.write output rendered-image))))))
 
