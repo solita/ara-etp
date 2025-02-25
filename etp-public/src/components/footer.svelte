@@ -98,8 +98,8 @@
     <div class="my-16 border-t-2 border-gray-400 pt-3">
       <a href="https://www.varke.fi">
         <picture>
-          <source media="(max-width: 767px)" srcset="{logoSmall}" />
-          <source media="(min-width: 768px)" srcset="{logo}" />
+          <source media="(max-width: 767px)" srcset={logoSmall} />
+          <source media="(min-width: 768px)" srcset={logo} />
           <img class="logo pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
         </picture>
       </a>

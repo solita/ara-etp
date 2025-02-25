@@ -6,7 +6,9 @@
 
   export let version;
 
-  $: footerLogoPath = Locales.isSV($locale) ? "images/YM_Varke_vaaka_sin_SV_RGB.png" : "images/YM_Varke_vaaka_sin_FI_RGB.png";
+  $: footerLogoPath = Locales.isSV($locale)
+    ? 'images/YM_Varke_vaaka_sin_SV_RGB.png'
+    : 'images/YM_Varke_vaaka_sin_FI_RGB.png';
 </script>
 
 <footer class="flex flex-col w-full text-sm">
@@ -77,7 +79,7 @@
   </div>
   <div
     class="border-t border-tableborder mx-8 pt-4 pb-16 flex items-center justify-between">
-    <img class="h-32" src="{footerLogoPath}" alt="Varke" />
+    <img class="h-32" src={footerLogoPath} alt="Varke" />
     <div class="">
       {version.version}
     </div>
