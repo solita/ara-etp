@@ -131,7 +131,7 @@
           href="https://www.varke.fi/sv/form/feedback-form"
           referrerpolicy="no-referrer"
           target="_blank">
-          Ge respons
+          Ge respons (varke.fi)
         </Link>.
       </p>
       <p>
