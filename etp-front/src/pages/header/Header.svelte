@@ -106,7 +106,9 @@
 
 <header class="flex justify-between px-2 lg:px-10">
   <div class="flex grow items-center">
-    <img class="mr-2 lg:mr-6 h-20" src={headerLogoPath} alt="Varke" />
+    <a class="logo-link" href="/">
+      <img class="mr-2 lg:mr-6 h-20" src={headerLogoPath} alt="Varke" />
+    </a>
     <LanguageSelect />
   </div>
 
