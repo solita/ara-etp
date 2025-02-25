@@ -80,8 +80,6 @@
   <div
     class="border-t border-tableborder mx-8 pt-4 pb-16 flex items-center justify-between">
     <img class="h-32" src={footerLogoPath} alt="Varke" />
-    <div class="">
-      {version.version}
-    </div>
+    <p>{version.version}</p>
   </div>
 </footer>
