@@ -16,7 +16,7 @@
 
 (def palveluvayla-basepath "/palveluvayla/v1/energiatodistukset")
 
-(t/deftest test-palveluvayla-api
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} test-palveluvayla-api
   (let [; Add laatija
         laatija-id (first (keys (test-data.laatija/generate-and-insert! 1)))
 

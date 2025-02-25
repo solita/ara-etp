@@ -58,7 +58,7 @@
                 count
                 zero?)))))
 
-(t/deftest find-energiatodistukset-xlsx-test
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. xlsx"} find-energiatodistukset-xlsx-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)]
     (t/is (instance? java.io.InputStream

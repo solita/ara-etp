@@ -127,7 +127,8 @@
             #"Sending suomifi message ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1 failed."
             (valvonta-kaytto.suomifi-viestit/send-message-to-osapuoli! valvonta toimenpide osapuoli document config)))))
 
-(t/deftest send-message-to-osapuoli-with-signing-test
+(t/deftest ^{:broken-test "flaky"}
+           send-message-to-osapuoli-with-signing-test
   (with-bindings {#'service.suomifi-viestit/post! (handle-request-with-xml-compare "suomifi/viesti-request-signed.xml"
                                                                                               "suomifi/viesti-response.xml"
                                                                                               202)

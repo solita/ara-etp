@@ -161,7 +161,7 @@
     (t/testing "None of the energiatodistukset should be expired as they have a recent valvonta"
       (t/is (empty? expired-ids)))))
 
-(t/deftest destroy-energiatodistus-pdf-test
+(t/deftest ^{:broken-on-windows-test "can't delete signable.pdf"} destroy-energiatodistus-pdf-test
   (let [laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
         energiatodistus-add-fi (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))
         energiatodistus-add-sv (-> (energiatodistus-test-data/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 1))
