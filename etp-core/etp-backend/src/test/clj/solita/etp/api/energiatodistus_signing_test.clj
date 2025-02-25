@@ -24,7 +24,7 @@
     (io/copy (io/file in) (io/file out))
     out))
 
-(t/deftest sign-with-system-test
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-test
   (let [;;Taken from the test-laatija's JWT
         laatija-auth-time (-> (LocalDate/of 2020 3 3)
                               (.atTime 12 22 49)

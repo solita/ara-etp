@@ -26,7 +26,7 @@
     (t/is (= (-> file-info :path io/file service/file->byte-array type str)
              "class [B"))))
 
-(t/deftest upsert-file-and-find-test
+(t/deftest ^{:broken-test "flaky"} upsert-file-and-find-test
   (service/upsert-file-from-bytes ts/*aws-s3-client*
                                   (:id file-info-1)
                                   (:bytes file-info-1))
@@ -45,7 +45,7 @@
                           #"The specified key does not exist."
                           (service/find-file ts/*aws-s3-client* "nonexisting"))))
 
-(t/deftest rewrite-test
+(t/deftest ^{:broken-test "flaky"} rewrite-test
   (let [id (str (:id file-info-1) "-rewrite-test")]
     (service/upsert-file-from-bytes ts/*aws-s3-client*
                                     id

@@ -203,7 +203,7 @@
     (t/is (= (service/start-energiatodistus-signing! db whoami id)
              :already-in-signing))))
 
-(t/deftest stop-energiatodistus-signing!-test
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} stop-energiatodistus-signing!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
