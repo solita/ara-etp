@@ -28,7 +28,7 @@
 <div bind:this={component}>
   <H1 text="Tillgänglighetsbeskrivning" />
   <p>
-    ARA strävar efter att garantera tillgängligheten till
+    Varke strävar efter att garantera tillgängligheten till
     private.energiatodistusrekisteri.fi i enlighet med lagen om
     tillhandahållande av digitala tjänster 306/2019.
   </p>
@@ -129,8 +129,13 @@
   <H2 text="Respons och kontaktuppgifter" />
   <p>
     Om du upptäckte en tillgänglighetsbrist som inte beskrivs på denna sida,
-    vänligen berätta det för oss. Kontakta oss genom att skicka e-post till
-    adressen: viestinta.ara (at) ara.fi
+    vänligen berätta det för oss. Ta kontakt via responsformuläret:
+    <Link
+      href="https://www.varke.fi/sv/form/feedback-form"
+      referrerpolicy="no-referrer"
+      target="_blank">
+      Ge respons (varke.fi)
+    </Link>.
   </p>
   <p>
     Vi svara på ditt meddelande så snart som möjligt. Observera att det kan ta

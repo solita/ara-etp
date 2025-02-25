@@ -35,7 +35,7 @@
         <h2 class="mb-4">{$_('FOOTER_LAKI')}</h2>
         <p>{$_('FOOTER_VARKE_VIRANOMAINEN')}</p>
         <br />
-        <Link href="https://www.ara.fi">{$_('FOOTER_VARKE_LINKKI')}</Link>
+        <Link href="https://www.varke.fi">{$_('FOOTER_VARKE_LINKKI')}</Link>
       </section>
       <section class="md:w-1/3 flex flex-col justify-between py-4 md:py-0">
         <h2 class="mb-4">{$_('FOOTER_YHTEYSTIEDOT')}</h2>
