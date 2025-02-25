@@ -100,7 +100,7 @@
         <picture>
           <source media="(max-width: 767px)" srcset={logoSmall} />
           <source media="(min-width: 768px)" srcset={logo} />
-          <img class="logo pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
+          <img class="pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
         </picture>
       </a>
     </div>
