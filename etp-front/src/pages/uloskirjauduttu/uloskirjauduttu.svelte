@@ -45,7 +45,7 @@
     <header class="flex justify-between">
       <div class="flex flex-1 items-center">
         <a href="/">
-          <img class="mr-8" src={headerLogoPath} alt="Varke" />
+          <img class="mr-8 h-20" src={headerLogoPath} alt="Varke" />
         </a>
         <LanguageSelect />
       </div>
