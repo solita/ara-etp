@@ -41,7 +41,7 @@
     <div>
       <H2>{$_('SAAVUTETTAVUUSSELOSTE')}</H2>
       <p>
-        ARA pyrkii takaamaan energiatodistusrekisteri.fi-palvelun
+        Varke pyrkii takaamaan energiatodistusrekisteri.fi-palvelun
         saavutettavuuden Lain digitaalisten palvelujen tarjoamisesta 306/2019
         mukaisesti.
       </p>
@@ -130,8 +130,14 @@
       <H3>Palaute ja yhteystiedot</H3>
       <p>
         Jos huomasit saavutettavuuspuutteen, jota ei tällä sivulla ole kuvattu,
-        kerrothan sen meille. Ota yhteyttä lähettämällä sähköpostia
-        osoitteeseen: viestinta.ara (at) ara.fi
+        kerrothan sen meille. Ota yhteyttä palautelomakkeella:
+        <Link
+          href="https://www.varke.fi/fi/form/feedback-form
+"
+          referrerpolicy="no-referrer"
+          target="_blank">
+          Anna palautetta (varke.fi)
+        </Link>.
       </p>
       <p>
         Vastaamme viestiisi niin pian kuin mahdollista. Huomaathan, että
