@@ -57,7 +57,10 @@
     <div class="flex justify-between items-center px-2 py-2 xl:px-16">
       <div class="flex justify-between items-center w-full">
         <a class="flex items-center" href="/">
-          <img src={Logo} alt={$_('HEADER_ENERGIATODISTUSREKISTERI_LOGO_ALT')} class="h-12" />
+          <img
+            src={Logo}
+            alt={$_('HEADER_ENERGIATODISTUSREKISTERI_LOGO_ALT')}
+            class="h-12" />
           <h1 class="pl-2 text-xs xs:text-base tracking-widest">
             {$_('ENERGIATODISTUSREKISTERI')}
           </h1>
