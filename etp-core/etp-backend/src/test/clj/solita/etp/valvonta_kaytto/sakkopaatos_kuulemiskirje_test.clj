@@ -212,9 +212,9 @@
           (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
           (t/is (= (:status response) 200))
 
-          (t/testing "and document has four pages"
+          (t/testing "and document has three pages"
             (t/is (= (.getNumberOfPages pdf-document)
-                     4)))
+                     3)))
 
           (t/testing "and document looks as it should"
             (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-kuulemiskirje-yksityishenkilo.pdf"))))))

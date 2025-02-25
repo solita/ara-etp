@@ -121,6 +121,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     <li class="no-indicator">Hallintolaki (434/2003) 34 §</li>
 </ul>
 
+<div class="page-break-avoid">
 <h2>Muutoksenhaku</h2>
 
 <p>Tähän päätökseen tyytymätön saa hakea siihen muutosta {{#tyyppikohtaiset-tiedot}}{{oikeus-fi}}{{/tyyppikohtaiset-tiedot}}. Valitus on tehtävä ja
@@ -133,7 +134,6 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
 
 <p>Tarkemmat ohjeet valituksen tekemisestä ovat tämän päätöksen liitteenä.</p>
 
-<div class="page-break-avoid">
 {{#valvoja}}
 <p>Lisätietoja päätöksestä antaa {{titteli-fi}} {{etunimi}} {{sukunimi}}, <br/>puh. {{puhelin}} / s-posti
     {{email}}. </p>
@@ -323,6 +323,7 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
     <li class="no-indicator">34 § i förvaltningslagen (434/2003)</li>
 </ul>
 
+<div class="page-break-avoid">
 <h2>Ändringssökande</h2>
 
 <p> Den som är missnöjd med detta beslut kan söka ändring i det hos förvaltningsdomstolen i
@@ -336,7 +337,6 @@ values (6, 'Käskypäätös / varsinainen päätös', 'Käskypäätös / varsina
 
 <p>Noggrannare anvisningar om inlämning av besvär finns med som bilaga till det här beslutet.</p>
 
-<div class="page-break-avoid">
 {{#valvoja}}
 <p>Mer information om besslutet ges av {{titteli-sv}} {{etunimi}} {{sukunimi}}, <br/>tfn {{puhelin}} / e-post
     {{email}}.</p>

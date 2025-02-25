@@ -227,9 +227,9 @@
               (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
               (t/is (= (:status response) 200))
 
-              (t/testing "and document has eight pages"
+              (t/testing "and document has six pages"
                 (t/is (= (.getNumberOfPages pdf-document)
-                         8)))
+                         6)))
 
               (t/testing "and document looks as it should"
                 (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-varsinainen-paatos-yksityishenkilo.pdf"))))
@@ -437,9 +437,9 @@
               (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
               (t/is (= (:status response) 200))
 
-              (t/testing "and document has eight pages"
+              (t/testing "and document has six pages"
                 (t/is (= (.getNumberOfPages pdf-document)
-                         8)))
+                         6)))
 
               (t/testing "and document looks as it should"
                 (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-varsinainen-paatos-yritys.pdf"))))))))
