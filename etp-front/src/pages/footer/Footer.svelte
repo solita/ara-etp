@@ -29,8 +29,8 @@
             <Link
               bold={true}
               additionalClasses="text-ara-2021-green-small-text"
-              href="tel:0295250800"
-              text={'029 525 0800'} />
+              href="tel:029516001"
+              text={'0295 16001'} />
           </div>
           <span class="font-bold mt-2"> {$_('footer.email')}: </span>
           <div>

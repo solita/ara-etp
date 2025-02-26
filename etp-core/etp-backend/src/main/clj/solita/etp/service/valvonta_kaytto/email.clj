@@ -116,7 +116,7 @@
         address-fi)
       (paragraph "Valvonta kohdistuu rakennuksen omistajaan ja tämä on vain teille tiedoksi.")
       (paragraph "Tarvittaessa lisätietoja voi kysyä osoitteesta "
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-fi
 
       (heading "Begäran om information (för kännedom)")
@@ -125,7 +125,7 @@
         address-sv)
       (paragraph "Övervakningen gäller byggnadens ägare och är enbart till din kännedom.")
       (paragraph "Mer information fås vid behov på adressen"
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-sv)}
    :rfi-order
    {:subject
@@ -138,7 +138,7 @@
         address-fi)
       (paragraph "Valvonta kohdistuu rakennuksen omistajaan ja tämä on vain teille tiedoksi.")
       (paragraph "Tarvittaessa lisätietoja voi kysyä osoitteesta "
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-fi
 
       (heading "Uppmaning till tillsyn över energicertifikat (för kännedom)")
@@ -147,7 +147,7 @@
         address-sv)
       (paragraph "Övervakningen gäller byggnadens ägare och är enbart till din kännedom.")
       (paragraph "Mer information fås vid behov på adressen"
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-sv)}})
 
 (defprotocol TemplateValue (view [value]))
