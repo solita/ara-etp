@@ -190,8 +190,8 @@
     </li>
     <li>
       när giltighetstiden för behörigheten att upprätta energicertifikat löper
-      ut och den som konstaterar behörigheten inte har meddelat Finansierings-
-      och utvecklingscentralen för boendet att behörigheten förnyas,
+      ut och den som konstaterar behörigheten inte har meddelat Centralen för
+      statligt stött bostadsbyggande att behörigheten förnyas,
     </li>
     <li>
       om upprättaren av energicertifikat meddelas ett förbud att upprätta
