@@ -51,7 +51,7 @@
 
 <style type="text/postcss">
   header {
-    @apply flex h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex uppercase text-light justify-between items-center font-bold tracking-xl;
   }
 
   .logo-link {
