@@ -50,7 +50,7 @@
         </address>
         <address class="not-italic">
           <span>{$_('PUHELINVAIHDE')}:</span>
-          <Link href="tel:0295250800">029 525 0800</Link>
+          <Link href="tel:029516001">0295 16001</Link>
         </address>
         <a href="/tietoa-sivustosta" class="block underline text-darkgreen">
           {$_('TIETOA_SIVUSTOSTA')}
