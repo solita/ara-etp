@@ -134,7 +134,7 @@ PL 35, 00023 Valtioneuvosto</p>
 
 <div class="page-break-avoid">
 <p>Vi ber Er skicka svaret till Varkes registratorskontor antingen per e-post till <br/>varke.ym@gov.fi eller per post till
-    Finansierings- och ut-vecklingscentralen för boendet, PB 30, 15141 Lahtis.</p>
+    Finansierings- och ut-vecklingscentralen för boendet, PB 35, 00023 Statsrådet.</p>
 
 {{#valvoja}}
 {{etunimi}} {{sukunimi}}

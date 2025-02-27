@@ -45,8 +45,8 @@
         </address>
         <address class="not-italic flex flex-col">
           <span>{$_('FOOTER_OSOITE_1')}</span>
-          <span>PL 30</span>
-          <span>15141 LAHTI</span>
+          <span>PL 35</span>
+          <span>00023 Valtioneuvosto</span>
         </address>
         <address class="not-italic">
           <span>{$_('PUHELINVAIHDE')}:</span>

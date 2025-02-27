@@ -12,10 +12,10 @@
            (java.time Instant)
            (java.util Base64)))
 
-(def lahettaja {:nimi             "Asumisen rahoitus- ja kehittämiskeskus"
-                :jakeluosoite     "Kirkkokatu 12 / PL 30"
-                :postinumero      "15141"
-                :postitoimipaikka "Lahti"})
+(def lahettaja {:nimi             "Valtion tukeman asuntorakentamisen keskus"
+                :jakeluosoite     "PL 35"
+                :postinumero      "00023"
+                :postitoimipaikka "Valtioneuvosto"})
 
 (defn- tunniste [toimenpide osapuoli]
   (str/join "-" [(or (:diaarinumero toimenpide) "ARA")

@@ -9,14 +9,14 @@
     (email/paragraph
       "Tämä on energiatodistuspalvelun lähettämä automaattinen viesti."
       "Älä vastaa tähän viestiin.")
-    (email/paragraph "Asumisen rahoitus- ja kehittämiskeskus")))
+    (email/paragraph "Valtion tukeman asuntorakentamisen keskus")))
 
 (def ^:private signature-sv
   (str
     (email/paragraph
       "Detta är ett automatiskt meddelande från energicertifikatstjänsten."
       "Svara inte på detta meddelande.")
-    (email/paragraph "Finansierings- och utvecklingscentralen för boendet")))
+    (email/paragraph "Centralen för statligt stött bostadsbyggande")))
 
 
 (def ^:private general-info-fi
