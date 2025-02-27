@@ -20,7 +20,7 @@ jobs:
           NVD_API_TOKEN: ${{ secrets.NVD_API_TOKEN }}
         run: ./nvd.sh
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           report_paths: '**/etp-core/etp-backend/target/nvd/dependency-check-junit.xml'
