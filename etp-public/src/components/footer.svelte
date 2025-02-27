@@ -21,6 +21,11 @@
 </script>
 
 <style>
+  @media screen and (min-width: 768px) {
+    .footer-logo {
+      height: 150px;
+    }
+  }
   @media print {
     footer {
       display: none;
@@ -100,7 +105,10 @@
         <picture>
           <source media="(max-width: 767px)" srcset={logoSmall} />
           <source media="(min-width: 768px)" srcset={logo} />
-          <img class="pt-8" src={logo} alt={$_('FOOTER_VARKE_LOGO_ALT')} />
+          <img
+            class="mt-8 footer-logo"
+            src={logo}
+            alt={$_('FOOTER_VARKE_LOGO_ALT')} />
         </picture>
       </a>
     </div>
