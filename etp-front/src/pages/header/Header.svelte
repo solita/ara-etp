@@ -51,15 +51,11 @@
 
 <style type="text/postcss">
   header {
-    @apply flex uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
   }
 
   .logo-link {
     flex-shrink: 0;
-  }
-
-  .header-logo {
-    height: 105px;
   }
 
   .listlink {
@@ -111,7 +107,7 @@
 <header class="flex justify-between px-2 lg:px-10 my-3">
   <div class="flex grow items-center">
     <a class="logo-link" href="/">
-      <img class="mr-2 lg:mr-6 header-logo" src={headerLogoPath} alt="Varke" />
+      <img class="mr-2 lg:mr-6 h-20" src={headerLogoPath} alt="Varke" />
     </a>
     <LanguageSelect />
   </div>
