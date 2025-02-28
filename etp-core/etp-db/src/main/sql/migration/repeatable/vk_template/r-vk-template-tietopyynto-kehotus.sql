@@ -47,7 +47,8 @@ $$
 <p>
   Valvontamme perusteella myynnissä tai vuokrattavana olevaa rakennustanne/asuntoanne markkinoidaan julkisesti
   ilman energiatodistusta. Mikäli kohteen julkista markkinointia jatketaan tai se myydään, <b>Varke kehottaa
-  esittämään energiatodistuksen {{määräpäivä}} mennessä sähköpostitse energiatodistus.varke@gov.fi tai postitse.</b>
+  esittämään energiatodistuksen {{määräpäivä}} mennessä sähköpostitse osoitteeseen
+  <span class="email-address">energiatodistus.varke@gov.fi</span> tai postitse.</b>
 </p>
 
 <p>
@@ -73,8 +74,8 @@ $$
 <p>
   På basis av vår tillsyn marknadsförs den byggnad/bostad som ni ska sälja eller hyra ut offentligt utan
   energicertifikat. Om den offentliga marknadsföringen av objektet fortsätter eller om det säljs <b>uppmanar
-  Varke er att skicka in ett energicertifikat senast den {{määräpäivä}} per e-post till energiatodistus.varke@gov.fi
-  eller per post.</b>
+  Varke er att skicka in ett energicertifikat senast den {{määräpäivä}} per e-post till
+  <span class="email-address">energiatodistus.varke@gov.fi</span> eller per post.</b>
 </p>
 
 <p>

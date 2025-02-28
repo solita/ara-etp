@@ -50,7 +50,7 @@ $$
   ja vuokraustilanteissa. Varke on lähettänyt teille kehotuksen liittyen rakennuksen/asunnon markkinointiin
   ilman energiatodistusta. <b>Varke antaa Teille varoituksen.</b> Mikäli kohteen julkista markkinointia
   jatketaan tai se myydään, <b>Varke pyytää esittämään energiatodistuksen {{määräpäivä}} mennessä sähköpostitse
-  energiatodistus.varke@gov.fi tai postitse.</b>
+  osoitteeseen <span class="email-address">energiatodistus.varke@gov.fi</span> tai postitse.</b>
 </p>
 
 <p>
@@ -75,7 +75,7 @@ $$
   energicertifikat vid försäljning och uthyrning. Varke har skickat er uppmaning angående marknadsföring av en
   byggnad/bostad utan energicertifikat. <b>Varke tilldelar er en varning.</b> Om den offentliga marknadsföringen
   av objektet fortsätter eller om det säljs <b>ber Varke er att skicka in ett energicertifikat senast
-  {{määräpäivä}} per e-post till energiatodistus.varke@gov.fi eller per post.</b>
+  {{määräpäivä}} per e-post till <span class="email-address">energiatodistus.varke@gov.fi</span> eller per post.</b>
 </p>
 
 <p>

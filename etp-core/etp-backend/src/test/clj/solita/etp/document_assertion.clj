@@ -12,6 +12,16 @@
 (def original-html->pdf pdf/html->pdf)
 (def html-base-template-path "documents/base-template.html")
 
+(defn html->pdf-with-update
+  "Wraps solita.etp.service.pdf/html->pdf so that the rendered html document is written to a
+  file. Used with html->pdf-with-assertion to update the snapshot, so that you remove the
+  content of the document (note: don't remove it, or io/resource will not know where in the
+  possible load paths is has to be) and run the tests to create a new snapshot."
+  [doc-path-to-compare-to html->pdf-called? html-doc output-stream]
+  (spit (io/resource doc-path-to-compare-to) (subs html-doc (-> html-base-template-path io/resource slurp count)))
+  (reset! html->pdf-called? true)
+  (original-html->pdf html-doc output-stream))
+
 (defn html->pdf-with-assertion
   "Wraps solita.etp.service.pdf/html->pdf so that the document can be asserted in html format before it's
   rendered to pdf. Provide first two parameters by using partial and redef the original function with the
