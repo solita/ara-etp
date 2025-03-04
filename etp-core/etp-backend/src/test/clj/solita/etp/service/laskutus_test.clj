@@ -307,7 +307,7 @@
         laatija-laskutus-asiakastunnus (format "L0%08d" laatija-id)]
     (t/is (= 16 (count tasmaytysraportti)))
     (t/is (= "ETP" (ffirst tasmaytysraportti)))
-    (t/is (= "ARA" (-> tasmaytysraportti second first)))
+    (t/is (= "Varke" (-> tasmaytysraportti second first)))
     (t/is (= [["Asiakkaiden lukumäärä yhteensä" nil {:v 4 :align :left}]
               ["Myyntitilausten lukumäärä yhteensä" nil {:v 4 :align :left}]
               ["Velotusmyyntitilausten lukumäärä yhteensä" nil {:v 4 :align :left}]
