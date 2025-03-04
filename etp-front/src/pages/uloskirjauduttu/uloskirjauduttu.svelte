@@ -1,12 +1,17 @@
 <script>
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import Footer from '@Pages/footer/Footer';
   import LanguageSelect from '@Pages/header/language-select';
   import Link from '@Component/Link/Link';
+  import * as Locales from '@Language/locale-utils';
 
   import * as versionApi from '@Component/Version/version-api';
   import * as Future from '@Utility/future-utils';
+
+  $: headerLogoPath = Locales.isSV($locale)
+    ? 'images/YM_Varke_vaaka_valk_SV_RGB.png'
+    : 'images/YM_Varke_vaaka_valk_FI_RGB.png';
 
   let resources = Maybe.None();
   Future.fork(
@@ -40,7 +45,7 @@
     <header class="flex justify-between">
       <div class="flex flex-1 items-center">
         <a href="/">
-          <img class="mr-8" src="images/ara_logo_simple_nega.svg" alt="Ara" />
+          <img class="mr-8 h-20" src={headerLogoPath} alt="Varke" />
         </a>
         <LanguageSelect />
       </div>

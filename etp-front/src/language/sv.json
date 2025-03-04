@@ -1,6 +1,6 @@
 {
   "document": {
-    "title": "Ara - Energicertifikatservice"
+    "title": "Varke - Energicertifikatservice"
   },
   "validation": {
     "required": "Obligatorisk uppgift",
@@ -380,7 +380,6 @@
     "results": "Resultat {count} ST.",
     "kaikki": "Alla",
     "voimassaolo": "Giltighetstid",
-    "tilat": {},
     "patevyystaso": "Behörighetsnivå",
     "toimintaalue": "Huvudverksamhetsområde",
     "keyword-search": "Textsökning (namn, personbeteckning, kontaktuppgifter)",
@@ -1222,7 +1221,7 @@
         "system": "Underteckna utan identitetskort"
       },
       "instructions": "Du kan underteckna energicertifikat med ditt identitetskort och kortläsarprogram. Alternativt kan du underteckna certifikatet med hjälp av stark autentisering och energicertifikattjänstens signaturcertifikat, vilket innebär att du inte behöver identitetskort.",
-      "system-signing-info-text": "Underteckna utan identitetskort ",
+      "system-signing-info-text": "Underteckna utan identitetskort",
       "system-signing-info-text-relogin": "Logga in på nytt för att underteckna",
       "system-signing-status-text": "Undertecknande av energicertifikat pågår",
       "language-adjective": {
@@ -1238,7 +1237,7 @@
       "messages": {
         "connection-check": "Kontakten till mPollux kontrolleras.",
         "already-started": "Undertecknandet har avbrutits av okänd orsak.",
-        "connection-success": "Uppgifterna i energicertifikatet och uppkopplingen till kortläserprogrammet har kontrollerats. ",
+        "connection-success": "Uppgifterna i energicertifikatet och uppkopplingen till kortläserprogrammet har kontrollerats.",
         "connection-failed": "Anslutning till mPollux misslyckades. Undertecknandet förutsätter att signaturprogrammet mPollux är installerat och att webbläsaren är ansluten till signaturprogrammet."
       },
       "error": {
@@ -1540,9 +1539,9 @@
   },
   "footer": {
     "about": "Information om webbplatsen",
-    "name": "Finansiering- och utvecklingcentralet för boendet",
-    "po-box": "PB 30",
-    "post-num": "15140 LAHTIS",
+    "name": "Centralen för statligt stött bostadsbyggande",
+    "po-box": "PB 35",
+    "post-num": "00023 Statsrådet",
     "contact-info": "Kontaktuppgifter",
     "phone": "Telefon",
     "email": "E-post",
@@ -1648,7 +1647,7 @@
           "info": "Mer information begärs av upprättaren.",
           "publish-button": "Skicka begäran om information",
           "response-title": "Begäran om information",
-          "response-description": "ARA ber om svar senast {deadline-date}."
+          "response-description": "Varke ber om svar senast {deadline-date}."
         },
         "rfi-reply": {
           "title": "Svar på begäran om information",
@@ -1663,14 +1662,14 @@
           "info": "Upprättaren uppmanas lämna ut den information som begärdes tidigare.",
           "publish-button": "Skicka uppmaning",
           "response-title": "Uppmaning att besvara begäran om information",
-          "response-description": "ARA ber om svar senast {deadline-date}."
+          "response-description": "Varke ber om svar senast {deadline-date}."
         },
         "rfi-warning": {
           "title": "Varning angående begäran om information",
           "info": "Upprättaren varnas om påföljderna ifall informationen inte lämnas ut inom utsatt tid.",
           "publish-button": "Skicka varning",
           "response-title": "Varning angående begäran om information",
-          "response-description": "ARA kräver svar senast {deadline-date}."
+          "response-description": "Varke kräver svar senast {deadline-date}."
         },
         "audit-report": {
           "title": "Kontrollpromemoria",
@@ -1682,7 +1681,7 @@
             "description": "Felbeskrivning"
           },
           "response-title": "Kontrollpromemoria",
-          "response-description": "ARA ber om svar senast {deadline-date}.",
+          "response-description": "Varke ber om svar senast {deadline-date}.",
           "add-virhe": "Lägg till fel",
           "virheet-title": "Fel",
           "virheet-empty": "Inga fel",
@@ -1711,14 +1710,14 @@
           "info": "Upprättaren uppmanas att korrigera energicertifikatet.",
           "publish-button": "Skicka uppmaning",
           "response-title": "Uppmaning att svara på kontrollpromemorian",
-          "response-description": "ARA ber om svar senast {deadline-date}."
+          "response-description": "Varke ber om svar senast {deadline-date}."
         },
         "audit-warning": {
           "title": "Varning angående kontrollpromemoria",
           "info": "Upprättaren varnas om påföljderna ifall energicertifikatet inte korrigeras inom utsatt tid.",
           "publish-button": "Skicka varning",
           "response-title": "Varning angående begäran om information",
-          "response-description": "ARA kräver svar senast {deadline-date}."
+          "response-description": "Varke kräver svar senast {deadline-date}."
         },
         "rfc-request": {
           "title": "Begäran om tilläggsutredning",
@@ -1726,7 +1725,7 @@
           "description": "Begäran om tilläggsutredning",
           "publish-button": "Skicka",
           "response-title": "Begäran om tilläggsutredning",
-          "response-description": "ARA ber om svar senast {deadline-date}."
+          "response-description": "Varke ber om svar senast {deadline-date}."
         },
         "rfc-reply": {
           "title": "Svar på begäran om tilläggsutredning",
@@ -1899,7 +1898,6 @@
         "attachments": "Bilagor och länkar",
         "rakennustunnus-existing-et": "Det finns redan energicertifikat för byggnadsbeteckningen"
       },
-      "new-kohde": {},
       "valvonta": {
         "title": "Kontroll",
         "messages": {
@@ -1938,21 +1936,21 @@
           "info": "Uppgifter om energicertifikatet begäras av byggnadens ägare.",
           "publish-button": "Skicka begäran om information",
           "response-title": "Begäran om information",
-          "response-description": "ARA ber om svar senast {deadline-date}."
+          "response-description": "Varke ber om svar senast {deadline-date}."
         },
         "rfi-order": {
           "title": "Uppmaning angående begäran om information",
           "info": "Byggnadens ägare uppmanas att besvara begäran om information.",
           "publish-button": "Skicka uppmaning",
           "response-title": "Uppmaning att besvara begäran om information",
-          "response-description": "ARA ber om svar senast {deadline-date}."
+          "response-description": "Varke ber om svar senast {deadline-date}."
         },
         "rfi-warning": {
           "title": "Varning angående begäran om information",
           "info": "Byggandens ägare varnas för påföljderna ifall begäran om information inte besvaras inom utsatt tid.",
           "publish-button": "Skicka varning",
           "response-title": "Varning angående begäran om information",
-          "response-description": "ARA kräver svar senast {deadline-date}."
+          "response-description": "Varke kräver svar senast {deadline-date}."
         },
         "closed": {
           "title": "Avslutande av kontroll",
@@ -2047,8 +2045,8 @@
           "department-head-title-fi": "Yksikön päällikön titteli, suomi (sv)",
           "department-head-title-sv": "Yksikön päällikön titteli, ruotsi (sv)",
           "department-head-name": "Yksikön päällikön nimi (sv)",
-          "default-statement-fi": "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
-          "default-statement-sv": "Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
+          "default-statement-fi": "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
+          "default-statement-sv": "Ändring i Varkes beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i Varkes beslut. Enligt Varkes uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
         },
         "penalty-decision-notice-first-mailing": {
           "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus) (sv)",

@@ -1,6 +1,7 @@
 (ns user
   (:require [integrant.repl :refer [clear go halt prep init reset reset-all]]
             [clojure.test :as t]
+            [clojure.string :as str]
             [solita.common.schema :as xschema]
             [clojure.walk :as walk]
             [schema.core :as schema]
@@ -10,6 +11,8 @@
  (fn []
    (require 'solita.etp.system)
    ((resolve 'solita.etp.system/config))))
+
+(def windows? (str/includes? (System/getProperty "os.name") "Windows"))
 
 (defn db
   ([] (-> integrant.repl.state/system :solita.etp/db))
@@ -21,14 +24,21 @@
 (defn run-test [var-name]
   (t/test-vars [var-name]))
 
+(defn non-brokens [vars]
+  (filter #(and (-> % meta :broken-test not)
+                (or (not windows?) (-> % meta :broken-on-windows-test not)))
+          vars))
+
 (defn run-tests
   ([]
    (require 'eftest.runner)
    (-> ((resolve 'eftest.runner/find-tests) "src/test")
+       non-brokens
        ((resolve 'eftest.runner/run-tests))))
   ([config]
    (require 'eftest.runner)
    (-> ((resolve 'eftest.runner/find-tests) "src/test")
+       non-brokens
        ((resolve 'eftest.runner/run-tests) config))))
 
 (defn run-tests-and-exit! []
@@ -85,6 +95,6 @@
 (defn generate-aineisto!
   "Generates the aineisto with `aineisto-id` into aws-s3-client"
   [aineisto-id]
-  (require 'solita.etp.service.aineisto)
-  ((resolve 'solita.etp.service.aineisto/update-aineisto-in-s3!)
+  (require 'solita.etp.service.csv-to-s3)
+  ((resolve 'solita.etp.service.csv-to-s3/update-aineisto-in-s3!)
    (db 2) {:id -5 :rooli -1} (aws-s3-client) aineisto-id))

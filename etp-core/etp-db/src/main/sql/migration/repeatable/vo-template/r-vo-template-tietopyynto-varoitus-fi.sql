@@ -1,5 +1,5 @@
 insert into vo_template (id, label_fi, label_sv, ordinal, toimenpidetype_id, language, content)
-values (3, 'Tietopyyntö / varoitus (fi)', 'Begäran om inlämning / varning (fi)', 1, 6, 'fi', 
+values (3, 'Tietopyyntö / varoitus (fi)', 'Begäran om inlämning / varning (fi)', 1, 6, 'fi',
 $$
 <div class="otsikko">
     <b>VAROITUS</b> <br/>
@@ -13,11 +13,11 @@ $$
     {{#energiatodistus}}
     <table class="sarake">
         <tr>
-            <td>Kohde:</td> 
+            <td>Kohde:</td>
             <td>
                 <div class="nowrap">{{nimi}}</div>
-                <div class="nowrap">{{katuosoite}}</div>  
-                <div class="nowrap">{{postinumero}} {{postitoimipaikka}}</div>  
+                <div class="nowrap">{{katuosoite}}</div>
+                <div class="nowrap">{{postinumero}} {{postitoimipaikka}}</div>
             </td>
         </tr>
     </table>
@@ -28,13 +28,13 @@ $$
 </p>
 
 
-<p>Asumisen rahoitus- ja kehittämiskeskuksen (ARA) tehtävänä on valvoa energiatodistusten oikeellisuutta.
+<p>Valtion tukeman asuntorakentamisen keskuksen (Varke) tehtävänä on valvoa energiatodistusten oikeellisuutta.
     Oikeellisuustarkastukset kohdistuvat energiatodistusten lähtötietoihin, energiatehokkuusluvun laskentaan sekä
     säästösuositusten oikeellisuuteen.</p>
 
-<p>ARA on lähettänyt teille tästä energiatodistuksesta taustamateriaalin tietopyynnön ja kehotuksen. 
-    <b>ARA tulee tarkastamaan todistuksen oikeellisuuden tämän materiaalin pohjalta.</b> Pyydämme, että toimitatte
-    seuraavat todistuksen laadinnassa käytetyt taustamateriaalit ARAn energiatodistusrekisteriin {{määräpäivä}}
+<p>Varke on lähettänyt teille tästä energiatodistuksesta taustamateriaalin tietopyynnön ja kehotuksen.
+    <b>Varke tulee tarkastamaan todistuksen oikeellisuuden tämän materiaalin pohjalta.</b> Pyydämme, että toimitatte
+    seuraavat todistuksen laadinnassa käytetyt taustamateriaalit Varken energiatodistusrekisteriin {{määräpäivä}}
     mennessä:</p>
 
 <ul>
@@ -48,16 +48,16 @@ $$
     <li>Havainnointipöytäkirja ja muu materiaali paikan päällä käynnistä (olemassa olevat rakennukset)</li>
 </ul>
 
-<p>ARAlla on oikeus saada valvontaa varten tarvittavat tiedot ja asiakirjat, mukaan lukien toimeksiantoja koskevat
+<p>Varkella on oikeus saada valvontaa varten tarvittavat tiedot ja asiakirjat, mukaan lukien toimeksiantoja koskevat
     tiedot. Laatijan on säilytettävä valmisteluasiakirjat, laskelmat ja muut tiedot, jotka laatija on tehnyt tai
     hankkinut todistuksen laatimista varten sekä tiedot todistuksen kohteessa tehdystä havainnoinnista. Laatijan on
     pidettävä arkistoa laatimistaan todistuksista. Asiakirjat, tiedot ja todistukset on säilytettävä vähintään 12
     vuotta.</p>
 
-<p>Jos energiatodistuksen laatija ei täytä säädettyjä velvollisuuksia, ARA kehottaa korjaamaan asian ja antaa määräajan
-    korjaukselle. Jos asiaa ei korjata määräajassa, ARA antaa laatijalle varoituksen ja uuden määräajan. Jos asiaa ei
-    edelleenkään korjata, ARA voi antaa laatijalle velvoittavan käskypäätöksen/käyttökieltopäätöksen, jota voidaan
-    tehostaa uhkasakolla. ARAlla on myös mahdollisuus antaa laatijalle laatimiskielto, jos laatija on toiminut
+<p>Jos energiatodistuksen laatija ei täytä säädettyjä velvollisuuksia, Varke kehottaa korjaamaan asian ja antaa määräajan
+    korjaukselle. Jos asiaa ei korjata määräajassa, Varke antaa laatijalle varoituksen ja uuden määräajan. Jos asiaa ei
+    edelleenkään korjata, Varke voi antaa laatijalle velvoittavan käskypäätöksen/käyttökieltopäätöksen, jota voidaan
+    tehostaa uhkasakolla. Varkella on myös mahdollisuus antaa laatijalle laatimiskielto, jos laatija on toiminut
     olennaisella tai merkittävällä tavalla säännösten vastaisesti.</p>
 
 <p>

@@ -28,7 +28,7 @@
 <div bind:this={component}>
   <H1 text="Tillgänglighetsbeskrivning" />
   <p>
-    ARA strävar efter att garantera tillgängligheten till
+    Varke strävar efter att garantera tillgängligheten till
     private.energiatodistusrekisteri.fi i enlighet med lagen om
     tillhandahållande av digitala tjänster 306/2019.
   </p>
@@ -129,8 +129,13 @@
   <H2 text="Respons och kontaktuppgifter" />
   <p>
     Om du upptäckte en tillgänglighetsbrist som inte beskrivs på denna sida,
-    vänligen berätta det för oss. Kontakta oss genom att skicka e-post till
-    adressen: viestinta.ara (at) ara.fi
+    vänligen berätta det för oss. Ta kontakt via responsformuläret:
+    <Link
+      href="https://www.varke.fi/sv/form/feedback-form"
+      referrerpolicy="no-referrer"
+      target="_blank">
+      Ge respons (varke.fi)
+    </Link>.
   </p>
   <p>
     Vi svara på ditt meddelande så snart som möjligt. Observera att det kan ta
@@ -139,22 +144,41 @@
 
   <H2 text="Verkställighetsförfarande" />
   <p>
-    Om du upptäcker tillgänglighetsproblem på webbplatsen ska du först ge
-    respons till webbplatsens administratör. Svaret kan ta upp till 14 dagar. Om
-    du inte är nöjd med det svar du fått eller om du inte får något svar inom
-    två veckor, kan du ge respons till Regionförvaltningsverket i Södra Finland.
+    Transport- och kommunikationsverket Traficom övervakar att lagens
+    tillgänglighetskrav följs i Finland. Om du märker brister i tillgängligheten
+    på vår webbplats, vänligen kontakta oss först, det vill säga webbplatsens
+    administratör.
+  </p>
+
+  <p>
+    Om du inte är nöjd med det svar du har fått eller inte får något svar alls
+    inom två veckor kan du lämna in en anmälan om bristande tillgänglighet till
+    Transport- och kommunikationsverkets tillsyn över digital tillgänglighet. På
+    Transport- och kommunikationsverkets webbplats finns det beskrivet hur du
+    kan göra en anmälan och hur ärendet behandlas.
+  </p>
+
+  <p>
+    <Link
+      href="https://www.saavutettavuusvaatimukset.fi/sv/dina-rattigheter/anvandares-rattigheter"
+      text="Användarens rättigheter (saavutettavuusvaatimukset.fi)" />
   </p>
 
   <H2 text="Tillsynsmyndighetens kontaktuppgifter" />
   <ul class="contact-info">
-    <li>Enheten för tillsyn av tillgänglighet</li>
+    <li>Transport- och kommunikationsverket Traficom</li>
+    <li>Tillsyn över digital tillgänglighet</li>
     <li>
-      <Link
-        href="https://www.saavutettavuusvaatimukset.fi/"
-        text="Saavutettavuusvaatimukset.fi"
+      Webbplats: <Link
+        href="https://tillganglighetskrav.fi"
+        text="Tillganglighetskrav.fi"
         target="_blank" />
     </li>
-    <li>saavutettavuus(at)avi.fi</li>
-    <li>växel 0295 016 000</li>
+    <li>
+      E-post: <Link
+        href="mailto:tillganglighet@traficom.fi"
+        text="tillganglighet@traficom.fi" />
+    </li>
+    <li>Telefon: 029 534 5000 (växeln)</li>
   </ul>
 </div>

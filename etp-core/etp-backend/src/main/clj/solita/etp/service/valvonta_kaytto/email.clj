@@ -92,15 +92,15 @@
     (html
       (heading "Vastaa tietopyyntöön")
       (paragraph
-        "ARA on lähettänyt teille kehotuksen."
-        "ARA antaa varoituksen ja vaatii vastaamaan kehotukseen {toimenpide.deadline-date} mennessä.")
+        "Varke on lähettänyt teille kehotuksen."
+        "Varke antaa varoituksen ja vaatii vastaamaan kehotukseen {toimenpide.deadline-date} mennessä.")
       rfi-order-description-fi
       signature-reply-fi
 
       (heading "Svara på uppmaningen")
       (paragraph
-        "ARA har skickat dig en uppmaning."
-        "ARA ger dig en varning och kräver att du svarar på uppmaningen senast den {toimenpite.deadline-date}.")
+        "Varke har skickat dig en uppmaning."
+        "Varke ger dig en varning och kräver att du svarar på uppmaningen senast den {toimenpite.deadline-date}.")
       rfi-order-description-sv
       signature-reply-sv)}})
 
@@ -116,7 +116,7 @@
         address-fi)
       (paragraph "Valvonta kohdistuu rakennuksen omistajaan ja tämä on vain teille tiedoksi.")
       (paragraph "Tarvittaessa lisätietoja voi kysyä osoitteesta "
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-fi
 
       (heading "Begäran om information (för kännedom)")
@@ -125,7 +125,7 @@
         address-sv)
       (paragraph "Övervakningen gäller byggnadens ägare och är enbart till din kännedom.")
       (paragraph "Mer information fås vid behov på adressen"
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-sv)}
    :rfi-order
    {:subject
@@ -138,7 +138,7 @@
         address-fi)
       (paragraph "Valvonta kohdistuu rakennuksen omistajaan ja tämä on vain teille tiedoksi.")
       (paragraph "Tarvittaessa lisätietoja voi kysyä osoitteesta "
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-fi
 
       (heading "Uppmaning till tillsyn över energicertifikat (för kännedom)")
@@ -147,7 +147,7 @@
         address-sv)
       (paragraph "Övervakningen gäller byggnadens ägare och är enbart till din kännedom.")
       (paragraph "Mer information fås vid behov på adressen"
-                 (mailto-link "energiatodistus@ara.fi"))
+                 (mailto-link "energiatodistus.varke@gov.fi"))
       signature-reply-sv)}})
 
 (defprotocol TemplateValue (view [value]))

@@ -12,10 +12,10 @@
            (java.time Instant)
            (java.util Base64)))
 
-(def lahettaja {:nimi             "Asumisen rahoitus- ja kehittämiskeskus"
-                :jakeluosoite     "Kirkkokatu 12 / PL 30"
-                :postinumero      "15141"
-                :postitoimipaikka "Lahti"})
+(def lahettaja {:nimi             "Valtion tukeman asuntorakentamisen keskus"
+                :jakeluosoite     "PL 35"
+                :postinumero      "00023"
+                :postitoimipaikka "Valtioneuvosto"})
 
 (defn- tunniste [toimenpide osapuoli]
   (str/join "-" [(or (:diaarinumero toimenpide) "ARA")
@@ -59,14 +59,14 @@
                          "{{katuosoite}}, {{postinumero}} {{postitoimipaikka-fi}}\n"
                          "{{#rfi-request}}Tietopyyntöön on vastattava {{deadline-date}} mennessä.{{/rfi-request}}"
                          "{{#rfi-order}}Kehotamme vastaamaan tietopyyntöön {{deadline-date}} mennessä.{{/rfi-order}}"
-                         "{{#rfi-warning}}ARA on lähettänyt teille kehotuksen. "
-                         "ARA antaa varoituksen ja vaatii vastaamaan tietopyyntöön {{deadline-date}} mennessä.{{/rfi-warning}}"
+                         "{{#rfi-warning}}Varke on lähettänyt teille kehotuksen. "
+                         "Varke antaa varoituksen ja vaatii vastaamaan tietopyyntöön {{deadline-date}} mennessä.{{/rfi-warning}}"
                          "\n\n"
                          "Som bilaga till detta meddelande finns en begäran om information som gäller din byggnad: {{rakennustunnus}}\n"
                          "{{katuosoite}}, {{postinumero}} {{postitoimipaikka-sv}}\n"
                          "{{#rfi-request}}Begäran om information ska besvaras senast den {{deadline-date}}.{{/rfi-request}}"
                          "{{#rfi-order}}Vi uppmanar dig att besvara begäran om information senast den {{deadline-date}}.{{/rfi-order}}"
-                         "{{#rfi-warning}}ARA har skickat en uppmaning till dig. ARA ger en varning och kräver att du svarar på begäran om information senast den {{deadline-date}}.{{/rfi-warning}}")
+                         "{{#rfi-warning}}Varke har skickat en uppmaning till dig. Varke ger en varning och kräver att du svarar på begäran om information senast den {{deadline-date}}.{{/rfi-warning}}")
                     {:rakennustunnus      (:rakennustunnus valvonta)
                      :katuosoite          (:katuosoite valvonta)
                      :postinumero         (:postinumero valvonta)

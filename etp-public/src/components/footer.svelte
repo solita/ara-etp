@@ -7,26 +7,29 @@
   import Link from '@Component/link';
   import IconLogin from '@Asset/icons/login-light.svg';
   import IconChat from '@Asset/icons/chat.svg';
-  import ImgLogoBlack from '@Asset/ara_logo_black.png';
-  import ImgLogoBlackSwe from '@Asset/ara_swe_logo_black.png';
+  import ImgFooterLogoFi from '@Asset/YM_Varke_vaaka_sin_FI_RGB.png?width=1471&height=257';
+  import ImgFooterLogoSv from '@Asset/YM_Varke_vaaka_sin_SV_RGB.png?width=1471&height=257';
+  import ImgFooterLogoSmallFi from '@Asset/YM_Varke_kapea_sin_FI_RGB.png?width=659&height=302';
+  import ImgFooterLogoSmallSv from '@Asset/YM_Varke_kapea_sin_SV_RGB.png?width=659&height=302';
 
   import { _, locale } from '@Localization/localization';
 
   export let config;
 
-  $: logo = $locale === 'fi' ? ImgLogoBlack : ImgLogoBlackSwe;
+  $: logo = $locale === 'fi' ? ImgFooterLogoFi : ImgFooterLogoSv;
+  $: logoSmall = $locale === 'fi' ? ImgFooterLogoSmallFi : ImgFooterLogoSmallSv;
 </script>
 
 <style>
+  @media screen and (min-width: 768px) {
+    .footer-logo {
+      height: 150px;
+    }
+  }
   @media print {
     footer {
       display: none;
     }
-  }
-
-  .logo {
-    height: 140px;
-    width: auto;
   }
 </style>
 
@@ -35,25 +38,24 @@
     <article class="flex flex-col md:flex-row md:my-0 md:space-x-10">
       <section class="md:w-1/3 py-4 md:py-0">
         <h2 class="mb-4">{$_('FOOTER_LAKI')}</h2>
-        <p>{$_('FOOTER_ARA_VIRANOMAINEN')}</p>
+        <p>{$_('FOOTER_VARKE_VIRANOMAINEN')}</p>
         <br />
-        <Link href="https://www.ara.fi">{$_('FOOTER_ARA_LINKKI')}</Link>
+        <Link href="https://www.varke.fi">{$_('FOOTER_VARKE_LINKKI')}</Link>
       </section>
       <section class="md:w-1/3 flex flex-col justify-between py-4 md:py-0">
         <h2 class="mb-4">{$_('FOOTER_YHTEYSTIEDOT')}</h2>
         <address class="not-italic">
           <span>{$_('EMAIL')}:</span>
-          <Link href="mailto:energiatodistus@ara.fi"
-            >energiatodistus@ara.fi</Link>
+          <Link href="mailto:varke.ym@gov.fi">varke.ym@gov.fi</Link>
         </address>
         <address class="not-italic flex flex-col">
           <span>{$_('FOOTER_OSOITE_1')}</span>
-          <span>PL 30</span>
-          <span>15141 LAHTI</span>
+          <span>PL 35</span>
+          <span>00023 Valtioneuvosto</span>
         </address>
         <address class="not-italic">
           <span>{$_('PUHELINVAIHDE')}:</span>
-          <Link href="tel:0295250800">029 525 0800</Link>
+          <Link href="tel:029516001">0295 16001</Link>
         </address>
         <a href="/tietoa-sivustosta" class="block underline text-darkgreen">
           {$_('TIETOA_SIVUSTOSTA')}
@@ -99,8 +101,15 @@
     </article>
 
     <div class="my-16 border-t-2 border-gray-400 pt-3">
-      <a href="https://www.ara.fi">
-        <img class="logo pt-8" src={logo} alt={$_('FOOTER_ARA_LOGO_ALT')} />
+      <a href="https://www.varke.fi">
+        <picture>
+          <source media="(max-width: 767px)" srcset={logoSmall} />
+          <source media="(min-width: 768px)" srcset={logo} />
+          <img
+            class="mt-8 footer-logo"
+            src={logo}
+            alt={$_('FOOTER_VARKE_LOGO_ALT')} />
+        </picture>
       </a>
     </div>
   </footer>

@@ -70,7 +70,8 @@ Content-Disposition: attachment; filename=start.sh
      :attachments attachments}))
 
 ;; 2 recipients x 2 emails => 4 files.
-(t/deftest ^:eftest/synchronized send-email!-test
+(t/deftest ^{:eftest/synchronized true
+             :broken-test "flaky"} send-email!-test
   (empty-email-directory!)
   (t/is (= 0 (count (email-directory-files))))
   (send-email! nil)

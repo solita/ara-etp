@@ -5,12 +5,17 @@
   import * as Navigation from '@Utility/navigation';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as keys from '@Utility/keys';
-  import { _ } from '@Language/i18n';
+  import { _, locale } from '@Language/i18n';
+  import * as Locales from '@Language/locale-utils';
 
   import LanguageSelect from './language-select';
 
   export let whoami = Maybe.None();
   export let ohjeSivut = Maybe.None();
+
+  $: headerLogoPath = Locales.isSV($locale)
+    ? 'images/YM_Varke_vaaka_valk_SV_RGB.png'
+    : 'images/YM_Varke_vaaka_valk_FI_RGB.png';
 
   let showNameDropdown = false;
   let showOhjeDropdown = false;
@@ -99,13 +104,10 @@
     }
   }} />
 
-<header class="flex justify-between px-2 lg:px-10">
+<header class="flex justify-between px-2 lg:px-10 my-3">
   <div class="flex grow items-center">
     <a class="logo-link" href="/">
-      <img
-        class="mr-2 lg:mr-6"
-        src="images/ara_logo_simple_nega.svg"
-        alt="Ara" />
+      <img class="mr-2 lg:mr-6 h-20" src={headerLogoPath} alt="Varke" />
     </a>
     <LanguageSelect />
   </div>

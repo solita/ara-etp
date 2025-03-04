@@ -18,7 +18,7 @@
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
-     :email    "testi@ara.fi"
+     :email    "testi@varke.fi"
      :puhelin  "0504363675457"
      :titteli-fi "energia-asiantuntija"
      :titteli-sv "energiexpert"})
@@ -113,7 +113,7 @@
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
                                             :type_specific_data {:fine 9000}
-                                            :diaarinumero       "ARA-05.03.01-2023-159"})
+                                            :diaarinumero       "Varke-05.03.01-2023-159"})
       ;; Add käskypäätös / varsinainen päätös toimenpide to the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id        valvonta-id
                                             :type_id            8
@@ -176,7 +176,7 @@
                                          :sukunimi "Tuntija"}
                     :deadline-date      "2023-11-04"
                     :description        "Tehdään sakkopäätöksen kuulemiskirje"
-                    :diaarinumero       "ARA-05.03.01-2023-159"
+                    :diaarinumero       "Varke-05.03.01-2023-159"
                     :filename           "sakkopaatos-kuulemiskirje.pdf"
                     :henkilot           [{:email                    nil
                                           :etunimi                  "Testi"
@@ -212,9 +212,9 @@
           (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
           (t/is (= (:status response) 200))
 
-          (t/testing "and document has four pages"
+          (t/testing "and document has three pages"
             (t/is (= (.getNumberOfPages pdf-document)
-                     4)))
+                     3)))
 
           (t/testing "and document looks as it should"
             (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-kuulemiskirje-yksityishenkilo.pdf"))))))
@@ -275,7 +275,7 @@
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
                                             :type_specific_data {:fine 9000}
-                                            :diaarinumero       "ARA-05.03.01-2023-159"})
+                                            :diaarinumero       "Varke-05.03.01-2023-159"})
       ;; Add käskypäätös / varsinainen päätös toimenpide to the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id        valvonta-id
                                             :type_id            8

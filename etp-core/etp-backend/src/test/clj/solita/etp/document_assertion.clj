@@ -21,8 +21,8 @@
   ;; Compare the created document to the snapshot
   (t/is (= html-doc
            (str
-             (slurp (io/resource html-base-template-path))
-             (slurp (io/resource doc-path-to-compare-to)))))
+            (slurp (io/resource html-base-template-path))
+            (slurp (io/resource doc-path-to-compare-to)))))
   (reset! html->pdf-called? true)
   ;;Calling original implementation to ensure the functionality doesn't change
   (original-html->pdf html-doc output-stream))
@@ -42,6 +42,14 @@
     (with-open [output (ByteArrayOutputStream.)]
       (ImageIOUtil/writeImage image "png" output)
       (.toByteArray output))))
+
+(defn save-new-snapshot
+  "If you want to update the snapshot of the document, call this function with the document and the path to the snapshot.
+   Example usage inside assert-pdf-matches-visually function: (save-new-snapshot pdf-under-testing baseline-pdf-resource-path)"
+  [^PDDocument pdf-doc snapshot-path-in-resources]
+  (let [target-path (str "./src/test/resources/" snapshot-path-in-resources)]
+    (io/make-parents target-path)
+    (.save pdf-doc target-path)))
 
 (defn assert-pdf-matches-visually
   "Checks that the given pdf document object matches visually to the baseline-pdf at the given resource path"
@@ -76,8 +84,8 @@
               "If change is intended, save new document snapshot in the test with save-new-snapshot function"))
 
       ;; Write the image in build directory so it can be compared manually
-      (with-open [output (FileOutputStream. (str "./target/" filename "-page-" (inc page-number) ".png"))]
-        (.write output rendered-image)))))
+      (let [debug-image-path (str "./target/" filename "-page-" (inc page-number) ".png")]
+        (io/make-parents debug-image-path)
+        (with-open [output (FileOutputStream. debug-image-path)]
+          (.write output rendered-image))))))
 
-(defn save-new-snapshot [new-snapshot snapshot-path-in-resources]
-  (io/copy new-snapshot (io/file (str "./src/test/resources/" snapshot-path-in-resources))))

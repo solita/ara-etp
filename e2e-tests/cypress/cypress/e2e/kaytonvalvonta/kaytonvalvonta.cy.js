@@ -413,11 +413,11 @@ const createSakkopaatosVarsinainenPaatos = () => {
   // Statement has default text filled in
   cy.get('[data-cy="toimenpide.statement-fi-0"]').should(
     'have.value',
-    'ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.'
+    'Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.'
   );
   cy.get('[data-cy="toimenpide.statement-sv-0"]').should(
     'have.value',
-    'Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom Esimerkki inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen.'
+    'Ändring i Varkes beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i Varkes beslut. Enligt Varkes uppfattning döms vitet ut till fullt belopp, eftersom Esimerkki inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen.'
   );
 
   cy.selectInSelect(

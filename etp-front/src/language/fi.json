@@ -1,6 +1,6 @@
 {
   "document": {
-    "title": "Ara - Energiatodistuspalvelu"
+    "title": "Varke - Energiatodistuspalvelu"
   },
   "validation": {
     "required": "Pakollinen tieto",
@@ -522,7 +522,7 @@
       "ehdotus": {
         "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen.",
         "info-p2": "<b>Valitse näistä korvattava energiatodistus</b> tai jos mitään todistusta ei korvata niin tämän kohdan voi ohittaa.",
-        "info-p3-1": "Jos halutaan korvata jokin muu niin valitse kohta ",
+        "info-p3-1": "Jos halutaan korvata jokin muu niin valitse kohta",
         "info-p3-2": "Korvaa todistuksen",
         "info-p3-3": "ja syötä korvattava todistustunnus käsin."
       },
@@ -758,7 +758,7 @@
         "paaiv": {
           "label-context": "Pääilmanvaihtokoneet",
           "tulo": "Tulo",
-          "poisto": "Poisto ",
+          "poisto": "Poisto",
           "sfp": "SFP-luku",
           "lampotilasuhde": "LTO:n lämpö\u00ADtilasuhde",
           "jaatymisenesto": "Jäätymisenesto"
@@ -960,8 +960,8 @@
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
         "label-context": "Tekniset järjestelmät",
-        "sahko": "Sähkö",
-        "lampo": "Lämpö",
+        "sahko": "Sähkö yhteensä",
+        "lampo": "Lämpö yhteensä",
         "kaukojaahdytys": "Kauko\u00ADjäähdytys",
         "lammitysjarjestelma": "Lämmitys\u00ADjärjestelmä",
         "labels": {
@@ -1225,10 +1225,10 @@
     "messages": {
       "save-success": "Energiatodistuksen tiedot tallennettu onnistuneesti.",
       "save-error": "Energiatodistuksen tietojen tallennuksessa tapahtui odottamaton virhe.",
-      "validation-error": "Lomakkeella virheitä, tarkista kentät: ",
+      "validation-error": "Lomakkeella virheitä, tarkista kentät:",
       "load-error": "Energiatodistuksen tietojen haku epäonnistui.",
       "not-found": "Energiatodistusta ei ole olemassa.",
-      "validation-required-error": "Pakolliset tiedot puuttuvat: ",
+      "validation-required-error": "Pakolliset tiedot puuttuvat:",
       "invalid-laskutusosoite-id": "Ei enää käytössä. Valitse voimassaoleva laskutustieto.",
       "delete-success": "Energiatodistus poistettiin onnistuneesti",
       "delete-error": "Energiatodistuksen poistaminen epäonnistui",
@@ -1594,7 +1594,7 @@
           "info": "Pyydetään laatijalta lisää tietoa.",
           "publish-button": "Lähetä tietopyyntö",
           "response-title": "Tietopyyntö",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-reply": {
           "title": "Vastaus tietopyyntöön",
@@ -1609,14 +1609,14 @@
           "info": "Kehoitetaan laatijaa luovuttamaan aikaisemmin pyydetyt tiedot.",
           "publish-button": "Lähetä kehotus",
           "response-title": "Kehotus vastata tietopyyntöön",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-warning": {
           "title": "Tietopyyntö varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos tietoja ei luovuteta määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
           "response-title": "Varoitus tietopyyntöön liittyen",
-          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+          "response-description": "Varke vaatii vastausta {deadline-date} mennessä."
         },
         "audit-report": {
           "title": "Valvontamuistio",
@@ -1633,7 +1633,7 @@
           "severity-title": "Vakavuus",
           "select-severity": "Valitse vakavuus",
           "response-title": "Valvontamuistio",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä.",
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä.",
           "draft-info": "Voit jatkaa valvontamuistion tekemistä myöhemmin",
           "tiedoksi": {
             "title": "Lähetä valvontamuistio tiedoksi",
@@ -1657,14 +1657,14 @@
           "info": "Kehoitetaan laatijaa korjaamaan energiatodistus.",
           "publish-button": "Lähetä kehotus",
           "response-title": "Kehotus vastata valvontamuistioon",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä."
         },
         "audit-warning": {
           "title": "Valvontamuistio varoitus",
           "info": "Varoitetaan laatijaa seurauksista, jos energiatodistusta ei korjata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
           "response-title": "Varoitus valvontamuistioon liittyen",
-          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+          "response-description": "Varke vaatii vastausta {deadline-date} mennessä."
         },
         "rfc-request": {
           "title": "Lisäselvityspyyntö",
@@ -1672,7 +1672,7 @@
           "description": "Lisäselvityspyyntö",
           "publish-button": "Lähetä",
           "response-title": "Lisäselvityspyyntö",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä."
         },
         "rfc-reply": {
           "title": "Vastaus lisäselvityspyyntöön",
@@ -1928,21 +1928,21 @@
           "info": "Pyydetään rakennuksen omistajalta tietoa energiatodistuksesta.",
           "publish-button": "Lähetä tietopyyntö",
           "response-title": "Tietopyyntö",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-order": {
           "title": "Kehotus",
           "info": "Kehoitetaan rakennuksen omistajia vastaamaan tietopyyntöön.",
           "publish-button": "Lähetä kehotus",
           "response-title": "Kehotus vastata tietopyyntöön",
-          "response-description": "ARA pyytää vastausta {deadline-date} mennessä."
+          "response-description": "Varke pyytää vastausta {deadline-date} mennessä."
         },
         "rfi-warning": {
           "title": "Varoitus",
           "info": "Varoitetaan rakennuksen omistajia seurauksista, jos tietopyyntöön ei vastata määräaikaan mennessä.",
           "publish-button": "Lähetä varoitus",
           "response-title": "Varoitus tietopyyntöön liittyen",
-          "response-description": "ARA vaatii vastausta {deadline-date} mennessä."
+          "response-description": "Varke vaatii vastausta {deadline-date} mennessä."
         },
         "decision-order": {
           "title": "Käskypäätös",
@@ -2049,8 +2049,8 @@
           "department-head-title-fi": "Yksikön päällikön titteli, suomi",
           "department-head-title-sv": "Yksikön päällikön titteli, ruotsi",
           "department-head-name": "Yksikön päällikön nimi",
-          "default-statement-fi": "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
-          "default-statement-sv": "Ändring i ARAs beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i ARAs beslut. Enligt ARAs uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
+          "default-statement-fi": "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
+          "default-statement-sv": "Ändring i Varkes beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i Varkes beslut. Enligt Varkes uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
         },
         "penalty-decision-notice-first-mailing": {
           "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus)",
@@ -2170,7 +2170,7 @@
     }
   },
   "drop-or-click-file": "Lisää tiedosto raahaamalla tai selaa tiedostoja",
-  "file-drop-or": "Lisää tiedosto raahaamalla tai ",
+  "file-drop-or": "Lisää tiedosto raahaamalla tai",
   "file-browse": "selaa tiedostoja",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
   "country-not-found": "Virheellinen maa",
@@ -2196,9 +2196,9 @@
   },
   "footer": {
     "about": "Tietoa Sivustosta",
-    "name": "Asumisen rahoitus- ja kehittämiskeskus",
-    "po-box": "PL 30",
-    "post-num": "15141 LAHTI",
+    "name": "Valtion tukeman asuntorakentamisen keskus",
+    "po-box": "PL 35",
+    "post-num": "00023 Valtioneuvosto",
     "contact-info": "Yhteystiedot",
     "phone": "Puhelin",
     "email": "Sähköposti",

@@ -23,7 +23,7 @@
   (test-kayttajat/insert-virtu-paakayttaja!
     {:etunimi  "Asian"
      :sukunimi "Tuntija"
-     :email    "testi@ara.fi"
+     :email    "testi@varke.fi"
      :puhelin  "0504363675457"
      :titteli-fi "energia-asiantuntija"
      :titteli-sv "energiexpert"})
@@ -88,7 +88,7 @@
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
                                             :type_specific_data {:fine 9000}
-                                            :diaarinumero       "ARA-05.03.01-2023-159"})
+                                            :diaarinumero       "Varke-05.03.01-2023-159"})
 
       ;; Add käskypäätös / varsinainen päätös toimenpide to the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id        valvonta-id
@@ -98,7 +98,7 @@
                                             :deadline_date      (LocalDate/of 2023 10 24)
                                             :template_id        6
                                             :description        "Tehdään varsinainen päätös, omistaja vastasi kuulemiskirjeeseen"
-                                            :diaarinumero       "ARA-05.03.01-2023-159"
+                                            :diaarinumero       "Varke-05.03.01-2023-159"
                                             :type_specific_data {:fine                     857
                                                                  :osapuoli-specific-data   [{:osapuoli             {:id   osapuoli-id
                                                                                                                     :type "henkilo"}
@@ -121,7 +121,7 @@
                                             :deadline_date      (LocalDate/of 2023 11 4)
                                             :template_id        7
                                             :description        "Tehdään sakkopäätöksen kuulemiskirje"
-                                            :diaarinumero       "ARA-05.03.01-2023-159"
+                                            :diaarinumero       "Varke-05.03.01-2023-159"
                                             :type_specific_data {:fine                   9000
                                                                  :osapuoli-specific-data [{:osapuoli {:id   osapuoli-id
                                                                                                       :type "henkilo"}
@@ -151,7 +151,7 @@
                                                                                :recipient-answered   true
                                                                                :answer-commentary-fi "En tiennyt, että todistus tarvitaan :("
                                                                                :answer-commentary-sv "Jag visste inte att ett intyg behövs :("
-                                                                               :statement-fi         "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
+                                                                               :statement-fi         "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
                                                                                :statement-sv         "Han vet inte. Vi förlotar."}]
                                                    :department-head-title-fi "Apulaisjohtaja"
                                                    :department-head-title-sv "Apulaisjohtaja på svenska"
@@ -198,7 +198,7 @@
                                 :valvonta-id   1
                                 :author        {:rooli-id 2 :sukunimi "Tuntija", :id 1 :etunimi "Asian"}
                                 :filename      "sakkopaatos.pdf"
-                                :diaarinumero  "ARA-05.03.01-2023-159"
+                                :diaarinumero  "Varke-05.03.01-2023-159"
                                 :id            6
                                 :deadline-date "2023-12-10"
                                 :type-specific-data
@@ -212,7 +212,7 @@
                                    :document             true
                                    :statement-sv         "Han vet inte. Vi förlotar."
                                    :statement-fi
-                                   "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
+                                   "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
                                    :answer-commentary-sv "Jag visste inte att ett intyg behövs :("
                                    :answer-commentary-fi "En tiennyt, että todistus tarvitaan :("}]
                                  :department-head-title-sv "Apulaisjohtaja på svenska"
@@ -227,9 +227,9 @@
               (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
               (t/is (= (:status response) 200))
 
-              (t/testing "and document has eight pages"
+              (t/testing "and document has six pages"
                 (t/is (= (.getNumberOfPages pdf-document)
-                         8)))
+                         6)))
 
               (t/testing "and document looks as it should"
                 (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-varsinainen-paatos-yksityishenkilo.pdf"))))
@@ -302,7 +302,7 @@
                                             :create_time        kuulemiskirje-timestamp
                                             :publish_time       kuulemiskirje-timestamp
                                             :deadline_date      (LocalDate/of 2023 8 27)
-                                            :diaarinumero       "ARA-05.03.01-2023-132"
+                                            :diaarinumero       "Varke-05.03.01-2023-132"
                                             :type_specific_data {:fine 9000}})
       ;; Add käskypäätös / varsinainen päätös toimenpide to the valvonta
       (jdbc/insert! ts/*db* :vk_toimenpide {:valvonta_id        valvonta-id
@@ -312,7 +312,7 @@
                                             :deadline_date      (LocalDate/of 2023 10 24)
                                             :template_id        6
                                             :description        "Tehdään varsinainen päätös, omistaja vastasi kuulemiskirjeeseen"
-                                            :diaarinumero       "ARA-05.03.01-2023-159"
+                                            :diaarinumero       "Varke-05.03.01-2023-159"
                                             :type_specific_data {:fine                     857
                                                                  :osapuoli-specific-data   [{:osapuoli             {:id   osapuoli-id
                                                                                                                     :type "yritys"}
@@ -335,7 +335,7 @@
                                             :deadline_date      (LocalDate/of 2023 11 4)
                                             :template_id        7
                                             :description        "Tehdään sakkopäätöksen kuulemiskirje"
-                                            :diaarinumero       "ARA-05.03.01-2023-159"
+                                            :diaarinumero       "Varke-05.03.01-2023-159"
                                             :type_specific_data {:fine 932
                                                                  :osapuoli-specific-data [{:osapuoli {:id   osapuoli-id
                                                                                                       :type "yritys"}
@@ -357,7 +357,7 @@
                                                    :osapuoli-specific-data   [{:osapuoli             {:id   osapuoli-id
                                                                                                       :type "yritys"}
                                                                                :hallinto-oikeus-id   4
-                                                                               :statement-fi         "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
+                                                                               :statement-fi         "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
                                                                                :statement-sv         "Placeholder"
                                                                                :answer-commentary-fi "Asianosainen ei vastannut."
                                                                                :answer-commentary-sv "Nej ansverat han."
@@ -408,7 +408,7 @@
                         :valvonta-id   2,
                         :author        {:rooli-id 2, :sukunimi "Tuntija", :id 1, :etunimi "Asian"},
                         :filename      "sakkopaatos.pdf",
-                        :diaarinumero  "ARA-05.03.01-2023-159",
+                        :diaarinumero  "Varke-05.03.01-2023-159",
                         :id            12,
                         :deadline-date "2023-10-04",
                         :type-specific-data
@@ -422,7 +422,7 @@
                            :document             true,
                            :statement-sv         "Placeholder",
                            :statement-fi
-                           "ARAn päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut ARAn päätöksessä. ARAn näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
+                           "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä."
                            :answer-commentary-fi "Asianosainen ei vastannut."
                            :answer-commentary-sv "Nej ansverat han."}],
                          :department-head-title-sv "Kungen",
@@ -437,9 +437,9 @@
               (t/is (= (-> response :headers (get "Content-Type")) "application/pdf"))
               (t/is (= (:status response) 200))
 
-              (t/testing "and document has eight pages"
+              (t/testing "and document has six pages"
                 (t/is (= (.getNumberOfPages pdf-document)
-                         8)))
+                         6)))
 
               (t/testing "and document looks as it should"
                 (doc/assert-pdf-matches-visually pdf-document "documents/sakkopaatos-varsinainen-paatos-yritys.pdf"))))))))

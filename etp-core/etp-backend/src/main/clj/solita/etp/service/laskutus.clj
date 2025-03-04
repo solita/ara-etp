@@ -258,7 +258,7 @@
         row-data-count (count row-data)
         laskutus-count (count laskutus)]
     (concat [["ETP" nil nil nil nil (.format time-formatter-fi now)]
-             ["ARA" nil (str "Myyntilaskut " (.format date-formatter-fi
+             ["Varke" nil (str "Myyntilaskut " (.format date-formatter-fi
                                                       (.minus now 1 ChronoUnit/DAYS)))]
              []
              ["Asiakkaiden lukumäärä yhteensä" nil {:v row-data-count :align :left}]

@@ -175,3 +175,14 @@ Other environments
 Both projects contain script ```build-docker-image.sh``` which can be
 used to build the uberjars and related docker containers. The build containers
 can be executed by running ```docker run [etp-db or etp-backend]```.
+
+Justfile
+---
+There's a justfile in this directory. It makes it easier to run backend tests and clean+migrate the dev deb. Running `$ just` should list all the file's abilities if they've changed after writing this document.
+
+To use the file install [just](https://github.com/casey/just) from your package manager and use it as if it was make that knew what it could do.
+
+I interpret the readme in a way that recipes that don't call explicit sh features should work on windows too. I'm not certain if `$ just` just errors if run without an sh present, or if it defaults to pwsh if no sh found, and I can't test it myself. However, using just is just a convinience, and it's not a requirement so... hope it works in win too :D
+
+### TODO 
+Move just a directory higher and teach it to start the frontend npm jobs?

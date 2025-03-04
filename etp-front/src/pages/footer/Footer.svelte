@@ -1,9 +1,14 @@
 <script>
   import { locale, _ } from '@Language/i18n';
+  import * as Locales from '@Language/locale-utils';
 
   import Link from '@Component/Link/Link';
 
   export let version;
+
+  $: footerLogoPath = Locales.isSV($locale)
+    ? 'images/YM_Varke_vaaka_sin_SV_RGB.png'
+    : 'images/YM_Varke_vaaka_sin_FI_RGB.png';
 </script>
 
 <footer class="flex flex-col w-full text-sm">
@@ -24,16 +29,16 @@
             <Link
               bold={true}
               additionalClasses="text-ara-2021-green-small-text"
-              href="tel:0295250800"
-              text={'029 525 0800'} />
+              href="tel:029516001"
+              text={'0295 16001'} />
           </div>
           <span class="font-bold mt-2"> {$_('footer.email')}: </span>
           <div>
             <Link
               bold={true}
               additionalClasses="text-ara-2021-green-small-text"
-              href={'mailto:energiatodistus@ara.fi'}
-              text={'energiatodistus@ara.fi'} />
+              href={'mailto:varke.ym@gov.fi'}
+              text={'varke.ym@gov.fi'} />
           </div>
         </div>
       </div>
@@ -74,7 +79,7 @@
   </div>
   <div
     class="border-t border-tableborder mx-8 pt-4 pb-16 flex items-center justify-between">
-    <img class="w-20 h-20" src="images/ara_logo_green.svg" alt="Ara" />
-    {version.version}
+    <img class="h-32" src={footerLogoPath} alt="Varke" />
+    <p>{version.version}</p>
   </div>
 </footer>

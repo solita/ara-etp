@@ -28,6 +28,7 @@
 (defn generate-pdf-as-file-mock [_ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
         out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+    (io/make-parents out)
     (io/copy (io/file in) (io/file out))
     out))
 

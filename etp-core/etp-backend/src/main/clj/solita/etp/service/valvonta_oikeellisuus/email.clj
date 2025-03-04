@@ -136,16 +136,16 @@
     (html
       (heading "Vastaa tietopyyntöön koskien energiatodistusta {energiatodistus.id}")
       (paragraph
-        "ARA on lähettänyt teille tästä energiatodistuksesta tietopyynnön ja kehotuksen."
-        "ARA antaa varoituksen ja vaatii vastaamaan tietopyyntöön {toimenpide.deadline-date} mennessä.")
+        "Varke on lähettänyt teille tästä energiatodistuksesta tietopyynnön ja kehotuksen."
+        "Varke antaa varoituksen ja vaatii vastaamaan tietopyyntöön {toimenpide.deadline-date} mennessä.")
       rfi-order-description-fi
       rfi-order-link-fi
       signature-do-not-reply-fi
 
       (heading "Svara på begäran om  information om energicertifikatet {energiatodistus.id}")
       (paragraph
-        "ARA har sänt er en begäran om information och uppmaning om detta energicertifikat."
-        "ARA ger dig en varning och kräver att du svarar på begäran om information senast den  {toimenpide.deadline-date}.")
+        "Varke har sänt er en begäran om information och uppmaning om detta energicertifikat."
+        "Varke ger dig en varning och kräver att du svarar på begäran om information senast den  {toimenpide.deadline-date}.")
       rfi-order-description-sv
       rfi-order-link-sv
       signature-do-not-reply-sv)}
@@ -199,8 +199,8 @@
     (html
       (heading "Vastaa valvontamuistioon koskien energiatodistusta {energiatodistus.id}")
       (paragraph
-        "ARA on lähettänyt teille tästä energiatodistuksesta valvontamuistion ja kehotuksen."
-        "ARA antaa varoituksen ja vaatii vastaamaan valvontamuistioon {toimenpide.deadline-date} mennessä.")
+        "Varke on lähettänyt teille tästä energiatodistuksesta valvontamuistion ja kehotuksen."
+        "Varke antaa varoituksen ja vaatii vastaamaan valvontamuistioon {toimenpide.deadline-date} mennessä.")
       (paragraph
         "Sinulle on saapunut valvontamuistio koskien energiatodistusta {energiatodistus.id},"
         address-fi)
@@ -209,8 +209,8 @@
 
       (heading "Svara på övervakningspromemorian om energicertifikatet {energiatodistus.id}")
       (paragraph
-        "ARA har sänt er en övervakningspromemoria och uppmaning om detta energicertifikat."
-        "ARA ger dig en varning och kräver att du svarar på övervakningspromemorian senast den  {toimenpide.deadline-date}.")
+        "Varke har sänt er en övervakningspromemoria och uppmaning om detta energicertifikat."
+        "Varke ger dig en varning och kräver att du svarar på övervakningspromemorian senast den  {toimenpide.deadline-date}.")
       (paragraph
         "Du har fått en övervakningspromemoria om energicertifikatet{energiatodistus.id},"
         address-sv)

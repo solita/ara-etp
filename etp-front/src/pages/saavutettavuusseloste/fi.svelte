@@ -28,7 +28,7 @@
 <div bind:this={component}>
   <H1 text="Saavutettavuusseloste" />
   <p>
-    ARA pyrkii takaamaan private.energiatodistusrekisteri.fi saavutettavuuden
+    Varke pyrkii takaamaan private.energiatodistusrekisteri.fi saavutettavuuden
     Lain digitaalisten palvelujen tarjoamisesta 306/2019 mukaisesti.
   </p>
   <p>
@@ -124,8 +124,13 @@
   <H2 text="Palaute ja yhteystiedot" />
   <p>
     Jos huomasit saavutettavuuspuutteen, jota ei tällä sivulla ole kuvattu,
-    kerrothan sen meille. Ota yhteyttä lähettämällä sähköpostia osoitteeseen:
-    viestinta.ara (at) ara.fi
+    kerrothan sen meille. Ota yhteyttä palautelomakkeella:
+    <Link
+      href="https://www.varke.fi/fi/form/feedback-form"
+      referrerpolicy="no-referrer"
+      target="_blank">
+      Anna palautetta (varke.fi)
+    </Link>.
   </p>
   <p>
     Vastaamme viestiisi niin pian kuin mahdollista. Huomaathan, että
@@ -134,22 +139,41 @@
 
   <H2 text="Täytäntöönpanomenettely" />
   <p>
-    Jos huomaat sivustolla saavutettavuusongelmia, anna ensin palautetta
-    sivuston ylläpitäjälle. Vastauksessa voi mennä 14 päivää. Jos et ole
-    tyytyväinen saamaasi vastaukseen tai et saa vastausta lainkaan kahden viikon
-    aikana, voit antaa palautteen Etelä-Suomen aluehallintovirastoon.
+    Liikenne- ja viestintävirasto valvoo lain edellyttämien
+    saavutettavuusvaatimusten toteutumista. Jos huomaat sivustolla
+    saavutettavuusongelmia, anna ensin palautetta meille eli sivuston
+    ylläpitäjälle.
+  </p>
+
+  <p>
+    Jos et ole tyytyväinen meiltä saamaasi vastaukseen tai et saa vastausta
+    lainkaan kahden viikon kuluessa, voit tehdä ilmoituksen Liikenne- ja
+    viestintäviraston digitaalisen esteettömyyden ja saavutettavuuden
+    valvontaan. Liikenne- ja viestintäviraston sivulla kerrotaan, miten
+    ilmoituksen voi tehdä ja miten asia käsitellään.
+  </p>
+
+  <p>
+    <Link
+      href="https://www.saavutettavuusvaatimukset.fi/fi/kayttajan-oikeudet/palvelun-kayttajan-oikeudet"
+      text="Palvelun käyttäjän oikeudet (saavutettavuusvaatimukset.fi)" />
   </p>
 
   <H2 text="Valvontaviranomaisen yhteystiedot" />
   <ul class="contact-info">
-    <li>Saavutettavuuden valvonnan yksikkö</li>
+    <li>Liikenne- ja viestintävirasto Traficom</li>
+    <li>Digitaalisen esteettömyyden ja saavutettavuuden valvontayksikkö</li>
     <li>
-      <Link
+      Verkkosivut: <Link
         href="https://www.saavutettavuusvaatimukset.fi/"
         text="Saavutettavuusvaatimukset.fi"
         target="_blank" />
     </li>
-    <li>saavutettavuus(at)avi.fi</li>
-    <li>vaihde 0295 016 000</li>
+    <li>
+      Sähköposti: <Link
+        href="mailto:saavutettavuus@traficom.fi"
+        text="saavutettavuus@traficom.fi" />
+    </li>
+    <li>Puhelin: 029 534 5000 (vaihde)</li>
   </ul>
 </div>

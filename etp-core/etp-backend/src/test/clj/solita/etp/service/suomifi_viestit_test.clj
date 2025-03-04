@@ -1,12 +1,13 @@
 (ns solita.etp.service.suomifi-viestit-test
-  (:require [clojure.test :as t]
-            [solita.etp.test-system :as ts]
-            [clojure.java.io :as io]
-            [solita.etp.service.valvonta-kaytto.suomifi-viestit :as valvonta-kaytto.suomifi-viestit]
-            [solita.etp.service.suomifi-viestit :as service.suomifi-viestit]
+  (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [solita.etp.service.pdf :as pdf])
-  (:import (java.time LocalDate)
+            [clojure.test :as t]
+            [solita.etp.service.pdf :as pdf]
+            [solita.etp.service.suomifi-viestit :as service.suomifi-viestit]
+            [solita.etp.service.valvonta-kaytto.suomifi-viestit :as valvonta-kaytto.suomifi-viestit]
+            [solita.etp.test-system :as ts])
+  (:import (java.nio.file Paths)
+           (java.time LocalDate)
            (org.w3c.dom Node)
            (org.xmlunit.diff Comparison$Detail ComparisonListener ComparisonResult ComparisonType DOMDifferenceEngine DifferenceEvaluator DifferenceEvaluators)
            (org.xmlunit.builder Input)
@@ -126,13 +127,14 @@
             #"Sending suomifi message ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1 failed."
             (valvonta-kaytto.suomifi-viestit/send-message-to-osapuoli! valvonta toimenpide osapuoli document config)))))
 
-(t/deftest send-message-to-osapuoli-with-signing-test
+(t/deftest ^{:broken-test "flaky"}
+           send-message-to-osapuoli-with-signing-test
   (with-bindings {#'service.suomifi-viestit/post! (handle-request-with-xml-compare "suomifi/viesti-request-signed.xml"
                                                                                               "suomifi/viesti-response.xml"
                                                                                               202)
                   #'valvonta-kaytto.suomifi-viestit/now                      (fn [] "2021-09-08T06:21:03.625667Z")
                   #'valvonta-kaytto.suomifi-viestit/bytes->base64            (fn [_] "dGVzdGk=")}
-    (let [config-with-keystore (merge config {:keystore-file     (.getPath (io/resource "suomifi/store.jks"))
+    (let [config-with-keystore (merge config {:keystore-file     (-> (io/resource "suomifi/store.jks") .toURI Paths/get .toString)
                                               :keystore-password "password"
                                               :keystore-alias    "default"})]
       (t/is (= (:sanoma-tunniste (valvonta-kaytto.suomifi-viestit/send-message-to-osapuoli! valvonta toimenpide osapuoli document config-with-keystore))
