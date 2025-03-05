@@ -3,7 +3,9 @@ name: nvd-clojure
 on:
   schedule:
     - cron: '0 2 * * 1'
-  workflow_dispatch:
+  push:
+    branches:
+      - feature/AE-2442-nvd-check-fail
 
 jobs:
   nvd:
