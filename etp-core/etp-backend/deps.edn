@@ -57,7 +57,8 @@
                             org.apache.xmlgraphics/batik-codec
                             org.apache.xmlgraphics/batik-ext
                             org.apache.xmlgraphics/xmlgraphics-commons]}
-             org.apache.xmlgraphics/xmlgraphics-commons {:mvn/version "2.10"}
+             org.apache.xmlgraphics/xmlgraphics-commons {:mvn/version "2.10"
+                                                         :exclusion [commons-io/commons-io "2.11.0"]}
              org.apache.xmlgraphics/batik-transcoder   {:mvn/version "1.18"}
              org.apache.xmlgraphics/batik-codec        {:mvn/version "1.18"}
              org.apache.xmlgraphics/batik-ext          {:mvn/version "1.18"}
