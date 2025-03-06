@@ -3,6 +3,9 @@ name: nvd-clojure
 on:
   schedule:
     - cron: '0 2 * * 1'
+  push:
+    branches:
+      - feature/AE-2439-vulnerability-fixes-and-supressions
 
 jobs:
   nvd:
