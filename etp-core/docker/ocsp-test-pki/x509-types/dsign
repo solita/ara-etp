@@ -1,6 +1,0 @@
-# X509 extensions that has the same key usages as DVV's system signature certificate
-
-basicConstraints = CA:FALSE
-subjectKeyIdentifier = hash
-authorityKeyIdentifier = keyid,issuer:always
-keyUsage = digitalSignature,nonRepudiation
