@@ -123,5 +123,6 @@
     <!-- False positive since attacks via XML are highly unlikely in our project. Supressing for one year to check if the libraries are updated afterwards -->
     <suppress until="2025-03-07">
         <cve>CVE-2024-47554</cve>
+        <packageUrl regex="true">^pkg:maven/commons-io/commons-io@2.8.0</packageUrl>
     </suppress>
 </suppressions>
