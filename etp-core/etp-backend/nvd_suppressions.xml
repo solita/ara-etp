@@ -124,6 +124,5 @@
     <suppress until="2025-03-07">
         <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons\-io@.*$</packageUrl>
         <cve>CVE-2024-47554</cve>
-        <notes>Suppressing for one year while monitoring updates.</notes>
     </suppress>
 </suppressions>
