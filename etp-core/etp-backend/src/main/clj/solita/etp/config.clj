@@ -166,7 +166,9 @@
 (def system-signature-certificate-leaf (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_LEAF" "system-signature/local-signing-leaf.pem.crt"))
 (def system-signature-certificate-intermediate (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_INTERMEDIATE" "system-signature/local-signing-int.pem.crt"))
 (def system-signature-certificate-root (env-or-resource "SYSTEM_SIGNATURE_CERTIFICATE_ROOT" "system-signature/local-signing-root.pem.crt"))
-(def dvv-timestamp-service-issuer-cert (env "DVV_TIMESTAMP_SERVICE_ISSUER_CERTIFICATE" nil))
+(def dvv-timestamp-service-issuer-cert (env-or-resource "DVV_TIMESTAMP_SERVICE_ISSUER_CERTIFICATE" nil))
+;; We need to use the root certificate in order to verify the timestamping service's response but also in order to use HTTPS.
+(def dvv-timestamp-service-root-cert (env-or-resource "DVV_TIMESTAMP_SERVICE_ROOT_CERTIFICATE" nil))
 
 (def system-signature-session-timeout-default-value 90)
 (def ^:dynamic system-signature-session-timeout-minutes (Integer/parseInt (env "SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES" (str system-signature-session-timeout-default-value))))
