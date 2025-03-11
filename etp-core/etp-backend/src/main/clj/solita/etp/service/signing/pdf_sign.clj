@@ -16,7 +16,7 @@
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
-           (eu.europa.esig.dss.spi.x509 CommonCertificateSource CommonTrustedCertificateSource)
+           (eu.europa.esig.dss.spi.x509 CertificateSource CommonCertificateSource CommonTrustedCertificateSource)
            (eu.europa.esig.dss.spi.x509.aia DefaultAIASource)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io ByteArrayInputStream File FileOutputStream InputStream ObjectInputStream ObjectOutputStream)
@@ -147,12 +147,15 @@
      :stateful-parameters (object->input-stream signature-parameters)}))
 
 (defn get-certificate-verifier-with-tsp-issuer []
-  (let [cert-verifier (doto (CommonCertificateVerifier.)
-                        (.setAIASource (DefaultAIASource.)))]
-    (when-let [issuer-cert-pem config/dvv-timestamp-service-issuer-cert]
-      (.addTrustedCertSources cert-verifier (doto (CommonTrustedCertificateSource.)
-                                              (.importAsTrusted (doto (CommonCertificateSource.)
-                                                                  (.addCertificate (pem->CertificateToken issuer-cert-pem)))))))
+  (let [cert-verifier (CommonCertificateVerifier.)
+        issuer-cert-pem config/dvv-timestamp-service-issuer-cert
+        root-cert-pem config/dvv-timestamp-service-root-cert]
+    (when (and issuer-cert-pem root-cert-pem)
+      (.addTrustedCertSources cert-verifier (into-array
+                                              CertificateSource
+                                              [(doto (CommonTrustedCertificateSource.)
+                                                 (.addCertificate (pem->CertificateToken root-cert-pem))
+                                                 (.addCertificate (pem->CertificateToken issuer-cert-pem)))])))
     cert-verifier))
 
 (defn unsigned-document-info-and-signature->t-level-signed-document
