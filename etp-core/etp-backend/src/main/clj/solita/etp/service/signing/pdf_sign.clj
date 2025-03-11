@@ -12,6 +12,7 @@
            (eu.europa.esig.dss.pades PAdESSignatureParameters SignatureFieldParameters SignatureImageParameters)
            (eu.europa.esig.dss.pades.signature ExternalCMSService PAdESService PAdESWithExternalCMSService)
            (eu.europa.esig.dss.service SecureRandomNonceSource)
+           (eu.europa.esig.dss.service.http.commons CommonsDataLoader)
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
@@ -20,7 +21,7 @@
            (eu.europa.esig.dss.spi.x509.aia DefaultAIASource)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io ByteArrayInputStream File FileOutputStream InputStream ObjectInputStream ObjectOutputStream)
-           (java.security KeyPair KeyPairGenerator PrivateKey SecureRandom Security)
+           (java.security KeyPair KeyPairGenerator KeyStore PrivateKey SecureRandom Security)
            (java.security.cert X509Certificate)
            (java.time Duration Instant)
            (java.util ArrayList Collection Date List)
@@ -78,9 +79,24 @@
                              ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
     (.setTsaPolicy "1.2.3.4")))
 
+;; We add the root certificate as trusted in order to trust the timestamping service's SSL certificate.
+(defn get-data-loader-for-https []
+  (let [cert-token (pem->CertificateToken config/dvv-timestamp-service-root-cert)
+        password (-> (random-uuid) .toString .toCharArray)
+        key-store (doto (KeyStore/getInstance (KeyStore/getDefaultType))
+                    (.load nil nil)
+                    (.setCertificateEntry "dvv-root-cert" (.getCertificate cert-token)))
+        key-store-document (with-open [baos (ByteArrayOutputStream.)]
+                             (-> key-store (.store baos password))
+                             (InMemoryDocument. (ByteArrayInputStream. (.toByteArray baos))))]
+    (doto (CommonsDataLoader.)
+      (.setSslTruststorePassword password)
+      (.setSslTruststore key-store-document))))
+
 (defn- ^:dynamic get-tsp-source []
   (if-let [tsa-url config/tsa-endpoint-url]
-    (OnlineTSPSource. tsa-url)
+    (doto (OnlineTSPSource. tsa-url)
+      (.setDataLoader (get-data-loader-for-https)))
     (default-tsp)))
 
 (defn- get-ocsp-source []
