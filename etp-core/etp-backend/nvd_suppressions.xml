@@ -120,9 +120,22 @@
         <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons\-compress@.*$</packageUrl>
         <cve>CVE-2024-26308</cve>
     </suppress>
-        <!-- False positive since attacks via XML are highly unlikely in our project. Supressing for one year to check if the libraries are updated afterwards -->
+    <!-- False positive since attacks via XML are highly unlikely in our project. Supressing for one year to check if the libraries are updated afterwards -->
     <suppress until="2026-03-07">
         <packageUrl regex="true">^pkg:maven/commons-io/commons-io@.*$</packageUrl>
         <cve>CVE-2024-47554</cve>
+    </suppress>
+    <!-- Upgrading jetty-client results in failing aws requests and the vulnerability isnt that critical, suppress for 2 months and see if the jetty-client is updated by then-->
+    <suppress until="2025-05-12">
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-io@.*$</packageUrl>
+        <cve>CVE-2024-22201</cve>
+    </suppress>
+    <suppress until="2025-05-12">
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-io@.*$</packageUrl>
+        <cve>CVE-2024-8184</cve>
+    </suppress>
+    <suppress until="2025-05-12">
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-io@.*$</packageUrl>
+        <cve>CVE-2024-6763</cve>
     </suppress>
 </suppressions>
