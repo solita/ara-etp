@@ -153,4 +153,20 @@
         <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-http@.*$</packageUrl>
         <cve>CVE-2024-6763</cve>
     </suppress>
+
+    <!-- Jetty Util - Suppression until May 12, 2025 -->
+    <suppress until="2025-05-12">
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-util@.*$</packageUrl>
+        <cve>CVE-2024-22201</cve>
+    </suppress>
+
+    <suppress until="2025-05-12">
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-util@.*$</packageUrl>
+        <cve>CVE-2024-8184</cve>
+    </suppress>
+
+    <suppress until="2025-05-12">
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-util@.*$</packageUrl>
+        <cve>CVE-2024-6763</cve>
+    </suppress>
 </suppressions>
