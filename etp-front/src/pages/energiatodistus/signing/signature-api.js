@@ -12,9 +12,9 @@ const signatureOptions = version => ({
     keyusages: ['nonrepudiation'],
     keyalgorithms: ['rsa']
   },
-  contentType: 'data',
+  contentType: 'digest',
   hashAlgorithm: 'SHA256',
-  signatureType: 'signature'
+  signatureType: 'cms-pades'
 });
 
 // Example of mPollux response can be found in etp-core/docker/mpollux/api/version
