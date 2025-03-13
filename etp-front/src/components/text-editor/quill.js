@@ -43,7 +43,7 @@ export const quill = (
     theme: 'snow' // or 'bubble'
   });
 
-  q.setContents(q.clipboard.convert(html), 'silent');
+  q.setContents(q.clipboard.convert({ html }), 'silent');
 
   const root = node.getRootNode();
   const editor = node.getElementsByClassName('ql-editor')[0];
