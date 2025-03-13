@@ -96,6 +96,10 @@ Run in Docker container with
 ```bash
 ./run-visual-tests-in-docker.sh
 ```
+(or in case of Windows):
+```powershell
+.\run-visual-tests-in-docker.ps1
+```
 
 If you run these locally outside Docker container, the snapshots will be different as browsers in different operating
 systems render things slightly differently.
@@ -103,6 +107,10 @@ systems render things slightly differently.
 When there are intentional changes, update the image snapshots by running 
 ```bash
 ./run-visual-tests-in-docker.sh update
+```
+(or in case of Windows):
+```powershell
+.\run-visual-tests-in-docker.ps1 update
 ```
 
 ### Cypress
