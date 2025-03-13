@@ -44,6 +44,10 @@
     padding: revert;
     white-space: normal;
   }
+
+  div.markup :global(p) {
+    margin-bottom: 10px;
+  }
 </style>
 
 <div class="markup"><slot /></div>
