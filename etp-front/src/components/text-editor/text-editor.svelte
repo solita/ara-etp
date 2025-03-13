@@ -19,7 +19,6 @@
 
   export let model = '';
   export let lens = R.identity;
-  export let clearContent = false;
 
   export let parse = R.identity;
   export let format = R.identity;
@@ -68,29 +67,6 @@
 
   let valid = true;
   $: setValid(editorElement, valid);
-
-  let previousContent = '';
-
-  const handleFocusOut = (event, viewValue, api) => {
-    const html = event.detail.html;
-
-    const markdown = toMarkdown(html);
-    previousContent = markdown;
-
-    if (markdown && markdown !== viewValue) {
-      api.blur(markdown);
-    }
-  };
-
-  // Watch for clearContent prop changes specifically
-  $: if (clearContent) {
-    const editor = document.querySelector('.ql-editor');
-    if (editor && editor.innerHTML !== '') {
-      editor.innerHTML = '';
-      previousContent = '';
-      clearContent = false;
-    }
-  }
 </script>
 
 <Input
@@ -114,14 +90,8 @@
     {#if !disabled}
       <div
         on:focusin={api.focus}
-        on:text-change={event => {
-          const markdown = toMarkdown(event.detail.html);
-          if (markdown !== previousContent) {
-            api.input(markdown);
-            previousContent = markdown;
-          }
-        }}
-        on:editor-focus-out={event => handleFocusOut(event, viewValue, api)}
+        on:editor-focus-out={event => api.blur(toMarkdown(event.detail.html))}
+        on:text-change={event => api.input(toMarkdown(event.detail.html))}
         use:quill={{
           html: MD.toHtml(viewValue),
           toolbar,
