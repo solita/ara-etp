@@ -171,6 +171,9 @@
                 filename (str key ".pdf")
                 ^Base64$Decoder decoder (Base64/getDecoder)
                 signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
+                ;; Here we could wait for OCSP responders' thisUpdate to be after the time in the timestamp, but
+                ;; for now it seems to be sufficient to not wait as the DVV's validator does not check for this
+                ;; and the signature is advanced level regardless.
                 signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
             (file-service/upsert-file-from-input-stream aws-s3-client
                                                         key
