@@ -6,7 +6,7 @@
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert ExceptionOnStatusAlert)
            (eu.europa.esig.dss.cades.signature CMSSignedDocument)
-           (eu.europa.esig.dss.enumerations SignatureLevel DigestAlgorithm SignatureAlgorithm)
+           (eu.europa.esig.dss.enumerations MimeType SignatureLevel DigestAlgorithm SignatureAlgorithm)
            (eu.europa.esig.dss.model DSSMessageDigest FileDocument InMemoryDocument SignatureValue)
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters SignatureFieldParameters SignatureImageParameters)
@@ -155,7 +155,8 @@
   [^File unsigned-pdf signature-options]
   (let [service (PAdESWithExternalCMSService.)
         signature-parameters (get-signature-parameters signature-options)
-        ^DSSMessageDigest message-digest (-> service (.getMessageDigest (FileDocument. unsigned-pdf) signature-parameters))]
+        ^DSSMessageDigest message-digest (-> service (.getMessageDigest (doto (FileDocument. unsigned-pdf)
+                                                                          (.setMimeType (MimeType/fromFileExtension "pdf"))) signature-parameters))]
     {:digest              (.getBase64Value message-digest)
      ;; At least the signature-png needs to be saved for use after getting the signature.
      ;; Parameters seem to also have some other state and differ somehow if recreated so
