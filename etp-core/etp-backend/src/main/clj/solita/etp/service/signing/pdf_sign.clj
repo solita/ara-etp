@@ -18,9 +18,8 @@
            (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (eu.europa.esig.dss.spi.x509 CertificateSource CommonCertificateSource CommonTrustedCertificateSource)
-           (eu.europa.esig.dss.spi.x509.aia DefaultAIASource)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
-           (java.io ByteArrayInputStream File FileOutputStream InputStream ObjectInputStream ObjectOutputStream)
+           (java.io ByteArrayInputStream File InputStream ObjectInputStream ObjectOutputStream)
            (java.security KeyPair KeyPairGenerator KeyStore PrivateKey SecureRandom Security)
            (java.security.cert X509Certificate)
            (java.time Duration Instant)
@@ -169,10 +168,15 @@
         issuer-cert-pem config/dvv-timestamp-service-issuer-cert
         root-cert-pem config/dvv-timestamp-service-root-cert]
     (when (and issuer-cert-pem root-cert-pem)
+      ;; Alternatively could just set (.setCheckRevocationForUntrustedChains true)
       (.addTrustedCertSources cert-verifier (into-array
+                                                CertificateSource
+                                                [(doto (CommonTrustedCertificateSource.)
+                                                   (.addCertificate (pem->CertificateToken root-cert-pem)))]))
+      ;; The issuing cert from DVV is not available via AIA extensions for the timestamping service's certificate.
+      (.addAdjunctCertSources cert-verifier (into-array
                                               CertificateSource
-                                              [(doto (CommonTrustedCertificateSource.)
-                                                 (.addCertificate (pem->CertificateToken root-cert-pem))
+                                              [(doto (CommonCertificateSource.)
                                                  (.addCertificate (pem->CertificateToken issuer-cert-pem)))])))
     cert-verifier))
 
@@ -223,8 +227,8 @@
         cert-verifier (get-certificate-verifier-with-tsp-issuer)
         service (doto (PAdESService. (doto cert-verifier
                                        (.setOcspSource ocsp-source)
-                                       ;; TODO: Trust KMS root and DVV's certs?
-                                       ;;       Like this this is the same behaviour as before.
+                                       ;; We could trust DVV's root cert explicitly instead of this.
+                                       ;; Like this, this is the same behaviour as before though (can sign with any cert).
                                        (.setCheckRevocationForUntrustedChains true)))
                   (.setTspSource tsp-source))
         lt-level-document (-> service (.extendDocument signed-pdf parameters))]
