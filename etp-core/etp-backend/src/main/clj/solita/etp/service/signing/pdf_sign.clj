@@ -116,7 +116,8 @@
       .readObject))
 
 (defn ^:dynamic get-signature-parameters [{:keys [^File signature-png page origin-x origin-y zoom]}]
-  (let [signature-png (InMemoryDocument. (io/input-stream signature-png))
+  (let [signature-png (doto (InMemoryDocument. (io/input-stream signature-png))
+                        (.setMimeType (MimeType/fromFileExtension "png")))
 
         ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
                                                      (.setPage page)
