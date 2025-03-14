@@ -3,9 +3,9 @@
              "src/main/resources"]
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
  :deps      {org.clojure/clojure                                 {:mvn/version "1.12.0"}
-             ch.qos.logback/logback-classic                      {:mvn/version "1.5.12"}
+             ch.qos.logback/logback-classic                      {:mvn/version "1.5.17"}
              org.slf4j/log4j-over-slf4j                          {:mvn/version "2.0.16"}
-             flathead/flathead                                   {:mvn/version "0.0.6"}
+             flathead/flathead                                     {:mvn/version "0.0.6"}
              integrant/integrant                                 {:mvn/version "0.13.1"}
              hikari-cp/hikari-cp                                 {:mvn/version "3.1.0"}
              org.postgresql/postgresql                           {:mvn/version "42.7.4"}
@@ -23,7 +23,7 @@
              metosin/reitit-middleware                           {:mvn/version "0.7.2"}
              metosin/reitit-dev                                  {:mvn/version "0.7.2"}
              metosin/reitit-schema                               {:mvn/version "0.7.2"}
-             fi.metosin/reitit-openapi                           {:mvn/version "0.7.2"}
+             fi.metosin/reitit-openapi                            {:mvn/version "0.7.2"}
              metosin/muuntaja                                    {:mvn/version "0.6.10"}
              metosin/jsonista                                    {:mvn/version "0.3.12"}
              metosin/schema-tools                                {:mvn/version "0.13.1"}
@@ -87,9 +87,7 @@
              eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}
-
-             }
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
