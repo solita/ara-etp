@@ -3,7 +3,7 @@
              "src/main/resources"]
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
  :deps      {org.clojure/clojure                       {:mvn/version "1.12.0"}
-             ch.qos.logback/logback-classic            {:mvn/version "1.5.12"}
+             ch.qos.logback/logback-classic            {:mvn/version "1.5.17"}
              org.slf4j/log4j-over-slf4j                {:mvn/version "2.0.16"}
              flathead/flathead                         {:mvn/version "0.0.6"}
              integrant/integrant                       {:mvn/version "0.13.1"}
@@ -73,10 +73,12 @@
              commons-io/commons-io                     {:mvn/version "2.18.0"}
              ;; commons-discovery is needed by some other library dynamically at runtime
              ;; related to suomi.fi-viestit implementation
+
              commons-discovery/commons-discovery       {:mvn/version "0.5"}
              com.sun.xml.ws/webservices-rt             {:mvn/version "2.0.1"}
              kovacnica/clojure.network.ip              {:mvn/version "0.1.5"
                                                         :exclusions  [org.clojure/clojurescript]}}
+
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
