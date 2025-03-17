@@ -88,7 +88,7 @@
       #(let [draft? false
              ^String pdf-path (energiatodistus-pdf-service/generate-pdf-as-file complete-energiatodistus language draft? laatija-allekirjoitus-id)
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
-             key (energiatodistus-service/file-key id language)
+             pdf-file-key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
@@ -101,7 +101,7 @@
                                                                               :origin-y      origin-y
                                                                               :zoom          134})]
          (file-service/upsert-file-from-file aws-s3-client
-                                             key
+                                             pdf-file-key
                                              energiatodistus-pdf)
          (save-stateful-signature-parameters aws-s3-client
                                              id

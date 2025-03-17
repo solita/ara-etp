@@ -170,9 +170,9 @@
     (when (and issuer-cert-pem root-cert-pem)
       ;; Alternatively could just set (.setCheckRevocationForUntrustedChains true)
       (.addTrustedCertSources cert-verifier (into-array
-                                                CertificateSource
-                                                [(doto (CommonTrustedCertificateSource.)
-                                                   (.addCertificate (pem->CertificateToken root-cert-pem)))]))
+                                              CertificateSource
+                                              [(doto (CommonTrustedCertificateSource.)
+                                                 (.addCertificate (pem->CertificateToken root-cert-pem)))]))
       ;; The issuing cert from DVV is not available via AIA extensions for the timestamping service's certificate.
       (.addAdjunctCertSources cert-verifier (into-array
                                               CertificateSource
@@ -194,9 +194,9 @@
 
   Returns:
   An InputStream of the T-level pdf."
-  [^InputStream unsigned-pdf ^InputStream stateful-parameters ^bytes cms-signature]
+  [^InputStream unsigned-pdf-is ^InputStream stateful-parameters ^bytes cms-signature]
   (let [^PAdESSignatureParameters signature-parameters (input-stream->object stateful-parameters)
-        unsigned-pdf (InMemoryDocument. unsigned-pdf)
+        unsigned-pdf (InMemoryDocument. unsigned-pdf-is)
         tsp-source (get-tsp-source)
         service-external-cms (doto (PAdESWithExternalCMSService.))
         signed-pdf-b-level (-> service-external-cms (.signDocument unsigned-pdf
@@ -218,8 +218,8 @@
 
   Returns:
   An InputStream of the LT-level pdf."
-  [^InputStream signed-t-level-pdf]
-  (let [signed-pdf (InMemoryDocument. signed-t-level-pdf)
+  [^InputStream signed-t-level-pdf-is]
+  (let [signed-t-level-pdf (InMemoryDocument. signed-t-level-pdf-is)
         tsp-source (get-tsp-source)
         ocsp-source (get-ocsp-source)
         parameters (doto (PAdESSignatureParameters.)
@@ -231,7 +231,7 @@
                                        ;; Like this, this is the same behaviour as before though (can sign with any cert).
                                        (.setCheckRevocationForUntrustedChains true)))
                   (.setTspSource tsp-source))
-        lt-level-document (-> service (.extendDocument signed-pdf parameters))]
+        lt-level-document (-> service (.extendDocument signed-t-level-pdf parameters))]
     (.openStream lt-level-document)))
 
 ;; External cms using digest->signature function (same what the card reader does)
