@@ -23,4 +23,5 @@
     <variable name="ASHA_LOG_LEVEL" value="${ASHA_LOG_LEVEL:-INFO}" />
     <logger name="solita.etp.service.asha" level="${ASHA_LOG_LEVEL}"/>
     <logger name="com.zaxxer.hikari.HikariDataSource" level="WARN"/>
+    <logger name="eu.europa.esig.dss" level="WARN"/>
 </configuration>
