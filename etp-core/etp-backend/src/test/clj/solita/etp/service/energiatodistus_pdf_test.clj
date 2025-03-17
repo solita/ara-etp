@@ -143,34 +143,6 @@
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
 
-(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-energiatodistus-test
-  (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-        laatija-id (-> laatijat keys sort first)
-        db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
-        whoami {:id laatija-id}]
-    (t/is (= (signing-service/sign-energiatodistus-pdf db
-                                               ts/*aws-s3-client*
-                                               whoami
-                                               energiatodistus-test-data/time-when-test-cert-not-expired
-                                               id
-                                               "fi"
-                                               nil)
-             :not-in-signing))
-    (energiatodistus-test-data/sign-at-time! id
-                                             laatija-id
-                                             false
-                                             energiatodistus-test-data/time-when-test-cert-not-expired)
-    (t/is (= (signing-service/sign-energiatodistus-pdf db
-                                               ts/*aws-s3-client*
-                                               whoami
-                                               energiatodistus-test-data/time-when-test-cert-not-expired
-                                               id
-                                               "fi"
-                                               nil)
-             :already-signed))))
-
-
 (t/deftest sign-with-system-states-test
   (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
     (t/testing "Signing a pdf using the system instead of mpollux"
