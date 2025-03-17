@@ -82,3 +82,7 @@
                                                           "allekirjoitus-id")
              :already-signed))))
 
+(t/deftest comparable-name-test
+  (t/is (= "abc" (service/comparable-name "abc")))
+  (t/is (= "aeiouao" (service/comparable-name "á, é, í, ó, ú. ä ö"))))
+
