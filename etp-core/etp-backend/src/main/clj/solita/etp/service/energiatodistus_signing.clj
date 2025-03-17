@@ -58,7 +58,7 @@
 (def deletable-signature-process-object-tag
   {:Key "TemporarySignatureProcessFile" :Value "True"})
 
-;; We store the stateful signing parameters into a path that can easily touched by a lifecycle rule so that the rule
+;; We store the stateful signing parameters into a path that can be easily touched by a lifecycle rule so that the rule
 ;; does not touch anything else.
 (defn stateful-signature-parameters-file-key [energiatodistus-id language]
   (when energiatodistus-id (format "energiatodistus-signing/stateful-signature-parameters-%s-%s" energiatodistus-id language)))
