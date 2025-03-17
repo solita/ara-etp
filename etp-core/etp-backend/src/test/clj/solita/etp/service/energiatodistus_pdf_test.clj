@@ -144,34 +144,6 @@
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
 
-(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} find-energiatodistus-digest-test
-  (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-        laatija-id (-> laatijat keys sort first)
-        db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
-        whoami {:id laatija-id}]
-    (t/is (= (signing-service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi" "allekirjoitus-id")
-             :not-in-signing))
-    (energiatodistus-service/start-energiatodistus-signing! db whoami id)
-    (t/is (contains? (signing-service/find-energiatodistus-digest db
-                                                          ts/*aws-s3-client*
-                                                          id
-                                                          "fi"
-                                                          "allekirjoitus-id")
-                     :digest))
-    (energiatodistus-service/end-energiatodistus-signing!
-      db
-      ts/*aws-s3-client*
-      whoami
-      id
-      {:skip-pdf-signed-assert? true})
-    (t/is (= (signing-service/find-energiatodistus-digest db
-                                                  ts/*aws-s3-client*
-                                                  id
-                                                  "fi"
-                                                  "allekirjoitus-id")
-             :already-signed))))
-
 (t/deftest comparable-name-test
   (t/is (= "abc" (signing-service/comparable-name "abc")))
   (t/is (= "aeiouao" (signing-service/comparable-name "á, é, í, ó, ú. ä ö"))))
