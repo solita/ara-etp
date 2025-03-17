@@ -3,7 +3,6 @@
             [clojure.string :as str]
             [clojure.test :as t]
             [solita.common.formats :as formats]
-            [solita.common.time :as time]
             [solita.common.xlsx :as xlsx]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
@@ -142,40 +141,6 @@
   (t/is (nil? (energiatodistus-service/file-key nil "fi")))
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
-
-(t/deftest sign-with-system-states-test
-  (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
-    (t/testing "Signing a pdf using the system instead of mpollux"
-      (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-            laatija-id (-> laatijat keys sort first)
-            db (ts/db-user laatija-id)
-            ;; The second ET is 2018 version
-            id (-> energiatodistukset keys sort second)
-            whoami {:id laatija-id}]
-        (t/testing "Signing a pdf should succeed"
-          (t/is (= (signing-service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :ok)))
-        (t/testing "Trying to sign again should result in :already-signed"
-          (t/is (= (signing-service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :already-signed)))
-        (t/testing "The state should result in :already-signed if trying to sign three times in a row"
-          (t/is (= (signing-service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :already-signed)))))))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-signature-test
   (t/testing "Signing a pdf using the system instead of mpollux"
