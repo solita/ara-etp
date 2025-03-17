@@ -1,16 +1,19 @@
 (ns solita.etp.service.energiatodistus-signing-test
   (:require
+    [clojure.java.io :as io]
     [solita.common.certificates-test :as certificates-test]
     [solita.common.time :as time]
     [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
     [solita.etp.service.energiatodistus-signing :as service]
+    [solita.etp.service.energiatodistus-pdf :as pdf-service]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
     [solita.etp.service.file :as file-service]
     [solita.etp.service.signing.pdf-sign :as pdf-sign-service]
     [clojure.test :as t]
     [solita.etp.test-data.laatija :as laatija-test-data]
     [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
-    [solita.etp.test-system :as ts]))
+    [solita.etp.test-system :as ts])
+  (:import (java.io InputStream)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -231,4 +234,27 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
         (t/testing "Trying to sign a pdf that is already in signing should not change the state"
           (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)
                    tila-id)))))))
+
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-signature-test
+  (t/testing "Signing a pdf using the system instead of mpollux"
+    (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
+      (let [{:keys [laatijat energiatodistukset]} (test-data-set)
+            laatija-id (-> laatijat keys sort first)
+            db (ts/db-user laatija-id)
+            ;; The second ET is 2018 version
+            id (-> energiatodistukset keys sort second)
+            whoami {:id laatija-id :rooli 0}
+            complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
+            language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
+
+        (t/testing "The signed document's signature should exist."
+          (service/sign-with-system {:db             db
+                                     :aws-s3-client  ts/*aws-s3-client*
+                                     :whoami         whoami
+                                     :aws-kms-client ts/*aws-kms-client*
+                                     :now            (time/now)
+                                     :id             id})
+          (with-open [^InputStream pdf-bytes (pdf-service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
+                      xout (java.io.ByteArrayOutputStream.)]
+            (io/copy pdf-bytes xout)))))))
 

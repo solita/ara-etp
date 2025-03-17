@@ -142,26 +142,3 @@
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
 
-(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-signature-test
-  (t/testing "Signing a pdf using the system instead of mpollux"
-    (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
-      (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-            laatija-id (-> laatijat keys sort first)
-            db (ts/db-user laatija-id)
-            ;; The second ET is 2018 version
-            id (-> energiatodistukset keys sort second)
-            whoami {:id laatija-id :rooli 0}
-            complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
-            language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
-
-        (t/testing "The signed document's signature should be exist."
-          (signing-service/sign-with-system {:db             db
-                                             :aws-s3-client  ts/*aws-s3-client*
-                                             :whoami         whoami
-                                             :aws-kms-client ts/*aws-kms-client*
-                                             :now            (Instant/now)
-                                             :id             id})
-          (with-open [^InputStream pdf-bytes (service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
-                      xout (java.io.ByteArrayOutputStream.)]
-            (io/copy pdf-bytes xout)))))))
-
