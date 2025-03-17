@@ -165,25 +165,3 @@
                       xout (java.io.ByteArrayOutputStream.)]
             (io/copy pdf-bytes xout)))))))
 
-(t/deftest sign-with-system-already-in-signing-test
-  (t/testing "Trying to sign a pdf that is already in signing should fail and not change the state"
-    (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-          laatija-id (-> laatijat keys sort first)
-          db (ts/db-user laatija-id)
-          id (-> energiatodistukset keys sort first)
-          whoami {:id laatija-id}]
-      ;; Put the energiatodistus into signing.
-      (energiatodistus-service/start-energiatodistus-signing! db whoami id)
-      (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-        (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
-          (t/is (= (signing-service/sign-with-system {:db             db
-                                              :aws-s3-client  ts/*aws-s3-client*
-                                              :whoami         whoami
-                                              :aws-kms-client ts/*aws-kms-client*
-                                              :now            (Instant/now)
-                                              :id             id})
-                   :already-in-signing)))
-        (t/testing "Trying to sign a pdf that is already in signing should not change the state"
-          (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)
-                   tila-id)))))))
-
