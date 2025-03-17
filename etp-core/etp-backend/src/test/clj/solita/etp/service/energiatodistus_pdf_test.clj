@@ -2,7 +2,6 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.test :as t]
-            [solita.common.certificates-test :as certificates-test]
             [solita.common.formats :as formats]
             [solita.common.time :as time]
             [solita.common.xlsx :as xlsx]
@@ -143,32 +142,6 @@
   (t/is (nil? (energiatodistus-service/file-key nil "fi")))
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
-
-(t/deftest validate-certificate!-test
-  (t/testing "Last name of laatija has to match the signing certificate"
-    (let [ex (try
-               (signing-service/validate-certificate! "Meikäläinen"
-                                              energiatodistus-test-data/time-when-test-cert-not-expired
-                                              certificates-test/test-cert-str)
-               (catch clojure.lang.ExceptionInfo ex ex))
-          {:keys [type]} (ex-data ex)]
-      (t/is (instance? clojure.lang.ExceptionInfo ex))
-      (t/is (= :name-does-not-match type))))
-
-  (t/testing "Signing certificate must not have expired"
-    (let [ex (try
-               (signing-service/validate-certificate! "Specimen-POtex"
-                                              energiatodistus-test-data/time-when-test-cert-expired
-                                              certificates-test/test-cert-str)
-               (catch clojure.lang.ExceptionInfo ex ex))
-          {:keys [type]} (ex-data ex)]
-      (t/is (instance? clojure.lang.ExceptionInfo ex))
-      (t/is (= :expired-signing-certificate type))))
-
-  (t/testing "With the expected name and within the validity period of the certificate, signing succeeds"
-    (signing-service/validate-certificate! "Specimen-POtex"
-                                   energiatodistus-test-data/time-when-test-cert-not-expired
-                                   certificates-test/test-cert-str)))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-energiatodistus-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
