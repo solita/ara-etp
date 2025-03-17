@@ -2,36 +2,36 @@
              "src/main/sql"
              "src/main/resources"]
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
- :deps      {org.clojure/clojure                       {:mvn/version "1.12.0"}
-             ch.qos.logback/logback-classic            {:mvn/version "1.5.17"}
-             org.slf4j/log4j-over-slf4j                {:mvn/version "2.0.16"}
-             flathead/flathead                         {:mvn/version "0.0.6"}
-             integrant/integrant                       {:mvn/version "0.13.1"}
-             hikari-cp/hikari-cp                       {:mvn/version "3.1.0"}
-             org.postgresql/postgresql                 {:mvn/version "42.7.4"}
-             org.clojure/java.jdbc                     {:mvn/version "0.7.12"}
-             org.clojure/data.csv                      {:mvn/version "1.1.0"}
-             http-kit/http-kit                         {:mvn/version "2.8.0"}
-             ring/ring-core                            {:mvn/version "1.13.0"}
-             javax.servlet/servlet-api                 {:mvn/version "2.5"}
-             org.clojure/tools.logging                 {:mvn/version "1.3.0"}
-             prismatic/schema                          {:mvn/version "1.4.1"}
-             metosin/reitit-ring                       {:mvn/version "0.7.2"}
-             metosin/reitit-swagger                    {:mvn/version "0.7.2"}
-             metosin/reitit-swagger-ui                 {:mvn/version "0.7.2"}
-             metosin/ring-swagger-ui                   {:mvn/version "5.17.14"}
-             metosin/reitit-middleware                 {:mvn/version "0.7.2"}
-             metosin/reitit-dev                        {:mvn/version "0.7.2"}
-             metosin/reitit-schema                     {:mvn/version "0.7.2"}
-             fi.metosin/reitit-openapi                 {:mvn/version "0.7.2"}
-             metosin/muuntaja                          {:mvn/version "0.6.10"}
-             metosin/jsonista                          {:mvn/version "0.3.12"}
-             metosin/schema-tools                      {:mvn/version "0.13.1"}
-             webjure/jeesql                            {:mvn/version "0.4.7"}
-             clj-http/clj-http                         {:mvn/version "3.13.0"}
-             buddy/buddy-core                          {:mvn/version "1.12.0-430"}
-             buddy/buddy-sign                          {:mvn/version "3.6.1-359"}
-             buddy/buddy-hashers                       {:mvn/version "2.0.167"}
+ :deps      {org.clojure/clojure                                 {:mvn/version "1.12.0"}
+             ch.qos.logback/logback-classic                      {:mvn/version "1.5.17"}
+             org.slf4j/log4j-over-slf4j                          {:mvn/version "2.0.16"}
+             flathead/flathead                                   {:mvn/version "0.0.6"}
+             integrant/integrant                                 {:mvn/version "0.13.1"}
+             hikari-cp/hikari-cp                                 {:mvn/version "3.1.0"}
+             org.postgresql/postgresql                           {:mvn/version "42.7.4"}
+             org.clojure/java.jdbc                               {:mvn/version "0.7.12"}
+             org.clojure/data.csv                                {:mvn/version "1.1.0"}
+             http-kit/http-kit                                   {:mvn/version "2.8.0"}
+             ring/ring-core                                      {:mvn/version "1.13.0"}
+             javax.servlet/servlet-api                           {:mvn/version "2.5"}
+             org.clojure/tools.logging                           {:mvn/version "1.3.0"}
+             prismatic/schema                                    {:mvn/version "1.4.1"}
+             metosin/reitit-ring                                 {:mvn/version "0.7.2"}
+             metosin/reitit-swagger                              {:mvn/version "0.7.2"}
+             metosin/reitit-swagger-ui                           {:mvn/version "0.7.2"}
+             metosin/ring-swagger-ui                             {:mvn/version "5.17.14"}
+             metosin/reitit-middleware                           {:mvn/version "0.7.2"}
+             metosin/reitit-dev                                  {:mvn/version "0.7.2"}
+             metosin/reitit-schema                               {:mvn/version "0.7.2"}
+             fi.metosin/reitit-openapi                           {:mvn/version "0.7.2"}
+             metosin/muuntaja                                    {:mvn/version "0.6.10"}
+             metosin/jsonista                                    {:mvn/version "0.3.12"}
+             metosin/schema-tools                                {:mvn/version "0.13.1"}
+             webjure/jeesql                                      {:mvn/version "0.4.7"}
+             clj-http/clj-http                                   {:mvn/version "3.13.0"}
+             buddy/buddy-core                                    {:mvn/version "1.12.0-430"}
+             buddy/buddy-sign                                    {:mvn/version "3.6.1-359"}
+             buddy/buddy-hashers                                 {:mvn/version "2.0.167"}
 
              org.apache.poi/poi                                  {:mvn/version "5.3.0"}
              org.apache.poi/poi-ooxml                            {:mvn/version "5.3.0"}
@@ -67,18 +67,18 @@
              com.jcraft/jsch                                     {:mvn/version "0.1.55"}
              com.sun.mail/javax.mail                             {:mvn/version "1.6.2"}
 
-             org.apache.wss4j/wss4j-ws-security-dom    {:mvn/version "3.0.4"}
-             org.apache.wss4j/wss4j-ws-security-common {:mvn/version "3.0.4"}
-             com.sun.xml.messaging.saaj/saaj-impl      {:mvn/version "3.0.4"}
-             org.apache.axis/axis                      {:mvn/version "1.4"}
-             commons-io/commons-io                     {:mvn/version "2.18.0"}
+             org.apache.wss4j/wss4j-ws-security-dom              {:mvn/version "3.0.4"}
+             org.apache.wss4j/wss4j-ws-security-common           {:mvn/version "3.0.4"}
+             com.sun.xml.messaging.saaj/saaj-impl                {:mvn/version "3.0.4"}
+             org.apache.axis/axis                                {:mvn/version "1.4"}
+             commons-io/commons-io                               {:mvn/version "2.18.0"}
              ;; commons-discovery is needed by some other library dynamically at runtime
              ;; related to suomi.fi-viestit implementation
 
-             commons-discovery/commons-discovery       {:mvn/version "0.5"}
-             com.sun.xml.ws/webservices-rt             {:mvn/version "2.0.1"}
-             kovacnica/clojure.network.ip              {:mvn/version "0.1.5"
-                                                        :exclusions  [org.clojure/clojurescript]}}
+             commons-discovery/commons-discovery                 {:mvn/version "0.5"}
+             com.sun.xml.ws/webservices-rt                       {:mvn/version "2.0.1"}
+             kovacnica/clojure.network.ip                        {:mvn/version "0.1.5"
+                                                                  :exclusions  [org.clojure/clojurescript]}
              eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1"}
@@ -87,9 +87,7 @@
              eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}
-
-             }
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
