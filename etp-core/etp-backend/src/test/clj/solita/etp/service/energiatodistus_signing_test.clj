@@ -8,6 +8,14 @@
 
 (t/use-fixtures :each ts/fixture)
 
+(t/deftest do-when-signing-test
+  (let [f (constantly true)]
+    (t/is (= (service/do-when-signing {:tila-id 0} f)
+             :not-in-signing))
+    (t/is (true? (service/do-when-signing {:tila-id 1} f)))
+    (t/is (= (service/do-when-signing {:tila-id 2} f)
+             :already-signed))))
+
 (t/deftest create-stateful-signature-parameters-test
   (let [energiatodistus-id "123"
         language "fi"

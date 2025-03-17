@@ -113,6 +113,7 @@
           (.close document)))
 
       (io/delete-file file-path))))
+
 (t/deftest generate-pdf-without-building-name
   (let [{:keys [energiatodistukset]} (test-data-set)
         xmp-parser (DomXmpParser.)]
@@ -142,14 +143,6 @@
   (t/is (nil? (energiatodistus-service/file-key nil "fi")))
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
-
-(t/deftest do-when-signing-test
-  (let [f (constantly true)]
-    (t/is (= (signing-service/do-when-signing {:tila-id 0} f)
-             :not-in-signing))
-    (t/is (true? (signing-service/do-when-signing {:tila-id 1} f)))
-    (t/is (= (signing-service/do-when-signing {:tila-id 2} f)
-             :already-signed))))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} find-energiatodistus-digest-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
