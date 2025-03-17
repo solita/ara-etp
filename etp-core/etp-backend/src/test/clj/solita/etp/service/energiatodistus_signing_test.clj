@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus-signing-test
   (:require
+    [solita.common.certificates-test :as certificates-test]
     [solita.etp.service.energiatodistus-signing :as service]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
     [solita.etp.service.file :as file-service]
@@ -85,4 +86,11 @@
 (t/deftest comparable-name-test
   (t/is (= "abc" (service/comparable-name "abc")))
   (t/is (= "aeiouao" (service/comparable-name "á, é, í, ó, ú. ä ö"))))
+
+(t/deftest validate-surname!-test
+  (t/is (thrown? clojure.lang.ExceptionInfo
+                 (service/validate-surname! "Meikäläinen"
+                                                    certificates-test/test-cert)))
+  (t/is (nil? (service/validate-surname! "Specimen-POtex"
+                                                 certificates-test/test-cert))))
 

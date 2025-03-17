@@ -144,14 +144,6 @@
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
 
-(t/deftest validate-surname!-test
-  (t/is (thrown? clojure.lang.ExceptionInfo
-                 (signing-service/validate-surname! "Meikäläinen"
-                                            certificates-test/test-cert)))
-  (t/is (nil? (signing-service/validate-surname! "Specimen-POtex"
-                                         certificates-test/test-cert))))
-
-
 (t/deftest validate-certificate!-test
   (t/testing "Last name of laatija has to match the signing certificate"
     (let [ex (try
