@@ -4,17 +4,13 @@
             [clojure.test :as t]
             [solita.common.formats :as formats]
             [solita.common.xlsx :as xlsx]
-            [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf :as service]
-            [solita.etp.service.energiatodistus-signing :as signing-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
-  (:import (java.io InputStream)
-           (java.time Instant)
-           (org.apache.pdfbox.pdmodel PDDocument)
+  (:import (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.xmpbox.xml DomXmpParser)))
 
 (t/use-fixtures :each ts/fixture)

@@ -1,6 +1,5 @@
 (ns solita.etp.service.energiatodistus-signing-test
   (:require
-    [clojure.java.io :as io]
     [solita.common.certificates-test :as certificates-test]
     [solita.common.time :as time]
     [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
