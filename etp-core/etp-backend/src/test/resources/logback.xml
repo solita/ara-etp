@@ -26,4 +26,5 @@
     <logger name="com.zaxxer.hikari.HikariDataSource" level="WARN"/>
     <logger name="solita.common.smtp" level="WARN"/>
     <logger name="ch.qos.logback.classic.*" level="WARN"/>
+    <logger name="eu.europa.esig.dss" level="WARN"/>
 </configuration>
