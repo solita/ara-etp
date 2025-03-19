@@ -216,6 +216,7 @@
     (->> [["MyyntiOrganisaatioKoodi" "7000"]
           ["JakelutieKoodi" "13"]
           ["SektoriKoodi" "01"]
+          ["MyyntiToimistoKoodi" "A427"]
           ["TilausLajiKoodi" "Z001"]
           ["PalveluLuontiPvm" formatted-last-day-of-last-month]
           (if december-laskutus? ["LaskuPvm" formatted-last-day-of-last-month] nil)
