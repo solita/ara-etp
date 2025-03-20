@@ -262,7 +262,6 @@
     <Signing
       {energiatodistus}
       allowSelection={true}
-      checkIfSelectionIsAllowed={false}
       reload={reset} />
   {/if}
 

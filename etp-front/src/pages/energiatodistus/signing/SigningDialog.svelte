@@ -21,22 +21,9 @@
   const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 
   export let allowSelection = true;
-  export let checkIfSelectionIsAllowed = false;
   export let freshSession = false;
 
   let currentState = { status: Signing.status.not_started };
-
-  if (checkIfSelectionIsAllowed) {
-    Future.fork(
-      _ => {
-        allowSelection = false;
-      },
-      config => {
-        allowSelection = !isProduction(config.environment);
-      },
-      versionApi.getConfig
-    );
-  }
 
   const isSigningMethodSelectionAllowed = state =>
     R.includes(R.prop('status', state), [

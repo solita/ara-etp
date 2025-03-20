@@ -213,9 +213,8 @@
 {#if signingActive}
   <Signing
     {energiatodistus}
-    reload={cancel}
     allowSelection={true}
-    checkIfSelectionIsAllowed={false} />
+    reload={cancel} />
 {/if}
 
 <div
