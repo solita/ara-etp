@@ -89,30 +89,29 @@
                           (api-response/signature-response
                             (energiatodistus-service/cancel-energiatodistus-signing! db whoami id)
                             id))}}]
-   (when config/allow-new-signature-implementation
-     ["/system-sign"
-      {:post {:summary    "Allekirjoita energiatodistus järjestelmällä"
-              :parameters {:path {:id common-schema/Key}}
-              :access     rooli-service/laatija?
-              :middleware [[security/wrap-session-time-limit config/system-signature-session-timeout-minutes]]
-              :responses  {200 {:body schema/Str}
-                           404 {:body schema/Str}}
-              :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db aws-s3-client aws-kms-client whoami]}]
-                            (api-response/with-exceptions
-                              #(api-response/signature-response
-                                 (energiatodistus-signing-service/sign-with-system
-                                   {:db                       db
-                                    :aws-s3-client            aws-s3-client
-                                    :aws-kms-client           aws-kms-client
-                                    :whoami                   whoami
-                                    :laatija-allekirjoitus-id (find-laatija-allekirjoitus-id db whoami)
-                                    :now                      (Instant/now)
-                                    :id                       id})
-                                 id)
-                              [{:type :name-does-not-match :response 403}
-                               {:type :signed-pdf-exists :response 409}
-                               {:type :expired-signing-certificate :response 400}
-                               {:type :missing-value :response 400}
-                               {:type :patevyys-expired :response 400}
-                               {:type :laatimiskielto :response 400}
-                               {:type :not-signed :response 400}]))}}])])
+   ["/system-sign"
+    {:post {:summary    "Allekirjoita energiatodistus järjestelmällä"
+            :parameters {:path {:id common-schema/Key}}
+            :access     rooli-service/laatija?
+            :middleware [[security/wrap-session-time-limit config/system-signature-session-timeout-minutes]]
+            :responses  {200 {:body schema/Str}
+                         404 {:body schema/Str}}
+            :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db aws-s3-client aws-kms-client whoami]}]
+                          (api-response/with-exceptions
+                            #(api-response/signature-response
+                               (energiatodistus-signing-service/sign-with-system
+                                 {:db                       db
+                                  :aws-s3-client            aws-s3-client
+                                  :aws-kms-client           aws-kms-client
+                                  :whoami                   whoami
+                                  :laatija-allekirjoitus-id (find-laatija-allekirjoitus-id db whoami)
+                                  :now                      (Instant/now)
+                                  :id                       id})
+                               id)
+                            [{:type :name-does-not-match :response 403}
+                             {:type :signed-pdf-exists :response 409}
+                             {:type :expired-signing-certificate :response 400}
+                             {:type :missing-value :response 400}
+                             {:type :patevyys-expired :response 400}
+                             {:type :laatimiskielto :response 400}
+                             {:type :not-signed :response 400}]))}}]])
