@@ -3,7 +3,13 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as objects from '@Utility/objects';
 import * as locales from '@Language/locale-utils';
 
-const zeroPath = R.map(R.when(R.is(Number), R.always(0)));
+const zeroPath = R.map(
+  R.when(
+    segment =>
+      R.is(Number, segment) || (R.is(String, segment) && !isNaN(segment)),
+    R.always(0)
+  )
+);
 
 const index = R.compose(Maybe.fromNull, R.head, R.filter(R.is(Number)));
 
