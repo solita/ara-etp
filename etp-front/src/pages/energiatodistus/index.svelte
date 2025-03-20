@@ -33,6 +33,6 @@
 <svelte:window on:hashchange={clearAnnouncements} />
 
 <Router {routes} {prefix} />
-<div class="w-full min-h-3em sticky bottom-0">
+<div class="w-full min-h-3em sticky bottom-0 z-10">
   <FlashMessage module={'Energiatodistus'} />
 </div>
