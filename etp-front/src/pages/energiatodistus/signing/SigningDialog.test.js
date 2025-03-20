@@ -271,7 +271,7 @@ test('SigningDialog renders correctly when default selection is system and there
   await assertSystemSigninDialogContents(closeDialogFn);
 });
 
-test('Signing method can be selected in SigningDialog when allowSelection is true', async () => {
+test('Signing method can be selected in SigningDialog', async () => {
   setupFetchMocks({
     [validateSessionUrl]: signingAllowedResponse(true),
     [mpolluxVersionUrl]: mpollxVersionResponse
@@ -283,8 +283,7 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
   render(SigningDialog, {
     energiatodistus: finnishTodistus,
     reload: closeDialogFn,
-    selection: 'card',
-    allowSelection: true
+    selection: 'card'
   });
 
   // Initial state of the view is as expected for card signing method
@@ -305,21 +304,6 @@ test('Signing method can be selected in SigningDialog when allowSelection is tru
   await fireEvent.click(selection);
 
   await assertSystemSigninDialogContents(closeDialogFn);
-});
-
-test('Signing method can not be selected when allowSelection is false', async () => {
-  setSessionValid();
-  const closeDialogFn = jest.fn();
-
-  // Render the dialog with card as the default selection
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: closeDialogFn,
-    selection: 'card',
-    allowSelection: false
-  });
-
-  assertSigningMethodSelectionIsNotVisible();
 });
 
 test('When system sign fails, error is shown', async () => {
@@ -418,7 +402,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   render(SigningDialog, {
     energiatodistus: todistus,
     reload: R.identity,
-    allowSelection: true,
     selection: 'system'
   });
 

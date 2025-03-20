@@ -20,7 +20,6 @@
 
   const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 
-  export let allowSelection = true;
   export let freshSession = false;
 
   let currentState = { status: Signing.status.not_started };
@@ -67,7 +66,7 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if allowSelection && isSigningMethodSelectionAllowed(currentState)}
+    {#if isSigningMethodSelectionAllowed(currentState)}
       <div class="mt-2" data-cy="signing-instructions">
         <p>{i18n('energiatodistus.signing.instructions')}</p>
       </div>
