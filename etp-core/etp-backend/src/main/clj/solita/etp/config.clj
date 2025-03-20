@@ -180,4 +180,3 @@
 
 ;; Feature flags
 (def allow-palveluvayla-api (Boolean/parseBoolean (find-configuration "ALLOW_PALVELUVAYLA_API" [env property] "false")))
-(def allow-new-signature-implementation (Boolean/parseBoolean (find-configuration "ALLOW_NEW_SIGNATURE" [env property] "false")))

@@ -259,11 +259,7 @@
 
 {#if !R.isNil(ETForm)}
   {#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
-    <Signing
-      {energiatodistus}
-      allowSelection={true}
-      checkIfSelectionIsAllowed={false}
-      reload={reset} />
+    <Signing {energiatodistus} reload={reset} />
   {/if}
 
   <DirtyConfirmation {dirty} />

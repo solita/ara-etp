@@ -20,23 +20,9 @@
 
   const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 
-  export let allowSelection = true;
-  export let checkIfSelectionIsAllowed = false;
   export let freshSession = false;
 
   let currentState = { status: Signing.status.not_started };
-
-  if (checkIfSelectionIsAllowed) {
-    Future.fork(
-      _ => {
-        allowSelection = false;
-      },
-      config => {
-        allowSelection = !isProduction(config.environment);
-      },
-      versionApi.getConfig
-    );
-  }
 
   const isSigningMethodSelectionAllowed = state =>
     R.includes(R.prop('status', state), [
@@ -80,7 +66,7 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if allowSelection && isSigningMethodSelectionAllowed(currentState)}
+    {#if isSigningMethodSelectionAllowed(currentState)}
       <div class="mt-2" data-cy="signing-instructions">
         <p>{i18n('energiatodistus.signing.instructions')}</p>
       </div>
