@@ -5,6 +5,7 @@
             [solita.etp.exception :as exception]
             [solita.etp.db :as db]
             [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.service.viesti :as viesti-service]
             [solita.etp.schema.kayttaja :as kayttaja-schema]
             [solita.etp.schema.common :as common-schema]
             [flathead.flatten :as flat]
@@ -53,7 +54,7 @@
 (defn api-key-hash [kayttaja]
   (if-let [api-key (:api-key kayttaja)]
     (assoc kayttaja :api-key-hash
-                   (hashers/derive api-key {:alg :bcrypt+sha512}))
+                    (hashers/derive api-key {:alg :bcrypt+sha512}))
     kayttaja))
 
 (defn- kayttaja->db-row [kayttaja]
@@ -66,22 +67,29 @@
       (dissoc :virtu)))
 
 (defn add-kayttaja! [db kayttaja]
-  (-> (db/with-db-exception-translation
-        jdbc/insert! db :kayttaja (kayttaja->db-row kayttaja) db/default-opts)
-      first :id))
+  (let [new-kayttaja-id (-> (db/with-db-exception-translation
+                              jdbc/insert! db :kayttaja (kayttaja->db-row kayttaja) db/default-opts)
+                            first :id)
+        new-kayttaja-rooli (:rooli kayttaja)
+        new-kayttaja-whoami {:id new-kayttaja-id :rooli new-kayttaja-rooli}]
+    ;; Viestit allowed only for laatijat, paakayttajat and laskuttajat.
+    (when (contains? #{0 2 3} new-kayttaja-rooli)
+      (let [ketjut (viesti-service/find-ketjut db new-kayttaja-whoami {})]
+        (doall #(viesti-service/read-ketju! db new-kayttaja-whoami %) ketjut)))
+    new-kayttaja-id))
 
 (defn update-kayttaja!
   "Update all other users (kayttaja) except laatija."
   [db whoami id kayttaja]
   (if (or (and (= id (:id whoami))
                (common-schema/not-contains-keys
-                kayttaja
-                kayttaja-schema/KayttajaAdminUpdate))
+                 kayttaja
+                 kayttaja-schema/KayttajaAdminUpdate))
           (rooli-service/paakayttaja? whoami))
     (db/with-db-exception-translation
       jdbc/update! db :kayttaja (kayttaja->db-row kayttaja)
-        ["rooli_id > 0 and id = ?" id]
-        db/default-opts)
+      ["rooli_id > 0 and id = ?" id]
+      db/default-opts)
     (exception/throw-forbidden!)))
 
 (defn find-history [db whoami kayttaja-id]
@@ -93,7 +101,7 @@
 
 (def system-kayttaja
   {:communication -3
-   :laskutus -2
-   :presigned -4
-   :aineisto -5
-   :expiration -6})
+   :laskutus      -2
+   :presigned     -4
+   :aineisto      -5
+   :expiration    -6})
