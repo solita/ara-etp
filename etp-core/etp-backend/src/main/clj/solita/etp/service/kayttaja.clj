@@ -73,7 +73,8 @@
         new-kayttaja-rooli (:rooli kayttaja)
         new-kayttaja-whoami {:id new-kayttaja-id :rooli new-kayttaja-rooli}]
     ;; Viestit allowed only for laatijat, paakayttajat and laskuttajat.
-    (when (contains? #{0 2 3} new-kayttaja-rooli)
+    (when (some #(% new-kayttaja-whoami)
+                [rooli-service/laatija? rooli-service/paakayttaja? rooli-service/laskuttaja?])
       (let [ketjut (viesti-service/find-ketjut db new-kayttaja-whoami {})]
         (doall #(viesti-service/read-ketju! db new-kayttaja-whoami %) ketjut)))
     new-kayttaja-id))
