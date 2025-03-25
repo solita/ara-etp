@@ -120,6 +120,10 @@
   (viesti-db/read-ketju! db {:viestiketju-id id})
   (find-ketju! db whoami id))
 
+(defn read-ketju-for-newly-created-user! [db whoami ketju-id reader-id]
+  (viesti-db/read-ketju-for-newly-created-user! db {:viestiketju-id ketju-id :reader-id reader-id})
+  (find-ketju! db whoami ketju-id))
+
 (defn- query-for-other-users [whoami]
   {:kayttaja-id           (:id whoami)
    :vastaanottajaryhma-id (builtin-vastaanottajaryhma-id whoami)})
