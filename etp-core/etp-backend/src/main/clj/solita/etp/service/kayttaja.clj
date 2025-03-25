@@ -72,11 +72,10 @@
                             first :id)
         new-kayttaja-rooli (:rooli kayttaja)
         new-kayttaja-whoami {:id new-kayttaja-id :rooli new-kayttaja-rooli}]
-    ;; Viestit allowed only for laatijat, paakayttajat and laskuttajat.
-    (when (some #(% new-kayttaja-whoami)
-                [rooli-service/laatija? rooli-service/paakayttaja? rooli-service/laskuttaja?])
-      (let [ketjut (viesti-service/find-ketjut db new-kayttaja-whoami {})]
-        (doall #(viesti-service/read-ketju! db new-kayttaja-whoami %) ketjut)))
+    ;; Make old viestit read for a new laatijat.
+    (when (rooli-service/laatija? new-kayttaja-whoami)
+      (let [ketju-ids (mapv :id (viesti-service/find-ketjut db new-kayttaja-whoami {}))]
+        (run! #(viesti-service/read-ketju! (assoc db :application-name (str new-kayttaja-id "@core.etp.test")) new-kayttaja-whoami %) ketju-ids)))
     new-kayttaja-id))
 
 (defn update-kayttaja!
