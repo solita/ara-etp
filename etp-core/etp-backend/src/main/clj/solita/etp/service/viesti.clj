@@ -147,6 +147,10 @@
             (viesti-db/select-viestiketjut-for-kayttaja
               db (merge query (query-for-other-users whoami)))))))
 
+(defn find-ketjut-for-vastaanottajaryhma [db vastaanottajaryhma-id]
+  (viesti-db/select-all-viestiketjut-for-vastaanottajaryhma db {:vastaanottajaryhma-id vastaanottajaryhma-id}))
+
+
 (defn count-ketjut [db whoami query]
   (-> (if (kasittelija? whoami)
         (viesti-db/select-count-all-viestiketjut db (merge default-filters query))
