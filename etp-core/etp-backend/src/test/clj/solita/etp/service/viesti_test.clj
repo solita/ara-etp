@@ -20,7 +20,7 @@
                               (map #(assoc % :rooli 2)))
         paakayttaja-ids (kayttaja-test-data/insert! paakayttaja-adds)
         paakayttajat (zipmap paakayttaja-ids paakayttaja-adds)]
-    {:laatijat laatijat
+    {:laatijat     laatijat
      :paakayttajat paakayttajat}))
 
 (def empty-query {})
@@ -46,25 +46,25 @@
         ketju-id (service/add-ketju! (ts/db-user laatija-1-id)
                                      (laatija-whoami laatija-1-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat []
-                                       :vastaanottajaryhma-id 0
-                                       :energiatodistus-id nil}))]
+                                       {:vastaanottajat        []
+                                        :vastaanottajaryhma-id 0
+                                        :energiatodistus-id    nil}))]
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user laatija-1-id)
-                                              (laatija-whoami laatija-1-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user laatija-1-id)
+                                               (laatija-whoami laatija-1-id)
+                                               ketju-id)))
           "Laatija must see their own ketju")
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user paakayttaja-id)
-                                              (paakayttaja-whoami paakayttaja-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user paakayttaja-id)
+                                               (paakayttaja-whoami paakayttaja-id)
+                                               ketju-id)))
           "Paakayttaja must see the ketju")
     (t/is (= (-> (etp-test/catch-ex-data
-                  #(service/find-ketju! (ts/db-user laatija-2-id)
-                                        (laatija-whoami laatija-2-id)
-                                        ketju-id))
+                   #(service/find-ketju! (ts/db-user laatija-2-id)
+                                         (laatija-whoami laatija-2-id)
+                                         ketju-id))
                  (dissoc :reason))
              {:type :forbidden})
           "An other laatija must not see the ketju")))
@@ -76,31 +76,31 @@
         ketju-id (service/add-ketju! (ts/db-user paakayttaja-1-id)
                                      (paakayttaja-whoami paakayttaja-1-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat [laatija-1-id]
-                                       :vastaanottajaryhma-id nil
-                                       :energiatodistus-id nil}))]
+                                       {:vastaanottajat        [laatija-1-id]
+                                        :vastaanottajaryhma-id nil
+                                        :energiatodistus-id    nil}))]
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user laatija-1-id)
-                                              (laatija-whoami laatija-1-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user laatija-1-id)
+                                               (laatija-whoami laatija-1-id)
+                                               ketju-id)))
           "Laatija must see the ketju where they are the recipient")
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user paakayttaja-1-id)
-                                              (paakayttaja-whoami paakayttaja-1-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user paakayttaja-1-id)
+                                               (paakayttaja-whoami paakayttaja-1-id)
+                                               ketju-id)))
           "Sending paakayttaja must see the ketju")
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user paakayttaja-2-id)
-                                              (paakayttaja-whoami paakayttaja-2-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user paakayttaja-2-id)
+                                               (paakayttaja-whoami paakayttaja-2-id)
+                                               ketju-id)))
           "Other paakayttaja must see the ketju")
     (t/is (= (-> (etp-test/catch-ex-data
-                  #(service/find-ketju! (ts/db-user laatija-2-id)
-                                        (laatija-whoami laatija-2-id)
-                                        ketju-id))
+                   #(service/find-ketju! (ts/db-user laatija-2-id)
+                                         (laatija-whoami laatija-2-id)
+                                         ketju-id))
                  (dissoc :reason))
              {:type :forbidden})
           "An other laatija must not see the ketju")))
@@ -111,24 +111,24 @@
         ketju-id (service/add-ketju! (ts/db-user sender-paakayttaja-id)
                                      (paakayttaja-whoami sender-paakayttaja-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat []
-                                       :vastaanottajaryhma-id 1
-                                       :energiatodistus-id nil}))]
+                                       {:vastaanottajat        []
+                                        :vastaanottajaryhma-id 1
+                                        :energiatodistus-id    nil}))]
     (doseq [[laatija-id _] laatijat]
       (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user laatija-id)
-                                              (laatija-whoami laatija-id)
-                                              ketju-id)))
-          "Laatija must see the ketju based on group membership"))
+              (schema/check viesti-schema/Ketju
+                            (service/find-ketju! (ts/db-user laatija-id)
+                                                 (laatija-whoami laatija-id)
+                                                 ketju-id)))
+            "Laatija must see the ketju based on group membership"))
 
     (doseq [[paakayttaja-id _] paakayttajat]
       (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user paakayttaja-id)
-                                              (paakayttaja-whoami paakayttaja-id)
-                                              ketju-id)))
-          "Paakayttaja must see the ketju based on being paakayttaja"))))
+              (schema/check viesti-schema/Ketju
+                            (service/find-ketju! (ts/db-user paakayttaja-id)
+                                                 (paakayttaja-whoami paakayttaja-id)
+                                                 ketju-id)))
+            "Paakayttaja must see the ketju based on being paakayttaja"))))
 
 (t/deftest paakayttaja-query-test
   (let [{:keys [laatijat paakayttajat]} (test-data-set)
@@ -138,21 +138,21 @@
         ketju-0-id (service/add-ketju! (ts/db-user laatija-1-id)
                                        (laatija-whoami laatija-1-id)
                                        (complete-ketju-add
-                                        {:vastaanottajat []
-                                         :vastaanottajaryhma-id 0
-                                         :energiatodistus-id nil}))
+                                         {:vastaanottajat        []
+                                          :vastaanottajaryhma-id 0
+                                          :energiatodistus-id    nil}))
         ketju-1-id (service/add-ketju! (ts/db-user laatija-1-id)
                                        (laatija-whoami laatija-1-id)
                                        (complete-ketju-add
-                                        {:vastaanottajat []
-                                         :vastaanottajaryhma-id 0
-                                         :energiatodistus-id nil}))
+                                         {:vastaanottajat        []
+                                          :vastaanottajaryhma-id 0
+                                          :energiatodistus-id    nil}))
         ketju-2-id (service/add-ketju! (ts/db-user laatija-2-id)
                                        (laatija-whoami laatija-2-id)
                                        (complete-ketju-add
-                                        {:vastaanottajat []
-                                         :vastaanottajaryhma-id 0
-                                         :energiatodistus-id nil}))
+                                         {:vastaanottajat        []
+                                          :vastaanottajaryhma-id 0
+                                          :energiatodistus-id    nil}))
         ;; PK1 assingns ketju 0 and ketju 2 to themselves
         ketju-0-assign-res (service/update-ketju! (ts/db-user paakayttaja-1-id)
                                                   ketju-0-id
@@ -167,8 +167,8 @@
                                                     "Vastaus ekaan ketjuun")
         ;; PK1 marks ketju 0 as done
         ketju-0-done-res (service/update-ketju! (ts/db-user paakayttaja-1-id)
-                                               ketju-0-id
-                                               {:kasitelty true})
+                                                ketju-0-id
+                                                {:kasitelty true})
         ]
     ;; Check that the above requests succeeded
     (t/is (int? ketju-0-id) "Must have gotten an int from add-ketju!")
@@ -204,7 +204,7 @@
                    (find-and-count-ketjut (ts/db-user paakayttaja-1-id)
                                           (paakayttaja-whoami paakayttaja-1-id)
                                           {:include-kasitelty false
-                                           :kasittelija-id paakayttaja-1-id})))
+                                           :kasittelija-id    paakayttaja-1-id})))
           "Expected to get every unfinished ketju of Paakayttaja 1")
     ;; Personal everything
     (t/is (= #{ketju-0-id ketju-2-id}
@@ -212,7 +212,7 @@
                    (find-and-count-ketjut (ts/db-user paakayttaja-1-id)
                                           (paakayttaja-whoami paakayttaja-1-id)
                                           {:include-kasitelty true
-                                           :kasittelija-id paakayttaja-1-id})))
+                                           :kasittelija-id    paakayttaja-1-id})))
           "Expected to get everything for Paakayttaja 1")
     ;; Query for someone who is looking to take on more work
     (t/is (= #{ketju-1-id}
@@ -220,7 +220,7 @@
                    (find-and-count-ketjut (ts/db-user paakayttaja-2-id)
                                           (paakayttaja-whoami paakayttaja-2-id)
                                           {:include-kasitelty false
-                                           :has-kasittelija false})))
+                                           :has-kasittelija   false})))
           "Expected that Paakayttaja 2 would get ketju 1")))
 
 (t/deftest add-ketju!-by-laatija-test
@@ -230,9 +230,9 @@
         ketju-id (service/add-ketju! (ts/db-user laatija-1-id)
                                      (laatija-whoami laatija-1-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat []
-                                       :vastaanottajaryhma-id 0
-                                       :energiatodistus-id nil}))
+                                       {:vastaanottajat        []
+                                        :vastaanottajaryhma-id 0
+                                        :energiatodistus-id    nil}))
         ketju (service/find-ketju! (ts/db-user laatija-1-id)
                                    (laatija-whoami laatija-1-id)
                                    ketju-id)]
@@ -248,9 +248,9 @@
                                                      ketju-id)))
           "Paakayttaja must be able to get the same ketju")
     (t/is (= (-> (etp-test/catch-ex-data
-                  #(service/find-ketju! (ts/db-user laatija-2-id)
-                                        (laatija-whoami laatija-2-id)
-                                        ketju-id))
+                   #(service/find-ketju! (ts/db-user laatija-2-id)
+                                         (laatija-whoami laatija-2-id)
+                                         ketju-id))
                  (dissoc :reason))
              {:type :forbidden})
           "An other laatija must not see the ketju")))
@@ -262,9 +262,9 @@
         ketju-id (service/add-ketju! (ts/db-user paakayttaja-id)
                                      (paakayttaja-whoami paakayttaja-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat [laatija-1-id]
-                                       :vastaanottajaryhma-id nil
-                                       :energiatodistus-id nil}))
+                                       {:vastaanottajat        [laatija-1-id]
+                                        :vastaanottajaryhma-id nil
+                                        :energiatodistus-id    nil}))
         ketju (service/find-ketju! (ts/db-user paakayttaja-id)
                                    (paakayttaja-whoami paakayttaja-id)
                                    ketju-id)]
@@ -284,9 +284,9 @@
                                                      ketju-id)))
           "The recipient laatija must be able to get the same ketju")
     (t/is (= (-> (etp-test/catch-ex-data
-                  #(service/find-ketju! (ts/db-user laatija-2-id)
-                                        (laatija-whoami laatija-2-id)
-                                        ketju-id))
+                   #(service/find-ketju! (ts/db-user laatija-2-id)
+                                         (laatija-whoami laatija-2-id)
+                                         ketju-id))
                  (dissoc :reason))
              {:type :forbidden})
           "An other laatija must not see the ketju")))
@@ -298,9 +298,9 @@
         ketju-id (service/add-ketju! (ts/db-user paakayttaja-1-id)
                                      (paakayttaja-whoami paakayttaja-1-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat [laatija-id]
-                                       :vastaanottajaryhma-id nil
-                                       :energiatodistus-id nil}))]
+                                       {:vastaanottajat        [laatija-id]
+                                        :vastaanottajaryhma-id nil
+                                        :energiatodistus-id    nil}))]
     (t/is (not= paakayttaja-2-id
                 (:kasittelija-id (service/find-ketju! (ts/db-user paakayttaja-1-id)
                                                       (paakayttaja-whoami paakayttaja-1-id)
@@ -317,14 +317,14 @@
         [[laatija-id _]] (take 1 laatijat)
         paakayttaja-count-unread (fn [paakayttaja-id]
                                    (:count
-                                    (service/count-unread-ketjut
-                                     (ts/db-user paakayttaja-id)
-                                     (paakayttaja-whoami paakayttaja-id))))
+                                     (service/count-unread-ketjut
+                                       (ts/db-user paakayttaja-id)
+                                       (paakayttaja-whoami paakayttaja-id))))
         unreads-before (paakayttaja-count-unread paakayttaja-1-id)
         ketju-add (complete-ketju-add
-                   {:vastaanottajat []
-                    :vastaanottajaryhma-id 0
-                    :energiatodistus-id nil})
+                    {:vastaanottajat        []
+                     :vastaanottajaryhma-id 0
+                     :energiatodistus-id    nil})
         ketju-id (service/add-ketju! (ts/db-user laatija-id)
                                      (laatija-whoami laatija-id)
                                      ketju-add)]
@@ -338,6 +338,42 @@
     (t/is (= 0 (paakayttaja-count-unread paakayttaja-1-id)))
     (t/is (= 1 (paakayttaja-count-unread paakayttaja-2-id)))))
 
+(t/deftest laatijat-unread-ketjut-new-user-test
+    (let [{:keys [laatijat paakayttajat]} (test-data-set)
+          [[message-sender-paakayttaja-id _]] (take 1 paakayttajat)
+          [[old-laatija-id _]] (take 1 laatijat)
+          count-unread (fn [user-id id->whoami]
+                         (:count
+                           (service/count-unread-ketjut
+                             (ts/db-user user-id)
+                             (id->whoami user-id))))
+          create-ketju (fn [creator-paakayttaja-id vastaanottajat-rooli]
+                         (service/add-ketju! (ts/db-user creator-paakayttaja-id)
+                                             (paakayttaja-whoami creator-paakayttaja-id)
+                                             (complete-ketju-add
+                                               {:vastaanottajat        []
+                                                :vastaanottajaryhma-id (service/builtin-vastaanottajaryhma-id vastaanottajat-rooli)
+                                                :energiatodistus-id    nil})))]
+
+      (t/testing "Before creating a viestiketju"
+        (t/testing "Old laatija has no unread messages"
+          (t/is (= 0 (count-unread old-laatija-id laatija-whoami)))))
+
+      ;; Create a ketju for every vastaanottajaryhma
+      (create-ketju message-sender-paakayttaja-id {:rooli 0})
+      (t/testing "After creating a viestiketju"
+        (t/testing "Old laatija has one message"
+          (t/is (= 1 (count-unread old-laatija-id laatija-whoami)))))
+
+      ;; Create new laatija
+      (let [{:keys [laatijat]} (test-data-set)
+            [[new-laatija-id _]] (take 1 laatijat)]
+        (t/testing "After creating a viestiketju and adding new users after"
+          (t/testing "Old laatija has one message"
+            (t/is (= 1 (count-unread old-laatija-id laatija-whoami))))
+          (t/testing "New laatija has no unread messages"
+            (t/is (= 0 (count-unread new-laatija-id laatija-whoami))))))))
+
 (t/deftest laatija-question-sequence-test
   (let [{:keys [laatijat paakayttajat]} (test-data-set)
         [[paakayttaja-id _]] (take 1 paakayttajat)
@@ -345,28 +381,28 @@
         make-unread-checker (fn [whoami-fn kayttaja-id]
                               (fn []
                                 (:count
-                                 (service/count-unread-ketjut
-                                  (ts/db-user kayttaja-id)
-                                  (whoami-fn kayttaja-id)))))
+                                  (service/count-unread-ketjut
+                                    (ts/db-user kayttaja-id)
+                                    (whoami-fn kayttaja-id)))))
         laatija-count-unread (make-unread-checker laatija-whoami laatija-id)
         paakayttaja-count-unread (make-unread-checker paakayttaja-whoami paakayttaja-id)
         paakayttaja-count-not-kasitelty (fn [] (count
-                                                (find-and-count-ketjut (ts/db-user paakayttaja-id)
-                                                                       (paakayttaja-whoami paakayttaja-id)
-                                                                       {:include-kasitelty false})))
+                                                 (find-and-count-ketjut (ts/db-user paakayttaja-id)
+                                                                        (paakayttaja-whoami paakayttaja-id)
+                                                                        {:include-kasitelty false})))
         paakayttaja-count-omat (fn [] (count
-                                       (find-and-count-ketjut (ts/db-user paakayttaja-id)
-                                                              (paakayttaja-whoami paakayttaja-id)
-                                                              {:include-kasitelty false
-                                                               :kasittelija-id paakayttaja-id})))
+                                        (find-and-count-ketjut (ts/db-user paakayttaja-id)
+                                                               (paakayttaja-whoami paakayttaja-id)
+                                                               {:include-kasitelty false
+                                                                :kasittelija-id    paakayttaja-id})))
         ketju-count-before (paakayttaja-count-not-kasitelty)
         ketju-id (service/add-ketju! (ts/db-user laatija-id)
                                      (laatija-whoami laatija-id)
                                      (complete-ketju-add
-                                      {:body "Hello"
-                                       :vastaanottajat []
-                                       :vastaanottajaryhma-id 0
-                                       :energiatodistus-id nil}))]
+                                       {:body                  "Hello"
+                                        :vastaanottajat        []
+                                        :vastaanottajaryhma-id 0
+                                        :energiatodistus-id    nil}))]
     (t/is (= 0 ketju-count-before))
     (t/is (= 1 (paakayttaja-count-not-kasitelty)))
     (t/is (= 0 (paakayttaja-count-omat)))
@@ -464,9 +500,9 @@
         ketju-id (service/add-ketju! (ts/db-user paakayttaja-1-id)
                                      (paakayttaja-whoami paakayttaja-1-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat [laatija-1-id]
-                                       :vastaanottajaryhma-id nil
-                                       :energiatodistus-id nil}))
+                                       {:vastaanottajat        [laatija-1-id]
+                                        :vastaanottajaryhma-id nil
+                                        :energiatodistus-id    nil}))
         ketju-count-after (-> (service/count-ketjut (ts/db-user laatija-1-id)
                                                     (laatija-whoami laatija-1-id)
                                                     empty-query)
@@ -478,38 +514,38 @@
         ketju-count-pk (-> (service/count-ketjut (ts/db-user paakayttaja-1-id)
                                                  (paakayttaja-whoami paakayttaja-1-id)
                                                  empty-query)
-                                  :count)
+                           :count)
         ketju-count-pk2 (-> (service/count-ketjut (ts/db-user paakayttaja-2-id)
                                                   (paakayttaja-whoami paakayttaja-2-id)
                                                   empty-query)
-                                  :count)]
+                            :count)]
     (t/is (= 0 ketju-count-before) "Must have no visible ketjus before one is added")
     (t/is (int? ketju-id) "Must have gotten an int from add-ketju!")
     (t/is (= 1 ketju-count-after) "Must have one ketju after the add")
 
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user laatija-1-id)
-                                              (laatija-whoami laatija-1-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user laatija-1-id)
+                                               (laatija-whoami laatija-1-id)
+                                               ketju-id)))
           "The recipient laatija must see the ketju")
 
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user paakayttaja-1-id)
-                                              (paakayttaja-whoami paakayttaja-1-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user paakayttaja-1-id)
+                                               (paakayttaja-whoami paakayttaja-1-id)
+                                               ketju-id)))
           "The sending paakayttaja must see the ketju")
     (t/is (nil?
-           (schema/check viesti-schema/Ketju
-                         (service/find-ketju! (ts/db-user paakayttaja-2-id)
-                                              (paakayttaja-whoami paakayttaja-2-id)
-                                              ketju-id)))
+            (schema/check viesti-schema/Ketju
+                          (service/find-ketju! (ts/db-user paakayttaja-2-id)
+                                               (paakayttaja-whoami paakayttaja-2-id)
+                                               ketju-id)))
           "Other paakayttaja must see the ketju")
     (t/is (= (-> (etp-test/catch-ex-data
-                  #(service/find-ketju! (ts/db-user laatija-2-id)
-                                        (laatija-whoami laatija-2-id)
-                                        ketju-id))
+                   #(service/find-ketju! (ts/db-user laatija-2-id)
+                                         (laatija-whoami laatija-2-id)
+                                         ketju-id))
                  (dissoc :reason))
              {:type :forbidden})
           "An other laatija must not see the ketju")
@@ -526,9 +562,9 @@
         ketju-id (service/add-ketju! (ts/db-user laatija-id)
                                      (laatija-whoami laatija-id)
                                      (complete-ketju-add
-                                      {:vastaanottajat []
-                                       :vastaanottajaryhma-id 0
-                                       :energiatodistus-id nil}))]
+                                       {:vastaanottajat        []
+                                        :vastaanottajaryhma-id 0
+                                        :energiatodistus-id    nil}))]
     (t/is (not (:kasitelty (service/find-ketju! (ts/db-user paakayttaja-id)
                                                 (paakayttaja-whoami paakayttaja-id)
                                                 ketju-id))))
@@ -549,14 +585,14 @@
                                            (paakayttaja-whoami paakayttaja-id)
                                            ketju-id)))
     (service/add-viesti! (ts/db-user laatija-id)
-                                    (laatija-whoami laatija-id)
-                                    ketju-id "Niin vielä yks juttu")
+                         (laatija-whoami laatija-id)
+                         ketju-id "Niin vielä yks juttu")
     (t/is (not (:kasitelty (service/find-ketju! (ts/db-user paakayttaja-id)
                                                 (paakayttaja-whoami paakayttaja-id)
                                                 ketju-id))))
     (service/add-viesti! (ts/db-user paakayttaja-id)
-                                    (paakayttaja-whoami paakayttaja-id)
-                                    ketju-id "Toinen vastaus")
+                         (paakayttaja-whoami paakayttaja-id)
+                         ketju-id "Toinen vastaus")
     (t/is (not (:kasitelty (service/find-ketju! (ts/db-user paakayttaja-id)
                                                 (paakayttaja-whoami paakayttaja-id)
                                                 ketju-id))))
