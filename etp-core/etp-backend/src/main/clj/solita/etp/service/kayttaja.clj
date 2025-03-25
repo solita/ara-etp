@@ -75,7 +75,7 @@
     ;; Make old viestit read for a new laatijat.
     (when (rooli-service/laatija? new-kayttaja-whoami)
       (let [ketju-ids (mapv :id (viesti-service/find-ketjut db new-kayttaja-whoami {}))]
-        (run! #(viesti-service/read-ketju! (assoc db :application-name (str new-kayttaja-id "@core.etp.test")) new-kayttaja-whoami %) ketju-ids)))
+        (run! #(viesti-service/read-ketju-for-newly-created-user! db new-kayttaja-whoami % new-kayttaja-id) ketju-ids)))
     new-kayttaja-id))
 
 (defn update-kayttaja!
