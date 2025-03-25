@@ -5,6 +5,7 @@
             [solita.etp.exception :as exception]
             [solita.etp.db :as db]
             [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.service.viesti :as viesti-service]
             [solita.etp.schema.kayttaja :as kayttaja-schema]
             [solita.etp.schema.common :as common-schema]
             [flathead.flatten :as flat]
@@ -53,7 +54,7 @@
 (defn api-key-hash [kayttaja]
   (if-let [api-key (:api-key kayttaja)]
     (assoc kayttaja :api-key-hash
-                   (hashers/derive api-key {:alg :bcrypt+sha512}))
+                    (hashers/derive api-key {:alg :bcrypt+sha512}))
     kayttaja))
 
 (defn- kayttaja->db-row [kayttaja]
@@ -66,22 +67,31 @@
       (dissoc :virtu)))
 
 (defn add-kayttaja! [db kayttaja]
-  (-> (db/with-db-exception-translation
-        jdbc/insert! db :kayttaja (kayttaja->db-row kayttaja) db/default-opts)
-      first :id))
+  (let [new-kayttaja-id (-> (db/with-db-exception-translation
+                              jdbc/insert! db :kayttaja (kayttaja->db-row kayttaja) db/default-opts)
+                            first :id)
+        new-kayttaja-rooli (:rooli kayttaja)
+        new-kayttaja-whoami {:id new-kayttaja-id :rooli new-kayttaja-rooli}
+        laatijat-vastaanottajaryhma-id 1]
+    ;; Make old viestit read for a new laatijat.
+    (when (rooli-service/laatija? new-kayttaja-whoami)
+      (let [ketju-ids (mapv :id (viesti-service/find-ketjut-for-vastaanottajaryhma db laatijat-vastaanottajaryhma-id))]
+        (println "ketju-ids" ketju-ids)
+        (run! #(viesti-service/read-ketju-for-newly-created-user! db new-kayttaja-whoami % new-kayttaja-id) ketju-ids)))
+    new-kayttaja-id))
 
 (defn update-kayttaja!
   "Update all other users (kayttaja) except laatija."
   [db whoami id kayttaja]
   (if (or (and (= id (:id whoami))
                (common-schema/not-contains-keys
-                kayttaja
-                kayttaja-schema/KayttajaAdminUpdate))
+                 kayttaja
+                 kayttaja-schema/KayttajaAdminUpdate))
           (rooli-service/paakayttaja? whoami))
     (db/with-db-exception-translation
       jdbc/update! db :kayttaja (kayttaja->db-row kayttaja)
-        ["rooli_id > 0 and id = ?" id]
-        db/default-opts)
+      ["rooli_id > 0 and id = ?" id]
+      db/default-opts)
     (exception/throw-forbidden!)))
 
 (defn find-history [db whoami kayttaja-id]
@@ -93,7 +103,7 @@
 
 (def system-kayttaja
   {:communication -3
-   :laskutus -2
-   :presigned -4
-   :aineisto -5
-   :expiration -6})
+   :laskutus      -2
+   :presigned     -4
+   :aineisto      -5
+   :expiration    -6})
