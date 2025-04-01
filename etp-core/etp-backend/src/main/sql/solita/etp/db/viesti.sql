@@ -101,6 +101,16 @@ insert into viesti_reader (viesti_id)
 select viesti.id from viesti where viesti.viestiketju_id = :viestiketju-id
 on conflict (viesti_id, reader_id) do nothing
 
+--name: select-all-viestiketjut-for-vastaanottajaryhma
+select id
+from viestiketju
+where vastaanottajaryhma_id = :vastaanottajaryhma-id
+
+--name: read-ketju-for-newly-created-user!
+insert into viesti_reader (viesti_id, reader_id)
+select viesti.id, :reader-id from viesti where viesti.viestiketju_id = :viestiketju-id
+    on conflict (viesti_id, reader_id) do nothing
+
 -- name: select-count-unread-for-kasittelija
 select count(*)
 from viestiketju
