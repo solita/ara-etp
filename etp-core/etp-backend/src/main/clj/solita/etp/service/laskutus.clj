@@ -316,7 +316,7 @@
 
 (defn send-tasmaytysraportti-email! [tasmaytysraportti-file]
   (email/send-multipart-email! {:to          config/laskutus-tasmaytysraportti-email-to
-                                :subject     "ARA ETP täsmätysraportti"
+                                :subject     "Varke ETP täsmäytysraportti"
                                 :body        "Liitteenä täsmäytysraportti."
                                 :subtype     "plain"
                                 :attachments [(smtp/file->attachment tasmaytysraportti-file)]}))
