@@ -11,6 +11,7 @@
             [solita.common.smtp :as smtp]
             [solita.etp.email :as email]
             [solita.etp.config :as config]
+            [solita.etp.exception :as exception]
             [solita.etp.db :as db]
             [solita.etp.service.file :as file-service])
   (:import (java.time Instant LocalDate Month ZoneId)
@@ -347,9 +348,15 @@
 
 (defn store-files! [aws-s3-client file-key-prefix files]
   (doseq [file files]
-    (file-service/upsert-file-from-file aws-s3-client
-                                        (str file-key-prefix (.getName file))
-                                        file)))
+    (let [blob-key (str file-key-prefix (.getName file))
+          max-retries 9
+          op-description (str "insert " (.getName file) " into " file-key-prefix)]
+      (exception/run-with-retries
+        #(file-service/upsert-file-from-file aws-s3-client
+                                             blob-key
+                                             file)
+        max-retries
+        op-description))))
 
 (defn upload-files-with-sftp! [sftp-connection files destination-dir]
   (sftp/make-directory! sftp-connection destination-dir)

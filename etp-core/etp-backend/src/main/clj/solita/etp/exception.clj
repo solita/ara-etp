@@ -81,3 +81,11 @@
       :unique-violation unique-exception-handler
       :forbidden forbidden-handler
       ::coercion/response-coercion (create-coercion-handler))))
+
+(defn run-with-retries [f retry-count op-description]
+  (try (f)
+       (catch Exception e
+         (log/error e "Exception in attempting to" op-description ":")
+         (if (< 0 retry-count)
+           (run-with-retries f (dec retry-count) op-description)
+           (throw e)))))
