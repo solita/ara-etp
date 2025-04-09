@@ -83,6 +83,10 @@
       ::coercion/response-coercion (create-coercion-handler))))
 
 (defn run-with-retries [f retry-count op-description]
+  "Attempt to run function `f` and return its value. If an exception happens,
+  log it at error level and try running the function again at most `retry-count`
+  times, until it succeeds. If there is no success within the retry count limit,
+  throw the last exception"
   (try (f)
        (catch Exception e
          (log/error e "Exception in attempting to" op-description ":")
