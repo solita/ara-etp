@@ -11,7 +11,6 @@
             [solita.common.smtp :as smtp]
             [solita.etp.email :as email]
             [solita.etp.config :as config]
-            [solita.etp.exception :as exception]
             [solita.etp.db :as db]
             [solita.etp.service.file :as file-service])
   (:import (java.time Instant LocalDate Month ZoneId)
@@ -346,12 +345,28 @@
          (when dry-run? "-dry-run")
          "/")))
 
+(defn run-with-retries [f retry-count op-description]
+  "Attempt to run function `f` and return its value. If an exception happens,
+  log it at error level and try running the function again at most `retry-count`
+  times, until it succeeds. If there is no success within the retry count limit,
+  throw the last exception"
+  (try
+    (f)
+    (catch Exception e
+      (log/error e "Exception in attempting to" op-description ":")
+      (if (< 0 retry-count)
+        (do
+          (log/info "Retrying " op-description " in 500 ms")
+          (Thread/sleep 500)
+          (run-with-retries f (dec retry-count) op-description))
+        (throw e)))))
+
 (defn store-files! [aws-s3-client file-key-prefix files]
   (doseq [file files]
     (let [blob-key (str file-key-prefix (.getName file))
           max-retries 9
           op-description (str "insert " (.getName file) " into " file-key-prefix)]
-      (exception/run-with-retries
+      (run-with-retries
         #(file-service/upsert-file-from-file aws-s3-client
                                              blob-key
                                              file)
