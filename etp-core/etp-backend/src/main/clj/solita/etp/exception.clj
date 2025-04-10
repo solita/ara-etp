@@ -81,4 +81,3 @@
       :unique-violation unique-exception-handler
       :forbidden forbidden-handler
       ::coercion/response-coercion (create-coercion-handler))))
-

@@ -350,16 +350,22 @@
   log it at error level and try running the function again at most `retry-count`
   times, until it succeeds. If there is no success within the retry count limit,
   throw the last exception"
-  (try
-    (f)
-    (catch Exception e
-      (log/error e "Exception in attempting to" op-description ":")
-      (if (< 0 retry-count)
-        (do
-          (log/info "Retrying " op-description " in 500 ms")
-          (Thread/sleep 500)
-          (run-with-retries f (dec retry-count) op-description))
-        (throw e)))))
+  (loop [retry-count retry-count]
+    (let [[res e]
+          (try
+            [(f) nil]
+            (catch Exception e
+              (log/error e "Exception in attempting to" (str op-description ":"))
+              [nil e]))]
+
+      (if e
+        (if (< 0 retry-count)
+          (do
+            (log/info "Retrying " op-description " in 500 ms")
+            (Thread/sleep 500)
+            (recur (dec retry-count)))
+          (throw e))
+        res))))
 
 (defn store-files! [aws-s3-client file-key-prefix files]
   (doseq [file files]
