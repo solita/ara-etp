@@ -405,7 +405,7 @@ const perustiedot = {
   kiinteistotunnus: [...stringComparisons],
   'julkinen-rakennus': [singleBoolean],
   uudisrakennus: [uudisrakennusEquals],
-  'katuosoite': [...stringComparisons],
+  'katuosoite-*': [...stringComparisons],
   postinumero: [...numberComparisons],
   laatimisvaihe: [luokitteluEquals(OPERATOR_TYPES.LAATIMISVAIHE)],
   valmistumisvuosi: [...unformattedNumberComparisons],

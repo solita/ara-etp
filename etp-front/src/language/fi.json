@@ -588,6 +588,7 @@
       "uudisrakennus": "Uudisrakennus",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
       "katuosoite": "Katuosoite",
+      "katuosoite-*": "Katuosoite",
       "postinumero": "Postinumero",
       "rakennustunnus": "Pysyvä rakennustunnus",
       "kiinteistotunnus": "Kiinteistötunnus",
