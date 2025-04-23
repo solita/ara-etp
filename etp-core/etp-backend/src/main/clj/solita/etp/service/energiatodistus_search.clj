@@ -300,7 +300,7 @@
             keyword-params)))
 
 (defn search
-  "Energiatodistus search for APIs. Returns only public data and makes sure that
+  "Energiatodistus search for APIs. Makes sure that
    there's a sensible limit for results. Coerces results with
    schema->db-row->energiatodistus."
   [db whoami query schema]
