@@ -164,7 +164,11 @@
     (throw-ex-info {:type    :unknown-field :field pattern
                     :message (str "Field glob pattern: " pattern " does not match any fields.")})))
 
-(defn- globbing [predicate]
+(defn- globbing
+  "Useful for instance for creating language version agnostic predicates
+
+   For example. katuosoite-* -> katuosoite-sv or katuosoite-fi"
+  [predicate]
   (fn [search-schema operator field & values]
     (if (str/includes? field "*")
       (let [fields (filter (glob-pattern-matcher field) (->> search-schema keys (map name)))]
