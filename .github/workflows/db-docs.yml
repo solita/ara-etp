@@ -1,0 +1,50 @@
+name: Database docs
+
+on:
+  # TODO: Only on push main and paths <db sql files>
+  pull_request:
+  push:
+    branches:
+      - main
+      - AE-2474/documentation-update
+
+jobs:
+  db-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@12.6
+        with:
+          cli: 1.11.1.1273
+
+        # Only starting the database would suffice but other services don't matter.
+        # start.sh starts the database and runs migrations.
+      - name: Start
+        working-directory: etp-core/docker
+        run: ./start.sh
+
+      - name: Run SchemaSpy
+        run: |
+          mkdir -p schemaspy-out
+          docker run \
+            --rm \
+            --user "$(id -u):$(id -g)" \
+            -v "$PWD/schemaspy-out:/output" \
+            --network etp_default \
+            schemaspy/schemaspy:7.0.2 \
+            -t pgsql11 \
+            -host db \
+            -port 5432 \
+            -db etp_dev \
+            -u etp \
+            -p etp \
+            -s etp
+
+      - name: Upload docs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-docs
+          path: schemaspy-out/
