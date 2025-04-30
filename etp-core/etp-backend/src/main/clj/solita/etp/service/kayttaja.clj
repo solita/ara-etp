@@ -76,7 +76,6 @@
     ;; Make old viestit read for a new laatijat.
     (when (rooli-service/laatija? new-kayttaja-whoami)
       (let [ketju-ids (mapv :id (viesti-service/find-ketjut-for-vastaanottajaryhma db laatijat-vastaanottajaryhma-id))]
-        (println "ketju-ids" ketju-ids)
         (run! #(viesti-service/read-ketju-for-newly-created-user! db new-kayttaja-whoami % new-kayttaja-id) ketju-ids)))
     new-kayttaja-id))
 

@@ -566,6 +566,7 @@
       "uudisrakennus": "Nybyggnad",
       "havainnointikaynti": "Datum för iakttagelser på plats",
       "katuosoite": "Gatuadress",
+      "katuosoite-*": "Gatuadress",
       "postinumero": "Postnummer",
       "rakennustunnus": "Permanent byggnadsbeteckning",
       "kiinteistotunnus": "Fastighetsbeteckning",
