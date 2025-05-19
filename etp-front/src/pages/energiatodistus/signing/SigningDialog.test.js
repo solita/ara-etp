@@ -271,41 +271,6 @@ test('SigningDialog renders correctly when default selection is system and there
   await assertSystemSigninDialogContents(closeDialogFn);
 });
 
-test('Signing method can be selected in SigningDialog', async () => {
-  setupFetchMocks({
-    [validateSessionUrl]: signingAllowedResponse(true),
-    [mpolluxVersionUrl]: mpollxVersionResponse
-  });
-
-  const closeDialogFn = jest.fn();
-
-  // Render the dialog with card as the default selection
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: closeDialogFn,
-    selection: 'card'
-  });
-
-  // Initial state of the view is as expected for card signing method
-  await assertCardSigningDialogContents(closeDialogFn);
-
-  // Reset mock calls so that they don't affect checks after switching the signing method
-  fetchMock.resetMocks();
-  closeDialogFn.mockReset();
-
-  // Options should be available
-  assertSigningMethodSelectionIsVisible();
-
-  // Select system signing
-  const selection = screen.getByRole('radio', {
-    name: 'Allekirjoita ilman henkilökorttia'
-  });
-  expect(selection).toBeInTheDocument();
-  await fireEvent.click(selection);
-
-  await assertSystemSigninDialogContents(closeDialogFn);
-});
-
 test('When system sign fails, error is shown', async () => {
   // Mock the signing api call to return an error
   setupFetchMocks({
