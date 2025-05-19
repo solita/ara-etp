@@ -46,22 +46,6 @@ const mpollxVersionResponse = {
   })
 };
 
-const mpolluxErrorResponse = {
-  status: 500
-};
-
-const mockMpolluxConnectionExists = () => {
-  fetchMock.mockIf(mpolluxVersionUrl, async req => {
-    return mpollxVersionResponse;
-  });
-};
-
-const mockMpolluxConnectionDoesNotExist = () => {
-  fetchMock.mockIf(mpolluxVersionUrl, async req => {
-    return mpolluxErrorResponse;
-  });
-};
-
 const systemSignSuccessResponse = {
   status: 200,
   body: JSON.stringify(`Ok`)
@@ -79,12 +63,6 @@ const mockSystemSignApiCallSuccess = () => {
   });
 };
 
-const mockSystemSignApiCallFailure = () => {
-  fetchMock.mockIf(systemSignUrl, async req => {
-    return systemSignFailureResponse;
-  });
-};
-
 const validateSessionUrl = '/api/private/energiatodistukset/validate-session';
 const signingAllowedResponse = allowed => {
   return {
@@ -93,11 +71,6 @@ const signingAllowedResponse = allowed => {
       'signing-allowed': allowed
     })
   };
-};
-const setSessionValid = () => {
-  setupFetchMocks({
-    [validateSessionUrl]: signingAllowedResponse(true)
-  });
 };
 
 const setupFetchMocks = mocks => {
@@ -131,21 +104,6 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
   expect(systemSigningContent).toHaveTextContent(
     'Allekirjoita ilman henkilökorttia'
   );
-
-  await assertButtons(closeDialogFn);
-};
-
-const assertCardSigningDialogContents = async closeDialogFn => {
-  const heading = await screen.findByRole('heading', {
-    name: /Allekirjoittaminen/u
-  });
-  expect(heading).toBeInTheDocument();
-  expect(heading.tagName).toBe('H1');
-
-  const statusText = await screen.findByText(
-    /Energiatodistuksen tiedot ja yhteys kortinlukuohjelmaan on tarkastettu./u
-  );
-  expect(statusText).toBeInTheDocument();
 
   await assertButtons(closeDialogFn);
 };
