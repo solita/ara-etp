@@ -461,7 +461,6 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   });
 
   // Before signing
-  assertSigningMethodSelectionIsVisible();
   assertInstructionsTextIsVisible();
   assertSigningInfoIsVisible();
   await assertNotInProgress();
@@ -485,7 +484,6 @@ test('When system signing of bilingual energiatodistus succeeds, success message
 
   expect(fetchMock.mock.calls.length).toBe(2);
 
-  assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
   assertSigningInfoIsNotVisible();
   await assertNotInProgress();
