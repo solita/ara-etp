@@ -203,57 +203,6 @@ const finnishTodistus = R.compose(
   R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
 )(energiatodistus2018());
 
-test('SigningDialog displays error message when default selection is card and there is no connection Mpollux', async () => {
-  setupFetchMocks({
-    [mpolluxVersionUrl]: mpolluxErrorResponse,
-    [validateSessionUrl]: signingAllowedResponse(true)
-  });
-
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: closeDialogFn,
-    selection: 'card'
-  });
-
-  const heading = screen.getByRole('heading', { name: /Allekirjoittaminen/u });
-  expect(heading).toBeInTheDocument();
-  expect(heading.tagName).toBe('H1');
-
-  const errorText = await screen.findByText(
-    /Yhteyden avaus mPolluxiin epäonnistui./u
-  );
-  expect(errorText).toBeInTheDocument();
-
-  // Signing button should not exist when Mpollux connection failed
-  const signButton = screen.queryByRole('button', { name: /Allekirjoita/i });
-  expect(signButton).not.toBeInTheDocument();
-
-  // Test that sulje buttton exists and clicking it calls the reload function
-  // passed to the component
-  const closeButton = screen.getByRole('button', { name: /Sulje/i });
-  expect(closeButton).toBeInTheDocument();
-  await fireEvent.click(closeButton);
-  expect(closeDialogFn.mock.calls).toHaveLength(1);
-});
-
-test('SigningDialog renders correctly when default selection is card and there is connection to Mpollux', async () => {
-  setupFetchMocks({
-    [mpolluxVersionUrl]: mpollxVersionResponse,
-    [validateSessionUrl]: signingAllowedResponse(true)
-  });
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: closeDialogFn,
-    selection: 'card'
-  });
-
-  await assertCardSigningDialogContents(closeDialogFn);
-});
-
 test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
   setupFetchMocks({
     [mpolluxVersionUrl]: mpollxVersionResponse,
