@@ -16,8 +16,6 @@ describe('Signing energiatodistus', () => {
 
     cy.get('[data-cy="allekirjoita-button"]').click();
 
-    cy.get('[data-cy="System"]').click();
-
     cy.intercept({
       method: 'POST',
       pathname:
@@ -57,8 +55,6 @@ describe('Signing energiatodistus', () => {
       .blur();
 
     cy.get('[data-cy="allekirjoita-button"]').click();
-
-    cy.get('[data-cy="System"]').click();
 
     cy.intercept({
       method: 'POST',
