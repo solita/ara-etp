@@ -1,14 +1,9 @@
 <script>
   import { _ } from '@Language/i18n';
 
-  import * as R from 'ramda';
-  import CardSigning from './CardSigning.svelte';
-  import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
   import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
-  import * as versionApi from '@Component/Version/version-api';
-  import { isProduction } from '@Utility/config_utils';
   import { announcementsForModule } from '@Utility/announce.js';
 
   export let energiatodistus;
