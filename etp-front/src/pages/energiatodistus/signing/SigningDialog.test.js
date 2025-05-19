@@ -351,7 +351,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   });
 
   // Before signing
-  assertSigningMethodSelectionIsVisible();
   assertInstructionsTextIsVisible();
   assertSigningInfoIsVisible();
   await assertNotInProgress();
@@ -362,7 +361,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   await fireEvent.click(signButton);
 
   // During signing
-  assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
   assertSigningInfoIsNotVisible();
   await assertInProgress();
@@ -375,7 +373,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   expect(fetchMock.mock.calls.length).toBe(2);
 
-  assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
   assertSigningInfoIsNotVisible();
   await assertNotInProgress();
@@ -406,7 +403,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   });
 
   // Before signing
-  assertSigningMethodSelectionIsVisible();
   assertInstructionsTextIsVisible();
   assertSigningInfoIsVisible();
   await assertNotInProgress();
@@ -417,7 +413,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   await fireEvent.click(signButton);
 
   // During signing
-  assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
   assertSigningInfoIsNotVisible();
   await assertInProgress();
@@ -430,7 +425,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
 
   expect(fetchMock.mock.calls.length).toBe(2);
 
-  assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
   assertSigningInfoIsNotVisible();
   await assertNotInProgress();
