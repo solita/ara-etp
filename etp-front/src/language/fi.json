@@ -1276,7 +1276,7 @@
       },
       "instructions": "Voit allekirjoittaa todistuksen vahvaa tunnistautumista ja Energiatodistuspalvelun allekirjoitusvarmennetta käyttäen.",
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia",
-      "system-signing-info-text-relogin": "Uudelleen kirjaudu allekirjoittaaksesi",
+      "system-signing-info-text-relogin": "Kirjaudu uudelleen allekirjoittaaksesi",
       "system-signing-status-text": "Energiatodistuksen allekirjoitus käynnissä",
       "language-adjective": {
         "fi": "suomenkielinen",
