@@ -107,7 +107,7 @@ const assertInProgress = async () => {
   const spinner = screen.getByTestId('spinner');
   expect(spinner).toBeInTheDocument();
   const statusText = await screen.queryByText(
-    'Energiatodistuksen allekirjoitus käynnissä'
+    'Energiatodistuksen allekirjoittaminen käynnissä'
   );
   expect(statusText).toBeInTheDocument();
 };
@@ -116,7 +116,7 @@ const assertNotInProgress = async () => {
   const spinner = screen.queryByTestId('spinner');
   expect(spinner).not.toBeInTheDocument();
   const statusText = await screen.queryByText(
-    'Energiatodistuksen allekirjoitus käynnissä'
+    'Energiatodistuksen allekirjoittaminen käynnissä'
   );
   expect(statusText).not.toBeInTheDocument();
 };
