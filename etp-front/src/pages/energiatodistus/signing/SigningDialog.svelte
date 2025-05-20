@@ -16,10 +16,11 @@
 
   let currentState = { status: Signing.status.not_started };
 
-  let canShowInstruction = currentState => R.or(
-    R.equals(currentState.status, Signing.status.not_started),
-    R.equals(currentState.status, Signing.status.aborted)
-  )
+  const canShowInstructions = state =>
+    R.includes(R.prop('status', state), [
+      Signing.status.not_started,
+      Signing.status.aborted
+    ]);
 
   Future.fork(
     _ => {
@@ -53,7 +54,7 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if canShowInstruction(currentState)}
+    {#if canShowInstructions(currentState)}
       <div class="mt-2" data-cy="signing-instructions">
         <p>{i18n('energiatodistus.signing.instructions')}</p>
       </div>
