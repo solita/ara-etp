@@ -1,4 +1,4 @@
-# ARA - Energiatodistuspalvelu frontend
+# Varke - Energiatodistuspalvelu frontend
 
 Tämä on web sovellus energiatodistusten laadintaan
 ja todistuksiin liittyvään viranomaistoimintaan.
