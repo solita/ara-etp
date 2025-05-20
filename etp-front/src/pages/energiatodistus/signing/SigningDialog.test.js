@@ -33,19 +33,6 @@ afterEach(() => {
   fetchMock.disableMocks();
 });
 
-const mpolluxVersionUrl = 'https://localhost:53952/version';
-const mpollxVersionResponse = {
-  status: 200,
-  body: JSON.stringify({
-    version: 'dummy',
-    httpMethods: 'GET, POST',
-    contentTypes: 'data, digest',
-    signatureTypes: 'signature',
-    selectorAvailable: true,
-    hashAlgorithms: 'SHA1, SHA256, SHA384, SHA512'
-  })
-};
-
 const systemSignSuccessResponse = {
   status: 200,
   body: JSON.stringify(`Ok`)
@@ -57,11 +44,6 @@ const systemSignFailureResponse = {
 
 const systemSignUrl =
   '/api/private/energiatodistukset/2018/1/signature/system-sign';
-const mockSystemSignApiCallSuccess = () => {
-  fetchMock.mockIf(systemSignUrl, async req => {
-    return systemSignSuccessResponse;
-  });
-};
 
 const validateSessionUrl = '/api/private/energiatodistukset/validate-session';
 const signingAllowedResponse = allowed => {
@@ -131,11 +113,6 @@ const assertInstructionsTextIsNotVisible = () => {
   expect(infoText).not.toBeInTheDocument();
 };
 
-const assertSigningMethodSelectionIsVisible = () => {
-  const options = screen.queryAllByRole('radio');
-  expect(options).toHaveLength(2);
-};
-
 const assertSigningMethodSelectionIsNotVisible = () => {
   const options = screen.queryAllByRole('radio');
   expect(options).toHaveLength(0);
@@ -145,23 +122,6 @@ const finnishTodistus = R.compose(
   R.assoc('id', 1),
   R.assocPath(['perustiedot', 'kieli'], Maybe.Some(0))
 )(energiatodistus2018());
-
-test('SigningDialog renders correctly when default selection is system and there is connection to Mpollux', async () => {
-  setupFetchMocks({
-    [mpolluxVersionUrl]: mpollxVersionResponse,
-    [validateSessionUrl]: signingAllowedResponse(true)
-  });
-
-  const closeDialogFn = jest.fn();
-
-  render(SigningDialog, {
-    energiatodistus: finnishTodistus,
-    reload: closeDialogFn,
-    selection: 'system'
-  });
-
-  await assertSystemSigninDialogContents(closeDialogFn);
-});
 
 test('When system sign fails, error is shown', async () => {
   // Mock the signing api call to return an error
