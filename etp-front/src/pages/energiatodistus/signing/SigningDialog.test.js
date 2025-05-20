@@ -100,22 +100,7 @@ const assertSystemSigninDialogContents = async closeDialogFn => {
   expect(heading).toBeInTheDocument();
   expect(heading.tagName).toBe('H1');
 
-  const systemSigningContent = screen.getByTestId('signing-info');
-  expect(systemSigningContent).toHaveTextContent(
-    'Allekirjoita ilman henkilökorttia'
-  );
-
   await assertButtons(closeDialogFn);
-};
-
-const assertSigningInfoIsVisible = () => {
-  const infoText = screen.getByTestId('signing-info');
-  expect(infoText).toBeInTheDocument();
-};
-
-const assertSigningInfoIsNotVisible = () => {
-  const infoText = screen.queryByTestId('signing-info');
-  expect(infoText).not.toBeInTheDocument();
 };
 
 const assertInProgress = async () => {
@@ -224,7 +209,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   // Before signing
   assertInstructionsTextIsVisible();
-  assertSigningInfoIsVisible();
   await assertNotInProgress();
 
   const signButton = await screen.findByRole('button', {
@@ -234,7 +218,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
 
   // During signing
   assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
   await assertInProgress();
 
   // After signing
@@ -246,7 +229,6 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
   expect(fetchMock.mock.calls.length).toBe(2);
 
   assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
   await assertNotInProgress();
 
   // Download link for signed pdf exists
@@ -276,7 +258,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
 
   // Before signing
   assertInstructionsTextIsVisible();
-  assertSigningInfoIsVisible();
   await assertNotInProgress();
 
   const signButton = await screen.findByRole('button', {
@@ -286,7 +267,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
 
   // During signing
   assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
   await assertInProgress();
 
   // After signing
@@ -298,7 +278,6 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   expect(fetchMock.mock.calls.length).toBe(2);
 
   assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
   await assertNotInProgress();
 
   // Download link for signed pdf exists
@@ -328,7 +307,6 @@ test('When system signing of bilingual energiatodistus succeeds, success message
 
   // Before signing
   assertInstructionsTextIsVisible();
-  assertSigningInfoIsVisible();
   await assertNotInProgress();
 
   const signButton = await screen.findByRole('button', {
@@ -339,7 +317,6 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   // During signing
   assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
   await assertInProgress();
 
   // After signing
@@ -351,7 +328,6 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   expect(fetchMock.mock.calls.length).toBe(2);
 
   assertInstructionsTextIsNotVisible();
-  assertSigningInfoIsNotVisible();
   await assertNotInProgress();
 
   // Download link for signed Finnish pdf exists

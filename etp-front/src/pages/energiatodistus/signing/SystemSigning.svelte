@@ -81,9 +81,6 @@
   {/each}
 
   {#if getStatus(currentState) === notStartedStatus}
-    <p data-cy="signing-info">
-      {i18n('energiatodistus.signing.system-signing-info-text')}
-    </p>
     {#if !freshSession}
       <p data-cy="signing-info-relogin">
         {i18n('energiatodistus.signing.system-signing-info-text-relogin')}
