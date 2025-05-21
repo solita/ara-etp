@@ -195,14 +195,6 @@
     R.prop('lastToimenpide')
   );
 
-  $: R.compose(
-    querystring =>
-      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
-    qs.stringify,
-    R.map(Maybe.get),
-    R.filter(Maybe.isSome)
-  )(query);
-
   const getTemplateName = templates =>
     R.compose(Locales.labelForId($locale))(templates);
 </script>
