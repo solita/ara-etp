@@ -2,29 +2,21 @@
   import { _ } from '@Language/i18n';
 
   import * as R from 'ramda';
-  import CardSigning from './CardSigning.svelte';
-  import Radio from '@Component/Radio/Radio.svelte';
   import SystemSigning from './SystemSigning.svelte';
   import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
-  import * as versionApi from '@Component/Version/version-api';
-  import { isProduction } from '@Utility/config_utils';
   import { announcementsForModule } from '@Utility/announce.js';
 
   export let energiatodistus;
   export let reload;
 
-  export let selection = 'card';
-
   const i18n = $_;
-
-  const isSigningMethodCard = selectedMethod => selectedMethod === 'card';
 
   export let freshSession = false;
 
   let currentState = { status: Signing.status.not_started };
 
-  const isSigningMethodSelectionAllowed = state =>
+  const canShowInstructions = state =>
     R.includes(R.prop('status', state), [
       Signing.status.not_started,
       Signing.status.aborted
@@ -49,10 +41,6 @@
     @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
   }
 
-  .selection {
-    @apply flex mt-4;
-  }
-
   .content {
     @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
   }
@@ -66,41 +54,17 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if isSigningMethodSelectionAllowed(currentState)}
+    {#if canShowInstructions(currentState)}
       <div class="mt-2" data-cy="signing-instructions">
         <p>{i18n('energiatodistus.signing.instructions')}</p>
       </div>
-
-      <div class="mt-2">
-        <div class="selection">
-          <div class="mr-3">
-            <Radio
-              label={i18n('energiatodistus.signing.options.card')}
-              bind:group={selection}
-              value="card"
-              name="Card" />
-          </div>
-          <div class="mr-3">
-            <Radio
-              label={i18n('energiatodistus.signing.options.system')}
-              bind:group={selection}
-              value="system"
-              name="System" />
-          </div>
-        </div>
-      </div>
     {/if}
-
     <div class="mt-4">
-      {#if isSigningMethodCard(selection)}
-        <CardSigning {energiatodistus} {reload} bind:currentState />
-      {:else}
-        <SystemSigning
-          {energiatodistus}
-          {reload}
-          bind:currentState
-          bind:freshSession />
-      {/if}
+      <SystemSigning
+        {energiatodistus}
+        {reload}
+        bind:currentState
+        bind:freshSession />
     </div>
   </div>
 </dialog>

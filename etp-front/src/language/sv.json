@@ -1221,7 +1221,7 @@
         "card": "Använd identitetskort",
         "system": "Underteckna utan identitetskort"
       },
-      "instructions": "Du kan underteckna energicertifikat med ditt identitetskort och kortläsarprogram. Alternativt kan du underteckna certifikatet med hjälp av stark autentisering och energicertifikattjänstens signaturcertifikat, vilket innebär att du inte behöver identitetskort.",
+      "instructions": "Signeringen baseras på din starka autentisering – ingen separat åtgärd krävs",
       "system-signing-info-text": "Underteckna utan identitetskort",
       "system-signing-info-text-relogin": "Logga in på nytt för att underteckna",
       "system-signing-status-text": "Undertecknande av energicertifikat pågår",

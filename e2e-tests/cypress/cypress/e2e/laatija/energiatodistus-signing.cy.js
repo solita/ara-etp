@@ -8,95 +8,6 @@ describe('Signing energiatodistus', () => {
     cy.resetDb();
   });
 
-  it('succeeds when signing using mpollux', () => {
-    cy.intercept(
-      'https://localhost:53952/version',
-      FIXTURES.mpollux.version
-    ).as('mpolluxVersion');
-    cy.intercept(
-      {
-        method: 'PUT',
-        pathname: /\/api\/private\/energiatodistukset\/2018\/5$/
-      },
-      { statusCode: 200 }
-    ).as('signStart');
-    cy.visit('/#/energiatodistus/2018/5');
-    cy.get('[data-cy="laskutusosoite-id"]').click();
-    cy.contains('Henkilökohtaiset tiedot').click();
-    cy.get('[data-cy="allekirjoita-button"]').click();
-
-    cy.wait('@signStart');
-    cy.wait('@mpolluxVersion');
-
-    cy.intercept(
-      {
-        method: 'POST',
-        pathname:
-          /\/api\/private\/energiatodistukset\/2018\/5\/signature\/start/
-      },
-      { statusCode: 200, body: 'Ok' }
-    ).as('start');
-
-    cy.intercept(
-      {
-        method: 'GET',
-        pathname:
-          /\/api\/private\/energiatodistukset\/2018\/5\/signature\/digest\/fi/
-      },
-      {
-        digest: FIXTURES.mpollux.digest
-      }
-    ).as('digest');
-
-    cy.intercept(
-      'POST',
-      'https://localhost:53952/sign',
-      FIXTURES.mpollux.sign
-    ).as('sign');
-
-    cy.intercept(
-      {
-        method: 'PUT',
-        pathname:
-          /\/api\/private\/energiatodistukset\/2018\/5\/signature\/pdf\/fi/
-      },
-      { statusCode: 200, body: FIXTURES.mpollux.pdf(5) }
-    ).as('pdf');
-
-    cy.intercept(
-      {
-        method: 'POST',
-        pathname:
-          /\/api\/private\/energiatodistukset\/2018\/5\/signature\/finish/
-      },
-      { statusCode: 200, body: 'Ok' }
-    ).as('finish');
-
-    // Signing method selection should exist before starting the signing.
-    cy.get('[name="Card"]').should('exist');
-    cy.get('[name="System"]').should('exist');
-
-    cy.get('[data-cy="signing-submit-button"]').click();
-
-    // Signing method selection should not exist when the signing is in progress.
-    cy.get('[name="Card"]').should('not.exist');
-    cy.get('[name="System"]').should('not.exist');
-
-    cy.wait('@start');
-    cy.wait('@digest');
-    cy.wait('@sign');
-    cy.wait('@pdf');
-    cy.wait('@finish');
-
-    cy.contains(
-      'Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti.'
-    ).should('exist');
-
-    // Signing method selection should not exist after the signing has finished.
-    cy.get('[name="Card"]').should('not.exist');
-    cy.get('[name="System"]').should('not.exist');
-  });
-
   it('succeeds when using system signing', () => {
     cy.visit('/#/energiatodistus/2018/2');
 
@@ -104,8 +15,6 @@ describe('Signing energiatodistus', () => {
     cy.selectInSelect('laskutusosoite-id', 'Henkilökohtaiset tiedot');
 
     cy.get('[data-cy="allekirjoita-button"]').click();
-
-    cy.get('[data-cy="System"]').click();
 
     cy.intercept({
       method: 'POST',
@@ -146,8 +55,6 @@ describe('Signing energiatodistus', () => {
       .blur();
 
     cy.get('[data-cy="allekirjoita-button"]').click();
-
-    cy.get('[data-cy="System"]').click();
 
     cy.intercept({
       method: 'POST',
