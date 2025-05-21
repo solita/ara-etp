@@ -1274,7 +1274,7 @@
         "card": "Käytä henkilökorttia",
         "system": "Allekirjoita ilman henkilökorttia"
       },
-      "instructions": "Voit allekirjoittaa todistuksen vahvaa tunnistautumista ja Energiatodistuspalvelun allekirjoitusvarmennetta käyttäen.",
+      "instructions": "Allekirjoitus perustuu vahvaan tunnistautumiseesi – erillistä toimenpidettä ei tarvita.",
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia",
       "system-signing-info-text-relogin": "Kirjaudu uudelleen allekirjoittaaksesi",
       "system-signing-status-text": "Energiatodistuksen allekirjoittaminen käynnissä",
