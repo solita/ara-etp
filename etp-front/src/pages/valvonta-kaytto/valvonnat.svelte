@@ -3,7 +3,6 @@
   import * as dfns from 'date-fns';
   import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
