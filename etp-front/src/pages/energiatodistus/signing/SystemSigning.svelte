@@ -189,5 +189,24 @@
     <div class="mt-2">
       <Spinner />
     </div>
+    <div class="buttons">
+      <!-- Only show the possibility to abort if someone reloads the page. -->
+      {#if stateIsSetViaStateInitialization}
+        <div class="mr-10 mt-5">
+          <Button
+            prefix="signing-abort"
+            text={i18n('energiatodistus.signing.button.abort')}
+            style={'secondary'}
+            on:click={abort} />
+        </div>
+        <div class="mt-5">
+          <Button
+            prefix="signing-close"
+            text={i18n('energiatodistus.signing.button.close')}
+            style={'secondary'}
+            on:click={reload} />
+        </div>
+      {/if}
+    </div>
   {/if}
 </div>
