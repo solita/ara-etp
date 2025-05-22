@@ -76,6 +76,24 @@
     signingProcess();
   };
 
+  const abort = _ => {
+    Future.fork(
+      _ => {
+        error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
+      },
+      resp => {
+        if (
+          resp === `Energiatodistus ${energiatodistus.id} is already signed`
+        ) {
+          error = Maybe.Some(
+            i18n('energiatodistus.signing.error.abort-failed')
+          );
+        } else reload();
+      },
+      etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
+    );
+  };
+
   const relogin = () => {
     redirect(`/api/logout?redirect-location=/${location.hash}`);
   };
