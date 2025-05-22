@@ -33,9 +33,13 @@
     [ET.tila.signed, signedStatus]
   ]);
 
+  let stateIsSetViaStateInitialization = false;
+
   export let currentState;
-  const setStatus = newStatus =>
-    (currentState = R.assoc('status', newStatus, currentState));
+  const setStatus = newStatus => {
+    stateIsSetViaStateInitialization = false;
+    currentState = R.assoc('status', newStatus, currentState);
+  };
   const getStatus = state => R.prop('status', state);
 
   const statusText = Signing.statusText(i18n);
@@ -75,6 +79,7 @@
   const relogin = () => {
     redirect(`/api/logout?redirect-location=/${location.hash}`);
   };
+
   setStatus(
     Objects.requireNotNil(
       initialStatus[energiatodistus['tila-id']],
@@ -84,6 +89,7 @@
         ET.tilaKey(energiatodistus['tila-id'])
     )
   );
+  stateIsSetViaStateInitialization = true;
 </script>
 
 <style type="text/postcss">
@@ -118,6 +124,7 @@
             on:click={relogin} />
         {/if}
       </div>
+
       <div class="mt-5">
         <Button
           prefix="signing-close"
