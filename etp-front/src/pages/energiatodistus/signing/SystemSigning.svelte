@@ -4,7 +4,9 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Objects from '@Utility/objects';
   import * as R from 'ramda';
+  import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
   import Error from '@Component/Error/Error.svelte';
   import * as Signing from './signing';
@@ -24,6 +26,12 @@
   const notStartedStatus = Signing.status.not_started;
   const inProgressStatus = Signing.status.already_started;
   const signedStatus = Signing.status.signed;
+
+  const initialStatus = R.fromPairs([
+    [ET.tila.draft, notStartedStatus],
+    [ET.tila['in-signing'], inProgressStatus],
+    [ET.tila.signed, signedStatus]
+  ]);
 
   export let currentState;
   const setStatus = newStatus =>
@@ -67,6 +75,15 @@
   const relogin = () => {
     redirect(`/api/logout?redirect-location=/${location.hash}`);
   };
+  setStatus(
+    Objects.requireNotNil(
+      initialStatus[energiatodistus['tila-id']],
+      'Energiatodistus ' +
+        energiatodistus.id +
+        ' invalid tila: ' +
+        ET.tilaKey(energiatodistus['tila-id'])
+    )
+  );
 </script>
 
 <style type="text/postcss">
