@@ -3,7 +3,6 @@
   import * as dfns from 'date-fns';
   import * as Parsers from '@Utility/parsers';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EM from '@Utility/either-maybe';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
@@ -16,6 +15,7 @@
   import * as Links from './links';
   import * as Valvojat from '@Pages/valvonta/valvojat';
   import * as Kayttajat from '@Utility/kayttajat';
+  import * as Query from '@Utility/query';
 
   import * as api from './valvonta-api';
   import * as osapuolet from './osapuolet';
@@ -62,26 +62,7 @@
   let pageCount;
   $: pageCount = Math.ceil(R.divide(valvontaCount, pageSize));
 
-  const queryStringIntegerProp = R.curry((querystring, prop) =>
-    R.compose(
-      R.chain(Either.toMaybe),
-      R.map(Parsers.parseInteger),
-      Maybe.fromEmpty,
-      R.prop(prop)
-    )(querystring)
-  );
-
-  const queryStringBooleanProp = R.curry((querystring, prop) =>
-    R.compose(
-      R.map(R.equals('true')),
-      Maybe.fromEmpty,
-      R.prop(prop)
-    )(querystring)
-  );
-
-  let parsedQs = qs.parse($querystring);
-
-  let query = {
+  const defaultQuery = {
     page: Maybe.None(),
     'valvoja-id': Maybe.None(),
     'include-closed': Maybe.None(),
@@ -92,22 +73,20 @@
     'asiakirjapohja-id': Maybe.None()
   };
 
-  query = R.mergeRight(query, {
-    page: queryStringIntegerProp(parsedQs, 'page'),
-    'valvoja-id': queryStringIntegerProp(parsedQs, 'valvoja-id'),
-    'include-closed': queryStringBooleanProp(parsedQs, 'include-closed'),
-    'has-valvoja': queryStringBooleanProp(parsedQs, 'has-valvoja'),
-    'only-uhkasakkoprosessi': queryStringBooleanProp(
-      parsedQs,
-      'only-uhkasakkoprosessi'
-    ),
-    keyword: Maybe.fromEmpty(R.prop('keyword', parsedQs)),
-    'toimenpidetype-id': queryStringIntegerProp(parsedQs, 'toimenpidetype-id'),
-    'asiakirjapohja-id': queryStringIntegerProp(parsedQs, 'asiakirjapohja-id')
-  });
-
-  const nextPageCallback = nextPage =>
-    (query = R.assoc('page', Maybe.Some(nextPage), query));
+  const parseQuery = R.compose(
+    R.mergeRight(defaultQuery),
+    R.evolve({
+      page: Query.parseInteger,
+      'valvoja-id': Query.parseInteger,
+      'include-closed': Query.parseBoolean,
+      'has-valvoja': Query.parseBoolean,
+      'only-uhkasakkoprosessi': Query.parseBoolean,
+      keyword: Parsers.parseOptionalString,
+      'toimenpidetype-id': Query.parseInteger,
+      'asiakirjapohja-id': Query.parseInteger
+    }),
+    qs.parse
+  );
 
   const wrapPercent = q => `%${q}%`;
 
@@ -126,7 +105,7 @@
     'has-valvoja': R.compose(R.filter(R.not), R.prop('has-valvoja'))(query)
   });
 
-  $: {
+  const load = query => {
     overlay = true;
     Future.fork(
       response => {
@@ -161,7 +140,24 @@
         templates: ValvontaApi.templates
       })
     );
+  };
+
+  const originalLocation = $location;
+  let loadedQuery = {};
+  $: query = parseQuery($querystring);
+  $: {
+    if (
+      !R.equals(loadedQuery, query) &&
+      R.equals(originalLocation, $location)
+    ) {
+      load(query);
+      Router.push(originalLocation + Query.toQueryString(query));
+      loadedQuery = query;
+    }
   }
+
+  const nextPageCallback = nextPage =>
+    (query = R.assoc('page', Maybe.Some(nextPage), query));
 
   const isTodayDeadline = R.compose(
     EM.exists(dfns.isToday),
@@ -198,14 +194,6 @@
     R.chain(R.prop('diaarinumero')),
     R.prop('lastToimenpide')
   );
-
-  $: R.compose(
-    querystring =>
-      replace(`${$location}${R.length(querystring) ? '?' + querystring : ''}`),
-    qs.stringify,
-    R.map(Maybe.get),
-    R.filter(Maybe.isSome)
-  )(query);
 
   const getTemplateName = templates =>
     R.compose(Locales.labelForId($locale))(templates);
