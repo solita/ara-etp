@@ -4,7 +4,9 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
+  import * as Objects from '@Utility/objects';
   import * as R from 'ramda';
+  import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as etApi from '@Pages/energiatodistus/energiatodistus-api';
   import Error from '@Component/Error/Error.svelte';
   import * as Signing from './signing';
@@ -25,9 +27,19 @@
   const inProgressStatus = Signing.status.already_started;
   const signedStatus = Signing.status.signed;
 
+  const initialStatus = R.fromPairs([
+    [ET.tila.draft, notStartedStatus],
+    [ET.tila['in-signing'], inProgressStatus],
+    [ET.tila.signed, signedStatus]
+  ]);
+
+  let stateIsSetViaStateInitialization = false;
+
   export let currentState;
-  const setStatus = newStatus =>
-    (currentState = R.assoc('status', newStatus, currentState));
+  const setStatus = newStatus => {
+    stateIsSetViaStateInitialization = false;
+    currentState = R.assoc('status', newStatus, currentState);
+  };
   const getStatus = state => R.prop('status', state);
 
   const statusText = Signing.statusText(i18n);
@@ -64,9 +76,38 @@
     signingProcess();
   };
 
+  const abort = _ => {
+    Future.fork(
+      _ => {
+        error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
+      },
+      resp => {
+        if (
+          resp === `Energiatodistus ${energiatodistus.id} is already signed`
+        ) {
+          error = Maybe.Some(
+            i18n('energiatodistus.signing.error.abort-failed')
+          );
+        } else reload();
+      },
+      etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
+    );
+  };
+
   const relogin = () => {
     redirect(`/api/logout?redirect-location=/${location.hash}`);
   };
+
+  setStatus(
+    Objects.requireNotNil(
+      initialStatus[energiatodistus['tila-id']],
+      'Energiatodistus ' +
+        energiatodistus.id +
+        ' invalid tila: ' +
+        ET.tilaKey(energiatodistus['tila-id'])
+    )
+  );
+  stateIsSetViaStateInitialization = true;
 </script>
 
 <style type="text/postcss">
@@ -101,6 +142,7 @@
             on:click={relogin} />
         {/if}
       </div>
+
       <div class="mt-5">
         <Button
           prefix="signing-close"
@@ -146,6 +188,25 @@
     </p>
     <div class="mt-2">
       <Spinner />
+    </div>
+    <div class="buttons">
+      <!-- Only show the possibility to abort if someone reloads the page. -->
+      {#if stateIsSetViaStateInitialization}
+        <div class="mr-10 mt-5">
+          <Button
+            prefix="signing-abort"
+            text={i18n('energiatodistus.signing.button.abort')}
+            style={'secondary'}
+            on:click={abort} />
+        </div>
+        <div class="mt-5">
+          <Button
+            prefix="signing-close"
+            text={i18n('energiatodistus.signing.button.close')}
+            style={'secondary'}
+            on:click={reload} />
+        </div>
+      {/if}
     </div>
   {/if}
 </div>

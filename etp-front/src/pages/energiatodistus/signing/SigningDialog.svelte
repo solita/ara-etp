@@ -17,10 +17,7 @@
   let currentState = { status: Signing.status.not_started };
 
   const canShowInstructions = state =>
-    R.includes(R.prop('status', state), [
-      Signing.status.not_started,
-      Signing.status.aborted
-    ]);
+    R.includes(R.prop('status', state), [Signing.status.not_started]);
 
   Future.fork(
     _ => {
