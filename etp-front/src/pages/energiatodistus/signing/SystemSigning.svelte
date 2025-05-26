@@ -35,16 +35,16 @@
     [ET.tila.signed, signedStatus]
   ]);
 
-  let stateIsSetViaStateInitialization = false;
-
   export let currentState;
   const setStatus = newStatus => {
-    stateIsSetViaStateInitialization = false;
     currentState = R.assoc('status', newStatus, currentState);
   };
   const getStatus = state => R.prop('status', state);
 
   const statusText = Signing.statusText(i18n);
+
+  const isAlreadySignedResponse =
+    R.equals(R.__, `Energiatodistus ${energiatodistus.id} is already signed`);
 
   const signAllPdfs = energiatodistus => {
     return etApi.signPdfsUsingSystemSignature(
@@ -57,12 +57,16 @@
   const signingProcess = () => {
     Future.fork(
       response => {
-        const errorKey =
-          'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
-        const message = i18n(errorKey);
-        error = R.equals(message, errorKey)
-          ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
-          : Maybe.Some(message);
+        if (isAlreadySignedResponse(response.body)) {
+          error = Maybe.Some(i18n('energiatodistus.signing.error.already-signed'));
+        } else {
+          const errorKey =
+            'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
+          const message = i18n(errorKey);
+          error = R.equals(message, errorKey)
+            ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
+            : Maybe.Some(message);
+        }
         setStatus(notStartedStatus);
       },
       _ => {
@@ -70,6 +74,10 @@
       },
       signAllPdfs(energiatodistus)
     );
+  };
+
+  const showSigningConfirmation = () => {
+    setStatus(askForConfirmationStatus);
   };
 
   const sign = () => {
@@ -84,12 +92,8 @@
         error = Maybe.Some(i18n('energiatodistus.signing.error.abort-failed'));
       },
       resp => {
-        if (
-          resp === `Energiatodistus ${energiatodistus.id} is already signed`
-        ) {
-          error = Maybe.Some(
-            i18n('energiatodistus.signing.error.abort-failed')
-          );
+        if (isAlreadySignedResponse(resp)) {
+          error = Maybe.Some(i18n('energiatodistus.signing.error.already-signed'));
         } else reload();
       },
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
@@ -104,18 +108,17 @@
     Objects.requireNotNil(
       initialStatus[energiatodistus['tila-id']],
       'Energiatodistus ' +
-        energiatodistus.id +
-        ' invalid tila: ' +
-        ET.tilaKey(energiatodistus['tila-id'])
+      energiatodistus.id +
+      ' invalid tila: ' +
+      ET.tilaKey(energiatodistus['tila-id'])
     )
   );
-  stateIsSetViaStateInitialization = true;
 </script>
 
 <style type="text/postcss">
-  .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-  }
+    .buttons {
+        @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+    }
 </style>
 
 <div>
@@ -124,6 +127,9 @@
   {/each}
 
   {#if getStatus(currentState) === notStartedStatus}
+    <div class="mt-2" data-cy="signing-instructions">
+      <p>{i18n('energiatodistus.signing.instructions')}</p>
+    </div>
     {#if !freshSession}
       <p data-cy="signing-info-relogin">
         {i18n('energiatodistus.signing.system-signing-info-text-relogin')}
@@ -133,9 +139,9 @@
       <div class="mr-10 mt-5">
         {#if freshSession}
           <Button
-            prefix="signing-submit"
+            prefix="signing-pre-submit"
             text={i18n('energiatodistus.signing.button.start')}
-            on:click={sign} />
+            on:click={showSigningConfirmation} />
         {:else}
           <Button
             prefix="relogin"
@@ -144,7 +150,6 @@
             on:click={relogin} />
         {/if}
       </div>
-
       <div class="mt-5">
         <Button
           prefix="signing-close"
@@ -153,6 +158,27 @@
           on:click={reload} />
       </div>
     </div>
+
+  {:else if getStatus(currentState) === askForConfirmationStatus}
+    <div class="mt-2" data-cy="signing-instructions">
+      <p>{i18n('energiatodistus.signing.system-signing-confirm-start-text')}</p>
+    </div>
+    <div class="buttons">
+      <div class="mr-10 mt-5">
+        <Button
+          prefix="signing-pre-submit"
+          text={i18n('energiatodistus.signing.button.confirm-start')}
+          on:click={sign} />
+      </div>
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
+    </div>
+
   {:else if getStatus(currentState) === signedStatus}
     <p>
       {statusText({
@@ -184,31 +210,41 @@
           on:click={reload} />
       </div>
     </div>
+
   {:else if getStatus(currentState) === inProgressStatus}
     <p data-cy="signing-status">
       {i18n('energiatodistus.signing.system-signing-status-text')}
     </p>
+    <p>
+      {i18n('energiatodistus.signing.system-signing-expected-duration-text')}
+    </p>
     <div class="mt-2">
       <Spinner />
     </div>
+
+  {:else if getStatus(currentState) === inProgressReloadedStatus}
+    <p data-cy="signing-status">
+      {i18n('energiatodistus.signing.system-signing-reloaded-status-text')}
+    </p>
+    <p>
+      {i18n('energiatodistus.signing.system-signing-reloaded-abort-text')}
+    </p>
     <div class="buttons">
       <!-- Only show the possibility to abort if someone reloads the page. -->
-      {#if stateIsSetViaStateInitialization}
-        <div class="mr-10 mt-5">
-          <Button
-            prefix="signing-abort"
-            text={i18n('energiatodistus.signing.button.abort')}
-            style={'secondary'}
-            on:click={abort} />
-        </div>
-        <div class="mt-5">
-          <Button
-            prefix="signing-close"
-            text={i18n('energiatodistus.signing.button.close')}
-            style={'secondary'}
-            on:click={reload} />
-        </div>
-      {/if}
+      <div class="mr-10 mt-5">
+        <Button
+          prefix="signing-abort"
+          text={i18n('energiatodistus.signing.button.abort')}
+          style={'secondary'}
+          on:click={abort} />
+      </div>
+      <div class="mt-5">
+        <Button
+          prefix="signing-close"
+          text={i18n('energiatodistus.signing.button.close')}
+          style={'secondary'}
+          on:click={reload} />
+      </div>
     </div>
   {/if}
 </div>
