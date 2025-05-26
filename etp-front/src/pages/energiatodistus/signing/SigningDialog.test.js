@@ -89,7 +89,7 @@ const assertInProgress = async () => {
   const spinner = screen.getByTestId('spinner');
   expect(spinner).toBeInTheDocument();
   const statusText = await screen.queryByText(
-    'Energiatodistuksen allekirjoittaminen käynnissä'
+    'Energiatodistuksen allekirjoittaminen käynnissä. Odota päivittämättä sivua.'
   );
   expect(statusText).toBeInTheDocument();
 };
@@ -142,6 +142,12 @@ test('When system sign fails, error is shown', async () => {
 
   await fireEvent.click(signButton);
 
+  const confirmButton = await screen.findByRole('button', {
+    name: /Aloita/i
+  });
+
+  await fireEvent.click(confirmButton);
+
   const spinner = screen.getByTestId('spinner');
 
   expect(spinner).toBeInTheDocument();
@@ -175,6 +181,11 @@ test('When system sign of energiatodistus in Finnish succeeds, success message a
     name: /Allekirjoita/i
   });
   await fireEvent.click(signButton);
+
+  const confirmButton = await screen.findByRole('button', {
+    name: /Aloita/i
+  });
+  await fireEvent.click(confirmButton);
 
   // During signing
   assertInstructionsTextIsNotVisible();
@@ -225,6 +236,11 @@ test('When system sign of energiatodistus in Swedish succeeds, success message a
   });
   await fireEvent.click(signButton);
 
+  const confirmButton = await screen.findByRole('button', {
+    name: /Aloita/i
+  });
+  await fireEvent.click(confirmButton);
+
   // During signing
   assertInstructionsTextIsNotVisible();
   await assertInProgress();
@@ -274,6 +290,11 @@ test('When system signing of bilingual energiatodistus succeeds, success message
   });
   await fireEvent.click(signButton);
 
+  const confirmButton = await screen.findByRole('button', {
+    name: /Aloita/i
+  });
+  await fireEvent.click(confirmButton);
+
   // During signing
   assertSigningMethodSelectionIsNotVisible();
   assertInstructionsTextIsNotVisible();
@@ -322,6 +343,12 @@ test('Signing button is not visible after signing using system signing', async (
   });
 
   await fireEvent.click(signButton);
+
+  const confirmButton = await screen.findByRole('button', {
+    name: /Aloita/i
+  });
+
+  await fireEvent.click(confirmButton);
 
   const statusText = await screen.findByText(
     /Suomenkielinen energiatodistus on allekirjoitettu onnistuneesti./u
