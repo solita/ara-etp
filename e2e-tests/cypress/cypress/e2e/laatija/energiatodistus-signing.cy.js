@@ -22,6 +22,7 @@ describe('Signing energiatodistus', () => {
         /\/api\/private\/energiatodistukset\/2018\/2\/signature\/system-sign/
     }).as('system-sign');
 
+    cy.get('[data-cy="signing-pre-submit-button"]').click();
     cy.get('[data-cy="signing-submit-button"]').click();
 
     cy.wait('@system-sign');
@@ -62,6 +63,7 @@ describe('Signing energiatodistus', () => {
         /\/api\/private\/energiatodistukset\/2018\/2\/signature\/system-sign/
     }).as('system-sign');
 
+    cy.get('[data-cy="signing-pre-submit-button"]').click();
     cy.get('[data-cy="signing-submit-button"]').click();
 
     cy.wait('@system-sign');

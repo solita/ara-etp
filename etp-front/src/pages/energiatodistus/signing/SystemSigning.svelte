@@ -166,7 +166,7 @@
     <div class="buttons">
       <div class="mr-10 mt-5">
         <Button
-          prefix="signing-pre-submit"
+          prefix="signing-submit"
           text={i18n('energiatodistus.signing.button.confirm-start')}
           on:click={sign} />
       </div>
