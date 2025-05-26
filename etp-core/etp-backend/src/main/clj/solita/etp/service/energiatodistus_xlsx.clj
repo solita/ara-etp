@@ -62,7 +62,7 @@
         (.setCellStyle cell date-style)))))
 
 (defn search-completed-energiatodistukset [db whoami query]
-  (let [query (update query :limit #(or % 1000))
+  (let [query (energiatodistus-search-service/enforce-query-limit query)
         luokittelut (complete-energiatodistus-service/luokittelut db)]
      (reduce (fn [acc energiatodistus-db-row]
                (conj acc
