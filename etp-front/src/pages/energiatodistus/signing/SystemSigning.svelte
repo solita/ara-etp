@@ -22,14 +22,16 @@
 
   let error = Maybe.None();
 
-  // Subset of signing statuses used in signing with system.
+  // Signing statuses used in signing with system.
   const notStartedStatus = Signing.status.not_started;
-  const inProgressStatus = Signing.status.already_started;
+  const askForConfirmationStatus = Signing.status.confirming_start;
+  const inProgressStatus = Signing.status.in_progress;
+  const inProgressReloadedStatus = Signing.status.in_progress_reloaded;
   const signedStatus = Signing.status.signed;
 
   const initialStatus = R.fromPairs([
     [ET.tila.draft, notStartedStatus],
-    [ET.tila['in-signing'], inProgressStatus],
+    [ET.tila['in-signing'], inProgressReloadedStatus],
     [ET.tila.signed, signedStatus]
   ]);
 

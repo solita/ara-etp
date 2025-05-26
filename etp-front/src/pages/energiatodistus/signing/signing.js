@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import * as etApi from '@Pages/energiatodistus/energiatodistus-api.js';
 import * as Fetch from '@Utility/fetch-utils.js';
-import { deserialize, url } from '@Pages/viesti/viesti-api.js';
 import * as Future from '@Utility/future-utils';
 
 const capitalize = R.compose(
@@ -11,14 +10,10 @@ const capitalize = R.compose(
 
 const statuses = [
   'not_started',
-  'already_started',
-  'start',
-  'digest',
-  'signature',
-  'pdf',
-  'finish',
+  'confirming_start',
+  'in_progress',
+  'in_progress_reloaded',
   'signed',
-  'aborted'
 ];
 
 export const status = R.compose(R.map(parseInt), R.invertObj)(statuses);
