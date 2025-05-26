@@ -43,8 +43,10 @@
 
   const statusText = Signing.statusText(i18n);
 
-  const isAlreadySignedResponse =
-    R.equals(R.__, `Energiatodistus ${energiatodistus.id} is already signed`);
+  const isAlreadySignedResponse = R.equals(
+    R.__,
+    `Energiatodistus ${energiatodistus.id} is already signed`
+  );
 
   const signAllPdfs = energiatodistus => {
     return etApi.signPdfsUsingSystemSignature(
@@ -58,10 +60,13 @@
     Future.fork(
       response => {
         if (isAlreadySignedResponse(response.body)) {
-          error = Maybe.Some(i18n('energiatodistus.signing.error.already-signed'));
+          error = Maybe.Some(
+            i18n('energiatodistus.signing.error.already-signed')
+          );
         } else {
           const errorKey =
-            'energiatodistus.signing.error.' + R.path(['body', 'type'], response);
+            'energiatodistus.signing.error.' +
+            R.path(['body', 'type'], response);
           const message = i18n(errorKey);
           error = R.equals(message, errorKey)
             ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
@@ -93,7 +98,9 @@
       },
       resp => {
         if (isAlreadySignedResponse(resp)) {
-          error = Maybe.Some(i18n('energiatodistus.signing.error.already-signed'));
+          error = Maybe.Some(
+            i18n('energiatodistus.signing.error.already-signed')
+          );
         } else reload();
       },
       etApi.cancelSign(fetch, energiatodistus.versio, energiatodistus.id)
@@ -108,17 +115,17 @@
     Objects.requireNotNil(
       initialStatus[energiatodistus['tila-id']],
       'Energiatodistus ' +
-      energiatodistus.id +
-      ' invalid tila: ' +
-      ET.tilaKey(energiatodistus['tila-id'])
+        energiatodistus.id +
+        ' invalid tila: ' +
+        ET.tilaKey(energiatodistus['tila-id'])
     )
   );
 </script>
 
 <style type="text/postcss">
-    .buttons {
-        @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
-    }
+  .buttons {
+    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+  }
 </style>
 
 <div>
@@ -158,7 +165,6 @@
           on:click={reload} />
       </div>
     </div>
-
   {:else if getStatus(currentState) === askForConfirmationStatus}
     <div class="mt-2" data-cy="signing-instructions">
       <p>{i18n('energiatodistus.signing.system-signing-confirm-start-text')}</p>
@@ -178,7 +184,6 @@
           on:click={reload} />
       </div>
     </div>
-
   {:else if getStatus(currentState) === signedStatus}
     <p>
       {statusText({
@@ -210,7 +215,6 @@
           on:click={reload} />
       </div>
     </div>
-
   {:else if getStatus(currentState) === inProgressStatus}
     <p data-cy="signing-status">
       {i18n('energiatodistus.signing.system-signing-status-text')}
@@ -221,7 +225,6 @@
     <div class="mt-2">
       <Spinner />
     </div>
-
   {:else if getStatus(currentState) === inProgressReloadedStatus}
     <p data-cy="signing-status">
       {i18n('energiatodistus.signing.system-signing-reloaded-status-text')}

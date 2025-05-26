@@ -13,7 +13,7 @@ const statuses = [
   'confirming_start',
   'in_progress',
   'in_progress_reloaded',
-  'signed',
+  'signed'
 ];
 
 export const status = R.compose(R.map(parseInt), R.invertObj)(statuses);
