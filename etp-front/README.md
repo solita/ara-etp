@@ -38,7 +38,9 @@ in the `modheaders.json` file, and there are two ways to use them:
 1) Use the Modheader extension in the browser to set the headers. The extension can import the
    `modheaders.json` file and then lets you choose which set of headers to use.
 2) Set the `ETP_DEV_FRONT_USER` environment variable to the email address of the user
-   whose JWT headers will be injected in the development server's proxy.
+   whose JWT headers will be injected in the development server's proxy. Optionally you can also set
+   the `WEBPACK_PORT` environment variable to change the port the development server runs on,
+   enabling you to run multiple instances of the frontend at the same time.
 
 Set the environment variable or the correct Modheader profile as needed, then start  [webpack](https://webpack.js.org):
 
