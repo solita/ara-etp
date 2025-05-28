@@ -13,7 +13,7 @@
 
   export let freshSession = false;
 
-  let currentState = { status: Signing.status.not_started };
+  let currentState = Signing.dialogState.not_started;
 
   Future.fork(
     _ => {

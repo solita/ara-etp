@@ -8,7 +8,7 @@ const capitalize = R.compose(
   R.juxt([R.compose(R.toUpper, R.head), R.tail])
 );
 
-const statuses = [
+const dialogStates = [
   'not_started',
   'confirming_start',
   'in_progress',
@@ -16,9 +16,12 @@ const statuses = [
   'signed'
 ];
 
-export const status = R.compose(R.map(parseInt), R.invertObj)(statuses);
+export const dialogState = R.compose(
+  R.map(parseInt),
+  R.invertObj
+)(dialogStates);
 
-const statusKey = id => statuses[id];
+const statusKey = id => dialogStates[id];
 
 export const statusText = R.curry((i18n, state) => {
   const languageAdjectiveName = i18n(

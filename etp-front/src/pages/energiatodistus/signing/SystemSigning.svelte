@@ -23,23 +23,23 @@
   let error = Maybe.None();
 
   // Signing statuses used in signing with system.
-  const notStartedStatus = Signing.status.not_started;
-  const askForConfirmationStatus = Signing.status.confirming_start;
-  const inProgressStatus = Signing.status.in_progress;
-  const inProgressReloadedStatus = Signing.status.in_progress_reloaded;
-  const signedStatus = Signing.status.signed;
+  const notStartedStatus = Signing.dialogState.not_started;
+  const askForConfirmationStatus = Signing.dialogState.confirming_start;
+  const inProgressStatus = Signing.dialogState.in_progress;
+  const inProgressReloadedStatus = Signing.dialogState.in_progress_reloaded;
+  const signedStatus = Signing.dialogState.signed;
 
-  const initialStatus = R.fromPairs([
+  const etTilaToInitialDialogState = R.fromPairs([
     [ET.tila.draft, notStartedStatus],
     [ET.tila['in-signing'], inProgressReloadedStatus],
     [ET.tila.signed, signedStatus]
   ]);
 
   export let currentState;
-  const setStatus = newStatus => {
-    currentState = R.assoc('status', newStatus, currentState);
+  const setState = newState => {
+    currentState = newState;
   };
-  const getStatus = state => R.prop('status', state);
+  const getState = state => state;
 
   const statusText = Signing.statusText(i18n);
 
@@ -72,21 +72,21 @@
             ? Maybe.Some(i18n('energiatodistus.signing.error.signing-failed'))
             : Maybe.Some(message);
         }
-        setStatus(notStartedStatus);
+        setState(notStartedStatus);
       },
       _ => {
-        setStatus(signedStatus);
+        setState(signedStatus);
       },
       signAllPdfs(energiatodistus)
     );
   };
 
   const showSigningConfirmation = () => {
-    setStatus(askForConfirmationStatus);
+    setState(askForConfirmationStatus);
   };
 
   const sign = () => {
-    setStatus(inProgressStatus);
+    setState(inProgressStatus);
     error = Maybe.None();
     signingProcess();
   };
@@ -111,9 +111,9 @@
     redirect(`/api/logout?redirect-location=/${location.hash}`);
   };
 
-  setStatus(
+  setState(
     Objects.requireNotNil(
-      initialStatus[energiatodistus['tila-id']],
+      etTilaToInitialDialogState[energiatodistus['tila-id']],
       'Energiatodistus ' +
         energiatodistus.id +
         ' invalid tila: ' +
@@ -133,7 +133,7 @@
     <Error {text} />
   {/each}
 
-  {#if getStatus(currentState) === notStartedStatus}
+  {#if getState(currentState) === notStartedStatus}
     <div class="mt-2" data-cy="signing-instructions">
       <p>{i18n('energiatodistus.signing.instructions')}</p>
     </div>
@@ -165,7 +165,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if getStatus(currentState) === askForConfirmationStatus}
+  {:else if getState(currentState) === askForConfirmationStatus}
     <div class="mt-2" data-cy="signing-instructions">
       <p>{i18n('energiatodistus.signing.system-signing-confirm-start-text')}</p>
     </div>
@@ -184,10 +184,10 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if getStatus(currentState) === signedStatus}
+  {:else if getState(currentState) === signedStatus}
     <p>
       {statusText({
-        status: Signing.status.signed,
+        status: Signing.dialogState.signed,
         language: Kielisyys.getEnergiatodistusLanguageCode(energiatodistus)
       })}
     </p>
@@ -215,7 +215,7 @@
           on:click={reload} />
       </div>
     </div>
-  {:else if getStatus(currentState) === inProgressStatus}
+  {:else if getState(currentState) === inProgressStatus}
     <p data-cy="signing-status">
       {i18n('energiatodistus.signing.system-signing-status-text')}
     </p>
@@ -225,7 +225,7 @@
     <div class="mt-2">
       <Spinner />
     </div>
-  {:else if getStatus(currentState) === inProgressReloadedStatus}
+  {:else if getState(currentState) === inProgressReloadedStatus}
     <p data-cy="signing-status">
       {i18n('energiatodistus.signing.system-signing-reloaded-status-text')}
     </p>
