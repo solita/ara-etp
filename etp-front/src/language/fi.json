@@ -1280,7 +1280,7 @@
       "system-signing-status-text": "Energiatodistuksen allekirjoittaminen käynnissä. Odota päivittämättä sivua.",
       "system-signing-expected-duration-text": "Tämä voi kestää noin minuutin.",
       "system-signing-reloaded-status-text": "Energiatodistus on allekirjoitettavana. Päivitä sivu tarkistaaksesi allekirjoituksen tilanne.",
-      "system-signing-reloaded-abort-text": "Jos allekirjoituksessa on kestänyt tavattoman pitkään, voit koittaa myös keskeyttää prosessin ja yrittää uudelleen.",
+      "system-signing-reloaded-abort-text": "Jos allekirjoituksessa on kestänyt tavattoman pitkään, voit kokeilla myös keskeyttää prosessin ja yrittää uudelleen.",
       "system-signing-confirm-start-text": "Haluatko varmasti aloittaa allekirjottamisen?",
       "language-adjective": {
         "fi": "suomenkielinen",
