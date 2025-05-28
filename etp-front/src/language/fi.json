@@ -1277,7 +1277,11 @@
       "instructions": "Allekirjoitus perustuu vahvaan tunnistautumiseesi – erillistä toimenpidettä ei tarvita.",
       "system-signing-info-text": "Allekirjoita ilman henkilökorttia",
       "system-signing-info-text-relogin": "Kirjaudu uudelleen allekirjoittaaksesi",
-      "system-signing-status-text": "Energiatodistuksen allekirjoittaminen käynnissä",
+      "system-signing-status-text": "Energiatodistuksen allekirjoittaminen käynnissä. Odota päivittämättä sivua.",
+      "system-signing-expected-duration-text": "Tämä voi kestää noin minuutin.",
+      "system-signing-reloaded-status-text": "Energiatodistus on allekirjoitettavana. Päivitä sivu tarkistaaksesi allekirjoituksen tilanne.",
+      "system-signing-reloaded-abort-text": "Jos allekirjoituksessa on kestänyt tavattoman pitkään, voit kokeilla myös keskeyttää prosessin ja yrittää uudelleen.",
+      "system-signing-confirm-start-text": "Haluatko varmasti aloittaa allekirjottamisen?",
       "language-adjective": {
         "fi": "suomenkielinen",
         "sv": "ruotsinkielinen",
@@ -1297,6 +1301,7 @@
       "error": {
         "abort-failed": "Keskeyttäminen epäonnistui",
         "signing-failed": "Allekirjoittaminen keskeytyi tuntemattomasta syystä. Voit aloittaa allekirjoituksen uudestaan tai keskeyttää allekirjoittamisen.",
+        "already-signed": "Energiatodistus on jo allekirjoitettu.",
         "session-validity-check-failed": "Session tarkistaminen epäonnistui. Uudelleenkirjautuminen voi korjata ongelman.",
         "name-does-not-match": "Allekirjoittajan nimi henkilövarmenteessa ei vastaa käyttäjän nimeä järjestelmässä.",
         "laatimiskielto": "Allekirjoittaminen ei ole mahdollista koska laatija on laatimiskiellossa.",
@@ -1316,6 +1321,7 @@
       },
       "button": {
         "start": "Allekirjoita",
+        "confirm-start": "Aloita",
         "abort": "Keskeytä",
         "close": "Sulje",
         "relogin": "Kirjaudu uudelleen"

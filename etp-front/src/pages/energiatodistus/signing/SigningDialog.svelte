@@ -1,7 +1,6 @@
 <script>
   import { _ } from '@Language/i18n';
 
-  import * as R from 'ramda';
   import SystemSigning from './SystemSigning.svelte';
   import * as Signing from './signing';
   import * as Future from '@Utility/future-utils';
@@ -14,13 +13,7 @@
 
   export let freshSession = false;
 
-  let currentState = { status: Signing.status.not_started };
-
-  const canShowInstructions = state =>
-    R.includes(R.prop('status', state), [
-      Signing.status.not_started,
-      Signing.status.aborted
-    ]);
+  let currentState = Signing.dialogState.not_started;
 
   Future.fork(
     _ => {
@@ -54,11 +47,6 @@
   <div class="content">
     <h1>{i18n('energiatodistus.signing.header')}</h1>
 
-    {#if canShowInstructions(currentState)}
-      <div class="mt-2" data-cy="signing-instructions">
-        <p>{i18n('energiatodistus.signing.instructions')}</p>
-      </div>
-    {/if}
     <div class="mt-4">
       <SystemSigning
         {energiatodistus}

@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import * as etApi from '@Pages/energiatodistus/energiatodistus-api.js';
 import * as Fetch from '@Utility/fetch-utils.js';
-import { deserialize, url } from '@Pages/viesti/viesti-api.js';
 import * as Future from '@Utility/future-utils';
 
 const capitalize = R.compose(
@@ -9,21 +8,20 @@ const capitalize = R.compose(
   R.juxt([R.compose(R.toUpper, R.head), R.tail])
 );
 
-const statuses = [
+const dialogStates = [
   'not_started',
-  'already_started',
-  'start',
-  'digest',
-  'signature',
-  'pdf',
-  'finish',
-  'signed',
-  'aborted'
+  'confirming_start',
+  'in_progress',
+  'in_progress_reloaded',
+  'signed'
 ];
 
-export const status = R.compose(R.map(parseInt), R.invertObj)(statuses);
+export const dialogState = R.compose(
+  R.map(parseInt),
+  R.invertObj
+)(dialogStates);
 
-const statusKey = id => statuses[id];
+const statusKey = id => dialogStates[id];
 
 export const statusText = R.curry((i18n, state) => {
   const languageAdjectiveName = i18n(

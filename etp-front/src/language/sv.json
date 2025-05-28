@@ -1224,7 +1224,11 @@
       "instructions": "Signeringen baseras på din starka autentisering – ingen separat åtgärd krävs",
       "system-signing-info-text": "Underteckna utan identitetskort",
       "system-signing-info-text-relogin": "Logga in på nytt för att underteckna",
-      "system-signing-status-text": "Undertecknande av energicertifikat pågår",
+      "system-signing-status-text": "Underteckningen av energicertifikatet pågår. Vänligen vänta och uppdatera inte sidan.",
+      "system-signing-expected-duration-text": "Det här kan ta upp till en minut.",
+      "system-signing-reloaded-status-text": "Energicertifikatet håller på att undertecknas. Uppdatera sidan för att se status för signeringen.",
+      "system-signing-reloaded-abort-text": "Om signeringen har tagit ovanligt lång tid kan du också försöka avbryta processen och försöka igen.",
+      "system-signing-confirm-start-text": "Vill du verkligen starta signeringen?",
       "language-adjective": {
         "fi": "på finska",
         "sv": "på svenska",
@@ -1244,7 +1248,8 @@
       "error": {
         "abort-failed": "Avbrytandet misslyckades",
         "signing-failed": "Undertecknandet avbröts av okänd anledning. Du kan börja underteckna på nytt eller avbryta undertecknandet.",
-        "session-validity-check-failed": "Session tarkistaminen epäonnistui. Uudelleenkirjautuminen voi korjata ongelman. (sv)",
+        "already-signed": "Energicertifikatet är redan undertecknat.",
+        "session-validity-check-failed": "Sessionskontrollen misslyckades. Att logga in på nytt kan lösa problemet.",
         "name-does-not-match": "Undertecknarens namn på personcertifikatet motsvarar inte användarens namn i systemet.",
         "laatimiskielto": "Ingen underteckningsprocess är möjlig eftersom upprättaren har förbjudits att upprätta dokument.",
         "patevyys-expired": "Ingen underteckningsprocess är möjlig eftersom upprättarens behörighet har upphört.",
@@ -1263,6 +1268,7 @@
       },
       "button": {
         "start": "Underteckna",
+        "confirm-start": "Starta",
         "abort": "Avbryt",
         "close": "Stäng",
         "relogin": "Logga in på nytt"
