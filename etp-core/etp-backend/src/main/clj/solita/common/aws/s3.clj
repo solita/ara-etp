@@ -15,15 +15,11 @@
                                        :Key    key})]
     (:Body result)))
 
-(defn get-object-head
-  ([aws-s3-client key]
-   (get-object-head aws-s3-client key {:checking-for-existence? false}))
-  ([{:keys [client bucket]} key options]
-   (aws.utils/invoke client
-                     :HeadObject
-                     {:Bucket bucket
-                      :Key    key}
-                     options)))
+(defn get-object-head [{:keys [client bucket]} key]
+  (aws.utils/invoke client
+                    :HeadObject
+                    {:Bucket bucket
+                     :Key    key}))
 
 (defn list-object-versions
   [{:keys [client bucket]} prefix]
@@ -35,8 +31,8 @@
 (defn delete-object [{:keys [client bucket]} key]
   (aws.utils/invoke client
                     :DeleteObject
-                    {:Bucket bucket
-                     :Key    key}))
+                    {:Bucket          bucket
+                     :Key             key}))
 
 (defn get-object-tagging
   ([aws-s3-client key]
