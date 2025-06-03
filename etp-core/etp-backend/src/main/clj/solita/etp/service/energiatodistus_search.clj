@@ -303,12 +303,16 @@
             where-params
             keyword-params)))
 
+(defn enforce-query-limit [query]
+  (let [query-limit 500]
+    (update query :limit #(min query-limit (or % query-limit)))))
+
 (defn search
   "Energiatodistus search for APIs. Makes sure that
    there's a sensible limit for results. Coerces results with
    schema->db-row->energiatodistus."
   [db whoami query schema]
-  (let [query (update query :limit #(min 1000 (or % 1000)))]
+  (let [query (enforce-query-limit query)]
     (->> (jdbc/query db (sql-query (select schema) whoami query) nil)
          (map (energiatodistus-service/schema->db-row->energiatodistus schema)))))
 
