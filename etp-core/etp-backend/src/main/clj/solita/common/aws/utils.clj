@@ -13,9 +13,6 @@
   (let [result (aws/invoke client {:op      op
                                    :request request})]
     (if (contains? result :cognitect.anomalies/category)
-      (do
-        (log/error "Unable to invoke aws client "
-                   (merge {:op op :request request} result))
-        (exception/throw-ex-info! (-> result :cognitect.anomalies/category anomalies->etp-codes)
-                                  (or (-> result :Error :Message) (:cognitect.anomalies/message result))))
+      (exception/throw-ex-info! (-> result :cognitect.anomalies/category anomalies->etp-codes)
+                                (or (-> result :Error :Message) (:cognitect.anomalies/message result)))
       result)))
