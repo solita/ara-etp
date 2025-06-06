@@ -2,6 +2,9 @@
   (:require [cognitect.aws.client.api :as aws]
             [solita.etp.exception :as exception]))
 
+;; Note that the status codes in the map below are just suggestions on what
+;; to return to the client, unless you know better. There is no actual mapping
+;; in place to apply these codes to the AWS errors.
 (def anomalies->etp-codes
   {:cognitect.anomalies/forbidden   :resource-forbidden     ;http status code: 403
    :cognitect.anomalies/not-found   :resource-not-found     ;http status code: 404
