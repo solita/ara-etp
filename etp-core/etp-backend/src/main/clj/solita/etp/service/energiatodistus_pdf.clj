@@ -2,6 +2,7 @@
   "Contains functionality to specifically create an energiatodistus as a pdf."
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
+            [clojure.tools.logging :as log]
             [solita.common.formats :as formats]
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
@@ -756,10 +757,12 @@
     is))
 
 (defn find-existing-pdf [aws-s3-client id kieli]
-  (when (file-service/file-exists? aws-s3-client (energiatodistus-service/file-key id kieli))
-    (->> (energiatodistus-service/file-key id kieli)
-         (file-service/find-file aws-s3-client)
-         io/input-stream)))
+  (let [file-key (energiatodistus-service/file-key id kieli)]
+    (if (file-service/file-exists? aws-s3-client file-key)
+      (->> file-key
+           (file-service/find-file aws-s3-client)
+           io/input-stream)
+      (log/warn "requested file" file-key "not found in S3"))))
 
 (defn find-energiatodistus-pdf [db aws-s3-client whoami id kieli]
   (when-let [{:keys [allekirjoitusaika] :as complete-energiatodistus}

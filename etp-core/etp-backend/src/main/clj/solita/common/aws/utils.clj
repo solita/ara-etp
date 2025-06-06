@@ -1,26 +1,20 @@
 (ns solita.common.aws.utils
-  (:require [clojure.tools.logging :as log]
-            [cognitect.aws.client.api :as aws]
+  (:require [cognitect.aws.client.api :as aws]
             [solita.etp.exception :as exception]))
 
+;; Note that the status codes in the map below are just suggestions on what
+;; to return to the client, unless you know better. There is no actual mapping
+;; in place to apply these codes to the AWS errors.
 (def anomalies->etp-codes
   {:cognitect.anomalies/forbidden   :resource-forbidden     ;http status code: 403
    :cognitect.anomalies/not-found   :resource-not-found     ;http status code: 404
    :cognitect.anomalies/busy        :resource-busy          ;http status code: 503
    :cognitect.anomalies/unavailable :resource-unavailable}) ;http status code: 504
 
-(defn invoke
-  ([client op request]
-   (invoke client op request {:checking-for-existence? false}))
-  ([client op request {:keys [checking-for-existence?]}]
-   (let [result (aws/invoke client {:op      op
-                                    :request request})]
-     (if (contains? result :cognitect.anomalies/category)
-       (let [error-code (-> result :cognitect.anomalies/category anomalies->etp-codes)]
-         (do
-           (when-not (and checking-for-existence? (= error-code :resource-not-found))
-             (log/error "Unable to invoke aws client "
-                        (merge {:op op :request request} result)))
-           (exception/throw-ex-info! error-code
-                                     (or (-> result :Error :Message) (:cognitect.anomalies/message result)))))
-       result))))
+(defn invoke [client op request]
+  (let [result (aws/invoke client {:op      op
+                                   :request request})]
+    (if (contains? result :cognitect.anomalies/category)
+      (exception/throw-ex-info! (-> result :cognitect.anomalies/category anomalies->etp-codes)
+                                (or (-> result :Error :Message) (:cognitect.anomalies/message result)))
+      result)))
