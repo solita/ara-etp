@@ -1,6 +1,5 @@
 (ns solita.common.aws.utils
-  (:require [clojure.tools.logging :as log]
-            [cognitect.aws.client.api :as aws]
+  (:require [cognitect.aws.client.api :as aws]
             [solita.etp.exception :as exception]))
 
 (def anomalies->etp-codes
