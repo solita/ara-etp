@@ -7,10 +7,12 @@
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
+            [solita.etp.config :as config]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.file :as file-service])
+            [solita.etp.service.file :as file-service]
+            [solita.etp.service.watermark-pdf :as watermark-pdf])
   (:import (java.io ByteArrayOutputStream File)
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
@@ -30,8 +32,11 @@
                           2018 {"fi" "energiatodistus-2018-fi.xlsx"
                                 "sv" "energiatodistus-2018-sv.xlsx"}})
 
-(def watermark-paths {"fi" "watermark-fi.pdf"
-                      "sv" "watermark-sv.pdf"})
+(def draft-watermark-texts {"fi" "LUONNOS"
+                            "sv" "UTKAST"})
+(def test-watermark-texts {"fi" "TESTI"
+                           "sv" "TEST"})
+
 (def sheet-count 8)
 (def tmp-dir "tmp-energiatodistukset/")
 
@@ -658,19 +663,6 @@
                75
                17.5)))
 
-(defn- add-watermark [pdf-path kieli]
-  (with-open [watermark (PDDocument/load (-> watermark-paths
-                                             (get kieli)
-                                             io/resource
-                                             io/input-stream))
-              overlay (doto (Overlay.)
-                        (.setInputFile pdf-path)
-                        (.setDefaultOverlayPDF watermark)
-                        (.setOverlayPosition Overlay$Position/FOREGROUND))
-              result (.overlay overlay (HashMap.))]
-    (.save result pdf-path)
-    pdf-path))
-
 (defn- make-xmp-metadata
   "Create an XMPMetadata object, which can be rendered as XML into the PDF file.
   This is the 'new' common kind of of PDF metadata"
@@ -746,9 +738,12 @@
                   (:laatija-fullname complete-energiatodistus)
                   laatija-allekirjoitus-id
                   (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
-    (if draft?
-      (add-watermark pdf-path kieli)
-      pdf-path)))
+    (cond
+      draft?
+      (watermark-pdf/add-watermark pdf-path (draft-watermark-texts kieli))
+      (contains? #{"dev" "test"} config/environment-alias)
+      (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli))
+      :else pdf-path)))
 
 (defn generate-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
   (let [pdf-path (generate-pdf-as-file energiatodistus kieli draft? laatija-allekirjoitus-id)
