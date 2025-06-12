@@ -27,6 +27,13 @@
       (-> resource-path io/resource slurp)))
 
 ;;
+;; Misc config
+;;
+
+(def environment-alias (env "ENVIRONMENT_ALIAS" "test"))
+(def is-public-backend? (Boolean/parseBoolean (find-configuration "IS_USED_AS_PUBLIC_BACKEND" [env property] "false")))
+
+;;
 ;; For Integrant components
 ;;
 
@@ -37,6 +44,7 @@
                            :server-name    (env "DB_HOST" "localhost")
                            :port-number    (env "DB_PORT" 5432)
                            :username       (env "DB_USER" "etp_app")
+                           :read-only      is-public-backend?
                            :password       (env "DB_PASSWORD" "etp")
                            :database-name  (env "DB_DATABASE" "etp_dev")
                            :current-schema (env "DB_SCHEMA" "etp")}
@@ -89,11 +97,6 @@
        (map str/trim)
        (remove str/blank?)))
 
-;;
-;; Misc config
-;;
-
-(def environment-alias (env "ENVIRONMENT_ALIAS" "test"))
 
 ;; Base URLs
 (def service-host (env "SERVICE_HOST" "localhost:3000"))
