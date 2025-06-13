@@ -33,8 +33,8 @@
              buddy/buddy-sign                                    {:mvn/version "3.6.1-359"}
              buddy/buddy-hashers                                 {:mvn/version "2.0.167"}
 
-             org.apache.poi/poi                                  {:mvn/version "5.3.0"}
-             org.apache.poi/poi-ooxml                            {:mvn/version "5.3.0"}
+             org.apache.poi/poi                                  {:mvn/version "5.4.1"}
+             org.apache.poi/poi-ooxml                            {:mvn/version "5.4.1"}
 
              org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
              org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
