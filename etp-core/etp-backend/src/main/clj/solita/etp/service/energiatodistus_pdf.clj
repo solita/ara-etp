@@ -16,7 +16,7 @@
   (:import (java.io ByteArrayOutputStream File)
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
-           (java.util Calendar GregorianCalendar HashMap)
+           (java.util Calendar GregorianCalendar)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
                                       PDPageContentStream$AppendMode)

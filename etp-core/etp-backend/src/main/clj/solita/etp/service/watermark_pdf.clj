@@ -90,5 +90,4 @@
                         (.setOverlayPosition Overlay$Position/FOREGROUND))
               result (.overlay overlay (HashMap.))]
     (.save result ^String pdf-path)
-    (.close watermark)
     pdf-path))
