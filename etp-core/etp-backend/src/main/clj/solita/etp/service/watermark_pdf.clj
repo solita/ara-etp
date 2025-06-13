@@ -6,7 +6,6 @@
            [org.apache.pdfbox.pdmodel.common PDRectangle]
            [org.apache.pdfbox.pdmodel.graphics.state PDExtendedGraphicsState]
            [org.apache.pdfbox.util Matrix]
-           [java.io File]
            [java.awt Color]))
 
 (defn- generate-watermark
