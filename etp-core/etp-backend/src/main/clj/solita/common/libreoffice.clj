@@ -51,7 +51,7 @@
       ;; ignore the usual need of having a per-process configuration. Instead, the
       ;; execution is protected by a lock
       (locking lock
-        (apply shell/sh "C:\\Program Files\\LibreOffice\\program\\soffice.bin" "--headless" args)))))
+        (apply shell/sh "C:\\Program Files\\LibreOffice\\program\\soffice.exe" "--headless" args)))))
 
 (defn run-with-args [& args]
   (if  (-> "os.name" System/getProperty (.startsWith "Windows "))
