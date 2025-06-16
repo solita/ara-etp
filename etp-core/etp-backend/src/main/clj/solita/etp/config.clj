@@ -36,11 +36,10 @@
 ;;
 ;; For Integrant components
 ;;
-
+(def ^:private ten-minutes-in-ms 600000)
 (defn db
   ([] (db {}))
   ([opts]
-   (let [ten-minutes-in-ms 600000]
      {:solita.etp/db (merge {:adapter        "postgresql"
                              :server-name    (env "DB_HOST" "localhost")
                              :port-number    (env "DB_PORT" 5432)
@@ -49,8 +48,8 @@
                              :password       (env "DB_PASSWORD" "etp")
                              :database-name  (env "DB_DATABASE" "etp_dev")
                              :current-schema (env "DB_SCHEMA" "etp")
-                            opts)})))
                              :max-lifetime   ten-minutes-in-ms}
+                            opts)}))
 
 (defn http-server
   ([] (http-server {}))
