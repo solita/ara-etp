@@ -2,13 +2,13 @@
              "src/main/sql"
              "src/main/resources"]
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
- :deps      {org.clojure/clojure                                 {:mvn/version "1.12.0"}
+ :deps      {org.clojure/clojure                                 {:mvn/version "1.12.0-alpha9"}
              ch.qos.logback/logback-classic                      {:mvn/version "1.5.17"}
              org.slf4j/log4j-over-slf4j                          {:mvn/version "2.0.16"}
              flathead/flathead                                   {:mvn/version "0.0.6"}
              integrant/integrant                                 {:mvn/version "0.13.1"}
              hikari-cp/hikari-cp                                 {:mvn/version "3.1.0"}
-             org.postgresql/postgresql                           {:mvn/version "42.7.4"}
+             org.postgresql/postgresql                           {:mvn/version "42.7.7"}
              org.clojure/java.jdbc                               {:mvn/version "0.7.12"}
              org.clojure/data.csv                                {:mvn/version "1.1.0"}
              http-kit/http-kit                                   {:mvn/version "2.8.0"}
@@ -33,14 +33,14 @@
              buddy/buddy-sign                                    {:mvn/version "3.6.1-359"}
              buddy/buddy-hashers                                 {:mvn/version "2.0.167"}
 
-             org.apache.poi/poi                                  {:mvn/version "5.3.0"}
-             org.apache.poi/poi-ooxml                            {:mvn/version "5.3.0"}
+             org.apache.poi/poi                                  {:mvn/version "5.4.1"}
+             org.apache.poi/poi-ooxml                            {:mvn/version "5.4.1"}
 
              org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
              org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
              org.apache.pdfbox/pdfbox                            {:mvn/version "2.0.32"}
              org.clojure/core.match                              {:mvn/version "1.1.0"}
-             com.cognitect.aws/api                               {:mvn/version "0.8.692"}
+             com.cognitect.aws/api                               {:mvn/version "0.8.741"}
              com.cognitect.aws/endpoints                         {:mvn/version "1.1.12.772"}
              com.cognitect.aws/s3                                {:mvn/version "869.2.1687.0"}
              com.cognitect.aws/kms                               {:mvn/version "869.2.1687.0"}
