@@ -40,15 +40,17 @@
 (defn db
   ([] (db {}))
   ([opts]
-   {:solita.etp/db (merge {:adapter        "postgresql"
-                           :server-name    (env "DB_HOST" "localhost")
-                           :port-number    (env "DB_PORT" 5432)
-                           :username       (env "DB_USER" "etp_app")
-                           :read-only      is-public-backend?
-                           :password       (env "DB_PASSWORD" "etp")
-                           :database-name  (env "DB_DATABASE" "etp_dev")
-                           :current-schema (env "DB_SCHEMA" "etp")}
-                          opts)}))
+   (let [ten-minutes-in-ms 600000]
+     {:solita.etp/db (merge {:adapter        "postgresql"
+                             :server-name    (env "DB_HOST" "localhost")
+                             :port-number    (env "DB_PORT" 5432)
+                             :username       (env "DB_USER" "etp_app")
+                             :read-only      is-public-backend?
+                             :password       (env "DB_PASSWORD" "etp")
+                             :database-name  (env "DB_DATABASE" "etp_dev")
+                             :current-schema (env "DB_SCHEMA" "etp")
+                             :max-lifetime   (env "DB_MAX_LIFETIME_MS" ten-minutes-in-ms)}
+                            opts)})))
 
 (defn http-server
   ([] (http-server {}))
