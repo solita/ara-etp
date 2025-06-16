@@ -49,8 +49,8 @@
                              :password       (env "DB_PASSWORD" "etp")
                              :database-name  (env "DB_DATABASE" "etp_dev")
                              :current-schema (env "DB_SCHEMA" "etp")
-                             :max-lifetime   (env "DB_MAX_LIFETIME_MS" ten-minutes-in-ms)}
                             opts)})))
+                             :max-lifetime   ten-minutes-in-ms}
 
 (defn http-server
   ([] (http-server {}))
