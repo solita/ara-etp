@@ -2167,6 +2167,7 @@
           "validation-error": "Det finns ett fel i uppgifterna. Granska uppgifterna om parten innan du skickar."
         },
         "toimitustapa-errors": {
+          "suomifi-henkilo-omistaja-required": "Endast ägaren kan ha suomi.fi som leveranssätt",
           "suomifi-henkilo": "När leveranssättet är suomi.fi ska personbeteckningen och adressuppgifterna vara ifyllda",
           "suomifi-yritys": "När leveranssättet är suomi.fi ska FO-numret och adressuppgifterna vara ifyllda",
           "email": "När leveranssättet är e-post ska e-postadressen vara ifylld"
