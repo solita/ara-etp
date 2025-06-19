@@ -68,6 +68,7 @@ describe('ToimitustapaErrorKey', () => {
       it('when using suomifi', () => {
         const suomifi = {
           'toimitustapa-id': Maybe.Some(0),
+          'rooli-id': Maybe.Some(0),
           henkilotunnus: Maybe.Some('123456-7890'),
           jakeluosoite: Maybe.Some('Katu 1'),
           maa: Maybe.Some('Suomi')
@@ -124,18 +125,21 @@ describe('ToimitustapaErrorKey', () => {
       it('when using suomifi', () => {
         const missingHenkilotunnus = {
           'toimitustapa-id': Maybe.Some(0),
+          'rooli-id': Maybe.Some(0),
           henkilotunnus: Maybe.None(),
           jakeluosoite: Maybe.Some('Katu 1'),
           maa: Maybe.Some('Suomi')
         };
         const missingJakeluosoite = {
           'toimitustapa-id': Maybe.Some(0),
+          'rooli-id': Maybe.Some(0),
           henkilotunnus: Maybe.Some('123456-7890'),
           jakeluosoite: Maybe.None(),
           maa: Maybe.Some('Suomi')
         };
         const missingMaa = {
           'toimitustapa-id': Maybe.Some(0),
+          'rooli-id': Maybe.Some(0),
           henkilotunnus: Maybe.Some('123456-7890'),
           jakeluosoite: Maybe.Some('Katu 1'),
           maa: Maybe.None()
@@ -146,6 +150,16 @@ describe('ToimitustapaErrorKey', () => {
               'suomifi-henkilo'
             );
           }
+        );
+        const notOmistaja = {
+          'toimitustapa-id': Maybe.Some(0),
+          'rooli-id': Maybe.Some(1), // Not omistaja
+          henkilotunnus: Maybe.Some('123456-7890'),
+          jakeluosoite: Maybe.Some('Katu 1'),
+          maa: Maybe.Some('Suomi')
+        };
+        expect(toimitustapaErrorKey.henkilo(notOmistaja).some()).toEqual(
+          'suomifi-henkilo-omistaja-required'
         );
       });
       it('when using email', () => {
