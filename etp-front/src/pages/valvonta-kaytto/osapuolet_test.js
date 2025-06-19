@@ -151,6 +151,16 @@ describe('ToimitustapaErrorKey', () => {
             );
           }
         );
+        const notOmistaja = {
+          'toimitustapa-id': Maybe.Some(0),
+          'rooli-id': Maybe.Some(1), // Not omistaja
+          henkilotunnus: Maybe.Some('123456-7890'),
+          jakeluosoite: Maybe.Some('Katu 1'),
+          maa: Maybe.Some('Suomi')
+        };
+        expect(toimitustapaErrorKey.henkilo(notOmistaja).some()).toEqual(
+          'suomifi-henkilo-omistaja-required'
+        );
       });
       it('when using email', () => {
         const missingEmail = {
