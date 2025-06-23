@@ -47,21 +47,32 @@ const invalidEmail = R.allPass([
   R.propSatisfies(Maybe.isNone, 'email')
 ]);
 
-export const toimitustapaErrorKey = {
-  yritys: yritys =>
-    toimitustapa.suomifi(yritys) &&
-    (Maybe.isNone(yritys.ytunnus) || invalidOsoite(yritys))
-      ? Maybe.Some('suomifi-yritys')
-      : invalidEmail(yritys)
-        ? Maybe.Some('email')
-        : Maybe.None(),
-  henkilo: henkilo =>
+const yritysErrorKey = yritys =>
+  toimitustapa.suomifi(yritys) &&
+  (Maybe.isNone(yritys.ytunnus) || invalidOsoite(yritys))
+    ? Maybe.Some('suomifi-yritys')
+    : invalidEmail(yritys)
+      ? Maybe.Some('email')
+      : Maybe.None();
+
+const henkiloErrorKey = henkilo => {
+  if (toimitustapa.suomifi(henkilo) && !isOmistaja(henkilo)) {
+    return Maybe.Some('suomifi-henkilo-omistaja-required');
+  } else if (
     toimitustapa.suomifi(henkilo) &&
     (Maybe.isNone(henkilo.henkilotunnus) || invalidOsoite(henkilo))
-      ? Maybe.Some('suomifi-henkilo')
-      : invalidEmail(henkilo)
-        ? Maybe.Some('email')
-        : Maybe.None()
+  ) {
+    return Maybe.Some('suomifi-henkilo');
+  } else if (invalidEmail(henkilo)) {
+    return Maybe.Some('email');
+  } else {
+    return Maybe.None();
+  }
+};
+
+export const toimitustapaErrorKey = {
+  yritys: yritysErrorKey,
+  henkilo: henkiloErrorKey
 };
 
 /**

@@ -1877,6 +1877,7 @@
           "validation-error": "Tiedoissa on virhe. Tarkista osapuolen tiedot ennen lähettämistä."
         },
         "toimitustapa-errors": {
+          "suomifi-henkilo-omistaja-required": "Vain omistajalle voidaan asettaa toimitustavaksi suomi.fi",
           "suomifi-henkilo": "Kun toimitustapa on suomi.fi, pitää henkilötunnus ja osoitetiedot olla täytettynä",
           "suomifi-yritys": "Kun toimitustapa on suomi.fi, pitää Y-tunnus ja osoitetiedot olla täytettynä",
           "email": "Kun toimitustapa on sahköposti, pitää sahköpostiosoitteen olla täytettynä"
