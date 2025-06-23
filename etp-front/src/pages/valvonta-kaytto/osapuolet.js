@@ -55,14 +55,6 @@ const yritysErrorKey = yritys =>
       ? Maybe.Some('email')
       : Maybe.None();
 
-const henkiloErrorKey_ = henkilo =>
-  toimitustapa.suomifi(henkilo) &&
-  (Maybe.isNone(henkilo.henkilotunnus) || invalidOsoite(henkilo))
-    ? Maybe.Some('suomifi-henkilo')
-    : invalidEmail(henkilo)
-      ? Maybe.Some('email')
-      : Maybe.None();
-
 const henkiloErrorKey = henkilo => {
   if (toimitustapa.suomifi(henkilo) && !isOmistaja(henkilo)) {
     return Maybe.Some('suomifi-henkilo-omistaja-required');
