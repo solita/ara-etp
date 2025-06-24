@@ -39,7 +39,8 @@
       <p>
         Personer som har avlagt behörighetsprovet med godkänt resultat läggs
         till i registret efter att proven har bedömts. Registreringen i
-        registret görs av dem som konstaterar behörigheten (FISE eller Kinko).
+        registret görs av <Link href="https://FISE.fi">FISE</Link>, som
+        konstaterar behörigheten.
       </p>
     </div>
     <div class="border-b border-grey pb-8 mb-8">
@@ -59,60 +60,6 @@
         Vänta tills du får en faktura från den som konstaterar behörigheten.
         Efter fakturans förfallodatum lägger den som konstaterar behörigheten
         till dig i registret över upprättare, om du har erlagt betalningen.
-      </p>
-    </div>
-    <div class="mb-8">
-      <H2>UNDERTECKNING AV ENERGICERTIFIKAT</H2>
-      <p>
-        Energicertifikatet undertecknas elektroniskt. Det finns två sätt att
-        underteckna certifikatet:
-      </p>
-      <ol class="numbered-list">
-        <li>
-          <p>
-            Underteckning baserad på <b>Suomi.fi-autentisering</b>, där
-            systemets underteckningscertifikat används. Autentisering sker när
-            du loggar in i registret. När du undertecknar certifikatet behöver
-            du inte autentisera dig igen. Autentisering krävs endast vid
-            undertecknande om det har gått mer än 1,5 timmar sedan inloggningen.
-          </p>
-        </li>
-        <li>
-          <p>
-            Underteckning med <b>elektroniskt identitetskort</b> (certifikatkort),
-            där det personliga underteckningscertifikatet används. För detta behöver
-            du ett ID-kort, en kortläsare och kortläsarprogrammet.
-          </p>
-          <ul>
-            <li>
-              <p>
-                Kortet ansöks hos polisen:
-                <Link href="https://poliisi.fi/etusivu">
-                  Gå till polisens webbplats för att ansöka om identitetskort
-                </Link>
-              </p>
-            </li>
-            <li>
-              <p>Kortläsaren kan köpas i elektronikbutiker.</p>
-            </li>
-            <li>
-              <p>
-                Kortläsarprogrammet kan laddas ner och installeras från
-                Myndigheten för digitalisering och befolkningsdata.
-                <Link href="https://dvv.fi/kortinlukijaohjelmisto">
-                  Gå till sidan för kortläsarprogrammet (dvv.fi)
-                </Link>
-              </p>
-            </li>
-          </ul>
-        </li>
-      </ol>
-      <p>
-        Mer information om elektronisk underteckning och certifikatkort finns på
-        Myndigheten för digitalisering och befolkningsdatas webbplats:
-        <Link href="https://dvv.fi/varmenteet"
-          >certifikat och kort (dvv.fi)
-        </Link>
       </p>
     </div>
   </div>
