@@ -59,59 +59,5 @@
         toteaja lisää sinut laatijarekisteriin, jos olet suorittanut maksun.
       </p>
     </div>
-    <div class="mb-8">
-      <H2>ENERGIATODISTUKSEN ALLEKIRJOITUS</H2>
-      <p>
-        Energiatodistus allekirjoitetaan sähköisesti. Todistuksen
-        allekirjoitukseen on kaksi tapaa:
-      </p>
-      <ol class="numbered-list">
-        <li>
-          <p>
-            <b>Suomi.fi-tunnistautumiseen</b> perustuva allekirjoitus, jossa käytetään
-            järjestelmän allekirjoitusvarmennetta. Tunnistautuminen tapahtuu kirjautuessasi
-            sisään rekisteriin. Kun allekirjoitat todistuksen sinun ei tarvitse enää
-            tunnistautua uudelleen. Tunnistautuminen vaaditaan allekirjoitettaessa
-            vain, jos rekisteriin kirjautumisesta on kulunut yli 1,5 tuntia.
-          </p>
-        </li>
-        <li>
-          <p>
-            <b>Sähköisellä henkilökortilla</b> eli varmennekortilla tapahtuva allekirjoitus,
-            jossa käytetään henkilökohtaista allekirjoitusvarmennetta. Tätä varten
-            tarvitset henkilökortin, kortinlukulaitteen ja kortinlukuohjelmiston.
-          </p>
-          <ul>
-            <li>
-              <p>
-                Korttia haetaan poliisilta:
-                <Link href="https://poliisi.fi/etusivu">
-                  Siirry poliisin sivuille henkilökortin hakemiseen
-                </Link>
-              </p>
-            </li>
-            <li>
-              <p>Kortinlukulaitteen voi ostaa elektroniikkaliikkeistä.</p>
-            </li>
-            <li>
-              <p>
-                Kortinlukijaohjelmiston voi ladata ja asentaa Digi- ja
-                väestötietovirastosta.
-                <Link href="https://dvv.fi/kortinlukijaohjelmisto">
-                  Siirry kortinlukijaohjelmiston sivulle (dvv.fi)
-                </Link>
-              </p>
-            </li>
-          </ul>
-        </li>
-      </ol>
-      <p>
-        Lisätietoja sähköisestä allekirjoituksesta ja henkilökortista löydät
-        Digi- ja väestötietoviraston sivuilta:
-        <Link href="https://dvv.fi/varmenteet">
-          varmenteet ja kortit (dvv.fi)
-        </Link>
-      </p>
-    </div>
   </div>
 </Container>
