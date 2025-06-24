@@ -92,7 +92,7 @@
       </li>
       <li>
         Täytä liityntäkatalogin testiversiosta löytyvä <Link
-          href="https://liityntakatalogi.test.suomi.fi/dataset/energiatodistusrekisteri-ara-svc"
+          href="https://liityntakatalogi.test.suomi.fi/dataset/energiatodistusrekisteri-varke-svc"
           >hakemus</Link
         >.
       </li>
@@ -110,7 +110,7 @@
       </li>
       <li>
         Täytä liityntäkatalogista löytyvä <Link
-          href="https://liityntakatalogi.suomi.fi/dataset/energiatodistusrekisteri-ara-svc"
+          href="https://liityntakatalogi.suomi.fi/fi/dataset/energiatodistusrekisteri-varke-svc"
           >hakemus</Link> ja odota Varken hyväksyntää.
       </li>
       <li>
