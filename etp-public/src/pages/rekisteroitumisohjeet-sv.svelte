@@ -39,7 +39,8 @@
       <p>
         Personer som har avlagt behörighetsprovet med godkänt resultat läggs
         till i registret efter att proven har bedömts. Registreringen i
-        registret görs av dem som konstaterar behörigheten (FISE eller Kinko).
+        registret görs av <Link href="https://FISE.fi">FISE</Link>, som
+        konstaterar behörigheten.
       </p>
     </div>
     <div class="border-b border-grey pb-8 mb-8">

@@ -38,7 +38,7 @@
       <p>
         Pätevyyskokeen hyväksytysti suorittaneet laatijat lisätään
         laatijarekisteriin kokeiden arvioinnin jälkeen. Rekisteriin lisäyksen
-        tekevät pätevyyden toteajat (FISE tai Kiinko).
+        tekee pätevyyden toteaja <Link href="https://FISE.fi">FISE</Link>.
       </p>
     </div>
     <div class="border-b border-grey pb-8 mb-8">
