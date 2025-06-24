@@ -228,6 +228,7 @@
                 bind:model={kayttajaAineistot}
                 lens={R.lensPath([index, 'ip-address'])}
                 validators={schema['ip-address']}
+                parse={R.trim}
                 {i18n} />
             </td>
             <td class="etp-table--td etp-table--td__center">
