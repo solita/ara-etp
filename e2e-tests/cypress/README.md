@@ -25,7 +25,7 @@ npm run cypress:run
 
 The `e2e Docker stack` includes the `dev Docker stack` from `etp-core/docker/` and adds
 `frontend`, `backend` and `migration-runner` services on top of it. The mapping of ports in the dev stack is
-overridden by `docker-compose.override.yml` so that you can run it while also running the e2e stack.
+overridden by `override.yml` so that you can run it while also running the e2e stack.
 
 ### Writing more tests
 
