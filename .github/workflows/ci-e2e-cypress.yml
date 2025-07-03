@@ -51,6 +51,20 @@ jobs:
           cache-from: type=gha,scope=smtp
           cache-to: type=gha,mode=max,scope=smtp
           load: true
+      - name: Build ocsp-responder-int
+        uses: docker/build-push-action@v5.4.0
+        with:
+          context: etp-core/docker/ocsp-test-pki
+          cache-from: type=gha,scope=smtp
+          cache-to: type=gha,mode=max,scope=ocsp-responder-int
+          load: true
+      - name: Build ocsp-responder-root
+        uses: docker/build-push-action@v5.4.0
+        with:
+          context: etp-core/docker/ocsp-test-pki
+          cache-from: type=gha,scope=smtp
+          cache-to: type=gha,mode=max,scope=ocsp-responder-root
+          load: true
       - name: Setup e2e-env
         working-directory: e2e-tests/cypress
         run: |
