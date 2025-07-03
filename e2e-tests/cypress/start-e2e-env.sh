@@ -7,6 +7,7 @@ set -euxo pipefail
 # When migrations are ready, create cypress_test database
 # Start backend and wait for it and frontend to be ready
 
+docker compose build
 docker compose up --build -d frontend
 docker compose up --build migration-runner --exit-code-from migration-runner
 docker compose exec db dropdb -U postgres cypress_test --if-exists --force
