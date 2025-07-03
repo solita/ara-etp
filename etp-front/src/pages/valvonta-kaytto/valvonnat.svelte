@@ -81,7 +81,7 @@
       'include-closed': Query.parseBoolean,
       'has-valvoja': Query.parseBoolean,
       'only-uhkasakkoprosessi': Query.parseBoolean,
-      keyword: Parsers.parseOptionalString,
+      keyword: Parsers.optionalString,
       'toimenpidetype-id': Query.parseInteger,
       'asiakirjapohja-id': Query.parseInteger
     }),
