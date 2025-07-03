@@ -16,7 +16,7 @@ docker compose exec db createdb -U postgres -T etp_dev cypress_test
 # The dependencies of the backend service do not always seem to be built before
 # compose attempts to start the backend service, and that will cause the final
 # `docker compose up` command to fail.
-docker compose build ocsp-responder-root
+docker compose build ocsp-responder-root ocsp-responder-int
 
 echo -e "\e[1;33m Waiting for services to be healthy. Can take ~20s. \e[0m"
 docker compose up --build --wait frontend --wait frontend-public --wait backend
