@@ -21,6 +21,11 @@ or just run the tests:
 npm run cypress:run
 ```
 
+You can also narrow down the tests with `--spec`
+```bash
+npm run cypress:run -- --spec "cypress/e2e/laatija/energiatodistus-signing.cy.js","cypress/e2e/laatija/tiedot-tarkastamatta.cy.js"
+```
+
 ### Docker stack
 
 The `e2e Docker stack` includes the `dev Docker stack` from `etp-core/docker/` and adds
