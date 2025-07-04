@@ -1240,10 +1240,7 @@
         "bilingual": "tvåspråkigt"
       },
       "messages": {
-        "connection-check": "Kontakten till mPollux kontrolleras.",
-        "already-started": "Undertecknandet har avbrutits av okänd orsak.",
-        "connection-success": "Uppgifterna i energicertifikatet och uppkopplingen till kortläserprogrammet har kontrollerats.",
-        "connection-failed": "Anslutning till mPollux misslyckades. Undertecknandet förutsätter att signaturprogrammet mPollux är installerat och att webbläsaren är ansluten till signaturprogrammet."
+        "already-started": "Undertecknandet har avbrutits av okänd orsak."
       },
       "error": {
         "abort-failed": "Avbrytandet misslyckades",
@@ -1260,7 +1257,6 @@
         "already-started": "Du kan börja underteckna energicertifikatet på nytt eller avbryta det och återgå till skissläget.",
         "start": "Underteckningsprocessen {language} startas.",
         "digest": "Energicertifikatet {language} skapas.",
-        "signature": "Underteckna energicertifikatet {language} i mPollux-programmet.",
         "pdf": "Underteckna {language} energicertifikatet.",
         "finish": "Avsluta underteckningsprocessen.",
         "signed": "{language} energicertifikatet har undertecknats.",
