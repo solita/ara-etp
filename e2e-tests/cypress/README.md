@@ -29,7 +29,7 @@ overridden by `override.yml` so that you can run it while also running the e2e s
 
 ### Writing more tests
 
-> **NB:** The `e2e Docker stack` might not yet use all of the components (mpollux, minio, etc.)
+> **NB:** The `e2e Docker stack` might not yet use all of the components (minio, etc.)
 > correctly. Typically you can fix this by making their location (e.g. localhost:1234) configurable
 > through an environment variable and setting it to the container's name (e.g. container:1234).
 
