@@ -51,6 +51,10 @@ npm run dev
 Navigate to [https://localhost:3000](https://localhost:3000). You should see your app running. Edit a component file
 in `src`, save it, the page should reload automatically.
 
+Note: To activate the work-in-progress ETP 2026 features, set the ETP_2026 environment variable to
+a non-emtpy string. This tells the webpack dev server to generate a frontend config.json with
+the parameters required for that.
+
 ## Testing
 
 ### What to test and at what level?
