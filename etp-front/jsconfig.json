@@ -2,10 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@Component": ["./src/components"],
-      "@Utility": ["./src/utils"],
-      "@Language": ["./src/language"],
-      "@": ["./src"]
+      "@Component/*": ["./src/components/*"],
+      "@Language/*": ["./src/language/*"],
+      "@Pages/*": ["./src/pages/*"],
+      "@Utility/*": ["./src/utils/*"],
+      "@/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules", "build"]
