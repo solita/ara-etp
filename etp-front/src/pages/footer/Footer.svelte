@@ -5,6 +5,7 @@
   import Link from '@Component/Link/Link';
 
   export let version;
+  export let isEtp2026 = false;
 
   $: footerLogoPath = Locales.isSV($locale)
     ? 'images/YM_Varke_vaaka_sin_SV_RGB.png'
@@ -80,6 +81,11 @@
   <div
     class="border-t border-tableborder mx-8 pt-4 pb-16 flex items-center justify-between">
     <img class="h-32" src={footerLogoPath} alt="Varke" />
-    <p>{version.version}</p>
+    <p>
+      {version.version}
+      {#if isEtp2026}
+        ETP 2026
+      {/if}
+    </p>
   </div>
 </footer>

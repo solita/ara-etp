@@ -91,7 +91,7 @@
 
     <div class="footercontainer">
       <div class="w-full max-w-1440 mx-auto">
-        <Footer {version} />
+        <Footer {version} isEtp2026={config.isEtp2026 ?? false} />
       </div>
     </div>
   {/each}

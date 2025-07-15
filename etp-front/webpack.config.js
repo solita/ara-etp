@@ -147,7 +147,8 @@ export default {
         res.json({
           isDev: true,
           environment: 'dev',
-          publicSiteUrl: 'https://localhost:3000'
+          publicSiteUrl: 'https://localhost:3000',
+          isEtp2026: !!process.env.ETP_2026
         })
       );
       return middlewares;
