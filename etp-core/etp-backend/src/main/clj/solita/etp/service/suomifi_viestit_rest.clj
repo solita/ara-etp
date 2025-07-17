@@ -22,15 +22,15 @@
 
 (defn- post-json!
   ([url request access-token]
-   (post-json! url (with-access-token access-token request)))
-  ([url request]
-   (*post!* url (merge request {:content-type :json
-                                :as           :json}))))
+   (*post!* url (merge (with-access-token access-token request) {:content-type :json
+                                                                 :as           :json}))))
 
 (defn- get-access-token! [config]
-  (let [response (post-json! token-endpoint {:form-params
-                                             {:password (:rest-salasana config)
-                                              :username (:viranomaistunnus config)}})]
+  (let [response (*post!* token-endpoint {:content-type :json
+                                          :as           :json
+                                          :form-params
+                                          {:password (:rest-salasana config)
+                                           :username (:viranomaistunnus config)}})]
     (:access_token (:body response))))
 
 (defn- send-attachment-pdf! [access-token pdf-file pdf-file-name]
@@ -95,12 +95,12 @@
   Returns: response?"
   [{:keys [pdf-file pdf-file-name] :as message-info} &
    [config]]
-  (let [default-config {:viranomaistunnus     config/suomifi-viestit-viranomaistunnus
-                        :palvelutunnus        config/suomifi-viestit-palvelutunnus
-                        :yhteyshenkilo-email  config/suomifi-viestit-yhteyshenkilo-email
-                        :laskutus-tunniste    config/suomifi-viestit-laskutus-tunniste
-                        :laskutus-salasana    config/suomifi-viestit-laskutus-salasana
-                        :rest-salasana        config/suomifi-viestit-rest-password}
+  (let [default-config {:viranomaistunnus    config/suomifi-viestit-viranomaistunnus
+                        :palvelutunnus       config/suomifi-viestit-palvelutunnus
+                        :yhteyshenkilo-email config/suomifi-viestit-yhteyshenkilo-email
+                        :laskutus-tunniste   config/suomifi-viestit-laskutus-tunniste
+                        :laskutus-salasana   config/suomifi-viestit-laskutus-salasana
+                        :rest-salasana       config/suomifi-viestit-rest-password}
         config (merge default-config config)
         access-token (get-access-token! config)
         attachment-ref (send-attachment-pdf! access-token pdf-file pdf-file-name)
