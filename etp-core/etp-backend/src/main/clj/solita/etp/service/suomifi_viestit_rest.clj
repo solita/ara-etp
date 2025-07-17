@@ -72,7 +72,7 @@
                                                                 :password       (:laskutus-salasana config)
                                                                 :username       (:laskutus-tunniste config)}}}
    :recipient  {:id recipient-id}
-   :sender     {:serviceId "ara_ws_energiatodistus"}})
+   :sender     {:serviceId (:palvelutunnus config)}})
 
 (defn send-suomifi-viesti-with-pdf-attachment!
   "Sends a Suomi.fi-viesti that has the `pdf-file` as an attachment.
