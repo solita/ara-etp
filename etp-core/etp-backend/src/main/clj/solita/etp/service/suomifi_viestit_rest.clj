@@ -93,16 +93,15 @@
 
   Returns: response?"
   [{:keys [pdf-file] :as message-info} &
-   [{:keys [viranomaistunnus palvelutunnus yhteyshenkilo-email
-            laskutus-tunniste laskutus-salasana rest-salasana]
-     :or   {viranomaistunnus     config/suomifi-viestit-viranomaistunnus
-            palvelutunnus        config/suomifi-viestit-palvelutunnus
-            yhteyshenkilo-email  config/suomifi-viestit-yhteyshenkilo-email
-            laskutus-tunniste    config/suomifi-viestit-laskutus-tunniste
-            laskutus-salasana    config/suomifi-viestit-laskutus-salasana
-            rest-salasana        config/suomifi-viestit-rest-password}
-     :as   config}]]
-  (let [access-token (get-access-token! config)
+   [config]]
+  (let [default-config {:viranomaistunnus     config/suomifi-viestit-viranomaistunnus
+                        :palvelutunnus        config/suomifi-viestit-palvelutunnus
+                        :yhteyshenkilo-email  config/suomifi-viestit-yhteyshenkilo-email
+                        :laskutus-tunniste    config/suomifi-viestit-laskutus-tunniste
+                        :laskutus-salasana    config/suomifi-viestit-laskutus-salasana
+                        :rest-salasana        config/suomifi-viestit-rest-password}
+        config (merge default-config config)
+        access-token (get-access-token! config)
         attachment-ref (send-attachment-pdf! access-token pdf-file)
         request (-> message-info
                     (dissoc :pdf-file)
