@@ -7,12 +7,17 @@
 (def token-endpoint (str base-url "/v1/token"))
 (def attachment-endpoint (str base-url "/v2/attachments"))
 (def messages-endpoint (str base-url "/v2/messages"))
+(def expected-status
+  {token-endpoint      200
+   attachment-endpoint 201
+   messages-endpoint   200})
 
 ;; Wrapper for post so that can be bound in tests.
 (defn- ^:private ^:dynamic *post!* [url request]
   (if base-url
-    (http/post url (merge {:throw-exceptions false}
-                          request))
+    (let [unexceptional-status (get expected-status url)]
+      (http/post url (merge {:unexceptional-status #(= % unexceptional-status)}
+                            request)))
     (do (log/info "Missing suomifi viestit rest base. Skipping request to suomifi viestit...")
         (:status 200))))
 
@@ -92,20 +97,33 @@
   - :street-address string       - The recipient's street address.
   - :zip-code       string       - The recipient's zip code.
 
-  Returns: response?"
-  [{:keys [pdf-file pdf-file-name] :as message-info} &
+  Returns: response"
+  [{:keys [pdf-file pdf-file-name external-id] :as message-info} &
    [config]]
-  (let [default-config {:viranomaistunnus    config/suomifi-viestit-viranomaistunnus
-                        :palvelutunnus       config/suomifi-viestit-palvelutunnus
-                        :yhteyshenkilo-email config/suomifi-viestit-yhteyshenkilo-email
-                        :laskutus-tunniste   config/suomifi-viestit-laskutus-tunniste
-                        :laskutus-salasana   config/suomifi-viestit-laskutus-salasana
-                        :rest-salasana       config/suomifi-viestit-rest-password}
-        config (merge default-config config)
-        access-token (get-access-token! config)
-        attachment-ref (send-attachment-pdf! access-token pdf-file pdf-file-name)
-        request (-> message-info
-                    (dissoc :pdf-file)
-                    (assoc :attachments [attachment-ref])
-                    (->messages config))]
-    (post-json! messages-endpoint {:form-params request} access-token)))
+  (try
+    (let [default-config {:viranomaistunnus    config/suomifi-viestit-viranomaistunnus
+                          :palvelutunnus       config/suomifi-viestit-palvelutunnus
+                          :yhteyshenkilo-email config/suomifi-viestit-yhteyshenkilo-email
+                          :laskutus-tunniste   config/suomifi-viestit-laskutus-tunniste
+                          :laskutus-salasana   config/suomifi-viestit-laskutus-salasana
+                          :rest-salasana       config/suomifi-viestit-rest-password}
+          config (merge default-config config)
+          _ (log/info "Getting access-token for suomifi viesti: " external-id)
+          access-token (get-access-token! config)
+          _ (log/info "Sending attachment for suomifi viesti: " external-id)
+          attachment-ref (send-attachment-pdf! access-token pdf-file pdf-file-name)
+          request (-> message-info
+                      (dissoc :pdf-file)
+                      (assoc :attachments [attachment-ref])
+                      (->messages config))]
+      (log/info "Sending suomifi viesti: " external-id)
+      (post-json! messages-endpoint {:form-params request} access-token))
+    (catch Exception cause
+      (throw
+        (ex-info
+          (str "Sending suomifi message with external-id " external-id " failed.")
+          {:type        :suomifi-viestit-rest-api-failure
+           :external-id external-id
+           :response    (-> cause ex-data :body)
+           :cause       (ex-data cause)}
+          cause)))))

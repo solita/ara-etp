@@ -25,7 +25,12 @@
 
    :suomifi-viestit-failure          {:subject "Suomifi viestin lähetys epäonnistui: {{request.sanoma-tunniste}}"
                                       :body    (str "Suomifi viestin lähettäminen epäonnistui\n"
-                                                    "- Sanoman tunniste: {{request.sanoma.tunniste}}")}})
+                                                    "- Sanoman tunniste: {{request.sanoma.tunniste}}")}
+
+   :suomifi-viestit-rest-api-failure {:subject "Suomifi viestin lähetys epäonnistui: {{external-id}}"
+                                      :body    (str "Suomifi viestin lähettäminen REST-rajapinnan kautta epäonnistui\n"
+                                                    "- Viestin extrenalId: {{external-id}}\n\n"
+                                                    "Etsi logeista externalId:llä, niin voit päätellä, mihin lähettäminen on kaatunut.")}})
 
 (defn- prepare-email [{:keys [subject body]} data]
   (let [config (update-in ch/default-config
