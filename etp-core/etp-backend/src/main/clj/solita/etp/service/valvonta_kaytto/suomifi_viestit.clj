@@ -150,7 +150,9 @@
   (let [type-key (toimenpide/type-key (:type-id toimenpide))
         {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
         asiakas (osapuoli->asiakas osapuoli)
+        tiedosto (toimenpide->tiedosto type-key)
         params {:pdf-file       document
+                :pdf-file-name  (:nimi tiedosto)
                 :title          nimike
                 :body           kuvaus
                 :external-id    (tunniste toimenpide osapuoli)

@@ -33,11 +33,11 @@
                                               :username (:viranomaistunnus config)}})]
     (:access_token (:body response))))
 
-(defn- send-attachment-pdf! [access-token pdf-file]
+(defn- send-attachment-pdf! [access-token pdf-file pdf-file-name]
   (let [request {:as :json
                  :multipart
-                 [{:name "file" :content pdf-file}
-                  {:name "Content/type" :content "application/pdf"}]}]
+                 [{:name pdf-file-name :part-name "file" :content pdf-file :mime-type "application/pdf"}
+                  ]}]
     (:body (*post!* attachment-endpoint (with-access-token access-token request)))))
 
 ;; Stable API
@@ -81,6 +81,7 @@
 
   Required keys:
   - :pdf-file       InputStream  - The PDF attachment that already has address page for paper mail.
+  - :pdf-file-name  string       - The name used for the PDF attachment.
   - :title          string       - The title of the message.
   - :body           string       - The body of the message.
   - :external-id    string       – A unique identifier for the message (tunniste).
@@ -92,7 +93,7 @@
   - :zip-code       string       - The recipient's zip code.
 
   Returns: response?"
-  [{:keys [pdf-file] :as message-info} &
+  [{:keys [pdf-file pdf-file-name] :as message-info} &
    [config]]
   (let [default-config {:viranomaistunnus     config/suomifi-viestit-viranomaistunnus
                         :palvelutunnus        config/suomifi-viestit-palvelutunnus
@@ -102,7 +103,7 @@
                         :rest-salasana        config/suomifi-viestit-rest-password}
         config (merge default-config config)
         access-token (get-access-token! config)
-        attachment-ref (send-attachment-pdf! access-token pdf-file)
+        attachment-ref (send-attachment-pdf! access-token pdf-file pdf-file-name)
         request (-> message-info
                     (dissoc :pdf-file)
                     (assoc :attachments [attachment-ref])
