@@ -1,5 +1,6 @@
 (ns solita.etp.service.valvonta-kaytto.suomifi-viestit
   (:require [clostache.parser :as clostache]
+            [clojure.tools.logging :as log]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
             [solita.etp.service.suomifi-viestit :as suomifi]
             [solita.etp.service.suomifi-viestit-rest :as suomifi-rest]
@@ -12,6 +13,29 @@
   (:import (java.nio.charset StandardCharsets)
            (java.time Instant)
            (java.util Base64)))
+
+;; TODO: this is from laskutus but Exception->Throwable. Put in some utility namespace?
+(defn run-with-retries [f retry-count op-description]
+  "Attempt to run function `f` and return its value. If an exception happens,
+  log it at error level and try running the function again at most `retry-count`
+  times, until it succeeds. If there is no success within the retry count limit,
+  throw the last exception"
+  (loop [retry-count retry-count]
+    (let [[res e]
+          (try
+            [(f) nil]
+            (catch Exception e
+              (log/error e "Exception in attempting to" (str op-description ":"))
+              [nil e]))]
+
+      (if e
+        (if (< 0 retry-count)
+          (do
+            (log/info "Retrying " op-description " in 500 ms")
+            (Thread/sleep 500)
+            (recur (dec retry-count)))
+          (throw e))
+        res))))
 
 (def lahettaja {:nimi             "Valtion tukeman asuntorakentamisen keskus"
                 :jakeluosoite     "PL 35"
@@ -165,8 +189,6 @@
                 :zip-code       (-> asiakas :osoite :postinumero)}]
     (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! params config)))
 
-;; TODO: Add wrapper somewhere in this chain to retry the sending.
-;;       Also soap or rest?
 (defn send-message-to-osapuoli! [valvonta
                                  toimenpide
                                  osapuoli
@@ -188,9 +210,10 @@
                         (filter osapuoli/omistaja?)
                         (filter osapuoli/suomi-fi?))]
 
-    (send-message-to-osapuoli!
-      valvonta
-      toimenpide
-      osapuoli
-      (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
-      config)))
+    (-> #(send-message-to-osapuoli!
+          valvonta
+          toimenpide
+          osapuoli
+          (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
+          config)
+        (run-with-retries 3 "send-message-to-osapuoli!"))))
