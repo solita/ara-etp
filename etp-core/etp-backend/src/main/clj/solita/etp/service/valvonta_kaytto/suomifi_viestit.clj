@@ -2,6 +2,7 @@
   (:require [clostache.parser :as clostache]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
             [solita.etp.service.suomifi-viestit :as suomifi]
+            [solita.etp.service.suomifi-viestit-rest :as suomifi-rest]
             [clojure.java.io :as io]
             [solita.etp.service.pdf :as pdf]
             [solita.common.time :as time]
@@ -138,15 +139,43 @@
      :asiakas            (osapuoli->asiakas osapuoli)
      :tiedostot          (document->tiedosto type-key osapuoli document)}))
 
+;; TODO: Once new implementation works, remove old one.
+(def use-rest true)
+
+(defn rest-case [valvonta
+                 toimenpide
+                 osapuoli
+                 document
+                 & [config]]
+  (let [type-key (toimenpide/type-key (:type-id toimenpide))
+        {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
+        asiakas (osapuoli->asiakas osapuoli)
+        params {:pdf-file       document
+                :title          nimike
+                :body           kuvaus
+                :external-id    (tunniste toimenpide osapuoli)
+                :recipient-id   (:tunnus asiakas)
+                :city           (-> asiakas :osoite :postitoimipaikka)
+                ;; TODO: select-countries?
+                :country-code   (-> asiakas :osoite :maa)
+                :name           (-> asiakas :osoite :nimi)
+                :street-address (-> asiakas :osoite :lahiosoite)
+                :zip-code       (-> asiakas :osoite :postinumero)}]
+    (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! params config)))
+
+;; TODO: Add wrapper somewhere in this chain to retry the sending.
+;;       Also soap or rest?
 (defn send-message-to-osapuoli! [valvonta
                                  toimenpide
                                  osapuoli
                                  document
                                  & [config]]
-  (suomifi/send-message!
-    (->sanoma toimenpide osapuoli)
-    (->kohde valvonta toimenpide osapuoli document)
-    config))
+  (if use-rest
+    (rest-case valvonta toimenpide osapuoli document config)
+    (suomifi/send-message!
+      (->sanoma toimenpide osapuoli)
+      (->kohde valvonta toimenpide osapuoli document)
+      config)))
 
 (defn send-suomifi-viestit! [aws-s3-client
                              valvonta
