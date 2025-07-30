@@ -10,7 +10,8 @@
             [solita.etp.jwt :as jwt]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.whoami :as whoami-service])
-  (:import (java.time Duration Instant)))
+  (:import (java.time Duration Instant)
+           (java.net URI)))
 
 (defn- req->jwt [request]
   (try
@@ -122,3 +123,22 @@
       (if (session-fresh? auth-time time-limit)
         (handler req)
         response/unauthorized))))
+
+(defn- sanitized-path [path]
+  (cond
+    (str/blank? path) "/"
+    (str/starts-with? path "//") "/"
+    (str/starts-with? path "/") path
+    :else (str "/" path)))
+
+(defn ->relative-redirect-url [url-text]
+  (let [uri (URI. url-text)
+        fragment (.getRawFragment uri)
+        query (.getRawQuery uri)
+        path (.getRawPath uri)]
+    (str
+      (sanitized-path path)
+      (when (not (str/blank? query))
+        (str "?" query))
+      (when (not (str/blank? fragment))
+        (str "#" fragment)))))
