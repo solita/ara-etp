@@ -40,7 +40,8 @@
       {#if config.showTestEnvNotification}
         <div class="print:hidden">
           <Container {...containerStyles.red}>
-            <Disclaimer>{$_('DISCLAIMER_WIP')}</Disclaimer>
+            <Disclaimer isEtp2026={config.isEtp2026 ?? false}
+              >{$_('DISCLAIMER_WIP')}</Disclaimer>
           </Container>
         </div>
 
