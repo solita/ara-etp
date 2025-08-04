@@ -142,7 +142,8 @@ module.exports = {
     }),
     new GenerateJsonPlugin('config.json', {
       showTestEnvNotification: true,
-      privateSiteUrl: 'https://localhost:3000'
+      privateSiteUrl: 'https://localhost:3000',
+      isEtp2026: !!process.env.ETP_2026
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
