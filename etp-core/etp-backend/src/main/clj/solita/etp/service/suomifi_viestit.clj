@@ -146,6 +146,24 @@
            (read-response request)
            (assert-tila-koodi! request)))
 
+(defn merge-default-config [config]
+  (merge {:rest-base-url        config/suomifi-viestit-rest-base-url
+          :rest-password        config/suomifi-viestit-rest-password
+          :viranomaistunnus     config/suomifi-viestit-viranomaistunnus
+          :palvelutunnus        config/suomifi-viestit-palvelutunnus
+          :varmenne             config/suomifi-viestit-varmenne
+          :tulostustoimittaja   config/suomifi-viestit-tulostustoimittaja
+          :yhteyshenkilo-nimi   config/suomifi-viestit-yhteyshenkilo-nimi
+          :yhteyshenkilo-email  config/suomifi-viestit-yhteyshenkilo-email
+          :laskutus-tunniste    config/suomifi-viestit-laskutus-tunniste
+          :laskutus-salasana    config/suomifi-viestit-laskutus-salasana
+          :paperitoimitus?      config/suomifi-viestit-paperitoimitus?
+          :laheta-tulostukseen? config/suomifi-viestit-laheta-tulostukseen?
+          :keystore-file        config/suomifi-viestit-keystore-file
+          :keystore-password    config/suomifi-viestit-keystore-password
+          :keystore-alias       config/suomifi-viestit-keystore-alias}
+         config))
+
 (defn send-message! [sanoma
                      kohde
                      & [{:keys [viranomaistunnus palvelutunnus varmenne tulostustoimittaja

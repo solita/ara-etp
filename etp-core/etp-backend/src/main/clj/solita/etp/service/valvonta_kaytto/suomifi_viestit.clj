@@ -2,7 +2,7 @@
   (:require [clostache.parser :as clostache]
             [clojure.tools.logging :as log]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
-            [solita.etp.service.suomifi-viestit :as suomifi]
+            [solita.etp.service.suomifi-viestit :as suomifi-soap]
             [solita.etp.service.suomifi-viestit-rest :as suomifi-rest]
             [clojure.java.io :as io]
             [solita.etp.service.pdf :as pdf]
@@ -191,7 +191,7 @@
                                  osapuoli
                                  document
                                  & [config]]
-  (suomifi/send-message!
+  (suomifi-soap/send-message!
     (->sanoma toimenpide osapuoli)
     (->kohde valvonta toimenpide osapuoli document)
     config))
@@ -201,7 +201,8 @@
                              toimenpide
                              osapuolet
                              & [config]]
-  (let [rest-config-problems (suomifi-rest/validate-config config)
+  (let [config (suomifi-soap/merge-default-config config)
+        rest-config-problems (suomifi-rest/validate-config config)
         send-to-osapuoli! (if (seq rest-config-problems)
                             (do
                               (log/info "Not sending via REST API due to configuration issues: " rest-config-problems)

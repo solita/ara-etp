@@ -12,11 +12,11 @@
   (let [auth-header {"Authorization" (str "Bearer " access-token)}]
     (update request :headers #(merge auth-header (or % {})))))
 
-(defn get-access-token! [{:keys [base-url rest-salasana viranomaistunnus]}]
-  (let [response (*post!* (str base-url "/v1/token")
+(defn get-access-token! [{:keys [rest-base-url rest-password viranomaistunnus]}]
+  (let [response (*post!* (str rest-base-url "/v1/token")
                           {:content-type :json
                            :as           :json
-                           :form-params  {:password rest-salasana
+                           :form-params  {:password rest-password
                                           :username viranomaistunnus}
                            :throw-exceptions false})
         status (:status response)]
@@ -26,14 +26,14 @@
                        :status status})))
     (:access_token (:body response))))
 
-(defn- post-attachment-pdf! [access-token pdf-file pdf-file-name {:keys [base-url]}]
+(defn- post-attachment-pdf! [access-token pdf-file pdf-file-name {:keys [rest-base-url]}]
   (let [request {:as        :json
                  :multipart [{:name      pdf-file-name
                               :part-name "file"
                               :content   pdf-file
                               :mime-type "application/pdf"}]
                  :throw-exceptions false}
-        response (*post!* (str base-url "/v2/attachments")
+        response (*post!* (str rest-base-url "/v2/attachments")
                           (with-access-token access-token request))]
     (when (not (= 201 (:status response)))
       (throw (ex-info "Failed to send attachment to Suomifi viestit REST API"
@@ -85,7 +85,7 @@
                  :content-type :json
                  :as :json
                  :throw-exceptions false}
-        response (*post!* (str (:base-url config) "/v2/messages")
+        response (*post!* (str (:rest-base-url config) "/v2/messages")
                           (with-access-token access-token request))]
     (when (not (= 200 (:status response)))
       (throw (ex-info (str "Expected 200 OK response from Suomifi viestit REST API, but got "
@@ -136,23 +136,23 @@
                              :external-id external-id}
                         e))))))
 
-(defn validate-config [{:keys [base-url
+(defn validate-config [{:keys [rest-base-url
                                laskutus-salasana
                                laskutus-tunniste
                                palvelutunnus
-                               rest-salasana
+                               rest-password
                                viranomaistunnus
                                yhteyshenkilo-email]}]
   (flatten
-    [(if (str/blank? base-url)
+    [(if (str/blank? rest-base-url)
        ["base-url is missing"]
        (try
-         (URI. base-url)
+         (URI. rest-base-url)
          []
-         (catch Exception _ [(str "Invalid base URL: " base-url)])))
+         (catch Exception _ [(str "Invalid base URL: " rest-base-url)])))
      (if (str/blank? laskutus-salasana) ["laskutus-salasana is missing"] [])
      (if (str/blank? laskutus-tunniste) ["laskutus-tunniste is missing"] [])
      (if (str/blank? palvelutunnus) ["palvelutunnus is missing"] [])
-     (if (str/blank? rest-salasana) ["rest-salasana is missing"] [])
+     (if (str/blank? rest-password) ["rest-password is missing"] [])
      (if (str/blank? viranomaistunnus) ["viranomaistunnus is missing"] [])
      (if (str/blank? yhteyshenkilo-email) ["yhteyshenkilo-email is missing"] [])]))
