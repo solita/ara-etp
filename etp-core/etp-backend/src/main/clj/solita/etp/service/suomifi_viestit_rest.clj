@@ -1,49 +1,46 @@
 (ns solita.etp.service.suomifi-viestit-rest
   (:require [clj-http.client :as http]
-            [clojure.tools.logging :as log]
-            [solita.etp.config :as config]))
+            [clojure.string :as str]
+            [clojure.tools.logging :as log])
+  (:import (java.net URI)))
 
-(def base-url config/suomifi-viestit-rest-base-url)
-(def token-endpoint (str base-url "/v1/token"))
-(def attachment-endpoint (str base-url "/v2/attachments"))
-(def messages-endpoint (str base-url "/v2/messages"))
-(def expected-status
-  {token-endpoint      200
-   attachment-endpoint 201
-   messages-endpoint   200})
-
-;; Wrapper for post so that can be bound in tests.
-(defn- ^:private ^:dynamic *post!* [url request]
-  (if base-url
-    (let [unexceptional-status (get expected-status url)]
-      (http/post url (merge {:unexceptional-status #(= % unexceptional-status)}
-                            request)))
-    (do (log/info "Missing suomifi viestit rest base. Skipping request to suomifi viestit...")
-        (:status 200))))
+(def ^{:private true
+       :dynamic true}
+  *post!* http/post)
 
 (defn- with-access-token [access-token request]
   (let [auth-header {"Authorization" (str "Bearer " access-token)}]
     (update request :headers #(merge auth-header (or % {})))))
 
-(defn- post-json!
-  ([url request access-token]
-   (*post!* url (merge (with-access-token access-token request) {:content-type :json
-                                                                 :as           :json}))))
-
-(defn- get-access-token! [config]
-  (let [response (*post!* token-endpoint {:content-type :json
-                                          :as           :json
-                                          :form-params
-                                          {:password (:rest-salasana config)
-                                           :username (:viranomaistunnus config)}})]
+(defn get-access-token! [{:keys [base-url rest-salasana viranomaistunnus]}]
+  (let [response (*post!* (str base-url "/v1/token")
+                          {:content-type :json
+                           :as           :json
+                           :form-params  {:password rest-salasana
+                                          :username viranomaistunnus}
+                           :throw-exceptions false})
+        status (:status response)]
+    (when (not (= 200 status))
+      (throw (ex-info "Failed to get an access token from Suomifi viestit REST API"
+                      {:type :suomifi-viestit-rest-access-token-get
+                       :status status})))
     (:access_token (:body response))))
 
-(defn- send-attachment-pdf! [access-token pdf-file pdf-file-name]
-  (let [request {:as :json
-                 :multipart
-                 [{:name pdf-file-name :part-name "file" :content pdf-file :mime-type "application/pdf"}
-                  ]}]
-    (:body (*post!* attachment-endpoint (with-access-token access-token request)))))
+(defn- post-attachment-pdf! [access-token pdf-file pdf-file-name {:keys [base-url]}]
+  (let [request {:as        :json
+                 :multipart [{:name      pdf-file-name
+                              :part-name "file"
+                              :content   pdf-file
+                              :mime-type "application/pdf"}]
+                 :throw-exceptions false}
+        response (*post!* (str base-url "/v2/attachments")
+                          (with-access-token access-token request))]
+    (when (not (= 201 (:status response)))
+      (throw (ex-info "Failed to send attachment to Suomifi viestit REST API"
+                      {:type    :suomifi-viestit-rest-attachment-send
+                       :status  (:status response)
+                       :response (:body response)})))
+    (:body response)))
 
 ;; Stable API
 (defn ->messages [{:keys [attachments title body external-id recipient-id city country-code name street-address zip-code]} config]
@@ -79,7 +76,28 @@
    :recipient  {:id recipient-id}
    :sender     {:serviceId (:palvelutunnus config)}})
 
+(defn- post-suomifi-message! [message-info attachment-ref access-token config]
+  (let [messages (-> message-info
+                    (dissoc :pdf-file)
+                    (assoc :attachments [attachment-ref])
+                    (->messages config))
+        request {:form-params messages
+                 :content-type :json
+                 :as :json
+                 :throw-exceptions false}
+        response (*post!* (str (:base-url config) "/v2/messages")
+                          (with-access-token access-token request))]
+    (when (not (= 200 (:status response)))
+      (throw (ex-info (str "Expected 200 OK response from Suomifi viestit REST API, but got "
+                           (:status response))
+                      {:type    :suomifi-viestit-rest-message-send
+                       :status  (:status response)
+                       :response (:body response)})))))
+
 (defn send-suomifi-viesti-with-pdf-attachment!
+  [{:keys [external-id]
+    :as   message-info}
+   config]
   "Sends a Suomi.fi-viesti that has the `pdf-file` as an attachment.
 
   The function expects a map containing the following keys:
@@ -98,32 +116,43 @@
   - :zip-code       string       - The recipient's zip code.
 
   Returns: response"
-  [{:keys [pdf-file pdf-file-name external-id] :as message-info} &
-   [config]]
+  (log/info "Sending suomifi viesti with external-id: " external-id)
   (try
-    (let [default-config {:viranomaistunnus    config/suomifi-viestit-viranomaistunnus
-                          :palvelutunnus       config/suomifi-viestit-palvelutunnus
-                          :yhteyshenkilo-email config/suomifi-viestit-yhteyshenkilo-email
-                          :laskutus-tunniste   config/suomifi-viestit-laskutus-tunniste
-                          :laskutus-salasana   config/suomifi-viestit-laskutus-salasana
-                          :rest-salasana       config/suomifi-viestit-rest-password}
-          config (merge default-config config)
-          _ (log/info "Getting access-token for suomifi viesti: " external-id)
-          access-token (get-access-token! config)
-          _ (log/info "Sending attachment for suomifi viesti: " external-id)
-          attachment-ref (send-attachment-pdf! access-token pdf-file pdf-file-name)
-          request (-> message-info
-                      (dissoc :pdf-file)
-                      (assoc :attachments [attachment-ref])
-                      (->messages config))]
-      (log/info "Sending suomifi viesti: " external-id)
-      (post-json! messages-endpoint {:form-params request} access-token))
-    (catch Exception cause
-      (throw
-        (ex-info
-          (str "Sending suomifi message with external-id " external-id " failed.")
-          {:type        :suomifi-viestit-rest-api-failure
-           :external-id external-id
-           :response    (-> cause ex-data :body)
-           :cause       (ex-data cause)}
-          cause)))))
+    (let [access-token (get-access-token! config)
+          attachment-ref (post-attachment-pdf! access-token
+                                               (:pdf-file message-info)
+                                               (:pdf-file-name message-info)
+                                               config)]
+      (post-suomifi-message! message-info
+                             attachment-ref
+                             access-token
+                             config)
+      (log/info "Successfully sent suomifi viesti with external-id: " external-id))
+    (catch Exception e
+      (let [msg (str "Failed to send suomifi.fi viesti with id "
+                     (:external-id message-info) ": " (.getMessage e))]
+        (log/error e msg)
+        (throw (ex-info msg {:type        :suomifi-viestit-rest-api-failure
+                             :external-id external-id}
+                        e))))))
+
+(defn validate-config [{:keys [base-url
+                               laskutus-salasana
+                               laskutus-tunniste
+                               palvelutunnus
+                               rest-salasana
+                               viranomaistunnus
+                               yhteyshenkilo-email]}]
+  (flatten
+    [(if (str/blank? base-url)
+       ["base-url is missing"]
+       (try
+         (URI. base-url)
+         []
+         (catch Exception _ [(str "Invalid base URL: " base-url)])))
+     (if (str/blank? laskutus-salasana) ["laskutus-salasana is missing"] [])
+     (if (str/blank? laskutus-tunniste) ["laskutus-tunniste is missing"] [])
+     (if (str/blank? palvelutunnus) ["palvelutunnus is missing"] [])
+     (if (str/blank? rest-salasana) ["rest-salasana is missing"] [])
+     (if (str/blank? viranomaistunnus) ["viranomaistunnus is missing"] [])
+     (if (str/blank? yhteyshenkilo-email) ["yhteyshenkilo-email is missing"] [])]))

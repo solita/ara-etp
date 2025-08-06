@@ -163,10 +163,7 @@
      :asiakas            (osapuoli->asiakas osapuoli)
      :tiedostot          (document->tiedosto type-key osapuoli document)}))
 
-;; TODO: Once new implementation works, remove old one.
-(def use-rest true)
-
-(defn rest-case [valvonta
+(defn send-suomifi-viesti-using-rest! [valvonta
                  toimenpide
                  osapuoli
                  document
@@ -175,45 +172,50 @@
         {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
         asiakas (osapuoli->asiakas osapuoli)
         tiedosto (toimenpide->tiedosto type-key)
-        params {:pdf-file       document
-                :pdf-file-name  (:nimi tiedosto)
-                :title          nimike
-                :body           kuvaus
-                :external-id    (tunniste toimenpide osapuoli)
-                :recipient-id   (:tunnus asiakas)
-                :city           (-> asiakas :osoite :postitoimipaikka)
-                ;; TODO: select-countries?
-                :country-code   (-> asiakas :osoite :maa)
-                :name           (-> asiakas :osoite :nimi)
-                :street-address (-> asiakas :osoite :lahiosoite)
-                :zip-code       (-> asiakas :osoite :postinumero)}]
-    (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! params config)))
+        message {:pdf-file       document
+                 :pdf-file-name  (:nimi tiedosto)
+                 :title          nimike
+                 :body           kuvaus
+                 :external-id    (tunniste toimenpide osapuoli)
+                 :recipient-id   (:tunnus asiakas)
+                 :city           (-> asiakas :osoite :postitoimipaikka)
+                 ;; TODO: select-countries?
+                 :country-code   (-> asiakas :osoite :maa)
+                 :name           (-> asiakas :osoite :nimi)
+                 :street-address (-> asiakas :osoite :lahiosoite)
+                 :zip-code       (-> asiakas :osoite :postinumero)}]
+    (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! message config)))
 
 (defn send-message-to-osapuoli! [valvonta
                                  toimenpide
                                  osapuoli
                                  document
                                  & [config]]
-  (if use-rest
-    (rest-case valvonta toimenpide osapuoli document config)
-    (suomifi/send-message!
-      (->sanoma toimenpide osapuoli)
-      (->kohde valvonta toimenpide osapuoli document)
-      config)))
+  (suomifi/send-message!
+    (->sanoma toimenpide osapuoli)
+    (->kohde valvonta toimenpide osapuoli document)
+    config))
 
 (defn send-suomifi-viestit! [aws-s3-client
                              valvonta
                              toimenpide
                              osapuolet
                              & [config]]
-  (doseq [osapuoli (->> osapuolet
-                        (filter osapuoli/omistaja?)
-                        (filter osapuoli/suomi-fi?))]
+  (let [rest-config-problems (suomifi-rest/validate-config config)
+        send-to-osapuoli! (if (seq rest-config-problems)
+                            (do
+                              (log/info "Not sending via REST API due to configuration issues: " rest-config-problems)
+                              (log/info "Falling back to SOAP API")
+                              send-message-to-osapuoli!)
+                            send-suomifi-viesti-using-rest!)]
+    (doseq [osapuoli (->> osapuolet
+                          (filter osapuoli/omistaja?)
+                          (filter osapuoli/suomi-fi?))]
 
-    (-> #(send-message-to-osapuoli!
-          valvonta
-          toimenpide
-          osapuoli
-          (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
-          config)
-        (run-with-retries 3 "send-message-to-osapuoli!"))))
+      (-> #(send-to-osapuoli!
+             valvonta
+             toimenpide
+             osapuoli
+             (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
+             config)
+          (run-with-retries 3 "send-message-to-osapuoli!")))))
