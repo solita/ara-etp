@@ -244,7 +244,7 @@
               format={Locales.labelForId($locale, patevyydet)}
               parse={Maybe.Some}
               noneLabel={i18nRoot + '.filters.all'}
-              items={R.pluck('id', patevyydet)} />
+              items={R.compose(R.pluck('id'), R.filter(R.propSatisfies(R.includes(R.__, [1, 2]), 'id')))(patevyydet)} />
           </div>
 
           <div class="lg:w-1/3 w-full px-4 py-4">
