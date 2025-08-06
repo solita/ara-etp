@@ -76,11 +76,11 @@
   (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language)))
 
 (defn find-energiatodistus-digest
-  "This is the function that does first real processing of the signature.
+  "This is the function that does the first real processing of the signature.
 
   Generate the pdf.
   Upload to S3.
-  Return the data that needs to be signed in base64"
+  Return the data that needs to be signed in base64."
   [db aws-s3-client id language laatija-allekirjoitus-id]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing

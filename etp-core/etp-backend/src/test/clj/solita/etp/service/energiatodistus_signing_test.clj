@@ -181,7 +181,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
 
 (t/deftest sign-with-system-states-test
   (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
-    (t/testing "Signing a pdf using the system instead of mpollux"
+    (t/testing "Signing a pdf using the system"
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
             laatija-id (-> laatijat keys sort first)
             db (ts/db-user laatija-id)
@@ -236,7 +236,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
                    tila-id)))))))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-signature-test
-  (t/testing "Signing a pdf using the system instead of mpollux"
+  (t/testing "Signing a pdf using the system"
     (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
             laatija-id (-> laatijat keys sort first)
