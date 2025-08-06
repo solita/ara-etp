@@ -147,8 +147,10 @@
 
 (t/deftest find-patevyydet-test
   (let [patevyydet (service/find-patevyystasot ts/*db*)
-        fi-labels (map :label-fi patevyydet)
-        se-labels (map :label-sv patevyydet)]
+        ; Filter to only test original patevyystaso entries (upcoming PPP features excluded)
+        original-patevyydet (filter #(#{1 2} (:id %)) patevyydet)
+        fi-labels (map :label-fi original-patevyydet)
+        se-labels (map :label-sv original-patevyydet)]
     (t/is (= ["Perustaso" "Ylempi taso"] fi-labels))
     (t/is (= ["Basnivå" "Högre nivå"] se-labels))))
 
