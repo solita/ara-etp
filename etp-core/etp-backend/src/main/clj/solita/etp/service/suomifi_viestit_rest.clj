@@ -42,7 +42,6 @@
                        :response (:body response)})))
     (:body response)))
 
-;; Stable API
 (defn ->messages [{:keys [attachments title body external-id recipient-id city country-code name street-address zip-code]} config]
   {:electronic {:bodyFormat         "Text"
                 :messageServiceType "Normal"
