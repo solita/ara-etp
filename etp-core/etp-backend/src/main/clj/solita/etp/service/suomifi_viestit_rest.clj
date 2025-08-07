@@ -26,7 +26,7 @@
                        :status status})))
     (:access_token (:body response))))
 
-(defn- post-attachment-pdf! [access-token pdf-file pdf-file-name {:keys [rest-base-url]}]
+(defn post-attachment-pdf! [access-token pdf-file pdf-file-name {:keys [rest-base-url]}]
   (let [request {:as        :json
                  :multipart [{:name      pdf-file-name
                               :part-name "file"
@@ -36,7 +36,8 @@
         response (*post!* (str rest-base-url "/v2/attachments")
                           (with-access-token access-token request))]
     (when (not (= 201 (:status response)))
-      (throw (ex-info "Failed to send attachment to Suomifi viestit REST API"
+      (throw (ex-info (str "Failed to send attachment to Suomifi viestit REST API: Expected 201 Created, but got "
+                           (:status response))
                       {:type    :suomifi-viestit-rest-attachment-send
                        :status  (:status response)
                        :response (:body response)})))
@@ -87,7 +88,7 @@
                                                                          :password       (:laskutus-salasana config)
                                                                          :username       (:laskutus-tunniste config)}}})))
 
-(defn- post-suomifi-message! [message-info attachment-ref access-token config]
+(defn post-suomifi-message! [message-info attachment-ref access-token config]
   (let [[msg-endpoint msg-fn] (if (or (str/blank? (:laskutus-tunniste config))
                                       (str/blank? (:laskutus-salasana config)))
                                 (do
@@ -160,11 +161,11 @@
                                yhteyshenkilo-email]}]
   (flatten
     [(if (str/blank? rest-base-url)
-       ["base-url is missing"]
+       ["rest-base-url is missing"]
        (try
          (URI. rest-base-url)
          []
-         (catch Exception _ [(str "Invalid base URL: " rest-base-url)])))
+         (catch Exception _ [(str "Invalid rest-base-url: " rest-base-url)])))
      (if (str/blank? palvelutunnus) ["palvelutunnus is missing"] [])
      (if (str/blank? rest-password) ["rest-password is missing"] [])
      (if (str/blank? viranomaistunnus) ["viranomaistunnus is missing"] [])
