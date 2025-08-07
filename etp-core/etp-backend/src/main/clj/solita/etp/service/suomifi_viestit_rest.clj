@@ -42,49 +42,67 @@
                        :response (:body response)})))
     (:body response)))
 
-(defn ->messages [{:keys [attachments title body external-id recipient-id city country-code name street-address zip-code]} config]
+(defn ->messages-electronic [{:keys [attachments title body external-id recipient-id]} config]
   {:electronic {:bodyFormat         "Text"
                 :messageServiceType "Normal"
                 :attachments        attachments
                 :title              title
+                ;; NOTE: in the notifications member, the values seem to be not just some placeholders, but
+                ;; the actual values of the stringy enums we want to use
                 :notifications      {:senderDetailsInNotifications "Organisation and service name"
                                      :unreadMessageNotification    {:reminder "Default reminder"}}
                 :replyAllowedBy     "No one"
                 :body               body
                 :visibility         "Normal"}
    :externalId external-id
-   :paperMail  {:messageServiceType           "Normal"
-                :createAddressPage            false
-                :rotateLandscapePages         true
-                :attachments                  attachments
-                :recipient                    {:address {:city          city
-                                                         :countryCode   country-code
-                                                         :name          name
-                                                         :streetAddress street-address
-                                                         :zipCode       zip-code}}
-                :sender                       {:address {:city          "Valtioneuvosto"
-                                                         :countryCode   "FI"
-                                                         :name          "Ympäristöministeriö, Valtion tukeman asuntorakentamisen keskus"
-                                                         :streetAddress "PL 35"
-                                                         :zipCode       "00023"}}
-                :twoSidedPrinting             true
-                :colorPrinting                true
-                :printingAndEnvelopingService {:postiMessaging {:contactDetails {:email (:yhteyshenkilo-email config)}
-                                                                :password       (:laskutus-salasana config)
-                                                                :username       (:laskutus-tunniste config)}}}
    :recipient  {:id recipient-id}
    :sender     {:serviceId (:palvelutunnus config)}})
 
+(defn ->messages [{:keys [attachments city country-code name street-address zip-code] :as message}
+                  config]
+  "Converts a message map to the format expected by the Suomifi viestit REST API for electronic message with
+   a paper paper mail fallback.
+
+   The resulting message is the same as the one produced by the `->messages-electronic` function, but it includes
+   an additional field for paper mail delivery, such as the recipient's address and sender's address."
+  (-> message
+      (->messages-electronic config)
+      (assoc :paperMail {:messageServiceType           "Normal"
+                         :createAddressPage            false
+                         :rotateLandscapePages         true
+                         :attachments                  attachments
+                         :recipient                    {:address {:city          city
+                                                                  :countryCode   country-code
+                                                                  :name          name
+                                                                  :streetAddress street-address
+                                                                  :zipCode       zip-code}}
+                         :sender                       {:address {:city          "Valtioneuvosto"
+                                                                  :countryCode   "FI"
+                                                                  :name          "Ympäristöministeriö, Valtion tukeman asuntorakentamisen keskus"
+                                                                  :streetAddress "PL 35"
+                                                                  :zipCode       "00023"}}
+                         :twoSidedPrinting             true
+                         :colorPrinting                true
+                         :printingAndEnvelopingService {:postiMessaging {:contactDetails {:email (:yhteyshenkilo-email config)}
+                                                                         :password       (:laskutus-salasana config)
+                                                                         :username       (:laskutus-tunniste config)}}})))
+
 (defn- post-suomifi-message! [message-info attachment-ref access-token config]
-  (let [messages (-> message-info
-                    (dissoc :pdf-file)
-                    (assoc :attachments [attachment-ref])
-                    (->messages config))
-        request {:form-params messages
-                 :content-type :json
-                 :as :json
+  (let [[msg-endpoint msg-fn] (if (or (str/blank? (:laskutus-tunniste config))
+                                      (str/blank? (:laskutus-salasana config)))
+                                (do
+                                  (log/info "Falling back to electronic-only delivery for Suomifi viesti")
+                                  [(str (:rest-base-url config) "/v2/messages/electronic") ->messages-electronic])
+                                [(str (:rest-base-url config) "/v2/messages") ->messages])
+        messages (-> message-info
+                     (dissoc :pdf-file)
+                     (assoc :attachments [attachment-ref])
+                     (msg-fn config))
+        request {:form-params      messages
+                 :content-type     :json
+                 :as               :json
                  :throw-exceptions false}
-        response (*post!* (str (:rest-base-url config) "/v2/messages")
+        response (*post!* msg-endpoint
                           (with-access-token access-token request))]
     (when (not (= 200 (:status response)))
       (throw (ex-info (str "Expected 200 OK response from Suomifi viestit REST API, but got "
@@ -136,8 +154,6 @@
                         e))))))
 
 (defn validate-config [{:keys [rest-base-url
-                               laskutus-salasana
-                               laskutus-tunniste
                                palvelutunnus
                                rest-password
                                viranomaistunnus
@@ -149,8 +165,6 @@
          (URI. rest-base-url)
          []
          (catch Exception _ [(str "Invalid base URL: " rest-base-url)])))
-     (if (str/blank? laskutus-salasana) ["laskutus-salasana is missing"] [])
-     (if (str/blank? laskutus-tunniste) ["laskutus-tunniste is missing"] [])
      (if (str/blank? palvelutunnus) ["palvelutunnus is missing"] [])
      (if (str/blank? rest-password) ["rest-password is missing"] [])
      (if (str/blank? viranomaistunnus) ["viranomaistunnus is missing"] [])
