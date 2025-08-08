@@ -1,7 +1,10 @@
 (ns solita.etp.service.valvonta-kaytto.suomifi-viestit
   (:require [clostache.parser :as clostache]
+            [clojure.tools.logging :as log]
+            [solita.etp.retry :as retry]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
-            [solita.etp.service.suomifi-viestit :as suomifi]
+            [solita.etp.service.suomifi-viestit :as suomifi-soap]
+            [solita.etp.service.suomifi-viestit-rest :as suomifi-rest]
             [clojure.java.io :as io]
             [solita.etp.service.pdf :as pdf]
             [solita.common.time :as time]
@@ -138,12 +141,35 @@
      :asiakas            (osapuoli->asiakas osapuoli)
      :tiedostot          (document->tiedosto type-key osapuoli document)}))
 
+(defn send-suomifi-viesti-using-rest! [valvonta
+                 toimenpide
+                 osapuoli
+                 document
+                 & [config]]
+  (let [type-key (toimenpide/type-key (:type-id toimenpide))
+        {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
+        asiakas (osapuoli->asiakas osapuoli)
+        tiedosto (toimenpide->tiedosto type-key)
+        message {:pdf-file       document
+                 :pdf-file-name  (:nimi tiedosto)
+                 :title          nimike
+                 :body           kuvaus
+                 :external-id    (tunniste toimenpide osapuoli)
+                 :recipient-id   (:tunnus asiakas)
+                 :city           (-> asiakas :osoite :postitoimipaikka)
+                 ;; TODO: select-countries?
+                 :country-code   (-> asiakas :osoite :maa)
+                 :name           (-> asiakas :osoite :nimi)
+                 :street-address (-> asiakas :osoite :lahiosoite)
+                 :zip-code       (-> asiakas :osoite :postinumero)}]
+    (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! message config)))
+
 (defn send-message-to-osapuoli! [valvonta
                                  toimenpide
                                  osapuoli
                                  document
                                  & [config]]
-  (suomifi/send-message!
+  (suomifi-soap/send-message!
     (->sanoma toimenpide osapuoli)
     (->kohde valvonta toimenpide osapuoli document)
     config))
@@ -153,13 +179,22 @@
                              toimenpide
                              osapuolet
                              & [config]]
-  (doseq [osapuoli (->> osapuolet
-                        (filter osapuoli/omistaja?)
-                        (filter osapuoli/suomi-fi?))]
+  (let [config (suomifi-soap/merge-default-config config)
+        rest-config-problems (suomifi-rest/validate-config config)
+        send-to-osapuoli! (if (seq rest-config-problems)
+                            (do
+                              (log/info "Not sending via REST API due to configuration issues: " rest-config-problems)
+                              (log/info "Falling back to SOAP API")
+                              send-message-to-osapuoli!)
+                            send-suomifi-viesti-using-rest!)]
+    (doseq [osapuoli (->> osapuolet
+                          (filter osapuoli/omistaja?)
+                          (filter osapuoli/suomi-fi?))]
 
-    (send-message-to-osapuoli!
-      valvonta
-      toimenpide
-      osapuoli
-      (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
-      config)))
+      (-> #(send-to-osapuoli!
+             valvonta
+             toimenpide
+             osapuoli
+             (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
+             config)
+          (retry/run-with-retries 3 "send-message-to-osapuoli!")))))
