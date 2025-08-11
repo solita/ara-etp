@@ -15,6 +15,7 @@
   import * as YritysApi from '@Pages/yritys/yritys-api';
   import * as GeoApi from '@Utility/api/geo-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
+  import * as versionApi from '@Component/Version/version-api';
 
   import { location, querystring, replace } from 'svelte-spa-router';
   import { _, locale } from '@Language/i18n';
@@ -64,7 +65,8 @@
       yritykset: YritysApi.getAllYritykset,
       patevyydet: LaatijaApi.patevyydet,
       toimintaalueet: GeoApi.toimintaalueet,
-      whoami: KayttajaApi.whoami
+      whoami: KayttajaApi.whoami,
+      config: versionApi.getConfig
     })
   );
 
@@ -221,7 +223,7 @@
 
   <Overlay {overlay}>
     <div slot="content">
-      {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami }}
+      {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami, config }}
         <div class="flex flex-wrap">
           <div class="lg:w-1/3 w-full px-4 py-4">
             <Select
@@ -246,7 +248,12 @@
               noneLabel={i18nRoot + '.filters.all'}
               items={R.compose(
                 R.pluck('id'),
-                R.filter(R.propSatisfies(R.includes(R.__, [1, 2]), 'id'))
+                R.filter(
+                  R.propSatisfies(
+                    config.isEtp2026 ? R.T : R.includes(R.__, [1, 2]),
+                    'id'
+                  )
+                )
               )(patevyydet)} />
           </div>
 
