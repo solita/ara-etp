@@ -105,7 +105,8 @@
                  :throw-exceptions false}
         response (*post!* msg-endpoint
                           (with-access-token access-token request))]
-    (when (not (= 200 (:status response)))
+    (if (= 200 (:status response))
+      response
       (throw (ex-info (str "Expected 200 OK response from Suomifi viestit REST API, but got "
                            (:status response))
                       {:type    :suomifi-viestit-rest-message-send
@@ -140,12 +141,13 @@
           attachment-ref (post-attachment-pdf! access-token
                                                (:pdf-file message-info)
                                                (:pdf-file-name message-info)
-                                               config)]
-      (post-suomifi-message! message-info
-                             attachment-ref
-                             access-token
-                             config)
-      (log/info "Successfully sent suomifi viesti with external-id: " external-id))
+                                               config)
+          response (post-suomifi-message! message-info
+                                          attachment-ref
+                                          access-token
+                                          config)]
+      (log/info "Suomi.fi viesti with external-id: " external-id
+      " was successfully accepted with messageId " (-> response :body :messageId)))
     (catch Exception e
       (let [msg (str "Failed to send suomifi.fi viesti with id "
                      (:external-id message-info) ": " (.getMessage e))]
