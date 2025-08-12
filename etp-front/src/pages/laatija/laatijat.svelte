@@ -251,7 +251,9 @@
                 R.pluck('id'),
                 R.filter(
                   R.propSatisfies(
-                    config.isEtp2026 ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
+                    config.isEtp2026
+                      ? R.T
+                      : PatevyystasotUtils.isBasicPatevyystaso,
                     'id'
                   )
                 )

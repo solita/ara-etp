@@ -10,7 +10,6 @@
   import * as LocaleUtils from '@Language/locale-utils';
   import * as PatevyystasotUtils from '@Utility/patevyystaso-utils';
 
-
   import { locale, _ } from '@Language/i18n';
 
   import H2 from '@Component/H/H2';
@@ -67,10 +66,12 @@
 
   $: patevyydetIds = R.compose(
     R.pluck('id'),
-    R.filter(R.propSatisfies(
-      config?.isEtp2026 ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
-      'id'
-    ))
+    R.filter(
+      R.propSatisfies(
+        config?.isEtp2026 ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
+        'id'
+      )
+    )
   )(luokittelut.patevyydet);
 
   $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
