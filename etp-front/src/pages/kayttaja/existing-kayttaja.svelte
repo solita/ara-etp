@@ -14,6 +14,7 @@
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
+  import * as versionApi from '@Component/Version/version-api';
 
   import AineistoasiakasForm from './aineistoasiakas-form.svelte';
   import KayttajaForm from './kayttaja-form.svelte';
@@ -134,7 +135,7 @@
         overlay = false;
         dirty = false;
       },
-      Future.parallelObject(7, {
+      Future.parallelObject(8, {
         kayttaja: kayttajaFuture,
         laatija: R.chain(
           kayttaja =>
@@ -151,6 +152,7 @@
           kayttajaFuture
         ),
         whoami: KayttajaApi.whoami,
+        config: versionApi.getConfig,
         roolit: KayttajaApi.roolit,
         aineistot: aineistotFuture,
         luokittelut: Future.parallelObject(5, {
@@ -197,7 +199,7 @@
 <Overlay {overlay}>
   <div slot="content">
     <DirtyConfirmation {dirty} />
-    {#each resources.toArray() as { kayttaja, laatija, whoami, luokittelut, roolit, aineistot, kayttajaAineistot }}
+    {#each resources.toArray() as { kayttaja, laatija, whoami, config, luokittelut, roolit, aineistot, kayttajaAineistot }}
       {#if Maybe.isSome(laatija)}
         <div class="mt-6">
           <H1 text={pageTitle(whoami, kayttaja)} />
@@ -208,6 +210,7 @@
             cancel={_ => load(params)}
             bind:dirty
             {whoami}
+            {config}
             {luokittelut}
             laatija={mergeKayttajaLaatija(kayttaja, Maybe.get(laatija))} />
         </div>

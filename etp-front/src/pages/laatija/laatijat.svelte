@@ -16,6 +16,7 @@
   import * as GeoApi from '@Utility/api/geo-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as versionApi from '@Component/Version/version-api';
+  import * as PatevyystasotUtils from '@Utility/patevyystaso-utils';
 
   import { location, querystring, replace } from 'svelte-spa-router';
   import { _, locale } from '@Language/i18n';
@@ -250,7 +251,7 @@
                 R.pluck('id'),
                 R.filter(
                   R.propSatisfies(
-                    config.isEtp2026 ? R.T : R.includes(R.__, [1, 2]),
+                    config.isEtp2026 ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
                     'id'
                   )
                 )

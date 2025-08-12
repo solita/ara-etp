@@ -10,6 +10,7 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as LaatijaApi from '@Pages/laatija/laatija-api';
   import * as LaskutusApi from '@Utility/api/laskutus-api';
+  import * as versionApi from '@Component/Version/version-api';
 
   import LaatijaForm from './laatija-form.svelte';
 
@@ -43,6 +44,7 @@
     },
     Future.parallelObject(2, {
       whoami: KayttajaApi.whoami,
+      config: versionApi.getConfig,
       luokittelut: Future.parallelObject(5, {
         countries: GeoApi.countries,
         toimintaalueet: GeoApi.toimintaalueet,
@@ -79,9 +81,10 @@
 <H1 text={i18n('kayttajat.new-partner')} />
 <Overlay {overlay}>
   <div slot="content">
-    {#each resources.toArray() as { whoami, luokittelut }}
+    {#each resources.toArray() as { whoami, config, luokittelut }}
       <LaatijaForm
         {luokittelut}
+        {config}
         {laatija}
         {whoami}
         {dirty}

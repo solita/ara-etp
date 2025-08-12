@@ -8,6 +8,8 @@
   import * as Formats from '@Utility/formats';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as LocaleUtils from '@Language/locale-utils';
+  import * as PatevyystasotUtils from '@Utility/patevyystaso-utils';
+
 
   import { locale, _ } from '@Language/i18n';
 
@@ -33,6 +35,7 @@
   export let laatija;
   export let whoami;
   export let luokittelut;
+  export let config;
   export let submit;
   export let dirty;
   export let cancel;
@@ -62,7 +65,13 @@
 
   $: toimintaAlueetIds = R.pluck('id', luokittelut.toimintaalueet);
 
-  $: patevyydetIds = R.pluck('id', luokittelut.patevyydet);
+  $: patevyydetIds = R.compose(
+    R.pluck('id'),
+    R.filter(R.propSatisfies(
+      config?.isEtp2026 ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
+      'id'
+    ))
+  )(luokittelut.patevyydet);
 
   $: laskutuskieletIds = R.pluck('id', luokittelut.laskutuskielet);
 
