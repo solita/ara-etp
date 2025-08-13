@@ -1,8 +1,0 @@
-{
-  "version": "dummy",
-  "httpMethods": "GET, POST",
-  "contentTypes": "data, digest",
-  "signatureTypes": "signature",
-  "selectorAvailable": true,
-  "hashAlgorithms": "SHA1, SHA256, SHA384, SHA512"
-}
