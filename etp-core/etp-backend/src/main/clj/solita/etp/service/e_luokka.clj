@@ -1,6 +1,7 @@
 (ns solita.etp.service.e-luokka
   (:require [clojure.core.match :as match]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
+            [solita.etp.etp2026 :as etp2026]
             [solita.common.logic :as logic])
   (:import (java.math RoundingMode)))
 
@@ -145,7 +146,7 @@
      kayttotarkoitus (find-by-id (:kayttotarkoitusluokka-id alakayttotarkoitus)
                                  kayttotarkoitukset)]
 
-    (assoc (raja-asteikko-f versio
+    (assoc (raja-asteikko-f (etp2026/implement-2026-via-2018 versio "2026 raja-asteikko are not known yet")
                             (:id kayttotarkoitus)
                             alakayttotarkoitus-id
                             nettoala)
