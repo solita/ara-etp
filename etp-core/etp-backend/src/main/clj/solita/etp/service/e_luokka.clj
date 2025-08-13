@@ -168,7 +168,12 @@
             versio alakayttotarkoitus-id nettoala e-luku))
 
 (def energiamuotokerroin
-  {2018 {:fossiilinen-polttoaine 1M
+  {2026 {:fossiilinen-polttoaine 1M
+         :sahko 1.2M
+         :kaukojaahdytys 0.28M
+         :kaukolampo 0.5M
+         :uusiutuva-polttoaine 0.5M}
+   2018 {:fossiilinen-polttoaine 1M
          :sahko 1.2M
          :kaukojaahdytys 0.28M
          :kaukolampo 0.5M
