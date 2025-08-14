@@ -60,7 +60,8 @@
 
 (def Whoami (-> Kayttaja
                 (dissoc :passivoitu :valvoja :login :api-key)
-                (assoc :partner schema/Bool)))
+                (assoc :partner schema/Bool)
+                (assoc :patevyystaso (schema/maybe schema/Int))))
 
 (def KayttajaHistory
   (-> Kayttaja
