@@ -6,12 +6,12 @@
             [solita.etp.service.energiatodistus :as energiatodistus-service]))
 
 (defn post
-  ([version save-schema coerce]
+  ([version save-schema coerce access]
   {:post
     {:summary    "Lisää luonnostilaisen energiatodistuksen"
      :parameters {:body save-schema}
      :responses  {201 {:body common-schema/IdAndWarnings}}
-     :access     rooli-service/laatija?
+     :access     access
      :handler    (fn [{:keys [db whoami parameters uri]}]
                    (api-response/with-exceptions
                      #(api-response/created uri
@@ -23,9 +23,9 @@
                       {:type :invalid-sisainen-kuorma :response 400}
                       {:type :invalid-laskutusosoite :response 400}]))}})
 
-  ([version save-schema] (post version save-schema identity)))
+  ([version save-schema] (post version save-schema identity rooli-service/laatija?)))
 
-(defn gpd-routes [get-schema save-schema]
+(defn gpd-routes [get-schema save-schema laatija-access]
   [""
    {:get    {:summary    "Hae yksittäinen energiatodistus tunnisteella (id)"
              :parameters {:path {:id common-schema/Key}}
@@ -40,7 +40,7 @@
     :put    {:summary    "Päivitä energiatodistuksen tietoja"
              :parameters {:path {:id common-schema/Key}
                           :body save-schema}
-             :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
+             :access     (some-fn laatija-access rooli-service/paakayttaja?)
              :responses  {200 {:body nil}
                           404 {:body common-schema/GeneralError}}
              :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db whoami parameters]}]
@@ -59,7 +59,7 @@
 
     :delete {:summary    "Poista luonnostilainen energiatodistus"
              :parameters {:path {:id common-schema/Key}}
-             :access     rooli-service/laatija?
+             :access     laatija-access
              :responses  {200 {:body nil}
                           404 {:body schema/Str}}
              :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]

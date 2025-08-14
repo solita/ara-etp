@@ -193,7 +193,8 @@
        ["" (crud-api/post 2013 energiatodistus-schema/EnergiatodistusSave2013)]
        ["/:id"
         (crud-api/gpd-routes energiatodistus-schema/Energiatodistus2013
-                             energiatodistus-schema/EnergiatodistusSave2013)
+                             energiatodistus-schema/EnergiatodistusSave2013
+                             rooli-service/laatija?)
         (pdf-route 2013)
         crud-api/discarded
         liite-api/routes
@@ -203,8 +204,21 @@
        ["" (crud-api/post 2018 energiatodistus-schema/EnergiatodistusSave2018)]
        ["/:id"
         (crud-api/gpd-routes energiatodistus-schema/Energiatodistus2018
-                             energiatodistus-schema/EnergiatodistusSave2018)
+                             energiatodistus-schema/EnergiatodistusSave2018
+                             rooli-service/laatija?)
         (pdf-route 2018)
+        crud-api/discarded
+        liite-api/routes
+        signing-api/routes]]
+      ["/2026"
+       ["" (crud-api/post 2026 energiatodistus-schema/EnergiatodistusSave2026
+                          identity rooli-service/ppp-laatija?)]
+       ["/:id"
+        (crud-api/gpd-routes energiatodistus-schema/Energiatodistus2026
+                             energiatodistus-schema/EnergiatodistusSave2026
+                             rooli-service/ppp-laatija?)
+        ;; TODO AE-2550 Go check the version use in PDF generation
+        (pdf-route 2026)
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]]
