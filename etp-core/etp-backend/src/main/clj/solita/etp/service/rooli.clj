@@ -13,6 +13,11 @@
 (defn laatija? [{:keys [rooli]}]
   (= rooli 0))
 
+(defn ppp-laatija? [{:keys [patevyystaso] :as whoami}]
+  (and (laatija? whoami)
+       (or (= patevyystaso 3)
+           (= patevyystaso 4))))
+
 (def accredited-laatija?
   "Accredited laatijan pätevyyden on todentanut virallinen pätevyyden toteaja.
    Partner-laatijalla ei ole oikeasti laatijan pätevyyttä ja hän voi lähinnä kokeilla tai testata järjestelmää."

@@ -5,6 +5,7 @@ SELECT k.id id, k.etunimi etunimi, k.sukunimi sukunimi, k.email email, k.puhelin
        k.organisaatio,
        k.api_key_hash api_key_hash, k.verifytime,
        coalesce(l.partner, false) as partner,
+       l.patevyystaso,
        k.titteli_fi, k.titteli_sv
 FROM kayttaja k
 LEFT JOIN laatija l ON l.id = k.id
