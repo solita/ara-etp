@@ -217,7 +217,6 @@
         (crud-api/gpd-routes energiatodistus-schema/Energiatodistus2026
                              energiatodistus-schema/EnergiatodistusSave2026
                              rooli-service/ppp-laatija?)
-        ;; TODO AE-2550 Go check the version use in PDF generation
         (pdf-route 2026)
         crud-api/discarded
         liite-api/routes
