@@ -92,7 +92,6 @@
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
-             ;; TODO: Check 2013 version positioning or is it even relevant?
              origin-y (case versio 2013 648 2018 666)
              digest-and-stuff (pdf-sign/unsigned-document->digest-and-params energiatodistus-pdf
                                                                              {:signature-png signature-png
