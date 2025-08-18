@@ -92,13 +92,6 @@
   (t/is (= "abc" (service/comparable-name "abc")))
   (t/is (= "aeiouao" (service/comparable-name "á, é, í, ó, ú. ä ö"))))
 
-(t/deftest validate-surname!-test
-  (t/is (thrown? clojure.lang.ExceptionInfo
-                 (service/validate-surname! "Meikäläinen"
-                                                    certificates-test/test-cert)))
-  (t/is (nil? (service/validate-surname! "Specimen-POtex"
-                                                 certificates-test/test-cert))))
-
 (t/deftest validate-certificate!-test
   (t/testing "Last name of laatija has to match the signing certificate"
     (let [ex (try

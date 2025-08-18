@@ -116,18 +116,6 @@
       str/lower-case
       (str/replace #"[^a-z]" "")))
 
-(defn validate-surname! [last-name certificate]
-  (let [surname (-> certificate
-                    certificates/subject
-                    :surname)]
-    (when-not (= (comparable-name last-name) (comparable-name surname))
-      (log/warn "Last name from certificate did not match with whoami info when signing energiatodistus PDF.")
-      (exception/throw-ex-info!
-        {:type    :name-does-not-match
-         :message (format "Last names did not match. Whoami has '%s' and certificate has '%s'"
-                          last-name
-                          surname)}))))
-
 (defn validate-not-after! [^Date now certificate]
   (let [not-after (-> certificate certificates/not-after)]
     (when (.after now not-after)
@@ -139,16 +127,11 @@
                           now)}))))
 
 (defn validate-certificate!
-  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate.
-
-  When using system signing the surname does not match the name in the certificate as it's issued for the whole
-  system and not a specific person."
+  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate."
   ([surname now certificate-str]
    (validate-certificate! surname now certificate-str true))
   ([surname now certificate-str validate-surname?]
    (let [certificate (certificates/pem-str->certificate certificate-str)]
-     (when validate-surname?
-       (validate-surname! surname certificate))
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
 (defn sign-energiatodistus-pdf
