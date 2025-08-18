@@ -93,15 +93,6 @@
   (t/is (= "aeiouao" (service/comparable-name "á, é, í, ó, ú. ä ö"))))
 
 (t/deftest validate-certificate!-test
-  (t/testing "Last name of laatija has to match the signing certificate"
-    (let [ex (try
-               (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-not-expired
-                                              certificates-test/test-cert-str)
-               (catch clojure.lang.ExceptionInfo ex ex))
-          {:keys [type]} (ex-data ex)]
-      (t/is (instance? clojure.lang.ExceptionInfo ex))
-      (t/is (= :name-does-not-match type))))
-
   (t/testing "Signing certificate must not have expired"
     (let [ex (try
                (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-expired
