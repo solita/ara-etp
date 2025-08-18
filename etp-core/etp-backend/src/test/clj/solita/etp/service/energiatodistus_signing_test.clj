@@ -119,11 +119,9 @@
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
-        whoami {:id laatija-id}]
+        id (-> energiatodistukset keys sort first)]
     (t/is (= (service/sign-energiatodistus-pdf db
                                                        ts/*aws-s3-client*
-                                                       whoami
                                                        energiatodistus-test-data/time-when-test-cert-not-expired
                                                        id
                                                        "fi"
@@ -135,7 +133,6 @@
                                              energiatodistus-test-data/time-when-test-cert-not-expired)
     (t/is (= (service/sign-energiatodistus-pdf db
                                                        ts/*aws-s3-client*
-                                                       whoami
                                                        energiatodistus-test-data/time-when-test-cert-not-expired
                                                        id
                                                        "fi"

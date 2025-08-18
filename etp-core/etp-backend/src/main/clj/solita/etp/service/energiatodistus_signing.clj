@@ -132,7 +132,7 @@
   (let [certificate (certificates/pem-str->certificate certificate-str)]
     (validate-not-after! (-> now Instant/from Date/from) certificate)))
 
-(defn sign-energiatodistus-pdf [db aws-s3-client whoami now id language {:keys [chain signature]}]
+(defn sign-energiatodistus-pdf [db aws-s3-client now id language {:keys [chain signature]}]
   (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
@@ -197,7 +197,7 @@
     (audit-log-message laatija-allekirjoitus-id id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign
-  [{:keys [db whoami now id laatija-allekirjoitus-id aws-s3-client aws-kms-client]} language digest-response]
+  [{:keys [db now id laatija-allekirjoitus-id aws-s3-client aws-kms-client]} language digest-response]
   (let [data-to-sign (-> digest-response
                          :digest
                          (.getBytes StandardCharsets/UTF_8)
@@ -214,7 +214,7 @@
         signature-and-chain {:chain chain-as-oneliners :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
-      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
+      #(sign-energiatodistus-pdf db aws-s3-client now id language signature-and-chain)
       (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end

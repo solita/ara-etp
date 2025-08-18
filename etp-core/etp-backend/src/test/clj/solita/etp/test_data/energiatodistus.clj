@@ -141,7 +141,6 @@
         (energiatodistus-signing-service/sign-energiatodistus-pdf
           ts/*db*
           ts/*aws-s3-client*
-          {:id laatija-id :sukunimi "Specimen-Potex"}
           now
           energiatodistus-id
           language-code
