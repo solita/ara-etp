@@ -127,12 +127,10 @@
                           now)}))))
 
 (defn validate-certificate!
-  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate."
-  ([now certificate-str]
-   (validate-certificate! now certificate-str true))
-  ([now certificate-str validate-surname?]
-   (let [certificate (certificates/pem-str->certificate certificate-str)]
-     (validate-not-after! (-> now Instant/from Date/from) certificate))))
+  "Validates that the certificate is not expired."
+  [now certificate-str]
+  (let [certificate (certificates/pem-str->certificate certificate-str)]
+    (validate-not-after! (-> now Instant/from Date/from) certificate)))
 
 (defn sign-energiatodistus-pdf
   ([db aws-s3-client whoami now id language signature-and-chain]
@@ -143,9 +141,7 @@
        complete-energiatodistus
        #(do
           (validate-certificate! now
-                                 (first chain)
-                                 ;; Validate the surname in the certificate only when signing with card-reader.
-                                 (= signing-method :card-reader))
+                                 (first chain))
           (let [key (energiatodistus-service/file-key id language)
                 unsigned-pdf-is (file-service/find-file aws-s3-client key)
                 sig-params-is (load-stateful-signature-parameters aws-s3-client id language)
