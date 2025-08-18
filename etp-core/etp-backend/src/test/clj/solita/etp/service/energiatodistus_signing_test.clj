@@ -95,9 +95,8 @@
 (t/deftest validate-certificate!-test
   (t/testing "Last name of laatija has to match the signing certificate"
     (let [ex (try
-               (service/validate-certificate! "Meikäläinen"
-                                                      energiatodistus-test-data/time-when-test-cert-not-expired
-                                                      certificates-test/test-cert-str)
+               (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-not-expired
+                                              certificates-test/test-cert-str)
                (catch clojure.lang.ExceptionInfo ex ex))
           {:keys [type]} (ex-data ex)]
       (t/is (instance? clojure.lang.ExceptionInfo ex))
@@ -105,18 +104,16 @@
 
   (t/testing "Signing certificate must not have expired"
     (let [ex (try
-               (service/validate-certificate! "Specimen-POtex"
-                                                      energiatodistus-test-data/time-when-test-cert-expired
-                                                      certificates-test/test-cert-str)
+               (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-expired
+                                              certificates-test/test-cert-str)
                (catch clojure.lang.ExceptionInfo ex ex))
           {:keys [type]} (ex-data ex)]
       (t/is (instance? clojure.lang.ExceptionInfo ex))
       (t/is (= :expired-signing-certificate type))))
 
   (t/testing "With the expected name and within the validity period of the certificate, signing succeeds"
-    (service/validate-certificate! "Specimen-POtex"
-                                           energiatodistus-test-data/time-when-test-cert-not-expired
-                                           certificates-test/test-cert-str)))
+    (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-not-expired
+                                   certificates-test/test-cert-str)))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-energiatodistus-pdf-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)

@@ -128,9 +128,9 @@
 
 (defn validate-certificate!
   "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate."
-  ([surname now certificate-str]
-   (validate-certificate! surname now certificate-str true))
-  ([surname now certificate-str validate-surname?]
+  ([now certificate-str]
+   (validate-certificate! now certificate-str true))
+  ([now certificate-str validate-surname?]
    (let [certificate (certificates/pem-str->certificate certificate-str)]
      (validate-not-after! (-> now Instant/from Date/from) certificate))))
 
@@ -142,8 +142,7 @@
      (do-when-signing
        complete-energiatodistus
        #(do
-          (validate-certificate! (:sukunimi whoami)
-                                 now
+          (validate-certificate! now
                                  (first chain)
                                  ;; Validate the surname in the certificate only when signing with card-reader.
                                  (= signing-method :card-reader))
