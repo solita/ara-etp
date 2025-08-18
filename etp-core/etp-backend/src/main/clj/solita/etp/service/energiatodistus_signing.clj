@@ -210,8 +210,8 @@
                                   (pdf-sign/digest->cms-signature-with-system
                                     data-to-sign
                                     system-signature-cms-info))
-        chain-like-from-card-reader (mapv cert-pem->one-liner-without-headers chain)
-        signature-and-chain {:chain chain-like-from-card-reader :signature (String. signature)}]
+        chain-as-oneliners (mapv cert-pem->one-liner-without-headers chain)
+        signature-and-chain {:chain chain-as-oneliners :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
       #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
