@@ -132,30 +132,27 @@
   (let [certificate (certificates/pem-str->certificate certificate-str)]
     (validate-not-after! (-> now Instant/from Date/from) certificate)))
 
-(defn sign-energiatodistus-pdf
-  ([db aws-s3-client whoami now id language signature-and-chain]
-   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :card-reader))
-  ([db aws-s3-client whoami now id language {:keys [chain signature]} signing-method]
-   (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-     (do-when-signing
-       complete-energiatodistus
-       #(do
-          (validate-certificate! now
-                                 (first chain))
-          (let [key (energiatodistus-service/file-key id language)
-                unsigned-pdf-is (file-service/find-file aws-s3-client key)
-                sig-params-is (load-stateful-signature-parameters aws-s3-client id language)
-                filename (str key ".pdf")
-                ^Base64$Decoder decoder (Base64/getDecoder)
-                signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
-                ;; Here we could wait for OCSP responders' thisUpdate to be after the time in the timestamp, but
-                ;; for now it seems to be sufficient to not wait as the DVV's validator does not check for this
-                ;; and the signature is advanced level regardless.
-                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
-            (file-service/upsert-file-from-input-stream aws-s3-client
-                                                        key
-                                                        signed-pdf-lt-level)
-            filename))))))
+(defn sign-energiatodistus-pdf [db aws-s3-client whoami now id language {:keys [chain signature]}]
+  (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+    (do-when-signing
+      complete-energiatodistus
+      #(do
+         (validate-certificate! now
+                                (first chain))
+         (let [key (energiatodistus-service/file-key id language)
+               unsigned-pdf-is (file-service/find-file aws-s3-client key)
+               sig-params-is (load-stateful-signature-parameters aws-s3-client id language)
+               filename (str key ".pdf")
+               ^Base64$Decoder decoder (Base64/getDecoder)
+               signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
+               ;; Here we could wait for OCSP responders' thisUpdate to be after the time in the timestamp, but
+               ;; for now it seems to be sufficient to not wait as the DVV's validator does not check for this
+               ;; and the signature is advanced level regardless.
+               signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
+           (file-service/upsert-file-from-input-stream aws-s3-client
+                                                       key
+                                                       signed-pdf-lt-level)
+           filename)))))
 
 
 (defn cert-pem->one-liner-without-headers [cert-pem]
@@ -217,7 +214,7 @@
         signature-and-chain {:chain chain-like-from-card-reader :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
-      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :system)
+      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain)
       (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end
