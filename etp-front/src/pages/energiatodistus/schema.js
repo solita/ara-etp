@@ -307,6 +307,8 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
+export const v2026 = R.clone(v2018);
+
 export const redefineNumericValidation = (schema, constraint) => {
   const path = R.append(R.__, R.split('.', constraint.property));
   return R.compose(

@@ -47,6 +47,10 @@ const versions = {
   2013: {
     deserializer: transformationFromSchema('deserialize')(schema.v2013),
     serializer: transformationFromSchema('serialize')(schema.v2013)
+  },
+  2026: {
+    deserializer: transformationFromSchema('deserialize')(schema.v2026),
+    serializer: transformationFromSchema('serialize')(schema.v2026)
   }
 };
 
@@ -64,7 +68,8 @@ const mergeEmpty = deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]));
 export const deserialize = R.compose(
   R.cond([
     [R.propEq(2018, 'versio'), mergeEmpty(empty.energiatodistus2018())],
-    [R.propEq(2013, 'versio'), mergeEmpty(empty.energiatodistus2013())]
+    [R.propEq(2013, 'versio'), mergeEmpty(empty.energiatodistus2013())],
+    [R.propEq(2026, 'versio'), mergeEmpty(empty.energiatodistus2026())]
   ]),
   evolveForVersion('deserializer'),
   R.tap(assertVersion),
@@ -349,10 +354,11 @@ export const luokittelutForVersion = version =>
     ...kayttotarkoitusluokittelut(version)
   });
 
-export const luokittelutAllVersions = Future.parallelObject(10, {
+export const luokittelutAllVersions = Future.parallelObject(12, {
   ...luokittelut,
   2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
-  2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013))
+  2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
+  2026: Future.parallelObject(2, kayttotarkoitusluokittelut(2026))
 });
 
 export const replaceable = R.curry((fetch, id) =>

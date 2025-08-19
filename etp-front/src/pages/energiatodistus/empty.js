@@ -286,3 +286,8 @@ export const energiatodistus2013 = R.compose(
   R.assoc('versio', 2013),
   energiatodistus2018
 );
+
+export const energiatodistus2026 = R.compose(
+  R.assoc('versio', 2026),
+  energiatodistus2018
+);

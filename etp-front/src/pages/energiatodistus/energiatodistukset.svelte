@@ -35,6 +35,7 @@
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as GeoApi from '@Utility/api/geo-api';
+  import * as versionApi from '@Component/Version/version-api';
   import { announcementsForModule } from '@Utility/announce';
   import { announcePolitely } from '@Utility/aria-live';
 
@@ -229,11 +230,12 @@
     response => {
       resources = Maybe.Some(response);
     },
-    Future.parallelObject(2, {
+    Future.parallelObject(3, {
       whoami: KayttajaApi.whoami,
       luokittelut: api.luokittelutAllVersions,
       toimenpidetyypit: ValvontaApi.toimenpidetyypit,
-      kunnat: GeoApi.kunnat
+      kunnat: GeoApi.kunnat,
+      config: versionApi.getConfig
     })
   );
 
@@ -255,12 +257,20 @@
 </style>
 
 <div class="w-full mt-3">
-  {#each resources.toArray() as { luokittelut, toimenpidetyypit, kunnat, whoami }}
+  {#each resources.toArray() as { luokittelut, toimenpidetyypit, kunnat, whoami, config }}
     <div class="flex flex-col lg:flex-row justify-between">
       <H1 text={i18n('energiatodistukset.title')} />
       {#if Kayttajat.isLaatija(whoami)}
         <div
           class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
+          {#if config?.isEtp2026}
+            <div class="flex flex-row my-auto">
+              <Link
+                text={i18n('energiatodistus.luo2026')}
+                href="#/energiatodistus/2026/new"
+                icon={Maybe.Some('add_circle_outline')} />
+            </div>
+          {/if}
           <div class="flex flex-row my-auto">
             <Link
               text={i18n('energiatodistus.luo2018')}

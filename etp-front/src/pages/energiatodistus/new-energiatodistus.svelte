@@ -35,9 +35,11 @@
   };
 
   const emptyEnergiatodistus = versio =>
-    R.equals(versio, '2018')
-      ? empty.energiatodistus2018()
-      : empty.energiatodistus2013();
+    R.cond([
+      [R.equals('2018'), () => empty.energiatodistus2018()],
+      [R.equals('2013'), () => empty.energiatodistus2013()],
+      [R.equals('2026'), () => empty.energiatodistus2026()]
+    ])(versio);
 
   const cleanEnergiatodistusCopy = R.compose(
     R.assoc('korvattu-energiatodistus-id', Maybe.None()),

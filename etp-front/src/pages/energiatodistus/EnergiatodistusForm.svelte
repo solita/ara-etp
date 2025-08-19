@@ -93,7 +93,8 @@
 
   const forms = {
     '2018': ET2018Form,
-    '2013': ET2013Form
+    '2013': ET2013Form,
+    '2026': ET2018Form  // Use ET2018Form for 2026 initially
   };
   const ETForm = forms[version];
 
