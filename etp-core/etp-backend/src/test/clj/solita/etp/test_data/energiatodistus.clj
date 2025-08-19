@@ -36,9 +36,10 @@
                  common-schema/IntNonNegative (g/always 1)})
 
 (defn schema-by-version-and-ready-for-signing [versio ready-for-signing?]
-  (cond->> (if (= versio 2013)
-             energiatodistus-schema/EnergiatodistusSave2013
-             energiatodistus-schema/EnergiatodistusSave2018)
+  (cond->> (cond
+             (= versio 2013) energiatodistus-schema/EnergiatodistusSave2013
+             (= versio 2018) energiatodistus-schema/EnergiatodistusSave2018
+             (= versio 2026) energiatodistus-schema/EnergiatodistusSave2026)
            ready-for-signing? (deep/map-values record?
                                                (logic/when* xschema/maybe? :schema))))
 
@@ -53,7 +54,7 @@
     {:perustiedot                     (merge
                                         {:kieli           (rand-int 2)
                                          :kayttotarkoitus "YAT"}
-                                        (when (= versio 2018)
+                                        (when (contains? #{2018 2026} versio)
                                           {:laatimisvaihe (rand-int 2)}))
      :lahtotiedot                     {:ilmanvaihto {:tyyppi-id (rand-int 7)}
                                        :lammitys    {:lammitysmuoto-1 {:id (rand-int 10)}

@@ -315,6 +315,8 @@
       (assoc-in [:toteutunut-ostoenergiankulutus :ostettu-energia :muu]
                 [(optional-properties UserDefinedEnergia)])))
 
+(def EnergiatodistusSave2026 EnergiatodistusSave2018)
+
 (defn ->EnergiatodistusSaveExternal [schema]
   (-> schema
       (dissoc :kommentti
@@ -361,12 +363,17 @@
   "Energiatodistus 2013"
   (energiatodistus-versio 2013 EnergiatodistusSave2013))
 
+(def Energiatodistus2026
+  "Energiatodistus 2026"
+  (energiatodistus-versio 2026 EnergiatodistusSave2026))
+
 (defn versio? [versio et] (-> et :versio (= versio)))
 
 (def Energiatodistus
   (schema/conditional
     (partial versio? 2018) Energiatodistus2018
-    (partial versio? 2013) Energiatodistus2013))
+    (partial versio? 2013) Energiatodistus2013
+    (partial versio? 2026) Energiatodistus2026))
 
 (defn assoc-energiatodistus
   "Extend energiatodistus schema by associating new key value pairs."
