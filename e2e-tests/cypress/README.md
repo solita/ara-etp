@@ -21,15 +21,20 @@ or just run the tests:
 npm run cypress:run
 ```
 
+You can also narrow down the tests with `--spec`
+```bash
+npm run cypress:run -- --spec "cypress/e2e/laatija/energiatodistus-signing.cy.js","cypress/e2e/laatija/tiedot-tarkastamatta.cy.js"
+```
+
 ### Docker stack
 
 The `e2e Docker stack` includes the `dev Docker stack` from `etp-core/docker/` and adds
 `frontend`, `backend` and `migration-runner` services on top of it. The mapping of ports in the dev stack is
-overridden by `docker-compose.override.yml` so that you can run it while also running the e2e stack.
+overridden by `override.yml` so that you can run it while also running the e2e stack.
 
 ### Writing more tests
 
-> **NB:** The `e2e Docker stack` might not yet use all of the components (mpollux, minio, etc.)
+> **NB:** The `e2e Docker stack` might not yet use all of the components (minio, etc.)
 > correctly. Typically you can fix this by making their location (e.g. localhost:1234) configurable
 > through an environment variable and setting it to the container's name (e.g. container:1234).
 

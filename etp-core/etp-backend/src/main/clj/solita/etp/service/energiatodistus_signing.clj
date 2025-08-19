@@ -76,11 +76,11 @@
   (file-service/find-file aws-s3-client (stateful-signature-parameters-file-key id language)))
 
 (defn find-energiatodistus-digest
-  "This is the function that does first real processing of the signature.
+  "This is the function that does the first real processing of the signature.
 
   Generate the pdf.
   Upload to S3.
-  Return the data that needs to be signed in base64"
+  Return the data that needs to be signed in base64."
   [db aws-s3-client id language laatija-allekirjoitus-id]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
@@ -92,7 +92,6 @@
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
-             ;; TODO: Check 2013 version positioning or is it even relevant?
              origin-y (case versio 2013 648 2018 666)
              digest-and-stuff (pdf-sign/unsigned-document->digest-and-params energiatodistus-pdf
                                                                              {:signature-png signature-png
@@ -117,18 +116,6 @@
       str/lower-case
       (str/replace #"[^a-z]" "")))
 
-(defn validate-surname! [last-name certificate]
-  (let [surname (-> certificate
-                    certificates/subject
-                    :surname)]
-    (when-not (= (comparable-name last-name) (comparable-name surname))
-      (log/warn "Last name from certificate did not match with whoami info when signing energiatodistus PDF.")
-      (exception/throw-ex-info!
-        {:type    :name-does-not-match
-         :message (format "Last names did not match. Whoami has '%s' and certificate has '%s'"
-                          last-name
-                          surname)}))))
-
 (defn validate-not-after! [^Date now certificate]
   (let [not-after (-> certificate certificates/not-after)]
     (when (.after now not-after)
@@ -140,45 +127,32 @@
                           now)}))))
 
 (defn validate-certificate!
-  "Validates that the certificate is not expired and optionally that the surname matches the name in the certificate.
+  "Validates that the certificate is not expired."
+  [now certificate-str]
+  (let [certificate (certificates/pem-str->certificate certificate-str)]
+    (validate-not-after! (-> now Instant/from Date/from) certificate)))
 
-  When using system signing the surname does not match the name in the certificate as it's issued for the whole
-  system and not a specific person."
-  ([surname now certificate-str]
-   (validate-certificate! surname now certificate-str true))
-  ([surname now certificate-str validate-surname?]
-   (let [certificate (certificates/pem-str->certificate certificate-str)]
-     (when validate-surname?
-       (validate-surname! surname certificate))
-     (validate-not-after! (-> now Instant/from Date/from) certificate))))
-
-(defn sign-energiatodistus-pdf
-  ([db aws-s3-client whoami now id language signature-and-chain]
-   (sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :card-reader))
-  ([db aws-s3-client whoami now id language {:keys [chain signature]} signing-method]
-   (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-     (do-when-signing
-       complete-energiatodistus
-       #(do
-          (validate-certificate! (:sukunimi whoami)
-                                 now
-                                 (first chain)
-                                 ;; Validate the surname in the certificate only when signing with card-reader.
-                                 (= signing-method :card-reader))
-          (let [key (energiatodistus-service/file-key id language)
-                unsigned-pdf-is (file-service/find-file aws-s3-client key)
-                sig-params-is (load-stateful-signature-parameters aws-s3-client id language)
-                filename (str key ".pdf")
-                ^Base64$Decoder decoder (Base64/getDecoder)
-                signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
-                ;; Here we could wait for OCSP responders' thisUpdate to be after the time in the timestamp, but
-                ;; for now it seems to be sufficient to not wait as the DVV's validator does not check for this
-                ;; and the signature is advanced level regardless.
-                signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
-            (file-service/upsert-file-from-input-stream aws-s3-client
-                                                        key
-                                                        signed-pdf-lt-level)
-            filename))))))
+(defn sign-energiatodistus-pdf [db aws-s3-client now id language {:keys [chain signature]}]
+  (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+    (do-when-signing
+      complete-energiatodistus
+      #(do
+         (validate-certificate! now
+                                (first chain))
+         (let [key (energiatodistus-service/file-key id language)
+               unsigned-pdf-is (file-service/find-file aws-s3-client key)
+               sig-params-is (load-stateful-signature-parameters aws-s3-client id language)
+               filename (str key ".pdf")
+               ^Base64$Decoder decoder (Base64/getDecoder)
+               signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
+               ;; Here we could wait for OCSP responders' thisUpdate to be after the time in the timestamp, but
+               ;; for now it seems to be sufficient to not wait as the DVV's validator does not check for this
+               ;; and the signature is advanced level regardless.
+               signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
+           (file-service/upsert-file-from-input-stream aws-s3-client
+                                                       key
+                                                       signed-pdf-lt-level)
+           filename)))))
 
 
 (defn cert-pem->one-liner-without-headers [cert-pem]
@@ -223,7 +197,7 @@
     (audit-log-message laatija-allekirjoitus-id id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign
-  [{:keys [db whoami now id laatija-allekirjoitus-id aws-s3-client aws-kms-client]} language digest-response]
+  [{:keys [db now id laatija-allekirjoitus-id aws-s3-client aws-kms-client]} language digest-response]
   (let [data-to-sign (-> digest-response
                          :digest
                          (.getBytes StandardCharsets/UTF_8)
@@ -236,11 +210,11 @@
                                   (pdf-sign/digest->cms-signature-with-system
                                     data-to-sign
                                     system-signature-cms-info))
-        chain-like-from-card-reader (mapv cert-pem->one-liner-without-headers chain)
-        signature-and-chain {:chain chain-like-from-card-reader :signature (String. signature)}]
+        chain-as-oneliners (mapv cert-pem->one-liner-without-headers chain)
+        signature-and-chain {:chain chain-as-oneliners :signature (String. signature)}]
     (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Signing via KMS"))
     (do-sign-with-system
-      #(sign-energiatodistus-pdf db aws-s3-client whoami now id language signature-and-chain :system)
+      #(sign-energiatodistus-pdf db aws-s3-client now id language signature-and-chain)
       (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end

@@ -9,9 +9,6 @@ services:
       - pgAdmin # Run only when this profile is used.
     ports: !reset []
 
-  mpollux:
-    ports: !reset []
-
   minio:
     ports: !reset []
     networks: !reset []

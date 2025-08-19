@@ -92,48 +92,27 @@
   (t/is (= "abc" (service/comparable-name "abc")))
   (t/is (= "aeiouao" (service/comparable-name "á, é, í, ó, ú. ä ö"))))
 
-(t/deftest validate-surname!-test
-  (t/is (thrown? clojure.lang.ExceptionInfo
-                 (service/validate-surname! "Meikäläinen"
-                                                    certificates-test/test-cert)))
-  (t/is (nil? (service/validate-surname! "Specimen-POtex"
-                                                 certificates-test/test-cert))))
-
 (t/deftest validate-certificate!-test
-  (t/testing "Last name of laatija has to match the signing certificate"
-    (let [ex (try
-               (service/validate-certificate! "Meikäläinen"
-                                                      energiatodistus-test-data/time-when-test-cert-not-expired
-                                                      certificates-test/test-cert-str)
-               (catch clojure.lang.ExceptionInfo ex ex))
-          {:keys [type]} (ex-data ex)]
-      (t/is (instance? clojure.lang.ExceptionInfo ex))
-      (t/is (= :name-does-not-match type))))
-
   (t/testing "Signing certificate must not have expired"
     (let [ex (try
-               (service/validate-certificate! "Specimen-POtex"
-                                                      energiatodistus-test-data/time-when-test-cert-expired
-                                                      certificates-test/test-cert-str)
+               (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-expired
+                                              certificates-test/test-cert-str)
                (catch clojure.lang.ExceptionInfo ex ex))
           {:keys [type]} (ex-data ex)]
       (t/is (instance? clojure.lang.ExceptionInfo ex))
       (t/is (= :expired-signing-certificate type))))
 
   (t/testing "With the expected name and within the validity period of the certificate, signing succeeds"
-    (service/validate-certificate! "Specimen-POtex"
-                                           energiatodistus-test-data/time-when-test-cert-not-expired
-                                           certificates-test/test-cert-str)))
+    (service/validate-certificate! energiatodistus-test-data/time-when-test-cert-not-expired
+                                   certificates-test/test-cert-str)))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-energiatodistus-pdf-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
-        whoami {:id laatija-id}]
+        id (-> energiatodistukset keys sort first)]
     (t/is (= (service/sign-energiatodistus-pdf db
                                                        ts/*aws-s3-client*
-                                                       whoami
                                                        energiatodistus-test-data/time-when-test-cert-not-expired
                                                        id
                                                        "fi"
@@ -145,7 +124,6 @@
                                              energiatodistus-test-data/time-when-test-cert-not-expired)
     (t/is (= (service/sign-energiatodistus-pdf db
                                                        ts/*aws-s3-client*
-                                                       whoami
                                                        energiatodistus-test-data/time-when-test-cert-not-expired
                                                        id
                                                        "fi"
@@ -181,7 +159,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
 
 (t/deftest sign-with-system-states-test
   (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
-    (t/testing "Signing a pdf using the system instead of mpollux"
+    (t/testing "Signing a pdf using the system"
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
             laatija-id (-> laatijat keys sort first)
             db (ts/db-user laatija-id)
@@ -236,7 +214,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
                    tila-id)))))))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-signature-test
-  (t/testing "Signing a pdf using the system instead of mpollux"
+  (t/testing "Signing a pdf using the system"
     (with-bindings {#'solita.etp.service.signing.pdf-sign/get-tsp-source solita.etp.test-timeserver/get-tsp-source-in-test}
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
             laatija-id (-> laatijat keys sort first)
