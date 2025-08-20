@@ -230,7 +230,7 @@
     response => {
       resources = Maybe.Some(response);
     },
-    Future.parallelObject(3, {
+    Future.parallelObject(5, {
       whoami: KayttajaApi.whoami,
       luokittelut: api.luokittelutAllVersions,
       toimenpidetyypit: ValvontaApi.toimenpidetyypit,
