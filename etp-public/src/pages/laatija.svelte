@@ -16,6 +16,8 @@
   export let id;
   let ref = '';
 
+  const configPromise = fetch('config.json').then(response => response.json());
+
   let component = null;
   $: laatijaPromise = $laatijatStore.then(laatijat => {
     const laatijaFound = laatijat.find(laatija => laatija.id == id);
@@ -81,6 +83,20 @@
             >{$_('LAATIJA_PATEVYYSTASO')}:</strong>
           <span>{laatija.patevyys}</span>
         </div>
+        {#await configPromise then config}
+          {#if config?.isEtp2026}
+            <div
+              class="flex flex-col md:flex-row text-lg space-x-2 my-1 w-full">
+              <strong
+                class="w-full md:w-1/3 text-lg text-ashblue tracking-widest"
+                >{$_('LAATIJA_PERUSPARANNUSPASSI_PATEVYYS')}:</strong>
+              <span
+                >{laatija.patevyys === 3 || laatija.patevyys === 4
+                  ? $_('LAATIJA_VOIMASSA')
+                  : $_('LAATIJA_EI_VOIMASSA')}</span>
+            </div>
+          {/if}
+        {/await}
         <div class="flex flex-col md:flex-row text-lg space-x-2 my-1 w-full">
           <strong class="w-full md:w-1/3 text-lg text-ashblue tracking-widest"
             >{$_('LAATIJA_VOIMASSAOLOAIKA')}:</strong>
