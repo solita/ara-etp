@@ -85,8 +85,10 @@
         </div>
         {#await configPromise then config}
           {#if config?.isEtp2026}
-            <div class="flex flex-col md:flex-row text-lg space-x-2 my-1 w-full">
-              <strong class="w-full md:w-1/3 text-lg text-ashblue tracking-widest"
+            <div
+              class="flex flex-col md:flex-row text-lg space-x-2 my-1 w-full">
+              <strong
+                class="w-full md:w-1/3 text-lg text-ashblue tracking-widest"
                 >{$_('LAATIJA_PERUSPARANNUSPASSI_PATEVYYS')}:</strong>
               <span
                 >{laatija.patevyys === 3 || laatija.patevyys === 4
