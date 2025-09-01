@@ -28,7 +28,7 @@
              metosin/jsonista                                    {:mvn/version "0.3.12"}
              metosin/schema-tools                                {:mvn/version "0.13.1"}
              webjure/jeesql                                      {:mvn/version "0.4.7"}
-             clj-http/clj-http                                   {:mvn/version "3.13.0"}
+             clj-http/clj-http                                   {:mvn/version "3.13.1"}
              buddy/buddy-core                                    {:mvn/version "1.12.0-430"}
              buddy/buddy-sign                                    {:mvn/version "3.6.1-359"}
              buddy/buddy-hashers                                 {:mvn/version "2.0.167"}
