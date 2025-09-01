@@ -16,7 +16,6 @@ etp-backend/tmp-laskutus
 etp-backend/tmp-csv
 etp-db/target
 docker/smtp/received-emails
-docker/minio/files
 
 # clojure
 .cpcache
