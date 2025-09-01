@@ -22,7 +22,13 @@ For Ubuntu:
 
     sudo apt install openjdk-17-jdk
 
-### Docker
+### Docker or Podman
+
+Install either Docker or Podman. Docker is recommended at least on Linux, but
+Windows and Macos users may benefit from using Podman. At least no license
+is needed.
+
+#### Docker
 
 Installation for Linux by following the instructions at the following URL:
 
@@ -35,6 +41,10 @@ Remember to follow the
 Docker-compose is also required:
 
 https://docs.docker.com/compose/install/
+
+#### Podman
+
+Follow [installation instructions](https://podman.io/docs/installation).
 
 ### Clojure + CLI Tools
 
@@ -56,7 +66,12 @@ Starting the development environment
 Start [the required services](/docker) (database etc):
 
     cd docker
+
+    # For Docker
     ./start.sh
+
+    # Alternative start command for Podman
+    ./start.sh --podman
 
 Start script starts docker-compose, creates template and dev databases
 and runs migrations for both of them.
@@ -184,5 +199,5 @@ To use the file install [just](https://github.com/casey/just) from your package 
 
 I interpret the readme in a way that recipes that don't call explicit sh features should work on windows too. I'm not certain if `$ just` just errors if run without an sh present, or if it defaults to pwsh if no sh found, and I can't test it myself. However, using just is just a convinience, and it's not a requirement so... hope it works in win too :D
 
-### TODO 
+### TODO
 Move just a directory higher and teach it to start the frontend npm jobs?

@@ -1,4 +1,3 @@
-version: '3.7'
 name: 'etp'
 
 services:
@@ -36,7 +35,7 @@ services:
     networks:
       - minio
     volumes:
-      - data:/files 
+      - data:/files
     command: server /files --console-address ":9001"
     environment:
       MINIO_ACCESS_KEY: minio
@@ -48,7 +47,7 @@ services:
       minio:
         condition: service_started
     networks:
-      - minio  
+      - minio
     entrypoint: >
       /bin/sh -c "
       sleep 5;
