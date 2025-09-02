@@ -79,15 +79,15 @@
              com.sun.xml.ws/webservices-rt                       {:mvn/version "2.0.1"}
              kovacnica/clojure.network.ip                        {:mvn/version "0.1.5"
                                                                   :exclusions  [org.clojure/clojurescript]}
-             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}}
+             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.3"}
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.3"}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
