@@ -124,8 +124,8 @@
   }
 </style>
 
-<div data-filter-component>
-  <fieldset class="flex flex-row gap-6 items-center">
+<div>
+  <fieldset class="flex flex-row gap-6 items-center pt-3">
     <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
 
     <!-- Ylempi taso toggle -->
