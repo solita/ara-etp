@@ -34,7 +34,8 @@
              buddy/buddy-hashers                                 {:mvn/version "2.0.167"}
 
              org.apache.poi/poi                                  {:mvn/version "5.4.1"}
-             org.apache.poi/poi-ooxml                            {:mvn/version "5.4.1"}
+             org.apache.poi/poi-ooxml                            {:mvn/version "5.4.1"
+                                                                  :exclusions  [org.apache.commons/commons-lang3]}
 
              org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
              org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
@@ -68,7 +69,8 @@
              com.sun.mail/javax.mail                             {:mvn/version "1.6.2"}
 
              org.apache.wss4j/wss4j-ws-security-dom              {:mvn/version "3.0.4"}
-             org.apache.wss4j/wss4j-ws-security-common           {:mvn/version "3.0.4"}
+             org.apache.wss4j/wss4j-ws-security-common           {:mvn/version "3.0.4"
+                                                                  :exclusions  [org.apache.commons/commons-lang3]}
              com.sun.xml.messaging.saaj/saaj-impl                {:mvn/version "3.0.4"}
              org.apache.axis/axis                                {:mvn/version "1.4"}
              commons-io/commons-io                               {:mvn/version "2.20.0"}
@@ -83,11 +85,16 @@
              eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1"
+                                                                  :exclusions  [org.apache.commons/commons-lang3]}
              eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
              eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}}
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}
+
+             ;; dss-utils-apache-commons, wss4j-ws-security-common and poi-ooxml contain vulnerable versions
+             ;; that is now excluded in them since they can not be updated.
+             org.apache.commons/commons-lang3                    {:mvn/version "3.18.0"}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
