@@ -3,6 +3,8 @@
 
   export let patevyydet;
   export let showPatevyydet = '1,2';
+
+  const configPromise = fetch('config.json').then(response => response.json());
 </script>
 
 <style>
@@ -86,67 +88,138 @@
   }
 </style>
 
-<fieldset class="flex flex-col md:flex-row">
-  <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
-  <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
-    <label class="radio-container">
-      <input
-        id="kaikkitasot"
-        type="radio"
-        bind:group={showPatevyydet}
-        value={'1,2'}
-        on:change />
-      <span class="radio-visual" />
-      {$_('LHAKU_FILTER_KAIKKI')}
-    </label>
+{#await configPromise then config}
+  {#if config?.isEtp2026}
+    <!-- ETP 2026 version with PPP support -->
+    <fieldset class="flex flex-col md:flex-row">
+      <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
+      <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
+        <label class="radio-container">
+          <input
+            id="kaikkitasot"
+            type="radio"
+            bind:group={showPatevyydet}
+            value={'1,2,3,4'}
+            on:change />
+          <span class="radio-visual" />
+          {$_('LHAKU_FILTER_KAIKKI')}
+        </label>
 
-    <div class="icon-container hidden md:block" tabindex="0">
-      <span class="material-icons text-green" aria-hidden="true"
-        >error_outline</span>
-      <div class="info-popup">
-        <strong>{$_('LHAKU_KAIKKI_TITLE')}</strong>
-        <p>{$_('LHAKU_KAIKKI_TEXT')}</p>
+        <div class="icon-container hidden md:block" tabindex="0">
+          <span class="material-icons text-green" aria-hidden="true"
+            >error_outline</span>
+          <div class="info-popup">
+            <strong>{$_('LHAKU_KAIKKI_TITLE')}</strong>
+            <p>{$_('LHAKU_KAIKKI_TEXT')}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
-    <label class="radio-container">
-      <input
-        id="perustaso"
-        type="radio"
-        bind:group={showPatevyydet}
-        value={'1'}
-        on:change />
-      <span class="radio-visual" />
-      {labelLocale($locale, patevyydet[0])}
-    </label>
-    <div class="icon-container hidden md:block" tabindex="0">
-      <span class="material-icons text-green" aria-hidden="true"
-        >error_outline</span>
-      <div class="info-popup">
-        <strong>{$_('LHAKU_PERUSTASO_TITLE')}</strong>
-        <p>{$_('LHAKU_PERUSTASO_TEXT')}</p>
+      <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
+        <label class="radio-container">
+          <input
+            id="ylempitaso"
+            type="radio"
+            bind:group={showPatevyydet}
+            value={'2'}
+            on:change />
+          <span class="radio-visual" />
+          {labelLocale($locale, patevyydet.find(p => p.id === 2))}
+        </label>
+        <div class="icon-container hidden md:block" tabindex="0">
+          <span class="material-icons text-green" aria-hidden="true"
+            >error_outline</span>
+          <div class="info-popup">
+            <strong>{$_('LHAKU_YLEMPITASO_TITLE')}</strong>
+            <p>{$_('LHAKU_YLEMPITASO_TEXT')}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="flex items-start space-x-1 py-3 md:py-0">
-    <label class="radio-container">
-      <input
-        id="ylempitaso"
-        type="radio"
-        bind:group={showPatevyydet}
-        value={'2'}
-        on:change />
-      <span class="radio-visual" />
-      {labelLocale($locale, patevyydet[1])}
-    </label>
-    <div class="icon-container hidden md:block" tabindex="0">
-      <span class="material-icons text-green" aria-hidden="true"
-        >error_outline</span>
-      <div class="info-popup">
-        <strong>{$_('LHAKU_YLEMPITASO_TITLE')}</strong>
-        <p>{$_('LHAKU_YLEMPITASO_TEXT')}</p>
+      <div class="flex items-start space-x-1 py-3 md:py-0">
+        <label class="radio-container">
+          <input
+            id="ppppatevyys"
+            type="radio"
+            bind:group={showPatevyydet}
+            value={'3,4'}
+            on:change />
+          <span class="radio-visual" />
+          {$_('LAATIJA_PERUSPARANNUSPASSI_PATEVYYS')}
+        </label>
+        <div class="icon-container hidden md:block" tabindex="0">
+          <span class="material-icons text-green" aria-hidden="true"
+            >error_outline</span>
+          <div class="info-popup">
+            <strong>{$_('LHAKU_PPP_TITLE')}</strong>
+            <p>{$_('LHAKU_PPP_TEXT')}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</fieldset>
+    </fieldset>
+  {:else}
+    <!-- Original version without PPP support -->
+    <fieldset class="flex flex-col md:flex-row">
+      <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
+      <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
+        <label class="radio-container">
+          <input
+            id="kaikkitasot"
+            type="radio"
+            bind:group={showPatevyydet}
+            value={'1,2'}
+            on:change />
+          <span class="radio-visual" />
+          {$_('LHAKU_FILTER_KAIKKI')}
+        </label>
+
+        <div class="icon-container hidden md:block" tabindex="0">
+          <span class="material-icons text-green" aria-hidden="true"
+            >error_outline</span>
+          <div class="info-popup">
+            <strong>{$_('LHAKU_KAIKKI_TITLE')}</strong>
+            <p>{$_('LHAKU_KAIKKI_TEXT')}</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
+        <label class="radio-container">
+          <input
+            id="perustaso"
+            type="radio"
+            bind:group={showPatevyydet}
+            value={'1'}
+            on:change />
+          <span class="radio-visual" />
+          {labelLocale($locale, patevyydet.find(p => p.id === 1))}
+        </label>
+        <div class="icon-container hidden md:block" tabindex="0">
+          <span class="material-icons text-green" aria-hidden="true"
+            >error_outline</span>
+          <div class="info-popup">
+            <strong>{$_('LHAKU_PERUSTASO_TITLE')}</strong>
+            <p>{$_('LHAKU_PERUSTASO_TEXT')}</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-start space-x-1 py-3 md:py-0">
+        <label class="radio-container">
+          <input
+            id="ylempitaso"
+            type="radio"
+            bind:group={showPatevyydet}
+            value={'2'}
+            on:change />
+          <span class="radio-visual" />
+          {labelLocale($locale, patevyydet.find(p => p.id === 2))}
+        </label>
+        <div class="icon-container hidden md:block" tabindex="0">
+          <span class="material-icons text-green" aria-hidden="true"
+            >error_outline</span>
+          <div class="info-popup">
+            <strong>{$_('LHAKU_YLEMPITASO_TITLE')}</strong>
+            <p>{$_('LHAKU_YLEMPITASO_TEXT')}</p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  {/if}
+{/await}

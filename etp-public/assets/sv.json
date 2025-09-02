@@ -102,6 +102,8 @@
   "LAATIJA_TAKAISIN": "Tillbaka till sökningen av upprättare",
   "LAATIJA_PATEVYYSTASO": "Behörighetsnivå",
   "LAATIJA_PERUSPARANNUSPASSI_PATEVYYS": "Perusparannuspassi behörighet",
+  "LHAKU_PPP_TITLE": "PPP Behörighet",
+  "LHAKU_PPP_TEXT": "Perusparannuspassi behörighet",
   "LAATIJA_VOIMASSA": "Kompetens",
   "LAATIJA_EI_VOIMASSA": "Ingen kompetens",
   "LAATIJA_VOIMASSAOLOAIKA": "Behörighetens giltighetstid",
