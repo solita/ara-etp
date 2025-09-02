@@ -123,7 +123,10 @@
             value={'2'}
             on:change />
           <span class="radio-visual" />
-          {labelLocale($locale, patevyydet.find(p => p.id === 2))}
+          {labelLocale(
+            $locale,
+            patevyydet.find(p => p.id === 2)
+          )}
         </label>
         <div class="icon-container hidden md:block" tabindex="0">
           <span class="material-icons text-green" aria-hidden="true"
@@ -189,7 +192,10 @@
             value={'1'}
             on:change />
           <span class="radio-visual" />
-          {labelLocale($locale, patevyydet.find(p => p.id === 1))}
+          {labelLocale(
+            $locale,
+            patevyydet.find(p => p.id === 1)
+          )}
         </label>
         <div class="icon-container hidden md:block" tabindex="0">
           <span class="material-icons text-green" aria-hidden="true"
@@ -209,7 +215,10 @@
             value={'2'}
             on:change />
           <span class="radio-visual" />
-          {labelLocale($locale, patevyydet.find(p => p.id === 2))}
+          {labelLocale(
+            $locale,
+            patevyydet.find(p => p.id === 2)
+          )}
         </label>
         <div class="icon-container hidden md:block" tabindex="0">
           <span class="material-icons text-green" aria-hidden="true"
