@@ -22,6 +22,7 @@
   import InfoBlock from '@Component/info-block';
   import TableLaatijahaku from '@Component/table-laatijahaku';
   import TableLaatijahakuFilter from '@Component/table-laatijahaku-filter';
+  import TableLaatijahakuFilter2026 from '@Component/table-laatijahaku-filter-2026';
   import Container, { styles as containerStyles } from '@Component/container';
   import Spinner from '@Component/spinner';
   import Pagination from '@Component/pagination';
@@ -31,6 +32,8 @@
   export let aluehaku = '';
   export let page = 0;
   export let filterPatevyydet = '1,2';
+
+  const configPromise = fetch('config.json').then(response => response.json());
 
   announceAssertively($_('NAVBAR_LAATIJAHAKU'));
 
@@ -48,7 +51,12 @@
     // When navigating to laatijahaku from navbar link while filterPatevyydet is set as an URL parameter,
     // filterPatevyydet for some reason becomes undefined and stays undefined when making LaatijaUtils.laatijatByHakukriteerit call, causing a nasty error that breaks the site until full refresh
     // ---
-    if (!filterPatevyydet) filterPatevyydet = '1,2';
+    if (!filterPatevyydet) {
+      // Set default based on ETP 2026 feature flag
+      configPromise.then(config => {
+        filterPatevyydet = config?.isEtp2026 ? '1,2,3,4' : '1,2';
+      });
+    }
   }
   const pageSize = 10;
 
@@ -87,8 +95,9 @@
       })
   );
 
-  const commitSearch = (nimihaku, aluehaku) => {
-    filterPatevyydet = '1,2';
+  const commitSearch = async (nimihaku, aluehaku) => {
+    const config = await configPromise;
+    filterPatevyydet = config?.isEtp2026 ? '1,2,3,4' : '1,2';
     const qs = [
       ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
       ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
@@ -187,18 +196,34 @@
         {patevyydet}
         {page}>
         <div slot="filter">
-          <TableLaatijahakuFilter
-            on:change={evt =>
-              navigate(
-                `/laatijahaku?${[
-                  ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
-                  ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
-                  ...[['filterPatevyydet', evt.detail].join('=')],
-                  ...[['page', 0].join('=')]
-                ].join('&')}`
-              )}
-            showPatevyydet={filterPatevyydet}
-            {patevyydet} />
+          {#await configPromise then config}
+            {#if config?.isEtp2026}
+              <TableLaatijahakuFilter2026
+                on:change={evt =>
+                  navigate(
+                    `/laatijahaku?${[
+                      ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
+                      ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
+                      ...[['filterPatevyydet', evt.detail].join('=')],
+                      ...[['page', 0].join('=')]
+                    ].join('&')}`
+                  )}
+                showPatevyydet={filterPatevyydet} />
+            {:else}
+              <TableLaatijahakuFilter
+                on:change={evt =>
+                  navigate(
+                    `/laatijahaku?${[
+                      ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
+                      ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
+                      ...[['filterPatevyydet', evt.target.value].join('=')],
+                      ...[['page', 0].join('=')]
+                    ].join('&')}`
+                  )}
+                showPatevyydet={filterPatevyydet}
+                {patevyydet} />
+            {/if}
+          {/await}
         </div>
         <div slot="pagination" let:currentPageItemCount>
           <Pagination
