@@ -113,6 +113,8 @@
   "LAATIJA_PERUSPARANNUSPASSI_PATEVYYS": "Perusparannuspassipätevyys",
   "LHAKU_PPP_TITLE": "Perusparannuspassipätevyys",
   "LHAKU_PPP_TEXT": "Perusparannuspassipätevyys",
+  "LHAKU_TOGGLE_YLEMPI_TASO": "Vain ylempi taso",
+  "LHAKU_TOGGLE_PPP": "Vain perusparannuspassipätevyydet",
   "LAATIJA_VOIMASSA": "Pätevyys",
   "LAATIJA_EI_VOIMASSA": "Ei pätevyyttä",
   "ENERGIATODISTUS": "Energiatodistus",

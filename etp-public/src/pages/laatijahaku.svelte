@@ -193,7 +193,7 @@
                 `/laatijahaku?${[
                   ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
                   ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
-                  ...[['filterPatevyydet', evt.target.value].join('=')],
+                  ...[['filterPatevyydet', evt.detail].join('=')],
                   ...[['page', 0].join('=')]
                 ].join('&')}`
               )}
