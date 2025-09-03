@@ -86,7 +86,7 @@
   }
 </style>
 
-<div>
+<div class="px-3 lg:px-8 xl:px-16 pb-8 flex flex-col w-full">
   <fieldset class="flex flex-col md:flex-row">
     <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
     <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">

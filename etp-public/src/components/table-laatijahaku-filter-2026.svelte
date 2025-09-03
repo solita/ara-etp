@@ -1,55 +1,28 @@
 <script>
   import { _ } from '@Localization/localization';
-  import { createEventDispatcher, tick, onMount } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
   export let showPatevyydet = '1,2,3,4';
 
-  // Individual toggle states for ETP 2026 filters
   let ylempitasoToggle = false;
   let pppToggle = false;
   let isUpdatingFromProp = false;
-  let ylempitasoInput;
-  let pppInput;
-  let mounted = false;
-
-  // Store focus state in sessionStorage to persist across re-mounts
-  let focusElementKey = 'laatija-filter-focus';
 
   // Lookup table for toggle combinations
   const toggleMappings = {
+    // From toggle states to IDs
     'false,false': '1,2,3,4',
     'true,false': '2,4',
     'false,true': '3,4',
     'true,true': '4'
   };
 
-  // Reverse mapping from IDs to toggle states
   const reverseMappings = Object.fromEntries(
     Object.entries(toggleMappings).map(([key, value]) => [value, key])
   );
 
-  onMount(() => {
-    mounted = true;
-
-    // Restore focus after component mounts
-    const storedFocus = sessionStorage.getItem(focusElementKey);
-    if (storedFocus) {
-      // Use setTimeout to ensure DOM is fully ready
-      setTimeout(() => {
-        if (storedFocus === 'ylempi' && ylempitasoInput) {
-          ylempitasoInput.focus();
-        } else if (storedFocus === 'ppp' && pppInput) {
-          pppInput.focus();
-        }
-        // Clear stored focus after restoration
-        sessionStorage.removeItem(focusElementKey);
-      }, 50);
-    }
-  });
-
-  // Function to update toggle states from showPatevyydet
   const updateTogglesFromProp = value => {
     isUpdatingFromProp = true;
     const sortedValue = value.split(',').sort().join(',');
@@ -63,69 +36,33 @@
     isUpdatingFromProp = false;
   };
 
-  const updatePropFromToggles = async () => {
-    if (isUpdatingFromProp || !mounted) return;
+  const updatePropFromToggles = () => {
+    if (isUpdatingFromProp) return;
 
     const toggleKey = `${ylempitasoToggle},${pppToggle}`;
     const newValue = toggleMappings[toggleKey];
 
-    if (newValue && newValue !== showPatevyydet) {
-      // Store which element has focus before navigation
-      const focusedElement = document.activeElement;
-      if (focusedElement === ylempitasoInput) {
-        sessionStorage.setItem(focusElementKey, 'ylempi');
-      } else if (focusedElement === pppInput) {
-        sessionStorage.setItem(focusElementKey, 'ppp');
-      }
-
+    if (newValue) {
       showPatevyydet = newValue;
       dispatch('change', newValue);
     }
-  };
-
-  const handleToggleChange = toggleName => {
-    if (!mounted || isUpdatingFromProp) return;
-
-    // Store focus before triggering update
-    sessionStorage.setItem(focusElementKey, toggleName);
-
-    // Trigger the update which will cause re-mount
-    updatePropFromToggles();
   };
 
   $: if (showPatevyydet && showPatevyydet !== 'on' && !isUpdatingFromProp) {
     updateTogglesFromProp(showPatevyydet);
   }
 
-  const handleKeydown = (event, toggleName) => {
-    if (event.code === 'Space') {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (toggleName === 'ylempi') {
-        ylempitasoToggle = !ylempitasoToggle;
-      } else {
-        pppToggle = !pppToggle;
+  $: ylempitasoToggle,
+    pppToggle,
+    (() => {
+      if (!isUpdatingFromProp) {
+        updatePropFromToggles();
       }
-
-      handleToggleChange(toggleName);
-    }
-  };
-
-  const handleClick = (event, toggleName) => {
-    event.preventDefault();
-
-    if (toggleName === 'ylempi') {
-      ylempitasoToggle = !ylempitasoToggle;
-    } else {
-      pppToggle = !pppToggle;
-    }
-
-    handleToggleChange(toggleName);
-  };
+    })();
 </script>
 
 <style>
+  /* Toggle styles for ETP 2026 */
   .toggle-container {
     display: flex;
     align-items: center;
@@ -169,7 +106,6 @@
     font-weight: 500;
   }
 
-  /* Custom positioning for the checkbox input */
   .checkbox-container input {
     position: absolute;
     top: 0;
@@ -193,21 +129,28 @@
   }
 </style>
 
-<div>
+<div class="px-3 lg:px-8 xl:px-16 pb-8 flex flex-col w-full">
   <fieldset class="flex flex-row gap-6 items-center pt-3">
     <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}</legend>
 
-    <!-- Ylempi taso toggle -->
     <label class="checkbox-container toggle-container">
       <input
         type="checkbox"
-        bind:this={ylempitasoInput}
         bind:checked={ylempitasoToggle}
         role="switch"
         aria-checked={ylempitasoToggle}
         aria-describedby="ylempi-help"
-        on:keydown={e => handleKeydown(e, 'ylempi')}
-        on:click={e => handleClick(e, 'ylempi')} />
+        on:keydown={(event) => {
+          if (event.code === 'Space') {
+            event.preventDefault();
+            event.stopPropagation();
+            ylempitasoToggle = !ylempitasoToggle;
+          }
+        }}
+        on:click={(event) => {
+          event.preventDefault();
+          ylempitasoToggle = !ylempitasoToggle;
+        }} />
       <div
         class="toggle-switch {ylempitasoToggle ? 'active' : ''}"
         aria-hidden="true">
@@ -218,16 +161,24 @@
       {ylempitasoToggle ? $_('COMMON_ON') : $_('COMMON_OFF')}
     </span>
 
-    <label class="checkbox-container toggle-container">
+    <label class="checkbox-container toggle-container" >
       <input
         type="checkbox"
         bind:checked={pppToggle}
-        bind:this={pppInput}
         role="switch"
         aria-checked={pppToggle}
         aria-describedby="ppp-help"
-        on:keydown={e => handleKeydown(e, 'ppp')}
-        on:click={e => handleClick(e, 'ppp')} />
+        on:keydown={(event) => {
+          if (event.code === 'Space') {
+            event.preventDefault();
+            event.stopPropagation();
+            pppToggle = !pppToggle;
+          }
+        }}
+        on:click={(event) => {
+          event.preventDefault();
+          pppToggle = !pppToggle;
+        }} />
       <div class="toggle-switch {pppToggle ? 'active' : ''}" aria-hidden="true">
       </div>
       <span class="toggle-label">{$_('LHAKU_TOGGLE_PPP')}</span>

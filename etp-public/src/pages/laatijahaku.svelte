@@ -113,13 +113,27 @@
     ]).then(([...args]) => GeoUtils.findToimintaalueIds(...args));
   };
 
-  onMount(() => {
+  onMount(async () => {
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: 'smooth'
     });
+    
+    // Initialize ETP 2026 flag
+    const config = await configPromise;
+    isEtp2026 = config?.isEtp2026 || false;
   });
+
+  const handleFilterChange = (newFilter) => {
+    const qs = [
+      ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
+      ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
+      ...[['filterPatevyydet', newFilter].join('=')],
+      ...[['page', 0].join('=')]
+    ].join('&');
+    navigate(`/laatijahaku${qs ? '?' + qs : ''}`);
+  };
 </script>
 
 <svelte:window
@@ -180,6 +194,19 @@
 </Container>
 
 <Container {...containerStyles.white}>
+  {#await configPromise then config}
+    {#if config?.isEtp2026}
+      <TableLaatijahakuFilter2026
+        on:change={(evt) => handleFilterChange(evt.detail)}
+        showPatevyydet={filterPatevyydet} />
+    {:else}
+      <TableLaatijahakuFilter
+        on:change={(evt) => handleFilterChange(evt.target.value)}
+        showPatevyydet={filterPatevyydet}
+        patevyydet={$patevyydet} />
+    {/if}
+  {/await}
+  
   <div
     class="px-3 lg:px-8 xl:px-16 pb-8 flex flex-col w-full"
     bind:this={resultsElement}>
@@ -195,36 +222,6 @@
         haetutToimintaalueet={h}
         {patevyydet}
         {page}>
-        <div slot="filter">
-          {#await configPromise then config}
-            {#if config?.isEtp2026}
-              <TableLaatijahakuFilter2026
-                on:change={evt =>
-                  navigate(
-                    `/laatijahaku?${[
-                      ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
-                      ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
-                      ...[['filterPatevyydet', evt.detail].join('=')],
-                      ...[['page', 0].join('=')]
-                    ].join('&')}`
-                  )}
-                showPatevyydet={filterPatevyydet} />
-            {:else}
-              <TableLaatijahakuFilter
-                on:change={evt =>
-                  navigate(
-                    `/laatijahaku?${[
-                      ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
-                      ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
-                      ...[['filterPatevyydet', evt.target.value].join('=')],
-                      ...[['page', 0].join('=')]
-                    ].join('&')}`
-                  )}
-                showPatevyydet={filterPatevyydet}
-                {patevyydet} />
-            {/if}
-          {/await}
-        </div>
         <div slot="pagination" let:currentPageItemCount>
           <Pagination
             {page}
