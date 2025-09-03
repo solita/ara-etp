@@ -313,5 +313,7 @@
   "TILASTOT_PAINOVOIMAINEN_TULO_POISTO": "Painovoimainen iv + koneellinen tulo- ja poisto",
   "TILASTOT_ALLE": "Alle",
   "TILASTOT_YLI": "Yli",
-  "TILASTOT_TULOSTA": "Tulosta"
+  "TILASTOT_TULOSTA": "Tulosta",
+  "COMMON_ON": "Päällä",
+  "COMMON_OFF": "Pois"
 }

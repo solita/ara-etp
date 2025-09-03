@@ -313,5 +313,7 @@
   "LISATIETOA_TUNNUSLUVUT": "Nyckeltal och statistik",
   "LISATIETOA_LAATIJOITA": "Upprättare",
   "LISATIETOA_ENERGIATODISTUKSIA": "Energicertifikat",
-  "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken"
+  "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken",
+  "COMMON_ON": "På",
+  "COMMON_OFF": "Av"
 }
