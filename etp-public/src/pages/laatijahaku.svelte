@@ -119,13 +119,13 @@
       left: 0,
       behavior: 'smooth'
     });
-    
+
     // Initialize ETP 2026 flag
     const config = await configPromise;
     isEtp2026 = config?.isEtp2026 || false;
   });
 
-  const handleFilterChange = (newFilter) => {
+  const handleFilterChange = newFilter => {
     const qs = [
       ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
       ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
@@ -197,16 +197,16 @@
   {#await configPromise then config}
     {#if config?.isEtp2026}
       <TableLaatijahakuFilter2026
-        on:change={(evt) => handleFilterChange(evt.detail)}
+        on:change={evt => handleFilterChange(evt.detail)}
         showPatevyydet={filterPatevyydet} />
     {:else}
       <TableLaatijahakuFilter
-        on:change={(evt) => handleFilterChange(evt.target.value)}
+        on:change={evt => handleFilterChange(evt.target.value)}
         showPatevyydet={filterPatevyydet}
         patevyydet={$patevyydet} />
     {/if}
   {/await}
-  
+
   <div
     class="px-3 lg:px-8 xl:px-16 pb-8 flex flex-col w-full"
     bind:this={resultsElement}>

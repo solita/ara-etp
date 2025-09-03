@@ -140,14 +140,14 @@
         role="switch"
         aria-checked={ylempitasoToggle}
         aria-describedby="ylempi-help"
-        on:keydown={(event) => {
+        on:keydown={event => {
           if (event.code === 'Space') {
             event.preventDefault();
             event.stopPropagation();
             ylempitasoToggle = !ylempitasoToggle;
           }
         }}
-        on:click={(event) => {
+        on:click={event => {
           event.preventDefault();
           ylempitasoToggle = !ylempitasoToggle;
         }} />
@@ -161,21 +161,21 @@
       {ylempitasoToggle ? $_('COMMON_ON') : $_('COMMON_OFF')}
     </span>
 
-    <label class="checkbox-container toggle-container" >
+    <label class="checkbox-container toggle-container">
       <input
         type="checkbox"
         bind:checked={pppToggle}
         role="switch"
         aria-checked={pppToggle}
         aria-describedby="ppp-help"
-        on:keydown={(event) => {
+        on:keydown={event => {
           if (event.code === 'Space') {
             event.preventDefault();
             event.stopPropagation();
             pppToggle = !pppToggle;
           }
         }}
-        on:click={(event) => {
+        on:click={event => {
           event.preventDefault();
           pppToggle = !pppToggle;
         }} />
