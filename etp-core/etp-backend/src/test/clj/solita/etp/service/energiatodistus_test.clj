@@ -30,6 +30,11 @@
                                    1
                                    2018
                                    true
+                                   laatija-id)
+                                  (energiatodistus-test-data/generate-and-insert!
+                                   1
+                                   2026
+                                   true
                                    laatija-id))]
     {:paakayttajat (zipmap paakayttaja-ids paakayttaja-adds)
      :laatijat laatijat
@@ -46,21 +51,21 @@
   (-> (service/find-energiatodistus ts/*db* id) :tila-id energiatodistus-tila/tila-key))
 
 (t/deftest add-and-find-energiatodistus-test
-  (let [{:keys [laatijat energiatodistukset]} (test-data-set)]
-    (doseq [id (-> energiatodistukset keys sort)]
+  (let [{:keys [energiatodistukset]} (test-data-set)]
+    (doseq [id (keys energiatodistukset)]
       (t/is (add-eq-found? (get energiatodistukset id)
                            (service/find-energiatodistus ts/*db* id))))))
 
 (t/deftest no-permissions-to-draft-test
-  (let [{:keys [energiatodistukset]} (test-data-set)
-        id (-> energiatodistukset keys first)]
-    (doseq [rooli [kayttaja-test-data/laatija
-                   kayttaja-test-data/patevyyden-toteaja
-                   kayttaja-test-data/paakayttaja
-                   kayttaja-test-data/laskuttaja]]
-      (t/is (= (etp-test/catch-ex-data
-                #(service/find-energiatodistus ts/*db* rooli id))
-               {:type :forbidden})))))
+  (let [{:keys [energiatodistukset]} (test-data-set)]
+    (doseq [id (keys energiatodistukset)]
+      (doseq [rooli [kayttaja-test-data/laatija
+                     kayttaja-test-data/patevyyden-toteaja
+                     kayttaja-test-data/paakayttaja
+                     kayttaja-test-data/laskuttaja]]
+        (t/is (= (etp-test/catch-ex-data
+                  #(service/find-energiatodistus ts/*db* rooli id))
+                 {:type :forbidden}))))))
 
 (t/deftest draft-visible-to-paakayttaja-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
@@ -79,7 +84,7 @@
 (t/deftest validation-test-invalid-value
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        energiatodistus (energiatodistus-test-data/generate-add 2018 false)
+        energiatodistus (energiatodistus-test-data/generate-add 2026 false)
         add-energiatodistus
         (fn [path value]
           (etp-test/catch-ex-data
@@ -170,12 +175,12 @@
 
 (t/deftest delete-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
-        laatija-id (-> laatijat keys sort first)
-        id (-> energiatodistukset keys sort first)]
-    (service/delete-energiatodistus-luonnos! ts/*db*
-                                             {:id laatija-id}
-                                             id)
-    (t/is (nil? (service/find-energiatodistus ts/*db* id)))))
+        laatija-id (-> laatijat keys sort first)]
+    (doseq [id (keys energiatodistukset)]
+      (service/delete-energiatodistus-luonnos! ts/*db*
+                                               {:id laatija-id}
+                                               id)
+      (t/is (nil? (service/find-energiatodistus ts/*db* id))))))
 
 (t/deftest laskuttaja-permissions-test
   (let [{:keys [energiatodistukset]} (test-data-set)
@@ -280,7 +285,6 @@
   (let [{:keys [laatijat energiatodistukset paakayttajat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         paakayttaja-id (-> paakayttajat keys sort first)
-        whoami {:id laatija-id :rooli 0}
         paakayttaja-whoami {:id paakayttaja-id :rooli 2}
         db (ts/db-user laatija-id)
         [korvattava-1st-id korvattava-2nd-id] (-> energiatodistukset keys sort)
