@@ -86,67 +86,75 @@
   }
 </style>
 
-<fieldset class="flex flex-col md:flex-row">
-  <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
-  <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
-    <label class="radio-container">
-      <input
-        id="kaikkitasot"
-        type="radio"
-        bind:group={showPatevyydet}
-        value={'1,2'}
-        on:change />
-      <span class="radio-visual" />
-      {$_('LHAKU_FILTER_KAIKKI')}
-    </label>
+<div class="px-3 lg:px-8 xl:px-16 pb-8 flex flex-col w-full">
+  <fieldset class="flex flex-col md:flex-row">
+    <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}:</legend>
+    <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
+      <label class="radio-container">
+        <input
+          id="kaikkitasot"
+          type="radio"
+          bind:group={showPatevyydet}
+          value={'1,2'}
+          on:change />
+        <span class="radio-visual" />
+        {$_('LHAKU_FILTER_KAIKKI')}
+      </label>
 
-    <div class="icon-container hidden md:block" tabindex="0">
-      <span class="material-icons text-green" aria-hidden="true"
-        >error_outline</span>
-      <div class="info-popup">
-        <strong>{$_('LHAKU_KAIKKI_TITLE')}</strong>
-        <p>{$_('LHAKU_KAIKKI_TEXT')}</p>
+      <div class="icon-container hidden md:block" tabindex="0">
+        <span class="material-icons text-green" aria-hidden="true"
+          >error_outline</span>
+        <div class="info-popup">
+          <strong>{$_('LHAKU_KAIKKI_TITLE')}</strong>
+          <p>{$_('LHAKU_KAIKKI_TEXT')}</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
-    <label class="radio-container">
-      <input
-        id="perustaso"
-        type="radio"
-        bind:group={showPatevyydet}
-        value={'1'}
-        on:change />
-      <span class="radio-visual" />
-      {labelLocale($locale, patevyydet[0])}
-    </label>
-    <div class="icon-container hidden md:block" tabindex="0">
-      <span class="material-icons text-green" aria-hidden="true"
-        >error_outline</span>
-      <div class="info-popup">
-        <strong>{$_('LHAKU_PERUSTASO_TITLE')}</strong>
-        <p>{$_('LHAKU_PERUSTASO_TEXT')}</p>
+    <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
+      <label class="radio-container">
+        <input
+          id="perustaso"
+          type="radio"
+          bind:group={showPatevyydet}
+          value={'1'}
+          on:change />
+        <span class="radio-visual" />
+        {labelLocale(
+          $locale,
+          patevyydet.find(p => p.id === 1)
+        )}
+      </label>
+      <div class="icon-container hidden md:block" tabindex="0">
+        <span class="material-icons text-green" aria-hidden="true"
+          >error_outline</span>
+        <div class="info-popup">
+          <strong>{$_('LHAKU_PERUSTASO_TITLE')}</strong>
+          <p>{$_('LHAKU_PERUSTASO_TEXT')}</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="flex items-start space-x-1 py-3 md:py-0">
-    <label class="radio-container">
-      <input
-        id="ylempitaso"
-        type="radio"
-        bind:group={showPatevyydet}
-        value={'2'}
-        on:change />
-      <span class="radio-visual" />
-      {labelLocale($locale, patevyydet[1])}
-    </label>
-    <div class="icon-container hidden md:block" tabindex="0">
-      <span class="material-icons text-green" aria-hidden="true"
-        >error_outline</span>
-      <div class="info-popup">
-        <strong>{$_('LHAKU_YLEMPITASO_TITLE')}</strong>
-        <p>{$_('LHAKU_YLEMPITASO_TEXT')}</p>
+    <div class="flex items-start space-x-1 py-3 md:py-0">
+      <label class="radio-container">
+        <input
+          id="ylempitaso"
+          type="radio"
+          bind:group={showPatevyydet}
+          value={'2'}
+          on:change />
+        <span class="radio-visual" />
+        {labelLocale(
+          $locale,
+          patevyydet.find(p => p.id === 2)
+        )}
+      </label>
+      <div class="icon-container hidden md:block" tabindex="0">
+        <span class="material-icons text-green" aria-hidden="true"
+          >error_outline</span>
+        <div class="info-popup">
+          <strong>{$_('LHAKU_YLEMPITASO_TITLE')}</strong>
+          <p>{$_('LHAKU_YLEMPITASO_TEXT')}</p>
+        </div>
       </div>
     </div>
-  </div>
-</fieldset>
+  </fieldset>
+</div>

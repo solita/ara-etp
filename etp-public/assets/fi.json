@@ -110,7 +110,11 @@
   "LAATIJA_WWW": "www-osoite",
   "LAATIJA_EMAIL": "Sähköpostiosoite",
   "LAATIJA_PUH": "Puhelinnumero",
-  "LAATIJA_PERUSPARANNUSPASSI_PATEVYYS": "Perusparannuspassi pätevyys",
+  "LAATIJA_PERUSPARANNUSPASSI_PATEVYYS": "Perusparannuspassipätevyys",
+  "LHAKU_PPP_TITLE": "Perusparannuspassipätevyys",
+  "LHAKU_PPP_TEXT": "Perusparannuspassipätevyys",
+  "LHAKU_TOGGLE_YLEMPI_TASO": "Vain ylempi taso",
+  "LHAKU_TOGGLE_PPP": "Vain perusparannuspassipätevyydet",
   "LAATIJA_VOIMASSA": "Pätevyys",
   "LAATIJA_EI_VOIMASSA": "Ei pätevyyttä",
   "ENERGIATODISTUS": "Energiatodistus",
@@ -309,5 +313,7 @@
   "TILASTOT_PAINOVOIMAINEN_TULO_POISTO": "Painovoimainen iv + koneellinen tulo- ja poisto",
   "TILASTOT_ALLE": "Alle",
   "TILASTOT_YLI": "Yli",
-  "TILASTOT_TULOSTA": "Tulosta"
+  "TILASTOT_TULOSTA": "Tulosta",
+  "COMMON_ON": "Päällä",
+  "COMMON_OFF": "Pois"
 }

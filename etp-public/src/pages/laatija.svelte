@@ -91,7 +91,7 @@
                 class="w-full md:w-1/3 text-lg text-ashblue tracking-widest"
                 >{$_('LAATIJA_PERUSPARANNUSPASSI_PATEVYYS')}:</strong>
               <span
-                >{laatija.patevyys === 3 || laatija.patevyys === 4
+                >{laatija.patevyystaso === 3 || laatija.patevyystaso === 4
                   ? $_('LAATIJA_VOIMASSA')
                   : $_('LAATIJA_EI_VOIMASSA')}</span>
             </div>
