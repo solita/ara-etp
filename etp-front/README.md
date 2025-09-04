@@ -46,6 +46,9 @@ Set the environment variable or the correct Modheader profile as needed, then st
 
 ```bash
 npm run dev
+
+# Or with ETP 2026 feature flag enabled
+ETP_2026=true npm run dev
 ```
 
 Navigate to [https://localhost:3000](https://localhost:3000). You should see your app running. Edit a component file
@@ -110,7 +113,7 @@ Run in Docker container with
 If you run these locally outside Docker container, the snapshots will be different as browsers in different operating
 systems render things slightly differently.
 
-When there are intentional changes, update the image snapshots by running 
+When there are intentional changes, update the image snapshots by running
 ```bash
 ./run-visual-tests-in-docker.sh update
 ```
