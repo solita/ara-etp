@@ -31,7 +31,8 @@
   export let nimihaku = '';
   export let aluehaku = '';
   export let page = 0;
-  export let filterPatevyydet = '1,2';
+  export let filterPatevyydet = '1,2,3,4';
+  let isEtp2026 = '';
 
   const configPromise = fetch('config.json').then(response => response.json());
 
@@ -51,12 +52,8 @@
     // When navigating to laatijahaku from navbar link while filterPatevyydet is set as an URL parameter,
     // filterPatevyydet for some reason becomes undefined and stays undefined when making LaatijaUtils.laatijatByHakukriteerit call, causing a nasty error that breaks the site until full refresh
     // ---
-    if (!filterPatevyydet) {
-      // Set default based on ETP 2026 feature flag
-      configPromise.then(config => {
-        filterPatevyydet = config?.isEtp2026 ? '1,2,3,4' : '1,2';
-      });
-    }
+    if (!filterPatevyydet) filterPatevyydet = '1,2,3,4';
+
   }
   const pageSize = 10;
 
@@ -194,7 +191,13 @@
 </Container>
 
 <Container {...containerStyles.white}>
-  {#await configPromise then config}
+  {#await Promise.all([configPromise, $patevyydet])}
+    <div class="px-3 lg:px-8 xl:px-16 pb-8">
+      <div class="flex justify-center">
+        <Spinner />
+      </div>
+    </div>
+  {:then [config, resolvedPatevyydet]}
     {#if config?.isEtp2026}
       <TableLaatijahakuFilter2026
         on:change={evt => handleFilterChange(evt.detail)}
@@ -203,7 +206,7 @@
       <TableLaatijahakuFilter
         on:change={evt => handleFilterChange(evt.target.value)}
         showPatevyydet={filterPatevyydet}
-        patevyydet={$patevyydet} />
+        patevyydet={resolvedPatevyydet} />
     {/if}
   {/await}
 
