@@ -53,7 +53,6 @@
     // filterPatevyydet for some reason becomes undefined and stays undefined when making LaatijaUtils.laatijatByHakukriteerit call, causing a nasty error that breaks the site until full refresh
     // ---
     if (!filterPatevyydet) filterPatevyydet = '1,2,3,4';
-
   }
   const pageSize = 10;
 
