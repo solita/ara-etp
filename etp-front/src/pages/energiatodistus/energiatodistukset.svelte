@@ -38,6 +38,7 @@
   import * as versionApi from '@Component/Version/version-api';
   import { announcementsForModule } from '@Utility/announce';
   import { announcePolitely } from '@Utility/aria-live';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   const i18n = $_;
   const { announceError, announceSuccess } =
@@ -263,7 +264,7 @@
       {#if Kayttajat.isLaatija(whoami)}
         <div
           class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
-          {#if config?.isEtp2026}
+          {#if isEtp2026Enabled(config)}
             <div class="flex flex-row my-auto">
               <Link
                 text={i18n('energiatodistus.luo2026')}
@@ -447,7 +448,8 @@
         <Spinner />
       </div>
     </Overlay>
-    {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
+    <!-- New ET2026 implementation -->
+    {#if isEtp2026Enabled(config)}
       <div class="flex flew-row mb-4 mr-4">
         <span class="material-icons">attachment</span>
         &nbsp;
@@ -455,13 +457,24 @@
           text={i18n('energiatodistus.lataa-csv')}
           href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
       </div>
+      <!-- Old implementation -->
+    {:else}
+      {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
+        <div class="flex flew-row mb-4 mr-4">
+          <span class="material-icons">attachment</span>
+          &nbsp;
+          <Link
+            text={i18n('energiatodistus.lataa-csv')}
+            href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
+        </div>
+      {/if}
+      <div class="flex flew-row mb-4 mr-4">
+        <span class="material-icons">attachment</span>
+        &nbsp;
+        <Link
+          text={i18n('energiatodistus.lataa-xlsx')}
+          href={`/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx${queryStringForExport}`} />
+      </div>
     {/if}
-    <div class="flex flew-row mb-4 mr-4">
-      <span class="material-icons">attachment</span>
-      &nbsp;
-      <Link
-        text={i18n('energiatodistus.lataa-xlsx')}
-        href={`/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx${queryStringForExport}`} />
-    </div>
   {/each}
 </div>
