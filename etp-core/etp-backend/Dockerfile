@@ -1,5 +1,5 @@
 # Build image
-FROM --platform=amd64 clojure:temurin-17-tools-deps-alpine@sha256:281d3e60b5145098170bedeff416cef6f175788c9eda61cbf409d4006875c2b6 as builder
+FROM --platform=amd64 clojure:temurin-17-tools-deps-alpine@sha256:e8e30ce317a8f3ab1cc64f46209bd44e0d6a3a88fd821a1031bbb4740d62e39f as builder
 
 # Preload dependencies for better caching
 COPY deps.edn /usr/src/etp-backend/
