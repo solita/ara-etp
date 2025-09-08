@@ -101,7 +101,11 @@
   "LHAKU_YLEMPITASO_TEXT": "Endast upprättarna på högre nivå syns i resultaten.",
   "LAATIJA_TAKAISIN": "Tillbaka till sökningen av upprättare",
   "LAATIJA_PATEVYYSTASO": "Behörighetsnivå",
-  "LAATIJA_PERUSPARANNUSPASSI_PATEVYYS": "Perusparannuspassi behörighet",
+  "LAATIJA_PERUSPARANNUSPASSI_PATEVYYS": "Perusparannuspassipätevyys (sv)",
+  "LHAKU_PPP_TITLE": "Perusparannuspassipätevyys (sv)",
+  "LHAKU_PPP_TEXT": "Perusparannuspassipätevyys (sv)",
+  "LHAKU_TOGGLE_YLEMPI_TASO": "Vain ylempi taso (sv)",
+  "LHAKU_TOGGLE_PPP": "Vain perusparannuspassipätevyydet (sv)",
   "LAATIJA_VOIMASSA": "Kompetens",
   "LAATIJA_EI_VOIMASSA": "Ingen kompetens",
   "LAATIJA_VOIMASSAOLOAIKA": "Behörighetens giltighetstid",
@@ -309,5 +313,7 @@
   "LISATIETOA_TUNNUSLUVUT": "Nyckeltal och statistik",
   "LISATIETOA_LAATIJOITA": "Upprättare",
   "LISATIETOA_ENERGIATODISTUKSIA": "Energicertifikat",
-  "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken"
+  "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken",
+  "COMMON_ON": "På",
+  "COMMON_OFF": "Av"
 }
