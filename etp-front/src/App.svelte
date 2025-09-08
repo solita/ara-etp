@@ -18,6 +18,7 @@
   import * as ohjeApi from '@Pages/ohje/ohje-api';
   import * as Future from '@Utility/future-utils';
   import Body from './Body.svelte';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   setupI18n();
 
@@ -91,7 +92,7 @@
 
     <div class="footercontainer">
       <div class="w-full max-w-1440 mx-auto">
-        <Footer {version} isEtp2026={config.isEtp2026 ?? false} />
+        <Footer {version} isEtp2026={isEtp2026Enabled(config)} />
       </div>
     </div>
   {/each}
