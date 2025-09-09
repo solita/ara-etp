@@ -129,10 +129,9 @@
   }
 </style>
 
-<div class="px-3 lg:px-8 xl:px-16 pb-8 flex flex-col w-full">
-  <fieldset class="flex flex-row gap-6 items-center pt-3">
-    <legend class="sr-only">{$_('LAATIJA_PATEVYYSTASO')}</legend>
-
+<div class="px-4 lg:px-8 xl:px-16 pb-8 flex flex-col w-full">
+  <fieldset class="flex flex-col md:flex-row gap-6 md:items-center pt-3">
+    <legend class="font-bold">{$_('LHAKU_PATEVYYS_LABEL')}</legend>
     <label class="checkbox-container toggle-container">
       <input
         type="checkbox"
