@@ -31,6 +31,7 @@
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import { announcementsForModule } from '@Utility/announce';
   import { announcePolitely } from '@Utility/aria-live';
+  import { isEtp2026Enabled } from '@/utils/config_utils.js';
 
   const i18n = $_;
   const i18nRoot = 'laatijat';
@@ -251,7 +252,7 @@
                 R.pluck('id'),
                 R.filter(
                   R.propSatisfies(
-                    config.isEtp2026
+                    isEtp2026Enabled(config)
                       ? R.T
                       : PatevyystasotUtils.isBasicPatevyystaso,
                     'id'

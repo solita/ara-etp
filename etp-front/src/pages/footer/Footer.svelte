@@ -3,9 +3,10 @@
   import * as Locales from '@Language/locale-utils';
 
   import Link from '@Component/Link/Link';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   export let version;
-  export let isEtp2026 = false;
+  export let config;
 
   $: footerLogoPath = Locales.isSV($locale)
     ? 'images/YM_Varke_vaaka_sin_SV_RGB.png'
@@ -83,7 +84,7 @@
     <img class="h-32" src={footerLogoPath} alt="Varke" />
     <p>
       {version.version}
-      {#if isEtp2026}
+      {#if isEtp2026Enabled(config)}
         ETP 2026
       {/if}
     </p>

@@ -25,6 +25,7 @@
   import * as LaatijaSchema from './schema';
 
   import { announcementsForModule } from '@Utility/announce';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   const i18n = $_;
   const i18nRoot = 'laatija';
@@ -68,7 +69,7 @@
     R.pluck('id'),
     R.filter(
       R.propSatisfies(
-        config?.isEtp2026 ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
+        isEtp2026Enabled(config) ? R.T : PatevyystasotUtils.isBasicPatevyystaso,
         'id'
       )
     )
