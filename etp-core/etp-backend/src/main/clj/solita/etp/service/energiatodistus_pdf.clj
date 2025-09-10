@@ -740,7 +740,7 @@
     (cond
       draft?
       (watermark-pdf/add-watermark pdf-path (draft-watermark-texts kieli))
-      (contains? #{"dev" "test"} config/environment-alias)
+      (contains? #{"local-dev" "dev" "test"} config/environment-alias)
       (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli))
       :else pdf-path)))
 
