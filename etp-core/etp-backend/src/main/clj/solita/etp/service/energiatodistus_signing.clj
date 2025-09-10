@@ -151,7 +151,7 @@
                ;; flow for the user since we can wait at most a minute because of CF.
 
                ;; In dev and test environment we do not have OCSP responders for our self-made certificates.
-               ;; Note that in local dev we do have OCSP responders but the default environment-alias is "test" in local dev.
+               ;; Note that in local dev we do have OCSP responders.
                signed-pdf-lt-or-t-level (if (contains? #{"dev" "test"} config/environment-alias)
                                                   signed-pdf-t-level
                                                   (pdf-sign/t-level->lt-level signed-pdf-t-level))]

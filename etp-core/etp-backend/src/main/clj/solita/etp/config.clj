@@ -30,7 +30,7 @@
 ;; Misc config
 ;;
 
-(def environment-alias (env "ENVIRONMENT_ALIAS" "test"))
+(def environment-alias (env "ENVIRONMENT_ALIAS" "local-dev"))
 (def is-public-backend? (Boolean/parseBoolean (find-configuration "IS_USED_AS_PUBLIC_BACKEND" [env property] "false")))
 
 ;;
