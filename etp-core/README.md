@@ -73,16 +73,17 @@ Start [the required services](/docker) (database etc):
     # Alternative start command for Podman
     ./start.sh --podman
 
-Start script starts docker-compose, creates template and dev databases
-and runs migrations for both of them.
+Start script starts docker-compose resulting in template and dev database
+creation. It also starts two `etp-db` containers which use Flyway to run
+migrations to both databases.
 
 Docker-compose has a service for faking digital signatures, mpollux. It uses a self-signed certificate.
 Visit https://127.0.0.1:53952/ and trust the certificate to get the digital signatures working.
 
-Start [the backend](/etp-backend). Backend developers should start the REPL from
-their IDE and start the services from there by calling the `reset` function.
-The application can be also started from the command line with the following
-command:
+Start [the backend](/etp-backend). Backend developers should start the REPL
+from their IDE and start the services from there by calling the `reset`
+function. The application can be also started from the command line with the
+following command:
 
     cd etp-backend
     clojure -M:dev -m solita.etp.core
@@ -128,15 +129,24 @@ There are two users for the database:
  * ```etp_app```: can read and write to tables in ```postgres``` database.
 
 In production and test environments the ```postgres``` database is used
-normally. It needs to be created during instance setup and migrations are ran as
-```etp``` user. ```etp_app``` user writes and reads data from the tables.
+normally. It needs to be created during instance setup and migrations are ran
+as ```etp``` user. ```etp_app``` user writes and reads data from the tables.
 
 In development environment the ```postgres``` database is used as a template
 that can be used for setting up new databases. The dockerized Postgres sets up
 a second database ```etp_dev``` which should be used locally during
-development. For convenience, [docker](/docker) directory contains script
-[flyway.sh](/docker/flyway.sh) that can be used for migrating and cleaning
-both databases with a single call.
+development. Migrations are run when containers start. If there's need to clean
+the migrations and apply them again, the following commands can be used inside
+the `docker` directory:
+
+```bash
+# Cleaning
+docker compose run etp-db-for-postgres ./db.sh clean
+docker compose run etp-db-for-etp_dev ./db.sh clean test
+# Applying migrations
+docker compose run etp-db-for-postgres ./db.sh migrate
+docker compose run etp-db-for-etp_dev ./db.sh migrate test
+```
 
 Tests will utilize ```postgres``` database as template extensively as each test
 will create their own database from it.

@@ -19,6 +19,27 @@ services:
       timeout: 5s
       retries: 30
 
+  etp-db-for-etp_dev:
+    build: ../../etp-core/etp-db
+    image: etp-db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/etp_dev
+    command:
+      ./db.sh migrate test
+    depends_on:
+      db:
+        condition: service_healthy
+
+  etp-db-for-postgres:
+    image: etp-db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/postgres
+    command:
+      ./db.sh migrate
+    depends_on:
+      db:
+        condition: service_healthy
+
   admin:
     image: dpage/pgadmin4
     ports:
