@@ -7,6 +7,7 @@
     [clojure.tools.logging :as log]
     [solita.common.certificates :as certificates]
     [solita.common.time :as time]
+    [solita.etp.etp2026 :as etp2026]
     [solita.etp.common.audit-log :as audit-log]
     [solita.etp.config :as config]
     [solita.etp.exception :as exception]
@@ -82,7 +83,9 @@
   Upload to S3.
   Return the data that needs to be signed in base64."
   [db aws-s3-client id language laatija-allekirjoitus-id]
-  (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+  (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus}
+             (-> (complete-energiatodistus-service/find-complete-energiatodistus db id)
+                 (update :versio #(etp2026/implement-2026-via-2018 % "Details for 2026 version of pdf not yet clear. Using 2018 version for now.")))]
     (do-when-signing
       complete-energiatodistus
       #(let [draft? false
