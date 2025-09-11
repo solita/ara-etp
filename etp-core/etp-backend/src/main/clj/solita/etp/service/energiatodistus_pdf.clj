@@ -7,6 +7,7 @@
             [solita.common.libreoffice :as libreoffice]
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
+            [solita.etp.etp2026 :as etp2026]
             [solita.etp.config :as config]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
@@ -569,39 +570,40 @@
               {:path [:tulokset :kuukausierittely-summat :hyoty :lampo] :dp 0}])})
 
 (defn fill-xlsx-template [{:keys [versio] :as complete-energiatodistus} kieli draft?]
-  (with-open [is (-> xlsx-template-paths
-                     (get-in [versio kieli])
-                     io/resource
-                     io/input-stream)
-              loaded-xlsx (xlsx/load-xlsx is)]
-    (let [sheets (map #(xlsx/get-sheet loaded-xlsx %) (range sheet-count))
-          path (->> (java.util.UUID/randomUUID)
-                    .toString
-                    (format "energiatodistus-%s.xlsx")
-                    (str tmp-dir))]
-      (doseq [[sheet-idx sheet-mappings] mappings]
-        (doseq [[row-idx {:keys [path f dp percent?]}] (map-indexed vector sheet-mappings)
-                :let [sheet (nth sheets sheet-idx)
-                      row (xlsx/get-row sheet row-idx)
-                      cell (xlsx/get-cell row 0)
-                      v (if path
-                          (get-in complete-energiatodistus path)
-                          (f complete-energiatodistus))
-                      v (cond
+  (let [versio (etp2026/implement-2026-via-2018 versio "There is no xlsx-template for 2026 version")]
+    (with-open [is (-> xlsx-template-paths
+                       (get-in [versio kieli])
+                       io/resource
+                       io/input-stream)
+                loaded-xlsx (xlsx/load-xlsx is)]
+      (let [sheets (map #(xlsx/get-sheet loaded-xlsx %) (range sheet-count))
+            path (->> (java.util.UUID/randomUUID)
+                      .toString
+                      (format "energiatodistus-%s.xlsx")
+                      (str tmp-dir))]
+        (doseq [[sheet-idx sheet-mappings] mappings]
+          (doseq [[row-idx {:keys [path f dp percent?]}] (map-indexed vector sheet-mappings)
+                  :let [sheet (nth sheets sheet-idx)
+                        row (xlsx/get-row sheet row-idx)
+                        cell (xlsx/get-cell row 0)
+                        v (if path
+                            (get-in complete-energiatodistus path)
+                            (f complete-energiatodistus))
+                        v (cond
 
-                          (number? v)
-                          (formats/format-number v dp percent?)
+                            (number? v)
+                            (formats/format-number v dp percent?)
 
-                          (string? v)
-                          (if (str/blank? v) " " v)
+                            (string? v)
+                            (if (str/blank? v) " " v)
 
-                          :else
-                          (or v " "))]]
-          (xlsx/set-cell-value cell v)))
-      (xlsx/evaluate-formulas loaded-xlsx)
-      (io/make-parents path)
-      (xlsx/save-xlsx loaded-xlsx path)
-      path)))
+                            :else
+                            (or v " "))]]
+            (xlsx/set-cell-value cell v)))
+        (xlsx/evaluate-formulas loaded-xlsx)
+        (io/make-parents path)
+        (xlsx/save-xlsx loaded-xlsx path)
+        path))))
 
 ;; Uses current Libreoffice export settings. Make sure they are set
 ;; for PDFA-2B.
