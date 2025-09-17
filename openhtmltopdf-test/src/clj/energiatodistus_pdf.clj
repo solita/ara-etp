@@ -41,20 +41,8 @@
     (.useSVGDrawer (BatikSVGDrawer.))                       ; // Load SVG support plugin
     (.run)))
 
-(defn generate-energiatodistus-2026-pdf->bytes [{:keys [data]}]
-  (with-open [baos (ByteArrayOutputStream.)
-              fos (FileOutputStream. "output-doc.testing-output.pdf")]
-    (-> "/home/juho/projects/varke/etp/ara-etp/openhtmltopdf-test/src/resources/energiatodistus-2026-fi.template.html"
-        slurp
-        (build-pdf fos))
-    (.toByteArray baos)))
-
 (defn hiccup-doc->html-doc [hiccup-doc]
   (str (h/html hiccup-doc)))
-
-(defn call-this-function []
-  (-> (generate-energiatodistus-2026-pdf->bytes {:data {:rakennustunnus 123}})
-      #_(#(spit "testet.pdf" % :binary true))))
 
 (defn arrow-polygon-svg [block-length block-color mirrored?]
   (let [sw "10,10"
@@ -99,9 +87,6 @@
 
 (defn et26-test [{:keys [rakennustunnus]}]
   (let [blue "#009ee0"
-        white "#000000"
-        kind-of-br [:div {:style (str "background-color: " blue "; height: 40px; border: 0px")}]
-        dt #([:dt {:style "dt::after {content}"}])
         style "
           body {
             font-family: roboto
@@ -145,9 +130,7 @@
           [:td "mitä"]
           [:td "sitä"]]]]
        (e-luokka-table "B")]
-      #_[:dl {:style (str "background-color: white; text-align: center; margin: 40px; border-radius: 14px")}
-         [:dt "Rakennustunnus"]
-         [:dd rakennustunnus]]]]))
+      ]]))
 
 (defn hiccup-doc [{:keys [data]}]
   (with-open [baos (ByteArrayOutputStream.)
@@ -162,4 +145,3 @@
   (hiccup-doc->html-doc (hiccup-doc {:data {:rakennustunnus 123}})))
 
 (call-this-function2)
-#_(call-this-function)
