@@ -6,7 +6,6 @@
 </script>
 
 <style>
-
   ol {
     @apply my-4 ml-6;
   }
