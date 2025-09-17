@@ -23,10 +23,6 @@
     @apply my-4 ml-6;
   }
 
-  ol {
-    @apply my-4 ml-6;
-  }
-
   .contact-info {
     @apply list-none;
   }
