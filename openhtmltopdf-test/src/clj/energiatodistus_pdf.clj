@@ -114,8 +114,10 @@
      [:body
       [:div {:style (str "background-color: " blue "; border-radius: 25px; height: 750px; padding-top: 6px")}
        [:h1 {:style (str "background-color: white; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; text-align: center; margin: 15px; ")} "ENERGIATODISTUS 2018"]
+       ;; Using a table since dl-element does not seem to work nicely with screen reader.
        [:table {:style (str "background-color: white; width: 100%; margin: 60px;")}
         [:thead {:style "display: none"}
+         ;; This should be read by a screen reader.
          [:tr
           [:th "Avain"]
           [:th "Arvo"]]]
@@ -129,8 +131,7 @@
          [:tr
           [:td "mitä"]
           [:td "sitä"]]]]
-       (e-luokka-table "B")]
-      ]]))
+       (e-luokka-table "B")]]]))
 
 (defn hiccup-doc [{:keys [data]}]
   (with-open [baos (ByteArrayOutputStream.)
