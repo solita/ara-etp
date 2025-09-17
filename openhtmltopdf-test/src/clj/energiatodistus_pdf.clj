@@ -141,7 +141,7 @@
   (with-open [baos (ByteArrayOutputStream.)
               fos (FileOutputStream. "hiccup-doc.testing-output.pdf")
               html-doc (io/writer "hiccup-html.testing-output.html")]
-    (pprint/pprint (hiccup-doc->html-doc (et26-test data)) html-doc)
+    (spit html-doc (hiccup-doc->html-doc (et26-test data)))
     (-> (hiccup-doc->html-doc (et26-test data))
         (build-pdf fos))
     (.toByteArray baos)))
