@@ -1,0 +1,9 @@
+# clojure
+.cpcache
+.nrepl-port
+*.swp
+*.pdf
+
+
+*.testing-output.pdf
+*.testing-output.html

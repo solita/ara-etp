@@ -1,0 +1,97 @@
+<html lang="FI-fi">
+<head>
+    <title>All-in-one PDF/UA Testcase</title>
+    <meta name="subject" content="PDF/UA all-in-one"/>
+    <meta name="author" content="openhtmltopdf.com team"/>
+    <meta name="description" content="An example containing everything for easy testing"/>
+
+    <bookmarks>
+        <bookmark name="Simple Paragraphs" href="#para"/>
+        <bookmark name="Lists" href="#lists">
+            <bookmark name="Ordered" href="#ordered"/>
+            <bookmark name="Unordered" href="#unordered"/>
+        </bookmark>
+        <bookmark name="Images" href="#images"/>
+        <bookmark name="Links" href="#links"/>
+        <bookmark name="Tables" href="#tables"/>
+        <bookmark name="Backgrounds" href="#backgrounds"/>
+        <bookmark name="Conclusion" href="#conclusion"/>
+    </bookmarks>
+
+    <style>
+        @page {
+            margin: 30px 20px;
+
+            @top-center {
+                font-family: 'roboto'; /* Font provided with builder. */
+                font-size: 16px;
+                color: blue;
+                content: "This is PDF/UA page " counter(page) " of " counter(pages) ".";
+            }
+        }
+
+        body {
+            margin: 0;
+            font-family: 'roboto'; /* Font provided with builder. */
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body style="">
+<h1 id="title">All-in-one accessible (PDF/UA, Section 508, WCAG) PDF example</h1>
+
+<h2 id="para">Perustiedot</h2>
+<dl>
+    <dt>
+        Rakennuksen nimi:
+    </dt>
+    <dd>
+        Atlantiksen kirjasto
+    </dd>
+    <dt>
+        Rakennuksen osoite:
+    </dt>
+    <dd>
+        <address>
+            Atlantiksen katu 1 A 9
+            33100 Tampere
+        </address>
+    </dd>
+    <dt>
+        Pysyvä rakennustunnus:
+    </dt>
+    <dt>
+        101010101A
+    </dt>
+    <dt>
+        Rakennuksen valmistumisvuosi:
+    </dt>
+    <dd>
+        2029
+    </dd>
+    <dt>
+        Rakennuksen käyttötarkoitusluokka:
+    </dt>
+    <dd>
+        Rivi- ja ketjutalot
+    </dd>
+    <dt>
+        Todistustunnus:
+    </dt>
+    <dd>
+        299292
+    </dd>
+    <dt>
+
+    </dt>
+    <dl>
+    </dl>
+</dl>
+<ul>
+    <li>Bullet item one</li>
+    <li>And two</li>
+    <li>And three</li>
+</ul>
+
+</body>
+</html>
