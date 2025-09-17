@@ -126,8 +126,5 @@
 </style>
 
 <div class:printing class:chart-parent={!printing}>
-  <canvas
-    bind:this={chartCanvas}
-    aria-label={ariaLabelText + ariaLabelStats}
-    role="img" />
+  <canvas bind:this={chartCanvas} aria-label={ariaLabelText + ariaLabelStats} />
 </div>

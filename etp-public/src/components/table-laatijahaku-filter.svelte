@@ -101,7 +101,11 @@
         {$_('LHAKU_FILTER_KAIKKI')}
       </label>
 
-      <div class="icon-container hidden md:block" role="button" tabindex="0" aria-label="{$_('LHAKU_KAIKKI_TITLE')} - {$_('LHAKU_KAIKKI_TEXT')}">
+      <div
+        class="icon-container hidden md:block"
+        role="button"
+        tabindex="0"
+        aria-label="{$_('LHAKU_KAIKKI_TITLE')} - {$_('LHAKU_KAIKKI_TEXT')}">
         <span class="material-icons text-green" aria-hidden="true"
           >error_outline</span>
         <div class="info-popup" role="tooltip">
@@ -124,7 +128,13 @@
           patevyydet.find(p => p.id === 1)
         )}
       </label>
-      <div class="icon-container hidden md:block" role="button" tabindex="0" aria-label="{$_('LHAKU_PERUSTASO_TITLE')} - {$_('LHAKU_PERUSTASO_TEXT')}">
+      <div
+        class="icon-container hidden md:block"
+        role="button"
+        tabindex="0"
+        aria-label="{$_('LHAKU_PERUSTASO_TITLE')} - {$_(
+          'LHAKU_PERUSTASO_TEXT'
+        )}">
         <span class="material-icons text-green" aria-hidden="true"
           >error_outline</span>
         <div class="info-popup" role="tooltip">
@@ -147,7 +157,13 @@
           patevyydet.find(p => p.id === 2)
         )}
       </label>
-      <div class="icon-container hidden md:block" role="button" tabindex="0" aria-label="{$_('LHAKU_YLEMPITASO_TITLE')} - {$_('LHAKU_YLEMPITASO_TEXT')}">
+      <div
+        class="icon-container hidden md:block"
+        role="button"
+        tabindex="0"
+        aria-label="{$_('LHAKU_YLEMPITASO_TITLE')} - {$_(
+          'LHAKU_YLEMPITASO_TEXT'
+        )}">
         <span class="material-icons text-green" aria-hidden="true"
           >error_outline</span>
         <div class="info-popup" role="tooltip">
