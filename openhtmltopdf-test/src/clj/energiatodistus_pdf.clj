@@ -102,7 +102,11 @@
                                 :page-break-inside "avoid"}))} content])
 
 (defn page [& content]
-  [:div {:style (style {:page-break-inside "avoid"
+  [:div {:style (style {:border-color      (:bg-blue colors)
+                        :border-width      "2px"
+                        :border-style      "solid"
+                        :height            "950px"
+                        :page-break-inside "avoid"
                         :page-break-before "always"})} content])
 
 (defn et26-test [{:keys [todistustunnus rakennustunnus e-luokka]}]
@@ -160,6 +164,69 @@
          [:td "3"]]]]
       (e-luokka-table e-luokka))
     (page
+      [:h2 {:style (style {:text-transform "uppercase" :color (:bg-blue colors)})} "Yhteenveto rakennuksen energiatehokkuudesta"]
+      [:h3
+       "Laskennallinen ostoenergiankulutus ja energiatehokkuuden vertailuluku (E-luku)"]
+      [:table
+       [:tbody
+        [:tr
+         [:th {:scope "row"} "Lämmitetty nettoala"]
+         [:td "150000,0"]]
+        [:tr
+         [:th {:scope "row"} "Lämmitysjärjestelmän kuvaus"]
+         ;; TODO: What is going on here?
+         [:td "Kaukolämpö, Toissijaisen lämmitysjärjestelmän kuvaus" [:br] "Vesikiertoinen lattialämmitys"]]
+        [:tr
+         [:th {:scope "row"} "Ilmanvaihtojärjestelmän kuvaus"]
+         [:td "Koneellinen poistoilmanvaihtojärjestelmä"]]]]
+      [:table
+       [:thead
+        [:tr
+         [:th "Käytettävä energiamuoto"]
+         [:th {:colspan "2"} "Vakioidulla käytöllä laskettu ostoenergia"]
+         [:th "Energiamuodon kerroin"]
+         [:th "Energiamuodon kertoimella painotettu energiankulutus"]]
+        [:tr
+         [:th ""]
+         [:th "kWh/vuosi"]
+         [:th "kWh/(m" [:sup 2] "vuosi)"]
+         [:th ""]
+         [:th "kWh" [:sub "E"] "/m" [:sup 2] "vuosi)"]]]
+       [:tbody
+        [:tr
+         [:th {:scope "row"} "kaukolämpö"]
+         [:td "70000000"]
+         [:td "47"]
+         [:td "0,5"]
+         [:td "23"]]
+        [:tr
+         [:th {:scope "row"} "sähkö"]
+         [:td "10000000"]
+         [:td "47"]
+         [:td "1,2"]
+         [:td "80"]]
+        [:tr
+         [:th {:scope "row"} "uusiutuva polttoaine"]
+         [:td "7000"]
+         [:td "67"]
+         [:td "0,5"]
+         [:td "0"]]
+        [:tr
+         [:th {:scope "row"} "fossiilinen polttoaine"]
+         [:td "0"]
+         [:td "47"]
+         [:td "1"]
+         [:td "0"]]
+        [:tr
+         [:th {:scope "row"} "kaukojäähdytys"]
+         [:td "0"]
+         [:td "47"]
+         [:td "0,28"]
+         [:td "0"]]
+        [:tr
+         [:th {:colspan "4" :scope "row"} "Enregiatehokkuuden vertailuluku (E-luku)"]
+         [:td "104"]]]])
+    (page
       [:h2 "E-LUVUN LASKENNAN LÄHTÖTIEDOT"]
       [:table
        [:thead
@@ -169,7 +236,7 @@
         [:tr
          [:th {:scope "row"} "Rakennuksen käyttötarkoitusluokka"]
          [:td "Tavaratalot"]
-         [:td {:style "colspan=2"}]]
+         [:td {:colspan "2"}]]
         [:tr
          [:th {:scope "row"} "Rakennuksen valmistumisvuosi"]
          [:td "2018"]
