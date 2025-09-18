@@ -105,16 +105,27 @@
   [:div {:style (style {:page-break-inside "avoid"
                         :page-break-before "always"})} content])
 
-(defn et26-test [{:keys [rakennustunnus e-luokka]}]
+(defn et26-test [{:keys [todistustunnus rakennustunnus e-luokka]}]
   [:html {:lang "fi-FI"}
    [:head
     [:title "Energiatodistus"]
     [:meta {:name "subject" :content "Hieno pytinki -rakennuksen energiatodistus"}]
     [:meta {:name "author" :content "Laatija Sejase"}]
     [:meta {:name "description" :content "Vuoden 2018 mukainen energiatodistus rakennukselle Hieno pytinki"}]
-    [:style "
-      .first-page-table :is(th, td) { vertical-align: top; background-color: red }
-    "]]
+    [:style
+     (str "@page {
+        @bottom-center {
+          font-family: roboto;
+          content: 'Todistustunnus: " todistustunnus ", ' counter(page) '/' counter(pages);
+        }
+      }
+      @page:first {
+        @bottom-center {
+          font-family: roboto;
+          content: '';
+        }
+      }
+    ")]]
    [:body {:style "font-family: roboto"}
     (first-page
       [:h1 {:style (str "background-color: white; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; text-align: center; margin: 15px; ")} "ENERGIATODISTUS 2018"]
@@ -140,7 +151,7 @@
          [:td "Tavaratalot"]]
         [:tr
          [:td "Todistustunnus"]
-         [:td "3"]]
+         [:td todistustunnus]]
         [:tr
          [:td "Energiatodistus on laadittu"]
          [:td "3"]]
@@ -149,7 +160,7 @@
          [:td "3"]]]]
       (e-luokka-table e-luokka))
     (page
-      [:h1 "Haloo"])]])
+      [:table "Haloo"])]])
 
 (defn hiccup-doc [{:keys [data]}]
   (with-open [baos (ByteArrayOutputStream.)
@@ -161,6 +172,9 @@
     (.toByteArray baos)))
 
 (defn call-this-function2 []
-  (hiccup-doc->html-doc (hiccup-doc {:data {:rakennustunnus 123 :e-luokka "B"}})))
+  ;; TODO: Maybe it would be a good idea in the data map to convert every value to string at this point?
+  (hiccup-doc->html-doc (hiccup-doc {:data {:todistustunnus "8"
+                                            :rakennustunnus 123
+                                            :e-luokka       "B"}})))
 
 (call-this-function2)
