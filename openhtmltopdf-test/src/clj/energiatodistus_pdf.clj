@@ -12,6 +12,14 @@
     (java.io ByteArrayOutputStream FileOutputStream InputStream)
     (com.openhtmltopdf.extend FSSupplier)))
 
+(defn style
+  "Convert a Clojure map of CSS properties into an inline style string."
+  [m]
+  (->> m
+       (map (fn [[k v]]
+              (str (name k) ": " v)))
+       (str/join "; ")))
+
 (def colors
   {:bg-blue  "#009ee0"
    :e-luku-a "#219741"
@@ -85,6 +93,14 @@
        (tr (e-luokka-block-svg "F" 210 (:e-luku-f colors)) (when-clause "F"))
        (tr (e-luokka-block-svg "G" 245 (:e-luku-g colors)) (when-clause "G"))]]]))
 
+(defn page [{:keys [first-page?]} & content]
+  [:div {:style (style (cond-> {:background-color  (:bg-blue colors)
+                                :border-radius     "25px"
+                                :height            "950px"
+                                :padding-top       "6px"
+                                :page-break-inside "avoid"}
+                               (not first-page?) (assoc :page-break-before "always")))} content])
+
 (defn et26-test [{:keys [rakennustunnus e-luokka]}]
   [:html {:lang "fi-FI"}
    [:head
@@ -96,45 +112,39 @@
       .first-page-table :is(th, td) { vertical-align: top; background-color: red }
     "]]
    [:body {:style "font-family: roboto"}
-    [:div {:style (str "background-color: " (:bg-blue colors) "; border-radius: 25px; height: 950px; padding-top: 6px")}
-     [:h1 {:style (str "background-color: white; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; text-align: center; margin: 15px; ")} "ENERGIATODISTUS 2018"]
-     ;; Using a table since dl-element does not seem to work nicely with screen reader.
-     [:table {:style (str "background-color: white; width: 100%; margin: 60px;")}
-      [:thead {:style "display: none"}
-       ;; This should be read by a screen reader.
-       [:tr
-        [:th "Tiedon kuvaus"]
-        [:th "Tiedon sisältö"]]]
-      [:tbody
-       [:tr
-        [:td "Rakennuksen nimi"]
-        [:td "Hieno pytinki"]]
-       [:tr
-        [:td "Rakennuksen osoite"]
-        [:td [:address "Hienonpytkinkinkatu 3" [:br] "33100 TAMPERE" [:br] "TÄHÄN VOI TULLA JOTAIN?"]]]
-       [:tr
-        [:td "Pysyvä rakennustunnus"]
-        [:td "1010101A"]]
-       [:tr
-        [:td "Rakennuksen käyttötarkoitusluokka"]
-        [:td "Tavaratalot"]]
-       [:tr
-        [:td "Todistustunnus"]
-        [:td "3"]]
-       [:tr
-        [:td "Energiatodistus on laadittu"]
-        [:td "3"]]
-       [:tr
-        [:td "Olemassa olevalle rakennukselle, havainnointikäynnin päivämäärä"]
-        [:td "3"]]
-
-
-       ]]
-     (e-luokka-table e-luokka)]
-
-    [:div {:style (str "background-color: " (:bg-blue colors) "; border-radius: 25px; height: 950px; padding-top: 6px")}]
-
-
+    (page {:first-page? true}
+      [:h1 {:style (str "background-color: white; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; text-align: center; margin: 15px; ")} "ENERGIATODISTUS 2018"]
+      ;; Using a table since dl-element does not seem to work nicely with screen reader.
+      [:table {:style (str "background-color: white; width: 100%; margin: 60px;")}
+       [:thead {:style "display: none"}
+        ;; This should be read by a screen reader.
+        [:tr
+         [:th "Tiedon kuvaus"]
+         [:th "Tiedon sisältö"]]]
+       [:tbody
+        [:tr
+         [:td "Rakennuksen nimi"]
+         [:td "Hieno pytinki"]]
+        [:tr
+         [:td "Rakennuksen osoite"]
+         [:td [:address "Hienonpytkinkinkatu 3" [:br] "33100 TAMPERE" [:br] "TÄHÄN VOI TULLA JOTAIN?"]]]
+        [:tr
+         [:td "Pysyvä rakennustunnus"]
+         [:td "1010101A"]]
+        [:tr
+         [:td "Rakennuksen käyttötarkoitusluokka"]
+         [:td "Tavaratalot"]]
+        [:tr
+         [:td "Todistustunnus"]
+         [:td "3"]]
+        [:tr
+         [:td "Energiatodistus on laadittu"]
+         [:td "3"]]
+        [:tr
+         [:td "Olemassa olevalle rakennukselle, havainnointikäynnin päivämäärä"]
+         [:td "3"]]]]
+      (e-luokka-table e-luokka))
+    (page [:h1 "Haloo"])
     ]])
 
 (defn hiccup-doc [{:keys [data]}]
