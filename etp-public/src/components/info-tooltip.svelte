@@ -91,13 +91,17 @@
   {#if tooltip.length}
     <div
       class="relative info-container hidden md:block"
+      role="button"
+      tabindex="0"
       aria-haspopup="true"
       on:mouseover={() => (open = true)}
-      on:mouseout={() => (open = false)}>
+      on:mouseout={() => (open = false)}
+      on:focus={() => (open = true)}
+      on:blur={() => (open = false)}>
       <span class="relative inline-block md:block">
         <img alt="" class="w-5 h-5" src={open ? InfoIconHover : InfoIcon} />
       </span>
-      <div class="info-popup {vertical} {horizontal}">
+      <div class="info-popup {vertical} {horizontal}" role="tooltip">
         <strong>{title}</strong>
         {#each tooltip.split('\n') as paragraph}
           <p>{paragraph}</p>

@@ -22,11 +22,6 @@
     @apply my-4;
   }
 
-  ul {
-    list-style: disc;
-    @apply my-4;
-  }
-
   p {
     @apply mb-4;
   }

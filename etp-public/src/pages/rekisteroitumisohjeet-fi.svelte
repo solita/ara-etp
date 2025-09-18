@@ -6,11 +6,6 @@
 </script>
 
 <style>
-  ul {
-    list-style: disc;
-    @apply my-4 ml-6;
-  }
-
   ol {
     @apply my-4 ml-6;
   }
