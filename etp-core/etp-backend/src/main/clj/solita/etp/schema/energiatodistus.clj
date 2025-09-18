@@ -315,7 +315,9 @@
       (assoc-in [:toteutunut-ostoenergiankulutus :ostettu-energia :muu]
                 [(optional-properties UserDefinedEnergia)])))
 
-(def EnergiatodistusSave2026 EnergiatodistusSave2018)
+(def EnergiatodistusSave2026
+  (assoc EnergiatodistusSave2018
+    :perusparannuspassi-id (schema/maybe common-schema/Key)))
 
 (defn ->EnergiatodistusSaveExternal [schema]
   (-> schema
