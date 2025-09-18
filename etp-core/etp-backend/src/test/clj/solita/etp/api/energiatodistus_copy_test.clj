@@ -17,6 +17,10 @@
 
 (defn cleanup-et
   "Simulate the cleanup normally done in the front-end"
+
+  ;; NOTE: if you need to change the cleanup here to match changes in the schema in the API,
+  ;; you probably also need to change the `serialize` function in
+  ;; etp-front/src/pages/energiatodistus/energiatodistus-api.js
   [et]
   (-> et
       (assoc :korvattu-energiatodistus-id nil
@@ -27,6 +31,7 @@
       (dissoc :id
               :laatija-fullname
               :laatija-id
+              :perusparannuspassi-id
               :korvaava-energiatodistus-id
               :versio
               :tila-id
