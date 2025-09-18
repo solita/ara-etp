@@ -94,13 +94,16 @@
        (tr (e-luokka-block-svg "F" 210 (:e-luku-f colors)) (when-clause "F"))
        (tr (e-luokka-block-svg "G" 245 (:e-luku-g colors)) (when-clause "G"))]]]))
 
-(defn page [{:keys [first-page?]} & content]
+(defn first-page [& content]
   [:div {:style (style (cond-> {:background-color  (:bg-blue colors)
                                 :border-radius     "25px"
                                 :height            "950px"
                                 :padding-top       "6px"
-                                :page-break-inside "avoid"}
-                               (not first-page?) (assoc :page-break-before "always")))} content])
+                                :page-break-inside "avoid"}))} content])
+
+(defn page [& content]
+  [:div {:style (style {:page-break-inside "avoid"
+                        :page-break-before "always"})} content])
 
 (defn et26-test [{:keys [rakennustunnus e-luokka]}]
   [:html {:lang "fi-FI"}
@@ -113,7 +116,7 @@
       .first-page-table :is(th, td) { vertical-align: top; background-color: red }
     "]]
    [:body {:style "font-family: roboto"}
-    (page {:first-page? true}
+    (first-page
       [:h1 {:style (str "background-color: white; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-left-radius: 25px; border-top-right-radius: 25px; text-align: center; margin: 15px; ")} "ENERGIATODISTUS 2018"]
       ;; Using a table since dl-element does not seem to work nicely with screen reader.
       [:table {:style (str "background-color: white; width: 100%; margin: 60px;")}
@@ -145,8 +148,8 @@
          [:td "Olemassa olevalle rakennukselle, havainnointikäynnin päivämäärä"]
          [:td "3"]]]]
       (e-luokka-table e-luokka))
-    (page [:h1 "Haloo"])
-    ]])
+    (page
+      [:h1 "Haloo"])]])
 
 (defn hiccup-doc [{:keys [data]}]
   (with-open [baos (ByteArrayOutputStream.)
