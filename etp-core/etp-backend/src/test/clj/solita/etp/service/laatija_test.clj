@@ -149,7 +149,7 @@
   (let [patevyydet (service/find-patevyystasot ts/*db*)
         fi-labels (map :label-fi patevyydet)
         se-labels (map :label-sv patevyydet)]
-    (t/is (= #{"Perustaso" "Ylempi taso" "Perustaso + PPP" "Ylempi + PPP"} (set fi-labels)))
+    (t/is (= #{"Perustaso" "Ylempi taso" "Perustaso + PPP" "Ylempi taso + PPP"} (set fi-labels)))
     (t/is (= #{"Basnivå" "Högre nivå" "Basnivå + PPP" "Högre nivå + PPP"} (set se-labels)))))
 
 (t/deftest validate-laatija-patevyys!-test
