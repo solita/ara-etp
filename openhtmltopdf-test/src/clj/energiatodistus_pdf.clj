@@ -160,7 +160,22 @@
          [:td "3"]]]]
       (e-luokka-table e-luokka))
     (page
-      [:table "Haloo"])]])
+      [:h2 "E-LUVUN LASKENNAN LÄHTÖTIEDOT"]
+      [:table
+       [:thead
+        [:tr
+         [:th "Rakennuskohde"]]]
+       [:tbody
+        [:tr
+         [:th {:scope "row"} "Rakennuksen käyttötarkoitusluokka"]
+         [:td "Tavaratalot"]
+         [:td {:style "colspan=2"}]]
+        [:tr
+         [:th {:scope "row"} "Rakennuksen valmistumisvuosi"]
+         [:td "2018"]
+         [:th {:scope "row"} "Lämmitetty nettoala"]
+         [:td "150000 m^2"]]]
+       ])]])
 
 (defn hiccup-doc [{:keys [data]}]
   (with-open [baos (ByteArrayOutputStream.)
