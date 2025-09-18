@@ -52,6 +52,7 @@
 (defn hiccup-doc->html-doc [hiccup-doc]
   (str (h/html hiccup-doc)))
 
+;; TODO: This would be much easire to adjust if just using maps {:x 10 :y 10} instead of strings...
 (defn arrow-polygon-svg [block-length block-color mirrored?]
   (let [sw "10,10"
         se (str (+ 10 block-length) ",10")
