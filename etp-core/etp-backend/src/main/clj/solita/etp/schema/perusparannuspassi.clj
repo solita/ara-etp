@@ -14,4 +14,6 @@
 
 (def Perusparannuspassi
   (merge common-schema/Id
+         {:laatija-id common-schema/Key
+          :tila-id    common-schema/Key}
          PerusparannuspassiSave))

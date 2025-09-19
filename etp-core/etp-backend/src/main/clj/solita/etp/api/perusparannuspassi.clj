@@ -18,23 +18,38 @@
              :parameters {:body ppp-schema/PerusparannuspassiSave}
              :responses  {201 {:body common-schema/IdAndWarnings}}
              :access     rooli-service/ppp-laatija?
-             :handler    not-implemented!}}]
+             :handler    (fn [{{:keys [body]} :parameters
+                               :keys [db whoami uri]}]
+                           (api-response/with-exceptions
+                             (fn []
+                               (api-response/created uri (ppp-service/insert-perusparannuspassi! db whoami body)))
+                             [{:type :energiatodistus-not-found :response 404}
+                              {:type :foreign-key-violation :response 400}
+                              {:type :invalid-energiatodistus-versio :response 400}
+                              {:type :invalid-energiatodistus-id :response 400}]))}}]
     ["/:id"
      {:get    {:summary    "Hae perusparannuspassi tunnisteella (id)"
                :parameters {:path {:id common-schema/Key}}
                :responses  {200 {:body ppp-schema/Perusparannuspassi}
                             404 {:body schema/Str}}
                :access     rooli-service/ppp-reader?
-               :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db]}]
+               :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]
                              (api-response/get-response
-                               (ppp-service/find-perusparannuspassi db id)
+                               (ppp-service/find-perusparannuspassi db whoami id)
                                (str "Perusparannuspassi " id " does not exist.")))}
       :put    {:summary    "Päivitä energiatodistuksen perusparannuspassin tietoja"
-               :parameters {}
+               :parameters {:path {:id common-schema/Key}
+                            :body ppp-schema/PerusparannuspassiSave}
                :responses  {200 {:body nil}
                             404 {:body common-schema/GeneralError}}
                :access     (some-fn rooli-service/ppp-laatija? rooli-service/paakayttaja?)
-               :handler    not-implemented!}
+               :handler    (fn [{{{:keys [id]} :path :keys [body]} :parameters :keys [db whoami uri]}]
+                             (api-response/response-with-exceptions
+                               #(ppp-service/update-perusparannuspassi! db whoami id body)
+                               [{:type :energiatodistus-not-found :response 404}
+                                {:type :foreign-key-violation :response 400}
+                                {:type :invalid-energiatodistus-versio :response 400}
+                                {:type :invalid-energiatodistus-id :response 400}]))}
       :delete {:summary    "Poista energiatodistukselta perusparannuspassi"
                :parameters {:path {:id common-schema/Key}}
                :responses  {200 {:body nil}
