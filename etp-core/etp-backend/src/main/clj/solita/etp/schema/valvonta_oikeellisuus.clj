@@ -91,6 +91,7 @@
 
 (def Energiatodistus+Valvonta
   (energiatodistus-schema/assoc-energiatodistus
+    :perusparannuspassi-id (schema/maybe common-schema/Key)
     :valvonta (assoc ValvontaSave
                 :ongoing schema/Bool
                 :type-id (schema/maybe common-schema/Key))))

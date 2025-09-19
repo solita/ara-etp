@@ -102,6 +102,7 @@ export const serialize = R.compose(
     'tila-id',
     'laatija-id',
     'laatija-fullname',
+    'perusparannuspassi-id',
     'allekirjoitusaika',
     'laskutusaika',
     'korvaava-energiatodistus-id',

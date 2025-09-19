@@ -19,10 +19,12 @@ where tila_id = et_tilat.hylatty and id = :id
 -- name: select-energiatodistus
 select energiatodistus.*,
        fullname(kayttaja.*) "laatija-fullname",
-       korvaava_energiatodistus.id as korvaava_energiatodistus_id
+       korvaava_energiatodistus.id as korvaava_energiatodistus_id,
+       ppp.id as perusparannuspassi_id
 from energiatodistus
   inner join kayttaja on kayttaja.id = energiatodistus.laatija_id
   left join energiatodistus korvaava_energiatodistus on korvaava_energiatodistus.korvattu_energiatodistus_id = energiatodistus.id
+  left join perusparannuspassi ppp on ppp.energiatodistus_id = energiatodistus.id
 where energiatodistus.id = :id
   and energiatodistus.tila_id <> (select poistettu FROM et_tilat);
 

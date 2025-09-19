@@ -26,6 +26,7 @@
             [solita.etp.api.laatija :as laatija-api]
             [solita.etp.api.laskutus :as laskutus-api]
             [solita.etp.api.palveluvayla :as palveluvayla]
+            [solita.etp.api.perusparannuspassi :as ppp-api]
             [solita.etp.api.sivu :as sivu-api]
             [solita.etp.api.statistics :as statistics-api]
             [solita.etp.api.valvonta :as valvonta-api]
@@ -150,6 +151,7 @@
              (tag "Laatijat Private API" laatija-api/private-routes)
              (tag "Geo Private API" geo-api/routes)
              (tag "Energiatodistus API" energiatodistus-api/private-routes)
+             (tag "Perusparannuspassi API" ppp-api/private-routes)
              (tag "Oikeellisuuden valvonta API" valvonta-oikeellisuus-api/routes)
              (tag "Käytönvalvonta API" valvonta-kaytto-api/routes)
              (tag "Valvonta API" valvonta-api/routes)
