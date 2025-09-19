@@ -25,7 +25,7 @@
   (file-service/find-file aws-s3-client (file-path document-file-key-prefix valvonta-id toimenpide-id osapuoli)))
 
 (defn info-letter []
-  (-> "pdf/Saate_rakennuksen_omistaja_su_ru.pdf" io/resource io/input-stream))
+  (-> "pdf/Saatekirje_rakennuksen_omistaja_FI_SV_2025.pdf" io/resource io/input-stream))
 
 (defn ^:dynamic store-hallinto-oikeus-attachment!
   "Store the hallinto-oikeus attachment of the käytönvalvonta toimenpide to the object storage"

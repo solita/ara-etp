@@ -99,30 +99,29 @@
 
 (defn- create-cover-page [osapuoli]
   (pdf/generate-pdf->input-stream
-    {:layout "pdf/ipost-address-page.html"
-     :data   {:lahettaja lahettaja
-              :vastaanottaja
-              {:tarkenne?        (-> osapuoli :vastaanottajan-tarkenne str/blank? not)
-               :tarkenne         (:vastaanottajan-tarkenne osapuoli)
-               :nimi             (if (osapuoli/henkilo? osapuoli)
-                                   (str (:etunimi osapuoli) " " (:sukunimi osapuoli))
-                                   (:nimi osapuoli))
-               :jakeluosoite     (:jakeluosoite osapuoli)
-               :postinumero      (:postinumero osapuoli)
-               :postitoimipaikka (:postitoimipaikka osapuoli)}}}))
+   {:layout "pdf/ipost-address-page.html"
+    :data   {:lahettaja lahettaja
+             :vastaanottaja
+             {:tarkenne?        (-> osapuoli :vastaanottajan-tarkenne str/blank? not)
+              :tarkenne         (:vastaanottajan-tarkenne osapuoli)
+              :nimi             (if (osapuoli/henkilo? osapuoli)
+                                  (str (:etunimi osapuoli) " " (:sukunimi osapuoli))
+                                  (:nimi osapuoli))
+              :jakeluosoite     (:jakeluosoite osapuoli)
+              :postinumero      (:postinumero osapuoli)
+              :postitoimipaikka (:postitoimipaikka osapuoli)}}}))
 
-(defn- tiedosto-sisalto [document osapuoli]
+(defn- tiedosto-sisalto [document]
   (pdf/merge-pdf
-    [(create-cover-page osapuoli)
-     (io/input-stream document)
-     (store/info-letter)]))
+   [(io/input-stream document)
+    (store/info-letter)]))
 
 (defn- ^:dynamic bytes->base64 [bytes]
   (String. (.encode (Base64/getEncoder) bytes) StandardCharsets/UTF_8))
 
-(defn- document->tiedosto [type-key osapuoli document]
+(defn- document->tiedosto [type-key document]
   (let [{:keys [nimi kuvaus]} (toimenpide->tiedosto type-key)
-        tiedosto (tiedosto-sisalto document osapuoli)]
+        tiedosto (tiedosto-sisalto document)]
     {:nimi    nimi
      :kuvaus  kuvaus
      :sisalto (bytes->base64 tiedosto)
@@ -139,18 +138,20 @@
      :kuvaus-teksti      kuvaus
      :lahetys-pvm        (now)
      :asiakas            (osapuoli->asiakas osapuoli)
-     :tiedostot          (document->tiedosto type-key osapuoli document)}))
+     :tiedostot          (document->tiedosto type-key document)}))
 
 (defn send-suomifi-viesti-using-rest! [valvonta
-                 toimenpide
-                 osapuoli
-                 document
-                 & [config]]
+                                       toimenpide
+                                       osapuoli
+                                       document
+                                       & [config]]
   (let [type-key (toimenpide/type-key (:type-id toimenpide))
         {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
         asiakas (osapuoli->asiakas osapuoli)
         tiedosto (toimenpide->tiedosto type-key)
-        message {:pdf-file       document
+        ;; Merge the main document with cover page and info-letter, same as SOAP API
+        merged-document (tiedosto-sisalto document)
+        message {:pdf-file       merged-document
                  :pdf-file-name  (:nimi tiedosto)
                  :title          nimike
                  :body           kuvaus
@@ -170,9 +171,9 @@
                                  document
                                  & [config]]
   (suomifi-soap/send-message!
-    (->sanoma toimenpide osapuoli)
-    (->kohde valvonta toimenpide osapuoli document)
-    config))
+   (->sanoma toimenpide osapuoli)
+   (->kohde valvonta toimenpide osapuoli document)
+   config))
 
 (defn send-suomifi-viestit! [aws-s3-client
                              valvonta
@@ -192,9 +193,9 @@
                           (filter osapuoli/suomi-fi?))]
 
       (-> #(send-to-osapuoli!
-             valvonta
-             toimenpide
-             osapuoli
-             (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
-             config)
+            valvonta
+            toimenpide
+            osapuoli
+            (store/find-document aws-s3-client (:valvonta-id toimenpide) (:id toimenpide) osapuoli)
+            config)
           (retry/run-with-retries 3 "send-message-to-osapuoli!")))))
