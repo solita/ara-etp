@@ -149,7 +149,7 @@
         {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
         asiakas (osapuoli->asiakas osapuoli)
         tiedosto (toimenpide->tiedosto type-key)
-        ;; Merge the main document with cover page and info-letter, same as SOAP API
+        ;; Merge the main document with info-letter, same as SOAP API
         merged-document (tiedosto-sisalto document)
         message {:pdf-file       merged-document
                  :pdf-file-name  (:nimi tiedosto)
