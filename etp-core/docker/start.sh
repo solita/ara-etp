@@ -22,7 +22,5 @@ docker_or_podman compose up -d
 
 docker_or_podman compose cp minio/files minio:/files
 
-# Wait naively for PostgreSQL to start
-sleep 2
-
-./flyway.sh migrate
+echo "Waiting for etp-db-for-etp_dev to run database migrations..."
+docker_or_podman compose wait etp-db-for-etp_dev

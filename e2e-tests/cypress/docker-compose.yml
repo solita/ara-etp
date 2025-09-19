@@ -46,7 +46,7 @@ services:
         condition: service_started
       minio_create_default_bucket:
         condition: service_completed_successfully
-      migration-runner:
+      etp-db-for-etp_dev:
         condition: service_completed_successfully
     entrypoint: >
       sh -c "
@@ -91,14 +91,3 @@ services:
       start_period: 0m
     ports:
       - 127.0.0.1:5059:5059
-
-  migration-runner:
-    build: ../../etp-core/etp-db
-    environment:
-      DB_URL: jdbc:postgresql://db:5432/etp_dev
-    command:
-      ./db.sh migrate dev
-    depends_on:
-      db:
-        condition: service_healthy
-

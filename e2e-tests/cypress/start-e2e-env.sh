@@ -3,12 +3,12 @@ set -euxo pipefail
 
 # Optimised start order
 # Start building frontend
-# Start migration runner, which requires database to be ready
+# Start etp-db, which requires database to be ready
 # When migrations are ready, create cypress_test database
 # Start backend and wait for it and frontend to be ready
 
 docker compose up --build -d frontend
-docker compose up --build migration-runner --exit-code-from migration-runner
+docker compose up --build etp-db-for-etp_dev --exit-code-from etp-db-for-etp_dev
 docker compose exec db dropdb -U postgres cypress_test --if-exists --force
 docker compose exec db createdb -U postgres -T etp_dev cypress_test
 
