@@ -150,11 +150,17 @@
                signed-pdf-t-level (pdf-sign/unsigned-document-info-and-signature->t-level-signed-document unsigned-pdf-is sig-params-is (.decode decoder signature))
                ;; Here we could wait for OCSP responders' thisUpdate to be after the time in the timestamp, but
                ;; for now it seems to be sufficient to not wait as the DVV's validator does not check for this
-               ;; and the signature is advanced level regardless.
-               signed-pdf-lt-level (pdf-sign/t-level->lt-level signed-pdf-t-level)]
+               ;; and the signature is advanced level regardless. The problem is that we would have to change the signing
+               ;; flow for the user since we can wait at most a minute because of CF.
+
+               ;; In dev and test environment we do not have OCSP responders for our self-made certificates.
+               ;; Note that in local dev we do have OCSP responders.
+               signed-pdf-lt-or-t-level (if (contains? #{"dev" "test"} config/environment-alias)
+                                                  signed-pdf-t-level
+                                                  (pdf-sign/t-level->lt-level signed-pdf-t-level))]
            (file-service/upsert-file-from-input-stream aws-s3-client
                                                        key
-                                                       signed-pdf-lt-level)
+                                                       signed-pdf-lt-or-t-level)
            filename)))))
 
 
