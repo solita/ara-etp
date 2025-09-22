@@ -86,6 +86,8 @@
    ["fullname(kayttaja.*) laatija_fullname"]
    (partial schema-contains? :korvaava-energiatodistus-id)
    ["korvaava_energiatodistus.id as korvaava_energiatodistus_id"]
+   (partial schema-contains? :perusparannuspassi-id)
+   ["perusparannuspassi.id as perusparannuspassi_id"]
    (partial schema-contains? :valvonta)
    ["coalesce(last_toimenpide.ongoing, false) valvonta$ongoing"
     "last_toimenpide.type_id valvonta$type_id"]})
@@ -106,7 +108,8 @@
      ON korvaava_energiatodistus.korvattu_energiatodistus_id = energiatodistus.id
    LEFT JOIN postinumero ON postinumero.id = energiatodistus.pt$postinumero
    LEFT JOIN kunta ON kunta.id = postinumero.kunta_id
-   LEFT JOIN toimintaalue ON toimintaalue.id = kunta.toimintaalue_id")
+   LEFT JOIN toimintaalue ON toimintaalue.id = kunta.toimintaalue_id
+   LEFT JOIN perusparannuspassi on perusparannuspassi.energiatodistus_id = energiatodistus.id")
 
 (defn- coercer! [field search-schema]
   (if-let [coercer (some-> field keyword search-schema)]
