@@ -83,13 +83,3 @@ docker compose exec db pg_dump -U etp etp_dev \
   --regex '^\s+\(-\d' `# kayttaja entries with negative id and are added by migration` \
   --regex '^\s+\(0, '\''database' `# Added by migration` \
   >> ../etp-db/src/test/sql/migration/repeatable/r-x-01-test-data.sql
-
-# Delete all SET commands that pg_dump adds.
-# Set commands are meaningful when doing pg_restore but not so when running the
-# SQL using Flyway. The migration role may not have permissions for some of the
-# commands.
-sed -i.bak '/^SET /d' ../etp-db/src/test/sql/migration/repeatable/r-x-01-test-data.sql
-
-# The created -i.bak is for compatibility with both GNU sed and BSD sed
-# (macOS). The backup file is not needed.
-rm ../etp-db/src/test/sql/migration/repeatable/r-x-01-test-data.sql.bak
