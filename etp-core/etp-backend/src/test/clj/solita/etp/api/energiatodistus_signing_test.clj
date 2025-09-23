@@ -57,6 +57,9 @@
           todistus-2018-fi (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))
           todistus-2018-sv (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 1))
           todistus-2018-multilingual (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
+          todistus-2026-fi (-> (test-data.energiatodistus/generate-add 2026 true) (assoc-in [:perustiedot :kieli] 0))
+          todistus-2026-sv (-> (test-data.energiatodistus/generate-add 2026 true) (assoc-in [:perustiedot :kieli] 1))
+          todistus-2026-multilingual (-> (test-data.energiatodistus/generate-add 2026 true) (assoc-in [:perustiedot :kieli] 2))
 
           todistus-2018-future (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
           todistus-2018-future-2 (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 2))
@@ -68,6 +71,9 @@
            todistus-2018-fi-id
            todistus-2018-sv-id
            todistus-2018-multilingual-id
+           todistus-2026-fi-id
+           todistus-2026-sv-id
+           todistus-2026-multilingual-id
            todistus-2018-future-id
            todistus-2018-future-2-id]
           (test-data.energiatodistus/insert! [todistus-2013-fi
@@ -76,6 +82,9 @@
                                               todistus-2018-fi
                                               todistus-2018-sv
                                               todistus-2018-multilingual
+                                              todistus-2026-fi
+                                              todistus-2026-sv
+                                              todistus-2026-multilingual
                                               todistus-2018-future
                                               todistus-2018-future-2] laatija-id)
 
@@ -128,6 +137,27 @@
                                        (test-data.laatija/with-suomifi-laatija)
                                        (mock/header "Accept" "application/json")))]
           (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2026 fi version"
+        (let [url (energiatodistus-sign-url todistus-2026-fi-id 2026)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-suomifi-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2026 sv version"
+        (let [url (energiatodistus-sign-url todistus-2026-sv-id 2026)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-suomifi-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+      (t/testing "Can sign 2026 multilingual version"
+        (let [url (energiatodistus-sign-url todistus-2026-multilingual-id 2026)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-suomifi-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200))))
+
+
+
       (t/testing "Trying to sign 2018 fi version again should fail"
         (let [url (energiatodistus-sign-url todistus-2018-fi-id 2018)
               response (ts/handler (-> (mock/request :post url)

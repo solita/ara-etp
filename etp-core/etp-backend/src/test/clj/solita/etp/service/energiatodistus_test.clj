@@ -195,57 +195,60 @@
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
-        id (-> energiatodistukset keys sort first)
+        ids (keys energiatodistukset)
         db (ts/db-user laatija-id)]
-    (t/is (= (energiatodistus-tila id) :draft))
-    (t/is (= (service/start-energiatodistus-signing! db whoami id) :ok))
-    (t/is (= (energiatodistus-tila id) :in-signing))
-    (t/is (= (service/start-energiatodistus-signing! db whoami id)
-             :already-in-signing))))
+    (doseq [id ids]
+      (t/is (= (energiatodistus-tila id) :draft))
+      (t/is (= (service/start-energiatodistus-signing! db whoami id) :ok))
+      (t/is (= (energiatodistus-tila id) :in-signing))
+      (t/is (= (service/start-energiatodistus-signing! db whoami id)
+               :already-in-signing)))))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} stop-energiatodistus-signing!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
-        id (-> energiatodistukset keys sort first)
+        ids (keys energiatodistukset)
         db (ts/db-user laatija-id)]
-    (t/is (= (energiatodistus-tila id) :draft))
-    (t/is (=  (service/end-energiatodistus-signing! db
-                                                    ts/*aws-s3-client*
-                                                    whoami
-                                                    id)
-              :not-in-signing))
-    (t/is (= (energiatodistus-tila id) :draft))
-    (service/start-energiatodistus-signing! db whoami id)
-    (t/is (= (energiatodistus-tila id) :in-signing))
-    (energiatodistus-test-data/sign-pdf! id laatija-id)
-    (t/is (= (service/end-energiatodistus-signing! db
-                                                   ts/*aws-s3-client*
-                                                   whoami
-                                                   id)
-             :ok))
-    (t/is (= (energiatodistus-tila id) :signed))
-    (t/is (= (service/end-energiatodistus-signing! db
-                                                   ts/*aws-s3-client*
-                                                   whoami
-                                                   id)
-             :already-signed))))
+    (doseq [id ids]
+      (t/is (= (energiatodistus-tila id) :draft))
+      (t/is (=  (service/end-energiatodistus-signing! db
+                                                      ts/*aws-s3-client*
+                                                      whoami
+                                                      id)
+                :not-in-signing))
+      (t/is (= (energiatodistus-tila id) :draft))
+      (service/start-energiatodistus-signing! db whoami id)
+      (t/is (= (energiatodistus-tila id) :in-signing))
+      (energiatodistus-test-data/sign-pdf! id laatija-id)
+      (t/is (= (service/end-energiatodistus-signing! db
+                                                     ts/*aws-s3-client*
+                                                     whoami
+                                                     id)
+               :ok))
+      (t/is (= (energiatodistus-tila id) :signed))
+      (t/is (= (service/end-energiatodistus-signing! db
+                                                     ts/*aws-s3-client*
+                                                     whoami
+                                                     id)
+               :already-signed)))))
 
 (t/deftest cancel-energiatodistus-signing!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
-        id (-> energiatodistukset keys sort first)
+        ids (keys energiatodistukset)
         db (ts/db-user laatija-id)]
-    (t/is (= (energiatodistus-tila id) :draft))
-    (t/is (=  (service/cancel-energiatodistus-signing! db whoami id)
-              :not-in-signing))
-    (t/is (= (energiatodistus-tila id) :draft))
-    (service/start-energiatodistus-signing! db whoami id)
-    (t/is (= (energiatodistus-tila id) :in-signing))
-    (t/is (=  (service/cancel-energiatodistus-signing! db whoami id)
-              :ok))
-    (t/is (= (energiatodistus-tila id) :draft))))
+    (doseq [id ids]
+      (t/is (= (energiatodistus-tila id) :draft))
+      (t/is (=  (service/cancel-energiatodistus-signing! db whoami id)
+                :not-in-signing))
+      (t/is (= (energiatodistus-tila id) :draft))
+      (service/start-energiatodistus-signing! db whoami id)
+      (t/is (= (energiatodistus-tila id) :in-signing))
+      (t/is (=  (service/cancel-energiatodistus-signing! db whoami id)
+                :ok))
+      (t/is (= (energiatodistus-tila id) :draft)))))
 
 (t/deftest update-signed-energiatodistus!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
