@@ -534,6 +534,7 @@
       "undo": "Återkalla ändringar",
       "sign": "Underteckna",
       "copy": "Kopiera som mall",
+      "add-ppp": "Lisää PPP (sv)",
       "preview": "Förhandsvisa",
       "download": "Ladda ner",
       "discard": "Förkasta",
@@ -1214,7 +1215,9 @@
       "tyojono-add-error": "Det gick inte att lägga till energicertifikat i arbetskön",
       "tyojono-remove-success": "Energicertifikatet togs bort från arbetskön",
       "tyojono-remove-error": "Det gick inte att ta bort energicertifikatet från arbetskön",
-      "invalid-laskutusosoite-id": "Används inte längre. Välj en faktureringsuppgift som är i kraft."
+      "invalid-laskutusosoite-id": "Används inte längre. Välj en faktureringsuppgift som är i kraft.",
+      "add-ppp-success": "Grundförbättringspass lades till",
+      "add-ppp-error": "Det gick inte att lägga till grundförbättringspass"
     },
     "signing": {
       "header": "Undertecknande",

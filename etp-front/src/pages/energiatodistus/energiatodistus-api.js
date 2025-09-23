@@ -413,3 +413,25 @@ export const signPdfsUsingSystemSignature = (fetch, version, id) =>
       )
     )
   )();
+
+export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
+  R.compose(
+    Fetch.responseAsJson,
+    Future.encaseP(
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        '/api/private/perusparannuspassit/2026'
+      )
+    )
+  )({
+    'energiatodistus-id': energiatodistusId,
+    valid: false,
+    vaiheet: [
+      { 'vaihe-nro': 1, valid: false },
+      { 'vaihe-nro': 2, valid: false },
+      { 'vaihe-nro': 3, valid: false },
+      { 'vaihe-nro': 4, valid: false }
+    ]
+  })
+);

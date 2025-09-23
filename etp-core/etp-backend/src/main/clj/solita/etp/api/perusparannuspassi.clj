@@ -11,7 +11,7 @@
   (throw (ex-info "Not implemented" {:type :not-implemented})))
 
 (def private-routes
-  ["/perusparannuspassit"
+  [["/perusparannuspassit"
    ["/2026"
     [""
      {:post {:summary    "Lisää energiatodistukselle perusparannuspassi"
@@ -55,4 +55,4 @@
                :responses  {200 {:body nil}
                             404 {:body common-schema/GeneralError}}
                :access     rooli-service/ppp-laatija?
-               :handler    not-implemented!}}]]])
+               :handler    not-implemented!}}]]]])
