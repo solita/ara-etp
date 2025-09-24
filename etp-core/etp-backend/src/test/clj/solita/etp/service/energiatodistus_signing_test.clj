@@ -21,15 +21,20 @@
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
         energiatodistukset (merge (energiatodistus-test-data/generate-and-insert!
-                                    1
-                                    2013
-                                    true
-                                    laatija-id)
+                                   1
+                                   2013
+                                   true
+                                   laatija-id)
                                   (energiatodistus-test-data/generate-and-insert!
-                                    1
-                                    2018
-                                    true
-                                    laatija-id))]
+                                   1
+                                   2018
+                                   true
+                                   laatija-id)
+                                  (energiatodistus-test-data/generate-and-insert!
+                                   1
+                                   2026
+                                   true
+                                   laatija-id))]
     {:laatijat           laatijat
      :energiatodistukset energiatodistukset}))
 
@@ -64,29 +69,30 @@
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
+        ids (keys energiatodistukset)
         whoami {:id laatija-id}]
-    (t/is (= (service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi" "allekirjoitus-id")
-             :not-in-signing))
-    (energiatodistus-service/start-energiatodistus-signing! db whoami id)
-    (t/is (contains? (service/find-energiatodistus-digest db
-                                                                  ts/*aws-s3-client*
-                                                                  id
-                                                                  "fi"
-                                                                  "allekirjoitus-id")
-                     :digest))
-    (energiatodistus-service/end-energiatodistus-signing!
-      db
-      ts/*aws-s3-client*
-      whoami
-      id
-      {:skip-pdf-signed-assert? true})
-    (t/is (= (service/find-energiatodistus-digest db
-                                                          ts/*aws-s3-client*
-                                                          id
-                                                          "fi"
-                                                          "allekirjoitus-id")
-             :already-signed))))
+    (doseq [id ids]
+      (t/is (= (service/find-energiatodistus-digest db ts/*aws-s3-client* id "fi" "allekirjoitus-id")
+               :not-in-signing))
+      (energiatodistus-service/start-energiatodistus-signing! db whoami id)
+      (t/is (contains? (service/find-energiatodistus-digest db
+                                                            ts/*aws-s3-client*
+                                                            id
+                                                            "fi"
+                                                            "allekirjoitus-id")
+                       :digest))
+      (energiatodistus-service/end-energiatodistus-signing!
+       db
+       ts/*aws-s3-client*
+       whoami
+       id
+       {:skip-pdf-signed-assert? true})
+      (t/is (= (service/find-energiatodistus-digest db
+                                                    ts/*aws-s3-client*
+                                                    id
+                                                    "fi"
+                                                    "allekirjoitus-id")
+               :already-signed)))))
 
 (t/deftest comparable-name-test
   (t/is (= "abc" (service/comparable-name "abc")))
@@ -110,25 +116,26 @@
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)]
-    (t/is (= (service/sign-energiatodistus-pdf db
-                                                       ts/*aws-s3-client*
-                                                       energiatodistus-test-data/time-when-test-cert-not-expired
-                                                       id
-                                                       "fi"
-                                                       nil)
-             :not-in-signing))
-    (energiatodistus-test-data/sign-at-time! id
-                                             laatija-id
-                                             false
-                                             energiatodistus-test-data/time-when-test-cert-not-expired)
-    (t/is (= (service/sign-energiatodistus-pdf db
-                                                       ts/*aws-s3-client*
-                                                       energiatodistus-test-data/time-when-test-cert-not-expired
-                                                       id
-                                                       "fi"
-                                                       nil)
-             :already-signed))))
+        ids (keys energiatodistukset)]
+    (doseq [id ids]
+      (t/is (= (service/sign-energiatodistus-pdf db
+                                                 ts/*aws-s3-client*
+                                                 energiatodistus-test-data/time-when-test-cert-not-expired
+                                                 id
+                                                 "fi"
+                                                 nil)
+               :not-in-signing))
+      (energiatodistus-test-data/sign-at-time! id
+                                               laatija-id
+                                               false
+                                               energiatodistus-test-data/time-when-test-cert-not-expired)
+      (t/is (= (service/sign-energiatodistus-pdf db
+                                                 ts/*aws-s3-client*
+                                                 energiatodistus-test-data/time-when-test-cert-not-expired
+                                                 id
+                                                 "fi"
+                                                 nil)
+               :already-signed)))))
 
 (t/deftest cert-pem->one-liner-without-headers-test
   (let [given "-----BEGIN CERTIFICATE-----
@@ -163,55 +170,56 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
             laatija-id (-> laatijat keys sort first)
             db (ts/db-user laatija-id)
-            ;; The second ET is 2018 version
-            id (-> energiatodistukset keys sort second)
+            ids (keys energiatodistukset)
             whoami {:id laatija-id}]
-        (t/testing "Signing a pdf should succeed"
-          (t/is (= (service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :ok)))
-        (t/testing "Trying to sign again should result in :already-signed"
-          (t/is (= (service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :already-signed)))
-        (t/testing "The state should result in :already-signed if trying to sign three times in a row"
-          (t/is (= (service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :already-signed)))))))
+        (doseq [id ids]
+          (t/testing "Signing a pdf should succeed"
+            (t/is (= (service/sign-with-system {:db             db
+                                                :aws-s3-client  ts/*aws-s3-client*
+                                                :whoami         whoami
+                                                :aws-kms-client ts/*aws-kms-client*
+                                                :now            (time/now)
+                                                :id             id})
+                     :ok)))
+          (t/testing "Trying to sign again should result in :already-signed"
+            (t/is (= (service/sign-with-system {:db             db
+                                                :aws-s3-client  ts/*aws-s3-client*
+                                                :whoami         whoami
+                                                :aws-kms-client ts/*aws-kms-client*
+                                                :now            (time/now)
+                                                :id             id})
+                     :already-signed)))
+          (t/testing "The state should result in :already-signed if trying to sign three times in a row"
+            (t/is (= (service/sign-with-system {:db             db
+                                                :aws-s3-client  ts/*aws-s3-client*
+                                                :whoami         whoami
+                                                :aws-kms-client ts/*aws-kms-client*
+                                                :now            (time/now)
+                                                :id             id})
+                     :already-signed))))))))
 
 (t/deftest sign-with-system-already-in-signing-test
   (t/testing "Trying to sign a pdf that is already in signing should fail and not change the state"
     (let [{:keys [laatijat energiatodistukset]} (test-data-set)
           laatija-id (-> laatijat keys sort first)
           db (ts/db-user laatija-id)
-          id (-> energiatodistukset keys sort first)
+          ids (keys energiatodistukset)
           whoami {:id laatija-id}]
-      ;; Put the energiatodistus into signing.
-      (energiatodistus-service/start-energiatodistus-signing! db whoami id)
-      (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
-        (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
-          (t/is (= (service/sign-with-system {:db             db
-                                                      :aws-s3-client  ts/*aws-s3-client*
-                                                      :whoami         whoami
-                                                      :aws-kms-client ts/*aws-kms-client*
-                                                      :now            (time/now)
-                                                      :id             id})
-                   :already-in-signing)))
-        (t/testing "Trying to sign a pdf that is already in signing should not change the state"
-          (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)
-                   tila-id)))))))
+      (doseq [id ids]
+        ;; Put the energiatodistus into signing.
+        (energiatodistus-service/start-energiatodistus-signing! db whoami id)
+        (let [{:keys [tila-id]} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
+          (t/testing "Trying to sign a pdf that is already in signing should return :already-in-signing"
+            (t/is (= (service/sign-with-system {:db             db
+                                                :aws-s3-client  ts/*aws-s3-client*
+                                                :whoami         whoami
+                                                :aws-kms-client ts/*aws-kms-client*
+                                                :now            (time/now)
+                                                :id             id})
+                     :already-in-signing)))
+          (t/testing "Trying to sign a pdf that is already in signing should not change the state"
+            (t/is (= (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :tila-id)
+                     tila-id))))))))
 
 (t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} sign-with-system-signature-test
   (t/testing "Signing a pdf using the system"
@@ -219,21 +227,19 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
       (let [{:keys [laatijat energiatodistukset]} (test-data-set)
             laatija-id (-> laatijat keys sort first)
             db (ts/db-user laatija-id)
-            ;; The second ET is 2018 version
-            id (-> energiatodistukset keys sort second)
-            whoami {:id laatija-id :rooli 0}
-            complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
-            language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]
-
-        (t/testing "The signed document's signature should exist."
-          (service/sign-with-system {:db             db
-                                     :aws-s3-client  ts/*aws-s3-client*
-                                     :whoami         whoami
-                                     :aws-kms-client ts/*aws-kms-client*
-                                     :now            (time/now)
-                                     :id             id})
-          (with-open [^InputStream pdf-is (pdf-service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
-                      pdf (PDDocument/load pdf-is)]
-            (let [signatures (.getSignatureDictionaries pdf)]
-              (t/is (not (nil? signatures))))))))))
-
+            ids (keys energiatodistukset)
+            whoami {:id laatija-id :rooli 0}]
+        (doseq [id ids
+                :let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db id)
+                      language-code (-> complete-energiatodistus :perustiedot :kieli (energiatodistus-service/language-id->codes) first)]]
+          (t/testing "The signed document's signature should exist."
+            (service/sign-with-system {:db             db
+                                       :aws-s3-client  ts/*aws-s3-client*
+                                       :whoami         whoami
+                                       :aws-kms-client ts/*aws-kms-client*
+                                       :now            (time/now)
+                                       :id             id})
+            (with-open [^InputStream pdf-is (pdf-service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
+                        pdf (PDDocument/load pdf-is)]
+              (let [signatures (.getSignatureDictionaries pdf)]
+                (t/is (not (nil? signatures)))))))))))
