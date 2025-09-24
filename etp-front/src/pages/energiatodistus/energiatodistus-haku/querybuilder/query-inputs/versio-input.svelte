@@ -2,12 +2,15 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
+
+  export let config;
   export let values = [];
   export let nameprefix;
   export let index = 0;
   export let value = R.head(values);
 
-  const versiot = [2018, 2013];
+  const versiot = isEtp2026Enabled(config) ? [2026, 2018, 2013] : [2018, 2013];
 
   let input;
 

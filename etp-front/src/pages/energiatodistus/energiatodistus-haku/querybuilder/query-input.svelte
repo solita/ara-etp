@@ -30,6 +30,7 @@
 
   export let nameprefix = '';
 
+  export let config;
   export let operations;
   export let operation;
   export let values;
@@ -129,6 +130,7 @@
     <div class="w-full">
       <svelte:component
         this={inputForType(op.type)}
+        {config}
         {values}
         {nameprefix}
         {luokittelut}
