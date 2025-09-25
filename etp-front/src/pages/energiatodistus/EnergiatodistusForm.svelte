@@ -264,7 +264,6 @@
   {/if}
 
   <DirtyConfirmation {dirty} />
-
   <div class="w-full relative flex">
     <div class="flex-grow overflow-x-hidden">
       <form
@@ -279,6 +278,13 @@
         on:reset={reset}>
         <div class="w-full mt-3">
           <H1 text={title} />
+
+          {#if version == 2026 && energiatodistus['perusparannuspassi-id'] && Maybe.isSome(energiatodistus['perusparannuspassi-id'])}
+            <!-- Just for local development, wip indicator -->
+            <div class="mb-3">
+              <H1 text="PPP - Lisätty" />
+            </div>
+          {/if}
 
           {#if EtUtils.isSigned(energiatodistus)}
             <div class="mb-5">

@@ -288,6 +288,30 @@
       <span class="text-2xl font-icon">file_copy</span>
     </button>
   {/if}
+  {#if id.isSome() && Kayttajat.isLaatija(whoami) && version === 2026 && et.isDraft(energiatodistus)}
+    <button
+      disabled={pendingExecution}
+      on:click={_ => {
+        if (pendingExecution) return;
+        pendingExecution = true;
+        Future.fork(
+          response => {
+            pendingExecution = false;
+            announceError(i18n('energiatodistus.messages.add-ppp-error'));
+          },
+          result => {
+            pendingExecution = false;
+            announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+            // Optionally reload or redirect to show the added PPP
+            cancel();
+          },
+          api.addPerusparannuspassi(fetch, Maybe.get(id))
+        );
+      }}>
+      <span class="description">{i18n('energiatodistus.toolbar.add-ppp')}</span>
+      <span class="text-2xl font-icon">add_circle_outline</span>
+    </button>
+  {/if}
   {#if R.includes(Toolbar.module.preview, fields)}
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
