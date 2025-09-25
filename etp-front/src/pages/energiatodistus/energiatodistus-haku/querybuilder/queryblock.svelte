@@ -10,6 +10,7 @@
   import Autocomplete from '@Component/Autocomplete/Autocomplete';
   import Input from '@Component/Input/Input';
 
+  export let config;
   export let operator;
   export let key;
   export let values;
@@ -99,6 +100,7 @@
   {#if Maybe.isSome(maybeKey) && values.length > 0}
     <div class="w-1/2">
       <QueryInput
+        {config}
         nameprefix={`${index}`}
         operation={operator}
         {values}

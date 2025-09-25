@@ -23,6 +23,7 @@
   import { _ } from '@Language/i18n';
   import { announcementsForModule } from '@Utility/announce';
 
+  export let config;
   export let where;
   export let keyword;
   export let kunnat;
@@ -166,6 +167,7 @@
       </div>
       <div class="flex justify-start items-center">
         <QueryBlock
+          {config}
           {operator}
           {key}
           {values}
