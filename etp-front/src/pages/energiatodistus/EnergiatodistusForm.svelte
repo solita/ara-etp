@@ -280,7 +280,7 @@
           <H1 text={title} />
 
           {#if version == 2026 && energiatodistus['perusparannuspassi-id'] && Maybe.isSome(energiatodistus['perusparannuspassi-id'])}
-          <!-- Just for local development, wip indicator -->
+            <!-- Just for local development, wip indicator -->
             <div class="mb-3">
               <H1 text="PPP - Lisätty" />
             </div>
