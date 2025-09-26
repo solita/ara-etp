@@ -135,18 +135,10 @@ as ```etp``` user. ```etp_app``` user writes and reads data from the tables.
 In development environment the ```postgres``` database is used as a template
 that can be used for setting up new databases. The dockerized Postgres sets up
 a second database ```etp_dev``` which should be used locally during
-development. Migrations are run when containers start. If there's need to clean
-the migrations and apply them again, the following commands can be used inside
-the `docker` directory:
+development. Migrations are run when containers start.
 
-```bash
-# Cleaning
-docker compose run etp-db-for-postgres ./db.sh clean
-docker compose run etp-db-for-etp_dev ./db.sh clean test
-# Applying migrations
-docker compose run etp-db-for-postgres ./db.sh migrate
-docker compose run etp-db-for-etp_dev ./db.sh migrate test
-```
+If migrations change, `start.sh` script "notices" it, deletes `etp-db`
+containers and rebuilds the image.
 
 Tests will utilize ```postgres``` database as template extensively as each test
 will create their own database from it.
