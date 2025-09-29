@@ -1,4 +1,4 @@
-insert into ppp_energiatehokkuus_mahdollisuus (id, label_fi, ordinal)
+insert into perusparannuspassi_energiatehokkuus_mahdollisuus (id, label_fi, ordinal)
 values
 (0,  'Kyllä, kaukolämpöön', 1),
 (1,  'Kyllä, Kaukojäähdytykseen', 2),
@@ -9,7 +9,7 @@ on conflict (id) do update set
 label_fi = excluded.label_fi,
 ordinal = excluded.ordinal;
 
-insert into ppp_paalammitysjarjestelma (id, label_fi, ordinal)
+insert into perusparannuspassi_paalammitysjarjestelma (id, label_fi, ordinal)
 values
 (0,  'Kaukolämpö', 1),
 (1,  'Sähkö', 2),
@@ -26,7 +26,7 @@ on conflict (id) do update set
 label_fi = excluded.label_fi,
 ordinal = excluded.ordinal;
 
-insert into ppp_ilmanvaihto (id, label_fi, ordinal)
+insert into perusparannuspassi_ilmanvaihto (id, label_fi, ordinal)
 values
 (0,  'Painovoimainen ilmanvaihtojärjestelmä', 1),
 (1,  'Koneellinen poistoilmanvaihtojärjestelmä', 2),
@@ -42,7 +42,7 @@ on conflict (id) do update set
 label_fi = excluded.label_fi,
 ordinal = excluded.ordinal;
 
-insert into ppp_uusiutuva_energia (id, label_fi, ordinal)
+insert into perusparannuspassi_uusiutuva_energia (id, label_fi, ordinal)
 values
 (0,  'Ei ole', 1),
 (1,  'Aurinkosähkö', 2),
@@ -55,7 +55,7 @@ on conflict (id) do update set
 label_fi = excluded.label_fi,
 ordinal = excluded.ordinal;
 
-insert into ppp_jaahdytys (id, label_fi, ordinal)
+insert into perusparannuspassi_jaahdytys (id, label_fi, ordinal)
 values
 (0,  'Ei ole', 1),
 (1,  'Aurinkosuojaukset', 2),
@@ -66,7 +66,7 @@ label_fi = excluded.label_fi,
 ordinal = excluded.ordinal;
 
 
-insert into ppp_toimenpide_ehdotus (id, label_fi, ordinal)
+insert into perusparannuspassi_toimenpide_ehdotus (id, label_fi, ordinal)
 values
 (0,  'Siirtyminen kaukolämpöön', 1),
 (1,  'Maalämpöpumppu', 2),

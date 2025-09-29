@@ -1,99 +1,60 @@
-create table ppp_energiatehokkuus_mahdollisuus
-(
-    id          integer not null primary key,
-    label_fi    text,
-    label_sv    text,
-    valid       boolean default true not null,
-    ordinal     integer default 0 not null,
-    description text
-);
+call create_classification('perusparannuspassi_paalammitysjarjestelma'::name);
 
-create table ppp_paalammitysjarjestelma
-(
-    id          integer not null primary key,
-    label_fi    text,
-    label_sv    text,
-    valid       boolean default true not null,
-    ordinal     integer default 0 not null,
-    description text
-);
+call create_classification('perusparannuspassi_ilmanvaihto'::name);
 
-create table ppp_ilmanvaihto
-(
-    id          integer not null primary key,
-    label_fi    text,
-    label_sv    text,
-    valid       boolean default true not null,
-    ordinal     integer default 0 not null,
-    description text
-);
+call create_classification('perusparannuspassi_uusiutuva_energia'::name);
 
-create table ppp_uusiutuva_energia
-(
-    id          integer not null primary key,
-    label_fi    text,
-    label_sv    text,
-    valid       boolean default true not null,
-    ordinal     integer default 0 not null,
-    description text
-);
+call create_classification('perusparannuspassi_jaahdytys'::name);
 
-create table ppp_jaahdytys
-(
-    id          integer not null primary key,
-    label_fi    text,
-    label_sv    text,
-    valid       boolean default true not null,
-    ordinal     integer default 0 not null,
-    description text
-);
+call create_classification('perusparannuspassi_toimenpide_ehdotus'::name);
 
-create table ppp_toimenpide_ehdotus
+call create_classification('perusparannuspassi_energiatehokkuus_mahdollisuus'::name);
+
+create table perusparannuspassi_vaihe_toimenpide_ehdotus
 (
-    id          integer not null primary key,
-    label_fi    text,
-    label_sv    text,
-    valid       boolean default true not null,
-    ordinal     integer default 0 not null,
-    description text
+    perusparannuspassi_id   integer not null references perusparannuspassi(id),
+    vaihe_nro               integer not null,
+    toimpenpide_ehdotus_id  integer not null references perusparannuspassi_toimenpide_ehdotus(id),
+    foreign key (perusparannuspassi_id, vaihe_nro)
+        references perusparannuspassi_vaihe(perusparannuspassi_id, vaihe_nro)
+
 );
 
 alter table perusparannuspassi
-    add column pp$havainnointikaynti date,
-    add column pp$passin_esittely date,
-    add column pp$tayttaa_Aplus_vaatimukset boolean not null default false,
-    add column pp$tayttaa_A0_vaatimukset boolean not null default false,
-    add column rp$ulkoseinat_ehdotettu_taso numeric not null default 0,
-    add column rp$ylapohja_ehdotettu_taso numeric not null default 0,
-    add column rp$alapohja_ehdotettu_taso numeric not null default 0,
-    add column rp$ikkunat_ehdotettu_taso numeric not null default 0,
-    add column rp$paalammitysjarjestelma_ehdotettu_taso int not null default 0 references ppp_paalammitysjarjestelma(id),
-    add column rp$ilmanvaihto_ehdotettu_taso int not null default 0 references ppp_ilmanvaihto(id),
-    add column rp$uusituva_energia_ehdotettu_taso int not null default 0 references ppp_uusiutuva_energia(id),
-    add column rp$jaahdystys_ehdotettu_taso int not null default 0 references ppp_jaahdytys(id),
-    add column rp$mahdollisuus_liittya_energiatehokkaaseen int not null default 0 references ppp_energiatehokkuus_mahdollisuus(id),
-    add column lt$kaukolampo_hinta numeric not null default 0,
-    add column lt$sahko_hinta numeric not null default 0,
-    add column lt$uusiutuvatPAt_hinta numeric not null default 0,
-    add column lt$fossiilisetPAt_hinta numeric not null default 0,
-    add column lt$kaukojaahdytys_hinta numeric not null default 0,
-    add column lt$lisatiedot text;
+    add column ppt$havainnointikaynti date,
+    add column ppt$passin_esittely date,
+    add column ppt$tayttaa_Aplus_vaatimukset boolean not null default false,
+    add column ppt$tayttaa_A0_vaatimukset boolean not null default false,
+    add column rpt$ulkoseinat_ehdotettu_taso numeric not null default 0,
+    add column rpt$ylapohja_ehdotettu_taso numeric not null default 0,
+    add column rpt$alapohja_ehdotettu_taso numeric not null default 0,
+    add column rpt$ikkunat_ehdotettu_taso numeric not null default 0,
+    add column rpt$paalammitysjarjestelma_ehdotettu_taso int not null default 0 references perusparannuspassi_paalammitysjarjestelma(id),
+    add column rpt$ilmanvaihto_ehdotettu_taso int not null default 0 references perusparannuspassi_ilmanvaihto(id),
+    add column rpt$uusituva_energia_ehdotettu_taso int not null default 0 references perusparannuspassi_uusiutuva_energia(id),
+    add column rpt$jaahdystys_ehdotettu_taso int not null default 0 references perusparannuspassi_jaahdytys(id),
+    add column rpt$mahdollisuus_liittya_energiatehokkaaseen int not null default 0 references perusparannuspassi_energiatehokkuus_mahdollisuus(id),
+    add column t$kaukolampo_hinta numeric not null default 0,
+    add column t$sahko_hinta numeric not null default 0,
+    add column t$uusiutuvatPAt_hinta numeric not null default 0,
+    add column t$fossiilisetPAt_hinta numeric not null default 0,
+    add column t$kaukojaahdytys_hinta numeric not null default 0,
+    add column t$lisatiedot text;
 ;
 
 alter table perusparannuspassi_vaihe
-    add column tp$toimenpide_ehdotukset ppp_toimenpide_ehdotus[],
     add column tp$toimenpideseloste text,
-    add column lt$vaiheen_alku_pvm date,
-    add column lt$vaiheen_loppu_pvm date,
-    add column lt$ostoenergian_tarve_kaukolampo integer not null default 0,
-    add column lt$ostoenergian_tarve_sahko integer not null default 0,
-    add column lt$ostoenergian_tarve_uusiutuvatPAt integer not null default 0,
-    add column lt$ostoenergian_tarve_fossiilisetPAt integer not null default 0,
-    add column lt$ostoenergian_tarve_kaukojäähdytys integer not null default 0,
-    add column lt$uusiutuvan_energian_kokonaistuotto integer not null default 0,
-    add column lt$rakennuksen_hyodyntama_osuus_uusiutuvan_energian_tuotosta integer not null default 0,
-    add column lt$toteutunut_ostoenergia_kaukolampo integer not null default 0,
-    add column lt$toteutunut_ostoenergia_sahko integer not null default 0,
-    add column lt$toteutunut_ostoenergia_uusiutuvatPAt integer not null default 0,
-    add column lt$toteutunut_ostoenergia_fossiilisetPAt integer not null default 0,
-    add column lt$toteutunut_ostoenergia_kaukojaahdytys integer not null default 0;
+    add column t$vaiheen_alku_pvm date,
+    add column t$vaiheen_loppu_pvm date,
+    add column t$ostoenergian_tarve_kaukolampo numeric not null default 0,
+    add column t$ostoenergian_tarve_sahko numeric not null default 0,
+    add column t$ostoenergian_tarve_uusiutuvatPAt numeric not null default 0,
+    add column t$ostoenergian_tarve_fossiilisetPAt numeric not null default 0,
+    add column t$ostoenergian_tarve_kaukojäähdytys numeric not null default 0,
+    add column t$uusiutuvan_energian_kokonaistuotto numeric not null default 0,
+    add column t$rakennuksen_hyodyntama_osuus_uusiutuvan_energian_tuotosta numeric not null default 0,
+    add column t$toteutunut_ostoenergia_kaukolampo numeric not null default 0,
+    add column t$toteutunut_ostoenergia_sahko numeric not null default 0,
+    add column t$toteutunut_ostoenergia_uusiutuvatPAt numeric not null default 0,
+    add column t$toteutunut_ostoenergia_fossiilisetPAt numeric not null default 0,
+    add column t$toteutunut_ostoenergia_kaukojaahdytys numeric not null default 0;
