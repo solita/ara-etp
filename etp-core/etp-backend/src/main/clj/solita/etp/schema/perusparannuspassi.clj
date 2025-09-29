@@ -3,14 +3,71 @@
     [schema.core :as schema]
     [solita.etp.schema.common :as common-schema]))
 
+(def PerusparannuspassiPerustiedot
+  {:havainnointikaynti  common-schema/Date
+   :passin-esittely     common-schema/Date
+   :tayttaa-Aplus-vaatimukset schema/Bool
+   :tayttaa-A0-vaatimukset    schema/Bool})
+
+(def ToimenpideEhdotus
+  {:id          common-schema/Key
+   :label_fi    common-schema/String150
+   :label_sv    common-schema/String150
+   :valid       schema/Bool
+   :ordinal     schema/Num
+   :description common-schema/String150})
+
+(def PerusparannuspassiRakennuksenperustiedot
+  {:ulkoseinat-ehdotettu-taso   schema/Num
+   :ylapohja-ehdotettu-taso     schema/Num
+   :alapohja-ehdotettu-taso     schema/Num
+   :ikkunat-ehdotettu-taso      schema/Num
+   :paalammitys-jarjestelma-ehdotettu-taso    common-schema/Key
+   :ilmanvaihto-ehdotettu-taso                common-schema/Key
+   :uusiutuva-energia-ehdotettu-taso          common-schema/Key
+   :jaahdytys-ehdotettu-taso                  common-schema/Key
+   :mahdollisuus-liittya-energiatehokkaaseen  common-schema/Key})
+
+(def PerusparannuspassiLaskennatTulokset
+  {:kaukolampo-hinta      schema/Num
+   :sahko-hinta           schema/Num
+   :uusiutuvatPAt-hinta   schema/Num
+   :fossiilisetPAt-hinta  schema/Num
+   :kaukojaahdytys-hinta  schema/Num
+   :lisatiedot            common-schema/String1500})
+
+(def PerusparannuspassiVaiheLaskennatTulokset
+  {:vaiheen-alku-pvm      common-schema/Date
+   :vaiheen-loppu-pvm     common-schema/Date
+   :ostoenergian-tarve-kaukolampo         schema/Num
+   :ostoenergian-tarve-sahko              schema/Num
+   :ostoenergian-tarve-uusiutuvatPAt      schema/Num
+   :ostoenergian-tarve-fossiilisetPAt     schema/Num
+   :ostoenergian-tarve-kaukojaahdytys     schema/Num
+   :uusiutuvan-energian-kokonaistuotto    schema/Num
+   :toteutunut-ostoenergia-kaukolampo     schema/Num
+   :toteutunut-ostoenergia-sahko          schema/Num
+   :toteutunut-ostoenergia-uusiutuvatPAt  schema/Num
+   :toteutunut-ostoenegia-fossiilisetPAt  schema/Num
+   :toteutunut-ostoenergia-kaukojaahdytys schema/Num})
+
+(def PerusparannuspassiVaiheToimenpiteet
+  {:toimenpideseloste     common-schema/String150
+   :toimenpide-ehdotukset [ToimenpideEhdotus]})
+
 (def PerusparannuspassiVaihe
   {:vaihe-nro (common-schema/LimitedInt 1 4)
-   :valid     schema/Bool})
+   :valid     schema/Bool
+   :toimenpiteet      [PerusparannuspassiVaiheToimenpiteet]
+   :laskennantulokset [PerusparannuspassiVaiheLaskennatTulokset]})
 
 (def PerusparannuspassiSave
   {:valid              schema/Bool
    :energiatodistus-id common-schema/Key
-   :vaiheet            [PerusparannuspassiVaihe]})
+   :perustiedot             [PerusparannuspassiPerustiedot]
+   :vaiheet                 [PerusparannuspassiVaihe]
+   :rakennuksenperustiedot  [PerusparannuspassiRakennuksenperustiedot]
+   :laskennanperustiedot    [PerusparannuspassiLaskennatTulokset]})
 
 (def Perusparannuspassi
   (merge common-schema/Id
