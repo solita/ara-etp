@@ -39,7 +39,7 @@
    * it out and we get the tab context into some consistent place.
    */
   h1 {
-    @apply text-secondary font-bold uppercase text-lg mb-8 tracking-xl outline-none;
+    @apply text-secondary font-bold uppercase text-h1 mb-12 tracking-xl outline-none;
   }
 </style>
 
