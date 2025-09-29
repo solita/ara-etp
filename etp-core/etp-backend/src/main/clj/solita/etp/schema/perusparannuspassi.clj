@@ -3,7 +3,7 @@
     [schema.core :as schema]
     [solita.etp.schema.common :as common-schema]))
 
-(def PerusparannuspassiPerustiedot
+(def Perustiedot
   {:havainnointikaynti  common-schema/Date
    :passin-esittely     common-schema/Date
    :tayttaa-Aplus-vaatimukset schema/Bool
@@ -17,7 +17,7 @@
    :ordinal     schema/Num
    :description common-schema/String150})
 
-(def PerusparannuspassiRakennuksenperustiedot
+(def Rakennuksenperustiedot
   {:ulkoseinat-ehdotettu-taso   schema/Num
    :ylapohja-ehdotettu-taso     schema/Num
    :alapohja-ehdotettu-taso     schema/Num
@@ -28,7 +28,7 @@
    :jaahdytys-ehdotettu-taso                  common-schema/Key
    :mahdollisuus-liittya-energiatehokkaaseen  common-schema/Key})
 
-(def PerusparannuspassiLaskennatTulokset
+(def LaskennanTulokset
   {:kaukolampo-hinta      schema/Num
    :sahko-hinta           schema/Num
    :uusiutuvatPAt-hinta   schema/Num
@@ -36,7 +36,7 @@
    :kaukojaahdytys-hinta  schema/Num
    :lisatiedot            common-schema/String1500})
 
-(def PerusparannuspassiVaiheLaskennatTulokset
+(def VaiheLaskennanTulokset
   {:vaiheen-alku-pvm      common-schema/Date
    :vaiheen-loppu-pvm     common-schema/Date
    :ostoenergian-tarve-kaukolampo         schema/Num
@@ -51,23 +51,23 @@
    :toteutunut-ostoenegia-fossiilisetPAt  schema/Num
    :toteutunut-ostoenergia-kaukojaahdytys schema/Num})
 
-(def PerusparannuspassiVaiheToimenpiteet
+(def VaiheToimenpiteet
   {:toimenpideseloste     common-schema/String150
    :toimenpide-ehdotukset [ToimenpideEhdotus]})
 
 (def PerusparannuspassiVaihe
   {:vaihe-nro (common-schema/LimitedInt 1 4)
    :valid     schema/Bool
-   :toimenpiteet      [PerusparannuspassiVaiheToimenpiteet]
-   :laskennantulokset [PerusparannuspassiVaiheLaskennatTulokset]})
+   :toimenpiteet      [VaiheToimenpiteet]
+   :laskennantulokset [VaiheLaskennanTulokset]})
 
 (def PerusparannuspassiSave
   {:valid              schema/Bool
    :energiatodistus-id common-schema/Key
-   :perustiedot             [PerusparannuspassiPerustiedot]
+   :perustiedot             [Perustiedot]
    :vaiheet                 [PerusparannuspassiVaihe]
-   :rakennuksenperustiedot  [PerusparannuspassiRakennuksenperustiedot]
-   :laskennanperustiedot    [PerusparannuspassiLaskennatTulokset]})
+   :rakennuksenperustiedot  [Rakennuksenperustiedot]
+   :laskennanperustiedot    [LaskennanTulokset]})
 
 (def Perusparannuspassi
   (merge common-schema/Id
