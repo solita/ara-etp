@@ -80,6 +80,9 @@ module.exports = {
         xl: '0.15em'
       }
     },
+    lineHeight: {
+      header: '1.5'
+    },
     fontSize: {
       // Tailwind V1 theming. Feel free to change if you are a visual designer
       xs: '0.75rem',
@@ -93,7 +96,8 @@ module.exports = {
       '5xl': '3rem',
       '6xl': '4rem',
       h1: '2rem',
-      h2: '1.5rem'
+      h2: '1.5rem',
+      h3: '1.25rem'
     }
   },
   plugins: [],
