@@ -72,5 +72,12 @@
                    ts/*db* {:id laatija-id :rooli 0} {})
           buffer (StringBuffer.)]
       (result #(.append buffer %))
-      (t/is (str/starts-with? (.toString buffer)
-                              "\"Id\";\"Versio\";")))))
+      (t/testing "The csv starts with expected headers"
+        (t/is (str/starts-with? (.toString buffer)
+                                "\"Id\";\"Perusparannuspassi-id\";\"Versio\";")))
+      #_(t/testing "Perusparannuspassi-id shows up as expected for a todistus with perusparannuspassi"
+        ;;TODO: AE-2582: Finish once the testing kit is complete
+        (t/is false))
+      #_(t/testing "Perusparannuspassi-id is empty for energiatodistus without perusparannuspassi"
+        ;; TODO: AE-2582: Finish once the testing kit is complete
+        (t/is false)))))

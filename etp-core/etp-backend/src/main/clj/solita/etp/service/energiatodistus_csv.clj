@@ -11,7 +11,7 @@
 
 (def private-columns
   (concat
-   (for [k [:id :versio :tila-id :laatija-id :laatija-fullname
+   (for [k [:id :perusparannuspassi-id :versio :tila-id :laatija-id :laatija-fullname
             :allekirjoitusaika :voimassaolo-paattymisaika
             :laskutusaika :draft-visible-to-paakayttaja :bypass-validation-limits
             :bypass-validation-limits-reason :korvattu-energiatodistus-id
