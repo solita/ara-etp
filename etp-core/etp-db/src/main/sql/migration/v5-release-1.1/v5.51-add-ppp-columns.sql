@@ -36,8 +36,8 @@ alter table perusparannuspassi
     add column rpt$mahdollisuus_liittya_energiatehokkaaseen int not null default 0 references perusparannuspassi_liittymismahdollisuus(id),
     add column t$kaukolampo_hinta numeric not null default 0,
     add column t$sahko_hinta numeric not null default 0,
-    add column t$uusiutuvatPAt_hinta numeric not null default 0,
-    add column t$fossiilisetPAt_hinta numeric not null default 0,
+    add column t$uusiutuvat_pat_hinta numeric not null default 0,
+    add column t$fossiiliset_pat_hinta numeric not null default 0,
     add column t$kaukojaahdytys_hinta numeric not null default 0,
     add column t$lisatiedot text;
 ;
@@ -48,13 +48,13 @@ alter table perusparannuspassi_vaihe
     add column t$vaiheen_loppu_pvm date,
     add column t$ostoenergian_tarve_kaukolampo numeric not null default 0,
     add column t$ostoenergian_tarve_sahko numeric not null default 0,
-    add column t$ostoenergian_tarve_uusiutuvatPAt numeric not null default 0,
-    add column t$ostoenergian_tarve_fossiilisetPAt numeric not null default 0,
+    add column t$ostoenergian_tarve_uusiutuvat_pat numeric not null default 0,
+    add column t$ostoenergian_tarve_fossiiliset_pat numeric not null default 0,
     add column t$ostoenergian_tarve_kaukojäähdytys numeric not null default 0,
     add column t$uusiutuvan_energian_kokonaistuotto numeric not null default 0,
     add column t$rakennuksen_hyodyntama_osuus_uusiutuvan_energian_tuotosta numeric not null default 0,
     add column t$toteutunut_ostoenergia_kaukolampo numeric not null default 0,
     add column t$toteutunut_ostoenergia_sahko numeric not null default 0,
-    add column t$toteutunut_ostoenergia_uusiutuvatPAt numeric not null default 0,
-    add column t$toteutunut_ostoenergia_fossiilisetPAt numeric not null default 0,
+    add column t$toteutunut_ostoenergia_uusiutuvat_pat numeric not null default 0,
+    add column t$toteutunut_ostoenergia_fossiiliset_pat numeric not null default 0,
     add column t$toteutunut_ostoenergia_kaukojaahdytys numeric not null default 0;
