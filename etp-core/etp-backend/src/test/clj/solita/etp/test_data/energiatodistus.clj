@@ -1,7 +1,5 @@
 (ns solita.etp.test-data.energiatodistus
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]
-            [clojure.test.check.generators :as test-generators]
             [flathead.deep :as deep]
             [schema-generators.generators :as g]
             [schema.core :as schema]
@@ -20,16 +18,7 @@
            (java.io FileInputStream ObjectInputStream)
            (java.time Instant)))
 
-(defn not-escaped-backslash? [generated-string]
-  (not (str/includes? generated-string "\\")))
-
-(def string-generator
-  "Pure string-ascii generator can generate \\ which breaks test
-   when the generated string goes to PostgreSQL like search"
-  (test-generators/such-that not-escaped-backslash?
-                             test-generators/string-ascii))
-
-(def generators {schema/Str                   string-generator
+(def generators {schema/Str                   generators/postgresql-safe-string-generator
                  schema/Num                   (g/always 1.0M)
                  common-schema/Num1           (g/always 1.0M)
                  common-schema/NonNegative    (g/always 1.0M)
