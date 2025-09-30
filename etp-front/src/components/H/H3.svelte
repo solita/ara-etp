@@ -5,7 +5,7 @@
 
 <style type="text/postcss">
   h3 {
-    @apply text-secondary w-full bg-secondary text-light font-bold uppercase text-sm mt-0 mb-4 p-3 tracking-xl;
+    @apply text-secondary w-full font-bold uppercase text-h3 mt-0 mb-4 tracking-xl leading-header;
   }
 
   .compact {
