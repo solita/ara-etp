@@ -1,4 +1,4 @@
-insert into perusparannuspassi_energiatehokkuus_mahdollisuus (id, label_fi, ordinal)
+insert into perusparannuspassi_liittymismahdollisuus(id, label_fi, ordinal)
 values
 (0,  'Kyllä, kaukolämpöön', 1),
 (1,  'Kyllä, Kaukojäähdytykseen', 2),

@@ -8,11 +8,11 @@ call create_classification('perusparannuspassi_jaahdytys'::name);
 
 call create_classification('perusparannuspassi_toimenpide_ehdotus'::name);
 
-call create_classification('perusparannuspassi_energiatehokkuus_mahdollisuus'::name);
+call create_classification('perusparannuspassi_liittymismahdollisuus'::name);
 
 create table perusparannuspassi_vaihe_toimenpide_ehdotus
 (
-    perusparannuspassi_id   integer not null references perusparannuspassi(id),
+    perusparannuspassi_id   integer not null,
     vaihe_nro               integer not null,
     toimpenpide_ehdotus_id  integer not null references perusparannuspassi_toimenpide_ehdotus(id),
     foreign key (perusparannuspassi_id, vaihe_nro)
@@ -23,8 +23,8 @@ create table perusparannuspassi_vaihe_toimenpide_ehdotus
 alter table perusparannuspassi
     add column ppt$havainnointikaynti date,
     add column ppt$passin_esittely date,
-    add column ppt$tayttaa_Aplus_vaatimukset boolean not null default false,
-    add column ppt$tayttaa_A0_vaatimukset boolean not null default false,
+    add column ppt$tayttaa_aplus_vaatimukset boolean not null default false,
+    add column ppt$tayttaa_a0_vaatimukset boolean not null default false,
     add column rpt$ulkoseinat_ehdotettu_taso numeric not null default 0,
     add column rpt$ylapohja_ehdotettu_taso numeric not null default 0,
     add column rpt$alapohja_ehdotettu_taso numeric not null default 0,
@@ -33,7 +33,7 @@ alter table perusparannuspassi
     add column rpt$ilmanvaihto_ehdotettu_taso int not null default 0 references perusparannuspassi_ilmanvaihto(id),
     add column rpt$uusituva_energia_ehdotettu_taso int not null default 0 references perusparannuspassi_uusiutuva_energia(id),
     add column rpt$jaahdystys_ehdotettu_taso int not null default 0 references perusparannuspassi_jaahdytys(id),
-    add column rpt$mahdollisuus_liittya_energiatehokkaaseen int not null default 0 references perusparannuspassi_energiatehokkuus_mahdollisuus(id),
+    add column rpt$mahdollisuus_liittya_energiatehokkaaseen int not null default 0 references perusparannuspassi_liittymismahdollisuus(id),
     add column t$kaukolampo_hinta numeric not null default 0,
     add column t$sahko_hinta numeric not null default 0,
     add column t$uusiutuvatPAt_hinta numeric not null default 0,
