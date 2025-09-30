@@ -41,6 +41,20 @@
        :current-energiatodistus-id (:energiatodistus-id current-ppp)
        :new-energiatodistus-id     (:energiatodistus-id new-ppp)})))
 
+(defn assert-vaihe-numerot! [new-ppp]
+  (let [vaihe-numerot (->> (:vaiheet new-ppp)
+                          (mapv :vaihe-nro))]
+    (when (not (every? #{1, 2, 3, 4} vaihe-numerot))
+      (exception/throw-ex-info!
+        {:type             :invalid-vaihe-nro
+         :message          "The only allowed numbers for vaihe-nro are 1, 2, 3 and 4"
+         :given-vaihe-nros vaihe-numerot}))
+    (when (not (= (count vaihe-numerot) (count (set vaihe-numerot))))
+      (exception/throw-ex-info!
+        {:type             :invalid-combination-of-vaihe-nro
+         :message          "You can give the same vaihe-nro only once"
+         :given-vaihe-nros vaihe-numerot}))))
+
 (defn find-perusparannuspassi [db whoami id]
   (jdbc/with-db-transaction
     [tx db]
@@ -68,6 +82,7 @@
 
 (defn insert-perusparannuspassi! [db whoami ppp]
   (assert-patevyystaso! whoami)
+  (assert-vaihe-numerot! ppp)
   (jdbc/with-db-transaction
     [tx db]
     (assert-insert-requirements! tx whoami ppp)
@@ -104,6 +119,8 @@
 
         ;; Only draft PPP can be modified
         (assert-draft! (:tila-id current-ppp))
+
+        (assert-vaihe-numerot! ppp)
 
         (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi
                                           (dissoc ppp :energiatodistus-id :vaiheet)

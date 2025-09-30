@@ -25,6 +25,8 @@
                                (api-response/created uri (ppp-service/insert-perusparannuspassi! db whoami body)))
                              [{:type :energiatodistus-not-found :response 404}
                               {:type :foreign-key-violation :response 400}
+                              {:type :invalid-vaihe-nro :response 400}
+                              {:type :invalid-combination-of-vaihe-nro :response 400}
                               {:type :invalid-energiatodistus-versio :response 400}
                               {:type :invalid-energiatodistus-id :response 400}]))}}]
     ["/:id"
@@ -48,6 +50,8 @@
                                #(ppp-service/update-perusparannuspassi! db whoami id body)
                                [{:type :energiatodistus-not-found :response 404}
                                 {:type :foreign-key-violation :response 400}
+                                {:type :invalid-vaihe-nro :response 400}
+                                {:type :invalid-combination-of-vaihe-nro :response 400}
                                 {:type :invalid-energiatodistus-versio :response 400}
                                 {:type :invalid-energiatodistus-id :response 400}]))}
       :delete {:summary    "Poista energiatodistukselta perusparannuspassi"
