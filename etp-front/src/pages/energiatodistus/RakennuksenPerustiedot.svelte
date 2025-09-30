@@ -6,7 +6,7 @@
   import * as Postinumero from '@Component/address/postinumero-fi';
   import * as Laatimisvaiheet from '././laatimisvaiheet';
 
-  import H2 from '@Component/H/H2';
+  import H3 from '@Component/H/H3';
   import Input from '@Pages/energiatodistus/Input';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
@@ -67,7 +67,7 @@
   );
 </script>
 
-<H2 text="Rakennuksen perustiedot" />
+<H3 text="Rakennuksen perustiedot" />
 
 <div class="flex lg:flex-row flex-col gap-x-8">
   <div class="lg:w-3/5 w-full py-4">

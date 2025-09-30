@@ -32,8 +32,8 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.rakennusvaippa.header')} />
 
-<div class="flex lg:flex-row flex-col">
-  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+<div class="flex lg:flex-row flex-col gap-8 mb-6">
+  <div class="w-1/3">
     <Input
       {disabled}
       {schema}
@@ -44,7 +44,7 @@
       labelUnit={Q50} />
   </div>
 
-  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+  <div class="w-1/3">
     <Input
       {disabled}
       {schema}
@@ -55,7 +55,7 @@
       labelUnit={Crak} />
   </div>
 
-  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+  <div class="w-1/3">
     <Input
       {disabled}
       {schema}

@@ -302,6 +302,7 @@
             </div>
           {/if}
 
+          <H2 text={$_('energiatodistus.perustiedot-header')} />
           <div class="mb-5">
             <Checkbox
               bind:model={energiatodistus}
@@ -337,7 +338,6 @@
             path={['kommentti']}
             bind:model={energiatodistus} />
 
-          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
           <EnergiatodistusKorvaava
             postinumerot={luokittelut.postinumerot}
             {whoami}
