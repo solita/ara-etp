@@ -1119,6 +1119,7 @@
         "2018": "Åtgärdsförslag för att förbättra e-talet"
       },
       "label-context": "$unused",
+      "table-header": "Åtgärdsförslag",
       "toimenpide-table": {
         "ehdotus": "Åtgärds\u00ADförslag",
         "lampo": "Värme, förändring i köpt energi",
