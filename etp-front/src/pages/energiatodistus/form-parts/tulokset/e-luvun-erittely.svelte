@@ -87,20 +87,18 @@
   }
 </script>
 
-<H3
-  compact={true}
-  text={$_('energiatodistus.tulokset.kaytettavat-energiamuodot.header')} />
+<H3 text={$_('energiatodistus.tulokset.kaytettavat-energiamuodot.header')} />
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table et-table__noborder mb-6">
+  <table class="et-table et-table__noborder mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-left-aligned">
           {$_(
             'energiatodistus.tulokset.kaytettavat-energiamuodot.kaytettavat-energiamuodot'
           )}
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_(
               `energiatodistus.tulokset.kaytettavat-energiamuodot.ostoenergia.${versio}`
@@ -110,12 +108,12 @@
             <VuosikulutusUnit />
           </span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           {$_(
             'energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon-kerroin'
           )}
         </th>
-        <th class="et-table--th et-table--th__twocells" colspan="2">
+        <th class="et-table--th et-table--th__twocells et-table--th-right-aligned" colspan="2">
           <div>
             {$_(
               'energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella-painotettu-energiankulutus'
