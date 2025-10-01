@@ -31,15 +31,18 @@
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-left-aligned">
           {$_(
             `energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.table-header`
           )}
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           <VuosituottoUnit />
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           <VuosituottoAreaUnit />
         </th>
       </tr>

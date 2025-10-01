@@ -37,7 +37,8 @@
   <table class="et-table et-table__noborder mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-left-aligned">
           {$_(
             'energiatodistus.tulokset.tekniset-jarjestelmat.table-header'
           )}</th>

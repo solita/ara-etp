@@ -27,12 +27,15 @@
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-left-aligned">
           {$_(`energiatodistus.tulokset.nettotarve.table-header`)}</th>
-        <th class="et-table--th et-table--th__twocells et-table--th-right-aligned">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-right-aligned">
           <VuosikulutusUnit />
         </th>
-        <th class="et-table--th et-table--th__twocells et-table--th-right-aligned">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-right-aligned">
           <VuosikulutusPerAlaUnit />
         </th>
       </tr>

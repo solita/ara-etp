@@ -113,7 +113,9 @@
             'energiatodistus.tulokset.kaytettavat-energiamuodot.energiamuodon-kerroin'
           )}
         </th>
-        <th class="et-table--th et-table--th__twocells et-table--th-right-aligned" colspan="2">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-right-aligned"
+          colspan="2">
           <div>
             {$_(
               'energiatodistus.tulokset.kaytettavat-energiamuodot.kertoimella-painotettu-energiankulutus'

@@ -37,7 +37,7 @@
           {$_(
             `energiatodistus.toteutunut-ostoenergiankulutus.table-header`
           )}</th>
-       
+
         <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           <VuosikulutusUnit />
         </th>
@@ -60,7 +60,7 @@
               )}
             </div>
           </td>
-        
+
           <td class="et-table--td">
             <Input
               {disabled}
