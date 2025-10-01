@@ -68,25 +68,27 @@
 </div>
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table mb-6">
+  <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th" />
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+          <span>{$_('energiatodistus.lahtotiedot.rakennusvaippa.table-header')}</span>
+        </th>
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.ala')}</span>
           <span class="block">
             <Area />
           </span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.U')}</span>
           <span class="block">W/(m²K)</span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.rakennusvaippa.U*A')}</span>
           <span class="block">W/K</span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_(
               'energiatodistus.lahtotiedot.rakennusvaippa.osuus-lampohaviosta'

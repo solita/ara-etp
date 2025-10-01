@@ -609,6 +609,7 @@
         "ilmanvuotoluku": "Luftläckagetal",
         "lampokapasiteetti": "Värmekapacitet",
         "ilmatilavuus": "Luftvolym",
+        "table-header": "Strukturera",
         "labels": {
           "ulkoseinat": "Ytter\u00ADväggar",
           "ylapohja": "Vinds\u00ADbjälklag",
@@ -659,6 +660,7 @@
         "header": "Fönster enligt väderstreck",
         "kohtisuora": "rät vinkel",
         "arvo": "värde",
+        "table-header": "Väderstreck",
         "labels": {
           "pohjoinen": "Norr",
           "koillinen": "Nordost",
@@ -731,6 +733,7 @@
         "ilmavirta": "Luftflöde",
         "tulo": "in",
         "poisto": "frånluft",
+        "table-header": "System",
         "labels": {
           "paaiv": "Huvud\u00ADaggregat (venti\u00ADlation)",
           "erillispoistot": "Separata utsug",
@@ -760,6 +763,7 @@
       "lammitys": {
         "header": "Uppvärmningssystem",
         "label-context": "Uppvärmningssystem",
+        "table-header": "Uppvärmningssystem",
         "lammitysmuoto-1": {
           "label-context": "$unused",
           "id": "Primärt uppvärmningssystem",
@@ -832,6 +836,7 @@
         "header": "Interna värmelaster enligt användningsgrad",
         "kayttoaste": "Använd\u00ADnings\u00adgrad",
         "lampokuorma": "Värmelast",
+        "table-header": "Värmelastkälla",
         "labels": {
           "henkilot": "Personer",
           "kuluttajalaitteet": "Hushålls\u00ADappa\u00ADrater",
@@ -912,6 +917,7 @@
           "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)"
         },
         "label-context": "Förnybara självförsörjningsenergier",
+        "table-header": "Energilösning",
         "labels": {
           "aurinkosahko": "Solel",
           "tuulisahko": "Vindel",
@@ -940,6 +946,7 @@
         "lampo": "Värme",
         "kaukojaahdytys": "Fjärrkyla",
         "lammitysjarjestelma": "Uppvärmnings\u00ADsystemet",
+        "table-header": "System",
         "labels": {
           "tilojen-lammitys": "Uppvärm\u00ADning av utrymmen",
           "tuloilman-lammitys": "Uppvärm\u00ADning av tilluft",
@@ -974,6 +981,7 @@
       },
       "nettotarve": {
         "header": "Nettoenergibehov",
+        "table-header": "Objekt för energibehovet",
         "labels": {
           "tilojen-lammitys-vuosikulutus": "Uppvärmning av utrymmen",
           "ilmanvaihdon-lammitys-vuosikulutus": "Uppvärmning av ventilationsluft",
@@ -993,6 +1001,7 @@
       "lampokuormat": {
         "header": "Värmelaster",
         "label-context": "Värmelaster",
+        "table-header": "Värmelast",
         "labels": {
           "aurinko": "Solen",
           "ihmiset": "Personer",
@@ -1015,6 +1024,7 @@
     },
     "toteutunut-ostoenergiankulutus": {
       "header": "Faktisk energiförbrukning",
+      "table-header": "Energikällor",
       "ostettu-energia": {
         "header": {
           "2013": "Köpt energi",
@@ -1049,6 +1059,7 @@
       "ostetut-polttoaineet": {
         "header": "Köpta bränslen",
         "table-header": {
+          "title": "Bränslen",
           "maara": "Mängd per år",
           "yksikko": "Enhet",
           "muunnoskerroin": "Omvandlingsfaktor (kWh)"
@@ -1084,6 +1095,7 @@
       },
       "toteutuneet-yhteensa-header": "Faktisk köpt energi totalt",
       "label-context": "Faktisk köpt energi",
+      "toteutuneet-yhteensa-table-header": "Källa för köpt energi",
       "labels": {
         "sahko-vuosikulutus-yhteensa": "El",
         "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme",

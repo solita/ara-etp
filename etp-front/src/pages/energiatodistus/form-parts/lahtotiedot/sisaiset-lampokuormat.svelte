@@ -58,23 +58,23 @@
   }
 </script>
 
-<H3 text={$_('energiatodistus.lahtotiedot.sis-kuorma.header')} compact={true} />
+<H3 text={$_('energiatodistus.lahtotiedot.sis-kuorma.header')} />
 
 <div class="min-w-full overflow-x-auto">
   <table class="et-table mb-6">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th" />
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+          {$_('energiatodistus.lahtotiedot.sis-kuorma.table-header')}
+        </th>
+        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           {$_('energiatodistus.lahtotiedot.sis-kuorma.kayttoaste')}
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           <span
             >{$_('energiatodistus.lahtotiedot.sis-kuorma.lampokuorma')}</span>
           <span class="block">W/m²</span>
         </th>
-        <th class="et-table--th" />
-        <th class="et-table--th" />
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -100,8 +100,6 @@
               bind:model={energiatodistus}
               path={['lahtotiedot', 'sis-kuorma', sisKuorma, 'lampokuorma']} />
           </td>
-          <td class="et-table--td" />
-          <td class="et-table--td" />
         </tr>
       {/each}
     </tbody>

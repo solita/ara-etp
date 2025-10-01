@@ -44,35 +44,40 @@
 </script>
 
 <H3
-  compact={true}
   text={$_(
     'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.header'
   )} />
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table mb-6">
+  <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__sixth" />
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__sixth et-table--th-left-aligned"
+          >{$_(
+            'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.title'
+          )}</th>
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           {$_(
             'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.maara'
           )}
         </th>
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
+          {$_(
+            'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
+          )}
           {$_(
             'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
           )}
         </th>
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           {$_(
             'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.muunnoskerroin'
           )}
         </th>
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           <VuosikulutusUnit />
         </th>
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           <VuosikulutusPerAlaUnit />
         </th>
       </tr>
