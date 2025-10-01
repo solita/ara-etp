@@ -18,9 +18,9 @@
   const base = `energiatodistus.huomiot.${huomio}`;
 </script>
 
-<H3 text={$_(`${base}.header`)} compact={true} />
+<H3 text={$_(`${base}.header`)} />
 
-<div class="w-full py-4 mb-6">
+<div class="w-full mb-6">
   <Textarea
     {disabled}
     {schema}
@@ -42,24 +42,24 @@
 {/each}
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table mb-6">
+  <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th" />
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-left-aligned">{$_('energiatodistus.huomiot.table-header')}</th>
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.huomiot.toimenpide-table.lampo')}</span>
           <span class="block"><VuosikulutusUnit /></span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.huomiot.toimenpide-table.sahko')}</span>
           <span class="block"><VuosikulutusUnit /></span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span
             >{$_('energiatodistus.huomiot.toimenpide-table.jaahdytys')}</span>
           <span class="block"><VuosikulutusUnit /></span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span
             >{$_(
               'energiatodistus.huomiot.toimenpide-table.eluvun-muutos'

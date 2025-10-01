@@ -1147,6 +1147,7 @@
         "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
       },
       "label-context": "$unused",
+      "table-header": "Toimenpide-ehdotus",
       "toimenpide-table": {
         "ehdotus": "Toimen\u00ADpide-ehdotus",
         "lampo": "Lämpö, osto\u00ADenergian muutos",
