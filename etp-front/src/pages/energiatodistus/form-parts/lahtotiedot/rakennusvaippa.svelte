@@ -71,8 +71,12 @@
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th-left-aligned et-table--th__twocells">
-          <span>{$_('energiatodistus.lahtotiedot.rakennusvaippa.table-header')}</span>
+        <th
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+          <span
+            >{$_(
+              'energiatodistus.lahtotiedot.rakennusvaippa.table-header'
+            )}</span>
         </th>
         <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.ala')}</span>

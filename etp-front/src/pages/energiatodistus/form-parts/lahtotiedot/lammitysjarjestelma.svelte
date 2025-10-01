@@ -287,14 +287,17 @@
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
           {$_('energiatodistus.lahtotiedot.lammitys.table-header')}
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           <span>{$_('energiatodistus.lahtotiedot.lammitys.maara')}</span>
           <span class="block">{$_('units.pieces')}</span>
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           <span>{$_('energiatodistus.lahtotiedot.lammitys.tuotto')}</span>
           <span class="block">kWh</span>
         </th>

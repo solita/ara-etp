@@ -64,13 +64,16 @@
   <table class="et-table mb-6">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
           {$_('energiatodistus.lahtotiedot.sis-kuorma.table-header')}
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           {$_('energiatodistus.lahtotiedot.sis-kuorma.kayttoaste')}
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
           <span
             >{$_('energiatodistus.lahtotiedot.sis-kuorma.lampokuorma')}</span>
           <span class="block">W/m²</span>
