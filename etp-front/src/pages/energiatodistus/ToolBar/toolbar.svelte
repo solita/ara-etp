@@ -12,6 +12,7 @@
   import Signing from '@Pages/energiatodistus/signing/SigningDialog.svelte';
   import TyojonoButton from './tyojono-button';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import Sisallysluettelo from './sisallysluettelo.svelte';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
@@ -215,7 +216,10 @@
 {/if}
 
 <div
-  class="toolbar relative flex flex-col text-secondary border-1 border-disabled">
+  class="toolbar relative flex flex-col text-secondary">
+  
+  <Sisallysluettelo />
+  
   <button on:click={toggleLanguageSelection}>
     {#if bilingual}
       <div class="flex flex-row w-full">

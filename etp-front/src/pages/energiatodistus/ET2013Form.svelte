@@ -53,7 +53,7 @@
   $: labelLocale = LocaleUtils.label($locale);
 </script>
 
-<H2 text={$_('energiatodistus.perustiedot.header')} />
+<H2 id="perustiedot" text={$_('energiatodistus.perustiedot.header')} />
 
 <div class="flex lg:flex-row flex-col gap-x-8">
   {#if R.complement(R.isNil)(energiatodistus.id)}
@@ -149,7 +149,7 @@
   bind:energiatodistus />
 
 <HR />
-<H2 text={$_('energiatodistus.lahtotiedot.header')} />
+<H2 id="laskennan-lahtotiedot" text={$_('energiatodistus.lahtotiedot.header')} />
 
 <div class="w-1/5 py-4 mb-4 flex flex-row items-end">
   <div class="w-5/6">
@@ -189,7 +189,7 @@
 
 <HR />
 
-<H2 text={$_('energiatodistus.tulokset.header')} />
+<H2 id="tulokset" text={$_('energiatodistus.tulokset.header')} />
 
 <ELuku {eTehokkuus} idSuffix="tulokset" />
 <ELuvunErittely
@@ -211,7 +211,7 @@
 <Lampokuormat {disabled} {schema} bind:energiatodistus />
 
 <HR />
-<H2 text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
+<H2 id="toteutunut-ostoenergiankulutus" text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
 <EnergiaverkostaOstetut
   versio={2013}
   {disabled}
@@ -222,7 +222,7 @@
 <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
 <HR />
-<H2 text={$_('energiatodistus.huomiot.header.2013')} />
+<H2 id="toimenpide-ehdotukset" text={$_('energiatodistus.huomiot.header.2013')} />
 <Huomio
   {disabled}
   {schema}
@@ -261,7 +261,7 @@
   {inputLanguage}
   bind:energiatodistus />
 
-<H2 text={$_('energiatodistus.lisamerkintoja')} />
+<H2 id="lisamerkintoja" text={$_('energiatodistus.lisamerkintoja')} />
 <div class="w-full py-4 mb-4">
   <Textarea
     {disabled}
