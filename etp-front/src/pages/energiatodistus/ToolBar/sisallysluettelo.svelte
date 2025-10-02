@@ -62,7 +62,7 @@
 
   .toc-item {
     @apply w-full py-2 text-left text-sm cursor-pointer;
-    @apply text-secondary text-tocLink;
+    @apply text-secondary text-tocLink underline leading-header;
     @apply transition-colors duration-200;
   }
 
@@ -71,7 +71,7 @@
   }
 
   .toc-header {
-    @apply font-semibold text-dark;
+    @apply font-semibold text-dark leading-header;
   }
 </style>
 
