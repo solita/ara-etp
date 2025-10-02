@@ -60,7 +60,6 @@
               )}
             </div>
           </td>
-
           <td class="et-table--td">
             <Input
               {disabled}
@@ -107,9 +106,6 @@
                 'nimi'
               ]} />
           </td>
-          <td class="et-table--td" />
-          <td class="et-table--td" />
-          <td class="et-table--td" />
           <td class="et-table--td">
             <Input
               {disabled}
