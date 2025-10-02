@@ -539,7 +539,8 @@
       "download": "Ladda ner",
       "discard": "Förkasta",
       "undodiscard": "Ångra funktionen Förkasta",
-      "delete": "Radera"
+      "delete": "Radera",
+      "sisallysluettelo": "Innehållsförteckning"
     },
     "new": {
       "draft": "Nytt utkast",

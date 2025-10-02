@@ -562,7 +562,8 @@
       "download": "Lataa",
       "discard": "Hylkää",
       "undodiscard": "Kumoa hylkäys",
-      "delete": "Poista"
+      "delete": "Poista",
+      "sisallysluettelo": "Sisällys"
     },
     "new": {
       "draft": "Uusi luonnos",
