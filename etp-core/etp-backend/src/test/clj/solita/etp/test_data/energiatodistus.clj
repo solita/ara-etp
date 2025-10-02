@@ -79,22 +79,39 @@
                    :ulkoovet          {:ala 0 :U 0.2}})
        (generate-adds n versio true)))
 
-(defn insert! [energiatodistus-adds laatija-id]
-  (mapv #(:id (energiatodistus-service/add-energiatodistus!
-                (ts/db-user laatija-id)
-                {:id laatija-id}
-                (if (-> % :perustiedot (contains? :uudisrakennus))
-                  2013
-                  2018)
-                %))
-        energiatodistus-adds))
+(defn- add->versio
+  "Here we don't know what version the add is, but we deduce it from its structure."
+  [add]
+  (cond (-> add :perustiedot (contains? :uudisrakennus)) 2013
+        ;; TODO: Need to consider 2026 version here.
+        :else 2018))
+
+(defn insert!
+  ([energiatodistus-adds laatija-id]
+   (mapv #(:id (energiatodistus-service/add-energiatodistus!
+                 (ts/db-user laatija-id)
+                 {:id laatija-id}
+                 (add->versio %)
+                 %))
+         energiatodistus-adds))
+  ([energiatodistus-adds laatija-id {:keys [force-2026?]}]
+   (if force-2026?
+     (mapv #(:id (energiatodistus-service/add-energiatodistus!
+                   (ts/db-user laatija-id)
+                   {:id laatija-id}
+                   2026
+                   %))
+           energiatodistus-adds)
+     (insert! energiatodistus-adds laatija-id))))
 
 (defn generate-and-insert!
   ([versio ready-for-signing? laatija-id]
    (first (generate-and-insert! 1 versio ready-for-signing? laatija-id)))
   ([n versio ready-for-signing? laatija-id]
    (let [energiatodistus-adds (generate-adds n versio ready-for-signing?)]
-     (zipmap (insert! energiatodistus-adds laatija-id) energiatodistus-adds))))
+     (if (= versio 2026)
+       (zipmap (insert! energiatodistus-adds laatija-id {:force-2026? true}) energiatodistus-adds)
+       (zipmap (insert! energiatodistus-adds laatija-id) energiatodistus-adds)))))
 
 (defn generate-pdf-as-file-mock [_ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
