@@ -283,7 +283,7 @@
 
   <DirtyConfirmation {dirty} />
   <div class="w-full relative flex">
-    <div class="sticky top-3em self-start flex justify-end pt-8 px-6">
+    <div class="sticky top-3em self-start flex justify-end px-6">
       <ToolBar
         save={validateAndSubmit}
         saveComplete={validateCompleteAndSubmit}
@@ -295,7 +295,7 @@
         {valvonta}
         bind:inputLanguage />
     </div>
-    <div class="flex-grow overflow-x-hidden">
+    <div class="flex-grow overflow-x-hidden border-l border-disabled pl-10 -mt-8 pt-4">
       <form
         bind:this={etFormElement}
         on:submit|preventDefault={validateAndSubmit(noop)}

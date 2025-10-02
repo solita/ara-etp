@@ -41,7 +41,7 @@
   <div class="content px-2 lg:px-10">
     <nav
       id="navigationcontainer"
-      class="w-full"
+      class="w-full pb-4"
       aria-label={$_('navigation.navigation-tab-bar')}>
       <NavigationTabBar
         {idTranslate}
