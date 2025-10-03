@@ -272,7 +272,7 @@
   }
 
   :global(.et-table--tr > .et-table--td:not(:first-child)) {
-    @apply text-center;
+    @apply text-right;
   }
 </style>
 
