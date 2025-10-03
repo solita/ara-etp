@@ -554,7 +554,7 @@
     "toolbar": {
       "new": "Tallenna",
       "save": "Tallenna",
-      "undo": "Peruuta muutokset",
+      "undo": "Peru muutokset",
       "sign": "Allekirjoita",
       "copy": "Kopioi pohjaksi",
       "add-ppp": "Lisää PPP",
@@ -563,7 +563,8 @@
       "discard": "Hylkää",
       "undodiscard": "Kumoa hylkäys",
       "delete": "Poista",
-      "sisallysluettelo": "Sisällys"
+      "sisallysluettelo": "Sisällys",
+      "language-label": "Sisällön kieli"
     },
     "new": {
       "draft": "Uusi luonnos",

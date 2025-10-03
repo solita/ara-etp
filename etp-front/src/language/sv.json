@@ -540,7 +540,8 @@
       "discard": "Förkasta",
       "undodiscard": "Ångra funktionen Förkasta",
       "delete": "Radera",
-      "sisallysluettelo": "Innehållsförteckning"
+      "sisallysluettelo": "Innehållsförteckning",
+      "language-label": "Innehållsspråk"
     },
     "new": {
       "draft": "Nytt utkast",
