@@ -8,6 +8,7 @@ create table perusparannuspassi_vaihe_toimenpide_ehdotus
     perusparannuspassi_id integer not null,
     vaihe_nro             integer not null,
     toimenpide_ehdotus_id integer not null references toimenpide_ehdotus(id),
+    ordinal               integer not null,
     foreign key (perusparannuspassi_id, vaihe_nro)
         references perusparannuspassi_vaihe(perusparannuspassi_id, vaihe_nro)
 );

@@ -135,12 +135,14 @@
                                                         ppp-vaihe->db-row)
           db/default-opts)
 
-        (doseq [toimenpide-ehdotus-id (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id))]
+        (doseq [[ordinal toimenpide-ehdotus-id]
+                (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
           (db/with-db-exception-translation
             jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
             {:perusparannuspassi_id id
              :vaihe_nro             (:vaihe-nro vaihe)
-             :toimenpide_ehdotus_id toimenpide-ehdotus-id}
+             :toimenpide_ehdotus_id toimenpide-ehdotus-id
+             :ordinal               ordinal}
             db/default-opts)))
 
       (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
@@ -189,12 +191,14 @@
           (jdbc/delete! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
                         ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
                         db/default-opts)
-          (doseq [toimenpide-ehdotus-id (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id))]
+          (doseq [[ordinal toimenpide-ehdotus-id]
+                  (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
             (db/with-db-exception-translation
               jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
               {:perusparannuspassi_id id
                :vaihe_nro             (:vaihe-nro vaihe)
-               :toimenpide_ehdotus_id toimenpide-ehdotus-id}
+               :toimenpide_ehdotus_id toimenpide-ehdotus-id
+               :ordinal               ordinal}
               db/default-opts)))
         (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
           (jdbc/update! tx :perusparannuspassi-vaihe
