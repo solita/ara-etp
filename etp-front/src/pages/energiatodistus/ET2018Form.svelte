@@ -169,7 +169,9 @@
   bind:energiatodistus />
 
 <HR />
-<H2 id="laskennan-lahtotiedot" text={$_('energiatodistus.lahtotiedot.header')} />
+<H2
+  id="laskennan-lahtotiedot"
+  text={$_('energiatodistus.lahtotiedot.header')} />
 
 <div class="flex w-full">
   <div class="w-1/3 mb-12">
@@ -228,7 +230,9 @@
 <Lampokuormat {disabled} {schema} bind:energiatodistus />
 
 <HR />
-<H2 id="toteutunut-ostoenergiankulutus" text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
+<H2
+  id="toteutunut-ostoenergiankulutus"
+  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
 <EnergiaverkostaOstetut
   versio={2018}
   {disabled}
@@ -239,7 +243,9 @@
 <ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
 
 <HR />
-<H2 id="toimenpide-ehdotukset" text={$_('energiatodistus.huomiot.header.2018')} />
+<H2
+  id="toimenpide-ehdotukset"
+  text={$_('energiatodistus.huomiot.header.2018')} />
 <Huomio
   {disabled}
   {schema}
