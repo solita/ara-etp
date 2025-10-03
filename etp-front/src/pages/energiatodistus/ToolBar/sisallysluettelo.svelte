@@ -37,7 +37,6 @@
       const elementRect = element.getBoundingClientRect();
       const currentScrollY =
         window.pageYOffset || document.documentElement.scrollTop;
-      // Calculate position with 20px offset above the element
       const targetPosition = elementRect.top + currentScrollY - 20;
 
       window.scrollTo({
@@ -45,7 +44,6 @@
         behavior: 'smooth'
       });
     } else {
-      // Debug: let's see all elements with IDs
       const allElementsWithIds = document.querySelectorAll('[id]');
       console.log(
         'All elements with IDs:',
@@ -63,7 +61,10 @@
   .toc-item {
     @apply w-full py-2 text-left text-sm cursor-pointer;
     @apply text-secondary text-tocLink underline leading-header;
-    @apply transition-colors duration-200;
+  }
+
+  .toc-item:hover {
+    @apply text-primary no-underline;
   }
 
   .toc-item:active {
