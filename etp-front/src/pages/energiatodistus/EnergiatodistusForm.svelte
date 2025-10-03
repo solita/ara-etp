@@ -295,7 +295,8 @@
         {valvonta}
         bind:inputLanguage />
     </div>
-    <div class="flex-grow overflow-x-hidden border-l border-disabled pl-10 -mt-8 pt-4">
+    <div
+      class="flex-grow overflow-x-hidden border-l border-disabled pl-10 -mt-8 pt-4">
       <form
         bind:this={etFormElement}
         on:submit|preventDefault={validateAndSubmit(noop)}
@@ -332,7 +333,9 @@
             </div>
           {/if}
           <div class="perustiedot__container mb-12">
-            <H2 id="perustiedot" text={$_('energiatodistus.perustiedot-header')} />
+            <H2
+            id="perustiedot"
+            text={$_('energiatodistus.perustiedot-header')} />
             <div class="mb-5">
               <Checkbox
                 bind:model={energiatodistus}
