@@ -9,6 +9,7 @@ module.exports = {
       primarydark: '#345000',
       secondarydark: '#343841',
       link: '#538000',
+      tocLink: '#0015FF',
       hover: '#538000',
       althover: '#c5e191',
       focus: '#538000',
@@ -80,6 +81,9 @@ module.exports = {
         xl: '0.15em'
       }
     },
+    lineHeight: {
+      header: '1.5'
+    },
     fontSize: {
       // Tailwind V1 theming. Feel free to change if you are a visual designer
       xs: '0.75rem',
@@ -91,7 +95,10 @@ module.exports = {
       '3xl': '1.875rem',
       '4xl': '2.25rem',
       '5xl': '3rem',
-      '6xl': '4rem'
+      '6xl': '4rem',
+      h1: '2rem',
+      h2: '1.5rem',
+      h3: '1.25rem'
     }
   },
   plugins: [],

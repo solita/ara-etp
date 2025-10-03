@@ -12,6 +12,7 @@
   import Signing from '@Pages/energiatodistus/signing/SigningDialog.svelte';
   import TyojonoButton from './tyojono-button';
   import Spinner from '@Component/Spinner/Spinner.svelte';
+  import Sisallysluettelo from './sisallysluettelo.svelte';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
@@ -145,11 +146,11 @@
 
 <style type="text/postcss">
   button {
-    @apply w-32 flex flex-col justify-center items-center;
+    @apply p-3 flex gap-2 items-center;
   }
 
-  button:not(:first-child) {
-    @apply h-24;
+  button:last-of-type {
+    @apply mb-3;
   }
 
   button:hover {
@@ -162,6 +163,10 @@
 
   button:active {
     @apply bg-primarydark;
+  }
+
+  button.languageselect-button {
+    @apply p-0 border-4 border-ara-2021-basic-gray rounded-md;
   }
 
   button:disabled {
@@ -177,7 +182,7 @@
   }
 
   .languageselect {
-    @apply font-bold uppercase text-light w-1/2 py-2;
+    @apply font-bold uppercase text-light w-1/2 py-1;
   }
 
   .languageselect:hover {
@@ -214,30 +219,8 @@
   <Signing {energiatodistus} reload={cancel} />
 {/if}
 
-<div
-  class="toolbar relative flex flex-col text-secondary border-1 border-disabled">
-  <button on:click={toggleLanguageSelection}>
-    {#if bilingual}
-      <div class="flex flex-row w-full">
-        {#each ['fi', 'sv'] as language}
-          <div
-            data-cy={`languageselect-${language}`}
-            class="languageselect"
-            class:bg-primary={R.equals(selectedLanguage, language)}
-            class:bg-ara-2021-basic-gray={!R.equals(
-              selectedLanguage,
-              language
-            )}>
-            {language}
-          </div>
-        {/each}
-      </div>
-    {:else}
-      <div class="w-full font-bold py-2 uppercase text-light bg-primary">
-        {energiatodistusKieli.map(et.kielisyysKey).some()}
-      </div>
-    {/if}
-  </button>
+<div class="toolbar relative flex flex-col text-secondary">
+  <Sisallysluettelo />
   {#if R.includes(Toolbar.module.tyojono, fields)}
     <TyojonoButton
       disabled={pendingExecution}
@@ -246,16 +229,16 @@
   {/if}
   {#if R.includes(Toolbar.module.save, fields)}
     <button disabled={!dirty || pendingExecution} on:click={save(noop)}>
+      <span class="text-2xl font-icon">save</span>
       <span class="description">
         {id.isSome()
           ? i18n('energiatodistus.toolbar.save')
           : i18n('energiatodistus.toolbar.new')}
       </span>
-      <span class="text-2xl font-icon">save</span>
     </button>
     <button disabled={!dirty || pendingExecution} on:click={cancel}>
-      <span class="description">{i18n('energiatodistus.toolbar.undo')}</span>
       <span class="text-2xl font-icon">undo</span>
+      <span class="description">{i18n('energiatodistus.toolbar.undo')}</span>
     </button>
   {/if}
   {#if R.includes(Toolbar.module.sign, fields)}
@@ -263,10 +246,10 @@
       disabled={pendingExecution}
       data-cy="allekirjoita-button"
       on:click={saveComplete(openSigning)}>
-      <div class="description">{i18n('energiatodistus.toolbar.sign')}</div>
       <span class="text-2xl font-icon border-b-3 border-secondary">
         create
       </span>
+      <div class="description">{i18n('energiatodistus.toolbar.sign')}</div>
     </button>
   {/if}
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
@@ -284,8 +267,8 @@
           newEtPage();
         }
       }}>
-      <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
       <span class="text-2xl font-icon">file_copy</span>
+      <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
     </button>
   {/if}
   {#if id.isSome() && Kayttajat.isLaatija(whoami) && version === 2026 && et.isDraft(energiatodistus)}
@@ -308,8 +291,8 @@
           api.addPerusparannuspassi(fetch, Maybe.get(id))
         );
       }}>
-      <span class="description">{i18n('energiatodistus.toolbar.add-ppp')}</span>
       <span class="text-2xl font-icon">add_circle_outline</span>
+      <span class="description">{i18n('energiatodistus.toolbar.add-ppp')}</span>
     </button>
   {/if}
   {#if R.includes(Toolbar.module.preview, fields)}
@@ -318,10 +301,10 @@
         <button
           disabled={pendingExecution}
           on:click={save(() => openUrl(href))}>
+          <span class="text-2xl font-icon">picture_as_pdf</span>
           <span class="block description"
             >{i18n('energiatodistus.toolbar.preview')}
             {R.toUpper(lang)}</span>
-          <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
       {/each}
     {/each}
@@ -330,10 +313,10 @@
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
         <button disabled={pendingExecution} on:click={() => openUrl(href)}>
+          <span class="text-2xl font-icon">picture_as_pdf</span>
           <span class="block description"
             >{i18n('energiatodistus.toolbar.download')}
             {R.toUpper(lang)}</span>
-          <span class="text-2xl font-icon">picture_as_pdf</span>
         </button>
       {/each}
     {/each}
@@ -346,9 +329,9 @@
       <button
         disabled={pendingExecution}
         on:click={() => confirm(discardEnergiatodistus)}>
+        <span class="text-2xl font-icon">block</span>
         <span class="description"
           >{i18n('energiatodistus.toolbar.discard')}</span>
-        <span class="text-2xl font-icon">block</span>
       </button>
     </Confirm>
   {/if}
@@ -360,9 +343,9 @@
       <button
         disabled={pendingExecution}
         on:click={() => confirm(undoDiscardEnergiatodistus)}>
+        <span class="text-2xl font-icon">undo</span>
         <span class="description"
           >{i18n('energiatodistus.toolbar.undodiscard')}</span>
-        <span class="text-2xl font-icon">undo</span>
       </button>
     </Confirm>
   {/if}
@@ -374,9 +357,9 @@
       <button
         disabled={pendingExecution}
         on:click={() => confirm(deleteEnergiatodistus)}>
+        <span class="text-2xl font-icon">delete_forever</span>
         <span class="description"
           >{i18n('energiatodistus.toolbar.delete')}</span>
-        <span class="text-2xl font-icon">delete_forever</span>
       </button>
     </Confirm>
   {/if}
@@ -399,4 +382,31 @@
       <Spinner />
     </div>
   {/if}
+  <div class="py-2">
+    <div class="font-semibold text-sm mb-2 text-dark w-1/2">
+      {i18n('energiatodistus.toolbar.language-label')}
+    </div>
+    <button on:click={toggleLanguageSelection} class="languageselect-button">
+      {#if bilingual}
+        <div class="flex flex-row w-full">
+          {#each ['fi', 'sv'] as language}
+            <div
+              data-cy={`languageselect-${language}`}
+              class="languageselect px-7"
+              class:bg-primary={R.equals(selectedLanguage, language)}
+              class:bg-ara-2021-basic-gray={!R.equals(
+                selectedLanguage,
+                language
+              )}>
+              {language}
+            </div>
+          {/each}
+        </div>
+      {:else}
+        <div class="w-full font-bold py-1 uppercase text-light bg-primary px-7">
+          {energiatodistusKieli.map(et.kielisyysKey).some()}
+        </div>
+      {/if}
+    </button>
+  </div>
 </div>

@@ -206,13 +206,27 @@
     @apply border-b-0;
   }
 
-  :global(.et-table--th),
+  :global(.et-table--th) {
+    @apply py-5 px-4 font-bold;
+  }
   :global(.et-table--td) {
-    @apply px-4 py-2 font-bold;
+    @apply py-3 px-4 font-bold;
+  }
+
+  :global(.et-table--td .inputwrapper) {
+    @apply border-primary;
+  }
+
+  :global(.et-table--th-left-aligned) {
+    @apply text-left;
+  }
+
+  :global(.et-table--th-right-aligned) {
+    @apply text-right;
   }
 
   :global(.et-table--th) {
-    @apply text-primary text-sm text-center w-1/5;
+    @apply text-primary text-sm w-1/5;
     height: 4em;
   }
 
@@ -227,6 +241,10 @@
 
   :global(.et-table--th__sixth) {
     @apply w-1/6;
+  }
+
+  :global(.et-table--th__4-6) {
+    @apply w-4/6;
   }
 
   :global(.et-table--th__fourcells) {
@@ -265,7 +283,20 @@
 
   <DirtyConfirmation {dirty} />
   <div class="w-full relative flex">
-    <div class="flex-grow overflow-x-hidden">
+    <div class="sticky top-3em self-start flex justify-end px-6">
+      <ToolBar
+        save={validateAndSubmit}
+        saveComplete={validateCompleteAndSubmit}
+        cancel={reset}
+        {energiatodistus}
+        {eTehokkuus}
+        dirty={dirty || R.isNil(energiatodistus.id)}
+        {whoami}
+        {valvonta}
+        bind:inputLanguage />
+    </div>
+    <div
+      class="flex-grow overflow-x-hidden border-l border-disabled pl-10 -mt-8 pt-4">
       <form
         bind:this={etFormElement}
         on:submit|preventDefault={validateAndSubmit(noop)}
@@ -302,6 +333,9 @@
             </div>
           {/if}
 
+          <H2
+            id="perustiedot"
+            text={$_('energiatodistus.perustiedot-header')} />
           <div class="mb-5">
             <Checkbox
               bind:model={energiatodistus}
@@ -337,7 +371,6 @@
             path={['kommentti']}
             bind:model={energiatodistus} />
 
-          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
           <EnergiatodistusKorvaava
             postinumerot={luokittelut.postinumerot}
             {whoami}
@@ -369,18 +402,6 @@
             {whoami} />
         </div>
       </form>
-    </div>
-    <div class="sticky top-3em lg:ml-10 self-start flex justify-end">
-      <ToolBar
-        save={validateAndSubmit}
-        saveComplete={validateCompleteAndSubmit}
-        cancel={reset}
-        {energiatodistus}
-        {eTehokkuus}
-        dirty={dirty || R.isNil(energiatodistus.id)}
-        {whoami}
-        {valvonta}
-        bind:inputLanguage />
     </div>
   </div>
 {:else}
