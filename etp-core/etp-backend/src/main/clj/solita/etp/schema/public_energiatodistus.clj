@@ -1,6 +1,7 @@
 (ns solita.etp.schema.public-energiatodistus
   (:require [schema.core :as schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
+            [solita.common.schema :as xschema]
             [solita.etp.schema.common :as common-schema]))
 
 (def Perustiedot
@@ -28,13 +29,13 @@
   (-> energiatodistus-schema/Tulokset
       (select-keys [:kaytettavat-energiamuodot])
       (assoc-in [:kaytettavat-energiamuodot :muu]
-                [(energiatodistus-schema/optional-properties
+                [(xschema/optional-properties
                   energiatodistus-schema/UserDefinedEnergiamuoto)])))
 
 (defn energiatodistus-versio [versio]
   (-> (energiatodistus-schema/energiatodistus-versio
        versio
-       (energiatodistus-schema/optional-properties
+       (xschema/optional-properties
         {:perustiedot Perustiedot
          :lahtotiedot Lahtotiedot
          :tulokset    Tulokset}))

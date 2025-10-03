@@ -3,8 +3,9 @@
             [schema.coerce :as coerce]
             [schema-tools.core :as schema-tools]
             [clojure.walk :as walk]
-            [schema-tools.coerce :as schema-tools-coerce])
-  (:import (schema.core Maybe ConditionalSchema Constrained Predicate)
+            [schema-tools.coerce :as schema-tools-coerce]
+            [solita.common.map :as m])
+  (:import (schema.core ConditionalSchema Constrained EnumSchema Maybe Predicate)
            (clojure.lang APersistentMap)))
 
 (defn schema-record?
@@ -55,3 +56,26 @@
 
 (def parse-big-decimal
   (coerce/safe #(if (string? %) (BigDecimal. ^String %) %)))
+
+(defn- illegal-argument! [msg]
+  (throw (IllegalArgumentException. msg)))
+
+(defn optional-properties [schema]
+  (if (schema-record? schema)
+    (cond
+      (maybe? schema) schema
+      (instance? Constrained schema)
+      (let [constrained-schema (optional-properties (:schema schema))]
+        (if (maybe? constrained-schema)
+          (schema/maybe schema)
+          (assoc schema :schema constrained-schema)))
+      (instance? EnumSchema schema) (schema/maybe schema)
+      (instance? Predicate schema) (schema/maybe schema)
+      :else (illegal-argument! (str "Unsupported schema record: " schema)))
+    (cond
+      (= schema schema/Bool) schema
+      (class? schema) (schema/maybe schema)
+      (map? schema) (m/map-values optional-properties schema)
+      (vector? schema) (mapv optional-properties schema)
+      (coll? schema) (map optional-properties schema)
+      :else (illegal-argument! (str "Unsupported schema: " schema)))))

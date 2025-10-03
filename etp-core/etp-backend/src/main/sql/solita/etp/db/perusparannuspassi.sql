@@ -28,3 +28,17 @@ set
 where
     vaihe_nro = :vaihe-nro and
     perusparannuspassi_id = :perusparannuspassi-id;
+
+-- name: select-perusparannuspassi-vaihe-toimenpide-ehdotukset
+select
+    pvte.toimenpide_ehdotus_id as id
+from perusparannuspassi_vaihe_toimenpide_ehdotus pvte
+where perusparannuspassi_id = :perusparannuspassi-id
+  and vaihe_nro = :vaihe-nro
+order by pvte.ordinal asc, pvte.toimenpide_ehdotus_id asc;
+
+-- name: delete-perusparannuspassi-vaihe-toimenpide-ehdotukset!
+delete
+from perusparannuspassi_vaihe_toimenpide_ehdotus
+where perusparannuspassi_id = :perusparannuspassi-id
+  and vaihe_nro = :vaihe-nro;

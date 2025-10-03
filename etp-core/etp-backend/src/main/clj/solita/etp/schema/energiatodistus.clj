@@ -9,26 +9,6 @@
             [solita.common.map :as map])
   (:import (schema.core Predicate EnumSchema Constrained)))
 
-(defn optional-properties [schema]
-  (if (xschema/schema-record? schema)
-    (cond
-      (xschema/maybe? schema) schema
-      (instance? Constrained schema)
-        (let [constrained-schema (optional-properties (:schema schema))]
-          (if (xschema/maybe? constrained-schema)
-            (schema/maybe schema)
-            (assoc schema :schema constrained-schema)))
-      (instance? EnumSchema schema) (schema/maybe schema)
-      (instance? Predicate schema) (schema/maybe schema)
-      :else (exception/illegal-argument! (str "Unsupported schema record: " schema)))
-    (cond
-      (= schema schema/Bool) schema
-      (class? schema) (schema/maybe schema)
-      (map? schema) (m/map-values optional-properties schema)
-      (vector? schema) (mapv optional-properties schema)
-      (coll? schema) (map optional-properties schema)
-      :else (exception/illegal-argument! (str "Unsupported schema: " schema)))))
-
 (def YritysPostinumero common-schema/String8)
 
 (def Yritys
@@ -170,8 +150,8 @@
    :lampo common-schema/NonNegative})
 
 (def Kuukausierittely (schema/maybe
-                       {:tuotto (optional-properties UusiutuvatOmavaraisenergiat)
-                        :kulutus (optional-properties SahkoLampo)}))
+                       {:tuotto (xschema/optional-properties UusiutuvatOmavaraisenergiat)
+                        :kulutus (xschema/optional-properties SahkoLampo)}))
 
 (def OptionalKuukausierittely (schema/constrained [Kuukausierittely]
                                                   #(contains? #{0 12} (count %))
@@ -272,7 +252,7 @@
   "This schema is used in
   add-energiatodistus and update-energiatodistus
   services for 2018 version"
-  (optional-properties
+  (xschema/optional-properties
     (merge
       Laskutus
       {:korvattu-energiatodistus-id     common-schema/Key
@@ -309,11 +289,11 @@
   (-> (dissoc-not-in-2013 EnergiatodistusSave2018)
       (assoc-in [:perustiedot :uudisrakennus] schema/Bool)
       (assoc-in [:tulokset :kaytettavat-energiamuodot :muu]
-                [(optional-properties UserDefinedEnergiamuoto)])
+                [(xschema/optional-properties UserDefinedEnergiamuoto)])
       (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat]
-                [(optional-properties UserDefinedEnergia)])
+                [(xschema/optional-properties UserDefinedEnergia)])
       (assoc-in [:toteutunut-ostoenergiankulutus :ostettu-energia :muu]
-                [(optional-properties UserDefinedEnergia)])))
+                [(xschema/optional-properties UserDefinedEnergia)])))
 
 (def EnergiatodistusSave2026
   EnergiatodistusSave2018)
@@ -409,7 +389,7 @@
     (merge common-schema/Id Status Laatija)
     :versio schema/Int
     :perustiedot
-    (optional-properties
+    (xschema/optional-properties
       (select-keys Perustiedot
                    [:rakennustunnus
                     :kayttotarkoitus
