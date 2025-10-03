@@ -35,6 +35,7 @@ grant insert, update on table vk_note to etp_app;
 
 grant insert, update on table perusparannuspassi to etp_app;
 grant insert, update on table perusparannuspassi_vaihe to etp_app;
+grant insert, update, delete on table perusparannuspassi_vaihe_toimenpide_ehdotus to etp_app;
 
 grant delete on table audit.energiatodistus to etp_app;
 grant delete on table vo_toimenpide to etp_app;

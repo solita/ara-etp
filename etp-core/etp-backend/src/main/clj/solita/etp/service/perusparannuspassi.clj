@@ -29,6 +29,11 @@
       (set/rename-keys db-abbreviations)
       tree->flat))
 
+(defn ppp-vaihe->db-row [ppp-vaihe]
+  (-> ppp-vaihe
+      (set/rename-keys db-abbreviations)
+      tree->flat))
+
 (defn db-row->ppp [db-row]
   (-> db-row
       flat->tree
@@ -118,10 +123,22 @@
                          jdbc/insert! tx :perusparannuspassi (dissoc ppp :vaiheet)
                          db/default-opts)]
 
+      ;; Insert
       (doseq [vaihe (:vaiheet ppp)]
         (db/with-db-exception-translation
-          jdbc/insert! tx :perusparannuspassi-vaihe (assoc vaihe :perusparannuspassi-id id)
-          db/default-opts))
+          jdbc/insert! tx :perusparannuspassi-vaihe (-> vaihe
+                                                        (update :toimenpiteet #(dissoc % :toimenpide-ehdotukset))
+                                                        (assoc :perusparannuspassi-id id)
+                                                        ppp-vaihe->db-row)
+          db/default-opts)
+
+        (doseq [toimenpide-ehdotus-id (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id))]
+          (db/with-db-exception-translation
+            jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+            {:perusparannuspassi_id id
+             :vaihe_nro             (:vaihe-nro vaihe)
+             :toimenpide_ehdotus_id toimenpide-ehdotus-id}
+            db/default-opts)))
 
       (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
         (jdbc/insert! tx :perusparannuspassi-vaihe
