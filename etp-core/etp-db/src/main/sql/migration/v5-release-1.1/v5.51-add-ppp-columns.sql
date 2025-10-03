@@ -32,11 +32,13 @@ alter table perusparannuspassi
     add column t$uusiutuvat_pat_hinta numeric,
     add column t$fossiiliset_pat_hinta numeric,
     add column t$kaukojaahdytys_hinta numeric,
-    add column t$lisatiedot text;
+    add column t$lisatiedot_fi text,
+    add column t$lisatiedot_sv text;
 
 
 alter table perusparannuspassi_vaihe
-    add column tp$toimenpideseloste text not null default '',
+    add column tp$toimenpideseloste_fi text,
+    add column tp$toimenpideseloste_sv text,
     add column t$vaiheen_alku_pvm date,
     add column t$vaiheen_loppu_pvm date,
     add column t$ostoenergian_tarve_kaukolampo numeric,

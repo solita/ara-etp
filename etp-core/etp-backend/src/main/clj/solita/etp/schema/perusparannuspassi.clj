@@ -27,7 +27,8 @@
    :uusiutuvat-pat-hinta  schema/Num
    :fossiiliset-pat-hinta schema/Num
    :kaukojaahdytys-hinta  schema/Num
-   :lisatiedot            common-schema/String1500})
+   :lisatiedot-fi         common-schema/String1500
+   :lisatiedot-sv         common-schema/String1500})
 
 (def VaiheLaskennanTulokset
   {:vaiheen-alku-pvm                       common-schema/Date
@@ -46,7 +47,8 @@
    :toteutunut-ostoenergia-kaukojaahdytys  schema/Num})
 
 (def Toimenpiteet
-  {:toimenpideseloste     schema/Str
+  {:toimenpideseloste-fi  (schema/maybe common-schema/String1500)
+   :toimenpideseloste-sv  (schema/maybe common-schema/String1500)
    :toimenpide-ehdotukset [common-schema/Id]})
 
 (def PerusparannuspassiVaihe
