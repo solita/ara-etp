@@ -31,16 +31,18 @@
   )(energiatodistus);
 </script>
 
-<H3
-  compact={true}
-  text={$_('energiatodistus.tulokset.tekniset-jarjestelmat.header')} />
+<H3 text={$_('energiatodistus.tulokset.tekniset-jarjestelmat.header')} />
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table et-table__noborder mb-6">
+  <table class="et-table et-table__noborder mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__twocells" />
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+          {$_(
+            'energiatodistus.tulokset.tekniset-jarjestelmat.table-header'
+          )}</th>
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_('energiatodistus.tulokset.tekniset-jarjestelmat.sahko')}
           </span>
@@ -48,7 +50,7 @@
             <VuosikulutusPerAlaUnit />
           </span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_('energiatodistus.tulokset.tekniset-jarjestelmat.lampo')}
           </span>
@@ -56,7 +58,7 @@
             <VuosikulutusPerAlaUnit />
           </span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_(
               'energiatodistus.tulokset.tekniset-jarjestelmat.kaukojaahdytys'

@@ -32,8 +32,8 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.rakennusvaippa.header')} />
 
-<div class="flex lg:flex-row flex-col">
-  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+<div class="flex lg:flex-row flex-col gap-8 mb-6">
+  <div class="w-1/3">
     <Input
       {disabled}
       {schema}
@@ -44,7 +44,7 @@
       labelUnit={Q50} />
   </div>
 
-  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+  <div class="w-1/3">
     <Input
       {disabled}
       {schema}
@@ -55,7 +55,7 @@
       labelUnit={Crak} />
   </div>
 
-  <div class="w-1/3 py-4 mb-6 flex flex-row items-end">
+  <div class="w-1/3">
     <Input
       {disabled}
       {schema}
@@ -68,25 +68,31 @@
 </div>
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table mb-6">
+  <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th" />
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+          <span
+            >{$_(
+              'energiatodistus.lahtotiedot.rakennusvaippa.table-header'
+            )}</span>
+        </th>
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.ala')}</span>
           <span class="block">
             <Area />
           </span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.U')}</span>
           <span class="block">W/(m²K)</span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>{$_('energiatodistus.lahtotiedot.rakennusvaippa.U*A')}</span>
           <span class="block">W/K</span>
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_(
               'energiatodistus.lahtotiedot.rakennusvaippa.osuus-lampohaviosta'

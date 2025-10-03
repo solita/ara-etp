@@ -24,7 +24,7 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.ilmanvaihto.header')} />
 
-<div class="w-full py-4 mb-4">
+<div class="w-full mb-6">
   <Select
     id={'lahtotiedot.ilmanvaihto.tyyppi-id'}
     items={R.map(R.prop('id'), ilmanvaihtotyypit)}
@@ -61,21 +61,23 @@
   <table class="et-table mb-6">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th" />
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-left-aligned">
+          {$_('energiatodistus.lahtotiedot.ilmanvaihto.table-header')}
+        </th>
+        <th class="et-table--th et-table--th-right-aligned">
           {$_('energiatodistus.lahtotiedot.ilmanvaihto.ilmavirta')}
           <br />
           {$_('energiatodistus.lahtotiedot.ilmanvaihto.tulo')} (m³/s) / {$_(
             'energiatodistus.lahtotiedot.ilmanvaihto.poisto'
           )} (m³/s)
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           {$_('energiatodistus.lahtotiedot.ilmanvaihto.sfp-luku')}
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           {$_('energiatodistus.lahtotiedot.ilmanvaihto.lampotilasuhde')}
         </th>
-        <th class="et-table--th">
+        <th class="et-table--th et-table--th-right-aligned">
           <span>
             {$_('energiatodistus.lahtotiedot.ilmanvaihto.jaatymisenesto')}
           </span>
@@ -171,7 +173,7 @@
 </div>
 
 <div class="flex lg:flex-row flex-col lg:items-end">
-  <div class="w-1/2 py-4 mb-4 mr-8">
+  <div class="w-1/2 py-4 mb-12 mr-8">
     <Input
       {disabled}
       {schema}
@@ -180,7 +182,7 @@
       path={['lahtotiedot', 'ilmanvaihto', 'lto-vuosihyotysuhde']} />
   </div>
 
-  <div class="w-1/2 py-4 mb-4">
+  <div class="w-1/2 py-4 mb-12">
     <Input
       {disabled}
       {schema}

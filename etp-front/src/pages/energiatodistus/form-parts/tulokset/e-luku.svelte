@@ -11,8 +11,8 @@
   export let idSuffix;
 </script>
 
-<div class="flex lg:flex-row flex-col">
-  <div class="lg:w-1/5 w-full py-2">
+<div class="flex lg:flex-row flex-col mb-12">
+  <div class="lg:w-1/5 w-full">
     <Input
       id={'energiatodistus.tulokset.e-luku.' + idSuffix}
       name="energiatodistus.tulokset.e-luku"
@@ -26,7 +26,7 @@
       lens={R.lens(R.identity, R.identity)}
       i18n={$_} />
   </div>
-  <div class="lg:w-1/5 w-full py-2">
+  <div class="lg:w-1/5 w-full">
     <Input
       id={'energiatodistus.tulokset.e-luokka.' + idSuffix}
       name="energiatodistus.tulokset.e-luokka"

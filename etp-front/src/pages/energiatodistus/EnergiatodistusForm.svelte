@@ -206,13 +206,27 @@
     @apply border-b-0;
   }
 
-  :global(.et-table--th),
+  :global(.et-table--th) {
+    @apply py-5 px-4 font-bold;
+  }
   :global(.et-table--td) {
-    @apply px-4 py-2 font-bold;
+    @apply py-3 px-4 font-bold;
+  }
+
+  :global(.et-table--td .inputwrapper) {
+    @apply border-primary;
+  }
+
+  :global(.et-table--th-left-aligned) {
+    @apply text-left;
+  }
+
+  :global(.et-table--th-right-aligned) {
+    @apply text-right;
   }
 
   :global(.et-table--th) {
-    @apply text-primary text-sm text-center w-1/5;
+    @apply text-primary text-sm w-1/5;
     height: 4em;
   }
 
@@ -227,6 +241,10 @@
 
   :global(.et-table--th__sixth) {
     @apply w-1/6;
+  }
+
+  :global(.et-table--th__4-6) {
+    @apply w-4/6;
   }
 
   :global(.et-table--th__fourcells) {
@@ -254,7 +272,7 @@
   }
 
   :global(.et-table--tr > .et-table--td:not(:first-child)) {
-    @apply text-center;
+    @apply text-right;
   }
 </style>
 
@@ -302,6 +320,7 @@
             </div>
           {/if}
 
+          <H2 text={$_('energiatodistus.perustiedot-header')} />
           <div class="mb-5">
             <Checkbox
               bind:model={energiatodistus}
@@ -337,7 +356,6 @@
             path={['kommentti']}
             bind:model={energiatodistus} />
 
-          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
           <EnergiatodistusKorvaava
             postinumerot={luokittelut.postinumerot}
             {whoami}
