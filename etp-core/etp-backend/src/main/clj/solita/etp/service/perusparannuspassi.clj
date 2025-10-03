@@ -113,6 +113,9 @@
     (assert-2026! versio)
     (assert-draft! tila-id)))
 
+(defn- without-toimenpide-ehdotukset [ppp-vaihe]
+  (update ppp-vaihe :toimenpiteet #(dissoc % :toimenpide-ehdotukset)))
+
 (defn insert-perusparannuspassi! [db whoami ppp]
   (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
@@ -127,7 +130,7 @@
       (doseq [vaihe (:vaiheet ppp)]
         (db/with-db-exception-translation
           jdbc/insert! tx :perusparannuspassi-vaihe (-> vaihe
-                                                        (update :toimenpiteet #(dissoc % :toimenpide-ehdotukset))
+                                                        without-toimenpide-ehdotukset
                                                         (assoc :perusparannuspassi-id id)
                                                         ppp-vaihe->db-row)
           db/default-opts)
@@ -149,33 +152,50 @@
       {:id       id
        :warnings []})))
 
+(defn assert-update-requirements! [db whoami current-ppp new-ppp]
+  (let [{:keys [tila-id laatija-id]}
+        (perusparannuspassi-db/select-for-ppp-add-requirements db current-ppp)]
+    ;; This is first, to avoid leaking information about the existence of the ET.
+    ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
+    (assert-correct-et-owner! whoami laatija-id)
+    (assert-same-energiatodistus-id! current-ppp new-ppp)
+    (assert-draft! tila-id)))
+
 (defn update-perusparannuspassi! [db whoami id ppp]
+  (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
     [tx db]
     (if-let [current-ppp (find-perusparannuspassi tx whoami id)]
       (do
         ;; This is a bit belt-and-suspenders at the moment of writing, because
         ;; find-perusparannuspassi already only looks for owned ppps.
-        (assert-correct-et-owner! whoami (:laatija-id current-ppp))
-
-        ;; energiatodistus-id cannot be changed, even though it is an accepted
-        ;; input for the initial POST
-        (assert-same-energiatodistus-id! current-ppp ppp)
-
-        ;; Only draft PPP can be modified
-        (assert-draft! (:tila-id current-ppp))
+        (assert-update-requirements! tx whoami current-ppp ppp)
 
         (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi
-                                          (dissoc ppp :energiatodistus-id :vaiheet)
+                                          (-> ppp
+                                              (dissoc :energiatodistus-id :vaiheet)
+                                              ppp->db-row)
                                           ["id = ?" id]
                                           db/default-opts)
 
         (doseq [vaihe (:vaiheet ppp)]
           (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi-vaihe
-                                            (dissoc vaihe :vaihe-nro)
+                                            (-> vaihe
+                                                (dissoc :vaihe-nro :perusparannuspassi-id)
+                                                without-toimenpide-ehdotukset
+                                                ppp-vaihe->db-row)
                                             ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
                                             db/default-opts)
-          )
+          (jdbc/delete! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+                        ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+                        db/default-opts)
+          (doseq [toimenpide-ehdotus-id (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id))]
+            (db/with-db-exception-translation
+              jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+              {:perusparannuspassi_id id
+               :vaihe_nro             (:vaihe-nro vaihe)
+               :toimenpide_ehdotus_id toimenpide-ehdotus-id}
+              db/default-opts)))
         (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
           (jdbc/update! tx :perusparannuspassi-vaihe
                         {:valid false}
