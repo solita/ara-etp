@@ -1,5 +1,7 @@
 (ns solita.etp.test-data.energiatodistus
   (:require [clojure.java.io :as io]
+            [clojure.string :as str]
+            [clojure.test.check.generators :as test-generators]
             [flathead.deep :as deep]
             [schema-generators.generators :as g]
             [schema.core :as schema]
@@ -18,7 +20,16 @@
            (java.io FileInputStream ObjectInputStream)
            (java.time Instant)))
 
-(def generators {schema/Str                   generators/postgresql-safe-string-generator
+(defn not-escaped-backslash? [generated-string]
+  (not (str/includes? generated-string "\\")))
+
+(def string-generator
+  "Pure string-ascii generator can generate \\ which breaks test
+   when the generated string goes to PostgreSQL like search"
+  (test-generators/such-that not-escaped-backslash?
+                             test-generators/string-ascii))
+
+(def generators {schema/Str                   string-generator
                  schema/Num                   (g/always 1.0M)
                  common-schema/Num1           (g/always 1.0M)
                  common-schema/NonNegative    (g/always 1.0M)
@@ -79,39 +90,22 @@
                    :ulkoovet          {:ala 0 :U 0.2}})
        (generate-adds n versio true)))
 
-(defn- add->versio
-  "Here we don't know what version the add is, but we deduce it from its structure."
-  [add]
-  (cond (-> add :perustiedot (contains? :uudisrakennus)) 2013
-        ;; TODO: Need to consider 2026 version here.
-        :else 2018))
-
-(defn insert!
-  ([energiatodistus-adds laatija-id]
-   (mapv #(:id (energiatodistus-service/add-energiatodistus!
-                 (ts/db-user laatija-id)
-                 {:id laatija-id}
-                 (add->versio %)
-                 %))
-         energiatodistus-adds))
-  ([energiatodistus-adds laatija-id {:keys [force-2026?]}]
-   (if force-2026?
-     (mapv #(:id (energiatodistus-service/add-energiatodistus!
-                   (ts/db-user laatija-id)
-                   {:id laatija-id}
-                   2026
-                   %))
-           energiatodistus-adds)
-     (insert! energiatodistus-adds laatija-id))))
+(defn insert! [energiatodistus-adds laatija-id]
+  (mapv #(:id (energiatodistus-service/add-energiatodistus!
+                (ts/db-user laatija-id)
+                {:id laatija-id}
+                (if (-> % :perustiedot (contains? :uudisrakennus))
+                  2013
+                  2018)
+                %))
+        energiatodistus-adds))
 
 (defn generate-and-insert!
   ([versio ready-for-signing? laatija-id]
    (first (generate-and-insert! 1 versio ready-for-signing? laatija-id)))
   ([n versio ready-for-signing? laatija-id]
    (let [energiatodistus-adds (generate-adds n versio ready-for-signing?)]
-     (if (= versio 2026)
-       (zipmap (insert! energiatodistus-adds laatija-id {:force-2026? true}) energiatodistus-adds)
-       (zipmap (insert! energiatodistus-adds laatija-id) energiatodistus-adds)))))
+     (zipmap (insert! energiatodistus-adds laatija-id) energiatodistus-adds))))
 
 (defn generate-pdf-as-file-mock [_ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"

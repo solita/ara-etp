@@ -1,6 +1,5 @@
 (ns solita.etp.test-data.generators
-  (:require [clojure.string :as str]
-            [clojure.test.check.generators :as test-generators]
+  (:require [clojure.test.check.generators :as test-generators]
             [schema-generators.generators :as g]
             [schema-generators.complete :as c]
             [solita.etp.schema.common :as common]
@@ -10,15 +9,6 @@
             [solita.etp.schema.kayttaja])
   (:import (java.time Instant LocalDate)
            (java.util UUID)))
-
-(defn not-escaped-backslash? [generated-string]
-  (not (str/includes? generated-string "\\")))
-
-(def postgresql-safe-string-generator
-  "Pure string-ascii generator can generate \\ which breaks test
-   when the generated string goes to PostgreSQL like search"
-  (test-generators/such-that not-escaped-backslash?
-                             test-generators/string-ascii))
 
 (defn unique-henkilotunnukset-f []
   (let [state (atom 0)]
