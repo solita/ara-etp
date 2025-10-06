@@ -40,15 +40,15 @@
 
     (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                   (mock/header "Accept" "application/json")
-                                  (laatija-test-data/with-suomifi-laatija)))]
-      (t/is (= 200 (:status get-res))))
+                                  (laatija-test-data/with-suomifi-laatija)))
+          created-ppp (-> get-res :body (j/read-value object-mapper) (dissoc :id :tila-id :laatija-id))]
+      (t/is (= 200 (:status get-res)))
 
-    (let [new-ppp (-> (ppp-test-data/generate-add 1)
-                      (update :passin-perustiedot assoc :tayttaa-a0-vaatimukset true))
-          new-ppp-body (-> new-ppp j/write-value-as-string)
-          put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
-                                  (mock/header "Accept" "application/json")
-                                  (mock/header "Content-Type" "application/json")
-                                  (mock/body new-ppp-body)
-                                  (laatija-test-data/with-suomifi-laatija)))]
-      (t/is (= 200 (:status put-res))))))
+      (let [modified-ppp (assoc-in created-ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+            new-ppp-body (j/write-value-as-string modified-ppp)
+            put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                    (mock/header "Accept" "application/json")
+                                    (mock/header "Content-Type" "application/json")
+                                    (mock/body new-ppp-body)
+                                    (laatija-test-data/with-suomifi-laatija)))]
+      (t/is (= 200 (:status put-res)))))))
