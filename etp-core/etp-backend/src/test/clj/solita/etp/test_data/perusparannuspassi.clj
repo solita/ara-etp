@@ -39,7 +39,47 @@
   - `energiatodistus-id` - ppp can only be created for an existing et"
   [energiatodistus-id]
   (generators/complete
-    {:energiatodistus-id energiatodistus-id}
+    {:energiatodistus-id energiatodistus-id
+     :valid true
+     :passin-perustiedot {:havainnointikaynti nil
+                          :passin-esittely nil
+                          :tayttaa-a0-vaatimukset false
+                          :tayttaa-aplus-vaatimukset false}
+     :vaiheet            [{:vaihe-nro 1
+                          :valid true
+                          :toimenpiteet {:toimenpideseloste-fi nil
+                                         :toimenpideseloste-sv nil
+                                         :toimenpide-ehdotukset [ ]}
+                          :tulokset {:vaiheen-alku-pvm nil
+                                     :vaiheen-loppu-pvm nil
+                                     :ostoenergian-tarve-kaukolampo 1
+                                     :ostoenergian-tarve-sahko 1
+                                     :ostoenergian-tarve-uusiutuvat-pat 1
+                                     :ostoenergian-tarve-fossiiliset-pat 1
+                                     :ostoenergian-tarve-kaukojaahdytys 1
+                                     :uusiutuvan-energian-kokonaistuotto 1
+                                     :uusiutuvan-energian-hyodynnetty-osuus 1
+                                     :toteutunut-ostoenergia-kaukolampo 1
+                                     :toteutunut-ostoenergia-sahko 1
+                                     :toteutunut-ostoenergia-uusiutuvat-pat 1
+                                     :toteutunut-ostoenergia-fossiiliset-pat 1
+                                     :toteutunut-ostoenergia-kaukojaahdytys 1}}]
+     :rakennuksen-perustiedot {:ulkoseinat-ehdotettu-taso 1
+                               :ylapohja-ehdotettu-taso 1
+                               :alapohja-ehdotettu-taso 1
+                               :ikkunat-ehdotettu-taso 1
+                               :paalammitysjarjestelma-ehdotettu-taso 1
+                               :ilmanvaihto-ehdotettu-taso 1
+                               :uusiutuva-energia-ehdotettu-taso 1
+                               :jaahdytys-ehdotettu-taso 1
+                               :mahdollisuus-liittya-energiatehokkaaseen 1}
+     :tulokset {:kaukolampo-hinta 1
+                :kaukojaahdytys-hinta 1
+                :sahko-hinta 1
+                :uusiutuvat-pat-hinta 1
+                :fossiiliset-pat-hinta 1
+                :lisatiedot-fi nil
+                :lisatiedot-sv nil}}
     perusparannuspassi-schema/PerusparannuspassiSave
     generators))
 
