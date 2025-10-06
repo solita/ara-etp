@@ -278,6 +278,7 @@
   {inputLanguage}
   bind:energiatodistus />
 
+<HR />
 <H2 text={$_('energiatodistus.lisamerkintoja')} />
 <div class="w-full py-4 mb-4">
   <Textarea
