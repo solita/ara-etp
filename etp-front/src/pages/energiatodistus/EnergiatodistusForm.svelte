@@ -334,8 +334,8 @@
           {/if}
           <div class="perustiedot__container mb-12">
             <H2
-            id="perustiedot"
-            text={$_('energiatodistus.perustiedot-header')} />
+              id="perustiedot"
+              text={$_('energiatodistus.perustiedot-header')} />
             <div class="mb-5">
               <Checkbox
                 bind:model={energiatodistus}
