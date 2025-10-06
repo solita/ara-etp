@@ -8,6 +8,7 @@
   import * as LocaleUtils from '@Language/locale-utils';
 
   import H2 from '@Component/H/H2';
+  import H3 from '@Component/H/H3';
   import Select from '@Component/Select/Select';
   import HR from '@Component/HR/HR';
 
@@ -55,113 +56,111 @@
   $: labelLocale = LocaleUtils.label($locale);
 </script>
 
-<H2 text={$_('energiatodistus.perustiedot.header')} />
-
-<div class="flex lg:flex-row flex-col gap-x-8">
-  {#if R.complement(R.isNil)(energiatodistus.id)}
-    <div class="lg:w-1/2 w-full py-2">
-      <BasicInput
-        id="energiatodistus.id"
-        name="energiatodistus.id"
-        label={$_('energiatodistus.id')}
-        disabled={true}
-        bind:model={energiatodistus}
-        lens={R.lensProp('id')}
-        i18n={$_} />
-    </div>
-  {/if}
-  {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
-    <div class="lg:w-1/2 w-full py-2">
-      <EnergiatodistusLaatija {whoami} {energiatodistus} />
-    </div>
-  {/if}
-</div>
-<div class="flex lg:flex-row flex-col gap-x-8">
-  <div class="lg:w-1/2 w-full py-4">
-    <Input
-      {disabled}
-      {schema}
-      center={false}
-      bind:model={energiatodistus}
-      path={['perustiedot', 'yritys', 'nimi']} />
+<div class="mb-8">
+  <H3 text={$_('energiatodistus.perustiedot.header')} />
+  <div class="flex lg:flex-row flex-col gap-x-8">
+    {#if R.complement(R.isNil)(energiatodistus.id)}
+      <div class="lg:w-1/2 w-full py-2">
+        <BasicInput
+          id="energiatodistus.id"
+          name="energiatodistus.id"
+          label={$_('energiatodistus.id')}
+          disabled={true}
+          bind:model={energiatodistus}
+          lens={R.lensProp('id')}
+          i18n={$_} />
+      </div>
+    {/if}
+    {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
+      <div class="lg:w-1/2 w-full py-2">
+        <EnergiatodistusLaatija {whoami} {energiatodistus} />
+      </div>
+    {/if}
   </div>
-
-  <div class="lg:w-1/2 w-full py-4">
-    <Input
-      {disabled}
-      {schema}
-      center={false}
-      bind:model={energiatodistus}
-      path={['perustiedot', 'tilaaja']} />
-  </div>
-</div>
-
-<div class="flex flex-col gap-x-8">
-  <div class="lg:w-1/2 w-full py-4">
-    <Select
-      id={'perustiedot.kieli'}
-      name={'perustiedot.kieli'}
-      label={$_('energiatodistus.perustiedot.kieli')}
-      required={true}
-      validation={schema.$signature}
-      {disabled}
-      bind:model={energiatodistus}
-      lens={R.lensPath(['perustiedot', 'kieli'])}
-      allowNone={false}
-      parse={Maybe.Some}
-      format={et.selectFormat(labelLocale, luokittelut.kielisyys)}
-      items={R.pluck('id', luokittelut.kielisyys)} />
-  </div>
-
-  <div class="lg:w-1/2 w-full py-4">
-    <Select
-      id={'perustiedot.laatimisvaihe'}
-      label={$_('energiatodistus.perustiedot.laatimisvaihe')}
-      required={true}
-      validation={schema.$signature}
-      {disabled}
-      bind:model={energiatodistus}
-      lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
-      parse={Maybe.Some}
-      format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
-      items={R.pluck('id', luokittelut.laatimisvaiheet)} />
-  </div>
-  {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
+  <div class="flex lg:flex-row flex-col gap-x-8">
     <div class="lg:w-1/2 w-full py-4">
       <Input
         {disabled}
         {schema}
-        required={true}
         center={false}
         bind:model={energiatodistus}
-        path={['perustiedot', 'havainnointikaynti']} />
+        path={['perustiedot', 'yritys', 'nimi']} />
     </div>
-  {/if}
 
-  <div class="lg:w-1/2 w-full py-4">
-    <Input
-      {disabled}
-      {schema}
-      center={false}
-      bind:model={energiatodistus}
-      path={['tulokset', 'laskentatyokalu']} />
+    <div class="lg:w-1/2 w-full py-4">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['perustiedot', 'tilaaja']} />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-x-8">
+    <div class="lg:w-1/2 w-full py-4">
+      <Select
+        id={'perustiedot.kieli'}
+        name={'perustiedot.kieli'}
+        label={$_('energiatodistus.perustiedot.kieli')}
+        required={true}
+        validation={schema.$signature}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'kieli'])}
+        allowNone={false}
+        parse={Maybe.Some}
+        format={et.selectFormat(labelLocale, luokittelut.kielisyys)}
+        items={R.pluck('id', luokittelut.kielisyys)} />
+    </div>
+
+    <div class="lg:w-1/2 w-full py-4">
+      <Select
+        id={'perustiedot.laatimisvaihe'}
+        label={$_('energiatodistus.perustiedot.laatimisvaihe')}
+        required={true}
+        validation={schema.$signature}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
+        parse={Maybe.Some}
+        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
+        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
+    </div>
+    {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
+      <div class="lg:w-1/2 w-full py-4">
+        <Input
+          {disabled}
+          {schema}
+          required={true}
+          center={false}
+          bind:model={energiatodistus}
+          path={['perustiedot', 'havainnointikaynti']} />
+      </div>
+    {/if}
+
+    <div class="lg:w-1/2 w-full py-4">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['tulokset', 'laskentatyokalu']} />
+    </div>
   </div>
 </div>
-
-<HR />
-
-<RakennuksenPerustiedot
-  {schema}
-  {inputLanguage}
-  {disabled}
-  {whoami}
-  bind:energiatodistus
-  postinumerot={luokittelut.postinumerot}
-  kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
-  alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
-
-<ELuku {eTehokkuus} idSuffix="perustiedot" />
-<HR />
+<div class="mb-8">
+  <RakennuksenPerustiedot
+    {schema}
+    {inputLanguage}
+    {disabled}
+    {whoami}
+    bind:energiatodistus
+    postinumerot={luokittelut.postinumerot}
+    kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
+    alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
+  <ELuku {eTehokkuus} idSuffix="perustiedot" />
+</div>
 <ToimenpideEhdotukset
   versio={'2018'}
   {disabled}
@@ -172,14 +171,16 @@
 <HR />
 <H2 text={$_('energiatodistus.lahtotiedot.header')} />
 
-<div class="w-1/5 py-4 mb-4 flex flex-row items-end">
-  <Input
-    {disabled}
-    {schema}
-    center={false}
-    bind:model={energiatodistus}
-    path={['lahtotiedot', 'lammitetty-nettoala']}
-    unit={Area} />
+<div class="flex w-full">
+  <div class="w-1/3 mb-12">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitetty-nettoala']}
+      unit={Area} />
+  </div>
 </div>
 
 <Rakennusvaippa {disabled} {schema} bind:energiatodistus />
@@ -277,6 +278,7 @@
   {inputLanguage}
   bind:energiatodistus />
 
+<HR />
 <H2 text={$_('energiatodistus.lisamerkintoja')} />
 <div class="w-full py-4 mb-4">
   <Textarea

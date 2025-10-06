@@ -432,6 +432,7 @@
   },
   "energiatodistus": {
     "title": "Energiatodistus",
+    "perustiedot-header": "Perustiedot",
     "et-lisays": "Uuden energiatodistuksen voit lisätä täältä:",
     "luo2018": "Luo ET 2018",
     "luo2013": "Luo ET 2013",
@@ -618,7 +619,7 @@
     },
     "yhteensa": "Yhteensä",
     "lahtotiedot": {
-      "header": "E-luvun laskennan lähtötiedot",
+      "header": "Laskennan lähtötiedot",
       "label-context": "$unused",
       "ala": "A",
       "U": "U",
@@ -631,6 +632,7 @@
         "ilmanvuotoluku": "Ilmanvuotoluku",
         "lampokapasiteetti": "Lämpökapasiteetti",
         "ilmatilavuus": "Ilmatilavuus",
+        "table-header": "Rakenne",
         "labels": {
           "ulkoseinat": "Ulkoseinät",
           "ylapohja": "Yläpohja",
@@ -681,6 +683,7 @@
         "header": "Ikkunat ilmansuunnittain",
         "kohtisuora": "kohtisuora",
         "arvo": "arvo",
+        "table-header": "Ilmansuunta",
         "labels": {
           "pohjoinen": "Pohjoinen",
           "koillinen": "Koillinen",
@@ -753,6 +756,7 @@
         "ilmavirta": "Ilmavirta",
         "tulo": "tulo",
         "poisto": "poisto",
+        "table-header": "Järjestelmä",
         "labels": {
           "paaiv": "Pääil\u00ADman\u00ADvaihto\u00ADkoneet",
           "erillispoistot": "Erillis\u00ADpoistot",
@@ -782,6 +786,7 @@
       "lammitys": {
         "header": "Lämmitysjärjestelmä",
         "label-context": "Lämmitysjärjestelmä",
+        "table-header": "Lämmitysjärjestelmä",
         "lammitysmuoto": {
           "label-context": "$unused",
           "id": "Lämmitysjärjestelmä",
@@ -859,6 +864,7 @@
         "header": "Sisäiset lämpökuormat eri käyttöasteilla",
         "kayttoaste": "Käyttöaste",
         "lampokuorma": "Lämpökuorma",
+        "table-header": "Lämpökuorman lähde",
         "labels": {
           "henkilot": "Henkilöt",
           "kuluttajalaitteet": "Kuluttajalaitteet",
@@ -934,6 +940,7 @@
           "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
         },
         "label-context": "Uusiutuvat omavaraisenergiat",
+        "table-header": "Energiaratkaisu",
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",
@@ -967,6 +974,7 @@
         "lampo": "Lämpö yhteensä",
         "kaukojaahdytys": "Kauko\u00ADjäähdytys",
         "lammitysjarjestelma": "Lämmitys\u00ADjärjestelmä",
+        "table-header": "Järjestelmä",
         "labels": {
           "tilojen-lammitys": "Tilojen lämmitys",
           "tuloilman-lammitys": "Tuloilman lämmitys",
@@ -1001,6 +1009,7 @@
       },
       "nettotarve": {
         "header": "Energian nettotarve",
+        "table-header": "Energiatarpeen kohde",
         "labels": {
           "tilojen-lammitys-vuosikulutus": "Tilojen lämmitys",
           "ilmanvaihdon-lammitys-vuosikulutus": "Ilmanvaihdon lämmitys",
@@ -1020,6 +1029,7 @@
       "lampokuormat": {
         "header": "Lämpökuormat",
         "label-context": "Lämpökuormat",
+        "table-header": "Lämpökuorma",
         "labels": {
           "aurinko": "Aurinko",
           "ihmiset": "Henkilöt",
@@ -1042,6 +1052,7 @@
     },
     "toteutunut-ostoenergiankulutus": {
       "header": "Toteutunut energiankulutus",
+      "table-header": "Energialähteet",
       "ostettu-energia": {
         "header": {
           "2018": "Energiaverkosta ostettu energia",
@@ -1076,6 +1087,7 @@
       "ostetut-polttoaineet": {
         "header": "Ostetut polttoaineet",
         "table-header": {
+          "title": "Polttoaine",
           "maara": "Poltto\u00ADaineen määrä vuodessa",
           "yksikko": "Yksikkö",
           "muunnoskerroin": "Muunnos\u00ADkerroin kWh:ksi"
@@ -1111,6 +1123,7 @@
       },
       "toteutuneet-yhteensa-header": "Toteutunut ostenergia yhteensä",
       "label-context": "Toteutunut ostoenergia",
+      "toteutuneet-yhteensa-table-header": "Ostoenergian lähde",
       "labels": {
         "sahko-vuosikulutus-yhteensa": "Sähkö",
         "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö",
@@ -1134,6 +1147,7 @@
         "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
       },
       "label-context": "$unused",
+      "table-header": "Toimenpide-ehdotus",
       "toimenpide-table": {
         "ehdotus": "Toimen\u00ADpide-ehdotus",
         "lampo": "Lämpö, osto\u00ADenergian muutos",

@@ -215,7 +215,7 @@
     data-cy={name}
     class:disabled
     bind:this={button}
-    class="button flex items-center"
+    class="button flex items-center pl-3"
     class:focused
     tabindex={disabled ? -1 : 0}
     on:click={_ => disabled || (showDropdown = !showDropdown)}

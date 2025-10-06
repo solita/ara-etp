@@ -28,23 +28,22 @@
 </script>
 
 <H3
-  compact={true}
   text={$_(
     'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header'
   )} />
 
-<div class="min-w-full overflow-x-auto">
-  <table class="et-table et-table__noborder mb-6">
+<div class="min-w-full overflow-x-auto md:overflow-x-hidden">
+  <table class="et-table et-table__noborder border-r-0">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__sixth" />
-        <th class="et-table--th et-table--th__sixth" />
-        <th class="et-table--th et-table--th__sixth" />
-        <th class="et-table--th et-table--th__sixth" />
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__4-6 et-table--th-left-aligned"
+          >{$_(
+            `energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-table-header`
+          )}</th>
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           <VuosikulutusUnit />
         </th>
-        <th class="et-table--th et-table--th__sixth">
+        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           <VuosikulutusPerAlaUnit />
         </th>
       </tr>
@@ -57,9 +56,7 @@
               `energiatodistus.toteutunut-ostoenergiankulutus.labels.${energiamuoto}`
             )}
           </td>
-          <td class="et-table--td" />
-          <td class="et-table--td" />
-          <td class="et-table--td" />
+
           <td class="et-table--td">
             <Input
               {disabled}
@@ -79,9 +76,6 @@
       {/each}
       <tr class="et-table--tr border-t-1 border-disabled">
         <td class="et-table--td uppercase">{$_('energiatodistus.yhteensa')}</td>
-        <td class="et-table--td" />
-        <td class="et-table--td" />
-        <td class="et-table--td" />
         <td class="et-table--td">
           {R.compose(
             formats.numberFormat,

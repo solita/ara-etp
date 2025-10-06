@@ -5,7 +5,7 @@
 
 <style type="text/postcss">
   h2 {
-    @apply text-primary uppercase font-bold text-base mb-4;
+    @apply text-primary uppercase font-bold text-h2 mb-12 leading-header;
   }
 </style>
 

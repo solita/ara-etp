@@ -21,20 +21,24 @@
   )(energiatodistus);
 </script>
 
-<H3 compact={true} text={$_('energiatodistus.tulokset.lampokuormat.header')} />
+<H3 text={$_('energiatodistus.tulokset.lampokuormat.header')} />
 
 <div class="min-w-full overflow-x-auto">
-  <table class="et-table mb-6">
+  <table class="et-table">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th__twocells" />
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+          {$_(`energiatodistus.tulokset.lampokuormat.table-header`)}
+        </th>
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-right-aligned">
           <VuosikulutusUnit />
         </th>
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th__twocells et-table--th-right-aligned">
           <VuosikulutusPerAlaUnit />
         </th>
-        <th class="et-table--th" />
       </tr>
     </thead>
 
@@ -59,7 +63,6 @@
               R.prop(kuorma)
             )(kuormatPerLammitettyNettoala)}
           </td>
-          <td class="et-table--td" />
         </tr>
       {/each}
     </tbody>

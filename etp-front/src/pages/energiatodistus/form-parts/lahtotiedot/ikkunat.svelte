@@ -9,26 +9,31 @@
   export let energiatodistus;
 </script>
 
-<H3 compact={true} text={$_('energiatodistus.lahtotiedot.ikkunat.header')} />
+<H3 text={$_('energiatodistus.lahtotiedot.ikkunat.header')} />
 
-<div class="min-w-full overflow-x-auto">
-  <table class="et-table mb-6">
+<div class="min-w-full overflow-x-auto md:overflow-x-hidden">
+  <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th" />
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th-left-aligned et-table--th__fourcells">
+          <span>{$_('energiatodistus.lahtotiedot.ikkunat.table-header')}</span>
+        </th>
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__fourcells">
           <span>{$_('energiatodistus.lahtotiedot.ala')}</span>
           <span class="block">m²</span>
         </th>
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__fourcells">
           <span>{$_('energiatodistus.lahtotiedot.U')}</span>
           <span class="block">W/(m²K)</span>
         </th>
-        <th class="et-table--th">
+        <th
+          class="et-table--th et-table--th-right-aligned et-table--th__fourcells">
           g<sub>{$_('energiatodistus.lahtotiedot.ikkunat.kohtisuora')}</sub
           >-{$_('energiatodistus.lahtotiedot.ikkunat.arvo')}
         </th>
-        <th class="et-table--th" />
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -61,7 +66,6 @@
               bind:model={energiatodistus}
               path={['lahtotiedot', 'ikkunat', ikkuna, 'g-ks']} />
           </td>
-          <td class="et-table--td" />
         </tr>
       {/each}
     </tbody>

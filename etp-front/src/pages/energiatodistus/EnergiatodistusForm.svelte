@@ -206,13 +206,27 @@
     @apply border-b-0;
   }
 
-  :global(.et-table--th),
+  :global(.et-table--th) {
+    @apply py-5 px-4 font-bold;
+  }
   :global(.et-table--td) {
-    @apply px-4 py-2 font-bold;
+    @apply py-3 px-4 font-bold;
+  }
+
+  :global(.et-table--td .inputwrapper) {
+    @apply border-primary;
+  }
+
+  :global(.et-table--th-left-aligned) {
+    @apply text-left;
+  }
+
+  :global(.et-table--th-right-aligned) {
+    @apply text-right;
   }
 
   :global(.et-table--th) {
-    @apply text-primary text-sm text-center w-1/5;
+    @apply text-primary text-sm w-1/5;
     height: 4em;
   }
 
@@ -227,6 +241,10 @@
 
   :global(.et-table--th__sixth) {
     @apply w-1/6;
+  }
+
+  :global(.et-table--th__4-6) {
+    @apply w-4/6;
   }
 
   :global(.et-table--th__fourcells) {
@@ -254,7 +272,7 @@
   }
 
   :global(.et-table--tr > .et-table--td:not(:first-child)) {
-    @apply text-center;
+    @apply text-right;
   }
 </style>
 
@@ -301,56 +319,56 @@
               )}
             </div>
           {/if}
-
-          <div class="mb-5">
-            <Checkbox
-              bind:model={energiatodistus}
-              lens={R.lensPath(['draft-visible-to-paakayttaja'])}
-              label={$_('energiatodistus.draft-visible-to-paakayttaja')}
-              {disabled} />
-          </div>
-
-          {#if R.or(energiatodistus['bypass-validation-limits'], Kayttajat.isPaakayttaja(whoami))}
+          <div class="perustiedot__container mb-12">
+            <H2 text={$_('energiatodistus.perustiedot-header')} />
             <div class="mb-5">
               <Checkbox
                 bind:model={energiatodistus}
-                lens={R.lensPath(['bypass-validation-limits'])}
-                label={$_('energiatodistus.bypass-validation-limits')}
-                disabled={disabledForPaakayttaja} />
+                lens={R.lensPath(['draft-visible-to-paakayttaja'])}
+                label={$_('energiatodistus.draft-visible-to-paakayttaja')}
+                {disabled} />
             </div>
-          {/if}
 
-          {#if energiatodistus['bypass-validation-limits']}
-            <div class="mb-5">
-              <Input
-                disabled={disabledForPaakayttaja}
-                {schema}
-                center={false}
-                bind:model={energiatodistus}
-                path={['bypass-validation-limits-reason']} />
-            </div>
-          {/if}
+            {#if R.or(energiatodistus['bypass-validation-limits'], Kayttajat.isPaakayttaja(whoami))}
+              <div class="mb-5">
+                <Checkbox
+                  bind:model={energiatodistus}
+                  lens={R.lensPath(['bypass-validation-limits'])}
+                  label={$_('energiatodistus.bypass-validation-limits')}
+                  disabled={disabledForPaakayttaja} />
+              </div>
+            {/if}
 
-          <PaakayttajanKommentti
-            {whoami}
-            {schema}
-            path={['kommentti']}
-            bind:model={energiatodistus} />
+            {#if energiatodistus['bypass-validation-limits']}
+              <div class="mb-5">
+                <Input
+                  disabled={disabledForPaakayttaja}
+                  {schema}
+                  center={false}
+                  bind:model={energiatodistus}
+                  path={['bypass-validation-limits-reason']} />
+              </div>
+            {/if}
 
-          <H2 text={$_('energiatodistus.korvaavuus.header.korvaavuus')} />
-          <EnergiatodistusKorvaava
-            postinumerot={luokittelut.postinumerot}
-            {whoami}
-            korvaavaEnergiatodistusId={energiatodistus[
-              'korvaava-energiatodistus-id'
-            ]} />
-          <EnergiatodistusKorvattu
-            bind:energiatodistus
-            bind:dirty
-            {whoami}
-            postinumerot={luokittelut.postinumerot}
-            bind:error={korvausError} />
-          <HR />
+            <PaakayttajanKommentti
+              {whoami}
+              {schema}
+              path={['kommentti']}
+              bind:model={energiatodistus} />
+
+            <EnergiatodistusKorvaava
+              postinumerot={luokittelut.postinumerot}
+              {whoami}
+              korvaavaEnergiatodistusId={energiatodistus[
+                'korvaava-energiatodistus-id'
+              ]} />
+            <EnergiatodistusKorvattu
+              bind:energiatodistus
+              bind:dirty
+              {whoami}
+              postinumerot={luokittelut.postinumerot}
+              bind:error={korvausError} />
+          </div>
 
           <Laskutus
             {schema}
