@@ -76,7 +76,7 @@
   }
 </style>
 
-<div class="toc">
+<div class="toc mb-6">
   <div class="toc-header">
     {i18n('energiatodistus.toolbar.sisallysluettelo')}
   </div>
