@@ -86,14 +86,14 @@
 (defn generate-adds [energiatodistus-ids]
   (map generate-add energiatodistus-ids))
 
-(defn insert! [perusparannuspassi-adds whoami]
+(defn insert! [perusparannuspassi-adds laatija-whoami]
   (mapv #(:id (perusparannuspassi-service/insert-perusparannuspassi!
-               (ts/db-user (:id whoami))
-               whoami
+               (ts/db-user (:id laatija-whoami))
+               laatija-whoami
                %)) perusparannuspassi-adds))
 
 (defn generate-and-insert!
-  [energiatodistus-ids laatija-id]
+  [energiatodistus-ids laatija-whoami]
    (let [perusparannuspassi-adds (generate-adds energiatodistus-ids)]
-     (insert! perusparannuspassi-adds laatija-id)))
+     (insert! perusparannuspassi-adds laatija-whoami)))
 
