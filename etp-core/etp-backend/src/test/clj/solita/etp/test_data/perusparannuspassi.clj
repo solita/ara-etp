@@ -97,3 +97,10 @@
   (let [perusparannuspassi-adds (generate-adds energiatodistus-ids)]
     (insert! perusparannuspassi-adds laatija-whoami)))
 
+(defn update! [perusparannuspassi-add perusparannuspassi-id laatija-whoami]
+  (:id (perusparannuspassi-service/update-perusparannuspassi!
+         (ts/db-user (:id laatija-whoami))
+         laatija-whoami
+         perusparannuspassi-id
+         perusparannuspassi-add)))
+
