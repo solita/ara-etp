@@ -217,6 +217,10 @@
     @apply border-primary;
   }
 
+  :global(.et-table--tr > .et-table--td.et-table--td-left-aligned) {
+    @apply text-left;
+  }
+
   /* Specific selectors for inputs in table cells (overrides center class) */
   :global(.et-table--td input.center),
   :global(.et-table--td input:not(.center)) {
@@ -277,7 +281,7 @@
     @apply font-bold;
   }
 
-  :global(.et-table--tr > .et-table--td:not(:first-child)) {
+  :global(.et-table--tr > .et-table--td:not(:first-child):not(.et-table--td-left-aligned)) {
     @apply text-right;
   }
 </style>
