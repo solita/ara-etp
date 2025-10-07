@@ -291,3 +291,71 @@ export const energiatodistus2026 = R.compose(
   R.assoc('versio', 2026),
   energiatodistus2018
 );
+
+const emptyPerusparannusPassinPerustiedot = _ => ({
+  havainnointikaynti: Maybe.None(),
+  'passin-esittely': Maybe.None(),
+  'tayttaa-aplus-vaatimukset': false,
+  'tayttaa-a0-vaatimukset': false
+});
+
+const emptyPerusparannusRakennuksenPerustiedot = _ => ({
+  'ulkoseinat-ehdotettu-taso': Maybe.None(),
+  'ylapohja-ehdotettu-taso': Maybe.None(),
+  'alapohja-ehdotettu-taso': Maybe.None(),
+  'ikkunat-ehdotettu-taso': Maybe.None(),
+  'paalammitysjarjestelma-ehdotettu-taso': Maybe.None(),
+  'ilmanvaihto-ehdotettu-taso': Maybe.None(),
+  'uusiutuva-energia-ehdotettu-taso': Maybe.None(),
+  'jaahdytys-ehdotettu-taso': Maybe.None(),
+  'mahdollisuus-liittya-energiatehokkaaseen': Maybe.None()
+});
+
+const emptyPerusparannusLaskennanTulokset = _ => ({
+  'kaukolampo-hinta': Maybe.None(),
+  'sahko-hinta': Maybe.None(),
+  'uusiutuvat-pat-hinta': Maybe.None(),
+  'fossiiliset-pat-hinta': Maybe.None(),
+  'kaukojaahdytys-hinta': Maybe.None(),
+  'lisatiedot-fi': Maybe.None(),
+  'lisatiedot-sv': Maybe.None()
+});
+
+const emptyPerusparannusVaiheenTulokset = _ => ({
+  'vaiheen-alku-pvm': Maybe.None(),
+  'vaiheen-loppu-pvm': Maybe.None(),
+  'ostoenergian-tarve-kaukolampo': Maybe.None(),
+  'ostoenergian-tarve-sahko': Maybe.None(),
+  'ostoenergian-tarve-uusiutuvat-pat': Maybe.None(),
+  'ostoenergian-tarve-fossiiliset-pat': Maybe.None(),
+  'ostoenergian-tarve-kaukojaahdytys': Maybe.None(),
+  'uusiutuvan-energian-kokonaistuotto': Maybe.None(),
+  'uusiutuvan-energian-hyodynnetty-osuus': Maybe.None(),
+  'toteutunut-ostoenergia-kaukolampo': Maybe.None(),
+  'toteutunut-ostoenergia-sahko': Maybe.None(),
+  'toteutunut-ostoenergia-uusiutuvat-pat': Maybe.None(),
+  'toteutunut-ostoenergia-fossiiliset-pat': Maybe.None(),
+  'toteutunut-ostoenergia-kaukojaahdytys': Maybe.None()
+});
+
+const emptyPerusparannusToimenpiteet = _ => ({
+  'toimenpideseloste-fi': Maybe.None(),
+  'toimenpideseloste-sv': Maybe.None(),
+  'toimenpide-ehdotukset': []
+});
+
+const emptyPerusparannusVaihe = n => ({
+  'vaihe-nro': n,
+  valid: false,
+  toimenpiteet: emptyPerusparannusToimenpiteet(),
+  tulokset: emptyPerusparannusVaiheenTulokset()
+});
+
+export const perusparannuspassi = energiatodistusId => ({
+  'energiatodistus-id': energiatodistusId,
+  valid: false,
+  'passin-perustiedot': emptyPerusparannusPassinPerustiedot(),
+  vaiheet: [1, 2, 3, 4].map(emptyPerusparannusVaihe),
+  'rakennuksen-perustiedot': emptyPerusparannusRakennuksenPerustiedot(),
+  tulokset: emptyPerusparannusLaskennanTulokset()
+});

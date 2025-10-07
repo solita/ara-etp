@@ -368,3 +368,52 @@ export const EnumerationIdType = (values, i18nKey) => ({
     Validations.liftValidator(validations.isValidId(values, i18nKey))
   ]
 });
+
+export const perusparannuspassi = {
+  'passin-perustiedot': {
+    havainnointikaynti: DateValue(),
+    'passin-esittely': DateValue()
+  },
+  'rakennuksen-perustiedot': {
+    'ulkoseinat-ehdotettu-taso': FloatNonNegative,
+    'ylapohja-ehdotettu-taso': FloatNonNegative,
+    'alapohja-ehdotettu-taso': FloatNonNegative,
+    'ikkunat-ehdotettu-taso': FloatNonNegative
+  },
+  tulokset: {
+    'kaukolampo-hinta': FloatNonNegative,
+    'sahko-hinta': FloatNonNegative,
+    'uusiutuvat-pat-hinta': FloatNonNegative,
+    'fossiiliset-pat-hinta': FloatNonNegative,
+    'kaukojaahdytys-hinta': FloatNonNegative,
+    'lisatiedot-fi': String(2, 1500),
+    'lisatiedot-sv': String(2, 1500)
+  },
+  vaiheet: R.repeat(
+    {
+      'vaihe-nro': Integer(1, 4),
+      toimenpiteet: {
+        'toimenpideseloste-fi': String(2, 1500),
+        'toimenpideseloste-sv': String(2, 1500),
+        'toimenpide-ehdotukset': [IntegerNonNegative]
+      },
+      tulokset: {
+        'vaiheen-alku-pvm': DateValue(),
+        'vaiheen-loppu-pvm': DateValue(),
+        'ostoenergian-tarve-kaukolampo': FloatNonNegative,
+        'ostoenergian-tarve-sahko': FloatNonNegative,
+        'ostoenergian-tarve-uusiutuvat-pat': FloatNonNegative,
+        'ostoenergian-tarve-fossiiliset-pat': FloatNonNegative,
+        'ostoenergian-tarve-kaukojaahdytys': FloatNonNegative,
+        'uusiutuvan-energian-kokonaistuotto': FloatNonNegative,
+        'uusiutuvan-energian-hyodynnetty-osuus': FloatNonNegative,
+        'toteutunut-ostoenergia-kaukolampo': FloatNonNegative,
+        'toteutunut-ostoenergia-sahko': FloatNonNegative,
+        'toteutunut-ostoenergia-uusiutuvat-pat': FloatNonNegative,
+        'toteutunut-ostoenergia-fossiiliset-pat': FloatNonNegative,
+        'toteutunut-ostoenergia-kaukojaahdytys': FloatNonNegative
+      }
+    },
+    4
+  )
+};
