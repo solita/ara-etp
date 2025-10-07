@@ -65,9 +65,6 @@
           {$_(
             'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
           )}
-          {$_(
-            'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
-          )}
         </th>
         <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
           {$_(
