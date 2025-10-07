@@ -312,6 +312,11 @@
                   <th class="etp-table--th">
                     {i18n('energiatodistus.haku.sarakkeet.tunnus')}
                   </th>
+                  {#if isEtp2026Enabled(config)}
+                    <th class="etp-table--th">
+                      {i18n('energiatodistus.haku.sarakkeet.ppp-tunnus')}
+                    </th>
+                  {/if}
                   <th class="etp-table--th">
                     {i18n('energiatodistus.haku.sarakkeet.e-luokka')}
                   </th>
@@ -360,6 +365,15 @@
                     <td data-cy="energiatodistus-id" class="etp-table--td">
                       {energiatodistus.id}
                     </td>
+                    {#if isEtp2026Enabled(config)}
+                      <td class="etp-table--td">
+                        {Maybe.fold(
+                          '-',
+                          R.identity,
+                          energiatodistus['perusparannuspassi-id']
+                        )}
+                      </td>
+                    {/if}
                     <td class="etp-table--td">
                       {orEmpty(energiatodistus.tulokset['e-luokka'])}
                     </td>

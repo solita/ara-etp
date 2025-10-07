@@ -429,6 +429,7 @@
       "sarakkeet": {
         "tila": "Status",
         "tunnus": "Beteckning",
+        "ppp-tunnus": "Perusparannuspassin tunnus (sv)",
         "e-luokka": "E-klass",
         "versio": "Version",
         "voimassa": "Giltig",

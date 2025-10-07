@@ -452,6 +452,7 @@
       "sarakkeet": {
         "tila": "Tila",
         "tunnus": "Tunnus",
+        "ppp-tunnus": "Perusparannuspassin tunnus",
         "e-luokka": "E-luokka",
         "versio": "Versio",
         "voimassa": "Voimassa",
