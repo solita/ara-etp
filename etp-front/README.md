@@ -184,9 +184,9 @@ Static assets (images, pdfs, etc.)
 #### Naming things
 
 - Directories/files should be kebab-case
-- Imported namespaces should be pascal-case
+- Imported namespaces should be PascalCase
 - Data models used with backend are kebab-case
-- Otherwise use camel-case.
+- Otherwise, use camelCase
 
 #### Monadic types
 
