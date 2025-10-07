@@ -222,9 +222,14 @@
   }
 
   /* Specific selectors for inputs in table cells (overrides center class) */
-  :global(.et-table--td input.center),
-  :global(.et-table--td input:not(.center)) {
+  :global(.et-table--td:not(.et-table--td-left-aligned) input.center),
+  :global(.et-table--td:not(.et-table--td-left-aligned) input:not(.center)) {
     @apply text-right pr-4;
+  }
+
+  /* Left-aligned inputs in left-aligned table cells */
+  :global(.et-table--tr > .et-table--td.et-table--td-left-aligned input) {
+    @apply text-left;
   }
 
   :global(.et-table--th-left-aligned) {

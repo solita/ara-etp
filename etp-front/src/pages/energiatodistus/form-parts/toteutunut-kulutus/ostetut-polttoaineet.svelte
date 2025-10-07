@@ -165,7 +165,7 @@
                 'maara-vuodessa'
               ]} />
           </td>
-          <td class="et-table--td">
+          <td class="et-table--td et-table--td-left-aligned">
             <Input
               {disabled}
               {schema}
