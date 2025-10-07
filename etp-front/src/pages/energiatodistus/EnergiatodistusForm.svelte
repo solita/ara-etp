@@ -217,6 +217,12 @@
     @apply border-primary;
   }
 
+  /* Specific selectors for inputs in table cells (overrides center class) */
+  :global(.et-table--td input.center),
+  :global(.et-table--td input:not(.center)) {
+    @apply text-right pr-4;
+  }
+
   :global(.et-table--th-left-aligned) {
     @apply text-left;
   }

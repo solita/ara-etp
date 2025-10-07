@@ -98,7 +98,7 @@
               compact={true}
               bind:model={energiatodistus}
               path={['lahtotiedot', 'ilmanvaihto', 'paaiv', 'tulo']} />
-            <span class="block" class:pb-3={disabled}>/</span>
+            <span class="block px-4">/</span>
             <Input
               {disabled}
               {schema}
@@ -147,7 +147,7 @@
                 compact={true}
                 bind:model={energiatodistus}
                 path={['lahtotiedot', 'ilmanvaihto', ilmanvaihto, 'tulo']} />
-              <span class="block" class:pb-3={disabled}>/</span>
+              <span class="block px-4">/</span>
               <Input
                 {disabled}
                 {schema}
