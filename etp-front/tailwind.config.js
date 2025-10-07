@@ -9,6 +9,7 @@ module.exports = {
       primarydark: '#345000',
       secondarydark: '#343841',
       link: '#538000',
+      tocLink: '#0015FF',
       hover: '#538000',
       althover: '#c5e191',
       focus: '#538000',

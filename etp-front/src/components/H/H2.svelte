@@ -1,6 +1,7 @@
 <script>
   export let dataCy;
   export let text = '';
+  export let id;
 </script>
 
 <style type="text/postcss">
@@ -9,4 +10,4 @@
   }
 </style>
 
-<h2 data-cy={dataCy}>{text}</h2>
+<h2 {id} data-cy={dataCy}>{text}</h2>
