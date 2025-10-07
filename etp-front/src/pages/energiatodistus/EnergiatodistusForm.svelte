@@ -286,7 +286,10 @@
     @apply font-bold;
   }
 
-  :global(.et-table--tr > .et-table--td:not(:first-child):not(.et-table--td-left-aligned)) {
+  :global(
+      .et-table--tr
+        > .et-table--td:not(:first-child):not(.et-table--td-left-aligned)
+    ) {
     @apply text-right;
   }
 </style>
