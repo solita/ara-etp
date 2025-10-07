@@ -7,6 +7,7 @@
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
+            [solita.etp.test-data.perusparannuspassi :as ppp-test-data]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.schema.public-energiatodistus :as energiatodistus-public-schema]
             [solita.etp.schema.valvonta-oikeellisuus :as valvonta-schema]
@@ -206,12 +207,12 @@
       (ts/db-user laatija-id) (test-whoami/laatija laatija-id)
       energiatodistus-id
       (assoc-in energiatodistus [:lahtotiedot :rakennusvaippa]
-                {:alapohja          {:ala 0 :U 0}
-                 :ikkunat           {:ala 0 :U 0}
-                 :ylapohja          {:ala 0 :U 0}
-                 :ulkoseinat        {:ala 1M :U 0}
-                 :kylmasillat-UA    0
-                 :ulkoovet          {:ala 0 :U 0}}))
+                {:alapohja       {:ala 0 :U 0}
+                 :ikkunat        {:ala 0 :U 0}
+                 :ylapohja       {:ala 0 :U 0}
+                 :ulkoseinat     {:ala 1M :U 0}
+                 :kylmasillat-UA 0
+                 :ulkoovet       {:ala 0 :U 0}}))
 
     (t/is (empty? (search whoami-laatija
                           [[["=" "energiatodistus.lahtotiedot.rakennusvaippa.kylmasillat-osuus-lampohaviosta" 123]]]
@@ -234,30 +235,30 @@
         id (-> energiatodistukset keys sort first)
         nimi (-> energiatodistukset (get id) :perustiedot :nimi-fi)]
     (t/is (not (search-and-assert
-                test-data-set
-                id
-                [[["=" "energiatodistus.perustiedot.nimi-fi" (str "a" nimi)]]])))
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.perustiedot.nimi-fi" (str "a" nimi)]]])))
     (t/is (search-and-assert
-           test-data-set
-           id
-           [[["=" "energiatodistus.perustiedot.nimi-fi" nimi]]]))))
+            test-data-set
+            id
+            [[["=" "energiatodistus.perustiedot.nimi-fi" nimi]]]))))
 
 (t/deftest search-by-id-and-nimi-test
   (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set)
         id (-> energiatodistukset keys sort first)
         nimi (-> energiatodistukset (get id) :perustiedot :nimi-fi)]
     (t/is (search-and-assert
-           test-data-set
-           id
-           [[["=" "energiatodistus.id" id]
-             ["=" "energiatodistus.perustiedot.nimi-fi" nimi]]]))))
+            test-data-set
+            id
+            [[["=" "energiatodistus.id" id]
+              ["=" "energiatodistus.perustiedot.nimi-fi" nimi]]]))))
 
 (t/deftest search-by-nimi-*-test
   (let [[laatija-id laatija] (laatija-test-data/generate-and-insert!)
         [id energiatodistus] (energiatodistus-test-data/generate-and-insert! 2018 true laatija-id)
         nimi-fi (-> energiatodistus :perustiedot :nimi-fi)
         nimi-sv (-> energiatodistus :perustiedot :nimi-fi)
-        test-data-set {:laatijat {laatija-id laatija}
+        test-data-set {:laatijat           {laatija-id laatija}
                        :energiatodistukset {id energiatodistus}}]
 
     (t/is (empty?
@@ -630,7 +631,7 @@
 
     (valvonta-service/add-toimenpide!
       ts/*db* ts/*aws-s3-client* kayttaja-test-data/paakayttaja id
-      {:type-id     3   :deadline-date (LocalDate/now) :description nil
+      {:type-id     3 :deadline-date (LocalDate/now) :description nil
        :severity-id nil :template-id 1 :virheet [] :tiedoksi []})
 
     (t/is (compare-energiatodistus
@@ -641,7 +642,7 @@
 
     (valvonta-service/add-toimenpide!
       ts/*db* ts/*aws-s3-client* kayttaja-test-data/paakayttaja id
-      {:type-id     4   :deadline-date (LocalDate/now) :description nil
+      {:type-id     4 :deadline-date (LocalDate/now) :description nil
        :severity-id nil :template-id 1 :virheet [] :tiedoksi []})
 
     (t/is (compare-energiatodistus
@@ -772,3 +773,51 @@
                             [[["ilike" "energiatodistus.lahtotiedot.lammitys.lammitysmuoto.kuvaus-sv" "%med%"]]]
                             nil nil nil)]
         (t/is (= (count results) 1))))))
+
+(t/deftest search-perusparannuspassi-test
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+
+        energiatodistus-ids-2018 (keys (energiatodistus-test-data/generate-and-insert! 2 2018 true laatija-id))
+        energiatodistus-ids-2026-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        never-created-ppp-et-ids (concat energiatodistus-ids-2018 energiatodistus-ids-2026-without-ppp)
+
+        energiatodistus-ids-2026-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        perusparannuspassi-ids-2026 (ppp-test-data/generate-and-insert! energiatodistus-ids-2026-with-ppp laatija-whoami)
+
+        energiatodistus-id-2026-ppp-removed (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        perusparannuspassi-removed-id-2026 (first (ppp-test-data/generate-and-insert! [energiatodistus-id-2026-ppp-removed] laatija-whoami))
+
+        energiatodistus->ppp (merge (zipmap energiatodistus-ids-2026-with-ppp perusparannuspassi-ids-2026)
+                                    (zipmap [energiatodistus-id-2026-ppp-removed] [perusparannuspassi-removed-id-2026]))]
+    ;; Remove the ppp from energiatodistus
+    (-> (ppp-test-data/generate-add energiatodistus-id-2026-ppp-removed)
+        (assoc-in [:valid] false)
+        (ppp-test-data/update! perusparannuspassi-removed-id-2026 laatija-whoami))
+    (t/testing "Perusparannuspassi-id shows up (created and exists in db)"
+      (let [results (search laatija-whoami nil nil nil nil)
+            filtered-results (filter #(->> %
+                                           :id
+                                           (contains? (set energiatodistus-ids-2026-with-ppp))) results)]
+        (t/is (= 2 (count filtered-results)))
+        (t/is (every? #(= (get energiatodistus->ppp (:id %)) (:perusparannuspassi-id %))
+                      filtered-results))))
+    (t/testing "Perusparannuspassi-id does not show up (deleted but exists in db)"
+      (let [results (search laatija-whoami nil nil nil nil)
+            filtered-results (filter #(->> %
+                                           :id
+                                           (contains? (set [energiatodistus-id-2026-ppp-removed]))) results)]
+        (t/is (= 1 (count filtered-results)))
+        (t/is (every? #(= nil (:perusparannuspassi-id %))
+                      filtered-results))))
+    (t/testing "Perusparannuspassi-id shows does not show up (never created)"
+      (let [results (search laatija-whoami nil nil nil nil)
+            filtered-results (filter #(->> %
+                                           :id
+                                           (contains? (set never-created-ppp-et-ids))) results)]
+        (t/is (= 4 (count filtered-results)))
+        (t/is (every? #(= nil (:perusparannuspassi-id %))
+                      filtered-results))))))
