@@ -15,6 +15,7 @@
   import Sisallysluettelo from './sisallysluettelo.svelte';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as PppApi from '@Pages/energiatodistus/perusparannuspassi-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toolbar from './toolbar-utils';
@@ -288,7 +289,7 @@
             // Optionally reload or redirect to show the added PPP
             cancel();
           },
-          api.addPerusparannuspassi(fetch, Maybe.get(id))
+          PppApi.addPerusparannuspassi(fetch, Maybe.get(id))
         );
       }}>
       <span class="text-2xl font-icon">add_circle_outline</span>
