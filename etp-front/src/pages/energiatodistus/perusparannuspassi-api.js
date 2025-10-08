@@ -19,6 +19,7 @@ export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
       )
     ),
     serialize,
+    R.assoc('valid', true),
     empty.perusparannuspassi
   )(energiatodistusId)
 );
