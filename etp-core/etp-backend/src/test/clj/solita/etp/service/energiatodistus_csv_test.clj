@@ -36,13 +36,25 @@
                                   true
                                   laatija-id)
         energiatodistukset (concat energiatodistukset-2018 energiatodistukset-2026)
-        ids-of-ets-with-pps (->> energiatodistukset-2026 keys (take 10))
-        ids-of-ets-without-pps (into [] (remove (-> ids-of-ets-with-pps set) (-> energiatodistukset keys set)))]
-    (ppp-test-data/generate-and-insert! ids-of-ets-with-pps laatija-whoami)
+        et-ids-to-add-ppps-for (->> energiatodistukset-2026 keys (take 10))
+        id-of-et-where-ppp-removed (first (take 1 et-ids-to-add-ppps-for))
+        ids-of-ets-with-pps (into [] (remove (set [id-of-et-where-ppp-removed]) (set et-ids-to-add-ppps-for)))
+        ids-of-ets-without-pps (into [] (remove (-> ids-of-ets-with-pps set) (-> energiatodistukset keys set)))
+
+        ppp-id-for-removed (first (ppp-test-data/generate-and-insert! [id-of-et-where-ppp-removed] laatija-whoami))
+
+        ppp-ids (ppp-test-data/generate-and-insert! ids-of-ets-with-pps laatija-whoami)
+        et-id->ppp-id (zipmap ids-of-ets-with-pps ppp-ids)]
+    (-> (ppp-test-data/generate-add id-of-et-where-ppp-removed)
+        (assoc-in [:valid] false)
+        (ppp-test-data/update! ppp-id-for-removed laatija-whoami))
     {:laatijat               laatijat
      :ppp-laatija-whoami     laatija-whoami
      :ids-of-ets-with-pps    ids-of-ets-with-pps
      :ids-of-ets-without-pps ids-of-ets-without-pps
+     :ppp-removed-case       {:ppp-id ppp-id-for-removed
+                              :et-id  id-of-et-where-ppp-removed}
+     :et-id->ppp-id          et-id->ppp-id
      :energiatodistukset     energiatodistukset}))
 
 (t/deftest columns-test
@@ -86,9 +98,8 @@
                                   -15
                                   (Instant/parse "2021-01-01T12:15:00.000Z")]))))
 
-(t/deftest ^{:broken-test "Perusparannuspassi generators need to be updated to work with the schema changes"}
-           write-energiatodistukset-csv-test
-  (let [{:keys [ids-of-ets-with-pps ids-of-ets-without-pps ppp-laatija-whoami]} (test-data-set)
+(t/deftest write-energiatodistukset-csv-test
+  (let [{:keys [ids-of-ets-with-pps ids-of-ets-without-pps ppp-laatija-whoami ppp-removed-case et-id->ppp-id]} (test-data-set)
         laatija-id (:id ppp-laatija-whoami)]
     (let [result (service/energiatodistukset-private-csv
                    ts/*db* {:id laatija-id :rooli 0} {})
@@ -109,10 +120,17 @@
                                     first)
               et-with-ppp (energiatodistus-service/find-energiatodistus ts/*db* et-with-ppp-id)
               ppp-id (:perusparannuspassi-id et-with-ppp)]
-          (t/is (not (nil? ppp-id)))
+          (t/testing "Perusparannuspassi-id is not for some other et"
+            (t/is (not (nil? ppp-id)))
+            (t/is (= ppp-id (et-id->ppp-id et-with-ppp-id))))
           (t/is (str/starts-with? et-with-ppp-line (str et-with-ppp-id ";" ppp-id ";")))))
       (t/testing "Perusparannuspassi-id is empty for energiatodistus without perusparannuspassi"
         (let [et-without-ppp-line (->> csv-lines-strings
                                        (filter #(str/starts-with? % (str et-without-ppp-id)))
                                        first)]
-          (t/is (str/starts-with? et-without-ppp-line (str et-without-ppp-id ";;"))))))))
+          (t/is (str/starts-with? et-without-ppp-line (str et-without-ppp-id ";;")))))
+      (t/testing "Perusparannuspassi-id is empty for energiatodistus that had perusparannuspassi but it is removed"
+        (let [et-without-ppp-line (->> csv-lines-strings
+                                       (filter #(str/starts-with? % (str (:et-id ppp-removed-case))))
+                                       first)]
+          (t/is (str/starts-with? et-without-ppp-line (str (:et-id ppp-removed-case) ";;"))))))))

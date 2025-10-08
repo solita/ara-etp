@@ -109,7 +109,9 @@
    LEFT JOIN postinumero ON postinumero.id = energiatodistus.pt$postinumero
    LEFT JOIN kunta ON kunta.id = postinumero.kunta_id
    LEFT JOIN toimintaalue ON toimintaalue.id = kunta.toimintaalue_id
-   LEFT JOIN perusparannuspassi on perusparannuspassi.energiatodistus_id = energiatodistus.id")
+   LEFT JOIN perusparannuspassi
+     ON perusparannuspassi.energiatodistus_id = energiatodistus.id
+     AND perusparannuspassi.valid = true")
 
 (defn- coercer! [field search-schema]
   (if-let [coercer (some-> field keyword search-schema)]
