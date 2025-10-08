@@ -57,6 +57,7 @@
       :toteamispaivamaara        common-schema/Date
       :voimassaolo-paattymisaika common-schema/Instant}}
     {:postinumero {:label common-schema/String50}}
+    {:perusparannuspassi {:id common-schema/Key}}
     (deep/map-values second search-fields/computed-fields)
     geo-schema/Search))
 

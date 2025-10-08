@@ -741,6 +741,9 @@ export const schema = {
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals]
   },
+  perusparannuspassi: {
+    id: [...numberComparisons]
+  },
   laatija,
   kunta,
   postinumero: {
