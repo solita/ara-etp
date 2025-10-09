@@ -428,8 +428,8 @@
     "haku": {
       "sarakkeet": {
         "tila": "Status",
-        "tunnus": "Beteckning",
-        "ppp-tunnus": "Perusparannuspassin tunnus (sv)",
+        "tunnus": "EC Beteckning",
+        "ppp-tunnus": "PPP tunnus (sv)",
         "e-luokka": "E-klass",
         "versio": "Version",
         "voimassa": "Giltig",

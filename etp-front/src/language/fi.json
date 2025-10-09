@@ -451,8 +451,8 @@
     "haku": {
       "sarakkeet": {
         "tila": "Tila",
-        "tunnus": "Tunnus",
-        "ppp-tunnus": "Perusparannuspassin tunnus",
+        "tunnus": "ET tunnus",
+        "ppp-tunnus": "PPP tunnus",
         "e-luokka": "E-luokka",
         "versio": "Versio",
         "voimassa": "Voimassa",
