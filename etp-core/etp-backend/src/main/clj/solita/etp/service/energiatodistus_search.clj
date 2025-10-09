@@ -57,7 +57,8 @@
       :toteamispaivamaara        common-schema/Date
       :voimassaolo-paattymisaika common-schema/Instant}}
     {:postinumero {:label common-schema/String50}}
-    {:perusparannuspassi {:id common-schema/Key}}
+    {:perusparannuspassi {:id    common-schema/Key
+                          :valid schema/Bool}}
     (deep/map-values second search-fields/computed-fields)
     geo-schema/Search))
 
@@ -151,6 +152,10 @@
 (defn is-null-expression [search-schema _ field]
   [(str (field->sql field search-schema) " is null")])
 
+(defn is-distinct-from-expression [search-schema _ field value]
+  [(str (field->sql field search-schema) " is distinct from ?")
+   (coerce-value! field value search-schema)])
+
 (defn in-expression [search-schema _ field values]
   [(str (field->sql field search-schema) " = any (?)")
    (mapv #(coerce-value! field % search-schema) values)])
@@ -185,18 +190,19 @@
       (apply predicate search-schema operator field values))))
 
 (def predicates
-  {"="         infix-notation
-   ">="        infix-notation
-   "<="        infix-notation
-   ">"         infix-notation
-   "<"         infix-notation
-   "icontains" icontains-expression
-   "like"      (globbing infix-notation)
-   "ilike"     (globbing infix-notation)
-   "not ilike" infix-notation
-   "between"   between-expression
-   "nil?"      is-null-expression
-   "in"        in-expression})
+  {"="                infix-notation
+   ">="               infix-notation
+   "<="               infix-notation
+   ">"                infix-notation
+   "<"                infix-notation
+   "icontains"        icontains-expression
+   "like"             (globbing infix-notation)
+   "ilike"            (globbing infix-notation)
+   "not ilike"        infix-notation
+   "between"          between-expression
+   "nil?"             is-null-expression
+   "is-distinct-from" is-distinct-from-expression
+   "in"               in-expression})
 
 (defn- sql-formatter! [predicate-name]
   (if-let [formatter (predicates predicate-name)]

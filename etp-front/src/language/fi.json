@@ -500,7 +500,8 @@
         "label": "Postitoimipaikka"
       },
       "perusparannuspassi": {
-        "id": "Perusparannuspassitunnus"
+        "id": "Perusparannuspassitunnus",
+        "valid": "Perusparannuspassi on olemassa"
       }
     },
     "kaikki": "Kaikki",
