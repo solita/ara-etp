@@ -19,6 +19,7 @@
   import Button from '@Component/Button/Button';
   import TextButton from '@Component/Button/TextButton';
   import Radio from '@Component/Radio/Radio';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   import { _ } from '@Language/i18n';
   import { announcementsForModule } from '@Utility/announce';
@@ -32,9 +33,14 @@
   export let whoami;
 
   let overlay = true;
-  let schema = Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
-    ? EtHakuSchema.paakayttajaSchema
-    : EtHakuSchema.laatijaSchema;
+  let schema = R.when(
+    R.always(R.not(isEtp2026Enabled(config))),
+    R.omit(['perusparannuspassi.id', 'perusparannuspassi.valid'])
+  )(
+    Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
+      ? EtHakuSchema.paakayttajaSchema
+      : EtHakuSchema.laatijaSchema
+  );
 
   const { announceWarning } = announcementsForModule('Energiatodistus');
 

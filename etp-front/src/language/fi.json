@@ -498,6 +498,10 @@
       },
       "postinumero": {
         "label": "Postitoimipaikka"
+      },
+      "perusparannuspassi": {
+        "id": "Perusparannuspassitunnus",
+        "valid": "Perusparannuspassi on olemassa"
       }
     },
     "kaikki": "Kaikki",
