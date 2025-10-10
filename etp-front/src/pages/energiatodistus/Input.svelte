@@ -19,6 +19,7 @@
   export let inputLanguage = Maybe.None();
   export let unit;
   export let labelUnit;
+  export let i18nRoot = 'energiatodistus';
 
   const id = inputs.id(path);
   $: type = inputs.type(schema, path);
@@ -41,8 +42,8 @@
       {id}
       name={id}
       label={compact
-        ? inputs.fullLabel($_, inputLanguage, path)
-        : inputs.label($_, inputLanguage, path)}
+        ? inputs.fullLabel($_, i18nRoot, inputLanguage, path)
+        : inputs.label($_, i18nRoot, inputLanguage, path)}
       {required}
       {disabled}
       {compact}

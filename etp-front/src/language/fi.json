@@ -1414,6 +1414,16 @@
       "search-results": "{count} hakutulosta."
     }
   },
+  "perusparannuspassi": {
+    "id": "Perusparannuspassin tunnus",
+    "passin-perustiedot": {
+      "header": "Passin perustiedot",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä",
+      "passin-esittely": "Passin esittelyn päivämäärä",
+      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa",
+      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa"
+    }
+  },
   "viesti": {
     "valvoja": "Valvojat",
     "system": "Järjestelmä",
