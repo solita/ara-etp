@@ -61,10 +61,7 @@
             'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.maara'
           )}
         </th>
-        <th class="et-table--th et-table--th__sixth et-table--th-right-aligned">
-          {$_(
-            'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
-          )}
+        <th class="et-table--th et-table--th__sixth et-table--th-left-aligned">
           {$_(
             'energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.table-header.yksikko'
           )}
@@ -102,7 +99,7 @@
                 polttoaine
               ]} />
           </td>
-          <td class="et-table--td">
+          <td class="et-table--td-left-aligned et-table--td">
             {$_(
               `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`
             )}
@@ -168,7 +165,7 @@
                 'maara-vuodessa'
               ]} />
           </td>
-          <td class="et-table--td">
+          <td class="et-table--td et-table--td-left-aligned">
             <Input
               {disabled}
               {schema}
