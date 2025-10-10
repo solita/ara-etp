@@ -10,8 +10,6 @@
 
   export let perusparannuspassi;
   export let schema;
-
-  console.log(perusparannuspassi);
 </script>
 
 <H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
