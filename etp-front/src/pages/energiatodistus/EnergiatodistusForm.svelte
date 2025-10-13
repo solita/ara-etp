@@ -295,13 +295,9 @@
 </style>
 
 {#if !R.isNil(ETForm)}
-  {#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
-    <Signing {energiatodistus} reload={reset} />
-  {/if}
-
   <DirtyConfirmation {dirty} />
   <div class="w-full relative flex">
-    <div class="sticky top-3em self-start flex justify-end px-6">
+    <div class="sticky top-3em self-start flex justify-end px-6 z-10">
       <ToolBar
         save={validateAndSubmit}
         saveComplete={validateCompleteAndSubmit}
@@ -424,4 +420,8 @@
   </div>
 {:else}
   <p>Energiatodistusversiota {version} ei ole olemassa.</p>
+{/if}
+
+{#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
+  <Signing {energiatodistus} reload={reset} />
 {/if}
