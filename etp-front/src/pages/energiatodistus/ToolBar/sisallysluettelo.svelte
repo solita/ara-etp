@@ -60,17 +60,17 @@
 
   .toc-item {
     @apply block py-2 text-sm;
-    color: #0000EE ; /* Default browser link blue */
-    text-decoration: underline ;
+    color: #0000ee; /* Default browser link blue */
+    text-decoration: underline;
   }
 
   .toc-item:visited {
-    color: #551A8B ; /* Default browser visited link purple */
+    color: #551a8b; /* Default browser visited link purple */
   }
 
   .toc-item:hover {
-    color: #0000EE ;
-    text-decoration: underline ;
+    color: #0000ee;
+    text-decoration: underline;
   }
 
   .toc-header {
