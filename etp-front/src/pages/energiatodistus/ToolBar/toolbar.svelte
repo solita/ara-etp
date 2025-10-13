@@ -197,6 +197,7 @@
   .toolbar {
     max-height: 90vh;
     overflow: auto;
+    align-items: flex-start;
   }
 
   .toolbar::-webkit-scrollbar {
@@ -365,7 +366,7 @@
     </Confirm>
   {/if}
   {#each eTehokkuus.toArray() as e}
-    <div class="border-2 border-dark py-2 bg-secondary">
+    <div class="border-2 border-dark py-2 bg-secondary w-full">
       <div class="font-bold text-center text-sm text-light pb-1">
         {i18n('energiatodistus.tulokset.e-luku')}
         {e['e-luku']}
@@ -384,7 +385,7 @@
     </div>
   {/if}
   <div class="py-2">
-    <div class="font-semibold text-sm mb-2 text-dark w-1/2">
+    <div class="font-semibold text-sm mb-2 text-dark w-full">
       {i18n('energiatodistus.toolbar.language-label')}
     </div>
     <button on:click={toggleLanguageSelection} class="languageselect-button">

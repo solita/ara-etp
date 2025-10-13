@@ -59,16 +59,18 @@
   }
 
   .toc-item {
-    @apply w-full py-2 text-left text-sm cursor-pointer;
-    @apply text-secondary text-tocLink underline leading-header;
+    @apply block py-2 text-sm;
+    color: #0000ee; /* Default browser link blue */
+    text-decoration: underline;
+  }
+
+  .toc-item:visited {
+    color: #551a8b; /* Default browser visited link purple */
   }
 
   .toc-item:hover {
-    @apply text-primary no-underline;
-  }
-
-  .toc-item:active {
-    @apply bg-primarydark;
+    color: #0000ee;
+    text-decoration: underline;
   }
 
   .toc-header {
@@ -82,11 +84,11 @@
   </div>
 
   {#each tocItems as item}
-    <button
+    <a
       class="toc-item"
-      on:click={() => scrollToSection(item.id)}
-      type="button">
+      href="#{item.id}"
+      on:click|preventDefault={() => scrollToSection(item.id)}>
       {item.label}
-    </button>
+    </a>
   {/each}
 </div>

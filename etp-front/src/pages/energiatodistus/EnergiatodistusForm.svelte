@@ -217,6 +217,21 @@
     @apply border-primary;
   }
 
+  :global(.et-table--tr > .et-table--td.et-table--td-left-aligned) {
+    @apply text-left;
+  }
+
+  /* Specific selectors for inputs in table cells (overrides center class) */
+  :global(.et-table--td:not(.et-table--td-left-aligned) input.center),
+  :global(.et-table--td:not(.et-table--td-left-aligned) input:not(.center)) {
+    @apply text-right pr-4;
+  }
+
+  /* Left-aligned inputs in left-aligned table cells */
+  :global(.et-table--tr > .et-table--td.et-table--td-left-aligned input) {
+    @apply text-left;
+  }
+
   :global(.et-table--th-left-aligned) {
     @apply text-left;
   }
@@ -271,19 +286,18 @@
     @apply font-bold;
   }
 
-  :global(.et-table--tr > .et-table--td:not(:first-child)) {
+  :global(
+      .et-table--tr
+        > .et-table--td:not(:first-child):not(.et-table--td-left-aligned)
+    ) {
     @apply text-right;
   }
 </style>
 
 {#if !R.isNil(ETForm)}
-  {#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
-    <Signing {energiatodistus} reload={reset} />
-  {/if}
-
   <DirtyConfirmation {dirty} />
   <div class="w-full relative flex">
-    <div class="sticky top-3em self-start flex justify-end px-6">
+    <div class="sticky top-3em self-start flex justify-end px-6 z-10">
       <ToolBar
         save={validateAndSubmit}
         saveComplete={validateCompleteAndSubmit}
@@ -406,4 +420,8 @@
   </div>
 {:else}
   <p>Energiatodistusversiota {version} ei ole olemassa.</p>
+{/if}
+
+{#if R.propEq(et.tila['in-signing'], 'tila-id', energiatodistus)}
+  <Signing {energiatodistus} reload={reset} />
 {/if}
