@@ -40,7 +40,7 @@ export const required = (inputLanguage, type, model) =>
 
 const localeKey = R.compose(removeLocalePostfix, R.join('.'), zeroPath);
 
-export const label = (i18n, inputLanguage, path) =>
+export const label = (i18n, i18nRoot, inputLanguage, path) =>
   // input ordinal in array (starting from 1)
   R.compose(
     Maybe.orSome(''),
@@ -48,7 +48,7 @@ export const label = (i18n, inputLanguage, path) =>
     index
   )(path) +
   // localized label text
-  i18n('energiatodistus.' + localeKey(path)) +
+  i18n(i18nRoot + '.' + localeKey(path)) +
   // input language symbol
   R.compose(
     Maybe.orSome(''),
@@ -69,10 +69,10 @@ const labelContext = (i18n, path) =>
       )
     : Maybe.None();
 
-export const fullLabel = (i18n, inputLanguage, path) =>
+export const fullLabel = (i18n, i18nRoot, inputLanguage, path) =>
   labelContext(i18n, path)
     .map(t => t + ' / ')
-    .orSome('') + label(i18n, inputLanguage, path);
+    .orSome('') + label(i18n, i18nRoot, inputLanguage, path);
 
 export function scrollIntoView(document, id) {
   document
