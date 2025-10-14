@@ -8,3 +8,65 @@
 @tailwind utilities;
 
 @import url('//cdn.quilljs.com/1.3.6/quill.snow.css');
+
+@layer components {
+  .et-table {
+    @apply border-b-1 border-disabled pb-8 table-fixed w-full;
+  }
+  .et-table__noborder {
+    @apply border-b-0;
+  }
+  .et-table--th {
+    @apply py-5 px-4 font-bold;
+    @apply text-primary text-sm w-1/5;
+    height: 4em;
+  }
+  .et-table--td {
+    @apply py-3 px-4 font-bold;
+  }
+  .et-table--td .inputwrapper {
+    @apply border-primary;
+  }
+  .et-table--th-left-aligned {
+    @apply text-left;
+  }
+  .et-table--th-right-aligned {
+    @apply text-right;
+  }
+  .et-table--tr > .et-table--th:not(:first-child),
+  .et-table--tr > .et-table--td:not(:first-child) {
+    @apply border-l-1 border-tableborder;
+  }
+  .et-table--thead {
+    @apply bg-tertiary;
+  }
+  .et-table--th__sixth {
+    @apply w-1/6;
+  }
+  .et-table--th__4-6 {
+    @apply w-4/6;
+  }
+  .et-table--th__fourcells {
+    @apply w-4/5;
+  }
+  .et-table--th__threecells {
+    @apply w-3/5;
+  }
+  .et-table--th__twocells {
+    @apply w-2/5;
+  }
+  .et-table--td__fifth {
+    @apply w-1/5;
+  }
+  .et-table--tr:last-child {
+    @apply mb-5;
+  }
+
+  .et-table--tr > .et-table--td:first-child {
+    @apply font-bold;
+  }
+
+  .et-table--tr > .et-table--td:not(:first-child) {
+    @apply text-right;
+  }
+}
