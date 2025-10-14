@@ -85,7 +85,7 @@
                                :rotateLandscapePages         true
                                :sender                       {:address {:city          "Valtioneuvosto"
                                                                         :countryCode   "FI"
-                                                                        :name          "Ympäristöministeriö, Valtion tukeman asuntorakentamisen keskus"
+                                                                        :name          "Valtion tukeman\nasuntorakentamisen keskus"
                                                                         :streetAddress "PL 35"
                                                                         :zipCode       "00023"}}
                                :twoSidedPrinting             true}
