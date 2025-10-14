@@ -87,5 +87,10 @@ const language = R.compose(
 );
 
 export const propertyLabel = R.curry((i18n, propertyName) =>
-  fullLabel(i18n, language(propertyName), R.split('.', propertyName))
+  fullLabel(
+    i18n,
+    'energiatodistus',
+    language(propertyName),
+    R.split('.', propertyName)
+  )
 );
