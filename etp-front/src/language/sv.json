@@ -475,6 +475,10 @@
       },
       "postinumero": {
         "label": "Postanstalt"
+      },
+      "perusparannuspassi": {
+        "id": "Perusparannuspassitunnus (sv)",
+        "valid": "Perusparannuspassi on olemassa (sv)"
       }
     },
     "kaikki": "Allt",

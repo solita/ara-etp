@@ -398,6 +398,19 @@ const havainnointikayntiBetween = key => ({
   type: OPERATOR_TYPES.DATE_BETWEEN
 });
 
+const pppOlemassa = key =>
+  R.assocPath(
+    ['operation', 'format'],
+    R.curry((command, key, value) =>
+      R.ifElse(
+        R.equals(true),
+        R.always([['=', key, true]]),
+        R.always([['is-distinct-from', key, true]])
+      )(value)
+    ),
+    singleBoolean(key)
+  );
+
 const perustiedot = {
   'nimi-fi': [...stringComparisons],
   'nimi-sv': [...stringComparisons],
@@ -740,6 +753,10 @@ export const schema = {
     'lisamerkintoja-sv': [stringContains],
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals]
+  },
+  perusparannuspassi: {
+    id: [...numberComparisons],
+    valid: [pppOlemassa]
   },
   laatija,
   kunta,
