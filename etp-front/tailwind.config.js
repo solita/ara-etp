@@ -98,7 +98,8 @@ module.exports = {
       '6xl': '4rem',
       h1: '2rem',
       h2: '1.5rem',
-      h3: '1.25rem'
+      h3: '1.25rem',
+      h4: '1rem'
     }
   },
   plugins: [],
