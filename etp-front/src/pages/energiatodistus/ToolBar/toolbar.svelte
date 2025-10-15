@@ -147,7 +147,7 @@
 
 <style type="text/postcss">
   button {
-    @apply p-3 flex gap-2 items-center;
+    @apply p-2 flex gap-2 items-center;
   }
 
   button:last-of-type {
