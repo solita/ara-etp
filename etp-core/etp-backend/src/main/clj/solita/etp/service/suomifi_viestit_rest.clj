@@ -69,7 +69,7 @@
   (-> message
       (->messages-electronic config)
       (assoc :paperMail {:messageServiceType           "Normal"
-                         :createAddressPage            true
+                         :createAddressPage            false
                          :rotateLandscapePages         true
                          :attachments                  attachments
                          :recipient                    {:address {:city          city

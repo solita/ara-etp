@@ -111,17 +111,18 @@
               :postinumero      (:postinumero osapuoli)
               :postitoimipaikka (:postitoimipaikka osapuoli)}}}))
 
-(defn- tiedosto-sisalto [document]
+(defn- tiedosto-sisalto [document osapuoli]
   (pdf/merge-pdf
-   [(io/input-stream document)
+   [(create-cover-page osapuoli)
+    (io/input-stream document)
     (store/info-letter)]))
 
 (defn- ^:dynamic bytes->base64 [bytes]
   (String. (.encode (Base64/getEncoder) bytes) StandardCharsets/UTF_8))
 
-(defn- document->tiedosto [type-key document]
+(defn- document->tiedosto [type-key osapuoli document]
   (let [{:keys [nimi kuvaus]} (toimenpide->tiedosto type-key)
-        tiedosto (tiedosto-sisalto document)]
+        tiedosto (tiedosto-sisalto document osapuoli)]
     {:nimi    nimi
      :kuvaus  kuvaus
      :sisalto (bytes->base64 tiedosto)
@@ -138,7 +139,7 @@
      :kuvaus-teksti      kuvaus
      :lahetys-pvm        (now)
      :asiakas            (osapuoli->asiakas osapuoli)
-     :tiedostot          (document->tiedosto type-key document)}))
+     :tiedostot          (document->tiedosto type-key osapuoli document)}))
 
 (defn send-suomifi-viesti-using-rest! [valvonta
                                        toimenpide
@@ -149,9 +150,7 @@
         {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)
         asiakas (osapuoli->asiakas osapuoli)
         tiedosto (toimenpide->tiedosto type-key)
-        ;; Merge the main document with info-letter, same as SOAP API
-        merged-document (tiedosto-sisalto document)
-        message {:pdf-file       merged-document
+        message {:pdf-file       document
                  :pdf-file-name  (:nimi tiedosto)
                  :title          nimike
                  :body           kuvaus
