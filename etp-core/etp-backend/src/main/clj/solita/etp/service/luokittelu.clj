@@ -19,6 +19,10 @@
 (def find-lammonjaot #(select-luokittelu % "lammonjako"))
 (def find-statistics-kayttotarkoitukset #(select-luokittelu % "stat_kayttotarkoitusluokka"))
 
+(def find-mahdollisuus-liittya #(select-luokittelu % "perusparannuspassi_liittymismahdollisuus"))
+(def find-uusiutuva-energia #(select-luokittelu % "perusparannuspassi_uusiutuva_energia"))
+(def find-jaahdytys #(select-luokittelu % "perusparannuspassi_jaahdytys"))
+
 (def find-vastaanottajaryhmat #(select-luokittelu % "vastaanottajaryhma"))
 
 (def find-toimenpidetypes #(select-luokittelu % "vo_toimenpidetype"))

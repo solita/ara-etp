@@ -23,6 +23,9 @@
    (classification-route "/lammitysmuoto" "lämmitysmuodot" luokittelu-service/find-lammitysmuodot)
    (classification-route "/lammonjako" "lämmönjaot" luokittelu-service/find-lammonjaot)
    (classification-route "/ilmanvaihtotyyppi" "ilmanvaihtotyypit" luokittelu-service/find-ilmanvaihtotyypit)
+   (classification-route "/mahdollisuus-liittya-energiatehokkaaseen" "mahdollisuus-liittya-energiatehokkaaseen" luokittelu-service/find-mahdollisuus-liittya)
+   (classification-route "/uusiutuva-energia" "uusiutuva-energia" luokittelu-service/find-uusiutuva-energia)
+   (classification-route "/jaahdytys" "jaahdytys" luokittelu-service/find-jaahdytys)
 
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"
