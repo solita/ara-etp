@@ -72,7 +72,7 @@
                   :externalId "dummy-external-id"
                   :paperMail  {:attachments                  ["dummy-attachment-ref"]
                                :colorPrinting                true
-                               :createAddressPage            true
+                               :createAddressPage            false
                                :messageServiceType           "Normal"
                                :printingAndEnvelopingService {:postiMessaging {:contactDetails {:email "hello@example.com"}
                                                                                :password       "asdasdasdasd"
