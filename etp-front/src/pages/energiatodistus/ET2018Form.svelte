@@ -56,6 +56,15 @@
   $: labelLocale = LocaleUtils.label($locale);
 </script>
 
+<style>
+  /* Min-height is bigger than other textarea so that the table of contents
+  links are visible, even after scrolling to last textarea via anchor link*/
+  .lisamerkintoja-textarea :global(textarea) {
+    min-height: 400px;
+    max-height: 600px;
+  }
+</style>
+
 <div class="mb-8">
   <H3 text={$_('energiatodistus.perustiedot.header')} />
   <div class="flex lg:flex-row flex-col gap-x-8">
@@ -286,7 +295,7 @@
 
 <HR />
 <H2 id="lisamerkintoja" text={$_('energiatodistus.lisamerkintoja')} />
-<div class="w-full py-4 mb-4">
+<div class="w-full py-4 mb-4 lisamerkintoja-textarea">
   <Textarea
     {disabled}
     {schema}
