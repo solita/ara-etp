@@ -1,6 +1,7 @@
 import { expect, describe, it } from '@jest/globals';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+import * as R from 'ramda';
 
 import * as EtUtils from './energiatodistus-utils';
 
@@ -613,6 +614,80 @@ describe('Energiatodistus Utils: ', () => {
       ];
 
       expect(expected).toEqual(EtUtils.vapaatKertoimet(et));
+    });
+  });
+});
+
+describe('e-luku calculations', () => {
+  describe('complete e-luku calculation', () => {
+    describe('Only fossiilinen polttoaine', () => {
+      it('works okay with everything filled', () => {
+        const energiamuodot = {
+          'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+          sahko: Either.Right(Maybe.Some(0)),
+          kaukojaahdytys: Either.Right(Maybe.Some(0)),
+          kaukolampo: Either.Right(Maybe.Some(0)),
+          'uusiutuva-polttoaine': Either.Right(Maybe.Some(0))
+        };
+
+        const e_luku = EtUtils.eluku(
+          2018,
+          Either.Right(Maybe.Some(100)),
+          energiamuodot
+        );
+        expect(e_luku).toEqual(Maybe.Some(100));
+      });
+
+      it('works okay with None in unused fields', () => {
+        const energiamuodot = {
+          'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+          sahko: Either.Right(Maybe.None()),
+          kaukojaahdytys: Either.Right(Maybe.None()),
+          kaukolampo: Either.Right(Maybe.None()),
+          'uusiutuva-polttoaine': Either.Right(Maybe.None())
+        };
+
+        const e_luku = EtUtils.eluku(
+          2018,
+          Either.Right(Maybe.Some(100)),
+          energiamuodot
+        );
+        expect(e_luku).toEqual(Maybe.Some(100));
+      });
+
+      it('None nettoala produces a None', () => {
+        const energiamuodot = {
+          'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+          sahko: Either.Right(Maybe.None()),
+          kaukojaahdytys: Either.Right(Maybe.None()),
+          kaukolampo: Either.Right(Maybe.None()),
+          'uusiutuva-polttoaine': Either.Right(Maybe.None())
+        };
+
+        const e_luku = EtUtils.eluku(
+          2018,
+          Either.Right(Maybe.None()),
+          energiamuodot
+        );
+        expect(e_luku).toEqual(Maybe.None());
+      });
+
+      it('produces the correct value for a more complicated input', () => {
+        const energiamuodot = {
+          'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+          sahko: Either.Right(Maybe.Some(10000)),
+          kaukojaahdytys: Either.Right(Maybe.Some(10000)),
+          kaukolampo: Either.Right(Maybe.Some(10000)),
+          'uusiutuva-polttoaine': Either.Right(Maybe.Some(10000))
+        };
+
+        const e_luku = EtUtils.eluku(
+          2018,
+          Either.Right(Maybe.Some(100)),
+          energiamuodot
+        );
+        expect(e_luku).toEqual(Maybe.Some(348));
+      });
     });
   });
 });

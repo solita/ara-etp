@@ -1427,6 +1427,35 @@
       "passin-esittely": "Passin esittelyn päivämäärä",
       "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa",
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa"
+    },
+    "laskennan-tulokset": {
+      "header": "Laskennan tulokset",
+      "vaihe": "Vaihe",
+      "aloitusvuosi": "Aloitusvuosi",
+      "kwh-per-vuosi": "kWh/vuosi",
+      "vaiheistus": {
+        "header": "Vaiheistus",
+        "info": "Tiedot kirjataan vain niille vaiheille, joilla on",
+        "info-aloitusvuosi": "aloitusvuosi"
+      },
+      "laskennallinen-ostoenergia": {
+        "header": "Laskennallinen ostoenergia",
+        "table-headers": {
+          "ostoenergian-tarve-kaukolampo": "Kaukolämpö",
+          "ostoenergian-tarve-sahko": "Sähkö",
+          "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet",
+          "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet",
+          "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys"
+        },
+        "lahtotilanne": "Lähtötilanne kWh/vuosi"
+      }
+    },
+    "vaiheet": {
+      "0": {
+        "tulokset": {
+          "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä"
+        }
+      }
     }
   },
   "viesti": {

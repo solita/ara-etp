@@ -25,7 +25,7 @@
     @apply py-3 px-4 font-bold;
   }
   .et-table--td .inputwrapper {
-    @apply border-primary;
+    @apply m-0;
   }
   .et-table--th-left-aligned {
     @apply text-left;

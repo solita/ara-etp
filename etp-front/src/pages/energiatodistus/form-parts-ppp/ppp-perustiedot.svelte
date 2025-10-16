@@ -15,6 +15,7 @@
 <H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
 
 <div class="min-w-full overflow-x-auto flex flex-col gap-y-5">
+  {console.log(perusparannuspassi['passin-perustiedot'])}
   <BasicInput
     id="perusparannuspassi.id"
     name="perusparannuspassi.id"
