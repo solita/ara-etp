@@ -10,13 +10,11 @@
 
   import Confirm from '@Component/Confirm/Confirm';
   import Signing from '@Pages/energiatodistus/signing/SigningDialog.svelte';
-  import TyojonoButton from './tyojono-button';
   import Spinner from '@Component/Spinner/Spinner.svelte';
   import Sisallysluettelo from './sisallysluettelo.svelte';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as PppApi from '@Pages/energiatodistus/perusparannuspassi-api';
-  import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
 
   import * as Toolbar from './toolbar-utils';
 
@@ -29,7 +27,6 @@
   export let eTehokkuus = Maybe.None();
   export let dirty;
   export let whoami;
-  export let valvonta = { ongoing: false, pending: false };
 
   const i18n = $_;
   const { announceError, announceSuccess } =
@@ -104,18 +101,6 @@
     );
   };
 
-  $: toggleTyojono = execute(
-    (fetch, _, id) =>
-      R.chain(
-        Future.after(200),
-        ValvontaApi.putValvonta(id, { pending: !valvonta.pending })
-      ),
-    `tyojono-${!valvonta.pending ? 'add' : 'remove'}`,
-    _ => {
-      valvonta = R.over(R.lensProp('pending'), R.not, valvonta);
-    }
-  );
-
   const deleteEnergiatodistus = execute(
     api.deleteEnergiatodistus,
     'delete',
@@ -147,7 +132,7 @@
 
 <style type="text/postcss">
   button {
-    @apply p-3 flex gap-2 items-center;
+    @apply p-2 flex gap-2 items-center;
   }
 
   button:last-of-type {
@@ -223,12 +208,6 @@
 
 <div class="toolbar relative flex flex-col text-secondary">
   <Sisallysluettelo />
-  {#if R.includes(Toolbar.module.tyojono, fields)}
-    <TyojonoButton
-      disabled={pendingExecution}
-      {valvonta}
-      on:click={toggleTyojono} />
-  {/if}
   {#if R.includes(Toolbar.module.save, fields)}
     <button disabled={!dirty || pendingExecution} on:click={save(noop)}>
       <span class="text-2xl font-icon">save</span>
