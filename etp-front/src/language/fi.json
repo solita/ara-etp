@@ -29,7 +29,8 @@
   "parsing": {
     "invalid-integer": "Virheellinen kokonaislukunumero",
     "invalid-number": "Virheellinen numero",
-    "invalid-date": "Virheellinen päivämäärä"
+    "invalid-date": "Virheellinen päivämäärä",
+    "invalid-year": "Virheellinen vuosiluku"
   },
   "navigation": {
     "breadcrumb-bar": "Sivuhierarkia",

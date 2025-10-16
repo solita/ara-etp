@@ -28,7 +28,8 @@
   "parsing": {
     "invalid-integer": "Felaktigt heltal",
     "invalid-number": "Felaktigt nummer",
-    "invalid-date": "Felaktigt datum"
+    "invalid-date": "Felaktigt datum",
+    "invalid-year": "Felaktigt år"
   },
   "navigation": {
     "breadcrumb-bar": "Sidhierarki",

@@ -28,6 +28,21 @@ export const parseInteger = R.compose(
   R.replace(/\s/g, '')
 );
 
+export const parseYear = R.compose(
+  R.ifElse(
+    R.allPass([
+      R.test(/^\d{4}$/),
+      txt => {
+        const year = parseInt(txt, 10);
+        return year >= 1900 && year <= 2100;
+      }
+    ]),
+    R.compose(Either.Right, txt => parseInt(txt, 10)),
+    R.always(Either.Left(R.applyTo('parsing.invalid-year')))
+  ),
+  R.replace(/\s/g, '')
+);
+
 /**
  * @sig string -> Either [(Translate -> string),number]
  */
