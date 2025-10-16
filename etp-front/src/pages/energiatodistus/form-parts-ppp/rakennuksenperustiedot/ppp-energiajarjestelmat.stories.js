@@ -1,0 +1,32 @@
+import Pppenergiajarjestelmat from './ppp-energiajarjestelmat.svelte';
+
+import * as empty from '@Pages/energiatodistus/empty.js';
+import * as schema from '@Pages/energiatodistus/schema.js';
+import * as R from 'ramda';
+
+const requiredFields = [];
+
+const saveSchema = R.compose(
+  R.reduce(schema.assocRequired, R.__, requiredFields)
+)(schema.perusparannuspassi);
+
+export default {
+  title: 'Pages/Energiatodistus/PPP energiajarjestelmat',
+  component: Pppenergiajarjestelmat
+};
+
+const Template = args => ({
+  Component: Pppenergiajarjestelmat,
+  props: args
+});
+
+export const Default = Template.bind({});
+Default.args = {
+  schema: saveSchema,
+  perusparannuspassi: R.mergeDeepLeft(
+    {
+      id: 4245
+    },
+    empty.perusparannuspassi(442)
+  )
+};
