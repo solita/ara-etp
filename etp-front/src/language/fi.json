@@ -1426,6 +1426,47 @@
       "passin-esittely": "Passin esittelyn päivämäärä",
       "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa",
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa"
+    },
+    "rakennuksen-perustiedot": {
+      "header": "Rakennuksen perustiedot",
+      "lisatiedot": "Lisätiedot",
+      "rakenteiden-u-arvot": {
+        "header": "Rakenteiden U-arvot",
+        "title": "Rakenne",
+        "lahtotiedot": "U-arvot, lähtötilanne",
+        "viimeisen-vaiheen-jalkeen": "U-arvot, viimeisen vaiheen jälkeen",
+        "labels": {
+          "ulkoseinat-ehdotettu-taso": "Ulkoseinät",
+          "ylapohja-ehdotettu-taso": "Yläpohjat",
+          "alapohja-ehdotettu-taso": "Alapohjat",
+          "ikkunat-ehdotettu-taso": "Ikkunat",
+          "ulko-ovet": "Ulko-ovet"
+        }
+      },
+      "energiajarjestelmat": {
+        "header": "Energiajärjesetelmät",
+        "title": "Energiajärjestelmä",
+        "nykyinen": "Nykyinen",
+        "ehdotettu-taso": "Ehdotettu taso",
+        "lisatiedot": {
+          "info": "Ilmoita mahdolliset muut energiajärjestelmät lisätiedoissa."
+        },
+        "labels": {
+          "paalammitysjarjestelma": "Päälämmitysjärjestelmä",
+          "ilmanvaihto": "Ilmanvaihto",
+          "uusiutuvaenergia": "Uusitutuva energia",
+          "jaahdytys": "Jäähdytys(optio)"
+        },
+        "kohteenliitettavyys": {
+          "header": "Kohteen liitettävyys",
+          "title": "Mahdollisuus liittyä",
+          "info": "Ilmoita tässä kohteen mahdollisuudesta liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen."
+        },
+        "korjausrakentamisen-vahimmaisvaatimustaso": {
+          "header": "Korjausrakentamisen vähimmäisvaatimustaso",
+          "title": "YM:n asetusten 4/13 mukainen korjaustakentamisen vähimmäisvaatimustaso"
+        }
+      }
     }
   },
   "viesti": {

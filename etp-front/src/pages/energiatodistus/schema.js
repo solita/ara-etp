@@ -381,7 +381,12 @@ export const perusparannuspassi = {
     'alapohja-ehdotettu-taso': FloatNonNegative,
     'ikkunat-ehdotettu-taso': FloatNonNegative,
     'ulkoovet-ehdotettu-taso': FloatNonNegative,
-    lisatietoja: String(2, 1500)
+    'paalammitysjarjetelma-ehdotettu-taso': Integer,
+    'ilmanvaihto-ehdotettu-taso': Integer,
+    'uusiutuva-energia-ehdotettu-taso': Integer,
+    'jaahdytys-ehdotettu-taso': Integer,
+    'mahdollisuus-liittya-energiatehokkaaseen': Integer,
+    lisatiedot: String(2, 100),
   },
   tulokset: {
     'kaukolampo-hinta': FloatNonNegative,
