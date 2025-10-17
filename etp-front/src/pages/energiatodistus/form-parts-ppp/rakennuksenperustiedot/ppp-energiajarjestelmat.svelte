@@ -78,9 +78,12 @@
       model: perusparannuspassi,
       items: uusiutuvaenergiaIds,
       format: formatUusiutuvaEnergia,
-      lens: R.lensPath(['rakennuksen-perustiedot', 'uusiutuva-energia-ehdotettu-taso'])
+      lens: R.lensPath([
+        'rakennuksen-perustiedot',
+        'uusiutuva-energia-ehdotettu-taso'
+      ])
     },
-  
+
     jaahdytys: {
       model: perusparannuspassi,
       items: jaahdytysIds,
@@ -97,7 +100,10 @@
       'id'
     ],
     ilmanvaihto: ['lahtotiedot', 'ilmanvaihto', 'tyyppi-id'],
-    uusiutuvaenergia: ['rakennuksen-perustiedot', 'uusiutuva-energia-ehdotettu-taso'],
+    uusiutuvaenergia: [
+      'rakennuksen-perustiedot',
+      'uusiutuva-energia-ehdotettu-taso'
+    ],
     jaahdytys: ['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso']
   };
 </script>
