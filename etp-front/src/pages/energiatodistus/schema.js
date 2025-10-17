@@ -386,7 +386,7 @@ export const perusparannuspassi = {
     'uusiutuva-energia-ehdotettu-taso': Integer,
     'jaahdytys-ehdotettu-taso': Integer,
     'mahdollisuus-liittya-energiatehokkaaseen': Integer,
-    lisatiedot: String(2, 100),
+    lisatiedot: String(2, 100)
   },
   tulokset: {
     'kaukolampo-hinta': FloatNonNegative,

@@ -336,7 +336,10 @@ const luokittelut = {
   kielisyys: Fetch.cached(fetch, '/kielisyys'),
   laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet'),
   patevyydet: Fetch.cached(fetch, '/patevyydet'),
-  mahdollisuusLiittya: Fetch.cached(fetch, '/mahdollisuus-liittya-energiatehokkaaseen'),
+  mahdollisuusLiittya: Fetch.cached(
+    fetch,
+    '/mahdollisuus-liittya-energiatehokkaaseen'
+  ),
   uusiutuvaEnergia: Fetch.cached(fetch, '/uusiutuva-energia'),
   jaahdytys: Fetch.cached(fetch, '/jaahdytys')
 };
