@@ -7,6 +7,7 @@ import * as Maybe from '@Utility/maybe-utils';
 
 import * as empty from '@Pages/energiatodistus/empty.js';
 import * as deep from '@/utils/deep-objects.js';
+import * as schema from './schema.js';
 
 export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
   R.compose(
@@ -42,7 +43,14 @@ const deserializer = {
   )
 };
 
+const transformationFromSchema = name =>
+  R.compose(
+    deep.filter(R.is(Function), R.complement(R.isNil)),
+    deep.map(R.propSatisfies(R.is(Array), 'validators'), R.prop(name))
+  )(schema.perusparannuspassi);
+
 export const deserialize = R.compose(
+  R.evolve(transformationFromSchema('deserialize')),
   R.evolve(deserializer),
   deep.map(R.F, Maybe.fromNull)
 );
@@ -64,5 +72,6 @@ export const serialize = R.compose(
       R.identity
     )
   ),
-  R.omit(['id', 'tila-id', 'laatija-id'])
+  R.omit(['id', 'tila-id', 'laatija-id']),
+  R.evolve(transformationFromSchema('serialize'))
 );
