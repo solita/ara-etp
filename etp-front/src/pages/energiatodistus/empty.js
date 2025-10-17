@@ -109,7 +109,7 @@ export const energiatodistus2018 = _ => ({
     },
     kayttotarkoitus: Maybe.None(),
     laatimisvaihe: Maybe.None(),
-    havainnointikaynti: Maybe.None(),
+    havainnointikaynti: ValidNone(),
     'keskeiset-suositukset-fi': Maybe.None(),
     'keskeiset-suositukset-sv': Maybe.None()
   },
@@ -293,17 +293,17 @@ export const energiatodistus2026 = R.compose(
 );
 
 const emptyPerusparannusPassinPerustiedot = _ => ({
-  havainnointikaynti: Maybe.None(),
-  'passin-esittely': Maybe.None(),
+  havainnointikaynti: ValidNone(),
+  'passin-esittely': ValidNone(),
   'tayttaa-aplus-vaatimukset': false,
   'tayttaa-a0-vaatimukset': false
 });
 
 const emptyPerusparannusRakennuksenPerustiedot = _ => ({
-  'ulkoseinat-ehdotettu-taso': Maybe.None(),
-  'ylapohja-ehdotettu-taso': Maybe.None(),
-  'alapohja-ehdotettu-taso': Maybe.None(),
-  'ikkunat-ehdotettu-taso': Maybe.None(),
+  'ulkoseinat-ehdotettu-taso': ValidNone(),
+  'ylapohja-ehdotettu-taso': ValidNone(),
+  'alapohja-ehdotettu-taso': ValidNone(),
+  'ikkunat-ehdotettu-taso': ValidNone(),
   'paalammitysjarjestelma-ehdotettu-taso': Maybe.None(),
   'ilmanvaihto-ehdotettu-taso': Maybe.None(),
   'uusiutuva-energia-ehdotettu-taso': Maybe.None(),
@@ -312,30 +312,30 @@ const emptyPerusparannusRakennuksenPerustiedot = _ => ({
 });
 
 const emptyPerusparannusLaskennanTulokset = _ => ({
-  'kaukolampo-hinta': Maybe.None(),
-  'sahko-hinta': Maybe.None(),
-  'uusiutuvat-pat-hinta': Maybe.None(),
-  'fossiiliset-pat-hinta': Maybe.None(),
-  'kaukojaahdytys-hinta': Maybe.None(),
+  'kaukolampo-hinta': ValidNone(),
+  'sahko-hinta': ValidNone(),
+  'uusiutuvat-pat-hinta': ValidNone(),
+  'fossiiliset-pat-hinta': ValidNone(),
+  'kaukojaahdytys-hinta': ValidNone(),
   'lisatiedot-fi': Maybe.None(),
   'lisatiedot-sv': Maybe.None()
 });
 
 const emptyPerusparannusVaiheenTulokset = _ => ({
-  'vaiheen-alku-pvm': Maybe.None(),
-  'vaiheen-loppu-pvm': Maybe.None(),
-  'ostoenergian-tarve-kaukolampo': Maybe.None(),
-  'ostoenergian-tarve-sahko': Maybe.None(),
-  'ostoenergian-tarve-uusiutuvat-pat': Maybe.None(),
-  'ostoenergian-tarve-fossiiliset-pat': Maybe.None(),
-  'ostoenergian-tarve-kaukojaahdytys': Maybe.None(),
-  'uusiutuvan-energian-kokonaistuotto': Maybe.None(),
-  'uusiutuvan-energian-hyodynnetty-osuus': Maybe.None(),
-  'toteutunut-ostoenergia-kaukolampo': Maybe.None(),
-  'toteutunut-ostoenergia-sahko': Maybe.None(),
-  'toteutunut-ostoenergia-uusiutuvat-pat': Maybe.None(),
-  'toteutunut-ostoenergia-fossiiliset-pat': Maybe.None(),
-  'toteutunut-ostoenergia-kaukojaahdytys': Maybe.None()
+  'vaiheen-alku-pvm': ValidNone(),
+  'vaiheen-loppu-pvm': ValidNone(),
+  'ostoenergian-tarve-kaukolampo': ValidNone(),
+  'ostoenergian-tarve-sahko': ValidNone(),
+  'ostoenergian-tarve-uusiutuvat-pat': ValidNone(),
+  'ostoenergian-tarve-fossiiliset-pat': ValidNone(),
+  'ostoenergian-tarve-kaukojaahdytys': ValidNone(),
+  'uusiutuvan-energian-kokonaistuotto': ValidNone(),
+  'uusiutuvan-energian-hyodynnetty-osuus': ValidNone(),
+  'toteutunut-ostoenergia-kaukolampo': ValidNone(),
+  'toteutunut-ostoenergia-sahko': ValidNone(),
+  'toteutunut-ostoenergia-uusiutuvat-pat': ValidNone(),
+  'toteutunut-ostoenergia-fossiiliset-pat': ValidNone(),
+  'toteutunut-ostoenergia-kaukojaahdytys': ValidNone()
 });
 
 const emptyPerusparannusToimenpiteet = _ => ({
