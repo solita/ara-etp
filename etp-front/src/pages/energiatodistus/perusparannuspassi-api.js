@@ -46,10 +46,7 @@ const deserializer = {
 const transformationFromSchema = name =>
   R.compose(
     deep.filter(R.is(Function), R.complement(R.isNil)),
-    deep.map(
-      R.propSatisfies(R.is(Array), 'validators'),
-      R.prop(name),
-    )
+    deep.map(R.propSatisfies(R.is(Array), 'validators'), R.prop(name))
   )(schema.perusparannuspassi);
 
 export const deserialize = R.compose(
