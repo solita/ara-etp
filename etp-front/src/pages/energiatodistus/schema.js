@@ -386,11 +386,7 @@ export const perusparannuspassi = {
     'ilmanvaihto-ehdotettu-taso': Integer,
     'uusiutuva-energia-ehdotettu-taso': Integer,
     'jaahdytys-ehdotettu-taso': Integer,
-<<<<<<< HEAD
     'mahdollisuus-liittya-energiatehokkaaseen': Integer
-=======
-    'mahdollisuus-liittya-energiatehokkaaseen': Integer,
->>>>>>> 958318501 (AE-2660: fields to schema and empty for ppp)
   },
   tulokset: {
     'kaukolampo-hinta': FloatNonNegative,
