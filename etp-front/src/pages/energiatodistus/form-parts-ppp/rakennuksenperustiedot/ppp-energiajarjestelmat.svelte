@@ -11,25 +11,31 @@
 
   export let schema;
   export let perusparannuspassi;
-  export let mahdollisuusLiittya;
+  export let mahdollisuusliittya;
   export let disabled;
   export let paalammitysjarjestelma;
   export let lammitysmuoto;
   export let energiatodistus;
-  export let ilmanVaihto;
+  export let ilmanvaihto;
+  export let uusiutuvaenergia;
+  export let jaahdytysjarjestelma;
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  $: mahdollisuusliittya = R.pluck('id', mahdollisuusLiittya);
+  $: mahdollisuusliittyaIds = R.pluck('id', mahdollisuusliittya);
 
   $: paalammitysjarjestelma = R.pluck('id', lammitysmuoto);
 
-  $: ilmanvaihto = R.pluck('id', ilmanVaihto);
+  $: ilmanvaihtoIds = R.pluck('id', ilmanvaihto);
+
+  $: uusiutuvaenergiaIds = R.pluck('id', uusiutuvaenergia);
+
+  $: jaahdytysIds = R.pluck('id', jaahdytysjarjestelma);
 
   $: formatMahdollisuusliittya = R.compose(
     Maybe.orSome(''),
     R.map(labelLocale),
-    Maybe.findById(R.__, mahdollisuusLiittya)
+    Maybe.findById(R.__, mahdollisuusliittya)
   );
 
   $: formatLammitysmuoto = R.compose(
@@ -41,9 +47,20 @@
   $: formatIlmanvaihto = R.compose(
     Maybe.orSome(''),
     R.map(labelLocale),
-    Maybe.findById(R.__, ilmanVaihto)
+    Maybe.findById(R.__, ilmanvaihto)
   );
 
+  $: formatUusiutuvaEnergia = R.compose(
+      Maybe.orSome(''),
+      R.map(labelLocale),
+      Maybe.findById(R.__, uusiutuvaenergia)
+  );
+
+  $: formatJaahdytys = R.compose(
+      Maybe.orSome(''),
+      R.map(labelLocale),
+      Maybe.findById(R.__, jaahdytysjarjestelma)
+  );
   $: energiajarjestelmatConfig = {
     paalammitysjarjestelma: {
       model: energiatodistus,
@@ -51,12 +68,37 @@
       format: formatLammitysmuoto,
       lens: R.lensProp('lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'id')
     },
-      ilmanvaihto: {
-        model: energiatodistus,
-          items: ilmanvaihto,
-          format: formatIlmanvaihto,
-          lens: R.lensPath(['lahtotiedot', 'ilmanvaihto']),
-      },
+    ilmanvaihto: {
+      model: energiatodistus,
+      items: ilmanvaihtoIds,
+      format: formatIlmanvaihto,
+      lens: R.lensPath(['lahtotiedot', 'ilmanvaihto'])
+    },
+    uusiutuvaenergia: {
+      model: perusparannuspassi,
+      items: uusiutuvaenergiaIds,
+      format: formatUusiutuvaEnergia,
+      lens: R.lensPath(['rakennuksen-perustiedot', 'uusiutuva-energia-ehdotettu-taso'])
+    },
+  
+    jaahdytys: {
+      model: perusparannuspassi,
+      items: jaahdytysIds,
+      format: formatJaahdytys,
+      lens: R.lensPath(['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso'])
+    }
+  };
+
+  $: currentValuePaths = {
+    paalammitysjarjestelma: [
+      'lahtotiedot',
+      'lammitys',
+      'lammitysmuoto-1',
+      'id'
+    ],
+    ilmanvaihto: ['lahtotiedot', 'ilmanvaihto', 'tyyppi-id'],
+    uusiutuvaenergia: ['rakennuksen-perustiedot', 'uusiutuva-energia-ehdotettu-taso'],
+    jaahdytys: ['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso']
   };
 </script>
 
@@ -90,7 +132,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each ['paalammitysjarjestelma','ilmanvaihto'] as energiajarjestelma}
+      {#each ['paalammitysjarjestelma', 'ilmanvaihto', 'uusiutuvaenergia', 'jaahdytys'] as energiajarjestelma}
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
@@ -98,12 +140,22 @@
             )}
           </td>
           <td>
+            {#if R.path(currentValuePaths[energiajarjestelma], energiatodistus)?.isValue}
+              {energiajarjestelmatConfig[energiajarjestelma].format(
+                R.path(currentValuePaths[energiajarjestelma], energiatodistus)
+                  .val
+              )}
+            {:else}
+              –
+            {/if}
+          </td>
           <td>
-           <Select {disabled}
-            model={energiajarjestelmatConfig[energiajarjestelma].model}
-            lens={energiajarjestelmatConfig[energiajarjestelma].lens}
-            items={energiajarjestelmatConfig[energiajarjestelma].items}
-            format={energiajarjestelmatConfig[energiajarjestelma].format}/>
+            <Select
+              {disabled}
+              model={energiajarjestelmatConfig[energiajarjestelma].model}
+              lens={energiajarjestelmatConfig[energiajarjestelma].lens}
+              items={energiajarjestelmatConfig[energiajarjestelma].items}
+              format={energiajarjestelmatConfig[energiajarjestelma].format} />
           </td>
         </tr>
       {/each}
@@ -143,7 +195,7 @@
       {disabled}
       bind:model={perusparannuspassi}
       lens={R.lensProp('rakennuksen-perustiedot')}
-      items={mahdollisuusliittya}
+      items={mahdollisuusliittyaIds}
       format={formatMahdollisuusliittya}
       required={true} />
   </div>
