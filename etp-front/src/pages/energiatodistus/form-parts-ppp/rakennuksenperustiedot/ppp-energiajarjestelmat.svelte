@@ -51,15 +51,15 @@
   );
 
   $: formatUusiutuvaEnergia = R.compose(
-      Maybe.orSome(''),
-      R.map(labelLocale),
-      Maybe.findById(R.__, uusiutuvaenergia)
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    Maybe.findById(R.__, uusiutuvaenergia)
   );
 
   $: formatJaahdytys = R.compose(
-      Maybe.orSome(''),
-      R.map(labelLocale),
-      Maybe.findById(R.__, jaahdytysjarjestelma)
+    Maybe.orSome(''),
+    R.map(labelLocale),
+    Maybe.findById(R.__, jaahdytysjarjestelma)
   );
   $: energiajarjestelmatConfig = {
     paalammitysjarjestelma: {
