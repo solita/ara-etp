@@ -391,7 +391,6 @@ export const perusparannuspassi = {
   },
   vaiheet: R.repeat(
     {
-      'vaihe-nro': Integer(1, 4),
       toimenpiteet: {
         'toimenpideseloste-fi': String(2, 1500),
         'toimenpideseloste-sv': String(2, 1500),
