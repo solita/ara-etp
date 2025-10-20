@@ -72,7 +72,7 @@
                   :externalId "dummy-external-id"
                   :paperMail  {:attachments                  ["dummy-attachment-ref"]
                                :colorPrinting                true
-                               :createAddressPage            true
+                               :createAddressPage            false
                                :messageServiceType           "Normal"
                                :printingAndEnvelopingService {:postiMessaging {:contactDetails {:email "hello@example.com"}
                                                                                :password       "asdasdasdasd"
@@ -85,7 +85,7 @@
                                :rotateLandscapePages         true
                                :sender                       {:address {:city          "Valtioneuvosto"
                                                                         :countryCode   "FI"
-                                                                        :name          "Ympäristöministeriö, Valtion tukeman asuntorakentamisen keskus"
+                                                                        :name          "Valtion tukeman asuntorakentamisen keskus"
                                                                         :streetAddress "PL 35"
                                                                         :zipCode       "00023"}}
                                :twoSidedPrinting             true}

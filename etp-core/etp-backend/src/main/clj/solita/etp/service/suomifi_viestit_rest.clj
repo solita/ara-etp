@@ -69,7 +69,7 @@
   (-> message
       (->messages-electronic config)
       (assoc :paperMail {:messageServiceType           "Normal"
-                         :createAddressPage            true
+                         :createAddressPage            false
                          :rotateLandscapePages         true
                          :attachments                  attachments
                          :recipient                    {:address {:city          city
@@ -79,7 +79,7 @@
                                                                   :zipCode       zip-code}}
                          :sender                       {:address {:city          "Valtioneuvosto"
                                                                   :countryCode   "FI"
-                                                                  :name          "Ympäristöministeriö, Valtion tukeman asuntorakentamisen keskus"
+                                                                  :name          "Valtion tukeman asuntorakentamisen keskus"
                                                                   :streetAddress "PL 35"
                                                                   :zipCode       "00023"}}
                          :twoSidedPrinting             true
