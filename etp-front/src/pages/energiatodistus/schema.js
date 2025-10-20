@@ -381,7 +381,7 @@ export const perusparannuspassi = {
     'alapohja-ehdotettu-taso': FloatNonNegative,
     'ikkunat-ehdotettu-taso': FloatNonNegative,
     'ulkoovet-ehdotettu-taso': FloatNonNegative,
-    'lisatietoja': String(2, 1500),
+    lisatietoja: String(2, 1500),
     'paalammitysjarjetelma-ehdotettu-taso': Integer,
     'ilmanvaihto-ehdotettu-taso': Integer,
     'uusiutuva-energia-ehdotettu-taso': Integer,
@@ -394,7 +394,7 @@ export const perusparannuspassi = {
     'uusiutuvat-pat-hinta': FloatNonNegative,
     'fossiiliset-pat-hinta': FloatNonNegative,
     'kaukojaahdytys-hinta': FloatNonNegative,
-    'lisatietoja': String(2, 1500)
+    lisatietoja: String(2, 1500)
   },
   vaiheet: R.repeat(
     {
