@@ -44,7 +44,9 @@
      :passin-perustiedot      {:havainnointikaynti        nil
                                :passin-esittely           nil
                                :tayttaa-a0-vaatimukset    false
-                               :tayttaa-aplus-vaatimukset false}
+                               :tayttaa-aplus-vaatimukset false
+                               :lisatietoja-fi         nil
+                               :lisatietoja-sv         nil}
      :vaiheet                 [{:vaihe-nro    1
                                 :valid        true
                                 :toimenpiteet {:toimenpideseloste-fi  nil
@@ -68,18 +70,20 @@
                                :ylapohja-ehdotettu-taso                  1
                                :alapohja-ehdotettu-taso                  1
                                :ikkunat-ehdotettu-taso                   1
-                               :paalammitysjarjestelma-ehdotettu-taso    1
+                               :ulkoovet-ehdotettu-taso                  1
                                :ilmanvaihto-ehdotettu-taso               1
                                :uusiutuva-energia-ehdotettu-taso         1
                                :jaahdytys-ehdotettu-taso                 1
-                               :mahdollisuus-liittya-energiatehokkaaseen 1}
+                               :mahdollisuus-liittya-energiatehokkaaseen 1
+                               :lisatietoja-fi         nil
+                               :lisatietoja-sv         nil}
      :tulokset                {:kaukolampo-hinta      1
                                :kaukojaahdytys-hinta  1
                                :sahko-hinta           1
                                :uusiutuvat-pat-hinta  1
                                :fossiiliset-pat-hinta 1
-                               :lisatiedot-fi         nil
-                               :lisatiedot-sv         nil}}
+                               :lisatietoja-fi         nil
+                               :lisatietoja-sv         nil}}
     perusparannuspassi-schema/PerusparannuspassiSave
     generators))
 
