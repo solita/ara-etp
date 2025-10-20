@@ -79,7 +79,7 @@
                                                                   :zipCode       zip-code}}
                          :sender                       {:address {:city          "Valtioneuvosto"
                                                                   :countryCode   "FI"
-                                                                  :name          "Valtion tukeman\nasuntorakentamisen keskus"
+                                                                  :name          "Valtion tukeman asuntorakentamisen keskus"
                                                                   :streetAddress "PL 35"
                                                                   :zipCode       "00023"}}
                          :twoSidedPrinting             true
