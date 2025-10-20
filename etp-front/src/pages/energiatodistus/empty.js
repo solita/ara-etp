@@ -296,7 +296,9 @@ const emptyPerusparannusPassinPerustiedot = _ => ({
   havainnointikaynti: ValidNone(),
   'passin-esittely': ValidNone(),
   'tayttaa-aplus-vaatimukset': false,
-  'tayttaa-a0-vaatimukset': false
+  'tayttaa-a0-vaatimukset': false,
+  'lisatietoja-fi': Maybe.None(),
+  'lisatietoja-sv': Maybe.None()
 });
 
 const emptyPerusparannusRakennuksenPerustiedot = _ => ({
@@ -304,11 +306,14 @@ const emptyPerusparannusRakennuksenPerustiedot = _ => ({
   'ylapohja-ehdotettu-taso': ValidNone(),
   'alapohja-ehdotettu-taso': ValidNone(),
   'ikkunat-ehdotettu-taso': ValidNone(),
+  'ulkoovet-ehdotettu-taso': ValidNone(),
   'paalammitysjarjestelma-ehdotettu-taso': Maybe.None(),
   'ilmanvaihto-ehdotettu-taso': Maybe.None(),
   'uusiutuva-energia-ehdotettu-taso': Maybe.None(),
   'jaahdytys-ehdotettu-taso': Maybe.None(),
-  'mahdollisuus-liittya-energiatehokkaaseen': Maybe.None()
+  'mahdollisuus-liittya-energiatehokkaaseen': Maybe.None(),
+  'lisatietoja-fi': Maybe.None(),
+  'lisatietoja-sv': Maybe.None()
 });
 
 const emptyPerusparannusLaskennanTulokset = _ => ({
@@ -317,8 +322,8 @@ const emptyPerusparannusLaskennanTulokset = _ => ({
   'uusiutuvat-pat-hinta': ValidNone(),
   'fossiiliset-pat-hinta': ValidNone(),
   'kaukojaahdytys-hinta': ValidNone(),
-  'lisatiedot-fi': Maybe.None(),
-  'lisatiedot-sv': Maybe.None()
+  'lisatietoja-fi': Maybe.None(),
+  'lisatietoja-sv': Maybe.None()
 });
 
 const emptyPerusparannusVaiheenTulokset = _ => ({
