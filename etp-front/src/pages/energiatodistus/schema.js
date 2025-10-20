@@ -394,6 +394,13 @@ export const perusparannuspassi = {
     'passin-esittely': DateValue(),
     lisatietoja: String(2, 1500)
   },
+  'energian-hinta': {
+    'kaukolampo': FloatNonNegative,
+    'sahko': FloatNonNegative,
+    'uusiutuva-polttoaine': FloatNonNegative,
+    'fossiilinen-polttoaine': FloatNonNegative,
+    'kaukojaahdytys': FloatNonNegative
+  },
   'rakennuksen-perustiedot': {
     'ulkoseinat-ehdotettu-taso': FloatNonNegative,
     'ylapohja-ehdotettu-taso': FloatNonNegative,

@@ -1485,6 +1485,18 @@
           "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)"
         }
       }
+    },
+    "energian-hinta": {
+      "header": "Energipris",
+      "energia": "Energi",
+      "hinta-snt-kwh": "Pris cent/kWh",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossilt bränsle",
+        "sahko": "El",
+        "kaukojaahdytys": "Fjärrkyla",
+        "kaukolampo": "Fjärrvärme",
+        "uusiutuva-polttoaine": "Förnybart bränsle"
+      }
     }
   },
   "viesti": {

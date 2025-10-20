@@ -1428,6 +1428,18 @@
       "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa",
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa"
     },
+    "energian-hinta": {
+      "header": "Energian hinta",
+      "energia": "Energia",
+      "hinta-snt-kwh": "Hinta snt/kWh",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+        "sahko": "Sähkö",
+        "kaukojaahdytys": "Kaukojäähdytys",
+        "kaukolampo": "Kaukolämpö",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+      }
+    },
     "rakennuksen-perustiedot": {
       "header": "Rakennuksen perustiedot",
       "lisatietoja": "Lisätiedot",

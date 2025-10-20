@@ -42,6 +42,11 @@
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
 
+  // PPP components
+  import EnergianHinta from './form-parts-ppp/energian-hinta';
+  import * as pppSchema from './schema';
+  import * as pppEmpty from './empty';
+
   import Area from './form-parts/units/area';
 
   export let energiatodistus;
@@ -303,3 +308,9 @@
     bind:model={energiatodistus}
     path={['lisamerkintoja']} />
 </div>
+
+<!-- Temporary PPP component for development -->
+<EnergianHinta 
+  schema={pppSchema.perusparannuspassi}
+  perusparannuspassi={energiatodistus.perusparannuspassi || pppEmpty.perusparannuspassi(energiatodistus.id)}
+  disabled={disabled} />
