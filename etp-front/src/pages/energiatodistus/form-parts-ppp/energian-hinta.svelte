@@ -18,8 +18,6 @@
     'kaukojaahdytys'
   ];
 
-  // Helper function to capitalize first letter
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 </script>
 
 <H3 text={$_('perusparannuspassi.energian-hinta.header')} />
