@@ -1429,7 +1429,7 @@
     },
     "rakennuksen-perustiedot": {
       "header": "Rakennuksen perustiedot",
-      "lisatiedot": "Lisätiedot",
+      "lisatietoja": "Lisätiedot",
       "rakenteiden-u-arvot": {
         "header": "Rakenteiden U-arvot",
         "title": "Rakenne",
