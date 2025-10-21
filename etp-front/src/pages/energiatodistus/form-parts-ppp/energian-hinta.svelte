@@ -9,13 +9,13 @@
   export let schema;
   export let disabled = false;
 
-  // Energy forms for the pricing table
+  // Energy forms for the pricing table - mapped to tulokset field names
   const energiamuodot = [
-    'kaukolampo',
-    'sahko', 
-    'uusiutuva-polttoaine',
-    'fossiilinen-polttoaine',
-    'kaukojaahdytys'
+    { key: 'kaukolampo', field: 'kaukolampo-hinta' },
+    { key: 'sahko', field: 'sahko-hinta' },
+    { key: 'uusiutuva-polttoaine', field: 'uusiutuvat-pat-hinta' },
+    { key: 'fossiilinen-polttoaine', field: 'fossiiliset-pat-hinta' },
+    { key: 'kaukojaahdytys', field: 'kaukojaahdytys-hinta' }
   ];
 
 </script>
@@ -23,7 +23,7 @@
 <H3 text={$_('perusparannuspassi.energian-hinta.header')} />
 <p class="mb-6">{$_('perusparannuspassi.energian-hinta.description')}</p>
 
-<div class="min-w-full overflow-x-auto md:overflow-x-hidden">
+<div class="min-w-full overflow-x-auto md:overflow-x-hidden mb-12">
   <table class="et-table et-table__noborder border-r-0 table-fixed">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
@@ -40,7 +40,7 @@
       {#each energiamuodot as energiamuoto}
         <tr class="et-table--tr">
           <td class="et-table--td et-table--th__twocells">
-            {$_(`perusparannuspassi.energian-hinta.labels.${energiamuoto}`)}
+            {$_(`perusparannuspassi.energian-hinta.labels.${energiamuoto.key}`)}
           </td>
           <td class="et-table--td et-table--td__fifth">
             <Input
@@ -48,7 +48,7 @@
               {schema}
               compact={true}
               bind:model={perusparannuspassi}
-              path={['energian-hinta', energiamuoto]}
+              path={['tulokset', energiamuoto.field]}
               i18nRoot="perusparannuspassi" />
           </td>
           <td class="et-table--td w-3/5 invisible border-0 p-0"></td>

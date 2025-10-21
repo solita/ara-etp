@@ -311,7 +311,7 @@
 </div>
 
 <!-- Temporary PPP component for development -->
-<EnergianHinta 
+<EnergianHinta
   schema={pppSchema.perusparannuspassi}
   perusparannuspassi={energiatodistus.perusparannuspassi || pppEmpty.perusparannuspassi(energiatodistus.id)}
   disabled={disabled} />

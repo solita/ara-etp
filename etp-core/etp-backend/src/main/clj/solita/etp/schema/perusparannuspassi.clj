@@ -12,13 +12,6 @@
    :lisatietoja-fi            common-schema/String1500
    :lisatietoja-sv            common-schema/String1500})
 
-(def EnergianHinta
-  {:kaukolampo              schema/Num
-   :sahko                   schema/Num
-   :uusiutuva-polttoaine    schema/Num
-   :fossiilinen-polttoaine  schema/Num
-   :kaukojaahdytys          schema/Num})
-
 (def Rakennuksenperustiedot
   {:ulkoseinat-ehdotettu-taso                schema/Num
    :ylapohja-ehdotettu-taso                  schema/Num
@@ -73,7 +66,6 @@
   {:valid                  schema/Bool
    :energiatodistus-id     common-schema/Key
    :passin-perustiedot            (xschema/optional-properties PassiPerustiedot)
-   :energian-hinta                (xschema/optional-properties EnergianHinta)
    :vaiheet                [PerusparannuspassiVaihe]
    :rakennuksen-perustiedot (xschema/optional-properties Rakennuksenperustiedot)
    :tulokset   (xschema/optional-properties LaskennanTulokset)})

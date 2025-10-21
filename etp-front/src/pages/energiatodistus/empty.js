@@ -301,14 +301,6 @@ const emptyPerusparannusPassinPerustiedot = _ => ({
   'lisatietoja-sv': Maybe.None()
 });
 
-const emptyEnergianHinta = _ => ({
-  'kaukolampo': ValidNone(),
-  'sahko': ValidNone(),
-  'uusiutuva-polttoaine': ValidNone(),
-  'fossiilinen-polttoaine': ValidNone(),
-  'kaukojaahdytys': ValidNone()
-});
-
 const emptyPerusparannusRakennuksenPerustiedot = _ => ({
   'ulkoseinat-ehdotettu-taso': ValidNone(),
   'ylapohja-ehdotettu-taso': ValidNone(),
@@ -368,7 +360,6 @@ export const perusparannuspassi = energiatodistusId => ({
   'energiatodistus-id': energiatodistusId,
   valid: false,
   'passin-perustiedot': emptyPerusparannusPassinPerustiedot(),
-  'energian-hinta': emptyEnergianHinta(),
   vaiheet: [1, 2, 3, 4].map(emptyPerusparannusVaihe),
   'rakennuksen-perustiedot': emptyPerusparannusRakennuksenPerustiedot(),
   tulokset: emptyPerusparannusLaskennanTulokset()
