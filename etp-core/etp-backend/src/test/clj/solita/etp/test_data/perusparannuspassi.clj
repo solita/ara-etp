@@ -71,6 +71,7 @@
                                :alapohja-ehdotettu-taso                  1
                                :ikkunat-ehdotettu-taso                   1
                                :ulkoovet-ehdotettu-taso                  1
+                               :paalammitysjarjestelma-ehdotettu-taso    1
                                :ilmanvaihto-ehdotettu-taso               1
                                :uusiutuva-energia-ehdotettu-taso         1
                                :jaahdytys-ehdotettu-taso                 1
