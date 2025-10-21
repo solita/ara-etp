@@ -44,6 +44,7 @@
 
   // PPP components
   import EnergianHinta from './form-parts-ppp/energian-hinta';
+  import LaskennallinenOstoenergia from './form-parts-ppp/laskennallinen-ostoenergia';
   import * as pppSchema from './schema';
   import * as pppEmpty from './empty';
 
@@ -311,6 +312,11 @@
 
 <!-- Temporary PPP component for development -->
 <EnergianHinta 
+  schema={pppSchema.perusparannuspassi}
+  perusparannuspassi={energiatodistus.perusparannuspassi || pppEmpty.perusparannuspassi(energiatodistus.id)}
+  disabled={disabled} />
+
+<LaskennallinenOstoenergia
   schema={pppSchema.perusparannuspassi}
   perusparannuspassi={energiatodistus.perusparannuspassi || pppEmpty.perusparannuspassi(energiatodistus.id)}
   disabled={disabled} />

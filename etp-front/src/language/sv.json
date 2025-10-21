@@ -1498,6 +1498,25 @@
         "kaukolampo": "Fjärrvärme",
         "uusiutuva-polttoaine": "Förnybart bränsle"
       }
+    },
+    "laskennallinen-ostoenergia": {
+      "header": "Energikostnader, beräknad köpt energi",
+      "description": "Kostnaderna beräknas automatiskt baserat på uppgiven information.",
+      "energia": "Energi",
+      "lahtotilanne": "Utgångsläge €/år",
+      "vaihe-1": "Skede 1 €/år",
+      "vaihe-2": "Skede 2 €/år",
+      "vaihe-3": "Skede 3 €/år",
+      "vaihe-4": "Skede 4 €/år",
+      "yhteensa": "Sammanlagt",
+      "erotus-edelliseen-vaiheeseen": "Skillnad mot föregående skede",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossilt bränsle",
+        "sahko": "El",
+        "kaukojaahdytys": "Fjärrkyla",
+        "kaukolampo": "Fjärrvärme",
+        "uusiutuva-polttoaine": "Förnybart bränsle"
+      }
     }
   },
   "viesti": {
