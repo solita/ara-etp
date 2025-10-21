@@ -99,7 +99,8 @@ module.exports = {
       h1: '2rem',
       h2: '1.5rem',
       h3: '1.25rem',
-      h4: '1rem'
+      h4: '1rem',
+      h5: '0.875rem'
     }
   },
   plugins: [],
