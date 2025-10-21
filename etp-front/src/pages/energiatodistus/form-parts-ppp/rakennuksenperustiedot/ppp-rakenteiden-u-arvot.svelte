@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n.js';
   import H3 from '@Component/H/H3.svelte';
+  import H4 from '@Component/H/H4.svelte';
   import Input from '@Pages/energiatodistus/Input.svelte';
 
   export let schema;
@@ -23,12 +24,14 @@
 </script>
 
 <H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
-<H3
-  text={$_(
-    'perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.header'
-  )} />
+<div class="py-4">
+  <H4
+    text={$_(
+      'perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.header'
+    )} />
+</div>
 
-<div class="min-w-full overflow-x-auto md:overflow-x-hidden border-right-0">
+<div class="flex lg:flex-row flex-col gap-x-8">
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">

@@ -4,9 +4,9 @@
   import { _ } from '@Language/i18n.js';
   import { locale } from '@Language/i18n';
 
-  import H3 from '@Component/H/H3.svelte';
-  import Input from '@Pages/energiatodistus/Input';
-  import Select from '@Component/Select/Select2.svelte';
+  import H4 from '@Component/H/H4.svelte';
+  import Textarea from '@Pages/energiatodistus/Textarea';
+  import Select from '@Component/Select/Select.svelte';
   import * as LocaleUtils from '@Language/locale-utils.js';
 
   export let schema;
@@ -83,12 +83,20 @@
         'uusiutuva-energia-ehdotettu-taso'
       ])
     },
-
     jaahdytys: {
       model: perusparannuspassi,
       items: jaahdytysIds,
       format: formatJaahdytys,
       lens: R.lensPath(['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso'])
+    },
+    mahdollisuusliittya: {
+      model: perusparannuspassi,
+      items: mahdollisuusliittyaIds,
+      format: formatMahdollisuusliittya,
+      lens: R.lensPath([
+        'rakennuksen-perustiedot',
+        'mahdollisuus-liittya-energiatehokkaaseen'
+      ])
     }
   };
 
@@ -108,12 +116,14 @@
   };
 </script>
 
-<H3
-  text={$_(
-    'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.header'
-  )} />
+<div class="py-4">
+  <H4
+    text={$_(
+      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.header'
+    )} />
+</div>
 
-<div class="min-w-full overflow-x-auto md:overflow-x-hidden border-right-0">
+<div class="min-w-full overflow-x-visible md:overflow-x-visible border-right-0">
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
@@ -157,7 +167,7 @@
           </td>
           <td>
             <Select
-              {disabled}
+              allowNone={false}
               model={energiajarjestelmatConfig[energiajarjestelma].model}
               lens={energiajarjestelmatConfig[energiajarjestelma].lens}
               items={energiajarjestelmatConfig[energiajarjestelma].items}
@@ -167,42 +177,50 @@
       {/each}
     </tbody>
   </table>
-  {$_(
-    'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.lisatiedot.info'
-  )}
-  <div class="lg:w-3/5 w-full py-4">
-    <Input
+  <div class="py-4">
+    {$_(
+      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.lisatiedot.info'
+    )}
+  </div>
+  <div class="w-full py-4 mb-4">
+    <Textarea
       {schema}
       i18nRoot="perusparannuspassi"
       bind:model={perusparannuspassi}
       path={['rakennuksen-perustiedot', 'lisatiedot']} />
   </div>
   <div class="w-full py-4">
-    <H3
-      text={$_(
-        'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.header'
-      )} />
+    <div class="py-4">
+      <H4
+        text={$_(
+          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.header'
+        )} />
+    </div>
     {$_(
       'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.title'
     )}
   </div>
-  <H3
-    text={$_(
-      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.header'
-    )} />
-  {$_(
-    'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.info'
-  )}
-  <div class="lg:w-1/2 w-full py-4">
-    <Select
-      label={$_(
-        'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.title'
-      )}
-      {disabled}
-      bind:model={perusparannuspassi}
-      lens={R.lensProp('rakennuksen-perustiedot')}
-      items={mahdollisuusliittyaIds}
-      format={formatMahdollisuusliittya}
-      required={true} />
+  <div class="w-full py-4">
+    <div class="py-4">
+      <H4
+        text={$_(
+          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.header'
+        )} />
+    </div>
+    {$_(
+      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.info'
+    )}
+    <div class="lg:w-1/2 w-full py-4">
+      <Select
+        label={$_(
+          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.title'
+        )}
+        {disabled}
+        model={energiajarjestelmatConfig.mahdollisuusliittya.model}
+        lens={energiajarjestelmatConfig.mahdollisuusliittya.lens}
+        items={energiajarjestelmatConfig.mahdollisuusliittya.items}
+        format={energiajarjestelmatConfig.mahdollisuusliittya.format}
+        required={true} />
+    </div>
   </div>
 </div>
