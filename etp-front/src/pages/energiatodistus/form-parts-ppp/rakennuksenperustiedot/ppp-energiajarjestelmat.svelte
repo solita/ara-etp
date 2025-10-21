@@ -188,8 +188,8 @@
       {schema}
       i18nRoot="perusparannuspassi"
       bind:model={perusparannuspassi}
-      path={['rakennuksen-perustiedot', 'lisatietoja']} 
-      inputLanguage={Maybe.Some(inputLanguage)}/>
+      path={['rakennuksen-perustiedot', 'lisatietoja']}
+      inputLanguage={Maybe.Some(inputLanguage)} />
   </div>
   <div class="w-full py-4">
     <div class="py-4">
