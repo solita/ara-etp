@@ -372,13 +372,16 @@ export const EnumerationIdType = (values, i18nKey) => ({
 export const perusparannuspassi = {
   'passin-perustiedot': {
     havainnointikaynti: DateValue(),
-    'passin-esittely': DateValue()
+    'passin-esittely': DateValue(),
+    lisatietoja: String(2, 1500)
   },
   'rakennuksen-perustiedot': {
     'ulkoseinat-ehdotettu-taso': FloatNonNegative,
     'ylapohja-ehdotettu-taso': FloatNonNegative,
     'alapohja-ehdotettu-taso': FloatNonNegative,
-    'ikkunat-ehdotettu-taso': FloatNonNegative
+    'ikkunat-ehdotettu-taso': FloatNonNegative,
+    'ulkoovet-ehdotettu-taso': FloatNonNegative,
+    lisatietoja: String(2, 1500)
   },
   tulokset: {
     'kaukolampo-hinta': FloatNonNegative,
@@ -386,8 +389,7 @@ export const perusparannuspassi = {
     'uusiutuvat-pat-hinta': FloatNonNegative,
     'fossiiliset-pat-hinta': FloatNonNegative,
     'kaukojaahdytys-hinta': FloatNonNegative,
-    'lisatiedot-fi': String(2, 1500),
-    'lisatiedot-sv': String(2, 1500)
+    lisatietoja: String(2, 1500)
   },
   vaiheet: R.repeat(
     {

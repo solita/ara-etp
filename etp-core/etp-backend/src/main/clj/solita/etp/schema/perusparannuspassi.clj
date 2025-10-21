@@ -8,18 +8,23 @@
   {:havainnointikaynti        common-schema/Date
    :passin-esittely           common-schema/Date
    :tayttaa-aplus-vaatimukset schema/Bool
-   :tayttaa-a0-vaatimukset    schema/Bool})
+   :tayttaa-a0-vaatimukset    schema/Bool
+   :lisatietoja-fi            common-schema/String1500
+   :lisatietoja-sv            common-schema/String1500})
 
 (def Rakennuksenperustiedot
   {:ulkoseinat-ehdotettu-taso                schema/Num
    :ylapohja-ehdotettu-taso                  schema/Num
    :alapohja-ehdotettu-taso                  schema/Num
    :ikkunat-ehdotettu-taso                   schema/Num
+   :ulkoovet-ehdotettu-taso                  schema/Num
    :paalammitysjarjestelma-ehdotettu-taso    common-schema/Key
    :ilmanvaihto-ehdotettu-taso               common-schema/Key
    :uusiutuva-energia-ehdotettu-taso         common-schema/Key
    :jaahdytys-ehdotettu-taso                 common-schema/Key
-   :mahdollisuus-liittya-energiatehokkaaseen common-schema/Key})
+   :mahdollisuus-liittya-energiatehokkaaseen common-schema/Key
+   :lisatietoja-fi         common-schema/String1500
+   :lisatietoja-sv         common-schema/String1500})
 
 (def LaskennanTulokset
   {:kaukolampo-hinta      schema/Num
@@ -27,8 +32,8 @@
    :uusiutuvat-pat-hinta  schema/Num
    :fossiiliset-pat-hinta schema/Num
    :kaukojaahdytys-hinta  schema/Num
-   :lisatiedot-fi         common-schema/String1500
-   :lisatiedot-sv         common-schema/String1500})
+   :lisatietoja-fi        common-schema/String1500
+   :lisatietoja-sv        common-schema/String1500})
 
 (def VaiheLaskennanTulokset
   {:vaiheen-alku-pvm                       common-schema/Date
