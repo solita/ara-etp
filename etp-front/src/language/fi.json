@@ -1430,6 +1430,7 @@
     },
     "energian-hinta": {
       "header": "Energian hinta",
+      "description": "Kirjaa käyttämäsi energian hinnat.",
       "energia": "Energia",
       "hinta-snt-kwh": "Hinta snt/kWh",
       "labels": {

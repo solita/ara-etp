@@ -1488,6 +1488,7 @@
     },
     "energian-hinta": {
       "header": "Energipris",
+      "description": "Kirjaa käyttämäsi energian hinnat. (sv)",
       "energia": "Energi",
       "hinta-snt-kwh": "Pris cent/kWh",
       "labels": {

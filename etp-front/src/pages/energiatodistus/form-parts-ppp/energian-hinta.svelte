@@ -23,6 +23,7 @@
 </script>
 
 <H3 text={$_('perusparannuspassi.energian-hinta.header')} />
+<p class="mb-6">{$_('perusparannuspassi.energian-hinta.description')}</p>
 
 <div class="min-w-full overflow-x-auto md:overflow-x-hidden">
   <table class="et-table et-table__noborder border-r-0 table-fixed">
