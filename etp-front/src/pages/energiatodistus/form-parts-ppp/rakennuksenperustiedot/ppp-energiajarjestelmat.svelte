@@ -19,6 +19,7 @@
   export let ilmanvaihto;
   export let uusiutuvaenergia;
   export let jaahdytysjarjestelma;
+  export let inputLanguage;
 
   $: labelLocale = LocaleUtils.label($locale);
 
@@ -66,13 +67,13 @@
       model: energiatodistus,
       items: paalammitysjarjestelma,
       format: formatLammitysmuoto,
-      lens: R.lensProp('lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'id')
+      lens: R.lensPath(['lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'id'])
     },
     ilmanvaihto: {
       model: energiatodistus,
       items: ilmanvaihtoIds,
       format: formatIlmanvaihto,
-      lens: R.lensPath(['lahtotiedot', 'ilmanvaihto'])
+      lens: R.lensPath(['lahtotiedot', 'ilmanvaihto', 'tyyppi-id'])
     },
     uusiutuvaenergia: {
       model: perusparannuspassi,
@@ -187,7 +188,8 @@
       {schema}
       i18nRoot="perusparannuspassi"
       bind:model={perusparannuspassi}
-      path={['rakennuksen-perustiedot', 'lisatiedot']} />
+      path={['rakennuksen-perustiedot', 'lisatietoja']} 
+      inputLanguage={Maybe.Some(inputLanguage)}/>
   </div>
   <div class="w-full py-4">
     <div class="py-4">
