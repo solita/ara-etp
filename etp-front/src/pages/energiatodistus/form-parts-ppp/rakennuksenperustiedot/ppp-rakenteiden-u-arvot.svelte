@@ -13,7 +13,8 @@
     'ulkoseinat-ehdotettu-taso': 'ulkoseinat',
     'ylapohja-ehdotettu-taso': 'ylapohja',
     'alapohja-ehdotettu-taso': 'alapohja',
-    'ikkunat-ehdotettu-taso': 'ikkunat'
+    'ikkunat-ehdotettu-taso': 'ikkunat',
+    'ulkoovet-ehdotettu-taso': 'ulkoovet'
   };
 
   function unwrapMonetValue(monetVal) {
@@ -58,7 +59,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each ['ulkoseinat-ehdotettu-taso', 'ylapohja-ehdotettu-taso', 'alapohja-ehdotettu-taso', 'ikkunat-ehdotettu-taso'] as rakenteet}
+      {#each ['ulkoseinat-ehdotettu-taso', 'ylapohja-ehdotettu-taso', 'alapohja-ehdotettu-taso', 'ikkunat-ehdotettu-taso', 'ulkoovet-ehdotettu-taso'] as rakenteet}
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
