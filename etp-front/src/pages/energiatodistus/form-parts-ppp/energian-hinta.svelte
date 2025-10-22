@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  import H3 from '@Component/H/H3';
+  import H4 from '@Component/H/H4';
   import Input from '@Pages/energiatodistus/Input';
 
   export let perusparannuspassi;
@@ -20,7 +20,7 @@
 
 </script>
 
-<H3 text={$_('perusparannuspassi.energian-hinta.header')} />
+<H4 text={$_('perusparannuspassi.energian-hinta.header')} />
 <p class="mb-6">{$_('perusparannuspassi.energian-hinta.description')}</p>
 
 <div class="min-w-full overflow-x-auto md:overflow-x-hidden mb-12">

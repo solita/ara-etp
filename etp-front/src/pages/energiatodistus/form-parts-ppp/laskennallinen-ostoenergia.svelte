@@ -4,8 +4,10 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as formats from '@Utility/formats';
+  import * as fxmath from '@Utility/fxmath';
 
-  import H3 from '@Component/H/H4';
+  import H4 from '@Component/H/H4';
   import Input from '@Pages/energiatodistus/Input';
 
   export let perusparannuspassi;
@@ -138,18 +140,9 @@
   function calculateAllCosts(calculateFn) {
     return energiamuodot.reduce((acc, energiamuoto) => {
       const cost = calculateFn(energiamuoto);
-      acc[energiamuoto.key] = cost !== null ? cost.toFixed(2) : null;
+      acc[energiamuoto.key] = cost !== null ? Maybe.Some(cost) : Maybe.None();
       return acc;
     }, {});
-  }
-
-  // Helper function to calculate total from cost object
-  function calculateTotal(costs) {
-    const costValues = Object.values(costs).filter(c => c !== null);
-    if (costValues.length === 0) return null;
-
-    const total = costValues.reduce((sum, cost) => sum + parseFloat(cost), 0);
-    return total.toFixed(2);
   }
 
   $: lahtotilanneCosts =
@@ -166,23 +159,20 @@
       )
     : [];
 
-  $: lahtotilanneTotalCost = calculateTotal(lahtotilanneCosts);
+  $: lahtotilanneTotalCost = EtUtils.sumEtValues(lahtotilanneCosts);
 
-  $: vaiheTotalCosts = vaiheCosts.map(calculateTotal);
+  $: vaiheTotalCosts = vaiheCosts.map(EtUtils.sumEtValues);
 
   $: differences = vaiheTotalCosts.map((vaiheCost, index) => {
     const previousCost =
       index === 0 ? lahtotilanneTotalCost : vaiheTotalCosts[index - 1];
 
-    if (vaiheCost === null || previousCost === null) return null;
-
-    const diff = parseFloat(vaiheCost) - parseFloat(previousCost);
-    return diff.toFixed(2);
+    return R.lift(R.subtract)(vaiheCost, previousCost);
   });
 </script>
 
 <!-- TODO CHANGE TO h4 -->
-<H3 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
+<H4 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
 <p class="mb-6">
   {$_('perusparannuspassi.laskennallinen-ostoenergia.description')}
 </p>
@@ -221,12 +211,18 @@
           </td>
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {lahtotilanneCosts[energiamuoto.key] || '-'}
+            {R.compose(
+              Maybe.orSome('-'),
+              R.map(R.compose(formats.numberFormat, fxmath.round(2)))
+            )(lahtotilanneCosts[energiamuoto.key])}
           </td>
-          {#each vaiheCosts as vaiheEnergyCosts, vaiheIndex}
+          {#each vaiheCosts as vaiheEnergyCosts}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {vaiheEnergyCosts[energiamuoto.key] || '-'}
+              {R.compose(
+                Maybe.orSome('-'),
+                R.map(R.compose(formats.numberFormat, fxmath.round(2)))
+              )(vaiheEnergyCosts[energiamuoto.key])}
             </td>
           {/each}
         </tr>
@@ -238,12 +234,18 @@
         </td>
         <td
           class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          {lahtotilanneTotalCost || '-'}
+          {R.compose(
+            Maybe.orSome('-'),
+            R.map(R.compose(formats.numberFormat, fxmath.round(2)))
+          )(lahtotilanneTotalCost)}
         </td>
         {#each vaiheTotalCosts as totalCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {totalCost || '-'}
+            {R.compose(
+              Maybe.orSome('-'),
+              R.map(R.compose(formats.numberFormat, fxmath.round(2)))
+            )(totalCost)}
           </td>
         {/each}
       </tr>
@@ -261,11 +263,13 @@
         {#each differences as diff}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if diff !== null}
-              {parseFloat(diff) < 0 ? diff : `+${diff}`}
-            {:else}
-              -
-            {/if}
+            {R.compose(
+              Maybe.orSome('-'),
+              R.map(value => {
+                const formatted = R.compose(formats.numberFormat, fxmath.round(2))(value);
+                return value < 0 ? formatted : `+${formatted}`;
+              })
+            )(diff)}
           </td>
         {/each}
       </tr>
