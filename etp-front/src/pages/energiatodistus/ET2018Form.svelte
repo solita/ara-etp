@@ -59,6 +59,11 @@
   export let eTehokkuus = Maybe.None();
   export let whoami;
 
+  // Ensure perusparannuspassi exists
+  $: if (!energiatodistus.perusparannuspassi) {
+    energiatodistus.perusparannuspassi = pppEmpty.perusparannuspassi(energiatodistus.id);
+  }
+
   $: labelLocale = LocaleUtils.label($locale);
 </script>
 
@@ -313,10 +318,11 @@
 <!-- Temporary PPP component for development -->
 <EnergianHinta
   schema={pppSchema.perusparannuspassi}
-  perusparannuspassi={energiatodistus.perusparannuspassi || pppEmpty.perusparannuspassi(energiatodistus.id)}
+  bind:perusparannuspassi={energiatodistus.perusparannuspassi}
   disabled={disabled} />
 
 <LaskennallinenOstoenergia
   schema={pppSchema.perusparannuspassi}
-  perusparannuspassi={energiatodistus.perusparannuspassi || pppEmpty.perusparannuspassi(energiatodistus.id)}
+  bind:perusparannuspassi={energiatodistus.perusparannuspassi}
+  energiatodistus={energiatodistus}
   disabled={disabled} />
