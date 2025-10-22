@@ -66,7 +66,7 @@
               `perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.labels.${rakenteet}`
             )}
           </td>
-          <td>
+          <td class="et-table--td">
             {#if unwrapMonetValue(R.path(['lahtotiedot', 'rakennusvaippa', rakenneKeyMap[rakenteet], 'U'], energiatodistus)) != null}
               {unwrapMonetValue(
                 R.path(
