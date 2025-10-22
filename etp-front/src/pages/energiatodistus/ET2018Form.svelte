@@ -45,6 +45,7 @@
   // PPP components
   import EnergianHinta from './form-parts-ppp/energian-hinta';
   import LaskennallinenOstoenergia from './form-parts-ppp/laskennallinen-ostoenergia';
+  import KustannuksetToteutunutOstoenergia from './form-parts-ppp/kustannukset-toteutunut-ostoenergia';
   import * as pppSchema from './schema';
   import * as pppEmpty from './empty';
 
@@ -326,3 +327,7 @@
   bind:perusparannuspassi={energiatodistus.perusparannuspassi}
   energiatodistus={energiatodistus}
   disabled={disabled} />
+
+<KustannuksetToteutunutOstoenergia
+  bind:perusparannuspassi={energiatodistus.perusparannuspassi}
+  energiatodistus={energiatodistus} />

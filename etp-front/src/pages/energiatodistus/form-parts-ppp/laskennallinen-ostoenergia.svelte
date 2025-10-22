@@ -177,7 +177,7 @@
   {$_('perusparannuspassi.laskennallinen-ostoenergia.description')}
 </p>
 
-<div class="min-w-full overflow-x-auto md:overflow-x-hidden">
+<div class="min-w-full overflow-x-auto md:overflow-x-hidden mb-12">
   <table class="et-table et-table__noborder border-r-0 table-fixed">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
