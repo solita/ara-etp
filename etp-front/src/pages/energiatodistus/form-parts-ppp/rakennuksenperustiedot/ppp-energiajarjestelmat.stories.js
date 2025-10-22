@@ -39,5 +39,5 @@ Default.args = {
   uusiutuvaenergia: [],
   jaahdytysjarjestelma: [],
   inputLanguage: 'fi',
-  disabled: false,
+  disabled: false
 };
