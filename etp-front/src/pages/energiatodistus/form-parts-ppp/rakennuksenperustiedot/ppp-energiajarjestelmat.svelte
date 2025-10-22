@@ -3,101 +3,53 @@
   import * as Maybe from '@/utils/maybe-utils.js';
   import { _ } from '@Language/i18n.js';
   import { locale } from '@Language/i18n';
-
   import H4 from '@Component/H/H4.svelte';
   import Textarea from '@Pages/energiatodistus/Textarea';
   import Select from '@Component/Select/Select.svelte';
   import * as LocaleUtils from '@Language/locale-utils.js';
+  import * as et from '@Pages/energiatodistus/energiatodistus-utils';
 
   export let schema;
   export let perusparannuspassi;
-  export let mahdollisuusliittya;
+  export let luokittelut;
   export let disabled;
-  export let paalammitysjarjestelma;
-  export let lammitysmuoto;
   export let energiatodistus;
-  export let ilmanvaihto;
-  export let uusiutuvaenergia;
-  export let jaahdytysjarjestelma;
   export let inputLanguage;
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  $: mahdollisuusliittyaIds = R.pluck('id', mahdollisuusliittya);
-
-  $: paalammitysjarjestelma = R.pluck('id', lammitysmuoto);
-
-  $: ilmanvaihtoIds = R.pluck('id', ilmanvaihto);
-
-  $: uusiutuvaenergiaIds = R.pluck('id', uusiutuvaenergia);
-
-  $: jaahdytysIds = R.pluck('id', jaahdytysjarjestelma);
-
-  $: formatMahdollisuusliittya = R.compose(
-    Maybe.orSome(''),
-    R.map(labelLocale),
-    Maybe.findById(R.__, mahdollisuusliittya)
-  );
-
-  $: formatLammitysmuoto = R.compose(
-    Maybe.orSome(''),
-    R.map(labelLocale),
-    Maybe.findById(R.__, lammitysmuoto)
-  );
-
-  $: formatIlmanvaihto = R.compose(
-    Maybe.orSome(''),
-    R.map(labelLocale),
-    Maybe.findById(R.__, ilmanvaihto)
-  );
-
-  $: formatUusiutuvaEnergia = R.compose(
-    Maybe.orSome(''),
-    R.map(labelLocale),
-    Maybe.findById(R.__, uusiutuvaenergia)
-  );
-
-  $: formatJaahdytys = R.compose(
-    Maybe.orSome(''),
-    R.map(labelLocale),
-    Maybe.findById(R.__, jaahdytysjarjestelma)
-  );
   $: energiajarjestelmatConfig = {
     paalammitysjarjestelma: {
-      model: energiatodistus,
-      items: paalammitysjarjestelma,
-      format: formatLammitysmuoto,
-      lens: R.lensPath(['lahtotiedot', 'lammitys', 'lammitysmuoto-1', 'id'])
+      items: R.pluck('id', luokittelut.lammitysmuoto),
+      format: et.selectFormat(labelLocale, luokittelut.lammitysmuoto),
+      lens: R.lensPath([
+        'rakennuksen-perustiedot',
+        'paalammitysjarjestelma-ehdotettu-taso'
+      ])
     },
     ilmanvaihto: {
-      model: energiatodistus,
-      items: ilmanvaihtoIds,
-      format: formatIlmanvaihto,
-      lens: R.lensPath(['lahtotiedot', 'ilmanvaihto', 'tyyppi-id'])
+      items: R.pluck('id', luokittelut.ilmanvaihtotyypit),
+      format: et.selectFormat(labelLocale, luokittelut.ilmanvaihtotyypit),
+      lens: R.lensPath([
+        'rakennuksen-perustiedot',
+        'ilmanvaihto-ehdotettu-taso'
+      ])
     },
     uusiutuvaenergia: {
-      model: perusparannuspassi,
-      items: uusiutuvaenergiaIds,
-      format: formatUusiutuvaEnergia,
+      items: R.pluck('id', luokittelut.uusiutuvaEnergia),
+      format: et.selectFormat(labelLocale, luokittelut.uusiutuvaEnergia),
       lens: R.lensPath([
         'rakennuksen-perustiedot',
         'uusiutuva-energia-ehdotettu-taso'
       ])
     },
     jaahdytys: {
-      model: perusparannuspassi,
-      items: jaahdytysIds,
-      format: formatJaahdytys,
+      items: R.pluck('id', luokittelut.jaahdytys),
+      format: et.selectFormat(labelLocale, luokittelut.jaahdytys),
       lens: R.lensPath(['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso'])
     },
     mahdollisuusliittya: {
-      model: perusparannuspassi,
-      items: mahdollisuusliittyaIds,
-      format: formatMahdollisuusliittya,
-      lens: R.lensPath([
-        'rakennuksen-perustiedot',
-        'mahdollisuus-liittya-energiatehokkaaseen'
-      ])
+      format: et.selectFormat(labelLocale, luokittelut.mahdollisuusLiittya)
     }
   };
 
@@ -135,13 +87,13 @@
           )}
         </th>
         <th
-          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
           {$_(
             'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.nykyinen'
           )}
         </th>
         <th
-          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
           {$_(
             'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.ehdotettu-taso'
           )}
@@ -169,10 +121,11 @@
           <td>
             <Select
               allowNone={false}
-              model={energiajarjestelmatConfig[energiajarjestelma].model}
+              bind:model={perusparannuspassi}
               lens={energiajarjestelmatConfig[energiajarjestelma].lens}
               items={energiajarjestelmatConfig[energiajarjestelma].items}
-              format={energiajarjestelmatConfig[energiajarjestelma].format} />
+              format={energiajarjestelmatConfig[energiajarjestelma].format}
+              parse={Maybe.Some} />
           </td>
         </tr>
       {/each}
@@ -218,10 +171,14 @@
           'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.title'
         )}
         {disabled}
-        model={energiajarjestelmatConfig.mahdollisuusliittya.model}
-        lens={energiajarjestelmatConfig.mahdollisuusliittya.lens}
-        items={energiajarjestelmatConfig.mahdollisuusliittya.items}
+        bind:model={perusparannuspassi}
+        lens={R.lensPath([
+          'rakennuksen-perustiedot',
+          'mahdollisuus-liittya-energiatehokkaaseen'
+        ])}
+        items={R.pluck('id', luokittelut.mahdollisuusLiittya)}
         format={energiajarjestelmatConfig.mahdollisuusliittya.format}
+        parse={Maybe.Some}
         required={true} />
     </div>
   </div>
