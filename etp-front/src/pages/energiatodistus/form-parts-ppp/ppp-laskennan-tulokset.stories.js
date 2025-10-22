@@ -38,6 +38,11 @@ energiatodistus.tulokset['kaytettavat-energiamuodot'][
 ] = Either.Right(Maybe.Some(12000));
 energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukojaahdytys =
   Either.Right(Maybe.Some(5000));
+energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'].aurinkosahko =
+  Either.Right(Maybe.Some(5000));
+energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
+  'kaukolampo-vuosikulutus'
+] = Either.Right(Maybe.Some(5000));
 
 const Template = args => ({
   Component,

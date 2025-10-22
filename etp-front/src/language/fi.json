@@ -1433,6 +1433,8 @@
       "vaihe": "Vaihe",
       "aloitusvuosi": "Aloitusvuosi",
       "kwh-per-vuosi": "kWh/vuosi",
+      "info-before-table": "Kirjaa arvot vaiheen muutosten jälkeen.",
+      "lahtotilanne": "Lähtötilanne kWh/vuosi",
       "vaiheistus": {
         "header": "Vaiheistus",
         "info": "Tiedot kirjataan vain niille vaiheille, joilla on",
@@ -1446,8 +1448,23 @@
           "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet",
           "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet",
           "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys"
-        },
-        "lahtotilanne": "Lähtötilanne kWh/vuosi"
+        }
+      },
+      "uusiutuva-energia": {
+        "header": "Uusiutuva energia",
+        "energialaji": "Energialaji",
+        "uusiutuvan-energian-kokonaistuotto": "Uusiutuvan energian vuotuinen tuotto",
+        "uusiutuvan-energian-hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta"
+      },
+      "toteutunut-ostoenergia": {
+        "header": "Toteutunut ostoenergia",
+        "table-headers": {
+          "toteutunut-ostoenergia-kaukolampo": "Kaukolämpö",
+          "toteutunut-ostoenergia-sahko": "Sähkö",
+          "toteutunut-ostoenergia-uusiutuvat-pat": "Uusiutuvat polttoaineet",
+          "toteutunut-ostoenergia-fossiiliset-pat": "Fossiiliset polttoaineet",
+          "toteutunut-ostoenergia-kaukojaahdytys": "Kaukojäähdytys"
+        }
       }
     },
     "vaiheet": {
