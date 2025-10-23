@@ -1455,7 +1455,7 @@
           "paalammitysjarjestelma": "Päälämmitysjärjestelmä",
           "ilmanvaihto": "Ilmanvaihto",
           "uusiutuvaenergia": "Uusiutuva energia",
-          "jaahdytys": "Jäähdytys(optio)"
+          "jaahdytys": "Jäähdytys (optio)"
         },
         "kohteenliitettavyys": {
           "header": "Kohteen liitettävyys",
