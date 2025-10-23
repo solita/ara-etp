@@ -1391,13 +1391,59 @@
     }
   },
   "perusparannuspassi": {
-    "id": "Perusparannuspassin tunnus sv?",
+    "id": "Perusparannuspassin tunnus (sv)",
     "passin-perustiedot": {
-      "header": "Passin perustiedot sv?",
-      "havainnointikaynti": "Havainnointikäynnin päivämäärä sv?",
-      "passin-esittely": "Passin esittelyn päivämäärä sv?",
-      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa sv?",
-      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa sv?"
+      "header": "Passin perustiedot (sv)",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä (sv)",
+      "passin-esittely": "Passin esittelyn päivämäärä (sv)",
+      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa (sv)",
+      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa (sv)"
+    },
+    "laskennan-tulokset": {
+      "header": "Laskennan tulokset (sv)",
+      "vaihe": "Vaihe (sv)",
+      "aloitusvuosi": "Aloitusvuosi (sv)",
+      "kwh-per-vuosi": "kWh/vuosi (sv)",
+      "info-before-table": "Kirjaa arvot vaiheen muutosten jälkeen. (sv)",
+      "lahtotilanne": "Lähtötilanne kWh/vuosi (sv)",
+      "vaiheistus": {
+        "header": "Vaiheistus (sv)",
+        "info": "Tiedot kirjataan vain niille vaiheille, joilla on (sv)",
+        "info-aloitusvuosi": "aloitusvuosi (sv)"
+      },
+      "laskennallinen-ostoenergia": {
+        "header": "Laskennallinen ostoenergia (sv)",
+        "table-headers": {
+          "ostoenergian-tarve-kaukolampo": "Kaukolämpö (sv)",
+          "ostoenergian-tarve-sahko": "Sähkö (sv)",
+          "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
+          "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
+          "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys (sv)"
+        }
+      },
+      "uusiutuva-energia": {
+        "header": "Uusiutuva energia (sv)",
+        "energialaji": "Energialaji (sv)",
+        "uusiutuvan-energian-kokonaistuotto": "Uusiutuvan energian vuotuinen tuotto (sv)",
+        "uusiutuvan-energian-hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta (sv)"
+      },
+      "toteutunut-ostoenergia": {
+        "header": "Toteutunut ostoenergia (sv)",
+        "table-headers": {
+          "toteutunut-ostoenergia-kaukolampo": "Kaukolämpö (sv)",
+          "toteutunut-ostoenergia-sahko": "Sähkö (sv)",
+          "toteutunut-ostoenergia-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
+          "toteutunut-ostoenergia-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
+          "toteutunut-ostoenergia-kaukojaahdytys": "Kaukojäähdytys (sv)"
+        }
+      }
+    },
+    "vaiheet": {
+      "0": {
+        "tulokset": {
+          "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)"
+        }
+      }
     }
   },
   "viesti": {
