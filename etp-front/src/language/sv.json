@@ -1389,6 +1389,57 @@
       "search-results": "{count} sökresultat."
     }
   },
+  "perusparannuspassi": {
+    "id": "Perusparannuspassin tunnus (sv)",
+    "passin-perustiedot": {
+      "header": "Passin perustiedot (sv)",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä (sv)",
+      "passin-esittely": "Passin esittelyn päivämäärä (sv)",
+      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa (sv)",
+      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa (sv)"
+    },
+    "rakennuksen-perustiedot": {
+      "header": "Rakennuksen perustiedot (sv)",
+      "lisatietoja": "Lisätiedot (sv)",
+      "rakenteiden-u-arvot": {
+        "header": "Rakenteiden U-arvot (sv)",
+        "title": "Rakenne (sv)",
+        "lahtotiedot": "U-arvot, lähtötilanne (sv)",
+        "viimeisen-vaiheen-jalkeen": "U-arvot, viimeisen vaiheen jälkeen (sv)",
+        "labels": {
+          "ulkoseinat-ehdotettu-taso": "Ulkoseinät (sv)",
+          "ylapohja-ehdotettu-taso": "Yläpohjat (sv)",
+          "alapohja-ehdotettu-taso": "Alapohjat (sv)",
+          "ikkunat-ehdotettu-taso": "Ikkunat (sv)",
+          "ulkoovet-ehdotettu-taso": "Ulko-ovet (sv)"
+        }
+      },
+      "energiajarjestelmat": {
+        "header": "Energiajärjesetelmät (sv)",
+        "title": "Energiajärjestelmä (sv)",
+        "nykyinen": "Nykyinen (sv)",
+        "ehdotettu-taso": "Ehdotettu taso (sv)",
+        "lisatiedot": {
+          "info": "Ilmoita mahdolliset muut energiajärjestelmät lisätiedoissa. (sv)"
+        },
+        "labels": {
+          "paalammitysjarjestelma": "Päälämmitysjärjestelmä (sv)",
+          "ilmanvaihto": "Ilmanvaihto (sv)",
+          "uusiutuvaenergia": "Uusiutuva energia (sv)",
+          "jaahdytys": "Jäähdytys (optio) (sv)"
+        },
+        "kohteenliitettavyys": {
+          "header": "Kohteen liitettävyys (sv)",
+          "title": "Mahdollisuus liittyä (sv)",
+          "info": "Ilmoita tässä kohteen mahdollisuudesta liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen. (sv)"
+        },
+        "korjausrakentamisen-vahimmaisvaatimustaso": {
+          "header": "Korjausrakentamisen vähimmäisvaatimustaso (sv)",
+          "title": "YM:n asetusten 4/13 mukainen korjaustakentamisen vähimmäisvaatimustaso (sv)"
+        }
+      }
+    }
+  },
   "viesti": {
     "valvoja": "Övervakare",
     "system": "System",
