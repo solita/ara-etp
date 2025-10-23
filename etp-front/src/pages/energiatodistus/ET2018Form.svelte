@@ -42,8 +42,6 @@
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
 
-  import * as pppEmpty from './empty';
-
   import Area from './form-parts/units/area';
 
   export let energiatodistus;
