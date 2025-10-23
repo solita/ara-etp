@@ -53,7 +53,7 @@
     }
   };
 
-  $: currentValuePaths = {
+  const currentValuePaths = {
     paalammitysjarjestelma: [
       'lahtotiedot',
       'lammitys',
