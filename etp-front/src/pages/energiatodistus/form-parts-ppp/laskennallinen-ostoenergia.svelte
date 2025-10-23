@@ -102,7 +102,7 @@
     ? R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(tuloksetData)
     : {};
 
-  $: vaiheConsumptionValues =
+  const vaiheConsumptionValues =
     PppUtils.extractVaiheConsumptionValues(mockVaiheet);
 
   function calculateCost(energiamuoto) {

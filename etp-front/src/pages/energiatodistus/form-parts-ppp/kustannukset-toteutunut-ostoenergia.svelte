@@ -157,7 +157,7 @@
     : {};
 
   // Extract vaihe consumption values
-  $: vaiheConsumptionValues =
+  const vaiheConsumptionValues =
     PppUtils.extractVaiheConsumptionValues(mockVaiheet);
 
   function calculateCost(energiamuoto) {
