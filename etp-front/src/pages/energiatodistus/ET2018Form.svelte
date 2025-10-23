@@ -42,11 +42,6 @@
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
 
-  // PPP components
-  import EnergianHinta from './form-parts-ppp/energian-hinta';
-  import LaskennallinenOstoenergia from './form-parts-ppp/laskennallinen-ostoenergia';
-  import KustannuksetToteutunutOstoenergia from './form-parts-ppp/kustannukset-toteutunut-ostoenergia';
-  import * as pppSchema from './schema';
   import * as pppEmpty from './empty';
 
   import Area from './form-parts/units/area';
@@ -59,13 +54,6 @@
   export let validation;
   export let eTehokkuus = Maybe.None();
   export let whoami;
-
-  // Ensure perusparannuspassi exists
-  $: if (!energiatodistus.perusparannuspassi) {
-    energiatodistus.perusparannuspassi = pppEmpty.perusparannuspassi(
-      energiatodistus.id
-    );
-  }
 
   $: labelLocale = LocaleUtils.label($locale);
 </script>
@@ -317,19 +305,3 @@
     bind:model={energiatodistus}
     path={['lisamerkintoja']} />
 </div>
-
-<!-- Temporary PPP component for development -->
-<EnergianHinta
-  schema={pppSchema.perusparannuspassi}
-  bind:perusparannuspassi={energiatodistus.perusparannuspassi}
-  {disabled} />
-
-<LaskennallinenOstoenergia
-  schema={pppSchema.perusparannuspassi}
-  bind:perusparannuspassi={energiatodistus.perusparannuspassi}
-  {energiatodistus}
-  {disabled} />
-
-<KustannuksetToteutunutOstoenergia
-  bind:perusparannuspassi={energiatodistus.perusparannuspassi}
-  {energiatodistus} />
