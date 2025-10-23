@@ -1390,6 +1390,16 @@
       "search-results": "{count} sökresultat."
     }
   },
+  "perusparannuspassi": {
+    "id": "Perusparannuspassin tunnus sv?",
+    "passin-perustiedot": {
+      "header": "Passin perustiedot sv?",
+      "havainnointikaynti": "Havainnointikäynnin päivämäärä sv?",
+      "passin-esittely": "Passin esittelyn päivämäärä sv?",
+      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa sv?",
+      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa sv?"
+    }
+  },
   "viesti": {
     "valvoja": "Övervakare",
     "system": "System",
