@@ -32,7 +32,7 @@ Default.args = {
     },
     empty.perusparannuspassi(442)
   ),
-luokittelut: {
+  luokittelut: {
     lammitysmuoto: [],
     ilmanvaihtotyypit: [],
     uusiutuvaEnergia: [],
