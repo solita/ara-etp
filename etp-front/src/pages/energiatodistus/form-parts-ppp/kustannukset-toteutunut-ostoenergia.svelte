@@ -2,6 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as Either from '@Utility/either-utils';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as PppUtils from './ppp-utils';
   import * as formats from '@Utility/formats';
@@ -37,6 +38,52 @@
       key: 'kaukojaahdytys',
       consumptionField: 'kaukojaahdytys-vuosikulutus',
       priceField: 'kaukojaahdytys-hinta'
+    }
+  ];
+
+  // PoC: Mock vaiheet data until real implementation is merged
+  // This simulates the structure from perusparannuspassi.vaiheet
+  // Using similar progressive reduction pattern as laskennallinen-ostoenergia
+  const mockVaiheet = [
+    {
+      'vaihe-nro': 1,
+      tulokset: {
+        'kaukolampo-vuosikulutus': Either.Right(12000),
+        'kokonaissahko-vuosikulutus': Either.Right(9000),
+        'uusiutuva-polttoaine': Either.Right(600),
+        'kevyt-polttooljy': Either.Right(350),
+        'kaukojaahdytys-vuosikulutus': Either.Right(250)
+      }
+    },
+    {
+      'vaihe-nro': 2,
+      tulokset: {
+        'kaukolampo-vuosikulutus': Either.Right(9500),
+        'kokonaissahko-vuosikulutus': Either.Right(7000),
+        'uusiutuva-polttoaine': Either.Right(500),
+        'kevyt-polttooljy': Either.Right(250),
+        'kaukojaahdytys-vuosikulutus': Either.Right(180)
+      }
+    },
+    {
+      'vaihe-nro': 3,
+      tulokset: {
+        'kaukolampo-vuosikulutus': Either.Right(7000),
+        'kokonaissahko-vuosikulutus': Either.Right(5000),
+        'uusiutuva-polttoaine': Either.Right(400),
+        'kevyt-polttooljy': Either.Right(150),
+        'kaukojaahdytys-vuosikulutus': Either.Right(120)
+      }
+    },
+    {
+      'vaihe-nro': 4,
+      tulokset: {
+        'kaukolampo-vuosikulutus': Either.Right(5000),
+        'kokonaissahko-vuosikulutus': Either.Right(3000),
+        'uusiutuva-polttoaine': Either.Right(300),
+        'kevyt-polttooljy': Either.Right(80),
+        'kaukojaahdytys-vuosikulutus': Either.Right(80)
+      }
     }
   ];
 
@@ -109,6 +156,9 @@
     ? R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(tuloksetData)
     : {};
 
+  // Extract vaihe consumption values
+  $: vaiheConsumptionValues = PppUtils.extractVaiheConsumptionValues(mockVaiheet);
+
   function calculateCost(energiamuoto) {
     const consumption = consumptionValues[energiamuoto.consumptionField];
     const price = priceValues[energiamuoto.priceField];
@@ -120,10 +170,26 @@
       ? PppUtils.calculateAllCosts(energiamuodot, calculateCost)
       : {};
 
+  // Calculate costs for each vaihe
+  $: vaiheCosts = tuloksetData
+    ? PppUtils.calculateVaiheCosts(
+        mockVaiheet,
+        energiamuodot,
+        vaiheConsumptionValues,
+        priceValues
+      )
+    : [];
+
   $: toteutuneetTotalCost = EtUtils.sumEtValues(toteutuneetCosts);
+
+  $: vaiheTotalCosts = vaiheCosts.map(EtUtils.sumEtValues);
+
+  $: differences = PppUtils.calculateVaiheDifferences(
+    vaiheTotalCosts,
+    toteutuneetTotalCost
+  );
 </script>
 
-<!-- TODO CHANGE TO h4 -->
 <H4
   text={$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.header')} />
 <p class="mb-6">
@@ -171,23 +237,15 @@
               R.map(R.compose(formats.numberFormat, fxmath.round(2)))
             )(toteutuneetCosts[energiamuoto.key])}
           </td>
-          <!-- Placeholder for vaihe columns -->
-          <td
-            class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            -
-          </td>
-          <td
-            class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            -
-          </td>
-          <td
-            class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            -
-          </td>
-          <td
-            class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            -
-          </td>
+          {#each vaiheCosts as vaiheEnergyCosts}
+            <td
+              class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
+              {R.compose(
+                Maybe.orSome('-'),
+                R.map(R.compose(formats.numberFormat, fxmath.round(2)))
+              )(vaiheEnergyCosts[energiamuoto.key])}
+            </td>
+          {/each}
         </tr>
       {/each}
       <!-- Yhteensä row -->
@@ -204,23 +262,15 @@
             R.map(R.compose(formats.numberFormat, fxmath.round(2)))
           )(toteutuneetTotalCost)}
         </td>
-        <!-- Placeholder for vaihe totals -->
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
+        {#each vaiheTotalCosts as totalCost}
+          <td
+            class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
+            {R.compose(
+              Maybe.orSome('-'),
+              R.map(R.compose(formats.numberFormat, fxmath.round(2)))
+            )(totalCost)}
+          </td>
+        {/each}
       </tr>
       <!-- Erotus edelliseen vaiheeseen row -->
       <tr class="et-table--tr">
@@ -233,23 +283,18 @@
           class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
           -
         </td>
-        <!-- Placeholder for vaihe differences -->
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
-        <td
-          class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          -
-        </td>
+        {#each differences as diff}
+          <td
+            class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
+            {R.compose(
+              Maybe.orSome('-'),
+              R.map(value => {
+                const formatted = R.compose(formats.numberFormat, fxmath.round(2))(value);
+                return value < 0 ? formatted : `+${formatted}`;
+              })
+            )(diff)}
+          </td>
+        {/each}
       </tr>
     </tbody>
   </table>

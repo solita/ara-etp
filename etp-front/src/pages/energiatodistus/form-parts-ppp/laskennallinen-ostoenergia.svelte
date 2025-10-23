@@ -9,7 +9,6 @@
   import * as fxmath from '@Utility/fxmath';
 
   import H4 from '@Component/H/H4';
-  import Input from '@Pages/energiatodistus/Input';
 
   export let perusparannuspassi;
   export let energiatodistus;
@@ -103,19 +102,10 @@
     ? R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(tuloksetData)
     : {};
 
-  $: vaiheConsumptionValues = mockVaiheet.map(vaihe =>
-    R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(vaihe.tulokset)
-  );
+  $: vaiheConsumptionValues = PppUtils.extractVaiheConsumptionValues(mockVaiheet);
 
   function calculateCost(energiamuoto) {
     const consumption = consumptionValues[energiamuoto.consumptionField];
-    const price = priceValues[energiamuoto.priceField];
-    return PppUtils.calculateCostFromValues(consumption, price);
-  }
-
-  function calculateVaiheCost(vaiheIndex, energiamuoto) {
-    const consumption =
-      vaiheConsumptionValues[vaiheIndex][energiamuoto.consumptionField];
     const price = priceValues[energiamuoto.priceField];
     return PppUtils.calculateCostFromValues(consumption, price);
   }
@@ -127,11 +117,11 @@
 
   // Calculate costs for each vaihe
   $: vaiheCosts = tuloksetData
-    ? mockVaiheet.map((_, vaiheIndex) =>
-        PppUtils.calculateAllCosts(
-          energiamuodot,
-          energiamuoto => calculateVaiheCost(vaiheIndex, energiamuoto)
-        )
+    ? PppUtils.calculateVaiheCosts(
+        mockVaiheet,
+        energiamuodot,
+        vaiheConsumptionValues,
+        priceValues
       )
     : [];
 
@@ -139,15 +129,12 @@
 
   $: vaiheTotalCosts = vaiheCosts.map(EtUtils.sumEtValues);
 
-  $: differences = vaiheTotalCosts.map((vaiheCost, index) => {
-    const previousCost =
-      index === 0 ? lahtotilanneTotalCost : vaiheTotalCosts[index - 1];
-
-    return R.lift(R.subtract)(vaiheCost, previousCost);
-  });
+  $: differences = PppUtils.calculateVaiheDifferences(
+    vaiheTotalCosts,
+    lahtotilanneTotalCost
+  );
 </script>
 
-<!-- TODO CHANGE TO h4 -->
 <H4 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
 <p class="mb-6">
   {$_('perusparannuspassi.laskennallinen-ostoenergia.description')}
