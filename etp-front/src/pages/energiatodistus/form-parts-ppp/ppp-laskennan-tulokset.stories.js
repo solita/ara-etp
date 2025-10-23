@@ -21,50 +21,59 @@ export default {
   component: Component
 };
 
-const energiatodistus = empty.energiatodistus2018();
-energiatodistus.lahtotiedot['lammitetty-nettoala'] = Either.Right(
-  Maybe.Some(150)
-);
-energiatodistus.tulokset['kaytettavat-energiamuodot'].sahko = Either.Right(
-  Maybe.Some(12000)
-);
-energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukolampo = Either.Right(
-  Maybe.Some(8000)
-);
-energiatodistus.tulokset['kaytettavat-energiamuodot']['uusiutuva-polttoaine'] =
-  Either.Right(Maybe.Some(5000));
-energiatodistus.tulokset['kaytettavat-energiamuodot'][
-  'fossiilinen-polttoaine'
-] = Either.Right(Maybe.Some(12000));
-energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukojaahdytys =
-  Either.Right(Maybe.Some(5000));
-energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'].aurinkosahko =
-  Either.Right(Maybe.Some(5000));
-energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-  'kaukolampo-vuosikulutus'
-] = Either.Right(Maybe.Some(5000));
+const testEnergiatodistus = () => {
+  const energiatodistus = empty.energiatodistus2018();
+  energiatodistus.id = 442;
+
+  energiatodistus.lahtotiedot['lammitetty-nettoala'] = Either.Right(
+    Maybe.Some(150)
+  );
+  energiatodistus.tulokset['kaytettavat-energiamuodot'].sahko = Either.Right(
+    Maybe.Some(12000)
+  );
+  energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukolampo =
+    Either.Right(Maybe.Some(8000));
+  energiatodistus.tulokset['kaytettavat-energiamuodot'][
+    'uusiutuva-polttoaine'
+  ] = Either.Right(Maybe.Some(5000));
+  energiatodistus.tulokset['kaytettavat-energiamuodot'][
+    'fossiilinen-polttoaine'
+  ] = Either.Right(Maybe.Some(12000));
+  energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukojaahdytys =
+    Either.Right(Maybe.Some(5000));
+  energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'].aurinkosahko =
+    Either.Right(Maybe.Some(5000));
+  energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
+    'kaukolampo-vuosikulutus'
+  ] = Either.Right(Maybe.Some(5000));
+
+  return energiatodistus;
+};
+
+const testPpp = energiatodistusId => {
+  const ppp = empty.perusparannuspassi(energiatodistusId);
+
+  ppp.id = 4245;
+  ppp.vaiheet[0].tulokset['vaiheen-alku-pvm'] = Either.Right(Maybe.Some(2030));
+  ppp.vaiheet[0].valid = true;
+
+  return ppp;
+};
 
 const Template = args => ({
   Component,
   props: args
 });
 
-const tweak = ppp => {
-  ppp.vaiheet[0].tulokset['vaiheen-alku-pvm'] = Either.Right(Maybe.Some(2030));
-  ppp.vaiheet[0].valid = true;
-  return ppp;
+const testData = () => {
+  const energiatodistus = testEnergiatodistus();
+  const perusparannuspassi = testPpp(energiatodistus.id);
+
+  return { energiatodistus, perusparannuspassi };
 };
 
 export const Default = Template.bind({});
 Default.args = {
   schema: saveSchema,
-  energiatodistus,
-  perusparannuspassi: tweak(
-    R.mergeDeepLeft(
-      {
-        id: 4245
-      },
-      empty.perusparannuspassi(442)
-    )
-  )
+  ...testData()
 };
