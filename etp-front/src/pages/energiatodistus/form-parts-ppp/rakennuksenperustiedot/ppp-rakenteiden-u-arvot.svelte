@@ -4,7 +4,7 @@
   import H3 from '@Component/H/H3.svelte';
   import H4 from '@Component/H/H4.svelte';
   import Input from '@Pages/energiatodistus/Input.svelte';
-  import { Maybe } from '@Utility/maybe-utils';
+  import * as EitherMaybe from '@Utility/either-maybe.js';
 
   export let schema;
   export let perusparannuspassi;
@@ -17,12 +17,6 @@
     'ikkunat-ehdotettu-taso': 'ikkunat',
     'ulkoovet-ehdotettu-taso': 'ulkoovet'
   };
-
-  function unwrapMonetValue(monetVal) {
-    return monetVal?.isRightValue && monetVal.value?.isValue
-      ? monetVal.value.val
-      : null;
-  }
 </script>
 
 <H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
@@ -69,9 +63,7 @@
           </td>
           <td class="et-table--td">
             {R.compose(
-              m => m.orSome('–'),
-              Maybe.fromNull,
-              unwrapMonetValue,
+              EitherMaybe.orSome('-'),
               R.path([
                 'lahtotiedot',
                 'rakennusvaippa',
