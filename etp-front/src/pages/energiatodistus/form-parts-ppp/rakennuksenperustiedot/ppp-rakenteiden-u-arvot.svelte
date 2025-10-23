@@ -4,6 +4,7 @@
   import H3 from '@Component/H/H3.svelte';
   import H4 from '@Component/H/H4.svelte';
   import Input from '@Pages/energiatodistus/Input.svelte';
+  import { Maybe } from '@Utility/maybe-utils';
 
   export let schema;
   export let perusparannuspassi;
@@ -67,21 +68,17 @@
             )}
           </td>
           <td class="et-table--td">
-            {#if unwrapMonetValue(R.path(['lahtotiedot', 'rakennusvaippa', rakenneKeyMap[rakenteet], 'U'], energiatodistus)) != null}
-              {unwrapMonetValue(
-                R.path(
-                  [
-                    'lahtotiedot',
-                    'rakennusvaippa',
-                    rakenneKeyMap[rakenteet],
-                    'U'
-                  ],
-                  energiatodistus
-                )
-              )}
-            {:else}
-              –
-            {/if}
+            {R.compose(
+              m => m.orSome('–'),
+              Maybe.fromNull,
+              unwrapMonetValue,
+              R.path([
+                'lahtotiedot',
+                'rakennusvaippa',
+                rakenneKeyMap[rakenteet],
+                'U'
+              ])
+            )(energiatodistus)}
           </td>
           <td>
             <Input
