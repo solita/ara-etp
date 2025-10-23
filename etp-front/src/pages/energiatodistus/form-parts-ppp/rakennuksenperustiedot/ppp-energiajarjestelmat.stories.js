@@ -1,4 +1,4 @@
-import Pppenergiajarjestelmat from './ppp-energiajarjestelmat.svelte';
+import PppEnergiajarjestelmat from './ppp-energiajarjestelmat.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty.js';
 import * as schema from '@Pages/energiatodistus/schema.js';
@@ -12,11 +12,11 @@ const saveSchema = R.compose(
 
 export default {
   title: 'Pages/Energiatodistus/PPP energiajarjestelmat',
-  component: Pppenergiajarjestelmat
+  component: PppEnergiajarjestelmat
 };
 
 const Template = args => ({
-  Component: Pppenergiajarjestelmat,
+  Component: PppEnergiajarjestelmat,
   props: args
 });
 
@@ -32,12 +32,13 @@ Default.args = {
     },
     empty.perusparannuspassi(442)
   ),
-  mahdollisuusliittya: [],
-  paalammitysjarjestelma: [],
-  lammitysmuoto: [],
-  ilmanvaihto: [],
-  uusiutuvaenergia: [],
-  jaahdytysjarjestelma: [],
+luokittelut: {
+    lammitysmuoto: [],
+    ilmanvaihtotyypit: [],
+    uusiutuvaEnergia: [],
+    jaahdytys: [],
+    mahdollisuusLiittya: []
+  },
   inputLanguage: 'fi',
   disabled: false
 };
