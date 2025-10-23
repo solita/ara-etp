@@ -3,6 +3,7 @@
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as PppUtils from './ppp-utils';
   import * as formats from '@Utility/formats';
   import * as fxmath from '@Utility/fxmath';
 
@@ -77,13 +78,13 @@
 
     // Calculate sum of uusiutuva polttoaine kWh values
     const uusiutuvaPolttoaine = (() => {
-      const pilkkeetHavu = unwrapMaybe(
+      const pilkkeetHavu = PppUtils.unwrapMaybe(
         muunnoskerrotutPolttoaineet['pilkkeet-havu-sekapuu']
       );
-      const pilkkeetKoivu = unwrapMaybe(
+      const pilkkeetKoivu = PppUtils.unwrapMaybe(
         muunnoskerrotutPolttoaineet['pilkkeet-koivu']
       );
-      const puupelletit = unwrapMaybe(
+      const puupelletit = PppUtils.unwrapMaybe(
         muunnoskerrotutPolttoaineet['puupelletit']
       );
 
@@ -93,7 +94,7 @@
     })();
 
     // Get fossiilinen polttoaine kWh value (kevyt-polttooljy)
-    const kevytPolttooljy = unwrapMaybe(
+    const kevytPolttooljy = PppUtils.unwrapMaybe(
       muunnoskerrotutPolttoaineet['kevyt-polttooljy']
     );
 
@@ -108,41 +109,15 @@
     ? R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(tuloksetData)
     : {};
 
-  // Helper function to unwrap Maybe values
-  function unwrapMaybe(value) {
-    return value && Maybe.isMaybe(value) ? Maybe.orSome(null, value) : value;
-  }
-
-  // Generic cost calculation function
-  function calculateCostFromValues(consumption, price) {
-    const consumptionValue = unwrapMaybe(consumption);
-    const priceValue = unwrapMaybe(price);
-
-    if (consumptionValue == null || priceValue == null) {
-      return null;
-    }
-
-    return (consumptionValue * priceValue) / 100;
-  }
-
   function calculateCost(energiamuoto) {
     const consumption = consumptionValues[energiamuoto.consumptionField];
     const price = priceValues[energiamuoto.priceField];
-    return calculateCostFromValues(consumption, price);
-  }
-
-  // Helper function to calculate costs for all energy types
-  function calculateAllCosts(calculateFn) {
-    return energiamuodot.reduce((acc, energiamuoto) => {
-      const cost = calculateFn(energiamuoto);
-      acc[energiamuoto.key] = cost !== null ? Maybe.Some(cost) : Maybe.None();
-      return acc;
-    }, {});
+    return PppUtils.calculateCostFromValues(consumption, price);
   }
 
   $: toteutuneetCosts =
     (ostettuEnergia || ostetutPolttoaineet) && tuloksetData
-      ? calculateAllCosts(calculateCost)
+      ? PppUtils.calculateAllCosts(energiamuodot, calculateCost)
       : {};
 
   $: toteutuneetTotalCost = EtUtils.sumEtValues(toteutuneetCosts);

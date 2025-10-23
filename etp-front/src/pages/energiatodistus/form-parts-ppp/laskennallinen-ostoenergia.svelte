@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Either from '@Utility/either-utils';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as PppUtils from './ppp-utils';
   import * as formats from '@Utility/formats';
   import * as fxmath from '@Utility/fxmath';
 
@@ -106,55 +107,30 @@
     R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(vaihe.tulokset)
   );
 
-  // Helper function to unwrap Maybe values
-  function unwrapMaybe(value) {
-    return value && Maybe.isMaybe(value) ? Maybe.orSome(null, value) : value;
-  }
-
-  // Generic cost calculation function
-  function calculateCostFromValues(consumption, price) {
-    const consumptionValue = unwrapMaybe(consumption);
-    const priceValue = unwrapMaybe(price);
-
-    if (consumptionValue == null || priceValue == null) {
-      return null;
-    }
-
-    return (consumptionValue * priceValue) / 100;
-  }
-
   function calculateCost(energiamuoto) {
     const consumption = consumptionValues[energiamuoto.consumptionField];
     const price = priceValues[energiamuoto.priceField];
-    return calculateCostFromValues(consumption, price);
+    return PppUtils.calculateCostFromValues(consumption, price);
   }
 
   function calculateVaiheCost(vaiheIndex, energiamuoto) {
     const consumption =
       vaiheConsumptionValues[vaiheIndex][energiamuoto.consumptionField];
     const price = priceValues[energiamuoto.priceField];
-    return calculateCostFromValues(consumption, price);
-  }
-
-  // Helper function to calculate costs for all energy types
-  function calculateAllCosts(calculateFn) {
-    return energiamuodot.reduce((acc, energiamuoto) => {
-      const cost = calculateFn(energiamuoto);
-      acc[energiamuoto.key] = cost !== null ? Maybe.Some(cost) : Maybe.None();
-      return acc;
-    }, {});
+    return PppUtils.calculateCostFromValues(consumption, price);
   }
 
   $: lahtotilanneCosts =
     kaytettavatEnergiamuodot && tuloksetData
-      ? calculateAllCosts(calculateCost)
+      ? PppUtils.calculateAllCosts(energiamuodot, calculateCost)
       : {};
 
   // Calculate costs for each vaihe
   $: vaiheCosts = tuloksetData
     ? mockVaiheet.map((_, vaiheIndex) =>
-        calculateAllCosts(energiamuoto =>
-          calculateVaiheCost(vaiheIndex, energiamuoto)
+        PppUtils.calculateAllCosts(
+          energiamuodot,
+          energiamuoto => calculateVaiheCost(vaiheIndex, energiamuoto)
         )
       )
     : [];
