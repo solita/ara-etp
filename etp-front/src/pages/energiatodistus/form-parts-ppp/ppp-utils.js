@@ -2,17 +2,13 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
 
-/**
- * Helper function to unwrap Maybe values
- * @param {*} value - Value that may or may not be a Maybe
- * @returns {*} - Unwrapped value or the value itself if not a Maybe
- */
-export const unwrapMaybe = value =>
-  value && Maybe.isMaybe(value) ? Maybe.orSome(null, value) : value;
-
 export const calculateCostFromValues = (consumption, price) => {
-  const consumptionValue = unwrapMaybe(consumption);
-  const priceValue = unwrapMaybe(price);
+  const consumptionValue =
+    consumption && Maybe.isMaybe(consumption)
+      ? Maybe.orSome(null, consumption)
+      : consumption;
+  const priceValue =
+    price && Maybe.isMaybe(price) ? Maybe.orSome(null, price) : price;
 
   if (consumptionValue == null || priceValue == null) {
     return null;

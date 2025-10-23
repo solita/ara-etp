@@ -125,23 +125,26 @@
 
     // Calculate sum of uusiutuva polttoaine kWh values
     const uusiutuvaPolttoaine = (() => {
-      const pilkkeetHavu = PppUtils.unwrapMaybe(
+      const pilkkeetHavu = Maybe.orSome(
+        0,
         muunnoskerrotutPolttoaineet['pilkkeet-havu-sekapuu']
       );
-      const pilkkeetKoivu = PppUtils.unwrapMaybe(
+      const pilkkeetKoivu = Maybe.orSome(
+        0,
         muunnoskerrotutPolttoaineet['pilkkeet-koivu']
       );
-      const puupelletit = PppUtils.unwrapMaybe(
+      const puupelletit = Maybe.orSome(
+        0,
         muunnoskerrotutPolttoaineet['puupelletit']
       );
 
-      const sum =
-        (pilkkeetHavu || 0) + (pilkkeetKoivu || 0) + (puupelletit || 0);
+      const sum = pilkkeetHavu + pilkkeetKoivu + puupelletit;
       return sum > 0 ? sum : null;
     })();
 
     // Get fossiilinen polttoaine kWh value (kevyt-polttooljy)
-    const kevytPolttooljy = PppUtils.unwrapMaybe(
+    const kevytPolttooljy = Maybe.orSome(
+      null,
       muunnoskerrotutPolttoaineet['kevyt-polttooljy']
     );
 
