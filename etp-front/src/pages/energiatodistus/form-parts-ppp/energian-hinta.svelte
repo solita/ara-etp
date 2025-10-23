@@ -17,7 +17,6 @@
     { key: 'fossiilinen-polttoaine', field: 'fossiiliset-pat-hinta' },
     { key: 'kaukojaahdytys', field: 'kaukojaahdytys-hinta' }
   ];
-
 </script>
 
 <H4 text={$_('perusparannuspassi.energian-hinta.header')} />
@@ -27,7 +26,8 @@
   <table class="et-table et-table__noborder border-r-0 table-fixed">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
-        <th class="et-table--th et-table--th-left-aligned et-table--th__twocells">
+        <th
+          class="et-table--th et-table--th-left-aligned et-table--th__twocells">
           {$_('perusparannuspassi.energian-hinta.energia')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--th__fifth">

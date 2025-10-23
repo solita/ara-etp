@@ -157,7 +157,8 @@
     : {};
 
   // Extract vaihe consumption values
-  $: vaiheConsumptionValues = PppUtils.extractVaiheConsumptionValues(mockVaiheet);
+  $: vaiheConsumptionValues =
+    PppUtils.extractVaiheConsumptionValues(mockVaiheet);
 
   function calculateCost(energiamuoto) {
     const consumption = consumptionValues[energiamuoto.consumptionField];
@@ -289,7 +290,10 @@
             {R.compose(
               Maybe.orSome('-'),
               R.map(value => {
-                const formatted = R.compose(formats.numberFormat, fxmath.round(2))(value);
+                const formatted = R.compose(
+                  formats.numberFormat,
+                  fxmath.round(2)
+                )(value);
                 return value < 0 ? formatted : `+${formatted}`;
               })
             )(diff)}

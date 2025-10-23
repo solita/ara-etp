@@ -62,7 +62,9 @@
 
   // Ensure perusparannuspassi exists
   $: if (!energiatodistus.perusparannuspassi) {
-    energiatodistus.perusparannuspassi = pppEmpty.perusparannuspassi(energiatodistus.id);
+    energiatodistus.perusparannuspassi = pppEmpty.perusparannuspassi(
+      energiatodistus.id
+    );
   }
 
   $: labelLocale = LocaleUtils.label($locale);
@@ -320,14 +322,14 @@
 <EnergianHinta
   schema={pppSchema.perusparannuspassi}
   bind:perusparannuspassi={energiatodistus.perusparannuspassi}
-  disabled={disabled} />
+  {disabled} />
 
 <LaskennallinenOstoenergia
   schema={pppSchema.perusparannuspassi}
   bind:perusparannuspassi={energiatodistus.perusparannuspassi}
-  energiatodistus={energiatodistus}
-  disabled={disabled} />
+  {energiatodistus}
+  {disabled} />
 
 <KustannuksetToteutunutOstoenergia
   bind:perusparannuspassi={energiatodistus.perusparannuspassi}
-  energiatodistus={energiatodistus} />
+  {energiatodistus} />
