@@ -12,7 +12,7 @@
   export let schema;
   export let perusparannuspassi;
   export let luokittelut;
-  export let disabled;
+  export let disabled = false;
   export let energiatodistus;
   export let inputLanguage;
 

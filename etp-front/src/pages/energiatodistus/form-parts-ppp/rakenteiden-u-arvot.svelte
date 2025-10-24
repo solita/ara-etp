@@ -19,13 +19,10 @@
   };
 </script>
 
-<H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
-<div class="py-4">
-  <H4
-    text={$_(
-      'perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.header'
-    )} />
-</div>
+<H4
+  text={$_(
+    'perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.header'
+  )} />
 
 <div class="flex lg:flex-row flex-col gap-x-8">
   <table class="et-table mb-12">
