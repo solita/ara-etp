@@ -16,6 +16,7 @@
   export let format = formats.optionalString;
   export let inputLanguage = Maybe.None();
   export let i18nRoot = 'energiatodistus';
+  export let showOrdinal = true;
 
   const id = inputs.id(path);
   $: type = inputs.type(schema, path);
@@ -25,7 +26,9 @@
 <Textarea
   {id}
   name={id}
-  label={inputs.label($_, i18nRoot, inputLanguage, path)}
+  label={showOrdinal
+    ? inputs.label($_, i18nRoot, inputLanguage, path)
+    : inputs.labelWithoutOrdinal($_, i18nRoot, inputLanguage, path)}
   {required}
   {disabled}
   {compact}
