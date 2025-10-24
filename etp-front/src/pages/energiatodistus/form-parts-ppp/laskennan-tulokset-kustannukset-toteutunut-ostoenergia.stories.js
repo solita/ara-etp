@@ -1,4 +1,4 @@
-import KustannuksetToteutunutOstoenergia from './kustannukset-toteutunut-ostoenergia.svelte';
+import KustannuksetToteutunutOstoenergia from './laskennan-tulokset-kustannukset-toteutunut-ostoenergia.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty';
 import * as schema from '@Pages/energiatodistus/schema';
@@ -7,7 +7,7 @@ import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
 export default {
-  title: 'Pages/Energiatodistus/PPP Kustannukset Toteutunut Ostoenergia',
+  title: 'Pages/Energiatodistus/PPP Laskennan Tulokset Kustannukset Toteutunut Ostoenergia',
   component: KustannuksetToteutunutOstoenergia
 };
 

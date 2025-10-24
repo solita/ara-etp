@@ -1,4 +1,4 @@
-import LaskennallinenOstoenergia from './laskennallinen-ostoenergia.svelte';
+import LaskennallinenOstoenergia from './laskennan-tulokset-kustannukset-laskennallinen-ostoenergia.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty';
 import * as schema from '@Pages/energiatodistus/schema';
@@ -7,7 +7,7 @@ import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
 export default {
-  title: 'Pages/Energiatodistus/PPP Laskennallinen Ostoenergia',
+  title: 'Pages/Energiatodistus/PPP Laskennan Tulokset Kustannukset Laskennallinen Ostoenergia',
   component: LaskennallinenOstoenergia
 };
 

@@ -1,4 +1,4 @@
-import EnergianHinta from './energian-hinta.svelte';
+import EnergianHinta from './laskennan-tulokset-energian-hinta.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty';
 import * as schema from '@Pages/energiatodistus/schema';
@@ -7,7 +7,7 @@ import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
 export default {
-  title: 'Pages/Energiatodistus/PPP Energian Hinta',
+  title: 'Pages/Energiatodistus/PPP Laskennan Tulokset Energian Hinta',
   component: EnergianHinta
 };
 
