@@ -1,4 +1,4 @@
-import Component from './ppp-laskennan-tulokset.svelte';
+import LaskennanTulokset from './laskennan-tulokset.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty';
 import * as schema from '@Pages/energiatodistus/schema';
@@ -18,7 +18,7 @@ const saveSchema = R.compose(
 
 export default {
   title: 'Pages/Energiatodistus/PPP Laskennan tulokset',
-  component: Component
+  component: LaskennanTulokset
 };
 
 const testEnergiatodistus = () => {
@@ -61,7 +61,7 @@ const testPpp = energiatodistusId => {
 };
 
 const Template = args => ({
-  Component,
+  Component: LaskennanTulokset,
   props: args
 });
 
