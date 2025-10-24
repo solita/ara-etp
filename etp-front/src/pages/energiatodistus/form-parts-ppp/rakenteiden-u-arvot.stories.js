@@ -1,22 +1,25 @@
-import PppEnergiajarjestelmat from './ppp-energiajarjestelmat.svelte';
+import RakenteidenUArvot from './rakenteiden-u-arvot.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty.js';
 import * as schema from '@Pages/energiatodistus/schema.js';
 import * as R from 'ramda';
 
-const requiredFields = [];
+const requiredFields = [
+  'passin-perustiedot.havainnointikaynti',
+  'passin-perustiedot.passin-esittely'
+];
 
 const saveSchema = R.compose(
   R.reduce(schema.assocRequired, R.__, requiredFields)
 )(schema.perusparannuspassi);
 
 export default {
-  title: 'Pages/Energiatodistus/PPP energiajarjestelmat',
-  component: PppEnergiajarjestelmat
+  title: 'Pages/Energiatodistus/PPP rakenteiden u-arvot',
+  component: RakenteidenUArvot
 };
 
 const Template = args => ({
-  Component: PppEnergiajarjestelmat,
+  Component: RakenteidenUArvot,
   props: args
 });
 
@@ -31,14 +34,5 @@ Default.args = {
       id: 4245
     },
     empty.perusparannuspassi(442)
-  ),
-  luokittelut: {
-    lammitysmuoto: [],
-    ilmanvaihtotyypit: [],
-    uusiutuvaEnergia: [],
-    jaahdytys: [],
-    mahdollisuusLiittya: []
-  },
-  inputLanguage: 'fi',
-  disabled: false
+  )
 };

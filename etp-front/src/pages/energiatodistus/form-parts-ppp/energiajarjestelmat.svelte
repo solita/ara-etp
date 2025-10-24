@@ -2,12 +2,12 @@
   import * as R from 'ramda';
   import * as Maybe from '@/utils/maybe-utils.js';
   import { _ } from '@Language/i18n.js';
-  import { locale } from '@Language/i18n';
+  import { locale } from '@Language/i18n.js';
   import H4 from '@Component/H/H4.svelte';
-  import Textarea from '@Pages/energiatodistus/Textarea';
+  import Textarea from '@Pages/energiatodistus/Textarea.svelte';
   import Select from '@Component/Select/Select.svelte';
   import * as LocaleUtils from '@Language/locale-utils.js';
-  import * as et from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as et from '@Pages/energiatodistus/energiatodistus-utils.js';
 
   export let schema;
   export let perusparannuspassi;

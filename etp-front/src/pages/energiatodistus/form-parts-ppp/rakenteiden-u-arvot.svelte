@@ -4,7 +4,7 @@
   import H3 from '@Component/H/H3.svelte';
   import H4 from '@Component/H/H4.svelte';
   import Input from '@Pages/energiatodistus/Input.svelte';
-  import * as EitherMaybe from '@Utility/either-maybe.js';
+  import * as EitherMaybe from '@/utils/either-maybe.js';
 
   export let schema;
   export let perusparannuspassi;
