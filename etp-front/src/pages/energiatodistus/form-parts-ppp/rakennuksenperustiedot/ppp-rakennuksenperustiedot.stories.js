@@ -23,9 +23,12 @@ const Template = args => ({
   props: args
 });
 
+const energiatodistus = empty.energiatodistus2018();
+
 export const Default = Template.bind({});
 Default.args = {
   schema: saveSchema,
+  energiatodistus,
   perusparannuspassi: R.mergeDeepLeft(
     {
       id: 4245
