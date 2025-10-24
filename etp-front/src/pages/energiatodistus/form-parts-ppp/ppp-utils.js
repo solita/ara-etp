@@ -2,25 +2,13 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
 
-export const calculateCostFromValues = (consumption, price) => {
-  const consumptionValue =
-    consumption && Maybe.isMaybe(consumption)
-      ? Maybe.orSome(null, consumption)
-      : consumption;
-  const priceValue =
-    price && Maybe.isMaybe(price) ? Maybe.orSome(null, price) : price;
-
-  if (consumptionValue == null || priceValue == null) {
-    return null;
-  }
-
-  return (consumptionValue * priceValue) / 100;
-};
+export const calculateCostFromValues = R.curry((consumption, price) =>
+  R.lift((c, p) => (c * p) / 100)(consumption, price)
+);
 
 export const calculateAllCosts = (energiamuodot, calculateFn) =>
   energiamuodot.reduce((acc, energiamuoto) => {
-    const cost = calculateFn(energiamuoto);
-    acc[energiamuoto.key] = cost !== null ? Maybe.Some(cost) : Maybe.None();
+    acc[energiamuoto.key] = calculateFn(energiamuoto);
     return acc;
   }, {});
 

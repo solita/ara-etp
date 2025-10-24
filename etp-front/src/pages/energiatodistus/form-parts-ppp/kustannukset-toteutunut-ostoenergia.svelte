@@ -48,41 +48,41 @@
     {
       'vaihe-nro': 1,
       tulokset: {
-        'kaukolampo-vuosikulutus': Either.Right(12000),
-        'kokonaissahko-vuosikulutus': Either.Right(9000),
-        'uusiutuva-polttoaine': Either.Right(600),
-        'kevyt-polttooljy': Either.Right(350),
-        'kaukojaahdytys-vuosikulutus': Either.Right(250)
+        'kaukolampo-vuosikulutus': Either.Right(Maybe.Some(12000)),
+        'kokonaissahko-vuosikulutus': Either.Right(Maybe.Some(9000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(600)),
+        'kevyt-polttooljy': Either.Right(Maybe.Some(350)),
+        'kaukojaahdytys-vuosikulutus': Either.Right(Maybe.Some(250))
       }
     },
     {
       'vaihe-nro': 2,
       tulokset: {
-        'kaukolampo-vuosikulutus': Either.Right(9500),
-        'kokonaissahko-vuosikulutus': Either.Right(7000),
-        'uusiutuva-polttoaine': Either.Right(500),
-        'kevyt-polttooljy': Either.Right(250),
-        'kaukojaahdytys-vuosikulutus': Either.Right(180)
+        'kaukolampo-vuosikulutus': Either.Right(Maybe.Some(9500)),
+        'kokonaissahko-vuosikulutus': Either.Right(Maybe.Some(7000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(500)),
+        'kevyt-polttooljy': Either.Right(Maybe.Some(250)),
+        'kaukojaahdytys-vuosikulutus': Either.Right(Maybe.Some(180))
       }
     },
     {
       'vaihe-nro': 3,
       tulokset: {
-        'kaukolampo-vuosikulutus': Either.Right(7000),
-        'kokonaissahko-vuosikulutus': Either.Right(5000),
-        'uusiutuva-polttoaine': Either.Right(400),
-        'kevyt-polttooljy': Either.Right(150),
-        'kaukojaahdytys-vuosikulutus': Either.Right(120)
+        'kaukolampo-vuosikulutus': Either.Right(Maybe.Some(7000)),
+        'kokonaissahko-vuosikulutus': Either.Right(Maybe.Some(5000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(400)),
+        'kevyt-polttooljy': Either.Right(Maybe.Some(150)),
+        'kaukojaahdytys-vuosikulutus': Either.Right(Maybe.Some(120))
       }
     },
     {
       'vaihe-nro': 4,
       tulokset: {
-        'kaukolampo-vuosikulutus': Either.Right(5000),
-        'kokonaissahko-vuosikulutus': Either.Right(3000),
-        'uusiutuva-polttoaine': Either.Right(300),
-        'kevyt-polttooljy': Either.Right(80),
-        'kaukojaahdytys-vuosikulutus': Either.Right(80)
+        'kaukolampo-vuosikulutus': Either.Right(Maybe.Some(5000)),
+        'kokonaissahko-vuosikulutus': Either.Right(Maybe.Some(3000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(300)),
+        'kevyt-polttooljy': Either.Right(Maybe.Some(80)),
+        'kaukojaahdytys-vuosikulutus': Either.Right(Maybe.Some(80))
       }
     }
   ];
@@ -123,30 +123,20 @@
         )(ostettuEnergia)
       : {};
 
-    // Calculate sum of uusiutuva polttoaine kWh values
-    const uusiutuvaPolttoaine = (() => {
-      const pilkkeetHavu = Maybe.orSome(
-        0,
-        muunnoskerrotutPolttoaineet['pilkkeet-havu-sekapuu']
-      );
-      const pilkkeetKoivu = Maybe.orSome(
-        0,
-        muunnoskerrotutPolttoaineet['pilkkeet-koivu']
-      );
-      const puupelletit = Maybe.orSome(
-        0,
-        muunnoskerrotutPolttoaineet['puupelletit']
-      );
+    // Calculate sum of uusiutuva polttoaine kWh values - keep as Maybe
+    const uusiutuvaPolttoaine = R.compose(
+      Maybe.fromNull,
+      R.when(R.equals(0), R.always(null)),
+      R.sum,
+      R.map(Maybe.orSome(0))
+    )([
+      muunnoskerrotutPolttoaineet['pilkkeet-havu-sekapuu'],
+      muunnoskerrotutPolttoaineet['pilkkeet-koivu'],
+      muunnoskerrotutPolttoaineet['puupelletit']
+    ]);
 
-      const sum = pilkkeetHavu + pilkkeetKoivu + puupelletit;
-      return sum > 0 ? sum : null;
-    })();
-
-    // Get fossiilinen polttoaine kWh value (kevyt-polttooljy)
-    const kevytPolttooljy = Maybe.orSome(
-      null,
-      muunnoskerrotutPolttoaineet['kevyt-polttooljy']
-    );
+    // Get fossiilinen polttoaine kWh value (kevyt-polttooljy) - keep as Maybe
+    const kevytPolttooljy = muunnoskerrotutPolttoaineet['kevyt-polttooljy'] || Maybe.None();
 
     return {
       ...ostettuEnergiaValues,

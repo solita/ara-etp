@@ -49,41 +49,41 @@
     {
       'vaihe-nro': 1,
       tulokset: {
-        kaukolampo: Either.Right(10000),
-        sahko: Either.Right(8000),
-        'uusiutuva-polttoaine': Either.Right(500),
-        'fossiilinen-polttoaine': Either.Right(300),
-        kaukojaahdytys: Either.Right(200)
+        kaukolampo: Either.Right(Maybe.Some(10000)),
+        sahko: Either.Right(Maybe.Some(8000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(500)),
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(300)),
+        kaukojaahdytys: Either.Right(Maybe.Some(200))
       }
     },
     {
       'vaihe-nro': 2,
       tulokset: {
-        kaukolampo: Either.Right(8000),
-        sahko: Either.Right(6000),
-        'uusiutuva-polttoaine': Either.Right(400),
-        'fossiilinen-polttoaine': Either.Right(200),
-        kaukojaahdytys: Either.Right(150)
+        kaukolampo: Either.Right(Maybe.Some(8000)),
+        sahko: Either.Right(Maybe.Some(6000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(400)),
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(200)),
+        kaukojaahdytys: Either.Right(Maybe.Some(150))
       }
     },
     {
       'vaihe-nro': 3,
       tulokset: {
-        kaukolampo: Either.Right(6000),
-        sahko: Either.Right(4000),
-        'uusiutuva-polttoaine': Either.Right(300),
-        'fossiilinen-polttoaine': Either.Right(100),
-        kaukojaahdytys: Either.Right(100)
+        kaukolampo: Either.Right(Maybe.Some(6000)),
+        sahko: Either.Right(Maybe.Some(4000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(300)),
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(100)),
+        kaukojaahdytys: Either.Right(Maybe.Some(100))
       }
     },
     {
       'vaihe-nro': 4,
       tulokset: {
-        kaukolampo: Either.Right(4000),
-        sahko: Either.Right(2000),
-        'uusiutuva-polttoaine': Either.Right(200),
-        'fossiilinen-polttoaine': Either.Right(50),
-        kaukojaahdytys: Either.Right(50)
+        kaukolampo: Either.Right(Maybe.Some(4000)),
+        sahko: Either.Right(Maybe.Some(2000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(200)),
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(50)),
+        kaukojaahdytys: Either.Right(Maybe.Some(50))
       }
     }
   ];
