@@ -281,6 +281,18 @@ export const ostetutEnergiamuodot = R.compose(
   ostettuEnergia
 );
 
+export const eluku = (versio, nettoala, energiamuodot) =>
+  R.compose(
+    R.lift(Math.ceil),
+    R.lift(R.flip(R.divide))(unnestValidation(nettoala)),
+    Maybe.of,
+    R.sum,
+    Maybe.findAllSome,
+    R.values,
+    R.evolve(R.map(R.lift(R.multiply), energiamuotokertoimet()[versio])),
+    R.map(unnestValidation)
+  )(energiamuodot);
+
 const fieldsWithToteutunutOstoenergia = [
   'sahko-vuosikulutus-yhteensa',
   'kaukolampo-vuosikulutus-yhteensa',

@@ -43,6 +43,25 @@ const DateValue = () => ({
   validators: []
 });
 
+export const YearOnlyDate = () => ({
+  parse: parsers.optionalParser(parsers.parseYear),
+  format: formats.optionalYear,
+
+  deserialize: R.compose(
+    parsers.toEitherMaybe,
+    R.map(Either.map(dfns.getYear)),
+    R.map(parsers.parseISODate)
+  ),
+
+  serialize: R.map(
+    R.map(year =>
+      dfns.formatISO(new Date(Date.UTC(year, 0, 1)), { representation: 'date' })
+    )
+  ),
+
+  validators: []
+});
+
 const Rakennustunnus = {
   parse: R.compose(Maybe.fromEmpty, R.trim, R.toUpper),
   format: formats.optionalString,
@@ -399,8 +418,8 @@ export const perusparannuspassi = {
         'toimenpide-ehdotukset': [IntegerNonNegative]
       },
       tulokset: {
-        'vaiheen-alku-pvm': DateValue(),
-        'vaiheen-loppu-pvm': DateValue(),
+        'vaiheen-alku-pvm': Integer(2025, 2200),
+        'vaiheen-loppu-pvm': Integer(2025, 2200),
         'ostoenergian-tarve-kaukolampo': FloatNonNegative,
         'ostoenergian-tarve-sahko': FloatNonNegative,
         'ostoenergian-tarve-uusiutuvat-pat': FloatNonNegative,

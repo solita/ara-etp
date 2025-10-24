@@ -22,3 +22,23 @@ describe('Parsers:', () => {
     });
   });
 });
+
+describe('toEitherMaybe', () => {
+  it('Converts Some Right to Right Some', () => {
+    expect(parsers.toEitherMaybe(Maybe.Some(Either.Right(2025)))).toEqual(
+      Either.Right(Maybe.of(2025))
+    );
+  });
+
+  it('Converts None to Right None', () => {
+    expect(parsers.toEitherMaybe(Maybe.None())).toEqual(
+      Either.Right(Maybe.None())
+    );
+  });
+
+  it('Converts Some Left to Left', () => {
+    expect(parsers.toEitherMaybe(Maybe.Some(Either.Left('baaad')))).toEqual(
+      Either.Left('baaad')
+    );
+  });
+});

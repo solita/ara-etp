@@ -28,7 +28,8 @@
   "parsing": {
     "invalid-integer": "Felaktigt heltal",
     "invalid-number": "Felaktigt nummer",
-    "invalid-date": "Felaktigt datum"
+    "invalid-date": "Felaktigt datum",
+    "invalid-year": "Felaktigt år"
   },
   "navigation": {
     "breadcrumb-bar": "Sidhierarki",
@@ -1436,6 +1437,52 @@
         "korjausrakentamisen-vahimmaisvaatimustaso": {
           "header": "Korjausrakentamisen vähimmäisvaatimustaso (sv)",
           "title": "YM:n asetusten 4/13 mukainen korjaustakentamisen vähimmäisvaatimustaso (sv)"
+        }
+      }
+    },
+    "laskennan-tulokset": {
+      "header": "Laskennan tulokset (sv)",
+      "vaihe": "Vaihe (sv)",
+      "aloitusvuosi": "Aloitusvuosi (sv)",
+      "kwh-per-vuosi": "kWh/vuosi (sv)",
+      "info-before-table": "Kirjaa arvot vaiheen muutosten jälkeen. (sv)",
+      "lahtotilanne": "Lähtötilanne kWh/vuosi (sv)",
+      "vaiheistus": {
+        "header": "Vaiheistus (sv)",
+        "info": "Tiedot kirjataan vain niille vaiheille, joilla on (sv)",
+        "info-aloitusvuosi": "aloitusvuosi (sv)"
+      },
+      "laskennallinen-ostoenergia": {
+        "header": "Laskennallinen ostoenergia (sv)",
+        "table-headers": {
+          "ostoenergian-tarve-kaukolampo": "Kaukolämpö (sv)",
+          "ostoenergian-tarve-sahko": "Sähkö (sv)",
+          "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
+          "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
+          "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys (sv)"
+        }
+      },
+      "uusiutuva-energia": {
+        "header": "Uusiutuva energia (sv)",
+        "energialaji": "Energialaji (sv)",
+        "uusiutuvan-energian-kokonaistuotto": "Uusiutuvan energian vuotuinen tuotto (sv)",
+        "uusiutuvan-energian-hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta (sv)"
+      },
+      "toteutunut-ostoenergia": {
+        "header": "Toteutunut ostoenergia (sv)",
+        "table-headers": {
+          "toteutunut-ostoenergia-kaukolampo": "Kaukolämpö (sv)",
+          "toteutunut-ostoenergia-sahko": "Sähkö (sv)",
+          "toteutunut-ostoenergia-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
+          "toteutunut-ostoenergia-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
+          "toteutunut-ostoenergia-kaukojaahdytys": "Kaukojäähdytys (sv)"
+        }
+      }
+    },
+    "vaiheet": {
+      "0": {
+        "tulokset": {
+          "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)"
         }
       }
     }
