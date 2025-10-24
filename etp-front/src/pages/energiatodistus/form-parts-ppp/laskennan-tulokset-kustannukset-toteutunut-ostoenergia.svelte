@@ -136,7 +136,8 @@
     ]);
 
     // Get fossiilinen polttoaine kWh value (kevyt-polttooljy) - keep as Maybe
-    const kevytPolttooljy = muunnoskerrotutPolttoaineet['kevyt-polttooljy'] || Maybe.None();
+    const kevytPolttooljy =
+      muunnoskerrotutPolttoaineet['kevyt-polttooljy'] || Maybe.None();
 
     return {
       ...ostettuEnergiaValues,

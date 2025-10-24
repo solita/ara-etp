@@ -7,7 +7,8 @@ import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
 export default {
-  title: 'Pages/Energiatodistus/PPP Laskennan Tulokset Kustannukset Toteutunut Ostoenergia',
+  title:
+    'Pages/Energiatodistus/PPP Laskennan Tulokset Kustannukset Toteutunut Ostoenergia',
   component: KustannuksetToteutunutOstoenergia
 };
 
