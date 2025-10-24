@@ -1428,6 +1428,57 @@
       "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa",
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa"
     },
+    "energian-hinta": {
+      "header": "Energian hinta",
+      "description": "Kirjaa käyttämäsi energian hinnat.",
+      "energia": "Energia",
+      "hinta-snt-kwh": "Hinta snt/kWh",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+        "sahko": "Sähkö",
+        "kaukojaahdytys": "Kaukojäähdytys",
+        "kaukolampo": "Kaukolämpö",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+      }
+    },
+    "laskennallinen-ostoenergia": {
+      "header": "Energiakustannukset, laskennallinen ostoenergia",
+      "description": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella.",
+      "energia": "Energia",
+      "lahtotilanne": "Lähtötilanne €/vuosi",
+      "vaihe-1": "Vaihe 1 €/vuosi",
+      "vaihe-2": "Vaihe 2 €/vuosi",
+      "vaihe-3": "Vaihe 3 €/vuosi",
+      "vaihe-4": "Vaihe 4 €/vuosi",
+      "yhteensa": "Yhteensä",
+      "erotus-edelliseen-vaiheeseen": "Erotus edelliseen vaiheeseen",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+        "sahko": "Sähkö",
+        "kaukojaahdytys": "Kaukojäähdytys",
+        "kaukolampo": "Kaukolämpö",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+      }
+    },
+    "kustannukset-toteutunut-ostoenergia": {
+      "header": "Energiakustannukset, toteutunut ostoenergia",
+      "description": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella.",
+      "energia": "Energia",
+      "lahtotilanne": "Lähtötilanne €/vuosi",
+      "vaihe-1": "Vaihe 1 €/vuosi",
+      "vaihe-2": "Vaihe 2 €/vuosi",
+      "vaihe-3": "Vaihe 3 €/vuosi",
+      "vaihe-4": "Vaihe 4 €/vuosi",
+      "yhteensa": "Yhteensä",
+      "erotus-edelliseen-vaiheeseen": "Erotus edelliseen vaiheeseen",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine",
+        "sahko": "Sähkö",
+        "kaukojaahdytys": "Kaukojäähdytys",
+        "kaukolampo": "Kaukolämpö",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine"
+      }
+    },
     "rakennuksen-perustiedot": {
       "header": "Rakennuksen perustiedot",
       "lisatietoja": "Lisätiedot",

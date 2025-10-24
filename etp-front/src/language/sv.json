@@ -1485,6 +1485,57 @@
           "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)"
         }
       }
+    },
+    "energian-hinta": {
+      "header": "Energian hinta (sv)",
+      "description": "Kirjaa käyttämäsi energian hinnat. (sv)",
+      "energia": "Energia (sv)",
+      "hinta-snt-kwh": "Hinta snt/kWh (sv)",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
+        "sahko": "Sähkö (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)",
+        "kaukolampo": "Kaukolämpö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)"
+      }
+    },
+    "laskennallinen-ostoenergia": {
+      "header": "Energiakustannukset, laskennallinen ostoenergia (sv)",
+      "description": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
+      "energia": "Energia (sv)",
+      "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
+      "vaihe-1": "Vaihe 1 €/vuosi (sv)",
+      "vaihe-2": "Vaihe 2 €/vuosi (sv)",
+      "vaihe-3": "Vaihe 3 €/vuosi (sv)",
+      "vaihe-4": "Vaihe 4 €/vuosi (sv)",
+      "yhteensa": "Yhteensä (sv)",
+      "erotus-edelliseen-vaiheeseen": "Erotus edelliseen vaiheeseen (sv)",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
+        "sahko": "Sähkö (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)",
+        "kaukolampo": "Kaukolämpö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)"
+      }
+    },
+    "kustannukset-toteutunut-ostoenergia": {
+      "header": "Energiakustannukset, toteutunut ostoenergia (sv)",
+      "description": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
+      "energia": "Energia (sv)",
+      "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
+      "vaihe-1": "Vaihe 1 €/vuosi (sv)",
+      "vaihe-2": "Vaihe 2 €/vuosi (sv)",
+      "vaihe-3": "Vaihe 3 €/vuosi (sv)",
+      "vaihe-4": "Vaihe 4 €/vuosi (sv)",
+      "yhteensa": "Yhteensä (sv)",
+      "erotus-edelliseen-vaiheeseen": "Erotus edelliseen vaiheeseen (sv)",
+      "labels": {
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
+        "sahko": "Sähkö (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)",
+        "kaukolampo": "Kaukolämpö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)"
+      }
     }
   },
   "viesti": {
