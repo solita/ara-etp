@@ -55,6 +55,15 @@ export const label = (i18n, i18nRoot, inputLanguage, path) =>
     R.map(l => ` / ${l}`)
   )(inputLanguage);
 
+export const labelWithoutOrdinal = (i18n, i18nRoot, inputLanguage, path) =>
+  // localized label text
+  i18n(i18nRoot + '.' + localeKey(path)) +
+  // input language symbol
+  R.compose(
+    Maybe.orSome(''),
+    R.map(l => ` / ${l}`)
+  )(inputLanguage);
+
 const labelContext = (i18n, path) =>
   R.length(path) > 1
     ? R.compose(
