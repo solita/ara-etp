@@ -346,7 +346,7 @@ const emptyPerusparannusVaiheenTulokset = _ => ({
 const emptyPerusparannusToimenpiteet = _ => ({
   'toimenpideseloste-fi': Maybe.None(),
   'toimenpideseloste-sv': Maybe.None(),
-  'toimenpide-ehdotukset': []
+  'toimenpide-ehdotukset': R.repeat(Maybe.None(), 6)
 });
 
 const emptyPerusparannusVaihe = n => ({
