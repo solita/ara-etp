@@ -22,6 +22,7 @@
 (def find-mahdollisuus-liittya #(select-luokittelu % "perusparannuspassi_liittymismahdollisuus"))
 (def find-uusiutuva-energia #(select-luokittelu % "perusparannuspassi_uusiutuva_energia"))
 (def find-jaahdytys #(select-luokittelu % "perusparannuspassi_jaahdytys"))
+(def find-toimenpide-ehdotus #(select-luokittelu % "toimenpide_ehdotus"))
 
 (def find-vastaanottajaryhmat #(select-luokittelu % "vastaanottajaryhma"))
 
