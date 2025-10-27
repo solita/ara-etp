@@ -7,7 +7,7 @@
   import H5 from '@Component/H/H5';
   import ViewModelValue from '@Component/ViewModelValue/ViewModelValue.svelte';
 
-  import DescriptionList from './DescriptionList.svelte';
+  import DescriptionList from './toimenpiteet/DescriptionList.svelte';
 
   const i18n = $_;
 

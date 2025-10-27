@@ -3,7 +3,7 @@
    */
 
   import H5 from '@Component/H/H5';
-  import DescriptionList from '@Pages/energiatodistus/form-parts-ppp/DescriptionList.svelte';
+  import DescriptionList from '@Pages/energiatodistus/form-parts-ppp/toimenpiteet/DescriptionList.svelte';
 </script>
 
 <div>
