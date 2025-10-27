@@ -12,8 +12,6 @@
   export let schema;
 </script>
 
-<H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
-
 <div class="min-w-full overflow-x-auto flex flex-col gap-y-5">
   <BasicInput
     id="perusparannuspassi.id"
