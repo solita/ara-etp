@@ -26,11 +26,13 @@
             [solita.etp.service.kielisyys :as kielisyys]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.service.rooli :as rooli-service]
-            [solita.postgresql.composite :as pg-composite])
+            [solita.postgresql.composite :as pg-composite]
+            [solita.etp.service.perusparannuspassi :as perusparannuspassi-service])
   (:import (org.apache.pdfbox.pdmodel PDDocument)))
 
 ; *** Require sql functions ***
 (db/require-queries 'energiatodistus)
+(db/require-queries 'perusparannuspassi)
 
 (defn find-protected-postinumerot [db min-count]
   (-> (energiatodistus-db/select-protected-postinumero-versio-kayttotarkoitus
@@ -510,8 +512,14 @@
       (str "Energiatodistus " id " does not exists."))))
 
 (defn delete-energiatodistus-luonnos! [db whoami id]
-  (assert-laatija! whoami (find-energiatodistus db id))
-  (energiatodistus-db/delete-energiatodistus-luonnos! db {:id id}))
+  (jdbc/with-db-transaction [db db]
+                            (assert-laatija! whoami (find-energiatodistus db id))
+                            (when-let [ppp (first (perusparannuspassi-db/find-by-energiatodistus-id
+                                                    db {:energiatodistus-id id
+                                                        :laatija-id (:id whoami)}))]
+
+                              (perusparannuspassi-service/delete-perusparannuspassi! db whoami (:id ppp)))
+                            (energiatodistus-db/delete-energiatodistus-luonnos! db {:id id})))
 
 (defn set-energiatodistus-discarded! [db id discard?]
   (if discard?
