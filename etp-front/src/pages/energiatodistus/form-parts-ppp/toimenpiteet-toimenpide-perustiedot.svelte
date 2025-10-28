@@ -5,7 +5,7 @@
   import { _ } from '@Language/i18n';
 
   import H5 from '@Component/H/H5';
-  import ViewModelValue from '@Component/ViewModelValue/ViewModelValue.svelte';
+  import ViewModelValue from '@Pages/energiatodistus/form-parts-ppp/toimenpiteet/ViewModelValue.svelte';
 
   import DescriptionList from './toimenpiteet/DescriptionList.svelte';
 

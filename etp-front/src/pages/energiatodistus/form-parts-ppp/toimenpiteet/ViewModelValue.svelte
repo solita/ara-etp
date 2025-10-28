@@ -10,9 +10,9 @@
   */
 
   import * as R from 'ramda';
-  import * as Either from '@Utility/either-utils';
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as objects from '@Utility/objects';
+  import * as Either from '@/utils/either-utils.js';
+  import * as Maybe from '@/utils/maybe-utils.js';
+  import * as objects from '@/utils/objects.js';
 
   export let lens;
   export let model;
