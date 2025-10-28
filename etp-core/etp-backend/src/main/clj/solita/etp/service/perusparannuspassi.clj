@@ -210,17 +210,15 @@
         :not-found
         (str "Perusparannuspassi " id " does not exist.")))))
 
-(defn delete-perusparannuspassi!
-  [db whoami perusparannuspassi-id]
-  (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi
-                     db {:id perusparannuspassi-id
-                         :laatija-id (:id whoami)}))]
-    (when-not ppp
-      (exception/throw-ex-info!
-        :not-found
-        (str "perusparannuspassi " perusparannuspassi-id " does not exist.")))
-
-    (perusparannuspassi-db/delete-perusparannuspassi-vaiheet! db {:perusparannuspassi-id perusparannuspassi-id})
-    (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id})
-
-    perusparannuspassi-id))
+(defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
+  (jdbc/with-db-transaction [db db]
+                            (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi
+                                               db {:id perusparannuspassi-id
+                                                   :laatija-id (:id whoami)}))]
+                              (when-not ppp
+                                (exception/throw-ex-info!
+                                  :not-found
+                                  (str "perusparannuspassi " perusparannuspassi-id " does not exist.")))
+                              (perusparannuspassi-db/delete-perusparannuspassi-vaiheet! db {:perusparannuspassi-id perusparannuspassi-id})
+                              (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id})
+                              perusparannuspassi-id)))
