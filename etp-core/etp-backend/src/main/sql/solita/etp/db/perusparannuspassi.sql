@@ -56,7 +56,7 @@ where ppp.energiatodistus_id = :energiatodistus-id
 -- name: delete-perusparannuspassi!
 update perusparannuspassi set
     valid = false
-where id = :id
+where id = :id;
 
 -- name: delete-perusparannuspassi-vaiheet!
 update perusparannuspassi_vaihe
