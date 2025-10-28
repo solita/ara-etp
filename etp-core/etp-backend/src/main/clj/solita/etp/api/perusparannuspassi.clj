@@ -55,4 +55,8 @@
                :responses  {200 {:body nil}
                             404 {:body common-schema/GeneralError}}
                :access     rooli-service/ppp-laatija?
-               :handler    not-implemented!}}]]]])
+               :handler   (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]
+                            (api-response/ok|not-found
+                              (ppp-service/delete-perusparannuspassi!
+                                db whoami id)
+                              (str "perusparannuspassi " id " does not exists.")))}}]]]])

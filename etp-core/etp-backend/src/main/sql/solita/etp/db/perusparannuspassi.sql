@@ -42,3 +42,25 @@ delete
 from perusparannuspassi_vaihe_toimenpide_ehdotus
 where perusparannuspassi_id = :perusparannuspassi-id
   and vaihe_nro = :vaihe-nro;
+
+-- name: find-by-energiatodistus-id
+select
+    ppp.*,
+    et.laatija_id,
+    et.tila_id
+from perusparannuspassi ppp
+         join energiatodistus et on ppp.energiatodistus_id = et.id
+where ppp.energiatodistus_id = :energiatodistus-id
+  and et.laatija_id = :laatija-id;
+
+-- name: delete-perusparannuspassi!
+update perusparannuspassi set
+    valid = false
+where id = :id;
+
+-- name: delete-perusparannuspassi-vaiheet!
+update perusparannuspassi_vaihe
+set
+    valid = false
+where
+    perusparannuspassi_id = :perusparannuspassi-id;
