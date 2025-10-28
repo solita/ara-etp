@@ -7,15 +7,12 @@
 
   const i18n = $_;
 
-  export let perusparannuspassi;
-
-  export let etSchema;
   export let energiatodistus;
+  export let etSchema;
+  export let perusparannuspassi;
   export let pppSchema;
   export let toimenpideEhdotuksetLuokittelu;
   export let inputLanguage;
-
-  $: console.log(perusparannuspassi);
 </script>
 
 <H3 text={i18n(`perusparannuspassi.vaiheet.0.toimenpiteet.header`)} />
