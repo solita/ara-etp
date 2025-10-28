@@ -11,6 +11,7 @@
   import H3 from '@Component/H/H3';
   import Select from '@Component/Select/Select';
   import HR from '@Component/HR/HR';
+  import TextButton from '@Component/Button/TextButton';
 
   import Input from './Input';
   import BasicInput from '@Component/Input/Input';
@@ -62,6 +63,11 @@
   .lisamerkintoja-textarea :global(textarea) {
     min-height: 400px;
     max-height: 600px;
+  }
+
+  /* Override H2 margin for PPP section */
+  .ppp-section :global(h2) {
+    margin-bottom: 0; /* 24px / mb-6 */
   }
 </style>
 
@@ -303,3 +309,31 @@
     bind:model={energiatodistus}
     path={['lisamerkintoja']} />
 </div>
+
+<HR />
+<div class="flex flex-col gap-6 ppp-section">
+  <div class="flex justify-between items-baseline">
+    <H2
+      id="perusparannuspassi"
+      text={$_('energiatodistus.perusparannuspassi.header')} />
+    <TextButton
+      icon="add_circle_outline"
+      text={$_('energiatodistus.perusparannuspassi.add-button')}
+      type="button"
+      on:click={() => {
+        // TODO: Add PPP form functionality
+        console.log('Add PPP form');
+      }} />
+  </div>
+  <div class="flex items-start p-4 bg-tertiary items-center">
+    <span class="font-icon mr-2 text-2xl">info_outline</span>
+    <span>{$_('energiatodistus.perusparannuspassi.info-text')}</span>
+  </div>
+  <p>
+    {$_('energiatodistus.perusparannuspassi.not-added')}
+  </p>
+  <p>
+    {$_('energiatodistus.perusparannuspassi.disclaimer')}
+  </p>
+</div>
+<HR />

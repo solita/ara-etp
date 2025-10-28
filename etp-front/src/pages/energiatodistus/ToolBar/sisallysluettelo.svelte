@@ -27,6 +27,10 @@
     {
       id: 'lisamerkintoja',
       label: i18n('energiatodistus.lisamerkintoja')
+    },
+    {
+      id: 'perusparannuspassi',
+      label: i18n('energiatodistus.perusparannuspassi.header')
     }
   ];
 
