@@ -6,11 +6,10 @@
 
   const i18n = $_;
 
-  // Load config directly (like laatijat.svelte pattern)
   let config = {};
   Future.fork(
     _ => {
-      config = {}; // Fallback to empty config on error
+      config = {};
     },
     loadedConfig => {
       config = loadedConfig;
