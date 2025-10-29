@@ -1,9 +1,24 @@
 <script>
   import { _ } from '@Language/i18n';
+  import * as Future from '@Utility/future-utils';
+  import * as versionApi from '@Component/Version/version-api';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   const i18n = $_;
 
-  const tocItems = [
+  // Load config directly (like laatijat.svelte pattern)
+  let config = {};
+  Future.fork(
+    _ => {
+      config = {}; // Fallback to empty config on error
+    },
+    loadedConfig => {
+      config = loadedConfig;
+    },
+    versionApi.getConfig
+  );
+
+  const allTocItems = [
     {
       id: 'perustiedot',
       label: i18n('energiatodistus.perustiedot-header')
@@ -30,9 +45,14 @@
     },
     {
       id: 'perusparannuspassi',
-      label: i18n('energiatodistus.perusparannuspassi.header')
+      label: i18n('energiatodistus.perusparannuspassi.header'),
+      requiresEtp2026: true
     }
   ];
+
+  $: tocItems = allTocItems.filter(
+    item => !item.requiresEtp2026 || isEtp2026Enabled(config)
+  );
 
   const scrollToSection = id => {
     const element = document.getElementById(id);
@@ -47,12 +67,6 @@
         top: targetPosition,
         behavior: 'smooth'
       });
-    } else {
-      const allElementsWithIds = document.querySelectorAll('[id]');
-      console.log(
-        'All elements with IDs:',
-        Array.from(allElementsWithIds).map(el => el.id)
-      );
     }
   };
 </script>
