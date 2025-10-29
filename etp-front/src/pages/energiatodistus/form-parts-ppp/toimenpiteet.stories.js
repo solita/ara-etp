@@ -331,8 +331,7 @@ const testPpp = energiatodistusId => {
     [1, 0, 2, 1, 0, 2]
   );
 
-  ppp.vaiheet[0].valid = true;
-  ppp.vaiheet[1].valid = true;
+  ppp.vaiheet[1].tulokset['vaiheen-alku-pvm'] = ValidSome(2035);
 
   return ppp;
 };

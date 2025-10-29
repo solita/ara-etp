@@ -1,6 +1,9 @@
 <script>
   import * as R from 'ramda';
 
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe.js';
+
   import H3 from '@Component/H/H3';
   import { _ } from '@Language/i18n';
   import Osio from './toimenpiteet-osio';
@@ -19,7 +22,7 @@
 
 <div class="flex min-w-full flex-col gap-y-8 overflow-x-auto">
   {#each perusparannuspassi.vaiheet as vaihe}
-    {#if R.equals(vaihe.valid, true)}
+    {#if R.compose(Maybe.isSome, EM.toMaybe, R.view(R.lensPath( ['tulokset', 'vaiheen-alku-pvm'] )))(vaihe)}
       <Osio
         {energiatodistus}
         {etSchema}
