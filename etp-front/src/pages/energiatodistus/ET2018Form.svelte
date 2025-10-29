@@ -62,7 +62,6 @@
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  // Load config directly (like laatijat.svelte pattern)
   let config = {};
   Future.fork(
     _ => {
@@ -80,9 +79,8 @@
 
   const addPPP = () => {
     if (!perusparannuspassi) {
-      // Initialize PPP structure with energiatodistus ID
       perusparannuspassi = Empty.perusparannuspassi(energiatodistus.id);
-      // Add id field using Maybe monad (will be set by backend when saved)
+
       perusparannuspassi.id = Maybe.None();
     }
     showPPP = true;
