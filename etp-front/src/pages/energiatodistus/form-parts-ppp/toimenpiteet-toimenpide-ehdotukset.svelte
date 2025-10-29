@@ -6,7 +6,10 @@
   import * as LocaleUtils from '@Language/locale-utils';
 
   import H5 from '@Component/H/H5';
-  import Select from '@Component/Select/Select';
+  import {
+    default as Select,
+    Variants as SelectVariants
+  } from '@Component/Select/Select';
 
   import Textarea from '@Pages/energiatodistus/Textarea.svelte';
 
@@ -31,6 +34,7 @@
     {#each R.range(0, 6) as toimenpideN}
       <div>
         <Select
+          variant={SelectVariants.LIGHT}
           items={R.pluck('id', toimenpideEhdotuksetLuokittelu)}
           format={ETUtils.selectFormat(
             LocaleUtils.label($locale),
