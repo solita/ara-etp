@@ -30,7 +30,7 @@
       'perusparannuspassi.vaiheet.0.toimenpiteet.toimenpide-ehdotukset.header'
     )}
     } />
-  <div class="grid grid-cols-2 gap-6">
+  <div class="grid grid-flow-col grid-rows-3 gap-6">
     {#each R.range(0, 6) as toimenpideN}
       <div>
         <Select
@@ -57,19 +57,14 @@
           )} />
       </div>
     {/each}
-    <div class="col-span-2">
-      <Textarea
-        schema={pppSchema}
-        showOrdinal={false}
-        inputLanguage={Maybe.Some(inputLanguage)}
-        bind:model={perusparannuspassi}
-        path={[
-          'vaiheet',
-          vaiheIndex(vaihe),
-          'toimenpiteet',
-          'toimenpideseloste'
-        ]}
-        i18nRoot="perusparannuspassi" />
-    </div>
+  </div>
+  <div class="w-full">
+    <Textarea
+      schema={pppSchema}
+      showOrdinal={false}
+      inputLanguage={Maybe.Some(inputLanguage)}
+      bind:model={perusparannuspassi}
+      path={['vaiheet', vaiheIndex(vaihe), 'toimenpiteet', 'toimenpideseloste']}
+      i18nRoot="perusparannuspassi" />
   </div>
 </div>
