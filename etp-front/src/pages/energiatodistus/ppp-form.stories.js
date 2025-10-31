@@ -43,9 +43,13 @@ const testEnergiatodistus = () => {
     Either.Right(Maybe.None());
   energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'].aurinkosahko =
     Either.Right(Maybe.None());
+
   energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
     'kaukolampo-vuosikulutus'
   ] = Either.Right(Maybe.Some(11000));
+  energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
+    'kokonaissahko-vuosikulutus'
+  ] = Either.Right(Maybe.Some(4000));
 
   return energiatodistus;
 };
@@ -68,6 +72,13 @@ const testPpp = energiatodistusId => {
   );
   ppp.vaiheet[0].tulokset['ostoenergian-tarve-sahko'] = Either.Right(
     Maybe.Some(3000)
+  );
+
+  ppp.vaiheet[0].tulokset['toteutunut-ostoenergia-kaukolampo'] = Either.Right(
+    Maybe.Some(9000)
+  );
+  ppp.vaiheet[0].tulokset['toteutunut-ostoenergia-sahko'] = Either.Right(
+    Maybe.Some(4000)
   );
 
   ppp.vaiheet[1].tulokset['vaiheen-alku-pvm'] = Either.Right(Maybe.Some(2035));

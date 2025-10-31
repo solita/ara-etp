@@ -97,69 +97,6 @@
   };
 
   $: costs = calculateCosts(energiatodistus, perusparannuspassi);
-
-  const formatCost = R.compose(
-    Maybe.orSome('-'),
-    R.map(R.compose(formats.numberFormat, fxmath.round(2))),
-    R.lift(R.divide(R.__, 100))
-  );
-
-  const formatCostDifference = R.compose(
-    Maybe.orSome('-'),
-    R.map(
-      R.ifElse(
-        a => a > 0,
-        R.compose(s => '+' + formats.numberFormat(s), fxmath.round(2)),
-        R.compose(formats.numberFormat, fxmath.round(2))
-      )
-    ),
-    R.lift(R.divide(R.__, 100))
-  );
-
-  // PoC: Mock vaiheet data until real implementation is merged
-  // This simulates the structure from perusparannuspassi.vaiheet
-  const mockVaiheet = [
-    {
-      'vaihe-nro': 1,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(10000)),
-        sahko: Either.Right(Maybe.Some(8000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(500)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(300)),
-        kaukojaahdytys: Either.Right(Maybe.Some(200))
-      }
-    },
-    {
-      'vaihe-nro': 2,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(8000)),
-        sahko: Either.Right(Maybe.Some(6000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(400)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(200)),
-        kaukojaahdytys: Either.Right(Maybe.Some(150))
-      }
-    },
-    {
-      'vaihe-nro': 3,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(6000)),
-        sahko: Either.Right(Maybe.Some(4000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(300)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(100)),
-        kaukojaahdytys: Either.Right(Maybe.Some(100))
-      }
-    },
-    {
-      'vaihe-nro': 4,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(4000)),
-        sahko: Either.Right(Maybe.Some(2000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(200)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(50)),
-        kaukojaahdytys: Either.Right(Maybe.Some(50))
-      }
-    }
-  ];
 </script>
 
 <H4 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
@@ -192,7 +129,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each laskennallisetOstoenergiat as { etEnergiamuoto, pppEnergiamuoto, pppPriceField }}
+      {#each laskennallisetOstoenergiat as { etEnergiamuoto }}
         <tr class="et-table--tr">
           <td class="et-table--td et-table--td__fifth">
             {$_(
@@ -202,13 +139,13 @@
 
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {formatCost(costs[0][etEnergiamuoto])}
+            {PppUtils.formatCost(costs[0][etEnergiamuoto])}
           </td>
 
           {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {formatCost(vaiheCost[etEnergiamuoto])}
+              {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
             </td>
           {/each}
         </tr>
@@ -221,12 +158,12 @@
         </td>
         <td
           class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          {formatCost(costs[0].total)}
+          {PppUtils.formatCost(costs[0].total)}
         </td>
         {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {formatCost(vaiheCost.total)}
+            {PppUtils.formatCost(vaiheCost.total)}
           </td>
         {/each}
       </tr>
@@ -245,7 +182,7 @@
         {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {R.compose(formatCostDifference, R.lift(R.subtract))(
+            {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
               cur.total,
               prev.total
             )}
