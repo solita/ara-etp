@@ -3,10 +3,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
-
-  import ViewModelValue from '@Pages/energiatodistus/form-parts-ppp/toimenpiteet/ViewModelValue.svelte';
-
-  import DescriptionList from './toimenpiteet/DescriptionList.svelte';
+  import * as inputs from '@Pages/energiatodistus/inputs.js';
 
   const i18n = $_;
 
@@ -59,7 +56,7 @@
   };
 </script>
 
-<DescriptionList>
+<dl class="description-list">
   <dt>
     {i18n('perusparannuspassi.vaiheet.0.tulokset.vaiheen-alku-pvm-vaihe-alkaa')}
   </dt>
@@ -88,4 +85,4 @@
       vaihe
     })}
   </dd>
-</DescriptionList>
+</dl>

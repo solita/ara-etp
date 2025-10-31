@@ -69,4 +69,21 @@
   .et-table--tr > .et-table--td:not(:first-child) {
     @apply text-right;
   }
+
+  .description-list {
+    @apply grid grid-cols-[max-content_1fr];
+  }
+
+  .description-list > dt,
+  .description-list > dd {
+    @apply border-b px-4 py-3;
+  }
+
+  .description-list > dt::after {
+    content: ":";
+  }
+
+  .description-list > dd {
+    @apply font-bold;
+  }
 }

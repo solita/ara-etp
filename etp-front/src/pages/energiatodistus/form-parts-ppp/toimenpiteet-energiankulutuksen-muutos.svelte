@@ -3,12 +3,12 @@
    */
 
   import H5 from '@Component/H/H5';
-  import DescriptionList from '@Pages/energiatodistus/form-parts-ppp/toimenpiteet/DescriptionList.svelte';
 </script>
 
 <div>
   <H5 text="TODO: AE-2663" />
-  <DescriptionList>
+
+  <dl class="description-list">
     <dt>TODO</dt>
     <dd>todo</dd>
     <dt>TODO</dt>
@@ -27,5 +27,5 @@
     <dd>todo</dd>
     <dt>TODO</dt>
     <dd>todo</dd>
-  </DescriptionList>
+  </dl>
 </div>
