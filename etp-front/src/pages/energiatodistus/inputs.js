@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
 import * as locales from '@Language/locale-utils';
 
@@ -95,4 +96,25 @@ export const propertyLabel = R.curry((i18n, propertyName) =>
     language(propertyName),
     R.split('.', propertyName)
   )
+);
+
+export const viewValueFormatted = R.curry(
+  ({ model, schema, path, valueOnEmpty }) => {
+    const valueType = type(schema, path);
+    const format = valueType.format;
+
+    const formatOrValueOnEmpty = R.ifElse(
+      R.always(R.isNotNil(valueOnEmpty)),
+      Maybe.cata(R.always(valueOnEmpty), format),
+      format
+    );
+
+    return R.compose(
+      Maybe.get,
+      Either.toMaybe,
+      Either.map(formatOrValueOnEmpty),
+      Either.fromValueOrEither,
+      R.view(R.lensPath(path))
+    )(model);
+  }
 );

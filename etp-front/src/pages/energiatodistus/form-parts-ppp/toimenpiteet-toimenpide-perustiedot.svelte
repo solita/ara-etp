@@ -64,16 +64,12 @@
     {i18n('perusparannuspassi.vaiheet.0.tulokset.vaiheen-alku-pvm-vaihe-alkaa')}
   </dt>
   <dd>
-    <ViewModelValue
-      model={perusparannuspassi}
-      schema={pppSchema}
-      valueOnNone="-"
-      lens={R.lensPath([
-        'vaiheet',
-        vaiheIndex(vaihe),
-        'tulokset',
-        'vaiheen-alku-pvm'
-      ])} />
+    {inputs.viewValueFormatted({
+      model: perusparannuspassi,
+      schema: pppSchema,
+      valueOnNone: '-',
+      path: ['vaiheet', vaiheIndex(vaihe), 'tulokset', 'vaiheen-alku-pvm']
+    })}
   </dd>
   <dt>
     {i18n('perusparannuspassi.vaiheet.0.tulokset.e-luokka-vaiheen-jalkeen')}
