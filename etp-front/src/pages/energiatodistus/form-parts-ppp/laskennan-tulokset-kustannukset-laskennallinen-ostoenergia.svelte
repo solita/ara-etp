@@ -15,125 +15,88 @@
   export let schema;
   export let disabled = false;
 
-  const energiamuodot = [
+  const laskennallisetOstoenergiat = [
     {
-      key: 'kaukolampo',
-      consumptionField: 'kaukolampo',
-      priceField: 'kaukolampo-hinta'
+      pppEnergiamuoto: 'ostoenergian-tarve-kaukolampo',
+      etEnergiamuoto: 'kaukolampo',
+      pppPriceField: 'kaukolampo-hinta'
     },
     {
-      key: 'sahko',
-      consumptionField: 'sahko',
-      priceField: 'sahko-hinta'
+      pppEnergiamuoto: 'ostoenergian-tarve-sahko',
+      etEnergiamuoto: 'sahko',
+      pppPriceField: 'sahko-hinta'
     },
     {
-      key: 'uusiutuva-polttoaine',
-      consumptionField: 'uusiutuva-polttoaine',
-      priceField: 'uusiutuvat-pat-hinta'
+      pppEnergiamuoto: 'ostoenergian-tarve-uusiutuvat-pat',
+      etEnergiamuoto: 'uusiutuva-polttoaine',
+      pppPriceField: 'uusiutuvat-pat-hinta'
     },
     {
-      key: 'fossiilinen-polttoaine',
-      consumptionField: 'fossiilinen-polttoaine',
-      priceField: 'fossiiliset-pat-hinta'
+      pppEnergiamuoto: 'ostoenergian-tarve-fossiiliset-pat',
+      etEnergiamuoto: 'fossiilinen-polttoaine',
+      pppPriceField: 'fossiiliset-pat-hinta'
     },
     {
-      key: 'kaukojaahdytys',
-      consumptionField: 'kaukojaahdytys',
-      priceField: 'kaukojaahdytys-hinta'
+      pppEnergiamuoto: 'ostoenergian-tarve-kaukojaahdytys',
+      etEnergiamuoto: 'kaukojaahdytys',
+      pppPriceField: 'kaukojaahdytys-hinta'
     }
   ];
 
-  // PoC: Mock vaiheet data until real implementation is merged
-  // This simulates the structure from perusparannuspassi.vaiheet
-  const mockVaiheet = [
-    {
-      'vaihe-nro': 1,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(10000)),
-        sahko: Either.Right(Maybe.Some(8000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(500)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(300)),
-        kaukojaahdytys: Either.Right(Maybe.Some(200))
-      }
-    },
-    {
-      'vaihe-nro': 2,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(8000)),
-        sahko: Either.Right(Maybe.Some(6000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(400)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(200)),
-        kaukojaahdytys: Either.Right(Maybe.Some(150))
-      }
-    },
-    {
-      'vaihe-nro': 3,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(6000)),
-        sahko: Either.Right(Maybe.Some(4000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(300)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(100)),
-        kaukojaahdytys: Either.Right(Maybe.Some(100))
-      }
-    },
-    {
-      'vaihe-nro': 4,
-      tulokset: {
-        kaukolampo: Either.Right(Maybe.Some(4000)),
-        sahko: Either.Right(Maybe.Some(2000)),
-        'uusiutuva-polttoaine': Either.Right(Maybe.Some(200)),
-        'fossiilinen-polttoaine': Either.Right(Maybe.Some(50)),
-        kaukojaahdytys: Either.Right(Maybe.Some(50))
-      }
-    }
-  ];
+  const calculateCosts = (et, ppp) => {
+    const multiplyEitherMaybe = (a, b) =>
+      R.lift(R.multiply)(
+        EtUtils.unnestValidation(a),
+        EtUtils.unnestValidation(b)
+      );
 
-  $: kaytettavatEnergiamuodot =
-    energiatodistus?.tulokset?.['kaytettavat-energiamuodot'];
+    const addTotal = costs =>
+      R.assoc(
+        'total',
+        R.compose(
+          R.reduce(
+            (acc, cost) =>
+              Maybe.isSome(acc) ? R.lift(R.add)(acc, cost) : cost,
+            Maybe.None()
+          ),
+          R.filter(Maybe.isSome),
+          R.values
+        )(costs),
+        costs
+      );
 
-  $: tuloksetData = perusparannuspassi?.tulokset;
+    const etCosts = R.compose(
+      addTotal,
+      R.fromPairs,
+      R.map(({ etEnergiamuoto, pppPriceField }) => [
+        etEnergiamuoto,
+        multiplyEitherMaybe(
+          et.tulokset['kaytettavat-energiamuodot'][etEnergiamuoto],
+          ppp.tulokset[pppPriceField]
+        )
+      ])
+    )(laskennallisetOstoenergiat);
 
-  $: consumptionValues = R.compose(
-    R.map(EtUtils.unnestValidation),
-    R.defaultTo({})
-  )(kaytettavatEnergiamuodot);
+    const pppCosts = R.map(
+      vaihe =>
+        R.compose(
+          addTotal,
+          R.fromPairs,
+          R.map(({ etEnergiamuoto, pppEnergiamuoto, pppPriceField }) => [
+            etEnergiamuoto,
+            multiplyEitherMaybe(
+              vaihe.tulokset[pppEnergiamuoto],
+              ppp.tulokset[pppPriceField]
+            )
+          ])
+        )(laskennallisetOstoenergiat),
+      ppp.vaiheet
+    );
 
-  $: priceValues = tuloksetData
-    ? R.compose(R.map(EtUtils.unnestValidation), R.defaultTo({}))(tuloksetData)
-    : {};
+    return [etCosts, ...pppCosts];
+  };
 
-  const vaiheConsumptionValues =
-    PppUtils.extractVaiheConsumptionValues(mockVaiheet);
-
-  function calculateCost(energiamuoto) {
-    const consumption = consumptionValues[energiamuoto.consumptionField];
-    const price = priceValues[energiamuoto.priceField];
-    return PppUtils.calculateCostFromValues(consumption, price);
-  }
-
-  $: lahtotilanneCosts =
-    kaytettavatEnergiamuodot && tuloksetData
-      ? PppUtils.calculateAllCosts(energiamuodot, calculateCost)
-      : {};
-
-  // Calculate costs for each vaihe
-  $: vaiheCosts = tuloksetData
-    ? PppUtils.calculateVaiheCosts(
-        mockVaiheet,
-        energiamuodot,
-        vaiheConsumptionValues,
-        priceValues
-      )
-    : [];
-
-  $: lahtotilanneTotalCost = EtUtils.sumEtValues(lahtotilanneCosts);
-
-  $: vaiheTotalCosts = vaiheCosts.map(EtUtils.sumEtValues);
-
-  $: differences = PppUtils.calculateVaiheDifferences(
-    vaiheTotalCosts,
-    lahtotilanneTotalCost
-  );
+  $: costs = calculateCosts(energiatodistus, perusparannuspassi);
 </script>
 
 <H4 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
@@ -166,31 +129,28 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each energiamuodot as energiamuoto, i}
+      {#each laskennallisetOstoenergiat as { etEnergiamuoto }}
         <tr class="et-table--tr">
           <td class="et-table--td et-table--td__fifth">
             {$_(
-              `perusparannuspassi.laskennallinen-ostoenergia.labels.${energiamuoto.key}`
+              `perusparannuspassi.laskennallinen-ostoenergia.labels.${etEnergiamuoto}`
             )}
           </td>
+
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {R.compose(
-              Maybe.orSome('-'),
-              R.map(R.compose(formats.numberFormat, fxmath.round(2)))
-            )(lahtotilanneCosts[energiamuoto.key])}
+            {PppUtils.formatCost(costs[0][etEnergiamuoto])}
           </td>
-          {#each vaiheCosts as vaiheEnergyCosts}
+
+          {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {R.compose(
-                Maybe.orSome('-'),
-                R.map(R.compose(formats.numberFormat, fxmath.round(2)))
-              )(vaiheEnergyCosts[energiamuoto.key])}
+              {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
             </td>
           {/each}
         </tr>
       {/each}
+
       <!-- Yhteensä row -->
       <tr class="et-table--tr border-t-1 border-disabled">
         <td class="et-table--td et-table--td__fifth uppercase">
@@ -198,21 +158,16 @@
         </td>
         <td
           class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-          {R.compose(
-            Maybe.orSome('-'),
-            R.map(R.compose(formats.numberFormat, fxmath.round(2)))
-          )(lahtotilanneTotalCost)}
+          {PppUtils.formatCost(costs[0].total)}
         </td>
-        {#each vaiheTotalCosts as totalCost}
+        {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {R.compose(
-              Maybe.orSome('-'),
-              R.map(R.compose(formats.numberFormat, fxmath.round(2)))
-            )(totalCost)}
+            {PppUtils.formatCost(vaiheCost.total)}
           </td>
         {/each}
       </tr>
+
       <!-- Erotus edelliseen vaiheeseen row -->
       <tr class="et-table--tr">
         <td class="et-table--td et-table--td__fifth">
@@ -224,19 +179,13 @@
           class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
           -
         </td>
-        {#each differences as diff}
+        {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {R.compose(
-              Maybe.orSome('-'),
-              R.map(value => {
-                const formatted = R.compose(
-                  formats.numberFormat,
-                  fxmath.round(2)
-                )(value);
-                return value < 0 ? formatted : `+${formatted}`;
-              })
-            )(diff)}
+            {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
+              cur.total,
+              prev.total
+            )}
           </td>
         {/each}
       </tr>
