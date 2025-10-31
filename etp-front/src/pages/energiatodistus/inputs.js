@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
+import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
 import * as locales from '@Language/locale-utils';
 
@@ -40,20 +41,25 @@ export const required = (inputLanguage, type, model) =>
 
 const localeKey = R.compose(removeLocalePostfix, R.join('.'), zeroPath);
 
-export const label = (i18n, i18nRoot, inputLanguage, path) =>
-  // input ordinal in array (starting from 1)
-  R.compose(
-    Maybe.orSome(''),
-    R.map(i => `${i + 1}. `),
-    index
-  )(path) +
+const findOrdinalInArray = R.compose(
+  Maybe.orSome(''),
+  R.map(i => `${i + 1}. `),
+  index
+);
+
+const inputLanguageSymbol = R.compose(
+  Maybe.orSome(''),
+  R.map(l => ` / ${l}`)
+);
+
+export const labelWithoutOrdinal = (i18n, i18nRoot, inputLanguage, path) =>
   // localized label text
-  i18n(i18nRoot + '.' + localeKey(path)) +
-  // input language symbol
-  R.compose(
-    Maybe.orSome(''),
-    R.map(l => ` / ${l}`)
-  )(inputLanguage);
+  i18n(i18nRoot + '.' + localeKey(path)) + inputLanguageSymbol(inputLanguage);
+
+export const label = (i18n, i18nRoot, inputLanguage, path) =>
+  // input ordinal if in array (starting from 1)
+  findOrdinalInArray(path) +
+  labelWithoutOrdinal(i18n, i18nRoot, inputLanguage, path);
 
 const labelContext = (i18n, path) =>
   R.length(path) > 1
@@ -93,4 +99,25 @@ export const propertyLabel = R.curry((i18n, propertyName) =>
     language(propertyName),
     R.split('.', propertyName)
   )
+);
+
+export const viewValueFormatted = R.curry(
+  ({ model, schema, path, valueOnEmpty }) => {
+    const valueType = type(schema, path);
+    const format = valueType.format;
+
+    const formatOrValueOnEmpty = R.ifElse(
+      R.always(R.isNotNil(valueOnEmpty)),
+      Maybe.cata(R.always(valueOnEmpty), format),
+      format
+    );
+
+    return R.compose(
+      Maybe.get,
+      Either.toMaybe,
+      Either.map(formatOrValueOnEmpty),
+      Either.fromValueOrEither,
+      R.view(R.lensPath(path))
+    )(model);
+  }
 );

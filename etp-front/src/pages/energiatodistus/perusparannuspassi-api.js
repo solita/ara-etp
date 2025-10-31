@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import * as Either from '@Utility/either-utils';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@/utils/fetch-utils.js';
-import * as Maybe from '@Utility/maybe-utils';
+import * as Maybe from '@Utility/maybe-utils.js';
 
 import * as empty from '@Pages/energiatodistus/empty.js';
 import * as deep from '@/utils/deep-objects.js';
@@ -25,6 +25,14 @@ export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
   )(energiatodistusId)
 );
 
+// This is somewhat different route than with energiatodistus. With energiatodistus inputtable values out of schema
+// are put into empty energiatodistus and then the empty is merged when deserializing.
+const deserializeToimenpideEhdotukset = toimenpiteet =>
+  R.concat(
+    toimenpiteet,
+    R.repeat(Maybe.None(), R.max(6 - R.length(toimenpiteet), 0))
+  );
+
 const deserializer = {
   id: Maybe.get,
   valid: Maybe.get,
@@ -37,7 +45,26 @@ const deserializer = {
   vaiheet: R.repeat(
     {
       'vaihe-nro': Maybe.get,
-      valid: Maybe.get
+      valid: Maybe.get,
+      toimenpiteet: {
+        'toimenpide-ehdotukset': deserializeToimenpideEhdotukset
+      }
+    },
+    4
+  )
+};
+
+const serializeToimenpideEhdotukset = R.compose(
+  R.filter(R.isNotNil),
+  R.map(Maybe.orSome(null))
+);
+
+const serializer = {
+  vaiheet: R.repeat(
+    {
+      toimenpiteet: {
+        'toimenpide-ehdotukset': serializeToimenpideEhdotukset
+      }
     },
     4
   )
@@ -73,5 +100,6 @@ export const serialize = R.compose(
     )
   ),
   R.omit(['id', 'tila-id', 'laatija-id']),
-  R.evolve(transformationFromSchema('serialize'))
+  R.evolve(transformationFromSchema('serialize')),
+  R.evolve(serializer)
 );

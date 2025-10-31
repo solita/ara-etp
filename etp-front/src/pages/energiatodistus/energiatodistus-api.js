@@ -341,7 +341,8 @@ const luokittelut = {
     '/mahdollisuus-liittya-energiatehokkaaseen'
   ),
   uusiutuvaEnergia: Fetch.cached(fetch, '/uusiutuva-energia'),
-  jaahdytys: Fetch.cached(fetch, '/jaahdytys')
+  jaahdytys: Fetch.cached(fetch, '/jaahdytys'),
+  'toimenpide-ehdotus': Fetch.cached(fetch, '/toimenpide-ehdotus')
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
