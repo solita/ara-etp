@@ -8,7 +8,7 @@
 <div>
   <H5 text="TODO: AE-2663" />
 
-  <dl class="description-list">
+  <dl class="ppp-description-list">
     <dt>TODO</dt>
     <dd>todo</dd>
     <dt>TODO</dt>

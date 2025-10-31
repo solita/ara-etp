@@ -70,20 +70,20 @@
     @apply text-right;
   }
 
-  .description-list {
+  .ppp-description-list {
     @apply grid grid-cols-[max-content_1fr];
   }
 
-  .description-list > dt,
-  .description-list > dd {
+  .ppp-description-list > dt,
+  .ppp-description-list > dd {
     @apply border-b px-4 py-3;
   }
 
-  .description-list > dt::after {
+  .ppp-description-list > dt::after {
     content: ':';
   }
 
-  .description-list > dd {
+  .ppp-description-list > dd {
     @apply font-bold;
   }
 }

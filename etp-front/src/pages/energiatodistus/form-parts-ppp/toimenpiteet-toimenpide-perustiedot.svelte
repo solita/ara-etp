@@ -56,7 +56,7 @@
   };
 </script>
 
-<dl class="description-list">
+<dl class="ppp-description-list">
   <dt>
     {i18n('perusparannuspassi.vaiheet.0.tulokset.vaiheen-alku-pvm-vaihe-alkaa')}
   </dt>
