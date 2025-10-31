@@ -80,7 +80,7 @@
   }
 
   .description-list > dt::after {
-    content: ":";
+    content: ':';
   }
 
   .description-list > dd {
