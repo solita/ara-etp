@@ -41,22 +41,25 @@ export const required = (inputLanguage, type, model) =>
 
 const localeKey = R.compose(removeLocalePostfix, R.join('.'), zeroPath);
 
+const findOrdinalInArray = R.compose(
+  Maybe.orSome(''),
+  R.map(i => `${i + 1}. `),
+  index
+);
+
+const inputLanguageSymbol = R.compose(
+  Maybe.orSome(''),
+  R.map(l => ` / ${l}`)
+);
+
 export const labelWithoutOrdinal = (i18n, i18nRoot, inputLanguage, path) =>
   // localized label text
-  i18n(i18nRoot + '.' + localeKey(path)) +
-  // input language symbol
-  R.compose(
-    Maybe.orSome(''),
-    R.map(l => ` / ${l}`)
-  )(inputLanguage);
+  i18n(i18nRoot + '.' + localeKey(path)) + inputLanguageSymbol(inputLanguage);
 
 export const label = (i18n, i18nRoot, inputLanguage, path) =>
-  // input ordinal in array (starting from 1)
-  R.compose(
-    Maybe.orSome(''),
-    R.map(i => `${i + 1}. `),
-    index
-  )(path) + labelWithoutOrdinal(i18n, i18nRoot, inputLanguage, path);
+  // input ordinal if in array (starting from 1)
+  findOrdinalInArray(path) +
+  labelWithoutOrdinal(i18n, i18nRoot, inputLanguage, path);
 
 const labelContext = (i18n, path) =>
   R.length(path) > 1
