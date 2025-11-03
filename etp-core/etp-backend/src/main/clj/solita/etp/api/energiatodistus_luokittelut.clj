@@ -26,6 +26,7 @@
    (classification-route "/mahdollisuus-liittya-energiatehokkaaseen" "mahdollisuus-liittya-energiatehokkaaseen" luokittelu-service/find-mahdollisuus-liittya)
    (classification-route "/uusiutuva-energia" "uusiutuva-energia" luokittelu-service/find-uusiutuva-energia)
    (classification-route "/jaahdytys" "jaahdytys" luokittelu-service/find-jaahdytys)
+   (classification-route "/toimenpide-ehdotus" "toimenpide-ehdotus" luokittelu-service/find-toimenpide-ehdotus)
 
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"

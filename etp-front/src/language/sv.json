@@ -1481,8 +1481,24 @@
     },
     "vaiheet": {
       "0": {
+        "toimenpiteet": {
+          "header": "Toimenpiteet (sv)",
+          "osio": {
+            "header": "Vaiheessa {vaihe} toteutettavat toimenpiteet (sv)",
+            "show": "Avaa osio (sv)",
+            "hide": "Sulje osio (sv)"
+          },
+          "toimenpideseloste": "Toimenpideseloste (sv)",
+          "toimenpide-ehdotukset": {
+            "header": "Toimenpide-ehdotukset (sv)",
+            "toimenpide-ehdotus-n": "{n}. toimenpide-ehdotus (sv)"
+          }
+        },
         "tulokset": {
-          "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)"
+          "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)",
+          "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa (sv)",
+          "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen (sv)",
+          "e-luku-vaiheen-jalkeen": "E-luku vaiheen jälkeen (sv)"
         }
       }
     },

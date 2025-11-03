@@ -1,3 +1,10 @@
+<script context="module">
+  export const Variants = {
+    DEFAULT: 'default',
+    LIGHT: 'light'
+  };
+</script>
+
 <script>
   import { tick } from 'svelte';
 
@@ -31,6 +38,8 @@
   export let validators = [];
 
   export let itemComponent = null;
+
+  export let variant = Variants.DEFAULT;
 
   const i18n = $_;
 
@@ -156,6 +165,10 @@
     @apply bg-light border-transparent min-h-0 cursor-default;
   }
 
+  .button.light {
+    @apply bg-light;
+  }
+
   .label.focused {
     @apply font-extrabold;
   }
@@ -217,6 +230,7 @@
     bind:this={button}
     class="button flex items-center pl-3"
     class:focused
+    class:light={R.equals(variant, 'light')}
     tabindex={disabled ? -1 : 0}
     on:click={_ => disabled || (showDropdown = !showDropdown)}
     on:focus={_ => {
