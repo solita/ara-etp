@@ -29,23 +29,27 @@ const testEnergiatodistus = () => {
     Maybe.Some(150)
   );
   energiatodistus.tulokset['kaytettavat-energiamuodot'].sahko = Either.Right(
-    Maybe.Some(12000)
+    Maybe.Some(3000)
   );
   energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukolampo =
-    Either.Right(Maybe.Some(8000));
+    Either.Right(Maybe.Some(12000));
   energiatodistus.tulokset['kaytettavat-energiamuodot'][
     'uusiutuva-polttoaine'
-  ] = Either.Right(Maybe.Some(5000));
+  ] = Either.Right(Maybe.Some(1000));
   energiatodistus.tulokset['kaytettavat-energiamuodot'][
     'fossiilinen-polttoaine'
-  ] = Either.Right(Maybe.Some(12000));
+  ] = Either.Right(Maybe.None());
   energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukojaahdytys =
-    Either.Right(Maybe.Some(5000));
+    Either.Right(Maybe.None());
   energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'].aurinkosahko =
-    Either.Right(Maybe.Some(5000));
+    Either.Right(Maybe.None());
+
   energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
     'kaukolampo-vuosikulutus'
-  ] = Either.Right(Maybe.Some(5000));
+  ] = Either.Right(Maybe.Some(11000));
+  energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'][
+    'kokonaissahko-vuosikulutus'
+  ] = Either.Right(Maybe.Some(4000));
 
   return energiatodistus;
 };
@@ -54,8 +58,31 @@ const testPpp = energiatodistusId => {
   const ppp = empty.perusparannuspassi(energiatodistusId);
 
   ppp.id = 4245;
+
+  ppp.tulokset['fossiiliset-pat-hinta'] = Either.Right(Maybe.Some(13.5));
+  ppp.tulokset['kaukojaahdytys-hinta'] = Either.Right(Maybe.Some(7.0));
+  ppp.tulokset['kaukolampo-hinta'] = Either.Right(Maybe.Some(11.5));
+  ppp.tulokset['sahko-hinta'] = Either.Right(Maybe.Some(22.0));
+  ppp.tulokset['uusiutuvat-pat-hinta'] = Either.Right(Maybe.Some(9.0));
+
   ppp.vaiheet[0].tulokset['vaiheen-alku-pvm'] = Either.Right(Maybe.Some(2030));
   ppp.vaiheet[0].valid = true;
+  ppp.vaiheet[0].tulokset['ostoenergian-tarve-kaukolampo'] = Either.Right(
+    Maybe.Some(10000)
+  );
+  ppp.vaiheet[0].tulokset['ostoenergian-tarve-sahko'] = Either.Right(
+    Maybe.Some(3000)
+  );
+
+  ppp.vaiheet[0].tulokset['toteutunut-ostoenergia-kaukolampo'] = Either.Right(
+    Maybe.Some(9000)
+  );
+  ppp.vaiheet[0].tulokset['toteutunut-ostoenergia-sahko'] = Either.Right(
+    Maybe.Some(4000)
+  );
+
+  ppp.vaiheet[1].tulokset['vaiheen-alku-pvm'] = Either.Right(Maybe.Some(2035));
+  ppp.vaiheet[1].valid = true;
 
   return ppp;
 };
