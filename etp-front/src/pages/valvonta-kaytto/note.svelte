@@ -19,7 +19,7 @@
     <span class="mr-2 whitespace-nowrap">
       {Formats.formatTimeInstantMinutes(note['create-time'])}
     </span>
-    <span class="font-icon mr-1">comment</span>
+    <span class="mr-1 font-icon">comment</span>
     <span>{i18n(`${i18nRoot}.title`)}</span>
     {#each Maybe.toArray(author) as a}
       <span class="ml-1">

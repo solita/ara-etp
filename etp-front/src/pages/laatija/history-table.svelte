@@ -50,16 +50,16 @@
             </span>
 
             {#if h.laatimiskielto}
-              <span class="text-error font-bold">
+              <span class="font-bold text-error">
                 {i18n(i18nRoot + '.laatimiskielto')}
               </span>
             {/if}
           </td>
           <td class="etp-table--td">
             {#if Maybe.isSome(h.wwwosoite)}
-              <div class="truncate www-container">
+              <div class="www-container truncate">
                 <a
-                  class="text-link cursor-pointer font-bold hover:underline"
+                  class="cursor-pointer font-bold text-link hover:underline"
                   title={h.wwwosoite.orSome('')}
                   href={h.wwwosoite.orSome('')}>{h.wwwosoite.orSome('')}</a>
               </div>

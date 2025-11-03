@@ -16,11 +16,11 @@
 
 <style type="text/postcss">
   label {
-    @apply inline-block w-full py-40 text-center bg-light text-dark rounded-lg border-dashed border-secondary border-2 cursor-pointer;
+    @apply inline-block w-full cursor-pointer rounded-lg border-2 border-dashed border-secondary bg-light py-40 text-center text-dark;
   }
 
   input {
-    @apply opacity-0 w-0 h-0;
+    @apply h-0 w-0 opacity-0;
   }
 
   label:hover .highlight-text,
@@ -29,7 +29,7 @@
   }
 
   .highlight {
-    @apply border-primary border-4;
+    @apply border-4 border-primary;
   }
 </style>
 
@@ -47,8 +47,8 @@
     }}
     type="file"
     {multiple} />
-  <span class="material-icons text-primary align-middle">arrow_downward</span>
+  <span class="material-icons align-middle text-primary">arrow_downward</span>
   <span>{labelText}</span>
-  <span class="font-bold text-primary highlight-text"
+  <span class="highlight-text font-bold text-primary"
     >{labelTextHighlight}</span>
 </label>

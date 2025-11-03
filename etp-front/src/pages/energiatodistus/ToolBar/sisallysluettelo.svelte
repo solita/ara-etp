@@ -55,7 +55,7 @@
 
 <style type="text/postcss">
   .toc {
-    @apply flex flex-col w-[240px];
+    @apply flex w-[240px] flex-col;
   }
 
   .toc-item {
@@ -74,7 +74,7 @@
   }
 
   .toc-header {
-    @apply font-semibold text-dark leading-header;
+    @apply font-semibold leading-header text-dark;
   }
 </style>
 

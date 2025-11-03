@@ -1,10 +1,10 @@
 <style type="text/postcss">
   :global(.etp-table) {
-    @apply w-full text-sm table-auto;
+    @apply w-full table-auto text-sm;
   }
 
   :global(.etp-table--thead) {
-    @apply text-primary uppercase text-left tracking-wider bg-light;
+    @apply bg-light text-left uppercase tracking-wider text-primary;
   }
 
   :global(.etp-table--th),
@@ -14,7 +14,7 @@
 
   :global(.etp-table--td:not(:first-child)),
   :global(.etp-table--th:not(:first-child)) {
-    @apply border-disabled border-l-1;
+    @apply border-l-1 border-disabled;
   }
 
   :global(.etp-table--tbody > :nth-child(odd)) {

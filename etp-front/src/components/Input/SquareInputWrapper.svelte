@@ -9,7 +9,7 @@
 
 <style type="text/postcss">
   div {
-    @apply flex relative items-center border-b-3 border-disabled text-dark;
+    @apply relative flex items-center border-b-3 border-disabled text-dark;
   }
 
   div:hover {
@@ -17,13 +17,13 @@
   }
 
   div.caret::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
+    @apply absolute font-icon text-2xl font-bold text-disabled;
     right: 0.5em;
     content: 'expand_more';
   }
 
   div.search::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
+    @apply absolute font-icon text-2xl font-bold text-disabled;
     right: 0.5em;
     content: 'search';
   }

@@ -126,14 +126,14 @@
     </table>
   </div>
 {/if}
-<div class="flex my-4 space-x-4">
-  <div class="flex mb-auto">
+<div class="my-4 flex space-x-4">
+  <div class="mb-auto flex">
     <Link
       href={Links.newHenkilo(valvonta)}
       icon={Maybe.Some('add_circle_outline')}
       text={i18n(i18nRoot + '.new-henkilo')} />
   </div>
-  <div class="flex mb-auto">
+  <div class="mb-auto flex">
     <Link
       href={Links.newYritys(valvonta)}
       icon={Maybe.Some('add_circle_outline')}

@@ -103,7 +103,7 @@
 <div class="w-full">
   <H2 text={i18n(i18nRoot + '.vastaanottajat')} />
 
-  <div class="flex flex-row my-4">
+  <div class="my-4 flex flex-row">
     <table class="etp-table">
       <thead class="etp-table--thead">
         <tr class="etp-table--tr etp-table--tr__light">
@@ -306,7 +306,7 @@
                   <div
                     class:text-primary={!disabled}
                     class:text-disabled={disabled}
-                    class="cursor-pointer etp-table--td__center"
+                    class="etp-table--td__center cursor-pointer"
                     role="button"
                     class:invisible={isPreviewHidden(toimenpide, osapuoli)}
                     on:click|stopPropagation={disabled ||

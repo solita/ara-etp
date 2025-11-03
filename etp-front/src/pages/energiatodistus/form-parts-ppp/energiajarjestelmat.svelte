@@ -76,7 +76,7 @@
     )} />
 </div>
 
-<div class="min-w-full overflow-x-visible md:overflow-x-visible border-right-0">
+<div class="border-right-0 min-w-full overflow-x-visible md:overflow-x-visible">
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
@@ -136,7 +136,7 @@
       'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.lisatiedot.info'
     )}
   </div>
-  <div class="w-full py-4 mb-4">
+  <div class="mb-4 w-full py-4">
     <Textarea
       {schema}
       i18nRoot="perusparannuspassi"
@@ -165,7 +165,7 @@
     {$_(
       'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.info'
     )}
-    <div class="lg:w-1/2 w-full py-4">
+    <div class="w-full py-4 lg:w-1/2">
       <Select
         label={$_(
           'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.title'

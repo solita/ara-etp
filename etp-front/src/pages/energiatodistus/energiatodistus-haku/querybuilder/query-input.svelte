@@ -103,7 +103,7 @@
     name={`${nameprefix}_type`}
     value={op.type} />
   {#if op.type !== OPERATOR_TYPES.BOOLEAN}
-    <div class="flex items-end w-1/4">
+    <div class="flex w-1/4 items-end">
       <div class="flex-grow">
         <Select
           items={operations}
@@ -126,7 +126,7 @@
       name={`${nameprefix}_operation`}
       value="=" />
   {/if}
-  <div class="inputs pl-4 flex justify-between flex-grow flex-row items-end">
+  <div class="inputs flex flex-grow flex-row items-end justify-between pl-4">
     <div class="w-full">
       <svelte:component
         this={inputForType(op.type)}

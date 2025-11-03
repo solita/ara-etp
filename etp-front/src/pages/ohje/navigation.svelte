@@ -111,13 +111,13 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full flex flex-col">
+  <div slot="content" class="flex w-full flex-col">
     {#each sivutTree as sivu}
       <NavLink {sivu} activeSivuId={id} draggable={sortMode} {updateSivu} />
     {/each}
     {#each Maybe.toArray(whoami) as whoami}
       {#if Kayttajat.isPaakayttaja(whoami)}
-        <div class="flex flex-col space-y-2 mt-4 justify-start font-semibold">
+        <div class="mt-4 flex flex-col justify-start space-y-2 font-semibold">
           {#if !R.isEmpty(sivutTree)}
             {#if !sortMode}
               <TextButton

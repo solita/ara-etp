@@ -32,16 +32,16 @@
   }
 
   header {
-    @apply flex px-10 h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex h-20 items-center justify-between px-10 font-bold uppercase tracking-xl text-light;
   }
 
   .footercontainer {
-    @apply w-full flex justify-center bg-background;
+    @apply flex w-full justify-center bg-background;
   }
 </style>
 
 <div class="headercontainer">
-  <div class="w-full max-w-1440 mx-auto">
+  <div class="mx-auto w-full max-w-1440">
     <header class="flex justify-between">
       <div class="flex flex-1 items-center">
         <a href="/">
@@ -53,7 +53,7 @@
   </div>
 </div>
 
-<div class="flex flex-col justify-center items-center text-3xl">
+<div class="flex flex-col items-center justify-center text-3xl">
   <div>
     <span class="font-semibold text-primary">{$_('log-out-done.message')}</span>
     {#each Maybe.toArray(resources) as { config }}
@@ -66,7 +66,7 @@
 </div>
 
 <div class="footercontainer">
-  <div class="w-full max-w-1440 mx-auto">
+  <div class="mx-auto w-full max-w-1440">
     {#each Maybe.toArray(resources) as { version }}
       <Footer {version} />
     {/each}

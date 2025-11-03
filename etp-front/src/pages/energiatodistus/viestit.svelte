@@ -87,7 +87,7 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each Maybe.toArray(resources) as { ketjut, whoami, vastaanottajaryhmat, kasittelijat }}
       <div class="flex justify-between">
         <H1 text={i18n('energiatodistus.viestit.title')} />

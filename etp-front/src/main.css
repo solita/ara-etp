@@ -11,18 +11,18 @@
 
 @layer components {
   .et-table {
-    @apply border-b-1 border-disabled pb-8 table-fixed w-full;
+    @apply w-full table-fixed border-b-1 border-disabled pb-8;
   }
   .et-table__noborder {
     @apply border-b-0;
   }
   .et-table--th {
-    @apply py-5 px-4 font-bold;
-    @apply text-primary text-sm w-1/5;
+    @apply px-4 py-5 font-bold;
+    @apply w-1/5 text-sm text-primary;
     height: 4em;
   }
   .et-table--td {
-    @apply py-3 px-4 font-bold;
+    @apply px-4 py-3 font-bold;
   }
   .et-table--td .inputwrapper {
     @apply m-0;

@@ -80,10 +80,10 @@
 
 <style type="text/postcss">
   h3 {
-    @apply text-primary uppercase font-bold text-sm;
+    @apply text-sm font-bold uppercase text-primary;
   }
   h3 span {
-    @apply lowercase text-lg font-normal;
+    @apply text-lg font-normal lowercase;
   }
 </style>
 
@@ -92,7 +92,7 @@
 {/if}
 
 {#if !R.isEmpty(korvattavat)}
-  <div class="my-4 border-primary/15 border-2 rounded-md p-4 shadow-md">
+  <div class="my-4 rounded-md border-2 border-primary/15 p-4 shadow-md">
     <h3>
       <span class="font-icon">info_outline</span>
       {i18n(i18nRoot + '.header.ehdotus')}
@@ -109,8 +109,8 @@
         text={i18n(i18nRoot + '.ehdotus.info-p3-2')} />
       {i18n(i18nRoot + '.ehdotus.info-p3-3')}
     </p>
-    <div class="flex flex-col gap-x-8 mt-2">
-      <div class="w-full py-4 relative" transition:slide={{ duration: 200 }}>
+    <div class="mt-2 flex flex-col gap-x-8">
+      <div class="relative w-full py-4" transition:slide={{ duration: 200 }}>
         <div class="overflow-auto">
           <table class="etp-table">
             <thead class="etp-table--thead">

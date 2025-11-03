@@ -122,7 +122,7 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3 flex space-x-4">
+  <div slot="content" class="mt-3 flex w-full space-x-4">
     <div class="w-2/6 max-w-xs">
       <Navigation
         id={params.id}
@@ -131,9 +131,9 @@
     </div>
     <div class="w-4/6 flex-grow">
       {#if sivu}
-        <div class="w-full flex flex-col">
+        <div class="flex w-full flex-col">
           <DirtyConfirmation {dirty} />
-          <div class="w-full flex flex-col">
+          <div class="flex w-full flex-col">
             <form
               id="ohje"
               on:submit|preventDefault={submitOhje(sivu)}
@@ -143,8 +143,8 @@
               on:change={_ => {
                 dirty = true;
               }}>
-              <div class="flex justify-between items-end">
-                <div class="flex-grow mr-4">
+              <div class="flex items-end justify-between">
+                <div class="mr-4 flex-grow">
                   <Input
                     id={'ohje.title'}
                     name={'ohje.title'}

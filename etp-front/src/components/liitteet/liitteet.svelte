@@ -90,7 +90,7 @@
 
 <style>
   .delete-icon:hover:not(.text-disabled) {
-    @apply text-error cursor-pointer;
+    @apply cursor-pointer text-error;
   }
 
   .delete-icon.text-disabled {
@@ -141,7 +141,7 @@
               <td class="etp-table--td">{liite['author-fullname']}</td>
               <td class="etp-table--td">
                 <a
-                  class="hover:underline font-bold text-link"
+                  class="font-bold text-link hover:underline"
                   target="_self"
                   href={liiteUrl(liite)}>
                   {liite.nimi}
@@ -149,7 +149,7 @@
               </td>
               <td class="etp-table--td etp-table--td__center">
                 <span
-                  class="font-icon-outlined cursor-default text-2xl"
+                  class="cursor-default font-icon-outlined text-2xl"
                   title={liite['contenttype']}>
                   {Maybe.isSome(liite.url) ? 'link' : 'attachment'}
                 </span>
@@ -176,7 +176,7 @@
                   </Confirm>
                 {:else}
                   <span
-                    class="font-icon text-2xl text-error cursor-default"
+                    class="cursor-default font-icon text-2xl text-error"
                     title={i18n(i18nRoot + '.liite.deleted')}>
                     delete_forever
                   </span>
@@ -191,15 +191,15 @@
 </div>
 
 {#if !disabled && !R.isNil(liiteApi)}
-  <div class="mb-4 flex lg:flex-row flex-col">
-    <div class="lg:w-1/2 w-full mr-6 mb-6">
+  <div class="mb-4 flex flex-col lg:flex-row">
+    <div class="mb-6 mr-6 w-full lg:w-1/2">
       <div class="flex space-x-1 text-primary">
         <span class="material-icons"> attachment </span>
         <H2 text={i18n(i18nRoot + '.add-files.title')} />
       </div>
       <FileDropArea bind:files multiple={true} />
     </div>
-    <div class="lg:w-1/2 w-full flex flex-col">
+    <div class="flex w-full flex-col lg:w-1/2">
       <div class="flex space-x-1 text-primary">
         <span class="material-icons"> link </span>
         <H2 text={i18n(i18nRoot + '.add-link.title')} />

@@ -24,7 +24,7 @@
 </style>
 
 {#if !R.isEmpty(messages)}
-  <div class="w-full min-h-3em">
+  <div class="min-h-3em w-full">
     {#each messages as message}
       <div transition:fly={{ y: 50 }}>
         <Alert

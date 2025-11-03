@@ -67,9 +67,9 @@
 
 <div class="mb-8">
   <H3 text={$_('energiatodistus.perustiedot.header')} />
-  <div class="flex lg:flex-row flex-col gap-x-8">
+  <div class="flex flex-col gap-x-8 lg:flex-row">
     {#if R.complement(R.isNil)(energiatodistus.id)}
-      <div class="lg:w-1/2 w-full py-2">
+      <div class="w-full py-2 lg:w-1/2">
         <BasicInput
           id="energiatodistus.id"
           name="energiatodistus.id"
@@ -81,13 +81,13 @@
       </div>
     {/if}
     {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
-      <div class="lg:w-1/2 w-full py-2">
+      <div class="w-full py-2 lg:w-1/2">
         <EnergiatodistusLaatija {whoami} {energiatodistus} />
       </div>
     {/if}
   </div>
-  <div class="flex lg:flex-row flex-col gap-x-8">
-    <div class="lg:w-1/2 w-full py-4">
+  <div class="flex flex-col gap-x-8 lg:flex-row">
+    <div class="w-full py-4 lg:w-1/2">
       <Input
         {disabled}
         {schema}
@@ -96,7 +96,7 @@
         path={['perustiedot', 'yritys', 'nimi']} />
     </div>
 
-    <div class="lg:w-1/2 w-full py-4">
+    <div class="w-full py-4 lg:w-1/2">
       <Input
         {disabled}
         {schema}
@@ -107,7 +107,7 @@
   </div>
 
   <div class="flex flex-col gap-x-8">
-    <div class="lg:w-1/2 w-full py-4">
+    <div class="w-full py-4 lg:w-1/2">
       <Select
         id={'perustiedot.kieli'}
         name={'perustiedot.kieli'}
@@ -123,7 +123,7 @@
         items={R.pluck('id', luokittelut.kielisyys)} />
     </div>
 
-    <div class="lg:w-1/2 w-full py-4">
+    <div class="w-full py-4 lg:w-1/2">
       <Select
         id={'perustiedot.laatimisvaihe'}
         label={$_('energiatodistus.perustiedot.laatimisvaihe')}
@@ -137,7 +137,7 @@
         items={R.pluck('id', luokittelut.laatimisvaiheet)} />
     </div>
     {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
-      <div class="lg:w-1/2 w-full py-4">
+      <div class="w-full py-4 lg:w-1/2">
         <Input
           {disabled}
           {schema}
@@ -148,7 +148,7 @@
       </div>
     {/if}
 
-    <div class="lg:w-1/2 w-full py-4">
+    <div class="w-full py-4 lg:w-1/2">
       <Input
         {disabled}
         {schema}
@@ -183,7 +183,7 @@
   text={$_('energiatodistus.lahtotiedot.header')} />
 
 <div class="flex w-full">
-  <div class="w-1/3 mb-12">
+  <div class="mb-12 w-1/3">
     <Input
       {disabled}
       {schema}
@@ -295,7 +295,7 @@
 
 <HR />
 <H2 id="lisamerkintoja" text={$_('energiatodistus.lisamerkintoja')} />
-<div class="w-full py-4 mb-4 lisamerkintoja-textarea">
+<div class="lisamerkintoja-textarea mb-4 w-full py-4">
   <Textarea
     {disabled}
     {schema}

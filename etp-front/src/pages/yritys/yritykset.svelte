@@ -82,13 +82,13 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     <H1 text={i18n('yritykset.title')} />
 
     <div class="my-4">
       <H2 text={i18n('yritykset.search')} />
       <div class="flex flex-col lg:flex-row">
-        <div class="lg:w-1/2 w-full mr-4">
+        <div class="mr-4 w-full lg:w-1/2">
           <Input
             model={query}
             lens={R.lensProp('search')}

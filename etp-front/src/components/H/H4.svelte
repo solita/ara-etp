@@ -5,7 +5,7 @@
 
 <style type="text/postcss">
   h4 {
-    @apply text-secondary w-full font-bold uppercase text-h4 mt-0 mb-2 leading-header;
+    @apply mb-2 mt-0 w-full text-h4 font-bold uppercase leading-header text-secondary;
   }
 
   .compact {

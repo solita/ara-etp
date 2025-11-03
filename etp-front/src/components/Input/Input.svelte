@@ -45,7 +45,7 @@
 
 <style type="text/postcss">
   .validation-label {
-    @apply absolute top-auto font-normal bg-light z-10;
+    @apply absolute top-auto z-10 bg-light font-normal;
     font-size: smaller;
   }
 </style>

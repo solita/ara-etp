@@ -135,7 +135,7 @@
   }
 
   h3 {
-    @apply text-primary uppercase font-bold text-sm mt-6;
+    @apply mt-6 text-sm font-bold uppercase text-primary;
   }
 </style>
 
@@ -161,10 +161,10 @@
 
   {#if checked}
     <div
-      class="flex flex-col gap-x-8 mt-2"
+      class="mt-2 flex flex-col gap-x-8"
       transition:slide={{ duration: 200 }}>
       {#if enabled}
-        <div class="w-full lg:w-1/2 py-2" on:input={updateQuery}>
+        <div class="w-full py-2 lg:w-1/2" on:input={updateQuery}>
           <Input
             model={query}
             id={'korvattavaenergiatodistus'}
@@ -185,7 +185,7 @@
           {/each}
           {#each Maybe.toArray(error) as key}
             <div class="error-label">
-              <span class="font-icon error-icon">error</span>
+              <span class="error-icon font-icon">error</span>
               {i18n('energiatodistus.korvaavuus.validation.' + key)}
             </div>
           {/each}

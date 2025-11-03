@@ -93,8 +93,8 @@
   on:submit|preventDefault={saveKayttaja}
   on:input={setDirty}
   on:change={setDirty}>
-  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Select
         id={'rooli'}
         name={'rooli-select'}
@@ -110,7 +110,7 @@
         items={R.pluck('id', filterRoolit(roolit))} />
     </div>
 
-    <div class="lg:w-1/6 lg:py-0 w-full px-4 py-4">
+    <div class="w-full px-4 py-4 lg:w-1/6 lg:py-0">
       <Checkbox
         bind:model={kayttaja}
         lens={R.lensProp('valvoja')}
@@ -118,7 +118,7 @@
         disabled={disabledAdmin} />
     </div>
 
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Checkbox
         bind:model={kayttaja}
         lens={R.lensProp('passivoitu')}
@@ -129,8 +129,8 @@
 
   <H2 text={i18n('kayttaja.perustiedot-header')} />
 
-  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'etunimi'}
         name={'etunimi'}
@@ -143,7 +143,7 @@
         {disabled}
         {i18n} />
     </div>
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'sukunimi'}
         name={'sukunimi'}
@@ -158,8 +158,8 @@
     </div>
   </div>
 
-  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'email'}
         name={'email'}
@@ -172,7 +172,7 @@
         {disabled}
         {i18n} />
     </div>
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'puhelin'}
         name={'puhelin'}
@@ -188,8 +188,8 @@
   </div>
 
   {#if isCurrentUserPaakayttaja && isEditedUserPaakayttaja}
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4 items-end">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="my-4 flex flex-col items-end py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'titteli-fi'}
           name={'titteli-fi'}
@@ -201,7 +201,7 @@
           {disabled}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'titteli-sv'}
           name={'titteli-sv'}
@@ -229,9 +229,9 @@
     label={i18n('kayttaja.virtu.checkbox')}
     disabled={disabledAdmin} />
 
-  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
+  <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
     {#if Maybe.isSome(kayttaja.virtu)}
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'virtu.organisaatio'}
           name={'virtu.organisaatio'}
@@ -248,7 +248,7 @@
           validators={virtuSchema.organisaatio}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'virtu.localid'}
           name={'virtu.localid'}
@@ -278,8 +278,8 @@
     label={i18n('kayttaja.suomifi.checkbox')}
     disabled={disabledAdmin} />
 
-  <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'henkilotunnus'}
         name={'henkilotunnus'}
@@ -294,7 +294,7 @@
     </div>
   </div>
 
-  <div class="flex lg:-mx-4 mt-10">
+  <div class="mt-10 flex lg:-mx-4">
     <div class="px-4">
       <Button
         prefix={'kayttaja-form'}

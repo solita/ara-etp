@@ -132,7 +132,7 @@
 
 <style type="text/postcss">
   button {
-    @apply p-2 flex gap-2 items-center;
+    @apply flex items-center gap-2 p-2;
   }
 
   button:last-of-type {
@@ -152,11 +152,11 @@
   }
 
   button.languageselect-button {
-    @apply p-0 border-4 border-ara-2021-basic-gray rounded-md;
+    @apply rounded-md border-4 border-ara-2021-basic-gray p-0;
   }
 
   button:disabled {
-    @apply text-disabled cursor-not-allowed;
+    @apply cursor-not-allowed text-disabled;
   }
 
   button:disabled:hover {
@@ -164,11 +164,11 @@
   }
 
   .description {
-    @apply font-bold uppercase text-sm;
+    @apply text-sm font-bold uppercase;
   }
 
   .languageselect {
-    @apply font-bold uppercase text-light w-1/2 py-1;
+    @apply w-1/2 py-1 font-bold uppercase text-light;
   }
 
   .languageselect:hover {
@@ -210,7 +210,7 @@
   <Sisallysluettelo />
   {#if R.includes(Toolbar.module.save, fields)}
     <button disabled={!dirty || pendingExecution} on:click={save(noop)}>
-      <span class="text-2xl font-icon">save</span>
+      <span class="font-icon text-2xl">save</span>
       <span class="description">
         {id.isSome()
           ? i18n('energiatodistus.toolbar.save')
@@ -218,7 +218,7 @@
       </span>
     </button>
     <button disabled={!dirty || pendingExecution} on:click={cancel}>
-      <span class="text-2xl font-icon">undo</span>
+      <span class="font-icon text-2xl">undo</span>
       <span class="description">{i18n('energiatodistus.toolbar.undo')}</span>
     </button>
   {/if}
@@ -227,7 +227,7 @@
       disabled={pendingExecution}
       data-cy="allekirjoita-button"
       on:click={saveComplete(openSigning)}>
-      <span class="text-2xl font-icon border-b-3 border-secondary">
+      <span class="border-b-3 border-secondary font-icon text-2xl">
         create
       </span>
       <div class="description">{i18n('energiatodistus.toolbar.sign')}</div>
@@ -248,7 +248,7 @@
           newEtPage();
         }
       }}>
-      <span class="text-2xl font-icon">file_copy</span>
+      <span class="font-icon text-2xl">file_copy</span>
       <span class="description">{i18n('energiatodistus.toolbar.copy')}</span>
     </button>
   {/if}
@@ -272,7 +272,7 @@
           PppApi.addPerusparannuspassi(fetch, Maybe.get(id))
         );
       }}>
-      <span class="text-2xl font-icon">add_circle_outline</span>
+      <span class="font-icon text-2xl">add_circle_outline</span>
       <span class="description">{i18n('energiatodistus.toolbar.add-ppp')}</span>
     </button>
   {/if}
@@ -282,8 +282,8 @@
         <button
           disabled={pendingExecution}
           on:click={save(() => openUrl(href))}>
-          <span class="text-2xl font-icon">picture_as_pdf</span>
-          <span class="block description"
+          <span class="font-icon text-2xl">picture_as_pdf</span>
+          <span class="description block"
             >{i18n('energiatodistus.toolbar.preview')}
             {R.toUpper(lang)}</span>
         </button>
@@ -294,8 +294,8 @@
     {#each pdfUrls as pdfUrl}
       {#each pdfUrl.toArray() as { href, lang }}
         <button disabled={pendingExecution} on:click={() => openUrl(href)}>
-          <span class="text-2xl font-icon">picture_as_pdf</span>
-          <span class="block description"
+          <span class="font-icon text-2xl">picture_as_pdf</span>
+          <span class="description block"
             >{i18n('energiatodistus.toolbar.download')}
             {R.toUpper(lang)}</span>
         </button>
@@ -310,7 +310,7 @@
       <button
         disabled={pendingExecution}
         on:click={() => confirm(discardEnergiatodistus)}>
-        <span class="text-2xl font-icon">block</span>
+        <span class="font-icon text-2xl">block</span>
         <span class="description"
           >{i18n('energiatodistus.toolbar.discard')}</span>
       </button>
@@ -324,7 +324,7 @@
       <button
         disabled={pendingExecution}
         on:click={() => confirm(undoDiscardEnergiatodistus)}>
-        <span class="text-2xl font-icon">undo</span>
+        <span class="font-icon text-2xl">undo</span>
         <span class="description"
           >{i18n('energiatodistus.toolbar.undodiscard')}</span>
       </button>
@@ -338,19 +338,19 @@
       <button
         disabled={pendingExecution}
         on:click={() => confirm(deleteEnergiatodistus)}>
-        <span class="text-2xl font-icon">delete_forever</span>
+        <span class="font-icon text-2xl">delete_forever</span>
         <span class="description"
           >{i18n('energiatodistus.toolbar.delete')}</span>
       </button>
     </Confirm>
   {/if}
   {#each eTehokkuus.toArray() as e}
-    <div class="border-2 border-dark py-2 bg-secondary w-full">
-      <div class="font-bold text-center text-sm text-light pb-1">
+    <div class="w-full border-2 border-dark bg-secondary py-2">
+      <div class="pb-1 text-center text-sm font-bold text-light">
         {i18n('energiatodistus.tulokset.e-luku')}
         {e['e-luku']}
       </div>
-      <div class="font-bold text-center text-sm text-light pt-1">
+      <div class="pt-1 text-center text-sm font-bold text-light">
         {i18n('energiatodistus.tulokset.e-luokka')}
         {e['e-luokka']}<sub>{energiatodistus.versio}</sub>
       </div>
@@ -359,17 +359,17 @@
   {#if pendingExecution}
     <div
       transition:fade={{ duration: 50 }}
-      class="absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0 flex flex-wrap justify-center content-center">
+      class="absolute bottom-0 left-0 right-0 top-0 flex flex-wrap content-center justify-center bg-light opacity-75">
       <Spinner />
     </div>
   {/if}
   <div class="py-2">
-    <div class="font-semibold text-sm mb-2 text-dark w-full">
+    <div class="mb-2 w-full text-sm font-semibold text-dark">
       {i18n('energiatodistus.toolbar.language-label')}
     </div>
     <button on:click={toggleLanguageSelection} class="languageselect-button">
       {#if bilingual}
-        <div class="flex flex-row w-full">
+        <div class="flex w-full flex-row">
           {#each ['fi', 'sv'] as language}
             <div
               data-cy={`languageselect-${language}`}
@@ -384,7 +384,7 @@
           {/each}
         </div>
       {:else}
-        <div class="w-full font-bold py-1 uppercase text-light bg-primary px-7">
+        <div class="w-full bg-primary px-7 py-1 font-bold uppercase text-light">
           {energiatodistusKieli.map(et.kielisyysKey).some()}
         </div>
       {/if}

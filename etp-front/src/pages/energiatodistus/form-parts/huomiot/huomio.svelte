@@ -20,7 +20,7 @@
 
 <H3 text={$_(`${base}.header`)} />
 
-<div class="w-full mb-6">
+<div class="mb-6 w-full">
   <Textarea
     {disabled}
     {schema}
@@ -30,7 +30,7 @@
 </div>
 
 {#each R.path(['huomiot', huomio, 'toimenpide'], energiatodistus) as _, index}
-  <div class="w-full py-4 mb-6">
+  <div class="mb-6 w-full py-4">
     <Input
       {disabled}
       {schema}

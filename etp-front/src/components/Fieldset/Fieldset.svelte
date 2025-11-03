@@ -8,7 +8,7 @@
   }
 </style>
 
-<fieldset class="flex flex-col md:flex-row py-4">
+<fieldset class="flex flex-col py-4 md:flex-row">
   <legend>{legendText}</legend>
   <slot />
 </fieldset>

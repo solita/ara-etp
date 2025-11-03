@@ -48,7 +48,7 @@
 
 <style type="text/postcss">
   ol {
-    @apply absolute top-auto left-0 right-0 overflow-auto z-20 shadow-dropdownlist;
+    @apply absolute left-0 right-0 top-auto z-20 overflow-auto shadow-dropdownlist;
     max-height: 35.6em;
   }
 
@@ -69,11 +69,11 @@
   }
 
   li {
-    @apply py-4 pl-6 cursor-pointer bg-light;
+    @apply cursor-pointer bg-light py-4 pl-6;
   }
 
   li:not(:first-child) {
-    @apply border-disabled border-t-1;
+    @apply border-t-1 border-disabled;
   }
 
   li:hover {
@@ -81,7 +81,7 @@
   }
 
   .active {
-    @apply outline-none bg-primary text-light;
+    @apply bg-primary text-light outline-none;
   }
 </style>
 

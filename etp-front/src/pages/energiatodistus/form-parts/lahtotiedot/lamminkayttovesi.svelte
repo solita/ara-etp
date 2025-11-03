@@ -14,8 +14,8 @@
 </script>
 
 <H3 text={$_('energiatodistus.lahtotiedot.lkvn-kaytto.header')} />
-<div class="flex lg:flex-row flex-col">
-  <div class="w-1/2 py-4 mb-12 flex flex-row items-end">
+<div class="flex flex-col lg:flex-row">
+  <div class="mb-12 flex w-1/2 flex-row items-end py-4">
     <Input
       {disabled}
       {schema}
@@ -24,7 +24,7 @@
       path={['lahtotiedot', 'lkvn-kaytto', 'ominaiskulutus']}
       unit={LitraaPerAlaUnit} />
   </div>
-  <div class="w-1/2 py-4 mb-12 flex flex-row items-end">
+  <div class="mb-12 flex w-1/2 flex-row items-end py-4">
     <Input
       {disabled}
       {schema}

@@ -12,7 +12,7 @@
 
 <style type="text/postcss">
   button {
-    @apply relative px-6 py-3 flex justify-center items-center rounded-full font-bold uppercase text-light tracking-xl min-w-10;
+    @apply relative flex min-w-10 items-center justify-center rounded-full px-6 py-3 font-bold uppercase tracking-xl text-light;
     transition:
       padding-right 0.5s,
       padding-left 0.5s;
@@ -31,10 +31,10 @@
   }
 
   .disabled {
-    @apply bg-disabled cursor-not-allowed;
+    @apply cursor-not-allowed bg-disabled;
   }
   .spinner-showing {
-    @apply pr-10 pl-2;
+    @apply pl-2 pr-10;
   }
 
   .spinner-container {
@@ -59,7 +59,7 @@
   on:click|stopPropagation>
   {text}
   {#if showSpinner}
-    <div class="spinner-container absolute top-0 right-0 opacity-0">
+    <div class="spinner-container absolute right-0 top-0 opacity-0">
       <Spinner smaller={true} />
     </div>
   {/if}

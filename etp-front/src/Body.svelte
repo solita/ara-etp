@@ -17,14 +17,14 @@
 
 <style type="text/postcss">
   #routecontainer {
-    @apply w-full pb-10 relative max-w-1440;
+    @apply relative w-full max-w-1440 pb-10;
   }
   #breadcrumbcontainer {
-    @apply w-full mx-auto bg-background;
+    @apply mx-auto w-full bg-background;
   }
 
   .content {
-    @apply w-full max-w-1440 flex flex-col items-center flex-grow py-8 mx-auto bg-light;
+    @apply mx-auto flex w-full max-w-1440 flex-grow flex-col items-center bg-light py-8;
   }
 
   .content h1 :not(first) {
@@ -34,7 +34,7 @@
 
 <ResourceProvider let:idTranslate>
   <nav id="breadcrumbcontainer" aria-label={$_('navigation.breadcrumb-bar')}>
-    <div class="w-full max-w-1440 mx-auto px-2 lg:px-10">
+    <div class="mx-auto w-full max-w-1440 px-2 lg:px-10">
       <Breadcrumb {whoami} {idTranslate} location={$location} />
     </div>
   </nav>

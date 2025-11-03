@@ -220,14 +220,14 @@
   };
 </script>
 
-<div class="w-full mt-3">
+<div class="mt-3 w-full">
   <H1 text={i18n(i18nRoot + '.title')} />
 
   <Overlay {overlay}>
     <div slot="content">
       {#each Maybe.toArray(resources) as { laatijat, yritykset, patevyydet, toimintaalueet, whoami, config }}
         <div class="flex flex-wrap">
-          <div class="lg:w-1/3 w-full px-4 py-4">
+          <div class="w-full px-4 py-4 lg:w-1/3">
             <Select
               label={i18n(i18nRoot + '.filters.label')}
               disabled={false}
@@ -239,7 +239,7 @@
               items={R.range(0, R.length(filters))} />
           </div>
 
-          <div class="lg:w-1/3 w-full px-4 py-4">
+          <div class="w-full px-4 py-4 lg:w-1/3">
             <Select
               label={i18n(i18nRoot + '.patevyystaso')}
               disabled={false}
@@ -261,7 +261,7 @@
               )(patevyydet)} />
           </div>
 
-          <div class="lg:w-1/3 w-full px-4 py-4">
+          <div class="w-full px-4 py-4 lg:w-1/3">
             <Select
               label={i18n(i18nRoot + '.toimintaalue')}
               disabled={false}
@@ -273,7 +273,7 @@
               items={R.pluck('id', toimintaalueet)} />
           </div>
 
-          <div class="lg:w-1/2 w-full px-4 py-4">
+          <div class="w-full px-4 py-4 lg:w-1/2">
             <Input
               name="keyword-search"
               label={i18n(i18nRoot + '.keyword-search')}
@@ -291,12 +291,12 @@
               }} />
           </div>
 
-          <div class="lg:w-1/2 w-full px-4 py-4 flex flex-wrap">
+          <div class="flex w-full flex-wrap px-4 py-4 lg:w-1/2">
             <div class="w-full">
               <Label
                 label={i18n(i18nRoot + '.voimassaolo-paattymisaika.label')} />
             </div>
-            <div class="lg:w-1/3 w-full">
+            <div class="w-full lg:w-1/3">
               <Datepicker
                 label={i18n(i18nRoot + '.voimassaolo-paattymisaika.after')}
                 compact="true"
@@ -306,8 +306,8 @@
                 transform={Maybe.Some}
                 format={Maybe.fold('', Formats.formatDateInstant)} />
             </div>
-            <span class="w-min px-4 invisible lg:visible">-</span>
-            <div class="lg:w-1/3 w-full">
+            <span class="invisible w-min px-4 lg:visible">-</span>
+            <div class="w-full lg:w-1/3">
               <Datepicker
                 label={i18n(i18nRoot + '.voimassaolo-paattymisaika.before')}
                 compact="true"

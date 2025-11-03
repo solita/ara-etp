@@ -4,11 +4,11 @@
 
 <style type="text/postcss">
   .error {
-    @apply flex py-2 px-2 bg-error text-light;
+    @apply flex bg-error px-2 py-2 text-light;
   }
 </style>
 
-<div class="my-2 error">
-  <span class="font-icon mr-2">error_outline</span>
+<div class="error my-2">
+  <span class="mr-2 font-icon">error_outline</span>
   <div role="alert">{text}</div>
 </div>

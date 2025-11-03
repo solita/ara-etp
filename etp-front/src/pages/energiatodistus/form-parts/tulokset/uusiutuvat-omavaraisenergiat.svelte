@@ -27,7 +27,7 @@
     'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2018'
   )} />
 
-<div class="min-w-full overflow-x-auto md:overflow-x-hidden border-right-0">
+<div class="border-right-0 min-w-full overflow-x-auto md:overflow-x-hidden">
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">

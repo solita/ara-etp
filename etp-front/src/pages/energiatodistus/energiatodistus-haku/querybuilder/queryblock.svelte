@@ -80,8 +80,8 @@
   }
 </script>
 
-<div class="flex items-end justify-start my-8 w-full">
-  <div class="w-1/2 mr-4">
+<div class="my-8 flex w-full items-end justify-start">
+  <div class="mr-4 w-1/2">
     <Autocomplete
       bind:completedValue
       items={R.compose(R.map(keyLabel), R.keys)(schema)}

@@ -37,7 +37,7 @@
     {#if Kayttajat.isPaakayttaja(whoami)}
       <button
         on:click={_ => (toimenpideToUpdate = Maybe.Some(toimenpide))}
-        class="inline-flex space-x-1 font-bold items-center text-primary border-b-1 border-transparent hover:border-primary cursor-pointer"
+        class="inline-flex cursor-pointer items-center space-x-1 border-b-1 border-transparent font-bold text-primary hover:border-primary"
         class:text-error={isPastDeadline(deadline)}
         class:hover:border-error={isPastDeadline(deadline)}>
         <span class="font-icon">schedule</span>
@@ -48,7 +48,7 @@
       </button>
     {:else}
       <div
-        class="inline-flex space-x-1 items-center border-b-1 border-transparent"
+        class="inline-flex items-center space-x-1 border-b-1 border-transparent"
         class:text-error={isPastDeadline(deadline)}>
         <span class="font-icon">schedule</span>
         <span

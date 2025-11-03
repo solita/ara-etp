@@ -5,7 +5,7 @@
   const i18n = $_;
 </script>
 
-<div class="w-full mt-3 flex space-x-4">
+<div class="mt-3 flex w-full space-x-4">
   <div class="w-2/6 max-w-xs">
     <Navigation />
   </div>

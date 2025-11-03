@@ -127,7 +127,7 @@
   }
 
   .invalid {
-    @apply text-error font-bold;
+    @apply font-bold text-error;
   }
 </style>
 
@@ -178,7 +178,7 @@
           files = [];
           laatijat = [];
         }}>
-        <div class="flex -mx-4 pt-8">
+        <div class="-mx-4 flex pt-8">
           <div class="px-4">
             <Button
               prefix="laatija-upload"

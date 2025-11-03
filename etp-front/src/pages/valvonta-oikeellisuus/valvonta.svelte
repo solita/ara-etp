@@ -150,12 +150,12 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each Maybe.toArray(resources) as { energiatodistus, korvaavatEnergiatodistukset, luokittelut, toimenpiteet, notes, ketjut, toimenpidetyypit, templatesByType, valvojat, valvonta, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
-      <div class="flex flex-col mb-8">
+      <div class="mb-8 flex flex-col">
         <div>{Maybe.orSome('', energiatodistus['laatija-fullname'])}</div>
         <div class="flex space-x-1">
           <div><RakennuksenNimi {energiatodistus} />.</div>

@@ -58,11 +58,11 @@
   }
 
   li {
-    @apply flex-grow w-1/3 mb-6;
+    @apply mb-6 w-1/3 flex-grow;
   }
 
   span {
-    @apply text-secondary mb-4;
+    @apply mb-4 text-secondary;
   }
 </style>
 

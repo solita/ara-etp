@@ -32,8 +32,8 @@
   );
 </script>
 
-<div class="flex flex-col mb-3">
-  <div class="flex overflow-hidden items-center">
+<div class="mb-3 flex flex-col">
+  <div class="flex items-center overflow-hidden">
     <div class="mr-4 whitespace-nowrap">
       {Formats.formatTimeInstantMinutes(
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
@@ -45,8 +45,8 @@
     </div>
 
     {#each EM.toArray(toimenpide['deadline-date']) as deadline}
-      <div class="flex items-center mr-1">
-        <span class="font-icon pb-1">alarm</span>
+      <div class="mr-1 flex items-center">
+        <span class="pb-1 font-icon">alarm</span>
         {Formats.formatDateInstant(deadline)}
       </div>
     {/each}

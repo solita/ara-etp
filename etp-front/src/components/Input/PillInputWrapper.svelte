@@ -9,7 +9,7 @@
 
 <style type="text/postcss">
   div {
-    @apply flex relative items-center border-3 border-disabled text-dark rounded-full px-5;
+    @apply relative flex items-center rounded-full border-3 border-disabled px-5 text-dark;
   }
 
   div:hover {

@@ -20,13 +20,13 @@
 
 <style type="text/postcss">
   .content {
-    @apply flex flex-col flex-grow py-8 px-10 mx-auto bg-light;
+    @apply mx-auto flex flex-grow flex-col bg-light px-10 py-8;
   }
 </style>
 
 <section class="content">
   <div
-    class="bg-success flex items-center py-4 px-4 mx-4 bg-primary text-light rounded-lg">
+    class="mx-4 flex items-center rounded-lg bg-primary bg-success px-4 py-4 text-light">
     <Spinner white={true} {disableAnimation} />
     <div class="mx-4">{$_('login_redirect')}</div>
   </div>

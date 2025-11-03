@@ -131,7 +131,7 @@
 
 <style type="text/postcss">
   .required-marker {
-    @apply font-icon text-xs align-top mr-1;
+    @apply mr-1 align-top font-icon text-xs;
   }
 
   div {
@@ -139,11 +139,11 @@
   }
 
   .button {
-    @apply font-medium cursor-pointer border-b-3 pt-2 border-disabled;
+    @apply cursor-pointer border-b-3 border-disabled pt-2 font-medium;
   }
 
   .button:not(.disabled)::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
+    @apply absolute font-icon text-2xl font-bold text-disabled;
     right: 0.5em;
     top: 0.03em;
     content: 'expand_more';
@@ -154,15 +154,15 @@
   }
 
   .button:hover {
-    @apply bg-background border-primary;
+    @apply border-primary bg-background;
   }
 
   .button:focus {
-    @apply outline-none border-primary;
+    @apply border-primary outline-none;
   }
 
   .button.disabled {
-    @apply bg-light border-transparent min-h-0 cursor-default;
+    @apply min-h-0 cursor-default border-transparent bg-light;
   }
 
   .button.light {

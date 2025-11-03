@@ -18,11 +18,11 @@
 
 <style type="text/postcss">
   div {
-    @apply flex flex-row-reverse relative justify-end items-center;
+    @apply relative flex flex-row-reverse items-center justify-end;
   }
 
   input {
-    @apply opacity-0 w-0 h-0;
+    @apply h-0 w-0 opacity-0;
   }
 
   label {
@@ -30,7 +30,7 @@
   }
 
   label.disabled {
-    @apply text-disabled cursor-default;
+    @apply cursor-default text-disabled;
   }
 
   label .material-icons {
@@ -45,7 +45,7 @@
 <div on:focusin={_ => (focused = true)} on:focusout={_ => (focused = false)}>
   <label class:disabled class:font-bold={focused}>
     <span
-      class="material-icons checked text-primary align-bottom"
+      class="material-icons checked align-bottom text-primary"
       class:inline-block={checked}
       class:hidden={!checked}>check_box</span>
     <span

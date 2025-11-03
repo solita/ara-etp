@@ -157,7 +157,7 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     <DirtyConfirmation {dirty} />
     {#each resources.toArray() as { whoami, laatijat, vastaanottajaryhmat, energiatodistus }}
       <H1 text={i18n(`${i18nRoot}.title`)} />
@@ -171,7 +171,7 @@
           dirty = true;
         }}>
         {#if Viestit.isAllowedToSendToEveryone(whoami)}
-          <div class="lg:w-1/2 w-full py-4">
+          <div class="w-full py-4 lg:w-1/2">
             <Autocomplete
               items={R.map(formatVastaanottaja, laatijat)}
               size="10">
@@ -195,7 +195,7 @@
         {/if}
 
         {#if !Viestit.isAllowedToSendToEveryone(whoami) || Maybe.isNone(energiatodistus)}
-          <div class="lg:w-1/2 w-full py-4">
+          <div class="w-full py-4 lg:w-1/2">
             <Select
               id={'ketju.vastaanottajaryhma'}
               label={i18n('viesti.ketju.vastaanottajaryhma')}

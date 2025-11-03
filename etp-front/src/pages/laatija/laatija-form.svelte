@@ -145,17 +145,17 @@
   on:submit|preventDefault={validateAndSubmit}
   on:input={setDirty}
   on:change={setDirty}>
-  <div class="w-full mt-3">
+  <div class="mt-3 w-full">
     {#if isPaakayttaja}
-      <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-2">
-        <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="my-2 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+        <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
           <Checkbox
             bind:model={laatija}
             lens={R.lensProp('passivoitu')}
             label={i18n('kayttaja.passivoitu')}
             disabled={false} />
         </div>
-        <div class="lg:w-1/3 w-full px-4">
+        <div class="w-full px-4 lg:w-1/3">
           <Checkbox
             bind:model={laatija}
             lens={R.lensProp('partner')}
@@ -166,8 +166,8 @@
     {/if}
 
     <H2 text={i18n(i18nRoot + '.perustiedot-header')} />
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'etunimi'}
           name={'etunimi'}
@@ -180,7 +180,7 @@
           disabled={!isPaakayttaja}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'sukunimi'}
           name={'sukunimi'}
@@ -193,7 +193,7 @@
           disabled={!isPaakayttaja}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'henkilotunnus'}
           name={'henkilotunnus'}
@@ -208,8 +208,8 @@
           {i18n} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4 items-end">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="my-4 flex flex-col items-end py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'email'}
           name={'email'}
@@ -224,7 +224,7 @@
           validators={schema.email}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'puhelin'}
           name={'puhelin'}
@@ -238,8 +238,8 @@
           {i18n} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-      <div class="lg:py-0 w-full px-4 py-4">
+    <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:py-0">
         <Input
           id={'vastaanottajan-tarkenne'}
           name={'vastaanottajan-tarkenne'}
@@ -254,8 +254,8 @@
           {i18n} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-      <div class="lg:py-0 w-full px-4 py-4">
+    <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:py-0">
         <Input
           id={'katuosoite'}
           name={'katuosoite'}
@@ -269,8 +269,8 @@
           {i18n} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'postinumero'}
           name={'postinumero'}
@@ -283,7 +283,7 @@
           {disabled}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'postitoimipaikka'}
           name={'postitoimipaikka'}
@@ -296,7 +296,7 @@
           {disabled}
           {i18n} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Autocomplete items={countryNames}>
           <Input
             id={'maa'}
@@ -314,8 +314,8 @@
         </Autocomplete>
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Select
           label={i18n('laatija.laskutuskieli')}
           required={true}
@@ -334,8 +334,8 @@
     <H2 text={i18n('laatija.laatijatiedot-header')} />
 
     {#if R.or(laatija.laatimiskielto, isPaakayttaja)}
-      <div class="flex lg:flex-row flex-col py-4 lg:-mx-4 my-4">
-        <div class="lg:w-1/3 w-full px-4">
+      <div class="my-4 flex flex-col py-4 lg:-mx-4 lg:flex-row">
+        <div class="w-full px-4 lg:w-1/3">
           <Checkbox
             bind:model={laatija}
             lens={R.lensProp('laatimiskielto')}
@@ -344,8 +344,8 @@
         </div>
       </div>
     {/if}
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
-      <div class="lg:w-1/3 w-full px-4">
+    <div class="flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 lg:w-1/3">
         <Input
           id={'patevyydenvoimassaolo'}
           name={'patevyydenvoimassaolo'}
@@ -357,7 +357,7 @@
           {i18n} />
       </div>
       {#if isPaakayttaja}
-        <div class="md:w-1/3 w-full px-4 lg:py-0 py-4">
+        <div class="w-full px-4 py-4 md:w-1/3 lg:py-0">
           <Datepicker
             id={'toteamispaivamaara'}
             name={'toteamispaivamaara'}
@@ -370,8 +370,8 @@
         </div>
       {/if}
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Select
           label={i18n('laatija.patevyystaso')}
           format={formatPatevyys}
@@ -382,8 +382,8 @@
           items={patevyydetIds} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4 flex flex-col">
+    <div class="flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="flex w-full flex-col px-4 py-4 lg:w-1/3 lg:py-0">
         <Select
           label={i18n('laatija.paatoimintaalue')}
           format={formatToimintaAlue}
@@ -394,10 +394,10 @@
           items={toimintaAlueetIds} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
+    <div class="flex flex-col py-4 lg:-mx-4 lg:flex-row">
       <div
         id="muuttoimintaalueet"
-        class="lg:py-0 w-full px-4 py-4 flex flex-col">
+        class="flex w-full flex-col px-4 py-4 lg:py-0">
         <ToimintaalueetChecklist
           label={i18n('laatija.muuttoimintaalueet')}
           toimintaalueet={toimintaAlueetIds}
@@ -407,8 +407,8 @@
           format={formatToimintaAlue} />
       </div>
     </div>
-    <div class="flex lg:flex-row flex-col py-4 lg:-mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="flex flex-col py-4 lg:-mx-4 lg:flex-row">
+      <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
         <Input
           id={'wwwosoite'}
           name={'wwwosoite'}
@@ -428,7 +428,7 @@
   <div class="mt-8">
     <H2 text={i18n('laatija.api-key-header')} />
     <div class="flex flex-col">
-      <div class="lg:w-1/2 w-full">
+      <div class="w-full lg:w-1/2">
         <Input
           id={'api-key'}
           name={'api-key'}
@@ -442,8 +442,8 @@
           {disabled}
           {i18n} />
       </div>
-      <div class="flex mt-4 items-center">
-        <span class="font-icon mr-1 text-xl">info</span>
+      <div class="mt-4 flex items-center">
+        <span class="mr-1 font-icon text-xl">info</span>
         <span>{i18n('laatija.api-key-requirements')}</span>
       </div>
     </div>
@@ -452,35 +452,35 @@
   <div class="mt-8">
     <H2 text={i18n('laatija.julkisettiedot-header')} />
     <div class="flex flex-col py-4 lg:-mx-4">
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 mb-2">
+      <div class="mb-2 w-full px-4 lg:w-1/3 lg:py-0">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenpuhelin')}
           {disabled}
           label={i18n('kayttaja.puhelin')} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+      <div class="my-2 w-full px-4 lg:w-1/3 lg:py-0">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenemail')}
           {disabled}
           label={i18n('kayttaja.email')} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+      <div class="my-2 w-full px-4 lg:w-1/3 lg:py-0">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenosoite')}
           {disabled}
           label={i18n('laatija.katuosoite')} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+      <div class="my-2 w-full px-4 lg:w-1/3 lg:py-0">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenpostinumero')}
           {disabled}
           label={i18n('laatija.postinumero')} />
       </div>
-      <div class="lg:w-1/3 lg:py-0 w-full px-4 my-2">
+      <div class="my-2 w-full px-4 lg:w-1/3 lg:py-0">
         <Checkbox
           bind:model={laatija}
           lens={R.lensProp('julkinenwwwosoite')}
@@ -490,7 +490,7 @@
       </div>
     </div>
   </div>
-  <div class="flex lg:-mx-4 mt-20">
+  <div class="mt-20 flex lg:-mx-4">
     {#if Kayttajat.isVerificationActive(whoami, laatija)}
       <div class="px-4">
         <Button

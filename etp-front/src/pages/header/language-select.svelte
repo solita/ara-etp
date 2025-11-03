@@ -13,7 +13,7 @@
   }
 
   div {
-    @apply font-light text-sm tracking-normal;
+    @apply text-sm font-light tracking-normal;
     min-width: 100px;
   }
 </style>

@@ -55,23 +55,23 @@
 
 <style type="text/postcss">
   dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
+    @apply fixed left-0 top-0 z-50 flex h-screen w-screen cursor-default items-center justify-center bg-hr;
   }
 
   .content {
-    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
+    @apply relative flex w-2/3 flex-col justify-center rounded-md bg-light px-10 py-10 shadow-lg;
   }
 
   h1 {
-    @apply text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl;
+    @apply mb-4 border-b-1 border-tertiary pb-2 text-lg font-bold uppercase tracking-xl text-secondary;
   }
 
   .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+    @apply mt-5 flex flex-wrap items-center border-t-1 border-tertiary;
   }
 
   .error {
-    @apply flex py-2 px-2 bg-error text-light;
+    @apply flex bg-error px-2 py-2 text-light;
   }
 </style>
 
@@ -80,8 +80,8 @@
     <h1>{i18n(i18nRoot + '.title')}</h1>
 
     {#each error.toArray() as txt}
-      <div class="my-2 error">
-        <span class="font-icon mr-2">error_outline</span>
+      <div class="error my-2">
+        <span class="mr-2 font-icon">error_outline</span>
         <div role="alert">{txt}</div>
       </div>
     {/each}

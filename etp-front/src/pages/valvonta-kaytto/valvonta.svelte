@@ -110,13 +110,13 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each Maybe.toArray(resources) as { toimenpiteet, notes, toimenpidetyypit, roolit, toimitustavat, templatesByType, postinumerot, valvojat, henkilot, yritykset, valvonta, hallintoOikeudet, karajaoikeudet, johtaja, whoami }}
       <H1
         text={i18n(i18nRoot + '.title') +
           Maybe.fold('', R.concat(' - '), diaarinumero(toimenpiteet))} />
 
-      <div class="flex flex-col my-4">
+      <div class="my-4 flex flex-col">
         <Address
           {postinumerot}
           katuosoite={Maybe.Some(valvonta.katuosoite)}

@@ -20,7 +20,7 @@
   }
 
   .required-marker {
-    @apply font-icon text-xs align-top mr-1;
+    @apply mr-1 align-top font-icon text-xs;
   }
 
   label.warning,

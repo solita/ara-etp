@@ -46,7 +46,7 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each Maybe.toArray(resources) as { roolit, kumppanit, kayttajat }}
       <div class="flex justify-between">
         <H1 text={i18n(i18nRoot + '.title')} />
@@ -105,7 +105,7 @@
         </div>
       {/if}
 
-      <div class="flex justify-between mt-8">
+      <div class="mt-8 flex justify-between">
         <H2 text={i18n(i18nRoot + '.partners')} />
         <div class="font-bold">
           <Link
@@ -158,7 +158,7 @@
         </div>
       {/if}
 
-      <div class="flex justify-between mt-8">
+      <div class="mt-8 flex justify-between">
         <H2 text={i18n(i18nRoot + '.aineistoasiakkaat')} />
         <div class="font-bold">
           <Link

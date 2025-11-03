@@ -46,9 +46,9 @@
         Maybe.orSome(toimenpide['create-time'], toimenpide['publish-time'])
       )}
     </div>
-    <div class="flex mr-2">
+    <div class="mr-2 flex">
       {#each Maybe.toArray(icon) as icon}
-        <span class="font-icon mr-1">{icon}</span>
+        <span class="mr-1 font-icon">{icon}</span>
       {/each}
 
       <span class="mr-1">
@@ -62,7 +62,7 @@
         {/if}
       </span>
       {#if Toimenpiteet.isDraft(toimenpide)}
-        <span class="font-icon mr-1" title={i18n(i18nRoot + '.draft')}
+        <span class="mr-1 font-icon" title={i18n(i18nRoot + '.draft')}
           >mode_edit</span>
       {/if}
       <span>({toimenpide.author.etunimi} {toimenpide.author.sukunimi})</span>
