@@ -31,6 +31,9 @@ const testEnergiatodistus = () => {
   energiatodistus.tulokset['kaytettavat-energiamuodot'].sahko = Either.Right(
     Maybe.Some(3000)
   );
+
+  energiatodistus.lahtotiedot.lammitys['lammitysmuoto-1'] = R.map(Maybe.Some, luokittelut.lammitysmuoto[0]);
+
   energiatodistus.tulokset['kaytettavat-energiamuodot'].kaukolampo =
     Either.Right(Maybe.Some(12000));
   energiatodistus.tulokset['kaytettavat-energiamuodot'][
