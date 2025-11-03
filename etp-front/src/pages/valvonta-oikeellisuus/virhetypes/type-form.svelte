@@ -55,8 +55,8 @@
   on:input={setDirty}
   on:change={setDirty}
   on:text-change={setDirty}>
-  <div class="flex flex-wrap bg-light text-base m-2 p-2">
-    <div class="w-1/6 py-4 px-2">
+  <div class="m-2 flex flex-wrap bg-light p-2 text-base">
+    <div class="w-1/6 px-2 py-4">
       <Input
         id={'id'}
         name={'id'}
@@ -68,7 +68,7 @@
         format={Maybe.orSome(i18n(i18nRoot + '.new-virhetype'))}
         {i18n} />
     </div>
-    <div class="w-1/6 py-4 px-2">
+    <div class="w-1/6 px-2 py-4">
       <Input
         id={'ordinal'}
         name={'ordinal'}
@@ -79,14 +79,14 @@
         parse={Parsers.parseInteger}
         {i18n} />
     </div>
-    <div class="w-4/6 py-4 px-4 flex justify-end flex-wrap content-center">
+    <div class="flex w-4/6 flex-wrap content-center justify-end px-4 py-4">
       <Checkbox
         disabled={false}
         label={i18n(`${i18nRoot}.valid`)}
         bind:model={virhetype}
         lens={R.lensProp('valid')} />
     </div>
-    <div class="lg:w-1/2 w-full py-4 px-2">
+    <div class="w-full px-2 py-4 lg:w-1/2">
       <TextEditor
         id={'label-fi'}
         name={'label-fi'}
@@ -99,7 +99,7 @@
         validators={schema['label-fi']}
         {i18n} />
     </div>
-    <div class="lg:w-1/2 w-full py-4 px-2">
+    <div class="w-full px-2 py-4 lg:w-1/2">
       <TextEditor
         id={'label-sv'}
         name={'label-sv'}
@@ -112,7 +112,7 @@
         validators={schema['label-sv']}
         {i18n} />
     </div>
-    <div class="lg:w-1/2 w-full py-4 px-2">
+    <div class="w-full px-2 py-4 lg:w-1/2">
       <TextEditor
         id={'description-fi'}
         name={'description-fi'}
@@ -125,7 +125,7 @@
         validators={schema['description-fi']}
         {i18n} />
     </div>
-    <div class="lg:w-1/2 w-full py-4 px-2">
+    <div class="w-full px-2 py-4 lg:w-1/2">
       <TextEditor
         id={'description-sv'}
         name={'description-sv'}
@@ -138,7 +138,7 @@
         validators={schema['description-sv']}
         {i18n} />
     </div>
-    <div class="flex space-x-4 b-t-1 pt-4">
+    <div class="b-t-1 flex space-x-4 pt-4">
       <Button
         disabled={!dirty}
         type={'submit'}

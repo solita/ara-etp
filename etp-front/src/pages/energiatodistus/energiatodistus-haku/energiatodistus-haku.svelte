@@ -96,7 +96,7 @@
 
 {#if Maybe.isSome(laatijat)}
   <div class="flex w-full">
-    <div class="w-7/12 flex flex-col justify-end">
+    <div class="flex w-7/12 flex-col justify-end">
       <Input
         bind:model={id}
         label={$_('energiatodistus.id')}
@@ -142,9 +142,9 @@
     }}>
     {#each queryItems as { conjunction, block: [operator, key, ...values] }, index (`${index}_${operator}_${key}_${R.join('_', values)}`)}
       <div
-        class="conjunction w-full flex justify-center"
+        class="conjunction flex w-full justify-center"
         class:bg-beige={conjunction === 'or'}>
-        <div class="flex justify-between w-1/6 my-5">
+        <div class="my-5 flex w-1/6 justify-between">
           <Radio
             group={conjunction}
             value={'and'}
@@ -171,7 +171,7 @@
             }} />
         </div>
       </div>
-      <div class="flex justify-start items-center">
+      <div class="flex items-center justify-start">
         <QueryBlock
           {config}
           {operator}
@@ -183,7 +183,7 @@
           {schema}
           laatijat={Maybe.get(laatijat)} />
         <span
-          class="text-secondary font-icon text-2xl cursor-pointer ml-4
+          class="ml-4 cursor-pointer font-icon text-2xl text-secondary
           hover:text-error"
           on:click={async _ => {
             const newItems = R.compose(
@@ -203,7 +203,7 @@
       </div>
     {/each}
 
-    <div class="flex my-4">
+    <div class="my-4 flex">
       <TextButton
         text={$_('energiatodistus.haku.lisaa_hakuehto')}
         icon={'add_circle_outline'}

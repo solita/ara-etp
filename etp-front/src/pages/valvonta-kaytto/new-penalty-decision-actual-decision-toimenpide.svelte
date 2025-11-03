@@ -76,7 +76,7 @@
 
 <style type="text/postcss">
   .warning-label {
-    @apply font-normal z-10;
+    @apply z-10 font-normal;
     font-size: smaller;
   }
 </style>
@@ -336,9 +336,9 @@
     {/each}
   </div>
 
-  <div class="w-full pt-4 border-t-1">
+  <div class="w-full border-t-1 pt-4">
     <p>
-      <span class="font-icon mr-1">info</span>{i18n(
+      <span class="mr-1 font-icon">info</span>{i18n(
         'valvonta.kaytto.toimenpide.manually-sent'
       )}
     </p>

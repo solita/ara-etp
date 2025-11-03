@@ -24,7 +24,7 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.ilmanvaihto.header')} />
 
-<div class="w-full mb-6">
+<div class="mb-6 w-full">
   <Select
     id={'lahtotiedot.ilmanvaihto.tyyppi-id'}
     items={R.map(R.prop('id'), ilmanvaihtotyypit)}
@@ -46,7 +46,7 @@
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
     }}
-    class="w-full py-4 mb-4">
+    class="mb-4 w-full py-4">
     <Input
       {disabled}
       {schema}
@@ -172,8 +172,8 @@
   </table>
 </div>
 
-<div class="flex lg:flex-row flex-col lg:items-end">
-  <div class="w-1/2 py-4 mb-12 mr-8">
+<div class="flex flex-col lg:flex-row lg:items-end">
+  <div class="mb-12 mr-8 w-1/2 py-4">
     <Input
       {disabled}
       {schema}
@@ -182,7 +182,7 @@
       path={['lahtotiedot', 'ilmanvaihto', 'lto-vuosihyotysuhde']} />
   </div>
 
-  <div class="w-1/2 py-4 mb-12">
+  <div class="mb-12 w-1/2 py-4">
     <Input
       {disabled}
       {schema}

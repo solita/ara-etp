@@ -13,7 +13,7 @@
 </script>
 
 <H3 text={$_(`energiatodistus.huomiot.suositukset-header.${versio}`)} />
-<div class="w-full py-4 mb-4">
+<div class="mb-4 w-full py-4">
   <Textarea
     {disabled}
     {schema}
@@ -23,7 +23,7 @@
 </div>
 
 <H3 text={$_('energiatodistus.huomiot.lisatietoja-header')} />
-<div class="w-full py-4 mb-4">
+<div class="mb-4 w-full py-4">
   <Textarea
     {disabled}
     {schema}

@@ -12,7 +12,7 @@
 
 <style type="text/postcss">
   a {
-    @apply relative inline-flex items-start text-link border-b-1 border-transparent font-semibold;
+    @apply relative inline-flex items-start border-b-1 border-transparent font-semibold text-link;
   }
 
   a:hover {
@@ -31,7 +31,7 @@
   data-cy={text}
   on:click>
   {#each Maybe.toArray(icon) as i}
-    <span class="font-icon mr-1">{i}</span>
+    <span class="mr-1 font-icon">{i}</span>
   {/each}
   {#if text}
     <span class={additionalClasses}>{text}</span>

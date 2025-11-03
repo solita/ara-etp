@@ -47,7 +47,7 @@
 
 <style type="text/postcss">
   .inputwrapper {
-    @apply flex relative items-center border-b-3 border-disabled text-dark;
+    @apply relative flex items-center border-b-3 border-disabled text-dark;
   }
 
   .inputwrapper:hover {
@@ -55,7 +55,7 @@
   }
 
   .inputwrapper.search::after {
-    @apply font-icon absolute text-2xl font-bold text-disabled;
+    @apply absolute font-icon text-2xl font-bold text-disabled;
     right: 0.5em;
     content: 'search';
   }
@@ -69,7 +69,7 @@
   }
 
   input {
-    @apply w-full relative font-medium py-1;
+    @apply relative w-full py-1 font-medium;
   }
 
   input:focus {

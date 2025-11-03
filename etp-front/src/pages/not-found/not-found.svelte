@@ -5,8 +5,8 @@
 <style type="text/postcss">
 </style>
 
-<div class="mb-5 bg-warning flex p-5">
-  <span class="font-icon mr-2">warning</span>
+<div class="mb-5 flex bg-warning p-5">
+  <span class="mr-2 font-icon">warning</span>
   {$_('not-found.message')}
 </div>
 <span>404</span> Page not found

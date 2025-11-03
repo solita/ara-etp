@@ -24,7 +24,7 @@
   export let liitteet;
 </script>
 
-<div class="w-full py-4 mb-4">
+<div class="mb-4 w-full py-4">
   <TextEditor
     id={'toimenpide.description'}
     label={text(toimenpide, 'description')}

@@ -6,11 +6,11 @@
 
 <style type="text/postcss">
   .spinner {
-    @apply inline-block relative w-12 h-12;
+    @apply relative inline-block h-12 w-12;
   }
 
   .spinner div {
-    @apply block absolute w-12 h-12 rounded-full border-solid border-8;
+    @apply absolute block h-12 w-12 rounded-full border-8 border-solid;
     box-sizing: border-box;
     border-color: #538000 transparent transparent transparent;
     animation: spin 1.2s linear infinite;

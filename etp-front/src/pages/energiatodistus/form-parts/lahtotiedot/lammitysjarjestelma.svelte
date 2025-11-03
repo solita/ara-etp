@@ -48,7 +48,7 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.lammitys.header')} />
 
-<div class="w-full py-4 mb-4">
+<div class="mb-4 w-full py-4">
   <Select
     id={'lahtotiedot.lammitys.lammitysmuoto-1.id'}
     items={R.map(R.prop('id'), lammitysmuoto)}
@@ -70,7 +70,7 @@
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
     }}
-    class="w-full py-4 mb-4">
+    class="mb-4 w-full py-4">
     <Input
       {disabled}
       {schema}
@@ -81,7 +81,7 @@
   </div>
 {/if}
 
-<div class="w-full py-4 mb-4">
+<div class="mb-4 w-full py-4">
   <Select
     id={'lahtotiedot.lammitys.lammitysmuoto-2.id'}
     items={R.map(R.prop('id'), lammitysmuoto)}
@@ -101,7 +101,7 @@
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
     }}
-    class="w-full py-4 mb-4">
+    class="mb-4 w-full py-4">
     <Input
       {disabled}
       {schema}
@@ -112,7 +112,7 @@
   </div>
 {/if}
 
-<div class="w-full py-4 mb-4">
+<div class="mb-4 w-full py-4">
   <Select
     id={'lahtotiedot.lammitys.lammonjako.id'}
     items={R.map(R.prop('id'), lammonjako)}
@@ -133,7 +133,7 @@
       const input = evt.target.getElementsByTagName('input')[0];
       input.focus();
     }}
-    class="w-full py-4 mb-4">
+    class="mb-4 w-full py-4">
     <Input
       {disabled}
       {schema}

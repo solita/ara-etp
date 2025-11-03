@@ -65,13 +65,13 @@
 </script>
 
 <dialog
-  class="fixed top-0 left-0 h-screen w-screen z-50 bg-hr cursor-default flex justify-center items-center"
+  class="fixed left-0 top-0 z-50 flex h-screen w-screen cursor-default items-center justify-center bg-hr"
   on:click|stopPropagation>
   <form
-    class="relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center"
+    class="relative flex w-2/3 flex-col justify-center rounded-md bg-light px-10 py-10 shadow-lg"
     bind:this={form}>
     <h1
-      class="text-secondary font-bold uppercase text-lg mb-4 pb-2 border-b-1 border-tertiary tracking-xl">
+      class="mb-4 border-b-1 border-tertiary pb-2 text-lg font-bold uppercase tracking-xl text-secondary">
       {i18n(i18nRoot + '.deadline-date-dialog.title')}
     </h1>
     <div class="flex">
@@ -87,7 +87,7 @@
         {i18n} />
     </div>
     <div
-      class="flex flex-wrap items-center mt-6 pt-6 border-t-1 border-tertiary space-x-5">
+      class="mt-6 flex flex-wrap items-center space-x-5 border-t-1 border-tertiary pt-6">
       {#if !pending}
         <Button
           text={i18n(i18nRoot + '.deadline-date-dialog.save')}

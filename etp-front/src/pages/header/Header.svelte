@@ -51,7 +51,7 @@
 
 <style type="text/postcss">
   header {
-    @apply flex h-20 uppercase text-light justify-between items-center font-bold tracking-xl;
+    @apply flex h-20 items-center justify-between font-bold uppercase tracking-xl text-light;
   }
 
   .logo-link {
@@ -59,10 +59,10 @@
   }
 
   .listlink {
-    @apply px-4 py-2 text-dark text-center font-normal normal-case w-full tracking-normal cursor-pointer;
+    @apply w-full cursor-pointer px-4 py-2 text-center font-normal normal-case tracking-normal text-dark;
   }
   .ohjelistlink {
-    @apply w-full p-2 text-dark text-left font-normal normal-case tracking-normal cursor-pointer;
+    @apply w-full cursor-pointer p-2 text-left font-normal normal-case tracking-normal text-dark;
   }
 
   .listlink:not(:last-child),
@@ -76,7 +76,7 @@
   }
 
   .logout {
-    @apply normal-case text-sm font-normal tracking-normal;
+    @apply text-sm font-normal normal-case tracking-normal;
   }
 
   .logout:hover {
@@ -104,15 +104,15 @@
     }
   }} />
 
-<header class="flex justify-between px-2 lg:px-10 my-3">
+<header class="my-3 flex justify-between px-2 lg:px-10">
   <div class="flex grow items-center">
     <a class="logo-link" href="/">
-      <img class="mr-2 lg:mr-6 h-20" src={headerLogoPath} alt="Varke" />
+      <img class="mr-2 h-20 lg:mr-6" src={headerLogoPath} alt="Varke" />
     </a>
     <LanguageSelect />
   </div>
 
-  <div class="dropdowns flex space-x-16 items-center">
+  <div class="dropdowns flex items-center space-x-16">
     {#if !R.isEmpty(ohjeNav)}
       <div class="flex flex-row justify-between">
         <div
@@ -125,7 +125,7 @@
           <span class="material-icons absolute">keyboard_arrow_down</span>
           {#if showOhjeDropdown}
             <div
-              class="absolute mt-2 w-96 bg-light shadow-xl flex flex-col z-10">
+              class="absolute z-10 mt-2 flex w-96 flex-col bg-light shadow-xl">
               {#each ohjeNav as sivu}
                 <a class="ohjelistlink" href={`/#/ohje/${sivu.id}`}>
                   <span> {sivu.title} </span>
@@ -139,7 +139,7 @@
         </div>
       </div>
     {:else if Kayttajat.isPaakayttaja(R.head(whoami.toArray()))}
-      <a class="text-light flex items-center" href={'/#/ohje/new'}>
+      <a class="flex items-center text-light" href={'/#/ohje/new'}>
         <span class="material-icons"> add </span>
         <span class="hover:underline">{$_('navigation.ohjeet')}</span>
       </a>
@@ -149,7 +149,7 @@
       <div class="flex flex-row justify-between">
         <div
           bind:this={nameNode}
-          class="relative cursor-pointer hover:underline mr-6"
+          class="relative mr-6 cursor-pointer hover:underline"
           on:click={toggleNameDropdown}>
           <span
             data-cy="fullname-in-header"
@@ -160,7 +160,7 @@
           <span class="material-icons absolute">keyboard_arrow_down</span>
           {#if showNameDropdown}
             <div
-              class="absolute mt-2 w-48 bg-light shadow-xl flex flex-col z-10">
+              class="absolute z-10 mt-2 flex w-48 flex-col bg-light shadow-xl">
               {#each links as link}
                 <a class="listlink w-full" href={link.href}>{link.text}</a>
               {/each}

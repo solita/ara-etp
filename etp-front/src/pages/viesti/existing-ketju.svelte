@@ -149,29 +149,29 @@
 
 <style>
   .message {
-    @apply p-4 flex flex-col rounded-lg;
+    @apply flex flex-col rounded-lg p-4;
   }
   .message:not(.self) {
     @apply mr-8 bg-backgroundhalf;
   }
   .message.self {
-    @apply ml-8 bg-light border-disabled border;
+    @apply ml-8 border border-disabled bg-light;
   }
   .message p {
-    @apply border-disabled mt-2 pt-2 border-t overflow-x-auto;
+    @apply mt-2 overflow-x-auto border-t border-disabled pt-2;
   }
   h1 {
-    @apply text-lg mb-2;
+    @apply mb-2 text-lg;
   }
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each resources.toArray() as { ketju, whoami, ryhmat, kasittelijat }}
       <DirtyConfirmation {dirty} />
 
       <div
-        class="flex justify-between items-center py-2 border-b border-disabled">
+        class="flex items-center justify-between border-b border-disabled py-2">
         <div>
           <h1>{ketju.subject}</h1>
           <SenderRecipients
@@ -188,7 +188,7 @@
         <div class="flex flex-col items-start">
           <div class="flex w-full justify-between px-2">
             {#each ketju['energiatodistus-id'].toArray() as etId}
-              <div class="flex w-full mr-auto space-x-1">
+              <div class="mr-auto flex w-full space-x-1">
                 <span>{i18n(i18nRoot + '.attach-to-et.attached-to')}</span>
                 <Link
                   bold={true}
@@ -213,7 +213,7 @@
                   }} />
               {/if}
 
-              <div class="mt-auto ml-auto justify-self-end">
+              <div class="ml-auto mt-auto justify-self-end">
                 <TextButton
                   on:click={() => {
                     showAttachEtDialog = true;
@@ -228,7 +228,7 @@
           </div>
 
           {#if Viestit.isKasittelija(whoami)}
-            <div class="flex items-end space-x-4 px-2 w-full">
+            <div class="flex w-full items-end space-x-4 px-2">
               <div class="w-64">
                 <Select
                   id={'kasittelija'}
@@ -269,7 +269,7 @@
       </div>
 
       {#if Kayttajat.isLaatija(whoami) && Viestit.isForLaatijat(ketju)}
-        <div class="font-bold my-4 mr-auto flex flex-shrink">
+        <div class="my-4 mr-auto flex flex-shrink font-bold">
           <Link
             icon={Maybe.Some('add_circle_outline')}
             text={i18n(i18nRoot + '.reply-in-new')}
@@ -279,7 +279,7 @@
 
       {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami) || Kayttajat.isLaskuttaja(whoami)}
         <form
-          class="p-4 my-4 ml-8 rounded-lg border-backgroundhalf"
+          class="my-4 ml-8 rounded-lg border-backgroundhalf p-4"
           class:hidden={!showViestiForm}
           on:submit|preventDefault={submitNewViesti}
           on:input={_ => {
@@ -288,7 +288,7 @@
           on:change={_ => {
             dirty = true;
           }}>
-          <div class="w-full mb-8 space-y-2">
+          <div class="mb-8 w-full space-y-2">
             <TextEditor
               id={'ketju.new-viesti'}
               name={'ketju.new-viesti'}
@@ -302,7 +302,7 @@
               {i18n} />
           </div>
 
-          <div class="w-full flex">
+          <div class="flex w-full">
             {#if (Kayttajat.isLaatija(whoami) && !Viestit.isForLaatijat(ketju)) || Kayttajat.isPaakayttaja(whoami) || Kayttajat.isLaskuttaja(whoami)}
               <Button
                 prefix={'viesti'}
@@ -313,7 +313,7 @@
           </div>
         </form>
         <div
-          class="w-full p-4 my-4 ml-8 space-y-2"
+          class="my-4 ml-8 w-full space-y-2 p-4"
           class:hidden={showViestiForm}>
           <Button
             prefix={'uusiviesti'}
@@ -347,7 +347,7 @@
       </div>
     {/each}
 
-    <div class="flex mt-4">
+    <div class="mt-4 flex">
       <TextButton
         on:click={pop}
         icon="arrow_back"

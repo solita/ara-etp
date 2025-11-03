@@ -153,7 +153,7 @@
 
 <style type="text/postcss">
   .warning-label {
-    @apply font-bold mb-5;
+    @apply mb-5 font-bold;
   }
 </style>
 
@@ -183,7 +183,7 @@
   <NoteDialog id={valvonta.id} {note} reload={load} />
 {/each}
 
-<div class="lg:w-1/2 w-full mb-5">
+<div class="mb-5 w-full lg:w-1/2">
   <Select
     label={i18n('valvonta.valvoja')}
     model={valvonta}
@@ -198,7 +198,7 @@
     items={R.pluck('id', Valvojat.filterActive(valvojat))} />
 </div>
 
-<div class="flex space-x-4 mb-5">
+<div class="mb-5 flex space-x-4">
   <TextButton
     icon="add_comment"
     text={i18n('valvonta.add-muistiinpano')}
@@ -229,7 +229,7 @@
     </div>
   {/if}
 
-  <div class="lg:w-1/2 w-full mb-5">
+  <div class="mb-5 w-full lg:w-1/2">
     <PrimaryToimenpideContextProvider
       primaryOption={Locales.label($locale)(
         Toimenpiteet.primaryTransitionForToimenpidetype(

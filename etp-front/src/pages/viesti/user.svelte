@@ -24,7 +24,7 @@
   {/if}
 {/if}
 {#if R.eqProps('id', user, whoami)}
-  <span class="text-primary font-bold">
+  <span class="font-bold text-primary">
     {$_('viesti.ketju.existing.self')}
   </span>
 {:else}

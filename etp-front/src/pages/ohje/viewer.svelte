@@ -55,18 +55,18 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3 flex space-x-4">
+  <div slot="content" class="mt-3 flex w-full space-x-4">
     <div class="w-2/6 max-w-xs">
       <Navigation {id} />
     </div>
-    <div class="w-4/6 flex-grow flex flex-col">
+    <div class="flex w-4/6 flex-grow flex-col">
       {#each Maybe.toArray(resources) as { sivu, whoami }}
-        <div class="flex justify-between items-start">
+        <div class="flex items-start justify-between">
           <div class="flex items-start justify-start">
             <H1 text={sivu.title} />
             {#if !sivu.published}
               <span
-                class="font-icon text-xl select-none ml-1 text-error"
+                class="ml-1 select-none font-icon text-xl text-error"
                 title={i18n('ohje.viewer.unpublished')}>
                 visibility_off
               </span>

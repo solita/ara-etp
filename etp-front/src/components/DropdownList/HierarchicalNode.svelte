@@ -13,11 +13,11 @@
 
 <style type="text/postcss">
   .nodeitem {
-    @apply py-4 cursor-pointer bg-light;
+    @apply cursor-pointer bg-light py-4;
   }
 
   li:not(:first-child) {
-    @apply border-disabled border-t-1;
+    @apply border-t-1 border-disabled;
   }
 
   .nodeitem:not(.header):hover {
@@ -25,7 +25,7 @@
   }
 
   .active {
-    @apply outline-none bg-primary text-light;
+    @apply bg-primary text-light outline-none;
   }
 
   .subitem {
@@ -33,7 +33,7 @@
   }
 
   .header {
-    @apply font-bold cursor-default;
+    @apply cursor-default font-bold;
   }
 </style>
 

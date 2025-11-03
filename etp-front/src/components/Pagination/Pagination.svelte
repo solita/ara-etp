@@ -43,7 +43,7 @@
 
   span,
   button {
-    @apply text-dark px-4 py-2 no-underline border-t-1 border-b-1 border-r-1 border-active;
+    @apply border-b-1 border-r-1 border-t-1 border-active px-4 py-2 text-dark no-underline;
   }
 
   .results,
@@ -71,7 +71,7 @@
   }
 
   button:focus {
-    @apply outline-none bg-secondary text-light;
+    @apply bg-secondary text-light outline-none;
   }
 </style>
 

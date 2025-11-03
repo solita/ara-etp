@@ -32,7 +32,7 @@
 
 <H3 text={$_('energiatodistus.lahtotiedot.rakennusvaippa.header')} />
 
-<div class="flex lg:flex-row flex-col gap-8 mb-6">
+<div class="mb-6 flex flex-col gap-8 lg:flex-row">
   <div class="w-1/3">
     <Input
       {disabled}

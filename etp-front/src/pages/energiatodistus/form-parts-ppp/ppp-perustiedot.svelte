@@ -12,7 +12,7 @@
   export let schema;
 </script>
 
-<div class="min-w-full overflow-x-auto flex flex-col gap-y-5">
+<div class="flex min-w-full flex-col gap-y-5 overflow-x-auto">
   <BasicInput
     id="perusparannuspassi.id"
     name="perusparannuspassi.id"
@@ -21,8 +21,8 @@
     bind:model={perusparannuspassi}
     lens={R.lensProp('id')}
     i18n={$_} />
-  <div class="flex lg:flex-row flex-col gap-x-8">
-    <div class="flex-1 min-w-0">
+  <div class="flex flex-col gap-x-8 lg:flex-row">
+    <div class="min-w-0 flex-1">
       <Input
         bind:model={perusparannuspassi}
         i18nRoot="perusparannuspassi"
@@ -30,7 +30,7 @@
         {schema} />
     </div>
 
-    <div class="flex-1 min-w-0">
+    <div class="min-w-0 flex-1">
       <Input
         bind:model={perusparannuspassi}
         i18nRoot="perusparannuspassi"

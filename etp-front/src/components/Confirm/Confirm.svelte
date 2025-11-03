@@ -24,21 +24,21 @@
 
 <style type="text/postcss">
   dialog {
-    @apply fixed top-0 w-screen left-0 z-50 h-screen bg-hr cursor-default flex justify-center items-center;
+    @apply fixed left-0 top-0 z-50 flex h-screen w-screen cursor-default items-center justify-center bg-hr;
   }
   .content {
-    @apply relative bg-light w-2/3 py-10 px-10 rounded-md shadow-lg flex flex-col justify-center;
+    @apply relative flex w-2/3 flex-col justify-center rounded-md bg-light px-10 py-10 shadow-lg;
   }
 
   .close {
-    @apply absolute top-0 right-0 pt-4 pr-4 text-primary cursor-pointer;
+    @apply absolute right-0 top-0 cursor-pointer pr-4 pt-4 text-primary;
   }
 
   .message {
-    @apply text-primary text-center font-bold px-24;
+    @apply px-24 text-center font-bold text-primary;
   }
   .buttons {
-    @apply flex justify-center items-center mt-8;
+    @apply mt-8 flex items-center justify-center;
   }
 </style>
 

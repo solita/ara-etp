@@ -31,7 +31,7 @@
   <H2 text={i18n(i18nRoot + '.contact-details-title')} />
 </div>
 <div
-  class="py-4 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 w-full md:w-2/3">
+  class="flex w-full flex-col space-y-4 py-4 md:w-2/3 md:flex-row md:space-x-4 md:space-y-0">
   <div class="w-full">
     <Input
       id={'osapuoli.email'}
@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<div class="py-4 w-full md:w-1/3 md:pr-2">
+<div class="w-full py-4 md:w-1/3 md:pr-2">
   <Input
     id={'osapuoli.vastaanottajan-tarkenne'}
     name={'osapuoli.vastaanottajan-tarkenne'}
@@ -70,7 +70,7 @@
     validators={schema['vastaanottajan-tarkenne']}
     {i18n} />
 </div>
-<div class="py-4 w-full">
+<div class="w-full py-4">
   <Input
     id={'osapuoli.jakeluosoite'}
     name={'osapuoli.jakeluosoite'}
@@ -83,7 +83,7 @@
     {i18n} />
 </div>
 <div
-  class="py-4 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 w-full">
+  class="flex w-full flex-col space-y-4 py-4 md:flex-row md:space-x-4 md:space-y-0">
   <div class="w-full">
     <Input
       id={'osapuoli.postinumero'}
@@ -125,7 +125,7 @@
     </Autocomplete>
   </div>
 </div>
-<div class="py-4 w-full md:w-1/3 md:pr-2">
+<div class="w-full py-4 md:w-1/3 md:pr-2">
   <Select
     id={'osapuoli.toimitustapa-id'}
     label={i18n(`${i18nRoot}.toimitustapa-id`)}
@@ -139,7 +139,7 @@
     items={R.pluck('id', toimitustavat)} />
 </div>
 {#if Osapuolet.toimitustapa.other(osapuoli)}
-  <div class="py-4 w-full md:w-1/3 md:pr-2">
+  <div class="w-full py-4 md:w-1/3 md:pr-2">
     <Input
       id={'osapuoli.toimitustapa-description'}
       name={'osapuoli.toimitustapa-description'}

@@ -12,7 +12,7 @@
 
 <style type="text/postcss">
   .alert {
-    @apply flex justify-around py-2 px-2 bg-primary text-light rounded-lg shadow-lg;
+    @apply flex justify-around rounded-lg bg-primary px-2 py-2 text-light shadow-lg;
   }
 
   .error {

@@ -192,12 +192,12 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each Maybe.toArray(resources) as { valvonnat, count, whoami, luokittelut, toimenpidetyypit, valvojat, laatijat, kayttotarkoitukset }}
       <H1 text={i18n(i18nRoot + '.title')} />
       {#if Kayttajat.isPaakayttaja(whoami)}
-        <div class="flex flex-wrap items-end md:space-y-0 space-y-4">
-          <div class="w-1/4 mr-4">
+        <div class="flex flex-wrap items-end space-y-4 md:space-y-0">
+          <div class="mr-4 w-1/4">
             <Select
               disabled={overlay}
               compact={true}
@@ -230,8 +230,8 @@
           </div>
         </div>
         <div
-          class="flex flex-wrap items-end md:space-x-4 md:space-y-0 space-y-4 my-4">
-          <div class="md:w-1/2 w-full">
+          class="my-4 flex flex-wrap items-end space-y-4 md:space-x-4 md:space-y-0">
+          <div class="w-full md:w-1/2">
             <Input
               label={i18n(i18nRoot + '.keyword-search')}
               model={query}
@@ -268,8 +268,8 @@
         </div>
 
         <div
-          class="flex flex-wrap items-end md:space-x-4 md:space-y-0 space-y-4 my-4">
-          <div class="md:w-1/2 w-full">
+          class="my-4 flex flex-wrap items-end space-y-4 md:space-x-4 md:space-y-0">
+          <div class="w-full md:w-1/2">
             <Select2
               id={'oikeellisuus.laatija'}
               name={'oikeellisuus.laatija'}
@@ -362,7 +362,7 @@
                   {#each Maybe.toArray(valvonta.lastToimenpide) as toimenpide}
                     <td class="etp-table--td">
                       <div class="flex flex-wrap">
-                        <div class="flex items-center mr-1">
+                        <div class="mr-1 flex items-center">
                           {Locales.labelForId(
                             $locale,
                             toimenpidetyypit
@@ -378,7 +378,7 @@
                             ) +
                               ' / ' +
                               Kayttajat.fullName(viesti.from)}
-                            class="text-primary text-lg"
+                            class="text-lg text-primary"
                             class:font-icon={isLaatijaViesti(viesti)}
                             class:font-icon-outlined={!isLaatijaViesti(viesti)}>
                             {viesti.kasitelty ? 'mark_email_read' : 'mail'}

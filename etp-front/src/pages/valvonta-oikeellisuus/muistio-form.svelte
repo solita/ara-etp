@@ -173,8 +173,8 @@
 <div class="my-5">
   {#each toimenpide.virheet as virhe, index}
     <div class="my-5">
-      <div class="flex mb-2">
-        <div class="text-primary font-bold truncate">
+      <div class="mb-2 flex">
+        <div class="truncate font-bold text-primary">
           {@html formatVirhetyyppi(virhe['type-id'])}
         </div>
         {#if !disabled}
@@ -182,19 +182,19 @@
             {#if Maybe.exists(R.equals(index), virheInEditMode)}
               <button
                 on:click|preventDefault|stopPropagation={close}
-                class="flex items-center space-x-1 mx-1 text-primary text-sm">
+                class="mx-1 flex items-center space-x-1 text-sm text-primary">
                 <span class="font-icon">close</span> Sulje muokkaus
               </button>
             {:else}
               <button
                 on:click|preventDefault|stopPropagation={_ => edit(index)}
-                class="flex items-center space-x-1 mx-1 text-primary text-sm">
+                class="mx-1 flex items-center space-x-1 text-sm text-primary">
                 <span class="font-icon">edit</span> Muokkaa
               </button>
             {/if}
             <button
               on:click|preventDefault|stopPropagation={_ => removeVirhe(index)}
-              class="flex items-center space-x-1 mx-1 text-error text-sm">
+              class="mx-1 flex items-center space-x-1 text-sm text-error">
               <span class="font-icon">remove_circle</span> Poista
             </button>
           </div>
@@ -235,7 +235,7 @@
 
 <H2 text={i18n(i18nRoot + '.severity-title')} />
 
-<div class="w-1/2 py-4 mb-5">
+<div class="mb-5 w-1/2 py-4">
   <Select
     id="severity-id"
     name="severity-id"
@@ -255,7 +255,7 @@
 <p>{i18n(i18nRoot + '.tiedoksi.description')}</p>
 
 {#each toimenpide.tiedoksi as _, i}
-  <div class="flex space-x-4 mb-8 mt-4">
+  <div class="mb-8 mt-4 flex space-x-4">
     <Input
       id={`tiedoksi.${i}.name`}
       name={`tiedoksi.${i}.name`}
@@ -281,7 +281,7 @@
 
     {#if !disabled}
       <span
-        class="material-icons delete-icon cursor-pointer mt-6"
+        class="material-icons delete-icon mt-6 cursor-pointer"
         on:click|stopPropagation={_ => removeTiedoksiRecipient(i)}>
         highlight_off
       </span>

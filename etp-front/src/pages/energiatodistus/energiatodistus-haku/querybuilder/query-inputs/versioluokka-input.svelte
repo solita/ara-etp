@@ -43,7 +43,7 @@
   </div>
 
   {#if currentluokittelut}
-    <div class="flex-grow ml-2">
+    <div class="ml-2 flex-grow">
       <Select
         allowNone={false}
         bind:model={luokittelu}

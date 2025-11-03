@@ -89,8 +89,8 @@
   on:submit|preventDefault={saveKayttaja}
   on:input={setDirty}
   on:change={setDirty}>
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="-mx-4 my-4 flex flex-col py-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Checkbox
         bind:model={kayttaja}
         lens={R.lensProp('passivoitu')}
@@ -101,8 +101,8 @@
 
   <H2 text={i18n('kayttaja.perustiedot-header')} />
 
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="-mx-4 my-4 flex flex-col py-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'organisaatio'}
         name={'organisaatio'}
@@ -117,8 +117,8 @@
     </div>
   </div>
 
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="-mx-4 my-4 flex flex-col py-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'etunimi'}
         name={'etunimi'}
@@ -131,7 +131,7 @@
         {disabled}
         {i18n} />
     </div>
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'sukunimi'}
         name={'sukunimi'}
@@ -145,8 +145,8 @@
         {i18n} />
     </div>
   </div>
-  <div class="flex lg:flex-row flex-col py-4 -mx-4 my-4 items-end">
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+  <div class="-mx-4 my-4 flex flex-col items-end py-4 lg:flex-row">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'email'}
         name={'email'}
@@ -159,7 +159,7 @@
         {disabled}
         {i18n} />
     </div>
-    <div class="lg:w-1/3 lg:py-0 w-full px-4 py-4">
+    <div class="w-full px-4 py-4 lg:w-1/3 lg:py-0">
       <Input
         id={'puhelin'}
         name={'puhelin'}
@@ -256,7 +256,7 @@
     </div>
   </div>
 
-  <div class="flex -mx-4 mt-10">
+  <div class="-mx-4 mt-10 flex">
     <div class="px-4">
       <Button
         type={'submit'}

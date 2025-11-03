@@ -108,7 +108,7 @@
 
 <style>
   h3 {
-    @apply font-bold my-2;
+    @apply my-2 font-bold;
   }
 </style>
 
@@ -118,10 +118,10 @@
   on:submit|preventDefault={submit}
   on:input={setDirty}
   on:change={setDirty}>
-  <div class="flex flex-col w-full py-8">
+  <div class="flex w-full flex-col py-8">
     <H2 text={i18n(`${i18nRoot}.rakennuksen-tiedot`)} />
 
-    <div class="py-4 w-full flex flex-col md:flex-row md:space-x-4">
+    <div class="flex w-full flex-col py-4 md:flex-row md:space-x-4">
       <div class="w-full md:w-1/3">
         <Input
           id={'kohde.rakennustunnus'}
@@ -141,7 +141,7 @@
         {#if !R.isEmpty(etForRakennustunnus)}
           <div class="flex flex-col">
             <div class="flex items-center">
-              <span class="font-icon mr-1 text-xl">info</span>
+              <span class="mr-1 font-icon text-xl">info</span>
               <span>{i18n(`${i18nRoot}.rakennustunnus-existing-et`)}</span>
             </div>
             <div class="flex space-x-1 pl-6">
@@ -159,7 +159,7 @@
         {/if}
       </div>
     </div>
-    <div class="py-4 w-full md:w-1/2">
+    <div class="w-full py-4 md:w-1/2">
       <Input
         id={'kohde.katuosoite'}
         name={'kohde.katuosoite'}
@@ -171,7 +171,7 @@
         validators={schema.katuosoite}
         {i18n} />
     </div>
-    <div class="py-4 w-full md:w-1/3">
+    <div class="w-full py-4 md:w-1/3">
       <Autocomplete items={postinumeroNames} size={10}>
         <Input
           id={'kohde.postinumero'}
@@ -207,10 +207,10 @@
       </div>
     {/if}
   </div>
-  <div class="flex flex-col w-full py-8">
+  <div class="flex w-full flex-col py-8">
     <H2 text={i18n(`${i18nRoot}.ilmoituksen-tiedot`)} />
 
-    <div class="py-4 w-full md:w-1/3">
+    <div class="w-full py-4 md:w-1/3">
       <Datepicker
         label={i18n(`${i18nRoot}.havaintopaiva`)}
         bind:model={kohde}
@@ -220,7 +220,7 @@
         transform={EM.fromNull}
         {i18n} />
     </div>
-    <div class="py-4 w-full md:w-1/3">
+    <div class="w-full py-4 md:w-1/3">
       <Select
         id={'kohde.ilmoituspaikka-id'}
         label={i18n(`${i18nRoot}.ilmoituspaikka-id`)}
@@ -234,7 +234,7 @@
         items={R.pluck('id', ilmoituspaikat)} />
     </div>
     {#if Ilmoituspaikka.other(kohde)}
-      <div class="py-4 w-full md:w-1/3">
+      <div class="w-full py-4 md:w-1/3">
         <Input
           id={'kohde.ilmoituspaikka-description'}
           name={'kohde.ilmoituspaikka-description'}
@@ -247,7 +247,7 @@
           {i18n} />
       </div>
     {/if}
-    <div class="py-4 w-full md:w-1/3">
+    <div class="w-full py-4 md:w-1/3">
       <Input
         id={'kohde.ilmoitustunnus'}
         name={'kohde.ilmoitustunnus'}

@@ -19,7 +19,7 @@
 </p>
 
 <div>
-  <table class="et-table overflow-x-auto md:overflow-x-hidden w-auto">
+  <table class="et-table w-auto overflow-x-auto md:overflow-x-hidden">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th

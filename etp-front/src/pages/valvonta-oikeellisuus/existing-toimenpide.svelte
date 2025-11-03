@@ -173,7 +173,7 @@
 
 <Overlay {overlay}>
   <slot />
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { whoami, templatesByType, virhetyypit, severities, toimenpide, liitteet }}
       <ToimenpideForm

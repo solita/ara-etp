@@ -124,7 +124,7 @@
 
 <style type="text/postcss">
   .buttons {
-    @apply flex flex-wrap items-center mt-5 border-t-1 border-tertiary;
+    @apply mt-5 flex flex-wrap items-center border-t-1 border-tertiary;
   }
 </style>
 
@@ -192,7 +192,7 @@
       })}
     </p>
 
-    <div class="flex flex-col items-start mt-2">
+    <div class="mt-2 flex flex-col items-start">
       {#if Kielisyys.fi(energiatodistus)}
         <Link
           href={Signing.pdfUrl(energiatodistus, 'fi')}

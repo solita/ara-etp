@@ -11,16 +11,16 @@
 
 <style type="text/postcss">
   h1 {
-    @apply text-primary uppercase font-bold text-sm;
+    @apply text-sm font-bold uppercase text-primary;
   }
   h1 span {
-    @apply lowercase text-lg font-normal;
+    @apply text-lg font-normal lowercase;
   }
 </style>
 
 {#if Kayttajat.isVerificationActive(whoami, kayttaja)}
   <div class="flex">
-    <div class="my-4 border-primary/15 border-2 rounded-md p-4 shadow-md">
+    <div class="my-4 rounded-md border-2 border-primary/15 p-4 shadow-md">
       <h1>
         <span class="font-icon">info_outline</span>
         {i18n(i18nRoot + '.header')}

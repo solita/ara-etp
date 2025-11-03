@@ -27,7 +27,7 @@
 
   div:last-child::after {
     content: '';
-    @apply flex-grow border-dark border-b-3;
+    @apply flex-grow border-b-3 border-dark;
   }
 </style>
 

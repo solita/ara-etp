@@ -24,7 +24,7 @@
     'perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.header'
   )} />
 
-<div class="flex lg:flex-row flex-col gap-x-8">
+<div class="flex flex-col gap-x-8 lg:flex-row">
   <table class="et-table mb-12">
     <thead class="et-table--thead">
       <tr class="et-table--tr">

@@ -6,7 +6,7 @@
 
 <style type="text/postcss">
   .overlay-container {
-    @apply w-full flex;
+    @apply flex w-full;
   }
 
   .overlayed-content {
@@ -14,7 +14,7 @@
   }
 
   .overlay {
-    @apply absolute bg-light opacity-75 top-0 bottom-0 left-0 right-0 flex justify-center items-center;
+    @apply absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-light opacity-75;
   }
 </style>
 

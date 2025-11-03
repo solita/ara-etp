@@ -22,8 +22,8 @@
 <H4 text={$_('perusparannuspassi.energian-hinta.header')} />
 <p class="mb-6">{$_('perusparannuspassi.energian-hinta.description')}</p>
 
-<div class="min-w-full overflow-x-auto md:overflow-x-hidden mb-12">
-  <table class="et-table et-table__noborder border-r-0 table-fixed">
+<div class="mb-12 min-w-full overflow-x-auto md:overflow-x-hidden">
+  <table class="et-table et-table__noborder table-fixed border-r-0">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th
@@ -33,7 +33,7 @@
         <th class="et-table--th et-table--th-right-aligned et-table--th__fifth">
           {$_('perusparannuspassi.energian-hinta.hinta-snt-kwh')}
         </th>
-        <th class="et-table--th w-3/5 invisible border-0 p-0"></th>
+        <th class="et-table--th invisible w-3/5 border-0 p-0"></th>
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -51,7 +51,7 @@
               path={['tulokset', energiamuoto.field]}
               i18nRoot="perusparannuspassi" />
           </td>
-          <td class="et-table--td w-3/5 invisible border-0 p-0"></td>
+          <td class="et-table--td invisible w-3/5 border-0 p-0"></td>
         </tr>
       {/each}
     </tbody>

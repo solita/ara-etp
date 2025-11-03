@@ -110,7 +110,7 @@
 <style>
 </style>
 
-<div class="w-full mt-3">
+<div class="mt-3 w-full">
   <H1 text={i18n(`${i18nRoot}.title`)} />
   <Overlay {overlay}>
     <div slot="content" class="mb-10">
@@ -164,7 +164,7 @@
         </table>
       </div>
 
-      <div class="overflow-x-auto my-10">
+      <div class="my-10 overflow-x-auto">
         <H2 text={i18n(`${i18nRoot}.energiatodistuslomake`)} />
         <table class="etp-table">
           <thead class="etp-table--thead">

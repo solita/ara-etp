@@ -12,7 +12,7 @@
 
 <style type="text/postcss">
   .last-login {
-    @apply text-secondary mb-4;
+    @apply mb-4 text-secondary;
   }
 </style>
 

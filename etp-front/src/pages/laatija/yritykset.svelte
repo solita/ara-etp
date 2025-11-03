@@ -141,14 +141,14 @@
 
 <style type="text/postcss">
   h2 {
-    @apply font-bold uppercase text-lg pb-4;
+    @apply pb-4 text-lg font-bold uppercase;
   }
 </style>
 
 <Overlay {overlay}>
   <div slot="content">
     <form>
-      <div class="w-full mt-3">
+      <div class="mt-3 w-full">
         <H1 text={i18n('laatija.yritykset.title')} />
 
         {#if R.isEmpty(laatijaYritykset)}
@@ -225,15 +225,15 @@
         {#if whoami.map(Kayttajat.isLaatija).orSome(false)}
           <h2>{i18n('laatija.yritykset.joining.heading')}</h2>
 
-          <ol class="list-decimal list-inside">
+          <ol class="list-inside list-decimal">
             <li>{i18n('laatija.yritykset.joining.step-1')}</li>
             <li>{i18n('laatija.yritykset.joining.step-2')}</li>
             <li>{i18n('laatija.yritykset.joining.step-3')}</li>
           </ol>
 
           <form class="mb-5" on:submit|preventDefault={attach}>
-            <div class="flex lg:flex-row flex-col py-4 -ml-4 lg:-mr-4">
-              <div class="lg:w-1/2 lg:py-0 w-full px-4 py-4">
+            <div class="-ml-4 flex flex-col py-4 lg:-mr-4 lg:flex-row">
+              <div class="w-full px-4 py-4 lg:w-1/2 lg:py-0">
                 <Autocomplete
                   items={R.map(
                     formatYritys,

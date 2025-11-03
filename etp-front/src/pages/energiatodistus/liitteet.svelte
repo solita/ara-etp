@@ -82,7 +82,7 @@
 
 {#each Maybe.toArray(resources) as { liitteet, whoami }}
   <Overlay {overlay}>
-    <div slot="content" class="w-full mt-3">
+    <div slot="content" class="mt-3 w-full">
       <H1 text={i18n('energiatodistus.liitteet.title')} />
       <Liitteet
         {liiteApi}

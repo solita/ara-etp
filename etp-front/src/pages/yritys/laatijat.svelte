@@ -87,7 +87,7 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     <H1 text="Yrityksen laatijat" />
 
     {#if R.isEmpty(laatijat)}
@@ -158,7 +158,7 @@
                       'yritys.laatijat.delete.confirm-message'
                     )}>
                     <span
-                      class="material-icons cursor-pointer delete-icon"
+                      class="material-icons delete-icon cursor-pointer"
                       title={hasModifyPermission
                         ? null
                         : i18n('yritys.messages.missing-permission')}

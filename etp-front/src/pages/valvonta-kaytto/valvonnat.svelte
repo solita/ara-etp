@@ -206,10 +206,10 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     <div class="flex justify-between">
       <H1 text={i18n(i18nRoot + '.title')} />
-      <div class="flex mb-auto">
+      <div class="mb-auto flex">
         <Link
           href="/#/valvonta/kaytto/new"
           icon={Maybe.Some('add_circle_outline')}
@@ -217,8 +217,8 @@
       </div>
     </div>
     {#each Maybe.toArray(resources) as { valvonnat, whoami, toimenpidetyypit, valvojat, postinumerot, templates }}
-      <div class="flex flex-wrap items-end md:space-y-0 space-y-4">
-        <div class="w-1/4 mr-4">
+      <div class="flex flex-wrap items-end space-y-4 md:space-y-0">
+        <div class="mr-4 w-1/4">
           <Select
             disabled={overlay}
             compact={true}
@@ -261,8 +261,8 @@
             parse={Maybe.Some} />
         </div>
       </div>
-      <div class="grid grid-cols-4 items-end gap-4 md:space-y-0 space-y-4 my-4">
-        <div class="md:col-span-2 col-span-4">
+      <div class="my-4 grid grid-cols-4 items-end gap-4 space-y-4 md:space-y-0">
+        <div class="col-span-4 md:col-span-2">
           <Input
             label={i18n(i18nRoot + '.keyword-search')}
             model={query}
@@ -280,7 +280,7 @@
               );
             }} />
         </div>
-        <div class="md:col-span-1 col-span-4">
+        <div class="col-span-4 md:col-span-1">
           <Select
             disabled={overlay}
             compact={false}
@@ -296,7 +296,7 @@
             parse={Maybe.Some}
             allowNone={true} />
         </div>
-        <div class="md:col-span-1 col-span-4">
+        <div class="col-span-4 md:col-span-1">
           <Select2
             label={i18n('valvonta.kaytto.all.last-template')}
             bind:model={query}

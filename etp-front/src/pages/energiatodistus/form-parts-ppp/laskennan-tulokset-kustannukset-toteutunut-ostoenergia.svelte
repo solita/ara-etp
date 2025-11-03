@@ -141,7 +141,7 @@
 </p>
 
 <div class="min-w-full overflow-x-auto md:overflow-x-hidden">
-  <table class="et-table et-table__noborder border-r-0 table-fixed">
+  <table class="et-table et-table__noborder table-fixed border-r-0">
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th class="et-table--th et-table--th-left-aligned et-table--td__fifth">

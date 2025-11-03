@@ -110,7 +110,7 @@
       text: i18n('peruuta')
     }
   ]}>
-  <div class="lg:mr-64 my-4 w-32">
+  <div class="my-4 w-32 lg:mr-64">
     <Input
       id={'dialog.attach-et.input'}
       name={'dialog.attach-et.input'}

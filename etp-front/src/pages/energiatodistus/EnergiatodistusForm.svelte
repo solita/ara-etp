@@ -199,8 +199,8 @@
 
 {#if !R.isNil(ETForm)}
   <DirtyConfirmation {dirty} />
-  <div class="w-full relative flex">
-    <div class="sticky top-3em self-start flex justify-end px-6 z-10">
+  <div class="relative flex w-full">
+    <div class="sticky top-3em z-10 flex justify-end self-start px-6">
       <ToolBar
         save={validateAndSubmit}
         saveComplete={validateCompleteAndSubmit}
@@ -213,7 +213,7 @@
         bind:inputLanguage />
     </div>
     <div
-      class="flex-grow overflow-x-hidden border-l border-disabled pl-10 -mt-8 pt-4">
+      class="-mt-8 flex-grow overflow-x-hidden border-l border-disabled pl-10 pt-4">
       <form
         bind:this={etFormElement}
         on:submit|preventDefault={validateAndSubmit(noop)}
@@ -224,7 +224,7 @@
           dirty = true;
         }}
         on:reset={reset}>
-        <div class="w-full mt-3">
+        <div class="mt-3 w-full">
           <H1 text={title} />
 
           {#if version == 2026 && energiatodistus['perusparannuspassi-id'] && Maybe.isSome(energiatodistus['perusparannuspassi-id'])}

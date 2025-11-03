@@ -38,16 +38,16 @@
 
 <a
   href={`#/viesti/${ketju.id}`}
-  class="flex flex-col border-b-2 border-background hover:bg-althover p-2"
+  class="flex flex-col border-b-2 border-background p-2 hover:bg-althover"
   class:unread>
-  <div class="flex items-start w-full justify-start">
-    <span class="w-2/12 py-1 border border-transparent">
+  <div class="flex w-full items-start justify-start">
+    <span class="w-2/12 border border-transparent py-1">
       {sentTime(ketju)}
     </span>
     <div
-      class="w-9/12 py-1 flex flex-wrap items-center"
+      class="flex w-9/12 flex-wrap items-center py-1"
       title={R.gt(R.length(ketju.subject), 40) ? ketju.subject : ''}>
-      <span class="subject truncate font-bold self-start mr-3">
+      <span class="subject mr-3 self-start truncate font-bold">
         {ketju.subject}
       </span>
 
@@ -62,7 +62,7 @@
         )} />
     </div>
     {#if Viestit.isKasittelija(whoami)}
-      <div class="flex-shrink justify-self-end ml-auto">
+      <div class="ml-auto flex-shrink justify-self-end">
         <button
           on:click|preventDefault|stopPropagation={submitKasitelty(
             R.prop('id', ketju),
@@ -80,10 +80,10 @@
   </div>
 
   <div class="flex items-center">
-    <div class="flex flex-col w-2/12">
+    <div class="flex w-2/12 flex-col">
       <span class="block">
         <span
-          class="font-icon mr-1"
+          class="mr-1 font-icon"
           class:text-primary={!unread}
           class:text-error={unread}>
           chat
@@ -94,11 +94,11 @@
 
     <div class="flex w-10/12 items-center justify-between">
       <div class="flex items-center overflow-hidden">
-        <div class="font-bold whitespace-nowrap">
+        <div class="whitespace-nowrap font-bold">
           <User user={R.prop('from', R.last(ketju.viestit))} {whoami} />
         </div>
         :
-        <div class="truncate p-1 flex space-x-1" class:font-bold={unread}>
+        <div class="flex space-x-1 truncate p-1" class:font-bold={unread}>
           <Style>
             {@html MD.toHtml(R.last(ketju.viestit).body)}
           </Style>

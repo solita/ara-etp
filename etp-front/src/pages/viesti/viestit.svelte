@@ -188,7 +188,7 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     {#each Maybe.toArray(resources) as { ketjut, whoami, vastaanottajaryhmat, kasittelijat, osapuolet }}
       <div class="flex justify-between">
         <H1 text={i18n('viesti.all.title')} />
@@ -200,7 +200,7 @@
         </div>
       </div>
       {#if !Kayttajat.isLaatija(whoami)}
-        <div class="flex justify-between mb-4">
+        <div class="mb-4 flex justify-between">
           <div class="flex flex-grow">
             <div class="w-1/4">
               <Select
@@ -238,8 +238,8 @@
             disabled={false} />
         </div>
 
-        <div class="flex md:flex-row flex-col">
-          <div class="md:w-1/2 w-full mr-4 my-4">
+        <div class="flex flex-col md:flex-row">
+          <div class="my-4 mr-4 w-full md:w-1/2">
             <Select2
               id={'viesti.from-id'}
               name={'viesti.from-id'}
@@ -256,7 +256,7 @@
               searchable={true} />
           </div>
 
-          <div class="md:w-1/2 w-full my-4">
+          <div class="my-4 w-full md:w-1/2">
             <Select2
               id={'viesti.vastaanottaja-id'}
               name={'viesti.vastaanottaja-id'}
@@ -274,8 +274,8 @@
           </div>
         </div>
 
-        <div class="flex md:flex-row flex-col mb-8">
-          <div class="md:w-1/2 w-full mr-4 my-4">
+        <div class="mb-8 flex flex-col md:flex-row">
+          <div class="my-4 mr-4 w-full md:w-1/2">
             <Input
               id="keyword"
               name="keyword"
@@ -295,7 +295,7 @@
                 );
               }} />
           </div>
-          <div class="md:w-1/2 w-full mr-4 my-4 md:my-8">
+          <div class="my-4 mr-4 w-full md:my-8 md:w-1/2">
             <Checkbox
               id={'valvonta'}
               name={'valvonta'}

@@ -61,7 +61,7 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3 flex flex-col space-y-8">
+  <div slot="content" class="mt-3 flex w-full flex-col space-y-8">
     {#each Maybe.toArray(resources) as { kayttaja, kayttajaHistory, laatijaHistory, roolit, patevyydet, toimintaalueet, countries, laskutuskielet }}
       <div>
         <H2 text={i18n('kayttaja.muutoshistoria.kayttajatiedot')} />

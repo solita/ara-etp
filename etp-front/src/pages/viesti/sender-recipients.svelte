@@ -21,8 +21,8 @@
 
 <div class="flex">
   <User {icons} {whoami} user={sender} />
-  <span class="font-icon mx-2">arrow_right_alt</span>
-  <div class="flex to truncate">
+  <span class="mx-2 font-icon">arrow_right_alt</span>
+  <div class="to flex truncate">
     {#each Maybe.toArray(recipientGroup) as group}
       {#if icons}<span class="font-icon">group</span>{/if}
       <span>

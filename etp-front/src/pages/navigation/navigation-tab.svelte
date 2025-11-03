@@ -15,17 +15,17 @@
 <style type="text/postcss">
   a,
   .disabled {
-    @apply relative flex py-4 font-bold justify-center border-dark border-b-3 cursor-pointer uppercase shadow-none tracking-xl outline-none;
+    @apply relative flex cursor-pointer justify-center border-b-3 border-dark py-4 font-bold uppercase tracking-xl shadow-none outline-none;
     transition: box-shadow 0.1s ease-in-out;
   }
 
   a:hover,
   a.active {
-    @apply shadow-hover-2-primary border-hover;
+    @apply border-hover shadow-hover-2-primary;
   }
 
   a:focus {
-    @apply shadow-hover-2-secondary border-secondary;
+    @apply border-secondary shadow-hover-2-secondary;
   }
 
   a:hover {
@@ -33,7 +33,7 @@
   }
 
   .badge {
-    @apply inline-flex justify-center items-center absolute rounded-full bg-primary text-light font-medium text-xs;
+    @apply absolute inline-flex items-center justify-center rounded-full bg-primary text-xs font-medium text-light;
     top: -1.5em;
     right: -1em;
     padding-left: 0.6em;

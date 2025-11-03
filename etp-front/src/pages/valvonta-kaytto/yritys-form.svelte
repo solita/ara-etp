@@ -57,9 +57,9 @@
   on:input={setDirty}
   on:change={setDirty}
   on:text-change={setDirty}>
-  <div class="flex flex-col w-full py-8">
+  <div class="flex w-full flex-col py-8">
     <div
-      class="py-4 flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 w-full md:w-2/3">
+      class="flex w-full flex-col space-y-4 py-4 md:w-2/3 md:flex-row md:space-x-4 md:space-y-0">
       <div class="w-full">
         <Input
           id={'yritys.nimi'}
@@ -86,7 +86,7 @@
       </div>
     </div>
 
-    <div class="py-4 w-full md:w-1/3 md:pr-2">
+    <div class="w-full py-4 md:w-1/3 md:pr-2">
       <Select
         id={'yritys.rooli-id'}
         label={i18n(`${i18nRoot}.rooli-id`)}
@@ -100,7 +100,7 @@
         items={R.pluck('id', roolit)} />
     </div>
     {#if Osapuolet.otherRooli(osapuoli)}
-      <div class="py-4 w-full md:w-1/3 md:pr-2">
+      <div class="w-full py-4 md:w-1/3 md:pr-2">
         <Input
           id={'yritys.rooli-description'}
           name={'yritys.rooli-description'}

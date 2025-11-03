@@ -8,7 +8,7 @@
 
 <style type="text/postcss">
   button {
-    @apply flex justify-start items-center text-primary border-b-1 border-transparent font-semibold;
+    @apply flex items-center justify-start border-b-1 border-transparent font-semibold text-primary;
   }
 
   button:hover:not(:disabled) {
@@ -24,11 +24,11 @@
   }
 
   button:disabled {
-    @apply text-disabled cursor-not-allowed;
+    @apply cursor-not-allowed text-disabled;
   }
 </style>
 
 <button {type} {title} {disabled} on:click>
-  <span class="font-icon mr-1">{icon}</span>
+  <span class="mr-1 font-icon">{icon}</span>
   {text}
 </button>

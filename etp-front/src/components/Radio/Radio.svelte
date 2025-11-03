@@ -14,15 +14,15 @@
 
 <style type="text/postcss">
   div {
-    @apply flex flex-row-reverse relative justify-end items-center;
+    @apply relative flex flex-row-reverse items-center justify-end;
   }
 
   input {
-    @apply opacity-0 w-0 h-0;
+    @apply h-0 w-0 opacity-0;
   }
 
   label {
-    @apply text-secondary cursor-pointer;
+    @apply cursor-pointer text-secondary;
   }
 
   label.disabled {
@@ -38,7 +38,7 @@
   }
 
   span {
-    @apply relative w-6 h-6 rounded-full border-2 border-dark mr-2 bg-light cursor-pointer;
+    @apply relative mr-2 h-6 w-6 cursor-pointer rounded-full border-2 border-dark bg-light;
   }
 
   span.disabled {

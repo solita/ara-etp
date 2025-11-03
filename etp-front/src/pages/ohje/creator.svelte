@@ -73,10 +73,10 @@
 </script>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3 flex space-x-4">
-    <div class="w-full flex flex-col">
+  <div slot="content" class="mt-3 flex w-full space-x-4">
+    <div class="flex w-full flex-col">
       <DirtyConfirmation {dirty} />
-      <div class="w-full flex flex-col">
+      <div class="flex w-full flex-col">
         <div class="mr-auto">
           <TextButton
             on:click={pop}

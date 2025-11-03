@@ -15,7 +15,7 @@
 
 <style type="text/postcss">
   input {
-    @apply w-full relative font-medium py-1;
+    @apply relative w-full py-1 font-medium;
   }
 
   input.center {

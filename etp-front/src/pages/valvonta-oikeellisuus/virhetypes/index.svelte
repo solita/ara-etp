@@ -116,7 +116,7 @@
 </style>
 
 <Overlay {overlay}>
-  <div slot="content" class="w-full mt-3">
+  <div slot="content" class="mt-3 w-full">
     <div class="flex justify-between">
       <H1 text={i18n(i18nRoot + '.title')} />
       <div class="font-bold">
@@ -129,8 +129,8 @@
     </div>
     <DirtyConfirmation {dirty} />
     {#each Maybe.toArray(resources) as { virhetypes }}
-      <div class="flex my-4">
-        <div class="lg:w-1/2 w-full">
+      <div class="my-4 flex">
+        <div class="w-full lg:w-1/2">
           <Input
             model={Maybe.orSome('', searchKeyword)}
             inputComponentWrapper={PillInputWrapper}

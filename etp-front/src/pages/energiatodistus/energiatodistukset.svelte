@@ -257,28 +257,28 @@
   }
 </style>
 
-<div class="w-full mt-3">
+<div class="mt-3 w-full">
   {#each resources.toArray() as { luokittelut, toimenpidetyypit, kunnat, whoami, config }}
-    <div class="flex flex-col lg:flex-row justify-between">
+    <div class="flex flex-col justify-between lg:flex-row">
       <H1 text={i18n('energiatodistukset.title')} />
       {#if Kayttajat.isLaatija(whoami)}
         <div
-          class="mb-4 flex lg:flex-row flex-col lg:space-x-4 text-primary font-bold">
+          class="mb-4 flex flex-col font-bold text-primary lg:flex-row lg:space-x-4">
           {#if isEtp2026Enabled(config)}
-            <div class="flex flex-row my-auto">
+            <div class="my-auto flex flex-row">
               <Link
                 text={i18n('energiatodistus.luo2026')}
                 href="#/energiatodistus/2026/new"
                 icon={Maybe.Some('add_circle_outline')} />
             </div>
           {/if}
-          <div class="flex flex-row my-auto">
+          <div class="my-auto flex flex-row">
             <Link
               text={i18n('energiatodistus.luo2018')}
               href="#/energiatodistus/2018/new"
               icon={Maybe.Some('add_circle_outline')} />
           </div>
-          <div class="flex flex-row my-auto">
+          <div class="my-auto flex flex-row">
             <Link
               text={i18n('energiatodistus.luo2013')}
               href="#/energiatodistus/2013/new"
@@ -465,7 +465,7 @@
     </Overlay>
     <!-- New ET2026 implementation -->
     {#if isEtp2026Enabled(config)}
-      <div class="flex flew-row mb-4 mr-4">
+      <div class="flew-row mb-4 mr-4 flex">
         <span class="material-icons">attachment</span>
         &nbsp;
         <Link
@@ -475,7 +475,7 @@
       <!-- Old implementation -->
     {:else}
       {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
-        <div class="flex flew-row mb-4 mr-4">
+        <div class="flew-row mb-4 mr-4 flex">
           <span class="material-icons">attachment</span>
           &nbsp;
           <Link
@@ -483,7 +483,7 @@
             href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
         </div>
       {/if}
-      <div class="flex flew-row mb-4 mr-4">
+      <div class="flew-row mb-4 mr-4 flex">
         <span class="material-icons">attachment</span>
         &nbsp;
         <Link

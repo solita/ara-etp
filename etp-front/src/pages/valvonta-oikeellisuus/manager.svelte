@@ -80,7 +80,7 @@
   <NoteDialog id={energiatodistus.id} {note} reload={load} />
 {/each}
 
-<div class="lg:w-1/4 w-full mb-8">
+<div class="mb-8 w-full lg:w-1/4">
   <Select
     label={i18n('valvonta.valvoja')}
     model={valvonta}
@@ -90,7 +90,7 @@
     items={R.pluck('id', Valvojat.filterActive(valvojat))} />
 </div>
 
-<div class="flex space-x-4 mb-8">
+<div class="mb-8 flex space-x-4">
   <TextButton
     icon="add_comment"
     text={i18n('valvonta.add-muistiinpano')}
@@ -115,7 +115,7 @@
   </div>
 {:else if !isDraft(toimenpiteet) && !ET.isDraft(energiatodistus)}
   <H2 text={i18n('valvonta.new-toimenpide')} />
-  <div class="lg:w-1/2 w-full mb-5">
+  <div class="mb-5 w-full lg:w-1/2">
     <Select
       label={i18n('valvonta.select-toimenpide')}
       model={toimenpideTyyppi}

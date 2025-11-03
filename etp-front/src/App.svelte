@@ -42,12 +42,12 @@
 
 <style type="text/postcss">
   .appcontainer {
-    @apply w-full flex flex-col flex-grow justify-between min-h-screen bg-light;
+    @apply flex min-h-screen w-full flex-grow flex-col justify-between bg-light;
   }
 
   .headercontainer,
   .footercontainer {
-    @apply w-full flex justify-center;
+    @apply flex w-full justify-center;
   }
 
   .headercontainer {
@@ -63,7 +63,7 @@
 
 <div class="appcontainer font-body">
   {#if resources.isNone() && failure.isNone()}
-    <section class="flex flex-col flex-grow py-8 px-10 mx-auto">
+    <section class="mx-auto flex flex-grow flex-col px-10 py-8">
       <Loading />
     </section>
   {/if}
@@ -80,17 +80,17 @@
 
   {#each Maybe.toArray(resources) as { whoami, config, version, ohjeSivut }}
     <div class="headercontainer">
-      <div class="w-full max-w-1440 mx-auto">
+      <div class="mx-auto w-full max-w-1440">
         <Header whoami={Maybe.Some(whoami)} {ohjeSivut} />
       </div>
     </div>
 
-    <div class="flex flex-col flex-grow">
+    <div class="flex flex-grow flex-col">
       <Body {whoami} {config} />
     </div>
 
     <div class="footercontainer">
-      <div class="w-full max-w-1440 mx-auto">
+      <div class="mx-auto w-full max-w-1440">
         <Footer {version} {config} />
       </div>
     </div>
