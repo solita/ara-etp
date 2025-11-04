@@ -29,7 +29,7 @@
   class="bg-background p-8 data-[open=false]:pb-6 data-[open=false]:pt-6">
   <div class="flex items-center justify-between">
     <H4
-      text={i18n('perusparannuspassi.vaiheet.0.toimenpiteet.osio.header', {
+      text={i18n('perusparannuspassi.toimenpiteet.osio.header', {
         values: { vaihe: vaihe['vaihe-nro'] }
       })} />
     <button
@@ -39,11 +39,11 @@
       {#if R.equals(true, open)}
         <span class="material-icons">keyboard_arrow_up</span>
         <span class="truncate"
-          >{i18n('perusparannuspassi.vaiheet.0.toimenpiteet.osio.hide')}</span>
+          >{i18n('perusparannuspassi.toimenpiteet.osio.sulje')}</span>
       {:else}
         <span class="material-icons">keyboard_arrow_down</span>
         <span class="truncate"
-          >{i18n('perusparannuspassi.vaiheet.0.toimenpiteet.osio.show')}</span>
+          >{i18n('perusparannuspassi.toimenpiteet.osio.avaa')}</span>
       {/if}
     </button>
   </div>

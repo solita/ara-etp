@@ -83,7 +83,7 @@
         <th
           class="et-table--th et-table--th__twocells et-table--th-left-aligned">
           {$_(
-            `perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.title`
+            'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.title'
           )}
         </th>
         <th
@@ -105,7 +105,7 @@
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
-              `perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.labels.${energiajarjestelma}`
+              `perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.${energiajarjestelma}`
             )}
           </td>
           <td>
@@ -133,7 +133,7 @@
   </table>
   <div class="py-4">
     {$_(
-      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.lisatiedot.info'
+      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.lisatiedot-kuvaus'
     )}
   </div>
   <div class="mb-4 w-full py-4">
@@ -152,23 +152,23 @@
         )} />
     </div>
     {$_(
-      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.title'
+      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.kuvaus'
     )}
   </div>
   <div class="w-full py-4">
     <div class="py-4">
       <H4
         text={$_(
-          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.header'
+          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteen-liitettavyys.header'
         )} />
     </div>
     {$_(
-      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.info'
+      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteen-liitettavyys.kuvaus'
     )}
     <div class="w-full py-4 lg:w-1/2">
       <Select
         label={$_(
-          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteenliitettavyys.title'
+          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteen-liitettavyys.label'
         )}
         {disabled}
         bind:model={perusparannuspassi}

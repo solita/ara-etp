@@ -1407,39 +1407,33 @@
       "lisatietoja": "Lisätiedot (sv)",
       "rakenteiden-u-arvot": {
         "header": "Rakenteiden U-arvot (sv)",
-        "title": "Rakenne (sv)",
+        "rakenne": "Rakenne (sv)",
         "lahtotiedot": "U-arvot, lähtötilanne (sv)",
         "viimeisen-vaiheen-jalkeen": "U-arvot, viimeisen vaiheen jälkeen (sv)",
-        "labels": {
-          "ulkoseinat-ehdotettu-taso": "Ulkoseinät (sv)",
-          "ylapohja-ehdotettu-taso": "Yläpohjat (sv)",
-          "alapohja-ehdotettu-taso": "Alapohjat (sv)",
-          "ikkunat-ehdotettu-taso": "Ikkunat (sv)",
-          "ulkoovet-ehdotettu-taso": "Ulko-ovet (sv)"
-        }
+        "ulkoseinat": "Ulkoseinät (sv)",
+        "ylapohja": "Yläpohjat (sv)",
+        "alapohja": "Alapohjat (sv)",
+        "ikkunat": "Ikkunat (sv)",
+        "ulkoovet": "Ulko-ovet (sv)"
       },
       "energiajarjestelmat": {
-        "header": "Energiajärjesetelmät (sv)",
+        "header": "Energiajärjestelmät (sv)",
         "title": "Energiajärjestelmä (sv)",
         "nykyinen": "Nykyinen (sv)",
         "ehdotettu-taso": "Ehdotettu taso (sv)",
-        "lisatiedot": {
-          "info": "Ilmoita mahdolliset muut energiajärjestelmät lisätiedoissa. (sv)"
-        },
-        "labels": {
-          "paalammitysjarjestelma": "Päälämmitysjärjestelmä (sv)",
-          "ilmanvaihto": "Ilmanvaihto (sv)",
-          "uusiutuvaenergia": "Uusiutuva energia (sv)",
-          "jaahdytys": "Jäähdytys (optio) (sv)"
-        },
-        "kohteenliitettavyys": {
+        "lisatiedot-kuvaus": "Ilmoita mahdolliset muut energiajärjestelmät lisätiedoissa. (sv)",
+        "paalammitysjarjestelma": "Päälämmitysjärjestelmä (sv)",
+        "ilmanvaihto": "Ilmanvaihto (sv)",
+        "uusiutuvaenergia": "Uusiutuva energia (sv)",
+        "jaahdytys": "Jäähdytys (optio) (sv)",
+        "kohteen-liitettavyys": {
           "header": "Kohteen liitettävyys (sv)",
-          "title": "Mahdollisuus liittyä (sv)",
-          "info": "Ilmoita tässä kohteen mahdollisuudesta liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen. (sv)"
+          "label": "Mahdollisuus liittyä (sv)",
+          "kuvaus": "Ilmoita tässä kohteen mahdollisuudesta liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen. (sv)"
         },
         "korjausrakentamisen-vahimmaisvaatimustaso": {
           "header": "Korjausrakentamisen vähimmäisvaatimustaso (sv)",
-          "title": "YM:n asetusten 4/13 mukainen korjaustakentamisen vähimmäisvaatimustaso (sv)"
+          "kuvaus": "YM:n asetusten 4/13 mukainen korjausrakentamisen vähimmäisvaatimustaso (sv)"
         }
       }
     },
@@ -1449,8 +1443,9 @@
       "aloitusvuosi": "Aloitusvuosi (sv)",
       "ei-aloitusvuotta": "Ei aloitusvuotta (sv)",
       "kwh-per-vuosi": "kWh/vuosi (sv)",
-      "info-before-table": "Kirjaa arvot vaiheen muutosten jälkeen. (sv)",
-      "lahtotilanne": "Lähtötilanne kWh/vuosi (sv)",
+      "lahtotilanne": "Lähtötilanne (sv)",
+      "lahtotilanne-kwh-vuosi": "Lähtötilanne kWh/vuosi (sv)",
+      "info-kirjaa-arvot": "Kirjaa arvot vaiheen muutosten jälkeen. (sv)",
       "vaiheistus": {
         "header": "Vaiheistus (sv)",
         "info": "Tiedot kirjataan vain niille vaiheille, joilla on (sv)",
@@ -1458,19 +1453,17 @@
       },
       "laskennallinen-ostoenergia": {
         "header": "Laskennallinen ostoenergia (sv)",
-        "table-headers": {
-          "ostoenergian-tarve-kaukolampo": "Kaukolämpö (sv)",
-          "ostoenergian-tarve-sahko": "Sähkö (sv)",
-          "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
-          "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
-          "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys (sv)"
-        }
+        "kaukolampo": "Kaukolämpö (sv)",
+        "sahko": "Sähkö (sv)",
+        "uusiutuvat-polttoaineet": "Uusiutuvat polttoaineet (sv)",
+        "fossiiliset-polttoaineet": "Fossiiliset polttoaineet (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)"
       },
       "uusiutuva-energia": {
         "header": "Uusiutuva energia (sv)",
         "energialaji": "Energialaji (sv)",
-        "uusiutuvan-energian-kokonaistuotto": "Uusiutuvan energian vuotuinen tuotto (sv)",
-        "uusiutuvan-energian-hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta (sv)"
+        "vuotuinen-tuotto": "Uusiutuvan energian vuotuinen tuotto (sv)",
+        "hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta (sv)"
       },
       "toteutunut-ostoenergia": {
         "header": "Toteutunut ostoenergia (sv)",
@@ -1481,7 +1474,69 @@
           "toteutunut-ostoenergia-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
           "toteutunut-ostoenergia-kaukojaahdytys": "Kaukojäähdytys (sv)"
         }
+      },
+      "energian-hinta": {
+        "header": "Energian hinta (sv)",
+        "kuvaus": "Kirjaa käyttämäsi energian hinnat. (sv)",
+        "energia": "Energia (sv)",
+        "hinta-snt-kwh": "Hinta snt/kWh (sv)",
+        "kaukolampo": "Kaukolämpö (sv)",
+        "sahko": "Sähkö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)",
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+      },
+      "kustannukset-laskennallinen": {
+        "header": "Energiakustannukset, laskennallinen ostoenergia (sv)",
+        "kuvaus": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
+        "energia": "Energia (sv)",
+        "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
+        "vaihe-1": "Vaihe 1 €/vuosi (sv)",
+        "vaihe-2": "Vaihe 2 €/vuosi (sv)",
+        "vaihe-3": "Vaihe 3 €/vuosi (sv)",
+        "vaihe-4": "Vaihe 4 €/vuosi (sv)",
+        "yhteensa": "Yhteensä (sv)",
+        "erotus": "Erotus edelliseen vaiheeseen (sv)",
+        "kaukolampo": "Kaukolämpö (sv)",
+        "sahko": "Sähkö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)",
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+      },
+      "kustannukset-toteutunut": {
+        "header": "Energiakustannukset, toteutunut ostoenergia (sv)",
+        "kuvaus": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
+        "energia": "Energia (sv)",
+        "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
+        "vaihe-1": "Vaihe 1 €/vuosi (sv)",
+        "vaihe-2": "Vaihe 2 €/vuosi (sv)",
+        "vaihe-3": "Vaihe 3 €/vuosi (sv)",
+        "vaihe-4": "Vaihe 4 €/vuosi (sv)",
+        "yhteensa": "Yhteensä (sv)",
+        "erotus": "Erotus edelliseen vaiheeseen (sv)",
+        "kaukolampo": "Kaukolämpö (sv)",
+        "sahko": "Sähkö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)",
+        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)"
       }
+    },
+    "toimenpiteet": {
+      "header": "Toimenpiteet (sv)",
+      "osio": {
+        "header": "Vaiheessa {vaihe} toteutettavat toimenpiteet (sv)",
+        "avaa": "Avaa osio (sv)",
+        "sulje": "Sulje osio (sv)"
+      },
+      "toimenpideseloste": "Toimenpideseloste (sv)",
+      "ehdotukset": {
+        "header": "Toimenpide-ehdotukset (sv)",
+        "toimenpide-n": "{n}. toimenpide-ehdotus (sv)"
+      },
+      "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)",
+      "vaihe-alkaa": "Vaihe alkaa (sv)",
+      "e-luokka-jalkeen": "E-luokka vaiheen jälkeen (sv)",
+      "e-luku-jalkeen": "E-luku vaiheen jälkeen (sv)"
     },
     "vaiheet": {
       "0": {
@@ -1517,57 +1572,6 @@
           "toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio": "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio (sv)",
           "energiankaytosta-aiheutuvat-hiilidioksidipaastot": "Energiankäytöstä aiheutuvat hiilidioksidipäästöt (sv)"
         }
-      }
-    },
-    "energian-hinta": {
-      "header": "Energian hinta (sv)",
-      "description": "Kirjaa käyttämäsi energian hinnat. (sv)",
-      "energia": "Energia (sv)",
-      "hinta-snt-kwh": "Hinta snt/kWh (sv)",
-      "labels": {
-        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
-        "sahko": "Sähkö (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)"
-      }
-    },
-    "laskennallinen-ostoenergia": {
-      "header": "Energiakustannukset, laskennallinen ostoenergia (sv)",
-      "description": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
-      "energia": "Energia (sv)",
-      "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
-      "vaihe-1": "Vaihe 1 €/vuosi (sv)",
-      "vaihe-2": "Vaihe 2 €/vuosi (sv)",
-      "vaihe-3": "Vaihe 3 €/vuosi (sv)",
-      "vaihe-4": "Vaihe 4 €/vuosi (sv)",
-      "yhteensa": "Yhteensä (sv)",
-      "erotus-edelliseen-vaiheeseen": "Erotus edelliseen vaiheeseen (sv)",
-      "labels": {
-        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
-        "sahko": "Sähkö (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)"
-      }
-    },
-    "kustannukset-toteutunut-ostoenergia": {
-      "header": "Energiakustannukset, toteutunut ostoenergia (sv)",
-      "description": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
-      "energia": "Energia (sv)",
-      "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
-      "vaihe-1": "Vaihe 1 €/vuosi (sv)",
-      "vaihe-2": "Vaihe 2 €/vuosi (sv)",
-      "vaihe-3": "Vaihe 3 €/vuosi (sv)",
-      "vaihe-4": "Vaihe 4 €/vuosi (sv)",
-      "yhteensa": "Yhteensä (sv)",
-      "erotus-edelliseen-vaiheeseen": "Erotus edelliseen vaiheeseen (sv)",
-      "labels": {
-        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
-        "sahko": "Sähkö (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)"
       }
     }
   },

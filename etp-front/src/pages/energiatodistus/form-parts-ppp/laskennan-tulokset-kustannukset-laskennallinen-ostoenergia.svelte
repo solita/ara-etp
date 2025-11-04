@@ -16,9 +16,14 @@
   );
 </script>
 
-<H4 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
+<H4
+  text={$_(
+    'perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.header'
+  )} />
 <p class="mb-6">
-  {$_('perusparannuspassi.laskennallinen-ostoenergia.description')}
+  {$_(
+    'perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.kuvaus'
+  )}
 </p>
 
 <div class="mb-12 min-w-full overflow-x-auto md:overflow-x-hidden">
@@ -26,22 +31,22 @@
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th class="et-table--th et-table--th-left-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.energia')}
+          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.energia')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.lahtotilanne')}
+          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.lahtotilanne')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.vaihe-1')}
+          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-1')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.vaihe-2')}
+          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-2')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.vaihe-3')}
+          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-3')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.vaihe-4')}
+          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-4')}
         </th>
       </tr>
     </thead>
@@ -50,7 +55,7 @@
         <tr class="et-table--tr">
           <td class="et-table--td et-table--td__fifth">
             {$_(
-              `perusparannuspassi.laskennallinen-ostoenergia.labels.${etEnergiamuoto}`
+              `perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.${etEnergiamuoto}`
             )}
           </td>
 
@@ -71,7 +76,9 @@
       <!-- Yhteensä row -->
       <tr class="et-table--tr border-t-1 border-disabled">
         <td class="et-table--td et-table--td__fifth uppercase">
-          {$_('perusparannuspassi.laskennallinen-ostoenergia.yhteensa')}
+          {$_(
+            'perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.yhteensa'
+          )}
         </td>
         <td
           class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
@@ -89,7 +96,7 @@
       <tr class="et-table--tr">
         <td class="et-table--td et-table--td__fifth">
           {$_(
-            'perusparannuspassi.laskennallinen-ostoenergia.erotus-edelliseen-vaiheeseen'
+            'perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.erotus'
           )}
         </td>
         <td

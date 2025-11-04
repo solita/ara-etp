@@ -19,8 +19,10 @@
   ];
 </script>
 
-<H4 text={$_('perusparannuspassi.energian-hinta.header')} />
-<p class="mb-6">{$_('perusparannuspassi.energian-hinta.description')}</p>
+<H4 text={$_('perusparannuspassi.laskennan-tulokset.energian-hinta.header')} />
+<p class="mb-6">
+  {$_('perusparannuspassi.laskennan-tulokset.energian-hinta.kuvaus')}
+</p>
 
 <div class="mb-12 min-w-full overflow-x-auto md:overflow-x-hidden">
   <table class="et-table et-table__noborder table-fixed border-r-0">
@@ -28,10 +30,12 @@
       <tr class="et-table--tr">
         <th
           class="et-table--th et-table--th-left-aligned et-table--th__twocells">
-          {$_('perusparannuspassi.energian-hinta.energia')}
+          {$_('perusparannuspassi.laskennan-tulokset.energian-hinta.energia')}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--th__fifth">
-          {$_('perusparannuspassi.energian-hinta.hinta-snt-kwh')}
+          {$_(
+            'perusparannuspassi.laskennan-tulokset.energian-hinta.hinta-snt-kwh'
+          )}
         </th>
         <th class="et-table--th invisible w-3/5 border-0 p-0"></th>
       </tr>
@@ -40,7 +44,9 @@
       {#each energiamuodot as energiamuoto}
         <tr class="et-table--tr">
           <td class="et-table--td et-table--th__twocells">
-            {$_(`perusparannuspassi.energian-hinta.labels.${energiamuoto.key}`)}
+            {$_(
+              `perusparannuspassi.laskennan-tulokset.energian-hinta.${energiamuoto.key}`
+            )}
           </td>
           <td class="et-table--td et-table--td__fifth">
             <Input

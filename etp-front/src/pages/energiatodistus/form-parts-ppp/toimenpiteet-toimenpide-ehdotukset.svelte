@@ -25,11 +25,7 @@
 </script>
 
 <div>
-  <H5
-    text={i18n(
-      'perusparannuspassi.vaiheet.0.toimenpiteet.toimenpide-ehdotukset.header'
-    )}
-    } />
+  <H5 text={i18n('perusparannuspassi.toimenpiteet.ehdotukset.header')} />
   <div class="grid grid-flow-col grid-rows-3 gap-6">
     {#each R.range(0, 6) as toimenpideN}
       <div>
@@ -52,7 +48,7 @@
             toimenpideN
           ])}
           label={i18n(
-            'perusparannuspassi.vaiheet.0.toimenpiteet.toimenpide-ehdotukset.toimenpide-ehdotus-n',
+            'perusparannuspassi.toimenpiteet.ehdotukset.toimenpide-n',
             { values: { n: toimenpideN + 1 } }
           )} />
       </div>

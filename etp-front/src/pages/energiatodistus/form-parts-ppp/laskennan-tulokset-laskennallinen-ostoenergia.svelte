@@ -17,20 +17,28 @@
   const laskennallisetOstoenergiat = [
     {
       ppp_energiamuoto: 'ostoenergian-tarve-kaukolampo',
-      et_energiamuoto: 'kaukolampo'
+      et_energiamuoto: 'kaukolampo',
+      label_key: 'kaukolampo'
     },
-    { ppp_energiamuoto: 'ostoenergian-tarve-sahko', et_energiamuoto: 'sahko' },
+    {
+      ppp_energiamuoto: 'ostoenergian-tarve-sahko',
+      et_energiamuoto: 'sahko',
+      label_key: 'sahko'
+    },
     {
       ppp_energiamuoto: 'ostoenergian-tarve-uusiutuvat-pat',
-      et_energiamuoto: 'uusiutuva-polttoaine'
+      et_energiamuoto: 'uusiutuva-polttoaine',
+      label_key: 'uusiutuvat-polttoaineet'
     },
     {
       ppp_energiamuoto: 'ostoenergian-tarve-fossiiliset-pat',
-      et_energiamuoto: 'fossiilinen-polttoaine'
+      et_energiamuoto: 'fossiilinen-polttoaine',
+      label_key: 'fossiiliset-polttoaineet'
     },
     {
       ppp_energiamuoto: 'ostoenergian-tarve-kaukojaahdytys',
-      et_energiamuoto: 'kaukojaahdytys'
+      et_energiamuoto: 'kaukojaahdytys',
+      label_key: 'kaukojaahdytys'
     }
   ];
 
@@ -50,7 +58,7 @@
   )} />
 
 <p>
-  {$_('perusparannuspassi.laskennan-tulokset.info-before-table')}
+  {$_('perusparannuspassi.laskennan-tulokset.info-kirjaa-arvot')}
 </p>
 
 <table class="et-table">
@@ -61,7 +69,9 @@
           'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.header'
         )}</th>
       <th class="et-table--th et-table--th-right-aligned"
-        >{$_('perusparannuspassi.laskennan-tulokset.lahtotilanne')}</th>
+        >{$_(
+          'perusparannuspassi.laskennan-tulokset.lahtotilanne-kwh-vuosi'
+        )}</th>
 
       {#each perusparannuspassi.vaiheet as vaihe}
         <th class="et-table--th et-table--th-right-aligned"
@@ -75,12 +85,12 @@
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each laskennallisetOstoenergiat as { ppp_energiamuoto, et_energiamuoto }}
+    {#each laskennallisetOstoenergiat as { ppp_energiamuoto, et_energiamuoto, label_key }}
       <tr class="et-table--tr">
         <td class="et-table--td"
           >{$_(
-            'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.table-headers.' +
-              ppp_energiamuoto
+            'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.' +
+              label_key
           )}</td>
 
         <td class="et-table--td"
