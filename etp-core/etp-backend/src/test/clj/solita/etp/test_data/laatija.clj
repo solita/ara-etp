@@ -58,6 +58,20 @@
        insert!
        first)))
 
+(defn insert-suomifi-laatija2!
+  "Inserts a different laatija for testing access."
+  ([]
+   (insert-suomifi-laatija2! (first (generate-adds 1))))
+  ([user-data]
+   (-> user-data
+       (merge {:henkilotunnus "020580-123X"
+               :passivoitu false
+               :email "laatija2@solita.fi"
+               :rooli 0})
+       vector
+       insert!
+       first)))
+
 (def laatija-access-token
   "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoib3BlbmlkIiwiYXV0aF90aW1lIjoxNzMzMjMwOTY5LCJpc3MiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vc29saXRhL2V0cC1jb3JlL2ZlYXR1cmUvQUUtNDMtYXV0aC1oZWFkZXJzLWhhbmRsaW5nL2V0cC1iYWNrZW5kL3NyYy9tYWluL3Jlc291cmNlcyIsImV4cCI6MTg5MzQ1NjAwMCwiaWF0IjoxNzMzNDEzNDI0LCJ2ZXJzaW9uIjoyLCJqdGkiOiI1ZmRkN2EyOS03ZWVhLTRmM2QtYTdhNi1jMjI4NDI2ZjYxMmIiLCJjbGllbnRfaWQiOiJ0ZXN0LWNsaWVudF9pZCIsInVzZXJuYW1lIjoidGVzdC11c2VybmFtZSJ9.XlIKLrNyLlJAnVmBVI3SxGSdTb4CUAKvhaCnDQT44XPG4Ilu1cD6X5sCY6DyOrN6muaEAY6OSag_qmEU51o6Dl6qMaP5egHNYLnXF-HAHBUg2muZ7AI5sM2iZMYrRlimOQcdaWm_pHXExLIFmhcXuA5Lzsq4VinesuCBxSqyIjGXgCj-lwgMlwq4Nb9D2mAnQ_fw6R8iOf-bLwvJ4LHNRFNEGRzOF_CVsbRlifx0InaJjUDBYEHWzIiC8Wf7Yn60fG90nxjMybQ2Es_sx3c8Zy3NQSnFj6Kg-eI0onES0jatTbH4dFeXyf5vJ44FgFo2mgPiu5a4CQGxsdfX8y6BYQ")
 
@@ -70,6 +84,11 @@
 (def laatija-oidc-data
   "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJsYWF0aWphQHNvbGl0YS5maSIsImN1c3RvbTpGSV9uYXRpb25hbElOIjoiMDEwNDY5LTk5OVciLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUiLCJleHAiOjE4OTM0NTYwMDAsImlzcyI6InRlc3QtaXNzIn0.Uk3DCz8fVTqgE_ge0ywVYpeFXnt5x6orlE3cC1e3lgs_2tzv7WHKCtLSbMWXYrcwOgZ-eOOuF_StNovq-IyMVjKAGxu1qaAR20Q2AYYg3JnOUNj1YPBpyA1nF5FYeNDolhlQKxrCj07hXmSBxBeIqNgOnepRJ0Rx9QEBoGbLvzT9mBf_m7CZncTcg2PCdtXiNeww5fx0R2ip53BcdI5nYcKz_LOae6Y707vfbmgfV_zDTFATDAqquwNuhtsqXbmc6D9smkJOl7CNPXY4riDuqyCbi62JMme90HlcHBRnMDLJXEIkTCaox3vdztxBlYVQYUwsaV3eOdQ7_v3wOal18w")
 
+(def laatija2-access-token
+  "eyJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJsYWF0aWphMkBzb2xpdGEuZmkiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6Im9wZW5pZCIsImF1dGhfdGltZSI6MTU4MzIzMDk2OSwiaXNzIjoiaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3NvbGl0YS9ldHAtY29yZS9mZWF0dXJlL0FFLTQzLWF1dGgtaGVhZGVycy1oYW5kbGluZy9ldHAtYmFja2VuZC9zcmMvbWFpbi9yZXNvdXJjZXMiLCJleHAiOjE4OTM0NTYwMDAsImlhdCI6MTYwMTUxMDQwMCwidmVyc2lvbiI6MiwianRpIjoiY2NjYmYyMjMtZjEwZi00MmJhLWIxYzAtN2UzMDdiMWM0ZTdmIiwiY2xpZW50X2lkIjoidGVzdC1jbGllbnRfaWQiLCJ1c2VybmFtZSI6InRlc3QtdXNlcm5hbWUifQ.T_Zi9l8t3NdAhwPEftbGFmHoOHmNK8MpJYNoAWTlx8e_ysIIqGBd-FIypYYzOc7IauSPIZGvDXHg-PvXaaYgi6VWLgSKbLMS3j75o8ReegWd5uxBnFVPIAQwchwRls066FPYcLEbaoUJwc0DtgoufJoo13gyilpQuOrSbXwSM18href9yZWVPVJmfvMhOTfXhCcUhWFOfWHQM4lJlYuwzPv5ynr5mfdTZ2Sy6pDSfxVtY1vdKWwwUCIk6oXVfKjaadyWOrbsDI9xGYfLQYMAWEIMxJrwaqdvuXmDOXZeTPWU7ND30z7jfOBGU0ev7bLEN_NnljNl_ujbhMKeRIRyeg")
+
+(def laatija2-oidc-data
+  "eyJ0eXAiOiJKV1QiLCJraWQiOiJ0ZXN0LWtpZCIsImFsZyI6IlJTMjU2IiwiaXNzIjoidGVzdC1pc3MiLCJjbGllbnQiOiJ0ZXN0LWNsaWVudCIsInNpZ25lciI6InRlc3Qtc2lnbmVyIiwiZXhwIjoxODkzNDU2MDAwfQ.eyJzdWIiOiJsYWF0aWphMkBzb2xpdGEuZmkiLCJjdXN0b206RklfbmF0aW9uYWxJTiI6IjAyMDU4MC0xMjNYIiwidXNlcm5hbWUiOiJ0ZXN0LXVzZXJuYW1lIiwiZXhwIjoxODkzNDU2MDAwLCJpc3MiOiJ0ZXN0LWlzcyJ9.WZO1_EdEXK_aPBnBwHJFTFNrYcc2QD4-I3htlGGSWWhpRal9ilpHwIIzs8HLqtNCBEZZQdc4ZZ_XtLRZABjGy3WZR_jiVg-cnFUur0hXlNPgPrsnffGpxe18oIe2UPc1_1ld5lDoDdoaatds9zYZlkP2Klb9Tv0When_37mzfaQdFXVVrNE1NZk1fH7yBXJvMiGmTz-qM8-iZ_ZSkSurSyvfbyaDU8Phe6Pg8EUkZnK8lYyNAsOzJF3XQkEK3CPD7vX1xMDARMtHL7H_dUVWfbcLOYXtN8iXsBsVmGnorwHkLyI1nm91YMEFuxrN7ScTVUp5GKWI3dgWXiHVcYC_Iw")
 
 (defn with-suomifi-laatija
   "Add virtu laatija user to ring-mock request"
@@ -78,3 +97,11 @@
       (mock/header "x-amzn-oidc-accesstoken" laatija-access-token)
       (mock/header "x-amzn-oidc-identity" "laatija@solita.fi")
       (mock/header "x-amzn-oidc-data" laatija-oidc-data)))
+
+(defn with-suomifi-laatija2
+  "Adds a different laatija user to ring-mock request"
+  [request]
+  (-> request
+      (mock/header "x-amzn-oidc-accesstoken" laatija2-access-token)
+      (mock/header "x-amzn-oidc-identity" "laatija2@solita.fi")
+      (mock/header "x-amzn-oidc-data" laatija2-oidc-data)))
