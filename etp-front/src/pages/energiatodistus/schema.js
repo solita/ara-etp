@@ -26,6 +26,20 @@ const Integer = (min, max) => ({
   validators: validations.MaybeInterval(min, max)
 });
 
+const Year = () => ({
+  parse: parsers.optionalParser(parsers.parseInteger),
+  format: formats.optionalYear,
+  deserialize: Either.Right,
+  validators: validations.MaybeInterval(2025, 2200)
+});
+
+const Currency = {
+  parse: parsers.optionalParser(parsers.parseNumber),
+  format: formats.optionalCurrency,
+  deserialize: Either.Right,
+  validators: validations.MaybeInterval(0, 9999999999)
+};
+
 const Float = (min, max) => ({
   parse: parsers.optionalParser(parsers.parseNumber),
   format: formats.optionalNumber,
@@ -403,11 +417,11 @@ export const perusparannuspassi = {
     lisatietoja: String(2, 1500)
   },
   tulokset: {
-    'kaukolampo-hinta': FloatNonNegative,
-    'sahko-hinta': FloatNonNegative,
-    'uusiutuvat-pat-hinta': FloatNonNegative,
-    'fossiiliset-pat-hinta': FloatNonNegative,
-    'kaukojaahdytys-hinta': FloatNonNegative,
+    'kaukolampo-hinta': Currency,
+    'sahko-hinta': Currency,
+    'uusiutuvat-pat-hinta': Currency,
+    'fossiiliset-pat-hinta': Currency,
+    'kaukojaahdytys-hinta': Currency,
     lisatietoja: String(2, 1500)
   },
   vaiheet: R.repeat(
@@ -416,8 +430,8 @@ export const perusparannuspassi = {
         toimenpideseloste: String(2, 1500)
       },
       tulokset: {
-        'vaiheen-alku-pvm': Integer(2025, 2200),
-        'vaiheen-loppu-pvm': Integer(2025, 2200),
+        'vaiheen-alku-pvm': Year(),
+        'vaiheen-loppu-pvm': Year(),
         'ostoenergian-tarve-kaukolampo': FloatNonNegative,
         'ostoenergian-tarve-sahko': FloatNonNegative,
         'ostoenergian-tarve-uusiutuvat-pat': FloatNonNegative,
