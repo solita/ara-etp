@@ -15,6 +15,10 @@
 (t/deftest ppp-post-test
   (laatija-test-data/insert-suomifi-laatija!
     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
+
+  (laatija-test-data/insert-suomifi-laatija2!
+    (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
+
   (t/testing "Create energiatodistus to test perusparannuspassi"
     (let [et (-> (et-test-data/generate-add 2026 true))
           et-body (-> et j/write-value-as-string)
@@ -48,8 +52,6 @@
       (t/is (= 200 (:status get-res)))
 
       (t/testing "create perusparannuspassi to energiatodistus with different laatija-id"
-        (laatija-test-data/insert-suomifi-laatija2!
-          (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
         (let [ppp (-> (ppp-test-data/generate-add 1))
               ppp-body (-> ppp j/write-value-as-string)
               post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
@@ -80,8 +82,6 @@
           (t/is (= 400 (:status put-res)))))
 
       (t/testing "owner can delete own perusparannuspassi"
-        (laatija-test-data/insert-suomifi-laatija!
-          (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
         (let [delete-res (ts/handler (-> (mock/request :delete (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                          (mock/header "Accept" "application/json")
                                          (laatija-test-data/with-suomifi-laatija)))]
@@ -99,10 +99,7 @@
                                        (laatija-test-data/with-suomifi-laatija)))]
           (t/is (= 403 (:status post-res)))))
 
-
       (t/testing "can't delete other laatija's perusparannuspassi"
-        (laatija-test-data/insert-suomifi-laatija2!
-          (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
         (let [delete-res (ts/handler (-> (mock/request :delete (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                          (mock/header "Accept" "application/json")
                                          (laatija-test-data/with-suomifi-laatija2)))]
