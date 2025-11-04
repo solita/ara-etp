@@ -18,6 +18,10 @@
   export let luokittelut;
   export let perusparannuspassi;
   export let schema;
+
+  // Check if energiatodistus has been calculated (tila-id > 0 means it's saved and calculated)
+  $: console.log('calculated', energiatodistus['tila-id']);
+  $: hasCalculatedResults = energiatodistus['tila-id'] > 0;
 </script>
 
 <div class="flex flex-col gap-6">
@@ -38,21 +42,24 @@
 
   <H3 text={$_('perusparannuspassi.laskennan-tulokset.header')} />
   <Vaiheistus bind:perusparannuspassi {schema} />
-  <LaskennallinenOstoenergia
-    bind:perusparannuspassi
-    {energiatodistus}
-    {schema} />
-  <UusiutuvaEnergia bind:perusparannuspassi {energiatodistus} {schema} />
-  <ToteutunutOstoenergia bind:perusparannuspassi {energiatodistus} {schema} />
-  <EnergianHinta bind:perusparannuspassi {energiatodistus} {schema} />
 
-  <LaskennallinenEnergiaKustannukset
-    bind:perusparannuspassi
-    {energiatodistus}
-    {schema} />
+  {#if hasCalculatedResults}
+    <LaskennallinenOstoenergia
+      bind:perusparannuspassi
+      {energiatodistus}
+      {schema} />
+    <UusiutuvaEnergia bind:perusparannuspassi {energiatodistus} {schema} />
+    <ToteutunutOstoenergia bind:perusparannuspassi {energiatodistus} {schema} />
+    <EnergianHinta bind:perusparannuspassi {energiatodistus} {schema} />
 
-  <ToteutunutOstoenergiaKustannukset
-    bind:perusparannuspassi
-    {energiatodistus}
-    {schema} />
+    <LaskennallinenEnergiaKustannukset
+      bind:perusparannuspassi
+      {energiatodistus}
+      {schema} />
+
+    <ToteutunutOstoenergiaKustannukset
+      bind:perusparannuspassi
+      {energiatodistus}
+      {schema} />
+  {/if}
 </div>

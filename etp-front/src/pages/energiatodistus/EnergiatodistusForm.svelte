@@ -317,6 +317,9 @@
             {luokittelut}
             {validation}
             {whoami} />
+
+          <!-- Slot for PPP form -->
+          <slot />
         </div>
       </form>
     </div>

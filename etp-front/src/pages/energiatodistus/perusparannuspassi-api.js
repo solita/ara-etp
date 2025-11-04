@@ -11,6 +11,7 @@ import * as schema from './schema.js';
 
 export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
   R.compose(
+    R.map(deserialize),
     Fetch.responseAsJson,
     Future.encaseP(
       Fetch.fetchWithMethod(
@@ -32,6 +33,16 @@ const deserializeToimenpideEhdotukset = toimenpiteet =>
     toimenpiteet,
     R.repeat(Maybe.None(), R.max(6 - R.length(toimenpiteet), 0))
   );
+
+export const getPerusparannuspassi = R.curry((fetch, pppId) =>
+  R.compose(
+    R.map(deserialize),
+    Fetch.responseAsJson,
+    Future.encaseP(
+      Fetch.getFetch(fetch)
+    )
+  )(`/api/private/perusparannuspassit/2026/${pppId}`)
+);
 
 const deserializer = {
   id: Maybe.get,

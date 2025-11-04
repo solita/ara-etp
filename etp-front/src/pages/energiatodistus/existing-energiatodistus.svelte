@@ -6,10 +6,18 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as versionApi from '@Component/Version/version-api';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
+  import * as Schema from '@Pages/energiatodistus/schema';
+  import * as Empty from '@Pages/energiatodistus/empty';
+
   import EnergiatodistusForm from '@Pages/energiatodistus/EnergiatodistusForm';
+  import PPPForm from '@Pages/energiatodistus/ppp-form.svelte';
+  import PPPWrapper from '@Pages/energiatodistus/PPPWrapper.svelte';
 
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as pppApi from '@Pages/energiatodistus/perusparannuspassi-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
@@ -35,6 +43,30 @@
   };
 
   let showMissingProperties;
+
+  let config = {};
+  Future.fork(
+    _ => {
+      config = {};
+    },
+    loadedConfig => {
+      config = loadedConfig;
+    },
+    versionApi.getConfig
+  );
+
+  // PPP state
+  let perusparannuspassi = null;
+  let showPPP = false;
+
+  // Toggle PPP form visibility
+  const togglePPP = (energiatodistusId, energiatodistus) => () => {
+    if (!showPPP && !perusparannuspassi) {
+      // Create empty PPP when showing for the first time
+      perusparannuspassi = Empty.perusparannuspassi(energiatodistusId);
+    }
+    showPPP = !showPPP;
+  };
 
   const submit = (energiatodistus, onSuccessfulSave) =>
     R.compose(
@@ -63,6 +95,9 @@
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
+    perusparannuspassi = null;
+    showPPP = false;
+
     Future.fork(
       response => {
         toggleOverlay(false);
@@ -70,6 +105,24 @@
       },
       response => {
         resources = Maybe.Some(response);
+
+        Maybe.fold(
+          () => {},
+          pppId => {
+            Future.fork(
+              err => {
+                console.error('Failed to load PPP:', err);
+              },
+              ppp => {
+                perusparannuspassi = ppp;
+                showPPP = true;
+              },
+              pppApi.getPerusparannuspassi(fetch, pppId)
+            );
+          },
+          response.energiatodistus['perusparannuspassi-id']
+        );
+
         toggleOverlay(false);
       },
       R.chain(
@@ -119,7 +172,23 @@
         {laskutusosoitteet}
         bind:showMissingProperties
         {submit}
-        title={title(energiatodistus)} />
+        title={title(energiatodistus)}>
+        <!-- PPP section as slot content -->
+        {#if isEtp2026Enabled(config) && params.version == 2026}
+          <PPPWrapper
+            {showPPP}
+            onAddPPP={togglePPP(energiatodistus.id, energiatodistus)}>
+            {#if perusparannuspassi}
+              <PPPForm
+                {energiatodistus}
+                inputLanguage={'fi'}
+                {luokittelut}
+                bind:perusparannuspassi
+                schema={Schema.perusparannuspassi} />
+            {/if}
+          </PPPWrapper>
+        {/if}
+      </EnergiatodistusForm>
     {/each}
   </div>
   <div slot="overlay-content">

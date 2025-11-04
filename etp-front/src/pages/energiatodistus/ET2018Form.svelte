@@ -3,20 +3,14 @@
 
   import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Future from '@Utility/future-utils';
   import * as et from './energiatodistus-utils';
   import * as Laatimisvaiheet from './laatimisvaiheet';
   import * as LocaleUtils from '@Language/locale-utils';
-  import * as Empty from './empty';
-  import * as Schema from './schema';
-  import * as versionApi from '@Component/Version/version-api';
-  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
   import H2 from '@Component/H/H2';
   import H3 from '@Component/H/H3';
   import Select from '@Component/Select/Select';
   import HR from '@Component/HR/HR';
-  import TextButton from '@Component/Button/TextButton';
 
   import Input from './Input';
   import BasicInput from '@Component/Input/Input';
@@ -49,7 +43,6 @@
   import Suositukset from './form-parts/huomiot/suositukset';
 
   import Area from './form-parts/units/area';
-  import PPPForm from './ppp-form.svelte';
 
   export let energiatodistus;
   export let inputLanguage;
@@ -61,30 +54,6 @@
   export let whoami;
 
   $: labelLocale = LocaleUtils.label($locale);
-
-  let config = {};
-  Future.fork(
-    _ => {
-      config = {}; // Fallback to empty config on error
-    },
-    loadedConfig => {
-      config = loadedConfig;
-    },
-    versionApi.getConfig
-  );
-
-  // PPP state
-  let perusparannuspassi = null;
-  let showPPP = false;
-
-  const addPPP = () => {
-    if (!perusparannuspassi) {
-      perusparannuspassi = Empty.perusparannuspassi(energiatodistus.id);
-
-      perusparannuspassi.id = Maybe.None();
-    }
-    showPPP = true;
-  };
 </script>
 
 <style>
@@ -93,11 +62,6 @@
   .lisamerkintoja-textarea :global(textarea) {
     min-height: 400px;
     max-height: 600px;
-  }
-
-  /* Override H2 margin for PPP section */
-  .ppp-section :global(h2) {
-    margin-bottom: 0; /* 24px / mb-6 */
   }
 </style>
 
@@ -339,44 +303,3 @@
     bind:model={energiatodistus}
     path={['lisamerkintoja']} />
 </div>
-
-{#if isEtp2026Enabled(config)}
-  <HR />
-  <div class="flex flex-col gap-6 ppp-section">
-    <div class="flex justify-between items-baseline">
-      <H2
-        id="perusparannuspassi"
-        text={$_('energiatodistus.perusparannuspassi.header')} />
-      <TextButton
-        icon="add_circle_outline"
-        text={$_('energiatodistus.perusparannuspassi.add-button')}
-        type="button"
-        on:click={addPPP} />
-    </div>
-    <div class="flex items-start p-4 bg-tertiary items-center">
-      <span class="font-icon mr-2 text-2xl">info_outline</span>
-      <span>{$_('energiatodistus.perusparannuspassi.info-text')}</span>
-    </div>
-
-    {#if !showPPP}
-      <p>
-        {$_('energiatodistus.perusparannuspassi.not-added')}
-      </p>
-      <p>
-        {$_('energiatodistus.perusparannuspassi.disclaimer')}
-      </p>
-    {:else}
-      <p>
-        {$_('energiatodistus.perusparannuspassi.disclaimer')}
-      </p>
-      <HR />
-      <PPPForm
-        {energiatodistus}
-        {inputLanguage}
-        {luokittelut}
-        bind:perusparannuspassi
-        schema={Schema.perusparannuspassi} />
-    {/if}
-  </div>
-{/if}
-<HR />
