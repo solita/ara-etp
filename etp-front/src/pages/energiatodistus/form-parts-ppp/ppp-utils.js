@@ -1,4 +1,5 @@
 import * as Maybe from '@Utility/maybe-utils';
+import * as EitherMaybe from '@Utility/either-maybe';
 import * as R from 'ramda';
 import * as formats from '@Utility/formats';
 import * as fxmath from '@Utility/fxmath';
@@ -197,3 +198,28 @@ export const calculateDerivedValues = (energiatodistus, perusparannuspassi) => {
     [etMetrics, ...pppMetrics]
   );
 };
+
+/**
+ * Format a ppp vaihe heading using a possible starting year.
+ *
+ * If `startingYear` contains a value, the returned string is:
+ *   "<title> (<startingYear>) <unit>"
+ *
+ * If `startingYear` is absent, the fallback will be:
+ *   "<title> (<noStartingYear>)"
+ *
+ * Parameters:
+ *  - title: string — main heading text
+ *  - unit: string — unit string appended when starting year is present
+ *  - startingYear: Either [*, Maybe number] value — mapped to produce the year;
+ *    if absent, fallback is used
+ *  - noStartingYear: string — text to use inside parentheses when starting year
+ *    is missing
+ *
+ * Returns: string
+ */
+export const formatVaiheHeading = (title, unit, startingYear, noStartingYear) =>
+  R.compose(
+    EitherMaybe.orSome(title + ' (' + noStartingYear + ')'),
+    EitherMaybe.map(aloitusvuosi => `${title} (${aloitusvuosi}) ${unit}`)
+  )(startingYear);

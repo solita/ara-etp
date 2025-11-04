@@ -1527,6 +1527,7 @@
       "header": "Laskennan tulokset",
       "vaihe": "Vaihe",
       "aloitusvuosi": "Aloitusvuosi",
+      "ei-aloitusvuotta": "Ei aloitusvuotta",
       "kwh-per-vuosi": "kWh/vuosi",
       "info-before-table": "Kirjaa arvot vaiheen muutosten jälkeen.",
       "lahtotilanne": "Lähtötilanne kWh/vuosi",

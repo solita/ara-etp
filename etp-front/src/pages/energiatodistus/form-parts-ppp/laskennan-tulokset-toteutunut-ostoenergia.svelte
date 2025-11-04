@@ -8,6 +8,7 @@
   import H4 from '@Component/H/H4';
   import { _ } from '@Language/i18n';
   import Input from '@Pages/energiatodistus/Input';
+  import * as PPPUtils from './ppp-utils.js';
 
   export let energiatodistus;
   export let perusparannuspassi;
@@ -67,16 +68,12 @@
       </th>
       {#each perusparannuspassi.vaiheet as vaihe}
         <th class="et-table--th et-table--th-right-aligned">
-          {$_('perusparannuspassi.laskennan-tulokset.vaihe') +
-            '' +
-            vaihe['vaihe-nro'] +
-            ' (' +
-            EitherMaybe.orSome(
-              'ei aloitusvuotta',
-              vaihe.tulokset['vaiheen-alku-pvm']
-            ) +
-            ') ' +
-            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi')}
+          {PPPUtils.formatVaiheHeading(
+            `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
+            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi'),
+            vaihe.tulokset['vaiheen-alku-pvm'],
+            $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
+          )}
         </th>
       {/each}
     </tr>

@@ -45,3 +45,8 @@ export const toArray = R.compose(Maybe.toArray, toMaybe);
  * (a -> boolean) -> Either [Maybe a] -> boolean
  */
 export const exists = R.curry((pred, em) => fold(false, pred, em));
+
+/**
+ * @sig (a -> b) -> Either [Maybe a] -> Either [Maybe b]
+ */
+export const map = R.curry((fn, em) => Either.map(R.map(fn), em));
