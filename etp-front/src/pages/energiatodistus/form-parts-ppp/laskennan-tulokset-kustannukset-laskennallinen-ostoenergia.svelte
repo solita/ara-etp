@@ -1,9 +1,12 @@
 <script>
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
+
+  import * as EitherMaybe from '@Utility/either-maybe';
   import * as PppUtils from './ppp-utils';
 
   import H4 from '@Component/H/H4';
+  import * as PPPUtils from '@Pages/energiatodistus/form-parts-ppp/ppp-utils.js';
 
   export let perusparannuspassi;
   export let energiatodistus;
@@ -31,23 +34,24 @@
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th class="et-table--th et-table--th-left-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.energia')}
+          {$_(
+            'perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.energia'
+          )}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.lahtotilanne')}
+          {$_(
+            'perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.lahtotilanne'
+          )}
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-1')}
-        </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-2')}
-        </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-3')}
-        </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.laskennan-tulokset.kustannukset-laskennallinen.vaihe-4')}
-        </th>
+        {#each perusparannuspassi.vaiheet as vaihe}
+          <th class="et-table--th et-table--th-right-aligned"
+            >{PPPUtils.formatVaiheHeading(
+              `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
+              $_('perusparannuspassi.laskennan-tulokset.eur-per-vuosi'),
+              vaihe.tulokset['vaiheen-alku-pvm'],
+              $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
+            )}</th>
+        {/each}
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -67,7 +71,9 @@
           {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
+              {#if EitherMaybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
+                {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
+              {/if}
             </td>
           {/each}
         </tr>
@@ -87,7 +93,9 @@
         {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {PppUtils.formatCost(vaiheCost.total)}
+            {#if EitherMaybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
+              {PppUtils.formatCost(vaiheCost.total)}
+            {/if}
           </td>
         {/each}
       </tr>
@@ -106,10 +114,12 @@
         {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
-              cur.total,
-              prev.total
-            )}
+            {#if EitherMaybe.isSome(cur['vaiheen-alku-pvm'])}
+              {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
+                cur.total,
+                prev.total
+              )}
+            {/if}
           </td>
         {/each}
       </tr>
