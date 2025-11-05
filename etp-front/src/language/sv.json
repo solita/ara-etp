@@ -100,7 +100,10 @@
     "year": "år",
     "pieces": "St",
     "celsius": "°C",
-    "days": "dagar"
+    "days": "dagar",
+    "screen-reader": {
+      "co2-ekv-tons-per-year": "tonnia hiilidioksidiekvivalenttia per vuosi (sv)"
+    }
   },
   "login_redirect": "Vänta en stund, du hänvisas till inloggningssidan",
   "loading": "Laddar...",

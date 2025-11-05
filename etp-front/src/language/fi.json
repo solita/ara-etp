@@ -102,7 +102,10 @@
     "days": "vrk",
     "year": "vuosi",
     "pieces": "kpl",
-    "celsius": "°C"
+    "celsius": "°C",
+    "screen-reader": {
+      "co2-ekv-tons-per-year": "tonnia hiilidioksidiekvivalenttia per vuosi"
+    }
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "loading": "Ladataan...",
