@@ -110,37 +110,29 @@
         if (response.perusparannuspassi) {
           perusparannuspassi = response.perusparannuspassi;
           showPPP = true;
-          console.log(perusparannuspassi);
         }
 
         toggleOverlay(false);
       },
       R.chain(
         response =>
-          R.chain(
-            responseWithLaskutus => {
-              const pppId = response.energiatodistus['perusparannuspassi-id'];
-              return Future.parallelObject(1, {
-                perusparannuspassi:
-                  pppId && Maybe.isSome(pppId)
-                    ? pppApi.getPerusparannuspassi(fetch, Maybe.get(pppId))
-                    : Future.resolve(null)
-              }).pipe(
-                R.map(pppResponse =>
-                  R.assoc(
-                    'perusparannuspassi',
-                    pppResponse.perusparannuspassi,
-                    responseWithLaskutus
-                  )
-                )
-              );
-            },
-            R.map(
-              R.assoc('laskutusosoitteet', R.__, response),
-              laatijaApi.laskutusosoitteet(
+          R.map(
+            additionalData => ({ ...response, ...additionalData }),
+            Future.parallelObject(2, {
+              laskutusosoitteet: laatijaApi.laskutusosoitteet(
                 Maybe.get(response.energiatodistus['laatija-id'])
-              )
-            )
+              ),
+              perusparannuspassi:
+                response.energiatodistus['perusparannuspassi-id'] &&
+                Maybe.isSome(response.energiatodistus['perusparannuspassi-id'])
+                  ? pppApi.getPerusparannuspassi(
+                      fetch,
+                      Maybe.get(
+                        response.energiatodistus['perusparannuspassi-id']
+                      )
+                    )
+                  : Future.resolve(null)
+            })
           ),
         Future.parallelObject(6, {
           energiatodistus: api.getEnergiatodistusById(
