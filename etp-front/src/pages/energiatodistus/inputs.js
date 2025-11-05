@@ -108,7 +108,7 @@ export const viewValueFormatted = R.curry(
 
     const formatOrValueOnEmpty = R.ifElse(
       R.always(R.isNotNil(valueOnEmpty)),
-      Maybe.cata(R.always(valueOnEmpty), format),
+      R.ifElse(Maybe.isNone, R.always(valueOnEmpty), format),
       format
     );
 

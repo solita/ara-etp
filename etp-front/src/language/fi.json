@@ -102,7 +102,10 @@
     "days": "vrk",
     "year": "vuosi",
     "pieces": "kpl",
-    "celsius": "°C"
+    "celsius": "°C",
+    "screen-reader": {
+      "co2-ekv-tons-per-year": "tonnia hiilidioksidiekvivalenttia per vuosi"
+    }
   },
   "login_redirect": "Odota hetki, sinut ohjataan kirjautumissivulle",
   "loading": "Ladataan...",
@@ -1575,10 +1578,23 @@
           }
         },
         "tulokset": {
+          "energiankulutuksen-muutos": {
+            "header": "Energiankulutuksen muutos",
+            "ostoenergian-tarve-kaukolampo-muutos": "Kaukolämpö",
+            "ostoenergian-tarve-sahko-muutos": "Sähkö",
+            "ostoenergian-tarve-uusiutuvat-pat-muutos": "Uusiutuvat polttoaineet",
+            "ostoenergian-tarve-fossiiliset-pat-muutos": "Fossiiliset polttoaineet",
+            "ostoenergian-tarve-kaukojaahdytys-muutos": "Kaukojäähdytys"
+          },
           "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä",
           "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa",
           "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen",
-          "e-luku-vaiheen-jalkeen": "E-luku vaiheen jälkeen"
+          "e-luku-vaiheen-jalkeen": "E-luku vaiheen jälkeen",
+          "ostoenergian-kokonaistarve-vaiheen-jalkeen": "Ostoenergian kokonaistarve vaiheen jälkeen",
+          "uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta": "Uusiutuvan energian osuus ostoenergian kokonaistarpeesta",
+          "ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus": "Ostoenergian kokonaistarve vaiheen jälkeen, toteutunut kulutus",
+          "toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio": "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio",
+          "energiankaytosta-aiheutuvat-hiilidioksidipaastot": "Energiankäytöstä aiheutuvat hiilidioksidipäästöt"
         }
       }
     }

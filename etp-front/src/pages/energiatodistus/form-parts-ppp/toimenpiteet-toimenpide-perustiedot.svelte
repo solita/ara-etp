@@ -64,7 +64,7 @@
     {inputs.viewValueFormatted({
       model: perusparannuspassi,
       schema: pppSchema,
-      valueOnNone: '-',
+      valueOnEmpty: '-',
       path: ['vaiheet', vaiheIndex(vaihe), 'tulokset', 'vaiheen-alku-pvm']
     })}
   </dd>

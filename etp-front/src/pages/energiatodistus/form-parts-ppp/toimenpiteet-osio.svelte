@@ -56,7 +56,10 @@
         {vaihe}
         {inputLanguage}
         {toimenpideEhdotuksetLuokittelu} />
-      <EnergiankulutuksenMuutos />
+      <EnergiankulutuksenMuutos
+        {perusparannuspassi}
+        {energiatodistus}
+        {vaihe} />
     </div>
   {/if}
 </div>
