@@ -106,31 +106,40 @@
       response => {
         resources = Maybe.Some(response);
 
-        Maybe.fold(
-          () => {},
-          pppId => {
-            Future.fork(
-              err => {
-                console.error('Failed to load PPP:', err);
-              },
-              ppp => {
-                perusparannuspassi = ppp;
-                showPPP = true;
-              },
-              pppApi.getPerusparannuspassi(fetch, pppId)
-            );
-          },
-          response.energiatodistus['perusparannuspassi-id']
-        );
+        // Set PPP if it exists
+        if (response.perusparannuspassi) {
+          perusparannuspassi = response.perusparannuspassi;
+          showPPP = true;
+          console.log(perusparannuspassi);
+        }
 
         toggleOverlay(false);
       },
       R.chain(
         response =>
-          R.map(
-            R.assoc('laskutusosoitteet', R.__, response),
-            laatijaApi.laskutusosoitteet(
-              Maybe.get(response.energiatodistus['laatija-id'])
+          R.chain(
+            responseWithLaskutus => {
+              const pppId = response.energiatodistus['perusparannuspassi-id'];
+              return Future.parallelObject(1, {
+                perusparannuspassi:
+                  pppId && Maybe.isSome(pppId)
+                    ? pppApi.getPerusparannuspassi(fetch, Maybe.get(pppId))
+                    : Future.resolve(null)
+              }).pipe(
+                R.map(pppResponse =>
+                  R.assoc(
+                    'perusparannuspassi',
+                    pppResponse.perusparannuspassi,
+                    responseWithLaskutus
+                  )
+                )
+              );
+            },
+            R.map(
+              R.assoc('laskutusosoitteet', R.__, response),
+              laatijaApi.laskutusosoitteet(
+                Maybe.get(response.energiatodistus['laatija-id'])
+              )
             )
           ),
         Future.parallelObject(6, {
