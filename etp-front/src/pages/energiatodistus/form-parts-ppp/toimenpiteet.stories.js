@@ -1,4 +1,5 @@
 import PppToimenpiteet from './toimenpiteet.svelte';
+import PppToimenpiteetOsio from './toimenpiteet-osio.svelte';
 
 import * as empty from '@Pages/energiatodistus/empty';
 import * as schema from '@Pages/energiatodistus/schema';
@@ -333,6 +334,13 @@ const testPpp = energiatodistusId => {
 
   ppp.vaiheet[1].tulokset['vaiheen-alku-pvm'] = ValidSome(2035);
 
+  ppp.vaiheet[0].tulokset['ostoenergian-tarve-kaukolampo'] = ValidSome(15000);
+  ppp.vaiheet[1].tulokset['ostoenergian-tarve-kaukolampo'] = ValidSome(10000);
+
+  ppp.vaiheet[1].tulokset['uusiutuvan-energian-hyodynnetty-osuus'] =
+    ValidSome(9000);
+
+  ppp.tulokset['kaukolampo-hinta'] = ValidSome(0.18);
   return ppp;
 };
 
@@ -354,6 +362,22 @@ Default.args = {
   energiatodistus: testEnergiatodistus(),
   toimenpideEhdotuksetLuokittelu: luokittelu,
   pppSchema: saveSchema,
+  inputLanguage: 'fi',
+  perusparannuspassi: testPpp(442)
+};
+
+const OsioTemplate = args => ({
+  Component: PppToimenpiteetOsio,
+  props: args
+});
+
+export const Osio = OsioTemplate.bind({});
+Osio.args = {
+  energiatodistus: testEnergiatodistus(),
+  toimenpideEhdotuksetLuokittelu: luokittelu,
+  pppSchema: saveSchema,
+  open: true,
+  vaihe: testPpp(442).vaiheet[1],
   inputLanguage: 'fi',
   perusparannuspassi: testPpp(442)
 };
