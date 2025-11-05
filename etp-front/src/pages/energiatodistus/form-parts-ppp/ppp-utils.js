@@ -23,7 +23,7 @@ export const formatCostDifference = R.compose(
   R.lift(R.divide(R.__, 100))
 );
 
-const energiamuodot = [
+export const energiamuodot = [
   {
     pppLaskennallinenEnergiamuoto: 'ostoenergian-tarve-kaukolampo',
     pppToteutunutEnergiamuoto: 'toteutunut-ostoenergia-kaukolampo',

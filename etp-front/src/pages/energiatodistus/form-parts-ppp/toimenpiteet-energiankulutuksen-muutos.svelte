@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import {_} from '@Language/i18n';
+  import { _ } from '@Language/i18n';
   import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
   import HiilidioksidiekvivalenttiTonnitPerVuosiUnit from '@Pages/energiatodistus/form-parts/units/annual-co2-ekv-tons';
   import EurosPerVuosiUnit from '@Pages/energiatodistus/form-parts/units/annual-euros';
@@ -33,7 +33,7 @@
   <H5
     text={i18n(
       'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.header'
-    )}/>
+    )} />
 
   <dl class="ppp-description-list">
     <dt>
@@ -42,12 +42,17 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(R.lift(R.subtract)(
-        metrics.current.laskennallinenKulutus.kaukolampo,
-        metrics.previous.laskennallinenKulutus.kaukolampo
-      ))}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(
+        R.lift(R.subtract)(
+          metrics.current.laskennallinenKulutus.kaukolampo,
+          metrics.previous.laskennallinenKulutus.kaukolampo
+        )
+      )}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.kaukolampo) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -56,12 +61,17 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(R.lift(R.subtract)(
-        metrics.current.laskennallinenKulutus.sahko,
-        metrics.previous.laskennallinenKulutus.sahko
-      ))}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(
+        R.lift(R.subtract)(
+          metrics.current.laskennallinenKulutus.sahko,
+          metrics.previous.laskennallinenKulutus.sahko
+        )
+      )}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.sahko) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -70,12 +80,17 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(R.lift(R.subtract)(
-        metrics.current.laskennallinenKulutus['uusiutuva-polttoaine'],
-        metrics.previous.laskennallinenKulutus['uusiutuva-polttoaine']
-      ))}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(
+        R.lift(R.subtract)(
+          metrics.current.laskennallinenKulutus['uusiutuva-polttoaine'],
+          metrics.previous.laskennallinenKulutus['uusiutuva-polttoaine']
+        )
+      )}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus['uusiutuva-polttoaine']) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -84,12 +99,17 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(R.lift(R.subtract)(
-        metrics.current.laskennallinenKulutus['fossiilinen-polttoaine'],
-        metrics.previous.laskennallinenKulutus['fossiilinen-polttoaine']
-      ))}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(
+        R.lift(R.subtract)(
+          metrics.current.laskennallinenKulutus['fossiilinen-polttoaine'],
+          metrics.previous.laskennallinenKulutus['fossiilinen-polttoaine']
+        )
+      )}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus['fossiilinen-polttoaine']) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -98,12 +118,17 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(R.lift(R.subtract)(
-        metrics.current.laskennallinenKulutus.kaukojaahdytys,
-        metrics.previous.laskennallinenKulutus.kaukojaahdytys
-      ))}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(
+        R.lift(R.subtract)(
+          metrics.current.laskennallinenKulutus.kaukojaahdytys,
+          metrics.previous.laskennallinenKulutus.kaukojaahdytys
+        )
+      )}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.kaukojaahdytys) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -112,9 +137,12 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(metrics.current.laskennallinenKulutus.total)}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKulutus.total)}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.total) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -123,7 +151,10 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.percentFormat))(metrics.current.uusiutuvanEnergianOsuusOstoenergianKokonaistarpeesta)}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.percentFormat)
+      )(metrics.current.uusiutuvanEnergianOsuusOstoenergianKokonaistarpeesta)}
     </dd>
     <dt>
       {i18n(
@@ -131,9 +162,12 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(metrics.current.toteutunutKulutus.total)}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(metrics.current.toteutunutKulutus.total)}
       {#each Maybe.toArray(metrics.current.toteutunutKulutus.total) as _}
-        <VuosikulutusUnit/>
+        <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
@@ -142,7 +176,10 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat))(metrics.current.laskennallinenKustannus.total)}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKustannus.total)}
       {#each Maybe.toArray(metrics.current.laskennallinenKustannus.total) as _}
         <EurosPerVuosiUnit />
       {/each}
@@ -153,9 +190,13 @@
       )}
     </dt>
     <dd>
-      {R.compose(Maybe.orSome('-'), R.map(formats.numberFormat), R.map(R.divide(R.__, 1000)))(metrics.current.laskennallinenCO2.total)}
+      {R.compose(
+        Maybe.orSome('-'),
+        R.map(formats.numberFormat),
+        R.map(R.divide(R.__, 1000))
+      )(metrics.current.laskennallinenCO2.total)}
       {#each Maybe.toArray(metrics.current.laskennallinenCO2.total) as _}
-        <HiilidioksidiekvivalenttiTonnitPerVuosiUnit/>
+        <HiilidioksidiekvivalenttiTonnitPerVuosiUnit />
       {/each}
     </dd>
   </dl>

@@ -1,9 +1,6 @@
 <script>
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as PppUtils from './ppp-utils';
 
   import H4 from '@Component/H/H4';
@@ -11,127 +8,10 @@
   export let perusparannuspassi;
   export let energiatodistus;
 
-  const toteutuneetOstoenergiat = [
-    {
-      pppEnergiamuoto: 'toteutunut-ostoenergia-kaukolampo',
-      etEnergiamuoto: 'kaukolampo',
-      getEnergiaFromEt: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kaukolampo-vuosikulutus'
-        ],
-      pppPriceField: 'kaukolampo-hinta'
-    },
-    {
-      pppEnergiamuoto: 'toteutunut-ostoenergia-sahko',
-      etEnergiamuoto: 'sahko',
-      getEnergiaFromEt: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kokonaissahko-vuosikulutus'
-        ],
-      pppPriceField: 'sahko-hinta'
-    },
-    {
-      pppEnergiamuoto: 'toteutunut-ostoenergia-uusiutuvat-pat',
-      etEnergiamuoto: 'uusiutuva-polttoaine',
-      getEnergiaFromEt: _ => Either.Right(Maybe.None()),
-      pppPriceField: 'uusiutuvat-pat-hinta'
-    },
-    {
-      pppEnergiamuoto: 'toteutunut-ostoenergia-fossiiliset-pat',
-      etEnergiamuoto: 'fossiilinen-polttoaine',
-      getEnergiaFromEt: _ => Either.Right(Maybe.None()),
-      pppPriceField: 'fossiiliset-pat-hinta'
-    },
-    {
-      pppEnergiamuoto: 'toteutunut-ostoenergia-kaukojaahdytys',
-      etEnergiamuoto: 'kaukojaahdytys',
-      getEnergiaFromEt: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kaukojaahdytys-vuosikulutus'
-        ],
-      pppPriceField: 'kaukojaahdytys-hinta'
-    }
-  ];
-
-  const calculateCosts = (et, ppp) => {
-    const multiplyEitherMaybe = (a, b) =>
-      R.lift(R.multiply)(
-        EtUtils.unnestValidation(a),
-        EtUtils.unnestValidation(b)
-      );
-
-    const addTotal = costs =>
-      R.assoc(
-        'total',
-        R.compose(
-          R.reduce(
-            (acc, cost) =>
-              Maybe.isSome(acc) ? R.lift(R.add)(acc, cost) : cost,
-            Maybe.None()
-          ),
-          R.filter(Maybe.isSome),
-          R.values
-        )(costs),
-        costs
-      );
-
-    const etCosts = R.compose(
-      addTotal,
-      R.fromPairs,
-      R.map(({ etEnergiamuoto, getEnergiaFromEt, pppPriceField }) => [
-        etEnergiamuoto,
-        multiplyEitherMaybe(getEnergiaFromEt(et), ppp.tulokset[pppPriceField])
-      ])
-    )(toteutuneetOstoenergiat);
-
-    const pppCosts = R.map(
-      vaihe =>
-        R.compose(
-          addTotal,
-          R.fromPairs,
-          R.map(({ etEnergiamuoto, pppEnergiamuoto, pppPriceField }) => [
-            etEnergiamuoto,
-            multiplyEitherMaybe(
-              vaihe.tulokset[pppEnergiamuoto],
-              ppp.tulokset[pppPriceField]
-            )
-          ])
-        )(toteutuneetOstoenergiat),
-      ppp.vaiheet
-    );
-
-    return [etCosts, ...pppCosts];
-  };
-
-  $: costs = calculateCosts(energiatodistus, perusparannuspassi);
-
-  const energiamuodot = [
-    {
-      key: 'kaukolampo',
-      consumptionField: 'kaukolampo-vuosikulutus',
-      priceField: 'kaukolampo-hinta'
-    },
-    {
-      key: 'sahko',
-      consumptionField: 'kokonaissahko-vuosikulutus',
-      priceField: 'sahko-hinta'
-    },
-    {
-      key: 'uusiutuva-polttoaine',
-      consumptionField: 'uusiutuva-polttoaine', // computed from multiple fields
-      priceField: 'uusiutuvat-pat-hinta'
-    },
-    {
-      key: 'fossiilinen-polttoaine',
-      consumptionField: 'kevyt-polttooljy',
-      priceField: 'fossiiliset-pat-hinta'
-    },
-    {
-      key: 'kaukojaahdytys',
-      consumptionField: 'kaukojaahdytys-vuosikulutus',
-      priceField: 'kaukojaahdytys-hinta'
-    }
-  ];
+  $: costs = R.map(
+    R.prop('toteutunutKustannus'),
+    PppUtils.calculateDerivedValues(energiatodistus, perusparannuspassi)
+  );
 </script>
 
 <H4
@@ -167,7 +47,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each toteutuneetOstoenergiat as { etEnergiamuoto }}
+      {#each PppUtils.energiamuodot as { etEnergiamuoto }}
         <tr class="et-table--tr">
           <td class="et-table--td et-table--td__fifth">
             {$_(
