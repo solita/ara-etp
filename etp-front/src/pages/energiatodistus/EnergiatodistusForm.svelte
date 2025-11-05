@@ -317,11 +317,11 @@
             {luokittelut}
             {validation}
             {whoami} />
-
-          <!-- Slot for PPP form -->
-          <slot />
         </div>
       </form>
+      <!-- Slot for PPP form -->
+      <!-- Todo: better placement, separate toolbar from this view too-->
+      <slot />
     </div>
   </div>
 {:else}

@@ -207,7 +207,7 @@
 {/if}
 
 <div class="toolbar relative flex flex-col text-secondary">
-  <Sisallysluettelo />
+  <Sisallysluettelo {version} />
   {#if R.includes(Toolbar.module.save, fields)}
     <button disabled={!dirty || pendingExecution} on:click={save(noop)}>
       <span class="font-icon text-2xl">save</span>

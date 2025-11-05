@@ -4,6 +4,7 @@
   import * as versionApi from '@Component/Version/version-api';
   import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
+  export let version;
   const i18n = $_;
 
   let config = {};
@@ -44,14 +45,16 @@
     },
     {
       id: 'perusparannuspassi',
-      label: i18n('energiatodistus.perusparannuspassi.header'),
-      requiresEtp2026: true
+      label: i18n('energiatodistus.perusparannuspassi.header')
     }
   ];
 
-  $: tocItems = allTocItems.filter(
-    item => !item.requiresEtp2026 || isEtp2026Enabled(config)
-  );
+  $: tocItems = allTocItems.filter(item => {
+    if (item.id === 'perusparannuspassi') {
+      return isEtp2026Enabled(config) && version === 2026;
+    }
+    return true;
+  });
 
   const scrollToSection = id => {
     const element = document.getElementById(id);
