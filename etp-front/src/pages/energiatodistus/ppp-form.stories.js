@@ -80,6 +80,8 @@ const testPpp = energiatodistusId => {
   ppp.vaiheet[0].tulokset['toteutunut-ostoenergia-sahko'] = Either.Right(
     Maybe.Some(4000)
   );
+  ppp.vaiheet[0].tulokset['uusiutuvan-energian-hyodynnetty-osuus'] =
+    Either.Right(Maybe.Some('1000'));
 
   ppp.vaiheet[1].tulokset['vaiheen-alku-pvm'] = Either.Right(Maybe.Some(2035));
   ppp.vaiheet[1].valid = true;
