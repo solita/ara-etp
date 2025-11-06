@@ -2,7 +2,6 @@
   import * as R from 'ramda';
 
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EitherMaybe from '@Utility/either-maybe.js';
 
   import H4 from '@Component/H/H4';
@@ -13,43 +12,6 @@
   export let energiatodistus;
   export let perusparannuspassi;
   export let schema;
-
-  const toteutuneetOstoenergiat = [
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-kaukolampo',
-      label_key: 'kaukolampo',
-      et_energiamuoto: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kaukolampo-vuosikulutus'
-        ]
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-sahko',
-      label_key: 'sahko',
-      et_energiamuoto: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kokonaissahko-vuosikulutus'
-        ]
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-uusiutuvat-pat',
-      label_key: 'uusiutuvat-polttoaineet',
-      et_energiamuoto: _ => Either.Right(Maybe.None())
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-fossiiliset-pat',
-      label_key: 'fossiiliset-polttoaineet',
-      et_energiamuoto: _ => Either.Right(Maybe.None())
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-kaukojaahdytys',
-      label_key: 'kaukojaahdytys',
-      et_energiamuoto: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kaukojaahdytys-vuosikulutus'
-        ]
-    }
-  ];
 </script>
 
 <H4
@@ -84,16 +46,16 @@
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each toteutuneetOstoenergiat as { ppp_energiamuoto, label_key, et_energiamuoto }}
+    {#each PPPUtils.energiamuodot as { etEnergiamuoto, getToteutunutEnergiaFromEt, pppToteutunutEnergiamuoto }}
       <tr class="et-table--tr">
         <td class="et-table--td et-table--th-left-aligned">
           {$_(
             'perusparannuspassi.laskennan-tulokset.toteutunut-ostoenergia.' +
-              label_key
+              etEnergiamuoto
           )}
         </td>
         <td class="et-table--td">
-          {EitherMaybe.orSome('', et_energiamuoto(energiatodistus))}
+          {EitherMaybe.orSome('', getToteutunutEnergiaFromEt(energiatodistus))}
         </td>
 
         {#each perusparannuspassi.vaiheet as vaihe}
@@ -113,7 +75,7 @@
                 'vaiheet',
                 vaihe['vaihe-nro'] - 1,
                 'tulokset',
-                ppp_energiamuoto
+                pppToteutunutEnergiamuoto
               ]} />
           </td>
         {/each}

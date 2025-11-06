@@ -14,42 +14,14 @@
   export let perusparannuspassi;
   export let schema;
 
-  const laskennallisetOstoenergiat = [
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-kaukolampo',
-      et_energiamuoto: 'kaukolampo',
-      label_key: 'kaukolampo'
-    },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-sahko',
-      et_energiamuoto: 'sahko',
-      label_key: 'sahko'
-    },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-uusiutuvat-pat',
-      et_energiamuoto: 'uusiutuva-polttoaine',
-      label_key: 'uusiutuvat-polttoaineet'
-    },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-fossiiliset-pat',
-      et_energiamuoto: 'fossiilinen-polttoaine',
-      label_key: 'fossiiliset-polttoaineet'
-    },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-kaukojaahdytys',
-      et_energiamuoto: 'kaukojaahdytys',
-      label_key: 'kaukojaahdytys'
-    }
-  ];
-
   const etEnergiamuodotFromPppVaihe = vaihe =>
     R.compose(
       R.fromPairs,
-      R.map(({ ppp_energiamuoto, et_energiamuoto }) => [
-        et_energiamuoto,
-        vaihe[ppp_energiamuoto]
+      R.map(({ pppLaskennallinenEnergiamuoto, etEnergiamuoto }) => [
+        etEnergiamuoto,
+        vaihe[pppLaskennallinenEnergiamuoto]
       ])
-    )(laskennallisetOstoenergiat);
+    )(PPPUtils.energiamuodot);
 </script>
 
 <H4
@@ -85,19 +57,19 @@
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each laskennallisetOstoenergiat as { ppp_energiamuoto, et_energiamuoto, label_key }}
+    {#each PPPUtils.energiamuodot as { etEnergiamuoto, pppLaskennallinenEnergiamuoto }}
       <tr class="et-table--tr">
         <td class="et-table--td"
           >{$_(
             'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.' +
-              label_key
+              etEnergiamuoto
           )}</td>
 
         <td class="et-table--td"
           >{EitherMaybe.orSome(
             0,
             energiatodistus.tulokset['kaytettavat-energiamuodot'][
-              et_energiamuoto
+              etEnergiamuoto
             ]
           )}</td>
 
@@ -118,7 +90,7 @@
                 'vaiheet',
                 vaihe['vaihe-nro'] - 1,
                 'tulokset',
-                ppp_energiamuoto
+                pppLaskennallinenEnergiamuoto
               ]} />
           </td>
         {/each}

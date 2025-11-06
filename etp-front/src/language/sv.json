@@ -1456,8 +1456,8 @@
         "header": "Laskennallinen ostoenergia (sv)",
         "kaukolampo": "Kaukolämpö (sv)",
         "sahko": "Sähkö (sv)",
-        "uusiutuvat-polttoaineet": "Uusiutuvat polttoaineet (sv)",
-        "fossiiliset-polttoaineet": "Fossiiliset polttoaineet (sv)",
+        "uusiutuva-polttoaine": "Uusiutuvat polttoaineet (sv)",
+        "fossiilinen-polttoaine": "Fossiiliset polttoaineet (sv)",
         "kaukojaahdytys": "Kaukojäähdytys (sv)"
       },
       "uusiutuva-energia": {
@@ -1468,13 +1468,11 @@
       },
       "toteutunut-ostoenergia": {
         "header": "Toteutunut ostoenergia (sv)",
-        "table-headers": {
-          "toteutunut-ostoenergia-kaukolampo": "Kaukolämpö (sv)",
-          "toteutunut-ostoenergia-sahko": "Sähkö (sv)",
-          "toteutunut-ostoenergia-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
-          "toteutunut-ostoenergia-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
-          "toteutunut-ostoenergia-kaukojaahdytys": "Kaukojäähdytys (sv)"
-        }
+        "kaukolampo": "Kaukolämpö (sv)",
+        "sahko": "Sähkö (sv)",
+        "uusiutuva-polttoaine": "Uusiutuvat polttoaineet (sv)",
+        "fossiilnen-polttoaine": "Fossiiliset polttoaineet (sv)",
+        "kaukojaahdytys": "Kaukojäähdytys (sv)"
       },
       "energian-hinta": {
         "header": "Energian hinta (sv)",
