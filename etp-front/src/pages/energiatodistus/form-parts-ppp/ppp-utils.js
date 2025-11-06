@@ -1,5 +1,4 @@
 import * as Maybe from '@Utility/maybe-utils';
-import * as EitherMaybe from '@Utility/either-maybe';
 import * as R from 'ramda';
 import * as formats from '@Utility/formats';
 import * as fxmath from '@Utility/fxmath';
