@@ -89,7 +89,7 @@
   let inputLanguage = 'fi';
 
   let korvausError = Maybe.None();
-  let dirty = false;
+  export let dirty = false;
 
   const forms = {
     '2018': ET2018Form,
