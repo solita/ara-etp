@@ -117,7 +117,7 @@
       R.chain(
         response =>
           R.map(
-            additionalData => ({ ...response, ...additionalData }),
+            R.mergeLeft(response),
             Future.parallelObject(2, {
               laskutusosoitteet: laatijaApi.laskutusosoitteet(
                 Maybe.get(response.energiatodistus['laatija-id'])
