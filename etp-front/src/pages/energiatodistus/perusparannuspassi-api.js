@@ -46,24 +46,7 @@ export const getPerusparannuspassi = R.curry((fetch, pppId) =>
 
 export const putPerusparannuspassi = R.curry((fetch, pppId, perusparannuspassi) =>
   R.compose(
-    R.chain(response => {
-      // Try to get text first to check if response has content
-      return Future.encaseP(() => response.text())().pipe(
-        R.chain(text => {
-          // If empty, return the input data
-          if (!text || text.trim() === '') {
-            return Future.resolve(perusparannuspassi);
-          }
-          // Otherwise parse and deserialize
-          try {
-            const json = JSON.parse(text);
-            return Future.resolve(deserialize(json));
-          } catch (e) {
-            return Future.reject(e);
-          }
-        })
-      );
-    }),
+    R.chain(Fetch.rejectWithInvalidResponse),
     Future.encaseP(
       Fetch.fetchWithMethod(
         fetch,
