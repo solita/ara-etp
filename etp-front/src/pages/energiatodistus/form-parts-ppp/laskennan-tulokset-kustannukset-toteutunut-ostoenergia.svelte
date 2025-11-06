@@ -4,13 +4,13 @@
   import * as PppUtils from './ppp-utils';
 
   import H4 from '@Component/H/H4';
-  import * as EitherMaybe from '@/utils/either-maybe.js';
+  import * as Maybe from '@/utils/maybe-utils.js';
 
   export let perusparannuspassi;
   export let energiatodistus;
 
   $: costs = R.map(
-    R.prop('toteutunutKustannus'),
+    metric => ({ ...metric.toteutunutKustannus, 'vaiheen-alku-pvm': metric['vaiheen-alku-pvm'] }),
     PppUtils.calculateDerivedValues(energiatodistus, perusparannuspassi)
   );
 </script>
@@ -63,7 +63,7 @@
           {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {#if EitherMaybe.isRightSome(vaiheCost['vaiheen-alku-pvm'])}
+              {#if Maybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
                 {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
               {/if}
             </td>
@@ -84,7 +84,7 @@
         {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if EitherMaybe.isRightSome(vaiheCost['vaiheen-alku-pvm'])}
+            {#if Maybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
               {PppUtils.formatCost(vaiheCost.total)}
             {/if}
           </td>
@@ -104,7 +104,7 @@
         {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if EitherMaybe.isRightSome(cur['vaiheen-alku-pvm'])}
+            {#if Maybe.isSome(cur['vaiheen-alku-pvm'])}
               {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
                 cur.total,
                 prev.total

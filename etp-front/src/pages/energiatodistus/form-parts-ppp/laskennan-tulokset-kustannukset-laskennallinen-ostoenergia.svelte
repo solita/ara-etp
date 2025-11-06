@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
 
-  import * as EitherMaybe from '@Utility/either-maybe';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as PppUtils from './ppp-utils';
 
   import H4 from '@Component/H/H4';
@@ -14,7 +14,7 @@
   export let disabled = false;
 
   $: costs = R.map(
-    R.prop('laskennallinenKustannus'),
+    metric => ({ ...metric.laskennallinenKustannus, 'vaiheen-alku-pvm': metric['vaiheen-alku-pvm'] }),
     PppUtils.calculateDerivedValues(energiatodistus, perusparannuspassi)
   );
 </script>
@@ -71,7 +71,7 @@
           {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {#if EitherMaybe.isRightSome(vaiheCost['vaiheen-alku-pvm'])}
+              {#if Maybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
                 {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
               {/if}
             </td>
@@ -93,7 +93,7 @@
         {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if EitherMaybe.isRightSome(vaiheCost['vaiheen-alku-pvm'])}
+            {#if Maybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
               {PppUtils.formatCost(vaiheCost.total)}
             {/if}
           </td>
@@ -114,7 +114,7 @@
         {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if EitherMaybe.isRightSome(cur['vaiheen-alku-pvm'])}
+            {#if Maybe.isSome(cur['vaiheen-alku-pvm'])}
               {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
                 cur.total,
                 prev.total
