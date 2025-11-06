@@ -1,12 +1,7 @@
 <script>
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
-  import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as PppUtils from './ppp-utils';
-  import * as formats from '@Utility/formats';
-  import * as fxmath from '@Utility/fxmath';
 
   import H4 from '@Component/H/H4';
 
@@ -15,88 +10,10 @@
   export let schema;
   export let disabled = false;
 
-  const laskennallisetOstoenergiat = [
-    {
-      pppEnergiamuoto: 'ostoenergian-tarve-kaukolampo',
-      etEnergiamuoto: 'kaukolampo',
-      pppPriceField: 'kaukolampo-hinta'
-    },
-    {
-      pppEnergiamuoto: 'ostoenergian-tarve-sahko',
-      etEnergiamuoto: 'sahko',
-      pppPriceField: 'sahko-hinta'
-    },
-    {
-      pppEnergiamuoto: 'ostoenergian-tarve-uusiutuvat-pat',
-      etEnergiamuoto: 'uusiutuva-polttoaine',
-      pppPriceField: 'uusiutuvat-pat-hinta'
-    },
-    {
-      pppEnergiamuoto: 'ostoenergian-tarve-fossiiliset-pat',
-      etEnergiamuoto: 'fossiilinen-polttoaine',
-      pppPriceField: 'fossiiliset-pat-hinta'
-    },
-    {
-      pppEnergiamuoto: 'ostoenergian-tarve-kaukojaahdytys',
-      etEnergiamuoto: 'kaukojaahdytys',
-      pppPriceField: 'kaukojaahdytys-hinta'
-    }
-  ];
-
-  const calculateCosts = (et, ppp) => {
-    const multiplyEitherMaybe = (a, b) =>
-      R.lift(R.multiply)(
-        EtUtils.unnestValidation(a),
-        EtUtils.unnestValidation(b)
-      );
-
-    const addTotal = costs =>
-      R.assoc(
-        'total',
-        R.compose(
-          R.reduce(
-            (acc, cost) =>
-              Maybe.isSome(acc) ? R.lift(R.add)(acc, cost) : cost,
-            Maybe.None()
-          ),
-          R.filter(Maybe.isSome),
-          R.values
-        )(costs),
-        costs
-      );
-
-    const etCosts = R.compose(
-      addTotal,
-      R.fromPairs,
-      R.map(({ etEnergiamuoto, pppPriceField }) => [
-        etEnergiamuoto,
-        multiplyEitherMaybe(
-          et.tulokset['kaytettavat-energiamuodot'][etEnergiamuoto],
-          ppp.tulokset[pppPriceField]
-        )
-      ])
-    )(laskennallisetOstoenergiat);
-
-    const pppCosts = R.map(
-      vaihe =>
-        R.compose(
-          addTotal,
-          R.fromPairs,
-          R.map(({ etEnergiamuoto, pppEnergiamuoto, pppPriceField }) => [
-            etEnergiamuoto,
-            multiplyEitherMaybe(
-              vaihe.tulokset[pppEnergiamuoto],
-              ppp.tulokset[pppPriceField]
-            )
-          ])
-        )(laskennallisetOstoenergiat),
-      ppp.vaiheet
-    );
-
-    return [etCosts, ...pppCosts];
-  };
-
-  $: costs = calculateCosts(energiatodistus, perusparannuspassi);
+  $: costs = R.map(
+    R.prop('laskennallinenKustannus'),
+    PppUtils.calculateDerivedValues(energiatodistus, perusparannuspassi)
+  );
 </script>
 
 <H4 text={$_('perusparannuspassi.laskennallinen-ostoenergia.header')} />
@@ -129,7 +46,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each laskennallisetOstoenergiat as { etEnergiamuoto }}
+      {#each PppUtils.energiamuodot as { etEnergiamuoto }}
         <tr class="et-table--tr">
           <td class="et-table--td et-table--td__fifth">
             {$_(
