@@ -1,9 +1,10 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EitherMaybe from '@Utility/either-maybe';
   import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
-  import * as inputs from '@Pages/energiatodistus/inputs.js';
+  import * as formats from '@/utils/formats.js';
 
   const i18n = $_;
 
@@ -61,12 +62,21 @@
     {i18n('perusparannuspassi.toimenpiteet.vaihe-alkaa')}
   </dt>
   <dd>
-    {inputs.viewValueFormatted({
-      model: perusparannuspassi,
-      schema: pppSchema,
-      valueOnEmpty: '-',
-      path: ['vaiheet', vaiheIndex(vaihe), 'tulokset', 'vaiheen-alku-pvm']
-    })}
+    {R.compose(
+      EitherMaybe.orSome('-'),
+      R.map(R.map(formats.yearFormat)),
+      R.tap(x => console.log(x))
+    )(
+      R.view(
+        R.lensPath([
+          'vaiheet',
+          vaiheIndex(vaihe),
+          'tulokset',
+          'vaiheen-alku-pvm'
+        ]),
+        perusparannuspassi
+      )
+    )}
   </dd>
   <dt>
     {i18n('perusparannuspassi.toimenpiteet.e-luokka-jalkeen')}
