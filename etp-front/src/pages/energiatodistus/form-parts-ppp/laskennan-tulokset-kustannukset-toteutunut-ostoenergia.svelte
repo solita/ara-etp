@@ -10,7 +10,10 @@
   export let energiatodistus;
 
   $: costs = R.map(
-    metric => ({ ...metric.toteutunutKustannus, 'vaiheen-alku-pvm': metric['vaiheen-alku-pvm'] }),
+    metric => ({
+      ...metric.toteutunutKustannus,
+      'vaiheen-alku-pvm': metric['vaiheen-alku-pvm']
+    }),
     PppUtils.calculateDerivedValues(energiatodistus, perusparannuspassi)
   );
 </script>
