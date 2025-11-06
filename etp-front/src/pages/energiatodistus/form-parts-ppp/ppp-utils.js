@@ -168,7 +168,9 @@ export const calculateDerivedValues = (energiatodistus, perusparannuspassi) => {
     );
 
     return {
-      'vaiheen-alku-pvm': EitherMaybe.toMaybe(vaihe.tulokset['vaiheen-alku-pvm']),
+      'vaiheen-alku-pvm': EitherMaybe.toMaybe(
+        vaihe.tulokset['vaiheen-alku-pvm']
+      ),
       laskennallinenKulutus,
       toteutunutKulutus: pppVaiheToteutunutKulutus(vaihe),
       uusiutuvanEnergianHyodynnettyOsuus,

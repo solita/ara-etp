@@ -1529,7 +1529,6 @@
         "avaa": "Avaa osio (sv)",
         "sulje": "Sulje osio (sv)"
       },
-      "toimenpideseloste": "Toimenpideseloste (sv)",
       "ehdotukset": {
         "header": "Toimenpide-ehdotukset (sv)",
         "toimenpide-n": "{n}. toimenpide-ehdotus (sv)"
@@ -1537,42 +1536,27 @@
       "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)",
       "vaihe-alkaa": "Vaihe alkaa (sv)",
       "e-luokka-jalkeen": "E-luokka vaiheen jälkeen (sv)",
-      "e-luku-jalkeen": "E-luku vaiheen jälkeen (sv)"
+      "e-luku-jalkeen": "E-luku vaiheen jälkeen (sv)",
+      "energiankulutuksen-muutos": {
+        "header": "Energiankulutuksen muutos (sv)",
+        "ostoenergian-tarve-kaukolampo-muutos": "Kaukolämpö (sv)",
+        "ostoenergian-tarve-sahko-muutos": "Sähkö (sv)",
+        "ostoenergian-tarve-uusiutuvat-pat-muutos": "Uusiutuvat polttoaineet (sv)",
+        "ostoenergian-tarve-fossiiliset-pat-muutos": "Fossiiliset polttoaineet (sv)",
+        "ostoenergian-tarve-kaukojaahdytys-muutos": "Kaukojäähdytys (sv)"
+      },
+      "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa (sv)",
+      "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen (sv)",
+      "e-luku-vaiheen-jalkeen": "E-luku vaiheen jälkeen (sv)",
+      "ostoenergian-kokonaistarve-vaiheen-jalkeen": "Ostoenergian kokonaistarve vaiheen jälkeen (sv)",
+      "uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta": "Uusiutuvan energian osuus ostoenergian kokonaistarpeesta (sv)",
+      "ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus": "Ostoenergian kokonaistarve vaiheen jälkeen, toteutunut kulutus (sv)",
+      "toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio": "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio (sv)",
+      "energiankaytosta-aiheutuvat-hiilidioksidipaastot": "Energiankäytöstä aiheutuvat hiilidioksidipäästöt (sv)"
     },
     "vaiheet": {
       "0": {
-        "toimenpiteet": {
-          "header": "Toimenpiteet (sv)",
-          "osio": {
-            "header": "Vaiheessa {vaihe} toteutettavat toimenpiteet (sv)",
-            "show": "Avaa osio (sv)",
-            "hide": "Sulje osio (sv)"
-          },
-          "toimenpideseloste": "Toimenpideseloste (sv)",
-          "toimenpide-ehdotukset": {
-            "header": "Toimenpide-ehdotukset (sv)",
-            "toimenpide-ehdotus-n": "{n}. toimenpide-ehdotus (sv)"
-          }
-        },
-        "tulokset": {
-          "energiankulutuksen-muutos": {
-            "header": "Energiankulutuksen muutos (sv)",
-            "ostoenergian-tarve-kaukolampo-muutos": "Kaukolämpö (sv)",
-            "ostoenergian-tarve-sahko-muutos": "Sähkö (sv)",
-            "ostoenergian-tarve-uusiutuvat-pat-muutos": "Uusiutuvat polttoaineet (sv)",
-            "ostoenergian-tarve-fossiiliset-pat-muutos": "Fossiiliset polttoaineet (sv)",
-            "ostoenergian-tarve-kaukojaahdytys-muutos": "Kaukojäähdytys (sv)"
-          },
-          "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)",
-          "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa (sv)",
-          "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen (sv)",
-          "e-luku-vaiheen-jalkeen": "E-luku vaiheen jälkeen (sv)",
-          "ostoenergian-kokonaistarve-vaiheen-jalkeen": "Ostoenergian kokonaistarve vaiheen jälkeen (sv)",
-          "uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta": "Uusiutuvan energian osuus ostoenergian kokonaistarpeesta (sv)",
-          "ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus": "Ostoenergian kokonaistarve vaiheen jälkeen, toteutunut kulutus (sv)",
-          "toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio": "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio (sv)",
-          "energiankaytosta-aiheutuvat-hiilidioksidipaastot": "Energiankäytöstä aiheutuvat hiilidioksidipäästöt (sv)"
-        }
+        "toimenpideseloste": "Toimenpideseloste (sv)"
       }
     }
   },
