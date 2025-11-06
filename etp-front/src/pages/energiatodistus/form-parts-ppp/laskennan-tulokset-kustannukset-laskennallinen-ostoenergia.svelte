@@ -71,7 +71,7 @@
           {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {#if EitherMaybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
+              {#if EitherMaybe.isRightSome(vaiheCost['vaiheen-alku-pvm'])}
                 {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
               {/if}
             </td>
@@ -93,7 +93,7 @@
         {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if EitherMaybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
+            {#if EitherMaybe.isRightSome(vaiheCost['vaiheen-alku-pvm'])}
               {PppUtils.formatCost(vaiheCost.total)}
             {/if}
           </td>
@@ -114,7 +114,7 @@
         {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {#if EitherMaybe.isSome(cur['vaiheen-alku-pvm'])}
+            {#if EitherMaybe.isRightSome(cur['vaiheen-alku-pvm'])}
               {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
                 cur.total,
                 prev.total

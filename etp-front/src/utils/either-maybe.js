@@ -54,4 +54,4 @@ export const map = R.curry((fn, em) => Either.map(R.map(fn), em));
 /**
  * @sig Either [Maybe a] -> boolean
  */
-export const isSome = em => toMaybe(em).isSome();
+export const isRightSome = em => toMaybe(em).isSome();
