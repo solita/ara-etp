@@ -22,6 +22,9 @@ export const currencyFormat = Intl.NumberFormat('fi-FI', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2
 }).format;
+export const numberDiffFormat = Intl.NumberFormat('fi-FI', {
+  signDisplay: 'always'
+}).format;
 
 export const optionalString = Maybe.orSome('');
 export const optionalNumber = R.compose(Maybe.orSome(''), R.map(numberFormat));
