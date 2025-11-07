@@ -64,8 +64,7 @@
   <dd>
     {R.compose(
       EitherMaybe.orSome('-'),
-      R.map(R.map(formats.yearFormat)),
-      R.tap(x => console.log(x))
+      R.map(R.map(formats.yearFormat))
     )(
       R.view(
         R.lensPath([
