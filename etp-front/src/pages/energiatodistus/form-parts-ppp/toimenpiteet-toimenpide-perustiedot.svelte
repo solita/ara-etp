@@ -58,7 +58,7 @@
 
 <dl class="ppp-description-list">
   <dt>
-    {i18n('perusparannuspassi.vaiheet.0.tulokset.vaiheen-alku-pvm-vaihe-alkaa')}
+    {i18n('perusparannuspassi.toimenpiteet.vaihe-alkaa')}
   </dt>
   <dd>
     {inputs.viewValueFormatted({
@@ -69,11 +69,11 @@
     })}
   </dd>
   <dt>
-    {i18n('perusparannuspassi.vaiheet.0.tulokset.e-luokka-vaiheen-jalkeen')}
+    {i18n('perusparannuspassi.toimenpiteet.e-luokka-jalkeen')}
   </dt>
   <dd>TODO E-luokka</dd>
   <dt>
-    {i18n('perusparannuspassi.vaiheet.0.tulokset.e-luku-vaiheen-jalkeen')}
+    {i18n('perusparannuspassi.toimenpiteet.e-luku-jalkeen')}
   </dt>
   <dd>
     {R.compose(

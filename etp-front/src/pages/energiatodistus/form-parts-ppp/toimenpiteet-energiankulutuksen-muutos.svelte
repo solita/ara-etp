@@ -32,13 +32,13 @@
 <div>
   <H5
     text={i18n(
-      'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.header'
+      'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.header'
     )} />
 
   <dl class="ppp-description-list">
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.ostoenergian-tarve-kaukolampo-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-kaukolampo-muutos'
       )}
     </dt>
     <dd>
@@ -57,7 +57,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.ostoenergian-tarve-sahko-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-sahko-muutos'
       )}
     </dt>
     <dd>
@@ -76,7 +76,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.ostoenergian-tarve-uusiutuvat-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-uusiutuvat-pat-muutos'
       )}
     </dt>
     <dd>
@@ -95,7 +95,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.ostoenergian-tarve-fossiiliset-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-fossiiliset-pat-muutos'
       )}
     </dt>
     <dd>
@@ -114,7 +114,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.energiankulutuksen-muutos.ostoenergian-tarve-kaukojaahdytys-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-kaukojaahdytys-muutos'
       )}
     </dt>
     <dd>
@@ -133,7 +133,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.ostoenergian-kokonaistarve-vaiheen-jalkeen'
+        'perusparannuspassi.toimenpiteet.ostoenergian-kokonaistarve-vaiheen-jalkeen'
       )}
     </dt>
     <dd>
@@ -147,7 +147,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta'
+        'perusparannuspassi.toimenpiteet.uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta'
       )}
     </dt>
     <dd>
@@ -158,7 +158,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus'
+        'perusparannuspassi.toimenpiteet.ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus'
       )}
     </dt>
     <dd>
@@ -172,7 +172,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio'
+        'perusparannuspassi.toimenpiteet.toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio'
       )}
     </dt>
     <dd>
@@ -186,7 +186,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.vaiheet.0.tulokset.energiankaytosta-aiheutuvat-hiilidioksidipaastot'
+        'perusparannuspassi.toimenpiteet.energiankaytosta-aiheutuvat-hiilidioksidipaastot'
       )}
     </dt>
     <dd>

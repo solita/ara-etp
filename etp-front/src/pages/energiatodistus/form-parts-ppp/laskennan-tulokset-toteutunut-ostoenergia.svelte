@@ -2,48 +2,16 @@
   import * as R from 'ramda';
 
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
   import * as EitherMaybe from '@Utility/either-maybe.js';
 
   import H4 from '@Component/H/H4';
   import { _ } from '@Language/i18n';
   import Input from '@Pages/energiatodistus/Input';
+  import * as PPPUtils from './ppp-utils.js';
 
   export let energiatodistus;
   export let perusparannuspassi;
   export let schema;
-
-  const toteutuneetOstoenergiat = [
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-kaukolampo',
-      et_energiamuoto: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kaukolampo-vuosikulutus'
-        ]
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-sahko',
-      et_energiamuoto: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kokonaissahko-vuosikulutus'
-        ]
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-uusiutuvat-pat',
-      et_energiamuoto: _ => Either.Right(Maybe.None())
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-fossiiliset-pat',
-      et_energiamuoto: _ => Either.Right(Maybe.None())
-    },
-    {
-      ppp_energiamuoto: 'toteutunut-ostoenergia-kaukojaahdytys',
-      et_energiamuoto: et =>
-        et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-          'kaukojaahdytys-vuosikulutus'
-        ]
-    }
-  ];
 </script>
 
 <H4
@@ -51,7 +19,7 @@
     'perusparannuspassi.laskennan-tulokset.toteutunut-ostoenergia.header'
   )} />
 <p>
-  {$_('perusparannuspassi.laskennan-tulokset.info-before-table')}
+  {$_('perusparannuspassi.laskennan-tulokset.info-kirjaa-arvot')}
 </p>
 
 <table class="et-table">
@@ -63,42 +31,38 @@
         )}
       </th>
       <th class="et-table--th et-table--th-right-aligned">
-        {$_('perusparannuspassi.laskennan-tulokset.lahtotilanne')}
+        {$_('perusparannuspassi.laskennan-tulokset.lahtotilanne-kwh-vuosi')}
       </th>
       {#each perusparannuspassi.vaiheet as vaihe}
         <th class="et-table--th et-table--th-right-aligned">
-          {$_('perusparannuspassi.laskennan-tulokset.vaihe') +
-            '' +
-            vaihe['vaihe-nro'] +
-            ' (' +
-            EitherMaybe.orSome(
-              'ei aloitusvuotta',
-              vaihe.tulokset['vaiheen-alku-pvm']
-            ) +
-            ') ' +
-            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi')}
+          {PPPUtils.formatVaiheHeading(
+            `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
+            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi'),
+            vaihe.tulokset['vaiheen-alku-pvm'],
+            $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
+          )}
         </th>
       {/each}
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each toteutuneetOstoenergiat as { ppp_energiamuoto, et_energiamuoto }}
+    {#each PPPUtils.energiamuodot as { etEnergiamuoto, getToteutunutEnergiaFromEt, pppToteutunutEnergiamuoto }}
       <tr class="et-table--tr">
         <td class="et-table--td et-table--th-left-aligned">
           {$_(
-            'perusparannuspassi.laskennan-tulokset.toteutunut-ostoenergia.table-headers.' +
-              ppp_energiamuoto
+            'perusparannuspassi.laskennan-tulokset.toteutunut-ostoenergia.' +
+              etEnergiamuoto
           )}
         </td>
         <td class="et-table--td">
-          {EitherMaybe.orSome('', et_energiamuoto(energiatodistus))}
+          {EitherMaybe.orSome('', getToteutunutEnergiaFromEt(energiatodistus))}
         </td>
 
         {#each perusparannuspassi.vaiheet as vaihe}
           <td class="et-table--td">
             <Input
               {schema}
-              center={false}
+              center={true}
               bind:model={perusparannuspassi}
               compact={true}
               i18nRoot="perusparannuspassi"
@@ -111,7 +75,7 @@
                 'vaiheet',
                 vaihe['vaihe-nro'] - 1,
                 'tulokset',
-                ppp_energiamuoto
+                pppToteutunutEnergiamuoto
               ]} />
           </td>
         {/each}

@@ -7,7 +7,7 @@ import * as EitherMaybe from '@Utility/either-maybe';
 
 export const formatCost = R.compose(
   Maybe.orSome('-'),
-  R.map(R.compose(formats.numberFormat, fxmath.round(2))),
+  R.map(R.compose(formats.currencyFormat, fxmath.round(2))),
   R.lift(R.divide(R.__, 100))
 );
 
@@ -16,8 +16,8 @@ export const formatCostDifference = R.compose(
   R.map(
     R.ifElse(
       a => a > 0,
-      R.compose(s => '+' + formats.numberFormat(s), fxmath.round(2)),
-      R.compose(formats.numberFormat, fxmath.round(2))
+      R.compose(s => '+' + formats.currencyFormat(s), fxmath.round(2)),
+      R.compose(formats.currencyFormat, fxmath.round(2))
     )
   ),
   R.lift(R.divide(R.__, 100))
@@ -168,6 +168,9 @@ export const calculateDerivedValues = (energiatodistus, perusparannuspassi) => {
     );
 
     return {
+      'vaiheen-alku-pvm': EitherMaybe.toMaybe(
+        vaihe.tulokset['vaiheen-alku-pvm']
+      ),
       laskennallinenKulutus,
       toteutunutKulutus: pppVaiheToteutunutKulutus(vaihe),
       uusiutuvanEnergianHyodynnettyOsuus,
@@ -197,3 +200,28 @@ export const calculateDerivedValues = (energiatodistus, perusparannuspassi) => {
     [etMetrics, ...pppMetrics]
   );
 };
+
+/**
+ * Format a ppp vaihe heading using a possible starting year.
+ *
+ * If `startingYear` contains a value, the returned string is:
+ *   "<title> (<startingYear>) <unit>"
+ *
+ * If `startingYear` is absent, the fallback will be:
+ *   "<title> (<noStartingYear>)"
+ *
+ * Parameters:
+ *  - title: string — main heading text
+ *  - unit: string — unit string appended when starting year is present
+ *  - startingYear: Either [*, Maybe number] value — mapped to produce the year;
+ *    if absent, fallback is used
+ *  - noStartingYear: string — text to use inside parentheses when starting year
+ *    is missing
+ *
+ * Returns: string
+ */
+export const formatVaiheHeading = (title, unit, startingYear, noStartingYear) =>
+  R.compose(
+    EitherMaybe.orSome(title + ' (' + noStartingYear + ')'),
+    EitherMaybe.map(aloitusvuosi => `${title} (${aloitusvuosi}) ${unit}`)
+  )(startingYear);

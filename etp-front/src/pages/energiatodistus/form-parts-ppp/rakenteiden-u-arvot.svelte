@@ -11,11 +11,11 @@
   export let energiatodistus;
 
   const rakenneKeyMap = {
-    'ulkoseinat-ehdotettu-taso': 'ulkoseinat',
-    'ylapohja-ehdotettu-taso': 'ylapohja',
-    'alapohja-ehdotettu-taso': 'alapohja',
-    'ikkunat-ehdotettu-taso': 'ikkunat',
-    'ulkoovet-ehdotettu-taso': 'ulkoovet'
+    ulkoseinat: 'ulkoseinat',
+    ylapohja: 'ylapohja',
+    alapohja: 'alapohja',
+    ikkunat: 'ikkunat',
+    ulkoovet: 'ulkoovet'
   };
 </script>
 
@@ -31,7 +31,7 @@
         <th
           class="et-table--th et-table--th__twocells et-table--th-left-aligned">
           {$_(
-            `perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.title`
+            'perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.rakenne'
           )}
         </th>
         <th
@@ -51,11 +51,11 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each ['ulkoseinat-ehdotettu-taso', 'ylapohja-ehdotettu-taso', 'alapohja-ehdotettu-taso', 'ikkunat-ehdotettu-taso', 'ulkoovet-ehdotettu-taso'] as rakenteet}
+      {#each ['ulkoseinat', 'ylapohja', 'alapohja', 'ikkunat', 'ulkoovet'] as rakenteet}
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
-              `perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.labels.${rakenteet}`
+              `perusparannuspassi.rakennuksen-perustiedot.rakenteiden-u-arvot.${rakenteet}`
             )}
           </td>
           <td class="et-table--td">
@@ -75,7 +75,8 @@
               bind:model={perusparannuspassi}
               compact={true}
               i18nRoot="perusparannuspassi"
-              path={['rakennuksen-perustiedot', rakenteet]}></Input>
+              path={['rakennuksen-perustiedot', `${rakenteet}-ehdotettu-taso`]}
+            ></Input>
           </td>
         </tr>
       {/each}

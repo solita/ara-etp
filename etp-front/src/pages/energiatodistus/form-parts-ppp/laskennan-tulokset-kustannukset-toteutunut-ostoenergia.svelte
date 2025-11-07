@@ -4,20 +4,26 @@
   import * as PppUtils from './ppp-utils';
 
   import H4 from '@Component/H/H4';
+  import * as Maybe from '@/utils/maybe-utils.js';
 
   export let perusparannuspassi;
   export let energiatodistus;
 
   $: costs = R.map(
-    R.prop('toteutunutKustannus'),
+    metric => ({
+      ...metric.toteutunutKustannus,
+      'vaiheen-alku-pvm': metric['vaiheen-alku-pvm']
+    }),
     PppUtils.calculateDerivedValues(energiatodistus, perusparannuspassi)
   );
 </script>
 
 <H4
-  text={$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.header')} />
+  text={$_(
+    'perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.header'
+  )} />
 <p class="mb-6">
-  {$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.description')}
+  {$_('perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.kuvaus')}
 </p>
 
 <div class="min-w-full overflow-x-auto md:overflow-x-hidden">
@@ -25,25 +31,24 @@
     <thead class="et-table--thead">
       <tr class="et-table--tr">
         <th class="et-table--th et-table--th-left-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.energia')}
-        </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
           {$_(
-            'perusparannuspassi.kustannukset-toteutunut-ostoenergia.lahtotilanne'
+            'perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.energia'
           )}
         </th>
         <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.vaihe-1')}
+          {$_(
+            'perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.lahtotilanne'
+          )}
         </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.vaihe-2')}
-        </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.vaihe-3')}
-        </th>
-        <th class="et-table--th et-table--th-right-aligned et-table--td__fifth">
-          {$_('perusparannuspassi.kustannukset-toteutunut-ostoenergia.vaihe-4')}
-        </th>
+        {#each perusparannuspassi.vaiheet as vaihe}
+          <th class="et-table--th et-table--th-right-aligned"
+            >{PppUtils.formatVaiheHeading(
+              `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
+              $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi'),
+              vaihe.tulokset['vaiheen-alku-pvm'],
+              $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
+            )}</th>
+        {/each}
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -51,7 +56,7 @@
         <tr class="et-table--tr">
           <td class="et-table--td et-table--td__fifth">
             {$_(
-              `perusparannuspassi.kustannukset-toteutunut-ostoenergia.labels.${etEnergiamuoto}`
+              `perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.${etEnergiamuoto}`
             )}
           </td>
           <td
@@ -61,7 +66,9 @@
           {#each costs.slice(1) as vaiheCost}
             <td
               class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-              {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
+              {#if Maybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
+                {PppUtils.formatCost(vaiheCost[etEnergiamuoto])}
+              {/if}
             </td>
           {/each}
         </tr>
@@ -70,7 +77,7 @@
       <tr class="et-table--tr border-t-1 border-disabled">
         <td class="et-table--td et-table--td__fifth uppercase">
           {$_(
-            'perusparannuspassi.kustannukset-toteutunut-ostoenergia.yhteensa'
+            'perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.yhteensa'
           )}
         </td>
         <td
@@ -80,7 +87,9 @@
         {#each costs.slice(1) as vaiheCost}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {PppUtils.formatCost(vaiheCost.total)}
+            {#if Maybe.isSome(vaiheCost['vaiheen-alku-pvm'])}
+              {PppUtils.formatCost(vaiheCost.total)}
+            {/if}
           </td>
         {/each}
       </tr>
@@ -88,7 +97,7 @@
       <tr class="et-table--tr">
         <td class="et-table--td et-table--td__fifth">
           {$_(
-            'perusparannuspassi.kustannukset-toteutunut-ostoenergia.erotus-edelliseen-vaiheeseen'
+            'perusparannuspassi.laskennan-tulokset.kustannukset-toteutunut.erotus'
           )}
         </td>
         <td
@@ -98,10 +107,12 @@
         {#each R.zip(costs.slice(0, costs.length - 1), costs.slice(1, costs.length)) as [prev, cur]}
           <td
             class="et-table--td et-table--td__fifth border-l-1 border-disabled text-right">
-            {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
-              cur.total,
-              prev.total
-            )}
+            {#if Maybe.isSome(cur['vaiheen-alku-pvm'])}
+              {R.compose(PppUtils.formatCostDifference, R.lift(R.subtract))(
+                cur.total,
+                prev.total
+              )}
+            {/if}
           </td>
         {/each}
       </tr>

@@ -4,6 +4,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as EitherMaybe from '@Utility/either-maybe.js';
   import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as PPPUtils from './ppp-utils';
 
   import H4 from '@Component/H/H4';
   import { _ } from '@Language/i18n';
@@ -13,34 +14,14 @@
   export let perusparannuspassi;
   export let schema;
 
-  const laskennallisetOstoenergiat = [
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-kaukolampo',
-      et_energiamuoto: 'kaukolampo'
-    },
-    { ppp_energiamuoto: 'ostoenergian-tarve-sahko', et_energiamuoto: 'sahko' },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-uusiutuvat-pat',
-      et_energiamuoto: 'uusiutuva-polttoaine'
-    },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-fossiiliset-pat',
-      et_energiamuoto: 'fossiilinen-polttoaine'
-    },
-    {
-      ppp_energiamuoto: 'ostoenergian-tarve-kaukojaahdytys',
-      et_energiamuoto: 'kaukojaahdytys'
-    }
-  ];
-
   const etEnergiamuodotFromPppVaihe = vaihe =>
     R.compose(
       R.fromPairs,
-      R.map(({ ppp_energiamuoto, et_energiamuoto }) => [
-        et_energiamuoto,
-        vaihe[ppp_energiamuoto]
+      R.map(({ pppLaskennallinenEnergiamuoto, etEnergiamuoto }) => [
+        etEnergiamuoto,
+        vaihe[pppLaskennallinenEnergiamuoto]
       ])
-    )(laskennallisetOstoenergiat);
+    )(PPPUtils.energiamuodot);
 </script>
 
 <H4
@@ -49,7 +30,7 @@
   )} />
 
 <p>
-  {$_('perusparannuspassi.laskennan-tulokset.info-before-table')}
+  {$_('perusparannuspassi.laskennan-tulokset.info-kirjaa-arvot')}
 </p>
 
 <table class="et-table">
@@ -60,37 +41,35 @@
           'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.header'
         )}</th>
       <th class="et-table--th et-table--th-right-aligned"
-        >{$_('perusparannuspassi.laskennan-tulokset.lahtotilanne')}</th>
+        >{$_(
+          'perusparannuspassi.laskennan-tulokset.lahtotilanne-kwh-vuosi'
+        )}</th>
 
       {#each perusparannuspassi.vaiheet as vaihe}
         <th class="et-table--th et-table--th-right-aligned"
-          >{$_('perusparannuspassi.laskennan-tulokset.vaihe') +
-            '' +
-            vaihe['vaihe-nro'] +
-            ' (' +
-            EitherMaybe.orSome(
-              'ei aloitusvuotta',
-              vaihe.tulokset['vaiheen-alku-pvm']
-            ) +
-            ') ' +
-            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi')}</th>
+          >{PPPUtils.formatVaiheHeading(
+            `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
+            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi'),
+            vaihe.tulokset['vaiheen-alku-pvm'],
+            $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
+          )}</th>
       {/each}
     </tr>
   </thead>
   <tbody class="et-table--tbody">
-    {#each laskennallisetOstoenergiat as { ppp_energiamuoto, et_energiamuoto }}
+    {#each PPPUtils.energiamuodot as { etEnergiamuoto, pppLaskennallinenEnergiamuoto }}
       <tr class="et-table--tr">
         <td class="et-table--td"
           >{$_(
-            'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.table-headers.' +
-              ppp_energiamuoto
+            'perusparannuspassi.laskennan-tulokset.laskennallinen-ostoenergia.' +
+              etEnergiamuoto
           )}</td>
 
         <td class="et-table--td"
           >{EitherMaybe.orSome(
             0,
             energiatodistus.tulokset['kaytettavat-energiamuodot'][
-              et_energiamuoto
+              etEnergiamuoto
             ]
           )}</td>
 
@@ -98,7 +77,7 @@
           <td class="et-table--td">
             <Input
               {schema}
-              center={false}
+              center={true}
               bind:model={perusparannuspassi}
               compact={true}
               i18nRoot="perusparannuspassi"
@@ -111,7 +90,7 @@
                 'vaiheet',
                 vaihe['vaihe-nro'] - 1,
                 'tulokset',
-                ppp_energiamuoto
+                pppLaskennallinenEnergiamuoto
               ]} />
           </td>
         {/each}

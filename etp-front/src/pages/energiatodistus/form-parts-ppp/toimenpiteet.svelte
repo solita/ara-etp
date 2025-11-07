@@ -18,7 +18,7 @@
   export let inputLanguage;
 </script>
 
-<H3 text={i18n(`perusparannuspassi.vaiheet.0.toimenpiteet.header`)} />
+<H3 text={i18n(`perusparannuspassi.toimenpiteet.header`)} />
 
 <div class="flex min-w-full flex-col gap-y-8 overflow-x-auto">
   {#each perusparannuspassi.vaiheet as vaihe}

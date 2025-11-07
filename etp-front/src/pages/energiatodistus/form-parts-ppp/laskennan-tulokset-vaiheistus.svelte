@@ -37,7 +37,7 @@
           <td class="et-table--td">
             <Input
               {schema}
-              center={false}
+              center={true}
               bind:model={perusparannuspassi}
               compact={true}
               i18nRoot="perusparannuspassi"
