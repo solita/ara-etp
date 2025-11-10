@@ -100,24 +100,3 @@ export const propertyLabel = R.curry((i18n, propertyName) =>
     R.split('.', propertyName)
   )
 );
-
-export const viewValueFormatted = R.curry(
-  ({ model, schema, path, valueOnEmpty }) => {
-    const valueType = type(schema, path);
-    const format = valueType.format;
-
-    const formatOrValueOnEmpty = R.ifElse(
-      R.always(R.isNotNil(valueOnEmpty)),
-      R.ifElse(Maybe.isNone, R.always(valueOnEmpty), format),
-      format
-    );
-
-    return R.compose(
-      Maybe.get,
-      Either.toMaybe,
-      Either.map(formatOrValueOnEmpty),
-      Either.fromValueOrEither,
-      R.view(R.lensPath(path))
-    )(model);
-  }
-);

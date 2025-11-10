@@ -18,14 +18,18 @@ export const numberFormat = Intl.NumberFormat('fi-FI').format;
 export const percentFormat = Intl.NumberFormat('fi-FI', {
   style: 'percent'
 }).format;
+export const yearFormat = R.identity;
 export const currencyFormat = Intl.NumberFormat('fi-FI', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2
 }).format;
+export const numberDiffFormat = Intl.NumberFormat('fi-FI', {
+  signDisplay: 'always'
+}).format;
 
 export const optionalString = Maybe.orSome('');
 export const optionalNumber = R.compose(Maybe.orSome(''), R.map(numberFormat));
-export const optionalYear = R.compose(Maybe.orSome(''), R.map(R.identity));
+export const optionalYear = R.compose(Maybe.orSome(''), R.map(yearFormat));
 export const optionalCurrency = R.compose(
   Maybe.orSome(''),
   R.map(currencyFormat)

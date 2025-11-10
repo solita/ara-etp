@@ -44,7 +44,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat)
+        R.map(formats.numberDiffFormat)
       )(
         R.lift(R.subtract)(
           metrics.current.laskennallinenKulutus.kaukolampo,
@@ -63,7 +63,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat)
+        R.map(formats.numberDiffFormat)
       )(
         R.lift(R.subtract)(
           metrics.current.laskennallinenKulutus.sahko,
@@ -82,7 +82,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat)
+        R.map(formats.numberDiffFormat)
       )(
         R.lift(R.subtract)(
           metrics.current.laskennallinenKulutus['uusiutuva-polttoaine'],
@@ -101,7 +101,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat)
+        R.map(formats.numberDiffFormat)
       )(
         R.lift(R.subtract)(
           metrics.current.laskennallinenKulutus['fossiilinen-polttoaine'],
@@ -120,7 +120,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat)
+        R.map(formats.numberDiffFormat)
       )(
         R.lift(R.subtract)(
           metrics.current.laskennallinenKulutus.kaukojaahdytys,
