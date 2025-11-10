@@ -24,7 +24,7 @@
              metosin/reitit-dev                                  {:mvn/version "0.7.2"}
              metosin/reitit-schema                               {:mvn/version "0.7.2"}
              fi.metosin/reitit-openapi                           {:mvn/version "0.7.2"}
-             metosin/muuntaja                                    {:mvn/version "0.6.10"}
+             metosin/muuntaja                                    {:mvn/version "0.6.11"}
              metosin/jsonista                                    {:mvn/version "0.3.13"}
              metosin/schema-tools                                {:mvn/version "0.13.1"}
              webjure/jeesql                                      {:mvn/version "0.4.7"}
