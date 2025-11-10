@@ -12,6 +12,7 @@
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-destruction :as energiatodistus-destruction-service]
             [solita.etp.service.laskutus :as laskutus-service]
             [solita.etp.service.file :as file-service]
             [solita.common.smtp-test :as smtp-test])
@@ -408,6 +409,59 @@
                                (str laskutus-service/asiakastieto-destination-dir "*"))
                  (sftp/delete! sftp-connection
                                (str laskutus-service/laskutustieto-destination-dir "*")))))))
+
+(t/deftest find-kuukauden-laskutus-with-destroyed-korvattu-test
+  (t/testing "Replacement certificate should be invoiced when the replaced certificate is destroyed (tuhottu)"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (first (keys laatijat))
+          ;; Create original energiatodistus
+          original-et-adds (energiatodistus-test-data/generate-adds 1 2018 true)
+          original-et-id (first (energiatodistus-test-data/insert! original-et-adds laatija-id))
+          ;; Create replacement energiatodistus
+          replacement-et-adds (energiatodistus-test-data/generate-adds 1 2018 true)
+          replacement-et-id (first (energiatodistus-test-data/insert! replacement-et-adds laatija-id))]
+
+      ;; Sign the original energiatodistus
+      (energiatodistus-service/start-energiatodistus-signing! ts/*db*
+                                                              {:id laatija-id}
+                                                              original-et-id)
+      (energiatodistus-service/end-energiatodistus-signing! ts/*db*
+                                                            ts/*aws-s3-client*
+                                                            {:id laatija-id}
+                                                            original-et-id
+                                                            {:skip-pdf-signed-assert? true})
+
+      ;; Sign the replacement energiatodistus (signed less than 7 days after original)
+      (energiatodistus-service/start-energiatodistus-signing! ts/*db*
+                                                              {:id laatija-id}
+                                                              replacement-et-id)
+      (energiatodistus-service/end-energiatodistus-signing! ts/*db*
+                                                            ts/*aws-s3-client*
+                                                            {:id laatija-id}
+                                                            replacement-et-id
+                                                            {:skip-pdf-signed-assert? true})
+
+      ;; Set the allekirjoitusaika for both to be within last month
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" original-et-id])
+      ;; Replacement signed 2 days after original (less than 7 days)
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' + interval '2 days' WHERE id = ?" replacement-et-id])
+
+      ;; Link replacement to original
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET korvattu_energiatodistus_id = ? WHERE id = ?" original-et-id replacement-et-id])
+
+      ;; Without destroyed status, replacement should NOT be invoiced (replaced within 7 days)
+      (let [laskutus-before (laskutus-service/find-kuukauden-laskutus ts/*db*)]
+        (t/is (not (contains? (->> laskutus-before (map :energiatodistus-id) set) replacement-et-id))
+              "Replacement energiatodistus should NOT be invoiced when replaced certificate is not destroyed and within 7 days"))
+
+      ;; Destroy the original energiatodistus using the complete destruction workflow
+      ;; This removes all related data and sets tila_id = 6 (tuhottu)
+      (energiatodistus-destruction-service/destroy-expired-energiatodistus! ts/*db* ts/*aws-s3-client* original-et-id)
+
+      ;; Now the replacement SHOULD be invoiced even though it was signed within 7 days
+      (let [laskutus-after (laskutus-service/find-kuukauden-laskutus ts/*db*)]
+        (t/is (contains? (->> laskutus-after (map :energiatodistus-id) set) replacement-et-id)
+              "Replacement energiatodistus SHOULD be invoiced when replaced certificate is destroyed (tuhottu)")))))
 
 ;; Uncomment to test performance and robustness locally
 #_(t/deftest ^:eftest/synchronized performance-test

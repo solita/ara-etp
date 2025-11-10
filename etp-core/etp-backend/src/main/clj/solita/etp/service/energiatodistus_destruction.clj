@@ -134,7 +134,12 @@
     (run! #(destroy-viestiketju db aws-s3-client %) viestiketjut-ids)
     (check-oikeellisuuden-valvontojen-viestiketjut db energiatodistus-id)))
 
-(defn- destroy-expired-energiatodistus! [db aws-s3-client energiatodistus-id]
+(defn destroy-expired-energiatodistus!
+  "Destroys most of an energiatodistus including PDFs, mosto of structural data, attachments, messages,
+  valvonta data, and audit trail.
+   Sets tila_id to 6 (tuhottu) and anonymizes most of the data fields.
+   This is primarily used internally in this namespace but also exposed for testing."
+  [db aws-s3-client energiatodistus-id]
   (delete-energiatodistus-pdfs! db aws-s3-client energiatodistus-id)
   (jdbc/with-db-transaction [db db]
                             (destroy-energiatodistus-viestiketjut db aws-s3-client energiatodistus-id)

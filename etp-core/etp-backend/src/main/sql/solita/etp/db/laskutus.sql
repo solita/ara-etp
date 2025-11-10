@@ -39,19 +39,35 @@ SELECT e.id energiatodistus_id, e.allekirjoitusaika, e.laskuriviviite,
        CASE WHEN e.laskutettava_yritys_id IS NULL THEN l.maa
             WHEN e.laskutettava_yritys_id IS NOT NULL THEN y.maa
        END maa
-  FROM energiatodistus e
+FROM energiatodistus e
   LEFT JOIN laatija l ON e.laatija_id = l.id
   LEFT JOIN kayttaja k ON l.id = k.id
   LEFT JOIN yritys y ON e.laskutettava_yritys_id = y.id
   LEFT JOIN verkkolaskuoperaattori v ON y.verkkolaskuoperaattori = v.id
   LEFT JOIN energiatodistus korvattu ON e.korvattu_energiatodistus_id = korvattu.id
-  WHERE e.allekirjoitusaika IS NOT NULL AND
-        e.allekirjoitusaika < date_trunc('month', now()) AND
-        e.allekirjoitusaika >= date_trunc('month', now()) - interval '1 month' AND
-        e.laskutusaika IS NULL AND
-        (e.korvattu_energiatodistus_id IS NULL OR
-         (date_trunc('day', e.allekirjoitusaika) - interval '7 days' > korvattu.allekirjoitusaika OR
-         korvattu.laatija_id != e.laatija_id));
+WHERE
+    -- Check that allekirjoitus is within the previous calendar month
+    e.allekirjoitusaika IS NOT NULL AND
+    e.allekirjoitusaika < date_trunc('month', now()) AND
+    date_trunc('month', now()) - interval '1 month' <= e.allekirjoitusaika AND
+
+    -- Must not have been invoiced already
+    e.laskutusaika IS NULL AND
+
+    -- A bunch of rules to exclude a somewhat complicated exception that allows an author
+    -- to reissue a certificate within 7 days without it being invoiced again.
+    (-- The certificate does not replace another
+     e.korvattu_energiatodistus_id IS NULL OR
+
+     -- The new certificate replaced an old one, which was at least 7 days old at the time of signing
+     date_trunc('day', e.allekirjoitusaika) - interval '7 days' > korvattu.allekirjoitusaika OR
+
+     -- The replaced certificate has been destroyed (implies it was old)
+     korvattu.tila_id = (SELECT tuhottu FROM et_tilat) OR
+
+     -- The replaced certificate was made by a different author
+     korvattu.laatija_id != e.laatija_id);
+
 
 -- name: mark-as-laskutettu!
 UPDATE energiatodistus SET laskutusaika = now() WHERE id IN (:ids);
