@@ -89,7 +89,7 @@
   let inputLanguage = 'fi';
 
   let korvausError = Maybe.None();
-  let dirty = false;
+  export let dirty = false;
 
   const forms = {
     '2018': ET2018Form,
@@ -319,6 +319,9 @@
             {whoami} />
         </div>
       </form>
+      <!-- Slot for PPP form -->
+      <!-- Todo: better placement, separate toolbar from this view too-->
+      <slot />
     </div>
   </div>
 {:else}

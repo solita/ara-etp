@@ -38,6 +38,7 @@
 
   <H3 text={$_('perusparannuspassi.laskennan-tulokset.header')} />
   <Vaiheistus bind:perusparannuspassi {schema} />
+
   <LaskennallinenOstoenergia
     bind:perusparannuspassi
     {energiatodistus}

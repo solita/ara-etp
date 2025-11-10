@@ -57,6 +57,13 @@
   };
 
   const energiamuotokertoimet = {
+    2026: {
+      'fossiilinen-polttoaine': 1,
+      kaukojaahdytys: 0.28,
+      kaukolampo: 0.5,
+      sahko: 1.2,
+      'uusiutuva-polttoaine': 0.5
+    },
     2018: {
       'fossiilinen-polttoaine': 1,
       kaukojaahdytys: 0.28,

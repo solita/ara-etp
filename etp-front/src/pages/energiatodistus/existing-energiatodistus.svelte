@@ -6,10 +6,18 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as versionApi from '@Component/Version/version-api';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
+  import * as Schema from '@Pages/energiatodistus/schema';
+  import * as Empty from '@Pages/energiatodistus/empty';
+
   import EnergiatodistusForm from '@Pages/energiatodistus/EnergiatodistusForm';
+  import PPPForm from '@Pages/energiatodistus/ppp-form.svelte';
+  import PPPWrapper from '@Pages/energiatodistus/PPPWrapper.svelte';
 
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as pppApi from '@Pages/energiatodistus/perusparannuspassi-api';
   import * as ValvontaApi from '@Pages/valvonta-oikeellisuus/valvonta-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
@@ -36,33 +44,96 @@
 
   let showMissingProperties;
 
-  const submit = (energiatodistus, onSuccessfulSave) =>
-    R.compose(
+  let config = {};
+  Future.fork(
+    _ => {
+      config = {};
+    },
+    loadedConfig => {
+      config = loadedConfig;
+    },
+    versionApi.getConfig
+  );
+
+  // PPP state
+  let perusparannuspassi = null;
+  let showPPP = false;
+
+  // Add PPP - creates a new perusparannuspassi via API
+  const addPerusparannuspassi = energiatodistusId => () => {
+    if (!showPPP && !perusparannuspassi) {
+      toggleOverlay(true);
       Future.fork(
-        response => {
+        _response => {
           toggleOverlay(false);
-          if (R.pathEq('missing-value', ['body', 'type'], response)) {
-            showMissingProperties(response.body.missing);
-          } else {
-            announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
-          }
+          announceError(i18n('energiatodistus.messages.add-ppp-error'));
         },
-        () => {
+        result => {
+          perusparannuspassi = result;
+          showPPP = true;
           toggleOverlay(false);
-          announceSuccess($_('energiatodistus.messages.save-success'));
-          onSuccessfulSave();
+          announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+        },
+        pppApi.addPerusparannuspassi(fetch, energiatodistusId)
+      );
+    } else {
+      // Just toggle visibility if PPP already exists
+      showPPP = !showPPP;
+    }
+  };
+
+  const submit = (energiatodistus, onSuccessfulSave) => {
+    toggleOverlay(true);
+
+    const saveFuture =
+      perusparannuspassi && perusparannuspassi.id
+        ? Future.parallelObject(2, {
+            energiatodistus: api.putEnergiatodistusById(
+              fetch,
+              params.version,
+              params.id
+            )(energiatodistus),
+            perusparannuspassi: pppApi.putPerusparannuspassi(
+              fetch,
+              perusparannuspassi.id,
+              perusparannuspassi
+            )
+          })
+        : R.map(
+            energiatodistus => ({ energiatodistus }),
+            api.putEnergiatodistusById(
+              fetch,
+              params.version,
+              params.id
+            )(energiatodistus)
+          );
+
+    Future.fork(
+      response => {
+        toggleOverlay(false);
+        if (R.pathEq('missing-value', ['body', 'type'], response)) {
+          showMissingProperties(response.body.missing);
+        } else {
+          announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
-      ),
-      R.chain(Future.after(400)),
-      api.putEnergiatodistusById(fetch, params.version, params.id),
-      R.tap(() => toggleOverlay(true))
-    )(energiatodistus);
+      },
+      () => {
+        toggleOverlay(false);
+        announceSuccess($_('energiatodistus.messages.save-success'));
+        onSuccessfulSave();
+      },
+      R.chain(Future.after(400), saveFuture)
+    );
+  };
 
   // load energiatodistus and classifications in parallel
   const load = params => {
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
+    perusparannuspassi = null;
+    showPPP = false;
+
     Future.fork(
       response => {
         toggleOverlay(false);
@@ -70,15 +141,34 @@
       },
       response => {
         resources = Maybe.Some(response);
+
+        // Set PPP if it exists
+        if (response.perusparannuspassi) {
+          perusparannuspassi = response.perusparannuspassi;
+          showPPP = true;
+        }
+
         toggleOverlay(false);
       },
       R.chain(
         response =>
           R.map(
-            R.assoc('laskutusosoitteet', R.__, response),
-            laatijaApi.laskutusosoitteet(
-              Maybe.get(response.energiatodistus['laatija-id'])
-            )
+            R.mergeLeft(response),
+            Future.parallelObject(2, {
+              laskutusosoitteet: laatijaApi.laskutusosoitteet(
+                Maybe.get(response.energiatodistus['laatija-id'])
+              ),
+              perusparannuspassi:
+                response.energiatodistus['perusparannuspassi-id'] &&
+                Maybe.isSome(response.energiatodistus['perusparannuspassi-id'])
+                  ? pppApi.getPerusparannuspassi(
+                      fetch,
+                      Maybe.get(
+                        response.energiatodistus['perusparannuspassi-id']
+                      )
+                    )
+                  : Future.resolve(null)
+            })
           ),
         Future.parallelObject(6, {
           energiatodistus: api.getEnergiatodistusById(
@@ -103,12 +193,20 @@
     `${$_('energiatodistus.title')} ${params.version}/${
       params.id
     } - ${tilaLabel(energiatodistus)}`;
+
+  let energiatodistusFormComponent;
+  const setFormDirty = () => {
+    if (energiatodistusFormComponent) {
+      energiatodistusFormComponent.$set({ dirty: true });
+    }
+  };
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
     {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, whoami, validation, valvonta, verkkolaskuoperaattorit, laskutusosoitteet }}
       <EnergiatodistusForm
+        bind:this={energiatodistusFormComponent}
         version={params.version}
         {energiatodistus}
         {luokittelut}
@@ -119,7 +217,25 @@
         {laskutusosoitteet}
         bind:showMissingProperties
         {submit}
-        title={title(energiatodistus)} />
+        title={title(energiatodistus)}>
+        <!-- PPP section as slot content -->
+        {#if isEtp2026Enabled(config) && params.version == 2026}
+          <PPPWrapper
+            {showPPP}
+            onAddPPP={addPerusparannuspassi(energiatodistus.id)}>
+            {#if perusparannuspassi}
+              <div on:input={setFormDirty} on:change={setFormDirty}>
+                <PPPForm
+                  {energiatodistus}
+                  inputLanguage={'fi'}
+                  {luokittelut}
+                  bind:perusparannuspassi
+                  schema={Schema.perusparannuspassi} />
+              </div>
+            {/if}
+          </PPPWrapper>
+        {/if}
+      </EnergiatodistusForm>
     {/each}
   </div>
   <div slot="overlay-content">

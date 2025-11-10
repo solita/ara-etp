@@ -1222,6 +1222,13 @@
       }
     },
     "lisamerkintoja": "Tilläggsuppgifter",
+    "perusparannuspassi": {
+      "header": "Perusparannuspassi (sv)",
+      "add-button": "Lisää perusparannuspassi (sv)",
+      "info-text": "Perusparannuspassin käyttö korvaa energiatodistuksen toimenpide-ehdotukset. (sv)",
+      "not-added": "Perusparannuspassia ei ole vielä lisätty. Aloita lisäämällä perusparannuspassi. (sv)",
+      "disclaimer": "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia. Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskelmissa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen verrattuna. (sv)"
+    },
     "messages": {
       "save-success": "Uppgifterna i energicertifikatet har sparats.",
       "save-error": "Det uppstod ett oväntat fel i sparandet av uppgifterna i energicertifikatet.",

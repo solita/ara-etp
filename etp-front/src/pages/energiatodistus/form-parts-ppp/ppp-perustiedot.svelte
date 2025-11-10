@@ -2,7 +2,6 @@
   import * as R from 'ramda';
 
   import Checkbox from '@Component/Checkbox/Checkbox';
-  import H3 from '@Component/H/H3';
   import HR from '@Component/HR/HR';
   import { _ } from '@Language/i18n';
   import BasicInput from '@Component/Input/Input';
