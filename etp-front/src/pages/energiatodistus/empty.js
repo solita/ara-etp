@@ -357,7 +357,6 @@ const emptyPerusparannusVaihe = n => ({
 });
 
 export const perusparannuspassi = energiatodistusId => ({
-  id: Maybe.None(),
   'energiatodistus-id': energiatodistusId,
   valid: false,
   'passin-perustiedot': emptyPerusparannusPassinPerustiedot(),
