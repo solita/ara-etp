@@ -45,7 +45,6 @@ FROM energiatodistus e
   LEFT JOIN yritys y ON e.laskutettava_yritys_id = y.id
   LEFT JOIN verkkolaskuoperaattori v ON y.verkkolaskuoperaattori = v.id
   LEFT JOIN energiatodistus korvattu ON e.korvattu_energiatodistus_id = korvattu.id
-  CROSS JOIN et_tilat
 WHERE
     -- Check that allekirjoitus is within the previous calendar month
     e.allekirjoitusaika IS NOT NULL AND
@@ -64,7 +63,7 @@ WHERE
      date_trunc('day', e.allekirjoitusaika) - interval '7 days' > korvattu.allekirjoitusaika OR
 
      -- The replaced certificate has been destroyed (implies it was old)
-     korvattu.tila_id = et_tilat.tuhottu OR
+     korvattu.tila_id = (SELECT tuhottu FROM et_tilat) OR
 
      -- The replaced certificate was made by a different author
      korvattu.laatija_id != e.laatija_id);
