@@ -38,24 +38,23 @@ export const getPerusparannuspassi = R.curry((fetch, pppId) =>
   R.compose(
     R.map(deserialize),
     Fetch.responseAsJson,
-    Future.encaseP(
-      Fetch.getFetch(fetch)
-    )
+    Future.encaseP(Fetch.getFetch(fetch))
   )(`/api/private/perusparannuspassit/2026/${pppId}`)
 );
 
-export const putPerusparannuspassi = R.curry((fetch, pppId, perusparannuspassi) =>
-  R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
-    Future.encaseP(
-      Fetch.fetchWithMethod(
-        fetch,
-        'put',
-        `/api/private/perusparannuspassit/2026/${pppId}`
-      )
-    ),
-    serialize
-  )(perusparannuspassi)
+export const putPerusparannuspassi = R.curry(
+  (fetch, pppId, perusparannuspassi) =>
+    R.compose(
+      R.chain(Fetch.rejectWithInvalidResponse),
+      Future.encaseP(
+        Fetch.fetchWithMethod(
+          fetch,
+          'put',
+          `/api/private/perusparannuspassit/2026/${pppId}`
+        )
+      ),
+      serialize
+    )(perusparannuspassi)
 );
 
 const deserializer = {

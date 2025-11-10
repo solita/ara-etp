@@ -8,9 +8,15 @@
   export let onAddPPP;
 </script>
 
+<style>
+  .ppp-section :global(h2) {
+    margin-bottom: 0;
+  }
+</style>
+
 <HR />
-<div class="flex flex-col gap-6 ppp-section">
-  <div class="flex justify-between items-baseline">
+<div class="ppp-section flex flex-col gap-6">
+  <div class="flex items-baseline justify-between">
     <H2
       id="perusparannuspassi"
       text={$_('energiatodistus.perusparannuspassi.header')} />
@@ -22,8 +28,8 @@
         on:click={onAddPPP} />
     {/if}
   </div>
-  <div class="flex items-start p-4 bg-tertiary items-center">
-    <span class="font-icon mr-2 text-2xl">info_outline</span>
+  <div class="flex items-start items-center bg-tertiary p-4">
+    <span class="mr-2 font-icon text-2xl">info_outline</span>
     <span>{$_('energiatodistus.perusparannuspassi.info-text')}</span>
   </div>
 
@@ -43,9 +49,3 @@
   {/if}
 </div>
 <HR />
-
-<style>
-  .ppp-section :global(h2) {
-    margin-bottom: 0;
-  }
-</style>

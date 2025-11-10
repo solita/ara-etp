@@ -224,9 +224,7 @@
             {showPPP}
             onAddPPP={addPerusparannuspassi(energiatodistus.id)}>
             {#if perusparannuspassi}
-              <div
-                on:input={setFormDirty}
-                on:change={setFormDirty}>
+              <div on:input={setFormDirty} on:change={setFormDirty}>
                 <PPPForm
                   {energiatodistus}
                   inputLanguage={'fi'}
