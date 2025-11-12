@@ -13,7 +13,7 @@
 
   import EnergiatodistusForm from '@Pages/energiatodistus/EnergiatodistusForm';
   import PPPForm from '@Pages/energiatodistus/ppp-form.svelte';
-  import PPPWrapper from '@Pages/energiatodistus/PPPWrapper.svelte';
+  import PPPSection from '@Pages/energiatodistus/PPPSection.svelte';
 
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
@@ -220,7 +220,7 @@
         title={title(energiatodistus)}>
         <!-- PPP section as slot content -->
         {#if isEtp2026Enabled(config) && params.version == 2026}
-          <PPPWrapper
+          <PPPSection
             {showPPP}
             onAddPPP={addPerusparannuspassi(energiatodistus.id)}>
             {#if perusparannuspassi}
@@ -233,7 +233,7 @@
                   schema={Schema.perusparannuspassi} />
               </div>
             {/if}
-          </PPPWrapper>
+          </PPPSection>
         {/if}
       </EnergiatodistusForm>
     {/each}

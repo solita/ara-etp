@@ -12,12 +12,18 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
   import EnergiatodistusForm from '@Pages/energiatodistus/EnergiatodistusForm';
+  import PPPForm from '@Pages/energiatodistus/ppp-form.svelte';
+  import PPPSection from '@Pages/energiatodistus/PPPSection.svelte';
   import * as empty from '@Pages/energiatodistus/empty';
   import * as ET from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as pppApi from '@Pages/energiatodistus/perusparannuspassi-api';
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as laskutusApi from '@Utility/api/laskutus-api';
+  import * as versionApi from '@Component/Version/version-api';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
+  import * as Schema from '@Pages/energiatodistus/schema';
 
   import * as Response from '@Utility/response';
   import { announcementsForModule } from '@Utility/announce';
@@ -32,6 +38,33 @@
 
   const toggleOverlay = value => {
     overlay = value;
+  };
+
+  let config = {};
+  Future.fork(
+    _ => {
+      config = {};
+    },
+    loadedConfig => {
+      config = loadedConfig;
+    },
+    versionApi.getConfig
+  );
+
+  // PPP state
+  let perusparannuspassi = null;
+  let showPPP = false;
+
+  // Add PPP - creates a local empty perusparannuspassi that will be saved with the energiatodistus
+  const addPerusparannuspassi = () => {
+    if (!showPPP && !perusparannuspassi) {
+      // Create empty PPP locally - energiatodistus doesn't have ID yet, will be set during save
+      perusparannuspassi = empty.perusparannuspassi(null);
+      showPPP = true;
+    } else {
+      // Just toggle visibility if PPP already exists
+      showPPP = !showPPP;
+    }
   };
 
   const emptyEnergiatodistus = versio =>
@@ -61,24 +94,43 @@
 
   let resources = Maybe.None();
 
-  const submit = (energiatodistus, onSuccessfulSave) =>
-    R.compose(
-      Future.fork(
-        response => {
-          toggleOverlay(false);
-          announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
-        },
-        ({ id }) => {
-          toggleOverlay(false);
-          announceSuccess($_('energiatodistus.messages.save-success'));
-          onSuccessfulSave();
-          replace(`/energiatodistus/${params.version}/${id}`);
-        }
-      ),
-      R.chain(Future.after(400)),
-      api.postEnergiatodistus(fetch, params.version),
-      R.tap(() => toggleOverlay(true))
-    )(energiatodistus);
+  const submit = (energiatodistus, onSuccessfulSave) => {
+    toggleOverlay(true);
+
+    // Create energiatodistus first, then PPP if it exists
+    const saveFuture = perusparannuspassi
+      ? R.chain(
+          etResult =>
+            R.map(
+              pppResult => ({
+                energiatodistus: etResult,
+                perusparannuspassi: pppResult
+              }),
+              pppApi.addPerusparannuspassi(fetch, etResult.id)
+            ),
+          api.postEnergiatodistus(fetch, params.version)(energiatodistus)
+        )
+      : R.map(
+          result => ({ energiatodistus: result }),
+          api.postEnergiatodistus(fetch, params.version)(energiatodistus)
+        );
+
+    Future.fork(
+      response => {
+        toggleOverlay(false);
+        announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
+      },
+      result => {
+        toggleOverlay(false);
+        announceSuccess($_('energiatodistus.messages.save-success'));
+        onSuccessfulSave();
+        replace(
+          `/energiatodistus/${params.version}/${result.energiatodistus.id}`
+        );
+      },
+      R.chain(Future.after(400), saveFuture)
+    );
+  };
 
   $: title =
     $_('energiatodistus.title') +
@@ -142,7 +194,21 @@
         {validation}
         {verkkolaskuoperaattorit}
         {laskutusosoitteet}
-        {submit} />
+        {submit}>
+        <!-- PPP section as slot content -->
+        {#if isEtp2026Enabled(config) && params.version == 2026}
+          <PPPSection {showPPP} onAddPPP={addPerusparannuspassi}>
+            {#if showPPP && perusparannuspassi}
+              <PPPForm
+                {energiatodistus}
+                inputLanguage={'fi'}
+                {luokittelut}
+                bind:perusparannuspassi
+                schema={Schema.perusparannuspassi} />
+            {/if}
+          </PPPSection>
+        {/if}
+      </EnergiatodistusForm>
     {/each}
   </div>
   <div slot="overlay-content">
