@@ -106,7 +106,10 @@
                 energiatodistus: etResult,
                 perusparannuspassi: pppResult
               }),
-              pppApi.addPerusparannuspassi(fetch, etResult.id)
+              pppApi.postPerusparannuspassi(
+                fetch,
+                R.assoc('energiatodistus-id', etResult.id, perusparannuspassi)
+              )
             ),
           api.postEnergiatodistus(fetch, params.version)(energiatodistus)
         )

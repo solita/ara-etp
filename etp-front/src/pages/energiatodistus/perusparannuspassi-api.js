@@ -26,6 +26,21 @@ export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
   )(energiatodistusId)
 );
 
+export const postPerusparannuspassi = R.curry((fetch, perusparannuspassi) =>
+  R.compose(
+    R.map(deserialize),
+    Fetch.responseAsJson,
+    Future.encaseP(
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        '/api/private/perusparannuspassit/2026'
+      )
+    ),
+    serialize
+  )(perusparannuspassi)
+);
+
 // This is somewhat different route than with energiatodistus. With energiatodistus inputtable values out of schema
 // are put into empty energiatodistus and then the empty is merged when deserializing.
 const deserializeToimenpideEhdotukset = toimenpiteet =>
