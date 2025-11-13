@@ -367,14 +367,6 @@
 
 (def Signature {:signature schema/Str :chain [schema/Str]})
 
-(def Range
-  {:min schema/Num
-   :max schema/Num})
-
-(def NumericValidation
-  {:property schema/Str,
-   :warning Range,
-   :error Range})
 
 (def EnergiatodistusSearch
   {(schema/optional-key :sort)    schema/Str

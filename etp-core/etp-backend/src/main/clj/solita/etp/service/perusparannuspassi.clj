@@ -2,6 +2,7 @@
   (:require
     [clojure.java.jdbc :as jdbc]
     [clojure.set :as set]
+    [clojure.string :as str]
     [flathead.flatten :as flat]
     [solita.etp.db :as db]
     [solita.etp.exception :as exception]
@@ -222,3 +223,41 @@
                               (perusparannuspassi-db/delete-perusparannuspassi-vaiheet! db {:perusparannuspassi-id perusparannuspassi-id})
                               (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id})
                               perusparannuspassi-id)))
+
+;; Validation functions
+
+(defn replace-abbreviation->fullname [path]
+  (reduce (fn [result [fullname abbreviation]]
+            (if (str/starts-with? result (name abbreviation))
+              (reduced (str/replace-first
+                         result (name abbreviation) (name fullname)))
+              result))
+          path db-abbreviations))
+
+(defn to-property-name [column-name]
+  (-> column-name
+      db/kebab-case
+      replace-abbreviation->fullname
+      (str/replace "$" ".")))
+
+(defn find-ppp-numeric-validations [db versio]
+  (map (comp
+         #(set/rename-keys % {:column-name :property})
+         #(update % :column-name to-property-name))
+       (perusparannuspassi-db/select-ppp-numeric-validations db {:versio versio})))
+
+(defn find-ppp-required-properties [db versio bypass-validation]
+  (map (comp to-property-name :column-name)
+       (perusparannuspassi-db/select-ppp-required-columns
+         db {:versio versio :bypass-validation bypass-validation})))
+
+(defn find-ppp-vaihe-numeric-validations [db versio]
+  (map (comp
+         #(set/rename-keys % {:column-name :property})
+         #(update % :column-name to-property-name))
+       (perusparannuspassi-db/select-ppp-vaihe-numeric-validations db {:versio versio})))
+
+(defn find-ppp-vaihe-required-properties [db versio bypass-validation]
+  (map (comp to-property-name :column-name)
+       (perusparannuspassi-db/select-ppp-vaihe-required-columns
+         db {:versio versio :bypass-validation bypass-validation})))
