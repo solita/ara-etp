@@ -52,12 +52,12 @@
   );
 
   // PPP state
-  let perusparannuspassi = null;
+  let perusparannuspassi = Maybe.None();
   let showPPP = false;
 
   // Add PPP - creates a local empty perusparannuspassi that will be saved with the energiatodistus
   const addPerusparannuspassi = () => {
-    if (!showPPP && !perusparannuspassi) {
+    if (!showPPP && Maybe.isNone(perusparannuspassi)) {
       // Create empty PPP locally - energiatodistus doesn't have ID yet, will be set during save
       perusparannuspassi = empty.perusparannuspassi(null);
       showPPP = true;

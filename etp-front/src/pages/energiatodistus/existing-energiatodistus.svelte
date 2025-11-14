@@ -56,12 +56,12 @@
   );
 
   // PPP state
-  let perusparannuspassi = null;
+  let perusparannuspassi = Maybe.None();
   let showPPP = false;
 
   // Add PPP - creates a new perusparannuspassi via API
   const addPerusparannuspassi = energiatodistusId => () => {
-    if (!showPPP && !perusparannuspassi) {
+    if (!showPPP && Maybe.isNone(perusparannuspassi)) {
       toggleOverlay(true);
       Future.fork(
         _response => {
