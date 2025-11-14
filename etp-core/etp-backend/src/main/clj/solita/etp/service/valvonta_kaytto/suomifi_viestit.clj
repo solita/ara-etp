@@ -3,7 +3,6 @@
             [clojure.tools.logging :as log]
             [solita.etp.retry :as retry]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
-            [solita.etp.service.suomifi-viestit :as suomifi-soap]
             [solita.etp.service.suomifi-viestit-rest :as suomifi-rest]
             [clojure.java.io :as io]
             [solita.etp.service.pdf :as pdf]
@@ -166,28 +165,15 @@
                  :zip-code       (-> asiakas :osoite :postinumero)}]
     (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! message config)))
 
-(defn send-message-to-osapuoli! [valvonta
-                                 toimenpide
-                                 osapuoli
-                                 document
-                                 & [config]]
-  (suomifi-soap/send-message!
-   (->sanoma toimenpide osapuoli)
-   (->kohde valvonta toimenpide osapuoli document)
-   config))
-
 (defn send-suomifi-viestit! [aws-s3-client
                              valvonta
                              toimenpide
                              osapuolet
                              & [config]]
-  (let [config (suomifi-soap/merge-default-config config)
+  (let [config (suomifi-rest/merge-default-config config)
         rest-config-problems (suomifi-rest/validate-config config)
         send-to-osapuoli! (if (seq rest-config-problems)
-                            (do
-                              (log/info "Not sending via REST API due to configuration issues: " rest-config-problems)
-                              (log/info "Falling back to SOAP API")
-                              send-message-to-osapuoli!)
+                            (log/error "Not sending via REST API due to configuration issues: " rest-config-problems)
                             send-suomifi-viesti-using-rest!)]
     (doseq [osapuoli (->> osapuolet
                           (filter osapuoli/omistaja?)

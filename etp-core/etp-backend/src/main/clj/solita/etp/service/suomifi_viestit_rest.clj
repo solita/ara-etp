@@ -1,6 +1,7 @@
 (ns solita.etp.service.suomifi-viestit-rest
   (:require [clj-http.client :as http]
             [clojure.string :as str]
+            [solita.etp.config :as config]
             [clojure.tools.logging :as log])
   (:import (java.net URI)))
 
@@ -155,6 +156,15 @@
         (throw (ex-info msg {:type        :suomifi-viestit-rest-api-failure
                              :external-id external-id}
                         e))))))
+
+(defn merge-default-config [config]
+  (merge {:rest-base-url        config/suomifi-viestit-rest-base-url
+          :palvelutunnus        config/suomifi-viestit-palvelutunnus
+          :rest-password        config/suomifi-viestit-rest-password
+          :yhteyshenkilo-email  config/suomifi-viestit-yhteyshenkilo-email}
+         config)
+
+  )
 
 (defn validate-config [{:keys [rest-base-url
                                palvelutunnus
