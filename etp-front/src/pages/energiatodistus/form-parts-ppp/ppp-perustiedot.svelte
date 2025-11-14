@@ -12,14 +12,16 @@
 </script>
 
 <div class="flex min-w-full flex-col gap-y-5 overflow-x-auto">
-  <BasicInput
-    id="perusparannuspassi.id"
-    name="perusparannuspassi.id"
-    label={$_('perusparannuspassi.id')}
-    disabled={true}
-    bind:model={perusparannuspassi}
-    lens={R.lensProp('id')}
-    i18n={$_} />
+  {#if R.complement(R.isNil)(perusparannuspassi.id)}
+    <BasicInput
+      id="perusparannuspassi.id"
+      name="perusparannuspassi.id"
+      label={$_('perusparannuspassi.id')}
+      disabled={true}
+      bind:model={perusparannuspassi}
+      lens={R.lensProp('id')}
+      i18n={$_} />
+  {/if}
   <div class="flex flex-col gap-x-8 lg:flex-row">
     <div class="min-w-0 flex-1">
       <Input
