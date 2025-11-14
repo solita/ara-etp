@@ -109,3 +109,49 @@
         (let [unauth-get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                    (mock/header "Accept" "application/json")))]
           (t/is (= 403 (:status unauth-get-res)))))))))
+
+(t/deftest ppp-numeric-validation-test
+  (t/testing "PPP numeric validation for kaukolampo-hinta"
+    (laatija-test-data/insert-suomifi-laatija!
+      (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
+
+    ;; Create energiatodistus first
+    (let [et (-> (et-test-data/generate-add 2026 true))
+          et-body (-> et j/write-value-as-string)
+          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+                                   (mock/header "Accept" "application/json")
+                                   (mock/header "Content-Type" "application/json")
+                                   (mock/body et-body)
+                                   (laatija-test-data/with-suomifi-laatija)))]
+      (t/is (= 201 (:status post-res)) "Expected status 201 from ET creation")
+      (let [et-id (-> post-res :body (j/read-value object-mapper) :id)]
+
+        (t/testing "PPP with kaukolampo-hinta at 3 cents should succeed with warnings (outside warning range 5-20)"
+          (let [ppp (-> (ppp-test-data/generate-add et-id)
+                        (assoc-in [:tulokset :kaukolampo-hinta] 3))
+                ppp-body (-> ppp j/write-value-as-string)
+                post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                         (mock/header "Accept" "application/json")
+                                         (mock/header "Content-Type" "application/json")
+                                         (mock/body ppp-body)
+                                         (laatija-test-data/with-suomifi-laatija)))
+                response-body (-> post-res :body (j/read-value object-mapper))]
+            (when-not (= 201 (:status post-res))
+              (println "Response body:" response-body))
+            (t/is (= 201 (:status post-res)) "Expected status 201 - value is outside warning range but inside error range")
+            (t/is (some? (:warnings response-body)) "Expected warnings to be present")
+            (t/is (seq (:warnings response-body)) "Expected warnings list to be non-empty")
+            (let [warnings (:warnings response-body)]
+              (t/is (some #(= "tulokset.kaukolampo-hinta" (:property %)) warnings)
+                    "Expected warning for tulokset.kaukolampo-hinta"))))
+
+        (t/testing "PPP with kaukolampo-hinta at 1 cent should fail with 400 (outside error range 1-100)"
+          (let [ppp (-> (ppp-test-data/generate-add et-id)
+                        (assoc-in [:tulokset :kaukolampo-hinta] 1))
+                ppp-body (-> ppp j/write-value-as-string)
+                post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                         (mock/header "Accept" "application/json")
+                                         (mock/header "Content-Type" "application/json")
+                                         (mock/body ppp-body)
+                                         (laatija-test-data/with-suomifi-laatija)))]
+            (t/is (= 400 (:status post-res)) "Expected status 400 - value is outside error range")))))))

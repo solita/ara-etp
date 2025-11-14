@@ -117,17 +117,65 @@
 (defn- without-toimenpide-ehdotukset [ppp-vaihe]
   (update ppp-vaihe :toimenpiteet #(dissoc % :toimenpide-ehdotukset)))
 
+(defn replace-abbreviation->fullname [path]
+  (reduce (fn [result [fullname abbreviation]]
+            (if (str/starts-with? result (name abbreviation))
+              (reduced (str/replace-first
+                         result (name abbreviation) (name fullname)))
+              result))
+          path db-abbreviations))
+
+(defn to-property-name [column-name]
+  (-> column-name
+      db/kebab-case
+      replace-abbreviation->fullname
+      (str/replace "$" ".")))
+
+(defn- find-ppp-numeric-column-validations [db versio]
+  (->>
+    (perusparannuspassi-db/select-ppp-numeric-validations db {:versio versio})
+    (map db/kebab-case-keys)
+    (map #(flat/flat->tree #"\$" %))))
+
+(defn- check-ppp-value [column-name value {:keys [min max]}]
+  (when (and value (or (< value min) (> value max)))
+    {:property (to-property-name column-name)
+     :value    value
+     :min      min
+     :max      max}))
+
+(defn- check-ppp-error! [column-name value interval]
+  (when-let [error (check-ppp-value column-name value interval)]
+    (exception/throw-ex-info!
+      (assoc error
+        :type :invalid-value
+        :message (str "Property: " (to-property-name column-name)
+                      " has an invalid value: " value)))))
+
+(defn- validate-ppp-db-row! [db ppp-db-row versio]
+  (->> (find-ppp-numeric-column-validations db versio)
+       (keep (fn [{:keys [column-name] :as validation}]
+               (let [value ((-> column-name str/lower-case db/kebab-case keyword)
+                            ppp-db-row)]
+                 (check-ppp-error! column-name value (:error validation))
+                 (check-ppp-value column-name value (:warning validation)))))
+       doall))
+
 (defn insert-perusparannuspassi! [db whoami ppp]
   (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
     [tx db]
     (assert-insert-requirements! tx whoami ppp)
     (let [ppp (ppp->db-row ppp)
+          ;; Validate PPP main row numeric values (errors throw, warnings collected)
+          warnings (validate-ppp-db-row! tx (dissoc ppp :vaiheet) 2026)
+
+          ;; Insert the main PPP row
           {:keys [id]} (db/with-db-exception-translation
                          jdbc/insert! tx :perusparannuspassi (dissoc ppp :vaiheet)
                          db/default-opts)]
 
-      ;; Insert
+      ;; Insert vaihe rows
       (doseq [vaihe (:vaiheet ppp)]
         (db/with-db-exception-translation
           jdbc/insert! tx :perusparannuspassi-vaihe (-> vaihe
@@ -153,7 +201,7 @@
                        :valid                 false}
                       db/default-opts))
       {:id       id
-       :warnings []})))
+       :warnings warnings})))
 
 (defn assert-update-requirements! [db whoami current-ppp new-ppp]
   (let [{:keys [tila-id laatija-id]}
@@ -174,39 +222,46 @@
         ;; find-perusparannuspassi already only looks for owned ppps.
         (assert-update-requirements! tx whoami current-ppp ppp)
 
-        (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi
-                                          (-> ppp
-                                              (dissoc :energiatodistus-id :vaiheet)
-                                              ppp->db-row)
-                                          ["id = ?" id]
-                                          db/default-opts)
+        (let [ppp-db-row (-> ppp
+                             (dissoc :energiatodistus-id :vaiheet)
+                             ppp->db-row)
+              ;; Validate PPP main row numeric values (errors throw, warnings collected)
+              warnings (validate-ppp-db-row! tx ppp-db-row 2026)]
 
-        (doseq [vaihe (:vaiheet ppp)]
-          (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi-vaihe
-                                            (-> vaihe
-                                                (dissoc :vaihe-nro :perusparannuspassi-id)
-                                                without-toimenpide-ehdotukset
-                                                ppp-vaihe->db-row)
-                                            ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+          ;; Update the main PPP row
+          (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi
+                                            ppp-db-row
+                                            ["id = ?" id]
                                             db/default-opts)
-          (jdbc/delete! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
-                        ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
-                        db/default-opts)
-          (doseq [[ordinal toimenpide-ehdotus-id]
-                  (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
-            (db/with-db-exception-translation
-              jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
-              {:perusparannuspassi_id id
-               :vaihe_nro             (:vaihe-nro vaihe)
-               :toimenpide_ehdotus_id toimenpide-ehdotus-id
-               :ordinal               ordinal}
-              db/default-opts)))
-        (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
-          (jdbc/update! tx :perusparannuspassi-vaihe
-                        {:valid false}
-                        ["perusparannuspassi_id = ? and vaihe_nro = ?" id vaihe-nro]
-                        db/default-opts))
-        nil)
+
+          ;; Update the vaihe rows
+          (doseq [vaihe (:vaiheet ppp)]
+            (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi-vaihe
+                                              (-> vaihe
+                                                  (dissoc :vaihe-nro :perusparannuspassi-id)
+                                                  without-toimenpide-ehdotukset
+                                                  ppp-vaihe->db-row)
+                                              ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+                                              db/default-opts)
+            (jdbc/delete! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+                          ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+                          db/default-opts)
+            (doseq [[ordinal toimenpide-ehdotus-id]
+                    (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
+              (db/with-db-exception-translation
+                jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+                {:perusparannuspassi_id id
+                 :vaihe_nro             (:vaihe-nro vaihe)
+                 :toimenpide_ehdotus_id toimenpide-ehdotus-id
+                 :ordinal               ordinal}
+                db/default-opts)))
+          (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
+            (jdbc/update! tx :perusparannuspassi-vaihe
+                          {:valid false}
+                          ["perusparannuspassi_id = ? and vaihe_nro = ?" id vaihe-nro]
+                          db/default-opts))
+          {:id       id
+           :warnings warnings}))
       (exception/throw-ex-info!
         :not-found
         (str "Perusparannuspassi " id " does not exist.")))))
@@ -226,19 +281,7 @@
 
 ;; Validation functions
 
-(defn replace-abbreviation->fullname [path]
-  (reduce (fn [result [fullname abbreviation]]
-            (if (str/starts-with? result (name abbreviation))
-              (reduced (str/replace-first
-                         result (name abbreviation) (name fullname)))
-              result))
-          path db-abbreviations))
 
-(defn to-property-name [column-name]
-  (-> column-name
-      db/kebab-case
-      replace-abbreviation->fullname
-      (str/replace "$" ".")))
 
 (defn find-ppp-numeric-validations [db versio]
   (map (comp

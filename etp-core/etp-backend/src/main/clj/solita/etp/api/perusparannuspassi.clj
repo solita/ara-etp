@@ -28,7 +28,8 @@
                              [{:type :energiatodistus-not-found :response 404}
                               {:type :foreign-key-violation :response 400}
                               {:type :invalid-energiatodistus-versio :response 400}
-                              {:type :invalid-energiatodistus-id :response 400}]))}}]
+                              {:type :invalid-energiatodistus-id :response 400}
+                              {:type :invalid-value :response 400}]))}}]
     ["/:id"
      {:get    {:summary    "Hae perusparannuspassi tunnisteella (id)"
                :parameters {:path {:id common-schema/Key}}
@@ -51,7 +52,8 @@
                                [{:type :energiatodistus-not-found :response 404}
                                 {:type :foreign-key-violation :response 400}
                                 {:type :invalid-energiatodistus-versio :response 400}
-                                {:type :invalid-energiatodistus-id :response 400}]))}
+                                {:type :invalid-energiatodistus-id :response 400}
+                                {:type :invalid-value :response 400}]))}
       :delete {:summary    "Poista energiatodistukselta perusparannuspassi"
                :parameters {:path {:id common-schema/Key}}
                :responses  {200 {:body nil}

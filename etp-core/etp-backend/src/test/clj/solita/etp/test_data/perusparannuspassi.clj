@@ -78,11 +78,11 @@
                                :mahdollisuus-liittya-energiatehokkaaseen 1
                                :lisatietoja-fi         nil
                                :lisatietoja-sv         nil}
-     :tulokset                {:kaukolampo-hinta      1
-                               :kaukojaahdytys-hinta  1
-                               :sahko-hinta           1
-                               :uusiutuvat-pat-hinta  1
-                               :fossiiliset-pat-hinta 1
+     :tulokset                {:kaukolampo-hinta      5
+                               :kaukojaahdytys-hinta  5
+                               :sahko-hinta           5
+                               :uusiutuvat-pat-hinta  5
+                               :fossiiliset-pat-hinta 5
                                :lisatietoja-fi         nil
                                :lisatietoja-sv         nil}}
     perusparannuspassi-schema/PerusparannuspassiSave
