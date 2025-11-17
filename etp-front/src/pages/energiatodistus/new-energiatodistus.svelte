@@ -98,7 +98,7 @@
     toggleOverlay(true);
 
     // Create energiatodistus first, then PPP if it exists
-    const saveFuture = perusparannuspassi
+    const saveFuture = Maybe.isSome(perusparannuspassi)
       ? R.chain(
           etResult =>
             R.map(
