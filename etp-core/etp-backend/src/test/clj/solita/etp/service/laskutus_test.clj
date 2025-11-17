@@ -35,8 +35,8 @@
 ;; Energiatodistus 5 is signed by laatija 1 during last month => laskutettava.
 ;; Energiatodistus 6 is signed by laatija 1 three months ago but has already
 ;; been laskutettu => not laskutettava.
-;; Energiatodistus 7 is signed by laatija 1 three months ago => not
-;; laskuttettava.
+;; Energiatodistus 7 is signed by laatija 1 three months ago =>
+;;   (abnormal because should have been invoiced in an earlier, but laskutettava anyway).
 ;; Energiatodistus 8 is signed by laatija 2 during last month and has replaced
 ;; energiatodistus 5 (by laatija 1) in less than 7 days => laskutettava.
 ;; Energiatodistus 9 is signed by laatija 3 during last month => laskutettava.
@@ -122,7 +122,7 @@
 (t/deftest find-kuukauden-laskutus-test
   (let [_ (test-data-set 0)
         laskutus (laskutus-service/find-kuukauden-laskutus ts/*db*)]
-    (t/is (= #{1 2 3 5 8 9 10} (->> laskutus (map :energiatodistus-id) set)))))
+    (t/is (= #{1 2 3 5 7 8 9 10} (->> laskutus (map :energiatodistus-id) set)))))
 
 (t/deftest asiakastiedot-test
   (let [{:keys [yritykset laatijat]} (test-data-set 0)
@@ -220,7 +220,7 @@
                  (xmap/dissoc-in [:laatijat
                                   yritys-laatija-id
                                   :energiatodistukset]))))
-    (t/is (= #{1 2 3 5}
+    (t/is (= #{1 2 3 5 7}
              (set (map :id yritys-laatija-energiatodistukset))))
     (t/is (= {:laskutus-asiakastunnus laatija-laskutus-asiakastunnus
               :laatijat {laatija-id {:nimi (str (:etunimi laatija)
@@ -270,7 +270,7 @@
               (t/is (str/includes? xml-str (str "<AsiakasNro>"
                                                 laskutus-asiakastunnus
                                                 "</AsiakasNro")))
-              (t/is (str/includes? xml-str "<TilausMaaraArvo>4</TilausMaaraArvo>"))
+              (t/is (str/includes? xml-str "<TilausMaaraArvo>5</TilausMaaraArvo>"))
               (t/is (re-find (tilausrivi-pattern (-> laskutustieto-energiatodistukset
                                                      first
                                                      :id)
@@ -312,12 +312,12 @@
     (t/is (= [["Asiakkaiden lukumäärä yhteensä" nil {:v 4 :align :left}]
               ["Myyntitilausten lukumäärä yhteensä" nil {:v 4 :align :left}]
               ["Velotusmyyntitilausten lukumäärä yhteensä" nil {:v 4 :align :left}]
-              ["Energiatodistusten lukumäärä yhteensä" nil {:v 7 :align :left}]
+              ["Energiatodistusten lukumäärä yhteensä" nil {:v 8 :align :left}]
               ["Hyvitystilausten lukumäärä yhteensä" nil {:v 0 :align :left}]
               ["Siirrettyjen liitetiedostojen lukumäärä" nil {:v 0 :align :left}]]
              (->> tasmaytysraportti
                   (drop 3)
-                  (take 6))))
+                  (take 6))) "Test item counts")
     (t/is (= [{:v "Tilauslaji" :align :center}
               {:v "Asiakkaan numero" :align :center}
               {:v "Asiakkaan nimi" :align :center}
