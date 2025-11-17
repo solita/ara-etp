@@ -52,12 +52,12 @@
   );
 
   // PPP state
-  let perusparannuspassi = Maybe.None();
+  let perusparannuspassi = null;
   let showPPP = false;
 
   // Add PPP - creates a local empty perusparannuspassi that will be saved with the energiatodistus
   const addPerusparannuspassi = () => {
-    if (!showPPP && Maybe.isNone(perusparannuspassi)) {
+    if (!showPPP && !perusparannuspassi) {
       // Create empty PPP locally - energiatodistus doesn't have ID yet, will be set during save
       perusparannuspassi = empty.perusparannuspassi(null);
       showPPP = true;
@@ -94,11 +94,9 @@
 
   let resources = Maybe.None();
 
-  const submit = (energiatodistus, onSuccessfulSave) => {
-    toggleOverlay(true);
-
-    // Create energiatodistus first, then PPP if it exists
-    const saveFuture = Maybe.isSome(perusparannuspassi)
+  // Save function for 2026 with PPP support
+  const saveFuture2026 = (energiatodistus, onSuccessfulSave) => {
+    const save = perusparannuspassi
       ? R.chain(
           etResult =>
             R.map(
@@ -114,7 +112,7 @@
           api.postEnergiatodistus(fetch, params.version)(energiatodistus)
         )
       : R.map(
-          result => ({ energiatodistus: result }),
+          etResult => ({ energiatodistus: etResult }),
           api.postEnergiatodistus(fetch, params.version)(energiatodistus)
         );
 
@@ -131,8 +129,39 @@
           `/energiatodistus/${params.version}/${result.energiatodistus.id}`
         );
       },
-      R.chain(Future.after(400), saveFuture)
+      R.chain(Future.after(400), save)
     );
+  };
+
+  // Save function for older versions (2013, 2018)
+  const saveFuture = (energiatodistus, onSuccessfulSave) => {
+    R.compose(
+      Future.fork(
+        response => {
+          toggleOverlay(false);
+          announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
+        },
+        ({ id }) => {
+          toggleOverlay(false);
+          announceSuccess($_('energiatodistus.messages.save-success'));
+          onSuccessfulSave();
+          replace(`/energiatodistus/${params.version}/${id}`);
+        }
+      ),
+      R.chain(Future.after(400)),
+      api.postEnergiatodistus(fetch, params.version),
+      R.tap(() => toggleOverlay(true))
+    )(energiatodistus);
+  };
+
+  const submit = (energiatodistus, onSuccessfulSave) => {
+    toggleOverlay(true);
+
+    if (isEtp2026Enabled(config) && params.version == 2026) {
+      saveFuture2026(energiatodistus, onSuccessfulSave);
+    } else {
+      saveFuture(energiatodistus, onSuccessfulSave);
+    }
   };
 
   $: title =
