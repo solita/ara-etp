@@ -6,6 +6,7 @@
 
   export let showPPP;
   export let onAddPPP;
+  export let onDeletePPP = () => console.log('Perusparannuspassi poistettu');
 </script>
 
 <style>
@@ -25,12 +26,26 @@
         icon="add_circle_outline"
         text={$_('energiatodistus.perusparannuspassi.add-button')}
         type="button"
+        largeIcon={true}
         on:click={onAddPPP} />
+    {:else}
+      <TextButton
+        icon="delete_forever"
+        text={$_('energiatodistus.perusparannuspassi.delete-button')}
+        type="button"
+        largeIcon={true}
+        on:click={onDeletePPP} />
     {/if}
   </div>
   <div class="flex items-start items-center bg-tertiary p-4">
     <span class="mr-2 font-icon text-2xl">info_outline</span>
-    <span>{$_('energiatodistus.perusparannuspassi.info-text')}</span>
+    <span>
+      {$_(
+        showPPP
+          ? 'energiatodistus.perusparannuspassi.info-text-when-PPP'
+          : 'energiatodistus.perusparannuspassi.info-text'
+      )}
+    </span>
   </div>
 
   {#if !showPPP}

@@ -4,6 +4,7 @@
   export let type = 'submit';
   export let title = '';
   export let disabled = false;
+  export let largeIcon = false;
 </script>
 
 <style type="text/postcss">
@@ -29,6 +30,6 @@
 </style>
 
 <button {type} {title} {disabled} on:click>
-  <span class="mr-1 font-icon">{icon}</span>
+  <span class="mr-1 font-icon icon-outlined {largeIcon ? 'text-3xl' : ''}">{icon}</span>
   {text}
 </button>

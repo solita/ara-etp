@@ -1253,7 +1253,9 @@
     "perusparannuspassi": {
       "header": "Perusparannuspassi",
       "add-button": "Lisää perusparannuspassi",
+      "delete-button": "Poista perusparannuspassi",
       "info-text": "Perusparannuspassin käyttö korvaa energiatodistuksen toimenpide-ehdotukset.",
+      "info-text-when-PPP": "Perusparannuspassi on otettu käyttöön. Passin käyttö korvaa energiatodistuksen toimenpide-ehdotukset.",
       "not-added": "Perusparannuspassia ei ole vielä lisätty. Aloita lisäämällä perusparannuspassi.",
       "disclaimer": "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia. Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskelmissa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen verrattuna."
     },
