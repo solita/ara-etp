@@ -123,7 +123,9 @@
     (assert-insert-requirements! tx whoami ppp)
     (let [ppp (ppp->db-row ppp)
           {:keys [id]} (db/with-db-exception-translation
-                         jdbc/insert! tx :perusparannuspassi (dissoc ppp :vaiheet)
+                         jdbc/insert! tx :perusparannuspassi (-> ppp
+                                                                  (dissoc :vaiheet)
+                                                                  (assoc :valid true))
                          db/default-opts)]
 
       ;; Insert
@@ -132,6 +134,7 @@
           jdbc/insert! tx :perusparannuspassi-vaihe (-> vaihe
                                                         without-toimenpide-ehdotukset
                                                         (assoc :perusparannuspassi-id id)
+                                                        (assoc :valid true)
                                                         ppp-vaihe->db-row)
           db/default-opts)
 

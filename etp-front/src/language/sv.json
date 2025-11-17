@@ -1250,7 +1250,10 @@
       "tyojono-remove-error": "Det gick inte att ta bort energicertifikatet från arbetskön",
       "invalid-laskutusosoite-id": "Används inte längre. Välj en faktureringsuppgift som är i kraft.",
       "add-ppp-success": "Grundförbättringspass lades till",
-      "add-ppp-error": "Det gick inte att lägga till grundförbättringspass"
+      "add-ppp-error": "Det gick inte att lägga till grundförbättringspass",
+      "delete-ppp-success": "Grundförbättringspass togs bort",
+      "delete-ppp-error": "Det gick inte att ta bort grundförbättringspass",
+      "save-before-adding-ppp": "Spara ändringar innan du lägger till ett nytt grundförbättringspass"
     },
     "signing": {
       "header": "Undertecknande",

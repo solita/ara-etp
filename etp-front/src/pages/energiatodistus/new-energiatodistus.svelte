@@ -62,6 +62,12 @@
     }
   };
 
+  // Delete PPP - removes the PPP data and hides the section
+  const deletePerusparannuspassi = () => {
+    perusparannuspassi = Maybe.None();
+    showPPP = false;
+  };
+
   const emptyEnergiatodistus = versio =>
     R.cond([
       [R.equals('2018'), () => empty.energiatodistus2018()],
