@@ -46,10 +46,11 @@ FROM energiatodistus e
   LEFT JOIN verkkolaskuoperaattori v ON y.verkkolaskuoperaattori = v.id
   LEFT JOIN energiatodistus korvattu ON e.korvattu_energiatodistus_id = korvattu.id
 WHERE
-    -- Check that allekirjoitus is within the previous calendar month
+    -- Check that allekirjoitusaika is not overly old, and at newest it
+    -- must have happened within the previous calendar month
     e.allekirjoitusaika IS NOT NULL AND
     e.allekirjoitusaika < date_trunc('month', now()) AND
-    date_trunc('month', now()) - interval '1 month' <= e.allekirjoitusaika AND
+    timestamp '2024-11-01' <= e.allekirjoitusaika AND
 
     -- Must not have been invoiced already
     e.laskutusaika IS NULL AND
