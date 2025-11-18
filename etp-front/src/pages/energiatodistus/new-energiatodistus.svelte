@@ -53,17 +53,12 @@
 
   // PPP state
   let perusparannuspassi = Maybe.None();
-  let showPPP = false;
 
   // Add PPP - creates a local empty perusparannuspassi that will be saved with the energiatodistus
   const addPerusparannuspassi = () => {
-    if (!showPPP && Maybe.isNone(perusparannuspassi)) {
+    if (Maybe.isNone(perusparannuspassi)) {
       // Create empty PPP locally - energiatodistus doesn't have ID yet, will be set during save
-      perusparannuspassi = empty.perusparannuspassi(null);
-      showPPP = true;
-    } else {
-      // Just toggle visibility if PPP already exists
-      showPPP = !showPPP;
+      perusparannuspassi = Maybe.Some(empty.perusparannuspassi(null));
     }
   };
 
@@ -94,46 +89,43 @@
 
   let resources = Maybe.None();
 
-  const submit = (energiatodistus, onSuccessfulSave) => {
-    toggleOverlay(true);
-
-    // Create energiatodistus first, then PPP if it exists
-    const saveFuture = perusparannuspassi
-      ? R.chain(
-          etResult =>
-            R.map(
-              pppResult => ({
-                energiatodistus: etResult,
-                perusparannuspassi: pppResult
-              }),
-              pppApi.postPerusparannuspassi(
-                fetch,
-                R.assoc('energiatodistus-id', etResult.id, perusparannuspassi)
+  const submit = (energiatodistus, onSuccessfulSave) =>
+    R.compose(
+      Future.fork(
+        response => {
+          toggleOverlay(false);
+          announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
+        },
+        ({ energiatodistus }) => {
+          toggleOverlay(false);
+          announceSuccess($_('energiatodistus.messages.save-success'));
+          onSuccessfulSave();
+          replace(`/energiatodistus/${params.version}/${energiatodistus.id}`);
+        }
+      ),
+      R.chain(Future.after(400)),
+      R.when(
+        () => Maybe.isSome(perusparannuspassi),
+        R.chain(etResult =>
+          R.map(
+            pppResult => ({
+              energiatodistus: etResult,
+              perusparannuspassi: pppResult
+            }),
+            pppApi.postPerusparannuspassi(
+              fetch,
+              R.assoc(
+                'energiatodistus-id',
+                etResult.id,
+                perusparannuspassi.some()
               )
-            ),
-          api.postEnergiatodistus(fetch, params.version)(energiatodistus)
+            )
+          )
         )
-      : R.map(
-          result => ({ energiatodistus: result }),
-          api.postEnergiatodistus(fetch, params.version)(energiatodistus)
-        );
-
-    Future.fork(
-      response => {
-        toggleOverlay(false);
-        announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
-      },
-      result => {
-        toggleOverlay(false);
-        announceSuccess($_('energiatodistus.messages.save-success'));
-        onSuccessfulSave();
-        replace(
-          `/energiatodistus/${params.version}/${result.energiatodistus.id}`
-        );
-      },
-      R.chain(Future.after(400), saveFuture)
-    );
-  };
+      ),
+      api.postEnergiatodistus(fetch, params.version),
+      R.tap(() => toggleOverlay(true))
+    )(energiatodistus);
 
   $: title =
     $_('energiatodistus.title') +
@@ -200,15 +192,17 @@
         {submit}>
         <!-- PPP section as slot content -->
         {#if isEtp2026Enabled(config) && params.version == 2026}
-          <PPPSection {showPPP} onAddPPP={addPerusparannuspassi}>
-            {#if showPPP && perusparannuspassi}
+          <PPPSection
+            showPPP={Maybe.isSome(perusparannuspassi)}
+            onAddPPP={addPerusparannuspassi}>
+            {#each Maybe.toArray(perusparannuspassi) as ppp}
               <PPPForm
                 {energiatodistus}
                 inputLanguage={'fi'}
                 {luokittelut}
-                bind:perusparannuspassi
+                bind:perusparannuspassi={ppp}
                 schema={Schema.perusparannuspassi} />
-            {/if}
+            {/each}
           </PPPSection>
         {/if}
       </EnergiatodistusForm>
