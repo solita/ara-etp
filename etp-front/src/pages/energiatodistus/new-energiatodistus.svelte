@@ -104,18 +104,25 @@
         }
       ),
       R.chain(Future.after(400)),
-      R.when(() => Maybe.isSome(perusparannuspassi), R.chain(
-        etResult => R.map(
-           pppResult => ({
-             energiatodistus: etResult,
-             perusparannuspassi: pppResult,
-           }),
-          pppApi.postPerusparannuspassi(
-            fetch,
-            R.assoc('energiatodistus-id', etResult.id, perusparannuspassi.some())
+      R.when(
+        () => Maybe.isSome(perusparannuspassi),
+        R.chain(etResult =>
+          R.map(
+            pppResult => ({
+              energiatodistus: etResult,
+              perusparannuspassi: pppResult
+            }),
+            pppApi.postPerusparannuspassi(
+              fetch,
+              R.assoc(
+                'energiatodistus-id',
+                etResult.id,
+                perusparannuspassi.some()
+              )
+            )
           )
         )
-      )),
+      ),
       api.postEnergiatodistus(fetch, params.version),
       R.tap(() => toggleOverlay(true))
     )(energiatodistus);
@@ -185,7 +192,9 @@
         {submit}>
         <!-- PPP section as slot content -->
         {#if isEtp2026Enabled(config) && params.version == 2026}
-          <PPPSection showPPP={Maybe.isSome(perusparannuspassi)} onAddPPP={addPerusparannuspassi}>
+          <PPPSection
+            showPPP={Maybe.isSome(perusparannuspassi)}
+            onAddPPP={addPerusparannuspassi}>
             {#each Maybe.toArray(perusparannuspassi) as ppp}
               <PPPForm
                 {energiatodistus}
