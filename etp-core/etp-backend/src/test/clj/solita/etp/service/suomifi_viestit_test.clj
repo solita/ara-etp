@@ -2,12 +2,13 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [clojure.test :as t]
+            [solita.common.time :as time]
             [solita.etp.service.pdf :as pdf]
             [solita.etp.service.suomifi-viestit :as service.suomifi-viestit]
             [solita.etp.service.valvonta-kaytto.suomifi-viestit :as valvonta-kaytto.suomifi-viestit]
             [solita.etp.test-system :as ts])
   (:import (java.nio.file Paths)
-           (java.time LocalDate)
+           (java.time Clock LocalDate ZoneOffset)
            (org.w3c.dom Node)
            (org.xmlunit.diff Comparison$Detail ComparisonListener ComparisonResult ComparisonType DOMDifferenceEngine DifferenceEvaluator DifferenceEvaluators)
            (org.xmlunit.builder Input)
@@ -108,18 +109,23 @@
   (with-bindings {#'service.suomifi-viestit/post! (handle-request "suomifi/viesti-request.xml"
                                                                              "suomifi/viesti-response.xml"
                                                                              202)
-                  #'valvonta-kaytto.suomifi-viestit/now                      (fn [] "2021-09-08T06:21:03.625667Z")
-                  #'valvonta-kaytto.suomifi-viestit/bytes->base64            (fn [_] "dGVzdGk=")}
+                  #'time/clock    (Clock/fixed (-> (LocalDate/of 2021 9 8)
+                                                   (.atTime 6 21 3 625667000)
+                                                   (.toInstant (ZoneOffset/of "+0")))
+                                               time/timezone)
+                  #'valvonta-kaytto.suomifi-viestit/bytes->base64 (fn [_] "dGVzdGk=")}
 
     (t/is (= (:sanoma-tunniste (valvonta-kaytto.suomifi-viestit/send-message-to-osapuoli! valvonta toimenpide osapuoli document config))
              "ARA-05.03.02-2021-31-ETP-KV-1-2-PERSON-1"))))
 
 (t/deftest send-message-to-osapuoli-id-already-exists-test
-  (with-bindings {#'service.suomifi-viestit/post! (handle-request "suomifi/viesti-request.xml"
-                                                                             "suomifi/viesti-id-already-exists-response.xml"
+  (with-bindings {#'service.suomifi-viestit/post!                            (handle-request "suomifi/viesti-request.xml"
+                                                                                             "suomifi/viesti-id-already-exists-response.xml"
                                                                              200)
-                  #'valvonta-kaytto.suomifi-viestit/now                      (fn []
-                                                               "2021-09-08T06:21:03.625667Z")
+                  #'time/clock    (Clock/fixed (-> (LocalDate/of 2021 9 8)
+                                                   (.atTime 6 21 3 625667000)
+                                                   (.toInstant (ZoneOffset/of "+0")))
+                                               time/timezone)
                   #'valvonta-kaytto.suomifi-viestit/bytes->base64            (fn [_]
                                                                "dGVzdGk=")}
     (t/is (thrown-with-msg?
@@ -132,8 +138,11 @@
   (with-bindings {#'service.suomifi-viestit/post! (handle-request-with-xml-compare "suomifi/viesti-request-signed.xml"
                                                                                               "suomifi/viesti-response.xml"
                                                                                               202)
-                  #'valvonta-kaytto.suomifi-viestit/now                      (fn [] "2021-09-08T06:21:03.625667Z")
-                  #'valvonta-kaytto.suomifi-viestit/bytes->base64            (fn [_] "dGVzdGk=")}
+                  #'time/clock    (Clock/fixed (-> (LocalDate/of 2021 9 8)
+                                                   (.atTime 6 21 3 625667000)
+                                                   (.toInstant (ZoneOffset/of "+0")))
+                                               time/timezone)
+                  #'valvonta-kaytto.suomifi-viestit/bytes->base64 (fn [_] "dGVzdGk=")}
     (let [config-with-keystore (merge config {:keystore-file     (-> (io/resource "suomifi/store.jks") .toURI Paths/get .toString)
                                               :keystore-password "password"
                                               :keystore-alias    "default"})]

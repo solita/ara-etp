@@ -12,7 +12,6 @@
             [solita.etp.service.valvonta-kaytto.osapuoli :as osapuoli]
             [clojure.string :as str])
   (:import (java.nio.charset StandardCharsets)
-           (java.time Instant)
            (java.util Base64)))
 
 (def lahettaja {:nimi             "Valtion tukeman asuntorakentamisen keskus"
@@ -128,16 +127,13 @@
      :sisalto (bytes->base64 tiedosto)
      :muoto   "application/pdf"}))
 
-(defn- ^:dynamic now []
-  (Instant/now))
-
 (defn- ->kohde [valvonta toimenpide osapuoli document]
   (let [type-key (toimenpide/type-key (:type-id toimenpide))
         {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)]
     {:viranomaistunniste (tunniste toimenpide osapuoli)
      :nimike             nimike
      :kuvaus-teksti      kuvaus
-     :lahetys-pvm        (now)
+     :lahetys-pvm        (time/now)
      :asiakas            (osapuoli->asiakas osapuoli)
      :tiedostot          (document->tiedosto type-key osapuoli document)}))
 
