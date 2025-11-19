@@ -150,22 +150,11 @@
 
 ;; Suomifi / viestit
 
-(def suomifi-viestit-proxy? (edn/read-string (env "SUOMIFI_VIESTIT_PROXY" "false")))
-(def suomifi-viestit-paperitoimitus? (edn/read-string (env "SUOMIFI_VIESTIT_PAPERITOIMITUS" "false")))
-(def suomifi-viestit-laheta-tulostukseen? (edn/read-string (env "SUOMIFI_VIESTIT_LAHETA_TULOSTUKSEEN" "false")))
-(def suomifi-viestit-endpoint-url (env "SUOMIFI_VIESTIT_ENDPOINT_URL" nil))
 (def suomifi-viestit-viranomaistunnus (env "SUOMIFI_VIESTIT_VIRANOMAISTUNNUS" nil))
 (def suomifi-viestit-palvelutunnus (env "SUOMIFI_VIESTIT_PALVELUTUNNUS" nil))
-(def suomifi-viestit-varmenne (env "SUOMIFI_VIESTIT_VARMENNE" nil))
-(def suomifi-viestit-tulostustoimittaja (env "SUOMIFI_VIESTIT_TULOSTUSTOIMITTAJA" nil))
-(def suomifi-viestit-yhteyshenkilo-nimi (env "SUOMIFI_VIESTIT_YHTEYSHENKILO_NIMI" nil))
 (def suomifi-viestit-yhteyshenkilo-email (env "SUOMIFI_VIESTIT_YHTEYSHENKILO_EMAIL" nil))
 (def suomifi-viestit-laskutus-tunniste (env "SUOMIFI_VIESTIT_LASKUTUS_TUNNISTE" nil))
 (def suomifi-viestit-laskutus-salasana (env "SUOMIFI_VIESTIT_LASKUTUS_SALASANA" nil))
-(def suomifi-viestit-keystore-file (env "SUOMIFI_VIESTIT_KEYSTORE_FILE" nil))
-(def suomifi-viestit-keystore-password (env "SUOMIFI_VIESTIT_KEYSTORE_PASSWORD" nil))
-(def suomifi-viestit-keystore-alias (env "SUOMIFI_VIESTIT_KEYSTORE_ALIAS" nil))
-
 (def suomifi-viestit-rest-base-url (env "SUOMIFI_VIESTIT_REST_BASE_URL" nil))
 (def suomifi-viestit-rest-password (env "SUOMIFI_VIESTIT_REST_PASSWORD" nil))
 
