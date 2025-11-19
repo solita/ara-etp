@@ -48,19 +48,9 @@
              de.ubercode.clostache/clostache                     {:mvn/version "1.4.0"}
              commonmark-hiccup/commonmark-hiccup                 {:mvn/version "0.3.0"}
 
-             com.openhtmltopdf/openhtmltopdf-pdfbox              {:mvn/version "1.0.10"}
-             com.openhtmltopdf/openhtmltopdf-slf4j               {:mvn/version "1.0.10"}
-
-             ;; Contains vulnerable version of batik-* libraries, exclude those
-             ;; and add direct dependency to newer versions
-             com.openhtmltopdf/openhtmltopdf-svg-support
-             {:mvn/version "1.0.10"
-              :exclusions  [org.apache.xmlgraphics/batik-transcoder
-                            org.apache.xmlgraphics/batik-codec
-                            org.apache.xmlgraphics/batik-ext]}
-             org.apache.xmlgraphics/batik-transcoder             {:mvn/version "1.18"}
-             org.apache.xmlgraphics/batik-codec                  {:mvn/version "1.18"}
-             org.apache.xmlgraphics/batik-ext                    {:mvn/version "1.18"}
+             io.github.openhtmltopdf/openhtmltopdf-pdfbox      {:mvn/version "1.1.31"}
+             io.github.openhtmltopdf/openhtmltopdf-svg-support {:mvn/version "1.1.31"}
+             io.github.openhtmltopdf/openhtmltopdf-slf4j       {:mvn/version "1.1.31"}
 
              ;; Non-alpha version does not support xml namespaces
              org.clojure/data.xml                                {:mvn/version "0.2.0-alpha9"}
