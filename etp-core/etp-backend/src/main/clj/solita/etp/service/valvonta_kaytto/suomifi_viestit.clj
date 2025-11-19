@@ -3,16 +3,13 @@
             [clojure.tools.logging :as log]
             [solita.etp.retry :as retry]
             [solita.etp.service.valvonta-kaytto.toimenpide :as toimenpide]
-            [solita.etp.service.suomifi-viestit :as suomifi-soap]
             [solita.etp.service.suomifi-viestit-rest :as suomifi-rest]
             [clojure.java.io :as io]
             [solita.etp.service.pdf :as pdf]
             [solita.common.time :as time]
             [solita.etp.service.valvonta-kaytto.store :as store]
             [solita.etp.service.valvonta-kaytto.osapuoli :as osapuoli]
-            [clojure.string :as str])
-  (:import (java.nio.charset StandardCharsets)
-           (java.util Base64)))
+            [clojure.string :as str]))
 
 (def lahettaja {:nimi             "Valtion tukeman asuntorakentamisen keskus"
                 :jakeluosoite     "PL 35"
@@ -28,10 +25,6 @@
                    (osapuoli/henkilo? osapuoli) "PERSON"
                    (osapuoli/yritys? osapuoli) "COMPANY")
                  (:id osapuoli)]))
-
-(defn- ->sanoma [toimenpide osapuoli]
-  {:tunniste (tunniste toimenpide osapuoli)
-   :versio   "1.0"})
 
 (defn- henkilo->asiakas [henkilo]
   {:tunnus (:henkilotunnus henkilo)
@@ -116,27 +109,6 @@
     (io/input-stream document)
     (store/info-letter)]))
 
-(defn- ^:dynamic bytes->base64 [bytes]
-  (String. (.encode (Base64/getEncoder) bytes) StandardCharsets/UTF_8))
-
-(defn- document->tiedosto [type-key osapuoli document]
-  (let [{:keys [nimi kuvaus]} (toimenpide->tiedosto type-key)
-        tiedosto (tiedosto-sisalto document osapuoli)]
-    {:nimi    nimi
-     :kuvaus  kuvaus
-     :sisalto (bytes->base64 tiedosto)
-     :muoto   "application/pdf"}))
-
-(defn- ->kohde [valvonta toimenpide osapuoli document]
-  (let [type-key (toimenpide/type-key (:type-id toimenpide))
-        {:keys [nimike kuvaus]} (toimenpide->kohde type-key valvonta toimenpide)]
-    {:viranomaistunniste (tunniste toimenpide osapuoli)
-     :nimike             nimike
-     :kuvaus-teksti      kuvaus
-     :lahetys-pvm        (time/now)
-     :asiakas            (osapuoli->asiakas osapuoli)
-     :tiedostot          (document->tiedosto type-key osapuoli document)}))
-
 (defn send-suomifi-viesti-using-rest! [valvonta
                                        toimenpide
                                        osapuoli
@@ -162,16 +134,6 @@
                  :zip-code       (-> asiakas :osoite :postinumero)}]
     (suomifi-rest/send-suomifi-viesti-with-pdf-attachment! message config)))
 
-(defn send-message-to-osapuoli! [valvonta
-                                 toimenpide
-                                 osapuoli
-                                 document
-                                 & [config]]
-  (suomifi-soap/send-message!
-   (->sanoma toimenpide osapuoli)
-   (->kohde valvonta toimenpide osapuoli document)
-   config))
-
 (defn send-suomifi-viestit! [aws-s3-client
                              valvonta
                              toimenpide
@@ -180,10 +142,7 @@
   (let [config (suomifi-rest/merge-default-config config)
         rest-config-problems (suomifi-rest/validate-config config)
         send-to-osapuoli! (if (seq rest-config-problems)
-                            (do
-                              (log/info "Not sending via REST API due to configuration issues: " rest-config-problems)
-                              (log/info "Falling back to SOAP API")
-                              send-message-to-osapuoli!)
+                            (log/error "Not sending via REST API due to configuration issues: " rest-config-problems)
                             send-suomifi-viesti-using-rest!)]
     (doseq [osapuoli (->> osapuolet
                           (filter osapuoli/omistaja?)
