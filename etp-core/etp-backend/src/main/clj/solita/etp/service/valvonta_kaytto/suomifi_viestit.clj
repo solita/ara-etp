@@ -177,7 +177,7 @@
                              toimenpide
                              osapuolet
                              & [config]]
-  (let [config (suomifi-soap/merge-default-config config)
+  (let [config (suomifi-rest/merge-default-config config)
         rest-config-problems (suomifi-rest/validate-config config)
         send-to-osapuoli! (if (seq rest-config-problems)
                             (do
